@@ -12,10 +12,13 @@ use Illuminate\Support\Facades\Process;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
+use Tests\Traits\RestoresSpellDescriptionImportState;
 
 #[Group('SpellTuning')]
 final class SpellTuningSnapshotLoaderTest extends PublicTestCase
 {
+    use RestoresSpellDescriptionImportState;
+
     private const string BUILD = '0.0.0.00042';
 
     private SpellTuningSnapshotLoaderInterface $loader;
@@ -29,6 +32,16 @@ final class SpellTuningSnapshotLoaderTest extends PublicTestCase
 
         $this->loader        = app(SpellTuningSnapshotLoaderInterface::class);
         $this->gameVersionId = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL)->id;
+
+        $this->captureSpellDescriptionImportState($this->gameVersionId);
+    }
+
+    #[\Override]
+    protected function tearDown(): void
+    {
+        $this->restoreSpellDescriptionImportState();
+
+        parent::tearDown();
     }
 
     #[Test]
@@ -78,20 +91,14 @@ final class SpellTuningSnapshotLoaderTest extends PublicTestCase
     public function load_givenDatabaseSource_usesRecordedBuildAndLiveSpells(): void
     {
         // Arrange
-        $state         = SpellDescriptionImportState::query()->findOrFail($this->gameVersionId);
-        $originalBuild = $state->build;
-        $state->update(['build' => self::BUILD]);
+        $this->recordImportState(self::BUILD);
 
-        try {
-            // Act
-            $snapshot = $this->loader->load(SpellTuningSnapshotLoaderInterface::SOURCE_DATABASE, null, $this->gameVersionId);
+        // Act
+        $snapshot = $this->loader->load(SpellTuningSnapshotLoaderInterface::SOURCE_DATABASE, null, $this->gameVersionId);
 
-            // Assert
-            $this->assertSame(self::BUILD, $snapshot->build);
-            $this->assertSame(Spell::query()->where('game_version_id', $this->gameVersionId)->count(), count($snapshot->spells));
-        } finally {
-            $state->update(['build' => $originalBuild]);
-        }
+        // Assert
+        $this->assertSame(self::BUILD, $snapshot->build);
+        $this->assertSame(Spell::query()->where('game_version_id', $this->gameVersionId)->count(), count($snapshot->spells));
     }
 
     #[Test]
@@ -108,6 +115,7 @@ final class SpellTuningSnapshotLoaderTest extends PublicTestCase
     public function load_givenDatabaseSource_populatesIconNameAndDispelTypeFromSpells(): void
     {
         // Arrange
+        $this->recordImportState(self::BUILD);
         $spell = Spell::query()->where('game_version_id', $this->gameVersionId)->firstOrFail();
 
         // Act
@@ -169,6 +177,14 @@ final class SpellTuningSnapshotLoaderTest extends PublicTestCase
 
         // Act
         $this->loader->load('not-a-ref-nor-a-file', null, $this->gameVersionId);
+    }
+
+    private function recordImportState(string $build): void
+    {
+        SpellDescriptionImportState::query()->updateOrCreate(
+            ['game_version_id' => $this->gameVersionId],
+            ['product' => 'wow', 'build' => $build, 'imported_at' => now()],
+        );
     }
 
     /**
