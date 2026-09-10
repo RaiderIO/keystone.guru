@@ -326,4 +326,38 @@ final class NpcControllerTest extends PublicTestCase
             Npc::query()->where('id', $npcId)->delete();
         }
     }
+
+    #[Test]
+    public function store_givenNoDungeonIds_failsValidationAndDoesNotCreateTheNpc(): void
+    {
+        // Arrange - regression coverage for #4601: an NPC saved through the admin form with no
+        // dungeon selected has nothing to derive its game version from (Npc::getGameVersionId()).
+        $templateNpc = Npc::query()->firstOrFail();
+        $npcId       = 999999501;
+
+        try {
+            $this->be(User::findOrFail(self::ADMIN_USER_ID));
+
+            // Act
+            $this->post(route('admin.npc.savenew'), [
+                'id'                        => $npcId,
+                'name'                      => 'Test Npc - requires a dungeon',
+                'game_version_id'           => $templateNpc->game_version_id,
+                'classification_id'         => $templateNpc->classification_id,
+                'npc_type_id'               => $templateNpc->npc_type_id,
+                'npc_class_id'              => $templateNpc->npc_class_id,
+                'aggressiveness'            => $templateNpc->aggressiveness,
+                'dungeon_ids'               => [],
+                'bolstering_whitelist_npcs' => [],
+                'spells'                    => [],
+                'submit'                    => 'Submit',
+            ])->assertSessionHasErrors('dungeon_ids');
+
+            // Assert
+            $this->assertFalse(Npc::query()->whereKey($npcId)->exists(), 'NPC must not have been created without a dungeon.');
+        } finally {
+            NpcDungeon::query()->where('npc_id', $npcId)->delete();
+            Npc::query()->whereKey($npcId)->delete();
+        }
+    }
 }

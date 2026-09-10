@@ -53,6 +53,9 @@ return [
             'required' => 'A reason is required - it is what makes this grant reviewable later.',
             'max'      => 'The reason may not be longer than :max characters.',
         ],
+        'npc_dungeon_ids' => [
+            'required' => 'Select at least one dungeon - an NPC with no dungeon has no way to derive which game version it belongs to.',
+        ],
     ],
     'date'              => 'The :attribute is not a valid date.',
     'date_equals'       => 'The :attribute must be a date equal to :date.',

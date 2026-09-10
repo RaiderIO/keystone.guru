@@ -66,6 +66,7 @@ $gameVersionsSelect = $allGameVersions
         'activeOnly' => false,
         'ignoreGameVersion' => true
     ])
+    @include('common.forms.form-error', ['key' => 'dungeon_ids'])
 
     <div class="mb-3{{ $errors->has('classification_id') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.npc.edit.classification'), 'classification_id') }}
