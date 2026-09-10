@@ -25,6 +25,7 @@ use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
 use App\Service\DungeonRoute\Logging\DungeonRouteUpgradeDraftServiceLoggingInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -188,27 +189,33 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
     /**
      * Guards #4584: two requests racing findOrCreateDraft() (double click, prefetch, a second Octane
      * worker) both see no draft and both insert, tripping dungeon_routes_upgrade_of_unique for the
-     * loser. A genuinely separate `migrate` connection is used - not just a nested transaction - so the
-     * winner's row survives the loser's transaction rolling back on the duplicate-key error.
+     * loser. The rival draft is inserted through a connection cloned from `phpunit` under a throwaway
+     * name - a genuinely separate connection targeting the same test database, so the winner's row
+     * survives the loser's transaction rolling back on the duplicate-key error. The `migrate` connection
+     * cannot be used for this: tests/Bootstrap.php restores it to its non-test database once migrations
+     * finish, so writes through it would land outside the database this test can see or clean up.
      */
     #[Test]
     public function findOrCreateDraft_givenAnotherConnectionWinsTheCreateRace_returnsTheWinnersDraftInsteadOfThrowing(): void
     {
-        $originalId = null;
+        $originalId     = null;
+        $raceConnection = 'race_test_4584';
 
         try {
             // Arrange
             [$original] = $this->createOutdatedRoute();
             $originalId = $original->id;
 
+            config(["database.connections.{$raceConnection}" => config('database.connections.phpunit')]);
+
             $guarded = false;
-            DungeonRoute::creating(function (DungeonRoute $model) use ($original, &$guarded): bool {
+            DungeonRoute::creating(function (DungeonRoute $model) use ($original, $raceConnection, &$guarded): bool {
                 if ($guarded || $model->upgrade_of_dungeon_route_id !== $original->id) {
                     return true;
                 }
                 $guarded = true;
 
-                DungeonRoute::factory()->connection('migrate')->create([
+                DungeonRoute::factory()->connection($raceConnection)->create([
                     'upgrade_of_dungeon_route_id' => $original->id,
                     'dungeon_id'                  => $original->dungeon_id,
                     'mapping_version_id'          => $original->mapping_version_id,
@@ -236,6 +243,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             if ($originalId !== null) {
                 DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $originalId)->delete();
             }
+            DB::purge($raceConnection);
             $this->tearDownCleanup();
         }
     }
