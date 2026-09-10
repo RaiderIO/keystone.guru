@@ -10,11 +10,11 @@ use Illuminate\Support\Collection;
  */
 ?>
 <li class="nav-item dropdown d-lg-none d-block">
-    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button"
+    <a class="nav-link dropdown-toggle" href="#" id="gameVersionDropdown" role="button"
        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         @include('common.gameversion.gameversionnav', ['gameVersion' => $currentUserGameVersion])
     </a>
-    <div class="dropdown-menu text-center text-xl-start" aria-labelledby="languageDropdown">
+    <div class="dropdown-menu text-center text-xl-start" aria-labelledby="gameVersionDropdown">
         @foreach ($allGameVersions as $gameVersion)
             <a class="dropdown-item {{ $currentUserGameVersion->id === $gameVersion->id ? 'active' : '' }}"
                href="{{ route('gameversion.update', ['gameVersion' => $gameVersion]) }}">

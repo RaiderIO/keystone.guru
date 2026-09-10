@@ -148,27 +148,20 @@ final class HeaderComposerTest extends PublicTestCase
     }
 
     /**
-     * Map pages pass `showExpansionNav => false` to reclaim header space; every other page renders
-     * with the default (#4024).
+     * The "Routes by expansion" dropdown was cut from the bar in #4465 - every destination now lives
+     * inside a category panel. The map view still passes `showExpansionNav`, so the header must keep
+     * accepting it and render identically either way.
      */
     #[Test]
-    public function render_givenShowExpansionNavDefault_rendersTheDropdown(): void
+    public function render_givenShowExpansionNavEitherWay_rendersTheSameHeader(): void
     {
         // Act
-        $html = view('common.layout.header')->render();
+        $default  = view('common.layout.header')->render();
+        $disabled = view('common.layout.header', ['showExpansionNav' => false])->render();
 
         // Assert
-        $this->assertStringContainsString(__('view_common.layout.header.browse_by_expansion'), $html);
-    }
-
-    #[Test]
-    public function render_givenShowExpansionNavFalse_omitsTheDropdown(): void
-    {
-        // Act
-        $html = view('common.layout.header', ['showExpansionNav' => false])->render();
-
-        // Assert
-        $this->assertStringNotContainsString(__('view_common.layout.header.browse_by_expansion'), $html);
+        $this->assertStringNotContainsString('Routes by expansion', $default);
+        $this->assertSame($default, $disabled);
     }
 
     /**

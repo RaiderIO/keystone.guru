@@ -496,6 +496,12 @@ body {
     background-color: var($--theme-btn-accent-hover) !important;
   }
 
+  /* Xal'atath's purple is that theme's identity colour, so the theme switch advertises it
+     regardless of which theme is currently applied */
+  .theme_switch_xalatath {
+    color: #6a2dbd;
+  }
+
   .bg-header {
     background-color: var($--theme-header) !important;
   }

@@ -16,6 +16,8 @@ $--theme-border-accent: --theme-border-accent;
 $--theme-border-subtle: --theme-border-subtle;
 $--theme-btn-accent: --theme-btn-accent;
 $--theme-btn-accent-hover: --theme-btn-accent-hover;
+/* Foreground for .btn-accent - white on darkly's green measures 2.4:1 */
+$--theme-btn-accent-text: --theme-btn-accent-text;
 $--theme-bg-card: --theme-bg-card;
 $--theme-bg-card-footer: --theme-bg-card-footer;
 $--theme-affix-page-seasonal-color: --theme-affix-page-seasonal-color;
@@ -40,6 +42,7 @@ $theme-map-darkly: (
         $--theme-border-subtle: #444,
         $--theme-btn-accent: #00bc8c,
         $--theme-btn-accent-hover: #007053,
+        $--theme-btn-accent-text: #202020,
         $--theme-bg-card: #303030,
         $--theme-bg-card-footer: #444,
         $--theme-affix-page-seasonal-color: #00bc8c,
@@ -65,6 +68,7 @@ $theme-map-lux: (
         $--theme-border-subtle: #dee2e6,
         $--theme-btn-accent: #1a1a1a,
         $--theme-btn-accent-hover: black,
+        $--theme-btn-accent-text: #fff,
         $--theme-bg-card: #fff,
         $--theme-bg-card-footer: rgba(0, 0, 0, 0.03),
         $--theme-affix-page-seasonal-color: #df691a,
@@ -92,6 +96,7 @@ $theme-map-vapor: (
         $--theme-border-subtle: #444,
         $--theme-btn-accent: #6a2dbd,
         $--theme-btn-accent-hover: #4b1f87,
+        $--theme-btn-accent-text: #fff,
         $--theme-bg-card: #303030,
         $--theme-bg-card-footer: #252525,
   // Seasonal / highlight colors (purple glow feel)
