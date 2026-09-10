@@ -118,6 +118,8 @@ use App\Service\DungeonRoute\MapDrawingService;
 use App\Service\DungeonRoute\MapDrawingServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use App\Service\EnemyForces\EnemyForcesDb2Service;
+use App\Service\EnemyForces\EnemyForcesDb2ServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Floor\FloorResolutionService;
@@ -306,6 +308,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         }
         $this->app->bind(RedisServiceInterface::class, PHPRedisService::class);
 
+        $this->app->bind(EnemyForcesDb2ServiceInterface::class, EnemyForcesDb2Service::class);
         // Both the interface and the concrete class are registered so that the request-scoped
         // caches inside them are shared by every caller, however it asks for the service (#4587)
         $this->app->scoped(ExpansionService::class);
