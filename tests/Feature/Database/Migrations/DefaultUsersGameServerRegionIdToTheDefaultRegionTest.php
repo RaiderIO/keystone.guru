@@ -12,11 +12,8 @@ use Tests\TestCases\PublicTestCase;
  * Guards the migration that stops users.game_server_region_id defaulting to -1 - see the
  * migration's own docblock and #4502.
  *
- * Everything here goes through the query builder on the migration's own connection rather than
- * through User/its factory: the model pins itself to the mysql connection (#4498), so an Eloquent
- * fixture would land in a different schema than the one the migration alters. The migration runs
- * DDL, which implicitly commits in MySQL, so the fixtures are cleaned up explicitly instead of by
- * rolling a transaction back.
+ * The migration runs DDL, which implicitly commits in MySQL, so the fixtures are cleaned up
+ * explicitly instead of by rolling a transaction back.
  */
 #[Group('Auth')]
 final class DefaultUsersGameServerRegionIdToTheDefaultRegionTest extends PublicTestCase

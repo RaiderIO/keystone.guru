@@ -28,12 +28,7 @@ final class FixDanglingGameServerRegionIdOnUsersTableTest extends PublicTestCase
     public function up_givenDanglingRegionId_repointsItToTheDefaultRegionWithoutTouchingUpdatedAt(): void
     {
         // Arrange
-        // Every statement below - including the migration's table-wide sweep - has to be
-        // transacted on the User model's own connection: it pins itself to mysql (#4498) while the
-        // default connection under PHPUnit is phpunit, and a transaction opened on the other
-        // connection rolls back nothing
-        $connection = DB::connection((new User())->getConnectionName());
-        $connection->beginTransaction();
+        DB::beginTransaction();
 
         try {
             $user = User::factory()->create();
@@ -45,16 +40,16 @@ final class FixDanglingGameServerRegionIdOnUsersTableTest extends PublicTestCase
             ]);
 
             // Act
-            $connection->flushQueryLog();
-            $connection->enableQueryLog();
+            DB::flushQueryLog();
+            DB::enableQueryLog();
 
             try {
                 $migration = require database_path(self::MIGRATION);
                 $migration->up();
 
-                $queryLog = $connection->getQueryLog();
+                $queryLog = DB::getQueryLog();
             } finally {
-                $connection->disableQueryLog();
+                DB::disableQueryLog();
             }
 
             // Assert
@@ -79,7 +74,7 @@ final class FixDanglingGameServerRegionIdOnUsersTableTest extends PublicTestCase
                 );
             }
         } finally {
-            $connection->rollBack();
+            DB::rollBack();
         }
     }
 
