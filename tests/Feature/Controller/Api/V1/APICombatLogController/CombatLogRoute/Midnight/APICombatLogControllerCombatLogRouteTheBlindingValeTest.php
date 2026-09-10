@@ -28,11 +28,16 @@ class APICombatLogControllerCombatLogRouteTheBlindingValeTest extends APICombatL
     /** @var int Mapped both in bridge group 46 and in group 49 just below it, which is what makes it useful here */
     private const NPC_ID_GROVEKEEPER = 245346;
 
-    /** @var int The NPC_ID_GROVEKEEPER enemy in bridge group 46, at ingame -1712.32/1324.16 */
-    private const ENEMY_ID_GROVEKEEPER_ON_BRIDGE = 149393;
+    /**
+     * @var int mdt_id of the NPC_ID_GROVEKEEPER enemy in bridge group 46, at ingame -1712.32/1324.16
+     *
+     * enemy_id is not usable here - it is reassigned every time the mapping is edited (MappingVersion
+     * clones every enemy on save), whereas npc_id + mdt_id stay stable across mapping versions.
+     */
+    private const MDT_ID_GROVEKEEPER_ON_BRIDGE = 5;
 
-    /** @var int The closest NPC_ID_GROVEKEEPER enemy outside the bridge groups, in group 49 ~37 yards away */
-    private const ENEMY_ID_GROVEKEEPER_OFF_BRIDGE = 149394;
+    /** @var int mdt_id of the closest NPC_ID_GROVEKEEPER enemy outside the bridge groups, in group 49 ~37 yards away */
+    private const MDT_ID_GROVEKEEPER_OFF_BRIDGE = 6;
 
     /** @var int ui_map_id of floor 408 - the only real floor of the dungeon, floor 459 is a facade */
     private const UI_MAP_ID_FLOOR_408 = 2500;
@@ -92,8 +97,8 @@ class APICombatLogControllerCombatLogRouteTheBlindingValeTest extends APICombatL
 
         try {
             $this->assertEquals(
-                self::ENEMY_ID_GROVEKEEPER_OFF_BRIDGE,
-                $this->findResolvedEnemyId($responseArr, self::NPC_ID_GROVEKEEPER),
+                self::MDT_ID_GROVEKEEPER_OFF_BRIDGE,
+                $this->findResolvedEnemyMdtId($responseArr, self::NPC_ID_GROVEKEEPER),
             );
         } finally {
             $this->deleteDungeonRoute($responseArr);
@@ -123,8 +128,8 @@ class APICombatLogControllerCombatLogRouteTheBlindingValeTest extends APICombatL
 
         try {
             $this->assertEquals(
-                self::ENEMY_ID_GROVEKEEPER_ON_BRIDGE,
-                $this->findResolvedEnemyId($responseArr, self::NPC_ID_GROVEKEEPER),
+                self::MDT_ID_GROVEKEEPER_ON_BRIDGE,
+                $this->findResolvedEnemyMdtId($responseArr, self::NPC_ID_GROVEKEEPER),
             );
         } finally {
             $this->deleteDungeonRoute($responseArr);
@@ -164,15 +169,18 @@ class APICombatLogControllerCombatLogRouteTheBlindingValeTest extends APICombatL
     }
 
     /**
+     * mdt_id (together with npc_id) is what stays stable across mapping versions - the enemy_id itself is
+     * reassigned every time the mapping is edited, since MappingVersion clones every enemy on save.
+     *
      * @param array<string, mixed> $responseArr
      */
-    private function findResolvedEnemyId(array $responseArr, int $npcId): ?int
+    private function findResolvedEnemyMdtId(array $responseArr, int $npcId): ?int
     {
         foreach ($this->getKillZones($responseArr) as $killZone) {
             $enemy = $killZone->enemies->firstWhere('npc_id', $npcId);
 
             if ($enemy !== null) {
-                return $enemy->id;
+                return $enemy->mdt_id;
             }
         }
 
