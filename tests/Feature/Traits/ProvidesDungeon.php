@@ -49,7 +49,7 @@ trait ProvidesDungeon
      * @param  int|null                                       $maxActiveFloors     Maximum number of those floors; `null` for no upper bound.
      * @param  bool|null                                      $challengeMode       Require the dungeon to (not) be a Mythic+ dungeon.
      * @param  bool|null                                      $speedrunEnabled     Require `speedrun_enabled` to equal this.
-     * @param  bool|null                                      $dungeonActive       Require `dungeons.active` to equal this. Off by default: which dungeons are inactive changes as game-version data changes (#4572), so tests have always been allowed to draw either state unless they specifically need one.
+     * @param  bool|null                                      $dungeonActive       Require `dungeons.active` to equal this.
      * @param  bool                                           $requireDefaultFloor Require an active default floor, which the `dungeonroute.edit` redirect chain needs.
      * @param  int                                            $minEnemies          Minimum enemies on the current mapping version.
      * @param  int                                            $minEnemyPacks       Minimum enemy packs on the current mapping version.

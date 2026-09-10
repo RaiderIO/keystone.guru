@@ -65,11 +65,6 @@ abstract class DungeonRouteControllerCreateTestBase extends PublicTestCase
         return (int)$notEnabled;
     }
 
-    /**
-     * Builds a dedicated inactive dungeon rather than fishing one out of seeded data - dungeon
-     * activity flips as game-version data changes, so a specific seeded row is not a stable
-     * fixture (#4572). Clean up with {@see cleanupInactiveDungeon()}.
-     */
     protected function getInactiveDungeon(int $mapId, string $key): Dungeon
     {
         return $this->createDungeonWithoutNpcs($mapId, $key);
