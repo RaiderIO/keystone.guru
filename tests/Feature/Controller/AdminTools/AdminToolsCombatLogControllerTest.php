@@ -17,6 +17,7 @@ use App\Models\Season;
 use App\Models\User;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Testing\Fakes\QueueFake;
 use PHPUnit\Framework\Attributes\Group;
@@ -51,6 +52,12 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // the persisted preference on the user row is what the controller actually sees. The
         // default facade style collapses floors onto the facade floor, which makes floor
         // selection assertions non-deterministic depending on the dungeon picked below.
+        // MapContextMappingVersionData memoises the enemy/floor payload through RemembersToFile, whose
+        // tmp_file store is a file cache with a 24h TTL. phpunit.xml redirects it to /tmp/phpunit_cache but
+        // never clears it, so without this the rendered map can come from a previous run's mapping data -
+        // the one cache these tests inherit that CACHE_STORE=array does not cover
+        Cache::store('tmp_file')->flush();
+
         $admin                             = User::findOrFail(1);
         $this->originalAdminMapFacadeStyle = $admin->map_facade_style;
         $admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_SPLIT_FLOORS]);
@@ -200,6 +207,15 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
                 'enemy_forces'       => 10,
             ])->id;
 
+            // The rendered count covers every failure row for this (dungeon, mapping version, npc), not just
+            // the one created below, so it is read rather than assumed to be 1 - a row left behind by an
+            // aborted earlier run would otherwise make the expected string never appear
+            $failureCountBefore = CombatLogRouteEnemyFailure::query()
+                ->where('dungeon_id', $dungeon->id)
+                ->where('mapping_version_id', $mappingVersion->id)
+                ->where('npc_id', $unmappedNpc->id)
+                ->count();
+
             $createdFailureIds[] = CombatLogRouteEnemyFailure::create([
                 'dungeon_id'         => $dungeon->id,
                 'floor_id'           => $floor->id,
@@ -217,7 +233,12 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
             // Assert — the unmapped npc is offered in the filter, with its count and the not-mapped flag
             $response->assertOk();
-            $response->assertSee(sprintf('(%d) — 1 ⚠ %s', $unmappedNpc->id, __('view_common.maps.controls.combatlogrouteenemyfailures.not_mapped')));
+            $response->assertSee(sprintf(
+                '(%d) — %d ⚠ %s',
+                $unmappedNpc->id,
+                $failureCountBefore + 1,
+                __('view_common.maps.controls.combatlogrouteenemyfailures.not_mapped'),
+            ));
         } finally {
             CombatLogRouteEnemyFailure::query()->whereIn('id', $createdFailureIds)->delete();
 

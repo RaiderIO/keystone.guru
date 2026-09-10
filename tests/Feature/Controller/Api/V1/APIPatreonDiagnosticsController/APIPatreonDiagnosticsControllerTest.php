@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Service\Patreon\Dtos\ApplyPaidBenefitsForMemberResult;
 use App\Service\Patreon\Dtos\PatreonCampaignMembers;
 use App\Service\Patreon\PatreonServiceInterface;
+use Carbon\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
@@ -35,6 +36,9 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
 
     private ?PatreonUserLink $patreonUserLink = null;
 
+    /** @var array<int, int> */
+    private array $createdSyncRunIds = [];
+
     #[\Override]
     protected function tearDown(): void
     {
@@ -44,7 +48,9 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
                 $this->patreonUserLink->delete();
             }
             $this->user?->delete();
-            PatreonSyncRun::query()->delete();
+            if ($this->createdSyncRunIds !== []) {
+                PatreonSyncRun::query()->whereIn('id', $this->createdSyncRunIds)->delete();
+            }
         } finally {
             parent::tearDown();
         }
@@ -55,17 +61,21 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
     {
         // Arrange
         $this->actingAsAdmin();
-        PatreonSyncRun::factory()->create(['started_at' => now()->subHours(2), 'members_fetched' => 400]);
-        PatreonSyncRun::factory()->truncated()->create(['started_at' => now()->subHour(), 'members_fetched' => 180]);
+        $older = $this->createSyncRun(['started_at' => now()->subHours(2), 'members_fetched' => 400]);
+        $newer = $this->createSyncRunTruncated(['started_at' => now()->subHour(), 'members_fetched' => 180]);
 
         // Act
         $response = $this->getJson(route('api.v1.patreon.sync_runs'));
 
-        // Assert - the drop from 400 to 180 is the whole point of keeping this history
+        // Assert - the drop from 400 to 180 is the whole point of keeping this history. Asserted over this
+        // class's own two runs rather than over data.0/data.1: the endpoint returns every run in the schema,
+        // so any other run recorded within the last two hours would shift every index
         $response->assertOk();
-        $response->assertJsonPath('data.0.members_fetched', 180);
-        $response->assertJsonPath('data.0.truncated', true);
-        $response->assertJsonPath('data.1.members_fetched', 400);
+        $ownRuns = $this->ownSyncRunsFrom($response->json('data'));
+        $this->assertSame([$newer->id, $older->id], array_column($ownRuns, 'id'), 'newest first');
+        $this->assertSame(180, $ownRuns[0]['members_fetched']);
+        $this->assertTrue($ownRuns[0]['truncated']);
+        $this->assertSame(400, $ownRuns[1]['members_fetched']);
     }
 
     #[Test]
@@ -189,7 +199,9 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
         $this->actingAsAdmin();
         $this->createLinkedUser(self::CAMPAIGN_EMAIL);
         $this->patreonUserLink->update(['last_seen_at' => now()->subHours(6)]);
-        PatreonSyncRun::factory()->create(['started_at' => now()->subMinutes(5)]);
+        // The endpoint compares against the single most recent run in the schema, so this one has to win
+        // that comparison outright - subMinutes(5) loses it to any run another test left behind since
+        $this->createSyncRun(['started_at' => $this->afterEveryRecordedSyncRun()]);
         $this->mockPatreonService();
 
         // Act
@@ -303,9 +315,12 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $response->assertJsonPath('data.needs_attention', true);
-        $response->assertJsonPath('data.unmatched_holders.0.patreon_user_link_id', $this->patreonUserLink->id);
-        $response->assertJsonPath('data.unmatched_holders.0.reason', 'no_campaign_member');
-        $response->assertJsonPath('data.unmatched_holders.0.stored_benefits', [PatreonBenefit::AD_FREE]);
+        // Located by link id rather than asserted at index 0: the list covers every benefit-holding link in
+        // the schema in no defined order, so any other such link decides what sits at index 0
+        $holder = $this->findUnmatchedHolder($response->json('data.unmatched_holders'), $this->patreonUserLink->id);
+        $this->assertNotNull($holder, 'this test\'s link must be reported as unmatched');
+        $this->assertSame('no_campaign_member', $holder['reason']);
+        $this->assertSame([PatreonBenefit::AD_FREE], $holder['stored_benefits']);
 
         // The masked address is the same guarantee the other endpoints make - this one returns a list of
         // accounts rather than taking one as input, so it is the endpoint where that matters most
@@ -398,6 +413,66 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
                 $entitledTierIds,
             )]],
         ];
+    }
+
+    /**
+     * @param array<string, mixed> $attributes
+     */
+    private function createSyncRun(array $attributes): PatreonSyncRun
+    {
+        $patreonSyncRun            = PatreonSyncRun::factory()->create($attributes);
+        $this->createdSyncRunIds[] = $patreonSyncRun->id;
+
+        return $patreonSyncRun;
+    }
+
+    /**
+     * @param array<string, mixed> $attributes
+     */
+    private function createSyncRunTruncated(array $attributes): PatreonSyncRun
+    {
+        $patreonSyncRun            = PatreonSyncRun::factory()->truncated()->create($attributes);
+        $this->createdSyncRunIds[] = $patreonSyncRun->id;
+
+        return $patreonSyncRun;
+    }
+
+    /**
+     * A timestamp no run recorded so far can beat, so a test that needs "the latest run" gets it regardless
+     * of what else the shared schema holds.
+     */
+    private function afterEveryRecordedSyncRun(): Carbon
+    {
+        $latest = PatreonSyncRun::query()->max('started_at');
+
+        return $latest === null ? now() : Carbon::parse($latest)->addSecond()->max(now());
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>> $runs
+     * @return array<int, array<string, mixed>>
+     */
+    private function ownSyncRunsFrom(array $runs): array
+    {
+        return array_values(array_filter(
+            $runs,
+            fn(array $run): bool => in_array($run['id'], $this->createdSyncRunIds, true),
+        ));
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>> $holders
+     * @return array<string, mixed>|null
+     */
+    private function findUnmatchedHolder(array $holders, int $patreonUserLinkId): ?array
+    {
+        foreach ($holders as $holder) {
+            if ($holder['patreon_user_link_id'] === $patreonUserLinkId) {
+                return $holder;
+            }
+        }
+
+        return null;
     }
 
     private function createLinkedUser(string $linkEmail): void

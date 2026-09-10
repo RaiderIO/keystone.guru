@@ -97,15 +97,25 @@ final class PatreonDiagnosticsServiceReconciliationTest extends PublicTestCase
         // Arrange - the case that dominates production. Without it, a bug that dumps every matched link
         // into the unmatched bucket would still pass every other test in this file
         $link = $this->createLinkedUser();
+        // A link holding no benefit rows is not a holder, so this measures the rest of the schema with
+        // everything else about this test already in place
+        $baseline = $this->reconcile([$this->member($link->email, ['2971575'])]);
         $this->grantBenefits($link, [PatreonBenefit::AD_FREE, PatreonBenefit::UNLISTED_ROUTES]);
 
         // Act
         $reconciliation = $this->reconcile([$this->member($link->email, ['2971575'])]);
 
-        // Assert
+        // Assert - as deltas against the baseline, and scoped to this test's own links. The counts (and so
+        // needsAttention()) are true totals over every benefit-holding link in the schema, so a leftover from
+        // an aborted run - or the developer's own Patreon link in a long-lived dev database - would move any
+        // absolute assertion. needsAttention()'s own semantics are covered from constructed counts in
+        // Tests\Unit\App\Service\Patreon\Dtos\Diagnostics\PatreonBenefitReconciliationTest
         $this->assertNull($this->findHolder($reconciliation, $link->id));
         $this->assertSame(0, $reconciliation->downgradedCount);
-        $this->assertFalse($reconciliation->needsAttention());
+        $this->assertNoneOfThisTestsLinksAreReported($reconciliation);
+        $this->assertSame($baseline->unmatchedCount, $reconciliation->unmatchedCount, 'a matched link must not be counted as unmatched');
+        $this->assertSame($baseline->blockedCount, $reconciliation->blockedCount, 'a matched link must not be counted as blocked');
+        $this->assertSame($baseline->holderCount + 1, $reconciliation->holderCount, 'the link must be counted as a holder once it holds benefits');
     }
 
     #[Test]
@@ -369,6 +379,22 @@ final class PatreonDiagnosticsServiceReconciliationTest extends PublicTestCase
         $this->app->instance(PatreonServiceInterface::class, $patreonService);
 
         return app(PatreonDiagnosticsServiceInterface::class)->getBenefitReconciliation();
+    }
+
+    /**
+     * The scoped stand-in for assertFalse($reconciliation->needsAttention()): it still catches a bug that
+     * dumps a matched link into a reported bucket, without depending on the rest of the schema being clean.
+     */
+    private function assertNoneOfThisTestsLinksAreReported(PatreonBenefitReconciliation $reconciliation): void
+    {
+        $reported = [];
+        foreach ([...$reconciliation->unmatchedHolders, ...$reconciliation->blockedHolders] as $holder) {
+            if (in_array($holder->patreonUserLinkId, $this->createdLinkIds, true)) {
+                $reported[] = $holder->patreonUserLinkId;
+            }
+        }
+
+        $this->assertSame([], $reported, 'this test\'s own links must not be reported as needing attention');
     }
 
     /**
