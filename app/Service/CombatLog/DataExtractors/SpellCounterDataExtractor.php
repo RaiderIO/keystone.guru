@@ -343,13 +343,9 @@ class SpellCounterDataExtractor implements DataExtractorInterface
                 'combat_log_path' => $this->currentCombatLogFilePath ?? '',
                 'created_at'      => $now,
                 'updated_at'      => $now,
-            ])
-                // Deterministic lock order across concurrently upserting jobs avoids MySQL deadlocks (#4086)
-                ->sortBy(fn(array $row) => [$row['spell_id'], $row['property'], $row['observed_on']])
-                ->values()
-                ->all();
+            ])->all();
 
-            CombatLogSpellPropertyObservation::upsert(
+            CombatLogSpellPropertyObservation::upsertWithDeadlockRetry(
                 $rows,
                 ['spell_id', 'property', 'observed_on'],
                 ['combat_log_path', 'updated_at'],

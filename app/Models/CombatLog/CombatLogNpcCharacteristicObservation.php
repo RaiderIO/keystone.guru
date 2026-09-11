@@ -4,6 +4,7 @@ namespace App\Models\CombatLog;
 
 use App\Models\Characteristic;
 use App\Models\Npc\Npc;
+use App\Models\Traits\UpsertsWithDeadlockRetry;
 use Database\Factories\CombatLog\CombatLogNpcCharacteristicObservationFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,6 +31,7 @@ class CombatLogNpcCharacteristicObservation extends Model
 {
     /** @use HasFactory<CombatLogNpcCharacteristicObservationFactory> */
     use HasFactory;
+    use UpsertsWithDeadlockRetry;
 
     protected $connection = 'combatlog';
 
