@@ -15,6 +15,11 @@ use Tests\TestCases\PublicTestCase;
 #[Group('Npc')]
 final class NpcHealthControllerTest extends PublicTestCase
 {
+    private const int CLASSIFICATIONLESS_NPC_ID = 999999601;
+
+    /** npcs.json seeds a few NPCs with this classification_id (e.g. Freehold's emissaries 155432-155434); no npc_classifications row has it */
+    private const int CLASSIFICATION_ID_WITHOUT_ROW = 0;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -57,6 +62,47 @@ final class NpcHealthControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function edit_givenDungeonWithAClassificationlessNpc_returnsOkAndListsThatNpc(): void
+    {
+        // Arrange
+        $npcHealth          = $this->getSeededNpcHealthWithDungeons();
+        $seededNpc          = Npc::query()->with('dungeons')->findOrFail($npcHealth->npc_id);
+        $neighbourNpc       = null;
+        $neighbourNpcHealth = null;
+
+        try {
+            $neighbourNpc = Npc::query()->create([
+                'id'                => self::CLASSIFICATIONLESS_NPC_ID,
+                'game_version_id'   => $npcHealth->game_version_id,
+                'classification_id' => self::CLASSIFICATION_ID_WITHOUT_ROW,
+                'npc_type_id'       => $seededNpc->npc_type_id,
+                'npc_class_id'      => $seededNpc->npc_class_id,
+                'name'              => 'Test Npc - classificationless neighbour',
+                'aggressiveness'    => $seededNpc->aggressiveness,
+                'dangerous'         => false,
+                'truesight'         => false,
+                'runs_away_in_fear' => false,
+            ]);
+            $neighbourNpc->dungeons()->attach($seededNpc->dungeons->firstOrFail()->id);
+            $neighbourNpcHealth = NpcHealth::query()->create([
+                'npc_id'          => $neighbourNpc->id,
+                'game_version_id' => $npcHealth->game_version_id,
+                'health'          => 123456,
+            ]);
+
+            // Act
+            $response = $this->get(route('admin.npc.npchealth.edit', ['npc' => $npcHealth->npc_id, 'npcHealth' => $npcHealth->id]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('Test Npc - classificationless neighbour');
+        } finally {
+            $neighbourNpcHealth?->delete();
+            $neighbourNpc?->delete();
+        }
+    }
+
+    #[Test]
     public function create_givenNpcWithDungeons_returnsOk(): void
     {
         // Arrange
@@ -71,8 +117,10 @@ final class NpcHealthControllerTest extends PublicTestCase
 
     private function getSeededNpcHealthWithDungeons(): NpcHealth
     {
+        // Unordered, MySQL flips between plans on its sampled statistics and returns a different row per run
         return NpcHealth::query()
             ->whereHas('npc', static fn(Builder $builder) => $builder->whereHas('dungeons'))
+            ->orderBy('id')
             ->firstOrFail();
     }
 }
