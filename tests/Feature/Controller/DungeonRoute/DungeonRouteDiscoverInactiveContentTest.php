@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Controller\DungeonRoute;
 
-use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
+use Tests\Fixtures\Traits\CreatesNpclessCombatLogDungeon;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -16,13 +16,15 @@ use Tests\TestCases\PublicTestCase;
  * `active` checks and never looked at the user. "This content is retired" is a 404: it is gone for
  * everyone, not withheld from you.
  *
- * These use the inactive rows the seeder already provides rather than flipping `active` on a live
- * row, so a mid-test failure cannot leave the shared database dirty.
+ * None of these flip `active` on a live row, so a mid-test failure cannot leave the shared database
+ * dirty: the expansion test uses an inactive row the seeder provides, the dungeon test creates its own.
  */
 #[Group('Controller')]
 #[Group('DungeonRoute')]
 final class DungeonRouteDiscoverInactiveContentTest extends PublicTestCase
 {
+    use CreatesNpclessCombatLogDungeon;
+
     #[Test]
     public function discoverExpansion_givenInactiveExpansion_returnsNotFound(): void
     {
@@ -57,15 +59,11 @@ final class DungeonRouteDiscoverInactiveContentTest extends PublicTestCase
         // Arrange
         /** @var GameVersion $gameVersion */
         $gameVersion = GameVersion::where('active', 1)->firstOrFail();
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::where('active', 0)->first() ?? Dungeon::where('active', 1)->firstOrFail();
-
-        $wasActive = (bool)$dungeon->active;
-        if ($wasActive) {
-            $dungeon->update(['active' => false]);
-        }
+        $dungeon     = null;
 
         try {
+            $dungeon = $this->createDungeonWithoutNpcs(4575001, 'test_inactive_dungeon_discover');
+
             // Act
             $response = $this->get(route('dungeonroutes.discoverdungeon', [
                 'gameVersion' => $gameVersion,
@@ -75,9 +73,7 @@ final class DungeonRouteDiscoverInactiveContentTest extends PublicTestCase
             // Assert
             $response->assertStatus(StatusCode::NOT_FOUND);
         } finally {
-            if ($wasActive) {
-                $dungeon->update(['active' => true]);
-            }
+            $this->deleteDungeon($dungeon);
         }
     }
 
