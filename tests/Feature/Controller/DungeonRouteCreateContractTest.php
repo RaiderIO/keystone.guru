@@ -234,11 +234,9 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             // has validation rules for 'class' and 'race' but none for 'specialization', so FormRequest::validated()
             // silently drops the submitted specialization[] values before DungeonRouteSaveService ever sees them.
             $this->assertSame([], $dungeonRoute->playerspecializations()->pluck('character_class_specialization_id')->all());
-            // Unlike 'class', DungeonRouteSaveService::syncRequestRelations() inserts 'race' values verbatim
-            // (no existence filtering against real race ids), so party members #2-5's sentinel "0" values are
-            // persisted as-is alongside party member #1's real race id.
-            $this->assertEqualsCanonicalizing(
-                [$characterRace->id, 0, 0, 0, 0],
+            // Party members #2-5 submit the sentinel "0", which is not a race and is not stored
+            $this->assertSame(
+                [$characterRace->id],
                 $dungeonRoute->playerraces()->pluck('character_race_id')->all(),
             );
         } finally {
