@@ -20,6 +20,7 @@ use Tests\Feature\Traits\HoldsTableLock;
  */
 #[Group('MDTImportStringService')]
 #[Group('MDTImportStringServiceObjects')]
+#[Group('HoldsTableLock')]
 class ObjectImporterTransactionRetryTest extends MDTImportStringServiceTestBase
 {
     use HoldsTableLock;

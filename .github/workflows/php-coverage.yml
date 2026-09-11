@@ -35,9 +35,6 @@ jobs:
       - name: Switch APP_ENV to testing
         run: echo "APP_ENV=testing" >> .env
 
-      - name: Seed users
-        run: php artisan db:seed --class=LaratrustSeeder --database=migrate
-
       - name: Run PHPUnit with coverage
         run: |
           set -o pipefail

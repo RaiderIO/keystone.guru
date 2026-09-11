@@ -22,6 +22,7 @@ use Tests\TestCases\PublicTestCase;
  */
 #[Group('MDT')]
 #[Group('PullImporter')]
+#[Group('HoldsTableLock')]
 final class PullImporterTransactionRetryTest extends PublicTestCase
 {
     use GeneratesDungeonRoutes;

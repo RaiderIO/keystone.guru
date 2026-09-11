@@ -6,6 +6,12 @@ inputs:
     description: 'Whether to run database migrations and seeding'
     required: false
     default: 'true'
+  parallel-schemas:
+    description: >-
+      Number of extra copies of the seeded schemas to provision as `<schema>_1..N` (main + combatlog),
+      one per paratest worker. 0 provisions none.
+    required: false
+    default: '0'
 
 runs:
   using: "composite"
@@ -230,7 +236,7 @@ runs:
       uses: actions/cache/restore@v5
       with:
         path: ~/ci-db-dump
-        key: ci-db-v1-${{ steps.db-cache-week.outputs.week }}-${{ hashFiles('database/migrations/**', 'database/migrations_combatlog/**', 'database/schema/**', 'database/seeders/**', 'database/data/**', 'lang/**', 'app/SeederHelpers/**', '.env.ci.example', 'docker-compose.ci.yml', '.github/actions/php-ci-setup/action.yml') }}
+        key: ci-db-v1-${{ steps.db-cache-week.outputs.week }}-${{ hashFiles('database/migrations/**', 'database/migrations_combatlog/**', 'database/schema/**', 'database/seeders/**', 'database/data/**', 'lang/**', 'app/SeederHelpers/**', 'config/laratrust_seeder.php', '.env.ci.example', 'docker-compose.ci.yml', '.github/actions/php-ci-setup/action.yml') }}
 
     - name: Migrate & seed
       if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit != 'true' }}
@@ -243,6 +249,7 @@ runs:
         php artisan migrate --database=combatlog_migrate --path=database/migrations_combatlog \
           --schema-path=database/schema/combatlog-schema.dump --force
         php artisan db:seed --database=migrate --force -v
+        php artisan db:seed --class=LaratrustSeeder --database=migrate --force
 
         # Dump from *inside* the container, not with the runner's client: `default-mysql-client`
         # installed above resolves to the MariaDB client on Ubuntu, which skews against a MySQL
@@ -266,11 +273,8 @@ runs:
     # Saved here rather than by the combined actions/cache, whose post-job save does not run when the
     # job fails - seeding happens in setup and PHPUnit runs after it, so a single failing test would
     # otherwise throw the dump away and make the next run seed again.
-    # On a cold cache all six php-tests shards seed in parallel and race to write this one key. No
-    # continue-on-error is needed for that: actions/cache/save logs "Failed to save: Unable to
-    # reserve cache with key ..., another job may be creating this cache" and still succeeds
-    # (observed on this PR's first cold run, where five shards lost the race and none failed). Left
-    # off deliberately, so a save that fails for a real reason is still visible.
+    # Concurrent runs can race to write this key; actions/cache/save logs "Unable to reserve cache"
+    # for the loser and still succeeds, so no continue-on-error - a real save failure stays visible.
     - name: Save seeded database dump
       if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit != 'true' }}
       uses: actions/cache/save@v5
@@ -279,9 +283,7 @@ runs:
         key: ${{ steps.cache-db.outputs.cache-primary-key }}
 
     # The dumps carry the `migrations` table, so Laravel sees a fully migrated schema, and mysqldump
-    # emits AUTO_INCREMENT= on every CREATE TABLE, so id sequences survive the round trip. The
-    # per-job `Seed users` step (LaratrustSeeder) still runs after this action in the workflows, on
-    # both paths, exactly as before.
+    # emits AUTO_INCREMENT= on every CREATE TABLE, so id sequences survive the round trip.
     - name: Load seeded database dump
       if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit == 'true' }}
       run: |
@@ -289,4 +291,34 @@ runs:
           mysql -uroot -proot 'keystone.guru.dev' < ~/ci-db-dump/main.sql
         docker compose -f docker-compose.ci.yml exec -T db-combatlog \
           mysql -uroot -proot 'keystone.guru.combatlog' < ~/ci-db-dump/combatlog.sql
+      shell: bash
+
+    # Loaded concurrently: one pair costs ~26s sequentially. The dump has no USE statement (mysqldump
+    # ran without --databases), so it loads into any schema name.
+    - name: Provision per-worker schema copies
+      if: ${{ inputs.run-migrations == 'true' && inputs.parallel-schemas != '0' }}
+      run: |
+        # The `mysql` connection (App\Models\User) authenticates as the compose MYSQL_USER, not root,
+        # and a schema created by root carries no grant for it.
+        pids=""
+        for t in $(seq 1 "${{ inputs.parallel-schemas }}"); do
+          docker compose -f docker-compose.ci.yml exec -T db \
+            mysql -uroot -proot -e "CREATE DATABASE \`keystone.guru.dev_${t}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL PRIVILEGES ON \`keystone.guru.dev_${t}\`.* TO 'homestead'@'%'"
+          docker compose -f docker-compose.ci.yml exec -T db-combatlog \
+            mysql -uroot -proot -e "CREATE DATABASE \`keystone.guru.combatlog_${t}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL PRIVILEGES ON \`keystone.guru.combatlog_${t}\`.* TO 'homestead'@'%'"
+          docker compose -f docker-compose.ci.yml exec -T db \
+            mysql -uroot -proot "keystone.guru.dev_${t}" < ~/ci-db-dump/main.sql &
+          pids="$pids $!"
+          docker compose -f docker-compose.ci.yml exec -T db-combatlog \
+            mysql -uroot -proot "keystone.guru.combatlog_${t}" < ~/ci-db-dump/combatlog.sql &
+          pids="$pids $!"
+        done
+        # `wait` alone only reports the last job; wait on each so any failed load fails the step.
+        failed=0
+        for pid in $pids; do
+          wait "$pid" || failed=1
+        done
+        [ "$failed" -eq 0 ] || { echo "::error::At least one per-worker schema load failed"; exit 1; }
+        docker compose -f docker-compose.ci.yml exec -T db mysql -uroot -proot -N -e "SHOW DATABASES LIKE 'keystone.guru.dev%'"
+        docker compose -f docker-compose.ci.yml exec -T db-combatlog mysql -uroot -proot -N -e "SHOW DATABASES LIKE 'keystone.guru.combatlog%'"
       shell: bash
