@@ -10,15 +10,6 @@ use Teapot\StatusCode;
 use Tests\Fixtures\Traits\CreatesNpclessCombatLogDungeon;
 use Tests\TestCases\PublicTestCase;
 
-/**
- * Inactive expansions, game versions and dungeons used to come back as 403, via DungeonPolicy,
- * ExpansionPolicy, GameVersionPolicy and SeasonPolicy - four one-method policies that were plain
- * `active` checks and never looked at the user. "This content is retired" is a 404: it is gone for
- * everyone, not withheld from you.
- *
- * None of these flip `active` on a live row, so a mid-test failure cannot leave the shared database
- * dirty: the expansion test uses an inactive row the seeder provides, the dungeon test creates its own.
- */
 #[Group('Controller')]
 #[Group('DungeonRoute')]
 final class DungeonRouteDiscoverInactiveContentTest extends PublicTestCase
@@ -80,8 +71,7 @@ final class DungeonRouteDiscoverInactiveContentTest extends PublicTestCase
     #[Test]
     public function discoverSeason_givenUnknownSeasonIndex_returnsNotFound(): void
     {
-        // Arrange - the season is resolved by query and may be null. That used to reach
-        // Gate::authorize('view', null).
+        // Arrange
         /** @var GameVersion $gameVersion */
         $gameVersion = GameVersion::where('active', 1)->where('has_seasons', 1)->firstOrFail();
 

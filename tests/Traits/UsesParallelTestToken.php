@@ -5,13 +5,8 @@ namespace Tests\Traits;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Isolates one paratest worker from the others (#4575). paratest exports TEST_TOKEN=1..N to each
- * worker process; without a token (plain phpunit, locally and in worktrees) nothing here changes.
- *
- * The framework's own ParallelTesting hooks are deliberately not used: they only engage behind
- * LARAVEL_PARALLEL_TESTING, which `php artisan test --parallel` sets and `vendor/bin/paratest`
- * does not, and they would migrate:fresh a `<db>_test_<token>` schema instead of using the
- * pre-seeded `<db>_<token>` copies CI provisions.
+ * Isolates one paratest worker from the others. paratest exports TEST_TOKEN=1..N to each worker
+ * process; without a token nothing here changes.
  */
 trait UsesParallelTestToken
 {
@@ -60,8 +55,7 @@ trait UsesParallelTestToken
 
     /**
      * Must run before the application is created: APP_SERVICES_CACHE is read while the kernel
-     * bootstraps, and four workers building the same package manifest file at once can hand one
-     * of them a half-written file. Once per process - the path is already suffixed afterwards.
+     * bootstraps, and workers building the same manifest file at once can read a half-written one.
      */
     protected function prepareParallelProcessEnvironment(string $token): void
     {
@@ -77,10 +71,8 @@ trait UsesParallelTestToken
     }
 
     /**
-     * Points everything a worker shares with its siblings at a per-token copy: both test schemas,
-     * the Redis key prefix and the tmp_file cache directory. Per test on purpose - the app is
-     * rebuilt (and config reset) for every test. Expects the combatlog connection to already be
-     * redirected to its phpunit schema when one is configured, so the suffix lands on that name.
+     * Points both test schemas, the Redis key prefix and the tmp_file cache directory at a per-token
+     * copy. Runs every test, since the app and its config are rebuilt per test.
      */
     protected function isolateParallelTestProcess(string $token): void
     {
@@ -97,11 +89,7 @@ trait UsesParallelTestToken
             DB::purge('combatlog_phpunit');
         }
 
-        // App\Models\User pins itself to the `mysql` connection; in CI that connection names the same
-        // schema as `phpunit`, so under plain phpunit users share the test schema. Point it at the
-        // worker's copy too, or every worker writes its users to one shared base schema while the
-        // rows referencing them land in its own - and a User query joined to another model's
-        // becomes a cross-database query Laravel cannot qualify with a dotted schema name.
+        // App\Models\User pins itself to the `mysql` connection, which in CI names the phpunit schema
         config([
             'database.connections.phpunit.database'   => $phpunitDatabase,
             'database.connections.phpunit.url'        => null,

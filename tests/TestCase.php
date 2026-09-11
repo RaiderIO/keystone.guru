@@ -78,8 +78,7 @@ abstract class TestCase extends BaseTestCase
             DB::purge('combatlog');
         }
 
-        // Under paratest every worker gets its own copy of both test schemas (#4575); after the
-        // combatlog redirect above so the token suffix lands on the phpunit schema name.
+        // After the combatlog redirect above, so the token suffix lands on the phpunit schema name
         if ($parallelTestToken !== null) {
             $this->isolateParallelTestProcess($parallelTestToken);
         }
