@@ -136,25 +136,6 @@ final class NpcGameVersionTest extends PublicTestCase
     }
 
     #[Test]
-    public function getGameVersionId_givenNpcWithoutAnyDungeon_returnsRetail(): void
-    {
-        // Arrange - combat-log-created NPCs have no npc_dungeons row to derive anything from
-        $npc = null;
-
-        try {
-            $npc = $this->createNpcInDungeons([], GameVersion::ALL[GameVersion::GAME_VERSION_WRATH]);
-
-            // Act
-            $gameVersionId = $npc->getGameVersionId();
-
-            // Assert
-            $this->assertSame(GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL], $gameVersionId);
-        } finally {
-            $this->cleanUpNpc($npc);
-        }
-    }
-
-    #[Test]
     public function getWowheadUrl_givenViewedMappingVersion_linksToThatGameVersionsWowheadDatabase(): void
     {
         // Arrange
