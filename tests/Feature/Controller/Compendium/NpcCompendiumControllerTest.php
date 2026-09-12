@@ -28,7 +28,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     use ProvidesDungeon;
     use ReadsDungeonSelect;
 
-    /** A classification_id no npc_classifications row has, which a few seeded NPCs carry as well (#4115) */
+    /** A classification_id no npc_classifications row has; a few seeded NPCs carry one like it */
     private const int UNKNOWN_CLASSIFICATION_ID = 999999;
 
     /** @var array<string, mixed> */
