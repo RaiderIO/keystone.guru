@@ -8,7 +8,6 @@ use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
-use App\Models\Npc\NpcClassification;
 use App\Models\Season;
 use App\Models\User;
 use App\Service\View\RequestViewContextInterface;

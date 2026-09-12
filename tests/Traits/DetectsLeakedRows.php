@@ -11,8 +11,8 @@ use PHPUnit\Event;
  * test that left a difference behind. The test database persists between tests and between runs, so a row a test
  * does not delete is read by every later test as if it were seeded.
  *
- * TEST_LEAK_GUARD selects what a difference does: `warn` (the default) attaches a PHPUnit warning to the test,
- * `fail` fails it, `off` skips the check.
+ * TEST_LEAK_GUARD selects what a difference does: `fail` (the default) fails the test, `warn` attaches a PHPUnit
+ * warning to it instead, `off` skips the check.
  */
 trait DetectsLeakedRows
 {
@@ -56,8 +56,8 @@ trait DetectsLeakedRows
      */
     private const array LEAK_GUARD_PREDICATES = [
         'phpunit' => [
-            'dungeons where active = 0'             => 'select count(*) from `dungeons` where `active` = 0',
-            'seasons parked at 2999-01-01'          => 'select count(*) from `seasons` where `start` >= \'2999-01-01\'',
+            'dungeons where active = 0'               => 'select count(*) from `dungeons` where `active` = 0',
+            'seasons parked at 2999-01-01'            => 'select count(*) from `seasons` where `start` >= \'2999-01-01\'',
             'users with a dungeon_id (admin context)' => 'select count(*) from `users` where `id` = 1 and `dungeon_id` is not null',
         ],
     ];
@@ -71,7 +71,7 @@ trait DetectsLeakedRows
     /** @var array<string, int> */
     private array $leakGuardCountsBefore = [];
 
-    private string $leakGuardMode = self::LEAK_GUARD_WARN;
+    private string $leakGuardMode = self::LEAK_GUARD_FAIL;
 
     /**
      * Call at the end of setUp(), once every connection points at its test schema.
@@ -190,6 +190,6 @@ trait DetectsLeakedRows
 
         return in_array($mode, [self::LEAK_GUARD_OFF, self::LEAK_GUARD_WARN, self::LEAK_GUARD_FAIL], true)
             ? $mode
-            : self::LEAK_GUARD_WARN;
+            : self::LEAK_GUARD_FAIL;
     }
 }
