@@ -8,11 +8,13 @@ use Illuminate\Support\Facades\DB;
 use PHPUnit\Event;
 use Tests\Attributes\Repeat;
 use Tests\Attributes\SlowTest;
+use Tests\Traits\DetectsLeakedRows;
 use Tests\Traits\UsesParallelTestToken;
 
 abstract class TestCase extends BaseTestCase
 {
     use Bootstrap;
+    use DetectsLeakedRows;
     use Shutdown;
     use UsesParallelTestToken;
 
@@ -105,20 +107,26 @@ abstract class TestCase extends BaseTestCase
 
             $this->bootstrap();
         }
+
+        // Last, so both schemas are the ones the test will actually write to
+        $this->snapshotRowCountsForLeakGuard();
     }
 
     #[\Override]
     protected function tearDown(): void
     {
         $elapsed = microtime(true) - $this->testStartTime;
+        // Reads config, so it has to be answered while the application still exists
+        $excludedFromTimingCheck = $this->isExcludedFromTimingCheck();
 
-        if ($this->isExcludedFromTimingCheck()) {
-            parent::tearDown();
+        // Runs the beforeApplicationDestroyed() callbacks, which is where some cleanup lives
+        parent::tearDown();
 
+        $this->reportLeakedRows();
+
+        if ($excludedFromTimingCheck) {
             return;
         }
-
-        parent::tearDown();
 
         if ($elapsed > self::MAX_TEST_DURATION_SECONDS) {
             $this->fail(sprintf(
