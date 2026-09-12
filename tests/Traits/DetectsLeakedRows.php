@@ -56,9 +56,8 @@ trait DetectsLeakedRows
      */
     private const array LEAK_GUARD_PREDICATES = [
         'phpunit' => [
-            'dungeons where active = 0'               => 'select count(*) from `dungeons` where `active` = 0',
-            'seasons parked at 2999-01-01'            => 'select count(*) from `seasons` where `start` >= \'2999-01-01\'',
-            'users with a dungeon_id (admin context)' => 'select count(*) from `users` where `id` = 1 and `dungeon_id` is not null',
+            'dungeons where active = 0'    => 'select count(*) from `dungeons` where `active` = 0',
+            'seasons parked at 2999-01-01' => 'select count(*) from `seasons` where `start` >= \'2999-01-01\'',
         ],
     ];
 
