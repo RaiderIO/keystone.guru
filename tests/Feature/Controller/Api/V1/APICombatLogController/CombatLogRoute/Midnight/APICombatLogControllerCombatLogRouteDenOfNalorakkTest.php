@@ -25,21 +25,13 @@ class APICombatLogControllerCombatLogRouteDenOfNalorakkTest extends APICombatLog
         $postBody = $this->getJsonData('Midnight/midnight_s2_den_of_nalorakk', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
-        try {
-            $this->validateResponseStaticData($responseArr);
-            $this->validateDungeon($responseArr);
-            $this->validatePulls($postBody, $responseArr, 20, 740);
-            $this->validateAffixes($responseArr);
-            $this->validateBossesResolved($postBody, $responseArr);
-        } finally {
-            $this->deleteDungeonRoute($responseArr);
-        }
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($postBody, $responseArr, 20, 740);
+        $this->validateAffixes($responseArr);
+        $this->validateBossesResolved($postBody, $responseArr);
     }
 }

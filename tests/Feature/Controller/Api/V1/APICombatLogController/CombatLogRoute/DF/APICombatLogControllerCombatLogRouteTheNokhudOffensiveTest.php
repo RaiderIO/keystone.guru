@@ -27,13 +27,9 @@ class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APIComb
         $postBody = $this->getJsonData('DF/df_s4_the_nokhud_offensive_no_roster_14', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($postBody, $responseArr, 21, 494); // This route just doesn't match count for some reason
@@ -47,13 +43,9 @@ class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APIComb
         $postBody = $this->getJsonData('DF/df_s4_the_nokhud_offensive_no_roster_8', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($postBody, $responseArr, 24, 528);

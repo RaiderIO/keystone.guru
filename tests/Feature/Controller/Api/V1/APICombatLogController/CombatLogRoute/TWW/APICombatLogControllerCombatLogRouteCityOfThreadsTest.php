@@ -26,13 +26,9 @@ class APICombatLogControllerCombatLogRouteCityOfThreadsTest extends APICombatLog
         $postBody = $this->getJsonData('TWW/tww_s1_city_of_threads_11', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         // Lacking 8 enemy forces due to missing Xeph'itik
