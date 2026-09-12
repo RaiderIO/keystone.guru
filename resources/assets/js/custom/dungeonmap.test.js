@@ -82,8 +82,8 @@ describe('DungeonMap._whenMapSized', () => {
 });
 
 describe('DungeonMap.refreshLeafletMap', () => {
-    // Regression test (#4622): the tile URL template's extension is a literal in source, not
-    // derived from tilesBaseUrl, so nothing else catches a silent revert to .png.
+    // The tile URL template's extension is a literal in source, not derived from tilesBaseUrl,
+    // so nothing else catches an accidental extension change here.
     it('requests tiles with a .webp extension', () => {
         const originalGetState = global.getState;
         const originalC = global.c;
