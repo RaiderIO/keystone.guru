@@ -317,7 +317,7 @@ return [
     'mdt_enemy_forces'                                                     => 'Forze nemiche',
     'ajax_error_default'                                                   => 'Si è verificato un errore durante l\'esecuzione della tua richiesta. Per favore, riprova.',
     'ajax_error_403'                                                       => 'Non sei autorizzato a eseguire questa richiesta.',
-    'mdt_export_url_expired'                                               => '',
+    'mdt_export_url_expired'                                               => 'Questa pagina è aperta da troppo tempo per esportare in MDT. Ricarica la pagina e riprova.',
     'ajax_error_404'                                                       => 'La risorsa richiesta non è stata trovata.',
     'ajax_error_419'                                                       => 'La tua sessione è scaduta. Per favore, aggiorna la pagina e riprova.',
     'map_object_readonly_label'                                            => 'Questa versione di mapping è di sola lettura',
