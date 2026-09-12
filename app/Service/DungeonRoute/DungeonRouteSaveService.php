@@ -5,6 +5,7 @@ namespace App\Service\DungeonRoute;
 use App\Models\Affix;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
+use App\Models\CharacterRace;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
@@ -214,7 +215,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
             return false;
         }
 
-        $this->syncRequestRelations($dungeonRoute, $validated);
+        $this->syncRequestRelations($dungeonRoute, $validated, $new);
         $this->applySelectedAffixGroups($dungeonRoute, $validated['route_select_affixes'] ?? [], $activeSeason, $new);
 
         // Instantly generate a placeholder thumbnail for new routes.
@@ -325,12 +326,13 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
      *
      * @param array<string, mixed> $validated
      */
-    private function syncRequestRelations(DungeonRoute $dungeonRoute, array $validated): void
+    private function syncRequestRelations(DungeonRoute $dungeonRoute, array $validated, bool $new): void
     {
         $newAttributes = $validated['attributes'] ?? [];
         if (!empty($newAttributes)) {
             $this->syncChildModels(
                 $dungeonRoute,
+                $new,
                 DungeonRouteAttribute::class,
                 'route_attribute_id',
                 RouteAttribute::whereIn('id', $newAttributes)->pluck('id'),
@@ -341,6 +343,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         if (!empty($newClasses)) {
             $this->syncChildModels(
                 $dungeonRoute,
+                $new,
                 DungeonRoutePlayerClass::class,
                 'character_class_id',
                 CharacterClass::whereIn('id', $newClasses)->pluck('id'),
@@ -351,6 +354,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         if (!empty($newSpecs)) {
             $this->syncChildModels(
                 $dungeonRoute,
+                $new,
                 DungeonRoutePlayerSpecialization::class,
                 'character_class_specialization_id',
                 CharacterClassSpecialization::whereIn('id', $newSpecs)->pluck('id'),
@@ -360,11 +364,15 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
         $newRaces = $validated['race'] ?? [];
         if (!empty($newRaces)) {
+            // Duplicates are kept on purpose - each one is a group slot. An unset slot submits "0"
+            $knownRaceIds = CharacterRace::whereIn('id', $newRaces)->pluck('id')->map(static fn($id): int => (int)$id);
+
             $this->syncChildModels(
                 $dungeonRoute,
+                $new,
                 DungeonRoutePlayerRace::class,
                 'character_race_id',
-                $newRaces,
+                array_filter((array)$newRaces, static fn($id): bool => $knownRaceIds->contains((int)$id)),
             );
         }
     }
@@ -375,9 +383,13 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
      * @param class-string<Model>  $childModel
      * @param iterable<int|string> $ids
      */
-    private function syncChildModels(DungeonRoute $dungeonRoute, string $childModel, string $foreignKey, iterable $ids): void
+    private function syncChildModels(DungeonRoute $dungeonRoute, bool $new, string $childModel, string $foreignKey, iterable $ids): void
     {
-        $childModel::where('dungeon_route_id', $dungeonRoute->id)->delete();
+        // A new route has no child rows, and deleting by its id only takes gap locks that deadlock
+        // against concurrent route creations
+        if (!$new) {
+            $childModel::where('dungeon_route_id', $dungeonRoute->id)->delete();
+        }
 
         $rows = [];
         foreach ($ids as $id) {
