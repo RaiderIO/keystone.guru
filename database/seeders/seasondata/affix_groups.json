@@ -4227,26 +4227,26 @@
         "season_id": 18,
         "expansion_id": 12,
         "seasonal_index": null,
-        "confirmed": false,
+        "confirmed": true,
         "affixes": [
             {
-                "affix_id": 24,
+                "affix_id": 40,
                 "key_level": 2
             },
             {
-                "affix_id": 24,
+                "affix_id": 4,
                 "key_level": 5
             },
             {
-                "affix_id": 24,
+                "affix_id": 14,
                 "key_level": 7
             },
             {
-                "affix_id": 24,
+                "affix_id": 39,
                 "key_level": 10
             },
             {
-                "affix_id": 24,
+                "affix_id": 37,
                 "key_level": 12
             }
         ]
@@ -4256,26 +4256,26 @@
         "season_id": 18,
         "expansion_id": 12,
         "seasonal_index": null,
-        "confirmed": false,
+        "confirmed": true,
         "affixes": [
             {
-                "affix_id": 24,
+                "affix_id": 40,
                 "key_level": 2
             },
             {
-                "affix_id": 24,
+                "affix_id": 14,
                 "key_level": 5
             },
             {
-                "affix_id": 24,
+                "affix_id": 4,
                 "key_level": 7
             },
             {
-                "affix_id": 24,
+                "affix_id": 34,
                 "key_level": 10
             },
             {
-                "affix_id": 24,
+                "affix_id": 37,
                 "key_level": 12
             }
         ]
@@ -4285,26 +4285,26 @@
         "season_id": 18,
         "expansion_id": 12,
         "seasonal_index": null,
-        "confirmed": false,
+        "confirmed": true,
         "affixes": [
             {
-                "affix_id": 24,
+                "affix_id": 40,
                 "key_level": 2
             },
             {
-                "affix_id": 24,
+                "affix_id": 4,
                 "key_level": 5
             },
             {
-                "affix_id": 24,
+                "affix_id": 14,
                 "key_level": 7
             },
             {
-                "affix_id": 24,
+                "affix_id": 33,
                 "key_level": 10
             },
             {
-                "affix_id": 24,
+                "affix_id": 37,
                 "key_level": 12
             }
         ]
@@ -4314,26 +4314,26 @@
         "season_id": 18,
         "expansion_id": 12,
         "seasonal_index": null,
-        "confirmed": false,
+        "confirmed": true,
         "affixes": [
             {
-                "affix_id": 24,
+                "affix_id": 40,
                 "key_level": 2
             },
             {
-                "affix_id": 24,
+                "affix_id": 14,
                 "key_level": 5
             },
             {
-                "affix_id": 24,
+                "affix_id": 4,
                 "key_level": 7
             },
             {
-                "affix_id": 24,
+                "affix_id": 39,
                 "key_level": 10
             },
             {
-                "affix_id": 24,
+                "affix_id": 37,
                 "key_level": 12
             }
         ]
