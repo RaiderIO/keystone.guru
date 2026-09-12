@@ -318,7 +318,7 @@ return [
             'compendium_tuning'               => '法术调整',
             'compendium_tuning_description'   => '法术在游戏版本之间有哪些变化',
             'class_compendium'                => '按职业',
-            'class_compendium_description'    => '您的职业技能对付NPC和法术时必须了解的要点',
+            'class_compendium_description'    => '您需要了解的职业技能与NPC及法术之间的交互要点',
         ],
         'nav' => [
             'dungeoncontext' => [
