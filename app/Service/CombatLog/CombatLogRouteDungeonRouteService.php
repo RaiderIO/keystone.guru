@@ -177,6 +177,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             Auth::id() ?? -1,
         );
 
+        /** @var array<int, array<string, mixed>> $enemyFailureAttributes */
+        $enemyFailureAttributes = [];
+
         try {
             if ($existingDungeonRoute !== null) {
                 // The route the builder just created IS the draft - it holds exactly the content the fresh combat log
@@ -188,17 +191,17 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
             $dungeonRoute = $builder->build();
 
-            // Worked out against the mapping version this generation was built on, and before apply() touches the
-            // original. A regeneration's failures belong to the original, which keeps its id through apply().
-            $enemyFailureAttributes = $this->getCombatLogRouteEnemyFailureAttributes(
-                $dungeonRoute->mappingVersion,
-                $combatLogRoute,
-                $dungeonRoute,
-                $existingDungeonRoute->id ?? $dungeonRoute->id,
-            );
-
             if ($existingDungeonRoute === null) {
-                $this->insertCombatLogRouteEnemyFailures($enemyFailureAttributes);
+                $this->saveCombatLogRouteEnemyFailures($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
+            } else {
+                // Worked out against the mapping version this generation was built on, and before apply() touches
+                // the original. A regeneration's failures belong to the original, which keeps its id through apply().
+                $enemyFailureAttributes = $this->getCombatLogRouteEnemyFailureAttributes(
+                    $dungeonRoute->mappingVersion,
+                    $combatLogRoute,
+                    $dungeonRoute,
+                    $existingDungeonRoute->id,
+                );
             }
 
             if ($combatLogRoute->settings->debugIcons) {
@@ -763,6 +766,16 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         }
 
         return $failureAttributes;
+    }
+
+    private function saveCombatLogRouteEnemyFailures(
+        MappingVersion           $mappingVersion,
+        CombatLogRouteRequestDto $combatLogRoute,
+        DungeonRoute             $dungeonRoute,
+    ): void {
+        $this->insertCombatLogRouteEnemyFailures(
+            $this->getCombatLogRouteEnemyFailureAttributes($mappingVersion, $combatLogRoute, $dungeonRoute, $dungeonRoute->id),
+        );
     }
 
     /**
