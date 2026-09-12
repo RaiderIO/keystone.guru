@@ -3,7 +3,6 @@
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute;
 
 use App\Models\Affix;
-use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
@@ -275,20 +274,8 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
         $this->deleteDungeonRouteByPublicKey($responseArr['data']['publicKey']);
     }
 
-    /**
-     * DungeonRoute::deleting does not cascade to the enemy failures the store endpoint records for the route, so
-     * those go separately - keyed by route rather than by dungeon, which other tests' rows share.
-     */
     private function deleteDungeonRouteByPublicKey(string $publicKey): void
     {
-        $dungeonRoute = DungeonRoute::where('public_key', $publicKey)->first();
-
-        if ($dungeonRoute === null) {
-            return;
-        }
-
-        CombatLogRouteEnemyFailure::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
-
-        $dungeonRoute->delete();
+        DungeonRoute::where('public_key', $publicKey)->first()?->delete();
     }
 }

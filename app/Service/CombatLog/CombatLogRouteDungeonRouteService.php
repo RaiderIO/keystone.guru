@@ -184,7 +184,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
             $dungeonRoute = $builder->build();
 
-            $this->saveCombatLogRouteEnemyFailures($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
+            // A draft's failures would go with it when apply() deletes it - a regeneration records them once applied
+            if ($existingDungeonRoute === null) {
+                $this->saveCombatLogRouteEnemyFailures($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
+            }
 
             if ($combatLogRoute->settings->debugIcons) {
                 $this->generateMapIcons(
@@ -209,7 +212,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             return $dungeonRoute;
         }
 
-        return $this->applyRegeneratedDungeonRoute($existingDungeonRoute, $dungeonRoute);
+        return $this->applyRegeneratedDungeonRoute($existingDungeonRoute, $dungeonRoute, $combatLogRoute);
     }
 
     /**
@@ -255,8 +258,11 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
      * @throws CombatLogRouteRegeneratedConcurrentlyException
      * @throws Throwable
      */
-    private function applyRegeneratedDungeonRoute(DungeonRoute $existingDungeonRoute, DungeonRoute $draft): DungeonRoute
-    {
+    private function applyRegeneratedDungeonRoute(
+        DungeonRoute             $existingDungeonRoute,
+        DungeonRoute             $draft,
+        CombatLogRouteRequestDto $combatLogRoute,
+    ): DungeonRoute {
         $draftId = $draft->id;
 
         try {
@@ -273,12 +279,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             );
         }
 
-        // Enemy failures live on the combatlog connection and are not part of the content apply() moves, so they are
-        // re-pointed by hand. Without this they would stay on the deleted draft's id and the original would keep
-        // accumulating the failures of every previous generation - which the old path got away with only because it
-        // deleted the whole route each time.
-        CombatLogRouteEnemyFailure::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
-        CombatLogRouteEnemyFailure::query()->where('dungeon_route_id', $draftId)->update(['dungeon_route_id' => $dungeonRoute->id]);
+        // Enemy failures live on the combatlog connection and are not part of the content apply() moves. The original
+        // keeps only the failures of its latest generation, not those of every previous one.
+        $dungeonRoute->deleteCombatLogRouteEnemyFailures();
+        $this->saveCombatLogRouteEnemyFailures($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
 
         // settings->temporary applies to the route that comes out of this regeneration, exactly as it did when that
         // route was a brand new row. apply() preserves the original's own expiry, so it is assigned here instead.

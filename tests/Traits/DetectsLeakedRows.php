@@ -2,6 +2,36 @@
 
 namespace Tests\Traits;
 
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\CombatLog\ChallengeModeRun;
+use App\Models\CombatLog\ChallengeModeRunData;
+use App\Models\CombatLog\CombatLogNpcEvent;
+use App\Models\CombatLog\CombatLogRouteEnemyFailure;
+use App\Models\CombatLog\CombatLogSpellEvent;
+use App\Models\CombatLog\ParsedCombatLog;
+use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteThumbnail;
+use App\Models\Enemy;
+use App\Models\EnemyPack;
+use App\Models\Expansion;
+use App\Models\Floor\Floor;
+use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Laratrust\Role;
+use App\Models\MapIconType;
+use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcEnemyForces;
+use App\Models\Patreon\PatreonBenefit;
+use App\Models\PublishedState;
+use App\Models\Season;
+use App\Models\SeasonDungeon;
+use App\Models\Spell\Spell;
+use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
+use App\Models\Team;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use PDO;
 use PHPUnit\Event;
@@ -25,17 +55,18 @@ trait DetectsLeakedRows
     /**
      * Counted in full. Every table here is small enough that the count is a fraction of a millisecond.
      *
-     * @var array<string, array<int, string>>
+     * @var array<string, array<int, class-string<\Illuminate\Database\Eloquent\Model>>>
      */
     private const array LEAK_GUARD_COUNTED_TABLES = [
         'phpunit' => [
-            'users', 'teams', 'dungeon_routes', 'dungeon_route_thumbnails', 'seasons', 'season_dungeons', 'dungeons',
-            'mapping_versions', 'expansions', 'game_versions', 'game_server_regions', 'floors', 'affix_groups',
-            'roles', 'tags', 'tag_categories', 'patreon_benefits', 'map_icon_types', 'published_states', 'npcs',
+            User::class, Team::class, DungeonRoute::class, DungeonRouteThumbnail::class, Season::class,
+            SeasonDungeon::class, Dungeon::class, MappingVersion::class, Expansion::class, GameVersion::class,
+            GameServerRegion::class, Floor::class, AffixGroup::class, Role::class, Tag::class, TagCategory::class,
+            PatreonBenefit::class, MapIconType::class, PublishedState::class, Npc::class,
         ],
         'combatlog' => [
-            'challenge_mode_runs', 'challenge_mode_run_data', 'combat_log_route_enemy_failures',
-            'combat_log_npc_events', 'combat_log_spell_events', 'parsed_combat_logs',
+            ChallengeModeRun::class, ChallengeModeRunData::class, CombatLogRouteEnemyFailure::class,
+            CombatLogNpcEvent::class, CombatLogSpellEvent::class, ParsedCombatLog::class,
         ],
     ];
 
@@ -43,26 +74,30 @@ trait DetectsLeakedRows
      * Too large to count in full on every test; only rows above the id the process started with are counted, so a
      * row a test inserts still shows while the tens of thousands of seeded rows cost a single index range scan.
      *
-     * @var array<string, array<int, string>>
+     * @var array<string, array<int, class-string<\Illuminate\Database\Eloquent\Model>>>
      */
     private const array LEAK_GUARD_APPENDED_TABLES = [
-        'phpunit' => ['enemies', 'enemy_packs', 'spells', 'npc_enemy_forces'],
+        'phpunit' => [Enemy::class, EnemyPack::class, Spell::class, NpcEnemyForces::class],
     ];
 
     /**
-     * Seeded rows a test may flip rather than create, counted by the state a fresh seed never has.
+     * Seeded rows a test may flip rather than create, counted by the state a fresh seed never has: label => the
+     * model and the where clause its rows are counted by.
      *
-     * @var array<string, array<string, string>>
+     * @var array<string, array<string, array{0: class-string<\Illuminate\Database\Eloquent\Model>, 1: string}>>
      */
     private const array LEAK_GUARD_PREDICATES = [
         'phpunit' => [
-            'dungeons where active = 0'    => 'select count(*) from `dungeons` where `active` = 0',
-            'seasons parked at 2999-01-01' => 'select count(*) from `seasons` where `start` >= \'2999-01-01\'',
+            'dungeons where active = 0'    => [Dungeon::class, '`active` = 0'],
+            'seasons parked at 2999-01-01' => [Season::class, '`start` >= \'2999-01-01\''],
         ],
     ];
 
     /** @var array<string, int> Per process: the highest id each appended table had when the first test ran */
     private static array $leakGuardBaselineIds = [];
+
+    /** @var array<class-string<\Illuminate\Database\Eloquent\Model>, string> */
+    private static array $leakGuardTableNames = [];
 
     /** @var array<string, PDO> Held across tearDown(), where the application (and DB manager) is already gone */
     private array $leakGuardConnections = [];
@@ -87,9 +122,10 @@ trait DetectsLeakedRows
             $this->leakGuardConnections[$connection] = DB::connection($connection)->getPdo();
         }
 
-        foreach (self::LEAK_GUARD_APPENDED_TABLES as $connection => $tables) {
-            foreach ($tables as $table) {
-                $key = sprintf('%s.%s', $connection, $table);
+        foreach (self::LEAK_GUARD_APPENDED_TABLES as $connection => $modelClasses) {
+            foreach ($modelClasses as $modelClass) {
+                $table = self::leakGuardTableName($modelClass);
+                $key   = sprintf('%s.%s', $connection, $table);
                 if (!array_key_exists($key, self::$leakGuardBaselineIds)) {
                     $maxId = $this->leakGuardConnections[$connection]
                         ->query(sprintf('select coalesce(max(`id`), 0) from `%s`', $table))
@@ -152,17 +188,24 @@ trait DetectsLeakedRows
         foreach ($this->leakGuardConnections as $connection => $pdo) {
             $columns = [];
 
-            foreach (self::LEAK_GUARD_COUNTED_TABLES[$connection] ?? [] as $table) {
+            foreach (self::LEAK_GUARD_COUNTED_TABLES[$connection] ?? [] as $modelClass) {
+                $table = self::leakGuardTableName($modelClass);
+
                 $columns[sprintf('%s.%s', $connection, $table)] = sprintf('(select count(*) from `%s`)', $table);
             }
 
-            foreach (self::LEAK_GUARD_APPENDED_TABLES[$connection] ?? [] as $table) {
+            foreach (self::LEAK_GUARD_APPENDED_TABLES[$connection] ?? [] as $modelClass) {
+                $table         = self::leakGuardTableName($modelClass);
                 $key           = sprintf('%s.%s', $connection, $table);
                 $columns[$key] = sprintf('(select count(*) from `%s` where `id` > %d)', $table, self::$leakGuardBaselineIds[$key]);
             }
 
-            foreach (self::LEAK_GUARD_PREDICATES[$connection] ?? [] as $label => $sql) {
-                $columns[sprintf('%s: %s', $connection, $label)] = sprintf('(%s)', $sql);
+            foreach (self::LEAK_GUARD_PREDICATES[$connection] ?? [] as $label => [$modelClass, $where]) {
+                $columns[sprintf('%s: %s', $connection, $label)] = sprintf(
+                    '(select count(*) from `%s` where %s)',
+                    self::leakGuardTableName($modelClass),
+                    $where,
+                );
             }
 
             $select = [];
@@ -180,6 +223,14 @@ trait DetectsLeakedRows
         }
 
         return $counts;
+    }
+
+    /**
+     * @param class-string<\Illuminate\Database\Eloquent\Model> $modelClass
+     */
+    private static function leakGuardTableName(string $modelClass): string
+    {
+        return self::$leakGuardTableNames[$modelClass] ??= new $modelClass()->getTable();
     }
 
     private static function resolveLeakGuardMode(): string
