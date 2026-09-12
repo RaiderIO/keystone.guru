@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
+use Tests\Fixtures\Traits\CreatesNpc;
+use Tests\Fixtures\Traits\CreatesSpell;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
@@ -23,6 +25,9 @@ use Tests\TestCases\PublicTestCase;
 #[Group('APICombatLogObservation')]
 final class APICombatLogObservationControllerTest extends PublicTestCase
 {
+    use CreatesNpc;
+    use CreatesSpell;
+
     /** @var array<int, int> */
     private array $createdSpellObservationIds = [];
 
@@ -283,29 +288,18 @@ final class APICombatLogObservationControllerTest extends PublicTestCase
     }
 
     /**
-     * Only `aura` and `miss_types_mask` are checked - `debuff` is seeded true on effectively every spell in this
-     * environment, so a test property that isn't `debuff` is used wherever collision with the seeded observation
-     * migration (`2026_05_22_000006_seed_combat_log_observations`, dated "today") matters.
+     * A spell of our own: the seeded observation migration (`2026_05_22_000006_seed_combat_log_observations`) records
+     * an observation for every seeded spell whose `aura`, `debuff` or `miss_types_mask` says so, so no seeded spell
+     * is guaranteed observation-free.
      */
     private function findSpellWithoutProperties(): Spell
     {
-        /** @var Spell $spell */
-        $spell = Spell::query()
-            ->where('aura', false)
-            ->where('miss_types_mask', 0)
-            ->firstOrFail();
-
-        return $spell;
+        return $this->createSpell();
     }
 
     private function findNpcWithoutCharacteristics(): Npc
     {
-        /** @var Npc $npc */
-        $npc = Npc::query()
-            ->whereDoesntHave('characteristics')
-            ->firstOrFail();
-
-        return $npc;
+        return $this->createNpcInDatabase();
     }
 
     private function createSpellObservation(int $spellId, SpellProperty $property, Carbon $observedOn): void

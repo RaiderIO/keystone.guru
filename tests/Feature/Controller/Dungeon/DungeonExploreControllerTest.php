@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\IsolatesSeededUpcomingSeasons;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -24,6 +25,7 @@ use Tests\TestCases\PublicTestCase;
 #[Group('DungeonExplore')]
 final class DungeonExploreControllerTest extends PublicTestCase
 {
+    use CreatesDungeon;
     use IsolatesSeededUpcomingSeasons;
 
     #[\Override]
@@ -106,8 +108,7 @@ final class DungeonExploreControllerTest extends PublicTestCase
     {
         // Arrange - inside the try so a failure halfway through still cleans up
         $upcomingSeason  = null;
-        $inactiveDungeon = Dungeon::firstWhere('key', DungeonKey::DEN_OF_NALORAKK->value);
-        $wasActive       = $inactiveDungeon->active;
+        $inactiveDungeon = $this->createDungeon();
 
         try {
             $upcomingSeason = $this->createUpcomingSeason();
@@ -116,9 +117,6 @@ final class DungeonExploreControllerTest extends PublicTestCase
                 'season_id'  => $upcomingSeason->id,
                 'dungeon_id' => $inactiveDungeon->id,
             ]);
-
-            $inactiveDungeon->active = false;
-            $inactiveDungeon->save();
 
             // Act
             $response = $this->get(route('dungeon.explore.gameversion.select', [
@@ -134,9 +132,6 @@ final class DungeonExploreControllerTest extends PublicTestCase
             );
             $response->assertDontSee(sprintf('data-id="%d"', $inactiveDungeon->id), false);
         } finally {
-            $inactiveDungeon->active = $wasActive;
-            $inactiveDungeon->save();
-
             if ($upcomingSeason !== null) {
                 $this->deleteUpcomingSeason($upcomingSeason);
             }

@@ -26,13 +26,9 @@ class APICombatLogControllerCombatLogRouteMistsOfTirnaScitheTest extends APIComb
         $postBody = $this->getJsonData('SL/tww_s1_mists_of_tirna_scithe_2', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($postBody, $responseArr, 19, 289);
@@ -46,13 +42,9 @@ class APICombatLogControllerCombatLogRouteMistsOfTirnaScitheTest extends APIComb
         $postBody = $this->getJsonData('SL/tww_s1_mists_of_tirna_scithe_4', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($postBody, $responseArr, 19, 270);

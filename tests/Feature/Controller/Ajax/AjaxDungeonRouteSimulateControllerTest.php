@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
+use App\Models\Mapping\MappingVersion;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Collection;
@@ -122,18 +125,25 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
     #[Test]
     public function simulate_givenSameNpcInSeveralPulls_loadsNpcHealthsOnceForTheRoute(): void
     {
-        // Arrange - several pulls, each holding an enemy of the same npc
-        /** @var Collection<int, Enemy>|null $enemies */
-        $enemies = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)
-            ->whereNotNull('npc_id')
-            ->get()
-            ->groupBy('npc_id')
-            ->filter(static fn(Collection $enemies): bool => $enemies->count() >= 3)
-            ->first();
+        // Arrange - several pulls, each holding an enemy of the same npc. The base route's dungeon is not required to
+        // have an npc mapped three times, so the route is re-drawn from a dungeon that is.
+        $this->dungeonRoute->delete();
 
-        if ($enemies === null) {
-            $this->markTestSkipped('No npc with 3+ enemies on this route\'s mapping version');
-        }
+        /** @var Collection<int, Enemy> $enemies */
+        [$dungeon, $mappingVersion, $enemies] = $this->findDungeon(
+            facadeEnabled: false,
+            challengeMode: true,
+            resolve:       static fn(Dungeon $dungeon, MappingVersion $mappingVersion): ?Collection => $mappingVersion->enemies()
+                ->whereNotNull('npc_id')
+                ->get()
+                ->groupBy('npc_id')
+                ->first(static fn(Collection $enemies): bool => $enemies->count() >= 3),
+        );
+
+        $this->dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
 
         /** @var Collection<int, KillZone> $killZones */
         $killZones = collect();
