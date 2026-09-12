@@ -8,12 +8,13 @@ use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use Database\Factories\FloorFactory;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCase;
 
 /**
  * A dungeon of the test's own, for a test that needs one in a state the seed does not promise: inactive, without
  * seasons, without enemies on its mapping version, on a given expansion. The seed does promise active dungeons with
- * enemies - use {@see \Tests\Feature\Traits\ProvidesDungeon::findDungeon()} for those.
+ * enemies - use {@see ProvidesDungeon::findDungeon()} for those.
  *
  * Everything created here is deleted again when the test's application is torn down.
  *

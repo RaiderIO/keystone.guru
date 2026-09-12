@@ -32,9 +32,10 @@ use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use PDO;
-use PHPUnit\Event;
+use PHPUnit\Event\Facade as EventFacade;
 
 /**
  * Compares the row counts of the tables tests most often pollute before and after every test, and reports the
@@ -55,7 +56,7 @@ trait DetectsLeakedRows
     /**
      * Counted in full. Every table here is small enough that the count is a fraction of a millisecond.
      *
-     * @var array<string, array<int, class-string<\Illuminate\Database\Eloquent\Model>>>
+     * @var array<string, array<int, class-string>>
      */
     private const array LEAK_GUARD_COUNTED_TABLES = [
         'phpunit' => [
@@ -74,7 +75,7 @@ trait DetectsLeakedRows
      * Too large to count in full on every test; only rows above the id the process started with are counted, so a
      * row a test inserts still shows while the tens of thousands of seeded rows cost a single index range scan.
      *
-     * @var array<string, array<int, class-string<\Illuminate\Database\Eloquent\Model>>>
+     * @var array<string, array<int, class-string>>
      */
     private const array LEAK_GUARD_APPENDED_TABLES = [
         'phpunit' => [Enemy::class, EnemyPack::class, Spell::class, NpcEnemyForces::class],
@@ -84,7 +85,7 @@ trait DetectsLeakedRows
      * Seeded rows a test may flip rather than create, counted by the state a fresh seed never has: label => the
      * model and the where clause its rows are counted by.
      *
-     * @var array<string, array<string, array{0: class-string<\Illuminate\Database\Eloquent\Model>, 1: string}>>
+     * @var array<string, array<string, array{0: class-string, 1: string}>>
      */
     private const array LEAK_GUARD_PREDICATES = [
         'phpunit' => [
@@ -96,7 +97,7 @@ trait DetectsLeakedRows
     /** @var array<string, int> Per process: the highest id each appended table had when the first test ran */
     private static array $leakGuardBaselineIds = [];
 
-    /** @var array<class-string<\Illuminate\Database\Eloquent\Model>, string> */
+    /** @var array<class-string<Model>, string> */
     private static array $leakGuardTableNames = [];
 
     /** @var array<string, PDO> Held across tearDown(), where the application (and DB manager) is already gone */
@@ -173,7 +174,7 @@ trait DetectsLeakedRows
             $this->fail($message);
         }
 
-        Event\Facade::emitter()->testTriggeredPhpunitWarning($this->valueObjectForEvents(), $message);
+        EventFacade::emitter()->testTriggeredPhpunitWarning($this->valueObjectForEvents(), $message);
     }
 
     /**
@@ -226,7 +227,7 @@ trait DetectsLeakedRows
     }
 
     /**
-     * @param class-string<\Illuminate\Database\Eloquent\Model> $modelClass
+     * @param class-string<Model> $modelClass
      */
     private static function leakGuardTableName(string $modelClass): string
     {

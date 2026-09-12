@@ -3,8 +3,10 @@
 namespace Tests\Feature\Console\Commands\Scheduler\DungeonRoute;
 
 use App\Console\Commands\Scheduler\DungeonRoute\PublishScheduled;
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteScheduledPublish;
+use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
@@ -71,8 +73,13 @@ final class PublishScheduledTest extends PublicTestCase
     #[Test]
     public function handle_givenDueScheduleForWorldState_setsPublishedAt(): void
     {
-        // Arrange — a route on an active Mythic+ dungeon
-        [$activeDungeon, $mappingVersion] = $this->findDungeon(dungeonActive: true, challengeMode: true);
+        // Arrange — a route on an active Mythic+ dungeon. The route has no pulls, so a mapping version with required
+        // enemies would refuse the publish
+        [$activeDungeon, $mappingVersion] = $this->findDungeon(
+            challengeMode: true,
+            dungeonActive: true,
+            resolve: static fn(Dungeon $dungeon, MappingVersion $mappingVersion): ?bool => $mappingVersion->enemies()->where('required', true)->exists() ? null : true,
+        );
 
         /** @var DungeonRoute $worldRoute */
         $worldRoute = DungeonRoute::factory()->make([

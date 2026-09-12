@@ -6,6 +6,7 @@ use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use Override;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\APICombatLogControllerTestBase;
 
 abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLogControllerTestBase
@@ -15,7 +16,7 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
     /** @var array<int, string> Public keys of every route stored through storeCombatLogRoute() in this test */
     private array $storedRoutePublicKeys = [];
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         try {

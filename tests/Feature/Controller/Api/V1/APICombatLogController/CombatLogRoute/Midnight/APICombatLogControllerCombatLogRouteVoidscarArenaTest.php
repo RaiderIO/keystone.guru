@@ -62,9 +62,8 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
         $this->validatePulls($postBody, $responseArr, 17, 739);
         $this->validateAffixes($responseArr);
 
-        // All three bosses were dropped from the route entirely while the floors' ingame coordinates were
-        // assigned to the wrong floors - their mapped positions ended up hundreds of yards from where they
-        // were actually killed, well outside enemy_engagement_max_range.
+        // Floor ingame coordinates assigned to the wrong floors put all three bosses' mapped positions hundreds of
+        // yards from where they are killed, well outside enemy_engagement_max_range, which drops them from the route.
         foreach ([self::NPC_ID_TAZRAH, self::NPC_ID_ATROXUS, self::NPC_ID_CHARONUS] as $bossNpcId) {
             $this->assertNotNull(
                 $this->findResolvedEnemyMdtId($responseArr, $bossNpcId),

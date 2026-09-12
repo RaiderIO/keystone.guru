@@ -88,4 +88,9 @@ class CombatLogRouteDungeonRouteServiceLogging extends StructuredLogging impleme
     {
         $this->info(__METHOD__, get_defined_vars());
     }
+
+    public function replaceCombatLogRouteEnemyFailuresFailed(int $dungeonRouteId, string $exception): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
 }
