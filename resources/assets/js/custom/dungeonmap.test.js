@@ -81,6 +81,67 @@ describe('DungeonMap._whenMapSized', () => {
     });
 });
 
+describe('DungeonMap.refreshLeafletMap', () => {
+    // The tile URL template's extension is a literal in source, not derived from tilesBaseUrl,
+    // so nothing else catches an accidental extension change here.
+    it('requests tiles with a .webp extension', () => {
+        const originalGetState = global.getState;
+        const originalC = global.c;
+
+        try {
+            global.c = {
+                map: {
+                    settings: {tileWidth: 256, tileHeight: 384},
+                    leafletSettings: {maxNativeZoom: 5},
+                },
+            };
+            global.L.point = (x, y) => ({x, y});
+            global.L.LatLngBounds = class {
+            };
+
+            let requestedUrl = null;
+            global.L.tileLayer = vi.fn((url) => {
+                requestedUrl = url;
+
+                return {addTo: vi.fn()};
+            });
+
+            global.getState = () => ({
+                getCurrentFloor: () => ({index: 1, zoom_max: 5}),
+                getMapContext: () => ({
+                    getDungeon: () => ({expansion: {shortname: 'tww'}, key: 'ara-kara'}),
+                }),
+            });
+
+            const map = Object.create(DungeonMap.prototype);
+            map.mapTileLayer = null;
+            map.options = {tilesBaseUrl: 'https://assets.keystone.guru/tiles_webp', defaultZoom: 2, defaultZoomMax: 5};
+            map.signal = vi.fn();
+            map.setMapState = vi.fn();
+            map.leafletMap = {
+                removeLayer: vi.fn(),
+                setView: vi.fn(),
+                unproject: vi.fn(() => ({})),
+                setMaxZoom: vi.fn(),
+            };
+
+            // The tile layer is built early in the method, before the (unstubbed) drawn-layers/
+            // controls/tooltips wiring further down; that downstream code throwing is expected
+            // and irrelevant here.
+            try {
+                map.refreshLeafletMap();
+            } catch {
+                // Ignored - see comment above.
+            }
+
+            expect(requestedUrl).toBe('https://assets.keystone.guru/tiles_webp/tww/ara-kara/1/{z}/{x}_{y}.webp');
+        } finally {
+            global.getState = originalGetState;
+            global.c = originalC;
+        }
+    });
+});
+
 describe('DungeonMap._enemyClicked', () => {
     // Regression test (#4431): clicking an enemy on a page with no killzone map object group
     // (Explore mode, the heatmap, some admin tools - anywhere `hiddenMapObjectGroups` hides

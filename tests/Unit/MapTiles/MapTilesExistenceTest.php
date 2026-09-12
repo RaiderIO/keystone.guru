@@ -21,7 +21,7 @@ final class MapTilesExistenceTest extends PublicTestCase
      * The tiles directory is gitignored in keystone.guru.assets (it is synced outside git), so it only
      * exists on a developer machine; a CI runner never has it.
      */
-    private const string TILES_PATH = '../keystone.guru.assets/tiles';
+    private const string TILES_PATH = '../keystone.guru.assets/tiles_webp';
 
     #[Test]
     public function mapTilesExistence_givenDungeon_shouldHaveAllMapTilesAvailable(): void
@@ -71,7 +71,7 @@ final class MapTilesExistenceTest extends PublicTestCase
 
                     for ($x = 0; $x < $maxX; $x++) {
                         for ($y = 0; $y < $maxY; $y++) {
-                            Assert::assertFileExists(sprintf('%s/%d_%d.png', $zoomLevelDirectory, $x, $y));
+                            Assert::assertFileExists(sprintf('%s/%d_%d.webp', $zoomLevelDirectory, $x, $y));
                         }
                     }
                 }
