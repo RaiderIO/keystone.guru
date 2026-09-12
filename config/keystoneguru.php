@@ -17,8 +17,8 @@ return [
     'assets_base_url'          => env('ASSETS_BASE_URL', '/'),
     'assets_base_url_internal' => env('ASSETS_BASE_URL_INTERNAL', env('ASSETS_BASE_URL', '/')),
     'images_base_url'          => sprintf('%s/images', env('ASSETS_BASE_URL', '')),
-    'tiles_base_url'           => sprintf('%s/tiles', env('ASSETS_BASE_URL', '')),
-    'tiles_base_url_internal'  => sprintf('%s/tiles', env('ASSETS_BASE_URL_INTERNAL', env('ASSETS_BASE_URL', ''))),
+    'tiles_base_url'           => sprintf('%s/tiles_webp', env('ASSETS_BASE_URL', '')),
+    'tiles_base_url_internal'  => sprintf('%s/tiles_webp', env('ASSETS_BASE_URL_INTERNAL', env('ASSETS_BASE_URL', ''))),
 
     'github_username'         => 'Wotuu',
     'github_repository_owner' => 'RaiderIO',
