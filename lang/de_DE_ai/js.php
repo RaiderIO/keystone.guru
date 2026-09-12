@@ -317,6 +317,7 @@ return [
     'mdt_enemy_forces'                                                     => 'Feindliche Kräfte',
     'ajax_error_default'                                                   => 'Bei der Ausführung deiner Anfrage ist ein Fehler aufgetreten. Bitte versuche es erneut.',
     'ajax_error_403'                                                       => 'Du bist nicht berechtigt, diese Anfrage auszuführen.',
+    'mdt_export_url_expired'                                               => 'Diese Seite ist schon zu lange geöffnet, um nach MDT zu exportieren. Bitte lade die Seite neu und versuche es erneut.',
     'ajax_error_404'                                                       => 'Die angeforderte Ressource wurde nicht gefunden.',
     'ajax_error_419'                                                       => 'Deine Sitzung ist abgelaufen. Bitte aktualisiere die Seite und versuche es erneut.',
     'map_object_readonly_label'                                            => 'Diese Mapping-Version ist schreibgeschützt',

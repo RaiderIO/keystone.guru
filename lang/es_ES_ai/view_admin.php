@@ -209,6 +209,7 @@ return [
             'header_edit'                    => '',
             'name'                           => '',
             'game_id'                        => '',
+            'game_version_id'                => '',
             'classification'                 => '',
             'aggressiveness'                 => '',
             'type'                           => '',

@@ -316,6 +316,7 @@ return [
     'mdt_enemy_forces'                                                     => '敵方部隊',
     'ajax_error_default'                                                   => '執行您的請求時發生錯誤。請重試。',
     'ajax_error_403'                                                       => '您無權執行此請求。',
+    'mdt_export_url_expired'                                               => '',
     'ajax_error_404'                                                       => '未找到請求的資源。',
     'ajax_error_419'                                                       => '您的會話已過期。請刷新頁面並重試。',
     'map_object_readonly_label'                                            => '此映射版本為唯讀',

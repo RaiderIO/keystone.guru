@@ -53,6 +53,9 @@ return [
             'required' => '',
             'max'      => '',
         ],
+        'npc_dungeon_ids' => [
+            'required' => '',
+        ],
     ],
     'date'              => 'O campo :attribute não contém uma data válida.',
     'date_equals'       => 'O campo :attribute deve ser uma data igual a :date.',

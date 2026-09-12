@@ -53,6 +53,9 @@ return [
             'required' => '',
             'max'      => '',
         ],
+        'npc_dungeon_ids' => [
+            'required' => '',
+        ],
     ],
     'date'              => 'Значение поля :attribute должно быть корректной датой.',
     'date_equals'       => 'Значение поля :attribute должно быть датой равной :date.',

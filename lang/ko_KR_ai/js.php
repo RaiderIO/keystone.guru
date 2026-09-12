@@ -316,6 +316,7 @@ return [
     'mdt_enemy_forces'                                                     => '적군 병력',
     'ajax_error_default'                                                   => '요청을 수행하는 중 오류가 발생했습니다. 다시 시도하십시오.',
     'ajax_error_403'                                                       => '이 요청을 수행할 권한이 없습니다.',
+    'mdt_export_url_expired'                                               => '이 페이지가 너무 오래 열려 있어 MDT로 내보낼 수 없습니다. 페이지를 새로고침하고 다시 시도하십시오.',
     'ajax_error_404'                                                       => '요청한 리소스를 찾을 수 없습니다.',
     'ajax_error_419'                                                       => '세션이 만료되었습니다. 페이지를 새로고침하고 다시 시도하십시오.',
     'map_object_readonly_label'                                            => '이 매핑 버전은 읽기 전용입니다',

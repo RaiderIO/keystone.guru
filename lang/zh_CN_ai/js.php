@@ -316,6 +316,7 @@ return [
     'mdt_enemy_forces'                                                     => '敌方部队',
     'ajax_error_default'                                                   => '执行请求时发生错误。请再试一次。',
     'ajax_error_403'                                                       => '您无权执行此请求。',
+    'mdt_export_url_expired'                                               => '此页面打开时间过长，无法导出到 MDT。请刷新页面并重试。',
     'ajax_error_404'                                                       => '请求的资源未找到。',
     'ajax_error_419'                                                       => '您的会话已过期。请刷新页面并重试。',
     'map_object_readonly_label'                                            => '此映射版本为只读',

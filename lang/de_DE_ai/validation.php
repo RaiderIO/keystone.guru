@@ -53,6 +53,9 @@ return [
             'required' => '',
             'max'      => '',
         ],
+        'npc_dungeon_ids' => [
+            'required' => '',
+        ],
     ],
     'date'              => ':Attribute muss ein gültiges Datum sein.',
     'date_equals'       => ':Attribute muss ein Datum gleich :date sein.',

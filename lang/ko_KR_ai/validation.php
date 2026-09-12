@@ -53,6 +53,9 @@ return [
             'required' => '',
             'max'      => '',
         ],
+        'npc_dungeon_ids' => [
+            'required' => '',
+        ],
     ],
     'date'              => ':Attribute은(는) 유효한 날짜가 아닙니다.',
     'date_equals'       => ':Attribute은(는) :date과(와) 같은날짜여야합니다.',

@@ -317,6 +317,7 @@ return [
     'mdt_enemy_forces'                                                     => 'Fuerzas enemigas',
     'ajax_error_default'                                                   => 'Ocurrió un error al realizar su solicitud. Por favor, intente de nuevo.',
     'ajax_error_403'                                                       => 'No está autorizado para realizar esta solicitud.',
+    'mdt_export_url_expired'                                               => 'Esta página lleva demasiado tiempo abierta para exportar a MDT. Por favor, recarga la página e inténtalo de nuevo.',
     'ajax_error_404'                                                       => 'El recurso solicitado no fue encontrado.',
     'ajax_error_419'                                                       => 'Su sesión ha expirado. Por favor, actualice la página e intente de nuevo.',
     'map_object_readonly_label'                                            => 'Esta versión del mapa es de solo lectura',

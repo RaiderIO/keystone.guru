@@ -209,6 +209,7 @@ return [
             'header_edit'                    => 'Редактировать NPC',
             'name'                           => 'Имя',
             'game_id'                        => 'Игровое ID',
+            'game_version_id'                => '',
             'classification'                 => 'Классификация',
             'aggressiveness'                 => 'Агрессивность',
             'type'                           => '',
