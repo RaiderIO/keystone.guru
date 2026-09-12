@@ -221,26 +221,11 @@ class Npc extends CacheModel implements MappingModelInterface
      */
     public function getGameVersionId(?MappingVersion $mappingVersion = null): int
     {
-        $storedGameVersionId = $this->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL];
-
-        // Without a mapping version the candidates can only ever turn the answer into retail, so for a
-        // retail NPC they cannot change it - worth skipping, this runs per NPC of a serialized collection
-        if ($mappingVersion === null && $storedGameVersionId === GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL]) {
-            return $storedGameVersionId;
-        }
-
-        $candidateGameVersionIds = $this->getCandidateGameVersionIds();
-
-        // Combat-log-created NPCs are in no dungeon at all, so there is nothing to derive from
-        if ($candidateGameVersionIds->isEmpty()) {
-            return GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL];
-        }
-
-        if ($mappingVersion !== null && $candidateGameVersionIds->contains($mappingVersion->game_version_id)) {
+        if ($mappingVersion !== null && $this->getCandidateGameVersionIds()->contains($mappingVersion->game_version_id)) {
             return $mappingVersion->game_version_id;
         }
 
-        return $storedGameVersionId;
+        return $this->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL];
     }
 
     /**
