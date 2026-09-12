@@ -9,12 +9,17 @@ use App\Models\PublishedState;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Console')]
 #[Group('DungeonRoute')]
 final class PublishScheduledTest extends PublicTestCase
 {
+    use CreatesDungeon;
+    use ProvidesDungeon;
+
     private DungeonRoute $dungeonRoute;
 
     #[\Override]
@@ -66,20 +71,8 @@ final class PublishScheduledTest extends PublicTestCase
     #[Test]
     public function handle_givenDueScheduleForWorldState_setsPublishedAt(): void
     {
-        // Arrange — use an active dungeon route
-        $activeDungeon = \App\Models\Dungeon::query()
-            ->where('active', true)
-            ->whereNotNull('challenge_mode_id')
-            ->first();
-
-        if ($activeDungeon === null) {
-            $this->markTestSkipped('No active dungeon available.');
-        }
-
-        $mappingVersion = $activeDungeon->getCurrentMappingVersion();
-        if ($mappingVersion === null) {
-            $this->markTestSkipped('No mapping version available for active dungeon.');
-        }
+        // Arrange — a route on an active Mythic+ dungeon
+        [$activeDungeon, $mappingVersion] = $this->findDungeon(dungeonActive: true, challengeMode: true);
 
         /** @var DungeonRoute $worldRoute */
         $worldRoute = DungeonRoute::factory()->make([
@@ -136,25 +129,13 @@ final class PublishScheduledTest extends PublicTestCase
     #[Test]
     public function handle_givenWorldScheduleForInactiveDungeon_skipsAndDeletesRecord(): void
     {
-        // Arrange — use an inactive dungeon
-        $inactiveDungeon = \App\Models\Dungeon::query()
-            ->where('active', false)
-            ->whereNotNull('challenge_mode_id')
-            ->first();
-
-        if ($inactiveDungeon === null) {
-            $this->markTestSkipped('No inactive dungeon available.');
-        }
-
-        $mappingVersion = $inactiveDungeon->getCurrentMappingVersion();
-        if ($mappingVersion === null) {
-            $this->markTestSkipped('No mapping version available for inactive dungeon.');
-        }
+        // Arrange — a route on a dungeon of our own that is inactive; the seed has none
+        $inactiveDungeon = $this->createDungeon(['active' => false]);
 
         /** @var DungeonRoute $inactiveRoute */
         $inactiveRoute = DungeonRoute::factory()->make([
             'dungeon_id'         => $inactiveDungeon->id,
-            'mapping_version_id' => $mappingVersion->id,
+            'mapping_version_id' => $inactiveDungeon->getCurrentMappingVersion()->id,
             'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
         ]);
         $inactiveRoute->save();

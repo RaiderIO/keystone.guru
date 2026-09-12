@@ -25,12 +25,9 @@ class APICombatLogControllerCombatLogRouteMaisaraCavernsTest extends APICombatLo
         $postBody = $this->getJsonData('Midnight/midnight_s1_maisara_caverns_preseason', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($postBody, $responseArr, 36, 551);

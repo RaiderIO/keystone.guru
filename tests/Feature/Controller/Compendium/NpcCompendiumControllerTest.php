@@ -8,7 +8,6 @@ use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
-use App\Models\Npc\NpcClassification;
 use App\Models\Season;
 use App\Models\User;
 use App\Service\View\RequestViewContextInterface;
@@ -18,14 +17,19 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\Feature\Traits\ReadsDungeonSelect;
+use Tests\Fixtures\Traits\CreatesNpc;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('Compendium')]
 final class NpcCompendiumControllerTest extends PublicTestCase
 {
+    use CreatesNpc;
     use ProvidesDungeon;
     use ReadsDungeonSelect;
+
+    /** A classification_id no npc_classifications row has; a few seeded NPCs carry one like it */
+    private const int UNKNOWN_CLASSIFICATION_ID = 999999;
 
     /** @var array<string, mixed> */
     private array $datatableParams = [
@@ -292,40 +296,55 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     #[Test]
     public function get_givenDungeonWithAClassificationlessNpc_returnsOk(): void
     {
-        // Arrange - a few seeded NPCs carry a classification_id that matches no npc_classifications
-        // row, and some of those are enemies on a current mapping version. Building their tooltip
-        // reads that relation, so this dungeon is what proves the payload survives a null one.
-        $classificationlessNpcIds = Npc::query()
-            ->whereNotIn('classification_id', NpcClassification::query()->select('id'))
-            ->pluck('id');
+        // Arrange - an NPC of our own whose classification_id matches no npc_classifications row, mapped as an
+        // enemy on an active dungeon's current mapping version. Building its tooltip reads that relation, so this
+        // is what proves the payload survives a null one.
+        [$dungeon, $mappingVersion] = $this->findDungeon(dungeonActive: true, minEnemies: 1);
+        $npc                        = $this->createNpcInDatabase(['classification_id' => self::UNKNOWN_CLASSIFICATION_ID]);
+        $enemy                      = null;
 
-        $dungeon = Dungeon::all()->first(static function (Dungeon $dungeon) use ($classificationlessNpcIds): bool {
-            $mappingVersion = $dungeon->getCurrentMappingVersion();
+        try {
+            $enemy = $this->createEnemyOfNpcOnMappingVersion($npc, $mappingVersion);
 
-            return $mappingVersion !== null && $mappingVersion->enemies()->whereIn('npc_id', $classificationlessNpcIds)->exists();
-        });
+            // Act - a page long enough to reach it: the endpoint orders by classification_id descending,
+            // so an NPC whose classification does not resolve sorts to the very end of the dungeon
+            $response = $this->call('GET', route('ajax.npc.compendium.search'), array_merge($this->datatableParams, [
+                'dungeon_id' => $dungeon->id,
+                'length'     => 500,
+            ]), [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
 
-        if ($dungeon === null) {
-            $this->markTestSkipped('No mapped NPC carries a classification_id without a matching classification row');
+            // Assert
+            $response->assertOk();
+
+            $rowsById = array_column($response->json()['data'], null, 'id');
+
+            $this->assertArrayHasKey($npc->id, $rowsById, 'The response did not carry the classificationless NPC, so it proves nothing');
+            $this->assertArrayNotHasKey('classification', $rowsById[$npc->id]['tooltip_data']);
+        } finally {
+            $enemy?->delete();
         }
+    }
 
-        // Act - a page long enough to reach it: the endpoint orders by classification_id descending,
-        // so an NPC whose classification does not resolve sorts to the very end of the dungeon
-        $response = $this->call('GET', route('ajax.npc.compendium.search'), array_merge($this->datatableParams, [
-            'dungeon_id' => $dungeon->id,
-            'length'     => 500,
-        ]), [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+    /**
+     * Enemy is mapping-versioned data, so the row is cloned off an existing enemy of the same version to satisfy
+     * every column the map expects, and only the npc is ours.
+     */
+    private function createEnemyOfNpcOnMappingVersion(Npc $npc, MappingVersion $mappingVersion): Enemy
+    {
+        /** @var Enemy $templateEnemy */
+        $templateEnemy = $mappingVersion->enemies()->firstOrFail();
 
-        // Assert
-        $response->assertOk();
-
-        $rowsById           = array_column($response->json()['data'], null, 'id');
-        $classificationless = array_intersect_key($rowsById, array_flip($classificationlessNpcIds->all()));
-
-        $this->assertNotEmpty($classificationless, 'The response carried no classificationless NPC, so it proves nothing');
-        foreach ($classificationless as $npc) {
-            $this->assertArrayNotHasKey('classification', $npc['tooltip_data']);
-        }
+        return Enemy::query()->create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $templateEnemy->floor_id,
+            'npc_id'             => $npc->id,
+            'faction'            => $templateEnemy->faction,
+            'required'           => false,
+            'skippable'          => false,
+            'hyper_respawn'      => false,
+            'lat'                => $templateEnemy->lat,
+            'lng'                => $templateEnemy->lng,
+        ]);
     }
 
     #[Test]
@@ -390,16 +409,10 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     #[Test]
     public function show_givenClassificationlessNpc_returnsOk(): void
     {
-        // Arrange - a few seeded NPCs carry a classification_id that matches no npc_classifications
-        // row (#4115); the header partial reads that relation directly, unlike the ajax endpoint's
-        // tooltip_data, so this is what proves the page survives a null one.
-        $npc = Npc::query()
-            ->whereNotIn('classification_id', NpcClassification::query()->select('id'))
-            ->first();
-
-        if ($npc === null) {
-            $this->markTestSkipped('No NPC carries a classification_id without a matching classification row');
-        }
+        // Arrange - an NPC of our own whose classification_id matches no npc_classifications row; the header
+        // partial reads that relation directly, unlike the ajax endpoint's tooltip_data, so this is what proves
+        // the page survives a null one.
+        $npc = $this->createNpcInDatabase(['classification_id' => self::UNKNOWN_CLASSIFICATION_ID]);
 
         // Act
         $response = $this->get(route('npc.compendium.show', $npc));

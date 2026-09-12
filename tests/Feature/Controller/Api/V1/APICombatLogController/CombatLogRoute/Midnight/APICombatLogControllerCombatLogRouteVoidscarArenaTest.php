@@ -54,30 +54,22 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
         $postBody = $this->getJsonData('Midnight/midnight_s2_voidscar_arena', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($postBody, $responseArr, 17, 739);
+        $this->validateAffixes($responseArr);
 
-        $responseArr = json_decode($response->content(), true);
-
-        try {
-            $this->validateResponseStaticData($responseArr);
-            $this->validateDungeon($responseArr);
-            $this->validatePulls($postBody, $responseArr, 17, 739);
-            $this->validateAffixes($responseArr);
-
-            // All three bosses were dropped from the route entirely while the floors' ingame coordinates were
-            // assigned to the wrong floors - their mapped positions ended up hundreds of yards from where they
-            // were actually killed, well outside enemy_engagement_max_range.
-            foreach ([self::NPC_ID_TAZRAH, self::NPC_ID_ATROXUS, self::NPC_ID_CHARONUS] as $bossNpcId) {
-                $this->assertNotNull(
-                    $this->findResolvedEnemyMdtId($responseArr, $bossNpcId),
-                    sprintf('Boss NPC %d was not assigned to any pull', $bossNpcId),
-                );
-            }
-        } finally {
-            $this->deleteDungeonRoute($responseArr);
+        // All three bosses were dropped from the route entirely while the floors' ingame coordinates were
+        // assigned to the wrong floors - their mapped positions ended up hundreds of yards from where they
+        // were actually killed, well outside enemy_engagement_max_range.
+        foreach ([self::NPC_ID_TAZRAH, self::NPC_ID_ATROXUS, self::NPC_ID_CHARONUS] as $bossNpcId) {
+            $this->assertNotNull(
+                $this->findResolvedEnemyMdtId($responseArr, $bossNpcId),
+                sprintf('Boss NPC %d was not assigned to any pull', $bossNpcId),
+            );
         }
     }
 
@@ -93,29 +85,21 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
         $postBody = $this->getJsonData('Midnight/midnight_s2_voidscar_arena', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
+        $killZones = $this->getKillZones($responseArr);
 
-        $responseArr = json_decode($response->content(), true);
+        $this->assertCount(17, $killZones);
 
-        try {
-            $killZones = $this->getKillZones($responseArr);
+        foreach ($killZones as $killZone) {
+            $floorIds = $killZone->enemies->pluck('floor_id')->unique();
 
-            $this->assertCount(17, $killZones);
-
-            foreach ($killZones as $killZone) {
-                $floorIds = $killZone->enemies->pluck('floor_id')->unique();
-
-                $this->assertCount(
-                    1,
-                    $floorIds,
-                    sprintf('Pull %d contains enemies from multiple floors: %s', $killZone->index, $floorIds->implode(', ')),
-                );
-            }
-        } finally {
-            $this->deleteDungeonRoute($responseArr);
+            $this->assertCount(
+                1,
+                $floorIds,
+                sprintf('Pull %d contains enemies from multiple floors: %s', $killZone->index, $floorIds->implode(', ')),
+            );
         }
     }
 
@@ -133,21 +117,13 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
         $postBody['npcs'][] = self::npcEvent(self::NPC_ID_STACKED_TRASH, '000004BE99', '20:19:00', '20:19:30', 482.70, 4443.30);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
-        try {
-            $this->assertEquals(
-                self::MDT_ID_TRASH_ON_BOSS_FLOOR,
-                $this->findResolvedEnemyMdtId($responseArr, self::NPC_ID_STACKED_TRASH),
-            );
-        } finally {
-            $this->deleteDungeonRoute($responseArr);
-        }
+        $this->assertEquals(
+            self::MDT_ID_TRASH_ON_BOSS_FLOOR,
+            $this->findResolvedEnemyMdtId($responseArr, self::NPC_ID_STACKED_TRASH),
+        );
     }
 
     /**
@@ -162,21 +138,13 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
         $postBody['npcs'][] = self::npcEvent(self::NPC_ID_STACKED_TRASH, '000004BE99', '20:19:00', '20:19:30', 482.70, 4443.30);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
-        try {
-            $this->assertEquals(
-                self::MDT_ID_TRASH_BEFORE_BOSS_FLOOR,
-                $this->findResolvedEnemyMdtId($responseArr, self::NPC_ID_STACKED_TRASH),
-            );
-        } finally {
-            $this->deleteDungeonRoute($responseArr);
-        }
+        $this->assertEquals(
+            self::MDT_ID_TRASH_BEFORE_BOSS_FLOOR,
+            $this->findResolvedEnemyMdtId($responseArr, self::NPC_ID_STACKED_TRASH),
+        );
     }
 
     /**

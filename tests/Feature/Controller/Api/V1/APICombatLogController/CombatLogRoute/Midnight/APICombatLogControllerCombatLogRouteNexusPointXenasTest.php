@@ -25,12 +25,9 @@ class APICombatLogControllerCombatLogRouteNexusPointXenasTest extends APICombatL
         $postBody = $this->getJsonData('Midnight/midnight_s1_nexus_point_xenas_preseason_mv_5', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($postBody, $responseArr, 25, 562);

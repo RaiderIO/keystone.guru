@@ -532,6 +532,9 @@ final class CombatLogRouteDungeonRouteServiceRegenerationTest extends PublicTest
     private function deleteDungeonRoutes(array $dungeonRouteIds): void
     {
         foreach ($dungeonRouteIds as $dungeonRouteId) {
+            // DungeonRoute::deleting does not reach the enemy failures the conversion records for the route
+            CombatLogRouteEnemyFailure::query()->where('dungeon_route_id', $dungeonRouteId)->delete();
+
             // Model delete so DungeonRoute::deleting cascades into the run + run data
             DungeonRoute::find($dungeonRouteId)?->delete();
 
