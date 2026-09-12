@@ -317,6 +317,7 @@ return [
     'mdt_enemy_forces'                                                     => 'Forces ennemies',
     'ajax_error_default'                                                   => 'Une erreur s\'est produite lors de l\'exécution de votre demande. Veuillez réessayer.',
     'ajax_error_403'                                                       => 'Vous n\'êtes pas autorisé à effectuer cette requête.',
+    'mdt_export_url_expired'                                               => '',
     'ajax_error_404'                                                       => 'La ressource demandée n\'a pas été trouvée.',
     'ajax_error_419'                                                       => 'Votre session a expiré. Veuillez rafraîchir la page et réessayer.',
     'map_object_readonly_label'                                            => 'Cette version de cartographie est en lecture seule',
