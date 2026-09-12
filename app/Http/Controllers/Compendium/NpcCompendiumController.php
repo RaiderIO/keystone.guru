@@ -165,7 +165,8 @@ class NpcCompendiumController extends Controller
             // tooltip_data is not appended by default - it would land in the map context as well,
             // which renders no tooltips and would carry the text for nothing (see Npc::$appends)
             ->afterQuery(static fn(EloquentCollection $npcs): EloquentCollection => $npcs->each->append('tooltip_data'))
-            ->selectRaw('npcs.*, npc_name_translations.translation as name, GROUP_CONCAT(DISTINCT dungeon_translations.translation SEPARATOR ", ") AS dungeon_names')
+            // An NPC whose name was never moved to a translation key has no translations row; its name is the key itself
+            ->selectRaw('npcs.*, COALESCE(npc_name_translations.translation, npcs.name) as name, GROUP_CONCAT(DISTINCT dungeon_translations.translation SEPARATOR ", ") AS dungeon_names')
             ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
             ->join('mapping_versions', 'enemies.mapping_version_id', '=', 'mapping_versions.id')
             ->join('dungeons', 'mapping_versions.dungeon_id', '=', 'dungeons.id')

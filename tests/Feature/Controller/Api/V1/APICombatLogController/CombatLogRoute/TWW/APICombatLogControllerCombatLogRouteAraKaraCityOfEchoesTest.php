@@ -26,13 +26,9 @@ class APICombatLogControllerCombatLogRouteAraKaraCityOfEchoesTest extends APICom
         $postBody = $this->getJsonData('TWW/tww_s1_ara_kara_city_of_echoes_jah_6_mv_10', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($postBody, $responseArr, 27, 510);
@@ -46,13 +42,9 @@ class APICombatLogControllerCombatLogRouteAraKaraCityOfEchoesTest extends APICom
         $postBody = $this->getJsonData('TWW/tww_s1_ara_kara_city_of_echoes_13_mv_10', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($postBody, $responseArr, 15, 498);
@@ -66,13 +58,9 @@ class APICombatLogControllerCombatLogRouteAraKaraCityOfEchoesTest extends APICom
         $postBody = $this->getJsonData('TWW/tww_s3_ptr_ara_kara_city_of_echoes_7', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($postBody, $responseArr, 20, 811);

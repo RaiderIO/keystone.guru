@@ -79,6 +79,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 use Throwable;
@@ -100,6 +101,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
     /** @var string A combat log does not name the realm type it was recorded on. */
     private const METADATA_PLACEHOLDER_REALM_TYPE = 'live';
+
+    /** @var int Rows per insert statement, so a combat log with many unresolved npcs stays under max_allowed_packet. */
+    private const ENEMY_FAILURE_INSERT_CHUNK_SIZE = 500;
 
     public function __construct(
         protected readonly CombatLogService                                  $combatLogService,
@@ -173,6 +177,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             Auth::id() ?? -1,
         );
 
+        /** @var array<int, array<string, mixed>> $enemyFailureAttributes */
+        $enemyFailureAttributes = [];
+
         try {
             if ($existingDungeonRoute !== null) {
                 // The route the builder just created IS the draft - it holds exactly the content the fresh combat log
@@ -184,7 +191,18 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
             $dungeonRoute = $builder->build();
 
-            $this->saveCombatLogRouteEnemyFailures($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
+            if ($existingDungeonRoute === null) {
+                $this->saveCombatLogRouteEnemyFailures($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
+            } else {
+                // Worked out against the mapping version this generation was built on, and before apply() touches
+                // the original. A regeneration's failures belong to the original, which keeps its id through apply().
+                $enemyFailureAttributes = $this->getCombatLogRouteEnemyFailureAttributes(
+                    $dungeonRoute->mappingVersion,
+                    $combatLogRoute,
+                    $dungeonRoute,
+                    $existingDungeonRoute->id,
+                );
+            }
 
             if ($combatLogRoute->settings->debugIcons) {
                 $this->generateMapIcons(
@@ -209,7 +227,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             return $dungeonRoute;
         }
 
-        return $this->applyRegeneratedDungeonRoute($existingDungeonRoute, $dungeonRoute);
+        return $this->applyRegeneratedDungeonRoute($existingDungeonRoute, $dungeonRoute, $enemyFailureAttributes);
     }
 
     /**
@@ -252,11 +270,18 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
      * combat log that misses a required enemy is a routine outcome rather than a reason to fail the whole
      * regeneration - the pre-#4297 replacement had no such check either.
      *
+     * The original ends up with exactly the enemy failures this generation computed, against the mapping version it
+     * was built on: whatever an earlier generation recorded is deleted, never carried over.
+     *
+     * @param  array<int, array<string, mixed>>               $enemyFailureAttributes
      * @throws CombatLogRouteRegeneratedConcurrentlyException
      * @throws Throwable
      */
-    private function applyRegeneratedDungeonRoute(DungeonRoute $existingDungeonRoute, DungeonRoute $draft): DungeonRoute
-    {
+    private function applyRegeneratedDungeonRoute(
+        DungeonRoute $existingDungeonRoute,
+        DungeonRoute $draft,
+        array        $enemyFailureAttributes,
+    ): DungeonRoute {
         $draftId = $draft->id;
 
         try {
@@ -273,17 +298,12 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             );
         }
 
-        // Enemy failures live on the combatlog connection and are not part of the content apply() moves, so they are
-        // re-pointed by hand. Without this they would stay on the deleted draft's id and the original would keep
-        // accumulating the failures of every previous generation - which the old path got away with only because it
-        // deleted the whole route each time.
-        CombatLogRouteEnemyFailure::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
-        CombatLogRouteEnemyFailure::query()->where('dungeon_route_id', $draftId)->update(['dungeon_route_id' => $dungeonRoute->id]);
-
         // settings->temporary applies to the route that comes out of this regeneration, exactly as it did when that
         // route was a brand new row. apply() preserves the original's own expiry, so it is assigned here instead.
         DungeonRoute::query()->whereKey($dungeonRoute->id)->update(['expires_at' => $draft->expires_at]);
         $dungeonRoute->expires_at = $draft->expires_at;
+
+        $this->replaceCombatLogRouteEnemyFailures($dungeonRoute, $enemyFailureAttributes);
 
         $this->log->applyRegeneratedDungeonRouteApplied($dungeonRoute->public_key, $dungeonRoute->id, $draftId);
 
@@ -666,11 +686,20 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         ]);
     }
 
-    private function saveCombatLogRouteEnemyFailures(
+    /**
+     * The rows combat_log_route_enemy_failures gets for the npcs of this combat log that resolved to no enemy. Writes
+     * nothing, so a regeneration can work them out before apply() replaces the original's content.
+     *
+     * @param  DungeonRoute                     $dungeonRoute   the route this generation was built into
+     * @param  int                              $dungeonRouteId the route the failures are recorded against
+     * @return array<int, array<string, mixed>>
+     */
+    private function getCombatLogRouteEnemyFailureAttributes(
         MappingVersion           $mappingVersion,
         CombatLogRouteRequestDto $combatLogRoute,
         DungeonRoute             $dungeonRoute,
-    ): void {
+        int                      $dungeonRouteId,
+    ): array {
         $now               = now();
         $failureAttributes = [];
 
@@ -702,7 +731,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 if ($combatLogRouteNpc->npcId !== null &&
                     $nonZeroEnemyForcesNpcIds !== [] &&
                     !isset($nonZeroEnemyForcesNpcIds[$combatLogRouteNpc->npcId])) {
-                    $this->log->saveCombatLogRouteEnemyFailuresSkippingNpcWithoutEnemyForces($dungeonRoute->id, $combatLogRouteNpc->npcId);
+                    $this->log->saveCombatLogRouteEnemyFailuresSkippingNpcWithoutEnemyForces($dungeonRouteId, $combatLogRouteNpc->npcId);
 
                     continue;
                 }
@@ -719,13 +748,13 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                         ),
                     );
                 } catch (InvalidArgumentException) {
-                    $this->log->saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation($dungeonRoute->id, $combatLogRouteNpc->npcId, $currentFloor->id);
+                    $this->log->saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation($dungeonRouteId, $combatLogRouteNpc->npcId, $currentFloor->id);
 
                     continue;
                 }
 
                 $failureAttributes[] = array_merge([
-                    'dungeon_route_id'   => $dungeonRoute->id,
+                    'dungeon_route_id'   => $dungeonRouteId,
                     'dungeon_id'         => $dungeonRoute->dungeon_id,
                     'floor_id'           => $currentFloor->id,
                     'mapping_version_id' => $mappingVersion->id,
@@ -736,8 +765,47 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             }
         }
 
-        if (!empty($failureAttributes)) {
-            CombatLogRouteEnemyFailure::insert($failureAttributes);
+        return $failureAttributes;
+    }
+
+    private function saveCombatLogRouteEnemyFailures(
+        MappingVersion           $mappingVersion,
+        CombatLogRouteRequestDto $combatLogRoute,
+        DungeonRoute             $dungeonRoute,
+    ): void {
+        $this->insertCombatLogRouteEnemyFailures(
+            $this->getCombatLogRouteEnemyFailureAttributes($mappingVersion, $combatLogRoute, $dungeonRoute, $dungeonRoute->id),
+        );
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $failureAttributes
+     */
+    private function insertCombatLogRouteEnemyFailures(array $failureAttributes): void
+    {
+        foreach (array_chunk($failureAttributes, self::ENEMY_FAILURE_INSERT_CHUNK_SIZE) as $chunk) {
+            CombatLogRouteEnemyFailure::insert($chunk);
+        }
+    }
+
+    /**
+     * Swaps a regenerated route's enemy failures for the ones its latest generation computed, all or nothing. The
+     * failures live on the combatlog connection, so they cannot share apply()'s transaction: by the time this runs
+     * the route's new content is live, and a failure here is logged rather than reported as a failed regeneration.
+     *
+     * @param array<int, array<string, mixed>> $failureAttributes
+     */
+    private function replaceCombatLogRouteEnemyFailures(DungeonRoute $dungeonRoute, array $failureAttributes): void
+    {
+        try {
+            DB::connection(new CombatLogRouteEnemyFailure()->getConnectionName())->transaction(
+                function () use ($dungeonRoute, $failureAttributes): void {
+                    $dungeonRoute->deleteCombatLogRouteEnemyFailures();
+                    $this->insertCombatLogRouteEnemyFailures($failureAttributes);
+                },
+            );
+        } catch (Throwable $throwable) {
+            $this->log->replaceCombatLogRouteEnemyFailuresFailed($dungeonRoute->id, $throwable->getMessage());
         }
     }
 

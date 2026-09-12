@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute;
 
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\DungeonKey;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
 use PHPUnit\Framework\Attributes\Group;
@@ -18,6 +19,9 @@ final class APICombatLogControllerCombatLogRouteEnemyFailuresTest extends APICom
 {
     protected const string FIXTURES_ROOT_DIR = '../';
 
+    /** @var int[] */
+    private array $createdNpcEnemyForcesIds = [];
+
     protected function getDungeonKey(): string
     {
         return DungeonKey::MAGISTERS_TERRACE_MIDNIGHT->value;
@@ -26,39 +30,28 @@ final class APICombatLogControllerCombatLogRouteEnemyFailuresTest extends APICom
     #[Test]
     public function store_givenRouteWithUnresolvableNpcs_persistsEnemyFailures(): void
     {
-        // Arrange
-        $postBody          = $this->getJsonData('Midnight/midnight_s1_magisters_terrace_preseason', self::FIXTURES_ROOT_DIR);
-        $countBefore       = CombatLogRouteEnemyFailure::where('dungeon_id', $this->dungeon->id)->count();
-        $insertedIds       = [];
-        $npcEnemyForcesIds = $this->giveFixtureNpcsEnemyForces($postBody);
-
         try {
+            // Arrange
+            $postBody = $this->getJsonData('Midnight/midnight_s1_magisters_terrace_preseason', self::FIXTURES_ROOT_DIR);
+            $this->giveFixtureNpcsEnemyForces($postBody);
+
             // Act
-            $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
-            $response->assertCreated();
+            $responseArr = $this->storeCombatLogRoute($postBody);
 
-            $insertedIds = CombatLogRouteEnemyFailure::where('dungeon_id', $this->dungeon->id)
-                ->orderBy('id', 'desc')
-                ->limit(500)
-                ->pluck('id')
-                ->toArray();
+            // Assert - only the failures recorded for this route, whatever other rows the dungeon carries
+            $dungeonRoute = DungeonRoute::where('public_key', $responseArr['data']['publicKey'])->firstOrFail();
+            $failures     = CombatLogRouteEnemyFailure::where('dungeon_route_id', $dungeonRoute->id)->get();
 
-            // Assert
-            $countAfter = CombatLogRouteEnemyFailure::where('dungeon_id', $this->dungeon->id)->count();
-            $this->assertGreaterThan($countBefore, $countAfter, 'Expected at least one CombatLogRouteEnemyFailure to be persisted.');
+            $this->assertNotEmpty($failures, 'Expected at least one CombatLogRouteEnemyFailure to be persisted.');
 
-            $failure = CombatLogRouteEnemyFailure::find($insertedIds[0]);
-            $this->assertNotNull($failure);
+            /** @var CombatLogRouteEnemyFailure $failure */
+            $failure = $failures->first();
             $this->assertEquals($this->dungeon->id, $failure->dungeon_id);
             $this->assertGreaterThan(0, $failure->floor_id);
             $this->assertGreaterThan(0, $failure->mapping_version_id);
         } finally {
-            if (!empty($insertedIds)) {
-                CombatLogRouteEnemyFailure::whereIn('id', $insertedIds)->delete();
-            }
-
-            if (!empty($npcEnemyForcesIds)) {
-                NpcEnemyForces::query()->whereKey($npcEnemyForcesIds)->delete();
+            if (!empty($this->createdNpcEnemyForcesIds)) {
+                NpcEnemyForces::query()->whereKey($this->createdNpcEnemyForcesIds)->delete();
                 new NpcEnemyForces()->flushCache();
             }
         }
@@ -69,10 +62,11 @@ final class APICombatLogControllerCombatLogRouteEnemyFailuresTest extends APICom
      * have no enemy forces tuned at all - give every one of them some, so the fixture's unresolvable npcs still land in
      * the table and this test keeps testing what it says it does.
      *
-     * @param  array<string, mixed> $postBody
-     * @return int[]                the created NpcEnemyForces ids
+     * Every created id is recorded as it is created, so a failure part-way through still cleans up what was made.
+     *
+     * @param array<string, mixed> $postBody
      */
-    private function giveFixtureNpcsEnemyForces(array $postBody): array
+    private function giveFixtureNpcsEnemyForces(array $postBody): void
     {
         /** @var MappingVersion $mappingVersion */
         $mappingVersion = MappingVersion::query()
@@ -89,9 +83,8 @@ final class APICombatLogControllerCombatLogRouteEnemyFailuresTest extends APICom
             ->pluck('npc_id')
             ->all();
 
-        $createdIds = [];
         foreach (array_diff($npcIds, $existingNpcIds) as $npcId) {
-            $createdIds[] = NpcEnemyForces::query()->create([
+            $this->createdNpcEnemyForcesIds[] = NpcEnemyForces::query()->create([
                 'mapping_version_id' => $mappingVersion->id,
                 'npc_id'             => $npcId,
                 'enemy_forces'       => 10,
@@ -99,7 +92,5 @@ final class APICombatLogControllerCombatLogRouteEnemyFailuresTest extends APICom
         }
 
         new NpcEnemyForces()->flushCache();
-
-        return $createdIds;
     }
 }

@@ -19,6 +19,7 @@ use App\Models\UserPinnedDungeonRoute;
 use App\Repositories\Interfaces\EnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
+use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use App\Service\CombatLog\Exceptions\CombatLogRouteRegeneratedConcurrentlyException;
 use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
@@ -47,6 +48,9 @@ final class CombatLogRouteDungeonRouteServiceRegenerationTest extends PublicTest
     private const FIXTURE_NAME = 'TWW/tww_s1_ara_kara_city_of_echoes_3';
 
     private const FIXTURE_ROOT_PATH = '../../../Controller/Api/V1/APICombatLogController/';
+
+    /** @var int The mapping version FIXTURE_NAME pins in its settings. */
+    private const FIXTURE_MAPPING_VERSION = 13;
 
     /** @var int An npc id that resolves to no enemy and carries no enemy forces, so it is recorded as a failure. */
     private const UNRESOLVABLE_NPC_ID = 999999999;
@@ -207,34 +211,35 @@ final class CombatLogRouteDungeonRouteServiceRegenerationTest extends PublicTest
     }
 
     /**
-     * Enemy failures are recorded per generation and live on the combatlog connection, outside the content apply()
-     * moves. They must end up on the route that survives, and must not pile up generation after generation - the
-     * pre-#4297 path got away with never cleaning them because it deleted the whole route each time.
+     * Enemy failures are triaged per mapping version: a route regenerated onto a newer mapping version must come out
+     * with the failures of that version only. What the previous generation recorded against the older version is
+     * deleted: the route is not built on that version, so a failure of it would be a false positive.
      */
     #[Test]
-    public function convertCombatLogRouteToDungeonRoute_givenRegeneration_movesEnemyFailuresOntoTheRouteAndDropsThePreviousOnes(): void
+    public function convertCombatLogRouteToDungeonRoute_givenRegenerationOntoANewerMappingVersion_replacesThePreviousFailuresWithOnesOfTheNewVersion(): void
     {
         // Arrange
         $createdRouteIds  = [];
         $npcEnemyForcesId = null;
 
         try {
-            $original          = $this->service->convertCombatLogRouteToDungeonRoute($this->getCombatLogRouteRequestDto());
-            $createdRouteIds[] = $original->id;
-
-            // Only failures of npcs worth enemy forces are recorded at all - see #4475
-            $npcEnemyForcesId = NpcEnemyForces::query()->create([
-                'mapping_version_id' => $original->mapping_version_id,
-                'npc_id'             => self::UNRESOLVABLE_NPC_ID,
-                'enemy_forces'       => 10,
-            ])->id;
+            $previousGeneration                           = $this->getCombatLogRouteRequestDto();
+            $previousGeneration->settings->mappingVersion = self::FIXTURE_MAPPING_VERSION - 1;
+            $original                                     = $this->service->convertCombatLogRouteToDungeonRoute($previousGeneration);
+            $createdRouteIds[]                            = $original->id;
+            $previousMappingVersionId                     = $original->mapping_version_id;
+            $this->assertSame(
+                self::FIXTURE_MAPPING_VERSION - 1,
+                $original->mappingVersion->version,
+                'Precondition: the original must be built on the older mapping version',
+            );
 
             // This fixture resolves every npc, so the previous generation's failure is planted by hand
             $previousFailure = CombatLogRouteEnemyFailure::create([
                 'dungeon_route_id'   => $original->id,
                 'dungeon_id'         => $original->dungeon_id,
                 'floor_id'           => $original->dungeon->floors()->firstWhere('default', 1)->id,
-                'mapping_version_id' => $original->mapping_version_id,
+                'mapping_version_id' => $previousMappingVersionId,
                 'npc_id'             => self::UNRESOLVABLE_NPC_ID,
                 'lat'                => 1.0,
                 'lng'                => 1.0,
@@ -248,18 +253,38 @@ final class CombatLogRouteDungeonRouteServiceRegenerationTest extends PublicTest
                 coord: new CombatLogRouteCoordRequestDto(1.0, 1.0),
             ));
 
+            // Only failures of npcs worth enemy forces in the version the route is built on are recorded at all
+            $newMappingVersion = MappingVersion::query()
+                ->where('dungeon_id', $original->dungeon_id)
+                ->where('game_version_id', $original->mappingVersion->game_version_id)
+                ->where('version', self::FIXTURE_MAPPING_VERSION)
+                ->firstOrFail();
+            $npcEnemyForcesId = NpcEnemyForces::query()->create([
+                'mapping_version_id' => $newMappingVersion->id,
+                'npc_id'             => self::UNRESOLVABLE_NPC_ID,
+                'enemy_forces'       => 10,
+            ])->id;
+
             // Act
             $regenerated = $this->service->convertCombatLogRouteToDungeonRoute($regeneration);
 
             // Assert
-            $failuresAfter = CombatLogRouteEnemyFailure::where('dungeon_route_id', $regenerated->id)->pluck('id');
+            $this->assertSame($newMappingVersion->id, $regenerated->mapping_version_id, 'The route must now be on the newer mapping version');
+
+            $failuresAfter = CombatLogRouteEnemyFailure::where('dungeon_route_id', $regenerated->id)->get();
             $this->assertNotEmpty($failuresAfter, 'The regeneration\'s own enemy failures must end up on the route');
-            $this->assertNotContains(
-                $previousFailure->id,
-                $failuresAfter,
-                'The previous generation\'s enemy failures must be dropped, not accumulated',
+            $this->assertSame(
+                [$newMappingVersion->id],
+                $failuresAfter->pluck('mapping_version_id')->unique()->values()->all(),
+                'Every failure on the route must be computed against the newer mapping version',
             );
+            $this->assertNotContains($previousFailure->id, $failuresAfter->pluck('id'), 'The previous generation\'s failures must not be carried over');
             $this->assertNull(CombatLogRouteEnemyFailure::find($previousFailure->id), 'The previous failures must be deleted, not orphaned');
+            $this->assertSame(
+                0,
+                CombatLogRouteEnemyFailure::where('mapping_version_id', $previousMappingVersionId)->where('dungeon_route_id', $regenerated->id)->count(),
+                'No failure of the older mapping version may remain on the route',
+            );
         } finally {
             $this->deleteDungeonRoutes($createdRouteIds);
 
@@ -267,6 +292,67 @@ final class CombatLogRouteDungeonRouteServiceRegenerationTest extends PublicTest
                 NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
                 new NpcEnemyForces()->flushCache();
             }
+        }
+    }
+
+    /**
+     * A regeneration works its enemy failures out before apply() writes anything onto the original, so failing to do
+     * so leaves the original exactly as it was - its content and the failures it already had.
+     */
+    #[Test]
+    public function convertCombatLogRouteToDungeonRoute_givenEnemyFailuresCannotBeWorkedOut_leavesTheOriginalAndItsFailuresUntouched(): void
+    {
+        // Arrange
+        $createdRouteIds = [];
+
+        try {
+            $original          = $this->service->convertCombatLogRouteToDungeonRoute($this->getCombatLogRouteRequestDto());
+            $createdRouteIds[] = $original->id;
+
+            $originalKillZoneIds = KillZone::where('dungeon_route_id', $original->id)->pluck('id')->sort()->values()->all();
+            $this->assertNotEmpty($originalKillZoneIds, 'Precondition: the original must have pulls to replace');
+
+            $previousFailure = CombatLogRouteEnemyFailure::create([
+                'dungeon_route_id'   => $original->id,
+                'dungeon_id'         => $original->dungeon_id,
+                'floor_id'           => $original->dungeon->floors()->firstWhere('default', 1)->id,
+                'mapping_version_id' => $original->mapping_version_id,
+                'npc_id'             => self::UNRESOLVABLE_NPC_ID,
+                'lat'                => 1.0,
+                'lng'                => 1.0,
+            ]);
+
+            $enemyFailureService = $this->createMock(CombatLogRouteEnemyFailureServiceInterface::class);
+            $enemyFailureService->method('getNonZeroEnemyForcesNpcIds')->willThrowException(new RuntimeException('Simulated failure'));
+            $this->app->instance(CombatLogRouteEnemyFailureServiceInterface::class, $enemyFailureService);
+            /** @var CombatLogRouteDungeonRouteServiceInterface $failingService */
+            $failingService = app(CombatLogRouteDungeonRouteServiceInterface::class);
+
+            $regeneration                      = $this->getCombatLogRouteRequestDto();
+            $regeneration->settings->publicKey = $original->public_key;
+
+            $routeCountBefore = DungeonRoute::count();
+
+            // Act
+            $thrown = null;
+
+            try {
+                $failingService->convertCombatLogRouteToDungeonRoute($regeneration);
+            } catch (RuntimeException $runtimeException) {
+                $thrown = $runtimeException;
+            }
+
+            // Assert
+            $this->assertNotNull($thrown, 'The failure must be propagated to the caller');
+            $this->assertSame(
+                $originalKillZoneIds,
+                KillZone::where('dungeon_route_id', $original->id)->pluck('id')->sort()->values()->all(),
+                'The original\'s pulls must not be replaced',
+            );
+            $this->assertNotNull(CombatLogRouteEnemyFailure::find($previousFailure->id), 'The original\'s failures must not be deleted');
+            $this->assertSame($routeCountBefore, DungeonRoute::count(), 'The draft must be cleaned up');
+        } finally {
+            $this->deleteDungeonRoutes($createdRouteIds);
         }
     }
 
@@ -532,7 +618,7 @@ final class CombatLogRouteDungeonRouteServiceRegenerationTest extends PublicTest
     private function deleteDungeonRoutes(array $dungeonRouteIds): void
     {
         foreach ($dungeonRouteIds as $dungeonRouteId) {
-            // Model delete so DungeonRoute::deleting cascades into the run + run data
+            // Model delete so DungeonRoute::deleting cascades into the run + run data and the enemy failures
             DungeonRoute::find($dungeonRouteId)?->delete();
 
             // Belt and braces for runs left dangling by a failing assertion

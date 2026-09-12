@@ -6,11 +6,51 @@ use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use Override;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\APICombatLogControllerTestBase;
 
 abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLogControllerTestBase
 {
     protected const FIXTURES_ROOT_DIR = '../../';
+
+    /** @var array<int, string> Public keys of every route stored through storeCombatLogRoute() in this test */
+    private array $storedRoutePublicKeys = [];
+
+    #[Override]
+    protected function tearDown(): void
+    {
+        try {
+            foreach ($this->storedRoutePublicKeys as $publicKey) {
+                $this->deleteDungeonRouteByPublicKey($publicKey);
+            }
+            $this->storedRoutePublicKeys = [];
+        } finally {
+            parent::tearDown();
+        }
+    }
+
+    /**
+     * Posts a combat log route body to the store endpoint, asserts it was created and returns the decoded response.
+     *
+     * The route this creates is persisted, and the test database is not rolled back between tests: it is deleted
+     * again in tearDown(), whatever the test's assertions do afterwards.
+     *
+     * @param  array<string, mixed> $postBody
+     * @return array<string, mixed>
+     */
+    protected function storeCombatLogRoute(array $postBody): array
+    {
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+
+        $response->assertCreated();
+
+        /** @var array<string, mixed> $responseArr */
+        $responseArr = json_decode($response->content(), true);
+
+        $this->storedRoutePublicKeys[] = $responseArr['data']['publicKey'];
+
+        return $responseArr;
+    }
 
     /**
      * @param array<string, mixed> $response
@@ -228,12 +268,15 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
     }
 
     /**
-     * The route the test just created is persisted, and the test database is not rolled back between tests.
-     *
      * @param array<string, mixed> $responseArr
      */
     protected function deleteDungeonRoute(array $responseArr): void
     {
-        DungeonRoute::where('public_key', $responseArr['data']['publicKey'])->first()?->delete();
+        $this->deleteDungeonRouteByPublicKey($responseArr['data']['publicKey']);
+    }
+
+    private function deleteDungeonRouteByPublicKey(string $publicKey): void
+    {
+        DungeonRoute::where('public_key', $publicKey)->first()?->delete();
     }
 }

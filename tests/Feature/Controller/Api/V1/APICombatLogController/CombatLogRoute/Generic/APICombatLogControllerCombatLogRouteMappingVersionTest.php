@@ -49,19 +49,11 @@ class APICombatLogControllerCombatLogRouteMappingVersionTest extends APICombatLo
         );
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
-        try {
-            $this->assertSame($pinnedVersion, $responseArr['data']['mappingVersion']);
-            $this->assertSame($this->dungeon->id, $responseArr['data']['dungeonId']);
-        } finally {
-            $this->deleteDungeonRoute($responseArr);
-        }
+        $this->assertSame($pinnedVersion, $responseArr['data']['mappingVersion']);
+        $this->assertSame($this->dungeon->id, $responseArr['data']['dungeonId']);
     }
 
     #[Test]
@@ -72,19 +64,11 @@ class APICombatLogControllerCombatLogRouteMappingVersionTest extends APICombatLo
         unset($postBody['settings']['mappingVersion']);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
-        try {
-            $this->assertSame($this->getCurrentMappingVersion()->version, $responseArr['data']['mappingVersion']);
-            $this->assertSame($this->dungeon->id, $responseArr['data']['dungeonId']);
-        } finally {
-            $this->deleteDungeonRoute($responseArr);
-        }
+        $this->assertSame($this->getCurrentMappingVersion()->version, $responseArr['data']['mappingVersion']);
+        $this->assertSame($this->dungeon->id, $responseArr['data']['dungeonId']);
     }
 
     /**
@@ -99,19 +83,11 @@ class APICombatLogControllerCombatLogRouteMappingVersionTest extends APICombatLo
         $postBody['settings']['mappingVersion'] = 9999;
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
-        try {
-            $this->assertSame($this->getCurrentMappingVersion()->version, $responseArr['data']['mappingVersion']);
-            $this->assertSame($this->dungeon->id, $responseArr['data']['dungeonId']);
-        } finally {
-            $this->deleteDungeonRoute($responseArr);
-        }
+        $this->assertSame($this->getCurrentMappingVersion()->version, $responseArr['data']['mappingVersion']);
+        $this->assertSame($this->dungeon->id, $responseArr['data']['dungeonId']);
     }
 
     private function getCurrentMappingVersion(): MappingVersion

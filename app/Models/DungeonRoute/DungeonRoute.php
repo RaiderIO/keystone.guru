@@ -12,6 +12,7 @@ use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
 use App\Models\CombatLog\ChallengeModeRun;
+use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemies\PridefulEnemy;
@@ -1608,6 +1609,18 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         $this->playerspecializations()->delete();
     }
 
+    /**
+     * Deletes the Auto Route Creator enemy failures recorded for this route. Rows imported from another deployment
+     * (`source` set) keep that deployment's route id, which can collide with a local one, so they are left alone.
+     */
+    public function deleteCombatLogRouteEnemyFailures(): void
+    {
+        CombatLogRouteEnemyFailure::query()
+            ->where('dungeon_route_id', $this->id)
+            ->whereNull('source')
+            ->delete();
+    }
+
     #[Override]
     protected static function boot(): void
     {
@@ -1642,6 +1655,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             // challenge_mode_run_data - fetch and delete the single row instead so the hook fires
             $dungeonRoute->setConnection('combatlog')->challengeModeRun()->first()?->delete();
             $dungeonRoute->setConnection(null);
+
+            $dungeonRoute->deleteCombatLogRouteEnemyFailures();
 
             // Delete thumbnails
             foreach ($dungeonRoute->dungeonRouteThumbnails as $dungeonRouteThumbnail) {

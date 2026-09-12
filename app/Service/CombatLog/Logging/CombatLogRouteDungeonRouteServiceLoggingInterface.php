@@ -35,4 +35,6 @@ interface CombatLogRouteDungeonRouteServiceLoggingInterface
     public function applyRegeneratedDungeonRouteDraftTakenOver(string $publicKey, int $dungeonRouteId, int $draftDungeonRouteId): void;
 
     public function applyRegeneratedDungeonRouteApplied(string $publicKey, int $dungeonRouteId, int $draftDungeonRouteId): void;
+
+    public function replaceCombatLogRouteEnemyFailuresFailed(int $dungeonRouteId, string $exception): void;
 }

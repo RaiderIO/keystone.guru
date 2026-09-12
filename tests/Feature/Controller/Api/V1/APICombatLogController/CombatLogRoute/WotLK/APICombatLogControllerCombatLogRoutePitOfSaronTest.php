@@ -25,13 +25,9 @@ class APICombatLogControllerCombatLogRoutePitOfSaronTest extends APICombatLogCon
         $postBody = $this->getJsonData('WotLK/midnight_s1_pit_of_saron_13', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($postBody, $responseArr, 24, 666);

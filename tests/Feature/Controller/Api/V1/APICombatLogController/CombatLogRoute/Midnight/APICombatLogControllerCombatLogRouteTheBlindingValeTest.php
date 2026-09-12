@@ -54,22 +54,14 @@ class APICombatLogControllerCombatLogRouteTheBlindingValeTest extends APICombatL
         $postBody = $this->getJsonData('Midnight/midnight_s2_the_blinding_vale', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
-        try {
-            $this->validateResponseStaticData($responseArr);
-            $this->validateDungeon($responseArr);
-            $this->validatePulls($postBody, $responseArr, 15, 685);
-            $this->validateAffixes($responseArr);
-            $this->validateBossesResolved($postBody, $responseArr);
-        } finally {
-            $this->deleteDungeonRoute($responseArr);
-        }
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($postBody, $responseArr, 15, 685);
+        $this->validateAffixes($responseArr);
+        $this->validateBossesResolved($postBody, $responseArr);
     }
 
     /**
@@ -88,21 +80,13 @@ class APICombatLogControllerCombatLogRouteTheBlindingValeTest extends APICombatL
         $postBody['npcs'][] = self::npcEvent(self::NPC_ID_GROVEKEEPER, '000014B004', '20:56:40', '20:56:45', -1712.00, 1324.00);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
-        try {
-            $this->assertEquals(
-                self::MDT_ID_GROVEKEEPER_OFF_BRIDGE,
-                $this->findResolvedEnemyMdtId($responseArr, self::NPC_ID_GROVEKEEPER),
-            );
-        } finally {
-            $this->deleteDungeonRoute($responseArr);
-        }
+        $this->assertEquals(
+            self::MDT_ID_GROVEKEEPER_OFF_BRIDGE,
+            $this->findResolvedEnemyMdtId($responseArr, self::NPC_ID_GROVEKEEPER),
+        );
     }
 
     /**
@@ -119,21 +103,13 @@ class APICombatLogControllerCombatLogRouteTheBlindingValeTest extends APICombatL
         $postBody['npcs'][] = self::npcEvent(self::NPC_ID_GROVEKEEPER, '000014B004', '20:56:40', '20:56:45', -1712.00, 1324.00);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
-        try {
-            $this->assertEquals(
-                self::MDT_ID_GROVEKEEPER_ON_BRIDGE,
-                $this->findResolvedEnemyMdtId($responseArr, self::NPC_ID_GROVEKEEPER),
-            );
-        } finally {
-            $this->deleteDungeonRoute($responseArr);
-        }
+        $this->assertEquals(
+            self::MDT_ID_GROVEKEEPER_ON_BRIDGE,
+            $this->findResolvedEnemyMdtId($responseArr, self::NPC_ID_GROVEKEEPER),
+        );
     }
 
     /**

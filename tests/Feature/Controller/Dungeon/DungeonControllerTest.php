@@ -47,6 +47,7 @@ final class DungeonControllerTest extends PublicTestCase
     {
         // Arrange
         $dungeon              = Dungeon::firstOrFail();
+        $originalAttributes   = $dungeon->getAttributes();
         $originalDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
 
         $expected = [
@@ -65,7 +66,7 @@ final class DungeonControllerTest extends PublicTestCase
                 $dungeon->fresh()->getEnabledSpeedrunDifficulties(),
             );
         } finally {
-            $this->restoreDifficulties($dungeon, $originalDifficulties);
+            $this->restoreDungeon($dungeon, $originalAttributes, $originalDifficulties);
         }
     }
 
@@ -74,6 +75,7 @@ final class DungeonControllerTest extends PublicTestCase
     {
         // Arrange
         $dungeon              = Dungeon::firstOrFail();
+        $originalAttributes   = $dungeon->getAttributes();
         $originalDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
 
         try {
@@ -92,7 +94,7 @@ final class DungeonControllerTest extends PublicTestCase
                 $dungeon->fresh()->getEnabledSpeedrunDifficulties(),
             );
         } finally {
-            $this->restoreDifficulties($dungeon, $originalDifficulties);
+            $this->restoreDungeon($dungeon, $originalAttributes, $originalDifficulties);
         }
     }
 
@@ -101,6 +103,7 @@ final class DungeonControllerTest extends PublicTestCase
     {
         // Arrange
         $dungeon              = Dungeon::firstOrFail();
+        $originalAttributes   = $dungeon->getAttributes();
         $originalDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
 
         try {
@@ -110,15 +113,22 @@ final class DungeonControllerTest extends PublicTestCase
             // Assert
             $response->assertSessionHasErrors('speedrun_difficulties.0');
         } finally {
-            $this->restoreDifficulties($dungeon, $originalDifficulties);
+            $this->restoreDungeon($dungeon, $originalAttributes, $originalDifficulties);
         }
     }
 
     /**
-     * @param list<int> $difficulties
+     * The update form posts no `active` (nor the other checkbox columns), so the controller unchecks them on the
+     * seeded dungeon; every column is put back, not only the difficulties.
+     *
+     * @param array<string, mixed> $attributes
+     * @param list<int>            $difficulties
      */
-    private function restoreDifficulties(Dungeon $dungeon, array $difficulties): void
+    private function restoreDungeon(Dungeon $dungeon, array $attributes, array $difficulties): void
     {
+        Dungeon::query()->whereKey($dungeon->id)->update($attributes);
+        new Dungeon()->flushCache();
+
         $dungeon->dungeonSpeedrunDifficulties()->delete();
         foreach ($difficulties as $difficulty) {
             $dungeon->dungeonSpeedrunDifficulties()->create(['difficulty' => $difficulty]);

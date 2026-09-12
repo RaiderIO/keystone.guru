@@ -279,21 +279,27 @@ final class AjaxEnemyForcesCheckpointControllerTest extends AjaxPublicTestCase
         $floor          = $this->getFloorWithEnemies();
         $mappingVersion = $this->getMappingVersionForFloor($floor);
 
-        $this->be(User::factory()->create());
+        $nonAdmin = User::factory()->create();
 
-        // Act
-        $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcescheckpoint', $mappingVersion->id), [
-            'id'                 => -1,
-            'mapping_version_id' => $mappingVersion->id,
-            'floor_id'           => $floor->id,
-            'name'               => 'Test corridor',
-            'lat'                => -128.5,
-            'lng'                => 192.5,
-        ]);
+        try {
+            $this->be($nonAdmin);
 
-        // Assert
-        $this->assertContains($response->getStatusCode(), [401, 403]);
-        $this->assertDatabaseMissing('enemy_forces_checkpoints', ['name' => 'Test corridor']);
+            // Act
+            $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcescheckpoint', $mappingVersion->id), [
+                'id'                 => -1,
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $floor->id,
+                'name'               => 'Test corridor',
+                'lat'                => -128.5,
+                'lng'                => 192.5,
+            ]);
+
+            // Assert
+            $this->assertContains($response->getStatusCode(), [401, 403]);
+            $this->assertDatabaseMissing('enemy_forces_checkpoints', ['name' => 'Test corridor']);
+        } finally {
+            $nonAdmin->delete();
+        }
     }
 
     /**

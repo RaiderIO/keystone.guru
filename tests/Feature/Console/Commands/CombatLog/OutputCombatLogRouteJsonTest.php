@@ -4,6 +4,7 @@ namespace Tests\Feature\Console\Commands\CombatLog;
 
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Facades\Artisan;
@@ -31,6 +32,9 @@ final class OutputCombatLogRouteJsonTest extends PublicTestCase
 
     private string $workingDir;
 
+    /** Building the request body persists the route it derives from the log; the command never deletes it */
+    private int $dungeonRouteMaxIdBefore;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -38,17 +42,26 @@ final class OutputCombatLogRouteJsonTest extends PublicTestCase
 
         $this->workingDir = sprintf('%s/combatlog-route-json-%s', sys_get_temp_dir(), uniqid());
         mkdir($this->workingDir);
+
+        $this->dungeonRouteMaxIdBefore = (int)DungeonRoute::query()->max('id');
     }
 
     #[\Override]
     protected function tearDown(): void
     {
-        foreach (glob(sprintf('%s/*', $this->workingDir)) as $file) {
-            unlink($file);
-        }
-        rmdir($this->workingDir);
+        try {
+            foreach (glob(sprintf('%s/*', $this->workingDir)) as $file) {
+                unlink($file);
+            }
+            rmdir($this->workingDir);
 
-        parent::tearDown();
+            // Model deletes, so DungeonRoute::deleting takes the run and the route contents with it
+            foreach (DungeonRoute::query()->where('id', '>', $this->dungeonRouteMaxIdBefore)->get() as $dungeonRoute) {
+                $dungeonRoute->delete();
+            }
+        } finally {
+            parent::tearDown();
+        }
     }
 
     #[Test]

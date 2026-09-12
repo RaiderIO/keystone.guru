@@ -7,6 +7,7 @@ use App\Models\GameVersion\GameVersion;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
+use Tests\Fixtures\Traits\CreatesExpansion;
 use Tests\Fixtures\Traits\CreatesNpclessCombatLogDungeon;
 use Tests\TestCases\PublicTestCase;
 
@@ -14,14 +15,14 @@ use Tests\TestCases\PublicTestCase;
 #[Group('DungeonRoute')]
 final class DungeonRouteDiscoverInactiveContentTest extends PublicTestCase
 {
+    use CreatesExpansion;
     use CreatesNpclessCombatLogDungeon;
 
     #[Test]
     public function discoverExpansion_givenInactiveExpansion_returnsNotFound(): void
     {
-        // Arrange
-        /** @var Expansion $expansion */
-        $expansion = Expansion::where('active', 0)->firstOrFail();
+        // Arrange - an expansion of our own; the seed promises active expansions, not a retired one
+        $expansion = $this->createExpansion(['active' => false]);
 
         // Act
         $response = $this->get(route('dungeonroutes.expansion', ['expansion' => $expansion]));

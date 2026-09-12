@@ -74,6 +74,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             $this->assertNull($dungeonRoute->getRawOriginal('dungeon_difficulty'));
         } finally {
             $dungeonRoute?->delete();
+            $user->delete();
         }
     }
 
@@ -112,6 +113,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             $this->assertEqualsCanonicalizing($affixIds, $dungeonRoute->affixgroups()->pluck('affix_group_id')->all());
         } finally {
             $dungeonRoute?->delete();
+            $user->delete();
         }
     }
 
@@ -149,6 +151,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             $this->assertSame($team->id, $dungeonRoute->team_id);
         } finally {
             $dungeonRoute?->delete();
+            $user->delete();
             TeamUser::where('team_id', $team->id)->delete();
             $team->delete();
         }
@@ -188,6 +191,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             $this->assertNull($dungeonRoute->team_id);
         } finally {
             $dungeonRoute?->delete();
+            $user->delete();
         }
     }
 
@@ -241,6 +245,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             );
         } finally {
             $dungeonRoute?->delete();
+            $user->delete();
         }
     }
 
@@ -284,6 +289,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             );
         } finally {
             $dungeonRoute?->delete();
+            $user->delete();
         }
     }
 
@@ -331,6 +337,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             $this->assertSame($startIconId, $dungeonRoute->getRawOriginal('dungeon_start_map_icon_id'));
         } finally {
             $dungeonRoute?->delete();
+            $user->delete();
         }
     }
 
@@ -362,6 +369,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             $this->assertNull($dungeonRoute->getRawOriginal('dungeon_difficulty'));
         } finally {
             $dungeonRoute?->delete();
+            $user->delete();
         }
     }
 
@@ -396,6 +404,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             $this->assertSame(1, $dungeonRoute->getRawOriginal('dungeon_difficulty'));
         } finally {
             $dungeonRoute?->delete();
+            $user->delete();
         }
     }
 
@@ -427,6 +436,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             $this->assertSame(2, $dungeonRoute->getRawOriginal('dungeon_difficulty'));
         } finally {
             $dungeonRoute?->delete();
+            $user->delete();
         }
     }
 
@@ -461,6 +471,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             $this->assertSame(2, $dungeonRoute->getRawOriginal('dungeon_difficulty'));
         } finally {
             $dungeonRoute?->delete();
+            $user->delete();
         }
     }
 
@@ -497,6 +508,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             $this->assertNull($dungeonRoute->getRawOriginal('dungeon_difficulty'));
         } finally {
             $dungeonRoute?->delete();
+            $user->delete();
         }
     }
 
@@ -588,6 +600,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
         } finally {
             TeamUser::where('team_id', $team->id)->delete();
             $team->delete();
+            $user->delete();
         }
     }
 

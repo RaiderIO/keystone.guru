@@ -24,12 +24,14 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionProperty;
 use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('AdminTools')]
 final class AdminToolsCombatLogControllerTest extends PublicTestCase
 {
+    use CreatesDungeon;
     use ProvidesDungeon;
 
     /** @var array<int, int> */
@@ -776,12 +778,8 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         Queue::fake();
 
         [$season, $dungeons] = $this->findSeasonWithDungeons();
-        $otherDungeon        = Dungeon::query()
-            ->whereNotIn('id', $dungeons->pluck('id'))
-            ->get()
-            ->filter(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion() !== null)
-            ->first();
-        $this->assertNotNull($otherDungeon, 'Unable to find a dungeon outside the chosen season to prove scoping!');
+        // A dungeon of our own is outside every season, which is what proves the scoping
+        $otherDungeon = $this->createDungeon();
 
         $includedFailure = $this->createEnemyFailureForDungeon($dungeons->get(0));
         $excludedFailure = $this->createEnemyFailureForDungeon($otherDungeon);

@@ -8,12 +8,15 @@ use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\CreatesSeason;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('SeasonService')]
 #[Group('GetSeasonWeeks')]
 final class GetSeasonWeeksTest extends PublicTestCase
 {
+    use CreatesSeason;
+
     #[Test]
     public function getSeasonWeeks_givenSeasonThatHasEnded_returnsEveryWeekUpToTheNextSeason(): void
     {
@@ -85,12 +88,9 @@ final class GetSeasonWeeksTest extends PublicTestCase
         $service  = app(SeasonServiceInterface::class);
         $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
 
-        /** @var Season|null $upcomingSeason */
-        $upcomingSeason = Season::query()->where('start', '>', Carbon::now()->addWeeks(2))->orderBy('start')->first();
-
-        if ($upcomingSeason === null) {
-            $this->markTestSkipped('No upcoming season is seeded to test against.');
-        }
+        // A season of our own: a seeded upcoming season starts eventually, and then this test would be testing a
+        // season that has begun
+        $upcomingSeason = $this->createSeason(['start' => Carbon::now()->addWeeks(4)->toDateTimeString()]);
 
         // Act
         $result = $service->getSeasonWeeks($upcomingSeason, $usRegion);
