@@ -23,6 +23,7 @@ jobs:
   check:
     name: Check no agent tooling is tracked
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
 

@@ -105,8 +105,20 @@ runs:
         printf 'Acquire::Retries "3";\nAcquire::http::Timeout "15";\nAcquire::https::Timeout "15";\n' \
           | sudo tee /etc/apt/apt.conf.d/99-ci-retries >/dev/null
 
-        sudo apt-get update
-        sudo apt-get install -y default-mysql-client redis-tools lua5.3 liblua5.3-dev
+        # Composite-action steps have no `timeout-minutes`, and the Acquire timeouts above do not
+        # catch a transfer that stalls partway through, so each apt call is bounded here and retried
+        # once: a mirror hang then costs minutes instead of the job's whole timeout.
+        apt_bounded() { # <seconds> <apt-get args...>
+          local seconds="$1"
+          shift
+          if sudo timeout "$seconds" apt-get "$@"; then
+            return 0
+          fi
+          echo "::warning::apt-get $1 failed or timed out after ${seconds}s, retrying once"
+          sudo timeout "$seconds" apt-get "$@"
+        }
+        apt_bounded 300 update
+        apt_bounded 600 install -y default-mysql-client redis-tools lua5.3 liblua5.3-dev
       shell: bash
 
     # Cache the compiled lua.so / bit.so so we skip the ~30-40s phpize/configure/make on every run
