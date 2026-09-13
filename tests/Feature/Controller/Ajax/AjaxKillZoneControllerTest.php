@@ -171,7 +171,7 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
         // Arrange
         /** @var Enemy $enemy */
         $enemy = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)
-            ->inRandomOrder()
+            ->orderBy('id')
             ->first();
 
         try {
@@ -342,7 +342,7 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     {
         // Arrange
         /** @var Enemy $enemy */
-        $enemy    = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)->inRandomOrder()->first();
+        $enemy    = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)->orderBy('id')->first();
         $killZone = KillZone::factory()->create([
             'dungeon_route_id' => $this->dungeonRoute->id,
             'floor_id'         => null,
@@ -385,7 +385,7 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     {
         // Arrange
         /** @var Enemy $enemy */
-        $enemy    = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)->inRandomOrder()->first();
+        $enemy    = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)->orderBy('id')->first();
         $killZone = KillZone::factory()->create([
             'dungeon_route_id' => $this->dungeonRoute->id,
             'floor_id'         => null,

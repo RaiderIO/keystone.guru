@@ -19,7 +19,7 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
         // Arrange
         /** @var Enemy $enemy */
         $enemy = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)
-            ->inRandomOrder()
+            ->orderBy('id')
             ->first();
 
         try {
@@ -49,7 +49,7 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
         // Arrange
         /** @var Enemy $enemy */
         $enemy = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)
-            ->inRandomOrder()
+            ->orderBy('id')
             ->first();
 
         DungeonRouteEnemyRaidMarker::create([

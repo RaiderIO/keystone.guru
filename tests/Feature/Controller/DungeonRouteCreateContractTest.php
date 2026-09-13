@@ -527,6 +527,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
         ]);
 
         $dungeonRoute = null;
+        $sinceId      = (int)DungeonRoute::query()->max('id');
 
         try {
             // Act (no actingAs - guest request)
@@ -537,6 +538,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             $response->assertRedirect();
 
             $dungeonRoute = DungeonRoute::query()
+                ->where('id', '>', $sinceId)
                 ->where('dungeon_id', $dungeon->id)
                 ->where('author_id', -1)
                 ->orderByDesc('id')
