@@ -18,6 +18,7 @@ permissions:
 jobs:
   php-coverage:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
 
     steps:
       - name: Checkout for local actions

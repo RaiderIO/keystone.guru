@@ -25,6 +25,7 @@ concurrency:
 jobs:
   php-lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout for local actions
