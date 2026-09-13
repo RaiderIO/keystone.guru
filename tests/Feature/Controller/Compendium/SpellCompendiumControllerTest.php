@@ -16,6 +16,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\Feature\Traits\ReadsDungeonSelect;
 use Tests\Fixtures\Traits\CreatesDungeon;
+use Tests\Fixtures\Traits\CreatesSpell;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
@@ -23,6 +24,7 @@ use Tests\TestCases\PublicTestCase;
 final class SpellCompendiumControllerTest extends PublicTestCase
 {
     use CreatesDungeon;
+    use CreatesSpell;
     use ProvidesDungeon;
     use ReadsDungeonSelect;
 
@@ -293,8 +295,7 @@ final class SpellCompendiumControllerTest extends PublicTestCase
     public function show_givenSpellWithoutTuningChanges_rendersEmptyState(): void
     {
         // Arrange
-        $spell = Spell::where('hidden_on_map', false)->whereDoesntHave('tuningChanges')->first();
-        $this->assertNotNull($spell);
+        $spell = $this->createSpell();
 
         // Act
         $response = $this->get(route('spell.compendium.show', $spell));
@@ -369,15 +370,8 @@ final class SpellCompendiumControllerTest extends PublicTestCase
         [$dungeon]      = $this->findDungeon(dungeonActive: true);
         [$otherDungeon] = $this->findDungeon(dungeonActive: true, constraint: static fn(Builder $query) => $query->where('id', '!=', $dungeon->id));
 
-        // Uncoupled spells, so the only dungeon either of them answers to is the one coupled below - without
-        // that, `assertNotContains()` would be resting on `spell_dungeons` happening to seed empty today
-        [$includedSpell, $excludedSpell] = Spell::query()
-            ->where('hidden_on_map', false)
-            ->whereDoesntHave('dungeons')
-            ->orderBy('id')
-            ->limit(2)
-            ->get()
-            ->all();
+        $includedSpell = $this->createSpell();
+        $excludedSpell = $this->createSpell();
 
         // Collected as they are created, so a throw on the second one still hands the first to the finally.
         // `spell_dungeons` seeds empty on a shared MySQL server, so a leak here is permanent
