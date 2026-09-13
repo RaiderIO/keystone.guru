@@ -21,6 +21,21 @@ class HandlerLogging extends StructuredLogging implements HandlerLoggingInterfac
     }
 
     /**
+     * Warning, not error: the error-level Sentry and Discord channels would otherwise alert on every scraper the
+     * signed-url gate turns away.
+     */
+    public function invalidSignature(
+        string  $ip,
+        string  $url,
+        ?int    $userId,
+        ?string $username,
+        bool    $hasSignature,
+        bool    $signatureExpired,
+    ): void {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    /**
      * @param array<string, mixed>|null $body
      * @param bool                      $reportedByErrorTracker Ends up in the log context, where a channel that also
      *                                                          receives the exception natively filters this record
