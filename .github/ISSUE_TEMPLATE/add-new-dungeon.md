@@ -23,6 +23,7 @@ Baseline mapping
 - [ ] Import the combat log, see where the enemies end up
 - [ ] Rotate the floor coordinates if necessary
 - [ ] Re-import mapping with all enemies being put on the correct floors
+- [ ] Check the enemy forces against the game client: `php artisan wagotools:diffenemyforces --dungeon=<key>` with `--product=wow` and `--product=wowt` (repeat after every MDT re-import)
 - [ ] Place map icons for relevant doodads
 
 Mapping refinement
