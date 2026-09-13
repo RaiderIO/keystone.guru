@@ -118,6 +118,22 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    public function doCreateThumbnailErrorWillRetry(string $errors, string $previewUrl, string $variant, int $renderDurationMs): void
+    {
+        $errors     = self::stripSecret($errors);
+        $previewUrl = self::stripSecret($previewUrl);
+
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function doCreateThumbnailRecoveredAfterReload(string $errors, string $previewUrl, string $variant, int $renderDurationMs): void
+    {
+        $errors     = self::stripSecret($errors);
+        $previewUrl = self::stripSecret($previewUrl);
+
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function queueThumbnailRefreshMappingVersionNull(string $publicKey): void
     {
         $this->error(__METHOD__, get_defined_vars());

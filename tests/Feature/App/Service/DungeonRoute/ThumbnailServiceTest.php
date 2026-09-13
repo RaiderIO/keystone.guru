@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Imagick;
 use ImagickDraw;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionMethod;
@@ -253,6 +254,56 @@ final class ThumbnailServiceTest extends PublicTestCase
         } finally {
             unlink($tmpFile);
         }
+    }
+
+    #[Test]
+    #[DataProvider('logRenderProcessOutcome_givenProcessResult_logsAtMatchingLevel_dataProvider')]
+    public function logRenderProcessOutcome_givenProcessResult_logsAtMatchingLevel(
+        bool    $isSuccessful,
+        bool    $isFinalAttempt,
+        string  $errors,
+        ?string $expectedLogMethod,
+        bool    $expectedResult,
+    ): void {
+        // Arrange
+        $loggedMethods = ['doCreateThumbnailError', 'doCreateThumbnailErrorWillRetry', 'doCreateThumbnailRecoveredAfterReload'];
+
+        $log = $this->createMockPublic(ThumbnailServiceLoggingInterface::class);
+        foreach ($loggedMethods as $loggedMethod) {
+            $log->expects($loggedMethod === $expectedLogMethod ? $this->once() : $this->never())
+                ->method($loggedMethod)
+                ->with($errors, 'http://nginx/preview/4', DungeonRouteThumbnailVariant::Standard->value, 1234);
+        }
+
+        $service = $this->buildService($log);
+        $method  = new ReflectionMethod($service, 'logRenderProcessOutcome');
+
+        // Act
+        $result = $method->invoke(
+            $service,
+            $isSuccessful,
+            $isFinalAttempt,
+            $errors,
+            'http://nginx/preview/4',
+            DungeonRouteThumbnailVariant::Standard,
+            1234,
+        );
+
+        // Assert
+        $this->assertSame($expectedResult, $result);
+    }
+
+    /**
+     * @return array<string, array{bool, bool, string, string|null, bool}>
+     */
+    public static function logRenderProcessOutcome_givenProcessResult_logsAtMatchingLevel_dataProvider(): array
+    {
+        return [
+            'failed on the final attempt'      => [false, true, 'Page load 3 of 3 failed', 'doCreateThumbnailError', false],
+            'failed with attempts remaining'   => [false, false, 'Page load 3 of 3 failed', 'doCreateThumbnailErrorWillRetry', false],
+            'succeeded after a reload'         => [true, true, 'Page load 1 of 3 failed', 'doCreateThumbnailRecoveredAfterReload', true],
+            'succeeded on the first page load' => [true, false, '', null, true],
+        ];
     }
 
     #[Test]

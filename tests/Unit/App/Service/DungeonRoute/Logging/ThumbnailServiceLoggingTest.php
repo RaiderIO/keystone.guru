@@ -120,6 +120,45 @@ final class ThumbnailServiceLoggingTest extends PublicTestCase
     }
 
     #[Test]
+    #[DataProvider('doCreateThumbnailRetryableOutcome_givenErrorsWithSecret_logsWarningWithoutSecret_dataProvider')]
+    public function doCreateThumbnailRetryableOutcome_givenErrorsWithSecret_logsWarningWithoutSecret(string $logMethod): void
+    {
+        // Arrange
+        config(['app.log_level' => 'debug', 'app.type' => 'local']);
+
+        $logger     = LoggingFixtures::createLogManager($this);
+        $log        = new TestableThumbnailServiceLogging($logger);
+        $previewUrl = sprintf('http://nginx/preview/4?secret=%s&z=1', self::SECRET);
+        $errors     = sprintf('Page load 1 of 3 failed after 2034ms for %s: Waiting failed', $previewUrl);
+
+        $logger
+            ->expects($this->once())
+            ->method('log')
+            ->willReturnCallback(function (string $level, string $message, array $context = []): void {
+                self::assertSame('WARNING', $level);
+                self::assertSame('Page load 1 of 3 failed after 2034ms for http://nginx/preview/4?z=1: Waiting failed', $context['errors']);
+                self::assertSame('http://nginx/preview/4?z=1', $context['previewUrl']);
+            });
+
+        // Act
+        $log->{$logMethod}($errors, $previewUrl, 'standard', 1234);
+
+        // Assert
+        // Already checked in the callback
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function doCreateThumbnailRetryableOutcome_givenErrorsWithSecret_logsWarningWithoutSecret_dataProvider(): array
+    {
+        return [
+            'failed with attempts remaining' => ['doCreateThumbnailErrorWillRetry'],
+            'recovered after a reload'       => ['doCreateThumbnailRecoveredAfterReload'],
+        ];
+    }
+
+    #[Test]
     public function doCreateThumbnailBlankImageRejected_givenPreviewUrlWithoutSecret_logsPreviewUrlUnchanged(): void
     {
         // Arrange

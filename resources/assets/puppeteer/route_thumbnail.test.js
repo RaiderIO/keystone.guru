@@ -1,4 +1,4 @@
-const {resolveConsoleArg, formatConsoleMessage, createDiagnosticsCollector, wireDiagnostics, launchBrowser} = require('./route_thumbnail');
+const {resolveConsoleArg, formatConsoleMessage, createDiagnosticsCollector, wireDiagnostics, launchBrowser, loadUntilFinished} = require('./route_thumbnail');
 
 /**
  * Puppeteer's real JSHandle#evaluate() runs a function inside the browser page and returns its
@@ -199,5 +199,87 @@ describe('wireDiagnostics', () => {
         page.emit('pageerror', error);
 
         expect(collector.diagnostics).toEqual([`PAGEERROR ${error.stack}`]);
+    });
+});
+
+/**
+ * A stand-in for a freshly opened preview page: `outcome` 'finished' resolves #finished_loading,
+ * 'missing' times the selector wait out, 'gotoFails' makes the navigation itself throw.
+ */
+function fakeLoadedPage(outcome) {
+    return {
+        goto: async () => {
+            if (outcome === 'gotoFails') {
+                throw new Error('Navigation timeout of 15000 ms exceeded');
+            }
+        },
+        waitForSelector: async () => {
+            if (outcome === 'missing') {
+                throw new Error('Waiting for selector `#finished_loading` failed');
+            }
+        },
+        evaluate: async () => ({readyState: 'complete', hasMapContextStatic: false}),
+        close: vi.fn(async () => {}),
+    };
+}
+
+function fakeOpenPage(outcomes) {
+    const pages = outcomes.map(fakeLoadedPage);
+    let opened = 0;
+
+    const openPage = vi.fn(async () => ({
+        page: pages[opened++],
+        diagnostics: ['REQUESTFAILED net::ERR_CONNECTION_RESET http://assets/mapcontext.js'],
+        pendingConsoleDiagnostics: [],
+    }));
+
+    return {openPage, pages};
+}
+
+const LOAD_OPTIONS = {maxLoads: 3, loadTimeoutMs: 15000, graceMs: 2000};
+
+describe('loadUntilFinished', () => {
+    it('loadUntilFinished_givenFirstLoadFinishes_returnsItsPageWithoutReports', async () => {
+        const {openPage, pages} = fakeOpenPage(['finished']);
+
+        const result = await loadUntilFinished(openPage, 'http://nginx/preview/1', LOAD_OPTIONS);
+
+        expect(result.page).toBe(pages[0]);
+        expect(result.failedLoadReports).toEqual([]);
+        expect(openPage).toHaveBeenCalledTimes(1);
+    });
+
+    it('loadUntilFinished_givenFirstLoadMissesMarker_reloadsAndReportsTheFailedLoad', async () => {
+        const {openPage, pages} = fakeOpenPage(['missing', 'finished']);
+
+        const result = await loadUntilFinished(openPage, 'http://nginx/preview/1', LOAD_OPTIONS);
+
+        expect(result.page).toBe(pages[1]);
+        expect(pages[0].close).toHaveBeenCalledTimes(1);
+        expect(result.failedLoadReports).toHaveLength(1);
+        expect(result.failedLoadReports[0]).toContain('Page load 1 of 3 failed');
+        expect(result.failedLoadReports[0]).toContain('Page state: {"readyState":"complete","hasMapContextStatic":false}');
+        expect(result.failedLoadReports[0]).toContain('REQUESTFAILED net::ERR_CONNECTION_RESET');
+    });
+
+    it('loadUntilFinished_givenNavigationThrows_treatsItAsAFailedLoadAndReloads', async () => {
+        const {openPage, pages} = fakeOpenPage(['gotoFails', 'finished']);
+
+        const result = await loadUntilFinished(openPage, 'http://nginx/preview/1', LOAD_OPTIONS);
+
+        expect(result.page).toBe(pages[1]);
+        expect(result.failedLoadReports[0]).toContain('Navigation timeout of 15000 ms exceeded');
+    });
+
+    it('loadUntilFinished_givenEveryLoadFails_returnsNullPageAndOneReportPerLoad', async () => {
+        const {openPage, pages} = fakeOpenPage(['missing', 'gotoFails', 'missing']);
+
+        const result = await loadUntilFinished(openPage, 'http://nginx/preview/1', LOAD_OPTIONS);
+
+        expect(result.page).toBeNull();
+        expect(result.failedLoadReports).toHaveLength(3);
+        expect(result.failedLoadReports[2]).toContain('Page load 3 of 3 failed');
+        expect(openPage).toHaveBeenCalledTimes(3);
+        pages.forEach(page => expect(page.close).toHaveBeenCalledTimes(1));
     });
 });

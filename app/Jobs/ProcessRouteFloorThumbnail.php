@@ -2,11 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Exceptions\ThumbnailRenderFailedException;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -53,7 +53,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     }
 
     /**
-     * @throws Exception
+     * @throws ThumbnailRenderFailedException
      */
     public function handle(): void
     {
@@ -75,7 +75,13 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
             // Give some additional space since we're refreshing ALL floors - the first floor may get processed,
             // but the floors after that will otherwise think "oh the thumbnail is up-to-date" and not refresh.
             if ($this->dungeonRoute->thumbnail_updated_at->isBefore($this->dungeonRoute->updated_at->addHour()) || $this->force) {
-                $result = $thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts(), $this->variant);
+                $result = $thumbnailService->createThumbnail(
+                    $this->dungeonRoute,
+                    $this->floorIndex,
+                    $this->attempts(),
+                    $this->variant,
+                    $this->attempts() >= $this->tries,
+                );
 
                 if (!$result) {
                     $log->handleCreateThumbnailError();
@@ -87,7 +93,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
                     // busy with the other floors of this same route) would be retried while it is still
                     // just as slow. See #3920. Once $tries is exhausted the worker calls failed() below
                     // instead of retrying again.
-                    throw new Exception(sprintf(
+                    throw new ThumbnailRenderFailedException(sprintf(
                         'Failed to create thumbnail for dungeon route %d floor %d on attempt %d',
                         $this->dungeonRoute->id,
                         $this->floorIndex,
