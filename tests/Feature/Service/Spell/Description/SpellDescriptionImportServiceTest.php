@@ -24,13 +24,19 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
 {
     use RestoresSpellDescriptionImportState;
 
-    private const string BUILD = '0.0.0.00001';
-
     private const int SPELL_ID = 999999911;
 
     private const string IMPORT_STATE_DATA_PATH = 'data/spell_description/import_state.json';
 
     private string $originalImportStateJson;
+
+    /**
+     * Own build per test run, not a shared constant - paratest splits at the test method level, so two
+     * methods of this class run in different worker processes at the same time, sharing the filesystem
+     * (only the database is per-worker). A fixed build id had both writing/deleting the same DB2 CSV
+     * cache directory concurrently.
+     */
+    private string $build;
 
     #[\Override]
     protected function setUp(): void
@@ -40,6 +46,8 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
         $this->originalImportStateJson = File::get(database_path(self::IMPORT_STATE_DATA_PATH));
 
         $this->captureSpellDescriptionImportState(GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL]);
+
+        $this->build = sprintf('0.0.%d.%d', getmypid(), random_int(10_000, 99_999));
     }
 
     #[\Override]
@@ -115,7 +123,7 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
         $result = app(SpellDescriptionImportServiceInterface::class)->importDescriptions(
             'wow',
             GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
-            self::BUILD,
+            $this->build,
         );
 
         $this->assertNotNull($result);
@@ -212,6 +220,6 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
 
     private function getDb2Directory(): string
     {
-        return storage_path(sprintf('app/db2/%s', self::BUILD));
+        return storage_path(sprintf('app/db2/%s', $this->build));
     }
 }
