@@ -73,7 +73,10 @@ final class APICombatLogEnemyFailureControllerTest extends PublicTestCase
         $failure = $this->createFailure(['dungeon_route_id' => $dungeonRoute->id, 'npc_id' => 99801]);
 
         // Act
-        $response = $this->getJson(route('api.v1.combatlog.enemy_failures.index', ['dungeon' => $this->dungeon->slug]));
+        $response = $this->getJson(route('api.v1.combatlog.enemy_failures.index', [
+            'dungeon'  => $this->dungeon->slug,
+            'after_id' => $failure->id - 1,
+        ]));
 
         // Assert
         $response->assertOk();
@@ -81,7 +84,8 @@ final class APICombatLogEnemyFailureControllerTest extends PublicTestCase
 
         /** @var array<int, array<string, mixed>> $data */
         $data = $response->json('data');
-        $row  = collect($data)->firstWhere('id', $failure->id);
+        $this->assertCount(1, $data);
+        $row = collect($data)->firstWhere('id', $failure->id);
         $this->assertNotNull($row);
         $this->assertSame($dungeonRoute->public_key, $row['dungeon_route_public_key']);
         $this->assertSame(99801, $row['npc_id']);
