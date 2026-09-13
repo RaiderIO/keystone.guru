@@ -6,12 +6,15 @@ use App\Models\Expansion;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\CreatesExpansion;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('Admin')]
 final class AdminExpansionControllerTest extends PublicTestCase
 {
+    use CreatesExpansion;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -76,33 +79,22 @@ final class AdminExpansionControllerTest extends PublicTestCase
     public function update_givenValidData_updatesExpansion(): void
     {
         // Arrange
-        $expansion      = Expansion::query()->firstOrFail();
-        $originalName   = $expansion->name;
-        $originalActive = $expansion->active;
-        $originalColor  = $expansion->color;
+        $expansion = $this->createExpansion(['active' => true]);
 
-        try {
-            // Act
-            $response = $this->patch(route('admin.expansion.update', $expansion), [
-                'active'    => 0,
-                'name'      => 'Updated Expansion',
-                'shortname' => $expansion->shortname,
-                'color'     => '#123456',
-            ]);
+        // Act
+        $response = $this->patch(route('admin.expansion.update', $expansion), [
+            'active'    => 0,
+            'name'      => 'Updated Expansion',
+            'shortname' => $expansion->shortname,
+            'color'     => '#123456',
+        ]);
 
-            // Assert
-            $response->assertOk();
+        // Assert
+        $response->assertOk();
 
-            $updated = Expansion::query()->findOrFail($expansion->id);
-            $this->assertSame('Updated Expansion', $updated->name);
-            $this->assertEquals(0, $updated->active);
-            $this->assertSame('#123456', $updated->color);
-        } finally {
-            Expansion::query()->where('id', $expansion->id)->update([
-                'name'   => $originalName,
-                'active' => $originalActive,
-                'color'  => $originalColor,
-            ]);
-        }
+        $updated = Expansion::query()->findOrFail($expansion->id);
+        $this->assertSame('Updated Expansion', $updated->name);
+        $this->assertEquals(0, $updated->active);
+        $this->assertSame('#123456', $updated->color);
     }
 }
