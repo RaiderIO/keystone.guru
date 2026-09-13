@@ -61,21 +61,19 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
     {
         // Arrange
         $this->actingAsAdmin();
-        $older = $this->createSyncRun(['started_at' => now()->subHours(2), 'members_fetched' => 400]);
-        $newer = $this->createSyncRunTruncated(['started_at' => now()->subHour(), 'members_fetched' => 180]);
+        $base  = $this->afterEveryRecordedSyncRun();
+        $older = $this->createSyncRun(['started_at' => $base->copy()->addHour(), 'members_fetched' => 400]);
+        $newer = $this->createSyncRunTruncated(['started_at' => $base->copy()->addHours(2), 'members_fetched' => 180]);
 
         // Act
         $response = $this->getJson(route('api.v1.patreon.sync_runs'));
 
-        // Assert - the drop from 400 to 180 is the whole point of keeping this history. Asserted over this
-        // class's own two runs rather than over data.0/data.1: the endpoint returns every run in the schema,
-        // so any other run recorded within the last two hours would shift every index
+        // Assert - the drop from 400 to 180 is the whole point of keeping this history
         $response->assertOk();
-        $ownRuns = $this->ownSyncRunsFrom($response->json('data'));
-        $this->assertSame([$newer->id, $older->id], array_column($ownRuns, 'id'), 'newest first');
-        $this->assertSame(180, $ownRuns[0]['members_fetched']);
-        $this->assertTrue($ownRuns[0]['truncated']);
-        $this->assertSame(400, $ownRuns[1]['members_fetched']);
+        $this->assertSame([$newer->id, $older->id], [$response->json('data.0.id'), $response->json('data.1.id')], 'newest first');
+        $this->assertSame(180, $response->json('data.0.members_fetched'));
+        $this->assertTrue($response->json('data.0.truncated'));
+        $this->assertSame(400, $response->json('data.1.members_fetched'));
     }
 
     #[Test]
@@ -446,18 +444,6 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
         $latest = PatreonSyncRun::query()->max('started_at');
 
         return $latest === null ? now() : Carbon::parse($latest)->addSecond()->max(now());
-    }
-
-    /**
-     * @param  array<int, array<string, mixed>> $runs
-     * @return array<int, array<string, mixed>>
-     */
-    private function ownSyncRunsFrom(array $runs): array
-    {
-        return array_values(array_filter(
-            $runs,
-            fn(array $run): bool => in_array($run['id'], $this->createdSyncRunIds, true),
-        ));
     }
 
     /**
