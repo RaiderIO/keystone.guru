@@ -209,9 +209,17 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
                 $description->values,
             );
 
+            // MySQL's json column reorders object keys on storage, so the stored side is round-tripped
+            // through the same DTO before the strict array comparison below - otherwise key order alone
+            // makes every value carrying a spellId or coefficient compare as changed.
+            $storedValues = $spell->description_values === null ? null : array_map(
+                static fn(array $value): array => SpellDescriptionValue::fromArray($value)->toArray(),
+                $spell->description_values,
+            );
+
             if ($template !== $spell->description_template
                 || $format !== $spell->description_format
-                || $values !== $spell->description_values) {
+                || $values !== $storedValues) {
                 Spell::query()
                     ->whereKey($spell->id)
                     ->update([
