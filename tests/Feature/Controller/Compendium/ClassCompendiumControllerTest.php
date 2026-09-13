@@ -21,12 +21,14 @@ use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Fixtures\Traits\CreatesSpell;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('Compendium')]
 final class ClassCompendiumControllerTest extends PublicTestCase
 {
+    use CreatesSpell;
     use ProvidesDungeon;
 
     /** @var array<int, array{0: int, 1: int}> npc_id/characteristic_id pairs this test created */
@@ -339,15 +341,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
 
         // Deliberately without a characteristic or counter bit, so the spell cannot also show up in
         // the CC table or a counter section and make the assertions below pass for the wrong reason
-        $spell = Spell::query()
-            ->where('game_version_id', $mappingVersion->game_version_id)
-            ->where('hidden_on_map', false)
-            ->whereNull('characteristic_id')
-            ->where('counters_mask', 0)
-            ->whereRaw('miss_types_mask & ? = 0', [Spell::MISS_TYPE_REFLECT])
-            ->first();
-        $this->assertNotNull($spell);
-        $originalMissTypesMask = $spell->miss_types_mask;
+        $spell = $this->createSpell([
+            'game_version_id' => $mappingVersion->game_version_id,
+            'miss_types_mask' => Spell::MISS_TYPE_REFLECT,
+        ]);
 
         // Set the user's context dungeon to the one with enemies
         $user              = User::findOrFail(1);
@@ -360,9 +357,6 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $npcSpell     = null;
 
         try {
-            $spell->miss_types_mask = $originalMissTypesMask | Spell::MISS_TYPE_REFLECT;
-            $spell->save();
-
             $spellDungeon = SpellDungeon::create([
                 'spell_id'   => $spell->id,
                 'dungeon_id' => $dungeon->id,
@@ -386,9 +380,6 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         } finally {
             $npcSpell?->delete();
             $spellDungeon?->delete();
-
-            $spell->miss_types_mask = $originalMissTypesMask;
-            $spell->save();
 
             $user->dungeon_id = $originalDungeonId;
             $user->save();
