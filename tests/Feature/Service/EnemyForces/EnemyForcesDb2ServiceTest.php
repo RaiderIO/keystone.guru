@@ -4,49 +4,30 @@ namespace Tests\Feature\Service\EnemyForces;
 
 use App\Models\Dungeon;
 use App\Models\Enemy;
+use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
+use App\Service\EnemyForces\Dtos\DungeonEnemyForcesDiff;
+use App\Service\EnemyForces\Dtos\EnemyForcesDb2Report;
 use App\Service\EnemyForces\EnemyForcesDb2ServiceInterface;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\CreatesDungeon;
+use Tests\Fixtures\Traits\WritesEnemyForcesDb2Tables;
 use Tests\TestCases\PublicTestCase;
 
-/**
- * Runs the diff against DB2 CSVs placed in the download cache, so the service reads the files it would
- * have downloaded without ever reaching wago.tools. The tables are generated from the dungeon's own
- * seeded enemy forces, so "identical" stays true no matter what the mapping is retuned to.
- */
 #[Group('EnemyForces')]
 final class EnemyForcesDb2ServiceTest extends PublicTestCase
 {
-    private const string BUILD = '0.0.0.00002';
+    use CreatesDungeon;
+    use WritesEnemyForcesDb2Tables;
 
-    private const string DUNGEON_KEY = 'den_of_nalorakk';
+    private const string BUILD = '0.0.0.00002';
 
     /** An NPC no mapping version places an enemy of - the client's tree keeps retired affix creatures. */
     private const int UNMAPPED_NPC_ID = 999999801;
-
-    private const int SCENARIO_ID = 999001;
-
-    private const int ROOT_CRITERIA_TREE_ID = 999100;
-
-    private const int FORCES_CRITERIA_TREE_ID = 999101;
-
-    private const int SECOND_FORCES_CRITERIA_TREE_ID = 999102;
-
-    private const int BOSS_CRITERIA_ID = 999500;
-
-    private const int DUNGEON_ENCOUNTER_ID = 999900;
-
-    /** The client names the challenge mode and its scenario the same, most of the time. */
-    private const string SCENARIO_NAME = 'A dungeon';
-
-    private const int SHARED_MAP_SCENARIO_ID = 999002;
-
-    private const int SHARED_MAP_ROOT_CRITERIA_TREE_ID = 999200;
-
-    private const int SHARED_MAP_FORCES_CRITERIA_TREE_ID = 999201;
 
     #[\Override]
     protected function tearDown(): void
@@ -321,7 +302,244 @@ final class EnemyForcesDb2ServiceTest extends PublicTestCase
         $this->assertTrue($dungeonDiff->matches());
     }
 
-    private function diffEnemyForces(Dungeon $dungeon): \App\Service\EnemyForces\Dtos\EnemyForcesDb2Report
+    #[Test]
+    public function diffEnemyForces_givenAnOlderDungeonOnTheSameChallengeMode_leavesTheOlderOneUnresolved(): void
+    {
+        // Arrange - Algeth'ar Academy is challenge mode 402 in Dragonflight and in Midnight, and the build only
+        // holds the Midnight tuning
+        [$dungeon, $mappingVersion, $ourEnemyForcesByNpcId] = $this->getDungeonEnemyForces();
+
+        $olderExpansion = Expansion::query()
+            ->where('released_at', '<', $dungeon->expansion->released_at)
+            ->orderByDesc('released_at')
+            ->firstOrFail();
+        $olderDungeon = $this->createDungeon([
+            'challenge_mode_id' => $dungeon->challenge_mode_id,
+            'expansion_id'      => $olderExpansion->id,
+        ]);
+
+        $this->writeDb2Tables($dungeon, $mappingVersion->enemy_forces_required, $ourEnemyForcesByNpcId);
+
+        // Act
+        $olderDungeonDiff = $this->diffEnemyForces($olderDungeon)->dungeonDiffs[$olderDungeon->id];
+        $dungeonDiff      = $this->diffEnemyForces($dungeon)->dungeonDiffs[$dungeon->id];
+
+        // Assert
+        $this->assertFalse($olderDungeonDiff->isResolved());
+        $this->assertStringContainsString(
+            sprintf('Shares challenge mode %d with %s', $dungeon->challenge_mode_id, __($dungeon->name)),
+            (string)$olderDungeonDiff->unresolvedReason,
+        );
+        $this->assertTrue($dungeonDiff->isResolved());
+        $this->assertTrue($dungeonDiff->matches());
+    }
+
+    #[Test]
+    public function writeEnemyForces_givenAMovedTotalAndARetunedNpc_writesBothOntoTheMappingVersion(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion, $ourEnemyForcesByNpcId] = $this->getDungeonEnemyForces();
+
+        $retunedNpcId          = (int)array_key_first($ourEnemyForcesByNpcId);
+        $untouchedNpcId        = (int)array_key_last($ourEnemyForcesByNpcId);
+        $db2EnemyForcesByNpcId = $ourEnemyForcesByNpcId;
+        $db2EnemyForcesByNpcId[$retunedNpcId] *= 2;
+
+        $this->writeDb2Tables($dungeon, $mappingVersion->enemy_forces_required + 31, $db2EnemyForcesByNpcId);
+
+        $mappingVersionBefore     = MappingVersion::findOrFail($mappingVersion->id);
+        $retunedNpcEnemyForcesRow = $this->getNpcEnemyForcesRow($mappingVersion, $retunedNpcId);
+        $this->assertNotNull($retunedNpcEnemyForcesRow);
+
+        try {
+            // Act
+            $this->writeEnemyForces($dungeon);
+
+            // Assert
+            $mappingVersionAfter     = MappingVersion::findOrFail($mappingVersion->id);
+            $retunedNpcEnemyForces   = $this->getNpcEnemyForcesRow($mappingVersion, $retunedNpcId);
+            $untouchedNpcEnemyForces = $this->getNpcEnemyForcesRow($mappingVersion, $untouchedNpcId);
+
+            $this->assertSame($mappingVersion->enemy_forces_required + 31, $mappingVersionAfter->enemy_forces_required);
+            $this->assertSame($mappingVersionBefore->enemy_forces_required_teeming, $mappingVersionAfter->enemy_forces_required_teeming);
+            $this->assertSame($mappingVersionBefore->enemy_forces_shrouded, $mappingVersionAfter->enemy_forces_shrouded);
+            $this->assertSame($mappingVersionBefore->enemy_forces_shrouded_zul_gamux, $mappingVersionAfter->enemy_forces_shrouded_zul_gamux);
+            $this->assertNotNull($retunedNpcEnemyForces);
+            $this->assertSame($ourEnemyForcesByNpcId[$retunedNpcId] * 2, $retunedNpcEnemyForces->enemy_forces);
+            $this->assertSame($retunedNpcEnemyForcesRow->enemy_forces_teeming, $retunedNpcEnemyForces->enemy_forces_teeming);
+            $this->assertSame($ourEnemyForcesByNpcId[$untouchedNpcId], $untouchedNpcEnemyForces?->enemy_forces);
+        } finally {
+            $this->restoreEnemyForces($mappingVersion, $ourEnemyForcesByNpcId);
+        }
+    }
+
+    #[Test]
+    public function writeEnemyForces_givenAMappedNpcWeHoldNoForcesFor_createsItsRow(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion, $ourEnemyForcesByNpcId] = $this->getDungeonEnemyForces();
+
+        $npcIdWithoutEnemyForces = Enemy::query()
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->whereNotNull('npc_id')
+            ->whereNotIn('npc_id', NpcEnemyForces::query()->where('mapping_version_id', $mappingVersion->id)->select('npc_id'))
+            ->value('npc_id');
+        $this->assertNotNull($npcIdWithoutEnemyForces, sprintf('Every enemy of %s is worth enemy forces', self::DUNGEON_KEY));
+
+        $this->writeDb2Tables(
+            $dungeon,
+            $mappingVersion->enemy_forces_required,
+            $ourEnemyForcesByNpcId + [$npcIdWithoutEnemyForces => 12],
+        );
+
+        try {
+            // Act
+            $this->writeEnemyForces($dungeon);
+
+            // Assert
+            $createdNpcEnemyForces = $this->getNpcEnemyForcesRow($mappingVersion, $npcIdWithoutEnemyForces);
+
+            $this->assertNotNull($createdNpcEnemyForces);
+            $this->assertSame(12, $createdNpcEnemyForces->enemy_forces);
+            $this->assertNull($createdNpcEnemyForces->enemy_forces_teeming);
+        } finally {
+            NpcEnemyForces::query()
+                ->where('mapping_version_id', $mappingVersion->id)
+                ->where('npc_id', $npcIdWithoutEnemyForces)
+                ->delete();
+        }
+    }
+
+    #[Test]
+    public function writeEnemyForces_givenAnNpcTheBuildAwardsNothingFor_keepsOurRow(): void
+    {
+        // Arrange - mostly Shrouded affix creatures, whose forces come from the mapping version instead
+        [$dungeon, $mappingVersion, $ourEnemyForcesByNpcId] = $this->getDungeonEnemyForces();
+
+        $droppedNpcId          = (int)array_key_first($ourEnemyForcesByNpcId);
+        $db2EnemyForcesByNpcId = $ourEnemyForcesByNpcId;
+        unset($db2EnemyForcesByNpcId[$droppedNpcId]);
+
+        $this->writeDb2Tables($dungeon, $mappingVersion->enemy_forces_required + 31, $db2EnemyForcesByNpcId);
+
+        try {
+            // Act
+            $dungeonDiff = $this->writeEnemyForces($dungeon);
+
+            // Assert
+            $this->assertSame([$droppedNpcId], array_keys($dungeonDiff->getNpcDiffsOnlyWeHold()));
+            $this->assertSame($ourEnemyForcesByNpcId[$droppedNpcId], $this->getNpcEnemyForcesRow($mappingVersion, $droppedNpcId)?->enemy_forces);
+        } finally {
+            $this->restoreEnemyForces($mappingVersion, $ourEnemyForcesByNpcId);
+        }
+    }
+
+    #[Test]
+    public function writeEnemyForces_givenAnUnmappedNpcAndANonCreatureCriteria_writesNeither(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion, $ourEnemyForcesByNpcId] = $this->getDungeonEnemyForces();
+
+        $this->writeDb2Tables(
+            $dungeon,
+            $mappingVersion->enemy_forces_required + 31,
+            $ourEnemyForcesByNpcId + [self::UNMAPPED_NPC_ID => 4],
+            nonCreatureCriteria: [['criteriaId' => 999700, 'type' => 92, 'asset' => 77283, 'amount' => 59]],
+        );
+
+        $npcEnemyForcesCountBefore = NpcEnemyForces::query()->where('mapping_version_id', $mappingVersion->id)->count();
+
+        try {
+            // Act
+            $this->writeEnemyForces($dungeon);
+
+            // Assert
+            $this->assertSame($npcEnemyForcesCountBefore, NpcEnemyForces::query()->where('mapping_version_id', $mappingVersion->id)->count());
+            $this->assertNull($this->getNpcEnemyForcesRow($mappingVersion, self::UNMAPPED_NPC_ID));
+            $this->assertNull($this->getNpcEnemyForcesRow($mappingVersion, 77283));
+        } finally {
+            $this->restoreEnemyForces($mappingVersion, $ourEnemyForcesByNpcId);
+        }
+    }
+
+    #[Test]
+    public function writeEnemyForces_givenAnUnresolvedDiff_throwsInvalidArgumentException(): void
+    {
+        // Arrange - a scenario with two forces nodes says nothing about which one M+ runs
+        [$dungeon, $mappingVersion, $ourEnemyForcesByNpcId] = $this->getDungeonEnemyForces();
+
+        $this->writeDb2Tables(
+            $dungeon,
+            $mappingVersion->enemy_forces_required + 31,
+            $ourEnemyForcesByNpcId,
+            withSecondForcesNode: true,
+        );
+
+        $dungeonDiff = $this->diffEnemyForces($dungeon)->dungeonDiffs[$dungeon->id];
+
+        // Act
+        $exception = null;
+
+        try {
+            app(EnemyForcesDb2ServiceInterface::class)->writeEnemyForces($dungeonDiff);
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $exception = $invalidArgumentException;
+        } finally {
+            $this->restoreEnemyForces($mappingVersion, $ourEnemyForcesByNpcId);
+        }
+
+        // Assert
+        $this->assertNotNull($exception);
+        $this->assertStringContainsString('2 enemy forces nodes', $exception->getMessage());
+        $this->assertSame($mappingVersion->enemy_forces_required, MappingVersion::findOrFail($mappingVersion->id)->enemy_forces_required);
+    }
+
+    protected function getDb2Build(): string
+    {
+        return self::BUILD;
+    }
+
+    private function writeEnemyForces(Dungeon $dungeon): DungeonEnemyForcesDiff
+    {
+        $dungeonDiff = $this->diffEnemyForces($dungeon)->dungeonDiffs[$dungeon->id];
+        $this->assertTrue($dungeonDiff->isResolved(), (string)$dungeonDiff->unresolvedReason);
+
+        app(EnemyForcesDb2ServiceInterface::class)->writeEnemyForces($dungeonDiff);
+
+        return $dungeonDiff;
+    }
+
+    private function getNpcEnemyForcesRow(MappingVersion $mappingVersion, int $npcId): ?NpcEnemyForces
+    {
+        return NpcEnemyForces::query()
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->where('npc_id', $npcId)
+            ->first();
+    }
+
+    /**
+     * Puts the seeded total and per NPC amounts back.
+     *
+     * @param array<int, int> $ourEnemyForcesByNpcId
+     */
+    private function restoreEnemyForces(MappingVersion $mappingVersion, array $ourEnemyForcesByNpcId): void
+    {
+        MappingVersion::query()
+            ->whereKey($mappingVersion->id)
+            ->update([
+                'enemy_forces_required' => $mappingVersion->enemy_forces_required,
+                'updated_at'            => $mappingVersion->updated_at,
+            ]);
+
+        foreach ($ourEnemyForcesByNpcId as $npcId => $enemyForces) {
+            NpcEnemyForces::query()
+                ->where('mapping_version_id', $mappingVersion->id)
+                ->where('npc_id', $npcId)
+                ->update(['enemy_forces' => $enemyForces]);
+        }
+    }
+
+    private function diffEnemyForces(Dungeon $dungeon): EnemyForcesDb2Report
     {
         /** @var EnemyForcesDb2ServiceInterface $enemyForcesDb2Service */
         $enemyForcesDb2Service = app(EnemyForcesDb2ServiceInterface::class);
@@ -336,140 +554,5 @@ final class EnemyForcesDb2ServiceTest extends PublicTestCase
         $this->assertNotNull($report);
 
         return $report;
-    }
-
-    /** @return array{0: Dungeon, 1: MappingVersion, 2: array<int, int>} */
-    private function getDungeonEnemyForces(): array
-    {
-        $dungeon = Dungeon::firstWhere('key', self::DUNGEON_KEY);
-        $this->assertNotNull($dungeon, sprintf('The seeded database has no %s', self::DUNGEON_KEY));
-
-        $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion(
-            GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
-        );
-        $this->assertNotNull($mappingVersion);
-
-        // Only the NPCs this mapping version actually places an enemy of - the ones it does not are what
-        // the "unmapped" test covers
-        $mappedNpcIds = Enemy::query()
-            ->where('mapping_version_id', $mappingVersion->id)
-            ->whereNotNull('npc_id')
-            ->distinct()
-            ->pluck('npc_id')
-            ->all();
-
-        $ourEnemyForcesByNpcId = NpcEnemyForces::query()
-            ->where('mapping_version_id', $mappingVersion->id)
-            ->whereIn('npc_id', $mappedNpcIds)
-            ->pluck('enemy_forces', 'npc_id')
-            ->map(static fn(int $enemyForces): int => $enemyForces)
-            ->all();
-
-        $this->assertNotEmpty($ourEnemyForcesByNpcId, sprintf('%s has no enemy forces to compare', self::DUNGEON_KEY));
-
-        return [$dungeon, $mappingVersion, $ourEnemyForcesByNpcId];
-    }
-
-    /**
-     * The rows the game client would ship for one dungeon's challenge mode scenario.
-     *
-     * @param array<int, int>                                                        $enemyForcesByNpcId
-     * @param array<int, array{criteriaId: int, type: int, asset: int, amount: int}> $nonCreatureCriteria
-     */
-    private function writeDb2Tables(
-        Dungeon $dungeon,
-        int     $enemyForcesRequired,
-        array   $enemyForcesByNpcId,
-        array   $nonCreatureCriteria = [],
-        bool    $withSecondForcesNode = false,
-        ?int    $dungeonEncounterMapId = null,
-        ?string $sharedMapScenarioName = null,
-        bool    $sharedMapScenarioIsAmbiguous = false,
-    ): void {
-        $criteriaTreeRows = [
-            sprintf('%d,0,"12.1 Dungeon (Challenge)",0,4,0,0', self::ROOT_CRITERIA_TREE_ID),
-            sprintf('%d,%d,"Defeat the boss",1,0,%d,0', self::ROOT_CRITERIA_TREE_ID + 10, self::ROOT_CRITERIA_TREE_ID, self::BOSS_CRITERIA_ID),
-            sprintf('%d,%d,"Enemy Forces",%d,9,0,1', self::FORCES_CRITERIA_TREE_ID, self::ROOT_CRITERIA_TREE_ID, $enemyForcesRequired),
-        ];
-        $criteriaRows = [
-            sprintf('%d,165,%d,0', self::BOSS_CRITERIA_ID, self::DUNGEON_ENCOUNTER_ID),
-        ];
-
-        if ($withSecondForcesNode) {
-            $criteriaTreeRows[] = sprintf(
-                '%d,%d,"Enemy Forces",%d,9,0,2',
-                self::SECOND_FORCES_CRITERIA_TREE_ID,
-                self::ROOT_CRITERIA_TREE_ID,
-                (int)round($enemyForcesRequired * 1.2),
-            );
-        }
-
-        $criteriaId = 999600;
-        foreach ($enemyForcesByNpcId as $npcId => $enemyForces) {
-            $criteriaTreeRows[] = sprintf('%d,%d,"",%d,0,%d,0', ++$criteriaId + 1000, self::FORCES_CRITERIA_TREE_ID, $enemyForces, $criteriaId);
-            $criteriaRows[]     = sprintf('%d,0,%d,0', $criteriaId, $npcId);
-        }
-
-        foreach ($nonCreatureCriteria as $index => $criteria) {
-            $criteriaTreeRows[] = sprintf('%d,%d,"",%d,0,%d,0', 999800 + $index, self::FORCES_CRITERIA_TREE_ID, $criteria['amount'], $criteria['criteriaId']);
-            $criteriaRows[]     = sprintf('%d,%d,%d,0', $criteria['criteriaId'], $criteria['type'], $criteria['asset']);
-        }
-
-        $scenarioRows = [sprintf('%d,"%s",1,0', self::SCENARIO_ID, self::SCENARIO_NAME)];
-        $stepRows     = [sprintf('%d,%d,%d', self::SCENARIO_ID + 100, self::SCENARIO_ID, self::ROOT_CRITERIA_TREE_ID)];
-
-        // A second dungeon on the same map - the other wing of a split dungeon, or the retired scenario of
-        // a reworked one. Its bosses are the same encounter, so only its name tells it apart.
-        if ($sharedMapScenarioName !== null) {
-            $scenarioRows[] = sprintf('%d,"%s",1,0', self::SHARED_MAP_SCENARIO_ID, $sharedMapScenarioName);
-            $stepRows[]     = sprintf('%d,%d,%d', self::SHARED_MAP_SCENARIO_ID + 100, self::SHARED_MAP_SCENARIO_ID, self::SHARED_MAP_ROOT_CRITERIA_TREE_ID);
-
-            $criteriaTreeRows[] = sprintf('%d,0,"Another dungeon (Challenge)",0,4,0,0', self::SHARED_MAP_ROOT_CRITERIA_TREE_ID);
-            $criteriaTreeRows[] = sprintf('%d,%d,"Defeat the boss",1,0,%d,0', self::SHARED_MAP_ROOT_CRITERIA_TREE_ID + 10, self::SHARED_MAP_ROOT_CRITERIA_TREE_ID, self::BOSS_CRITERIA_ID);
-            $criteriaTreeRows[] = sprintf('%d,%d,"Enemy Forces",%d,9,0,1', self::SHARED_MAP_FORCES_CRITERIA_TREE_ID, self::SHARED_MAP_ROOT_CRITERIA_TREE_ID, $enemyForcesRequired + 100);
-
-            if ($sharedMapScenarioIsAmbiguous) {
-                $criteriaTreeRows[] = sprintf('%d,%d,"Enemy Forces",%d,9,0,2', self::SHARED_MAP_FORCES_CRITERIA_TREE_ID + 1, self::SHARED_MAP_ROOT_CRITERIA_TREE_ID, $enemyForcesRequired + 200);
-            }
-        }
-
-        $this->writeDb2Table('MapChallengeMode', 'ID,Name_lang,MapID', [
-            sprintf('%d,"%s",%d', $dungeon->challenge_mode_id, self::SCENARIO_NAME, $dungeon->map_id),
-        ]);
-        $this->writeDb2Table('Scenario', 'ID,Name_lang,Type,Flags', $scenarioRows);
-        $this->writeDb2Table('ScenarioStep', 'ID,ScenarioID,CriteriatreeID', $stepRows);
-        $this->writeDb2Table('CriteriaTree', 'ID,Parent,Description_lang,Amount,Operator,CriteriaID,OrderIndex', $criteriaTreeRows);
-        $this->writeDb2Table('Criteria', 'ID,Type,Asset,Modifier_tree_ID', $criteriaRows);
-        $this->writeDb2Table('DungeonEncounter', 'ID,MapID', [
-            sprintf('%d,%d', self::DUNGEON_ENCOUNTER_ID, $dungeonEncounterMapId ?? $dungeon->map_id),
-        ]);
-    }
-
-    /** @param array<int, string> $rows */
-    private function writeDb2Table(string $table, string $header, array $rows): void
-    {
-        $directory = $this->getDb2Directory();
-
-        if (!is_dir($directory)) {
-            mkdir($directory, 0755, true);
-        }
-
-        file_put_contents(sprintf('%s/%s.csv', $directory, $table), implode("\n", [$header, ...$rows]));
-    }
-
-    private function removeDb2Tables(): void
-    {
-        foreach (glob(sprintf('%s/*.csv', $this->getDb2Directory())) ?: [] as $filePath) {
-            unlink($filePath);
-        }
-
-        if (is_dir($this->getDb2Directory())) {
-            rmdir($this->getDb2Directory());
-        }
-    }
-
-    private function getDb2Directory(): string
-    {
-        return storage_path(sprintf('app/db2/%s', self::BUILD));
     }
 }

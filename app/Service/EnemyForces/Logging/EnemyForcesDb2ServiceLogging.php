@@ -33,4 +33,29 @@ class EnemyForcesDb2ServiceLogging extends StructuredLogging implements EnemyFor
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
+
+    public function writeEnemyForcesStart(int $dungeonId, int $mappingVersionId): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
+    public function writeEnemyForcesEnd(): void
+    {
+        $this->end(__METHOD__);
+    }
+
+    public function writeEnemyForcesRequired(int $ourEnemyForcesRequired, int $db2EnemyForcesRequired): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function writeEnemyForcesUpdateNpc(int $npcId, int $ourEnemyForces, int $db2EnemyForces): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function writeEnemyForcesCreateNpc(int $npcId, int $db2EnemyForces): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
 }
