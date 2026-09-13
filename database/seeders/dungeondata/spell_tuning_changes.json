@@ -688,5 +688,20 @@
         "old_text": "1.5",
         "new_text": "3",
         "delta": null
+    },
+    {
+        "game_version_id": 1,
+        "spell_id": 272021,
+        "from_build": "12.1.0.69587",
+        "to_build": "12.1.0.69814",
+        "to_build_number": 69814,
+        "change_type": "value_changed",
+        "value_index": 1,
+        "kind": "radius",
+        "old_coefficient": null,
+        "new_coefficient": null,
+        "old_text": "100",
+        "new_text": "50,000",
+        "delta": null
     }
 ]

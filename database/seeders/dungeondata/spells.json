@@ -131735,7 +131735,7 @@
             },
             {
                 "kind": "radius",
-                "text": "100"
+                "text": "50,000"
             },
             {
                 "kind": "value",
@@ -131764,7 +131764,7 @@
                 "period_ms": 0,
                 "chain_targets": 0,
                 "radius": null,
-                "max_radius": 100
+                "max_radius": 50000
             },
             {
                 "effect_index": 1,
@@ -417003,7 +417003,7 @@
                 "period_ms": 0,
                 "chain_targets": 0,
                 "radius": null,
-                "max_radius": 100
+                "max_radius": 50000
             }
         ]
     },
@@ -417630,7 +417630,7 @@
                 "period_ms": 0,
                 "chain_targets": 0,
                 "radius": null,
-                "max_radius": 100
+                "max_radius": 50000
             }
         ]
     },
