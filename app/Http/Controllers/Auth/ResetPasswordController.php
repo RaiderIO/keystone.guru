@@ -32,6 +32,7 @@ class ResetPasswordController extends Controller implements HasMiddleware
     {
         return [
             'guest',
+            'throttle:reset-password',
         ];
     }
 }

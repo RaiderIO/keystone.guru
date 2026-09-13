@@ -147,6 +147,9 @@ class AppServiceProvider extends ServiceProvider
 
             return $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 50)->by($this->userKey($request));
         });
+        // Every attempt costs a password hash comparison, and the per-username lockout of ThrottlesLogins does not
+        // bound a caller that rotates usernames. Account access, so the ceiling is set well above what real traffic produces
+        RateLimiter::for('login', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
         RateLimiter::for('reset-password', function (Request $request) {
             // Same as create-user: only the form submission is interesting, showing the form is free
             if ($request->method() === 'GET') {
@@ -163,6 +166,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Heavy GET requests
         RateLimiter::for('search-dungeonroute', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 600)->by($this->userKey($request)));
+        // Every call is an outbound request to the Raider.IO API, and the front-end fires one per filter change
+        RateLimiter::for('heatmap-data', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
 
         // This consumes the same resources as creating a route - so we limit it
         RateLimiter::for('mdt-details', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));

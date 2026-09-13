@@ -3,14 +3,55 @@
 namespace Tests\Feature\Controller\Auth;
 
 use App\Models\User;
+use App\Providers\AppServiceProvider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use ReflectionProperty;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Auth')]
+#[Group('RateLimiting')]
 final class LoginControllerTest extends PublicTestCase
 {
+    #[Test]
+    public function login_givenTooManyRequests_isRateLimited(): void
+    {
+        // Arrange - one request per hour is enough to prove the throttle is applied to the route; the credentials
+        // are wrong on purpose, so the per-username lockout of ThrottlesLogins is not what answers the second request
+        $this->overrideHttpRateLimit(1);
+
+        try {
+            // Act
+            $firstResponse  = $this->post(route('login'), ['email' => 'nobody@example.com', 'password' => 'definitely-not-the-password']);
+            $secondResponse = $this->post(route('login'), ['email' => 'somebody-else@example.com', 'password' => 'definitely-not-the-password']);
+
+            // Assert
+            $firstResponse->assertStatus(302);
+            $secondResponse->assertStatus(429);
+        } finally {
+            $this->overrideHttpRateLimit(null);
+        }
+    }
+
+    #[Test]
+    public function showLoginForm_givenGuest_isNotRateLimited(): void
+    {
+        // Arrange
+        $this->overrideHttpRateLimit(1);
+
+        try {
+            // Act
+            $this->get(route('login'));
+            $response = $this->get(route('login'));
+
+            // Assert
+            $response->assertStatus(200);
+        } finally {
+            $this->overrideHttpRateLimit(null);
+        }
+    }
+
     #[Test]
     public function login_givenInvalidCredentials_redirectsToLoginWithErrors(): void
     {
@@ -163,6 +204,11 @@ final class LoginControllerTest extends PublicTestCase
         } finally {
             $user->delete();
         }
+    }
+
+    private function overrideHttpRateLimit(?int $limit): void
+    {
+        new ReflectionProperty(AppServiceProvider::class, 'rateLimitOverrideHttp')->setValue(null, $limit);
     }
 
     /**

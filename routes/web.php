@@ -622,7 +622,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::put('/{tag}/all', new AjaxTagController()->updateAll(...))->name('ajax.tag.updateall');
             Route::delete('/{tag}/all', new AjaxTagController()->deleteAll(...))->name('ajax.tag.deleteall');
         });
-        Route::prefix('heatmap')->group(static function () {
+        Route::prefix('heatmap')->middleware('throttle:heatmap-data')->group(static function () {
             Route::get('/data', new AjaxHeatmapController()->getData(...))->name('ajax.heatmap.data');
         });
 
@@ -631,9 +631,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('userreport/enemy/{enemy}', new AjaxUserReportController()->enemyStore(...))->name('ajax.userreport.enemy');
         });
 
-        Route::get('/routes', new AjaxDungeonRouteController()->get(...));
-
         Route::middleware('throttle:search-dungeonroute')->group(static function () {
+            Route::get('/routes', new AjaxDungeonRouteController()->get(...));
+
             Route::get('/search', new AjaxDungeonRouteController()->htmlsearch(...));
             Route::get('/search/{category}', new AjaxDungeonRouteController()->htmlsearchcategory(...));
 
