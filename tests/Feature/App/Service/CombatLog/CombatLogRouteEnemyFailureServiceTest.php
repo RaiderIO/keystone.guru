@@ -12,12 +12,15 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('CombatLog')]
 #[Group('CombatLogRouteEnemyFailureService')]
 final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
 {
+    use CreatesDungeon;
+
     private CombatLogRouteEnemyFailureServiceInterface $service;
 
     private Dungeon $dungeon;
@@ -38,22 +41,8 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
 
         $this->service = app(CombatLogRouteEnemyFailureServiceInterface::class);
 
-        // CombatLogRouteEnemyFailure is on a separate DB connection, so fetch existing dungeon IDs first.
-        $dungeonIdsWithData = CombatLogRouteEnemyFailure::query()
-            ->distinct()
-            ->pluck('dungeon_id')
-            ->all();
-
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::query()
-            ->when(!empty($dungeonIdsWithData), fn($q) => $q->whereNotIn('id', $dungeonIdsWithData))
-            ->inRandomOrder()
-            ->first();
-        $this->dungeon = $dungeon;
-
-        /** @var Floor $floor */
-        $floor       = $this->dungeon->floors()->where('facade', 0)->first();
-        $this->floor = $floor;
+        $this->dungeon = $this->createDungeon();
+        $this->floor   = $this->dungeon->floors()->firstOrFail();
 
         $this->mappingVersion = $this->dungeon->getCurrentMappingVersion();
     }

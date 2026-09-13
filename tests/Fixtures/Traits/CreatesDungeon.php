@@ -26,12 +26,17 @@ trait CreatesDungeon
     private array $createdDungeons = [];
 
     /**
-     * @param array<string, mixed> $attributes         Any `dungeons` column. Defaults to an inactive Mythic+ dungeon on the first active expansion.
-     * @param bool                 $withMappingVersion Give it a current (empty) mapping version on the default game version.
-     * @param bool                 $withDefaultFloor   Give it one fully configured default floor, which every map page needs.
+     * @param array<string, mixed> $attributes               Any `dungeons` column. Defaults to an inactive Mythic+ dungeon on the first active expansion.
+     * @param bool                 $withMappingVersion       Give it a current (empty) mapping version on the default game version.
+     * @param bool                 $withDefaultFloor         Give it one fully configured default floor, which every map page needs.
+     * @param array<string, mixed> $mappingVersionAttributes Any `mapping_versions` column, merged over the defaults. Ignored without a mapping version.
      */
-    protected function createDungeon(array $attributes = [], bool $withMappingVersion = true, bool $withDefaultFloor = true): Dungeon
-    {
+    protected function createDungeon(
+        array $attributes = [],
+        bool  $withMappingVersion = true,
+        bool  $withDefaultFloor = true,
+        array $mappingVersionAttributes = [],
+    ): Dungeon {
         if ($this->createdDungeons === []) {
             $this->beforeApplicationDestroyed(fn() => $this->deleteCreatedDungeons());
         }
@@ -63,7 +68,7 @@ trait CreatesDungeon
         }
 
         if ($withMappingVersion) {
-            MappingVersion::create([
+            MappingVersion::create(array_merge([
                 'game_version_id'                 => GameVersion::getDefaultGameVersion()->id,
                 'dungeon_id'                      => $dungeon->id,
                 'version'                         => 1,
@@ -75,7 +80,7 @@ trait CreatesDungeon
                 'facade_enabled'                  => false,
                 'mdt_mapping_hash'                => null,
                 'mdt_changes_pending'             => false,
-            ]);
+            ], $mappingVersionAttributes));
         }
 
         return $dungeon;

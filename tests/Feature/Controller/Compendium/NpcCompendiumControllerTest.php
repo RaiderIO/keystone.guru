@@ -17,6 +17,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\Feature\Traits\ReadsDungeonSelect;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\Fixtures\Traits\CreatesNpc;
 use Tests\TestCases\PublicTestCase;
 
@@ -24,6 +25,7 @@ use Tests\TestCases\PublicTestCase;
 #[Group('Compendium')]
 final class NpcCompendiumControllerTest extends PublicTestCase
 {
+    use CreatesDungeon;
     use CreatesNpc;
     use ProvidesDungeon;
     use ReadsDungeonSelect;
@@ -158,10 +160,13 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     {
         // Arrange - the dungeon filter only lists dungeons mapped for the visitor's game version, so
         // a dungeon outside it is not among its options. The table must still show the URL's dungeon
-        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
-        $dungeon     = Dungeon::query()
-            ->whereDoesntHave('mappingVersions', static fn($query) => $query->where('game_version_id', $gameVersion->id))
+        $otherGameVersion = GameVersion::query()
+            ->where('id', '!=', GameVersion::getUserOrDefaultGameVersion()->id)
             ->firstOrFail();
+        $dungeon = $this->createDungeon(
+            ['active' => true],
+            mappingVersionAttributes: ['game_version_id' => $otherGameVersion->id],
+        );
 
         // Act
         $response = $this->get(route('npc.compendium.index.dungeon', ['dungeon' => $dungeon]));

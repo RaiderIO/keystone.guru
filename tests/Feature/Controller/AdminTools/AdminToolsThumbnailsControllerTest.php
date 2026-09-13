@@ -9,20 +9,19 @@ use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\Floor\Floor;
 use App\Models\Laratrust\Role;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('AdminTools')]
 final class AdminToolsThumbnailsControllerTest extends PublicTestCase
 {
-    use ProvidesDungeon;
+    use CreatesDungeon;
 
     #[Test]
     public function thumbnailsregeneratesubmit_givenForce_dispatchesForcedJobs(): void
@@ -255,13 +254,11 @@ final class AdminToolsThumbnailsControllerTest extends PublicTestCase
      */
     private function createRouteWithNewerThumbnailTimestamp(): DungeonRoute
     {
-        [$dungeon, $mappingVersion] = $this->findDungeon(
-            constraint: static fn(Builder $query) => $query->whereDoesntHave('dungeonRoutes'),
-        );
+        $dungeon = $this->createDungeon();
 
         return DungeonRoute::factory()->create([
             'dungeon_id'           => $dungeon->id,
-            'mapping_version_id'   => $mappingVersion->id,
+            'mapping_version_id'   => $dungeon->getCurrentMappingVersion()->id,
             'thumbnail_updated_at' => Carbon::now()->addDay(),
         ]);
     }
