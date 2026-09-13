@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\App\Repository;
 
-use App\Models\Dungeon;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
 use App\Models\Spell\SpellTuningChange;
@@ -10,11 +9,14 @@ use App\Repositories\Interfaces\Spell\SpellTuningChangeRepositoryInterface;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('SpellTuning')]
 final class SpellTuningChangeRepositoryTest extends PublicTestCase
 {
+    use CreatesDungeon;
+
     private const string OLD_BUILD = '0.0.0.00011';
 
     private const string MID_BUILD = '0.0.0.00012';
@@ -101,8 +103,7 @@ final class SpellTuningChangeRepositoryTest extends PublicTestCase
         try {
             [$spellIn, $spellOut] = Spell::query()->where('hidden_on_map', false)->orderBy('id')->limit(2)->get()->all();
             $gameVersionId        = $spellIn->game_version_id;
-            /** @var Dungeon $dungeon */
-            $dungeon = Dungeon::query()->whereDoesntHave('spells')->firstOrFail();
+            $dungeon              = $this->createDungeon(['active' => true]);
 
             $spellDungeon = SpellDungeon::query()->create(['spell_id' => $spellIn->id, 'dungeon_id' => $dungeon->id]);
 

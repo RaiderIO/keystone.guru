@@ -11,20 +11,19 @@ use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
 use App\Service\Season\SeasonServiceInterface;
-use Illuminate\Database\Eloquent\Builder;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use Teapot\StatusCode;
 use Tests\Feature\Controller\DungeonRouteTestBase;
-use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\Fixtures\ServiceFixtures;
 use Tests\Fixtures\Traits\CreatesCombatLogEvent;
+use Tests\Fixtures\Traits\CreatesDungeon;
 
 final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 {
     use CreatesCombatLogEvent;
-    use ProvidesDungeon;
+    use CreatesDungeon;
 
     const EVENT_TYPE = CombatLogEventEventType::NpcDeath;
     const DATA_TYPE  = CombatLogEventDataType::PlayerPosition;
@@ -107,12 +106,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     public function getData_givenTimerFractionFilterAndDungeonWithoutTimer_returnsBadRequest(): void
     {
         // Arrange
-        [$dungeon] = $this->findDungeon(
-            constraint: static fn(Builder $query) => $query->whereDoesntHave(
-                'mappingVersions',
-                static fn(Builder $query) => $query->where('timer_max_seconds', '>', 0),
-            ),
-        );
+        $dungeon = $this->createDungeon(mappingVersionAttributes: ['timer_max_seconds' => 0]);
 
         $this->setUpTestForDungeon($dungeon, 10, 20);
 

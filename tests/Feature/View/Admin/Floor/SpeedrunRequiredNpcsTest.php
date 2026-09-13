@@ -7,22 +7,19 @@ use App\Models\Floor\Floor;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Mapping')]
 final class SpeedrunRequiredNpcsTest extends PublicTestCase
 {
+    use CreatesDungeon;
+
     #[Test]
     public function speedrunRequiredNpcs_givenNoNpcs_rendersEmptyStateAndAddDropdownForEveryDifficulty(): void
     {
         // Arrange
-        $floor = Floor::whereNotNull('dungeon_id')
-            ->whereDoesntHave('dungeonSpeedrunRequiredNpcs')
-            ->first();
-
-        if ($floor === null) {
-            $this->fail('No seeded floor without speedrun required NPCs found.');
-        }
+        $floor = $this->createDungeon()->floors()->firstOrFail();
 
         // Act
         $rendered = $this->renderPartial($floor);
@@ -48,13 +45,7 @@ final class SpeedrunRequiredNpcsTest extends PublicTestCase
     public function speedrunRequiredNpcs_givenNpcsForSomeDifficulties_rendersTabsOnlyForThoseDifficulties(): void
     {
         // Arrange
-        $floor = Floor::whereNotNull('dungeon_id')
-            ->whereDoesntHave('dungeonSpeedrunRequiredNpcs')
-            ->first();
-
-        if ($floor === null) {
-            $this->fail('No seeded floor without speedrun required NPCs found.');
-        }
+        $floor = $this->createDungeon()->floors()->firstOrFail();
 
         $createdNpcs = collect([DungeonDifficulty::TEN_MAN->value, DungeonDifficulty::FORTY_MAN->value])
             ->map(static fn(int $difficulty): DungeonSpeedrunRequiredNpc => DungeonSpeedrunRequiredNpc::create([

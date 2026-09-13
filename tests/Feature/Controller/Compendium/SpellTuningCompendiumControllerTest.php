@@ -3,7 +3,6 @@
 namespace Tests\Feature\Controller\Compendium;
 
 use App\Features\NpcCompendium;
-use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
@@ -12,6 +11,7 @@ use App\Models\User;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
@@ -19,6 +19,8 @@ use Tests\TestCases\PublicTestCase;
 #[Group('SpellTuning')]
 final class SpellTuningCompendiumControllerTest extends PublicTestCase
 {
+    use CreatesDungeon;
+
     private const string FROM_BUILD = '0.0.0.00021';
 
     private const string TO_BUILD = '0.0.0.00022';
@@ -115,8 +117,7 @@ final class SpellTuningCompendiumControllerTest extends PublicTestCase
             ->limit(2)
             ->get()
             ->all();
-        /** @var Dungeon $dungeon */
-        $dungeon      = Dungeon::query()->active()->whereDoesntHave('spells')->firstOrFail();
+        $dungeon      = $this->createDungeon(['active' => true]);
         $created      = [];
         $spellDungeon = null;
 

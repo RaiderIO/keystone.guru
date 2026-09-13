@@ -18,11 +18,13 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('CombatLogEvent')]
 final class CombatLogEventFilterTest extends PublicTestCase
 {
+    use CreatesDungeon;
     use ProvidesDungeon;
 
     /**
@@ -35,34 +37,25 @@ final class CombatLogEventFilterTest extends PublicTestCase
     public function fromHeatmapDataFilter_givenMappingVersionTimerMaxSecondsIsZero_throwsInvalidArgumentException(): void
     {
         // Arrange
-        [$dungeon, $mappingVersion] = $this->findDungeon();
+        $dungeon = $this->createDungeon(mappingVersionAttributes: ['timer_max_seconds' => 0]);
 
-        $originalTimerMaxSeconds           = $mappingVersion->timer_max_seconds;
-        $mappingVersion->timer_max_seconds = 0;
-        $mappingVersion->save();
+        $heatmapDataFilter = new HeatmapDataFilter(
+            $dungeon,
+            CombatLogEventEventType::NpcDeath,
+            CombatLogEventDataType::PlayerPosition,
+        );
+        $heatmapDataFilter->setTimerFractionMin(0.0);
+        $heatmapDataFilter->setTimerFractionMax(1.0);
 
-        try {
-            $heatmapDataFilter = new HeatmapDataFilter(
-                $dungeon,
-                CombatLogEventEventType::NpcDeath,
-                CombatLogEventDataType::PlayerPosition,
-            );
-            $heatmapDataFilter->setTimerFractionMin(0.0);
-            $heatmapDataFilter->setTimerFractionMax(1.0);
+        // Assert
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Mapping version does not have a timer max seconds value');
 
-            // Assert
-            $this->expectException(InvalidArgumentException::class);
-            $this->expectExceptionMessage('Mapping version does not have a timer max seconds value');
-
-            // Act
-            CombatLogEventFilter::fromHeatmapDataFilter(
-                App::make(SeasonServiceInterface::class),
-                $heatmapDataFilter,
-            );
-        } finally {
-            $mappingVersion->timer_max_seconds = $originalTimerMaxSeconds;
-            $mappingVersion->save();
-        }
+        // Act
+        CombatLogEventFilter::fromHeatmapDataFilter(
+            App::make(SeasonServiceInterface::class),
+            $heatmapDataFilter,
+        );
     }
 
     /**
@@ -74,34 +67,25 @@ final class CombatLogEventFilterTest extends PublicTestCase
     public function fromHeatmapDataFilter_givenTimerFractionRange_computesDurationBoundsInMinutes(): void
     {
         // Arrange - a 1800 second (30 minute) timer, filtering the middle half of the run
-        [$dungeon, $mappingVersion] = $this->findDungeon();
+        $dungeon = $this->createDungeon(mappingVersionAttributes: ['timer_max_seconds' => 1800]);
 
-        $originalTimerMaxSeconds           = $mappingVersion->timer_max_seconds;
-        $mappingVersion->timer_max_seconds = 1800;
-        $mappingVersion->save();
+        $heatmapDataFilter = new HeatmapDataFilter(
+            $dungeon,
+            CombatLogEventEventType::NpcDeath,
+            CombatLogEventDataType::PlayerPosition,
+        );
+        $heatmapDataFilter->setTimerFractionMin(0.25);
+        $heatmapDataFilter->setTimerFractionMax(0.75);
 
-        try {
-            $heatmapDataFilter = new HeatmapDataFilter(
-                $dungeon,
-                CombatLogEventEventType::NpcDeath,
-                CombatLogEventDataType::PlayerPosition,
-            );
-            $heatmapDataFilter->setTimerFractionMin(0.25);
-            $heatmapDataFilter->setTimerFractionMax(0.75);
+        // Act
+        $combatLogEventFilter = CombatLogEventFilter::fromHeatmapDataFilter(
+            App::make(SeasonServiceInterface::class),
+            $heatmapDataFilter,
+        );
 
-            // Act
-            $combatLogEventFilter = CombatLogEventFilter::fromHeatmapDataFilter(
-                App::make(SeasonServiceInterface::class),
-                $heatmapDataFilter,
-            );
-
-            // Assert - 0.25 * 1800s / 60 = 7.5 minutes, 0.75 * 1800s / 60 = 22.5 minutes
-            $this->assertSame(7, $combatLogEventFilter->getDurationMin());
-            $this->assertSame(22, $combatLogEventFilter->getDurationMax());
-        } finally {
-            $mappingVersion->timer_max_seconds = $originalTimerMaxSeconds;
-            $mappingVersion->save();
-        }
+        // Assert - 0.25 * 1800s / 60 = 7.5 minutes, 0.75 * 1800s / 60 = 22.5 minutes
+        $this->assertSame(7, $combatLogEventFilter->getDurationMin());
+        $this->assertSame(22, $combatLogEventFilter->getDurationMax());
     }
 
     /**
