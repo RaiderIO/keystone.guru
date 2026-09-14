@@ -10,7 +10,7 @@ use RuntimeException;
  * {@see \App\Jobs\CombatLog\ProcessCombatLogSegments::handle()} like any other transient infra
  * blip, but as its own class so `bootstrap/app.php` can report it at warning rather than error
  * level: one run's segment failing to download costs nothing, the run is simply skipped and its
- * parsing budget given back (see #3919).
+ * parsing budget given back.
  */
 class CombatLogSegmentDownloadFailedException extends RuntimeException
 {

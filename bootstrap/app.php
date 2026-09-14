@@ -113,7 +113,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // A segment failing to download is expected and costs nothing - the run is skipped and
         // retried with a fresh presigned URL, or its budget is given back for the next poll to
         // spend elsewhere. Only the aggregate rate matters, which combatlog:reportpollinghealth
-        // already reports on separately at error level (#4173, #3919).
+        // already reports on separately at error level.
         $exceptions->level(CombatLogSegmentDownloadFailedException::class, LogLevel::WARNING);
 
         Integration::handles($exceptions);

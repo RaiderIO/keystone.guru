@@ -113,7 +113,7 @@ class HandlerTest extends PublicTestCase
      * skipped and its budget given back - so it must not page Sentry at error level like a genuine
      * defect would. bootstrap/app.php maps it to warning via $exceptions->level(); this asserts
      * that mapping actually reaches the bound handler instance rather than testing bootstrap/app.php
-     * directly (#4678).
+     * directly.
      */
     #[Test]
     public function level_givenCombatLogSegmentDownloadFailedException_isMappedToWarning(): void
