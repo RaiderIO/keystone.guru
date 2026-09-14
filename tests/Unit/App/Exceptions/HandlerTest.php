@@ -4,10 +4,12 @@ namespace Tests\Unit\App\Exceptions;
 
 use App\Exceptions\Handler;
 use App\Exceptions\Logging\HandlerLoggingInterface;
+use App\Service\CombatLog\Exceptions\CombatLogSegmentDownloadFailedException;
 use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Foundation\Application;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Psr\Log\LogLevel;
 use ReflectionProperty;
 use RuntimeException;
 use Tests\TestCases\PublicTestCase;
@@ -104,6 +106,26 @@ class HandlerTest extends PublicTestCase
         $handler->report(new RuntimeException('boom'));
 
         // Assert - the mock expectation
+    }
+
+    /**
+     * A run's segment failing to download is expected and costs nothing - the run is retried or
+     * skipped and its budget given back - so it must not page Sentry at error level like a genuine
+     * defect would. bootstrap/app.php maps it to warning via $exceptions->level(); this asserts
+     * that mapping actually reaches the bound handler instance rather than testing bootstrap/app.php
+     * directly (#4678).
+     */
+    #[Test]
+    public function level_givenCombatLogSegmentDownloadFailedException_isMappedToWarning(): void
+    {
+        // Arrange
+        $handler = app()->make(Handler::class);
+
+        // Act
+        $levels = new ReflectionProperty($handler::class, 'levels')->getValue($handler);
+
+        // Assert
+        self::assertSame(LogLevel::WARNING, $levels[CombatLogSegmentDownloadFailedException::class] ?? null);
     }
 
     /**

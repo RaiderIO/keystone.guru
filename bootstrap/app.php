@@ -16,6 +16,7 @@ use App\Http\Middleware\ResetsMapFacadeStyleOverride;
 use App\Http\Middleware\TracksUserIpAddress;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\ViewCacheBuster;
+use App\Service\CombatLog\Exceptions\CombatLogSegmentDownloadFailedException;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use BeyondCode\ServerTiming\Middleware\ServerTimingMiddleware;
 use Illuminate\Foundation\Application;
@@ -27,6 +28,7 @@ use Illuminate\Routing\Middleware\ThrottleRequests;
 use Jenssegers\Agent\AgentServiceProvider;
 use Laratrust\LaratrustServiceProvider;
 use Laravel\Tinker\TinkerServiceProvider;
+use Psr\Log\LogLevel;
 use Rollbar\Laravel\RollbarServiceProvider;
 use Sentry\Laravel\Integration;
 use SocialiteProviders\Manager\ServiceProvider;
@@ -108,5 +110,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
+        // A segment failing to download is expected and costs nothing - the run is skipped and
+        // retried with a fresh presigned URL, or its budget is given back for the next poll to
+        // spend elsewhere. Only the aggregate rate matters, which combatlog:reportpollinghealth
+        // already reports on separately at error level (#4173, #3919).
+        $exceptions->level(CombatLogSegmentDownloadFailedException::class, LogLevel::WARNING);
+
         Integration::handles($exceptions);
     })->create();
