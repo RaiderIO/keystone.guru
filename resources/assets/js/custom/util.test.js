@@ -15,6 +15,7 @@ const {
     getLatLngDistanceSquared,
     rotateLatLng,
     getCenteroid,
+    filterHTML,
     getQueryParams,
     isElementFullyVisible,
     getMapObjectGroup,
@@ -209,6 +210,58 @@ describe('getCenteroid', () => {
         const result = getCenteroid([[10, -6]]);
         expect(result.lat).toBeCloseTo(10, 10);
         expect(result.lng).toBeCloseTo(-6, 10);
+    });
+});
+
+describe('filterHTML', () => {
+    const allowedTags = ['a', 'b', 'br'];
+    const allowedDomains = ['keystone.guru'];
+
+    it('keeps allowed tags and strips their attributes', () => {
+        expect(filterHTML('<b class="x" onclick="alert(1)">bold</b><br>', allowedTags, allowedDomains))
+            .toBe('<b>bold</b><br>');
+    });
+
+    it('replaces a disallowed tag with its escaped text', () => {
+        expect(filterHTML('<i>&lt;b&gt;</i><img src="x" onerror="alert(1)">', allowedTags, allowedDomains))
+            .toBe('&lt;b&gt;');
+    });
+
+    it('keeps an http(s) link to an allowed domain', () => {
+        expect(filterHTML('<a href="https://keystone.guru/routes" target="_blank">link</a>', allowedTags, allowedDomains))
+            .toBe('<a href="https://keystone.guru/routes">link</a>');
+    });
+
+    it('keeps a relative link, which resolves to the current site', () => {
+        const origin = new URL(document.baseURI).hostname;
+
+        expect(filterHTML('<a href="/routes">link</a>', allowedTags, [origin]))
+            .toBe('<a href="/routes">link</a>');
+    });
+
+    it.each([
+        ['a disallowed domain', 'https://example.com/'],
+        ['a javascript: scheme', 'javascript:alert(1)'],
+        ['a javascript: scheme carrying an allowed host', 'javascript://keystone.guru/%0aalert(1)'],
+        ['a data: scheme', 'data:text/html,<script>alert(1)</script>'],
+        ['a non-http scheme on an allowed domain', 'ftp://keystone.guru/'],
+    ])('drops a link to %s but keeps its text', (_, href) => {
+        expect(filterHTML(`<a href="${href}">link</a>`, allowedTags, allowedDomains)).toBe('link');
+    });
+
+    it('never parses the input into the live document', () => {
+        const innerHtmlSetter = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML').set;
+        const liveDocumentWrites = [];
+        vi.spyOn(Element.prototype, 'innerHTML', 'set').mockImplementation(function (value) {
+            if (this.ownerDocument === document) {
+                liveDocumentWrites.push(value);
+            }
+            innerHtmlSetter.call(this, value);
+        });
+
+        filterHTML('<img src="x" onerror="alert(1)">', allowedTags, allowedDomains);
+
+        expect(liveDocumentWrites).toEqual([]);
     });
 });
 
