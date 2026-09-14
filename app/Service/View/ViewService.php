@@ -428,9 +428,13 @@ class ViewService implements ViewServiceInterface
 
     public function getCurrentSeasonForRegion(GameServerRegion $gameServerRegion): ?Season
     {
+        // Cached together with what the header's affix group lookup reads from it, so that lookup never
+        // lazy-loads them back on every page.
         return $this->cachedGlobal(
             sprintf('current_season:%s', $gameServerRegion->short),
-            fn() => $this->expansionService->getCurrentSeason($this->getCurrentExpansionForRegion($gameServerRegion), $gameServerRegion),
+            fn() => $this->expansionService
+                ->getCurrentSeason($this->getCurrentExpansionForRegion($gameServerRegion), $gameServerRegion)
+                ?->loadMissing(['expansion.timewalkingEvent', 'affixGroups.affixes']),
             3600,
         );
     }
@@ -636,11 +640,18 @@ class ViewService implements ViewServiceInterface
     {
         $key = sprintf('view_data:%s:%s', $this->release, $name);
 
-        return once(fn() => $this->rememberLocal(
-            $key,
+        // Boxed, because a cache store treats a null value as a miss - an unboxed null (no next season
+        // revealed, most of the year) would be recomputed on every request.
+        /** @var array{value: mixed} $boxed */
+        $boxed = once(fn() => $this->rememberLocal(
+            sprintf('%s:boxed', $key),
             $localTtl,
-            fn() => $this->cacheService->setCacheEnabled(!$this->forceRefresh)
-                ->remember($key, $compute, config('keystoneguru.cache.global_view_variables.ttl')),
+            fn(): array => [
+                'value' => $this->cacheService->setCacheEnabled(!$this->forceRefresh)
+                    ->remember($key, $compute, config('keystoneguru.cache.global_view_variables.ttl')),
+            ],
         ));
+
+        return $boxed['value'];
     }
 }

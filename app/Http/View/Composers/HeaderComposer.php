@@ -2,6 +2,10 @@
 
 namespace App\Http\View\Composers;
 
+use App\Features\Heatmap;
+use App\Features\NpcCompendium;
+use App\Features\SearchPageRework;
+use App\Features\XalatathTheme;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupEaseTier;
 use App\Models\GameVersion\GameVersion;
@@ -13,6 +17,7 @@ use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
+use Laravel\Pennant\Feature;
 
 readonly class HeaderComposer implements ViewComposerInterface
 {
@@ -28,6 +33,14 @@ readonly class HeaderComposer implements ViewComposerInterface
 
     public function compose(View $view): void
     {
+        // The header checks these on every page; one query resolves them all instead of one each.
+        Feature::loadMissing([
+            SearchPageRework::class,
+            Heatmap::class,
+            NpcCompendium::class,
+            XalatathTheme::class,
+        ]);
+
         $gameServerRegion = $this->requestViewContext->getUserOrDefaultRegion();
 
         $currentSeason = $this->viewService->getCurrentSeasonForRegion($gameServerRegion);

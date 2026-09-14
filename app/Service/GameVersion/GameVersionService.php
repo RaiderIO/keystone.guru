@@ -5,6 +5,7 @@ namespace App\Service\GameVersion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\User;
 use App\Service\Cookies\CookieServiceInterface;
+use App\Service\View\ViewServiceInterface;
 
 class GameVersionService implements GameVersionServiceInterface
 {
@@ -12,6 +13,7 @@ class GameVersionService implements GameVersionServiceInterface
 
     public function __construct(
         private readonly CookieServiceInterface $cookieService,
+        private readonly ViewServiceInterface   $viewService,
     ) {
     }
 
@@ -31,7 +33,12 @@ class GameVersionService implements GameVersionServiceInterface
     {
         $gameVersion = null;
         if ($user === null && isset($_COOKIE[self::GAME_VERSION_COOKIE])) {
-            $gameVersion = GameVersion::find(GameVersion::ALL[$_COOKIE[self::GAME_VERSION_COOKIE]] ?? 0);
+            $gameVersionId = GameVersion::ALL[$_COOKIE[self::GAME_VERSION_COOKIE]] ?? 0;
+
+            // Every returning guest carries this cookie and the header asks on every page, so answer from
+            // the cached list of active game versions before asking the database.
+            $gameVersion = $gameVersionId === 0 ? null :
+                ($this->viewService->getAllGameVersions()->firstWhere('id', $gameVersionId) ?? GameVersion::find($gameVersionId));
         }
 
         if ($gameVersion === null) {
