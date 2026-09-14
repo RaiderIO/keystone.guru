@@ -7,6 +7,7 @@ use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
+use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\Dtos\SeasonWeek;
 use App\Traits\UserCurrentTime;
@@ -22,6 +23,7 @@ use Illuminate\Support\Collection;
  */
 class SeasonService implements SeasonServiceInterface
 {
+    use RemembersToFile;
     use UserCurrentTime;
 
     /**
@@ -198,12 +200,19 @@ class SeasonService implements SeasonServiceInterface
     private function getSeasonsOfExpansion(Expansion $expansion): Collection
     {
         if (!$this->seasonsPerExpansionCache->has($expansion->id)) {
+            // The header resolves the current season on every page. Kept out of Redis on purpose: the
+            // serialized tree is ~340 KB, which made it the largest single source of Redis traffic.
             $this->seasonsPerExpansionCache->put(
                 $expansion->id,
-                Season::where('expansion_id', $expansion->id)
-                    ->with(['expansion.timewalkingEvent', 'affixGroups', 'dungeons'])
-                    ->orderBy('start')
-                    ->get(),
+                $this->rememberLocal(
+                    sprintf('season_service:seasons_of_expansion:%d', $expansion->id),
+                    config('keystoneguru.cache.seasons_of_expansion.ttl'),
+                    static fn(): Collection => Season::where('expansion_id', $expansion->id)
+                        ->with(['expansion.timewalkingEvent', 'affixGroups', 'dungeons'])
+                        ->orderBy('start')
+                        ->get(),
+                    config('keystoneguru.cache.seasons_of_expansion.enabled'),
+                ),
             );
         }
 

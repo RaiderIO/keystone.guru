@@ -59,6 +59,9 @@
              CACHE_STORE does not cover. Without this the tests read, write and flush the cache of the
              application running out of the same checkout. -->
         <env name="CACHE_FILE_PATH" value="/tmp/phpunit_cache"/>
+        <!-- SeasonService keeps each expansion's seasons in that same file cache. Tests create and edit
+             seasons freely, so a cached tree would outlive the test that built it. -->
+        <env name="SEASONS_OF_EXPANSION_CACHE_ENABLED" value="false"/>
     </php>
     <source>
         <include>

@@ -110,6 +110,10 @@ return [
         'global_view_variables' => [
             'ttl' => '1 hour',
         ],
+        'seasons_of_expansion' => [
+            'ttl'     => 3600,
+            'enabled' => env('SEASONS_OF_EXPANSION_CACHE_ENABLED', true),
+        ],
         'default_game_region' => [
             'ttl' => '1 hour',
         ],

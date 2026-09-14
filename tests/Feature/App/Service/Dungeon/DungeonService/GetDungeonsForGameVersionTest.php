@@ -14,7 +14,9 @@ use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -94,6 +96,39 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
         // Assert
         $this->assertEqualsCanonicalizing(
             $currentSeason->dungeons()->pluck('dungeons.id')->all(),
+            $dungeons->pluck('id')->all(),
+        );
+    }
+
+    /**
+     * The header asks on every page: a season handed over with its dungeons loaded must cost no query.
+     */
+    #[Test]
+    public function getDungeonsForGameVersion_givenACurrentSeasonWithItsDungeonsLoaded_readsNoDungeons(): void
+    {
+        // Arrange
+        $currentSeason = Season::with('dungeons')->findOrFail(Season::SEASON_SL_S4);
+
+        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
+        $seasonService->method('getCurrentSeason')->willReturn($currentSeason);
+
+        $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        $service     = $this->buildService($seasonService);
+
+        $dungeonQueries = 0;
+        DB::listen(static function (QueryExecuted $query) use (&$dungeonQueries): void {
+            if (str_contains($query->sql, 'from `dungeons`')) {
+                $dungeonQueries++;
+            }
+        });
+
+        // Act - CI runs with the model cache on, which would answer a dungeons query without reaching the database
+        $dungeons = app('model-cache')->runDisabled(static fn() => $service->getDungeonsForGameVersion($gameVersion));
+
+        // Assert
+        $this->assertSame(0, $dungeonQueries);
+        $this->assertEqualsCanonicalizing(
+            $currentSeason->dungeons->pluck('id')->all(),
             $dungeons->pluck('id')->all(),
         );
     }
