@@ -152,10 +152,23 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         try {
             $this->log->searchAdvancedRunsStart($url);
 
-            $response = $this->curlGet($url);
-            $json     = json_decode($response, true);
+            $response = '';
 
-            if (!is_array($json) || !isset($json['matches']) || !is_array($json['matches'])) {
+            try {
+                // Cloudflare occasionally answers with a 504 gateway-timeout HTML page instead of
+                // JSON - transient and gone on the next attempt, so retry a few times with backoff
+                // before treating it as a real failure.
+                $json = retry(3, function () use ($url, &$response) {
+                    $response = $this->curlGet($url);
+                    $json     = json_decode($response, true);
+
+                    if (!is_array($json) || !isset($json['matches']) || !is_array($json['matches'])) {
+                        throw new InvalidApiResponseException('Invalid response from Raider.IO API', $url, $response);
+                    }
+
+                    return $json;
+                }, static fn(int $attempt) => $attempt * 500);
+            } catch (InvalidApiResponseException) {
                 $this->log->searchAdvancedRunsInvalidResponse($url, $response);
 
                 // A null total is what tells a caller this was an error rather than a genuinely empty

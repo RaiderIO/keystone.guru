@@ -12,6 +12,7 @@ use App\Service\RaiderIO\Logging\RaiderIOApiServiceLoggingInterface;
 use App\Service\RaiderIO\RaiderIOApiService;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Sleep;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
@@ -335,6 +336,69 @@ final class RaiderIOApiServiceTest extends PublicTestCase
         // Assert
         $this->assertSame(0, $result->runs[0]->faction);
         $this->assertNull($result->runs[1]->faction);
+    }
+
+    /**
+     * Cloudflare occasionally answers with a transient gateway-timeout HTML page instead of JSON -
+     * a retry a moment later succeeds, so it must not surface as a failure to the caller.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenTransientInvalidResponseThenValidResponse_retriesAndSucceeds(): void
+    {
+        // Arrange
+        Sleep::fake();
+
+        $attempt = 0;
+        $service = $this->makeService(function () use (&$attempt): string {
+            $attempt++;
+
+            if ($attempt === 1) {
+                return '<html>504 Gateway Timeout</html>';
+            }
+
+            return json_encode(['total' => 0, 'matches' => []]);
+        });
+
+        $this->log->expects($this->never())->method('searchAdvancedRunsInvalidResponse');
+
+        // Act
+        $result = $service->searchAdvancedRuns($this->makeSearchFilter(2, 6));
+
+        // Assert
+        $this->assertSame(2, $attempt);
+        $this->assertSame(0, $result->total);
+    }
+
+    /**
+     * A gateway timeout that outlasts every retry is a real failure - the null total tells the
+     * caller so, and it is only logged once the retries are exhausted.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenPersistentInvalidResponse_exhaustsRetriesAndLogsOnce(): void
+    {
+        // Arrange
+        Sleep::fake();
+
+        $attempts = 0;
+        $service  = $this->makeService(function () use (&$attempts): string {
+            $attempts++;
+
+            return '<html>504 Gateway Timeout</html>';
+        });
+
+        $this->log->expects($this->once())->method('searchAdvancedRunsInvalidResponse');
+
+        // Act
+        $result = $service->searchAdvancedRuns($this->makeSearchFilter(2, 6));
+
+        // Assert
+        $this->assertSame(3, $attempts);
+        $this->assertNull($result->total);
+        $this->assertEmpty($result->runs);
     }
 
     /**
