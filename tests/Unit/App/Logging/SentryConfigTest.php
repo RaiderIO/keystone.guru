@@ -2,7 +2,10 @@
 
 namespace Tests\Unit\App\Logging;
 
+use App\Logging\Sentry\BeforeSend;
+use App\Logging\Sentry\ExceptionLevelOverride;
 use App\Logging\Sentry\ScheduledCommandFingerprint;
+use App\Service\CombatLog\Exceptions\CombatLogSegmentDownloadFailedException;
 use Closure;
 use Exception;
 use PHPUnit\Framework\Attributes\Group;
@@ -11,6 +14,7 @@ use RuntimeException;
 use Sentry\Event;
 use Sentry\EventHint;
 use Sentry\Options;
+use Sentry\Severity;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -166,9 +170,80 @@ final class SentryConfigTest extends PublicTestCase
 
         // Assert
         self::assertNotInstanceOf(Closure::class, $beforeSend, 'A Closure here breaks `php artisan config:cache`.');
-        self::assertSame([ScheduledCommandFingerprint::class, 'apply'], $beforeSend);
+        self::assertSame([BeforeSend::class, 'apply'], $beforeSend);
         // The exact round-trip ConfigCacheCommand performs - a Closure dies here on Closure::__set_state()
         self::assertSame($beforeSend, eval(sprintf('return %s;', var_export($beforeSend, true))));
+    }
+
+    /**
+     * Sentry\Laravel\Integration::handles() captures every reportable exception through its own
+     * captureException() path, independently of Laravel's log level handling - a bootstrap/app.php
+     * $exceptions->level() mapping alone never reaches Sentry. ExceptionLevelOverride reads the same
+     * mapping back off the bound exception handler and applies it to the outgoing event; this exercises
+     * it through the config wiring (BeforeSend) rather than calling it directly.
+     */
+    #[Test]
+    public function beforeSend_givenExceptionMappedToWarning_setsSentryEventLevelToWarning(): void
+    {
+        // Arrange
+        $event = Event::createEvent();
+        $hint  = EventHint::fromArray(['exception' => new CombatLogSegmentDownloadFailedException('Failed to download segment 1 for run 42')]);
+
+        // Act
+        $result = call_user_func(config('sentry.before_send'), $event, $hint);
+
+        // Assert
+        self::assertSame(Severity::WARNING, (string)$result->getLevel());
+    }
+
+    #[Test]
+    public function apply_givenExceptionWithNoLevelMapping_leavesEventLevelUntouched(): void
+    {
+        // Arrange
+        $event = Event::createEvent();
+        $hint  = EventHint::fromArray(['exception' => new RuntimeException('Something else broke entirely')]);
+
+        // Act
+        $result = ExceptionLevelOverride::apply($event, $hint);
+
+        // Assert
+        self::assertSame($event->getLevel(), $result->getLevel());
+    }
+
+    #[Test]
+    public function levelOverrideApply_givenNoException_returnsEventUnmodified(): void
+    {
+        // Arrange
+        $event = Event::createEvent();
+
+        // Act
+        $result = ExceptionLevelOverride::apply($event, null);
+
+        // Assert
+        self::assertSame($event, $result);
+    }
+
+    /**
+     * BeforeSend composes ScheduledCommandFingerprint and ExceptionLevelOverride into the single
+     * callable the config accepts - this guards that composition still runs the fingerprinting step
+     * (already covered standalone above) once wired through the actual config value.
+     */
+    #[Test]
+    public function beforeSend_givenScheduledCommandFailedException_stillFingerprintsByCommandName(): void
+    {
+        // Arrange
+        $event = Event::createEvent();
+        $hint  = EventHint::fromArray([
+            'exception' => new Exception(
+                "Scheduled command ['/usr/local/bin/php' 'artisan' combatlog:detectstaledata] failed with exit code [1].",
+            ),
+        ]);
+
+        // Act
+        $result = call_user_func(config('sentry.before_send'), $event, $hint);
+
+        // Assert
+        self::assertSame(['schedule-run-command-failed', 'combatlog:detectstaledata'], $result->getFingerprint());
     }
 
     /**

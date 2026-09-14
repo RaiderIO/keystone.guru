@@ -52,12 +52,13 @@ return [
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#ignore_exceptions
     // 'ignore_exceptions' => [],
 
-    // Gives each failing scheduled command its own Sentry issue instead of one shared bucket (#3902) - the rationale
-    // and the message parsing live on the class.
+    // Chains the individual before_send callbacks (fingerprinting failing scheduled commands into
+    // their own issue, applying bootstrap/app.php's $exceptions->level() mapping since
+    // Sentry\Laravel\Integration::handles() otherwise ignores it) - see App\Logging\Sentry\BeforeSend.
     // This MUST stay a var_export-able array callable: `php artisan config:cache` (run by the infrastructure
     // repository) var_exports every config value and dies on a Closure. So no closure here, and no first-class
-    // callable syntax (`ScheduledCommandFingerprint::apply(...)`) either - that is a Closure too.
-    'before_send' => [\App\Logging\Sentry\ScheduledCommandFingerprint::class, 'apply'],
+    // callable syntax (`BeforeSend::apply(...)`) either - that is a Closure too.
+    'before_send' => [\App\Logging\Sentry\BeforeSend::class, 'apply'],
 
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#ignore_transactions
     'ignore_transactions' => [
