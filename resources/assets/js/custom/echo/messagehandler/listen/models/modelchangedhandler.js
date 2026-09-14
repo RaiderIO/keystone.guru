@@ -76,10 +76,19 @@ class ModelChangedHandler extends BaseModelHandler {
 
         let state = getState();
         if (state.isEchoEnabled() && state.getUser().public_key !== user.public_key && user.name !== null) {
+            // The notification renders as HTML, and both values can hold another user's text
             showInfoNotification(lang.get('js.echo_object_changed_notification', {
-                object: localMapObject.toString(),
-                user: user.name
+                object: Handlebars.escapeExpression(localMapObject.toString()),
+                user: Handlebars.escapeExpression(user.name)
             }));
         }
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        ModelChangedHandler,
+    };
 }
