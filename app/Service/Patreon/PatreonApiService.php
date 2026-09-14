@@ -24,7 +24,7 @@ class PatreonApiService implements PatreonApiServiceInterface
         try {
             $identityResponse = $this->getApiClient($accessToken)->get_data(
                 sprintf(
-                    'identity?include=memberships,memberships.currently_entitled_tiers' .
+                    'identity?include=memberships,memberships.campaign,memberships.currently_entitled_tiers' .
                     '&%s=email,first_name,full_name,image_url,last_name,thumb_url,url,vanity,is_email_verified' .
                     '&%s=email,currently_entitled_amount_cents,lifetime_support_cents,last_charge_status,patron_status,last_charge_date,pledge_relationship_start',
                     urlencode('fields[user]'),
@@ -36,14 +36,16 @@ class PatreonApiService implements PatreonApiServiceInterface
                 if (!isset($identityResponse['included'])) {
                     $this->log->getIdentityIncludedNotFound();
                 } else {
-                    // Bit ugly but otherwise I'd need the broad 'campaigns.members[email]' permission which I don't need/want
+                    // Bit ugly but otherwise I'd need the broad 'campaigns.members[email]' permission which I don't need/want.
+                    // The identity.memberships scope returns the user's memberships of every creator they support,
+                    // so every one of them gets the email - the caller picks the one for our campaign
                     foreach ($identityResponse['included'] as &$included) {
                         if ($included['type'] === 'member') {
                             $included['attributes']['email'] = $identityResponse['data']['attributes']['email'];
                             $this->log->getIdentityUpdatedEmailAddress($included['attributes']['email']);
-                            break;
                         }
                     }
+                    unset($included);
                 }
             }
         } finally {

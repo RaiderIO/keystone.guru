@@ -104,6 +104,8 @@ interface PatreonServiceLoggingInterface
 
     public function linkToUserAccountIdentityIncludedNotSet(): void;
 
+    public function linkToUserAccountNotAMemberOfCampaign(): void;
+
     public function linkToUserAccountSessionExpired(): void;
 
     public function linkToUserAccountException(Exception $e): void;

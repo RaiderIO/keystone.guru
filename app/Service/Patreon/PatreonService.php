@@ -423,22 +423,25 @@ class PatreonService implements PatreonServiceInterface
                         $result = LinkToUserIdResult::InternalErrorOccurred;
                         $this->log->linkToUserAccountIdentityIncludedNotSet();
                     } else {
-                        /** @var array<int, mixed> $identityResponseIncluded */
+                        /** @var array<int, array<string, mixed>> $identityResponseIncluded */
                         $identityResponseIncluded = $identityResponse['included'];
-                        /** @var array<string, mixed>|null $member */
-                        $member = collect($identityResponseIncluded)->filter(static fn(
-                            array $included,
-                        ) => $included['type'] === 'member')->first();
+                        $member                   = $this->findCampaignMember($identityResponseIncluded);
 
                         $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
                         $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
 
-                        // Now that the PatreonData object was created, apply the correct paid benefits to the account
-                        $this->applyPaidBenefitsForMember(
-                            $campaignBenefits,
-                            $campaignTiers,
-                            $member,
-                        );
+                        if ($member === null) {
+                            // Nothing to apply - the link itself still stands, and the hourly sync picks the user
+                            // up as soon as they become a member of our campaign
+                            $this->log->linkToUserAccountNotAMemberOfCampaign();
+                        } else {
+                            // Now that the PatreonData object was created, apply the correct paid benefits to the account
+                            $this->applyPaidBenefitsForMember(
+                                $campaignBenefits,
+                                $campaignTiers,
+                                $member,
+                            );
+                        }
                     }
                 }
             } else {
@@ -676,6 +679,33 @@ class PatreonService implements PatreonServiceInterface
             }
 
             return $result;
+        }
+
+        return null;
+    }
+
+    /**
+     * The user's membership of our campaign, out of the memberships an identity response includes.
+     *
+     * The identity.memberships scope makes Patreon return a membership for every creator the user supports,
+     * in no particular order - any other membership's entitled tiers are unknown to our campaign.
+     *
+     * @param  array<int, array<string, mixed>> $identityResponseIncluded
+     * @return array<string, mixed>|null
+     */
+    private function findCampaignMember(array $identityResponseIncluded): ?array
+    {
+        $campaignId = (string)config('keystoneguru.patreon.campaign_id');
+
+        foreach ($identityResponseIncluded as $included) {
+            if (($included['type'] ?? null) !== 'member') {
+                continue;
+            }
+
+            $memberCampaignId = $included['relationships']['campaign']['data']['id'] ?? null;
+            if (is_scalar($memberCampaignId) && (string)$memberCampaignId === $campaignId) {
+                return $included;
+            }
         }
 
         return null;
