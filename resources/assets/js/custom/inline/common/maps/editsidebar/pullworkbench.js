@@ -88,7 +88,7 @@ class PullWorkBench extends Signalable {
         }
 
         /** @type KillZoneMapObjectGroup */
-        let killZoneMapObjectGroup = this.killZonesSidebar.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.killZonesSidebar.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
 
         this.killZone = killZoneMapObjectGroup.findMapObjectById(killZoneId);
         if (this.killZone === null) {

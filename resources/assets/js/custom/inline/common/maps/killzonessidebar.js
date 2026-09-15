@@ -41,7 +41,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @private
      */
     _newPullClicked() {
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         killZoneMapObjectGroup.createNewPull();
     }
 
@@ -103,7 +103,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         }
 
         /** @type KillZoneMapObjectGroup */
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
 
         let previousKillZoneRowElementVisual = null;
         let previousKillZone = killZoneMapObjectGroup.findKillZoneByIndex(killZone.index - 1);
@@ -200,7 +200,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // Re-add them only if we should
         if (state.getPullsSidebarFloorSwitchVisibility()) {
             let mapContext = state.getMapContext();
-            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
             /** @type KillZone */
             let previousKillZone = null;
             let previousKillZoneFloorIds = [];
@@ -256,7 +256,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         rowElement.refresh();
 
         if (cascadeRefresh) {
-            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
             $.each(killZoneMapObjectGroup.objects, function (index, futureKillZone) {
                 // Do not update pull texts for killzones that do not have
                 if (futureKillZone.id > 0 && futureKillZone.getIndex() >= killZone.index) {
@@ -278,7 +278,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         let self = this;
 
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         $.each(killZoneMapObjectGroup.objects, function (index, killZone) {
             // Do not update pull texts for killzones that do not have
             if (killZone.id > 0 && killZone.getIndex() >= minIndex) {
@@ -378,7 +378,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @private
      */
     _onNewKillZoneClicked() {
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         let killZone = killZoneMapObjectGroup.createNewPull();
 
         this.map.setMapState(new EditKillZoneEnemySelection(this.map, killZone));
@@ -395,7 +395,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         if (this._dragHasSwitchedOrder) {
             /** @type KillZoneMapObjectGroup */
-            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
 
             let $killZonesContainerChildren = $('#killzones_container').children('.map_killzonessidebar_killzone');
             let count = 1;
@@ -485,7 +485,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         $(this.options.killZonesPullsSettingsDeleteAllSelector).unbind('click').bind('click', function () {
             showConfirmYesCancel(lang.get('js.killzone_sidebar_delete_all_pulls_confirm_label'), function () {
                 /** @type KillZoneMapObjectGroup */
-                let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+                let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
 
                 killZoneMapObjectGroup.deleteAll();
                 self._rebuildFloorSwitches();
@@ -523,7 +523,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             }
         });
 
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         // User interface action created a new killzone
         killZoneMapObjectGroup.register('killzone:new', this, function (killZoneCreatedEvent) {
             // We do not know the ID before this so we cannot scroll to the new killzone instantly
@@ -673,7 +673,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         this.map.unregister('map:mapstatechanged', this);
         // this.map.unregister('map:beforerefresh', this);
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         killZoneMapObjectGroup.unregister(['object:add', 'object:deleted', 'killzone:new', 'killzone:overpulledenemyadded', 'killzone:overpulledenemyremoved'], this);
 
         getState().unregister('killzonesnumberstyle:changed', this);
