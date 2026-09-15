@@ -40,10 +40,11 @@ final class ObjectImporterTest extends PublicTestCase
     }
 
     #[Test]
-    #[DataProvider('parseObjects_note_dataProvider')]
-    public function parseObjects_givenANoteWithHtmlAssignedToAPull_importsThePullDescriptionWithoutTags(string $note, string $expectedText): void
+    public function parseObjects_givenANoteWithHtmlAssignedToAPull_importsThePullDescriptionUnchanged(): void
     {
         // Arrange
+        $note = '<b>x</b>';
+
         [$mappingVersion, $enemy, $floor] = $this->findDungeonWithEnemy();
         $importStringObjects              = $this->createImportStringObjects($mappingVersion, $floor, $enemy, $note);
         $importStringObjects->getKillZoneAttributes()->put(1, [
@@ -57,7 +58,7 @@ final class ObjectImporterTest extends PublicTestCase
 
         // Assert
         $this->assertCount(0, $result->getMapIcons());
-        $this->assertSame($expectedText, $result->getKillZoneAttributes()->get(1)['description']);
+        $this->assertSame($note, $result->getKillZoneAttributes()->get(1)['description']);
     }
 
     /**

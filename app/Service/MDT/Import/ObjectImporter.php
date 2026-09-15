@@ -278,12 +278,6 @@ class ObjectImporter
         array               $details,
         bool                $assignNotesToPulls,
     ): void {
-        // The note becomes a map icon comment or a pull description, and both are bulk-inserted
-        // past the models' own stripping
-        if (is_string($details[4] ?? null)) {
-            $details[4] = new HtmlSanitizer()->stripAllTags($details[4]);
-        }
-
         $latLng = Conversion::convertMDTCoordinateToLatLng([
             'x' => $details[0],
             'y' => $details[1],
@@ -388,7 +382,8 @@ class ObjectImporter
             'mapping_version_id' => null,
             'floor_id'           => $latLng->getFloor()->id,
             'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_COMMENT],
-            'comment'            => $details[4],
+            // Bulk-inserted past MapIcon::setCommentAttribute()'s own stripping
+            'comment' => new HtmlSanitizer()->stripAllTags((string)$details[4]),
         ], $latLng->toArray()));
     }
 

@@ -18,7 +18,6 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Event;
 use Mockery;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
@@ -196,68 +195,6 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
             $this->assertEquals($enemy->id, $killZoneEnemy->enemy_id);
         } finally {
             $this->dungeonRoute->killZones()->delete();
-        }
-    }
-
-    #[Test]
-    #[DataProvider('store_description_dataProvider')]
-    public function store_givenANewKillZoneWithAHtmlDescription_storesItWithoutTags(string $description, string $expectedDescription): void
-    {
-        try {
-            // Act
-            $response = $this->post(sprintf('/ajax/%s/killzone', $this->dungeonRoute->public_key), [
-                'color'       => '#ff0000',
-                'index'       => 1,
-                'description' => $description,
-                'enemies'     => [],
-                'spells'      => [],
-            ]);
-
-            // Assert
-            $response->assertSuccessful();
-            /** @var KillZone $killZone */
-            $killZone = $this->dungeonRoute->killZones()->firstOrFail();
-            $this->assertSame($expectedDescription, $killZone->description);
-        } finally {
-            $this->deleteKillZones();
-        }
-    }
-
-    /**
-     * @return array<string, array{0: string, 1: string}>
-     */
-    public static function store_description_dataProvider(): array
-    {
-        return [
-            'plain text'                  => ["Lust here\nthen stop", "Lust here\nthen stop"],
-            'bold'                        => ['<b>x</b>', 'x'],
-            'image with an event handler' => ['Pull<img src=x onerror=alert(1)>', 'Pull'],
-            'script'                      => ['<script>alert(1)</script>', 'alert(1)'],
-            'allowed link'                => ['<a href="https://raider.io">Raider.IO</a>', 'Raider.IO'],
-            'less than that is no tag'    => ['a < b', 'a < b'],
-        ];
-    }
-
-    #[Test]
-    public function store_givenAnExistingKillZoneWithAHtmlDescription_updatesItWithoutTags(): void
-    {
-        // Arrange
-        $killZone = $this->createKillZoneWithEnemies(new Collection());
-
-        try {
-            // Act
-            $response = $this->put(sprintf('/ajax/%s/killzone/%d', $this->dungeonRoute->public_key, $killZone->id), [
-                'color'       => '#ff0000',
-                'index'       => 1,
-                'description' => '<h4>Boss</h4><img src=x onerror=alert(1)>',
-                'spells'      => [],
-            ]);
-
-            // Assert
-            $response->assertSuccessful();
-            $this->assertSame('Boss', $killZone->fresh()?->description);
-        } finally {
-            $this->deleteKillZones();
         }
     }
 

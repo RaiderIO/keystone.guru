@@ -3,7 +3,6 @@
 namespace App\Models\KillZone;
 
 use App\Logic\Structs\LatLng;
-use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -91,11 +90,6 @@ class KillZone extends Model
             'lat'              => 'float',
             'lng'              => 'float',
         ];
-    }
-
-    public function setDescriptionAttribute(?string $value): void
-    {
-        $this->attributes['description'] = new HtmlSanitizer()->stripAllTags($value);
     }
 
     /**
