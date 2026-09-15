@@ -5,6 +5,7 @@ namespace App\Service\CombatLog\DataExtractors\SpellDataCollectors;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
 use App\Models\Spell\Spell as SpellModel;
+use App\Models\Spell\SpellCategory;
 use App\Models\Spell\SpellDungeon;
 use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -51,7 +52,7 @@ class SpellDungeonAssignmentCollector implements SpellDataCollectorInterface
             // Only assign spells that are NOT player spells!
             if (
                 $spell !== null &&
-                $spell->category === sprintf('spellcategory.%s', SpellModel::CATEGORY_UNKNOWN)
+                $spell->category === sprintf('spellcategory.%s', SpellCategory::Unknown->value)
             ) {
                 // If this dungeon wasn't assigned to the spell yet..
                 if ($spell->spellDungeons

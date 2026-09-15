@@ -4,6 +4,7 @@ use App\Models\CharacterClass;
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCounter;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInterface;
 use Illuminate\Support\Collection;
 
@@ -139,7 +140,7 @@ use Illuminate\Support\Collection;
             $counterSpells = $counterSection['spells'];
             /** @var Collection<int, Collection<int, Npc>> $npcsBySpellId */
             $npcsBySpellId = $counterSection['npcsBySpellId'];
-            $counterKey    = Spell::ALL_COUNTERS[$definition->getCounterBit()];
+            $counterKey    = SpellCounter::slugsByBit()[$definition->getCounterBit()];
             ?>
             <div class="compendium_record_section @if($loop->first) mt-4 @endif">
                 <div class="compendium_record_label">

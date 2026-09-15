@@ -10,6 +10,7 @@ use App\Models\CombatLog\CombatLogNpcEventType;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell as SpellModel;
+use App\Models\Spell\SpellCategory;
 use App\Models\Spell\SpellDungeon;
 use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -55,7 +56,7 @@ class NpcSpellAssignmentCollector implements SpellDataCollectorInterface
     ): void {
         // Check if the spell can be assigned
         $spell = $this->allSpells->get($prefix->getSpellId());
-        if ($spell === null || $spell->category !== sprintf('spellcategory.%s', SpellModel::CATEGORY_UNKNOWN)) {
+        if ($spell === null || $spell->category !== sprintf('spellcategory.%s', SpellCategory::Unknown->value)) {
             return;
         }
 

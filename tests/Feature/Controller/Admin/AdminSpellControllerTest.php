@@ -28,7 +28,7 @@ final class AdminSpellControllerTest extends PublicTestCase
     public function update_givenDispelTypeSubmittedFromTheEditForm_persistsThePrefixedTranslationKey(): void
     {
         // Arrange - #4095: SpellController::getEditViewParams() hands the edit form
-        // Spell::ALL_DISPEL_TYPE_KEYS (prefixed) as the dropdown's option values, so that is what a
+        // SpellDispelType::translationKeys() (prefixed) as the dropdown's option values, so that is what a
         // real submission sends back. A regression here (e.g. dropping the prefix again, or
         // re-introducing a mismatched unprefixed option list) must fail this test.
         $spell = $this->createSpell();

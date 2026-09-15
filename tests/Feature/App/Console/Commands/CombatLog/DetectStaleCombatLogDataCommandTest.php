@@ -13,7 +13,9 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcDungeon;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCounter;
 use App\Models\Spell\SpellDungeon;
+use App\Models\Spell\SpellImmunity;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Season\SeasonServiceStub;
 use Illuminate\Support\Carbon;
@@ -310,7 +312,7 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
         // Arrange
         $windowDays = config('keystoneguru.combat_log_staleness.observation_window_days');
         $this->seedObservationDays($windowDays + 1);
-        $this->createTestSpell(['counters_mask' => Spell::COUNTER_VANISH]);
+        $this->createTestSpell(['counters_mask' => SpellCounter::Vanish->value]);
         $this->linkSpellToCurrentSeason();
         $this->createSpellPropertyObservation(
             SpellProperty::CounterVanish,
@@ -334,7 +336,7 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     {
         // Arrange
         $windowDays = config('keystoneguru.combat_log_staleness.observation_window_days');
-        $this->createTestSpell(['counters_mask' => Spell::COUNTER_VANISH]);
+        $this->createTestSpell(['counters_mask' => SpellCounter::Vanish->value]);
         $this->linkSpellToCurrentSeason();
         $this->seedObservationDays($windowDays, 1);
         $this->createSpellPropertyObservation(SpellProperty::CounterVanish, now());
@@ -343,7 +345,7 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
         $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
 
         // Assert
-        $this->assertDatabaseHas('spells', ['id' => self::SPELL_ID, 'counters_mask' => Spell::COUNTER_VANISH]);
+        $this->assertDatabaseHas('spells', ['id' => self::SPELL_ID, 'counters_mask' => SpellCounter::Vanish->value]);
         $this->assertDatabaseMissing('combat_log_spell_events', [
             'spell_id'   => self::SPELL_ID,
             'event_type' => CombatLogSpellEventType::PropertyRemoved->value,
@@ -357,7 +359,7 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
         // Arrange
         $windowDays = config('keystoneguru.combat_log_staleness.observation_window_days');
         $this->seedObservationDays($windowDays + 1);
-        $this->createTestSpell(['bypasses_immunities_mask' => Spell::IMMUNITY_DIVINE_SHIELD]);
+        $this->createTestSpell(['bypasses_immunities_mask' => SpellImmunity::DivineShield->value]);
         $this->linkSpellToCurrentSeason();
         $this->createSpellPropertyObservation(
             SpellProperty::BypassDivineShield,
@@ -381,7 +383,7 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     {
         // Arrange
         $windowDays = config('keystoneguru.combat_log_staleness.observation_window_days');
-        $this->createTestSpell(['bypasses_immunities_mask' => Spell::IMMUNITY_DIVINE_SHIELD]);
+        $this->createTestSpell(['bypasses_immunities_mask' => SpellImmunity::DivineShield->value]);
         $this->linkSpellToCurrentSeason();
         $this->seedObservationDays($windowDays, 1);
         $this->createSpellPropertyObservation(SpellProperty::BypassDivineShield, now());
@@ -390,7 +392,7 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
         $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
 
         // Assert
-        $this->assertDatabaseHas('spells', ['id' => self::SPELL_ID, 'bypasses_immunities_mask' => Spell::IMMUNITY_DIVINE_SHIELD]);
+        $this->assertDatabaseHas('spells', ['id' => self::SPELL_ID, 'bypasses_immunities_mask' => SpellImmunity::DivineShield->value]);
         $this->assertDatabaseMissing('combat_log_spell_events', [
             'spell_id'   => self::SPELL_ID,
             'event_type' => CombatLogSpellEventType::PropertyRemoved->value,

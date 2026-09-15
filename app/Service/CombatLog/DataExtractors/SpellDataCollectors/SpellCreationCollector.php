@@ -7,6 +7,7 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\Interrupt;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\CombatLog\CombatLogSpellEventType;
 use App\Models\Spell\Spell as SpellModel;
+use App\Models\Spell\SpellDispelType;
 use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -142,7 +143,7 @@ class SpellCreationCollector implements SpellDataCollectorInterface
         try {
             $createdSpell = SpellModel::create([
                 'id'           => $spellId,
-                'dispel_type'  => sprintf('spelldispeltype.%s', SpellModel::DISPEL_TYPE_UNKNOWN),
+                'dispel_type'  => sprintf('spelldispeltype.%s', SpellDispelType::Unknown->value),
                 'icon_name'    => '',
                 'name'         => $name,
                 'schools_mask' => $schoolsMask,

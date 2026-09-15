@@ -5,6 +5,10 @@ namespace App\Service\Wowhead;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCategory;
+use App\Models\Spell\SpellCooldownGroup;
+use App\Models\Spell\SpellDispelType;
+use App\Models\Spell\SpellSchool;
 use App\Service\Traits\Curl;
 use App\Service\Wowhead\Dtos\SpellDataResult;
 use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;
@@ -178,8 +182,8 @@ class WowheadService implements WowheadServiceInterface
 
         // More hacky shit to scrape data we need
         $mechanic      = null;
-        $category      = Spell::CATEGORY_UNKNOWN;
-        $cooldownGroup = sprintf('spellcooldowngroup.%s', Spell::COOLDOWN_GROUP_UNKNOWN); // I can't find info on this on Wowhead?
+        $category      = SpellCategory::Unknown->value;
+        $cooldownGroup = sprintf('spellcooldowngroup.%s', SpellCooldownGroup::Unknown->value); // I can't find info on this on Wowhead?
         $dispelType    = '';
         $iconName      = '';
         $name          = '';
@@ -249,7 +253,7 @@ class WowheadService implements WowheadServiceInterface
                 ], '', $line);
                 $schools = explode(', ', $schoolsStr);
 
-                $allSchoolsFlipped = array_flip(Spell::ALL_SCHOOLS);
+                $allSchoolsFlipped = array_flip(SpellSchool::slugsByBit());
                 foreach ($schools as $school) {
                     $schoolLower = strtolower($school);
                     if (isset($allSchoolsFlipped[$schoolLower])) {
@@ -271,13 +275,13 @@ class WowheadService implements WowheadServiceInterface
                 ], '', $line);
                 $dispelTypeLower = strtolower($dispelType);
                 if (str_contains($dispelTypeLower, 'n/a')) {
-                    $dispelType = Spell::DISPEL_TYPE_NOT_AVAILABLE;
-                } elseif (in_array($dispelTypeLower, Spell::ALL_DISPEL_TYPES)) {
+                    $dispelType = SpellDispelType::NotAvailable->value;
+                } elseif (in_array($dispelTypeLower, SpellDispelType::values())) {
                     $dispelType = $dispelTypeLower;
                 } else {
                     $this->log->getSpellDataSpellDispelTypeNotFound($dispelType);
 
-                    $dispelType = Spell::DISPEL_TYPE_UNKNOWN;
+                    $dispelType = SpellDispelType::Unknown->value;
                 }
                 $dispelType      = sprintf('spelldispeltype.%s', $dispelType);
                 $dispelTypeFound = false;

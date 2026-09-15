@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
  */
 return new class extends Migration {
     /**
-     * Bit → property name mapping, mirroring SpellConstants::ALL_MISS_TYPES prefixed with 'miss_'.
+     * Bit → property name mapping, mirroring App\Models\Spell\SpellMissType::slugsByBit() prefixed with 'miss_'.
      */
     private const array MISS_TYPE_BITS = [
         1   => 'miss_absorb',

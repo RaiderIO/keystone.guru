@@ -14,6 +14,7 @@ use App\Models\CombatLog\CombatLogSpellEventType;
 use App\Models\CombatLog\CombatLogSpellPropertyObservation;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Spell\Spell as SpellModel;
+use App\Models\Spell\SpellMissType;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -62,9 +63,9 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
         }
 
         if ($suffix instanceof MissedInterface) {
-            $bit = SpellModel::GUID_MISS_TYPE_MAPPING[$suffix->getMissType()::class] ?? null;
-            if ($bit !== null) {
-                $properties[] = SpellProperty::fromMissTypeBit($bit);
+            $missType = SpellMissType::tryFromGuid($suffix->getMissType());
+            if ($missType !== null) {
+                $properties[] = SpellProperty::fromMissTypeBit($missType->value);
             }
         }
 
