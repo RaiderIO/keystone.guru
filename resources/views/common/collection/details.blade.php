@@ -17,6 +17,12 @@ $dungeonRouteCollection  ??= null;
 $selectedDungeonRouteIds ??= [];
 $teams                   ??= collect();
 
+// After a failed validation the picker must show what was submitted, not what is stored - otherwise
+// resubmitting the corrected form saves the collection with no routes. An empty submission stays empty
+if (session()->hasOldInput()) {
+    $selectedDungeonRouteIds = array_map(intval(...), (array)old('dungeon_routes', []));
+}
+
 $publishedStateOptions = [];
 foreach (DungeonRouteCollection::AVAILABLE_PUBLISHED_STATES as $publishedState) {
     // Sharing with a team is only meaningful when the user is actually in one

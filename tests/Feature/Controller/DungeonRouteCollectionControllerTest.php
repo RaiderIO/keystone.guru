@@ -143,6 +143,77 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function savenew_givenAFailedValidation_keepsTheSubmittedRoutesSelected(): void
+    {
+        // Arrange
+        $creator      = $this->createCreator();
+        $dungeonRoute = $this->createRouteFor($creator);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act - no name, so validation fails and the form is shown again
+            $response = $this->actingAs($creator)
+                ->from(route('collections.new'))
+                ->followingRedirects()
+                ->post(route('collections.savenew'), [
+                    'published_state' => PublishedState::WORLD,
+                    'dungeon_routes'  => [$dungeonRoute->id],
+                ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertMatchesRegularExpression(
+                sprintf('/<option value="%d"\s+selected\s*>/', $dungeonRoute->id),
+                $response->getContent(),
+            );
+            $this->assertSame(0, DungeonRouteCollection::where('user_id', $creator->id)->count());
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $dungeonRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenAFailedValidationWithNoRoutesSubmitted_keepsTheSelectionEmpty(): void
+    {
+        // Arrange
+        $creator                = $this->createCreator();
+        $dungeonRoute           = $this->createRouteFor($creator);
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $dungeonRoute->id,
+            'order'                       => 0,
+        ]);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $editUrl = route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]);
+
+        try {
+            // Act - the stored route was deselected, but the missing name fails validation
+            $response = $this->actingAs($creator)
+                ->from($editUrl)
+                ->followingRedirects()
+                ->patch($editUrl, [
+                    'published_state' => PublishedState::WORLD,
+                ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertDoesNotMatchRegularExpression(
+                sprintf('/<option value="%d"\s+selected\s*>/', $dungeonRoute->id),
+                $response->getContent(),
+            );
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $dungeonRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function savenew_givenTeamPublishedStateWithoutATeam_failsValidation(): void
     {
         // Arrange
