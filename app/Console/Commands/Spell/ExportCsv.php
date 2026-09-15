@@ -5,6 +5,9 @@ namespace App\Console\Commands\Spell;
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellDispelType;
+use App\Models\Spell\SpellMissType;
+use App\Models\Spell\SpellSchool;
 use Illuminate\Console\Command;
 use Str;
 
@@ -43,11 +46,11 @@ class ExportCsv extends Command
                 'npc_id'      => $npc?->id ?? 'UNKNOWN', // @phpstan-ignore nullsafe.neverNull
                 'mechanic'    => __($spell->mechanic, [], 'en_US'),
                 'name'        => __($spell->name, [], 'en_US'),
-                'dispel_type' => in_array($spell->dispel_type, Spell::ALL_DISPEL_TYPE_KEYS) ?
+                'dispel_type' => in_array($spell->dispel_type, SpellDispelType::translationKeys()) ?
                     __($spell->dispel_type, [], 'en_US') :
                     $spell->dispel_type,
-                'schools'      => Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask, 'spellschools'),
-                'miss_types'   => Spell::maskToReadableString(Spell::ALL_MISS_TYPES, $spell->miss_types_mask, 'spellmisstypes'),
+                'schools'      => Spell::maskToReadableString(SpellSchool::slugsByBit(), $spell->schools_mask, 'spellschools'),
+                'miss_types'   => Spell::maskToReadableString(SpellMissType::slugsByBit(), $spell->miss_types_mask, 'spellmisstypes'),
                 'aura'         => $spell->aura ? 1 : 0,
                 'debuff'       => $spell->debuff ? 1 : 0,
                 'cast_time'    => $spell->cast_time,

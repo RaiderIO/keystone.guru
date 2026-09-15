@@ -1,6 +1,10 @@
 <?php
 
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCounter;
+use App\Models\Spell\SpellImmunity;
+use App\Models\Spell\SpellMissType;
+use App\Models\Spell\SpellSchool;
 
 /**
  * The section title lives in the parent record section's label rail (see show.blade.php).
@@ -13,22 +17,22 @@ $details = [
     [
         'label'   => __('view_compendium.spell.sections.details.header_schools'),
         'tooltip' => __('view_compendium.spell.sections.details.header_schools_tooltip'),
-        'value'   => Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask, 'spellschools') ?: '-',
+        'value'   => Spell::maskToReadableString(SpellSchool::slugsByBit(), $spell->schools_mask, 'spellschools') ?: '-',
     ],
     [
         'label'   => __('view_compendium.spell.sections.details.header_miss_types'),
         'tooltip' => __('view_compendium.spell.sections.details.header_miss_types_tooltip'),
-        'value'   => Spell::maskToReadableString(Spell::ALL_MISS_TYPES, $spell->miss_types_mask, 'spellmisstypes') ?: '-',
+        'value'   => Spell::maskToReadableString(SpellMissType::slugsByBit(), $spell->miss_types_mask, 'spellmisstypes') ?: '-',
     ],
     [
         'label'   => __('view_compendium.spell.sections.details.header_counters'),
         'tooltip' => __('view_compendium.spell.sections.details.header_counters_tooltip'),
-        'value'   => Spell::maskToReadableString(Spell::ALL_COUNTERS, $spell->counters_mask, 'spellcounters') ?: '-',
+        'value'   => Spell::maskToReadableString(SpellCounter::slugsByBit(), $spell->counters_mask, 'spellcounters') ?: '-',
     ],
     [
         'label'   => __('view_compendium.spell.sections.details.header_bypasses_immunities'),
         'tooltip' => __('view_compendium.spell.sections.details.header_bypasses_immunities_tooltip'),
-        'value'   => Spell::maskToReadableString(Spell::ALL_IMMUNITIES, $spell->bypasses_immunities_mask, 'spellimmunities') ?: '-',
+        'value'   => Spell::maskToReadableString(SpellImmunity::slugsByBit(), $spell->bypasses_immunities_mask, 'spellimmunities') ?: '-',
     ],
     [
         'label'   => __('view_compendium.spell.sections.details.header_dispel_type'),

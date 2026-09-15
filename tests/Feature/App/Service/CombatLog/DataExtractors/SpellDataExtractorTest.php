@@ -15,7 +15,10 @@ use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell as SpellModel;
+use App\Models\Spell\SpellCategory;
 use App\Models\Spell\SpellDungeon;
+use App\Models\Spell\SpellMissType;
+use App\Models\Spell\SpellSchool;
 use App\Repositories\Swoole\SpellRepositorySwoole;
 use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\SpellDataCollectors\SpellCreationCollector;
@@ -163,7 +166,7 @@ final class SpellDataExtractorTest extends PublicTestCase
         // Assert - 0x20 is 32, not the 0 a plain (int) cast produces
         $this->assertDatabaseHas('spells', [
             'id'           => self::SPELL_ID,
-            'schools_mask' => SpellModel::SCHOOL_SHADOW,
+            'schools_mask' => SpellSchool::Shadow->value,
         ]);
     }
 
@@ -183,7 +186,7 @@ final class SpellDataExtractorTest extends PublicTestCase
         $this->assertSame(1, SpellModel::where('id', self::SPELL_ID)->count());
         $this->assertDatabaseHas('spells', [
             'id'           => self::SPELL_ID,
-            'schools_mask' => SpellModel::SCHOOL_SHADOW,
+            'schools_mask' => SpellSchool::Shadow->value,
         ]);
         $this->assertDatabaseMissing('combat_log_spell_events', [
             'spell_id'   => self::SPELL_ID,
@@ -206,7 +209,7 @@ final class SpellDataExtractorTest extends PublicTestCase
 
         // Act
         $createSpell = new ReflectionMethod($collector, 'createSpell');
-        $createSpell->invoke($collector, $this->result, self::SPELL_ID, 'TestSpell', SpellModel::SCHOOL_SHADOW);
+        $createSpell->invoke($collector, $this->result, self::SPELL_ID, 'TestSpell', SpellSchool::Shadow->value);
         $collector->afterCollect($this->result, self::COMBAT_LOG_PATH);
 
         // Assert - the existing-spell path ran instead of throwing: the school got repaired, still only one row,
@@ -214,7 +217,7 @@ final class SpellDataExtractorTest extends PublicTestCase
         $this->assertSame(1, SpellModel::where('id', self::SPELL_ID)->count());
         $this->assertDatabaseHas('spells', [
             'id'           => self::SPELL_ID,
-            'schools_mask' => SpellModel::SCHOOL_SHADOW,
+            'schools_mask' => SpellSchool::Shadow->value,
         ]);
         $this->assertDatabaseMissing('combat_log_spell_events', [
             'spell_id'   => self::SPELL_ID,
@@ -226,7 +229,7 @@ final class SpellDataExtractorTest extends PublicTestCase
         $this->assertSame(0, $this->result->toArray()['createdSpells']);
         $this->assertSame(1, $this->result->toArray()['updatedSpells']);
         $this->assertTrue($allSpells->has(self::SPELL_ID));
-        $this->assertSame(SpellModel::SCHOOL_SHADOW, $allSpells->get(self::SPELL_ID)->schools_mask);
+        $this->assertSame(SpellSchool::Shadow->value, $allSpells->get(self::SPELL_ID)->schools_mask);
     }
 
     #[Test]
@@ -242,7 +245,7 @@ final class SpellDataExtractorTest extends PublicTestCase
         // Assert
         $this->assertDatabaseHas('spells', [
             'id'           => self::SPELL_ID,
-            'schools_mask' => SpellModel::SCHOOL_SHADOW,
+            'schools_mask' => SpellSchool::Shadow->value,
         ]);
 
         // Assert - the repair is auditable from the activity feed, like every other spell mutation here
@@ -267,7 +270,7 @@ final class SpellDataExtractorTest extends PublicTestCase
         // Assert
         $this->assertDatabaseHas('spells', [
             'id'           => self::SPELL_ID,
-            'schools_mask' => SpellModel::SCHOOL_SHADOW,
+            'schools_mask' => SpellSchool::Shadow->value,
         ]);
     }
 
@@ -275,7 +278,7 @@ final class SpellDataExtractorTest extends PublicTestCase
     public function extractData_givenAKnownSpellThatAlreadyHasASchool_leavesItAlone(): void
     {
         // Arrange - the database is authoritative once a school is known; a single event must not overwrite it
-        $this->createTestSpell(['schools_mask' => SpellModel::SCHOOL_FIRE]);
+        $this->createTestSpell(['schools_mask' => SpellSchool::Fire->value]);
         $extractor = $this->makeExtractor();
 
         // Act
@@ -284,7 +287,7 @@ final class SpellDataExtractorTest extends PublicTestCase
         // Assert
         $this->assertDatabaseHas('spells', [
             'id'           => self::SPELL_ID,
-            'schools_mask' => SpellModel::SCHOOL_FIRE,
+            'schools_mask' => SpellSchool::Fire->value,
         ]);
     }
 
@@ -439,7 +442,7 @@ final class SpellDataExtractorTest extends PublicTestCase
         // Assert - the bit was set once, and only the worker that set it wrote an event (#4199)
         $this->assertDatabaseHas('spells', [
             'id'              => self::SPELL_ID,
-            'miss_types_mask' => SpellModel::MISS_TYPE_INTERRUPT,
+            'miss_types_mask' => SpellMissType::Interrupt->value,
         ]);
         $this->assertSame(1, CombatLogSpellEvent::on('combatlog')
             ->where('spell_id', self::SPELL_ID)
@@ -453,7 +456,7 @@ final class SpellDataExtractorTest extends PublicTestCase
     {
         // Arrange — spell with 'unknown' category so assignSpellToNpc runs, aura=true so no PropertyChanged noise
         $this->createTestSpell([
-            'category' => sprintf('spellcategory.%s', SpellModel::CATEGORY_UNKNOWN),
+            'category' => sprintf('spellcategory.%s', SpellCategory::Unknown->value),
             'aura'     => true,
         ]);
         $this->createTestNpc();
@@ -492,7 +495,7 @@ final class SpellDataExtractorTest extends PublicTestCase
         // Arrange - two ingest processes, each holding its own process-persistent spell catalog (#4058) built
         // while neither knew about the other's dungeon assignment, exactly as concurrent workers do (#4327)
         $this->createTestSpell([
-            'category' => sprintf('spellcategory.%s', SpellModel::CATEGORY_UNKNOWN),
+            'category' => sprintf('spellcategory.%s', SpellCategory::Unknown->value),
             'aura'     => true,
         ]);
         $this->createTestNpc();

@@ -15,7 +15,7 @@ use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Path;
 use App\Models\Polyline;
-use App\Models\Spell\Spell;
+use App\Models\Spell\KnownSpell;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
 use App\Service\MDT\Models\ImportStringObjects;
@@ -333,21 +333,21 @@ class ObjectImporter
                         $spellId = 0;
 
                         if ($commentLower === 'bloodlust') {
-                            $spellId = Spell::SPELL_BLOODLUST;
+                            $spellId = KnownSpell::BLOODLUST;
                         } elseif ($commentLower === 'heroism') {
-                            $spellId = Spell::SPELL_HEROISM;
+                            $spellId = KnownSpell::HEROISM;
                         } elseif ($commentLower === 'fury of the aspects') { // @phpstan-ignore identical.alwaysFalse
-                            $spellId = Spell::SPELL_FURY_OF_THE_ASPECTS;
+                            $spellId = KnownSpell::FURY_OF_THE_ASPECTS;
                         } elseif ($commentLower === 'time warp' || $commentLower === 'timewarp') {
-                            $spellId = Spell::SPELL_TIME_WARP;
+                            $spellId = KnownSpell::TIME_WARP;
                         } elseif ($commentLower === 'ancient hysteria') {
-                            $spellId = Spell::SPELL_ANCIENT_HYSTERIA;
+                            $spellId = KnownSpell::ANCIENT_HYSTERIA;
                         } elseif ($commentLower === 'drums') { // @phpstan-ignore identical.alwaysFalse
-                            $spellId = Spell::SPELL_THUNDEROUS_DRUMS;
+                            $spellId = KnownSpell::THUNDEROUS_DRUMS;
                         } elseif ($commentLower === 'primal rage') { // @phpstan-ignore identical.alwaysFalse
-                            $spellId = Spell::SPELL_PRIMAL_RAGE;
+                            $spellId = KnownSpell::PRIMAL_RAGE;
                         } elseif ($commentLower === 'harriers cry') { // @phpstan-ignore identical.alwaysFalse
-                            $spellId = Spell::SPELL_HARRIERS_CRY;
+                            $spellId = KnownSpell::HARRIERS_CRY;
                         }
 
                         $newAttributes = $killZoneAttribute['spells'][] = [

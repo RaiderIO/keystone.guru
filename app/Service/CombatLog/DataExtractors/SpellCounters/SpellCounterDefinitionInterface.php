@@ -12,7 +12,7 @@ interface SpellCounterDefinitionInterface
     public function getProperty(): SpellProperty;
 
     /**
-     * The Spell::COUNTER_* bit this counter occupies on `counters_mask`.
+     * The {@see \App\Models\Spell\SpellCounter} bit this counter occupies on `counters_mask`.
      */
     public function getCounterBit(): int;
 
@@ -55,7 +55,7 @@ interface SpellCounterDefinitionInterface
     public function dropsThreat(): bool;
 
     /**
-     * The `Spell::DISPEL_TYPE_*` values that rule a removed debuff out as something this counter could have caused
+     * The {@see \App\Models\Spell\SpellDispelType} values that rule a removed debuff out as something this counter could have caused
      * to go away (signatures A and B). Empty for a threat drop - it makes the NPC give up on the player regardless
      * of what it had applied. Cloak of Shadows can only strip magic, so a poison or disease falling off in its
      * window is provably not its doing.

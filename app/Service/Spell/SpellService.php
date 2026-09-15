@@ -4,6 +4,9 @@ namespace App\Service\Spell;
 
 use App\Models\CharacterClass;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCategory;
+use App\Models\Spell\SpellCooldownGroup;
+use App\Models\Spell\SpellDispelType;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\Spell\Logging\SpellServiceLoggingInterface;
 use Illuminate\Support\Str;
@@ -63,7 +66,7 @@ class SpellService implements SpellServiceInterface
                 'id'             => $spellId,
                 'category'       => $categoryName,
                 'cooldown_group' => $cooldownGroupName,
-                'dispel_type'    => sprintf('spelldispeltype.%s', Spell::DISPEL_TYPE_MAGIC),
+                'dispel_type'    => sprintf('spelldispeltype.%s', SpellDispelType::Magic->value),
                 'icon_name'      => $row[$indexClassIconName],
                 'name'           => $row[$indexClassSpellName],
                 'schools_mask'   => 0,
@@ -100,7 +103,7 @@ class SpellService implements SpellServiceInterface
         // Try to match the category directly first
         $categorySlug = Str::slug($rowClassName, '_');
 
-        if (!in_array($categorySlug, Spell::ALL_CATEGORIES)) {
+        if (!in_array($categorySlug, SpellCategory::values())) {
             // Try to find the associated class first, then use that class to identify the category
             $characterClass = $this->getCharacterClassFromClassName($rowClassName);
 
@@ -115,7 +118,7 @@ class SpellService implements SpellServiceInterface
 
             $categorySlug = Str::slug($characterClassName, '_');
 
-            if (!in_array($categorySlug, Spell::ALL_CATEGORIES)) {
+            if (!in_array($categorySlug, SpellCategory::values())) {
                 $this->log->getCategoryNameFromClassNameUnableToFindCategory($categorySlug);
 
                 return null;
@@ -146,7 +149,7 @@ class SpellService implements SpellServiceInterface
     {
         $cooldownGroupSlug = Str::slug($cooldownGroup, '_');
 
-        if (!in_array($cooldownGroupSlug, Spell::ALL_COOLDOWN_GROUPS)) {
+        if (!in_array($cooldownGroupSlug, SpellCooldownGroup::values())) {
             $this->log->getCooldownGroupNameFromCooldownGroupUnableToFindCategory($cooldownGroupSlug);
 
             return null;

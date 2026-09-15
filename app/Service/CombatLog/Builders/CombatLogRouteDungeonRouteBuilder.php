@@ -9,6 +9,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Spell\KnownSpell;
 use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
@@ -46,17 +47,17 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
      * to a single pull, so we limit it to a few that are actually useful.
      */
     private const array VALID_SPELL_IDS = [
-        Spell::SPELL_BLOODLUST,
-        Spell::SPELL_HEROISM,
-        Spell::SPELL_TIME_WARP,
-        Spell::SPELL_FURY_OF_THE_ASPECTS,
-        Spell::SPELL_ANCIENT_HYSTERIA,
-        Spell::SPELL_PRIMAL_RAGE,
-        Spell::SPELL_FERAL_HIDE_DRUMS,
-        Spell::SPELL_HARRIERS_CRY,
-        Spell::SPELL_SHROUD_OF_CONCEALMENT,
-        Spell::SPELL_CONTROL_UNDEAD,
-        Spell::SPELL_SUBJUGATE_DEMON,
+        KnownSpell::BLOODLUST,
+        KnownSpell::HEROISM,
+        KnownSpell::TIME_WARP,
+        KnownSpell::FURY_OF_THE_ASPECTS,
+        KnownSpell::ANCIENT_HYSTERIA,
+        KnownSpell::PRIMAL_RAGE,
+        KnownSpell::FERAL_HIDE_DRUMS,
+        KnownSpell::HARRIERS_CRY,
+        KnownSpell::SHROUD_OF_CONCEALMENT,
+        KnownSpell::CONTROL_UNDEAD,
+        KnownSpell::SUBJUGATE_DEMON,
     ];
 
     private readonly CombatLogRouteDungeonRouteBuilderLoggingInterface $log;

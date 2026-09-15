@@ -70,7 +70,6 @@ use Str;
 class Spell extends CacheModel implements MappingModelInterface
 {
     use SeederModel;
-    use SpellConstants;
     use SerializesDates;
 
     public $incrementing = false;
@@ -83,9 +82,26 @@ class Spell extends CacheModel implements MappingModelInterface
     private const array UNINFORMATIVE_DISPEL_TYPES = [
         null,
         '',
-        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_NONE,
-        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_NOT_AVAILABLE,
-        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_UNKNOWN,
+        SpellDispelType::TRANSLATION_KEY_PREFIX . SpellDispelType::None->value,
+        SpellDispelType::TRANSLATION_KEY_PREFIX . SpellDispelType::NotAvailable->value,
+        SpellDispelType::TRANSLATION_KEY_PREFIX . SpellDispelType::Unknown->value,
+    ];
+
+    /**
+     * Columns holding behavior derived from combat logs rather than from the game client, so their
+     * values are per-environment and must never round-trip through the git seeders.
+     *
+     * Every entry must be hidden by MappingExportServiceInterface::serializeSpells() (so it stays out
+     * of spells.json) *and* preserved by SpellRelationMapping::getPreservedColumns() (so a re-seed
+     * copies the live value into the temp table instead of nulling it). Both read this one list: a
+     * column missing from either is wiped from every environment by the next seed.
+     */
+    public const array COMBAT_LOG_DERIVED_COLUMNS = [
+        'aura',
+        'debuff',
+        'miss_types_mask',
+        'counters_mask',
+        'bypasses_immunities_mask',
     ];
 
     protected $appends = [
@@ -182,7 +198,7 @@ class Spell extends CacheModel implements MappingModelInterface
             'name'       => __($this->name),
             'format'     => $this->description_format,
             'values'     => $this->description_values ?? [],
-            'schools'    => self::maskToReadableString(self::ALL_SCHOOLS, $this->schools_mask, 'spellschools') ?: null,
+            'schools'    => self::maskToReadableString(SpellSchool::slugsByBit(), $this->schools_mask, 'spellschools') ?: null,
             'dispelType' => $this->hasUninformativeDispelType() ? null : __($this->dispel_type),
             'mechanic'   => $this->mechanic ? __($this->mechanic) : null,
             'castTime'   => $this->cast_time > 0 ? $this->cast_time / 1000 : null,
@@ -198,7 +214,7 @@ class Spell extends CacheModel implements MappingModelInterface
     private function hasUninformativeDispelType(): bool
     {
         return in_array($this->dispel_type, self::UNINFORMATIVE_DISPEL_TYPES, true)
-            || !in_array($this->dispel_type, self::ALL_DISPEL_TYPE_KEYS, true);
+            || !in_array($this->dispel_type, SpellDispelType::translationKeys(), true);
     }
 
     public function getWowheadUrlAttribute(): string
@@ -229,7 +245,7 @@ class Spell extends CacheModel implements MappingModelInterface
     {
         $result = [];
 
-        foreach (self::ALL_SCHOOLS as $school => $value) {
+        foreach (SpellSchool::slugsByBit() as $school => $value) {
             $result[$school] = $this->schools_mask & $school;
         }
 

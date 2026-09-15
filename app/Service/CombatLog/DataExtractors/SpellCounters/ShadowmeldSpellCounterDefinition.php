@@ -4,7 +4,7 @@ namespace App\Service\CombatLog\DataExtractors\SpellCounters;
 
 use App\Models\CharacterRace;
 use App\Models\CombatLog\SpellProperty;
-use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCounter;
 
 class ShadowmeldSpellCounterDefinition extends SpellCounterDefinition
 {
@@ -17,7 +17,7 @@ class ShadowmeldSpellCounterDefinition extends SpellCounterDefinition
 
     public function getCounterBit(): int
     {
-        return Spell::COUNTER_SHADOWMELD;
+        return SpellCounter::Shadowmeld->value;
     }
 
     /**
