@@ -14,6 +14,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
@@ -90,6 +91,76 @@ final class AjaxMapIconControllerTest extends DungeonRouteTestBase
             $this->assertEquals($this->dungeonRoute->id, $mapIcon->dungeon_route_id);
         } finally {
             $mapIcon->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('dungeonRouteStore_comment_dataProvider')]
+    public function dungeonRouteStore_givenACommentWithHtml_storesItWithoutTags(string $comment, string $expectedComment): void
+    {
+        // Arrange
+        $mapIcon = $this->createMapIcon();
+
+        try {
+            // Act
+            $response = $this->put(
+                $this->mapIconUrl($this->dungeonRoute, $mapIcon),
+                $this->storePayload($mapIcon, $comment),
+            );
+
+            // Assert
+            $response->assertOk();
+            $response->assertJsonPath('comment', $expectedComment);
+            $mapIcon->refresh();
+            $this->assertSame($expectedComment, $mapIcon->comment);
+        } finally {
+            $mapIcon->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string}>
+     */
+    public static function dungeonRouteStore_comment_dataProvider(): array
+    {
+        return [
+            'plain text'                  => ["Use the door\nthen stack", "Use the door\nthen stack"],
+            'bold'                        => ['<b>x</b>', 'x'],
+            'image with an event handler' => ['Look<img src=x onerror=alert(1)>', 'Look'],
+            'script'                      => ['<script>alert(1)</script>', 'alert(1)'],
+            'allowed link'                => ['<a href="https://raider.io">Raider.IO</a>', 'Raider.IO'],
+            'less than that is no tag'    => ['a < b', 'a < b'],
+        ];
+    }
+
+    #[Test]
+    public function store_givenANewMapIconWithAHtmlComment_createsItWithoutTags(): void
+    {
+        // Arrange
+        $floor = $this->randomNonFacadeFloor($this->dungeonRoute);
+
+        try {
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/mapicon', $this->dungeonRoute->getRouteKey()), [
+                'mapping_version_id'         => null,
+                'floor_id'                   => $floor->id,
+                'team_id'                    => null,
+                'map_icon_type_id'           => $this->nonAdminMapIconType()->id,
+                'linked_awakened_obelisk_id' => null,
+                'lat'                        => -100,
+                'lng'                        => 100,
+                'comment'                    => '<b>Stack</b> here<script>alert(1)</script>',
+                'permanent_tooltip'          => 0,
+                'seasonal_index'             => null,
+            ]);
+
+            // Assert
+            $response->assertCreated();
+            /** @var MapIcon $mapIcon */
+            $mapIcon = $this->dungeonRoute->mapicons()->firstOrFail();
+            $this->assertSame('Stack herealert(1)', $mapIcon->comment);
+        } finally {
+            $this->dungeonRoute->mapicons()->get()->each(static fn(MapIcon $mapIcon) => $mapIcon->delete());
         }
     }
 

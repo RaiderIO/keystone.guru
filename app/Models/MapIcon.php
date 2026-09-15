@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Logic\Utils\HtmlSanitizer;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Interfaces\HasLatLngInterface;
@@ -104,6 +105,11 @@ class MapIcon extends Model implements HasLatLngInterface, MappingModelCloneable
     public function getIsAdminAttribute(): bool
     {
         return $this->mapping_version_id !== null;
+    }
+
+    public function setCommentAttribute(?string $value): void
+    {
+        $this->attributes['comment'] = new HtmlSanitizer()->stripAllTags($value);
     }
 
     /**

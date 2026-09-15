@@ -287,7 +287,8 @@ class MapObjectGroup extends Signalable {
                 let oldTooltip = layer.getTooltip();
                 let oldTooltipLayerId = layer._leaflet_id;
 
-                let tooltip = layer.bindTooltip(user.name, {
+                // Leaflet renders string tooltip content as HTML
+                let tooltip = layer.bindTooltip(Handlebars.escapeExpression(user.name), {
                     permanent: true, className: `echo_user_${user.public_key}_tooltip ${fontClass}`, direction: 'top'
                 });
 
@@ -677,4 +678,10 @@ class MapObjectGroup extends Signalable {
 
         return this;
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {MapObjectGroup};
 }
