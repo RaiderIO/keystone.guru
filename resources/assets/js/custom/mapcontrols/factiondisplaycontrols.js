@@ -91,9 +91,9 @@ class FactionDisplayControls extends MapControl {
         console.assert(this instanceof FactionDisplayControls, 'this is not FactionDisplayControls', this);
 
         let enemyMapObjectGroups = [
-            this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY),
-            this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK),
-            this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL)
+            this.map.mapObjectGroupManager.getEnemyMapObjectGroup(),
+            this.map.mapObjectGroupManager.getEnemyPackMapObjectGroup(),
+            this.map.mapObjectGroupManager.getEnemyPatrolMapObjectGroup()
         ];
 
         // For each group

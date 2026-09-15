@@ -12,6 +12,7 @@ global.EditKillZoneEnemySelection = {isEnemySelectable: vi.fn(() => true)};
 global.getState = () => ({getMapContext: () => ({})});
 
 const DungeonMap = require('./dungeonmap');
+const {fakeMapObjectGroupManager} = require('../test/fixtures/mapObjectGroupManager');
 
 /**
  * Builds a minimal object that satisfies `_whenMapSized`: the `_mapSizedRafId` field, a fake
@@ -150,7 +151,7 @@ describe('DungeonMap._enemyClicked', () => {
     // so the click should just do nothing.
     it('does nothing when the current page has no killzone map object group', () => {
         const map = Object.create(DungeonMap.prototype);
-        map.mapObjectGroupManager = {getByName: () => false};
+        map.mapObjectGroupManager = fakeMapObjectGroupManager(() => null);
         map.getMapState = () => null;
         EditKillZoneEnemySelection.isEnemySelectable.mockClear();
 

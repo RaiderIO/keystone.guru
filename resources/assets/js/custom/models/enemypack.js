@@ -93,7 +93,7 @@ class EnemyPack extends VersionableMapObject {
                 clicked: function (e) {
                     self.map.leafletMap.closePopup();
 
-                    let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                    let enemyMapObjectGroup = self.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
                     for (let key in enemyMapObjectGroup.objects) {
                         let enemy = enemyMapObjectGroup.objects[key];
@@ -160,7 +160,7 @@ class EnemyPack extends VersionableMapObject {
     setRawEnemies(rawEnemies) {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
         this.rawEnemies = rawEnemies;
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         for (let i = 0; i < this.rawEnemies.length; i++) {
             let rawEnemy = this.rawEnemies[i];
             let enemy = enemyMapObjectGroup.findMapObjectById(rawEnemy.id);
@@ -187,7 +187,7 @@ class EnemyPack extends VersionableMapObject {
         let self = this;
 
         // Convert raw enemies to current enemies
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         let latLngs = [];
         for (let i = 0; i < this.rawEnemies.length; i++) {
             let rawEnemy = this.rawEnemies[i];
@@ -227,7 +227,7 @@ class EnemyPack extends VersionableMapObject {
             }
         }
 
-        let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+        let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getEnemyPackMapObjectGroup();
         enemyPackMapObjectGroup.setLayerToMapObject(result, this);
         this.rebindTooltip();
     }
@@ -283,7 +283,7 @@ class EnemyPack extends VersionableMapObject {
     getEnemyForces() {
         let result = 0;
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         for (let i = 0; i < this.rawEnemies.length; i++) {
             let rawEnemy = this.rawEnemies[i];
             let enemy = enemyMapObjectGroup.findMapObjectById(rawEnemy.id);

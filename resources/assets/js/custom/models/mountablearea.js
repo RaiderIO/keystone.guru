@@ -133,7 +133,7 @@ class MountableArea extends VersionableMapObject {
             }
         }
 
-        let mountableAreaMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MOUNTABLE_AREA);
+        let mountableAreaMapObjectGroup = this.map.mapObjectGroupManager.getMountableAreaMapObjectGroup();
         mountableAreaMapObjectGroup.setLayerToMapObject(result, this);
         this.rebindTooltip();
     }

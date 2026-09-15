@@ -41,7 +41,7 @@ class AddAwakenedObeliskGatewayMapState extends MapObjectMapState {
         let addedGateway = saveSuccessEvent.data.object;
 
         // Find the gateway that was potentially already there
-        let mapIconManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
+        let mapIconManager = this.map.mapObjectGroupManager.getMapIconMapObjectGroup();
         for (let key in mapIconManager.objects) {
             let mapIconCandidate = mapIconManager.objects[key];
 
@@ -56,7 +56,7 @@ class AddAwakenedObeliskGatewayMapState extends MapObjectMapState {
         }
 
         // Find the path that was potentially already there
-        let pathManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
+        let pathManager = this.map.mapObjectGroupManager.getPathMapObjectGroup();
         for (let key in pathManager.objects) {
             let pathCandidate = pathManager.objects[key];
 

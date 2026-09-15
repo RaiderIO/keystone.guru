@@ -13,6 +13,7 @@ globalThis.MapObjectGroup = class MapObjectGroup {
 };
 
 const {KillZoneMapObjectGroup} = require('./killzonemapobjectgroup');
+const {fakeMapObjectGroupManager} = require('../../test/fixtures/mapObjectGroupManager');
 
 /**
  * A group wired up just enough to answer hasKilledAllRequiredEnemies(): the enemies that exist on the map, the
@@ -28,15 +29,13 @@ function buildGroup(enemies, killedEnemyIds, teeming) {
     const group = Object.create(KillZoneMapObjectGroup.prototype);
 
     group.objects = killedEnemyIds.length === 0 ? [] : [{enemies: killedEnemyIds, overpulledEnemies: []}];
-    group.manager = {
-        getByName: (name) => {
-            if (name !== MAP_OBJECT_GROUP_ENEMY) {
-                throw new Error(`Unexpected map object group requested: ${name}`);
-            }
+    group.manager = fakeMapObjectGroupManager((name) => {
+        if (name !== MAP_OBJECT_GROUP_ENEMY) {
+            throw new Error(`Unexpected map object group requested: ${name}`);
+        }
 
-            return {objects: enemies};
-        },
-    };
+        return {objects: enemies};
+    });
 
     globalThis.getState = () => ({getMapContext: () => ({getTeeming: () => teeming})});
 

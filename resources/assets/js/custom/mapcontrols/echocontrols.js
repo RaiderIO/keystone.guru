@@ -300,7 +300,7 @@ class EchoControls extends MapControl {
      * @private
      */
     _onEchoCursorsEnabledChanged() {
-        let userMousePositionMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
+        let userMousePositionMapObjectGroup = this.map.mapObjectGroupManager.getUserMousePositionMapObjectGroup();
 
         userMousePositionMapObjectGroup.setVisibility(getState().getEchoCursorsEnabled());
     }

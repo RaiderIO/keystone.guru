@@ -4,10 +4,10 @@ class EditKillZoneEnemySelection extends EnemySelection {
     constructor(map, sourceMapObject, previousKillZoneEnemySelection = null) {
         super(map, sourceMapObject);
 
-        // MapObjectGroupManager.getByName() returns false, not null, when a page hides this group
+        // There is no killzone map object group when a page hides it
         // (e.g. Explore mode's view.blade.php), which happens for the throwaway selection that
         // EditKillZoneEnemySelection.isEnemySelectable() constructs purely to reuse the filter logic.
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         if (killZoneMapObjectGroup) {
             killZoneMapObjectGroup.register('object:deleted', this, this._onMapObjectDeleted.bind(this));
         }
@@ -124,7 +124,7 @@ class EditKillZoneEnemySelection extends EnemySelection {
         let self = this;
 
         // Register to all existing killzones so that we may find if there have been changes to them or not
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         for (let key in killZoneMapObjectGroup.objects) {
             let killZone = killZoneMapObjectGroup.objects[key];
 
@@ -140,7 +140,7 @@ class EditKillZoneEnemySelection extends EnemySelection {
 
     stop() {
         super.stop();
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         for (let key in killZoneMapObjectGroup.objects) {
             let killZone = killZoneMapObjectGroup.objects[key];
 
@@ -162,7 +162,7 @@ class EditKillZoneEnemySelection extends EnemySelection {
     cleanup() {
         super.cleanup();
 
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         killZoneMapObjectGroup.unregister('object:deleted', this);
 
         // If there's any black listed killzones left - unreg from save:success

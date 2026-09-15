@@ -134,7 +134,7 @@ class DrawControls extends MapControl {
             }
         });
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         enemyMapObjectGroup.register('pridefulenemy:assigned', this, this._refreshPridefulButtonText.bind(this));
         enemyMapObjectGroup.register('pridefulenemy:unassigned', this, this._refreshPridefulButtonText.bind(this));
 
@@ -178,7 +178,7 @@ class DrawControls extends MapControl {
                 hotkey: '4',
                 cssClass: 'leaflet-draw-draw-pridefulenemy',
                 enabled: function () {
-                    let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                    let enemyMapObjectGroup = self.map.mapObjectGroupManager.getEnemyMapObjectGroup();
                     return c.map.pridefulenemy.isEnabled() && enemyMapObjectGroup.getAssignedPridefulEnemies() < c.map.pridefulenemy.max;
                 }
             });
@@ -235,7 +235,7 @@ class DrawControls extends MapControl {
     _refreshPridefulButtonText() {
         console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         let assignedPridefulEnemies = enemyMapObjectGroup.getAssignedPridefulEnemies();
         let buttonText = `${lang.get(`js.pridefulenemy`)} (${assignedPridefulEnemies}/${c.map.pridefulenemy.max})`;
@@ -639,7 +639,7 @@ class DrawControls extends MapControl {
     cleanup() {
         super.cleanup();
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         enemyMapObjectGroup.unregister('pridefulenemy:assigned', this);
         enemyMapObjectGroup.unregister('pridefulenemy:unassigned', this);
         // this.map.leafletMap.off(L.Draw.Event.CREATED);

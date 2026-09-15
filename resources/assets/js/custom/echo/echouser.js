@@ -31,7 +31,7 @@ class EchoUser extends Signalable {
 
         // Create a map object for this echo user
         /** @type UserMousePositionMapObjectGroup */
-        let userMousePositionMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
+        let userMousePositionMapObjectGroup = this.map.mapObjectGroupManager.getUserMousePositionMapObjectGroup();
         this.mapobject = userMousePositionMapObjectGroup.createNewUserMousePosition(this);
     }
 

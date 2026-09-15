@@ -15,7 +15,7 @@ class KillZoneDeletedHandler extends ModelDeletedHandler {
 
         if (shouldHandle) {
 
-            let killZoneMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            let killZoneMapObjectGroup = this.echo.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
 
             let mapObject = killZoneMapObjectGroup.findMapObjectById(e.model_id);
             if (mapObject !== null) {
@@ -23,7 +23,7 @@ class KillZoneDeletedHandler extends ModelDeletedHandler {
 
                 // @TODO use an event listener?
                 /** @type {KillZonePathMapObjectGroup} */
-                let killZonePathMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE_PATH);
+                let killZonePathMapObjectGroup = this.echo.map.mapObjectGroupManager.getKillZonePathMapObjectGroup();
                 killZonePathMapObjectGroup.fetchAndRefresh(e.context_route_key);
 
                 this._showDeletedFromEcho(mapObject, e.user);

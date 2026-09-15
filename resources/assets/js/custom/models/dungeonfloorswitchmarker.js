@@ -226,7 +226,7 @@ class DungeonFloorSwitchMarker extends Icon {
 
         if (getState().isCurrentDungeonFacadeEnabled() && this.linked_dungeon_floor_switch_marker_id !== null) {
             /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
-            let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+            let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getDungeonFloorSwitchMarkerMapObjectGroup();
             let linkedDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.findMapObjectById(this.linked_dungeon_floor_switch_marker_id);
 
             if (linkedDungeonFloorSwitchMarker !== null && linkedDungeonFloorSwitchMarker.isVisible()) {
