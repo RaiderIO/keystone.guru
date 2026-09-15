@@ -151,7 +151,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         // Load overpulled enemies in our kill zone
         if (getState().getMapContext() instanceof MapContextLiveSession) {
             let overpulledEnemiesData = getState().getMapContext().getOverpulledEnemies();
-            let enemyMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let enemyMapObjectGroup = this.manager.getEnemyMapObjectGroup();
 
             for (let index in overpulledEnemiesData) {
                 if (overpulledEnemiesData.hasOwnProperty(index)) {
@@ -375,7 +375,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     hasKilledAllRequiredEnemies() {
         let result = true;
 
-        let enemyMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.manager.getEnemyMapObjectGroup();
         let mapContext = getState().getMapContext();
 
         for (let key in enemyMapObjectGroup.objects) {
@@ -420,7 +420,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                     killZone.onDeleteSuccess(json, true);
                 }
 
-                let enemyMapObjectGroup = self.manager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                let enemyMapObjectGroup = self.manager.getEnemyMapObjectGroup();
                 for (let key in enemyMapObjectGroup.objects) {
                     let enemy = enemyMapObjectGroup.objects[key];
                     if (enemy instanceof PridefulEnemy && enemy.isAssigned()) {
@@ -430,7 +430,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                 }
 
                 /** @type KillZonePathMapObjectGroup */
-                let killZonePathMapObjectGroup = self.manager.getByName(MAP_OBJECT_GROUP_KILLZONE_PATH);
+                let killZonePathMapObjectGroup = self.manager.getKillZonePathMapObjectGroup();
                 killZonePathMapObjectGroup.refresh([]);
 
                 if (callback !== null && typeof callback === 'function') {

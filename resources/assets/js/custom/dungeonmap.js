@@ -337,7 +337,7 @@ class DungeonMap extends Signalable {
         // If we created something
         this.leafletMap.on(L.Draw.Event.CREATED, function (event) {
             if (event.layerType === 'pridefulenemy') {
-                let mapObjectGroup = self.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                let mapObjectGroup = self.mapObjectGroupManager.getEnemyMapObjectGroup();
                 let pridefulEnemy = mapObjectGroup.getFreePridefulEnemy();
                 // Place the prideful enemy at the correct position
                 pridefulEnemy.setAssignedLocation(event.layer.getLatLng().lat, event.layer.getLatLng().lng, getState().getCurrentFloor().id);
@@ -541,7 +541,7 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         /** @type KillZoneMapObjectGroup */
-        let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.mapObjectGroupManager.getKillZoneMapObjectGroup();
 
         let enemy = enemyClickedEvent.context;
         let currentMapState = this.getMapState();
@@ -615,7 +615,7 @@ class DungeonMap extends Signalable {
         let enemyPack = enemyPackClickedEvent.context;
         let clickEvent = enemyPackClickedEvent.data.clickEvent;
 
-        let enemyMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         // Find the first visible enemy in the pack to act as a delegate for all click logic
         let representativeEnemy = null;
