@@ -31,7 +31,7 @@ class NpcChangedHandler extends MessageHandler {
         // Redraw all enemies that have this npc so that we're up-to-date. An enemy may still be
         // holding the npc's old id in memory if it was just renamed (the DB rows were already
         // remapped server-side, but connected clients were never told).
-        let enemyMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.echo.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         for (let key in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[key];
             if (enemy.npc_id === e.model.id || (e.old_npc_id !== null && e.old_npc_id !== undefined && enemy.npc_id === e.old_npc_id)) {

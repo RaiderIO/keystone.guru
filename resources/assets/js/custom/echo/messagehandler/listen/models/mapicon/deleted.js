@@ -15,7 +15,7 @@ class MapIconDeletedHandler extends ModelDeletedHandler {
 
         if (shouldHandle) {
 
-            let mapIconMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
+            let mapIconMapObjectGroup = this.echo.map.mapObjectGroupManager.getMapIconMapObjectGroup();
 
             let mapObject = mapIconMapObjectGroup.findMapObjectById(e.model_id);
             if (mapObject !== null) {

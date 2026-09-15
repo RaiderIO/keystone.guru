@@ -21,7 +21,7 @@ class PathChangedHandler extends ModelChangedHandler {
         console.log(`PathChangedHandler::onReceive:`, shouldHandle, e);
         if (shouldHandle) {
             let self = this;
-            let pathMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
+            let pathMapObjectGroup = this.echo.map.mapObjectGroupManager.getPathMapObjectGroup();
 
             let requestId = (this._latestRequestIdByModelId[e.model.id] || 0) + 1;
             this._latestRequestIdByModelId[e.model.id] = requestId;

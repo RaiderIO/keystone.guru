@@ -21,7 +21,7 @@ class ArrowChangedHandler extends ModelChangedHandler {
         console.log(`ArrowChangedHandler::onReceive:`, shouldHandle, e);
         if (shouldHandle) {
             let self = this;
-            let arrowMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ARROW);
+            let arrowMapObjectGroup = this.echo.map.mapObjectGroupManager.getArrowMapObjectGroup();
 
             let requestId = (this._latestRequestIdByModelId[e.model.id] || 0) + 1;
             this._latestRequestIdByModelId[e.model.id] = requestId;
