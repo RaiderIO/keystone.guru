@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\Feature\Feature;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
@@ -75,6 +76,7 @@ use Override;
  * @property EloquentCollection<int, UserIpAddress>          $ipAddresses
  * @property EloquentCollection<int, UserSocialLink>         $socialLinks
  * @property EloquentCollection<int, UserPinnedDungeonRoute> $pinnedDungeonRoutes
+ * @property EloquentCollection<int, DungeonRouteCollection> $dungeonRouteCollections
  *
  * @mixin Eloquent
  */
@@ -248,6 +250,12 @@ class User extends Authenticatable implements LaratrustUser
     public function pinnedDungeonRoutes(): HasMany
     {
         return $this->hasMany(UserPinnedDungeonRoute::class)->orderBy('order');
+    }
+
+    /** @return HasMany<DungeonRouteCollection, $this> */
+    public function dungeonRouteCollections(): HasMany
+    {
+        return $this->hasMany(DungeonRouteCollection::class)->orderBy('name');
     }
 
     /**
@@ -429,6 +437,10 @@ class User extends Authenticatable implements LaratrustUser
             foreach ($user->dungeonRoutes()->lazyById() as $dungeonRoute) {
                 $dungeonRoute->delete();
             }
+
+            // Deleted per-model rather than mass-deleted, so DungeonRouteCollection's own
+            // deleting() hook fires and cleans up its dungeonRouteCollectionRoutes rows too
+            $user->dungeonRouteCollections->each(static fn(DungeonRouteCollection $dungeonRouteCollection) => $dungeonRouteCollection->delete());
 
             // UserReport has no deleting hook, so a mass delete is fine here
             $user->reports()->delete();
