@@ -174,7 +174,19 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
         try {
             $this->log->touchRoutesForTeamStart($teamId);
 
-            $updatedRouteCount = DungeonRoute::where('team_id', $teamId)->update(['updated_at' => now()]);
+            $now = now()->toDateTimeString();
+
+            // A thumbnail that was fresh before the touch stays fresh, so the touch does not queue a re-render
+            // of every route of the team. MySQL assigns a single-table UPDATE left to right, so the IF() must
+            // come before updated_at to still compare against its old value. toBase() stops Eloquent from
+            // prepending its own updated_at assignment.
+            $updatedRouteCount = DungeonRoute::query()
+                ->where('team_id', $teamId)
+                ->toBase()
+                ->update([
+                    'thumbnail_updated_at' => DB::raw(sprintf("IF(thumbnail_updated_at >= updated_at, '%s', thumbnail_updated_at)", $now)),
+                    'updated_at'           => $now,
+                ]);
         } finally {
             $this->log->touchRoutesForTeamEnd($teamId, $updatedRouteCount);
         }

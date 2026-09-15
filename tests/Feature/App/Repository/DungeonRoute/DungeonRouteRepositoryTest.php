@@ -9,6 +9,7 @@ use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Attributes\SlowTest;
@@ -269,5 +270,98 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
                 sprintf('Mismatch for dungeon route %d', $dungeonRoute->id),
             );
         });
+    }
+
+    #[Test]
+    #[DataProvider('getDungeonRoutesWithExpiredThumbnails_scheduledSweepProvider')]
+    public function getDungeonRoutesWithExpiredThumbnails_givenScheduledSweep_returnsOnlyRecentlyEditedStaleRoutes(
+        int  $updatedMinutesAgo,
+        int  $thumbnailUpdatedMinutesAgo,
+        ?int $queuedMinutesAgo,
+        int  $popularity,
+        bool $expectedPicked,
+    ): void {
+        // Arrange
+        config(['keystoneguru.thumbnail.refresh_outdated_count' => 100000]);
+        $dungeonRoute = null;
+
+        try {
+            $dungeonRoute = $this->createRouteWithThumbnailState(
+                $updatedMinutesAgo,
+                $thumbnailUpdatedMinutesAgo,
+                $queuedMinutesAgo,
+                $popularity,
+            );
+
+            // Act
+            $result = $this->repository->getDungeonRoutesWithExpiredThumbnails();
+
+            // Assert
+            $this->assertSame($expectedPicked, $result->pluck('id')->contains($dungeonRoute->id));
+        } finally {
+            $dungeonRoute?->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{int, int, int|null, int, bool}>
+     */
+    public static function getDungeonRoutesWithExpiredThumbnails_scheduledSweepProvider(): array
+    {
+        $hour = 60;
+        $day  = 24 * $hour;
+
+        return [
+            'popular route edited an hour ago'                   => [$hour, 2 * $day, null, 10, true],
+            'popular route edited beyond the recent-edit window' => [8 * $day, 30 * $day, null, 10, false],
+            'popular route edited within the debounce'           => [5, 2 * $day, null, 10, false],
+            'unpopular route edited an hour ago'                 => [$hour, 2 * $day, null, 0, false],
+            'route queued within the requeue window'             => [2 * $day, 3 * $day, 13 * $hour, 10, false],
+            'route queued beyond the requeue window'             => [5 * $day, 6 * $day, 73 * $hour, 10, true],
+            'route whose thumbnail is newer than its last edit'  => [2 * $day, $day, null, 10, false],
+        ];
+    }
+
+    #[Test]
+    public function getDungeonRoutesWithExpiredThumbnails_givenOldUnpopularStaleRouteInList_returnsRoute(): void
+    {
+        // Arrange
+        $dungeonRoute = null;
+
+        try {
+            $dungeonRoute = $this->createRouteWithThumbnailState(30 * 24 * 60, 60 * 24 * 60, null, 0);
+
+            // Act
+            $result = $this->repository->getDungeonRoutesWithExpiredThumbnails(collect([$dungeonRoute]));
+
+            // Assert
+            $this->assertTrue($result->pluck('id')->contains($dungeonRoute->id));
+        } finally {
+            $dungeonRoute?->delete();
+        }
+    }
+
+    private function createRouteWithThumbnailState(
+        int  $updatedMinutesAgo,
+        int  $thumbnailUpdatedMinutesAgo,
+        ?int $queuedMinutesAgo,
+        int  $popularity,
+    ): DungeonRoute {
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'author_id'  => 1,
+            'expires_at' => null,
+        ]);
+
+        // Written through the query builder so Eloquent does not overwrite updated_at
+        DungeonRoute::query()->whereKey($dungeonRoute->id)->toBase()->update([
+            'popularity'                  => $popularity,
+            'updated_at'                  => now()->subMinutes($updatedMinutesAgo)->toDateTimeString(),
+            'thumbnail_updated_at'        => now()->subMinutes($thumbnailUpdatedMinutesAgo)->toDateTimeString(),
+            'thumbnail_refresh_queued_at' => $queuedMinutesAgo === null
+                ? '1970-01-01 00:00:00'
+                : now()->subMinutes($queuedMinutesAgo)->toDateTimeString(),
+        ]);
+
+        return $dungeonRoute->refresh();
     }
 }
