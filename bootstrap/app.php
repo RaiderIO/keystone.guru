@@ -13,6 +13,7 @@ use App\Http\Middleware\OnlyAjax;
 use App\Http\Middleware\PoweredBySwoole;
 use App\Http\Middleware\ReadOnlyMode;
 use App\Http\Middleware\ResetsMapFacadeStyleOverride;
+use App\Http\Middleware\StartSessionUnlessThrowaway;
 use App\Http\Middleware\TracksUserIpAddress;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\ViewCacheBuster;
@@ -25,6 +26,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Session\Middleware\StartSession;
 use Jenssegers\Agent\AgentServiceProvider;
 use Laratrust\LaratrustServiceProvider;
 use Laravel\Tinker\TinkerServiceProvider;
@@ -95,6 +97,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->prependToPriorityList(before: ApiAuthentication::class, prepend: ApiAuthenticationThrottle::class);
 
         $middleware->replace(\Illuminate\Http\Middleware\TrustProxies::class, TrustProxies::class);
+
+        $middleware->web(replace: [StartSession::class => StartSessionUnlessThrowaway::class]);
 
         $middleware->alias([
             'ajax'                      => OnlyAjax::class,
