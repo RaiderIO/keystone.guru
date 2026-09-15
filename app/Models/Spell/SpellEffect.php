@@ -2,8 +2,8 @@
 
 namespace App\Models\Spell;
 
-use App\Models\CacheModel;
 use App\Models\Traits\SeederModel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property Spell $spell
  */
-class SpellEffect extends CacheModel
+class SpellEffect extends Model
 {
     use SeederModel;
 

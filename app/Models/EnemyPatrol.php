@@ -11,6 +11,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasPolyline;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Override;
@@ -33,7 +34,7 @@ use Override;
  *
  * @mixin Eloquent
  */
-class EnemyPatrol extends CacheModel implements HasPolylineInterface, MappingModelCloneableInterface, MappingModelInterface
+class EnemyPatrol extends Model implements HasPolylineInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use HasPolyline;
     use SeederModel;

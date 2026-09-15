@@ -2,12 +2,12 @@
 
 namespace App\Models\Timewalking;
 
-use App\Models\CacheModel;
 use App\Models\Expansion;
 use App\Models\Season;
 use App\Models\Traits\HasStart;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
@@ -24,7 +24,7 @@ use Illuminate\Support\Carbon;
  *
  * @mixin Eloquent
  */
-class TimewalkingEvent extends CacheModel
+class TimewalkingEvent extends Model
 {
     use HasStart;
     use SeederModel;

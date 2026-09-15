@@ -7,6 +7,7 @@ use App\Models\DungeonRoute\DungeonRoutePlayerRace;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Override;
@@ -29,7 +30,7 @@ use Str;
  *
  * @mixin Eloquent
  */
-class CharacterClass extends CacheModel
+class CharacterClass extends Model
 {
     use SeederModel;
 

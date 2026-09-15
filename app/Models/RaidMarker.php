@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $id
@@ -11,7 +12,7 @@ use Eloquent;
  *
  * @mixin Eloquent
  */
-class RaidMarker extends CacheModel
+class RaidMarker extends Model
 {
     use SeederModel;
 

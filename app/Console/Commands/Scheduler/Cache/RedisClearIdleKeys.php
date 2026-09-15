@@ -19,7 +19,7 @@ class RedisClearIdleKeys extends SchedulerCommand
      *
      * @var string
      */
-    protected $description = 'Clears presence channel keys in redis that have not been accessed in 24 hours';
+    protected $description = 'Clears idle keys in redis';
 
     /**
      * Execute the console command.

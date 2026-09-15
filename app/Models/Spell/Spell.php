@@ -2,7 +2,6 @@
 
 namespace App\Models\Spell;
 
-use App\Models\CacheModel;
 use App\Models\Characteristic;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Dungeon;
@@ -18,6 +17,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -67,7 +67,7 @@ use Str;
  *
  * @mixin Eloquent
  */
-class Spell extends CacheModel implements MappingModelInterface
+class Spell extends Model implements MappingModelInterface
 {
     use SeederModel;
     use SpellConstants;

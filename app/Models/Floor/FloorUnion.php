@@ -2,7 +2,6 @@
 
 namespace App\Models\Floor;
 
-use App\Models\CacheModel;
 use App\Models\Interfaces\HasLatLngInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
@@ -12,6 +11,7 @@ use App\Models\Traits\HasLatLng;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -32,7 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin Eloquent
  */
-class FloorUnion extends CacheModel implements HasLatLngInterface, MappingModelCloneableInterface, MappingModelInterface
+class FloorUnion extends Model implements HasLatLngInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;

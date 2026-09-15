@@ -2,13 +2,13 @@
 
 namespace App\Models\Spell;
 
-use App\Models\CacheModel;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Traits\SeederModel;
 use App\Service\Spell\Description\Dtos\SpellDescriptionValueKind;
 use Database\Factories\Spell\SpellTuningChangeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
@@ -40,7 +40,7 @@ use Illuminate\Support\Carbon;
  *
  * @mixin Eloquent
  */
-class SpellTuningChange extends CacheModel
+class SpellTuningChange extends Model
 {
     /** @use HasFactory<SpellTuningChangeFactory> */
     use HasFactory;

@@ -3,9 +3,9 @@
 namespace App\Models\AffixGroup;
 
 use App\Models\Affix;
-use App\Models\CacheModel;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * @mixin Eloquent
  */
-class AffixGroupCoupling extends CacheModel
+class AffixGroupCoupling extends Model
 {
     use SeederModel;
 

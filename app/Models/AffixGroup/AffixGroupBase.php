@@ -3,9 +3,9 @@
 namespace App\Models\AffixGroup;
 
 use App\Models\Affix;
-use App\Models\CacheModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin Eloquent
  */
-abstract class AffixGroupBase extends CacheModel
+abstract class AffixGroupBase extends Model
 {
     public $timestamps = false;
 
