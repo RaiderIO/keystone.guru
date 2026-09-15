@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f69ef3ba282fcc5391b5660db78158a",
+    "content-hash": "8743f9e002d98e680a90fe129d81c142",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -2068,85 +2068,6 @@
                 }
             ],
             "time": "2025-12-03T09:33:47+00:00"
-        },
-        {
-            "name": "genealabs/laravel-model-caching",
-            "version": "13.1.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mike-bronner/laravel-model-caching.git",
-                "reference": "d234967c6848e32059ddd2e44964f48651a12573"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mike-bronner/laravel-model-caching/zipball/d234967c6848e32059ddd2e44964f48651a12573",
-                "reference": "d234967c6848e32059ddd2e44964f48651a12573",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/cache": "^11.0|^12.0|^13.0",
-                "illuminate/config": "^11.0|^12.0|^13.0",
-                "illuminate/console": "^11.0|^12.0|^13.0",
-                "illuminate/container": "^11.0|^12.0|^13.0",
-                "illuminate/database": "^11.0|^12.0|^13.0",
-                "illuminate/http": "^11.0|^12.0|^13.0",
-                "illuminate/support": "^11.0|^12.0|^13.0",
-                "mikebronner/laravel-pivot-events": "*",
-                "php": ">=8.2"
-            },
-            "replace": {
-                "mikebronner/laravel-model-caching": "self.version"
-            },
-            "require-dev": {
-                "aws/aws-sdk-php": "^3.322.9",
-                "doctrine/dbal": "^3.3|^4.2",
-                "fakerphp/faker": "^1.11",
-                "larastan/larastan": "^2.0|^3.0",
-                "laravel/boost": "^2.0",
-                "laravel/pint": "^1.27",
-                "mikebronner/development-settings": "^0.1.15",
-                "orchestra/testbench": "^9.0|^10.0|^11.0",
-                "pestphp/pest": "^3.0|^4.0",
-                "pestphp/pest-plugin-laravel": "^3.0|^4.0",
-                "phpunit/phpunit": "^10.5|^11.5|^12.5",
-                "predis/predis": "^2.0|^3.0",
-                "slevomat/coding-standard": "^7.0|^8.14",
-                "squizlabs/php_codesniffer": "^3.6|^4.0",
-                "symfony/thanks": "^1.2"
-            },
-            "suggest": {
-                "aws/aws-sdk-php": "Required for DynamoDB cache store support (^3.322)"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "GeneaLabs\\LaravelModelCaching\\Providers\\Service"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GeneaLabs\\LaravelModelCaching\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mike Bronner",
-                    "email": "hello@genealabs.com"
-                }
-            ],
-            "description": "Automatic caching for Eloquent models.",
-            "support": {
-                "issues": "https://github.com/mike-bronner/laravel-model-caching/issues",
-                "source": "https://github.com/mike-bronner/laravel-model-caching/tree/13.1.6"
-            },
-            "abandoned": "mike-bronner/laravel-model-caching",
-            "time": "2026-07-07T23:40:51+00:00"
         },
         {
             "name": "graham-campbell/bounded-cache",
@@ -5206,62 +5127,6 @@
                 }
             ],
             "time": "2026-03-27T08:19:49+00:00"
-        },
-        {
-            "name": "mikebronner/laravel-pivot-events",
-            "version": "12.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mikebronner/laravel-pivot-events.git",
-                "reference": "aeeceb7672c2ac359472fedba75349710572e72f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mikebronner/laravel-pivot-events/zipball/aeeceb7672c2ac359472fedba75349710572e72f",
-                "reference": "aeeceb7672c2ac359472fedba75349710572e72f",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/database": "^8.0|^9.0|^10.0|^11.0|^12.0",
-                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^9.0|^10.0",
-                "phpunit/phpunit": "^10.5|^11.0",
-                "symfony/thanks": "^1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "GeneaLabs\\LaravelPivotEvents\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mike Bronner",
-                    "email": "hello@genealabs.com",
-                    "homepage": "https://genealabs.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "This package introduces new eloquent events for sync(), attach(), detach() or updateExistingPivot() methods on BelongsToMany relation.",
-            "homepage": "https://github.com/mikebronner/laravel-pivot-events",
-            "keywords": [
-                "eloquent events",
-                "eloquent extra events",
-                "laravel BelongsToMany events",
-                "laravel pivot events",
-                "laravel sync events"
-            ],
-            "support": {
-                "issues": "https://github.com/mikebronner/laravel-pivot-events/issues",
-                "source": "https://github.com/mikebronner/laravel-pivot-events"
-            },
-            "time": "2025-02-26T23:42:30+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",

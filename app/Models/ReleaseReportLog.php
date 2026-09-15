@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $id
@@ -13,7 +14,7 @@ use Eloquent;
  *
  * @mixin Eloquent
  */
-class ReleaseReportLog extends CacheModel
+class ReleaseReportLog extends Model
 {
     protected $fillable = [
         'version',

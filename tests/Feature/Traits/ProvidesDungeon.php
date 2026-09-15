@@ -76,13 +76,7 @@ trait ProvidesDungeon
     ): array {
         $requirements = [];
 
-        // The candidate query is never cached: `Dungeon` is a CacheModel, model caching is on in CI
-        // but off locally, and a cached list would go stale for constraints that depend on rows
-        // other tests create (e.g. whereDoesntHave('dungeonRoutes')) - writing a DungeonRoute does
-        // not flush the Dungeon cache. The per-candidate requirement checks below query Enemy /
-        // EnemyPack / Floor with caching left on, which is safe because those models' own writes
-        // invalidate their tags.
-        $query = Dungeon::query()->disableCache();
+        $query = Dungeon::query();
 
         // A dungeon without any mapping version can never resolve a current one
         $query->whereHas('mappingVersions');
@@ -333,7 +327,7 @@ trait ProvidesDungeon
      */
     private function reloadDungeon(Dungeon $dungeon): Dungeon
     {
-        return Dungeon::query()->disableCache()->findOrFail($dungeon->id);
+        return Dungeon::query()->findOrFail($dungeon->id);
     }
 
     /**

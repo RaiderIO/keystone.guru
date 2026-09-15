@@ -35,10 +35,10 @@ final class MDTExportStringServiceQueryCountTest extends MDTImportStringServiceT
                 }
             });
 
-            // Act - CI runs with the model cache on, which would answer these queries without reaching the database
-            $encodedString = app('model-cache')->runDisabled(fn() => app()->make(MDTExportStringServiceInterface::class)
+            // Act
+            $encodedString = app()->make(MDTExportStringServiceInterface::class)
                 ->setDungeonRoute($dungeonRoute)
-                ->getEncodedString(new Collection(), false));
+                ->getEncodedString(new Collection(), false);
 
             // Assert
             $this->assertSame(1, $killZoneEnemyQueries);
@@ -68,9 +68,9 @@ final class MDTExportStringServiceQueryCountTest extends MDTImportStringServiceT
             });
 
             // Act
-            $encodedString = app('model-cache')->runDisabled(static fn() => app()->make(MDTExportStringServiceInterface::class)
+            $encodedString = app()->make(MDTExportStringServiceInterface::class)
                 ->setDungeonRoute($freshDungeonRoute)
-                ->getEncodedString(new Collection()));
+                ->getEncodedString(new Collection());
 
             // Assert
             $this->assertSame(0, $queries);

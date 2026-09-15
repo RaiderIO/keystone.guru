@@ -2,10 +2,10 @@
 
 namespace App\Models\Npc;
 
-use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class NpcDungeon extends CacheModel
+class NpcDungeon extends Model
 {
     use SeederModel;
 

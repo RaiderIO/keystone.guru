@@ -173,8 +173,8 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
             }
         });
 
-        // Act - CI runs with the model cache on, which would answer these queries without reaching the database
-        $response = app('model-cache')->runDisabled(fn() => $this->get($url));
+        // Act
+        $response = $this->get($url);
 
         // Assert
         $response->assertOk();

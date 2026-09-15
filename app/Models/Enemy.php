@@ -14,6 +14,7 @@ use App\Models\Traits\Reportable;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -59,7 +60,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin Eloquent
  */
-class Enemy extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface, HasLatLngInterface
+class Enemy extends Model implements MappingModelCloneableInterface, MappingModelInterface, HasLatLngInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;

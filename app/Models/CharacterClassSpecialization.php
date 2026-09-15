@@ -6,6 +6,7 @@ use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Traits\HasCombatLogCriterion;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Str;
 
@@ -22,7 +23,7 @@ use Str;
  *
  * @mixin Eloquent
  */
-class CharacterClassSpecialization extends CacheModel implements CombatLogCriterionModelInterface
+class CharacterClassSpecialization extends Model implements CombatLogCriterionModelInterface
 {
     use HasCombatLogCriterion;
     use SeederModel;

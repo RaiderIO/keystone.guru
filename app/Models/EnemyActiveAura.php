@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Spell\Spell;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class EnemyActiveAura extends CacheModel
+class EnemyActiveAura extends Model
 {
     use SeederModel;
 

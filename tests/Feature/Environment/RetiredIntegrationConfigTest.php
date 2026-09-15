@@ -12,7 +12,8 @@ use Tests\TestCase;
  *
  * InfluxDB was replaced by the telemetry_metrics table in #4075, the Reddit integration was never wired up in
  * config/ or app/, and GITHUB_DOCKER_ACCESS_TOKEN is a registry credential that the running application never
- * reads. Each one was a variable a developer had to keep populated for no benefit.
+ * reads. Each one was a variable a developer had to keep populated for no benefit. The model cache
+ * (genealabs/laravel-model-caching) is retired too, together with its Redis connection and cache store.
  */
 #[Group('Environment')]
 final class RetiredIntegrationConfigTest extends TestCase
@@ -34,7 +35,7 @@ final class RetiredIntegrationConfigTest extends TestCase
     public function exampleEnvironmentFile_givenRetiredIntegrations_declaresNoneOfTheirVariables(string $fileName): void
     {
         // Arrange
-        $retiredPrefixes = ['INFLUXDB_', 'REDDIT_', 'GITHUB_DOCKER_ACCESS_TOKEN'];
+        $retiredPrefixes = ['INFLUXDB_', 'REDDIT_', 'GITHUB_DOCKER_ACCESS_TOKEN', 'MODEL_CACHE_', 'REDIS_DB_MODEL_CACHE'];
         $contents        = file_get_contents(base_path($fileName));
 
         // Act
@@ -64,5 +65,25 @@ final class RetiredIntegrationConfigTest extends TestCase
         // Assert
         $this->assertFalse($configExists, 'config/influxdb.php was retired along with the InfluxDB sink');
         $this->assertArrayNotHasKey('influxdb', $keystoneGuru);
+    }
+
+    #[Test]
+    public function modelCacheConfiguration_givenThePackageRemoval_isAbsent(): void
+    {
+        // Arrange
+
+        // Act
+        $configExists     = file_exists(config_path('laravel-model-caching.php'));
+        $redisConnections = config('database.redis');
+        $cacheStores      = config('cache.stores');
+        $traitExists      = trait_exists('GeneaLabs\\LaravelModelCaching\\Traits\\Cachable');
+        $cacheModelExists = class_exists('App\\Models\\CacheModel');
+
+        // Assert
+        $this->assertFalse($configExists, 'config/laravel-model-caching.php was retired along with the package');
+        $this->assertArrayNotHasKey('model_cache', $redisConnections);
+        $this->assertArrayNotHasKey('redis_model_cache', $cacheStores);
+        $this->assertFalse($traitExists, 'genealabs/laravel-model-caching must no longer be installed');
+        $this->assertFalse($cacheModelExists, 'App\\Models\\CacheModel was retired along with the package');
     }
 }

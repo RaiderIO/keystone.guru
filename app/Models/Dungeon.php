@@ -80,7 +80,7 @@ use Override;
  *
  * @mixin Eloquent
  */
-class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, MappingModelInterface, TracksPageViewInterface
+class Dungeon extends Model implements CombatLogCriterionModelInterface, MappingModelInterface, TracksPageViewInterface
 {
     use HasCombatLogCriterion;
 

@@ -127,7 +127,6 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
 
             if ($npcEnemyForcesIds !== []) {
                 NpcEnemyForces::query()->whereKey($npcEnemyForcesIds)->delete();
-                new NpcEnemyForces()->flushCache();
             }
         }
     }
@@ -210,12 +209,10 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
 
             if ($enemyIds !== []) {
                 Enemy::query()->whereKey($enemyIds)->delete();
-                new Enemy()->flushCache();
             }
 
             if ($npcEnemyForcesIds !== []) {
                 NpcEnemyForces::query()->whereKey($npcEnemyForcesIds)->delete();
-                new NpcEnemyForces()->flushCache();
             }
         }
     }

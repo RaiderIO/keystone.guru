@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
@@ -14,7 +15,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class CharacterRaceClassCoupling extends CacheModel
+class CharacterRaceClassCoupling extends Model
 {
     use SeederModel;
 

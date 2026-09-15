@@ -2,9 +2,9 @@
 
 namespace App\Models\Floor;
 
-use App\Models\CacheModel;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $id
@@ -14,7 +14,7 @@ use Eloquent;
  *
  * @mixin Eloquent
  */
-class FloorCoupling extends CacheModel
+class FloorCoupling extends Model
 {
     use SeederModel;
 

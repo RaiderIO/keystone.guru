@@ -52,7 +52,6 @@ final class APICombatLogControllerCombatLogRouteEnemyFailuresTest extends APICom
         } finally {
             if (!empty($this->createdNpcEnemyForcesIds)) {
                 NpcEnemyForces::query()->whereKey($this->createdNpcEnemyForcesIds)->delete();
-                new NpcEnemyForces()->flushCache();
             }
         }
     }
@@ -90,7 +89,5 @@ final class APICombatLogControllerCombatLogRouteEnemyFailuresTest extends APICom
                 'enemy_forces'       => 10,
             ])->id;
         }
-
-        new NpcEnemyForces()->flushCache();
     }
 }

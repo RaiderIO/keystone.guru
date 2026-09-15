@@ -6,6 +6,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Str;
 
@@ -23,7 +24,7 @@ use Str;
  *
  * @mixin Eloquent
  */
-class Affix extends CacheModel
+class Affix extends Model
 {
     use SeederModel;
 

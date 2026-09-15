@@ -70,8 +70,7 @@ if (!$debug) {
 }
 
 // Ensure redis remains healthy
-$commands[] = Schedule::command('redis:clearidlekeys 900')->everyFifteenMinutes();
-$commands[] = Schedule::command('modelCache:clear')->daily();
+$commands[] = Schedule::command('redis:clearidlekeys')->everyFifteenMinutes();
 
 // Aggregate all metrics so they're nice and snappy to load
 $commands[] = Schedule::command('metric:aggregate')->everyFiveMinutes();

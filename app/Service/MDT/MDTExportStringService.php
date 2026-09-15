@@ -473,13 +473,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         return $this->rememberLocal(
             sprintf('mdt_export_string:%s_%s', $this->dungeonRoute->id, $this->dungeonRoute->updated_at->timestamp),
             config('keystoneguru.cache.mdt_export_strings.ttl'),
-
-            // #2945 I just had a weird issue where copying an MDT string from one route, would actually generate a string
-            // based on another route. The route title was extracted correctly, but the pulls/map icons were from
-            // another route entirely. Clearing the caches solved this issue. I'm disabling the model cache for this operation
-            // as a result.
-
-            fn() => app('model-cache')->runDisabled(function () use ($warnings) {
+            function () use ($warnings) {
                 //        $lua = $this->_getLua();
 
                 $this->dungeonRoute->loadMissing([
@@ -570,7 +564,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                         throw $exception;
                     }
                 }
-            }),
+            },
             $useCache,
         );
     }

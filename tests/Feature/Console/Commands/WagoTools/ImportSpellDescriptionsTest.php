@@ -85,7 +85,6 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
             );
         } finally {
             $spell?->delete();
-            new Spell()->flushCache();
             $this->clearImportState();
             $this->removeDb2Tables();
         }
@@ -123,9 +122,7 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
             $this->assertSame(12.0, $effect->max_radius);
         } finally {
             SpellEffect::query()->where('spell_id', self::SPELL_ID)->delete();
-            new SpellEffect()->flushCache();
             $spell?->delete();
-            new Spell()->flushCache();
             $this->clearImportState();
             $this->removeDb2Tables();
         }
@@ -157,7 +154,6 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
         } finally {
             $spell?->delete();
             $describedSpell?->delete();
-            new Spell()->flushCache();
             $this->clearImportState();
             $this->removeDb2Tables();
         }
@@ -184,7 +180,6 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
             $this->assertSame('A description of a previous game build.', $spell->description);
         } finally {
             $spell?->delete();
-            new Spell()->flushCache();
             $this->clearImportState();
             $this->removeDb2Tables();
         }
@@ -218,7 +213,6 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
         } finally {
             $classicSpell?->delete();
             $describedSpell?->delete();
-            new Spell()->flushCache();
             $this->clearImportState();
             $this->removeDb2Tables();
         }
@@ -248,7 +242,6 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
         } finally {
             $unknownSpell?->delete();
             $describedSpell?->delete();
-            new Spell()->flushCache();
             $this->clearImportState();
             $this->removeDb2Tables();
         }

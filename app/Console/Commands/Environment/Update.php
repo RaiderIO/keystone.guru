@@ -69,9 +69,6 @@ class Update extends Command
 
         $this->call('migrate', Migrate::COMBAT_LOG_MIGRATE_OPTIONS);
 
-        // Drop all caches for all models while we re-seed
-        $this->call('modelCache:clear');
-
         $this->call('db:seed', [
             '--database' => 'migrate',
             '--force'    => true,

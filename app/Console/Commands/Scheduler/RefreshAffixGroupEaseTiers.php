@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands\Scheduler;
 
-use App\Models\AffixGroup\AffixGroupEaseTier;
-use App\Models\AffixGroup\AffixGroupEaseTierPull;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\AffixGroup\ArchonApiServiceInterface;
 use App\Service\AffixGroup\Exceptions\InvalidResponseException;
@@ -49,10 +47,6 @@ class RefreshAffixGroupEaseTiers extends SchedulerCommand
             }
 
             $affixGroupEaseTierService->parseTierList($tierLists);
-
-            // Clear model cache so that it will be refreshed upon next request
-            $this->call('modelCache:clear', ['--model' => AffixGroupEaseTier::class]);
-            $this->call('modelCache:clear', ['--model' => AffixGroupEaseTierPull::class]);
 
             return 0;
         });

@@ -148,7 +148,6 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 
             if ($npcEnemyForcesId !== null) {
                 NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
-                new NpcEnemyForces()->flushCache();
             }
         }
     }
@@ -313,7 +312,6 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 
             if ($npcEnemyForcesId !== null) {
                 NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
-                new NpcEnemyForces()->flushCache();
             }
         }
     }

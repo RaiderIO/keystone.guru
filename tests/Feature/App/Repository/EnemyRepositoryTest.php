@@ -144,7 +144,6 @@ final class EnemyRepositoryTest extends PublicTestCase
             $this->assertSame($expectedPatrolIds, $orderedPatrolIds, 'Enemies were not ordered ascending by enemy_patrol_id.');
         } finally {
             Enemy::query()->whereKey(collect($createdEnemies)->pluck('id')->all())->delete();
-            (new Enemy())->flushCache();
         }
     }
 }

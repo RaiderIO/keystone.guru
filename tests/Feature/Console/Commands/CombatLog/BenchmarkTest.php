@@ -311,7 +311,6 @@ final class BenchmarkTest extends PublicTestCase
     {
         NpcDungeon::query()->where('npc_id', $npcId)->delete();
         Npc::query()->where('id', $npcId)->delete();
-        new Npc()->flushCache();
 
         CombatLogSpellPropertyObservation::query()->where('combat_log_path', $logPath)->delete();
     }

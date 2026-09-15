@@ -73,8 +73,6 @@ class SpellDamageCalibrationService implements SpellDamageCalibrationServiceInte
                     $onProgress($handled, $spells->count());
                 }
             }
-
-            new Spell()->flushCache();
         } finally {
             $this->log->calibrateEnd();
         }

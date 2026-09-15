@@ -53,7 +53,6 @@ final class AnalyzeEnemyFailuresCommandTest extends PublicTestCase
 
             if ($this->createdNpcEnemyForcesIds !== []) {
                 NpcEnemyForces::query()->whereKey($this->createdNpcEnemyForcesIds)->delete();
-                new NpcEnemyForces()->flushCache();
             }
         } finally {
             parent::tearDown();

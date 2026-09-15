@@ -41,8 +41,6 @@ final class SeederModelTest extends PublicTestCase
             $this->assertNull(SeasonDungeon::query()->find($seasonDungeon->id));
         } finally {
             SeasonDungeon::query()->whereKey($seasonDungeon?->id)->delete();
-
-            new SeasonDungeon()->flushCache();
         }
     }
 }

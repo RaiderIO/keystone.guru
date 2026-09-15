@@ -31,8 +31,6 @@ class DropCaches implements ShouldQueue
 
         $cacheService->dropCaches();
 
-        Artisan::call('modelCache:clear');
-
         Artisan::call('keystoneguru:view', ['operation' => 'cache']);
 
         Log::channel('scheduler')->info('Finished dropping caches');

@@ -2,7 +2,6 @@
 
 namespace App\Models\GameVersion;
 
-use App\Models\CacheModel;
 use App\Models\Expansion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\SeederModel;
@@ -11,6 +10,7 @@ use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
@@ -32,7 +32,7 @@ use Override;
  *
  * @method static Builder<GameVersion> active()
  */
-class GameVersion extends CacheModel
+class GameVersion extends Model
 {
     use SeederModel;
 

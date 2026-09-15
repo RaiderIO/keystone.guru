@@ -13,7 +13,7 @@ class RedisSize extends Measurement
      */
     public function getDataPoints(): array
     {
-        // Several of the configured connections (default/model_cache/cache/session) may point at the
+        // Several of the configured connections (default/cache/session) may point at the
         // same logical Redis database - dedupe by database index so each one is only sampled once,
         // instead of recording identical DBSIZE values under multiple tags.
         $connectionNameByDatabase = [];

@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
-use Artisan;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -24,9 +23,6 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        // Refresh the mapping versions so that we're sure we get the latest info
-        Artisan::call('modelCache:clear', ['--model' => MappingVersion::class]);
-
         if (MappingVersion::count() !== 0) {
             $this->command->comment('NOT adding Mapping Versions - initial seed has already happened');
 

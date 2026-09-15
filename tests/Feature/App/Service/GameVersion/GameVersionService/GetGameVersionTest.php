@@ -97,8 +97,7 @@ final class GetGameVersionTest extends PublicTestCase
         DB::enableQueryLog();
 
         try {
-            // CI runs with the model cache on, which would answer these queries without reaching the database.
-            app('model-cache')->runDisabled($callback);
+            $callback();
         } finally {
             DB::disableQueryLog();
         }

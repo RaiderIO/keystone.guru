@@ -2,10 +2,10 @@
 
 namespace App\Models\Npc;
 
-use App\Models\CacheModel;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin Eloquent
  */
-class NpcType extends CacheModel
+class NpcType extends Model
 {
     use SeederModel;
 

@@ -43,7 +43,7 @@ trait CreatesDungeon
 
         $key = sprintf('test_dungeon_%s', uniqid());
         // Combat logs resolve a dungeon by map id, so it must not collide with a seeded one
-        $mapId = max(9_000_000, (int)Dungeon::query()->disableCache()->max('map_id') + 1);
+        $mapId = max(9_000_000, (int)Dungeon::query()->max('map_id') + 1);
 
         $dungeon = Dungeon::create(array_merge([
             'expansion_id'      => Expansion::query()->where('active', 1)->firstOrFail()->id,
@@ -100,14 +100,10 @@ trait CreatesDungeon
                 $floor->delete();
             }
 
-            // Dungeon::boot() refuses `deleting`, so only the query builder can remove the row - and nothing flushes
-            // the model cache for a query builder delete
+            // Dungeon::boot() refuses `deleting`, so only the query builder can remove the row
             Dungeon::query()->whereKey($dungeon->id)->delete();
         }
 
         $this->createdDungeons = [];
-
-        new Dungeon()->flushCache();
-        new Floor()->flushCache();
     }
 }

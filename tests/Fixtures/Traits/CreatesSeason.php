@@ -83,6 +83,5 @@ trait CreatesSeason
     private function flushSeasonCachesForCreatedSeasons(): void
     {
         Cache::store('tmp_file')->flush();
-        new Season()->flushCache();
     }
 }

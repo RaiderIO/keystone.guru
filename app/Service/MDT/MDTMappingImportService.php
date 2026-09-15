@@ -719,10 +719,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         EnemyForcesCheckpoint::query()
             ->whereIn('id', $enemyForcesCheckpointsToPrune->pluck('id'))
             ->delete();
-
-        // laravel-model-caching only flushes on model events and truncate(), never on a builder delete, so the
-        // reads above would otherwise keep serving the checkpoints this just removed
-        new EnemyForcesCheckpoint()->flushCache();
     }
 
     /**

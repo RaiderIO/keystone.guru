@@ -2,10 +2,10 @@
 
 namespace App\Models\Npc;
 
-use App\Models\CacheModel;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class NpcHealth extends CacheModel
+class NpcHealth extends Model
 {
     use SeederModel;
 
