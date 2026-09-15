@@ -117,6 +117,7 @@ global.$.each = (obj, callback) => {
 };
 
 const {KillZone} = require('./killzone');
+const {fakeMapObjectGroupManager} = require('../../test/fixtures/mapObjectGroupManager');
 
 /**
  * A fake enemy collaborator. Tracks its assigned kill zone and answers the classification
@@ -205,17 +206,15 @@ function makeFakeMap(enemiesById = {}, options = {}) {
         options: {edit: false, noUI: true},
         register: () => {},
         unregister: () => {},
-        mapObjectGroupManager: {
-            getByName: (name) => {
-                if (name === MAP_OBJECT_GROUP_ENEMY) {
-                    return enemyGroup;
-                }
-                if (name === MAP_OBJECT_GROUP_KILLZONE && options.hideKillZoneGroup) {
-                    return null;
-                }
-                return genericGroup;
-            },
-        },
+        mapObjectGroupManager: fakeMapObjectGroupManager((name) => {
+            if (name === MAP_OBJECT_GROUP_ENEMY) {
+                return enemyGroup;
+            }
+            if (name === MAP_OBJECT_GROUP_KILLZONE && options.hideKillZoneGroup) {
+                return null;
+            }
+            return genericGroup;
+        }),
     };
 }
 

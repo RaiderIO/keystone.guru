@@ -159,7 +159,7 @@ class UserMousePosition extends MapObject {
         this.floor_id = message.floor_id;
 
         // Hide/show ourselves based on the received location
-        let userMousePositionMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
+        let userMousePositionMapObjectGroup = this.map.mapObjectGroupManager.getUserMousePositionMapObjectGroup();
         userMousePositionMapObjectGroup.setMapObjectVisibility(this, this.shouldBeVisible());
     }
 

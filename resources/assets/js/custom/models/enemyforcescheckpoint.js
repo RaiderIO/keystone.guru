@@ -84,7 +84,7 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
     getMapObjectGroup() {
         console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
 
-        return this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT);
+        return this.map.mapObjectGroupManager.getEnemyForcesCheckpointMapObjectGroup();
     }
 
     /**
@@ -148,7 +148,7 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
 
         let result = [];
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         // May be null in an admin setting where there's no enemies
         if (enemyMapObjectGroup === null) {
             return result;

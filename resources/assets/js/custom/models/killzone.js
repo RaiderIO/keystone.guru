@@ -74,7 +74,7 @@ class KillZone extends MapObject {
             let teeming = teemingChangedEvent.data.teeming;
 
             // If we're visible for teeming, and we're now no longer teeming, remove ourselves from our current killzone
-            let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let enemyMapObjectGroup = self.map.mapObjectGroupManager.getEnemyMapObjectGroup();
             let hasRemovedEnemy = false;
             let currentEnemies = [...self.enemies];
             for (let i = 0; i < currentEnemies.length; i++) {
@@ -98,7 +98,7 @@ class KillZone extends MapObject {
 
         getState().register('mapzoomlevel:changed', this, this._mapZoomLevelChanged.bind(this));
         getState().register('killzonesnumberstyle:changed', this, this._numberStyleChanged.bind(this));
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         // There is no killzone map object group when a page hides it
         // (e.g. Explore mode's view.blade.php), which happens for the throwaway KillZone that
         // EditKillZoneEnemySelection.isEnemySelectable() constructs purely to reuse its filter logic.
@@ -335,7 +335,7 @@ class KillZone extends MapObject {
             // Remove it
             let deleted = this.overpulledEnemies.splice(index, 1);
             if (deleted.length === 1) {
-                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
                 let enemy = enemyMapObjectGroup.findMapObjectById(deleted[0]);
                 enemy.unregister('overpulled:changed', this);
 
@@ -364,7 +364,7 @@ class KillZone extends MapObject {
             // Remove it
             let deleted = this.enemies.splice(index, 1);
             if (deleted.length === 1) {
-                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
                 /** @type {Enemy} */
                 let enemy = enemyMapObjectGroup.findMapObjectById(deleted[0]);
                 // This enemy left us, no longer interested in it
@@ -385,7 +385,7 @@ class KillZone extends MapObject {
             let linkedAwakenedEnemy = enemy.getLinkedAwakenedEnemy();
             if (linkedAwakenedEnemy !== null) {
                 /** @type {Enemy} */
-                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
                 let finalBoss = enemyMapObjectGroup.getFinalBoss();
 
@@ -456,7 +456,7 @@ class KillZone extends MapObject {
                 }
 
                 // Hide the awakened enemy that's near the boss
-                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
                 enemyMapObjectGroup.setMapObjectVisibility(linkedAwakenedEnemy, false);
             }
         }
@@ -471,7 +471,7 @@ class KillZone extends MapObject {
 
         this.removeExistingConnectionsToEnemies();
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         // Copy enemies array as we're making changes in it by removing enemies
         let currentEnemies = [...this.enemies];
         for (let i = 0; i < currentEnemies.length; i++) {
@@ -675,7 +675,7 @@ class KillZone extends MapObject {
         console.assert(this instanceof KillZone, 'this is not a KillZone', this);
         let self = this;
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         let latLngs = [];
         let otherFloorsWithEnemies = [];
@@ -717,7 +717,7 @@ class KillZone extends MapObject {
         // If there are other floors with enemies AND enemies on this floor..
         if (otherFloorsWithEnemies.length > 0 && latLngs.length > 0) {
             console.info(`Pull ${this.index} has enemies on other floors`, otherFloorsWithEnemies);
-            let floorSwitchMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+            let floorSwitchMapObjectGroup = self.map.mapObjectGroupManager.getDungeonFloorSwitchMarkerMapObjectGroup();
             if (_.size(floorSwitchMapObjectGroup.objects) > 0) {
                 $.each(otherFloorsWithEnemies, function (i, floorId) {
                     // Build a list of eligible floor switchers to the floor ID we want (there may be multiple!)
@@ -822,7 +822,7 @@ class KillZone extends MapObject {
     isLinkedToLastBoss() {
         let result = false;
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         for (let i = 0; i < this.enemies.length; i++) {
             let enemy = enemyMapObjectGroup.findMapObjectById(this.enemies[i]);
             if (enemy !== null && enemy.isLastBoss()) {
@@ -841,7 +841,7 @@ class KillZone extends MapObject {
     getFloorIds() {
         let result = [];
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         $.each(this.enemies, function (i, id) {
             /** @type Enemy */
@@ -861,7 +861,7 @@ class KillZone extends MapObject {
     getEnemyForces() {
         let result = 0;
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         // We must consider overpulled enemies part of our enemy forces as well - even though they may technically not be part of the current pull
         let allEnemies = this.enemies.concat(this.overpulledEnemies);
@@ -885,7 +885,7 @@ class KillZone extends MapObject {
         // You always get one bonus for some reason
         let result = 1;
 
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         for (let key in killZoneMapObjectGroup.objects) {
             let killZone = killZoneMapObjectGroup.objects[key];
             if (killZone.getIndex() <= this.getIndex()) {
@@ -903,7 +903,7 @@ class KillZone extends MapObject {
     getEnemyForcesCumulative() {
         let result = 0;
 
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         for (let key in killZoneMapObjectGroup.objects) {
             let killZone = killZoneMapObjectGroup.objects[key];
             if (killZone.getIndex() <= this.getIndex()) {
@@ -951,7 +951,7 @@ class KillZone extends MapObject {
         let previousForces = this.getEnemyForces();
 
         // Remove any enemies that we may have had
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         this._isBulkUpdating = true;
 
@@ -1001,7 +1001,7 @@ class KillZone extends MapObject {
 
         // Remove previous layers if it's needed
         if (this.enemyConnectionsLayerGroup !== null) {
-            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
             // Remove layers we no longer need from the layer group
             if (this.enemiesLayer !== null) {
                 this.enemyConnectionsLayerGroup.removeLayer(this.enemiesLayer);
@@ -1031,7 +1031,7 @@ class KillZone extends MapObject {
         // Create & add new layer
         this.enemyConnectionsLayerGroup = new L.LayerGroup();
 
-        let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         killZoneMapObjectGroup.layerGroup.addLayer(this.enemyConnectionsLayerGroup);
 
         // Add connections from each enemy to our location
@@ -1168,7 +1168,7 @@ class KillZone extends MapObject {
     getShroudedEnemyStacks() {
         let result = 0;
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         for (let i = 0; i < this.enemies.length; i++) {
             let enemyId = this.enemies[i];
             /** @type {Enemy} */
@@ -1257,13 +1257,13 @@ class KillZone extends MapObject {
         this.map.register('map:mapobjectgroupsloaded', this, function () {
             // Hide the killzone layer when in preview mode
             if (self.map.options.noUI) {
-                let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+                let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
                 killZoneMapObjectGroup.setMapObjectVisibility(self, false);
             }
         });
 
         this.register('object:deleted', this, function () {
-            let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let enemyMapObjectGroup = self.map.mapObjectGroupManager.getEnemyMapObjectGroup();
             $.each(self.enemies, function (i, id) {
                 let enemy = enemyMapObjectGroup.findMapObjectById(id);
                 if (enemy !== null) {
@@ -1317,7 +1317,7 @@ class KillZone extends MapObject {
 
 
         state.getMapContext().unregister('teeming:changed', this);
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         if (killZoneMapObjectGroup) {
             killZoneMapObjectGroup.unregister('killzone:changed', this);
         }
@@ -1330,7 +1330,7 @@ class KillZone extends MapObject {
         this.map.unregister('killzone:selectionchanged', this);
         this.map.unregister('map:mapobjectgroupsloaded', this);
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
             // enemy.setSelectable(false);
             enemy.unregister('obsolete:changed', self);
