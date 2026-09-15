@@ -5,7 +5,6 @@ namespace App\Logic\Utils;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
-use Exception;
 
 class HtmlSanitizer
 {
@@ -77,22 +76,11 @@ class HtmlSanitizer
                     // Allowed tag, now check attributes
                     if ($tagName === 'a') {
                         $href = $child->getAttribute('href');
-                        if (!empty($href)) {
-                            try {
-                                $url  = parse_url($href);
-                                $host = $url['host'] ?? '';
-                                if ($host !== '' && !in_array($host, $allowedDomains)) {
-                                    // Invalid domain, replace with text
-                                    $textNode = $element->ownerDocument->createTextNode($child->textContent);
-                                    $element->replaceChild($textNode, $child);
-                                    continue;
-                                }
-                            } catch (Exception) {
-                                // Invalid URL, replace with text
-                                $textNode = $element->ownerDocument->createTextNode($child->textContent);
-                                $element->replaceChild($textNode, $child);
-                                continue;
-                            }
+                        if (!empty($href) && !$this->isHrefAllowed($href, $allowedDomains)) {
+                            // Disallowed link target, replace with text
+                            $textNode = $element->ownerDocument->createTextNode($child->textContent);
+                            $element->replaceChild($textNode, $child);
+                            continue;
                         }
                     }
 
@@ -109,5 +97,32 @@ class HtmlSanitizer
                 }
             }
         }
+    }
+
+    /**
+     * @param array<int, string> $allowedDomains
+     */
+    private function isHrefAllowed(string $href, array $allowedDomains): bool
+    {
+        // Browsers drop control characters and surrounding whitespace before resolving a URL, so
+        // they must not be allowed to hide the scheme from parse_url() either
+        $href = preg_replace('/[\x00-\x20\x7F]+/', '', $href) ?? '';
+        // Browsers normalize a leading backslash to a forward slash, making \\host an absolute URL
+        $href = str_replace('\\', '/', $href);
+
+        if ($href === '') {
+            return false;
+        }
+
+        // Without a scheme the link resolves against the current origin - except for the
+        // protocol-relative form, which points at another host and must be checked as absolute
+        if (preg_match('/^[a-z][a-z\d+.\-]*:/i', $href) !== 1) {
+            return !str_starts_with($href, '//');
+        }
+
+        $url = parse_url($href) ?: [];
+
+        return in_array(strtolower($url['scheme'] ?? ''), ['http', 'https'], true) &&
+            in_array(strtolower($url['host'] ?? ''), $allowedDomains, true);
     }
 }

@@ -42,11 +42,6 @@ abstract class DatatablesColumnHandler
         ?string $generalSearch,
     ): void;
 
-    public function getDtHandler(): DatatablesHandler
-    {
-        return $this->dtHandler;
-    }
-
     /**
      * @return string Gets the column name of the handler.
      */
@@ -83,14 +78,15 @@ abstract class DatatablesColumnHandler
         if (is_array($order)) {
             $order = $order[0] ?? null;
         }
-        $generalSearch = ($request->get('search'))['value'];
+        $generalSearch = $request->input('search.value');
+        $generalSearch = is_string($generalSearch) ? $generalSearch : null;
 
         // Find the column we should handle
         $column = null;
         // Find the index too; needed to handle sorting later on
         $columnIndex = -1;
         foreach ($columns as $index => $value) {
-            if ($value['name'] === $this->columnName) {
+            if (($value['name'] ?? null) === $this->columnName) {
                 $column      = $value;
                 $columnIndex = $index;
                 break;

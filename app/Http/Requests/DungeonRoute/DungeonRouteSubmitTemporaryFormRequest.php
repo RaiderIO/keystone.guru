@@ -3,6 +3,7 @@
 namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Laratrust\Role;
 use App\Rules\DungeonRouteLevelRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -29,7 +30,7 @@ class DungeonRouteSubmitTemporaryFormRequest extends FormRequest
                 Rule::exists(Dungeon::class, 'id')->where('active', '1'),
             ],
             // Nullable: the difficulty select is empty for non-speedrun dungeons, and Tom Select submits an empty value for it
-            'dungeon_difficulty'  => ['nullable', Rule::in(array_values(Dungeon::DIFFICULTY_ALL))],
+            'dungeon_difficulty'  => ['nullable', Rule::in(DungeonDifficulty::values())],
             'dungeon_route_level' => new DungeonRouteLevelRule(),
 
             // Verified against the dungeon's mapping version in DungeonRouteSaveService

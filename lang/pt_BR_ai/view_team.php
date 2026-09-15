@@ -18,15 +18,15 @@ return [
         ],
         'overview' => [
             'title'   => 'Visão geral',
-            'routes'  => '',
-            'members' => '',
+            'routes'  => 'Rotas',
+            'members' => 'Membros',
         ],
         'routepublishing' => [
             'title'            => 'Publicação de rotas',
-            'description'      => '',
-            'enabled'          => '',
-            'timezone_warning' => '',
-            'profile_link'     => '',
+            'description'      => 'A publicação de rotas permite que você publique rotas para todos de forma programada. Você pode definir, para cada rota, a data e a hora em que ela será colocada automaticamente no estado Publicado e ficará visível para todos.',
+            'enabled'          => 'Ativado',
+            'timezone_warning' => 'Os horários de publicação agendados usam o fuso horário do seu perfil. Certifique-se de que seu fuso horário esteja definido corretamente em :link.',
+            'profile_link'     => 'configurações de perfil',
         ],
         'routes' => [
             'title'                  => 'Lista de rotas',

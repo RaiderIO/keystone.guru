@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Environment;
 
+use App\Console\Commands\Database\Migrate;
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Jobs\RefreshDiscoverCache;
 use Illuminate\Console\Command;
@@ -61,16 +62,12 @@ class Update extends Command
         $this->call('ide-helper:generate');
         $this->call('ide-helper:meta');
 
-        $this->call('migrate', [
-            '--database' => 'migrate',
-            '--force'    => true,
-        ]);
+        // Both migrate invocations reuse Migrate's options rather than restating them: this runs on container
+        // startup via docker_init.sh, so a copy that drifted onto the least-privilege `combatlog` connection
+        // would fail the DROP migrations there and nowhere a developer would look first.
+        $this->call('migrate', Migrate::MIGRATE_OPTIONS);
 
-        $this->call('migrate', [
-            '--database' => 'combatlog',
-            '--path'     => 'database/migrations_combatlog',
-            '--force'    => true,
-        ]);
+        $this->call('migrate', Migrate::COMBAT_LOG_MIGRATE_OPTIONS);
 
         // Drop all caches for all models while we re-seed
         $this->call('modelCache:clear');

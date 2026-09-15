@@ -7,6 +7,8 @@ use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
+use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -166,5 +168,86 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
                 ->whereIn('npc_id', $enemies->pluck('npc_id'))
                 ->delete();
         }
+    }
+
+    #[Test]
+    public function store_givenSeveralEnemies_marksThemAllOverpulled(): void
+    {
+        // Arrange
+        $enemies = $this->distinctEnemies(3);
+
+        // Act
+        $response = $this->post($this->url(), [
+            'kill_zone_id' => $this->killZone->id,
+            'enemy_ids'    => $enemies->pluck('id')->toArray(),
+        ]);
+
+        // Assert
+        $response->assertOk();
+        $this->assertEquals(
+            $enemies->count(),
+            LiveSessionOverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count(),
+        );
+    }
+
+    /**
+     * Overpulling a pack is one user action - a failure partway through the batch must not commit
+     * the enemies saved before it while the client is told the whole request failed.
+     */
+    #[Test]
+    public function store_givenOneEnemyOfTheBatchFails_savesNoneOfThem(): void
+    {
+        // Arrange
+        $enemies = $this->distinctEnemies(3);
+
+        // Fail the third write, by which point the first two have already been inserted inside the
+        // same transaction
+        $saveCount = 0;
+        LiveSessionOverpulledEnemy::creating(static function () use (&$saveCount): bool {
+            if (++$saveCount === 3) {
+                throw new Exception('Simulated failure saving the overpulled enemy');
+            }
+
+            return true;
+        });
+
+        try {
+            // Act
+            $response = $this->post($this->url(), [
+                'kill_zone_id' => $this->killZone->id,
+                'enemy_ids'    => $enemies->pluck('id')->toArray(),
+            ]);
+
+            // Assert - the client is told it failed, and the live session shows no half-applied pull
+            $response->assertStatus(500);
+            $this->assertEquals(0, LiveSessionOverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
+        } finally {
+            // Remove only the listener registered above - LiveSessionOverpulledEnemy::flushEventListeners()
+            // would also wipe its own boot() listeners for the rest of the PHPUnit process
+            Event::forget('eloquent.creating: ' . LiveSessionOverpulledEnemy::class);
+        }
+    }
+
+    /**
+     * @return Collection<int, Enemy>
+     */
+    private function distinctEnemies(int $count): Collection
+    {
+        // The controller keys overpulled enemies on (npc_id, mdt_id), so two enemies sharing that
+        // pair would collapse into a single row and make the counts meaningless
+        return $this->dungeonRoute->mappingVersion->enemies()
+            ->get()
+            ->unique(static fn(Enemy $enemy) => sprintf('%d-%d', $enemy->npc_id, $enemy->mdt_id))
+            ->take($count)
+            ->values();
+    }
+
+    private function url(): string
+    {
+        return sprintf(
+            '/ajax/%s/live/%s/overpulledenemy',
+            $this->dungeonRoute->getRouteKey(),
+            $this->liveSession->getRouteKey(),
+        );
     }
 }

@@ -4,10 +4,11 @@ namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\HasPolylineInterface;
+use App\Models\Traits\HasPolyline;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Override;
 
@@ -26,8 +27,10 @@ use Override;
  *
  * @mixin Eloquent
  */
-class Arrow extends Model
+class Arrow extends Model implements HasPolylineInterface
 {
+    use HasPolyline;
+
     protected $visible = [
         'id',
         'floor_id',
@@ -58,12 +61,6 @@ class Arrow extends Model
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
-    }
-
-    /** @return HasOne<Polyline, $this> */
-    public function polyline(): HasOne
-    {
-        return $this->hasOne(Polyline::class, 'model_id')->where('model_class', static::class);
     }
 
     /** @return BelongsTo<Floor, $this> */

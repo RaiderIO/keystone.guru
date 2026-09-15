@@ -19,10 +19,15 @@ $appType = config('app.type');
 $commands = [];
 
 $commands[] = Schedule::command('combatlog:detectstaledata')->hourly();
+$commands[] = Schedule::command('combatlog:pruneparsedlogs')->daily();
 if (in_array($appType, [
     'staging',
+    'production',
 ])) {
-    $commands[] = Schedule::command('combatlog:pollruns')->hourly();
+    $commands[] = Schedule::command('combatlog:pollruns')->hourly()->withoutOverlapping()->onOneServer();
+    // Ten past the hour: late enough that the jobs combatlog:pollruns dispatched at the top of the
+    // previous hour have run and recorded their outcome, and it is the previous hour it reports on.
+    $commands[] = Schedule::command('combatlog:reportpollinghealth')->hourlyAt(10);
 }
 
 $commands[] = Schedule::command('dungeonroute:updatepopularity')->hourly();
@@ -53,6 +58,8 @@ $commands[] = Schedule::command('telescope:prune --hours=48')->daily();
 
 $commands[] = Schedule::command('page-views:prune')->daily();
 
+$commands[] = Schedule::command('telemetry:prune')->daily();
+
 // Refresh any membership status - if they're unsubbed, revoke their access. If they're subbed, add access
 $commands[] = Schedule::command('patreon:refreshmembers')->hourly();
 
@@ -80,6 +87,13 @@ $commands[] = Schedule::command('livesession:cleanup-expired')->hourly();
 // Rendering needs headless chrome, so skip it locally like the other thumbnail refreshers.
 if (!app()->environment('local')) {
     $commands[] = Schedule::command('thumbnail:ensureheroes')->hourly();
+}
+
+// A game patch is a trigger for a manual re-import (#4021), not a release - files a GitHub issue when
+// it fires. Only production runs it: staging isn't guaranteed to have a cron running it in the future,
+// and there's no need for both environments to check and potentially file the same issue.
+if ($appType === 'production') {
+    $commands[] = Schedule::command('wagotools:checkforspelldescriptionpatch')->daily();
 }
 
 // PID 1's stdout is used to ensure that the output is always logged, even when running in a Docker

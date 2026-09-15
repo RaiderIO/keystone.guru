@@ -8,7 +8,7 @@ use App\Models\User;
 
 /**
  * Gates the creator podium: the revamped public profile (bio, socials, pinned routes), the creator
- * directory, and the featured-creators row on the discover landing page.
+ * directory, and the featured-creators rail on the per-dungeon route page.
  *
  * While in development this resolves only for admins and the internal team, so the work can merge
  * dark. Opening it to the public is a one-line change here - drop the role check and return true
@@ -27,9 +27,6 @@ class CreatorProfiles
         }
 
         // Ok, feature is enabled, now check if YOU can do it
-        return $user?->hasRole([
-            Role::ROLE_ADMIN,
-            Role::ROLE_INTERNAL_TEAM,
-        ]) ?? false;
+        return $user?->hasRole(Role::ROLES_INTERNAL) ?? false;
     }
 }

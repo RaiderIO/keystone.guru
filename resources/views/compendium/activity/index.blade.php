@@ -11,11 +11,15 @@ use Illuminate\Support\Collection;
  * @var Dungeon                                                               $contextDungeon
  * @var LengthAwarePaginator<int, string>                                     $dates
  * @var array<string, Collection<int, CombatLogNpcEvent|CombatLogSpellEvent>> $eventsByDay
+ * @var Collection<int, Dungeon>                                              $gameVersionDungeons
  */
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$contextDungeon],
     'title'             => __('view_compendium.activity.index.title'),
+    'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+        $dungeon->key => route('compendium.activity', ['dungeon' => $dungeon])
+    ]),
 ])
 
 @section('header-title')
@@ -28,11 +32,12 @@ use Illuminate\Support\Collection;
     @else
         @foreach($dates->items() as $date)
                 <?php /** @var string $date */ ?>
-            <div class="mb-5">
+            <div class="mb-4">
                 @include('compendium.activity.sections.event_list', [
                     'events'         => $eventsByDay[$date],
                     'date'           => $date,
                     'contextDungeon' => $contextDungeon,
+                    'limit'          => 15,
                 ])
             </div>
         @endforeach

@@ -18,15 +18,15 @@ return [
         ],
         'overview' => [
             'title'   => 'Panoramica',
-            'routes'  => '',
-            'members' => '',
+            'routes'  => 'Percorsi',
+            'members' => 'Membri',
         ],
         'routepublishing' => [
             'title'            => 'Pubblicazione percorsi',
-            'description'      => '',
-            'enabled'          => '',
-            'timezone_warning' => '',
-            'profile_link'     => '',
+            'description'      => 'La pubblicazione dei percorsi ti permette di pubblicarli al mondo secondo una pianificazione. Puoi impostare una data/ora per ogni percorso in cui verranno automaticamente messi in stato Pubblicato e resi visibili al mondo.',
+            'enabled'          => 'Abilitato',
+            'timezone_warning' => 'Gli orari di pubblicazione pianificati usano il fuso orario del tuo profilo. Assicurati che il tuo fuso orario sia impostato correttamente nelle tue :link.',
+            'profile_link'     => 'impostazioni del profilo',
         ],
         'routes' => [
             'title'                  => 'Elenco percorsi',

@@ -535,6 +535,10 @@ return [
                 'go_north'                  => '向北走',
                 'go_south'                  => '向南走',
             ],
+            'den_of_nalorakk' => [
+                'offering'        => '',
+                'warding_incense' => '',
+            ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => '豐盛的邪枝燉肉：享用一份邪枝燉肉，增加你的吸血3%並減少受到的範圍攻擊傷害3%，持續30分鐘。',
             ],
@@ -542,6 +546,41 @@ return [
                 'activates_after_killing_bosses' => '在擊殺第一個首領（任一）後，啟動單程返回長廊。第二次擊殺將帶你到相應的上層。',
             ],
         ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => '',
+                'coilscar_or_aqueous_surger_variants' => "",
+                'dragonmaw_variants'                  => '',
+            ],
+        ],
     ],
 
+    'checkpoints' => [
+        'bfa' => [
+            'temple_of_sethraliss' => [
+                'atrium_of_sethraliss_name' => '',
+            ],
+        ],
+        'df' => [
+            'ruby_life_pools' => [
+                'ruby_overlook_name' => '',
+            ],
+        ],
+        'midnight' => [
+            'altar_of_fangs' => [
+                'final_room_section_name' => '',
+            ],
+            'den_of_nalorakk' => [
+                'the_heart_of_rage_name' => '',
+            ],
+            'magisters_terrace' => [
+                'tower_section_name' => '',
+            ],
+        ],
+        'wotlk' => [
+            'pit_of_saron' => [
+                'cavern_section_name' => '',
+            ],
+        ],
+    ],
 ];

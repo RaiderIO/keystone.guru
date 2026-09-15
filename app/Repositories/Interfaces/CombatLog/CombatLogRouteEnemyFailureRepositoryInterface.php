@@ -3,7 +3,9 @@
 namespace App\Repositories\Interfaces\CombatLog;
 
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
+use App\Models\Dungeon;
 use App\Repositories\BaseRepositoryInterface;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Collection;
 
 /**
@@ -19,4 +21,19 @@ use Illuminate\Support\Collection;
  */
 interface CombatLogRouteEnemyFailureRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * A page of the dungeon's failures in ascending id order, starting after $afterId. Fetches one row MORE than
+     * $limit so the caller can tell whether another page exists (pop it before handing the page to anyone).
+     *
+     * @param  int[]|null                                  $npcIds
+     * @return Collection<int, CombatLogRouteEnemyFailure>
+     */
+    public function getPageAfterId(
+        Dungeon          $dungeon,
+        int              $afterId,
+        int              $limit,
+        ?int             $mappingVersionId = null,
+        ?array           $npcIds = null,
+        ?CarbonInterface $since = null,
+    ): Collection;
 }

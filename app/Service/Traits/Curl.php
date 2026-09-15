@@ -5,7 +5,7 @@ namespace App\Service\Traits;
 trait Curl
 {
     /**
-     * @param array<string, mixed> $options
+     * @param array<int, mixed> $options
      */
     public function curlGet(string $url, array $options = []): string
     {
@@ -71,7 +71,7 @@ trait Curl
      * Note `httpCode` is 0 for non-HTTP protocols, and when the request never got a response at all, so callers
      * should judge failure on `errorNumber` first.
      *
-     * @param  array<string, mixed>                                      $options
+     * @param  array<int, mixed>                                         $options
      * @return array{body: string|bool, httpCode: int, errorNumber: int}
      */
     protected function curlGetResponse(string $url, array $options = []): array

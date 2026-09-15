@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
  * @var Dungeon                               $contextDungeon
  * @var Collection<int, Spell>                $spells
  * @var Collection<int, Collection<int, Npc>> $npcsByCharacteristicId
+ * @var Collection<int, array{noEffect: Collection<int, Npc>, worksOn: Collection<int, Npc>}> $notableNpcsByCharacteristicId
  * @var array<int, array{
  *     definition: SpellCounterDefinitionInterface,
  *     raceName: string|null,
@@ -23,48 +24,71 @@ use Illuminate\Support\Collection;
  *     spells: Collection<int, Spell>,
  *     npcsBySpellId: Collection<int, Collection<int, Npc>>,
  * }|null $reflectSection
+ * @var Collection<int, Dungeon> $gameVersionDungeons
  */
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbs'       => 'compendium.class.show',
     'breadcrumbsParams' => [$characterClass, $contextDungeon],
     'title'             => __('view_compendium.class.show.title', ['name' => __($characterClass->name)]),
+    'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+        $dungeon->key => route('compendium.class.show.dungeon', [
+            'characterClass' => $characterClass,
+            'dungeon' => $dungeon,
+        ])
+    ]),
 ])
 
 @section('content')
+    @include('dungeonroute.discover.wallpaper', ['dungeon' => $contextDungeon])
+
     {{-- Header --}}
-    <div class="row mb-4">
-        <div class="col-auto">
-            <img src="{{ $characterClass->icon_url }}"
-                 width="64" height="64"
-                 alt="{{ __($characterClass->name) }}"
-                 loading="lazy"
-                 class="rounded"/>
-        </div>
-        <div class="col">
-            <h2 class="mb-1">{{ __($characterClass->name) }}</h2>
+    <div class="compendium_identity">
+        <img src="{{ $characterClass->icon_url }}"
+             width="88" height="88"
+             alt="{{ __($characterClass->name) }}"
+             loading="lazy"
+             class="compendium_identity_portrait"/>
+        <div class="compendium_identity_body">
+            <h2 class="compendium_identity_title">{{ __($characterClass->name) }}</h2>
+            <div class="compendium_identity_meta">
+                <span class="compendium_chip">{{ __($contextDungeon->name) }}</span>
+            </div>
         </div>
     </div>
 
-    {{-- Spell → Characteristic → Affected NPCs table --}}
+    {{-- Spell → Characteristic → the NPCs that defy the usual expectation for what they are --}}
     @if($spells->isEmpty())
         <p class="text-muted">{{ __('view_compendium.class.show.no_spells') }}</p>
     @else
         <div class="table-responsive">
-            <table class="table table-sm table-striped">
+            <table class="compendium_table">
                 <thead>
                 <tr>
                     <th width="25%">{{ __('view_compendium.class.show.table_header_spell') }}</th>
                     <th width="20%">{{ __('view_compendium.class.show.table_header_characteristic') }}</th>
-                    <th width="55%">{{ __('view_compendium.class.show.table_header_npcs') }}</th>
+                    <th width="55%">
+                        {{ __('view_compendium.class.show.table_header_npcs') }}
+                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                           title="{{ __('view_compendium.class.show.npcs_description') }}"></i>
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($spells as $spell)
                     <?php /** @var Spell $spell */ ?>
-                    <?php $affectedNpcs = $npcsByCharacteristicId->get($spell->characteristic_id, collect()); ?>
+                    <?php
+                    $affectedNpcs = $npcsByCharacteristicId->get($spell->characteristic_id, collect());
+                    $notableNpcs  = $notableNpcsByCharacteristicId->get($spell->characteristic_id, ['noEffect' => collect(), 'worksOn' => collect()]);
+
+                    // Three distinct states, and the difference between the last two matters: having
+                    // never seen this characteristic land at all says nothing about the NPCs it did
+                    // not land on, so that must not read as "we checked and nothing was surprising"
+                    $hasObservations = $affectedNpcs->isNotEmpty();
+                    $hasExceptions   = $notableNpcs['noEffect']->isNotEmpty() || $notableNpcs['worksOn']->isNotEmpty();
+                    ?>
                     <tr>
-                        <td>@include('common.spell.link', ['spell' => $spell])</td>
+                        <td class="compendium_table_spell">@include('common.spell.link', ['spell' => $spell])</td>
                         <td>
                             @if($spell->characteristic)
                                 <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $spell->characteristic->icon_name)) }}"
@@ -75,12 +99,25 @@ use Illuminate\Support\Collection;
                             @endif
                         </td>
                         <td>
-                            @if($affectedNpcs->isEmpty())
-                                <span class="text-muted">{{ __('view_compendium.class.show.no_npcs') }}</span>
+                            @if(!$hasObservations)
+                                <span class="text-muted">{{ __('view_compendium.class.show.npcs_no_data') }}</span>
+                            @elseif(!$hasExceptions)
+                                <span class="text-muted">{{ __('view_compendium.class.show.npcs_no_exceptions') }}</span>
                             @else
-                                @foreach($affectedNpcs as $npc)
-                                    <?php /** @var Npc $npc */ ?>
-                                    @include('common.npc.link', ['npc' => $npc])@if(!$loop->last), @endif
+                                @foreach(['worksOn' => 'npcs_works_on', 'noEffect' => 'npcs_no_effect'] as $group => $labelKey)
+                                    @if($notableNpcs[$group]->isNotEmpty())
+                                        <div class="compendium_exception compendium_exception--{{ $group === 'worksOn' ? 'works' : 'noeffect' }}">
+                                            <span class="compendium_chip compendium_chip--{{ $group === 'worksOn' ? 'works' : 'noeffect' }}">
+                                                {{ __(sprintf('view_compendium.class.show.%s', $labelKey)) }}
+                                            </span>
+                                            <span class="compendium_exception_npcs">
+                                                @foreach($notableNpcs[$group] as $npc)
+                                                    <?php /** @var Npc $npc */ ?>
+                                                    @include('common.npc.link', ['npc' => $npc])@if(!$loop->last), @endif
+                                                @endforeach
+                                            </span>
+                                        </div>
+                                    @endif
                                 @endforeach
                             @endif
                         </td>
@@ -93,8 +130,6 @@ use Illuminate\Support\Collection;
 
     {{-- Counterable abilities (Vanish / Shadowmeld / ...) --}}
     @if(!empty($counterSections))
-        <h3 class="mt-4">{{ __('view_compendium.class.show.counters.title') }}</h3>
-
         @foreach($counterSections as $counterSection)
             <?php
             /** @var SpellCounterDefinitionInterface $definition */
@@ -106,30 +141,37 @@ use Illuminate\Support\Collection;
             $npcsBySpellId = $counterSection['npcsBySpellId'];
             $counterKey    = Spell::ALL_COUNTERS[$definition->getCounterBit()];
             ?>
-            <div class="mb-4">
-                <h5 class="mb-2">
-                    <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $definition->getIconName())) }}"
-                         width="20" height="20"
-                         loading="lazy"
-                         class="rounded me-1"
-                         alt="{{ __('spellcounters.' . $counterKey) }}"/>{{ __('spellcounters.' . $counterKey) }}
-                    @if($raceName !== null)
-                        <span class="badge text-bg-secondary ms-1">
-                            {{ __('view_compendium.class.show.counters.racial', ['race' => __($raceName)]) }}
-                        </span>
+            <div class="compendium_record_section @if($loop->first) mt-4 @endif">
+                <div class="compendium_record_label">
+                    @if($loop->first)
+                        {{ __('view_compendium.class.show.counters.title') }}
                     @endif
-                </h5>
+                </div>
+                <div>
+                    <h5 class="mb-2">
+                        <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $definition->getIconName())) }}"
+                             width="20" height="20"
+                             loading="lazy"
+                             class="rounded me-1"
+                             alt="{{ __('spellcounters.' . $counterKey) }}"/>{{ __('spellcounters.' . $counterKey) }}
+                        @if($raceName !== null)
+                            <span class="badge text-bg-secondary ms-1">
+                                {{ __('view_compendium.class.show.counters.racial', ['race' => __($raceName)]) }}
+                            </span>
+                        @endif
+                    </h5>
 
-                @if($counterSpells->isEmpty())
-                    <p class="text-muted">{{ __('view_compendium.class.show.counters.no_spells') }}</p>
-                @else
-                    @include('compendium.class.sections.spell-npc-table', [
-                        'tableSpells'        => $counterSpells,
-                        'tableNpcsBySpellId' => $npcsBySpellId,
-                        'tableSpellHeader'   => 'view_compendium.class.show.counters.table_header_spell',
-                        'tableNpcsHeader'    => 'view_compendium.class.show.counters.table_header_npcs',
-                    ])
-                @endif
+                    @if($counterSpells->isEmpty())
+                        <p class="text-muted mb-0">{{ __('view_compendium.class.show.counters.no_spells') }}</p>
+                    @else
+                        @include('compendium.class.sections.spell-npc-table', [
+                            'tableSpells'        => $counterSpells,
+                            'tableNpcsBySpellId' => $npcsBySpellId,
+                            'tableSpellHeader'   => 'view_compendium.class.show.counters.table_header_spell',
+                            'tableNpcsHeader'    => 'view_compendium.class.show.counters.table_header_npcs',
+                        ])
+                    @endif
+                </div>
             </div>
         @endforeach
     @endif
@@ -142,24 +184,33 @@ use Illuminate\Support\Collection;
         /** @var Collection<int, Collection<int, Npc>> $reflectNpcsBySpellId */
         $reflectNpcsBySpellId = $reflectSection['npcsBySpellId'];
         ?>
-        <h3 class="mt-4">
-            <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $reflectSection['iconName'])) }}"
-                 width="24" height="24"
-                 loading="lazy"
-                 class="rounded me-1"
-                 alt="{{ __('view_compendium.class.show.reflect.title') }}"/>{{ __('view_compendium.class.show.reflect.title') }}
-        </h3>
-        <p class="text-muted">{{ __('view_compendium.class.show.reflect.description') }}</p>
+        <div class="compendium_record_section">
+            <div class="compendium_record_label">
+                {{ __('view_compendium.class.show.reflect.title') }}
+                <div class="compendium_record_label_sub">
+                    {{ __('view_compendium.class.show.reflect.description') }}
+                </div>
+            </div>
+            <div>
+                <h5 class="mb-2">
+                    <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $reflectSection['iconName'])) }}"
+                         width="20" height="20"
+                         loading="lazy"
+                         class="rounded me-1"
+                         alt="{{ __('view_compendium.class.show.reflect.title') }}"/>{{ __('view_compendium.class.show.reflect.title') }}
+                </h5>
 
-        @if($reflectSpells->isEmpty())
-            <p class="text-muted">{{ __('view_compendium.class.show.reflect.no_spells') }}</p>
-        @else
-            @include('compendium.class.sections.spell-npc-table', [
-                'tableSpells'        => $reflectSpells,
-                'tableNpcsBySpellId' => $reflectNpcsBySpellId,
-                'tableSpellHeader'   => 'view_compendium.class.show.reflect.table_header_spell',
-                'tableNpcsHeader'    => 'view_compendium.class.show.reflect.table_header_npcs',
-            ])
-        @endif
+                @if($reflectSpells->isEmpty())
+                    <p class="text-muted mb-0">{{ __('view_compendium.class.show.reflect.no_spells') }}</p>
+                @else
+                    @include('compendium.class.sections.spell-npc-table', [
+                        'tableSpells'        => $reflectSpells,
+                        'tableNpcsBySpellId' => $reflectNpcsBySpellId,
+                        'tableSpellHeader'   => 'view_compendium.class.show.reflect.table_header_spell',
+                        'tableNpcsHeader'    => 'view_compendium.class.show.reflect.table_header_npcs',
+                    ])
+                @endif
+            </div>
+        </div>
     @endif
 @endsection

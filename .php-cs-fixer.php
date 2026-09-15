@@ -1,11 +1,19 @@
 <?php
 
 use ErickSkrauch\PhpCsFixer\Fixers as ErickSkrauchFixers;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
-    // It legit breaks views if you let it try to fix them - it removes needed imports
-    ->exclude(['vendor', 'node_modules', 'storage', 'bootstrap/cache', 'resources/views'])
+    // It legit breaks views if you let it try to fix them - it removes needed imports.
+    // docker-compose holds no PHP, but it does hold the bind-mounted MySQL data dirs, whose
+    // internal dirs (e.g. mysql-combatlog/#innodb_temp) are owned by the container's mysql uid
+    // and unreadable on the host - descending into them aborts the entire run with
+    // "RecursiveDirectoryIterator(...): Permission denied". Excluding is what stops the descent:
+    // ignoreVCS()/ignoreVCSIgnored() only filter results, after the traversal has already failed.
+    // tmp/phpstan is PHPStan's tmpDir (see phpstan.neon); once populated it holds thousands of
+    // cached PHP files that otherwise get scanned too, blowing past the fixer's timeout.
+    ->exclude(['vendor', 'node_modules', 'storage', 'bootstrap/cache', 'resources/views', 'docker-compose', 'tmp'])
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);
@@ -16,7 +24,7 @@ return (new PhpCsFixer\Config())
     ->setIndent("    ")
     ->setLineEnding("\n")
     ->setFinder($finder)
-    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
+    ->setParallelConfig(ParallelConfigFactory::sequential())
     ->setRules([
         // Arrays & commas
         'array_syntax'                => ['syntax' => 'short'],

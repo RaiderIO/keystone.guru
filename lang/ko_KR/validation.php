@@ -20,10 +20,25 @@ return [
         'numeric' => ':Attribute의 값은 :min에서 :max 사이여야 합니다.',
         'string'  => ':Attribute의 길이는 :min에서 :max 문자 사이여야 합니다.',
     ],
-    'boolean'           => ':Attribute은(는) true 또는 false 이어야 합니다.',
-    'can'               => ':Attribute 필드에 승인되지 않은 값이 포함되어 있습니다.',
-    'confirmed'         => ':Attribute 확인 항목이 일치하지 않습니다.',
-    'current_password'  => '패스워드가 일치하지 않습니다.',
+    'boolean'          => ':Attribute은(는) true 또는 false 이어야 합니다.',
+    'can'              => ':Attribute 필드에 승인되지 않은 값이 포함되어 있습니다.',
+    'confirmed'        => ':Attribute 확인 항목이 일치하지 않습니다.',
+    'current_password' => '패스워드가 일치하지 않습니다.',
+    'custom'           => [
+        'bio' => [
+            'max' => '',
+        ],
+        'pinned_dungeon_routes' => [
+            'max'    => '',
+            'exists' => '',
+        ],
+        'social_links' => [
+            'invalid_url_for_platform' => '',
+        ],
+        'creator_search' => [
+            'max' => '',
+        ],
+    ],
     'date'              => ':Attribute은(는) 유효한 날짜가 아닙니다.',
     'date_equals'       => ':Attribute은(는) :date과(와) 같은날짜여야합니다.',
     'date_format'       => ':Attribute이(가) :format 형식과 일치하지 않습니다.',

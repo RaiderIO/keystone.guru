@@ -13,8 +13,10 @@
     @endisset
 
     <div class="mb-3{{ $errors->has('active') ? ' has-error' : '' }}">
-        {{ html()->label(__('view_admin.expansion.edit.active'), 'active') }}
-        {{ html()->checkbox('active', isset($expansion) ? $expansion->active : 1, 1)->class('form-check-input') }}
+        <div class="form-check">
+            {{ html()->checkbox('active', isset($expansion) ? $expansion->active : 1, 1)->class('form-check-input') }}
+            {{ html()->label(__('view_admin.expansion.edit.active'), 'active')->class('form-check-label') }}
+        </div>
         @include('common.forms.form-error', ['key' => 'active'])
     </div>
 

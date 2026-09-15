@@ -1,0 +1,22 @@
+# codebase-memory-mcp ignore rules.
+# Laravel's compiled Blade cache: machine-generated copies of every rendered view.
+# Gitignored via storage/framework/views/.gitignore, which CBM does not honour (nested
+# .gitignore files are not read), so they land in the graph as mangled duplicates.
+storage/framework/
+
+# Container config and MySQL data directories - not source.
+docker-compose/
+
+# Gitignored runtime output (debug snapshots, request logs) — already excluded per-file via root
+# .gitignore/nested .gitignore, but listing them here collapses the coverage report's not_indexed
+# list from hundreds of individual file entries to two directory entries.
+storage/debugbar/
+storage/logs/
+
+# Re-include tracked source that CBM's built-in skip-list drops by directory name.
+!resources/assets/
+!database/migrations/
+!scripts/
+
+# Build scripts are real source (.mjs), not build output.
+!scripts/build/

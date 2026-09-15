@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware\Api;
 
+use App\Http\Middleware\Api\Logging\ApiAuthenticationLoggingInterface;
+use App\Service\User\Dtos\BasicAuthenticationResult;
 use App\Service\User\UserServiceInterface;
 use Closure;
 use Illuminate\Http\Request;
@@ -10,8 +12,10 @@ use Teapot\StatusCode;
 
 class ApiAuthentication
 {
-    public function __construct(private readonly UserServiceInterface $userService)
-    {
+    public function __construct(
+        private readonly UserServiceInterface              $userService,
+        private readonly ApiAuthenticationLoggingInterface $log,
+    ) {
     }
 
     /**
@@ -19,8 +23,21 @@ class ApiAuthentication
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!app()->runningUnitTests() && !$this->userService->loginAsUserFromAuthenticationHeader($request)) {
-            return response()->json(['error' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
+        if (!app()->runningUnitTests()) {
+            $result = $this->userService->loginAsUserFromAuthenticationHeader($request);
+
+            if ($result !== BasicAuthenticationResult::Success) {
+                // Every failure answers the same opaque 401, so the log line is the only place that says
+                // whether the credentials were rejected or were never usable in the first place. A request
+                // that carried no Authorization header at all is not logged: that is every URL scanner
+                // that ever walks the API, and the group middleware runs before the route-level throttles,
+                // so logging it would hand anyone an unthrottled way to flood the warning log.
+                if ($result !== BasicAuthenticationResult::MissingHeader) {
+                    $this->log->handleAuthenticationFailed($result->value);
+                }
+
+                return response()->json(['error' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
+            }
         }
 
         return $next($request);

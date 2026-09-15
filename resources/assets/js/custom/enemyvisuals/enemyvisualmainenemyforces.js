@@ -47,6 +47,10 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
      * @private
      */
     _getDisplayText() {
+        if (this.isSpeedrunRequiredNpc()) {
+            return '1';
+        }
+
         return getState().getMapNumberStyle() === NUMBER_STYLE_ENEMY_FORCES ?
             `${this.enemyvisual.enemy.getEnemyForces()}` :
             `${getFormattedPercentage(this.enemyvisual.enemy.getEnemyForces(), this.enemyvisual.map.enemyForcesManager.getEnemyForcesRequired())}`;
@@ -83,4 +87,12 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
         super.cleanup();
 
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemyVisualMainEnemyForces,
+    };
 }

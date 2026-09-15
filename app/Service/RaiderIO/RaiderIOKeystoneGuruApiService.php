@@ -12,7 +12,7 @@ use App\Service\RaiderIO\Dtos\HeatmapDataResponse\HeatmapDataResponse;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
-use App\Service\Season\SeasonAffixGroupServiceInterface;
+use App\Service\RaiderIO\Enums\RaiderIOFaction;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
@@ -32,10 +32,12 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
     /** Hardcoded dungeon zone ID matching the challenge mode ID above. */
     private const int FAKE_DUNGEON_ZONE_ID = 8910;
 
+    /** Faction used to populate fake runs that were not asked for a specific one. */
+    private const RaiderIOFaction FAKE_FACTION = RaiderIOFaction::Alliance;
+
     public function __construct(
-        private readonly SeasonServiceInterface           $seasonService,
-        private readonly SeasonAffixGroupServiceInterface $seasonAffixGroupService,
-        private readonly CombatLogEventServiceInterface   $combatLogEventService,
+        private readonly SeasonServiceInterface         $seasonService,
+        private readonly CombatLogEventServiceInterface $combatLogEventService,
     ) {
     }
 
@@ -43,7 +45,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
     {
         return HeatmapDataResponse::fromArray(
             $this->combatLogEventService->getGridAggregation(
-                CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $this->seasonAffixGroupService, $heatmapDataFilter),
+                CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $heatmapDataFilter),
             )->toArray(),
         );
     }
@@ -60,6 +62,10 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
         $challengeModeId = $filter->dungeon?->challenge_mode_id ?? self::FAKE_CHALLENGE_MODE_ID; // @phpstan-ignore nullsafe.neverNull
         $specBlizzardIds = $filter->specs->pluck('specialization_id')->map('intval')->values()->all();
         $memberSpecIds   = !empty($specBlizzardIds) ? $specBlizzardIds : self::FAKE_SPEC_IDS;
+        // Reflected back the same way the dungeon and the specs are: the poller records a fake run
+        // against the very criteria it searched with, so a filter this mock ignored would leave that
+        // criterion's budget stuck at zero for as long as the mock is enabled.
+        $faction = RaiderIOFaction::fromFaction($filter->faction) ?? self::FAKE_FACTION;
 
         $runs = [];
         foreach ($zipFiles as $index => $filePath) {
@@ -70,6 +76,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
                 memberSpecIds:   $memberSpecIds,
                 mythicLevel:     $filter->mythicLevelMin,
                 affixes:         [],
+                faction:         $faction->value,
             );
         }
 

@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => '',
-                'popular'                    => '',
-                'popular_by_current_affixes' => '',
-                'popular_by_next_affixes'    => '',
-                'newly_published_routes'     => '',
+                'weekly_route'           => '',
+                'weekly_routes'          => '',
+                'community_routes'       => '',
+                'popular'                => '',
+                'newly_published_routes' => '',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'expert' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'title' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => '',
-            'popular'                    => '',
-            'popular_by_current_affixes' => '',
-            'popular_by_next_affixes'    => '',
-            'newly_published_routes'     => '',
+            'title'                  => '',
+            'popular'                => '',
+            'newly_published_routes' => '',
         ],
         'panel' => [
             'show_more' => '',

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\TWW;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICombatLogControllerCombatLogRouteTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCombatLogRouteEcoDomeAldaniTest extends APICombatLog
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_ECO_DOME_AL_DANI;
+        return DungeonKey::ECO_DOME_AL_DANI->value;
     }
 
     #[Test]
@@ -26,16 +26,12 @@ class APICombatLogControllerCombatLogRouteEcoDomeAldaniTest extends APICombatLog
         $postBody = $this->getJsonData('TWW/tww_s3_ptr_eco_dome_aldani_7', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 23, 586);
+        $this->validatePulls($postBody, $responseArr, 23, 586);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

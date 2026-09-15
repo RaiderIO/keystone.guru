@@ -34,6 +34,7 @@ trait ResolvesCombatLogSearchFilter
             completedAtFrom: Carbon::now()->subDays((int)$this->option('from-days')),
             completedAtTo:   null,
             mythicLevelMin:  (int)$this->option('min-level'),
+            mythicLevelMax:  null,
             limit:           (int)$this->option('limit'),
             offset:          (int)$this->option('offset'),
         );

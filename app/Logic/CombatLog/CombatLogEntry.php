@@ -14,6 +14,10 @@ use InvalidArgumentException;
 
 class CombatLogEntry
 {
+    /**
+     * Tried in order in {@see parseTimestamp()}; the first match wins and is memoized. Order is
+     * load-bearing only if a future entry overlaps with an earlier one - today none do.
+     */
     public const DATE_FORMATS = [
         'm/d H:i:s.v',
         'm/d/Y H:i:s.v-1',
@@ -171,6 +175,8 @@ class CombatLogEntry
                 $parsedTimestamp = Carbon::createFromFormat($dateFormat, $timestamp);
 
                 self::$previousDateFormat = $key;
+
+                break;
             } catch (InvalidFormatException) {
                 continue;
             }

@@ -1,0 +1,123 @@
+/**
+ * The hover tooltip card, shared by the spell tooltips (#3951) and the NPC tooltips (#4096).
+ *
+ * Styled after the compendium's Field Record surfaces (#3945): a card on the tonal ladder through
+ * theme variables, never a hardcoded theme colour, so darkly, lux and vapor all hold.
+ */
+
+.hover_tooltip {
+    position: absolute;
+    z-index: 1080;
+    display: none;
+    max-width: 22rem;
+    padding: 0.75rem;
+    background-color: var(--theme-bg-card);
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 0.25rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+    font-size: 0.875rem;
+    line-height: 1.45;
+    pointer-events: none;
+}
+
+.hover_tooltip_visible {
+    display: block;
+}
+
+.hover_tooltip_header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.hover_tooltip_icon,
+.hover_tooltip_portrait {
+    border-radius: 0.2rem;
+    flex-shrink: 0;
+}
+
+.hover_tooltip_name {
+    font-weight: 600;
+}
+
+.hover_tooltip_description {
+    color: var(--bs-secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.hover_tooltip_description:last-child {
+    margin-bottom: 0;
+}
+
+/* ===== Badge rail ===== */
+
+.hover_tooltip_badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.hover_tooltip_badge {
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+/* ===== Facts register ===== */
+
+.hover_tooltip_facts {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.15rem 0.75rem;
+    margin-top: 0.6rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.25);
+    font-size: 0.8125rem;
+}
+
+.hover_tooltip_fact {
+    display: contents;
+}
+
+.hover_tooltip_fact_label {
+    color: var(--bs-secondary-color);
+    white-space: nowrap;
+}
+
+.hover_tooltip_fact_value {
+    text-align: right;
+}
+
+/* ===== Characteristics ===== */
+
+.hover_tooltip_characteristics {
+    margin-top: 0.6rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.25);
+    font-size: 0.8125rem;
+}
+
+.hover_tooltip_characteristics_label {
+    color: var(--bs-secondary-color);
+    margin-bottom: 0.25rem;
+}
+
+.hover_tooltip_characteristics_list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.6rem;
+}
+
+.hover_tooltip_characteristic {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.hover_tooltip_characteristic img {
+    border-radius: 0.2rem;
+}

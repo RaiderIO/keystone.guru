@@ -4,11 +4,16 @@ namespace App\Service\MDT;
 
 use App\Logic\MDT\Exception\CliWeakaurasParserNotFoundException;
 use App\Logic\MDT\IO\MDTStringFormat;
+use App\Service\MDT\Logging\MDTBaseServiceLoggingInterface;
 use Lua;
 use Throwable;
 
 abstract class MDTBaseService
 {
+    public function __construct(private readonly MDTBaseServiceLoggingInterface $log)
+    {
+    }
+
     /**
      * Gets a Lua instance and load all the required files in it.
      */
@@ -50,11 +55,16 @@ abstract class MDTBaseService
         } catch (CliWeakaurasParserNotFoundException $cliWeakaurasParserNotFoundException) {
             throw $cliWeakaurasParserNotFoundException;
         } catch (Throwable $throwable) {
-            // detect() matched a format, so this string genuinely claimed to be an MDT export -
-            // always worth reporting. Truncated: the input is unvalidated user input of arbitrary size.
-            logger()->error($throwable->getMessage(), [
-                'string' => substr($string, 0, 2048),
-            ]);
+            // Truncated: the input is unvalidated user input of arbitrary size.
+            $truncatedString = substr($string, 0, 2048);
+
+            // Whether the string plausibly claims to be an MDT export string at all decides whether this
+            // is worth alerting on - see the two logging methods for the reasoning behind each level.
+            if (MDTStringFormat::isValid($string)) {
+                $this->log->decodeFailed($truncatedString, $throwable::class, $throwable->getMessage());
+            } else {
+                $this->log->decodeInvalidStringFailed($truncatedString, $throwable::class, $throwable->getMessage());
+            }
 
             return null;
         }

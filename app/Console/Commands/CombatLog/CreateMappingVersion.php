@@ -5,6 +5,7 @@ namespace App\Console\Commands\CombatLog;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\CombatLog\CombatLogMappingVersionServiceInterface;
+use App\Service\CombatLog\Exceptions\DungeonHasNoNpcsException;
 
 class CreateMappingVersion extends BaseCombatLogCommand
 {
@@ -36,6 +37,15 @@ class CreateMappingVersion extends BaseCombatLogCommand
         $mappingVersion = null;
         if (is_numeric($mappingVersionId)) {
             $mappingVersion = MappingVersion::findOrFail($mappingVersionId);
+
+            if ($mappingVersion->enemies()->count() > 0) {
+                $this->error(sprintf(
+                    'Mapping version %d already has enemies on it - this command only supports the initial placement of enemies, not amending an existing mapping version.',
+                    $mappingVersion->id,
+                ));
+
+                return 1;
+            }
         }
 
         return $this->parseCombatLogRecursively(
@@ -66,27 +76,53 @@ class CreateMappingVersion extends BaseCombatLogCommand
         }
 
         $hasMappingVersion = $mappingVersion !== null;
+        // Enemies are appended to the mapping version, so on an existing one its current enemies say nothing
+        // about what this combat log contributed - only the difference does (#4354)
+        $enemyCountBefore = $mappingVersion?->enemies()->count() ?? 0;
 
-        $mappingVersion = $combatLogMappingVersionService->createMappingVersionFromDungeonOrRaid(
-            $filePath,
-            $gameVersion,
-            $mappingVersion,
-            $enemyConnections,
-        );
+        try {
+            $mappingVersion = $combatLogMappingVersionService->createMappingVersionFromDungeonOrRaid(
+                $filePath,
+                $gameVersion,
+                $mappingVersion,
+                $enemyConnections,
+            );
+        } catch (DungeonHasNoNpcsException $dungeonHasNoNpcsException) {
+            // The message is actionable on its own - don't bury it in a stack trace (#4354)
+            $this->error(sprintf('- %s', $dungeonHasNoNpcsException->getMessage()));
+
+            return 0;
+        }
 
         if ($mappingVersion === null) {
             $this->error(sprintf('Failed to create mapping version: %s', $filePath));
-        } else {
-            $this->info(
+
+            return 0;
+        }
+
+        $enemyCount    = $mappingVersion->enemies()->count();
+        $resultMessage = sprintf(
+            '- %s mapping version %s (%s, %d, %d enemies)',
+            $hasMappingVersion ? 'Updated' : 'Created',
+            $mappingVersion->version,
+            __($mappingVersion->dungeon->name, [], 'en_US'),
+            $mappingVersion->id,
+            $enemyCount,
+        );
+
+        if ($enemyCount - $enemyCountBefore === 0) {
+            // The dungeon does have NPCs, but not the ones in this combat log - so every enemy was skipped
+            // anyway. Report it as the failed import it is rather than as a successful one (#4354).
+            $this->error($resultMessage);
+            $this->error(
                 sprintf(
-                    '- %s mapping version %s (%s, %d, %d enemies)',
-                    $hasMappingVersion ? 'Updated' : 'Created',
-                    $mappingVersion->version,
+                    '- No enemies were imported! None of the NPCs in this combat log are attached to %s - run `php artisan combatlog:extractdata %s` first to create them.',
                     __($mappingVersion->dungeon->name, [], 'en_US'),
-                    $mappingVersion->id,
-                    $mappingVersion->enemies()->count(),
+                    $filePath,
                 ),
             );
+        } else {
+            $this->info($resultMessage);
         }
 
         return 0;

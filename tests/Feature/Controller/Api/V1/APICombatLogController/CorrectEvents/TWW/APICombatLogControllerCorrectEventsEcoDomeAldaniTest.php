@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\TWW;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\APICombatLogControllerCorrectEventsTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCorrectEventsEcoDomeAldaniTest extends APICombatLogC
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_ECO_DOME_AL_DANI;
+        return DungeonKey::ECO_DOME_AL_DANI->value;
     }
 
     #[Test]

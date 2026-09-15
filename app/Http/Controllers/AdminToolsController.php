@@ -4,14 +4,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\DropCaches;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\User;
-use App\Service\Cache\CacheServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
-use Artisan;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -76,17 +75,11 @@ class AdminToolsController extends Controller
         ]);
     }
 
-    public function dropCache(Request $request, CacheServiceInterface $cacheService): RedirectResponse
+    public function dropCache(Request $request): RedirectResponse
     {
-        ini_set('max_execution_time', -1);
+        DropCaches::dispatch();
 
-        $cacheService->dropCaches();
-
-        Artisan::call('modelCache:clear');
-
-        Artisan::call('keystoneguru:view', ['operation' => 'cache']);
-
-        Session::flash('status', __('controller.admintools.flash.caches_dropped_successfully'));
+        Session::flash('status', __('controller.admintools.flash.caches_drop_queued'));
 
         return redirect()->route('admin.tools');
     }

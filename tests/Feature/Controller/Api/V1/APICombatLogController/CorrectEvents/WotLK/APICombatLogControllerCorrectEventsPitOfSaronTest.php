@@ -1,8 +1,7 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CorrectEvents\WotLK;
-
-use App\Models\Dungeon;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\WotLK;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\APICombatLogControllerCorrectEventsTestBase;
@@ -16,7 +15,7 @@ class APICombatLogControllerCorrectEventsPitOfSaronTest extends APICombatLogCont
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_PIT_OF_SARON;
+        return DungeonKey::PIT_OF_SARON->value;
     }
 
     #[Test]

@@ -7,6 +7,12 @@ use InvalidArgumentException;
 class CombatLogStringParser
 {
     /**
+     * The only characters {@see parseCombatLogLine()} makes a decision on; every other character is
+     * appended to the current value unchanged.
+     */
+    private const string CONTROL_CHARACTERS = '"[],()';
+
+    /**
      * @param  string             $line
      * @return array<int, string>
      */
@@ -21,6 +27,18 @@ class CombatLogStringParser
 
         $length = strlen($line);
         for ($i = 0; $i < $length; $i++) {
+            // Everything that is not one of these six characters is copied through verbatim, so jump
+            // straight to the next one instead of walking the line a character at a time.
+            $runLength = strcspn($line, self::CONTROL_CHARACTERS, $i);
+            if ($runLength > 0) {
+                $current .= substr($line, $i, $runLength);
+                $i += $runLength;
+
+                if ($i >= $length) {
+                    break;
+                }
+            }
+
             $char = $line[$i];
 
             if ($char === '"' && ($i === 0 || $line[$i - 1] !== '\\')) {

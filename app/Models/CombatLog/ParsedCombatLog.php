@@ -2,25 +2,25 @@
 
 namespace App\Models\CombatLog;
 
-use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int  $id
- * @property int  $combat_log_path
- * @property bool $extracted_data
+ * @property int         $id
+ * @property string|null $combat_log_path
+ * @property int|null    $run_id          The Raider.IO run this combat log belongs to, written by PollCombatLogRunsCommand.
+ * @property bool        $extracted_data
  *
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
  * @mixin Eloquent
  */
 class ParsedCombatLog extends Model
 {
-    use SeederModel, SerializesDates;
+    use SerializesDates;
 
     protected $connection = 'combatlog';
 

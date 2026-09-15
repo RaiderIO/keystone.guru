@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api\V1\InternalTeam\Cache;
 
 use App\Http\Controllers\Controller;
-use App\Service\Cache\CacheServiceInterface;
+use App\Jobs\DropCaches;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 
 class APICacheController extends Controller
 {
@@ -14,7 +13,7 @@ class APICacheController extends Controller
      * @OA\Post(
      *     operationId="dropCache",
      *     path="/api/v1/cache/drop",
-     *     summary="Drop all application caches",
+     *     summary="Queue dropping of all application caches",
      *     tags={"Cache"},
      *
      *     @OA\Response(response=200, description="Successful operation",
@@ -24,15 +23,9 @@ class APICacheController extends Controller
      *     )
      * )
      */
-    public function drop(Request $request, CacheServiceInterface $cacheService): JsonResponse
+    public function drop(Request $request): JsonResponse
     {
-        ini_set('max_execution_time', -1);
-
-        $cacheService->dropCaches();
-
-        Artisan::call('modelCache:clear');
-
-        Artisan::call('keystoneguru:view', ['operation' => 'cache']);
+        DropCaches::dispatch();
 
         return response()->json(['status' => 'ok']);
     }

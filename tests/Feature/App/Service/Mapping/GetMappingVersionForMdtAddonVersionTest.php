@@ -187,7 +187,100 @@ final class GetMappingVersionForMdtAddonVersionTest extends PublicTestCase
         $this->assertSame($expected->id, $result->id);
     }
 
-    private function createMappingVersion(int $version, ?int $addonVersion, string $createdAt): MappingVersion
+    #[Test]
+    public function getMappingVersionForMdtAddonVersion_givenPendingMappingVersionTiedWithMdtOne_returnsTheMdtMappingVersion(): void
+    {
+        // Arrange - the live case (#4280): v2 was imported from MDT, v3 is our own correction of it and
+        // inherited v2's mdt_addon_version, so both resolve to the same imported-from date.
+        $expected = $this->createMappingVersion(2, 5014, '2024-09-28 00:00:00');
+        $this->createMappingVersion(3, 5014, '2024-10-05 00:00:00', true);
+
+        // Act
+        $result = $this->mappingService->getMappingVersionForMdtAddonVersion($this->reloadDungeon(), 5014, $this->gameVersion);
+
+        // Assert - the tie-break must not hand the import our diverged mapping version
+        $this->assertNotNull($result);
+        $this->assertSame($expected->id, $result->id);
+    }
+
+    #[Test]
+    public function getMappingVersionForMdtAddonVersion_givenPendingCurrentAndVersionNewerThanEveryImport_returnsNewestMdtMappingVersion(): void
+    {
+        // Arrange
+        $expected = $this->createMappingVersion(1, 5014, '2024-09-28 00:00:00');
+        $this->createMappingVersion(2, 5014, '2024-10-05 00:00:00', true);
+
+        // Act - string newer than anything imported, which used to fall back to the current mapping version
+        $result = $this->mappingService->getMappingVersionForMdtAddonVersion($this->reloadDungeon(), 6115, $this->gameVersion);
+
+        // Assert
+        $this->assertNotNull($result);
+        $this->assertSame($expected->id, $result->id);
+    }
+
+    #[Test]
+    public function getMappingVersionForMdtAddonVersion_givenPendingCurrentAndNoAddonVersion_returnsNewestMdtMappingVersion(): void
+    {
+        // Arrange
+        $expected = $this->createMappingVersion(1, 5014, '2024-09-28 00:00:00');
+        $this->createMappingVersion(2, 5014, '2024-10-05 00:00:00', true);
+
+        // Act
+        $result = $this->mappingService->getMappingVersionForMdtAddonVersion($this->reloadDungeon(), null, $this->gameVersion);
+
+        // Assert
+        $this->assertNotNull($result);
+        $this->assertSame($expected->id, $result->id);
+    }
+
+    #[Test]
+    public function getMappingVersionForMdtAddonVersion_givenPendingCurrentAndUnknownAddonVersion_returnsNewestMdtMappingVersion(): void
+    {
+        // Arrange
+        $expected = $this->createMappingVersion(1, 5014, '2024-09-28 00:00:00');
+        $this->createMappingVersion(2, 5014, '2024-10-05 00:00:00', true);
+
+        // Act
+        $result = $this->mappingService->getMappingVersionForMdtAddonVersion($this->reloadDungeon(), 999999, $this->gameVersion);
+
+        // Assert
+        $this->assertNotNull($result);
+        $this->assertSame($expected->id, $result->id);
+    }
+
+    #[Test]
+    public function getMappingVersionForMdtAddonVersion_givenPendingMappingVersionMidChain_returnsTheLaterMdtMappingVersion(): void
+    {
+        // Arrange - MDT caught up again after our own correction, so the newest mapping version is MDT's
+        $this->createMappingVersion(1, 40120, '2022-11-28 00:00:00');
+        $this->createMappingVersion(2, 40120, '2023-01-05 00:00:00', true);
+        $expected = $this->createMappingVersion(3, 5014, '2024-09-28 00:00:00');
+
+        // Act - string built after our correction but before MDT's next release
+        $result = $this->mappingService->getMappingVersionForMdtAddonVersion($this->reloadDungeon(), 4351, $this->gameVersion);
+
+        // Assert
+        $this->assertNotNull($result);
+        $this->assertSame($expected->id, $result->id);
+    }
+
+    #[Test]
+    public function getMappingVersionForMdtAddonVersion_givenEveryMappingVersionPending_returnsCurrentMappingVersion(): void
+    {
+        // Arrange - a dungeon MDT never carried: there is no MDT-matching mapping version to fall back to,
+        // and callers dereference the result, so it must not be null.
+        $this->createMappingVersion(1, 5014, '2024-09-28 00:00:00', true);
+        $current = $this->createMappingVersion(2, 5014, '2024-10-05 00:00:00', true);
+
+        // Act
+        $result = $this->mappingService->getMappingVersionForMdtAddonVersion($this->reloadDungeon(), 5014, $this->gameVersion);
+
+        // Assert
+        $this->assertNotNull($result);
+        $this->assertSame($current->id, $result->id);
+    }
+
+    private function createMappingVersion(int $version, ?int $addonVersion, string $createdAt, bool $mdtChangesPending = false): MappingVersion
     {
         // insertGetId bypasses the clone-on-create boot, giving us exactly the candidate rows we define.
         $id = MappingVersion::query()->insertGetId([
@@ -198,6 +291,7 @@ final class GetMappingVersionForMdtAddonVersionTest extends PublicTestCase
             'timer_max_seconds'     => 0,
             'facade_enabled'        => false,
             'mdt_addon_version'     => $addonVersion,
+            'mdt_changes_pending'   => $mdtChangesPending,
             'created_at'            => $createdAt,
             'updated_at'            => $createdAt,
         ]);

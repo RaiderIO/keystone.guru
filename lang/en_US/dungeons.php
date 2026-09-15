@@ -943,10 +943,10 @@ return [
             ],
         ],
         'kings_rest' => [
-            'name'         => 'Kings\' Rest',
+            'name'         => 'King\'s Rest',
             'abbreviation' => 'KR',
             'floors'       => [
-                'kings_rest' => 'Kings\' Rest',
+                'kings_rest' => 'King\'s Rest',
             ],
         ],
         'mechagon_junkyard' => [
@@ -1397,14 +1397,14 @@ return [
         ],
         'the_blinding_vale' => [
             'name'         => 'The Blinding Vale',
-            'abbreviation' => 'TBV',
+            'abbreviation' => 'BV',
             'floors'       => [
                 'the_blinding_vale' => 'The Blinding Vale',
             ],
         ],
         'voidscar_arena' => [
             'name'         => 'Voidscar Arena',
-            'abbreviation' => 'VA',
+            'abbreviation' => 'VSA',
             'floors'       => [
                 'halls_of_spite'   => 'Halls of Spite',
                 'voidscar_arena'   => 'Voidscar Arena',

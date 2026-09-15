@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\AddsTraceIdToContext;
 use App\Http\Middleware\Api\ApiAuthentication;
+use App\Http\Middleware\Api\ApiAuthenticationThrottle;
 use App\Http\Middleware\Api\ApiRole;
 use App\Http\Middleware\BlockBannedIpAddresses;
 use App\Http\Middleware\DebugBarMessageLogger;
@@ -11,9 +12,12 @@ use App\Http\Middleware\LegalAgreed;
 use App\Http\Middleware\OnlyAjax;
 use App\Http\Middleware\PoweredBySwoole;
 use App\Http\Middleware\ReadOnlyMode;
+use App\Http\Middleware\ResetsMapFacadeStyleOverride;
+use App\Http\Middleware\StartSessionUnlessThrowaway;
 use App\Http\Middleware\TracksUserIpAddress;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\ViewCacheBuster;
+use App\Service\CombatLog\Exceptions\CombatLogSegmentDownloadFailedException;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use BeyondCode\ServerTiming\Middleware\ServerTimingMiddleware;
 use Illuminate\Foundation\Application;
@@ -21,9 +25,12 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
 use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Session\Middleware\StartSession;
 use Jenssegers\Agent\AgentServiceProvider;
 use Laratrust\LaratrustServiceProvider;
 use Laravel\Tinker\TinkerServiceProvider;
+use Psr\Log\LogLevel;
 use Rollbar\Laravel\RollbarServiceProvider;
 use Sentry\Laravel\Integration;
 use SocialiteProviders\Manager\ServiceProvider;
@@ -48,31 +55,50 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn() => route('login'));
         $middleware->redirectUsersTo('/home');
 
-        // Only the external webhook endpoints (called by GitHub / Wowhead without a session)
-        // are exempt from CSRF verification; every other route sends a token.
+        // Exempt from CSRF verification: the external webhook endpoints (called by GitHub / Wowhead
+        // without a session) and the unauthenticated metric counters, which are also posted from
+        // cross-site embed <iframe>s that carry no session cookie under same_site=lax. Every other
+        // route sends a token.
         $middleware->validateCsrfTokens(except: [
             'webhook/*',
+            'ajax/metric',
+            'ajax/metric/*',
         ]);
 
         // Prepend so every log line of the request - including those of other global middleware - carries the trace_id
         $middleware->prepend(AddsTraceIdToContext::class);
 
         // Runs right after (the replaced) TrustProxies, so $request->ip() is already the real
-        // visitor IP resolved from CF-Connecting-IP - see BlockBannedIpAddresses for details.
+        // visitor IP resolved from the forwarded chain - see BlockBannedIpAddresses for details.
         $middleware->append([
             BlockBannedIpAddresses::class,
             ServerTimingMiddleware::class,
             CheckForMaintenanceMode::class,
             PoweredBySwoole::class,
+            // Must run before any controller that calls User::forceMapFacadeStyle() - it writes a
+            // static that would otherwise leak into the next request on the same Octane worker
+            ResetsMapFacadeStyleOverride::class,
         ]);
 
         $middleware->api([
+            'authentication_throttle'   => ApiAuthenticationThrottle::class,
             'authentication'            => ApiAuthentication::class,
+            'throttle_api_general'      => 'throttle:api-general',
             'debug_info_context_logger' => DebugInfoContextLogger::class,
             'read_only_mode'            => ReadOnlyMode::class,
         ]);
 
+        // The order written above is not the order that runs: SortedMiddleware re-sorts the stack by the priority
+        // list, and a middleware that is on that list (ThrottleRequests) moves ahead of one that is not. The
+        // api-general limiter buckets by user id and exempts internal roles, so it has to see the user that
+        // ApiAuthentication resolves - which only holds if the authentication middleware is on the list too, and
+        // the throttle that bounds the authentication has to run ahead of it for the same reason.
+        $middleware->prependToPriorityList(before: ThrottleRequests::class, prepend: ApiAuthentication::class);
+        $middleware->prependToPriorityList(before: ApiAuthentication::class, prepend: ApiAuthenticationThrottle::class);
+
         $middleware->replace(\Illuminate\Http\Middleware\TrustProxies::class, TrustProxies::class);
+
+        $middleware->web(replace: [StartSession::class => StartSessionUnlessThrowaway::class]);
 
         $middleware->alias([
             'ajax'                      => OnlyAjax::class,
@@ -88,5 +114,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
+        // A segment failing to download is expected and costs nothing - the run is skipped and
+        // retried with a fresh presigned URL, or its budget is given back for the next poll to
+        // spend elsewhere. Only the aggregate rate matters, which combatlog:reportpollinghealth
+        // already reports on separately at error level.
+        $exceptions->level(CombatLogSegmentDownloadFailedException::class, LogLevel::WARNING);
+
         Integration::handles($exceptions);
     })->create();

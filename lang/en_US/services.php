@@ -49,6 +49,7 @@ return [
                 'unable_to_find_enemies_pull_skipped_details'          => 'This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.',
                 'unable_to_find_awakened_obelisks'                     => 'Cannot find Awakened Obelisks for your dungeon/week combination. Your Awakened Obelisk skips will not be imported.',
                 'unable_to_find_awakened_obelisk_different_floor'      => 'Unable to import Awakened Obelisk :name, it is on a different floor than the Obelisk itself. Keystone.guru does not support this at this time.',
+                'unable_to_find_awakened_obelisk_enemy'                => 'Unable to import Awakened Obelisk :name, its enemy could not be resolved on your dungeon/week combination.',
                 'unable_to_decode_mdt_import_string'                   => 'Unable to decode MDT import string',
                 'unable_to_validate_mdt_import_string'                 => 'Unable to validate MDT import string',
             ],
@@ -61,6 +62,22 @@ return [
         'analyze_combat_log' => [
             'verify_error'     => 'Unable to verify combat log: error.',
             'processing_error' => 'Unable to process combat log: error.',
+        ],
+    ],
+    'combatlog' => [
+        'enemy_failure_analysis' => [
+            'verdict' => [
+                'npc_not_mapped'       => 'NPC not mapped',
+                'no_enemy_in_range'    => 'No enemy in range',
+                'enemies_exhausted'    => 'More in game than mapped',
+                'wrong_floor_artifact' => 'Probably a wrong-floor artifact',
+            ],
+            'suggestion' => [
+                'npc_not_mapped'       => ':npc is not in this mapping version at all, yet it was engaged :count times across :routes routes here. Add it (or its pack) at this location.',
+                'no_enemy_in_range'    => 'The nearest mapped :npc (enemy :enemy_id) is :distance yd away, beyond the :range yd engagement range. A pack of :npc is probably missing here, or mapped in the wrong place.',
+                'enemies_exhausted'    => ':enemies mapped :npc within range, but routes still fail here about :avg times each - the game probably has more :npc in this pack than the mapping does.',
+                'wrong_floor_artifact' => 'No :npc in range on this floor, but there is one within :distance yd on another floor. The recorded floor is inferred from the previous npc in the log, so this is most likely that inference - verify before changing the mapping.',
+            ],
         ],
     ],
 

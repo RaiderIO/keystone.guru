@@ -91,9 +91,12 @@ class MDTImportController extends Controller
                 $dungeonRoute = $mdtImportStringService->setEncodedString($string)
                     ->getDungeonRoute(collect(), collect(), $sandbox, true, $validated['assign_notes_to_pulls'] ?? false, $validated['import_as_this_week'] ?? false);
 
-                // Ensure team_id is set
+                // Ensure team_id is set. -1 is the "no team" sentinel the import form's select
+                // submits, and team_id is a signed column that would otherwise store it verbatim
                 if (!$sandbox) {
-                    $dungeonRoute->team_id = $validated['team_id'] ?? null;
+                    $teamId = (int)($validated['team_id'] ?? 0);
+
+                    $dungeonRoute->team_id = $teamId > 0 ? $teamId : null;
                     $dungeonRoute->save();
                 }
             } catch (MDTStringParseException) {

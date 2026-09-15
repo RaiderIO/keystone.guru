@@ -131,6 +131,29 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_EMPOWER_END           => EmpowerEnd::class,
     ];
 
+    /**
+     * Concrete suffix class per already-resolved event name, per combat log version. Nested rather
+     * than keyed on a "<version>|<eventName>" string because building that key costs more per line
+     * than the second array lookup does.
+     *
+     * The mapping is a pure function of those two values - no request, user or connection state - so
+     * retaining it between requests under Octane is safe. Growth is capped rather than argued away:
+     * see {@see RESOLVED_CLASS_NAME_LIMIT}.
+     *
+     * @var array<int, array<string, class-string<Suffix>>>
+     */
+    private static array $resolvedClassNames = [];
+
+    /**
+     * Caching stops above this many entries per combat log version. A well formed log needs ~32 -
+     * the distinct event names across the entire benchmark corpus - but nothing constrains a log to
+     * be well formed: resolution only requires the name to *end* in a known suffix, so
+     * SPELL_<anything>_CAST_SUCCESS is accepted and would otherwise add an entry that a long-lived
+     * Octane worker never releases. Past the cap resolution falls back to the scan, which is still
+     * correct, just no faster than it was before.
+     */
+    private const int RESOLVED_CLASS_NAME_LIMIT = 1024;
+
     public function __construct(protected int $combatLogVersion)
     {
     }
@@ -150,11 +173,24 @@ abstract class Suffix implements HasParameters
      */
     public static function createFromEventName(int $combatLogVersion, string $eventName): Suffix
     {
+        // Every line pays this lookup, and the answer only ever depends on the version and the event
+        // name, so resolve a name once and construct directly from the remembered class after that.
+        if (isset(self::$resolvedClassNames[$combatLogVersion][$eventName])) {
+            $className = self::$resolvedClassNames[$combatLogVersion][$eventName];
+
+            return new $className($combatLogVersion);
+        }
+
         foreach (self::SUFFIX_CLASS_MAPPING as $prefix => $className) {
             if (Str::endsWith($eventName, $prefix)) {
-                $suffix = new $className($combatLogVersion);
-                if ($suffix instanceof SuffixBuilderInterface) {
-                    return $suffix::create($combatLogVersion);
+                // is_subclass_of() answers this from the class name, so a builder no longer has an
+                // instance built and thrown away before create() is called on it.
+                $suffix = is_subclass_of($className, SuffixBuilderInterface::class)
+                    ? $className::create($combatLogVersion)
+                    : new $className($combatLogVersion);
+
+                if (count(self::$resolvedClassNames[$combatLogVersion] ?? []) < self::RESOLVED_CLASS_NAME_LIMIT) {
+                    self::$resolvedClassNames[$combatLogVersion][$eventName] = $suffix::class;
                 }
 
                 return $suffix;

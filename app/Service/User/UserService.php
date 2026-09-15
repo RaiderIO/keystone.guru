@@ -4,6 +4,7 @@ namespace App\Service\User;
 
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\User\Dtos\BasicAuthenticationResult;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -21,34 +22,28 @@ class UserService implements UserServiceInterface
     ) {
     }
 
-    public function loginAsUserFromAuthenticationHeader(Request $request): bool
+    public function loginAsUserFromAuthenticationHeader(Request $request): BasicAuthenticationResult
     {
-        if (!$request->hasHeader('Authorization')) {
+        $credentials = $this->credentialsFromAuthenticationHeader($request);
+
+        if ($credentials instanceof BasicAuthenticationResult) {
+            return $credentials;
+        }
+
+        return $this->loginAsUser(...$credentials)
+            ? BasicAuthenticationResult::Success
+            : BasicAuthenticationResult::CredentialsRejected;
+    }
+
+    public function hasVerifiedCredentialsCached(Request $request): bool
+    {
+        $credentials = $this->credentialsFromAuthenticationHeader($request);
+
+        if ($credentials instanceof BasicAuthenticationResult) {
             return false;
         }
 
-        $authentication = (string)$request->header('Authorization');
-        if (!Str::startsWith($authentication, 'Basic')) {
-            return false;
-        }
-
-        $base64     = Str::replace('Basic ', '', $authentication);
-        $usernamePw = base64_decode($base64);
-        if ($usernamePw === false) { // @phpstan-ignore identical.alwaysFalse
-            return false;
-        }
-
-        $explode = explode(':', $usernamePw);
-        if (count($explode) !== 2) {
-            return false;
-        }
-
-        [
-            $username,
-            $password,
-        ] = $explode;
-
-        return $this->loginAsUser($username, $password);
+        return (bool)$this->cacheService->get($this->userAuthCacheKey(...$credentials));
     }
 
     /**
@@ -61,12 +56,7 @@ class UserService implements UserServiceInterface
      */
     public function loginAsUser(string $email, string $password): bool
     {
-        // Use a more secure cache key (HMAC for password)
-        $cacheKey = sprintf(
-            self::CACHE_KEY_USER_AUTH,
-            $email,
-            hash_hmac('sha256', $password, (string)config('app.key')),
-        );
+        $cacheKey = $this->userAuthCacheKey($email, $password);
 
         // Fast-path: Check cache for authenticated user
         if ($user = $this->cacheService->get($cacheKey)) {
@@ -89,5 +79,62 @@ class UserService implements UserServiceInterface
         auth()->setUser($user);
 
         return true;
+    }
+
+    /**
+     * @return array{0: string, 1: string}|BasicAuthenticationResult The credentials, or why they could not be read
+     */
+    private function credentialsFromAuthenticationHeader(Request $request): array|BasicAuthenticationResult
+    {
+        if (!$request->hasHeader('Authorization')) {
+            return BasicAuthenticationResult::MissingHeader;
+        }
+
+        $authentication = (string)$request->header('Authorization');
+        if (!Str::startsWith($authentication, 'Basic')) {
+            return BasicAuthenticationResult::UnsupportedScheme;
+        }
+
+        $base64     = Str::replace('Basic ', '', $authentication);
+        $usernamePw = base64_decode($base64);
+        if ($usernamePw === false) { // @phpstan-ignore identical.alwaysFalse
+            return BasicAuthenticationResult::MalformedCredentials;
+        }
+
+        // RFC 7617 forbids a colon in the userid but explicitly allows one in the password, so only
+        // the first colon separates the two - splitting on every colon made any password containing
+        // one impossible to authenticate with, while it kept working through the login form.
+        $explode = explode(':', $usernamePw, 2);
+        if (count($explode) !== 2) {
+            return BasicAuthenticationResult::MalformedCredentials;
+        }
+
+        [
+            $username,
+            $password,
+        ] = $explode;
+
+        // Guzzle sends `Basic Og==` (an empty username and password) when it is handed null credentials,
+        // which would otherwise reach the database as a lookup for the user with an empty email address
+        if ($username === '' || $password === '') {
+            return BasicAuthenticationResult::MalformedCredentials;
+        }
+
+        return [
+            $username,
+            $password,
+        ];
+    }
+
+    /**
+     * The password is only ever present as an HMAC, so the key cannot be walked back to it.
+     */
+    private function userAuthCacheKey(string $email, string $password): string
+    {
+        return sprintf(
+            self::CACHE_KEY_USER_AUTH,
+            $email,
+            hash_hmac('sha256', $password, (string)config('app.key')),
+        );
     }
 }

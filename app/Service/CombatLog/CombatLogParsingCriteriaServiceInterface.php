@@ -6,31 +6,49 @@ use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Season;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
+use App\Service\CombatLog\Dtos\KeyLevelBand;
+use App\Service\CombatLog\Dtos\PollingBudgetWindow;
 use Illuminate\Support\Collection;
 
 interface CombatLogParsingCriteriaServiceInterface
 {
     /**
-     * Returns true if ALL given criteria counts for today are below their configured thresholds
-     * for the given combat log version.
+     * Returns true if ALL given criteria counts for today are below the share of their configured
+     * thresholds that the given budget window has released so far. Criteria in the top band are
+     * always parseable: those runs bypass the budgets entirely.
      *
      * Note: call recordParsed() immediately when this returns true (at webhook accept time,
      * not after processing) so concurrent requests see updated counts.
      *
      * @param CombatLogParsingCriterionCheck[] $criteria
      */
-    public function shouldParse(int $combatLogVersion, array $criteria): bool;
+    public function shouldParse(int $combatLogVersion, array $criteria, PollingBudgetWindow $budgetWindow): bool;
 
     /**
-     * Increments the count for each given criterion for today.
+     * Increments the count for each given criterion on the given date (today when omitted).
      * Must be called immediately when a combat log is accepted for processing.
      *
      * @param CombatLogParsingCriterionCheck[] $criteria
      */
-    public function recordParsed(int $combatLogVersion, array $criteria): void;
+    public function recordParsed(int $combatLogVersion, array $criteria, ?string $date = null): void;
+
+    /**
+     * Gives back what recordParsed() took: decrements the count for each given criterion on the
+     * date it was recorded on. Called when a run that was recorded as parsed turns out to yield no
+     * data at all (unavailable segments, a failed download, an unparsable log), so that the budget
+     * it consumed goes to a run that does yield data instead.
+     *
+     * @param CombatLogParsingCriterionCheck[] $criteria
+     */
+    public function releaseParsed(int $combatLogVersion, array $criteria, string $date): void;
 
     /**
      * Resets all criterion counts for today (UTC date) to zero.
+     *
+     * The budget this hands back is released pro rata like any other, so a reset partway through
+     * the day does not let a band spend its whole threshold at once - it spends it across the
+     * polling opportunities it has left. A band whose last opportunity of the day has already
+     * passed gets nothing back until tomorrow, reset or not.
      */
     public function resetAllForToday(): void;
 
@@ -52,12 +70,19 @@ interface CombatLogParsingCriteriaServiceInterface
     public function getAllModelsForCriteria(string $modelClass, Season $season): Collection;
 
     /**
-     * Returns all models from getAllModelsForCriteria() that are still eligible for polling today:
-     * models with no row yet (implicit count = 0) and models with count < threshold.
-     * Models with count >= threshold are excluded.
+     * Returns all models from getAllModelsForCriteria() that are still eligible for polling in the
+     * given band during the given budget window: models with no row yet for that band (implicit
+     * count = 0) and models whose count is still below the share of their threshold that the
+     * window has released. Every model is eligible in the top band.
      *
      * @param  class-string<CombatLogCriterionModelInterface>    $modelClass
      * @return Collection<int, CombatLogCriterionModelInterface>
      */
-    public function getModelsEligibleForPolling(int $combatLogVersion, string $modelClass, Season $season): Collection;
+    public function getModelsEligibleForPolling(
+        int                 $combatLogVersion,
+        string              $modelClass,
+        Season              $season,
+        KeyLevelBand        $band,
+        PollingBudgetWindow $budgetWindow,
+    ): Collection;
 }

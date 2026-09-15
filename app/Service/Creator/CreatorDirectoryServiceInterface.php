@@ -4,6 +4,7 @@ namespace App\Service\Creator;
 
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 interface CreatorDirectoryServiceInterface
 {
@@ -15,4 +16,11 @@ interface CreatorDirectoryServiceInterface
      * @return LengthAwarePaginator<int, User>
      */
     public function paginateCreators(?string $search = null, ?int $perPage = null): LengthAwarePaginator;
+
+    /**
+     * The creators to surface in the featured rail on the per-dungeon route page.
+     *
+     * @return Collection<int, User>
+     */
+    public function getFeaturedCreators(?int $limit = null): Collection;
 }

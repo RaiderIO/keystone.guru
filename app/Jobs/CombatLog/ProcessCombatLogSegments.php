@@ -5,8 +5,13 @@ namespace App\Jobs\CombatLog;
 use App\Jobs\Logging\ProcessCombatLogSegmentsLoggingInterface;
 use App\Models\Season;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
+use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
+use App\Service\CombatLog\CombatLogPollingHealthServiceInterface;
+use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
+use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
 use App\Service\CombatLog\Exceptions\CombatLogParseException;
+use App\Service\CombatLog\Exceptions\CombatLogSegmentDownloadFailedException;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Traits\CombatLogSegmentFile;
@@ -26,6 +31,11 @@ use Throwable;
  * The segment download URLs are presigned and short-lived (5 minutes), so they must be resolved and
  * downloaded within the same job run rather than handed off across the queue. Each part is processed
  * independently; they do not need to be combined into a single file.
+ *
+ * A run that yields no data at all - no segments, an undownloadable segment, an unparsable log - stays
+ * blacklisted by the parsed_combat_logs row combatlog:pollruns wrote for it, so it is never picked up
+ * again. What it must not also keep is the parsing budget it was handed on dispatch: that is given back
+ * here, so the next hourly poll spends it on a run that does yield data (#4173).
  */
 class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
 {
@@ -42,11 +52,20 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
 
     public int $uniqueFor = 7200;
 
+    /**
+     * @param CombatLogParsingCriterionCheck[] $criteria     The criteria whose budget this run was recorded against.
+     * @param string|null                      $criteriaDate The date those counts were recorded on. Carried explicitly
+     *                                                       because a retried or backlogged job can end up releasing
+     *                                                       after midnight, and Carbon::now() would then decrement a
+     *                                                       different day's row than the one that was incremented.
+     */
     public function __construct(
         private readonly Season                        $season,
         private readonly int                           $runId,
         private readonly int                           $combatLogVersion,
         private readonly ?CombatLogRunContextInterface $runContext = null,
+        private readonly array                         $criteria = [],
+        private readonly ?string                       $criteriaDate = null,
     ) {
         $this->queue = sprintf('%s-cl-process', config('app.type'));
     }
@@ -54,6 +73,7 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
     public function handle(
         RaiderIOApiServiceInterface              $raiderIOApiService,
         CombatLogDataExtractionServiceInterface  $extractionService,
+        CombatLogPollingHealthServiceInterface   $healthService,
         ProcessCombatLogSegmentsLoggingInterface $log,
     ): void {
         $log->handleStart($this->runId, $this->combatLogVersion);
@@ -67,6 +87,14 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
 
             if ($segmentsResponse === null || empty($segmentsResponse->segments)) {
                 $log->handleSegmentsNotAvailable($this->runId);
+
+                // Counted here rather than in RaiderIOApiService, which serves callers that have
+                // nothing to do with polling (the internal API, combatlog:downloadruns): only a run
+                // this job was handed is a polled run. Which flavour of nothing came back - a 404,
+                // an error page, an empty segments array - is in the logs; here they are one thing.
+                $healthService->recordFailure(CombatLogPollingFailureReason::SegmentsUnavailable);
+
+                $this->releaseCriteriaBudget();
 
                 return;
             }
@@ -88,7 +116,7 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
                 if (!$this->curlSaveToFile($segment->downloadUrl, $tempPath)) {
                     $log->handleSegmentDownloadFailed($this->runId, $segment->id, $tempPath);
 
-                    throw new RuntimeException(
+                    throw new CombatLogSegmentDownloadFailedException(
                         sprintf('Failed to download segment %d for run %d', $segment->id, $this->runId),
                     );
                 }
@@ -132,14 +160,61 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
                 $e->getMessage(),
                 $rawLine,
             );
+
+            $healthService->recordFailure(CombatLogPollingFailureReason::ParseFailed);
+            $this->releaseCriteriaBudget();
         } finally {
             foreach ($tempFiles as $tempFile) {
                 if (file_exists($tempFile)) {
                     unlink($tempFile);
                 }
             }
+
+            if ($result) {
+                $healthService->recordSucceeded();
+            }
+
             $log->handleEnd($this->runId, $result);
         }
+    }
+
+    /**
+     * Runs once the last attempt has failed - which is every path that throws out of handle(), so
+     * chiefly the download and infrastructure failures it deliberately re-throws for a retry. The
+     * paths handle() swallows release their own budget inline; this covers the ones it doesn't.
+     */
+    public function failed(?Throwable $throwable): void
+    {
+        app(CombatLogPollingHealthServiceInterface::class)
+            ->recordFailure(CombatLogPollingFailureReason::RunFailedAfterRetries);
+
+        $this->releaseCriteriaBudget();
+    }
+
+    /**
+     * Gives back the parsing budget this run was handed on dispatch, so the criteria it was meant to
+     * satisfy are polled for again on the next hourly run. Deliberately not a retry of this run: it
+     * is blacklisted, and finding a replacement immediately would mean re-querying Raider.IO from
+     * inside the job for what the next poll finds on its own an hour later (#4173).
+     *
+     * $criteria/$criteriaDate are readonly promoted properties, so a job that was serialized onto the
+     * queue before this constructor gained them is restored by SerializesModels::__unserialize() with
+     * both left uninitialized - it only assigns properties present in the stored payload and never
+     * falls back to the constructor's default, which only applies when the constructor actually runs.
+     * Direct access would then throw "must not be accessed before initialization" (#4233); isset() is
+     * the safe way to read a possibly-uninitialized typed property.
+     */
+    private function releaseCriteriaBudget(): void
+    {
+        // PHPStan sees the constructor default and assumes it always runs; a job restored from the queue
+        // via SerializesModels::__unserialize() never calls it - see the docblock above.
+        // @phpstan-ignore isset.initializedProperty
+        if (!isset($this->criteria) || $this->criteria === [] || !isset($this->criteriaDate)) {
+            return;
+        }
+
+        app(CombatLogParsingCriteriaServiceInterface::class)
+            ->releaseParsed($this->combatLogVersion, $this->criteria, $this->criteriaDate);
     }
 
     public function uniqueId(): string

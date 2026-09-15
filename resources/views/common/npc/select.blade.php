@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
  * @var bool                                     $required
  * @var bool                                     $liveSearch
  * @var bool                                     $showId      Show NPC ID alongside name as "<name> (<id>)"
+ * @var array<int, string>                       $suffixes    Optional per-npc text appended to the label, keyed by npc id
  */
 
 $id         ??= 'npc_id_select';
@@ -24,6 +25,7 @@ $multiple   ??= false;
 $required   ??= false;
 $liveSearch ??= true;
 $showId     ??= false;
+$suffixes   ??= [];
 
 if (!isset($npcsByGroup)) {
     $npcsByGroup = collect(['' => $npcs ?? collect()]);
@@ -43,17 +45,20 @@ if (!isset($npcsByGroup)) {
                 <optgroup label="{{ $group }}">
             @endif
             @foreach($groupNpcs as $npc)
-                <?php ob_start() ?>
+                <?php
+                $optionName = ($showId ? sprintf('%s (%d)', __($npc->name), $npc->id) : __($npc->name)) . ($suffixes[$npc->id] ?? '');
+                ob_start();
+                ?>
 
                 @include('common.forms.select.imageoption', [
                     'url'  => ksgAsset($npc->enemy_portrait_url),
-                    'name' => $showId ? sprintf('%s (%d)', __($npc->name), $npc->id) : __($npc->name),
+                    'name' => $optionName,
                 ])
 
                 <?php $html = ob_get_clean(); ?>
                 <option value="{{ $npc->id }}"
                         @if($selected !== null && $selected == $npc->id) selected="selected" @endif
-                        data-content="{{{$html}}}">{{ $showId ? sprintf('%s (%d)', __($npc->name), $npc->id) : __($npc->name) }}</option>
+                        data-content="{{{$html}}}">{{ $optionName }}</option>
             @endforeach
             @if($group)
                 </optgroup>

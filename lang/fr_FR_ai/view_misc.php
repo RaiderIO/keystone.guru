@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => 'Itinéraires populaires par affixes actuels',
         'popular_routes_by_next_affixes'    => 'Itinéraires populaires par affixes suivants',
     ],
-    'changelog' => [
-        'title'  => 'Journal des modifications',
-        'header' => 'Journal des modifications',
-    ],
     'credits' => [
         'title'            => 'Crédits',
         'header'           => 'Crédits',
@@ -59,9 +55,10 @@ return [
         'npcs_assigned'                 => 'PNJ assignés',
     ],
     'status' => [
-        'title'       => 'Statut',
-        'header'      => 'Statut',
-        'description' => 'Nous sommes en ligne, yay !',
+        'title'        => 'Statut',
+        'header'       => 'Statut',
+        'description'  => 'Nous sommes en ligne, yay !',
+        'check_failed' => 'Échec de la vérification, consultez le journal de l\'application pour plus de détails',
     ],
 
 ];

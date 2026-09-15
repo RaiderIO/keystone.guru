@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Heatmap\ExploreEmbedUrlFormRequest;
 use App\Http\Requests\Heatmap\ExploreUrlFormRequest;
 use App\Models\Dungeon;
-use App\Models\Floor\Floor;
+use App\Models\DungeonKey;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
 use App\Service\Dungeon\DungeonServiceInterface;
+use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
@@ -68,8 +69,12 @@ class DungeonExploreController extends Controller
         ]);
     }
 
-    public function viewDungeon(Request $request, GameVersion $gameVersion, Dungeon $dungeon): RedirectResponse
-    {
+    public function viewDungeon(
+        Request                         $request,
+        GameVersion                     $gameVersion,
+        Dungeon                         $dungeon,
+        FloorResolutionServiceInterface $floorResolutionService,
+    ): RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
         if (!$dungeon->active || $currentMappingVersion === null) {
@@ -78,10 +83,7 @@ class DungeonExploreController extends Controller
             ]);
         }
 
-        /** @var Floor|null $defaultFloor */
-        $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-            ->defaultOrFacade($currentMappingVersion)
-            ->first();
+        $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeon, $currentMappingVersion);
 
         return redirect()->route('dungeon.explore.gameversion.view.floor', [
             'gameVersion' => $gameVersion,
@@ -96,7 +98,7 @@ class DungeonExploreController extends Controller
     ): RedirectResponse {
         return redirect()->route('dungeon.explore.gameversion.view.floor', [
             'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
-            'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
+            'dungeon'     => Dungeon::where('key', DungeonKey::MECHAGON_WORKSHOP->value)->firstOrFail(),
             'floorIndex'  => $floorIndex,
         ] + $request->validated());
     }
@@ -107,6 +109,7 @@ class DungeonExploreController extends Controller
         SeasonServiceInterface           $seasonService,
         SeasonAffixGroupServiceInterface $seasonAffixGroupService,
         DungeonServiceInterface          $dungeonService,
+        FloorResolutionServiceInterface  $floorResolutionService,
         GameVersion                      $gameVersion,
         Dungeon                          $dungeon,
         string                           $floorIndex = '1',
@@ -119,34 +122,16 @@ class DungeonExploreController extends Controller
             ]);
         }
 
-        if (!is_numeric($floorIndex)) {
-            $floorIndex = '1';
-        }
+        $resolvedFloor = $floorResolutionService->resolveRequestedFloor($dungeon, $currentMappingVersion, $floorIndex);
 
-        /** @var Floor|null $floor */
-        $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($currentMappingVersion, (int)$floorIndex)
-            ->first();
-
-        if ($floor === null) {
-            /** @var Floor|null $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-                ->defaultOrFacade($currentMappingVersion)
-                ->first();
-
+        if (!$resolvedFloor->isCanonical) {
             return redirect()->route('dungeon.explore.gameversion.view.floor', [
                 'gameVersion' => $gameVersion,
                 'dungeon'     => $dungeon,
-                'floorIndex'  => $defaultFloor->index,
+                'floorIndex'  => $resolvedFloor->floor->index,
             ] + $request->validated());
         } else {
-            if ($floor->index !== (int)$floorIndex) {
-                return redirect()->route('dungeon.explore.gameversion.view.floor', [
-                    'gameVersion' => $gameVersion,
-                    'dungeon'     => $dungeon,
-                    'floorIndex'  => $floor->index,
-                ] + $request->validated());
-            }
+            $floor = $resolvedFloor->floor;
 
             $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
@@ -178,7 +163,7 @@ class DungeonExploreController extends Controller
     ): RedirectResponse {
         return redirect()->route('dungeon.explore.gameversion.embed.floor', [
             'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
-            'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
+            'dungeon'     => Dungeon::where('key', DungeonKey::MECHAGON_WORKSHOP->value)->firstOrFail(),
             'floorIndex'  => $floorIndex,
         ] + $request->validated());
     }
@@ -188,6 +173,7 @@ class DungeonExploreController extends Controller
         MapContextServiceInterface       $mapContextService,
         SeasonServiceInterface           $seasonService,
         SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        FloorResolutionServiceInterface  $floorResolutionService,
         GameVersion                      $gameVersion,
         Dungeon                          $dungeon,
         string                           $floorIndex = '1',
@@ -200,10 +186,6 @@ class DungeonExploreController extends Controller
             ]);
         }
 
-        if (!is_numeric($floorIndex)) {
-            $floorIndex = '1';
-        }
-
         $locale = $request->get('locale', App::getLocale());
         App::setLocale(
             config('language.short_to_long')[$locale] ?? $locale,
@@ -213,31 +195,19 @@ class DungeonExploreController extends Controller
         $mapFacadeStyle = $request->get('mapFacadeStyle', User::getCurrentUserMapFacadeStyle());
         User::forceMapFacadeStyle($mapFacadeStyle);
 
-        /** @var Floor|null $floor */
-        $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($currentMappingVersion, (int)$floorIndex)
-            ->first();
+        $resolvedFloor = $floorResolutionService->resolveRequestedFloor($dungeon, $currentMappingVersion, $floorIndex);
 
         $validated = $request->validated();
 
-        if ($floor === null) {
-            /** @var Floor|null $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-                ->defaultOrFacade($currentMappingVersion)
-                ->first();
-
+        if (!$resolvedFloor->isCanonical) {
             return redirect()->route('dungeon.explore.gameversion.embed.floor', [
                 'gameVersion' => $gameVersion,
                 'dungeon'     => $dungeon,
-                'floorIndex'  => $defaultFloor->index,
-            ] + $validated);
-        } elseif ($floor->index !== (int)$floorIndex) {
-            return redirect()->route('dungeon.explore.gameversion.embed.floor', [
-                'gameVersion' => $gameVersion,
-                'dungeon'     => $dungeon,
-                'floorIndex'  => $floor->index,
+                'floorIndex'  => $resolvedFloor->floor->index,
             ] + $validated);
         }
+
+        $floor = $resolvedFloor->floor;
 
         $style                 = $request->get('style', 'compact');
         $headerBackgroundColor = $request->get('headerBackgroundColor');
@@ -272,7 +242,7 @@ class DungeonExploreController extends Controller
             'title'                   => __($dungeon->name),
             'mapFacadeStyle'          => $mapFacadeStyle,
             'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, $mapFacadeStyle),
-            'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
+            'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                 $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),
             'parameters'   => $validated,

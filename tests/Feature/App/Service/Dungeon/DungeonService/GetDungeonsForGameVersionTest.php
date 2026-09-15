@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Service\Dungeon\DungeonService;
 
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -13,15 +14,39 @@ use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\CreatesSeason;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('DungeonService')]
 #[Group('GetDungeonsForGameVersion')]
 final class GetDungeonsForGameVersionTest extends PublicTestCase
 {
+    use CreatesSeason;
+
+    /**
+     * Two seasons of the test's own with disjoint dungeons, read back in one query so both come out of a
+     * multi-row result.
+     *
+     * @return array{0: Season, 1: Season} The current season, then the next one.
+     */
+    private function createCurrentAndNextSeason(): array
+    {
+        $dungeonIds = Dungeon::query()->active()->orderBy('id')->limit(4)->pluck('id')->all();
+        $this->assertCount(4, $dungeonIds);
+
+        $currentSeasonId = $this->createSeason(['start' => now()->subMonth()], array_slice($dungeonIds, 0, 2))->id;
+        $nextSeasonId    = $this->createSeason(['start' => now()->addMonth()], array_slice($dungeonIds, 2, 2))->id;
+
+        $seasons = Season::query()->whereKey([$currentSeasonId, $nextSeasonId])->get()->keyBy('id');
+
+        return [$seasons->get($currentSeasonId), $seasons->get($nextSeasonId)];
+    }
+
     /**
      * Builds the service with everything but the season service stubbed out - the season service is
      * the only collaborator this method's behaviour depends on.
@@ -47,12 +72,7 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
     public function getDungeonsForGameVersion_givenAnUpcomingSeason_returnsTheCurrentSeasonsDungeons(): void
     {
         // Arrange
-        $seasons = Season::query()->orderByDesc('id')->limit(2)->get();
-
-        $this->assertCount(2, $seasons, 'Need at least two seeded seasons to load them as a collection');
-
-        $nextSeason    = $seasons->first();
-        $currentSeason = $seasons->last();
+        [$currentSeason, $nextSeason] = $this->createCurrentAndNextSeason();
 
         $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
         $seasonService->method('getCurrentSeason')->willReturn($currentSeason);
@@ -78,8 +98,7 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
     public function getDungeonsForGameVersion_givenNoUpcomingSeason_returnsTheCurrentSeasonsDungeons(): void
     {
         // Arrange - loaded as a collection for the same reason as the test above
-        $seasons       = Season::query()->orderByDesc('id')->limit(2)->get();
-        $currentSeason = $seasons->last();
+        [$currentSeason] = $this->createCurrentAndNextSeason();
 
         $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
         $seasonService->method('getCurrentSeason')->willReturn($currentSeason);
@@ -93,6 +112,39 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
         // Assert
         $this->assertEqualsCanonicalizing(
             $currentSeason->dungeons()->pluck('dungeons.id')->all(),
+            $dungeons->pluck('id')->all(),
+        );
+    }
+
+    /**
+     * The header asks on every page: a season handed over with its dungeons loaded must cost no query.
+     */
+    #[Test]
+    public function getDungeonsForGameVersion_givenACurrentSeasonWithItsDungeonsLoaded_readsNoDungeons(): void
+    {
+        // Arrange
+        $currentSeason = Season::with('dungeons')->findOrFail(Season::SEASON_SL_S4);
+
+        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
+        $seasonService->method('getCurrentSeason')->willReturn($currentSeason);
+
+        $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        $service     = $this->buildService($seasonService);
+
+        $dungeonQueries = 0;
+        DB::listen(static function (QueryExecuted $query) use (&$dungeonQueries): void {
+            if (str_contains($query->sql, 'from `dungeons`')) {
+                $dungeonQueries++;
+            }
+        });
+
+        // Act - CI runs with the model cache on, which would answer a dungeons query without reaching the database
+        $dungeons = app('model-cache')->runDisabled(static fn() => $service->getDungeonsForGameVersion($gameVersion));
+
+        // Assert
+        $this->assertSame(0, $dungeonQueries);
+        $this->assertEqualsCanonicalizing(
+            $currentSeason->dungeons->pluck('id')->all(),
             $dungeons->pluck('id')->all(),
         );
     }
@@ -128,12 +180,15 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
     #[Test]
     public function getDungeonsForGameVersion_givenAFutureSeasonSeededForTheCurrentExpansion_returnsOnlyTheCurrentSeasonsDungeons(): void
     {
-        // Arrange
+        // Arrange - freezes "now" inside Season::SEASON_MIDNIGHT_S1's actual window (2026-03-02 to
+        // 2026-08-17) so this test's assumption that S1 is current holds regardless of real wall-clock time
+        $this->travelTo(Carbon::create(2026, 5, 28));
+
         $gameVersion   = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
         $currentSeason = Season::findOrFail(Season::SEASON_MIDNIGHT_S1);
         $expansion     = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT);
         // A dungeon that is not part of the current season, so the assert below can tell the two apart
-        $futureSeasonDungeon = Dungeon::firstWhere('key', Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES);
+        $futureSeasonDungeon = Dungeon::firstWhere('key', DungeonKey::ARA_KARA_CITY_OF_ECHOES->value);
 
         // Created inside the try so a failure halfway through still cleans up
         $futureSeason = null;

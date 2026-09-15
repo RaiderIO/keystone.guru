@@ -2,7 +2,7 @@
 
 namespace App\Service\MDT\Logging;
 
-interface MDTImportStringServiceLoggingInterface
+interface MDTImportStringServiceLoggingInterface extends MDTBaseServiceLoggingInterface
 {
     /**
      * @param array<string, mixed> $latLngWithFloor

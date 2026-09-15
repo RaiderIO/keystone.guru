@@ -46,7 +46,7 @@ return [
                 'tooltip' => [
                     'start' => 'Klicken, um mit dem Zeichnen der Form zu beginnen.',
                     'cont'  => 'Klicken, um die Form weiter zu zeichnen.',
-                    'end'   => 'Klicken Sie auf den ersten Punkt, um diese Form zu schließen.',
+                    'end'   => 'Klicke auf den ersten Punkt, um diese Form zu schließen.',
                 ],
             ],
             'polyline' => [
@@ -54,7 +54,7 @@ return [
                 'tooltip' => [
                     'start' => 'Klicken, um mit dem Zeichnen der Linie zu beginnen.',
                     'cont'  => 'Klicken, um die Linie weiter zu zeichnen.',
-                    'end'   => 'Klicken Sie auf den letzten Punkt, um die Linie zu beenden.',
+                    'end'   => 'Klicke auf den letzten Punkt, um die Linie zu beenden.',
                 ],
             ],
             'rectangle' => [
@@ -71,20 +71,20 @@ return [
                 'tooltip' => [
                     'start' => 'Klicken, um mit dem Zeichnen des Pfades zu beginnen.',
                     'cont'  => 'Klicken, um den Pfad weiter zu zeichnen.',
-                    'end'   => 'Klicken Sie auf die Schaltfläche \'Fertig\' in der Symbolleiste, um Ihren Pfad zu vervollständigen.',
+                    'end'   => 'Klicke auf die Schaltfläche \'Fertig\' in der Symbolleiste, um deinen Pfad zu vervollständigen.',
                 ],
             ],
             'brushline' => [
                 'tooltip' => [
                     'start' => 'Klicken, um mit dem Zeichnen der Linie zu beginnen.',
                     'cont'  => 'Klicken und ziehen, um die Linie weiter zu zeichnen.',
-                    'end'   => 'Klicken/Ziehen Sie weiter. Wenn Sie fertig sind, drücken Sie die Schaltfläche \'Fertig\' in der Symbolleiste, um Ihre Linie zu vervollständigen.',
+                    'end'   => 'Klicke/ziehe weiter. Wenn du fertig bist, drücke die Schaltfläche \'Fertig\' in der Symbolleiste, um deine Linie zu vervollständigen.',
                 ],
             ],
             'arrow' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
+                    'start' => 'Klicke, um den Startpunkt des Pfeils zu setzen.',
+                    'cont'  => 'Klicke, um die Spitze des Pfeils zu setzen.',
                 ],
             ],
         ],
@@ -115,13 +115,13 @@ return [
         'handlers' => [
             'edit' => [
                 'tooltip' => [
-                    'text'    => 'Ziehen Sie Griffe oder Marker, um Merkmale zu bearbeiten.',
-                    'subtext' => 'Klicken Sie auf Abbrechen, um Änderungen rückgängig zu machen.',
+                    'text'    => 'Ziehe Griffe oder Marker, um Merkmale zu bearbeiten.',
+                    'subtext' => 'Klicke auf Abbrechen, um Änderungen rückgängig zu machen.',
                 ],
             ],
             'remove' => [
                 'tooltip' => [
-                    'text' => 'Klicken Sie auf ein Merkmal, um es zu entfernen.',
+                    'text' => 'Klicke auf ein Merkmal, um es zu entfernen.',
                 ],
             ],
         ],

@@ -76,6 +76,11 @@ interface PatreonServiceLoggingInterface
      */
     public function applyPaidBenefitsForMemberUnknownPatreonBenefits(array $benefits, string $email): void;
 
+    /**
+     * @param array<int, string> $tierIds
+     */
+    public function applyPaidBenefitsForMemberUnknownPatreonTiers(array $tierIds, string $email): void;
+
     public function applyPaidBenefitsForMemberEnd(): void;
 
     public function linkToUserAccountStart(int $id, string $code, string $redirectUri): void;
@@ -98,6 +103,8 @@ interface PatreonServiceLoggingInterface
     public function linkToUserAccountIdentityError(array $errors): void;
 
     public function linkToUserAccountIdentityIncludedNotSet(): void;
+
+    public function linkToUserAccountNotAMemberOfCampaign(): void;
 
     public function linkToUserAccountSessionExpired(): void;
 
@@ -140,4 +147,10 @@ interface PatreonServiceLoggingInterface
     public function loadAdminUserEnd(): void;
 
     public function createPatreonUserLinkSuccessful(int $userId, int $patreonUserLinkId): void;
+
+    public function grantAllBenefits(int $userId, int $grantedByUserId, string $reason): void;
+
+    public function revokeManualGrant(int $userId, int $revokedByUserId, int $revokedGrants): void;
+
+    public function revokeManualGrantDeletedFabricatedLink(int $userId, int $revokedByUserId): void;
 }

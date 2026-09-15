@@ -76,7 +76,7 @@ class EnemyForcesControls extends MapControl {
         $enemyForces.removeClass('map_enemy_forces_too_much_warning map_enemy_forces_ok');
         $enemyForcesStatus.attr('title', '');
 
-        let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = getKillZoneMapObjectGroup();
         if (!killZoneMapObjectGroup.hasKilledAllRequiredEnemies()) {
             $enemyForcesStatus.attr('title', lang.get('js.enemy_forces_not_all_required_enemies_killed_label'))
             $enemyForces.addClass('map_enemy_forces_too_little_warning');

@@ -11,9 +11,11 @@ use App\Service\Cache\CacheServiceInterface;
  * @var DungeonRoute          $dungeonroute
  * @var array<string, mixed>  $__env
  * @var boolean               $cache
+ * @var boolean|null          $useFrontPageThumbnail
  */
 
-$showDungeonImage ??= false;
+$showDungeonImage      ??= false;
+$useFrontPageThumbnail ??= false;
 $isAdmin          = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 // Generate a unique string so each card on the page has a stable, unique id
 $uniqueString = uniqid();
@@ -25,15 +27,17 @@ use (
     $uniqueString,
     $dungeonroute,
     $isAdmin,
+    $useFrontPageThumbnail,
     $__env
 )
 
 {
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
-    // The map is demoted to a background texture: always a single image, never a carousel
+    // The map is demoted to a background texture: always a single image, never a carousel. Falls back
+    // to the standard thumbnail when the thinner-lined front-page variant hasn't been generated yet.
     $backgroundUrl = $dungeonroute->has_thumbnail
-        ? $dungeonroute->thumbnails->first()->getURL()
+        ? ($useFrontPageThumbnail ? $dungeonroute->getFrontPageThumbnails() : $dungeonroute->thumbnails)->first()->getURL()
         : $dungeonroute->dungeon->getImageTransparentUrl();
     // favorites_count is only present when the route was loaded through the discover builders (withCount).
     // Weekly (Raider.IO) routes bypass those builders, so guard against a missing count.
@@ -82,7 +86,9 @@ use (
         <div class="row g-0 px-2 align-items-end poster_title_row">
             <div class="col">
                 <h4 class="mb-0 title">
-                    <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}">
+                    {{-- The title clamps to two lines (see discover.css); the attribute keeps the full text reachable --}}
+                    <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
+                       title="{{ $dungeonroute->title }}">
                         {{ $dungeonroute->title }}
                     </a>
                 </h4>
@@ -110,14 +116,15 @@ use (
             </div>
         @endif
 
-        <div class="row g-0 bg-card-footer px-2 py-1 poster_footer">
+        <?php // The footer is styled in discover.css as part of the dark-imagery object (bg-card-footer is near-transparent in lux) ?>
+        <div class="row g-0 px-2 py-1 poster_footer">
             <div class="col">
                 <div class="poster_author d-flex align-items-center">
                     @include('common.user.name', ['user' => $dungeonroute->author, 'link' => true, 'showAnonIcon' => false])
                     {{-- Reserved slot for the future Raider.IO author trust badge (see #3349) --}}
                     <span class="poster_trust_badge ms-1"></span>
                 </div>
-                <div class="poster_social small text-muted">
+                <div class="poster_social small">
                     @if( $ratingCount > 0 )
                         <span class="poster_rating">
                             @include('common.dungeonroute.rating', ['count' => $ratingCount, 'rating' => (int) round($dungeonroute->rating)])
@@ -150,7 +157,7 @@ if ($cache) {
 // Echo the result of this function
     echo $cacheService->rememberInHash(
         DungeonRoute::getCardCacheKey($dungeonroute->id),
-        DungeonRoute::getCardCacheField('poster', $currentUserLocale, 0, (int)$showDungeonImage, (int)$isAdmin),
+        DungeonRoute::getCardCacheField('poster', $currentUserLocale, 0, (int)$showDungeonImage, (int)$isAdmin, (int)$useFrontPageThumbnail),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );

@@ -44,7 +44,16 @@ class DungeonRoutePolicy
      */
     public function preview(?User $user, DungeonRoute $dungeonroute, string $secret): bool
     {
-        return config('keystoneguru.thumbnail.preview_secret') === $secret || ($user !== null && $user->is_admin);
+        if ($user !== null && $user->is_admin) {
+            return true;
+        }
+
+        $configuredSecret = config('keystoneguru.thumbnail.preview_secret');
+        if (!is_string($configuredSecret) || trim($configuredSecret) === '') {
+            return false;
+        }
+
+        return hash_equals($configuredSecret, $secret);
     }
 
     /**
@@ -74,6 +83,11 @@ class DungeonRoutePolicy
      */
     public function publish(User $user, DungeonRoute $dungeonroute, ?string $publishedState = null): Response
     {
+        // An upgrade draft only ever goes live through Apply, onto its original
+        if ($dungeonroute->is_upgrade_draft) {
+            return $this->deny(__('policy.publish_route_is_upgrade_draft'));
+        }
+
         if ($publishedState !== PublishedState::UNPUBLISHED && !$dungeonroute->hasKilledAllRequiredEnemies()) {
             return $this->deny(__('policy.publish_not_all_required_enemies_killed'));
         }
@@ -125,6 +139,38 @@ class DungeonRoutePolicy
     public function edit(?User $user, DungeonRoute $dungeonroute): bool
     {
         return $dungeonroute->mayUserEdit($user);
+    }
+
+    /**
+     * Determine whether the user can apply an upgrade draft onto the route it is a draft of. Requires
+     * edit rights on BOTH - applying writes to the original, not to the draft that was navigated to.
+     */
+    public function applyUpgrade(User $user, DungeonRoute $dungeonroute): Response
+    {
+        if (!$dungeonroute->is_upgrade_draft) {
+            return $this->deny(__('policy.apply_upgrade_route_not_upgrade_draft'));
+        }
+
+        $original = $dungeonroute->upgradeOfDungeonRoute;
+        if ($original === null) {
+            return $this->deny(__('policy.apply_upgrade_original_route_deleted'));
+        }
+
+        return ($dungeonroute->mayUserEdit($user) && $original->mayUserEdit($user)) ?
+            $this->allow() :
+            $this->deny();
+    }
+
+    /**
+     * Determine whether the user can discard an upgrade draft.
+     */
+    public function discardUpgrade(User $user, DungeonRoute $dungeonroute): Response
+    {
+        if (!$dungeonroute->is_upgrade_draft) {
+            return $this->deny(__('policy.discard_upgrade_route_not_upgrade_draft'));
+        }
+
+        return $dungeonroute->mayUserEdit($user) ? $this->allow() : $this->deny();
     }
 
     /**

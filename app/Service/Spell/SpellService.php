@@ -63,7 +63,7 @@ class SpellService implements SpellServiceInterface
                 'id'             => $spellId,
                 'category'       => $categoryName,
                 'cooldown_group' => $cooldownGroupName,
-                'dispel_type'    => 'Magic',
+                'dispel_type'    => sprintf('spelldispeltype.%s', Spell::DISPEL_TYPE_MAGIC),
                 'icon_name'      => $row[$indexClassIconName],
                 'name'           => $row[$indexClassSpellName],
                 'schools_mask'   => 0,

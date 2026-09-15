@@ -48,6 +48,10 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
             getState().setDungeonSpeedrunRequiredNpcsShowAllEnabled(false);
         });
 
+        getState().register('floorid:changed', this, function (floorIdChangedEvent) {
+            self.refreshUI();
+        });
+
         this.loaded = true;
     }
 
@@ -87,6 +91,20 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
     }
 
     /**
+     * Determines whether a required npc belongs in the overflow (non-current-floor) container.
+     * The facade floor is a synthetic, combined view - required npcs are only ever assigned to
+     * real floors, so on the facade floor every npc belongs in the main container instead.
+     * @param requiredNpc {Object}
+     * @param currentFloorId {Number}
+     * @param isFacadeFloor {Boolean}
+     * @private
+     * @return {Boolean}
+     */
+    _isOverflowNpc(requiredNpc, currentFloorId, isFacadeFloor) {
+        return !isFacadeFloor && requiredNpc.floor_id !== currentFloorId;
+    }
+
+    /**
      * Refreshes the UI to reflect the current enemy forces state
      */
     refreshUI() {
@@ -99,7 +117,15 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
         let $dungeonSpeedrunRequiredNpcsOverflow = $('#edit_route_dungeon_speedrun_required_npcs_container_overflow');
         $dungeonSpeedrunRequiredNpcsOverflow.empty();
 
-        let currentFloorId = getState().getCurrentFloor().id;
+        let currentFloor = getState().getCurrentFloor();
+        let currentFloorId = currentFloor.id;
+        // The facade floor is a synthetic, combined view - required npcs are only ever assigned
+        // to real floors, so a floor_id comparison would always send every npc to the overflow
+        // container and leave the visible list empty.
+        let isFacadeFloor = !!currentFloor.facade;
+
+        $('#edit_route_dungeon_speedrun_required_npcs_toggle_container').toggle(!isFacadeFloor);
+
         let mapContext = getState().getMapContext();
         let requiredNpcs = mapContext.getDungeonSpeedrunRequiredNpcs(mapContext.getDungeonDifficulty());
         for (let index in requiredNpcs) {
@@ -107,7 +133,7 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
             let requiredNpc = requiredNpcs[index];
 
             // Insert an npc on a different floor to the overflow container
-            if (requiredNpc.floor_id !== currentFloorId) {
+            if (this._isOverflowNpc(requiredNpc, currentFloorId, isFacadeFloor)) {
                 $targetContainer = $dungeonSpeedrunRequiredNpcsOverflow;
             }
 
@@ -167,7 +193,12 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
 
     cleanup() {
         console.assert(this instanceof DungeonSpeedrunRequiredNpcsControls, 'this is not DungeonSpeedrunRequiredNpcsControls', this);
+        getState().unregister('floorid:changed', this);
         super.cleanup();
     }
 
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = DungeonSpeedrunRequiredNpcsControls;
 }

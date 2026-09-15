@@ -42,7 +42,9 @@ $connectedFloorCandidates = $dungeon->floors;
             ?>
         <div class="row mb-3">
             <div class="col-2">
-                {{ html()->checkbox(sprintf('floor_%s_connected', $connectedFloorCandidate->id), isset($floorCoupling) ? 1 : 0, $connectedFloorCandidate->id)->attributes(array_merge(['class' => 'form-check-input'], $disabled)) }}
+                <div class="form-check">
+                    {{ html()->checkbox(sprintf('floor_%s_connected', $connectedFloorCandidate->id), isset($floorCoupling) ? 1 : 0, $connectedFloorCandidate->id)->attributes(array_merge(['class' => 'form-check-input'], $disabled)) }}
+                </div>
             </div>
             <div class="col-8">
                 <a href="{{ route('admin.floor.edit', ['dungeon' => $dungeon, 'floor' => $connectedFloorCandidate]) }}">{{ __($connectedFloorCandidate->name) }}</a>

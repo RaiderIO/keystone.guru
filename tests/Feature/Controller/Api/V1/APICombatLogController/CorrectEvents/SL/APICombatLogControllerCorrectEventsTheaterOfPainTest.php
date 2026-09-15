@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\SL;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\APICombatLogControllerCorrectEventsTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCorrectEventsTheaterOfPainTest extends APICombatLogC
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_THEATER_OF_PAIN;
+        return DungeonKey::THEATER_OF_PAIN->value;
     }
 
     #[Test]

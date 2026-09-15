@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => 'Rutas populares por afijos actuales',
         'popular_routes_by_next_affixes'    => 'Rutas populares por próximos afijos',
     ],
-    'changelog' => [
-        'title'  => 'Registro de cambios',
-        'header' => 'Registro de cambios',
-    ],
     'credits' => [
         'title'            => 'Créditos',
         'header'           => 'Créditos',
@@ -59,9 +55,10 @@ return [
         'npcs_assigned'                 => 'NPCs asignados',
     ],
     'status' => [
-        'title'       => 'Estado',
-        'header'      => 'Estado',
-        'description' => '¡Estamos activos, yay!',
+        'title'        => 'Estado',
+        'header'       => 'Estado',
+        'description'  => '¡Estamos activos, yay!',
+        'check_failed' => 'La comprobación falló, consulta el registro de la aplicación para más detalles',
     ],
 
 ];

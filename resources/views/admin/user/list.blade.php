@@ -34,6 +34,16 @@ use Illuminate\Support\Collection;
                 $('#user_ip_addresses_textarea').val(ipAddresses);
             });
 
+            // On grant_all_benefits_modal show, point the form at the user whose row was clicked. The
+            // grant is a POST carrying a required reason, so it cannot be a plain link (#4385)
+            $('#grant_all_benefits_modal').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget);
+
+                $('#grant_all_benefits_form').attr('action', `/admin/user/${button.data('user-id')}/grantAllBenefits`);
+                $('#grant_all_benefits_user_name').text(button.data('user-name'));
+                $('#grant_all_benefits_reason').val('');
+            });
+
             $('#admin_user_table').DataTable({
                 'processing': true,
                 'serverSide': true,
@@ -50,7 +60,7 @@ use Illuminate\Support\Collection;
 
                         $.ajax({
                             type: 'PUT',
-                            url: `/ajax/user/${$this.data('userid')}/patreon/benefit`,
+                            url: `/ajax/user/${$this.data('userid')}/patreon/benefits`,
                             data: {
                                 patreonBenefits: $this.val()
                             },
@@ -135,12 +145,10 @@ use Illuminate\Support\Collection;
                                 let template = Handlebars.templates['admin_users_table_row_patreon'];
 
                                 let patreonBenefitsCopy = JSON.parse(JSON.stringify(patreonBenefits));
-                                for (let i = 0; i < row.patreon_user_link.patreonbenefits.length; i++) {
-                                    let userPaidTier = row.patreon_user_link.patreonbenefits[i];
-                                    for (let j = 0; j < patreonBenefitsCopy.length; j++) {
-                                        // Translate the patreon benefit's name
-                                        patreonBenefitsCopy[j].name = lang.get(patreonBenefitsCopy[j].name);
 
+                                for (let i = 0; i < row.patreon_user_link.patreon_benefits.length; i++) {
+                                    let userPaidTier = row.patreon_user_link.patreon_benefits[i];
+                                    for (let j = 0; j < patreonBenefitsCopy.length; j++) {
                                         if (patreonBenefitsCopy[j].id === userPaidTier.id) {
                                             patreonBenefitsCopy[j].selected = true;
                                         }
@@ -186,6 +194,28 @@ use Illuminate\Support\Collection;
             </a>
         </p>
         <textarea id="user_ip_addresses_textarea" class="w-100" rows="20"></textarea>
+    @endcomponent
+
+    @component('common.general.modal', ['id' => 'grant_all_benefits_modal'])
+        <h4>{{ __('view_admin.user.list.grant_all_benefits_header') }}</h4>
+        <p>
+            {{ __('view_admin.user.list.grant_all_benefits_description') }}
+            <strong id="grant_all_benefits_user_name"></strong>
+        </p>
+        <form id="grant_all_benefits_form" method="POST" action="" accept-charset="UTF-8" autocomplete="off">
+            @csrf
+            <div class="mb-3">
+                <label class="form-label" for="grant_all_benefits_reason">
+                    {{ __('view_admin.user.list.grant_all_benefits_reason') }}
+                </label>
+                <input type="text" class="form-control" id="grant_all_benefits_reason" name="reason"
+                       maxlength="255" required
+                       placeholder="{{ __('view_admin.user.list.grant_all_benefits_reason_placeholder') }}">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                {{ __('view_admin.user.list.grant_all_benefits_submit') }}
+            </button>
+        </form>
     @endcomponent
 
 @endsection

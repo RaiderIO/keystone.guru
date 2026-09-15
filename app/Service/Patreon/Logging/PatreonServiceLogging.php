@@ -152,6 +152,17 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * Error level on purpose: the member is skipped entirely, and error is the only level that reaches
+     * Discord and Sentry.
+     *
+     * @param array<int, string> $tierIds
+     */
+    public function applyPaidBenefitsForMemberUnknownPatreonTiers(array $tierIds, string $email): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function applyPaidBenefitsForMemberEnd(): void
     {
         $this->end(__METHOD__);
@@ -194,6 +205,11 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     public function linkToUserAccountIdentityIncludedNotSet(): void
     {
         $this->error(__METHOD__);
+    }
+
+    public function linkToUserAccountNotAMemberOfCampaign(): void
+    {
+        $this->info(__METHOD__);
     }
 
     public function linkToUserAccountSessionExpired(): void
@@ -279,6 +295,21 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     public function createPatreonUserLinkSuccessful(int $userId, int $patreonUserLinkId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function grantAllBenefits(int $userId, int $grantedByUserId, string $reason): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function revokeManualGrant(int $userId, int $revokedByUserId, int $revokedGrants): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function revokeManualGrantDeletedFabricatedLink(int $userId, int $revokedByUserId): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }

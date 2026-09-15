@@ -20,10 +20,43 @@ return [
         'numeric' => 'O campo :attribute deve conter um número entre :min e :max.',
         'string'  => 'O campo :attribute deve conter entre :min a :max caracteres.',
     ],
-    'boolean'           => 'O campo :attribute deve conter o valor verdadeiro ou falso.',
-    'can'               => 'O campo :attribute contém um valor não autorizado.',
-    'confirmed'         => 'A confirmação para o campo :attribute não coincide.',
-    'current_password'  => 'A senha está incorreta.',
+    'boolean'          => 'O campo :attribute deve conter o valor verdadeiro ou falso.',
+    'can'              => 'O campo :attribute contém um valor não autorizado.',
+    'confirmed'        => 'A confirmação para o campo :attribute não coincide.',
+    'current_password' => 'A senha está incorreta.',
+    'custom'           => [
+        'bio' => [
+            'max' => '',
+        ],
+        'pinned_dungeon_routes' => [
+            'max'    => '',
+            'exists' => '',
+        ],
+        'social_links' => [
+            'invalid_url_for_platform' => '',
+        ],
+        'periods' => [
+            'not_in_season' => '',
+        ],
+        'creator_search' => [
+            'max' => '',
+        ],
+        'autoroutecoverage_days' => [
+            'integer' => '',
+            'min'     => '',
+            'max'     => '',
+        ],
+        'telemetry_range' => [
+            'in' => '',
+        ],
+        'patreon_grant_reason' => [
+            'required' => '',
+            'max'      => '',
+        ],
+        'npc_dungeon_ids' => [
+            'required' => '',
+        ],
+    ],
     'date'              => 'O campo :attribute não contém uma data válida.',
     'date_equals'       => 'O campo :attribute deve ser uma data igual a :date.',
     'date_format'       => 'A data informada para o campo :attribute não respeita o formato :format.',

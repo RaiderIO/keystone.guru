@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\App\Service\RaiderIO;
 
+use App\Models\Faction;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
-use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -30,20 +30,16 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
         /** @var MockObject&SeasonServiceInterface $seasonService */
         $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
 
-        /** @var MockObject&SeasonAffixGroupServiceInterface $seasonAffixGroupService */
-        $seasonAffixGroupService = $this->createMockPublic(SeasonAffixGroupServiceInterface::class);
-
         /** @var MockObject&CombatLogEventServiceInterface $combatLogEventService */
         $combatLogEventService = $this->createMockPublic(CombatLogEventServiceInterface::class);
 
         $this->service = new RaiderIOKeystoneGuruApiService(
             $seasonService,
-            $seasonAffixGroupService,
             $combatLogEventService,
         );
     }
 
-    private function makeFilter(): SearchAdvancedRunsFilter
+    private function makeFilter(?Faction $faction = null): SearchAdvancedRunsFilter
     {
         return new SearchAdvancedRunsFilter(
             dungeon:         null,
@@ -52,9 +48,46 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
             completedAtFrom: Carbon::now(),
             completedAtTo:   null,
             mythicLevelMin:  0,
+            mythicLevelMax:  null,
             limit:           10,
             offset:          0,
+            faction:         $faction,
         );
+    }
+
+    /**
+     * The poller records a fake run against the criteria it searched with, so a filter dimension
+     * this mock silently dropped would leave that criterion's budget at zero forever locally - which
+     * is exactly what a race criterion is (#4357).
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenAFactionFilter_reflectsThatFactionBackOntoTheFakeRuns(): void
+    {
+        // Arrange
+        Storage::fake('s3_combat_logs');
+        Storage::disk('s3_combat_logs')->put('run1.zip', 'content');
+
+        $horde = Faction::query()->where('key', Faction::FACTION_HORDE)->firstOrFail();
+
+        // Act
+        $result = $this->service->searchAdvancedRuns($this->makeFilter($horde));
+
+        // Assert
+        $this->assertSame(1, $result->runs[0]->faction);
+    }
+
+    #[Test]
+    public function searchAdvancedRuns_givenNoFactionFilter_stillGivesTheFakeRunsAFaction(): void
+    {
+        // Arrange
+        Storage::fake('s3_combat_logs');
+        Storage::disk('s3_combat_logs')->put('run1.zip', 'content');
+
+        // Act
+        $result = $this->service->searchAdvancedRuns($this->makeFilter());
+
+        // Assert
+        $this->assertNotNull($result->runs[0]->faction);
     }
 
     #[Test]

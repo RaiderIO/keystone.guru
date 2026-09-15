@@ -43,8 +43,10 @@ use Illuminate\Support\Facades\Auth;
 
 @if(Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN) && isset($model))
     <div class="mb-3">
-        {{ html()->label(__('view_common.team.details.route_publishing_enabled'), 'route_publishing_enabled') }}
-        {{ html()->checkbox('route_publishing_enabled', $model->route_publishing_enabled, 1)->class('form-check-input') }}
+        <div class="form-check">
+            {{ html()->checkbox('route_publishing_enabled', $model->route_publishing_enabled, 1)->class('form-check-input') }}
+            {{ html()->label(__('view_common.team.details.route_publishing_enabled'), 'route_publishing_enabled')->class('form-check-label') }}
+        </div>
     </div>
 @endif
 

@@ -52,6 +52,7 @@ return [
                 'any'                     => 'Cualquiera',
                 'select_floor'            => 'Seleccionar piso',
                 'view_heatmap_fullscreen' => 'Ver en pantalla completa',
+                'not_supported'           => ':dungeon no admite mapas de calor.',
             ],
         ],
     ],

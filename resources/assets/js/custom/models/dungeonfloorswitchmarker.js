@@ -72,6 +72,13 @@ class DungeonFloorSwitchMarker extends Icon {
             self._assignPopup();
         });
 
+        // The tooltip may be bound before target_floor_id is loaded (attributes are assigned in
+        // order and map_icon_type_id's setter eagerly refreshes the visual/tooltip), which bakes
+        // in the 'unknown floor' fallback text. Rebind once all attributes have loaded.
+        this.register('object:initialized', this, function () {
+            self.bindTooltip();
+        });
+
         if (getState().isEchoEnabled()) {
             getState().getEchoHandler().register('mouseposition:received', this, this._mousePositionReceived.bind(this));
         }
@@ -335,9 +342,18 @@ class DungeonFloorSwitchMarker extends Icon {
     cleanup() {
         super.cleanup();
         getState().unregister('floorid:changed', this);
+        this.unregister('object:initialized', this);
 
         if (getState().isEchoEnabled()) {
             getState().getEchoHandler().unregister('mouseposition:received', this);
         }
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        DungeonFloorSwitchMarker,
+    };
 }

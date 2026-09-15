@@ -6,13 +6,15 @@ return [
         'io' => [
             'export_string' => [
                 'category' => [
-                    'pull'     => '拉取 %d',
-                    'title'    => '标题',
-                    'map_icon' => '地图图标',
+                    'pull'         => '拉取 %d',
+                    'title'        => '标题',
+                    'map_icon'     => '地图图标',
+                    'raid_markers' => '团队标记',
                 ],
                 'unable_to_find_mdt_enemy_for_kg_enemy'             => '无法找到 Keystone.guru 敌人对应的 MDT 敌人，NPC %s（enemy_id: %d, npc_id: %d）。',
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => '这表明您的路线中击杀了一个 MDT 已知的敌人 NPC，但 Keystone.guru 尚未将该敌人与 MDT 对应起来（或在 MDT 中不存在）。',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => '此拉取已被移除，因为在 MDT 中找不到所有选择的敌人，导致拉取为空。',
+                'unable_to_find_mdt_enemy_for_kg_raid_marker'       => '无法为带有 %s 团队标记的敌人找到对应的 MDT 数据（npc_id: %s）。',
                 'route_title_contains_non_ascii_char_bug'           => '您的路线标题包含非 ASCII 字符，这些字符已知会触发 Keystone.guru 中一个尚未解决的编码错误。
                                                         您的路线标题中的所有违规字符已被删除，我们对造成的不便表示歉意，并希望尽快解决此问题。',
                 'route_title_contains_non_ascii_char_bug_details' => '旧标题：%s，新标题：%s',
@@ -24,15 +26,16 @@ return [
                     'awakened_obelisks' => '觉醒方尖碑',
                     'pulls'             => '拉',
                     'notes'             => '笔记',
-                    'arrows'            => '',
+                    'arrows'            => '箭头',
                     'pull'              => '拉 %d',
                     'object'            => '对象 %d',
+                    'raid_markers'      => '团队标记',
                 ],
                 'object_out_of_bounds'                                 => '无法放置评论：无法放置评论 ":comment" 对象超出范围。',
                 'limit_reached_pulls'                                  => '无法导入路线：超过最大 :limit 个拉。',
                 'limit_reached_brushlines'                             => '无法导入路线：超过最大 :limit 行。',
                 'limit_reached_paths'                                  => '无法导入路线：超过最大 :limit 条路径。',
-                'limit_reached_arrows'                                 => '',
+                'limit_reached_arrows'                                 => '无法导入路线：箭头数量超过了最大值 :limit。',
                 'limit_reached_notes'                                  => '无法导入路线：超过最大 :limit 条注释。',
                 'unable_to_find_floor_for_object'                      => '无法找到匹配 MDT 楼层 ID %d 的 Keystone.guru 楼层。',
                 'unable_to_find_floor_for_object_details'              => '这表明 MDT 有一个楼层，而 Keystone.guru 没有。',
@@ -46,6 +49,7 @@ return [
                 'unable_to_find_enemies_pull_skipped_details'          => '这可能表明 MDT 最近有一个更新尚未集成到 Keystone.guru 中。',
                 'unable_to_find_awakened_obelisks'                     => '无法为您的地下城/周组合找到觉醒的方尖碑。您的觉醒方尖碑跳过将不会被导入。',
                 'unable_to_find_awakened_obelisk_different_floor'      => '无法导入觉醒的方尖碑 :name，它位于与方尖碑本身不同的楼层。Keystone.guru 目前不支持这一点。',
+                'unable_to_find_awakened_obelisk_enemy'                => '无法导入觉醒的方尖碑 :name，无法根据您的地下城/周组合解析其对应的敌人。',
                 'unable_to_decode_mdt_import_string'                   => '无法解码 MDT 导入字符串',
                 'unable_to_validate_mdt_import_string'                 => '无法验证 MDT 导入字符串',
             ],
@@ -58,6 +62,22 @@ return [
         'analyze_combat_log' => [
             'verify_error'     => '无法验证战斗日志：错误。',
             'processing_error' => '无法处理战斗日志：错误。',
+        ],
+    ],
+    'combatlog' => [
+        'enemy_failure_analysis' => [
+            'verdict' => [
+                'npc_not_mapped'       => 'NPC 未映射',
+                'no_enemy_in_range'    => '范围内没有敌人',
+                'enemies_exhausted'    => '游戏内数量多于已映射数量',
+                'wrong_floor_artifact' => '很可能是楼层判断错误造成的',
+            ],
+            'suggestion' => [
+                'npc_not_mapped'       => ':npc 完全不存在于此映射版本中，但在 :routes 条路线中，玩家却在此处与其交战了 :count 次。请在此位置添加它（或它所在的包）。',
+                'no_enemy_in_range'    => '最近的已映射 :npc（敌人 :enemy_id）在 :distance 码之外，超出了 :range 码的交战范围。这里很可能漏掉了一包 :npc，或者该 :npc 被映射到了错误的位置。',
+                'enemies_exhausted'    => '范围内已映射了 :enemies 个 :npc，但每条路线在此处仍平均失败约 :avg 次——游戏中这个包里的 :npc 很可能比映射中的更多。',
+                'wrong_floor_artifact' => '本楼层范围内没有 :npc，但另一个楼层上有一个在 :distance 码以内。记录的楼层是根据日志中前一个 NPC 推断出来的，因此这很可能就是该推断造成的——请先核实再修改映射。',
+            ],
         ],
     ],
 

@@ -21,6 +21,7 @@ use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
 use App\Service\MDT\Models\ImportStringObjects;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class ObjectImporter
 {
@@ -384,7 +385,18 @@ class ObjectImporter
         ], $latLng->toArray()));
     }
 
+    /**
+     * Wrapped in a retried transaction - concurrent imports bulk-inserting into the shared
+     * `polylines` table can hit a MySQL lock wait timeout under contention (#4239).
+     */
     public function applyObjectsToDungeonRoute(
+        ImportStringObjects $importStringObjects,
+        DungeonRoute        $dungeonRoute,
+    ): void {
+        DB::transaction(fn() => $this->doApplyObjectsToDungeonRoute($importStringObjects, $dungeonRoute), 3);
+    }
+
+    private function doApplyObjectsToDungeonRoute(
         ImportStringObjects $importStringObjects,
         DungeonRoute        $dungeonRoute,
     ): void {

@@ -28,9 +28,32 @@ use App\Models\Npc\NpcHealth;
 @section('content')
     @include('compendium.npc.sections.header')
 
-    @include('compendium.npc.sections.characteristics')
+    <div class="compendium_record_section">
+        <div class="compendium_record_label">
+            {{ __('view_compendium.npc.sections.characteristics.title') }}
+            <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="top"
+               title="{{ __('view_compendium.npc.sections.characteristics.tooltip') }}"></i>
+        </div>
+        <div>
+            @include('compendium.npc.sections.characteristics')
+        </div>
+    </div>
 
-    @include('compendium.npc.sections.spells')
+    <div class="compendium_record_section">
+        <div class="compendium_record_label">
+            {{ __('view_compendium.npc.sections.spells.title') }}
+        </div>
+        <div>
+            @include('compendium.npc.sections.spells')
+        </div>
+    </div>
 
-    @include('compendium.npc.sections.event_feed')
+    <div class="compendium_record_section">
+        <div class="compendium_record_label">
+            {{ __('view_compendium.npc.sections.event_feed.title') }}
+        </div>
+        <div>
+            @include('compendium.npc.sections.event_feed')
+        </div>
+    </div>
 @endsection

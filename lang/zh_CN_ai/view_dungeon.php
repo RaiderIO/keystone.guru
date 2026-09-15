@@ -52,6 +52,7 @@ return [
                 'any'                     => '任何',
                 'select_floor'            => '选择楼层',
                 'view_heatmap_fullscreen' => '全屏查看',
+                'not_supported'           => ':dungeon 不支持热图。',
             ],
         ],
     ],

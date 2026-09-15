@@ -20,7 +20,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
 
         // Copy to clipboard functionality
         $('.copy_simulationcraft_string_to_clipboard').unbind('click').bind('click', function () {
-            let $exportResult = $('#mdt_export_result');
+            let $exportResult = $('#simulationcraft_export_result');
             copyToClipboard($exportResult.val(), $exportResult);
         });
 
@@ -100,7 +100,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
         $bloodlustPerPullSelect.find('option').remove();
         let selectedPulls = [];
 
-        let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = getKillZoneMapObjectGroup();
         let sortedKillZones = _.sortBy(_.values(killZoneMapObjectGroup.objects), 'index');
 
         for (let i = 0; i < sortedKillZones.length; i++) {
@@ -196,7 +196,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
      * @private
      */
     _fetchSimulationCraftString() {
-        $.ajax({
+        guardedAjaxClick('#simulate_get_string', {
             type: 'POST',
             url: `/ajax/${getState().getMapContext().getPublicKey()}/simulate`,
             dataType: 'json',
@@ -217,4 +217,10 @@ class CommonDungeonrouteSimulate extends InlineCode {
             }
         });
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {CommonDungeonrouteSimulate};
 }

@@ -127,6 +127,55 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
 
     /**
      * @throws Exception
+     * @throws Throwable
+     */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
+    public function parseTierList_GivenResponseWithArchonDungeonNamesRequiringMapping_ShouldResolveThemAndNotLogUnknownDungeon(): void
+    {
+        // Arrange
+        // "Sethraliss" and "Kings' Rest" are how Archon.gg names Temple of Sethraliss and King's Rest respectively -
+        // they must resolve via DUNGEON_NAME_MAPPING rather than being logged as unknown dungeons (#4153)
+        $affixGroupId = 124;
+        $response     = $this->getJsonData('response_dungeon_name_mapping');
+
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
+            $this,
+            null,
+            $log,
+            ['getAffixGroupByString'],
+        );
+
+        $affixGroupEaseTierService->expects($this->once())
+            ->method('getAffixGroupByString')
+            ->willReturn(AffixGroup::findOrFail($affixGroupId));
+
+        $log->expects($this->never())
+            ->method('parseTierListUnknownDungeon');
+
+        // 8 dungeons, including Sethraliss and Kings' Rest
+        $log->expects($this->exactly(8))
+            ->method('parseTierListSavedDungeonTier');
+
+        // Act
+        $result = null;
+
+        try {
+            DB::transaction(function () use (&$result, $affixGroupEaseTierService, $response) {
+                $result = $affixGroupEaseTierService->parseTierList($response);
+            });
+        } finally {
+            $result?->delete();
+        }
+
+        // Assert
+        $this->assertInstanceOf(AffixGroupEaseTierPull::class, $result);
+        $this->assertGreaterThan(0, $result->id);
+    }
+
+    /**
+     * @throws Exception
      */
     #[Test]
     #[Group('AffixGroupEaseTierService')]

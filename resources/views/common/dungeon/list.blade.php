@@ -62,7 +62,7 @@ $currentAffixGroup ??= null;
         ?>
         @include('common.dungeon.list.card', [
             'link' => $links->get('more'),
-            'title' => 'More',
+            'title' => __('view_common.dungeon.list.more'),
             'isSelected' => !$hasSelectedDungeon,
             'imageUrl' => $gameVersion->expansion->getWallpaperUrl(),
             'imageAlt' => __($gameVersion->expansion->name),

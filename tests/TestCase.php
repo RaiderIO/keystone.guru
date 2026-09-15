@@ -4,14 +4,19 @@ namespace Tests;
 
 use App\Logging\StructuredLogging;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Event;
 use Tests\Attributes\Repeat;
 use Tests\Attributes\SlowTest;
+use Tests\Traits\DetectsLeakedRows;
+use Tests\Traits\UsesParallelTestToken;
 
 abstract class TestCase extends BaseTestCase
 {
     use Bootstrap;
+    use DetectsLeakedRows;
     use Shutdown;
+    use UsesParallelTestToken;
 
     private const float WARN_TEST_DURATION_SECONDS = 1.0;
 
@@ -49,9 +54,36 @@ abstract class TestCase extends BaseTestCase
     #[\Override]
     protected function setUp(): void
     {
+        $parallelTestToken = self::parallelTestToken();
+        if ($parallelTestToken !== null) {
+            $this->prepareParallelProcessEnvironment($parallelTestToken);
+        }
+
         parent::setUp();
 
         $this->testStartTime = microtime(true);
+
+        // The combatlog connection has no phpunit variant of its own, so in the main checkout
+        // tests historically read/wrote the LIVE combatlog schema - whose combat-log-derived rows
+        // are not recoverable (#4346). When a dedicated test schema is configured
+        // (DB_PHPUNIT_COMBATLOG_DATABASE -> the combatlog_phpunit connection), redirect the
+        // combatlog connection to it before any test touches it. Per-test on purpose: the app is
+        // rebuilt (and config reset) for every test.
+        $phpunitCombatlogDatabase = config('database.connections.combatlog_phpunit.database');
+        if (!empty($phpunitCombatlogDatabase)) {
+            // url must go too: a configured DB_URL would re-override `database` when the
+            // connection is built, silently undoing the isolation
+            config([
+                'database.connections.combatlog.database' => $phpunitCombatlogDatabase,
+                'database.connections.combatlog.url'      => null,
+            ]);
+            DB::purge('combatlog');
+        }
+
+        // After the combatlog redirect above, so the token suffix lands on the phpunit schema name
+        if ($parallelTestToken !== null) {
+            $this->isolateParallelTestProcess($parallelTestToken);
+        }
 
         // StructuredLogging caches config values in statics that survive across tests - a config() change made by a
         // previous test must not leak into this one. enable() is used instead of flushConfigCache() alone because
@@ -75,20 +107,26 @@ abstract class TestCase extends BaseTestCase
 
             $this->bootstrap();
         }
+
+        // Last, so both schemas are the ones the test will actually write to
+        $this->snapshotRowCountsForLeakGuard();
     }
 
     #[\Override]
     protected function tearDown(): void
     {
         $elapsed = microtime(true) - $this->testStartTime;
+        // Reads config, so it has to be answered while the application still exists
+        $excludedFromTimingCheck = $this->isExcludedFromTimingCheck();
 
-        if ($this->isExcludedFromTimingCheck()) {
-            parent::tearDown();
+        // Runs the beforeApplicationDestroyed() callbacks, which is where some cleanup lives
+        parent::tearDown();
 
+        $this->reportLeakedRows();
+
+        if ($excludedFromTimingCheck) {
             return;
         }
-
-        parent::tearDown();
 
         if ($elapsed > self::MAX_TEST_DURATION_SECONDS) {
             $this->fail(sprintf(

@@ -13,11 +13,12 @@ use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Spell\Spell;
-use App\Repositories\Interfaces\SpellRepositoryInterface;
+use App\Repositories\Swoole\SpellRepositorySwoole;
 use App\Service\CombatLog\DataExtractors\Logging\NpcCharacteristicDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\NpcCharacteristicDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Mockery;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -50,7 +51,9 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         // Ensure spell 118 has characteristic_id set before the extractor loads its cache
         Spell::where('id', self::SPELL_ID)->update(['characteristic_id' => Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH]]);
 
-        $this->extractor = new NpcCharacteristicDataExtractor($this->app->make(SpellRepositoryInterface::class));
+        // A fresh (non-app-bound) repository per test - the process-persistent app instance would serve a
+        // catalog memoized before the characteristic update above
+        $this->extractor = new NpcCharacteristicDataExtractor(new SpellRepositorySwoole());
         $this->result    = new ExtractedDataResult();
 
         $dungeon              = Dungeon::first();
@@ -261,6 +264,53 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
             'npc_id'     => self::NPC_ID,
             'event_type' => CombatLogNpcEventType::CharacteristicAdded->value,
         ], 'combatlog');
+    }
+
+    #[Test]
+    public function npcCharacteristicsTable_givenDuplicatePair_rejectsSecondInsertWithUniqueConstraintViolation(): void
+    {
+        // Arrange
+        $this->createTestNpc();
+        $characteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
+        NpcCharacteristic::create([
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+        ]);
+
+        // Act & Assert
+        $this->expectException(UniqueConstraintViolationException::class);
+        NpcCharacteristic::query()->insert([
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+        ]);
+    }
+
+    #[Test]
+    public function firstOrCreate_givenExistingPairRaceLost_returnsExistingRowWithoutThrowing(): void
+    {
+        // Arrange
+        $this->createTestNpc();
+        $characteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
+        $existing         = NpcCharacteristic::create([
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+        ]);
+
+        // Act — mirrors NpcCharacteristicDataExtractor::afterExtract(), simulating the race loser
+        $npcCharacteristic = NpcCharacteristic::firstOrCreate([
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+        ]);
+
+        // Assert
+        $this->assertFalse($npcCharacteristic->wasRecentlyCreated);
+        $this->assertSame($existing->id, $npcCharacteristic->id);
+        $this->assertSame(
+            1,
+            NpcCharacteristic::where('npc_id', self::NPC_ID)
+                ->where('characteristic_id', $characteristicId)
+                ->count(),
+        );
     }
 
     #[Test]

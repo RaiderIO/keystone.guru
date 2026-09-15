@@ -6,6 +6,7 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
+use App\Logic\CombatLog\CombatEvents\Interfaces\HasGenericData;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Player;
@@ -130,10 +131,17 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
                     return false;
                 }
-            } elseif ($combatLogEvent instanceof CombatLogEvent || $combatLogEvent instanceof UnitDied) {
-                // PARTY_KILL and UNIT_DIED extend UnitDied (a GenericSpecialEvent, not CombatLogEvent) but
-                // still carry generic data with the dying unit's GUID.
+            } elseif ($combatLogEvent instanceof HasGenericData) {
+                // UnitDied is a GenericSpecialEvent rather than a CombatLogEvent - both carry generic data, so type
+                // check against the interface. Checking against CombatLogEvent alone discards every enemy death.
                 $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
+
+                if ($destGuid === null) {
+                    $this->log->parseInvalidCombatLogEvent($lineNr);
+
+                    return false;
+                }
+
                 $this->log->parseUnitDied($lineNr, $destGuid->getGuid());
             } else {
                 $this->log->parseInvalidCombatLogEvent($lineNr);

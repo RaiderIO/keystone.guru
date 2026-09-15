@@ -38,6 +38,20 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
         $this->end(__METHOD__);
     }
 
+    public function importMappingVersionFromMDTPendingAcceptance(string $key, int $version): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function acceptMDTMappingForPendingMappingVersion(
+        string  $key,
+        int     $version,
+        ?string $mdtMappingHash,
+        string  $latestMdtMappingHash,
+    ): void {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
     public function importDungeonMappingVersionFromMDTNoChangeDetected(string $key, ?string $latestMdtMappingHash): void
     {
         $this->warning(__METHOD__, get_defined_vars());
@@ -78,6 +92,11 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
         $this->info(__METHOD__, get_defined_vars());
     }
 
+    public function importNpcsDataFromMDTSkipHealthOverwrite(int $npcId, int $existingHealth, int $mdtHealth): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
     public function importNpcsDataFromMDTNpcNotMarkedForAllDungeons(int $npcId): void
     {
         $this->error(__METHOD__, get_defined_vars());
@@ -88,12 +107,9 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
         $this->error(__METHOD__, get_defined_vars());
     }
 
-    public function importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
+    public function importNpcsDataFromMDTNpcsUpdate(
         int $npcsUpdated,
         int $npcsInserted,
-        int $npcSpellsDeleted,
-        int $npcSpellsInserted,
-        int $npcDungeonsDeleted,
         int $npcDungeonsInserted,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
@@ -104,39 +120,9 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
         $this->end(__METHOD__);
     }
 
-    public function importSpellDataFromMDTStart(string $key): void
-    {
-        $this->start(__METHOD__, get_defined_vars());
-    }
-
-    public function importSpellDataFromMDTSpellInExcludeList(): void
-    {
-        $this->debug(__METHOD__);
-    }
-
-    public function importSpellDataFromMDTResult(int $spellCount, int $spellDungeonCount): void
-    {
-        $this->debug(__METHOD__, get_defined_vars());
-    }
-
-    public function importSpellDataFromMDTFailed(): void
-    {
-        $this->error(__METHOD__);
-    }
-
-    public function importSpellDataFromMDTEnd(): void
-    {
-        $this->end(__METHOD__);
-    }
-
     public function importNpcsStart(): void
     {
         $this->start(__METHOD__);
-    }
-
-    public function importNpcsDataFromMDTSpellInExcludeList(): void
-    {
-        $this->debug(__METHOD__);
     }
 
     public function importNpcsDataFromMDTSaveNewNpc(int $npcId): void
@@ -326,6 +312,16 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
         $this->end(__METHOD__);
     }
 
+    public function importMappingVersionFromMDTNpcSetReplaced(
+        string $dungeonKey,
+        int    $previousNpcCount,
+        int    $incomingNpcCount,
+        int    $keptPercentage,
+        bool   $forceImport,
+    ): void {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function importMapPOIsStart(): void
     {
         $this->start(__METHOD__);
@@ -338,6 +334,20 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
 
     public function importMapPOIsMissingTranslation(string $translationKey): void
     {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function importMapPOIsDeletedClonedGenericItemMapIcons(int $deletedCount): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function importMapPOIsUnhandledMapPOI(
+        string $mdtMapPOIType,
+        ?int   $spellId,
+        ?int   $textureFileDataId,
+        int    $subLevel,
+    ): void {
         $this->error(__METHOD__, get_defined_vars());
     }
 
@@ -363,6 +373,14 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
     }
 
     public function importMapPOIsHaveExistingFloorSwitchMarkers(int $count): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param array<string, float> $latLng
+     */
+    public function importMapPOIsHaveExistingDungeonStartMapIcon(array $latLng): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }

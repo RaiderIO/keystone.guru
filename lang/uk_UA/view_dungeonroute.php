@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Тижневий маршрут Raider.IO',
-                'popular'                    => 'Поширені маршрути',
-                'popular_by_current_affixes' => 'Поширені маршрути за поточними модифікаторами',
-                'popular_by_next_affixes'    => 'Поширені маршрути за наступними модифікаторами',
-                'newly_published_routes'     => 'Недавно опубліковані маршрути',
+                'weekly_route'           => 'Тижневий маршрут Raider.IO',
+                'weekly_routes'          => '',
+                'community_routes'       => '',
+                'popular'                => 'Поширені маршрути',
+                'newly_published_routes' => 'Недавно опубліковані маршрути',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'expert' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'title' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => 'Маршрути',
-            'popular'                    => 'Поширені маршрути',
-            'popular_by_current_affixes' => 'Поширені маршрути за поточними модифікаторами',
-            'popular_by_next_affixes'    => 'Поширені маршрути за наступними модифікаторами',
-            'newly_published_routes'     => 'Недавно опубліковані маршрути',
+            'title'                  => 'Маршрути',
+            'popular'                => 'Поширені маршрути',
+            'newly_published_routes' => 'Недавно опубліковані маршрути',
         ],
         'panel' => [
             'show_more' => 'Показати більше',

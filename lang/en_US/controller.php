@@ -21,12 +21,15 @@ return [
         'flash' => [
             'banned_ip_address_added'                => 'IP address banned successfully',
             'banned_ip_address_removed'              => 'Ban removed successfully',
+            'patreon_manual_grant_revoked'           => 'Revoked the manual Patreon grant of :user',
+            'patreon_manual_grant_nothing_to_revoke' => ':user has no manually granted Patreon benefits to revoke',
             'message_banner_set_successfully'        => 'Message banner set successfully',
             'thumbnail_regenerate_result'            => 'Dispatched :success jobs for :total routes. :failed failed.',
             'combatlog_route_regenerate_result'      => 'Dispatched :count jobs',
             'combatlog_criteria_reset'               => 'All parsing criteria counts for today have been reset.',
             'combatlog_criteria_thresholds_updated'  => 'Parsing criteria thresholds have been updated.',
             'caches_dropped_successfully'            => 'Caches dropped successfully',
+            'caches_drop_queued'                     => 'Cache drop has been queued and will run in the background',
             'exception'                              => 'Exception thrown in admin panel',
             'feature_toggle_activated'               => 'Feature :feature is now activated',
             'feature_toggle_deactivated'             => 'Feature :feature is now deactivated',
@@ -48,6 +51,11 @@ return [
             'affixgroup_created' => 'Affix group created',
             'affixgroup_updated' => 'Affix group updated',
             'affixgroup_deleted' => 'Affix group deleted',
+        ],
+    ],
+    'apicombatlogroute' => [
+        'error' => [
+            'no_post_body' => 'This route has no stored combat log route request body.',
         ],
     ],
     'apicombatlogrun' => [
@@ -89,6 +97,9 @@ return [
             'route_cloned_successfully' => 'Route cloned successfully',
             'route_updated'             => 'Route updated',
             'route_created'             => 'Route created',
+            'upgrade_draft_created'     => 'An upgrade draft was created. Repair it here - the original route keeps serving its old content until you apply your changes.',
+            'upgrade_applied'           => 'The upgrade was applied to your route.',
+            'upgrade_discarded'         => 'The upgrade draft was discarded.',
         ],
     ],
     'dungeonroutediscover' => [
@@ -121,6 +132,12 @@ return [
         'error' => [
             'floor_not_found_in_dungeon' => 'Floor not part of dungeon',
             'not_found'                  => 'Not found',
+        ],
+    ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => 'Unable to place the pull here - this location does not belong to any floor of this dungeon',
+            'unable_to_delete_pull'           => 'Unable to delete pull',
         ],
     ],
     'oauthlogin' => [
@@ -170,6 +187,7 @@ return [
             'session_expired'         => 'Your session has expired. Please try again.',
             'patreon_error_occurred'  => 'An error occurred on Patreon\'s side. Please try again later.',
             'internal_error_occurred' => 'An error occurred while processing Patreon\'s response - it appears to be malformed. The error was logged and will be dealt with. Please try again later.',
+            'link_cancelled'          => 'Linking your Patreon account was cancelled.',
         ],
     ],
     'profile' => [

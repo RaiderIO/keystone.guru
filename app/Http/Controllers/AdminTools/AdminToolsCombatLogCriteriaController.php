@@ -22,6 +22,7 @@ class AdminToolsCombatLogCriteriaController extends Controller
             ->where('date', $today)
             ->orderBy('combat_log_version')
             ->orderBy('model_class')
+            ->orderBy('mythic_level_min')
             ->get();
 
         $modelsById = [];

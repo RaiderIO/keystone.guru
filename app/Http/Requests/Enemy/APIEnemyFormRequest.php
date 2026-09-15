@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Enemy;
 
-use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Enemy;
 use App\Models\EnemyForcesCheckpoint;
 use App\Models\EnemyPack;
@@ -74,7 +74,7 @@ class APIEnemyFormRequest extends FormRequest
             'enemy_forces_override'         => 'nullable|int',
             'enemy_forces_override_teeming' => 'nullable|int',
             'dungeon_difficulty'            => [
-                Rule::in(array_merge(array_values(Dungeon::DIFFICULTY_ALL), [
+                Rule::in(array_merge(DungeonDifficulty::values(), [
                     '-1',
                     '',
                     null,

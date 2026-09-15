@@ -159,8 +159,10 @@ $dungeonSelectId = 'dungeon_id_select';
                                 {{ __('view_common.forms.createroute.admin') }}
                             </h3>
                             <div class="mb-3">
-                                {{ html()->label(__('view_common.forms.createroute.demo_route'), 'demo') }}
-                                {{ html()->checkbox('demo', null, 1)->class('form-check-input') }}
+                                <div class="form-check">
+                                    {{ html()->checkbox('demo', null, 1)->class('form-check-input') }}
+                                    {{ html()->label(__('view_common.forms.createroute.demo_route'), 'demo')->class('form-check-label') }}
+                                </div>
                             </div>
                         @endif
                     </div>

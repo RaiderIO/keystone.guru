@@ -16,7 +16,7 @@ use Illuminate\Support\Collection;
         <div id="view_route_map_actions_container" class="mb-2">
             @include('common.maps.controls.elements.floorswitch', ['floors' => $floors])
 
-            @include('common.maps.controls.elements.enemyvisualtype')
+            @include('common.maps.controls.elements.enemydisplaytype')
 
             @include('common.maps.controls.elements.mapobjectgroupvisibility', ['floors' => $floors])
 

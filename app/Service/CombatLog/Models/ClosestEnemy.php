@@ -12,8 +12,6 @@ class ClosestEnemy
      */
     private float $distanceBetweenEnemies = 99999999;
 
-    private float $distanceBetweenLastPullAndEnemy = 99999999;
-
     private float $weightedTotalDistance = 99999999;
 
     private ?Enemy $enemy = null;
@@ -26,18 +24,6 @@ class ClosestEnemy
     public function setDistanceBetweenEnemies(float $distanceBetweenEnemies): ClosestEnemy
     {
         $this->distanceBetweenEnemies = $distanceBetweenEnemies;
-
-        return $this;
-    }
-
-    public function getDistanceBetweenLastPullAndEnemy(): float
-    {
-        return $this->distanceBetweenLastPullAndEnemy;
-    }
-
-    public function setDistanceBetweenLastPullAndEnemy(float $distanceBetweenLastPullAndEnemy): ClosestEnemy
-    {
-        $this->distanceBetweenLastPullAndEnemy = $distanceBetweenLastPullAndEnemy;
 
         return $this;
     }

@@ -12,7 +12,7 @@
     "settings": {
         "temporary": true,
         "debugIcons": false,
-        "mappingVersion": null
+        "mappingVersion": 7
     },
     "challengeMode": {
         "start": "2026-01-11T07:43:39.761+00:00",

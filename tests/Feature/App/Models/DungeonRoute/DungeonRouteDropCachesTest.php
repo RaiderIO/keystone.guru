@@ -51,7 +51,18 @@ final class DungeonRouteDropCachesTest extends PublicTestCase
         // Arrange & Act
         $field = DungeonRoute::getCardCacheField('vertical', 'en_US', 0, 1, 0);
 
-        // Assert
-        $this->assertSame('vertical:en_US_0_1_0', $field);
+        // Assert - useFrontPageThumbnail defaults to 0 when omitted
+        $this->assertSame('vertical:en_US_0_1_0_0', $field);
+    }
+
+    #[Test]
+    public function getCardCacheField_givenUseFrontPageThumbnail_includesItInField(): void
+    {
+        // Arrange & Act
+        $field = DungeonRoute::getCardCacheField('vertical', 'en_US', 0, 1, 0, 1);
+
+        // Assert - a separate cache field from the non-front-page variant, so switching pages never
+        // shows the other page's cached line thickness
+        $this->assertSame('vertical:en_US_0_1_0_1', $field);
     }
 }

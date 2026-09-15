@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Dungeon;
 
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Expansion;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -31,7 +32,7 @@ class CreateMissing extends Command
         /** @var Collection<string, Dungeon> $dungeons */
         $dungeons = Dungeon::all()->keyBy('key');
 
-        foreach (Dungeon::ALL as $expansionKey => $dungeonKeys) {
+        foreach (DungeonKey::casesByExpansionKey() as $expansionKey => $dungeonKeys) {
             // Temp, I just want classic dungeons for now
             if ($expansionKey !== Expansion::EXPANSION_MOP) {
                 continue;
@@ -39,14 +40,14 @@ class CreateMissing extends Command
 
             foreach ($dungeonKeys as $dungeonKey) {
                 // Already exists, we no longer care
-                if ($dungeons->has($dungeonKey)) {
+                if ($dungeons->has($dungeonKey->value)) {
                     continue;
                 }
 
                 /** @var Expansion $expansion */
                 $expansion = $expansions->get($expansionKey);
 
-                $nameTranslationKey = sprintf('dungeons.%s.%s.name', $expansionKey, $dungeonKey);
+                $nameTranslationKey = sprintf('dungeons.%s.%s.name', $expansionKey, $dungeonKey->value);
                 $nameTranslated     = __($nameTranslationKey, [], 'en_US');
 
                 Dungeon::create([
@@ -58,7 +59,7 @@ class CreateMissing extends Command
                     'challenge_mode_id' => 123,
                     'mdt_id'            => 123,
                     'name'              => $nameTranslationKey,
-                    'key'               => $dungeonKey,
+                    'key'               => $dungeonKey->value,
                     'slug'              => Str::slug($nameTranslated),
                 ]);
 

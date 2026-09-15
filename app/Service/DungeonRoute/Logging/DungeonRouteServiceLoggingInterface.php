@@ -36,5 +36,7 @@ interface DungeonRouteServiceLoggingInterface
 
     public function publishScheduledDungeonRouteSkippedInactiveDungeon(int $dungeonRouteId, int $dungeonId, int $scheduledPublishId): void;
 
+    public function publishScheduledDungeonRouteSkippedUpgradeDraft(int $dungeonRouteId, int $scheduledPublishId): void;
+
     public function publishScheduledDungeonRouteSkippedRequiredEnemiesNotKilled(int $dungeonRouteId, int $scheduledPublishId): void;
 }

@@ -33,26 +33,32 @@ $floor ??= null;
 
     <div class="row mb-3">
         <div class="col {{ $errors->has('active') ? ' has-error' : '' }}">
-            {{ html()->label(__('view_admin.floor.edit.active'), 'active')->class('fw-bold') }}
-            {{ html()->checkbox('active', $floor?->active, 1)->class('form-check-input') }}
+            <div class="form-check">
+                {{ html()->checkbox('active', $floor?->active, 1)->class('form-check-input') }}
+                {{ html()->label(__('view_admin.floor.edit.active'), 'active')->class('fw-bold form-check-label') }}
+            </div>
             @include('common.forms.form-error', ['key' => 'active'])
         </div>
 
         <div class="col {{ $errors->has('default') ? ' has-error' : '' }}">
-            {{ html()->label(__('view_admin.floor.edit.default'), 'default')->class('fw-bold') }}
-            <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
-                __('view_admin.floor.edit.default_title')
-                 }}"></i>
-            {{ html()->checkbox('default', $floor?->default ?? (int) ($dungeon->floors()->count() === 0), 1)->class('form-check-input') }}
+            <div class="form-check">
+                {{ html()->checkbox('default', $floor?->default ?? (int) ($dungeon->floors()->count() === 0), 1)->class('form-check-input') }}
+                {{ html()->label(__('view_admin.floor.edit.default'), 'default')->class('fw-bold form-check-label') }}
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
+                    __('view_admin.floor.edit.default_title')
+                     }}"></i>
+            </div>
             @include('common.forms.form-error', ['key' => 'default'])
         </div>
 
         <div class="col {{ $errors->has('facade') ? ' has-error' : '' }}">
-            {{ html()->label(__('view_admin.floor.edit.facade'), 'facade')->class('fw-bold') }}
-            <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
-                __('view_admin.floor.edit.facade_title')
-                 }}"></i>
-            {{ html()->checkbox('facade', $floor?->facade, 1)->class('form-check-input') }}
+            <div class="form-check">
+                {{ html()->checkbox('facade', $floor?->facade, 1)->class('form-check-input') }}
+                {{ html()->label(__('view_admin.floor.edit.facade'), 'facade')->class('fw-bold form-check-label') }}
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
+                    __('view_admin.floor.edit.facade_title')
+                     }}"></i>
+            </div>
             @include('common.forms.form-error', ['key' => 'facade'])
         </div>
     </div>
@@ -125,6 +131,12 @@ $floor ??= null;
         {{ html()->label(sprintf(__('view_admin.floor.edit.zoom_max'), config('keystoneguru.zoom_max_default')), 'zoom_max')->class('fw-bold') }}
         {{ html()->number('zoom_max')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'zoom_max'])
+    </div>
+
+    <div class="mb-3{{ $errors->has('enemy_pack_margin') ? ' has-error' : '' }}">
+        {{ html()->label(__('view_admin.floor.edit.enemy_pack_margin'), 'enemy_pack_margin')->class('fw-bold') }}
+        {{ html()->number('enemy_pack_margin', $floor?->enemy_pack_margin, 0, 50, '0.1')->class('form-control') }}
+        @include('common.forms.form-error', ['key' => 'enemy_pack_margin'])
     </div>
 
     <div class="mb-3">

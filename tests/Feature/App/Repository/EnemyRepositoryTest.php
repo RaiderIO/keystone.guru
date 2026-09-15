@@ -98,4 +98,53 @@ final class EnemyRepositoryTest extends PublicTestCase
             $this->assertNotNull($enemy->kill_priority, sprintf('Enemy %d has null kill_priority.', $enemy->id));
         });
     }
+
+    #[Test]
+    public function getAvailableEnemiesForDungeonRouteBuilder_givenMultiplePatrolGroups_ordersByAscendingEnemyPatrolId(): void
+    {
+        // Arrange
+        $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
+
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
+
+        $baseEnemy = $mappingVersion->enemies()->first();
+        $this->assertNotNull($baseEnemy, 'Expected at least one enemy in fixture mapping version.');
+
+        $attributes = $baseEnemy->only($baseEnemy->getFillable());
+        unset($attributes['id']);
+
+        // A handful of enemy_patrol_id groups, interspersed with non-patrol (null) enemies, is what
+        // exposes the non-transitive comparator bug — Collection::sort() with only one or two
+        // distinct values can happen to land in the right place by luck of the sort algorithm.
+        $enemyPatrolIds = [null, 3, null, 1, null, 4, null, 2, null, 5, null];
+
+        $createdEnemies = array_map(
+            static fn(?int $enemyPatrolId) => Enemy::query()->create(array_merge(
+                $attributes,
+                ['enemy_patrol_id' => $enemyPatrolId],
+            )),
+            $enemyPatrolIds,
+        );
+
+        try {
+            // Act
+            $result = $this->repository->getAvailableEnemiesForDungeonRouteBuilder($mappingVersion);
+
+            // Assert — filtered down to just the synthetic enemies, their relative order must be
+            // ascending by enemy_patrol_id (null treated as 0), regardless of how the rest sorted.
+            $createdIds       = collect($createdEnemies)->pluck('id')->all();
+            $orderedPatrolIds = $result->only($createdIds)->map(
+                static fn(Enemy $enemy) => $enemy->enemy_patrol_id ?? 0,
+            )->values()->all();
+            $expectedPatrolIds = $orderedPatrolIds;
+            sort($expectedPatrolIds);
+
+            $this->assertCount(count($enemyPatrolIds), $orderedPatrolIds, 'Not all synthetic enemies were found in the result.');
+            $this->assertSame($expectedPatrolIds, $orderedPatrolIds, 'Enemies were not ordered ascending by enemy_patrol_id.');
+        } finally {
+            Enemy::query()->whereKey(collect($createdEnemies)->pluck('id')->all())->delete();
+            (new Enemy())->flushCache();
+        }
+    }
 }

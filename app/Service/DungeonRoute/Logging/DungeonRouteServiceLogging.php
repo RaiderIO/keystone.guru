@@ -85,6 +85,11 @@ class DungeonRouteServiceLogging extends StructuredLogging implements DungeonRou
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    public function publishScheduledDungeonRouteSkippedUpgradeDraft(int $dungeonRouteId, int $scheduledPublishId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function publishScheduledDungeonRouteSkippedRequiredEnemiesNotKilled(int $dungeonRouteId, int $scheduledPublishId): void
     {
         $this->error(__METHOD__, get_defined_vars());

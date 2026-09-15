@@ -3,12 +3,54 @@
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute;
 
 use App\Models\Affix;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\Npc;
+use Override;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\APICombatLogControllerTestBase;
 
 abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLogControllerTestBase
 {
     protected const FIXTURES_ROOT_DIR = '../../';
+
+    /** @var array<int, string> Public keys of every route stored through storeCombatLogRoute() in this test */
+    private array $storedRoutePublicKeys = [];
+
+    #[Override]
+    protected function tearDown(): void
+    {
+        try {
+            foreach ($this->storedRoutePublicKeys as $publicKey) {
+                $this->deleteDungeonRouteByPublicKey($publicKey);
+            }
+            $this->storedRoutePublicKeys = [];
+        } finally {
+            parent::tearDown();
+        }
+    }
+
+    /**
+     * Posts a combat log route body to the store endpoint, asserts it was created and returns the decoded response.
+     *
+     * The route this creates is persisted, and the test database is not rolled back between tests: it is deleted
+     * again in tearDown(), whatever the test's assertions do afterwards.
+     *
+     * @param  array<string, mixed> $postBody
+     * @return array<string, mixed>
+     */
+    protected function storeCombatLogRoute(array $postBody): array
+    {
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+
+        $response->assertCreated();
+
+        /** @var array<string, mixed> $responseArr */
+        $responseArr = json_decode($response->content(), true);
+
+        $this->storedRoutePublicKeys[] = $responseArr['data']['publicKey'];
+
+        return $responseArr;
+    }
 
     /**
      * @param array<string, mixed> $response
@@ -41,10 +83,42 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
     }
 
     /**
+     * The API deliberately falls back to the dungeon's current mapping version when the requested one cannot be
+     * resolved (CombatLogRouteRequestDto::createDungeonRoute()) - an external client posting a version we have since
+     * dropped still gets a route. A fixture must never take that fallback: it would silently re-baseline the
+     * hardcoded counts below against whatever mapping happens to be seeded.
+     *
+     * @param array<string, mixed> $postBody
      * @param array<string, mixed> $responseArr
      */
-    protected function validatePulls(array $responseArr, int $pulls, int $enemyForces): void
+    protected function validateMappingVersion(array $postBody, array $responseArr): void
     {
+        $pinnedVersion = $postBody['settings']['mappingVersion'] ?? null;
+
+        $this->assertNotNull(
+            $pinnedVersion,
+            'Fixture does not pin settings.mappingVersion - it would silently follow every MDT import',
+        );
+
+        $this->assertSame(
+            $pinnedVersion,
+            $responseArr['data']['mappingVersion'],
+            sprintf(
+                'Fixture pins mapping version %d but the route was created on %d - the pinned version no longer exists for this dungeon',
+                $pinnedVersion,
+                $responseArr['data']['mappingVersion'],
+            ),
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $postBody
+     * @param array<string, mixed> $responseArr
+     */
+    protected function validatePulls(array $postBody, array $responseArr, int $pulls, int $enemyForces): void
+    {
+        $this->validateMappingVersion($postBody, $responseArr);
+
         $this->assertCount($pulls, $responseArr['data']['pulls']);
         $this->assertEquals($enemyForces, $responseArr['data']['enemyForces']);
         /** @var MappingVersion|null $mappingVersion */
@@ -94,5 +168,115 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
                 $this->assertContains($affix->affix_id, $validAffixIds, sprintf('Affix with key %s and id %d not found in response [%s]', $affix->key, $affix->affix_id, implode(', ', $validAffixIds)));
             }
         }
+    }
+
+    /**
+     * Asserts that a single pull holds all of $npcIds at once.
+     *
+     * validateBossesResolved() only covers what the party is on record as having killed, so it cannot see an enemy a
+     * DungeonRouteBuilderRule awarded - the whole point of those being that no death for them is ever sent to us.
+     * This is how such an award is asserted instead.
+     *
+     * @param array<string, mixed> $responseArr
+     * @param array<int, int>      $npcIds
+     */
+    protected function validateNpcIdsInSamePull(array $responseArr, array $npcIds): void
+    {
+        /** @var array<int, array<string, mixed>> $pulls */
+        $pulls = $responseArr['data']['pulls'];
+
+        $matchingPulls = array_filter($pulls, static function (array $pull) use ($npcIds): bool {
+            /** @var array<int, array<string, mixed>> $enemies */
+            $enemies = $pull['enemies'];
+
+            return array_diff($npcIds, array_column($enemies, 'npcId')) === [];
+        });
+
+        $this->assertNotEmpty(
+            $matchingPulls,
+            sprintf('No single pull holds all of NPCs %s', implode(', ', $npcIds)),
+        );
+    }
+
+    /**
+     * Asserts how many enemies carrying $npcId the route ended up with.
+     *
+     * An awarded npc credits every one of its mapped enemies, so for those the count is what matters: presence alone
+     * is also satisfied by crediting one of six, which is the failure this guards against.
+     *
+     * @param array<string, mixed> $responseArr
+     */
+    protected function validateNpcIdCount(array $responseArr, int $npcId, int $expectedCount): void
+    {
+        /** @var array<int, array<string, mixed>> $pulls */
+        $pulls = $responseArr['data']['pulls'];
+        $count = 0;
+
+        foreach ($pulls as $pull) {
+            /** @var array<int, array<string, mixed>> $enemies */
+            $enemies = $pull['enemies'];
+            $count += count(array_filter($enemies, static fn(array $enemy): bool => $enemy['npcId'] === $npcId));
+        }
+
+        $this->assertSame(
+            $expectedCount,
+            $count,
+            sprintf('Expected %d enemies with NPC %d in the route, found %d', $expectedCount, $npcId, $count),
+        );
+    }
+
+    /**
+     * Every boss the party actually killed must end up in a pull. A boss that is silently dropped - because its
+     * mapped position is out of range of where it was killed, or because it resolved onto the wrong floor - is the
+     * failure mode a hardcoded pull/enemy-forces count cannot see, so it is asserted separately from those numbers.
+     *
+     * @param array<string, mixed> $postBody
+     * @param array<string, mixed> $responseArr
+     */
+    protected function validateBossesResolved(array $postBody, array $responseArr): void
+    {
+        /** @var array<int, array<string, mixed>> $killedNpcs */
+        $killedNpcs   = $postBody['npcs'];
+        $killedNpcIds = array_values(array_unique(array_column($killedNpcs, 'npcId')));
+
+        $bossNpcIds = Npc::query()
+            ->whereIn('id', $killedNpcIds)
+            ->get()
+            ->filter(static fn(Npc $npc): bool => $npc->isBoss())
+            ->pluck('id')
+            ->all();
+
+        $this->assertNotEmpty($bossNpcIds, 'The combat log contains no boss kills at all');
+
+        /** @var array<int, array<string, mixed>> $pulls */
+        $pulls          = $responseArr['data']['pulls'];
+        $resolvedNpcIds = [];
+
+        foreach ($pulls as $pull) {
+            /** @var array<int, array<string, mixed>> $enemies */
+            $enemies        = $pull['enemies'];
+            $resolvedNpcIds = array_merge($resolvedNpcIds, array_column($enemies, 'npcId'));
+        }
+
+        foreach ($bossNpcIds as $bossNpcId) {
+            $this->assertContains(
+                $bossNpcId,
+                $resolvedNpcIds,
+                sprintf('Boss NPC %d was killed in the combat log but is not part of any pull', $bossNpcId),
+            );
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $responseArr
+     */
+    protected function deleteDungeonRoute(array $responseArr): void
+    {
+        $this->deleteDungeonRouteByPublicKey($responseArr['data']['publicKey']);
+    }
+
+    private function deleteDungeonRouteByPublicKey(string $publicKey): void
+    {
+        DungeonRoute::where('public_key', $publicKey)->first()?->delete();
     }
 }

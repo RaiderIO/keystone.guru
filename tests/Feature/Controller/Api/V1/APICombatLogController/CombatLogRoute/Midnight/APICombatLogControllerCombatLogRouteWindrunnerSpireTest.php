@@ -1,8 +1,7 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\Midnight;
-
-use App\Models\Dungeon;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\Midnight;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICombatLogControllerCombatLogRouteTestBase;
@@ -16,7 +15,7 @@ class APICombatLogControllerCombatLogRouteWindrunnerSpireTest extends APICombatL
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_WINDRUNNER_SPIRE;
+        return DungeonKey::WINDRUNNER_SPIRE->value;
     }
 
     #[Test]
@@ -26,15 +25,12 @@ class APICombatLogControllerCombatLogRouteWindrunnerSpireTest extends APICombatL
         $postBody = $this->getJsonData('Midnight/midnight_s1_windrunner_spire_preseason', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 28, 537);
+        $this->validatePulls($postBody, $responseArr, 28, 537);
         $this->validateAffixes($responseArr);
     }
 }

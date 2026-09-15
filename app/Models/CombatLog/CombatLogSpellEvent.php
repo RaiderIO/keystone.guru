@@ -3,7 +3,6 @@
 namespace App\Models\CombatLog;
 
 use App\Models\Spell\Spell;
-use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +24,7 @@ use Illuminate\Support\Carbon;
  */
 class CombatLogSpellEvent extends Model
 {
-    use SeederModel, SerializesDates;
+    use SerializesDates;
 
     protected $connection = 'combatlog';
 

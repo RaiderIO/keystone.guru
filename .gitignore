@@ -50,7 +50,17 @@ docker-compose/mysql*-upgrade-bak/
 
 # AI
 .ladebugermcp/
-.claude/worktrees
+# Agent tooling (skills, agents, conventions, the agent sh/ scripts) lives in a separate private
+# repo and is symlinked in by that repo's install.sh. NO trailing slash: git does not treat a
+# symlink as a directory, so `/.claude/` would leave the link showing as untracked - and
+# committable, which is exactly what the split exists to prevent.
+/.claude
+/sh/worktree.sh
+/sh/codex.sh
+/sh/gh-bot.sh
+/sh/gh-write-guard.sh
+/sh/gh-write-guard-test.sh
+/sh/release-watch.sh
 
 # Local scratch data that must never be staged (git add * is allowlisted for agents)
 __pycache__/
@@ -63,3 +73,14 @@ __pycache__/
 
 # Scratch dir used by the headless-browser-verify skill (screenshots + driver scripts)
 /.chrome-tmp
+
+# impeccable skill: per-machine runtime state (hook consent, cache, generated critiques)
+/.impeccable/
+# impeccable skill: GitHub Copilot agent-surface mirror, not used by this repo
+/.github/agents/
+/.github/hooks/
+/.github/skills/
+
+# Stray placeholder symlink for a dev-environment node_modules mount
+/www_main_node_modules_placeholder
+lang/texts_to_translate.json

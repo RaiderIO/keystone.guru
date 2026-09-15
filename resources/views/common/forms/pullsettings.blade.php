@@ -36,15 +36,15 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
     <div class="mb-3">
         <div class="row">
             <div class="col">
-                {{ __('view_common.forms.pullsettings.show_floor_breakdown') }}
-                <i class="fas fa-info-circle"
-                   data-bs-toggle="tooltip"
-                   title="{{ __('view_common.forms.pullsettings.show_floor_breakdown_title') }}"></i>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                {{ html()->checkbox('pulls_sidebar_floor_switch_visibility', $pullsSidebarFloorSwitchVisibility, 1)->id('pulls_sidebar_floor_switch_visibility')->class('form-check-input') }}
+                <div class="form-check">
+                    {{ html()->checkbox('pulls_sidebar_floor_switch_visibility', $pullsSidebarFloorSwitchVisibility, 1)->id('pulls_sidebar_floor_switch_visibility')->class('form-check-input') }}
+                    <label for="pulls_sidebar_floor_switch_visibility" class="form-check-label">
+                        {{ __('view_common.forms.pullsettings.show_floor_breakdown') }}
+                    </label>
+                    <i class="fas fa-info-circle"
+                       data-bs-toggle="tooltip"
+                       title="{{ __('view_common.forms.pullsettings.show_floor_breakdown_title') }}"></i>
+                </div>
             </div>
         </div>
     </div>
@@ -84,19 +84,17 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
         <div class="mb-3">
             <div class="row g-0 view_dungeonroute_details_row">
                 <div class="col pe-2">
-                    <label for="pull_gradient_apply_always">
-                        {{ __('view_common.forms.pullsettings.always_apply_on_pull_change') }}
-                        <i class="fas fa-info-circle"
-                           data-bs-toggle="tooltip"
-                           title="{{ __('view_common.forms.pullsettings.always_apply_on_pull_change_title') }}">
+                    <div class="form-check">
+                        {{ html()->checkbox('pull_gradient_apply_always', $dungeonroute->pull_gradient_apply_always, 1)->id('pull_gradient_apply_always')->class('form-check-input') }}
+                        <label for="pull_gradient_apply_always" class="form-check-label">
+                            {{ __('view_common.forms.pullsettings.always_apply_on_pull_change') }}
+                            <i class="fas fa-info-circle"
+                               data-bs-toggle="tooltip"
+                               title="{{ __('view_common.forms.pullsettings.always_apply_on_pull_change_title') }}">
 
-                        </i>
-                    </label>
-                </div>
-            </div>
-            <div class="row g-0 view_dungeonroute_details_row">
-                <div class="col pe-2">
-                    {{ html()->checkbox('pull_gradient_apply_always', $dungeonroute->pull_gradient_apply_always, 1)->id('pull_gradient_apply_always')->class('form-check-input') }}
+                            </i>
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>

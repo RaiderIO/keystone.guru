@@ -79,6 +79,10 @@ class CombatLogRouteRequestDto extends RequestDto implements Arrayable
             );
         }
 
+        // The builders that consume this DungeonRoute's dungeon relation (e.g. CombatLogRouteCorrectionBuilder)
+        // access ->floors - eager-load it here to avoid a lazy-loading violation.
+        $dungeon->loadMissing('floors');
+
         // In case there was a mapping version override, we need to find the correct mapping version
         if ($this->settings->mappingVersion !== null) {
             $mappingVersion = $dungeonRepository->getMappingVersionByVersion(
@@ -93,14 +97,14 @@ class CombatLogRouteRequestDto extends RequestDto implements Arrayable
 
         $currentSeasonForDungeon = $dungeon->getActiveSeason($seasonService);
 
-        // Fully get rid of it when regenerating. It won't be available for a sec but that's okay
-        $existingDungeonRoute = $dungeonRouteRepository->findCombatLogRouteByPublicKey($this->settings->publicKey);
-        if ($existingDungeonRoute !== null) {
-            $existingDungeonRoute->delete();
-        }
-
+        // When regenerating (settings->publicKey set) this route never becomes the public one: it is turned into an
+        // upgrade draft of the route being regenerated, and CombatLogRouteDungeonRouteService applies its content
+        // onto that original once the build is complete (#4297). The original therefore never stops owning the
+        // public key Raider.IO stores, nor its ChallengeModeRun, and the key below stays this draft's own - it is
+        // discarded along with the draft. Deleting the old route here, before the build, is what orphaned routes on
+        // any mid-build failure and let the run lookup steal another route's run (#4194).
         $dungeonRoute = $dungeonRouteRepository->create([
-            'public_key'         => $existingDungeonRoute?->public_key ?? $dungeonRouteRepository->generateRandomPublicKey(), // @phpstan-ignore nullsafe.neverNull
+            'public_key'         => $dungeonRouteRepository->generateRandomPublicKey(),
             'author_id'          => $userId,
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,

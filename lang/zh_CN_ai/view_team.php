@@ -18,15 +18,15 @@ return [
         ],
         'overview' => [
             'title'   => '概览',
-            'routes'  => '',
-            'members' => '',
+            'routes'  => '路线',
+            'members' => '成员',
         ],
         'routepublishing' => [
             'title'            => '路线发布',
-            'description'      => '',
-            'enabled'          => '',
-            'timezone_warning' => '',
-            'profile_link'     => '',
+            'description'      => '路线发布功能允许您按计划向所有人发布路线。您可以为每条路线设置一个日期/时间，届时该路线将自动进入已发布状态并对所有人可见。',
+            'enabled'          => '已启用',
+            'timezone_warning' => '计划发布时间使用您个人资料中的时区。请确保在您的 :link 中正确设置了时区。',
+            'profile_link'     => '个人资料设置',
         ],
         'routes' => [
             'title'                  => '路线列表',

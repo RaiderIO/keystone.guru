@@ -1,3 +1,8 @@
+// Time budget (ms) for a single frame of the RafWorkQueue draining _visualRefreshQueue before it
+// re-queues itself for the next frame. Chosen to leave headroom in a 16.7ms (60fps) frame for
+// everything else the browser needs to do (layout, paint, input handling).
+const ENEMY_VISUAL_REFRESH_FRAME_BUDGET_MS = 8;
+
 class EnemyVisualManager extends Signalable {
 
     constructor(map) {
@@ -14,8 +19,22 @@ class EnemyVisualManager extends Signalable {
         this._enemyVisibilityMap = [];
         this._allEnemies = [];
         this._visibleEnemies = [];
+        // Visuals queued by _onZoomLevelChanged() to refresh/rebuild, spread over multiple
+        // rAF-budgeted frames instead of firing one rAF callback per enemy (551 of them landed
+        // in a single 116.7ms frame on the Black Temple facade otherwise). Keyed by enemy so a
+        // rapid run of zoom events (fast scroll wheel) updates the enemy's already-queued task in
+        // place instead of piling up one task per event.
+        this._visualRefreshQueue = new RafWorkQueue({
+            run: this._runVisualRefreshTask.bind(this),
+            frameBudgetMs: ENEMY_VISUAL_REFRESH_FRAME_BUDGET_MS,
+        });
+        this._enemyMarkerCuller = new EnemyMarkerCuller(this.map, this._allEnemies, () => self._hoveredEnemy);
         /** @type Enemy|null */
         this._hoveredEnemy = null;
+        // Ids of enemy patrols we've already attached the mouseover/mouseout handlers below to -
+        // `save:success` fires on every subsequent save too, not just the initial add, so this
+        // guards against re-attaching (and thus leaking) another pair of handlers each time.
+        this._enemyPatrolIdsWithVisualHandlers = new Set();
 
         // There is no mousemoveend function. Every time the mouse of moved a timeout is set for X MS to trigger the mouse
         // move function one last time to properly wrap everything up. If mouse of moved before the timeout, the timeout
@@ -36,8 +55,14 @@ class EnemyVisualManager extends Signalable {
                 self._allEnemies.push(addedEnemy);
             }
         });
-        enemyMapObjectGroup.register('object:remove', this, function (objectRemoveEvent) {
-            let removedEnemy = objectRemoveEvent.data.object;
+        // Both the initial load and a floor switch put their markers on the map after map:refresh
+        // has already been handled, so the cull has to be driven by the markers themselves
+        // appearing. One event per enemy, coalesced into a single pass on the next frame.
+        enemyMapObjectGroup.register('mapobject:shown', this, function () {
+            self._enemyMarkerCuller.scheduleUpdate();
+        });
+        enemyMapObjectGroup.register('object:deleted', this, function (objectDeletedEvent) {
+            let removedEnemy = objectDeletedEvent.data.object;
             let index = self._allEnemies.indexOf(removedEnemy);
             if (index > -1) {
                 self._allEnemies.splice(index, 1);
@@ -46,6 +71,10 @@ class EnemyVisualManager extends Signalable {
             if (index > -1) {
                 self._visibleEnemies.splice(index, 1);
             }
+            if (self._hoveredEnemy === removedEnemy) {
+                self._hoveredEnemy = null;
+            }
+            self._visualRefreshQueue.cancel(removedEnemy);
         });
 
         // This can in theory be moved completely to enemy patrol but I prefer to keep it in here so all the mouse overing
@@ -57,7 +86,9 @@ class EnemyVisualManager extends Signalable {
             enemyPatrolMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
                 /** @type EnemyPatrol addedEnemyPatrol */
                 let addedEnemyPatrol = objectAddEvent.data.object;
-                if (addedEnemyPatrol.id > 0) {
+                if (addedEnemyPatrol.id > 0 && !self._enemyPatrolIdsWithVisualHandlers.has(addedEnemyPatrol.id)) {
+                    self._enemyPatrolIdsWithVisualHandlers.add(addedEnemyPatrol.id);
+
                     let mouseOverFn = function (e) {
                         if (!(self.map.getMapState() instanceof EditMapState) && addedEnemyPatrol.enemies.length > 0) {
                             for (let i = 0; i < addedEnemyPatrol.enemies.length; i++) {
@@ -138,11 +169,15 @@ class EnemyVisualManager extends Signalable {
             self.map.leafletMap.on('moveend', self._onLeafletMapMoveEnd.bind(self));
 
             self._onLeafletMapMove();
+            // A floor switch re-adds every marker to a fresh layer group after this handler runs,
+            // so the cull class every one of them was carrying is gone. The pass is queued rather
+            // than run here for that reason - by the next frame the new markers exist.
+            self._enemyMarkerCuller.scheduleUpdate();
         });
 
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.newMapState instanceof EditMapState) {
-                let focusedEnemy = getState().getFocusedEnemy();
+                let focusedEnemy = enemyMapObjectGroup.getFocusedEnemy();
                 if (focusedEnemy !== null) {
                     focusedEnemy.visual._mouseOut();
                 }
@@ -174,6 +209,11 @@ class EnemyVisualManager extends Signalable {
         let bounds = this.map.leafletMap.getBounds();
         this._visibleEnemies = [];
 
+        // Visible enemies queued first so the frames the user is looking at settle before the
+        // (possibly still-queued) off-screen always-rebuild enemies catch up
+        let visibleTasks = [];
+        let invisibleTasks = [];
+
         for (let i = 0; i < this._allEnemies.length; i++) {
             let enemy = this._allEnemies[i];
 
@@ -188,11 +228,9 @@ class EnemyVisualManager extends Signalable {
                     }
                     // If we're mouse hovering the visual, just rebuild it entirely. There are a few things which need
                     // reworking to support a full refresh of the visual
-                    if (shouldAlwaysRebuild || enemy.visual.isHighlighted() || isMdt) {
-                        window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
-                    } else {
-                        window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
-                    }
+                    let shouldBuild = (shouldAlwaysRebuild || enemy.visual.isHighlighted() || isMdt);
+                    let task = {enemy: enemy, build: shouldBuild};
+                    (isVisible ? visibleTasks : invisibleTasks).push(task);
                     // Keep track that we already refreshed all these so they won't be refreshed AGAIN upon move
                     // But don't do this for mdt enemies - just recalculate then
                     if (enemy.id > 0) {
@@ -200,6 +238,42 @@ class EnemyVisualManager extends Signalable {
                     }
                 }
             }
+        }
+
+        this._enqueueVisualRefreshTasks(visibleTasks.concat(invisibleTasks));
+        this._enemyMarkerCuller.update(bounds);
+    }
+
+    /**
+     * Queues visual refresh/rebuild tasks to be processed over one or more time-budgeted
+     * requestAnimationFrame callbacks, rather than one rAF callback per task (which all run back
+     * to back in the same frame regardless of how many are queued). An enemy already queued (e.g.
+     * a second zoom event fired before the first finished draining) has its existing task's
+     * `build` flag upgraded in place instead of getting a second entry, so a fast run of zoom
+     * events can't make the queue grow faster than the time budget drains it.
+     * @param tasks {Array<{enemy: Enemy, build: boolean}>}
+     * @private
+     */
+    _enqueueVisualRefreshTasks(tasks) {
+        for (let i = 0; i < tasks.length; i++) {
+            let task = tasks[i];
+            this._visualRefreshQueue.enqueue(task.enemy, task, function (existingTask, incomingTask) {
+                existingTask.build = existingTask.build || incomingTask.build;
+                return existingTask;
+            });
+        }
+    }
+
+    /**
+     * Runs a single queued visual refresh/rebuild task. Called by the RafWorkQueue.
+     * @param task {{enemy: Enemy, build: boolean}}
+     * @private
+     */
+    _runVisualRefreshTask(task) {
+        if (task.build) {
+            task.enemy.visual.buildVisual();
+        } else {
+            task.enemy.visual.refreshSize();
         }
     }
 
@@ -349,7 +423,7 @@ class EnemyVisualManager extends Signalable {
                         if (hoveredEnemy) hoveredEnemy.visual._mouseOver();
                     } else if (hoveredEnemy) {
                         // Same manager (same pack), just update focus
-                        getState().setFocusedEnemy(hoveredEnemy);
+                        this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY).setFocusedEnemy(hoveredEnemy);
                     }
                     this._hoveredEnemy = hoveredEnemy;
                 }
@@ -418,6 +492,8 @@ class EnemyVisualManager extends Signalable {
                 }
             }
 
+            this._enemyMarkerCuller.update(bounds);
+
             this._lastMapMoveDistanceCheckTime = currTime;
         }
     }
@@ -436,4 +512,8 @@ class EnemyVisualManager extends Signalable {
 
         this._isMapBeingDragged = false;
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = EnemyVisualManager;
 }

@@ -19,11 +19,24 @@ use Tests\TestCases\PublicTestCase;
 #[Group('MDTNpcMappingCoverage')]
 final class MDTNpcMappingCoverageTest extends PublicTestCase
 {
+    /**
+     * Dungeons whose mapping was corrected on our end while MDT's lua still reflects the old
+     * layout, so MDT's clones do not line up with our mdt_id assignments yet.
+     *
+     * Empty whenever MDT is in step with us - it fills up again the moment a correction of ours is
+     * submitted upstream but not yet released, and empties again on `mdt:acceptmapping` (#4281).
+     *
+     * @var array<int, string>
+     */
+    private const array EXCLUDED_DUNGEON_KEYS = [
+    ];
+
     #[Test]
     public function mdtNpcMapping_givenAllDungeons_hasNoUnmappedClones(): void
     {
         // Arrange
-        $failures = [];
+        $failures         = [];
+        $unrelatedMdtData = [];
 
         // Cover the current season AND the newest one of the same expansion. getCurrentSeason() alone
         // stops gating a season the moment the next one is seeded but has not started yet - which is
@@ -47,7 +60,11 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
         $dungeons = Dungeon::with(['floors', 'npcs', 'mappingVersions.gameVersion'])
             ->whereIn('id', $dungeonIds)
             ->get()
-            ->filter(static fn(Dungeon $dungeon) => Conversion::hasMDTDungeonName($dungeon->key));
+            ->filter(static fn(Dungeon $dungeon) => Conversion::hasMDTDungeonName($dungeon->key))
+            // Delete this ignore again as soon as EXCLUDED_DUNGEON_KEYS is refilled - it only holds
+            // while the list is empty, and becomes an unmatched-ignore error the moment it is not.
+            // @phpstan-ignore function.impossibleType
+            ->filter(static fn(Dungeon $dungeon) => !in_array($dungeon->key, self::EXCLUDED_DUNGEON_KEYS, true));
 
         $this->assertNotEmpty($dungeons, 'Expected at least one MDT supported dungeon to check');
 
@@ -69,10 +86,27 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
             // would otherwise contribute zero failures and look like full coverage.
             $this->assertNotEmpty($mdtClones, sprintf('%s produced no MDT clones at all', $dungeon->key));
 
+            $mappingEnemies = $mappingVersion->enemies()->whereNotNull('mdt_id')->get();
+
+            // MDT occasionally ships one dungeon's data under another dungeon's name - Midnight 6.2.1
+            // has DenOfNalorakk.lua duplicated as TheBlindingVale.lua (see #3995). Our mapping is then
+            // the correct one and MDT's is not, so measuring coverage against it reports every clone as
+            // missing and drowns out the real gaps this test exists to find. Skip such a dungeon: a
+            // non-empty mapping version sharing no NPC at all with MDT's clones is never a coverage
+            // problem, and the skip lifts itself the moment MDT ships the right file.
+            $sharesAnyNpc = $mappingEnemies
+                ->pluck('npc_id')
+                ->intersect($mdtClones->pluck('npc_id'))
+                ->isNotEmpty();
+
+            if ($mappingEnemies->isNotEmpty() && !$sharesAnyNpc) {
+                $unrelatedMdtData[] = $dungeon->key;
+
+                continue;
+            }
+
             // Build a lookup of KG enemy (effectiveNpcId_mdtId) pairs for this mapping version
-            $kgPairs = $mappingVersion->enemies()
-                ->whereNotNull('mdt_id')
-                ->get()
+            $kgPairs = $mappingEnemies
                 ->map(static fn(Enemy $enemy) => sprintf('%d_%d', $enemy->mdt_npc_id ?? $enemy->npc_id, $enemy->mdt_id))
                 ->flip();
 
@@ -97,6 +131,13 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
         }
 
         // Assert
+        if ($unrelatedMdtData !== []) {
+            fwrite(STDERR, sprintf(
+                "\nMDTNpcMappingCoverage: skipped %s - MDT ships unrelated data for it, see #3995\n",
+                implode(', ', $unrelatedMdtData),
+            ));
+        }
+
         $this->assertEmpty(
             $failures,
             sprintf(

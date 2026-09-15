@@ -12,16 +12,8 @@ use App\Models\CombatLog\CombatLogAnalyzeStatus;
 use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
 use App\Repositories\Interfaces\CombatLog\ParsedCombatLogRepositoryInterface;
-use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
-use App\Repositories\Interfaces\SpellRepositoryInterface;
-use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
+use App\Service\CombatLog\DataExtractors\DataExtractorFactoryInterface;
 use App\Service\CombatLog\DataExtractors\DataExtractorInterface;
-use App\Service\CombatLog\DataExtractors\FloorDataExtractor;
-use App\Service\CombatLog\DataExtractors\ImmunityBypassDataExtractor;
-use App\Service\CombatLog\DataExtractors\NpcCharacteristicDataExtractor;
-use App\Service\CombatLog\DataExtractors\NpcUpdateDataExtractor;
-use App\Service\CombatLog\DataExtractors\SpellCounterDataExtractor;
-use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
 use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
@@ -29,6 +21,7 @@ use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLoggingInterface
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Support\Collection;
+use Throwable;
 
 class CombatLogDataExtractionService implements CombatLogDataExtractionServiceInterface
 {
@@ -49,22 +42,11 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
     public function __construct(
         private readonly CombatLogServiceInterface                      $combatLogService,
         private readonly SeasonServiceInterface                         $seasonService,
-        private readonly FloorRepositoryInterface                       $floorRepository,
-        private readonly SpellRepositoryInterface                       $spellRepository,
         private readonly ParsedCombatLogRepositoryInterface             $parsedCombatLogRepository,
         private readonly CombatLogDataExtractionServiceLoggingInterface $log,
+        DataExtractorFactoryInterface                                   $dataExtractorFactory,
     ) {
-        /** @var Collection<int, DataExtractorInterface> $extractors */
-        $extractors = collect([
-            new CreateMissingNpcDataExtractor(),
-            new NpcUpdateDataExtractor(),
-            new FloorDataExtractor($this->floorRepository),
-            new SpellDataExtractor(),
-            new NpcCharacteristicDataExtractor($this->spellRepository),
-            new SpellCounterDataExtractor(),
-            new ImmunityBypassDataExtractor(),
-        ]);
-        $this->dataExtractors = $extractors;
+        $this->dataExtractors = $dataExtractorFactory->createExtractors();
     }
 
     public function extractData(
@@ -252,11 +234,17 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                         ]);
                     }
                 });
+                $this->log->extractDataAsyncCompleted();
+
                 $combatLogAnalyze->update([
                     'percent_completed' => 100,
                     'result'            => json_encode($result->toArray()),
+                    'status'            => CombatLogAnalyzeStatus::Completed,
                 ]);
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
+                // Throwable, not Exception: lazy AdvancedData parsing surfaces malformed-GUID
+                // TypeErrors here (on first getter access during extraction) rather than in the
+                // verify pass above, and those must mark the analysis as errored too
                 $this->log->extractDataAsyncAnalyzeError($e);
 
                 $combatLogAnalyze->update([
@@ -267,12 +255,6 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                 ]);
 
                 return null;
-            } finally {
-                $this->log->extractDataAsyncCompleted();
-
-                $combatLogAnalyze->update([
-                    'status' => CombatLogAnalyzeStatus::Completed,
-                ]);
             }
         } finally {
             $this->log->extractDataAsyncEnd();

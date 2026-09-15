@@ -23,7 +23,7 @@ const CLASSIC_DUNGEON_TK_ID           = 9202;
 
 const SPEEDRUN_DUNGEON_IDS = [CLASSIC_DUNGEON_SSC_ID, CLASSIC_DUNGEON_TK_ID];
 
-// DungeonConstants::DIFFICULTY_ALL = ['10_man' => 1, '25_man' => 2] - identical in every environment.
+// DungeonDifficulty::TEN_MAN = 1, DungeonDifficulty::TWENTY_FIVE_MAN = 2 - identical in every environment.
 const DIFFICULTY_10_MAN = 1;
 const DIFFICULTY_25_MAN = 2;
 

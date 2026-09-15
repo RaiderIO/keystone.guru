@@ -4,12 +4,14 @@ use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellTuningChange;
 use Illuminate\Support\Collection;
 
 /**
  * @var Spell                                                  $spell
  * @var Collection<int, Npc>                                   $npcs
  * @var Collection<int, CombatLogNpcEvent|CombatLogSpellEvent> $eventFeed
+ * @var Collection<string, Collection<int, SpellTuningChange>> $tuningChangesByBuild keyed by to_build, newest first
  */
 ?>
 @extends('layouts.sitepage', [
@@ -33,11 +35,59 @@ use Illuminate\Support\Collection;
 @section('content')
     @include('compendium.spell.sections.header')
 
-    @include('compendium.spell.sections.details')
+    @if($spell->description !== null)
+        <div class="compendium_record_section">
+            <div class="compendium_record_label">
+                {{ __('view_compendium.spell.sections.description.title') }}
+            </div>
+            <div>
+                @include('compendium.spell.sections.description')
+            </div>
+        </div>
+    @endif
 
-    @include('compendium.spell.sections.dungeons')
+    <div class="compendium_record_section">
+        <div class="compendium_record_label">
+            {{ __('view_compendium.spell.sections.details.title') }}
+        </div>
+        <div>
+            @include('compendium.spell.sections.details')
+        </div>
+    </div>
 
-    @include('compendium.spell.sections.npcs')
+    <div class="compendium_record_section">
+        <div class="compendium_record_label">
+            {{ __('view_compendium.spell.sections.tuning_changes.title') }}
+        </div>
+        <div>
+            @include('compendium.spell.sections.tuning_changes')
+        </div>
+    </div>
 
-    @include('compendium.spell.sections.event_feed')
+    <div class="compendium_record_section">
+        <div class="compendium_record_label">
+            {{ __('view_compendium.spell.sections.dungeons.title') }}
+        </div>
+        <div>
+            @include('compendium.spell.sections.dungeons')
+        </div>
+    </div>
+
+    <div class="compendium_record_section">
+        <div class="compendium_record_label">
+            {{ __('view_compendium.spell.sections.npcs.title') }}
+        </div>
+        <div>
+            @include('compendium.spell.sections.npcs')
+        </div>
+    </div>
+
+    <div class="compendium_record_section">
+        <div class="compendium_record_label">
+            {{ __('view_compendium.spell.sections.event_feed.title') }}
+        </div>
+        <div>
+            @include('compendium.spell.sections.event_feed')
+        </div>
+    </div>
 @endsection

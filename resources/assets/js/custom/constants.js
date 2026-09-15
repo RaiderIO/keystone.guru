@@ -59,6 +59,27 @@ const MAP_FACADE_STYLE_BOTH = 'both';
 
 const MAP_MAX_LAT = -256;
 const MAP_MAX_LNG = 384;
+// Must match CoordinatesService::MAP_SIZE / ::MAP_ASPECT_RATIO
+const MAP_SIZE = 256;
+const MAP_ASPECT_RATIO = 1.5;
+
+// Enemy display types - kept in lockstep with Enemy::DISPLAY_TYPE_ALL, which sanitizes the
+// enemy_display_type cookie before it reaches the map (EnemyDisplayTypeTest guards the parity)
+const DISPLAY_TYPE_ENEMY_PORTRAIT = 'enemy_portrait';
+const DISPLAY_TYPE_NPC_CLASS = 'npc_class';
+const DISPLAY_TYPE_NPC_TYPE = 'npc_type';
+const DISPLAY_TYPE_ENEMY_FORCES = 'enemy_forces';
+const DISPLAY_TYPE_ENEMY_GROUP = 'enemy_group';
+const DISPLAY_TYPE_ENEMY_SKIPPABLE = 'enemy_skippable';
+const DISPLAY_TYPE_DEFAULT = DISPLAY_TYPE_ENEMY_PORTRAIT;
+const DISPLAY_TYPE_ALL = [
+    DISPLAY_TYPE_ENEMY_PORTRAIT,
+    DISPLAY_TYPE_NPC_CLASS,
+    DISPLAY_TYPE_NPC_TYPE,
+    DISPLAY_TYPE_ENEMY_FORCES,
+    DISPLAY_TYPE_ENEMY_GROUP,
+    DISPLAY_TYPE_ENEMY_SKIPPABLE,
+];
 
 // Map context
 const MAP_CONTEXT_TYPE_DUNGEON_ROUTE = 'dungeonroute';
@@ -331,11 +352,6 @@ let c = {
             classification_display_zoom: 3,
             truesight_display_zoom: 3,
             teeming_display_zoom: 3,
-            awakened_display_zoom: 3,
-            encrypted_display_zoom: 3,
-            inspiring_display_zoom: 3,
-            prideful_display_zoom: 3,
-            tormented_display_zoom: 3,
             active_aura_display_zoom: 3,
             colors: [
                 /*'#C000F0',
@@ -718,6 +734,14 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         c,
         polylineDefaultColor,
+        DISPLAY_TYPE_ENEMY_PORTRAIT,
+        DISPLAY_TYPE_NPC_CLASS,
+        DISPLAY_TYPE_NPC_TYPE,
+        DISPLAY_TYPE_ENEMY_FORCES,
+        DISPLAY_TYPE_ENEMY_GROUP,
+        DISPLAY_TYPE_ENEMY_SKIPPABLE,
+        DISPLAY_TYPE_DEFAULT,
+        DISPLAY_TYPE_ALL,
         AFFIX_FORTIFIED,
         AFFIX_TYRANNICAL,
         AFFIX_THUNDERING,
@@ -729,5 +753,29 @@ if (typeof module !== 'undefined' && module.exports) {
         COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION,
         USER_ROLE_ADMIN,
         USER_ROLE_INTERNAL_TEAM,
+        MAP_MAX_LAT,
+        MAP_MAX_LNG,
+        MAP_SIZE,
+        MAP_ASPECT_RATIO,
+        MAP_FACADE_STYLE_SPLIT_FLOORS,
+        MAP_FACADE_STYLE_FACADE,
+        MAP_FACADE_STYLE_BOTH,
+        MAP_OBJECT_GROUP_NAMES,
+        MAP_OBJECT_GROUP_USER_MOUSE_POSITION,
+        MAP_OBJECT_GROUP_BRUSHLINE,
+        MAP_OBJECT_GROUP_ENEMY,
+        MAP_OBJECT_GROUP_ENEMY_PATROL,
+        MAP_OBJECT_GROUP_ENEMY_PACK,
+        MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT,
+        MAP_OBJECT_GROUP_FLOOR_UNION,
+        MAP_OBJECT_GROUP_FLOOR_UNION_AREA,
+        MAP_OBJECT_GROUP_KILLZONE,
+        MAP_OBJECT_GROUP_KILLZONE_PATH,
+        MAP_OBJECT_GROUP_MAPICON,
+        MAP_OBJECT_GROUP_MOUNTABLE_AREA,
+        MAP_OBJECT_GROUP_PATH,
+        MAP_OBJECT_GROUP_ARROW,
+        MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER,
+        MAP_OBJECT_GROUP_PLAYER_POSITION,
     };
 }

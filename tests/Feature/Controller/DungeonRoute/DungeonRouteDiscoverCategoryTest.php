@@ -223,6 +223,32 @@ final class DungeonRouteDiscoverCategoryTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function discoverDungeon_givenReworkFlagActiveAndAllRoutesFitTheHeroBand_hidesEmptyCommunitySection(): void
+    {
+        // Arrange - exactly 3 routes are all promoted into the hero band, leaving none for the leaderboard
+        Feature::define(DungeonRouteListRework::class, true);
+        [$gameVersion, $dungeon, $routes] = $this->createQualifyingRoutes(3);
+
+        try {
+            // Act
+            $response = $this->get(route('dungeonroutes.discoverdungeon', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+            ]));
+
+            // Assert - the hero band shows all 3 routes; the "Community routes" section is skipped
+            // entirely rather than misleadingly claiming no routes exist directly below them
+            $response->assertOk();
+            $response->assertSee('discover_hero_band', false);
+            $response->assertDontSee(__('view_dungeonroute.discover.dungeon.overview.community_routes'));
+            $response->assertDontSee(__('view_common.dungeonroute.cardlist.no_dungeonroutes'));
+            $response->assertDontSee(__('view_common.dungeonroute.leaderboard.create_first_route'));
+        } finally {
+            $routes->each(fn(DungeonRoute $route) => $route->delete());
+        }
+    }
+
     /**
      * Resolves an active dungeon (with a current mapping version and floors) plus its game version.
      * @return array{0: GameVersion, 1: Dungeon}

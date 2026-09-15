@@ -5,7 +5,6 @@ namespace App\Events\Models\Arrow;
 use App\Events\Models\ModelChangedEvent;
 use App\Models\Arrow;
 use App\Models\User;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Override;
 
@@ -15,10 +14,9 @@ use Override;
 class ArrowChangedEvent extends ModelChangedEvent
 {
     public function __construct(
-        private readonly CoordinatesServiceInterface $coordinatesService,
-        Model                                        $context,
-        User                                         $user,
-        protected Arrow|Model                        $model,
+        Model                 $context,
+        User                  $user,
+        protected Arrow|Model $model,
     ) {
         parent::__construct($context, $user, $model);
     }
@@ -37,15 +35,16 @@ class ArrowChangedEvent extends ModelChangedEvent
         /** @var Arrow $model */
         $model = $this->model;
 
-        return array_merge(
-            parent::broadcastWith(),
-            [
-                'model_data' => $model->polyline->getCoordinatesData(
-                    $this->coordinatesService,
-                    $model->dungeonRoute->mappingVersion,
-                    $model->floor,
-                ),
-            ],
-        );
+        $broadcast = parent::broadcastWith();
+
+        // Neither the raw vertices nor the computed coordinates are broadcast here - an arrow can
+        // have enough vertices to push the payload over Reverb's message size cap (#3909).
+        // Collaborating clients fetch the coordinates themselves via AjaxArrowController::show()
+        // once they receive this event (see Arrow's changed.js).
+        $modelArray = $model->toArray();
+        unset($modelArray['polyline']['vertices_json']);
+        $broadcast['model'] = $modelArray;
+
+        return $broadcast;
     }
 }

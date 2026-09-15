@@ -43,6 +43,7 @@ use Override;
  * @property int         $timer_max_seconds               The maximum timer (in seconds) that you have to complete the dungeon.
  * @property string|null $mdt_mapping_hash
  * @property int|null    $mdt_addon_version               The MDT addon version this mapping version was imported from (e.g. 6120 for MDT v6.1.20).
+ * @property bool        $mdt_changes_pending             True if this mapping version diverges from what MDT ships (created by us, not imported from MDT).
  * @property bool        $facade_enabled                  True if this mapping version uses facades, false if it does not.
  *
  * @property Carbon $updated_at
@@ -84,6 +85,7 @@ class MappingVersion extends Model
         'facade_enabled',
         'mdt_mapping_hash',
         'mdt_addon_version',
+        'mdt_changes_pending',
     ];
 
     protected $fillable = [
@@ -98,6 +100,7 @@ class MappingVersion extends Model
         'facade_enabled',
         'mdt_mapping_hash',
         'mdt_addon_version',
+        'mdt_changes_pending',
         'updated_at',
         'created_at',
     ];
@@ -130,6 +133,7 @@ class MappingVersion extends Model
             'timer_max_seconds'               => 'integer',
             'facade_enabled'                  => 'integer',
             'mdt_addon_version'               => 'integer',
+            'mdt_changes_pending'             => 'boolean',
         ];
     }
 
@@ -664,6 +668,31 @@ class MappingVersion extends Model
                     }
                 }
             }
+            // Change linked dungeon floor switch markers to point at their new sibling clone
+            foreach ($idMapping->get(DungeonFloorSwitchMarker::class) as $dungeonFloorSwitchMarkerRelationCoupling) {
+                /** @var array{oldModel: DungeonFloorSwitchMarker, newModel: DungeonFloorSwitchMarker} $dungeonFloorSwitchMarkerRelationCoupling */
+                $oldLinkedDungeonFloorSwitchMarkerId = $dungeonFloorSwitchMarkerRelationCoupling['oldModel']->linked_dungeon_floor_switch_marker_id;
+                if ($oldLinkedDungeonFloorSwitchMarkerId === null) {
+                    continue;
+                }
+
+                // Find the new ID of the linked dungeon floor switch marker
+                $newLinkedDungeonFloorSwitchMarkerId = null;
+                foreach ($idMapping->get(DungeonFloorSwitchMarker::class) as $linkedDungeonFloorSwitchMarkerRelationCoupling) {
+                    /** @var array{oldModel: DungeonFloorSwitchMarker, newModel: DungeonFloorSwitchMarker} $linkedDungeonFloorSwitchMarkerRelationCoupling */
+                    if ($linkedDungeonFloorSwitchMarkerRelationCoupling['oldModel']->id === $oldLinkedDungeonFloorSwitchMarkerId) {
+                        $newLinkedDungeonFloorSwitchMarkerId = $linkedDungeonFloorSwitchMarkerRelationCoupling['newModel']->id;
+                        break;
+                    }
+                }
+
+                // The old link may already be dangling (pointing at a marker outside this mapping
+                // version), in which case there is no new sibling to point at - null it out rather
+                // than silently carrying over a pointer into the previous mapping version's id space.
+                $dungeonFloorSwitchMarkerRelationCoupling['newModel']->update([
+                    'linked_dungeon_floor_switch_marker_id' => $newLinkedDungeonFloorSwitchMarkerId,
+                ]);
+            }
             // Change floor unions of floor union areas
             foreach ($idMapping->get(FloorUnionArea::class) as $floorUnionAreaRelationCoupling) {
                 /** @var array{oldModel: FloorUnionArea, newModel: FloorUnionArea} $floorUnionAreaRelationCoupling */
@@ -692,7 +721,11 @@ class MappingVersion extends Model
                 $enemyPatrol->delete();
             }
 
-            $mappingVersion->mapIcons()->delete();
+            // A mass delete on the relation skips MapIcon::deleting (via HasLinkedAwakenedObelisk),
+            // which is what cleans up map_object_to_awakened_obelisk_links
+            foreach ($mappingVersion->mapIcons as $mapIcon) {
+                $mapIcon->delete();
+            }
             $mappingVersion->mountableAreas()->delete();
             $mappingVersion->enemyForcesCheckpoints()->delete();
             $mappingVersion->floorUnions()->delete();

@@ -3,7 +3,6 @@
 namespace App\Models\Tags;
 
 use App\Http\Requests\Tag\TagFormRequest;
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Interfaces\HasTagsInterface;
 use App\Models\Traits\HasGenericModelRelation;
 use Eloquent;
@@ -12,7 +11,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 
 /**
  * @property int         $id
@@ -72,23 +70,6 @@ class Tag extends Model
         }
 
         return $query->groupBy('name');
-    }
-
-    /**
-     * @return Collection<int, DungeonRoute>
-     */
-    public function getUsageByName(): Collection
-    {
-        return match ($this->tagCategory->name) {
-            TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM => DungeonRoute::join('tags', 'tags.model_id', '=', 'dungeon_routes.id')
-                ->where('tags.model_class', $this->model_class)
-                ->where('tags.name', $this->name)
-                ->where('tags.context_id', $this->context_id)
-                ->where('tags.context_class', $this->context_class)
-                ->where('tags.tag_category_id', $this->tag_category_id)
-                ->get(),
-            default => collect(),
-        };
     }
 
     public static function saveFromRequest(TagFormRequest $request, Model $context, int $tagCategoryId): Tag

@@ -4,6 +4,7 @@ namespace App\Service\Dungeon;
 
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
 use App\Models\User;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
@@ -104,7 +105,8 @@ class DungeonService implements DungeonServiceInterface
             $gameVersion   = $this->gameVersionService->getGameVersion($user);
             $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
 
-            $dungeon = $currentSeason?->dungeons()->first() ?? Dungeon::active()->firstWhere('expansion_id', $gameVersion->expansion_id);
+            $dungeon = ($currentSeason === null ? null : $this->getSeasonDungeons($currentSeason)->first())
+                ?? Dungeon::active()->firstWhere('expansion_id', $gameVersion->expansion_id);
 
             $this->setDungeonContext($dungeon, $user);
         }
@@ -123,13 +125,19 @@ class DungeonService implements DungeonServiceInterface
         // instead: the "next season" card that HeaderComposer adds to the dungeon context bar.
         $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
 
-        // Load the relation explicitly rather than reading it lazily - a season read out of a collection
-        // trips preventLazyLoading, which takes down every page that renders the header (HeaderComposer).
-        //
-        // Deliberately dungeons()->get() and NOT loadMissing(): SeasonService keeps its season models in a
-        // service-level cache, so memoising the relation onto them makes it outlive the request and leak a
-        // stale dungeon list into later ones. That was measurable - loadMissing() turned the suite red with
-        // a route being created against the wrong dungeon.
-        return $currentSeason?->dungeons()->get() ?? $gameVersion->expansion->dungeons;
+        return $currentSeason === null ? $gameVersion->expansion->dungeons : $this->getSeasonDungeons($currentSeason);
+    }
+
+    /**
+     * SeasonService hands out its seasons with `dungeons` eager-loaded, which makes this free on every page
+     * the header renders. Never loadMissing() the relation instead: those seasons live in a service-level
+     * cache, and a relation memoised onto them outlives the request (a stale dungeon list once had a route
+     * created against the wrong dungeon). A season handed over without it is queried, never lazy-loaded.
+     *
+     * @return Collection<int, Dungeon>
+     */
+    private function getSeasonDungeons(Season $season): Collection
+    {
+        return $season->relationLoaded('dungeons') ? $season->dungeons : $season->dungeons()->get();
     }
 }

@@ -35,8 +35,26 @@ return [
         'social_links' => [
             'invalid_url_for_platform' => 'That is not a valid https link for this platform.',
         ],
+        'periods' => [
+            'not_in_season' => 'One or more selected weeks do not belong to :season, so that combination selects no routes at all.',
+        ],
         'creator_search' => [
             'max' => 'A creator name is at most :max characters, so a longer search cannot match anyone.',
+        ],
+        'autoroutecoverage_days' => [
+            'integer' => 'The amount of days must be a whole number.',
+            'min'     => 'The overview must cover at least :min day.',
+            'max'     => 'The overview may cover at most :max days.',
+        ],
+        'telemetry_range' => [
+            'in' => 'The selected period is not one of the supported periods.',
+        ],
+        'patreon_grant_reason' => [
+            'required' => 'A reason is required - it is what makes this grant reviewable later.',
+            'max'      => 'The reason may not be longer than :max characters.',
+        ],
+        'npc_dungeon_ids' => [
+            'required' => 'Select at least one dungeon - an NPC with no dungeon has no way to derive which game version it belongs to.',
         ],
     ],
     'date'              => 'The :attribute is not a valid date.',

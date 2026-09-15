@@ -2,12 +2,20 @@
 
 use App\Models\Dungeon;
 use App\Models\Npc\NpcClassification;
+use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon $contextDungeon
+ * @var Dungeon                  $contextDungeon
+ * @var Collection<int, Dungeon> $gameVersionDungeons
+ * @var Collection<int, string>  $dungeonSlugsById
  */
 ?>
-@extends('layouts.sitepage', ['title' => __('view_compendium.spell.index.title')])
+@extends('layouts.sitepage', [
+    'title' => __('view_compendium.spell.index.title'),
+    'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+        $dungeon->key => route('spell.compendium.index.dungeon', ['dungeon' => $dungeon])
+    ]),
+])
 
 @section('header-title')
     {{ __('view_compendium.spell.index.header') }}
@@ -29,6 +37,11 @@ use App\Models\Npc\NpcClassification;
             const npcShowBaseUrl = '{{ url('/compendium/npc') }}';
             const spellTemplate = Handlebars.templates['spell_template'];
             const npcTemplate = Handlebars.templates['npc'];
+            // The dungeon in the URL is what this page is about; the filter below is only a way to
+            // navigate to another dungeon's page. Reading the table's dungeon off the select instead
+            // would list a different dungeon whenever the select does not offer this one - it only
+            // lists dungeons mapped for the visitor's game version, which the URL is not bound by.
+            const contextDungeonId = {{ $contextDungeon->id }};
 
             const table = $('#compendium_spell_table').DataTable({
                 'processing': true,
@@ -38,10 +51,7 @@ use App\Models\Npc\NpcClassification;
                 'ajax': {
                     'url': '{{ route('ajax.spell.compendium.search') }}',
                     'data': function (d) {
-                        const dungeonId = $('#compendium_filter_dungeon').val();
-                        if (dungeonId) {
-                            d.dungeon_id = dungeonId;
-                        }
+                        d.dungeon_id = contextDungeonId;
                     },
                 },
                 'lengthMenu': [25],
@@ -55,6 +65,8 @@ use App\Models\Npc\NpcClassification;
                         'render': function (data, type, row) {
                             return spellTemplate({
                                 compendium_url: `${spellShowBaseUrl}/${row.id}-${slugify(data ?? '')}`,
+                                wowhead_tooltip_data: row.wowhead_tooltip_data,
+                                spell_tooltip: row.tooltip_data ? JSON.stringify(row.tooltip_data) : null,
                                 icon_url: row.icon_url,
                                 name: data ?? '',
                             });
@@ -84,6 +96,7 @@ use App\Models\Npc\NpcClassification;
                                     is_boss: bossClassificationIds.includes(npc.classification_id),
                                     boss_icon_url: skullIconUrl,
                                     name: lang.get(npc.name),
+                                    npc_tooltip: npc.tooltip_data ? JSON.stringify(npc.tooltip_data) : null,
                                 });
                             }).join('');
                         },
@@ -96,21 +109,41 @@ use App\Models\Npc\NpcClassification;
                         }
                     });
                 },
+                'drawCallback': function () {
+                    if (typeof $WowheadPower !== 'undefined') {
+                        $WowheadPower.refreshLinks();
+                    }
+                },
                 'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
                     'emptyTable': lang.get('js.datatable_no_spells_in_table'),
                 }),
             });
 
+            // Picking another dungeon navigates to that dungeon's page - that keeps the URL, the
+            // header's dungeon selection and the dungeon context in sync. Should the selection ever
+            // hold something that is not a dungeon id (the select can emit season/expansion
+            // options), fall back to just reloading the table.
+            const dungeonSlugsById = @json($dungeonSlugsById);
+            const dungeonBaseUrl = '{{ url('/compendium/dungeon') }}';
+
             $('#compendium_filter_dungeon').on('change', function () {
-                table.ajax.reload();
+                const dungeonSlug = dungeonSlugsById[$(this).val()];
+
+                if (dungeonSlug) {
+                    window.location.href = `${dungeonBaseUrl}/${dungeonSlug}/spell`;
+                } else {
+                    table.ajax.reload();
+                }
             });
         });
     </script>
 @endsection
 
 @section('content')
-    <div class="row mb-3">
-        <div class="col-md-4">
+    @include('dungeonroute.discover.wallpaper', ['dungeon' => $contextDungeon])
+
+    <div class="compendium_toolbar">
+        <div class="compendium_toolbar_filter">
             @include('common.dungeon.select', [
                 'id'          => 'compendium_filter_dungeon',
                 'label'       => false,
@@ -122,13 +155,15 @@ use App\Models\Npc\NpcClassification;
         </div>
     </div>
 
-    <table id="compendium_spell_table" class="tablesorter default_table table-striped">
-        <thead>
-        <tr>
-            <th width="25%">{{ __('view_compendium.spell.index.table_header_name') }}</th>
-            <th width="25%">{{ __('view_compendium.spell.index.table_header_dungeons') }}</th>
-            <th width="50%">{{ __('view_compendium.spell.index.table_header_used_by') }}</th>
-        </tr>
-        </thead>
-    </table>
+    <div class="compendium_datatable">
+        <table id="compendium_spell_table" class="tablesorter default_table compendium_table">
+            <thead>
+            <tr>
+                <th width="25%">{{ __('view_compendium.spell.index.table_header_name') }}</th>
+                <th width="25%">{{ __('view_compendium.spell.index.table_header_dungeons') }}</th>
+                <th width="50%">{{ __('view_compendium.spell.index.table_header_used_by') }}</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Service\CombatLog\Logging;
 use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 use Exception;
+use Throwable;
 
 class CombatLogDataExtractionServiceLogging extends StructuredLogging implements CombatLogDataExtractionServiceLoggingInterface
 {
@@ -75,7 +76,7 @@ class CombatLogDataExtractionServiceLogging extends StructuredLogging implements
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function extractDataAsyncAnalyzeError(Exception $e): void
+    public function extractDataAsyncAnalyzeError(Throwable $e): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }

@@ -46,7 +46,7 @@ final class AjaxKillZonePathsControllerTest extends DungeonRouteTestBase
         /** @var Floor $floor */
         $floor = $this->dungeonRoute->dungeon->floors()
             ->where('facade', false)
-            ->inRandomOrder()
+            ->orderBy('id')
             ->first();
 
         $killZone1 = KillZone::factory()->create([

@@ -21,6 +21,7 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\TitleColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
 use App\Logic\MDT\Exception\ImportWarning;
+use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteFavorite;
@@ -52,6 +53,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Random\RandomException;
@@ -92,6 +94,7 @@ class AjaxDungeonRouteController extends Controller
             'routeattributes',
             'ratings',
             'metricAggregations',
+            'upgradeDraft',
             $tagsRelationshipName,
         ];
 
@@ -174,11 +177,12 @@ class AjaxDungeonRouteController extends Controller
                     /** @var $query Builder */
                     $query->where('dungeon_route_favorites.user_id', $user->id);
                 });
-            } else {
-                // Filter by our own user if logged in
-                if ($mine) {
-                    $routes = $routes->where('author_id', $user->id);
-                }
+            }
+
+            // Filter by our own user if logged in. $mine is what exempts the query from the published state
+            // filter further down, so it must narrow the results down to the user's own routes on its own
+            if ($mine) {
+                $routes = $routes->where('author_id', $user->id);
             }
 
             // Handle team if set
@@ -462,13 +466,13 @@ class AjaxDungeonRouteController extends Controller
 
         if ($gameVersion !== null) {
             $discoverService = $discoverService->withGameVersion($gameVersion);
-        } else {
+        } elseif ($expansion !== null) {
             $discoverService = $discoverService->withExpansion($expansion);
         }
 
         $region = GameServerRegion::getUserOrDefaultRegion();
 
-        $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $region);
+        $currentAffixGroup = $expansion !== null ? $expansionService->getCurrentAffixGroup($expansion, $region) : null;
 
         switch ($category) {
             case 'popular':
@@ -660,8 +664,13 @@ class AjaxDungeonRouteController extends Controller
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
-            $newRoute = $saveService->cloneRoute($dungeonRoute, false);
-            $team->addRoute($newRoute);
+            DB::transaction(function () use ($dungeonRoute, $saveService, $team): void {
+                $newRoute = $saveService->cloneRoute($dungeonRoute, false);
+
+                if (!$team->addRoute($newRoute)) {
+                    throw new Exception('Unable to assign the cloned route to the team!');
+                }
+            });
 
             return response('', Http::NO_CONTENT);
         } else {
@@ -695,6 +704,7 @@ class AjaxDungeonRouteController extends Controller
     /** @return array<string, float|int> */
     public function rate(Request $request, DungeonRoute $dungeonRoute): array
     {
+        Gate::authorize('view', $dungeonRoute);
         Gate::authorize('rate', $dungeonRoute);
 
         $value = $request->get('rating', -1);
@@ -722,14 +732,16 @@ class AjaxDungeonRouteController extends Controller
      */
     public function rateDelete(Request $request, DungeonRoute $dungeonRoute): array
     {
+        Gate::authorize('view', $dungeonRoute);
         Gate::authorize('rate', $dungeonRoute);
 
         $user = Auth::user();
 
         /** @var DungeonRouteRating $dungeonRouteRating */
-        $dungeonRouteRating = DungeonRouteRating::firstOrFail()
+        $dungeonRouteRating = DungeonRouteRating::query()
             ->where('dungeon_route_id', $dungeonRoute->id)
-            ->where('user_id', $user->id);
+            ->where('user_id', $user->id)
+            ->firstOrFail();
         $dungeonRouteRating->delete();
 
         $dungeonRoute->unsetRelation('ratings');
@@ -743,8 +755,8 @@ class AjaxDungeonRouteController extends Controller
      */
     public function favorite(Request $request, DungeonRoute $dungeonRoute): Response
     {
-        // No authorization: every user may favorite every route. The route sits behind
-        // ['auth', 'role:user|admin'], which is the only requirement.
+        Gate::authorize('view', $dungeonRoute);
+
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */
@@ -762,13 +774,15 @@ class AjaxDungeonRouteController extends Controller
      */
     public function favoriteDelete(Request $request, DungeonRoute $dungeonRoute): Response
     {
-        // No authorization: every user may unfavorite every route. See favorite().
+        // Deliberately not gated on 'view' like favorite() is: a route may become unpublished after it was
+        // favorited, and the user must still be able to remove it from their favorites afterwards
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */
-        $dungeonRouteFavorite = DungeonRouteFavorite::firstOrFail()
+        $dungeonRouteFavorite = DungeonRouteFavorite::query()
             ->where('dungeon_route_id', $dungeonRoute->id)
-            ->where('user_id', $user->id);
+            ->where('user_id', $user->id)
+            ->firstOrFail();
         $dungeonRouteFavorite->delete();
 
         return response()->noContent();
@@ -805,6 +819,20 @@ class AjaxDungeonRouteController extends Controller
                 'mdt_string' => $dungeonRoute,
                 'warnings'   => $warningResult,
             ];
+        } catch (InvalidMDTDungeonException $ex) {
+            // Expected, user-input-driven case (#3908): every MDT export entrypoint gates on
+            // Dungeon::mdt_supported (== Conversion::hasMDTDungeonName()), so reaching here means
+            // the button was never rendered for this dungeon in the first place - not an
+            // application defect. Skip the Log::error() the generic catch below does, since the
+            // sentry log channel alerts on error-level logs (config/logging.php) and this isn't
+            // worth paging on. Matches how MDTImportController skips logging its own known domain
+            // exceptions.
+            //
+            // Deliberately NOT InvalidMDTExpansionException here: unlike the dungeon check, nothing
+            // gates the UI on expansion support, so that exception firing means a user-visible
+            // broken button with no signal anywhere if it's ever silenced - let it fall through to
+            // the generic catch below instead.
+            return abort(400, sprintf(__('controller.apidungeonroute.mdt_generate_error'), $ex->getMessage()));
         } catch (Exception $ex) {
             Log::error(sprintf('MDT export error: %s', $ex->getMessage()), ['dungeonroute' => $dungeonRoute]);
 

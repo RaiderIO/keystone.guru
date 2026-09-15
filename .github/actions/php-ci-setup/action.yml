@@ -6,6 +6,12 @@ inputs:
     description: 'Whether to run database migrations and seeding'
     required: false
     default: 'true'
+  parallel-schemas:
+    description: >-
+      Number of extra copies of the seeded schemas to provision as `<schema>_1..N` (main + combatlog),
+      one per paratest worker. 0 provisions none.
+    required: false
+    default: '0'
 
 runs:
   using: "composite"
@@ -22,10 +28,10 @@ runs:
         echo "cli-weakauras-parser-sha=febb57faeaa805a79c9c2e0425c804e441a0e969" >> "$GITHUB_OUTPUT" # = v0.1.8
         echo "rust-toolchain=1.91.1" >> "$GITHUB_OUTPUT"
       shell: bash
-    - name: Checkout
-      uses: actions/checkout@v5
-      with:
-        fetch-depth: 0
+    # No checkout here on purpose: a local composite action can only be resolved from an
+    # already-checked-out workspace, so every caller has necessarily run actions/checkout before
+    # reaching this point. A second checkout would wipe the workspace and refetch the whole repo -
+    # ~889 MB across 46 branches and 448 tags, which is what made jobs stall for 10-15 minutes (#4135).
 
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
@@ -53,9 +59,66 @@ runs:
         # Drop the Microsoft apt repos preinstalled on the runner image (azure-cli, microsoft-prod);
         # nothing here installs from them, and their recurring CDN outages fail `apt-get update`
         # with "Clearsigned file isn't valid, got 'NOSPLIT'" (#3441).
-        grep -lr "packages.microsoft.com" /etc/apt/sources.list.d/ | xargs -r sudo rm -f
-        sudo apt-get update
-        sudo apt-get install -y default-mysql-client redis-tools lua5.3 liblua5.3-dev
+        # The `|| true` matters: grep exits 1 when it matches nothing, which under `pipefail` would
+        # fail the whole step the day the runner image stops shipping those repos.
+        grep -lr "packages.microsoft.com" /etc/apt/sources.list.d/ 2>/dev/null | xargs -r sudo rm -f || true
+
+        # Point apt away from azure.archive.ubuntu.com: GitHub's regional Azure mirror stalls for
+        # minutes at a time on hosted runners (#4135, actions/runner-images#7048), and
+        # archive.ubuntu.com is what it eventually falls through to anyway.
+        #
+        # The runner image does NOT name the mirror in sources.list: ubuntu.sources uses
+        # `mirror+file:/etc/apt/apt-mirrors.txt`, and that mirrorlist lists azure first. Dropping
+        # the azure line there makes apt use the next entry (archive.ubuntu.com, which also carries
+        # the -security pocket). The sed over sources.list / *.sources covers older or changed
+        # runner images that spell the host out directly instead.
+        #
+        # The mirrorlist path is read back out of the `mirror+file:` URI rather than hardcoded, so a
+        # renamed target doesn't silently turn this whole block into a no-op.
+        MIRRORLIST="$(grep -rhoE 'mirror\+file:/[^[:space:]]+' /etc/apt/sources.list /etc/apt/sources.list.d/ 2>/dev/null | head -n1 | cut -d: -f2-)" || true
+        [ -n "$MIRRORLIST" ] || MIRRORLIST=/etc/apt/apt-mirrors.txt
+        if [ -f "$MIRRORLIST" ] && grep -q 'azure\.archive\.ubuntu\.com' "$MIRRORLIST"; then
+          sudo sed -i '/azure\.archive\.ubuntu\.com/d' "$MIRRORLIST"
+          # Never leave the mirrorlist empty - apt would then have no source at all.
+          grep -qE '^[[:space:]]*https?://' "$MIRRORLIST" \
+            || printf 'http://archive.ubuntu.com/ubuntu/\nhttp://security.ubuntu.com/ubuntu/\n' | sudo tee "$MIRRORLIST" >/dev/null
+        fi
+        sudo sed -i 's|azure\.archive\.ubuntu\.com|archive.ubuntu.com|g' \
+          /etc/apt/sources.list /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources 2>/dev/null || true
+
+        echo "==> effective apt mirrors ($MIRRORLIST):"
+        cat "$MIRRORLIST" 2>/dev/null || echo "  (no mirrorlist)"
+
+        # Capture the leftovers instead of branching on grep's exit status: GNU grep exits 2 when it
+        # finds matches AND hits an unreadable path, so `grep ... && warn || ok` would print the
+        # all-clear on any image missing one of these paths - the same false green that made the
+        # first attempt at this fix look like it worked.
+        AZURE_LEFT="$(grep -rl 'azure\.archive\.ubuntu\.com' /etc/apt/sources.list /etc/apt/sources.list.d/ "$MIRRORLIST" 2>/dev/null)" || true
+        if [ -n "$AZURE_LEFT" ]; then
+          echo "::warning::apt sources still point at azure.archive.ubuntu.com (#4135 rewrite missed a path): $(echo "$AZURE_LEFT" | tr '\n' ' ')"
+        else
+          echo "==> apt sources clean of azure mirror"
+        fi
+
+        # A drop-in rather than `-o` flags so `apt-get install` below - the download-heavy half -
+        # gets the same retry/timeout behaviour as the update.
+        printf 'Acquire::Retries "3";\nAcquire::http::Timeout "15";\nAcquire::https::Timeout "15";\n' \
+          | sudo tee /etc/apt/apt.conf.d/99-ci-retries >/dev/null
+
+        # Composite-action steps have no `timeout-minutes`, and the Acquire timeouts above do not
+        # catch a transfer that stalls partway through, so each apt call is bounded here and retried
+        # once: a mirror hang then costs minutes instead of the job's whole timeout.
+        apt_bounded() { # <seconds> <apt-get args...>
+          local seconds="$1"
+          shift
+          if sudo timeout "$seconds" apt-get "$@"; then
+            return 0
+          fi
+          echo "::warning::apt-get $1 failed or timed out after ${seconds}s, retrying once"
+          sudo timeout "$seconds" apt-get "$@"
+        }
+        apt_bounded 300 update
+        apt_bounded 600 install -y default-mysql-client redis-tools lua5.3 liblua5.3-dev
       shell: bash
 
     # Cache the compiled lua.so / bit.so so we skip the ~30-40s phpize/configure/make on every run
@@ -141,10 +204,133 @@ runs:
         php artisan key:generate --force -v
       shell: bash
 
-    - name: Migrate & seed
+    # Seeding the database costs ~84s and every caller of this action produces the exact same one, so
+    # it is paid six times per PR by the php-tests shards alone, plus nightly by php-coverage and
+    # twice per release by release-deploy (#4139). Cache a mysqldump of the seeded result instead:
+    # on a hit the seed is skipped entirely and the dump is loaded, on a miss we seed exactly as
+    # before and produce the dump for everyone else. A stale or absent cache therefore degrades to
+    # the old behaviour rather than failing.
+    #
+    # There is deliberately NO `restore-keys` here (unlike the composer cache above): a prefix match
+    # would silently hand a job a database seeded from *different* input files, which fails later,
+    # elsewhere, and for a confusing reason. Exact key or miss.
+    #
+    # The key covers everything the seeders read from disk, enumerated from DatabaseSeeder::SEEDERS
+    # rather than guessed - note that three of those inputs live outside database/seeders:
+    #   - database/data/**    MDTAddonVersionSeeder, SpellDescriptionImportStateSeeder
+    #   - lang/**             TranslationsSeeder globs lang_path() into the `translations` table
+    #   - app/SeederHelpers/** the RelationParsers/RelationMappings that decide what the JSON becomes,
+    #                          plus the LoadsSeasonData / LoadsMapIconTypeData traits
+    # This file is hashed too: it holds the procedure (the migrate/seed commands, the mysqldump
+    # flags), and a dump built by the old procedure must not keep being served after the procedure
+    # changes.
+    # Seeded output can still change through PHP that none of these paths cover (a model's boot
+    # behaviour, say). Bump the `v1` epoch below by hand when that happens - over-invalidating costs
+    # one seed, under-invalidating costs a confusing red build.
+    #
+    # The ISO week stamp caps how long one dump can be served. Eviction alone would not: GitHub's
+    # 7-day rule counts from last *access*, and this key is read six times per PR plus nightly, so a
+    # dump for an unchanged set of inputs would otherwise be reused indefinitely.
+    # Nothing seeded is known to depend on when the seed ran - seeded timestamps come from committed
+    # JSON via TimestampAttributeParser, and MappingVersionSeeder's Carbon::now() branch is dead
+    # behind its `MappingVersion::count() !== 0` guard once DungeonDataSeeder has run - so this is
+    # insurance against a future time-dependent seeder rather than a fix for a known one. It costs
+    # one re-seed a week, absorbed by ci-db-warm on the next push to master.
+    - name: Stamp the ISO week for the database cache key
+      id: db-cache-week
       if: ${{ inputs.run-migrations == 'true' }}
+      run: echo "week=$(date -u +%G-W%V)" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Restore seeded database dump
+      id: cache-db
+      if: ${{ inputs.run-migrations == 'true' }}
+      uses: actions/cache/restore@v5
+      with:
+        path: ~/ci-db-dump
+        key: ci-db-v1-${{ steps.db-cache-week.outputs.week }}-${{ hashFiles('database/migrations/**', 'database/migrations_combatlog/**', 'database/schema/**', 'database/seeders/**', 'database/data/**', 'lang/**', 'app/SeederHelpers/**', 'config/laratrust_seeder.php', '.env.ci.example', 'docker-compose.ci.yml', '.github/actions/php-ci-setup/action.yml') }}
+
+    - name: Migrate & seed
+      if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit != 'true' }}
       run: |
         php artisan migrate --database=migrate --force
-        php artisan migrate --database=combatlog --path=database/migrations_combatlog --force
+        # --schema-path is not optional: Laravel resolves the squashed schema dump by *connection*
+        # name, so on combatlog_migrate it looks for a combatlog_migrate-schema.dump that does not
+        # exist, silently skips the dump and runs the incremental migrations against an empty
+        # database - which dies on the first one to touch a table the dump was to have created.
+        php artisan migrate --database=combatlog_migrate --path=database/migrations_combatlog \
+          --schema-path=database/schema/combatlog-schema.dump --force
         php artisan db:seed --database=migrate --force -v
+        php artisan db:seed --class=LaratrustSeeder --database=migrate --force
+
+        # Dump from *inside* the container, not with the runner's client: `default-mysql-client`
+        # installed above resolves to the MariaDB client on Ubuntu, which skews against a MySQL
+        # 8.0.42 server. This is the same reason sh/worktree.sh:load_schema_dump() pipes through
+        # `docker exec` instead of using the app image's client. Print the version so which client
+        # actually ran is on record in the log.
+        mkdir -p ~/ci-db-dump
+        # --routines --events are not needed today (neither schema defines any, and triggers are
+        # dumped by default) but are cheap insurance: the cached dump outlives the run that made it,
+        # so a routine added later must not go silently missing on every cache hit.
+        docker compose -f docker-compose.ci.yml exec -T db mysqldump --version
+        docker compose -f docker-compose.ci.yml exec -T db \
+          mysqldump --no-tablespaces --single-transaction --routines --events -uroot -proot \
+          'keystone.guru.dev' > ~/ci-db-dump/main.sql
+        docker compose -f docker-compose.ci.yml exec -T db-combatlog \
+          mysqldump --no-tablespaces --single-transaction --routines --events -uroot -proot \
+          'keystone.guru.combatlog' > ~/ci-db-dump/combatlog.sql
+        ls -la ~/ci-db-dump
+      shell: bash
+
+    # Saved here rather than by the combined actions/cache, whose post-job save does not run when the
+    # job fails - seeding happens in setup and PHPUnit runs after it, so a single failing test would
+    # otherwise throw the dump away and make the next run seed again.
+    # Concurrent runs can race to write this key; actions/cache/save logs "Unable to reserve cache"
+    # for the loser and still succeeds, so no continue-on-error - a real save failure stays visible.
+    - name: Save seeded database dump
+      if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit != 'true' }}
+      uses: actions/cache/save@v5
+      with:
+        path: ~/ci-db-dump
+        key: ${{ steps.cache-db.outputs.cache-primary-key }}
+
+    # The dumps carry the `migrations` table, so Laravel sees a fully migrated schema, and mysqldump
+    # emits AUTO_INCREMENT= on every CREATE TABLE, so id sequences survive the round trip.
+    - name: Load seeded database dump
+      if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit == 'true' }}
+      run: |
+        docker compose -f docker-compose.ci.yml exec -T db \
+          mysql -uroot -proot 'keystone.guru.dev' < ~/ci-db-dump/main.sql
+        docker compose -f docker-compose.ci.yml exec -T db-combatlog \
+          mysql -uroot -proot 'keystone.guru.combatlog' < ~/ci-db-dump/combatlog.sql
+      shell: bash
+
+    # Loaded concurrently: one pair costs ~26s sequentially. The dump has no USE statement (mysqldump
+    # ran without --databases), so it loads into any schema name.
+    - name: Provision per-worker schema copies
+      if: ${{ inputs.run-migrations == 'true' && inputs.parallel-schemas != '0' }}
+      run: |
+        # The `mysql` connection (App\Models\User) authenticates as the compose MYSQL_USER, not root,
+        # and a schema created by root carries no grant for it.
+        pids=""
+        for t in $(seq 1 "${{ inputs.parallel-schemas }}"); do
+          docker compose -f docker-compose.ci.yml exec -T db \
+            mysql -uroot -proot -e "CREATE DATABASE \`keystone.guru.dev_${t}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL PRIVILEGES ON \`keystone.guru.dev_${t}\`.* TO 'homestead'@'%'"
+          docker compose -f docker-compose.ci.yml exec -T db-combatlog \
+            mysql -uroot -proot -e "CREATE DATABASE \`keystone.guru.combatlog_${t}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL PRIVILEGES ON \`keystone.guru.combatlog_${t}\`.* TO 'homestead'@'%'"
+          docker compose -f docker-compose.ci.yml exec -T db \
+            mysql -uroot -proot "keystone.guru.dev_${t}" < ~/ci-db-dump/main.sql &
+          pids="$pids $!"
+          docker compose -f docker-compose.ci.yml exec -T db-combatlog \
+            mysql -uroot -proot "keystone.guru.combatlog_${t}" < ~/ci-db-dump/combatlog.sql &
+          pids="$pids $!"
+        done
+        # `wait` alone only reports the last job; wait on each so any failed load fails the step.
+        failed=0
+        for pid in $pids; do
+          wait "$pid" || failed=1
+        done
+        [ "$failed" -eq 0 ] || { echo "::error::At least one per-worker schema load failed"; exit 1; }
+        docker compose -f docker-compose.ci.yml exec -T db mysql -uroot -proot -N -e "SHOW DATABASES LIKE 'keystone.guru.dev%'"
+        docker compose -f docker-compose.ci.yml exec -T db-combatlog mysql -uroot -proot -N -e "SHOW DATABASES LIKE 'keystone.guru.combatlog%'"
       shell: bash

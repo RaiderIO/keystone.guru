@@ -13,12 +13,13 @@ use App\Service\RaiderIO\Dtos\RaiderIOHeatmapGridResponse;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
+use App\Service\RaiderIO\Enums\RaiderIOFaction;
 use App\Service\RaiderIO\Exceptions\InvalidApiResponseException;
 use App\Service\RaiderIO\Logging\RaiderIOApiServiceLoggingInterface;
-use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Traits\Curl;
 use Str;
+use Teapot\StatusCode\Http;
 
 class RaiderIOApiService implements RaiderIOApiServiceInterface
 {
@@ -37,7 +38,6 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
     public function __construct(
         private readonly CoordinatesServiceInterface        $coordinatesService,
         private readonly SeasonServiceInterface             $seasonService,
-        private readonly SeasonAffixGroupServiceInterface   $seasonAffixGroupService,
         private readonly RaiderIOApiServiceLoggingInterface $log,
     ) {
     }
@@ -86,7 +86,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             return HeatmapDataResponse::fromArray(
                 new RaiderIOHeatmapGridResponse(
                     $this->coordinatesService,
-                    CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $this->seasonAffixGroupService, $heatmapDataFilter),
+                    CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $heatmapDataFilter),
                     $json['gridsByFloor'],
                     $json['numRuns'],
                     $json['maxSamplesInGrid'],
@@ -108,29 +108,43 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         }
 
         $dungeonZoneId = $filter->dungeon?->zone_id;
+        $faction       = RaiderIOFaction::fromFaction($filter->faction);
         $memberSpecIds = $filter->specs
             ->pluck('specialization_id')
             ->map(fn($specId) => ['eq' => (int)$specId])
             ->values()
             ->toArray();
 
+        $mythicLevel = ['gte' => $filter->mythicLevelMin];
+
+        if ($filter->mythicLevelMax !== null) {
+            $mythicLevel['lte'] = $filter->mythicLevelMax;
+        }
+
         $params = array_filter([
             'type'         => 'mythic_plus_runs',
             'hasAutoRoute' => [0 => ['eq' => 1]],
             'season'       => [0 => ['eq' => $this->buildSeasonString($filter->season->expansion->shortname, $filter->season->index)]],
-            'mythicLevel'  => [0 => ['gte' => $filter->mythicLevelMin]],
+            'mythicLevel'  => [0 => $mythicLevel],
             'numChests'    => [
                 0 => ['eq' => 1],
                 1 => ['eq' => 2],
                 2 => ['eq' => 3],
             ],
-            'completedAt'   => [0 => $completedAt],
-            'timezone'      => 'UTC',
-            'sort'          => ['hasAutoRoute' => 'desc'],
+            'completedAt' => [0 => $completedAt],
+            'timezone'    => 'UTC',
+            // Sorting on hasAutoRoute is a no-op - it is already filtered to 1 - which leaves the
+            // ordering stable across identical calls. Repeated polls of the same narrow filter then
+            // return the exact same page, and every run on it has already been parsed. Ordering by
+            // recency instead means each poll leads with the runs that appeared since the last one.
+            'sort'          => ['completedAt' => 'desc'],
             'limit'         => $filter->limit,
             'offset'        => $filter->offset,
             'dungeonZoneId' => $dungeonZoneId !== null ? [0 => ['eq' => $dungeonZoneId]] : null,
             'memberSpecIds' => !empty($memberSpecIds) ? $memberSpecIds : null,
+            // A run only carries a faction when every member shares one - a cross faction group has
+            // none at all, so this filter always excludes those along with the other faction.
+            'faction' => $faction !== null ? [0 => ['eq' => $faction->value]] : null,
         ]);
 
         $url = sprintf('%s?%s', self::SEARCH_ADVANCED_URL, http_build_query($params));
@@ -138,12 +152,28 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         try {
             $this->log->searchAdvancedRunsStart($url);
 
-            $response = $this->curlGet($url);
-            $json     = json_decode($response, true);
+            $response = '';
 
-            if (!is_array($json) || !isset($json['matches']) || !is_array($json['matches'])) {
+            try {
+                // Cloudflare occasionally answers with a 504 gateway-timeout HTML page instead of
+                // JSON - transient and gone on the next attempt, so retry a few times with backoff
+                // before treating it as a real failure.
+                $json = retry(3, function () use ($url, &$response) {
+                    $response = $this->curlGet($url);
+                    $json     = json_decode($response, true);
+
+                    if (!is_array($json) || !isset($json['matches']) || !is_array($json['matches'])) {
+                        throw new InvalidApiResponseException('Invalid response from Raider.IO API', $url, $response);
+                    }
+
+                    return $json;
+                }, static fn(int $attempt) => $attempt * 500);
+            } catch (InvalidApiResponseException) {
                 $this->log->searchAdvancedRunsInvalidResponse($url, $response);
 
+                // A null total is what tells a caller this was an error rather than a genuinely empty
+                // result set - a valid response always carries one. combatlog:pollruns counts it from
+                // there, rather than this service counting for every caller it has (#4173).
                 return new SearchAdvancedRunsResponse([], null);
             }
 
@@ -155,7 +185,12 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                 $runs[] = SearchAdvancedRun::fromArray($match['data']);
             }
 
-            $total = isset($json['total']['value']) ? (int)$json['total']['value'] : null;
+            // An empty result set returns a scalar `"total": 0` instead of `{"value": n}`
+            $total = match (true) {
+                isset($json['total']['value'])     => (int)$json['total']['value'],
+                is_numeric($json['total'] ?? null) => (int)$json['total'],
+                default                            => null,
+            };
 
             return new SearchAdvancedRunsResponse($runs, $total);
         } finally {
@@ -178,7 +213,19 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             $json     = json_decode($response, true);
 
             if (!is_array($json) || !isset($json['sourceUserId'], $json['segments']) || !is_array($json['segments'])) {
-                $this->log->getCombatLogSegmentsForRunInvalidResponse($runId, $url, $response);
+                // A 404 with this specific message means the run's segments simply haven't been
+                // uploaded to Raider.IO yet (#3918) - an expected, recurring state to log distinctly
+                // from a genuinely malformed/unexpected response, which stays error-level below.
+                // Matching on 'message' too (not just 'statusCode') matters: the upstream API is
+                // hapi-style, whose default route-not-found body is also {"statusCode":404,"error":
+                // "Not Found","message":"Not Found"} - identical statusCode, but a real integration
+                // break (wrong path, unrecognized season) that must still page.
+                if (($json['statusCode'] ?? null) === Http::NOT_FOUND
+                    && str_contains((string)($json['message'] ?? ''), 'combat log segments')) {
+                    $this->log->getCombatLogSegmentsForRunNotYetAvailable($runId, $url, $response);
+                } else {
+                    $this->log->getCombatLogSegmentsForRunInvalidResponse($runId, $url, $response);
+                }
 
                 return null;
             }

@@ -20,10 +20,25 @@ return [
         'numeric' => ':Attribute deve trovarsi tra :min - :max.',
         'string'  => ':Attribute deve trovarsi tra :min - :max caratteri.',
     ],
-    'boolean'           => 'Il campo :attribute deve essere vero o falso.',
-    'can'               => 'Il campo :attribute contiene un valore non autorizzato.',
-    'confirmed'         => 'Il campo di conferma per :attribute non coincide.',
-    'current_password'  => 'Password non valida.',
+    'boolean'          => 'Il campo :attribute deve essere vero o falso.',
+    'can'              => 'Il campo :attribute contiene un valore non autorizzato.',
+    'confirmed'        => 'Il campo di conferma per :attribute non coincide.',
+    'current_password' => 'Password non valida.',
+    'custom'           => [
+        'bio' => [
+            'max' => '',
+        ],
+        'pinned_dungeon_routes' => [
+            'max'    => '',
+            'exists' => '',
+        ],
+        'social_links' => [
+            'invalid_url_for_platform' => '',
+        ],
+        'creator_search' => [
+            'max' => '',
+        ],
+    ],
     'date'              => ':Attribute non è una data valida.',
     'date_equals'       => ':Attribute deve essere una data e uguale a :date.',
     'date_format'       => ':Attribute non coincide con il formato :format.',

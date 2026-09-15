@@ -35,7 +35,7 @@ interface CoordinatesServiceInterface
     public function distanceIngameXY(IngameXY $ingameXYA, IngameXY $ingameXYB): float;
 
     /**
-     * @param array<int, LatLng> $polygon
+     * @param array<int, array{lat: float, lng: float}> $polygon
      */
     public function polygonContainsPoint(LatLng $latLng, array $polygon): bool;
 

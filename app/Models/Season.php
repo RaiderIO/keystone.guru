@@ -29,7 +29,6 @@ use Illuminate\Support\Carbon;
  * @property string   $name                    Dynamic attribute
  * @property string   $name_med                Dynamic attribute
  * @property string   $name_long               Dynamic attribute
- * @property int      $start_period            Dynamic attribute
  *
  * @property Expansion $expansion
  *
@@ -106,7 +105,6 @@ class Season extends CacheModel
     protected $appends = [
         'name',
         'name_long',
-        'start_period',
     ];
 
     protected function casts(): array
@@ -132,11 +130,6 @@ class Season extends CacheModel
             'expansion' => __($this->expansion->name),
             'season'    => $this->index,
         ]);
-    }
-
-    public function getStartPeriodAttribute(): int
-    {
-        return GameServerRegion::getUserOrDefaultRegion()->getKeystoneLeaderboardPeriod($this->start);
     }
 
     /** @return BelongsTo<Expansion, $this> */

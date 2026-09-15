@@ -21,11 +21,13 @@ use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\GameServerRegion;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Polyline;
+use App\Models\Season;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
@@ -52,6 +54,7 @@ use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
 use App\Service\CombatLog\Builders\CombatLogRouteCombatLogEventsBuilder;
 use App\Service\CombatLog\Builders\CombatLogRouteCorrectionBuilder;
 use App\Service\CombatLog\Builders\CombatLogRouteDungeonRouteBuilder;
+use App\Service\CombatLog\Exceptions\CombatLogRouteRegeneratedConcurrentlyException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Logging\CombatLogRouteDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
@@ -63,6 +66,8 @@ use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\CombatLog\ResultEvents\PlayerDied as PlayerDiedResultEvent;
 use App\Service\CombatLog\ResultEvents\SpellCast as SpellCastResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
+use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
 use App\Service\DungeonRoute\MapDrawingServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceStub;
@@ -71,9 +76,13 @@ use App\Service\Season\SeasonServiceStub;
 use Auth;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
+use Throwable;
 
 /**
  * Orchestrates combat log parsing: runs filters to produce result events, then builds a DungeonRoute with kill zones
@@ -81,6 +90,21 @@ use Ramsey\Uuid\Uuid;
  */
 class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteServiceInterface
 {
+    /** @var int A combat log carries no Raider.IO keystone run id - locally parsed routes all share this one. */
+    private const METADATA_PLACEHOLDER_KEYSTONE_RUN_ID = 98765;
+
+    /** @var int As above, for the logged run id. */
+    private const METADATA_PLACEHOLDER_LOGGED_RUN_ID = 87654;
+
+    /** @var string A combat log does not name the region it was recorded on. */
+    private const METADATA_PLACEHOLDER_REGION = GameServerRegion::EUROPE;
+
+    /** @var string A combat log does not name the realm type it was recorded on. */
+    private const METADATA_PLACEHOLDER_REALM_TYPE = 'live';
+
+    /** @var int Rows per insert statement, so a combat log with many unresolved npcs stays under max_allowed_packet. */
+    private const ENEMY_FAILURE_INSERT_CHUNK_SIZE = 500;
+
     public function __construct(
         protected readonly CombatLogService                                  $combatLogService,
         protected readonly SeasonServiceInterface                            $seasonService,
@@ -103,17 +127,39 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         protected readonly SpellRepositorySwooleInterface                    $spellRepositorySwoole,
         protected readonly FloorRepositorySwooleInterface                    $floorRepositorySwoole,
         protected readonly DungeonRepositorySwooleInterface                  $dungeonRepositorySwoole,
+        protected readonly DungeonRouteUpgradeDraftServiceInterface          $dungeonRouteUpgradeDraftService,
+        protected readonly CombatLogRouteEnemyFailureServiceInterface        $combatLogRouteEnemyFailureService,
         protected readonly CombatLogRouteDungeonRouteServiceLoggingInterface $log,
     ) {
     }
 
     /**
      * @throws DungeonNotSupportedException
+     * @throws CombatLogRouteRegeneratedConcurrentlyException
      * @throws Exception
      */
     public function convertCombatLogRouteToDungeonRoute(CombatLogRouteRequestDto $combatLogRoute): DungeonRoute
     {
-        $dungeonRoute = new CombatLogRouteDungeonRouteBuilder(
+        // Regeneration (settings->publicKey set) replaces the contents of an existing combat log route. That route -
+        // and the ChallengeModeRun that makes it one - stays untouched until the replacement is completely built, so a
+        // failure anywhere below leaves it exactly as it was and the regeneration can simply be retried (#4194).
+        // findCombatLogRouteByPublicKey() only matches routes that have a run, which is the guard that stops the
+        // API from overwriting arbitrary routes by public key.
+        $existingDungeonRoute = $this->dungeonRouteRepository->findCombatLogRouteByPublicKey($combatLogRoute->settings->publicKey);
+
+        if ($existingDungeonRoute !== null) {
+            // Only one draft may exist per route (dungeon_routes_upgrade_of_unique), and a regeneration takes over
+            // whatever it finds: a draft here is all but certainly the wreckage of an earlier ARC run that died
+            // between creating it and applying it, and blocking every future regeneration on it would be worse than
+            // discarding it (#4297).
+            $abandonedDraft = $existingDungeonRoute->upgradeDraft()->first();
+            if ($abandonedDraft !== null) {
+                $this->log->convertCombatLogRouteToDungeonRouteDiscardingAbandonedDraft($existingDungeonRoute->id, $abandonedDraft->id);
+                $abandonedDraft->delete();
+            }
+        }
+
+        $builder = new CombatLogRouteDungeonRouteBuilder(
             $this->seasonService,
             $this->seasonAffixGroupService,
             $this->coordinatesService,
@@ -129,18 +175,137 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $this->dungeonRepository,
             $combatLogRoute,
             Auth::id() ?? -1,
-        )->build();
+        );
 
-        $this->saveChallengeModeRun($combatLogRoute, $dungeonRoute);
-        $this->saveCombatLogRouteEnemyFailures($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
+        /** @var array<int, array<string, mixed>> $enemyFailureAttributes */
+        $enemyFailureAttributes = [];
 
-        if ($combatLogRoute->settings->debugIcons) {
-            $this->generateMapIcons(
-                $dungeonRoute->mappingVersion,
-                $combatLogRoute,
-                $dungeonRoute,
+        try {
+            if ($existingDungeonRoute !== null) {
+                // The route the builder just created IS the draft - it holds exactly the content the fresh combat log
+                // produced, which is what apply() then writes onto the original. The DungeonRoute::saving hook flips
+                // it to UNPUBLISHED on this write, which is what a draft should be: it must never be reachable in its
+                // own right, the original keeps serving its public key throughout.
+                $this->markAsUpgradeDraft($builder->getDungeonRoute(), $existingDungeonRoute);
+            }
+
+            $dungeonRoute = $builder->build();
+
+            if ($existingDungeonRoute === null) {
+                $this->saveCombatLogRouteEnemyFailures($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
+            } else {
+                // Worked out against the mapping version this generation was built on, and before apply() touches
+                // the original. A regeneration's failures belong to the original, which keeps its id through apply().
+                $enemyFailureAttributes = $this->getCombatLogRouteEnemyFailureAttributes(
+                    $dungeonRoute->mappingVersion,
+                    $combatLogRoute,
+                    $dungeonRoute,
+                    $existingDungeonRoute->id,
+                );
+            }
+
+            if ($combatLogRoute->settings->debugIcons) {
+                $this->generateMapIcons(
+                    $dungeonRoute->mappingVersion,
+                    $combatLogRoute,
+                    $dungeonRoute,
+                );
+            }
+        } catch (Throwable $throwable) {
+            // The builder's constructor already created the new route - don't leave a half-built one behind
+            $newDungeonRoute = $builder->getDungeonRoute();
+            $this->log->convertCombatLogRouteToDungeonRouteBuildFailedDeletingNewRoute($newDungeonRoute->id, $throwable->getMessage());
+            $newDungeonRoute->delete();
+
+            throw $throwable;
+        }
+
+        // Only now that the draft is complete does its content replace the original's
+        if ($existingDungeonRoute === null) {
+            $this->saveChallengeModeRun($combatLogRoute, $dungeonRoute);
+
+            return $dungeonRoute;
+        }
+
+        return $this->applyRegeneratedDungeonRoute($existingDungeonRoute, $dungeonRoute, $enemyFailureAttributes);
+    }
+
+    /**
+     * Marks the freshly created, still empty route as the upgrade draft of the route being regenerated, so that the
+     * combat log's output lands in a draft rather than in a second standalone route. Apply then writes that content
+     * onto the original, which keeps its id - and with it every inbound reference and every relation the old
+     * "build a new row and hand it the public key" replacement used to throw away (#4297).
+     *
+     * dungeon_routes_upgrade_of_unique is what makes this the arbiter between two regenerations of the same route
+     * that overlap: the second one to get here finds the index taken and loses, rather than both of them building
+     * into the same draft. The caller's catch removes the half-built route this one had already created.
+     *
+     * A regeneration that starts *later* still takes this draft over mid-build (see the discard in
+     * convertCombatLogRouteToDungeonRoute()). This one then fails somewhere in the builder - most likely on
+     * DungeonRouteBuilder::buildFinished()'s find()->update() against the deleted row - rather than with a tidy
+     * exception, but the outcome is the same either way: the caller's catch cleans up after it and rethrows, and
+     * the original is never touched by the loser.
+     *
+     * @throws CombatLogRouteRegeneratedConcurrentlyException
+     */
+    private function markAsUpgradeDraft(DungeonRoute $draft, DungeonRoute $existingDungeonRoute): void
+    {
+        try {
+            $draft->update(['upgrade_of_dungeon_route_id' => $existingDungeonRoute->id]);
+        } catch (UniqueConstraintViolationException) {
+            throw new CombatLogRouteRegeneratedConcurrentlyException(
+                sprintf(
+                    'Route %s is already being regenerated concurrently; discarded this regeneration',
+                    $existingDungeonRoute->public_key,
+                ),
             );
         }
+    }
+
+    /**
+     * Writes the completed draft's content onto the route being regenerated and deletes the draft, via the same
+     * draft-and-apply path a manual mapping version upgrade uses.
+     *
+     * The publish invariant is deliberately not enforced here: an ARC route is published by construction, and a
+     * combat log that misses a required enemy is a routine outcome rather than a reason to fail the whole
+     * regeneration - the pre-#4297 replacement had no such check either.
+     *
+     * The original ends up with exactly the enemy failures this generation computed, against the mapping version it
+     * was built on: whatever an earlier generation recorded is deleted, never carried over.
+     *
+     * @param  array<int, array<string, mixed>>               $enemyFailureAttributes
+     * @throws CombatLogRouteRegeneratedConcurrentlyException
+     * @throws Throwable
+     */
+    private function applyRegeneratedDungeonRoute(
+        DungeonRoute $existingDungeonRoute,
+        DungeonRoute $draft,
+        array        $enemyFailureAttributes,
+    ): DungeonRoute {
+        $draftId = $draft->id;
+
+        try {
+            $dungeonRoute = $this->dungeonRouteUpgradeDraftService->apply($draft, enforcePublishInvariant: false);
+        } catch (UpgradeDraftGoneException) {
+            // Another regeneration of the same route took this draft over while this one was still building. Its
+            // row is already gone, but delete() still fires DungeonRoute::deleting, which cleans up the kill zones
+            // and map icons this build wrote against that id.
+            $this->log->applyRegeneratedDungeonRouteDraftTakenOver($existingDungeonRoute->public_key, $existingDungeonRoute->id, $draftId);
+            $draft->delete();
+
+            throw new CombatLogRouteRegeneratedConcurrentlyException(
+                sprintf('Route %s was regenerated concurrently; discarded this regeneration', $existingDungeonRoute->public_key),
+            );
+        }
+
+        // settings->temporary applies to the route that comes out of this regeneration, exactly as it did when that
+        // route was a brand new row. apply() preserves the original's own expiry, so it is assigned here instead.
+        DungeonRoute::query()->whereKey($dungeonRoute->id)->update(['expires_at' => $draft->expires_at]);
+        $dungeonRoute->expires_at = $draft->expires_at;
+
+        $this->replaceCombatLogRouteEnemyFailures($dungeonRoute, $enemyFailureAttributes);
+
+        $this->log->applyRegeneratedDungeonRouteApplied($dungeonRoute->public_key, $dungeonRoute->id, $draftId);
 
         return $dungeonRoute;
     }
@@ -224,6 +389,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     public function getCombatLogRoute(
         string $combatLogFilePath,
         bool   $dungeonOrRaid = false,
+        bool   $debugIcons = false,
     ): ?CombatLogRouteRequestDto {
         ini_set('max_execution_time', 1800);
 
@@ -239,11 +405,13 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     return null;
                 }
 
-                $seconds      = random_int(1200, 2400);
-                $milliseconds = $seconds * 1000;
+                $seconds       = random_int(1200, 2400);
+                $milliseconds  = $seconds * 1000;
+                $runStart      = Carbon::now()->subSeconds($seconds);
+                $wowInstanceId = null;
 
                 $challengeMode = new CombatLogRouteChallengeModeRequestDto(
-                    Carbon::now()->subSeconds($seconds)->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
+                    $runStart->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
                     Carbon::now()->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
                     true,
                     $milliseconds,
@@ -277,12 +445,20 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     BaseResultEvent $resultEvent,
                 ) => $resultEvent instanceof PlayerDiedResultEvent);
 
+                $runStart      = $challengeModeStartEvent->getTimestamp();
+                $wowInstanceId = $challengeModeStartEvent->getInstanceID();
+
+                // A combat log does not carry the dungeon's par time, but the mapping does - and without it parTimeMs
+                // would claim every run finished exactly on the timer.
+                $parTimeMs = $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?
+                    $challengeModeEndEvent->getTotalTimeMS() : $dungeonRoute->mappingVersion->timer_max_seconds * 1000;
+
                 $challengeMode = new CombatLogRouteChallengeModeRequestDto(
-                    $challengeModeStartEvent->getTimestamp()->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
+                    $runStart->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
                     $challengeModeEndEvent->getTimestamp()->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
                     (bool)$challengeModeEndEvent->getSuccess(),
                     $challengeModeEndEvent->getTotalTimeMS(),
-                    $challengeModeEndEvent->getTotalTimeMS(),
+                    $parTimeMs,
                     $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?
                         1 : $challengeModeEndEvent->getTotalTimeMS() / ($dungeonRoute->mappingVersion->timer_max_seconds * 1000),
                     $challengeModeStartEvent->getChallengeModeID(),
@@ -406,17 +582,8 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             }
 
             return new CombatLogRouteRequestDto(
-                new CombatLogRouteMetadataRequestDto(
-                    Uuid::uuid4()->toString(),
-                    98765,
-                    87654,
-                    99,
-                    'season-midnight-1',
-                    2,
-                    'live',
-                    1,
-                ),
-                new CombatLogRouteSettingsRequestDto(true, true, $dungeonRoute->mappingVersion->version),
+                $this->getCombatLogRouteMetadata($dungeonRoute, $runStart, $wowInstanceId),
+                new CombatLogRouteSettingsRequestDto(true, $debugIcons, $dungeonRoute->mappingVersion->version),
                 $challengeMode,
                 new CombatLogRouteRosterRequestDto(
                     $mostRecentCombatantInfo->count(),
@@ -450,25 +617,55 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         }
     }
 
+    /**
+     * The metadata a locally parsed combat log can carry. Raider.IO owns most of this - a combat log file has no
+     * notion of a keystone/logged run id, nor of the region or realm type it was recorded on - so those stay
+     * placeholders. What the log *does* determine is the season the run belongs to, the week within it, and the
+     * WoW instance id; those are resolved here rather than hardcoded, because `metadata->season` and
+     * `metadata->period` are stored on every combat_log_event the route produces and are what the heatmap filters
+     * on. A run recorded under the wrong season string is invisible to those filters.
+     */
+    private function getCombatLogRouteMetadata(
+        DungeonRoute $dungeonRoute,
+        Carbon       $runStart,
+        ?int         $wowInstanceId,
+    ): CombatLogRouteMetadataRequestDto {
+        // Deliberately not getSeasonAt(), which scopes to a single expansion: a season routinely contains dungeons
+        // from older ones (Midnight season 2 runs King's Rest, a BfA dungeon), so the dungeon's own expansion is
+        // the wrong lens. Seasons run back to back across expansions, so the last one to have started is the one
+        // the run belongs to.
+        /** @var Season|null $season */
+        $season = $this->seasonService->getAllSeasons()
+            ->filter(static fn(Season $season): bool => $season->start->lessThanOrEqualTo($runStart))
+            ->sortByDesc('start')
+            ->first() ?? $this->seasonService->getMostRecentSeasonForDungeon($dungeonRoute->dungeon);
+
+        /** @var GameServerRegion $region */
+        $region = GameServerRegion::where('short', self::METADATA_PLACEHOLDER_REGION)->firstOrFail();
+
+        return new CombatLogRouteMetadataRequestDto(
+            Uuid::uuid4()->toString(),
+            self::METADATA_PLACEHOLDER_KEYSTONE_RUN_ID,
+            self::METADATA_PLACEHOLDER_LOGGED_RUN_ID,
+            // The period is the week of the run in Blizzard's global numbering, which is a function of the date and
+            // the region's weekly reset - not of the season - so it is taken from the same region metadata->regionId
+            // claims, rather than counted forward from the season's start.
+            $region->getKeystoneLeaderboardPeriod($runStart),
+            $season === null ? null : sprintf('season-%s-%d', $season->expansion->shortname, $season->index),
+            $region->id,
+            self::METADATA_PLACEHOLDER_REALM_TYPE,
+            $wowInstanceId,
+        );
+    }
+
+    /**
+     * Inserts a fresh run for a route that does not replace an existing one. A regeneration needs nothing here at
+     * all: it preserves the original's id, so the original's run still points at it. The run is deliberately no
+     * longer looked up by metadata->runId either, which is a client-supplied string shared by hundreds of routes
+     * and re-pointed some *other* route's run (#4194).
+     */
     private function saveChallengeModeRun(CombatLogRouteRequestDto $combatLogRoute, DungeonRoute $dungeonRoute): void
     {
-        // The dungeon route ID was changed, so we need to update the challenge mode run
-        // but don't store this info twice, not necessary
-        if ($combatLogRoute->settings->publicKey !== null) {
-            /** @var ChallengeModeRunData|null $oldChallengeModeRunData */
-            $oldChallengeModeRunData = ChallengeModeRunData::with('challengeModeRun')
-                ->firstWhere('run_id', $combatLogRoute->metadata->runId);
-
-            if ($oldChallengeModeRunData !== null && $oldChallengeModeRunData->challengeModeRun !== null) { // @phpstan-ignore notIdentical.alwaysTrue
-                $oldChallengeModeRunData->challengeModeRun->update([
-                    'dungeon_route_id' => $dungeonRoute->id,
-                ]);
-
-                return;
-            }
-        }
-
-        // Insert a new run
         $now = Carbon::now();
 
         /** @var ChallengeModeRun $challengeModeRun */
@@ -489,16 +686,31 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         ]);
     }
 
-    private function saveCombatLogRouteEnemyFailures(
+    /**
+     * The rows combat_log_route_enemy_failures gets for the npcs of this combat log that resolved to no enemy. Writes
+     * nothing, so a regeneration can work them out before apply() replaces the original's content.
+     *
+     * @param  DungeonRoute                     $dungeonRoute   the route this generation was built into
+     * @param  int                              $dungeonRouteId the route the failures are recorded against
+     * @return array<int, array<string, mixed>>
+     */
+    private function getCombatLogRouteEnemyFailureAttributes(
         MappingVersion           $mappingVersion,
         CombatLogRouteRequestDto $combatLogRoute,
         DungeonRoute             $dungeonRoute,
-    ): void {
+        int                      $dungeonRouteId,
+    ): array {
         $now               = now();
         $failureAttributes = [];
 
         /** @var Floor|null $previousFloor */
         $previousFloor = $dungeonRoute->dungeon->floors()->firstWhere('default', 1);
+
+        // An empty set means nothing is tuned in this mapping version yet - then every failure is worth recording
+        $nonZeroEnemyForcesNpcIds = array_fill_keys(
+            $this->combatLogRouteEnemyFailureService->getNonZeroEnemyForcesNpcIds($mappingVersion),
+            true,
+        );
 
         foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
             $currentFloor = $combatLogRouteNpc->getResolvedEnemy()?->floor ?? $previousFloor; // @phpstan-ignore nullsafe.neverNull
@@ -507,17 +719,42 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 continue;
             }
 
+            // Track the floor regardless of whether a failure gets recorded below - later npcs that
+            // fall back to $previousFloor must still see this npc's floor even if this one is skipped.
+            $previousFloor = $currentFloor;
+
             if ($combatLogRouteNpc->getResolvedEnemy() === null) {
-                $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
-                    new IngameXY(
-                        $combatLogRouteNpc->coord->x,
-                        $combatLogRouteNpc->coord->y,
-                        $currentFloor,
-                    ),
-                );
+                // An npc not worth any enemy forces in this mapping version never affects the route that gets built,
+                // so failing to place it is noise rather than a mapping problem worth triaging. That covers npcs the
+                // mapping does not know at all - temporary adds spawned mid-fight, which are the bulk of the volume.
+                // A failure without an npc id is kept - nothing attributes it to an npc, so nothing marks it as noise.
+                if ($combatLogRouteNpc->npcId !== null &&
+                    $nonZeroEnemyForcesNpcIds !== [] &&
+                    !isset($nonZeroEnemyForcesNpcIds[$combatLogRouteNpc->npcId])) {
+                    $this->log->saveCombatLogRouteEnemyFailuresSkippingNpcWithoutEnemyForces($dungeonRouteId, $combatLogRouteNpc->npcId);
+
+                    continue;
+                }
+
+                // This table is diagnostic bookkeeping only (unresolved-npc triage) - a floor with
+                // unset ingame coordinates (a mapping data gap, #3904) must not fail the whole combat
+                // log route submission just because it can't be recorded here.
+                try {
+                    $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                        new IngameXY(
+                            $combatLogRouteNpc->coord->x,
+                            $combatLogRouteNpc->coord->y,
+                            $currentFloor,
+                        ),
+                    );
+                } catch (InvalidArgumentException) {
+                    $this->log->saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation($dungeonRouteId, $combatLogRouteNpc->npcId, $currentFloor->id);
+
+                    continue;
+                }
 
                 $failureAttributes[] = array_merge([
-                    'dungeon_route_id'   => $dungeonRoute->id,
+                    'dungeon_route_id'   => $dungeonRouteId,
                     'dungeon_id'         => $dungeonRoute->dungeon_id,
                     'floor_id'           => $currentFloor->id,
                     'mapping_version_id' => $mappingVersion->id,
@@ -526,11 +763,50 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     'updated_at'         => $now,
                 ], $latLng->toArray());
             }
-
-            $previousFloor = $currentFloor;
         }
 
-        CombatLogRouteEnemyFailure::insert($failureAttributes);
+        return $failureAttributes;
+    }
+
+    private function saveCombatLogRouteEnemyFailures(
+        MappingVersion           $mappingVersion,
+        CombatLogRouteRequestDto $combatLogRoute,
+        DungeonRoute             $dungeonRoute,
+    ): void {
+        $this->insertCombatLogRouteEnemyFailures(
+            $this->getCombatLogRouteEnemyFailureAttributes($mappingVersion, $combatLogRoute, $dungeonRoute, $dungeonRoute->id),
+        );
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $failureAttributes
+     */
+    private function insertCombatLogRouteEnemyFailures(array $failureAttributes): void
+    {
+        foreach (array_chunk($failureAttributes, self::ENEMY_FAILURE_INSERT_CHUNK_SIZE) as $chunk) {
+            CombatLogRouteEnemyFailure::insert($chunk);
+        }
+    }
+
+    /**
+     * Swaps a regenerated route's enemy failures for the ones its latest generation computed, all or nothing. The
+     * failures live on the combatlog connection, so they cannot share apply()'s transaction: by the time this runs
+     * the route's new content is live, and a failure here is logged rather than reported as a failed regeneration.
+     *
+     * @param array<int, array<string, mixed>> $failureAttributes
+     */
+    private function replaceCombatLogRouteEnemyFailures(DungeonRoute $dungeonRoute, array $failureAttributes): void
+    {
+        try {
+            DB::connection(new CombatLogRouteEnemyFailure()->getConnectionName())->transaction(
+                function () use ($dungeonRoute, $failureAttributes): void {
+                    $dungeonRoute->deleteCombatLogRouteEnemyFailures();
+                    $this->insertCombatLogRouteEnemyFailures($failureAttributes);
+                },
+            );
+        } catch (Throwable $throwable) {
+            $this->log->replaceCombatLogRouteEnemyFailuresFailed($dungeonRoute->id, $throwable->getMessage());
+        }
     }
 
     private function generateMapIcons(
@@ -559,13 +835,21 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 continue;
             }
 
-            $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
-                new IngameXY(
-                    $combatLogRouteNpc->coord->x,
-                    $combatLogRouteNpc->coord->y,
-                    $currentFloor,
-                ),
-            );
+            // A floor with unset ingame coordinates (a mapping data gap, #3904) must not fail the
+            // whole request just because this one npc's icon can't be placed.
+            try {
+                $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                    new IngameXY(
+                        $combatLogRouteNpc->coord->x,
+                        $combatLogRouteNpc->coord->y,
+                        $currentFloor,
+                    ),
+                );
+            } catch (InvalidArgumentException) {
+                $this->log->generateMapIconsUnableToCalculateMapLocation($combatLogRouteNpc->getUniqueId(), $currentFloor->id);
+
+                continue;
+            }
             $latLngs[] = $latLng;
 
             /** @var Npc|null $npc */

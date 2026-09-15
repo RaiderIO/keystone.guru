@@ -17,8 +17,8 @@ return [
     'assets_base_url'          => env('ASSETS_BASE_URL', '/'),
     'assets_base_url_internal' => env('ASSETS_BASE_URL_INTERNAL', env('ASSETS_BASE_URL', '/')),
     'images_base_url'          => sprintf('%s/images', env('ASSETS_BASE_URL', '')),
-    'tiles_base_url'           => sprintf('%s/tiles', env('ASSETS_BASE_URL', '')),
-    'tiles_base_url_internal'  => sprintf('%s/tiles', env('ASSETS_BASE_URL_INTERNAL', env('ASSETS_BASE_URL', ''))),
+    'tiles_base_url'           => sprintf('%s/tiles_webp', env('ASSETS_BASE_URL', '')),
+    'tiles_base_url_internal'  => sprintf('%s/tiles_webp', env('ASSETS_BASE_URL_INTERNAL', env('ASSETS_BASE_URL', ''))),
 
     'github_username'         => 'Wotuu',
     'github_repository_owner' => 'RaiderIO',
@@ -60,14 +60,34 @@ return [
             'default_max' => 30,
         ],
 
-        'scaling_factor'         => 1.10,
-        'scaling_factor_past_10' => 1.10,
+        // Enemy health by key level - see Npc::getScalingFactor() for the formula and #4094 for the combat log
+        // measurements (Murder Row at +2, +4..+10, +12) that every number below was fitted to. +1 is the base, every
+        // level through +10 adds 7%, every level from +11 adds 10% (Xal'atath's Guile), and the game rounds that
+        // per-level multiplier to two decimals before applying the affixes below.
+        'scaling_factor'         => 1.07,
+        'scaling_factor_past_10' => 1.1,
 
         'affix_scaling_factor' => [
-            'fortified'       => 1.2,
-            'tyrannical'      => 1.3,
-            'thundering'      => 1.05,
-            'xalataths_guile' => 1.2,
+            'fortified'  => 1.2,
+            'tyrannical' => 1.25,
+            'thundering' => 1.05,
+        ],
+        // Fortified (non-bosses) and Tyrannical (bosses): from +10 both are always active, regardless of what the
+        // route's affix group says; between +7 and +9 only one of them is, and which one swaps every other week, so
+        // there it follows the affixes passed in (the route's affix group). Below +7 neither applies. The #4094
+        // measurements at +7..+9 were taken in a Fortified week (trash x1.2, bosses untouched).
+        'affix_scaling_factor_min_key_level'      => 7,
+        'affix_scaling_factor_both_min_key_level' => 10,
+
+        // Most hostile non-boss enemies have 5% less health at +2..+5 (Lindormi's Guidance, Midnight S2) - measured on
+        // every trash NPC of Murder Row and 10 of 14 in The Blinding Vale at +2..+5, absent from +6 on. The affix
+        // "weakens select enemies", and which ones is not knowable from our data, so this is the majority behaviour:
+        // the minority (and summoned units, which also skip Fortified) is overstated by 5% below +6. A +6 log has
+        // neither this nor Fortified in play, which is why combatlog:extractnpchealth prefers one. Set the factor to 1
+        // when a season drops the affix.
+        'low_key_non_boss_health' => [
+            'max_key_level' => 5,
+            'factor'        => 0.95,
         ],
     ],
 
@@ -89,6 +109,10 @@ return [
         ],
         'global_view_variables' => [
             'ttl' => '1 hour',
+        ],
+        'seasons_of_expansion' => [
+            'ttl'     => 3600,
+            'enabled' => env('SEASONS_OF_EXPANSION_CACHE_ENABLED', true),
         ],
         'default_game_region' => [
             'ttl' => '1 hour',
@@ -168,6 +192,17 @@ return [
     /** The range after which we start considering patrols too */
     'enemy_engagement_max_range_patrols_default' => 50,
 
+    /** Clustering and classification of Auto Route Creator enemy failures (admin heatmap cluster layer, combatlog:analyzeenemyfailures) */
+    'enemy_failure_analysis' => [
+        /** Failures of one npc on one floor within this many ingame yards of each other form one cluster. About a quarter of the
+         *  engagement range: far enough to absorb the scatter of one engagement, close enough to keep adjacent packs apart. */
+        'cluster_radius_yd' => 40,
+        /** A cluster with fewer failures than this is flagged low-volume */
+        'min_count' => 5,
+        /** A cluster affecting fewer distinct routes than this is flagged low-volume */
+        'min_routes' => 3,
+    ],
+
     /** The default max zoom level on the map */
     'zoom_max_default' => 5,
 
@@ -203,6 +238,23 @@ return [
     'page_views' => [
         /** The number of days page view records are kept before being pruned. Only the last X days are needed for popularity calculations. */
         'retention_days' => 30,
+    ],
+
+    'telemetry' => [
+        /** The number of days operational telemetry metric records (scheduled command run times, queue/mysql gauges) are kept before being pruned. */
+        'retention_days' => 30,
+
+        /**
+         * Measurements excluded from `telemetry:prune` entirely, kept forever for long-term
+         * site-growth trends instead of the operational `retention_days` window.
+         *
+         * @var array<int, string>
+         */
+        'growth_measurements' => [
+            'user_count',
+            'team_count',
+            'dungeon_route_count',
+        ],
     ],
 
     'thumbnail' => [
@@ -270,6 +322,12 @@ return [
 
         /** How many creators to show per page of the directory */
         'per_page' => 24,
+
+        /** How many creators to feature in the rail - four is what fits its 70rem measure without the shelf needing to scroll on a desktop */
+        'featured_count' => 4,
+
+        /** The rail is a site-wide list off a heavy GROUP BY, so it may go this stale - see getFeaturedCreators() */
+        'featured_ttl' => '1 hour',
     ],
 
     /**
@@ -372,12 +430,6 @@ return [
         'expires_hours' => 1,
     ],
 
-    'influxdb' => [
-        'default_tags' => [
-            'environment' => env('APP_ENV'),
-        ],
-    ],
-
     'webhook' => [
         'github' => [
             'url'    => env('DISCORD_GITHUB_WEBHOOK'),
@@ -401,6 +453,19 @@ return [
         // Local envs hit the real production RaiderIO API by default. Set this to true to use the
         // local opensearch-backed mock service instead (requires a running local opensearch node).
         'use_local_mock_service' => env('RAIDERIO_USE_LOCAL_MOCK_SERVICE', false),
+    ],
+
+    // Other deployments of keystone.guru that local tooling (e.g. combatlog:importenemyfailures) may pull data from,
+    // keyed by the --host value those commands accept. Credentials are never configured here - they are read from a
+    // file/stdin per invocation.
+    'remote_hosts' => [
+        'production' => [
+            // `?:` rather than the env() default: .env.example ships the key blank, and a blank must still mean the default
+            'base_url' => env('KSG_REMOTE_PRODUCTION_URL') ?: 'https://keystone.guru',
+        ],
+        'staging' => [
+            'base_url' => env('KSG_REMOTE_STAGING_URL') ?: 'https://staging.keystone.guru',
+        ],
     ],
 
     'patreon' => [
@@ -520,6 +585,23 @@ return [
                     'custom' => [
                         'kill_zone_path_weight_multiplier' => 3,
                     ],
+                    /**
+                     * Same render dimensions as `standard`, but used only on the front page's "popular this
+                     * week" route cards. `standard`'s x3 line weight is tuned to still read as a route shape
+                     * at the Find Routes page's small size, but on the front page it just looks thick - this
+                     * multiplier sits between `hero` (unmultiplied, but rendered much larger) and `standard`.
+                     * Generated alongside the hero variant (thumbnail:ensureheroes), since the front page's
+                     * top route per dungeon is already a subset of the routes shown as heroes.
+                     */
+                    'front_page' => [
+                        'viewport_width'                   => 768,
+                        'viewport_height'                  => 512,
+                        'image_width'                      => 384,
+                        'image_height'                     => 256,
+                        'zoom_level'                       => 1,
+                        'quality'                          => 90,
+                        'kill_zone_path_weight_multiplier' => 1.5,
+                    ],
                 ],
                 /** I observed it to be about 8 but with settings it may be longer, so 10 to be safe. */
                 'estimated_generation_time_seconds' => 10,
@@ -531,10 +613,50 @@ return [
     'raider_io' => [
         'team_id'            => 2136,
         'combat_log_polling' => [
-            'completed_at_window_days' => (int)env('COMBAT_LOG_POLLING_COMPLETED_AT_WINDOW_DAYS', 1),
-            'mythic_level_min'         => (int)env('COMBAT_LOG_POLLING_MYTHIC_LEVEL_MIN', 10),
+            // Widened from 1 to 7 (#4035): between seasons there's typically a week with no M+ runs
+            // completed at all, and a 1-day window then finds nothing to poll. 7 days still finds
+            // last week's runs once M+ activity resumes, so this survives every future season gap
+            // too, not just the current one.
+            'completed_at_window_days' => (int)env('COMBAT_LOG_POLLING_COMPLETED_AT_WINDOW_DAYS', 7),
             'limit'                    => (int)env('COMBAT_LOG_POLLING_LIMIT', 100),
             'download_url'             => env('COMBAT_LOG_POLLING_DOWNLOAD_URL'),
+
+            // When an hour of polling is bad enough to be worth waking someone for (#4173). A run
+            // that yields no data costs nothing on its own - it is blacklisted and the budget it
+            // consumed is given back - so both a meaningful volume and a meaningful share of the
+            // hour's runs have to fail before combatlog:reportpollinghealth reports at error level.
+            // The defaults sit well above the observed steady state: #3918 measured the two biggest
+            // failure clusters on staging at roughly one an hour each, so 25 of them across the
+            // window is an order of magnitude more than a normal day produces.
+            'health' => [
+                'window_hours'     => (int)env('COMBAT_LOG_POLLING_HEALTH_WINDOW_HOURS', 3),
+                'min_failures'     => (int)env('COMBAT_LOG_POLLING_HEALTH_MIN_FAILURES', 25),
+                'min_failure_rate' => (float)env('COMBAT_LOG_POLLING_HEALTH_MIN_FAILURE_RATE', 0.5),
+            ],
+
+            // Runs are polled in key level bands so that what we parse covers the whole spectrum
+            // instead of the (by far most populous) 10-16 range. One band is polled per hour.
+            'bands' => [
+                'level_min'         => (int)env('COMBAT_LOG_POLLING_BAND_LEVEL_MIN', 2),
+                'width'             => (int)env('COMBAT_LOG_POLLING_BAND_WIDTH', 5),
+                'default_threshold' => (int)env('COMBAT_LOG_POLLING_BAND_DEFAULT_THRESHOLD', 60),
+            ],
+
+            // The highest keys of a season are always parsed, bypassing the band budgets
+            // entirely - those are the runs where players have it all figured out.
+            'top_band' => [
+                'levels_below_max'    => (int)env('COMBAT_LOG_POLLING_TOP_BAND_LEVELS_BELOW_MAX', 2),
+                'min_runs_for_level'  => (int)env('COMBAT_LOG_POLLING_TOP_BAND_MIN_RUNS_FOR_LEVEL', 25),
+                'probe_window_days'   => (int)env('COMBAT_LOG_POLLING_TOP_BAND_PROBE_WINDOW_DAYS', 7),
+                'probe_level_ceiling' => (int)env('COMBAT_LOG_POLLING_TOP_BAND_PROBE_LEVEL_CEILING', 40),
+
+                // Kept below the hourly schedule of combatlog:pollruns so the max key level is
+                // re-probed on every run. At the start of a season everyone starts at the minimum
+                // key level and climbs over the following days; a max cached for longer pins the
+                // top band's floor near the bottom, and the top band is dispatched without
+                // consulting any budget - so it would parse every run of the season.
+                'max_key_level_cache_minutes' => (int)env('COMBAT_LOG_POLLING_TOP_BAND_MAX_KEY_LEVEL_CACHE_MINUTES', 50),
+            ],
         ],
         'weekly_route' => [
             'url'  => 'https://raider.io/weekly-routes',
@@ -546,8 +668,41 @@ return [
         ],
     ],
 
+    'npc' => [
+        /**
+         * NPCs whose seeded data is hand-curated and must never be replaced by an automated source. Honoured by two
+         * paths, with different breadth: MDTMappingImportService skips the NPC's data entirely (health, display id,
+         * encounter id, ...), while combatlog:extractnpchealth skips only its npc_healths row - even with --overwrite -
+         * and reports it as "curated".
+         *
+         * @var array<int, int>
+         */
+        'curated_npc_data_npc_ids' => [
+            // Priory of the Sacred Flame - 3 mini bosses where MDT has high health values - they mess up auto map sizing based on health
+            211289,
+            211290,
+            211291,
+            // Murder Row - Infernal, stored at 2.7M while it has ~205M in game: a 200M trash mob breaks the
+            // health-based enemy sizing on the map (Wotuu, #4207)
+            238414,
+            // King's Rest - Minion of Zul, a gimmick mob that carries a shield and deliberately low health. Combat
+            // logs show a flat 24 max HP that does not scale with the key level at all, so no base health can be
+            // derived from them (Wotuu, #4208) - the seeded value stands.
+            133943,
+            138493,
+        ],
+    ],
+
     'mdt' => [
-        'version' => 'v6.2.0-alpha3',
+        'version' => 'v6.2.16',
+
+        /**
+         * How long the signed MDT export url minted at page render stays valid. Deliberately
+         * generous: a user who leaves a route tab open all day and only then hits Copy MDT must
+         * still get their string. The gate's value is that the url has to come from a page render
+         * at all, not that the window is narrow.
+         */
+        'export_url_expiry_hours' => 24,
     ],
 
     'combat_log_route_regeneration' => [
@@ -558,5 +713,42 @@ return [
     'combat_log_staleness' => [
         /** The number of days without a new observation before an NPC characteristic or spell property is considered stale and removed. */
         'observation_window_days' => (int)env('COMBAT_LOG_STALENESS_OBSERVATION_WINDOW_DAYS', 3),
+
+        /**
+         * The number of distinct data-days of observation history that are retained before older
+         * observation rows are pruned. This is deliberately far larger than the staleness window:
+         * the retained history is what any future observation-density analysis has to work with,
+         * while `observation_window_days` alone decides when a fact expires (#4356).
+         *
+         * Must be at least `observation_window_days + 2` - pruning observations that the staleness
+         * sweep still needs would make every fact look stale. The sweep clamps it to that minimum
+         * rather than trusting the configured value.
+         */
+        'observation_retention_days' => (int)env('COMBAT_LOG_STALENESS_OBSERVATION_RETENTION_DAYS', 30),
+    ],
+
+    'trusted_proxies' => [
+        /**
+         * CIDRs of the hop directly in front of the application, trusted in addition to CloudFlare's
+         * published ranges so the X-Forwarded-For chain is walked all the way back to the visitor.
+         *
+         * In production the connecting peer is the ALB, not CloudFlare, so without these the peer is
+         * untrusted, the chain is never walked, and $request->ip() returns the load balancer ENI -
+         * collapsing every anonymous visitor into one bucket for rate limiting and IP bans (#4536).
+         *
+         * This is the VPC CIDR block declared in keystoneguru-infra `cdk/bin/cdk.ts` (NetworkStack
+         * `cidrBlock`), not an AWS-published range: the ALB's ENIs draw their addresses from our own
+         * VPC subnets, which are carved out of it. Naming the whole VPC rather than the individual
+         * public subnets means adding an availability zone or re-slicing the subnets cannot silently
+         * revert IP resolution to the ENI address. It stays exact because the application's security
+         * group only accepts ingress from the load balancer's security group, so the ALB is the only
+         * peer that can ever connect.
+         *
+         * @var array<int, string>
+         */
+        'vpc_cidrs' => array_values(array_filter(array_map(
+            'trim',
+            explode(',', (string)env('TRUSTED_PROXY_VPC_CIDRS', '172.41.0.0/16')),
+        ))),
     ],
 ];

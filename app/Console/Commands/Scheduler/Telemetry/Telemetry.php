@@ -4,15 +4,13 @@ namespace App\Console\Commands\Scheduler\Telemetry;
 
 use App\Console\Commands\Scheduler\SchedulerCommand;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\DungeonRouteCount;
-use App\Console\Commands\Scheduler\Telemetry\Measurement\MachineStats;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\Measurement;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\MySqlStats;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\QueueSize;
+use App\Console\Commands\Scheduler\Telemetry\Measurement\RedisSize;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\TeamCount;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\UserCount;
-use Exception;
-use InfluxDB\Database;
-use TrayLabs\InfluxDB\Facades\InfluxDB;
+use App\Service\Telemetry\TelemetryServiceInterface;
 
 class Telemetry extends SchedulerCommand
 {
@@ -28,7 +26,7 @@ class Telemetry extends SchedulerCommand
      *
      * @var string
      */
-    protected $description = 'Refreshes the telemetry to Grafana';
+    protected $description = 'Samples site gauges into the telemetry metrics store';
 
     /** @var array|Measurement[] */
     private $measurements;
@@ -47,32 +45,27 @@ class Telemetry extends SchedulerCommand
             new DungeonRouteCount(),
             new QueueSize(),
 
-            // Machine
-            new MachineStats(),
-
             // MySql
             new MySqlStats(),
+
+            // Redis
+            new RedisSize(),
         ];
     }
 
     /**
      * Execute the console command.
-     *
-     *
-     * @throws Exception
      */
-    public function handle(): int
+    public function handle(TelemetryServiceInterface $telemetryService): int
     {
-        return $this->trackTime(function () {
-            if (config('influxdb.enabled')) {
-                $points = [];
+        return $this->trackTime(function () use ($telemetryService) {
+            $dataPoints = [];
 
-                foreach ($this->measurements as $measurement) {
-                    $points = array_merge($points, $measurement->getPoints());
-                }
-
-                InfluxDB::writePoints($points, Database::PRECISION_SECONDS);
+            foreach ($this->measurements as $measurement) {
+                $dataPoints = array_merge($dataPoints, $measurement->getDataPoints());
             }
+
+            $telemetryService->recordDataPoints($dataPoints);
 
             return 0;
         });

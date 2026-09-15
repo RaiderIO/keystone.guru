@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -51,6 +52,19 @@ class AjaxEnemyForcesCheckpointController extends AjaxMappingModelBaseController
      */
     public function delete(Request $request, MappingVersion $mappingVersion, EnemyForcesCheckpoint $enemyForcesCheckpoint)
     {
+        // route:cache serializes this method; a body whose only $this usage sits inside a
+        // nested closure is reconstructed unbound. Delegating keeps a top-level $this read
+        // here, and the closures below compile normally inside a regular method (#4329).
+        return $this->deleteEnemyForcesCheckpoint($request, $mappingVersion, $enemyForcesCheckpoint);
+    }
+
+    /**
+     * @return Response|ResponseFactory
+     *
+     * @throws Throwable
+     */
+    private function deleteEnemyForcesCheckpoint(Request $request, MappingVersion $mappingVersion, EnemyForcesCheckpoint $enemyForcesCheckpoint)
+    {
         return DB::transaction(function () use ($enemyForcesCheckpoint) {
             try {
                 // The model's `deleted` hook releases its member enemies, so they don't keep pointing at
@@ -62,7 +76,12 @@ class AjaxEnemyForcesCheckpointController extends AjaxMappingModelBaseController
                     if (Auth::check()) {
                         /** @var User $user */
                         $user = Auth::user();
-                        broadcast(new EnemyForcesCheckpointDeletedEvent($enemyForcesCheckpoint->floor->dungeon, $user, $enemyForcesCheckpoint));
+
+                        try {
+                            broadcast(new EnemyForcesCheckpointDeletedEvent($enemyForcesCheckpoint->floor->dungeon, $user, $enemyForcesCheckpoint));
+                        } catch (BroadcastException) {
+                            // Ignore broadcast failures
+                        }
                     }
                 }
 

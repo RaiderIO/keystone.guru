@@ -261,7 +261,9 @@ class MDTDungeon
                             'faction'   => isset($clone['faction']) ?
                                 ((int)$clone['faction'] === 1 ? Faction::FACTION_HORDE : Faction::FACTION_ALLIANCE)
                                 : 'any',
-                            'enemy_forces_override'         => null,
+                            // A clone may carry its own count, superseding its NPC's count for that clone alone
+                            // (MDT 6.2.10 gave Temple of Sethraliss' G30 different enemy forces than G29 this way).
+                            'enemy_forces_override'         => isset($clone['count']) ? (int)$clone['count'] : null,
                             'enemy_forces_override_teeming' => null,
                         ]);
                         // Special MDT fields which are not fillable
@@ -341,6 +343,7 @@ class MDTDungeon
 
             $eval = '
                         local MDT = {}
+                        MDT.AddonName = "MythicDungeonTools"
                         MDT.L = {atalTeemingNote = "", underrotVoidNote = "", tdBuffGateNote = "", wcmWorldquestNote = ""}
                         MDT.dungeonTotalCount = {}
                         MDT.mapInfo = {}
@@ -384,6 +387,7 @@ class MDTDungeon
 
             $replaceStrings = [
                 'local addonName = ...' => 'local addonName = "MythicDungeonTools"',
+                'local _, MDT = ...'    => 'local MDT = MDT',
             ];
             foreach ($replaceStrings as $search => $replace) {
                 $eval = str_replace($search, $replace, $eval);

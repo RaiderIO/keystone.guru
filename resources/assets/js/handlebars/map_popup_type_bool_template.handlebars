@@ -5,14 +5,16 @@
             {{ description }}
         </div>
     {{/if}}
-    <input type="checkbox" class="form-check-input" value="{{value}}"
-           id="map_{{map_object_name}}_edit_popup_{{property}}_{{id}}"
-           name="map_{{map_object_name}}_edit_popup_{{property}}_{{id}}"
-        {{#ifCond value '===' 1 }}
-           checked="checked"
-        {{/ifCond}}
-        {{#ifCond value '===' true }}
-           checked="checked"
-        {{/ifCond}}
-    />
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" value="{{value}}"
+               id="map_{{map_object_name}}_edit_popup_{{property}}_{{id}}"
+               name="map_{{map_object_name}}_edit_popup_{{property}}_{{id}}"
+            {{#ifCond value '===' 1 }}
+               checked="checked"
+            {{/ifCond}}
+            {{#ifCond value '===' true }}
+               checked="checked"
+            {{/ifCond}}
+        />
+    </div>
 </div>

@@ -1338,6 +1338,15 @@ return [
                 'the_headteachers_enclave' => 'Hodor',
             ],
         ],
+        'altar_of_fangs' => [
+            'name'         => 'Hodor',
+            'abbreviation' => 'Hodor',
+            'floors'       => [
+                'sacrificial_approach' => 'Hodor',
+                'mutation_chambers'    => 'Hodor',
+                'altar_of_fangs'       => 'Hodor',
+            ],
+        ],
         'den_of_nalorakk' => [
             'name'         => 'Hodor',
             'abbreviation' => 'Hodor',
@@ -1397,7 +1406,9 @@ return [
             'name'         => 'Hodor',
             'abbreviation' => 'Hodor',
             'floors'       => [
-                'voidscar_arena' => 'Hodor',
+                'halls_of_spite'   => 'Hodor',
+                'voidscar_arena'   => 'Hodor',
+                'domanaars_ascent' => 'Hodor',
             ],
         ],
         'windrunner_spire' => [

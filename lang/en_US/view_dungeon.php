@@ -52,6 +52,7 @@ return [
                 'any'                     => 'Any',
                 'select_floor'            => 'Select floor',
                 'view_heatmap_fullscreen' => 'View fullscreen',
+                'not_supported'           => ':dungeon does not support heatmaps.',
             ],
         ],
     ],

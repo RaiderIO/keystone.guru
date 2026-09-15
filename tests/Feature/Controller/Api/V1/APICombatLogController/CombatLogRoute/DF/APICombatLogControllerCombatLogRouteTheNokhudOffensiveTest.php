@@ -3,7 +3,7 @@
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\DF;
 
 use App\Models\Affix;
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICombatLogControllerCombatLogRouteTestBase;
@@ -17,7 +17,7 @@ class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APIComb
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE;
+        return DungeonKey::THE_NOKHUD_OFFENSIVE->value;
     }
 
     #[Test]
@@ -27,16 +27,12 @@ class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APIComb
         $postBody = $this->getJsonData('DF/df_s4_the_nokhud_offensive_no_roster_14', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 21, 494); // This route just doesn't match count for some reason
+        $this->validatePulls($postBody, $responseArr, 21, 494); // This route just doesn't match count for some reason
         $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 
@@ -47,16 +43,12 @@ class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APIComb
         $postBody = $this->getJsonData('DF/df_s4_the_nokhud_offensive_no_roster_8', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 24, 528);
+        $this->validatePulls($postBody, $responseArr, 24, 528);
         $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_ENTANGLING, Affix::AFFIX_BOLSTERING);
     }
 }

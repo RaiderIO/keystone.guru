@@ -117,10 +117,6 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <a href="{{ route('admin.tools.enemyforces.import.view') }}">{{ __('view_admin.tools.list.enemy_forces_import') }}</a>
-                        <small class="text-muted d-block">{{ __('view_admin.tools.list.enemy_forces_import_description') }}</small>
-                    </li>
-                    <li class="list-group-item">
                         <a href="{{ route('admin.tools.enemyforces.recalculate.view') }}">{{ __('view_admin.tools.list.enemy_forces_recalculate') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.enemy_forces_recalculate_description') }}</small>
                     </li>
@@ -161,6 +157,10 @@
                     <li class="list-group-item">
                         <a href="{{ route('admin.tools.combatlog.rundata') }}">{{ __('view_admin.tools.list.combatlog_run_data') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.combatlog_run_data_description') }}</small>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.combatlog.route.coverage.view') }}">{{ __('view_admin.tools.list.combatlog_route_coverage') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.combatlog_route_coverage_description') }}</small>
                     </li>
                     <li class="list-group-item">
                         <a href="{{ route('admin.tools.combatlog.route.enemy_failures.view') }}">{{ __('view_admin.tools.list.combatlog_route_enemy_failures') }}</a>
@@ -259,6 +259,36 @@
                     <li class="list-group-item">
                         <a href="{{ route('admin.tools.bannedipaddresses.view') }}">{{ __('view_admin.tools.list.manage_banned_ip_addresses') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.manage_banned_ip_addresses_description') }}</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        {{-- Telemetry --}}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fas fa-chart-line"></i> {{ __('view_admin.tools.list.subheader_telemetry') }}
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.telemetry.view') }}">{{ __('view_admin.tools.list.view_telemetry') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.view_telemetry_description') }}</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        {{-- Patreon --}}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fab fa-patreon"></i> {{ __('view_admin.tools.list.subheader_patreon') }}
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.patreon.grants.view') }}">{{ __('view_admin.tools.list.manage_patreon_manual_grants') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.manage_patreon_manual_grants_description') }}</small>
                     </li>
                 </ul>
             </div>

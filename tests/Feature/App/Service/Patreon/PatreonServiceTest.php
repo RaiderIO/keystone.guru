@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Service\Patreon;
 
 use App\Models\Patreon\PatreonBenefit;
+use App\Models\Patreon\PatreonManualGrant;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
@@ -36,6 +37,10 @@ final class PatreonServiceTest extends PublicTestCase
                     $this->patreonUserLink->delete();
                 }
             } finally {
+                if ($this->user !== null) {
+                    PatreonManualGrant::query()->where('user_id', $this->user->id)->delete();
+                }
+
                 $this->user?->delete();
             }
         } finally {
@@ -111,6 +116,76 @@ final class PatreonServiceTest extends PublicTestCase
         // Assert
         $this->assertSame(ApplyPaidBenefitsForMemberResult::UnknownBenefits, $result);
         $this->assertDatabaseHas('patreon_user_benefits', ['id' => $patreonUserBenefit->id]);
+    }
+
+    #[Test]
+    public function applyPaidBenefitsForMember_givenUserWithActiveManualGrant_doesNotRevokeTheirBenefits(): void
+    {
+        // Arrange - a real patron (real tokens, so the permanent-token exception does not apply) who was
+        // manually granted all benefits. Before #4385 the sync happily diffed those benefits away again,
+        // which made a manual override on an already-linked user silently evaporate within the hour.
+        $this->createPatron();
+
+        $patreonUserBenefit = PatreonUserBenefit::create([
+            'patreon_user_link_id' => $this->patreonUserLink->id,
+            'patreon_benefit_id'   => PatreonBenefit::ALL[PatreonBenefit::ANIMATED_POLYLINES],
+        ]);
+
+        PatreonManualGrant::factory()->create([
+            'user_id' => $this->user->id,
+            'reason'  => 'Bought the top tier but it never applied',
+        ]);
+
+        // The campaign says this member is only entitled to ad-free, so an unguarded sync would revoke
+        // the granted animated polylines and add ad-free instead
+        $campaignBenefits = [
+            ['id' => '10', 'type' => 'benefit', 'attributes' => ['title' => PatreonBenefit::AD_FREE]],
+        ];
+        $campaignTiers = $this->campaignTiersWithBenefitIds(['10']);
+
+        // Act
+        $result = $this->applyPaidBenefitsForMember($campaignBenefits, $campaignTiers);
+
+        // Assert
+        $this->assertSame(ApplyPaidBenefitsForMemberResult::Applied, $result);
+        $this->assertDatabaseHas('patreon_user_benefits', ['id' => $patreonUserBenefit->id]);
+        $this->assertSame(1, PatreonUserBenefit::query()
+            ->where('patreon_user_link_id', $this->patreonUserLink->id)
+            ->count());
+    }
+
+    #[Test]
+    public function applyPaidBenefitsForMember_givenUserWithRevokedManualGrant_syncsThemNormally(): void
+    {
+        // Arrange - the same setup, except the grant has been revoked; the user is back to being an
+        // ordinary patron and their benefits must follow the tier they actually pay for again
+        $this->createPatron();
+
+        PatreonUserBenefit::create([
+            'patreon_user_link_id' => $this->patreonUserLink->id,
+            'patreon_benefit_id'   => PatreonBenefit::ALL[PatreonBenefit::ANIMATED_POLYLINES],
+        ]);
+
+        PatreonManualGrant::factory()->revoked()->create(['user_id' => $this->user->id]);
+
+        $campaignBenefits = [
+            ['id' => '10', 'type' => 'benefit', 'attributes' => ['title' => PatreonBenefit::AD_FREE]],
+        ];
+        $campaignTiers = $this->campaignTiersWithBenefitIds(['10']);
+
+        // Act
+        $result = $this->applyPaidBenefitsForMember($campaignBenefits, $campaignTiers);
+
+        // Assert
+        $this->assertSame(ApplyPaidBenefitsForMemberResult::Applied, $result);
+        $this->assertDatabaseHas('patreon_user_benefits', [
+            'patreon_user_link_id' => $this->patreonUserLink->id,
+            'patreon_benefit_id'   => PatreonBenefit::ALL[PatreonBenefit::AD_FREE],
+        ]);
+        $this->assertDatabaseMissing('patreon_user_benefits', [
+            'patreon_user_link_id' => $this->patreonUserLink->id,
+            'patreon_benefit_id'   => PatreonBenefit::ALL[PatreonBenefit::ANIMATED_POLYLINES],
+        ]);
     }
 
     #[Test]

@@ -44,6 +44,12 @@ return [
                 'cta'         => 'View activity',
                 'subtitle'    => 'Updated daily',
             ],
+            'tuning' => [
+                'title'        => 'Spell Tuning',
+                'description'  => 'What each game patch changed about NPC spells: damage going up or down, durations, cooldowns - in the numbers players actually see.',
+                'cta'          => 'View tuning changes',
+                'count_suffix' => 'builds compared',
+            ],
             'class' => [
                 'title'        => 'By Class',
                 'description'  => 'See which of your crowd control spells work on which NPCs, grouped by class.',
@@ -64,7 +70,17 @@ return [
         'school_recorded'         => ':spell deals :schools damage',
         'immunity_bypass_added'   => ':spell was observed landing through :property',
         'immunity_bypass_removed' => ':spell was no longer observed landing through :property',
-        'property'                => [
+        // Subject-less variants: used when the row already leads with the spell link as its
+        // subject, so the description does not repeat the spell name
+        'spell_created_no_subject'           => 'Added to database',
+        'counter_added_no_subject'           => 'Can now be countered by :property',
+        'counter_removed_no_subject'         => 'Can no longer be countered by :property',
+        'school_recorded_no_subject'         => 'Deals :schools damage',
+        'immunity_bypass_added_no_subject'   => 'Observed landing through :property',
+        'immunity_bypass_removed_no_subject' => 'No longer observed landing through :property',
+        'count'                              => ':count event|:count events',
+        'more'                               => 'and :count more',
+        'property'                           => [
             'aura'   => 'Aura',
             'debuff' => 'Debuff',
         ],
@@ -79,15 +95,18 @@ return [
             'table_header_spells'   => 'Spells',
         ],
         'show' => [
-            'title' => ':name - NPC Compendium',
+            'title'   => ':name - NPC Compendium',
+            'wowhead' => 'View on Wowhead',
         ],
         'sections' => [
             'header' => [
                 'level' => 'Level',
             ],
             'characteristics' => [
-                'title'   => 'Characteristics',
-                'tooltip' => 'What is this NPC affected by?',
+                'title'        => 'Characteristics',
+                'tooltip'      => 'What is this NPC affected by?',
+                'empty'        => 'No characteristics recorded.',
+                'not_observed' => 'Not observed:',
             ],
             'spells' => [
                 'title'                              => 'Spells',
@@ -130,6 +149,9 @@ return [
                 'aura'   => 'Aura',
                 'debuff' => 'Debuff',
             ],
+            'description' => [
+                'title' => 'Description',
+            ],
             'details' => [
                 'title'                              => 'Details',
                 'header_schools'                     => 'Schools',
@@ -162,6 +184,11 @@ return [
                 'title' => 'Recent Activity',
                 'empty' => 'No activity recorded yet.',
             ],
+            'tuning_changes' => [
+                'title'        => 'Tuning changes',
+                'empty'        => 'No tuning changes recorded for this spell.',
+                'build_header' => 'Build :to (compared with :from)',
+            ],
         ],
     ],
     'activity' => [
@@ -176,6 +203,40 @@ return [
             'empty'  => 'No activity recorded for this day.',
         ],
     ],
+    'sections' => [
+        // Shared primitive rendering a list of spell tuning changes (compendium/sections/tuning_change_list)
+        'tuning_change_list' => [
+            'kinds' => [
+                'damage'   => 'Damage',
+                'healing'  => 'Healing',
+                'duration' => 'Duration',
+                'period'   => 'Period',
+                'radius'   => 'Radius',
+                'count'    => 'Count',
+                'value'    => 'Value',
+            ],
+            'coefficient'    => 'coefficient',
+            'rewritten'      => 'Description rewritten',
+            'added'          => 'Description added',
+            'no_description' => '(no description)',
+            'changed_to'     => 'changed to',
+            'shared_by'      => ':count spell records share this change',
+        ],
+    ],
+    'tuning' => [
+        'index' => [
+            'title'             => 'Spell Tuning - Compendium',
+            'header'            => 'Spell Tuning',
+            'header_dungeon'    => 'Spell Tuning - :dungeon',
+            'intro'             => 'What each game patch changed about NPC spells, in the numbers players actually see. Only changes to the numbers count - a reworded description with the same numbers is not listed.',
+            'empty'             => 'No tuning changes recorded yet.',
+            'all_dungeons'      => 'All dungeons',
+            'show_all_dungeons' => 'Show all dungeons',
+            'build_title'       => 'Build :build',
+            'build_subtitle'    => 'compared with :from',
+            'changed_spells'    => ':count spell changed|:count spells changed',
+        ],
+    ],
     'class' => [
         'index' => [
             'title'  => 'Compendium - By Class',
@@ -185,9 +246,14 @@ return [
             'title'                       => ':name - By Class',
             'table_header_spell'          => 'Spell',
             'table_header_characteristic' => 'Characteristic',
-            'table_header_npcs'           => 'Affected NPCs',
+            'table_header_npcs'           => 'Notable NPCs',
             'no_spells'                   => 'No CC spells found for this class in this game version.',
             'no_npcs'                     => '-',
+            'npcs_no_effect'              => 'Immune',
+            'npcs_works_on'               => 'Works on',
+            'npcs_no_exceptions'          => 'Nothing unexpected',
+            'npcs_no_data'                => 'No data',
+            'npcs_description'            => 'Only the surprises are listed - trash that resisted, and bosses it landed on anyway. Anything behaving the way you already expect is left out. "No effect observed" means other crowd control from this table has been seen landing on that NPC but this one never has: it is evidence, not a confirmed immunity.',
             'counters'                    => [
                 'title'              => 'Counterable abilities',
                 'racial'             => 'Racial (:race)',

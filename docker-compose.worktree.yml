@@ -27,6 +27,13 @@ services:
       # Live-shares the main checkout's generated thumbnails (#3548) — worktrees don't run
       # Horizon/puppeteer themselves, so this is the only way they see thumbnails at all.
       - ${MAIN_THUMBNAILS_DIR}:/var/www/storage/app/public/thumbnails
+      # The assets repo, at the same path the main stack mounts it (#3993): `base_path('../keystone.guru.assets')`
+      # resolves to /var/keystone.guru.assets, so `mapicon:downloadmdtitemicons` and `mapicon:generateitemicons`
+      # run from a worktree too. Read-write on purpose — both commands write icons. Note this is the one mount
+      # here that is NOT worktree-isolated: writes land in the shared assets repo, so `git status` it afterwards.
+      # The default resolves keystone.guru-worktrees/<branch> -> the main checkout's sibling, which is where
+      # sh/worktree.sh and docker-compose.yml both expect the repo; sh/worktree.sh writes it explicitly.
+      - ${MAIN_ASSETS_DIR:-../../keystone.guru.assets}:/var/keystone.guru.assets
 
   nginx:
     image: nginx:alpine

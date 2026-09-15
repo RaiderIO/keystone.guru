@@ -24,6 +24,19 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importMappingVersionFromMDTEnd(): void;
 
+    /**
+     * The import refused to create a new mapping version because the current one is awaiting MDT acceptance
+     * of our own changes - see MDTMappingPendingAcceptanceException (#4281).
+     */
+    public function importMappingVersionFromMDTPendingAcceptance(string $key, int $version): void;
+
+    public function acceptMDTMappingForPendingMappingVersion(
+        string  $key,
+        int     $version,
+        ?string $mdtMappingHash,
+        string  $latestMdtMappingHash,
+    ): void;
+
     public function importDungeonMappingVersionFromMDTNoChangeDetected(
         string  $key,
         ?string $latestMdtMappingHash,
@@ -43,12 +56,11 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importNpcsDataFromMDTIgnoreNpc(int $npcId): void;
 
-    public function importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
+    public function importNpcsDataFromMDTSkipHealthOverwrite(int $npcId, int $existingHealth, int $mdtHealth): void;
+
+    public function importNpcsDataFromMDTNpcsUpdate(
         int $npcsUpdated,
         int $npcsInserted,
-        int $npcSpellsDeleted,
-        int $npcSpellsInserted,
-        int $npcDungeonsDeleted,
         int $npcDungeonsInserted,
     ): void;
 
@@ -58,19 +70,7 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importNpcsDataFromMDTEnd(): void;
 
-    public function importSpellDataFromMDTStart(string $key): void;
-
-    public function importSpellDataFromMDTSpellInExcludeList(): void;
-
-    public function importSpellDataFromMDTResult(int $spellCount, int $spellDungeonCount): void;
-
-    public function importSpellDataFromMDTFailed(): void;
-
-    public function importSpellDataFromMDTEnd(): void;
-
     public function importNpcsStart(): void;
-
-    public function importNpcsDataFromMDTSpellInExcludeList(): void;
 
     public function importNpcsDataFromMDTSaveNewNpc(int $npcId): void;
 
@@ -161,11 +161,29 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemyPatrolsEnd(): void;
 
+    public function importMappingVersionFromMDTNpcSetReplaced(
+        string $dungeonKey,
+        int    $previousNpcCount,
+        int    $incomingNpcCount,
+        int    $keptPercentage,
+        bool   $forceImport,
+    ): void;
+
     public function importMapPOIsStart(): void;
 
     public function importMapPOIsMDTHasMapPOIs(): void;
 
     public function importMapPOIsMissingTranslation(string $translationKey): void;
+
+    public function importMapPOIsDeletedClonedGenericItemMapIcons(int $deletedCount): void;
+
+    public function importMapPOIsUnhandledMapPOI(
+        string $mdtMapPOIType,
+        ?int   $spellId,
+        ?int   $textureFileDataId,
+        int    $subLevel,
+    ): void;
+
     public function importMapPOIsCreatedNewMapIcon(int $mapIconId, int $floorId, int $mapIconTypeId): void;
 
     /**
@@ -180,6 +198,11 @@ interface MDTMappingImportServiceLoggingInterface
     ): void;
 
     public function importMapPOIsHaveExistingFloorSwitchMarkers(int $count): void;
+
+    /**
+     * @param array<string, float> $latLng
+     */
+    public function importMapPOIsHaveExistingDungeonStartMapIcon(array $latLng): void;
 
     public function importMapPOIsEnd(): void;
 }

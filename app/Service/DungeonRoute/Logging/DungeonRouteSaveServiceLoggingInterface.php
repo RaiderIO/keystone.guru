@@ -8,6 +8,8 @@ interface DungeonRouteSaveServiceLoggingInterface
 
     public function saveFailed(?int $dungeonRouteId): void;
 
+    public function saveTeamAssignmentDenied(?int $dungeonRouteId, ?int $currentTeamId, ?int $requestedTeamId, ?int $userId): void;
+
     public function saveTemplateCloneStart(int $dungeonRouteId, int $templateRouteId): void;
 
     public function saveTemplateCloneEnd(int $dungeonRouteId): void;

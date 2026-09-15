@@ -15,6 +15,7 @@ use App\Features\CreatorProfiles;
 use App\Features\NpcCompendium;
 use App\Http\Controllers\Admin\AdminDungeonRouteController;
 use App\Http\Controllers\AdminTools\AdminToolsArtisanCommandsController;
+use App\Http\Controllers\AdminTools\AdminToolsAutoRouteCoverageController;
 use App\Http\Controllers\AdminTools\AdminToolsBannedIpAddressController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogCriteriaController;
@@ -27,7 +28,9 @@ use App\Http\Controllers\AdminTools\AdminToolsFeaturesController;
 use App\Http\Controllers\AdminTools\AdminToolsMdtController;
 use App\Http\Controllers\AdminTools\AdminToolsMessageBannerController;
 use App\Http\Controllers\AdminTools\AdminToolsNpcController;
+use App\Http\Controllers\AdminTools\AdminToolsPatreonGrantsController;
 use App\Http\Controllers\AdminTools\AdminToolsSpellsController;
+use App\Http\Controllers\AdminTools\AdminToolsTelemetryController;
 use App\Http\Controllers\AdminTools\AdminToolsThumbnailsController;
 use App\Http\Controllers\AdminTools\AdminToolsWagoGgController;
 use App\Http\Controllers\AdminToolsController;
@@ -71,6 +74,7 @@ use App\Http\Controllers\Compendium\ClassCompendiumController;
 use App\Http\Controllers\Compendium\CompendiumController;
 use App\Http\Controllers\Compendium\NpcCompendiumController;
 use App\Http\Controllers\Compendium\SpellCompendiumController;
+use App\Http\Controllers\Compendium\SpellTuningCompendiumController;
 use App\Http\Controllers\CreatorDirectoryController;
 use App\Http\Controllers\Dungeon\DungeonController;
 use App\Http\Controllers\Dungeon\DungeonExploreController;
@@ -103,6 +107,7 @@ use App\Http\Controllers\UserReportController;
 use App\Http\Controllers\Webhook\GithubWebhookController;
 use App\Http\Controllers\Webhook\WowheadWebhookController;
 use App\Http\Middleware\WowheadCors;
+use App\Models\DungeonDifficulty;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route as RoutingRoute;
 use Symfony\Component\HttpFoundation\Response;
@@ -120,7 +125,7 @@ Route::prefix('webhook')->group(static function () {
     });
 });
 
-Route::middleware(['debugbarmessagelogger', 'debug_info_context_logger'])->group(static function () {
+Route::middleware(['auth', 'role:admin', 'debugbarmessagelogger', 'debug_info_context_logger'])->group(static function () {
     Route::get('benchmark', new SiteController()->benchmark(...));
 });
 
@@ -178,6 +183,20 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::middleware(sprintf('feature_active:%s', NpcCompendium::class))
         ->prefix('compendium')->group(static function () {
             Route::get('/', new CompendiumController()->index(...))->name('compendium.index');
+            // Every page whose content is scoped to a dungeon lives under the dungeon it is about.
+            // The literal segment keeps the slug unambiguous, so no section here can ever be mistaken
+            // for a dungeon (or the other way around) no matter what a dungeon is called.
+            Route::prefix('dungeon/{dungeon}')->group(static function () {
+                Route::get('npc', new NpcCompendiumController()->indexDungeon(...))->name('npc.compendium.index.dungeon');
+                Route::get('spell', new SpellCompendiumController()->indexDungeon(...))->name('spell.compendium.index.dungeon');
+                Route::get('activity', new NpcCompendiumController()->activity(...))->name('compendium.activity');
+                Route::get('activity/{date}', new NpcCompendiumController()->activityDay(...))->name('compendium.activity.day');
+                Route::get('tuning', new SpellTuningCompendiumController()->indexDungeon(...))->name('compendium.tuning');
+                // withoutScopedBindings: a child binding with a custom key is scoped to its parent by
+                // default, which would have Laravel resolve the class through $dungeon->characterClasses()
+                Route::get('class/{characterClass:slug}', new ClassCompendiumController()->showDungeon(...))
+                    ->withoutScopedBindings()->name('compendium.class.show.dungeon');
+            });
             Route::prefix('npc')->group(static function () {
                 Route::get('/', new NpcCompendiumController()->index(...))->name('npc.compendium.index');
                 Route::get('/{npc}', new NpcCompendiumController()->show(...))->name('npc.compendium.show');
@@ -186,16 +205,11 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/', new SpellCompendiumController()->index(...))->name('spell.compendium.index');
                 Route::get('/{spell}', new SpellCompendiumController()->show(...))->name('spell.compendium.show');
             });
-            Route::prefix('activity')->group(static function () {
-                Route::get('/', new NpcCompendiumController()->activityIndex(...))->name('compendium.activity.index');
-                Route::prefix('{dungeon}')->group(static function () {
-                    Route::get('/', new NpcCompendiumController()->activity(...))->name('compendium.activity');
-                    Route::get('/{date}', new NpcCompendiumController()->activityDay(...))->name('compendium.activity.day');
-                });
-            });
+            Route::get('activity', new NpcCompendiumController()->activityIndex(...))->name('compendium.activity.index');
+            Route::get('tuning', new SpellTuningCompendiumController()->index(...))->name('compendium.tuning.index');
             Route::prefix('class')->group(static function () {
                 Route::get('/', new ClassCompendiumController()->index(...))->name('compendium.class.index');
-                Route::get('/{characterClass:key}', new ClassCompendiumController()->show(...))->name('compendium.class.show');
+                Route::get('/{characterClass:slug}', new ClassCompendiumController()->show(...))->name('compendium.class.show');
             });
         });
 
@@ -305,8 +319,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             // Edit your own dungeon routes
             Route::get('edit', new DungeonRouteController()->edit(...))->name('dungeonroute.edit');
             Route::get('edit/{floorIndex}', new DungeonRouteController()->editFloor(...))->name('dungeonroute.edit.floor');
-            // Submit a patch for your own dungeon route
-            Route::patch('edit', new DungeonRouteController()->update(...))->name('dungeonroute.update');
             Route::middleware(['auth', 'role:user|admin'])->group(static function () {
                 // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
                 Route::get('live', new LiveSessionController()->create(...))->name('dungeonroute.livesession.create');
@@ -317,6 +329,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 // Claiming a route that was made by /sandbox functionality
                 Route::get('claim', new DungeonRouteController()->claim(...))->name('dungeonroute.claim');
                 Route::get('migrate/{seasonalType}', new DungeonRouteController()->migrateToSeasonalType(...))->name('dungeonroute.migrate');
+                // Apply or discard a mapping version upgrade draft. Both take the DRAFT as their route
+                // model - that is the page the buttons live on.
+                Route::post('upgrade/apply', new DungeonRouteController()->applyUpgrade(...))->name('dungeonroute.upgrade.apply');
+                Route::post('upgrade/discard', new DungeonRouteController()->discardUpgrade(...))->name('dungeonroute.upgrade.discard');
             });
         });
     });
@@ -383,7 +399,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                         Route::patch('/', new FloorController()->update(...))->name('admin.floor.update');
                         Route::get('mapping', new FloorController()->mapping(...))->name('admin.floor.edit.mapping');
                         // Speedrun required npcs
-                        Route::prefix('speedrunrequirednpcs')->group(static function () {
+                        Route::prefix('speedrunrequirednpcs')->whereIn('difficulty', DungeonDifficulty::values())->group(static function () {
                             Route::get('{difficulty}/new', new DungeonSpeedrunRequiredNpcsController()->create(...))->name('admin.dungeonspeedrunrequirednpc.new');
                             Route::post('{difficulty}/new', new DungeonSpeedrunRequiredNpcsController()->createSave(...))->name('admin.dungeonspeedrunrequirednpc.savenew');
                             Route::delete('{difficulty}/{dungeonspeedrunrequirednpc}', new DungeonSpeedrunRequiredNpcsController()->delete(...))->name('admin.dungeonspeedrunrequirednpc.delete');
@@ -468,7 +484,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::prefix('user')->group(static function () {
                 Route::post('{user}/make/{role}', new UserController()->makeRole(...))->name('admin.user.make.role');
                 Route::delete('{user}/delete', new UserController()->delete(...))->name('admin.user.delete');
-                Route::get('{user}/grantAllBenefits', new UserController()->grantAllBenefits(...))->name('admin.user.grantallbenefits');
+                // POST rather than GET: granting hands out paid benefits for free and now carries a required reason (#4385)
+                Route::post('{user}/grantAllBenefits', new UserController()->grantAllBenefits(...))->name('admin.user.grantallbenefits');
             });
             Route::get('users', new UserController()->get(...))->name('admin.users');
             Route::get('userreports', new UserReportController()->get(...))->name('admin.userreports');
@@ -499,9 +516,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::post('/dungeonroute/mappingversions/{mappingVersion}/upgrade', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersionsUpgrade(...))->name('admin.tools.dungeonroute.mappingversionusage.upgrade');
                 Route::get('/dungeonroute/{dungeonRoute:id}', new AdminToolsDungeonRouteController()->dungeonrouteView(...))->name('admin.tools.dungeonroute.view.get');
 
-                // Import enemy forces
-                Route::get('enemyforces/import', new AdminToolsEnemyForcesController()->enemyforcesimport(...))->name('admin.tools.enemyforces.import.view');
-                Route::post('enemyforces/import', new AdminToolsEnemyForcesController()->enemyforcesimportsubmit(...))->name('admin.tools.enemyforces.import.submit');
+                // Enemy forces
                 Route::get('enemyforces/recalculate', new AdminToolsEnemyForcesController()->enemyforcesrecalculate(...))->name('admin.tools.enemyforces.recalculate.view');
                 Route::post('enemyforces/recalculate', new AdminToolsEnemyForcesController()->enemyforcesrecalculatesubmit(...))->name('admin.tools.enemyforces.recalculate.submit');
 
@@ -513,6 +528,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('combatlog/regenerate', new AdminToolsCombatLogController()->combatlogregenerate(...))->name('admin.tools.combatlog.regenerate.view');
                 Route::post('combatlog/regenerate', new AdminToolsCombatLogController()->combatlogregeneratesubmit(...))->name('admin.tools.combatlog.regenerate.submit');
                 Route::get('combatlog/route/enemy-failures', new AdminToolsCombatLogController()->combatLogRouteEnemyFailures(...))->name('admin.tools.combatlog.route.enemy_failures.view');
+                Route::get('combatlog/route/enemy-failures/{floorIndex}', new AdminToolsCombatLogController()->combatLogRouteEnemyFailuresFloor(...))->name('admin.tools.combatlog.route.enemy_failures.view.floor');
+                Route::get('combatlog/route/coverage', new AdminToolsAutoRouteCoverageController()->index(...))->name('admin.tools.combatlog.route.coverage.view');
                 Route::get('combatlog/criteria', new AdminToolsCombatLogCriteriaController()->criteria(...))->name('admin.tools.combatlog.criteria.view');
                 Route::post('combatlog/criteria/reset', new AdminToolsCombatLogCriteriaController()->criteriaReset(...))->name('admin.tools.combatlog.criteria.reset');
                 Route::post('combatlog/criteria/thresholds', new AdminToolsCombatLogCriteriaController()->updateThresholds(...))->name('admin.tools.combatlog.criteria.thresholds');
@@ -574,7 +591,14 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('datadump/exportdungeondata', new AdminToolsDataDumpController()->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
                 Route::get('readonly/toggle', new AdminToolsController()->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
 
+                // Telemetry
+                Route::get('telemetry', new AdminToolsTelemetryController()->index(...))->name('admin.tools.telemetry.view');
+                Route::get('telemetry/data', new AdminToolsTelemetryController()->data(...))->name('admin.tools.telemetry.data');
+
                 // Banned IP addresses
+                Route::get('patreon/grants', new AdminToolsPatreonGrantsController()->index(...))->name('admin.tools.patreon.grants.view');
+                Route::delete('patreon/grants/{user}', new AdminToolsPatreonGrantsController()->revoke(...))->name('admin.tools.patreon.grants.revoke');
+
                 Route::get('bannedipaddresses', new AdminToolsBannedIpAddressController()->index(...))->name('admin.tools.bannedipaddresses.view');
                 Route::post('bannedipaddresses', new AdminToolsBannedIpAddressController()->store(...))->name('admin.tools.bannedipaddresses.store');
                 Route::delete('bannedipaddresses/{bannedIpAddress}', new AdminToolsBannedIpAddressController()->destroy(...))->name('admin.tools.bannedipaddresses.destroy');
@@ -596,7 +620,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::put('/{tag}/all', new AjaxTagController()->updateAll(...))->name('ajax.tag.updateall');
             Route::delete('/{tag}/all', new AjaxTagController()->deleteAll(...))->name('ajax.tag.deleteall');
         });
-        Route::prefix('heatmap')->group(static function () {
+        Route::prefix('heatmap')->middleware('throttle:heatmap-data')->group(static function () {
             Route::get('/data', new AjaxHeatmapController()->getData(...))->name('ajax.heatmap.data');
         });
 
@@ -605,9 +629,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('userreport/enemy/{enemy}', new AjaxUserReportController()->enemyStore(...))->name('ajax.userreport.enemy');
         });
 
-        Route::get('/routes', new AjaxDungeonRouteController()->get(...));
-
         Route::middleware('throttle:search-dungeonroute')->group(static function () {
+            Route::get('/routes', new AjaxDungeonRouteController()->get(...));
+
             Route::get('/search', new AjaxDungeonRouteController()->htmlsearch(...));
             Route::get('/search/{category}', new AjaxDungeonRouteController()->htmlsearchcategory(...));
 
@@ -619,12 +643,19 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('/mdt/details', new MDTImportController()->details(...))->name('mdt.details');
         });
 
-        Route::post('/profile/legal', new AjaxProfileController()->legalAgree(...));
-        Route::post('/profile/adfree/{user:public_key}', new AjaxProfileController()->addAdFreeGiveaway(...));
-        Route::delete('/profile/adfree/{user:public_key}', new AjaxProfileController()->removeAdFreeGiveaway(...));
+        // legalAgree only mutates the caller's own record, so plain 'auth' is enough - a role-less
+        // authenticated user (e.g. the seeded Internal Team account) must still be able to clear the
+        // legal modal, which re-shows on every page until legal_agreed is set.
+        Route::middleware('auth')->group(static function () {
+            Route::post('/profile/legal', new AjaxProfileController()->legalAgree(...));
+        });
+        Route::middleware(['auth', 'role:user|admin'])->group(static function () {
+            Route::post('/profile/adfree/{user:public_key}', new AjaxProfileController()->addAdFreeGiveaway(...));
+            Route::delete('/profile/adfree/{user:public_key}', new AjaxProfileController()->removeAdFreeGiveaway(...));
+        });
 
         // Metrics
-        Route::prefix('metric')->group(static function () {
+        Route::middleware('throttle:store-metric')->prefix('metric')->group(static function () {
             Route::post('/', new AjaxMetricController()->store(...))->name('ajax.metric.store');
             Route::post('/route/{dungeonRoute}', new AjaxMetricController()->storeDungeonRoute(...))->name('ajax.metric.dungeonroute.store');
         });
@@ -691,6 +722,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::prefix('combatlogroute')->group(static function () {
                     Route::get('/enemy-failures', new AjaxAdminCombatLogRouteController()->getEnemyFailures(...))
                         ->name('ajax.admin.combatlogroute.enemy_failures');
+                    Route::get('/enemy-failures/clusters', new AjaxAdminCombatLogRouteController()->getEnemyFailureClusters(...))
+                        ->name('ajax.admin.combatlogroute.enemy_failures.clusters');
                     Route::delete('/enemy-failures', new AjaxAdminCombatLogRouteController()->deleteEnemyFailures(...))
                         ->name('ajax.admin.combatlogroute.enemy_failures.delete');
                 });
@@ -702,6 +735,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
         // May be performed without being logged in (sandbox functionality)
         Route::prefix('{dungeonRoute}')->group(static function () {
+            Route::get('/brushline/{brushline}', new AjaxBrushlineController()->show(...))->name('ajax.dungeonroute.brushline.show');
             Route::post('/brushline', new AjaxBrushlineController()->store(...))->name('ajax.dungeonroute.brushline.create');
             Route::put('/brushline/{brushline}', new AjaxBrushlineController()->store(...))->name('ajax.dungeonroute.brushline.update');
             Route::delete('/brushline/{brushline}', new AjaxBrushlineController()->delete(...))->name('ajax.dungeonroute.brushline.delete');
@@ -720,10 +754,12 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('/pridefulenemy/{enemy}', new AjaxPridefulEnemyController()->store(...));
             Route::delete('/pridefulenemy/{enemy}', new AjaxPridefulEnemyController()->delete(...));
 
+            Route::get('/path/{path}', new AjaxPathController()->show(...))->name('ajax.dungeonroute.path.show');
             Route::post('/path', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.create');
             Route::put('/path/{path}', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.update');
             Route::delete('/path/{path}', new AjaxPathController()->delete(...))->name('ajax.dungeonroute.path.delete');
 
+            Route::get('/arrow/{arrow}', new AjaxArrowController()->show(...))->name('ajax.dungeonroute.arrow.show');
             Route::post('/arrow', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.create');
             Route::put('/arrow/{arrow}', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.update');
             Route::delete('/arrow/{arrow}', new AjaxArrowController()->delete(...))->name('ajax.dungeonroute.arrow.delete');
@@ -734,7 +770,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::post('/clone/team/{team}', new AjaxDungeonRouteController()->cloneToTeam(...));
             });
 
-            Route::middleware('throttle:mdt-export')->group(static function () {
+            // The signature is relative: it covers the path and query string only, so whichever
+            // scheme/host the ALB and CloudFlare hand us can never invalidate it
+            Route::middleware(['throttle:mdt-export', 'signed:relative'])->group(static function () {
                 Route::get('/mdtExport', new AjaxDungeonRouteController()->mdtExport(...))->name('api.dungeonroute.mdtexport');
             });
 

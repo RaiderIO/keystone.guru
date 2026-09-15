@@ -83,8 +83,8 @@ return [
             ],
             'arrow' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
+                    'start' => 'Haz clic para colocar el inicio de la flecha.',
+                    'cont'  => 'Haz clic para colocar la punta de la flecha.',
                 ],
             ],
         ],

@@ -3,25 +3,18 @@
 namespace App\Console\Commands\Scheduler\Telemetry\Measurement;
 
 use App\Models\Team;
-use InfluxDB\Point;
+use App\Models\Telemetry\TelemetryMetric;
+use App\Service\Telemetry\Dtos\TelemetryDataPoint;
 
 class TeamCount extends Measurement
 {
     /**
      * {@inheritDoc}
      */
-    public function getPoints(): array
+    public function getDataPoints(): array
     {
         return [
-            new Point(
-                'team_count',
-                null,
-                $this->getTags(),
-                [
-                    'all' => Team::count(),
-                ],
-                time(),
-            ),
+            new TelemetryDataPoint(TelemetryMetric::MEASUREMENT_TEAM_COUNT, 'all', Team::count()),
         ];
     }
 }

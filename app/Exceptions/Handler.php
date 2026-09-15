@@ -4,14 +4,19 @@ namespace App\Exceptions;
 
 use App\Exceptions\Logging\HandlerLoggingInterface;
 use App\Models\User;
+use App\Service\Request\ApiRequestServiceInterface;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\MalformedUrlException;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\ValidationException;
 use MarvinLabs\DiscordLogger\Discord\Exceptions\MessageCouldNotBeSent;
 use Override;
@@ -47,6 +52,7 @@ class Handler extends ExceptionHandler
         MethodNotAllowedHttpException::class,
         NotFoundHttpException::class,
         AccessDeniedHttpException::class,
+        MalformedUrlException::class,
         // No point in logging Discord message send failures to Discord
         MessageCouldNotBeSent::class,
     ];
@@ -63,6 +69,12 @@ class Handler extends ExceptionHandler
     #[Override]
     public function report(Throwable $e): void
     {
+        // Queued broadcast jobs retry on DNS failure, but Worker::runJob reports every attempt -
+        // this is a transient environment issue, not an application defect (#4341).
+        if ($e instanceof BroadcastException && str_contains($e->getMessage(), 'Could not resolve host')) {
+            return;
+        }
+
         // request() is not available in console
         $request = app()->runningInConsole() ? null : request();
 
@@ -73,6 +85,16 @@ class Handler extends ExceptionHandler
 
             if ($e instanceof TooManyRequestsHttpException) {
                 $handlerLogging->tooManyRequests($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $e);
+            } elseif ($e instanceof InvalidSignatureException) {
+                $hasSignature = $request?->query('signature') !== null;
+                $handlerLogging->invalidSignature(
+                    $request?->ip() ?? 'unknown IP',
+                    $request?->fullUrl(),
+                    $user?->id,
+                    $user?->name,
+                    $hasSignature,
+                    $hasSignature && !URL::signatureHasNotExpired($request),
+                );
             } elseif (!in_array($e::class, $this->dontReport)) {
                 // parent::report() below also reports the exception itself whenever shouldReport() allows it, so this
                 // record can be a duplicate - but only for that subset. $dontReport here is an exact class match while
@@ -112,6 +134,12 @@ class Handler extends ExceptionHandler
                         'model' => $e->getModel(),
                     ]),
                 ], StatusCode::NOT_FOUND);
+            } elseif ($e instanceof AuthenticationException) {
+                // AuthenticationException is not an HttpExceptionInterface, so without this check it
+                // falls through every instanceof branch below and hits the generic 500 tail instead
+                // of the 401 unauthenticated() already builds - a guest hitting any auth-gated
+                // /ajax/ or /api/ route would 500 instead of 401 (#3863).
+                return $this->unauthenticated($request, $e);
             }
 
             // Normalize the same way parent::render() would (AuthorizationException -> 403,
@@ -161,20 +189,30 @@ class Handler extends ExceptionHandler
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($this->shouldReturnJson($request, $exception)) {
-            return response()->json(['error' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
+            // defaultAjaxErrorFn() (resources/assets/js/custom/inline/layouts/app.js) only reads
+            // responseJSON.errors then responseJSON.message - 'error' was silently dropped, falling
+            // back to the generic "An error occurred" toast.
+            return response()->json(['message' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
         }
 
         return redirect()->guest('login');
     }
 
     /**
-     * No view composers run on /ajax/ (KeystoneGuruServiceProvider::boot(), gated by
-     * ViewService::shouldLoadViewVariables()) - not even for the handful of /ajax/ routes
-     * whitelisted there to deliberately render an HTML fragment on success (search/view). So an
-     * HTML error view rendered for ANY /ajax/ request is guaranteed to crash on a missing view
-     * variable (#3806). Force JSON for every /ajax/ error (matching how /api/ is already treated
-     * here) except ValidationException, which render() above already carves out since it never
-     * renders an HTML error view in the first place.
+     * An API request must never be answered with an HTML error view: no view composer runs for it
+     * (KeystoneGuruServiceProvider::boot() skips registering them for any path
+     * ViewService::shouldLoadViewVariables() rejects, which is every API path bar a few that render
+     * a view on purpose), so such a view is guaranteed to crash on a missing view variable
+     * (#3806, #3903). Force JSON for those - except ValidationException, which render() above
+     * already carves out since it never renders an HTML error view in the first place.
+     *
+     * Whether the request is an API request is ApiRequestService's call, not something derived from
+     * the view layer: it is resolved here rather than constructor-injected, matching how this class
+     * already resolves HandlerLoggingInterface. The previous hand-rolled check
+     * (str_starts_with($path, 'api/') || str_starts_with($path, 'ajax/')) that the service replaces
+     * had drifted in two ways: it never covered '/benchmark' at all, and Request::decodedPath()
+     * trims the trailing slash, so a bare "/api/" request decoded to "api" and silently failed
+     * "starts with 'api/'" (#3903).
      */
     #[Override]
     protected function shouldReturnJson($request, Throwable $e): bool
@@ -187,14 +225,8 @@ class Handler extends ExceptionHandler
             return parent::shouldReturnJson($request, $e);
         }
 
-        return $this->isApiRequest($request) || parent::shouldReturnJson($request, $e);
-    }
-
-    private function isApiRequest(Request $request): bool
-    {
-        $path = $request->decodedPath();
-
-        return str_starts_with($path, 'api/') || str_starts_with($path, 'ajax/');
+        return app(ApiRequestServiceInterface::class)->isApiRequest($request)
+            || parent::shouldReturnJson($request, $e);
     }
 
     /**

@@ -115,7 +115,7 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
      * write on success is asserted directly.
      *
      * importNpcsDataFromMDT() is stubbed out via a partial mock rather than left real: it save()s every MDT
-     * NPC, upserts NpcHealth, and mass-inserts NpcSpell/NpcDungeon, and for genuinely new NPCs also writes
+     * NPC, upserts NpcHealth, and mass-inserts NpcDungeon, and for genuinely new NPCs also writes
      * NpcEnemyForces into every historical mapping version - none of which is scoped to the new mapping
      * version, so a mapping-version delete cannot revert it. That would pollute the shared dev DB with
      * unrevertable rows on every run - exactly what #3737 itself warns about. throne_of_the_tides already
@@ -142,6 +142,7 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
             ->setConstructorArgs([
                 $this->app->make(CacheServiceInterface::class),
                 $this->app->make(CoordinatesServiceInterface::class),
+                $this->app->make(MDTAddonVersionServiceInterface::class),
                 $this->app->make(MDTMappingImportServiceLoggingInterface::class),
             ])
             ->onlyMethods(['importNpcsDataFromMDT'])
@@ -182,7 +183,7 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
      * the exact point #3755 describes, without needing to fabricate a genuine NPC-save failure.
      *
      * importNpcsDataFromMDT() is stubbed out for the same reason the success-path test above stubs it: it
-     * writes to shared Npc/NpcHealth/NpcSpell/NpcDungeon rows that are not scoped to the new mapping version,
+     * writes to shared Npc/NpcHealth/NpcDungeon rows that are not scoped to the new mapping version,
      * so a mapping-version delete cannot revert them. throne_of_the_tides already has every NPC MDT reports
      * for it seeded, so importNpcs()'s re-fetch of the dungeon's NPCs still finds a real NPC - with count > 0
      * - to reach the per-NPC try block that is being forced to fail.
@@ -211,6 +212,7 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
             ->setConstructorArgs([
                 $this->app->make(CacheServiceInterface::class),
                 $this->app->make(CoordinatesServiceInterface::class),
+                $this->app->make(MDTAddonVersionServiceInterface::class),
                 $mockLog,
             ])
             ->onlyMethods(['importNpcsDataFromMDT'])

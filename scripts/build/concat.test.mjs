@@ -1,4 +1,5 @@
 // @vitest-environment node
+import fs from 'node:fs';
 import path from 'node:path';
 import {describe, expect, it} from 'vitest';
 import {expandScriptList} from './concat.mjs';
@@ -23,6 +24,15 @@ describe('expandScriptList', () => {
 
         // Deterministic (sorted) glob expansion so builds are reproducible
         expect(inlineFiles).toEqual([...inlineFiles].sort());
+    });
+
+    it('expandScriptList_givenCustomScripts_everyCheckedInFileExistsOnDisk', () => {
+        // handlebars.js is gitignored and written by the handlebars build step, so it is absent on a fresh checkout
+        const generated = path.join(rootDir, 'resources/assets/js/handlebars.js');
+        const missing = expandScriptList(rootDir, customScripts)
+            .filter(file => file !== generated && !fs.existsSync(file));
+
+        expect(missing).toEqual([]);
     });
 
     it('expandScriptList_givenPlainPaths_returnsThemUnsortedInGivenOrder', () => {

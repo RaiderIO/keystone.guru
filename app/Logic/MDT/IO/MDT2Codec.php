@@ -64,6 +64,13 @@ final class MDT2Codec implements MDTStringCodecInterface
     private const MAX_ITEMS = 262144;
 
     /**
+     * Cap on how many trailing characters decodeBase64WithTrailingGarbageRecovery() will try
+     * stripping from an otherwise-invalid payload before giving up - see that method's docblock
+     * for why this is safe.
+     */
+    private const MAX_TRAILING_GARBAGE_BYTES = 8;
+
+    /**
      * @param string $string A (potential) MDT export string, e.g. pasted user input
      */
     public function appliesTo(string $string): bool
@@ -99,12 +106,72 @@ final class MDT2Codec implements MDTStringCodecInterface
             throw new MDT2DecodeException(sprintf('String does not start with %s', self::PREFIX));
         }
 
-        $binary = base64_decode(substr($string, strlen(self::PREFIX)), true);
+        $payload = substr($string, strlen(self::PREFIX));
 
-        if ($binary === false) {
-            throw new MDT2DecodeException('Unable to decode Base64 payload');
+        // Production has seen pastes containing a second (sometimes a byte-for-byte duplicate)
+        // `!~MDT2~...` export concatenated after the first, with anything from nothing to a chunk
+        // of unrelated note text in between - a doubled paste action, or a whole multi-route note
+        // copied instead of a single export. `!` and `~` fall outside the Base64 alphabet, so a
+        // genuine export's payload can never legitimately contain the prefix - any occurrence past
+        // the first is unambiguously the start of a second export, never a false positive. Try
+        // decoding just the first export before falling through to the single-payload attempt below.
+        $secondExportPosition = strpos($payload, self::PREFIX);
+        if ($secondExportPosition !== false) {
+            $firstExportPayload = substr($payload, 0, $secondExportPosition);
+
+            // Ordinary words in separator note text ("Route: ...") are themselves valid Base64
+            // characters, so a plain rtrim()/whitespace check would leave far more than
+            // MAX_TRAILING_GARBAGE_BYTES of them dangling. Base64's alphabet is a hard boundary
+            // instead: cut at the first character outside it (space, punctuation, CJK, ...) - that
+            // can only be separator content, never part of the first export's own payload - then
+            // let the existing trailing-garbage recovery mop up the handful of alphanumeric
+            // characters (if any) still stuck to the end, e.g. "Route" before a colon.
+            if (preg_match('/[^A-Za-z0-9+\/=]/', $firstExportPayload, $matches, PREG_OFFSET_CAPTURE) === 1) {
+                $firstExportPayload = substr($firstExportPayload, 0, $matches[0][1]);
+            }
+
+            try {
+                return self::decodeBinary(self::decodeBase64WithTrailingGarbageRecovery($firstExportPayload));
+            } catch (MDT2DecodeException) {
+                // Not recoverable this way either - fall through to the single-payload attempt
+                // below, whose failure is what actually gets reported to the caller.
+            }
         }
 
+        return self::decodeBinary(self::decodeBase64WithTrailingGarbageRecovery($payload));
+    }
+
+    /**
+     * Production has seen otherwise-valid MDT2 payloads with a handful of stray bytes stuck to the
+     * end (e.g. a validly-padded Base64 blob with "w==" appended) - clipboard interference between
+     * export and paste, outside our control. Only Base64's strict length/alphabet check can be
+     * broken by such trailing bytes - gzinflate() already stops at the DEFLATE stream's end and
+     * ignores anything after it, so a payload that would fail later in the pipeline fails there
+     * regardless of trimming. Recovery is scoped to this step alone: each retry is a cheap
+     * base64_decode() call, not a repeat of the expensive inflate/CBOR validation in
+     * decodeBinary(), which still runs exactly once either way.
+     *
+     * @throws MDT2DecodeException
+     */
+    private static function decodeBase64WithTrailingGarbageRecovery(string $payload): string
+    {
+        for ($trim = 0; $trim <= self::MAX_TRAILING_GARBAGE_BYTES; $trim++) {
+            $binary = base64_decode($trim === 0 ? $payload : substr($payload, 0, -$trim), true);
+
+            if ($binary !== false) {
+                return $binary;
+            }
+        }
+
+        throw new MDT2DecodeException('Unable to decode Base64 payload');
+    }
+
+    /**
+     * @return array<int|string, mixed>
+     * @throws MDT2DecodeException
+     */
+    private static function decodeBinary(string $binary): array
+    {
         $inflated = @gzinflate($binary, self::MAX_DECOMPRESSED_BYTES);
 
         if ($inflated === false) {

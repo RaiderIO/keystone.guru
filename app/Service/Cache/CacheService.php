@@ -12,6 +12,7 @@ use Illuminate\Redis\Connections\Connection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Psr\SimpleCache\InvalidArgumentException;
+use RedisException;
 
 class CacheService implements CacheServiceInterface
 {
@@ -137,7 +138,7 @@ class CacheService implements CacheServiceInterface
                             if ($this->set($key, $value, $ttl ?? $this->getTtl($key))) {
                                 $result = $value;
                             }
-                        } catch (InvalidArgumentException $e) {
+                        } catch (InvalidArgumentException|RedisException $e) {
                             $this->log->rememberFailedToSetCache($key, $e);
 
                             $result = $value;
@@ -210,7 +211,15 @@ class CacheService implements CacheServiceInterface
 
     public function get(string $key): mixed
     {
-        return Cache::get($key);
+        // Called from TrustProxies on every production request (via CloudflareService::getIpRanges()),
+        // so an uncaught RedisException here would take the whole site down on a Redis blip (#3914).
+        try {
+            return Cache::get($key);
+        } catch (RedisException $e) {
+            $this->log->getFailedRedisConnection($key, $e);
+
+            return null;
+        }
     }
 
     /**
@@ -273,15 +282,23 @@ class CacheService implements CacheServiceInterface
         // and delete active sessions, logging idle users out. See SESSION_CONNECTION for the second safeguard.
         $prefix = config('database.redis.options.prefix') . config('cache.prefix');
 
+        // Presence keys are only ever written on the 'default' broadcasting connection (see
+        // config/broadcasting.php), so the sweep for them needs neither the 'model_cache' nor the 'cache'
+        // connection. A SCAN MATCH also lets Redis itself discard everything but presence keys, instead of
+        // returning every key on the connection for PHP to regex against.
         return $this->deleteKeysByPattern([
             sprintf('/%s[a-f0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
         ], $seconds) +
-            $this->deleteKeysByPattern([
-                // publicKeys are 7 characters long
-                sprintf('/%spresence-%s-route-edit\.[a-zA-Z0-9]{7}.*/', $prefix, config('app.type')),
-                sprintf('/%spresence-%s-live-session\.[a-zA-Z0-9]{7}.*/', $prefix, config('app.type')),
-                // Special - these keys should be cleared after 24 hours, regardless of what $seconds say
-            ], 86400);
+            $this->deleteKeysByPattern(
+                [
+                    // publicKeys are 7 characters long
+                    sprintf('/%spresence-%s-(?:route-edit|live-session)\.[a-zA-Z0-9]{7}.*/', $prefix, config('app.type')),
+                    // Special - these keys should be cleared after 24 hours, regardless of what $seconds say
+                ],
+                86400,
+                connections: ['default'],
+                scanMatch: sprintf('%spresence-%s-*', $prefix, config('app.type')),
+            );
     }
 
     public function lock(string $key, callable $callable, int $waitFor = 10): mixed
@@ -290,17 +307,22 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param array<int, string> $regexes
+     * @param array<int, string>      $regexes
+     * @param array<int, string>|null $connections Overrides the default connection list. The 'session'
+     *                                             connection may never be included, so this task can never
+     *                                             delete active sessions and log idle users out.
      */
-    private function deleteKeysByPattern(array $regexes, ?int $idleTimeSeconds = null): int
-    {
+    private function deleteKeysByPattern(
+        array   $regexes,
+        ?int    $idleTimeSeconds = null,
+        ?array  $connections = null,
+        ?string $scanMatch = null,
+    ): int {
         if (empty($regexes)) {
             return 0;
         }
 
-        // List of Redis connection names to operate on. The 'session' connection is deliberately excluded so
-        // this task can never delete active sessions and log idle users out.
-        $connections = [
+        $connections ??= [
             // App logic
             'default',
             // Model cache
@@ -317,7 +339,7 @@ class CacheService implements CacheServiceInterface
         foreach ($connections as $connection) {
             // Get the Redis connection once.
             $redis                         = Redis::connection($connection);
-            $deletedCountForThisConnection = $this->deleteKeysByPatternOnConnection($redis, $regexes, $idleTimeSeconds, $prefix);
+            $deletedCountForThisConnection = $this->deleteKeysByPatternOnConnection($redis, $regexes, $idleTimeSeconds, $prefix, $scanMatch);
             $totalDeletedCount += $deletedCountForThisConnection;
         }
 
@@ -332,17 +354,25 @@ class CacheService implements CacheServiceInterface
         array      $regexes,
         ?int       $idleTimeSeconds,
         string     $prefix,
+        ?string    $scanMatch = null,
     ): int {
         $deletedKeysCountTotal = 0;
         $deletedKeysCount      = 0;
         $i                     = 0;
         $nextKey               = 0;
 
+        // SCAN's own MATCH filters keys on the Redis server, so a caller with a narrow glob pattern (e.g. a
+        // fixed key prefix) never pays for PHP regex-matching every key on the connection. COUNT 1000 keeps
+        // the loop to a handful of round trips instead of the ~10-per-call default.
+        $scanArgs = $scanMatch !== null
+            ? ['MATCH', $scanMatch, 'COUNT', '1000']
+            : [];
+
         try {
             $this->log->deleteKeysByPatternStart($redis->getName(), $idleTimeSeconds);
 
             do {
-                $result = $this->redisService->rawCommand($redis, 'SCAN', (string)$nextKey);
+                $result = $this->redisService->rawCommand($redis, 'SCAN', (string)$nextKey, ...$scanArgs);
 
                 if ($result === false) {
                     $this->log->deleteKeysByPatternScanFailed($nextKey);

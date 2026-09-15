@@ -1,8 +1,7 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\Cata;
-
-use App\Models\Dungeon;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\Cata;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICombatLogControllerCombatLogRouteTestBase;
@@ -16,7 +15,7 @@ class APICombatLogControllerCombatLogRouteSkyreachTest extends APICombatLogContr
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_SKYREACH;
+        return DungeonKey::SKYREACH->value;
     }
 
     #[Test]
@@ -26,16 +25,12 @@ class APICombatLogControllerCombatLogRouteSkyreachTest extends APICombatLogContr
         $postBody = $this->getJsonData('Cata/midnight_s1_skyreach_preseason', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 16, 431);
+        $this->validatePulls($postBody, $responseArr, 16, 431);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

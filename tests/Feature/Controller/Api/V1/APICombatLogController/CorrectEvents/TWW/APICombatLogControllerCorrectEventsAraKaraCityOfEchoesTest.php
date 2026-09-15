@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\TWW;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\APICombatLogControllerCorrectEventsTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCorrectEventsAraKaraCityOfEchoesTest extends APIComb
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES;
+        return DungeonKey::ARA_KARA_CITY_OF_ECHOES->value;
     }
 
     #[Test]

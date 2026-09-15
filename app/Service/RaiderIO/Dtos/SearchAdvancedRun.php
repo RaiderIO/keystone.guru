@@ -7,6 +7,8 @@ class SearchAdvancedRun
     /**
      * @param int[] $memberSpecIds Blizzard spec IDs of all party members.
      * @param int[] $affixes       Affix IDs active during the run.
+     * @param ?int  $faction       Raider.IO faction of the group: 0 = Alliance, 1 = Horde. Null for a
+     *                             cross faction group, which has no single faction to report.
      */
     public function __construct(
         public readonly int   $id,
@@ -15,6 +17,7 @@ class SearchAdvancedRun
         public readonly array $memberSpecIds,
         public readonly int   $mythicLevel,
         public readonly array $affixes,
+        public readonly ?int  $faction = null,
     ) {
     }
 
@@ -30,6 +33,7 @@ class SearchAdvancedRun
             memberSpecIds:   array_map(intval(...), $data['memberSpecIds'] ?? []),
             mythicLevel:     (int)$data['mythicLevel'],
             affixes:         array_map(intval(...), $data['affixes'] ?? []),
+            faction:         isset($data['faction']) ? (int)$data['faction'] : null,
         );
     }
 }

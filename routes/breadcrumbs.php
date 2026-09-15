@@ -8,6 +8,7 @@ use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CharacterClass;
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
@@ -285,6 +286,14 @@ Breadcrumbs::for('admin.tools.combatlog.rundata', static function (Generator $tr
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.combat_log_run_data'), route('admin.tools.combatlog.rundata'));
 });
+Breadcrumbs::for('admin.tools.combatlog.route.coverage', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.combat_log_route_coverage'), route('admin.tools.combatlog.route.coverage.view'));
+});
+Breadcrumbs::for('admin.tools.telemetry', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.telemetry'), route('admin.tools.telemetry.view'));
+});
 Breadcrumbs::for('admin.tools.dungeonroute.view', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.dungeonroute_view'), route('admin.tools.dungeonroute.view'));
@@ -296,10 +305,6 @@ Breadcrumbs::for('admin.tools.dungeonroute.viewcontents', static function (Gener
 Breadcrumbs::for('admin.tools.dungeonroute.mappingversions', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.dungeonroute_mapping_version_usage'), route('admin.tools.dungeonroute.mappingversionusage'));
-});
-Breadcrumbs::for('admin.tools.enemyforces.import', static function (Generator $trail) {
-    $trail->parent('admin.tools.list');
-    $trail->push(__('breadcrumbs.home.admin.tools.enemyforces_import'), route('admin.tools.enemyforces.import.view'));
 });
 Breadcrumbs::for('admin.tools.enemyforces.recalculate', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
@@ -385,7 +390,7 @@ Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', static function (Genera
     $trail->parent('admin.floor.edit', $dungeon, $floor);
     $trail->push(
         __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc', [
-            'difficulty' => Dungeon::getDifficultyName($difficulty),
+            'difficulty' => DungeonDifficulty::from($difficulty)->translatedName(),
         ]),
         route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]),
     );
@@ -506,7 +511,7 @@ Breadcrumbs::for('admin.userreport.list', static function (Generator $trail) {
  */
 Breadcrumbs::for('compendium.npc.index', static function (Generator $trail) {
     $trail->parent('home');
-    $trail->push(__('breadcrumbs.home.compendium.npc'), route('npc.compendium.index'));
+    $trail->push(__('breadcrumbs.home.compendium.npc'), route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::getUserOrDefaultDungeon()]));
 });
 
 Breadcrumbs::for('compendium.npc.show', static function (Generator $trail, Npc $npc) {
@@ -516,7 +521,7 @@ Breadcrumbs::for('compendium.npc.show', static function (Generator $trail, Npc $
 
 Breadcrumbs::for('compendium.spell.index', static function (Generator $trail) {
     $trail->parent('home');
-    $trail->push(__('breadcrumbs.home.compendium.spell'), route('spell.compendium.index'));
+    $trail->push(__('breadcrumbs.home.compendium.spell'), route('spell.compendium.index.dungeon', ['dungeon' => Dungeon::getUserOrDefaultDungeon()]));
 });
 
 Breadcrumbs::for('compendium.spell.show', static function (Generator $trail, Spell $spell) {
@@ -535,6 +540,16 @@ Breadcrumbs::for('compendium.activity.day', static function (Generator $trail, D
     $trail->push(__('breadcrumbs.home.compendium.activity_day', ['date' => $date->format('F j, Y')]), route('compendium.activity.day', ['dungeon' => $dungeon, 'date' => $date->format('Y-m-d')]));
 });
 
+Breadcrumbs::for('compendium.tuning.index', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.compendium.tuning'), route('compendium.tuning.index'));
+});
+
+Breadcrumbs::for('compendium.tuning', static function (Generator $trail, Dungeon $dungeon) {
+    $trail->parent('compendium.tuning.index');
+    $trail->push(__($dungeon->name), route('compendium.tuning', $dungeon));
+});
+
 Breadcrumbs::for('compendium.class.index', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.compendium.class'), route('compendium.class.index'));
@@ -542,6 +557,9 @@ Breadcrumbs::for('compendium.class.index', static function (Generator $trail) {
 
 Breadcrumbs::for('compendium.class.show', static function (Generator $trail, CharacterClass $characterClass, Dungeon $dungeon) {
     $trail->parent('compendium.class.index');
-    $trail->push(__($characterClass->name), route('compendium.class.show', $characterClass));
+    $trail->push(__($characterClass->name), route('compendium.class.show.dungeon', [
+        'characterClass' => $characterClass,
+        'dungeon'        => $dungeon,
+    ]));
     $trail->push(__($dungeon->name));
 });

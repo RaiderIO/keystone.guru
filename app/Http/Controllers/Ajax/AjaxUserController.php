@@ -25,6 +25,9 @@ class AjaxUserController extends Controller
     {
         $users = User::with([
             'patreonUserLink',
+            // The link's manually_granted attribute reads this relation, so without it every row on
+            // the page would fire its own query for it
+            'patreonUserLink.activeManualGrant',
             'roles',
             'dungeonRoutes',
             'ipAddresses',

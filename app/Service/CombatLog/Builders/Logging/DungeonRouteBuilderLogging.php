@@ -72,12 +72,10 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
      * @param array<int, bool> $preferredGroups
      */
     public function findUnkilledEnemyForNpcAtIngameLocationStart(
-        int    $npcId,
-        float  $ingameX,
-        float  $ingameY,
-        ?float $previousPullLat,
-        ?float $previousPullLng,
-        array  $preferredGroups,
+        int   $npcId,
+        float $ingameX,
+        float $ingameY,
+        array $preferredGroups,
     ): void {
         $this->start(__METHOD__, get_defined_vars());
     }
@@ -85,7 +83,6 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(
         int   $id,
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy,
         int   $group,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
@@ -94,7 +91,6 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredFloor(
         int   $id,
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy,
         int   $floorId,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
@@ -130,7 +126,6 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     public function findClosestEnemyInAllFilteredEnemiesEnemyIsNull(
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -143,7 +138,6 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     public function findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(
         ?int  $enemyId,
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy,
         int   $maxDistance,
     ): void {
         $this->warning(__METHOD__, get_defined_vars());
@@ -157,7 +151,6 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(
         int   $enemyId,
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -165,6 +158,62 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     public function findUnkilledEnemyForNpcAtIngameLocationEnd(): void
     {
         $this->end(__METHOD__);
+    }
+
+    public function findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutFirstPassExclusions(
+        int $npcId,
+    ): void {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function applyBossKillFloorCutoffMinimumFloorIndexRaised(
+        int $enemyId,
+        int $npcId,
+        int $floorId,
+        int $minimumFloorIndex,
+    ): void {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function theBlindingValeBridgeRuleBridgeEnemiesBlocked(
+        int   $npcId,
+        array $enemyUniqueKeys,
+    ): void {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function kingsRestDespawningEnemiesRuleEnemyKillsAwarded(
+        int   $triggerNpcId,
+        array $awardedNpcIds,
+    ): void {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function templeOfSethralissDespawningEnemiesRuleEnemyKillsAwarded(
+        int   $triggerNpcId,
+        array $awardedNpcIds,
+    ): void {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function templeOfSethralissDespawningEnemiesRuleRunFinishedEnemyKillsAwarded(array $awardedNpcIds): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function awardEnemyKillsEnemyNotFound(int $npcId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function awardEnemyKillsEnemyAwarded(int $npcId, int $enemyId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function awardEnemyKillsIterationLimitReached(int $npcId, int $awardedCount): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     public function findClosestEnemyAndDistanceFromList(int $enemiesCount, bool $considerPatrols): void
@@ -175,7 +224,6 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     public function findClosestEnemyAndDistanceFromListResult(
         ?int  $enemyId,
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }

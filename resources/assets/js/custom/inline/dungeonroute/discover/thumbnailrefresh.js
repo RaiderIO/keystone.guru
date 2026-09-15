@@ -11,7 +11,7 @@ class ThumbnailRefresh {
         $(this.selector).unbind('click').bind('click', function () {
             let $this = $(this);
 
-            $.ajax({
+            guardedAjaxClick($this, {
                 type: 'POST',
                 url: `/ajax/admin/thumbnail/${$this.data('publickey')}/refresh`,
                 success: function (json) {

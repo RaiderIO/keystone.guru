@@ -11,6 +11,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Team;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
@@ -24,6 +25,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\View\View;
 use Teapot\StatusCode;
@@ -50,6 +52,7 @@ class SiteController extends Controller
         SeasonServiceInterface          $seasonService,
         DungeonRouteRepositoryInterface $dungeonRouteRepository,
         DiscoverServiceInterface        $discoverService,
+        DungeonServiceInterface         $dungeonService,
     ): View {
         // @TODO Add caching
         $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes();
@@ -68,6 +71,10 @@ class SiteController extends Controller
                 ->popularGroupedByDungeon()
                 ->map(static fn(Collection $routes) => $routes->take(1))
                 ->flatten(),
+            'userOrDefaultGameVersion' => $userOrDefaultGameVersion,
+            // HeaderComposer only injects this into the header view itself - the dungeon context
+            // links this page overrides are built in the view, so it needs its own copy
+            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion),
         ]);
     }
 
@@ -257,20 +264,22 @@ class SiteController extends Controller
             DB::select('SELECT 1');     // trivial round trip
             $checks['database']['ok'] = true;
         } catch (Throwable $e) {
-            $checks['database']['error'] = $e->getMessage();
+            Log::error('Status check failed: database', ['exception' => $e]);
+            $checks['database']['error'] = __('view_misc.status.check_failed');
         }
 
         // Redis check: PING
         try {
             $pong = Redis::connection()->client()->ping();
 
-            // Some clients return "PONG" or true
-            $checks['redis']['ok'] = $pong->getPayload() === 'PONG';
+            // phpredis returns true (or the string "PONG"); predis returns a Status object
+            $checks['redis']['ok'] = $pong === true || $pong === 'PONG' || (is_object($pong) && method_exists($pong, 'getPayload') && $pong->getPayload() === 'PONG');
             if (!$checks['redis']['ok']) {
                 $checks['redis']['error'] = 'Unexpected PING response';
             }
         } catch (Throwable $e) {
-            $checks['redis']['error'] = $e->getMessage();
+            Log::error('Status check failed: redis', ['exception' => $e]);
+            $checks['redis']['error'] = __('view_misc.status.check_failed');
         }
 
         // Check if the disk is writable

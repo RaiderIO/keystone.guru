@@ -14,7 +14,9 @@ class APIMetricFormRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
-    }    /**
+    }
+
+    /**
      * @return array<string, array<int, string|Rule>|string|Rule>
      */
     public function rules(): array
@@ -22,7 +24,7 @@ class APIMetricFormRequest extends FormRequest
         return [
             'id'          => 'int',
             'model_id'    => 'nullable|int',
-            'model_class' => 'nullable|string',
+            'model_class' => ['nullable', 'string', Rule::in(Metric::ALL_MODEL_CLASSES)],
             'category'    => Rule::in(Metric::ALL_CATEGORIES),
             'tag'         => Rule::in(Metric::ALL_TAGS),
             'value'       => 'int',

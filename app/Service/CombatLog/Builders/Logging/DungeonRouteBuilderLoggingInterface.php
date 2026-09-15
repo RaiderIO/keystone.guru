@@ -35,35 +35,76 @@ interface DungeonRouteBuilderLoggingInterface
      * @param array<int, bool> $preferredGroups
      */
     public function findUnkilledEnemyForNpcAtIngameLocationStart(
-        int    $npcId,
-        float  $ingameX,
-        float  $ingameY,
-        ?float $previousPullLat,
-        ?float $previousPullLng,
-        array  $preferredGroups,
+        int   $npcId,
+        float $ingameX,
+        float $ingameY,
+        array $preferredGroups,
     ): void;
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(
         int   $id,
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy,
         int   $group,
     ): void;
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredFloor(
         int   $id,
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy,
         int   $floorId,
     ): void;
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(
         int   $enemyId,
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy,
     ): void;
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnd(): void;
+
+    public function findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutFirstPassExclusions(
+        int $npcId,
+    ): void;
+
+    public function applyBossKillFloorCutoffMinimumFloorIndexRaised(
+        int $enemyId,
+        int $npcId,
+        int $floorId,
+        int $minimumFloorIndex,
+    ): void;
+
+    /**
+     * @param array<int, string> $enemyUniqueKeys
+     */
+    public function theBlindingValeBridgeRuleBridgeEnemiesBlocked(
+        int   $npcId,
+        array $enemyUniqueKeys,
+    ): void;
+
+    /**
+     * @param array<int, int> $awardedNpcIds
+     */
+    public function kingsRestDespawningEnemiesRuleEnemyKillsAwarded(
+        int   $triggerNpcId,
+        array $awardedNpcIds,
+    ): void;
+
+    /**
+     * @param array<int, int> $awardedNpcIds
+     */
+    public function templeOfSethralissDespawningEnemiesRuleEnemyKillsAwarded(
+        int   $triggerNpcId,
+        array $awardedNpcIds,
+    ): void;
+
+    /**
+     * @param array<int, int> $awardedNpcIds
+     */
+    public function templeOfSethralissDespawningEnemiesRuleRunFinishedEnemyKillsAwarded(array $awardedNpcIds): void;
+
+    public function awardEnemyKillsEnemyNotFound(int $npcId): void;
+
+    public function awardEnemyKillsEnemyAwarded(int $npcId, int $enemyId): void;
+
+    public function awardEnemyKillsIterationLimitReached(int $npcId, int $awardedCount): void;
 
     /**
      * @param array<int, bool> $preferredGroups
@@ -80,7 +121,6 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function findClosestEnemyInAllFilteredEnemiesEnemyIsNull(
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy,
     ): void;
 
     public function findClosestEnemyInAllFilteredEnemiesEnemyIsBossIgnoringTooFarAwayCheck(): void;
@@ -88,7 +128,6 @@ interface DungeonRouteBuilderLoggingInterface
     public function findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(
         ?int  $enemyId,
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy,
         int   $maxDistance,
     ): void;
 
@@ -99,7 +138,6 @@ interface DungeonRouteBuilderLoggingInterface
     public function findClosestEnemyAndDistanceFromListResult(
         ?int  $enemyId,
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy,
     ): void;
 
     /**

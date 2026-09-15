@@ -1,4 +1,4 @@
-group,key,en-US,de-DE,es-ES,es-MX,fr-FR,it-IT,ko-KR,pt-BR,ru-RU,uk-UA
+group,key,en,de,es-ES,es-MX,fr,it,ko,pt-BR,ru,uk
 affixes,bolstering.name,Bolstering,,,,,,,,,Bolstering
 affixes,bolstering.description,"When any non-boss enemy dies, its death cry empowers nearby allies, increasing their maximum health and damage by 20%.",,,,,,,,,"Коли помирає будь-який ворог, що не є босом, його передсмертний крик посилює союзників поблизу, збільшуючи їхнє максимальне здоров’я й шкоду на 20%."
 affixes,bursting.name,Bursting,,,,,,,,,Bursting

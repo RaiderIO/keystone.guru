@@ -6,6 +6,7 @@ use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\DungeonRoute\DungeonRouteAttribute;
@@ -214,45 +215,6 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
         ];
     }
 
-    #[Test]
-    #[DataProvider('teamIdProvider')]
-    public function save_givenTeamId_resolvesExpectedTeamId(int $inputTeamId, ?int $expectedTeamId): void
-    {
-        // Arrange
-        $dungeon   = $this->getRetailDungeon();
-        $service   = $this->buildService(seasonService: $this->noSeasonService(), thumbnailService: $this->thumbnailServiceAllowingRefresh());
-        $route     = new DungeonRoute();
-        $validated = [
-            'dungeon_id'          => $dungeon->id,
-            'faction_id'          => 1,
-            'dungeon_route_title' => 'Team Test',
-            'team_id'             => $inputTeamId,
-        ];
-
-        try {
-            // Act
-            $service->save($route, $validated);
-
-            // Assert
-            $this->assertEquals($expectedTeamId, $route->team_id);
-        } finally {
-            if ($route->exists) {
-                $this->cleanupRoute($route);
-            }
-        }
-    }
-
-    /**
-     * @return array<string, array{0: int, 1: int|null}>
-     */
-    public static function teamIdProvider(): array
-    {
-        return [
-            'zero becomes null'     => [0, null],
-            'a positive id is kept' => [4242, 4242],
-        ];
-    }
-
     /**
      * @param array<int, int> $inputSeasonalIndex
      */
@@ -377,8 +339,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
         );
         $enabledDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
         // A difficulty that is NOT enabled for this dungeon
-        $disabledDifficulty = collect(Dungeon::DIFFICULTY_ALL)
-            ->values()
+        $disabledDifficulty = collect(DungeonDifficulty::values())
             ->first(fn(int $difficulty) => !in_array($difficulty, $enabledDifficulties, true));
 
         $this->assertNotNull($disabledDifficulty, 'Expected a dungeon that does not enable every difficulty');
@@ -420,7 +381,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
             'dungeon_id'          => $dungeon->id,
             'faction_id'          => 1,
             'dungeon_route_title' => 'Difficulty Discarded Test',
-            'dungeon_difficulty'  => Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN],
+            'dungeon_difficulty'  => DungeonDifficulty::TWENTY_FIVE_MAN->value,
         ];
 
         try {

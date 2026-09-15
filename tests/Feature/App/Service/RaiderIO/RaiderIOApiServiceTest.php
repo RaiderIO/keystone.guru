@@ -3,17 +3,21 @@
 namespace Tests\Feature\App\Service\RaiderIO;
 
 use App\Models\Expansion;
+use App\Models\Faction;
 use App\Models\Season;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
+use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Logging\RaiderIOApiServiceLoggingInterface;
 use App\Service\RaiderIO\RaiderIOApiService;
-use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Sleep;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
+use Teapot\StatusCode\Http;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('RaiderIO')]
@@ -83,6 +87,7 @@ final class RaiderIOApiServiceTest extends PublicTestCase
     {
         // Arrange
         $this->log->expects($this->once())->method('getCombatLogSegmentsForRunInvalidResponse');
+        $this->log->expects($this->never())->method('getCombatLogSegmentsForRunNotYetAvailable');
         $service = $this->makeService(fn(): string => 'not json');
 
         // Act
@@ -90,6 +95,342 @@ final class RaiderIOApiServiceTest extends PublicTestCase
 
         // Assert
         $this->assertNull($result);
+    }
+
+    /**
+     * Guards #3918: a run's segments simply not having been uploaded to Raider.IO yet (the API
+     * returns a 404 with this specific shape) is an expected, recurring state - it must be logged
+     * distinctly from a genuinely malformed response instead of paging Sentry as an error.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function getCombatLogSegmentsForRun_givenSegmentsNotYetAvailable_logsDistinctlyFromInvalidResponse(): void
+    {
+        // Arrange
+        $this->log->expects($this->once())->method('getCombatLogSegmentsForRunNotYetAvailable');
+        $this->log->expects($this->never())->method('getCombatLogSegmentsForRunInvalidResponse');
+        $service = $this->makeService(fn(): string => json_encode([
+            'statusCode' => Http::NOT_FOUND,
+            'error'      => 'Not Found',
+            'message'    => 'No combat log segments found for this run',
+        ]));
+
+        // Act
+        $result = $service->getCombatLogSegmentsForRun($this->makeSeason(), self::RUN_ID);
+
+        // Assert
+        $this->assertNull($result);
+    }
+
+    /**
+     * Guards #3918: the upstream API is hapi-style, so a genuine route-not-found (wrong path,
+     * unrecognized season) yields the same status code with a generic message - that is a broken
+     * integration and must still be logged at error level rather than swallowed as "not yet
+     * uploaded".
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function getCombatLogSegmentsForRun_givenGenericNotFoundResponse_logsAsInvalidResponse(): void
+    {
+        // Arrange
+        $this->log->expects($this->once())->method('getCombatLogSegmentsForRunInvalidResponse');
+        $this->log->expects($this->never())->method('getCombatLogSegmentsForRunNotYetAvailable');
+        $service = $this->makeService(fn(): string => json_encode([
+            'statusCode' => Http::NOT_FOUND,
+            'error'      => 'Not Found',
+            'message'    => 'Not Found',
+        ]));
+
+        // Act
+        $result = $service->getCombatLogSegmentsForRun($this->makeSeason(), self::RUN_ID);
+
+        // Assert
+        $this->assertNull($result);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenBandedFilter_boundsMythicLevelOnBothSides(): void
+    {
+        // Arrange
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return json_encode(['total' => ['value' => 1231], 'matches' => []]);
+        });
+
+        // Act
+        $result = $service->searchAdvancedRuns($this->makeSearchFilter(2, 6));
+
+        // Assert
+        $decodedUrl = urldecode((string)$capturedUrl);
+        $this->assertStringContainsString('mythicLevel[0][gte]=2', $decodedUrl);
+        $this->assertStringContainsString('mythicLevel[0][lte]=6', $decodedUrl);
+        $this->assertSame(1231, $result->total);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenOpenEndedFilter_omitsUpperBound(): void
+    {
+        // Arrange
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return json_encode(['total' => ['value' => 542], 'matches' => []]);
+        });
+
+        // Act
+        $service->searchAdvancedRuns($this->makeSearchFilter(22, null));
+
+        // Assert
+        $decodedUrl = urldecode((string)$capturedUrl);
+        $this->assertStringContainsString('mythicLevel[0][gte]=22', $decodedUrl);
+        $this->assertStringNotContainsString('mythicLevel[0][lte]', $decodedUrl);
+    }
+
+    /**
+     * The upstream API returns `"total": {"value": n}` for a non-empty result set, but a plain
+     * scalar `"total": 0` when nothing matches. Reading only the object shape reports "unknown"
+     * for an empty band, which is the one answer the top band probe has to be able to trust.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenEmptyResultSet_readsScalarTotalAsZero(): void
+    {
+        // Arrange
+        $service = $this->makeService(fn(): string => json_encode(['total' => 0, 'matches' => []]));
+
+        // Act
+        $result = $service->searchAdvancedRuns($this->makeSearchFilter(26, 26));
+
+        // Assert
+        $this->assertSame(0, $result->total);
+        $this->assertEmpty($result->runs);
+    }
+
+    /**
+     * Sorting on anything stable hands every repeated poll of the same filter the exact same page,
+     * by which time every run on it has already been parsed.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenAnyFilter_sortsByRecency(): void
+    {
+        // Arrange
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return json_encode(['total' => 0, 'matches' => []]);
+        });
+
+        // Act
+        $service->searchAdvancedRuns($this->makeSearchFilter(2, 6));
+
+        // Assert
+        $this->assertStringContainsString('sort[completedAt]=desc', urldecode((string)$capturedUrl));
+    }
+
+    /**
+     * Raider.IO numbers the Alliance 0, and array_filter() on the query parameters is the obvious
+     * place for a zero to silently disappear.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenAllianceFaction_filtersOnRaiderIOFactionZero(): void
+    {
+        // Arrange
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return json_encode(['total' => 0, 'matches' => []]);
+        });
+
+        $alliance = Faction::query()->where('key', Faction::FACTION_ALLIANCE)->firstOrFail();
+
+        // Act
+        $service->searchAdvancedRuns($this->makeSearchFilter(2, 6, $alliance));
+
+        // Assert
+        $this->assertStringContainsString('faction[0][eq]=0', urldecode((string)$capturedUrl));
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenHordeFaction_filtersOnRaiderIOFactionOne(): void
+    {
+        // Arrange
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return json_encode(['total' => 0, 'matches' => []]);
+        });
+
+        $horde = Faction::query()->where('key', Faction::FACTION_HORDE)->firstOrFail();
+
+        // Act
+        $service->searchAdvancedRuns($this->makeSearchFilter(2, 6, $horde));
+
+        // Assert
+        $this->assertStringContainsString('faction[0][eq]=1', urldecode((string)$capturedUrl));
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenNoFaction_omitsTheFactionFilter(): void
+    {
+        // Arrange
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return json_encode(['total' => 0, 'matches' => []]);
+        });
+
+        // Act
+        $service->searchAdvancedRuns($this->makeSearchFilter(2, 6));
+
+        // Assert
+        $this->assertStringNotContainsString('faction[0][eq]', urldecode((string)$capturedUrl));
+    }
+
+    /**
+     * A cross faction group carries no faction at all, which must survive as null rather than
+     * collapse into the Alliance's 0.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenCrossFactionRun_readsItsFactionAsNull(): void
+    {
+        // Arrange
+        $service = $this->makeService(fn(): string => json_encode([
+            'total'   => ['value' => 2],
+            'matches' => [
+                ['data' => $this->makeRunData(1, faction: 0)],
+                ['data' => $this->makeRunData(2, faction: null)],
+            ],
+        ]));
+
+        // Act
+        $result = $service->searchAdvancedRuns($this->makeSearchFilter(2, 6));
+
+        // Assert
+        $this->assertSame(0, $result->runs[0]->faction);
+        $this->assertNull($result->runs[1]->faction);
+    }
+
+    /**
+     * Cloudflare occasionally answers with a transient gateway-timeout HTML page instead of JSON -
+     * a retry a moment later succeeds, so it must not surface as a failure to the caller.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenTransientInvalidResponseThenValidResponse_retriesAndSucceeds(): void
+    {
+        // Arrange
+        Sleep::fake();
+
+        $attempt = 0;
+        $service = $this->makeService(function () use (&$attempt): string {
+            $attempt++;
+
+            if ($attempt === 1) {
+                return '<html>504 Gateway Timeout</html>';
+            }
+
+            return json_encode(['total' => 0, 'matches' => []]);
+        });
+
+        $this->log->expects($this->never())->method('searchAdvancedRunsInvalidResponse');
+
+        // Act
+        $result = $service->searchAdvancedRuns($this->makeSearchFilter(2, 6));
+
+        // Assert
+        $this->assertSame(2, $attempt);
+        $this->assertSame(0, $result->total);
+    }
+
+    /**
+     * A gateway timeout that outlasts every retry is a real failure - the null total tells the
+     * caller so, and it is only logged once the retries are exhausted.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenPersistentInvalidResponse_exhaustsRetriesAndLogsOnce(): void
+    {
+        // Arrange
+        Sleep::fake();
+
+        $attempts = 0;
+        $service  = $this->makeService(function () use (&$attempts): string {
+            $attempts++;
+
+            return '<html>504 Gateway Timeout</html>';
+        });
+
+        $this->log->expects($this->once())->method('searchAdvancedRunsInvalidResponse');
+
+        // Act
+        $result = $service->searchAdvancedRuns($this->makeSearchFilter(2, 6));
+
+        // Assert
+        $this->assertSame(3, $attempts);
+        $this->assertNull($result->total);
+        $this->assertEmpty($result->runs);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function makeRunData(int $id, ?int $faction): array
+    {
+        return [
+            'id'              => $id,
+            'challengeModeId' => 399,
+            'dungeonZoneId'   => 12916,
+            'memberSpecIds'   => [66, 70],
+            'mythicLevel'     => 14,
+            'affixes'         => [9, 10],
+            'faction'         => $faction,
+        ];
+    }
+
+    private function makeSearchFilter(int $mythicLevelMin, ?int $mythicLevelMax, ?Faction $faction = null): SearchAdvancedRunsFilter
+    {
+        return new SearchAdvancedRunsFilter(
+            dungeon:         null,
+            season:          $this->makeSeason(),
+            specs:           collect(),
+            completedAtFrom: Carbon::now()->subDay(),
+            completedAtTo:   null,
+            mythicLevelMin:  $mythicLevelMin,
+            mythicLevelMax:  $mythicLevelMax,
+            limit:           100,
+            offset:          0,
+            faction:         $faction,
+        );
     }
 
     /**
@@ -102,11 +443,8 @@ final class RaiderIOApiServiceTest extends PublicTestCase
         $coordinatesService = $this->createMockPublic(CoordinatesServiceInterface::class);
         /** @var MockObject&SeasonServiceInterface $seasonService */
         $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
-        /** @var MockObject&SeasonAffixGroupServiceInterface $seasonAffixGroupService */
-        $seasonAffixGroupService = $this->createMockPublic(SeasonAffixGroupServiceInterface::class);
-
-        $service = $this->getMockBuilder(RaiderIOApiService::class)
-            ->setConstructorArgs([$coordinatesService, $seasonService, $seasonAffixGroupService, $this->log])
+        $service       = $this->getMockBuilder(RaiderIOApiService::class)
+            ->setConstructorArgs([$coordinatesService, $seasonService, $this->log])
             ->onlyMethods(['curlGet'])
             ->getMock();
 

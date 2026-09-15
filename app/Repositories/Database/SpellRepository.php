@@ -45,4 +45,24 @@ class SpellRepository extends DatabaseRepository implements SpellRepositoryInter
             ->get()
             ->keyBy('id');
     }
+
+    /**
+     * @return Collection<int, Spell>
+     */
+    public function getAllKeyedWithSpellDungeons(): Collection
+    {
+        return Spell::with('spellDungeons')
+            ->get()
+            ->keyBy('id');
+    }
+
+    /**
+     * @return Collection<int, int>
+     */
+    public function getHiddenOnMapSpellIds(): Collection
+    {
+        return Spell::query()
+            ->where('hidden_on_map', true)
+            ->pluck('id');
+    }
 }

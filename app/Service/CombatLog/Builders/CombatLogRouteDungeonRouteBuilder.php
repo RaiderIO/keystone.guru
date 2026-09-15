@@ -6,6 +6,7 @@ use App;
 use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcRequestDto;
 use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Spell\Spell;
@@ -122,6 +123,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
 
     private function buildKillZones(): void
     {
+        $lastDiedNpc = null;
+
         $filteredNpcs = $this->combatLogRoute->npcs->filter(fn(
             CombatLogRouteNpcRequestDto $npc,
         ) => $this->validNpcIds->search((int)$npc->npcId) !== false);
@@ -172,10 +175,9 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 $newFloor = $floorCache->get($event['npc']->coord->uiMapId);
 
                 if ($newFloor === null) {
-                    $floorCache->put(
-                        $event['npc']->coord->uiMapId,
-                        $this->floorRepository->findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id),
-                    );
+                    $newFloor = $this->floorRepository->findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id);
+
+                    $floorCache->put($event['npc']->coord->uiMapId, $newFloor);
                 }
 
                 if ($newFloor === null) {
@@ -233,7 +235,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 // to the beginning, but you're now phased in a Shadow Realm. I split this off in a separate floor so
                 // that the enemies are not on the same floor as the original enemies that you already killed.
                 // So what we do here is forcibly yoink the originally killed enemy (that you sent me) to the new floor.
-                if ($this->dungeonRoute->dungeon->key === Dungeon::DUNGEON_DARKFLAME_CLEFT) {
+                if ($this->dungeonRoute->dungeon->key === DungeonKey::DARKFLAME_CLEFT->value) {
                     $event['npc']->coord->uiMapId = $resolvedEnemy->floor->ui_map_id;
                 }
 
@@ -241,12 +243,28 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 $activePull->enemyEngaged($activePullEnemy);
             } elseif ($event['type'] === 'died') {
                 // Find the pull that this enemy is part of
+                $diedInActivePull = null;
                 foreach ($this->activePullCollection as $activePull) {
                     /** @var ActivePull $activePull */
                     if ($activePull->isEnemyInCombat($uniqueUid)) {
                         $activePull->enemyKilled($event['npc']->getUniqueId());
+                        $diedInActivePull = $activePull;
                         $this->log->buildKillZonesEnemyKilled($uniqueUid, $event['npc']->getDiedAt()->toDateTimeString());
                     }
+                }
+
+                $lastDiedNpc = $event['npc'];
+
+                $awardedNpcIds = $this->notifyRulesEnemyDied($event['npc']->npcId, $event['npc']->getResolvedEnemy());
+
+                // Must happen before the pulls below are created, so the awarded kills are part of the pull that
+                // triggered them rather than of one after it
+                if ($awardedNpcIds->isNotEmpty()) {
+                    $this->awardEnemyKills(
+                        $awardedNpcIds,
+                        $diedInActivePull,
+                        $this->createActivePullEnemy($event['npc']),
+                    );
                 }
 
                 // Handle spells and the actual creation of pulls
@@ -271,6 +289,11 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 }
             }
         }
+
+        // Every route posted here is of a run that reached its end - challengeMode.end is required on the request
+        $this->awardRunFinishedEnemyKills(
+            $lastDiedNpc === null ? null : $this->createActivePullEnemy($lastDiedNpc),
+        );
 
         // Handle spells and the actual creation of pulls for all remaining active pulls
         foreach ($this->activePullCollection as $activePull) {

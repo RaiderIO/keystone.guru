@@ -14,7 +14,6 @@ $showLegalModal ??= true;
     /** This is just for some client display - don't bother trying to edit it and gain access - there's server side checks */
     var isUserAdmin = {{ Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN) ? 'true' : 'false' }};
 
-    var _legalStartTimer = new Date().getTime();
     @auth
     // Legal nag so that everyone agrees to the terms, that has registered.
     @if($showLegalModal && !Auth::user()->legal_agreed)
@@ -32,9 +31,6 @@ $showLegalModal ??= true;
             type: 'POST',
             url: '/ajax/profile/legal',
             dataType: 'json',
-            data: {
-                time: new Date().getTime() - _legalStartTimer
-            },
             beforeSend: function () {
                 $('#legal_confirm_btn').attr('disabled', 'disabled');
             },

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\SL;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICombatLogControllerCombatLogRouteTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCombatLogRouteMistsOfTirnaScitheTest extends APIComb
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE;
+        return DungeonKey::MISTS_OF_TIRNA_SCITHE->value;
     }
 
     #[Test]
@@ -26,16 +26,12 @@ class APICombatLogControllerCombatLogRouteMistsOfTirnaScitheTest extends APIComb
         $postBody = $this->getJsonData('SL/tww_s1_mists_of_tirna_scithe_2', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 19, 289);
+        $this->validatePulls($postBody, $responseArr, 19, 289);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 
@@ -46,16 +42,12 @@ class APICombatLogControllerCombatLogRouteMistsOfTirnaScitheTest extends APIComb
         $postBody = $this->getJsonData('SL/tww_s1_mists_of_tirna_scithe_4', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 19, 270);
+        $this->validatePulls($postBody, $responseArr, 19, 270);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 }

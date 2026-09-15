@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\TWW;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICombatLogControllerCombatLogRouteTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCombatLogRouteOperationFloodgateTest extends APIComb
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_OPERATION_FLOODGATE;
+        return DungeonKey::OPERATION_FLOODGATE->value;
     }
 
     #[Test]
@@ -26,16 +26,12 @@ class APICombatLogControllerCombatLogRouteOperationFloodgateTest extends APIComb
         $postBody = $this->getJsonData('TWW/tww_s2_operation_floodgate_8_mv_3', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 18, 472);
+        $this->validatePulls($postBody, $responseArr, 18, 472);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
@@ -47,16 +43,12 @@ class APICombatLogControllerCombatLogRouteOperationFloodgateTest extends APIComb
         $postBody = $this->getJsonData('TWW/tww_s3_ptr_operation_floodgate_7', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 21, 476);
+        $this->validatePulls($postBody, $responseArr, 21, 476);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

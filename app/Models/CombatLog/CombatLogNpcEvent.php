@@ -4,7 +4,6 @@ namespace App\Models\CombatLog;
 
 use App\Models\Npc\Npc;
 use App\Models\Traits\HasGenericModelRelation;
-use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -28,7 +27,7 @@ use Illuminate\Support\Carbon;
  */
 class CombatLogNpcEvent extends Model
 {
-    use HasGenericModelRelation, SeederModel, SerializesDates;
+    use HasGenericModelRelation, SerializesDates;
 
     protected $connection = 'combatlog';
 

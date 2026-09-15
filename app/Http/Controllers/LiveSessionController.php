@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 use App\Events\LiveSession\InviteEvent;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Floor\Floor;
 use App\Models\LiveSession\LiveSession;
 use App\Models\Team;
 use App\Models\User;
+use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -65,8 +66,13 @@ class LiveSessionController extends Controller
                 }
 
                 if ($invitees->isNotEmpty()) {
-                    // Broadcast that channel that a team member has started a live session and that we're invited!
-                    broadcast(new InviteEvent($liveSession, $user, $invitees));
+                    try {
+                        // Broadcast that channel that a team member has started a live session and that we're invited!
+                        broadcast(new InviteEvent($liveSession, $user, $invitees));
+                    } catch (BroadcastException $exception) {
+                        // Ignore broadcast failures, but keep the visibility the outer catch below used to give this
+                        report($exception);
+                    }
                 }
             } catch (Exception $exception) {
                 report($exception);
@@ -89,18 +95,20 @@ class LiveSessionController extends Controller
      * @throws AuthorizationException
      */
     public function view(
-        Request                    $request,
-        MapContextServiceInterface $mapContextService,
-        Dungeon                    $dungeon,
-        DungeonRoute               $dungeonroute,
-        ?string                    $title,
-        LiveSession                $liveSession,
+        Request                         $request,
+        MapContextServiceInterface      $mapContextService,
+        FloorResolutionServiceInterface $floorResolutionService,
+        Dungeon                         $dungeon,
+        DungeonRoute                    $dungeonroute,
+        ?string                         $title,
+        LiveSession                     $liveSession,
     ) {
         $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
 
         return $this->viewFloor(
             $request,
             $mapContextService,
+            $floorResolutionService,
             $dungeon,
             $dungeonroute,
             $title,
@@ -115,13 +123,14 @@ class LiveSessionController extends Controller
      * @throws AuthorizationException
      */
     public function viewFloor(
-        Request                    $request,
-        MapContextServiceInterface $mapContextService,
-        Dungeon                    $dungeon,
-        DungeonRoute               $dungeonroute,
-        ?string                    $title,
-        LiveSession                $liveSession,
-        string                     $floorIndex,
+        Request                         $request,
+        MapContextServiceInterface      $mapContextService,
+        FloorResolutionServiceInterface $floorResolutionService,
+        Dungeon                         $dungeon,
+        DungeonRoute                    $dungeonroute,
+        ?string                         $title,
+        LiveSession                     $liveSession,
+        string                          $floorIndex,
     ) {
         Gate::authorize('view', $dungeonroute);
 
@@ -142,16 +151,13 @@ class LiveSessionController extends Controller
             abort(404);
         }
 
-        if (!is_numeric($floorIndex)) {
-            $floorIndex = '1';
-        }
+        $resolvedFloor = $floorResolutionService->resolveRequestedFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion, $floorIndex);
 
-        /** @var Floor|null $floor */
-        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($dungeonroute->mappingVersion, (int)$floorIndex)
-            ->first();
-
-        if ($floor === null) {
+        // Note: this does NOT redirect to a canonical URL when the resolved floor merely doesn't
+        // match the requested index (unlike DungeonExploreController/DungeonHeatmapController/
+        // AdminToolsCombatLogController) - only when nothing matched at all, which in practice never
+        // happens since Floor::indexOrFacade() always falls back to the default floor.
+        if (!$resolvedFloor->floorWasFound) {
             return redirect()->route('dungeonroute.livesession.view', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
@@ -164,7 +170,7 @@ class LiveSessionController extends Controller
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
                 'liveSession'  => $liveSession,
-                'floor'        => $floor,
+                'floor'        => $resolvedFloor->floor,
                 'mapContext'   => $mapContextService->createMapContextLiveSession($liveSession, User::getCurrentUserMapFacadeStyle()),
             ]);
         }

@@ -12,6 +12,7 @@ use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
 use App\Models\CombatLog\ChallengeModeRun;
+use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
@@ -84,6 +85,7 @@ use Override;
  * @property int                  $published_state_id
  * @property int|null             $dungeon_start_map_icon_id
  * @property string|null          $clone_of
+ * @property int|null             $upgrade_of_dungeon_route_id
  * @property string               $title
  * @property string               $description
  * @property int|null             $level_min
@@ -94,6 +96,8 @@ use Override;
  * @property bool                 $teeming
  * @property bool                 $demo
  * @property array<string, mixed> $setup                           Attribute
+ * @property bool                 $is_upgrade_draft                Attribute
+ * @property bool                 $has_upgrade_draft               Attribute
  * @property bool                 $has_thumbnail                   Attribute
  * @property int                  $has_enemy_forces                Computed column added by CoverageService::selectRaw()
  * @property int                  $mapping_version_game_version_id Computed column added by AjaxDungeonRouteController::get()'s selectRaw()
@@ -117,12 +121,14 @@ use Override;
  * @property Path                              $route
  * @property Season|null                       $season
  * @property Faction                           $faction
- * @property User|null                         $author           Can be null in case of temporary route
+ * @property User|null                         $author                Can be null in case of temporary route
  * @property MDTImport                         $mdtImport
  * @property Team|null                         $team
  * @property PublishedState                    $publishedState
  * @property DungeonRouteScheduledPublish|null $scheduledPublish
- * @property ChallengeModeRun|null             $challengeModeRun Is only set if route is created through API
+ * @property ChallengeModeRun|null             $challengeModeRun      Is only set if route is created through API
+ * @property DungeonRoute|null                 $upgradeOfDungeonRoute
+ * @property DungeonRoute|null                 $upgradeDraft
  *
  * @property EloquentCollection<int, CharacterClassSpecialization>     $specializations
  * @property EloquentCollection<int, CharacterClass>                   $classes
@@ -143,6 +149,7 @@ use Override;
  * @property EloquentCollection<int, LiveSessionOverpulledEnemy>       $overpulledEnemies
  * @property EloquentCollection<int, DungeonRouteEnemyRaidMarker>      $enemyRaidMarkers
  * @property EloquentCollection<int, MapIcon>                          $mapicons
+ * @property EloquentCollection<int, MapIcon>                          $routeMapIcons
  * @property EloquentCollection<int, PageView>                         $pageviews
  * @property EloquentCollection<int, Tag>                              $tags
  * @property EloquentCollection<int, RouteAttribute>                   $routeattributes
@@ -181,11 +188,14 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'has_thumbnail',
         'has_team',
         'published',
+        'is_upgrade_draft',
+        'has_upgrade_draft',
     ];
 
     protected $hidden = [
         'id',
         'author_id',
+        'upgrade_of_dungeon_route_id',
         'dungeon_id',
         'faction_id',
         'team_id',
@@ -212,6 +222,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'id',
         'public_key',
         'clone_of',
+        'upgrade_of_dungeon_route_id',
         'author_id',
         'dungeon_id',
         'mapping_version_id',
@@ -224,6 +235,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'title',
         'description',
         'difficulty',
+        'dungeon_difficulty',
         'seasonal_index',
         'level_min',
         'level_max',
@@ -236,6 +248,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'rating_count',
         'thumbnail_refresh_queued_at',
         'thumbnail_updated_at',
+        'pull_gradient',
+        'pull_gradient_apply_always',
     ];
 
     protected function casts(): array
@@ -499,6 +513,18 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     }
 
     /**
+     * The map icons that this route actually owns. Deliberately NOT mapicons(), which widens itself to
+     * team wide icons that do not belong to this route - that relation must never be used as a copy or
+     * as a delete source.
+     *
+     * @return HasMany<MapIcon, $this>
+     */
+    public function routeMapIcons(): HasMany
+    {
+        return $this->hasMany(MapIcon::class);
+    }
+
+    /**
      * Resolves the dungeon start map icon for this route. When a specific start was chosen
      * (dungeon_start_map_icon_id) it is returned directly; otherwise falls back to the first
      * dungeon start of the route's mapping version.
@@ -546,6 +572,27 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->hasOne(DungeonRouteScheduledPublish::class);
     }
 
+    /**
+     * The route that this route is an upgrade draft of, if any.
+     *
+     * @return BelongsTo<DungeonRoute, $this>
+     */
+    public function upgradeOfDungeonRoute(): BelongsTo
+    {
+        return $this->belongsTo(DungeonRoute::class, 'upgrade_of_dungeon_route_id');
+    }
+
+    /**
+     * The upgrade draft that was created for this route, if any. There can only ever be one - the
+     * dungeon_routes_upgrade_of_unique index enforces that.
+     *
+     * @return HasOne<DungeonRoute, $this>
+     */
+    public function upgradeDraft(): HasOne
+    {
+        return $this->hasOne(DungeonRoute::class, 'upgrade_of_dungeon_route_id');
+    }
+
     /** @return HasMany<Tag, $this> */
     public function tagsteam(): HasMany
     {
@@ -586,7 +633,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     {
         /** @var Collection<int, KillZone> $killZones */
         $killZones = $this->killZones()
-            ->with(['enemies', 'floor'])
+            ->with(['enemies.floor', 'enemies.npc', 'floor'])
             ->get();
 
         if ($useFacade) {
@@ -738,6 +785,25 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->team_id !== null;
     }
 
+    /**
+     * Deliberately an attribute rather than an isUpgradeDraft() method: Larastan resolves an $appends
+     * entry by camel-casing it, and a public method of that name shadows the accessor. Same shape as
+     * has_team / has_thumbnail.
+     */
+    public function getIsUpgradeDraftAttribute(): bool
+    {
+        return $this->upgrade_of_dungeon_route_id !== null;
+    }
+
+    public function getHasUpgradeDraftAttribute(): bool
+    {
+        // Explicitly load the relation so this appended attribute also works on routes hydrated in a
+        // collection (preventLazyLoading). Callers listing many routes should eager load upgradeDraft.
+        $this->loadMissing('upgradeDraft');
+
+        return $this->getRelation('upgradeDraft') !== null;
+    }
+
     public function updateRating(): float
     {
         $avg   = round($this->ratings()->avg('rating') ?? 0, 2);
@@ -775,6 +841,32 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         }
 
         return $this->thumbnails->first()?->getURL();
+    }
+
+    /**
+     * Returns the thinner-lined front page thumbnails (one per active floor), falling back to the
+     * standard thumbnail *per floor* when the front-page variant has not been generated yet for that
+     * floor specifically (backwards compatible with pre-existing routes, and correct mid-generation:
+     * a route whose front-page render is still queued/failed for one floor out of several must not
+     * drop that floor from the carousel entirely - see getHeroThumbnailUrl(), which does not need this
+     * per-floor merge since it only ever shows a single thumbnail).
+     *
+     * @return Collection<int, File>
+     */
+    public function getFrontPageThumbnails(): Collection
+    {
+        // Explicitly load the relation so this also works on routes hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('dungeonRouteThumbnails');
+
+        return $this->dungeonRouteThumbnails
+            ->whereIn('variant', [DungeonRouteThumbnailVariant::FrontPage, DungeonRouteThumbnailVariant::Standard])
+            ->groupBy('floor_id')
+            ->map(static fn(Collection $thumbnailsForFloor) => $thumbnailsForFloor
+                ->firstWhere('variant', DungeonRouteThumbnailVariant::FrontPage)
+                ?? $thumbnailsForFloor->first())
+            ->pluck('file')
+            ->filter()
+            ->values();
     }
 
     /**
@@ -879,15 +971,18 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     public function mayUserView(?User $user): bool
     {
-        $result = false;
-        $result = match ($this->published_state_id) {
-            PublishedState::ALL[PublishedState::UNPUBLISHED]                                                 => $this->mayUserEdit($user),
+        // Whoever may edit a route may always view it - a route its own author cannot open is a state
+        // the application offers no way out of, and a TEAM published route that lost its team (both
+        // removing the last member and deleting the team null team_id in bulk) lands in exactly that state
+        if ($this->mayUserEdit($user)) {
+            return true;
+        }
+
+        return match ($this->published_state_id) {
             PublishedState::ALL[PublishedState::TEAM]                                                        => ($this->team !== null && $this->team->isUserMember($user)) || ($user !== null && $user->hasRole(Role::ROLE_ADMIN)),
             PublishedState::ALL[PublishedState::WORLD_WITH_LINK], PublishedState::ALL[PublishedState::WORLD] => true,
-            default                                                                                          => $result,
+            default                                                                                          => false,
         };
-
-        return $result;
     }
 
     public function mayUserEdit(?User $user): bool
@@ -1453,15 +1548,77 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         int    $showAffixes,
         int    $showDungeonImage,
         int    $isAdmin,
+        int    $useFrontPageThumbnail = 0,
     ): string {
         return sprintf(
-            '%s:%s_%d_%d_%d',
+            '%s:%s_%d_%d_%d_%d',
             $orientation,
             $locale,
             $showAffixes,
             $showDungeonImage,
             $isAdmin,
+            $useFrontPageThumbnail,
         );
+    }
+
+    /**
+     * Deletes every mapping/content relation that this route owns. Called from the deleting hook and from
+     * DungeonRouteUpgradeDraftService::apply(), so that the delete path and the apply path cannot drift
+     * apart. The per model loops are deliberate - a mass delete on the relation skips the model events
+     * that clean up polylines, kill zone children and awakened obelisk links.
+     */
+    public function deleteContentRelations(): void
+    {
+        $this->load([
+            'brushlines',
+            'paths',
+            'arrows',
+            'killZones',
+        ]);
+
+        // Mapping related items
+        $this->enemyRaidMarkers()->delete();
+        foreach ($this->brushlines as $brushline) {
+            $brushline->delete();
+        }
+
+        foreach ($this->paths as $path) {
+            $path->delete();
+        }
+
+        foreach ($this->arrows as $arrow) {
+            $arrow->delete();
+        }
+
+        foreach ($this->killZones as $killZone) {
+            $killZone->delete();
+        }
+
+        // A mass delete on the relation skips MapIcon::deleting (via HasLinkedAwakenedObelisk),
+        // which is what cleans up map_object_to_awakened_obelisk_links
+        foreach ($this->routeMapIcons()->get() as $mapIcon) {
+            $mapIcon->delete();
+        }
+        $this->pridefulEnemies()->delete();
+
+        // Dungeonroute settings
+        $this->affixgroups()->delete();
+        $this->routeattributesraw()->delete();
+        $this->playerclasses()->delete();
+        $this->playerraces()->delete();
+        $this->playerspecializations()->delete();
+    }
+
+    /**
+     * Deletes the Auto Route Creator enemy failures recorded for this route. Rows imported from another deployment
+     * (`source` set) keep that deployment's route id, which can collide with a local one, so they are left alone.
+     */
+    public function deleteCombatLogRouteEnemyFailures(): void
+    {
+        CombatLogRouteEnemyFailure::query()
+            ->where('dungeon_route_id', $this->id)
+            ->whereNull('source')
+            ->delete();
     }
 
     #[Override]
@@ -1469,20 +1626,37 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     {
         parent::boot();
 
+        // An upgrade draft can never be published on its own - publishing only ever happens through
+        // DungeonRouteUpgradeDraftService::apply(), onto the original. This is the silent backstop that
+        // covers DungeonRouteSaveService::persist()'s forceFill() (which bypasses $fillable but not model
+        // events), admin form edits, and any future write path.
+        static::saving(static function (DungeonRoute $dungeonRoute): void {
+            if ($dungeonRoute->upgrade_of_dungeon_route_id !== null) {
+                $dungeonRoute->published_state_id = PublishedState::ALL[PublishedState::UNPUBLISHED];
+            }
+        });
+
         // Delete route properly if it gets deleted
         static::deleting(static function (DungeonRoute $dungeonRoute) {
             $dungeonRoute->load([
                 'dungeonRouteThumbnails',
                 'dungeonRouteThumbnailJobs',
-                'brushlines',
-                'paths',
-                'arrows',
-                'killZones',
                 'livesessions',
             ]);
 
-            $dungeonRoute->setConnection('combatlog')->challengeModeRun()->delete();
+            // An original's draft must not be left orphaned. This terminates: a draft never has a draft
+            // of its own, findOrCreateDraft() rejects a draft-of-a-draft.
+            // Queried rather than read off the relation: a route hydrated as part of a collection (a
+            // team's dungeonRoutes, an admin bulk delete) has preventLazyLoading armed, and reading
+            // $dungeonRoute->upgradeDraft there throws LazyLoadingViolationException.
+            $dungeonRoute->upgradeDraft()->first()?->delete();
+
+            // A mass delete on the relation skips ChallengeModeRun::deleting, which is what cleans up
+            // challenge_mode_run_data - fetch and delete the single row instead so the hook fires
+            $dungeonRoute->setConnection('combatlog')->challengeModeRun()->first()?->delete();
             $dungeonRoute->setConnection(null);
+
+            $dungeonRoute->deleteCombatLogRouteEnemyFailures();
 
             // Delete thumbnails
             foreach ($dungeonRoute->dungeonRouteThumbnails as $dungeonRouteThumbnail) {
@@ -1497,34 +1671,11 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 $dungeonRouteThumbnailJob->expire();
             }
 
-            // Dungeonroute settings
-            $dungeonRoute->affixgroups()->delete();
-            $dungeonRoute->routeattributesraw()->delete();
-            $dungeonRoute->playerclasses()->delete();
-            $dungeonRoute->playerraces()->delete();
-            $dungeonRoute->playerspecializations()->delete();
+            // Dungeonroute settings + mapping related items. Tags are deliberately NOT part of this -
+            // apply() reuses deleteContentRelations() and must not wipe the original's tags.
+            $dungeonRoute->deleteContentRelations();
             $dungeonRoute->tags()->delete();
 
-            // Mapping related items
-            $dungeonRoute->enemyRaidMarkers()->delete();
-            foreach ($dungeonRoute->brushlines as $brushline) {
-                $brushline->delete();
-            }
-
-            foreach ($dungeonRoute->paths as $path) {
-                $path->delete();
-            }
-
-            foreach ($dungeonRoute->arrows as $arrow) {
-                $arrow->delete();
-            }
-
-            foreach ($dungeonRoute->killZones as $killZone) {
-                $killZone->delete();
-            }
-
-            $dungeonRoute->mapicons()->delete();
-            $dungeonRoute->pridefulEnemies()->delete();
             // External
             $dungeonRoute->ratings()->delete();
             $dungeonRoute->favorites()->delete();

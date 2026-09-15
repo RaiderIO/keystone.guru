@@ -4,7 +4,8 @@
     </div>
     <div class="col-auto">
         <a class="btn-sm btn-success" href="{{ upgrade_url }}">
-            <i class="fa fa-arrow-up"></i> {{ upgrade_label }}
+            <i class="fa fa-arrow-up"></i>
+            {{#if has_draft}}{{ mapping_version_upgrade_continue_label }}{{else}}{{ upgrade_label }}{{/if}}
         </a>
     </div>
 </div>

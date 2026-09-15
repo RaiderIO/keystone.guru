@@ -106,3 +106,9 @@ class LiveSessionEnemy extends Enemy {
         return 'LiveSessionEnemy-' + this.id;
     }
 }
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        LiveSessionEnemy,
+    };
+}

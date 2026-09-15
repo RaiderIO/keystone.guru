@@ -246,7 +246,7 @@ final class DungeonRouteControllerSaveNewTest extends DungeonRouteControllerCrea
     {
         // Arrange
         $user    = User::factory()->create();
-        $dungeon = $this->getInactiveDungeon();
+        $dungeon = $this->getInactiveDungeon(4572001, 'test_inactive_dungeon_savenew');
 
         try {
             // Act
@@ -257,6 +257,7 @@ final class DungeonRouteControllerSaveNewTest extends DungeonRouteControllerCrea
             // Assert
             $response->assertSessionHasErrors('dungeon_id');
         } finally {
+            $this->cleanupInactiveDungeon($dungeon);
             $user->delete();
         }
     }

@@ -103,6 +103,30 @@ return [
             ]) : [],
         ],
 
+        // Used only by the test suite, and only when DB_PHPUNIT_COMBATLOG_DATABASE is set:
+        // Tests\TestCase then redirects the `combatlog` connection's database here, so tests
+        // never read/write the live combatlog schema — its combat-log-derived rows are not
+        // recoverable (#4346). Unset, tests keep using the `combatlog` connection as-is
+        // (CI and worktrees already point that at a private schema).
+        'combatlog_phpunit' => [
+            'driver'         => 'mysql',
+            'url'            => env('DB_URL'),
+            'host'           => env('DB_COMBATLOG_HOST', '127.0.0.1'),
+            'port'           => env('DB_COMBATLOG_PORT', '3306'),
+            'database'       => env('DB_PHPUNIT_COMBATLOG_DATABASE', ''),
+            'username'       => env('DB_COMBATLOG_USERNAME', 'forge'),
+            'password'       => env('DB_COMBATLOG_PASSWORD', ''),
+            'charset'        => 'utf8mb4',
+            'collation'      => 'utf8mb4_unicode_ci',
+            'prefix'         => '',
+            'prefix_indexes' => true,
+            'strict'         => false,
+            'engine'         => null,
+            'options'        => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'combatlog_migrate' => [
             'driver'         => 'mysql',
             'url'            => env('DB_URL'),

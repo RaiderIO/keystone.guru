@@ -29,7 +29,11 @@
         >
             {{view_ip_addresses_label}}
         </a>
-        <a class="dropdown-item" href="/admin/user/{{user.id}}/grantAllBenefits">
+        <a class="dropdown-item" href="#"
+           data-bs-toggle="modal" data-bs-target="#grant_all_benefits_modal"
+           data-user-id="{{user.id}}"
+           data-user-name="{{user.name}}"
+        >
             {{grant_all_benefits_label}}
         </a>
     </div>

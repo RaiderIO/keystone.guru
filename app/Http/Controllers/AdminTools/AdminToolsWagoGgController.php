@@ -32,7 +32,7 @@ class AdminToolsWagoGgController extends Controller
         $uiMapAssignmentTableHeaderIndexMaxY    = array_search('Region_4', $uiMapAssignmentTableHeaders, true);
 
         /** @var Collection<int, Floor> $allFloors */
-        //        $allDungeons = Dungeon::where('key', Dungeon::DUNGEON_AZJOL_NERUB)->get()->keyBy('id');
+        //        $allDungeons = Dungeon::where('key', DungeonKey::AZJOL_NERUB->value)->get()->keyBy('id');
         $allFloors = Floor::where('facade', 0)
             ->where('ui_map_id', '>', 0)
             ->where('ingame_min_x', 0)

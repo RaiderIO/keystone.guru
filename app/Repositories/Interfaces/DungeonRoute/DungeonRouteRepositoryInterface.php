@@ -10,6 +10,7 @@ use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
+use Closure;
 use Illuminate\Support\Collection;
 
 /**
@@ -65,4 +66,12 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
     public function findRoutes(DungeonRouteSearchFilter $filter): Collection;
 
     public function findCombatLogRouteByPublicKey(?string $publicKey): ?DungeonRoute;
+
+    /**
+     * Chunks all dungeon routes of the given season and/or dungeons, passing each chunk to the given callback.
+     *
+     * @param Collection<int, int>|null                    $dungeonIds
+     * @param Closure(Collection<int, DungeonRoute>): void $callback
+     */
+    public function chunkBySeasonAndDungeonIds(?Season $season, ?Collection $dungeonIds, int $chunkSize, Closure $callback): void;
 }

@@ -63,6 +63,8 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
 
     public function doCreateThumbnailProcessStart(string $commandLine): void
     {
+        $commandLine = self::redactSecret($commandLine);
+
         $this->info(__METHOD__, get_defined_vars());
     }
 
@@ -74,6 +76,13 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
     public function doCreateThumbnailRescale(string $tmpFile, string $target): void
     {
         $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function doCreateThumbnailBlankImageRejected(string $tmpFile, string $previewUrl, string $variant): void
+    {
+        $previewUrl = self::redactSecret($previewUrl);
+
+        $this->error(__METHOD__, get_defined_vars());
     }
 
     public function doCreateThumbnailRemovedOldPngFile(): void
@@ -101,8 +110,10 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->warning(__METHOD__);
     }
 
-    public function doCreateThumbnailError(string $errors): void
+    public function doCreateThumbnailError(string $errors, string $previewUrl, string $variant, int $renderDurationMs): void
     {
+        $previewUrl = self::redactSecret($previewUrl);
+
         $this->error(__METHOD__, get_defined_vars());
     }
 
@@ -114,6 +125,11 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
     public function queueThumbnailRefreshDispatchedJob(string $publicKey, int $index, bool $force): void
     {
         $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function queueThumbnailRefreshDispatchException(string $publicKey, int $index, Throwable $exception): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
     }
 
     public function doCreateThumbnailEnd(): void
@@ -138,5 +154,13 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         Exception $exception,
     ): void {
         $this->error(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * Replaces the value of any `secret` query parameter in a URL or command line with a placeholder.
+     */
+    private static function redactSecret(string $value): string
+    {
+        return preg_replace('/([?&]secret=)[^&\s\'"]*/', '$1[redacted]', $value) ?? $value;
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\WotLK;
-
-use App\Models\Dungeon;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\WotLK;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICombatLogControllerCombatLogRouteTestBase;
@@ -16,7 +15,7 @@ class APICombatLogControllerCombatLogRoutePitOfSaronTest extends APICombatLogCon
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_PIT_OF_SARON;
+        return DungeonKey::PIT_OF_SARON->value;
     }
 
     #[Test]
@@ -26,16 +25,12 @@ class APICombatLogControllerCombatLogRoutePitOfSaronTest extends APICombatLogCon
         $postBody = $this->getJsonData('WotLK/midnight_s1_pit_of_saron_13', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+        $responseArr = $this->storeCombatLogRoute($postBody);
 
         // Assert
-        $response->assertCreated();
-
-        $responseArr = json_decode($response->content(), true);
-
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 24, 666);
+        $this->validatePulls($postBody, $responseArr, 24, 666);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 }

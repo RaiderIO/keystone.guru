@@ -94,11 +94,13 @@ use Illuminate\Support\Collection;
                         </div>
                     @else
                         <div class="col-auto">
-                            <input type="checkbox"
-                                   class="form-check-input spell spell-{{ $npcSpell->spell_id }}"
-                                   name="spell-{{ $npcSpell->spell_id }}"
-                                   data-id="{{ $npcSpell->spell_id }}"
-                                   value="{{ $npcSpell->spell_id }}" {{ $spell->hidden_on_map ? '' : 'checked' }}>
+                            <div class="form-check">
+                                <input type="checkbox"
+                                       class="form-check-input spell spell-{{ $npcSpell->spell_id }}"
+                                       name="spell-{{ $npcSpell->spell_id }}"
+                                       data-id="{{ $npcSpell->spell_id }}"
+                                       value="{{ $npcSpell->spell_id }}" {{ $spell->hidden_on_map ? '' : 'checked' }}>
+                            </div>
                         </div>
                         <div class="col">
                             <div class="form-element" style="line-height: 2.5">

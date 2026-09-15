@@ -7,9 +7,16 @@ class MapState extends Signalable {
         this.map = map;
         this._started = false;
         this._stopped = false;
+        // The handler asks this instance whether it should warn, so it needs `this`. Binding once and
+        // keeping the result means start() and stop() add/remove the exact same function object.
+        this._onBeforeUnload = this._onBeforeUnload.bind(this);
     }
 
     _onBeforeUnload(event) {
+        if (!this.shouldWarnUnsavedChanges()) {
+            return;
+        }
+
         // Cancel the event as stated by the standard.
         event.preventDefault();
         // Chrome requires returnValue to be set.
@@ -52,6 +59,15 @@ class MapState extends Signalable {
 
     isModal() {
         return false;
+    }
+
+    /**
+     * Whether navigating away while this map state is active should warn the user that they may lose
+     * changes. States that know their changes are already synced with the server should override this.
+     * @returns {boolean}
+     */
+    shouldWarnUnsavedChanges() {
+        return true;
     }
 
     shouldRebuildEnemyVisuals() {

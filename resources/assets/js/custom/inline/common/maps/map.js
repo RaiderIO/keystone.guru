@@ -4,7 +4,7 @@
  * @property {boolean} edit
  * @property {boolean} readonly
  * @property {boolean} sandbox
- * @property {string} defaultEnemyVisualType
+ * @property {string} defaultEnemyDisplayType
  * @property {boolean} defaultHeatmapShowTooltips
  * @property {boolean} defaultHeatmapShowOnTop
  * @property {number} defaultUnkilledEnemyOpacity
@@ -25,6 +25,8 @@
  * @property {string} tilesBaseUrl
  * @property {Object} parameters
  * @property {number} floorId
+ * @property {boolean} npcCompendiumEnabled
+ * @property {string} npcCompendiumBaseUrl
  */
 
 /**
@@ -104,7 +106,7 @@ class CommonMapsMap extends InlineCode {
             this._setupRatingSelection();
             this._setupFloorSelection();
             this._setupMapObjectGroupVisibility();
-            this._setupEnemyVisualTypes();
+            this._setupEnemyDisplayTypes();
             this._setupZoomControl();
             this._setupFavorite();
             this._setupLabelToggle();
@@ -224,6 +226,14 @@ class CommonMapsMap extends InlineCode {
                 console.error(e);
             }
         }
+
+        // The cookies above were written directly, not through a StateManager setter
+        state.invalidateCookieCache();
+
+        // Another tab may have changed one of them; cookies have no change event to listen to
+        window.addEventListener('focus', function () {
+            state.invalidateCookieCache();
+        }, false);
     }
 
     /**
@@ -411,7 +421,7 @@ class CommonMapsMap extends InlineCode {
      *
      * @private
      */
-    _setupEnemyVisualTypes() {
+    _setupEnemyDisplayTypes() {
         // Enemy visual types
         $('#map_enemy_visuals_dropdown').find('a:not(.disabled)').unbind('click').bind('click', function () {
             let $this = $(this);
@@ -577,10 +587,19 @@ class CommonMapsMap extends InlineCode {
         let enemy = enemyContextMenuEvent.context;
         let visualData = enemy.getVisualData();
 
-        // The modal is only rendered on route/explore maps - on e.g. the admin mapping pages this is a no-op
+        // The modal (and the NPC Compendium tab below) is only relevant on route/explore maps -
+        // on e.g. the admin mapping pages this is a no-op
         let enemyDetailsModal = document.getElementById('enemy_details_modal');
 
         if (visualData !== null && enemyDetailsModal !== null) {
+            // Opened synchronously from the user gesture so popup blockers don't intervene. On an
+            // embedded route map this can still run inside a sandboxed iframe without
+            // `allow-popups` - window.open() then returns null, so fall through to the modal
+            // instead of silently doing nothing.
+            if (this.options.npcCompendiumEnabled && window.open(`${this.options.npcCompendiumBaseUrl}/${enemy.npc.id}`) !== null) {
+                return;
+            }
+
             let $title = $('#enemy_details_modal_title_text').html(lang.get(enemy.npc.name));
             if (getState().isMapAdmin()) {
                 $title.empty().append(
@@ -666,7 +685,7 @@ class CommonMapsMap extends InlineCode {
         // Build a list of elements to hide from the UI
         for (let index in MAP_OBJECT_GROUP_NAMES) {
             let mapObjectGroupName = MAP_OBJECT_GROUP_NAMES[index];
-            let group = getState().getDungeonMap().mapObjectGroupManager.getByName(mapObjectGroupName);
+            let group = getMapObjectGroup(mapObjectGroupName);
 
             if (group instanceof MapObjectGroup) {
                 if (hiddenInUI.includes(mapObjectGroupName) ||
@@ -702,10 +721,13 @@ class CommonMapsMap extends InlineCode {
      * @private
      */
     _fetchMdtExportString() {
+        let mapContext = getState().getMapContext();
+
         $.ajax({
             type: 'GET',
-            // When in edit mode, never use the cache, when viewing we DO want the cache to avoid excessive server load
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/mdtExport?useCache=${this.options.edit ? 0 : 1}`,
+            // When in edit mode, never use the cache, when viewing we DO want the cache to avoid excessive server load.
+            // Both urls are signed server-side, so useCache cannot be flipped from here
+            url: this.options.edit ? mapContext.getMdtExportUrlUncached() : mapContext.getMdtExportUrl(),
             dataType: 'json',
             beforeSend: function () {
                 $('.mdt_export_loader_container').show();
@@ -721,6 +743,7 @@ class CommonMapsMap extends InlineCode {
                 }
 
             },
+            error: mdtExportAjaxErrorFn,
             complete: function () {
                 $('.mdt_export_loader_container').hide();
                 $('.mdt_export_result_container').show();

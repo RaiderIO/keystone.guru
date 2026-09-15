@@ -1,1 +1,42 @@
-[]
+[
+    {
+        "id": 20,
+        "mapping_version_id": 838,
+        "floor_id": 49,
+        "name": "mapping.checkpoints.bfa.temple_of_sethraliss.atrium_of_sethraliss_name",
+        "lat": -206.5,
+        "lng": 273.5
+    },
+    {
+        "id": 24,
+        "mapping_version_id": 909,
+        "floor_id": 49,
+        "name": "mapping.checkpoints.bfa.temple_of_sethraliss.atrium_of_sethraliss_name",
+        "lat": -206.5,
+        "lng": 273.5
+    },
+    {
+        "id": 27,
+        "mapping_version_id": 996,
+        "floor_id": 49,
+        "name": "mapping.checkpoints.bfa.temple_of_sethraliss.atrium_of_sethraliss_name",
+        "lat": -206.5,
+        "lng": 273.5
+    },
+    {
+        "id": 35,
+        "mapping_version_id": 1059,
+        "floor_id": 49,
+        "name": "mapping.checkpoints.bfa.temple_of_sethraliss.atrium_of_sethraliss_name",
+        "lat": -206.5,
+        "lng": 273.5
+    },
+    {
+        "id": 37,
+        "mapping_version_id": 1066,
+        "floor_id": 49,
+        "name": "mapping.checkpoints.bfa.temple_of_sethraliss.atrium_of_sethraliss_name",
+        "lat": -206.5,
+        "lng": 273.5
+    }
+]

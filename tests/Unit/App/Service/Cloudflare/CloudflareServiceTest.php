@@ -155,6 +155,36 @@ final class CloudflareServiceTest extends PublicTestCase
         $this->assertCount(14, $ipRanges);
     }
 
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[Group('CloudflareService')]
+    public function getIpRangesV4_GivenRequest_BoundsConnectAndResponseTimeouts(): void
+    {
+        // Arrange
+        $log = LoggingFixtures::createCloudflareServiceLogging($this);
+
+        $cloudflareService = ServiceFixtures::getCloudflareServiceMock(
+            testCase: $this,
+            methodsToMock: ['curlGet'],
+            cacheService: $this->cacheService,
+            log: $log,
+        );
+
+        $cloudflareService->expects($this->once())
+            ->method('curlGet')
+            ->with(
+                $this->anything(),
+                $this->callback(static fn(array $options): bool => ($options[CURLOPT_CONNECTTIMEOUT] ?? null) === 5
+                    && ($options[CURLOPT_TIMEOUT] ?? null) === 5),
+            )
+            ->willReturn($this->getResponse('ipsv4'));
+
+        // Act
+        $cloudflareService->getIpRangesV4(false);
+    }
+
     private function getResponse(string $fileName): string
     {
         return file_get_contents(sprintf('%s/Fixtures/%s.txt', __DIR__, $fileName));

@@ -1338,6 +1338,15 @@ return [
                 'the_headteachers_enclave' => 'Enclave de la Doyenne',
             ],
         ],
+        'altar_of_fangs' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'sacrificial_approach' => '',
+                'mutation_chambers'    => '',
+                'altar_of_fangs'       => '',
+            ],
+        ],
         'den_of_nalorakk' => [
             'name'         => 'Antre de Nalorakk',
             'abbreviation' => '',
@@ -1397,7 +1406,9 @@ return [
             'name'         => 'Arène de la Cicatrice du Vide',
             'abbreviation' => '',
             'floors'       => [
-                'voidscar_arena' => 'Arène de la Cicatrice du Vide',
+                'halls_of_spite'   => '',
+                'voidscar_arena'   => 'Arène de la Cicatrice du Vide',
+                'domanaars_ascent' => '',
             ],
         ],
         'windrunner_spire' => [

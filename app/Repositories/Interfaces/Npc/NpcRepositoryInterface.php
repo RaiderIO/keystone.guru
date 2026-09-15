@@ -30,4 +30,12 @@ interface NpcRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, int>
      */
     public function getInUseNpcIds(MappingVersion $mappingVersion, ?Collection $inUseNpcs = null): Collection;
+
+    /**
+     * NPCs keyed by id, with the relations the compendium's NPC link hover tooltips read (#4096) eager-loaded.
+     *
+     * @param  Collection<int, int> $npcIds
+     * @return Collection<int, Npc>
+     */
+    public function findAllByIdWithTooltipRelations(Collection $npcIds): Collection;
 }

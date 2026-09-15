@@ -73,4 +73,9 @@ class ResultEventDungeonRouteBuilderLogging extends DungeonRouteBuilderLogging i
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
+
+    public function buildAwardedEnemyKillsDroppedWithoutTrigger(string $guid, array $awardedNpcIds): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
 }

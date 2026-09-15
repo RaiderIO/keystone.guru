@@ -28,6 +28,7 @@ class MappingVersionFactory extends Factory
             'enemy_forces_shrouded_zul_gamux' => 27,
             'timer_max_seconds'               => 1800,
             'mdt_mapping_hash'                => null,
+            'mdt_changes_pending'             => false,
         ];
     }
 }

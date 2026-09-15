@@ -10,8 +10,9 @@ import {transformSync} from 'esbuild';
  * Parity notes vs the old webpack pipeline:
  * - `$asset-url` is prepended to every entry exactly like sass-loader's `additionalData` did.
  * - Webpack tilde imports (`~bootstrap/scss/bootstrap`) and bare package imports
- *   (`lightslider/dist/css/lightslider.min.css`) resolve into node_modules via the custom
- *   importer below.
+ *   (`nouislider/dist/nouislider.css`) resolve into node_modules via the custom importer below.
+ *   Since #3595 removed the last bare import from app.scss every entry uses the tilde form, so
+ *   that branch of the importer is only kept honest by sass.test.mjs.
  * - Plain `.css` imports are inlined the way css-loader did. Dart-sass emits `.css`-suffixed
  *   `@import` urls literally without consulting importers, so the extension is stripped from
  *   loaded scss first; the extensionless url then goes through the importer, which resolves the

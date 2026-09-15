@@ -18,15 +18,15 @@ return [
         ],
         'overview' => [
             'title'   => '개요',
-            'routes'  => '',
-            'members' => '',
+            'routes'  => '경로',
+            'members' => '멤버',
         ],
         'routepublishing' => [
             'title'            => '경로 게시',
-            'description'      => '',
-            'enabled'          => '',
-            'timezone_warning' => '',
-            'profile_link'     => '',
+            'description'      => '경로 게시 기능을 사용하면 예약된 일정에 따라 경로를 전 세계에 공개할 수 있습니다. 경로별로 날짜/시간을 지정하면 해당 시점에 자동으로 게시 상태로 전환되어 전 세계에 공개됩니다.',
+            'enabled'          => '활성화됨',
+            'timezone_warning' => '예약된 게시 시간은 프로필의 시간대를 기준으로 합니다. :link에서 시간대가 올바르게 설정되어 있는지 확인하세요.',
+            'profile_link'     => '프로필 설정',
         ],
         'routes' => [
             'title'                  => '경로 목록',

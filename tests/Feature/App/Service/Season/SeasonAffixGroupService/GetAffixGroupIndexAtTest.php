@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Service\Season\SeasonAffixGroupService;
-
+namespace Tests\Feature\App\Service\Season\SeasonAffixGroupService;
 use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Service\Season\SeasonAffixGroupService;

@@ -4,6 +4,7 @@ namespace App\Http\Resources\Dungeon;
 
 use App\Http\Resources\Floor\FloorResource;
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Floor\Floor;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -67,9 +68,10 @@ class DungeonResource extends JsonResource
             'heatmapEnabled'       => $this->heatmap_enabled,
             'combinedViewEnabled'  => (int)$this->floors->contains(fn(Floor $floor) => $floor->facade),
             'speedrunEnabled'      => $this->speedrun_enabled,
-            'speedrunDifficulties' => collect(Dungeon::DIFFICULTY_ALL)
-                ->filter(fn(int $id) => in_array($id, $this->getEnabledSpeedrunDifficulties(), true))
-                ->keys()
+            'speedrunDifficulties' => collect(DungeonDifficulty::cases())
+                ->filter(fn(DungeonDifficulty $difficulty) => in_array($difficulty->value, $this->getEnabledSpeedrunDifficulties(), true))
+                ->map(fn(DungeonDifficulty $difficulty) => $difficulty->slug())
+                ->values()
                 ->all(),
             'floors' => $this->floors
                 ->filter(static fn(Floor $floor) => !$floor->facade)

@@ -4,32 +4,32 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Events\Models\Brushline\BrushlineChangedEvent;
 use App\Events\Models\Brushline\BrushlineDeletedEvent;
-use App\Http\Controllers\Controller;
+use App\Events\Models\ModelChangedEvent;
 use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
-use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Brushline\APIBrushlineFormRequest;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteLimitType;
-use App\Models\Polyline;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Override;
 use Teapot\StatusCode\Http;
 use Throwable;
 
-class AjaxBrushlineController extends Controller
+class AjaxBrushlineController extends AjaxMappingModelBaseController
 {
     use EnforcesDungeonRouteLimits;
-    use SavesPolylines;
     use ValidatesFloorId;
 
     /**
@@ -56,58 +56,47 @@ class AjaxBrushlineController extends Controller
             return $result;
         }
 
-        DB::transaction(function () use ($coordinatesService, $brushline, $dungeonRoute, $validated, &$result) {
-            $beforeModel = $brushline === null ? null : clone $brushline;
-
-            if ($brushline === null) {
-                $brushline = Brushline::create([
+        try {
+            $result = $this->storeModel(
+                $coordinatesService,
+                null,
+                array_merge($validated, [
                     'dungeon_route_id' => $dungeonRoute->id,
-                    'floor_id'         => $validated['floor_id'],
-                    'polyline_id'      => -1,
-                ]);
-                $success = true;
-            } else {
-                $success = $brushline->update([
-                    'dungeon_route_id' => $dungeonRoute->id,
-                    'floor_id'         => $validated['floor_id'],
-                ]);
-            }
-
-            try {
-                if ($success) {
-                    // Create a new polyline and save it
-                    $this->savePolylineToModel(
-                        $coordinatesService,
-                        $dungeonRoute,
-                        $dungeonRoute->mappingVersion,
-                        Polyline::findOrNew($brushline->polyline_id),
-                        $beforeModel,
-                        $brushline,
-                        $validated['polyline'],
-                    );
-
-                    // Touch the route so that the thumbnail gets updated
-                    $dungeonRoute->touch();
-
-                    // Something's updated; broadcast it
-                    if (Auth::check()) {
-                        try {
-                            broadcast(new BrushlineChangedEvent($coordinatesService, $dungeonRoute, Auth::user(), $brushline));
-                        } catch (BroadcastException) {
-                            // We don't really care if the broadcast fails, so just catch the exception and move on
-                        }
-                    }
-                } else {
-                    throw new Exception(__('controller.brushline.error.unable_to_save_brushline'));
-                }
-
-                $result = $brushline;
-            } catch (Exception) {
-                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
-            }
-        });
+                    'polyline_id'      => $brushline?->polyline_id ?? -1, // @phpstan-ignore nullsafe.neverNull
+                ]),
+                Brushline::class,
+                $brushline,
+                null,
+                $dungeonRoute,
+            );
+        } catch (Exception) {
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+        }
 
         return $result;
+    }
+
+    /**
+     * Returns the coordinate data that was dropped from the brushline-changed broadcast (#3909) -
+     * collaborating clients call this after receiving that event instead.
+     *
+     * @return array<string, mixed>
+     *
+     * @throws AuthorizationException
+     */
+    public function show(CoordinatesServiceInterface $coordinatesService, DungeonRoute $dungeonRoute, Brushline $brushline): array
+    {
+        $dungeonRoute = $brushline->dungeonRoute;
+
+        Gate::authorize('view', $dungeonRoute);
+
+        return [
+            'model_data' => $brushline->polyline->getCoordinatesData(
+                $coordinatesService,
+                $dungeonRoute->mappingVersion,
+                $brushline->floor,
+            ),
+        ];
     }
 
     /**
@@ -117,24 +106,51 @@ class AjaxBrushlineController extends Controller
      */
     public function delete(Request $request, DungeonRoute $dungeonRoute, Brushline $brushline)
     {
+        // route:cache serializes this method; a body whose only $this usage sits inside a
+        // nested closure is reconstructed unbound. Delegating keeps a top-level $this read
+        // here, and the closures below compile normally inside a regular method (#4329).
+        return $this->deleteBrushline($request, $dungeonRoute, $brushline);
+    }
+
+    /**
+     * @return Response|ResponseFactory
+     *
+     * @throws AuthorizationException
+     */
+    private function deleteBrushline(Request $request, DungeonRoute $dungeonRoute, Brushline $brushline)
+    {
         $dungeonRoute = $brushline->dungeonRoute;
 
         // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's brush line
         Gate::authorize('edit', $dungeonRoute);
 
         try {
-            if ($brushline->delete()) {
-                if (Auth::check()) {
-                    /** @var \App\Models\User $user */
-                    $user = Auth::getUser();
-
-                    broadcast(new BrushlineDeletedEvent($dungeonRoute, $user, $brushline));
+            $deleted = DB::transaction(function () use ($dungeonRoute, $brushline): bool {
+                // Nothing has been written yet, so there is nothing to roll back
+                if (!$brushline->delete()) {
+                    return false;
                 }
 
                 $this->dungeonRouteChanged($dungeonRoute, $brushline, null);
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonRoute->touch();
+
+                return true;
+            });
+
+            if ($deleted) {
+                // Broadcast only once the delete is committed, so no listener can read pre-commit state
+                if (Auth::check()) {
+                    /** @var \App\Models\User $user */
+                    $user = Auth::getUser();
+
+                    try {
+                        broadcast(new BrushlineDeletedEvent($dungeonRoute, $user, $brushline));
+                    } catch (BroadcastException) {
+                        // We don't really care if the broadcast fails, so just catch the exception and move on
+                    }
+                }
 
                 $result = response()->noContent();
             } else {
@@ -145,5 +161,15 @@ class AjaxBrushlineController extends Controller
         }
 
         return $result;
+    }
+
+    #[Override]
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Brushline|Model             $model,
+    ): ModelChangedEvent {
+        return new BrushlineChangedEvent($context, $user, $model);
     }
 }

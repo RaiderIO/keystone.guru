@@ -2,8 +2,12 @@
 
 use App\Http\Controllers\Api\V1\InternalTeam\Cache\APICacheController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogController;
+use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogEnemyFailureController;
+use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogObservationController;
+use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRouteController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRunController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APILiveSessionCombatLogController;
+use App\Http\Controllers\Api\V1\InternalTeam\Patreon\APIPatreonDiagnosticsController;
 use App\Http\Controllers\Api\V1\Public\Dungeon\APIDungeonController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteDiscoverController;
@@ -31,8 +35,16 @@ Route::prefix('v1')->group(static function () {
             Route::post('events', new APILiveSessionCombatLogController()->store(...))->name('api.v1.combatlog.livesession.events.store');
         });
 
-        Route::middleware(['api_role:admin'])->group(static function () {
+        // Read-only endpoints an AI agent needs for combat log triage (#4227) - admins and agents, nobody else
+        Route::middleware(['api_role:admin|ai_agent'])->group(static function () {
             Route::get('seasons/{season}/runs/{runId}/segments', new APICombatLogRunController()->segments(...))->name('api.v1.combatlog.run.segments');
+            Route::get('enemy-failures/{dungeon}', new APICombatLogEnemyFailureController()->index(...))->name('api.v1.combatlog.enemy_failures.index');
+            Route::get('route/{dungeonRoute}/post-body', new APICombatLogRouteController()->postBody(...))->name('api.v1.combatlog.route.post_body');
+            Route::prefix('observations')->group(static function () {
+                Route::middleware('throttle:api-combatlog-observations-density')->get('density', new APICombatLogObservationController()->density(...))->name('api.v1.combatlog.observations.density');
+                Route::get('spells/{spell}', new APICombatLogObservationController()->spellHistory(...))->name('api.v1.combatlog.observations.spells.show');
+                Route::get('npcs/{npc}', new APICombatLogObservationController()->npcHistory(...))->name('api.v1.combatlog.observations.npcs.show');
+            });
         });
     });
 
@@ -46,6 +58,20 @@ Route::prefix('v1')->group(static function () {
             });
         });
         Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', new APIDungeonRouteThumbnailJobController()->show(...))->name('api.v1.thumbnailjob.show');
+    });
+
+    Route::middleware(['api_role:admin|ai_agent'])->prefix('patreon')->group(static function () {
+        // Reads the recorded run history and nothing else - no Patreon traffic, so no throttle
+        Route::get('sync-runs', new APIPatreonDiagnosticsController()->syncRuns(...))->name('api.v1.patreon.sync_runs');
+
+        // Everything below walks the whole campaign - the per-user endpoint included - and shares Patreon's
+        // rate limit with the hourly sync
+        Route::middleware('throttle:api-patreon-diagnostics')->group(static function () {
+            Route::get('user', new APIPatreonDiagnosticsController()->user(...))->name('api.v1.patreon.user');
+            Route::get('campaign', new APIPatreonDiagnosticsController()->campaign(...))->name('api.v1.patreon.campaign');
+            Route::get('sync-dry-run', new APIPatreonDiagnosticsController()->syncDryRun(...))->name('api.v1.patreon.sync_dry_run');
+            Route::get('benefit-reconciliation', new APIPatreonDiagnosticsController()->benefitReconciliation(...))->name('api.v1.patreon.benefit_reconciliation');
+        });
     });
 
     Route::middleware(['api_role:admin'])->prefix('cache')->group(static function () {

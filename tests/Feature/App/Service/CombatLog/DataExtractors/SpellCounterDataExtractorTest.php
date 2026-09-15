@@ -122,6 +122,36 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
+    public function extractData_givenTheSpellIsAlreadyAssignedToTheDungeonByAnotherNpc_doesNotCreateADuplicateSpellDungeonRow(): void
+    {
+        // Arrange - #4327: a different NPC (or a racing extraction job) already assigned this spell to this
+        // dungeon before this NPC's own NpcSpell row existed, so assignSpellToNpc() still reaches the
+        // SpellDungeon insert for a pair that is already there
+        $castSpellId   = 9990035;
+        $debuffSpellId = 9990036;
+        $this->createTestSpell($castSpellId);
+        $this->createTestSpell($debuffSpellId, 12000);
+        SpellDungeon::create([
+            'spell_id'   => $castSpellId,
+            'dungeon_id' => $this->currentDungeon->dungeon->id,
+        ]);
+
+        // Act - must not throw on the now-duplicate insert attempt
+        $this->runExtract([
+            $this->npcCastStart(0, $castSpellId, 'Lens Flare'),
+            $this->debuffApplied(0, $debuffSpellId, 'Lens Flare', null),
+            $this->debuffRemoved(1999, $debuffSpellId, 'Lens Flare', null),
+            $this->playerCastSuccess(2000, VanishSpellCounterDefinition::SPELL_ID_VANISH_CAST, 'Vanish'),
+        ]);
+
+        // Assert - still exactly one row for the pair
+        $this->assertSame(
+            1,
+            SpellDungeon::where('spell_id', $castSpellId)->where('dungeon_id', $this->currentDungeon->dungeon->id)->count(),
+        );
+    }
+
+    #[Test]
     public function extractData_givenTargetingDebuffDroppedJustAfterVanish_setsCounterOnCastSpell(): void
     {
         // Arrange - same signature, but the removal line comes *after* the counter cast
@@ -744,6 +774,36 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
         $this->assertSame(2, $this->result->toArray()['addedSpellCounters']);
         $this->assertCounterRecorded($cloakDebuffSpellId, Spell::COUNTER_CLOAK_OF_SHADOWS, SpellProperty::CounterCloakOfShadows);
         $this->assertCounterRecorded($invisibilityDebuffSpellId, Spell::COUNTER_INVISIBILITY, SpellProperty::CounterInvisibility);
+    }
+
+    #[Test]
+    public function extractData_givenTheDungeonChangedMidLog_attributesTheSpellToTheDungeonMovedInto(): void
+    {
+        // Arrange - the dungeon the extractor reads off the context is cached between lines, so a detection made
+        // after the context moved on must still land on the dungeon the counter actually happened in
+        $castSpellId   = 9990035;
+        $debuffSpellId = 9990036;
+        $this->createTestSpell($castSpellId);
+        $this->createTestSpell($debuffSpellId, 12000);
+        $otherDungeon        = Dungeon::where('id', '!=', $this->currentDungeon->dungeon->id)->firstOrFail();
+        $otherDungeonContext = new DataExtractionCurrentDungeon($otherDungeon);
+
+        // Act - the first line primes the cache with the original dungeon, the rest happen in the one moved into
+        $this->extractor->beforeExtract($this->result, self::COMBAT_LOG_PATH);
+        $this->extractor->extractData($this->result, $this->currentDungeon, $this->npcCastStart(0, $castSpellId, 'Lens Flare'));
+        foreach ([
+            $this->debuffApplied(0, $debuffSpellId, 'Lens Flare', null),
+            $this->debuffRemoved(1999, $debuffSpellId, 'Lens Flare', null),
+            $this->playerCastSuccess(2000, VanishSpellCounterDefinition::SPELL_ID_VANISH_CAST, 'Vanish'),
+        ] as $event) {
+            $this->extractor->extractData($this->result, $otherDungeonContext, $event);
+        }
+        $this->extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
+
+        // Assert
+        $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
+        $this->assertTrue(SpellDungeon::where('spell_id', $castSpellId)->where('dungeon_id', $otherDungeon->id)->exists());
+        $this->assertFalse(SpellDungeon::where('spell_id', $castSpellId)->where('dungeon_id', $this->currentDungeon->dungeon->id)->exists());
     }
 
     /**

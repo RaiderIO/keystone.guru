@@ -35,4 +35,9 @@ interface ResultEventDungeonRouteBuilderLoggingInterface extends DungeonRouteBui
     ): void;
 
     public function buildEnemyKilled(string $guid, string $timestamp): void;
+
+    /**
+     * @param array<int, int> $awardedNpcIds
+     */
+    public function buildAwardedEnemyKillsDroppedWithoutTrigger(string $guid, array $awardedNpcIds): void;
 }

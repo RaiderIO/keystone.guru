@@ -4,18 +4,30 @@ namespace Tests\Feature\Controller\Compendium;
 
 use App\Features\NpcCompendium;
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
+use App\Models\Spell\SpellTuningChange;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Feature\Traits\ReadsDungeonSelect;
+use Tests\Fixtures\Traits\CreatesDungeon;
+use Tests\Fixtures\Traits\CreatesSpell;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('Compendium')]
 final class SpellCompendiumControllerTest extends PublicTestCase
 {
+    use CreatesDungeon;
+    use CreatesSpell;
+    use ProvidesDungeon;
+    use ReadsDungeonSelect;
+
     /** @var array<string, mixed> */
     private array $datatableParams = [
         'draw'    => 1,
@@ -72,7 +84,7 @@ final class SpellCompendiumControllerTest extends PublicTestCase
         $this->actingAsGuest();
 
         // Act
-        $response = $this->get(route('spell.compendium.index'));
+        $response = $this->get(route('spell.compendium.index.dungeon', ['dungeon' => Dungeon::active()->firstOrFail()]));
 
         // Assert
         $response->assertOk();
@@ -82,10 +94,92 @@ final class SpellCompendiumControllerTest extends PublicTestCase
     public function index_givenAdminFeatureEnabled_returnsOk(): void
     {
         // Act
-        $response = $this->get(route('spell.compendium.index'));
+        $response = $this->get(route('spell.compendium.index.dungeon', ['dungeon' => Dungeon::active()->firstOrFail()]));
 
         // Assert
         $response->assertOk();
+    }
+
+    #[Test]
+    public function index_givenNoDungeonInUrl_redirectsToContextDungeon(): void
+    {
+        // Arrange
+        $dungeon           = Dungeon::active()->firstOrFail();
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $dungeon->id;
+        $user->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('spell.compendium.index'));
+
+            // Assert - a 302, not a 301: the target depends on the visitor's own context dungeon
+            $response->assertRedirect(route('spell.compendium.index.dungeon', ['dungeon' => $dungeon]));
+            $response->assertStatus(302);
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
+    public function indexDungeon_givenDungeonOtherThanContextDungeon_rendersThatDungeonAndMakesItTheContext(): void
+    {
+        // Arrange - two different dungeons, so the URL is provably what decides what is rendered. Both must
+        // be ones the filter actually offers, or no option renders as selected and there is nothing to read.
+        $contextDungeon   = $this->dungeonsOfferedByDungeonSelect()->orderBy('id')->firstOrFail();
+        $requestedDungeon = $this->dungeonsOfferedByDungeonSelect()->where('id', '!=', $contextDungeon->id)->orderBy('id')->firstOrFail();
+
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $contextDungeon->id;
+        $user->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('spell.compendium.index.dungeon', ['dungeon' => $requestedDungeon]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame($requestedDungeon->id, $this->getSelectedDungeonId($response->getContent()));
+            $this->assertSame($requestedDungeon->id, User::findOrFail(1)->dungeon_id);
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
+    public function indexDungeon_givenDungeonNotOfferedByTheFilter_stillDrivesTheTableFromTheUrlDungeon(): void
+    {
+        // Arrange - the dungeon filter only lists dungeons mapped for the visitor's game version, so
+        // a dungeon outside it is not among its options. The table must still show the URL's dungeon
+        $otherGameVersion = GameVersion::query()
+            ->where('id', '!=', GameVersion::getUserOrDefaultGameVersion()->id)
+            ->firstOrFail();
+        $dungeon = $this->createDungeon(
+            ['active' => true],
+            mappingVersionAttributes: ['game_version_id' => $otherGameVersion->id],
+        );
+
+        // Act
+        $response = $this->get(route('spell.compendium.index.dungeon', ['dungeon' => $dungeon]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertNoDungeonSelected($response->getContent());
+        $response->assertSee(sprintf('const contextDungeonId = %d;', $dungeon->id), false);
+    }
+
+    #[Test]
+    public function indexDungeon_givenUnknownDungeonSlug_returnsNotFound(): void
+    {
+        // Act
+        $response = $this->get('/compendium/dungeon/not-a-dungeon/spell');
+
+        // Assert
+        $response->assertNotFound();
     }
 
     #[Test]
@@ -163,6 +257,55 @@ final class SpellCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function show_givenSpellWithTuningChanges_rendersThemNewestBuildFirst(): void
+    {
+        // Arrange
+        $spell = Spell::where('hidden_on_map', false)->first();
+        $this->assertNotNull($spell);
+        $created = [];
+
+        try {
+            $created[] = SpellTuningChange::factory()->create(['spell_id' => $spell->id, 'from_build' => '0.0.0.00001', 'to_build' => '0.0.0.00002', 'to_build_number' => 2, 'old_text' => '11,111', 'new_text' => '22,222', 'delta' => 1.0]);
+            $created[] = SpellTuningChange::factory()->create(['spell_id' => $spell->id, 'from_build' => '0.0.0.00002', 'to_build' => '0.0.0.00003', 'to_build_number' => 3, 'kind' => 'duration', 'old_coefficient' => null, 'new_coefficient' => null, 'old_text' => '10 sec', 'new_text' => '25 sec', 'delta' => null]);
+
+            // Act
+            $response = $this->get(route('spell.compendium.show', $spell));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeText(__('view_compendium.spell.sections.tuning_changes.title'));
+            $response->assertSeeTextInOrder([
+                __('view_compendium.spell.sections.tuning_changes.build_header', ['from' => '0.0.0.00002', 'to' => '0.0.0.00003']),
+                '10 sec',
+                '25 sec',
+                __('view_compendium.spell.sections.tuning_changes.build_header', ['from' => '0.0.0.00001', 'to' => '0.0.0.00002']),
+                '11,111',
+                '22,222',
+                '+100%',
+            ]);
+            $response->assertDontSeeText(__('view_compendium.spell.sections.tuning_changes.empty'));
+        } finally {
+            foreach ($created as $change) {
+                $change->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function show_givenSpellWithoutTuningChanges_rendersEmptyState(): void
+    {
+        // Arrange
+        $spell = $this->createSpell();
+
+        // Act
+        $response = $this->get(route('spell.compendium.show', $spell));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeText(__('view_compendium.spell.sections.tuning_changes.empty'));
+    }
+
+    #[Test]
     public function show_givenInvalidSpell_returnsNotFound(): void
     {
         // Act
@@ -220,25 +363,50 @@ final class SpellCompendiumControllerTest extends PublicTestCase
     #[Test]
     public function get_givenDungeonFilter_returnsOnlySpellsForDungeon(): void
     {
-        // Arrange
-        $dungeon = Dungeon::active()->first();
-        $this->assertNotNull($dungeon);
+        // Arrange - the couplings are created here rather than picked out of the seed data. Since #3989
+        // stopped MDT coupling NPC spells, `spell_dungeons` seeds empty, so every dungeon returned zero
+        // rows and the loop below asserted nothing at all. Two dungeons, so the filter is provably
+        // filtering rather than just returning everything it has
+        [$dungeon]      = $this->findDungeon(dungeonActive: true);
+        [$otherDungeon] = $this->findDungeon(dungeonActive: true, constraint: static fn(Builder $query) => $query->where('id', '!=', $dungeon->id));
 
-        // Act
-        $response = $this->call('GET', route('ajax.spell.compendium.search'), array_merge($this->datatableParams, [
-            'dungeon_id' => $dungeon->id,
-        ]), [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+        $includedSpell = $this->createSpell();
+        $excludedSpell = $this->createSpell();
 
-        // Assert
-        $response->assertOk();
-        $data = $response->json();
-        $this->assertArrayHasKey('data', $data);
-        foreach ($data['data'] as $spell) {
-            $this->assertTrue(
-                SpellDungeon::where('spell_id', $spell['id'])
-                    ->where('dungeon_id', $dungeon->id)
-                    ->exists(),
-            );
+        // Collected as they are created, so a throw on the second one still hands the first to the finally.
+        // `spell_dungeons` seeds empty on a shared MySQL server, so a leak here is permanent
+        $couplings = collect();
+
+        try {
+            $couplings->push(SpellDungeon::create(['spell_id' => $includedSpell->id, 'dungeon_id' => $dungeon->id]));
+            $couplings->push(SpellDungeon::create(['spell_id' => $excludedSpell->id, 'dungeon_id' => $otherDungeon->id]));
+
+            // Act
+            $response = $this->call('GET', route('ajax.spell.compendium.search'), array_merge($this->datatableParams, [
+                'dungeon_id' => $dungeon->id,
+            ]), [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+
+            // Assert
+            $response->assertOk();
+            $data = $response->json();
+            $this->assertArrayHasKey('data', $data);
+
+            $returnedSpellIds = array_column($data['data'], 'id');
+
+            // Page 1 holds the whole result set, so the two checks below are not at pagination's mercy
+            $this->assertSame(count($returnedSpellIds), $data['recordsFiltered']);
+            $this->assertContains($includedSpell->id, $returnedSpellIds);
+            $this->assertNotContains($excludedSpell->id, $returnedSpellIds);
+
+            foreach ($data['data'] as $spell) {
+                $this->assertTrue(
+                    SpellDungeon::where('spell_id', $spell['id'])
+                        ->where('dungeon_id', $dungeon->id)
+                        ->exists(),
+                );
+            }
+        } finally {
+            SpellDungeon::query()->whereIn('id', $couplings->pluck('id'))->delete();
         }
     }
 

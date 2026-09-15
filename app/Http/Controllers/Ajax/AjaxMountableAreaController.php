@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -50,6 +51,19 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
      */
     public function delete(Request $request, MappingVersion $mappingVersion, MountableArea $mountableArea)
     {
+        // route:cache serializes this method; a body whose only $this usage sits inside a
+        // nested closure is reconstructed unbound. Delegating keeps a top-level $this read
+        // here, and the closures below compile normally inside a regular method (#4329).
+        return $this->deleteMountableArea($request, $mappingVersion, $mountableArea);
+    }
+
+    /**
+     * @return Response|ResponseFactory
+     *
+     * @throws Throwable
+     */
+    private function deleteMountableArea(Request $request, MappingVersion $mappingVersion, MountableArea $mountableArea)
+    {
         return DB::transaction(function () use ($mountableArea) {
             try {
                 if ($mountableArea->delete()) {
@@ -59,7 +73,12 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
                     if (Auth::check()) {
                         /** @var User $user */
                         $user = Auth::user();
-                        broadcast(new MountableAreaDeletedEvent($mountableArea->floor->dungeon, $user, $mountableArea));
+
+                        try {
+                            broadcast(new MountableAreaDeletedEvent($mountableArea->floor->dungeon, $user, $mountableArea));
+                        } catch (BroadcastException) {
+                            // Ignore broadcast failures
+                        }
                     }
                 }
 

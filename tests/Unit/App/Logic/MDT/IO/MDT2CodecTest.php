@@ -401,6 +401,120 @@ final class MDT2CodecTest extends TestCase
     }
 
     #[Test]
+    public function decode_givenStrayTrailingBytes_stripsThemAndDecodesSuccessfully(): void
+    {
+        // Arrange - a validly-padded MDT2 string with a handful of stray bytes appended, as seen
+        // in production (clipboard interference between export and paste, outside our control)
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $string = $this->buildMdt2String($cbor) . 'w==';
+
+        // Act
+        $decoded = $this->codec->decode($string);
+
+        // Assert
+        $this->assertSame(['objects' => ['a', 'b']], $decoded);
+    }
+
+    #[Test]
+    public function decode_givenTrailingGarbageAtCapBoundary_stripsAndDecodesSuccessfully(): void
+    {
+        // Arrange - '!' is outside the Base64 alphabet, so no amount of trimming can accidentally
+        // realign it into valid-but-different Base64: decode only succeeds once every garbage byte
+        // is gone, regardless of this fixture's own padding. Exactly MAX_TRAILING_GARBAGE_BYTES
+        // garbage bytes, pinning the retry loop's inclusive upper edge.
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $string = $this->buildMdt2String($cbor) . str_repeat('!', 8);
+
+        // Act
+        $decoded = $this->codec->decode($string);
+
+        // Assert
+        $this->assertSame(['objects' => ['a', 'b']], $decoded);
+    }
+
+    #[Test]
+    public function decode_givenTrailingGarbageOneByteOverCap_throwsMDT2DecodeException(): void
+    {
+        // Arrange - one byte more than MAX_TRAILING_GARBAGE_BYTES tolerates
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $string = $this->buildMdt2String($cbor) . str_repeat('!', 9);
+
+        // Assert
+        $this->expectException(MDT2DecodeException::class);
+
+        // Act
+        $this->codec->decode($string);
+    }
+
+    #[Test]
+    public function decode_givenExactDuplicateExportConcatenated_decodesFirstExport(): void
+    {
+        // Arrange - the same export string pasted twice back-to-back with no separator, as seen in
+        // production (e.g. a doubled Ctrl+V)
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $export = $this->buildMdt2String($cbor);
+        $string = $export . $export;
+
+        // Act
+        $decoded = $this->codec->decode($string);
+
+        // Assert
+        $this->assertSame(['objects' => ['a', 'b']], $decoded);
+    }
+
+    #[Test]
+    public function decode_givenSecondExportSeparatedByUnrelatedText_decodesFirstExport(): void
+    {
+        // Arrange - two exports pasted together with unrelated text in between, as seen in
+        // production (a multi-route note copied instead of a single export)
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $first  = $this->buildMdt2String($cbor);
+        $second = $this->buildMdt2String(hex2bin('a141614101'));
+        $string = $first . "\r\n\r\n洞穴\r\n\r\n" . $second;
+
+        // Act
+        $decoded = $this->codec->decode($string);
+
+        // Assert
+        $this->assertSame(['objects' => ['a', 'b']], $decoded);
+    }
+
+    #[Test]
+    public function decode_givenSecondExportSeparatedByWordyNoteText_decodesFirstExport(): void
+    {
+        // Arrange - a realistic separator: plain English note text glued directly onto the first
+        // export with no delimiter, whose letters are themselves valid Base64 characters and
+        // comfortably exceed MAX_TRAILING_GARBAGE_BYTES on their own - only the punctuation is
+        // outside the Base64 alphabet, so the fix must cut there rather than rely on trimming a
+        // small fixed number of trailing bytes
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $first  = $this->buildMdt2String($cbor);
+        $second = $this->buildMdt2String(hex2bin('a141614101'));
+        $string = $first . 'Route: The Azure Vault, week 3' . $second;
+
+        // Act
+        $decoded = $this->codec->decode($string);
+
+        // Assert
+        $this->assertSame(['objects' => ['a', 'b']], $decoded);
+    }
+
+    #[Test]
+    public function decode_givenFirstExportCorruptAndSecondExportValid_throwsMDT2DecodeException(): void
+    {
+        // Arrange - recovery only ever tries the first export; a valid second export does not mask
+        // a genuinely corrupt first one
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $string = '!~MDT2~%%%not-base64%%%' . $this->buildMdt2String($cbor);
+
+        // Assert
+        $this->expectException(MDT2DecodeException::class);
+
+        // Act
+        $this->codec->decode($string);
+    }
+
+    #[Test]
     #[DataProvider('decode_givenCorruptString_throwsMDT2DecodeException_Provider')]
     public function decode_givenCorruptString_throwsMDT2DecodeException(string $string): void
     {

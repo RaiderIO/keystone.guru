@@ -7,7 +7,9 @@ use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
+use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Season\Dtos\SeasonWeek;
 use App\Traits\UserCurrentTime;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -21,6 +23,7 @@ use Illuminate\Support\Collection;
  */
 class SeasonService implements SeasonServiceInterface
 {
+    use RemembersToFile;
     use UserCurrentTime;
 
     /**
@@ -30,12 +33,16 @@ class SeasonService implements SeasonServiceInterface
 
     private ?Season $firstSeasonCache = null;
 
+    /** @var Collection<int, Collection<int, Season>> Seasons of an expansion, keyed by expansion id */
+    private Collection $seasonsPerExpansionCache;
+
     public function __construct(
         private readonly ExpansionService          $expansionService,
         private readonly SeasonRepositoryInterface $seasonRepository,
     ) {
-        $this->seasonCache      = collect();
-        $this->firstSeasonCache = null;
+        $this->seasonCache              = collect();
+        $this->firstSeasonCache         = null;
+        $this->seasonsPerExpansionCache = collect();
     }
 
     /**
@@ -88,6 +95,53 @@ class SeasonService implements SeasonServiceInterface
     }
 
     /**
+     * @return Collection<int, SeasonWeek>
+     */
+    public function getSeasonWeeks(Season $season, GameServerRegion $region): Collection
+    {
+        $result = collect();
+
+        $now = Carbon::now();
+        // Weeks are stepped in UTC: a region timezone keeps the reset at the same local hour, so adding weeks in
+        // it shifts the absolute moment by an hour across a DST change - enough to land a week in its neighbour's
+        // period, since getKeystoneLeaderboardPeriod() counts fixed 7 day blocks from a UTC epoch.
+        $seasonStart = $season->start($region)->setTimezone('UTC');
+
+        if ($seasonStart->greaterThan($now)) {
+            return $result;
+        }
+
+        // getNextSeason() is scoped to a single expansion, which is the wrong lens here: seasons run back to back
+        // across expansions, so the next season to start - whichever expansion it belongs to - is what ends this one.
+        $nextSeasonStart = $this->getAllSeasons()
+            ->map(static fn(Season $candidate): Carbon => $candidate->start($region)->setTimezone('UTC'))
+            ->filter(static fn(Carbon $candidateStart): bool => $candidateStart->greaterThan($seasonStart))
+            ->sortBy(static fn(Carbon $candidateStart): int => $candidateStart->getTimestamp())
+            ->first();
+
+        $seasonEnd = $nextSeasonStart === null || $nextSeasonStart->greaterThan($now) ? $now : $nextSeasonStart;
+
+        $date = $seasonStart->copy();
+        $week = 1;
+
+        while ($date->lessThan($seasonEnd)) {
+            $result->put($week, new SeasonWeek(
+                $week,
+                // Halfway into the week rather than at its very start: the reset the season start is aligned to
+                // drifts up to an hour from the epoch's fixed blocks across DST, which flips the period of a date
+                // sitting right on the boundary.
+                $region->getKeystoneLeaderboardPeriod($date->copy()->addDays(3)),
+                $date->copy(),
+            ));
+
+            $date->addWeek();
+            $week++;
+        }
+
+        return $result;
+    }
+
+    /**
      * Find the season active at a given date across all expansions, skipping seasons with no affix groups defined.
      * Unlike getSeasonAt(), this is not scoped to a single expansion and filters out placeholder seasons that have
      * not yet had their affix groups assigned, so an upcoming season never blanks the rotation display.
@@ -119,21 +173,50 @@ class SeasonService implements SeasonServiceInterface
         $region ??= GameServerRegion::getUserOrDefaultRegion();
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
+        // Database stores everything in UTC, so we need to convert the date to UTC to compare it properly
+        $dateUtc = $date->copy()->setTimezone('UTC');
+
+        // An expansion has a handful of seasons and they never change during a request, while callers
+        // ask for one date after another - `SeasonAffixGroupService::getWeeklyAffixGroupsSinceStart()`
+        // walks every week since the season started. Resolving the date against the loaded rows keeps
+        // that at one query per expansion instead of one per date (#4587). The comparison mirrors the
+        // DATE_ADD(DATE_ADD(`start`, ...)) this used to run as SQL; `start` is stored and cast in UTC.
         /** @var Season|null $season */
-        $season = Season::whereRaw(
-            'DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) <= ?',
-            [
-                $region->reset_day_offset,
-                $region->reset_hours_offset,
-                // Database stores everything in UTC, so we need to convert the date to UTC to compare it properly
-                $date->copy()->setTimezone('UTC')->toDateTimeString(),
-            ],
-        )
-            ->where('expansion_id', $expansion->id)
-            ->orderBy('start', 'desc')
-            ->first();
+        $season = $this->getSeasonsOfExpansion($expansion)
+            ->last(static fn(Season $season): bool => $season->start->copy()
+                ->addDays($region->reset_day_offset)
+                ->addHours($region->reset_hours_offset)
+                ->lessThanOrEqualTo($dateUtc));
 
         return $season;
+    }
+
+    /**
+     * Every season of an expansion, oldest first - including the timewalking ones that
+     * {@see SeasonService::getAllSeasons()} deliberately leaves out.
+     *
+     * @return Collection<int, Season>
+     */
+    private function getSeasonsOfExpansion(Expansion $expansion): Collection
+    {
+        if (!$this->seasonsPerExpansionCache->has($expansion->id)) {
+            // The header resolves the current season on every page. Kept out of Redis on purpose: the
+            // serialized tree is ~340 KB, which made it the largest single source of Redis traffic.
+            $this->seasonsPerExpansionCache->put(
+                $expansion->id,
+                $this->rememberLocal(
+                    sprintf('season_service:seasons_of_expansion:%d', $expansion->id),
+                    config('keystoneguru.cache.seasons_of_expansion.ttl'),
+                    static fn(): Collection => Season::where('expansion_id', $expansion->id)
+                        ->with(['expansion.timewalkingEvent', 'affixGroups', 'dungeons'])
+                        ->orderBy('start')
+                        ->get(),
+                    config('keystoneguru.cache.seasons_of_expansion.enabled'),
+                ),
+            );
+        }
+
+        return $this->seasonsPerExpansionCache->get($expansion->id);
     }
 
     /**

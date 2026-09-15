@@ -30,6 +30,7 @@ class NpcType extends CacheModel
     public const MECHANICAL    = 9;
     public const UNDEAD        = 10;
     public const UNCATEGORIZED = 11;
+    public const TOTEM         = 12;
     public const NOT_SPECIFIED = 100; // MDT compatibility
 
     public const ALL = [
@@ -44,6 +45,7 @@ class NpcType extends CacheModel
         'Mechanical'    => self::MECHANICAL,
         'Undead'        => self::UNDEAD,
         'Uncategorized' => self::UNCATEGORIZED,
+        'Totem'         => self::TOTEM,
         'Not specified' => self::NOT_SPECIFIED,
     ];
 

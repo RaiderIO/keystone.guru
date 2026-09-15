@@ -22,7 +22,7 @@ class AjaxMetricController extends Controller
 
         // A DungeonRoute reported through the generic endpoint must still respect the route's own
         // view gate, the same as storeDungeonRoute() - otherwise it's a blanket bypass of that gate.
-        if ($validated['model_class'] === DungeonRoute::class && $validated['model_id'] !== null) {
+        if (($validated['model_class'] ?? null) === DungeonRoute::class && ($validated['model_id'] ?? null) !== null) {
             $dungeonRoute = DungeonRoute::find($validated['model_id']);
 
             if ($dungeonRoute !== null) {

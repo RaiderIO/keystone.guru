@@ -4,8 +4,13 @@ class EditKillZoneEnemySelection extends EnemySelection {
     constructor(map, sourceMapObject, previousKillZoneEnemySelection = null) {
         super(map, sourceMapObject);
 
+        // MapObjectGroupManager.getByName() returns false, not null, when a page hides this group
+        // (e.g. Explore mode's view.blade.php), which happens for the throwaway selection that
+        // EditKillZoneEnemySelection.isEnemySelectable() constructs purely to reuse the filter logic.
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        killZoneMapObjectGroup.register('object:deleted', this, this._onMapObjectDeleted.bind(this));
+        if (killZoneMapObjectGroup) {
+            killZoneMapObjectGroup.register('object:deleted', this, this._onMapObjectDeleted.bind(this));
+        }
 
         this._changedKillZoneIds = [];
         this._previousKillZoneEnemySelection = previousKillZoneEnemySelection;
@@ -35,6 +40,21 @@ class EditKillZoneEnemySelection extends EnemySelection {
 
     getName() {
         return 'EditKillZoneEnemySelection';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    shouldWarnUnsavedChanges() {
+        // Changes to pulls are only sent to the server in stop() - anything still queued is unsaved
+        if (this._changedKillZoneIds.length > 0) {
+            return true;
+        }
+
+        // A freshly created pull is saved by createNewPull() _before_ this map state is constructed, so
+        // its save may still be in flight (or have failed) while nothing is queued here yet
+        let killZone = this.getMapObject();
+        return killZone !== null && !killZone.synced;
     }
 
     /**

@@ -1,10 +1,12 @@
 <?php
 
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClass;
 use App\Models\Npc\NpcType;
 use App\Models\Spell\Spell;
+use Illuminate\Support\Collection;
 
 /**
  * @var Npc                  $npc
@@ -12,7 +14,11 @@ use App\Models\Spell\Spell;
  * @var array<string, mixed> $classifications
  * @var Spell[]              $spells
  * @var array<int, int>      $bolsteringNpcs
+ * @var Collection<int, GameVersion> $allGameVersions
  */
+
+$gameVersionsSelect = $allGameVersions
+    ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 ?>
 
 @extends('layouts.sitepage', [
@@ -45,6 +51,13 @@ use App\Models\Spell\Spell;
         @include('common.forms.form-error', ['key' => 'id'])
     </div>
 
+    <div class="mb-3{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
+        {{ html()->label(__('view_admin.npc.edit.game_version_id'), 'game_version_id') }}
+        <span class="form-required">*</span>
+        {{ html()->select('game_version_id', $gameVersionsSelect, $npc->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL])->class('form-control selectpicker') }}
+        @include('common.forms.form-error', ['key' => 'game_version_id'])
+    </div>
+
     @include('common.dungeon.select', [
         'name' => 'dungeon_ids[]',
         'selected' => isset($npc) ? $npc->dungeons->pluck('id')->toArray() : [],
@@ -53,6 +66,7 @@ use App\Models\Spell\Spell;
         'activeOnly' => false,
         'ignoreGameVersion' => true
     ])
+    @include('common.forms.form-error', ['key' => 'dungeon_ids'])
 
     <div class="mb-3{{ $errors->has('classification_id') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.npc.edit.classification'), 'classification_id') }}
@@ -98,43 +112,55 @@ use App\Models\Spell\Spell;
         <div class="row">
             <div class="col">
                 <div class="{{ $errors->has('dangerous') ? ' has-error' : '' }}">
-                    {{ html()->label(__('view_admin.npc.edit.dangerous'), 'dangerous') }}
-                    {{ html()->checkbox('dangerous', isset($npc) ? $npc->dangerous : 0, 1)->class('form-check-input') }}
+                    <div class="form-check">
+                        {{ html()->checkbox('dangerous', isset($npc) ? $npc->dangerous : 0, 1)->class('form-check-input') }}
+                        {{ html()->label(__('view_admin.npc.edit.dangerous'), 'dangerous')->class('form-check-label') }}
+                    </div>
                     @include('common.forms.form-error', ['key' => 'dangerous'])
                 </div>
             </div>
             <div class="col">
                 <div class="{{ $errors->has('truesight') ? ' has-error' : '' }}">
-                    {{ html()->label(__('view_admin.npc.edit.truesight'), 'truesight') }}
-                    {{ html()->checkbox('truesight', isset($npc) ? $npc->truesight : 0, 1)->class('form-check-input') }}
+                    <div class="form-check">
+                        {{ html()->checkbox('truesight', isset($npc) ? $npc->truesight : 0, 1)->class('form-check-input') }}
+                        {{ html()->label(__('view_admin.npc.edit.truesight'), 'truesight')->class('form-check-label') }}
+                    </div>
                     @include('common.forms.form-error', ['key' => 'truesight'])
                 </div>
             </div>
             <div class="col">
                 <div class="{{ $errors->has('bursting') ? ' has-error' : '' }}">
-                    {{ html()->label(__('view_admin.npc.edit.bursting'), 'bursting') }}
-                    {{ html()->checkbox('bursting', isset($npc) ? $npc->bursting : 1, 1)->class('form-check-input') }}
+                    <div class="form-check">
+                        {{ html()->checkbox('bursting', isset($npc) ? $npc->bursting : 1, 1)->class('form-check-input') }}
+                        {{ html()->label(__('view_admin.npc.edit.bursting'), 'bursting')->class('form-check-label') }}
+                    </div>
                     @include('common.forms.form-error', ['key' => 'bursting'])
                 </div>
             </div>
             <div class="col">
                 <div class="{{ $errors->has('bolstering') ? ' has-error' : '' }}">
-                    {{ html()->label(__('view_admin.npc.edit.bolstering'), 'bolstering') }}
-                    {{ html()->checkbox('bolstering', isset($npc) ? $npc->bolstering : 1, 1)->class('form-check-input') }}
+                    <div class="form-check">
+                        {{ html()->checkbox('bolstering', isset($npc) ? $npc->bolstering : 1, 1)->class('form-check-input') }}
+                        {{ html()->label(__('view_admin.npc.edit.bolstering'), 'bolstering')->class('form-check-label') }}
+                    </div>
                     @include('common.forms.form-error', ['key' => 'bolstering'])
                 </div>
             </div>
             <div class="col">
                 <div class="{{ $errors->has('sanguine') ? ' has-error' : '' }}">
-                    {{ html()->label(__('view_admin.npc.edit.sanguine'), 'sanguine') }}
-                    {{ html()->checkbox('sanguine', isset($npc) ? $npc->sanguine : 1, 1)->class('form-check-input') }}
+                    <div class="form-check">
+                        {{ html()->checkbox('sanguine', isset($npc) ? $npc->sanguine : 1, 1)->class('form-check-input') }}
+                        {{ html()->label(__('view_admin.npc.edit.sanguine'), 'sanguine')->class('form-check-label') }}
+                    </div>
                     @include('common.forms.form-error', ['key' => 'sanguine'])
                 </div>
             </div>
             <div class="col">
                 <div class="{{ $errors->has('runs_away_in_fear') ? ' has-error' : '' }}">
-                    {{ html()->label(__('view_admin.npc.edit.runs_away_in_fear'), 'runs_away_in_fear') }}
-                    {{ html()->checkbox('runs_away_in_fear', isset($npc) ? $npc->runs_away_in_fear : 0, 1)->class('form-check-input') }}
+                    <div class="form-check">
+                        {{ html()->checkbox('runs_away_in_fear', isset($npc) ? $npc->runs_away_in_fear : 0, 1)->class('form-check-input') }}
+                        {{ html()->label(__('view_admin.npc.edit.runs_away_in_fear'), 'runs_away_in_fear')->class('form-check-label') }}
+                    </div>
                     @include('common.forms.form-error', ['key' => 'runs_away_in_fear'])
                 </div>
             </div>

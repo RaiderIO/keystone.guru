@@ -112,6 +112,24 @@ trait SpellConstants
         self::IMMUNITY_ANTI_MAGIC_SHELL         => 'anti_magic_shell',
     ];
 
+    /**
+     * Columns holding behavior derived from combat logs rather than from the game client, so their
+     * values are per-environment and must never round-trip through the git seeders.
+     *
+     * Every entry must be hidden by MappingExportServiceInterface::serializeSpells() (so it stays out
+     * of spells.json) *and* preserved by SpellRelationMapping::getPreservedColumns() (so a re-seed
+     * copies the live value into the temp table instead of nulling it). Those two lists are the same
+     * list, which is why it lives here: `counters_mask` and `bypasses_immunities_mask` were added to
+     * the first and missed from the second, and every staging deploy silently wiped them (#4033).
+     */
+    public const array COMBAT_LOG_DERIVED_COLUMNS = [
+        'aura',
+        'debuff',
+        'miss_types_mask',
+        'counters_mask',
+        'bypasses_immunities_mask',
+    ];
+
     public const string DISPEL_TYPE_MAGIC         = 'magic';
     public const string DISPEL_TYPE_DISEASE       = 'disease';
     public const string DISPEL_TYPE_POISON        = 'poison';
@@ -130,6 +148,18 @@ trait SpellConstants
         self::DISPEL_TYPE_NONE,
         self::DISPEL_TYPE_NOT_AVAILABLE,
         self::DISPEL_TYPE_UNKNOWN,
+    ];
+
+    /** {@see self::ALL_DISPEL_TYPES}, in the prefixed form `spells`.`dispel_type` actually stores (#4095). */
+    public const array ALL_DISPEL_TYPE_KEYS = [
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_MAGIC,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_DISEASE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_POISON,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_CURSE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_ENRAGE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_NONE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_NOT_AVAILABLE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_UNKNOWN,
     ];
 
     public const string CATEGORY_GENERAL      = 'general';
@@ -316,10 +346,5 @@ trait SpellConstants
         self::SPELL_FERAL_HIDE_DRUMS,
         self::SPELL_THUNDEROUS_DRUMS,
         self::SPELL_HARRIERS_CRY,
-    ];
-
-    public const array EXCLUDE_MDT_IMPORT_SPELLS = [
-        186439,
-        // Shadow Mend, was removed from the game
     ];
 }

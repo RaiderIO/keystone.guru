@@ -15,14 +15,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int      $id
- * @property int|null $dungeon_route_id
- * @property int      $dungeon_id
- * @property int      $floor_id
- * @property int      $mapping_version_id
- * @property int|null $npc_id
- * @property float    $lat
- * @property float    $lng
+ * @property int         $id
+ * @property int|null    $dungeon_route_id
+ * @property string|null $source             null when this environment recorded the row itself, otherwise the remote host it was imported from (production, staging)
+ * @property int         $dungeon_id
+ * @property int         $floor_id
+ * @property int         $mapping_version_id
+ * @property int|null    $npc_id
+ * @property float       $lat
+ * @property float       $lng
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -43,6 +44,7 @@ class CombatLogRouteEnemyFailure extends Model
 
     protected $fillable = [
         'dungeon_route_id',
+        'source',
         'dungeon_id',
         'floor_id',
         'mapping_version_id',

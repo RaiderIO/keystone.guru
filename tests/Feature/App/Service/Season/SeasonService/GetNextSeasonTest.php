@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Service\Season\SeasonService;
-
+namespace Tests\Feature\App\Service\Season\SeasonService;
 use App\Models\Season;
 use App\Service\Season\SeasonServiceInterface;
 use PHPUnit\Framework\Attributes\Group;

@@ -19,13 +19,14 @@ return [
             'mdt_invalid_category'                => '',
         ],
         'flash' => [
+            'banned_ip_address_added'                => '',
+            'banned_ip_address_removed'              => '',
             'message_banner_set_successfully'        => '',
             'thumbnail_regenerate_result'            => '',
             'combatlog_route_regenerate_result'      => '',
             'combatlog_criteria_reset'               => '',
             'combatlog_criteria_thresholds_updated'  => '',
             'caches_dropped_successfully'            => '',
-            'releases_exported'                      => '',
             'exception'                              => '',
             'feature_toggle_activated'               => '',
             'feature_toggle_deactivated'             => '',
@@ -34,6 +35,24 @@ return [
             'mapping_version_upgrade_already_latest' => '',
             'read_only_mode_disabled'                => '',
             'read_only_mode_enabled'                 => '',
+        ],
+    ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => '',
+            'affix_updated' => '',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => '',
+            'affixgroup_updated' => '',
+            'affixgroup_deleted' => '',
+        ],
+    ],
+    'apicombatlogrun' => [
+        'error' => [
+            'no_segments' => '',
         ],
     ],
     'apidungeonroute' => [
@@ -73,21 +92,15 @@ return [
         ],
     ],
     'dungeonroutediscover' => [
-        'popular'           => '',
-        'this_week_affixes' => '',
-        'next_week_affixes' => '',
-        'new'               => '',
-        'season'            => [
-            'popular'           => '',
-            'this_week_affixes' => '',
-            'next_week_affixes' => '',
-            'new'               => '',
+        'popular' => '',
+        'new'     => '',
+        'season'  => [
+            'popular' => '',
+            'new'     => '',
         ],
         'dungeon' => [
-            'popular'           => '',
-            'this_week_affixes' => '',
-            'next_week_affixes' => '',
-            'new'               => '',
+            'popular' => '',
+            'new'     => '',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -110,6 +123,11 @@ return [
             'not_found'                  => '',
         ],
     ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => '',
+        ],
+    ],
     'oauthlogin' => [
         'flash' => [
             'registered_successfully' => '',
@@ -125,16 +143,6 @@ return [
         ],
         'legal_agreed_required' => '',
         'legal_agreed_accepted' => '',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => '',
-        ],
-        'flash' => [
-            'release_updated'  => '',
-            'release_created'  => '',
-            'github_exception' => '',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => '',
@@ -176,6 +184,7 @@ return [
             'profile_updated'                  => '',
             'unexpected_error_when_saving'     => '',
             'privacy_settings_updated'         => '',
+            'creator_profile_updated'          => '',
             'password_changed'                 => '',
             'new_password_equals_old_password' => '',
             'new_passwords_do_not_match'       => '',
@@ -192,6 +201,12 @@ return [
             'add_ad_free_giveaway_already_has_giveaway' => '',
             'remove_ad_free_giveaway_not_found'         => '',
             'remove_ad_free_giveaway_not_yours'         => '',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => '',
+            'season_updated' => '',
         ],
     ],
     'spell' => [

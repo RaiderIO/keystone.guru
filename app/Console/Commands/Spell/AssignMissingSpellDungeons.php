@@ -47,8 +47,18 @@ class AssignMissingSpellDungeons extends Command
 
                     // For each spell this NPC can cast, ensure that that spell is also assigned to the same dungeon(s)
                     $npc->npcSpells->each(function (NpcSpell $npcSpell) use ($npc) {
-                        /** @var Spell $spell */
+                        /** @var Spell|null $spell */
                         $spell = $npcSpell->spell;
+
+                        // An NpcSpell can point at a spell the spells table does not have yet: the combat log
+                        // pipeline records the (npc, spell) pair the moment it observes the cast, and the
+                        // spells row is filled in later by the spell data pipeline. The MDT import used to
+                        // create such rows too and no longer does (#3989), but the ones it already created
+                        // remain. Nothing can be inferred for either until the spell itself is known.
+                        // (a bare return skips this NpcSpell; returning false would stop the whole each())
+                        if ($spell === null) {
+                            return;
+                        }
 
                         // For each dungeon this NPC is in, ensure the spell is also assigned to that dungeon
                         foreach ($npc->npcDungeons as $npcDungeon) {

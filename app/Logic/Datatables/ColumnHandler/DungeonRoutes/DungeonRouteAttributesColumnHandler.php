@@ -28,6 +28,11 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
                 $generalSearch,
     ): void {
         $routeAttributeIds = $columnData['search']['value'] ?? null;
+        // A select that isn't rendered for the current view sends the literal string 'undefined'
+        // instead of omitting the param
+        if (!is_array($routeAttributeIds)) {
+            $routeAttributeIds = [];
+        }
         // If filtering or ordering
         if (!empty($routeAttributeIds) || $order !== null) {
             // $builder->leftJoin('dungeon_route_attributes', 'dungeon_route_attributes.dungeon_route_id', '=', 'dungeon_routes.id');

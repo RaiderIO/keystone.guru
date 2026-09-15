@@ -5,8 +5,10 @@ namespace App\Models\CombatLog;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use Carbon\CarbonInterval;
+use Database\Factories\CombatLog\ChallengeModeRunFactory;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
@@ -35,6 +37,9 @@ use Override;
  */
 class ChallengeModeRun extends Model
 {
+    /** @use HasFactory<ChallengeModeRunFactory> */
+    use HasFactory;
+
     protected $connection = 'combatlog';
 
     public $timestamps = false;
@@ -52,6 +57,20 @@ class ChallengeModeRun extends Model
     protected $with = [
         'challengeModeRunData',
     ];
+
+    /**
+     * Timestamps are disabled on this model, so created_at is not treated as a date automatically.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'success'    => 'boolean',
+            'duplicate'  => 'boolean',
+            'created_at' => 'datetime',
+        ];
+    }
 
     /** @return HasOne<Dungeon, $this> */
     public function dungeon(): HasOne

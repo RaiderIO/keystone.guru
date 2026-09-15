@@ -19,4 +19,13 @@ use Illuminate\Support\Collection;
  */
 interface ChallengeModeRunRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * The runs belonging to any of the given dungeon routes, optionally limited to the runs made in one of the
+     * given keystone leaderboard periods (weeks).
+     *
+     * @param  Collection<int, int>              $dungeonRouteIds
+     * @param  Collection<int, int>|null         $periods
+     * @return Collection<int, ChallengeModeRun>
+     */
+    public function getByDungeonRouteIds(Collection $dungeonRouteIds, ?Collection $periods = null): Collection;
 }

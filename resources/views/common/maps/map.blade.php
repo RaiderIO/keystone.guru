@@ -1,5 +1,6 @@
 <?php
 
+use App\Features\NpcCompendium;
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
 use App\Logic\MapContext\Map\MapContextDungeonRoute;
@@ -56,6 +57,7 @@ $user?->setRelation('roles', $user->roles->map(fn($role) => $role->makeHidden([
 $headerTitle         ??= null;
 $season              ??= null;
 $isAdmin             = isset($admin) && $admin;
+$npcCompendiumEnabled = Feature::active(NpcCompendium::class);
 $embed               = isset($embed) && $embed;
 $embedStyle          ??= '';
 $edit                = isset($edit) && $edit;
@@ -86,7 +88,7 @@ $show['controls']['combatLogRouteEnemyFailures'] ??= false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
-$enemyVisualType                  = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
+$enemyDisplayType                 = Enemy::sanitizeDisplayType($_COOKIE['enemy_display_type'] ?? null);
 $heatmapShowTooltips              = $_COOKIE['heatmap_show_tooltips'] ?? '1';
 $mapHeatmapShowOnTop              = (bool)($_COOKIE['map_heatmap_show_on_top'] ?? false);
 $unkilledEnemyOpacity             = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
@@ -164,7 +166,7 @@ if ($isAdmin) {
     'edit' => $edit,
     'readonly' => false, // May be set to true in the code though - but set a default here
     'sandbox' => $sandboxMode,
-    'defaultEnemyVisualType' => $enemyVisualType,
+    'defaultEnemyDisplayType' => $enemyDisplayType,
     'defaultHeatmapShowTooltips' => $heatmapShowTooltips,
     'defaultHeatmapShowOnTop' => $mapHeatmapShowOnTop,
     'defaultUnkilledEnemyOpacity' => $unkilledEnemyOpacity,
@@ -185,6 +187,8 @@ if ($isAdmin) {
     'tilesBaseUrl' => $tilesBaseUrl,
     'parameters' => $parameters,
     'floorId' => $floor->id,
+    'npcCompendiumEnabled' => $npcCompendiumEnabled,
+    'npcCompendiumBaseUrl' => url('/compendium/npc'),
 ], $adminOptions)])
 
 @section('scripts')
@@ -262,6 +266,7 @@ if ($isAdmin) {
                 'showMore' => true,
                 'showDungeonContext' => !($mapContext instanceof MapContextDungeonRoute),
                 'showGameVersionSelection' => false,
+                'showExpansionNav' => false,
                 'forceShrink' => true,
                 'dungeonContextLinks' => $dungeonContextLinks,
             ])
@@ -350,8 +355,11 @@ if ($isAdmin) {
 
     @if(isset($show['controls']['combatLogRouteEnemyFailures']) && $show['controls']['combatLogRouteEnemyFailures'])
         @include('common.maps.controls.combatlogrouteenemyfailures', [
-            'dungeon'        => $dungeon,
-            'mappingVersion' => $mappingVersion,
+            'dungeon'                     => $dungeon,
+            'mappingVersion'              => $mappingVersion,
+            'mappingVersionFailureCounts' => $mappingVersionFailureCounts,
+            'npcFailureCounts'            => $npcFailureCounts,
+            'npcs'                        => $npcs,
         ])
     @endif
 

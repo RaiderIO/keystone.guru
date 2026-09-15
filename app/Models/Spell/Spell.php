@@ -4,12 +4,15 @@ namespace App\Models\Spell;
 
 use App\Models\CacheModel;
 use App\Models\Characteristic;
+use App\Models\CombatLog\SpellProperty;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Npc\Npc;
 use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
+use App\Service\Spell\Description\Dtos\RenderedSpellDescription;
+use App\Service\Spell\Description\Dtos\SpellDescriptionValue;
 use Carbon\Exceptions\InvalidFormatException;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -19,17 +22,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Str;
 
 /**
- * @property int         $id
- * @property int         $game_version_id
- * @property string|null $category
- * @property string|null $cooldown_group
- * @property string      $dispel_type
- * @property string      $mechanic
- * @property string      $icon_name
- * @property string      $name
+ * @property int                    $id
+ * @property int                    $game_version_id
+ * @property string|null            $category
+ * @property string|null            $cooldown_group
+ * @property string                 $dispel_type
+ * @property string                 $mechanic
+ * @property string                 $icon_name
+ * @property string                 $name
+ * @property string|null            $description_template
+ * @property string|null            $description_format
+ * @property array<int, mixed>|null $description_values
+ *
+ * @property string|null $description
  * @property int         $schools_mask
  * @property int         $miss_types_mask
  * @property int         $counters_mask
@@ -44,12 +53,15 @@ use Str;
  * @property Carbon      $fetched_data_at
  *
  * @property string $icon_url
+ * @property string $wowhead_tooltip_data
  *
- * @property GameVersion                           $gameVersion
- * @property EloquentCollection<int, Dungeon>      $dungeons
- * @property EloquentCollection<int, SpellDungeon> $spellDungeons
- * @property EloquentCollection<int, Npc>          $npcs
- * @property Characteristic|null                   $characteristic
+ * @property GameVersion                                $gameVersion
+ * @property EloquentCollection<int, Dungeon>           $dungeons
+ * @property EloquentCollection<int, SpellDungeon>      $spellDungeons
+ * @property EloquentCollection<int, SpellEffect>       $spellEffects
+ * @property EloquentCollection<int, SpellTuningChange> $tuningChanges
+ * @property EloquentCollection<int, Npc>               $npcs
+ * @property Characteristic|null                        $characteristic
  *
  * @method static Builder<self> visible()
  *
@@ -67,9 +79,20 @@ class Spell extends CacheModel implements MappingModelInterface
 
     public $hidden = ['pivot'];
 
+    /** Dispel types that carry no information, and so earn no row in the tooltip. */
+    private const array UNINFORMATIVE_DISPEL_TYPES = [
+        null,
+        '',
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_NONE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_NOT_AVAILABLE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_UNKNOWN,
+    ];
+
     protected $appends = [
         'icon_url',
         'wowhead_url',
+        'wowhead_tooltip_data',
+        'tooltip_data',
     ];
 
     protected $fillable = [
@@ -81,6 +104,10 @@ class Spell extends CacheModel implements MappingModelInterface
         'mechanic',
         'icon_name',
         'name',
+        'description_template',
+        'description_format',
+        'description_values',
+        'damage_multiplier',
         'schools_mask',
         'miss_types_mask',
         'counters_mask',
@@ -113,12 +140,75 @@ class Spell extends CacheModel implements MappingModelInterface
             'hidden_on_map'            => 'boolean',
             'characteristic_id'        => 'integer',
             'fetched_data_at'          => 'datetime',
+            'description_values'       => 'array',
+            'damage_multiplier'        => 'float',
         ];
+    }
+
+    /**
+     * The description as it reads with the values it was rendered with.
+     *
+     * Kept as an accessor rather than a column: the format and its values are the source of truth, so
+     * that damage and healing can be recalculated for a key level without a stored sentence going stale.
+     */
+    public function getDescriptionAttribute(): ?string
+    {
+        if ($this->description_format === null) {
+            return null;
+        }
+
+        return new RenderedSpellDescription(
+            $this->description_format,
+            array_map(SpellDescriptionValue::fromArray(...), $this->description_values ?? []),
+        )->render();
+    }
+
+    /**
+     * Everything the hover tooltip shows, in one payload.
+     *
+     * The description travels as its format plus its values rather than as a finished sentence, so the
+     * browser can put different numbers in when a key level is picked (#3971). Null when we have no
+     * description, which is what makes a link fall back to Wowhead's tooltip instead.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getTooltipDataAttribute(): ?array
+    {
+        if ($this->description_format === null) {
+            return null;
+        }
+
+        return array_filter([
+            'name'       => __($this->name),
+            'format'     => $this->description_format,
+            'values'     => $this->description_values ?? [],
+            'schools'    => self::maskToReadableString(self::ALL_SCHOOLS, $this->schools_mask, 'spellschools') ?: null,
+            'dispelType' => $this->hasUninformativeDispelType() ? null : __($this->dispel_type),
+            'mechanic'   => $this->mechanic ? __($this->mechanic) : null,
+            'castTime'   => $this->cast_time > 0 ? $this->cast_time / 1000 : null,
+            'duration'   => $this->duration > 0 ? $this->duration / 1000 : null,
+        ], static fn(mixed $value): bool => $value !== null && $value !== []);
+    }
+
+    /**
+     * Whether `dispel_type` carries no information worth showing in the tooltip - a dispel type of
+     * none, n/a or unknown, or a value that isn't a recognised prefixed translation key
+     * (legacy/unprefixed data, drift).
+     */
+    private function hasUninformativeDispelType(): bool
+    {
+        return in_array($this->dispel_type, self::UNINFORMATIVE_DISPEL_TYPES, true)
+            || !in_array($this->dispel_type, self::ALL_DISPEL_TYPE_KEYS, true);
     }
 
     public function getWowheadUrlAttribute(): string
     {
         return self::getWowheadLink($this->game_version_id, $this->id, $this->name);
+    }
+
+    public function getWowheadTooltipDataAttribute(): string
+    {
+        return self::getWowheadTooltipData($this->game_version_id, $this->id);
     }
 
     public function setFetchedDataAtAttribute(mixed $value): void
@@ -192,10 +282,22 @@ class Spell extends CacheModel implements MappingModelInterface
         return $this->belongsToMany(Dungeon::class, 'spell_dungeons', 'spell_id', 'dungeon_id');
     }
 
+    /** @return HasMany<SpellEffect, $this> */
+    public function spellEffects(): HasMany
+    {
+        return $this->hasMany(SpellEffect::class);
+    }
+
     /** @return HasMany<SpellDungeon, $this> */
     public function spellDungeons(): HasMany
     {
         return $this->hasMany(SpellDungeon::class);
+    }
+
+    /** @return HasMany<SpellTuningChange, $this> */
+    public function tuningChanges(): HasMany
+    {
+        return $this->hasMany(SpellTuningChange::class);
     }
 
     /**
@@ -212,43 +314,66 @@ class Spell extends CacheModel implements MappingModelInterface
         return 0;
     }
 
-    public function isAssignedDungeon(Dungeon $dungeon): bool
+    /**
+     * Records a combat-log-derived property on this spell, and reports whether this call was the one that set it.
+     *
+     * The write is the guard: the UPDATE only matches rows where the property is still unset, so exactly one caller
+     * ever gets `true` back and can emit the single `CombatLogSpellEvent` that belongs to that transition. Deciding
+     * that by reading the property off the model first does not work - the extraction pipeline hands every job a
+     * process-persistent spell catalog (#4058), so a snapshot taken before another worker's write keeps reporting the
+     * property as unset for up to the catalog TTL, and every job in that window re-emitted the same event (#4199).
+     *
+     * The catalog's own copy is updated on success so the same process does not keep re-issuing the UPDATE.
+     */
+    public function recordCombatLogProperty(SpellProperty $property): bool
     {
-        $result = false;
-        foreach ($this->spellDungeons as $spellDungeon) {
-            if ($spellDungeon->dungeon_id === $dungeon->id) {
-                $result = true;
-                break;
-            }
+        $column = $property->column();
+        $bit    = $property->maskBit();
+
+        $query = self::query()->where('id', $this->id);
+
+        if ($bit === null) {
+            // `debuff` is nullable, so a bare where(false) would never match the rows that still hold NULL
+            $query->where(static fn(Builder $builder) => $builder->where($column, false)->orWhereNull($column));
+            $values = [$column => true];
+        } else {
+            $query->whereRaw(sprintf('%s & ? = 0', $column), [$bit]);
+            $values = [$column => DB::raw(sprintf('%s | %d', $column, $bit))];
         }
 
-        return $result;
+        if ($query->update($values) !== 1) {
+            return false;
+        }
+
+        $this->setAttribute($column, $bit === null ? true : ((int)$this->getAttribute($column) | $bit));
+        $this->syncOriginalAttribute($column);
+
+        return true;
     }
 
     public static function getWowheadLink(?int $gameVersionId, int $spellId, ?string $name = null): string
     {
-        $wowheadBaseUrl = 'https://www.wowhead.com';
-        if ($gameVersionId !== null) {
-            switch ($gameVersionId) {
-                case GameVersion::ALL[GameVersion::GAME_VERSION_WRATH]:
-                    $wowheadBaseUrl .= '/wrath';
-                    break;
-                case GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]:
-                    $wowheadBaseUrl .= '/classic';
-                    break;
-                case GameVersion::ALL[GameVersion::GAME_VERSION_MOP]:
-                    $wowheadBaseUrl .= '/mop-classic';
-                    break;
-            }
-        }
-
-        $result = sprintf('%s/spell=%d', $wowheadBaseUrl, $spellId);
+        $result = sprintf('%s/spell=%d', GameVersion::getWowheadBaseUrl($gameVersionId), $spellId);
 
         if (!empty(__($name))) {
             $result .= '/' . Str::slug(__($name));
         }
 
         return $result;
+    }
+
+    /**
+     * The data-wowhead attribute value for the Wowhead tooltip script. The domain parameter must
+     * match getWowheadLink()'s URL prefix for the same game version, or the hover tooltip shows
+     * retail data while the link points at a classic database.
+     */
+    public static function getWowheadTooltipData(?int $gameVersionId, int $spellId): string
+    {
+        $domain = GameVersion::getWowheadDomain($gameVersionId);
+
+        return $domain === null
+            ? sprintf('spell=%d', $spellId)
+            : sprintf('spell=%d&domain=%s', $spellId, $domain);
     }
 
     /** @param array<int|string, int|string> $mapping */

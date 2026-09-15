@@ -104,7 +104,7 @@ class AdminToolsNpcController extends Controller
                 $existed = $npcCandidate->exists;
                 if ($npcCandidate->save()) {
                     foreach ($dungeons as $dungeon) {
-                        NpcDungeon::create([
+                        NpcDungeon::firstOrCreate([
                             'npc_id'     => $npcCandidate->id,
                             'dungeon_id' => $dungeon->id,
                         ]);
@@ -170,7 +170,7 @@ class AdminToolsNpcController extends Controller
     public function npcsShowMissingDisplayId(): View
     {
         return view('admin.tools.npc.showmissingdisplayid', [
-            'npcs' => Npc::whereNull('display_id')->get(),
+            'npcs' => Npc::with(['dungeons'])->whereNull('display_id')->get(),
         ]);
     }
 

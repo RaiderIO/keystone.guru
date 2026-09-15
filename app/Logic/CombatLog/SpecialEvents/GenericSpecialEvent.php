@@ -4,9 +4,10 @@ namespace App\Logic\CombatLog\SpecialEvents;
 
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataBuilder;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
+use App\Logic\CombatLog\CombatEvents\Interfaces\HasGenericData;
 use Override;
 
-abstract class GenericSpecialEvent extends SpecialEvent
+abstract class GenericSpecialEvent extends SpecialEvent implements HasGenericData
 {
     private GenericDataInterface $genericData;
 

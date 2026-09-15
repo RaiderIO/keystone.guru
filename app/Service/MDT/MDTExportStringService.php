@@ -5,6 +5,7 @@ namespace App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
+use App\Logic\MDT\IO\MDTStringFormat;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Arrow;
 use App\Models\Brushline;
@@ -17,6 +18,7 @@ use App\Models\Path;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\MDT\Logging\MDTExportStringServiceLoggingInterface;
 use Exception;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -41,7 +43,9 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     public function __construct(
         private readonly CacheServiceInterface       $cacheService,
         private readonly CoordinatesServiceInterface $coordinatesService,
+        MDTExportStringServiceLoggingInterface       $log,
     ) {
+        parent::__construct($log);
     }
 
     /**
@@ -254,6 +258,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     private function extractKillZoneDescriptionObjects(): array
     {
         $objects = [];
+
+        $this->dungeonRoute->loadMissing(['killZones.enemies.floor']);
 
         foreach ($this->dungeonRoute->killZones as $killZone) {
             if (!isset($killZone->description)) {
@@ -511,7 +517,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 ];
 
                 try {
-                    return $this->encode($mdtObject);
+                    return $this->encode($mdtObject, MDTStringFormat::MDT2);
                 } catch (Exception $exception) {
                     // Encoding issue - adjust the title and try again
                     if (str_contains($exception->getMessage(), 'call to lua function [string &quot;line&quot;]')) {

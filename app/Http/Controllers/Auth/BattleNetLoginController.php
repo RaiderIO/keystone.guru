@@ -24,11 +24,10 @@ class BattleNetLoginController extends OAuthLoginController
             // Prefer nickname over full name
             'name' => $oauthUser->nickname,
             // Email is likely null in Battle.net's case, so make up one to make the database happy
-            'email'           => sprintf('%s@battle.net', $oauthUser->id),
-            'echo_color'      => randomHexColor(),
-            'password'        => '',
-            'legal_agreed'    => 1,
-            'legal_agreed_ms' => -1,
+            'email'        => sprintf('%s@battle.net', $oauthUser->id),
+            'echo_color'   => randomHexColor(),
+            'password'     => '',
+            'legal_agreed' => 1,
         ]);
     }
 
@@ -42,10 +41,13 @@ class BattleNetLoginController extends OAuthLoginController
         Request                      $request,
         ReadOnlyModeServiceInterface $readOnlyModeService,
     ): RedirectResponse|SymfonyRedirectResponse {
-        $this->redirectTo = $request->get('redirect', '/');
+        $this->redirectTo = $this->resolveRedirectTarget($request, '/');
 
         $region = $request->get('region', GameServerRegion::DEFAULT_REGION);
-        if (GameServerRegion::where('short', $region)->doesntExist()) {
+        // An explicit allowlist rather than a table-existence check: `world` is a region row that
+        // Battle.net cannot authenticate against, and any future non-OAuth region row would
+        // otherwise pass the check and build an OAuth URL nobody can log in through (#4004)
+        if (!in_array($region, GameServerRegion::BATTLE_NET_REGIONS, true)) {
             abort(404);
         }
 

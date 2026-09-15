@@ -5,17 +5,34 @@ namespace Tests\Feature\Controller\Compendium;
 use App\Features\NpcCompendium;
 use App\Models\Dungeon;
 use App\Models\Enemy;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use App\Models\Season;
 use App\Models\User;
+use App\Service\View\RequestViewContextInterface;
+use App\Service\View\ViewServiceInterface;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Feature\Traits\ReadsDungeonSelect;
+use Tests\Fixtures\Traits\CreatesDungeon;
+use Tests\Fixtures\Traits\CreatesNpc;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('Compendium')]
 final class NpcCompendiumControllerTest extends PublicTestCase
 {
+    use CreatesDungeon;
+    use CreatesNpc;
+    use ProvidesDungeon;
+    use ReadsDungeonSelect;
+
+    /** A classification_id no npc_classifications row has; a few seeded NPCs carry one like it */
+    private const int UNKNOWN_CLASSIFICATION_ID = 999999;
+
     /** @var array<string, mixed> */
     private array $datatableParams = [
         'draw'    => 1,
@@ -72,7 +89,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         $this->actingAsGuest();
 
         // Act
-        $response = $this->get(route('npc.compendium.index'));
+        $response = $this->get(route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::active()->firstOrFail()]));
 
         // Assert
         $response->assertOk();
@@ -82,36 +99,133 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     public function index_givenAdminFeatureEnabled_returnsOk(): void
     {
         // Act
-        $response = $this->get(route('npc.compendium.index'));
+        $response = $this->get(route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::active()->firstOrFail()]));
 
         // Assert
         $response->assertOk();
     }
 
     #[Test]
-    public function index_givenShowSeasons_returnsNoDuplicateDungeonsInSelect(): void
+    public function index_givenNoDungeonInUrl_redirectsToContextDungeon(): void
     {
+        // Arrange
+        $dungeon           = Dungeon::active()->firstOrFail();
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $dungeon->id;
+        $user->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('npc.compendium.index'));
+
+            // Assert - a 302, not a 301: the target depends on the visitor's own context dungeon
+            $response->assertRedirect(route('npc.compendium.index.dungeon', ['dungeon' => $dungeon]));
+            $response->assertStatus(302);
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
+    public function indexDungeon_givenDungeonOtherThanContextDungeon_rendersThatDungeonAndMakesItTheContext(): void
+    {
+        // Arrange - two different dungeons, so the URL is provably what decides what is rendered. Both must
+        // be ones the filter actually offers, or no option renders as selected and there is nothing to read.
+        $contextDungeon   = $this->dungeonsOfferedByDungeonSelect()->orderBy('id')->firstOrFail();
+        $requestedDungeon = $this->dungeonsOfferedByDungeonSelect()->where('id', '!=', $contextDungeon->id)->orderBy('id')->firstOrFail();
+
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $contextDungeon->id;
+        $user->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('npc.compendium.index.dungeon', ['dungeon' => $requestedDungeon]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame($requestedDungeon->id, $this->getSelectedDungeonId($response->getContent()));
+            $this->assertSame($requestedDungeon->id, User::findOrFail(1)->dungeon_id);
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
+    public function indexDungeon_givenDungeonNotOfferedByTheFilter_stillDrivesTheTableFromTheUrlDungeon(): void
+    {
+        // Arrange - the dungeon filter only lists dungeons mapped for the visitor's game version, so
+        // a dungeon outside it is not among its options. The table must still show the URL's dungeon
+        $otherGameVersion = GameVersion::query()
+            ->where('id', '!=', GameVersion::getUserOrDefaultGameVersion()->id)
+            ->firstOrFail();
+        $dungeon = $this->createDungeon(
+            ['active' => true],
+            mappingVersionAttributes: ['game_version_id' => $otherGameVersion->id],
+        );
+
         // Act
-        $response = $this->get(route('npc.compendium.index'));
+        $response = $this->get(route('npc.compendium.index.dungeon', ['dungeon' => $dungeon]));
 
         // Assert
         $response->assertOk();
-        $dom = new \DOMDocument();
-        @$dom->loadHTML($response->getContent());
-        $xpath   = new \DOMXPath($dom);
-        $options = $xpath->query('//select[@id="compendium_filter_dungeon"]//option');
-        $values  = [];
-        foreach ($options as $option) {
-            if (!$option instanceof \DOMElement) {
-                continue;
-            }
-            $value = $option->getAttribute('value');
-            if (is_numeric($value) && (int)$value > 0) {
-                $values[] = (int)$value;
-            }
-        }
+        $this->assertNoDungeonSelected($response->getContent());
+        $response->assertSee(sprintf('const contextDungeonId = %d;', $dungeon->id), false);
+    }
 
-        $this->assertSame(count($values), count(array_unique($values)), 'Dungeon select contains duplicate dungeon IDs');
+    #[Test]
+    public function indexDungeon_givenUnknownDungeonSlug_returnsNotFound(): void
+    {
+        // Act
+        $response = $this->get('/compendium/dungeon/not-a-dungeon/npc');
+
+        // Assert
+        $response->assertNotFound();
+    }
+
+    #[Test]
+    public function index_givenShowSeasons_returnsNoDuplicateDungeonsInSelect(): void
+    {
+        // Arrange - the duplicate this guards against can only arise for a dungeon that renders in a season
+        // optgroup *and* in its expansion's, which `common/dungeon/select` prevents by rejecting the season
+        // dungeons from the expansion groups. That branch is skipped whole when the visitor's game version
+        // has no seasons, so without these two preconditions "unique" would hold for a reason unrelated to
+        // the scenario in the name
+        $this->assertTrue(
+            (bool)GameVersion::getUserOrDefaultGameVersion()->has_seasons,
+            'The visitor game version has no seasons, so the select never builds the season optgroups this test is about',
+        );
+
+        // Sourced exactly as DungeonSelectComposer feeds the blade, next season included: a season seeded
+        // ahead of its start date is normal here, and reading only the current one would let the
+        // intersection below go empty while the scenario is live through the next
+        $region      = app(RequestViewContextInterface::class)->getUserOrDefaultRegion();
+        $viewService = app(ViewServiceInterface::class);
+
+        $seasonDungeonIds = collect([
+            $viewService->getNextSeasonForRegion($region),
+            $viewService->getCurrentSeasonForRegion($region),
+        ])->filter()
+            ->flatMap(static fn(Season $season) => $season->dungeons->pluck('id'))
+            ->unique()
+            ->all();
+
+        // Act
+        $response = $this->get(route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::active()->firstOrFail()]));
+
+        // Assert
+        $response->assertOk();
+        $dungeonIds = $this->getOfferedDungeonIds($response->getContent());
+
+        $this->assertNotEmpty(
+            array_intersect($seasonDungeonIds, $dungeonIds),
+            'The select rendered no season dungeon, so no dungeon could have landed in two optgroups',
+        );
+        $this->assertSame(count($dungeonIds), count(array_unique($dungeonIds)), 'Dungeon select contains duplicate dungeon IDs');
     }
 
     #[Test]
@@ -129,10 +243,14 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     #[Test]
     public function get_givenDungeonFilter_returnsOnlyNpcsForDungeon(): void
     {
-        // Arrange
-        $dungeon        = Dungeon::active()->first();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
-        $this->assertNotNull($mappingVersion);
+        // Arrange - the endpoint joins npcs through enemies, so a dungeon whose mapping version carries no
+        // enemy with an npc returns an empty set and the loop below then asserts nothing at all. Require the
+        // property rather than hoping the pick happens to have it
+        [$dungeon, $mappingVersion] = $this->findDungeon(
+            dungeonActive: true,
+            minEnemies:    1,
+            resolve:       static fn(Dungeon $dungeon, MappingVersion $mappingVersion) => $mappingVersion->enemies()->whereNotNull('npc_id')->exists() ?: null,
+        );
 
         // Act
         $response = $this->call('GET', route('ajax.npc.compendium.search'), array_merge($this->datatableParams, [
@@ -143,6 +261,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         $response->assertOk();
         $data = $response->json();
         $this->assertArrayHasKey('data', $data);
+        $this->assertNotEmpty($data['data'], 'The dungeon filter returned no NPCs, so the check below proves nothing');
         foreach ($data['data'] as $npc) {
             $this->assertTrue(
                 Enemy::where('npc_id', $npc['id'])
@@ -150,6 +269,87 @@ final class NpcCompendiumControllerTest extends PublicTestCase
                     ->exists(),
             );
         }
+    }
+
+    #[Test]
+    public function get_givenDungeonFilter_returnsTooltipDataPerNpc(): void
+    {
+        // Arrange - the datatable builds each NPC link's hover tooltip off this payload (#4096); it
+        // is not an appended attribute, so the endpoint has to ask for it explicitly
+        [$dungeon, $mappingVersion] = $this->findDungeon(
+            dungeonActive: true,
+            minEnemies:    1,
+            resolve:       static fn(Dungeon $dungeon, MappingVersion $mappingVersion) => $mappingVersion->enemies()->whereNotNull('npc_id')->exists() ?: null,
+        );
+
+        // Act
+        $response = $this->call('GET', route('ajax.npc.compendium.search'), array_merge($this->datatableParams, [
+            'dungeon_id' => $dungeon->id,
+        ]), [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+
+        // Assert
+        $response->assertOk();
+        $data = $response->json();
+        $this->assertNotEmpty($data['data'], 'The dungeon filter returned no NPCs, so the check below proves nothing');
+        foreach ($data['data'] as $npc) {
+            $this->assertArrayHasKey('tooltip_data', $npc);
+            // The name is the one row every NPC has; everything else is left out when it says nothing
+            $this->assertArrayHasKey('name', $npc['tooltip_data']);
+        }
+    }
+
+    #[Test]
+    public function get_givenDungeonWithAClassificationlessNpc_returnsOk(): void
+    {
+        // Arrange - an NPC of our own whose classification_id matches no npc_classifications row, mapped as an
+        // enemy on an active dungeon's current mapping version. Building its tooltip reads that relation, so this
+        // is what proves the payload survives a null one.
+        [$dungeon, $mappingVersion] = $this->findDungeon(dungeonActive: true, minEnemies: 1);
+        $npc                        = $this->createNpcInDatabase(['classification_id' => self::UNKNOWN_CLASSIFICATION_ID]);
+        $enemy                      = null;
+
+        try {
+            $enemy = $this->createEnemyOfNpcOnMappingVersion($npc, $mappingVersion);
+
+            // Act - a page long enough to reach it: the endpoint orders by classification_id descending,
+            // so an NPC whose classification does not resolve sorts to the very end of the dungeon
+            $response = $this->call('GET', route('ajax.npc.compendium.search'), array_merge($this->datatableParams, [
+                'dungeon_id' => $dungeon->id,
+                'length'     => 500,
+            ]), [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+
+            // Assert
+            $response->assertOk();
+
+            $rowsById = array_column($response->json()['data'], null, 'id');
+
+            $this->assertArrayHasKey($npc->id, $rowsById, 'The response did not carry the classificationless NPC, so it proves nothing');
+            $this->assertArrayNotHasKey('classification', $rowsById[$npc->id]['tooltip_data']);
+        } finally {
+            $enemy?->delete();
+        }
+    }
+
+    /**
+     * Enemy is mapping-versioned data, so the row is cloned off an existing enemy of the same version to satisfy
+     * every column the map expects, and only the npc is ours.
+     */
+    private function createEnemyOfNpcOnMappingVersion(Npc $npc, MappingVersion $mappingVersion): Enemy
+    {
+        /** @var Enemy $templateEnemy */
+        $templateEnemy = $mappingVersion->enemies()->firstOrFail();
+
+        return Enemy::query()->create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $templateEnemy->floor_id,
+            'npc_id'             => $npc->id,
+            'faction'            => $templateEnemy->faction,
+            'required'           => false,
+            'skippable'          => false,
+            'hyper_respawn'      => false,
+            'lat'                => $templateEnemy->lat,
+            'lng'                => $templateEnemy->lng,
+        ]);
     }
 
     #[Test]
@@ -183,11 +383,41 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function show_givenValidNpc_seesWowheadLink(): void
+    {
+        // Arrange
+        $npc = Npc::with('classification')->first();
+        $this->assertNotNull($npc);
+
+        // Act
+        $response = $this->get(route('npc.compendium.show', $npc));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee($npc->wowhead_url, false);
+    }
+
+    #[Test]
     public function show_givenCorrectSlug_returnsOk(): void
     {
         // Arrange
         $npc = Npc::with('classification')->first();
         $this->assertNotNull($npc);
+
+        // Act
+        $response = $this->get(route('npc.compendium.show', $npc));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    #[Test]
+    public function show_givenClassificationlessNpc_returnsOk(): void
+    {
+        // Arrange - an NPC of our own whose classification_id matches no npc_classifications row; the header
+        // partial reads that relation directly, unlike the ajax endpoint's tooltip_data, so this is what proves
+        // the page survives a null one.
+        $npc = $this->createNpcInDatabase(['classification_id' => self::UNKNOWN_CLASSIFICATION_ID]);
 
         // Act
         $response = $this->get(route('npc.compendium.show', $npc));

@@ -65,6 +65,8 @@ global.MapObject = class MapObject {
 
     onDeleteSuccess() {}
 
+    cleanup() {}
+
     _getAttributes() {
         return [];
     }
@@ -81,22 +83,48 @@ global.L = {
     },
 };
 
+// 1d-bis. Collaborator classes the covered methods only reference through `instanceof`.
+global.Enemy = class Enemy {};
+global.MapContextLiveSession = class MapContextLiveSession {};
+global.EnemySelection = class EnemySelection {
+    constructor(mapObject = null) {
+        this._mapObject = mapObject;
+    }
+
+    getMapObject() {
+        return this._mapObject;
+    }
+
+    register() {}
+
+    unregister() {}
+};
+
 // 1e. getState() is called from the constructor; provide a fake that satisfies
 // the event registrations it performs.
 const fakeState = {
     register: () => {},
-    getMapContext: () => ({register: () => {}}),
+    unregister: () => {},
+    getMapContext: () => ({register: () => {}, unregister: () => {}}),
 };
 global.getState = () => fakeState;
+
+// 1f. cleanup() iterates the enemy group's objects via `$.each`; the shared setup's `$`
+// stub does not define it.
+global.$.each = (obj, callback) => {
+    Object.keys(obj ?? {}).forEach((key) => callback(key, obj[key]));
+};
 
 const {KillZone} = require('./killzone');
 
 /**
- * A fake enemy collaborator. Tracks its assigned kill zone and answers the
- * classification questions KillZone asks with sensible "plain enemy" defaults.
+ * A fake enemy collaborator. Tracks its assigned kill zone and answers the classification
+ * questions KillZone asks with defaults for an enemy with no special classification (not
+ * prideful, awakened, or linked to the last boss).
  */
 function makeFakeEnemy(id) {
-    return {
+    // KillZone._enemySelected() asserts `enemy instanceof Enemy`, so build off that prototype.
+    return Object.assign(new Enemy(), {
         id,
         enemy_pack_id: null,
         _killZone: null,
@@ -111,19 +139,60 @@ function makeFakeEnemy(id) {
         isPridefulNpc: () => false,
         isAwakenedNpc: () => false,
         isLinkedToLastBoss: () => false,
-    };
+        isObsolete: () => false,
+        getEnemyForces: () => 10,
+        getPackBuddies: () => [],
+    });
+}
+
+/**
+ * Builds a pack of fake enemies that all know each other as pack buddies.
+ *
+ * @param {Number} packId
+ * @param {Number[]} ids
+ * @returns {Object[]}
+ */
+function makeFakeEnemyPack(packId, ids) {
+    const pack = ids.map((id) => {
+        const enemy = makeFakeEnemy(id);
+        enemy.enemy_pack_id = packId;
+        return enemy;
+    });
+
+    // getPackBuddies() is pushed onto by _enemySelected(), so hand out a fresh array each call.
+    pack.forEach((enemy) => {
+        enemy.getPackBuddies = () => pack.filter((buddy) => buddy !== enemy);
+    });
+
+    return pack;
+}
+
+/**
+ * @param {Object} enemy
+ * @param {Object} [context]
+ * @returns {Object}
+ */
+function enemySelectedEvent(enemy, context = {}) {
+    return {data: {enemy: enemy, ignorePackBuddies: false}, context: context};
 }
 
 /**
  * A fake DungeonMap exposing only what KillZone touches: an event bus and a
  * mapObjectGroupManager whose enemy group resolves the provided enemies by id.
+ *
+ * @param {Object} enemiesById
+ * @param {Object} [options]
+ * @param {boolean} [options.hideKillZoneGroup] Mirrors MapObjectGroupManager.getByName()
+ *   returning `false` (its "not found" sentinel, not `null`) for a group a page hides via
+ *   its `hiddenMapObjectGroups` option - e.g. Explore mode hiding the 'killzone' group.
  */
-function makeFakeMap(enemiesById = {}) {
+function makeFakeMap(enemiesById = {}, options = {}) {
     const enemyGroup = {
         register: () => {},
         unregister: () => {},
         findMapObjectById: (id) => enemiesById[id] ?? null,
         setMapObjectVisibility: () => {},
+        objects: {},
     };
     const genericGroup = {
         register: () => {},
@@ -136,7 +205,15 @@ function makeFakeMap(enemiesById = {}) {
         register: () => {},
         unregister: () => {},
         mapObjectGroupManager: {
-            getByName: (name) => (name === MAP_OBJECT_GROUP_ENEMY ? enemyGroup : genericGroup),
+            getByName: (name) => {
+                if (name === MAP_OBJECT_GROUP_ENEMY) {
+                    return enemyGroup;
+                }
+                if (name === MAP_OBJECT_GROUP_KILLZONE && options.hideKillZoneGroup) {
+                    return false;
+                }
+                return genericGroup;
+            },
         },
     };
 }
@@ -151,6 +228,14 @@ describe('KillZone constructor', () => {
         expect(killZone.label).toBe('KillZone');
         expect(killZone.enemies).toEqual([]);
         expect(killZone.spellIds).toEqual([]);
+    });
+
+    // Regression test for the Explore-mode "killZoneMapObjectGroup.register is not a
+    // function" crash: EditKillZoneEnemySelection.isEnemySelectable() builds a throwaway
+    // KillZone on every enemy click, even on pages (like Explore) whose hiddenMapObjectGroups
+    // option means no KillZoneMapObjectGroup was ever instantiated.
+    it('does not throw when the killzone map object group is hidden for the current page', () => {
+        expect(() => new KillZone(makeFakeMap({}, {hideKillZoneGroup: true}), null)).not.toThrow();
     });
 });
 
@@ -243,11 +328,142 @@ describe('KillZone.onSaveSuccess', () => {
     });
 });
 
+describe('KillZone.cleanup', () => {
+    // Regression test: EditKillZoneEnemySelection.isEnemySelectable() always calls
+    // cleanup() on its throwaway KillZone, including on pages where the killzone map
+    // object group was never instantiated (see the constructor test above).
+    it('does not throw when the killzone map object group is hidden for the current page', () => {
+        const killZone = new KillZone(makeFakeMap({}, {hideKillZoneGroup: true}), null);
+
+        expect(() => killZone.cleanup()).not.toThrow();
+    });
+});
+
 describe('KillZone.toString', () => {
     it('describes itself by its pull index', () => {
         const killZone = new KillZone(makeFakeMap(), null);
         killZone.setIndex(7);
 
         expect(killZone.toString()).toBe('Pull 7');
+    });
+});
+
+describe('KillZone._mapStateChanged', () => {
+    /**
+     * @param {KillZone} killZone
+     * @param {?Object} previousMapState
+     * @param {?Object} newMapState
+     */
+    const fireMapStateChanged = (killZone, previousMapState, newMapState) => killZone._mapStateChanged({
+        data: {previousMapState: previousMapState, newMapState: newMapState},
+    });
+
+    /**
+     * @param {Number} id
+     * @returns {KillZone}
+     */
+    function makeSelectableKillZone(id) {
+        const killZone = new KillZone(makeFakeMap(), null);
+        killZone.id = id;
+        // Isolate from the heavy, Leaflet-coupled redraw - the redraw is what is being counted.
+        killZone.redrawConnectionsToEnemies = vi.fn();
+
+        return killZone;
+    }
+
+    it('redraws when this kill zone becomes the selected one', () => {
+        const killZone = makeSelectableKillZone(5);
+
+        fireMapStateChanged(killZone, null, new EnemySelection({id: 5}));
+
+        expect(killZone.redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+    });
+
+    it('redraws when this kill zone stops being the selected one', () => {
+        const killZone = makeSelectableKillZone(5);
+
+        fireMapStateChanged(killZone, new EnemySelection({id: 5}), null);
+
+        expect(killZone.redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+    });
+
+    // The regression this pins (#4589): every pull redrew its enemy hull on every map state change,
+    // three addLayer plus up to three removeLayer calls each, for a visually identical result.
+    it('does not redraw when another kill zone is the target of the selection', () => {
+        const killZone = makeSelectableKillZone(5);
+
+        fireMapStateChanged(killZone, new EnemySelection({id: 6}), new EnemySelection({id: 7}));
+
+        expect(killZone.redrawConnectionsToEnemies).not.toHaveBeenCalled();
+    });
+
+    it('does not redraw when neither map state is an enemy selection', () => {
+        const killZone = makeSelectableKillZone(5);
+
+        fireMapStateChanged(killZone, null, {});
+
+        expect(killZone.redrawConnectionsToEnemies).not.toHaveBeenCalled();
+    });
+});
+
+describe('KillZone._enemySelected', () => {
+    /**
+     * @param {Object[]} enemies
+     * @returns {KillZone}
+     */
+    function makeSavedKillZone(enemies) {
+        const enemiesById = {};
+        enemies.forEach((enemy) => (enemiesById[enemy.id] = enemy));
+
+        const killZone = new KillZone(makeFakeMap(enemiesById), null);
+        killZone.id = 5;
+        killZone.redrawConnectionsToEnemies = vi.fn();
+        killZone._signals = [];
+
+        return killZone;
+    }
+
+    // The regression this pins (#4590): each pack buddy emitted its own killzone:enemyadded, and every
+    // one of those fans out to a killzone:changed that rebinds tooltips and updates every sidebar row.
+    it('collapses a pack add into a single killzone:enemieschanged signal', () => {
+        const pack = makeFakeEnemyPack(7, [1, 2, 3]);
+        const killZone = makeSavedKillZone(pack);
+
+        killZone._enemySelected(enemySelectedEvent(pack[0]));
+
+        // _enemySelected() walks the pack buddies before the clicked enemy itself.
+        expect(killZone.enemies).toEqual([2, 3, 1]);
+        expect(signalsOf(killZone, 'killzone:enemyadded')).toHaveLength(0);
+
+        const changed = signalsOf(killZone, 'killzone:enemieschanged');
+        expect(changed).toHaveLength(1);
+        expect(changed[0].data).toEqual({previousForces: 0, newForces: 30});
+    });
+
+    it('collapses a pack removal into a single killzone:enemieschanged signal', () => {
+        const pack = makeFakeEnemyPack(7, [1, 2, 3]);
+        const killZone = makeSavedKillZone(pack);
+        pack.forEach((enemy) => killZone._addEnemy(enemy));
+        killZone._signals = [];
+
+        killZone._enemySelected(enemySelectedEvent(pack[0]));
+
+        expect(killZone.enemies).toEqual([]);
+        expect(signalsOf(killZone, 'killzone:enemyremoved')).toHaveLength(0);
+
+        const changed = signalsOf(killZone, 'killzone:enemieschanged');
+        expect(changed).toHaveLength(1);
+        expect(changed[0].data).toEqual({previousForces: 30, newForces: 0});
+    });
+
+    it('still signals per enemy when the enemy is not part of a pack', () => {
+        const enemy = makeFakeEnemy(1);
+        enemy.enemy_pack_id = 0;
+        const killZone = makeSavedKillZone([enemy]);
+
+        killZone._enemySelected(enemySelectedEvent(enemy));
+
+        expect(signalsOf(killZone, 'killzone:enemyadded')).toHaveLength(1);
+        expect(signalsOf(killZone, 'killzone:enemieschanged')).toHaveLength(0);
     });
 });

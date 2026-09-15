@@ -158,6 +158,47 @@ function defaultAjaxErrorFn(xhr, textStatus/*, errorThrown*/) {
 }
 
 /**
+ * Wraps a $.ajax() call with an in-flight guard keyed on the triggering element, so a double-click
+ * (or double-tap) on the same button does not fire the request twice before the first response
+ * comes back - both would race each other server-side. The element is disabled for the duration
+ * of the request, both to enforce the guard and to give the user visible feedback that the click
+ * registered.
+ *
+ * Unlike a guard flag on a class instance, keying on the element lets one handler shared across
+ * many rows (e.g. a per-row delete button) guard each row independently instead of blocking every
+ * other row while one request is in flight.
+ *
+ * @param {jQuery|Element|string} trigger The element (or selector) the click came from
+ * @param {Object} ajaxSettings Passed through to $.ajax(); its own `complete` callback(s) still
+ * run, in `this`-context, same as they would without the guard - `complete` may be a function or
+ * (per jQuery) an array of functions
+ * @returns {jQuery.jqXHR|undefined} The jqXHR, or undefined if a request for this trigger was already in flight
+ */
+function guardedAjaxClick(trigger, ajaxSettings) {
+    let $trigger = $(trigger);
+
+    if ($trigger.data('ajaxInFlight')) {
+        return undefined;
+    }
+    $trigger.data('ajaxInFlight', true).prop('disabled', true);
+
+    let originalComplete = ajaxSettings.complete;
+    let originalCallbacks = Array.isArray(originalComplete)
+        ? originalComplete
+        : (typeof originalComplete === 'function' ? [originalComplete] : []);
+
+    return $.ajax(Object.assign({}, ajaxSettings, {
+        complete: function (xhr, textStatus) {
+            $trigger.data('ajaxInFlight', false).prop('disabled', false);
+
+            for (let callback of originalCallbacks) {
+                callback.call(this, xhr, textStatus);
+            }
+        }
+    }));
+}
+
+/**
  * @private
  */
 function _hideTooltips() {
@@ -179,9 +220,19 @@ function refreshTooltips($element = null) {
         } else {
             $('.tooltip').remove();
             $element.each(function () {
-                // Dispose and recreate so a changed title attribute is re-read (BS4 _fixTitle equivalent)
+                // Dispose and recreate so a changed title attribute is re-read (BS4 _fixTitle equivalent).
+                // BS5's dispose() restores `title` from `data-bs-original-title` (the element's very
+                // first-ever title) before tearing down, which would clobber a title attribute changed
+                // since - clear the stale value first so the fresh title survives the refresh. Only do
+                // this when `title` was actually re-set: after the first construction BS5's _fixTitle()
+                // moves `title` into `data-bs-original-title` and removes `title` entirely, so on an
+                // unchanged refresh there is no `title` attribute to fall back to and clearing
+                // `data-bs-original-title` unconditionally would leave the tooltip with no content at all.
                 let existingTooltip = bootstrap.Tooltip.getInstance(this);
                 if (existingTooltip !== null) {
+                    if (this.getAttribute('title')) {
+                        this.removeAttribute('data-bs-original-title');
+                    }
                     existingTooltip.dispose();
                 }
                 new bootstrap.Tooltip(this);
@@ -332,6 +383,21 @@ function showInfoNotification(text, opts = {}) {
 }
 
 /**
+ * Error handler for the MDT export requests. Their url carries a signature minted when the page was
+ * rendered (#4538), so the one failure a user can actually act on is an expired one - which the
+ * generic 403 message ('you are not authorized') would send them looking in entirely the wrong place.
+ **/
+function mdtExportAjaxErrorFn(xhr, textStatus, errorThrown) {
+    if (xhr.status === 403) {
+        showErrorNotification(lang.get('js.mdt_export_url_expired'));
+
+        return;
+    }
+
+    defaultAjaxErrorFn(xhr, textStatus, errorThrown);
+}
+
+/**
  * Shows a warning notification message.
  * @param text The text to display.
  * @param opts
@@ -352,5 +418,5 @@ function showErrorNotification(text, opts = {}) {
 // Guarded export for the test runner (Vitest). This is a no-op in the browser,
 // where `module` is undefined, so it does not affect the concatenated bundle.
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {LayoutsApp, defaultAjaxErrorFn};
+    module.exports = {LayoutsApp, defaultAjaxErrorFn, mdtExportAjaxErrorFn, refreshTooltips, guardedAjaxClick};
 }

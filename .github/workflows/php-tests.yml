@@ -1,81 +1,96 @@
 name: PHP Tests
 
+# No base-branch filter: stacked PRs (one PR targeting another open PR's branch) must run the
+# same tests as PRs against master (#4074).
+# Draft PRs skip this suite (#4343); it runs on ready_for_review, on pushes to non-draft PRs,
+# and on pushes to a draft carrying the `run full ci` label (add the label, then push to trigger
+# a run — #4473: a `labeled` trigger produces a run for every label, and a run whose job is
+# skipped by `if:` leaves the required php-tests check permanently unreported for that
+# commit, blocking merge even though an earlier run on the same commit already passed them).
 on:
   pull_request:
-    branches:
-      - master
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
 
+# Cancel superseded runs (#4343).
+concurrency:
+  group: php-tests-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
+  # vendor/bin/paratest, not `php artisan test --parallel`: Laravel's ParallelTesting hooks would
+  # migrate:fresh a `<db>_test_<token>` schema instead of using the copies php-ci-setup provisions.
   php-tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
 
-    # The suite is split into shards that run concurrently on separate runners, each with its own
-    # MySQL, so wall-clock time is the slowest shard instead of the sum:
-    #   - combatlog-route / correct-events : the two subgroups of the heavy APICombatLog suite
-    #     (together they equal the whole APICombatLog group).
-    #   - feature-controller / feature-other : the Feature suite, split by the Controller group. Since
-    #     "--group=Controller" and "--exclude-group=Controller" are exact complements, the two shards
-    #     are guaranteed to cover the whole Feature suite with no overlap and no dropped tests, while
-    #     staying roughly time-balanced (Controller tests are fewer but slower HTTP-stack tests).
-    #   - unit : the Unit suite.
-    # The five shards are disjoint and together equal the full run minus MapTiles
-    # (162 + 409 + 46 + 32 + 308 = 957). Using --testsuite (not a positional path) keeps the Unit
-    # suite's phpunit.xml <exclude> entries honoured and auto-covers newly added test files. Coverage
-    # is NOT computed here (it is instrumentation overhead) — see php-coverage.yml for the coverage run.
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - shard: combatlog-route
-            phpunit-args: "--group=CombatLogRoute"
-          - shard: correct-events
-            phpunit-args: "--group=CorrectEvents"
-          - shard: feature-controller
-            phpunit-args: "--testsuite \"Feature Tests\" --group=Controller --exclude-group=APICombatLog --exclude-group=MapTiles"
-          - shard: feature-other
-            phpunit-args: "--testsuite \"Feature Tests\" --exclude-group=Controller --exclude-group=APICombatLog --exclude-group=MapTiles"
-          - shard: unit
-            phpunit-args: "--testsuite \"Unit Tests\" --exclude-group=MapTiles"
+    if: >-
+      github.event.action == 'ready_for_review' ||
+      (contains(fromJSON('["opened", "reopened", "synchronize"]'), github.event.action) &&
+        (github.event.pull_request.draft == false ||
+         contains(github.event.pull_request.labels.*.name, 'run full ci')))
 
-    name: php-tests (${{ matrix.shard }})
+    name: php-tests
 
     steps:
       - name: Checkout for local actions
+        # Shallow on purpose: nothing in CI reads git history (the only git command is
+        # `git rev-parse HEAD` for the version file), and a full fetch of 46 branches + 448 tags
+        # cost 10-15 minutes per job (#4135).
         uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
 
       - name: Start services
         run: docker compose -f docker-compose.ci.yml up -d --wait
 
       - name: Common PHP/Laravel setup
         uses: ./.github/actions/php-ci-setup
+        with:
+          parallel-schemas: '4'
 
       - name: Switch APP_ENV to testing
         run: echo "APP_ENV=testing" >> .env
 
-      - name: Seed users
-        run: php artisan db:seed --class=LaratrustSeeder --database=migrate
-
-      - name: Run PHPUnit (${{ matrix.shard }})
+      # paratest never reads its workers' stderr, so the stderr log channel writes to a file the
+      # leak guard below can grep.
+      - name: Run PHPUnit in parallel (paratest, 4 workers)
+        env:
+          LOG_STDERR_STREAM: ${{ github.workspace }}/phpunit-stderr.log
         run: |
           set -o pipefail
-          ./vendor/bin/phpunit ${{ matrix.phpunit-args }} 2>&1 | tee phpunit-output.log
+          ./vendor/bin/paratest --processes=4 --exclude-group=Nightly --exclude-group=HoldsTableLock \
+            --log-junit phpunit-junit.xml 2>&1 | tee phpunit-output.log
+
+      - name: Run PHPUnit serially (HoldsTableLock group)
+        run: |
+          set -o pipefail
+          ./vendor/bin/phpunit --group=HoldsTableLock --exclude-group=Nightly \
+            --log-junit phpunit-junit-serial.xml 2>&1 | tee -a phpunit-output.log
+
+      # Per-test wall-clock times. Local timings are not a usable proxy - a development test database carries
+      # orders of magnitude more rows than CI's freshly-seeded one, so DB-heavy tests are wildly slower locally.
+      - name: Upload per-test timings
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: phpunit-junit
+          path: |
+            phpunit-junit.xml
+            phpunit-junit-serial.xml
+          if-no-files-found: warn
 
       # Structured logging reaching the console during a test run interleaves ANSI-coloured log lines with the
       # progress output, and has now regressed twice (#3722, #3782) because every guard against it lived in
-      # application state that a test is free to change. Assert on the PHPUnit step's own output only: the setup
+      # application state that a test is free to change. Assert on the PHPUnit steps' own output only: the setup
       # steps above run real artisan commands, which log to stderr legitimately. The pattern is verified against
       # the log of the run that prompted #3782 - it matches all 965 of its leaked lines.
       #
-      # Skipped when PHPUnit itself fails (the default success() condition), deliberately: a red shard has a real
+      # Skipped when PHPUnit itself fails (the default success() condition), deliberately: a red run has a real
       # failure to fix first, and a failure diff is exactly the kind of output that could match by accident.
       - name: Assert no log lines leaked into the test output
         run: |
-          if grep -nE '\] [A-Za-z0-9_-]+\.(DEBUG|INFO|NOTICE|WARNING|ERROR|CRITICAL|ALERT|EMERGENCY): ' phpunit-output.log; then
+          if cat phpunit-output.log phpunit-stderr.log 2>/dev/null | grep -nE '\] [A-Za-z0-9_-]+\.(DEBUG|INFO|NOTICE|WARNING|ERROR|CRITICAL|ALERT|EMERGENCY): '; then
             echo "::error::Log lines leaked into PHPUnit's own output - see #3782"
             exit 1
           fi

@@ -105,11 +105,13 @@ describe('createSassImporter', () => {
         expect(fileURLToPath(url)).toBe(path.join(rootDir, 'node_modules', 'bootstrap', 'scss', 'bootstrap.scss'));
     });
 
+    // app.scss has used the tilde form everywhere since #3595 dropped lightslider, its last bare
+    // import - so this is now the only thing keeping the bare-specifier branch honest.
     it('canonicalize_givenBarePackageUrl_resolvesIntoNodeModules', () => {
-        const url = importer.canonicalize('lightslider/dist/css/lightslider.min');
+        const url = importer.canonicalize('nouislider/dist/nouislider');
 
         expect(url).not.toBeNull();
-        expect(fileURLToPath(url)).toBe(path.join(rootDir, 'node_modules', 'lightslider', 'dist', 'css', 'lightslider.min.css'));
+        expect(fileURLToPath(url)).toBe(path.join(rootDir, 'node_modules', 'nouislider', 'dist', 'nouislider.css'));
     });
 
     it('canonicalize_givenFileUrlToPartial_resolvesTheUnderscorePartial', () => {

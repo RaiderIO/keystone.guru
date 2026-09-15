@@ -18,6 +18,12 @@
         </testsuite>
     </testsuites>
     <php>
+        <!-- These only apply when the variable is not already set in the process environment: PHPUnit
+             leaves an existing one alone, and Laravel's Env reads $_SERVER (where a container's
+             environment lands) before $_ENV (where PHPUnit writes). Anything that injects these into
+             the container - an env_file, a compose environment: block, an exported shell variable -
+             therefore silently wins, and no test fails when it does.
+             Tests\Feature\Environment\TestEnvironmentTest is what makes that loud. -->
         <env name="DEBUGBAR_ENABLED" value="false"/>
         <env name="APP_DEBUG" value="false"/>
         <env name="APP_ENV" value="testing"/>
@@ -31,6 +37,8 @@
         <!-- No test may ever reach the real error tracker, full stop. -->
         <env name="SENTRY_LARAVEL_DSN" value="" force="true"/>
         <env name="SENTRY_DSN" value="" force="true"/>
+        <!-- No test may ever send real mail, full stop - a developer's local .env can carry a real Mailgun secret. -->
+        <env name="MAIL_DRIVER" value="log" force="true"/>
         <env name="APP_SERVICES_CACHE" value="/tmp/phpunit_services.php"/>
         <!-- ReverbHttpApiService builds its Guzzle client in its CONSTRUCTOR, from
              reverb.apps.apps.0.options.host/port. An empty host (which is what .env.ci.example ships)
@@ -40,10 +48,20 @@
              test, so every controller test that injects the interface stays unaffected. -->
         <env name="REVERB_HOST" value="http://127.0.0.1" force="true"/>
         <env name="REVERB_PORT" value="6001" force="true"/>
+        <!-- Local .env has BROADCAST_CONNECTION=reverb, whose driver calls Laravel's broadcast()
+             straight at REVERB_HOST above - unreachable by design, so it throws a BroadcastException
+             through any controller that broadcasts (and a few controllers catch that alongside
+             unrelated exceptions, turning it into a false-negative response instead of a network
+             error - see #3940). Force the 'log' driver so broadcast() writes to the log instead of
+             making a real HTTP call, matching the fire-and-forget behavior no test relies on. -->
+        <env name="BROADCAST_CONNECTION" value="log" force="true"/>
         <!-- The 'tmp_file' store (RemembersToFile, used by ViewService among others) is a file cache that
              CACHE_STORE does not cover. Without this the tests read, write and flush the cache of the
              application running out of the same checkout. -->
         <env name="CACHE_FILE_PATH" value="/tmp/phpunit_cache"/>
+        <!-- SeasonService keeps each expansion's seasons in that same file cache. Tests create and edit
+             seasons freely, so a cached tree would outlive the test that built it. -->
+        <env name="SEASONS_OF_EXPANSION_CACHE_ENABLED" value="false"/>
     </php>
     <source>
         <include>

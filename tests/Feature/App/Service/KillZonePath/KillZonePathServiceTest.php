@@ -5,17 +5,24 @@ namespace Tests\Feature\App\Service\KillZonePath;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\Mapping\MappingVersion;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('KillZonePath')]
 final class KillZonePathServiceTest extends PublicTestCase
 {
+    use ProvidesDungeon;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -217,6 +224,165 @@ final class KillZonePathServiceTest extends PublicTestCase
             $markerA->delete();
             $dungeonRoute->delete();
             $mappingVersion->delete();
+        }
+    }
+
+    /**
+     * Guards #3917: a kill zone whose location was placed on a facade (combined multi-floor) view
+     * has a facade floor_id, which CoordinatesService::calculateIngameLocationForMapLocation()
+     * rejects - loadAndBuildGraph() must skip that kill zone instead of letting the exception
+     * surface uncaught on save.
+     */
+    #[Test]
+    public function findPathsToKillZones_givenKillZoneOnFacadeFloor_skipsKillZoneInsteadOfThrowing(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true);
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', true)->firstOrFail();
+        /** @var Floor $realFloor */
+        $realFloor = $dungeon->floors()->where('facade', false)->firstOrFail();
+
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        // On the facade view, not a real floor - exactly how #3917's reported latlng was stored
+        $facadeKillZone = KillZone::factory()->create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $facadeFloor->id,
+            'lat'              => -100.0,
+            'lng'              => 100.0,
+            'index'            => 1,
+        ]);
+        $realKillZone = KillZone::factory()->create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $realFloor->id,
+            'lat'              => -50.0,
+            'lng'              => 50.0,
+            'index'            => 2,
+        ]);
+
+        try {
+            // Act
+            /** @var KillZonePathServiceInterface $service */
+            $service = app(KillZonePathServiceInterface::class);
+            $result  = $service->findPathsToKillZones($dungeonRoute);
+
+            // Assert - no InvalidArgumentException, the facade kill zone is excluded, and the
+            // real-floor one is the only remaining entry (findPathsToKillZones() creates a key for
+            // every non-skipped kill zone regardless of whether a path was found, so asserting the
+            // count pins down that exactly one kill zone survived rather than merely that the key
+            // exists)
+            $this->assertCount(1, $result);
+            $this->assertArrayHasKey($realKillZone->id, $result);
+        } finally {
+            $realKillZone->delete();
+            $facadeKillZone->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * Guards #4585: a kill zone without its own floor_id resolves its floor from the enemies it
+     * holds, which used to cost one `floors` lookup and one `enemies.npc` load per kill zone. The
+     * route view, the map context and the MDT export all read the route through this accessor, so
+     * the cost scaled with the number of pulls on the most-read page of the site.
+     */
+    #[Test]
+    public function findPathsToKillZones_givenKillZonesWithoutFloorOnSeveralFloors_resolvesFloorsWithoutQueryPerKillZone(): void
+    {
+        // Arrange
+        /** @var Collection<int, Collection<int, Enemy>> $enemiesPerFloor */
+        [$dungeon, $mappingVersion, $enemiesPerFloor] = $this->findDungeon(
+            facadeEnabled: false,
+            minActiveFloors: 2,
+            resolve: static function (Dungeon $dungeon, MappingVersion $mappingVersion) {
+                $enemiesPerFloor = Enemy::where('mapping_version_id', $mappingVersion->id)
+                    ->whereNotNull('npc_id')
+                    ->get()
+                    ->groupBy('floor_id')
+                    // Two kill zones per floor is what makes a per-kill-zone lookup visible
+                    ->filter(static fn(Collection $enemies): bool => $enemies->count() >= 2);
+
+                return $enemiesPerFloor->count() >= 2 ? $enemiesPerFloor->take(2) : null;
+            },
+        );
+
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        /** @var Collection<int, KillZone> $killZones */
+        $killZones = collect();
+        $index     = 1;
+        foreach ($enemiesPerFloor as $enemies) {
+            // Two kill zones on each of the two floors, each holding one enemy, and - crucially -
+            // no floor_id of their own, so getDominantFloor() has to resolve it
+            foreach ($enemies->take(2) as $enemy) {
+                $killZones->push(
+                    KillZone::factory()
+                        ->withEnemies($enemy)
+                        ->create([
+                            'dungeon_route_id' => $dungeonRoute->id,
+                            'floor_id'         => null,
+                            'lat'              => null,
+                            'lng'              => null,
+                            'index'            => $index++,
+                        ]),
+                );
+            }
+        }
+
+        /** @var array<int, string> $queries */
+        $queries = [];
+        DB::listen(static function (QueryExecuted $query) use (&$queries): void {
+            $queries[] = $query->sql;
+        });
+
+        try {
+            // Act
+            /** @var KillZonePathServiceInterface $service */
+            $service = app(KillZonePathServiceInterface::class);
+            $result  = $service->findPathsToKillZones($dungeonRoute);
+
+            // Assert - all four kill zones took part, and their floors plus npcs were resolved in
+            // one query each rather than one per kill zone
+            $this->assertCount(4, $result);
+
+            $floorQueries = array_values(array_filter(
+                $queries,
+                static fn(string $sql): bool => str_contains($sql, 'from `floors`'),
+            ));
+            $npcQueries = array_values(array_filter(
+                $queries,
+                static fn(string $sql): bool => str_contains($sql, 'from `npcs`'),
+            ));
+
+            // Three bulk eager loads: the floor switch markers' floors, the kill zone enemies'
+            // floors, and the dungeon start map icon's floor
+            $this->assertLessThanOrEqual(
+                3,
+                count($floorQueries),
+                sprintf('Expected floors to be resolved in bulk, got: %s', implode(' | ', $floorQueries)),
+            );
+            $this->assertEmpty(
+                array_filter($floorQueries, static fn(string $sql): bool => str_contains($sql, '`floors`.`id` = ?')),
+                'A single-floor lookup means the dominant floor is resolved per kill zone again',
+            );
+            $this->assertLessThanOrEqual(
+                1,
+                count($npcQueries),
+                sprintf('Expected npcs to be loaded once, got: %s', implode(' | ', $npcQueries)),
+            );
+        } finally {
+            foreach ($killZones as $killZone) {
+                $killZone->killZoneEnemies()->delete();
+                $killZone->delete();
+            }
+            $dungeonRoute->delete();
         }
     }
 }

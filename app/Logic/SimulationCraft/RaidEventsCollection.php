@@ -47,6 +47,10 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
             }
         }
 
+        // An npc that appears in several pulls is hydrated as a separate Npc instance per pull, so
+        // without this every one of them fetches its own npc_healths rows (#4586)
+        $this->options->dungeonRoute->loadMissing(['killZones.enemies.npc.npcHealths']);
+
         foreach ($this->options->dungeonRoute->killZones as $killZone) {
             // Skip empty pulls
             if ($killZone->getEnemies()->count() === 0) {

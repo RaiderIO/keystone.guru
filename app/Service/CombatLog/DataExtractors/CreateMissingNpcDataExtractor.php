@@ -8,6 +8,7 @@ use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
+use App\Logic\CombatLog\Guid\Guid;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClass;
 use App\Models\Npc\NpcClassification;
@@ -66,7 +67,16 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
         if (!($parsedEvent instanceof AdvancedCombatLogEvent)) {
             return;
         }
-        $guid = $parsedEvent->getAdvancedData()->getInfoGuid();
+
+        $advancedData = $parsedEvent->getAdvancedData();
+
+        // Cheap raw-string check before parsing the info GUID into a Guid instance - a Player- info
+        // GUID can never be an NPC, so those lines skip Guid construction entirely.
+        if (!Guid::isCreatureGuidString($advancedData->getInfoGuidRaw())) {
+            return;
+        }
+
+        $guid = $advancedData->getInfoGuid();
 
         if ($guid instanceof Creature && $this->checkedNpcIds->search($guid->getId()) === false) {
             $this->checkedNpcIds->push($guid->getId());

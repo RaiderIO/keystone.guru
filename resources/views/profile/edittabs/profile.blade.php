@@ -67,12 +67,14 @@ use Illuminate\Support\Collection;
     </div>
 
     <div class="mb-3{{ $errors->has('echo_anonymous') ? ' has-error' : '' }}">
-        <label for="echo_anonymous">
-            {{ __('view_profile.edit.show_as_anonymous') }}
-            <i class="fas fa-info-circle" data-bs-toggle="tooltip"
-               title="{{ __('view_profile.edit.show_as_anonymous_title') }}"></i>
-        </label>
-        {{ html()->checkbox('echo_anonymous', $user->echo_anonymous, 1)->class('form-check-input') }}
+        <div class="form-check">
+            {{ html()->checkbox('echo_anonymous', $user->echo_anonymous, 1)->class('form-check-input') }}
+            <label for="echo_anonymous" class="form-check-label">
+                {{ __('view_profile.edit.show_as_anonymous') }}
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip"
+                   title="{{ __('view_profile.edit.show_as_anonymous_title') }}"></i>
+            </label>
+        </div>
     </div>
 
     <div class="mb-3{{ $errors->has('echo_color') ? ' has-error' : '' }}">

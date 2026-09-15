@@ -12,7 +12,8 @@
         },
         "settings": {
             "temporary": true,
-            "debugIcons": false
+            "debugIcons": false,
+            "mappingVersion": 8
         },
         "challengeMode": {
             "start": "2024-06-02T19:28:55.196+00:00",
@@ -1115,8 +1116,8 @@
                     "uiMapId": 2093
                 },
                 "coordEnemy": {
-                    "x": -2611.52,
-                    "y": -2480.81,
+                    "x": -2620.79,
+                    "y": -2487.52,
                     "uiMapId": 2093
                 },
                 "gridCoord": {

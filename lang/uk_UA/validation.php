@@ -20,10 +20,25 @@ return [
         'numeric' => 'Поле :attribute має бути між :min та :max.',
         'string'  => 'Текст у полі :attribute має бути не менше :min та не більше :max символів.',
     ],
-    'boolean'           => 'Поле :attribute повинне містити логічний тип.',
-    'can'               => 'Поле :attribute містить неавторизоване значення.',
-    'confirmed'         => 'Поле :attribute не збігається з підтвердженням.',
-    'current_password'  => 'Пароль неправильний.',
+    'boolean'          => 'Поле :attribute повинне містити логічний тип.',
+    'can'              => 'Поле :attribute містить неавторизоване значення.',
+    'confirmed'        => 'Поле :attribute не збігається з підтвердженням.',
+    'current_password' => 'Пароль неправильний.',
+    'custom'           => [
+        'bio' => [
+            'max' => '',
+        ],
+        'pinned_dungeon_routes' => [
+            'max'    => '',
+            'exists' => '',
+        ],
+        'social_links' => [
+            'invalid_url_for_platform' => '',
+        ],
+        'creator_search' => [
+            'max' => '',
+        ],
+    ],
     'date'              => 'Поле :attribute не є датою.',
     'date_equals'       => 'Поле :attribute має бути датою рівною :date.',
     'date_format'       => 'Поле :attribute не відповідає формату :format.',

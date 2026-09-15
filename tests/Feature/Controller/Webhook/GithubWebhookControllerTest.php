@@ -5,8 +5,10 @@ namespace Tests\Feature\Controller\Webhook;
 use App\Service\Discord\DiscordApiServiceInterface;
 use Illuminate\Testing\TestResponse;
 use Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
@@ -91,6 +93,37 @@ final class GithubWebhookControllerTest extends TestCase
         $this->assertNotSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
+    #[Test]
+    #[DataProvider('unsetConfiguredSecretProvider')]
+    public function github_givenUnsetConfiguredSecret_throwsRuntimeExceptionEvenWithMatchingSignature(mixed $configuredSecret): void
+    {
+        // Arrange
+        $this->withoutExceptionHandling();
+        config(['keystoneguru.webhook.github.secret' => $configuredSecret]);
+        $this->expectDiscordEmbeds(0);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Github webhook secret is not configured');
+
+        // Act
+        $this->postWebhook('refs/heads/master', [$this->distinctCommit()], (string)$configuredSecret);
+    }
+
+    /**
+     * Configured secret values that must all be treated as "not configured": the empty string, null, the
+     * `false` that env() yields for an unquoted `false`, and a whitespace-only string.
+     *
+     * @return array<string, array{mixed}>
+     */
+    public static function unsetConfiguredSecretProvider(): array
+    {
+        return [
+            'empty string'    => [''],
+            'null'            => [null],
+            'boolean false'   => [false],
+            'whitespace only' => ['   '],
+        ];
+    }
+
     /**
      * Bind a mocked Discord service that expects `sendEmbeds` to be called exactly $times (0 = never).
      */
@@ -112,10 +145,10 @@ final class GithubWebhookControllerTest extends TestCase
      *
      * @return TestResponse<Response>
      */
-    private function postWebhook(string $ref, array $commits): TestResponse
+    private function postWebhook(string $ref, array $commits, string $secret = self::SECRET): TestResponse
     {
         $payload   = json_encode(['ref' => $ref, 'commits' => $commits], JSON_THROW_ON_ERROR);
-        $signature = 'sha1=' . hash_hmac('sha1', $payload, self::SECRET);
+        $signature = 'sha1=' . hash_hmac('sha1', $payload, $secret);
 
         return $this->call(
             'POST',

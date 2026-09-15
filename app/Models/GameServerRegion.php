@@ -60,6 +60,21 @@ class GameServerRegion extends CacheModel
         self::WORLD    => 6,
     ];
 
+    /**
+     * The regions that Battle.net can actually authenticate against. WORLD is a Keystone.guru
+     * construct with no matching Battle.net OAuth endpoint, so it must never be offered as a login
+     * region - see #4004.
+     *
+     * @var array<int, string>
+     */
+    public const array BATTLE_NET_REGIONS = [
+        self::AMERICAS,
+        self::EUROPE,
+        self::CHINA,
+        self::TAIWAN,
+        self::KOREA,
+    ];
+
     protected $fillable = [
         'short',
         'name',

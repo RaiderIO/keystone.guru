@@ -17,6 +17,7 @@ use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Closure;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -382,6 +383,18 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         }
 
         return $dungeonRoute;
+    }
+
+    /**
+     * @param Collection<int, int>|null                    $dungeonIds
+     * @param Closure(Collection<int, DungeonRoute>): void $callback
+     */
+    public function chunkBySeasonAndDungeonIds(?Season $season, ?Collection $dungeonIds, int $chunkSize, Closure $callback): void
+    {
+        DungeonRoute::query()
+            ->when($season !== null, static fn(EloquentBuilder $builder) => $builder->where('season_id', $season->id))
+            ->when($dungeonIds !== null, static fn(EloquentBuilder $builder) => $builder->whereIn('dungeon_id', $dungeonIds))
+            ->chunkById($chunkSize, $callback);
     }
 
     /**

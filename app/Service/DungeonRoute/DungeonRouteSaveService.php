@@ -5,6 +5,7 @@ namespace App\Service\DungeonRoute;
 use App\Models\Affix;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
+use App\Models\CharacterRace;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
@@ -17,6 +18,7 @@ use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
 use App\Models\RouteAttribute;
 use App\Models\Season;
+use App\Models\Team;
 use App\Models\User;
 use App\Repositories\Interfaces\MapIconRepositoryInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteSaveServiceLoggingInterface;
@@ -116,6 +118,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
             $source->cloneRelationsInto($clone, [
                 $source->playerraces,
                 $source->playerclasses,
+                $source->playerspecializations,
                 $source->affixGroups,
                 $source->paths,
                 $source->brushlines,
@@ -123,7 +126,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
                 $source->killZones,
                 $source->pridefulEnemies,
                 $source->enemyRaidMarkers,
-                $source->mapicons,
+                $source->routeMapIcons,
                 $source->routeattributesraw,
             ]);
 
@@ -159,7 +162,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         $userGameVersion = GameVersion::getUserOrDefaultGameVersion();
         $activeSeason    = $userGameVersion->has_seasons ? $this->resolveSeasonForEdit($dungeon) : null;
 
-        $teamId    = (int)($validated['team_id'] ?? $dungeonRoute->team_id);
+        $teamId    = $this->resolveTeamId($dungeonRoute, $validated, $user);
         $factionId = (int)($validated['faction_id'] ?? $dungeonRoute->faction_id);
 
         // Fetch the title if the user set anything
@@ -174,7 +177,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
 
         $attributes = [
             'dungeon_id' => $dungeonId,
-            'team_id'    => $teamId > 0 ? $teamId : null,
+            'team_id'    => $teamId,
             // If it was empty just set Unspecified instead
             'faction_id'                 => $factionId ?: 1,
             'seasonal_index'             => (int)($validated['seasonal_index'] ?? [$dungeonRoute->seasonal_index])[0],
@@ -212,7 +215,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
             return false;
         }
 
-        $this->syncRequestRelations($dungeonRoute, $validated);
+        $this->syncRequestRelations($dungeonRoute, $validated, $new);
         $this->applySelectedAffixGroups($dungeonRoute, $validated['route_select_affixes'] ?? [], $activeSeason, $new);
 
         // Instantly generate a placeholder thumbnail for new routes.
@@ -274,16 +277,62 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
     }
 
     /**
+     * Resolves which team the route ends up on. Which team holds a route is the author's call, not
+     * every editor's: a team collaborator may edit a teammate's route, but moving it into a team of
+     * their own would take it away from the team that granted them that edit right in the first
+     * place. The target team is checked against the author for the same reason AjaxTeamController
+     * checks it there - a team only holds routes written by its own members.
+     *
+     * A request that leaves team_id where it already is always passes, so an ordinary collaborator
+     * save is unaffected, as is an author who has since left the team the route sits on.
+     *
+     * @param array<string, mixed> $validated
+     */
+    private function resolveTeamId(DungeonRoute $dungeonRoute, array $validated, ?User $user): ?int
+    {
+        $currentTeamId = $dungeonRoute->team_id;
+
+        if (!array_key_exists('team_id', $validated)) {
+            return $currentTeamId;
+        }
+
+        $requestedTeamId = (int)$validated['team_id'];
+        $requestedTeamId = $requestedTeamId > 0 ? $requestedTeamId : null;
+
+        if ($requestedTeamId === $currentTeamId) {
+            return $currentTeamId;
+        }
+
+        // For a route with no author of its own - one being created, or a sandbox route whose
+        // author_id is the -1 placeholder until someone claims it - the caller is the author, so
+        // this collapses to "a team I am a member of"
+        $author = $dungeonRoute->exists && !$dungeonRoute->isSandbox() ? $dungeonRoute->author : $user;
+
+        $mayAssign = $user !== null &&
+            ($author?->is($user) || $user->hasRole(Role::ROLE_ADMIN)) &&
+            ($requestedTeamId === null || (Team::find($requestedTeamId)?->isUserMember($author) ?? false));
+
+        if (!$mayAssign) {
+            $this->log->saveTeamAssignmentDenied($dungeonRoute->id ?? null, $currentTeamId, $requestedTeamId, $user?->id);
+
+            return $currentTeamId;
+        }
+
+        return $requestedTeamId;
+    }
+
+    /**
      * Syncs the route's user-selected child collections (attributes, classes, specs, races) from the request.
      *
      * @param array<string, mixed> $validated
      */
-    private function syncRequestRelations(DungeonRoute $dungeonRoute, array $validated): void
+    private function syncRequestRelations(DungeonRoute $dungeonRoute, array $validated, bool $new): void
     {
         $newAttributes = $validated['attributes'] ?? [];
         if (!empty($newAttributes)) {
             $this->syncChildModels(
                 $dungeonRoute,
+                $new,
                 DungeonRouteAttribute::class,
                 'route_attribute_id',
                 RouteAttribute::whereIn('id', $newAttributes)->pluck('id'),
@@ -294,6 +343,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         if (!empty($newClasses)) {
             $this->syncChildModels(
                 $dungeonRoute,
+                $new,
                 DungeonRoutePlayerClass::class,
                 'character_class_id',
                 CharacterClass::whereIn('id', $newClasses)->pluck('id'),
@@ -304,6 +354,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         if (!empty($newSpecs)) {
             $this->syncChildModels(
                 $dungeonRoute,
+                $new,
                 DungeonRoutePlayerSpecialization::class,
                 'character_class_specialization_id',
                 CharacterClassSpecialization::whereIn('id', $newSpecs)->pluck('id'),
@@ -313,11 +364,15 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
         $newRaces = $validated['race'] ?? [];
         if (!empty($newRaces)) {
+            // Duplicates are kept on purpose - each one is a group slot. An unset slot submits "0"
+            $knownRaceIds = CharacterRace::whereIn('id', $newRaces)->pluck('id')->map(static fn($id): int => (int)$id);
+
             $this->syncChildModels(
                 $dungeonRoute,
+                $new,
                 DungeonRoutePlayerRace::class,
                 'character_race_id',
-                $newRaces,
+                array_filter((array)$newRaces, static fn($id): bool => $knownRaceIds->contains((int)$id)),
             );
         }
     }
@@ -328,9 +383,13 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
      * @param class-string<Model>  $childModel
      * @param iterable<int|string> $ids
      */
-    private function syncChildModels(DungeonRoute $dungeonRoute, string $childModel, string $foreignKey, iterable $ids): void
+    private function syncChildModels(DungeonRoute $dungeonRoute, bool $new, string $childModel, string $foreignKey, iterable $ids): void
     {
-        $childModel::where('dungeon_route_id', $dungeonRoute->id)->delete();
+        // A new route has no child rows, and deleting by its id only takes gap locks that deadlock
+        // against concurrent route creations
+        if (!$new) {
+            $childModel::where('dungeon_route_id', $dungeonRoute->id)->delete();
+        }
 
         $rows = [];
         foreach ($ids as $id) {

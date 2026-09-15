@@ -2,9 +2,16 @@
 
 namespace Tests\Feature\Controller;
 
+use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Laratrust\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Redis;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use RuntimeException;
+use Teapot\StatusCode;
+use Tests\Attributes\SlowTest;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
@@ -37,6 +44,30 @@ final class SiteControllerTest extends PublicTestCase
         } finally {
             $user->delete();
         }
+    }
+
+    /**
+     * Picking a dungeon in the header's context strip on the homepage previously changed the visitor's
+     * context dungeon without changing anything on the page - the strip should send them to that
+     * dungeon's browse-routes page instead.
+     */
+    #[Test]
+    public function index_givenGuest_linksDungeonContextStripToDiscoverDungeon(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+
+        // Act
+        $response = $this->get(route('home'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee(route('dungeonroutes.discoverdungeon', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+        ]), false);
+        $response->assertDontSee(route('dungeon.changecontext', ['dungeon' => $dungeon]), false);
     }
 
     #[Test]
@@ -93,5 +124,104 @@ final class SiteControllerTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $response->assertDontSee('site-footer__worktree');
+    }
+
+    #[Test]
+    public function status_givenHealthyDependencies_returnsOkForEveryCheck(): void
+    {
+        // Act
+        $response = $this->get(route('misc.status'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('Database: OK', false);
+        $response->assertSee('Redis: OK', false);
+        $response->assertSee('Disk: OK', false);
+    }
+
+    #[Test]
+    public function status_givenRedisFailure_rendersGenericMessageWithoutExceptionText(): void
+    {
+        // Arrange
+        $exceptionMessage = 'redis://user:hunter2@redis.internal:6379';
+        Redis::shouldReceive('connection')->andThrow(new RuntimeException($exceptionMessage));
+
+        // Act
+        $response = $this->get(route('misc.status'));
+
+        // Assert
+        $response->assertStatus(StatusCode::SERVICE_UNAVAILABLE);
+        $response->assertSee(__('view_misc.status.check_failed'));
+        $response->assertDontSee($exceptionMessage);
+        $response->assertDontSee('hunter2');
+    }
+
+    /**
+     * '/benchmark' is one of the ApiRequestService paths, so an unauthenticated request gets the JSON 401 rather than
+     * the login redirect a page would get.
+     */
+    #[Test]
+    public function benchmark_givenGuest_returnsUnauthorized(): void
+    {
+        // Act
+        $response = $this->get('/benchmark');
+
+        // Assert
+        $response->assertUnauthorized();
+    }
+
+    #[Test]
+    public function benchmark_givenNonAdminUser_returnsForbidden(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $user->addRole(Role::firstWhere('name', Role::ROLE_USER));
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->get('/benchmark');
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $user->delete();
+        }
+    }
+
+    /**
+     * The benchmark reads its input from tmp/combatlog.json, which is not part of the checkout - the test provides
+     * one from the API fixtures and removes it again unless it was already there.
+     */
+    #[Test]
+    #[SlowTest]
+    public function benchmark_givenAdmin_returnsOk(): void
+    {
+        // Arrange
+        $admin = User::findOrFail(1);
+        $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
+
+        $inputPath    = base_path('tmp/combatlog.json');
+        $fixturePath  = base_path('tests/Feature/Controller/Api/V1/APICombatLogController/Fixtures/TWW/tww_s1_ara_kara_city_of_echoes_3.json');
+        $createdInput = false;
+
+        try {
+            if (!file_exists($inputPath)) {
+                if (!is_dir(dirname($inputPath))) {
+                    mkdir(dirname($inputPath), 0775, true);
+                }
+                copy($fixturePath, $inputPath);
+                $createdInput = true;
+            }
+
+            // Act
+            $response = $this->actingAs($admin)->get('/benchmark');
+
+            // Assert
+            $response->assertOk();
+        } finally {
+            if ($createdInput) {
+                unlink($inputPath);
+            }
+        }
     }
 }

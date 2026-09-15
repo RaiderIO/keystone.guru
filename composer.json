@@ -30,14 +30,14 @@
             "type": "package",
             "package": {
                 "name": "nnoggie/mythicdungeontools",
-                "version": "6.2.0-alpha3",
+                "version": "6.2.16",
                 "source": {
-                    "url": "https://github.com/Wotuu/MythicDungeonTools.git",
+                    "url": "https://github.com/Nnoggie/MythicDungeonTools.git",
                     "type": "git",
-                    "reference": "ff4ef5fc933dc9304263203e3ba4d94ceaf2fe95"
+                    "reference": "952d152a8694bbde8421dc14995522f853515886"
                 },
                 "dist": {
-                    "url": "https://github.com/Wotuu/MythicDungeonTools/archive/ff4ef5fc933dc9304263203e3ba4d94ceaf2fe95.zip",
+                    "url": "https://github.com/Nnoggie/MythicDungeonTools/archive/952d152a8694bbde8421dc14995522f853515886.zip",
                     "type": "zip"
                 }
             }
@@ -112,11 +112,11 @@
         "spomky-labs/cbor-php": "^3.3",
         "symfony/http-client": "^7.2",
         "symfony/mailgun-mailer": "^7.2",
-        "tray-labs/laravel-influxdb": "^1.0",
         "tremby/laravel-git-version": "^1.1",
         "zircote/swagger-php": "^4.8"
     },
     "require-dev": {
+        "brianium/paratest": "^7.8.5",
         "driftingly/rector-laravel": "^2.1",
         "erickskrauch/php-cs-fixer-custom-fixers": "^1.3",
         "filp/whoops": "^2.8",

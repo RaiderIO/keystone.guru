@@ -544,4 +544,32 @@ return [
         ],
     ],
 
+    'checkpoints' => [
+        'bfa' => [
+            'temple_of_sethraliss' => [
+                'atrium_of_sethraliss_name' => 'Hodor',
+            ],
+        ],
+        'df' => [
+            'ruby_life_pools' => [
+                'ruby_overlook_name' => 'Hodor',
+            ],
+        ],
+        'midnight' => [
+            'altar_of_fangs' => [
+                'final_room_section_name' => 'Hodor',
+            ],
+            'den_of_nalorakk' => [
+                'the_heart_of_rage_name' => 'Hodor',
+            ],
+            'magisters_terrace' => [
+                'tower_section_name' => 'Hodor',
+            ],
+        ],
+        'wotlk' => [
+            'pit_of_saron' => [
+                'cavern_section_name' => 'Hodor',
+            ],
+        ],
+    ],
 ];

@@ -3,10 +3,12 @@
 namespace App\Logic\MapContext\Map;
 
 use App\Models\Dungeon;
+use App\Models\GameServerRegion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Season\Dtos\SeasonWeek;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Override;
@@ -71,8 +73,33 @@ class MapContextDungeonExplore extends MapContextMappingVersion
         $activeSeason = $this->dungeon->getActiveSeason($this->seasonService);
 
         return array_merge(parent::toArray(), [
-            'featuredAffixes'   => $activeSeason == null ? [] : $this->seasonAffixGroupService->getFeaturedAffixes($activeSeason),
-            'seasonStartPeriod' => $activeSeason?->start_period ?? 0, // @phpstan-ignore nullsafe.neverNull
+            'featuredAffixes' => $activeSeason == null ? [] : $this->seasonAffixGroupService->getFeaturedAffixes($activeSeason),
+            'seasonWeeks'     => $this->getSeasonWeeks(),
         ]);
+    }
+
+    /**
+     * The week index to keystone leaderboard period mapping the heatmap's week filter translates its selection
+     * with. Resolved against the most recent season rather than getActiveSeason(), because that is the season the
+     * week dropdown's options are built from - getActiveSeason() prefers an upcoming season, whose weeks are not
+     * in the dropdown at all.
+     *
+     * @return array<int, array{week: int, period: int}>
+     */
+    private function getSeasonWeeks(): array
+    {
+        $season = $this->seasonService->getMostRecentSeasonForDungeon($this->dungeon);
+
+        if ($season === null) {
+            return [];
+        }
+
+        return $this->seasonService->getSeasonWeeks($season, GameServerRegion::getUserOrDefaultRegion())
+            ->map(static fn(SeasonWeek $seasonWeek): array => [
+                'week'   => $seasonWeek->week,
+                'period' => $seasonWeek->period,
+            ])
+            ->values()
+            ->all();
     }
 }

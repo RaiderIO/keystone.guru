@@ -43,8 +43,8 @@ class ExportCsv extends Command
                 'npc_id'      => $npc?->id ?? 'UNKNOWN', // @phpstan-ignore nullsafe.neverNull
                 'mechanic'    => __($spell->mechanic, [], 'en_US'),
                 'name'        => __($spell->name, [], 'en_US'),
-                'dispel_type' => in_array($spell->dispel_type, Spell::ALL_DISPEL_TYPES) ?
-                    __(sprintf('spelldispeltype.%s', $spell->dispel_type), [], 'en_US') :
+                'dispel_type' => in_array($spell->dispel_type, Spell::ALL_DISPEL_TYPE_KEYS) ?
+                    __($spell->dispel_type, [], 'en_US') :
                     $spell->dispel_type,
                 'schools'      => Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask, 'spellschools'),
                 'miss_types'   => Spell::maskToReadableString(Spell::ALL_MISS_TYPES, $spell->miss_types_mask, 'spellmisstypes'),

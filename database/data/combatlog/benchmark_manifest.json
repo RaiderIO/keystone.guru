@@ -1,0 +1,69 @@
+{
+    "schemaVersion": 1,
+    "description": "Pinned combat log corpus for combatlog:benchmark (#4040). Files are materialized into storage/app/benchmarks/ (gitignored); the command downloads missing segments from the 's3_combat_logs' S3 disk under the benchmark-corpus/ prefix (#4317 - Raider.IO's segment URLs are presigned/short-lived and the original run ids expired upstream) and verifies these sha256 hashes before every benchmark.",
+    "pinnedAt": "2026-08-25",
+    "runs": {
+        "2997075": {
+            "reason": "King's Rest +14 - death knight coverage; together with the other four runs, exercises mage/paladin/hunter/rogue/death-knight for the counter and immunity detectors",
+            "segments": {
+                "run_2997075_segment_1.txt": "4c292fdfaa009492ec65990c000430b243b637885fcc87c01eb22e288dbf575b",
+                "run_2997075_segment_2.txt": "396729796225c88c13137f9d5c764836d8d5fbf14304dffdb1dbb0e38dc226f7",
+                "run_2997075_segment_3.txt": "ede18bf304472a542146366a8c72ac601fe95e96ad097732edcdddc00233f779",
+                "run_2997075_segment_4.txt": "5eff1a0d3364cbea3a10407a593f43e9fa16342504f881af111bd97005a06439",
+                "run_2997075_segment_5.txt": "54795a9e193c9b68eb8303ced4a5f680250a4bc0453f644363b6a59b8baf3a8f",
+                "run_2997075_segment_6.txt": "da503ab4c10d464cea35fbae78ac4577d777af1ce650eebaf6173fdd1361b628",
+                "run_2997075_segment_7.txt": "a24ab14d49ae9b3338c0217374162fd3613ec97293dc5467f0041d8ad17e56fb",
+                "run_2997075_segment_8.txt": "69b66066c56af181b972e246ea9e68019bfa0327934c8f4d205fa82c565fea77",
+                "run_2997075_segment_9.txt": "9e0d5df3400aebe346c3274e89ac2aa6908c9bb7593964bad4c6934bdf854418"
+            }
+        },
+        "2996765": {
+            "reason": "Voidscar Arena +12 - paladin coverage",
+            "segments": {
+                "run_2996765_segment_1.txt": "9ade55893e8a40cd30eac0cb647e38daa554c6e351863cbbdc9e5e92931f37a5",
+                "run_2996765_segment_2.txt": "a9733f1a78532bce3537251a4d930f59f318e4391c91ad4c5c351067dd428e09",
+                "run_2996765_segment_3.txt": "3d79d0d8ef0231de61cab25f773b3fe53ae2423fc06a6c87deb5f3deed6251f3",
+                "run_2996765_segment_4.txt": "918ee4cd265d48eb7a1f9bd76b7f0020a2d41f488f63ba1d26373434350690cd",
+                "run_2996765_segment_5.txt": "7fa1fd24c66cacc5c79bc1f69c91dd8678aa77717ea960e853962d22dc58e66e",
+                "run_2996765_segment_6.txt": "1230092f1a5426b7bc64c22d1c217945619ff60faa54accb0fa28ca2d793726b",
+                "run_2996765_segment_7.txt": "bc6e3ae7e539740dff30f6d3d8bfb4db168c3fcc57b5b6dcbb3537826459f33b"
+            }
+        },
+        "2996997": {
+            "reason": "Ruby Life Pools +12 - hunter coverage",
+            "segments": {
+                "run_2996997_segment_1.txt": "9d8630488ff90e14a2a2b42a71290dfd9a6dd611a9144449191875157c6aa225",
+                "run_2996997_segment_2.txt": "062816a867575f88d6891f21a6bfc83d6feebc431c19fb6ef98e86d7b84dc7ff",
+                "run_2996997_segment_3.txt": "41f81c6dd865453e1d2b16cb226b788933f6e7ea687a43bafb04c84994b02583",
+                "run_2996997_segment_4.txt": "5101c5e31d89edae1c7590256da2f397f32b0f458b5f8bc774c50fdf758512c9",
+                "run_2996997_segment_5.txt": "88ec1caaf0839b99bd1f1c2930fb353c3ea2eafd8d2cb7a5b83fa4fce2bad7d4",
+                "run_2996997_segment_6.txt": "abba2f5ec67468fe01f9d7a653d62303fc01c9ad39edcd263cb339831e72deed",
+                "run_2996997_segment_7.txt": "16947f4f354d2dd8ce6e07538765455d3e3ea221d49ff3f3f2db4a86e1ae5dcf"
+            }
+        },
+        "2996629": {
+            "reason": "Altar of Fangs +14 - rogue coverage",
+            "segments": {
+                "run_2996629_segment_1.txt": "78c5ac67447db15ebbffbdd43e6efee2234b32ae325138dbe6949b0917b00d87",
+                "run_2996629_segment_2.txt": "257bf13688db9c47341beb3bdbf98e0cd812401056429f9ed923470c891c7780",
+                "run_2996629_segment_3.txt": "cd7a041696d2ec9be14af6da82e4964fa3acc80ff841b49e51037d0591a2bbbf",
+                "run_2996629_segment_4.txt": "9e615bfff8729403df78bd347fff8249c9ec070d884602438d7acfd6fbe93241",
+                "run_2996629_segment_5.txt": "e83811a9a399098d18b807463d2b72d7ae60aa1196e51c5525798ed2ee03727c",
+                "run_2996629_segment_6.txt": "07334346de00776e84a868241216c08f07ebd9df4a3575c74086aa8657a522c7",
+                "run_2996629_segment_7.txt": "65277184df9a35607bf35210c2e184a357184086711253e58ef533395285f5da"
+            }
+        },
+        "2996392": {
+            "reason": "Den of Nalorakk +12 - mage coverage",
+            "segments": {
+                "run_2996392_segment_1.txt": "73484a684d9584950961588e44ce127d1d857096efe9f2d72b84ed9ad277fac8",
+                "run_2996392_segment_2.txt": "9504a614d738b4fbc9af30b4471dcee184791287583895b907f2b10be22c8e14",
+                "run_2996392_segment_3.txt": "3d35652dc0eaaa1b3597db85931df10d426b075e627af4a73346a1c1f6e01c4e",
+                "run_2996392_segment_4.txt": "9658e5aa6a033b56d8a8a8514bda2f85af70ee532eb3f3b2cdf910935d057e90",
+                "run_2996392_segment_5.txt": "b093099634c67a0ed5340982d340088e8f35bca815159e7b00d829f16b2c931f",
+                "run_2996392_segment_6.txt": "5ce1eddedf31c1b103111aa2c05aa4fb558e998e11551930fa9b1bb89e60baf4",
+                "run_2996392_segment_7.txt": "0dbec83147e639f0fb4fe6eaff03f424ae6f2cd748c4cf99e0b041a8e5b6aa63"
+            }
+        }
+    }
+}

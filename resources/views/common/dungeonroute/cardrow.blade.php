@@ -102,7 +102,8 @@ $cacheFn = static function () use (
         @include('common.dungeonroute.pullgraph', [
             'pullForces'  => $pullForces,
             'chartHeight' => 22,
-            'fill'        => 'rgba(255, 255, 255, 0.45)',
+            // Inherits the stats cluster's muted text color, so the bars stay visible in every theme
+            'fill'        => 'currentColor',
             'bossFill'    => 'rgba(240, 180, 60, 0.9)',
             'graphClass'  => 'leaderboard_pull_graph me-3',
             'tooltipKey'  => 'view_common.dungeonroute.cardrow.pulls',

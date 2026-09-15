@@ -25,7 +25,10 @@ $pullForcesResolver ??= new DungeonRouteEnemyForcesPageResolver(
 @if($dungeonroutes->isEmpty())
     <div class="row g-0">
         <div class="col-xl text-center">
-            {{ __('view_common.dungeonroute.cardlist.no_dungeonroutes') }}
+            <p>{{ __('view_common.dungeonroute.cardlist.no_dungeonroutes') }}</p>
+            <a class="btn btn-accent" href="{{ route('dungeonroute.new') }}">
+                <i class="fas fa-plus"></i> {{ __('view_common.dungeonroute.leaderboard.create_first_route') }}
+            </a>
         </div>
     </div>
 @else

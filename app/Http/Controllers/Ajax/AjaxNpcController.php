@@ -12,6 +12,7 @@ use App\Logic\Datatables\NpcsDatatablesHandler;
 use App\Models\Npc\Npc;
 use App\Models\User;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -34,7 +35,11 @@ class AjaxNpcController extends Controller
                 /** @var User $user */
                 $user = Auth::user();
                 foreach ($npc->dungeons as $dungeon) {
-                    broadcast(new NpcDeletedEvent($dungeon, $user, $npc));
+                    try {
+                        broadcast(new NpcDeletedEvent($dungeon, $user, $npc));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
             }
 
@@ -72,12 +77,15 @@ class AjaxNpcController extends Controller
                 $clause->on('npc_name_translations.key', '=', 'npcs.name')
                     ->where('npc_name_translations.locale', '=', 'en_US');
             })
-            ->leftJoin('enemies', 'npcs.id', '=', 'enemies.npc_id')
+            ->leftJoin('mapping_versions', function (JoinClause $clause) {
+                $clause->on('mapping_versions.dungeon_id', '=', 'dungeons.id')
+                    ->whereRaw('mapping_versions.id = (SELECT MAX(mv2.id) FROM mapping_versions mv2 WHERE mv2.dungeon_id = dungeons.id)');
+            })
+            ->leftJoin('enemies', function (JoinClause $clause) {
+                $clause->on('enemies.npc_id', '=', 'npcs.id')
+                    ->on('enemies.mapping_version_id', '=', 'mapping_versions.id');
+            })
             ->groupBy('npcs.id');
-        //            ->leftJoin('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
-        //            ->whereColumn('enemies.mapping_version_id', 'mapping_versions.id')
-        //            ->groupBy('npcs.id', 'mapping_versions.dungeon_id')
-        //            ->orderByDesc('mapping_versions.version');
 
         $datatablesHandler = (new NpcsDatatablesHandler($request));
 

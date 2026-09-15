@@ -2,10 +2,13 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
+use Exception;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
@@ -31,14 +34,7 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     {
         parent::setUp();
 
-        $this->team = Team::create([
-            'name'         => sprintf('Ajax team test %s', uniqid()),
-            'public_key'   => Team::generateRandomPublicKey(),
-            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
-            'description'  => 'Created by AjaxTeamControllerTest',
-            'icon_file_id' => -1,
-            'default_role' => TeamUser::ROLE_MEMBER,
-        ]);
+        $this->team = $this->createTeam();
 
         $this->moderator = User::factory()->create();
         $this->moderator->addRole(Role::ROLE_USER);
@@ -136,6 +132,234 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
         // Assert
         $response->assertStatus(StatusCode::FOUND);
         $response->assertSessionHasErrors(['username']);
+    }
+
+    /**
+     * Guards #4264: isUserAdmin() and getNewAdminUponAdminAccountDeletion() both answer from
+     * getUserRole(), which re-queries team_users. Asking them *after* removeMember() had deleted
+     * the row - as the controller used to - made isUserAdmin() always false, so no successor was
+     * ever promoted and the team was left with no admin whatsoever.
+     */
+    #[Test]
+    public function removeMember_givenTheAdminRemovesThemselves_promotesTheHighestRankedMember(): void
+    {
+        // Arrange - the moderator outranks the plain member, so they are the successor
+        $admin = User::factory()->create();
+        $admin->addRole(Role::ROLE_USER);
+
+        TeamUser::create(['team_id' => $this->team->id, 'user_id' => $admin->id, 'role' => TeamUser::ROLE_ADMIN]);
+
+        $this->actingAs($admin);
+
+        try {
+            // Act
+            $response = $this->delete(sprintf('/ajax/team/%s/member/%s', $this->team->getRouteKey(), $admin->getRouteKey()));
+
+            // Assert - the team is left with an admin who can still administrate it
+            $response->assertNoContent();
+            $this->assertSame(
+                TeamUser::ROLE_ADMIN,
+                TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->moderator->id)->value('role'),
+            );
+        } finally {
+            TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $admin->id)->delete();
+            $admin->delete();
+        }
+    }
+
+    /**
+     * Guards #4264: removeMember() is transacted internally, but the admin promotion that follows
+     * it was not part of that transaction. An admin removing themselves whose promotion of a
+     * successor then failed left a team with no admin at all - a state
+     * Team::getNewAdminUponAdminAccountDeletion() throws on, so nothing could repair it afterwards.
+     */
+    #[Test]
+    public function removeMember_givenTheAdminPromotionFails_rollsBackTheMemberRemoval(): void
+    {
+        // Arrange - an admin who is about to remove themselves, leaving the moderator to promote
+        $admin = User::factory()->create();
+        $admin->addRole(Role::ROLE_USER);
+
+        TeamUser::create(['team_id' => $this->team->id, 'user_id' => $admin->id, 'role' => TeamUser::ROLE_ADMIN]);
+
+        $this->actingAs($admin);
+
+        // Fail the promotion, which is a TeamUser role update. The member removal itself is a query
+        // builder delete and fires no model events, so this only trips the write that follows it
+        TeamUser::updating(static function (): never {
+            throw new Exception('Simulated failure promoting the new admin');
+        });
+
+        try {
+            // Act
+            $response = $this->delete(sprintf('/ajax/team/%s/member/%s', $this->team->getRouteKey(), $admin->getRouteKey()));
+
+            // Assert - the removal is undone, so the team still has an admin who can retry
+            $response->assertStatus(StatusCode::INTERNAL_SERVER_ERROR);
+            $this->assertSame(
+                TeamUser::ROLE_ADMIN,
+                TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $admin->id)->value('role'),
+            );
+        } finally {
+            // Remove only the listener registered above - TeamUser::flushEventListeners() would also
+            // wipe its own boot() listeners for the rest of the PHPUnit process
+            Event::forget('eloquent.updating: ' . TeamUser::class);
+
+            TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $admin->id)->delete();
+            $admin->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenARouteAuthoredOutsideTheTeam_returnsForbiddenAndLeavesItUnassigned(): void
+    {
+        // Arrange - a route with no team yet, authored by someone who is not in this team at all
+        $outsider = User::factory()->create();
+        $outsider->addRole(Role::ROLE_USER);
+
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $outsider->id, 'team_id' => null]);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $outsider->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenARouteAuthoredByAnotherTeamMember_assignsItToTheTeam(): void
+    {
+        // Arrange - authored by a teammate rather than by the caller: the team's "add route"
+        // listing offers a moderator every team member's unassigned route, not only their own
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => null]);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertSame($this->team->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenARouteAlreadyOnAnotherTeam_returnsNotFoundAndLeavesItAssigned(): void
+    {
+        // Arrange - a teammate's route that another team already holds
+        $otherTeam    = $this->createTeam();
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => $otherTeam->id]);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertSame($otherTeam->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $otherTeam->load('members.patreonAdFreeGiveaway')->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenARouteAlreadyOnThisTeam_returnsNoContent(): void
+    {
+        // Arrange - a repeated request, as a double click produces
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => $this->team->id]);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertSame($this->team->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenARouteOfAnotherTeam_returnsNotFoundAndLeavesItAssigned(): void
+    {
+        // Arrange - the caller moderates $this->team, but the route sits on a different team
+        $otherTeam    = $this->createTeam();
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->moderator->id, 'team_id' => $otherTeam->id]);
+
+        try {
+            // Act
+            $response = $this->delete($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertSame($otherTeam->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $otherTeam->load('members.patreonAdFreeGiveaway')->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenARouteOfThisTeam_unassignsIt(): void
+    {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->moderator->id, 'team_id' => $this->team->id]);
+
+        try {
+            // Act
+            $response = $this->delete($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenARouteOnNoTeam_returnsNoContent(): void
+    {
+        // Arrange - a repeated request, as a double click produces
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => null]);
+
+        try {
+            // Act
+            $response = $this->delete($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    private function createTeam(): Team
+    {
+        return Team::create([
+            'name'         => sprintf('Ajax team test %s', uniqid()),
+            'public_key'   => Team::generateRandomPublicKey(),
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'description'  => 'Created by AjaxTeamControllerTest',
+            'icon_file_id' => -1,
+            'default_role' => TeamUser::ROLE_MEMBER,
+        ]);
+    }
+
+    private function teamRouteUrl(Team $team, DungeonRoute $dungeonRoute): string
+    {
+        return sprintf('/ajax/team/%s/route/%s', $team->getRouteKey(), $dungeonRoute->getRouteKey());
     }
 
     private function changeRoleUrl(): string

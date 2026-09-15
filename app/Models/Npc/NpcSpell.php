@@ -4,7 +4,6 @@ namespace App\Models\Npc;
 
 use App\Models\CacheModel;
 use App\Models\Spell\Spell;
-use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -20,8 +19,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class NpcSpell extends CacheModel
 {
-    use SeederModel;
-
     public $timestamps = false;
 
     protected $fillable = [

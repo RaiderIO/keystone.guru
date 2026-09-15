@@ -26,7 +26,7 @@ class DungeonRouteTableTeam {
         if (teamPublicKey !== null) {
             let key = $(clickEvent.currentTarget).attr('data-publickey');
 
-            $.ajax({
+            guardedAjaxClick(clickEvent.currentTarget, {
                 type: 'POST',
                 url: `/ajax/team/${teamPublicKey}/route/${key}`,
                 dataType: 'json',
@@ -53,7 +53,7 @@ class DungeonRouteTableTeam {
         if (teamPublicKey !== null) {
             let key = $(clickEvent.currentTarget).attr('data-publickey');
 
-            $.ajax({
+            guardedAjaxClick(clickEvent.currentTarget, {
                 type: 'POST',
                 url: `/ajax/team/${teamPublicKey}/route/${key}`,
                 data: {

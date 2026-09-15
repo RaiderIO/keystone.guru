@@ -10,10 +10,13 @@ use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use ReflectionProperty;
 use Tests\TestCases\PublicTestCase;
 
 final class AdvancedDataTest extends PublicTestCase
 {
+    private const string RAW_ADVANCED_RANGE_DAMAGE_EVENT = '5/15 21:20:23.861  RANGE_DAMAGE,Player-1084-0A4BFB68,"Ooteeny-TarrenMill",0x512,0x0,Creature-0-4242-1841-14566-130909-00006285EA,"Fetid Maggot",0xa48,0x0,75,"Auto Shot",0x1,Creature-0-4242-1841-14566-130909-00006285EA,0000000000000000,980750,988005,0,0,5043,0,1,0,0,0,671.47,1235.72,1041,1.1845,70,7255,5182,-1,1,0,0,0,1,nil,nil';
+
     /**
      * @throws \Exception
      */
@@ -94,6 +97,95 @@ final class AdvancedDataTest extends PublicTestCase
         Assert::assertEquals($expectedUiMapId, $advancedData->getUiMapId());
         Assert::assertEquals($expectedFacing, $advancedData->getFacing());
         Assert::assertEquals($expectedLevel, $advancedData->getLevel());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('AdvancedData')]
+    public function getAdvancedData_givenNoGetterCalled_neverParsesLazyFields(): void
+    {
+        // Arrange
+        $combatLogEntry = new CombatLogEntry(self::RAW_ADVANCED_RANGE_DAMAGE_EVENT);
+
+        // Act
+        /** @var AdvancedCombatLogEvent $parseEventResult */
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
+        $advancedData     = $parseEventResult->getAdvancedData();
+
+        // Assert - retrieving the interface itself must not trigger parsing of any lazy field
+        Assert::assertFalse($this->guidHasBeenParsed($advancedData, 'infoGuid'));
+        Assert::assertFalse($this->guidHasBeenParsed($advancedData, 'ownerGuid'));
+        Assert::assertFalse($this->powerArrayHasBeenParsed($advancedData, 'powerType'));
+        Assert::assertFalse($this->powerArrayHasBeenParsed($advancedData, 'currentPower'));
+        Assert::assertFalse($this->powerArrayHasBeenParsed($advancedData, 'maxPower'));
+        Assert::assertFalse($this->powerArrayHasBeenParsed($advancedData, 'powerCost'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('AdvancedData')]
+    public function getInfoGuid_calledTwice_parsesOnceAndReturnsTheSameInstance(): void
+    {
+        // Arrange
+        $combatLogEntry = new CombatLogEntry(self::RAW_ADVANCED_RANGE_DAMAGE_EVENT);
+        /** @var AdvancedCombatLogEvent $parseEventResult */
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
+        $advancedData     = $parseEventResult->getAdvancedData();
+
+        // Act
+        $first = $advancedData->getInfoGuid();
+        Assert::assertTrue($this->guidHasBeenParsed($advancedData, 'infoGuid'));
+        $second = $advancedData->getInfoGuid();
+
+        // Assert - the second call must not re-parse, it should return the exact same instance;
+        // and parsing the info GUID must not have dragged the other lazy fields along with it
+        Assert::assertSame($first, $second);
+        Assert::assertFalse($this->guidHasBeenParsed($advancedData, 'ownerGuid'));
+        Assert::assertFalse($this->powerArrayHasBeenParsed($advancedData, 'powerType'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('AdvancedData')]
+    public function getInfoGuidRaw_calledBeforeAndAfterGuidParsing_returnsTheSameRawGuidString(): void
+    {
+        // Arrange
+        $combatLogEntry = new CombatLogEntry(self::RAW_ADVANCED_RANGE_DAMAGE_EVENT);
+        /** @var AdvancedCombatLogEvent $parseEventResult */
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
+        $advancedData     = $parseEventResult->getAdvancedData();
+
+        // Act
+        $rawBeforeParsing = $advancedData->getInfoGuidRaw();
+        Assert::assertFalse($this->guidHasBeenParsed($advancedData, 'infoGuid'));
+
+        $advancedData->getInfoGuid();
+        Assert::assertTrue($this->guidHasBeenParsed($advancedData, 'infoGuid'));
+
+        $rawAfterParsing = $advancedData->getInfoGuidRaw();
+
+        // Assert
+        Assert::assertEquals('Creature-0-4242-1841-14566-130909-00006285EA', $rawBeforeParsing);
+        Assert::assertEquals($rawBeforeParsing, $rawAfterParsing);
+    }
+
+    private function guidHasBeenParsed(AdvancedDataInterface $advancedData, string $property): bool
+    {
+        return new ReflectionProperty($advancedData, $property)->getValue($advancedData) !== false;
+    }
+
+    private function powerArrayHasBeenParsed(AdvancedDataInterface $advancedData, string $property): bool
+    {
+        return new ReflectionProperty($advancedData, $property)->isInitialized($advancedData);
     }
 
     /**

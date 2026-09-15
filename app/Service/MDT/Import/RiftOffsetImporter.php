@@ -14,7 +14,10 @@ use App\Models\Polyline;
 use App\Service\MDT\Models\ImportStringRiftOffsets;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RiftOffsetImporter
 {
@@ -64,17 +67,29 @@ class RiftOffsetImporter
 
         // From the built array, construct our map icons / paths
         foreach ($rifts as $npcId => $mdtXy) {
+            // $npcId comes straight from the user-supplied import string and isn't constrained to
+            // the 4 hardcoded obelisk ids above - an arbitrary id would otherwise hit an undefined
+            // array key below and throw an uncaught Error (the same failure mode as #3915, just a
+            // different exception class than the catch further down handles).
+            if (!isset($npcIdToMapIconMapping[$npcId])) {
+                continue;
+            }
+
+            /** @var MapIcon $obeliskMapIcon */
+            $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
+
             try {
-                // Find out the floor where the NPC is standing on
+                // Find out the floor where the NPC is standing on. Anchored to the obelisk map
+                // icon's own floor rather than filtered by enemy_pack_id: some dungeons only carry
+                // an unpacked Enemy row for this NPC on their current mapping version (packed rows
+                // exist only on older ones - #3935), and the same npc_id can additionally be placed
+                // on multiple floors of the same dungeon, so the obelisk icon's floor is the only
+                // reliable disambiguator between those duplicates.
                 /** @var Enemy $enemy */
                 $enemy = Enemy::where('npc_id', $npcId)
                     ->where('mapping_version_id', $importStringRiftOffsets->getMappingVersion()->id)
-                    ->whereNotNull('enemy_pack_id')
-                    ->whereIn('floor_id', $floorIds)
+                    ->where('floor_id', $obeliskMapIcon->floor_id)
                     ->firstOrFail();
-
-                /** @var MapIcon $obeliskMapIcon */
-                $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
 
                 if (isset($mdtXy['sublevel'])) {
                     throw new ImportWarning(
@@ -125,13 +140,36 @@ class RiftOffsetImporter
                 $importStringRiftOffsets->getPaths()->push($pathAttributes);
             } catch (ImportWarning $warning) {
                 $importStringRiftOffsets->getWarnings()->add($warning);
+            } catch (ModelNotFoundException) {
+                // No enemy matching this NPC on the obelisk icon's floor resolved for this mapping
+                // version - the clone genuinely isn't seeded there (e.g. #3935: several BFA
+                // dungeons never carry this NPC at all). Skip this one obelisk skip rather than
+                // 500ing the whole import.
+                $importStringRiftOffsets->getWarnings()->add(new ImportWarning(
+                    __('services.mdt.io.import_string.category.awakened_obelisks'),
+                    __(
+                        'services.mdt.io.import_string.unable_to_find_awakened_obelisk_enemy',
+                        ['name' => __($obeliskMapIcon->mapIconType->name)],
+                    ),
+                ));
             }
         }
 
         return $importStringRiftOffsets;
     }
 
+    /**
+     * Wrapped in a retried transaction - concurrent imports bulk-inserting into the shared
+     * `polylines` table can hit a MySQL lock wait timeout under contention (#4239).
+     */
     public function applyRiftOffsetsToDungeonRoute(
+        ImportStringRiftOffsets $importStringRiftOffsets,
+        DungeonRoute            $dungeonRoute,
+    ): void {
+        DB::transaction(fn() => $this->doApplyRiftOffsetsToDungeonRoute($importStringRiftOffsets, $dungeonRoute), 3);
+    }
+
+    private function doApplyRiftOffsetsToDungeonRoute(
         ImportStringRiftOffsets $importStringRiftOffsets,
         DungeonRoute            $dungeonRoute,
     ): void {
@@ -139,8 +177,19 @@ class RiftOffsetImporter
 
         // Assign map objects to the route
         $mapIconsAttributes = [];
+        /**
+         * The obelisk each map icon links back to, indexed the same way as $mapIconsAttributes.
+         * parseRiftOffsets() carries this model along inside the map icon attributes, but
+         * `map_icons` has no such column and insert() bypasses $fillable - leaving it in the
+         * payload threw "Unknown column 'obelisk_map_icon'" on every rift offset import (#4255).
+         *
+         * @var array<int, MapIcon> $linkedObeliskMapIcons
+         */
+        $linkedObeliskMapIcons = [];
         foreach ($importStringRiftOffsets->getMapIcons() as $mapIcon) {
-            $mapIconsAttributes[] = array_merge($mapIcon, [
+            $linkedObeliskMapIcons[] = $mapIcon['obelisk_map_icon'];
+
+            $mapIconsAttributes[] = array_merge(Arr::except($mapIcon, ['obelisk_map_icon']), [
                 'dungeon_route_id'   => $dungeonRoute->id,
                 'mapping_version_id' => $mapIcon['mapping_version_id'],
                 'floor_id'           => $mapIcon['floor_id'],
@@ -177,7 +226,7 @@ class RiftOffsetImporter
         foreach ($paths as $path) {
             /** @var Path $path */
             $polyLinesAttributes[$polyLineIndex]['model_id'] = $path->id;
-            $path->setLinkedAwakenedObeliskByMapIconId($mapIconsAttributes[$polyLineIndex]['obelisk_map_icon']->id);
+            $path->setLinkedAwakenedObeliskByMapIconId($linkedObeliskMapIcons[$polyLineIndex]->id);
 
             $polyLineIndex++;
         }
@@ -212,7 +261,7 @@ class RiftOffsetImporter
         $obeliskMapIconIndex = 0;
         foreach ($obeliskMapIcons as $obeliskMapIcon) {
             /** @var MapIcon $obeliskMapIcon */
-            $obeliskMapIcon->setLinkedAwakenedObeliskByMapIconId($mapIconsAttributes[$obeliskMapIconIndex]['obelisk_map_icon']->id);
+            $obeliskMapIcon->setLinkedAwakenedObeliskByMapIconId($linkedObeliskMapIcons[$obeliskMapIconIndex]->id);
 
             $obeliskMapIconIndex++;
         }

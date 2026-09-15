@@ -24,6 +24,12 @@ class NpcHealth extends CacheModel
 {
     use SeederModel;
 
+    /**
+     * The health an NPC carries when we never learned its real value - a placeholder rather than a
+     * small enemy, which is why it is not worth putting in front of anyone (#4094).
+     */
+    public const int HEALTH_PLACEHOLDER = 10000;
+
     public $timestamps = false;
 
     protected $fillable = [

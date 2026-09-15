@@ -1,7 +1,671 @@
 /**
- * Placeholder: no compendium-specific rules exist yet. The compendium views
- * (resources/views/compendium/**) currently style entirely with stock Bootstrap classes
- * (card/badge/col/btn), so there is nothing to move here from the old grab-bag files (verified by
- * grepping compendium blade files against custom.css/general.css/header.css/map.css during the
- * #3506 CSS reorg). This file is the designated home for compendium CSS going forward.
+ * Compendium — "The Field Record" (#3945).
+ *
+ * Every compendium page reads as one continuous record sheet: an identity band on top, then
+ * labeled register sections (label rail left, content right) separated by hairline rules.
+ * Surfaces sit on the tonal ladder through theme variables (never hardcoded theme hexes) so
+ * darkly, lux and vapor all hold; muted text uses Bootstrap's per-theme --bs-secondary-color
+ * because --theme-light is white in lux and unreadable on light surfaces.
  */
+
+/* ===== Record register skeleton ===== */
+
+.compendium_record_section {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: 0 1.5rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid rgba(128, 128, 128, 0.25);
+}
+
+.compendium_record_section:first-child {
+    border-top: 0;
+}
+
+.compendium_record_label {
+    color: var(--bs-secondary-color);
+    font-size: 0.875rem;
+    line-height: 1.4;
+    padding-top: 0.2rem;
+}
+
+.compendium_record_label .fa-info-circle {
+    opacity: 0.6;
+}
+
+.compendium_record_label_sub {
+    font-size: 0.8125rem;
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 767.98px) {
+    .compendium_record_section {
+        display: block;
+    }
+
+    .compendium_record_label {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* ===== Identity band ===== */
+
+.compendium_identity {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.25rem;
+    align-items: center;
+    padding: 1.25rem;
+    background-color: var(--theme-bg-card);
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.compendium_identity_portrait {
+    width: 88px;
+    height: 88px;
+    border-radius: 0.25rem;
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    flex-shrink: 0;
+}
+
+.compendium_identity_body {
+    flex: 1 1 16rem;
+    min-width: 0;
+}
+
+.compendium_identity_title {
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+}
+
+.compendium_identity_meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    align-items: center;
+}
+
+.compendium_identity_actions {
+    flex-shrink: 0;
+}
+
+/* Key: value stat chip in the identity band; one tonal rung above the band itself */
+.compendium_chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background-color: var(--theme-bg-card-footer);
+    color: var(--bs-body-color);
+    border-radius: 0.25rem;
+    padding: 0.2rem 0.55rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+}
+
+.compendium_chip_label {
+    color: var(--bs-secondary-color);
+}
+
+/*
+ * The two exception chips carry opposite meanings, so they are separated by more than colour:
+ * a leading glyph and a left border keep them apart for anyone who cannot tell the hues apart.
+ */
+.compendium_chip--works,
+.compendium_chip--noeffect {
+    border-left: 3px solid;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.compendium_chip--works {
+    border-left-color: var(--bs-success);
+}
+
+.compendium_chip--works::before {
+    content: '\002B';
+    font-weight: 700;
+    color: var(--bs-success);
+}
+
+.compendium_chip--noeffect {
+    border-left-color: var(--bs-warning);
+}
+
+.compendium_chip--noeffect::before {
+    content: '\2013';
+    font-weight: 700;
+    color: var(--bs-warning);
+}
+
+/* Each exception group is its own line - two groups in one cell must not read as one list */
+.compendium_exception {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.15rem 0;
+}
+
+.compendium_exception + .compendium_exception {
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+    margin-top: 0.25rem;
+    padding-top: 0.4rem;
+}
+
+.compendium_exception_npcs {
+    min-width: 0;
+}
+
+/* Keeps a spell and its icon on one line, but only where there is room for it - see below */
+.compendium_table_spell {
+    white-space: nowrap;
+}
+
+/*
+ * Three columns whose content all refuses to wrap add up to more than a phone is wide, and the table
+ * then hides the NPC names behind a horizontal scroll - the one thing on the row worth reading. The
+ * chip keeps its own nowrap (a label broken across two lines is unreadable) and instead moves above
+ * its NPCs, while the spell name is allowed to wrap.
+ */
+@media (max-width: 767.98px) {
+    .compendium_exception {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.15rem;
+    }
+
+    .compendium_table_spell {
+        white-space: normal;
+    }
+
+    .compendium_chip--works,
+    .compendium_chip--noeffect {
+        padding: 0.15rem 0.35rem;
+        font-size: 0.6875rem;
+        gap: 0.25rem;
+    }
+}
+
+/* ===== Characteristics ===== */
+
+.compendium_characteristics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.compendium_characteristic {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--theme-bg-card);
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.6rem 0.25rem 0.25rem;
+    font-size: 0.875rem;
+    color: var(--bs-body-color);
+}
+
+.compendium_characteristic img {
+    width: 28px;
+    height: 28px;
+    border-radius: 0.2rem;
+}
+
+/* The "not observed" cluster: small grayscale icon-only strip below the active chips */
+.compendium_characteristics_muted {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+}
+
+.compendium_characteristics_muted img {
+    width: 22px;
+    height: 22px;
+    border-radius: 0.2rem;
+    filter: grayscale(100%);
+    opacity: 0.35;
+}
+
+.compendium_characteristics_muted_label {
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+    margin-right: 0.25rem;
+}
+
+/* ===== Dense data tables ===== */
+
+.compendium_table {
+    width: 100%;
+    font-size: 0.875rem;
+    border-collapse: collapse;
+    margin-bottom: 0;
+}
+
+.compendium_table thead th {
+    background-color: var(--theme-dark);
+    color: var(--bs-secondary-color);
+    font-weight: 400;
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.35);
+    text-align: left;
+    vertical-align: bottom;
+}
+
+.compendium_table tbody td {
+    padding: 0.5rem 0.75rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.15);
+    color: var(--bs-body-color);
+    vertical-align: middle;
+}
+
+.compendium_table tbody tr:first-child td {
+    border-top: 0;
+}
+
+.compendium_table tbody tr:hover {
+    background-color: rgba(128, 128, 128, 0.08);
+}
+
+.compendium_table .compendium_table_muted {
+    color: var(--bs-secondary-color);
+}
+
+/* ===== Key-value register (the data plate) ===== */
+
+.compendium_kv {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+    gap: 1px;
+    background-color: rgba(128, 128, 128, 0.2);
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    border-radius: 0.25rem;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.compendium_kv_item {
+    background-color: var(--theme-dark);
+    padding: 0.6rem 0.75rem;
+}
+
+.compendium_kv_item dt {
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    margin-bottom: 0.1rem;
+}
+
+.compendium_kv_item dd {
+    margin: 0;
+    color: var(--bs-body-color);
+    font-size: 0.9375rem;
+}
+
+/* ===== Activity log ===== */
+
+.compendium_log_row {
+    display: grid;
+    grid-template-columns: 6.5rem 1.25rem minmax(0, 1fr);
+    gap: 0 0.75rem;
+    padding: 0.45rem 0;
+    border-top: 1px solid rgba(128, 128, 128, 0.12);
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.compendium_log_row:first-child {
+    border-top: 0;
+}
+
+.compendium_log_time {
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+    white-space: nowrap;
+}
+
+.compendium_log_time a {
+    color: inherit;
+}
+
+.compendium_log_icon {
+    text-align: center;
+    font-size: 0.8125rem;
+}
+
+.compendium_log_text {
+    color: var(--bs-body-color);
+    min-width: 0;
+}
+
+.compendium_log_text img {
+    width: 20px;
+    height: 20px;
+    border-radius: 0.2rem;
+    vertical-align: -0.3em;
+    margin-right: 0.15rem;
+}
+
+/* Day header used by the activity pages: date left, event count right */
+.compendium_log_day {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.compendium_log_day_title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.compendium_log_day_count {
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+    .compendium_log_row {
+        grid-template-columns: 1.25rem minmax(0, 1fr);
+    }
+
+    .compendium_log_time {
+        grid-column: 2;
+        order: 2;
+    }
+}
+
+/* ===== Landing directory ===== */
+
+.compendium_directory {
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+a.compendium_directory_row {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.9rem 1.1rem;
+    background-color: var(--theme-bg-card);
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+    color: var(--bs-body-color);
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+}
+
+a.compendium_directory_row:first-child {
+    border-top: 0;
+}
+
+a.compendium_directory_row:hover {
+    background-color: var(--theme-bg-card-footer);
+    color: var(--bs-body-color);
+    text-decoration: none;
+}
+
+.compendium_directory_icon {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--theme-darker);
+    border-radius: 0.25rem;
+    color: var(--theme-link);
+    font-size: 1.15rem;
+}
+
+.compendium_directory_title {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.compendium_directory_count {
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+    margin-left: 0.5rem;
+}
+
+.compendium_directory_desc {
+    color: var(--bs-secondary-color);
+    font-size: 0.875rem;
+    margin: 0.1rem 0 0;
+}
+
+.compendium_directory_cta {
+    color: var(--theme-link);
+    white-space: nowrap;
+    font-size: 0.875rem;
+}
+
+a.compendium_directory_row:hover .compendium_directory_cta {
+    color: var(--theme-link-hover);
+}
+
+@media (max-width: 575.98px) {
+    a.compendium_directory_row {
+        grid-template-columns: 3rem minmax(0, 1fr);
+    }
+
+    .compendium_directory_cta {
+        display: none;
+    }
+}
+
+/* ===== Class tiles ===== */
+
+a.compendium_class_tile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    background-color: var(--theme-bg-card);
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 0.25rem;
+    color: var(--bs-body-color);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+    height: 100%;
+}
+
+a.compendium_class_tile:hover {
+    background-color: var(--theme-bg-card-footer);
+    color: var(--bs-body-color);
+    text-decoration: none;
+}
+
+a.compendium_class_tile img {
+    width: 36px;
+    height: 36px;
+    border-radius: 0.25rem;
+    flex-shrink: 0;
+}
+
+/* ===== Index toolbar ===== */
+
+.compendium_toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.compendium_toolbar_filter {
+    flex: 0 1 20rem;
+    min-width: 14rem;
+}
+
+/* DataTables chrome inside a compendium index: align the generated search box and pager
+   with the register language */
+.compendium_datatable div.dt-container div.dt-search {
+    margin-bottom: 0.5rem;
+}
+
+.compendium_datatable div.dt-container div.dt-search input {
+    background-color: var(--theme-dark);
+    color: var(--bs-body-color);
+    border: 1px solid rgba(128, 128, 128, 0.5);
+    border-radius: 0.25rem;
+    padding: 0.3rem 0.6rem;
+}
+
+.compendium_datatable table.dataTable {
+    border-collapse: collapse;
+}
+
+/* ===== Spell description (#3971) ===== */
+
+.compendium_spell_description {
+    margin-bottom: 0.5rem;
+    max-width: 60ch;
+}
+
+.compendium_spell_description:last-child {
+    margin-bottom: 0;
+}
+
+/* ===== Tuning changes (#4313) ===== */
+
+/*
+ * Register grid per row: [spell subject | change | delta]. The delta hangs in its own right-aligned
+ * column so magnitudes scan vertically; the per-spell section has no subject column and collapses
+ * to [change | delta] through the missing --subject modifier.
+ */
+.compendium_tuning_row {
+    display: grid;
+    grid-template-areas: 'body delta';
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0 1rem;
+    align-items: baseline;
+    padding: 0.35rem 0;
+}
+
+.compendium_tuning_list--subject .compendium_tuning_row {
+    grid-template-areas: 'subject body delta';
+    /* The subject cell carries the spell link, the xN marker and the dungeon abbreviations */
+    grid-template-columns: minmax(10rem, 16rem) minmax(0, 1fr) auto;
+}
+
+.compendium_tuning_row + .compendium_tuning_row {
+    border-top: 1px solid rgba(128, 128, 128, 0.15);
+}
+
+.compendium_tuning_subject {
+    grid-area: subject;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.35rem;
+}
+
+.compendium_tuning_body {
+    grid-area: body;
+    min-width: 0;
+    overflow-wrap: break-word;
+}
+
+.compendium_tuning_kind {
+    color: var(--bs-secondary-color);
+}
+
+.compendium_tuning_new {
+    font-weight: 600;
+}
+
+.compendium_tuning_arrow {
+    opacity: 0.45;
+    font-size: 0.75em;
+}
+
+.compendium_tuning_delta {
+    grid-area: delta;
+    justify-self: end;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/*
+ * Nerf = green (good news for the player), buff = red, matching the sign colours used site-wide.
+ * The stock danger tone misses 4.5:1 AA contrast on the dark rungs, so it is blended toward the
+ * body colour - lighter in darkly, darker in lux - clearing AA in every theme without a new hex.
+ */
+.compendium_tuning_delta--up {
+    color: color-mix(in srgb, var(--bs-danger) 70%, var(--bs-body-color));
+}
+
+.compendium_tuning_delta--down {
+    color: var(--bs-success);
+}
+
+/* xN marker on rows collapsed from duplicate same-named spell records; the title attr explains it */
+.compendium_tuning_count {
+    display: inline-block;
+    background-color: var(--theme-bg-card-footer);
+    color: var(--bs-secondary-color);
+    border-radius: 0.25rem;
+    padding: 0 0.3rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    margin-inline-start: 0.25rem;
+    cursor: help;
+}
+
+/* Rewritten/added descriptions stack old above new - two paragraphs never read inline */
+.compendium_tuning_values--stacked {
+    display: block;
+}
+
+.compendium_tuning_values--stacked .compendium_tuning_old {
+    display: block;
+    color: var(--bs-secondary-color);
+}
+
+.compendium_tuning_values--stacked .compendium_tuning_new {
+    display: block;
+    font-weight: 400;
+}
+
+.compendium_tuning_dungeons {
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+}
+
+/* Hairline dot between the spell and its dungeons, cheaper than a boxed chip */
+.compendium_tuning_dungeons::before {
+    content: '\00B7';
+    margin-inline-end: 0.35rem;
+}
+
+.compendium_tuning_build_heading {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 0;
+    color: var(--bs-body-color);
+}
+
+@media (max-width: 767.98px) {
+    /* Subject takes its own line; the change keeps the delta beside it so the pair stays associated */
+    .compendium_tuning_list--subject .compendium_tuning_row {
+        grid-template-areas:
+            'subject subject'
+            'body    delta';
+        grid-template-columns: minmax(0, 1fr) auto;
+        row-gap: 0.1rem;
+    }
+}

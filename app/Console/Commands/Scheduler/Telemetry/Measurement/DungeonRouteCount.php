@@ -4,39 +4,36 @@ namespace App\Console\Commands\Scheduler\Telemetry\Measurement;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\PublishedState;
+use App\Models\Telemetry\TelemetryMetric;
+use App\Service\Telemetry\Dtos\TelemetryDataPoint;
 use Illuminate\Support\Collection;
-use InfluxDB\Point;
 
 class DungeonRouteCount extends Measurement
 {
     /**
      * {@inheritDoc}
      */
-    public function getPoints(): array
+    public function getDataPoints(): array
     {
         /** @var Collection<int, PublishedState> $publishedStates */
         $publishedStates = PublishedState::all();
 
+        $result = [
+            new TelemetryDataPoint(TelemetryMetric::MEASUREMENT_DUNGEON_ROUTE_COUNT, 'all', DungeonRoute::count()),
+            new TelemetryDataPoint(TelemetryMetric::MEASUREMENT_DUNGEON_ROUTE_COUNT, 'temporary', DungeonRoute::where('author_id', '<=', 0)->count()),
+        ];
+
         // Get a count of routes by published state
-        $publishedStateFields = [];
         foreach ($publishedStates as $publishedState) {
-            $publishedStateFields[sprintf('published_%s', $publishedState->name)] = DungeonRoute::where('published_state_id', $publishedState->id)
-                ->where('author_id', '>', 0)
-                ->count();
+            $result[] = new TelemetryDataPoint(
+                TelemetryMetric::MEASUREMENT_DUNGEON_ROUTE_COUNT,
+                sprintf('published_%s', $publishedState->name),
+                DungeonRoute::where('published_state_id', $publishedState->id)
+                    ->where('author_id', '>', 0)
+                    ->count(),
+            );
         }
 
-        return [
-            new Point(
-                'dungeon_route_count',
-                null,
-                $this->getTags(),
-                // Merge the published states with the 'all' and 'temporary' fields
-                array_merge([
-                    'all'       => DungeonRoute::count(),
-                    'temporary' => DungeonRoute::where('author_id', '<=', 0)->count(),
-                ], $publishedStateFields),
-                time(),
-            ),
-        ];
+        return $result;
     }
 }

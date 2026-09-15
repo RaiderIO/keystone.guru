@@ -3,11 +3,22 @@
 return [
 
     'dungeon' => [
+        'difficulty' => [
+            '10_man' => '',
+            '25_man' => '',
+            '20_man' => '',
+            '40_man' => '',
+        ],
         'griddiscover' => [
-            'popular'   => '',
-            'this_week' => '',
-            'next_week' => '',
-            'new'       => '',
+            'popular' => '',
+            'new'     => '',
+        ],
+        'list' => [
+            'more'        => '',
+            'next_season' => '',
+            'card'        => [
+                'this_week_tier' => '',
+            ],
         ],
         'gridtabs' => [
             'raid' => '',
@@ -50,8 +61,28 @@ return [
         'cardlist' => [
             'no_dungeonroutes' => '',
         ],
+        'leaderboard' => [
+            'create_first_route' => '',
+        ],
         'rating' => [
             'nr_of_votes' => '',
+        ],
+        'poster' => [
+            'views'     => '',
+            'favorites' => '',
+        ],
+        'cardhero' => [
+            'top_community_route'    => '',
+            'ranked_community_route' => '',
+            'views'                  => '',
+            'favorites'              => '',
+            'pulls'                  => '',
+        ],
+        'cardrow' => [
+            'new'       => '',
+            'views'     => '',
+            'favorites' => '',
+            'pulls'     => '',
         ],
         'table' => [
             'team'                  => '',
@@ -79,6 +110,8 @@ return [
             'title_title'                                    => '',
             'dungeon_speedrun_required_npc_difficulty'       => '',
             'dungeon_speedrun_required_npc_difficulty_title' => '',
+            'dungeon_start'                                  => '',
+            'dungeon_start_title'                            => '',
             'description'                                    => '',
             'description_title'                              => '',
             'key_levels'                                     => '',
@@ -106,6 +139,8 @@ return [
             'remember_me'          => '',
             'forgot_your_password' => '',
             'login_through_oauth2' => '',
+            'no_account_yet'       => '',
+            'register_now'         => '',
         ],
         'mapsettings' => [
             'general'                                       => '',
@@ -119,6 +154,10 @@ return [
             'heatmap'                                       => '',
             'show_heatmap_tooltips'                         => '',
             'show_heatmap_tooltips_title'                   => '',
+            'heatmap_render_order'                          => '',
+            'heatmap_render_order_title'                    => '',
+            'heatmap_render_order_on_top'                   => '',
+            'heatmap_render_order_behind'                   => '',
             'enemies'                                       => '',
             'enemy_number_style'                            => '',
             'enemy_number_style_title'                      => '',
@@ -153,7 +192,11 @@ return [
             'import_route'                           => '',
         ],
         'oauth' => [
-            'battletag_warning' => '',
+            'battletag_warning'       => '',
+            'battlenet_region'        => '',
+            'continue_with_battlenet' => '',
+            'continue_with_discord'   => '',
+            'continue_with_google'    => '',
         ],
         'pullsettings' => [
             'pull_number_style'                 => '',
@@ -185,6 +228,8 @@ return [
             'terms_of_service'        => '',
             'privacy_policy'          => '',
             'cookie_policy'           => '',
+            'already_have_an_account' => '',
+            'login_now'               => '',
         ],
         'timezoneselect' => [
             'africa'     => '',
@@ -227,7 +272,6 @@ return [
             'api_documentation_internal_team' => '',
             'keystone_guru'                   => '',
             'changelog'                       => '',
-            'changelog_new'                   => '',
             'credits'                         => '',
             'about'                           => '',
             'legacy'                          => '',
@@ -243,6 +287,7 @@ return [
             'trademark'                       => '',
             'trademark_footer'                => '',
             'social'                          => '',
+            'worktree'                        => '',
         ],
         'header' => [
             'toggle_navigation_title' => '',
@@ -255,20 +300,25 @@ return [
             'explore'                 => '',
             'new'                     => '',
             'compendium'              => '',
+            'compendium_overview'     => '',
             'npc_compendium'          => '',
             'spell_compendium'        => '',
             'compendium_activity'     => '',
             'class_compendium'        => '',
         ],
         'nav' => [
+            'dungeoncontext' => [
+                'change_dungeon' => '',
+            ],
             'user' => [
                 'login'              => '',
                 'register'           => '',
                 'telescope'          => '',
                 'tools'              => '',
-                'view_releases'      => '',
                 'view_expansions'    => '',
                 'view_dungeons'      => '',
+                'view_affixes'       => '',
+                'view_seasons'       => '',
                 'view_npcs'          => '',
                 'view_spells'        => '',
                 'view_users'         => '',
@@ -416,6 +466,7 @@ return [
                 'edit_route_settings'            => '',
                 'edit_mapping_version'           => '',
                 'share'                          => '',
+                'route_actions'                  => '',
                 'start_live_session'             => '',
                 'start_live_session_paragraph_1' => '',
                 'start_live_session_paragraph_2' => '',
@@ -478,7 +529,7 @@ return [
     ],
     'mappingversion' => [
         'select' => [
-            'mapping_version_readonly' => '',
+            'mapping_version_previous' => '',
             'mapping_version'          => '',
         ],
     ],
@@ -636,11 +687,6 @@ return [
         ],
         'select' => [
             'npc' => '',
-        ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => '',
         ],
     ],
     'tag' => [

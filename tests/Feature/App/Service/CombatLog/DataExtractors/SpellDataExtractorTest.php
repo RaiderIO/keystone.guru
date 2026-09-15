@@ -16,7 +16,9 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell as SpellModel;
 use App\Models\Spell\SpellDungeon;
+use App\Repositories\Swoole\SpellRepositorySwoole;
 use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterface;
+use App\Service\CombatLog\DataExtractors\SpellDataCollectors\SpellCreationCollector;
 use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
@@ -24,6 +26,7 @@ use Illuminate\Support\Carbon;
 use Mockery;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use ReflectionMethod;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('SpellDataExtractor')]
@@ -41,6 +44,9 @@ final class SpellDataExtractorTest extends PublicTestCase
 
     /** SPELL_AURA_APPLIED for an unknown spell, prefix school 0x20 (shadow) - hex, exactly as retail logs it */
     private const string RAW_SHADOW_BUFF_EVENT = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-999601-000000000,"TestNpc",0xa48,0x0,Creature-0-2085-2290-22744-999601-000000001,"TestNpc",0xa48,0x0,999602,"TestSpell",0x20,BUFF';
+
+    /** SPELL_AURA_APPLIED, source=NPC, dest=Player, DEBUFF → triggers SpellProperty::Debuff, the one nullable column */
+    private const string RAW_DEBUFF_EVENT = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-999601-000000000,"TestNpc",0xa48,0x0,Player-1084-0B48C032,"TestPlayer",0x512,0x80000000,999602,"TestSpell",0x1,DEBUFF';
 
     private ExtractedDataResult $result;
 
@@ -120,7 +126,9 @@ final class SpellDataExtractorTest extends PublicTestCase
 
     private function makeExtractor(): SpellDataExtractor
     {
-        return new SpellDataExtractor();
+        // A fresh (non-app-bound) repository per extractor - tests create/delete spells between
+        // makeExtractor() calls and must not see another test's memoized catalog
+        return new SpellDataExtractor(new SpellRepositorySwoole());
     }
 
     private function parsedEvent(string $rawEvent): BaseEvent
@@ -157,6 +165,68 @@ final class SpellDataExtractorTest extends PublicTestCase
             'id'           => self::SPELL_ID,
             'schools_mask' => SpellModel::SCHOOL_SHADOW,
         ]);
+    }
+
+    #[Test]
+    public function extractData_givenASpellCreatedAfterTheCatalogWasBuilt_findsItInsteadOfCreatingADuplicate(): void
+    {
+        // Arrange - the catalog is shared across jobs in a long-lived worker (#4058): build it first, then
+        // create the spell behind its back, like another worker would
+        $this->createTestNpc();
+        $extractor = $this->makeExtractor();
+        $this->createTestSpell(['schools_mask' => 0]);
+
+        // Act - a blind create here would die on a duplicate primary key
+        $this->runExtract($extractor, [$this->parsedEvent(self::RAW_SHADOW_BUFF_EVENT)]);
+
+        // Assert - the existing-spell path ran: the school got repaired, and no SpellCreated event was written
+        $this->assertSame(1, SpellModel::where('id', self::SPELL_ID)->count());
+        $this->assertDatabaseHas('spells', [
+            'id'           => self::SPELL_ID,
+            'schools_mask' => SpellModel::SCHOOL_SHADOW,
+        ]);
+        $this->assertDatabaseMissing('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::SpellCreated->value,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function createSpell_givenAnotherWorkerInsertedTheSameSpellBetweenTheLookupAndTheInsert_fallsBackToTheExistingSpellPathInsteadOfThrowing(): void
+    {
+        // Arrange - this worker's own findSpell() check already missed (empty catalog, no row yet), simulated
+        // here by calling the collector's private createSpell() path directly while another worker's insert has
+        // already landed in between (#4151) - a blind create dies on a duplicate primary key
+        /** @var SpellDataExtractorLoggingInterface $log */
+        $log       = Mockery::mock(SpellDataExtractorLoggingInterface::class)->shouldIgnoreMissing();
+        $allSpells = collect();
+        $collector = new SpellCreationCollector($allSpells, $log);
+        $collector->beforeCollect(self::COMBAT_LOG_PATH);
+        $this->createTestSpell(['schools_mask' => 0]);
+
+        // Act
+        $createSpell = new ReflectionMethod($collector, 'createSpell');
+        $createSpell->invoke($collector, $this->result, self::SPELL_ID, 'TestSpell', SpellModel::SCHOOL_SHADOW);
+        $collector->afterCollect($this->result, self::COMBAT_LOG_PATH);
+
+        // Assert - the existing-spell path ran instead of throwing: the school got repaired, still only one row,
+        // and no SpellCreated event was written since this worker did not actually create it
+        $this->assertSame(1, SpellModel::where('id', self::SPELL_ID)->count());
+        $this->assertDatabaseHas('spells', [
+            'id'           => self::SPELL_ID,
+            'schools_mask' => SpellModel::SCHOOL_SHADOW,
+        ]);
+        $this->assertDatabaseMissing('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::SpellCreated->value,
+        ], 'combatlog');
+
+        // Assert - counted as an update, not a creation, and the shared catalog now has the winning row so
+        // downstream collectors (npc/spell assignments) do not skip this spell for the rest of the run
+        $this->assertSame(0, $this->result->toArray()['createdSpells']);
+        $this->assertSame(1, $this->result->toArray()['updatedSpells']);
+        $this->assertTrue($allSpells->has(self::SPELL_ID));
+        $this->assertSame(SpellModel::SCHOOL_SHADOW, $allSpells->get(self::SPELL_ID)->schools_mask);
     }
 
     #[Test]
@@ -304,6 +374,81 @@ final class SpellDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
+    public function afterExtract_givenAnotherWorkerRecordedThePropertyAfterTheCatalogWasBuilt_doesNotEmitASecondEvent(): void
+    {
+        // Arrange - two ingest processes, each holding its own process-persistent spell catalog (#4058) built while
+        // the property was still unset, exactly as concurrent workers do during an ingest burst
+        $this->createTestSpell(['aura' => false]);
+        $workerA = $this->makeExtractor();
+        $workerB = $this->makeExtractor();
+
+        // Act - both observe the same aura, each from its own combat log
+        $this->runExtract($workerA, [$this->parsedEvent(self::RAW_BUFF_EVENT)], '/tmp/worker-a.log');
+        $this->runExtract($workerB, [$this->parsedEvent(self::RAW_BUFF_EVENT)], '/tmp/worker-b.log');
+
+        // Assert - the property was recorded, but only the worker that actually flipped it wrote an event (#4199)
+        $this->assertDatabaseHas('spells', [
+            'id'   => self::SPELL_ID,
+            'aura' => true,
+        ]);
+        $this->assertSame(1, CombatLogSpellEvent::on('combatlog')
+            ->where('spell_id', self::SPELL_ID)
+            ->where('event_type', CombatLogSpellEventType::PropertyChanged->value)
+            ->where('property', SpellProperty::Aura->value)
+            ->count());
+    }
+
+    #[Test]
+    public function afterExtract_givenASpellWhoseNullableDebuffColumnIsNull_recordsItAndEmitsExactlyOneEvent(): void
+    {
+        // Arrange - `debuff` is the one property column that is nullable, and is NULL rather than 0 on most live
+        // rows, so the conditional write has to match NULL as well as false
+        $this->createTestSpell(['debuff' => null]);
+        $workerA = $this->makeExtractor();
+        $workerB = $this->makeExtractor();
+
+        // Act
+        $this->runExtract($workerA, [$this->parsedEvent(self::RAW_DEBUFF_EVENT)], '/tmp/worker-a.log');
+        $this->runExtract($workerB, [$this->parsedEvent(self::RAW_DEBUFF_EVENT)], '/tmp/worker-b.log');
+
+        // Assert
+        $this->assertDatabaseHas('spells', [
+            'id'     => self::SPELL_ID,
+            'debuff' => true,
+        ]);
+        $this->assertSame(1, CombatLogSpellEvent::on('combatlog')
+            ->where('spell_id', self::SPELL_ID)
+            ->where('event_type', CombatLogSpellEventType::PropertyChanged->value)
+            ->where('property', SpellProperty::Debuff->value)
+            ->count());
+    }
+
+    #[Test]
+    public function afterExtract_givenAnotherWorkerRecordedAMaskPropertyAfterTheCatalogWasBuilt_doesNotEmitASecondEvent(): void
+    {
+        // Arrange - the miss/counter/bypass properties live in a bitmask column instead of a boolean one, so they
+        // take a different conditional-write path than aura/debuff and need their own regression cover
+        $this->createTestSpell(['miss_types_mask' => 0]);
+        $workerA = $this->makeExtractor();
+        $workerB = $this->makeExtractor();
+
+        // Act
+        $this->runExtract($workerA, [$this->parsedEvent(self::RAW_INTERRUPT_EVENT)], '/tmp/worker-a.log');
+        $this->runExtract($workerB, [$this->parsedEvent(self::RAW_INTERRUPT_EVENT)], '/tmp/worker-b.log');
+
+        // Assert - the bit was set once, and only the worker that set it wrote an event (#4199)
+        $this->assertDatabaseHas('spells', [
+            'id'              => self::SPELL_ID,
+            'miss_types_mask' => SpellModel::MISS_TYPE_INTERRUPT,
+        ]);
+        $this->assertSame(1, CombatLogSpellEvent::on('combatlog')
+            ->where('spell_id', self::SPELL_ID)
+            ->where('event_type', CombatLogSpellEventType::PropertyChanged->value)
+            ->where('property', SpellProperty::MissInterrupt->value)
+            ->count());
+    }
+
+    #[Test]
     public function afterExtract_givenNewNpcSpellAssignment_createsNpcSpellAndEvent(): void
     {
         // Arrange — spell with 'unknown' category so assignSpellToNpc runs, aura=true so no PropertyChanged noise
@@ -332,6 +477,38 @@ final class SpellDataExtractorTest extends PublicTestCase
         ], 'combatlog');
 
         $this->assertSame(1, $this->result->toArray()['createdNpcSpells']);
+
+        // Assert - #4327: both SpellDungeonAssignmentCollector and NpcSpellAssignmentCollector assign this
+        // spell to the same dungeon for this one event; that must still leave exactly one row
+        $this->assertSame(
+            1,
+            SpellDungeon::where('spell_id', self::SPELL_ID)->where('dungeon_id', $this->currentDungeon->dungeon->id)->count(),
+        );
+    }
+
+    #[Test]
+    public function collect_givenAnotherWorkerAssignedTheSpellToTheDungeonAfterTheCatalogWasBuilt_doesNotCreateADuplicateRow(): void
+    {
+        // Arrange - two ingest processes, each holding its own process-persistent spell catalog (#4058) built
+        // while neither knew about the other's dungeon assignment, exactly as concurrent workers do (#4327)
+        $this->createTestSpell([
+            'category' => sprintf('spellcategory.%s', SpellModel::CATEGORY_UNKNOWN),
+            'aura'     => true,
+        ]);
+        $this->createTestNpc();
+        $workerA = $this->makeExtractor();
+        $workerB = $this->makeExtractor();
+
+        // Act - workerA's run commits the assignment; workerB's in-memory catalog is still stale, so its own
+        // check-then-insert races against a row that already exists by the time it inserts
+        $this->runExtract($workerA, [$this->parsedEvent(self::RAW_BUFF_EVENT)], '/tmp/worker-a.log');
+        $this->runExtract($workerB, [$this->parsedEvent(self::RAW_BUFF_EVENT)], '/tmp/worker-b.log');
+
+        // Assert - still exactly one row for the pair, no duplicate-key exception surfaced
+        $this->assertSame(
+            1,
+            SpellDungeon::where('spell_id', self::SPELL_ID)->where('dungeon_id', $this->currentDungeon->dungeon->id)->count(),
+        );
     }
 
     #[Test]
@@ -395,6 +572,35 @@ final class SpellDataExtractorTest extends PublicTestCase
 
         $this->assertSame(1, $this->result->toArray()['createdSpells']);
         $this->assertSame(1, $this->result->toArray()['updatedSpells']);
+    }
+
+    #[Test]
+    public function afterExtract_givenMultipleDistinctPropertiesInOneBatch_writesAllObservationRows(): void
+    {
+        // Arrange — spell not yet known; both rows land in the same afterExtract upsert batch. Regression
+        // check for #4086: the batch is now sorted by its unique key before upserting to keep concurrent
+        // jobs' lock order deterministic, which must not drop or corrupt any row in the batch
+        $extractor = $this->makeExtractor();
+
+        // Act — two distinct properties (Aura, MissInterrupt) for the same spell in one batch
+        $this->runExtract($extractor, [
+            $this->parsedEvent(self::RAW_INTERRUPT_EVENT),
+            $this->parsedEvent(self::RAW_BUFF_EVENT),
+        ]);
+
+        // Assert — both rows present
+        $this->assertDatabaseHas('combat_log_spell_property_observations', [
+            'spell_id' => self::SPELL_ID,
+            'property' => SpellProperty::MissInterrupt->value,
+        ], 'combatlog');
+        $this->assertDatabaseHas('combat_log_spell_property_observations', [
+            'spell_id' => self::SPELL_ID,
+            'property' => SpellProperty::Aura->value,
+        ], 'combatlog');
+        $this->assertSame(
+            2,
+            CombatLogSpellPropertyObservation::where('spell_id', self::SPELL_ID)->count(),
+        );
     }
 
     #[Test]

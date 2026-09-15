@@ -1338,6 +1338,15 @@ return [
                 'the_headteachers_enclave' => 'El Enclave de la Rectora',
             ],
         ],
+        'altar_of_fangs' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'sacrificial_approach' => '',
+                'mutation_chambers'    => '',
+                'altar_of_fangs'       => '',
+            ],
+        ],
         'den_of_nalorakk' => [
             'name'         => 'Guarida de Nalorakk',
             'abbreviation' => '',
@@ -1397,7 +1406,9 @@ return [
             'name'         => 'Arena Rajavacío',
             'abbreviation' => '',
             'floors'       => [
-                'voidscar_arena' => 'Arena Rajavacío',
+                'halls_of_spite'   => '',
+                'voidscar_arena'   => 'Arena Rajavacío',
+                'domanaars_ascent' => '',
             ],
         ],
         'windrunner_spire' => [

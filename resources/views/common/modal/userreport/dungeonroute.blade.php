@@ -35,13 +35,14 @@ $publicKey    = $dungeonroute !== null ? $dungeonroute->public_key : 'auto';
         </div>
 
         <div class="mb-3">
-
-            @guest
-                {{ html()->label(__('view_common.modal.userreport.dungeonroute.contact_by_email_guest'), 'dungeonroute_report_contact_ok') }}
-            @else
-                {{ html()->label(__('view_common.modal.userreport.dungeonroute.contact_by_email'), 'dungeonroute_report_contact_ok') }}
-            @endguest
-            {{ html()->checkbox('dungeonroute_report_contact_ok', false, 1)->class('form-check-input dungeonroute_report_contact_ok') }}
+            <div class="form-check">
+                {{ html()->checkbox('dungeonroute_report_contact_ok', false, 1)->class('form-check-input dungeonroute_report_contact_ok') }}
+                @guest
+                    {{ html()->label(__('view_common.modal.userreport.dungeonroute.contact_by_email_guest'), 'dungeonroute_report_contact_ok')->class('form-check-label') }}
+                @else
+                    {{ html()->label(__('view_common.modal.userreport.dungeonroute.contact_by_email'), 'dungeonroute_report_contact_ok')->class('form-check-label') }}
+                @endguest
+            </div>
         </div>
 
         <button class="btn btn-info dungeonroute_report_submit">

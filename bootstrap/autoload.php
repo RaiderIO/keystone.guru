@@ -32,3 +32,19 @@ $compiledPath = __DIR__ . '/cache/compiled.php';
 if (file_exists($compiledPath)) {
     require $compiledPath;
 }
+
+/*
+|--------------------------------------------------------------------------
+| Keep The Test Suite Off The Real Error Tracker
+|--------------------------------------------------------------------------
+|
+| This file is loaded only as phpunit.xml's bootstrap, and PHPUnit applies its <php> block before
+| getting here. That block empties both DSN variables with force="true", but PHPUnit writes only
+| putenv() and $_ENV, while Laravel resolves env() through Dotenv's ServerConstAdapter ($_SERVER)
+| ahead of its EnvConstAdapter ($_ENV). A DSN in the container's environment therefore beats
+| force="true" and the suite transmits its own deliberate report() calls to production Sentry.
+| Removing the $_SERVER entries is what lets the emptied $_ENV value win.
+|
+*/
+
+unset($_SERVER['SENTRY_LARAVEL_DSN'], $_SERVER['SENTRY_DSN']);

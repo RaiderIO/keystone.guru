@@ -1,1 +1,42 @@
-[]
+[
+    {
+        "id": 19,
+        "mapping_version_id": 879,
+        "floor_id": 155,
+        "name": "mapping.checkpoints.df.ruby_life_pools.ruby_overlook_name",
+        "lat": -65.138,
+        "lng": 128.3731
+    },
+    {
+        "id": 23,
+        "mapping_version_id": 908,
+        "floor_id": 155,
+        "name": "mapping.checkpoints.df.ruby_life_pools.ruby_overlook_name",
+        "lat": -65.138,
+        "lng": 128.3731
+    },
+    {
+        "id": 26,
+        "mapping_version_id": 995,
+        "floor_id": 155,
+        "name": "mapping.checkpoints.df.ruby_life_pools.ruby_overlook_name",
+        "lat": -65.138,
+        "lng": 128.3731
+    },
+    {
+        "id": 34,
+        "mapping_version_id": 1056,
+        "floor_id": 155,
+        "name": "mapping.checkpoints.df.ruby_life_pools.ruby_overlook_name",
+        "lat": -65.138,
+        "lng": 128.3731
+    },
+    {
+        "id": 36,
+        "mapping_version_id": 1064,
+        "floor_id": 155,
+        "name": "mapping.checkpoints.df.ruby_life_pools.ruby_overlook_name",
+        "lat": -65.138,
+        "lng": 128.3731
+    }
+]

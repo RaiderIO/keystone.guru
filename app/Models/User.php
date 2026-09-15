@@ -35,7 +35,7 @@ use Override;
  * @property int         $id
  * @property string      $public_key
  * @property int         $game_server_region_id
- * @property int         $patreon_user_link_id
+ * @property int|null    $patreon_user_link_id
  * @property int         $game_version_id
  * @property int         $dungeon_id                  The dungeon context this user is in.
  * @property string      $name
@@ -54,7 +54,6 @@ use Override;
  * @property string      $password
  * @property string      $raw_patreon_response_data
  * @property bool        $legal_agreed
- * @property int         $legal_agreed_ms
  * @property bool        $analytics_cookie_opt_out
  *
  * @property PatreonUserLink|null       $patreonUserLink
@@ -121,11 +120,6 @@ class User extends Authenticatable implements LaratrustUser
     private static ?string $OVERRIDE_MAP_FACADE_STYLE = null;
 
     /**
-     * @var string Have to specify connection explicitly so that Tracker still works (has its own DB)
-     */
-    protected $connection = 'mysql';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
@@ -147,7 +141,6 @@ class User extends Authenticatable implements LaratrustUser
         'kill_zone_path_weight',
         'password',
         'legal_agreed',
-        'legal_agreed_ms',
     ];
 
     /**
@@ -300,7 +293,7 @@ class User extends Authenticatable implements LaratrustUser
 
         // If we weren't an admin, check patreon data
         if (!$result && $this->patreonUserLink !== null && isset(PatreonBenefit::ALL[$key])) {
-            $result = $this->patreonUserLink->patreonbenefits()->where('patreon_benefits.id', PatreonBenefit::ALL[$key])->exists();
+            $result = $this->patreonUserLink->patreonBenefits()->where('patreon_benefits.id', PatreonBenefit::ALL[$key])->exists();
         }
 
         return $result;
@@ -348,19 +341,6 @@ class User extends Authenticatable implements LaratrustUser
     {
         return $this->dungeonRoutes()->count() < config('keystoneguru.registered_user_dungeonroute_limit') ||
             $this->hasPatreonBenefit(PatreonBenefit::UNLIMITED_DUNGEONROUTES);
-    }
-
-    /**
-     * Get the amount of routes a user may still create.
-     *
-     * NOTE: Will be inaccurate if the user is a Patron. Just don't call this function then.
-     */
-    public function getRemainingRouteCount(): int
-    {
-        return (int)max(
-            0,
-            config('keystoneguru.registered_user_dungeonroute_limit') - $this->dungeonRoutes()->count(),
-        );
     }
 
     /**
@@ -441,9 +421,20 @@ class User extends Authenticatable implements LaratrustUser
             // never runs - drop the user's stored feature values explicitly instead
             Feature::forgetAllForUser($user);
 
-            $user->dungeonRoutes()->delete();
+            // Deleted one at a time on purpose: a mass delete on the relation goes straight to the query
+            // builder and never fires DungeonRoute::deleting, which is what cleans up the route's thumbnails
+            // (and their files on disk), thumbnail jobs, challenge mode run, tags and all mapping objects.
+            // lazyById() rather than get() so a user at the route cap doesn't hydrate every route at once -
+            // it pages on id > lastSeen, which stays correct while the rows are being deleted underneath it
+            foreach ($user->dungeonRoutes()->lazyById() as $dungeonRoute) {
+                $dungeonRoute->delete();
+            }
+
+            // UserReport has no deleting hook, so a mass delete is fine here
             $user->reports()->delete();
-            $user->patreonUserLink()->delete();
+
+            // Same as the dungeon routes above - PatreonUserLink::deleting drops the user's patreon benefits
+            $user->patreonUserLink()->first()?->delete();
             foreach ($user->teams as $team) {
                 // Remove ourselves from the team
                 $team->removeMember($user);

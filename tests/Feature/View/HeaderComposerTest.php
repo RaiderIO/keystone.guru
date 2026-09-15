@@ -3,26 +3,32 @@
 namespace Tests\Feature\View;
 
 use App\Http\View\Composers\HeaderComposer;
+use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
+use App\Service\View\RequestViewContextInterface;
+use App\Service\View\ViewServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\IsolatesSeededUpcomingSeasons;
 use Tests\TestCases\PublicTestCase;
 
 /**
  * The dungeon context bar follows the current season only. The upcoming season is advertised next to it
- * as a card of its own, and in the header nav link, but only once an admin has marked it `active` -
- * seasons are seeded weeks before they start so their mapping can be reviewed, and until then they should
- * not show up anywhere (#3761, #3868).
+ * as a card of its own, but only once an admin has marked it `active` - seasons are seeded weeks before
+ * they start so their mapping can be reviewed, and until then they should not show up anywhere
+ * (#3761, #3868).
  */
 #[Group('ViewComposers')]
 #[Group('HeaderComposer')]
 final class HeaderComposerTest extends PublicTestCase
 {
+    use IsolatesSeededUpcomingSeasons;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -34,10 +40,14 @@ final class HeaderComposerTest extends PublicTestCase
         // the array store the tests run on - survives between test runs. Seasons created below would otherwise be
         // invisible to the composer, or worse, stay visible to whatever runs next.
         $this->flushSeasonCaches();
+
+        // These tests assert on which season is upcoming site-wide, so a seeded upcoming season would answer
+        // for them - and no assertion of "nothing is advertised" could hold at all.
+        $this->hideSeededUpcomingSeasons();
     }
 
     #[Test]
-    public function compose_givenAnActiveUpcomingSeason_setsTheNextSeasonAndCard(): void
+    public function compose_givenAnActiveUpcomingSeason_setsTheNextSeasonCard(): void
     {
         // Arrange - inside the try so a failure halfway through still cleans up
         $upcomingSeason = null;
@@ -53,7 +63,6 @@ final class HeaderComposerTest extends PublicTestCase
             // Assert
             $data = $view->getData();
 
-            $this->assertSame($upcomingSeason->id, $data['nextSeason']?->id);
             $this->assertNotNull($data['dungeonContextNextSeason']);
             $this->assertSame($upcomingSeason->id, $data['dungeonContextNextSeason']->id);
             $this->assertStringContainsString(sprintf('season=%d', $upcomingSeason->id), $data['dungeonContextNextSeasonLink']);
@@ -81,7 +90,6 @@ final class HeaderComposerTest extends PublicTestCase
             // Assert
             $data = $view->getData();
 
-            $this->assertNull($data['nextSeason'], 'An inactive season must not leak into the header nav link either');
             $this->assertNull($data['dungeonContextNextSeason']);
             $this->assertNull($data['dungeonContextNextSeasonLink']);
         } finally {
@@ -120,9 +128,16 @@ final class HeaderComposerTest extends PublicTestCase
             // Assert
             $data = $view->getData();
 
-            $this->assertSame($upcomingSeason->id, $data['nextSeason']?->id, 'The season should still be found, just not advertised as a card');
             $this->assertNull($data['dungeonContextNextSeason']);
             $this->assertNull($data['dungeonContextNextSeasonLink']);
+
+            // The season lookup itself must be unaffected by has_seasons - only the card is gated on it.
+            // Without this, the has_seasons gate could be broken (e.g. silently suppressing the season
+            // lookup itself) and the assertions above would pass vacuously.
+            $region      = app(RequestViewContextInterface::class)->getUserOrDefaultRegion();
+            $foundSeason = app(ViewServiceInterface::class)->getNextSeasonForRegion($region);
+            $this->assertNotNull($foundSeason, 'The season should still be found, just not advertised as a card');
+            $this->assertSame($upcomingSeason->id, $foundSeason->id);
         } finally {
             $user?->delete();
 
@@ -130,6 +145,119 @@ final class HeaderComposerTest extends PublicTestCase
                 $this->deleteSeason($upcomingSeason);
             }
         }
+    }
+
+    /**
+     * The "Routes by expansion" dropdown was cut from the bar in #4465 - every destination now lives
+     * inside a category panel. The map view still passes `showExpansionNav`, so the header must keep
+     * accepting it and render identically either way.
+     */
+    #[Test]
+    public function render_givenShowExpansionNavEitherWay_rendersTheSameHeader(): void
+    {
+        // Act
+        $default  = view('common.layout.header')->render();
+        $disabled = view('common.layout.header', ['showExpansionNav' => false])->render();
+
+        // Assert
+        $this->assertStringNotContainsString('Routes by expansion', $default);
+        $this->assertSame($default, $disabled);
+    }
+
+    /**
+     * The desktop dungeon-context strip is hidden below `lg`, so the mobile dropdown beside the navbar
+     * toggler is the only way to switch dungeon on a phone (#4097).
+     */
+    #[Test]
+    public function render_givenShowDungeonContextDefault_rendersTheMobileDungeonSelector(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::getUserOrDefaultDungeon();
+
+        // Act
+        $selector = $this->getMobileDungeonSelectorHtml(view('common.layout.header')->render());
+
+        // Assert
+        $this->assertNotNull($selector, 'The mobile dungeon selector should render');
+        $this->assertStringContainsString(__('view_common.layout.nav.dungeoncontext.change_dungeon'), $selector);
+        $this->assertStringContainsString(route('dungeon.changecontext', ['dungeon' => $dungeon]), $selector);
+    }
+
+    /**
+     * A dungeon route's map view has no dungeon context to switch - it passes `showDungeonContext => false`
+     * for the desktop strip, and the mobile selector must follow it.
+     */
+    #[Test]
+    public function render_givenShowDungeonContextFalse_omitsTheMobileDungeonSelector(): void
+    {
+        // Act
+        $html = view('common.layout.header', ['showDungeonContext' => false])->render();
+
+        // Assert
+        $this->assertNull($this->getMobileDungeonSelectorHtml($html));
+    }
+
+    /**
+     * Explore, heatmap, the compendiums, search and discover all override the dungeon context links so that
+     * picking a dungeon keeps you on the page type you were already on. The mobile selector honouring the
+     * default instead would silently kick those pages' visitors onto a map.
+     */
+    #[Test]
+    public function render_givenOverriddenDungeonContextLinks_usesThemForTheMobileDungeonSelector(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        $links   = collect([$dungeon->key => 'https://example.test/overridden']);
+
+        // Act
+        $selector = $this->getMobileDungeonSelectorHtml(
+            view('common.layout.header', ['dungeonContextLinks' => $links])->render(),
+        );
+
+        // Assert
+        $this->assertNotNull($selector);
+        $this->assertStringContainsString('https://example.test/overridden', $selector);
+        $this->assertStringNotContainsString(route('dungeon.changecontext', ['dungeon' => $dungeon]), $selector);
+    }
+
+    /**
+     * Map pages cap the strip at `maxColCount` dungeons and add a 'more' link into their own full dungeon
+     * selection page. The mobile dropdown is capped the same way, so it has to offer the same way out - or
+     * the dungeons past the cap become unreachable on a phone.
+     */
+    #[Test]
+    public function render_givenShowMore_rendersTheMoreEntryInTheMobileDungeonSelector(): void
+    {
+        // Arrange - `maxColCount` is not a header parameter: exactly like the desktop strip's own include,
+        // the partial reads it out of the enclosing view scope, which is what lets the cap be forced here
+        // instead of depending on how many dungeons the current season happens to seed.
+        $links = collect(['more' => 'https://example.test/more']);
+
+        // Act
+        $selector = $this->getMobileDungeonSelectorHtml(
+            view('common.layout.header', [
+                'showMore'            => true,
+                'maxColCount'         => 1,
+                'dungeonContextLinks' => $links,
+            ])->render(),
+        );
+
+        // Assert
+        $this->assertNotNull($selector);
+        $this->assertStringContainsString('https://example.test/more', $selector);
+        $this->assertStringContainsString(__('view_common.dungeon.list.more'), $selector);
+    }
+
+    /**
+     * The rendered `<li>` of the mobile dungeon selector, or null when the header did not render one. Scoped
+     * on purpose: the desktop strip carries the same links, so an assertion over the whole header would pass
+     * on the desktop markup alone.
+     */
+    private function getMobileDungeonSelectorHtml(string $html): ?string
+    {
+        $matched = preg_match('/<li class="nav-item dropdown dungeon_context_nav".*?<\/li>/s', $html, $matches);
+
+        return $matched === 1 ? $matches[0] : null;
     }
 
     private function deleteSeason(Season $season): void

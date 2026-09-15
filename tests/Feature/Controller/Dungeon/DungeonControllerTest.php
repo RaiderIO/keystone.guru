@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Dungeon;
 
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\User;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\Group;
@@ -46,11 +47,12 @@ final class DungeonControllerTest extends PublicTestCase
     {
         // Arrange
         $dungeon              = Dungeon::firstOrFail();
+        $originalAttributes   = $dungeon->getAttributes();
         $originalDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
 
         $expected = [
-            Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN],
-            Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN],
+            DungeonDifficulty::TEN_MAN->value,
+            DungeonDifficulty::TWENTY_FIVE_MAN->value,
         ];
 
         try {
@@ -64,7 +66,7 @@ final class DungeonControllerTest extends PublicTestCase
                 $dungeon->fresh()->getEnabledSpeedrunDifficulties(),
             );
         } finally {
-            $this->restoreDifficulties($dungeon, $originalDifficulties);
+            $this->restoreDungeon($dungeon, $originalAttributes, $originalDifficulties);
         }
     }
 
@@ -73,25 +75,26 @@ final class DungeonControllerTest extends PublicTestCase
     {
         // Arrange
         $dungeon              = Dungeon::firstOrFail();
+        $originalAttributes   = $dungeon->getAttributes();
         $originalDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
 
         try {
             // Act — first set two difficulties, then re-sync to a single one
             $this->updateDungeon($dungeon, [
-                Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN],
-                Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN],
+                DungeonDifficulty::TEN_MAN->value,
+                DungeonDifficulty::TWENTY_FIVE_MAN->value,
             ]);
             $this->updateDungeon($dungeon, [
-                Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_20_MAN],
+                DungeonDifficulty::TWENTY_MAN->value,
             ]);
 
             // Assert — only the last set remains
             $this->assertEqualsCanonicalizing(
-                [Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_20_MAN]],
+                [DungeonDifficulty::TWENTY_MAN->value],
                 $dungeon->fresh()->getEnabledSpeedrunDifficulties(),
             );
         } finally {
-            $this->restoreDifficulties($dungeon, $originalDifficulties);
+            $this->restoreDungeon($dungeon, $originalAttributes, $originalDifficulties);
         }
     }
 
@@ -100,6 +103,7 @@ final class DungeonControllerTest extends PublicTestCase
     {
         // Arrange
         $dungeon              = Dungeon::firstOrFail();
+        $originalAttributes   = $dungeon->getAttributes();
         $originalDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
 
         try {
@@ -109,15 +113,22 @@ final class DungeonControllerTest extends PublicTestCase
             // Assert
             $response->assertSessionHasErrors('speedrun_difficulties.0');
         } finally {
-            $this->restoreDifficulties($dungeon, $originalDifficulties);
+            $this->restoreDungeon($dungeon, $originalAttributes, $originalDifficulties);
         }
     }
 
     /**
-     * @param list<int> $difficulties
+     * The update form posts no `active` (nor the other checkbox columns), so the controller unchecks them on the
+     * seeded dungeon; every column is put back, not only the difficulties.
+     *
+     * @param array<string, mixed> $attributes
+     * @param list<int>            $difficulties
      */
-    private function restoreDifficulties(Dungeon $dungeon, array $difficulties): void
+    private function restoreDungeon(Dungeon $dungeon, array $attributes, array $difficulties): void
     {
+        Dungeon::query()->whereKey($dungeon->id)->update($attributes);
+        new Dungeon()->flushCache();
+
         $dungeon->dungeonSpeedrunDifficulties()->delete();
         foreach ($difficulties as $difficulty) {
             $dungeon->dungeonSpeedrunDifficulties()->create(['difficulty' => $difficulty]);

@@ -9,6 +9,7 @@ use App\Models\CombatLog\CombatLogSpellEventType;
 use App\Models\Spell\Spell as SpellModel;
 use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
 
 class SpellCreationCollector implements SpellDataCollectorInterface
@@ -42,27 +43,21 @@ class SpellCreationCollector implements SpellDataCollectorInterface
         $spellId     = $prefix->getSpellId();
         $schoolsMask = $prefix->getSpellSchoolMask();
 
-        /** @var SpellModel|null $existingSpell */
-        $existingSpell = $this->allSpells->get($spellId);
+        $existingSpell = $this->findSpell($spellId);
         if ($existingSpell !== null) {
             $this->repairMissingSchoolsMask($result, $existingSpell, $schoolsMask);
 
             return;
         }
 
-        $createdSpell = $this->createSpellModel($result, $spellId, $prefix->getSpellName(), $schoolsMask);
-        $this->allSpells->put($spellId, $createdSpell);
-        $this->pendingNewSpells->put($spellId, $createdSpell);
-
-        $this->log->createMissingSpellCreatedSpell($createdSpell->name, $spellId);
+        $this->createSpell($result, $spellId, $prefix->getSpellName(), $schoolsMask);
     }
 
     public function ensureInterruptSpellExists(ExtractedDataResult $result, Interrupt $interrupt): void
     {
         $spellId = $interrupt->getExtraSpellId();
 
-        /** @var SpellModel|null $existingSpell */
-        $existingSpell = $this->allSpells->get($spellId);
+        $existingSpell = $this->findSpell($spellId);
         if ($existingSpell !== null) {
             // The interrupted spell's school is trusted to create a spell on the line below, so it is good enough
             // to repair one too
@@ -71,11 +66,7 @@ class SpellCreationCollector implements SpellDataCollectorInterface
             return;
         }
 
-        $createdSpell = $this->createSpellModel($result, $spellId, $interrupt->getExtraSpellName(), $interrupt->getExtraSchool());
-        $this->allSpells->put($spellId, $createdSpell);
-        $this->pendingNewSpells->put($spellId, $createdSpell);
-
-        $this->log->createMissingSpellCreatedSpell($createdSpell->name, $spellId);
+        $this->createSpell($result, $spellId, $interrupt->getExtraSpellName(), $interrupt->getExtraSchool());
     }
 
     public function afterCollect(ExtractedDataResult $result, string $combatLogFilePath): void
@@ -91,6 +82,25 @@ class SpellCreationCollector implements SpellDataCollectorInterface
 
         $this->pendingNewSpells         = collect();
         $this->currentCombatLogFilePath = null;
+    }
+
+    /**
+     * The catalog is shared across jobs in a long-lived worker (#4058), so it can miss a spell another
+     * process created after the catalog was built. Never blind-create on a catalog miss - check the table
+     * first, or the insert dies on a duplicate primary key.
+     */
+    private function findSpell(int $spellId): ?SpellModel
+    {
+        /** @var SpellModel|null $existingSpell */
+        $existingSpell = $this->allSpells->get($spellId);
+        if ($existingSpell === null) {
+            $existingSpell = SpellModel::with('spellDungeons')->find($spellId);
+            if ($existingSpell !== null) {
+                $this->allSpells->put($spellId, $existingSpell);
+            }
+        }
+
+        return $existingSpell;
     }
 
     /**
@@ -121,19 +131,47 @@ class SpellCreationCollector implements SpellDataCollectorInterface
         }
     }
 
-    private function createSpellModel(ExtractedDataResult $result, int $spellId, string $name, int $schoolsMask): SpellModel
+    /**
+     * Creates the spell, or - if another worker's job created the same spell id between our findSpell() check
+     * and this insert - falls back to the existing-spell path instead of letting the duplicate primary key
+     * abort the whole combat log import (#4151). The catalog is shared and long-lived (#4058), but findSpell()
+     * only guards against catalog staleness, not against a genuine concurrent insert landing in between.
+     */
+    private function createSpell(ExtractedDataResult $result, int $spellId, string $name, int $schoolsMask): void
     {
-        $createdSpell = SpellModel::create([
-            'id'           => $spellId,
-            'dispel_type'  => '',
-            'icon_name'    => '',
-            'name'         => $name,
-            'schools_mask' => $schoolsMask,
-            'aura'         => false,
-        ]);
+        try {
+            $createdSpell = SpellModel::create([
+                'id'           => $spellId,
+                'dispel_type'  => sprintf('spelldispeltype.%s', SpellModel::DISPEL_TYPE_UNKNOWN),
+                'icon_name'    => '',
+                'name'         => $name,
+                'schools_mask' => $schoolsMask,
+                'aura'         => false,
+            ]);
+        } catch (UniqueConstraintViolationException) {
+            $existingSpell = SpellModel::with('spellDungeons')->find($spellId);
+            if ($existingSpell === null) {
+                // Should be unreachable - the insert only collided because a row with this id exists - but if
+                // it somehow vanished between the collision and this re-fetch, downstream collectors that key
+                // off allSpells silently skip this spell for the rest of the run, which is worth knowing about.
+                $this->log->createSpellLostRaceSpellVanished($spellId);
+
+                return;
+            }
+
+            $this->allSpells->put($spellId, $existingSpell);
+            $this->repairMissingSchoolsMask($result, $existingSpell, $schoolsMask);
+            $this->log->createSpellLostRaceFoundExistingSpell($spellId);
+
+            return;
+        }
+
         $createdSpell->setRelation('spellDungeons', collect());
         $result->createdSpell();
 
-        return $createdSpell;
+        $this->allSpells->put($spellId, $createdSpell);
+        $this->pendingNewSpells->put($spellId, $createdSpell);
+
+        $this->log->createMissingSpellCreatedSpell($createdSpell->name, $spellId);
     }
 }

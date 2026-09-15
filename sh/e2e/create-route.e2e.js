@@ -419,7 +419,7 @@ async function main() {
 
             await openTomSelect(page, 'dungeon_difficulty_select');
             const options = await tomSelectOptions(page, 'dungeon_difficulty_select');
-            // DungeonConstants::DIFFICULTY_25_MAN => 2. Only assert 25-man is present: this dev
+            // DungeonDifficulty::TWENTY_FIVE_MAN = 2. Only assert 25-man is present: this dev
             // DB's seeded SSC only has the 25-man speedrun difficulty enabled, not 10-man.
             const has25man = options.some(o => o.value === '2');
             assert(has25man, `expected a 25-man (value=2) option, got ${JSON.stringify(options)}`);

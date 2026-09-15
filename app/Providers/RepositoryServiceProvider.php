@@ -97,6 +97,8 @@ use App\Repositories\Database\PageViewRepository;
 use App\Repositories\Database\PathRepository;
 use App\Repositories\Database\Patreon\PatreonAdFreeGiveawayRepository;
 use App\Repositories\Database\Patreon\PatreonBenefitRepository;
+use App\Repositories\Database\Patreon\PatreonManualGrantRepository;
+use App\Repositories\Database\Patreon\PatreonSyncRunRepository;
 use App\Repositories\Database\Patreon\PatreonUserBenefitRepository;
 use App\Repositories\Database\Patreon\PatreonUserLinkRepository;
 use App\Repositories\Database\PolylineRepository;
@@ -110,12 +112,16 @@ use App\Repositories\Database\SimulationCraft\SimulationCraftRaidEventsOptionsRe
 use App\Repositories\Database\Speedrun\DungeonSpeedrunDifficultyRepository;
 use App\Repositories\Database\Speedrun\DungeonSpeedrunRequiredNpcNpcRepository;
 use App\Repositories\Database\Speedrun\DungeonSpeedrunRequiredNpcRepository;
+use App\Repositories\Database\Spell\SpellDescriptionImportStateRepository;
 use App\Repositories\Database\Spell\SpellDungeonRepository;
+use App\Repositories\Database\Spell\SpellEffectRepository;
+use App\Repositories\Database\Spell\SpellTuningChangeRepository;
 use App\Repositories\Database\SpellRepository;
 use App\Repositories\Database\Tags\TagCategoryRepository;
 use App\Repositories\Database\Tags\TagRepository;
 use App\Repositories\Database\TeamRepository;
 use App\Repositories\Database\TeamUserRepository;
+use App\Repositories\Database\Telemetry\TelemetryMetricRepository;
 use App\Repositories\Database\Timewalking\TimewalkingEventRepository;
 use App\Repositories\Database\Translation\TranslationRepository;
 use App\Repositories\Database\UserIpAddressRepository;
@@ -218,6 +224,8 @@ use App\Repositories\Interfaces\PageViewRepositoryInterface;
 use App\Repositories\Interfaces\PathRepositoryInterface;
 use App\Repositories\Interfaces\Patreon\PatreonAdFreeGiveawayRepositoryInterface;
 use App\Repositories\Interfaces\Patreon\PatreonBenefitRepositoryInterface;
+use App\Repositories\Interfaces\Patreon\PatreonManualGrantRepositoryInterface;
+use App\Repositories\Interfaces\Patreon\PatreonSyncRunRepositoryInterface;
 use App\Repositories\Interfaces\Patreon\PatreonUserBenefitRepositoryInterface;
 use App\Repositories\Interfaces\Patreon\PatreonUserLinkRepositoryInterface;
 use App\Repositories\Interfaces\PolylineRepositoryInterface;
@@ -231,12 +239,16 @@ use App\Repositories\Interfaces\SimulationCraft\SimulationCraftRaidEventsOptions
 use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunDifficultyRepositoryInterface;
 use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunRequiredNpcNpcRepositoryInterface;
 use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunRequiredNpcRepositoryInterface;
+use App\Repositories\Interfaces\Spell\SpellDescriptionImportStateRepositoryInterface;
 use App\Repositories\Interfaces\Spell\SpellDungeonRepositoryInterface;
+use App\Repositories\Interfaces\Spell\SpellEffectRepositoryInterface;
+use App\Repositories\Interfaces\Spell\SpellTuningChangeRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Repositories\Interfaces\Tags\TagCategoryRepositoryInterface;
 use App\Repositories\Interfaces\Tags\TagRepositoryInterface;
 use App\Repositories\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Interfaces\TeamUserRepositoryInterface;
+use App\Repositories\Interfaces\Telemetry\TelemetryMetricRepositoryInterface;
 use App\Repositories\Interfaces\Timewalking\TimewalkingEventRepositoryInterface;
 use App\Repositories\Interfaces\Translation\TranslationRepositoryInterface;
 use App\Repositories\Interfaces\UserIpAddressRepositoryInterface;
@@ -331,6 +343,8 @@ class RepositoryServiceProvider extends ServiceProvider
         // Patreon
         $this->app->bind(PatreonAdFreeGiveawayRepositoryInterface::class, PatreonAdFreeGiveawayRepository::class);
         $this->app->bind(PatreonBenefitRepositoryInterface::class, PatreonBenefitRepository::class);
+        $this->app->bind(PatreonManualGrantRepositoryInterface::class, PatreonManualGrantRepository::class);
+        $this->app->bind(PatreonSyncRunRepositoryInterface::class, PatreonSyncRunRepository::class);
         $this->app->bind(PatreonUserBenefitRepositoryInterface::class, PatreonUserBenefitRepository::class);
         $this->app->bind(PatreonUserLinkRepositoryInterface::class, PatreonUserLinkRepository::class);
 
@@ -344,10 +358,16 @@ class RepositoryServiceProvider extends ServiceProvider
 
         // Spell
         $this->app->bind(SpellDungeonRepositoryInterface::class, SpellDungeonRepository::class);
+        $this->app->bind(SpellEffectRepositoryInterface::class, SpellEffectRepository::class);
+        $this->app->bind(SpellDescriptionImportStateRepositoryInterface::class, SpellDescriptionImportStateRepository::class);
+        $this->app->bind(SpellTuningChangeRepositoryInterface::class, SpellTuningChangeRepository::class);
 
         // Tags
         $this->app->bind(TagCategoryRepositoryInterface::class, TagCategoryRepository::class);
         $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
+
+        // Telemetry
+        $this->app->bind(TelemetryMetricRepositoryInterface::class, TelemetryMetricRepository::class);
 
         // Timewalking
         $this->app->bind(TimewalkingEventRepositoryInterface::class, TimewalkingEventRepository::class);

@@ -1,8 +1,7 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CorrectEvents\Midnight;
-
-use App\Models\Dungeon;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\Midnight;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\APICombatLogControllerCorrectEventsTestBase;
@@ -16,7 +15,7 @@ class APICombatLogControllerCorrectEventsNexusPointXenasTest extends APICombatLo
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_NEXUS_POINT_XENAS;
+        return DungeonKey::NEXUS_POINT_XENAS->value;
     }
 
     #[Test]

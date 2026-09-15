@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Dungeon;
 
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -11,6 +12,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\IsolatesSeededUpcomingSeasons;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -22,16 +25,29 @@ use Tests\TestCases\PublicTestCase;
 #[Group('DungeonExplore')]
 final class DungeonExploreControllerTest extends PublicTestCase
 {
+    use CreatesDungeon;
+    use IsolatesSeededUpcomingSeasons;
+
     #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Freezes "now" inside Season::SEASON_MIDNIGHT_S1's actual window (2026-03-02 to 2026-08-17) so this
+        // test's assumption that S1 is current holds regardless of real wall-clock time - real time crossing
+        // S2's start (#3980) is exactly the season IsolatesSeededUpcomingSeasons parks below, not one this
+        // suite can otherwise account for.
+        $this->travelTo(Carbon::create(2026, 5, 28));
 
         $this->actingAsGuest();
 
         // ViewService caches the seasons it hands the composers for an hour in the 'tmp_file' store, which -
         // unlike the array store the tests run on - survives between test runs
         $this->flushSeasonCaches();
+
+        // The season tabs render the current and the upcoming season, so a seeded upcoming season would take
+        // the slot these tests expect their own season to occupy.
+        $this->hideSeededUpcomingSeasons();
     }
 
     #[Test]
@@ -87,6 +103,41 @@ final class DungeonExploreControllerTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function select_givenAnUpcomingSeasonWithAnInactiveDungeon_omitsItFromTheGrid(): void
+    {
+        // Arrange - inside the try so a failure halfway through still cleans up
+        $upcomingSeason  = null;
+        $inactiveDungeon = $this->createDungeon();
+
+        try {
+            $upcomingSeason = $this->createUpcomingSeason();
+
+            SeasonDungeon::create([
+                'season_id'  => $upcomingSeason->id,
+                'dungeon_id' => $inactiveDungeon->id,
+            ]);
+
+            // Act
+            $response = $this->get(route('dungeon.explore.gameversion.select', [
+                'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
+                'season'      => $upcomingSeason->id,
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(
+                sprintf('data-id="%d"', Dungeon::firstWhere('key', DungeonKey::ARA_KARA_CITY_OF_ECHOES->value)->id),
+                false,
+            );
+            $response->assertDontSee(sprintf('data-id="%d"', $inactiveDungeon->id), false);
+        } finally {
+            if ($upcomingSeason !== null) {
+                $this->deleteUpcomingSeason($upcomingSeason);
+            }
+        }
+    }
+
     private function assertSeasonTabActive(string $content, int $seasonId): void
     {
         $this->assertStringContainsString('active', $this->getSeasonTabClasses($content, $seasonId));
@@ -133,7 +184,7 @@ final class DungeonExploreControllerTest extends PublicTestCase
 
         SeasonDungeon::create([
             'season_id'  => $season->id,
-            'dungeon_id' => Dungeon::firstWhere('key', Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES)->id,
+            'dungeon_id' => Dungeon::firstWhere('key', DungeonKey::ARA_KARA_CITY_OF_ECHOES->value)->id,
         ]);
 
         return $season;

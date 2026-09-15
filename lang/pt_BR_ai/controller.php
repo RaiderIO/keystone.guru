@@ -19,21 +19,48 @@ return [
             'mdt_invalid_category'                => 'Categoria inválida',
         ],
         'flash' => [
+            'banned_ip_address_added'                => 'Endereço IP banido com sucesso',
+            'banned_ip_address_removed'              => 'Banimento removido com sucesso',
+            'patreon_manual_grant_revoked'           => 'Os benefícios do Patreon concedidos manualmente para :user foram revogados',
+            'patreon_manual_grant_nothing_to_revoke' => ':user não tem benefícios do Patreon concedidos manualmente para revogar',
             'message_banner_set_successfully'        => 'Banner de mensagem configurado com sucesso',
             'thumbnail_regenerate_result'            => 'Despachou :success trabalhos para rotas :total. :failed falhou.',
-            'combatlog_route_regenerate_result'      => '',
-            'combatlog_criteria_reset'               => '',
-            'combatlog_criteria_thresholds_updated'  => '',
+            'combatlog_route_regenerate_result'      => 'Despachados :count trabalhos',
+            'combatlog_criteria_reset'               => 'Todas as contagens de critérios de análise de hoje foram redefinidas.',
+            'combatlog_criteria_thresholds_updated'  => 'Os limites dos critérios de análise foram atualizados.',
             'caches_dropped_successfully'            => 'Caches descartados com sucesso',
-            'releases_exported'                      => 'Lançamentos exportados',
+            'caches_drop_queued'                     => 'O descarte de cache foi enfileirado e será executado em segundo plano',
             'exception'                              => 'Exceção lançada no painel de administração',
             'feature_toggle_activated'               => 'Recurso :feature agora ativado',
             'feature_toggle_deactivated'             => 'Recurso :feature agora desativado',
             'feature_forgotten'                      => 'Recurso :feature esquecido com sucesso',
-            'mapping_version_upgrade_queued'         => '',
-            'mapping_version_upgrade_already_latest' => '',
+            'mapping_version_upgrade_queued'         => 'Enfileiradas :count rotas para atualização de :version para a mais recente.',
+            'mapping_version_upgrade_already_latest' => 'Esta versão de mapeamento já é a mais recente para sua masmorra — nenhuma rota foi enfileirada.',
             'read_only_mode_disabled'                => 'Modo somente leitura desativado',
             'read_only_mode_enabled'                 => 'Modo somente leitura ativado',
+        ],
+    ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => 'Afixo criado',
+            'affix_updated' => 'Afixo atualizado',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => 'Grupo de afixos criado',
+            'affixgroup_updated' => 'Grupo de afixos atualizado',
+            'affixgroup_deleted' => 'Grupo de afixos excluído',
+        ],
+    ],
+    'apicombatlogroute' => [
+        'error' => [
+            'no_post_body' => 'Esta rota não contém o corpo armazenado da requisição de rota do registro de combate.',
+        ],
+    ],
+    'apicombatlogrun' => [
+        'error' => [
+            'no_segments' => 'Nenhum segmento de log de combate está disponível para esta execução.',
         ],
     ],
     'apidungeonroute' => [
@@ -54,8 +81,8 @@ return [
     ],
     'arrow' => [
         'error' => [
-            'unable_to_save_arrow'   => '',
-            'unable_to_delete_arrow' => '',
+            'unable_to_save_arrow'   => 'Não foi possível salvar a seta',
+            'unable_to_delete_arrow' => 'Não foi possível excluir a seta',
         ],
     ],
     'dungeon' => [
@@ -70,24 +97,21 @@ return [
             'route_cloned_successfully' => 'Rota clonada com sucesso',
             'route_updated'             => 'Rota atualizada',
             'route_created'             => 'Rota criada',
+            'upgrade_draft_created'     => 'Um rascunho de atualização foi criado. Corrija-o aqui; a rota original continuará exibindo o conteúdo antigo até você aplicar suas alterações.',
+            'upgrade_applied'           => 'A atualização foi aplicada à sua rota.',
+            'upgrade_discarded'         => 'O rascunho de atualização foi descartado.',
         ],
     ],
     'dungeonroutediscover' => [
-        'popular'           => 'Rotas populares',
-        'this_week_affixes' => 'Afixos desta semana',
-        'next_week_affixes' => 'Afixos da próxima semana',
-        'new'               => 'Novo',
-        'season'            => [
-            'popular'           => '%s rotas populares',
-            'this_week_affixes' => '%s esta semana',
-            'next_week_affixes' => '%s próxima semana',
-            'new'               => '%s novas rotas',
+        'popular' => 'Rotas populares',
+        'new'     => 'Novo',
+        'season'  => [
+            'popular' => '%s rotas populares',
+            'new'     => '%s novas rotas',
         ],
         'dungeon' => [
-            'popular'           => '%s rotas populares',
-            'this_week_affixes' => '%s esta semana',
-            'next_week_affixes' => '%s próxima semana',
-            'new'               => '%s novas rotas',
+            'popular' => '%s rotas populares',
+            'new'     => '%s novas rotas',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -110,6 +134,12 @@ return [
             'not_found'                  => 'Não encontrado',
         ],
     ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => 'Não foi possível posicionar o pull aqui - esta localização não pertence a nenhum andar desta masmorra',
+            'unable_to_delete_pull'           => 'Não foi possível excluir o pull',
+        ],
+    ],
     'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Registrado com sucesso. Aproveite o site!',
@@ -125,16 +155,6 @@ return [
         ],
         'legal_agreed_required' => 'Você precisa concordar com nossos termos legais para se registrar.',
         'legal_agreed_accepted' => 'Você precisa concordar com nossos termos legais para se registrar.',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => 'Não foi possível salvar a versão',
-        ],
-        'flash' => [
-            'release_updated'  => 'Versão atualizada',
-            'release_created'  => 'Versão criada',
-            'github_exception' => 'Ocorreu um erro ao comunicar com o Github: :message',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => 'Nova versão de mapeamento adicionada!',
@@ -167,6 +187,7 @@ return [
             'session_expired'         => 'Sua sessão expirou. Por favor, tente novamente.',
             'patreon_error_occurred'  => 'Ocorreu um erro no lado do Patreon. Por favor, tente novamente mais tarde.',
             'internal_error_occurred' => 'Ocorreu um erro ao processar a resposta do Patreon - parece estar malformada. O erro foi registrado e será tratado. Por favor, tente novamente mais tarde.',
+            'link_cancelled'          => 'A vinculação da sua conta do Patreon foi cancelada.',
         ],
     ],
     'profile' => [
@@ -176,6 +197,7 @@ return [
             'profile_updated'                  => 'Perfil atualizado',
             'unexpected_error_when_saving'     => 'Ocorreu um erro inesperado ao tentar salvar seu perfil',
             'privacy_settings_updated'         => 'Configurações de privacidade atualizadas',
+            'creator_profile_updated'          => 'Perfil de criador atualizado',
             'password_changed'                 => 'Senha alterada',
             'new_password_equals_old_password' => 'Nova senha é igual à senha antiga',
             'new_passwords_do_not_match'       => 'As novas senhas não coincidem',
@@ -187,11 +209,17 @@ return [
             'error_deleting_account'           => 'Ocorreu um erro. Por favor, tente novamente.',
         ],
         'error' => [
-            'add_ad_free_giveaway_limit_reached'        => '',
-            'add_ad_free_giveaway_already_ad_free'      => '',
-            'add_ad_free_giveaway_already_has_giveaway' => '',
-            'remove_ad_free_giveaway_not_found'         => '',
-            'remove_ad_free_giveaway_not_yours'         => '',
+            'add_ad_free_giveaway_limit_reached'        => 'Não foi possível adicionar mais brindes sem anúncios. Limite atingido.',
+            'add_ad_free_giveaway_already_ad_free'      => 'Não foi possível adicionar brindes sem anúncios, o usuário já está sem anúncios através da própria assinatura do Patreon.',
+            'add_ad_free_giveaway_already_has_giveaway' => 'Não foi possível adicionar brindes sem anúncios, o usuário já está sem anúncios através de um brinde existente.',
+            'remove_ad_free_giveaway_not_found'         => 'Não foi possível remover o brinde sem anúncios - o usuário não possui nenhum no momento.',
+            'remove_ad_free_giveaway_not_yours'         => 'Não é possível remover brindes sem anúncios que não foram originalmente concedidos por você.',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => 'Temporada criada',
+            'season_updated' => 'Temporada atualizada',
         ],
     ],
     'spell' => [
@@ -230,9 +258,9 @@ return [
     'admin' => [
         'dungeonroute' => [
             'flash' => [
-                'updated' => '',
-                'deleted' => '',
-                'claimed' => '',
+                'updated' => 'Rota de masmorra atualizada com sucesso.',
+                'deleted' => 'Rota de masmorra excluída com sucesso.',
+                'claimed' => 'Rota de masmorra reivindicada com sucesso. Agora você é o proprietário.',
             ],
         ],
     ],

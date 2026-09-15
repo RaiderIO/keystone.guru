@@ -66,7 +66,7 @@ class SettingsTabPull extends SettingsTab {
                 $('#edit_route_freedraw_options_gradient_apply_to_pulls').hide();
                 $('#edit_route_freedraw_options_gradient_apply_to_pulls_saving').show();
 
-                let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+                let killZoneMapObjectGroup = getKillZoneMapObjectGroup();
 
                 killZoneMapObjectGroup.applyPullGradient(true, function () {
                     $('#edit_route_freedraw_options_gradient_apply_to_pulls').show();

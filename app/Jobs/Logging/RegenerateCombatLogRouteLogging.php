@@ -26,6 +26,11 @@ class RegenerateCombatLogRouteLogging extends StructuredLogging implements Regen
         $this->info(__METHOD__, get_defined_vars());
     }
 
+    public function handleCredentialsNotConfigured(): void
+    {
+        $this->error(__METHOD__);
+    }
+
     public function handleRequestError(string $message): void
     {
         $this->error(__METHOD__, get_defined_vars());

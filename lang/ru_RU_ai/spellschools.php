@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'physical' => '',
-    'holy'     => '',
-    'fire'     => '',
-    'nature'   => '',
-    'frost'    => '',
-    'shadow'   => '',
-    'arcane'   => '',
+    'physical' => 'Физический',
+    'holy'     => 'Свет',
+    'fire'     => 'Огонь',
+    'nature'   => 'Природа',
+    'frost'    => 'Лёд',
+    'shadow'   => 'Тьма',
+    'arcane'   => 'Тайная магия',
 ];

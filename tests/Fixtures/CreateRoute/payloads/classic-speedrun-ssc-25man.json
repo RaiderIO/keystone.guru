@@ -1,5 +1,5 @@
 {
-    "description": "Classic speedrun dungeon (Serpentshrine Cavern-like) with both 10-man and 25-man difficulties enabled: user explicitly picks 25-man (DungeonConstants::DIFFICULTY_ALL['25_man'] = 2) via Tom Select. dungeon_start_map_icon_id is entirely absent - see classic-speedrun-ssc-10man.json for why.",
+    "description": "Classic speedrun dungeon (Serpentshrine Cavern-like) with both 10-man and 25-man difficulties enabled: user explicitly picks 25-man (DungeonDifficulty::TWENTY_FIVE_MAN = 2) via Tom Select. dungeon_start_map_icon_id is entirely absent - see classic-speedrun-ssc-10man.json for why.",
     "endpoint": "dungeonroute.savenew",
     "gameVersion": "classic",
     "auth": true,

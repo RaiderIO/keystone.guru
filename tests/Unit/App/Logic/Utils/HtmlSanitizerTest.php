@@ -63,6 +63,46 @@ class HtmlSanitizerTest extends TestCase
                 '<a href="/test">Relative</a>',
                 '<a href="/test">Relative</a>',
             ],
+            [
+                '<a href="#anchor">Anchor</a>',
+                '<a href="#anchor">Anchor</a>',
+            ],
+            [
+                '<a href="HTTPS://Raider.IO/weekly-route">Uppercase</a>',
+                '<a href="HTTPS://Raider.IO/weekly-route">Uppercase</a>',
+            ],
+            [
+                '<a href="javascript:doSomething()">Scheme without a host</a>',
+                'Scheme without a host',
+            ],
+            [
+                '<a href="JaVaScRiPt:doSomething()">Mixed case scheme</a>',
+                'Mixed case scheme',
+            ],
+            [
+                "<a href=\"java\tscript:doSomething()\">Scheme with an embedded tab</a>",
+                'Scheme with an embedded tab',
+            ],
+            [
+                '<a href="data:text/html,Test">Data scheme</a>',
+                'Data scheme',
+            ],
+            [
+                '<a href="mailto:someone@example.com">Mail scheme</a>',
+                'Mail scheme',
+            ],
+            [
+                '<a href="//google.com/test">Protocol relative</a>',
+                'Protocol relative',
+            ],
+            [
+                '<a href="\\\\google.com/test">Leading backslashes</a>',
+                'Leading backslashes',
+            ],
+            [
+                '<a href="ftp://keystone.guru/test">Disallowed scheme on an allowed domain</a>',
+                'Disallowed scheme on an allowed domain',
+            ],
         ];
     }
 }

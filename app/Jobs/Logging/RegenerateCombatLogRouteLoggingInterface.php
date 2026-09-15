@@ -12,6 +12,8 @@ interface RegenerateCombatLogRouteLoggingInterface
 
     public function handleSuccess(): void;
 
+    public function handleCredentialsNotConfigured(): void;
+
     public function handleRequestError(string $message): void;
 
     public function handleEnd(bool $result): void;

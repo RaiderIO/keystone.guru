@@ -30,10 +30,14 @@ class MappingService implements MappingServiceInterface
             'game_version_id'   => $gameVersion->id,
             'mdt_mapping_hash'  => null,
             'mdt_addon_version' => null,
-            'version'           => $newVersion,
-            'facade_enabled'    => false,
-            'created_at'        => $now,
-            'updated_at'        => $now,
+            // Explicitly set (matches the column default, true) rather than omitted - Eloquent's create()
+            // does not hydrate the in-memory model with a DB-applied default, so callers reading the
+            // returned instance's mdt_changes_pending right away would otherwise see null until a refresh.
+            'mdt_changes_pending' => true,
+            'version'             => $newVersion,
+            'facade_enabled'      => false,
+            'created_at'          => $now,
+            'updated_at'          => $now,
         ]);
     }
 
@@ -52,10 +56,13 @@ class MappingService implements MappingServiceInterface
             'game_version_id'   => $gameVersion->id,
             'mdt_mapping_hash'  => $currentMappingVersion?->mdt_mapping_hash ?? null, // @phpstan-ignore nullsafe.neverNull
             'mdt_addon_version' => $currentMappingVersion?->mdt_addon_version ?? null, // @phpstan-ignore nullsafe.neverNull
-            'version'           => $newVersion,
-            'facade_enabled'    => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
-            'created_at'        => $now,
-            'updated_at'        => $now,
+            // Set explicitly (matches the column default, true) since ::create() doesn't hydrate the
+            // in-memory model with a DB-applied default, and callers read this instance right away.
+            'mdt_changes_pending' => true,
+            'version'             => $newVersion,
+            'facade_enabled'      => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
+            'created_at'          => $now,
+            'updated_at'          => $now,
         ]);
     }
 
@@ -95,10 +102,12 @@ class MappingService implements MappingServiceInterface
             // Set only once the import actually succeeds, see importMappingVersionFromMDT() (#3737)
             'mdt_mapping_hash'  => null,
             'mdt_addon_version' => $this->mdtAddonVersionService->getCurrentAddonVersion(),
-            'version'           => ($currentMappingVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
-            'facade_enabled'    => $facadeEnabled,
-            'created_at'        => $now,
-            'updated_at'        => $now,
+            // Imported straight from MDT, so MDT strings may resolve onto it (#4280)
+            'mdt_changes_pending' => false,
+            'version'             => ($currentMappingVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
+            'facade_enabled'      => $facadeEnabled,
+            'created_at'          => $now,
+            'updated_at'          => $now,
         ]);
 
         $newMappingVersion = MappingVersion::find($id);
@@ -168,28 +177,51 @@ class MappingService implements MappingServiceInterface
      * multiple candidates share the same imported-from date (e.g. a manual/facade clone that inherited
      * its parent's `mdt_addon_version`), the highest `version` among them wins.
      *
-     * Falls back to the current mapping version when the string carries no `addonVersion` (Keystone's
-     * own exports, very old strings), when the version is unknown, or when the string is newer than
-     * anything imported (the user is genuinely ahead of the server).
+     * Mapping versions flagged `mdt_changes_pending` - ones we created ourselves, whose mapping diverges
+     * from what MDT ships until MDT accepts the change - are never a valid target: the enemies an MDT
+     * string references are MDT's, so importing them into our own diverged mapping mismatches them
+     * (#4280). They are excluded from the candidates AND from every fallback below; the ceiling for an
+     * import is therefore the newest mapping version MDT still matches.
+     *
+     * Falls back to that newest MDT-matching mapping version when the string carries no `addonVersion`
+     * (Keystone's own exports, very old strings), when the version is unknown, or when the string is
+     * newer than anything imported (the user is genuinely ahead of the server). A dungeon whose every
+     * mapping version is flagged falls back to the current one, so this never returns null for a dungeon
+     * that has a mapping version at all - callers dereference the result directly.
      */
     public function getMappingVersionForMdtAddonVersion(Dungeon $dungeon, ?int $addonVersion, ?GameVersion $gameVersion = null): ?MappingVersion
     {
         $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
 
-        if ($addonVersion === null || $addonVersion === 0 || $currentMappingVersion === null) {
-            return $currentMappingVersion;
+        if ($currentMappingVersion === null) {
+            return null;
+        }
+
+        /** @var MappingVersion|null $newestMdtMappingVersion */
+        $newestMdtMappingVersion = $dungeon->mappingVersions()
+            ->where('game_version_id', $currentMappingVersion->game_version_id)
+            ->where('mdt_changes_pending', false)
+            ->reorder('mapping_versions.version', 'desc')
+            ->without('dungeon')
+            ->first();
+
+        $fallbackMappingVersion = $newestMdtMappingVersion ?? $currentMappingVersion;
+
+        if ($addonVersion === null || $addonVersion === 0) {
+            return $fallbackMappingVersion;
         }
 
         $stringDate = $this->mdtAddonVersionService->getReleaseDate($addonVersion);
 
         // Unknown addonVersion (newer than what has been synced, or a value with no release) → newest.
         if ($stringDate === null) {
-            return $currentMappingVersion;
+            return $fallbackMappingVersion;
         }
 
         /** @var \Illuminate\Support\Collection<int, MappingVersion> $candidates */
         $candidates = $dungeon->mappingVersions()
             ->where('game_version_id', $currentMappingVersion->game_version_id)
+            ->where('mdt_changes_pending', false)
             ->reorder('mapping_versions.version', 'asc')
             ->without('dungeon')
             ->get();
@@ -217,14 +249,14 @@ class MappingService implements MappingServiceInterface
             }
         }
 
-        // String is newer than every mapping version we imported → current (newest) is correct.
+        // String is newer than every mapping version we imported → newest MDT-matching one is correct.
         if ($match === null) {
-            return $currentMappingVersion;
+            return $fallbackMappingVersion;
         }
 
         // Re-fetch as a single model (mirroring getCurrentMappingVersion) so downstream lazy-loads such as
         // ->enemies are permitted; models pulled from the candidate collection above would trip the guard.
-        return $dungeon->mappingVersions()->without('dungeon')->find($match->id) ?? $currentMappingVersion;
+        return $dungeon->mappingVersions()->without('dungeon')->find($match->id) ?? $fallbackMappingVersion;
     }
 
     public function copyMappingVersionToDungeon(MappingVersion $sourceMappingVersion, Dungeon $dungeon): MappingVersion
@@ -242,10 +274,12 @@ class MappingService implements MappingServiceInterface
             'game_version_id'   => $sourceMappingVersion->game_version_id,
             'mdt_mapping_hash'  => $sourceMappingVersion->mdt_mapping_hash,
             'mdt_addon_version' => $sourceMappingVersion->mdt_addon_version,
-            'version'           => ($currentMappingVersionForGameVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
-            'facade_enabled'    => $currentMappingVersionForGameVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
-            'created_at'        => $now,
-            'updated_at'        => $now,
+            // A copy onto another dungeon is ours, not MDT's - see createNewMappingVersionFromPreviousMapping
+            // (#4280). mdt_changes_pending intentionally omitted - the column default (true) covers this.
+            'version'        => ($currentMappingVersionForGameVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
+            'facade_enabled' => $currentMappingVersionForGameVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
+            'created_at'     => $now,
+            'updated_at'     => $now,
         ]);
 
         return MappingVersion::find($id);

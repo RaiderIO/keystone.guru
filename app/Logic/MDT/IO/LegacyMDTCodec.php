@@ -21,6 +21,9 @@ final class LegacyMDTCodec implements MDTStringCodecInterface
 
     private const string CLI_PARSER_DECODE_CMD = '/usr/bin/cli_weakauras_parser decode %s';
 
+    /** Upper bound in bytes on the decoded JSON accepted from cli_weakauras_parser; matches MDT2Codec's decompressed cap. */
+    public const int MAX_DECODED_BYTES = 1048576;
+
     /**
      * Checks if $string is plausibly a legacy MDT export string - a `!`-prefixed Base64-ish blob.
      * MDT 6.2+ `!~MDT2~` strings are decoded natively by MDT2Codec and never reach here, so `~` is
@@ -60,7 +63,14 @@ final class LegacyMDTCodec implements MDTStringCodecInterface
      */
     public function decode(string $string): array
     {
-        $output  = $this->transform(false, $string);
+        $output = $this->transform(false, $string);
+
+        if (strlen($output) > self::MAX_DECODED_BYTES) {
+            throw new LegacyMDTDecodeException(
+                sprintf('cli_weakauras_parser output of %d bytes exceeds the %d byte limit', strlen($output), self::MAX_DECODED_BYTES),
+            );
+        }
+
         $decoded = json_decode($output, true);
 
         if (!is_array($decoded)) {

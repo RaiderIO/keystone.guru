@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Imagick;
 use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
 use Intervention\Image\ImageManager;
 use Random\RandomException;
@@ -165,13 +166,15 @@ class ThumbnailService implements ThumbnailServiceInterface
             $tmpFile            = sprintf('/tmp/%s_%s', $dungeonRoute->public_key, $filename);
             $tmpFileAfterResize = sprintf('/tmp/%s_resized_%s', $dungeonRoute->public_key, $filename);
 
+            $previewUrl = $this->getPreviewUrl($dungeonRoute, $floorIndex, $zoomLevel, $variant);
+
             // puppeteer chromium-browser
             $process = new Process([
                 'node',
                 // Script to execute
                 resource_path('assets/puppeteer/route_thumbnail.js'),
                 // First argument; where to navigate
-                $this->getPreviewUrl($dungeonRoute, $floorIndex, $zoomLevel, $variant),
+                $previewUrl,
                 // Second argument; where to save the resulting image
                 $tmpFile,
                 $viewportWidth,
@@ -180,46 +183,59 @@ class ThumbnailService implements ThumbnailServiceInterface
 
             $this->log->doCreateThumbnailProcessStart($process->getCommandLine());
 
+            $renderStartedAt = microtime(true);
             $process->run();
+            $renderDurationMs = (int)round((microtime(true) - $renderStartedAt) * 1000);
 
             if ($process->isSuccessful()) {
                 if (!file_exists($tmpFile)) {
                     $this->log->doCreateThumbnailFileNotFoundDidPuppeteerDownloadChromium($tmpFile);
                 } else {
                     try {
-                        // We've updated the thumbnail; make sure the route is updated, so it doesn't get updated anymore
-                        $dungeonRoute->thumbnail_updated_at = Carbon::now();
-                        // Do not update the timestamps of the route! Otherwise, we'll just keep on updating the timestamp
-                        $dungeonRoute->timestamps = false;
-                        $dungeonRoute->save();
+                        if ($this->isBlankImage($tmpFile)) {
+                            // A uniform single-colour render is never a legitimate thumbnail - treat it as a
+                            // failed attempt (thumbnail_updated_at is not touched below) so the existing
+                            // retry/max_attempts path in ProcessRouteFloorThumbnail applies instead of the
+                            // route silently looking up to date forever. See #4103.
+                            $this->log->doCreateThumbnailBlankImageRejected($tmpFile, $previewUrl, $variant->value);
+                        } else {
+                            // Rescale it
+                            $this->log->doCreateThumbnailRescale($tmpFile, $tmpFileAfterResize);
+                            new ImageManager(new ImagickDriver())
+                                ->read($tmpFile)
+                                ->resize($imageWidth, $imageHeight)
+                                ->save($tmpFileAfterResize, $quality);
 
-                        // Rescale it
-                        $this->log->doCreateThumbnailRescale($tmpFile, $tmpFileAfterResize);
-                        new ImageManager(new ImagickDriver())
-                            ->read($tmpFile)
-                            ->resize($imageWidth, $imageHeight)
-                            ->save($tmpFileAfterResize, $quality);
+                            $target = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder);
 
-                        $target = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder);
+                            // Remove any old .png file that may be there
+                            $oldPngFilePath = str_replace('.jpg', '.png', $target);
+                            if (file_exists($oldPngFilePath) && unlink($oldPngFilePath)) {
+                                $this->log->doCreateThumbnailRemovedOldPngFile();
+                            }
 
-                        // Remove any old .png file that may be there
-                        $oldPngFilePath = str_replace('.jpg', '.png', $target);
-                        if (file_exists($oldPngFilePath) && unlink($oldPngFilePath)) {
-                            $this->log->doCreateThumbnailRemovedOldPngFile();
+                            // Image now exists in target location; compress it and move it to the target location
+                            // Log::channel('scheduler')->info('Compressing image..');
+                            // $this->compressPng($tmpScaledFile, $target);
+
+                            $result = $this->attachThumbnailToDungeonRoute(
+                                $dungeonRoute,
+                                $floorIndex,
+                                $target,
+                                file_get_contents($tmpFileAfterResize),
+                                $disk,
+                                $variant,
+                            );
+
+                            // We've updated the thumbnail; make sure the route is updated, so it doesn't get
+                            // updated anymore. Stamped only now that the render has passed the blank-image
+                            // check and been rescaled/attached - an exception above leaves
+                            // thumbnail_updated_at untouched so the route stays eligible for retry. See #4103.
+                            $dungeonRoute->thumbnail_updated_at = Carbon::now();
+                            // Do not update the timestamps of the route! Otherwise, we'll just keep on updating the timestamp
+                            $dungeonRoute->timestamps = false;
+                            $dungeonRoute->save();
                         }
-
-                        // Image now exists in target location; compress it and move it to the target location
-                        // Log::channel('scheduler')->info('Compressing image..');
-                        // $this->compressPng($tmpScaledFile, $target);
-
-                        $result = $this->attachThumbnailToDungeonRoute(
-                            $dungeonRoute,
-                            $floorIndex,
-                            $target,
-                            file_get_contents($tmpFileAfterResize),
-                            $disk,
-                            $variant,
-                        );
                     } catch (Throwable $e) {
                         $this->log->doCreateThumbnailException($e);
                     } finally {
@@ -244,7 +260,7 @@ class ThumbnailService implements ThumbnailServiceInterface
             // Log any errors that may have occurred
             $errors = $process->getErrorOutput();
             if (!empty($errors)) {
-                $this->log->doCreateThumbnailError($errors);
+                $this->log->doCreateThumbnailError($errors, $previewUrl, $variant->value, $renderDurationMs);
 
                 return null;
             }
@@ -253,6 +269,31 @@ class ThumbnailService implements ThumbnailServiceInterface
         }
 
         return $result;
+    }
+
+    /**
+     * A uniform single-colour image (every pixel the same RGB value) is never a legitimate map
+     * render - the map background alone has enough variation to rule that out. Checked per-channel
+     * because Imagick::CHANNEL_ALL's range spans the different channel values of a single flat
+     * colour (e.g. solid red has R=max, G=B=0), which would never look "flat" as a combined range.
+     */
+    private function isBlankImage(string $filePath): bool
+    {
+        $image = new Imagick($filePath);
+
+        try {
+            foreach ([Imagick::CHANNEL_RED, Imagick::CHANNEL_GREEN, Imagick::CHANNEL_BLUE] as $channel) {
+                $range = $image->getImageChannelRange($channel);
+                if ($range['minima'] !== $range['maxima']) {
+                    return false;
+                }
+            }
+
+            return true;
+        } finally {
+            $image->clear();
+            $image->destroy();
+        }
     }
 
     /**
@@ -287,14 +328,28 @@ class ThumbnailService implements ThumbnailServiceInterface
             $forceDispatch = $isStandard ? $force : true;
             /** @var Floor $floor */
             foreach ($dungeonRoute->dungeon->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->get() as $floor) {
-                ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $forceDispatch, 0, $variant);
-                $result = true;
+                try {
+                    // Queueing this job is fire-and-forget from every caller's perspective - a render
+                    // failure must never break whatever request/command triggered the refresh. On a real
+                    // (async) queue connection dispatch() never throws; the worker processes the job
+                    // separately, and ProcessRouteFloorThumbnail's own $tries/backoff()/failed() handle
+                    // retries and giving up. Only the `sync` connection (tests, and any environment that
+                    // sets QUEUE_CONNECTION=sync) runs the job inline and lets a failed render's exception
+                    // propagate straight out of dispatch() - the job already logs the failure itself
+                    // before throwing, so there is nothing left to do here but stop it from escaping. See
+                    // #3920.
+                    ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $forceDispatch, $variant);
 
-                $this->log->queueThumbnailRefreshDispatchedJob(
-                    $dungeonRoute->public_key,
-                    $floor->index,
-                    $forceDispatch,
-                );
+                    $this->log->queueThumbnailRefreshDispatchedJob(
+                        $dungeonRoute->public_key,
+                        $floor->index,
+                        $forceDispatch,
+                    );
+                } catch (Throwable $e) {
+                    $this->log->queueThumbnailRefreshDispatchException($dungeonRoute->public_key, $floor->index, $e);
+                }
+
+                $result = true;
             }
         }
 

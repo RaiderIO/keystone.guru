@@ -4,6 +4,7 @@ namespace App\Console\Commands\CombatLog;
 
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use Exception;
+use Throwable;
 
 class OutputCombatLogRouteJson extends BaseCombatLogCommand
 {
@@ -12,7 +13,7 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $signature = 'combatlog:outputcombatlogroutejson {filePath} {--dungeonOrRaid}';
+    protected $signature = 'combatlog:outputcombatlogroutejson {filePath} {--dungeonOrRaid} {--debugIcons : Ask the Auto Route Creator for debug map icons when this body is posted - only useful when debugging the ARC itself}';
 
     /**
      * The console command description.
@@ -33,25 +34,42 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
 
         $filePath      = $this->argument('filePath');
         $dungeonOrRaid = (bool)$this->option('dungeonOrRaid');
+        $debugIcons    = (bool)$this->option('debugIcons');
+        $failed        = false;
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use (
+        $result = $this->parseCombatLogRecursively($filePath, function (string $filePath) use (
             $combatLogRouteBodyDungeonRouteService,
             $dungeonOrRaid,
+            $debugIcons,
+            &$failed,
         ) {
-            if (!str_contains($filePath, '.zip')) {
-                $this->comment(sprintf('- Skipping file %s (not a .zip)', $filePath));
+            if (!str_ends_with($filePath, '.zip') && !str_ends_with($filePath, '.txt')) {
+                $this->comment(sprintf('- Skipping file %s (not a .zip or .txt)', $filePath));
 
                 return 0;
             }
 
-            if (file_exists(str_replace('.zip', '.json', $filePath))) {
+            if (file_exists(self::getResultingFilePath($filePath))) {
                 $this->comment(sprintf('- Skipping file %s (already generated .json)', $filePath));
 
                 return 0;
             }
 
-            return $this->outputCombatLogRouteJson($combatLogRouteBodyDungeonRouteService, $filePath, $dungeonOrRaid);
+            try {
+                return $this->outputCombatLogRouteJson($combatLogRouteBodyDungeonRouteService, $filePath, $dungeonOrRaid, $debugIcons);
+            } catch (Throwable $throwable) {
+                // One unusable log in a folder must not abort the rest of it - a folder of combat logs routinely
+                // contains a run that was never finished, or a single segment of one, neither of which carries the
+                // CHALLENGE_MODE_START/END pair a route is built from. The command still exits non-zero.
+                $failed = true;
+
+                $this->warn(sprintf('- Unable to parse %s: %s', $filePath, $throwable->getMessage()));
+
+                return 0;
+            }
         });
+
+        return $failed ? self::FAILURE : $result;
     }
 
     /**
@@ -61,15 +79,13 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
         CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
         string                                     $filePath,
         bool                                       $dungeonOrRaid = false,
+        bool                                       $debugIcons = false,
     ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
-        $resultingFile = str_replace([
-            '.txt',
-            '.zip',
-        ], '.json', $filePath);
+        $resultingFile = self::getResultingFilePath($filePath);
 
-        $combatLogRouteJson = $combatLogRouteDungeonRouteService->getCombatLogRoute($filePath, $dungeonOrRaid);
+        $combatLogRouteJson = $combatLogRouteDungeonRouteService->getCombatLogRoute($filePath, $dungeonOrRaid, $debugIcons);
         if ($combatLogRouteJson !== null) {
             $result = file_put_contents(
                 $resultingFile,
@@ -89,5 +105,20 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
         }
 
         return $result > 0 ? 0 : -1;
+    }
+
+    /**
+     * The .json request body that a given combat log is written to - alongside the log itself, with its extension
+     * swapped out.
+     */
+    private static function getResultingFilePath(string $filePath): string
+    {
+        foreach (['.txt', '.zip'] as $extension) {
+            if (str_ends_with($filePath, $extension)) {
+                return substr($filePath, 0, -strlen($extension)) . '.json';
+            }
+        }
+
+        return $filePath . '.json';
     }
 }

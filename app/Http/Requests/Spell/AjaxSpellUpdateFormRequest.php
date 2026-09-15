@@ -30,7 +30,7 @@ class AjaxSpellUpdateFormRequest extends FormRequest
             ],
             'icon_name'      => 'string',
             'category'       => Rule::in(Spell::ALL_CATEGORIES),
-            'dispel_type'    => Rule::in(Spell::ALL_DISPEL_TYPES),
+            'dispel_type'    => Rule::in(Spell::ALL_DISPEL_TYPE_KEYS),
             'cooldown_group' => Rule::in(Spell::ALL_COOLDOWN_GROUPS),
             'schools'        => 'array',
             'schools.*'      => Rule::in(array_keys(Spell::ALL_SCHOOLS)),

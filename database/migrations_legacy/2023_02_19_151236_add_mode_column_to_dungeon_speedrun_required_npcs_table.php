@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,7 +22,7 @@ return new class extends Migration {
             '
             UPDATE `dungeon_speedrun_required_npcs` SET mode = :mode
             ',
-            ['mode' => Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN]],
+            ['mode' => DungeonDifficulty::TWENTY_FIVE_MAN->value],
         );
     }
 

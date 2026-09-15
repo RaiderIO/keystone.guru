@@ -6,7 +6,6 @@ use App\Models\Tags\Tag;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * This model manages tags for other objects. I.e., a user can have tags for a dungeon route.
@@ -33,23 +32,6 @@ trait HasTags
         }
 
         return $result;
-    }
-
-    /**
-     * @return Collection<int, string>
-     */
-    public function getUniqueTagNames(?int $categoryId = null): Collection
-    {
-        $builder = $this->tags();
-
-        if ($categoryId !== null) {
-            $builder->where('tag_category_id', $categoryId);
-        }
-
-        return $builder->select('name')
-            ->distinct()
-            ->get()
-            ->pluck('name');
     }
 
     /**

@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Logic\CombatLog\SpecialEvents\CombatantInfo;
-
+namespace Tests\Unit\App\Logic\CombatLog\SpecialEvents\CombatantInfo;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\SpecialEvents\CombatantInfo\Versions\V22\CombatantInfoV22;
 use PHPUnit\Framework\Assert;

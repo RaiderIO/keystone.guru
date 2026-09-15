@@ -24,6 +24,7 @@ use Override;
 
 /**
  * @property int        $id
+ * @property int        $game_version_id
  * @property int        $classification_id
  * @property int        $npc_type_id
  * @property int        $npc_class_id
@@ -41,9 +42,14 @@ use Override;
  * @property bool       $runs_away_in_fear
  * @property bool       $hyper_respawn
  *
- * @property NpcClassification $classification
- * @property NpcType           $type
- * @property NpcClass          $class
+ * @property string               $enemy_portrait_url
+ * @property string               $wowhead_url
+ * @property array<string, mixed> $tooltip_data
+ *
+ * @property GameVersion            $gameVersion
+ * @property NpcClassification|null $classification A few seeded NPCs carry an id no classification row matches
+ * @property NpcType                $type
+ * @property NpcClass               $class
  *
  * @property NpcEnemyForces|null                             $enemyForces
  * @property EloquentCollection<int, NpcEnemyForces>         $npcEnemyForces
@@ -85,6 +91,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
     protected $fillable = [
         'id',
+        'game_version_id',
         'dungeon_id',
         'classification_id',
         'npc_type_id',
@@ -104,12 +111,14 @@ class Npc extends CacheModel implements MappingModelInterface
 
     protected $appends = [
         'enemy_portrait_url',
+        'wowhead_url',
     ];
 
     protected function casts(): array
     {
         return [
             'id'                => 'integer',
+            'game_version_id'   => 'integer',
             'dungeon_id'        => 'integer',
             'classification_id' => 'integer',
             'npc_type_id'       => 'integer',
@@ -141,6 +150,109 @@ class Npc extends CacheModel implements MappingModelInterface
     }
 
     /**
+     * Everything the hover tooltip shows, in one payload - the counterpart of Spell::$tooltip_data (#4096).
+     *
+     * Deliberately NOT in $appends, unlike the spell one: NPCs are serialized in bulk into the map
+     * context, and computing this for every NPC of a dungeon would both lazy-load four relations per
+     * NPC and grow that payload with text no map ever renders. Render sites opt in instead, either by
+     * reading $npc->tooltip_data or by appending it to a collection they eager-loaded themselves.
+     *
+     * Reads the classification, type, characteristics and npcHealths relations - eager-load all four
+     * wherever this is rendered for more than one NPC.
+     *
+     * @return array<string, mixed>
+     */
+    public function getTooltipDataAttribute(): array
+    {
+        return array_filter([
+            'name'        => __($this->name),
+            'portraitUrl' => ksgAsset($this->enemy_portrait_url),
+            // A handful of seeded NPCs carry a classification_id no npc_classifications row matches,
+            // so this relation really can come back null - the badge is then left out entirely
+            'classification'    => $this->classification === null ? null : __($this->classification->name),
+            'classificationKey' => $this->classification?->key,
+            'health'            => $this->getTooltipHealth(),
+            'type'              => $this->type->type,
+            // Mirrors the flags the NPC's own compendium page shows; bursting/bolstering/sanguine are
+            // deliberately left out there as well
+            'flags' => array_values(array_filter([
+                $this->dangerous ? __('view_admin.npc.edit.dangerous') : null,
+                $this->truesight ? __('view_admin.npc.edit.truesight') : null,
+                $this->runs_away_in_fear ? __('view_admin.npc.edit.runs_away_in_fear') : null,
+            ])),
+            // Observed crowd control only - an NPC without a characteristic was never seen affected by
+            // one, which is not the same as being immune to it (#4028), so nothing is listed as absent
+            'characteristics' => $this->characteristics->map(static fn(Characteristic $characteristic): array => [
+                'name'    => __($characteristic->name),
+                'iconUrl' => ksgAssetImage(sprintf('spells/%s.jpg', $characteristic->icon_name)),
+            ])->values()->all(),
+        ], static fn(mixed $value): bool => $value !== null && $value !== []);
+    }
+
+    public function getWowheadUrlAttribute(): string
+    {
+        return $this->getWowheadUrl();
+    }
+
+    /**
+     * The game versions this NPC is known to exist in, derived from the dungeons it is assigned to
+     * (npc_dungeons) and the game versions those dungeons have mapping versions for.
+     *
+     * @return Collection<int, int>
+     */
+    public function getCandidateGameVersionIds(): Collection
+    {
+        // Queried directly rather than through the `dungeons` relation - caching it on the Npc makes
+        // toArray() serialize it, which lazy-loads each Dungeon's appends (#4250)
+        return once(fn(): Collection => MappingVersion::query()
+            ->join('npc_dungeons', 'npc_dungeons.dungeon_id', '=', 'mapping_versions.dungeon_id')
+            ->where('npc_dungeons.npc_id', $this->id)
+            ->distinct()
+            ->pluck('mapping_versions.game_version_id')
+            ->map(static fn(mixed $gameVersionId): int => (int)$gameVersionId)
+            ->values());
+    }
+
+    /**
+     * Which game version's Wowhead database holds this NPC's data. An NPC id can be shared across
+     * game versions (Naxxramas exists in both Classic and Wrath), so the stored game_version_id is
+     * a hand-correctable fallback rather than the answer: the mapping version being viewed wins
+     * whenever its game version is one the NPC actually appears in (#3987).
+     */
+    public function getGameVersionId(?MappingVersion $mappingVersion = null): int
+    {
+        if ($mappingVersion !== null && $this->getCandidateGameVersionIds()->contains($mappingVersion->game_version_id)) {
+            return $mappingVersion->game_version_id;
+        }
+
+        return $this->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL];
+    }
+
+    /**
+     * The Wowhead page for this NPC, on the Wowhead database of the game version that
+     * getGameVersionId() resolves for the mapping version in scope (if any).
+     */
+    public function getWowheadUrl(?MappingVersion $mappingVersion = null): string
+    {
+        return self::getWowheadLink($this->getGameVersionId($mappingVersion), $this->id, $this->name);
+    }
+
+    /**
+     * The Wowhead page for an NPC, on the Wowhead database belonging to the NPC's game version -
+     * a Classic or Mists of Pandaria NPC does not exist on retail Wowhead (#3987).
+     */
+    public static function getWowheadLink(?int $gameVersionId, int $npcId, ?string $name = null): string
+    {
+        $result = sprintf('%s/npc=%d', GameVersion::getWowheadBaseUrl($gameVersionId), $npcId);
+
+        if (!empty(__($name))) {
+            $result .= '/' . Str::slug(__($name));
+        }
+
+        return $result;
+    }
+
+    /**
      * Gets all derived enemies from this Npc.
      *
      * @return HasMany<Enemy, $this>
@@ -166,6 +278,12 @@ class Npc extends CacheModel implements MappingModelInterface
     public function npcDungeons(): HasMany
     {
         return $this->hasMany(NpcDungeon::class);
+    }
+
+    /** @return BelongsTo<GameVersion, $this> */
+    public function gameVersion(): BelongsTo
+    {
+        return $this->belongsTo(GameVersion::class);
     }
 
     /** @return BelongsTo<NpcClassification, $this> */
@@ -321,7 +439,22 @@ class Npc extends CacheModel implements MappingModelInterface
         ]);
     }
 
-    /** @param array<int, string> $affixes */
+    /**
+     * What the stored base health is multiplied by at $keyLevel. Fitted to combat log measurements of every key level
+     * (#4094), which the game reproduces to five significant digits: the per-level multiplier (7% per level through
+     * +10, 10% per level from +11 - Xal'atath's Guile, so it needs no affix of its own) is rounded to two decimals,
+     * *then* the modifiers apply: Fortified (non-bosses) and Tyrannical (bosses) - both from +10, and between +7 and
+     * +9 whichever one the week's affixes ($affixes) carry, since they swap every other week - and the low-key
+     * reduction on non-bosses. All numbers live in config('keystoneguru.keystone'), with the reasoning next to them.
+     *
+     * This is the game's formula, with nothing in it to compensate for the seeded data: MDT stores Midnight boss bases
+     * 4.17% high (it reverses its +10 observations with Fortified's 1.2 rather than Tyrannical's 1.25), and #4208
+     * corrected those rows from +6 combat logs instead of carrying a boss factor here. #4211 stopped
+     * MDTMappingImportService::importNpcsDataFromMDT() from overwriting a health it already has, so those corrected
+     * values now survive an MDT re-import of the dungeon.
+     *
+     * @param array<int, string> $affixes A list of Affix:: string constants
+     */
     public function getScalingFactor(int $keyLevel, array $affixes = []): float
     {
         $keyLevelFactor = 1;
@@ -329,23 +462,28 @@ class Npc extends CacheModel implements MappingModelInterface
             $keyLevelFactor *= ($i < 10 ? config('keystoneguru.keystone.scaling_factor') : config('keystoneguru.keystone.scaling_factor_past_10'));
         }
 
-        if (in_array(Affix::AFFIX_FORTIFIED, $affixes) && $this->isAffectedByFortified()) {
-            $keyLevelFactor *= config('keystoneguru.keystone.affix_scaling_factor.fortified');
+        $result = round($keyLevelFactor, 2);
+
+        $bothAffixesActive = $keyLevel >= config('keystoneguru.keystone.affix_scaling_factor_both_min_key_level');
+        $weekAffixActive   = $keyLevel >= config('keystoneguru.keystone.affix_scaling_factor_min_key_level');
+
+        if ($this->isAffectedByFortified() && ($bothAffixesActive || ($weekAffixActive && in_array(Affix::AFFIX_FORTIFIED, $affixes)))) {
+            $result *= config('keystoneguru.keystone.affix_scaling_factor.fortified');
         }
 
-        if (in_array(Affix::AFFIX_TYRANNICAL, $affixes) && $this->isAffectedByTyrannical()) {
-            $keyLevelFactor *= config('keystoneguru.keystone.affix_scaling_factor.tyrannical');
+        if ($this->isAffectedByTyrannical() && ($bothAffixesActive || ($weekAffixActive && in_array(Affix::AFFIX_TYRANNICAL, $affixes)))) {
+            $result *= config('keystoneguru.keystone.affix_scaling_factor.tyrannical');
         }
 
         if ($keyLevel >= 10 && in_array(Affix::AFFIX_THUNDERING, $affixes)) {
-            $keyLevelFactor *= config('keystoneguru.keystone.affix_scaling_factor.thundering');
+            $result *= config('keystoneguru.keystone.affix_scaling_factor.thundering');
         }
 
-        if ($keyLevel >= 12 && in_array(Affix::AFFIX_XALATATHS_GUILE, $affixes)) {
-            $keyLevelFactor *= config('keystoneguru.keystone.affix_scaling_factor.xalataths_guile');
+        if (!$this->isBoss() && $keyLevel <= config('keystoneguru.keystone.low_key_non_boss_health.max_key_level')) {
+            $result *= config('keystoneguru.keystone.low_key_non_boss_health.factor');
         }
 
-        return round($keyLevelFactor * 100) / 100;
+        return $result;
     }
 
     public function getHealthByGameVersion(GameVersion $gameVersion): ?NpcHealth
@@ -401,10 +539,42 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function getDungeonId(): ?int
     {
-        /** @var Dungeon|null $dungeon */
-        $dungeon = $this->dungeons->first();
+        // Query directly rather than through the cached `dungeons` relation - caching it on the
+        // model means it gets serialized by mappingChanged()'s toArray(), which lazy-loads each
+        // Dungeon's floors relation (via the floor_count append) and throws (#4250).
+        return $this->dungeons()->value('dungeons.id');
+    }
 
-        return $dungeon?->id;
+    /**
+     * The NPC's base health as the tooltip states it, or null when we have nothing worth stating.
+     *
+     * `percentage` is part of the answer, not a footnote to it: MDT records a good many creatures as
+     * a fraction of a stored base (a Blinding Vale add at 30% of its pack leader's health), so the
+     * raw column on its own overstates them - the same product calculateHealthForKey() scales from.
+     */
+    private function getTooltipHealth(): ?int
+    {
+        $npcHealth = $this->getHealthByGameVersion(GameVersion::getUserOrDefaultGameVersion());
+
+        // A health of exactly the placeholder means we never learned this NPC's health, so it says
+        // nothing worth a row - a fair few dungeons still carry those (#4094). Checked before the
+        // percentage is applied, since the placeholder is what the column stores, not what it means.
+        if ($npcHealth === null || $npcHealth->health === NpcHealth::HEALTH_PLACEHOLDER) {
+            return null;
+        }
+
+        return (int)round($npcHealth->health * (($npcHealth->percentage ?? 100) / 100));
+    }
+
+    /**
+     * NPCs whose data is hand-curated and must never be replaced by an automated source - see
+     * config('keystoneguru.npc.curated_npc_data_npc_ids') for who is on the list and why.
+     *
+     * @return array<int, int>
+     */
+    public static function getCuratedDataNpcIds(): array
+    {
+        return (array)config('keystoneguru.npc.curated_npc_data_npc_ids');
     }
 
     #[Override]

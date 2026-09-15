@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Http\View\Composers\AdminDungeonMappingVersionsComposer;
 use App\Http\View\Composers\AdminMessageBannerComposer;
+use App\Http\View\Composers\AdminNpcEditComposer;
 use App\Http\View\Composers\AdminNpcHealthEditComposer;
 use App\Http\View\Composers\AdminSpellEditComposer;
 use App\Http\View\Composers\AffixesComposer;
 use App\Http\View\Composers\AppLayoutComposer;
+use App\Http\View\Composers\AuthFormComposer;
 use App\Http\View\Composers\CompositionComposer;
 use App\Http\View\Composers\CreateRouteFormComposer;
 use App\Http\View\Composers\DiscoverAffixGroupComposer;
@@ -17,6 +19,7 @@ use App\Http\View\Composers\DungeonGridTabsComposer;
 use App\Http\View\Composers\DungeonSelectComposer;
 use App\Http\View\Composers\DungeonStartSelectComposer;
 use App\Http\View\Composers\EmbedComposer;
+use App\Http\View\Composers\FeaturedCreatorsComposer;
 use App\Http\View\Composers\GameVersionsNavComposer;
 use App\Http\View\Composers\GlobalComposer;
 use App\Http\View\Composers\HeaderComposer;
@@ -61,14 +64,24 @@ use App\Service\CombatLog\CombatLogMappingVersionService;
 use App\Service\CombatLog\CombatLogMappingVersionServiceInterface;
 use App\Service\CombatLog\CombatLogParsingCriteriaService;
 use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
+use App\Service\CombatLog\CombatLogPollingBandService;
+use App\Service\CombatLog\CombatLogPollingBandServiceInterface;
+use App\Service\CombatLog\CombatLogPollingHealthService;
+use App\Service\CombatLog\CombatLogPollingHealthServiceInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteService;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
+use App\Service\CombatLog\CombatLogRouteEnemyFailureAnalysisService;
+use App\Service\CombatLog\CombatLogRouteEnemyFailureAnalysisServiceInterface;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureService;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use App\Service\CombatLog\CombatLogService;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\CombatLogSplitService;
 use App\Service\CombatLog\CombatLogSplitServiceInterface;
+use App\Service\CombatLog\DataExtractors\DataExtractorFactory;
+use App\Service\CombatLog\DataExtractors\DataExtractorFactoryInterface;
+use App\Service\CombatLog\NpcHealthExtractionService;
+use App\Service\CombatLog\NpcHealthExtractionServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteService;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\CombatLogEvent\CombatLogEventService;
@@ -99,12 +112,18 @@ use App\Service\DungeonRoute\DungeonRouteSearchService;
 use App\Service\DungeonRoute\DungeonRouteSearchServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteService;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteUpgradeDraftService;
+use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
 use App\Service\DungeonRoute\MapDrawingService;
 use App\Service\DungeonRoute\MapDrawingServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use App\Service\EnemyForces\EnemyForcesDb2Service;
+use App\Service\EnemyForces\EnemyForcesDb2ServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Floor\FloorResolutionService;
+use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\GameVersion\GameVersionService;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Image\ImageService;
@@ -145,6 +164,8 @@ use App\Service\Npc\NpcService;
 use App\Service\Npc\NpcServiceInterface;
 use App\Service\Patreon\PatreonApiService;
 use App\Service\Patreon\PatreonApiServiceInterface;
+use App\Service\Patreon\PatreonDiagnosticsService;
+use App\Service\Patreon\PatreonDiagnosticsServiceInterface;
 use App\Service\Patreon\PatreonService;
 use App\Service\Patreon\PatreonServiceInterface;
 use App\Service\RaiderIO\RaiderIOApiService;
@@ -152,6 +173,8 @@ use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
 use App\Service\ReadOnlyMode\ReadOnlyModeService;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
+use App\Service\Request\ApiRequestService;
+use App\Service\Request\ApiRequestServiceInterface;
 use App\Service\Reverb\ReverbHttpApiService;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonAffixGroupService;
@@ -160,10 +183,24 @@ use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsService;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
+use App\Service\Spell\Description\SpellDamageCalibrationService;
+use App\Service\Spell\Description\SpellDamageCalibrationServiceInterface;
+use App\Service\Spell\Description\SpellDescriptionImportService;
+use App\Service\Spell\Description\SpellDescriptionImportServiceInterface;
+use App\Service\Spell\Description\SpellDescriptionParser;
+use App\Service\Spell\Description\SpellDescriptionParserInterface;
+use App\Service\Spell\Description\SpellDescriptionPatchCheckService;
+use App\Service\Spell\Description\SpellDescriptionPatchCheckServiceInterface;
 use App\Service\Spell\SpellService;
 use App\Service\Spell\SpellServiceInterface;
+use App\Service\Spell\Tuning\SpellTuningDiffService;
+use App\Service\Spell\Tuning\SpellTuningDiffServiceInterface;
+use App\Service\Spell\Tuning\SpellTuningSnapshotLoader;
+use App\Service\Spell\Tuning\SpellTuningSnapshotLoaderInterface;
 use App\Service\StructuredLogging\StructuredLoggingService;
 use App\Service\StructuredLogging\StructuredLoggingServiceInterface;
+use App\Service\Telemetry\TelemetryService;
+use App\Service\Telemetry\TelemetryServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use App\Service\User\UserService;
@@ -172,6 +209,8 @@ use App\Service\View\RequestViewContext;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewService;
 use App\Service\View\ViewServiceInterface;
+use App\Service\WagoTools\WagoToolsService;
+use App\Service\WagoTools\WagoToolsServiceInterface;
 use App\Service\Wowhead\WowheadService;
 use App\Service\Wowhead\WowheadServiceInterface;
 use App\Service\Wowhead\WowheadTranslationService;
@@ -196,6 +235,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(ArchonApiServiceInterface::class, ArchonApiService::class);
         $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
+        $this->app->bind(WagoToolsServiceInterface::class, WagoToolsService::class);
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
         $this->app->bind(CreatorDirectoryServiceInterface::class, CreatorDirectoryService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
@@ -214,23 +254,43 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(ReverbHttpApiServiceInterface::class, ReverbHttpApiService::class);
 
         // Internals
+        // No dependencies - resolved very early (ViewService, and Handler on any request that errors)
+        $this->app->bind(ApiRequestServiceInterface::class, ApiRequestService::class);
         $this->app->bind(CoordinatesServiceInterface::class, CoordinatesService::class);
+        $this->app->bind(FloorResolutionServiceInterface::class, FloorResolutionService::class);
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
+        $this->app->bind(PatreonDiagnosticsServiceInterface::class, PatreonDiagnosticsService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
+        $this->app->bind(TelemetryServiceInterface::class, TelemetryService::class);
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
         $this->app->bind(CombatLogParsingCriteriaServiceInterface::class, CombatLogParsingCriteriaService::class);
+        $this->app->bind(CombatLogPollingBandServiceInterface::class, CombatLogPollingBandService::class);
+        $this->app->bind(CombatLogPollingHealthServiceInterface::class, CombatLogPollingHealthService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);
         $this->app->bind(SpellServiceInterface::class, SpellService::class);
+        $this->app->bind(SpellDescriptionParserInterface::class, SpellDescriptionParser::class);
+        // Depends on WagoToolsService, SpellDescriptionParser
+        $this->app->bind(SpellDescriptionImportServiceInterface::class, SpellDescriptionImportService::class);
+        // Depends on WowheadService
+        $this->app->bind(SpellDamageCalibrationServiceInterface::class, SpellDamageCalibrationService::class);
+        // Depends on WagoToolsService
+        $this->app->bind(SpellDescriptionPatchCheckServiceInterface::class, SpellDescriptionPatchCheckService::class);
+        // Depends on SpellDescriptionImportStateRepository
+        $this->app->bind(SpellTuningSnapshotLoaderInterface::class, SpellTuningSnapshotLoader::class);
+        // Depends on SpellTuningChangeRepository
+        $this->app->bind(SpellTuningDiffServiceInterface::class, SpellTuningDiffService::class);
         $this->app->bind(ChallengeModeRunDataServiceInterface::class, ChallengeModeRunDataService::class);
         $this->app->bind(CombatLogEventServiceInterface::class, CombatLogEventService::class);
         $this->app->bind(DungeonServiceInterface::class, DungeonService::class);
         $this->app->bind(CookieServiceInterface::class, CookieService::class);
         $this->app->bind(DungeonRouteSaveServiceInterface::class, DungeonRouteSaveService::class);
         $this->app->bind(DungeonRouteServiceInterface::class, DungeonRouteService::class);
+        // Depends on DungeonRouteService, ThumbnailService
+        $this->app->bind(DungeonRouteUpgradeDraftServiceInterface::class, DungeonRouteUpgradeDraftService::class);
         $this->app->bind(DungeonRouteSearchServiceInterface::class, DungeonRouteSearchService::class);
         $this->app->bind(DungeonRouteKillZoneServiceInterface::class, DungeonRouteKillZoneService::class);
         $this->app->bind(ImageServiceInterface::class, ImageService::class);
@@ -256,7 +316,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         }
         $this->app->bind(RedisServiceInterface::class, PHPRedisService::class);
 
-        $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
+        $this->app->bind(EnemyForcesDb2ServiceInterface::class, EnemyForcesDb2Service::class);
+        // Both the interface and the concrete class are registered so that the request-scoped
+        // caches inside them are shared by every caller, however it asks for the service (#4587)
+        $this->app->scoped(ExpansionService::class);
+        $this->app->scoped(ExpansionServiceInterface::class, ExpansionService::class);
         $this->app->bind(NpcCompendiumServiceInterface::class, NpcCompendiumService::class);
         $this->app->bind(SpellCompendiumServiceInterface::class, SpellCompendiumService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);
@@ -271,7 +335,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
 
         // Depends on ExpansionService
-        $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
+        $this->app->scoped(SeasonService::class);
+        $this->app->scoped(SeasonServiceInterface::class, SeasonService::class);
         $this->app->bind(OverpulledEnemyServiceInterface::class, OverpulledEnemyService::class);
         $this->app->bind(LiveSessionCombatStateServiceInterface::class, LiveSessionCombatStateService::class);
         $this->app->bind(LiveSessionCombatLogServiceInterface::class, LiveSessionCombatLogService::class);
@@ -299,6 +364,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Depends on CombatLogService, SeasonService, CoordinatesService
         $this->app->bind(CombatLogRouteDungeonRouteServiceInterface::class, CombatLogRouteDungeonRouteService::class);
         $this->app->bind(CombatLogRouteEnemyFailureServiceInterface::class, CombatLogRouteEnemyFailureService::class);
+        $this->app->bind(CombatLogRouteEnemyFailureAnalysisServiceInterface::class, CombatLogRouteEnemyFailureAnalysisService::class);
         $this->app->bind(ResultEventDungeonRouteServiceInterface::class, ResultEventDungeonRouteService::class);
 
         // Depends on all of the above - pretty much
@@ -308,7 +374,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->scoped(RequestViewContextInterface::class, RequestViewContext::class);
 
         // Depends on CombatLogService, SeasonService, WowheadService
+        $this->app->bind(DataExtractorFactoryInterface::class, DataExtractorFactory::class);
         $this->app->bind(CombatLogDataExtractionServiceInterface::class, CombatLogDataExtractionService::class);
+        $this->app->bind(NpcHealthExtractionServiceInterface::class, NpcHealthExtractionService::class);
     }
 
     /**
@@ -370,6 +438,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Dungeon grid view
         view()->composer('dungeonroute.discover.search', DiscoverSearchComposer::class);
 
+        view()->composer('creator.featured', FeaturedCreatorsComposer::class);
+
         view()->composer('common.dungeonroute.create.dungeondifficultyselect', DungeonDifficultySelectComposer::class);
 
         view()->composer('common.dungeonroute.create.dungeonstartselect', DungeonStartSelectComposer::class);
@@ -378,6 +448,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'common.forms.oauth',
             'common.forms.register',
         ], OAuthRegisterFormComposer::class);
+
+        view()->composer([
+            'common.forms.login',
+            'common.forms.register',
+        ], AuthFormComposer::class);
 
         view()->composer([
             'common.forms.createroute',
@@ -417,6 +492,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Admin
         view()->composer('admin.dungeon.mappingversions', AdminDungeonMappingVersionsComposer::class);
+
+        view()->composer('admin.npc.edit', AdminNpcEditComposer::class);
 
         view()->composer('admin.npchealth.edit', AdminNpcHealthEditComposer::class);
 

@@ -12,9 +12,12 @@ use App\Http\Requests\KillZone\APIDeleteAllFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneMassFormRequest;
 use App\Jobs\RefreshEnemyForces;
+use App\Logic\Structs\LatLng;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteLimitType;
+use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
+use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;
@@ -23,13 +26,15 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Teapot\StatusCode\Http;
@@ -69,9 +74,6 @@ class AjaxKillZoneController extends Controller
      * route if it already exists and isn't a sandbox, not just the route named in the request -
      * so the ownership check happens once, up front, before any storage side effect runs, rather
      * than saveKillZone() repeating the same check on the same route for every non-hijack call.
-     * saveKillZone() still re-authorizes once more in its own race-condition fallback, where a
-     * concurrent request can create the kill zone between this check and the actual insert - that
-     * one can't be hoisted here since it depends on what actually happened during the write.
      *
      * @return DungeonRoute the route to actually save the kill zone against
      */
@@ -89,6 +91,126 @@ class AjaxKillZoneController extends Controller
     }
 
     /**
+     * Rewrites a submitted kill zone location that is expressed on a facade (combined multi-floor)
+     * map onto the real floor it belongs to, mutating $data so the conversion happens *before* the
+     * row is written rather than as a second update afterwards.
+     *
+     * Whether the submitted location is a facade location is derived from the submitted floor's own
+     * `facade` flag, deliberately not from the acting user's map facade style: that style is
+     * request-scoped state which the save request does not necessarily share with the request that
+     * rendered the map the location was placed on, and a mismatch used to persist the facade floor
+     * verbatim (#3917).
+     *
+     * @throws HttpException when a facade location on a facade-rendering route belongs to no real floor
+     *
+     * @param  array<string, mixed> $data
+     * @return LatLng|null          the location exactly as submitted, so the response can echo it back in the
+     *                              plane the client is rendering, or null if no facade location was
+     *                              submitted or the submitted one was dropped
+     */
+    private function convertSubmittedFacadeLocation(
+        CoordinatesServiceInterface $coordinatesService,
+        DungeonRoute                $dungeonRoute,
+        KillZone                    $killZone,
+        array                      &                       $data,
+    ): ?LatLng {
+        if (!isset($data['floor_id'], $data['lat'], $data['lng'])) {
+            return null;
+        }
+
+        /** @var Floor|null $submittedFloor */
+        $submittedFloor = Floor::find($data['floor_id']);
+
+        if ($submittedFloor === null || !$submittedFloor->facade) {
+            return null;
+        }
+
+        // The route's map never renders a facade, so this cannot be a location the user just placed
+        // on one - it is a bad location echoed back by a client that loaded an already-corrupted row
+        // (convertFacadeMapLocationToMapLocation() would hand it straight back unconverted anyway).
+        // Drop it so the save still succeeds: failing here would make every such pull uneditable.
+        if (!$dungeonRoute->mappingVersion->facade_enabled) {
+            $data['floor_id'] = null;
+            $data['lat']      = null;
+            $data['lng']      = null;
+
+            return null;
+        }
+
+        $submittedLatLng = new LatLng((float)$data['lat'], (float)$data['lng'], $submittedFloor);
+
+        $convertedLatLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
+            $dungeonRoute->mappingVersion,
+            $submittedLatLng,
+        );
+
+        $convertedFloor = $convertedLatLng->getFloor();
+
+        // The location falls outside every floor union area, so it belongs to no real floor at all -
+        // the dead space of the combined image (0.003% of it, measured across every facade dungeon).
+        // It may never be persisted: every consumer downstream (ingame coordinate conversion, kill
+        // zone paths, MDT export) assumes a real floor.
+        if ($convertedFloor === null || $convertedFloor->facade) {
+            // A location the client is merely echoing back unchanged comes from a row corrupted
+            // before this fix, and refusing it would make that pull uneditable forever. Drop it and
+            // let the save land - the KillZonePathService guard covers the row until it is re-placed.
+            if (!$this->isNewLocationForKillZone($killZone, $data)) {
+                $data['floor_id'] = null;
+                $data['lat']      = null;
+                $data['lng']      = null;
+
+                return null;
+            }
+
+            // A location the user just placed is worth failing on, so they get feedback instead of
+            // watching their marker silently disappear. 422 as a literal, like
+            // abortIfDungeonRouteLimitReached() - Teapot's Http does not expose UNPROCESSABLE_ENTITY
+            //
+            // Expected to be rare (see the dead-space note above), not impossible - reported with the
+            // submitted lat/lng so an occurrence can actually be plotted against the mapping version's
+            // floor unions instead of only naming which one was hit.
+            report(new Exception(sprintf(
+                'Facade location (%s, %s) could not be converted to a real floor for mapping version %d, submitted floor %d',
+                $data['lat'],
+                $data['lng'],
+                $dungeonRoute->mappingVersion->id,
+                $submittedFloor->id,
+            )));
+
+            abort(422, __('controller.killzone.error.facade_location_not_convertible'));
+        }
+
+        $data['floor_id'] = $convertedFloor->id;
+        $data['lat']      = $convertedLatLng->getLat();
+        $data['lng']      = $convertedLatLng->getLng();
+
+        return $submittedLatLng;
+    }
+
+    /**
+     * Whether the submitted location differs from the one the kill zone already holds, i.e. whether
+     * the user actually placed or moved the kill area rather than the client echoing back what it
+     * loaded. Compared with a tolerance because the coordinates round-trip through JSON as strings.
+     *
+     * @param array<string, mixed> $data
+     */
+    private function isNewLocationForKillZone(KillZone $killZone, array $data): bool
+    {
+        if (!$killZone->exists || $killZone->floor_id === null) {
+            return true;
+        }
+
+        return (int)$killZone->floor_id !== (int)$data['floor_id'] ||
+            abs((float)$killZone->lat - (float)$data['lat']) > 0.0001 ||
+            abs((float)$killZone->lng - (float)$data['lng']) > 0.0001;
+    }
+
+    /**
+     * Deliberately opens no transaction of its own - every caller wraps it in one, so that
+     * storeAll()'s batch is atomic as a whole rather than per pull, and so that a retry after a
+     * deadlock re-runs the entire unit instead of a savepoint MySQL has already discarded. Every
+     * model it touches is (re)hydrated inside this method, so a retried attempt starts clean.
+     *
      * @throws \Exception
      *
      * @param array<string, mixed> $data
@@ -114,26 +236,19 @@ class AjaxKillZoneController extends Controller
 
         $this->abortIfDungeonRouteLimitReached($dungeonroute, DungeonRouteLimitType::KillZones);
 
+        // Must happen before the row is written - the database may never hold a facade floor
+        $submittedFacadeLatLng = $this->convertSubmittedFacadeLocation($coordinatesService, $dungeonroute, $killZone, $data);
+
         $beforeModel = clone $killZone;
 
         // Capture the before-state enemy IDs before any delete/insert
         $beforeEnemyIds = $beforeModel->killZoneEnemies->pluck('enemy_id');
 
         if (!$killZone->exists) {
-            try {
-                $killZone = KillZone::create($data);
-                $success  = true;
-            } catch (UniqueConstraintViolationException) {
-                // Race condition: another request created this kill zone between findOrNew and create.
-                // Re-load and re-authorize before updating to prevent cross-route hijacking.
-                $killZone = KillZone::with('dungeonRoute')->findOrFail($data['id']);
-                if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
-                    Gate::authorize('edit', $killZone->dungeonRoute);
-                }
-                $beforeModel    = clone $killZone;
-                $beforeEnemyIds = $beforeModel->killZoneEnemies->pluck('enemy_id');
-                $success        = $killZone->update($data);
-            }
+            // The primary key is always assigned by the database, never taken from the request
+            unset($data['id']);
+            $killZone = KillZone::create($data);
+            $success  = true;
         } else {
             $success = $killZone->update($data);
         }
@@ -189,7 +304,10 @@ class AjaxKillZoneController extends Controller
             }
 
             if ($recalculateEnemyForces) {
-                RefreshEnemyForces::dispatch($dungeonroute->id);
+                // afterCommit: the caller wraps this in a transaction, and a queue worker that picks
+                // the job up before it commits would recalculate the enemy forces from pre-commit
+                // state - or from state that a retried attempt rolled back entirely (#4260)
+                RefreshEnemyForces::dispatch($dungeonroute->id)->afterCommit();
             }
 
             $this->dungeonRouteChanged($dungeonroute, $beforeModel, $killZone, function (
@@ -200,41 +318,30 @@ class AjaxKillZoneController extends Controller
                 $afterAttributes['enemies']  = $killZone->enemies->pluck('id');
             });
 
-            // If killzone has lat/lng set, convert it to facade location if it's not already
-            $useFacade = $dungeonroute->mappingVersion->facade_enabled &&
-                User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
-
-            if ($killZone->hasKillArea()) {
-                // Track this latlng so we can re-echo it back to the user if we still want to use facades
-                $originalLatLng = $killZone->getLatLng();
-
-                // Only when we actually have a kill location set!
-                if ($useFacade && $originalLatLng->getFloor() !== null) {
-                    $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
-                        $dungeonroute->mappingVersion,
-                        $originalLatLng,
-                    );
-
-                    // Save the killzone with converted lat/lngs in the database
-                    $killZone->update([
-                        'lat'      => $latLng->getLat(),
-                        'lng'      => $latLng->getLng(),
-                        'floor_id' => $latLng->getFloor()->id,
-                    ]);
-                }
-
-                // But echo it back as facade!
-                $killZone->setAttribute('lat', $originalLatLng->getLat());
-                $killZone->setAttribute('lng', $originalLatLng->getLng());
-                $killZone->setAttribute('floor_id', $originalLatLng->getFloor()->id);
-                $killZone->setRelation('floor', $originalLatLng->getFloor());
+            // The row now holds the real-floor location; echo the location back in the plane the
+            // client submitted it in, so the marker it just placed does not jump on its map
+            if ($submittedFacadeLatLng !== null) {
+                $killZone->setAttribute('lat', $submittedFacadeLatLng->getLat());
+                $killZone->setAttribute('lng', $submittedFacadeLatLng->getLng());
+                $killZone->setAttribute('floor_id', $submittedFacadeLatLng->getFloor()->id);
+                $killZone->setRelation('floor', $submittedFacadeLatLng->getFloor());
             }
 
             if (Auth::check()) {
                 // Something's updated; broadcast it
                 /** @var User $user */
                 $user = Auth::user();
-                broadcast(new KillZoneChangedEvent($coordinatesService, $dungeonroute, $user, $killZone));
+
+                // afterCommit: collaborators must not be told about a pull that a rollback (or a
+                // retried attempt) then took away again - they would render enemies that no longer
+                // belong to it (#4260). Runs immediately when no transaction is open.
+                DB::afterCommit(static function () use ($coordinatesService, $dungeonroute, $user, $killZone): void {
+                    try {
+                        broadcast(new KillZoneChangedEvent($coordinatesService, $dungeonroute, $user, $killZone));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
+                });
             }
         } else {
             throw new Exception('Unable to save kill zone!');
@@ -253,7 +360,7 @@ class AjaxKillZoneController extends Controller
         APIKillZoneFormRequest       $request,
         DungeonRoute                 $dungeonRoute,
         ?KillZone                    $killZone = null,
-    ): KillZone {
+    ): KillZone|Response {
         // Outside the try/catch on purpose: an authorization failure must surface as a 403, not be
         // rewritten into the 404 below.
         $dungeonRoute = $this->authorizeKillZoneEdit($dungeonRoute, $killZone);
@@ -272,13 +379,37 @@ class AjaxKillZoneController extends Controller
 
             $data['id'] = $killZone?->id ?? null; // @phpstan-ignore nullsafe.neverNull
 
-            $result = $this->saveKillZone($coordinatesService, $dungeonRoute, $data, $killZone !== null);
-            $result->setAttribute('killzone_paths', $this->getKillZonePaths($killZonePathService, $dungeonRoute));
+            $isUpdate = $killZone !== null;
+
+            // The pull's enemies and spells are written as a delete followed by an insert; without a
+            // transaction a failure in between committed the delete and never ran the insert, so the
+            // pull was permanently emptied (#4260). Retried because `kill_zone_enemies` is one of the
+            // most contended tables in the app (#4239).
+            $result = DB::transaction(fn(): KillZone => $this->saveKillZone(
+                $coordinatesService,
+                $dungeonRoute,
+                $data,
+                $isUpdate,
+            ), 3);
         } catch (AuthorizationException|HttpException $deliberateResponse) {
             // A 403 or a 422 we raised on purpose must not be rewritten into the 404 below
             throw $deliberateResponse;
-        } catch (Exception) {
-            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+        } catch (Exception $exception) {
+            report($exception);
+
+            return response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+        }
+
+        try {
+            // Deliberately isolated from the save above: the kill zone is already persisted and
+            // broadcast at this point, so a failure computing this cosmetic add-on must not be
+            // reported back to the client as a total failure - the caller would never learn the
+            // save actually succeeded and retry with an id-less payload, creating a duplicate.
+            $result->setAttribute('killzone_paths', $this->getKillZonePaths($killZonePathService, $dungeonRoute));
+        } catch (Exception $exception) {
+            report($exception);
+
+            $result->setAttribute('killzone_paths', []);
         }
 
         return $result;
@@ -302,81 +433,136 @@ class AjaxKillZoneController extends Controller
 
         $validated = $request->validated();
 
-        // Update killzones
-        $killZones = new Collection();
-        foreach ($validated['killzones'] ?? [] as $killZoneData) {
-            try {
-                /** @var KillZone|null $existingKillZone */
-                $existingKillZone = isset($killZoneData['id'])
-                    ? KillZone::with('dungeonRoute')->find($killZoneData['id'])
-                    : null;
-                $killZoneDungeonRoute = $this->authorizeKillZoneEdit($dungeonRoute, $existingKillZone);
+        // Set by the batch loop below so the response can name the pull that could not be saved,
+        // even though the failure now has to travel out of the transaction as an exception
+        $notFoundKillZoneId = null;
+        // The id each submitted entry was saved to, in submission order - the only way a caller can
+        // learn the id of an entry it submitted without one
+        $killZoneIds = [];
 
-                // Unset the enemies since we're quicker to update that in bulk here
-                $kzDataWithoutEnemies = $killZoneData;
-                unset($kzDataWithoutEnemies['enemies']);
-                // Do not save the enemy forces - we save it one time down below
-                $killZones->push(
-                    $this->saveKillZone(
-                        $coordinatesService,
-                        $killZoneDungeonRoute,
-                        $kzDataWithoutEnemies,
-                        false,
-                    ),
-                );
-            } catch (AuthorizationException|HttpException $deliberateResponse) {
-                // A 403 or a 422 we raised on purpose must not be rewritten into the 404 below
-                throw $deliberateResponse;
-            } catch (Exception) {
-                return response(sprintf('Unable to find kill zone %s', $killZoneData['id']), Http::NOT_FOUND);
-            }
-        }
+        try {
+            // One transaction for the whole batch, not one per pull: the bulk enemy delete at the
+            // bottom spans every pull in the request, so a failure between it and the matching
+            // insert used to permanently empty all of them at once (#4260). Retried because
+            // `kill_zone_enemies` is one of the most contended tables in the app (#4239).
+            $enemyForces = DB::transaction(function () use (
+                $coordinatesService,
+                $dungeonRoute,
+                $validated,
+                &$notFoundKillZoneId,
+                &$killZoneIds,
+            ): int {
+                // Update killzones, keyed by the submitted entry's position so the enemy phase
+                // below can pair each entry with the row it was actually saved to - an entry that
+                // names no id at all is created under a database-assigned one
+                $killZones = new Collection();
+                foreach ($validated['killzones'] ?? [] as $index => $killZoneData) {
+                    try {
+                        /** @var KillZone|null $existingKillZone */
+                        $existingKillZone = isset($killZoneData['id'])
+                            ? KillZone::with('dungeonRoute')->find($killZoneData['id'])
+                            : null;
+                        $killZoneDungeonRoute = $this->authorizeKillZoneEdit($dungeonRoute, $existingKillZone);
 
-        // Save enemy data at once and not one by one - it's slow
-        $killZoneEnemies = [];
-        $enemies         = $dungeonRoute->mappingVersion->enemies->keyBy('id');
-        $validEnemyIds   = $enemies->pluck('id')->toArray();
+                        // Unset the enemies since we're quicker to update that in bulk here
+                        $kzDataWithoutEnemies = $killZoneData;
+                        unset($kzDataWithoutEnemies['enemies']);
+                        // Do not save the enemy forces - we save it one time down below
+                        $killZones->put(
+                            $index,
+                            $this->saveKillZone(
+                                $coordinatesService,
+                                $killZoneDungeonRoute,
+                                $kzDataWithoutEnemies,
+                                false,
+                            ),
+                        );
+                    } catch (AuthorizationException|HttpException $deliberateResponse) {
+                        // A 403 or a 422 we raised on purpose must not be rewritten into the 404 below
+                        throw $deliberateResponse;
+                    } catch (Exception $exception) {
+                        $notFoundKillZoneId = $killZoneData['id'] ?? null;
 
-        // Insert new enemies based on what was sent
-        foreach ($validated['killzones'] ?? [] as $killZoneData) {
-            try {
-                if (isset($killZoneData['enemies'])) {
-                    // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
-                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn(
-                        $item,
-                    ) => in_array($item, $validEnemyIds));
-
-                    // Assign kill zone to each passed enemy
-                    foreach ($killZoneDataEnemies as $killZoneDataEnemyId) {
-                        $enemy             = $enemies->get($killZoneDataEnemyId);
-                        $killZoneEnemies[] = [
-                            'kill_zone_id' => $killZoneData['id'],
-                            'npc_id'       => $enemy->mdt_npc_id ?? $enemy->npc_id,
-                            'mdt_id'       => $enemy->mdt_id,
-                            'enemy_id'     => $enemy->id,
-                        ];
+                        throw $exception;
                     }
                 }
-            } catch (Exception) {
-                return response(sprintf('Unable to find kill zone %s', $killZoneData['id']), Http::NOT_FOUND);
-            }
+
+                // Save enemy data at once and not one by one - it's slow
+                $killZoneEnemies = [];
+                $enemies         = $dungeonRoute->mappingVersion->enemies->keyBy('id');
+                $validEnemyIds   = $enemies->pluck('id')->toArray();
+
+                $killZoneIds = $killZones->pluck('id')->values()->toArray();
+
+                // Insert new enemies based on what was sent
+                foreach ($validated['killzones'] ?? [] as $index => $killZoneData) {
+                    try {
+                        if (isset($killZoneData['enemies'])) {
+                            /** @var KillZone $savedKillZone */
+                            $savedKillZone = $killZones->get($index);
+                            $killZoneId    = $savedKillZone->id;
+
+                            // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
+                            $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn(
+                                $item,
+                            ) => in_array($item, $validEnemyIds));
+
+                            // Assign kill zone to each passed enemy
+                            foreach ($killZoneDataEnemies as $killZoneDataEnemyId) {
+                                $enemy             = $enemies->get($killZoneDataEnemyId);
+                                $killZoneEnemies[] = [
+                                    'kill_zone_id' => $killZoneId,
+                                    'npc_id'       => $enemy->mdt_npc_id ?? $enemy->npc_id,
+                                    'mdt_id'       => $enemy->mdt_id,
+                                    'enemy_id'     => $enemy->id,
+                                ];
+                            }
+                        }
+                    } catch (Exception $exception) {
+                        $notFoundKillZoneId = $killZoneData['id'] ?? null;
+
+                        throw $exception;
+                    }
+                }
+
+                // May be empty if the user did not send any enemies
+                if ($killZoneEnemies !== []) {
+                    // Delete existing enemies
+                    KillZoneEnemy::whereIn('kill_zone_id', $killZones->pluck('id')->toArray())->delete();
+                    // Save all new enemies at once
+                    KillZoneEnemy::insert($killZoneEnemies);
+                }
+
+                $enemyForces = $dungeonRoute->getEnemyForces();
+
+                // Written through the query builder, and the timestamp with it rather than via
+                // touch(): $dungeonRoute outlives this closure, so on a retry Eloquent would find
+                // the instance clean after the rolled-back first attempt and issue no SQL at all
+                // (#4250)
+                DungeonRoute::query()->whereKey($dungeonRoute->id)->update([
+                    'enemy_forces' => $enemyForces,
+                    'updated_at'   => Carbon::now(),
+                ]);
+
+                return $enemyForces;
+            }, 3);
+        } catch (AuthorizationException|HttpException $deliberateResponse) {
+            // A 403 or a 422 we raised on purpose must not be rewritten into the 404 below
+            throw $deliberateResponse;
+        } catch (Exception $exception) {
+            // The catch now also covers the enemy_forces write, which used to sit outside any
+            // try/catch - a genuine database failure there would otherwise turn into a silent 404
+            report($exception);
+
+            return response(sprintf('Unable to find kill zone %s', $notFoundKillZoneId), Http::NOT_FOUND);
         }
 
-        // May be empty if the user did not send any enemies
-        if ($killZoneEnemies !== []) {
-            // Delete existing enemies
-            KillZoneEnemy::whereIn('kill_zone_id', $killZones->pluck('id')->toArray())->delete();
-            // Save all new enemies at once
-            KillZoneEnemy::insert($killZoneEnemies);
-        }
-
-        // Update the enemy forces
-        $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
-        // Touch the route so that the thumbnail gets updated
-        $dungeonRoute->touch();
+        // Reflect the committed state on the in-memory instance for the response
+        $dungeonRoute->setAttribute('enemy_forces', $enemyForces);
 
         return [
-            'enemy_forces'   => $dungeonRoute->enemy_forces,
+            'enemy_forces'   => $enemyForces,
+            'killzone_ids'   => $killZoneIds,
             'killzone_paths' => $this->getKillZonePaths($killZonePathService, $dungeonRoute),
         ];
     }
@@ -399,31 +585,80 @@ class AjaxKillZoneController extends Controller
             Gate::authorize('edit', $dungeonRoute);
         }
 
+        // KillZone::deleting cascades into kill_zone_enemies and kill_zone_spells, and the route's
+        // enemy_forces and change log follow - six writes that a failure part-way through used to
+        // leave half-applied (#4260). Distinguishes a refused delete from a failed one so the
+        // pre-existing 500 vs 404 split survives the exception having to escape the transaction.
+        $deleteRefused = false;
+
         try {
-            if ($killZone->delete()) {
+            $enemyForces = DB::transaction(function () use ($killZone, $dungeonRoute, &$deleteRefused): int {
+                // Re-read per attempt: Model::delete() flips `exists` to false and that survives a
+                // rollback, so a retried attempt would find the instance already "deleted", return
+                // null and delete nothing while every other write in here re-ran (#4250)
+                /** @var KillZone|null $freshKillZone */
+                $freshKillZone = KillZone::find($killZone->id);
+
+                if ($freshKillZone === null) {
+                    throw new Exception('Kill zone no longer exists');
+                }
+
+                if (!$freshKillZone->delete()) {
+                    $deleteRefused = true;
+
+                    throw new Exception('Unable to delete pull');
+                }
+
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::user();
-                    broadcast(new KillZoneDeletedEvent($dungeonRoute, $user, $killZone));
+
+                    // afterCommit: collaborators must not be told the pull is gone while it can
+                    // still come back through a rollback or a retried attempt
+                    DB::afterCommit(static function () use ($dungeonRoute, $user, $freshKillZone): void {
+                        try {
+                            broadcast(new KillZoneDeletedEvent($dungeonRoute, $user, $freshKillZone));
+                        } catch (BroadcastException) {
+                            // Ignore broadcast failures
+                        }
+                    });
                 }
 
                 $dungeonRoute->load('killZones');
-                $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
+                $enemyForces = $dungeonRoute->getEnemyForces();
 
-                $this->dungeonRouteChanged($dungeonRoute, $killZone, null);
+                // Query builder, timestamp included rather than touch(): $dungeonRoute outlives
+                // this closure, so on a retry Eloquent would find it clean and write nothing (#4250)
+                DungeonRoute::query()->whereKey($dungeonRoute->id)->update([
+                    'enemy_forces' => $enemyForces,
+                    'updated_at'   => Carbon::now(),
+                ]);
+                $dungeonRoute->setAttribute('enemy_forces', $enemyForces);
 
-                // Touch the route so that the thumbnail gets updated
-                $dungeonRoute->touch();
+                $this->dungeonRouteChanged($dungeonRoute, $freshKillZone, null);
 
-                $result = [
-                    'enemy_forces'   => $dungeonRoute->enemy_forces,
-                    'killzone_count' => $dungeonRoute->killZones()->count(),
-                    'killzone_paths' => $this->getKillZonePaths($killZonePathService, $dungeonRoute),
-                ];
-            } else {
-                $result = response('Unable to delete pull', Http::INTERNAL_SERVER_ERROR);
-            }
-        } catch (Exception) {
+                return $enemyForces;
+            }, 3);
+        } catch (Exception $exception) {
+            report($exception);
+
+            return $deleteRefused
+                ? response(__('controller.killzone.error.unable_to_delete_pull'), Http::INTERNAL_SERVER_ERROR)
+                : response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+        }
+
+        try {
+            // Deliberately outside the transaction: this only reads, and holding row locks on
+            // kill_zones/kill_zone_enemies/dungeon_routes while it walks the route's floors and
+            // floor unions would widen the very lock window the retries above exist to absorb
+            $result = [
+                'enemy_forces'   => $enemyForces,
+                'killzone_count' => $dungeonRoute->killZones()->count(),
+                'killzone_paths' => $this->getKillZonePaths($killZonePathService, $dungeonRoute),
+            ];
+        } catch (Exception $exception) {
+            report($exception);
+
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
@@ -446,36 +681,77 @@ class AjaxKillZoneController extends Controller
 
         if ($validated['confirm'] === 'yes') {
             try {
-                $killZones       = $dungeonRoute->killZones;
-                $pridefulEnemies = $dungeonRoute->pridefulEnemies;
+                // Clearing a route is six writes per pull plus the prideful enemies and the route
+                // itself; without a transaction a failure part-way through left the route
+                // half-cleared, with no way for the client to tell how far it got (#4260)
+                DB::transaction(function () use ($dungeonRoute): void {
+                    // Queried rather than read off $dungeonRoute's relation: Model::delete() flips
+                    // `exists` to false and that survives a rollback, so a retried attempt would
+                    // iterate the same already-"deleted" instances, delete nothing, and still report
+                    // the route as cleared (#4250)
+                    $killZones = KillZone::query()
+                        ->where('dungeon_route_id', $dungeonRoute->id)
+                        ->get();
+                    $pridefulEnemies = PridefulEnemy::query()
+                        ->where('dungeon_route_id', $dungeonRoute->id)
+                        ->get();
 
-                $dungeonRoute->killZones()->delete();
-                $dungeonRoute->pridefulEnemies()->delete();
-
-                if (Auth::check()) {
-                    /** @var User $user */
-                    $user = Auth::user();
+                    // Deleted one at a time - a mass delete on the relation skips KillZone::deleting, which
+                    // is what cleans up the kill zone's enemies and spells
                     foreach ($killZones as $killZone) {
-                        $this->dungeonRouteChanged($dungeonRoute, $killZone, null);
+                        $killZone->delete();
+                    }
+                    $dungeonRoute->pridefulEnemies()->delete();
 
-                        broadcast(new KillZoneDeletedEvent($dungeonRoute, $user, $killZone));
+                    if (Auth::check()) {
+                        /** @var User $user */
+                        $user = Auth::user();
+                        foreach ($killZones as $killZone) {
+                            $this->dungeonRouteChanged($dungeonRoute, $killZone, null);
+                        }
+
+                        // afterCommit: collaborators must not be told the route was cleared while a
+                        // rollback or a retried attempt can still put every pull back
+                        DB::afterCommit(static function () use ($dungeonRoute, $user, $killZones, $pridefulEnemies): void {
+                            foreach ($killZones as $killZone) {
+                                try {
+                                    broadcast(new KillZoneDeletedEvent($dungeonRoute, $user, $killZone));
+                                } catch (BroadcastException) {
+                                    // Ignore broadcast failures
+                                }
+                            }
+
+                            foreach ($pridefulEnemies as $pridefulEnemy) {
+                                try {
+                                    broadcast(new PridefulEnemyDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
+                                } catch (BroadcastException) {
+                                    // Ignore broadcast failures
+                                }
+                            }
+                        });
                     }
 
-                    foreach ($pridefulEnemies as $pridefulEnemy) {
-                        broadcast(new PridefulEnemyDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
-                    }
-                }
+                    $dungeonRoute->load('killZones');
 
-                $dungeonRoute->load('killZones');
-                $dungeonRoute->update(['enemy_forces' => 0]);
-                // Touch the route so that the thumbnail gets updated
-                $dungeonRoute->touch();
+                    // Query builder, timestamp included rather than touch(): $dungeonRoute outlives
+                    // this closure, so on a retry Eloquent would find it clean and write nothing (#4250)
+                    DungeonRoute::query()->whereKey($dungeonRoute->id)->update([
+                        'enemy_forces' => 0,
+                        'updated_at'   => Carbon::now(),
+                    ]);
+                    $dungeonRoute->setAttribute('enemy_forces', 0);
+                }, 3);
 
+                // Deliberately outside the transaction: this only reads, and holding row locks on
+                // kill_zones/kill_zone_enemies/dungeon_routes while it walks the route's floors and
+                // floor unions would widen the very lock window the retries above exist to absorb
                 $result = [
-                    'enemy_forces'   => $dungeonRoute->enemy_forces,
+                    'enemy_forces'   => 0,
                     'killzone_paths' => $this->getKillZonePaths($killZonePathService, $dungeonRoute),
                 ];
-            } catch (\Exception) {
+            } catch (\Exception $exception) {
+                report($exception);
+
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
         } else {

@@ -16,7 +16,7 @@ trait SavesArrayToJsonFile
     protected function saveDataToJsonFile(mixed $dataArr, string $dir, string $filename): void
     {
         if (!file_exists($dir)) {
-            mkdir($dir, 755, true);
+            mkdir($dir, 0755, true);
         }
 
         $filePath = $dir . '/' . $filename;

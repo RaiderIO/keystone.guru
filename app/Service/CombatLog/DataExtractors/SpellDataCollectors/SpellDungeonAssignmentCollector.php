@@ -57,17 +57,21 @@ class SpellDungeonAssignmentCollector implements SpellDataCollectorInterface
                 if ($spell->spellDungeons
                     ->where('dungeon_id', $currentDungeon->dungeon->id)
                     ->isEmpty()) {
-                    // Assign it
-                    SpellDungeon::create([
+                    // insertOrIgnore (not create()) so a concurrent extraction job racing this
+                    // same-empty check cannot create a duplicate (spell_id, dungeon_id) row - the
+                    // unique index makes the second insert a no-op instead of a duplicate row
+                    $inserted = SpellDungeon::query()->insertOrIgnore([
                         'spell_id'   => $spell->id,
                         'dungeon_id' => $currentDungeon->dungeon->id,
                     ]);
 
                     $spell->unsetRelation('spellDungeons')->load('spellDungeons');
 
-                    $result->createdSpellDungeon();
+                    if ($inserted > 0) {
+                        $result->createdSpellDungeon();
 
-                    $this->log->assignDungeonToSpellAssignedDungeonToSpell($prefix->getSpellId(), $currentDungeon->dungeon->id);
+                        $this->log->assignDungeonToSpellAssignedDungeonToSpell($prefix->getSpellId(), $currentDungeon->dungeon->id);
+                    }
                 }
             }
         }

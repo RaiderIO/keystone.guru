@@ -20,10 +20,25 @@ return [
         'numeric' => 'Значение поля :attribute должно быть от :min до :max.',
         'string'  => 'Количество символов в поле :attribute должно быть от :min до :max.',
     ],
-    'boolean'           => 'Значение поля :attribute должно быть логического типа.',
-    'can'               => 'Значение поля :attribute должно быть авторизованным.',
-    'confirmed'         => 'Значение поля :attribute не совпадает с подтверждаемым.',
-    'current_password'  => 'Неверный пароль.',
+    'boolean'          => 'Значение поля :attribute должно быть логического типа.',
+    'can'              => 'Значение поля :attribute должно быть авторизованным.',
+    'confirmed'        => 'Значение поля :attribute не совпадает с подтверждаемым.',
+    'current_password' => 'Неверный пароль.',
+    'custom'           => [
+        'bio' => [
+            'max' => '',
+        ],
+        'pinned_dungeon_routes' => [
+            'max'    => '',
+            'exists' => '',
+        ],
+        'social_links' => [
+            'invalid_url_for_platform' => '',
+        ],
+        'creator_search' => [
+            'max' => '',
+        ],
+    ],
     'date'              => 'Значение поля :attribute должно быть корректной датой.',
     'date_equals'       => 'Значение поля :attribute должно быть датой равной :date.',
     'date_format'       => 'Значение поля :attribute должно соответствовать формату даты: :format.',

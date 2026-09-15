@@ -42,7 +42,7 @@ use Illuminate\Support\Collection;
                     <td>{{ $npc->id }}</td>
                     <td>{{ __($npc->name) }}</td>
                     <td>
-                        <a href="https://www.wowhead.com/npc={{ $npc->id }}" target="_blank">
+                        <a href="{{ $npc->wowhead_url }}" target="_blank">
                             {{ __('view_admin.tools.npcs.showmissingdisplayid.wowhead') }} <i
                                 class="fa fa-external-link"></i>
                         </a>

@@ -6,6 +6,7 @@ use App\Exceptions\Handler;
 use App\Models\Feature\Feature;
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use App\Overrides\AiLocaleMessageSelector;
 use App\Overrides\CustomRateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Console\Events\CommandStarting;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Illuminate\Translation\Translator;
 use Override;
 use Rollbar\Payload\Level;
 use Rollbar\Rollbar;
@@ -122,6 +124,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->extend(RateLimiter::class, fn($command, $app) => new CustomRateLimiter($app->make('cache')->driver(
             $app['config']->get('cache.limiter'),
         )));
+
+        // trans_choice()'s plural rules don't know the `*_ai` locales - see AiLocaleMessageSelector
+        $this->app->afterResolving('translator', static fn(Translator $translator) => $translator->setSelector(new AiLocaleMessageSelector()));
     }
 
     /**
@@ -142,9 +147,27 @@ class AppServiceProvider extends ServiceProvider
 
             return $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 50)->by($this->userKey($request));
         });
+        // Every attempt costs a password hash comparison, and the per-username lockout of ThrottlesLogins does not
+        // bound a caller that rotates usernames. Account access, so the ceiling is set well above what real traffic produces
+        RateLimiter::for('login', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
+        RateLimiter::for('reset-password', function (Request $request) {
+            // Same as create-user: only the form submission is interesting, showing the form is free
+            if ($request->method() === 'GET') {
+                return Limit::none();
+            }
+
+            // Account recovery, so the ceiling is set well above what real traffic produces
+            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 300)->by($this->userKey($request));
+        });
+
+        // Writes a row per call and is reachable without a session, but it is only sent on two explicit user
+        // actions - so the ceiling sits far above what the front-end can produce
+        RateLimiter::for('store-metric', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 6000)->by($this->userKey($request)));
 
         // Heavy GET requests
         RateLimiter::for('search-dungeonroute', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 600)->by($this->userKey($request)));
+        // Every call is an outbound request to the Raider.IO API, and the front-end fires one per filter change
+        RateLimiter::for('heatmap-data', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
 
         // This consumes the same resources as creating a route - so we limit it
         RateLimiter::for('mdt-details', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
@@ -157,8 +180,11 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('api-general', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 900)->by($this->userKey($request)));
         RateLimiter::for('api-combatlog-create-dungeonroute', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 120)->by($this->userKey($request)));
         RateLimiter::for('api-combatlog-correct-event', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 900)->by($this->userKey($request)));
+        RateLimiter::for('api-patreon-diagnostics', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 10)->by($this->userKey($request)));
         RateLimiter::for('api-create-dungeonroute-thumbnail', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 30)->by($this->userKey($request)));
         RateLimiter::for('api-combatlog-live-session-events', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 900)->by($this->userKey($request)));
+        // Full-table aggregate - modest cap, admins are exempt via noLimitForExemptionsApi so this really only bounds the ai_agent role
+        RateLimiter::for('api-combatlog-observations-density', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 20)->by($this->userKey($request)));
     }
 
     private function noLimitForExemptions(Request $request): ?Limit
@@ -166,10 +192,7 @@ class AppServiceProvider extends ServiceProvider
         /** @var User|null $user */
         $user = $request->user();
 
-        if ($user?->hasRole(Role::roles([
-            Role::ROLE_ADMIN,
-            Role::ROLE_INTERNAL_TEAM,
-        ]))) {
+        if ($user?->hasRole(Role::roles(Role::ROLES_INTERNAL))) {
             return Limit::none();
         }
 

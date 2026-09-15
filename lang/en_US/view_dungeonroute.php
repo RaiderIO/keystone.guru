@@ -102,6 +102,7 @@ return [
         'linkpreview_default_description'         => 'M+ route for dungeon %s by %s.',
         'linkpreview_default_description_sandbox' => 'Temporary M+ route for dungeon %s.',
         'linkpreview_default_description_explore' => 'Explore %s.',
+        'linkpreview_default_description_heatmap' => 'View a heatmap of %s to see which choices the community is making.',
     ],
 
 ];

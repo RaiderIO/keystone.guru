@@ -6,6 +6,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
         // Listen to changes in the NPC to update the icon and re-draw the visual
         this.enemyvisual.enemy.register('enemy:set_npc', this, function () {
+            // getSize()'s cache is keyed on zoom level only, so a cached size from before this
+            // NPC change (different health/classification) would otherwise be served as-is.
+            self._sizeCache = [];
             self._refreshNpc();
         });
         this._sizeCache = [];
@@ -41,19 +44,8 @@ class EnemyVisualMain extends EnemyVisualIcon {
                 }
             }
 
-            if (mapContext instanceof MapContextDungeonRoute &&
-                this.enemyvisual.enemy.npc_id && mapContext.getDungeonDifficulty() !== null) {
-                let requiredNpcs = mapContext.getDungeonSpeedrunRequiredNpcs(mapContext.getDungeonDifficulty());
-
-                for (let index in requiredNpcs) {
-                    let requiredNpc = requiredNpcs[index];
-                    if (requiredNpc.dungeon_speedrun_required_npc_npcs
-                        .map(e => e.npc_id)
-                        .includes(this.enemyvisual.enemy.npc_id)) {
-                        mainVisualInnerClasses.push('required_npc');
-                        break;
-                    }
-                }
+            if (this.isSpeedrunRequiredNpc()) {
+                mainVisualInnerClasses.push('required_npc');
             }
 
             let hasShroudedAffix = mapContext.hasAffix(AFFIX_SHROUDED);
@@ -89,6 +81,34 @@ class EnemyVisualMain extends EnemyVisualIcon {
             main_visual_inner_style: mainVisualInnerStyle.join(' '),
             selection_classes: [] // selectionClasses.join(' ')
         });
+    }
+
+    /**
+     * Whether this enemy's NPC is required for the dungeon's speedrun.
+     * @returns {boolean}
+     */
+    isSpeedrunRequiredNpc() {
+        if (this.enemyvisual.enemy.npc === null || !this.enemyvisual.enemy.npc_id) {
+            return false;
+        }
+
+        let mapContext = getState().getMapContext();
+        if (!(mapContext instanceof MapContextDungeonRoute) || mapContext.getDungeonDifficulty() === null) {
+            return false;
+        }
+
+        let requiredNpcs = mapContext.getDungeonSpeedrunRequiredNpcs(mapContext.getDungeonDifficulty());
+
+        for (let index in requiredNpcs) {
+            let requiredNpc = requiredNpcs[index];
+            if (requiredNpc.dungeon_speedrun_required_npc_npcs
+                .map(e => e.npc_id)
+                .includes(this.enemyvisual.enemy.npc_id)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -148,7 +168,11 @@ class EnemyVisualMain extends EnemyVisualIcon {
         console.assert(this instanceof EnemyVisualMain, 'this is not an EnemyVisualMain!', this);
 
         let state = getState();
-        let zoomLevelOffset = state.getMapZoomLevel() * 2;
+        // zoomSnap: 0 lets the map land on fractional zoom levels (mouse-wheel zooming), so the
+        // key must be quantized - otherwise every distinct fractional zoom is a fresh cache entry
+        // that's written once and never hit again, and the cache grows unbounded. Rounding the
+        // offset itself (rather than the zoom level first) keeps the existing 1px granularity.
+        let zoomLevelOffset = Math.round(state.getMapZoomLevel() * 2);
 
         // Don't do expensive calculations if we don't need to
         if (this._sizeCache.hasOwnProperty(zoomLevelOffset)) {
@@ -205,4 +229,12 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
         this.enemyvisual.enemy.unregister('enemy:set_npc', this);
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemyVisualMain,
+    };
 }

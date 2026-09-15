@@ -151,7 +151,7 @@ $gameVersionsSelect   = $allGameVersions
                         <tr>
                             <td>{{ __($autoCompleteNpc->id) }}</td>
                             <td>{{ __($autoCompleteNpc->name) }}</td>
-                            <td>{{ __($autoCompleteNpc->classification->name) }}</td>
+                            <td>{{ $autoCompleteNpc->classification === null ? '' : __($autoCompleteNpc->classification->name) }}</td>
                             <td>{{ number_format($autoCompleteNpcHealth->health) }}</td>
                             <td>{{ $autoCompleteNpcHealth->percentage }}</td>
                             <td>

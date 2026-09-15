@@ -19,4 +19,11 @@ use Illuminate\Support\Collection;
  */
 interface NpcSpellRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * The distinct ids of every spell cast by the given NPCs.
+     *
+     * @param  Collection<int, int> $npcIds
+     * @return Collection<int, int>
+     */
+    public function getSpellIdsByNpcIds(Collection $npcIds): Collection;
 }

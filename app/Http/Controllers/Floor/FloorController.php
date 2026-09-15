@@ -9,6 +9,7 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorCoupling;
 use App\Models\Mapping\MappingVersion;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -107,6 +108,7 @@ class FloorController extends Controller
     public function mapping(
         Request                    $request,
         MapContextServiceInterface $mapContextService,
+        DungeonServiceInterface    $dungeonService,
         Dungeon                    $dungeon,
         Floor                      $floor,
     ) {
@@ -120,6 +122,10 @@ class FloorController extends Controller
                 'floor'          => $floor,
                 'mapContext'     => $mapContextService->createMapContextMappingVersionEdit($dungeon, $mappingVersion),
                 'mappingVersion' => $mappingVersion,
+                // No explicit game version: this must match what HeaderComposer resolves for the
+                // dungeon-context strip itself (the user's current game version context), or the
+                // dungeonContextLinks map built from it would miss dungeons the strip actually shows.
+                'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(),
             ]);
         } else {
             Session::flash('warning', sprintf(__('view_admin.floor.flash.invalid_mapping_version_id'), __($dungeon->name)));

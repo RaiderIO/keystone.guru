@@ -2,6 +2,8 @@
 
 namespace App\Service\MDT;
 
+use App\Service\MDT\Lua\LuaLiteral;
+
 class PhpArray2LuaTable
 {
     private const string TOKEN_OBJECT_OPEN = '{' . PHP_EOL;
@@ -94,7 +96,10 @@ class PhpArray2LuaTable
      */
     private function renderValue($value, int $indent): array
     {
-        if (is_string($value)) {
+        if ($value instanceof LuaLiteral) {
+            // Raw Lua that must survive verbatim - full precision coordinates, L["..."] keys, ..
+            $tokens = [$value->getLiteral()];
+        } elseif (is_string($value)) {
             $tokens = [
                 self::TOKEN_STRING_QUOTE,
                 $value,

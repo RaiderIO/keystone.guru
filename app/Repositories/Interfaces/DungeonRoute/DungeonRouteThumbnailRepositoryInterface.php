@@ -45,4 +45,15 @@ interface DungeonRouteThumbnailRepositoryInterface extends BaseRepositoryInterfa
      * @return Builder<DungeonRouteThumbnail>
      */
     public function fileBackedThumbnailsQuery(array $dungeonRouteIds = []): Builder;
+
+    /**
+     * The IDs of routes that already have at least one thumbnail of this variant, so a bulk refresh can
+     * regenerate the variants a route actually has without producing new ones for routes that never had
+     * them (a hero render is far more expensive than the standard one, and only the discovery hero band
+     * displays it).
+     *
+     * @param  ?int                 $dungeonId Optional dungeon to restrict to; null scans every dungeon.
+     * @return Collection<int, int>
+     */
+    public function getDungeonRouteIdsWithVariant(DungeonRouteThumbnailVariant $variant, ?int $dungeonId = null): Collection;
 }

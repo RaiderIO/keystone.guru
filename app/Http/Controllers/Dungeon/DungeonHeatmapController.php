@@ -7,13 +7,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Heatmap\HeatmapEmbedUrlFormRequest;
 use App\Http\Requests\Heatmap\HeatmapUrlFormRequest;
 use App\Models\Dungeon;
-use App\Models\Floor\Floor;
+use App\Models\DungeonKey;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Models\User;
 use App\Service\Dungeon\DungeonServiceInterface;
+use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
@@ -73,10 +74,11 @@ class DungeonHeatmapController extends Controller
     }
 
     public function viewDungeon(
-        SeasonServiceInterface $seasonService,
-        Request                $request,
-        GameVersion            $gameVersion,
-        Dungeon                $dungeon,
+        SeasonServiceInterface          $seasonService,
+        Request                         $request,
+        FloorResolutionServiceInterface $floorResolutionService,
+        GameVersion                     $gameVersion,
+        Dungeon                         $dungeon,
     ): RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
@@ -85,10 +87,7 @@ class DungeonHeatmapController extends Controller
             return $redirect;
         }
 
-        /** @var Floor|null $defaultFloor */
-        $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-            ->defaultOrFacade($currentMappingVersion)
-            ->first();
+        $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeon, $currentMappingVersion);
 
         return redirect()->route('dungeon.heatmap.gameversion.view.floor', [
             'gameVersion' => $gameVersion,
@@ -103,7 +102,7 @@ class DungeonHeatmapController extends Controller
     ): RedirectResponse {
         return redirect()->route('dungeon.heatmap.gameversion.view.floor', [
             'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
-            'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
+            'dungeon'     => Dungeon::where('key', DungeonKey::MECHAGON_WORKSHOP->value)->firstOrFail(),
             'floorIndex'  => $floorIndex,
         ] + $request->validated());
     }
@@ -114,6 +113,7 @@ class DungeonHeatmapController extends Controller
         SeasonServiceInterface           $seasonService,
         SeasonAffixGroupServiceInterface $seasonAffixGroupService,
         DungeonServiceInterface          $dungeonService,
+        FloorResolutionServiceInterface  $floorResolutionService,
         GameVersion                      $gameVersion,
         Dungeon                          $dungeon,
         string                           $floorIndex = '1',
@@ -129,34 +129,16 @@ class DungeonHeatmapController extends Controller
             return $redirect;
         }
 
-        if (!is_numeric($floorIndex)) {
-            $floorIndex = '1';
-        }
+        $resolvedFloor = $floorResolutionService->resolveRequestedFloor($dungeon, $currentMappingVersion, $floorIndex);
 
-        /** @var Floor|null $floor */
-        $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($currentMappingVersion, (int)$floorIndex)
-            ->first();
-
-        if ($floor === null) {
-            /** @var Floor|null $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-                ->defaultOrFacade($currentMappingVersion)
-                ->first();
-
+        if (!$resolvedFloor->isCanonical) {
             return redirect()->route('dungeon.heatmap.gameversion.view.floor', [
                 'gameVersion' => $gameVersion,
                 'dungeon'     => $dungeon,
-                'floorIndex'  => $defaultFloor->index,
+                'floorIndex'  => $resolvedFloor->floor->index,
             ] + $request->validated());
         } else {
-            if ($floor->index !== (int)$floorIndex) {
-                return redirect()->route('dungeon.heatmap.gameversion.view.floor', [
-                    'gameVersion' => $gameVersion,
-                    'dungeon'     => $dungeon,
-                    'floorIndex'  => $floor->index,
-                ] + $request->validated());
-            }
+            $floor = $resolvedFloor->floor;
 
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 
@@ -186,7 +168,7 @@ class DungeonHeatmapController extends Controller
     ): RedirectResponse {
         return redirect()->route('dungeon.heatmap.gameversion.embed.floor', [
             'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
-            'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
+            'dungeon'     => Dungeon::where('key', DungeonKey::MECHAGON_WORKSHOP->value)->firstOrFail(),
             'floorIndex'  => $floorIndex,
         ] + $request->validated());
     }
@@ -196,55 +178,41 @@ class DungeonHeatmapController extends Controller
         MapContextServiceInterface       $mapContextService,
         SeasonServiceInterface           $seasonService,
         SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        FloorResolutionServiceInterface  $floorResolutionService,
         GameVersion                      $gameVersion,
         Dungeon                          $dungeon,
         string                           $floorIndex = '1',
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $dungeon->getActiveSeason($seasonService));
-        if ($redirect instanceof RedirectResponse) {
-            return $redirect;
-        }
+        // Applied before the guard so the "unsupported" view honors the embed's requested locale too
+        $locale = $request->get('locale', App::getLocale());
+        App::setLocale(
+            config('language.short_to_long')[$locale] ?? $locale,
+        );
 
-        if (!is_numeric($floorIndex)) {
-            $floorIndex = '1';
+        $unsupported = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $dungeon->getActiveSeason($seasonService), embed: true);
+        if ($unsupported !== null) {
+            return $unsupported;
         }
 
         // Ensure that User::getCurrentUserMapFacadeStyle() returns the wanted map facade style
         $mapFacadeStyle = $request->get('mapFacadeStyle', User::getCurrentUserMapFacadeStyle());
         User::forceMapFacadeStyle($mapFacadeStyle);
 
-        /** @var Floor|null $floor */
-        $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($currentMappingVersion, (int)$floorIndex)
-            ->first();
+        $resolvedFloor = $floorResolutionService->resolveRequestedFloor($dungeon, $currentMappingVersion, $floorIndex);
 
         $validated = $request->validated();
 
-        if ($floor === null) {
-            /** @var Floor|null $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-                ->defaultOrFacade($currentMappingVersion)
-                ->first();
-
+        if (!$resolvedFloor->isCanonical) {
             return redirect()->route('dungeon.heatmap.gameversion.embed.floor', [
                 'gameVersion' => $gameVersion,
                 'dungeon'     => $dungeon,
-                'floorIndex'  => $defaultFloor->index,
-            ] + $validated);
-        } elseif ($floor->index !== (int)$floorIndex) {
-            return redirect()->route('dungeon.heatmap.gameversion.embed.floor', [
-                'gameVersion' => $gameVersion,
-                'dungeon'     => $dungeon,
-                'floorIndex'  => $floor->index,
+                'floorIndex'  => $resolvedFloor->floor->index,
             ] + $validated);
         }
 
-        $locale = $request->get('locale', App::getLocale());
-        App::setLocale(
-            config('language.short_to_long')[$locale] ?? $locale,
-        );
+        $floor = $resolvedFloor->floor;
 
         $style                  = $request->get('style', 'compact');
         $headerBackgroundColor  = $request->get('headerBackgroundColor');
@@ -326,17 +294,22 @@ class DungeonHeatmapController extends Controller
     /**
      * Maybe this should go in a policy?
      *
-     * @param  Dungeon               $dungeon
-     * @param  GameVersion           $gameVersion
-     * @param  MappingVersion|null   $currentMappingVersion
-     * @return RedirectResponse|null
+     * Redirects to the dungeon selection page normally. Inside an embed, redirecting there would
+     * break out of the embedding iframe onto the full site (nav + footer), so `$embed` renders a
+     * minimal embed-appropriate "not supported" view instead.
+     *
+     * @param  Dungeon                    $dungeon
+     * @param  GameVersion                $gameVersion
+     * @param  MappingVersion|null        $currentMappingVersion
+     * @return RedirectResponse|View|null
      */
     private function guardAgainstInvalidAccess(
         GameVersion     $gameVersion,
         Dungeon         $dungeon,
         ?MappingVersion $currentMappingVersion,
         ?Season         $mostRecentSeason = null,
-    ): ?RedirectResponse {
+        bool            $embed = false,
+    ): RedirectResponse|View|null {
         if (
             !$dungeon->active ||
             !$dungeon->heatmap_enabled ||
@@ -344,6 +317,13 @@ class DungeonHeatmapController extends Controller
             $mostRecentSeason === null ||
             !Feature::active(Heatmap::class)
         ) {
+            if ($embed) {
+                return view('dungeon.heatmap.gameversion.embedunsupported', [
+                    'dungeon' => $dungeon,
+                    'title'   => __($dungeon->name),
+                ]);
+            }
+
             return redirect()->route('dungeon.heatmap.gameversion.select', [
                 'gameVersion' => $gameVersion,
             ]);

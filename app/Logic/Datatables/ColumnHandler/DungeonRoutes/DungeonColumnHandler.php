@@ -28,7 +28,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
                 $generalSearch,
     ): void {
         // If we should search for this value
-        if ($columnData['searchable'] === 'true') {
+        if (($columnData['searchable'] ?? null) === 'true') {
             $searchValue = $columnData['search']['value'] ?? null;
             // -1 = all dungeons = no filter
             if ((int)$searchValue !== -1 && !empty($searchValue)) {
@@ -49,12 +49,12 @@ class DungeonColumnHandler extends DatatablesColumnHandler
         }
 
         // If we should order
-        if ($columnData['orderable'] === 'true') {
+        if (($columnData['orderable'] ?? null) === 'true') {
             // Order on this column?
             if (!is_null($order)) {
-                $orderBuilder->orderby('dungeons.expansion_id', $order['dir'] === 'asc' ? 'asc' : 'desc')
+                $orderBuilder->orderby('dungeons.expansion_id', ($order['dir'] ?? null) === 'asc' ? 'asc' : 'desc')
                     // Order either asc or desc, nothing else
-                    ->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
+                    ->orderBy($this->getColumnData(), ($order['dir'] ?? null) === 'asc' ? 'asc' : 'desc');
             }
         }
     }

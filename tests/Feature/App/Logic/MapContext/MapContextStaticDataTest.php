@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Logic\MapContext;
 
 use App\Models\Faction;
+use App\Models\Spell\Spell;
 use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Support\Facades\Cache;
 use Override;
@@ -21,6 +22,10 @@ final class MapContextStaticDataTest extends PublicTestCase
         // RemembersToFile writes to the `tmp_file` file store, which survives between test runs -
         // without this the assertions below could run against a payload built by older code.
         Cache::store('tmp_file')->flush();
+
+        // The Spell query behind selectableSpells is model-cached (laravel-model-caching); flush
+        // so a prior test's locale doesn't leak into this one.
+        new Spell()->flushCache();
     }
 
     #[Test]
@@ -57,5 +62,34 @@ final class MapContextStaticDataTest extends PublicTestCase
         // faction should never be part of this payload.
         $factionKeys = array_column($factions, 'key');
         $this->assertNotContains(Faction::FACTION_UNSPECIFIED, $factionKeys);
+    }
+
+    #[Test]
+    public function toArray_givenTwoLocales_returnsPayloadsWithDistinctTranslatedSpellNames(): void
+    {
+        // Arrange - the static cache key used to hardcode the '%s' placeholder instead of
+        // interpolating the locale, so every locale shared a single cache entry and every locale
+        // but the first one to run ended up serving that first locale's translations.
+        // Spell 465 (Devotion Aura) is seeded with distinct en_US/de_DE translations.
+        $devotionAuraSpellId = 465;
+
+        // Act
+        $enSpells = app(MapContextServiceInterface::class)->createMapContextStaticData('en_US')->toArray()['static']['selectableSpells'];
+
+        // laravel-model-caching's cache key does not factor in join clauses, so without flushing,
+        // the second query below - identical but for the locale in its join condition - would hit
+        // the same cache entry as the query above and mask the very bug this test guards against.
+        new Spell()->flushCache();
+
+        $deSpells = app(MapContextServiceInterface::class)->createMapContextStaticData('de_DE')->toArray()['static']['selectableSpells'];
+
+        $enNamesByKey = $enSpells->pluck('name', 'id');
+        $deNamesByKey = $deSpells->pluck('name', 'id');
+
+        // Assert
+        $this->assertNotEmpty($enNamesByKey);
+        $this->assertEqualsCanonicalizing($enNamesByKey->keys()->all(), $deNamesByKey->keys()->all());
+        $this->assertSame('Devotion Aura', $enNamesByKey->get($devotionAuraSpellId));
+        $this->assertSame('Aura der Hingabe', $deNamesByKey->get($devotionAuraSpellId));
     }
 }

@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -30,6 +31,16 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
         ?MappingModelInterface $beforeModel,
         ?MappingModelInterface $afterModel,
     ): bool {
+        return false;
+    }
+
+    /**
+     * A floor union positions a floor onto the facade floor - its own lat/lng is a facade
+     * coordinate and must be stored exactly as it came in.
+     */
+    #[Override]
+    protected function shouldConvertFacadeCoordinates(): bool
+    {
         return false;
     }
 
@@ -60,7 +71,12 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
                     if (Auth::check()) {
                         /** @var User $user */
                         $user = Auth::getUser();
-                        broadcast(new FloorUnionDeletedEvent($floorUnion->floor->dungeon, $user, $floorUnion));
+
+                        try {
+                            broadcast(new FloorUnionDeletedEvent($floorUnion->floor->dungeon, $user, $floorUnion));
+                        } catch (BroadcastException) {
+                            // Ignore broadcast failures
+                        }
                     }
                 }
 

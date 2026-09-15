@@ -183,6 +183,9 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     /** @var int|null The dungeon the extraction currently takes place in - used for SpellDungeon assignment. */
     private ?int $currentDungeonId = null;
 
+    /** @var DataExtractionCurrentDungeon|null The context $currentDungeonId was read from - see extractData. */
+    private ?DataExtractionCurrentDungeon $currentDungeonContext = null;
+
     public function __construct()
     {
         $definitionsByTriggerSpellId     = collect();
@@ -227,7 +230,14 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         DataExtractionCurrentDungeon $currentDungeon,
         BaseEvent                    $parsedEvent,
     ): void {
-        $this->currentDungeonId = $currentDungeon->dungeon->id;
+        // Reading the id off the Dungeon model goes through Eloquent's __get, measured at 1,185 ns against 79 ns for
+        // the same value out of getAttributes() - on a 1.4M-line corpus pass that one read was 32% of everything this
+        // extractor spent (#4059). The context is a readonly DTO that extractDungeon() only replaces when the run's
+        // dungeon actually changes, so its identity is a sound cache key.
+        if ($this->currentDungeonContext !== $currentDungeon) {
+            $this->currentDungeonContext = $currentDungeon;
+            $this->currentDungeonId      = $currentDungeon->dungeon->id;
+        }
 
         // A new run invalidates every in-flight correlation
         if ($parsedEvent instanceof ChallengeModeStart ||
@@ -252,7 +262,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             return;
         }
 
-        // Range carries the spell id/name and is the base of the Spell, SpellPeriodic and SpellBuilding prefixes
+        // Range carries the spell id/name and is the ancestor of the Spell, SpellPeriodic and SpellBuilding prefixes
         $prefix = $parsedEvent->getPrefix();
         if (!($prefix instanceof Range)) {
             return;
@@ -260,48 +270,64 @@ class SpellCounterDataExtractor implements DataExtractorInterface
 
         $suffix      = $parsedEvent->getSuffix();
         $genericData = $parsedEvent->getGenericData();
-        $sourceGuid  = $genericData->getSourceGuid();
-        $destGuid    = $genericData->getDestGuid();
         $timestamp   = $parsedEvent->getTimestamp();
 
-        $sourceNpcGuid = $this->npcCreatureGuid($sourceGuid);
-        $destNpcGuid   = $this->npcCreatureGuid($destGuid);
-
+        // Both guids are fetched inside each dispatch arm, not above it - roughly 58% of corpus lines reaching here
+        // are SPELL_DAMAGE/_SUPPORT/SPELL_HEAL/SPELL_PERIODIC_DAMAGE/SPELL_ENERGIZE, which match no arm below and
+        // used neither guid. getSourceGuid()/getDestGuid() are cached per line, so calling either more than once
+        // within an arm costs nothing beyond the first call.
         if ($suffix instanceof CastStart) {
+            $sourceGuid    = $genericData->getSourceGuid();
+            $sourceNpcGuid = $this->npcCreatureGuid($sourceGuid);
             if ($sourceNpcGuid !== null && $sourceGuid instanceof Creature) {
                 $this->handleNpcCastStart($sourceNpcGuid, $sourceGuid->getId(), $prefix->getSpellId(), $prefix->getSpellName(), $timestamp);
             }
         } elseif ($suffix instanceof CastSuccess) {
+            $sourceGuid = $genericData->getSourceGuid();
             if ($sourceGuid instanceof Player) {
                 $this->handleCounterTrigger($this->definitionsByTriggerSpellId, $sourceGuid->getGuid(), $prefix->getSpellId(), $timestamp);
-            } elseif ($sourceNpcGuid !== null) {
-                // The cast resolved - it needs no further explanation
-                $this->pendingNpcCasts->forget($sourceNpcGuid);
+            } else {
+                $sourceNpcGuid = $this->npcCreatureGuid($sourceGuid);
+                if ($sourceNpcGuid !== null) {
+                    // The cast resolved - it needs no further explanation
+                    $this->pendingNpcCasts->forget($sourceNpcGuid);
+                }
             }
         } elseif ($suffix instanceof CastFailed) {
+            $sourceNpcGuid = $this->npcCreatureGuid($genericData->getSourceGuid());
             if ($sourceNpcGuid !== null) {
                 $this->pendingNpcCasts->forget($sourceNpcGuid);
             }
         } elseif ($suffix instanceof Interrupt) {
             // The interrupted caster is the *destination* of a SPELL_INTERRUPT
+            $destNpcGuid = $this->npcCreatureGuid($genericData->getDestGuid());
             if ($destNpcGuid !== null) {
                 $this->pendingNpcCasts->forget($destNpcGuid);
             }
         } elseif ($suffix instanceof AuraAppliedInterface) {
             if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF) {
-                $this->handleDebuffApplied($sourceGuid, $destGuid, $prefix->getSpellId(), $prefix->getSpellName(), $timestamp);
-            } elseif ($destGuid instanceof Player) {
-                $this->handleCounterTrigger($this->definitionsByTriggerAuraSpellId, $destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+                $this->handleDebuffApplied($genericData->getSourceGuid(), $genericData->getDestGuid(), $prefix->getSpellId(), $prefix->getSpellName(), $timestamp);
+            } else {
+                $destGuid = $genericData->getDestGuid();
+                if ($destGuid instanceof Player) {
+                    $this->handleCounterTrigger($this->definitionsByTriggerAuraSpellId, $destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+                }
             }
         } elseif ($suffix instanceof AuraRemovedInterface) {
-            if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF && $destGuid instanceof Player) {
-                $this->handleDebuffRemoved($destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+            if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF) {
+                $destGuid = $genericData->getDestGuid();
+                if ($destGuid instanceof Player) {
+                    $this->handleDebuffRemoved($destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+                }
             }
         } elseif ($suffix instanceof AuraRefresh) {
             // A refresh restarts the debuff's duration - without this, a genuinely countered removal after a
             // refresh would be rejected by the natural-expiry guard for outliving its single-application duration
-            if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF && $destGuid instanceof Player) {
-                $this->handleDebuffRefreshed($destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+            if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF) {
+                $destGuid = $genericData->getDestGuid();
+                if ($destGuid instanceof Player) {
+                    $this->handleDebuffRefreshed($destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+                }
             }
         }
     }
@@ -317,9 +343,9 @@ class SpellCounterDataExtractor implements DataExtractorInterface
                 'combat_log_path' => $this->currentCombatLogFilePath ?? '',
                 'created_at'      => $now,
                 'updated_at'      => $now,
-            ])->values()->all();
+            ])->all();
 
-            CombatLogSpellPropertyObservation::upsert(
+            CombatLogSpellPropertyObservation::upsertWithDeadlockRetry(
                 $rows,
                 ['spell_id', 'property', 'observed_on'],
                 ['combat_log_path', 'updated_at'],
@@ -343,6 +369,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         $this->spellDispelTypeCache       = collect();
         $this->currentCombatLogFilePath   = null;
         $this->currentDungeonId           = null;
+        $this->currentDungeonContext      = null;
         $this->resetCorrelationState();
     }
 
@@ -372,25 +399,22 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             return;
         }
 
-        $counterBit = $definition->getCounterBit();
-        if (($spell->counters_mask & $counterBit) !== 0) {
+        // The write itself decides whether this counter is news - a check against the in-memory catalog may
+        // predate another worker's write by up to the catalog TTL and re-emit an event that already exists (#4199)
+        if (!$spell->recordCombatLogProperty($property)) {
             $this->log->afterExtractCounterAlreadyKnown($spellId, $property->value);
 
             return;
         }
 
-        $spell->counters_mask |= $counterBit;
+        CombatLogSpellEvent::create([
+            'spell_id'        => $spellId,
+            'event_type'      => CombatLogSpellEventType::PropertyChanged,
+            'property'        => $property,
+            'combat_log_path' => $this->currentCombatLogFilePath,
+        ]);
 
-        if ($spell->save()) {
-            CombatLogSpellEvent::create([
-                'spell_id'        => $spellId,
-                'event_type'      => CombatLogSpellEventType::PropertyChanged,
-                'property'        => $property,
-                'combat_log_path' => $this->currentCombatLogFilePath,
-            ]);
-
-            $result->addedSpellCounter();
-        }
+        $result->addedSpellCounter();
     }
 
     /**
@@ -434,9 +458,10 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             'spell_id' => $spellId,
         ]);
 
-        if ($observation['dungeon_id'] !== null && !SpellDungeon::where('spell_id', $spellId)
-            ->where('dungeon_id', $observation['dungeon_id'])->exists()) {
-            SpellDungeon::create([
+        // insertOrIgnore (not exists()+create()) so a concurrent extraction job racing this same
+        // pair cannot create a duplicate row - the unique index makes the second insert a no-op
+        if ($observation['dungeon_id'] !== null) {
+            SpellDungeon::query()->insertOrIgnore([
                 'spell_id'   => $spellId,
                 'dungeon_id' => $observation['dungeon_id'],
             ]);

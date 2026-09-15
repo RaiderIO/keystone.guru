@@ -34,4 +34,6 @@ interface WowheadServiceLoggingInterface
         bool $castTimeSet,
         bool $durationSet,
     ): void;
+
+    public function getSpellTooltipTextInvalidResponse(int $spellId): void;
 }

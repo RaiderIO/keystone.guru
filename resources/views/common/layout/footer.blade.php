@@ -20,7 +20,7 @@ use App\Models\Laratrust\Role;
                                 {{ __('view_common.layout.footer.api_documentation') }}
                             </a>
                         </li>
-                        @if(Auth::check() && Auth::user()->hasRole(Role::roles([Role::ROLE_ADMIN, Role::ROLE_INTERNAL_TEAM])))
+                        @if(Auth::check() && Auth::user()->hasRole(Role::roles(Role::ROLES_INTERNAL)))
                             <li class="site-footer__item">
                                 <a href="{{ route('l5-swagger.internal_team.api') }}">
                                     {{ __('view_common.layout.footer.api_documentation_internal_team') }}

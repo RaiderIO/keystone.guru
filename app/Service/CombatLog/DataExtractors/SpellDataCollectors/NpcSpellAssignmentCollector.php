@@ -99,13 +99,13 @@ class NpcSpellAssignmentCollector implements SpellDataCollectorInterface
                 'spell_id' => $pending['spell_id'],
             ]);
 
-            if (!SpellDungeon::where('spell_id', $pending['spell_id'])
-                ->where('dungeon_id', $pending['dungeon_id'])->exists()) {
-                SpellDungeon::create([
-                    'spell_id'   => $pending['spell_id'],
-                    'dungeon_id' => $pending['dungeon_id'],
-                ]);
-            }
+            // insertOrIgnore (not exists()+create()) so a concurrent extraction job racing this
+            // same pair cannot create a duplicate row - the unique index makes the second insert
+            // a no-op instead of a duplicate row, and it's one query instead of two either way
+            SpellDungeon::query()->insertOrIgnore([
+                'spell_id'   => $pending['spell_id'],
+                'dungeon_id' => $pending['dungeon_id'],
+            ]);
 
             CombatLogNpcEvent::create([
                 'npc_id'          => $pending['npc_id'],

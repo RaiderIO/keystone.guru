@@ -16,6 +16,17 @@ export const customScripts = [
     'resources/assets/js/custom/colorutil.js',
     'resources/assets/js/custom/util.js',
     'resources/assets/js/custom/constants.js',
+    'resources/assets/js/custom/rafworkqueue.js',
+    // The shared tooltip card comes before the two kinds of tooltip that register into it
+    'resources/assets/js/custom/hovertooltip.js',
+    'resources/assets/js/custom/spelltooltip.js',
+    'resources/assets/js/custom/npctooltip.js',
+
+    // Coordinate conversion - the structs before the service that returns them, both after
+    // constants.js (MAP_MAX_LAT etc) and util.js (rotateLatLng, roundHalfAwayFromZero)
+    'resources/assets/js/custom/structs/latlng.js',
+    'resources/assets/js/custom/structs/ingamexy.js',
+    'resources/assets/js/custom/coordinates/coordinatesservice.js',
 
     // Include in proper order
     'resources/assets/js/custom/signalable.js',
@@ -48,6 +59,7 @@ export const customScripts = [
 
     // Depends on the above
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
+    'resources/assets/js/custom/enemyvisuals/enemymarkerculler.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmanager.js',
     'resources/assets/js/custom/enemyforces/enemyforcesmanager.js',
     'resources/assets/js/custom/enemyforces/livesessionenemyforcesmanager.js',

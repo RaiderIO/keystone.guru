@@ -3,6 +3,7 @@
 namespace Tests\Unit\App\Logic\Structs;
 
 use App\Logic\Structs\LatLng;
+use App\Models\Floor\Floor;
 use App\Service\Coordinates\CoordinatesService;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -10,10 +11,10 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
+#[Group('LatLng')]
 final class LatLngTest extends PublicTestCase
 {
     #[Test]
-    #[Group('LatLng')]
     #[DataProvider('scale_givenPositiveMapCoordinates_shouldScaleLatLng_DataProvider')]
     public function scale_givenPositiveMapCoordinates_shouldScaleLatLng(
         LatLng $latLng,
@@ -51,7 +52,6 @@ final class LatLngTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('LatLng')]
     #[DataProvider('scale_givenRealisticMapCoordinates_shouldScaleLatLng_DataProvider')]
     public function scale_givenRealisticMapCoordinates_shouldScaleLatLng(
         LatLng $latLng,
@@ -85,7 +85,6 @@ final class LatLngTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('LatLng')]
     #[DataProvider('rotate_givenPositiveMapCoordinates_shouldRotateLatLng_DataProvider')]
     public function rotate_givenPositiveMapCoordinates_shouldRotateLatLng(
         LatLng $latLng,
@@ -125,7 +124,6 @@ final class LatLngTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('LatLng2')]
     #[DataProvider('rotate_givenScaledMapCoordinates_shouldRotateLatLng_DataProvider')]
     public function rotate_givenScaledMapCoordinates_shouldRotateLatLng(
         LatLng $latLng,
@@ -166,5 +164,49 @@ final class LatLngTest extends PublicTestCase
             //                new LatLng(14.644660940672622, 50),
             //            ],
         ];
+    }
+
+    #[Test]
+    public function clone_givenLatLng_returnsIndependentCopyKeepingTheFloor(): void
+    {
+        // Arrange
+        $floor  = new Floor()->forceFill(['id' => 12]);
+        $latLng = new LatLng(-100, 200, $floor);
+
+        // Act
+        $clone = clone $latLng;
+        $clone->setLat(-50);
+
+        // Assert
+        Assert::assertSame(-100.0, $latLng->getLat());
+        Assert::assertSame($floor, $clone->getFloor());
+    }
+
+    #[Test]
+    public function getLat_givenPrecisionAndNegativeHalfway_roundsAwayFromZeroLikePhp(): void
+    {
+        // Arrange
+        $latLng = new LatLng(-1.5, 1.5);
+
+        // Act
+        $lat = $latLng->getLat(0);
+        $lng = $latLng->getLng(0);
+
+        // Assert
+        Assert::assertSame(-2.0, $lat);
+        Assert::assertSame(2.0, $lng);
+    }
+
+    #[Test]
+    public function toArrayWithFloor_givenNoFloor_returnsNullFloorId(): void
+    {
+        // Arrange
+        $latLng = new LatLng(-1, 2);
+
+        // Act
+        $result = $latLng->toArrayWithFloor();
+
+        // Assert
+        Assert::assertSame(['lat' => -1.0, 'lng' => 2.0, 'floor_id' => null], $result);
     }
 }

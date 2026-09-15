@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\App\Logic\MDT\IO;
 
+use App\Logic\MDT\Exception\LegacyMDTDecodeException;
 use App\Logic\MDT\IO\LegacyMDTCodec;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -19,6 +20,36 @@ final class LegacyMDTCodecTest extends TestCase
         parent::setUp();
 
         $this->codec = new LegacyMDTCodec();
+    }
+
+    #[Test]
+    #[Group('UsesLua')]
+    public function decode_givenRealFixture_returnsArray(): void
+    {
+        // Arrange
+        $string = file_get_contents(base_path('tests/Feature/App/Service/MDT/Fixtures/mdt_import_v507_mistsoftirnescithe.txt'));
+
+        // Act
+        $decoded = $this->codec->decode($string);
+
+        // Assert
+        $this->assertArrayHasKey('value', $decoded);
+        $this->assertNotEmpty($decoded['value']);
+    }
+
+    #[Test]
+    #[Group('UsesLua')]
+    public function decode_givenDecodedOutputOverSizeLimit_throwsLegacyMDTDecodeException(): void
+    {
+        // Arrange - a highly repetitive payload encodes to a small string but decodes past the limit
+        $string = $this->codec->encode(['text' => str_repeat('a', LegacyMDTCodec::MAX_DECODED_BYTES + 1)]);
+
+        // Assert
+        $this->expectException(LegacyMDTDecodeException::class);
+        $this->expectExceptionMessage('exceeds');
+
+        // Act
+        $this->codec->decode($string);
     }
 
     #[Test]

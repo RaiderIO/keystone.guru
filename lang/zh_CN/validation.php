@@ -20,10 +20,25 @@ return [
         'numeric' => ':Attribute 必须介于 :min - :max 之间。',
         'string'  => ':Attribute 必须介于 :min - :max 个字符之间。',
     ],
-    'boolean'           => ':Attribute 必须为布尔值。',
-    'can'               => ':Attribute 字段包含未经授权的值。',
-    'confirmed'         => ':Attribute 两次输入不一致。',
-    'current_password'  => '密码错误。',
+    'boolean'          => ':Attribute 必须为布尔值。',
+    'can'              => ':Attribute 字段包含未经授权的值。',
+    'confirmed'        => ':Attribute 两次输入不一致。',
+    'current_password' => '密码错误。',
+    'custom'           => [
+        'bio' => [
+            'max' => '',
+        ],
+        'pinned_dungeon_routes' => [
+            'max'    => '',
+            'exists' => '',
+        ],
+        'social_links' => [
+            'invalid_url_for_platform' => '',
+        ],
+        'creator_search' => [
+            'max' => '',
+        ],
+    ],
     'date'              => ':Attribute 不是一个有效的日期。',
     'date_equals'       => ':Attribute 必须要等于 :date。',
     'date_format'       => ':Attribute 的格式必须为 :format。',

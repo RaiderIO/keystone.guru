@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Laratrust\Role;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
@@ -28,7 +29,7 @@ class DungeonFormRequest extends FormRequest
             'heatmap_enabled'         => 'nullable|boolean',
             'speedrun_enabled'        => 'nullable|boolean',
             'speedrun_difficulties'   => 'nullable|array',
-            'speedrun_difficulties.*' => ['integer', Rule::in(array_values(Dungeon::DIFFICULTY_ALL))],
+            'speedrun_difficulties.*' => ['integer', Rule::in(DungeonDifficulty::values())],
             'zone_id'                 => 'int',
             'map_id'                  => 'int',
             'instance_id'             => 'nullable|int',
@@ -45,7 +46,7 @@ class DungeonFormRequest extends FormRequest
             'key' => [
                 'required',
                 Rule::unique(Dungeon::class, 'key')->ignore($this->get('key'), 'key'),
-                Rule::in(collect(array_merge_recursive(Dungeon::ALL, Dungeon::ALL_RAID))->flatten()),
+                Rule::in(Dungeon::allKeys()),
             ],
             'slug' => [
                 'required',

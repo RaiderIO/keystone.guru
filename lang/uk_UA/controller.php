@@ -19,13 +19,14 @@ return [
             'mdt_invalid_category'                => 'Неправильна категорія',
         ],
         'flash' => [
+            'banned_ip_address_added'                => '',
+            'banned_ip_address_removed'              => '',
             'message_banner_set_successfully'        => 'Банер повідомлення успішно встановлено',
             'thumbnail_regenerate_result'            => 'Надіслано :success завдань для :total маршруту(-ів). Невдалих — :failed.',
             'combatlog_route_regenerate_result'      => 'Надіслано :count завдань',
             'combatlog_criteria_reset'               => '',
             'combatlog_criteria_thresholds_updated'  => '',
             'caches_dropped_successfully'            => 'Кеш успішно очищено',
-            'releases_exported'                      => 'Версії експортовано',
             'exception'                              => ' У панелі адміністратора сталася халепа',
             'feature_toggle_activated'               => 'Функція :feature тепер увімкнена',
             'feature_toggle_deactivated'             => 'Функція :feature тепер вимкнена',
@@ -34,6 +35,24 @@ return [
             'mapping_version_upgrade_already_latest' => '',
             'read_only_mode_disabled'                => 'Режим для читання вимкнено',
             'read_only_mode_enabled'                 => 'Режим для читання ввімкнено',
+        ],
+    ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => '',
+            'affix_updated' => '',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => '',
+            'affixgroup_updated' => '',
+            'affixgroup_deleted' => '',
+        ],
+    ],
+    'apicombatlogrun' => [
+        'error' => [
+            'no_segments' => '',
         ],
     ],
     'apidungeonroute' => [
@@ -73,21 +92,15 @@ return [
         ],
     ],
     'dungeonroutediscover' => [
-        'popular'           => 'Поширені маршрути',
-        'this_week_affixes' => 'Модифікатори поточного тижня',
-        'next_week_affixes' => 'Модифікатори наступного тижня',
-        'new'               => 'Нове',
-        'season'            => [
-            'popular'           => 'Поширені маршрути %s',
-            'this_week_affixes' => '%s поточного тижня',
-            'next_week_affixes' => '%s наступного тижня',
-            'new'               => 'Нові маршрути %s',
+        'popular' => 'Поширені маршрути',
+        'new'     => 'Нове',
+        'season'  => [
+            'popular' => 'Поширені маршрути %s',
+            'new'     => 'Нові маршрути %s',
         ],
         'dungeon' => [
-            'popular'           => 'Поширені маршрути %s',
-            'this_week_affixes' => '%s поточного тижня',
-            'next_week_affixes' => '%s наступного тижня',
-            'new'               => 'Нові маршрути %s',
+            'popular' => 'Поширені маршрути %s',
+            'new'     => 'Нові маршрути %s',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -110,6 +123,11 @@ return [
             'not_found'                  => 'Не знайдено',
         ],
     ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => '',
+        ],
+    ],
     'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Реєстрація успішна. Приємного користування сайтом!',
@@ -125,16 +143,6 @@ return [
         ],
         'legal_agreed_required' => 'Для реєстрації необхідно погодитися з нашими умовами користування.',
         'legal_agreed_accepted' => 'Для реєстрації необхідно погодитися з нашими умовами користування.',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => 'Не вдалося зберегти версію',
-        ],
-        'flash' => [
-            'release_updated'  => 'Версію оновлено',
-            'release_created'  => 'Версію створено',
-            'github_exception' => 'Під час зв\'язку з Github сталася помилка: :message',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => 'Додано нову версію мапи!',
@@ -176,6 +184,7 @@ return [
             'profile_updated'                  => 'Профіль оновлено',
             'unexpected_error_when_saving'     => 'Під час зберігання вашого профілю виникла несподівана помилка',
             'privacy_settings_updated'         => 'Налаштування приватності оновлено',
+            'creator_profile_updated'          => '',
             'password_changed'                 => 'Пароль змінено',
             'new_password_equals_old_password' => 'Новий пароль збігається зі старим паролем',
             'new_passwords_do_not_match'       => 'Нові паролі не збігаються',
@@ -192,6 +201,12 @@ return [
             'add_ad_free_giveaway_already_has_giveaway' => '',
             'remove_ad_free_giveaway_not_found'         => '',
             'remove_ad_free_giveaway_not_yours'         => '',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => '',
+            'season_updated' => '',
         ],
     ],
     'spell' => [

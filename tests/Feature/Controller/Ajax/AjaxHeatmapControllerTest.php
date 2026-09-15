@@ -6,21 +6,24 @@ use App;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
-use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
+use Teapot\StatusCode;
 use Tests\Feature\Controller\DungeonRouteTestBase;
 use Tests\Fixtures\ServiceFixtures;
 use Tests\Fixtures\Traits\CreatesCombatLogEvent;
+use Tests\Fixtures\Traits\CreatesDungeon;
 
 final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 {
     use CreatesCombatLogEvent;
+    use CreatesDungeon;
 
     const EVENT_TYPE = CombatLogEventEventType::NpcDeath;
     const DATA_TYPE  = CombatLogEventDataType::PlayerPosition;
@@ -36,7 +39,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         // Arrange
         $rowCountPerFloor = 10;
         $runCount         = 20;
-        $dungeon          = Dungeon::firstWhere('key', Dungeon::DUNGEON_THE_STONEVAULT);
+        $dungeon          = Dungeon::firstWhere('key', DungeonKey::THE_STONEVAULT->value);
         $this->setUpTestForDungeon($dungeon, $rowCountPerFloor, $runCount);
 
         // Act
@@ -69,7 +72,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         // Arrange
         $rowCountPerFloor = 10;
         $runCount         = 20;
-        $dungeon          = Dungeon::firstWhere('key', Dungeon::DUNGEON_THE_NECROTIC_WAKE);
+        $dungeon          = Dungeon::firstWhere('key', DungeonKey::THE_NECROTIC_WAKE->value);
         $this->setUpTestForDungeon($dungeon, $rowCountPerFloor, $runCount, true);
 
         // Act
@@ -97,11 +100,40 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     /**
      * @throws Exception
      */
+    #[Test]
+    #[Group('Controller')]
+    #[Group('HeatmapController')]
+    public function getData_givenTimerFractionFilterAndDungeonWithoutTimer_returnsBadRequest(): void
+    {
+        // Arrange
+        $dungeon = $this->createDungeon(mappingVersionAttributes: ['timer_max_seconds' => 0]);
+
+        $this->setUpTestForDungeon($dungeon, 10, 20);
+
+        // Act
+        $response = $this->get(route('ajax.heatmap.data', [
+            'type'             => self::EVENT_TYPE->value,
+            'dataType'         => self::DATA_TYPE->value,
+            'dungeonId'        => $dungeon->id,
+            'minTimerFraction' => 0.0,
+            'maxTimerFraction' => 1.0,
+        ]));
+
+        // Assert
+        $response->assertStatus(StatusCode::BAD_REQUEST);
+        $this->assertSame(
+            'Mapping version does not have a timer max seconds value',
+            json_decode($response->content(), true)['message'],
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
     private function setUpTestForDungeon(Dungeon $dungeon, int $rowCountPerFloor, int $runCount, bool $useFacade = false): void
     {
         $combatLogEventFilter = new CombatLogEventFilter(
             App::make(SeasonServiceInterface::class),
-            App::make(SeasonAffixGroupServiceInterface::class),
             $dungeon,
             self::EVENT_TYPE,
             self::DATA_TYPE,

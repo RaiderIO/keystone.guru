@@ -3,16 +3,20 @@
 namespace Tests\Feature\Controller\DungeonRouteController;
 
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use PHPUnit\Framework\Attributes\Group;
+use Tests\Fixtures\Traits\CreatesNpclessCombatLogDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('DungeonRoute')]
 abstract class DungeonRouteControllerCreateTestBase extends PublicTestCase
 {
+    use CreatesNpclessCombatLogDungeon;
+
     protected function latestRouteSince(int $sinceId): ?DungeonRoute
     {
         return DungeonRoute::query()
@@ -53,7 +57,7 @@ abstract class DungeonRouteControllerCreateTestBase extends PublicTestCase
     {
         $enabled = $dungeon->getEnabledSpeedrunDifficulties();
         // A valid enum difficulty that is not one of this dungeon's enabled speedrun difficulties
-        $notEnabled = collect(array_values(Dungeon::DIFFICULTY_ALL))
+        $notEnabled = collect(DungeonDifficulty::values())
             ->first(static fn(int $difficulty): bool => !in_array($difficulty, $enabled, true));
 
         $this->assertNotNull($notEnabled, 'Expected a valid difficulty that is not enabled for this dungeon.');
@@ -61,9 +65,18 @@ abstract class DungeonRouteControllerCreateTestBase extends PublicTestCase
         return (int)$notEnabled;
     }
 
-    protected function getInactiveDungeon(): Dungeon
+    protected function getInactiveDungeon(int $mapId, string $key): Dungeon
     {
-        return Dungeon::query()->where('active', false)->firstOrFail();
+        return $this->createDungeonWithoutNpcs($mapId, $key);
+    }
+
+    /**
+     * `CreatesNpclessCombatLogDungeon::deleteDungeon()` is private to the trait, so subclasses
+     * calling {@see getInactiveDungeon()} need this wrapper to clean up.
+     */
+    protected function cleanupInactiveDungeon(?Dungeon $dungeon): void
+    {
+        $this->deleteDungeon($dungeon);
     }
 
     protected function getFactionSelectionRequiredDungeon(): Dungeon

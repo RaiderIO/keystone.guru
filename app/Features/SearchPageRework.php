@@ -19,9 +19,6 @@ class SearchPageRework
         }
 
         // Ok, feature is enabled, now check if YOU can do it
-        return $user?->hasRole([
-            Role::ROLE_ADMIN,
-            Role::ROLE_INTERNAL_TEAM,
-        ]) ?? false;
+        return $user?->hasRole(Role::ROLES_INTERNAL) ?? false;
     }
 }

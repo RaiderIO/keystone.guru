@@ -6,13 +6,15 @@ return [
         'io' => [
             'export_string' => [
                 'category' => [
-                    'pull'     => 'Puxada %d',
-                    'title'    => 'Título',
-                    'map_icon' => 'Ícone do mapa',
+                    'pull'         => 'Puxada %d',
+                    'title'        => 'Título',
+                    'map_icon'     => 'Ícone do mapa',
+                    'raid_markers' => 'Marcadores de banda',
                 ],
                 'unable_to_find_mdt_enemy_for_kg_enemy'             => 'Não foi possível encontrar o equivalente MDT para o inimigo do Keystone.guru com NPC %s (enemy_id: %d, npc_id: %d).',
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Isso indica que sua rota mata um inimigo cujo NPC é conhecido pelo MDT, mas o Keystone.guru ainda não associou esse inimigo a um equivalente MDT (ou ele não existe no MDT).',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Esta puxada foi removida, pois todos os inimigos selecionados não puderam ser encontrados no MDT, resultando em uma puxada vazia.',
+                'unable_to_find_mdt_enemy_for_kg_raid_marker'       => 'Não foi possível encontrar o equivalente no MDT para o inimigo com o marcador de banda %s (npc_id: %s).',
                 'route_title_contains_non_ascii_char_bug'           => 'O título da sua rota contém caracteres não-ASCII que são conhecidos por acionar um bug de codificação ainda não resolvido no Keystone.guru.
                                                         O título da sua rota foi removido de todos os caracteres ofensivos, pedimos desculpas pelo inconveniente e esperamos resolver este problema em breve.',
                 'route_title_contains_non_ascii_char_bug_details' => 'Título antigo: %s, novo título: %s',
@@ -24,15 +26,16 @@ return [
                     'awakened_obelisks' => 'Obeliscos Despertados',
                     'pulls'             => 'Puxadas',
                     'notes'             => 'Notas',
-                    'arrows'            => '',
+                    'arrows'            => 'Setas',
                     'pull'              => 'Puxada %d',
                     'object'            => 'Objeto %d',
+                    'raid_markers'      => 'Marcadores de banda',
                 ],
                 'object_out_of_bounds'                                 => 'Não foi possível colocar o comentário: não foi possível colocar o comentário ":comment" objeto está fora dos limites.',
                 'limit_reached_pulls'                                  => 'Não foi possível importar a rota: mais do que o máximo de :limit puxadas.',
                 'limit_reached_brushlines'                             => 'Não foi possível importar a rota: mais do que o máximo de :limit linhas.',
                 'limit_reached_paths'                                  => 'Não foi possível importar a rota: mais do que o máximo de :limit caminhos.',
-                'limit_reached_arrows'                                 => '',
+                'limit_reached_arrows'                                 => 'Não foi possível importar a rota: mais do que o máximo de :limit setas.',
                 'limit_reached_notes'                                  => 'Não foi possível importar a rota: mais do que o máximo de :limit notas.',
                 'unable_to_find_floor_for_object'                      => 'Não foi possível encontrar um andar do Keystone.guru que corresponda ao ID do andar do MDT %d.',
                 'unable_to_find_floor_for_object_details'              => 'Isso indica que o MDT tem um andar que o Keystone.guru não possui.',
@@ -46,6 +49,7 @@ return [
                 'unable_to_find_enemies_pull_skipped_details'          => 'Isso pode indicar que o MDT teve uma atualização recente que ainda não foi integrada no Keystone.guru.',
                 'unable_to_find_awakened_obelisks'                     => 'Não foi possível encontrar Obeliscos Despertos para a combinação da sua masmorra/semana. Seus saltos de Obelisco Desperto não serão importados.',
                 'unable_to_find_awakened_obelisk_different_floor'      => 'Não foi possível importar o Obelisco Desperto :name, ele está em um andar diferente do próprio Obelisco. O Keystone.guru não suporta isso no momento.',
+                'unable_to_find_awakened_obelisk_enemy'                => 'Não foi possível importar o Obelisco Despertado :name; o inimigo dele não pôde ser identificado para essa combinação de masmorra/semana.',
                 'unable_to_decode_mdt_import_string'                   => 'Não foi possível decodificar a string de importação MDT',
                 'unable_to_validate_mdt_import_string'                 => 'Não foi possível validar a string de importação do MDT',
             ],
@@ -58,6 +62,22 @@ return [
         'analyze_combat_log' => [
             'verify_error'     => 'Não foi possível verificar o registro de combate: erro.',
             'processing_error' => 'Não foi possível processar o registro de combate: erro.',
+        ],
+    ],
+    'combatlog' => [
+        'enemy_failure_analysis' => [
+            'verdict' => [
+                'npc_not_mapped'       => 'NPC não mapeado',
+                'no_enemy_in_range'    => 'Nenhum inimigo ao alcance',
+                'enemies_exhausted'    => 'Mais no jogo do que no mapeamento',
+                'wrong_floor_artifact' => 'Provavelmente um artefato causado por um andar incorreto',
+            ],
+            'suggestion' => [
+                'npc_not_mapped'       => ':npc não aparece em nenhum ponto desta versão de mapeamento, mas, ainda assim, foi engajado neste local. Número de engajamentos: :count; rotas analisadas: :routes. Adicione-o (ou o pacote dele) aqui.',
+                'no_enemy_in_range'    => 'O :npc mapeado mais próximo (inimigo :enemy_id) está a :distance jardas, além do alcance de engajamento de :range jardas. Provavelmente falta um pacote de :npc aqui, ou ele está mapeado no lugar errado.',
+                'enemies_exhausted'    => 'O mapeamento contém :npc dentro do alcance (total: :enemies), mas as rotas ainda apresentam falhas neste local (média por rota: :avg). O jogo provavelmente tem mais :npc neste pacote do que o mapeamento.',
+                'wrong_floor_artifact' => 'Nenhum :npc está ao alcance neste andar, mas há um em outro andar a no máximo :distance jardas. O andar registrado é inferido com base no NPC anterior do registro, então isso muito provavelmente se deve a essa inferência; verifique antes de alterar o mapeamento.',
+            ],
         ],
     ],
 

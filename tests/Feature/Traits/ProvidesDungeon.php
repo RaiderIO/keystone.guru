@@ -16,6 +16,15 @@ use RuntimeException;
  * Sampling a dungeon and only afterwards checking whether it is usable is what produced the
  * recurring CI flakes (#3679, #3710): the draw succeeded, and the test then failed on something the
  * draw never guaranteed - most often an enemy that the dungeon simply does not have.
+ *
+ * The same shape survives a plain `Dungeon::active()->first()` pick: three MDT bumps in a row (#3944,
+ * #3980, #4008) were blocked by a test that picked a dungeon broadly and then asserted something only a
+ * dungeon with an unrequested property satisfies. Whatever the test needs from the dungeon belongs in
+ * the pick. Two ways to state it, depending on what is being observed:
+ *
+ * - a property of the dungeon's own mapping data -> a `findDungeon()` argument, or its `resolve` closure;
+ * - "the page's dungeon filter actually offers it" -> {@see ReadsDungeonSelect::dungeonsOfferedByDungeonSelect()},
+ *   which stays a Builder of its own because those tests pick a deterministic *pair* of dungeons.
  */
 trait ProvidesDungeon
 {
@@ -40,7 +49,7 @@ trait ProvidesDungeon
      * @param  int|null                                       $maxActiveFloors     Maximum number of those floors; `null` for no upper bound.
      * @param  bool|null                                      $challengeMode       Require the dungeon to (not) be a Mythic+ dungeon.
      * @param  bool|null                                      $speedrunEnabled     Require `speedrun_enabled` to equal this.
-     * @param  bool|null                                      $dungeonActive       Require `dungeons.active` to equal this. Off by default: 20 of the 102 non-facade dungeons are inactive and tests have always been allowed to use them.
+     * @param  bool|null                                      $dungeonActive       Require `dungeons.active` to equal this.
      * @param  bool                                           $requireDefaultFloor Require an active default floor, which the `dungeonroute.edit` redirect chain needs.
      * @param  int                                            $minEnemies          Minimum enemies on the current mapping version.
      * @param  int                                            $minEnemyPacks       Minimum enemy packs on the current mapping version.

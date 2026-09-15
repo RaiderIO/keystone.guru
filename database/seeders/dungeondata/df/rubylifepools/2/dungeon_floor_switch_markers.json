@@ -94,5 +94,77 @@
         "hidden_in_facade": false,
         "lat": -142,
         "lng": 192
+    },
+    {
+        "id": 3270,
+        "mapping_version_id": 839,
+        "floor_id": 155,
+        "source_floor_id": null,
+        "target_floor_id": 154,
+        "linked_dungeon_floor_switch_marker_id": 3271,
+        "direction": null,
+        "hidden_in_facade": false,
+        "lat": -142,
+        "lng": 192
+    },
+    {
+        "id": 3349,
+        "mapping_version_id": 879,
+        "floor_id": 155,
+        "source_floor_id": null,
+        "target_floor_id": 154,
+        "linked_dungeon_floor_switch_marker_id": 3350,
+        "direction": null,
+        "hidden_in_facade": false,
+        "lat": -142,
+        "lng": 192
+    },
+    {
+        "id": 3385,
+        "mapping_version_id": 908,
+        "floor_id": 155,
+        "source_floor_id": null,
+        "target_floor_id": 154,
+        "linked_dungeon_floor_switch_marker_id": 3386,
+        "direction": null,
+        "hidden_in_facade": false,
+        "lat": -142,
+        "lng": 192
+    },
+    {
+        "id": 3467,
+        "mapping_version_id": 995,
+        "floor_id": 155,
+        "source_floor_id": null,
+        "target_floor_id": 154,
+        "linked_dungeon_floor_switch_marker_id": 3468,
+        "direction": null,
+        "hidden_in_facade": false,
+        "lat": -142,
+        "lng": 192
+    },
+    {
+        "id": 3572,
+        "mapping_version_id": 1056,
+        "floor_id": 155,
+        "source_floor_id": null,
+        "target_floor_id": 154,
+        "linked_dungeon_floor_switch_marker_id": 3573,
+        "direction": null,
+        "hidden_in_facade": false,
+        "lat": -142,
+        "lng": 192
+    },
+    {
+        "id": 3592,
+        "mapping_version_id": 1064,
+        "floor_id": 155,
+        "source_floor_id": null,
+        "target_floor_id": 154,
+        "linked_dungeon_floor_switch_marker_id": 3593,
+        "direction": null,
+        "hidden_in_facade": false,
+        "lat": -142,
+        "lng": 192
     }
 ]

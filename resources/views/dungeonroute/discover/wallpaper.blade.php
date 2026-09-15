@@ -15,7 +15,7 @@ use App\Models\GameVersion\GameVersion;
 $wallpaperUrl = null;
 
 if (isset($dungeon)) {
-    $wallpaperUrl = $dungeon->getImageWallpaperUrl();
+    $wallpaperUrl = $dungeon->hasImageWallpaper() ? $dungeon->getImageWallpaperUrl() : $dungeon->expansion->getWallpaperUrl();
 } elseif (isset($expansion)) {
     $wallpaperUrl = $expansion->getWallpaperUrl();
 } elseif (isset($gameVersion->expansion)) {

@@ -3,22 +3,29 @@
 namespace App\Service\Patreon;
 
 use App\Models\Patreon\PatreonBenefit;
+use App\Models\Patreon\PatreonManualGrant;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
+use App\Repositories\Interfaces\Patreon\PatreonManualGrantRepositoryInterface;
 use App\Service\Patreon\Dtos\ApplyPaidBenefitsForMemberResult;
 use App\Service\Patreon\Dtos\LinkToUserIdResult;
+use App\Service\Patreon\Dtos\PatreonCampaignMembers;
+use App\Service\Patreon\Dtos\PatreonMemberSyncPlan;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class PatreonService implements PatreonServiceInterface
 {
     private ?User $cachedAdminUser = null;
 
     public function __construct(
-        private readonly PatreonApiServiceInterface     $patreonApiService,
-        private readonly PatreonServiceLoggingInterface $log,
+        private readonly PatreonApiServiceInterface            $patreonApiService,
+        private readonly PatreonManualGrantRepositoryInterface $patreonManualGrantRepository,
+        private readonly PatreonServiceLoggingInterface        $log,
     ) {
     }
 
@@ -37,7 +44,7 @@ class PatreonService implements PatreonServiceInterface
             $this->log->loadCampaignBenefitsStart();
 
             // Fetch the tiers and benefits of a campaign
-            $tiersAndBenefitsResponse = $this->patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token);
+            $tiersAndBenefitsResponse = $this->patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token)->response;
             if (isset($tiersAndBenefitsResponse['errors'])) {
                 $this->log->loadCampaignBenefitsRetrieveTiersErrors($tiersAndBenefitsResponse);
 
@@ -76,7 +83,7 @@ class PatreonService implements PatreonServiceInterface
             $this->log->loadCampaignTiersStart();
 
             // Fetch the tiers and benefits of a campaign
-            $tiersAndBenefitsResponse = $this->patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token);
+            $tiersAndBenefitsResponse = $this->patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token)->response;
             if (isset($tiersAndBenefitsResponse['errors'])) {
                 $this->log->loadCampaignTiersRetrieveTiersAndBenefitsErrors($tiersAndBenefitsResponse);
 
@@ -100,10 +107,7 @@ class PatreonService implements PatreonServiceInterface
         }
     }
 
-    /**
-     * @return array<int, array<string, mixed>>|null
-     */
-    public function loadCampaignMembers(): ?array
+    public function loadCampaignMembers(): ?PatreonCampaignMembers
     {
         if (($adminUser = $this->loadAdminUser()) === null) {
             $this->log->loadCampaignMembersAdminUserNull();
@@ -115,25 +119,32 @@ class PatreonService implements PatreonServiceInterface
             $this->log->loadCampaignMembersStart();
 
             // Now that we have a valid token - perform the members request
-            $membersResponse = $this->patreonApiService->getCampaignMembers($adminUser->patreonUserLink->access_token);
+            $pagedResponse   = $this->patreonApiService->getCampaignMembers($adminUser->patreonUserLink->access_token);
+            $membersResponse = $pagedResponse->response;
+
+            // A truncated fetch comes back memberless rather than as null, so the caller can still record
+            // how far it got - a failure on page 5 is not the same as one on page 1
             if (isset($membersResponse['errors'])) {
                 $this->log->loadCampaignTiersRetrieveMembersErrors($membersResponse);
 
-                return null;
+                return new PatreonCampaignMembers([], $pagedResponse->pageCount, $pagedResponse->rowCount, truncated: true);
             }
 
             if (!isset($membersResponse['data'])) {
                 $this->log->loadCampaignTiersRetrieveMembersDataNotSet($membersResponse);
 
-                return null;
+                return new PatreonCampaignMembers([], $pagedResponse->pageCount, $pagedResponse->rowCount, truncated: true);
             }
 
             /** @var array<int, mixed> $membersResponseData */
             $membersResponseData = $membersResponse['data'];
 
-            return collect($membersResponseData)->filter(static fn(
+            /** @var array<int, array<string, mixed>> $members */
+            $members = collect($membersResponseData)->filter(static fn(
                 $included,
-            ) => $included['type'] === 'member')->toArray();
+            ) => $included['type'] === 'member')->values()->toArray();
+
+            return new PatreonCampaignMembers($members, $pagedResponse->pageCount, $pagedResponse->rowCount, truncated: false);
         } finally {
             $this->log->loadCampaignMembersEnd();
         }
@@ -149,96 +160,59 @@ class PatreonService implements PatreonServiceInterface
         try {
             $this->log->applyPaidBenefitsForMemberStart($member['id']);
 
-            // The email attribute can be entirely absent for a member instead of present-but-null, so this can't
-            // rely on the key always being set (#3767) - a missing key is handled the same as an empty value below
-            $memberEmail = $member['attributes']['email'] ?? null;
+            $plan = $this->planPaidBenefitsForMember($campaignBenefits, $campaignTiers, $member);
 
-            if (empty($memberEmail)) {
-                $this->log->applyPaidBenefitsForMemberEmptyMemberEmail();
+            $patreonUserLink = $plan->patreonUserLink;
 
-                return ApplyPaidBenefitsForMemberResult::MemberNotLinked;
+            // Stamp every link the campaign still lists, whatever the outcome was - this is the only record
+            // that a sync actually reached this patron
+            if ($patreonUserLink !== null) {
+                PatreonUserLink::query()->whereKey($patreonUserLink->id)->update([
+                    'last_seen_at'     => Carbon::now(),
+                    'last_sync_result' => $plan->result->value,
+                ]);
             }
 
-            /** @var PatreonUserLink|null $patreonUserLink */
-            $patreonUserLink = PatreonUserLink::with(['user'])->where('email', $memberEmail)->first();
-
-            if ($patreonUserLink === null) {
-                $this->log->applyPaidBenefitsForMemberCannotFindPatreonData();
-
-                return ApplyPaidBenefitsForMemberResult::MemberNotLinked;
+            // Anything other than Applied means no trustworthy benefit set could be worked out, so nothing
+            // is written - see the individual enum cases
+            if ($plan->result !== ApplyPaidBenefitsForMemberResult::Applied || $patreonUserLink === null || $plan->manuallyGranted) {
+                return $plan->result;
             }
 
             $user = $patreonUserLink->user;
-            if ($user === null) { // @phpstan-ignore identical.alwaysFalse
-                $this->log->applyPaidBenefitsForMemberCannotFindUserForPatreonUserLink();
-
-                return ApplyPaidBenefitsForMemberResult::MemberNotLinked;
-            }
-
-            // Exception for users that were granted their membership status
-            if ($patreonUserLink->refresh_token === PatreonUserLink::PERMANENT_TOKEN) {
-                $this->log->applyPaidBenefitsForMemberUserManuallyAssignedAllBenefits();
-
-                return ApplyPaidBenefitsForMemberResult::Applied;
-            }
-
-            // We now know which user this is - update the benefits of this user
-            /** @var Collection<int, string> $newBenefits */
-            $newBenefits = collect();
-            foreach ($member['relationships']['currently_entitled_tiers']['data'] as $currentlyEntitledTier) {
-                /** @var array{id: int, type: string} $currentlyEntitledTier */
-                // For all tiers this user is paying for - combine the benefits to one big array
-                $newBenefits = $newBenefits->merge($this->getBenefitsByTierId($campaignTiers, $campaignBenefits, $currentlyEntitledTier['id']));
-            }
-
-            // The benefit titles come straight from the campaign on patreon.com, so a renamed or newly added benefit
-            // is not necessarily one we know about. Such a title used to fall through into an undefined array key
-            // below, but skipping just that one title is worse than not syncing at all: the diff further down would
-            // then revoke the benefit it was renamed from. Bail out entirely instead and log the unknown title so
-            // it can be added to PatreonBenefit::ALL (#3748)
-            $unknownBenefits = $newBenefits->reject(static fn(string $benefit) => isset(PatreonBenefit::ALL[$benefit]));
-            if ($unknownBenefits->isNotEmpty()) {
-                $this->log->applyPaidBenefitsForMemberUnknownPatreonBenefits($unknownBenefits->all(), $user->email);
-
-                return ApplyPaidBenefitsForMemberResult::UnknownBenefits;
-            }
 
             // If the user has no benefits (maybe user unsubbed or didn't pay up)
-            if ($newBenefits->isEmpty()) {
-                // Remove all their tiers
-                $user->patreonUserLink->patreonUserBenefits()->delete();
+            if ($plan->resolvedBenefits === []) {
+                // A row-level delete rather than a revoke of each benefit in the plan: it also clears rows
+                // for benefits no longer in PatreonBenefit::ALL, which have no id to revoke by
+                $patreonUserLink->patreonUserBenefits()->delete();
                 $this->log->applyPaidBenefitsForMemberRemovedAllBenefits();
             } else {
-                // Update the patreon benefits to their new status
-                foreach ($newBenefits as $benefit) {
-                    if (!$user->hasPatreonBenefit($benefit)) {
-                        PatreonUserBenefit::create([
-                            'patreon_user_link_id' => $user->patreon_user_link_id,
-                            'patreon_benefit_id'   => PatreonBenefit::ALL[$benefit],
-                        ]);
-                        $this->log->applyPaidBenefitsAddedPatreonBenefit($benefit, $user->email);
-                    }
+                // Write against the link the member was matched to, not $user->patreon_user_link_id: the two
+                // differ when the account's link pointer is stale, and then the pointer is the wrong one
+                foreach ($plan->benefitsToAdd as $benefit) {
+                    PatreonUserBenefit::create([
+                        'patreon_user_link_id' => $patreonUserLink->id,
+                        'patreon_benefit_id'   => PatreonBenefit::ALL[$benefit],
+                    ]);
+                    $this->log->applyPaidBenefitsAddedPatreonBenefit($benefit, $user->email);
                 }
 
-                // Check if any patreon benefits were removed, if so delete them
-                $removedBenefits = $user->getPatreonBenefits()->diff($newBenefits);
-                if ($removedBenefits->isNotEmpty()) {
-                    foreach ($removedBenefits as $removedBenefit) {
-                        // Benefits are keyed by title, so a benefit row in the database that we no longer know about
-                        // (PatreonBenefit::ALL is the source of truth) has no id to delete by. Defensive only - every
-                        // key currently seeded into patreon_benefits is present in PatreonBenefit::ALL
-                        if (!isset(PatreonBenefit::ALL[$removedBenefit])) {
-                            $this->log->applyPaidBenefitsForMemberUnknownPatreonBenefits([$removedBenefit], $user->email);
+                foreach ($plan->benefitsToRevoke as $removedBenefit) {
+                    // Benefits are keyed by title, so a benefit row in the database that we no longer know about
+                    // (PatreonBenefit::ALL is the source of truth) has no id to delete by. Defensive only - every
+                    // key currently seeded into patreon_benefits is present in PatreonBenefit::ALL
+                    if (!isset(PatreonBenefit::ALL[$removedBenefit])) {
+                        $this->log->applyPaidBenefitsForMemberUnknownPatreonBenefits([$removedBenefit], $user->email);
 
-                            continue;
-                        }
-
-                        PatreonUserBenefit::where('patreon_user_link_id', $user->patreon_user_link_id)
-                            ->where('patreon_benefit_id', PatreonBenefit::ALL[$removedBenefit])
-                            ->delete();
-
-                        $this->log->applyPaidBenefitsRevokedPatreonBenefit($removedBenefit, $user->email);
+                        continue;
                     }
+
+                    PatreonUserBenefit::where('patreon_user_link_id', $patreonUserLink->id)
+                        ->where('patreon_benefit_id', PatreonBenefit::ALL[$removedBenefit])
+                        ->delete();
+
+                    $this->log->applyPaidBenefitsRevokedPatreonBenefit($removedBenefit, $user->email);
                 }
             }
         } finally {
@@ -246,6 +220,159 @@ class PatreonService implements PatreonServiceInterface
         }
 
         return ApplyPaidBenefitsForMemberResult::Applied;
+    }
+
+    /**
+     * Works out - without writing anything - what a sync would do to the account behind one campaign member.
+     *
+     * @param array<int, array<string, mixed>> $campaignBenefits
+     * @param array<int, array<string, mixed>> $campaignTiers
+     * @param array<string, mixed>             $member
+     */
+    public function planPaidBenefitsForMember(array $campaignBenefits, array $campaignTiers, array $member): PatreonMemberSyncPlan
+    {
+        $memberId = isset($member['id']) && is_scalar($member['id']) ? (string)$member['id'] : '';
+
+        // The email attribute can be entirely absent for a member instead of present-but-null, so this can't
+        // rely on the key always being set (#3767) - a missing key is handled the same as an empty value below
+        $rawMemberEmail = $member['attributes']['email'] ?? null;
+        $memberEmail    = is_string($rawMemberEmail) && $rawMemberEmail !== '' ? $rawMemberEmail : null;
+
+        /** @var array<int, mixed> $entitledTierData */
+        $entitledTierData = $member['relationships']['currently_entitled_tiers']['data'] ?? [];
+        /** @var array<int, string> $entitledTierIds */
+        $entitledTierIds = [];
+        foreach ($entitledTierData as $currentlyEntitledTier) {
+            if (isset($currentlyEntitledTier['id']) && is_scalar($currentlyEntitledTier['id'])) {
+                $entitledTierIds[] = (string)$currentlyEntitledTier['id'];
+            }
+        }
+
+        if ($memberEmail === null) {
+            $this->log->applyPaidBenefitsForMemberEmptyMemberEmail();
+
+            return $this->memberNotLinkedPlan($memberId, $memberEmail, $entitledTierIds);
+        }
+
+        /** @var PatreonUserLink|null $patreonUserLink */
+        $patreonUserLink = PatreonUserLink::with(['user'])->where('email', $memberEmail)->first();
+
+        if ($patreonUserLink === null) {
+            $this->log->applyPaidBenefitsForMemberCannotFindPatreonData();
+
+            return $this->memberNotLinkedPlan($memberId, $memberEmail, $entitledTierIds);
+        }
+
+        $user = $patreonUserLink->user;
+        if ($user === null) {
+            $this->log->applyPaidBenefitsForMemberCannotFindUserForPatreonUserLink();
+
+            return $this->memberNotLinkedPlan($memberId, $memberEmail, $entitledTierIds);
+        }
+
+        /** @var array<int, string> $currentBenefits */
+        $currentBenefits = $user->getPatreonBenefits()->values()->all();
+
+        // Exception for users that were granted their membership status
+        if ($patreonUserLink->refresh_token === PatreonUserLink::PERMANENT_TOKEN ||
+            $this->patreonManualGrantRepository->hasActiveGrantForUserId($user->id)) {
+            $this->log->applyPaidBenefitsForMemberUserManuallyAssignedAllBenefits();
+
+            return new PatreonMemberSyncPlan(
+                memberId: $memberId,
+                memberEmail: $memberEmail,
+                patreonUserLink: $patreonUserLink,
+                entitledTierIds: $entitledTierIds,
+                unresolvedTierIds: [],
+                resolvedBenefits: [],
+                unknownBenefits: [],
+                currentBenefits: $currentBenefits,
+                benefitsToAdd: [],
+                benefitsToRevoke: [],
+                manuallyGranted: true,
+                result: ApplyPaidBenefitsForMemberResult::Applied,
+            );
+        }
+
+        // We now know which user this is - work out the benefits of this user
+        /** @var Collection<int, string> $resolvedBenefits */
+        $resolvedBenefits = collect();
+        /** @var array<int, string> $unresolvedTierIds */
+        $unresolvedTierIds = [];
+        foreach ($entitledTierIds as $entitledTierId) {
+            // For all tiers this user is paying for - combine the benefits to one big array
+            $tierBenefits = $this->getBenefitsByTierId($campaignTiers, $campaignBenefits, $entitledTierId);
+
+            if ($tierBenefits === null) {
+                $unresolvedTierIds[] = $entitledTierId;
+
+                continue;
+            }
+
+            $resolvedBenefits = $resolvedBenefits->merge($tierBenefits);
+        }
+        $resolvedBenefits = $resolvedBenefits->unique()->values();
+
+        // A tier the campaign response does not describe leaves an incomplete benefit set behind: with every
+        // tier unresolved it computes to empty, which reads as "unsubscribed" below and revokes everything
+        if ($unresolvedTierIds !== []) {
+            $this->log->applyPaidBenefitsForMemberUnknownPatreonTiers($unresolvedTierIds, $user->email);
+
+            return new PatreonMemberSyncPlan(
+                memberId: $memberId,
+                memberEmail: $memberEmail,
+                patreonUserLink: $patreonUserLink,
+                entitledTierIds: $entitledTierIds,
+                unresolvedTierIds: $unresolvedTierIds,
+                resolvedBenefits: $resolvedBenefits->all(),
+                unknownBenefits: [],
+                currentBenefits: $currentBenefits,
+                benefitsToAdd: [],
+                benefitsToRevoke: [],
+                manuallyGranted: false,
+                result: ApplyPaidBenefitsForMemberResult::UnknownTiers,
+            );
+        }
+
+        // The benefit titles come straight from the campaign on patreon.com, so a renamed or newly added benefit
+        // is not necessarily one we know about. Such a title used to fall through into an undefined array key
+        // below, but skipping just that one title is worse than not syncing at all: the diff further down would
+        // then revoke the benefit it was renamed from. Bail out entirely instead and log the unknown title so
+        // it can be added to PatreonBenefit::ALL (#3748)
+        $unknownBenefits = $resolvedBenefits->reject(static fn(string $benefit) => isset(PatreonBenefit::ALL[$benefit]))->values();
+        if ($unknownBenefits->isNotEmpty()) {
+            $this->log->applyPaidBenefitsForMemberUnknownPatreonBenefits($unknownBenefits->all(), $user->email);
+
+            return new PatreonMemberSyncPlan(
+                memberId: $memberId,
+                memberEmail: $memberEmail,
+                patreonUserLink: $patreonUserLink,
+                entitledTierIds: $entitledTierIds,
+                unresolvedTierIds: [],
+                resolvedBenefits: $resolvedBenefits->all(),
+                unknownBenefits: $unknownBenefits->all(),
+                currentBenefits: $currentBenefits,
+                benefitsToAdd: [],
+                benefitsToRevoke: [],
+                manuallyGranted: false,
+                result: ApplyPaidBenefitsForMemberResult::UnknownBenefits,
+            );
+        }
+
+        return new PatreonMemberSyncPlan(
+            memberId: $memberId,
+            memberEmail: $memberEmail,
+            patreonUserLink: $patreonUserLink,
+            entitledTierIds: $entitledTierIds,
+            unresolvedTierIds: [],
+            resolvedBenefits: $resolvedBenefits->all(),
+            unknownBenefits: [],
+            currentBenefits: $currentBenefits,
+            benefitsToAdd: $resolvedBenefits->diff($currentBenefits)->values()->all(),
+            benefitsToRevoke: collect($currentBenefits)->diff($resolvedBenefits)->values()->all(),
+            manuallyGranted: false,
+            result: ApplyPaidBenefitsForMemberResult::Applied,
+        );
     }
 
     public function linkToUserAccount(User $user, string $code, string $redirectUri): LinkToUserIdResult
@@ -296,22 +423,25 @@ class PatreonService implements PatreonServiceInterface
                         $result = LinkToUserIdResult::InternalErrorOccurred;
                         $this->log->linkToUserAccountIdentityIncludedNotSet();
                     } else {
-                        /** @var array<int, mixed> $identityResponseIncluded */
+                        /** @var array<int, array<string, mixed>> $identityResponseIncluded */
                         $identityResponseIncluded = $identityResponse['included'];
-                        /** @var array<string, mixed>|null $member */
-                        $member = collect($identityResponseIncluded)->filter(static fn(
-                            array $included,
-                        ) => $included['type'] === 'member')->first();
+                        $member                   = $this->findCampaignMember($identityResponseIncluded);
 
                         $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
                         $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
 
-                        // Now that the PatreonData object was created, apply the correct paid benefits to the account
-                        $this->applyPaidBenefitsForMember(
-                            $campaignBenefits,
-                            $campaignTiers,
-                            $member,
-                        );
+                        if ($member === null) {
+                            // Nothing to apply - the link itself still stands, and the hourly sync picks the user
+                            // up as soon as they become a member of our campaign
+                            $this->log->linkToUserAccountNotAMemberOfCampaign();
+                        } else {
+                            // Now that the PatreonData object was created, apply the correct paid benefits to the account
+                            $this->applyPaidBenefitsForMember(
+                                $campaignBenefits,
+                                $campaignTiers,
+                                $member,
+                            );
+                        }
                     }
                 }
             } else {
@@ -327,6 +457,124 @@ class PatreonService implements PatreonServiceInterface
         }
 
         return $result;
+    }
+
+    public function grantAllBenefits(User $user, User $grantedBy, string $reason): PatreonManualGrant
+    {
+        // No retry count on purpose: $user is a route-bound model that outlives this closure, and a
+        // retried transaction would find it clean on the second attempt and silently skip the
+        // patreon_user_link_id write below (#4250)
+        return DB::transaction(function () use ($user, $grantedBy, $reason): PatreonManualGrant {
+            $this->lockUserAndRefresh($user);
+
+            if ($user->patreonUserLink === null) {
+                // The user has no Patreon account at all - fabricate a link to hang the benefits off.
+                // The permanent token is what tells the hourly sync this link has nothing to refresh
+                $patreonUserLink = PatreonUserLink::create([
+                    'user_id'       => $user->id,
+                    'email'         => $user->email,
+                    'scope'         => 'identity identity[email] identity.memberships campaigns',
+                    'access_token'  => PatreonUserLink::PERMANENT_TOKEN,
+                    'refresh_token' => PatreonUserLink::PERMANENT_TOKEN,
+                    'version'       => '0.0.1',
+                    'expires_at'    => Carbon::now()->addYears(100),
+                ]);
+
+                $user->setRelation('patreonUserLink', $patreonUserLink);
+                $user->patreon_user_link_id = $patreonUserLink->id;
+                $user->save();
+            } else {
+                // The user has a real Patreon link - leave its tokens and expires_at completely alone.
+                // Rewriting them would break the OAuth refresh, and expires_at is ON UPDATE
+                // CURRENT_TIMESTAMP so any write to that row expires the link
+                $user->patreonUserLink->patreonUserBenefits()->delete();
+            }
+
+            foreach (PatreonBenefit::ALL as $patreonBenefitId) {
+                PatreonUserBenefit::create([
+                    'patreon_user_link_id' => $user->patreon_user_link_id,
+                    'patreon_benefit_id'   => $patreonBenefitId,
+                ]);
+            }
+
+            // Re-granting supersedes any grant already in place, so the audit trail stays a chain of
+            // one active grant with the previous ones revoked, rather than several overlapping rows
+            $this->revokeActiveGrantRecords($user, $grantedBy);
+
+            $grant = PatreonManualGrant::create([
+                'user_id'            => $user->id,
+                'granted_by_user_id' => $grantedBy->id,
+                'reason'             => $reason,
+            ]);
+
+            $this->log->grantAllBenefits($user->id, $grantedBy->id, $reason);
+
+            return $grant;
+        });
+    }
+
+    public function revokeManualGrant(User $user, User $revokedBy): bool
+    {
+        return DB::transaction(function () use ($user, $revokedBy): bool {
+            $this->lockUserAndRefresh($user);
+
+            $revokedGrants   = $this->revokeActiveGrantRecords($user, $revokedBy);
+            $patreonUserLink = $user->patreonUserLink;
+
+            // A link the admin panel fabricated represents nothing but the grant itself, so it goes
+            // away with it. A real link stays: the user is still a Patreon member, and the next
+            // patreon:refreshmembers run puts their actual tier's benefits back
+            if ($patreonUserLink?->refresh_token === PatreonUserLink::PERMANENT_TOKEN) {
+                // Deleting the link cascades to its benefits through the model's deleting hook
+                $patreonUserLink->delete();
+
+                User::query()->whereKey($user->id)->update(['patreon_user_link_id' => null]);
+                $user->patreon_user_link_id = null;
+                $user->unsetRelation('patreonUserLink');
+
+                $this->log->revokeManualGrantDeletedFabricatedLink($user->id, $revokedBy->id);
+
+                return true;
+            }
+
+            $patreonUserLink?->patreonUserBenefits()->delete();
+
+            $this->log->revokeManualGrant($user->id, $revokedBy->id, $revokedGrants);
+
+            return $revokedGrants > 0 || $patreonUserLink !== null;
+        });
+    }
+
+    /**
+     * Takes a row lock on the user for the rest of the surrounding transaction, then re-reads them so
+     * the caller sees whatever the request that held the lock before it committed.
+     *
+     * Granting and revoking both read the user's link state and then write based on it, so without
+     * this a double-submitted modal (or a grant racing a revoke) has both requests act on the same
+     * stale read: two fabricated links for one user, a doubled-up set of benefit rows, or an active
+     * grant whose benefits the other request just deleted.
+     */
+    private function lockUserAndRefresh(User $user): void
+    {
+        User::query()->whereKey($user->id)->lockForUpdate()->firstOrFail();
+
+        $user->refresh();
+    }
+
+    /**
+     * Marks every active grant of this user as revoked.
+     *
+     * @return int The amount of grant records that were revoked.
+     */
+    private function revokeActiveGrantRecords(User $user, User $revokedBy): int
+    {
+        return PatreonManualGrant::query()
+            ->active()
+            ->where('user_id', $user->id)
+            ->update([
+                'revoked_at'         => Carbon::now(),
+                'revoked_by_user_id' => $revokedBy->id,
+            ]);
     }
 
     private function loadAdminUser(): ?User
@@ -396,32 +644,92 @@ class PatreonService implements PatreonServiceInterface
     }
 
     /**
+     * The benefit titles one tier grants, or null when the campaign does not describe that tier at all.
+     *
+     * Null and an empty array mean different things to the caller: "we do not know what this tier grants"
+     * versus "this tier grants nothing".
+     *
+     * Ids are compared as strings: the Patreon API is JSON:API, where resource ids are strings, so a
+     * `===` against an int would never match and would land on the "tier not found" path.
+     *
      * @param  array<int, array<string, mixed>> $campaignTiers
      * @param  array<int, array<string, mixed>> $campaignBenefits
-     * @return array<int, string>
+     * @return array<int, string>|null
      */
-    private function getBenefitsByTierId(array $campaignTiers, array $campaignBenefits, int $tierId): array
+    private function getBenefitsByTierId(array $campaignTiers, array $campaignBenefits, string $tierId): ?array
     {
-        $result = [];
-
         foreach ($campaignTiers as $tier) {
-            if ((int)$tier['id'] === $tierId) {
-                // Found the tier, now match the benefits..
-                foreach ($tier['relationships']['benefits']['data'] as $benefitData) {
-                    // Search the list of benefits for a match, and if found add the title to the result array
-                    foreach ($campaignBenefits as $campaignBenefit) {
-                        if ($campaignBenefit['id'] === $benefitData['id']) {
-                            $result[] = $campaignBenefit['attributes']['title'];
-                            break;
-                        }
+            if (!isset($tier['id']) || !is_scalar($tier['id']) || (string)$tier['id'] !== $tierId) {
+                continue;
+            }
+
+            $result = [];
+
+            // Found the tier, now match the benefits..
+            /** @var array<int, array<string, mixed>> $tierBenefitData */
+            $tierBenefitData = $tier['relationships']['benefits']['data'] ?? [];
+            foreach ($tierBenefitData as $benefitData) {
+                // Search the list of benefits for a match, and if found add the title to the result array
+                foreach ($campaignBenefits as $campaignBenefit) {
+                    if ((string)$campaignBenefit['id'] === (string)$benefitData['id']) {
+                        $result[] = $campaignBenefit['attributes']['title'];
+                        break;
                     }
                 }
+            }
 
-                break;
+            return $result;
+        }
+
+        return null;
+    }
+
+    /**
+     * The user's membership of our campaign, out of the memberships an identity response includes.
+     *
+     * The identity.memberships scope makes Patreon return a membership for every creator the user supports,
+     * in no particular order - any other membership's entitled tiers are unknown to our campaign.
+     *
+     * @param  array<int, array<string, mixed>> $identityResponseIncluded
+     * @return array<string, mixed>|null
+     */
+    private function findCampaignMember(array $identityResponseIncluded): ?array
+    {
+        $campaignId = (string)config('keystoneguru.patreon.campaign_id');
+
+        foreach ($identityResponseIncluded as $included) {
+            if (($included['type'] ?? null) !== 'member') {
+                continue;
+            }
+
+            $memberCampaignId = $included['relationships']['campaign']['data']['id'] ?? null;
+            if (is_scalar($memberCampaignId) && (string)$memberCampaignId === $campaignId) {
+                return $included;
             }
         }
 
-        return $result;
+        return null;
+    }
+
+    /**
+     * @param array<int, string> $entitledTierIds
+     */
+    private function memberNotLinkedPlan(string $memberId, ?string $memberEmail, array $entitledTierIds): PatreonMemberSyncPlan
+    {
+        return new PatreonMemberSyncPlan(
+            memberId: $memberId,
+            memberEmail: $memberEmail,
+            patreonUserLink: null,
+            entitledTierIds: $entitledTierIds,
+            unresolvedTierIds: [],
+            resolvedBenefits: [],
+            unknownBenefits: [],
+            currentBenefits: [],
+            benefitsToAdd: [],
+            benefitsToRevoke: [],
+            manuallyGranted: false,
+            result: ApplyPaidBenefitsForMemberResult::MemberNotLinked,
+        );
     }
 
     /**

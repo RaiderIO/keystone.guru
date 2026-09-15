@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => '',
         'popular_routes_by_next_affixes'    => '',
     ],
-    'changelog' => [
-        'title'  => '',
-        'header' => '',
-    ],
     'credits' => [
         'title'            => '',
         'header'           => '',

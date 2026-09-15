@@ -56,8 +56,10 @@ use Illuminate\Support\Collection;
         </div>
 
         <div class="mb-3{{ $errors->has('active') ? ' has-error' : '' }}">
-            {{ html()->label(__('view_admin.season.edit.active'), 'active') }}
-            {{ html()->checkbox('active', ($season ?? null)?->active ?? 1, 1)->class('form-check-input') }}
+            <div class="form-check">
+                {{ html()->checkbox('active', ($season ?? null)?->active ?? 1, 1)->class('form-check-input') }}
+                {{ html()->label(__('view_admin.season.edit.active'), 'active')->class('form-check-label') }}
+            </div>
             <small class="text-muted d-block">{{ __('view_admin.season.edit.active_help') }}</small>
             @include('common.forms.form-error', ['key' => 'active'])
         </div>

@@ -167,10 +167,13 @@ $dungeonsSelect = array_filter($dungeonsSelect, static fn($groupOptions) => coun
     @if($label !== false)
         {{ html()->label($label . ($required ? '<span class="form-required">*</span>' : ''), $id) }}
     @endif
-    {{ html()->select($name, $dungeonsSelect, $selected)->attributes(array_merge(['id' => $id],
-        $multiple ? ['multiple' => 'multiple'] : [], [
-            'class' => 'form-control selectpicker', 'data-live-search' => 'true'
-        ])) }}
+    {{ html()->select($name, $dungeonsSelect, $selected)
+        ->when($multiple, fn($select) => $select->multiple())
+        ->attributes([
+            'id'               => $id,
+            'class'            => 'form-control selectpicker',
+            'data-live-search' => 'true',
+        ]) }}
     @if( $showSiegeWarning )
         <div id="siege_of_boralus_faction_warning" class="text-warning mt-2" style="display: none;">
             <i class="fa fa-exclamation-triangle"></i> {{ __('view_common.dungeon.select.siege_of_boralus_warning') }}

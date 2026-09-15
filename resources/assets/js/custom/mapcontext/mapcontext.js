@@ -326,36 +326,6 @@ class MapContext extends Signalable {
 
     /**
      *
-     * @param latLng {L.latLng}
-     * @param floor {{}|Number}
-     * @returns {{}}
-     */
-    getIngameXY(latLng, floor) {
-        if (typeof floor === 'number') {
-            let foundFloor = this.getFloorById(floor);
-
-            if (typeof foundFloor !== 'object') {
-                console.error(`Unable to convert ingame xy, cannot find floor for id ${floor}`);
-            } else {
-                floor = foundFloor;
-            }
-        }
-
-        let ingameMapSizeX = floor.ingame_max_x - floor.ingame_min_x;
-        let ingameMapSizeY = floor.ingame_max_y - floor.ingame_min_y;
-
-        // Invert the lat/lngs
-        let factorLat = ((MAP_MAX_LAT - latLng.lat) / MAP_MAX_LAT);
-        let factorLng = ((MAP_MAX_LNG - latLng.lng) / MAP_MAX_LNG);
-
-        return [
-            (ingameMapSizeX * factorLng) + floor.ingame_min_x,
-            (ingameMapSizeY * factorLat) + floor.ingame_min_y
-        ];
-    }
-
-    /**
-     *
      * @returns {*}
      */
     getVisibleFloors() {
@@ -659,6 +629,54 @@ class MapContext extends Signalable {
      */
     getMappingVersionUpgradeUrl() {
         return this._options.mappingVersionUpgradeUrl;
+    }
+
+    /**
+     * True if the route being viewed is a mapping version upgrade draft of another route.
+     * @returns {Boolean}
+     */
+    isUpgradeDraft() {
+        return this._options.isUpgradeDraft === true;
+    }
+
+    /**
+     * True if an upgrade draft was created for the route being viewed.
+     * @returns {Boolean}
+     */
+    hasUpgradeDraft() {
+        return this._options.hasUpgradeDraft === true;
+    }
+
+    /**
+     * The title of the route this draft upgrades, or null if this route is not a draft.
+     * @returns {?String}
+     */
+    getUpgradeOfDungeonRouteTitle() {
+        return this._options.upgradeOfDungeonRouteTitle ?? null;
+    }
+
+    /**
+     * The edit url of the route this draft upgrades, or null if this route is not a draft.
+     * @returns {?String}
+     */
+    getUpgradeOfDungeonRouteEditUrl() {
+        return this._options.upgradeOfDungeonRouteEditUrl ?? null;
+    }
+
+    /**
+     * Null unless the route being viewed is an upgrade draft.
+     * @returns {?String}
+     */
+    getMappingVersionUpgradeApplyUrl() {
+        return this._options.mappingVersionUpgradeApplyUrl ?? null;
+    }
+
+    /**
+     * Null unless the route being viewed is an upgrade draft.
+     * @returns {?String}
+     */
+    getMappingVersionUpgradeDiscardUrl() {
+        return this._options.mappingVersionUpgradeDiscardUrl ?? null;
     }
 
     /**

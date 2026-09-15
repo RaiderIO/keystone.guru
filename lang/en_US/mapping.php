@@ -535,6 +535,10 @@ return [
                 'go_north'                  => 'Go north',
                 'go_south'                  => 'Go south',
             ],
+            'den_of_nalorakk' => [
+                'offering'        => 'Offering',
+                'warding_incense' => 'Warding Incense (5% Versatility for 10 minutes)',
+            ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => 'Hearty Vilebranch Stew: Have a serving of Vilebranch stew, increasing your Leech by 3% and reducing the damage taken from area of effect attacks by 3% for 30 min.',
             ],
@@ -542,10 +546,33 @@ return [
                 'activates_after_killing_bosses' => 'One way trip back to the Promenade activates after killing the first boss (either of them). The second kill will take you to the respective Upper level instead.',
             ],
         ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => 'Enemies can be one of Ashtongue Mystic, Ashtongue Stormcaller, Ashtongue Battlelord.',
+                'coilscar_or_aqueous_surger_variants' => "This group's enemies can be one of Coilscar General, Coilscar Soothsayer, Coilscar Seacaller or Aqueous Surger",
+                'dragonmaw_variants'                  => 'Dragonmaw Wind Reaver and Dragonmaw Sky Stalker can be one of the other.',
+            ],
+        ],
     ],
 
     'checkpoints' => [
+        'bfa' => [
+            'temple_of_sethraliss' => [
+                'atrium_of_sethraliss_name' => 'Atrium of Sethraliss',
+            ],
+        ],
+        'df' => [
+            'ruby_life_pools' => [
+                'ruby_overlook_name' => 'Ruby Overlook',
+            ],
+        ],
         'midnight' => [
+            'altar_of_fangs' => [
+                'final_room_section_name' => 'Final room',
+            ],
+            'den_of_nalorakk' => [
+                'the_heart_of_rage_name' => 'The Heart of Rage',
+            ],
             'magisters_terrace' => [
                 'tower_section_name' => 'Tower section',
             ],

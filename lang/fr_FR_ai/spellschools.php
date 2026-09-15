@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'physical' => '',
-    'holy'     => '',
-    'fire'     => '',
-    'nature'   => '',
-    'frost'    => '',
-    'shadow'   => '',
-    'arcane'   => '',
+    'physical' => 'Physique',
+    'holy'     => 'Sacré',
+    'fire'     => 'Feu',
+    'nature'   => 'Nature',
+    'frost'    => 'Givre',
+    'shadow'   => 'Ombre',
+    'arcane'   => 'Arcane',
 ];

@@ -32,16 +32,18 @@
     {{ html()->hidden('mdt_import_sandbox', 1) }}
 @else
     <div class="mb-3">
-        <label for="mdt_import_sandbox">
-            {{ __('view_common.forms.mdtimport.temporary_route') }}
-            <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
-                sprintf(
-                    __('view_common.forms.mdtimport.temporary_route_title'),
-                    config('keystoneguru.sandbox_dungeon_route_expires_hours')
-                )
-                 }}"></i>
-        </label>
-        {{ html()->checkbox('mdt_import_sandbox', false, 1)->id('mdt_import_sandbox')->class('form-check-input') }}
+        <div class="form-check">
+            {{ html()->checkbox('mdt_import_sandbox', false, 1)->id('mdt_import_sandbox')->class('form-check-input') }}
+            <label for="mdt_import_sandbox" class="form-check-label">
+                {{ __('view_common.forms.mdtimport.temporary_route') }}
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
+                    sprintf(
+                        __('view_common.forms.mdtimport.temporary_route_title'),
+                        config('keystoneguru.sandbox_dungeon_route_expires_hours')
+                    )
+                     }}"></i>
+            </label>
+        </div>
     </div>
     @include('common.team.select', ['id' => 'mdt_import_team_id_select',  'required' => false])
 @endguest
@@ -74,18 +76,22 @@
     <div class="row">
         <div class="col">
             <div class="assign_notes_to_pulls_container">
-                <label for="assign_notes_to_pulls">
-                    {{ __('view_common.forms.mdtimport.assign_notes_to_pulls') }}
-                </label>
-                {{ html()->checkbox('assign_notes_to_pulls', true, 1)->id('assign_notes_to_pulls')->class('form-check-input') }}
+                <div class="form-check">
+                    {{ html()->checkbox('assign_notes_to_pulls', true, 1)->id('assign_notes_to_pulls')->class('form-check-input') }}
+                    <label for="assign_notes_to_pulls" class="form-check-label">
+                        {{ __('view_common.forms.mdtimport.assign_notes_to_pulls') }}
+                    </label>
+                </div>
             </div>
         </div>
         <div class="col">
             <div class="import_as_this_week_container" style="display: none;">
-                <label for="import_as_this_week">
-                    {{ __('view_common.forms.mdtimport.import_as_this_week') }}
-                </label>
-                {{ html()->checkbox('import_as_this_week', false, 1)->id('import_as_this_week')->class('form-check-input') }}
+                <div class="form-check">
+                    {{ html()->checkbox('import_as_this_week', false, 1)->id('import_as_this_week')->class('form-check-input') }}
+                    <label for="import_as_this_week" class="form-check-label">
+                        {{ __('view_common.forms.mdtimport.import_as_this_week') }}
+                    </label>
+                </div>
             </div>
         </div>
     </div>

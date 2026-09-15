@@ -53,15 +53,5 @@
     flex-wrap: wrap;
 }
 
-@media (min-width: 900px) {
-    .modal-dialog-small {
-        max-width: 900px;
-    }
-}
-
-/** Hide the separating border between login/register when on a small screen, when they're stacked vertically */
-@media (max-width: 900px) {
-    .modal-dialog-small .border-left.border-white {
-        border: none !important;
-    }
-}
+/* .modal-dialog-small's width lives in sass/theme/theme.scss - this file's rules are emitted
+   unwrapped, which is not specific enough to beat Bootstrap's own .modal-dialog max-width. */

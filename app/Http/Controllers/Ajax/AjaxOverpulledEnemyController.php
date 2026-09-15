@@ -17,10 +17,12 @@ use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode\Http;
 
@@ -46,26 +48,43 @@ class AjaxOverpulledEnemyController extends Controller
         /** @var Collection<int, Enemy> $enemies */
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
-        foreach ($enemies as $enemy) {
-            /** @var LiveSessionOverpulledEnemy $overpulledEnemy */
-            $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $liveSession->id)
-                ->where('npc_id', $enemy->npc_id)
-                ->where('mdt_id', $enemy->mdt_id)
-                ->firstOrNew([
-                    'live_session_id' => $liveSession->id,
-                    'kill_zone_id'    => $validated['kill_zone_id'],
-                    'npc_id'          => $enemy->npc_id,
-                    'mdt_id'          => $enemy->mdt_id,
-                ]);
+        /** @var array<int, array{LiveSessionOverpulledEnemy, Enemy}> $savedEnemies */
+        $savedEnemies = DB::transaction(function () use ($enemies, $liveSession, $validated): array {
+            $savedEnemies = [];
 
-            if (!$overpulledEnemy->save()) {
-                throw new Exception('Unable to save overpulled enemy!');
+            foreach ($enemies as $enemy) {
+                /** @var LiveSessionOverpulledEnemy $overpulledEnemy */
+                $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $liveSession->id)
+                    ->where('npc_id', $enemy->npc_id)
+                    ->where('mdt_id', $enemy->mdt_id)
+                    ->firstOrNew([
+                        'live_session_id' => $liveSession->id,
+                        'kill_zone_id'    => $validated['kill_zone_id'],
+                        'npc_id'          => $enemy->npc_id,
+                        'mdt_id'          => $enemy->mdt_id,
+                    ]);
+
+                if (!$overpulledEnemy->save()) {
+                    throw new Exception('Unable to save overpulled enemy!');
+                }
+
+                $savedEnemies[] = [$overpulledEnemy, $enemy];
             }
 
-            if (Auth::check()) {
-                /** @var User $user */
-                $user = Auth::getUser();
-                broadcast(new OverpulledEnemyChangedEvent($liveSession, $user, $overpulledEnemy, $enemy));
+            return $savedEnemies;
+        });
+
+        // Broadcast only once the batch is committed, so no listener can read pre-commit state
+        if (Auth::check()) {
+            /** @var User $user */
+            $user = Auth::getUser();
+
+            foreach ($savedEnemies as [$overpulledEnemy, $enemy]) {
+                try {
+                    broadcast(new OverpulledEnemyChangedEvent($liveSession, $user, $overpulledEnemy, $enemy));
+                } catch (BroadcastException) {
+                    // Ignore broadcast failures
+                }
             }
         }
 
@@ -95,24 +114,46 @@ class AjaxOverpulledEnemyController extends Controller
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
         try {
-            foreach ($enemies as $enemy) {
-                /** @var LiveSessionOverpulledEnemy $overpulledEnemy */
-                $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $liveSession->id)
-                    ->where('npc_id', $enemy->npc_id)
-                    ->where('mdt_id', $enemy->mdt_id)
-                    ->first();
+            // The whole batch is one user action - undoing an overpull. Without a transaction a
+            // failure on the third enemy committed the first two, leaving the live session showing
+            // half a pull while the client was told the request failed
+            /** @var array<int, Enemy> $deletedEnemies */
+            $deletedEnemies = DB::transaction(function () use ($enemies, $liveSession): array {
+                $deletedEnemies = [];
 
-                if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) { // @phpstan-ignore booleanAnd.leftAlwaysTrue
-                    /** @var User $user */
-                    $user = Auth::getUser();
-                    broadcast(new OverpulledEnemyDeletedEvent($liveSession, $user, $enemy));
+                foreach ($enemies as $enemy) {
+                    /** @var LiveSessionOverpulledEnemy|null $overpulledEnemy */
+                    $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $liveSession->id)
+                        ->where('npc_id', $enemy->npc_id)
+                        ->where('mdt_id', $enemy->mdt_id)
+                        ->first();
+
+                    if ($overpulledEnemy !== null && $overpulledEnemy->delete() === true) {
+                        $deletedEnemies[] = $enemy;
+                    }
+                }
+
+                return $deletedEnemies;
+            });
+
+            // Broadcast only once the batch is committed, so no listener can read pre-commit state
+            if (Auth::check()) {
+                /** @var User $user */
+                $user = Auth::getUser();
+
+                foreach ($deletedEnemies as $enemy) {
+                    try {
+                        broadcast(new OverpulledEnemyDeletedEvent($liveSession, $user, $enemy));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
             }
 
             // Optionally, don't calculate the return value. Computed once after the loop, not per enemy -
             // it already reflects every deletion above, so recomputing per iteration is redundant work
             // and broadcasts the same not-yet-final state K times instead of once.
-            if ($validated['no_result'] !== true) {
+            if ($enemies->isNotEmpty() && $validated['no_result'] !== true) {
                 $result = $this->broadcastRouteCorrection($overpulledEnemyService, $combatStateService, $liveSession)->toArray();
             }
         } catch (Exception) {
@@ -137,7 +178,12 @@ class AjaxOverpulledEnemyController extends Controller
                 ->unique()
                 ->values()
                 ->toArray();
-            broadcast(new RouteCorrectionEvent($liveSession, $user, $enemyIds));
+
+            try {
+                broadcast(new RouteCorrectionEvent($liveSession, $user, $enemyIds));
+            } catch (BroadcastException) {
+                // Ignore broadcast failures
+            }
         }
 
         return $routeCorrection;

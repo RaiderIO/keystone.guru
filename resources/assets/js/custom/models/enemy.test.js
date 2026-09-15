@@ -273,7 +273,8 @@ function makeFakeEditMap() {
 
 /**
  * An enemy on an editable map that wants a popup - i.e. what an AdminEnemy is on the admin mapping
- * page (plain enemies return false from isEditable(), so they never get one at all).
+ * page (a base Enemy, not an AdminEnemy, returns false from isEditable(), so it never gets one at
+ * all).
  */
 function makeEditableEnemy() {
     const map = makeFakeEditMap();

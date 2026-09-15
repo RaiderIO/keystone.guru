@@ -54,8 +54,12 @@ class DungeonrouteTable extends InlineCode {
         $(this.options.filterButtonSelector).unbind('click').bind('click', function () {
             // Build the search parameters
             let dungeonId = $(self.options.dungeonSelectId).val();
-            let affixes = $(self.options.affixSelectId).val();
-            let attributes = $(self.options.attributesSelectId).val();
+            // .val() on a zero-element jQuery collection (e.g. a select that doesn't exist for
+            // this table's view) returns undefined, which would otherwise be sent to the server
+            // as the literal search value 'undefined' instead of an empty array. See the same
+            // guard on requirements/tags below.
+            let affixes = $(self.options.affixSelectId).val() || [];
+            let attributes = $(self.options.attributesSelectId).val() || [];
 
             // Find wherever the columns are we're looking for, then filter using them
             // https://stackoverflow.com/questions/32598279/how-to-get-name-of-datatable-column
@@ -259,7 +263,7 @@ class DungeonrouteTable extends InlineCode {
                 });
             });
 
-            self.carouselHandler.refreshCarousel('', {autoWidth: false});
+            self.carouselHandler.refreshCarousel();
         });
 
         self._dt.on('click', 'tbody td.clickable', function (clickEvent) {
@@ -399,6 +403,9 @@ class DungeonrouteTable extends InlineCode {
                 'title': lang.get('js.author_label'),
                 'data': 'author.name',
                 'name': 'author.name',
+                'render': function (data, type, row, meta) {
+                    return self._renderAuthor(data, type, row, meta);
+                },
                 'className': 'd-none ' + (self._tableView.getName() === 'profile' ? '' : 'd-lg-table-cell')
             },
             enemy_forces: {
@@ -590,8 +597,18 @@ class DungeonrouteTable extends InlineCode {
             published: row.published,
             show_migrate_to_encrypted: isShadowlandsRoute && !rowHasEncryptedAffix && !rowHasShroudedAffix,
             show_migrate_to_shrouded: isShadowlandsRoute && !rowHasShroudedAffix,
-            has_new_mapping_version: row.dungeon_latest_mapping_version_id !== row.mapping_version_id
+            has_new_mapping_version: row.dungeon_latest_mapping_version_id !== row.mapping_version_id,
+            // Both arrive for free through DungeonRoute's $appends
+            is_upgrade_draft: row.is_upgrade_draft === true,
+            has_upgrade_draft: row.has_upgrade_draft === true
         };
+    }
+
+    /**
+     * The author name is free user text; the cell holds nothing but that text, so escaping is the whole render.
+     */
+    _renderAuthor(data, type, row, meta) {
+        return Handlebars.escapeExpression(data);
     }
 
     _renderTitle(data, type, row, meta, showDescription) {
@@ -603,7 +620,9 @@ class DungeonrouteTable extends InlineCode {
             })
         );
 
-        result = `${published} ${row.title}`;
+        // The template renders the composed result unescaped so that the published icon's markup
+        // survives; the title is free user text and must be escaped here instead.
+        result = `${published} ${Handlebars.escapeExpression(row.title)}`;
 
         let template = Handlebars.templates['dungeonroute_table_title'];
         let templateData = $.extend({}, getHandlebarsDefaultVariables(), {

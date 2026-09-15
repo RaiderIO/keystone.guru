@@ -9,6 +9,11 @@ class CacheServiceLogging extends StructuredLogging implements CacheServiceLoggi
 {
     use InteractsWithRollbar;
 
+    public function getFailedRedisConnection(string $key, \Throwable $e): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function rememberFailedToSetCache(string $key, \Throwable $e): void
     {
         $this->error(__METHOD__, get_defined_vars());

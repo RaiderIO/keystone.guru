@@ -96,7 +96,12 @@ class KillZone extends MapObject {
         getState().register('mapzoomlevel:changed', this, this._mapZoomLevelChanged.bind(this));
         getState().register('killzonesnumberstyle:changed', this, this._numberStyleChanged.bind(this));
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        killZoneMapObjectGroup.register('killzone:changed', this, this._onKillZoneChanged.bind(this));
+        // MapObjectGroupManager.getByName() returns false, not null, when a page hides this group
+        // (e.g. Explore mode's view.blade.php), which happens for the throwaway KillZone that
+        // EditKillZoneEnemySelection.isEnemySelectable() constructs purely to reuse its filter logic.
+        if (killZoneMapObjectGroup) {
+            killZoneMapObjectGroup.register('killzone:changed', this, this._onKillZoneChanged.bind(this));
+        }
     }
 
     /**
@@ -463,6 +468,13 @@ class KillZone extends MapObject {
         if (enemy.enemy_pack_id !== 0 && !ignorePackBuddies) {
             let packBuddies = enemy.getPackBuddies();
             packBuddies.push(enemy);
+
+            // Every killzone:enemyadded/enemyremoved fans out to a killzone:changed, which rebinds the
+            // permanent tooltip of every later pull and updates every sidebar row; collapse the pack
+            // into the single killzone:enemieschanged that all of those listeners also handle.
+            let previousForces = this.getEnemyForces();
+            this._isBulkUpdating = true;
+
             // Add all enemies in the pack to this killzone as well
             for (let i = 0; i < packBuddies.length; i++) {
                 let packBuddy = packBuddies[i];
@@ -472,6 +484,10 @@ class KillZone extends MapObject {
                     this._addOrRemoveEnemy(packBuddy, removed);
                 }
             }
+
+            this._isBulkUpdating = false;
+
+            this.signal('killzone:enemieschanged', {previousForces: previousForces, newForces: this.getEnemyForces()});
         } else {
             this._addOrRemoveEnemy(enemy, removed);
         }
@@ -509,16 +525,23 @@ class KillZone extends MapObject {
         let previousState = mapStateChangedEvent.data.previousMapState;
         let newState = mapStateChangedEvent.data.newMapState;
         if (previousState instanceof EnemySelection || newState instanceof EnemySelection) {
-            // Redraw any changes as necessary (for example, user (de-)selected a killzone, must redraw to update selection visuals)
-            this.redrawConnectionsToEnemies();
+            let wasSelected = previousState instanceof EnemySelection && previousState.getMapObject()?.id === this.id;
+            let isSelected = newState instanceof EnemySelection && newState.getMapObject()?.id === this.id;
+
+            // The only visual that differs between the two states is the selected pull's own polygon
+            // (redrawConnectionsToEnemies() switches to an antPath for it); redrawing the other pulls
+            // costs three addLayer and up to three removeLayer calls each for an identical result.
+            if (wasSelected || isSelected) {
+                this.redrawConnectionsToEnemies();
+            }
 
             if (this.map.options.edit) {
-                if (previousState instanceof EnemySelection && previousState.getMapObject()?.id === this.id) {
+                if (wasSelected) {
                     // Unreg if we were listening
                     previousState.unregister('enemyselection:enemyselected', this);
                 }
 
-                if (newState instanceof EnemySelection && newState.getMapObject()?.id === this.id) {
+                if (isSelected) {
                     // Reg for changes to our killzone if necessary
                     newState.register('enemyselection:enemyselected', this, this._enemySelected.bind(this));
                 }
@@ -1195,7 +1218,9 @@ class KillZone extends MapObject {
 
         state.getMapContext().unregister('teeming:changed', this);
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        killZoneMapObjectGroup.unregister('killzone:changed', this);
+        if (killZoneMapObjectGroup) {
+            killZoneMapObjectGroup.unregister('killzone:changed', this);
+        }
         state.unregister('mapzoomlevel:changed', this);
         state.unregister('killzonesnumberstyle:changed', this);
         this.unregister('object:deleted', this);

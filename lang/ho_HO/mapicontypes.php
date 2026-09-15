@@ -112,4 +112,18 @@ return [
     'seat_of_the_triumvirate_void_infusion'  => 'Hodor',
     'maisara_caverns_hearty_vilebranch_stew' => 'Hodor',
 
+    'algethar_academy_black_dragonflight_pledge_pin'  => 'Hodor',
+    'algethar_academy_blue_dragonflight_pledge_pin'   => 'Hodor',
+    'algethar_academy_bronze_dragonflight_pledge_pin' => 'Hodor',
+    'algethar_academy_green_dragonflight_pledge_pin'  => 'Hodor',
+    'algethar_academy_red_dragonflight_pledge_pin'    => 'Hodor',
+    'magisters_terrace_arcane_empowerment'            => 'Hodor',
+    'murder_row_fel_contraband'                       => 'Hodor',
+    'murder_row_felstone'                             => 'Hodor',
+    'murder_row_felwyrm_egg'                          => 'Hodor',
+    'murder_row_heartstop_poison'                     => 'Hodor',
+    'murder_row_loaded_pistol'                        => 'Hodor',
+    'murder_row_overload_golem'                       => 'Hodor',
+    'the_blinding_vale_flourishing_stride'            => 'Hodor',
+
 ];

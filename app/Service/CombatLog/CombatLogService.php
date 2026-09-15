@@ -415,7 +415,8 @@ readonly class CombatLogService implements CombatLogServiceInterface
 
             fclose($handle);
 
-            if (file_exists($extractedFilePath)) {
+            // Null when the combat log was handed over unzipped - there is nothing to clean up then
+            if ($extractedFilePath !== null && file_exists($extractedFilePath)) {
                 unlink($extractedFilePath);
             }
         }

@@ -37,6 +37,10 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         // Midnight S1
         "Magisters' Terrace"          => "Magisters'",
         'The Seat of the Triumvirate' => 'Seat',
+
+        // Midnight S2
+        'Temple of Sethraliss' => 'Sethraliss',
+        "King's Rest"          => "Kings' Rest",
     ];
     public const string DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
 

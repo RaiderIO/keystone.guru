@@ -37,6 +37,9 @@ class DatabaseSeeder extends Seeder
         TranslationsSeeder::class,
         MDTAddonVersionSeeder::class,
 
+        // Depends on GameVersionsSeeder
+        SpellDescriptionImportStateSeeder::class,
+
         // Depends on ExpansionsSeeder, SeasonsSeeder
         AffixSeeder::class,
 

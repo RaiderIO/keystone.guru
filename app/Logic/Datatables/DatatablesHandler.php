@@ -99,7 +99,7 @@ abstract class DatatablesHandler
             // Handle default filtering/sorting
             $columns = $this->request->get('columns', []);
             foreach ($columns as $column) {
-                $columnName = $column['name'];
+                $columnName = $column['name'] ?? null;
                 // Only if the column name was set - column name comes from the client, do not trust it!!
                 // Only if not handled by a custom column handler already
                 if (!empty($columnName) && !isset($this->columnHandlers[$columnName])) {

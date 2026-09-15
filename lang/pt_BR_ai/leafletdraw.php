@@ -83,8 +83,8 @@ return [
             ],
             'arrow' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
+                    'start' => 'Clique para posicionar o início da seta.',
+                    'cont'  => 'Clique para posicionar a ponta da seta.',
                 ],
             ],
         ],
