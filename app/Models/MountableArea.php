@@ -14,6 +14,7 @@ use App\Models\Traits\HasVertices;
 use App\Models\Traits\SeederModel;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class MountableArea extends CacheModel implements HasVerticesInterface, ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
+class MountableArea extends Model implements HasVerticesInterface, ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasVertices;

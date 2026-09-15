@@ -77,11 +77,13 @@ final class RetiredIntegrationConfigTest extends TestCase
         $redisConnections = config('database.redis');
         $cacheStores      = config('cache.stores');
         $traitExists      = trait_exists('GeneaLabs\\LaravelModelCaching\\Traits\\Cachable');
+        $cacheModelExists = class_exists('App\\Models\\CacheModel');
 
         // Assert
         $this->assertFalse($configExists, 'config/laravel-model-caching.php was retired along with the package');
         $this->assertArrayNotHasKey('model_cache', $redisConnections);
         $this->assertArrayNotHasKey('redis_model_cache', $cacheStores);
         $this->assertFalse($traitExists, 'genealabs/laravel-model-caching must no longer be installed');
+        $this->assertFalse($cacheModelExists, 'App\\Models\\CacheModel was retired along with the package');
     }
 }

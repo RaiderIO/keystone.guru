@@ -2,9 +2,9 @@
 
 namespace App\Models\Npc;
 
-use App\Models\CacheModel;
 use App\Models\Characteristic;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class NpcCharacteristic extends CacheModel
+class NpcCharacteristic extends Model
 {
     public $timestamps = false;
 

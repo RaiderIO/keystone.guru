@@ -7,6 +7,7 @@ use App\Models\Traits\HasStart;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -38,7 +39,7 @@ use Illuminate\Support\Carbon;
  *
  * @mixin Eloquent
  */
-class Season extends CacheModel
+class Season extends Model
 {
     use HasStart;
     use SeederModel;

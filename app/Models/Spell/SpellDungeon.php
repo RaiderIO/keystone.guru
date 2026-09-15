@@ -2,8 +2,8 @@
 
 namespace App\Models\Spell;
 
-use App\Models\CacheModel;
 use App\Models\Dungeon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Spell   $spell
  * @property Dungeon $dungeon
  */
-class SpellDungeon extends CacheModel
+class SpellDungeon extends Model
 {
     public $timestamps = false;
 

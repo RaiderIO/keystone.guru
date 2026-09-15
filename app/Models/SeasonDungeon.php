@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class SeasonDungeon extends CacheModel
+class SeasonDungeon extends Model
 {
     use SeederModel;
 

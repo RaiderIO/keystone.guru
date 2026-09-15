@@ -32,8 +32,8 @@ use ZipArchive;
  *
  * Comparability comes from priming, not transactions: the priming run(s) create every referenced NPC/spell,
  * so all measured runs take the *find* path - which is production-representative. Transactional rollback is
- * deliberately not used: Npc/Spell extend CacheModel and the model cache is not transactional, and a huge
- * transaction makes later writes progressively slower via undo growth. All runs pass force=true so the
+ * deliberately not used: a huge transaction makes later writes progressively slower via undo growth. All runs
+ * pass force=true so the
  * ParsedCombatLog short-circuit/insert stay out of the measured work.
  */
 class Benchmark extends BaseCombatLogCommand

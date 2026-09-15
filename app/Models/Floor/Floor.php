@@ -3,7 +3,6 @@
 namespace App\Models\Floor;
 
 use App\Logic\Structs\MapBounds;
-use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
@@ -24,6 +23,7 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -86,7 +86,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class Floor extends CacheModel implements MappingModelInterface
+class Floor extends Model implements MappingModelInterface
 {
     /** @use HasFactory<\Database\Factories\FloorFactory> */
     use HasFactory;

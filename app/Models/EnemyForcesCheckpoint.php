@@ -12,6 +12,7 @@ use App\Models\Traits\HasLatLng;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Override;
@@ -34,7 +35,7 @@ use Override;
  *
  * @mixin Eloquent
  */
-class EnemyForcesCheckpoint extends CacheModel implements HasLatLngInterface, MappingModelCloneableInterface, MappingModelInterface
+class EnemyForcesCheckpoint extends Model implements HasLatLngInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;

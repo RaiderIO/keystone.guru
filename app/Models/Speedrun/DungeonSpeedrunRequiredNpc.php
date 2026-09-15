@@ -2,12 +2,12 @@
 
 namespace App\Models\Speedrun;
 
-use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin Eloquent
  */
-class DungeonSpeedrunRequiredNpc extends CacheModel
+class DungeonSpeedrunRequiredNpc extends Model
 {
     use SeederModel;
 

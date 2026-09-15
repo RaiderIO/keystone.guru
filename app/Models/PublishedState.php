@@ -7,6 +7,7 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
@@ -17,7 +18,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class PublishedState extends CacheModel
+class PublishedState extends Model
 {
     use SeederModel;
 
