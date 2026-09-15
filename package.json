@@ -38,7 +38,7 @@
         "chart.js": "^4.5.1",
         "d3": "7.9.0",
         "datatables.net": "^3.0.1",
-        "datatables.net-dt": "^3.0.3",
+        "datatables.net-dt": "^3.0.4",
         "dotenv": "^17.4.2",
         "geojson-utils": "^1.1.0",
         "grapick": "^0.1.13",
