@@ -10,6 +10,7 @@ use App\Service\Spell\Tuning\Dtos\SpellTuningDiffResult;
 use App\Service\Spell\Tuning\Exceptions\SpellTuningSnapshotException;
 use App\Service\Spell\Tuning\SpellTuningDiffServiceInterface;
 use App\Service\Spell\Tuning\SpellTuningSnapshotLoaderInterface;
+use App\Service\WagoTools\WagoToolsServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
@@ -31,6 +32,7 @@ class DiffTuning extends Command
                             {--from-build= : Build of --from, when it cannot be read from import_state.json}
                             {--to-build= : Build of --to, when it cannot be read from import_state.json}
                             {--gameVersion=retail : Key of the game version to diff}
+                            {--product=wow : The CDN product the new build shipped on, to look up the date it went live}
                             {--dry-run : Print the changes without storing them}';
 
     /**
@@ -43,6 +45,7 @@ class DiffTuning extends Command
     public function handle(
         SpellTuningSnapshotLoaderInterface $spellTuningSnapshotLoader,
         SpellTuningDiffServiceInterface    $spellTuningDiffService,
+        WagoToolsServiceInterface          $wagoToolsService,
     ): int {
         $gameVersionKey = (string)$this->option('gameVersion');
         $gameVersion    = GameVersion::firstWhere('key', $gameVersionKey);
@@ -87,7 +90,12 @@ class DiffTuning extends Command
             return self::SUCCESS;
         }
 
-        $stored = $spellTuningDiffService->store($result);
+        $toBuildReleasedAt = $wagoToolsService->getBuildReleasedAt((string)$this->option('product'), $to->build);
+        if ($toBuildReleasedAt === null) {
+            $this->warn(sprintf('Could not find when build %s went live on wago.tools - keeping the date already recorded for it, if any.', $to->build));
+        }
+
+        $stored = $spellTuningDiffService->store($result, $toBuildReleasedAt);
 
         $this->info(sprintf('Stored %d changes for build %s. Run mapping:save to write them to database/seeders/dungeondata/spell_tuning_changes.json.', $stored, $to->build));
 

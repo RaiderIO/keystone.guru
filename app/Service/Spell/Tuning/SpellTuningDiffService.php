@@ -10,6 +10,7 @@ use App\Service\Spell\Tuning\Dtos\SpellTuningDiffResult;
 use App\Service\Spell\Tuning\Dtos\SpellTuningSnapshot;
 use App\Service\Spell\Tuning\Dtos\SpellTuningSnapshotSpell;
 use App\Service\Spell\Tuning\Logging\SpellTuningDiffServiceLoggingInterface;
+use Illuminate\Support\Carbon;
 use InvalidArgumentException;
 
 class SpellTuningDiffService implements SpellTuningDiffServiceInterface
@@ -64,15 +65,18 @@ class SpellTuningDiffService implements SpellTuningDiffServiceInterface
         }
     }
 
-    public function store(SpellTuningDiffResult $result): int
+    public function store(SpellTuningDiffResult $result, ?Carbon $toBuildReleasedAt = null): int
     {
         $this->log->storeStart($result->fromBuild, $result->toBuild, $result->gameVersionId, count($result->changes));
 
         try {
+            // A failed lookup on a re-run must not wipe the date an earlier run already recorded
+            $toBuildReleasedAt ??= $this->spellTuningChangeRepository->findBuildReleasedAt($result->gameVersionId, $result->toBuild);
+
             return $this->spellTuningChangeRepository->replaceForBuild(
                 $result->gameVersionId,
                 $result->toBuild,
-                $result->toRows(),
+                $result->toRows($toBuildReleasedAt),
             );
         } finally {
             $this->log->storeEnd();

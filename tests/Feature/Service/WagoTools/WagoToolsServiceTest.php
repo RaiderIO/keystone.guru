@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Service\WagoTools;
 
+use App\Service\WagoTools\Logging\WagoToolsServiceLoggingInterface;
+use App\Service\WagoTools\WagoToolsService;
 use App\Service\WagoTools\WagoToolsServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -105,6 +107,166 @@ final class WagoToolsServiceTest extends PublicTestCase
         // Assert
         $this->assertSame([], $result);
         $this->assertFileDoesNotExist(sprintf('%s/ManifestInterfaceData.csv', $this->getDb2Directory()));
+    }
+
+    #[Test]
+    public function getLatestBuild_givenBuildsResponse_returnsTheNewestBuildOfTheProduct(): void
+    {
+        // Arrange
+        $wagoToolsService = $this->createServiceWithBuildsResponse($this->buildsResponse());
+
+        // Act
+        $latestBuild = $wagoToolsService->getLatestBuild('wow');
+
+        // Assert
+        $this->assertSame('12.1.0.69404', $latestBuild);
+    }
+
+    #[Test]
+    public function getLatestBuild_givenFailedRequest_returnsNull(): void
+    {
+        // Arrange
+        $wagoToolsService = $this->createServiceWithBuildsResponse(null);
+
+        // Act
+        $latestBuild = $wagoToolsService->getLatestBuild('wow');
+
+        // Assert
+        $this->assertNull($latestBuild);
+    }
+
+    #[Test]
+    public function getBuildReleasedAt_givenKnownBuild_returnsItsCreatedAtInUtc(): void
+    {
+        // Arrange
+        $wagoToolsService = $this->createServiceWithBuildsResponse($this->buildsResponse());
+
+        // Act
+        $releasedAt = $wagoToolsService->getBuildReleasedAt('wow', '12.1.0.69382');
+
+        // Assert
+        $this->assertNotNull($releasedAt);
+        $this->assertSame('2026-08-18 00:59:01', $releasedAt->toDateTimeString());
+        $this->assertSame('UTC', $releasedAt->getTimezone()->getName());
+    }
+
+    #[Test]
+    public function getBuildReleasedAt_givenBuildOfAnotherProduct_returnsNull(): void
+    {
+        // Arrange - the build exists, but only on the PTR
+        $wagoToolsService = $this->createServiceWithBuildsResponse($this->buildsResponse());
+
+        // Act
+        $releasedAt = $wagoToolsService->getBuildReleasedAt('wow', '12.2.0.70001');
+
+        // Assert
+        $this->assertNull($releasedAt);
+    }
+
+    #[Test]
+    public function getBuildReleasedAt_givenUnknownProduct_returnsNull(): void
+    {
+        // Arrange
+        $wagoToolsService = $this->createServiceWithBuildsResponse($this->buildsResponse());
+
+        // Act
+        $releasedAt = $wagoToolsService->getBuildReleasedAt('wow_unknown', '12.1.0.69382');
+
+        // Assert
+        $this->assertNull($releasedAt);
+    }
+
+    #[Test]
+    public function getBuildReleasedAt_givenFailedRequest_returnsNull(): void
+    {
+        // Arrange
+        $wagoToolsService = $this->createServiceWithBuildsResponse(null);
+
+        // Act
+        $releasedAt = $wagoToolsService->getBuildReleasedAt('wow', '12.1.0.69382');
+
+        // Assert
+        $this->assertNull($releasedAt);
+    }
+
+    #[Test]
+    public function getBuildReleasedAt_givenResponseThatIsNotJson_returnsNull(): void
+    {
+        // Arrange
+        $wagoToolsService = $this->createServiceWithBuildsResponse('<html>Service unavailable</html>');
+
+        // Act
+        $releasedAt = $wagoToolsService->getBuildReleasedAt('wow', '12.1.0.69382');
+
+        // Assert
+        $this->assertNull($releasedAt);
+    }
+
+    #[Test]
+    public function getBuildReleasedAt_givenMalformedCreatedAt_returnsNull(): void
+    {
+        // Arrange
+        $wagoToolsService = $this->createServiceWithBuildsResponse(json_encode([
+            'wow' => [['version' => '12.1.0.69382', 'created_at' => 'yesterday']],
+        ]));
+
+        // Act
+        $releasedAt = $wagoToolsService->getBuildReleasedAt('wow', '12.1.0.69382');
+
+        // Assert
+        $this->assertNull($releasedAt);
+    }
+
+    #[Test]
+    public function getBuildReleasedAt_givenMissingCreatedAt_returnsNull(): void
+    {
+        // Arrange
+        $wagoToolsService = $this->createServiceWithBuildsResponse(json_encode([
+            'wow' => [['version' => '12.1.0.69382']],
+        ]));
+
+        // Act
+        $releasedAt = $wagoToolsService->getBuildReleasedAt('wow', '12.1.0.69382');
+
+        // Assert
+        $this->assertNull($releasedAt);
+    }
+
+    /**
+     * A service whose request for wago.tools' build list returns the given body, or fails when it is null.
+     */
+    private function createServiceWithBuildsResponse(?string $buildsResponse): WagoToolsServiceInterface
+    {
+        return new class(app(WagoToolsServiceLoggingInterface::class), $buildsResponse) extends WagoToolsService {
+            public function __construct(
+                WagoToolsServiceLoggingInterface $log,
+                private readonly ?string         $buildsResponse,
+            ) {
+                parent::__construct($log);
+            }
+
+            #[\Override]
+            protected function curlGetContents(string $url): ?string
+            {
+                return $this->buildsResponse;
+            }
+        };
+    }
+
+    /**
+     * The shape of https://wago.tools/api/builds: every product's builds, newest first.
+     */
+    private function buildsResponse(): string
+    {
+        return json_encode([
+            'wow' => [
+                ['product' => 'wow', 'version' => '12.1.0.69404', 'created_at' => '2026-08-20 19:18:02', 'is_bgdl' => false],
+                ['product' => 'wow', 'version' => '12.1.0.69382', 'created_at' => '2026-08-18 00:59:01', 'is_bgdl' => false],
+            ],
+            'wowt' => [
+                ['product' => 'wowt', 'version' => '12.2.0.70001', 'created_at' => '2026-09-01 10:00:00', 'is_bgdl' => false],
+            ],
+        ]);
     }
 
     private function writeTable(string $table, string $contents): void

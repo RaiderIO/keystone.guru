@@ -5,9 +5,12 @@ namespace Tests\Feature\Console\Commands\Spell;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\SpellTuningChange;
 use App\Models\Spell\SpellTuningChangeType;
+use App\Service\WagoTools\WagoToolsServiceInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -26,11 +29,16 @@ final class DiffTuningTest extends PublicTestCase
 
     private const int SPELL_ID_REWRITTEN = 999999813;
 
+    private const string TO_BUILD_RELEASED_AT = '2026-08-20 19:18:02';
+
     private int $gameVersionId;
 
     private string $fromPath;
 
     private string $toPath;
+
+    /** @var WagoToolsServiceInterface&MockObject */
+    private WagoToolsServiceInterface $wagoToolsService;
 
     #[\Override]
     protected function setUp(): void
@@ -38,6 +46,11 @@ final class DiffTuningTest extends PublicTestCase
         parent::setUp();
 
         $this->gameVersionId = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL)->id;
+
+        // Never ask the real wago.tools when a build went live
+        $this->wagoToolsService = $this->createMockPublic(WagoToolsServiceInterface::class);
+        $this->wagoToolsService->method('getBuildReleasedAt')->willReturn(Carbon::createFromFormat('Y-m-d H:i:s', self::TO_BUILD_RELEASED_AT, 'UTC'));
+        app()->instance(WagoToolsServiceInterface::class, $this->wagoToolsService);
 
         $this->fromPath = $this->writeSpellsFile('from', [
             $this->spellEntry(self::SPELL_ID_CHANGED, 'Deals %1$s damage over %2$s.', [$this->damage('29,095', 3), $this->duration('10 sec')]),
@@ -98,6 +111,76 @@ final class DiffTuningTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenBuildKnownToWagoTools_storesTheDateItWentLive(): void
+    {
+        // Arrange
+        $this->wagoToolsService->expects($this->once())
+            ->method('getBuildReleasedAt')
+            ->with('wowt', self::TO_BUILD);
+
+        // Act
+        $this->artisan('spell:difftuning', [
+            '--from'       => $this->fromPath,
+            '--to'         => $this->toPath,
+            '--from-build' => self::FROM_BUILD,
+            '--to-build'   => self::TO_BUILD,
+            '--product'    => 'wowt',
+        ])->assertExitCode(0);
+
+        // Assert
+        $releasedAts = SpellTuningChange::query()->where('to_build', self::TO_BUILD)->get()->pluck('to_build_released_at');
+        $this->assertCount(3, $releasedAts);
+        foreach ($releasedAts as $releasedAt) {
+            $this->assertSame(self::TO_BUILD_RELEASED_AT, $releasedAt?->toDateTimeString());
+        }
+    }
+
+    #[Test]
+    public function handle_givenBuildUnknownToWagoTools_warnsAndStoresTheChangesWithoutADate(): void
+    {
+        // Arrange
+        $wagoToolsService = $this->createMockPublic(WagoToolsServiceInterface::class);
+        $wagoToolsService->expects($this->once())->method('getBuildReleasedAt')->with('wow', self::TO_BUILD)->willReturn(null);
+        app()->instance(WagoToolsServiceInterface::class, $wagoToolsService);
+
+        // Act
+        $this->artisan('spell:difftuning', [
+            '--from'       => $this->fromPath,
+            '--to'         => $this->toPath,
+            '--from-build' => self::FROM_BUILD,
+            '--to-build'   => self::TO_BUILD,
+        ])
+            ->expectsOutputToContain(sprintf('Could not find when build %s went live', self::TO_BUILD))
+            ->assertExitCode(0);
+
+        // Assert
+        $changes = SpellTuningChange::query()->where('to_build', self::TO_BUILD)->get();
+        $this->assertCount(3, $changes);
+        $this->assertTrue($changes->every(static fn(SpellTuningChange $change): bool => $change->to_build_released_at === null));
+    }
+
+    #[Test]
+    public function handle_givenRerunWhileWagoToolsIsUnreachable_keepsTheRecordedDate(): void
+    {
+        // Arrange - the first run recorded the date
+        $this->runDiff();
+
+        $wagoToolsService = $this->createMockPublic(WagoToolsServiceInterface::class);
+        $wagoToolsService->expects($this->once())->method('getBuildReleasedAt')->willReturn(null);
+        app()->instance(WagoToolsServiceInterface::class, $wagoToolsService);
+
+        // Act
+        $this->runDiff();
+
+        // Assert
+        $releasedAts = SpellTuningChange::query()->where('to_build', self::TO_BUILD)->get()->pluck('to_build_released_at');
+        $this->assertCount(3, $releasedAts);
+        foreach ($releasedAts as $releasedAt) {
+            $this->assertSame(self::TO_BUILD_RELEASED_AT, $releasedAt?->toDateTimeString());
+        }
+    }
+
+    #[Test]
     public function handle_givenSecondRunForSameBuilds_keepsTheSameRows(): void
     {
         // Arrange
@@ -130,6 +213,9 @@ final class DiffTuningTest extends PublicTestCase
     #[Test]
     public function handle_givenDryRun_storesNothing(): void
     {
+        // Arrange
+        $this->wagoToolsService->expects($this->never())->method('getBuildReleasedAt');
+
         // Act
         $this->artisan('spell:difftuning', [
             '--from'       => $this->fromPath,

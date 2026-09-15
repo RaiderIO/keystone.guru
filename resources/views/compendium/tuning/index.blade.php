@@ -3,11 +3,12 @@
 use App\Models\Dungeon;
 use App\Models\Spell\SpellTuningChange;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
  * @var Dungeon|null                                                                                     $contextDungeon      null on the unscoped page
- * @var LengthAwarePaginator<int, array{from_build: string, to_build: string, to_build_number: int, spell_count: int}> $builds
+ * @var LengthAwarePaginator<int, array{from_build: string, to_build: string, to_build_number: int, to_build_released_at: Carbon|null, spell_count: int}> $builds
  * @var array<string, Collection<int, SpellTuningChange>>                                                $changesByBuild      keyed by to_build
  * @var Collection<int, Dungeon>                                                                         $gameVersionDungeons
  */
@@ -64,6 +65,11 @@ use Illuminate\Support\Collection;
                 <div class="compendium_record_label">
                     {{-- h5: one step below the sitepage layout's h4 page title, so builds are jump targets --}}
                     <h5 class="compendium_tuning_build_heading">{{ __('view_compendium.tuning.index.build_title', ['build' => $build['to_build']]) }}</h5>
+                    @if($build['to_build_released_at'] !== null)
+                        <div class="compendium_record_label_sub">
+                            @include('compendium.sections.tuning_build_released_at', ['releasedAt' => $build['to_build_released_at']])
+                        </div>
+                    @endif
                     <div class="compendium_record_label_sub">
                         {{ __('view_compendium.tuning.index.build_subtitle', ['from' => $build['from_build']]) }}
                         &middot;

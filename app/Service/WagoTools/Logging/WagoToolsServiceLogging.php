@@ -24,6 +24,21 @@ class WagoToolsServiceLogging extends StructuredLogging implements WagoToolsServ
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    public function getBuildReleasedAtRequestFailed(string $product, string $build): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function getBuildReleasedAtNotFound(string $product, string $build): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function getBuildReleasedAtInvalidResponse(string $product, string $build): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function getTableCsvPathCacheHit(string $table, string $build): void
     {
         $this->debug(__METHOD__, get_defined_vars());

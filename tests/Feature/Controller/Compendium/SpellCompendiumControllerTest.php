@@ -292,6 +292,33 @@ final class SpellCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function show_givenTuningChangeWithReleasedAt_rendersTheDateNextToItsBuild(): void
+    {
+        // Arrange
+        $spell = Spell::where('hidden_on_map', false)->first();
+        $this->assertNotNull($spell);
+        $created = [];
+
+        try {
+            $created[] = SpellTuningChange::factory()->create(['spell_id' => $spell->id, 'from_build' => '0.0.0.00001', 'to_build' => '0.0.0.00002', 'to_build_number' => 2, 'to_build_released_at' => '2001-02-03 04:05:06']);
+
+            // Act
+            $response = $this->get(route('spell.compendium.show', $spell));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeTextInOrder([
+                __('view_compendium.spell.sections.tuning_changes.build_header', ['from' => '0.0.0.00001', 'to' => '0.0.0.00002']),
+                __('view_compendium.sections.tuning_build_released_at.went_live', ['date' => 'Feb 3, 2001']),
+            ]);
+        } finally {
+            foreach ($created as $change) {
+                $change->delete();
+            }
+        }
+    }
+
+    #[Test]
     public function show_givenSpellWithoutTuningChanges_rendersEmptyState(): void
     {
         // Arrange

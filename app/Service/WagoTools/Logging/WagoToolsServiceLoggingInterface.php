@@ -10,6 +10,12 @@ interface WagoToolsServiceLoggingInterface
 
     public function getLatestBuildInvalidResponse(string $product): void;
 
+    public function getBuildReleasedAtRequestFailed(string $product, string $build): void;
+
+    public function getBuildReleasedAtNotFound(string $product, string $build): void;
+
+    public function getBuildReleasedAtInvalidResponse(string $product, string $build): void;
+
     public function getTableCsvPathCacheHit(string $table, string $build): void;
 
     public function downloadTableStart(string $table, string $build): void;
