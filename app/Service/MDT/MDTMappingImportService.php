@@ -89,7 +89,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         // an ambient/unrelated game version's mapping version when the dungeon has none for $gameVersion yet
         // (e.g. its first-ever import for a newly-added game version). A null here is a real, valid case: the
         // downstream clone/import calls below all treat it as "nothing to carry over from" (#3757).
-        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
+        $currentMappingVersion = $dungeon->reloadMappingVersions()->getCurrentMappingVersionForGameVersion($gameVersion);
         if ($forceImport || $currentMappingVersion === null || $currentMappingVersion->mdt_mapping_hash !== $latestMdtMappingHash) {
             $this->log->importMappingVersionFromMDTMappingChanged($currentMappingVersion?->mdt_mapping_hash, $latestMdtMappingHash);
 
@@ -188,7 +188,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     ): MappingVersion {
         $gameVersion ??= GameVersion::getDefaultGameVersion();
 
-        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
+        $currentMappingVersion = $dungeon->reloadMappingVersions()->getCurrentMappingVersionForGameVersion($gameVersion);
 
         if ($currentMappingVersion === null) {
             throw new Exception(sprintf('%s has no mapping version for game version %s', $dungeon->key, $gameVersion->key));

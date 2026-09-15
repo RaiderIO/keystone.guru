@@ -527,17 +527,20 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     /**
      * Resolves the dungeon start map icon for this route. When a specific start was chosen
      * (dungeon_start_map_icon_id) it is returned directly; otherwise falls back to the first
-     * dungeon start of the route's mapping version.
+     * dungeon start of the route's mapping version. Only its floor is eager loaded - callers need its location.
      */
     public function getDungeonStartMapIcon(): ?MapIcon
     {
+        $query = MapIcon::query()
+            ->without(['mapIconType', 'linkedawakenedobelisks'])
+            ->with('floor');
+
         if ($this->dungeon_start_map_icon_id !== null) {
-            return MapIcon::find($this->dungeon_start_map_icon_id);
+            return $query->find($this->dungeon_start_map_icon_id);
         }
 
-        return MapIcon::where('mapping_version_id', $this->mapping_version_id)
+        return $query->where('mapping_version_id', $this->mapping_version_id)
             ->where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START])
-            ->with('floor')
             ->first();
     }
 
@@ -632,11 +635,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function mapContextKillZones(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
         /** @var Collection<int, KillZone> $killZones */
-        $killZones = $this->killZones()
-            ->with(['enemies.floor', 'enemies.npc', 'floor'])
-            ->get();
+        $killZones = $this->loadMissing(['killZones.enemies.floor', 'killZones.enemies.npc', 'killZones.floor'])->killZones;
 
         if ($useFacade) {
+            // The facade conversion rewrites each kill zone's location - leave the route's own kill zones untouched
+            $killZones = $killZones->map(static fn(KillZone $killZone): KillZone => clone $killZone);
+
             foreach ($killZones as $killZone) {
                 // If no kill zone was set, skip the conversion step
                 if (!$killZone->hasValidLatLng()) {

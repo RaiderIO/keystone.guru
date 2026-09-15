@@ -75,6 +75,29 @@ final class DungeonRouteGetDungeonStartMapIconTest extends PublicTestCase
     }
 
     #[Test]
+    public function getDungeonStartMapIcon_givenStart_returnsItWithOnlyItsFloorLoaded(): void
+    {
+        // Arrange
+        $route   = DungeonRoute::factory()->create(['dungeon_start_map_icon_id' => null]);
+        $floorId = $route->dungeon->floors->first()->id;
+        $start   = $this->createDungeonStartMapIcon($route->mapping_version_id, $floorId, 'mapping.start.east');
+
+        try {
+            // Act
+            $result = $route->getDungeonStartMapIcon();
+
+            // Assert
+            $this->assertNotNull($result);
+            $this->assertTrue($result->relationLoaded('floor'));
+            $this->assertFalse($result->relationLoaded('mapIconType'));
+            $this->assertFalse($result->relationLoaded('linkedawakenedobelisks'));
+        } finally {
+            $start->delete();
+            $route->delete();
+        }
+    }
+
+    #[Test]
     public function getDungeonStartMapIcon_givenNoStartsForMappingVersion_returnsNull(): void
     {
         // Arrange — point the route at a mapping version that has no map icons at all

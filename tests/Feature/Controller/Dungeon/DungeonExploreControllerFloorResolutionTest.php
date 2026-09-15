@@ -4,6 +4,8 @@ namespace Tests\Feature\Controller\Dungeon;
 
 use App\Models\Floor\Floor;
 use App\Models\User;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -148,6 +150,35 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
+    }
+
+    #[Test]
+    public function embed_givenExistingFloorIndex_loadsTheDungeonsMappingVersionsOnce(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: false, dungeonActive: true, requireDefaultFloor: true);
+        $gameVersion                = $mappingVersion->gameVersion;
+        /** @var Floor $floor */
+        $floor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
+        $url   = route('dungeon.explore.gameversion.embed.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => $floor->index,
+        ]);
+
+        $mappingVersionQueries = 0;
+        DB::listen(static function (QueryExecuted $query) use (&$mappingVersionQueries): void {
+            if (str_contains($query->sql, 'from `mapping_versions` where `mapping_versions`.`dungeon_id`')) {
+                $mappingVersionQueries++;
+            }
+        });
+
+        // Act - CI runs with the model cache on, which would answer these queries without reaching the database
+        $response = app('model-cache')->runDisabled(fn() => $this->get($url));
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame(1, $mappingVersionQueries);
     }
 
     #[Test]

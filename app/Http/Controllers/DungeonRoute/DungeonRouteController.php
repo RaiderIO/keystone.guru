@@ -65,6 +65,8 @@ class DungeonRouteController extends Controller
         DungeonRoute                    $dungeonroute,
         ?string                         $title = null,
     ): RedirectResponse {
+        $this->useBoundDungeon($dungeonroute, $dungeon);
+
         $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion);
 
         return redirect()->route('dungeonroute.view.floor', [
@@ -91,6 +93,8 @@ class DungeonRouteController extends Controller
         string                          $floorIndex,
     ) {
         Gate::authorize('view', $dungeonroute);
+
+        $this->useBoundDungeon($dungeonroute, $dungeon);
 
         if ($dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.view', [
@@ -738,5 +742,15 @@ class DungeonRouteController extends Controller
         }
 
         return redirect()->to($redirectUrl)->with($sessionKey, $status);
+    }
+
+    /**
+     * The URL's {dungeon} is bound separately from the route; reuse it as the route's dungeon when they match.
+     */
+    private function useBoundDungeon(DungeonRoute $dungeonRoute, Dungeon $dungeon): void
+    {
+        if ($dungeonRoute->dungeon_id === $dungeon->id) {
+            $dungeonRoute->setRelation('dungeon', $dungeon);
+        }
     }
 }
