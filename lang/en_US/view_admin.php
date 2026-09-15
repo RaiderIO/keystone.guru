@@ -715,8 +715,6 @@ return [
             'view_dungeon_mapping_version_accuracy'                   => 'View mapping version accuracy vs MDT mapping',
             'view_dungeon_mapping_version_accuracy_description'       => 'Check how accurately a mapping version matches the MDT data.',
             'subheader_enemy_forces'                                  => 'Enemy Forces',
-            'enemy_forces_import'                                     => 'Import enemy forces',
-            'enemy_forces_import_description'                         => 'Import enemy force counts from an external file.',
             'enemy_forces_recalculate'                                => 'Mass recalculate enemy forces for routes',
             'enemy_forces_recalculate_description'                    => 'Recalculate enemy force totals for all existing routes.',
             'subheader_thumbnails'                                    => 'Thumbnails',

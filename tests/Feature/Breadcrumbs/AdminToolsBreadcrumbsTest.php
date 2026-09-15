@@ -31,7 +31,6 @@ final class AdminToolsBreadcrumbsTest extends TestCase
             'dungeonroute view'                            => ['admin.tools.dungeonroute.view'],
             'dungeonroute view contents'                   => ['admin.tools.dungeonroute.viewcontents'],
             'dungeonroute mapping version usage'           => ['admin.tools.dungeonroute.mappingversions'],
-            'enemyforces import'                           => ['admin.tools.enemyforces.import'],
             'enemyforces recalculate'                      => ['admin.tools.enemyforces.recalculate'],
             'features list'                                => ['admin.tools.features.list'],
             'mdt dungeon mapping hash'                     => ['admin.tools.mdt.dungeonmappinghash'],

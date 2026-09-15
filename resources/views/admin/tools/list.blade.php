@@ -117,10 +117,6 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <a href="{{ route('admin.tools.enemyforces.import.view') }}">{{ __('view_admin.tools.list.enemy_forces_import') }}</a>
-                        <small class="text-muted d-block">{{ __('view_admin.tools.list.enemy_forces_import_description') }}</small>
-                    </li>
-                    <li class="list-group-item">
                         <a href="{{ route('admin.tools.enemyforces.recalculate.view') }}">{{ __('view_admin.tools.list.enemy_forces_recalculate') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.enemy_forces_recalculate_description') }}</small>
                     </li>
