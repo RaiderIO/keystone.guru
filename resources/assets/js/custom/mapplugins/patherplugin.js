@@ -13,7 +13,7 @@ class PatherPlugin extends MapPlugin {
         this.pather = new L.Pather();
         this.pather.on('created', function (patherEvent) {
             // Add the newly created polyline to our system
-            let mapObjectGroup = self.map.mapObjectGroupManager.getByName('brushline');
+            let mapObjectGroup = self.map.mapObjectGroupManager.getBrushlineMapObjectGroup();
 
             // Create a new brushline
             let points = [];

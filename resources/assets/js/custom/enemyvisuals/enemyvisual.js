@@ -454,7 +454,7 @@ class EnemyVisual extends Signalable {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
         // If the object is invisible, don't build the visual
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         // Determine which modifiers the visual should have
         // console.warn(`building visual`, enemyMapObjectGroup.isMapObjectVisible(this.enemy));
 

@@ -31,6 +31,7 @@ global.MapObjectMapState = MapObjectMapState;
 const {EnemySelection} = require('./enemyselection');
 // The subclasses reference their base as a bare global (they are concatenated into one bundle).
 global.EnemySelection = EnemySelection;
+const {fakeMapObjectGroupManager} = require('../../../test/fixtures/mapObjectGroupManager');
 
 const {EditKillZoneEnemySelection} = require('./editkillzoneenemyselection');
 
@@ -130,7 +131,7 @@ describe('EditKillZoneEnemySelection constructor (#4431)', () => {
         // Arrange
         const fakeMap = Object.assign(Object.create(DungeonMap.prototype), {
             options: {edit: false},
-            mapObjectGroupManager: {getByName: () => null},
+            mapObjectGroupManager: fakeMapObjectGroupManager(() => null),
         });
 
         // Act / Assert

@@ -108,7 +108,7 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
         let deletedIds = [];
         let addedIds = [];
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         for (let i = 0; i < this.changedEnemyIds.length; i++) {
             let changedEnemyId = this.changedEnemyIds[i];
@@ -182,7 +182,7 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
         // Override the enemy forces with a new value
         this.map.enemyForcesManager.setEnemyForcesOverride(json.enemy_forces);
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         for (let key in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[key];
 

@@ -42,7 +42,7 @@ class EnemyVisualManager extends Signalable {
         // time but only once every 50 ms, for example).
         this._mouseStoppedMovingTimeoutId = -1;
 
-        let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = self.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         enemyMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
             /** @type Enemy addedEnemy */
             let addedEnemy = objectAddEvent.data.object;
@@ -80,7 +80,7 @@ class EnemyVisualManager extends Signalable {
         // This can in theory be moved completely to enemy patrol but I prefer to keep it in here so all the mouse overing
         // code is handled in this class.
         // This code allows mouse over of enemy patrols to highlight the enemies that the patrol is attached to.
-        let enemyPatrolMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
+        let enemyPatrolMapObjectGroup = self.map.mapObjectGroupManager.getEnemyPatrolMapObjectGroup();
         // May be null when rendering thumbnails
         if (enemyPatrolMapObjectGroup instanceof EnemyPatrolMapObjectGroup) {
             enemyPatrolMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
@@ -120,7 +120,7 @@ class EnemyVisualManager extends Signalable {
         }
 
         // Same as above, but for hovering an enemy forces checkpoint's pill - highlights its members.
-        let enemyForcesCheckpointMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT);
+        let enemyForcesCheckpointMapObjectGroup = self.map.mapObjectGroupManager.getEnemyForcesCheckpointMapObjectGroup();
         // May be null when rendering thumbnails
         if (enemyForcesCheckpointMapObjectGroup instanceof EnemyForcesCheckpointMapObjectGroup) {
             enemyForcesCheckpointMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
@@ -285,7 +285,7 @@ class EnemyVisualManager extends Signalable {
     _onNumberStyleChanged(numberStyleChangedEvent) {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         for (let key in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[key];
 
@@ -325,7 +325,7 @@ class EnemyVisualManager extends Signalable {
     _onEnemyAggressivenessBorderChanged(enemyAggressivenessBorderChangedEvent) {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         for (let key in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[key];
 
@@ -343,7 +343,7 @@ class EnemyVisualManager extends Signalable {
     _onEnemyDangerousBorderChanged(enemyDangerousBorderChangedEvent) {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         for (let key in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[key];
 
@@ -361,7 +361,7 @@ class EnemyVisualManager extends Signalable {
     _onEnemyDisplayTypeChanged(enemyDisplayTypeChangedEvent) {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         for (let key in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[key];
@@ -416,14 +416,14 @@ class EnemyVisualManager extends Signalable {
                     if (oldManagerId !== newManagerId) {
                         // We moved to a different pack or out of a pack
                         // We need to find the old manager enemy to call _mouseOut on it
-                        let oldManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY).findMapObjectById(oldManagerId);
+                        let oldManager = this.map.mapObjectGroupManager.getEnemyMapObjectGroup().findMapObjectById(oldManagerId);
                         if (oldManager) oldManager.visual._mouseOut();
 
                         // And call _mouseOver on the new enemy
                         if (hoveredEnemy) hoveredEnemy.visual._mouseOver();
                     } else if (hoveredEnemy) {
                         // Same manager (same pack), just update focus
-                        this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY).setFocusedEnemy(hoveredEnemy);
+                        this.map.mapObjectGroupManager.getEnemyMapObjectGroup().setFocusedEnemy(hoveredEnemy);
                     }
                     this._hoveredEnemy = hoveredEnemy;
                 }

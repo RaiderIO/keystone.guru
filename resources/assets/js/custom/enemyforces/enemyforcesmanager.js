@@ -14,7 +14,7 @@ class EnemyForcesManager extends Signalable {
         }
 
         // On route load, this will also fill the enemy forces to the value they should be as the route is loaded
-        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         // May be null in admin setting where there's no kill zones
         if (killZoneMapObjectGroup !== null) {
             killZoneMapObjectGroup.register('killzone:enemyadded', this, function (addEvent) {
@@ -165,7 +165,7 @@ class EnemyForcesManager extends Signalable {
         // Unreg from map
         this.map.unregister('map:mapobjectgroupsloaded', this);
         // Unreg killzones
-        let killzoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killzoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
         killzoneMapObjectGroup.unregister('object:add', this);
         killzoneMapObjectGroup.unregister('killzone:enemyremoved', this);
         killzoneMapObjectGroup.unregister('killzone:enemyadded', this);
