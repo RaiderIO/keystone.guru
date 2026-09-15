@@ -4,6 +4,7 @@ namespace Tests\Unit\App\Exceptions;
 
 use App\Exceptions\Handler;
 use App\Exceptions\Logging\HandlerLoggingInterface;
+use App\Exceptions\ThumbnailRenderFailedException;
 use App\Service\CombatLog\Exceptions\CombatLogSegmentDownloadFailedException;
 use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Foundation\Application;
@@ -66,6 +67,29 @@ class HandlerTest extends PublicTestCase
 
         // Assert
         self::assertSame(1, $callbackCalls);
+    }
+
+    /**
+     * The thumbnail job throws this only to make the queue worker retry; ThumbnailService has already logged the
+     * failed render, so it must never reach the reportable pipeline Sentry hooks into.
+     */
+    #[Test]
+    public function report_givenThumbnailRenderFailedException_doesNotInvokeReportCallbacks(): void
+    {
+        // Arrange
+        $handler       = app()->make(Handler::class);
+        $callbackCalls = 0;
+        $handler->reportable(function (ThumbnailRenderFailedException $e) use (&$callbackCalls) {
+            $callbackCalls++;
+
+            return false;
+        });
+
+        // Act
+        $handler->report(new ThumbnailRenderFailedException('Failed to create thumbnail for dungeon route 1 floor 1 on attempt 1'));
+
+        // Assert
+        self::assertSame(0, $callbackCalls);
     }
 
     /**

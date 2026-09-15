@@ -39,11 +39,16 @@ interface ThumbnailServiceInterface
         ?int         $quality = null,
     ): Collection;
 
+    /**
+     * @param bool $isFinalAttempt False while the caller will retry a failed render; the failure is then logged
+     *                             as a warning instead of an error.
+     */
     public function createThumbnail(
         DungeonRoute                 $dungeonRoute,
         int                          $floorIndex,
         int                          $attempts,
         DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
+        bool                         $isFinalAttempt = true,
     ): ?DungeonRouteThumbnail;
 
     public function createThumbnailCustom(

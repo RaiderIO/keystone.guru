@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\App\Jobs;
 
+use App\Exceptions\ThumbnailRenderFailedException;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -71,6 +73,61 @@ final class ProcessRouteFloorThumbnailTest extends PublicTestCase
 
             // Assert
             Queue::assertNotPushed(ProcessRouteFloorThumbnail::class);
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    #[Test]
+    public function handle_givenFailedRenderWithAttemptsRemaining_rendersAsNonFinalAttemptAndThrowsUnreportedException(): void
+    {
+        // Arrange
+        config(['keystoneguru.thumbnail.max_attempts' => 3]);
+
+        $dungeonRoute = $this->createDungeonRouteDueForThumbnail();
+
+        $thumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
+        $thumbnailService->expects($this->once())
+            ->method('createThumbnail')
+            ->with($this->anything(), 1, 1, DungeonRouteThumbnailVariant::Standard, false)
+            ->willReturn(null);
+        app()->instance(ThumbnailServiceInterface::class, $thumbnailService);
+
+        try {
+            // Assert
+            $this->expectException(ThumbnailRenderFailedException::class);
+
+            // Act - outside a queue worker attempts() is 1
+            new ProcessRouteFloorThumbnail($dungeonRoute, 1, true)->handle();
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    #[Test]
+    public function handle_givenLastAttempt_rendersAsFinalAttempt(): void
+    {
+        // Arrange
+        config(['keystoneguru.thumbnail.max_attempts' => 1]);
+
+        $dungeonRoute = $this->createDungeonRouteDueForThumbnail();
+
+        $thumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
+        $thumbnailService->expects($this->once())
+            ->method('createThumbnail')
+            ->with($this->anything(), 1, 1, DungeonRouteThumbnailVariant::Standard, true)
+            ->willReturn($dungeonRoute->dungeonRouteThumbnails()->make());
+        app()->instance(ThumbnailServiceInterface::class, $thumbnailService);
+
+        try {
+            // Act
+            new ProcessRouteFloorThumbnail($dungeonRoute, 1, true)->handle();
         } finally {
             $dungeonRoute->delete();
         }

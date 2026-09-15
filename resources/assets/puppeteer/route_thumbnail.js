@@ -13,11 +13,18 @@ function delay(timeout) {
     });
 }
 
-// Browser-side events are collected here rather than printed as they happen, and are only emitted
-// when the render fails. This is deliberate and load-bearing: ThumbnailService::doCreateThumbnail()
-// treats ANY non-empty stderr as a failed render (it returns null even when the screenshot itself
-// succeeded), so writing diagnostics to stderr unconditionally would fail every good render. See #3920.
+// The exit code is the render's outcome; stderr only carries diagnostics. Browser-side events are
+// collected rather than printed as they happen, and are written to stderr only for a page load that
+// failed - ThumbnailService::doCreateThumbnail() logs a successful render with non-empty stderr as
+// recovered, so printing them unconditionally would flag every good render.
 const MAX_DIAGNOSTICS = 200;
+
+// #finished_loading is appended synchronously by the map's DOMContentLoaded bootstrap, so it either
+// exists once the `load` event has fired or it never will - waiting longer does not help, loading the
+// page again does. Three loads of at most 15s + 2s stay inside the 60s Symfony Process default.
+const MAX_PAGE_LOADS = 3;
+const PAGE_LOAD_TIMEOUT_MS = 15000;
+const FINISHED_LOADING_GRACE_MS = 2000;
 
 /**
  * A fresh {diagnostics, recordDiagnostic} pair, so a test can exercise recordDiagnostic() /
@@ -205,58 +212,93 @@ async function launchBrowser(puppeteerModule = puppeteer) {
     }
 }
 
-async function render() {
-    let startTime = new Date().getTime();
-    console.log('Creating browser');
-    const browser = await launchBrowser();
-    const {diagnostics, recordDiagnostic} = createDiagnosticsCollector();
+/**
+ * Loads `url` in a fresh page until #finished_loading appears, at most `maxLoads` times. Every
+ * failed load is closed and described in a report, so a transient failure costs a reload instead
+ * of the whole render.
+ *
+ * @param {function(): Promise<{page: object, diagnostics: string[], pendingConsoleDiagnostics: Promise[]}>} openPage
+ * @param {string} url
+ * @param {{maxLoads: number, loadTimeoutMs: number, graceMs: number}} options
+ * @returns {Promise<{page: object|null, failedLoadReports: string[]}>} `page` is null when every load failed.
+ */
+async function loadUntilFinished(openPage, url, {maxLoads, loadTimeoutMs, graceMs}) {
+    const failedLoadReports = [];
 
-    try {
-        const page = await browser.newPage();
-        const pendingConsoleDiagnostics = wireDiagnostics(page, {diagnostics, recordDiagnostic});
+    for (let load = 1; load <= maxLoads; load++) {
+        const startedAt = new Date().getTime();
+        const {page, diagnostics, pendingConsoleDiagnostics} = await openPage();
 
-        // Force facade for thumbnails
-        await page.setCookie({
-            name: 'map_facade_style',
-            value: 'facade',
-            domain: new URL(process.argv[2]).hostname
-        });
-
-        // Force the default pull-connection weight; the page's own cookie-default bootstrap uses secure
-        // cookies which are rejected on plain-http (internal) URLs, and a NaN weight draws invisible lines
-        await page.setCookie({
-            name: 'kill_zone_path_weight',
-            value: '5',
-            domain: new URL(process.argv[2]).hostname
-        });
-
-        await page.setViewport({width: Math.max(process.argv[4] ?? 0, 768), height: Math.max(process.argv[5] ?? 0, 512)});
-
-        console.log(`Navigating to ${process.argv[2]}`);
-        await page.goto(process.argv[2]);
-
-        console.log('Waiting for page to load fully');
         try {
-            await page.waitForSelector('#finished_loading', {timeout: 10000});
+            await page.goto(url, {timeout: loadTimeoutMs});
+            await page.waitForSelector('#finished_loading', {timeout: graceMs});
+
+            return {page, failedLoadReports};
         } catch (e) {
             // Failure path only - see the note on `diagnostics` above before moving any of this out of the catch.
             await Promise.all(pendingConsoleDiagnostics);
             const pageState = await collectPageState(page);
 
-            console.error(`Render failed after ${new Date().getTime() - startTime}ms for ${process.argv[2]}`);
-            console.error(`Page state: ${JSON.stringify(pageState)}`);
-            console.error(diagnostics.length === 0
-                ? 'Browser reported no console output, page errors or failed requests.'
-                : `Browser events:\n${diagnostics.join('\n')}`);
+            failedLoadReports.push([
+                `Page load ${load} of ${maxLoads} failed after ${new Date().getTime() - startedAt}ms for ${url}: ${e.message}`,
+                `Page state: ${JSON.stringify(pageState)}`,
+                diagnostics.length === 0
+                    ? 'Browser reported no console output, page errors or failed requests.'
+                    : `Browser events:\n${diagnostics.join('\n')}`,
+            ].join('\n'));
 
-            throw e;
+            await page.close().catch(() => {});
+        }
+    }
+
+    return {page: null, failedLoadReports};
+}
+
+async function render() {
+    const [, , url, targetFile, viewportWidth, viewportHeight] = process.argv;
+    let startTime = new Date().getTime();
+    console.log('Creating browser');
+    const browser = await launchBrowser();
+
+    try {
+        const hostname = new URL(url).hostname;
+        const openPage = async () => {
+            const page = await browser.newPage();
+            const collector = createDiagnosticsCollector();
+            const pendingConsoleDiagnostics = wireDiagnostics(page, collector);
+
+            // Force facade for thumbnails
+            await page.setCookie({name: 'map_facade_style', value: 'facade', domain: hostname});
+
+            // Force the default pull-connection weight; the page's own cookie-default bootstrap uses secure
+            // cookies which are rejected on plain-http (internal) URLs, and a NaN weight draws invisible lines
+            await page.setCookie({name: 'kill_zone_path_weight', value: '5', domain: hostname});
+
+            await page.setViewport({width: Math.max(viewportWidth ?? 0, 768), height: Math.max(viewportHeight ?? 0, 512)});
+
+            return {page, diagnostics: collector.diagnostics, pendingConsoleDiagnostics};
+        };
+
+        console.log(`Navigating to ${url}`);
+        const {page, failedLoadReports} = await loadUntilFinished(openPage, url, {
+            maxLoads: MAX_PAGE_LOADS,
+            loadTimeoutMs: PAGE_LOAD_TIMEOUT_MS,
+            graceMs: FINISHED_LOADING_GRACE_MS,
+        });
+
+        if (failedLoadReports.length > 0) {
+            console.error(failedLoadReports.join('\n\n'));
+        }
+
+        if (page === null) {
+            throw new Error(`#finished_loading did not appear in any of ${MAX_PAGE_LOADS} page loads`);
         }
 
         console.log('Waiting for animations to complete');
         await delay(500);
 
         console.log('Taking screenshot');
-        await page.screenshot({path: process.argv[3]});
+        await page.screenshot({path: targetFile});
     } finally {
         await browser.close();
         let time = new Date().getTime() - startTime;
@@ -267,7 +309,10 @@ async function render() {
 // Only run as a script (invoked by ThumbnailService via a `node route_thumbnail.js ...` subprocess) -
 // not when required by a test, which needs the functions below without also launching a real browser.
 if (require.main === module) {
-    render();
+    render().catch(e => {
+        console.error(e.stack || e.message);
+        process.exitCode = 1;
+    });
 }
 
-module.exports = {resolveConsoleArg, formatConsoleMessage, createDiagnosticsCollector, wireDiagnostics, launchBrowser};
+module.exports = {resolveConsoleArg, formatConsoleMessage, createDiagnosticsCollector, wireDiagnostics, launchBrowser, loadUntilFinished};

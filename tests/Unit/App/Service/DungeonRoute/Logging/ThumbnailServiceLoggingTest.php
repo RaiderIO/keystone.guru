@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\App\Service\DungeonRoute\Logging;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\LoggingFixtures;
@@ -14,7 +15,7 @@ final class ThumbnailServiceLoggingTest extends PublicTestCase
     private const string SECRET = 'super-secret-preview-value';
 
     #[Test]
-    public function doCreateThumbnailProcessStart_givenCommandLineWithSecret_logsRedactedCommandLine(): void
+    public function doCreateThumbnailProcessStart_givenCommandLineWithSecret_logsCommandLineWithoutSecretParameter(): void
     {
         // Arrange
         config(['app.log_level' => 'debug', 'app.type' => 'local']);
@@ -31,8 +32,8 @@ final class ThumbnailServiceLoggingTest extends PublicTestCase
             ->method('log')
             ->willReturnCallback(function (string $level, string $message, array $context = []): void {
                 self::assertArrayHasKey('commandLine', $context);
-                self::assertStringNotContainsString(self::SECRET, $context['commandLine']);
-                self::assertStringContainsString('secret=[redacted]&z=2', $context['commandLine']);
+                self::assertStringNotContainsString('secret', $context['commandLine']);
+                self::assertStringContainsString('?dungeonroute=abc&z=2"', $context['commandLine']);
             });
 
         // Act
@@ -43,7 +44,7 @@ final class ThumbnailServiceLoggingTest extends PublicTestCase
     }
 
     #[Test]
-    public function doCreateThumbnailError_givenPreviewUrlWithSecretAsLastParameter_logsRedactedPreviewUrl(): void
+    public function doCreateThumbnailError_givenPreviewUrlWithSecretAsLastParameter_logsPreviewUrlWithoutSecretParameter(): void
     {
         // Arrange
         config(['app.log_level' => 'debug', 'app.type' => 'local']);
@@ -57,8 +58,7 @@ final class ThumbnailServiceLoggingTest extends PublicTestCase
             ->method('log')
             ->willReturnCallback(function (string $level, string $message, array $context = []): void {
                 self::assertArrayHasKey('previewUrl', $context);
-                self::assertStringNotContainsString(self::SECRET, $context['previewUrl']);
-                self::assertSame('https://keystone.guru/preview?dungeonroute=abc&secret=[redacted]', $context['previewUrl']);
+                self::assertSame('https://keystone.guru/preview?dungeonroute=abc', $context['previewUrl']);
             });
 
         // Act
@@ -66,6 +66,96 @@ final class ThumbnailServiceLoggingTest extends PublicTestCase
 
         // Assert
         // Already checked in the callback
+    }
+
+    #[Test]
+    #[DataProvider('doCreateThumbnailError_givenErrorsWithSecret_logsErrorsWithoutSecretParameter_dataProvider')]
+    public function doCreateThumbnailError_givenErrorsWithSecret_logsErrorsWithoutSecretParameter(
+        string $errors,
+        string $expectedErrors,
+    ): void {
+        // Arrange
+        config(['app.log_level' => 'debug', 'app.type' => 'local']);
+
+        $logger = LoggingFixtures::createLogManager($this);
+        $log    = new TestableThumbnailServiceLogging($logger);
+
+        $logger
+            ->expects($this->once())
+            ->method('log')
+            ->willReturnCallback(function (string $level, string $message, array $context = []) use ($expectedErrors): void {
+                self::assertSame($expectedErrors, $context['errors']);
+            });
+
+        // Act
+        $log->doCreateThumbnailError($errors, 'https://keystone.guru/preview', 'standard', 1234);
+
+        // Assert
+        // Already checked in the callback
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function doCreateThumbnailError_givenErrorsWithSecret_logsErrorsWithoutSecretParameter_dataProvider(): array
+    {
+        return [
+            'secret as a middle parameter, on several lines' => [
+                sprintf(
+                    "Render failed after 10012ms for http://nginx/preview/4?dungeonroute=abc&secret=%s&z=1\nRESPONSE 500 http://nginx/preview/4?secret=%s&z=1",
+                    self::SECRET,
+                    self::SECRET,
+                ),
+                "Render failed after 10012ms for http://nginx/preview/4?dungeonroute=abc&z=1\nRESPONSE 500 http://nginx/preview/4?z=1",
+            ],
+            'secret as the only parameter' => [
+                sprintf('Render failed after 10012ms for http://nginx/preview/4?secret=%s', self::SECRET),
+                'Render failed after 10012ms for http://nginx/preview/4',
+            ],
+            'no secret' => [
+                'TimeoutError: Waiting for selector `#finished_loading` failed',
+                'TimeoutError: Waiting for selector `#finished_loading` failed',
+            ],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('doCreateThumbnailRetryableOutcome_givenErrorsWithSecret_logsWarningWithoutSecret_dataProvider')]
+    public function doCreateThumbnailRetryableOutcome_givenErrorsWithSecret_logsWarningWithoutSecret(string $logMethod): void
+    {
+        // Arrange
+        config(['app.log_level' => 'debug', 'app.type' => 'local']);
+
+        $logger     = LoggingFixtures::createLogManager($this);
+        $log        = new TestableThumbnailServiceLogging($logger);
+        $previewUrl = sprintf('http://nginx/preview/4?secret=%s&z=1', self::SECRET);
+        $errors     = sprintf('Page load 1 of 3 failed after 2034ms for %s: Waiting failed', $previewUrl);
+
+        $logger
+            ->expects($this->once())
+            ->method('log')
+            ->willReturnCallback(function (string $level, string $message, array $context = []): void {
+                self::assertSame('WARNING', $level);
+                self::assertSame('Page load 1 of 3 failed after 2034ms for http://nginx/preview/4?z=1: Waiting failed', $context['errors']);
+                self::assertSame('http://nginx/preview/4?z=1', $context['previewUrl']);
+            });
+
+        // Act
+        $log->{$logMethod}($errors, $previewUrl, 'standard', 1234);
+
+        // Assert
+        // Already checked in the callback
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function doCreateThumbnailRetryableOutcome_givenErrorsWithSecret_logsWarningWithoutSecret_dataProvider(): array
+    {
+        return [
+            'failed with attempts remaining' => ['doCreateThumbnailErrorWillRetry'],
+            'recovered after a reload'       => ['doCreateThumbnailRecoveredAfterReload'],
+        ];
     }
 
     #[Test]

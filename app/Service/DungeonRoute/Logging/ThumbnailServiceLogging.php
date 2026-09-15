@@ -63,7 +63,7 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
 
     public function doCreateThumbnailProcessStart(string $commandLine): void
     {
-        $commandLine = self::redactSecret($commandLine);
+        $commandLine = self::stripSecret($commandLine);
 
         $this->info(__METHOD__, get_defined_vars());
     }
@@ -80,7 +80,7 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
 
     public function doCreateThumbnailBlankImageRejected(string $tmpFile, string $previewUrl, string $variant): void
     {
-        $previewUrl = self::redactSecret($previewUrl);
+        $previewUrl = self::stripSecret($previewUrl);
 
         $this->error(__METHOD__, get_defined_vars());
     }
@@ -112,9 +112,26 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
 
     public function doCreateThumbnailError(string $errors, string $previewUrl, string $variant, int $renderDurationMs): void
     {
-        $previewUrl = self::redactSecret($previewUrl);
+        $errors     = self::stripSecret($errors);
+        $previewUrl = self::stripSecret($previewUrl);
 
         $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function doCreateThumbnailErrorWillRetry(string $errors, string $previewUrl, string $variant, int $renderDurationMs): void
+    {
+        $errors     = self::stripSecret($errors);
+        $previewUrl = self::stripSecret($previewUrl);
+
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function doCreateThumbnailRecoveredAfterReload(string $errors, string $previewUrl, string $variant, int $renderDurationMs): void
+    {
+        $errors     = self::stripSecret($errors);
+        $previewUrl = self::stripSecret($previewUrl);
+
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     public function queueThumbnailRefreshMappingVersionNull(string $publicKey): void
@@ -157,10 +174,16 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
     }
 
     /**
-     * Replaces the value of any `secret` query parameter in a URL or command line with a placeholder.
+     * Removes every `secret` query parameter from a URL, command line or block of text, leaving the rest of the
+     * query string intact. Masking only the value is not enough: Sentry's server-side scrubber replaces any logged
+     * value that still contains `secret=` with "[Filtered]", which discards the whole field.
      */
-    private static function redactSecret(string $value): string
+    private static function stripSecret(string $value): string
     {
-        return preg_replace('/([?&]secret=)[^&\s\'"]*/', '$1[redacted]', $value) ?? $value;
+        return preg_replace_callback(
+            '/([?&])secret=[^&\s\'"]*(&?)/',
+            static fn(array $matches): string => $matches[1] === '?' && $matches[2] === '&' ? '?' : $matches[2],
+            $value,
+        ) ?? $value;
     }
 }

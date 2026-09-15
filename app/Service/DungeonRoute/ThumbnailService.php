@@ -32,6 +32,8 @@ class ThumbnailService implements ThumbnailServiceInterface
 
     public const string THUMBNAIL_CUSTOM_FOLDER_PATH = 'thumbnails_custom';
 
+    private const int RENDER_PROCESS_TIMEOUT_SECONDS = 90;
+
     public function __construct(
         private readonly DungeonRouteRepositoryInterface          $dungeonRouteRepository,
         private readonly DungeonRouteThumbnailRepositoryInterface $dungeonRouteThumbnailRepository,
@@ -47,6 +49,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         int                          $floorIndex,
         int                          $attempts = 0,
         DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
+        bool                         $isFinalAttempt = true,
     ): ?DungeonRouteThumbnail {
         try {
             $this->log->createThumbnailStart($dungeonRoute->public_key, $floorIndex, $attempts);
@@ -68,6 +71,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 $settings['zoom_level'],
                 $settings['quality'],
                 $variant,
+                $isFinalAttempt,
             );
         } finally {
             $this->log->createThumbnailEnd();
@@ -119,6 +123,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         ?float                       $zoomLevel = null,
         ?int                         $quality = null,
         DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
+        bool                         $isFinalAttempt = true,
     ): ?DungeonRouteThumbnail {
         $result = null;
 
@@ -181,94 +186,131 @@ class ThumbnailService implements ThumbnailServiceInterface
                 $viewportHeight,
             ]);
 
+            // Up to three page loads of at most 17 seconds each (see route_thumbnail.js), well inside the
+            // thumbnail queue worker's own job timeout.
+            $process->setTimeout(self::RENDER_PROCESS_TIMEOUT_SECONDS);
+
             $this->log->doCreateThumbnailProcessStart($process->getCommandLine());
 
             $renderStartedAt = microtime(true);
             $process->run();
             $renderDurationMs = (int)round((microtime(true) - $renderStartedAt) * 1000);
 
-            if ($process->isSuccessful()) {
-                if (!file_exists($tmpFile)) {
-                    $this->log->doCreateThumbnailFileNotFoundDidPuppeteerDownloadChromium($tmpFile);
-                } else {
-                    try {
-                        if ($this->isBlankImage($tmpFile)) {
-                            // A uniform single-colour render is never a legitimate thumbnail - treat it as a
-                            // failed attempt (thumbnail_updated_at is not touched below) so the existing
-                            // retry/max_attempts path in ProcessRouteFloorThumbnail applies instead of the
-                            // route silently looking up to date forever. See #4103.
-                            $this->log->doCreateThumbnailBlankImageRejected($tmpFile, $previewUrl, $variant->value);
-                        } else {
-                            // Rescale it
-                            $this->log->doCreateThumbnailRescale($tmpFile, $tmpFileAfterResize);
-                            new ImageManager(new ImagickDriver())
-                                ->read($tmpFile)
-                                ->resize($imageWidth, $imageHeight)
-                                ->save($tmpFileAfterResize, $quality);
-
-                            $target = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder);
-
-                            // Remove any old .png file that may be there
-                            $oldPngFilePath = str_replace('.jpg', '.png', $target);
-                            if (file_exists($oldPngFilePath) && unlink($oldPngFilePath)) {
-                                $this->log->doCreateThumbnailRemovedOldPngFile();
-                            }
-
-                            // Image now exists in target location; compress it and move it to the target location
-                            // Log::channel('scheduler')->info('Compressing image..');
-                            // $this->compressPng($tmpScaledFile, $target);
-
-                            $result = $this->attachThumbnailToDungeonRoute(
-                                $dungeonRoute,
-                                $floorIndex,
-                                $target,
-                                file_get_contents($tmpFileAfterResize),
-                                $disk,
-                                $variant,
-                            );
-
-                            // We've updated the thumbnail; make sure the route is updated, so it doesn't get
-                            // updated anymore. Stamped only now that the render has passed the blank-image
-                            // check and been rescaled/attached - an exception above leaves
-                            // thumbnail_updated_at untouched so the route stays eligible for retry. See #4103.
-                            $dungeonRoute->thumbnail_updated_at = Carbon::now();
-                            // Do not update the timestamps of the route! Otherwise, we'll just keep on updating the timestamp
-                            $dungeonRoute->timestamps = false;
-                            $dungeonRoute->save();
-                        }
-                    } catch (Throwable $e) {
-                        $this->log->doCreateThumbnailException($e);
-                    } finally {
-                        // Cleanup
-                        $removedTmpFile = $removedTmpFileAfterResize = null;
-                        if (file_exists($tmpFile)) {
-                            $removedTmpFile = unlink($tmpFile);
-                        }
-                        if (file_exists($tmpFileAfterResize)) {
-                            $removedTmpFileAfterResize = unlink($tmpFileAfterResize);
-                        }
-
-                        if ($removedTmpFile || $removedTmpFileAfterResize) {
-                            $this->log->doCreateThumbnailRemovedTmpFileSuccess();
-                        } elseif ($removedTmpFile === false || $removedTmpFileAfterResize === false) {
-                            $this->log->doCreateThumbnailRemovedTmpFileFailure();
-                        }
-                    }
-                }
+            if (!$this->logRenderProcessOutcome(
+                $process->isSuccessful(),
+                $isFinalAttempt,
+                $process->getErrorOutput(),
+                $previewUrl,
+                $variant,
+                $renderDurationMs,
+            )) {
+                return null;
             }
 
-            // Log any errors that may have occurred
-            $errors = $process->getErrorOutput();
-            if (!empty($errors)) {
-                $this->log->doCreateThumbnailError($errors, $previewUrl, $variant->value, $renderDurationMs);
+            if (!file_exists($tmpFile)) {
+                $this->log->doCreateThumbnailFileNotFoundDidPuppeteerDownloadChromium($tmpFile);
+            } else {
+                try {
+                    if ($this->isBlankImage($tmpFile)) {
+                        // A uniform single-colour render is never a legitimate thumbnail - treat it as a
+                        // failed attempt (thumbnail_updated_at is not touched below) so the existing
+                        // retry/max_attempts path in ProcessRouteFloorThumbnail applies instead of the
+                        // route silently looking up to date forever. See #4103.
+                        $this->log->doCreateThumbnailBlankImageRejected($tmpFile, $previewUrl, $variant->value);
+                    } else {
+                        // Rescale it
+                        $this->log->doCreateThumbnailRescale($tmpFile, $tmpFileAfterResize);
+                        new ImageManager(new ImagickDriver())
+                            ->read($tmpFile)
+                            ->resize($imageWidth, $imageHeight)
+                            ->save($tmpFileAfterResize, $quality);
 
-                return null;
+                        $target = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder);
+
+                        // Remove any old .png file that may be there
+                        $oldPngFilePath = str_replace('.jpg', '.png', $target);
+                        if (file_exists($oldPngFilePath) && unlink($oldPngFilePath)) {
+                            $this->log->doCreateThumbnailRemovedOldPngFile();
+                        }
+
+                        // Image now exists in target location; compress it and move it to the target location
+                        // Log::channel('scheduler')->info('Compressing image..');
+                        // $this->compressPng($tmpScaledFile, $target);
+
+                        $result = $this->attachThumbnailToDungeonRoute(
+                            $dungeonRoute,
+                            $floorIndex,
+                            $target,
+                            file_get_contents($tmpFileAfterResize),
+                            $disk,
+                            $variant,
+                        );
+
+                        // We've updated the thumbnail; make sure the route is updated, so it doesn't get
+                        // updated anymore. Stamped only now that the render has passed the blank-image
+                        // check and been rescaled/attached - an exception above leaves
+                        // thumbnail_updated_at untouched so the route stays eligible for retry. See #4103.
+                        $dungeonRoute->thumbnail_updated_at = Carbon::now();
+                        // Do not update the timestamps of the route! Otherwise, we'll just keep on updating the timestamp
+                        $dungeonRoute->timestamps = false;
+                        $dungeonRoute->save();
+                    }
+                } catch (Throwable $e) {
+                    $this->log->doCreateThumbnailException($e);
+                } finally {
+                    // Cleanup
+                    $removedTmpFile = $removedTmpFileAfterResize = null;
+                    if (file_exists($tmpFile)) {
+                        $removedTmpFile = unlink($tmpFile);
+                    }
+                    if (file_exists($tmpFileAfterResize)) {
+                        $removedTmpFileAfterResize = unlink($tmpFileAfterResize);
+                    }
+
+                    if ($removedTmpFile || $removedTmpFileAfterResize) {
+                        $this->log->doCreateThumbnailRemovedTmpFileSuccess();
+                    } elseif ($removedTmpFile === false || $removedTmpFileAfterResize === false) {
+                        $this->log->doCreateThumbnailRemovedTmpFileFailure();
+                    }
+                }
             }
         } finally {
             $this->log->doCreateThumbnailEnd();
         }
 
         return $result;
+    }
+
+    /**
+     * route_thumbnail.js reports the render's outcome through its exit code; its stderr only carries the diagnostics
+     * of any page load that failed. A render that recovered after a reload, or failed while the caller will still
+     * retry it, is logged as a warning - only a failure on the final attempt is an error.
+     *
+     * @return bool True when the render produced a screenshot that should be processed.
+     */
+    private function logRenderProcessOutcome(
+        bool                         $isSuccessful,
+        bool                         $isFinalAttempt,
+        string                       $errors,
+        string                       $previewUrl,
+        DungeonRouteThumbnailVariant $variant,
+        int                          $renderDurationMs,
+    ): bool {
+        if (!$isSuccessful) {
+            if ($isFinalAttempt) {
+                $this->log->doCreateThumbnailError($errors, $previewUrl, $variant->value, $renderDurationMs);
+            } else {
+                $this->log->doCreateThumbnailErrorWillRetry($errors, $previewUrl, $variant->value, $renderDurationMs);
+            }
+
+            return false;
+        }
+
+        if (!empty($errors)) {
+            $this->log->doCreateThumbnailRecoveredAfterReload($errors, $previewUrl, $variant->value, $renderDurationMs);
+        }
+
+        return true;
     }
 
     /**
