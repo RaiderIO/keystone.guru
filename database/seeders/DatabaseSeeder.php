@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
         MapIconTypesSeeder::class,
         TagCategorySeeder::class,
         PublishedStatesSeeder::class,
+        DungeonRouteCollectionCategoriesSeeder::class,
         CharacteristicsSeeder::class,
         TranslationsSeeder::class,
         MDTAddonVersionSeeder::class,
