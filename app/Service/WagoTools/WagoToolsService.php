@@ -4,11 +4,15 @@ namespace App\Service\WagoTools;
 
 use App\Service\WagoTools\Exceptions\WagoToolsDownloadException;
 use App\Service\WagoTools\Logging\WagoToolsServiceLoggingInterface;
+use Carbon\Exceptions\InvalidFormatException;
 use Generator;
+use Illuminate\Support\Carbon;
 
 class WagoToolsService implements WagoToolsServiceInterface
 {
     private const string BUILDS_URL = 'https://wago.tools/api/builds';
+
+    private const string BUILD_CREATED_AT_FORMAT = 'Y-m-d H:i:s';
 
     private const string TABLE_CSV_URL = 'https://wago.tools/db2/%s/csv?build=%s&locale=%s';
 
@@ -32,17 +36,15 @@ class WagoToolsService implements WagoToolsServiceInterface
 
     public function getLatestBuild(string $product): ?string
     {
-        $response = $this->curlGetContents(self::BUILDS_URL);
+        $builds = $this->fetchBuilds();
 
-        if ($response === null) {
+        if ($builds === null) {
             $this->log->getLatestBuildRequestFailed($product);
 
             return null;
         }
 
-        $builds = json_decode($response, true);
-
-        if (!is_array($builds) || !isset($builds[$product]) || !is_array($builds[$product])) {
+        if (!isset($builds[$product]) || !is_array($builds[$product])) {
             $this->log->getLatestBuildUnknownProduct($product);
 
             return null;
@@ -58,6 +60,38 @@ class WagoToolsService implements WagoToolsServiceInterface
         }
 
         return $latestBuild;
+    }
+
+    public function getBuildReleasedAt(string $product, string $build): ?Carbon
+    {
+        $builds = $this->fetchBuilds();
+
+        if ($builds === null) {
+            $this->log->getBuildReleasedAtRequestFailed($product, $build);
+
+            return null;
+        }
+
+        foreach (is_array($builds[$product] ?? null) ? $builds[$product] : [] as $productBuild) {
+            if (!is_array($productBuild) || ($productBuild['version'] ?? null) !== $build) {
+                continue;
+            }
+
+            $createdAt = $productBuild['created_at'] ?? null;
+
+            try {
+                // wago.tools reports the moment the build appeared on the CDN, in UTC
+                return is_string($createdAt) ? Carbon::createFromFormat(self::BUILD_CREATED_AT_FORMAT, $createdAt, 'UTC') : null;
+            } catch (InvalidFormatException) {
+                $this->log->getBuildReleasedAtInvalidResponse($product, $build);
+
+                return null;
+            }
+        }
+
+        $this->log->getBuildReleasedAtNotFound($product, $build);
+
+        return null;
     }
 
     public function getTableCsvPath(string $table, string $build): string
@@ -179,6 +213,34 @@ class WagoToolsService implements WagoToolsServiceInterface
         }
     }
 
+    protected function curlGetContents(string $url): ?string
+    {
+        $curlHandle = curl_init();
+
+        curl_setopt_array($curlHandle, [
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_ENCODING       => '',
+            CURLOPT_CONNECTTIMEOUT => 30,
+            CURLOPT_TIMEOUT        => 60,
+        ]);
+
+        try {
+            $response = curl_exec($curlHandle);
+            $httpCode = (int)curl_getinfo($curlHandle, CURLINFO_RESPONSE_CODE);
+
+            if (!is_string($response) || $httpCode < 200 || $httpCode >= 300) {
+                return null;
+            }
+        } finally {
+            curl_close($curlHandle);
+        }
+
+        return $response;
+    }
+
     private function getTableCsvTargetPath(string $table, string $build): string
     {
         return storage_path(sprintf('app/db2/%s/%s.csv', $build, $table));
@@ -225,31 +287,21 @@ class WagoToolsService implements WagoToolsServiceInterface
         return true;
     }
 
-    private function curlGetContents(string $url): ?string
+    /**
+     * The build list of every product wago.tools tracks, keyed by product, or null when it could not be read.
+     *
+     * @return array<string, mixed>|null
+     */
+    private function fetchBuilds(): ?array
     {
-        $curlHandle = curl_init();
+        $response = $this->curlGetContents(self::BUILDS_URL);
 
-        curl_setopt_array($curlHandle, [
-            CURLOPT_URL            => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_MAXREDIRS      => 10,
-            CURLOPT_ENCODING       => '',
-            CURLOPT_CONNECTTIMEOUT => 30,
-            CURLOPT_TIMEOUT        => 60,
-        ]);
-
-        try {
-            $response = curl_exec($curlHandle);
-            $httpCode = (int)curl_getinfo($curlHandle, CURLINFO_RESPONSE_CODE);
-
-            if (!is_string($response) || $httpCode < 200 || $httpCode >= 300) {
-                return null;
-            }
-        } finally {
-            curl_close($curlHandle);
+        if ($response === null) {
+            return null;
         }
 
-        return $response;
+        $builds = json_decode($response, true);
+
+        return is_array($builds) ? $builds : null;
     }
 }

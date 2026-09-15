@@ -4,6 +4,7 @@ namespace App\Service\WagoTools;
 
 use App\Service\WagoTools\Exceptions\WagoToolsDownloadException;
 use Generator;
+use Illuminate\Support\Carbon;
 
 /**
  * Reads the game client's DB2 tables from https://wago.tools, which publishes them as one CSV per
@@ -18,6 +19,15 @@ interface WagoToolsServiceInterface
      * @param string $product the CDN product to read builds for, e.g. `wow`, `wowt` or `wow_classic`
      */
     public function getLatestBuild(string $product): ?string;
+
+    /**
+     * When the given build went live, i.e. when wago.tools first saw it on the CDN, or null when that
+     * is not known.
+     *
+     * @param string $product the CDN product the build belongs to, e.g. `wow`
+     * @param string $build   e.g. `12.1.0.69404`
+     */
+    public function getBuildReleasedAt(string $product, string $build): ?Carbon;
 
     /**
      * Download a DB2 table's CSV for the given build, and return the path it was saved to. Repeat calls

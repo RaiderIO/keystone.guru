@@ -4,6 +4,7 @@ namespace App\Service\Spell\Tuning;
 
 use App\Service\Spell\Tuning\Dtos\SpellTuningDiffResult;
 use App\Service\Spell\Tuning\Dtos\SpellTuningSnapshot;
+use Illuminate\Support\Carbon;
 
 interface SpellTuningDiffServiceInterface
 {
@@ -18,6 +19,8 @@ interface SpellTuningDiffServiceInterface
     /**
      * Stores a result, replacing whatever was recorded for its target build before so re-running the
      * diff for the same build pair is idempotent. Returns the number of rows stored.
+     *
+     * @param Carbon|null $toBuildReleasedAt when the target build went live, if known
      */
-    public function store(SpellTuningDiffResult $result): int;
+    public function store(SpellTuningDiffResult $result, ?Carbon $toBuildReleasedAt = null): int;
 }

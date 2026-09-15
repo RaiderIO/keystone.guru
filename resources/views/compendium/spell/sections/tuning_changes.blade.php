@@ -21,6 +21,10 @@ use Illuminate\Support\Collection;
                     'from' => $changes->first()->from_build,
                     'to'   => $toBuild,
                 ]) }}
+                @if($changes->first()->to_build_released_at !== null)
+                    &middot;
+                    @include('compendium.sections.tuning_build_released_at', ['releasedAt' => $changes->first()->to_build_released_at])
+                @endif
             </div>
             @include('compendium.sections.tuning_change_list', [
                 'changes'  => $changes,

@@ -106,6 +106,78 @@ final class SpellTuningCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenBuildWithReleasedAt_rendersTheDateItWentLive(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+        $spell   = $this->findVisibleRetailSpell();
+        $created = [];
+
+        try {
+            $created[] = SpellTuningChange::factory()->create([
+                'spell_id'             => $spell->id,
+                'game_version_id'      => $spell->game_version_id,
+                'from_build'           => self::FROM_BUILD,
+                'to_build'             => self::TO_BUILD,
+                'to_build_number'      => 22,
+                'to_build_released_at' => '2001-02-03 04:05:06',
+            ]);
+
+            // Act
+            $response = $this->get(route('compendium.tuning.index'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeTextInOrder([
+                __('view_compendium.tuning.index.build_title', ['build' => self::TO_BUILD]),
+                __('view_compendium.sections.tuning_build_released_at.went_live', ['date' => 'Feb 3, 2001']),
+                __('view_compendium.tuning.index.build_subtitle', ['from' => self::FROM_BUILD]),
+            ]);
+            $response->assertSee('<time datetime="2001-02-03T04:05:06Z">', false);
+        } finally {
+            foreach ($created as $change) {
+                $change->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function indexDungeon_givenBuildWithoutReleasedAt_rendersNoDate(): void
+    {
+        // Arrange - a dungeon of its own, so no seeded build (which all carry a date) is on the page
+        $this->actingAsGuest();
+        $spell        = $this->findVisibleRetailSpell();
+        $dungeon      = $this->createDungeon(['active' => true]);
+        $created      = [];
+        $spellDungeon = null;
+
+        try {
+            $spellDungeon = SpellDungeon::query()->create(['spell_id' => $spell->id, 'dungeon_id' => $dungeon->id]);
+            $created[]    = SpellTuningChange::factory()->create([
+                'spell_id'             => $spell->id,
+                'game_version_id'      => $spell->game_version_id,
+                'from_build'           => self::FROM_BUILD,
+                'to_build'             => self::TO_BUILD,
+                'to_build_number'      => 22,
+                'to_build_released_at' => null,
+            ]);
+
+            // Act
+            $response = $this->get(route('compendium.tuning', ['dungeon' => $dungeon]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeText(__('view_compendium.tuning.index.build_subtitle', ['from' => self::FROM_BUILD]));
+            $response->assertDontSee('<time datetime=', false);
+        } finally {
+            foreach ($created as $change) {
+                $change->delete();
+            }
+            $spellDungeon?->delete();
+        }
+    }
+
+    #[Test]
     public function indexDungeon_givenDungeon_showsOnlySpellsOfThatDungeonAndSetsContext(): void
     {
         // Arrange

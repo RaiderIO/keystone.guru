@@ -4,6 +4,7 @@ namespace App\Service\Spell\Tuning\Dtos;
 
 use App\Models\Spell\SpellTuningChangeType;
 use App\Service\Spell\Description\Dtos\SpellDescriptionValueKind;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 /**
@@ -34,22 +35,23 @@ class SpellTuningChangeDto
      *
      * @return array<string, mixed>
      */
-    public function toRow(int $gameVersionId, string $fromBuild, string $toBuild): array
+    public function toRow(int $gameVersionId, string $fromBuild, string $toBuild, ?Carbon $toBuildReleasedAt): array
     {
         return [
-            'game_version_id' => $gameVersionId,
-            'spell_id'        => $this->spellId,
-            'from_build'      => $fromBuild,
-            'to_build'        => $toBuild,
-            'to_build_number' => self::buildNumber($toBuild),
-            'change_type'     => $this->changeType->value,
-            'value_index'     => $this->valueIndex,
-            'kind'            => $this->kind?->value,
-            'old_coefficient' => $this->oldCoefficient,
-            'new_coefficient' => $this->newCoefficient,
-            'old_text'        => $this->oldText,
-            'new_text'        => $this->newText,
-            'delta'           => $this->delta,
+            'game_version_id'      => $gameVersionId,
+            'spell_id'             => $this->spellId,
+            'from_build'           => $fromBuild,
+            'to_build'             => $toBuild,
+            'to_build_number'      => self::buildNumber($toBuild),
+            'to_build_released_at' => $toBuildReleasedAt?->toDateTimeString(),
+            'change_type'          => $this->changeType->value,
+            'value_index'          => $this->valueIndex,
+            'kind'                 => $this->kind?->value,
+            'old_coefficient'      => $this->oldCoefficient,
+            'new_coefficient'      => $this->newCoefficient,
+            'old_text'             => $this->oldText,
+            'new_text'             => $this->newText,
+            'delta'                => $this->delta,
         ];
     }
 

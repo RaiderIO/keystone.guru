@@ -201,6 +201,30 @@ class MappingExportServiceTest extends TestCase
     }
 
     /**
+     * The seeder inserts the exported value as-is, so it must be a datetime MySQL accepts - not the ISO 8601
+     * string a datetime cast serializes to by default.
+     */
+    #[Test]
+    public function serializeSpellTuningChanges_givenReleasedAt_returnsItAsMysqlDateTime(): void
+    {
+        // Arrange
+        /** @var MappingExportServiceInterface $mappingExportService */
+        $mappingExportService = app(MappingExportServiceInterface::class);
+        $change               = SpellTuningChange::factory()->create(['to_build' => '0.0.0.00098', 'to_build_number' => 98, 'to_build_released_at' => '2001-02-03 04:05:06']);
+
+        try {
+            // Act
+            $exported = collect($mappingExportService->serializeSpellTuningChanges())->firstWhere('to_build', '0.0.0.00098');
+
+            // Assert
+            Assert::assertNotNull($exported, 'The created change was not exported');
+            Assert::assertSame('2001-02-03 04:05:06', $exported['to_build_released_at']);
+        } finally {
+            $change->delete();
+        }
+    }
+
+    /**
      * Every spell carries the same shape, so the first handful of offenders identifies the problem; the
      * total is reported so a truncated list is never mistaken for the full extent of the leak.
      *

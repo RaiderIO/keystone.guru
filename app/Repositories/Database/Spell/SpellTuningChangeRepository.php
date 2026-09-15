@@ -36,15 +36,17 @@ class SpellTuningChangeRepository extends DatabaseRepository implements SpellTun
         return $this->scopeToDungeon(SpellTuningChange::query(), $dungeon)
             ->select(['from_build', 'to_build', 'to_build_number'])
             ->selectRaw('COUNT(DISTINCT spell_id) AS spell_count')
+            ->selectRaw('MAX(to_build_released_at) AS to_build_released_at')
             ->where('game_version_id', $gameVersionId)
             ->groupBy(['from_build', 'to_build', 'to_build_number'])
             ->orderByDesc('to_build_number')
             ->paginate($perPage)
             ->through(static fn(SpellTuningChange $row): array => [
-                'from_build'      => $row->from_build,
-                'to_build'        => $row->to_build,
-                'to_build_number' => $row->to_build_number,
-                'spell_count'     => (int)$row->getAttribute('spell_count'),
+                'from_build'           => $row->from_build,
+                'to_build'             => $row->to_build,
+                'to_build_number'      => $row->to_build_number,
+                'to_build_released_at' => $row->to_build_released_at,
+                'spell_count'          => (int)$row->getAttribute('spell_count'),
             ]);
     }
 

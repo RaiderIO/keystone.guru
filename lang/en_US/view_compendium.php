@@ -222,6 +222,9 @@ return [
             'changed_to'     => 'changed to',
             'shared_by'      => ':count spell records share this change',
         ],
+        'tuning_build_released_at' => [
+            'went_live' => 'Went live :date',
+        ],
     ],
     'tuning' => [
         'index' => [

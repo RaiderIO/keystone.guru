@@ -10,6 +10,7 @@ use Database\Factories\Spell\SpellTuningChangeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * One change in a spell's description numbers between two client builds, as found by
@@ -24,14 +25,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string                         $from_build
  * @property string                         $to_build
  * @property int                            $to_build_number
+ * @property Carbon|null                    $to_build_released_at When to_build went live, in UTC; null when unknown
  * @property SpellTuningChangeType          $change_type
- * @property int|null                       $value_index     Position in `spells.description_values`; null for a rewritten description
+ * @property int|null                       $value_index          Position in `spells.description_values`; null for a rewritten description
  * @property SpellDescriptionValueKind|null $kind
  * @property float|null                     $old_coefficient
  * @property float|null                     $new_coefficient
  * @property string|null                    $old_text
  * @property string|null                    $new_text
- * @property float|null                     $delta           new / old - 1 for scalable values, null otherwise
+ * @property float|null                     $delta                new / old - 1 for scalable values, null otherwise
  *
  * @property Spell       $spell
  * @property GameVersion $gameVersion
@@ -52,6 +54,7 @@ class SpellTuningChange extends CacheModel
         'from_build',
         'to_build',
         'to_build_number',
+        'to_build_released_at',
         'change_type',
         'value_index',
         'kind',
@@ -68,12 +71,14 @@ class SpellTuningChange extends CacheModel
             'game_version_id' => 'integer',
             'spell_id'        => 'integer',
             'to_build_number' => 'integer',
-            'change_type'     => SpellTuningChangeType::class,
-            'value_index'     => 'integer',
-            'kind'            => SpellDescriptionValueKind::class,
-            'old_coefficient' => 'float',
-            'new_coefficient' => 'float',
-            'delta'           => 'float',
+            // The seeder JSON inserts this string as-is, so it must stay a format MySQL accepts
+            'to_build_released_at' => 'datetime:Y-m-d H:i:s',
+            'change_type'          => SpellTuningChangeType::class,
+            'value_index'          => 'integer',
+            'kind'                 => SpellDescriptionValueKind::class,
+            'old_coefficient'      => 'float',
+            'new_coefficient'      => 'float',
+            'delta'                => 'float',
         ];
     }
 
