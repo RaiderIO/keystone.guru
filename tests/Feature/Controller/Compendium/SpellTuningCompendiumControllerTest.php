@@ -245,7 +245,6 @@ final class SpellTuningCompendiumControllerTest extends PublicTestCase
     {
         $rows = SpellTuningChange::query()->get()->makeHidden(['id'])->toArray();
         SpellTuningChange::query()->delete();
-        new SpellTuningChange()->flushCache();
 
         return array_map(static function (array $row): array {
             // Enum casts serialize to their values already; nothing else to convert
@@ -261,6 +260,5 @@ final class SpellTuningCompendiumControllerTest extends PublicTestCase
         foreach (array_chunk($rows, 500) as $chunk) {
             SpellTuningChange::query()->insert($chunk);
         }
-        new SpellTuningChange()->flushCache();
     }
 }

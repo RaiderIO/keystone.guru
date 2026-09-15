@@ -56,8 +56,6 @@ final class MDTMappingImportPreservesCombatLogHealthTest extends PublicTestCase
 
         try {
             NpcHealth::query()->whereKey($npcHealth->id)->update(['health' => $sentinelHealth]);
-            Npc::query()->findOrFail(self::XATHUUX_NPC_ID)->flushCache();
-            new NpcHealth()->flushCache();
 
             // Act
             $failures = [];
@@ -66,9 +64,6 @@ final class MDTMappingImportPreservesCombatLogHealthTest extends PublicTestCase
             // Assert
             $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
 
-            // Model caching is on in CI: the eager-loaded npcHealths cache under the Npc model, so both need flushing
-            new Npc()->flushCache();
-            new NpcHealth()->flushCache();
             $this->assertSame(
                 $sentinelHealth,
                 Npc::query()->with('npcHealths')->findOrFail(self::XATHUUX_NPC_ID)->getHealthByGameVersion($retailGameVersion)?->health,
@@ -76,8 +71,6 @@ final class MDTMappingImportPreservesCombatLogHealthTest extends PublicTestCase
             );
         } finally {
             NpcHealth::query()->whereKey($npcHealth->id)->update(['health' => self::XATHUUX_CORRECTED_HEALTH]);
-            Npc::query()->findOrFail(self::XATHUUX_NPC_ID)->flushCache();
-            new NpcHealth()->flushCache();
         }
     }
 
@@ -96,8 +89,6 @@ final class MDTMappingImportPreservesCombatLogHealthTest extends PublicTestCase
 
         try {
             NpcHealth::query()->whereKey($npcHealth->id)->update(['health' => NpcHealth::HEALTH_PLACEHOLDER]);
-            Npc::query()->findOrFail(self::XATHUUX_NPC_ID)->flushCache();
-            new NpcHealth()->flushCache();
 
             $mappingImportService = $this->app->make(MDTMappingImportServiceInterface::class);
 
@@ -119,8 +110,6 @@ final class MDTMappingImportPreservesCombatLogHealthTest extends PublicTestCase
             // Assert
             $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
 
-            new Npc()->flushCache();
-            new NpcHealth()->flushCache();
             $this->assertSame(
                 $mdtHealth,
                 Npc::query()->with('npcHealths')->findOrFail(self::XATHUUX_NPC_ID)->getHealthByGameVersion($retailGameVersion)?->health,
@@ -128,8 +117,6 @@ final class MDTMappingImportPreservesCombatLogHealthTest extends PublicTestCase
             );
         } finally {
             NpcHealth::query()->whereKey($npcHealth->id)->update(['health' => self::XATHUUX_CORRECTED_HEALTH]);
-            Npc::query()->findOrFail(self::XATHUUX_NPC_ID)->flushCache();
-            new NpcHealth()->flushCache();
         }
     }
 }

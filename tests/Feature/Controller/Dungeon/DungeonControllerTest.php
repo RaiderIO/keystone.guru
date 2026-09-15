@@ -127,7 +127,6 @@ final class DungeonControllerTest extends PublicTestCase
     private function restoreDungeon(Dungeon $dungeon, array $attributes, array $difficulties): void
     {
         Dungeon::query()->whereKey($dungeon->id)->update($attributes);
-        new Dungeon()->flushCache();
 
         $dungeon->dungeonSpeedrunDifficulties()->delete();
         foreach ($difficulties as $difficulty) {

@@ -16,7 +16,7 @@ ARG STAGE
 # GIT_REF optionally pins the checkout to a specific tag/commit (e.g. a release tag),
 # falling back to the branch matching STAGE when not provided. It is also written to the
 # `version` file so the cron image shares the web images' cache namespace and compiled/<tag>
-# asset keying (laravel-model-caching and ksgCompiledAsset both read this file).
+# asset keying (ViewService and ksgCompiledAsset both read this file).
 ARG GIT_REF
 # Checkout the correct version of the repo
 RUN git config --global --add safe.directory /var/www/html && \

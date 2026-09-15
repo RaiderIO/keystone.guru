@@ -290,7 +290,6 @@ final class CombatLogRouteDungeonRouteServiceRegenerationTest extends PublicTest
 
             if ($npcEnemyForcesId !== null) {
                 NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
-                new NpcEnemyForces()->flushCache();
             }
         }
     }

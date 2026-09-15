@@ -119,6 +119,5 @@ trait IsolatesSeededUpcomingSeasons
     private function flushSeededSeasonCaches(): void
     {
         Cache::store('tmp_file')->flush();
-        new Season()->flushCache();
     }
 }

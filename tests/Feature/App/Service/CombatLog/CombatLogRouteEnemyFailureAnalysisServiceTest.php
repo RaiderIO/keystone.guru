@@ -92,8 +92,6 @@ final class CombatLogRouteEnemyFailureAnalysisServiceTest extends PublicTestCase
             // Enemy and MappingVersion are SeederModels - delete() is refused, use the query builder
             Enemy::query()->where('mapping_version_id', $this->mappingVersion->id)->delete();
             MappingVersion::query()->whereKey($this->mappingVersion->id)->delete();
-            new Enemy()->flushCache();
-            new NpcEnemyForces()->flushCache();
         } finally {
             parent::tearDown();
         }

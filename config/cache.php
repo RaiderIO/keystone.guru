@@ -14,11 +14,6 @@ return [
             'connection'      => 'default',
             'lock_connection' => 'default',
         ],
-
-        'redis_model_cache' => [
-            'driver'     => 'redis',
-            'connection' => 'model_cache',
-        ],
     ],
 
     /*

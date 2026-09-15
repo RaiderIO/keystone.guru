@@ -236,7 +236,7 @@ final class ProvidesDungeonTest extends PublicTestCase
         // Arrange
         $retail   = GameVersion::getDefaultGameVersion();
         $otherIds = [];
-        foreach (Dungeon::query()->disableCache()->get() as $candidate) {
+        foreach (Dungeon::query()->get() as $candidate) {
             /** @var Dungeon $candidate */
             $mappingVersion = $candidate->getCurrentMappingVersion();
 
@@ -437,7 +437,7 @@ final class ProvidesDungeonTest extends PublicTestCase
     {
         $ids = [];
 
-        foreach (Dungeon::query()->disableCache()->get() as $dungeon) {
+        foreach (Dungeon::query()->get() as $dungeon) {
             /** @var Dungeon $dungeon */
             $mappingVersion = $dungeon->getCurrentMappingVersion();
 

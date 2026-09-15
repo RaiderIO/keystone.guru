@@ -121,7 +121,6 @@ class MapContextMappingVersionData implements Arrayable
                             ]);
                     },
                 ])
-                ->disableCache()
                 ->get()
                 ->setVisible([
                     'id',

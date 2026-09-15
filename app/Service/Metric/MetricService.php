@@ -3,9 +3,7 @@
 namespace App\Service\Metric;
 
 use App\Models\Metrics\Metric;
-use App\Models\Metrics\MetricAggregation;
 use App\Service\Cache\CacheServiceInterface;
-use Artisan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -106,10 +104,6 @@ class MetricService implements MetricServiceInterface
             metric_aggregations.updated_at = IF(metric_aggregations.value = metrics.value, metric_aggregations.updated_at, metrics.updated_at),
             metric_aggregations.value = metrics.value;
         ");
-
-        if ($result) {
-            Artisan::call('modelCache:clear', ['--model' => MetricAggregation::class]);
-        }
 
         return $result;
     }

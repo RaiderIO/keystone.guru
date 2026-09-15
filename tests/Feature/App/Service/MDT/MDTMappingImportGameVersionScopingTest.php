@@ -93,8 +93,7 @@ final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
             // Not a whole-environment flip to 'production' (the old approach here): that made
             // StructuredLogging::resolveChannel() dump the import's ~1000 log lines to stderr into CI output
             // (#3782). Not Model::preventLazyLoading(false) either: that flag is snapshotted per model
-            // instance at hydration, so instances laravel-model-caching unserializes from cache keep whatever
-            // value was cached and still throw. Restored via reflection rather than re-registering
+            // instance at hydration. Restored via reflection rather than re-registering
             // AppServiceProvider, which would duplicate its Event::listen() registrations.
             /** @var Closure|null $originalViolationCallback */
             $originalViolationCallback = new ReflectionProperty(Model::class, 'lazyLoadingViolationCallback')->getValue();

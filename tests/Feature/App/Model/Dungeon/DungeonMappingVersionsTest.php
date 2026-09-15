@@ -25,7 +25,7 @@ final class DungeonMappingVersionsTest extends PublicTestCase
         $gameVersion   = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
         $dungeon       = $this->findDungeonWithMultipleMappingVersionsFor($gameVersion);
         $expected      = $this->newestMappingVersion($dungeon, $gameVersion);
-        $loadedDungeon = app('model-cache')->runDisabled(static fn() => Dungeon::findOrFail($dungeon->id)->loadMappingVersions());
+        $loadedDungeon = Dungeon::findOrFail($dungeon->id)->loadMappingVersions();
 
         $queries = 0;
         DB::listen(static function () use (&$queries): void {
@@ -47,11 +47,11 @@ final class DungeonMappingVersionsTest extends PublicTestCase
         $gameVersion  = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
         $dungeon      = $this->findDungeonWithMultipleMappingVersionsFor($gameVersion);
         $expected     = $this->newestMappingVersion($dungeon, $gameVersion);
-        $freshDungeon = app('model-cache')->runDisabled(static fn() => Dungeon::findOrFail($dungeon->id));
+        $freshDungeon = Dungeon::findOrFail($dungeon->id);
         $this->assertFalse($freshDungeon->relationLoaded('mappingVersions'));
 
         // Act
-        $mappingVersion = app('model-cache')->runDisabled(static fn() => $freshDungeon->getCurrentMappingVersionForGameVersion($gameVersion));
+        $mappingVersion = $freshDungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
         // Assert
         $this->assertTrue($freshDungeon->relationLoaded('mappingVersions'));
@@ -64,12 +64,10 @@ final class DungeonMappingVersionsTest extends PublicTestCase
         // Arrange
         $gameVersion  = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
         $dungeon      = $this->findDungeonWithMultipleMappingVersionsFor($gameVersion);
-        $freshDungeon = app('model-cache')->runDisabled(static fn() => Dungeon::findOrFail($dungeon->id));
+        $freshDungeon = Dungeon::findOrFail($dungeon->id);
 
         // Act
-        $floorUnionCount = app('model-cache')->runDisabled(
-            static fn() => $freshDungeon->getCurrentMappingVersionForGameVersion($gameVersion)?->floorUnions->count(),
-        );
+        $floorUnionCount = $freshDungeon->getCurrentMappingVersionForGameVersion($gameVersion)?->floorUnions->count();
 
         // Assert
         $this->assertIsInt($floorUnionCount);
@@ -82,8 +80,8 @@ final class DungeonMappingVersionsTest extends PublicTestCase
         $retail       = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
         $classicEra   = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
         [$dungeon]    = $this->findDungeon(gameVersion: $retail);
-        $freshDungeon = app('model-cache')->runDisabled(static fn() => Dungeon::findOrFail($dungeon->id));
-        $expected     = app('model-cache')->runDisabled(static fn() => $freshDungeon->getCurrentMappingVersionForGameVersion($retail));
+        $freshDungeon = Dungeon::findOrFail($dungeon->id);
+        $expected     = $freshDungeon->getCurrentMappingVersionForGameVersion($retail);
 
         $queries = 0;
         DB::listen(static function () use (&$queries): void {
@@ -91,11 +89,8 @@ final class DungeonMappingVersionsTest extends PublicTestCase
         });
 
         // Act
-        $mappingVersion = app('model-cache')->runDisabled(static function () use ($freshDungeon, $retail, $classicEra): ?MappingVersion {
-            $freshDungeon->getCurrentMappingVersionForGameVersion($classicEra);
-
-            return $freshDungeon->getCurrentMappingVersionForGameVersion($retail);
-        });
+        $freshDungeon->getCurrentMappingVersionForGameVersion($classicEra);
+        $mappingVersion = $freshDungeon->getCurrentMappingVersionForGameVersion($retail);
 
         // Assert
         $this->assertSame(0, $queries);
@@ -113,10 +108,10 @@ final class DungeonMappingVersionsTest extends PublicTestCase
                 static fn(Builder $mappingVersions) => $mappingVersions->where('game_version_id', $gameVersion->id),
             ),
         );
-        $freshDungeon = app('model-cache')->runDisabled(static fn() => Dungeon::findOrFail($dungeon->id));
+        $freshDungeon = Dungeon::findOrFail($dungeon->id);
 
         // Act
-        $mappingVersion = app('model-cache')->runDisabled(static fn() => $freshDungeon->getCurrentMappingVersionForGameVersion($gameVersion));
+        $mappingVersion = $freshDungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
         // Assert
         $this->assertNull($mappingVersion);
@@ -128,7 +123,7 @@ final class DungeonMappingVersionsTest extends PublicTestCase
     {
         // Arrange
         [$dungeon] = $this->findDungeon();
-        $dungeon   = app('model-cache')->runDisabled(static fn() => Dungeon::findOrFail($dungeon->id)->loadMappingVersions());
+        $dungeon   = Dungeon::findOrFail($dungeon->id)->loadMappingVersions();
         $expected  = $dungeon->mappingVersions->pluck('id')->all();
 
         $queries = 0;
@@ -137,7 +132,7 @@ final class DungeonMappingVersionsTest extends PublicTestCase
         });
 
         // Act
-        $mappingVersionIds = app('model-cache')->runDisabled(static fn() => $dungeon->loadMappingVersions()->mappingVersions->pluck('id')->all());
+        $mappingVersionIds = $dungeon->loadMappingVersions()->mappingVersions->pluck('id')->all();
 
         // Assert
         $this->assertSame(0, $queries);
@@ -150,7 +145,7 @@ final class DungeonMappingVersionsTest extends PublicTestCase
         // Arrange
         $gameVersion   = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
         [$dungeon]     = $this->findDungeon(gameVersion: $gameVersion);
-        $loadedDungeon = app('model-cache')->runDisabled(static fn() => Dungeon::findOrFail($dungeon->id)->loadMappingVersions());
+        $loadedDungeon = Dungeon::findOrFail($dungeon->id)->loadMappingVersions();
         $current       = $loadedDungeon->getCurrentMappingVersionForGameVersion($gameVersion);
         $this->assertNotNull($current);
 
@@ -173,9 +168,7 @@ final class DungeonMappingVersionsTest extends PublicTestCase
 
             // Act
             $staleMappingVersion    = $loadedDungeon->getCurrentMappingVersionForGameVersion($gameVersion);
-            $reloadedMappingVersion = app('model-cache')->runDisabled(
-                static fn() => $loadedDungeon->reloadMappingVersions()->getCurrentMappingVersionForGameVersion($gameVersion),
-            );
+            $reloadedMappingVersion = $loadedDungeon->reloadMappingVersions()->getCurrentMappingVersionForGameVersion($gameVersion);
 
             // Assert
             $this->assertSame($current->id, $staleMappingVersion?->id);
