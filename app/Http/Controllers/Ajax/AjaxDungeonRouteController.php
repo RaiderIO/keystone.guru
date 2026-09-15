@@ -258,7 +258,7 @@ class AjaxDungeonRouteController extends Controller
         if (isset($result['data'])) {
             /** @var array<int, mixed> $data */
             $data = $result['data'];
-            $thumbnailService->queueThumbnailRefreshIfMissing(collect($data));
+            $thumbnailService->dungeonRoutesDisplayed(collect($data));
         }
 
         return $result;
@@ -411,7 +411,7 @@ class AjaxDungeonRouteController extends Controller
             $userRegion = GameServerRegion::getUserOrDefaultRegion();
 
             // Ensure that the resulting routes have their thumbnails refreshed if they are missing
-            $thumbnailService->queueThumbnailRefreshIfMissing($result);
+            $thumbnailService->dungeonRoutesDisplayed($result);
 
             return view('common.dungeonroute.cardlist', [
                 'currentAffixGroup' => ($season !== null ? $seasonAffixGroupService->getCurrentAffixGroupInRegion($season, $userRegion) : null) ??
@@ -496,7 +496,7 @@ class AjaxDungeonRouteController extends Controller
         if ($result->isEmpty()) {
             return response()->noContent();
         } else {
-            $thumbnailService->queueThumbnailRefreshIfMissing($result);
+            $thumbnailService->dungeonRoutesDisplayed($result);
 
             return view('common.dungeonroute.cardlist', [
                 'currentAffixGroup' => $currentAffixGroup,

@@ -34,6 +34,15 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
      */
     public function getDungeonRoutesWithExpiredThumbnails(?Collection $dungeonRoutes = null): Collection;
 
+    /**
+     * Sets last_accessed_at to now for the given routes that were not yet accessed today, without touching
+     * updated_at.
+     *
+     * @param  Collection<int, int> $dungeonRouteIds
+     * @return int                  The amount of routes that were stamped.
+     */
+    public function stampLastAccessedAt(Collection $dungeonRouteIds): int;
+
     /** @return Collection<string, Collection<int, WeeklyRoute>> */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection;
 

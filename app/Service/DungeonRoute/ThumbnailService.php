@@ -410,21 +410,20 @@ class ThumbnailService implements ThumbnailServiceInterface
     }
 
     /**
-     * @param  Collection<int, DungeonRoute> $dungeonRoutes
-     * @param  bool                          $force
-     * @return bool
+     * {@inheritDoc}
      */
-    public function queueThumbnailRefreshIfMissing(Collection $dungeonRoutes, bool $force = false): bool
+    public function dungeonRoutesDisplayed(Collection $dungeonRoutes): bool
     {
+        if ($dungeonRoutes->isEmpty()) {
+            return false;
+        }
+
+        $this->dungeonRouteRepository->stampLastAccessedAt($dungeonRoutes->pluck('id'));
+
         $result = false;
-
-        $dungeonRoutesWithExpiredThumbnails = $this->dungeonRouteRepository->getDungeonRoutesWithExpiredThumbnails(
-            $dungeonRoutes,
-        );
-
-        foreach ($dungeonRoutesWithExpiredThumbnails as $dungeonRoute) {
+        foreach ($this->dungeonRouteRepository->getDungeonRoutesWithExpiredThumbnails($dungeonRoutes) as $dungeonRoute) {
             /** @var DungeonRoute $dungeonRoute */
-            if ($this->queueThumbnailRefresh($dungeonRoute, $force)) {
+            if ($this->queueThumbnailRefresh($dungeonRoute)) {
                 $result = true;
             }
         }

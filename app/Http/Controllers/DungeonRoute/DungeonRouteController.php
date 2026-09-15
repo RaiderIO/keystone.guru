@@ -130,7 +130,7 @@ class DungeonRouteController extends Controller
             $floor = $resolvedFloor->floor;
 
             // If we viewed a route, then there should also be a thumbnail for it
-            $thumbnailService->queueThumbnailRefreshIfMissing(collect([$dungeonroute]));
+            $thumbnailService->dungeonRoutesDisplayed(collect([$dungeonroute]));
 
             return view('dungeonroute.view', [
                 'dungeon'        => $dungeonroute->dungeon,
