@@ -22,6 +22,10 @@ final class CacheServiceClearIdleKeysTest extends PublicTestCase
 {
     private const int IDLE_THRESHOLD_SECONDS = 900;
 
+    // The presence-key sweep hardcodes an 86400s idle threshold regardless of the seconds argument, so the
+    // mocked OBJECT idletime response must clear that too.
+    private const int PRESENCE_IDLE_TIME_SECONDS = 86400 + 1;
+
     private function prefix(): string
     {
         return config('database.redis.options.prefix') . config('cache.prefix');
@@ -29,25 +33,31 @@ final class CacheServiceClearIdleKeysTest extends PublicTestCase
 
     /**
      * Runs clearIdleKeys against a CacheService whose Redis layer is fully mocked, so no real keys are touched.
-     * SCAN returns the supplied keys once, OBJECT idletime reports every key as idle past the threshold, and
-     * DEL is captured. Returns the bare list of keys that clearIdleKeys asked Redis to delete.
+     * SCAN returns the supplied keys once per connection it is called on, OBJECT idletime reports every key as
+     * idle past the threshold, and DEL/SCAN calls are captured.
      *
-     * @param  array<int, string> $keysOnEachConnection
-     * @return array<int, string>
+     * @param  array<int, string>                                                                                                 $keysOnEachConnection
+     * @return array{deletedKeys: array<int, string>, scanCalls: array<int, array{connection: string, args: array<int, string>}>}
      */
-    private function runClearIdleKeysAndCaptureDeletes(array $keysOnEachConnection): array
+    private function runClearIdleKeysAndCaptureCalls(array $keysOnEachConnection): array
     {
         $deletedKeys = [];
+        $scanCalls   = [];
 
         /** @var MockObject&RedisServiceInterface $redisService */
         $redisService = $this->createMockPublic(RedisServiceInterface::class);
         $redisService->method('rawCommand')->willReturnCallback(
-            function (Connection $redis, string $command, ...$params) use (&$deletedKeys, $keysOnEachConnection): mixed {
+            function (Connection $redis, string $command, ...$params) use (&$deletedKeys, &$scanCalls, $keysOnEachConnection): mixed {
                 return match ($command) {
                     // [cursor, keys] - cursor 0 ends the SCAN loop after one iteration.
-                    'SCAN' => ['0', $keysOnEachConnection],
-                    // Report every key as idle well past any threshold so the idle check never shields a match.
-                    'OBJECT' => self::IDLE_THRESHOLD_SECONDS + 1,
+                    'SCAN' => (static function () use ($redis, $params, &$scanCalls, $keysOnEachConnection): array {
+                        $scanCalls[] = ['connection' => $redis->getName(), 'args' => $params];
+
+                        return ['0', $keysOnEachConnection];
+                    })(),
+                    // Report every key as idle well past any threshold - including the presence sweep's own
+                    // hardcoded 86400s - so the idle check never shields a match.
+                    'OBJECT' => self::PRESENCE_IDLE_TIME_SECONDS,
                     'DEL'    => (static function () use (&$deletedKeys, $params): int {
                         foreach ($params as $key) {
                             $deletedKeys[] = $key;
@@ -66,7 +76,16 @@ final class CacheServiceClearIdleKeysTest extends PublicTestCase
         $cacheService = new CacheService($redisService, $log);
         $cacheService->clearIdleKeys(self::IDLE_THRESHOLD_SECONDS);
 
-        return $deletedKeys;
+        return ['deletedKeys' => $deletedKeys, 'scanCalls' => $scanCalls];
+    }
+
+    /**
+     * @param  array<int, string> $keysOnEachConnection
+     * @return array<int, string>
+     */
+    private function runClearIdleKeysAndCaptureDeletes(array $keysOnEachConnection): array
+    {
+        return $this->runClearIdleKeysAndCaptureCalls($keysOnEachConnection)['deletedKeys'];
     }
 
     #[Test]
@@ -93,5 +112,71 @@ final class CacheServiceClearIdleKeysTest extends PublicTestCase
 
         // Assert
         $this->assertContains($modelCacheKey, $deletedKeys, 'An idle Model Cache key should still be cleaned up by clearIdleKeys');
+    }
+
+    #[Test]
+    public function clearIdleKeys_givenPresenceKeyIdleForMoreThan24Hours_deletesIt(): void
+    {
+        // Arrange - a route-edit presence key with a 7-character public key.
+        $presenceKey = sprintf('%spresence-%s-route-edit.E2mXPo3', $this->prefix(), config('app.type'));
+
+        // Act
+        $deletedKeys = $this->runClearIdleKeysAndCaptureDeletes([$presenceKey]);
+
+        // Assert
+        $this->assertContains($presenceKey, $deletedKeys, 'A presence key idle past 24 hours should be cleaned up by clearIdleKeys');
+    }
+
+    #[Test]
+    public function clearIdleKeys_givenLiveSessionPresenceKey_deletesIt(): void
+    {
+        // Arrange
+        $presenceKey = sprintf('%spresence-%s-live-session.E2mXPo3', $this->prefix(), config('app.type'));
+
+        // Act
+        $deletedKeys = $this->runClearIdleKeysAndCaptureDeletes([$presenceKey]);
+
+        // Assert
+        $this->assertContains($presenceKey, $deletedKeys, 'A live-session presence key idle past 24 hours should be cleaned up by clearIdleKeys');
+    }
+
+    #[Test]
+    public function clearIdleKeys_sweepingPresenceKeys_scansOnlyTheDefaultConnectionOnce(): void
+    {
+        // Arrange
+        $presenceKey = sprintf('%spresence-%s-route-edit.E2mXPo3', $this->prefix(), config('app.type'));
+
+        // Act
+        $scanCalls = $this->runClearIdleKeysAndCaptureCalls([$presenceKey])['scanCalls'];
+
+        // Assert - the model-cache half still scans default/model_cache/cache (one SCAN call each, cursor 0
+        // ends the loop), and the presence half must add exactly one more SCAN call, on 'default' only.
+        $presenceScanCalls = array_values(array_filter(
+            $scanCalls,
+            static fn(array $call): bool => in_array('MATCH', $call['args'], true),
+        ));
+
+        $this->assertCount(1, $presenceScanCalls, 'The presence-key sweep must scan in a single pass');
+        $this->assertSame('default', $presenceScanCalls[0]['connection'], 'The presence-key sweep must only scan the default connection');
+    }
+
+    #[Test]
+    public function clearIdleKeys_sweepingPresenceKeys_usesAServerSideScanMatch(): void
+    {
+        // Arrange
+        $presenceKey   = sprintf('%spresence-%s-route-edit.E2mXPo3', $this->prefix(), config('app.type'));
+        $expectedMatch = sprintf('%spresence-%s-*', $this->prefix(), config('app.type'));
+
+        // Act
+        $scanCalls = $this->runClearIdleKeysAndCaptureCalls([$presenceKey])['scanCalls'];
+
+        $presenceScanCalls = array_values(array_filter(
+            $scanCalls,
+            static fn(array $call): bool => in_array('MATCH', $call['args'], true),
+        ));
+
+        // Assert - args are [cursor, MATCH, pattern, COUNT, count]
+        $this->assertCount(1, $presenceScanCalls);
+        $this->assertSame(['0', 'MATCH', $expectedMatch, 'COUNT', '1000'], $presenceScanCalls[0]['args']);
     }
 }
