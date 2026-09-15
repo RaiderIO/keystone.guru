@@ -2,7 +2,7 @@
 
 @section('header-title', __('view_auth.passwords.reset.header'))
 @section('content')
-    <form method="POST" action="{{ route('password.update') }}">
+    <form id="reset_password_form" method="POST" action="{{ route('password.update') }}" class="auth-form">
         {{ csrf_field() }}
 
         <input type="hidden" name="token" value="{{ $token }}">
@@ -21,12 +21,11 @@
         <div class="mb-3">
             <label for="password" class="form-label">{{ __('view_auth.passwords.reset.password') }}</label>
 
-            <input id="password" type="password"
-                   class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password"
-                   required autocomplete="new-password"
-                   @if($errors->has('password')) aria-invalid="true" @endif>
-
-            @include('common.forms.form-error', ['key' => 'password'])
+            @include('common.forms.passwordinput', [
+                'inputId'      => 'password',
+                'name'         => 'password',
+                'autocomplete' => 'new-password',
+            ])
         </div>
 
         <div class="mb-3">
@@ -34,12 +33,11 @@
                 {{ __('view_auth.passwords.reset.confirm_password') }}
             </label>
 
-            <input id="password-confirm" type="password"
-                   class="form-control{{ $errors->has('password_confirmation') ? ' is-invalid' : '' }}"
-                   name="password_confirmation" required autocomplete="new-password"
-                   @if($errors->has('password_confirmation')) aria-invalid="true" @endif>
-
-            @include('common.forms.form-error', ['key' => 'password_confirmation'])
+            @include('common.forms.passwordinput', [
+                'inputId'      => 'password-confirm',
+                'name'         => 'password_confirmation',
+                'autocomplete' => 'new-password',
+            ])
         </div>
 
         <div class="mb-3">

@@ -198,6 +198,9 @@ return [
             'continue_with_discord'   => 'Continue with Discord',
             'continue_with_google'    => 'Continue with Google',
         ],
+        'passwordinput' => [
+            'show_password' => 'Show password',
+        ],
         'pullsettings' => [
             'pull_number_style'                 => 'Pull number style',
             'pull_number_style_title'           => 'This controls how the pulls sidebar and enemy forces checkpoints display numbers.',
@@ -228,6 +231,7 @@ return [
             'terms_of_service'        => 'terms of service',
             'privacy_policy'          => 'privacy policy',
             'cookie_policy'           => 'cookie policy',
+            'opens_in_new_tab'        => 'Opens in a new tab',
             'already_have_an_account' => 'Already have an account?',
             'login_now'               => 'Login',
         ],

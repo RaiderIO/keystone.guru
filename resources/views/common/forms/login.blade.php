@@ -9,18 +9,19 @@ $errors   ??= collect();
 $authSuccessUrl ??= null;
 ?>
 
-<div class="row">
+<div class="row auth-form">
     <div class="col-12 col-lg-6">
         <form id="{{ $modalClass }}login_form" method="POST"
               action="{{ route('login', ['redirect' => $redirect]) }}">
             {{ csrf_field() }}
-            <h3>
+            <h3 id="{{ $modalClass }}login_heading">
                 {{ __('view_common.forms.login.login') }}
             </h3>
 
             <div class="mb-3">
                 <label for="{{ $modalClass }}login_email" class="form-label">
                     {{ __('view_common.forms.login.email_address') }}
+                    <span class="form-required" aria-hidden="true">*</span>
                 </label>
 
                 <input id="{{ $modalClass }}login_email" type="email"
@@ -33,13 +34,14 @@ $authSuccessUrl ??= null;
             <div class="mb-3">
                 <label for="{{ $modalClass }}login_password" class="form-label">
                     {{ __('view_common.forms.login.password') }}
+                    <span class="form-required" aria-hidden="true">*</span>
                 </label>
 
-                <input id="{{ $modalClass }}login_password" type="password"
-                       class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password"
-                       autocomplete="current-password" required
-                       @if($errors->has('password')) aria-invalid="true" @endif>
-                @include('common.forms.form-error', ['key' => 'password'])
+                @include('common.forms.passwordinput', [
+                    'inputId'      => $modalClass . 'login_password',
+                    'name'         => 'password',
+                    'autocomplete' => 'current-password',
+                ])
             </div>
 
             <div class="mb-3">

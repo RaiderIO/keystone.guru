@@ -147,7 +147,13 @@ $.fn.passwordStrength = function (options) {
             .append($('<div>', {'class': 'progress'}).append($bar))
             .append($text);
 
-        $input.closest('div').append($widget);
+        // Inside an .input-group (a password input with a reveal button) the closest div is the
+        // group itself, which would squeeze the meter in next to the button
+        let $container = $input.closest('div');
+        if ($container.hasClass('input-group')) {
+            $container = $container.parent();
+        }
+        $container.append($widget);
 
         function setBar(percent, className) {
             $bar.css('width', `${percent}%`).attr('aria-valuenow', percent)
