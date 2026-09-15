@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 
@@ -9,6 +10,7 @@ use App\Models\Season;
  * @var int         $routeKeyLevelFrom
  * @var int         $routeKeyLevelTo
  * @var GameVersion $currentUserGameVersion
+ * @var Dungeon     $currentDungeonContext
  */
 
 $dungeonSelectId = 'dungeon_id_select_temporary';
@@ -28,7 +30,7 @@ $dungeonSelectId = 'dungeon_id_select_temporary';
 {{ html()->form('POST', route('dungeonroute.temporary.savenew'))->open() }}
 <div class="container">
     @if( !isset($model) )
-        @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false, 'showSeasons' => true])
+        @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false, 'showSeasons' => true, 'selected' => $currentDungeonContext->id])
     @endif
 
     @if($currentUserGameVersion->has_seasons)

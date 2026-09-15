@@ -3,8 +3,12 @@
 namespace Tests\Feature\View;
 
 use App\Http\View\Composers\CreateRouteFormComposer;
+use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Season;
+use App\Models\User;
+use App\Service\View\RequestViewContextInterface;
+use App\Service\View\ViewServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Group;
@@ -83,6 +87,68 @@ final class CreateRouteFormComposerTest extends PublicTestCase
             if ($upcomingSeason !== null) {
                 $this->deleteSeason($upcomingSeason);
             }
+        }
+    }
+
+    /**
+     * The Create Route dungeon selector must preselect whatever dungeon the top-bar context is
+     * currently on, instead of always falling back to the first option in the list.
+     */
+    #[Test]
+    public function compose_givenADungeonContextCookie_setsCurrentDungeonContextToThatDungeon(): void
+    {
+        // Arrange
+        $expectedDungeon = Dungeon::active()
+            ->whereHas('expansion', static fn($q) => $q->where('shortname', 'classic'))
+            ->first();
+        $this->assertNotNull($expectedDungeon, 'Need at least one active Classic dungeon in the DB');
+
+        $_COOKIE['dungeon_context'] = $expectedDungeon->key;
+
+        try {
+            $view = view('common.forms.createroute');
+
+            // Act
+            app(CreateRouteFormComposer::class)->compose($view);
+
+            // Assert
+            $this->assertSame($expectedDungeon->id, $view->getData()['currentDungeonContext']->id);
+        } finally {
+            unset($_COOKIE['dungeon_context']);
+        }
+    }
+
+    /**
+     * The actual HTML the "Create Route" button lazy-loads (via the whitelisted ajax.view
+     * endpoint - see AjaxViewFormRequest) must mark the logged-in user's dungeon context as
+     * selected, not just leave the composer's view data correct.
+     */
+    #[Test]
+    public function ajaxView_givenALoggedInUserWithADungeonContext_preselectsThatDungeonInTheCreateRouteForm(): void
+    {
+        // Arrange - must be a dungeon the form's selector actually lists (the current season's
+        // dungeons), and not the first one in that list, or the pre-fix default would pass by luck
+        $currentSeason = app(ViewServiceInterface::class)
+            ->getCurrentSeasonForRegion(app(RequestViewContextInterface::class)->getUserOrDefaultRegion());
+        $seasonDungeons = $currentSeason->dungeons()->active()->get();
+        $this->assertGreaterThan(1, $seasonDungeons->count(), 'Need at least two active current-season dungeons');
+        $expectedDungeon = $seasonDungeons->last();
+
+        $user = User::factory()->create(['dungeon_id' => $expectedDungeon->id]);
+
+        try {
+            // Act
+            $response = $this->actingAs($user)
+                ->get(route('ajax.view', ['view' => 'common.modal.createroute']), ['X-Requested-With' => 'XMLHttpRequest']);
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(
+                sprintf('value="%d" selected="selected"', $expectedDungeon->id),
+                false,
+            );
+        } finally {
+            $user->delete();
         }
     }
 

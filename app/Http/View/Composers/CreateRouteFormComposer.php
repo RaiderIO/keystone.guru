@@ -3,8 +3,10 @@
 namespace App\Http\View\Composers;
 
 use App\Models\Season;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 readonly class CreateRouteFormComposer implements ViewComposerInterface
@@ -12,11 +14,14 @@ readonly class CreateRouteFormComposer implements ViewComposerInterface
     public function __construct(
         private ViewServiceInterface        $viewService,
         private RequestViewContextInterface $requestViewContext,
+        private DungeonServiceInterface     $dungeonService,
     ) {
     }
 
     public function compose(View $view): void
     {
+        $view->with('currentDungeonContext', $this->dungeonService->getDungeonContext(Auth::user()));
+
         $gameServerRegion = $this->requestViewContext->getUserOrDefaultRegion();
 
         /** @var Season $currentSeason */
