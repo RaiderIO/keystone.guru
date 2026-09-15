@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserPinnedDungeonRoute;
 use App\Models\UserSocialLink;
 use App\Models\UserSocialLinkPlatform;
+use Illuminate\Support\Facades\Queue;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -139,6 +140,44 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             // Assert
             $response->assertOk();
             $response->assertViewHas('pinnedDungeonRoutes', static fn($routes): bool => $routes->count() === 1);
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $pin->delete();
+            $publishedRoute->delete();
+            $viewer->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function view_givenAPinnedPublishedRoute_stampsItAsAccessed(): void
+    {
+        // Arrange
+        Queue::fake();
+        $creator = User::factory()->create();
+        $viewer  = User::factory()->create();
+
+        $publishedRoute = DungeonRoute::factory()->create([
+            'author_id'          => $creator->id,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+
+        $pin                   = new UserPinnedDungeonRoute();
+        $pin->user_id          = $creator->id;
+        $pin->dungeon_route_id = $publishedRoute->id;
+        $pin->order            = 0;
+        $pin->save();
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('profile.view', ['user' => $creator]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertTrue($publishedRoute->refresh()->last_accessed_at?->isToday() ?? false);
         } finally {
             Feature::for($viewer)->forget(CreatorProfiles::class);
             $pin->delete();

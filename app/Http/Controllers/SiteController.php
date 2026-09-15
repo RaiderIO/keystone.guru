@@ -13,6 +13,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
@@ -53,6 +54,7 @@ class SiteController extends Controller
         DungeonRouteRepositoryInterface $dungeonRouteRepository,
         DiscoverServiceInterface        $discoverService,
         DungeonServiceInterface         $dungeonService,
+        ThumbnailServiceInterface       $thumbnailService,
     ): View {
         // @TODO Add caching
         $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes();
@@ -60,18 +62,21 @@ class SiteController extends Controller
         $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
         $season                   = $seasonService->getCurrentSeason($userOrDefaultGameVersion->expansion);
 
+        $popularDungeonRoutesByDungeon = $discoverService
+            ->withSeason($season)
+            ->withGameVersion($userOrDefaultGameVersion)
+            ->excludeTeam(Team::getRaiderIOTeam())
+            ->popularGroupedByDungeon()
+            ->map(static fn(Collection $routes) => $routes->take(1))
+            ->flatten();
+        $thumbnailService->dungeonRoutesDisplayed($popularDungeonRoutesByDungeon);
+
         return view('home.layout', [
             'currentSeason'                 => $season,
             'weeklyRouteDungeons'           => Dungeon::whereIn('key', $weeklyRoutes->keys())->orderBy('id')->get(),
             'weeklyRoutes'                  => $weeklyRoutes,
-            'popularDungeonRoutesByDungeon' => $discoverService
-                ->withSeason($season)
-                ->withGameVersion($userOrDefaultGameVersion)
-                ->excludeTeam(Team::getRaiderIOTeam())
-                ->popularGroupedByDungeon()
-                ->map(static fn(Collection $routes) => $routes->take(1))
-                ->flatten(),
-            'userOrDefaultGameVersion' => $userOrDefaultGameVersion,
+            'popularDungeonRoutesByDungeon' => $popularDungeonRoutesByDungeon,
+            'userOrDefaultGameVersion'      => $userOrDefaultGameVersion,
             // HeaderComposer only injects this into the header view itself - the dungeon context
             // links this page overrides are built in the view, so it needs its own copy
             'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion),
@@ -208,6 +213,7 @@ class SiteController extends Controller
         SeasonAffixGroupServiceInterface $seasonAffixGroupService,
         ExpansionService                 $expansionService,
         TimewalkingEventServiceInterface $timewalkingEventService,
+        ThumbnailServiceInterface        $thumbnailService,
     ): View {
         $currentExpansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
 
@@ -217,6 +223,14 @@ class SiteController extends Controller
         $offset    = max(min($offset, $maxOffset), $minOffset);
 
         $currentSeason = $seasonService->getCurrentSeason($currentExpansion);
+
+        $thisWeekDungeonRoutes = $discoverService
+            ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
+            ->popularByAffixGroup($currentSeason !== null ? $seasonAffixGroupService->getCurrentAffixGroup($currentSeason) : null);
+        $nextWeekDungeonRoutes = $discoverService
+            ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
+            ->popularByAffixGroup($currentSeason !== null ? $seasonAffixGroupService->getNextAffixGroup($currentSeason) : null);
+        $thumbnailService->dungeonRoutesDisplayed($thisWeekDungeonRoutes->merge($nextWeekDungeonRoutes));
 
         return view('misc.affixes', [
             'timewalkingEventService' => $timewalkingEventService,
@@ -228,12 +242,8 @@ class SiteController extends Controller
             'showPrevious'            => $offset > $minOffset,
             'showNext'                => $offset < $maxOffset,
             'dungeonroutes'           => [
-                'thisweek' => $discoverService
-                    ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
-                    ->popularByAffixGroup($currentSeason !== null ? $seasonAffixGroupService->getCurrentAffixGroup($currentSeason) : null),
-                'nextweek' => $discoverService
-                    ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
-                    ->popularByAffixGroup($currentSeason !== null ? $seasonAffixGroupService->getNextAffixGroup($currentSeason) : null),
+                'thisweek' => $thisWeekDungeonRoutes,
+                'nextweek' => $nextWeekDungeonRoutes,
             ],
         ]);
     }
