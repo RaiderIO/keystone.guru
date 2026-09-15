@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Affix;
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
@@ -13,6 +14,7 @@ use App\Models\Season;
  * @var int               $routeKeyLevelFrom
  * @var int               $routeKeyLevelTo
  * @var GameVersion       $currentUserGameVersion
+ * @var Dungeon           $currentDungeonContext
  */
 
 $teeming                = old('teeming') ?? false;
@@ -40,7 +42,7 @@ $dungeonSelectId = 'dungeon_id_select';
 
 <div class="container">
     @if( !isset($dungeonroute) )
-        @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false, 'showSeasons' => true, 'showSiegeWarning' => true])
+        @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false, 'showSeasons' => true, 'showSiegeWarning' => true, 'selected' => $currentDungeonContext->id])
     @else
         <input id="{{ $dungeonSelectId }}" type="hidden" value="{{ $dungeonroute->dungeon_id }}">
     @endif
