@@ -268,13 +268,15 @@ body {
   /** One button component for every OAuth provider. Bootstrap's outline variants are keyed to
       fixed palette colors - `btn-outline-secondary` lands on #444, which is all but invisible
       against the #303030 modal surface - so this is themed instead. */
-  .btn-oauth {
+  .btn-oauth,
+  .btn-password-reveal {
     color: var($--theme-text-contrast);
     background-color: transparent;
     border: 1px solid var($--theme-text-contrast);
   }
 
-  .btn-oauth:hover {
+  .btn-oauth:hover,
+  .btn-password-reveal:hover {
     color: var($--theme-dark);
     background-color: var($--theme-text-contrast);
     border-color: var($--theme-text-contrast);
@@ -288,6 +290,60 @@ body {
   .btn-oauth:focus-visible {
     outline: 2px solid var($--theme-text-contrast);
     outline-offset: 2px;
+  }
+
+  /** The auth forms are the one surface every new visitor has to get through, often on a phone:
+      every control there gets the 44px minimum touch target (WCAG 2.5.5) instead of Bootstrap's
+      38px. Scoped rather than global so dense editor forms keep their compact controls. */
+  .auth-form .form-control,
+  .auth-form .form-select,
+  .auth-form .btn {
+    min-height: 44px;
+  }
+
+  .auth-form .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .auth-form .form-check {
+    min-height: 44px;
+  }
+
+  /** Bootstrap's .form-text is a 75%-alpha grey that blends to 3.9:1 on lux's white surface - below
+      the 4.5:1 small text needs. */
+  .auth-form .form-text {
+    color: var($--theme-text-contrast);
+    opacity: 0.8;
+  }
+
+  .auth-form .form-check-input[type="checkbox"] {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+
+  /** The show-password toggle next to a password input; its colours are shared with .btn-oauth. */
+  .btn-password-reveal {
+    min-width: 44px;
+  }
+
+  /** Same story as .btn-oauth: a bare .btn has no focus ring of its own. The z-index keeps the
+      outline above the input it overlaps inside the group. */
+  .btn-password-reveal:focus,
+  .btn-password-reveal:focus-visible {
+    outline: 2px solid var($--theme-text-contrast);
+    outline-offset: 2px;
+    z-index: 5;
+  }
+
+  /** Bootstrap's close button is a 24px target; grow its padding to 44px and pull it into the
+      corner so the glyph stays where it was. */
+  .auth-modal .modal-content > .btn-close {
+    top: 0;
+    right: 0;
+    padding: calc((44px - 1em) / 2);
   }
 
   /* normal container */

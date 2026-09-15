@@ -15,42 +15,60 @@ $redirect = old('redirect', $redirect);
 $errors   ??= collect();
 // Set by AuthFormComposer - the home page URL when the current page is guest-only, null otherwise
 $authSuccessUrl ??= null;
+
+// Opens in a new tab: following it in place would throw away the half-filled form (and, in a modal,
+// the page behind it). The new-tab hint is a description rather than link text, so it does not end
+// up three times over in the accessible name of the checkbox whose label holds these links.
+$newTabHintId = $modalClass . 'register_new_tab_hint';
+$legalLink    = static fn(string $routeName, string $translationKey): string => sprintf(
+    '<a href="%s" target="_blank" rel="noopener" aria-describedby="%s">%s</a>',
+    e(route($routeName)),
+    e($newTabHintId),
+    e(__($translationKey)),
+);
 ?>
 
-<div class="row">
+<span id="{{ $newTabHintId }}" hidden>{{ __('view_common.forms.register.opens_in_new_tab') }}</span>
+<div class="row auth-form">
     <div class="col-12 col-lg-6">
         <form id="{{ $modalClass }}register_form" method="POST"
               action="{{ route('register', ['redirect' => $redirect]) }}">
             {{ csrf_field() }}
-            <h3>
+            <h3 id="{{ $modalClass }}register_heading">
                 {{ __('view_common.forms.register.register') }}
             </h3>
 
             <div class="mb-3">
                 <label for="{{ $modalClass }}register_name" class="form-label">
-                    {{ __('view_common.forms.register.username') }} <span class="form-required">*</span>
-                    <i class="fas fa-info-circle" data-bs-toggle="tooltip"
-                       title="{{__('view_common.forms.register.username_title')}}"></i>
+                    {{ __('view_common.forms.register.username') }}
+                    <span class="form-required" aria-hidden="true">*</span>
                 </label>
 
                 <input id="{{ $modalClass }}register_name" type="text"
                        class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name"
                        value="{{ old('name') }}" required autofocus autocomplete="username"
+                       aria-describedby="{{ $modalClass }}register_name_help"
                        @if($errors->has('name')) aria-invalid="true" @endif>
+                <div id="{{ $modalClass }}register_name_help" class="form-text">
+                    {{ __('view_common.forms.register.username_title') }}
+                </div>
                 @include('common.forms.form-error', ['key' => 'name'])
             </div>
 
             <div class="mb-3">
                 <label for="{{ $modalClass }}register_email" class="form-label">
-                    {{ __('view_common.forms.register.email_address') }} <span class="form-required">*</span>
-                    <i class="fas fa-info-circle" data-bs-toggle="tooltip"
-                       title="{{__('view_common.forms.register.email_address_title')}}"></i>
+                    {{ __('view_common.forms.register.email_address') }}
+                    <span class="form-required" aria-hidden="true">*</span>
                 </label>
 
                 <input id="{{ $modalClass }}register_email" type="email"
                        class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email"
                        value="{{ old('email') }}" required autocomplete="email"
+                       aria-describedby="{{ $modalClass }}register_email_help"
                        @if($errors->has('email')) aria-invalid="true" @endif>
+                <div id="{{ $modalClass }}register_email_help" class="form-text">
+                    {{ __('view_common.forms.register.email_address_title') }}
+                </div>
                 @include('common.forms.form-error', ['key' => 'email'])
             </div>
 
@@ -68,37 +86,39 @@ $authSuccessUrl ??= null;
 
             <div class="mb-3">
                 <label for="{{ $modalClass }}register_password" class="form-label">
-                    {{ __('view_common.forms.register.password') }} <span class="form-required">*</span>
+                    {{ __('view_common.forms.register.password') }}
+                    <span class="form-required" aria-hidden="true">*</span>
                 </label>
 
-                <input id="{{ $modalClass }}register_password" type="password"
-                       class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password"
-                       required autocomplete="new-password"
-                       @if($errors->has('password')) aria-invalid="true" @endif>
-                @include('common.forms.form-error', ['key' => 'password'])
+                @include('common.forms.passwordinput', [
+                    'inputId'      => $modalClass . 'register_password',
+                    'name'         => 'password',
+                    'autocomplete' => 'new-password',
+                ])
             </div>
 
             <div class="mb-3">
                 <label for="{{ $modalClass }}register_password-confirm" class="form-label">
-                    {{ __('view_common.forms.register.confirm_password') }} <span class="form-required">*</span>
+                    {{ __('view_common.forms.register.confirm_password') }}
+                    <span class="form-required" aria-hidden="true">*</span>
                 </label>
 
-                <input id="{{ $modalClass }}register_password-confirm" type="password"
-                       class="form-control{{ $errors->has('password_confirmation') ? ' is-invalid' : '' }}"
-                       name="password_confirmation" required autocomplete="new-password"
-                       @if($errors->has('password_confirmation')) aria-invalid="true" @endif>
-                @include('common.forms.form-error', ['key' => 'password_confirmation'])
+                @include('common.forms.passwordinput', [
+                    'inputId'      => $modalClass . 'register_password-confirm',
+                    'name'         => 'password_confirmation',
+                    'autocomplete' => 'new-password',
+                ])
             </div>
 
             <div class="mb-3">
                 <div class="form-check">
-                    {{ html()->checkbox('legal_agreed', null, 1)->id($modalClass . 'legal_agreed')->class('form-check-input' . ($errors->has('legal_agreed') ? ' is-invalid' : '')) }}
+                    {{ html()->checkbox('legal_agreed', null, 1)->id($modalClass . 'legal_agreed')->required()->class('form-check-input' . ($errors->has('legal_agreed') ? ' is-invalid' : '')) }}
                     <label for="{{ $modalClass }}legal_agreed" class="form-check-label">
                         {!! sprintf(__('view_common.forms.register.legal_agree'),
-                         '<a href="' . route('legal.terms') . '">' . __('view_common.forms.register.terms_of_service') . '</a>',
-                         '<a href="' . route('legal.privacy') . '">' . __('view_common.forms.register.privacy_policy') . '</a>',
-                         '<a href="' . route('legal.cookies') . '">' . __('view_common.forms.register.cookie_policy') . '</a>')
-                         !!}
+                         $legalLink('legal.terms', 'view_common.forms.register.terms_of_service'),
+                         $legalLink('legal.privacy', 'view_common.forms.register.privacy_policy'),
+                         $legalLink('legal.cookies', 'view_common.forms.register.cookie_policy'))
+                         !!}<span class="form-required" aria-hidden="true">&nbsp;*</span>
                     </label>
                     @include('common.forms.form-error', ['key' => 'legal_agreed'])
                 </div>
@@ -124,9 +144,9 @@ $authSuccessUrl ??= null;
         </h3>
         <p>
             {!! sprintf(__('view_common.forms.register.legal_agree_oauth2'),
-             '<a href="' . route('legal.terms') . '">' . __('view_common.forms.register.terms_of_service') . '</a>',
-             '<a href="' . route('legal.privacy') . '">' . __('view_common.forms.register.privacy_policy') . '</a>',
-             '<a href="' . route('legal.cookies') . '">' . __('view_common.forms.register.cookie_policy') . '</a>')
+             $legalLink('legal.terms', 'view_common.forms.register.terms_of_service'),
+             $legalLink('legal.privacy', 'view_common.forms.register.privacy_policy'),
+             $legalLink('legal.cookies', 'view_common.forms.register.cookie_policy'))
              !!}
             {{ __('view_common.forms.oauth.battletag_warning') }}
         </p>

@@ -249,3 +249,66 @@ describe('CommonFormsAuthform._submit', () => {
         expect(ajaxCallCount).toBe(2);
     });
 });
+
+describe('CommonFormsAuthform._renderErrors', () => {
+    let previousJquery;
+    let previousShowErrorNotification;
+
+    beforeEach(() => {
+        // `_renderErrors()` only walks and edits the DOM, so run it against a real jQuery
+        previousJquery                     = globalThis.$;
+        previousShowErrorNotification      = globalThis.showErrorNotification;
+        globalThis.$                       = require('jquery');
+        globalThis.showErrorNotification   = () => {};
+
+        document.body.innerHTML = `
+            <form id="modal-register_form">
+                <div class="mb-3">
+                    <input id="modal-register_email" name="email" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <input id="modal-register_password" name="password" type="password" class="form-control">
+                        <button id="modal-register_password_reveal" type="button">show</button>
+                    </div>
+                </div>
+            </form>`;
+    });
+
+    afterEach(() => {
+        globalThis.$                     = previousJquery;
+        globalThis.showErrorNotification = previousShowErrorNotification;
+        document.body.innerHTML          = '';
+    });
+
+    it('_renderErrors_givenErrorForInputInsideInputGroup_rendersTheMessageAfterTheGroup', () => {
+        // Arrange
+        const authform = makeAuthform({formSelector: '#modal-register_form'});
+
+        // Act
+        authform._renderErrors(globalThis.$('#modal-register_form'), {password: ['Too short.']});
+
+        // Assert - not wedged between the input and its reveal button
+        const group    = document.querySelector('.input-group');
+        const feedback = group.nextElementSibling;
+        expect(group.querySelector('.invalid-feedback')).toBeNull();
+        expect(feedback.classList.contains('invalid-feedback')).toBe(true);
+        expect(feedback.classList.contains('d-block')).toBe(true);
+        expect(feedback.getAttribute('role')).toBe('alert');
+        expect(feedback.textContent).toBe('Too short.');
+        expect(document.querySelector('#modal-register_password').getAttribute('aria-invalid')).toBe('true');
+    });
+
+    it('_renderErrors_givenErrorForPlainInput_rendersTheMessageRightAfterTheInput', () => {
+        // Arrange
+        const authform = makeAuthform({formSelector: '#modal-register_form'});
+
+        // Act
+        authform._renderErrors(globalThis.$('#modal-register_form'), {email: ['Invalid e-mail.']});
+
+        // Assert
+        const feedback = document.querySelector('#modal-register_email').nextElementSibling;
+        expect(feedback.classList.contains('invalid-feedback')).toBe(true);
+        expect(feedback.textContent).toBe('Invalid e-mail.');
+    });
+});

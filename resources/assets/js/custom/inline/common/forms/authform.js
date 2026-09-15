@@ -116,9 +116,13 @@ class CommonFormsAuthform extends InlineCode {
             let $input = $form.find(`[name="${key}"]`).last();
             if ($input.length > 0) {
                 $input.addClass('is-invalid').attr('aria-invalid', 'true');
+                // A password input shares an .input-group with its reveal button; the message goes
+                // below the whole group, not wedged between the two
+                let $inputGroup = $input.closest('.input-group');
                 // d-block: the theme build prefixes Bootstrap's `.is-invalid ~ .invalid-feedback`
                 // display rule under the theme class, which breaks it - show it explicitly
-                $('<div class="invalid-feedback d-block" role="alert">').text(message).insertAfter($input);
+                $('<div class="invalid-feedback d-block" role="alert">').text(message)
+                    .insertAfter($inputGroup.length > 0 ? $inputGroup : $input);
             } else {
                 unmatched.push(message);
             }
