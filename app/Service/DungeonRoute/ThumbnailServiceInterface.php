@@ -22,9 +22,13 @@ interface ThumbnailServiceInterface
     ): bool;
 
     /**
-     * @param Collection<int, DungeonRoute> $dungeonRoutes
+     * Call for every set of routes whose thumbnails are shown to a visitor: records the access (at most once per
+     * route per day) and queues a render for any of them whose thumbnail is stale or missing.
+     *
+     * @param  Collection<int, DungeonRoute> $dungeonRoutes
+     * @return bool                          True when a render was queued for at least one route.
      */
-    public function queueThumbnailRefreshIfMissing(Collection $dungeonRoutes, bool $force = false): bool;
+    public function dungeonRoutesDisplayed(Collection $dungeonRoutes): bool;
 
     /**
      * @return Collection<int, DungeonRouteThumbnailJob>

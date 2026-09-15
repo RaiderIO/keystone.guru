@@ -11,6 +11,7 @@ use App\Http\Resources\DungeonRoute\DungeonRouteSummaryEnvelopeResource;
 use App\Http\Resources\DungeonRouteThumbnailJob\DungeonRouteThumbnailJobEnvelopeResource;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\Controller\Api\V1\APIDungeonRouteControllerServiceInterface;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,26 +31,29 @@ class APIDungeonRouteController extends Controller
      *    )
      * )
      */
-    public function index(DungeonRouteListRequest $request): DungeonRouteSummaryEnvelopeResource
-    {
+    public function index(
+        DungeonRouteListRequest   $request,
+        ThumbnailServiceInterface $thumbnailService,
+    ): DungeonRouteSummaryEnvelopeResource {
         $validated = $request->validated();
 
-        return new DungeonRouteSummaryEnvelopeResource(
-            DungeonRoute::withOnly([
-                'dungeon',
-                // UserLinksResource serializes the author's avatar - User no longer eager loads iconfile globally
-                'author.iconfile',
-                'killZones',
-                'affixes',
-                'thumbnails',
-                'mappingVersion',
-            ])
-                ->where('author_id', Auth::id())
-                ->when($validated['dungeon_id'] ?? false, static function (Builder $builder) use ($validated) {
-                    $builder->where('dungeon_id', $validated['dungeon_id']);
-                })
-                ->paginate(),
-        );
+        $dungeonRoutes = DungeonRoute::withOnly([
+            'dungeon',
+            // UserLinksResource serializes the author's avatar
+            'author.iconfile',
+            'killZones',
+            'affixes',
+            'thumbnails',
+            'mappingVersion',
+        ])
+            ->where('author_id', Auth::id())
+            ->when($validated['dungeon_id'] ?? false, static function (Builder $builder) use ($validated) {
+                $builder->where('dungeon_id', $validated['dungeon_id']);
+            })
+            ->paginate();
+        $thumbnailService->dungeonRoutesDisplayed($dungeonRoutes->getCollection());
+
+        return new DungeonRouteSummaryEnvelopeResource($dungeonRoutes);
     }
 
     /**
@@ -65,8 +69,11 @@ class APIDungeonRouteController extends Controller
      * )
      * @throws AuthorizationException
      */
-    public function show(DungeonRouteRequest $request, DungeonRoute $dungeonRoute): DungeonRouteResource
-    {
+    public function show(
+        DungeonRouteRequest       $request,
+        DungeonRoute              $dungeonRoute,
+        ThumbnailServiceInterface $thumbnailService,
+    ): DungeonRouteResource {
         $dungeonRoute->load([
             'dungeon',
             'author',
@@ -77,6 +84,8 @@ class APIDungeonRouteController extends Controller
         ]);
 
         Gate::authorize('view', $dungeonRoute);
+
+        $thumbnailService->dungeonRoutesDisplayed(collect([$dungeonRoute]));
 
         return new DungeonRouteResource($dungeonRoute);
     }

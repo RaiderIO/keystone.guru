@@ -12,6 +12,8 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInte
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Imagick;
@@ -37,6 +39,39 @@ final class ThumbnailServiceTest extends PublicTestCase
             app()->make(DungeonRouteThumbnailRepositoryInterface::class),
             $log,
         );
+    }
+
+    private function buildServiceWithRealRepositories(): ThumbnailService
+    {
+        return new ThumbnailService(
+            app()->make(DungeonRouteRepositoryInterface::class),
+            app()->make(DungeonRouteThumbnailRepositoryInterface::class),
+            $this->createMockPublic(ThumbnailServiceLoggingInterface::class),
+        );
+    }
+
+    /**
+     * A non-sandbox route last edited two days ago and rendered a day ago, without any thumbnail rows.
+     */
+    private function createRouteWithFreshThumbnailTimestamps(): DungeonRoute
+    {
+        $dungeon      = $this->getDungeonWithNonFacadeFloor();
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'author_id'          => 1,
+            'expires_at'         => null,
+        ]);
+
+        // Written through the query builder so Eloquent does not overwrite updated_at
+        DungeonRoute::query()->whereKey($dungeonRoute->id)->toBase()->update([
+            'updated_at'                  => now()->subDays(2)->toDateTimeString(),
+            'thumbnail_updated_at'        => now()->subDay()->toDateTimeString(),
+            'thumbnail_refresh_queued_at' => '1970-01-01 00:00:00',
+            'last_accessed_at'            => null,
+        ]);
+
+        return $dungeonRoute->refresh();
     }
 
     /**
@@ -831,6 +866,144 @@ final class ThumbnailServiceTest extends PublicTestCase
         } finally {
             $dungeonRoute->delete();
         }
+    }
+
+    #[Test]
+    public function dungeonRoutesDisplayed_givenRouteWithoutThumbnail_stampsAccessAndQueuesRender(): void
+    {
+        // Arrange
+        Queue::fake();
+        $dungeonRoute = null;
+
+        try {
+            $dungeonRoute = $this->createRouteWithFreshThumbnailTimestamps();
+            $updatedAt    = $dungeonRoute->updated_at->toDateTimeString();
+            $floorCount   = $dungeonRoute->dungeon->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->count();
+
+            $service = $this->buildServiceWithRealRepositories();
+
+            // Act
+            $result = $service->dungeonRoutesDisplayed(collect([$dungeonRoute]));
+
+            // Assert
+            $dungeonRoute->refresh();
+            $this->assertTrue($result);
+            Queue::assertPushed(ProcessRouteFloorThumbnail::class, $floorCount);
+            // Its thumbnail_updated_at looks fresh, so only a forced job gets past the job's own freshness gate
+            Queue::assertPushed(ProcessRouteFloorThumbnail::class, static fn(ProcessRouteFloorThumbnail $job): bool => (fn(): bool => $this->force)->call($job));
+            $this->assertTrue($dungeonRoute->last_accessed_at->isToday());
+            $this->assertSame($updatedAt, $dungeonRoute->updated_at->toDateTimeString());
+        } finally {
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function dungeonRoutesDisplayed_givenStaleRouteWithStandardThumbnail_queuesUnforcedRender(): void
+    {
+        // Arrange
+        Queue::fake();
+        $dungeonRoute = null;
+        $thumbnail    = null;
+
+        try {
+            $dungeonRoute = $this->createRouteWithFreshThumbnailTimestamps();
+            DungeonRoute::query()->whereKey($dungeonRoute->id)->toBase()->update([
+                'thumbnail_updated_at' => now()->subDays(3)->toDateTimeString(),
+            ]);
+            $thumbnail = DungeonRouteThumbnail::create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'floor_id'         => $dungeonRoute->dungeon->floors()->firstOrFail()->id,
+                'variant'          => DungeonRouteThumbnailVariant::Standard,
+            ]);
+
+            $service = $this->buildServiceWithRealRepositories();
+
+            // Act
+            $result = $service->dungeonRoutesDisplayed(collect([$dungeonRoute->refresh()]));
+
+            // Assert
+            $this->assertTrue($result);
+            Queue::assertNotPushed(ProcessRouteFloorThumbnail::class, static fn(ProcessRouteFloorThumbnail $job): bool => (fn(): bool => $this->force)->call($job));
+        } finally {
+            $thumbnail?->delete();
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function dungeonRoutesDisplayed_givenStampingFails_logsAndStillQueuesRenders(): void
+    {
+        // Arrange
+        Queue::fake();
+        $dungeonRouteRepository = $this->createMockPublic(DungeonRouteRepositoryInterface::class);
+        $dungeonRouteRepository->method('stampLastAccessedAt')
+            ->willThrowException(new QueryException('mysql', 'update dungeon_routes', [], new Exception('Lock wait timeout exceeded')));
+        $dungeonRouteRepository->expects($this->once())
+            ->method('getDungeonRoutesWithExpiredThumbnails')
+            ->willReturn(collect());
+
+        $log = $this->createMockPublic(ThumbnailServiceLoggingInterface::class);
+        $log->expects($this->once())->method('dungeonRoutesDisplayedStampLastAccessedAtException');
+
+        $service = new ThumbnailService(
+            $dungeonRouteRepository,
+            app()->make(DungeonRouteThumbnailRepositoryInterface::class),
+            $log,
+        );
+
+        // Act
+        $result = $service->dungeonRoutesDisplayed(collect([new DungeonRoute(['id' => 1])]));
+
+        // Assert
+        $this->assertFalse($result);
+    }
+
+    #[Test]
+    public function dungeonRoutesDisplayed_givenStaleRouteThatIsNotDisplayed_leavesItAlone(): void
+    {
+        // Arrange
+        Queue::fake();
+        $displayedRoute = null;
+        $staleRoute     = null;
+
+        try {
+            $displayedRoute = $this->createRouteWithFreshThumbnailTimestamps();
+            $staleRoute     = $this->createRouteWithFreshThumbnailTimestamps();
+            // Edited after its last render, so the thumbnail is stale
+            DungeonRoute::query()->whereKey($staleRoute->id)->toBase()->update([
+                'thumbnail_updated_at' => now()->subDays(3)->toDateTimeString(),
+            ]);
+
+            $service = $this->buildServiceWithRealRepositories();
+
+            // Act
+            $service->dungeonRoutesDisplayed(collect([$displayedRoute]));
+
+            // Assert
+            $staleRoute->refresh();
+            $this->assertNull($staleRoute->last_accessed_at);
+            $this->assertSame('1970-01-01 00:00:00', $staleRoute->thumbnail_refresh_queued_at->toDateTimeString());
+            $this->assertTrue($displayedRoute->refresh()->thumbnail_refresh_queued_at->isToday());
+        } finally {
+            $displayedRoute?->delete();
+            $staleRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function dungeonRoutesDisplayed_givenNoRoutes_returnsFalse(): void
+    {
+        // Arrange
+        Queue::fake();
+        $service = $this->buildServiceWithRealRepositories();
+
+        // Act
+        $result = $service->dungeonRoutesDisplayed(collect());
+
+        // Assert
+        $this->assertFalse($result);
+        Queue::assertNothingPushed();
     }
 
     #[Test]

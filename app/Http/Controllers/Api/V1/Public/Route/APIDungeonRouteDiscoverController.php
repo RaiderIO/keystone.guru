@@ -8,6 +8,7 @@ use App\Http\Resources\DungeonRoute\DungeonRouteSummaryEnvelopeResource;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 
 class APIDungeonRouteDiscoverController extends Controller
@@ -32,15 +33,17 @@ class APIDungeonRouteDiscoverController extends Controller
         APIOffsetPaginatedRequest $request,
         GameVersion               $gameVersion,
         DiscoverServiceInterface  $discoverService,
+        ThumbnailServiceInterface $thumbnailService,
     ): DungeonRouteSummaryEnvelopeResource {
-        return new DungeonRouteSummaryEnvelopeResource(
-            $discoverService
-                ->withCache(false)
-                ->withGameVersion($gameVersion)
-                ->withLimit($request->getCount())
-                ->withBuilder(fn(Builder $b) => $b->offset($request->getOffset()))
-                ->popular(),
-        );
+        $dungeonRoutes = $discoverService
+            ->withCache(false)
+            ->withGameVersion($gameVersion)
+            ->withLimit($request->getCount())
+            ->withBuilder(fn(Builder $b) => $b->offset($request->getOffset()))
+            ->popular();
+        $thumbnailService->dungeonRoutesDisplayed($dungeonRoutes);
+
+        return new DungeonRouteSummaryEnvelopeResource($dungeonRoutes);
     }
 
     /**
@@ -63,15 +66,17 @@ class APIDungeonRouteDiscoverController extends Controller
         APIOffsetPaginatedRequest $request,
         GameVersion               $gameVersion,
         DiscoverServiceInterface  $discoverService,
+        ThumbnailServiceInterface $thumbnailService,
     ): DungeonRouteSummaryEnvelopeResource {
-        return new DungeonRouteSummaryEnvelopeResource(
-            $discoverService
-                ->withCache(false)
-                ->withGameVersion($gameVersion)
-                ->withLimit($request->getCount())
-                ->withBuilder(fn(Builder $b) => $b->offset($request->getOffset()))
-                ->new(),
-        );
+        $dungeonRoutes = $discoverService
+            ->withCache(false)
+            ->withGameVersion($gameVersion)
+            ->withLimit($request->getCount())
+            ->withBuilder(fn(Builder $b) => $b->offset($request->getOffset()))
+            ->new();
+        $thumbnailService->dungeonRoutesDisplayed($dungeonRoutes);
+
+        return new DungeonRouteSummaryEnvelopeResource($dungeonRoutes);
     }
 
     /**
@@ -96,15 +101,17 @@ class APIDungeonRouteDiscoverController extends Controller
         GameVersion               $gameVersion,
         Dungeon                   $dungeon,
         DiscoverServiceInterface  $discoverService,
+        ThumbnailServiceInterface $thumbnailService,
     ): DungeonRouteSummaryEnvelopeResource {
-        return new DungeonRouteSummaryEnvelopeResource(
-            $discoverService
-                ->withCache(false)
-                ->withGameVersion($gameVersion)
-                ->withLimit($request->getCount())
-                ->withBuilder(fn(Builder $b) => $b->offset($request->getOffset()))
-                ->popularByDungeon($dungeon),
-        );
+        $dungeonRoutes = $discoverService
+            ->withCache(false)
+            ->withGameVersion($gameVersion)
+            ->withLimit($request->getCount())
+            ->withBuilder(fn(Builder $b) => $b->offset($request->getOffset()))
+            ->popularByDungeon($dungeon);
+        $thumbnailService->dungeonRoutesDisplayed($dungeonRoutes);
+
+        return new DungeonRouteSummaryEnvelopeResource($dungeonRoutes);
     }
 
     /**
@@ -129,14 +136,16 @@ class APIDungeonRouteDiscoverController extends Controller
         GameVersion               $gameVersion,
         Dungeon                   $dungeon,
         DiscoverServiceInterface  $discoverService,
+        ThumbnailServiceInterface $thumbnailService,
     ): DungeonRouteSummaryEnvelopeResource {
-        return new DungeonRouteSummaryEnvelopeResource(
-            $discoverService
-                ->withCache(false)
-                ->withGameVersion($gameVersion)
-                ->withLimit($request->getCount())
-                ->withBuilder(fn(Builder $b) => $b->offset($request->getOffset()))
-                ->newByDungeon($dungeon),
-        );
+        $dungeonRoutes = $discoverService
+            ->withCache(false)
+            ->withGameVersion($gameVersion)
+            ->withLimit($request->getCount())
+            ->withBuilder(fn(Builder $b) => $b->offset($request->getOffset()))
+            ->newByDungeon($dungeon);
+        $thumbnailService->dungeonRoutesDisplayed($dungeonRoutes);
+
+        return new DungeonRouteSummaryEnvelopeResource($dungeonRoutes);
     }
 }
