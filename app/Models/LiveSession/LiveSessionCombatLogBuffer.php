@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int         $live_session_id
  * @property string|null $buffer
  * @property int|null    $last_sequence
+ * @property int         $revision
  *
  * @property LiveSession $liveSession
  */
@@ -24,11 +25,19 @@ class LiveSessionCombatLogBuffer extends Model
         'live_session_id',
         'buffer',
         'last_sequence',
+        'revision',
     ];
 
     protected $hidden = [
         'buffer',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'revision' => 'integer',
+        ];
+    }
 
     protected static function newFactory(): LiveSessionCombatLogBufferFactory
     {

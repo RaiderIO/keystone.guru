@@ -76,11 +76,8 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             }
 
             // Captured before processing so the post-reduction write can be skipped if a newer batch arrived
-            // in the meantime, preventing us from clobbering those lines. last_sequence alone isn't enough:
-            // a concurrently-ingested batch with a null batch_sequence never changes last_sequence, so
-            // updated_at (bumped by every append, sequenced or not) is guarded too - see reduceBuffer().
-            $lastSequenceAtRead = $buffer->last_sequence;
-            $updatedAtAtRead    = $buffer->updated_at;
+            // in the meantime, preventing us from clobbering those lines - see reduceBuffer().
+            $revisionAtRead = $buffer->revision;
 
             $tmpFile        = sprintf('/dev/shm/live_session_%d.txt', $liveSession->id);
             $fileSaveResult = file_put_contents($tmpFile, $decompressed);
@@ -130,11 +127,11 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                         if ($event instanceof AdvancedCombatLogEvent) {
                             $advancedData = $event->getAdvancedData();
 
-                            $sourceGuid = $event->getGenericData()->getSourceGuid();
-                            if ($sourceGuid instanceof Player) {
-                                $lastKnownPlayerPositions->put($sourceGuid->getGuid(), [
+                            $playerPositionOwner = self::resolvePlayerPositionOwner($event);
+                            if ($playerPositionOwner !== null) {
+                                $lastKnownPlayerPositions->put($playerPositionOwner['guid'], [
                                     'event'         => $event,
-                                    'characterName' => $event->getGenericData()->getSourceName(),
+                                    'characterName' => $playerPositionOwner['characterName'],
                                 ]);
                             }
 
@@ -189,7 +186,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                     $this->collectCombatantInfo($combatLogDungeonRouteFilter),
                 );
 
-                $this->reduceBuffer($liveSession, $tmpFile, $validNpcIds, $lastSequenceAtRead, $updatedAtAtRead);
+                $this->reduceBuffer($liveSession, $tmpFile, $validNpcIds, $revisionAtRead);
             } finally {
                 @unlink($tmpFile);
             }
@@ -203,21 +200,20 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
      * creator, so it does not grow unbounded with every batch. Player positions are persisted separately
      * (see {@see processPlayerPositions()}), so player movement is intentionally not retained here.
      *
-     * The write is conditional on `last_sequence` AND `updated_at` being unchanged since we read the
-     * buffer: if a newer batch was appended while this job ran, we leave the buffer alone and let the
-     * next job reduce it, so freshly ingested lines are never overwritten. Re-processing is idempotent,
-     * so nothing is lost. `last_sequence` alone would miss a concurrently-ingested batch with a null
-     * `batch_sequence` (that append never changes `last_sequence`), so `updated_at` - bumped by every
-     * append regardless of sequencing - is guarded too.
+     * The write is conditional on `revision` being unchanged since we read the buffer: every append
+     * bumps it, sequenced or not, so if a batch was appended while this job ran we leave the buffer
+     * alone and let the next job reduce it - freshly ingested lines are never overwritten.
+     * Re-processing is idempotent, so nothing is lost. `last_sequence` cannot serve here (an
+     * unsequenced batch never changes it), and neither can `updated_at`, whose one-second resolution
+     * lets an append in the same second as the read go unnoticed.
      *
      * @param Collection<int, int> $validNpcIds
      */
     private function reduceBuffer(
-        LiveSession     $liveSession,
-        string          $tmpFile,
-        Collection      $validNpcIds,
-        ?int            $lastSequenceAtRead,
-        ?\Carbon\Carbon $updatedAtAtRead,
+        LiveSession $liveSession,
+        string      $tmpFile,
+        Collection  $validNpcIds,
+        int         $revisionAtRead,
     ): void {
         $reducedLines = $this->liveSessionCombatLogService->reduceCombatLogForBuffer($tmpFile, $validNpcIds);
         $compressed   = gzencode(implode("\n", $reducedLines), 6);
@@ -227,15 +223,10 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             return;
         }
 
-        $query = LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id);
-        if ($lastSequenceAtRead === null) {
-            $query->whereNull('last_sequence');
-        } else {
-            $query->where('last_sequence', $lastSequenceAtRead);
-        }
-        $query->where('updated_at', $updatedAtAtRead);
-
-        $query->update(['buffer' => $compressed]);
+        LiveSessionCombatLogBuffer::query()
+            ->where('live_session_id', $liveSession->id)
+            ->where('revision', $revisionAtRead)
+            ->update(['buffer' => $compressed]);
     }
 
     /**
@@ -508,5 +499,36 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
         }
 
         return $closest;
+    }
+
+    /**
+     * The advanced data carries the position of the info GUID's unit, which is the source on most events but
+     * not all of them - so the player a position belongs to is the info GUID, named through whichever side of
+     * the event it is on. Null when the info GUID is not a player, or is neither the source nor the dest.
+     *
+     * @return array{guid: string, characterName: string}|null
+     */
+    private static function resolvePlayerPositionOwner(AdvancedCombatLogEvent $event): ?array
+    {
+        $infoGuid = $event->getAdvancedData()->getInfoGuid();
+        if (!($infoGuid instanceof Player)) {
+            return null;
+        }
+
+        $genericData   = $event->getGenericData();
+        $characterName = match ($infoGuid->getGuid()) {
+            $genericData->getSourceGuid()?->getGuid() => $genericData->getSourceName(),
+            $genericData->getDestGuid()?->getGuid()   => $genericData->getDestName(),
+            default                                   => null,
+        };
+
+        if ($characterName === null) {
+            return null;
+        }
+
+        return [
+            'guid'          => $infoGuid->getGuid(),
+            'characterName' => $characterName,
+        ];
     }
 }

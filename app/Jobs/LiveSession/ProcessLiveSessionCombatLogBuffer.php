@@ -31,8 +31,12 @@ class ProcessLiveSessionCombatLogBuffer implements ShouldQueue
      */
     public function middleware(): array
     {
+        // Without an expiry, a worker killed mid-job never releases the lock and every later job for this
+        // live session is dropped by dontRelease(). It expires shortly after the job's own timeout
         return [
-            new WithoutOverlapping(sprintf('live-session-buffer-%d', $this->liveSessionId))->dontRelease(),
+            new WithoutOverlapping(sprintf('live-session-buffer-%d', $this->liveSessionId))
+                ->dontRelease()
+                ->expireAfter($this->timeout + 30),
         ];
     }
 

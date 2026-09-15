@@ -72,6 +72,7 @@ class APILiveSessionCombatLogController extends Controller
             if ($batchSequence !== null) {
                 $buffer->last_sequence = $batchSequence;
             }
+            $buffer->revision = ($buffer->revision ?? 0) + 1;
             $buffer->save();
 
             return false;
