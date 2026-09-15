@@ -295,7 +295,10 @@ class DungeonRouteDiscoverController extends Controller
                 $dungeon,
                 (int)config('keystoneguru.discover.limits.leaderboard'),
             );
-            $thumbnailService->dungeonRoutesDisplayed($displayedWeeklyDungeonRoutes->merge($paginator->items()));
+            // The weekly hero band only renders on the first page
+            $thumbnailService->dungeonRoutesDisplayed(
+                ($paginator->onFirstPage() ? $displayedWeeklyDungeonRoutes : collect())->merge($paginator->items()),
+            );
 
             return view('dungeonroute.discover.dungeon.overview', [
                 'breadcrumbs'  => 'dungeonroutes.discoverdungeon',

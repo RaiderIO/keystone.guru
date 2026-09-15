@@ -69,6 +69,8 @@ interface ThumbnailServiceLoggingInterface
 
     public function queueThumbnailRefreshDispatchException(string $publicKey, int $index, Throwable $exception): void;
 
+    public function dungeonRoutesDisplayedStampLastAccessedAtException(Throwable $exception): void;
+
     public function doCreateThumbnailEnd(): void;
 
     public function copyThumbnailsException(

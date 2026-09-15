@@ -15,6 +15,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInte
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -418,12 +419,19 @@ class ThumbnailService implements ThumbnailServiceInterface
             return false;
         }
 
-        $this->dungeonRouteRepository->stampLastAccessedAt($dungeonRoutes->pluck('id'));
+        // Best-effort: a lock wait or deadlock while stamping must not fail the page that displays the routes
+        try {
+            $this->dungeonRouteRepository->stampLastAccessedAt($dungeonRoutes->pluck('id'));
+        } catch (QueryException $exception) {
+            $this->log->dungeonRoutesDisplayedStampLastAccessedAtException($exception);
+        }
 
         $result = false;
         foreach ($this->dungeonRouteRepository->getDungeonRoutesWithExpiredThumbnails($dungeonRoutes) as $dungeonRoute) {
             /** @var DungeonRoute $dungeonRoute */
-            if ($this->queueThumbnailRefresh($dungeonRoute)) {
+            // The render job skips routes whose thumbnail_updated_at looks fresh, which a hero or custom render
+            // also sets - force it when the standard thumbnail does not exist at all
+            if ($this->queueThumbnailRefresh($dungeonRoute, $dungeonRoute->getAttribute('has_standard_thumbnail') === false)) {
                 $result = true;
             }
         }
