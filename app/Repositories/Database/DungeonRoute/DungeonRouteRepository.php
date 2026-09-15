@@ -58,20 +58,22 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
                     ->orWhere(static function (EloquentBuilder $builder) {
                         // If it is in the queue to be refreshed
                         $builder->whereColumn('thumbnail_refresh_queued_at', '>', 'thumbnail_updated_at')
-                            ->whereDate('thumbnail_refresh_queued_at', '<', now()->subHours(config('keystoneguru.thumbnail.refresh_requeue_hours'))->toDateTimeString());
+                            ->where('thumbnail_refresh_queued_at', '<', now()->subHours(config('keystoneguru.thumbnail.refresh_requeue_hours'))->toDateTimeString());
                     });
             })
             ->where(static function (EloquentBuilder $builder) {
                 // Only if it's not already queued!
                 $builder->whereColumn('updated_at', '>', 'thumbnail_updated_at')
-                    ->whereDate('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail.refresh_min'))->toDateTimeString());
+                    ->where('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail.refresh_min'))->toDateTimeString());
             })
             ->when($dungeonRoutes, function (EloquentBuilder $builder) use ($dungeonRoutes) {
                 // If we have a specific set of routes to refresh, only select those
                 $builder->whereIn('id', $dungeonRoutes->pluck('id'));
             })->when(!$dungeonRoutes, function (EloquentBuilder $builder) {
-                // Otherwise, only select routes that have been recently updated/viewed/accessed
-                $builder->where('popularity', '>', 0);
+                // Otherwise, only popular routes that were edited recently. An older stale route is rendered
+                // when it is next displayed, through the branch above.
+                $builder->where('popularity', '>', 0)
+                    ->where('updated_at', '>=', now()->subDays(config('keystoneguru.thumbnail.refresh_recent_days'))->toDateTimeString());
             })
             // Published routes get priority! This is only really relevant initially while processing the thumbnail queue
             ->orderBy('published_state_id', 'desc')

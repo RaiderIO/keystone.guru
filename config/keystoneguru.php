@@ -276,9 +276,16 @@ return [
         'refresh_min' => 30,
 
         /**
-         * The amount of hours when a thumbnail refresh must be in the queue for before it is re-queued
+         * The amount of hours when a thumbnail refresh must be in the queue for before it is re-queued. Must stay
+         * above the longest realistic thumbnail queue backlog, or every still-pending route gets dispatched again.
          */
-        'refresh_requeue_hours' => 12,
+        'refresh_requeue_hours' => 72,
+
+        /**
+         * The amount of days after its last edit that the scheduled refresh still renders a route's changed
+         * thumbnail. Older stale routes are only rendered when they are displayed.
+         */
+        'refresh_recent_days' => 7,
 
         /**
          * The maximum attempts a thumbnail generation can take before it is failed and not queued again
@@ -286,9 +293,9 @@ return [
         'max_attempts' => 3,
 
         /**
-         * The maximum amount of thumbnails that will be queued in a single run.
+         * The maximum amount of routes that will be queued in a single run of the scheduled refresh.
          */
-        'refresh_outdated_count' => 10000,
+        'refresh_outdated_count' => 500,
     ],
 
     /**
