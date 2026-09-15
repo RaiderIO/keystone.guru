@@ -15,7 +15,7 @@ class AdminEnemyPack extends EnemyPack {
         super.localDelete(massDelete);
 
         // Add all the enemies in said pack to the toggle display
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         for (let key in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[key];

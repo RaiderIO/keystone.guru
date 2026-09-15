@@ -89,7 +89,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
         }
 
         // Attached to the patrol group's own layer group, so the Map Elements toggle covers the lines too
-        let enemyPatrolMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
+        let enemyPatrolMapObjectGroup = this.map.mapObjectGroupManager.getEnemyPatrolMapObjectGroup();
 
         this.enemyConnections.draw(
             enemyPatrolMapObjectGroup.layerGroup,
@@ -102,7 +102,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
         super.localDelete(massDelete);
 
         // Add all the enemies in said pack to the toggle display
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         for (let key in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[key];

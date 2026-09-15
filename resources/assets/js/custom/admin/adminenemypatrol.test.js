@@ -84,6 +84,7 @@ const fakeState = {
 global.getState = () => fakeState;
 
 const {AdminEnemyPatrol} = require('./adminenemypatrol');
+const {fakeMapObjectGroupManager} = require('../../test/fixtures/mapObjectGroupManager');
 
 /**
  * A fake DungeonMap exposing only what AdminEnemyPatrol touches.
@@ -92,9 +93,7 @@ function makeFakeMap() {
     return {
         register: vi.fn(),
         unregister: vi.fn(),
-        mapObjectGroupManager: {
-            getByName: () => ({layerGroup: {}}),
-        },
+        mapObjectGroupManager: fakeMapObjectGroupManager(() => ({layerGroup: {}})),
     };
 }
 
