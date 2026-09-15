@@ -303,8 +303,8 @@ class KillZone extends MapObject {
     }
 
     /**
-     * Hook called after an enemy was removed from this pull, so subclasses ({@see LiveSessionKillZone}) can tear down
-     * the listeners set up in {@see _onEnemyAdded}. No-op by default.
+     * Hook called after an enemy left this pull, so subclasses ({@see LiveSessionKillZone}) can tear down the
+     * listeners set up in {@see _onEnemyAdded}. No-op by default.
      * @param enemy {Enemy}
      * @protected
      */

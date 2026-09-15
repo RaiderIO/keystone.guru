@@ -153,7 +153,7 @@ class LiveSessionOverpullDetectionService implements LiveSessionOverpullDetectio
     private function recomputeObsoleteIfNeeded(LiveSession $liveSession): void
     {
         // The obsolete set is dynamic: it must be re-derived on every chunk, not just when a new overpull
-        // appears. Killing an enemy that was previously marked obsolete is an on-route kill (no new
+        // appears. Killing an enemy that is marked obsolete is an on-route kill (no new
         // overpull), yet it must drop out of the obsolete set and have a replacement marked further down.
         // We only recompute when overpulls exist (the only thing that produces obsolete enemies) or when
         // stale obsolete rows are still present that may need clearing.

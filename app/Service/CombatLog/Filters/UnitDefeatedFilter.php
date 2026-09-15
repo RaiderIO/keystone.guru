@@ -103,7 +103,7 @@ class UnitDefeatedFilter implements CombatLogParserInterface
         // The Council of Tribes despawns the same way. Their encounter does end, so the EncounterEnd branch below
         // usually catches them - but that has not proven fool-proof, so this is a second, independent way to see it.
         // These are the npc_ids the current mapping carries; the 135470/135472/135475 set with the same three names
-        // is not part of it anymore.
+        // is not in it.
         269808 => 0.01,
         269810 => 0.01,
         269811 => 0.01,

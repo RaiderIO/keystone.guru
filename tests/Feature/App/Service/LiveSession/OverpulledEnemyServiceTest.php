@@ -36,7 +36,7 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
 
     private const int SKIPPABLE_ENEMY_ID = 27963;
 
-    // Two downstream skippable enemies (5 forces each, no pack) sharing npc_id=129526 — used to prove that a
+    // Two downstream skippable enemies (5 forces each, no pack) sharing npc_id=129526 — they prove that a
     // killed obsolete enemy is replaced by a later skippable one.
     private const int SKIPPABLE_A_ENEMY_ID = 28142;
 
@@ -180,7 +180,7 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
                 'mdt_id'          => self::OVERPULL_MDT_ID,
             ]);
 
-            // The earlier skippable enemy (A) was actually killed, so it can no longer be skipped
+            // The earlier skippable enemy (A) was actually killed, so it cannot be skipped
             LiveSessionKilledEnemy::query()->create([
                 'live_session_id' => $liveSession->id,
                 'npc_id'          => self::SKIPPABLE_A_NPC_ID,

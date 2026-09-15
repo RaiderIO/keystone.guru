@@ -27,7 +27,7 @@ class LiveSessionKillZone extends KillZone {
         for (let i = 0; i < allEnemies.length; i++) {
             /** @type {Enemy} */
             let enemy = enemyMapObjectGroup.findMapObjectById(allEnemies[i]);
-            // Unless this enemy is obsolete - then we don't consider it anymore for this pull
+            // Unless this enemy is obsolete - then it does not count towards this pull
             if (enemy !== null && !enemy.isObsolete()) {
                 result += enemy.getEnemyForces();
             }

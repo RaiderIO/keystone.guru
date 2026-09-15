@@ -129,8 +129,8 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
     #[Test]
     public function delete_givenMultipleEnemies_dispatchesRouteCorrectionEventOnlyOnce(): void
     {
-        // Arrange - regression guard: the route correction used to be recomputed and broadcast once
-        // per enemy inside the delete loop instead of once after it
+        // Arrange - the route correction must be computed and broadcast once after the delete loop,
+        // not once per enemy inside it
         Event::fake([RouteCorrectionEvent::class]);
 
         /** @var \Illuminate\Support\Collection<int, Enemy> $enemies */
