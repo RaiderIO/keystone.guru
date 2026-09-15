@@ -207,6 +207,11 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
         $this->error(__METHOD__);
     }
 
+    public function linkToUserAccountNotAMemberOfCampaign(): void
+    {
+        $this->info(__METHOD__);
+    }
+
     public function linkToUserAccountSessionExpired(): void
     {
         $this->info(__METHOD__);
