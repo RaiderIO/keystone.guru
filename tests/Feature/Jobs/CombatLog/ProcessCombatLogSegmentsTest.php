@@ -15,6 +15,7 @@ use App\Service\CombatLog\Dtos\CombatLogRunContext;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
 use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
 use App\Service\CombatLog\Exceptions\CombatLogParseException;
+use App\Service\CombatLog\Exceptions\CombatLogSegmentDownloadFailedException;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
@@ -274,7 +275,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
-    public function handle_givenSegmentDownloadFails_throwsRuntimeExceptionForRetry(): void
+    public function handle_givenSegmentDownloadFails_throwsCombatLogSegmentDownloadFailedExceptionForRetry(): void
     {
         // Arrange
         $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
@@ -305,7 +306,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
             ->willReturn(false);
 
         // Assert + Act
-        $this->expectException(RuntimeException::class);
+        $this->expectException(CombatLogSegmentDownloadFailedException::class);
         app()->call([$job, 'handle']);
     }
 

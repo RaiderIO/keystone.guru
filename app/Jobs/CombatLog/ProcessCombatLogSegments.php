@@ -11,6 +11,7 @@ use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
 use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
 use App\Service\CombatLog\Exceptions\CombatLogParseException;
+use App\Service\CombatLog\Exceptions\CombatLogSegmentDownloadFailedException;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Traits\CombatLogSegmentFile;
@@ -115,7 +116,7 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
                 if (!$this->curlSaveToFile($segment->downloadUrl, $tempPath)) {
                     $log->handleSegmentDownloadFailed($this->runId, $segment->id, $tempPath);
 
-                    throw new RuntimeException(
+                    throw new CombatLogSegmentDownloadFailedException(
                         sprintf('Failed to download segment %d for run %d', $segment->id, $this->runId),
                     );
                 }
