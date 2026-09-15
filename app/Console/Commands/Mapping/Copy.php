@@ -57,7 +57,7 @@ class Copy extends Command
         // version's number here (see #3720).
         $newMappingVersion->update([
             'dungeon_id' => $targetDungeon->id,
-            'version'    => ($targetDungeon->getCurrentMappingVersionForGameVersion($gameVersion)?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
+            'version'    => ($targetDungeon->reloadMappingVersions()->getCurrentMappingVersionForGameVersion($gameVersion)?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
         ]);
 
         if ($sourceDungeonKey !== $targetDungeonKey) {

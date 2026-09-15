@@ -20,7 +20,7 @@ class MappingService implements MappingServiceInterface
     public function createNewBareMappingVersion(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion
     {
         /** @var MappingVersion|null $currentMappingVersion */
-        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
+        $currentMappingVersion = $dungeon->reloadMappingVersions()->getCurrentMappingVersionForGameVersion($gameVersion);
         $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1; // @phpstan-ignore nullsafe.neverNull
 
         $now = Carbon::now()->toDateTimeString();
@@ -46,7 +46,7 @@ class MappingService implements MappingServiceInterface
         GameVersion $gameVersion,
     ): MappingVersion {
         /** @var MappingVersion|null $currentMappingVersion */
-        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
+        $currentMappingVersion = $dungeon->reloadMappingVersions()->getCurrentMappingVersionForGameVersion($gameVersion);
         $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1; // @phpstan-ignore nullsafe.neverNull
 
         $now = Carbon::now()->toDateTimeString();
@@ -266,7 +266,7 @@ class MappingService implements MappingServiceInterface
         // the acting user's/default game version and can land on a completely different
         // game_version_id than the one actually being copied (see #3720).
         /** @var MappingVersion|null $currentMappingVersionForGameVersion */
-        $currentMappingVersionForGameVersion = $dungeon->getCurrentMappingVersionForGameVersion($sourceMappingVersion->gameVersion);
+        $currentMappingVersionForGameVersion = $dungeon->reloadMappingVersions()->getCurrentMappingVersionForGameVersion($sourceMappingVersion->gameVersion);
         $now                                 = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([

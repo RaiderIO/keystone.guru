@@ -139,9 +139,6 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
 
     private ?Season $activeSeasonCache = null;
 
-    /** @var Collection<int, MappingVersion|null>|null  */
-    private ?Collection $currentMappingVersionCache = null;
-
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
@@ -218,25 +215,14 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
 
     public function getCurrentMappingVersionForGameVersion(GameVersion $gameVersion): ?MappingVersion
     {
-        if ($this->currentMappingVersionCache === null) {
-            // Initialize the cache if it is not set
-            $this->currentMappingVersionCache = collect();
-        }
-
-        if ($this->currentMappingVersionCache->has($gameVersion->id)) {
-            return $this->currentMappingVersionCache->get($gameVersion->id);
-        }
-
         /** @var MappingVersion|null $mappingVersion */
-        $mappingVersion = $this->relationLoaded('mappingVersions') ?
-            $this->mappingVersions->firstWhere('game_version_id', $gameVersion->id) :
-            $this->mappingVersions()
-                ->where('game_version_id', $gameVersion->id)
-                ->orderByDesc('mapping_versions.version')
-                ->without('dungeon')
-                ->first();
+        $mappingVersion = $this->loadMappingVersions()->mappingVersions->firstWhere('game_version_id', $gameVersion->id);
 
-        $this->currentMappingVersionCache->put($gameVersion->id, $mappingVersion);
+        // Eloquent flags every model of a multi-row relation for lazy-load prevention, but callers use the
+        // current version as a standalone model, the same as a single-row query would return it.
+        if ($mappingVersion !== null) {
+            $mappingVersion->preventsLazyLoading = false;
+        }
 
         return $mappingVersion;
     }
@@ -539,6 +525,15 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         ]);
 
         return $this;
+    }
+
+    /**
+     * For write paths that act on the current mapping version (or number the next one after it): an already-loaded
+     * relation does not see rows written since it was loaded.
+     */
+    public function reloadMappingVersions(): self
+    {
+        return $this->unsetRelation('mappingVersions')->loadMappingVersions();
     }
 
     public function hasMappingVersionWithSeasons(): bool
