@@ -516,9 +516,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::post('/dungeonroute/mappingversions/{mappingVersion}/upgrade', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersionsUpgrade(...))->name('admin.tools.dungeonroute.mappingversionusage.upgrade');
                 Route::get('/dungeonroute/{dungeonRoute:id}', new AdminToolsDungeonRouteController()->dungeonrouteView(...))->name('admin.tools.dungeonroute.view.get');
 
-                // Import enemy forces
-                Route::get('enemyforces/import', new AdminToolsEnemyForcesController()->enemyforcesimport(...))->name('admin.tools.enemyforces.import.view');
-                Route::post('enemyforces/import', new AdminToolsEnemyForcesController()->enemyforcesimportsubmit(...))->name('admin.tools.enemyforces.import.submit');
+                // Enemy forces
                 Route::get('enemyforces/recalculate', new AdminToolsEnemyForcesController()->enemyforcesrecalculate(...))->name('admin.tools.enemyforces.recalculate.view');
                 Route::post('enemyforces/recalculate', new AdminToolsEnemyForcesController()->enemyforcesrecalculatesubmit(...))->name('admin.tools.enemyforces.recalculate.submit');
 

@@ -306,10 +306,6 @@ Breadcrumbs::for('admin.tools.dungeonroute.mappingversions', static function (Ge
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.dungeonroute_mapping_version_usage'), route('admin.tools.dungeonroute.mappingversionusage'));
 });
-Breadcrumbs::for('admin.tools.enemyforces.import', static function (Generator $trail) {
-    $trail->parent('admin.tools.list');
-    $trail->push(__('breadcrumbs.home.admin.tools.enemyforces_import'), route('admin.tools.enemyforces.import.view'));
-});
 Breadcrumbs::for('admin.tools.enemyforces.recalculate', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.enemyforces_recalculate'), route('admin.tools.enemyforces.recalculate.view'));
