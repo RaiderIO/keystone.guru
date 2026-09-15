@@ -26,9 +26,11 @@ const MAP_OBJECT_GROUP_MOUNTABLE_AREA = 'mountablearea';
 const MAP_OBJECT_GROUP_PATH = 'path';
 const MAP_OBJECT_GROUP_ARROW = 'arrow';
 const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
+const MAP_OBJECT_GROUP_PLAYER_POSITION = 'playerposition';
 
 const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_USER_MOUSE_POSITION,
+    MAP_OBJECT_GROUP_PLAYER_POSITION,
     MAP_OBJECT_GROUP_ENEMY_PATROL,
     // Depends on MAP_OBJECT_GROUP_ENEMY_PATROL
     MAP_OBJECT_GROUP_ENEMY,
@@ -700,6 +702,8 @@ let c = {
             mousePollFrequencyMs: 100,
             // How often to send the mouse frequency, in milliseconds
             mouseSendFrequencyMs: 500,
+            // The maximum time a received player position is allowed to glide to its new location, in milliseconds
+            playerPositionSmoothingMaxMs: 10000,
             // The amount of users before an overflow is initiated
             userOverflowCount: 1
         },
@@ -772,5 +776,6 @@ if (typeof module !== 'undefined' && module.exports) {
         MAP_OBJECT_GROUP_PATH,
         MAP_OBJECT_GROUP_ARROW,
         MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER,
+        MAP_OBJECT_GROUP_PLAYER_POSITION,
     };
 }

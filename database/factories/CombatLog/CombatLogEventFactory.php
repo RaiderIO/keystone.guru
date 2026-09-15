@@ -27,10 +27,20 @@ class CombatLogEventFactory extends Factory
         /** @var Expansion $expansion */
         $expansion = Expansion::where('shortname', Expansion::EXPANSION_DRAGONFLIGHT)->first();
 
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::where('expansion_id', $expansion->id)
-            ->inRandomOrder()
-            ->first();
+        $count = 0;
+        do {
+            if (++$count > 20) {
+                throw new \RuntimeException('Unable to find a dungeon with a non-facade floor');
+            }
+
+            /** @var Dungeon $dungeon */
+            $dungeon = Dungeon::where('expansion_id', $expansion->id)
+                ->inRandomOrder()
+                ->first();
+
+            /** @var Floor|null $floor */
+            $floor = $dungeon->floors()->where('facade', 0)->first();
+        } while ($floor === null);
 
         /** @var Season $season */
         $season = Season::where('expansion_id', $expansion->id)
@@ -41,9 +51,6 @@ class CombatLogEventFactory extends Factory
         $affixGroup = $season->affixGroups()
             ->inRandomOrder()
             ->first();
-
-        /** @var Floor $floor */
-        $floor = $dungeon->floors()->where('facade', 0)->first();
 
         return $this->definitionFromState(
             $dungeon,

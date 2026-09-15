@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogEnemyFailureC
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogObservationController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRouteController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRunController;
+use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APILiveSessionCombatLogController;
 use App\Http\Controllers\Api\V1\InternalTeam\Patreon\APIPatreonDiagnosticsController;
 use App\Http\Controllers\Api\V1\Public\Dungeon\APIDungeonController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteController;
@@ -29,6 +30,9 @@ Route::prefix('v1')->group(static function () {
         });
         Route::middleware('throttle:api-combatlog-correct-event')->prefix('event')->group(static function () {
             Route::post('correct', new APICombatLogController()->correctEvents(...))->name('api.v1.combatlog.event.correct');
+        });
+        Route::middleware('throttle:api-combatlog-live-session-events')->prefix('livesession/{liveSession}')->group(static function () {
+            Route::post('events', new APILiveSessionCombatLogController()->store(...))->name('api.v1.combatlog.livesession.events.store');
         });
 
         // Read-only endpoints an AI agent needs for combat log triage (#4227) - admins and agents, nobody else
