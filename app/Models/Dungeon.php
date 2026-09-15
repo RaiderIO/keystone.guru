@@ -228,11 +228,13 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         }
 
         /** @var MappingVersion|null $mappingVersion */
-        $mappingVersion = $this->mappingVersions()
-            ->where('game_version_id', $gameVersion->id)
-            ->orderByDesc('mapping_versions.version')
-            ->without('dungeon')
-            ->first();
+        $mappingVersion = $this->relationLoaded('mappingVersions') ?
+            $this->mappingVersions->firstWhere('game_version_id', $gameVersion->id) :
+            $this->mappingVersions()
+                ->where('game_version_id', $gameVersion->id)
+                ->orderByDesc('mapping_versions.version')
+                ->without('dungeon')
+                ->first();
 
         $this->currentMappingVersionCache->put($gameVersion->id, $mappingVersion);
 
@@ -524,6 +526,10 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
 
     public function loadMappingVersions(): self
     {
+        if ($this->relationLoaded('mappingVersions')) {
+            return $this;
+        }
+
         $this->load([
             'mappingVersions' => function (HasMany $query) {
                 // Prevent circular reference loading - we also don't need it because WE are the dungeon

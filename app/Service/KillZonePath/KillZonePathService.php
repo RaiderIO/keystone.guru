@@ -86,6 +86,7 @@ class KillZonePathService implements KillZonePathServiceInterface
             ->with(['floor', 'enemies.floor', 'enemies.npc'])
             ->orderBy('index')
             ->get();
+        $dungeonRoute->setRelation('killZones', $killZones);
 
         $dungeonStart = $dungeonRoute->getDungeonStartMapIcon();
 

@@ -112,11 +112,8 @@ class MappingVersion extends Model
 
     public $timestamps = true;
 
-    /** @var Collection<int, EloquentCollection<int, FloorUnion>>|null */
-    private ?Collection $cachedFloorUnionsOnFloor = null;
-
-    /** @var Collection<int, EloquentCollection<int, FloorUnion>>|null */
-    private ?Collection $cachedFloorUnionsForFloor = null;
+    /** @var EloquentCollection<int, FloorUnion>|null */
+    private ?EloquentCollection $cachedFloorUnions = null;
 
     private ?bool $isLatestForDungeonCache = null;
 
@@ -274,26 +271,7 @@ class MappingVersion extends Model
      */
     public function getFloorUnionsOnFloor(int $floorId): EloquentCollection
     {
-        if ($this->cachedFloorUnionsOnFloor === null) {
-            $this->cachedFloorUnionsOnFloor = collect();
-        }
-
-        if ($this->cachedFloorUnionsOnFloor->has($floorId)) {
-            return $this->cachedFloorUnionsOnFloor->get($floorId);
-        }
-
-        $floorUnions = $this
-            ->floorUnions()
-            ->where('floor_id', $floorId)
-            ->with([
-                'floor',
-                'targetFloor',
-            ])
-            ->get();
-
-        $this->cachedFloorUnionsOnFloor->put($floorId, $floorUnions);
-
-        return $floorUnions;
+        return $this->getAllFloorUnions()->where('floor_id', $floorId)->values();
     }
 
     /**
@@ -301,25 +279,7 @@ class MappingVersion extends Model
      */
     public function getFloorUnionsForFloor(Floor $floor): EloquentCollection
     {
-        if ($this->cachedFloorUnionsForFloor === null) {
-            $this->cachedFloorUnionsForFloor = collect();
-        }
-
-        if ($this->cachedFloorUnionsForFloor->has($floor->id)) {
-            $floorUnions = $this->cachedFloorUnionsForFloor->get($floor->id);
-        } else {
-            $floorUnions = $this->floorUnions()
-                ->where('target_floor_id', $floor->id)
-                ->with([
-                    'floor',
-                    'targetFloor',
-                ])
-                ->get();
-
-            $this->cachedFloorUnionsForFloor->put($floor->id, $floorUnions);
-        }
-
-        return $floorUnions;
+        return $this->getAllFloorUnions()->where('target_floor_id', $floor->id)->values();
     }
 
     public function getFloorUnionForLatLng(
@@ -353,6 +313,22 @@ class MappingVersion extends Model
         }
 
         return $result;
+    }
+
+    /**
+     * Every floor union of this mapping version, loaded once: coordinate conversions look them up per floor, for
+     * every map object on a page.
+     *
+     * @return EloquentCollection<int, FloorUnion>
+     */
+    private function getAllFloorUnions(): EloquentCollection
+    {
+        return $this->cachedFloorUnions ??= $this->floorUnions()
+            ->with([
+                'floor',
+                'targetFloor',
+            ])
+            ->get();
     }
 
     /**

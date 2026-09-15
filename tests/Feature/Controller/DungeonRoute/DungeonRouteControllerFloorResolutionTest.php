@@ -7,6 +7,8 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\PublishedState;
 use App\Models\User;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -38,6 +40,41 @@ final class DungeonRouteControllerFloorResolutionTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function viewFloor_givenTheRoutesOwnDungeonInTheUrl_doesNotQueryTheDungeonAgain(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner);
+        /** @var Floor $floor */
+        $floor = Floor::where('dungeon_id', $route->dungeon_id)->defaultOrFacade($route->mappingVersion)->first();
+        $url   = route('dungeonroute.view.floor', [
+            'dungeon'      => $route->dungeon,
+            'dungeonroute' => $route,
+            'title'        => $route->getTitleSlug(),
+            'floorIndex'   => $floor->index,
+        ]);
+
+        $dungeonByIdQueries = 0;
+        DB::listen(static function (QueryExecuted $query) use (&$dungeonByIdQueries): void {
+            if (str_contains($query->sql, 'from `dungeons` where `dungeons`.`id` =')) {
+                $dungeonByIdQueries++;
+            }
+        });
+
+        try {
+            // Act - CI runs with the model cache on, which would answer these queries without reaching the database
+            $response = app('model-cache')->runDisabled(fn() => $this->get($url));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame(0, $dungeonByIdQueries);
         } finally {
             $route->delete();
             $owner->delete();

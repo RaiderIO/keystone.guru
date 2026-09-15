@@ -299,7 +299,7 @@ class SeasonService implements SeasonServiceInterface
 
     private function ensureSeasonCacheLoaded(): void
     {
-        if ($this->seasonCache->empty()) { // @phpstan-ignore if.alwaysTrue
+        if ($this->seasonCache->isEmpty()) {
             $this->seasonCache = Season::selectRaw('seasons.*')
                 ->with(['expansion', 'expansion.timewalkingEvent', 'affixGroups'])
                 ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')

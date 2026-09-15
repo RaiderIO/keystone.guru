@@ -345,7 +345,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         // Lua is 1 based, not 0 based
         $pullIndex = 1;
         /** @var Collection<int, KillZone> $killZones */
-        $killZones = $this->dungeonRoute->killZones()->get();
+        $killZones = $this->dungeonRoute->loadMissing(['killZones.enemies.floor'])->killZones;
         foreach ($killZones as $killZone) {
             $pull = [];
 
@@ -482,6 +482,11 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             fn() => app('model-cache')->runDisabled(function () use ($warnings) {
                 //        $lua = $this->_getLua();
 
+                $this->dungeonRoute->loadMissing([
+                    'affixGroups',
+                    'dungeon',
+                ]);
+
                 $affixes = $this->dungeonRoute->affixes()->with(['season'])->get();
                 /** @var AffixGroup|null $firstAffixGroup */
                 $firstAffixGroup = $affixes->first();
@@ -578,10 +583,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
      */
     public function setDungeonRoute(DungeonRoute $dungeonRoute): self
     {
-        $this->dungeonRoute = $dungeonRoute->load([
-            'affixGroups',
-            'dungeon',
-        ]);
+        $this->dungeonRoute = $dungeonRoute;
 
         return $this;
     }
