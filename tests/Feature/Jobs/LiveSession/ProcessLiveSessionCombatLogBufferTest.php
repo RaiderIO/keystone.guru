@@ -8,6 +8,10 @@ use App\Events\LiveSession\RouteCorrectionEvent;
 use App\Events\Models\LiveSession\EnemyKilledEvent;
 use App\Events\Models\LiveSession\PlayerMovedEvent;
 use App\Jobs\LiveSession\ProcessLiveSessionCombatLogBuffer;
+use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
+use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
+use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
+use App\Logic\CombatLog\Guid\Guid;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -21,11 +25,13 @@ use App\Models\LiveSession\LiveSessionObsoleteEnemy;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
 use App\Models\User;
+use App\Service\LiveSession\LiveSessionBufferProcessingService;
 use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use ReflectionMethod;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('LiveSession')]
@@ -712,6 +718,124 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         // Assert — expectations above
     }
 
+    #[Test]
+    public function middleware_givenAJob_expiresTheOverlapLockAfterTheJobTimeout(): void
+    {
+        // Arrange
+        $job = new ProcessLiveSessionCombatLogBuffer(1);
+
+        // Act
+        $middleware = $job->middleware()[0];
+
+        // Assert - a worker killed mid-job must not hold the lock forever
+        $this->assertGreaterThan($job->timeout, $middleware->expiresAfter);
+    }
+
+    // -------------------------------------------------------------------------
+    // Service: reduceBuffer
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function reduceBuffer_givenABatchAppendedSinceTheRead_leavesTheBufferAlone(): void
+    {
+        // Arrange
+        [$liveSession, $buffer, $tmpFile] = $this->arrangeBufferForReduction(revision: 5);
+
+        try {
+            // Act - the job read revision 4, and an append has bumped it to 5 since
+            $this->invokeReduceBuffer($liveSession, $tmpFile, 4);
+
+            // Assert
+            $this->assertSame($buffer->buffer, $buffer->fresh()->buffer);
+        } finally {
+            @unlink($tmpFile);
+            $buffer->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function reduceBuffer_givenNoAppendSinceTheRead_replacesTheBufferWithTheReducedLines(): void
+    {
+        // Arrange
+        [$liveSession, $buffer, $tmpFile] = $this->arrangeBufferForReduction(revision: 5);
+
+        try {
+            // Act
+            $this->invokeReduceBuffer($liveSession, $tmpFile, 5);
+
+            // Assert
+            $this->assertNotSame($buffer->buffer, $buffer->fresh()->buffer);
+        } finally {
+            @unlink($tmpFile);
+            $buffer->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Service: player position owner
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function resolvePlayerPositionOwner_givenInfoGuidIsTheDest_attributesThePositionToTheDest(): void
+    {
+        // Arrange
+        $event = $this->makeAdvancedEvent(
+            sourceGuid: 'Player-1403-0A000001',
+            sourceName: 'Healzor',
+            destGuid: 'Player-1403-0A000002',
+            destName: 'Tankadin',
+            infoGuid: 'Player-1403-0A000002',
+        );
+
+        // Act
+        $result = $this->invokeResolvePlayerPositionOwner($event);
+
+        // Assert
+        $this->assertSame(['guid' => 'Player-1403-0A000002', 'characterName' => 'Tankadin'], $result);
+    }
+
+    #[Test]
+    public function resolvePlayerPositionOwner_givenInfoGuidIsTheSource_attributesThePositionToTheSource(): void
+    {
+        // Arrange
+        $event = $this->makeAdvancedEvent(
+            sourceGuid: 'Player-1403-0A000001',
+            sourceName: 'Healzor',
+            destGuid: 'Creature-0-3767-658-26019-252558-00006B5B0F',
+            destName: 'Enemy',
+            infoGuid: 'Player-1403-0A000001',
+        );
+
+        // Act
+        $result = $this->invokeResolvePlayerPositionOwner($event);
+
+        // Assert
+        $this->assertSame(['guid' => 'Player-1403-0A000001', 'characterName' => 'Healzor'], $result);
+    }
+
+    #[Test]
+    public function resolvePlayerPositionOwner_givenInfoGuidIsACreature_returnsNull(): void
+    {
+        // Arrange - a player hitting an enemy whose own position is in the advanced data
+        $event = $this->makeAdvancedEvent(
+            sourceGuid: 'Player-1403-0A000001',
+            sourceName: 'Healzor',
+            destGuid: 'Creature-0-3767-658-26019-252558-00006B5B0F',
+            destName: 'Enemy',
+            infoGuid: 'Creature-0-3767-658-26019-252558-00006B5B0F',
+        );
+
+        // Act
+        $result = $this->invokeResolvePlayerPositionOwner($event);
+
+        // Assert
+        $this->assertNull($result);
+    }
+
     // -------------------------------------------------------------------------
     // Helpers
     // -------------------------------------------------------------------------
@@ -761,5 +885,67 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         foreach ($killZoneIds as $killZoneId) {
             KillZone::query()->where('id', $killZoneId)->delete();
         }
+    }
+
+    /**
+     * @return array{LiveSession, LiveSessionCombatLogBuffer, string}
+     */
+    private function arrangeBufferForReduction(int $revision): array
+    {
+        $lines = array_slice(file(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE, FILE_IGNORE_NEW_LINES), 0, 500);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        $buffer = LiveSessionCombatLogBuffer::factory()->create([
+            'live_session_id' => $liveSession->id,
+            'buffer'          => gzencode(implode("\n", $lines), 6),
+            'revision'        => $revision,
+        ]);
+
+        // The job reduces what it read into its temp file; keeping that shorter than the stored buffer makes
+        // the guarded write observable no matter how much the reduction itself drops
+        $tmpFile = tempnam(sys_get_temp_dir(), 'live_session_reduce_test_');
+        file_put_contents($tmpFile, implode("\n", array_slice($lines, 0, 100)));
+
+        return [$liveSession, $buffer, $tmpFile];
+    }
+
+    private function invokeReduceBuffer(LiveSession $liveSession, string $tmpFile, int $revisionAtRead): void
+    {
+        $service = app()->make(LiveSessionBufferProcessingService::class);
+
+        new ReflectionMethod($service, 'reduceBuffer')->invoke($service, $liveSession, $tmpFile, collect(), $revisionAtRead);
+    }
+
+    /**
+     * @return array{guid: string, characterName: string}|null
+     */
+    private function invokeResolvePlayerPositionOwner(AdvancedCombatLogEvent $event): ?array
+    {
+        return new ReflectionMethod(LiveSessionBufferProcessingService::class, 'resolvePlayerPositionOwner')->invoke(null, $event);
+    }
+
+    private function makeAdvancedEvent(
+        string $sourceGuid,
+        string $sourceName,
+        string $destGuid,
+        string $destName,
+        string $infoGuid,
+    ): AdvancedCombatLogEvent {
+        $genericData = $this->createMock(GenericDataInterface::class);
+        $genericData->method('getSourceGuid')->willReturn(Guid::createFromGuidString($sourceGuid));
+        $genericData->method('getSourceName')->willReturn($sourceName);
+        $genericData->method('getDestGuid')->willReturn(Guid::createFromGuidString($destGuid));
+        $genericData->method('getDestName')->willReturn($destName);
+
+        $advancedData = $this->createMock(AdvancedDataInterface::class);
+        $advancedData->method('getInfoGuid')->willReturn(Guid::createFromGuidString($infoGuid));
+
+        $event = $this->createMock(AdvancedCombatLogEvent::class);
+        $event->method('getGenericData')->willReturn($genericData);
+        $event->method('getAdvancedData')->willReturn($advancedData);
+
+        return $event;
     }
 }

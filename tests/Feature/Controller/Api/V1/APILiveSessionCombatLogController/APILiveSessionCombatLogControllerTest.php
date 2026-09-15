@@ -240,6 +240,42 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function store_givenUnsequencedBatches_bumpsTheRevisionOnEveryAppend(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        /** @var User $user */
+        $user = User::findOrFail(1);
+        $this->actingAs($user);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            // Act - neither batch carries a batch_sequence, so last_sequence never moves
+            foreach (['6/1 12:00:00.000  SPELL_CAST_START,Player-1-000', '6/1 12:00:05.000  SPELL_CAST_SUCCESS,Player-1-000'] as $line) {
+                $this->postJson(
+                    route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
+                    ['lines' => [$line]],
+                )->assertOk();
+            }
+
+            // Assert
+            $buffer = LiveSessionCombatLogBuffer::query()
+                ->where('live_session_id', $liveSession->id)
+                ->firstOrFail();
+
+            $this->assertNull($buffer->last_sequence);
+            $this->assertSame(2, $buffer->revision);
+        } finally {
+            LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
     public function store_givenDuplicateBatchSequence_skipsAndReturnsOk(): void
     {
         // Arrange
