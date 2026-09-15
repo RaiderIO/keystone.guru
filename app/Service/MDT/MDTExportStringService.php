@@ -6,6 +6,7 @@ use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\IO\MDTStringFormat;
+use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Arrow;
@@ -21,6 +22,7 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\MDT\Import\ObjectImporter;
 use App\Service\MDT\Logging\MDTExportStringServiceLoggingInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -49,10 +51,16 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     private const int KILL_ZONE_SPELLS_NOTE_DISTANCE = 6;
 
     /**
-     * @var int The importer attaches a note to a pull with an enemy within 50 yards of it. Six map units exceed that
-     *          on the largest floors (Nokhud Offensive: ~20 yards per unit).
+     * @var int Keeps the note well within ObjectImporter::IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS of its pull. Six map
+     *          units exceed that on the largest floors (Nokhud Offensive: ~20 yards per unit).
      */
     private const int KILL_ZONE_SPELLS_NOTE_MAX_DISTANCE_YARDS = 25;
+
+    /** @var array<int, array{0: int, 1: int}> The lat/lng directions a spells note is tried in: below, above, left, right */
+    private const array KILL_ZONE_SPELLS_NOTE_DIRECTIONS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+
+    /** @var array<int, float> Fractions of KILL_ZONE_SPELLS_NOTE_DISTANCE a spells note is tried at, in order */
+    private const array KILL_ZONE_SPELLS_NOTE_DISTANCE_FACTORS = [1.0, 0.5];
 
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
     private DungeonRoute $dungeonRoute;
@@ -344,8 +352,10 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             'spells' => static fn(Relation $query) => $query->orderBy('kill_zone_spells.id'),
         ]);
 
+        $enemyIngameLocationsByFloorId = $this->getKillZoneEnemyIngameLocationsByFloorId();
+
         foreach ($killZonesWithSpells as $killZone) {
-            $latLng = $this->getKillZoneSpellsNoteLatLng($killZone);
+            $latLng = $this->getKillZoneSpellsNoteLatLng($killZone, $enemyIngameLocationsByFloorId);
 
             if ($latLng === null) {
                 $warnings->push(new ImportWarning(
@@ -378,13 +388,38 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     }
 
     /**
-     * Where the spells note of a kill zone goes: just below the lowest enemy of the pull on its dominant floor, which
-     * keeps it clear of the description note above the pull. A pull without enemies falls back to its kill area.
+     * @return array<int, array<int, array{killZoneId: int, ingameXY: IngameXY}>> The ingame location of every enemy
+     *                                                                            of every pull, by floor ID.
      */
-    private function getKillZoneSpellsNoteLatLng(KillZone $killZone): ?LatLng
+    private function getKillZoneEnemyIngameLocationsByFloorId(): array
     {
-        $mappingVersion = $this->dungeonRoute->mappingVersion;
-        $enemies        = $killZone->getEnemies();
+        $result = [];
+
+        foreach ($this->dungeonRoute->killZones as $killZone) {
+            foreach ($killZone->getEnemies() as $enemy) {
+                $result[$enemy->floor_id][] = [
+                    'killZoneId' => $killZone->id,
+                    'ingameXY'   => $this->coordinatesService->calculateIngameLocationForMapLocation(
+                        new LatLng($enemy->lat, $enemy->lng, $enemy->floor),
+                    ),
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Where the spells note of a kill zone goes, as exported: next to one of the pull's enemies on its dominant floor
+     * - preferably below the lowest one, which keeps it clear of the description note above the pull - at the first
+     * spot where re-importing the string attaches the note to this pull and no other. Right on top of the pull's
+     * lowest enemy when no spot next to its enemies does. A pull without enemies uses its kill area.
+     *
+     * @param array<int, array<int, array{killZoneId: int, ingameXY: IngameXY}>> $enemyIngameLocationsByFloorId
+     */
+    private function getKillZoneSpellsNoteLatLng(KillZone $killZone, array $enemyIngameLocationsByFloorId): ?LatLng
+    {
+        $enemies = $killZone->getEnemies();
 
         if ($enemies->isEmpty()) {
             if (!$killZone->hasKillArea()) {
@@ -393,9 +428,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
             $killAreaLatLng = new LatLng($killZone->lat, $killZone->lng, $killZone->floor);
 
-            return $mappingVersion->facade_enabled && !$killZone->floor->facade
-                ? $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $killAreaLatLng)
-                : $killAreaLatLng;
+            return $this->convertKillZoneSpellsNoteLatLngToExportedLatLng($killAreaLatLng, $killAreaLatLng);
         }
 
         $dominantFloorId = $killZone->getDominantFloor(true)?->id;
@@ -406,44 +439,128 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $enemiesOnFloor = $enemies->where('floor_id', $enemies->countBy('floor_id')->sortDesc()->keys()->first());
         }
 
-        /** @var Enemy $lowestEnemy */
-        $lowestEnemy       = $enemiesOnFloor->sortBy('lat')->first();
-        $lowestEnemyLatLng = new LatLng($lowestEnemy->lat, $lowestEnemy->lng, $lowestEnemy->floor);
-        $noteLatLng        = $this->getKillZoneSpellsNoteLatLngNextTo($lowestEnemyLatLng);
+        /** @var Collection<int, LatLng> $enemyLatLngs */
+        $enemyLatLngs = $enemiesOnFloor
+            ->sortBy('lat')
+            ->map(static fn(Enemy $enemy): LatLng => new LatLng($enemy->lat, $enemy->lng, $enemy->floor))
+            ->values();
 
-        if (!$mappingVersion->facade_enabled) {
-            return $noteLatLng;
+        foreach (self::KILL_ZONE_SPELLS_NOTE_DISTANCE_FACTORS as $distanceFactor) {
+            foreach ($enemyLatLngs as $enemyLatLng) {
+                foreach (self::KILL_ZONE_SPELLS_NOTE_DIRECTIONS as [$latDirection, $lngDirection]) {
+                    $candidateLatLng = $this->getKillZoneSpellsNoteLatLngNextTo(
+                        $enemyLatLng,
+                        $latDirection * $distanceFactor * self::KILL_ZONE_SPELLS_NOTE_DISTANCE,
+                        $lngDirection * $distanceFactor * self::KILL_ZONE_SPELLS_NOTE_DISTANCE,
+                    );
+
+                    if ($candidateLatLng === null) {
+                        continue;
+                    }
+
+                    $exportedLatLng = $this->convertKillZoneSpellsNoteLatLngToExportedLatLng($candidateLatLng, $enemyLatLng);
+                    if ($this->getKillZoneIdsClaimingNoteOnImport($exportedLatLng, $enemyIngameLocationsByFloorId) === [$killZone->id]) {
+                        return $exportedLatLng;
+                    }
+                }
+            }
         }
 
-        // The note must land on the same facade floor as the enemy, even if it sits just outside that floor union's area
-        return $this->coordinatesService->convertMapLocationToFacadeMapLocation(
-            $mappingVersion,
-            $noteLatLng,
-            $mappingVersion->getFloorUnionForLatLng($this->coordinatesService, $lowestEnemyLatLng),
-        );
+        /** @var LatLng $lowestEnemyLatLng */
+        $lowestEnemyLatLng = $enemyLatLngs->first();
+
+        return $this->convertKillZoneSpellsNoteLatLngToExportedLatLng($lowestEnemyLatLng, $lowestEnemyLatLng);
     }
 
     /**
-     * Offsets $latLng downwards on the map (upwards when that would leave it) by KILL_ZONE_SPELLS_NOTE_DISTANCE map
-     * units, capped at KILL_ZONE_SPELLS_NOTE_MAX_DISTANCE_YARDS ingame.
+     * Offsets $latLng by the given amount of map units, scaled down to at most KILL_ZONE_SPELLS_NOTE_MAX_DISTANCE_YARDS
+     * ingame. Null when that leaves the map.
      */
-    private function getKillZoneSpellsNoteLatLngNextTo(LatLng $latLng): LatLng
+    private function getKillZoneSpellsNoteLatLngNextTo(LatLng $latLng, float $latOffset, float $lngOffset): ?LatLng
     {
-        $direction = $latLng->getLat() - self::KILL_ZONE_SPELLS_NOTE_DISTANCE < CoordinatesService::MAP_MAX_LAT ? 1 : -1;
-        $offset    = $direction * self::KILL_ZONE_SPELLS_NOTE_DISTANCE;
-
         $distanceYards = $this->coordinatesService->distanceIngameXY(
             $this->coordinatesService->calculateIngameLocationForMapLocation($latLng),
             $this->coordinatesService->calculateIngameLocationForMapLocation(
-                new LatLng($latLng->getLat() + $offset, $latLng->getLng(), $latLng->getFloor()),
+                new LatLng($latLng->getLat() + $latOffset, $latLng->getLng() + $lngOffset, $latLng->getFloor()),
             ),
         );
 
         if ($distanceYards > self::KILL_ZONE_SPELLS_NOTE_MAX_DISTANCE_YARDS) {
-            $offset *= self::KILL_ZONE_SPELLS_NOTE_MAX_DISTANCE_YARDS / $distanceYards;
+            $latOffset *= self::KILL_ZONE_SPELLS_NOTE_MAX_DISTANCE_YARDS / $distanceYards;
+            $lngOffset *= self::KILL_ZONE_SPELLS_NOTE_MAX_DISTANCE_YARDS / $distanceYards;
         }
 
-        return new LatLng($latLng->getLat() + $offset, $latLng->getLng(), $latLng->getFloor());
+        $result = new LatLng($latLng->getLat() + $latOffset, $latLng->getLng() + $lngOffset, $latLng->getFloor());
+
+        if ($result->getLat() < CoordinatesService::MAP_MAX_LAT || $result->getLat() > 0 ||
+            $result->getLng() < 0 || $result->getLng() > CoordinatesService::MAP_MAX_LNG) {
+            return null;
+        }
+
+        return $result;
+    }
+
+    /**
+     * On facade routes the note must land on the same facade floor as $anchorLatLng, even if it sits just outside
+     * that floor union's area.
+     */
+    private function convertKillZoneSpellsNoteLatLngToExportedLatLng(LatLng $latLng, LatLng $anchorLatLng): LatLng
+    {
+        $mappingVersion = $this->dungeonRoute->mappingVersion;
+
+        if (!$mappingVersion->facade_enabled || $latLng->getFloor()?->facade) {
+            return $latLng;
+        }
+
+        return $this->coordinatesService->convertMapLocationToFacadeMapLocation(
+            $mappingVersion,
+            $latLng,
+            $mappingVersion->getFloorUnionForLatLng($this->coordinatesService, $anchorLatLng),
+        );
+    }
+
+    /**
+     * Mirrors ObjectImporter attaching an imported note to a pull: through the rounded MDT coordinates the note is
+     * exported with and back, to the pull with the enemy nearest to it on its floor, within the importer's radius.
+     *
+     * @param  array<int, array<int, array{killZoneId: int, ingameXY: IngameXY}>> $enemyIngameLocationsByFloorId
+     * @return array<int, int>                                                    The IDs of the kill zones tied for
+     *                                                                            nearest; empty when none is in range.
+     */
+    private function getKillZoneIdsClaimingNoteOnImport(LatLng $exportedLatLng, array $enemyIngameLocationsByFloorId): array
+    {
+        $importedLatLng = Conversion::convertMDTCoordinateToLatLng(
+            Conversion::convertLatLngToMDTCoordinate($exportedLatLng),
+            $exportedLatLng->getFloor(),
+        );
+
+        if ($importedLatLng->getFloor()?->facade) {
+            $importedLatLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation(
+                $this->dungeonRoute->mappingVersion,
+                $importedLatLng,
+            );
+
+            if ($importedLatLng->getFloor()?->facade) {
+                return [];
+            }
+        }
+
+        $ingameXY        = $this->coordinatesService->calculateIngameLocationForMapLocation($importedLatLng);
+        $nearestDistance = (float)ObjectImporter::IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS;
+        $killZoneIds     = [];
+
+        foreach ($enemyIngameLocationsByFloorId[$importedLatLng->getFloor()?->id] ?? [] as $enemyIngameLocation) {
+            $distance = $this->coordinatesService->distanceIngameXY($enemyIngameLocation['ingameXY'], $ingameXY);
+
+            if ($distance < $nearestDistance) {
+                $nearestDistance = $distance;
+                $killZoneIds     = [$enemyIngameLocation['killZoneId']];
+            } elseif ($killZoneIds !== [] && $distance === $nearestDistance && !in_array($enemyIngameLocation['killZoneId'], $killZoneIds, true)) {
+                $killZoneIds[] = $enemyIngameLocation['killZoneId'];
+            }
+        }
+
+        return $killZoneIds;
     }
 
     /**

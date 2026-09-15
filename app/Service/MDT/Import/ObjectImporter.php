@@ -26,8 +26,8 @@ use Illuminate\Support\Facades\DB;
 
 class ObjectImporter
 {
-    /** @var int */
-    private const int IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS = 50;
+    /** @var int A note closer than this to an enemy of a pull is attached to that pull instead of becoming a map icon */
+    public const int IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS = 50;
 
     /** @var array<string, int> Names users write on MDT notes for a spell other than the spell's own name */
     private const array SPELL_IDS_BY_ALIAS = [

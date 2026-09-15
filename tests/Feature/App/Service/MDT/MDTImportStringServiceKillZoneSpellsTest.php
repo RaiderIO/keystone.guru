@@ -362,6 +362,40 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
         }
     }
 
+    #[Test]
+    public function getDungeonRoute_givenExportedSpellsPullWithAnotherPullsEnemyRightBelowIt_keepsTheSpellsOnTheirPull(): void
+    {
+        $dungeonRoute  = null;
+        $importedRoute = null;
+
+        try {
+            // Arrange
+            $attempts = 0;
+            do {
+                $dungeonRoute?->delete();
+                $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies(enemyCount: 2);
+                $enemies      = $this->findEnemyWithAnotherEnemyRightBelowIt($this->getSafeMdtEnemies($dungeonRoute, limit: 200));
+            } while ($enemies === null && ++$attempts < 25);
+            $this->assertNotNull($enemies, 'No MDT dungeon has a safe enemy with another one right below it');
+
+            [$upperEnemy, $lowerEnemy] = $enemies;
+            $this->createKillZone($dungeonRoute, 1, [Spell::SPELL_BLOODLUST], $upperEnemy);
+            $this->createKillZone($dungeonRoute, 2, [], $lowerEnemy);
+
+            $encodedString = $this->exportDungeonRouteToString($dungeonRoute);
+
+            // Act
+            $importedRoute = $this->importStringToDungeonRoute($encodedString);
+
+            // Assert
+            $this->assertSame([1 => [Spell::SPELL_BLOODLUST], 2 => []], $this->getSpellIdsByKillZoneIndex($importedRoute));
+            $this->assertSame(0, $importedRoute->mapIcons()->count());
+        } finally {
+            $importedRoute?->delete();
+            $dungeonRoute?->delete();
+        }
+    }
+
     /**
      * @param array<int, int> $spellIds
      */
@@ -447,6 +481,46 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
 
                     if ($distance > 5 && $distance < self::IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS - 5) {
                         return [$enemyA, $enemyB];
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  Collection<int, Enemy>         $enemies
+     * @return array{0: Enemy, 1: Enemy}|null An enemy, and another enemy on its floor that is closer than the first one
+     *                                        to the spot a fixed offset below the first one (6 map units, capped at 25
+     *                                        yards ingame).
+     */
+    private function findEnemyWithAnotherEnemyRightBelowIt(Collection $enemies): ?array
+    {
+        foreach ($enemies->groupBy('floor_id') as $floorId => $enemiesOnFloor) {
+            $floor = $this->getFloor((int)$floorId);
+
+            foreach ($enemiesOnFloor as $upperEnemy) {
+                $upperLatLng = new LatLng($upperEnemy->lat, $upperEnemy->lng, $floor);
+                $offset      = 6.0;
+                $belowLatLng = new LatLng($upperEnemy->lat - $offset, $upperEnemy->lng, $floor);
+                $offsetYards = $this->distanceYards($upperLatLng, $belowLatLng);
+                if ($offsetYards > 25) {
+                    $belowLatLng = new LatLng($upperEnemy->lat - $offset * 25 / $offsetYards, $upperEnemy->lng, $floor);
+                }
+
+                if ($belowLatLng->getLat() < CoordinatesService::MAP_MAX_LAT) {
+                    continue;
+                }
+
+                foreach ($enemiesOnFloor as $lowerEnemy) {
+                    if ($lowerEnemy->id === $upperEnemy->id) {
+                        continue;
+                    }
+
+                    $lowerLatLng = new LatLng($lowerEnemy->lat, $lowerEnemy->lng, $floor);
+                    if ($this->distanceYards($belowLatLng, $lowerLatLng) < $this->distanceYards($belowLatLng, $upperLatLng) - 1) {
+                        return [$upperEnemy, $lowerEnemy];
                     }
                 }
             }
