@@ -82,6 +82,10 @@ class MetricService implements MetricServiceInterface
         });
     }
 
+    /**
+     * A group whose count did not change keeps its updated_at, so InnoDB leaves the row unwritten and only groups
+     * that received new metrics cost write I/O. The assignments run left to right: updated_at has to come first.
+     */
     public function aggregateMetrics(): bool
     {
         $result = DB::insert("
@@ -98,7 +102,9 @@ class MetricService implements MetricServiceInterface
                 FROM metrics
                 GROUP BY model_id, model_class, category, tag
             ) as metrics
-        ON DUPLICATE KEY UPDATE metric_aggregations.value = metrics.value, metric_aggregations.updated_at = metrics.updated_at;
+        ON DUPLICATE KEY UPDATE
+            metric_aggregations.updated_at = IF(metric_aggregations.value = metrics.value, metric_aggregations.updated_at, metrics.updated_at),
+            metric_aggregations.value = metrics.value;
         ");
 
         if ($result) {
