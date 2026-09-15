@@ -29,7 +29,7 @@ class CreateMissingNpcDataExtractorLogging extends StructuredLogging implements 
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function extractDataCreatedNpc(int $npcId, string $name, int $baseHealth, string $rawEvent): void
+    public function extractDataCreatedNpc(int $npcId, string $name, string $rawEvent): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }

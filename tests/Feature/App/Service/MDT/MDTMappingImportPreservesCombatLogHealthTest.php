@@ -10,6 +10,7 @@ use App\Models\Npc\NpcHealth;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use Exception;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -82,54 +83,135 @@ final class MDTMappingImportPreservesCombatLogHealthTest extends PublicTestCase
     }
 
     #[Test]
-    public function importNpcsDataFromMDT_givenNpcWithPlaceholderHealth_fillsItFromMDT(): void
+    public function importNpcsDataFromMDT_givenNpcWithPlaceholderHealth_leavesThePlaceholder(): void
     {
         // Arrange
+        [$dungeon, $retailGameVersion, $npcHealth] = $this->arrangeXathuux();
+
+        try {
+            NpcHealth::query()->whereKey($npcHealth->id)->update(['health' => NpcHealth::HEALTH_PLACEHOLDER]);
+            $this->flushNpcCaches();
+
+            // Act
+            $failures = $this->importMurderRow($dungeon, $retailGameVersion);
+
+            // Assert
+            $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
+
+            $this->flushNpcCaches();
+            $this->assertSame(
+                NpcHealth::HEALTH_PLACEHOLDER,
+                $this->findXathuuxHealth($retailGameVersion)?->health,
+                'A placeholder is left for combatlog:extractnpchealth to fill, never filled from MDT.',
+            );
+        } finally {
+            NpcHealth::query()->whereKey($npcHealth->id)->update(['health' => self::XATHUUX_CORRECTED_HEALTH]);
+            $this->flushNpcCaches();
+        }
+    }
+
+    #[Test]
+    public function importNpcsDataFromMDT_givenNpcWithoutHealthRow_createsAPlaceholderRow(): void
+    {
+        // Arrange
+        [$dungeon, $retailGameVersion, $npcHealth] = $this->arrangeXathuux();
+        $originalAttributes                        = $npcHealth->getAttributes();
+
+        try {
+            NpcHealth::query()->whereKey($npcHealth->id)->delete();
+            $this->flushNpcCaches();
+
+            // Act
+            $failures = $this->importMurderRow($dungeon, $retailGameVersion);
+
+            // Assert
+            $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
+
+            $this->flushNpcCaches();
+            $createdNpcHealths = NpcHealth::query()
+                ->where('npc_id', self::XATHUUX_NPC_ID)
+                ->where('game_version_id', $retailGameVersion->id)
+                ->get();
+            $this->assertCount(1, $createdNpcHealths);
+            $this->assertSame(NpcHealth::HEALTH_PLACEHOLDER, $createdNpcHealths->first()->health);
+            $this->assertNull($createdNpcHealths->first()->percentage);
+        } finally {
+            NpcHealth::query()
+                ->where('npc_id', self::XATHUUX_NPC_ID)
+                ->where('game_version_id', $retailGameVersion->id)
+                ->delete();
+            NpcHealth::query()->insert($originalAttributes);
+            $this->flushNpcCaches();
+        }
+    }
+
+    #[Test]
+    public function importNpcsDataFromMDT_givenNpcHealthWithPercentage_leavesThePercentageAlone(): void
+    {
+        // Arrange
+        [$dungeon, $retailGameVersion, $npcHealth] = $this->arrangeXathuux();
+        $originalPercentage                        = $npcHealth->percentage;
+
+        try {
+            NpcHealth::query()->whereKey($npcHealth->id)->update(['percentage' => 50]);
+            $this->flushNpcCaches();
+
+            // Act
+            $failures = $this->importMurderRow($dungeon, $retailGameVersion);
+
+            // Assert
+            $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
+
+            $this->flushNpcCaches();
+            $this->assertSame(50, $this->findXathuuxHealth($retailGameVersion)?->percentage);
+        } finally {
+            NpcHealth::query()->whereKey($npcHealth->id)->update(['percentage' => $originalPercentage]);
+            $this->flushNpcCaches();
+        }
+    }
+
+    /**
+     * @return array{Dungeon, GameVersion, NpcHealth}
+     */
+    private function arrangeXathuux(): array
+    {
         $dungeon = Dungeon::query()->where('key', 'murder_row')->firstOrFail();
 
         /** @var GameVersion $retailGameVersion */
         $retailGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_RETAIL)->firstOrFail();
 
-        $xathuux   = Npc::query()->with('npcHealths')->findOrFail(self::XATHUUX_NPC_ID);
-        $npcHealth = $xathuux->getHealthByGameVersion($retailGameVersion);
+        $npcHealth = $this->findXathuuxHealth($retailGameVersion);
         $this->assertNotNull($npcHealth, 'The seeder must ship a health row, or this test proves nothing.');
 
-        try {
-            NpcHealth::query()->whereKey($npcHealth->id)->update(['health' => NpcHealth::HEALTH_PLACEHOLDER]);
-            Npc::query()->findOrFail(self::XATHUUX_NPC_ID)->flushCache();
-            new NpcHealth()->flushCache();
+        return [$dungeon, $retailGameVersion, $npcHealth];
+    }
 
-            $mappingImportService = $this->app->make(MDTMappingImportServiceInterface::class);
+    private function findXathuuxHealth(GameVersion $gameVersion): ?NpcHealth
+    {
+        return Npc::query()->with('npcHealths')->findOrFail(self::XATHUUX_NPC_ID)->getHealthByGameVersion($gameVersion);
+    }
 
-            $mdtDungeon = app(MDTDungeon::class, [
-                'cacheService'       => app(CacheServiceInterface::class),
-                'coordinatesService' => app(CoordinatesServiceInterface::class),
-                'dungeon'            => $dungeon,
-            ]);
+    /**
+     * @return array<int, Exception>
+     */
+    private function importMurderRow(Dungeon $dungeon, GameVersion $gameVersion): array
+    {
+        $mdtDungeon = app(MDTDungeon::class, [
+            'cacheService'       => app(CacheServiceInterface::class),
+            'coordinatesService' => app(CoordinatesServiceInterface::class),
+            'dungeon'            => $dungeon,
+        ]);
 
-            $mdtHealth = collect($mdtDungeon->getMDTNPCs())
-                ->first(static fn($mdtNpc) => $mdtNpc->getId() === self::XATHUUX_NPC_ID)
-                ?->getHealth();
-            $this->assertIsInt($mdtHealth);
+        $failures = [];
+        $this->app->make(MDTMappingImportServiceInterface::class)->importNpcsDataFromMDT($mdtDungeon, $dungeon, $gameVersion, $failures);
 
-            // Act
-            $failures = [];
-            $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $retailGameVersion, $failures);
+        return $failures;
+    }
 
-            // Assert
-            $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
-
-            new Npc()->flushCache();
-            new NpcHealth()->flushCache();
-            $this->assertSame(
-                $mdtHealth,
-                Npc::query()->with('npcHealths')->findOrFail(self::XATHUUX_NPC_ID)->getHealthByGameVersion($retailGameVersion)?->health,
-                'A placeholder health must still be filled from MDT.',
-            );
-        } finally {
-            NpcHealth::query()->whereKey($npcHealth->id)->update(['health' => self::XATHUUX_CORRECTED_HEALTH]);
-            Npc::query()->findOrFail(self::XATHUUX_NPC_ID)->flushCache();
-            new NpcHealth()->flushCache();
-        }
+    private function flushNpcCaches(): void
+    {
+        // Model caching is on in CI: the eager-loaded npcHealths cache under the Npc model, so both need flushing
+        new Npc()->flushCache();
+        new NpcHealth()->flushCache();
     }
 }

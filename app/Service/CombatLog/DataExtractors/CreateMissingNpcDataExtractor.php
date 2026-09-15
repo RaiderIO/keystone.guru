@@ -122,34 +122,16 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
             ]);
 
             if ($createdNpc instanceof Npc) { // @phpstan-ignore instanceof.alwaysTrue
-                // Determine health
-                if ($currentDungeon->keyLevel === null) {
-                    $baseHealth = $parsedEvent->getAdvancedData()->getMaxHP();
-                } else {
-                    // Calculate the base health based on the current key level + current max hp
-                    $baseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $createdNpc->getScalingFactor(
-                        $currentDungeon->keyLevel,
-                        // Affixgroup can be null for PTR keys for example, which can have arbitrary affixes
-                        $currentDungeon->affixGroup?->affixes->pluck('key')->toArray() ?? [],
-                    ));
-                }
-
                 NpcDungeon::create([
                     'npc_id'     => $createdNpc->id,
                     'dungeon_id' => $currentDungeon->dungeon->id,
                 ]);
-
-                // @TODO For now don't update base health - I may be doing the calculation wrong, MDT's got it?
-//                $createdNpc->update([
-//                    'base_health' => $baseHealth,
-//                ]);
 
                 $result->createdNpc();
 
                 $this->log->extractDataCreatedNpc(
                     $guid->getId(),
                     $name,
-                    $baseHealth,
                     $parsedEvent->getRawEvent(),
                 );
             } else {

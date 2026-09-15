@@ -30,7 +30,6 @@ class MDTNpc implements Arrayable
     private string $creatureType;
     private int $level  = 0;
     private int $health = 0;
-    private readonly ?int $healthPercentage;
     /**
      * @var array<int, mixed>
      */
@@ -80,9 +79,8 @@ class MDTNpc implements Arrayable
             $this->creatureType = $this->rawMdtNpc['creatureType'];
         }
 
-        $this->level            = (int)($this->rawMdtNpc['level'] ?? 0);
-        $this->health           = (int)$this->rawMdtNpc['health'];
-        $this->healthPercentage = $this->rawMdtNpc['health_percentage'] ?? null;
+        $this->level  = (int)($this->rawMdtNpc['level'] ?? 0);
+        $this->health = (int)$this->rawMdtNpc['health'];
 
         // We need to do this ksort magic because php arrays that we get from Lua are in a random order - this makes it consistent
         if (isset($this->rawMdtNpc['characteristics'])) {
@@ -233,11 +231,6 @@ class MDTNpc implements Arrayable
     public function getHealth(): int
     {
         return $this->health;
-    }
-
-    public function getHealthPercentage(): ?int
-    {
-        return $this->healthPercentage;
     }
 
     /**

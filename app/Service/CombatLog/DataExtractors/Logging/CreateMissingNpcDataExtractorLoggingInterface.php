@@ -12,7 +12,7 @@ interface CreateMissingNpcDataExtractorLoggingInterface
 
     public function extractDataNpcWasAPet(int $npcId, string $name): void;
 
-    public function extractDataCreatedNpc(int $npcId, string $name, int $baseHealth, string $rawEvent): void;
+    public function extractDataCreatedNpc(int $npcId, string $name, string $rawEvent): void;
 
     public function extractDataNpcNotCreated(int $npcId, string $name): void;
 }

@@ -14,9 +14,7 @@ use Illuminate\Support\Collection;
  * Turns the max HP values NpcHealthDataExtractor collected from a combat log into base health for the mapping.
  *
  * The forward formula is Npc::calculateHealthForKey(): health * (percentage ?? 100) / 100 * getScalingFactor().
- * The reversal therefore has to honour the row's percentage as well as the scaling factor - both attempts that
- * preceded this one (CreateMissingNpcDataExtractor's commented-out base health, and the since-deleted
- * NpcUpdateDataExtractor) divided by the factor alone.
+ * The reversal therefore has to honour the row's percentage as well as the scaling factor.
  */
 class NpcHealthExtractionService implements NpcHealthExtractionServiceInterface
 {
