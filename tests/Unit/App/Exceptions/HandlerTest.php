@@ -7,6 +7,8 @@ use App\Exceptions\Logging\HandlerLoggingInterface;
 use App\Service\CombatLog\Exceptions\CombatLogSegmentDownloadFailedException;
 use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Psr\Log\LogLevel;
@@ -126,6 +128,70 @@ class HandlerTest extends PublicTestCase
 
         // Assert
         self::assertSame(LogLevel::WARNING, $levels[CombatLogSegmentDownloadFailedException::class] ?? null);
+    }
+
+    /**
+     * InvalidSignatureException is a 403 HttpException subclass, so the exact-class $dontReport check lets it
+     * through; it must land on the warning-level invalidSignature record instead of the error-level one.
+     */
+    #[Test]
+    public function report_givenInvalidSignatureExceptionForUrlWithoutSignature_logsInvalidSignatureInsteadOfUncaughtException(): void
+    {
+        // Arrange
+        $this->markApplicationAsNotRunningInConsole();
+        $this->app->instance('request', Request::create('/ajax/i2zrVoe/mdtExport'));
+        $handlerLogging = $this->createMock(HandlerLoggingInterface::class);
+        $handlerLogging->expects(self::never())->method('uncaughtException');
+        $handlerLogging->expects(self::once())
+            ->method('invalidSignature')
+            ->with(self::anything(), 'http://localhost/ajax/i2zrVoe/mdtExport', null, null, false, false);
+        $this->instance(HandlerLoggingInterface::class, $handlerLogging);
+        $handler = app()->make(Handler::class);
+
+        // Act
+        $handler->report(new InvalidSignatureException());
+
+        // Assert - the mock expectations
+    }
+
+    #[Test]
+    public function report_givenInvalidSignatureExceptionForExpiredSignedUrl_logsInvalidSignatureAsExpired(): void
+    {
+        // Arrange
+        $this->markApplicationAsNotRunningInConsole();
+        $expires = now()->subHour()->getTimestamp();
+        $this->app->instance('request', Request::create(sprintf('/ajax/i2zrVoe/mdtExport?expires=%d&signature=abc', $expires)));
+        $handlerLogging = $this->createMock(HandlerLoggingInterface::class);
+        $handlerLogging->expects(self::once())
+            ->method('invalidSignature')
+            ->with(self::anything(), self::anything(), null, null, true, true);
+        $this->instance(HandlerLoggingInterface::class, $handlerLogging);
+        $handler = app()->make(Handler::class);
+
+        // Act
+        $handler->report(new InvalidSignatureException());
+
+        // Assert - the mock expectation
+    }
+
+    #[Test]
+    public function report_givenInvalidSignatureExceptionForTamperedUnexpiredSignedUrl_logsInvalidSignatureAsNotExpired(): void
+    {
+        // Arrange
+        $this->markApplicationAsNotRunningInConsole();
+        $expires = now()->addHour()->getTimestamp();
+        $this->app->instance('request', Request::create(sprintf('/ajax/i2zrVoe/mdtExport?expires=%d&signature=abc', $expires)));
+        $handlerLogging = $this->createMock(HandlerLoggingInterface::class);
+        $handlerLogging->expects(self::once())
+            ->method('invalidSignature')
+            ->with(self::anything(), self::anything(), null, null, true, false);
+        $this->instance(HandlerLoggingInterface::class, $handlerLogging);
+        $handler = app()->make(Handler::class);
+
+        // Act
+        $handler->report(new InvalidSignatureException());
+
+        // Assert - the mock expectation
     }
 
     /**

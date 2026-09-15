@@ -14,7 +14,9 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\MalformedUrlException;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\ValidationException;
 use MarvinLabs\DiscordLogger\Discord\Exceptions\MessageCouldNotBeSent;
 use Override;
@@ -83,6 +85,16 @@ class Handler extends ExceptionHandler
 
             if ($e instanceof TooManyRequestsHttpException) {
                 $handlerLogging->tooManyRequests($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $e);
+            } elseif ($e instanceof InvalidSignatureException) {
+                $hasSignature = $request?->query('signature') !== null;
+                $handlerLogging->invalidSignature(
+                    $request?->ip() ?? 'unknown IP',
+                    $request?->fullUrl(),
+                    $user?->id,
+                    $user?->name,
+                    $hasSignature,
+                    $hasSignature && !URL::signatureHasNotExpired($request),
+                );
             } elseif (!in_array($e::class, $this->dontReport)) {
                 // parent::report() below also reports the exception itself whenever shouldReport() allows it, so this
                 // record can be a duplicate - but only for that subset. $dontReport here is an exact class match while
