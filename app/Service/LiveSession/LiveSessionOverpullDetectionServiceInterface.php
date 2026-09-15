@@ -13,9 +13,9 @@ interface LiveSessionOverpullDetectionServiceInterface
      * persist the result, broadcast the appropriate events, and recompute
      * the obsolete enemy set whenever overpulled or obsolete rows currently exist for this
      * live session (not only when this call recorded a new overpull — killing a
-     * previously-obsolete enemy on-route must also drop it out of the obsolete set). Also
-     * persists and broadcasts the current in-combat enemy set, which seeds the "current pull"
-     * used to attribute off-route kills.
+     * obsolete enemy on-route must also drop it out of the obsolete set). Also persists and
+     * broadcasts the current in-combat enemy set, which seeds the "current pull" that off-route
+     * kills are attributed to.
      *
      * @param Collection<int, Enemy> $resolvedKillsInOrder Resolved enemies in temporal/stream order.
      * @param Collection<int, Enemy> $inCombatEnemies      Enemies currently in combat (resolved).

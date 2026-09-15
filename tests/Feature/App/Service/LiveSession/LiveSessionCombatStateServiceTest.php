@@ -462,7 +462,7 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
             // Act — a later position update without a resolvable COMBATANT_INFO
             $this->service->setPlayerPosition($liveSession, 'Player-1234-ABCDEF01', 'Testchar', -200.0, 50.0, 2);
 
-            // Assert — the previously-known class/spec is preserved
+            // Assert — the class/spec resolved earlier is preserved
             $this->assertDatabaseHas('live_session_player_positions', [
                 'live_session_id'   => $liveSession->id,
                 'player_guid'       => 'Player-1234-ABCDEF01',

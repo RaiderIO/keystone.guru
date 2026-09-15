@@ -162,7 +162,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                             }
                         }
 
-                        // A dead enemy is no longer in combat.
+                        // A dead enemy leaves combat.
                         if ($unitDefeatedFilter->parse($event, $lineNr)) {
                             $this->log->processBufferPreCombatRemoval($event->getRawEvent());
 

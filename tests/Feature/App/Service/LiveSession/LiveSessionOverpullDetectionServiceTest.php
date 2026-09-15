@@ -222,8 +222,8 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
 
         [$dungeonRoute, $liveSession, $killZone1] = $this->arrangeFreeholdSession();
 
-        // The id divergence (live_session.id != dungeon_route_id) is required to exercise the
-        // OverpulledEnemyService SQL fix (#3288). In a shared test DB this is naturally true.
+        // OverpulledEnemyService must key on live_session.id, not dungeon_route_id - the two ids
+        // have to differ for this test to tell them apart. In a shared test DB they naturally do.
         $this->assertNotSame($liveSession->id, $dungeonRoute->id);
 
         // Kill zone 2 (downstream) holds a skippable enemy that can be flagged obsolete
@@ -306,7 +306,7 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
             // Act 2: the obsolete enemy A is killed anyway → it must drop out of obsolete, B takes its place
             $service->processResolvedKills($liveSession, collect([$skippableEnemyA]), collect());
 
-            // Assert: A is killed and no longer obsolete; B is now obsolete instead
+            // Assert: A is killed and not obsolete; B is obsolete instead
             $this->assertDatabaseHas('live_session_killed_enemies', [
                 'live_session_id' => $liveSession->id,
                 'npc_id'          => self::SKIPPABLE_A_NPC_ID,

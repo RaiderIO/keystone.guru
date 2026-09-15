@@ -123,7 +123,7 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
                 'floor_id'       => $floorId,
                 'updated_at'     => now(),
                 // Only overwrite the class/spec when we actually resolved them from a COMBATANT_INFO, so
-                // a later position update without one never wipes a previously-known specialization. The
+                // a later position update without one never wipes a specialization resolved earlier. The
                 // explicit null check (not array_filter()'s falsy-stripping default) matters here too -
                 // class/spec ids of 0 must not be treated the same as "not resolved".
                 ...array_filter([
