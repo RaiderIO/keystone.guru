@@ -91,14 +91,19 @@ class MapObjectGroupManager extends Signalable {
     }
 
     /**
-     * Retrieves a map object group by its name.
-     * @param name
-     * @returns {boolean|MapObjectGroup}
+     * Retrieves a map object group by its name. Prefer the named accessors below when the name is known up front.
+     *
+     * A group is absent when the page suppressed it through its hiddenMapObjectGroups option, and while the
+     * constructor is still creating the groups: a group cannot see one that comes after it in
+     * MAP_OBJECT_GROUP_NAMES from inside its own constructor.
+     *
+     * @param {string} name One of the MAP_OBJECT_GROUP_* constants.
+     * @returns {MapObjectGroup|null} Null when this map has no such map object group.
      */
     getByName(name) {
         console.assert(this instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);
 
-        let result = false;
+        let result = null;
         for (let i = 0; i < this.mapObjectGroups.length; i++) {
             if (this.mapObjectGroups[i].names.includes(name)) {
                 result = this.mapObjectGroups[i];
@@ -107,6 +112,117 @@ class MapObjectGroupManager extends Signalable {
         }
 
         return result;
+    }
+
+    /**
+     * Named accessors, one for each entry of MAP_OBJECT_GROUP_NAMES. Each returns null when this map has no
+     * such group, exactly like getByName().
+     *
+     * MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK deliberately has none: it is an alias that resolves to the map
+     * icon group through its multi-name registration, not a group of its own.
+     *
+     * @returns {UserMousePositionMapObjectGroup|null}
+     */
+    getUserMousePositionMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
+    }
+
+    /**
+     * @returns {EnemyPatrolMapObjectGroup|null}
+     */
+    getEnemyPatrolMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
+    }
+
+    /**
+     * @returns {EnemyMapObjectGroup|null}
+     */
+    getEnemyMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_ENEMY);
+    }
+
+    /**
+     * @returns {EnemyPackMapObjectGroup|null}
+     */
+    getEnemyPackMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+    }
+
+    /**
+     * @returns {EnemyForcesCheckpointMapObjectGroup|null}
+     */
+    getEnemyForcesCheckpointMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT);
+    }
+
+    /**
+     * @returns {PathMapObjectGroup|null}
+     */
+    getPathMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_PATH);
+    }
+
+    /**
+     * @returns {DungeonFloorSwitchMarkerMapObjectGroup|null}
+     */
+    getDungeonFloorSwitchMarkerMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+    }
+
+    /**
+     * @returns {BrushlineMapObjectGroup|null}
+     */
+    getBrushlineMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
+    }
+
+    /**
+     * @returns {ArrowMapObjectGroup|null}
+     */
+    getArrowMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_ARROW);
+    }
+
+    /**
+     * @returns {MapIconMapObjectGroup|null}
+     */
+    getMapIconMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_MAPICON);
+    }
+
+    /**
+     * @returns {KillZoneMapObjectGroup|null}
+     */
+    getKillZoneMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_KILLZONE);
+    }
+
+    /**
+     * @returns {KillZonePathMapObjectGroup|null}
+     */
+    getKillZonePathMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_KILLZONE_PATH);
+    }
+
+    /**
+     * @returns {MountableAreaMapObjectGroup|null}
+     */
+    getMountableAreaMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_MOUNTABLE_AREA);
+    }
+
+    /**
+     * @returns {FloorUnionMapObjectGroup|null}
+     */
+    getFloorUnionMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_FLOOR_UNION);
+    }
+
+    /**
+     * @returns {FloorUnionAreaMapObjectGroup|null}
+     */
+    getFloorUnionAreaMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_FLOOR_UNION_AREA);
     }
 
     /**
@@ -150,4 +266,10 @@ class MapObjectGroupManager extends Signalable {
 
         this.signal('updated');
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {MapObjectGroupManager};
 }

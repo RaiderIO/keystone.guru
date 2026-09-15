@@ -344,140 +344,150 @@ function removeStrayTooltips() {
 }
 
 /**
- * Safely get a map object group by name off the currently displayed map.
+ * The MapObjectGroupManager of the currently displayed map, or null when there is none.
  *
  * Every step of the chain can legitimately be absent, so none of them may be dereferenced blindly:
  * - pages outside a map context have no state manager at all - the no-op fallback at the top of this
  *   file returns false for exactly that case, so `typeof getState === 'function'` is never enough
  *   and the result must be checked for truthiness;
- * - the state manager returns null for its dungeon map until a map registers itself;
- * - MapObjectGroupManager.getByName() returns false (not a nullish value) for a group the page
- *   suppressed through its hiddenMapObjectGroups option, so normalise with `||`, not `??`.
+ * - the state manager returns null for its dungeon map until a map registers itself.
  *
  * getState is reached through globalThis rather than as a bare identifier: the fallback declaration
  * at the top of this file is hoisted, which shadows the real getState() from statemanager.blade.php
  * when util.js is loaded as a module (as the Vitest suite does). In the browser both are properties
  * of the global object, so the two forms are equivalent there.
  *
- * @param {string} name One of the MAP_OBJECT_GROUP_* constants.
- * @returns {MapObjectGroup|null} Null when this page has no such map object group.
+ * Code that already holds a map must use its own map.mapObjectGroupManager instead: a DungeonMap
+ * registers itself with the state manager from inside its constructor, so anything on that
+ * construction path would find the previous map here, or none at all.
+ *
+ * @returns {MapObjectGroupManager|null}
+ * @private
  */
-function getMapObjectGroup(name) {
+function _getCurrentMapObjectGroupManager() {
     let state = typeof globalThis.getState === 'function' ? globalThis.getState() : null;
     let dungeonMap = state ? state.getDungeonMap() : null;
 
-    return (dungeonMap?.mapObjectGroupManager?.getByName(name)) || null;
+    return dungeonMap?.mapObjectGroupManager ?? null;
 }
 
 /**
- * Safe per-group accessors, one for each entry of MAP_OBJECT_GROUP_NAMES. All of them return null
- * rather than throwing when the current page has no map, or hides the group in question.
+ * Safely get a map object group by name off the currently displayed map.
  *
- * MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK deliberately has none: it is an alias that resolves to
- * the map icon group through its multi-name registration, not a group of its own.
+ * @param {string} name One of the MAP_OBJECT_GROUP_* constants.
+ * @returns {MapObjectGroup|null} Null when this page has no map, or no such map object group.
+ */
+function getMapObjectGroup(name) {
+    return _getCurrentMapObjectGroupManager()?.getByName(name) ?? null;
+}
+
+/**
+ * Safe per-group accessors for the currently displayed map, one for each entry of
+ * MAP_OBJECT_GROUP_NAMES. Each delegates to the MapObjectGroupManager accessor of the same name and
+ * returns null rather than throwing when the current page has no map, or hides the group in question.
  *
  * @returns {UserMousePositionMapObjectGroup|null}
  */
 function getUserMousePositionMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
+    return _getCurrentMapObjectGroupManager()?.getUserMousePositionMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {EnemyPatrolMapObjectGroup|null}
  */
 function getEnemyPatrolMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_ENEMY_PATROL);
+    return _getCurrentMapObjectGroupManager()?.getEnemyPatrolMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {EnemyMapObjectGroup|null}
  */
 function getEnemyMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_ENEMY);
+    return _getCurrentMapObjectGroupManager()?.getEnemyMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {EnemyPackMapObjectGroup|null}
  */
 function getEnemyPackMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_ENEMY_PACK);
+    return _getCurrentMapObjectGroupManager()?.getEnemyPackMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {EnemyForcesCheckpointMapObjectGroup|null}
  */
 function getEnemyForcesCheckpointMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT);
+    return _getCurrentMapObjectGroupManager()?.getEnemyForcesCheckpointMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {PathMapObjectGroup|null}
  */
 function getPathMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_PATH);
+    return _getCurrentMapObjectGroupManager()?.getPathMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {DungeonFloorSwitchMarkerMapObjectGroup|null}
  */
 function getDungeonFloorSwitchMarkerMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+    return _getCurrentMapObjectGroupManager()?.getDungeonFloorSwitchMarkerMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {BrushlineMapObjectGroup|null}
  */
 function getBrushlineMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_BRUSHLINE);
+    return _getCurrentMapObjectGroupManager()?.getBrushlineMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {ArrowMapObjectGroup|null}
  */
 function getArrowMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_ARROW);
+    return _getCurrentMapObjectGroupManager()?.getArrowMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {MapIconMapObjectGroup|null}
  */
 function getMapIconMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_MAPICON);
+    return _getCurrentMapObjectGroupManager()?.getMapIconMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {KillZoneMapObjectGroup|null}
  */
 function getKillZoneMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_KILLZONE);
+    return _getCurrentMapObjectGroupManager()?.getKillZoneMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {KillZonePathMapObjectGroup|null}
  */
 function getKillZonePathMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_KILLZONE_PATH);
+    return _getCurrentMapObjectGroupManager()?.getKillZonePathMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {MountableAreaMapObjectGroup|null}
  */
 function getMountableAreaMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_MOUNTABLE_AREA);
+    return _getCurrentMapObjectGroupManager()?.getMountableAreaMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {FloorUnionMapObjectGroup|null}
  */
 function getFloorUnionMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_FLOOR_UNION);
+    return _getCurrentMapObjectGroupManager()?.getFloorUnionMapObjectGroup() ?? null;
 }
 
 /**
  * @returns {FloorUnionAreaMapObjectGroup|null}
  */
 function getFloorUnionAreaMapObjectGroup() {
-    return getMapObjectGroup(MAP_OBJECT_GROUP_FLOOR_UNION_AREA);
+    return _getCurrentMapObjectGroupManager()?.getFloorUnionAreaMapObjectGroup() ?? null;
 }
 
 /**

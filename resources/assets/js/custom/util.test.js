@@ -39,6 +39,7 @@ const {
 // The real constants, so the accessor tests below assert against the values the site actually uses
 // rather than values the test invented - a mis-paired constant has to fail.
 const MAP_OBJECT_GROUP_CONSTANTS = require('./constants');
+const {fakeMapObjectGroupManager} = require('../test/fixtures/mapObjectGroupManager');
 
 describe('convertToSlug', () => {
     it('converts spaced text to a lowercased, dashed slug', () => {
@@ -292,14 +293,32 @@ describe('getMapObjectGroup', () => {
     ];
 
     /**
-     * @param {*} groupOrFalse What the stubbed MapObjectGroupManager.getByName() should return.
+     * Installs a current map whose manager is the real MapObjectGroupManager prototype with getByName()
+     * stubbed, so the accessors under test run through the production manager accessors.
+     *
+     * @param {Object|null} groupOrNull What the stubbed MapObjectGroupManager.getByName() should return.
      * @returns {function(string): *} The getByName spy, so tests can assert the name it was passed.
      */
-    const stubMapWithGroup = (groupOrFalse) => {
-        let getByName = vi.fn(() => groupOrFalse);
-        globalThis.getState = () => ({getDungeonMap: () => ({mapObjectGroupManager: {getByName}})});
+    const stubMapWithGroup = (groupOrNull) => {
+        let getByName = vi.fn(() => groupOrNull);
+        let mapObjectGroupManager = fakeMapObjectGroupManager(getByName);
+        globalThis.getState = () => ({getDungeonMap: () => ({mapObjectGroupManager})});
 
         return getByName;
+    };
+
+    /**
+     * Installs a current map whose manager only has the given accessor, as a spy.
+     *
+     * @param {string} methodName
+     * @param {Object|null} groupOrNull What the manager accessor should return.
+     * @returns {function(): *} The manager accessor spy.
+     */
+    const stubMapWithManagerAccessor = (methodName, groupOrNull) => {
+        let managerAccessor = vi.fn(() => groupOrNull);
+        globalThis.getState = () => ({getDungeonMap: () => ({mapObjectGroupManager: {[methodName]: managerAccessor}})});
+
+        return managerAccessor;
     };
 
     // util.js reads the constants as bare globals, which is what the concatenated bundle gives it
@@ -331,8 +350,8 @@ describe('getMapObjectGroup', () => {
     });
 
     it('getMapObjectGroup_givenGroupHiddenOnThisPage_returnsNull', () => {
-        // Arrange - getByName() answers with false, not a nullish value, for a group that is not registered
-        stubMapWithGroup(false);
+        // Arrange - the page's hiddenMapObjectGroups option means the manager never created the group
+        stubMapWithGroup(null);
 
         // Act & Assert
         expect(getMapObjectGroup('killzone')).toBeNull();
@@ -358,6 +377,43 @@ describe('getMapObjectGroup', () => {
         // Assert
         expect(result).toBe(mapObjectGroup);
         expect(getByName).toHaveBeenCalledWith(expectedGroupName);
+    });
+
+    it.each(ACCESSORS)('%s_givenCurrentMap_delegatesToTheManagerAccessorOfTheSameName', (name, accessor) => {
+        // Arrange
+        let mapObjectGroup = {name: name};
+        let managerAccessor = stubMapWithManagerAccessor(name, mapObjectGroup);
+
+        // Act
+        let result = accessor();
+
+        // Assert
+        expect(result).toBe(mapObjectGroup);
+        expect(managerAccessor).toHaveBeenCalledOnce();
+    });
+
+    it.each(ACCESSORS)('%s_givenGroupHiddenOnThisPage_returnsNull', (name, accessor) => {
+        // Arrange
+        stubMapWithGroup(null);
+
+        // Act & Assert
+        expect(accessor()).toBeNull();
+    });
+
+    it.each(ACCESSORS)('%s_givenNoStateManager_returnsNull', (name, accessor) => {
+        // Arrange - what getState() falls back to on pages that are not a map
+        globalThis.getState = () => false;
+
+        // Act & Assert
+        expect(accessor()).toBeNull();
+    });
+
+    it.each(ACCESSORS)('%s_givenStateWithoutDungeonMap_returnsNull', (name, accessor) => {
+        // Arrange - the state manager exists but no map has registered itself yet
+        globalThis.getState = () => ({getDungeonMap: () => null});
+
+        // Act & Assert
+        expect(accessor()).toBeNull();
     });
 
     it('getMapObjectGroup_givenEveryRegisteredGroupName_hasAnAccessor', () => {

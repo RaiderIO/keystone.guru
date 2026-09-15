@@ -184,8 +184,8 @@ function enemySelectedEvent(enemy, context = {}) {
  * @param {Object} enemiesById
  * @param {Object} [options]
  * @param {boolean} [options.hideKillZoneGroup] Mirrors MapObjectGroupManager.getByName()
- *   returning `false` (its "not found" sentinel, not `null`) for a group a page hides via
- *   its `hiddenMapObjectGroups` option - e.g. Explore mode hiding the 'killzone' group.
+ *   returning `null` for a group a page hides via its `hiddenMapObjectGroups` option - e.g.
+ *   Explore mode hiding the 'killzone' group.
  */
 function makeFakeMap(enemiesById = {}, options = {}) {
     const enemyGroup = {
@@ -211,7 +211,7 @@ function makeFakeMap(enemiesById = {}, options = {}) {
                     return enemyGroup;
                 }
                 if (name === MAP_OBJECT_GROUP_KILLZONE && options.hideKillZoneGroup) {
-                    return false;
+                    return null;
                 }
                 return genericGroup;
             },

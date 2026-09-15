@@ -11,7 +11,7 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
         // On route load, this will also fill the enemy forces to the value they should be as the route is loaded
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         // May be null in admin setting where there's no kill zones
-        if (killZoneMapObjectGroup !== false) {
+        if (killZoneMapObjectGroup !== null) {
             killZoneMapObjectGroup.register('killzone:enemyadded', this, function (addEvent) {
                 self._onEnemySelectionChanged(addEvent);
             });

@@ -99,7 +99,7 @@ class KillZone extends MapObject {
         getState().register('mapzoomlevel:changed', this, this._mapZoomLevelChanged.bind(this));
         getState().register('killzonesnumberstyle:changed', this, this._numberStyleChanged.bind(this));
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        // MapObjectGroupManager.getByName() returns false, not null, when a page hides this group
+        // There is no killzone map object group when a page hides it
         // (e.g. Explore mode's view.blade.php), which happens for the throwaway KillZone that
         // EditKillZoneEnemySelection.isEnemySelectable() constructs purely to reuse its filter logic.
         if (killZoneMapObjectGroup) {

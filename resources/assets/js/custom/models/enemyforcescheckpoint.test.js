@@ -170,7 +170,7 @@ function createCheckpointForNumberStyle({killZonesNumberStyle, mapNumberStyle}) 
     checkpoint.map = {
         options: {noUI: false},
         mapObjectGroupManager: {
-            getByName: (name) => (name === 'enemy' ? enemyMapObjectGroup : false),
+            getByName: (name) => (name === 'enemy' ? enemyMapObjectGroup : null),
         },
         enemyForcesManager: {
             getEnemyForcesForEnemies: () => 20,
@@ -259,7 +259,7 @@ describe('EnemyForcesCheckpoint.isMapObjectGroupShown', () => {
     it('isMapObjectGroupShown_givenNoMapObjectGroup_returnsTrue', () => {
         // Arrange
         const checkpoint = Object.create(EnemyForcesCheckpoint.prototype);
-        checkpoint.map = {mapObjectGroupManager: {getByName: () => false}};
+        checkpoint.map = {mapObjectGroupManager: {getByName: () => null}};
 
         // Act
         const result = checkpoint.isMapObjectGroupShown();

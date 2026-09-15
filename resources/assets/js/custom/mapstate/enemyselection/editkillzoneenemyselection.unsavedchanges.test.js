@@ -124,13 +124,13 @@ describe('EditKillZoneEnemySelection constructor (#4431)', () => {
     // Regression test for the Explore-mode "killZoneMapObjectGroup.register is not a function"
     // crash: EditKillZoneEnemySelection.isEnemySelectable() constructs a throwaway instance on
     // every enemy click, including on pages (like Explore) whose hiddenMapObjectGroups option
-    // means MapObjectGroupManager.getByName() returns `false` (its "not found" sentinel) for the
+    // means MapObjectGroupManager.getByName() returns `null` (its "not found" sentinel) for the
     // killzone group rather than an actual KillZoneMapObjectGroup.
     it('does not throw when the killzone map object group is hidden for the current page', () => {
         // Arrange
         const fakeMap = Object.assign(Object.create(DungeonMap.prototype), {
             options: {edit: false},
-            mapObjectGroupManager: {getByName: () => false},
+            mapObjectGroupManager: {getByName: () => null},
         });
 
         // Act / Assert

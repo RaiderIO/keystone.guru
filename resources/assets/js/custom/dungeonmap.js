@@ -348,7 +348,7 @@ class DungeonMap extends Signalable {
             } else {
                 // Find the corresponding map object group
                 let mapObjectGroup = self.mapObjectGroupManager.getByName(event.layerType);
-                if (mapObjectGroup !== false) {
+                if (mapObjectGroup !== null) {
                     let mapObject;
                     // Catch creating a KillZone - we want to add a layer to an existing KillZone, not create a new KillZone object
                     if (mapObjectGroup instanceof KillZoneMapObjectGroup) {

@@ -150,7 +150,7 @@ describe('DungeonMap._enemyClicked', () => {
     // so the click should just do nothing.
     it('does nothing when the current page has no killzone map object group', () => {
         const map = Object.create(DungeonMap.prototype);
-        map.mapObjectGroupManager = {getByName: () => false};
+        map.mapObjectGroupManager = {getByName: () => null};
         map.getMapState = () => null;
         EditKillZoneEnemySelection.isEnemySelectable.mockClear();
 
