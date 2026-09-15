@@ -24,7 +24,7 @@ final class AjaxArrowControllerTest extends DungeonRouteTestBase
         /** @var Floor $randomFloor */
         $randomFloor = $this->dungeonRoute->dungeon->floors()
             ->where('facade', false)
-            ->inRandomOrder()
+            ->orderBy('id')
             ->first();
 
         $polyline = PolylineFixtures::createPolyline($randomFloor);
@@ -55,7 +55,7 @@ final class AjaxArrowControllerTest extends DungeonRouteTestBase
         /** @var Floor $randomFloor */
         $randomFloor = $this->dungeonRoute->dungeon->floors()
             ->where('facade', false)
-            ->inRandomOrder()
+            ->orderBy('id')
             ->first();
 
         $polyline = PolylineFixtures::createPolyline($randomFloor);
@@ -89,7 +89,7 @@ final class AjaxArrowControllerTest extends DungeonRouteTestBase
         /** @var Floor $randomFloor */
         $randomFloor = $this->dungeonRoute->dungeon->floors()
             ->where('facade', false)
-            ->inRandomOrder()
+            ->orderBy('id')
             ->first();
 
         $polyline = PolylineFixtures::createPolyline($randomFloor);
@@ -181,7 +181,7 @@ final class AjaxArrowControllerTest extends DungeonRouteTestBase
             /** @var Floor $randomFloor */
             $randomFloor = $dungeonRoute->dungeon->floors()
                 ->where('facade', false)
-                ->inRandomOrder()
+                ->orderBy('id')
                 ->first();
 
             $polyline = PolylineFixtures::createPolyline($randomFloor);

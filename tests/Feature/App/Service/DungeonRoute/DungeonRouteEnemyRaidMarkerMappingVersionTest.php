@@ -250,7 +250,7 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
                 }
 
                 /** @var Enemy|null $enemy */
-                $enemy = $query->inRandomOrder()->first();
+                $enemy = $query->orderBy('id')->first();
 
                 return $enemy;
             },

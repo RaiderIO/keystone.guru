@@ -19,12 +19,34 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\CreatesSeason;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('DungeonService')]
 #[Group('GetDungeonsForGameVersion')]
 final class GetDungeonsForGameVersionTest extends PublicTestCase
 {
+    use CreatesSeason;
+
+    /**
+     * Two seasons of the test's own with disjoint dungeons, read back in one query so both come out of a
+     * multi-row result.
+     *
+     * @return array{0: Season, 1: Season} The current season, then the next one.
+     */
+    private function createCurrentAndNextSeason(): array
+    {
+        $dungeonIds = Dungeon::query()->active()->orderBy('id')->limit(4)->pluck('id')->all();
+        $this->assertCount(4, $dungeonIds);
+
+        $currentSeasonId = $this->createSeason(['start' => now()->subMonth()], array_slice($dungeonIds, 0, 2))->id;
+        $nextSeasonId    = $this->createSeason(['start' => now()->addMonth()], array_slice($dungeonIds, 2, 2))->id;
+
+        $seasons = Season::query()->whereKey([$currentSeasonId, $nextSeasonId])->get()->keyBy('id');
+
+        return [$seasons->get($currentSeasonId), $seasons->get($nextSeasonId)];
+    }
+
     /**
      * Builds the service with everything but the season service stubbed out - the season service is
      * the only collaborator this method's behaviour depends on.
@@ -50,12 +72,7 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
     public function getDungeonsForGameVersion_givenAnUpcomingSeason_returnsTheCurrentSeasonsDungeons(): void
     {
         // Arrange
-        $seasons = Season::query()->orderByDesc('id')->limit(2)->get();
-
-        $this->assertCount(2, $seasons, 'Need at least two seeded seasons to load them as a collection');
-
-        $nextSeason    = $seasons->first();
-        $currentSeason = $seasons->last();
+        [$currentSeason, $nextSeason] = $this->createCurrentAndNextSeason();
 
         $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
         $seasonService->method('getCurrentSeason')->willReturn($currentSeason);
@@ -81,8 +98,7 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
     public function getDungeonsForGameVersion_givenNoUpcomingSeason_returnsTheCurrentSeasonsDungeons(): void
     {
         // Arrange - loaded as a collection for the same reason as the test above
-        $seasons       = Season::query()->orderByDesc('id')->limit(2)->get();
-        $currentSeason = $seasons->last();
+        [$currentSeason] = $this->createCurrentAndNextSeason();
 
         $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
         $seasonService->method('getCurrentSeason')->willReturn($currentSeason);
