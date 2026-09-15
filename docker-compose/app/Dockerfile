@@ -133,6 +133,10 @@ COPY root/ /root/
 # Only copy this file over to prevent overriding the entire folder which will be changed by docker-php-ext-enable
 COPY usr/local/etc/php/conf.d/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 
+# Same reason - the production Swoole container overwrites this exact path with its own copy from
+# the infra config bucket, which additionally enables OPcache for CLI.
+COPY usr/local/etc/php/conf.d/jit.ini /usr/local/etc/php/conf.d/jit.ini
+
 # Only copy this file over to prevent overriding the entire folder which will be changed by docker-php-ext-enable
 COPY usr/local/etc/php-fpm.d/ /usr/local/etc/php-fpm.d/
 
