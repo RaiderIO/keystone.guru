@@ -9,6 +9,32 @@ use DOMNode;
 class HtmlSanitizer
 {
     /**
+     * A browser only opens a tag on a `<` followed by a letter, `/`, `!` or `?`; any other `<`
+     * (`a < b`, `I <3 this`) is text. An unterminated tag runs to the end of the input, which is
+     * where a browser drops it too.
+     */
+    private const string TAG_PATTERN = '/<[a-z\/!?][^>]*(?:>|$)/i';
+
+    /**
+     * Removes every HTML tag, keeping the text between them. Entities are left as they are, so
+     * the result never contains markup that was not already escaped in the input.
+     */
+    public function stripAllTags(?string $input): ?string
+    {
+        if ($input === null || $input === '') {
+            return $input;
+        }
+
+        // Repeat until stable: removing one tag can join the text around it into a new one (`<<b>script>`)
+        do {
+            $previous = $input;
+            $input    = preg_replace(self::TAG_PATTERN, '', $input) ?? '';
+        } while ($input !== $previous);
+
+        return $input;
+    }
+
+    /**
      * @param  string|null $input
      * @param  bool        $convertLineEnding
      * @return string

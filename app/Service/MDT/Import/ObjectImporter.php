@@ -6,6 +6,7 @@ use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Exception\ImportError;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\Structs\LatLng;
+use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Arrow;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -277,6 +278,12 @@ class ObjectImporter
         array               $details,
         bool                $assignNotesToPulls,
     ): void {
+        // The note becomes a map icon comment or a pull description, and both are bulk-inserted
+        // past the models' own stripping
+        if (is_string($details[4] ?? null)) {
+            $details[4] = new HtmlSanitizer()->stripAllTags($details[4]);
+        }
+
         $latLng = Conversion::convertMDTCoordinateToLatLng([
             'x' => $details[0],
             'y' => $details[1],

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Email\CustomPasswordResetEmail;
+use App\Logic\Utils\HtmlSanitizer;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Feature\Feature;
 use App\Models\GameVersion\GameVersion;
@@ -182,6 +183,11 @@ class User extends Authenticatable implements LaratrustUser
     public function getIsAdminAttribute(): bool
     {
         return $this->hasRole(Role::ROLE_ADMIN);
+    }
+
+    public function setNameAttribute(?string $value): void
+    {
+        $this->attributes['name'] = new HtmlSanitizer()->stripAllTags($value);
     }
 
     /** @return HasMany<DungeonRoute, $this> */
