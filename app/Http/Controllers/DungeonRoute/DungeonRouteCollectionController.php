@@ -92,7 +92,7 @@ class DungeonRouteCollectionController extends Controller
                 'description'        => $request->validated('description'),
             ]);
 
-            $this->syncDungeonRoutes($dungeonRouteCollection, $request->dungeonRoutes(), $dungeonRouteCollectionRouteRepository);
+            self::syncDungeonRoutes($dungeonRouteCollection, $request->dungeonRoutes(), $dungeonRouteCollectionRouteRepository);
 
             return $dungeonRouteCollection;
         });
@@ -151,7 +151,7 @@ class DungeonRouteCollectionController extends Controller
                 'description'        => $request->validated('description'),
             ]);
 
-            $this->syncDungeonRoutes($dungeonRouteCollection, $request->dungeonRoutes(), $dungeonRouteCollectionRouteRepository);
+            self::syncDungeonRoutes($dungeonRouteCollection, $request->dungeonRoutes(), $dungeonRouteCollectionRouteRepository);
         });
 
         Session::flash('status', __('controller.dungeonroutecollection.flash.collection_updated'));
@@ -234,7 +234,7 @@ class DungeonRouteCollectionController extends Controller
      *
      * @param Collection<int, DungeonRoute> $dungeonRoutes
      */
-    private function syncDungeonRoutes(
+    private static function syncDungeonRoutes(
         DungeonRouteCollection                         $dungeonRouteCollection,
         Collection                                     $dungeonRoutes,
         DungeonRouteCollectionRouteRepositoryInterface $dungeonRouteCollectionRouteRepository,
