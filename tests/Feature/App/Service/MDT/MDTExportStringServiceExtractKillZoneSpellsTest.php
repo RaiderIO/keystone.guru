@@ -359,6 +359,68 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
         }
     }
 
+    #[Test]
+    public function getEncodedString_givenRouteExportedInAnotherLocaleFirst_returnsSpellNamesInTheCurrentLocale(): void
+    {
+        $dungeonRoute = null;
+        $locale       = app()->getLocale();
+
+        try {
+            // Arrange
+            $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
+            $this->createKillZone($dungeonRoute, 1, [Spell::SPELL_BLOODLUST], $this->getSafeMdtEnemies($dungeonRoute)->first());
+
+            app()->setLocale('de_DE');
+            $germanEncodedString = app()->make(MDTExportStringServiceInterface::class)
+                ->setDungeonRoute($dungeonRoute)
+                ->getEncodedString(collect());
+            app()->setLocale('en_US');
+
+            // Act
+            $englishEncodedString = app()->make(MDTExportStringServiceInterface::class)
+                ->setDungeonRoute($dungeonRoute)
+                ->getEncodedString(collect());
+
+            // Assert
+            $this->assertSame('Kampfrausch', array_values($this->decode($germanEncodedString)['objects'])[0]['d'][4]);
+            $this->assertSame('Bloodlust', array_values($this->decode($englishEncodedString)['objects'])[0]['d'][4]);
+        } finally {
+            app()->setLocale($locale);
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function extractObjects_givenSeveralKillZonesWithSpellsAndKillAreas_exportsANoteForEach(): void
+    {
+        $dungeonRoute = null;
+
+        try {
+            // Arrange
+            $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies(enemyFilter: $this->isNotAtTheBottomOfTheMap(...));
+            $enemy        = $this->getSafeMdtEnemies($dungeonRoute, enemyFilter: $this->isNotAtTheBottomOfTheMap(...))->first();
+            $this->createKillZone($dungeonRoute, 1, [Spell::SPELL_HEROISM], null, [
+                'floor_id' => $enemy->floor_id,
+                'lat'      => -100.5,
+                'lng'      => 200.25,
+            ]);
+            $this->createKillZone($dungeonRoute, 2, [Spell::SPELL_BLOODLUST], $enemy, [
+                'floor_id' => $enemy->floor_id,
+                'lat'      => $enemy->lat,
+                'lng'      => $enemy->lng,
+            ]);
+
+            // Act
+            $objects = $this->exportObjects($dungeonRoute);
+
+            // Assert
+            $this->assertSame(['Heroism', 'Bloodlust'], array_column(array_column($objects, 'd'), 4));
+            $this->assertNoteIsBelowEnemy($objects[1], $enemy);
+        } finally {
+            $dungeonRoute?->delete();
+        }
+    }
+
     /**
      * @param  Collection<int, ImportWarning>|null $warnings
      * @return array<int, array<string, mixed>>

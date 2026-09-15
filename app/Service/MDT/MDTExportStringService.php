@@ -288,7 +288,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     {
         $objects = [];
 
-        $this->dungeonRoute->loadMissing(['killZones.enemies.floor']);
+        $this->dungeonRoute->loadMissing(['killZones.enemies.floor', 'killZones.floor']);
 
         foreach ($this->dungeonRoute->killZones as $killZone) {
             if (!isset($killZone->description)) {
@@ -340,7 +340,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         $objects = [];
 
         /** @var EloquentCollection<int, KillZone> $killZonesWithSpells */
-        $killZonesWithSpells = $this->dungeonRoute->loadMissing(['killZones.enemies.floor'])->killZones
+        $killZonesWithSpells = $this->dungeonRoute->loadMissing(['killZones.enemies.floor', 'killZones.floor'])->killZones
             ->filter(static fn(KillZone $killZone): bool => $killZone->spells->isNotEmpty());
 
         if ($killZonesWithSpells->isEmpty()) {
@@ -735,7 +735,13 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     public function getEncodedString(Collection $warnings, bool $useCache = true): string
     {
         return $this->rememberLocal(
-            sprintf('mdt_export_string:%s_%s', $this->dungeonRoute->id, $this->dungeonRoute->updated_at->timestamp),
+            // Spell names in the string are translated to the current locale
+            sprintf(
+                'mdt_export_string:%s_%s_%s',
+                $this->dungeonRoute->id,
+                $this->dungeonRoute->updated_at->timestamp,
+                app()->getLocale(),
+            ),
             config('keystoneguru.cache.mdt_export_strings.ttl'),
 
             // #2945 I just had a weird issue where copying an MDT string from one route, would actually generate a string
