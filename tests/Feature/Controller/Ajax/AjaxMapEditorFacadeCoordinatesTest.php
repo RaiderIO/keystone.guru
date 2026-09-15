@@ -256,8 +256,8 @@ final class AjaxMapEditorFacadeCoordinatesTest extends AjaxPublicTestCase
 
     /**
      * Finds a seeded facade mapping version together with a facade lat/lng that genuinely converts
-     * onto another floor. A facade point outside every floor union area converts to itself, which
-     * would make these tests assert nothing.
+     * onto another floor at other coordinates. A facade point outside every floor union area converts
+     * to itself, which would make these tests assert nothing.
      *
      * @return array{0: MappingVersion, 1: Floor, 2: LatLng, 3: Floor}
      */
@@ -291,7 +291,9 @@ final class AjaxMapEditorFacadeCoordinatesTest extends AjaxPublicTestCase
 
                         $converted = $coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $facadeLatLng);
 
-                        if ($converted->getFloor()?->id !== $floorUnion->floor_id) {
+                        // A floor union can overlay its target floor 1:1 (Darkflame Cleft), changing the floor but not the coordinates
+                        if ($converted->getFloor()?->id !== $floorUnion->floor_id
+                            && abs($converted->getLat() - $facadeLatLng->getLat()) > 0.0001) {
                             return [$mappingVersion, $floorUnion->floor, $facadeLatLng, $converted->getFloor()];
                         }
                     }
