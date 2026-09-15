@@ -6,6 +6,7 @@ use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\IO\MDTStringFormat;
+use App\Logic\Structs\LatLng;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Arrow;
 use App\Models\Brushline;
@@ -15,11 +16,15 @@ use App\Models\KillZone\KillZone;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Path;
+use App\Models\Spell\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
+use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Logging\MDTExportStringServiceLoggingInterface;
 use Exception;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -36,6 +41,18 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
     /** @var int How far away do we create notes in MDT */
     private const int KILL_ZONE_DESCRIPTION_DISTANCE = 3;
+
+    /**
+     * @var int Map units between a pull's lowest enemy and its spells note. MDT draws an enemy portrait ~13 and a
+     *          note pin 12 of its own units wide (1 map unit = 2.185 MDT units), so this keeps the two apart.
+     */
+    private const int KILL_ZONE_SPELLS_NOTE_DISTANCE = 6;
+
+    /**
+     * @var int The importer attaches a note to a pull with an enemy within 50 yards of it. Six map units exceed that
+     *          on the largest floors (Nokhud Offensive: ~20 yards per unit).
+     */
+    private const int KILL_ZONE_SPELLS_NOTE_MAX_DISTANCE_YARDS = 25;
 
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
     private DungeonRoute $dungeonRoute;
@@ -72,6 +89,10 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         }
 
         foreach ($this->extractKillZoneDescriptionObjects() as $item) {
+            $result[$currentObjectIndex++] = $item;
+        }
+
+        foreach ($this->extractKillZoneSpellObjects($warnings) as $item) {
             $result[$currentObjectIndex++] = $item;
         }
 
@@ -297,6 +318,132 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         }
 
         return $objects;
+    }
+
+    /**
+     * MDT has no concept of spells assigned to a pull. For each kill zone with spells, extract one MDT note that
+     * lists the (translated) names of its spells, one per line.
+     *
+     * @param  Collection<int, ImportWarning> $warnings
+     * @return array<int, mixed>
+     */
+    private function extractKillZoneSpellObjects(Collection $warnings): array
+    {
+        $objects = [];
+
+        /** @var EloquentCollection<int, KillZone> $killZonesWithSpells */
+        $killZonesWithSpells = $this->dungeonRoute->loadMissing(['killZones.enemies.floor'])->killZones
+            ->filter(static fn(KillZone $killZone): bool => $killZone->spells->isNotEmpty());
+
+        if ($killZonesWithSpells->isEmpty()) {
+            return $objects;
+        }
+
+        // KillZone eager loads its spells without their name
+        $killZonesWithSpells->load([
+            'spells' => static fn(Relation $query) => $query->orderBy('kill_zone_spells.id'),
+        ]);
+
+        foreach ($killZonesWithSpells as $killZone) {
+            $latLng = $this->getKillZoneSpellsNoteLatLng($killZone);
+
+            if ($latLng === null) {
+                $warnings->push(new ImportWarning(
+                    sprintf(__('services.mdt.io.export_string.category.pull'), $killZone->index),
+                    __('services.mdt.io.export_string.unable_to_place_kill_zone_spells_note'),
+                ));
+
+                continue;
+            }
+
+            $floor          = $latLng->getFloor();
+            $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($latLng);
+
+            $objects[] = [
+                'n' => true,
+                'd' => [
+                    1 => $mdtCoordinates['x'],
+                    2 => $mdtCoordinates['y'],
+                    3 => $floor->mdt_sub_level ?? $floor->index,
+                    4 => true,
+                    5 => $killZone->spells
+                        ->map(static fn(Spell $spell): string => __($spell->name))
+                        ->unique()
+                        ->implode("\n"),
+                ],
+            ];
+        }
+
+        return $objects;
+    }
+
+    /**
+     * Where the spells note of a kill zone goes: just below the lowest enemy of the pull on its dominant floor, which
+     * keeps it clear of the description note above the pull. A pull without enemies falls back to its kill area.
+     */
+    private function getKillZoneSpellsNoteLatLng(KillZone $killZone): ?LatLng
+    {
+        $mappingVersion = $this->dungeonRoute->mappingVersion;
+        $enemies        = $killZone->getEnemies();
+
+        if ($enemies->isEmpty()) {
+            if (!$killZone->hasKillArea()) {
+                return null;
+            }
+
+            $killAreaLatLng = new LatLng($killZone->lat, $killZone->lng, $killZone->floor);
+
+            return $mappingVersion->facade_enabled && !$killZone->floor->facade
+                ? $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $killAreaLatLng)
+                : $killAreaLatLng;
+        }
+
+        $dominantFloorId = $killZone->getDominantFloor(true)?->id;
+        $enemiesOnFloor  = $enemies->where('floor_id', $dominantFloorId);
+
+        // The dominant floor is the kill area's floor when one is set, which need not have any of the enemies on it
+        if ($enemiesOnFloor->isEmpty()) {
+            $enemiesOnFloor = $enemies->where('floor_id', $enemies->countBy('floor_id')->sortDesc()->keys()->first());
+        }
+
+        /** @var Enemy $lowestEnemy */
+        $lowestEnemy       = $enemiesOnFloor->sortBy('lat')->first();
+        $lowestEnemyLatLng = new LatLng($lowestEnemy->lat, $lowestEnemy->lng, $lowestEnemy->floor);
+        $noteLatLng        = $this->getKillZoneSpellsNoteLatLngNextTo($lowestEnemyLatLng);
+
+        if (!$mappingVersion->facade_enabled) {
+            return $noteLatLng;
+        }
+
+        // The note must land on the same facade floor as the enemy, even if it sits just outside that floor union's area
+        return $this->coordinatesService->convertMapLocationToFacadeMapLocation(
+            $mappingVersion,
+            $noteLatLng,
+            $mappingVersion->getFloorUnionForLatLng($this->coordinatesService, $lowestEnemyLatLng),
+        );
+    }
+
+    /**
+     * Offsets $latLng downwards on the map (upwards when that would leave it) by KILL_ZONE_SPELLS_NOTE_DISTANCE map
+     * units, capped at KILL_ZONE_SPELLS_NOTE_MAX_DISTANCE_YARDS ingame.
+     */
+    private function getKillZoneSpellsNoteLatLngNextTo(LatLng $latLng): LatLng
+    {
+        $direction = $latLng->getLat() - self::KILL_ZONE_SPELLS_NOTE_DISTANCE < CoordinatesService::MAP_MAX_LAT ? 1 : -1;
+        $offset    = $direction * self::KILL_ZONE_SPELLS_NOTE_DISTANCE;
+
+        $distanceYards = $this->coordinatesService->distanceIngameXY(
+            $this->coordinatesService->calculateIngameLocationForMapLocation($latLng),
+            $this->coordinatesService->calculateIngameLocationForMapLocation(
+                new LatLng($latLng->getLat() + $offset, $latLng->getLng(), $latLng->getFloor()),
+            ),
+        );
+
+        if ($distanceYards > self::KILL_ZONE_SPELLS_NOTE_MAX_DISTANCE_YARDS) {
+            $offset *= self::KILL_ZONE_SPELLS_NOTE_MAX_DISTANCE_YARDS / $distanceYards;
+        }
+
+        return new LatLng($latLng->getLat() + $offset, $latLng->getLng(), $latLng->getFloor());
     }
 
     /**
