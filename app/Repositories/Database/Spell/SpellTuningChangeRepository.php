@@ -9,6 +9,7 @@ use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\Spell\SpellTuningChangeRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -61,6 +62,16 @@ class SpellTuningChangeRepository extends DatabaseRepository implements SpellTun
             ->orderBy('spell_id')
             ->orderBy('value_index')
             ->get();
+    }
+
+    public function findBuildReleasedAt(int $gameVersionId, string $toBuild): ?Carbon
+    {
+        $releasedAt = SpellTuningChange::query()
+            ->where('game_version_id', $gameVersionId)
+            ->where('to_build', $toBuild)
+            ->max('to_build_released_at');
+
+        return $releasedAt === null ? null : Carbon::parse($releasedAt, 'UTC');
     }
 
     public function replaceForBuild(int $gameVersionId, string $toBuild, array $rows): int

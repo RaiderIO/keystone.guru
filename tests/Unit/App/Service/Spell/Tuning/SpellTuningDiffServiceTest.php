@@ -374,6 +374,49 @@ final class SpellTuningDiffServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function store_givenReleasedAt_doesNotLookUpTheRecordedOne(): void
+    {
+        // Arrange
+        $from   = $this->snapshot(self::FROM_BUILD, [$this->spell(values: [$this->damage('29,095', 3.0)])]);
+        $to     = $this->snapshot(self::TO_BUILD, [$this->spell(values: [$this->damage('38,793', 4.0)])]);
+        $result = $this->service->diff($from, $to);
+
+        $this->repository->expects($this->never())->method('findBuildReleasedAt');
+        $this->repository->expects($this->once())->method('replaceForBuild')->willReturn(1);
+
+        // Act
+        $this->service->store($result, Carbon::createFromFormat('Y-m-d H:i:s', '2026-08-20 19:18:02', 'UTC'));
+    }
+
+    #[Test]
+    public function store_givenNoReleasedAt_keepsTheDateAlreadyRecordedForTheBuild(): void
+    {
+        // Arrange
+        $from   = $this->snapshot(self::FROM_BUILD, [$this->spell(values: [$this->damage('29,095', 3.0)])]);
+        $to     = $this->snapshot(self::TO_BUILD, [$this->spell(values: [$this->damage('38,793', 4.0)])]);
+        $result = $this->service->diff($from, $to);
+
+        $this->repository->expects($this->once())
+            ->method('findBuildReleasedAt')
+            ->with(self::GAME_VERSION_ID, self::TO_BUILD)
+            ->willReturn(Carbon::createFromFormat('Y-m-d H:i:s', '2026-08-20 19:18:02', 'UTC'));
+        $this->repository->expects($this->once())
+            ->method('replaceForBuild')
+            ->with(
+                self::GAME_VERSION_ID,
+                self::TO_BUILD,
+                $this->callback(static fn(array $rows): bool => $rows[0]['to_build_released_at'] === '2026-08-20 19:18:02'),
+            )
+            ->willReturn(1);
+
+        // Act
+        $stored = $this->service->store($result);
+
+        // Assert
+        $this->assertSame(1, $stored);
+    }
+
+    #[Test]
     public function toRows_givenNoReleasedAt_returnsRowsWithNullReleasedAt(): void
     {
         // Arrange

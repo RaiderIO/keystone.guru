@@ -70,6 +70,9 @@ class SpellTuningDiffService implements SpellTuningDiffServiceInterface
         $this->log->storeStart($result->fromBuild, $result->toBuild, $result->gameVersionId, count($result->changes));
 
         try {
+            // A failed lookup on a re-run must not wipe the date an earlier run already recorded
+            $toBuildReleasedAt ??= $this->spellTuningChangeRepository->findBuildReleasedAt($result->gameVersionId, $result->toBuild);
+
             return $this->spellTuningChangeRepository->replaceForBuild(
                 $result->gameVersionId,
                 $result->toBuild,

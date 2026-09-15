@@ -160,6 +160,27 @@ final class DiffTuningTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenRerunWhileWagoToolsIsUnreachable_keepsTheRecordedDate(): void
+    {
+        // Arrange - the first run recorded the date
+        $this->runDiff();
+
+        $wagoToolsService = $this->createMockPublic(WagoToolsServiceInterface::class);
+        $wagoToolsService->expects($this->once())->method('getBuildReleasedAt')->willReturn(null);
+        app()->instance(WagoToolsServiceInterface::class, $wagoToolsService);
+
+        // Act
+        $this->runDiff();
+
+        // Assert
+        $releasedAts = SpellTuningChange::query()->where('to_build', self::TO_BUILD)->get()->pluck('to_build_released_at');
+        $this->assertCount(3, $releasedAts);
+        foreach ($releasedAts as $releasedAt) {
+            $this->assertSame(self::TO_BUILD_RELEASED_AT, $releasedAt?->toDateTimeString());
+        }
+    }
+
+    #[Test]
     public function handle_givenSecondRunForSameBuilds_keepsTheSameRows(): void
     {
         // Arrange

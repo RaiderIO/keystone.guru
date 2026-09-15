@@ -122,6 +122,42 @@ final class SpellTuningChangeRepositoryTest extends PublicTestCase
     }
 
     #[Test]
+    public function findBuildReleasedAt_givenDatedBuild_returnsItsDate(): void
+    {
+        // Arrange
+        $change = SpellTuningChange::factory()->create(['from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12, 'to_build_released_at' => '2001-02-03 04:05:06']);
+
+        try {
+            // Act
+            $releasedAt = $this->repository->findBuildReleasedAt($change->game_version_id, self::MID_BUILD);
+
+            // Assert
+            $this->assertSame('2001-02-03 04:05:06', $releasedAt?->toDateTimeString());
+        } finally {
+            $change->delete();
+        }
+    }
+
+    #[Test]
+    public function findBuildReleasedAt_givenUndatedOrUnknownBuild_returnsNull(): void
+    {
+        // Arrange
+        $change = SpellTuningChange::factory()->create(['from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12, 'to_build_released_at' => null]);
+
+        try {
+            // Act
+            $undated = $this->repository->findBuildReleasedAt($change->game_version_id, self::MID_BUILD);
+            $unknown = $this->repository->findBuildReleasedAt($change->game_version_id, self::NEW_BUILD);
+
+            // Assert
+            $this->assertNull($undated);
+            $this->assertNull($unknown);
+        } finally {
+            $change->delete();
+        }
+    }
+
+    #[Test]
     public function getForBuild_givenDungeon_returnsOnlySpellsOfThatDungeon(): void
     {
         // Arrange

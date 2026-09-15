@@ -20,7 +20,8 @@ interface SpellTuningDiffServiceInterface
      * Stores a result, replacing whatever was recorded for its target build before so re-running the
      * diff for the same build pair is idempotent. Returns the number of rows stored.
      *
-     * @param Carbon|null $toBuildReleasedAt when the target build went live, if known
+     * @param Carbon|null $toBuildReleasedAt when the target build went live; null keeps whatever date is already
+     *                                       recorded for the build
      */
     public function store(SpellTuningDiffResult $result, ?Carbon $toBuildReleasedAt = null): int;
 }

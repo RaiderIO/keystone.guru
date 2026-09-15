@@ -92,7 +92,7 @@ class DiffTuning extends Command
 
         $toBuildReleasedAt = $wagoToolsService->getBuildReleasedAt((string)$this->option('product'), $to->build);
         if ($toBuildReleasedAt === null) {
-            $this->warn(sprintf('Could not find when build %s went live on wago.tools - it is stored without a date.', $to->build));
+            $this->warn(sprintf('Could not find when build %s went live on wago.tools - keeping the date already recorded for it, if any.', $to->build));
         }
 
         $stored = $spellTuningDiffService->store($result, $toBuildReleasedAt);

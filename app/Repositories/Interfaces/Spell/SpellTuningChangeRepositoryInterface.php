@@ -46,6 +46,11 @@ interface SpellTuningChangeRepositoryInterface extends BaseRepositoryInterface
     public function getForBuild(int $gameVersionId, string $toBuild, ?Dungeon $dungeon): Collection;
 
     /**
+     * When the given build went live, as recorded on its changes, or null when none of them carries a date.
+     */
+    public function findBuildReleasedAt(int $gameVersionId, string $toBuild): ?Carbon;
+
+    /**
      * Replaces every change recorded for the given build with $rows, so re-running the diff for the
      * same build pair is idempotent. Returns the number of rows inserted.
      *
