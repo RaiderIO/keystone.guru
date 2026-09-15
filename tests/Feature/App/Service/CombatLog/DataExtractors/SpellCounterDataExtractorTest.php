@@ -14,6 +14,7 @@ use App\Models\CombatLog\SpellProperty;
 use App\Models\Dungeon;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCounter;
 use App\Models\Spell\SpellDungeon;
 use App\Service\CombatLog\DataExtractors\Logging\SpellCounterDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounterDataExtractor;
@@ -107,7 +108,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert - the fact attaches to the cast spell, not to the targeting debuff
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($castSpellId, Spell::COUNTER_VANISH, SpellProperty::CounterVanish);
+        $this->assertCounterRecorded($castSpellId, SpellCounter::Vanish->value, SpellProperty::CounterVanish);
         $this->assertNoCounterRecorded($debuffSpellId);
 
         // Assert - the countered spell is assigned to the casting NPC (cast-only spells with a nil destination never
@@ -170,7 +171,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($castSpellId, Spell::COUNTER_VANISH, SpellProperty::CounterVanish);
+        $this->assertCounterRecorded($castSpellId, SpellCounter::Vanish->value, SpellProperty::CounterVanish);
         $this->assertNoCounterRecorded($debuffSpellId);
     }
 
@@ -192,7 +193,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($channelSpellId, Spell::COUNTER_VANISH, SpellProperty::CounterVanish);
+        $this->assertCounterRecorded($channelSpellId, SpellCounter::Vanish->value, SpellProperty::CounterVanish);
     }
 
     #[Test]
@@ -212,7 +213,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($channelSpellId, Spell::COUNTER_SHADOWMELD, SpellProperty::CounterShadowmeld);
+        $this->assertCounterRecorded($channelSpellId, SpellCounter::Shadowmeld->value, SpellProperty::CounterShadowmeld);
     }
 
     #[Test]
@@ -232,7 +233,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($castSpellId, Spell::COUNTER_VANISH, SpellProperty::CounterVanish);
+        $this->assertCounterRecorded($castSpellId, SpellCounter::Vanish->value, SpellProperty::CounterVanish);
     }
 
     #[Test]
@@ -338,7 +339,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($castSpellId, Spell::COUNTER_VANISH, SpellProperty::CounterVanish);
+        $this->assertCounterRecorded($castSpellId, SpellCounter::Vanish->value, SpellProperty::CounterVanish);
     }
 
     #[Test]
@@ -422,7 +423,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
         ]);
 
         // Assert
-        $this->assertCounterRecorded($channelSpellId, Spell::COUNTER_VANISH, SpellProperty::CounterVanish);
+        $this->assertCounterRecorded($channelSpellId, SpellCounter::Vanish->value, SpellProperty::CounterVanish);
         $this->assertFalse(NpcSpell::where('npc_id', self::CREATURE_NPC_ID)->where('spell_id', $channelSpellId)->exists());
     }
 
@@ -446,7 +447,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($channelSpellId, Spell::COUNTER_VANISH, SpellProperty::CounterVanish);
+        $this->assertCounterRecorded($channelSpellId, SpellCounter::Vanish->value, SpellProperty::CounterVanish);
     }
 
     #[Test]
@@ -470,7 +471,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($channelSpellId, Spell::COUNTER_VANISH, SpellProperty::CounterVanish);
+        $this->assertCounterRecorded($channelSpellId, SpellCounter::Vanish->value, SpellProperty::CounterVanish);
     }
 
     #[Test]
@@ -543,7 +544,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($channelSpellId, Spell::COUNTER_FEIGN_DEATH, SpellProperty::CounterFeignDeath);
+        $this->assertCounterRecorded($channelSpellId, SpellCounter::FeignDeath->value, SpellProperty::CounterFeignDeath);
     }
 
     #[Test]
@@ -563,7 +564,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($castSpellId, Spell::COUNTER_FEIGN_DEATH, SpellProperty::CounterFeignDeath);
+        $this->assertCounterRecorded($castSpellId, SpellCounter::FeignDeath->value, SpellProperty::CounterFeignDeath);
     }
 
     #[Test]
@@ -584,7 +585,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($channelSpellId, Spell::COUNTER_INVISIBILITY, SpellProperty::CounterInvisibility);
+        $this->assertCounterRecorded($channelSpellId, SpellCounter::Invisibility->value, SpellProperty::CounterInvisibility);
     }
 
     #[Test]
@@ -607,7 +608,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($channelSpellId, Spell::COUNTER_INVISIBILITY, SpellProperty::CounterInvisibility);
+        $this->assertCounterRecorded($channelSpellId, SpellCounter::Invisibility->value, SpellProperty::CounterInvisibility);
     }
 
     #[Test]
@@ -650,7 +651,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($debuffSpellId, Spell::COUNTER_CLOAK_OF_SHADOWS, SpellProperty::CounterCloakOfShadows);
+        $this->assertCounterRecorded($debuffSpellId, SpellCounter::CloakOfShadows->value, SpellProperty::CounterCloakOfShadows);
     }
 
     #[Test]
@@ -671,7 +672,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($debuffSpellId, Spell::COUNTER_CLOAK_OF_SHADOWS, SpellProperty::CounterCloakOfShadows);
+        $this->assertCounterRecorded($debuffSpellId, SpellCounter::CloakOfShadows->value, SpellProperty::CounterCloakOfShadows);
     }
 
     #[Test]
@@ -743,8 +744,8 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(2, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($firstDebuffSpellId, Spell::COUNTER_CLOAK_OF_SHADOWS, SpellProperty::CounterCloakOfShadows);
-        $this->assertCounterRecorded($secondDebuffSpellId, Spell::COUNTER_CLOAK_OF_SHADOWS, SpellProperty::CounterCloakOfShadows);
+        $this->assertCounterRecorded($firstDebuffSpellId, SpellCounter::CloakOfShadows->value, SpellProperty::CounterCloakOfShadows);
+        $this->assertCounterRecorded($secondDebuffSpellId, SpellCounter::CloakOfShadows->value, SpellProperty::CounterCloakOfShadows);
     }
 
     #[Test]
@@ -772,8 +773,8 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         // Assert - one counter per use, not two
         $this->assertSame(2, $this->result->toArray()['addedSpellCounters']);
-        $this->assertCounterRecorded($cloakDebuffSpellId, Spell::COUNTER_CLOAK_OF_SHADOWS, SpellProperty::CounterCloakOfShadows);
-        $this->assertCounterRecorded($invisibilityDebuffSpellId, Spell::COUNTER_INVISIBILITY, SpellProperty::CounterInvisibility);
+        $this->assertCounterRecorded($cloakDebuffSpellId, SpellCounter::CloakOfShadows->value, SpellProperty::CounterCloakOfShadows);
+        $this->assertCounterRecorded($invisibilityDebuffSpellId, SpellCounter::Invisibility->value, SpellProperty::CounterInvisibility);
     }
 
     #[Test]

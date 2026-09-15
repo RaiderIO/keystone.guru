@@ -15,7 +15,7 @@ final class AjaxSpellControllerTest extends AjaxPublicTestCase
     public function update_givenPrefixedDispelType_persistsItUnchanged(): void
     {
         // Arrange - #4095: AjaxSpellUpdateFormRequest validates dispel_type against
-        // Spell::ALL_DISPEL_TYPE_KEYS (prefixed), so this is the shape a real request sends.
+        // SpellDispelType::translationKeys() (prefixed), so this is the shape a real request sends.
         $spell = Spell::query()->firstOrFail();
 
         // Act

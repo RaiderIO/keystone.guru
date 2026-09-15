@@ -6,6 +6,10 @@ use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\SpellFormRequest;
 use App\Models\Characteristic;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCategory;
+use App\Models\Spell\SpellCooldownGroup;
+use App\Models\Spell\SpellDispelType;
+use App\Models\Spell\SpellSchool;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -147,16 +151,16 @@ class SpellController extends Controller
     {
         return [
             'allCharacteristics' => Characteristic::all(),
-            'categories'         => collect(Spell::ALL_CATEGORIES)->mapWithKeys(fn(string $category) => [
+            'categories'         => collect(SpellCategory::values())->mapWithKeys(fn(string $category) => [
                 $category => __(sprintf('spellcategory.%s', $category)),
             ])->toArray(),
-            'dispelTypes' => collect(Spell::ALL_DISPEL_TYPE_KEYS)->mapWithKeys(fn(string $dispelTypeKey) => [
+            'dispelTypes' => collect(SpellDispelType::translationKeys())->mapWithKeys(fn(string $dispelTypeKey) => [
                 $dispelTypeKey => __($dispelTypeKey),
             ])->toArray(),
-            'schools' => collect(Spell::ALL_SCHOOLS)->mapWithKeys(fn(string $name, int $school) => [
+            'schools' => collect(SpellSchool::slugsByBit())->mapWithKeys(fn(string $name, int $school) => [
                 __(sprintf('spellschools.%s', $name)) => $school,
             ])->toArray(),
-            'cooldownGroups' => collect(Spell::ALL_COOLDOWN_GROUPS)->mapWithKeys(fn(string $cooldownGroupKey) => [
+            'cooldownGroups' => collect(SpellCooldownGroup::values())->mapWithKeys(fn(string $cooldownGroupKey) => [
                 $cooldownGroupKey => __(sprintf('spellcooldowngroup.%s', $cooldownGroupKey)),
             ])->toArray(),
         ];

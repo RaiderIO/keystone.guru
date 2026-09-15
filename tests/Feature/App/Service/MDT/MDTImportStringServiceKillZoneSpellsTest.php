@@ -9,6 +9,7 @@ use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
+use App\Models\Spell\KnownSpell;
 use App\Models\Spell\Spell;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -37,7 +38,7 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
         try {
             // Arrange
             $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
-            $this->createKillZone($dungeonRoute, 1, [Spell::SPELL_BLOODLUST], $this->getSafeMdtEnemies($dungeonRoute)->first());
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST], $this->getSafeMdtEnemies($dungeonRoute)->first());
 
             $encodedString = $this->exportDungeonRouteToString($dungeonRoute);
 
@@ -45,7 +46,7 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
             $importedRoute = $this->importStringToDungeonRoute($encodedString);
 
             // Assert
-            $this->assertSame([1 => [Spell::SPELL_BLOODLUST]], $this->getSpellIdsByKillZoneIndex($importedRoute));
+            $this->assertSame([1 => [KnownSpell::BLOODLUST]], $this->getSpellIdsByKillZoneIndex($importedRoute));
             $this->assertSame(0, $importedRoute->mapIcons()->count());
         } finally {
             $importedRoute?->delete();
@@ -63,7 +64,7 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
             // Arrange
             $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies(enemyCount: 2);
             $enemies      = $this->getSafeMdtEnemies($dungeonRoute, limit: 2);
-            $this->createKillZone($dungeonRoute, 1, [Spell::SPELL_TIME_WARP, Spell::SPELL_HEROISM], $enemies->get(0));
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::TIME_WARP, KnownSpell::HEROISM], $enemies->get(0));
             $this->createKillZone($dungeonRoute, 2, [], $enemies->get(1));
 
             $encodedString = $this->exportDungeonRouteToString($dungeonRoute);
@@ -73,7 +74,7 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
 
             // Assert
             $this->assertEquals(
-                [1 => [Spell::SPELL_TIME_WARP, Spell::SPELL_HEROISM], 2 => []],
+                [1 => [KnownSpell::TIME_WARP, KnownSpell::HEROISM], 2 => []],
                 $this->getSpellIdsByKillZoneIndex($importedRoute),
             );
             $this->assertSame(0, $importedRoute->mapIcons()->count());
@@ -93,7 +94,7 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
         try {
             // Arrange
             $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
-            $this->createKillZone($dungeonRoute, 1, [Spell::SPELL_BLOODLUST], $this->getSafeMdtEnemies($dungeonRoute)->first());
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST], $this->getSafeMdtEnemies($dungeonRoute)->first());
 
             app()->setLocale('de_DE');
             $encodedString = $this->exportDungeonRouteToString($dungeonRoute);
@@ -102,7 +103,7 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
             $importedRoute = $this->importStringToDungeonRoute($encodedString);
 
             // Assert
-            $this->assertSame([1 => [Spell::SPELL_BLOODLUST]], $this->getSpellIdsByKillZoneIndex($importedRoute));
+            $this->assertSame([1 => [KnownSpell::BLOODLUST]], $this->getSpellIdsByKillZoneIndex($importedRoute));
             $this->assertSame(0, $importedRoute->mapIcons()->count());
         } finally {
             app()->setLocale($locale);
@@ -120,7 +121,7 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
         try {
             // Arrange
             $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
-            $this->createKillZone($dungeonRoute, 1, [Spell::SPELL_BLOODLUST], $this->getSafeMdtEnemies($dungeonRoute)->first());
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST], $this->getSafeMdtEnemies($dungeonRoute)->first());
 
             $importedRoute = $this->importStringToDungeonRoute($this->exportDungeonRouteToString($dungeonRoute));
 
@@ -171,11 +172,11 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
     public static function spellNoteProvider(): array
     {
         return [
-            'spell name'                 => ['Bloodlust', Spell::SPELL_BLOODLUST],
-            'upper case with whitespace' => ['  HEROISM ', Spell::SPELL_HEROISM],
-            'alias'                      => ['timewarp', Spell::SPELL_TIME_WARP],
-            'alias of a renamed spell'   => ['Fury of the Ancients', Spell::SPELL_FURY_OF_THE_ASPECTS],
-            'trailing blank lines'       => ["Primal Rage\n\n", Spell::SPELL_PRIMAL_RAGE],
+            'spell name'                 => ['Bloodlust', KnownSpell::BLOODLUST],
+            'upper case with whitespace' => ['  HEROISM ', KnownSpell::HEROISM],
+            'alias'                      => ['timewarp', KnownSpell::TIME_WARP],
+            'alias of a renamed spell'   => ['Fury of the Ancients', KnownSpell::FURY_OF_THE_ASPECTS],
+            'trailing blank lines'       => ["Primal Rage\n\n", KnownSpell::PRIMAL_RAGE],
         ];
     }
 
@@ -190,7 +191,7 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
             /** @var Spell $spell */
             $spell = Spell::query()
                 ->where('selectable', true)
-                ->whereNotIn('id', Spell::BLOODLUSTY_SPELLS)
+                ->whereNotIn('id', KnownSpell::BLOODLUSTY_SPELLS)
                 ->orderBy('id')
                 ->get()
                 ->firstOrFail(static fn(Spell $spell): bool => __($spell->name, [], 'en_US') !== $spell->name);
@@ -228,7 +229,7 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
             // Arrange
             $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
             $enemy        = $this->getSafeMdtEnemies($dungeonRoute)->first();
-            $this->createKillZone($dungeonRoute, 1, [Spell::SPELL_BLOODLUST], $enemy);
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST], $enemy);
             $this->createCommentMapIcon($dungeonRoute, 'Bloodlust', $this->getFloor($enemy->floor_id), $enemy->lat, $enemy->lng);
 
             $encodedString = $this->exportDungeonRouteToString($dungeonRoute);
@@ -237,7 +238,7 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
             $importedRoute = $this->importStringToDungeonRoute($encodedString);
 
             // Assert
-            $this->assertSame([1 => [Spell::SPELL_BLOODLUST]], $this->getSpellIdsByKillZoneIndex($importedRoute));
+            $this->assertSame([1 => [KnownSpell::BLOODLUST]], $this->getSpellIdsByKillZoneIndex($importedRoute));
             $this->assertSame(0, $importedRoute->mapIcons()->count());
         } finally {
             $importedRoute?->delete();
@@ -355,7 +356,7 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
             $importedRoute = $this->importStringToDungeonRoute($encodedString);
 
             // Assert
-            $this->assertSame([1 => [], 2 => [Spell::SPELL_BLOODLUST]], $this->getSpellIdsByKillZoneIndex($importedRoute));
+            $this->assertSame([1 => [], 2 => [KnownSpell::BLOODLUST]], $this->getSpellIdsByKillZoneIndex($importedRoute));
         } finally {
             $importedRoute?->delete();
             $dungeonRoute?->delete();
@@ -379,7 +380,7 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
             $this->assertNotNull($enemies, 'No MDT dungeon has a safe enemy with another one right below it');
 
             [$upperEnemy, $lowerEnemy] = $enemies;
-            $this->createKillZone($dungeonRoute, 1, [Spell::SPELL_BLOODLUST], $upperEnemy);
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST], $upperEnemy);
             $this->createKillZone($dungeonRoute, 2, [], $lowerEnemy);
 
             $encodedString = $this->exportDungeonRouteToString($dungeonRoute);
@@ -388,7 +389,7 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
             $importedRoute = $this->importStringToDungeonRoute($encodedString);
 
             // Assert
-            $this->assertSame([1 => [Spell::SPELL_BLOODLUST], 2 => []], $this->getSpellIdsByKillZoneIndex($importedRoute));
+            $this->assertSame([1 => [KnownSpell::BLOODLUST], 2 => []], $this->getSpellIdsByKillZoneIndex($importedRoute));
             $this->assertSame(0, $importedRoute->mapIcons()->count());
         } finally {
             $importedRoute?->delete();

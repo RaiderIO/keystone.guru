@@ -10,6 +10,9 @@ use App\Models\MapIconType;
 use App\Models\PublishedState;
 use App\Models\RaidMarker;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellDispelType;
+use App\Models\Spell\SpellMissType;
+use App\Models\Spell\SpellSchool;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
 use Illuminate\Contracts\Support\Arrayable;
@@ -67,9 +70,9 @@ class MapContextStaticData implements Arrayable
                 'publishStates'                     => PublishedState::all(),
                 'gameVersions'                      => GameVersion::all(),
                 'selectableSpells'                  => $selectableSpells,
-                'spellSchools'                      => Spell::ALL_SCHOOLS,
-                'spellMissTypes'                    => Spell::ALL_MISS_TYPES,
-                'spellDispelTypes'                  => Spell::ALL_DISPEL_TYPES,
+                'spellSchools'                      => SpellSchool::slugsByBit(),
+                'spellMissTypes'                    => SpellMissType::slugsByBit(),
+                'spellDispelTypes'                  => SpellDispelType::values(),
             ], config('keystoneguru.cache.static_data.ttl'));
         });
 

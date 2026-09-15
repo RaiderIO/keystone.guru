@@ -17,6 +17,7 @@ use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Path;
 use App\Models\Polyline;
+use App\Models\Spell\KnownSpell;
 use App\Models\Spell\Spell;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
@@ -32,9 +33,9 @@ class ObjectImporter
 
     /** @var array<string, int> Names users write on MDT notes for a spell other than the spell's own name */
     private const array SPELL_IDS_BY_ALIAS = [
-        'timewarp'             => Spell::SPELL_TIME_WARP,
-        'ancient hysteria'     => Spell::SPELL_ANCIENT_HYSTERIA,
-        'fury of the ancients' => Spell::SPELL_FURY_OF_THE_ASPECTS,
+        'timewarp'             => KnownSpell::TIME_WARP,
+        'ancient hysteria'     => KnownSpell::ANCIENT_HYSTERIA,
+        'fury of the ancients' => KnownSpell::FURY_OF_THE_ASPECTS,
     ];
 
     public function __construct(
@@ -440,11 +441,11 @@ class ObjectImporter
 
         $spells = Spell::query()
             ->where('selectable', true)
-            ->orWhereIn('id', Spell::BLOODLUSTY_SPELLS)
+            ->orWhereIn('id', KnownSpell::BLOODLUSTY_SPELLS)
             ->orderBy('id')
             ->get(['id', 'name'])
             // Bloodlust effects claim a name shared with any other spell
-            ->sortBy(static fn(Spell $spell): int => in_array($spell->id, Spell::BLOODLUSTY_SPELLS, true) ? 0 : 1);
+            ->sortBy(static fn(Spell $spell): int => in_array($spell->id, KnownSpell::BLOODLUSTY_SPELLS, true) ? 0 : 1);
 
         foreach ($spells as $spell) {
             foreach ([__($spell->name, [], 'en_US'), __($spell->name)] as $translatedName) {

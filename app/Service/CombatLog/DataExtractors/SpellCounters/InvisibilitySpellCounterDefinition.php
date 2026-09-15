@@ -4,7 +4,7 @@ namespace App\Service\CombatLog\DataExtractors\SpellCounters;
 
 use App\Models\CharacterClass;
 use App\Models\CombatLog\SpellProperty;
-use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCounter;
 
 class InvisibilitySpellCounterDefinition extends SpellCounterDefinition
 {
@@ -33,7 +33,7 @@ class InvisibilitySpellCounterDefinition extends SpellCounterDefinition
 
     public function getCounterBit(): int
     {
-        return Spell::COUNTER_INVISIBILITY;
+        return SpellCounter::Invisibility->value;
     }
 
     /**

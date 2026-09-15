@@ -13,8 +13,11 @@ use App\Models\CombatLog\CombatLogSpellPropertyObservation;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Dungeon;
 use App\Models\Npc\NpcSpell;
+use App\Models\Spell\KnownSpell;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
+use App\Models\Spell\SpellImmunity;
+use App\Models\Spell\SpellSchool;
 use App\Service\CombatLog\DataExtractors\ImmunityBypassDataExtractor;
 use App\Service\CombatLog\DataExtractors\ImmunityBypasses\ImmunityDefinitionInterface;
 use App\Service\CombatLog\DataExtractors\ImmunityBypasses\ImmunityDefinitions;
@@ -48,7 +51,7 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
     private const int TEST_SPELL_ID_LAST = 9991040;
 
     /** @var int Shadow, so it is covered by both the full and the magic-only immunities */
-    private const int SCHOOL_SHADOW = Spell::SCHOOL_SHADOW;
+    private const int SCHOOL_SHADOW = SpellSchool::Shadow->value;
 
     private ImmunityBypassDataExtractor $extractor;
 
@@ -96,14 +99,14 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcDamage(2000, $spellId, 'Unstoppable Force'),
-            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellImmunityBypasses']);
-        $this->assertBypassRecorded($spellId, Spell::IMMUNITY_DIVINE_SHIELD, SpellProperty::BypassDivineShield);
+        $this->assertBypassRecorded($spellId, SpellImmunity::DivineShield->value, SpellProperty::BypassDivineShield);
 
         // Assert - the bypassing spell is assigned to the NPC that cast it, so it shows up on its compendium page
         $this->assertTrue(NpcSpell::where('npc_id', self::CREATURE_NPC_ID)->where('spell_id', $spellId)->exists());
@@ -130,9 +133,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act - must not throw on the now-duplicate insert attempt
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcDamage(2000, $spellId, 'Unstoppable Force'),
-            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert - still exactly one row for the pair
@@ -152,8 +155,8 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
         // Act
         $this->runExtract([
             $this->npcDamage(0, $spellId, 'Unstoppable Force'),
-            $this->immunityApplied(1000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
-            $this->immunityRemoved(9000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(1000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(9000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert
@@ -170,8 +173,8 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
-            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcDamage(8500, $spellId, 'Unstoppable Force'),
         ]);
 
@@ -189,9 +192,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcDamage(ImmunityBypassDataExtractor::EPSILON_MS - 1, $spellId, 'Unstoppable Force'),
-            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert
@@ -208,9 +211,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcDamage(8000 - (ImmunityBypassDataExtractor::EPSILON_MS - 1), $spellId, 'Unstoppable Force'),
-            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert
@@ -227,9 +230,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_BLESSING_OF_SPELLWARDING, 'Blessing of Spellwarding'),
-            $this->npcDamage(2000, $spellId, 'Cleave', Spell::SCHOOL_PHYSICAL),
-            $this->immunityRemoved(10000, Spell::SPELL_BLESSING_OF_SPELLWARDING, 'Blessing of Spellwarding'),
+            $this->immunityApplied(0, KnownSpell::BLESSING_OF_SPELLWARDING, 'Blessing of Spellwarding'),
+            $this->npcDamage(2000, $spellId, 'Cleave', SpellSchool::Physical->value),
+            $this->immunityRemoved(10000, KnownSpell::BLESSING_OF_SPELLWARDING, 'Blessing of Spellwarding'),
         ]);
 
         // Assert
@@ -246,14 +249,14 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_BLESSING_OF_SPELLWARDING, 'Blessing of Spellwarding'),
+            $this->immunityApplied(0, KnownSpell::BLESSING_OF_SPELLWARDING, 'Blessing of Spellwarding'),
             $this->npcDamage(2000, $spellId, 'Void Bolt'),
-            $this->immunityRemoved(10000, Spell::SPELL_BLESSING_OF_SPELLWARDING, 'Blessing of Spellwarding'),
+            $this->immunityRemoved(10000, KnownSpell::BLESSING_OF_SPELLWARDING, 'Blessing of Spellwarding'),
         ]);
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellImmunityBypasses']);
-        $this->assertBypassRecorded($spellId, Spell::IMMUNITY_BLESSING_OF_SPELLWARDING, SpellProperty::BypassBlessingOfSpellwarding);
+        $this->assertBypassRecorded($spellId, SpellImmunity::BlessingOfSpellwarding->value, SpellProperty::BypassBlessingOfSpellwarding);
     }
 
     #[Test]
@@ -266,9 +269,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_ANTI_MAGIC_SHELL, 'Anti-Magic Shell'),
+            $this->immunityApplied(0, KnownSpell::ANTI_MAGIC_SHELL, 'Anti-Magic Shell'),
             $this->npcDamage(2000, $spellId, 'Void Bolt'),
-            $this->immunityRemoved(5000, Spell::SPELL_ANTI_MAGIC_SHELL, 'Anti-Magic Shell'),
+            $this->immunityRemoved(5000, KnownSpell::ANTI_MAGIC_SHELL, 'Anti-Magic Shell'),
         ]);
 
         // Assert
@@ -285,14 +288,14 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_ANTI_MAGIC_SHELL, 'Anti-Magic Shell'),
+            $this->immunityApplied(0, KnownSpell::ANTI_MAGIC_SHELL, 'Anti-Magic Shell'),
             $this->npcDebuffApplied(2000, $spellId, 'Mind Flay'),
-            $this->immunityRemoved(5000, Spell::SPELL_ANTI_MAGIC_SHELL, 'Anti-Magic Shell'),
+            $this->immunityRemoved(5000, KnownSpell::ANTI_MAGIC_SHELL, 'Anti-Magic Shell'),
         ]);
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellImmunityBypasses']);
-        $this->assertBypassRecorded($spellId, Spell::IMMUNITY_ANTI_MAGIC_SHELL, SpellProperty::BypassAntiMagicShell);
+        $this->assertBypassRecorded($spellId, SpellImmunity::AntiMagicShell->value, SpellProperty::BypassAntiMagicShell);
     }
 
     #[Test]
@@ -304,9 +307,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_ASPECT_OF_THE_TURTLE, 'Aspect of the Turtle'),
+            $this->immunityApplied(0, KnownSpell::ASPECT_OF_THE_TURTLE, 'Aspect of the Turtle'),
             $this->npcDebuffApplied(2000, $spellId, 'Mind Flay'),
-            $this->immunityRemoved(8000, Spell::SPELL_ASPECT_OF_THE_TURTLE, 'Aspect of the Turtle'),
+            $this->immunityRemoved(8000, KnownSpell::ASPECT_OF_THE_TURTLE, 'Aspect of the Turtle'),
         ]);
 
         // Assert
@@ -324,9 +327,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcPeriodicDamage(2000, $spellId, 'Corruption'),
-            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert
@@ -343,9 +346,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcMissed(2000, $spellId, 'Unstoppable Force'),
-            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert
@@ -362,9 +365,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcDamage(2000, $spellId, 'Unstoppable Force', self::SCHOOL_SHADOW, 0),
-            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert
@@ -381,9 +384,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcDamage(2000, $spellId, 'Unstoppable Force', self::SCHOOL_SHADOW, 12345, self::OTHER_PLAYER_GUID),
-            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert
@@ -400,9 +403,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcDamage(2000, $spellId, 'Sanguine Ichor', self::SCHOOL_SHADOW, 12345, self::PLAYER_GUID, self::OTHER_PLAYER_GUID),
-            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert
@@ -422,9 +425,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
         // Act
         $this->runExtract([
             $this->npcCastSuccess(0, $spellId, 'Arcane Bolt'),
-            $this->immunityApplied(127, Spell::SPELL_ASPECT_OF_THE_TURTLE, 'Aspect of the Turtle'),
+            $this->immunityApplied(127, KnownSpell::ASPECT_OF_THE_TURTLE, 'Aspect of the Turtle'),
             $this->npcDamage(494, $spellId, 'Arcane Bolt'),
-            $this->immunityRemoved(8127, Spell::SPELL_ASPECT_OF_THE_TURTLE, 'Aspect of the Turtle'),
+            $this->immunityRemoved(8127, KnownSpell::ASPECT_OF_THE_TURTLE, 'Aspect of the Turtle'),
         ]);
 
         // Assert
@@ -442,15 +445,15 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcCastSuccess(2000, $spellId, 'Unstoppable Force'),
             $this->npcDamage(2010, $spellId, 'Unstoppable Force'),
-            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellImmunityBypasses']);
-        $this->assertBypassRecorded($spellId, Spell::IMMUNITY_DIVINE_SHIELD, SpellProperty::BypassDivineShield);
+        $this->assertBypassRecorded($spellId, SpellImmunity::DivineShield->value, SpellProperty::BypassDivineShield);
     }
 
     #[Test]
@@ -466,7 +469,7 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
             $this->npcCastSuccess(0, $spellId, 'Unstoppable Force'),
             $this->immunityApplied(
                 ImmunityBypassDataExtractor::CAST_PROVENANCE_MAX_AGE_MS,
-                Spell::SPELL_DIVINE_SHIELD,
+                KnownSpell::DIVINE_SHIELD,
                 'Divine Shield',
             ),
             $this->npcDamage(ImmunityBypassDataExtractor::CAST_PROVENANCE_MAX_AGE_MS + 2000, $spellId, 'Unstoppable Force'),
@@ -474,7 +477,7 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellImmunityBypasses']);
-        $this->assertBypassRecorded($spellId, Spell::IMMUNITY_DIVINE_SHIELD, SpellProperty::BypassDivineShield);
+        $this->assertBypassRecorded($spellId, SpellImmunity::DivineShield->value, SpellProperty::BypassDivineShield);
     }
 
     #[Test]
@@ -486,7 +489,7 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcDamage(9000, $spellId, 'Unstoppable Force'),
         ]);
 
@@ -504,13 +507,13 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcDamage(2000, $spellId, 'Unstoppable Force'),
         ]);
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellImmunityBypasses']);
-        $this->assertBypassRecorded($spellId, Spell::IMMUNITY_DIVINE_SHIELD, SpellProperty::BypassDivineShield);
+        $this->assertBypassRecorded($spellId, SpellImmunity::DivineShield->value, SpellProperty::BypassDivineShield);
     }
 
     #[Test]
@@ -522,18 +525,18 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
-            $this->immunityApplied(500, Spell::SPELL_BLESSING_OF_PROTECTION, 'Blessing of Protection'),
-            $this->npcDamage(2000, $spellId, 'Cleave', Spell::SCHOOL_PHYSICAL),
-            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
-            $this->immunityRemoved(8500, Spell::SPELL_BLESSING_OF_PROTECTION, 'Blessing of Protection'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(500, KnownSpell::BLESSING_OF_PROTECTION, 'Blessing of Protection'),
+            $this->npcDamage(2000, $spellId, 'Cleave', SpellSchool::Physical->value),
+            $this->immunityRemoved(8000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8500, KnownSpell::BLESSING_OF_PROTECTION, 'Blessing of Protection'),
         ]);
 
         // Assert
         $this->assertSame(2, $this->result->toArray()['addedSpellImmunityBypasses']);
         $this->assertBypassRecorded(
             $spellId,
-            Spell::IMMUNITY_DIVINE_SHIELD | Spell::IMMUNITY_BLESSING_OF_PROTECTION,
+            SpellImmunity::DivineShield->value | SpellImmunity::BlessingOfProtection->value,
             SpellProperty::BypassDivineShield,
         );
         $this->assertDatabaseHas('combat_log_spell_property_observations', [
@@ -551,15 +554,15 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcDamage(2000, $spellId, 'Unstoppable Force'),
             $this->npcDamage(3000, $spellId, 'Unstoppable Force'),
-            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellImmunityBypasses']);
-        $this->assertBypassRecorded($spellId, Spell::IMMUNITY_DIVINE_SHIELD, SpellProperty::BypassDivineShield);
+        $this->assertBypassRecorded($spellId, SpellImmunity::DivineShield->value, SpellProperty::BypassDivineShield);
     }
 
     #[Test]
@@ -592,10 +595,10 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
         // Act
         $this->runExtract([
             $this->npcCastSuccess(0, $spellId, 'Arcane Bolt'),
-            $this->immunityApplied(200, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(200, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcCastSuccess(1000, $spellId, 'Arcane Bolt'),
             $this->npcDamage(1200, $spellId, 'Arcane Bolt'),
-            $this->immunityRemoved(8200, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(8200, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert
@@ -620,9 +623,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
             $events[] = $this->npcCastSuccess($otherCaster, $spellId, 'Arcane Bolt', $this->creatureGuid($otherCaster));
         }
 
-        $events[] = $this->immunityApplied(2000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield');
+        $events[] = $this->immunityApplied(2000, KnownSpell::DIVINE_SHIELD, 'Divine Shield');
         $events[] = $this->npcDamage(2500, $spellId, 'Arcane Bolt');
-        $events[] = $this->immunityRemoved(10000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield');
+        $events[] = $this->immunityRemoved(10000, KnownSpell::DIVINE_SHIELD, 'Divine Shield');
 
         // Act
         $this->runExtract($events);
@@ -676,14 +679,14 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
         ]);
         // The second log starts later than that leftover cast, so a surviving one would veto this hit as in-flight
         $this->runExtract([
-            $this->immunityApplied(2000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(2000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcDamage(4000, $spellId, 'Unstoppable Force'),
-            $this->immunityRemoved(10000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityRemoved(10000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
         ]);
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['addedSpellImmunityBypasses']);
-        $this->assertBypassRecorded($spellId, Spell::IMMUNITY_DIVINE_SHIELD, SpellProperty::BypassDivineShield);
+        $this->assertBypassRecorded($spellId, SpellImmunity::DivineShield->value, SpellProperty::BypassDivineShield);
     }
 
     #[Test]
@@ -696,7 +699,7 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->runExtract([
-            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'),
             $this->npcDamage($expiryMs - (ImmunityBypassDataExtractor::EPSILON_MS - 1), $spellId, 'Unstoppable Force'),
             $this->npcDamage($expiryMs + 5000, 9991028, 'Unrelated'),
         ]);
@@ -716,7 +719,7 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->extractor->beforeExtract($this->result, self::COMBAT_LOG_PATH);
-        $this->extractor->extractData($this->result, $this->currentDungeon, $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'));
+        $this->extractor->extractData($this->result, $this->currentDungeon, $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'));
         $this->extractor->extractData($this->result, $this->currentDungeon, $this->npcDamage(2000, $spellId, 'Unstoppable Force'));
         $this->extractor->extractData($this->result, new DataExtractionCurrentDungeon($otherDungeon), $this->zoneChange(4000));
         $this->extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
@@ -738,9 +741,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         $this->extractor->beforeExtract($this->result, self::COMBAT_LOG_PATH);
-        $this->extractor->extractData($this->result, $this->currentDungeon, $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'));
+        $this->extractor->extractData($this->result, $this->currentDungeon, $this->immunityApplied(0, KnownSpell::DIVINE_SHIELD, 'Divine Shield'));
         $this->extractor->extractData($this->result, $otherDungeonContext, $this->zoneChange(2000));
-        $this->extractor->extractData($this->result, $otherDungeonContext, $this->immunityApplied(4000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'));
+        $this->extractor->extractData($this->result, $otherDungeonContext, $this->immunityApplied(4000, KnownSpell::DIVINE_SHIELD, 'Divine Shield'));
         $this->extractor->extractData($this->result, $otherDungeonContext, $this->npcDamage(6000, $spellId, 'Unstoppable Force'));
         $this->extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
 
@@ -759,7 +762,7 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
 
         // Act
         sort($definedBuffSpellIds);
-        $canonicalSpellIds = Spell::IMMUNITY_SPELLS;
+        $canonicalSpellIds = KnownSpell::IMMUNITY_SPELLS;
         sort($canonicalSpellIds);
 
         // Assert - a spell id added to the constant without a definition would silently never open a window

@@ -3,7 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Models\Laratrust\Role;
-use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCategory;
+use App\Models\Spell\SpellCooldownGroup;
+use App\Models\Spell\SpellDispelType;
+use App\Models\Spell\SpellSchool;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -25,11 +28,11 @@ class SpellFormRequest extends FormRequest
             'id'                => 'required',
             'name'              => 'required|string',
             'icon_name'         => 'required|string',
-            'category'          => Rule::in(Spell::ALL_CATEGORIES),
-            'dispel_type'       => Rule::in(Spell::ALL_DISPEL_TYPE_KEYS),
-            'cooldown_group'    => Rule::in(Spell::ALL_COOLDOWN_GROUPS),
+            'category'          => Rule::in(SpellCategory::values()),
+            'dispel_type'       => Rule::in(SpellDispelType::translationKeys()),
+            'cooldown_group'    => Rule::in(SpellCooldownGroup::values()),
             'schools'           => 'array',
-            'schools.*'         => Rule::in(array_keys(Spell::ALL_SCHOOLS)),
+            'schools.*'         => Rule::in(array_keys(SpellSchool::slugsByBit())),
             'aura'              => 'boolean',
             'selectable'        => 'boolean',
             'hidden_on_map'     => 'boolean',

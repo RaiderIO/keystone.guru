@@ -17,7 +17,7 @@ interface ImmunityDefinitionInterface
     public function getProperty(): SpellProperty;
 
     /**
-     * The Spell::IMMUNITY_* bit this immunity occupies on `bypasses_immunities_mask`.
+     * The {@see \App\Models\Spell\SpellImmunity} bit this immunity occupies on `bypasses_immunities_mask`.
      */
     public function getImmunityBit(): int;
 
@@ -27,7 +27,7 @@ interface ImmunityDefinitionInterface
     public function getBuffSpellIds(): array;
 
     /**
-     * The `Spell::SCHOOL_*` bits this immunity protects against. Damage of any other school landing during the window
+     * The {@see \App\Models\Spell\SpellSchool} bits this immunity protects against. Damage of any other school landing during the window
      * was never supposed to be stopped.
      */
     public function getProtectedSchoolsMask(): int;

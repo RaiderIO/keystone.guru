@@ -8,6 +8,7 @@ use App\Models\CombatLog\SpellProperty;
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellSchool;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
 
@@ -145,7 +146,7 @@ $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
             [
                 'spell'   => $spellName,
                 'schools' => e($event->spell
-                    ? Spell::maskToReadableString(Spell::ALL_SCHOOLS, $event->spell->schools_mask, 'spellschools')
+                    ? Spell::maskToReadableString(SpellSchool::slugsByBit(), $event->spell->schools_mask, 'spellschools')
                     : '-'),
             ]
         ),
