@@ -2,18 +2,20 @@
 
 namespace Tests\Feature\App\Service\CombatLog;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\CombatLog\CombatLogServiceInterface;
+use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged;
 use App\Service\CombatLog\ResultEvents\EnemyKilled;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * Regression tests that verify CombatFilter correctly detects enemy kills from real combat logs.
- * These tests guard against the PhpStan regression (commit a3b5cfb47) where the kill-detection
- * else-branch was narrowed to CombatLogEvent, silently dropping PARTY_KILL/UNIT_DIED events that
- * extend GenericSpecialEvent rather than CombatLogEvent.
+ * Verifies CombatFilter detects enemy kills from real combat logs. PARTY_KILL/UNIT_DIED extend
+ * GenericSpecialEvent rather than CombatLogEvent, so a kill-detection branch narrowed to
+ * CombatLogEvent silently drops every one of them.
  */
 #[Group('CombatLog')]
 #[Group('CombatLogServiceResultEvents')]
@@ -39,7 +41,7 @@ final class CombatLogServiceResultEventsTest extends PublicTestCase
         $service = app()->make(CombatLogServiceInterface::class);
 
         // Act
-        $resultEvents = $service->getResultEventsForChallengeMode($zipPath);
+        $resultEvents = $this->getResultEventsForChallengeMode($service, $zipPath);
 
         // Assert
         $killedCount  = $resultEvents->filter(static fn($e) => $e instanceof EnemyKilled)->count();
@@ -71,7 +73,7 @@ final class CombatLogServiceResultEventsTest extends PublicTestCase
         $service = app()->make(CombatLogServiceInterface::class);
 
         // Act
-        $resultEvents = $service->getResultEventsForChallengeMode($zipPath);
+        $resultEvents = $this->getResultEventsForChallengeMode($service, $zipPath);
 
         // Assert
         $killedCount  = $resultEvents->filter(static fn($e) => $e instanceof EnemyKilled)->count();
@@ -87,5 +89,21 @@ final class CombatLogServiceResultEventsTest extends PublicTestCase
             $engagedCount,
             'Every killed enemy should have a matching engaged event',
         );
+    }
+
+    /**
+     * Parsing a challenge mode log saves the dungeon route it builds, so remove whatever it created.
+     *
+     * @return Collection<int, BaseResultEvent>
+     */
+    private function getResultEventsForChallengeMode(CombatLogServiceInterface $service, string $zipPath): Collection
+    {
+        $sinceId = (int)DungeonRoute::query()->max('id');
+
+        try {
+            return $service->getResultEventsForChallengeMode($zipPath);
+        } finally {
+            DungeonRoute::query()->where('id', '>', $sinceId)->get()->each(static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->delete());
+        }
     }
 }
