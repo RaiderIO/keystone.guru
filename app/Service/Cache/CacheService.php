@@ -168,7 +168,7 @@ class CacheService implements CacheServiceInterface
         if ($this->cacheEnabled) {
             $cached = $this->redisService->rawCommand($redis, 'HGET', $prefixedKey, $field);
             if ($cached !== false && $cached !== null) {
-                return unserialize((string)$cached);
+                return unserialize((string)$cached, ['allowed_classes' => false]);
             }
         }
 

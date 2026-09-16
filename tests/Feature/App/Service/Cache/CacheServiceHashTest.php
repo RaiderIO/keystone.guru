@@ -133,6 +133,27 @@ final class CacheServiceHashTest extends PublicTestCase
     }
 
     #[Test]
+    public function rememberInHash_givenCachedFieldHoldingAnObject_returnsAnIncompleteClassWithoutInstantiatingIt(): void
+    {
+        // Arrange - every caller of this hash echoes rendered card HTML, so a serialized object can only
+        // come from a tampered or foreign Redis value; unserialize() must not build the class for it.
+        $recordedCommands = [];
+        $cacheService     = $this->makeCacheService(serialize(new CacheServiceHashTestPayload()), $recordedCommands);
+
+        // Act
+        $result = $cacheService->rememberInHash(
+            'dungeonroute_card:123',
+            'vertical:en_US_0_1_0',
+            static fn(): string => '<div>fresh</div>',
+            '1 hour',
+        );
+
+        // Assert
+        $this->assertInstanceOf(\__PHP_Incomplete_Class::class, $result, 'A serialized object must not be instantiated');
+        $this->assertFalse(CacheServiceHashTestPayload::$wakeUpCalled, '__wakeup() must never run on a cached value');
+    }
+
+    #[Test]
     public function dropHashCache_givenRouteKey_issuesSingleDel(): void
     {
         // Arrange
@@ -146,5 +167,19 @@ final class CacheServiceHashTest extends PublicTestCase
         $delCalls = $this->paramsForCommand($recordedCommands, 'DEL');
         $this->assertCount(1, $delCalls, 'Dropping a route hash must issue exactly one DEL');
         $this->assertSame($this->prefix() . 'dungeonroute_card:123', $delCalls[0][0], 'DEL must target the prefixed hash key');
+    }
+}
+
+/**
+ * Records whether unserialize() was allowed to build it. Declared here rather than as a fixture because
+ * its only purpose is to be rejected by the cache's unserialize() call.
+ */
+final class CacheServiceHashTestPayload
+{
+    public static bool $wakeUpCalled = false;
+
+    public function __wakeup(): void
+    {
+        self::$wakeUpCalled = true;
     }
 }
