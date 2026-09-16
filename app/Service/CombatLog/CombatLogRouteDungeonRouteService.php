@@ -19,7 +19,9 @@ use App\Models\Brushline;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
+use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\MapIcon;
@@ -54,6 +56,8 @@ use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
 use App\Service\CombatLog\Builders\CombatLogRouteCombatLogEventsBuilder;
 use App\Service\CombatLog\Builders\CombatLogRouteCorrectionBuilder;
 use App\Service\CombatLog\Builders\CombatLogRouteDungeonRouteBuilder;
+use App\Service\CombatLog\Builders\DungeonRouteBuilder;
+use App\Service\CombatLog\Dtos\CombatLogRouteEnemyRecordings;
 use App\Service\CombatLog\Exceptions\CombatLogRouteRegeneratedConcurrentlyException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Logging\CombatLogRouteDungeonRouteServiceLoggingInterface;
@@ -104,6 +108,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
     /** @var int Rows per insert statement, so a combat log with many unresolved npcs stays under max_allowed_packet. */
     private const ENEMY_FAILURE_INSERT_CHUNK_SIZE = 500;
+
+    /** @var int As above, for the matches that resolved but did so from far away. */
+    private const ENEMY_RESOLUTION_INSERT_CHUNK_SIZE = 500;
 
     public function __construct(
         protected readonly CombatLogService                                  $combatLogService,
@@ -177,8 +184,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             Auth::id() ?? -1,
         );
 
-        /** @var array<int, array<string, mixed>> $enemyFailureAttributes */
-        $enemyFailureAttributes = [];
+        $enemyRecordings = new CombatLogRouteEnemyRecordings();
 
         try {
             if ($existingDungeonRoute !== null) {
@@ -192,11 +198,11 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $dungeonRoute = $builder->build();
 
             if ($existingDungeonRoute === null) {
-                $this->saveCombatLogRouteEnemyFailures($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
+                $this->saveCombatLogRouteEnemyRecordings($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
             } else {
                 // Worked out against the mapping version this generation was built on, and before apply() touches
-                // the original. A regeneration's failures belong to the original, which keeps its id through apply().
-                $enemyFailureAttributes = $this->getCombatLogRouteEnemyFailureAttributes(
+                // the original. A regeneration's recordings belong to the original, which keeps its id through apply().
+                $enemyRecordings = $this->getCombatLogRouteEnemyRecordings(
                     $dungeonRoute->mappingVersion,
                     $combatLogRoute,
                     $dungeonRoute,
@@ -227,7 +233,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             return $dungeonRoute;
         }
 
-        return $this->applyRegeneratedDungeonRoute($existingDungeonRoute, $dungeonRoute, $enemyFailureAttributes);
+        return $this->applyRegeneratedDungeonRoute($existingDungeonRoute, $dungeonRoute, $enemyRecordings);
     }
 
     /**
@@ -270,17 +276,16 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
      * combat log that misses a required enemy is a routine outcome rather than a reason to fail the whole
      * regeneration - the pre-#4297 replacement had no such check either.
      *
-     * The original ends up with exactly the enemy failures this generation computed, against the mapping version it
-     * was built on: whatever an earlier generation recorded is deleted, never carried over.
+     * The original ends up with exactly the enemy failures and resolutions this generation computed, against the
+     * mapping version it was built on: whatever an earlier generation recorded is deleted, never carried over.
      *
-     * @param  array<int, array<string, mixed>>               $enemyFailureAttributes
      * @throws CombatLogRouteRegeneratedConcurrentlyException
      * @throws Throwable
      */
     private function applyRegeneratedDungeonRoute(
-        DungeonRoute $existingDungeonRoute,
-        DungeonRoute $draft,
-        array        $enemyFailureAttributes,
+        DungeonRoute                  $existingDungeonRoute,
+        DungeonRoute                  $draft,
+        CombatLogRouteEnemyRecordings $enemyRecordings,
     ): DungeonRoute {
         $draftId = $draft->id;
 
@@ -303,7 +308,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         DungeonRoute::query()->whereKey($dungeonRoute->id)->update(['expires_at' => $draft->expires_at]);
         $dungeonRoute->expires_at = $draft->expires_at;
 
-        $this->replaceCombatLogRouteEnemyFailures($dungeonRoute, $enemyFailureAttributes);
+        $this->replaceCombatLogRouteEnemyRecordings($dungeonRoute, $enemyRecordings);
 
         $this->log->applyRegeneratedDungeonRouteApplied($dungeonRoute->public_key, $dungeonRoute->id, $draftId);
 
@@ -687,21 +692,24 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     }
 
     /**
-     * The rows combat_log_route_enemy_failures gets for the npcs of this combat log that resolved to no enemy. Writes
-     * nothing, so a regeneration can work them out before apply() replaces the original's content.
+     * The diagnostic rows this combat log produces: combat_log_route_enemy_failures for the npcs that resolved to no
+     * enemy at all, and combat_log_route_enemy_resolutions for the ones that did resolve, but to an enemy far enough
+     * away that the match is worth a second look. Writes nothing, so a regeneration can work them out before apply()
+     * replaces the original's content.
      *
-     * @param  DungeonRoute                     $dungeonRoute   the route this generation was built into
-     * @param  int                              $dungeonRouteId the route the failures are recorded against
-     * @return array<int, array<string, mixed>>
+     * @param DungeonRoute $dungeonRoute   the route this generation was built into
+     * @param int          $dungeonRouteId the route the rows are recorded against
      */
-    private function getCombatLogRouteEnemyFailureAttributes(
+    private function getCombatLogRouteEnemyRecordings(
         MappingVersion           $mappingVersion,
         CombatLogRouteRequestDto $combatLogRoute,
         DungeonRoute             $dungeonRoute,
         int                      $dungeonRouteId,
-    ): array {
-        $now               = now();
-        $failureAttributes = [];
+    ): CombatLogRouteEnemyRecordings {
+        $now                  = now();
+        $failureAttributes    = [];
+        $resolutionAttributes = [];
+        $minDistance          = (float)config('keystoneguru.enemy_resolution.record_min_distance_yd');
 
         /** @var Floor|null $previousFloor */
         $previousFloor = $dungeonRoute->dungeon->floors()->firstWhere('default', 1);
@@ -713,17 +721,18 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         );
 
         foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
-            $currentFloor = $combatLogRouteNpc->getResolvedEnemy()?->floor ?? $previousFloor; // @phpstan-ignore nullsafe.neverNull
+            $resolvedEnemy = $combatLogRouteNpc->getResolvedEnemy();
+            $currentFloor  = $resolvedEnemy?->floor ?? $previousFloor; // @phpstan-ignore nullsafe.neverNull
 
             if ($currentFloor === null) {
                 continue;
             }
 
-            // Track the floor regardless of whether a failure gets recorded below - later npcs that
+            // Track the floor regardless of whether a row gets recorded below - later npcs that
             // fall back to $previousFloor must still see this npc's floor even if this one is skipped.
             $previousFloor = $currentFloor;
 
-            if ($combatLogRouteNpc->getResolvedEnemy() === null) {
+            if ($resolvedEnemy === null) {
                 // An npc not worth any enemy forces in this mapping version never affects the route that gets built,
                 // so failing to place it is noise rather than a mapping problem worth triaging. That covers npcs the
                 // mapping does not know at all - temporary adds spawned mid-fight, which are the bulk of the volume.
@@ -748,7 +757,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                         ),
                     );
                 } catch (InvalidArgumentException) {
-                    $this->log->saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation($dungeonRouteId, $combatLogRouteNpc->npcId, $currentFloor->id);
+                    $this->log->saveCombatLogRouteEnemyRecordingsUnableToCalculateMapLocation($dungeonRouteId, $combatLogRouteNpc->npcId, $currentFloor->id);
 
                     continue;
                 }
@@ -762,20 +771,153 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     'created_at'         => $now,
                     'updated_at'         => $now,
                 ], $latLng->toArray());
+
+                continue;
+            }
+
+            $resolutionAttributes[] = $this->getCombatLogRouteEnemyResolutionAttributes(
+                $mappingVersion,
+                $combatLogRouteNpc,
+                $resolvedEnemy,
+                $dungeonRoute,
+                $dungeonRouteId,
+                $currentFloor,
+                $minDistance,
+                $now,
+            );
+        }
+
+        return new CombatLogRouteEnemyRecordings($failureAttributes, array_values(array_filter($resolutionAttributes)));
+    }
+
+    /**
+     * The combat_log_route_enemy_resolutions row for one npc that did resolve to a mapped enemy, or null when the
+     * match is not worth recording.
+     *
+     * @return array<string, mixed>|null
+     */
+    private function getCombatLogRouteEnemyResolutionAttributes(
+        MappingVersion              $mappingVersion,
+        CombatLogRouteNpcRequestDto $combatLogRouteNpc,
+        Enemy                       $resolvedEnemy,
+        DungeonRoute                $dungeonRoute,
+        int                         $dungeonRouteId,
+        Floor                       $currentFloor,
+        float                       $minDistance,
+        Carbon                      $now,
+    ): ?array {
+        $distance = $combatLogRouteNpc->getResolvedEnemyDistance();
+
+        // Only the combat log route builder measures this - a route built from result events records nothing
+        if ($distance === null) {
+            return null;
+        }
+
+        // There is only one boss npc in the mapping, so a boss match is unambiguous however far away it was logged -
+        // the matcher skips its range check for exactly that reason. Recording the distance would only add noise.
+        if ($resolvedEnemy->npc?->isBoss() ?? false) {
+            return null;
+        }
+
+        // The matcher judges on the kill priority skewed distance rather than the real one, deliberately treating a
+        // high priority enemy as closer than it is. Recording that same skewed distance keeps a long line that was
+        // intended out of the red.
+        $weightFactor     = 1 + ($resolvedEnemy->kill_priority * DungeonRouteBuilder::ENEMY_KILL_PRIORITY_WEIGHT_RATIO);
+        $weightedDistance = $distance * $weightFactor;
+
+        if ($weightedDistance < $minDistance) {
+            return null;
+        }
+
+        // A patrolling enemy is wherever its patrol is, so the honest distance is the one to its closest vertex. The
+        // matcher only considers those vertices in its last resort strategy, which leaves an enemy matched through an
+        // engaged pack measured against a mapped anchor point it may never stand on.
+        $patrolDistance = $this->getClosestPatrolVertexDistance($resolvedEnemy, $combatLogRouteNpc);
+        if ($patrolDistance !== null && $patrolDistance < $distance) {
+            $distance         = $patrolDistance;
+            $weightedDistance = $distance * $weightFactor;
+
+            if ($weightedDistance < $minDistance) {
+                return null;
             }
         }
 
-        return $failureAttributes;
+        // As with the failures above, a floor with unset ingame coordinates must not fail the whole submission
+        try {
+            $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                new IngameXY(
+                    $combatLogRouteNpc->coord->x,
+                    $combatLogRouteNpc->coord->y,
+                    $currentFloor,
+                ),
+            );
+        } catch (InvalidArgumentException) {
+            $this->log->saveCombatLogRouteEnemyRecordingsUnableToCalculateMapLocation($dungeonRouteId, $combatLogRouteNpc->npcId, $currentFloor->id);
+
+            return null;
+        }
+
+        return [
+            'dungeon_route_id'   => $dungeonRouteId,
+            'dungeon_id'         => $dungeonRoute->dungeon_id,
+            'floor_id'           => $currentFloor->id,
+            'mapping_version_id' => $mappingVersion->id,
+            'npc_id'             => $combatLogRouteNpc->npcId,
+            'enemy_id'           => $resolvedEnemy->id,
+            'lat'                => $latLng->getLat(),
+            'lng'                => $latLng->getLng(),
+            'enemy_lat'          => $resolvedEnemy->lat,
+            'enemy_lng'          => $resolvedEnemy->lng,
+            'distance'           => $distance,
+            'weighted_distance'  => $weightedDistance,
+            'created_at'         => $now,
+            'updated_at'         => $now,
+        ];
     }
 
-    private function saveCombatLogRouteEnemyFailures(
+    /**
+     * The ingame yards between where the npc was engaged and the closest vertex of the enemy's patrol, or null when
+     * the enemy does not patrol or its patrol cannot be converted to ingame coordinates.
+     */
+    private function getClosestPatrolVertexDistance(Enemy $enemy, CombatLogRouteNpcRequestDto $combatLogRouteNpc): ?float
+    {
+        if ($enemy->enemyPatrol?->polyline === null) {
+            return null;
+        }
+
+        $closestDistance = null;
+
+        try {
+            foreach ($enemy->enemyPatrol->polyline->getDecodedLatLngs($enemy->floor) as $latLng) {
+                $vertexIngameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($latLng);
+
+                $vertexDistance = $this->coordinatesService->distanceBetweenPoints(
+                    $vertexIngameXY->getX(),
+                    $combatLogRouteNpc->coord->x,
+                    $vertexIngameXY->getY(),
+                    $combatLogRouteNpc->coord->y,
+                );
+
+                if ($closestDistance === null || $vertexDistance < $closestDistance) {
+                    $closestDistance = $vertexDistance;
+                }
+            }
+        } catch (InvalidArgumentException) {
+            return null;
+        }
+
+        return $closestDistance;
+    }
+
+    private function saveCombatLogRouteEnemyRecordings(
         MappingVersion           $mappingVersion,
         CombatLogRouteRequestDto $combatLogRoute,
         DungeonRoute             $dungeonRoute,
     ): void {
-        $this->insertCombatLogRouteEnemyFailures(
-            $this->getCombatLogRouteEnemyFailureAttributes($mappingVersion, $combatLogRoute, $dungeonRoute, $dungeonRoute->id),
-        );
+        $enemyRecordings = $this->getCombatLogRouteEnemyRecordings($mappingVersion, $combatLogRoute, $dungeonRoute, $dungeonRoute->id);
+
+        $this->insertCombatLogRouteEnemyFailures($enemyRecordings->failures);
+        $this->insertCombatLogRouteEnemyResolutions($enemyRecordings->resolutions);
     }
 
     /**
@@ -789,23 +931,35 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     }
 
     /**
-     * Swaps a regenerated route's enemy failures for the ones its latest generation computed, all or nothing. The
-     * failures live on the combatlog connection, so they cannot share apply()'s transaction: by the time this runs
-     * the route's new content is live, and a failure here is logged rather than reported as a failed regeneration.
-     *
-     * @param array<int, array<string, mixed>> $failureAttributes
+     * @param array<int, array<string, mixed>> $resolutionAttributes
      */
-    private function replaceCombatLogRouteEnemyFailures(DungeonRoute $dungeonRoute, array $failureAttributes): void
+    private function insertCombatLogRouteEnemyResolutions(array $resolutionAttributes): void
+    {
+        foreach (array_chunk($resolutionAttributes, self::ENEMY_RESOLUTION_INSERT_CHUNK_SIZE) as $chunk) {
+            CombatLogRouteEnemyResolution::insert($chunk);
+        }
+    }
+
+    /**
+     * Swaps a regenerated route's enemy failures and resolutions for the ones its latest generation computed, all or
+     * nothing. They live on the combatlog connection, so they cannot share apply()'s transaction: by the time this
+     * runs the route's new content is live, and a failure here is logged rather than reported as a failed
+     * regeneration.
+     */
+    private function replaceCombatLogRouteEnemyRecordings(DungeonRoute $dungeonRoute, CombatLogRouteEnemyRecordings $enemyRecordings): void
     {
         try {
             DB::connection(new CombatLogRouteEnemyFailure()->getConnectionName())->transaction(
-                function () use ($dungeonRoute, $failureAttributes): void {
+                function () use ($dungeonRoute, $enemyRecordings): void {
                     $dungeonRoute->deleteCombatLogRouteEnemyFailures();
-                    $this->insertCombatLogRouteEnemyFailures($failureAttributes);
+                    $dungeonRoute->deleteCombatLogRouteEnemyResolutions();
+
+                    $this->insertCombatLogRouteEnemyFailures($enemyRecordings->failures);
+                    $this->insertCombatLogRouteEnemyResolutions($enemyRecordings->resolutions);
                 },
             );
         } catch (Throwable $throwable) {
-            $this->log->replaceCombatLogRouteEnemyFailuresFailed($dungeonRoute->id, $throwable->getMessage());
+            $this->log->replaceCombatLogRouteEnemyRecordingsFailed($dungeonRoute->id, $throwable->getMessage());
         }
     }
 

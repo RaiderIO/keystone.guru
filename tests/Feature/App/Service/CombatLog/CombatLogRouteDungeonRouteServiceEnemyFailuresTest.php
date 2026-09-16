@@ -18,7 +18,7 @@ use ReflectionClass;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * Exercises CombatLogRouteDungeonRouteService::saveCombatLogRouteEnemyFailures() directly via
+ * Exercises CombatLogRouteDungeonRouteService::saveCombatLogRouteEnemyRecordings() directly via
  * reflection rather than through the full API/builder pipeline: within a single test, that pipeline
  * resolves floors through FloorRepositorySwoole/EnemyRepositorySwoole, which cache Floor/Enemy
  * instances for the lifetime of the test (Laravel's TestCase rebuilds the container per test via
@@ -41,7 +41,7 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
      * rather than the "not worth any enemy forces" skip.
      */
     #[Test]
-    public function saveCombatLogRouteEnemyFailures_givenUnresolvableNpcOnFloorWithoutIngameCoordinates_skipsOnlyThatOne(): void
+    public function saveCombatLogRouteEnemyRecordings_givenUnresolvableNpcOnFloorWithoutIngameCoordinates_skipsOnlyThatOne(): void
     {
         $zeroedEnemy = Enemy::query()->whereNotNull('floor_id')->with('floor')->first();
         $this->assertNotNull($zeroedEnemy, 'Expected at least one seeded Enemy with a floor.');
@@ -107,7 +107,7 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
 
             /** @var CombatLogRouteDungeonRouteServiceInterface $service */
             $service = app(CombatLogRouteDungeonRouteServiceInterface::class);
-            $method  = new ReflectionClass($service)->getMethod('saveCombatLogRouteEnemyFailures');
+            $method  = new ReflectionClass($service)->getMethod('saveCombatLogRouteEnemyRecordings');
 
             // Act
             $method->invokeArgs($service, [$dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute]);
@@ -138,7 +138,7 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
      * (a temporary add spawned mid-fight). Only an npc actually worth enemy forces is recorded.
      */
     #[Test]
-    public function saveCombatLogRouteEnemyFailures_givenUnresolvedNpcsWithoutEnemyForces_recordsOnlyTheNpcWorthEnemyForces(): void
+    public function saveCombatLogRouteEnemyRecordings_givenUnresolvedNpcsWithoutEnemyForces_recordsOnlyTheNpcWorthEnemyForces(): void
     {
         $resolvedEnemy = Enemy::query()->whereNotNull('floor_id')->with('floor')->first();
         $this->assertNotNull($resolvedEnemy, 'Expected at least one seeded Enemy with a floor.');
@@ -192,7 +192,7 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
 
             /** @var CombatLogRouteDungeonRouteServiceInterface $service */
             $service = app(CombatLogRouteDungeonRouteServiceInterface::class);
-            $method  = new ReflectionClass($service)->getMethod('saveCombatLogRouteEnemyFailures');
+            $method  = new ReflectionClass($service)->getMethod('saveCombatLogRouteEnemyRecordings');
 
             // Act
             $method->invokeArgs($service, [$dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute]);

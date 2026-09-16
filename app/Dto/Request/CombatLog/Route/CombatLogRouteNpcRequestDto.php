@@ -24,6 +24,8 @@ class CombatLogRouteNpcRequestDto extends RequestDto implements Arrayable
 
     private ?Enemy $resolvedEnemy = null;
 
+    private ?float $resolvedEnemyDistance = null;
+
     public function __construct(
         public ?int                           $npcId = null,
         public ?string                        $spawnUid = null,
@@ -58,6 +60,21 @@ class CombatLogRouteNpcRequestDto extends RequestDto implements Arrayable
     public function setResolvedEnemy(?Enemy $enemy): self
     {
         $this->resolvedEnemy = $enemy;
+
+        return $this;
+    }
+
+    /**
+     * @return float|null The ingame yards between where this npc was engaged and the enemy it resolved to, null when it resolved to nothing
+     */
+    public function getResolvedEnemyDistance(): ?float
+    {
+        return $this->resolvedEnemyDistance;
+    }
+
+    public function setResolvedEnemyDistance(?float $resolvedEnemyDistance): self
+    {
+        $this->resolvedEnemyDistance = $resolvedEnemyDistance;
 
         return $this;
     }

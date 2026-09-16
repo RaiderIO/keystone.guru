@@ -216,10 +216,11 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 }
 
                 $activePullEnemy = $this->createActivePullEnemy($event['npc']);
-                $resolvedEnemy   = $this->findUnkilledEnemyForNpcAtIngameLocation(
+                $closestEnemy    = $this->findUnkilledEnemyForNpcAtIngameLocation(
                     $activePullEnemy,
                     $this->activePullCollection->getInCombatGroups(),
                 );
+                $resolvedEnemy = $closestEnemy->getEnemy();
 
                 if ($resolvedEnemy === null) {
                     $this->log->buildKillZonesUnableToFindEnemyForNpc($uniqueUid);
@@ -228,7 +229,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 }
 
                 // Ensure we know about the enemy being resolved fully
-                $event['npc']->setResolvedEnemy($resolvedEnemy);
+                $event['npc']->setResolvedEnemy($resolvedEnemy)
+                    ->setResolvedEnemyDistance($closestEnemy->getDistanceBetweenEnemies());
                 $activePullEnemy->setResolvedEnemy($resolvedEnemy);
 
                 // A bit of a hack slash exception for Darkflame Cleft. In the second part of the dungeon you cycle back
