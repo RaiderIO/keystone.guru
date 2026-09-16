@@ -9,6 +9,8 @@ use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcDungeon;
+use App\Models\Npc\NpcHealth;
 use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
@@ -25,6 +27,8 @@ final class CreateMissingNpcDataExtractorTest extends PublicTestCase
     private const string COMBAT_LOG_PATH = '/tmp/create-missing-npc-test.log';
 
     private const int PRE_SEEDED_NPC_ID = 76149;
+
+    private const int UNKNOWN_NPC_ID = 99999901;
 
     /**
      * %s is filled in with the advanced-data info GUID under test. The rest of the event mirrors a
@@ -113,6 +117,35 @@ final class CreateMissingNpcDataExtractorTest extends PublicTestCase
             'Pet'      => ['Pet-0-4237-1209-2796-76149-0000293D52'],
             'Vehicle'  => ['Vehicle-0-4237-1209-2796-76149-0000293D52'],
         ];
+    }
+
+    #[Test]
+    public function extractData_givenAnUnknownCreature_createsTheNpcWithoutAHealthRow(): void
+    {
+        // Arrange
+        $this->assertFalse(Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->exists());
+
+        $extractor   = new CreateMissingNpcDataExtractor();
+        $unknownGuid = sprintf('Creature-0-4237-1209-2796-%d-0000293D52', self::UNKNOWN_NPC_ID);
+        $rawEvent    = str_replace('Creature-0-4237-1209-2796-76149-0000293D52', $unknownGuid, sprintf(self::RAW_EVENT_TEMPLATE, $unknownGuid));
+
+        try {
+            // Act
+            $extractor->beforeExtract($this->result, self::COMBAT_LOG_PATH);
+            $extractor->extractData($this->result, $this->currentDungeon, $this->parsedEvent($rawEvent));
+            $extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
+
+            // Assert
+            $this->assertSame('Dread Raven', Npc::query()->findOrFail(self::UNKNOWN_NPC_ID)->name);
+            $this->assertTrue(NpcDungeon::query()
+                ->where('npc_id', self::UNKNOWN_NPC_ID)
+                ->where('dungeon_id', $this->currentDungeon->dungeon->id)
+                ->exists());
+            $this->assertFalse(NpcHealth::query()->where('npc_id', self::UNKNOWN_NPC_ID)->exists());
+        } finally {
+            Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->first()?->delete();
+            NpcHealth::query()->where('npc_id', self::UNKNOWN_NPC_ID)->delete();
+        }
     }
 
     private function assertAdvancedEvent(BaseEvent $parsedEvent): AdvancedDataInterface

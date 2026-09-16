@@ -9,11 +9,11 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $npc_id
- * @property int $game_version_id
- * @property int $health
- * @property int $percentage
+ * @property int      $id
+ * @property int      $npc_id
+ * @property int      $game_version_id
+ * @property int      $health
+ * @property int|null $percentage
  *
  * @property Npc         $npc
  * @property GameVersion $gameVersion

@@ -56,8 +56,6 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importNpcsDataFromMDTIgnoreNpc(int $npcId): void;
 
-    public function importNpcsDataFromMDTSkipHealthOverwrite(int $npcId, int $existingHealth, int $mdtHealth): void;
-
     public function importNpcsDataFromMDTNpcsUpdate(
         int $npcsUpdated,
         int $npcsInserted,
