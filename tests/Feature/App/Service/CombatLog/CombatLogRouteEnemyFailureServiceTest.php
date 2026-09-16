@@ -551,7 +551,6 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
     {
         if ($this->createdNpcEnemyForcesIds !== []) {
             NpcEnemyForces::query()->whereKey($this->createdNpcEnemyForcesIds)->delete();
-            new NpcEnemyForces()->flushCache();
             $this->createdNpcEnemyForcesIds = [];
         }
 

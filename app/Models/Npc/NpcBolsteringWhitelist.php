@@ -2,9 +2,9 @@
 
 namespace App\Models\Npc;
 
-use App\Models\CacheModel;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class NpcBolsteringWhitelist extends CacheModel
+class NpcBolsteringWhitelist extends Model
 {
     use SeederModel;
 

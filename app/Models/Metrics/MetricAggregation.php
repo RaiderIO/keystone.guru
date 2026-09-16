@@ -2,9 +2,9 @@
 
 namespace App\Models\Metrics;
 
-use App\Models\CacheModel;
 use App\Models\Traits\HasGenericModelRelation;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int          $model_id
@@ -21,7 +21,7 @@ use Eloquent;
  *
  * @mixin Eloquent
  */
-class MetricAggregation extends CacheModel
+class MetricAggregation extends Model
 {
     use HasGenericModelRelation;
 

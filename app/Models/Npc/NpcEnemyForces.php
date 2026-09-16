@@ -2,12 +2,12 @@
 
 namespace App\Models\Npc;
 
-use App\Models\CacheModel;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\SeederModel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @since 21/05/2023
  */
-class NpcEnemyForces extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
+class NpcEnemyForces extends Model implements MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use SeederModel;

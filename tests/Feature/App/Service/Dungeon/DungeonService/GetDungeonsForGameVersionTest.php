@@ -138,8 +138,8 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
             }
         });
 
-        // Act - CI runs with the model cache on, which would answer a dungeons query without reaching the database
-        $dungeons = app('model-cache')->runDisabled(static fn() => $service->getDungeonsForGameVersion($gameVersion));
+        // Act
+        $dungeons = $service->getDungeonsForGameVersion($gameVersion);
 
         // Assert
         $this->assertSame(0, $dungeonQueries);

@@ -96,9 +96,6 @@ the main checkout's.
     `constrained()`.
   - **Migrations must be backward-compatible with the currently-running code** (deploys are not
     atomic). Additive is safe; drops/renames/narrowing ship a release later.
-  - **Missing model-cache invalidation on a raw write to a `CacheModel` is not a finding.** The
-    tables are read-only in production, caching is off in development, and each release rotates the
-    cache prefix.
   - **`lat`/`lng` on map objects are display-only** coordinates on a fixed image — never valid for
     distances, sizes or comparisons. Conversion goes through `CoordinatesServiceInterface`.
   - Only `lang/en_US` is edited by hand; every other locale is generated externally.

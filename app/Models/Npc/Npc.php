@@ -3,7 +3,6 @@
 namespace App\Models\Npc;
 
 use App\Models\Affix;
-use App\Models\CacheModel;
 use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\Enemy;
@@ -14,6 +13,7 @@ use App\Models\Spell\Spell;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -67,7 +67,7 @@ use Override;
  *
  * @mixin Eloquent
  */
-class Npc extends CacheModel implements MappingModelInterface
+class Npc extends Model implements MappingModelInterface
 {
     use SeederModel;
 

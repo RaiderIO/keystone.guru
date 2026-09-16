@@ -209,9 +209,6 @@ final class NpcGameVersionTest extends PublicTestCase
             ]);
         }
 
-        new Npc()->flushCache();
-        new NpcDungeon()->flushCache();
-
         // The npc_dungeons rows must be visible to the relation, and getCandidateGameVersionIds()
         // memoizes per instance
         return Npc::query()->findOrFail(self::TEST_NPC_ID);
@@ -221,8 +218,5 @@ final class NpcGameVersionTest extends PublicTestCase
     {
         NpcDungeon::query()->where('npc_id', self::TEST_NPC_ID)->delete();
         $npc?->delete();
-
-        new Npc()->flushCache();
-        new NpcDungeon()->flushCache();
     }
 }

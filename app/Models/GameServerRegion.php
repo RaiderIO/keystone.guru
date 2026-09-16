@@ -6,6 +6,7 @@ use App\Models\Traits\SeederModel;
 use App\Service\Cache\CacheServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\Auth;
  *
  * @mixin Eloquent
  */
-class GameServerRegion extends CacheModel
+class GameServerRegion extends Model
 {
     use SeederModel;
 

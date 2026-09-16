@@ -2,9 +2,9 @@
 
 namespace App\Models\Npc;
 
-use App\Models\CacheModel;
 use App\Models\Spell\Spell;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class NpcSpell extends CacheModel
+class NpcSpell extends Model
 {
     public $timestamps = false;
 

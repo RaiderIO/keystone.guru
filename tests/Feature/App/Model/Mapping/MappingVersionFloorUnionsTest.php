@@ -29,13 +29,13 @@ final class MappingVersionFloorUnionsTest extends PublicTestCase
             }
         });
 
-        // Act - CI runs with the model cache on, which would answer these queries without reaching the database
-        $floorUnionIdsForFloor = app('model-cache')->runDisabled(static fn() => $floors->mapWithKeys(
+        // Act
+        $floorUnionIdsForFloor = $floors->mapWithKeys(
             static fn(Floor $floor) => [$floor->id => $mappingVersion->getFloorUnionsForFloor($floor)->pluck('id')->sort()->values()->all()],
-        )->all());
-        $floorUnionIdsOnFloor = app('model-cache')->runDisabled(static fn() => $floors->mapWithKeys(
+        )->all();
+        $floorUnionIdsOnFloor = $floors->mapWithKeys(
             static fn(Floor $floor) => [$floor->id => $mappingVersion->getFloorUnionsOnFloor($floor->id)->pluck('id')->sort()->values()->all()],
-        )->all());
+        )->all();
 
         // Assert
         $this->assertSame(1, $floorUnionQueries);

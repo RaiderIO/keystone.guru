@@ -6,7 +6,6 @@ use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
-use App\Models\Npc\NpcHealth;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
@@ -62,9 +61,6 @@ final class MDTMappingImportCuratedNpcDataTest extends PublicTestCase
         // Assert
         $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
 
-        // Model caching is on in CI: the eager-loaded npcHealths cache under the Npc model, so both need flushing
-        new Npc()->flushCache();
-        new NpcHealth()->flushCache();
         $this->assertSame(
             self::INFERNAL_CURATED_HEALTH,
             Npc::query()->with('npcHealths')->findOrFail(self::INFERNAL_NPC_ID)->getHealthByGameVersion($retailGameVersion)?->health,

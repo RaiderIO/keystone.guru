@@ -12,8 +12,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $key
  *
  * @mixin Eloquent
- *
- * @todo Using CacheModel causes cache problems? People did not get their patreon rewards applied properly because of it?
  */
 class PatreonBenefit extends Model
 {

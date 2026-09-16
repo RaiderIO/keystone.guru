@@ -13,6 +13,7 @@ use App\Models\Traits\HasVertices;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -33,7 +34,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin Eloquent
  */
-class EnemyPack extends CacheModel implements HasVerticesInterface, ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
+class EnemyPack extends Model implements HasVerticesInterface, ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasVertices;

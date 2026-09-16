@@ -83,7 +83,6 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
             $this->assertSame(0, $secondResult->updatedCount);
         } finally {
             $spell?->delete();
-            new Spell()->flushCache();
             $this->clearImportState();
             $this->removeDb2Tables();
         }
@@ -112,7 +111,6 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
             $this->assertSame(1, $secondResult->updatedCount);
         } finally {
             $spell?->delete();
-            new Spell()->flushCache();
             $this->clearImportState();
             $this->removeDb2Tables();
         }

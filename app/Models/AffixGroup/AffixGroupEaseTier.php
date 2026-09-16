@@ -2,9 +2,9 @@
 
 namespace App\Models\AffixGroup;
 
-use App\Models\CacheModel;
 use App\Models\Dungeon;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class AffixGroupEaseTier extends CacheModel
+class AffixGroupEaseTier extends Model
 {
     public $fillable = [
         'affix_group_ease_tier_pull_id',

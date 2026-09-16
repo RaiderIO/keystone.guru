@@ -108,9 +108,6 @@ final class MetricServiceTest extends PublicTestCase
         );
     }
 
-    /**
-     * Read through the query builder so the model cache cannot serve a stale aggregation.
-     */
     private function getAggregation(string $tag): ?object
     {
         return DB::table('metric_aggregations')

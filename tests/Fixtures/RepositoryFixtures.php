@@ -9,7 +9,6 @@ use App\Repositories\Interfaces\AffixGroup\AffixGroupEaseTierRepositoryInterface
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\AffixRepositoryInterface;
 use App\Repositories\Interfaces\BrushlineRepositoryInterface;
-use App\Repositories\Interfaces\CacheModelRepositoryInterface;
 use App\Repositories\Interfaces\CharacterClassRepositoryInterface;
 use App\Repositories\Interfaces\CharacterClassSpecializationRepositoryInterface;
 use App\Repositories\Interfaces\CharacterRaceClassCouplingRepositoryInterface;
@@ -891,22 +890,6 @@ class RepositoryFixtures
         array          $methodsToMock = [],
     ): MockObject|BrushlineRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilderPublic(BrushlineRepositoryInterface::class);
-
-        if (!empty($methodsToMock)) {
-            $mockBuilder->onlyMethods($methodsToMock);
-        }
-
-        return $mockBuilder->getMock();
-    }
-
-    /**
-     * @param array<int, string> $methodsToMock
-     */
-    public static function getCacheModelRepositoryMock(
-        PublicTestCase $testCase,
-        array          $methodsToMock = [],
-    ): MockObject|CacheModelRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilderPublic(CacheModelRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);

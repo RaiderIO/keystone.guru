@@ -169,8 +169,6 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
                 ->whereNotIn('effect_index', array_keys($spellEffects))
                 ->delete();
         }
-
-        new SpellEffect()->flushCache();
     }
 
     /**

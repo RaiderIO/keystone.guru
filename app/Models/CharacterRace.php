@@ -8,6 +8,7 @@ use App\Models\Traits\HasCombatLogCriterion;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin Eloquent
  */
-class CharacterRace extends CacheModel implements CombatLogCriterionModelInterface
+class CharacterRace extends Model implements CombatLogCriterionModelInterface
 {
     use HasCombatLogCriterion;
     use SeederModel;

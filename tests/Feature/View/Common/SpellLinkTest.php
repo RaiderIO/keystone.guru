@@ -30,7 +30,6 @@ final class SpellLinkTest extends PublicTestCase
             $this->assertStringNotContainsString('data-wowhead', $result);
         } finally {
             $spell?->delete();
-            new Spell()->flushCache();
         }
     }
 
@@ -51,7 +50,6 @@ final class SpellLinkTest extends PublicTestCase
             $this->assertStringNotContainsString('data-spell-tooltip', $result);
         } finally {
             $spell?->delete();
-            new Spell()->flushCache();
         }
     }
 
@@ -72,7 +70,6 @@ final class SpellLinkTest extends PublicTestCase
             $this->assertStringContainsString('&lt;script&gt;', $result);
         } finally {
             $spell?->delete();
-            new Spell()->flushCache();
         }
     }
 

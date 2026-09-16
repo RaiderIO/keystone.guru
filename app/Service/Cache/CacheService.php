@@ -16,6 +16,8 @@ use RedisException;
 
 class CacheService implements CacheServiceInterface
 {
+    private const int PRESENCE_KEY_IDLE_SECONDS = 86400;
+
     private bool $cacheEnabled = true;
 
     /** @var bool Bypassing the cache means that the closure is always called and the result is never cached */
@@ -109,52 +111,47 @@ class CacheService implements CacheServiceInterface
      */
     public function remember(string $key, mixed $value, mixed $ttl = null): mixed
     {
-        // So if we're caching something, do not populate the model cache for the queries inside $value()
-        // Otherwise we're caching things twice, and that's not what we want
-        // The results will likely explode the model cache (and redis usage as a result) so don't use it
-        return app('model-cache')->runDisabled(function () use ($key, $value, $ttl) {
-            $result = null;
+        $result = null;
 
-            //        $lock = Cache::lock(sprintf('%s:lock', $key), 10);
-            try {
-                // Wait up to 20 seconds to acquire the lock...
-                //            $lock->block(self::LOCK_BLOCK_TIMEOUT);
+        //        $lock = Cache::lock(sprintf('%s:lock', $key), 10);
+        try {
+            // Wait up to 20 seconds to acquire the lock...
+            //            $lock->block(self::LOCK_BLOCK_TIMEOUT);
 
-                // If we should ignore the cache, or if it's not found
-                if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
-                    // Get the result by calling the closure
-                    if ($value instanceof Closure) {
-                        $value = $value();
+            // If we should ignore the cache, or if it's not found
+            if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
+                // Get the result by calling the closure
+                if ($value instanceof Closure) {
+                    $value = $value();
+                }
+
+                // Only write it to cache when we're not local
+                if (!$this->isBypassCache()) {
+                    if (is_string($ttl)) {
+                        $ttl = DateInterval::createFromDateString($ttl);
                     }
 
-                    // Only write it to cache when we're not local
-                    if (!$this->isBypassCache()) {
-                        if (is_string($ttl)) {
-                            $ttl = DateInterval::createFromDateString($ttl);
-                        }
-
-                        // If not overridden, get the TTL from config, if it's set anyway
-                        try {
-                            if ($this->set($key, $value, $ttl ?? $this->getTtl($key))) {
-                                $result = $value;
-                            }
-                        } catch (InvalidArgumentException|RedisException $e) {
-                            $this->log->rememberFailedToSetCache($key, $e);
-
+                    // If not overridden, get the TTL from config, if it's set anyway
+                    try {
+                        if ($this->set($key, $value, $ttl ?? $this->getTtl($key))) {
                             $result = $value;
                         }
-                    } else {
+                    } catch (InvalidArgumentException|RedisException $e) {
+                        $this->log->rememberFailedToSetCache($key, $e);
+
                         $result = $value;
                     }
+                } else {
+                    $result = $value;
                 }
-            } catch (LockTimeoutException $e) {
-                $this->log->rememberFailedToAcquireLock($key, $e);
-            } finally {
-                //            $lock->release();
             }
+        } catch (LockTimeoutException $e) {
+            $this->log->rememberFailedToAcquireLock($key, $e);
+        } finally {
+            //            $lock->release();
+        }
 
-            return $result;
-        });
+        return $result;
     }
 
     /**
@@ -163,39 +160,36 @@ class CacheService implements CacheServiceInterface
      */
     public function rememberInHash(string $hashKey, string $field, mixed $value, mixed $ttl = null): mixed
     {
-        // Just like remember(), do not populate the model cache for the queries inside $value()
-        return app('model-cache')->runDisabled(function () use ($hashKey, $field, $value, $ttl) {
-            $prefixedKey = config('database.redis.options.prefix') . $hashKey;
-            $redis       = Redis::connection('default');
+        $prefixedKey = config('database.redis.options.prefix') . $hashKey;
+        $redis       = Redis::connection('default');
 
-            // Return the cached field when it exists and the cache is enabled. A missing field is false (phpredis)
-            // or null (predis); a genuinely stored null is distinguishable as the serialized string 'N;'.
-            if ($this->cacheEnabled) {
-                $cached = $this->redisService->rawCommand($redis, 'HGET', $prefixedKey, $field);
-                if ($cached !== false && $cached !== null) {
-                    return unserialize((string)$cached);
-                }
+        // Return the cached field when it exists and the cache is enabled. A missing field is false (phpredis)
+        // or null (predis); a genuinely stored null is distinguishable as the serialized string 'N;'.
+        if ($this->cacheEnabled) {
+            $cached = $this->redisService->rawCommand($redis, 'HGET', $prefixedKey, $field);
+            if ($cached !== false && $cached !== null) {
+                return unserialize((string)$cached);
             }
+        }
 
-            // Cache miss - resolve the value by calling the closure
-            if ($value instanceof Closure) {
-                $value = $value();
+        // Cache miss - resolve the value by calling the closure
+        if ($value instanceof Closure) {
+            $value = $value();
+        }
+
+        // Only write it to cache when we're not bypassing it
+        if (!$this->isBypassCache()) {
+            $this->redisService->rawCommand($redis, 'HSET', $prefixedKey, $field, serialize($value));
+
+            // Redis can only expire a hash as a whole, so refresh the TTL of the entire hash on every write.
+            // A frequently viewed route thus keeps all of its cached variants warm together.
+            $ttlSeconds = $this->ttlToSeconds($ttl);
+            if ($ttlSeconds !== null) {
+                $this->redisService->rawCommand($redis, 'EXPIRE', $prefixedKey, (string)$ttlSeconds);
             }
+        }
 
-            // Only write it to cache when we're not bypassing it
-            if (!$this->isBypassCache()) {
-                $this->redisService->rawCommand($redis, 'HSET', $prefixedKey, $field, serialize($value));
-
-                // Redis can only expire a hash as a whole, so refresh the TTL of the entire hash on every write.
-                // A frequently viewed route thus keeps all of its cached variants warm together.
-                $ttlSeconds = $this->ttlToSeconds($ttl);
-                if ($ttlSeconds !== null) {
-                    $this->redisService->rawCommand($redis, 'EXPIRE', $prefixedKey, (string)$ttlSeconds);
-                }
-            }
-
-            return $value;
-        });
+        return $value;
     }
 
     /**
@@ -271,34 +265,23 @@ class CacheService implements CacheServiceInterface
         ]);
     }
 
-    public function clearIdleKeys(?int $seconds = null): int
+    public function clearIdleKeys(): int
     {
-        // Only Laravel Model Cache keys may be cleaned up by this task. These are sha1 hashes (lowercase hex),
-        // optionally chained with a colon, ex.
-        // keystoneguru-live-cache:d8123999fdd7267f49290a1f2bb13d3b154b452a
-        // keystoneguru-live-cache:d8123999fdd7267f49290a1f2bb13d3b154b452a:f723072f44f1e4727b7ae26316f3d61dd3fe3d33
-        // The first segment is restricted to [a-f0-9] (hex) on purpose: Laravel session ids are 40-char
-        // alphanumeric strings ([A-Za-z0-9]) stored with the same prefix, and a broader class would match
-        // and delete active sessions, logging idle users out. See SESSION_CONNECTION for the second safeguard.
         $prefix = config('database.redis.options.prefix') . config('cache.prefix');
 
         // Presence keys are only ever written on the 'default' broadcasting connection (see
-        // config/broadcasting.php), so the sweep for them needs neither the 'model_cache' nor the 'cache'
-        // connection. A SCAN MATCH also lets Redis itself discard everything but presence keys, instead of
-        // returning every key on the connection for PHP to regex against.
-        return $this->deleteKeysByPattern([
-            sprintf('/%s[a-f0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
-        ], $seconds) +
-            $this->deleteKeysByPattern(
-                [
-                    // publicKeys are 7 characters long
-                    sprintf('/%spresence-%s-(?:route-edit|live-session)\.[a-zA-Z0-9]{7}.*/', $prefix, config('app.type')),
-                    // Special - these keys should be cleared after 24 hours, regardless of what $seconds say
-                ],
-                86400,
-                connections: ['default'],
-                scanMatch: sprintf('%spresence-%s-*', $prefix, config('app.type')),
-            );
+        // config/broadcasting.php), so the sweep for them does not need the 'cache' connection. A SCAN MATCH
+        // also lets Redis itself discard everything but presence keys, instead of returning every key on the
+        // connection for PHP to regex against.
+        return $this->deleteKeysByPattern(
+            [
+                // publicKeys are 7 characters long
+                sprintf('/%spresence-%s-(?:route-edit|live-session)\.[a-zA-Z0-9]{7}.*/', $prefix, config('app.type')),
+            ],
+            self::PRESENCE_KEY_IDLE_SECONDS,
+            connections: ['default'],
+            scanMatch: sprintf('%spresence-%s-*', $prefix, config('app.type')),
+        );
     }
 
     public function lock(string $key, callable $callable, int $waitFor = 10): mixed
@@ -325,8 +308,6 @@ class CacheService implements CacheServiceInterface
         $connections ??= [
             // App logic
             'default',
-            // Model cache
-            'model_cache',
             // Used by Laravel cache
             'cache',
         ];

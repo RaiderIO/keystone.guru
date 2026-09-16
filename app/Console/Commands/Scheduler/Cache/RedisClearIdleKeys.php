@@ -12,14 +12,14 @@ class RedisClearIdleKeys extends SchedulerCommand
      *
      * @var string
      */
-    protected $signature = 'redis:clearidlekeys {seconds=3600}';
+    protected $signature = 'redis:clearidlekeys';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Clears all idle keys in redis for Laravel Model Cache that have not been accessed in a specific time in seconds';
+    protected $description = 'Clears idle keys in redis';
 
     /**
      * Execute the console command.
@@ -27,9 +27,7 @@ class RedisClearIdleKeys extends SchedulerCommand
     public function handle(CacheServiceInterface $cacheService): int
     {
         return $this->trackTime(function () use ($cacheService) {
-            $seconds = (int)$this->argument('seconds');
-
-            $keysCleared = $cacheService->clearIdleKeys($seconds);
+            $keysCleared = $cacheService->clearIdleKeys();
             $this->info(sprintf('Cleared %d keys', $keysCleared));
 
             return 0;

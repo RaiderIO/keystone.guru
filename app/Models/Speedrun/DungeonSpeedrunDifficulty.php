@@ -2,10 +2,10 @@
 
 namespace App\Models\Speedrun;
 
-use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class DungeonSpeedrunDifficulty extends CacheModel
+class DungeonSpeedrunDifficulty extends Model
 {
     use SeederModel;
 

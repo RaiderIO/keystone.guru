@@ -246,7 +246,6 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
             if ($npcEnemyForcesId !== null) {
                 NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
-                new NpcEnemyForces()->flushCache();
             }
         }
     }
