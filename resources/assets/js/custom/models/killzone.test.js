@@ -86,7 +86,6 @@ global.L = {
 // 1d-bis. Collaborator classes the covered methods only reference through `instanceof`.
 global.Enemy = class Enemy {};
 global.MapContextLiveSession = class MapContextLiveSession {};
-global.SelectKillZoneEnemySelectionOverpull = class SelectKillZoneEnemySelectionOverpull {};
 global.EnemySelection = class EnemySelection {
     constructor(mapObject = null) {
         this._mapObject = mapObject;
@@ -229,7 +228,6 @@ describe('KillZone constructor', () => {
         expect(killZone.label).toBe('KillZone');
         expect(killZone.enemies).toEqual([]);
         expect(killZone.spellIds).toEqual([]);
-        expect(killZone.overpulledEnemies).toEqual([]);
     });
 
     // Regression test for the Explore-mode "killZoneMapObjectGroup.register is not a
@@ -466,19 +464,6 @@ describe('KillZone._enemySelected', () => {
         killZone._enemySelected(enemySelectedEvent(enemy));
 
         expect(signalsOf(killZone, 'killzone:enemyadded')).toHaveLength(1);
-        expect(signalsOf(killZone, 'killzone:enemieschanged')).toHaveLength(0);
-    });
-
-    // killzone:enemieschanged carries an enemy forces delta that already includes the overpulled
-    // enemies, and nothing listens to it for the overpull visuals - so that path keeps its own signals.
-    it('leaves the overpull path signalling per pack buddy', () => {
-        const pack = makeFakeEnemyPack(7, [1, 2, 3]);
-        const killZone = makeSavedKillZone(pack);
-
-        killZone._enemySelected(enemySelectedEvent(pack[0], new SelectKillZoneEnemySelectionOverpull()));
-
-        expect(killZone.overpulledEnemies).toEqual([2, 3, 1]);
-        expect(signalsOf(killZone, 'killzone:overpulledenemyadded')).toHaveLength(3);
         expect(signalsOf(killZone, 'killzone:enemieschanged')).toHaveLength(0);
     });
 });

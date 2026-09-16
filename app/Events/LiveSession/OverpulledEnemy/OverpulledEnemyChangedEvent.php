@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Events\OverpulledEnemy;
+namespace App\Events\LiveSession\OverpulledEnemy;
 
 use App\Events\ContextEvent;
-use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
+use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Override;
@@ -15,7 +15,7 @@ class OverpulledEnemyChangedEvent extends ContextEvent
 
     protected int $kill_zone_id;
 
-    public function __construct(Model $context, User $user, OverpulledEnemy $overpulledEnemy, Enemy $enemy)
+    public function __construct(Model $context, User $user, LiveSessionOverpulledEnemy $overpulledEnemy, Enemy $enemy)
     {
         $this->enemy_id     = $enemy->id;
         $this->kill_zone_id = $overpulledEnemy->kill_zone_id;

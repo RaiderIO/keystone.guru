@@ -8,11 +8,6 @@ class EnemyForcesManager extends Signalable {
         this.enemyForces = 0;
         this.enemyForcesOverride = null;
 
-        let mapContext = getState().getMapContext();
-        if (mapContext instanceof MapContextLiveSession && mapContext.getEnemyForcesOverride() !== mapContext.getEnemyForces()) {
-            this.enemyForcesOverride = mapContext.getEnemyForcesOverride();
-        }
-
         // On route load, this will also fill the enemy forces to the value they should be as the route is loaded
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         // May be null in admin setting where there's no kill zones
@@ -56,16 +51,21 @@ class EnemyForcesManager extends Signalable {
 
         let previousEnemyForces = this.enemyForces;
 
+        console.log(`[EnemyForces] _setEnemyForces`, {previousEnemyForces: previousEnemyForces, value: value, force: force, override: this.enemyForcesOverride});
+
         if (previousEnemyForces !== value || force) {
             this.enemyForces = value;
 
             // If there's an override, we don't fire this. We don't want to fire an event for incorrect values.
             // It's still valid to set the above in case the override is removed again later.
             if (this.enemyForcesOverride === null) {
+                console.log(`[EnemyForces] _setEnemyForces signalling enemyforces:changed`, {previousEnemyForces: previousEnemyForces, currentEnemyForces: this.enemyForces});
                 this.signal('enemyforces:changed', {
                     previousEnemyForces: previousEnemyForces,
                     currentEnemyForces: this.enemyForces
                 });
+            } else {
+                console.log(`[EnemyForces] _setEnemyForces NOT signalling (override active)`, {override: this.enemyForcesOverride, base: this.enemyForces});
             }
         }
     }
@@ -78,6 +78,8 @@ class EnemyForcesManager extends Signalable {
         console.assert(this instanceof EnemyForcesManager, 'this is not EnemyForcesManager', this);
 
         let previousEnemyForces = this.enemyForcesOverride ?? this.enemyForces;
+
+        console.log(`[EnemyForces] setEnemyForcesOverride`, {previousOverride: this.enemyForcesOverride, newOverride: value, base: this.enemyForces});
 
         this.enemyForcesOverride = value;
 

@@ -4,7 +4,7 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\PublishedState;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;

@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\OverpulledEnemy\OverpulledEnemyChangedEvent;
-use App\Events\OverpulledEnemy\OverpulledEnemyDeletedEvent;
+use App\Events\LiveSession\OverpulledEnemy\OverpulledEnemyChangedEvent;
+use App\Events\LiveSession\OverpulledEnemy\OverpulledEnemyDeletedEvent;
+use App\Events\LiveSession\RouteCorrectionEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OverpulledEnemy\OverpulledEnemyFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\User;
+use App\Service\LiveSession\DungeonRouteCorrection;
+use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -31,10 +34,11 @@ class AjaxOverpulledEnemyController extends Controller
      * @throws AuthorizationException
      */
     public function store(
-        OverpulledEnemyServiceInterface $overpulledEnemyService,
-        OverpulledEnemyFormRequest      $request,
-        DungeonRoute                    $dungeonRoute,
-        LiveSession                     $liveSession,
+        OverpulledEnemyServiceInterface        $overpulledEnemyService,
+        LiveSessionCombatStateServiceInterface $combatStateService,
+        OverpulledEnemyFormRequest             $request,
+        DungeonRoute                           $dungeonRoute,
+        LiveSession                            $liveSession,
     ) {
         Gate::authorize('view', $dungeonRoute);
         Gate::authorize('view', $liveSession);
@@ -44,13 +48,13 @@ class AjaxOverpulledEnemyController extends Controller
         /** @var Collection<int, Enemy> $enemies */
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
-        /** @var array<int, array{OverpulledEnemy, Enemy}> $savedEnemies */
+        /** @var array<int, array{LiveSessionOverpulledEnemy, Enemy}> $savedEnemies */
         $savedEnemies = DB::transaction(function () use ($enemies, $liveSession, $validated): array {
             $savedEnemies = [];
 
             foreach ($enemies as $enemy) {
-                /** @var OverpulledEnemy $overpulledEnemy */
-                $overpulledEnemy = OverpulledEnemy::where('live_session_id', $liveSession->id)
+                /** @var LiveSessionOverpulledEnemy $overpulledEnemy */
+                $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $liveSession->id)
                     ->where('npc_id', $enemy->npc_id)
                     ->where('mdt_id', $enemy->mdt_id)
                     ->firstOrNew([
@@ -84,7 +88,7 @@ class AjaxOverpulledEnemyController extends Controller
             }
         }
 
-        return $overpulledEnemyService->getRouteCorrection($liveSession)->toArray();
+        return $this->broadcastRouteCorrection($overpulledEnemyService, $combatStateService, $liveSession)->toArray();
     }
 
     /**
@@ -93,13 +97,14 @@ class AjaxOverpulledEnemyController extends Controller
      * @throws AuthorizationException
      */
     public function delete(
-        OverpulledEnemyServiceInterface $overpulledEnemyService,
-        OverpulledEnemyFormRequest      $request,
-        DungeonRoute                    $dungeonroute,
-        LiveSession                     $livesession,
+        OverpulledEnemyServiceInterface        $overpulledEnemyService,
+        LiveSessionCombatStateServiceInterface $combatStateService,
+        OverpulledEnemyFormRequest             $request,
+        DungeonRoute                           $dungeonRoute,
+        LiveSession                            $liveSession,
     ) {
-        Gate::authorize('view', $dungeonroute);
-        Gate::authorize('view', $livesession);
+        Gate::authorize('view', $dungeonRoute);
+        Gate::authorize('view', $liveSession);
 
         $result = response()->noContent();
 
@@ -113,12 +118,12 @@ class AjaxOverpulledEnemyController extends Controller
             // failure on the third enemy committed the first two, leaving the live session showing
             // half a pull while the client was told the request failed
             /** @var array<int, Enemy> $deletedEnemies */
-            $deletedEnemies = DB::transaction(function () use ($enemies, $livesession): array {
+            $deletedEnemies = DB::transaction(function () use ($enemies, $liveSession): array {
                 $deletedEnemies = [];
 
                 foreach ($enemies as $enemy) {
-                    /** @var OverpulledEnemy|null $overpulledEnemy */
-                    $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
+                    /** @var LiveSessionOverpulledEnemy|null $overpulledEnemy */
+                    $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $liveSession->id)
                         ->where('npc_id', $enemy->npc_id)
                         ->where('mdt_id', $enemy->mdt_id)
                         ->first();
@@ -138,23 +143,49 @@ class AjaxOverpulledEnemyController extends Controller
 
                 foreach ($deletedEnemies as $enemy) {
                     try {
-                        broadcast(new OverpulledEnemyDeletedEvent($livesession, $user, $enemy));
+                        broadcast(new OverpulledEnemyDeletedEvent($liveSession, $user, $enemy));
                     } catch (BroadcastException) {
                         // Ignore broadcast failures
                     }
                 }
             }
 
-            // The route correction is a read that only shapes the response - it used to be
-            // recomputed once per enemy inside the loop, which produced the same value every time.
-            // Optionally, don't calculate the return value
+            // Optionally, don't calculate the return value. Computed once after the loop, not per enemy -
+            // it already reflects every deletion above, so recomputing per iteration is redundant work
+            // and broadcasts the same not-yet-final state K times instead of once.
             if ($enemies->isNotEmpty() && $validated['no_result'] !== true) {
-                $result = $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
+                $result = $this->broadcastRouteCorrection($overpulledEnemyService, $combatStateService, $liveSession)->toArray();
             }
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;
+    }
+
+    private function broadcastRouteCorrection(
+        OverpulledEnemyServiceInterface        $overpulledEnemyService,
+        LiveSessionCombatStateServiceInterface $combatStateService,
+        LiveSession                            $liveSession,
+    ): DungeonRouteCorrection {
+        $routeCorrection = $overpulledEnemyService->getRouteCorrection($liveSession);
+
+        if (Auth::check()) {
+            /** @var User $user */
+            $user     = Auth::getUser();
+            $enemyIds = $routeCorrection->getObsoleteEnemies()
+                ->merge($combatStateService->getObsoleteEnemyIds($liveSession))
+                ->unique()
+                ->values()
+                ->toArray();
+
+            try {
+                broadcast(new RouteCorrectionEvent($liveSession, $user, $enemyIds));
+            } catch (BroadcastException) {
+                // Ignore broadcast failures
+            }
+        }
+
+        return $routeCorrection;
     }
 }
