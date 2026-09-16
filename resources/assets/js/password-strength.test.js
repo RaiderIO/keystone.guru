@@ -136,6 +136,22 @@ describe('$.fn.passwordStrength (#3597)', () => {
         expect(document.querySelector('.password-strength')).toBeNull();
     });
 
+    test('passwordStrength_givenInputInsideInputGroup_rendersTheMeterBelowTheGroup', () => {
+        // A password input sharing an .input-group with its reveal button: the meter belongs under
+        // the whole group, not squeezed in beside the button
+        document.body.innerHTML = '<div class="mb-3"><div class="input-group">' +
+            '<input type="password" id="register_password" /><button type="button">show</button>' +
+            '</div></div>';
+
+        $('#register_password').passwordStrength(OPTIONS);
+
+        const widget = document.querySelector('.password-strength');
+        expect(widget).not.toBeNull();
+        expect(widget.closest('.input-group')).toBeNull();
+        expect(widget.parentElement.classList.contains('mb-3')).toBe(true);
+        expect(widget.previousElementSibling.classList.contains('input-group')).toBe(true);
+    });
+
     test('passwordStrength_givenNoMatchingInput_doesNotThrowAndRendersNothing', () => {
         document.body.innerHTML = '';
 

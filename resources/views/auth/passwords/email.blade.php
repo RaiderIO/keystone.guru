@@ -2,7 +2,7 @@
 
 @section('header-title', __('view_auth.passwords.email.header'))
 @section('content')
-    <form method="POST" action="{{ route('password.email') }}">
+    <form id="forgot_password_form" method="POST" action="{{ route('password.email') }}" class="auth-form">
         {{ csrf_field() }}
 
         <div class="mb-3">

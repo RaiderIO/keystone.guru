@@ -34,7 +34,7 @@ $battleNetRegions = $allRegions->filter(
     <div class="mb-3">
         <button type="submit"
                 class="btn btn-oauth w-100 d-flex align-items-center justify-content-center gap-2">
-            <i class="fab fa-battle-net"></i>
+            <i class="fab fa-battle-net" aria-hidden="true"></i>
             {{ __('view_common.forms.oauth.continue_with_battlenet') }}
         </button>
     </div>
@@ -43,7 +43,7 @@ $battleNetRegions = $allRegions->filter(
 <div class="mb-3">
     <a href="{{ route('login.discord') }}"
        class="btn btn-oauth w-100 d-flex align-items-center justify-content-center gap-2">
-        <i class="fab fa-discord"></i>
+        <i class="fab fa-discord" aria-hidden="true"></i>
         {{ __('view_common.forms.oauth.continue_with_discord') }}
     </a>
 </div>
@@ -51,7 +51,7 @@ $battleNetRegions = $allRegions->filter(
 <div class="mb-3">
     <a href="{{ route('login.google') }}"
        class="btn btn-oauth w-100 d-flex align-items-center justify-content-center gap-2">
-        <i class="fab fa-google"></i>
+        <i class="fab fa-google" aria-hidden="true"></i>
         {{ __('view_common.forms.oauth.continue_with_google') }}
     </a>
 </div>
