@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\App\Service\CombatLog;
+namespace Tests\Feature\App\Service\CombatLog\Builders;
 
 use App\Dto\Request\CombatLog\Route\CombatLogRouteCoordRequestDto;
 use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcRequestDto;
@@ -12,29 +12,28 @@ use App\Models\Enemy;
 use App\Models\EnemyPatrol;
 use App\Models\Npc\NpcClassification;
 use App\Models\Polyline;
-use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
+use App\Service\CombatLog\Builders\CombatLogRouteEnemyRecordingsBuilder;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionClass;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * Exercises the enemy resolution half of CombatLogRouteDungeonRouteService::saveCombatLogRouteEnemyRecordings(): the
- * rows recorded for npcs that DID resolve to a mapped enemy, but only from far away. As with the enemy failure tests
- * next to it the method is called directly through reflection rather than through the full API/builder pipeline, so
- * the distance under test is the one the test hands in rather than one the matcher happened to produce.
+ * Exercises the enemy resolution half of CombatLogRouteEnemyRecordingsBuilder::buildAndSave(): the rows recorded for
+ * npcs that DID resolve to a mapped enemy, but only from far away. As with the enemy failure tests next to it the
+ * builder is called directly rather than through the full API/builder pipeline, so the distance under test is the one
+ * the test hands in rather than one the matcher happened to produce.
  */
 #[Group('CombatLog')]
-#[Group('CombatLogRouteDungeonRouteService')]
-final class CombatLogRouteDungeonRouteServiceEnemyResolutionsTest extends PublicTestCase
+#[Group('CombatLogRouteEnemyRecordingsBuilder')]
+final class CombatLogRouteEnemyRecordingsBuilderResolutionsTest extends PublicTestCase
 {
     /** Comfortably above the configured recording threshold, whatever it is tuned to. */
     private const float FAR_DISTANCE = 100.0;
 
     #[Test]
-    public function saveCombatLogRouteEnemyRecordings_givenMatchFurtherAwayThanThreshold_recordsTheResolution(): void
+    public function buildAndSave_givenMatchFurtherAwayThanThreshold_recordsTheResolution(): void
     {
         // Arrange
         $enemy        = $this->getResolvableEnemy();
@@ -65,7 +64,7 @@ final class CombatLogRouteDungeonRouteServiceEnemyResolutionsTest extends Public
     }
 
     #[Test]
-    public function saveCombatLogRouteEnemyRecordings_givenMatchCloserThanThreshold_recordsNothing(): void
+    public function buildAndSave_givenMatchCloserThanThreshold_recordsNothing(): void
     {
         // Arrange
         $enemy        = $this->getResolvableEnemy();
@@ -90,7 +89,7 @@ final class CombatLogRouteDungeonRouteServiceEnemyResolutionsTest extends Public
      * match is unambiguous however far away it was logged. Recording it would be noise.
      */
     #[Test]
-    public function saveCombatLogRouteEnemyRecordings_givenBossMatchedFromFarAway_recordsNothing(): void
+    public function buildAndSave_givenBossMatchedFromFarAway_recordsNothing(): void
     {
         // Arrange
         $enemy = Enemy::query()
@@ -122,7 +121,7 @@ final class CombatLogRouteDungeonRouteServiceEnemyResolutionsTest extends Public
      * record nothing, even though the distance the matcher measured was far past the threshold.
      */
     #[Test]
-    public function saveCombatLogRouteEnemyRecordings_givenPatrollingEnemyEngagedOnAPatrolVertex_recordsNothing(): void
+    public function buildAndSave_givenPatrollingEnemyEngagedOnAPatrolVertex_recordsNothing(): void
     {
         // Arrange
         $enemy        = $this->getResolvableEnemy();
@@ -167,7 +166,7 @@ final class CombatLogRouteDungeonRouteServiceEnemyResolutionsTest extends Public
      * kill priority explains stays out of the recording.
      */
     #[Test]
-    public function saveCombatLogRouteEnemyRecordings_givenHighKillPriorityEnemy_recordsTheWeightedDistance(): void
+    public function buildAndSave_givenHighKillPriorityEnemy_recordsTheWeightedDistance(): void
     {
         // Arrange
         $enemy                = $this->getResolvableEnemy();
@@ -202,7 +201,7 @@ final class CombatLogRouteDungeonRouteServiceEnemyResolutionsTest extends Public
      * A regeneration replaces what an earlier generation recorded for the same route rather than adding to it.
      */
     #[Test]
-    public function replaceCombatLogRouteEnemyRecordings_givenRouteWithExistingResolutions_replacesThemInsteadOfAddingTo(): void
+    public function replace_givenRouteWithExistingResolutions_replacesThemInsteadOfAddingTo(): void
     {
         // Arrange
         $enemy        = $this->getResolvableEnemy();
@@ -213,20 +212,18 @@ final class CombatLogRouteDungeonRouteServiceEnemyResolutionsTest extends Public
             $this->saveEnemyRecordings($dungeonRoute, $combatLogRoute);
             $this->assertSame(1, CombatLogRouteEnemyResolution::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
 
-            /** @var CombatLogRouteDungeonRouteServiceInterface $service */
-            $service = app(CombatLogRouteDungeonRouteServiceInterface::class);
-            $reflect = new ReflectionClass($service);
+            $builder = app(CombatLogRouteEnemyRecordingsBuilder::class);
 
             $secondDistance  = self::FAR_DISTANCE + 25;
-            $enemyRecordings = $reflect->getMethod('getCombatLogRouteEnemyRecordings')->invokeArgs($service, [
+            $enemyRecordings = $builder->build(
                 $dungeonRoute->mappingVersion,
                 $this->createCombatLogRoute($enemy, $secondDistance),
                 $dungeonRoute,
                 $dungeonRoute->id,
-            ]);
+            );
 
             // Act
-            $reflect->getMethod('replaceCombatLogRouteEnemyRecordings')->invokeArgs($service, [$dungeonRoute, $enemyRecordings]);
+            $builder->replace($dungeonRoute, $enemyRecordings);
 
             // Assert
             $resolutions = CombatLogRouteEnemyResolution::query()->where('dungeon_route_id', $dungeonRoute->id)->get();
@@ -242,7 +239,7 @@ final class CombatLogRouteDungeonRouteServiceEnemyResolutionsTest extends Public
      * is diagnostic bookkeeping - it must be skipped rather than fail the whole combat log route submission.
      */
     #[Test]
-    public function saveCombatLogRouteEnemyRecordings_givenFloorWithoutIngameCoordinates_skipsWithoutThrowing(): void
+    public function buildAndSave_givenFloorWithoutIngameCoordinates_skipsWithoutThrowing(): void
     {
         // Arrange
         $enemy          = $this->getResolvableEnemy();
@@ -364,12 +361,8 @@ final class CombatLogRouteDungeonRouteServiceEnemyResolutionsTest extends Public
 
     private function saveEnemyRecordings(DungeonRoute $dungeonRoute, CombatLogRouteRequestDto $combatLogRoute): void
     {
-        /** @var CombatLogRouteDungeonRouteServiceInterface $service */
-        $service = app(CombatLogRouteDungeonRouteServiceInterface::class);
-
-        new ReflectionClass($service)
-            ->getMethod('saveCombatLogRouteEnemyRecordings')
-            ->invokeArgs($service, [$dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute]);
+        app(CombatLogRouteEnemyRecordingsBuilder::class)
+            ->buildAndSave($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
     }
 
     private function cleanUp(DungeonRoute $dungeonRoute): void

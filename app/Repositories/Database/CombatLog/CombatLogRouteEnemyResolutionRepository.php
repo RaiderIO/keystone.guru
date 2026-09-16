@@ -6,6 +6,7 @@ use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\CombatLog\CombatLogRouteEnemyResolutionRepositoryInterface;
 use Carbon\CarbonInterface;
+use Illuminate\Support\Collection;
 
 class CombatLogRouteEnemyResolutionRepository extends DatabaseRepository implements CombatLogRouteEnemyResolutionRepositoryInterface
 {
@@ -18,14 +19,14 @@ class CombatLogRouteEnemyResolutionRepository extends DatabaseRepository impleme
     {
         $totalDeleted = 0;
 
-        do {
-            $deleted = CombatLogRouteEnemyResolution::query()
-                ->where('created_at', '<', $cutoff)
-                ->limit($batchSize)
-                ->delete();
-
-            $totalDeleted += $deleted;
-        } while ($deleted === $batchSize);
+        CombatLogRouteEnemyResolution::query()
+            ->select(['id'])
+            ->where('created_at', '<', $cutoff)
+            ->chunkById($batchSize, function (Collection $resolutions) use (&$totalDeleted): void {
+                $totalDeleted += CombatLogRouteEnemyResolution::query()
+                    ->whereIn('id', $resolutions->pluck('id'))
+                    ->delete();
+            });
 
         return $totalDeleted;
     }

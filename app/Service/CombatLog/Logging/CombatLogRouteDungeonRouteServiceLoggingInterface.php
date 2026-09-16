@@ -24,10 +24,6 @@ interface CombatLogRouteDungeonRouteServiceLoggingInterface
 
     public function generateMapIconsUnableToCalculateMapLocation(string $uniqueId, int $floorId): void;
 
-    public function saveCombatLogRouteEnemyRecordingsUnableToCalculateMapLocation(int $dungeonRouteId, ?int $npcId, int $floorId): void;
-
-    public function saveCombatLogRouteEnemyFailuresSkippingNpcWithoutEnemyForces(int $dungeonRouteId, int $npcId): void;
-
     public function convertCombatLogRouteToDungeonRouteBuildFailedDeletingNewRoute(int $dungeonRouteId, string $exception): void;
 
     public function convertCombatLogRouteToDungeonRouteDiscardingAbandonedDraft(int $dungeonRouteId, int $draftDungeonRouteId): void;
@@ -35,6 +31,4 @@ interface CombatLogRouteDungeonRouteServiceLoggingInterface
     public function applyRegeneratedDungeonRouteDraftTakenOver(string $publicKey, int $dungeonRouteId, int $draftDungeonRouteId): void;
 
     public function applyRegeneratedDungeonRouteApplied(string $publicKey, int $dungeonRouteId, int $draftDungeonRouteId): void;
-
-    public function replaceCombatLogRouteEnemyRecordingsFailed(int $dungeonRouteId, string $exception): void;
 }

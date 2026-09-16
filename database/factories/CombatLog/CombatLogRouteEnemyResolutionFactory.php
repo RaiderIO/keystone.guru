@@ -3,7 +3,6 @@
 namespace Database\Factories\CombatLog;
 
 use App\Models\CombatLog\CombatLogRouteEnemyResolution;
-use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
@@ -18,24 +17,25 @@ class CombatLogRouteEnemyResolutionFactory extends Factory
 
     public function definition(): array
     {
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::inRandomOrder()->first();
+        // Any enemy of any dungeon's current mapping version - not every dungeon has enemies on its first floor,
+        // so the enemy is what the row is built around rather than a randomly picked dungeon
+        /** @var Enemy $enemy */
+        $enemy = Enemy::query()
+            ->whereNotNull('npc_id')
+            ->whereIn('mapping_version_id', MappingVersion::query()->selectRaw('MAX(id)')->groupBy('dungeon_id'))
+            ->whereIn('floor_id', Floor::query()->where('facade', 0)->select('id'))
+            ->inRandomOrder()
+            ->first();
 
         /** @var Floor $floor */
-        $floor = $dungeon->floors()->where('facade', 0)->first();
-
-        /** @var MappingVersion $mappingVersion */
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
-
-        /** @var Enemy $enemy */
-        $enemy = $mappingVersion->enemies()->where('floor_id', $floor->id)->first();
+        $floor = $enemy->floor;
 
         $distance = $this->faker->randomFloat(3, 40, 150);
 
         return [
-            'dungeon_id'         => $dungeon->id,
+            'dungeon_id'         => $floor->dungeon_id,
             'floor_id'           => $floor->id,
-            'mapping_version_id' => $mappingVersion->id,
+            'mapping_version_id' => $enemy->mapping_version_id,
             'npc_id'             => $enemy->npc_id,
             'enemy_id'           => $enemy->id,
             'lat'                => $this->faker->randomFloat(4, 0, 100),

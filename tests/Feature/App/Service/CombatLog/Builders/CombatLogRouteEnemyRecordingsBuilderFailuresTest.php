@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\App\Service\CombatLog;
+namespace Tests\Feature\App\Service\CombatLog\Builders;
 
 use App\Dto\Request\CombatLog\Route\CombatLogRouteCoordRequestDto;
 use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcRequestDto;
@@ -10,26 +10,24 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Npc\NpcEnemyForces;
-use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
+use App\Service\CombatLog\Builders\CombatLogRouteEnemyRecordingsBuilder;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionClass;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * Exercises CombatLogRouteDungeonRouteService::saveCombatLogRouteEnemyRecordings() directly via
- * reflection rather than through the full API/builder pipeline: within a single test, that pipeline
- * resolves floors through FloorRepositorySwoole/EnemyRepositorySwoole, which cache Floor/Enemy
- * instances for the lifetime of the test (Laravel's TestCase rebuilds the container per test via
- * refreshApplication(), but not between requests within one test), so mutating a floor's ingame
- * coordinates and re-submitting within the same test would not reliably be observed there. The
- * method under test only ever reads floors via plain Eloquent relations, so a direct call is both
- * faster and immune to that caching layer.
+ * Exercises CombatLogRouteEnemyRecordingsBuilder::buildAndSave() directly rather than through the full
+ * API/builder pipeline: within a single test, that pipeline resolves floors through
+ * FloorRepositorySwoole/EnemyRepositorySwoole, which cache Floor/Enemy instances for the lifetime of the
+ * test (Laravel's TestCase rebuilds the container per test via refreshApplication(), but not between
+ * requests within one test), so mutating a floor's ingame coordinates and re-submitting within the same
+ * test would not reliably be observed there. The method under test only ever reads floors via plain
+ * Eloquent relations, so a direct call is both faster and immune to that caching layer.
  */
 #[Group('CombatLog')]
-#[Group('CombatLogRouteDungeonRouteService')]
-final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTestCase
+#[Group('CombatLogRouteEnemyRecordingsBuilder')]
+final class CombatLogRouteEnemyRecordingsBuilderFailuresTest extends PublicTestCase
 {
     /**
      * Guards #3904: a floor with unset (zero-size) ingame coordinates must not fail the whole
@@ -41,7 +39,7 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
      * rather than the "not worth any enemy forces" skip.
      */
     #[Test]
-    public function saveCombatLogRouteEnemyRecordings_givenUnresolvableNpcOnFloorWithoutIngameCoordinates_skipsOnlyThatOne(): void
+    public function buildAndSave_givenUnresolvableNpcOnFloorWithoutIngameCoordinates_skipsOnlyThatOne(): void
     {
         $zeroedEnemy = Enemy::query()->whereNotNull('floor_id')->with('floor')->first();
         $this->assertNotNull($zeroedEnemy, 'Expected at least one seeded Enemy with a floor.');
@@ -105,12 +103,10 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
                 $unresolvedOnGoodFloor,
             ]));
 
-            /** @var CombatLogRouteDungeonRouteServiceInterface $service */
-            $service = app(CombatLogRouteDungeonRouteServiceInterface::class);
-            $method  = new ReflectionClass($service)->getMethod('saveCombatLogRouteEnemyRecordings');
+            $builder = app(CombatLogRouteEnemyRecordingsBuilder::class);
 
             // Act
-            $method->invokeArgs($service, [$dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute]);
+            $builder->buildAndSave($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
 
             // Assert - no exception, exactly one failure recorded (npc4, on the floor with real coordinates)
             $failures = CombatLogRouteEnemyFailure::where('dungeon_route_id', $dungeonRoute->id)->get();
@@ -138,7 +134,7 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
      * (a temporary add spawned mid-fight). Only an npc actually worth enemy forces is recorded.
      */
     #[Test]
-    public function saveCombatLogRouteEnemyRecordings_givenUnresolvedNpcsWithoutEnemyForces_recordsOnlyTheNpcWorthEnemyForces(): void
+    public function buildAndSave_givenUnresolvedNpcsWithoutEnemyForces_recordsOnlyTheNpcWorthEnemyForces(): void
     {
         $resolvedEnemy = Enemy::query()->whereNotNull('floor_id')->with('floor')->first();
         $this->assertNotNull($resolvedEnemy, 'Expected at least one seeded Enemy with a floor.');
@@ -190,12 +186,10 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
                 new CombatLogRouteNpcRequestDto(npcId: $worthForcesNpcId, coord: new CombatLogRouteCoordRequestDto(5.0, 5.0)),
             ]));
 
-            /** @var CombatLogRouteDungeonRouteServiceInterface $service */
-            $service = app(CombatLogRouteDungeonRouteServiceInterface::class);
-            $method  = new ReflectionClass($service)->getMethod('saveCombatLogRouteEnemyRecordings');
+            $builder = app(CombatLogRouteEnemyRecordingsBuilder::class);
 
             // Act
-            $method->invokeArgs($service, [$dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute]);
+            $builder->buildAndSave($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
 
             // Assert
             $failures = CombatLogRouteEnemyFailure::where('dungeon_route_id', $dungeonRoute->id)->get();

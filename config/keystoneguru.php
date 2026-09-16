@@ -209,8 +209,9 @@ return [
         'record_min_distance_yd' => 40,
         /** A heatmap cell needs this many recorded matches before it is drawn - one body pull is noise, the same spot repeatedly is a mapping problem */
         'heatmap_min_samples' => 3,
-        /** How long a recorded match is kept around for */
-        'retention_days' => 90,
+        /** How long a recorded match is kept around for - short enough that the data always describes the mapping as it is
+         *  now, including a hotfix that moved enemies around mid-season, and long enough to gather volume across routes */
+        'retention_days' => 14,
     ],
 
     /** The default max zoom level on the map */
