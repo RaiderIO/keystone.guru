@@ -105,4 +105,47 @@ class HtmlSanitizerTest extends TestCase
             ],
         ];
     }
+
+    #[Test]
+    #[Group('HtmlSanitizer')]
+    #[DataProvider('stripAllTags_dataProvider')]
+    public function stripAllTags_givenInput_returnsTextWithoutTags(?string $input, ?string $expected): void
+    {
+        // Arrange
+        $sanitizer = new HtmlSanitizer();
+
+        // Act
+        $result = $sanitizer->stripAllTags($input);
+
+        // Assert
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @return array<string, array{0: string|null, 1: string|null}>
+     */
+    public static function stripAllTags_dataProvider(): array
+    {
+        return [
+            'null'                                  => [null, null],
+            'empty'                                 => ['', ''],
+            'plain text'                            => ['Pull the pack left of the boss', 'Pull the pack left of the boss'],
+            'plain text with line breaks'           => ["Line 1\nLine 2", "Line 1\nLine 2"],
+            'unicode'                               => ['Überpull — 50% 💀', 'Überpull — 50% 💀'],
+            'bold'                                  => ['<b>x</b>', 'x'],
+            'image with an event handler'           => ['<img src=x onerror=alert(1)>', ''],
+            'script keeps its text inert'           => ['<script>alert(1)</script>', 'alert(1)'],
+            'allowed link'                          => ['<a href="https://raider.io">Raider.IO</a>', 'Raider.IO'],
+            'attribute value containing a bracket'  => ['<img alt=">" src=x>after', '" src=x>after'],
+            'comment'                               => ['before<!-- hidden -->after', 'beforeafter'],
+            'uppercase tag'                         => ['<SCRIPT>x</SCRIPT>', 'x'],
+            'unterminated tag'                      => ['text<img src=x onerror=alert(1)', 'text'],
+            'tag rebuilt by stripping another'      => ['<<b>script>alert(1)<</b>/script>', 'alert(1)'],
+            'less than with spaces'                 => ['a < b', 'a < b'],
+            'less than without spaces before digit' => ['I <3 this route', 'I <3 this route'],
+            'less than or equal'                    => ['x <= 5', 'x <= 5'],
+            'greater than'                          => ['a > b', 'a > b'],
+            'escaped markup stays escaped'          => ['&lt;b&gt;x&lt;/b&gt;', '&lt;b&gt;x&lt;/b&gt;'],
+        ];
+    }
 }

@@ -291,6 +291,8 @@ function getCenteroid(latLngs) {
 }
 
 /**
+ * Strips every tag not in allowedTags (keeping its text), every attribute except an <a>'s href, and
+ * every link that is not http(s) to one of allowedDomains.
  *
  * @param {string} input
  * @param {string[]} allowedTags
@@ -298,8 +300,9 @@ function getCenteroid(latLngs) {
  * @returns {string}
  */
 function filterHTML(input, allowedTags, allowedDomains) {
-    let tempDiv = document.createElement('div');
-    tempDiv.innerHTML = input;
+    // Parsed into an inert document: markup parsed into an element of the live document starts
+    // loading its resources, so an <img onerror> fires even after the element is stripped below
+    let tempDiv = new DOMParser().parseFromString(input, 'text/html').body;
 
     let allElements = tempDiv.querySelectorAll('*');
 
@@ -307,17 +310,18 @@ function filterHTML(input, allowedTags, allowedDomains) {
         let tagName = element.tagName.toLowerCase();
 
         if (!allowedTags.includes(tagName)) {
-            element.replaceWith(document.createTextNode(element.innerText));
+            element.replaceWith(document.createTextNode(element.textContent));
         } else {
             if (tagName === 'a' && element.hasAttribute('href')) {
                 try {
-                    let url = new URL(element.href);
-                    if (!allowedDomains.includes(url.hostname)) {
-                        element.replaceWith(document.createTextNode(element.innerText));
+                    let url = new URL(element.getAttribute('href'), document.baseURI);
+                    // A non-network scheme can still carry an allowed host, e.g. javascript://keystone.guru/
+                    if (!['http:', 'https:'].includes(url.protocol) || !allowedDomains.includes(url.hostname)) {
+                        element.replaceWith(document.createTextNode(element.textContent));
                         return;
                     }
                 } catch (e) {
-                    element.replaceWith(document.createTextNode(element.innerText));
+                    element.replaceWith(document.createTextNode(element.textContent));
                     return;
                 }
             }
@@ -665,6 +669,7 @@ if (typeof module !== 'undefined' && module.exports) {
         rotateLatLng,
         roundHalfAwayFromZero,
         getCenteroid,
+        filterHTML,
         getQueryParams,
         isElementFullyVisible,
         getMapObjectGroup,

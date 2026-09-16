@@ -242,6 +242,13 @@ class TeamEdit extends InlineCode {
     }
 
     /**
+     * DataTables writes a cell's string as HTML, and a member's name is another user's text.
+     */
+    _renderName(data, type, row, meta) {
+        return Handlebars.escapeExpression(data);
+    }
+
+    /**
      * Refreshes the table with the current data.
      */
     refreshTeamMembersTable() {
@@ -256,7 +263,10 @@ class TeamEdit extends InlineCode {
         let columns = [{
             'data': 'name',
             'title': lang.get('js.name_label'),
-            'width': '45%'
+            'width': '45%',
+            'render': function (data, type, row, meta) {
+                return self._renderName(data, type, row, meta);
+            }
         }, {
             'data': 'join_date',
             'title': lang.get('js.join_date_label'),
@@ -431,4 +441,10 @@ class TeamEdit extends InlineCode {
         });
 
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {TeamEdit};
 }

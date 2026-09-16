@@ -84,12 +84,18 @@ use Illuminate\Support\Collection;
                     {
                         'title': lang.get('js.name_label'),
                         'data': 'name',
-                        'name': 'name'
+                        'name': 'name',
+                        'render': function (data, type, row, meta) {
+                            return Handlebars.escapeExpression(data);
+                        }
                     },
                     {
                         'title': lang.get('js.email_label'),
                         'data': 'email',
-                        'name': 'email'
+                        'name': 'email',
+                        'render': function (data, type, row, meta) {
+                            return Handlebars.escapeExpression(data);
+                        }
                     },
                     {
                         'title': lang.get('js.route_count_label'),

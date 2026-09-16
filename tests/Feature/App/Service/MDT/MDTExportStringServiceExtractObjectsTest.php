@@ -30,10 +30,15 @@ class MDTExportStringServiceExtractObjectsTest extends MDTExportStringServiceTes
             $dungeonRoute = $this->getMDTCompatibleNonFacadeDungeonRoute();
 
             /** @var MapIcon $mapIcon */
-            $mapIcon = MapIcon::factory()->create([
+            $mapIcon = MapIcon::factory()->create();
+            $dungeonRoute->mapIcons()->save($mapIcon);
+
+            // The comment mutator now strips HTML on write; update through the query builder to
+            // stand in for a row saved before that stripping existed.
+            MapIcon::query()->whereKey($mapIcon->id)->update([
                 'comment' => sprintf('some string <a href="%s">link text</a>', $url),
             ]);
-            $dungeonRoute->mapIcons()->save($mapIcon);
+            $mapIcon->refresh();
 
             $warnings = collect();
 

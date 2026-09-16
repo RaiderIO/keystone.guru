@@ -6,6 +6,7 @@ use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Exception\ImportError;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\Structs\LatLng;
+use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Arrow;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -381,7 +382,8 @@ class ObjectImporter
             'mapping_version_id' => null,
             'floor_id'           => $latLng->getFloor()->id,
             'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_COMMENT],
-            'comment'            => $details[4],
+            // Bulk-inserted past MapIcon::setCommentAttribute()'s own stripping
+            'comment' => new HtmlSanitizer()->stripAllTags((string)$details[4]),
         ], $latLng->toArray()));
     }
 
