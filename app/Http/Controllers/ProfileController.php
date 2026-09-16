@@ -19,6 +19,7 @@ use App\Models\UserSocialLink;
 use App\Repositories\Interfaces\UserPinnedDungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\UserSocialLinkRepositoryInterface;
 use App\Service\DungeonRoute\CoverageServiceInterface;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
@@ -49,7 +50,7 @@ class ProfileController extends Controller
     /**
      * @return View
      */
-    public function view(Request $request, User $user): View
+    public function view(Request $request, User $user, ThumbnailServiceInterface $thumbnailService): View
     {
         $creatorProfileActive = Feature::active(CreatorProfiles::class);
 
@@ -90,6 +91,8 @@ class ProfileController extends Controller
                 ->map(static fn(UserPinnedDungeonRoute $pin): ?DungeonRoute => $pin->dungeonRoute)
                 ->filter(static fn(?DungeonRoute $dungeonRoute): bool => $dungeonRoute?->mayUserView($viewer) ?? false)
                 ->values();
+
+            $thumbnailService->dungeonRoutesDisplayed($pinnedDungeonRoutes);
         }
 
         return view('profile.view', [

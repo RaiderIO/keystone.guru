@@ -36,6 +36,14 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     }
 
     /**
+     * @param Collection<int, int> $dungeonRouteIds
+     */
+    public function stampLastAccessedAt(Collection $dungeonRouteIds): int
+    {
+        return $dungeonRouteIds->count();
+    }
+
+    /**
      * @return Collection<string, Collection<int, WeeklyRoute>>
      */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection

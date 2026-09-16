@@ -6,6 +6,7 @@ use App\Models\Affix;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\Npc\NpcClassification;
 use App\Models\PublishedState;
 use App\Models\Season;
@@ -61,14 +62,22 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
                             ->where('thumbnail_refresh_queued_at', '<', now()->subHours(config('keystoneguru.thumbnail.refresh_requeue_hours'))->toDateTimeString());
                     });
             })
-            ->where(static function (EloquentBuilder $builder) {
-                // Only if it's not already queued!
+            ->where(static function (EloquentBuilder $builder) use ($dungeonRoutes) {
                 $builder->whereColumn('updated_at', '>', 'thumbnail_updated_at')
-                    ->where('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail.refresh_min'))->toDateTimeString());
+                    // A displayed route also needs a render when it has no standard thumbnail at all
+                    ->when($dungeonRoutes, static function (EloquentBuilder $builder) {
+                        $builder->orWhereDoesntHave('dungeonRouteThumbnails', static function (EloquentBuilder $builder) {
+                            $builder->where('variant', DungeonRouteThumbnailVariant::Standard->value);
+                        });
+                    });
             })
+            ->where('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail.refresh_min'))->toDateTimeString())
             ->when($dungeonRoutes, function (EloquentBuilder $builder) use ($dungeonRoutes) {
                 // If we have a specific set of routes to refresh, only select those
-                $builder->whereIn('id', $dungeonRoutes->pluck('id'));
+                $builder->whereIn('id', $dungeonRoutes->pluck('id'))
+                    ->withExists(['dungeonRouteThumbnails as has_standard_thumbnail' => static function (EloquentBuilder $builder) {
+                        $builder->where('variant', DungeonRouteThumbnailVariant::Standard->value);
+                    }]);
             })->when(!$dungeonRoutes, function (EloquentBuilder $builder) {
                 // Otherwise, only popular routes that were edited recently. An older stale route is rendered
                 // when it is next displayed, through the branch above.
@@ -82,6 +91,39 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             // Limit the amount of routes at a time, do not overflow the queue since we cannot process more anyway
             ->limit(config('keystoneguru.thumbnail.refresh_outdated_count'))
             ->get();
+    }
+
+    /**
+     * @param Collection<int, int> $dungeonRouteIds
+     */
+    public function stampLastAccessedAt(Collection $dungeonRouteIds): int
+    {
+        if ($dungeonRouteIds->isEmpty()) {
+            return 0;
+        }
+
+        $notAccessedToday = static function (EloquentBuilder $builder) {
+            $builder->whereNull('last_accessed_at')
+                ->orWhere('last_accessed_at', '<', now()->startOfDay()->toDateTimeString());
+        };
+
+        // A plain (non-locking) read first: an UPDATE locks every row it scans even when none match, and most
+        // displays are of routes that were already stamped today
+        $unstampedIds = DungeonRoute::query()
+            ->whereIn('id', $dungeonRouteIds)
+            ->where($notAccessedToday)
+            ->pluck('id');
+
+        if ($unstampedIds->isEmpty()) {
+            return 0;
+        }
+
+        // Through the base query builder: Eloquent would bump updated_at, which marks the thumbnail as stale
+        return DungeonRoute::query()
+            ->whereIn('id', $unstampedIds)
+            ->where($notAccessedToday)
+            ->toBase()
+            ->update(['last_accessed_at' => now()->toDateTimeString()]);
     }
 
     /**

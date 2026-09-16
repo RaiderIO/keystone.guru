@@ -15,6 +15,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInte
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -410,21 +411,27 @@ class ThumbnailService implements ThumbnailServiceInterface
     }
 
     /**
-     * @param  Collection<int, DungeonRoute> $dungeonRoutes
-     * @param  bool                          $force
-     * @return bool
+     * {@inheritDoc}
      */
-    public function queueThumbnailRefreshIfMissing(Collection $dungeonRoutes, bool $force = false): bool
+    public function dungeonRoutesDisplayed(Collection $dungeonRoutes): bool
     {
+        if ($dungeonRoutes->isEmpty()) {
+            return false;
+        }
+
+        // Best-effort: a lock wait or deadlock while stamping must not fail the page that displays the routes
+        try {
+            $this->dungeonRouteRepository->stampLastAccessedAt($dungeonRoutes->pluck('id'));
+        } catch (QueryException $exception) {
+            $this->log->dungeonRoutesDisplayedStampLastAccessedAtException($exception);
+        }
+
         $result = false;
-
-        $dungeonRoutesWithExpiredThumbnails = $this->dungeonRouteRepository->getDungeonRoutesWithExpiredThumbnails(
-            $dungeonRoutes,
-        );
-
-        foreach ($dungeonRoutesWithExpiredThumbnails as $dungeonRoute) {
+        foreach ($this->dungeonRouteRepository->getDungeonRoutesWithExpiredThumbnails($dungeonRoutes) as $dungeonRoute) {
             /** @var DungeonRoute $dungeonRoute */
-            if ($this->queueThumbnailRefresh($dungeonRoute, $force)) {
+            // The render job skips routes whose thumbnail_updated_at looks fresh, which a hero or custom render
+            // also sets - force it when the standard thumbnail does not exist at all
+            if ($this->queueThumbnailRefresh($dungeonRoute, $dungeonRoute->getAttribute('has_standard_thumbnail') === false)) {
                 $result = true;
             }
         }

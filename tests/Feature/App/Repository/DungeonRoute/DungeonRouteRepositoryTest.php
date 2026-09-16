@@ -4,6 +4,8 @@ namespace Tests\Feature\App\Repository\DungeonRoute;
 
 use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteThumbnail;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
@@ -339,6 +341,146 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
         } finally {
             $dungeonRoute?->delete();
         }
+    }
+
+    #[Test]
+    public function getDungeonRoutesWithExpiredThumbnails_givenListedRouteWithoutStandardThumbnail_returnsRoute(): void
+    {
+        // Arrange - the timestamps say the thumbnail is fresh, but no thumbnail row backs it
+        $dungeonRoute = null;
+
+        try {
+            $dungeonRoute = $this->createRouteWithThumbnailState(2 * 24 * 60, 24 * 60, null, 0);
+
+            // Act
+            $result = $this->repository->getDungeonRoutesWithExpiredThumbnails(collect([$dungeonRoute]));
+
+            // Assert
+            $this->assertTrue($result->pluck('id')->contains($dungeonRoute->id));
+        } finally {
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function getDungeonRoutesWithExpiredThumbnails_givenListedRouteWithFreshStandardThumbnail_doesNotReturnRoute(): void
+    {
+        // Arrange
+        $dungeonRoute = null;
+        $thumbnail    = null;
+
+        try {
+            $dungeonRoute = $this->createRouteWithThumbnailState(2 * 24 * 60, 24 * 60, null, 0);
+            $thumbnail    = DungeonRouteThumbnail::create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'floor_id'         => $dungeonRoute->dungeon->floors()->firstOrFail()->id,
+                'variant'          => DungeonRouteThumbnailVariant::Standard,
+            ]);
+
+            // Act
+            $result = $this->repository->getDungeonRoutesWithExpiredThumbnails(collect([$dungeonRoute]));
+
+            // Assert
+            $this->assertFalse($result->pluck('id')->contains($dungeonRoute->id));
+        } finally {
+            $thumbnail?->delete();
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function getDungeonRoutesWithExpiredThumbnails_givenListedRouteWithOnlyHeroThumbnail_returnsRoute(): void
+    {
+        // Arrange
+        $dungeonRoute = null;
+        $thumbnail    = null;
+
+        try {
+            $dungeonRoute = $this->createRouteWithThumbnailState(2 * 24 * 60, 24 * 60, null, 0);
+            $thumbnail    = DungeonRouteThumbnail::create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'floor_id'         => $dungeonRoute->dungeon->floors()->firstOrFail()->id,
+                'variant'          => DungeonRouteThumbnailVariant::Hero,
+            ]);
+
+            // Act
+            $result = $this->repository->getDungeonRoutesWithExpiredThumbnails(collect([$dungeonRoute]));
+
+            // Assert
+            $this->assertTrue($result->pluck('id')->contains($dungeonRoute->id));
+        } finally {
+            $thumbnail?->delete();
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('stampLastAccessedAt_notAccessedTodayProvider')]
+    public function stampLastAccessedAt_givenRouteNotAccessedToday_stampsNowWithoutTouchingUpdatedAt(?string $lastAccessedAt): void
+    {
+        // Arrange
+        $dungeonRoute = null;
+
+        try {
+            $dungeonRoute = $this->createRouteWithThumbnailState(3 * 24 * 60, 4 * 24 * 60, null, 0);
+            DungeonRoute::query()->whereKey($dungeonRoute->id)->toBase()->update(['last_accessed_at' => $lastAccessedAt]);
+            $updatedAt = $dungeonRoute->updated_at->toDateTimeString();
+
+            // Act
+            $result = $this->repository->stampLastAccessedAt(collect([$dungeonRoute->id]));
+
+            // Assert
+            $dungeonRoute->refresh();
+            $this->assertSame(1, $result);
+            $this->assertTrue($dungeonRoute->last_accessed_at->isToday());
+            $this->assertSame($updatedAt, $dungeonRoute->updated_at->toDateTimeString());
+        } finally {
+            $dungeonRoute?->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string|null}>
+     */
+    public static function stampLastAccessedAt_notAccessedTodayProvider(): array
+    {
+        return [
+            'never accessed'          => [null],
+            'last accessed yesterday' => [now()->subDay()->toDateTimeString()],
+        ];
+    }
+
+    #[Test]
+    public function stampLastAccessedAt_givenRouteAlreadyAccessedToday_doesNotWrite(): void
+    {
+        // Arrange
+        $dungeonRoute = null;
+
+        try {
+            $dungeonRoute   = $this->createRouteWithThumbnailState(3 * 24 * 60, 4 * 24 * 60, null, 0);
+            $lastAccessedAt = now()->startOfDay()->toDateTimeString();
+            DungeonRoute::query()->whereKey($dungeonRoute->id)->toBase()->update(['last_accessed_at' => $lastAccessedAt]);
+
+            // Act
+            $result = $this->repository->stampLastAccessedAt(collect([$dungeonRoute->id]));
+
+            // Assert
+            $dungeonRoute->refresh();
+            $this->assertSame(0, $result);
+            $this->assertSame($lastAccessedAt, $dungeonRoute->last_accessed_at->toDateTimeString());
+        } finally {
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function stampLastAccessedAt_givenNoRoutes_returnsZero(): void
+    {
+        // Act
+        $result = $this->repository->stampLastAccessedAt(collect());
+
+        // Assert
+        $this->assertSame(0, $result);
     }
 
     private function createRouteWithThumbnailState(
