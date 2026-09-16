@@ -64,9 +64,6 @@ class Save extends Command
      */
     public function handle(): int
     {
-        // Drop all caches for all models - otherwise it may produce some strange results
-        $this->call('modelCache:clear');
-
         $dungeonDataDir = database_path('seeders/dungeondata/');
         $seasonDataDir  = database_path('seeders/seasondata/');
 

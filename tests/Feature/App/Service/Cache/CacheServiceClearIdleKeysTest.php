@@ -12,18 +12,16 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * Guards the clearIdleKeys regex against deleting Laravel session keys. Session ids are 40-char alphanumeric
- * strings stored with the same redis prefix as Model Cache keys (40-char sha1 hashes); a too-broad first
- * segment used to match and delete active sessions, logging idle users out.
+ * Guards that clearIdleKeys only ever deletes idle presence channel keys. Session ids are 40-char alphanumeric
+ * strings stored with the same redis prefix; a too-broad pattern would delete active sessions and log idle users
+ * out.
  */
 #[Group('Cache')]
 #[Group('CacheServiceClearIdleKeys')]
 final class CacheServiceClearIdleKeysTest extends PublicTestCase
 {
-    private const int IDLE_THRESHOLD_SECONDS = 900;
-
-    // The presence-key sweep hardcodes an 86400s idle threshold regardless of the seconds argument, so the
-    // mocked OBJECT idletime response must clear that too.
+    // The presence-key sweep only deletes keys idle for over 86400s, so the mocked OBJECT idletime response must
+    // clear that.
     private const int PRESENCE_IDLE_TIME_SECONDS = 86400 + 1;
 
     private function prefix(): string
@@ -55,8 +53,8 @@ final class CacheServiceClearIdleKeysTest extends PublicTestCase
 
                         return ['0', $keysOnEachConnection];
                     })(),
-                    // Report every key as idle well past any threshold - including the presence sweep's own
-                    // hardcoded 86400s - so the idle check never shields a match.
+                    // Report every key as idle well past the presence sweep's 86400s threshold, so the idle check
+                    // never shields a match.
                     'OBJECT' => self::PRESENCE_IDLE_TIME_SECONDS,
                     'DEL'    => (static function () use (&$deletedKeys, $params): int {
                         foreach ($params as $key) {
@@ -74,7 +72,7 @@ final class CacheServiceClearIdleKeysTest extends PublicTestCase
         $log = $this->createMockPublic(CacheServiceLoggingInterface::class);
 
         $cacheService = new CacheService($redisService, $log);
-        $cacheService->clearIdleKeys(self::IDLE_THRESHOLD_SECONDS);
+        $cacheService->clearIdleKeys();
 
         return ['deletedKeys' => $deletedKeys, 'scanCalls' => $scanCalls];
     }
@@ -102,16 +100,16 @@ final class CacheServiceClearIdleKeysTest extends PublicTestCase
     }
 
     #[Test]
-    public function clearIdleKeys_givenIdleModelCacheKey_deletesIt(): void
+    public function clearIdleKeys_givenIdleTaggedCacheKey_doesNotDeleteIt(): void
     {
-        // Arrange - a Model Cache key: a sha1 hash, optionally chained with a second sha1 hash.
-        $modelCacheKey = $this->prefix() . '65aa219314bb8283edd4a0ac5d83931692ea0bba:129d1d5ea35b2697e76199983478a8a1e2d916a9';
+        // Arrange - a tagged cache key: a sha1 hash, optionally chained with a second sha1 hash.
+        $taggedCacheKey = $this->prefix() . '65aa219314bb8283edd4a0ac5d83931692ea0bba:129d1d5ea35b2697e76199983478a8a1e2d916a9';
 
         // Act
-        $deletedKeys = $this->runClearIdleKeysAndCaptureDeletes([$modelCacheKey]);
+        $deletedKeys = $this->runClearIdleKeysAndCaptureDeletes([$taggedCacheKey]);
 
         // Assert
-        $this->assertContains($modelCacheKey, $deletedKeys, 'An idle Model Cache key should still be cleaned up by clearIdleKeys');
+        $this->assertNotContains($taggedCacheKey, $deletedKeys, 'Only presence keys may be deleted by clearIdleKeys');
     }
 
     #[Test]
@@ -149,15 +147,9 @@ final class CacheServiceClearIdleKeysTest extends PublicTestCase
         // Act
         $scanCalls = $this->runClearIdleKeysAndCaptureCalls([$presenceKey])['scanCalls'];
 
-        // Assert - the model-cache half still scans default/model_cache/cache (one SCAN call each, cursor 0
-        // ends the loop), and the presence half must add exactly one more SCAN call, on 'default' only.
-        $presenceScanCalls = array_values(array_filter(
-            $scanCalls,
-            static fn(array $call): bool => in_array('MATCH', $call['args'], true),
-        ));
-
-        $this->assertCount(1, $presenceScanCalls, 'The presence-key sweep must scan in a single pass');
-        $this->assertSame('default', $presenceScanCalls[0]['connection'], 'The presence-key sweep must only scan the default connection');
+        // Assert - cursor 0 ends the loop, so a single pass is exactly one SCAN call
+        $this->assertCount(1, $scanCalls, 'The presence-key sweep must scan in a single pass');
+        $this->assertSame('default', $scanCalls[0]['connection'], 'The presence-key sweep must only scan the default connection');
     }
 
     #[Test]

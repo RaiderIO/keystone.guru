@@ -202,8 +202,8 @@ final class DungeonExploreControllerTest extends PublicTestCase
     }
 
     /**
-     * The model events take care of laravel-model-caching; ViewService's 'tmp_file' store is a plain file cache
-     * that nothing invalidates, and it holds the seasons it hands the composers for an hour.
+     * ViewService's 'tmp_file' store is a plain file cache that nothing invalidates, and it holds the
+     * seasons it hands the composers for an hour.
      */
     private function flushSeasonCaches(): void
     {

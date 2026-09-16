@@ -34,7 +34,7 @@ interface CacheServiceInterface
 
     public function dropCaches(): void;
 
-    public function clearIdleKeys(?int $seconds = null): int;
+    public function clearIdleKeys(): int;
 
     public function lock(string $key, callable $callable, int $waitFor = 60): mixed;
 }

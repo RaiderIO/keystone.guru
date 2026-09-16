@@ -17,15 +17,15 @@ final class GetAllSeasonsTest extends PublicTestCase
     {
         // Arrange
         $service  = app(SeasonService::class);
-        $expected = app('model-cache')->runDisabled(static fn() => $service->getAllSeasons()->pluck('id')->all());
+        $expected = $service->getAllSeasons()->pluck('id')->all();
 
         $queries = 0;
         DB::listen(static function () use (&$queries): void {
             $queries++;
         });
 
-        // Act - CI runs with the model cache on, which would answer these queries without reaching the database
-        $seasonIds = app('model-cache')->runDisabled(static fn() => $service->getAllSeasons()->pluck('id')->all());
+        // Act
+        $seasonIds = $service->getAllSeasons()->pluck('id')->all();
 
         // Assert
         $this->assertNotEmpty($seasonIds);

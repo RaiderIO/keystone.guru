@@ -79,7 +79,5 @@ trait CreatesNpclessCombatLogDungeon
         }
 
         Dungeon::query()->where('id', $dungeon->id)->delete();
-
-        new Dungeon()->flushCache();
     }
 }

@@ -78,10 +78,8 @@ final class DungeonRouteMapContextKillZonesTest extends PublicTestCase
                 }
             });
 
-            // Act - CI runs with the model cache on, which would answer these queries without reaching the database
-            $killZones = app('model-cache')->runDisabled(
-                static fn() => $route->mapContextKillZones(app(CoordinatesServiceInterface::class), false),
-            );
+            // Act
+            $killZones = $route->mapContextKillZones(app(CoordinatesServiceInterface::class), false);
 
             // Assert
             $this->assertSame(0, $killZoneQueries);

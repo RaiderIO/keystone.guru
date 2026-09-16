@@ -268,8 +268,8 @@ final class HeaderComposerTest extends PublicTestCase
     }
 
     /**
-     * The model events take care of laravel-model-caching; ViewService's 'tmp_file' store is a plain file cache
-     * that nothing invalidates, and it holds the season for an hour.
+     * ViewService's 'tmp_file' store is a plain file cache that nothing invalidates, and it holds the
+     * season for an hour.
      */
     private function flushSeasonCaches(): void
     {

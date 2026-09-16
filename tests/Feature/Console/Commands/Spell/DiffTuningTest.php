@@ -69,7 +69,6 @@ final class DiffTuningTest extends PublicTestCase
     {
         File::delete([$this->fromPath, $this->toPath]);
         SpellTuningChange::query()->where('to_build', self::TO_BUILD)->delete();
-        new SpellTuningChange()->flushCache();
 
         parent::tearDown();
     }

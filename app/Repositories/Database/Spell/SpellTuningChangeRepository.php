@@ -91,9 +91,6 @@ class SpellTuningChangeRepository extends DatabaseRepository implements SpellTun
             return $inserted;
         });
 
-        // insert()/delete() go around the model events that keep the model cache in step
-        new SpellTuningChange()->flushCache();
-
         return $inserted;
     }
 

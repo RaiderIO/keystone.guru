@@ -22,10 +22,6 @@ final class MapContextStaticDataTest extends PublicTestCase
         // RemembersToFile writes to the `tmp_file` file store, which survives between test runs -
         // without this the assertions below could run against a payload built by older code.
         Cache::store('tmp_file')->flush();
-
-        // The Spell query behind selectableSpells is model-cached (laravel-model-caching); flush
-        // so a prior test's locale doesn't leak into this one.
-        new Spell()->flushCache();
     }
 
     #[Test]
@@ -75,11 +71,6 @@ final class MapContextStaticDataTest extends PublicTestCase
 
         // Act
         $enSpells = app(MapContextServiceInterface::class)->createMapContextStaticData('en_US')->toArray()['static']['selectableSpells'];
-
-        // laravel-model-caching's cache key does not factor in join clauses, so without flushing,
-        // the second query below - identical but for the locale in its join condition - would hit
-        // the same cache entry as the query above and mask the very bug this test guards against.
-        new Spell()->flushCache();
 
         $deSpells = app(MapContextServiceInterface::class)->createMapContextStaticData('de_DE')->toArray()['static']['selectableSpells'];
 
