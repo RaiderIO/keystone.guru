@@ -9,19 +9,18 @@ use App\Logic\MDT\IO\MDTStringFormat;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\AffixGroup\AffixGroup;
-use App\Models\Arrow;
-use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
-use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Path;
 use App\Models\Spell\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\MDT\Export\ArrowExporter;
+use App\Service\MDT\Export\LineExporter;
+use App\Service\MDT\Export\MapIconExporter;
 use App\Service\MDT\Export\Traits\ConvertsHtmlToMdtComment;
 use App\Service\MDT\Import\ObjectImporter;
 use App\Service\MDT\Logging\MDTExportStringServiceLoggingInterface;
@@ -70,6 +69,9 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     public function __construct(
         private readonly CacheServiceInterface       $cacheService,
         private readonly CoordinatesServiceInterface $coordinatesService,
+        private readonly MapIconExporter             $mapIconExporter,
+        private readonly LineExporter                $lineExporter,
+        private readonly ArrowExporter               $arrowExporter,
         MDTExportStringServiceLoggingInterface       $log,
     ) {
         parent::__construct($log);
@@ -86,15 +88,15 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         // Lua is 1 based, not 0 based
         $currentObjectIndex = 1;
 
-        foreach ($this->extractMapIconObjects() as $item) {
+        foreach ($this->mapIconExporter->export($this->dungeonRoute, $warnings) as $item) {
             $result[$currentObjectIndex++] = $item;
         }
 
-        foreach ($this->extractLineObjects() as $item) {
+        foreach ($this->lineExporter->export($this->dungeonRoute, $warnings) as $item) {
             $result[$currentObjectIndex++] = $item;
         }
 
-        foreach ($this->extractArrowObjects() as $item) {
+        foreach ($this->arrowExporter->export($this->dungeonRoute, $warnings) as $item) {
             $result[$currentObjectIndex++] = $item;
         }
 
@@ -107,178 +109,6 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         }
 
         return $result;
-    }
-
-    /** @return array<int, mixed> */
-    private function extractMapIconObjects(): array
-    {
-        $objects = [];
-
-        foreach ($this->dungeonRoute->mapicons()->with(['floor'])->get() as $mapIcon) {
-            /** @var MapIcon $mapIcon */
-            $latLng = $mapIcon->getLatLng();
-            if ($this->dungeonRoute->mappingVersion->facade_enabled) {
-                $latLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
-                    $this->dungeonRoute->mappingVersion,
-                    $latLng,
-                );
-            }
-
-            $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($latLng);
-
-            $objects[] = [
-                'n' => true,
-                'd' => [
-                    1 => $mdtCoordinates['x'],
-                    2 => $mdtCoordinates['y'],
-                    3 => $latLng->getFloor()->mdt_sub_level ?? $latLng->getFloor()->index,
-                    4 => true,
-                    5 => $this->convertHtmlToMdtComment($mapIcon->comment ?? __($mapIcon->mapIconType?->name) ?? ''), // @phpstan-ignore nullsafe.neverNull, nullCoalesce.expr
-                ],
-            ];
-        }
-
-        return $objects;
-    }
-
-    /** @return array<int, mixed> */
-    private function extractLineObjects(): array
-    {
-        $objects = [];
-
-        /** @var Collection<int, Path|Brushline> $brushlines */
-        $brushlines = $this->dungeonRoute->brushlines()->with(['floor'])->get()->toBase();
-
-        $lines = $brushlines->merge(
-            $this->dungeonRoute->paths()->with(['floor'])->get()->toBase(),
-        );
-
-        foreach ($lines as $line) {
-            /** @var Path|Brushline $line */
-            $mdtLine = [
-                'd' => [
-                    1 => $line->polyline->weight,
-                    2 => 1,
-                    3 => $line->floor->mdt_sub_level ?? $line->floor->index,
-                    4 => true,
-                    5 => str_starts_with($line->polyline->color, '#') ? substr($line->polyline->color, 1) : $line->polyline->color,
-                    6 => -8,
-                    7 => true,
-                ],
-                'l' => [],
-            ];
-
-            if ($line instanceof Brushline) {
-                $mdtLine['d'][7] = true;
-            }
-
-            $vertexIndex            = 1;
-            $verticesLatLngs        = $line->polyline->getDecodedLatLngs($line->floor);
-            $previousMdtCoordinates = null;
-
-            foreach ($verticesLatLngs as $vertexLatLng) {
-                if ($this->dungeonRoute->mappingVersion->facade_enabled) {
-                    $vertexLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
-                        $this->dungeonRoute->mappingVersion,
-                        $vertexLatLng,
-                    );
-
-                    // The floor of the line should be updated too
-                    $mdtLine['d'][3] = $vertexLatLng->getFloor()->mdt_sub_level ?? $vertexLatLng->getFloor()->index;
-                }
-
-                $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($vertexLatLng);
-
-                if ($previousMdtCoordinates !== null) {
-                    // We must do A -> B, B -> C, C -> D. I don't know why he wants the previous coordinates too, but alas that's how it works
-                    $mdtLine['l'][$vertexIndex++] = $previousMdtCoordinates['x'];
-                    $mdtLine['l'][$vertexIndex++] = $previousMdtCoordinates['y'];
-                    $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['x'];
-                    $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['y'];
-                }
-
-                $previousMdtCoordinates = $mdtCoordinates;
-            }
-
-            $objects[] = $mdtLine;
-        }
-
-        return $objects;
-    }
-
-    /**
-     * Export arrows as MDT triangle objects.
-     *
-     * @return array<int, mixed>
-     */
-    private function extractArrowObjects(): array
-    {
-        $objects = [];
-
-        foreach ($this->dungeonRoute->arrows()->with(['floor'])->get() as $arrow) {
-            /** @var Arrow $arrow */
-            if ($arrow->polyline === null) {
-                continue;
-            }
-
-            $verticesLatLngs = $arrow->polyline->getDecodedLatLngs($arrow->floor);
-
-            $mdtLine = [
-                'd' => [
-                    1 => $arrow->polyline->weight,
-                    2 => 1,
-                    3 => $arrow->floor->mdt_sub_level ?? $arrow->floor->index,
-                    4 => true,
-                    5 => str_starts_with($arrow->polyline->color, '#') ? substr($arrow->polyline->color, 1) : $arrow->polyline->color,
-                    6 => -8,
-                    7 => true,
-                ],
-                'l' => [],
-                't' => [],
-            ];
-
-            $vertexIndex            = 1;
-            $firstMdtCoordinates    = null;
-            $lastMdtCoordinates     = null;
-            $previousMdtCoordinates = null;
-
-            foreach ($verticesLatLngs as $vertexLatLng) {
-                if ($this->dungeonRoute->mappingVersion->facade_enabled) {
-                    $vertexLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
-                        $this->dungeonRoute->mappingVersion,
-                        $vertexLatLng,
-                    );
-
-                    $mdtLine['d'][3] = $vertexLatLng->getFloor()->mdt_sub_level ?? $vertexLatLng->getFloor()->index;
-                }
-
-                $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($vertexLatLng);
-
-                $firstMdtCoordinates ??= $mdtCoordinates;
-                $lastMdtCoordinates = $mdtCoordinates;
-
-                if ($previousMdtCoordinates !== null) {
-                    $mdtLine['l'][$vertexIndex++] = $previousMdtCoordinates['x'];
-                    $mdtLine['l'][$vertexIndex++] = $previousMdtCoordinates['y'];
-                    $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['x'];
-                    $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['y'];
-                }
-
-                $previousMdtCoordinates = $mdtCoordinates;
-            }
-
-            // Compute arrow direction from shaft: atan2(dy, dx) of the last segment
-            // ($lastMdtCoordinates is non-null whenever $firstMdtCoordinates is - both are assigned each iteration)
-            if ($firstMdtCoordinates !== null) {
-                $dx              = (float)$lastMdtCoordinates['x'] - (float)$firstMdtCoordinates['x'];
-                $dy              = (float)$lastMdtCoordinates['y'] - (float)$firstMdtCoordinates['y'];
-                $mdtLine['t'][1] = atan2($dy, $dx);
-            }
-
-            $objects[] = $mdtLine;
-        }
-
-        return $objects;
     }
 
     /**
