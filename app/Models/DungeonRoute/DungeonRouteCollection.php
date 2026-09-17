@@ -53,14 +53,14 @@ class DungeonRouteCollection extends Model
     /**
      * How many routes a single collection may hold. A collection is meant to be a curated list -
      * without a cap the public collection page would eagerly load an unbounded amount of routes.
+     * Three routes for every dungeon of a season is plenty for a curated set.
      */
-    public const int MAX_ROUTES = 50;
+    public const int MAX_ROUTES = 24;
 
     /**
-     * How many collections a single user may own. Three collections for every dungeon of a season
-     * is plenty for a curated set.
+     * How many collections a single user may own.
      */
-    public const int MAX_COLLECTIONS = 24;
+    public const int MAX_COLLECTIONS = 25;
 
     /**
      * The published states a collection may be in. Unlike a dungeon route a collection is never
