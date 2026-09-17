@@ -192,10 +192,10 @@ return [
     ],
     'dungeonroutecollection' => [
         'flash' => [
-            'collection_created'      => '',
-            'collection_updated'      => '',
-            'collection_deleted'      => '',
-            'max_collections_reached' => '',
+            'collection_created'      => 'Raccolta creata',
+            'collection_updated'      => 'Raccolta aggiornata',
+            'collection_deleted'      => 'Raccolta eliminata',
+            'max_collections_reached' => 'Puoi avere al massimo :max raccolte.',
         ],
     ],
     'profile' => [

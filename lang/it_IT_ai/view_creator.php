@@ -8,10 +8,10 @@ return [
         'search_label'       => 'Cerca un creatore',
         'search_placeholder' => 'Cerca per nome',
         'search_submit'      => 'Cerca',
-        'category_label'     => '',
-        'category_any'       => '',
+        'category_label'     => 'Filtra per il tipo di raccolte che un creatore condivide',
+        'category_any'       => 'Qualsiasi raccolta',
         'empty'              => 'Non ci sono ancora creatori elencati.',
-        'empty_for_category' => '',
+        'empty_for_category' => 'Nessun creatore condivide ancora una raccolta ":category".',
         'empty_for_search'   => 'Nessun creatore trovato corrispondente a ":search".',
     ],
     'featured' => [
