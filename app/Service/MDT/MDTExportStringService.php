@@ -14,6 +14,7 @@ use App\Service\MDT\Export\KillZoneDescriptionExporter;
 use App\Service\MDT\Export\KillZoneSpellsExporter;
 use App\Service\MDT\Export\LineExporter;
 use App\Service\MDT\Export\MapIconExporter;
+use App\Service\MDT\Export\MDTObjectExporterInterface;
 use App\Service\MDT\Export\PullExporter;
 use App\Service\MDT\Logging\MDTExportStringServiceLoggingInterface;
 use Exception;
@@ -33,17 +34,28 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
     private DungeonRoute $dungeonRoute;
 
+    /** @var array<int, MDTObjectExporterInterface> The order MDT's objects are numbered in. */
+    private readonly array $objectExporters;
+
     public function __construct(
-        private readonly MapIconExporter             $mapIconExporter,
-        private readonly LineExporter                $lineExporter,
-        private readonly ArrowExporter               $arrowExporter,
-        private readonly KillZoneDescriptionExporter $killZoneDescriptionExporter,
-        private readonly KillZoneSpellsExporter      $killZoneSpellsExporter,
-        private readonly PullExporter                $pullExporter,
-        private readonly EnemyAssignmentExporter     $enemyAssignmentExporter,
-        MDTExportStringServiceLoggingInterface       $log,
+        MapIconExporter                          $mapIconExporter,
+        LineExporter                             $lineExporter,
+        ArrowExporter                            $arrowExporter,
+        KillZoneDescriptionExporter              $killZoneDescriptionExporter,
+        KillZoneSpellsExporter                   $killZoneSpellsExporter,
+        private readonly PullExporter            $pullExporter,
+        private readonly EnemyAssignmentExporter $enemyAssignmentExporter,
+        MDTExportStringServiceLoggingInterface   $log,
     ) {
         parent::__construct($log);
+
+        $this->objectExporters = [
+            $mapIconExporter,
+            $lineExporter,
+            $arrowExporter,
+            $killZoneDescriptionExporter,
+            $killZoneSpellsExporter,
+        ];
     }
 
     /**
@@ -57,24 +69,10 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         // Lua is 1 based, not 0 based
         $currentObjectIndex = 1;
 
-        foreach ($this->mapIconExporter->export($this->dungeonRoute, $warnings) as $item) {
-            $result[$currentObjectIndex++] = $item;
-        }
-
-        foreach ($this->lineExporter->export($this->dungeonRoute, $warnings) as $item) {
-            $result[$currentObjectIndex++] = $item;
-        }
-
-        foreach ($this->arrowExporter->export($this->dungeonRoute, $warnings) as $item) {
-            $result[$currentObjectIndex++] = $item;
-        }
-
-        foreach ($this->killZoneDescriptionExporter->export($this->dungeonRoute, $warnings) as $item) {
-            $result[$currentObjectIndex++] = $item;
-        }
-
-        foreach ($this->killZoneSpellsExporter->export($this->dungeonRoute, $warnings) as $item) {
-            $result[$currentObjectIndex++] = $item;
+        foreach ($this->objectExporters as $objectExporter) {
+            foreach ($objectExporter->export($this->dungeonRoute, $warnings) as $item) {
+                $result[$currentObjectIndex++] = $item;
+            }
         }
 
         return $result;
