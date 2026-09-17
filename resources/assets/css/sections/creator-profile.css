@@ -98,3 +98,17 @@
         text-align: left;
     }
 }
+
+/* Compact collection tile on the podium. Colour comes from .card, so only geometry lives here. */
+.collection_card_name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+/* Keep a long description from turning a tile into a wall of text */
+.collection_card_description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
