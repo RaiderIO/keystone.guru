@@ -223,7 +223,7 @@ return [
             'shared_by'      => '共有 :count 条法术记录发生了相同的变更',
         ],
         'tuning_build_released_at' => [
-            'went_live' => '',
+            'went_live' => ':date 上线',
         ],
     ],
     'tuning' => [

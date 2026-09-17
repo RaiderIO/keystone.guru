@@ -192,10 +192,10 @@ return [
     ],
     'dungeonroutecollection' => [
         'flash' => [
-            'collection_created'      => '',
-            'collection_updated'      => '',
-            'collection_deleted'      => '',
-            'max_collections_reached' => '',
+            'collection_created'      => '合集已创建',
+            'collection_updated'      => '合集已更新',
+            'collection_deleted'      => '合集已删除',
+            'max_collections_reached' => '您最多只能拥有 :max 个合集。',
         ],
     ],
     'profile' => [
