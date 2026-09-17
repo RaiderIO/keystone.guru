@@ -151,6 +151,46 @@ final class APICombatLogEnemyFailureControllerTest extends PublicTestCase
         $this->assertSame([$matching->id], array_column($response->json('data'), 'id'));
     }
 
+    /**
+     * An imported row keeps the dungeon_route_id it had on the deployment it came from, which identifies a completely
+     * different route here as soon as the two numbers collide. Resolving it against a local route would hand out a
+     * public key pointing at someone else's route, so an imported row gets no public key at all.
+     */
+    #[Test]
+    public function index_givenImportedRowPointingAtALocalRouteId_returnsNoPublicKeyForIt(): void
+    {
+        // Arrange
+        $this->actingAsAdmin();
+
+        $localRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $this->dungeon->id,
+            'mapping_version_id' => $this->mappingVersion->id,
+        ]);
+        $this->createdDungeonRouteIds[] = $localRoute->id;
+
+        // The imported row's remote id happens to be this local route's id - the collision this guards against
+        $imported = $this->createFailure([
+            'dungeon_route_id' => $localRoute->id,
+            'source'           => 'production',
+        ]);
+
+        // Act
+        $response = $this->getJson(route('api.v1.combatlog.enemy_failures.index', [
+            'dungeon'  => $this->dungeon->slug,
+            'after_id' => $imported->id - 1,
+        ]));
+
+        // Assert
+        $response->assertOk();
+
+        /** @var array<int, array<string, mixed>> $data */
+        $data = $response->json('data');
+        $row  = collect($data)->firstWhere('id', $imported->id);
+        $this->assertNotNull($row);
+        $this->assertSame($localRoute->id, $row['dungeon_route_id']);
+        $this->assertNull($row['dungeon_route_public_key']);
+    }
+
     #[Test]
     public function index_givenLimitAboveMax_returnsUnprocessable(): void
     {

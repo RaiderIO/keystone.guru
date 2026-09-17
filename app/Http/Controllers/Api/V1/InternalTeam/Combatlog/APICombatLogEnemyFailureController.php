@@ -51,8 +51,15 @@ class APICombatLogEnemyFailureController extends Controller
         $hasMore  = $failures->count() > $limit;
         $failures = $failures->take($limit);
 
-        // DungeonRoute lives on the other database connection, so the public keys are resolved in a second query
-        $dungeonRouteIds = $failures->pluck('dungeon_route_id')->filter()->unique()->values();
+        // DungeonRoute lives on the other database connection, so the public keys are resolved in a second query.
+        // Only rows this environment recorded itself point at a local route: an imported row keeps the id it had on
+        // the deployment it came from, which identifies a different route here whenever the two numbers collide.
+        $dungeonRouteIds = $failures
+            ->where('source', null)
+            ->pluck('dungeon_route_id')
+            ->filter()
+            ->unique()
+            ->values();
         /** @var array<int, string> $dungeonRoutePublicKeysById */
         $dungeonRoutePublicKeysById = $dungeonRouteIds->isEmpty() ? [] : DungeonRoute::query()
             ->whereIn('id', $dungeonRouteIds)
