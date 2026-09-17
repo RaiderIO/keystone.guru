@@ -154,6 +154,32 @@ final class CacheServiceHashTest extends PublicTestCase
     }
 
     #[Test]
+    public function rememberInHash_givenAllowedClasses_returnsTheInstantiatedObject(): void
+    {
+        // Arrange
+        $recordedCommands                          = [];
+        CacheServiceHashTestPayload::$wakeUpCalled = false;
+        $cacheService                              = $this->makeCacheService(serialize(new CacheServiceHashTestPayload()), $recordedCommands);
+
+        try {
+            // Act
+            $result = $cacheService->rememberInHash(
+                'dungeonroute_card:123',
+                'vertical:en_US_0_1_0',
+                static fn(): string => '<div>fresh</div>',
+                '1 hour',
+                [CacheServiceHashTestPayload::class],
+            );
+
+            // Assert
+            $this->assertInstanceOf(CacheServiceHashTestPayload::class, $result, 'A caller-allowed class must be unserialized into that class');
+            $this->assertTrue(CacheServiceHashTestPayload::$wakeUpCalled, '__wakeup() must run for a caller-allowed class');
+        } finally {
+            CacheServiceHashTestPayload::$wakeUpCalled = false;
+        }
+    }
+
+    #[Test]
     public function dropHashCache_givenRouteKey_issuesSingleDel(): void
     {
         // Arrange

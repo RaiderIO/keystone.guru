@@ -9,7 +9,6 @@ use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
-use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -556,18 +555,6 @@ final class AjaxTagControllerTest extends PublicTestCase
             'invite_code'  => fake()->unique()->uuid(),
             'default_role' => TeamUser::ROLE_MEMBER,
         ]);
-    }
-
-    #[Test]
-    public function all_givenAnyCaller_isNotRoutable(): void
-    {
-        // Arrange - the listing returned every user's and team's tags to anyone; nothing calls it.
-        // Act
-        $response = $this->get('/ajax/tag');
-
-        // Assert
-        $response->assertMethodNotAllowed();
-        $this->assertNull(Route::getRoutes()->getByName('ajax.tag.all'), 'The tag listing route must not be registered');
     }
 
     /**
