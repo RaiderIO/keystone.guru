@@ -727,6 +727,98 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
     }
 
     /**
+     * Every poll well-formed, thousands of runs matching, and nothing dispatched. Without this
+     * counter nothing observes that state, so nothing can report it either.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenTopBandWithRunsAvailableAndNoneDispatched_recordsAnIdleTopBandPoll(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        $run = $this->makeRun(4201, $this->dungeon->challenge_mode_id, mythicLevel: 23);
+
+        $criteriaService = $this->makeCriteriaService();
+        $criteriaService->method('shouldParse')->willReturn(false);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService(topRuns: [$run]);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->once())->method('recordTopBandPoll')->with(1, 0);
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        try {
+            ParsedCombatLog::create(['run_id' => $run->id]);
+
+            // Act + Assert
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $run->id)->delete();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenTopBandDispatchingARun_recordsANonIdleTopBandPoll(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        $run = $this->makeRun(4202, $this->dungeon->challenge_mode_id, mythicLevel: 23);
+
+        $criteriaService = $this->makeCriteriaService();
+        $criteriaService->method('shouldParse')->willReturn(false);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService(topRuns: [$run]);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->once())->method('recordTopBandPoll')->with(1, 1);
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        try {
+            // Act + Assert
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $run->id)->delete();
+        }
+    }
+
+    /**
+     * A search that came back malformed carries no total, and is already counted as a search
+     * failure - counting it as "runs were available and we took none" too would raise a second,
+     * misleading signal for one upstream error.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenTopBandSearchFailure_recordsNoRunsAvailable(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        $criteriaService = $this->makeCriteriaService();
+        $criteriaService->method('shouldParse')->willReturn(false);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('searchAdvancedRuns')->willReturn(new SearchAdvancedRunsResponse([], null));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->once())->method('recordTopBandPoll')->with(0, 0);
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        // Act + Assert
+        $this->artisan('combatlog:pollruns')->assertSuccessful();
+    }
+
+    /**
      * The same run legitimately comes back from several criterion queries and again from the top
      * band. Dispatching it more than once wastes a parse, and inserting it twice trips the unique
      * index on parsed_combat_logs.run_id.

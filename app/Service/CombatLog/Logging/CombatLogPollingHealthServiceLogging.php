@@ -23,4 +23,14 @@ class CombatLogPollingHealthServiceLogging extends StructuredLogging implements 
     {
         $this->error(__METHOD__, get_defined_vars());
     }
+
+    /**
+     * Warning rather than error: every poll behind this succeeded, so nothing is broken in the sense
+     * reportSummaryDegraded() means, but the band that is exempt from every budget - because its
+     * runs are the most valuable ones we parse - has stopped contributing anything at all.
+     */
+    public function reportTopBandIdle(string $hour, int $consecutiveIdlePolls, int $thresholdPolls): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
 }

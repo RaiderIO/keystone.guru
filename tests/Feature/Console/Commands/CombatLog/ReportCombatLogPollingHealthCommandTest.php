@@ -81,7 +81,26 @@ final class ReportCombatLogPollingHealthCommandTest extends PublicTestCase
         $this->artisan('combatlog:reportpollinghealth', ['--hours-ago' => 3])->assertSuccessful();
     }
 
-    private function makeSummary(int $dispatched, int $failures): CombatLogPollingHealthSummary
+    /**
+     * A window whose only content is an idle top band has every counter at zero, which is exactly
+     * the shape the command treats as nothing to say.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenNothingPolledButAnIdleTopBand_stillReports(): void
+    {
+        // Arrange
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->method('getSummary')->willReturn($this->makeSummary(dispatched: 0, failures: 0, topBandConsecutiveIdlePolls: 24));
+        $healthService->expects($this->once())->method('reportSummary')->willReturn(false);
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        // Act + Assert
+        $this->artisan('combatlog:reportpollinghealth')->assertSuccessful();
+    }
+
+    private function makeSummary(int $dispatched, int $failures, int $topBandConsecutiveIdlePolls = 0): CombatLogPollingHealthSummary
     {
         $failuresByReason = [];
         foreach (CombatLogPollingFailureReason::cases() as $reason) {
@@ -90,10 +109,11 @@ final class ReportCombatLogPollingHealthCommandTest extends PublicTestCase
         $failuresByReason[CombatLogPollingFailureReason::ParseFailed->value] = $failures;
 
         return new CombatLogPollingHealthSummary(
-            hour:             '2026-08-20-14',
-            dispatched:       $dispatched,
-            succeeded:        max($dispatched - $failures, 0),
-            failuresByReason: $failuresByReason,
+            hour:                        '2026-08-20-14',
+            dispatched:                  $dispatched,
+            succeeded:                   max($dispatched - $failures, 0),
+            failuresByReason:            $failuresByReason,
+            topBandConsecutiveIdlePolls: $topBandConsecutiveIdlePolls,
         );
     }
 }

@@ -11,14 +11,16 @@ use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
 readonly class CombatLogPollingHealthSummary
 {
     /**
-     * @param string             $hour             The bucket this covers, or `first..last` for a multi-hour window.
-     * @param array<string, int> $failuresByReason Keyed by CombatLogPollingFailureReason value, every reason present.
+     * @param string             $hour                        The bucket this covers, or `first..last` for a multi-hour window.
+     * @param array<string, int> $failuresByReason            Keyed by CombatLogPollingFailureReason value, every reason present.
+     * @param int                $topBandConsecutiveIdlePolls Consecutive polls in which the top band had runs available and took none, as it stands now rather than over the window.
      */
     public function __construct(
         public string $hour,
         public int    $dispatched,
         public int    $succeeded,
         public array  $failuresByReason,
+        public int    $topBandConsecutiveIdlePolls = 0,
     ) {
     }
 
@@ -47,8 +49,16 @@ readonly class CombatLogPollingHealthSummary
         return $this->failuresByReason[$reason->value] ?? 0;
     }
 
+    /**
+     * An idle top band counts as something to say even when every counter is zero - a window in
+     * which the top band had runs available and dispatched none of them, and nothing else happened
+     * either, is the one state this whole summary exists to surface and the one it would hide.
+     */
     public function isEmpty(): bool
     {
-        return $this->dispatched === 0 && $this->succeeded === 0 && $this->getTotalFailures() === 0;
+        return $this->dispatched === 0
+            && $this->succeeded === 0
+            && $this->getTotalFailures() === 0
+            && $this->topBandConsecutiveIdlePolls === 0;
     }
 }

@@ -32,6 +32,13 @@ interface CombatLogPollingHealthServiceInterface
     public function recordFailure(CombatLogPollingFailureReason $reason): void;
 
     /**
+     * Records what one poll of the top band amounted to. A poll that had runs available and
+     * dispatched none of them is counted as idle, and consecutive idle polls accumulate; anything
+     * else clears the streak.
+     */
+    public function recordTopBandPoll(int $available, int $dispatched): void;
+
+    /**
      * Returns the counters for the window of hours ending in the hour the given moment falls in.
      * The window defaults to the configured one and exists because a run's outcome can land in a
      * later hour than its dispatch - see the implementation.
@@ -40,7 +47,8 @@ interface CombatLogPollingHealthServiceInterface
 
     /**
      * Logs the given hour's summary - at error level, and only then, when the hour saw a substantial
-     * share of its runs fail. Returns whether it did.
+     * share of its runs fail. Returns whether it did. A top band that has been idle for longer than
+     * the configured streak is reported alongside it, at warning level.
      */
     public function reportSummary(CombatLogPollingHealthSummary $summary): bool;
 }

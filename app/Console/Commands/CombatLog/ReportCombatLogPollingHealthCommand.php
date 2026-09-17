@@ -39,13 +39,14 @@ class ReportCombatLogPollingHealthCommand extends SchedulerCommand
             $degraded = $healthService->reportSummary($summary);
 
             $this->info(sprintf(
-                'combatlog:reportpollinghealth — %s | dispatched=%d succeeded=%d failed=%d rate=%.2f degraded=%s | %s',
+                'combatlog:reportpollinghealth — %s | dispatched=%d succeeded=%d failed=%d rate=%.2f degraded=%s topband_idle_polls=%d | %s',
                 $summary->hour,
                 $summary->dispatched,
                 $summary->succeeded,
                 $summary->getTotalFailures(),
                 $summary->getFailureRate(),
                 $degraded ? 'yes' : 'no',
+                $summary->topBandConsecutiveIdlePolls,
                 implode(', ', array_map(
                     static fn(string $reason, int $count): string => sprintf('%s=%d', $reason, $count),
                     array_keys($summary->failuresByReason),

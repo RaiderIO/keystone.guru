@@ -13,4 +13,6 @@ interface CombatLogPollingHealthServiceLoggingInterface
      * @param array<string, int> $failuresByReason
      */
     public function reportSummaryDegraded(string $hour, int $dispatched, int $succeeded, int $failures, float $failureRate, array $failuresByReason): void;
+
+    public function reportTopBandIdle(string $hour, int $consecutiveIdlePolls, int $thresholdPolls): void;
 }

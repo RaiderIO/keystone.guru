@@ -67,4 +67,23 @@ final class CombatLogPollingHealthServiceLoggingTest extends PublicTestCase
         // Act
         $log->reportSummaryHealthy('2026-08-20-14', 40, 38, 2, 0.05, ['parse_failed' => 2]);
     }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function reportTopBandIdle_givenCalled_logsAtWarningNotError(): void
+    {
+        // Arrange - every poll behind this succeeded, so it must not page the way a degraded window does
+        $logManager = LoggingFixtures::createLogManager($this);
+        app()->instance('log', $logManager);
+
+        $logManager->expects($this->once())->method('log')->with('WARNING');
+
+        /** @var CombatLogPollingHealthServiceLoggingInterface $log */
+        $log = app(CombatLogPollingHealthServiceLoggingInterface::class);
+
+        // Act
+        $log->reportTopBandIdle('2026-08-20-14', 24, 12);
+    }
 }
