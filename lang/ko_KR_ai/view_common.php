@@ -509,7 +509,7 @@ return [
             ],
 
             'combatlogrouteenemyresolutions' => [
-                'explanation'             => '매칭은 되었지만 :distance야드 이상 떨어진 매핑된 적에 매칭된 적입니다. 같은 지점이 계속 나타난다면 그곳의 적이 잘못 배치되었다는 신호입니다.',
+                'explanation'             => '매칭은 되었지만 :distance야드 이상 떨어진 매핑된 적에 연결된 경우입니다. 같은 지점이 계속 나타난다면 그곳의 적이 잘못 배치되었다는 신호입니다.',
                 'mapping_version_filter'  => '매핑 버전',
                 'npc_filter'              => 'NPC 필터',
                 'metric_filter'           => '셀 가중치',

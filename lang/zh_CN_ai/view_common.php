@@ -509,7 +509,7 @@ return [
             ],
 
             'combatlogrouteenemyresolutions' => [
-                'explanation'             => '已匹配成功但匹配到的已映射敌人至少相距 :distance 码的敌人。反复出现的热点说明那里的敌人位置有误。',
+                'explanation'             => '已成功匹配，但匹配到的已映射敌人至少相距 :distance 码。反复出现的热点说明那里的敌人位置有误。',
                 'mapping_version_filter'  => '映射版本',
                 'npc_filter'              => 'NPC筛选',
                 'metric_filter'           => '单元格权重',
