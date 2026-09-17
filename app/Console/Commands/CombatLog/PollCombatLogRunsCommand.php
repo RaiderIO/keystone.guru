@@ -270,6 +270,13 @@ class PollCombatLogRunsCommand extends Command
      * always dispatched: no budget is consulted, and they are counted against their own band so
      * they cannot eat into the budgets of the spread bands.
      *
+     * Pages onwards while a whole page turns out to be already parsed. One page holds the newest
+     * `limit` runs of a result set that spans the whole completed_at window, so an hour in which no
+     * new top run appeared sees nothing but already-parsed runs on page one - and any top run that
+     * fell past page one, because more than `limit` of them accumulated between two polls, would
+     * never be reached at all. Stops at the first page that dispatches something and at the
+     * configured page cap.
+     *
      * @param Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
      * @param Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
      * @param Collection<int, CharacterRace>                       $criterionRaces
@@ -290,41 +297,62 @@ class PollCombatLogRunsCommand extends Command
         array        &        $dispatchCounts,
     ): void {
         $dispatchedBefore = $dispatchCounts['dispatched'];
+        $maxPages         = (int)config('keystoneguru.raider_io.combat_log_polling.top_band.max_pages');
 
         // Nothing else creates this band's rows for today: it is dispatch or nothing, because the
         // band has no budget for shouldParse() to check on its way past findOrCreate(). Without
         // this the admin criteria page shows no top band at all on a day it dispatched nothing.
         $this->criteriaService->ensureCriteriaExist($combatLogVersion, $season, $band);
 
-        $response = $this->raiderIOApiService->searchAdvancedRuns(new SearchAdvancedRunsFilter(
-            dungeon:         null,
-            season:          $season,
-            specs:           collect(),
-            completedAtFrom: $completedAtFrom,
-            completedAtTo:   null,
-            mythicLevelMin:  $band->min,
-            mythicLevelMax:  $band->max,
-            limit:           $limit,
-            offset:          0,
-        ));
+        $available   = null;
+        $pagesPolled = 0;
 
-        $this->recordSearchFailure($response);
+        for ($page = 0; $page < $maxPages; $page++) {
+            $dispatchedBeforePage = $dispatchCounts['dispatched'];
 
-        $this->markAlreadyParsedRuns($response->runs, $knownRunIds, $force);
+            $response = $this->raiderIOApiService->searchAdvancedRuns(new SearchAdvancedRunsFilter(
+                dungeon:         null,
+                season:          $season,
+                specs:           collect(),
+                completedAtFrom: $completedAtFrom,
+                completedAtTo:   null,
+                mythicLevelMin:  $band->min,
+                mythicLevelMax:  $band->max,
+                limit:           $limit,
+                offset:          $page * $limit,
+            ));
 
-        foreach ($response->runs as $run) {
-            if (isset($knownRunIds[$run->id])) {
-                $dispatchCounts['skippedParsed']++;
-                continue;
+            $pagesPolled++;
+
+            if ($page === 0) {
+                $available = $response->total;
             }
 
-            $this->dispatchRun($run, $season, $combatLogVersion, $band, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $criterionRaces, $knownRunIds, $force, $dispatchCounts);
+            $this->recordSearchFailure($response);
+
+            $this->markAlreadyParsedRuns($response->runs, $knownRunIds, $force);
+
+            foreach ($response->runs as $run) {
+                if (isset($knownRunIds[$run->id])) {
+                    $dispatchCounts['skippedParsed']++;
+                    continue;
+                }
+
+                $this->dispatchRun($run, $season, $combatLogVersion, $band, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $criterionRaces, $knownRunIds, $force, $dispatchCounts);
+            }
+
+            // A short page is the last one there is - and a failed search returns an empty one, which
+            // stops the paging rather than spending the whole cap on an API that is currently broken.
+            if ($dispatchCounts['dispatched'] > $dispatchedBeforePage || count($response->runs) < $limit) {
+                break;
+            }
         }
 
         $this->info(sprintf(
-            'combatlog:pollruns — top band %s | available=%s dispatched=%d',
+            'combatlog:pollruns — top band %s | available=%s pages=%d dispatched=%d',
             $band,
-            $response->total ?? '?',
+            $available ?? '?',
+            $pagesPolled,
             $dispatchCounts['dispatched'] - $dispatchedBefore,
         ));
     }
