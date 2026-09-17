@@ -3,6 +3,9 @@
 namespace App\Models\CombatLog;
 
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCounter;
+use App\Models\Spell\SpellImmunity;
+use App\Models\Spell\SpellMissType;
 use LogicException;
 
 enum SpellProperty: string
@@ -35,7 +38,7 @@ enum SpellProperty: string
 
     public static function fromMissTypeBit(int $bit): self
     {
-        return self::from(sprintf('miss_%s', Spell::ALL_MISS_TYPES[$bit]));
+        return self::from(sprintf('miss_%s', SpellMissType::slugsByBit()[$bit]));
     }
 
     /**
@@ -63,9 +66,9 @@ enum SpellProperty: string
         }
 
         [$names, $prefix] = match (true) {
-            $this->isCounter()        => [Spell::ALL_COUNTERS, 'counter_'],
-            $this->isImmunityBypass() => [Spell::ALL_IMMUNITIES, 'bypass_'],
-            default                   => [Spell::ALL_MISS_TYPES, 'miss_'],
+            $this->isCounter()        => [SpellCounter::slugsByBit(), 'counter_'],
+            $this->isImmunityBypass() => [SpellImmunity::slugsByBit(), 'bypass_'],
+            default                   => [SpellMissType::slugsByBit(), 'miss_'],
         };
 
         foreach ($names as $bit => $name) {
@@ -75,6 +78,25 @@ enum SpellProperty: string
         }
 
         throw new LogicException(sprintf('No bit found for SpellProperty: %s', $this->value));
+    }
+
+    /**
+     * The translation key of the counter, immunity or miss type this property stands for, or null for the two
+     * properties that are stored as a boolean column rather than a mask bit.
+     */
+    public function translationKey(): ?string
+    {
+        $bit = $this->maskBit();
+
+        if ($bit === null) {
+            return null;
+        }
+
+        return match (true) {
+            $this->isCounter()        => SpellCounter::from($bit)->translationKey(),
+            $this->isImmunityBypass() => SpellImmunity::from($bit)->translationKey(),
+            default                   => SpellMissType::from($bit)->translationKey(),
+        };
     }
 
     public function isCounter(): bool

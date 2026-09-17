@@ -4,6 +4,7 @@ use App\Models\CharacterClass;
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCounter;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInterface;
 use Illuminate\Support\Collection;
 
@@ -139,7 +140,7 @@ use Illuminate\Support\Collection;
             $counterSpells = $counterSection['spells'];
             /** @var Collection<int, Collection<int, Npc>> $npcsBySpellId */
             $npcsBySpellId = $counterSection['npcsBySpellId'];
-            $counterKey    = Spell::ALL_COUNTERS[$definition->getCounterBit()];
+            $counterName   = __(SpellCounter::from($definition->getCounterBit())->translationKey());
             ?>
             <div class="compendium_record_section @if($loop->first) mt-4 @endif">
                 <div class="compendium_record_label">
@@ -153,7 +154,7 @@ use Illuminate\Support\Collection;
                              width="20" height="20"
                              loading="lazy"
                              class="rounded me-1"
-                             alt="{{ __('spellcounters.' . $counterKey) }}"/>{{ __('spellcounters.' . $counterKey) }}
+                             alt="{{ $counterName }}"/>{{ $counterName }}
                         @if($raceName !== null)
                             <span class="badge text-bg-secondary ms-1">
                                 {{ __('view_compendium.class.show.counters.racial', ['race' => __($raceName)]) }}

@@ -30,7 +30,10 @@ use App\Models\CombatLog\SpellProperty;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell as SpellModel;
+use App\Models\Spell\SpellCategory;
+use App\Models\Spell\SpellDispelType;
 use App\Models\Spell\SpellDungeon;
+use App\Models\Spell\SpellMechanic;
 use App\Service\CombatLog\DataExtractors\Logging\SpellCounterDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitions;
@@ -83,25 +86,25 @@ class SpellCounterDataExtractor implements DataExtractorInterface
      * (bleeds, Judgment, Consecration, ...) land on trash NPCs near-constantly mid-combat and must not veto signature
      * C, or it would never fire in practice.
      *
-     * @var array<int, string>
+     * @var list<SpellMechanic>
      */
     public const array CAST_DISTURBING_MECHANICS = [
-        SpellModel::MECHANIC_ASLEEP,
-        SpellModel::MECHANIC_BANISHED,
-        SpellModel::MECHANIC_CHARMED,
-        SpellModel::MECHANIC_DISORIENTED,
-        SpellModel::MECHANIC_FLEEING,
-        SpellModel::MECHANIC_FROZEN,
-        SpellModel::MECHANIC_GRIPPED,
-        SpellModel::MECHANIC_HORRIFIED,
-        SpellModel::MECHANIC_INCAPACITATED,
-        SpellModel::MECHANIC_INTERRUPTED,
-        SpellModel::MECHANIC_POLYMORPHED,
-        SpellModel::MECHANIC_SAPPED,
-        SpellModel::MECHANIC_SHACKLED,
-        SpellModel::MECHANIC_SILENCED,
-        SpellModel::MECHANIC_STUNNED,
-        SpellModel::MECHANIC_TURNED,
+        SpellMechanic::Asleep,
+        SpellMechanic::Banished,
+        SpellMechanic::Charmed,
+        SpellMechanic::Disoriented,
+        SpellMechanic::Fleeing,
+        SpellMechanic::Frozen,
+        SpellMechanic::Gripped,
+        SpellMechanic::Horrified,
+        SpellMechanic::Incapacitated,
+        SpellMechanic::Interrupted,
+        SpellMechanic::Polymorphed,
+        SpellMechanic::Sapped,
+        SpellMechanic::Shackled,
+        SpellMechanic::Silenced,
+        SpellMechanic::Stunned,
+        SpellMechanic::Turned,
     ];
 
     /** @var Collection<int, SpellCounterDefinitionInterface> Keyed by trigger cast spell id. */
@@ -438,7 +441,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         // their Wowhead data is fetched, and the countered spell is often exactly such a spell.
         if ($npcId === null ||
             $spell === null ||
-            ($spell->category !== null && $spell->category !== sprintf('spellcategory.%s', SpellModel::CATEGORY_UNKNOWN))) {
+            ($spell->category !== null && $spell->category !== SpellCategory::Unknown->translationKey())) {
             return;
         }
 
@@ -775,7 +778,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         }
 
         foreach (self::CAST_DISTURBING_MECHANICS as $disturbingMechanic) {
-            if ($mechanic === sprintf('spellmechanic.%s', $disturbingMechanic)) {
+            if ($mechanic === $disturbingMechanic->translationKey()) {
                 return true;
             }
         }
@@ -812,7 +815,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         }
 
         // Rows predating the translation-key migration still hold the bare value, so compare on that
-        $dispelType = Str::after($dispelType, SpellModel::DISPEL_TYPE_TRANSLATION_KEY_PREFIX);
+        $dispelType = Str::after($dispelType, SpellDispelType::TRANSLATION_KEY_PREFIX);
 
         if (!in_array($dispelType, $unstrippableDispelTypes, true)) {
             return true;

@@ -4,6 +4,9 @@ namespace App\Service\Spell;
 
 use App\Models\CharacterClass;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCategory;
+use App\Models\Spell\SpellCooldownGroup;
+use App\Models\Spell\SpellDispelType;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\Spell\Logging\SpellServiceLoggingInterface;
 use Illuminate\Support\Str;
@@ -63,7 +66,7 @@ class SpellService implements SpellServiceInterface
                 'id'             => $spellId,
                 'category'       => $categoryName,
                 'cooldown_group' => $cooldownGroupName,
-                'dispel_type'    => sprintf('spelldispeltype.%s', Spell::DISPEL_TYPE_MAGIC),
+                'dispel_type'    => SpellDispelType::Magic->translationKey(),
                 'icon_name'      => $row[$indexClassIconName],
                 'name'           => $row[$indexClassSpellName],
                 'schools_mask'   => 0,
@@ -98,9 +101,9 @@ class SpellService implements SpellServiceInterface
     public function getCategoryNameFromRowClassName(string $rowClassName): ?string
     {
         // Try to match the category directly first
-        $categorySlug = Str::slug($rowClassName, '_');
+        $category = SpellCategory::tryFrom(Str::slug($rowClassName, '_'));
 
-        if (!in_array($categorySlug, Spell::ALL_CATEGORIES)) {
+        if ($category === null) {
             // Try to find the associated class first, then use that class to identify the category
             $characterClass = $this->getCharacterClassFromClassName($rowClassName);
 
@@ -114,15 +117,16 @@ class SpellService implements SpellServiceInterface
             $characterClassName = __($characterClass->name, [], 'en_US');
 
             $categorySlug = Str::slug($characterClassName, '_');
+            $category     = SpellCategory::tryFrom($categorySlug);
 
-            if (!in_array($categorySlug, Spell::ALL_CATEGORIES)) {
+            if ($category === null) {
                 $this->log->getCategoryNameFromClassNameUnableToFindCategory($categorySlug);
 
                 return null;
             }
         }
 
-        return sprintf('spellcategory.%s', $categorySlug);
+        return $category->translationKey();
     }
 
     public function getCharacterClassFromClassName(string $csvClass): ?CharacterClass
@@ -145,14 +149,15 @@ class SpellService implements SpellServiceInterface
     public function getCooldownGroupNameFromRowCooldownGroup(string $cooldownGroup): ?string
     {
         $cooldownGroupSlug = Str::slug($cooldownGroup, '_');
+        $cooldownGroupCase = SpellCooldownGroup::tryFrom($cooldownGroupSlug);
 
-        if (!in_array($cooldownGroupSlug, Spell::ALL_COOLDOWN_GROUPS)) {
+        if ($cooldownGroupCase === null) {
             $this->log->getCooldownGroupNameFromCooldownGroupUnableToFindCategory($cooldownGroupSlug);
 
             return null;
         }
 
-        return sprintf('spellcooldowngroup.%s', $cooldownGroupSlug);
+        return $cooldownGroupCase->translationKey();
     }
 
     /**

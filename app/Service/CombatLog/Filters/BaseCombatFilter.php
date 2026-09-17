@@ -16,7 +16,7 @@ use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\EncounterEnd\EncounterEndInterface;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Models\Npc\Npc;
-use App\Models\Spell\Spell;
+use App\Models\Spell\KnownSpell;
 use App\Service\CombatLog\Filters\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
@@ -426,7 +426,7 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
             return false;
         }
 
-        return in_array($prefix->getSpellId(), Spell::CHARM_SPELLS);
+        return in_array($prefix->getSpellId(), KnownSpell::CHARM_SPELLS);
     }
 
     private function isEnemyDefeated(BaseEvent $combatLogEvent): bool

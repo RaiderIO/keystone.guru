@@ -8,6 +8,7 @@ use App\Models\CombatLog\SpellProperty;
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellSchool;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
 
@@ -60,22 +61,8 @@ $eventGlyph = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): ar
 };
 
 $spellPropertyName = static function (SpellProperty $property): string {
-    if ($property === SpellProperty::Aura || $property === SpellProperty::Debuff) {
-        return __('view_compendium.event.property.' . $property->value);
-    }
-
-    if ($property->isCounter()) {
-        // counter_vanish → vanish
-        return __('spellcounters.' . substr($property->value, 8));
-    }
-
-    if ($property->isImmunityBypass()) {
-        // bypass_divine_shield → divine_shield
-        return __('spellimmunities.' . substr($property->value, 7));
-    }
-
-    // miss_reflect → reflect
-    return __('spellmisstypes.' . substr($property->value, 5));
+    // Aura and debuff are boolean columns rather than mask bits, so no spell enum names them
+    return __($property->translationKey() ?? sprintf('view_compendium.event.property.%s', $property->value));
 };
 
 /**
@@ -145,7 +132,7 @@ $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
             [
                 'spell'   => $spellName,
                 'schools' => e($event->spell
-                    ? Spell::maskToReadableString(Spell::ALL_SCHOOLS, $event->spell->schools_mask, 'spellschools')
+                    ? SpellSchool::maskToTranslatedString($event->spell->schools_mask)
                     : '-'),
             ]
         ),

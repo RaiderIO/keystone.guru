@@ -12,6 +12,9 @@ use App\Models\CombatLog\CombatLogSpellPropertyObservation;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCounter;
+use App\Models\Spell\SpellImmunity;
+use App\Models\Spell\SpellMissType;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -300,7 +303,7 @@ class DetectStaleCombatLogDataCommand extends Command
 
     private function getMissTypeBit(SpellProperty $property): int
     {
-        foreach (Spell::ALL_MISS_TYPES as $bit => $name) {
+        foreach (SpellMissType::slugsByBit() as $bit => $name) {
             if ($property->value === sprintf('miss_%s', $name)) {
                 return $bit;
             }
@@ -311,7 +314,7 @@ class DetectStaleCombatLogDataCommand extends Command
 
     private function getCounterBit(SpellProperty $property): int
     {
-        foreach (Spell::ALL_COUNTERS as $bit => $name) {
+        foreach (SpellCounter::slugsByBit() as $bit => $name) {
             if ($property->value === sprintf('counter_%s', $name)) {
                 return $bit;
             }
@@ -322,7 +325,7 @@ class DetectStaleCombatLogDataCommand extends Command
 
     private function getImmunityBit(SpellProperty $property): int
     {
-        foreach (Spell::ALL_IMMUNITIES as $bit => $name) {
+        foreach (SpellImmunity::slugsByBit() as $bit => $name) {
             if ($property->value === sprintf('bypass_%s', $name)) {
                 return $bit;
             }

@@ -3,7 +3,9 @@
 namespace App\Service\CombatLog\DataExtractors\ImmunityBypasses;
 
 use App\Models\CombatLog\SpellProperty;
-use App\Models\Spell\Spell;
+use App\Models\Spell\KnownSpell;
+use App\Models\Spell\SpellImmunity;
+use App\Models\Spell\SpellSchool;
 use Illuminate\Support\Collection;
 
 /**
@@ -28,9 +30,9 @@ final class ImmunityDefinitions
             // Immune to all damage and harmful effects
             new ImmunityDefinition(
                 SpellProperty::BypassDivineShield,
-                Spell::IMMUNITY_DIVINE_SHIELD,
-                [Spell::SPELL_DIVINE_SHIELD],
-                Spell::SCHOOLS_MASK_ALL,
+                SpellImmunity::DivineShield->value,
+                [KnownSpell::DivineShield->value],
+                SpellSchool::MASK_ALL,
                 true,
                 true,
                 8000,
@@ -38,9 +40,9 @@ final class ImmunityDefinitions
             // Immune to all damage and harmful effects
             new ImmunityDefinition(
                 SpellProperty::BypassIceBlock,
-                Spell::IMMUNITY_ICE_BLOCK,
-                [Spell::SPELL_ICE_BLOCK],
-                Spell::SCHOOLS_MASK_ALL,
+                SpellImmunity::IceBlock->value,
+                [KnownSpell::IceBlock->value],
+                SpellSchool::MASK_ALL,
                 true,
                 true,
                 10000,
@@ -48,9 +50,9 @@ final class ImmunityDefinitions
             // Damage only - it never claimed to stop debuffs
             new ImmunityDefinition(
                 SpellProperty::BypassAspectOfTheTurtle,
-                Spell::IMMUNITY_ASPECT_OF_THE_TURTLE,
-                [Spell::SPELL_ASPECT_OF_THE_TURTLE],
-                Spell::SCHOOLS_MASK_ALL,
+                SpellImmunity::AspectOfTheTurtle->value,
+                [KnownSpell::AspectOfTheTurtle->value],
+                SpellSchool::MASK_ALL,
                 true,
                 false,
                 8000,
@@ -58,9 +60,9 @@ final class ImmunityDefinitions
             // Physical damage and harmful effects only
             new ImmunityDefinition(
                 SpellProperty::BypassBlessingOfProtection,
-                Spell::IMMUNITY_BLESSING_OF_PROTECTION,
-                [Spell::SPELL_BLESSING_OF_PROTECTION],
-                Spell::SCHOOL_PHYSICAL,
+                SpellImmunity::BlessingOfProtection->value,
+                [KnownSpell::BlessingOfProtection->value],
+                SpellSchool::Physical->value,
                 true,
                 true,
                 10000,
@@ -68,9 +70,9 @@ final class ImmunityDefinitions
             // Magical damage and harmful effects only
             new ImmunityDefinition(
                 SpellProperty::BypassBlessingOfSpellwarding,
-                Spell::IMMUNITY_BLESSING_OF_SPELLWARDING,
-                [Spell::SPELL_BLESSING_OF_SPELLWARDING],
-                Spell::SCHOOLS_MASK_MAGIC,
+                SpellImmunity::BlessingOfSpellwarding->value,
+                [KnownSpell::BlessingOfSpellwarding->value],
+                SpellSchool::MASK_MAGIC,
                 true,
                 true,
                 10000,
@@ -80,9 +82,9 @@ final class ImmunityDefinitions
             // duration only ever force-closes a window whose removal line is missing
             new ImmunityDefinition(
                 SpellProperty::BypassAntiMagicShell,
-                Spell::IMMUNITY_ANTI_MAGIC_SHELL,
-                [Spell::SPELL_ANTI_MAGIC_SHELL],
-                Spell::SCHOOLS_MASK_MAGIC,
+                SpellImmunity::AntiMagicShell->value,
+                [KnownSpell::AntiMagicShell->value],
+                SpellSchool::MASK_MAGIC,
                 false,
                 true,
                 7000,

@@ -4,7 +4,7 @@ namespace Tests\Unit\App\Logic\CombatLog\CombatEvents\Prefixes;
 
 use App\Logic\CombatLog\CombatEvents\Prefixes\Range;
 use App\Logic\CombatLog\CombatLogVersion;
-use App\Models\Spell\Spell;
+use App\Models\Spell\SpellSchool;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -36,16 +36,16 @@ final class RangeTest extends PublicTestCase
     {
         return [
             // How retail actually logs the prefix school - a plain (int) cast reads every one of these as 0
-            'hex physical'         => ['0x1', Spell::SCHOOL_PHYSICAL],
-            'hex holy'             => ['0x2', Spell::SCHOOL_HOLY],
-            'hex shadow'           => ['0x20', Spell::SCHOOL_SHADOW],
-            'hex arcane'           => ['0x40', Spell::SCHOOL_ARCANE],
-            'hex uppercase'        => ['0X20', Spell::SCHOOL_SHADOW],
+            'hex physical'         => ['0x1', SpellSchool::Physical->value],
+            'hex holy'             => ['0x2', SpellSchool::Holy->value],
+            'hex shadow'           => ['0x20', SpellSchool::Shadow->value],
+            'hex arcane'           => ['0x40', SpellSchool::Arcane->value],
+            'hex uppercase'        => ['0X20', SpellSchool::Shadow->value],
             'hex multi school'     => ['0x7c', 124],
             'hex uppercase digits' => ['0x7C', 124],
             'hex none'             => ['0x0', 0],
             // Decimal is how the damage *suffix* logs it, and is accepted so the parse survives a format change
-            'decimal'      => ['32', Spell::SCHOOL_SHADOW],
+            'decimal'      => ['32', SpellSchool::Shadow->value],
             'decimal zero' => ['0', 0],
             'nil'          => ['nil', 0],
         ];

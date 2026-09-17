@@ -4,6 +4,7 @@ namespace App\Console\Commands\Wowhead;
 
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Spell\KnownSpell;
 use App\Models\Spell\Spell;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
@@ -92,7 +93,7 @@ class FetchSpellData extends Command
                     $spellAttributes['fetched_data_at'] = Carbon::now();
 
                     // Prevent category updates when we change it manually
-                    if (in_array($spell->id, Spell::BLOODLUSTY_SPELLS)) {
+                    if (in_array($spell->id, KnownSpell::BLOODLUSTY_SPELLS)) {
                         unset($spellAttributes['category']);
                     }
 

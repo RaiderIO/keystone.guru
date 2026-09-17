@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellSchool;
 
 /**
  * @var Spell $spell
@@ -27,7 +28,7 @@ use App\Models\Spell\Spell;
             @endif
             @if($spell->schools_mask > 0)
                 <span class="compendium_chip">
-                    {{ Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask, 'spellschools') }}
+                    {{ SpellSchool::maskToTranslatedString($spell->schools_mask) }}
                 </span>
             @endif
             @if($spell->dispel_type)

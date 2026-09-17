@@ -9,6 +9,8 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCategory;
+use App\Models\Spell\SpellMissType;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitions;
 use App\Service\Dungeon\DungeonServiceInterface;
@@ -69,7 +71,7 @@ class ClassCompendiumController extends Controller
         // taxonomy nobody thinks in.
         $spells = self::sortByTranslatedName(
             Spell::query()
-                ->where('category', sprintf('spellcategory.%s', $characterClass->key))
+                ->where('category', SpellCategory::translationKeyFor($characterClass->key))
                 ->whereNotNull('characteristic_id')
                 ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
                 ->with('characteristic')
@@ -258,7 +260,7 @@ class ClassCompendiumController extends Controller
         // Scoped to the context dungeon so the listed spells match the section's "for this dungeon" framing
         $spells = Spell::query()
             ->visible()
-            ->whereRaw('miss_types_mask & ? != 0', [Spell::MISS_TYPE_REFLECT])
+            ->whereRaw('miss_types_mask & ? != 0', [SpellMissType::Reflect->value])
             ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
             ->whereIn('id', static function ($query) use ($dungeon): void {
                 $query->select('spell_id')->from('spell_dungeons')->where('dungeon_id', $dungeon->id);

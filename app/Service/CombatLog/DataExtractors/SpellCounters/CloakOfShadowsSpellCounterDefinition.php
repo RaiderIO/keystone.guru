@@ -4,7 +4,8 @@ namespace App\Service\CombatLog\DataExtractors\SpellCounters;
 
 use App\Models\CharacterClass;
 use App\Models\CombatLog\SpellProperty;
-use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCounter;
+use App\Models\Spell\SpellDispelType;
 
 /**
  * Unlike the threat-drop counters, Cloak of Shadows does not pre-empt anything - it strips the magic debuffs already
@@ -22,7 +23,7 @@ class CloakOfShadowsSpellCounterDefinition extends SpellCounterDefinition
 
     public function getCounterBit(): int
     {
-        return Spell::COUNTER_CLOAK_OF_SHADOWS;
+        return SpellCounter::CloakOfShadows->value;
     }
 
     /**
@@ -60,7 +61,7 @@ class CloakOfShadowsSpellCounterDefinition extends SpellCounterDefinition
     }
 
     /**
-     * `Spell::DISPEL_TYPE_NONE` is deliberately absent even though "not dispellable at all"
+     * `SpellDispelType::None` is deliberately absent even though "not dispellable at all"
      * contradicts a magic strip as squarely as a poison does: `2026_04_20_224500_update_spell_dispel_type_to_translation_keys`
      * folded the legacy empty string into `none` alongside the explicit `None`, so the value no
      * longer distinguishes "known to be undispellable" from "never had a value" - and rejecting
@@ -71,10 +72,10 @@ class CloakOfShadowsSpellCounterDefinition extends SpellCounterDefinition
     public function getUnstrippableDebuffDispelTypes(): array
     {
         return [
-            Spell::DISPEL_TYPE_POISON,
-            Spell::DISPEL_TYPE_DISEASE,
-            Spell::DISPEL_TYPE_CURSE,
-            Spell::DISPEL_TYPE_ENRAGE,
+            SpellDispelType::Poison->value,
+            SpellDispelType::Disease->value,
+            SpellDispelType::Curse->value,
+            SpellDispelType::Enrage->value,
         ];
     }
 }

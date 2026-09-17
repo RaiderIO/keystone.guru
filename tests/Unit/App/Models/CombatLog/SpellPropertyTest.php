@@ -4,6 +4,9 @@ namespace Tests\Unit\App\Models\CombatLog;
 
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCounter;
+use App\Models\Spell\SpellImmunity;
+use App\Models\Spell\SpellMissType;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -12,16 +15,16 @@ use Tests\TestCases\PublicTestCase;
 final class SpellPropertyTest extends PublicTestCase
 {
     #[Test]
-    public function columnAndMaskBit_givenEveryProperty_resolveToTheColumnAndBitTheSpellConstantsDeclare(): void
+    public function columnAndMaskBit_givenEveryProperty_resolveToTheColumnAndBitTheSpellEnumsDeclare(): void
     {
         // Arrange - Spell::recordCombatLogProperty() builds its conditional UPDATE from these two, so a property
         // that resolves to the wrong column or bit would silently record the wrong fact
         $expectedColumns = [
             'aura'                     => ['aura'],
             'debuff'                   => ['debuff'],
-            'miss_types_mask'          => Spell::ALL_MISS_TYPES,
-            'counters_mask'            => Spell::ALL_COUNTERS,
-            'bypasses_immunities_mask' => Spell::ALL_IMMUNITIES,
+            'miss_types_mask'          => SpellMissType::slugsByBit(),
+            'counters_mask'            => SpellCounter::slugsByBit(),
+            'bypasses_immunities_mask' => SpellImmunity::slugsByBit(),
         ];
 
         foreach (SpellProperty::cases() as $property) {

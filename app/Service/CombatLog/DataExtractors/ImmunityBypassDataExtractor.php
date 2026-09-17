@@ -29,6 +29,7 @@ use App\Models\CombatLog\SpellProperty;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell as SpellModel;
+use App\Models\Spell\SpellCategory;
 use App\Models\Spell\SpellDungeon;
 use App\Service\CombatLog\DataExtractors\ImmunityBypasses\ImmunityDefinitionInterface;
 use App\Service\CombatLog\DataExtractors\ImmunityBypasses\ImmunityDefinitions;
@@ -370,7 +371,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         // null category is allowed - spells first created from a combat log carry no category until Wowhead is fetched
         if ($npcId === null ||
             $spell === null ||
-            ($spell->category !== null && $spell->category !== sprintf('spellcategory.%s', SpellModel::CATEGORY_UNKNOWN))) {
+            ($spell->category !== null && $spell->category !== SpellCategory::Unknown->translationKey())) {
             return;
         }
 

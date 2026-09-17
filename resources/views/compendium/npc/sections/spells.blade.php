@@ -2,6 +2,10 @@
 
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCounter;
+use App\Models\Spell\SpellImmunity;
+use App\Models\Spell\SpellMissType;
+use App\Models\Spell\SpellSchool;
 
 /**
  * The section title lives in the parent record section's label rail (see show.blade.php).
@@ -54,10 +58,10 @@ use App\Models\Spell\Spell;
 
                 <tr>
                     <td class="text-nowrap">@include('common.spell.link', ['spell' => $spell, 'size' => 24])</td>
-                    <td>{{ Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask, 'spellschools') }}</td>
-                    <td>{{ Spell::maskToReadableString(Spell::ALL_MISS_TYPES, $spell->miss_types_mask, 'spellmisstypes') }}</td>
-                    <td>{{ Spell::maskToReadableString(Spell::ALL_COUNTERS, $spell->counters_mask, 'spellcounters') }}</td>
-                    <td>{{ Spell::maskToReadableString(Spell::ALL_IMMUNITIES, $spell->bypasses_immunities_mask, 'spellimmunities') }}</td>
+                    <td>{{ SpellSchool::maskToTranslatedString($spell->schools_mask) }}</td>
+                    <td>{{ SpellMissType::maskToTranslatedString($spell->miss_types_mask) }}</td>
+                    <td>{{ SpellCounter::maskToTranslatedString($spell->counters_mask) }}</td>
+                    <td>{{ SpellImmunity::maskToTranslatedString($spell->bypasses_immunities_mask) }}</td>
                     <td>{{ __($spell->dispel_type) }}</td>
                     <td>{{ __($spell->mechanic) }}</td>
                     <td>{{ $spell->cast_time > 0 ? ($spell->cast_time / 1000) . 's' : '-' }}</td>
