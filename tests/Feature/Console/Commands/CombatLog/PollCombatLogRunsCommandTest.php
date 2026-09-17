@@ -1014,6 +1014,34 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
     }
 
     /**
+     * The top band has no budget for shouldParse() to consult, so a dispatch is the only thing that
+     * ever creates its rows - and on a day without one the admin criteria page, which reads today's
+     * rows, cannot show the band at all.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenTopBandDispatchesNothing_stillCreatesTheTopBandCriterionRows(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        $criteriaService = $this->makeCriteriaService();
+        $criteriaService->expects($this->once())
+            ->method('ensureCriteriaExist')
+            ->with($this->anything(), $this->season, $this->topBand);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService();
+
+        // Act
+        $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+        // Assert — the expectation above; nothing was dispatched to create the rows as a side effect
+        Bus::assertNotDispatched(ProcessCombatLogSegments::class);
+    }
+
+    /**
      * @param  ?Collection<int, Dungeon>                      $eligibleDungeons
      * @param  ?Collection<int, CharacterClassSpecialization> $eligibleSpecs
      * @param  ?Collection<int, CharacterRace>                $eligibleRaces

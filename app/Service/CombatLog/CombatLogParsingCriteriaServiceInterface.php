@@ -43,6 +43,18 @@ interface CombatLogParsingCriteriaServiceInterface
     public function releaseParsed(int $combatLogVersion, array $criteria, string $date): void;
 
     /**
+     * Creates today's criterion rows for every model of every criterion model class in the given
+     * band, leaving the count of a row that already exists alone.
+     *
+     * The spread bands materialise their rows as a side effect of shouldParse(), which the top band
+     * never reaches - it has no budget to check, so its rows are only ever created by recordParsed()
+     * when a run is actually dispatched. A top band that dispatches nothing therefore has no rows
+     * for today at all, and the admin criteria page - which reads today's rows - cannot tell that
+     * the band exists. Calling this makes the band visible with a count of 0 instead.
+     */
+    public function ensureCriteriaExist(int $combatLogVersion, Season $season, KeyLevelBand $band): void;
+
+    /**
      * Resets all criterion counts for today (UTC date) to zero.
      *
      * The budget this hands back is released pro rata like any other, so a reset partway through

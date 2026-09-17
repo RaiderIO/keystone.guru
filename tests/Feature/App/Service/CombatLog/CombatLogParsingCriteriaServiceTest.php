@@ -28,6 +28,13 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     private const int SPEC_ID    = 999902;
     private const int RACE_ID    = 999904;
 
+    /**
+     * A band no other test in this suite touches. ensureCriteriaExist() creates rows for every real
+     * model of the season rather than the synthetic ids above, so the band is what identifies them
+     * again for the cleanup.
+     */
+    private const int ENSURE_BAND_MIN = 97;
+
     private CombatLogParsingCriteriaServiceInterface $service;
 
     #[\Override]
@@ -829,5 +836,102 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         // Assert
         $this->assertFalse($beforeReset);
         $this->assertTrue($afterReset);
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    #[Test]
+    public function ensureCriteriaExist_givenNoRowsYet_createsATopBandRowForEverySeasonDungeon(): void
+    {
+        // Arrange
+        $season = Season::query()->has('dungeons')->firstOrFail();
+
+        try {
+            // Act
+            $this->service->ensureCriteriaExist(self::VERSION, $season, new KeyLevelBand(self::ENSURE_BAND_MIN, null));
+
+            // Assert — a row per dungeon, each carrying the top band's shape: open ended and unbudgeted
+            $rows = CombatLogParsingCriterion::query()
+                ->where('mythic_level_min', self::ENSURE_BAND_MIN)
+                ->where('model_class', Dungeon::class)
+                ->get();
+
+            $this->assertCount($season->dungeons()->count(), $rows);
+
+            foreach ($rows as $row) {
+                $this->assertNull($row->mythic_level_max);
+                $this->assertEquals(0, $row->count);
+                $this->assertEquals(0, $row->threshold);
+            }
+        } finally {
+            $this->deleteEnsureBandRows();
+        }
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    #[Test]
+    public function ensureCriteriaExist_givenNoRowsYet_createsARowForEveryCriterionModelClass(): void
+    {
+        // Arrange
+        $season = Season::query()->has('dungeons')->firstOrFail();
+
+        try {
+            // Act
+            $this->service->ensureCriteriaExist(self::VERSION, $season, new KeyLevelBand(self::ENSURE_BAND_MIN, null));
+
+            // Assert
+            foreach (array_keys(CombatLogParsingCriterion::VALID_CRITERIA) as $modelClass) {
+                $this->assertEquals(
+                    $this->service->getAllModelsForCriteria($modelClass, $season)->count(),
+                    CombatLogParsingCriterion::query()
+                        ->where('mythic_level_min', self::ENSURE_BAND_MIN)
+                        ->where('model_class', $modelClass)
+                        ->count(),
+                    sprintf('Expected a row per model for %s', $modelClass),
+                );
+            }
+        } finally {
+            $this->deleteEnsureBandRows();
+        }
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    #[Test]
+    public function ensureCriteriaExist_givenARowThatAlreadyCountedRuns_leavesItsCountUntouched(): void
+    {
+        // Arrange
+        $season  = Season::query()->has('dungeons')->firstOrFail();
+        $dungeon = $season->dungeons()->firstOrFail();
+        $band    = new KeyLevelBand(self::ENSURE_BAND_MIN, null);
+
+        $this->service->recordParsed(self::VERSION, [
+            new CombatLogParsingCriterionCheck(Dungeon::class, $dungeon->id, $band),
+        ]);
+
+        try {
+            // Act
+            $this->service->ensureCriteriaExist(self::VERSION, $season, $band);
+
+            // Assert — an hourly call must not reset what the day has already recorded
+            $this->assertEquals(1, CombatLogParsingCriterion::query()
+                ->where('mythic_level_min', self::ENSURE_BAND_MIN)
+                ->where('model_class', Dungeon::class)
+                ->where('model_id', $dungeon->id)
+                ->value('count'));
+        } finally {
+            $this->deleteEnsureBandRows();
+        }
+    }
+
+    private function deleteEnsureBandRows(): void
+    {
+        CombatLogParsingCriterion::query()
+            ->where('mythic_level_min', self::ENSURE_BAND_MIN)
+            ->delete();
     }
 }

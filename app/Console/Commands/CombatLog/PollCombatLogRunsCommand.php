@@ -291,6 +291,11 @@ class PollCombatLogRunsCommand extends Command
     ): void {
         $dispatchedBefore = $dispatchCounts['dispatched'];
 
+        // Nothing else creates this band's rows for today: it is dispatch or nothing, because the
+        // band has no budget for shouldParse() to check on its way past findOrCreate(). Without
+        // this the admin criteria page shows no top band at all on a day it dispatched nothing.
+        $this->criteriaService->ensureCriteriaExist($combatLogVersion, $season, $band);
+
         $response = $this->raiderIOApiService->searchAdvancedRuns(new SearchAdvancedRunsFilter(
             dungeon:         null,
             season:          $season,
