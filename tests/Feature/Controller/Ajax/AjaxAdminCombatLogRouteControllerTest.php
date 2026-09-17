@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
+use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Laratrust\Role;
@@ -10,6 +11,8 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\User;
 use App\Service\CombatLog\Dtos\CombatLogRouteEnemyFailureHeatmapResult;
+use App\Service\CombatLog\Dtos\CombatLogRouteEnemyResolutionHeatmapResult;
+use App\Service\CombatLog\Enums\EnemyResolutionHeatmapMetric;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
@@ -393,5 +396,269 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
         } finally {
             $nonAdmin->delete();
         }
+    }
+    #[Test]
+    public function getEnemyResolutions_givenNoDungeonId_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions'));
+
+        // Assert
+        $response->assertUnprocessable();
+    }
+
+    #[Test]
+    public function getEnemyResolutions_givenNoMappingVersionId_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions', [
+            'dungeon_id' => $this->dungeon->id,
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('mapping_version_id');
+    }
+
+    #[Test]
+    public function getEnemyResolutions_givenValidDungeon_returnsFullHeatmapResponseShape(): void
+    {
+        $created = [];
+
+        try {
+            // Arrange - enough matches in one spot for the cell to be drawn at the default minimum
+            config(['keystoneguru.enemy_resolution.heatmap_min_samples' => 2]);
+
+            for ($i = 0; $i < 2; $i++) {
+                $created[] = $this->createResolution(-50.0 + $i * 0.01, 100.0, 60.0);
+            }
+
+            // Act
+            $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions', [
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+            ]));
+
+            // Assert
+            $response->assertOk();
+
+            $body = json_decode($response->content(), true);
+            $this->assertArrayHasKey('data', $body);
+            $this->assertArrayHasKey('data_type', $body);
+            $this->assertArrayHasKey('weight_max', $body);
+            $this->assertArrayHasKey('resolution_count', $body);
+            $this->assertArrayHasKey('drawn_count', $body);
+            $this->assertArrayHasKey('metric', $body);
+            $this->assertArrayHasKey('min_samples', $body);
+            $this->assertArrayHasKey('grid_size_x', $body);
+            $this->assertArrayHasKey('grid_size_y', $body);
+            $this->assertArrayHasKey('dungeon_routes', $body);
+
+            $this->assertEquals(CombatLogRouteEnemyResolutionHeatmapResult::DATA_TYPE, $body['data_type']);
+            // No metric given means the average - the default the form request falls back on
+            $this->assertEquals(EnemyResolutionHeatmapMetric::Average->value, $body['metric']);
+            $this->assertEquals(2, $body['min_samples']);
+            $this->assertGreaterThan(0, $body['grid_size_x']);
+            $this->assertGreaterThan(0, $body['grid_size_y']);
+
+            /** @var array<int, array<string, mixed>> $bodyData */
+            $bodyData   = $body['data'];
+            $floorEntry = collect($bodyData)->firstWhere('floor_id', $this->floor->id);
+            $this->assertNotNull($floorEntry);
+            $this->assertNotEmpty($floorEntry['lat_lngs']);
+
+            // A cell's weight is a distance in ingame yards rather than a count, unlike the failure heatmap
+            foreach ($floorEntry['lat_lngs'] as $latLng) {
+                $this->assertArrayHasKey('lat', $latLng);
+                $this->assertArrayHasKey('lng', $latLng);
+                $this->assertArrayHasKey('weight', $latLng);
+                $this->assertArrayHasKey('count', $latLng);
+                $this->assertEqualsWithDelta(60.0, $latLng['weight'], 0.01);
+            }
+        } finally {
+            CombatLogRouteEnemyResolution::whereIn('id', $created)->delete();
+        }
+    }
+
+    #[Test]
+    public function getEnemyResolutions_givenNpcIdFilter_returnsOnlyMatchingGridCell(): void
+    {
+        $created = [];
+
+        // Use unlikely npc IDs to avoid collisions with existing test data
+        $targetNpcId = 99903;
+        $otherNpcId  = 99904;
+
+        try {
+            // Arrange - one cell per npc, each on its own so a single match is enough to be drawn
+            config(['keystoneguru.enemy_resolution.heatmap_min_samples' => 1]);
+
+            $created[] = $this->createResolution(-50.0, 100.0, 60.0, npcId: $targetNpcId);
+            $created[] = $this->createResolution(-200.0, 300.0, 90.0, npcId: $otherNpcId);
+
+            // Act
+            $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions', [
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+                'npc_id'             => [$targetNpcId],
+            ]));
+
+            // Assert
+            $response->assertOk();
+
+            $body = json_decode($response->content(), true);
+            /** @var array<int, array<string, mixed>> $bodyData */
+            $bodyData = $body['data'];
+            $latLngs  = collect($bodyData)->flatMap(fn(array $entry): array => $entry['lat_lngs']);
+
+            $this->assertCount(1, $latLngs);
+            $this->assertEqualsWithDelta(60.0, $latLngs->first()['weight'], 0.01);
+            $this->assertEquals(1, $body['resolution_count']);
+            $this->assertEquals(1, $body['drawn_count']);
+            $this->assertEqualsWithDelta(60.0, $body['weight_max'], 0.01);
+        } finally {
+            CombatLogRouteEnemyResolution::whereIn('id', $created)->delete();
+        }
+    }
+
+    #[Test]
+    public function getEnemyResolutions_givenUnknownMetric_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions', [
+            'dungeon_id'         => $this->dungeon->id,
+            'mapping_version_id' => $this->mappingVersion->id,
+            'metric'             => 'median',
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('metric');
+    }
+
+    #[Test]
+    public function getEnemyResolutions_givenNegativeMinDistance_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions', [
+            'dungeon_id'         => $this->dungeon->id,
+            'mapping_version_id' => $this->mappingVersion->id,
+            'min_distance'       => -1,
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('min_distance');
+    }
+
+    #[Test]
+    public function getEnemyResolutions_givenNonAdmin_returnsForbidden(): void
+    {
+        // Arrange
+        $nonAdmin = User::factory()->create();
+
+        try {
+            $this->assertFalse($nonAdmin->hasRole(Role::ROLE_ADMIN));
+            $this->actingAs($nonAdmin);
+
+            // Act
+            $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions', [
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+            ]));
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+        } finally {
+            $nonAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function deleteEnemyResolutions_givenNoDungeonId_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->delete(route('ajax.admin.combatlogroute.enemy_resolutions.delete'));
+
+        // Assert
+        $response->assertUnprocessable();
+    }
+
+    #[Test]
+    public function deleteEnemyResolutions_givenValidDungeon_deletesOnlyThatDungeonsRecords(): void
+    {
+        $created = [];
+
+        try {
+            // Arrange - a second dungeon's row is what proves the delete is scoped
+            $otherDungeon = Dungeon::query()->where('id', '!=', $this->dungeon->id)->firstOrFail();
+
+            $deletedId = $this->createResolution(-50.0, 100.0, 60.0);
+            $created[] = $deletedId;
+
+            $keptId    = $this->createResolution(-50.0, 100.0, 60.0, dungeon: $otherDungeon);
+            $created[] = $keptId;
+
+            // Act
+            $response = $this->delete(route('ajax.admin.combatlogroute.enemy_resolutions.delete'), [
+                'dungeon_id' => $this->dungeon->id,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertNull(CombatLogRouteEnemyResolution::find($deletedId));
+            $this->assertNotNull(CombatLogRouteEnemyResolution::find($keptId));
+        } finally {
+            CombatLogRouteEnemyResolution::whereIn('id', $created)->delete();
+        }
+    }
+
+    #[Test]
+    public function deleteEnemyResolutions_givenNonAdmin_returnsForbidden(): void
+    {
+        // Arrange
+        $nonAdmin = User::factory()->create();
+
+        try {
+            $this->assertFalse($nonAdmin->hasRole(Role::ROLE_ADMIN));
+            $this->actingAs($nonAdmin);
+
+            // Act
+            $response = $this->delete(route('ajax.admin.combatlogroute.enemy_resolutions.delete'), [
+                'dungeon_id' => $this->dungeon->id,
+            ]);
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+        } finally {
+            $nonAdmin->delete();
+        }
+    }
+
+    /**
+     * @return int The id of the created record
+     */
+    private function createResolution(float $lat, float $lng, float $weightedDistance, ?int $npcId = null, ?Dungeon $dungeon = null): int
+    {
+        $dungeon ??= $this->dungeon;
+        $isOwnDungeon = $dungeon->id === $this->dungeon->id;
+
+        /** @var Floor $floor */
+        $floor = $isOwnDungeon ? $this->floor : $dungeon->floors()->firstOrFail();
+
+        return CombatLogRouteEnemyResolution::create([
+            'dungeon_id'         => $dungeon->id,
+            'floor_id'           => $floor->id,
+            'mapping_version_id' => $isOwnDungeon ? $this->mappingVersion->id : $dungeon->getCurrentMappingVersion()->id,
+            'npc_id'             => $npcId,
+            // enemy_id is NOT NULL but carries no foreign key - any enemy the row claims to have resolved to does
+            'enemy_id'          => 1,
+            'lat'               => $lat,
+            'lng'               => $lng,
+            'enemy_lat'         => $lat + 1,
+            'enemy_lng'         => $lng + 1,
+            'distance'          => $weightedDistance,
+            'weighted_distance' => $weightedDistance,
+        ])->id;
     }
 }

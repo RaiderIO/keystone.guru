@@ -486,6 +486,20 @@ return [
                 'matching_routes'      => 'Matching routes',
                 'no_matching_routes'   => 'No matching routes found',
             ],
+
+            'combatlogrouteenemyresolutions' => [
+                'explanation'             => 'Enemies that did resolve, but to a mapped enemy at least :distance yards away. A hot spot that keeps coming back is a sign the enemies there are placed wrong.',
+                'mapping_version_filter'  => 'Mapping version',
+                'npc_filter'              => 'NPC filter',
+                'metric_filter'           => 'Cell weight',
+                'metric_average'          => 'Average distance',
+                'metric_max'              => 'Worst distance',
+                'min_distance_filter'     => 'Minimum distance (yd)',
+                'summary'                 => 'Drawing :drawn of :total matches, worst cell :max yd',
+                'clear_resolutions'       => 'Clear resolutions',
+                'clear_resolutions_title' => 'Delete all resolution records for this dungeon',
+                'matching_routes'         => 'Worst routes',
+            ],
             'header' => [
                 'toggle_navigation'              => 'Toggle navigation',
                 'stop'                           => 'Stop',

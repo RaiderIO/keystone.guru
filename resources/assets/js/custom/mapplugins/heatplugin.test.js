@@ -24,6 +24,8 @@ global.MapContextDungeonExplore = class MapContextDungeonExplore {
 global.COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION = 'player_position';
 global.COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION = 'enemy_position';
 global.COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_FAILURE = 'enemy_failure';
+global.HEAT_COMBINE_MODE_SUM = 'sum';
+global.HEAT_COMBINE_MODE_MAX = 'max';
 global.isMobile = () => true;
 
 const HeatPlugin = require('./heatplugin');

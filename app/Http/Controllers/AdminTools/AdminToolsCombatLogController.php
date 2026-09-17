@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminTools;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminToolsCombatLogRegenerateRequest;
 use App\Http\Requests\AdminToolsCombatLogRouteEnemyFailuresRequest;
+use App\Http\Requests\AdminToolsCombatLogRouteEnemyResolutionsRequest;
 use App\Jobs\RegenerateCombatLogRoute;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
@@ -16,6 +17,7 @@ use App\Models\User;
 use App\Repositories\Interfaces\CombatLog\ChallengeModeRunRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
+use App\Service\CombatLog\CombatLogRouteEnemyResolutionServiceInterface;
 use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -99,6 +101,101 @@ class AdminToolsCombatLogController extends Controller
             'npcFailureCounts',
             'npcs',
         ));
+    }
+
+    public function combatLogRouteEnemyResolutions(
+        AdminToolsCombatLogRouteEnemyResolutionsRequest $request,
+        FloorResolutionServiceInterface                 $floorResolutionService,
+    ): RedirectResponse {
+        $dungeon = Dungeon::getUserOrDefaultDungeon();
+
+        if ($request->has('dungeon_id') && (int)$request->input('dungeon_id') !== $dungeon->id) {
+            return redirect()->route('admin.tools.combatlog.route.enemy_resolutions.view', [
+                'dungeon_id' => $dungeon->id,
+            ]);
+        }
+
+        $mappingVersion = $request->getMappingVersion() ?? $dungeon->getCurrentMappingVersion();
+
+        abort_if($mappingVersion === null, 404);
+        // A mapping version of another dungeon makes no sense here - and would build the wrong map context below
+        abort_if($mappingVersion->dungeon_id !== $dungeon->id, 404);
+
+        $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeon, $mappingVersion);
+
+        return redirect()->route('admin.tools.combatlog.route.enemy_resolutions.view.floor', [
+            'floorIndex' => $defaultFloor->index,
+        ] + $request->validated());
+    }
+
+    public function combatLogRouteEnemyResolutionsFloor(
+        AdminToolsCombatLogRouteEnemyResolutionsRequest $request,
+        MapContextServiceInterface                      $mapContextService,
+        CombatLogRouteEnemyResolutionServiceInterface   $combatLogRouteEnemyResolutionService,
+        FloorResolutionServiceInterface                 $floorResolutionService,
+        string                                          $floorIndex,
+    ): RedirectResponse|View {
+        $dungeon = Dungeon::getUserOrDefaultDungeon();
+
+        if ($request->has('dungeon_id') && (int)$request->input('dungeon_id') !== $dungeon->id) {
+            return redirect()->route('admin.tools.combatlog.route.enemy_resolutions.view', [
+                'dungeon_id' => $dungeon->id,
+            ]);
+        }
+
+        $mappingVersion = $request->getMappingVersion() ?? $dungeon->getCurrentMappingVersion();
+
+        abort_if($mappingVersion === null, 404);
+        abort_if($mappingVersion->dungeon_id !== $dungeon->id, 404);
+
+        $resolvedFloor = $floorResolutionService->resolveRequestedFloor($dungeon, $mappingVersion, $floorIndex);
+
+        if (!$resolvedFloor->isCanonical) {
+            return redirect()->route('admin.tools.combatlog.route.enemy_resolutions.view.floor', [
+                'floorIndex' => $resolvedFloor->floor->index,
+            ] + $request->validated());
+        }
+
+        $floor = $resolvedFloor->floor;
+
+        $mapContext = $mapContextService->createMapContextDungeonExplore($dungeon, $mappingVersion, User::getCurrentUserMapFacadeStyle());
+
+        $dungeon->load(['mappingVersions.gameVersion']);
+        $mappingVersionResolutionCounts = $combatLogRouteEnemyResolutionService->getResolutionCountsPerMappingVersion($dungeon);
+        $npcResolutionCounts            = $combatLogRouteEnemyResolutionService->getResolutionCountsPerNpc($dungeon, $mappingVersion);
+        $npcs                           = $this->getEnemyResolutionNpcs($npcResolutionCounts);
+
+        return view('admin.tools.combatlog.combatlogroute_enemy_resolutions', compact(
+            'dungeon',
+            'floor',
+            'mappingVersion',
+            'mapContext',
+            'mappingVersionResolutionCounts',
+            'npcResolutionCounts',
+            'npcs',
+        ));
+    }
+
+    /**
+     * The npcs to offer in the resolution filter: only the ones that actually have a recorded match, most first. Every
+     * one of them resolved to a mapped enemy, so unlike the failures page there is no such thing as an unmapped npc here.
+     *
+     * @param  Collection<int, int> $npcResolutionCounts npc_id => resolution count
+     * @return Collection<int, Npc>
+     */
+    private function getEnemyResolutionNpcs(Collection $npcResolutionCounts): Collection
+    {
+        /** @var Collection<int, Npc> $npcs */
+        $npcs = Npc::query()
+            ->whereIn('id', $npcResolutionCounts->keys())
+            ->get()
+            ->sortBy([
+                static fn(Npc $a, Npc $b) => ($npcResolutionCounts->get($b->id, 0) <=> $npcResolutionCounts->get($a->id, 0)),
+                static fn(Npc $a, Npc $b) => strcmp(__($a->name), __($b->name)),
+            ])
+            ->values();
+
+        return $npcs;
     }
 
     /**

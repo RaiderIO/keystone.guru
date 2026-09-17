@@ -87,6 +87,7 @@ $show['controls']['view']                 ??= false;
 $show['controls']['present']                       ??= false;
 $show['controls']['live']                          ??= false;
 $show['controls']['combatLogRouteEnemyFailures']   ??= false;
+$show['controls']['combatLogRouteEnemyResolutions'] ??= false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
@@ -362,6 +363,16 @@ if ($isAdmin) {
             'mappingVersionFailureCounts' => $mappingVersionFailureCounts,
             'npcFailureCounts'            => $npcFailureCounts,
             'npcs'                        => $npcs,
+        ])
+    @endif
+
+    @if(isset($show['controls']['combatLogRouteEnemyResolutions']) && $show['controls']['combatLogRouteEnemyResolutions'])
+        @include('common.maps.controls.combatlogrouteenemyresolutions', [
+            'dungeon'                        => $dungeon,
+            'mappingVersion'                 => $mappingVersion,
+            'mappingVersionResolutionCounts' => $mappingVersionResolutionCounts,
+            'npcResolutionCounts'            => $npcResolutionCounts,
+            'npcs'                           => $npcs,
         ])
     @endif
 

@@ -6,6 +6,7 @@ use App\Jobs\RegenerateCombatLogRoute;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
+use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
@@ -39,6 +40,9 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
     /** @var array<int, int> */
     private array $createdEnemyFailureIds = [];
+
+    /** @var array<int, int> */
+    private array $createdEnemyResolutionIds = [];
 
     private ?string $originalAdminMapFacadeStyle = null;
 
@@ -92,6 +96,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
             ChallengeModeRun::query()->whereIn('dungeon_route_id', $this->createdDungeonRouteIds)->delete();
             DungeonRoute::query()->whereIn('id', $this->createdDungeonRouteIds)->delete();
             CombatLogRouteEnemyFailure::query()->whereIn('id', $this->createdEnemyFailureIds)->delete();
+            CombatLogRouteEnemyResolution::query()->whereIn('id', $this->createdEnemyResolutionIds)->delete();
         } finally {
             parent::tearDown();
         }
@@ -344,6 +349,347 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
         // Assert
         $response->assertNotFound();
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutions_givenAdmin_redirectsToDefaultFloor(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        /** @var Floor $defaultFloor */
+        $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view'));
+
+        // Assert
+        $response->assertRedirect(route('admin.tools.combatlog.route.enemy_resolutions.view.floor', [
+            'floorIndex' => $defaultFloor->index,
+        ]));
+    }
+
+    /**
+     * The sidebar's own filters mean nothing to this controller, but the redirect to the default floor is what a
+     * shared link hits first - dropping them there would land the reader on the page with the defaults, looking at
+     * something other than what the link was meant to show.
+     */
+    #[Test]
+    public function combatLogRouteEnemyResolutions_givenSidebarFilters_keepsThemOnTheRedirect(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        /** @var Floor $defaultFloor */
+        $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view', [
+            'metric'       => 'max',
+            'min_distance' => 45,
+        ]));
+
+        // Assert
+        $response->assertRedirect(route('admin.tools.combatlog.route.enemy_resolutions.view.floor', [
+            'floorIndex'   => $defaultFloor->index,
+            'metric'       => 'max',
+            'min_distance' => 45,
+        ]));
+    }
+
+    /**
+     * The sidebar writes its npc selection into the URL comma joined, so that is the shape a shared or refreshed
+     * link arrives in - the page must take it rather than reject what it produced itself.
+     */
+    #[Test]
+    public function combatLogRouteEnemyResolutions_givenCommaJoinedNpcIds_keepsThemOnTheRedirect(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        /** @var Floor $defaultFloor */
+        $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view', ['npc_id' => '123,456']));
+
+        // Assert
+        $response->assertRedirect(route('admin.tools.combatlog.route.enemy_resolutions.view.floor', [
+            'floorIndex' => $defaultFloor->index,
+            'npc_id'     => '123,456',
+        ]));
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutions_givenUnknownMetric_returnsValidationError(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view', ['metric' => 'sideways']));
+
+        // Assert
+        $response->assertSessionHasErrors('metric');
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutions_givenAdmin_returnsOkAfterFollowingRedirect(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        // Act
+        $response = $this->followingRedirects()->get(route('admin.tools.combatlog.route.enemy_resolutions.view'));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutions_givenGuest_redirectsToLogin(): void
+    {
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view'));
+
+        // Assert
+        $response->assertRedirect();
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutions_givenNonAdmin_returnsForbidden(): void
+    {
+        // Arrange
+        $nonAdmin = User::factory()->create();
+
+        try {
+            $this->be($nonAdmin);
+
+            // Act
+            $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view'));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $nonAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutions_givenMappingVersionOfOtherDungeon_returns404(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon             = Dungeon::getUserOrDefaultDungeon();
+        $otherMappingVersion = MappingVersion::query()->where('dungeon_id', '!=', $dungeon->id)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view', [
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $otherMappingVersion->id,
+        ]));
+
+        // Assert
+        $response->assertNotFound();
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutions_givenMappingVersionId_rendersThatMappingVersionSelected(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        // Prefer a non-current mapping version so the assertion proves the parameter was honoured, not the default
+        $mappingVersion = $dungeon->mappingVersions()->orderBy('version')->firstOrFail();
+
+        // Act
+        $response = $this->followingRedirects()->get(route('admin.tools.combatlog.route.enemy_resolutions.view', [
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertMatchesRegularExpression(
+            sprintf('/<option value="%d"\s+selected="selected"\s*>/', $mappingVersion->id),
+            $response->getContent(),
+        );
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutions_givenResolutionsForNpc_listsNpcWithItsResolutionCount(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        /** @var Npc $npc */
+        $npc = Npc::query()->firstOrFail();
+
+        // The rendered count covers every resolution row for this (dungeon, mapping version, npc), not just the one
+        // created below, so it is read rather than assumed to be 1 - a row left behind by an aborted earlier run
+        // would otherwise make the expected string never appear
+        $resolutionCountBefore = CombatLogRouteEnemyResolution::query()
+            ->where('dungeon_id', $dungeon->id)
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->where('npc_id', $npc->id)
+            ->count();
+
+        $this->createEnemyResolutionForDungeon($dungeon, $npc->id);
+
+        // Act
+        $response = $this->followingRedirects()->get(route('admin.tools.combatlog.route.enemy_resolutions.view', [
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]));
+
+        // Assert - the npc is offered in the filter, with its recorded match count
+        $response->assertOk();
+        $response->assertSee(sprintf('(%d) — %s', $npc->id, number_format($resolutionCountBefore + 1)));
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutionsFloor_givenValidFloorIndex_returnsOkForThatFloor(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        /** @var Floor $floor */
+        $floor = $dungeon->floors()->where('facade', 0)->where('index', '!=', 1)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view.floor', [
+            'floorIndex' => $floor->index,
+        ]));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutionsFloor_givenNonExistentFloorIndex_redirectsToDefaultFloor(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        /** @var Floor $defaultFloor */
+        $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view.floor', [
+            'floorIndex' => 999999,
+        ]));
+
+        // Assert
+        $response->assertRedirect(route('admin.tools.combatlog.route.enemy_resolutions.view.floor', [
+            'floorIndex' => $defaultFloor->index,
+        ]));
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutionsFloor_givenNonNumericFloorIndex_behavesAsFloorIndexOne(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        // Act - a non-numeric floorIndex is treated exactly like an explicit "1", per the same
+        // `!is_numeric($floorIndex)` fallback used by DungeonExploreController/DungeonRouteController
+        $expectedResponse = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view.floor', [
+            'floorIndex' => 1,
+        ]));
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view.floor', [
+            'floorIndex' => 'not-a-number',
+        ]));
+
+        // Assert
+        $response->assertStatus($expectedResponse->getStatusCode());
+        if ($expectedResponse->isRedirect()) {
+            $response->assertRedirect($expectedResponse->headers->get('Location'));
+        }
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutionsFloor_givenGuest_redirectsToLogin(): void
+    {
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view.floor', [
+            'floorIndex' => 1,
+        ]));
+
+        // Assert
+        $response->assertRedirect();
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutionsFloor_givenNonAdmin_returnsForbidden(): void
+    {
+        // Arrange
+        $nonAdmin = User::factory()->create();
+
+        try {
+            $this->be($nonAdmin);
+
+            // Act
+            $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view.floor', [
+                'floorIndex' => 1,
+            ]));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $nonAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutionsFloor_givenMappingVersionOfOtherDungeon_returns404(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon             = Dungeon::getUserOrDefaultDungeon();
+        $otherMappingVersion = MappingVersion::query()->where('dungeon_id', '!=', $dungeon->id)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view.floor', [
+            'floorIndex'         => 1,
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $otherMappingVersion->id,
+        ]));
+
+        // Assert
+        $response->assertNotFound();
+    }
+
+    #[Test]
+    public function getEnemyResolutions_givenAdmin_returnsDungeonRoutesKey(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        [$dungeon, $mappingVersion] = $this->findDungeon(challengeMode: true);
+
+        // Act
+        $response = $this->getJson(
+            route('ajax.admin.combatlogroute.enemy_resolutions', ['dungeon_id' => $dungeon->id, 'mapping_version_id' => $mappingVersion->id]),
+            ['X-Requested-With' => 'XMLHttpRequest'],
+        );
+
+        // Assert
+        $response->assertOk();
+        $response->assertJsonStructure(['data', 'data_type', 'weight_max', 'resolution_count', 'drawn_count', 'metric', 'min_samples', 'grid_size_x', 'grid_size_y', 'dungeon_routes']);
     }
 
     #[Test]
@@ -903,6 +1249,32 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $this->createdEnemyFailureIds[] = $failure->id;
 
         return $failure;
+    }
+
+    private function createEnemyResolutionForDungeon(Dungeon $dungeon, ?int $npcId = null): CombatLogRouteEnemyResolution
+    {
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        /** @var Floor $floor */
+        $floor = $dungeon->floors()->where('facade', 0)->firstOrFail();
+
+        $resolution = CombatLogRouteEnemyResolution::create([
+            'dungeon_id'         => $dungeon->id,
+            'floor_id'           => $floor->id,
+            'mapping_version_id' => $mappingVersion->id,
+            'npc_id'             => $npcId,
+            // enemy_id is NOT NULL but carries no foreign key - any enemy the row claims to have resolved to does
+            'enemy_id'          => 1,
+            'lat'               => -50.0,
+            'lng'               => 100.0,
+            'enemy_lat'         => -49.0,
+            'enemy_lng'         => 101.0,
+            'distance'          => 60.0,
+            'weighted_distance' => 60.0,
+        ]);
+
+        $this->createdEnemyResolutionIds[] = $resolution->id;
+
+        return $resolution;
     }
 
     /**
