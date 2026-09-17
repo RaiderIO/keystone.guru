@@ -24,6 +24,25 @@ enum SpellCategory: string
     case Evoker      = 'evoker';
     case Unknown     = 'unknown';
 
+    public const string TRANSLATION_KEY_PREFIX = 'spellcategory.';
+
+    /**
+     * This category as `spells`.`category` stores it, which is also its translation key.
+     */
+    public function translationKey(): string
+    {
+        return self::TRANSLATION_KEY_PREFIX . $this->value;
+    }
+
+    /**
+     * The key for a category slug that has not been matched to a case - scraped and imported values reach
+     * `spells`.`category` without ever being checked against the cases.
+     */
+    public static function translationKeyFor(string $categorySlug): string
+    {
+        return self::TRANSLATION_KEY_PREFIX . $categorySlug;
+    }
+
     /**
      * @return list<string>
      */

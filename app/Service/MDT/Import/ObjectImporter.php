@@ -33,9 +33,9 @@ class ObjectImporter
 
     /** @var array<string, int> Names users write on MDT notes for a spell other than the spell's own name */
     private const array SPELL_IDS_BY_ALIAS = [
-        'timewarp'             => KnownSpell::TIME_WARP,
-        'ancient hysteria'     => KnownSpell::ANCIENT_HYSTERIA,
-        'fury of the ancients' => KnownSpell::FURY_OF_THE_ASPECTS,
+        'timewarp'             => KnownSpell::TimeWarp->value,
+        'ancient hysteria'     => KnownSpell::AncientHysteria->value,
+        'fury of the ancients' => KnownSpell::FuryOfTheAspects->value,
     ];
 
     public function __construct(

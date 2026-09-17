@@ -17,6 +17,8 @@ enum SpellCounter: int
     case Invisibility   = 8;
     case CloakOfShadows = 16;
 
+    public const string TRANSLATION_KEY_PREFIX = 'spellcounters.';
+
     /**
      * The slug of this counter, which doubles as the suffix of its `spellcounters.*` translation key.
      */

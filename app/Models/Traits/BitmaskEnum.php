@@ -11,8 +11,31 @@ trait BitmaskEnum
     abstract public function slug(): string;
 
     /**
-     * Every case's slug keyed by its bit, in declaration order - the shape
-     * {@see \App\Models\Spell\Spell::maskToReadableString()} and the map context's static data expect.
+     * This case's translation key - the prefix comes from the enum's own TRANSLATION_KEY_PREFIX.
+     */
+    public function translationKey(): string
+    {
+        return static::TRANSLATION_KEY_PREFIX . $this->slug();
+    }
+
+    /**
+     * Every case set in the given mask, translated and comma separated, in declaration order.
+     */
+    public static function maskToTranslatedString(int $mask): string
+    {
+        $result = [];
+
+        foreach (self::cases() as $case) {
+            if ($case->isSetIn($mask)) {
+                $result[] = __($case->translationKey());
+            }
+        }
+
+        return implode(', ', $result);
+    }
+
+    /**
+     * Every case's slug keyed by its bit, in declaration order - the shape the map context's static data expects.
      *
      * @return array<int, string>
      */

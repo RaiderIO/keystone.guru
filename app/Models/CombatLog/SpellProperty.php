@@ -80,6 +80,25 @@ enum SpellProperty: string
         throw new LogicException(sprintf('No bit found for SpellProperty: %s', $this->value));
     }
 
+    /**
+     * The translation key of the counter, immunity or miss type this property stands for, or null for the two
+     * properties that are stored as a boolean column rather than a mask bit.
+     */
+    public function translationKey(): ?string
+    {
+        $bit = $this->maskBit();
+
+        if ($bit === null) {
+            return null;
+        }
+
+        return match (true) {
+            $this->isCounter()        => SpellCounter::from($bit)->translationKey(),
+            $this->isImmunityBypass() => SpellImmunity::from($bit)->translationKey(),
+            default                   => SpellMissType::from($bit)->translationKey(),
+        };
+    }
+
     public function isCounter(): bool
     {
         return str_starts_with($this->value, 'counter_');

@@ -56,7 +56,7 @@ class NpcSpellAssignmentCollector implements SpellDataCollectorInterface
     ): void {
         // Check if the spell can be assigned
         $spell = $this->allSpells->get($prefix->getSpellId());
-        if ($spell === null || $spell->category !== sprintf('spellcategory.%s', SpellCategory::Unknown->value)) {
+        if ($spell === null || $spell->category !== SpellCategory::Unknown->translationKey()) {
             return;
         }
 

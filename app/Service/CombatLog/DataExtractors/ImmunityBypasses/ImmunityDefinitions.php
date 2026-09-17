@@ -31,7 +31,7 @@ final class ImmunityDefinitions
             new ImmunityDefinition(
                 SpellProperty::BypassDivineShield,
                 SpellImmunity::DivineShield->value,
-                [KnownSpell::DIVINE_SHIELD],
+                [KnownSpell::DivineShield->value],
                 SpellSchool::MASK_ALL,
                 true,
                 true,
@@ -41,7 +41,7 @@ final class ImmunityDefinitions
             new ImmunityDefinition(
                 SpellProperty::BypassIceBlock,
                 SpellImmunity::IceBlock->value,
-                [KnownSpell::ICE_BLOCK],
+                [KnownSpell::IceBlock->value],
                 SpellSchool::MASK_ALL,
                 true,
                 true,
@@ -51,7 +51,7 @@ final class ImmunityDefinitions
             new ImmunityDefinition(
                 SpellProperty::BypassAspectOfTheTurtle,
                 SpellImmunity::AspectOfTheTurtle->value,
-                [KnownSpell::ASPECT_OF_THE_TURTLE],
+                [KnownSpell::AspectOfTheTurtle->value],
                 SpellSchool::MASK_ALL,
                 true,
                 false,
@@ -61,7 +61,7 @@ final class ImmunityDefinitions
             new ImmunityDefinition(
                 SpellProperty::BypassBlessingOfProtection,
                 SpellImmunity::BlessingOfProtection->value,
-                [KnownSpell::BLESSING_OF_PROTECTION],
+                [KnownSpell::BlessingOfProtection->value],
                 SpellSchool::Physical->value,
                 true,
                 true,
@@ -71,7 +71,7 @@ final class ImmunityDefinitions
             new ImmunityDefinition(
                 SpellProperty::BypassBlessingOfSpellwarding,
                 SpellImmunity::BlessingOfSpellwarding->value,
-                [KnownSpell::BLESSING_OF_SPELLWARDING],
+                [KnownSpell::BlessingOfSpellwarding->value],
                 SpellSchool::MASK_MAGIC,
                 true,
                 true,
@@ -83,7 +83,7 @@ final class ImmunityDefinitions
             new ImmunityDefinition(
                 SpellProperty::BypassAntiMagicShell,
                 SpellImmunity::AntiMagicShell->value,
-                [KnownSpell::ANTI_MAGIC_SHELL],
+                [KnownSpell::AntiMagicShell->value],
                 SpellSchool::MASK_MAGIC,
                 false,
                 true,

@@ -13,6 +13,7 @@ use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCategory;
 use App\Models\Spell\SpellDungeon;
 use App\Models\Spell\SpellMissType;
 use App\Models\User;
@@ -687,7 +688,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
 
         $defaultGameVersion = GameVersion::getDefaultGameVersion();
 
-        $classSpells = Spell::where('category', sprintf('spellcategory.%s', $characterClass->key))
+        $classSpells = Spell::where('category', SpellCategory::translationKeyFor($characterClass->key))
             ->whereNotNull('characteristic_id')
             ->where('game_version_id', $defaultGameVersion->id)
             ->get();

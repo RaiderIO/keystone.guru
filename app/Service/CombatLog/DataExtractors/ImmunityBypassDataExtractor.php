@@ -371,7 +371,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         // null category is allowed - spells first created from a combat log carry no category until Wowhead is fetched
         if ($npcId === null ||
             $spell === null ||
-            ($spell->category !== null && $spell->category !== sprintf('spellcategory.%s', SpellCategory::Unknown->value))) {
+            ($spell->category !== null && $spell->category !== SpellCategory::Unknown->translationKey())) {
             return;
         }
 

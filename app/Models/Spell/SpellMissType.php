@@ -34,6 +34,8 @@ enum SpellMissType: int
     case Resist    = 512;
     case Interrupt = 1024;
 
+    public const string TRANSLATION_KEY_PREFIX = 'spellmisstypes.';
+
     /**
      * The miss type a combat log `SPELL_MISSED` line's miss type GUID stands for. Interrupt has no miss type GUID,
      * so it is never returned; neither is anything for a GUID that is not a miss type.

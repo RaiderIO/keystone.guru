@@ -18,6 +18,8 @@ enum SpellImmunity: int
     case BlessingOfSpellwarding = 16;
     case AntiMagicShell         = 32;
 
+    public const string TRANSLATION_KEY_PREFIX = 'spellimmunities.';
+
     /**
      * The slug of this immunity, which doubles as the suffix of its `spellimmunities.*` translation key.
      */

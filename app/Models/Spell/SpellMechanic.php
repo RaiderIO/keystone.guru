@@ -39,6 +39,25 @@ enum SpellMechanic: string
     case Turned        = 'turned';
     case Wounded       = 'wounded';
 
+    public const string TRANSLATION_KEY_PREFIX = 'spellmechanic.';
+
+    /**
+     * This mechanic as `spells`.`mechanic` stores it, which is also its translation key.
+     */
+    public function translationKey(): string
+    {
+        return self::TRANSLATION_KEY_PREFIX . $this->value;
+    }
+
+    /**
+     * The key for a mechanic slug that has not been matched to a case - Wowhead's mechanic names reach
+     * `spells`.`mechanic` without ever being checked against the cases.
+     */
+    public static function translationKeyFor(string $mechanicSlug): string
+    {
+        return self::TRANSLATION_KEY_PREFIX . $mechanicSlug;
+    }
+
     /**
      * Blizzard's ID for this mechanic, which does not follow the order of the cases.
      */

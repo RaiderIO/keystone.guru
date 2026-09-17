@@ -22,6 +22,8 @@ enum SpellSchool: int
     case Shadow   = 32;
     case Arcane   = 64;
 
+    public const string TRANSLATION_KEY_PREFIX = 'spellschools.';
+
     /** Every non-physical school - what a magic-only immunity (Anti-Magic Shell, Blessing of Spellwarding) protects against. */
     public const int MASK_MAGIC = self::Holy->value | self::Fire->value | self::Nature->value |
         self::Frost->value | self::Shadow->value | self::Arcane->value;

@@ -47,17 +47,17 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
      * to a single pull, so we limit it to a few that are actually useful.
      */
     private const array VALID_SPELL_IDS = [
-        KnownSpell::BLOODLUST,
-        KnownSpell::HEROISM,
-        KnownSpell::TIME_WARP,
-        KnownSpell::FURY_OF_THE_ASPECTS,
-        KnownSpell::ANCIENT_HYSTERIA,
-        KnownSpell::PRIMAL_RAGE,
-        KnownSpell::FERAL_HIDE_DRUMS,
-        KnownSpell::HARRIERS_CRY,
-        KnownSpell::SHROUD_OF_CONCEALMENT,
-        KnownSpell::CONTROL_UNDEAD,
-        KnownSpell::SUBJUGATE_DEMON,
+        KnownSpell::Bloodlust->value,
+        KnownSpell::Heroism->value,
+        KnownSpell::TimeWarp->value,
+        KnownSpell::FuryOfTheAspects->value,
+        KnownSpell::AncientHysteria->value,
+        KnownSpell::PrimalRage->value,
+        KnownSpell::FeralHideDrums->value,
+        KnownSpell::HarriersCry->value,
+        KnownSpell::ShroudOfConcealment->value,
+        KnownSpell::ControlUndead->value,
+        KnownSpell::SubjugateDemon->value,
     ];
 
     private readonly CombatLogRouteDungeonRouteBuilderLoggingInterface $log;

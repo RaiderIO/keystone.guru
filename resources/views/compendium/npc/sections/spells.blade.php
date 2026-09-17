@@ -58,10 +58,10 @@ use App\Models\Spell\SpellSchool;
 
                 <tr>
                     <td class="text-nowrap">@include('common.spell.link', ['spell' => $spell, 'size' => 24])</td>
-                    <td>{{ Spell::maskToReadableString(SpellSchool::slugsByBit(), $spell->schools_mask, 'spellschools') }}</td>
-                    <td>{{ Spell::maskToReadableString(SpellMissType::slugsByBit(), $spell->miss_types_mask, 'spellmisstypes') }}</td>
-                    <td>{{ Spell::maskToReadableString(SpellCounter::slugsByBit(), $spell->counters_mask, 'spellcounters') }}</td>
-                    <td>{{ Spell::maskToReadableString(SpellImmunity::slugsByBit(), $spell->bypasses_immunities_mask, 'spellimmunities') }}</td>
+                    <td>{{ SpellSchool::maskToTranslatedString($spell->schools_mask) }}</td>
+                    <td>{{ SpellMissType::maskToTranslatedString($spell->miss_types_mask) }}</td>
+                    <td>{{ SpellCounter::maskToTranslatedString($spell->counters_mask) }}</td>
+                    <td>{{ SpellImmunity::maskToTranslatedString($spell->bypasses_immunities_mask) }}</td>
                     <td>{{ __($spell->dispel_type) }}</td>
                     <td>{{ __($spell->mechanic) }}</td>
                     <td>{{ $spell->cast_time > 0 ? ($spell->cast_time / 1000) . 's' : '-' }}</td>

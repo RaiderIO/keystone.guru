@@ -8,6 +8,7 @@ use App\Models\Spell\Spell;
 use App\Models\Spell\SpellCategory;
 use App\Models\Spell\SpellCooldownGroup;
 use App\Models\Spell\SpellDispelType;
+use App\Models\Spell\SpellMechanic;
 use App\Models\Spell\SpellSchool;
 use App\Service\Traits\Curl;
 use App\Service\Wowhead\Dtos\SpellDataResult;
@@ -183,7 +184,7 @@ class WowheadService implements WowheadServiceInterface
         // More hacky shit to scrape data we need
         $mechanic      = null;
         $category      = SpellCategory::Unknown->value;
-        $cooldownGroup = sprintf('spellcooldowngroup.%s', SpellCooldownGroup::Unknown->value); // I can't find info on this on Wowhead?
+        $cooldownGroup = SpellCooldownGroup::Unknown->translationKey(); // I can't find info on this on Wowhead?
         $dispelType    = '';
         $iconName      = '';
         $name          = '';
@@ -228,7 +229,7 @@ class WowheadService implements WowheadServiceInterface
                 if (str_contains($mechanic, 'n/a')) {
                     $mechanic = null;
                 } else {
-                    $mechanic = sprintf('spellmechanic.%s', Str::slug($mechanic));
+                    $mechanic = SpellMechanic::translationKeyFor(Str::slug($mechanic));
                 }
                 $mechanicFound = false;
                 $mechanicSet   = true;
@@ -283,7 +284,7 @@ class WowheadService implements WowheadServiceInterface
 
                     $dispelType = SpellDispelType::Unknown->value;
                 }
-                $dispelType      = sprintf('spelldispeltype.%s', $dispelType);
+                $dispelType      = SpellDispelType::from($dispelType)->translationKey();
                 $dispelTypeFound = false;
                 $dispelTypeSet   = true;
             } // Cast time
@@ -331,7 +332,7 @@ class WowheadService implements WowheadServiceInterface
         return new SpellDataResult(
             $spellId,
             $mechanic,
-            sprintf('spellcategory.%s', $category),
+            SpellCategory::translationKeyFor($category),
             $cooldownGroup,
             $dispelType,
             $iconName,

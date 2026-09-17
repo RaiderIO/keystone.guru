@@ -456,7 +456,7 @@ final class SpellDataExtractorTest extends PublicTestCase
     {
         // Arrange — spell with 'unknown' category so assignSpellToNpc runs, aura=true so no PropertyChanged noise
         $this->createTestSpell([
-            'category' => sprintf('spellcategory.%s', SpellCategory::Unknown->value),
+            'category' => SpellCategory::Unknown->translationKey(),
             'aura'     => true,
         ]);
         $this->createTestNpc();
@@ -495,7 +495,7 @@ final class SpellDataExtractorTest extends PublicTestCase
         // Arrange - two ingest processes, each holding its own process-persistent spell catalog (#4058) built
         // while neither knew about the other's dungeon assignment, exactly as concurrent workers do (#4327)
         $this->createTestSpell([
-            'category' => sprintf('spellcategory.%s', SpellCategory::Unknown->value),
+            'category' => SpellCategory::Unknown->translationKey(),
             'aura'     => true,
         ]);
         $this->createTestNpc();

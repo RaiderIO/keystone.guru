@@ -52,7 +52,7 @@ class SpellDungeonAssignmentCollector implements SpellDataCollectorInterface
             // Only assign spells that are NOT player spells!
             if (
                 $spell !== null &&
-                $spell->category === sprintf('spellcategory.%s', SpellCategory::Unknown->value)
+                $spell->category === SpellCategory::Unknown->translationKey()
             ) {
                 // If this dungeon wasn't assigned to the spell yet..
                 if ($spell->spellDungeons

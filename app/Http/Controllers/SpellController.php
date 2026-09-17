@@ -50,7 +50,7 @@ class SpellController extends Controller
         $spellBefore = clone $spell;
 
         $spell->id             = $validated['id'];
-        $spell->category       = sprintf('spellcategory.%s', $validated['category']);
+        $spell->category       = SpellCategory::from($validated['category'])->translationKey();
         $spell->dispel_type    = $validated['dispel_type'];
         $spell->cooldown_group = $validated['cooldown_group'];
         $spell->icon_name      = $validated['icon_name'];
@@ -151,17 +151,17 @@ class SpellController extends Controller
     {
         return [
             'allCharacteristics' => Characteristic::all(),
-            'categories'         => collect(SpellCategory::values())->mapWithKeys(fn(string $category) => [
-                $category => __(sprintf('spellcategory.%s', $category)),
+            'categories'         => collect(SpellCategory::cases())->mapWithKeys(fn(SpellCategory $category) => [
+                $category->value => __($category->translationKey()),
             ])->toArray(),
             'dispelTypes' => collect(SpellDispelType::translationKeys())->mapWithKeys(fn(string $dispelTypeKey) => [
                 $dispelTypeKey => __($dispelTypeKey),
             ])->toArray(),
-            'schools' => collect(SpellSchool::slugsByBit())->mapWithKeys(fn(string $name, int $school) => [
-                __(sprintf('spellschools.%s', $name)) => $school,
+            'schools' => collect(SpellSchool::cases())->mapWithKeys(fn(SpellSchool $school) => [
+                __($school->translationKey()) => $school->value,
             ])->toArray(),
-            'cooldownGroups' => collect(SpellCooldownGroup::values())->mapWithKeys(fn(string $cooldownGroupKey) => [
-                $cooldownGroupKey => __(sprintf('spellcooldowngroup.%s', $cooldownGroupKey)),
+            'cooldownGroups' => collect(SpellCooldownGroup::cases())->mapWithKeys(fn(SpellCooldownGroup $cooldownGroup) => [
+                $cooldownGroup->value => __($cooldownGroup->translationKey()),
             ])->toArray(),
         ];
     }

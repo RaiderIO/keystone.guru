@@ -24,6 +24,16 @@ enum SpellCooldownGroup: string
     case Utility      = 'utility';
     case Unknown      = 'unknown';
 
+    public const string TRANSLATION_KEY_PREFIX = 'spellcooldowngroup.';
+
+    /**
+     * This cooldown group as `spells`.`cooldown_group` stores it, which is also its translation key.
+     */
+    public function translationKey(): string
+    {
+        return self::TRANSLATION_KEY_PREFIX . $this->value;
+    }
+
     /**
      * @return list<string>
      */

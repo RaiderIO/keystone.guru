@@ -36,7 +36,7 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
             // Arrange
             $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies(enemyFilter: $this->isNotAtTheBottomOfTheMap(...));
             $enemy        = $this->getSafeMdtEnemies($dungeonRoute, enemyFilter: $this->isNotAtTheBottomOfTheMap(...))->first();
-            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST], $enemy);
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::Bloodlust->value], $enemy);
 
             $warnings = collect();
 
@@ -62,7 +62,7 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
             // Arrange
             $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
             $enemy        = $this->getSafeMdtEnemies($dungeonRoute)->first();
-            $this->createKillZone($dungeonRoute, 1, [KnownSpell::TIME_WARP, KnownSpell::BLOODLUST], $enemy);
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::TimeWarp->value, KnownSpell::Bloodlust->value], $enemy);
 
             // Act
             $objects = $this->exportObjects($dungeonRoute);
@@ -105,9 +105,9 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
             // Arrange
             $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies(enemyCount: 3);
             $enemies      = $this->getSafeMdtEnemies($dungeonRoute, limit: 3);
-            $this->createKillZone($dungeonRoute, 1, [KnownSpell::HEROISM], $enemies->get(0));
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::Heroism->value], $enemies->get(0));
             $this->createKillZone($dungeonRoute, 2, [], $enemies->get(1));
-            $this->createKillZone($dungeonRoute, 3, [KnownSpell::BLOODLUST], $enemies->get(2));
+            $this->createKillZone($dungeonRoute, 3, [KnownSpell::Bloodlust->value], $enemies->get(2));
 
             // Act
             $objects = $this->exportObjects($dungeonRoute);
@@ -128,7 +128,7 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
             // Arrange
             $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies(enemyFilter: $this->isNotAtTheBottomOfTheMap(...));
             $enemy        = $this->getSafeMdtEnemies($dungeonRoute, enemyFilter: $this->isNotAtTheBottomOfTheMap(...))->first();
-            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST], $enemy, ['description' => 'Pull the pack']);
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::Bloodlust->value], $enemy, ['description' => 'Pull the pack']);
 
             // Act
             $objects = $this->exportObjects($dungeonRoute);
@@ -152,7 +152,7 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
         try {
             // Arrange
             $dungeonRoute = $this->getMDTCompatibleNonFacadeDungeonRoute();
-            $this->createKillZone($dungeonRoute, 4, [KnownSpell::BLOODLUST]);
+            $this->createKillZone($dungeonRoute, 4, [KnownSpell::Bloodlust->value]);
 
             $warnings = collect();
 
@@ -181,7 +181,7 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
             $dungeonRoute = $this->getMDTCompatibleNonFacadeDungeonRoute();
             /** @var Floor $floor */
             $floor = $dungeonRoute->dungeon->floors()->firstOrFail();
-            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST], null, [
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::Bloodlust->value], null, [
                 'floor_id' => $floor->id,
                 'lat'      => -100.5,
                 'lng'      => 200.25,
@@ -210,7 +210,7 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
         try {
             // Arrange
             [$dungeonRoute, $majorityFloorEnemies, $minorityFloorEnemy] = $this->createRouteWithEnemiesOnTwoFloors();
-            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST], $minorityFloorEnemy, [], ...$majorityFloorEnemies);
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::Bloodlust->value], $minorityFloorEnemy, [], ...$majorityFloorEnemies);
 
             // Act
             $objects = $this->exportObjects($dungeonRoute);
@@ -231,7 +231,7 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
         try {
             // Arrange
             [$dungeonRoute, $majorityFloorEnemies, $minorityFloorEnemy] = $this->createRouteWithEnemiesOnTwoFloors();
-            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST], null, [
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::Bloodlust->value], null, [
                 'floor_id' => $minorityFloorEnemy->floor_id,
                 'lat'      => $minorityFloorEnemy->lat,
                 'lng'      => $minorityFloorEnemy->lng,
@@ -256,7 +256,7 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
         try {
             // Arrange
             [$dungeonRoute, $majorityFloorEnemies, $minorityFloorEnemy] = $this->createRouteWithEnemiesOnTwoFloors();
-            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST], $minorityFloorEnemy, [
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::Bloodlust->value], $minorityFloorEnemy, [
                 'floor_id' => $minorityFloorEnemy->floor_id,
                 'lat'      => $minorityFloorEnemy->lat,
                 'lng'      => $minorityFloorEnemy->lng,
@@ -293,7 +293,7 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
                 'dungeon_id'         => $dungeon->id,
                 'mapping_version_id' => $mappingVersion->id,
             ]);
-            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST], $enemy);
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::Bloodlust->value], $enemy);
 
             $facadeLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
                 $mappingVersion,
@@ -343,7 +343,7 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
             // Arrange
             $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
             $enemy        = $this->getSafeMdtEnemies($dungeonRoute)->first();
-            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST, KnownSpell::HEROISM], $enemy);
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::Bloodlust->value, KnownSpell::Heroism->value], $enemy);
 
             app()->setLocale('de_DE');
 
@@ -368,7 +368,7 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
         try {
             // Arrange
             $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
-            $this->createKillZone($dungeonRoute, 1, [KnownSpell::BLOODLUST], $this->getSafeMdtEnemies($dungeonRoute)->first());
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::Bloodlust->value], $this->getSafeMdtEnemies($dungeonRoute)->first());
 
             app()->setLocale('de_DE');
             $germanEncodedString = app()->make(MDTExportStringServiceInterface::class)
@@ -399,12 +399,12 @@ final class MDTExportStringServiceExtractKillZoneSpellsTest extends MDTExportStr
             // Arrange
             $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies(enemyFilter: $this->isNotAtTheBottomOfTheMap(...));
             $enemy        = $this->getSafeMdtEnemies($dungeonRoute, enemyFilter: $this->isNotAtTheBottomOfTheMap(...))->first();
-            $this->createKillZone($dungeonRoute, 1, [KnownSpell::HEROISM], null, [
+            $this->createKillZone($dungeonRoute, 1, [KnownSpell::Heroism->value], null, [
                 'floor_id' => $enemy->floor_id,
                 'lat'      => -100.5,
                 'lng'      => 200.25,
             ]);
-            $this->createKillZone($dungeonRoute, 2, [KnownSpell::BLOODLUST], $enemy, [
+            $this->createKillZone($dungeonRoute, 2, [KnownSpell::Bloodlust->value], $enemy, [
                 'floor_id' => $enemy->floor_id,
                 'lat'      => $enemy->lat,
                 'lng'      => $enemy->lng,

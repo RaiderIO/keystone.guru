@@ -20,6 +20,7 @@ use App\Models\PublishedState;
 use App\Models\RouteAttribute;
 use App\Models\Season;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCategory;
 use App\Models\User;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\Cache\CacheServiceInterface;
@@ -226,7 +227,7 @@ class ViewService implements ViewServiceInterface
     public function getSelectableSpellsByCategory(): Collection
     {
         return $this->cachedGlobal('selectable_spells_by_category', static fn() => Spell::where('selectable', true)
-            ->orderByRaw("CASE WHEN category = 'spellcategory.general' THEN 0 ELSE 1 END")
+            ->orderByRaw('CASE WHEN category = ? THEN 0 ELSE 1 END', [SpellCategory::General->translationKey()])
             ->orderBy('category')
             ->orderBy('name')
             ->get()

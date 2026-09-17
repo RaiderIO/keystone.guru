@@ -86,25 +86,25 @@ class SpellCounterDataExtractor implements DataExtractorInterface
      * (bleeds, Judgment, Consecration, ...) land on trash NPCs near-constantly mid-combat and must not veto signature
      * C, or it would never fire in practice.
      *
-     * @var array<int, string>
+     * @var list<SpellMechanic>
      */
     public const array CAST_DISTURBING_MECHANICS = [
-        SpellMechanic::Asleep->value,
-        SpellMechanic::Banished->value,
-        SpellMechanic::Charmed->value,
-        SpellMechanic::Disoriented->value,
-        SpellMechanic::Fleeing->value,
-        SpellMechanic::Frozen->value,
-        SpellMechanic::Gripped->value,
-        SpellMechanic::Horrified->value,
-        SpellMechanic::Incapacitated->value,
-        SpellMechanic::Interrupted->value,
-        SpellMechanic::Polymorphed->value,
-        SpellMechanic::Sapped->value,
-        SpellMechanic::Shackled->value,
-        SpellMechanic::Silenced->value,
-        SpellMechanic::Stunned->value,
-        SpellMechanic::Turned->value,
+        SpellMechanic::Asleep,
+        SpellMechanic::Banished,
+        SpellMechanic::Charmed,
+        SpellMechanic::Disoriented,
+        SpellMechanic::Fleeing,
+        SpellMechanic::Frozen,
+        SpellMechanic::Gripped,
+        SpellMechanic::Horrified,
+        SpellMechanic::Incapacitated,
+        SpellMechanic::Interrupted,
+        SpellMechanic::Polymorphed,
+        SpellMechanic::Sapped,
+        SpellMechanic::Shackled,
+        SpellMechanic::Silenced,
+        SpellMechanic::Stunned,
+        SpellMechanic::Turned,
     ];
 
     /** @var Collection<int, SpellCounterDefinitionInterface> Keyed by trigger cast spell id. */
@@ -441,7 +441,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         // their Wowhead data is fetched, and the countered spell is often exactly such a spell.
         if ($npcId === null ||
             $spell === null ||
-            ($spell->category !== null && $spell->category !== sprintf('spellcategory.%s', SpellCategory::Unknown->value))) {
+            ($spell->category !== null && $spell->category !== SpellCategory::Unknown->translationKey())) {
             return;
         }
 
@@ -778,7 +778,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         }
 
         foreach (self::CAST_DISTURBING_MECHANICS as $disturbingMechanic) {
-            if ($mechanic === sprintf('spellmechanic.%s', $disturbingMechanic)) {
+            if ($mechanic === $disturbingMechanic->translationKey()) {
                 return true;
             }
         }

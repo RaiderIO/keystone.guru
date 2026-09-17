@@ -28,7 +28,7 @@ use App\Models\Spell\SpellSchool;
             @endif
             @if($spell->schools_mask > 0)
                 <span class="compendium_chip">
-                    {{ Spell::maskToReadableString(SpellSchool::slugsByBit(), $spell->schools_mask, 'spellschools') }}
+                    {{ SpellSchool::maskToTranslatedString($spell->schools_mask) }}
                 </span>
             @endif
             @if($spell->dispel_type)

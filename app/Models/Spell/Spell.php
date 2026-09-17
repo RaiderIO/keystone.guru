@@ -198,7 +198,7 @@ class Spell extends Model implements MappingModelInterface
             'name'       => __($this->name),
             'format'     => $this->description_format,
             'values'     => $this->description_values ?? [],
-            'schools'    => self::maskToReadableString(SpellSchool::slugsByBit(), $this->schools_mask, 'spellschools') ?: null,
+            'schools'    => SpellSchool::maskToTranslatedString($this->schools_mask) ?: null,
             'dispelType' => $this->hasUninformativeDispelType() ? null : __($this->dispel_type),
             'mechanic'   => $this->mechanic ? __($this->mechanic) : null,
             'castTime'   => $this->cast_time > 0 ? $this->cast_time / 1000 : null,
@@ -390,29 +390,5 @@ class Spell extends Model implements MappingModelInterface
         return $domain === null
             ? sprintf('spell=%d', $spellId)
             : sprintf('spell=%d&domain=%s', $spellId, $domain);
-    }
-
-    /** @param array<int|string, int|string> $mapping */
-    public static function maskToReadableString(array $mapping, int $mask, ?string $translationPrefix = null): string
-    {
-        $result = [];
-
-        foreach ($mapping as $key => $value) {
-            // New format: bitmask => name
-            if (is_int($key)) {
-                $bitmask = $key;
-                $name    = $value;
-            } // Old format: name => bitmask
-            else {
-                $bitmask = $value;
-                $name    = $key;
-            }
-
-            if (($mask & $bitmask) !== 0) {
-                $result[] = $translationPrefix === null ? (string)$name : __($translationPrefix . '.' . $name);
-            }
-        }
-
-        return implode(', ', $result);
     }
 }

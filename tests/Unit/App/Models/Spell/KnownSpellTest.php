@@ -48,4 +48,17 @@ final class KnownSpellTest extends PublicTestCase
         // Assert
         $this->assertSame($expected, $immunitySpells);
     }
+
+    #[Test]
+    public function tryFrom_givenTheSpellIdOfACase_returnsThatCase(): void
+    {
+        // Arrange
+        $spellId = 2825;
+
+        // Act
+        $knownSpell = KnownSpell::tryFrom($spellId);
+
+        // Assert
+        $this->assertSame(KnownSpell::Bloodlust, $knownSpell);
+    }
 }

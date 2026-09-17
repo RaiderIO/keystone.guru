@@ -17,22 +17,22 @@ $details = [
     [
         'label'   => __('view_compendium.spell.sections.details.header_schools'),
         'tooltip' => __('view_compendium.spell.sections.details.header_schools_tooltip'),
-        'value'   => Spell::maskToReadableString(SpellSchool::slugsByBit(), $spell->schools_mask, 'spellschools') ?: '-',
+        'value'   => SpellSchool::maskToTranslatedString($spell->schools_mask) ?: '-',
     ],
     [
         'label'   => __('view_compendium.spell.sections.details.header_miss_types'),
         'tooltip' => __('view_compendium.spell.sections.details.header_miss_types_tooltip'),
-        'value'   => Spell::maskToReadableString(SpellMissType::slugsByBit(), $spell->miss_types_mask, 'spellmisstypes') ?: '-',
+        'value'   => SpellMissType::maskToTranslatedString($spell->miss_types_mask) ?: '-',
     ],
     [
         'label'   => __('view_compendium.spell.sections.details.header_counters'),
         'tooltip' => __('view_compendium.spell.sections.details.header_counters_tooltip'),
-        'value'   => Spell::maskToReadableString(SpellCounter::slugsByBit(), $spell->counters_mask, 'spellcounters') ?: '-',
+        'value'   => SpellCounter::maskToTranslatedString($spell->counters_mask) ?: '-',
     ],
     [
         'label'   => __('view_compendium.spell.sections.details.header_bypasses_immunities'),
         'tooltip' => __('view_compendium.spell.sections.details.header_bypasses_immunities_tooltip'),
-        'value'   => Spell::maskToReadableString(SpellImmunity::slugsByBit(), $spell->bypasses_immunities_mask, 'spellimmunities') ?: '-',
+        'value'   => SpellImmunity::maskToTranslatedString($spell->bypasses_immunities_mask) ?: '-',
     ],
     [
         'label'   => __('view_compendium.spell.sections.details.header_dispel_type'),

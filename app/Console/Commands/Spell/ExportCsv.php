@@ -49,8 +49,8 @@ class ExportCsv extends Command
                 'dispel_type' => in_array($spell->dispel_type, SpellDispelType::translationKeys()) ?
                     __($spell->dispel_type, [], 'en_US') :
                     $spell->dispel_type,
-                'schools'      => Spell::maskToReadableString(SpellSchool::slugsByBit(), $spell->schools_mask, 'spellschools'),
-                'miss_types'   => Spell::maskToReadableString(SpellMissType::slugsByBit(), $spell->miss_types_mask, 'spellmisstypes'),
+                'schools'      => SpellSchool::maskToTranslatedString($spell->schools_mask),
+                'miss_types'   => SpellMissType::maskToTranslatedString($spell->miss_types_mask),
                 'aura'         => $spell->aura ? 1 : 0,
                 'debuff'       => $spell->debuff ? 1 : 0,
                 'cast_time'    => $spell->cast_time,

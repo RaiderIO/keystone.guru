@@ -9,6 +9,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCategory;
 use App\Models\Spell\SpellMissType;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitions;
@@ -70,7 +71,7 @@ class ClassCompendiumController extends Controller
         // taxonomy nobody thinks in.
         $spells = self::sortByTranslatedName(
             Spell::query()
-                ->where('category', sprintf('spellcategory.%s', $characterClass->key))
+                ->where('category', SpellCategory::translationKeyFor($characterClass->key))
                 ->whereNotNull('characteristic_id')
                 ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
                 ->with('characteristic')
