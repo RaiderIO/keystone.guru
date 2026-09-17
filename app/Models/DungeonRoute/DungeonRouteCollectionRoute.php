@@ -20,8 +20,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $created_at
  *
  * @property DungeonRouteCollection $dungeonRouteCollection
- * @property DungeonRoute|null      $dungeonRoute           This project uses no foreign keys, so a route that
- *                                                          was since deleted leaves a dangling coupling behind
+ * @property DungeonRoute           $dungeonRoute
  *
  * @mixin Eloquent
  */

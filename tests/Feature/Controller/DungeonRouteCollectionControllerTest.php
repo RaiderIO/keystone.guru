@@ -110,6 +110,38 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function savenew_givenTheCollectionLimitIsReached_createsNoFurtherCollection(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        DungeonRouteCollection::factory()
+            ->count(DungeonRouteCollection::MAX_COLLECTIONS)
+            ->create(['user_id' => $creator->id]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+                'name'            => 'ZzTestOneTooMany',
+                'published_state' => PublishedState::WORLD,
+                'dungeon_routes'  => [],
+            ]);
+
+            // Assert
+            $response->assertRedirect(route('collections.index'));
+            $this->assertSame(
+                DungeonRouteCollection::MAX_COLLECTIONS,
+                DungeonRouteCollection::where('user_id', $creator->id)->count(),
+            );
+        } finally {
+            DungeonRouteCollection::where('user_id', $creator->id)->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
     /**
      * Collecting somebody else's route would let anyone surface - and link around - a route that
      * is not theirs, so the author constraint is the only thing keeping a collection to its owner.
