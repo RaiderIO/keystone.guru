@@ -636,8 +636,10 @@ return [
             // last week's runs once M+ activity resumes, so this survives every future season gap
             // too, not just the current one.
             'completed_at_window_days' => (int)env('COMBAT_LOG_POLLING_COMPLETED_AT_WINDOW_DAYS', 7),
-            'limit'                    => (int)env('COMBAT_LOG_POLLING_LIMIT', 100),
-            'download_url'             => env('COMBAT_LOG_POLLING_DOWNLOAD_URL'),
+            // 100 is the ceiling the search API allows an ordinary caller; it answers 400 to
+            // anything above it, which the retry then spends three attempts on before giving up.
+            'limit'        => (int)env('COMBAT_LOG_POLLING_LIMIT', 100),
+            'download_url' => env('COMBAT_LOG_POLLING_DOWNLOAD_URL'),
 
             // When an hour of polling is bad enough to be worth waking someone for (#4173). A run
             // that yields no data costs nothing on its own - it is blacklisted and the budget it
@@ -674,6 +676,18 @@ return [
                 // top band's floor near the bottom, and the top band is dispatched without
                 // consulting any budget - so it would parse every run of the season.
                 'max_key_level_cache_minutes' => (int)env('COMBAT_LOG_POLLING_TOP_BAND_MAX_KEY_LEVEL_CACHE_MINUTES', 50),
+
+                // How many pages of the top band's result set one invocation may walk before giving
+                // up for the hour. The top band queries every dungeon at once over the whole
+                // completed_at window, so its result set runs to thousands of runs across dozens of
+                // pages while page one holds only the newest `limit` of them - all long since
+                // parsed once the band has been polled hourly for a day. Paging stops at the first
+                // page that dispatches something, so the extra calls are only spent on an hour that
+                // would otherwise have dispatched nothing at all. The cap is what keeps that
+                // bounded: the top band consults no budget, so every run it finds is parsed.
+                // `max_pages * limit` must stay under 10000 - the search API pages with a plain
+                // offset into the search index, which refuses to reach past that.
+                'max_pages' => (int)env('COMBAT_LOG_POLLING_TOP_BAND_MAX_PAGES', 5),
             ],
         ],
         'weekly_route' => [

@@ -600,6 +600,133 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
     }
 
     /**
+     * An hour in which no new top run appeared finds nothing but already-parsed runs on page one,
+     * and any top run pushed past page one by a burst would never be reached at all.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenTopBandPageFullyParsed_pagesToTheNextOffset(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        config(['keystoneguru.raider_io.combat_log_polling.limit' => 2]);
+
+        $parsedRuns = [
+            $this->makeRun(4101, $this->dungeon->challenge_mode_id, mythicLevel: 23),
+            $this->makeRun(4102, $this->dungeon->challenge_mode_id, mythicLevel: 23),
+        ];
+        $freshRun = $this->makeRun(4103, $this->dungeon->challenge_mode_id, mythicLevel: 23);
+
+        $criteriaService = $this->makeCriteriaService();
+        $criteriaService->method('shouldParse')->willReturn(false);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiServiceWithTopBandPages([$parsedRuns, [$freshRun]]);
+
+        $runIds = [4101, 4102, 4103];
+
+        try {
+            foreach ($parsedRuns as $parsedRun) {
+                ParsedCombatLog::create(['run_id' => $parsedRun->id]);
+            }
+
+            // Act
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+            // Assert
+            $this->assertSame([0, 2], $this->capturedTopBandOffsets());
+            Bus::assertDispatchedTimes(ProcessCombatLogSegments::class, 1);
+        } finally {
+            ParsedCombatLog::query()->whereIn('run_id', $runIds)->delete();
+        }
+    }
+
+    /**
+     * The top band consults no budget, so an unbounded walk over a result set of thousands would
+     * queue every one of them.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenEveryTopBandPageFullyParsed_stopsAtTheConfiguredPageCap(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        config([
+            'keystoneguru.raider_io.combat_log_polling.limit'              => 2,
+            'keystoneguru.raider_io.combat_log_polling.top_band.max_pages' => 3,
+        ]);
+
+        $parsedRuns = [
+            $this->makeRun(4111, $this->dungeon->challenge_mode_id, mythicLevel: 23),
+            $this->makeRun(4112, $this->dungeon->challenge_mode_id, mythicLevel: 23),
+        ];
+
+        $criteriaService = $this->makeCriteriaService();
+        $criteriaService->method('shouldParse')->willReturn(false);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        // Every page holds the same already-parsed runs, so no page ever dispatches anything
+        $this->mockRaiderIOApiServiceWithTopBandPages([$parsedRuns], repeatLastPage: true);
+
+        $runIds = [4111, 4112];
+
+        try {
+            foreach ($parsedRuns as $parsedRun) {
+                ParsedCombatLog::create(['run_id' => $parsedRun->id]);
+            }
+
+            // Act
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+            // Assert
+            $this->assertSame([0, 2, 4], $this->capturedTopBandOffsets());
+            Bus::assertNotDispatched(ProcessCombatLogSegments::class);
+        } finally {
+            ParsedCombatLog::query()->whereIn('run_id', $runIds)->delete();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenTopBandPageYieldingADispatch_doesNotPageFurther(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        config(['keystoneguru.raider_io.combat_log_polling.limit' => 2]);
+
+        $freshRuns = [
+            $this->makeRun(4121, $this->dungeon->challenge_mode_id, mythicLevel: 23),
+            $this->makeRun(4122, $this->dungeon->challenge_mode_id, mythicLevel: 23),
+        ];
+
+        $criteriaService = $this->makeCriteriaService();
+        $criteriaService->method('shouldParse')->willReturn(false);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiServiceWithTopBandPages([$freshRuns], repeatLastPage: true);
+
+        $runIds = [4121, 4122];
+
+        try {
+            // Act
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+            // Assert
+            $this->assertSame([0], $this->capturedTopBandOffsets());
+            Bus::assertDispatchedTimes(ProcessCombatLogSegments::class, 2);
+        } finally {
+            ParsedCombatLog::query()->whereIn('run_id', $runIds)->delete();
+        }
+    }
+
+    /**
      * The same run legitimately comes back from several criterion queries and again from the top
      * band. Dispatching it more than once wastes a parse, and inserting it twice trips the unique
      * index on parsed_combat_logs.run_id.
@@ -1094,6 +1221,55 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
             },
         );
         app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+    }
+
+    /**
+     * Serves the top band one page per entry, keyed by the offset the command asks for. The spread
+     * band gets nothing - these tests drive the top band alone.
+     *
+     * @param  SearchAdvancedRun[][] $topBandPages
+     * @throws Exception
+     */
+    private function mockRaiderIOApiServiceWithTopBandPages(array $topBandPages, bool $repeatLastPage = false): void
+    {
+        $this->capturedMythicLevelMins  = [];
+        $this->capturedMythicLevelMaxes = [];
+        $this->capturedFilters          = [];
+
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('searchAdvancedRuns')->willReturnCallback(
+            function (SearchAdvancedRunsFilter $filter) use ($topBandPages, $repeatLastPage): SearchAdvancedRunsResponse {
+                $this->capturedMythicLevelMins[]  = $filter->mythicLevelMin;
+                $this->capturedMythicLevelMaxes[] = $filter->mythicLevelMax;
+                $this->capturedFilters[]          = $filter;
+
+                if ($filter->mythicLevelMax !== null) {
+                    return new SearchAdvancedRunsResponse([], 0);
+                }
+
+                $pageIndex = (int)($filter->offset / $filter->limit);
+                $runs      = $topBandPages[$pageIndex] ?? ($repeatLastPage ? end($topBandPages) : []);
+
+                return new SearchAdvancedRunsResponse($runs, 1000);
+            },
+        );
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+    }
+
+    /**
+     * @return int[]
+     */
+    private function capturedTopBandOffsets(): array
+    {
+        $offsets = [];
+
+        foreach ($this->capturedFilters as $filter) {
+            if ($filter->mythicLevelMax === null) {
+                $offsets[] = $filter->offset;
+            }
+        }
+
+        return $offsets;
     }
 
     /**
