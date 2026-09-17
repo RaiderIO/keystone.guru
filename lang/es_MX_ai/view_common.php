@@ -2,6 +2,26 @@
 
 return [
 
+    'collection' => [
+        'details' => [
+            'name'                 => '',
+            'description'          => '',
+            'category'             => '',
+            'category_none'        => '',
+            'category_help'        => '',
+            'published_state'      => '',
+            'published_state_help' => '',
+            'team'                 => '',
+            'team_none'            => '',
+            'team_help'            => '',
+            'dungeon_routes'       => '',
+            'dungeon_routes_none'  => '',
+            'dungeon_routes_help'  => '',
+            'save'                 => '',
+            'submit'               => '',
+            'delete'               => '',
+        ],
+    ],
     'dungeon' => [
         'difficulty' => [
             '10_man' => '10 jugadores',
@@ -198,6 +218,9 @@ return [
             'continue_with_discord'   => 'Continuar con Discord',
             'continue_with_google'    => 'Continuar con Google',
         ],
+        'passwordinput' => [
+            'show_password' => '',
+        ],
         'pullsettings' => [
             'pull_number_style'                 => 'Estilo de número de tirón',
             'pull_number_style_title'           => 'Esto controla cómo la barra lateral de tirones muestra los números.',
@@ -228,6 +251,7 @@ return [
             'terms_of_service'        => 'términos del servicio',
             'privacy_policy'          => 'política de privacidad',
             'cookie_policy'           => 'política de cookies',
+            'opens_in_new_tab'        => '',
             'already_have_an_account' => '¿Ya tienes una cuenta?',
             'login_now'               => 'Iniciar sesión',
         ],
@@ -343,6 +367,7 @@ return [
                 'my_routes'                  => 'Mis rutas',
                 'my_favorites'               => 'Mis favoritos',
                 'my_tags'                    => 'Mis etiquetas',
+                'my_collections'             => '',
                 'my_teams'                   => 'Mis equipos',
                 'my_profile'                 => 'Mi perfil público',
                 'account_settings'           => 'Configuración de la cuenta',
@@ -481,6 +506,30 @@ return [
                 'clear_failures_title' => 'Eliminar todos los registros de fallos de esta mazmorra',
                 'matching_routes'      => 'Rutas coincidentes',
                 'no_matching_routes'   => 'No se encontraron rutas coincidentes',
+            ],
+
+            'combatlogrouteenemyresolutions' => [
+                'explanation'             => '',
+                'mapping_version_filter'  => '',
+                'npc_filter'              => '',
+                'metric_filter'           => '',
+                'metric_average'          => '',
+                'metric_max'              => '',
+                'min_distance_filter'     => '',
+                'summary'                 => '',
+                'clear_resolutions'       => '',
+                'clear_resolutions_title' => '',
+                'matching_routes'         => '',
+                'show_lines'              => '',
+                'lines_legend'            => '',
+                'line_popup'              => [
+                    'npc'            => '',
+                    'distance'       => '',
+                    'weighted'       => '',
+                    'route'          => '',
+                    'imported_route' => '',
+                    'no_route'       => '',
+                ],
             ],
             'header' => [
                 'toggle_navigation'              => 'Alternar navegación',

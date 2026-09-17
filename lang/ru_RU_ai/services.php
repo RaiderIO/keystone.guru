@@ -15,6 +15,7 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Это указывает на то, что ваш маршрут убивает врага, NPC которого известен MDT, но Keystone.guru еще не связал этого врага с эквивалентом MDT (или он не существует в MDT).',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Этот захват был удален, так как все выбранные враги не были найдены в MDT, что привело к пустому захвату.',
                 'unable_to_find_mdt_enemy_for_kg_raid_marker'       => 'Не удалось найти эквивалент MDT для врага с рейдовой меткой %s (npc_id: %s).',
+                'unable_to_place_kill_zone_spells_note'             => '',
                 'route_title_contains_non_ascii_char_bug'           => 'Название вашего маршрута содержит не-ASCII символы, которые, как известно, вызывают еще не решенную ошибку кодировки в Keystone.guru.
                                                         Название вашего маршрута было очищено от всех нежелательных символов, приносим извинения за неудобства и надеемся скоро решить эту проблему.',
                 'route_title_contains_non_ascii_char_bug_details' => 'Старое название: %s, новое название: %s',

@@ -222,6 +222,9 @@ return [
             'changed_to'     => 'mudou para',
             'shared_by'      => 'Registros de feitiço que compartilham esta alteração: :count',
         ],
+        'tuning_build_released_at' => [
+            'went_live' => '',
+        ],
     ],
     'tuning' => [
         'index' => [

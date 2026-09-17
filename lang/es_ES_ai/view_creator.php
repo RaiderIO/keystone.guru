@@ -8,7 +8,10 @@ return [
         'search_label'       => 'Buscar un creador',
         'search_placeholder' => 'Buscar por nombre',
         'search_submit'      => 'Buscar',
+        'category_label'     => '',
+        'category_any'       => '',
         'empty'              => 'Todavía no hay creadores en la lista.',
+        'empty_for_category' => '',
         'empty_for_search'   => 'No se encontraron creadores que coincidan con ":search".',
     ],
     'featured' => [

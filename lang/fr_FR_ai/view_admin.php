@@ -715,8 +715,6 @@ return [
             'view_dungeon_mapping_version_accuracy'                   => '',
             'view_dungeon_mapping_version_accuracy_description'       => '',
             'subheader_enemy_forces'                                  => '',
-            'enemy_forces_import'                                     => '',
-            'enemy_forces_import_description'                         => '',
             'enemy_forces_recalculate'                                => '',
             'enemy_forces_recalculate_description'                    => '',
             'subheader_thumbnails'                                    => '',
@@ -731,6 +729,8 @@ return [
             'combatlog_route_coverage_description'                    => '',
             'combatlog_route_enemy_failures'                          => '',
             'combatlog_route_enemy_failures_description'              => '',
+            'combatlog_route_enemy_resolutions'                       => '',
+            'combatlog_route_enemy_resolutions_description'           => '',
             'combatlog_run_data'                                      => '',
             'combatlog_run_data_description'                          => '',
             'subheader_wagogg'                                        => '',
@@ -825,6 +825,10 @@ return [
             ],
             'route' => [
                 'enemy_failures' => [
+                    'title'  => '',
+                    'header' => '',
+                ],
+                'enemy_resolutions' => [
                     'title'  => '',
                     'header' => '',
                 ],

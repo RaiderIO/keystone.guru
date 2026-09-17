@@ -8,7 +8,10 @@ return [
         'search_label'       => 'Rechercher un créateur',
         'search_placeholder' => 'Rechercher par nom',
         'search_submit'      => 'Rechercher',
+        'category_label'     => '',
+        'category_any'       => '',
         'empty'              => 'Aucun créateur n\'est encore répertorié.',
+        'empty_for_category' => '',
         'empty_for_search'   => 'Aucun créateur ne correspond à « :search ».',
     ],
     'featured' => [

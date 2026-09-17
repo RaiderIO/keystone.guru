@@ -2,6 +2,26 @@
 
 return [
 
+    'collection' => [
+        'details' => [
+            'name'                 => '',
+            'description'          => '',
+            'category'             => '',
+            'category_none'        => '',
+            'category_help'        => '',
+            'published_state'      => '',
+            'published_state_help' => '',
+            'team'                 => '',
+            'team_none'            => '',
+            'team_help'            => '',
+            'dungeon_routes'       => '',
+            'dungeon_routes_none'  => '',
+            'dungeon_routes_help'  => '',
+            'save'                 => '',
+            'submit'               => '',
+            'delete'               => '',
+        ],
+    ],
     'dungeon' => [
         'difficulty' => [
             '10_man' => '10人',
@@ -198,6 +218,9 @@ return [
             'continue_with_discord'   => '使用 Discord 继续',
             'continue_with_google'    => '使用 Google 继续',
         ],
+        'passwordinput' => [
+            'show_password' => '',
+        ],
         'pullsettings' => [
             'pull_number_style'                 => '拉怪数字样式',
             'pull_number_style_title'           => '这控制侧边栏中拉怪显示数字的方式。',
@@ -228,6 +251,7 @@ return [
             'terms_of_service'        => '服务条款',
             'privacy_policy'          => '隐私政策',
             'cookie_policy'           => 'cookie政策',
+            'opens_in_new_tab'        => '',
             'already_have_an_account' => '已经有账户了？',
             'login_now'               => '登录',
         ],
@@ -343,6 +367,7 @@ return [
                 'my_routes'                  => '我的路线',
                 'my_favorites'               => '我的收藏',
                 'my_tags'                    => '我的标签',
+                'my_collections'             => '',
                 'my_teams'                   => '我的团队',
                 'my_profile'                 => '我的公共资料',
                 'account_settings'           => '账户设置',
@@ -481,6 +506,30 @@ return [
                 'clear_failures_title' => '删除此地下城的所有失败记录',
                 'matching_routes'      => '匹配的路线',
                 'no_matching_routes'   => '未找到匹配的路线',
+            ],
+
+            'combatlogrouteenemyresolutions' => [
+                'explanation'             => '',
+                'mapping_version_filter'  => '',
+                'npc_filter'              => '',
+                'metric_filter'           => '',
+                'metric_average'          => '',
+                'metric_max'              => '',
+                'min_distance_filter'     => '',
+                'summary'                 => '',
+                'clear_resolutions'       => '',
+                'clear_resolutions_title' => '',
+                'matching_routes'         => '',
+                'show_lines'              => '',
+                'lines_legend'            => '',
+                'line_popup'              => [
+                    'npc'            => '',
+                    'distance'       => '',
+                    'weighted'       => '',
+                    'route'          => '',
+                    'imported_route' => '',
+                    'no_route'       => '',
+                ],
             ],
             'header' => [
                 'toggle_navigation'              => '切换导航',

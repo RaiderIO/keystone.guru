@@ -2,6 +2,7 @@
 
 return [
 
+    'view_collection_not_published'                       => '',
     'view_route_not_published'                            => 'Questo percorso non è pubblicato e non può essere visualizzato. Si prega di chiedere all\'autore di pubblicare questo percorso per visualizzarlo.',
     'present_route_not_published'                         => 'Questo percorso non è pubblicato e non può essere presentato. Si prega di chiedere all\'autore di pubblicare questo percorso per presentarlo.',
     'embed_route_not_published'                           => 'Questo percorso non è pubblicato e non può essere visualizzato. Si prega di chiedere all\'autore di pubblicare questo percorso per visualizzarlo.',

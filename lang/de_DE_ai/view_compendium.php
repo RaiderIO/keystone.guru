@@ -222,6 +222,9 @@ return [
             'changed_to'     => 'wird zu',
             'shared_by'      => 'Zaubereinträge mit dieser Änderung: :count',
         ],
+        'tuning_build_released_at' => [
+            'went_live' => '',
+        ],
     ],
     'tuning' => [
         'index' => [

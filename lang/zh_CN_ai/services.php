@@ -15,6 +15,7 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => '这表明您的路线中击杀了一个 MDT 已知的敌人 NPC，但 Keystone.guru 尚未将该敌人与 MDT 对应起来（或在 MDT 中不存在）。',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => '此拉取已被移除，因为在 MDT 中找不到所有选择的敌人，导致拉取为空。',
                 'unable_to_find_mdt_enemy_for_kg_raid_marker'       => '无法为带有 %s 团队标记的敌人找到对应的 MDT 数据（npc_id: %s）。',
+                'unable_to_place_kill_zone_spells_note'             => '',
                 'route_title_contains_non_ascii_char_bug'           => '您的路线标题包含非 ASCII 字符，这些字符已知会触发 Keystone.guru 中一个尚未解决的编码错误。
                                                         您的路线标题中的所有违规字符已被删除，我们对造成的不便表示歉意，并希望尽快解决此问题。',
                 'route_title_contains_non_ascii_char_bug_details' => '旧标题：%s，新标题：%s',

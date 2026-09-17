@@ -332,7 +332,6 @@ return [
     'map_icon_permanent_tooltip_label'                                     => 'Permanenter Tooltip',
     'map_icon_map_icon_type_id_label'                                      => 'Symbol',
     'map_icon_comment_label'                                               => 'Kommentar',
-    'map_icon_comment_description_label'                                   => 'Unterstützte HTML-Tags: :tags',
     'map_icon_map_icon_type_id_select_default_label'                       => 'Symbol auswählen',
     'map_icon_seasonal_type_label'                                         => 'Saisonaler Typ',
     'map_icon_seasonal_index_label'                                        => 'Saisonaler Index',

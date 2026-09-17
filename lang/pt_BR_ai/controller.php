@@ -190,6 +190,14 @@ return [
             'link_cancelled'          => 'A vinculação da sua conta do Patreon foi cancelada.',
         ],
     ],
+    'dungeonroutecollection' => [
+        'flash' => [
+            'collection_created'      => '',
+            'collection_updated'      => '',
+            'collection_deleted'      => '',
+            'max_collections_reached' => '',
+        ],
+    ],
     'profile' => [
         'flash' => [
             'email_already_in_use'             => 'Esse nome de usuário já está em uso.',

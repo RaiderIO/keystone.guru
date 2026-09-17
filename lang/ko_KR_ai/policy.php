@@ -2,6 +2,7 @@
 
 return [
 
+    'view_collection_not_published'                       => '',
     'view_route_not_published'                            => '이 경로는 게시되지 않았으며 볼 수 없습니다. 저자에게 이 경로를 게시하도록 요청하세요.',
     'present_route_not_published'                         => '이 경로는 게시되지 않았으며 발표할 수 없습니다. 저자에게 이 경로를 게시하도록 요청하세요.',
     'embed_route_not_published'                           => '이 경로는 게시되지 않았으며 볼 수 없습니다. 저자에게 이 경로를 게시하도록 요청하세요.',

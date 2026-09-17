@@ -2,6 +2,26 @@
 
 return [
 
+    'collection' => [
+        'details' => [
+            'name'                 => '',
+            'description'          => '',
+            'category'             => '',
+            'category_none'        => '',
+            'category_help'        => '',
+            'published_state'      => '',
+            'published_state_help' => '',
+            'team'                 => '',
+            'team_none'            => '',
+            'team_help'            => '',
+            'dungeon_routes'       => '',
+            'dungeon_routes_none'  => '',
+            'dungeon_routes_help'  => '',
+            'save'                 => '',
+            'submit'               => '',
+            'delete'               => '',
+        ],
+    ],
     'dungeon' => [
         'difficulty' => [
             '10_man' => '10인',
@@ -198,6 +218,9 @@ return [
             'continue_with_discord'   => 'Discord로 계속하기',
             'continue_with_google'    => 'Google로 계속하기',
         ],
+        'passwordinput' => [
+            'show_password' => '',
+        ],
         'pullsettings' => [
             'pull_number_style'                 => '풀 번호 스타일',
             'pull_number_style_title'           => '이 설정은 풀 사이드바에 숫자가 표시되는 방식을 제어합니다.',
@@ -228,6 +251,7 @@ return [
             'terms_of_service'        => '서비스 약관',
             'privacy_policy'          => '개인정보 보호정책',
             'cookie_policy'           => '쿠키 정책',
+            'opens_in_new_tab'        => '',
             'already_have_an_account' => '이미 계정이 있으신가요?',
             'login_now'               => '로그인하기',
         ],
@@ -343,6 +367,7 @@ return [
                 'my_routes'                  => '내 경로',
                 'my_favorites'               => '내 즐겨찾기',
                 'my_tags'                    => '내 태그',
+                'my_collections'             => '',
                 'my_teams'                   => '내 팀',
                 'my_profile'                 => '내 공개 프로필',
                 'account_settings'           => '계정 설정',
@@ -481,6 +506,30 @@ return [
                 'clear_failures_title' => '이 던전의 모든 실패 기록을 삭제합니다',
                 'matching_routes'      => '일치하는 경로',
                 'no_matching_routes'   => '일치하는 경로를 찾을 수 없습니다',
+            ],
+
+            'combatlogrouteenemyresolutions' => [
+                'explanation'             => '',
+                'mapping_version_filter'  => '',
+                'npc_filter'              => '',
+                'metric_filter'           => '',
+                'metric_average'          => '',
+                'metric_max'              => '',
+                'min_distance_filter'     => '',
+                'summary'                 => '',
+                'clear_resolutions'       => '',
+                'clear_resolutions_title' => '',
+                'matching_routes'         => '',
+                'show_lines'              => '',
+                'lines_legend'            => '',
+                'line_popup'              => [
+                    'npc'            => '',
+                    'distance'       => '',
+                    'weighted'       => '',
+                    'route'          => '',
+                    'imported_route' => '',
+                    'no_route'       => '',
+                ],
             ],
             'header' => [
                 'toggle_navigation'              => '내비게이션 전환',

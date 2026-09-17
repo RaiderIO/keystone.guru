@@ -32,6 +32,10 @@ return [
             'max'    => '',
             'exists' => '',
         ],
+        'pinned_dungeon_route_collections' => [
+            'max'    => '',
+            'exists' => '',
+        ],
         'social_links' => [
             'invalid_url_for_platform' => '',
         ],
@@ -55,6 +59,25 @@ return [
         ],
         'npc_dungeon_ids' => [
             'required' => '',
+        ],
+        'collection_name' => [
+            'required' => '',
+            'max'      => '',
+        ],
+        'collection_description' => [
+            'max' => '',
+        ],
+        'collection_team_id' => [
+            'required_if' => '',
+            'exists'      => '',
+        ],
+        'collection_category_id' => [
+            'exists' => '',
+        ],
+        'collection_dungeon_routes' => [
+            'max'      => '',
+            'exists'   => '',
+            'distinct' => '',
         ],
     ],
     'date'              => 'Le champ :attribute n\'est pas une date valide.',

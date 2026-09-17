@@ -331,7 +331,6 @@ return [
     'map_icon_permanent_tooltip_label'                                     => '永久提示',
     'map_icon_map_icon_type_id_label'                                      => '图标',
     'map_icon_comment_label'                                               => '评论',
-    'map_icon_comment_description_label'                                   => '支持的HTML标签: :tags',
     'map_icon_map_icon_type_id_select_default_label'                       => '选择图标',
     'map_icon_seasonal_type_label'                                         => '季节类型',
     'map_icon_seasonal_index_label'                                        => '季节指数',

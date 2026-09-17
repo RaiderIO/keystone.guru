@@ -2,6 +2,26 @@
 
 return [
 
+    'collection' => [
+        'details' => [
+            'name'                 => '',
+            'description'          => '',
+            'category'             => '',
+            'category_none'        => '',
+            'category_help'        => '',
+            'published_state'      => '',
+            'published_state_help' => '',
+            'team'                 => '',
+            'team_none'            => '',
+            'team_help'            => '',
+            'dungeon_routes'       => '',
+            'dungeon_routes_none'  => '',
+            'dungeon_routes_help'  => '',
+            'save'                 => '',
+            'submit'               => '',
+            'delete'               => '',
+        ],
+    ],
     'dungeon' => [
         'difficulty' => [
             '10_man' => '10 игроков',
@@ -198,6 +218,9 @@ return [
             'continue_with_discord'   => 'Продолжить через Discord',
             'continue_with_google'    => 'Продолжить через Google',
         ],
+        'passwordinput' => [
+            'show_password' => '',
+        ],
         'pullsettings' => [
             'pull_number_style'                 => 'Стиль номера пула',
             'pull_number_style_title'           => 'Это управляет номерами ваших пулов на боковой панели',
@@ -228,6 +251,7 @@ return [
             'terms_of_service'        => 'Условиями использования',
             'privacy_policy'          => 'Политикой конфиденциальности',
             'cookie_policy'           => 'Политикой в отношении файлов cookie',
+            'opens_in_new_tab'        => '',
             'already_have_an_account' => 'Уже есть аккаунт?',
             'login_now'               => 'Войти',
         ],
@@ -343,6 +367,7 @@ return [
                 'my_routes'                  => 'Мои маршруты',
                 'my_favorites'               => 'Мои избранные',
                 'my_tags'                    => 'Мои теги',
+                'my_collections'             => '',
                 'my_teams'                   => 'Мои команды',
                 'my_profile'                 => 'Мой публичный профиль',
                 'account_settings'           => 'Настройки аккаунта',
@@ -481,6 +506,30 @@ return [
                 'clear_failures_title' => 'Удалить все записи о сбоях для этого подземелья',
                 'matching_routes'      => 'Подходящие маршруты',
                 'no_matching_routes'   => 'Подходящих маршрутов не найдено',
+            ],
+
+            'combatlogrouteenemyresolutions' => [
+                'explanation'             => '',
+                'mapping_version_filter'  => '',
+                'npc_filter'              => '',
+                'metric_filter'           => '',
+                'metric_average'          => '',
+                'metric_max'              => '',
+                'min_distance_filter'     => '',
+                'summary'                 => '',
+                'clear_resolutions'       => '',
+                'clear_resolutions_title' => '',
+                'matching_routes'         => '',
+                'show_lines'              => '',
+                'lines_legend'            => '',
+                'line_popup'              => [
+                    'npc'            => '',
+                    'distance'       => '',
+                    'weighted'       => '',
+                    'route'          => '',
+                    'imported_route' => '',
+                    'no_route'       => '',
+                ],
             ],
             'header' => [
                 'toggle_navigation'              => 'Включить навигацию',

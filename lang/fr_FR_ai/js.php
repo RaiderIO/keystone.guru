@@ -332,7 +332,6 @@ return [
     'map_icon_permanent_tooltip_label'                                     => 'Infobulle permanente',
     'map_icon_map_icon_type_id_label'                                      => 'Icône',
     'map_icon_comment_label'                                               => 'Commentaire',
-    'map_icon_comment_description_label'                                   => 'Balises HTML prises en charge : :tags',
     'map_icon_map_icon_type_id_select_default_label'                       => 'Sélectionnez l\'icône',
     'map_icon_seasonal_type_label'                                         => 'Type saisonnier',
     'map_icon_seasonal_index_label'                                        => 'Indice saisonnier',

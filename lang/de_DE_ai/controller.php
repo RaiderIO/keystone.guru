@@ -190,6 +190,14 @@ return [
             'link_cancelled'          => 'Das Verknüpfen deines Patreon-Kontos wurde abgebrochen.',
         ],
     ],
+    'dungeonroutecollection' => [
+        'flash' => [
+            'collection_created'      => '',
+            'collection_updated'      => '',
+            'collection_deleted'      => '',
+            'max_collections_reached' => '',
+        ],
+    ],
     'profile' => [
         'flash' => [
             'email_already_in_use'             => 'Dieser Benutzername wird bereits verwendet.',

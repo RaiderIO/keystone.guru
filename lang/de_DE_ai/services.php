@@ -15,6 +15,7 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Dies zeigt an, dass deine Route einen Feind tötet, dessen NPC MDT bekannt ist, aber Keystone.guru hat diesen Feind noch nicht mit einem MDT-Äquivalent gekoppelt (oder er existiert nicht in MDT).',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Dieser Zug wurde entfernt, da alle ausgewählten Feinde in MDT nicht gefunden werden konnten, was zu einem ansonsten leeren Zug führte.',
                 'unable_to_find_mdt_enemy_for_kg_raid_marker'       => 'Für den Gegner mit der Schlachtzugsmarkierung %s konnte kein MDT-Äquivalent gefunden werden (npc_id: %s).',
+                'unable_to_place_kill_zone_spells_note'             => '',
                 'route_title_contains_non_ascii_char_bug'           => 'Dein Routentitel enthält nicht-ASCII-Zeichen, die bekanntermaßen einen noch ungelösten Codierungsfehler in Keystone.guru auslösen.
                                                         Dein Routentitel wurde von allen störenden Zeichen befreit, wir entschuldigen uns für die Unannehmlichkeiten und hoffen, dieses Problem bald zu lösen.',
                 'route_title_contains_non_ascii_char_bug_details' => 'Alter Titel: %s, neuer Titel: %s',

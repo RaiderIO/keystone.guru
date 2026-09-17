@@ -222,6 +222,9 @@ return [
             'changed_to'     => '변경 후 값:',
             'shared_by'      => '이 변경을 공유하는 주문 기록 :count개',
         ],
+        'tuning_build_released_at' => [
+            'went_live' => '',
+        ],
     ],
     'tuning' => [
         'index' => [

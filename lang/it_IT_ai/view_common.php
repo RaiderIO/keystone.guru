@@ -2,6 +2,26 @@
 
 return [
 
+    'collection' => [
+        'details' => [
+            'name'                 => '',
+            'description'          => '',
+            'category'             => '',
+            'category_none'        => '',
+            'category_help'        => '',
+            'published_state'      => '',
+            'published_state_help' => '',
+            'team'                 => '',
+            'team_none'            => '',
+            'team_help'            => '',
+            'dungeon_routes'       => '',
+            'dungeon_routes_none'  => '',
+            'dungeon_routes_help'  => '',
+            'save'                 => '',
+            'submit'               => '',
+            'delete'               => '',
+        ],
+    ],
     'dungeon' => [
         'difficulty' => [
             '10_man' => '10 giocatori',
@@ -198,6 +218,9 @@ return [
             'continue_with_discord'   => 'Continua con Discord',
             'continue_with_google'    => 'Continua con Google',
         ],
+        'passwordinput' => [
+            'show_password' => '',
+        ],
         'pullsettings' => [
             'pull_number_style'                 => 'Stile numero pull',
             'pull_number_style_title'           => 'Questo controlla come la barra laterale dei pull visualizza i numeri.',
@@ -228,6 +251,7 @@ return [
             'terms_of_service'        => 'termini di servizio',
             'privacy_policy'          => 'politica sulla privacy',
             'cookie_policy'           => 'politica sui cookie',
+            'opens_in_new_tab'        => '',
             'already_have_an_account' => 'Hai già un account?',
             'login_now'               => 'Accedi',
         ],
@@ -343,6 +367,7 @@ return [
                 'my_routes'                  => 'I miei percorsi',
                 'my_favorites'               => 'I miei preferiti',
                 'my_tags'                    => 'I miei tag',
+                'my_collections'             => '',
                 'my_teams'                   => 'I miei team',
                 'my_profile'                 => 'Il mio profilo pubblico',
                 'account_settings'           => 'Impostazioni account',
@@ -481,6 +506,30 @@ return [
                 'clear_failures_title' => 'Elimina tutti i record di errore per questo dungeon',
                 'matching_routes'      => 'Percorsi corrispondenti',
                 'no_matching_routes'   => 'Nessun percorso corrispondente trovato',
+            ],
+
+            'combatlogrouteenemyresolutions' => [
+                'explanation'             => '',
+                'mapping_version_filter'  => '',
+                'npc_filter'              => '',
+                'metric_filter'           => '',
+                'metric_average'          => '',
+                'metric_max'              => '',
+                'min_distance_filter'     => '',
+                'summary'                 => '',
+                'clear_resolutions'       => '',
+                'clear_resolutions_title' => '',
+                'matching_routes'         => '',
+                'show_lines'              => '',
+                'lines_legend'            => '',
+                'line_popup'              => [
+                    'npc'            => '',
+                    'distance'       => '',
+                    'weighted'       => '',
+                    'route'          => '',
+                    'imported_route' => '',
+                    'no_route'       => '',
+                ],
             ],
             'header' => [
                 'toggle_navigation'              => 'Attiva/disattiva navigazione',

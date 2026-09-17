@@ -8,7 +8,10 @@ return [
         'search_label'       => '搜索创作者',
         'search_placeholder' => '按名称搜索',
         'search_submit'      => '搜索',
+        'category_label'     => '',
+        'category_any'       => '',
         'empty'              => '目前还没有列出的创作者。',
+        'empty_for_category' => '',
         'empty_for_search'   => '未找到与":search"匹配的创作者。',
     ],
     'featured' => [

@@ -15,6 +15,7 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Cela indique que votre route tue un ennemi dont le PNJ est connu de MDT, mais Keystone.guru n\'a pas encore couplé cet ennemi à un équivalent MDT (ou il n\'existe pas dans MDT).',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Ce tirage a été supprimé car tous les ennemis sélectionnés n\'ont pas pu être trouvés dans MDT, entraînant un tirage vide.',
                 'unable_to_find_mdt_enemy_for_kg_raid_marker'       => 'Impossible de trouver l\'équivalent MDT pour l\'ennemi portant le marqueur de raid %s (npc_id : %s).',
+                'unable_to_place_kill_zone_spells_note'             => '',
                 'route_title_contains_non_ascii_char_bug'           => 'Le titre de votre route contient des caractères non-ASCII connus pour déclencher un bug d\'encodage encore non résolu dans Keystone.guru.
                                                         Le titre de votre route a été dépouillé de tous les caractères offensants, nous nous excusons pour le désagrément et espérons résoudre ce problème bientôt.',
                 'route_title_contains_non_ascii_char_bug_details' => 'Ancien titre : %s, nouveau titre : %s',

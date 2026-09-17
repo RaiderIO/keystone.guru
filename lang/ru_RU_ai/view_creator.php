@@ -8,7 +8,10 @@ return [
         'search_label'       => 'Поиск создателя',
         'search_placeholder' => 'Поиск по имени',
         'search_submit'      => 'Поиск',
+        'category_label'     => '',
+        'category_any'       => '',
         'empty'              => 'Создатели пока не найдены.',
+        'empty_for_category' => '',
         'empty_for_search'   => 'Не найдено создателей по запросу ":search".',
     ],
     'featured' => [

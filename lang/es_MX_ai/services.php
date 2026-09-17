@@ -15,6 +15,7 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Esto indica que tu ruta mata a un enemigo cuyo NPC es conocido por MDT, pero Keystone.guru aún no ha acoplado a ese enemigo con un equivalente de MDT (o no existe en MDT).',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Este jalón ha sido eliminado ya que no se pudieron encontrar todos los enemigos seleccionados en MDT, resultando en un jalón vacío.',
                 'unable_to_find_mdt_enemy_for_kg_raid_marker'       => 'No se pudo encontrar el equivalente de MDT para el enemigo con el marcador de banda %s (npc_id: %s).',
+                'unable_to_place_kill_zone_spells_note'             => '',
                 'route_title_contains_non_ascii_char_bug'           => 'El título de tu ruta contiene caracteres no ASCII que se sabe desencadenan un error de codificación no resuelto en Keystone.guru.
                                                         El título de tu ruta ha sido despojado de todos los caracteres problemáticos, nos disculpamos por el inconveniente y esperamos resolver este problema pronto.',
                 'route_title_contains_non_ascii_char_bug_details' => 'Título anterior: %s, nuevo título: %s',

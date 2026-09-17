@@ -190,6 +190,14 @@ return [
             'link_cancelled'          => 'Patreon 계정 연결이 취소되었습니다.',
         ],
     ],
+    'dungeonroutecollection' => [
+        'flash' => [
+            'collection_created'      => '',
+            'collection_updated'      => '',
+            'collection_deleted'      => '',
+            'max_collections_reached' => '',
+        ],
+    ],
     'profile' => [
         'flash' => [
             'email_already_in_use'             => '해당 사용자 이름은 이미 사용 중입니다.',

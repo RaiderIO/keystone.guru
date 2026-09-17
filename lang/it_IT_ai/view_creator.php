@@ -8,7 +8,10 @@ return [
         'search_label'       => 'Cerca un creatore',
         'search_placeholder' => 'Cerca per nome',
         'search_submit'      => 'Cerca',
+        'category_label'     => '',
+        'category_any'       => '',
         'empty'              => 'Non ci sono ancora creatori elencati.',
+        'empty_for_category' => '',
         'empty_for_search'   => 'Nessun creatore trovato corrispondente a ":search".',
     ],
     'featured' => [
