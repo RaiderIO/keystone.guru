@@ -31,7 +31,15 @@ class CombatLogEventGridAggregationResult implements Arrayable
         private readonly int                         $runCount,
         private readonly bool                        $floorsAsArray = false,
     ) {
-        $this->useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+        $dungeon                     = $combatLogEventFilter->getDungeon();
+        $this->currentMappingVersion = $dungeon->getCurrentMappingVersion();
+
+        // As in the map itself: a mapping version without a facade of its own renders the real floors whatever the
+        // viewer's style says, and the cells have to follow the floors that are actually on screen. The facade floor
+        // has to exist too - converting cells onto a floor that is never drawn puts them nowhere.
+        $this->useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE &&
+            $this->currentMappingVersion->facade_enabled &&
+            $dungeon->floors->firstWhere('facade', true) !== null;
     }
 
     public function toArray(): array

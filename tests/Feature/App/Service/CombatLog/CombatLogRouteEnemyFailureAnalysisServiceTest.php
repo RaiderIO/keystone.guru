@@ -9,6 +9,7 @@ use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\User;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureAnalysisServiceInterface;
 use App\Service\CombatLog\Dtos\EnemyFailureAnalysis\EnemyFailureCluster;
 use App\Service\CombatLog\Dtos\EnemyFailureAnalysis\EnemyFailureVerdict;
@@ -18,6 +19,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -29,6 +31,7 @@ use Tests\TestCases\PublicTestCase;
 final class CombatLogRouteEnemyFailureAnalysisServiceTest extends PublicTestCase
 {
     use ProvidesDungeon;
+    use CreatesDungeon;
 
     private const int NPC_ID = 99950;
 
@@ -321,6 +324,64 @@ final class CombatLogRouteEnemyFailureAnalysisServiceTest extends PublicTestCase
         // Assert
         $this->assertSame(3, $clusters[0]->routeCount);
         $this->assertEqualsWithDelta(2.0, $clusters[0]->avgFailuresPerRoute, 0.001);
+    }
+
+    /**
+     * A mapping version without a facade of its own renders the real floors even for a viewer whose map style is
+     * facade - Dungeon::floorsForMapFacade() falls back. Re-homing a cluster onto a facade floor the map is not
+     * showing would put it on a floor nothing draws.
+     */
+    #[Test]
+    public function analyze_givenFacadeViewerOnAMappingVersionWithoutFacade_keepsTheRealFloor(): void
+    {
+        // Arrange - a fresh dungeon (facade_enabled false by default) that owns a facade floor of its own
+        $dungeon        = $this->createDungeon();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $floor          = $dungeon->floors()->firstOrFail();
+        $facadeFloor    = Floor::create([
+            'dungeon_id' => $dungeon->id,
+            'index'      => 2,
+            'name'       => 'Test Facade Floor',
+            'default'    => false,
+            'facade'     => true,
+        ]);
+        $dungeon->unsetRelation('floors');
+
+        $user                   = User::findOrFail(1);
+        $originalMapFacadeStyle = $user->map_facade_style;
+        $npcId                  = 99960;
+        $failure                = null;
+
+        try {
+            $user->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
+            $this->be($user);
+
+            $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(new IngameXY(
+                ($floor->ingame_min_x + $floor->ingame_max_x) / 2,
+                ($floor->ingame_min_y + $floor->ingame_max_y) / 2,
+                $floor,
+            ));
+
+            $failure = CombatLogRouteEnemyFailure::create([
+                'dungeon_id'         => $dungeon->id,
+                'floor_id'           => $floor->id,
+                'mapping_version_id' => $mappingVersion->id,
+                'npc_id'             => $npcId,
+                'lat'                => $latLng->getLat(),
+                'lng'                => $latLng->getLng(),
+            ]);
+
+            // Act
+            $array = $this->service->analyze($dungeon, $mappingVersion, [$npcId], null)->toArray();
+
+            // Assert - deliberately not calling setUseFacade(), so the constructor's own decision is what is asserted
+            $floorIds = array_column($array['data'], 'floor_id');
+            $this->assertContains($floor->id, $floorIds);
+            $this->assertNotContains($facadeFloor->id, $floorIds);
+        } finally {
+            $failure?->delete();
+            $user->update(['map_facade_style' => $originalMapFacadeStyle]);
+        }
     }
 
     /**
