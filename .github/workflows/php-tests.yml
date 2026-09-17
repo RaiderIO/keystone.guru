@@ -7,16 +7,23 @@ name: PHP Tests
 # a run — #4473: a `labeled` trigger produces a run for every label, and a run whose job is
 # skipped by `if:` leaves the required php-tests check permanently unreported for that
 # commit, blocking merge even though an earlier run on the same commit already passed them).
+#
+# workflow_dispatch is the manual recovery for exactly that dead end: GitHub occasionally drops a
+# non-push pull_request event outright (no run object is created, so no `if:` is ever evaluated),
+# which leaves the required php-tests check unreported for a head commit that is otherwise ready.
+# `gh workflow run php-tests.yml --ref <branch>` attaches a fresh php-tests check run to that
+# commit, with no push and no close/reopen cycle.
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 # Cancel superseded runs (#4343).
 concurrency:
-  group: php-tests-${{ github.event.pull_request.number }}
+  group: php-tests-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -27,6 +34,7 @@ jobs:
     timeout-minutes: 25
 
     if: >-
+      github.event_name == 'workflow_dispatch' ||
       github.event.action == 'ready_for_review' ||
       (contains(fromJSON('["opened", "reopened", "synchronize"]'), github.event.action) &&
         (github.event.pull_request.draft == false ||
