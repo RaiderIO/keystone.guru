@@ -6,30 +6,33 @@ globalThis.InlineCode = InlineCode;
 const {getQueryParams} = require('../../../util');
 globalThis.getQueryParams = getQueryParams;
 
-const {SearchFilter} = require('./filters/filter');
+const {SearchFilter} = require('../search/filters/filter');
 globalThis.SearchFilter = SearchFilter;
 
-const {SearchFilterPassThrough} = require('./filters/filterpassthrough');
+const {SearchFilterPassThrough} = require('../search/filters/filterpassthrough');
 globalThis.SearchFilterPassThrough = SearchFilterPassThrough;
 
-const {SearchFilterInput} = require('./filters/filterinput');
+const {SearchFilterInput} = require('../search/filters/filterinput');
 globalThis.SearchFilterInput = SearchFilterInput;
 
-const {SearchFilterInputChange} = require('./filters/filterinputchange');
+const {SearchFilterInputChange} = require('../search/filters/filterinputchange');
 globalThis.SearchFilterInputChange = SearchFilterInputChange;
 
 globalThis.HEAT_COMBINE_MODE_MAX = 'max';
 
-const {SearchParams} = require('./searchparams');
+const {SearchParams} = require('../search/searchparams');
 globalThis.SearchParams = SearchParams;
 
-const {SearchHandler} = require('./searchhandler');
+const {SearchHandler} = require('../search/searchhandler');
 globalThis.SearchHandler = SearchHandler;
 
 const {SearchInlineBase} = require('../../base/searchinlinebase');
 globalThis.SearchInlineBase = SearchInlineBase;
 
-const {CommonMapsCombatlogrouteenemyresolutions} = require('./searchhandlercombatlogrouteenemyresolutions');
+const {SearchHandlerCombatLogRouteEnemyResolutions} = require('../search/searchhandlercombatlogrouteenemyresolutions');
+globalThis.SearchHandlerCombatLogRouteEnemyResolutions = SearchHandlerCombatLogRouteEnemyResolutions;
+
+const {CommonMapsCombatlogrouteenemyresolutions} = require('./combatlogrouteenemyresolutions');
 
 describe('CommonMapsCombatlogrouteenemyresolutions', () => {
     let dungeonMapStub;
