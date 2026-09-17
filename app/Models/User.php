@@ -9,6 +9,7 @@ use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\Feature\Feature;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserLink;
@@ -413,6 +414,19 @@ class User extends Authenticatable implements LaratrustUser
             Auth::user()?->map_facade_style ?? // @phpstan-ignore nullsafe.neverNull
             $_COOKIE['map_facade_style'] ??
             User::DEFAULT_MAP_FACADE_STYLE;
+    }
+
+    /**
+     * Whether output derived from $mappingVersion should be converted to facade coordinates for the current user.
+     * The map itself falls back to the real floors whenever the mapping version has no facade of its own (see
+     * Dungeon::floorsForMapFacade()), whatever the viewer's style says - converting onto a facade floor the map
+     * never draws would put the result nowhere.
+     */
+    public static function shouldUseFacadeMapStyle(MappingVersion $mappingVersion): bool
+    {
+        return self::getCurrentUserMapFacadeStyle() === self::MAP_FACADE_STYLE_FACADE &&
+            $mappingVersion->facade_enabled &&
+            $mappingVersion->dungeon->floors->firstWhere('facade', true) !== null;
     }
 
     public static function getCurrentUserKillzonePathWeight(): int

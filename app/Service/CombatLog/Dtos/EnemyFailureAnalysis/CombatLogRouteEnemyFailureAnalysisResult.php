@@ -29,7 +29,7 @@ class CombatLogRouteEnemyFailureAnalysisResult implements Arrayable
         public readonly int                          $minRoutes,
         public readonly int                          $skippedCount,
     ) {
-        $this->useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+        $this->useFacade = User::shouldUseFacadeMapStyle($mappingVersion);
     }
 
     public function toArray(): array

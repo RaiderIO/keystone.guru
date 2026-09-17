@@ -44,10 +44,11 @@ class CombatLogEventSearchResult
         /** @var Collection<int, Floor> $floors */
         $floors = $dungeon->floors->keyBy('ui_map_id');
 
-        $useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $useFacade      = User::shouldUseFacadeMapStyle($mappingVersion);
 
         return [
-            'data' => $this->combatLogEvents->map(function (CombatLogEvent $combatLogEvent) use ($dungeon, $floors, $useFacade) {
+            'data' => $this->combatLogEvents->map(function (CombatLogEvent $combatLogEvent) use ($floors, $useFacade, $mappingVersion) {
                 $ingameXY = match ($this->combatLogEventFilter->getDataType()) {
                     CombatLogEventDataType::PlayerPosition => $combatLogEvent->getIngameXY(),
                     CombatLogEventDataType::EnemyPosition  => $combatLogEvent->getIngameXYEnemy(),
@@ -63,7 +64,7 @@ class CombatLogEventSearchResult
                 );
 
                 $latLngArray = ($useFacade ?
-                    $this->coordinatesService->convertMapLocationToFacadeMapLocation($dungeon->getCurrentMappingVersion(), $latLng) :
+                    $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $latLng) :
                     $latLng)->toArrayWithFloor();
 
                 $latLngArray['lat'] = round($latLngArray['lat'], 2);

@@ -35,7 +35,7 @@ class CombatLogRouteEnemyFailureHeatmapResult implements Arrayable
         private readonly int                         $failureCount,
         private readonly array                       $dungeonRoutes = [],
     ) {
-        $this->useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+        $this->useFacade = User::shouldUseFacadeMapStyle($mappingVersion);
     }
 
     public function toArray(): array

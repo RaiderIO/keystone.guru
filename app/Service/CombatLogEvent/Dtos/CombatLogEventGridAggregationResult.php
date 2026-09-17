@@ -31,7 +31,8 @@ class CombatLogEventGridAggregationResult implements Arrayable
         private readonly int                         $runCount,
         private readonly bool                        $floorsAsArray = false,
     ) {
-        $this->useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+        $this->currentMappingVersion = $combatLogEventFilter->getDungeon()->getCurrentMappingVersion();
+        $this->useFacade             = User::shouldUseFacadeMapStyle($this->currentMappingVersion);
     }
 
     public function toArray(): array

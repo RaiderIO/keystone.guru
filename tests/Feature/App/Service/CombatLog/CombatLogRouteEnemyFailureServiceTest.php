@@ -9,6 +9,7 @@ use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\User;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -555,6 +556,63 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
         }
 
         parent::tearDown();
+    }
+
+    /**
+     * A mapping version without a facade of its own renders the real floors even for a viewer whose map style is
+     * facade - Dungeon::floorsForMapFacade() falls back. Re-homing the cells onto a facade floor the map is not
+     * showing would draw them nowhere, silently.
+     */
+    #[Test]
+    public function getEnemyFailureHeatmapData_givenFacadeViewerOnAMappingVersionWithoutFacade_keepsTheRealFloor(): void
+    {
+        $created = [];
+
+        try {
+            // Arrange - the dungeon owns a facade floor, so only facade_enabled decides
+            $facadeFloor = $this->createFacadeFloor();
+            $user        = User::findOrFail(1);
+
+            $originalMapFacadeStyle = $user->map_facade_style;
+
+            try {
+                $user->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
+                $this->be($user);
+                $this->mappingVersion->update(['facade_enabled' => 0]);
+                $this->mappingVersion->refresh();
+
+                $failure   = $this->createFailure(['lat' => -50.0, 'lng' => 100.0]);
+                $created[] = $failure->id;
+
+                // Act
+                $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, $this->mappingVersion, null);
+                $array  = $result->toArray();
+
+                // Assert - deliberately without setUseFacade(), so the constructor's own decision is what is asserted
+                $floorIds = array_column($array['data'], 'floor_id');
+                $this->assertContains($this->floor->id, $floorIds);
+                $this->assertNotContains($facadeFloor->id, $floorIds);
+            } finally {
+                $user->update(['map_facade_style' => $originalMapFacadeStyle]);
+            }
+        } finally {
+            CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
+        }
+    }
+
+    private function createFacadeFloor(): Floor
+    {
+        $facadeFloor = Floor::create([
+            'dungeon_id' => $this->dungeon->id,
+            'index'      => 2,
+            'name'       => 'Test Facade Floor',
+            'default'    => false,
+            'facade'     => true,
+        ]);
+
+        $this->dungeon->unsetRelation('floors');
+
+        return $facadeFloor;
     }
 
     /**
