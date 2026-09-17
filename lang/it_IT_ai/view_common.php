@@ -2,6 +2,26 @@
 
 return [
 
+    'collection' => [
+        'details' => [
+            'name'                 => 'Nome',
+            'description'          => 'Descrizione',
+            'category'             => 'Categoria',
+            'category_none'        => 'Nessuna categoria',
+            'category_help'        => 'Il tipo di percorsi che contiene questa raccolta. Il livello chiave è escluso di proposito: una raccolta amichevole per Pug lo è a qualsiasi livello chiave.',
+            'published_state'      => 'Visibile a',
+            'published_state_help' => 'Condividere una raccolta non pubblica mai i percorsi che contiene: un percorso non pubblicato resta nascosto.',
+            'team'                 => 'Team',
+            'team_none'            => 'Nessun team',
+            'team_help'            => 'Il team con cui condividere questa raccolta, quando la raccolta è visibile al tuo team.',
+            'dungeon_routes'       => 'Percorsi',
+            'dungeon_routes_none'  => 'Non hai ancora creato nessun percorso.',
+            'dungeon_routes_help'  => 'Tieni premuto ctrl (o cmd) per selezionare più percorsi, fino a un massimo di :max. Vengono mostrati nell\'ordine in cui li hai selezionati.',
+            'save'                 => 'Salva',
+            'submit'               => 'Crea raccolta',
+            'delete'               => 'Elimina raccolta',
+        ],
+    ],
     'dungeon' => [
         'difficulty' => [
             '10_man' => '10 giocatori',
@@ -198,6 +218,9 @@ return [
             'continue_with_discord'   => 'Continua con Discord',
             'continue_with_google'    => 'Continua con Google',
         ],
+        'passwordinput' => [
+            'show_password' => 'Mostra password',
+        ],
         'pullsettings' => [
             'pull_number_style'                 => 'Stile numero pull',
             'pull_number_style_title'           => 'Questo controlla come la barra laterale dei pull visualizza i numeri.',
@@ -228,6 +251,7 @@ return [
             'terms_of_service'        => 'termini di servizio',
             'privacy_policy'          => 'politica sulla privacy',
             'cookie_policy'           => 'politica sui cookie',
+            'opens_in_new_tab'        => 'Si apre in una nuova scheda',
             'already_have_an_account' => 'Hai già un account?',
             'login_now'               => 'Accedi',
         ],
@@ -343,6 +367,7 @@ return [
                 'my_routes'                  => 'I miei percorsi',
                 'my_favorites'               => 'I miei preferiti',
                 'my_tags'                    => 'I miei tag',
+                'my_collections'             => 'Le mie raccolte',
                 'my_teams'                   => 'I miei team',
                 'my_profile'                 => 'Il mio profilo pubblico',
                 'account_settings'           => 'Impostazioni account',
@@ -481,6 +506,30 @@ return [
                 'clear_failures_title' => 'Elimina tutti i record di errore per questo dungeon',
                 'matching_routes'      => 'Percorsi corrispondenti',
                 'no_matching_routes'   => 'Nessun percorso corrispondente trovato',
+            ],
+
+            'combatlogrouteenemyresolutions' => [
+                'explanation'             => 'Nemici che sono stati associati, ma a un nemico mappato ad almeno :distance iarde di distanza. Un punto caldo che continua a ripresentarsi è segno che i nemici lì sono posizionati male.',
+                'mapping_version_filter'  => 'Versione di mappatura',
+                'npc_filter'              => 'Filtro NPC',
+                'metric_filter'           => 'Peso della cella',
+                'metric_average'          => 'Distanza media',
+                'metric_max'              => 'Distanza peggiore',
+                'min_distance_filter'     => 'Distanza minima (iarde)',
+                'summary'                 => 'Mostrate :drawn associazioni su :total, cella peggiore :max iarde',
+                'clear_resolutions'       => 'Cancella associazioni',
+                'clear_resolutions_title' => 'Elimina tutti i record di associazione per questo dungeon',
+                'matching_routes'         => 'Percorsi peggiori',
+                'show_lines'              => 'Mostra le linee verso il nemico associato',
+                'lines_legend'            => 'Le :count associazioni peggiori del filtro attuale su tutti i piani di questo dungeon, da dove è iniziato il combattimento fino al nemico a cui è stato attribuito.',
+                'line_popup'              => [
+                    'npc'            => ':name (:id)',
+                    'distance'       => 'Associato al nemico :enemy, a :distance iarde di distanza',
+                    'weighted'       => 'Con la priorità di uccisione è stato valutato come :weighted iarde',
+                    'route'          => 'Apri il percorso :key',
+                    'imported_route' => 'Registrato su :source, lì percorso :id',
+                    'no_route'       => 'Nessun percorso registrato per questa associazione',
+                ],
             ],
             'header' => [
                 'toggle_navigation'              => 'Attiva/disattiva navigazione',

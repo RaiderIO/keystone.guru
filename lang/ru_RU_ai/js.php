@@ -332,7 +332,6 @@ return [
     'map_icon_permanent_tooltip_label'                                     => 'Постоянная подсказка',
     'map_icon_map_icon_type_id_label'                                      => 'Иконка',
     'map_icon_comment_label'                                               => 'Комментарий',
-    'map_icon_comment_description_label'                                   => 'Поддерживаемые HTML теги: :tags',
     'map_icon_map_icon_type_id_select_default_label'                       => 'Выбрать иконку',
     'map_icon_seasonal_type_label'                                         => 'Тип сезона',
     'map_icon_seasonal_index_label'                                        => 'Индекс сезона',

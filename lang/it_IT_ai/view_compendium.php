@@ -222,6 +222,9 @@ return [
             'changed_to'     => 'diventa',
             'shared_by'      => 'Record di incantesimi con questa modifica: :count',
         ],
+        'tuning_build_released_at' => [
+            'went_live' => 'Attivo dal :date',
+        ],
     ],
     'tuning' => [
         'index' => [

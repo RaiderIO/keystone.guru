@@ -2,6 +2,26 @@
 
 return [
 
+    'collection' => [
+        'details' => [
+            'name'                 => '이름',
+            'description'          => '설명',
+            'category'             => '카테고리',
+            'category_none'        => '카테고리 없음',
+            'category_help'        => '이 컬렉션에 어떤 종류의 경로가 담겨 있는지를 나타냅니다. 키 레벨은 의도적으로 포함하지 않습니다. 쉽게 참여 가능한 컬렉션은 어떤 키 레벨에서도 쉽게 참여할 수 있습니다.',
+            'published_state'      => '공개 대상',
+            'published_state_help' => '컬렉션을 공유해도 그 안의 경로가 게시되지는 않습니다. 게시되지 않은 경로는 계속 숨겨진 상태로 유지됩니다.',
+            'team'                 => '팀',
+            'team_none'            => '팀 없음',
+            'team_help'            => '컬렉션이 팀에게 공개될 때 이 컬렉션을 공유할 팀입니다.',
+            'dungeon_routes'       => '경로',
+            'dungeon_routes_none'  => '아직 만든 경로가 없습니다.',
+            'dungeon_routes_help'  => 'ctrl(또는 cmd)을 누른 상태로 최대 :max개까지 여러 경로를 선택하세요. 선택한 순서대로 표시됩니다.',
+            'save'                 => '저장',
+            'submit'               => '컬렉션 만들기',
+            'delete'               => '컬렉션 삭제',
+        ],
+    ],
     'dungeon' => [
         'difficulty' => [
             '10_man' => '10인',
@@ -198,6 +218,9 @@ return [
             'continue_with_discord'   => 'Discord로 계속하기',
             'continue_with_google'    => 'Google로 계속하기',
         ],
+        'passwordinput' => [
+            'show_password' => '비밀번호 표시',
+        ],
         'pullsettings' => [
             'pull_number_style'                 => '풀 번호 스타일',
             'pull_number_style_title'           => '이 설정은 풀 사이드바에 숫자가 표시되는 방식을 제어합니다.',
@@ -228,6 +251,7 @@ return [
             'terms_of_service'        => '서비스 약관',
             'privacy_policy'          => '개인정보 보호정책',
             'cookie_policy'           => '쿠키 정책',
+            'opens_in_new_tab'        => '새 탭에서 열립니다',
             'already_have_an_account' => '이미 계정이 있으신가요?',
             'login_now'               => '로그인하기',
         ],
@@ -343,6 +367,7 @@ return [
                 'my_routes'                  => '내 경로',
                 'my_favorites'               => '내 즐겨찾기',
                 'my_tags'                    => '내 태그',
+                'my_collections'             => '내 컬렉션',
                 'my_teams'                   => '내 팀',
                 'my_profile'                 => '내 공개 프로필',
                 'account_settings'           => '계정 설정',
@@ -481,6 +506,30 @@ return [
                 'clear_failures_title' => '이 던전의 모든 실패 기록을 삭제합니다',
                 'matching_routes'      => '일치하는 경로',
                 'no_matching_routes'   => '일치하는 경로를 찾을 수 없습니다',
+            ],
+
+            'combatlogrouteenemyresolutions' => [
+                'explanation'             => '매칭은 되었지만 :distance야드 이상 떨어진 매핑된 적에 연결된 경우입니다. 같은 지점이 계속 나타난다면 그곳의 적이 잘못 배치되었다는 신호입니다.',
+                'mapping_version_filter'  => '매핑 버전',
+                'npc_filter'              => 'NPC 필터',
+                'metric_filter'           => '셀 가중치',
+                'metric_average'          => '평균 거리',
+                'metric_max'              => '최악 거리',
+                'min_distance_filter'     => '최소 거리(야드)',
+                'summary'                 => '전체 :total개 매칭 중 :drawn개 표시, 최악 셀 :max야드',
+                'clear_resolutions'       => '매칭 기록 지우기',
+                'clear_resolutions_title' => '이 던전의 모든 매칭 기록을 삭제합니다',
+                'matching_routes'         => '최악의 경로',
+                'show_lines'              => '매칭된 적까지 선 표시',
+                'lines_legend'            => '현재 필터에서 이 던전의 모든 층에 걸쳐 가장 나쁜 :count개의 매칭으로, 전투가 시작된 지점부터 매칭된 적까지 이어집니다.',
+                'line_popup'              => [
+                    'npc'            => ':name (:id)',
+                    'distance'       => '적 :enemy에 매칭됨, :distance야드 거리',
+                    'weighted'       => '처치 우선순위를 반영해 :weighted야드로 평가되었습니다',
+                    'route'          => '경로 :key 열기',
+                    'imported_route' => ':source에 기록됨, 해당 사이트의 경로 :id',
+                    'no_route'       => '이 매칭에 기록된 경로가 없습니다',
+                ],
             ],
             'header' => [
                 'toggle_navigation'              => '내비게이션 전환',

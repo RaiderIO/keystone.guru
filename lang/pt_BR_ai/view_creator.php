@@ -8,7 +8,10 @@ return [
         'search_label'       => 'Buscar um criador',
         'search_placeholder' => 'Buscar por nome',
         'search_submit'      => 'Buscar',
+        'category_label'     => 'Filtrar pelo tipo de coleções que um criador compartilha',
+        'category_any'       => 'Qualquer coleção',
         'empty'              => 'Ainda não há criadores listados.',
+        'empty_for_category' => 'Ainda não há criadores compartilhando uma coleção ":category".',
         'empty_for_search'   => 'Nenhum criador encontrado correspondendo a ":search".',
     ],
     'featured' => [

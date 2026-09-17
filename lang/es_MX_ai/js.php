@@ -332,7 +332,6 @@ return [
     'map_icon_permanent_tooltip_label'                                     => 'Consejo permanente',
     'map_icon_map_icon_type_id_label'                                      => 'Ícono',
     'map_icon_comment_label'                                               => 'Comentario',
-    'map_icon_comment_description_label'                                   => 'Etiquetas HTML soportadas: :tags',
     'map_icon_map_icon_type_id_select_default_label'                       => 'Seleccionar ícono',
     'map_icon_seasonal_type_label'                                         => 'Tipo de temporada',
     'map_icon_seasonal_index_label'                                        => 'Índice de temporada',

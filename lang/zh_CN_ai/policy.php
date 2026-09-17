@@ -2,6 +2,7 @@
 
 return [
 
+    'view_collection_not_published'                       => '该合集未共享，无法查看。请要求作者共享此合集以便查看。',
     'view_route_not_published'                            => '该路线未发布，无法查看。请要求作者发布此路线以查看。',
     'present_route_not_published'                         => '该路线未发布，无法展示。请要求作者发布此路线以展示。',
     'embed_route_not_published'                           => '此路线未发布，无法查看。请要求作者发布此路线以查看。',

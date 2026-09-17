@@ -2,6 +2,26 @@
 
 return [
 
+    'collection' => [
+        'details' => [
+            'name'                 => 'Nom',
+            'description'          => 'Description',
+            'category'             => 'Catégorie',
+            'category_none'        => 'Aucune catégorie',
+            'category_help'        => 'Le genre d\'itinéraires que contient cette collection. Le niveau de clé en est délibérément exclu : une collection adaptée aux PUG l\'est à n\'importe quel niveau de clé.',
+            'published_state'      => 'Visible par',
+            'published_state_help' => 'Partager une collection ne publie jamais les itinéraires qu\'elle contient : un itinéraire non publié reste masqué.',
+            'team'                 => 'Équipe',
+            'team_none'            => 'Aucune équipe',
+            'team_help'            => 'L\'équipe avec laquelle partager cette collection, lorsque la collection est visible par votre équipe.',
+            'dungeon_routes'       => 'Itinéraires',
+            'dungeon_routes_none'  => 'Vous n\'avez pas encore créé d\'itinéraire.',
+            'dungeon_routes_help'  => 'Maintenez ctrl (ou cmd) pour sélectionner plusieurs itinéraires, jusqu\'à un maximum de :max. Ils sont affichés dans l\'ordre dans lequel vous les avez sélectionnés.',
+            'save'                 => 'Enregistrer',
+            'submit'               => 'Créer la collection',
+            'delete'               => 'Supprimer la collection',
+        ],
+    ],
     'dungeon' => [
         'difficulty' => [
             '10_man' => '10 joueurs',
@@ -198,6 +218,9 @@ return [
             'continue_with_discord'   => 'Continuer avec Discord',
             'continue_with_google'    => 'Continuer avec Google',
         ],
+        'passwordinput' => [
+            'show_password' => 'Afficher le mot de passe',
+        ],
         'pullsettings' => [
             'pull_number_style'                 => 'Style de numérotation des pulls',
             'pull_number_style_title'           => 'Cela contrôle la façon dont la barre latérale des pulls affiche les nombres.',
@@ -228,6 +251,7 @@ return [
             'terms_of_service'        => 'conditions d\'utilisation',
             'privacy_policy'          => 'politique de confidentialité',
             'cookie_policy'           => 'politique des cookies',
+            'opens_in_new_tab'        => 'S\'ouvre dans un nouvel onglet',
             'already_have_an_account' => 'Vous avez déjà un compte ?',
             'login_now'               => 'Se connecter',
         ],
@@ -343,6 +367,7 @@ return [
                 'my_routes'                  => 'Mes itinéraires',
                 'my_favorites'               => 'Mes favoris',
                 'my_tags'                    => 'Mes tags',
+                'my_collections'             => 'Mes collections',
                 'my_teams'                   => 'Mes équipes',
                 'my_profile'                 => 'Mon profil public',
                 'account_settings'           => 'Paramètres du compte',
@@ -481,6 +506,30 @@ return [
                 'clear_failures_title' => 'Supprimer tous les enregistrements d\'échecs pour ce donjon',
                 'matching_routes'      => 'Itinéraires correspondants',
                 'no_matching_routes'   => 'Aucun itinéraire correspondant trouvé',
+            ],
+
+            'combatlogrouteenemyresolutions' => [
+                'explanation'             => 'Ennemis qui ont bien été associés, mais à un ennemi mappé situé à au moins :distance yards. Un point chaud qui revient sans cesse est le signe que les ennemis y sont mal placés.',
+                'mapping_version_filter'  => 'Version de mapping',
+                'npc_filter'              => 'Filtre PNJ',
+                'metric_filter'           => 'Poids de la cellule',
+                'metric_average'          => 'Distance moyenne',
+                'metric_max'              => 'Pire distance',
+                'min_distance_filter'     => 'Distance minimale (yards)',
+                'summary'                 => 'Affichage de :drawn associations sur :total, pire cellule :max yards',
+                'clear_resolutions'       => 'Effacer les associations',
+                'clear_resolutions_title' => 'Supprimer tous les enregistrements d\'association pour ce donjon',
+                'matching_routes'         => 'Pires itinéraires',
+                'show_lines'              => 'Afficher les lignes vers l\'ennemi associé',
+                'lines_legend'            => 'Les :count pires associations du filtre actuel sur tous les étages de ce donjon, depuis l\'endroit où le combat a commencé jusqu\'à l\'ennemi auquel il a été attribué.',
+                'line_popup'              => [
+                    'npc'            => ':name (:id)',
+                    'distance'       => 'Associé à l\'ennemi :enemy, à :distance yards',
+                    'weighted'       => 'Avec la priorité de tuer, évalué à :weighted yards',
+                    'route'          => 'Ouvrir l\'itinéraire :key',
+                    'imported_route' => 'Enregistré sur :source, itinéraire :id là-bas',
+                    'no_route'       => 'Aucun itinéraire enregistré pour cette association',
+                ],
             ],
             'header' => [
                 'toggle_navigation'              => 'Basculer la navigation',

@@ -8,7 +8,10 @@ return [
         'search_label'       => 'Nach einem Creator suchen',
         'search_placeholder' => 'Nach Name suchen',
         'search_submit'      => 'Suchen',
+        'category_label'     => 'Nach der Art der Sammlungen filtern, die ein Creator teilt',
+        'category_any'       => 'Jede Sammlung',
         'empty'              => 'Es sind noch keine Creator aufgeführt.',
+        'empty_for_category' => 'Noch kein Creator teilt eine ":category"-Sammlung.',
         'empty_for_search'   => 'Keine Creator gefunden, die zu ":search" passen.',
     ],
     'featured' => [

@@ -2,6 +2,7 @@
 
 return [
 
+    'view_collection_not_published'                       => 'Cette collection n\'est pas partagée et ne peut pas être consultée. Veuillez demander à l\'auteur de partager cette collection pour la visualiser.',
     'view_route_not_published'                            => 'Cet itinéraire n\'est pas publié et ne peut pas être consulté. Veuillez demander à l\'auteur de publier cet itinéraire pour le visualiser.',
     'present_route_not_published'                         => 'Cet itinéraire n\'est pas publié et ne peut pas être présenté. Veuillez demander à l\'auteur de publier cet itinéraire pour le présenter.',
     'embed_route_not_published'                           => 'Cet itinéraire n\'est pas publié et ne peut pas être consulté. Veuillez demander à l\'auteur de publier cet itinéraire pour le visualiser.',

@@ -222,6 +222,9 @@ return [
             'changed_to'     => 'devient',
             'shared_by'      => 'Enregistrements de sorts concernés par la même modification : :count',
         ],
+        'tuning_build_released_at' => [
+            'went_live' => 'Mis en ligne le :date',
+        ],
     ],
     'tuning' => [
         'index' => [

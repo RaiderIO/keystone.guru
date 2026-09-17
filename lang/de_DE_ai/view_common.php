@@ -2,6 +2,26 @@
 
 return [
 
+    'collection' => [
+        'details' => [
+            'name'                 => 'Name',
+            'description'          => 'Beschreibung',
+            'category'             => 'Kategorie',
+            'category_none'        => 'Keine Kategorie',
+            'category_help'        => 'Welche Art von Routen diese Sammlung enthält. Die Schlüsselstufe ist absichtlich kein Teil davon - eine PUG-freundliche Sammlung ist auf jeder Schlüsselstufe PUG-freundlich.',
+            'published_state'      => 'Sichtbar für',
+            'published_state_help' => 'Das Teilen einer Sammlung veröffentlicht niemals die Routen darin - eine Route, die nicht veröffentlicht ist, bleibt verborgen.',
+            'team'                 => 'Team',
+            'team_none'            => 'Kein Team',
+            'team_help'            => 'Das Team, mit dem diese Sammlung geteilt wird, wenn die Sammlung für dein Team sichtbar ist.',
+            'dungeon_routes'       => 'Routen',
+            'dungeon_routes_none'  => 'Du hast noch keine Routen erstellt.',
+            'dungeon_routes_help'  => 'Halte Strg (oder Cmd) gedrückt, um mehrere Routen auszuwählen, bis zu maximal :max. Sie werden in der Reihenfolge angezeigt, in der du sie ausgewählt hast.',
+            'save'                 => 'Speichern',
+            'submit'               => 'Sammlung erstellen',
+            'delete'               => 'Sammlung löschen',
+        ],
+    ],
     'dungeon' => [
         'difficulty' => [
             '10_man' => '10 Spieler',
@@ -198,6 +218,9 @@ return [
             'continue_with_discord'   => 'Weiter mit Discord',
             'continue_with_google'    => 'Weiter mit Google',
         ],
+        'passwordinput' => [
+            'show_password' => 'Passwort anzeigen',
+        ],
         'pullsettings' => [
             'pull_number_style'                 => 'Pull-Nummern-Stil',
             'pull_number_style_title'           => 'Dies steuert, wie die Pulls-Seitenleiste Zahlen anzeigt.',
@@ -228,6 +251,7 @@ return [
             'terms_of_service'        => 'Nutzungsbedingungen',
             'privacy_policy'          => 'Datenschutzrichtlinie',
             'cookie_policy'           => 'Cookie-Richtlinie',
+            'opens_in_new_tab'        => 'Öffnet in einem neuen Tab',
             'already_have_an_account' => 'Du hast bereits ein Konto?',
             'login_now'               => 'Anmelden',
         ],
@@ -343,6 +367,7 @@ return [
                 'my_routes'                  => 'Meine Routen',
                 'my_favorites'               => 'Meine Favoriten',
                 'my_tags'                    => 'Meine Tags',
+                'my_collections'             => 'Meine Sammlungen',
                 'my_teams'                   => 'Meine Teams',
                 'my_profile'                 => 'Mein öffentliches Profil',
                 'account_settings'           => 'Kontoeinstellungen',
@@ -481,6 +506,30 @@ return [
                 'clear_failures_title' => 'Alle Fehlerdatensätze für diesen Dungeon löschen',
                 'matching_routes'      => 'Passende Routen',
                 'no_matching_routes'   => 'Keine passenden Routen gefunden',
+            ],
+
+            'combatlogrouteenemyresolutions' => [
+                'explanation'             => 'Gegner, die zugeordnet wurden, aber zu einem gemappten Gegner in mindestens :distance Yards Entfernung. Ein Hotspot, der immer wiederkommt, ist ein Zeichen dafür, dass die Gegner dort falsch platziert sind.',
+                'mapping_version_filter'  => 'Mapping-Version',
+                'npc_filter'              => 'NPC-Filter',
+                'metric_filter'           => 'Zellengewicht',
+                'metric_average'          => 'Durchschnittliche Entfernung',
+                'metric_max'              => 'Schlechteste Entfernung',
+                'min_distance_filter'     => 'Mindestentfernung (Yards)',
+                'summary'                 => 'Zeige :drawn von :total Zuordnungen, schlechteste Zelle :max Yards',
+                'clear_resolutions'       => 'Zuordnungen löschen',
+                'clear_resolutions_title' => 'Alle Zuordnungsdatensätze für diesen Dungeon löschen',
+                'matching_routes'         => 'Schlechteste Routen',
+                'show_lines'              => 'Linien zum zugeordneten Gegner anzeigen',
+                'lines_legend'            => 'Die :count schlechtesten Zuordnungen des aktuellen Filters über alle Etagen dieses Dungeons, von dort, wo der Kampf begann, bis zu dem Gegner, dem er zugeordnet wurde.',
+                'line_popup'              => [
+                    'npc'            => ':name (:id)',
+                    'distance'       => 'Gegner :enemy zugeordnet, :distance Yards entfernt',
+                    'weighted'       => 'Durch die Tötungspriorität als :weighted Yards bewertet',
+                    'route'          => 'Route :key öffnen',
+                    'imported_route' => 'Aufgezeichnet auf :source, dort Route :id',
+                    'no_route'       => 'Keine Route für diese Zuordnung aufgezeichnet',
+                ],
             ],
             'header' => [
                 'toggle_navigation'              => 'Navigation umschalten',

@@ -190,6 +190,14 @@ return [
             'link_cancelled'          => '您的 Patreon 账户链接已取消。',
         ],
     ],
+    'dungeonroutecollection' => [
+        'flash' => [
+            'collection_created'      => '合集已创建',
+            'collection_updated'      => '合集已更新',
+            'collection_deleted'      => '合集已删除',
+            'max_collections_reached' => '您最多只能拥有 :max 个合集。',
+        ],
+    ],
     'profile' => [
         'flash' => [
             'email_already_in_use'             => '该用户名已被使用。',

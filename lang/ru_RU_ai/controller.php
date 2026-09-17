@@ -190,6 +190,14 @@ return [
             'link_cancelled'          => 'Привязка Вашего аккаунта Patreon была отменена.',
         ],
     ],
+    'dungeonroutecollection' => [
+        'flash' => [
+            'collection_created'      => 'Коллекция создана',
+            'collection_updated'      => 'Коллекция обновлена',
+            'collection_deleted'      => 'Коллекция удалена',
+            'max_collections_reached' => 'У Вас может быть не более :max коллекций.',
+        ],
+    ],
     'profile' => [
         'flash' => [
             'email_already_in_use'             => 'Пользователь с таким электронным адресом уже существует',

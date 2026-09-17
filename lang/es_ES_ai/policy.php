@@ -2,6 +2,7 @@
 
 return [
 
+    'view_collection_not_published'                       => 'Esta colección no está compartida y no se puede ver. Por favor, pide al autor que comparta esta colección para verla.',
     'view_route_not_published'                            => 'Esta ruta no está publicada y no se puede ver. Por favor, pide al autor que publique esta ruta para verla.',
     'present_route_not_published'                         => 'Esta ruta no está publicada y no se puede presentar. Por favor, pide al autor que publique esta ruta para presentarla.',
     'embed_route_not_published'                           => 'Esta ruta no está publicada y no se puede ver. Por favor, pide al autor que publique esta ruta para verla.',

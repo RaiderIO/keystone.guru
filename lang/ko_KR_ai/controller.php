@@ -190,6 +190,14 @@ return [
             'link_cancelled'          => 'Patreon 계정 연결이 취소되었습니다.',
         ],
     ],
+    'dungeonroutecollection' => [
+        'flash' => [
+            'collection_created'      => '컬렉션이 생성되었습니다',
+            'collection_updated'      => '컬렉션이 업데이트되었습니다',
+            'collection_deleted'      => '컬렉션이 삭제되었습니다',
+            'max_collections_reached' => '컬렉션은 최대 :max개까지 만들 수 있습니다.',
+        ],
+    ],
     'profile' => [
         'flash' => [
             'email_already_in_use'             => '해당 사용자 이름은 이미 사용 중입니다.',

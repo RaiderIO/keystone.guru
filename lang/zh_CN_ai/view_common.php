@@ -2,6 +2,26 @@
 
 return [
 
+    'collection' => [
+        'details' => [
+            'name'                 => '名称',
+            'description'          => '描述',
+            'category'             => '类别',
+            'category_none'        => '无类别',
+            'category_help'        => '此合集收录哪一类路线。钥匙等级特意不计入其中——PUG 友好的合集在任何钥匙等级下都是 PUG 友好的。',
+            'published_state'      => '可见对象',
+            'published_state_help' => '共享合集绝不会发布其中的路线——未发布的路线仍然处于隐藏状态。',
+            'team'                 => '团队',
+            'team_none'            => '无团队',
+            'team_help'            => '当合集对您的团队可见时，与之共享该合集的团队。',
+            'dungeon_routes'       => '路线',
+            'dungeon_routes_none'  => '您还没有创建任何路线。',
+            'dungeon_routes_help'  => '按住 ctrl（或 cmd）可选择多条路线，最多 :max 条。它们会按照您选择的顺序显示。',
+            'save'                 => '保存',
+            'submit'               => '创建合集',
+            'delete'               => '删除合集',
+        ],
+    ],
     'dungeon' => [
         'difficulty' => [
             '10_man' => '10人',
@@ -198,6 +218,9 @@ return [
             'continue_with_discord'   => '使用 Discord 继续',
             'continue_with_google'    => '使用 Google 继续',
         ],
+        'passwordinput' => [
+            'show_password' => '显示密码',
+        ],
         'pullsettings' => [
             'pull_number_style'                 => '拉怪数字样式',
             'pull_number_style_title'           => '这控制侧边栏中拉怪显示数字的方式。',
@@ -228,6 +251,7 @@ return [
             'terms_of_service'        => '服务条款',
             'privacy_policy'          => '隐私政策',
             'cookie_policy'           => 'cookie政策',
+            'opens_in_new_tab'        => '在新标签页中打开',
             'already_have_an_account' => '已经有账户了？',
             'login_now'               => '登录',
         ],
@@ -343,6 +367,7 @@ return [
                 'my_routes'                  => '我的路线',
                 'my_favorites'               => '我的收藏',
                 'my_tags'                    => '我的标签',
+                'my_collections'             => '我的合集',
                 'my_teams'                   => '我的团队',
                 'my_profile'                 => '我的公共资料',
                 'account_settings'           => '账户设置',
@@ -481,6 +506,30 @@ return [
                 'clear_failures_title' => '删除此地下城的所有失败记录',
                 'matching_routes'      => '匹配的路线',
                 'no_matching_routes'   => '未找到匹配的路线',
+            ],
+
+            'combatlogrouteenemyresolutions' => [
+                'explanation'             => '已成功匹配，但匹配到的已映射敌人至少相距 :distance 码。反复出现的热点说明那里的敌人位置有误。',
+                'mapping_version_filter'  => '映射版本',
+                'npc_filter'              => 'NPC筛选',
+                'metric_filter'           => '单元格权重',
+                'metric_average'          => '平均距离',
+                'metric_max'              => '最差距离',
+                'min_distance_filter'     => '最小距离（码）',
+                'summary'                 => '正在绘制 :total 个匹配中的 :drawn 个，最差单元格 :max 码',
+                'clear_resolutions'       => '清除匹配记录',
+                'clear_resolutions_title' => '删除此地下城的所有匹配记录',
+                'matching_routes'         => '最差的路线',
+                'show_lines'              => '显示到匹配敌人的连线',
+                'lines_legend'            => '当前筛选条件下此地下城所有楼层中最差的 :count 个匹配，从战斗开始的位置连到被归属的敌人。',
+                'line_popup'              => [
+                    'npc'            => ':name (:id)',
+                    'distance'       => '匹配到敌人 :enemy，相距 :distance 码',
+                    'weighted'       => '计入击杀优先级后判定为 :weighted 码',
+                    'route'          => '打开路线 :key',
+                    'imported_route' => '记录于 :source，在该处为路线 :id',
+                    'no_route'       => '此匹配没有记录任何路线',
+                ],
             ],
             'header' => [
                 'toggle_navigation'              => '切换导航',

@@ -15,6 +15,7 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Isso indica que sua rota mata um inimigo cujo NPC é conhecido pelo MDT, mas o Keystone.guru ainda não associou esse inimigo a um equivalente MDT (ou ele não existe no MDT).',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Esta puxada foi removida, pois todos os inimigos selecionados não puderam ser encontrados no MDT, resultando em uma puxada vazia.',
                 'unable_to_find_mdt_enemy_for_kg_raid_marker'       => 'Não foi possível encontrar o equivalente no MDT para o inimigo com o marcador de banda %s (npc_id: %s).',
+                'unable_to_place_kill_zone_spells_note'             => 'Os feitiços atribuídos a este pull não foram exportados: eles são exportados como uma nota do MDT ao lado do pull, mas este pull não tem inimigos nem área de abate onde posicionar essa nota.',
                 'route_title_contains_non_ascii_char_bug'           => 'O título da sua rota contém caracteres não-ASCII que são conhecidos por acionar um bug de codificação ainda não resolvido no Keystone.guru.
                                                         O título da sua rota foi removido de todos os caracteres ofensivos, pedimos desculpas pelo inconveniente e esperamos resolver este problema em breve.',
                 'route_title_contains_non_ascii_char_bug_details' => 'Título antigo: %s, novo título: %s',

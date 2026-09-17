@@ -2,6 +2,26 @@
 
 return [
 
+    'collection' => [
+        'details' => [
+            'name'                 => 'Nome',
+            'description'          => 'Descrição',
+            'category'             => 'Categoria',
+            'category_none'        => 'Sem categoria',
+            'category_help'        => 'Que tipo de rotas esta coleção contém. O nível da chave é deixado de fora de propósito: uma coleção amigável para PUG é amigável para PUG em qualquer nível de chave.',
+            'published_state'      => 'Visível para',
+            'published_state_help' => 'Compartilhar uma coleção nunca publica as rotas dentro dela: uma rota que não está publicada continua oculta.',
+            'team'                 => 'Equipe',
+            'team_none'            => 'Sem equipe',
+            'team_help'            => 'A equipe com a qual compartilhar esta coleção, quando a coleção está visível para a sua equipe.',
+            'dungeon_routes'       => 'Rotas',
+            'dungeon_routes_none'  => 'Você ainda não criou nenhuma rota.',
+            'dungeon_routes_help'  => 'Mantenha ctrl (ou cmd) pressionado para selecionar várias rotas, até um máximo de :max. Elas são mostradas na ordem em que você as selecionou.',
+            'save'                 => 'Salvar',
+            'submit'               => 'Criar coleção',
+            'delete'               => 'Excluir coleção',
+        ],
+    ],
     'dungeon' => [
         'difficulty' => [
             '10_man' => '10 jogadores',
@@ -198,6 +218,9 @@ return [
             'continue_with_discord'   => 'Continuar com o Discord',
             'continue_with_google'    => 'Continuar com o Google',
         ],
+        'passwordinput' => [
+            'show_password' => 'Mostrar senha',
+        ],
         'pullsettings' => [
             'pull_number_style'                 => 'Estilo do número do pull',
             'pull_number_style_title'           => 'Isso controla como a barra lateral de pulls exibe números.',
@@ -228,6 +251,7 @@ return [
             'terms_of_service'        => 'termos de serviço',
             'privacy_policy'          => 'política de privacidade',
             'cookie_policy'           => 'política de cookies',
+            'opens_in_new_tab'        => 'Abre em uma nova aba',
             'already_have_an_account' => 'Já tem uma conta?',
             'login_now'               => 'Entrar',
         ],
@@ -343,6 +367,7 @@ return [
                 'my_routes'                  => 'Minhas rotas',
                 'my_favorites'               => 'Meus favoritos',
                 'my_tags'                    => 'Minhas tags',
+                'my_collections'             => 'Minhas coleções',
                 'my_teams'                   => 'Minhas equipes',
                 'my_profile'                 => 'Meu perfil público',
                 'account_settings'           => 'Configurações da conta',
@@ -481,6 +506,30 @@ return [
                 'clear_failures_title' => 'Excluir todos os registros de falhas desta masmorra',
                 'matching_routes'      => 'Rotas correspondentes',
                 'no_matching_routes'   => 'Nenhuma rota correspondente encontrada',
+            ],
+
+            'combatlogrouteenemyresolutions' => [
+                'explanation'             => 'Inimigos que foram correspondidos, mas a um inimigo mapeado a pelo menos :distance jardas de distância. Um ponto quente que continua reaparecendo é sinal de que os inimigos ali estão posicionados errado.',
+                'mapping_version_filter'  => 'Versão de mapeamento',
+                'npc_filter'              => 'Filtro de NPC',
+                'metric_filter'           => 'Peso da célula',
+                'metric_average'          => 'Distância média',
+                'metric_max'              => 'Pior distância',
+                'min_distance_filter'     => 'Distância mínima (jardas)',
+                'summary'                 => 'Exibindo :drawn de :total correspondências, pior célula :max jardas',
+                'clear_resolutions'       => 'Limpar correspondências',
+                'clear_resolutions_title' => 'Excluir todos os registros de correspondência desta masmorra',
+                'matching_routes'         => 'Piores rotas',
+                'show_lines'              => 'Mostrar linhas até o inimigo correspondido',
+                'lines_legend'            => 'As :count piores correspondências do filtro atual em todos os andares desta masmorra, do local onde o combate começou até o inimigo ao qual foi atribuído.',
+                'line_popup'              => [
+                    'npc'            => ':name (:id)',
+                    'distance'       => 'Correspondido ao inimigo :enemy, a :distance jardas de distância',
+                    'weighted'       => 'Com a prioridade de matar, foi avaliado como :weighted jardas',
+                    'route'          => 'Abrir a rota :key',
+                    'imported_route' => 'Registrado em :source, rota :id lá',
+                    'no_route'       => 'Nenhuma rota registrada para esta correspondência',
+                ],
             ],
             'header' => [
                 'toggle_navigation'              => 'Alternar navegação',

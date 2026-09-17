@@ -8,7 +8,10 @@ return [
         'search_label'       => 'Поиск создателя',
         'search_placeholder' => 'Поиск по имени',
         'search_submit'      => 'Поиск',
+        'category_label'     => 'Фильтр по типу коллекций, которыми делится создатель',
+        'category_any'       => 'Любая коллекция',
         'empty'              => 'Создатели пока не найдены.',
+        'empty_for_category' => 'Пока никто из создателей не делится коллекцией ":category".',
         'empty_for_search'   => 'Не найдено создателей по запросу ":search".',
     ],
     'featured' => [

@@ -331,7 +331,6 @@ return [
     'map_icon_permanent_tooltip_label'                                     => '영구 툴팁',
     'map_icon_map_icon_type_id_label'                                      => '아이콘',
     'map_icon_comment_label'                                               => '주석',
-    'map_icon_comment_description_label'                                   => '지원되는 HTML 태그: :tags',
     'map_icon_map_icon_type_id_select_default_label'                       => '아이콘 선택',
     'map_icon_seasonal_type_label'                                         => '계절 유형',
     'map_icon_seasonal_index_label'                                        => '계절 지수',

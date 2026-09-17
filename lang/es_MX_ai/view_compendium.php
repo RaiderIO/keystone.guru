@@ -222,6 +222,9 @@ return [
             'changed_to'     => 'pasó a',
             'shared_by'      => 'Registros de hechizo que comparten este cambio: :count',
         ],
+        'tuning_build_released_at' => [
+            'went_live' => 'Publicado el :date',
+        ],
     ],
     'tuning' => [
         'index' => [
