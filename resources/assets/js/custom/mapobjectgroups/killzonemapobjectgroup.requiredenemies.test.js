@@ -13,7 +13,7 @@ globalThis.MapObjectGroup = class MapObjectGroup {
 };
 
 const {KillZoneMapObjectGroup} = require('./killzonemapobjectgroup');
-const {fakeMapObjectGroupManager} = require('../../test/fixtures/mapObjectGroupManager');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 /**
  * A group wired up just enough to answer hasKilledAllRequiredEnemies(): the enemies that exist on the map, the

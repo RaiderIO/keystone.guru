@@ -45,7 +45,7 @@ const {RaidMarkerSelectMapState} = require('../mapstate/raidmarkerselectmapstate
 global.RaidMarkerSelectMapState = RaidMarkerSelectMapState;
 
 const {EnemyVisual} = require('./enemyvisual');
-const {fakeMapObjectGroupManager} = require('../../test/fixtures/mapObjectGroupManager');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 // Called at the top of _cleanupCircleMenu.
 global.removeStrayTooltips = () => {

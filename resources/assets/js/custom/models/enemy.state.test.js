@@ -216,7 +216,7 @@ function setFakeState({
 setFakeState();
 
 const {Enemy} = require('./enemy');
-const {fakeMapObjectGroupManager} = require('../../test/fixtures/mapObjectGroupManager');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 // 1h. Only ever used through `instanceof` (raid markers are not available on the admin mapping page).
 global.AdminEnemy = class AdminEnemy extends Enemy {

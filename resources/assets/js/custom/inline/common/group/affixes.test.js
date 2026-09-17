@@ -25,7 +25,7 @@ const {
     AFFIX_GROUP_DEFAULT_ID,
     AFFIX_GROUP_ALT_A_ID,
     AFFIX_GROUP_ALT_B_ID,
-} = require('../../../../test/fixtures/createRouteForm');
+} = require('#test/fixtures/createRouteForm');
 
 /**
  * @param {string|number} dataId

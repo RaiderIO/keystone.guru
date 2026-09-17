@@ -12,7 +12,7 @@ global.EditKillZoneEnemySelection = {isEnemySelectable: vi.fn(() => true)};
 global.getState = () => ({getMapContext: () => ({})});
 
 const DungeonMap = require('./dungeonmap');
-const {fakeMapObjectGroupManager} = require('../test/fixtures/mapObjectGroupManager');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 /**
  * Builds a minimal object that satisfies `_whenMapSized`: the `_mapSizedRafId` field, a fake

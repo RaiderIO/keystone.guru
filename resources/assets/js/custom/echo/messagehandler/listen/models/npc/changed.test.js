@@ -40,7 +40,7 @@ global.NpcChangedMessage = class NpcChangedMessage {
 };
 
 const {NpcChangedHandler} = require('./changed');
-const {fakeMapObjectGroupManager} = require('../../../../../../test/fixtures/mapObjectGroupManager');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 function makeEnemy(npcId, enemyForces, enemyForcesTeeming) {
     return {

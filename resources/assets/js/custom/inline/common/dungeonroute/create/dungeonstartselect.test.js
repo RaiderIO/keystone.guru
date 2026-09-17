@@ -22,7 +22,7 @@ const {
     RETAIL_DUNGEON_ALPHA_ID,
     RETAIL_DUNGEON_BETA_ID,
     DUNGEON_STARTS_BY_DUNGEON_ID,
-} = require('../../../../../test/fixtures/createRouteForm');
+} = require('#test/fixtures/createRouteForm');
 
 // A third dungeon, absent from DUNGEON_STARTS_BY_DUNGEON_ID entirely, to exercise the "no entry at
 // all" branch (dungeonStarts defaults to []).

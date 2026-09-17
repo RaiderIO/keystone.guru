@@ -4,7 +4,7 @@ class AddAwakenedObeliskGatewayMapState extends MapObjectMapState {
         console.assert(sourceMapObject instanceof MapIcon, 'sourceMapObject is not a MapIcon', sourceMapObject);
         console.assert(sourceMapObject.getMapIconType().isAwakenedObelisk(), 'sourceMapObject is not an Awakened Obelisk!', sourceMapObject);
 
-        let mapIconManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK);
+        let mapIconManager = this.map.mapObjectGroupManager.getMapIconMapObjectGroup();
         mapIconManager.register('save:success', this, this._onSaveSuccess.bind(this));
     }
 
@@ -27,7 +27,7 @@ class AddAwakenedObeliskGatewayMapState extends MapObjectMapState {
 
         this.sourceMapObject.floor_id = getState().getCurrentFloor().id;
 
-        let mapIconManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK);
+        let mapIconManager = this.map.mapObjectGroupManager.getMapIconMapObjectGroup();
         mapIconManager.unregister('save:success', this);
     }
 

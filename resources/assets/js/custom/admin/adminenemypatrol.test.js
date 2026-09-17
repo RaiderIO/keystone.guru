@@ -84,7 +84,7 @@ const fakeState = {
 global.getState = () => fakeState;
 
 const {AdminEnemyPatrol} = require('./adminenemypatrol');
-const {fakeMapObjectGroupManager} = require('../../test/fixtures/mapObjectGroupManager');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 /**
  * A fake DungeonMap exposing only what AdminEnemyPatrol touches.

@@ -205,7 +205,7 @@ async function measureGesture(page, cdp, direction, viewport) {
         if (flag('hide-enemies')) {
             await page.evaluate(() => {
                 getState().getDungeonMap().mapObjectGroupManager
-                    .getByName(MAP_OBJECT_GROUP_ENEMY).setVisibility(false);
+                    .getEnemyMapObjectGroup().setVisibility(false);
             });
             await sleep(2000);
         }

@@ -34,7 +34,7 @@ const {
     FACTION_ALLIANCE_ID,
     CLASS_WARRIOR_ID,
     RACE_ORC_ID,
-} = require('../../../../test/fixtures/createRouteForm');
+} = require('#test/fixtures/createRouteForm');
 
 const RACE_HUMAN_ID = 32;
 

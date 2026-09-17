@@ -117,7 +117,7 @@ global.$.each = (obj, callback) => {
 };
 
 const {KillZone} = require('./killzone');
-const {fakeMapObjectGroupManager} = require('../../test/fixtures/mapObjectGroupManager');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 /**
  * A fake enemy collaborator. Tracks its assigned kill zone and answers the classification

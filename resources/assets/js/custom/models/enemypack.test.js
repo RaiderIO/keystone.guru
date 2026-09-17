@@ -40,7 +40,7 @@ global.c = {
 };
 
 const {EnemyPack} = require('./enemypack');
-const {fakeMapObjectGroupManager} = require('../../test/fixtures/mapObjectGroupManager');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 /**
  * Builds an enemy pack on a bare prototype (Object.create), so none of the constructor's signal

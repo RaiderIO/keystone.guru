@@ -36,7 +36,7 @@ global.L = {
 };
 
 const {EnemyForcesCheckpoint} = require('./enemyforcescheckpoint');
-const {fakeMapObjectGroupManager} = require('../../test/fixtures/mapObjectGroupManager');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 /**
  * Builds a checkpoint on a bare prototype (Object.create), so none of the constructor's signal wiring

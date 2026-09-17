@@ -27,7 +27,7 @@ const {
     DIFFICULTY_BY_DUNGEON,
     DIFFICULTY_10_MAN,
     DIFFICULTY_25_MAN,
-} = require('../../../../../test/fixtures/createRouteForm');
+} = require('#test/fixtures/createRouteForm');
 
 /**
  * @param {number} selectedDungeonId

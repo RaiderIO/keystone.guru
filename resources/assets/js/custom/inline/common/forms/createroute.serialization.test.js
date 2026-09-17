@@ -51,8 +51,8 @@ const {
     KEY_LEVEL_MIN,
     KEY_LEVEL_MAX,
     DUNGEON_STARTS_BY_DUNGEON_ID,
-} = require('../../../../test/fixtures/createRouteForm');
-const {serializeForm, resolveFixture, loadPayloadFixtures, assertPayloadsMatch} = require('../../../../test/fixtures/payloadContract');
+} = require('#test/fixtures/createRouteForm');
+const {serializeForm, resolveFixture, loadPayloadFixtures, assertPayloadsMatch} = require('#test/fixtures/payloadContract');
 
 const TITLE = 'My Test Route';
 

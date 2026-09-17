@@ -39,7 +39,7 @@ const {
 // The real constants, so the accessor tests below assert against the values the site actually uses
 // rather than values the test invented - a mis-paired constant has to fail.
 const MAP_OBJECT_GROUP_CONSTANTS = require('./constants');
-const {fakeMapObjectGroupManager} = require('../test/fixtures/mapObjectGroupManager');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 describe('convertToSlug', () => {
     it('converts spaced text to a lowercased, dashed slug', () => {
