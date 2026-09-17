@@ -5,7 +5,7 @@ namespace Tests\Feature\Controller;
 use App\Features\CreatorProfiles;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
-use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
+use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
 use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
 use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
@@ -347,7 +347,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
                 'name'            => 'ZzTestCategorisedCollection',
                 'published_state' => PublishedState::WORLD,
-                'category_id'     => DungeonRouteCollectionCategory::ALL[DungeonRouteCollectionCategory::PUG_FRIENDLY],
+                'category_id'     => DungeonRouteCollectionCategoryType::PugFriendly->id(),
             ]);
 
             // Assert
@@ -359,7 +359,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
 
             $this->assertNotNull($dungeonRouteCollection);
             $this->assertSame(
-                DungeonRouteCollectionCategory::ALL[DungeonRouteCollectionCategory::PUG_FRIENDLY],
+                DungeonRouteCollectionCategoryType::PugFriendly->id(),
                 $dungeonRouteCollection->dungeon_route_collection_category_id,
             );
         } finally {
@@ -406,7 +406,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
 
         $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
             'user_id'                              => $creator->id,
-            'dungeon_route_collection_category_id' => DungeonRouteCollectionCategory::ALL[DungeonRouteCollectionCategory::MDI],
+            'dungeon_route_collection_category_id' => DungeonRouteCollectionCategoryType::Mdi->id(),
         ]);
 
         try {
@@ -441,7 +441,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
             'user_id'                              => $creator->id,
             'published_state_id'                   => PublishedState::ALL[PublishedState::WORLD],
-            'dungeon_route_collection_category_id' => DungeonRouteCollectionCategory::ALL[DungeonRouteCollectionCategory::BEGINNER],
+            'dungeon_route_collection_category_id' => DungeonRouteCollectionCategoryType::Beginner->id(),
         ]);
 
         try {
@@ -452,7 +452,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             $response->assertOk();
             $response->assertSee(__(sprintf(
                 'dungeonroutecollectioncategories.%s',
-                DungeonRouteCollectionCategory::BEGINNER,
+                DungeonRouteCollectionCategoryType::Beginner->value,
             )));
         } finally {
             $dungeonRouteCollection->delete();

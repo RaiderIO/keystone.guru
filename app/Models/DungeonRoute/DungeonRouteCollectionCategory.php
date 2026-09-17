@@ -33,24 +33,6 @@ class DungeonRouteCollectionCategory extends Model
 
     protected $hidden = ['pivot'];
 
-    public const string PUG_FRIENDLY = 'pug_friendly';
-
-    public const string BEGINNER = 'beginner';
-
-    public const string INTERMEDIATE = 'intermediate';
-
-    public const string EXPERT = 'expert';
-
-    public const string MDI = 'mdi';
-
-    public const array ALL = [
-        self::PUG_FRIENDLY => 1,
-        self::BEGINNER     => 2,
-        self::INTERMEDIATE => 3,
-        self::EXPERT       => 4,
-        self::MDI          => 5,
-    ];
-
     /** @return HasMany<DungeonRouteCollection, $this> */
     public function dungeonRouteCollections(): HasMany
     {

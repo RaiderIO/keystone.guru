@@ -3,6 +3,7 @@
 namespace Tests\Unit\App\Models;
 
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
+use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -11,19 +12,25 @@ use Tests\TestCases\PublicTestCase;
 final class DungeonRouteCollectionCategoryTest extends PublicTestCase
 {
     /**
-     * The ids in ALL are what the seeder writes and what the form posts back, so a drift between
-     * the constant and the table means a category silently changes meaning.
+     * The ids the enum reports are what the seeder writes and what the form posts back, so a drift
+     * between the enum and the table means a category silently changes meaning.
      */
     #[Test]
-    public function all_givenTheSeededTable_matchesTheConstant(): void
+    public function cases_givenTheSeededTable_matchTheEnum(): void
     {
+        // Arrange
+        $expected = [];
+        foreach (DungeonRouteCollectionCategoryType::cases() as $categoryType) {
+            $expected[$categoryType->value] = $categoryType->id();
+        }
+
         // Act
         $seeded = DungeonRouteCollectionCategory::query()
             ->pluck('id', 'name')
             ->all();
 
         // Assert - assertEquals rather than assertSame: row order carries no meaning here
-        $this->assertEquals(DungeonRouteCollectionCategory::ALL, $seeded);
+        $this->assertEquals($expected, $seeded);
     }
 
     #[Test]
@@ -31,7 +38,7 @@ final class DungeonRouteCollectionCategoryTest extends PublicTestCase
     {
         // Arrange
         $category = DungeonRouteCollectionCategory::query()
-            ->where('name', DungeonRouteCollectionCategory::PUG_FRIENDLY)
+            ->where('name', DungeonRouteCollectionCategoryType::PugFriendly->value)
             ->firstOrFail();
 
         // Act
@@ -39,11 +46,11 @@ final class DungeonRouteCollectionCategoryTest extends PublicTestCase
 
         // Assert
         $this->assertSame(
-            __(sprintf('dungeonroutecollectioncategories.%s', DungeonRouteCollectionCategory::PUG_FRIENDLY)),
+            __(sprintf('dungeonroutecollectioncategories.%s', DungeonRouteCollectionCategoryType::PugFriendly->value)),
             $result,
         );
         $this->assertNotSame(
-            sprintf('dungeonroutecollectioncategories.%s', DungeonRouteCollectionCategory::PUG_FRIENDLY),
+            sprintf('dungeonroutecollectioncategories.%s', DungeonRouteCollectionCategoryType::PugFriendly->value),
             $result,
             'A missing translation would render the key itself',
         );

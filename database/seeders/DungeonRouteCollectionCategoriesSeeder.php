@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
+use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
 use Illuminate\Database\Seeder;
 
 class DungeonRouteCollectionCategoriesSeeder extends Seeder implements TableSeederInterface
@@ -13,10 +14,10 @@ class DungeonRouteCollectionCategoriesSeeder extends Seeder implements TableSeed
     public function run(): void
     {
         $categoryAttributes = [];
-        foreach (DungeonRouteCollectionCategory::ALL as $categoryName => $id) {
+        foreach (DungeonRouteCollectionCategoryType::cases() as $categoryType) {
             $categoryAttributes[] = [
-                'id'   => $id,
-                'name' => $categoryName,
+                'id'   => $categoryType->id(),
+                'name' => $categoryType->value,
             ];
         }
 
