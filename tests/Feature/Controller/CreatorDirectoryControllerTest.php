@@ -5,7 +5,7 @@ namespace Tests\Feature\Controller;
 use App\Features\CreatorProfiles;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
-use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
+use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
 use App\Models\PublishedState;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -240,16 +240,16 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
         $wantedRoutes   = $this->createPublishedRoutesFor($wanted, $this->minPublishedRoutes());
         $unwantedRoutes = $this->createPublishedRoutesFor($unwanted, $this->minPublishedRoutes());
 
-        $wantedCollection = $this->createPublishedCollectionFor($wanted, DungeonRouteCollectionCategory::MDI);
+        $wantedCollection = $this->createPublishedCollectionFor($wanted, DungeonRouteCollectionCategoryType::Mdi);
         // A collection of a different kind must not make its author match the MDI filter
-        $unwantedCollection = $this->createPublishedCollectionFor($unwanted, DungeonRouteCollectionCategory::BEGINNER);
+        $unwantedCollection = $this->createPublishedCollectionFor($unwanted, DungeonRouteCollectionCategoryType::Beginner);
 
         Feature::for($viewer)->activate(CreatorProfiles::class);
 
         try {
             // Act
             $response = $this->actingAs($viewer)->get(route('creators.index', [
-                'category_id' => DungeonRouteCollectionCategory::ALL[DungeonRouteCollectionCategory::MDI],
+                'category_id' => DungeonRouteCollectionCategoryType::Mdi->id(),
             ]));
 
             // Assert
@@ -281,7 +281,7 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
         $creator = User::factory()->create();
         $routes  = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes());
 
-        $collection = $this->createPublishedCollectionFor($creator, DungeonRouteCollectionCategory::EXPERT);
+        $collection = $this->createPublishedCollectionFor($creator, DungeonRouteCollectionCategoryType::Expert);
         $collection->update(['published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED]]);
 
         Feature::for($viewer)->activate(CreatorProfiles::class);
@@ -289,7 +289,7 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($viewer)->get(route('creators.index', [
-                'category_id' => DungeonRouteCollectionCategory::ALL[DungeonRouteCollectionCategory::EXPERT],
+                'category_id' => DungeonRouteCollectionCategoryType::Expert->id(),
             ]));
 
             // Assert
@@ -399,12 +399,12 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
         return $routes;
     }
 
-    private function createPublishedCollectionFor(User $creator, string $categoryName): DungeonRouteCollection
+    private function createPublishedCollectionFor(User $creator, DungeonRouteCollectionCategoryType $categoryType): DungeonRouteCollection
     {
         return DungeonRouteCollection::factory()->create([
             'user_id'                              => $creator->id,
             'published_state_id'                   => PublishedState::ALL[PublishedState::WORLD],
-            'dungeon_route_collection_category_id' => DungeonRouteCollectionCategory::ALL[$categoryName],
+            'dungeon_route_collection_category_id' => $categoryType->id(),
         ]);
     }
 
