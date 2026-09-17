@@ -636,8 +636,10 @@ return [
             // last week's runs once M+ activity resumes, so this survives every future season gap
             // too, not just the current one.
             'completed_at_window_days' => (int)env('COMBAT_LOG_POLLING_COMPLETED_AT_WINDOW_DAYS', 7),
-            'limit'                    => (int)env('COMBAT_LOG_POLLING_LIMIT', 100),
-            'download_url'             => env('COMBAT_LOG_POLLING_DOWNLOAD_URL'),
+            // 100 is the ceiling the search API allows an ordinary caller; it answers 400 to
+            // anything above it, which the retry then spends three attempts on before giving up.
+            'limit'        => (int)env('COMBAT_LOG_POLLING_LIMIT', 100),
+            'download_url' => env('COMBAT_LOG_POLLING_DOWNLOAD_URL'),
 
             // When an hour of polling is bad enough to be worth waking someone for (#4173). A run
             // that yields no data costs nothing on its own - it is blacklisted and the budget it
@@ -683,6 +685,8 @@ return [
                 // page that dispatches something, so the extra calls are only spent on an hour that
                 // would otherwise have dispatched nothing at all. The cap is what keeps that
                 // bounded: the top band consults no budget, so every run it finds is parsed.
+                // `max_pages * limit` must stay under 10000 - the search API pages with a plain
+                // offset into the search index, which refuses to reach past that.
                 'max_pages' => (int)env('COMBAT_LOG_POLLING_TOP_BAND_MAX_PAGES', 5),
             ],
         ],
