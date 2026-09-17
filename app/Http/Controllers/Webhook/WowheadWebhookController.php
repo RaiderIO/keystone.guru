@@ -24,7 +24,7 @@ class WowheadWebhookController extends Controller
         WowheadPageRequest      $request,
         WowheadServiceInterface $wowheadService,
     ): string {
-        if (!config('app.debug', true)) {
+        if (!config('app.debug', false)) {
             abort(StatusCode::FORBIDDEN);
         }
 
@@ -65,7 +65,7 @@ class WowheadWebhookController extends Controller
         WowheadPageRequest      $request,
         WowheadServiceInterface $wowheadService,
     ): string {
-        if (!config('app.debug', true)) {
+        if (!config('app.debug', false)) {
             abort(StatusCode::FORBIDDEN);
         }
 

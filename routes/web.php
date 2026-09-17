@@ -611,7 +611,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::get('view/{view}', new AjaxViewController()->view(...))->name('ajax.view');
 
         Route::prefix('tag')->group(static function () {
-            Route::get('/', new AjaxTagController()->all(...))->name('ajax.tag.all');
             Route::middleware('throttle:create-tag')->group(static function () {
                 Route::post('/', new AjaxTagController()->store(...))->name('ajax.tag.create');
             });

@@ -16,7 +16,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -26,14 +25,6 @@ use Teapot\StatusCode\Http;
 
 class AjaxTagController extends Controller
 {
-    /**
-     * @return Collection<int, Tag>
-     */
-    public function all(Request $request): Collection
-    {
-        return Tag::all();
-    }
-
     /**
      * @return Application|ResponseFactory|Response|Tag
      *

@@ -155,10 +155,11 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param  Closure|mixed $value
+     * @param  Closure|mixed                 $value
+     * @param  bool|array<int, class-string> $allowedClasses
      * @return mixed
      */
-    public function rememberInHash(string $hashKey, string $field, mixed $value, mixed $ttl = null): mixed
+    public function rememberInHash(string $hashKey, string $field, mixed $value, mixed $ttl = null, bool|array $allowedClasses = false): mixed
     {
         $prefixedKey = config('database.redis.options.prefix') . $hashKey;
         $redis       = Redis::connection('default');
@@ -168,7 +169,7 @@ class CacheService implements CacheServiceInterface
         if ($this->cacheEnabled) {
             $cached = $this->redisService->rawCommand($redis, 'HGET', $prefixedKey, $field);
             if ($cached !== false && $cached !== null) {
-                return unserialize((string)$cached);
+                return unserialize((string)$cached, ['allowed_classes' => $allowedClasses]);
             }
         }
 
