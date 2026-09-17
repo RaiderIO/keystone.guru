@@ -45,6 +45,7 @@ const {RaidMarkerSelectMapState} = require('../mapstate/raidmarkerselectmapstate
 global.RaidMarkerSelectMapState = RaidMarkerSelectMapState;
 
 const {EnemyVisual} = require('./enemyvisual');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 // Called at the top of _cleanupCircleMenu.
 global.removeStrayTooltips = () => {
@@ -267,7 +268,7 @@ function makeBuildVisualContext(activeMapState) {
     };
     self.map = {
         getMapState: () => activeMapState,
-        mapObjectGroupManager: {getByName: () => ({isMapObjectVisible: () => true})},
+        mapObjectGroupManager: fakeMapObjectGroupManager(() => ({isMapObjectVisible: () => true})),
     };
     self.signal = () => {
     };

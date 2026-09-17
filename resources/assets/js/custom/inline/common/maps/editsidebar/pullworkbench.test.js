@@ -32,6 +32,7 @@ const {Signalable} = require('../../../../signalable');
 global.Signalable = Signalable;
 
 const {PullWorkBench} = require('./pullworkbench');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 function makeFakeKillZone(id, hasKillArea = false) {
     return {id, index: id, hasKillArea: () => hasKillArea};
@@ -40,7 +41,7 @@ function makeFakeKillZone(id, hasKillArea = false) {
 function makeWorkBench(killZonesById) {
     const killZoneGroup = {findMapObjectById: (id) => killZonesById[id] ?? null};
     const workBench = new PullWorkBench({
-        map: {mapObjectGroupManager: {getByName: () => killZoneGroup}},
+        map: {mapObjectGroupManager: fakeMapObjectGroupManager(() => killZoneGroup)},
     });
 
     workBench.$workbench = chainable([]);

@@ -87,7 +87,7 @@ class RowElementKillZone extends RowElement {
         // Find the killzone and if found, switch our map to a selection for that killzone
         let newMapState = null;
         if (selectedKillZoneId > 0) {
-            let killZoneMapObjectGroup = map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            let killZoneMapObjectGroup = map.mapObjectGroupManager.getKillZoneMapObjectGroup();
 
             /** @type KillZone */
             let killZone = killZoneMapObjectGroup.findMapObjectById(selectedKillZoneId);
@@ -148,7 +148,7 @@ class RowElementKillZone extends RowElement {
         let hasAwakened = false, hasPrideful = false, hasInspiring = false, hasShrouded = false,
             hasShroudedZulGamux = false;
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         for (let i = 0; i < this.killZone.enemies.length; i++) {
             let enemyId = this.killZone.enemies[i];
             for (let enemyKey in enemyMapObjectGroup.objects) {
@@ -209,7 +209,7 @@ class RowElementKillZone extends RowElement {
         let obsoleteNpcs = [];
         let overpulledNpcs = [];
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         let addEnemyToNpcList = (function (enemyId) {
             /** @type {Enemy} */

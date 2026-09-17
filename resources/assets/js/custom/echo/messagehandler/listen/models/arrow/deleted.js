@@ -14,7 +14,7 @@ class ArrowDeletedHandler extends ModelDeletedHandler {
         console.log(`ArrowDeletedHandler::onReceive: ${e.model_id} ${e.model_class}`);
 
         if (shouldHandle) {
-            let arrowMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ARROW);
+            let arrowMapObjectGroup = this.echo.map.mapObjectGroupManager.getArrowMapObjectGroup();
 
             let mapObject = arrowMapObjectGroup.findMapObjectById(e.model_id);
             if (mapObject !== null) {

@@ -70,7 +70,7 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
         // dropdown would never reach them. Redraw on every toggle - the draw itself is gated on
         // isMapObjectGroupShown(), so a hidden group draws nothing.
         let mapObjectGroup = this.getMapObjectGroup();
-        if (mapObjectGroup !== false) {
+        if (mapObjectGroup !== null) {
             mapObjectGroup.register('visibility:changed', this, function () {
                 self.refreshPill();
             });
@@ -78,13 +78,13 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
     }
 
     /**
-     * The MapObjectGroup that owns this checkpoint, or false when there is none.
-     * @returns {MapObjectGroup|Boolean}
+     * The MapObjectGroup that owns this checkpoint, or null when there is none.
+     * @returns {EnemyForcesCheckpointMapObjectGroup|null}
      */
     getMapObjectGroup() {
         console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
 
-        return this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT);
+        return this.map.mapObjectGroupManager.getEnemyForcesCheckpointMapObjectGroup();
     }
 
     /**
@@ -98,7 +98,7 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
 
         let mapObjectGroup = this.getMapObjectGroup();
 
-        return mapObjectGroup === false || mapObjectGroup.isShown();
+        return mapObjectGroup === null || mapObjectGroup.isShown();
     }
 
     /**
@@ -148,9 +148,9 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
 
         let result = [];
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        // May be false in an admin setting where there's no enemies
-        if (enemyMapObjectGroup === false) {
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
+        // May be null in an admin setting where there's no enemies
+        if (enemyMapObjectGroup === null) {
             return result;
         }
 
@@ -337,7 +337,7 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
         getState().unregister('floorid:changed', this);
 
         let mapObjectGroup = this.getMapObjectGroup();
-        if (mapObjectGroup !== false) {
+        if (mapObjectGroup !== null) {
             mapObjectGroup.unregister('visibility:changed', this);
         }
     }

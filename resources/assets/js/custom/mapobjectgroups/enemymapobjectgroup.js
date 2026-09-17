@@ -129,7 +129,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         let isRouteAwakened = mapContext.hasAffix(AFFIX_AWAKENED);
         let isRoutePrideful = mapContext.hasAffix(AFFIX_PRIDEFUL);
 
-        let enemyPatrolMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
+        let enemyPatrolMapObjectGroup = this.manager.getEnemyPatrolMapObjectGroup();
 
         // Couple awakened enemies to each other
         for (let key in this.objects) {

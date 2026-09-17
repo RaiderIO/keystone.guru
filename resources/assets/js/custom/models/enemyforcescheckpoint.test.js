@@ -36,6 +36,7 @@ global.L = {
 };
 
 const {EnemyForcesCheckpoint} = require('./enemyforcescheckpoint');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 /**
  * Builds a checkpoint on a bare prototype (Object.create), so none of the constructor's signal wiring
@@ -69,9 +70,7 @@ function createCheckpoint({groupIsShown = true, currentFloorId = 2} = {}) {
         leafletMap: {
             removeLayer: (layer) => removedLayers.push(layer),
         },
-        mapObjectGroupManager: {
-            getByName: (name) => (name === 'enemy' ? enemyMapObjectGroup : mapObjectGroup),
-        },
+        mapObjectGroupManager: fakeMapObjectGroupManager((name) => (name === 'enemy' ? enemyMapObjectGroup : mapObjectGroup)),
     };
 
     global.getState = () => ({
@@ -169,9 +168,7 @@ function createCheckpointForNumberStyle({killZonesNumberStyle, mapNumberStyle}) 
     checkpoint.layer = {bindTooltip: (text) => (checkpoint._boundTooltipText = text)};
     checkpoint.map = {
         options: {noUI: false},
-        mapObjectGroupManager: {
-            getByName: (name) => (name === 'enemy' ? enemyMapObjectGroup : false),
-        },
+        mapObjectGroupManager: fakeMapObjectGroupManager((name) => (name === 'enemy' ? enemyMapObjectGroup : null)),
         enemyForcesManager: {
             getEnemyForcesForEnemies: () => 20,
             getEnemyForcesRequired: () => 100,
@@ -259,7 +256,7 @@ describe('EnemyForcesCheckpoint.isMapObjectGroupShown', () => {
     it('isMapObjectGroupShown_givenNoMapObjectGroup_returnsTrue', () => {
         // Arrange
         const checkpoint = Object.create(EnemyForcesCheckpoint.prototype);
-        checkpoint.map = {mapObjectGroupManager: {getByName: () => false}};
+        checkpoint.map = {mapObjectGroupManager: fakeMapObjectGroupManager(() => null)};
 
         // Act
         const result = checkpoint.isMapObjectGroupShown();

@@ -21,7 +21,7 @@ class BrushlineChangedHandler extends ModelChangedHandler {
         console.log(`BrushlineChangedHandler::onReceive:`, shouldHandle, e);
         if (shouldHandle) {
             let self = this;
-            let brushlineMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
+            let brushlineMapObjectGroup = this.echo.map.mapObjectGroupManager.getBrushlineMapObjectGroup();
 
             let requestId = (this._latestRequestIdByModelId[e.model.id] || 0) + 1;
             this._latestRequestIdByModelId[e.model.id] = requestId;

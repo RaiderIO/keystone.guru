@@ -40,6 +40,7 @@ global.NpcChangedMessage = class NpcChangedMessage {
 };
 
 const {NpcChangedHandler} = require('./changed');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 function makeEnemy(npcId, enemyForces, enemyForcesTeeming) {
     return {
@@ -72,9 +73,7 @@ function makeHandler(mapContext, enemies) {
 
     let handler = new NpcChangedHandler({
         map: {
-            mapObjectGroupManager: {
-                getByName: () => ({objects: enemies}),
-            },
+            mapObjectGroupManager: fakeMapObjectGroupManager(() => ({objects: enemies})),
         },
     });
 

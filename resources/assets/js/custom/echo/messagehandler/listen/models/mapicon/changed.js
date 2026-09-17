@@ -14,7 +14,7 @@ class MapIconChangedHandler extends ModelChangedHandler {
 
         console.log(`MapIconChangedHandler::onReceive:`, shouldHandle, e);
         if (shouldHandle) {
-            let mapIconMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
+            let mapIconMapObjectGroup = this.echo.map.mapObjectGroupManager.getMapIconMapObjectGroup();
 
             // Apply the correct coordinates for our choice of facade
             let coordinates = this._getCorrectLatLngFromEvent(e);

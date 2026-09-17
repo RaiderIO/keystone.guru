@@ -216,6 +216,7 @@ function setFakeState({
 setFakeState();
 
 const {Enemy} = require('./enemy');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 // 1h. Only ever used through `instanceof` (raid markers are not available on the admin mapping page).
 global.AdminEnemy = class AdminEnemy extends Enemy {
@@ -277,11 +278,9 @@ function makeFakeMap({mapState = null, edit = false, enemyForcesRequired = 100, 
         enemyForcesManager: {
             getEnemyForcesRequired: () => enemyForcesRequired,
         },
-        mapObjectGroupManager: {
-            getByName: () => ({
-                findMapObjectById: (id) => killZonesById[id] ?? null,
-            }),
-        },
+        mapObjectGroupManager: fakeMapObjectGroupManager(() => ({
+            findMapObjectById: (id) => killZonesById[id] ?? null,
+        })),
         /**
          * Switches the map state and notifies listeners, mirroring DungeonMap#setMapState(): the
          * new state is in place BEFORE the event is delivered, so a listener that calls back into

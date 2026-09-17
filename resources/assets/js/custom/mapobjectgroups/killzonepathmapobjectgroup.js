@@ -184,7 +184,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
 
         this._killZonePaths = getState().getMapContext().getKillZonePaths();
 
-        let killZoneMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = this.manager.getKillZoneMapObjectGroup();
         // let killZoneChangedFn = (event) => this.refresh(event.data.object.killzone_paths !== undefined ? event.data.object.killzone_paths : null)
 
         let self = this;

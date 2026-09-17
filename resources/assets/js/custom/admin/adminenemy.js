@@ -43,7 +43,7 @@ class AdminEnemy extends Enemy {
             }
 
             // In case floor ID changed
-            let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let enemyMapObjectGroup = self.map.mapObjectGroupManager.getEnemyMapObjectGroup();
             enemyMapObjectGroup.setMapObjectVisibility(self, self.shouldBeVisible());
 
             // Ensure that skippable property is synced to all of our pack buddies - if you pull this pack,
@@ -103,7 +103,7 @@ class AdminEnemy extends Enemy {
                 }
 
                 if (this._previousConnectedEnemyId > 0) {
-                    let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                    let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
                     let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
                     // Must be found..
                     if (previousEnemy !== null) {
@@ -137,7 +137,7 @@ class AdminEnemy extends Enemy {
         if (this._connectedEnemy === null) {
             let self = this;
 
-            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
             // We're an enemy, we need to find an MDT enemy instead
             if (!this.is_mdt && this.mdt_id !== null) {
                 let foundMDTEnemy = false;
@@ -255,7 +255,7 @@ class AdminEnemy extends Enemy {
 
         // Unset any previously connected enemy; detach them from this MDT enemy, it no longer wants you (sorry :c)
         if (this._previousConnectedEnemyId > 0) {
-            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
             /** @type AdminEnemy */
             let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
             previousEnemy.detachConnectedEnemy();
@@ -287,7 +287,7 @@ class AdminEnemy extends Enemy {
 
         // Remove previous layers if it's needed
         if (this.enemyConnectionLayerGroup !== null) {
-            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
             enemyMapObjectGroup.layerGroup.removeLayer(this.enemyConnectionLayerGroup);
         }
     }
@@ -315,7 +315,7 @@ class AdminEnemy extends Enemy {
             });
         }
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         // Only when we should..
         for (let index in connectedEnemies) {
@@ -328,7 +328,7 @@ class AdminEnemy extends Enemy {
                     this.enemyConnectionLayerGroup = new L.LayerGroup();
 
                     // Add the layer to the map
-                    let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                    let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
                     enemyMapObjectGroup.layerGroup.addLayer(this.enemyConnectionLayerGroup);
 
                     // Draw a line to the MDT enemy

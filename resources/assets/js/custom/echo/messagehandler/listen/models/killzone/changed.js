@@ -16,7 +16,7 @@ class KillZoneChangedHandler extends ModelChangedHandler {
 
         console.log(`KillZoneChangedHandler::onReceive:`, shouldHandle, e);
         if (shouldHandle) {
-            let killZoneMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            let killZoneMapObjectGroup = this.echo.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
 
             // Apply the correct coordinates for our choice of facade
             let coordinates = this._getCorrectLatLngFromEvent(e, false);
@@ -29,7 +29,7 @@ class KillZoneChangedHandler extends ModelChangedHandler {
 
             // @TODO use an event listener?
             /** @type {KillZonePathMapObjectGroup} */
-            let killZonePathMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE_PATH);
+            let killZonePathMapObjectGroup = this.echo.map.mapObjectGroupManager.getKillZonePathMapObjectGroup();
             killZonePathMapObjectGroup.fetchAndRefresh(e.context_route_key);
 
             this._showChangedFromEchoNotification(mapObject, e.user);

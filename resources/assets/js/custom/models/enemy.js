@@ -266,7 +266,7 @@ class Enemy extends VersionableMapObject {
                 type: 'int',
                 default: null,
                 setter: function (value) {
-                    let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                    let enemyMapObjectGroup = self.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
                     self.exclusive_enemy_id = value;
                     self.setExclusiveEnemy(enemyMapObjectGroup.findMapObjectById(value));
@@ -459,7 +459,7 @@ class Enemy extends VersionableMapObject {
             this.enemy_id = remoteMapObject.enemy_id;
 
             // Link the mdt_npc_id on load so that the visual knows to display it differently
-            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
             let linkedEnemy = enemyMapObjectGroup.findMapObjectById(this.enemy_id);
             if (linkedEnemy instanceof Enemy) {
                 this.mdt_npc_id = linkedEnemy.mdt_npc_id;
@@ -703,7 +703,7 @@ class Enemy extends VersionableMapObject {
         // Only if we're part of a pack
         if (this.enemy_pack_id !== null) {
             // Add all the enemies in said pack to the toggle display
-            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
             for (let key in enemyMapObjectGroup.objects) {
                 let enemy = enemyMapObjectGroup.objects[key];
@@ -729,7 +729,7 @@ class Enemy extends VersionableMapObject {
         // Only if we're part of a pack
         if (this.enemy_pack_id !== null) {
             // Add all the enemies in said pack to the toggle display
-            let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+            let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getEnemyPackMapObjectGroup();
 
             // May be null in certain view modes
             if (enemyPackMapObjectGroup !== null) {
@@ -1165,7 +1165,7 @@ class Enemy extends VersionableMapObject {
         let result = null;
 
         if (this.overpulledKillZoneId !== null) {
-            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
             result = killZoneMapObjectGroup.findMapObjectById(this.overpulledKillZoneId);
         }
 

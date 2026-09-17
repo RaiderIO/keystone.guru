@@ -14,7 +14,7 @@ class PathDeletedHandler extends ModelDeletedHandler {
         console.log(`PathDeletedHandler::onReceive: ${e.model_id} ${e.model_class}`);
 
         if (shouldHandle) {
-            let pathMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
+            let pathMapObjectGroup = this.echo.map.mapObjectGroupManager.getPathMapObjectGroup();
 
             let mapObject = pathMapObjectGroup.findMapObjectById(e.model_id);
             if (mapObject !== null) {

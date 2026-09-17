@@ -1,6 +1,9 @@
 {
     "name": "keystone-guru",
     "private": true,
+    "imports": {
+        "#test/*": "./resources/assets/js/test/*.js"
+    },
     "scripts": {
         "dev": "npm run development",
         "development": "node scripts/build/build.mjs",

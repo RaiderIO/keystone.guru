@@ -12,7 +12,7 @@ class OverpulledEnemyChangedHandler extends MessageHandler {
     onReceive(e) {
         super.onReceive(e);
 
-        let enemyMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.echo.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         /** @type {Enemy} */
         let enemy = enemyMapObjectGroup.findMapObjectById(e.enemy_id);

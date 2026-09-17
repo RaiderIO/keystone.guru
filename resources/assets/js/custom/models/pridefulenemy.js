@@ -94,7 +94,7 @@ class PridefulEnemy extends Enemy {
         console.assert(this instanceof PridefulEnemy, 'this was not a PridefulEnemy', this);
         this.assigned = false;
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         enemyMapObjectGroup.setMapObjectVisibility(this, false);
 
         let oldKillZone = this.getKillZone();

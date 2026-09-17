@@ -58,7 +58,7 @@ class EnemySelection extends MapObjectMapState {
         // this._oldMapObjectIcon = this.sourceMapObject.layer.options.icon;
         // this.sourceMapObject.layer.setIcon(this._getLayerIcon());
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         for (let key in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[key];
@@ -96,7 +96,7 @@ class EnemySelection extends MapObjectMapState {
         // this.sourceMapObject.layer.setIcon(this._oldMapObjectIcon);
 
         // Revert all things we did to enemies
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
             // Enemies no longer present themselves as selectable
             if (enemy.isSelectable()) {

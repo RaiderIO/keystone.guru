@@ -40,6 +40,7 @@ global.c = {
 };
 
 const {EnemyPack} = require('./enemypack');
+const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
 
 /**
  * Builds an enemy pack on a bare prototype (Object.create), so none of the constructor's signal
@@ -65,9 +66,7 @@ function createEnemyPack({floorId = 1, floorEnemyPackMargin = null} = {}) {
     enemyPack.floor_id = floorId;
     enemyPack.rawEnemies = [{id: 1}, {id: 2}];
     enemyPack.map = {
-        mapObjectGroupManager: {
-            getByName: (name) => (name === MAP_OBJECT_GROUP_ENEMY ? enemyMapObjectGroup : enemyPackMapObjectGroup),
-        },
+        mapObjectGroupManager: fakeMapObjectGroupManager((name) => (name === MAP_OBJECT_GROUP_ENEMY ? enemyMapObjectGroup : enemyPackMapObjectGroup)),
     };
 
     const floor = floorEnemyPackMargin === undefined ? false : {id: floorId, enemy_pack_margin: floorEnemyPackMargin};

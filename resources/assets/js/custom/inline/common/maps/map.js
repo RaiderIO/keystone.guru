@@ -144,7 +144,7 @@ class CommonMapsMap extends InlineCode {
             });
 
             // Enemy info should be set on right click
-            let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getEnemyMapObjectGroup();
             let registerEnemyContextMenuFn = function (addEvent) {
                 addEvent.data.object.register('enemy:contextmenu', self, self._onEnemyContextMenu.bind(self));
             };
@@ -901,7 +901,7 @@ class CommonMapsMap extends InlineCode {
      */
     _getMDTUnmappedEnemies() {
         let result = [];
-        let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         for (let index in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[index];
@@ -921,7 +921,7 @@ class CommonMapsMap extends InlineCode {
      */
     _getClosestMDTEnemyForEnemy(targetEnemy) {
         let result = null;
-        let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getEnemyMapObjectGroup();
 
         let closestEnemyDistance = 99999999;
         for (let key in enemyMapObjectGroup.objects) {
@@ -950,7 +950,7 @@ class CommonMapsMap extends InlineCode {
     cleanup() {
         super.cleanup();
 
-        let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getEnemyMapObjectGroup();
         for (let index in enemyMapObjectGroup.objects) {
             enemyMapObjectGroup.objects[index].unregister('enemy:contextmenu', this);
         }
