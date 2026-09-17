@@ -223,7 +223,7 @@ return [
             'shared_by'      => 'Записей заклинаний с этим изменением: :count',
         ],
         'tuning_build_released_at' => [
-            'went_live' => '',
+            'went_live' => 'Запущено :date',
         ],
     ],
     'tuning' => [
