@@ -2,10 +2,10 @@
 
 return [
 
-    'pug_friendly' => '',
-    'beginner'     => '',
-    'intermediate' => '',
-    'expert'       => '',
-    'mdi'          => '',
+    'pug_friendly' => 'Apto para PUG',
+    'beginner'     => 'Principiante',
+    'intermediate' => 'Intermedio',
+    'expert'       => 'Experto',
+    'mdi'          => 'MDI',
 
 ];
