@@ -59,16 +59,6 @@ class CombatLogRouteDungeonRouteServiceLogging extends StructuredLogging impleme
         $this->warning(__METHOD__, get_defined_vars());
     }
 
-    public function saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation(int $dungeonRouteId, ?int $npcId, int $floorId): void
-    {
-        $this->warning(__METHOD__, get_defined_vars());
-    }
-
-    public function saveCombatLogRouteEnemyFailuresSkippingNpcWithoutEnemyForces(int $dungeonRouteId, int $npcId): void
-    {
-        $this->debug(__METHOD__, get_defined_vars());
-    }
-
     public function convertCombatLogRouteToDungeonRouteBuildFailedDeletingNewRoute(int $dungeonRouteId, string $exception): void
     {
         $this->warning(__METHOD__, get_defined_vars());
@@ -87,10 +77,5 @@ class CombatLogRouteDungeonRouteServiceLogging extends StructuredLogging impleme
     public function applyRegeneratedDungeonRouteApplied(string $publicKey, int $dungeonRouteId, int $draftDungeonRouteId): void
     {
         $this->info(__METHOD__, get_defined_vars());
-    }
-
-    public function replaceCombatLogRouteEnemyFailuresFailed(int $dungeonRouteId, string $exception): void
-    {
-        $this->error(__METHOD__, get_defined_vars());
     }
 }

@@ -13,6 +13,7 @@ use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
+use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Models\Dungeon;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemies\PridefulEnemy;
@@ -1628,6 +1629,14 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             ->delete();
     }
 
+    public function deleteCombatLogRouteEnemyResolutions(): void
+    {
+        CombatLogRouteEnemyResolution::query()
+            ->where('dungeon_route_id', $this->id)
+            ->whereNull('source')
+            ->delete();
+    }
+
     #[Override]
     protected static function boot(): void
     {
@@ -1664,6 +1673,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             $dungeonRoute->setConnection(null);
 
             $dungeonRoute->deleteCombatLogRouteEnemyFailures();
+            $dungeonRoute->deleteCombatLogRouteEnemyResolutions();
 
             // Delete thumbnails
             foreach ($dungeonRoute->dungeonRouteThumbnails as $dungeonRouteThumbnail) {

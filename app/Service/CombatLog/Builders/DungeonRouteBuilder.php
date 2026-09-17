@@ -72,7 +72,7 @@ abstract class DungeonRouteBuilder
      *            we divide this factor by 10. -0.50 means that a kill_priority of 10 the distance is multiplied by * 0.5 (so it appears much closer)
      *            and a kill_priority of -10 the distance is multiplied by * 1.5 (so it appears much further away).
      */
-    private const ENEMY_KILL_PRIORITY_WEIGHT_RATIO = (-0.50 / 10);
+    public const ENEMY_KILL_PRIORITY_WEIGHT_RATIO = (-0.50 / 10);
 
     protected ?Floor $currentFloor;
 
@@ -254,7 +254,7 @@ abstract class DungeonRouteBuilder
         ActivePullEnemy $activePullEnemy,
         Collection      $preferredGroups,
         bool            $ignoreRangeCheck = false,
-    ): ?Enemy {
+    ): ClosestEnemy {
         // See if we actually need to go look for another NPC
         if (isset(self::NPC_ID_MAPPING[$activePullEnemy->getNpcId()])) {
             $this->log->findUnkilledEnemyForNpcAtIngameLocationMappingToDifferentNpcId(
@@ -312,7 +312,7 @@ abstract class DungeonRouteBuilder
             $this->log->findUnkilledEnemyForNpcAtIngameLocationEnd();
         }
 
-        return $closestEnemy->getEnemy();
+        return $closestEnemy;
     }
 
     /**
@@ -508,7 +508,7 @@ abstract class DungeonRouteBuilder
                     $awardedEnemy,
                     $this->activePullCollection->getInCombatGroups(),
                     true,
-                );
+                )->getEnemy();
 
                 if ($resolvedEnemy === null) {
                     break;
