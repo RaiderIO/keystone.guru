@@ -16,6 +16,8 @@ use App\Service\EnemyForces\Dtos\NpcEnemyForcesDiff;
 use App\Service\EnemyForces\Logging\EnemyForcesDb2ServiceLoggingInterface;
 use App\Service\WagoTools\WagoToolsServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 
 class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
 {
@@ -62,8 +64,9 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
                 return null;
             }
 
-            $challengeModes = $this->readChallengeModes($build, $dungeons);
-            $treesByMapId   = $this->readEnemyForcesTrees($build);
+            $challengeModes           = $this->readChallengeModes($build, $dungeons);
+            $treesByMapId             = $this->readEnemyForcesTrees($build);
+            $newerDungeonsByDungeonId = $this->getNewerDungeonsOnSameChallengeMode($dungeons);
 
             $dungeonDiffs = [];
             foreach ($dungeons as $currentDungeon) {
@@ -72,12 +75,65 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
                     $gameVersion,
                     $challengeModes[$currentDungeon->challenge_mode_id] ?? null,
                     $treesByMapId,
+                    $newerDungeonsByDungeonId[$currentDungeon->id] ?? null,
                 );
             }
 
             return new EnemyForcesDb2Report($product, $build, $dungeonDiffs);
         } finally {
             $this->log->diffEnemyForcesEnd();
+        }
+    }
+
+    public function writeEnemyForces(DungeonEnemyForcesDiff $dungeonDiff): void
+    {
+        $mappingVersion         = $dungeonDiff->mappingVersion;
+        $db2EnemyForcesRequired = $dungeonDiff->db2EnemyForcesRequired;
+
+        if (!$dungeonDiff->isResolved() || $mappingVersion === null || $db2EnemyForcesRequired === null) {
+            throw new InvalidArgumentException(sprintf(
+                'Refusing to write the enemy forces of %s: %s',
+                $dungeonDiff->dungeon->key,
+                $dungeonDiff->unresolvedReason ?? 'it was not compared against a build',
+            ));
+        }
+
+        try {
+            $this->log->writeEnemyForcesStart($dungeonDiff->dungeon->id, $mappingVersion->id);
+
+            DB::transaction(function () use ($dungeonDiff, $mappingVersion, $db2EnemyForcesRequired) {
+                if (!$dungeonDiff->hasMatchingEnemyForcesRequired()) {
+                    MappingVersion::query()
+                        ->whereKey($mappingVersion->id)
+                        ->update(['enemy_forces_required' => $db2EnemyForcesRequired]);
+
+                    $this->log->writeEnemyForcesRequired($mappingVersion->enemy_forces_required, $db2EnemyForcesRequired);
+                }
+
+                foreach ($dungeonDiff->getNpcDiffsToWrite() as $npcDiff) {
+                    $db2EnemyForces = (int)$npcDiff->db2EnemyForces;
+
+                    if ($npcDiff->ourEnemyForces === null) {
+                        NpcEnemyForces::query()->insert([
+                            'mapping_version_id'   => $mappingVersion->id,
+                            'npc_id'               => $npcDiff->npcId,
+                            'enemy_forces'         => $db2EnemyForces,
+                            'enemy_forces_teeming' => null,
+                        ]);
+
+                        $this->log->writeEnemyForcesCreateNpc($npcDiff->npcId, $db2EnemyForces);
+                    } else {
+                        NpcEnemyForces::query()
+                            ->where('mapping_version_id', $mappingVersion->id)
+                            ->where('npc_id', $npcDiff->npcId)
+                            ->update(['enemy_forces' => $db2EnemyForces]);
+
+                        $this->log->writeEnemyForcesUpdateNpc($npcDiff->npcId, $npcDiff->ourEnemyForces, $db2EnemyForces);
+                    }
+                }
+            });
+        } finally {
+            $this->log->writeEnemyForcesEnd();
         }
     }
 
@@ -93,6 +149,41 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
             ->get();
 
         return $dungeons;
+    }
+
+    /**
+     * The client reuses a challenge mode for a dungeon's return in a later expansion (Algeth'ar Academy in
+     * Dragonflight and Midnight), and its tree then only holds the tuning of the latest one.
+     *
+     * @param  Collection<int, Dungeon> $dungeons
+     * @return array<int, Dungeon>      dungeon id => the dungeon of the most recent expansion on the same
+     *                                  challenge mode, for every dungeon that is not that one itself
+     */
+    private function getNewerDungeonsOnSameChallengeMode(Collection $dungeons): array
+    {
+        $dungeonsByChallengeModeId = Dungeon::query()
+            ->with('expansion')
+            ->whereIn('challenge_mode_id', $dungeons->pluck('challenge_mode_id')->unique()->all())
+            ->get()
+            ->groupBy('challenge_mode_id');
+
+        $newerDungeonsByDungeonId = [];
+        foreach ($dungeons as $dungeon) {
+            /** @var Collection<int, Dungeon> $sameChallengeModeDungeons */
+            $sameChallengeModeDungeons = $dungeonsByChallengeModeId->get($dungeon->challenge_mode_id) ?? new Collection();
+
+            $newestDungeon = $sameChallengeModeDungeons
+                ->sortByDesc(static fn(Dungeon $sameChallengeModeDungeon): string => (string)$sameChallengeModeDungeon->expansion->released_at)
+                ->first();
+            $ownDungeon = $sameChallengeModeDungeons->firstWhere('id', $dungeon->id);
+
+            if ($newestDungeon !== null && $ownDungeon !== null
+                && strcmp((string)$newestDungeon->expansion->released_at, (string)$ownDungeon->expansion->released_at) > 0) {
+                $newerDungeonsByDungeonId[$dungeon->id] = $newestDungeon;
+            }
+        }
+
+        return $newerDungeonsByDungeonId;
     }
 
     /**
@@ -346,12 +437,25 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
      * @param array{mapId: int, name: string}|null       $challengeMode
      * @param array<int, array<int, Db2EnemyForcesTree>> $treesByMapId
      */
-    private function diffDungeon(Dungeon $dungeon, GameVersion $gameVersion, ?array $challengeMode, array $treesByMapId): DungeonEnemyForcesDiff
-    {
+    private function diffDungeon(
+        Dungeon     $dungeon,
+        GameVersion $gameVersion,
+        ?array      $challengeMode,
+        array       $treesByMapId,
+        ?Dungeon    $newerDungeon,
+    ): DungeonEnemyForcesDiff {
         $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
         if ($mappingVersion === null) {
             return $this->unresolved($dungeon, sprintf('No %s mapping version', $gameVersion->key));
+        }
+
+        if ($newerDungeon !== null) {
+            return $this->unresolved($dungeon, sprintf(
+                'Shares challenge mode %d with %s of a later expansion - the build only holds the enemy forces of that one',
+                $dungeon->challenge_mode_id,
+                __($newerDungeon->name),
+            ), $mappingVersion);
         }
 
         if ($challengeMode === null) {
