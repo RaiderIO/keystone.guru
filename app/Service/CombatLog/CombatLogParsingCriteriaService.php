@@ -77,6 +77,21 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
         }
     }
 
+    public function ensureCriteriaExist(int $combatLogVersion, Season $season, KeyLevelBand $band): void
+    {
+        $today = Carbon::now()->toDateString();
+
+        foreach (array_keys(CombatLogParsingCriterion::VALID_CRITERIA) as $modelClass) {
+            foreach ($this->getAllModelsForCriteria($modelClass, $season) as $model) {
+                $this->findOrCreate(
+                    $combatLogVersion,
+                    new CombatLogParsingCriterionCheck($modelClass, $model->getKey(), $band),
+                    $today,
+                );
+            }
+        }
+    }
+
     public function resetAllForToday(): void
     {
         CombatLogParsingCriterion::query()
