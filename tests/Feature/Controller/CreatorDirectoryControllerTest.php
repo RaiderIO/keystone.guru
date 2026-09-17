@@ -4,6 +4,8 @@ namespace Tests\Feature\Controller;
 
 use App\Features\CreatorProfiles;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteCollection;
+use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
 use App\Models\PublishedState;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -228,6 +230,136 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenACategoryFilter_onlyListsCreatorsSharingThatKindOfCollection(): void
+    {
+        // Arrange
+        $viewer   = User::factory()->create();
+        $wanted   = User::factory()->create();
+        $unwanted = User::factory()->create();
+
+        $wantedRoutes   = $this->createPublishedRoutesFor($wanted, $this->minPublishedRoutes());
+        $unwantedRoutes = $this->createPublishedRoutesFor($unwanted, $this->minPublishedRoutes());
+
+        $wantedCollection = $this->createPublishedCollectionFor($wanted, DungeonRouteCollectionCategoryType::Mdi);
+        // A collection of a different kind must not make its author match the MDI filter
+        $unwantedCollection = $this->createPublishedCollectionFor($unwanted, DungeonRouteCollectionCategoryType::Beginner);
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', [
+                'category_id' => DungeonRouteCollectionCategoryType::Mdi->id(),
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $creatorIds = $this->creatorIdsFrom($response);
+            $this->assertTrue($creatorIds->contains($wanted->id), 'A creator sharing that kind of collection must be listed');
+            $this->assertFalse($creatorIds->contains($unwanted->id), 'A creator without one must be filtered out');
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $unwantedCollection->delete();
+            $wantedCollection->delete();
+            $this->deleteAll($unwantedRoutes);
+            $this->deleteAll($wantedRoutes);
+            $unwanted->delete();
+            $wanted->delete();
+            $viewer->delete();
+        }
+    }
+
+    /**
+     * Matching on a collection nobody may see would leak that the collection exists at all, so
+     * only world published collections may put a creator in a filtered listing.
+     */
+    #[Test]
+    public function index_givenACategoryFilter_ignoresCollectionsThatAreNotPublic(): void
+    {
+        // Arrange
+        $viewer  = User::factory()->create();
+        $creator = User::factory()->create();
+        $routes  = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes());
+
+        $collection = $this->createPublishedCollectionFor($creator, DungeonRouteCollectionCategoryType::Expert);
+        $collection->update(['published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED]]);
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', [
+                'category_id' => DungeonRouteCollectionCategoryType::Expert->id(),
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertFalse(
+                $this->creatorIdsFrom($response)->contains($creator->id),
+                'An unpublished collection must not surface its author in a filtered listing',
+            );
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $collection->delete();
+            $this->deleteAll($routes);
+            $creator->delete();
+            $viewer->delete();
+        }
+    }
+
+    /**
+     * The category select posts an empty string for "Any collection", which must browse unfiltered
+     * rather than fail the integer rule.
+     */
+    #[Test]
+    public function index_givenAnEmptyCategory_listsEveryCreator(): void
+    {
+        // Arrange
+        $viewer  = User::factory()->create();
+        $creator = User::factory()->create();
+        $routes  = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes());
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['search' => '', 'category_id' => '']));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSessionHasNoErrors();
+            $this->assertTrue(
+                $this->creatorIdsFrom($response)->contains($creator->id),
+                'An empty category means "any category", not a validation error',
+            );
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $this->deleteAll($routes);
+            $creator->delete();
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenACategoryThatDoesNotExist_failsValidation(): void
+    {
+        // Arrange
+        $viewer = User::factory()->create();
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['category_id' => 99999]));
+
+            // Assert
+            $response->assertSessionHasErrors('category_id');
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
     public function index_givenAnOverlongSearch_failsValidation(): void
     {
         // Arrange
@@ -265,6 +397,15 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
         }
 
         return $routes;
+    }
+
+    private function createPublishedCollectionFor(User $creator, DungeonRouteCollectionCategoryType $categoryType): DungeonRouteCollection
+    {
+        return DungeonRouteCollection::factory()->create([
+            'user_id'                              => $creator->id,
+            'published_state_id'                   => PublishedState::ALL[PublishedState::WORLD],
+            'dungeon_route_collection_category_id' => $categoryType->id(),
+        ]);
     }
 
     /** @param EloquentCollection<int, DungeonRoute> $routes */

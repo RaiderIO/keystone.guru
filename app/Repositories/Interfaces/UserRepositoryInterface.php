@@ -31,7 +31,10 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * ordered by that count descending, with `users.id` as a stable tiebreak so pagination cannot
      * repeat or skip a creator between pages.
      *
+     * @param int|null $categoryId When set, only creators who publicly share a collection filed
+     *                             under this category are listed.
+     *
      * @return Builder<User>
      */
-    public function buildListedCreatorsQuery(): Builder;
+    public function buildListedCreatorsQuery(?int $categoryId = null): Builder;
 }
