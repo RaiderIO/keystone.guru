@@ -223,7 +223,7 @@ return [
             'shared_by'      => 'Registros de feitiço que compartilham esta alteração: :count',
         ],
         'tuning_build_released_at' => [
-            'went_live' => '',
+            'went_live' => 'Entrou no ar em :date',
         ],
     ],
     'tuning' => [
