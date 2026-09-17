@@ -225,6 +225,39 @@ final class CombatLogPollingHealthServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function recordTopBandPoll_givenIdlePollsSpanningTheCounterTtl_keepsTheStreak(): void
+    {
+        // Arrange - an incident that outlives the counter's TTL is the one this signal is for; the
+        // streak must not expire out from under it and restart the threshold from zero
+        Carbon::setTestNow(Carbon::parse('2026-08-20 14:30:00'));
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+
+        // Act
+        Carbon::setTestNow(Carbon::parse('2026-08-22 13:30:00'));
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+
+        Carbon::setTestNow(Carbon::parse('2026-08-24 12:30:00'));
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+
+        // Assert
+        $this->assertSame(3, $this->service->getSummary(Carbon::now(), windowHours: 1)->topBandConsecutiveIdlePolls);
+    }
+
+    #[Test]
+    public function recordTopBandPoll_givenNoPollForLongerThanTheCounterTtl_forgetsTheStreak(): void
+    {
+        // Arrange - polling stopped entirely rather than the band recovering, so the count is stale
+        Carbon::setTestNow(Carbon::parse('2026-08-20 14:30:00'));
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+
+        // Act
+        Carbon::setTestNow(Carbon::parse('2026-08-22 15:30:00'));
+
+        // Assert
+        $this->assertSame(0, $this->service->getSummary(Carbon::now(), windowHours: 1)->topBandConsecutiveIdlePolls);
+    }
+
+    #[Test]
     public function reportSummary_givenIdleStreakPastTheThreshold_reportsTheIdleTopBand(): void
     {
         // Arrange

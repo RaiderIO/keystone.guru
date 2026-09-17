@@ -20,9 +20,12 @@ class CombatLogPollingHealthService implements CombatLogPollingHealthServiceInte
 
     /**
      * The idle streak is not bucketed by hour like the other counters: the threshold it feeds is
-     * measured in half a day of polls, and hourly buckets expire long before that. A streak that
-     * stops being written to at all - the scheduler stopped, the command crashes before the top
-     * band - expires instead of alerting forever on a stale count.
+     * measured in half a day of polls, and hourly buckets expire long before that. The expiry is
+     * refreshed on every idle poll, so it measures how long nothing has been written at all - the
+     * scheduler stopped, the command crashes before the top band - rather than how long the streak
+     * has been going. Letting it measure the latter would expire the counter out from under an
+     * incident that outlives it and restart the threshold from zero, which is the one case the
+     * whole signal exists for.
      */
     private const int TOP_BAND_IDLE_STREAK_TTL_HOURS = 48;
 
@@ -59,8 +62,14 @@ class CombatLogPollingHealthService implements CombatLogPollingHealthServiceInte
         if ($available > 0 && $dispatched === 0) {
             $key = self::TOP_BAND_IDLE_STREAK_CACHE_KEY;
 
-            Cache::add($key, 0, Carbon::now()->addHours(self::TOP_BAND_IDLE_STREAK_TTL_HOURS));
-            Cache::increment($key);
+            // Read-modify-write rather than increment(): the point is to reset the expiry on every
+            // poll, and increment() cannot. Two invocations racing in the same hour lose one count
+            // between them, which is what a streak counting polls-as-hours wants anyway.
+            Cache::put(
+                $key,
+                (int)Cache::get($key, 0) + 1,
+                Carbon::now()->addHours(self::TOP_BAND_IDLE_STREAK_TTL_HOURS),
+            );
 
             return;
         }
