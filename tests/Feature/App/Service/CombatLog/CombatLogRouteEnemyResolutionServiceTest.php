@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\User;
 use App\Service\CombatLog\CombatLogRouteEnemyResolutionServiceInterface;
 use App\Service\CombatLog\Enums\EnemyResolutionHeatmapMetric;
 use Override;
@@ -35,6 +36,9 @@ final class CombatLogRouteEnemyResolutionServiceTest extends PublicTestCase
     /** @var int[] */
     private array $createdDungeonRouteIds = [];
 
+    /** @var int[] */
+    private array $createdFacadeFloorIds = [];
+
     #[Override]
     protected function setUp(): void
     {
@@ -42,6 +46,7 @@ final class CombatLogRouteEnemyResolutionServiceTest extends PublicTestCase
 
         $this->createdResolutionIds   = [];
         $this->createdDungeonRouteIds = [];
+        $this->createdFacadeFloorIds  = [];
 
         $this->service = app(CombatLogRouteEnemyResolutionServiceInterface::class);
 
@@ -61,6 +66,8 @@ final class CombatLogRouteEnemyResolutionServiceTest extends PublicTestCase
             foreach (DungeonRoute::query()->whereKey($this->createdDungeonRouteIds)->get() as $dungeonRoute) {
                 $dungeonRoute->delete();
             }
+
+            Floor::query()->whereKey($this->createdFacadeFloorIds)->delete();
         } finally {
             parent::tearDown();
         }
@@ -249,6 +256,232 @@ final class CombatLogRouteEnemyResolutionServiceTest extends PublicTestCase
         ], $publicKeys);
     }
 
+    #[Test]
+    public function getResolutionLines_givenSeveralMatches_returnsTheWorstOnesFirstWithBothEnds(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createDungeonRoute();
+        $this->createResolution(-100.0, 192.0, 60.0, npcId: 991020, dungeonRouteId: $dungeonRoute->id);
+        $this->createResolution(-110.0, 190.0, 90.0, npcId: 991020, dungeonRouteId: $dungeonRoute->id);
+
+        // Act
+        $lines = $this->service->getResolutionLines($this->dungeon, $this->mappingVersion, null, null, 10);
+
+        // Assert
+        $this->assertCount(2, $lines);
+        $this->assertEqualsWithDelta(90.0, $lines[0]['weighted_distance'], 0.01);
+        $this->assertEqualsWithDelta(60.0, $lines[1]['weighted_distance'], 0.01);
+        $this->assertSame($this->floor->id, $lines[0]['floor_id']);
+        $this->assertEqualsWithDelta(-110.0, $lines[0]['lat'], 0.01);
+        $this->assertEqualsWithDelta(-109.0, $lines[0]['enemy_lat'], 0.01);
+        $this->assertSame($dungeonRoute->public_key, $lines[0]['dungeon_route_public_key']);
+        $this->assertNotNull($lines[0]['dungeon_route_url']);
+    }
+
+    #[Test]
+    public function getResolutionLines_givenLimit_returnsAtMostThatMany(): void
+    {
+        // Arrange
+        foreach ([60.0, 70.0, 80.0] as $distance) {
+            $this->createResolution(-100.0, 192.0, $distance, npcId: 991021);
+        }
+
+        // Act
+        $lines = $this->service->getResolutionLines($this->dungeon, $this->mappingVersion, null, null, 2);
+
+        // Assert
+        $this->assertCount(2, $lines);
+        $this->assertEqualsWithDelta(80.0, $lines[0]['weighted_distance'], 0.01);
+    }
+
+    /**
+     * An imported row's dungeon_route_id belongs to the deployment it came from, so it gets no local link - its source
+     * and public key are what identify the route where it actually lives.
+     */
+    #[Test]
+    public function getResolutionLines_givenImportedMatch_returnsNoLocalRouteLink(): void
+    {
+        // Arrange - the remote id deliberately collides with a real local route
+        $localRoute = $this->createDungeonRoute();
+        $resolution = $this->createResolution(-100.0, 192.0, 70.0, npcId: 991022, dungeonRouteId: $localRoute->id);
+        $resolution->update(['source' => 'production']);
+
+        // Act
+        $lines = $this->service->getResolutionLines($this->dungeon, $this->mappingVersion, null, null, 10);
+
+        // Assert
+        $this->assertCount(1, $lines);
+        $this->assertSame('production', $lines[0]['source']);
+        $this->assertNull($lines[0]['dungeon_route_url']);
+        $this->assertNull($lines[0]['dungeon_route_public_key']);
+    }
+
+    /**
+     * The mapping moves on while the records stay, and an imported row points at an enemy this environment may not
+     * have at all - neither may take the page down, and neither may cost the line what it recorded.
+     */
+    #[Test]
+    public function getResolutionLines_givenMatchWhoseEnemyIsGone_stillReturnsTheLineWithItsRecordedDistances(): void
+    {
+        // Arrange
+        $this->createResolution(-100.0, 192.0, weightedDistance: 35.0, distance: 70.0, npcId: 991023, enemyId: 99999999);
+
+        // Act
+        $lines = $this->service->getResolutionLines($this->dungeon, $this->mappingVersion, null, null, 10);
+
+        // Assert - the weighting is read off the record, so it survives the enemy it pointed at
+        $this->assertCount(1, $lines);
+        $this->assertSame(99999999, $lines[0]['enemy_id']);
+        $this->assertEqualsWithDelta(70.0, $lines[0]['distance'], 0.01);
+        $this->assertEqualsWithDelta(35.0, $lines[0]['weighted_distance'], 0.01);
+    }
+
+    /**
+     * A mapping version without a facade of its own renders the real floors even for a viewer whose map style is
+     * facade - Dungeon::floorsForMapFacade() falls back. Re-homing the lines onto a facade floor the map is not
+     * showing would filter every one of them out on every floor, silently.
+     */
+    #[Test]
+    public function getResolutionLines_givenFacadeViewerOnAMappingVersionWithoutFacade_keepsTheRealFloor(): void
+    {
+        // Arrange - the dungeon owns a facade floor, so only facade_enabled decides
+        $facadeFloor = $this->createFacadeFloor();
+        $user        = User::findOrFail(1);
+
+        $this->withFacadeViewer($user, function () use ($facadeFloor) {
+            $this->mappingVersion->update(['facade_enabled' => 0]);
+            $this->mappingVersion->refresh();
+            $this->dungeon->unsetRelation('floors');
+
+            $this->createResolution(-100.0, 192.0, 70.0, npcId: 991030);
+
+            // Act
+            $lines = $this->service->getResolutionLines($this->dungeon, $this->mappingVersion, null, null, 10);
+
+            // Assert
+            $this->assertCount(1, $lines);
+            $this->assertSame($this->floor->id, $lines[0]['floor_id']);
+            $this->assertNotSame($facadeFloor->id, $lines[0]['floor_id']);
+        });
+    }
+
+    /**
+     * The other direction of the same condition: with a facade of its own, that is the floor the map draws and the
+     * one the lines have to land on.
+     */
+    #[Test]
+    public function getResolutionLines_givenFacadeViewerOnAMappingVersionWithFacade_movesThemOntoTheFacadeFloor(): void
+    {
+        // Arrange
+        $facadeFloor = $this->createFacadeFloor();
+        $user        = User::findOrFail(1);
+
+        $this->withFacadeViewer($user, function () use ($facadeFloor) {
+            $this->mappingVersion->update(['facade_enabled' => 1]);
+            $this->mappingVersion->refresh();
+            $this->dungeon->unsetRelation('floors');
+
+            $this->createResolution(-100.0, 192.0, 70.0, npcId: 991032);
+
+            // Act
+            $lines = $this->service->getResolutionLines($this->dungeon, $this->mappingVersion, null, null, 10);
+
+            // Assert
+            $this->assertCount(1, $lines);
+            $this->assertSame($facadeFloor->id, $lines[0]['floor_id']);
+        });
+    }
+
+    /**
+     * The heatmap cells under the lines answer the same question with the same rule, and every other test here
+     * overrides that decision with setUseFacade() - so it is asserted here on the value the constructor works out.
+     */
+    #[Test]
+    public function getResolutionHeatmapData_givenFacadeViewerOnAMappingVersionWithoutFacade_keepsTheRealFloor(): void
+    {
+        // Arrange
+        $facadeFloor = $this->createFacadeFloor();
+        $user        = User::findOrFail(1);
+
+        $this->withFacadeViewer($user, function () use ($facadeFloor) {
+            config(['keystoneguru.enemy_resolution.heatmap_min_samples' => 1]);
+            $this->mappingVersion->update(['facade_enabled' => 0]);
+            $this->mappingVersion->refresh();
+            $this->dungeon->unsetRelation('floors');
+
+            $this->createResolution(-100.0, 192.0, 70.0, npcId: 991033);
+
+            // Act - deliberately without setUseFacade(), so the constructor's own decision is what is asserted
+            $array = $this->service
+                ->getResolutionHeatmapData($this->dungeon, $this->mappingVersion, null, EnemyResolutionHeatmapMetric::Average)
+                ->toArray();
+
+            // Assert
+            $floorIds = array_column($array['data'], 'floor_id');
+            $this->assertContains($this->floor->id, $floorIds);
+            $this->assertNotContains($facadeFloor->id, $floorIds);
+        });
+    }
+
+    /**
+     * Runs $callback with user id 1 acting and its map style set to facade, restoring both afterwards.
+     */
+    private function withFacadeViewer(User $user, callable $callback): void
+    {
+        $originalMapFacadeStyle = $user->map_facade_style;
+        $originalFacadeEnabled  = $this->mappingVersion->facade_enabled;
+
+        try {
+            $user->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
+            $this->be($user);
+
+            $callback();
+        } finally {
+            $user->update(['map_facade_style' => $originalMapFacadeStyle]);
+            $this->mappingVersion->update(['facade_enabled' => $originalFacadeEnabled]);
+        }
+    }
+
+    private function createFacadeFloor(): Floor
+    {
+        $facadeFloor = Floor::create([
+            'dungeon_id' => $this->dungeon->id,
+            'index'      => 2,
+            'name'       => 'Test Facade Floor',
+            'default'    => false,
+            'facade'     => true,
+        ]);
+
+        $this->createdFacadeFloorIds[] = $facadeFloor->id;
+        $this->dungeon->unsetRelation('floors');
+
+        return $facadeFloor;
+    }
+
+    /**
+     * An imported row's dungeon_route_id belongs to the deployment it came from, so it must not put a local route on
+     * the shortlist - that route has nothing to do with the match.
+     */
+    #[Test]
+    public function getResolutionHeatmapData_givenImportedMatch_keepsItsRemoteRouteOutOfTheShortlist(): void
+    {
+        // Arrange
+        config(['keystoneguru.enemy_resolution.heatmap_min_samples' => 1]);
+
+        $localRoute = $this->createDungeonRoute();
+        $imported   = $this->createResolution(-100.0, 192.0, 90.0, npcId: 991031, dungeonRouteId: $localRoute->id);
+        $imported->update(['source' => 'production']);
+
+        // Act
+        $array = $this->service
+            ->getResolutionHeatmapData($this->dungeon, $this->mappingVersion, [991031], EnemyResolutionHeatmapMetric::Average)
+            ->setUseFacade(false)
+            ->toArray();
+
+        // Assert
+        $this->assertSame([], $array['dungeon_routes']);
+    }
+
     private function createDungeonRoute(): DungeonRoute
     {
         $dungeonRoute = DungeonRoute::factory()->create([
@@ -268,6 +501,7 @@ final class CombatLogRouteEnemyResolutionServiceTest extends PublicTestCase
         ?float $distance = null,
         ?int   $npcId = null,
         ?int   $dungeonRouteId = null,
+        int    $enemyId = 1,
     ): CombatLogRouteEnemyResolution {
         $resolution = CombatLogRouteEnemyResolution::create([
             'dungeon_id'         => $this->dungeon->id,
@@ -275,7 +509,7 @@ final class CombatLogRouteEnemyResolutionServiceTest extends PublicTestCase
             'mapping_version_id' => $this->mappingVersion->id,
             'npc_id'             => $npcId,
             'dungeon_route_id'   => $dungeonRouteId,
-            'enemy_id'           => 1,
+            'enemy_id'           => $enemyId,
             'lat'                => $lat,
             'lng'                => $lng,
             'enemy_lat'          => $lat + 1,

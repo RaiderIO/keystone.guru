@@ -2,10 +2,14 @@
 
 namespace App\Service\CombatLog;
 
+use App\Logic\Structs\LatLng;
 use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\Npc;
+use App\Models\User;
 use App\Service\CombatLog\Dtos\CombatLogRouteEnemyResolutionHeatmapResult;
 use App\Service\CombatLog\Enums\EnemyResolutionHeatmapMetric;
 use App\Service\Coordinates\CoordinatesService;
@@ -70,6 +74,91 @@ readonly class CombatLogRouteEnemyResolutionService implements CombatLogRouteEne
         );
     }
 
+    public function getResolutionLines(
+        Dungeon        $dungeon,
+        MappingVersion $mappingVersion,
+        ?array         $npcIds,
+        ?float         $minDistance,
+        int            $limit,
+    ): array {
+        /** @var Collection<int, CombatLogRouteEnemyResolution> $resolutions */
+        $resolutions = $this->resolutionsQuery($dungeon, $mappingVersion, $npcIds, $minDistance)
+            ->orderByDesc('weighted_distance')
+            ->limit($limit)
+            ->get();
+
+        if ($resolutions->isEmpty()) {
+            return [];
+        }
+
+        /** @var Collection<int, Npc> $npcs */
+        $npcs = Npc::query()->whereIn('id', $resolutions->pluck('npc_id')->filter()->unique())->get()->keyBy('id');
+        // An imported row's dungeon_route_id belongs to the deployment it came from and means nothing here, so only
+        // rows this environment recorded itself get a route link - the others carry their source and public key
+        // instead, which is what identifies the route where it lives
+        /** @var Collection<int, DungeonRoute> $dungeonRoutes */
+        $dungeonRoutes = DungeonRoute::with('dungeon')
+            ->whereIn('id', $resolutions->whereNull('source')->pluck('dungeon_route_id')->filter()->unique())
+            ->get()
+            ->keyBy('id');
+
+        /** @var Collection<int, Floor> $floors */
+        $floors = $dungeon->floors->keyBy('id');
+        // The map itself falls back to the real floors when the mapping version has no facade of its own, whatever
+        // the viewer's style says - re-homing the lines onto a facade floor the map is not showing would drop them
+        $useFacade   = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE && $mappingVersion->facade_enabled;
+        $facadeFloor = $useFacade ? $dungeon->floors->firstWhere('facade', true) : null;
+
+        $lines = [];
+        foreach ($resolutions as $resolution) {
+            /** @var Floor|null $floor */
+            $floor = $floors->get($resolution->floor_id);
+            if ($floor === null) {
+                continue;
+            }
+
+            $engagedAt = new LatLng((float)$resolution->lat, (float)$resolution->lng, $floor);
+            $enemyAt   = new LatLng((float)$resolution->enemy_lat, (float)$resolution->enemy_lng, $floor);
+            $floorId   = $resolution->floor_id;
+
+            if ($facadeFloor instanceof Floor) {
+                $engagedAt = $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $engagedAt);
+                $enemyAt   = $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $enemyAt);
+                $floorId   = $facadeFloor->id;
+            }
+
+            /** @var Npc|null $npc */
+            $npc = $resolution->npc_id === null ? null : $npcs->get($resolution->npc_id);
+            /** @var DungeonRoute|null $dungeonRoute */
+            $dungeonRoute = $resolution->source === null && $resolution->dungeon_route_id !== null
+                ? $dungeonRoutes->get($resolution->dungeon_route_id)
+                : null;
+
+            $lines[] = [
+                'floor_id'                 => $floorId,
+                'lat'                      => round($engagedAt->getLat(), 2),
+                'lng'                      => round($engagedAt->getLng(), 2),
+                'enemy_lat'                => round($enemyAt->getLat(), 2),
+                'enemy_lng'                => round($enemyAt->getLng(), 2),
+                'distance'                 => round((float)$resolution->distance, 1),
+                'weighted_distance'        => round((float)$resolution->weighted_distance, 1),
+                'npc_id'                   => $resolution->npc_id,
+                'npc_name'                 => $npc === null ? null : __($npc->name, [], 'en_US'),
+                'enemy_id'                 => $resolution->enemy_id,
+                'source'                   => $resolution->source,
+                'dungeon_route_id'         => $resolution->dungeon_route_id,
+                'dungeon_route_public_key' => $dungeonRoute?->public_key,
+                'dungeon_route_url'        => $dungeonRoute === null ? null : route('dungeonroute.view', [
+                    'dungeon'      => $dungeonRoute->dungeon,
+                    'dungeonroute' => $dungeonRoute,
+                    'title'        => $dungeonRoute->getTitleSlug(),
+                ]),
+            ];
+        }
+
+        return $lines;
+    }
+
     public function getResolutionCountsPerNpc(Dungeon $dungeon, MappingVersion $mappingVersion): Collection
     {
         /** @var Collection<int, int> $result */
@@ -132,6 +221,8 @@ readonly class CombatLogRouteEnemyResolutionService implements CombatLogRouteEne
         // several places would otherwise fill the whole shortlist and hide every other route that shares the problem
         $dungeonRouteIds = $this->resolutionsQuery($dungeon, $mappingVersion, $npcIds, $minDistance)
             ->whereNotNull('dungeon_route_id')
+            // An imported row's route id belongs to the deployment it came from and names an unrelated route here
+            ->whereNull('source')
             ->selectRaw('dungeon_route_id, MAX(weighted_distance) AS worst_distance')
             ->groupBy('dungeon_route_id')
             ->orderByDesc('worst_distance')

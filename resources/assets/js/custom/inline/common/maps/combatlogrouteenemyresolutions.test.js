@@ -54,6 +54,7 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
             <div id="summary"></div>
             <div id="routes_container"></div>
             <div id="routes_list"></div>
+            <input type="checkbox" id="show_lines" checked>
         `;
 
         dungeonMapStub = {
@@ -64,16 +65,44 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
             },
             leafletMap: {},
         };
+        currentFloor = {id: 5};
         stateStub = {
             getDungeonMap: () => dungeonMapStub,
-            getCurrentFloor: () => ({id: 5}),
+            getCurrentFloor: () => currentFloor,
             register: vi.fn(),
         };
         globalThis.getState = () => stateStub;
 
+        // Minimal Leaflet: a layer group that remembers what was added, and lines that remember their options
+        layerGroupStub = {
+            layers: [],
+            addTo: function () { return this; },
+            clearLayers: function () { this.layers = []; },
+        };
+        globalThis.L = {
+            layerGroup: () => layerGroupStub,
+            polyline: (latLngs, options) => ({
+                latLngs,
+                options,
+                popup: null,
+                bindPopup: function (html) { this.popup = html; return this; },
+                addTo: function (group) { group.layers.push(this); return this; },
+            }),
+        };
+
         vi.spyOn($, 'ajax').mockReturnValue({done: () => ({})});
         globalThis.getQueryParams = getQueryParams;
     });
+
+    let currentFloor;
+    let layerGroupStub;
+
+    const line = (overrides = {}) => Object.assign({
+        floor_id: 5, lat: -10, lng: 20, enemy_lat: -12, enemy_lng: 22,
+        distance: 80, weighted_distance: 80, npc_id: 42, npc_name: 'Npc',
+        enemy_id: 7, source: null,
+        dungeon_route_public_key: null, dungeon_route_url: null,
+    }, overrides);
 
     function createInstance() {
         return new CommonMapsCombatlogrouteenemyresolutions('combatlogrouteenemyresolutions', 'common/maps/combatlogrouteenemyresolutions', {
@@ -81,6 +110,16 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
             mappingVersionId: 10,
             pageUrl: '/admin/tools/combatlog/route/enemy-resolutions',
             getEnemyResolutionsUrl: '/ajax/admin/combatlogroute/enemy-resolutions',
+            linesUrl: '/ajax/admin/combatlogroute/enemy-resolutions/lines',
+            showLinesSelector: '#show_lines',
+            linePopupTexts: {
+                npc: ':name (:id)',
+                distance: 'Resolved to enemy :enemy, :distance yd away',
+                weighted: 'Kill priority had the matcher judge it as :weighted yd',
+                route: 'Open route :key',
+                importedRoute: 'Recorded on :source, route :id there',
+                noRoute: 'No route recorded for this match',
+            },
             deleteUrl: '/ajax/admin/combatlogroute/enemy-resolutions',
             filterMappingVersionIdSelector: '#filter_mapping_version_id',
             filterNpcIdSelector: '#filter_npc_id',
@@ -221,5 +260,164 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
         expect($('#routes_list a').length).toBe(1);
         // jsdom has no layout, so :visible never matches - the inline style show() sets is what can be asserted
         expect($('#routes_container').css('display')).not.toBe('none');
+    });
+
+    test('search_alsoFetchesLinesWithTheSameFilters', () => {
+        const instance = createInstance();
+        $('#filter_npc_id').append('<option value="42" selected>x</option>');
+        $('#filter_min_distance').val('75');
+
+        instance.activate();
+
+        const linesCall = $.ajax.mock.calls.find((call) => call[0].url === '/ajax/admin/combatlogroute/enemy-resolutions/lines');
+        expect(linesCall).toBeDefined();
+        expect(linesCall[0].data).toEqual({dungeon_id: 123, mapping_version_id: 10, npc_id: [42], min_distance: '75'});
+    });
+
+    test('redrawLines_drawsOnlyCurrentFloorLinesFromEngagementToEnemy', () => {
+        const instance = createInstance();
+        instance.activate();
+
+        instance._lines = [line({floor_id: 5}), line({floor_id: 6}), line({floor_id: 5, lat: -30, lng: 40})];
+        instance._redrawLines();
+
+        expect(layerGroupStub.layers.length).toBe(2);
+        expect(layerGroupStub.layers[0].latLngs).toEqual([[-10, 20], [-12, 22]]);
+        expect(layerGroupStub.layers[1].latLngs).toEqual([[-30, 40], [-12, 22]]);
+    });
+
+    /**
+     * The layer group survives a floor switch, so without clearing it by hand the previous floor's lines would stay
+     * on the map on top of the new floor's.
+     */
+    test('floorChange_clearsTheLayerAndRedrawsForTheNewFloor', () => {
+        const instance = createInstance();
+        instance.activate();
+
+        instance._lines = [line({floor_id: 5}), line({floor_id: 6, lat: -30, lng: 40})];
+        instance._redrawLines();
+        expect(layerGroupStub.layers.length).toBe(1);
+        expect(layerGroupStub.layers[0].latLngs).toEqual([[-10, 20], [-12, 22]]);
+
+        const floorChanged = stateStub.register.mock.calls.find((call) => call[0] === 'floorid:changed')[2];
+        currentFloor = {id: 6};
+        floorChanged();
+
+        expect(layerGroupStub.layers.length).toBe(1);
+        expect(layerGroupStub.layers[0].latLngs).toEqual([[-30, 40], [-12, 22]]);
+    });
+
+    test('redrawLines_givenCheckboxUnchecked_drawsNothing', () => {
+        const instance = createInstance();
+        instance.activate();
+        $('#show_lines').prop('checked', false);
+
+        instance._lines = [line()];
+        instance._redrawLines();
+
+        expect(layerGroupStub.layers).toEqual([]);
+    });
+
+    /**
+     * Overlapping requests: only the latest may paint, so a slower earlier response is discarded when it returns.
+     */
+    test('fetchLines_givenStaleResponseArrivingLate_ignoresIt', () => {
+        const instance = createInstance();
+        instance.activate();
+
+        // Two line requests in flight; resolve the SECOND first, then the first (stale) one
+        const pending = [];
+        $.ajax.mockImplementation((options) => ({done: (callback) => { if (options.url.endsWith('/lines')) pending.push(callback); return {}; }}));
+        instance._fetchLines([1]);
+        instance._fetchLines([2]);
+        pending[1]({data: [line({npc_id: 2})]});
+        pending[0]({data: [line({npc_id: 1})]});
+
+        expect(instance._lines.map((entry) => entry.npc_id)).toEqual([2]);
+    });
+
+    test('getLineColor_givenSeverity_goesFromYellowThroughOrangeToRed', () => {
+        const instance = createInstance();
+
+        expect(instance._getLineColor(1)).toBe('#e74c3c');
+        expect(instance._getLineColor(0.8)).toBe('#e74c3c');
+        expect(instance._getLineColor(0.5)).toBe('#e67e22');
+        expect(instance._getLineColor(0.1)).toBe('#f1c40f');
+    });
+
+    test('redrawLines_colorsEachLineByHowItComparesToTheWorstOne', () => {
+        const instance = createInstance();
+        instance.activate();
+
+        instance._lines = [line({weighted_distance: 100}), line({weighted_distance: 20})];
+        instance._redrawLines();
+
+        expect(layerGroupStub.layers[0].options.color).toBe('#e74c3c');
+        expect(layerGroupStub.layers[1].options.color).toBe('#f1c40f');
+    });
+
+    test('getLinePopupHtml_givenLocallyRecordedMatch_linksTheRoute', () => {
+        const instance = createInstance();
+
+        const html = instance._getLinePopupHtml(line({
+            dungeon_route_public_key: 'abc123',
+            dungeon_route_url: '/route/abc123',
+        }));
+
+        expect(html).toContain('href="/route/abc123"');
+        expect(html).toContain('Open route abc123');
+        expect(html).not.toContain('No route recorded');
+    });
+
+    /**
+     * An imported row's dungeon_route_id belongs to the deployment it came from, so there is nothing to link to here -
+     * its source and public key are what identify the route where it lives.
+     */
+    test('getLinePopupHtml_givenImportedMatch_namesTheSourceInsteadOfLinking', () => {
+        const instance = createInstance();
+
+        // The shape the endpoint really produces for an imported row: no local key, no local link, a remote id
+        const html = instance._getLinePopupHtml(line({
+            dungeon_route_id: 4242,
+            dungeon_route_public_key: null,
+            dungeon_route_url: null,
+            source: 'production',
+        }));
+
+        expect(html).toContain('Recorded on production, route 4242 there');
+        expect(html).not.toContain('<a href');
+    });
+
+    test('getLinePopupHtml_givenMatchWithoutARoute_saysSo', () => {
+        const instance = createInstance();
+
+        const html = instance._getLinePopupHtml(line());
+
+        expect(html).toContain('No route recorded for this match');
+    });
+
+    /**
+     * The recorded distance pair is what says kill priority moved this match, and it says it about the match as it
+     * happened rather than about the enemy as it stands today.
+     */
+    test('getLinePopupHtml_givenWeightedDistanceDifferingFromTheRealOne_showsWhatTheMatcherJudged', () => {
+        const instance = createInstance();
+
+        const weighted = instance._getLinePopupHtml(line({distance: 80, weighted_distance: 40}));
+        const unweighted = instance._getLinePopupHtml(line({distance: 80, weighted_distance: 80}));
+
+        expect(weighted).toContain('40');
+        expect(weighted).toContain('judge');
+        expect(unweighted).not.toContain('judge');
+    });
+
+    test('redrawLines_bindsThePopupToEachLine', () => {
+        const instance = createInstance();
+        instance.activate();
+
+        instance._lines = [line({npc_name: 'Deadly Thing'})];
+        instance._redrawLines();
+
+        expect(layerGroupStub.layers[0].popup).toContain('Deadly Thing (42)');
     });
 });

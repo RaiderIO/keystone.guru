@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteGetEnemyResolutionLinesFormRequest;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Models\Dungeon;
@@ -627,6 +628,117 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
             $response = $this->delete(route('ajax.admin.combatlogroute.enemy_resolutions.delete'), [
                 'dungeon_id' => $this->dungeon->id,
             ]);
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+        } finally {
+            $nonAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function getEnemyResolutionLines_givenNoDungeonId_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions.lines'));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('dungeon_id');
+    }
+
+    #[Test]
+    public function getEnemyResolutionLines_givenValidDungeon_returnsLinesWithBothEndsAndTheirContext(): void
+    {
+        $created = [];
+
+        try {
+            // Arrange
+            $created[] = $this->createResolution(-50.0, 100.0, 60.0, npcId: 99906);
+
+            // Act
+            $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions.lines', [
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertJsonStructure([
+                'data' => [[
+                    'floor_id',
+                    'lat',
+                    'lng',
+                    'enemy_lat',
+                    'enemy_lng',
+                    'distance',
+                    'weighted_distance',
+                    'npc_id',
+                    'npc_name',
+                    'enemy_id',
+                    'source',
+                    'dungeon_route_id',
+                    'dungeon_route_public_key',
+                    'dungeon_route_url',
+                ]],
+            ]);
+
+            $this->assertCount(1, $response->json('data'));
+            $this->assertSame($this->floor->id, $response->json('data.0.floor_id'));
+            $this->assertSame(99906, $response->json('data.0.npc_id'));
+            $this->assertEqualsWithDelta(-50.0, $response->json('data.0.lat'), 0.01);
+            $this->assertEqualsWithDelta(-49.0, $response->json('data.0.enemy_lat'), 0.01);
+            $this->assertEqualsWithDelta(60.0, $response->json('data.0.weighted_distance'), 0.01);
+        } finally {
+            CombatLogRouteEnemyResolution::whereIn('id', $created)->delete();
+        }
+    }
+
+    #[Test]
+    public function getEnemyResolutionLines_givenLimitAboveTheMaximum_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions.lines', [
+            'dungeon_id'         => $this->dungeon->id,
+            'mapping_version_id' => $this->mappingVersion->id,
+            'limit'              => AjaxAdminCombatLogRouteGetEnemyResolutionLinesFormRequest::LIMIT_MAX + 1,
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('limit');
+    }
+
+    #[Test]
+    public function getEnemyResolutionLines_givenNegativeMinDistance_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions.lines', [
+            'dungeon_id'         => $this->dungeon->id,
+            'mapping_version_id' => $this->mappingVersion->id,
+            'min_distance'       => -1,
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('min_distance');
+    }
+
+    #[Test]
+    public function getEnemyResolutionLines_givenNonAdmin_returnsForbidden(): void
+    {
+        // Arrange
+        $nonAdmin = User::factory()->create();
+
+        try {
+            $this->assertFalse($nonAdmin->hasRole(Role::ROLE_ADMIN));
+            $this->actingAs($nonAdmin);
+
+            // Act
+            $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions.lines', [
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+            ]));
 
             // Assert
             $response->assertStatus(StatusCode::FORBIDDEN);
