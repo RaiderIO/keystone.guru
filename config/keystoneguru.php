@@ -652,6 +652,13 @@ return [
                 'window_hours'     => (int)env('COMBAT_LOG_POLLING_HEALTH_WINDOW_HOURS', 3),
                 'min_failures'     => (int)env('COMBAT_LOG_POLLING_HEALTH_MIN_FAILURES', 25),
                 'min_failure_rate' => (float)env('COMBAT_LOG_POLLING_HEALTH_MIN_FAILURE_RATE', 0.5),
+
+                // How many consecutive polls the top band may find runs available and dispatch none
+                // of them before that is reported. A handful is normal - the band legitimately has
+                // nothing to do in an hour where no new top run appeared - but it is polled hourly
+                // and exempt from every budget, so half a day of it means its runs are not reaching
+                // us at all rather than that there were none worth taking.
+                'top_band_idle_polls' => (int)env('COMBAT_LOG_POLLING_HEALTH_TOP_BAND_IDLE_POLLS', 12),
             ],
 
             // Runs are polled in key level bands so that what we parse covers the whole spectrum

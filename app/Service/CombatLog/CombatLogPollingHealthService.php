@@ -16,6 +16,19 @@ class CombatLogPollingHealthService implements CombatLogPollingHealthServiceInte
 
     private const string SUCCEEDED_COUNTER = 'succeeded';
 
+    private const string TOP_BAND_IDLE_STREAK_CACHE_KEY = 'combatlog:pollruns:health:topband:idle-streak';
+
+    /**
+     * The idle streak is not bucketed by hour like the other counters: the threshold it feeds is
+     * measured in half a day of polls, and hourly buckets expire long before that. The expiry is
+     * refreshed on every idle poll, so it measures how long nothing has been written at all - the
+     * scheduler stopped, the command crashes before the top band - rather than how long the streak
+     * has been going. Letting it measure the latter would expire the counter out from under an
+     * incident that outlives it and restart the threshold from zero, which is the one case the
+     * whole signal exists for.
+     */
+    private const int TOP_BAND_IDLE_STREAK_TTL_HOURS = 48;
+
     /**
      * Long enough that the hourly report always finds the hour it reports on intact - even if the
      * scheduler is late or a run of it is skipped - and short enough that nothing lingers.
@@ -42,6 +55,28 @@ class CombatLogPollingHealthService implements CombatLogPollingHealthServiceInte
         $this->increment($reason->value);
     }
 
+    public function recordTopBandPoll(int $available, int $dispatched): void
+    {
+        // Available but nothing taken is the signal: a band with nothing available has correctly
+        // found nothing, and one that dispatched is working.
+        if ($available > 0 && $dispatched === 0) {
+            $key = self::TOP_BAND_IDLE_STREAK_CACHE_KEY;
+
+            // Read-modify-write rather than increment(): the point is to reset the expiry on every
+            // poll, and increment() cannot. Two invocations racing in the same hour lose one count
+            // between them, which is what a streak counting polls-as-hours wants anyway.
+            Cache::put(
+                $key,
+                (int)Cache::get($key, 0) + 1,
+                Carbon::now()->addHours(self::TOP_BAND_IDLE_STREAK_TTL_HOURS),
+            );
+
+            return;
+        }
+
+        Cache::forget(self::TOP_BAND_IDLE_STREAK_CACHE_KEY);
+    }
+
     public function getSummary(Carbon $endHour, ?int $windowHours = null): CombatLogPollingHealthSummary
     {
         // A run is counted as dispatched in the hour it was polled, but its outcome lands in the hour
@@ -66,10 +101,13 @@ class CombatLogPollingHealthService implements CombatLogPollingHealthServiceInte
         }
 
         return new CombatLogPollingHealthSummary(
-            hour:             $windowHours === 1 ? $buckets[0] : sprintf('%s..%s', $buckets[0], end($buckets)),
-            dispatched:       $this->readAll($buckets, self::DISPATCHED_COUNTER),
-            succeeded:        $this->readAll($buckets, self::SUCCEEDED_COUNTER),
-            failuresByReason: $failuresByReason,
+            hour:                        $windowHours === 1 ? $buckets[0] : sprintf('%s..%s', $buckets[0], end($buckets)),
+            dispatched:                  $this->readAll($buckets, self::DISPATCHED_COUNTER),
+            succeeded:                   $this->readAll($buckets, self::SUCCEEDED_COUNTER),
+            failuresByReason:            $failuresByReason,
+            // Unlike everything else here this is the streak as it stands now rather than a total
+            // over the window - a streak is only meaningful up to the present moment.
+            topBandConsecutiveIdlePolls: (int)Cache::get(self::TOP_BAND_IDLE_STREAK_CACHE_KEY, 0),
         );
     }
 
@@ -81,6 +119,15 @@ class CombatLogPollingHealthService implements CombatLogPollingHealthServiceInte
         // Both conditions must hold: the rate alone would page on the two failures of a window that
         // only dispatched two runs, and the count alone would page on a busy window that was fine.
         $degraded = $summary->getTotalFailures() >= $minFailures && $summary->getFailureRate() >= $minRate;
+
+        $idleThreshold = (int)config('keystoneguru.raider_io.combat_log_polling.health.top_band_idle_polls');
+
+        // Reported separately from the failure rate, and below it: the top band going quiet costs
+        // the most valuable runs of the season, but every individual poll of it succeeded, so it is
+        // not a failure and must not decide whether the window counts as degraded.
+        if ($idleThreshold > 0 && $summary->topBandConsecutiveIdlePolls >= $idleThreshold) {
+            $this->log->reportTopBandIdle($summary->hour, $summary->topBandConsecutiveIdlePolls, $idleThreshold);
+        }
 
         if ($degraded) {
             $this->log->reportSummaryDegraded(

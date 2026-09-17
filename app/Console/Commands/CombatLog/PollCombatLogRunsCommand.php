@@ -348,12 +348,18 @@ class PollCombatLogRunsCommand extends Command
             }
         }
 
+        $dispatchedByBand = $dispatchCounts['dispatched'] - $dispatchedBefore;
+
+        // A search that failed outright reports no total; counting that as "runs were available and
+        // we took none" would raise the idle signal for what is already counted as a search failure.
+        $this->healthService->recordTopBandPoll($available ?? 0, $dispatchedByBand);
+
         $this->info(sprintf(
             'combatlog:pollruns — top band %s | available=%s pages=%d dispatched=%d',
             $band,
             $available ?? '?',
             $pagesPolled,
-            $dispatchCounts['dispatched'] - $dispatchedBefore,
+            $dispatchedByBand,
         ));
     }
 

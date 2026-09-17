@@ -180,6 +180,134 @@ final class CombatLogPollingHealthServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function recordTopBandPoll_givenRunsAvailableAndNoneDispatched_growsTheIdleStreak(): void
+    {
+        // Arrange
+        Carbon::setTestNow(Carbon::parse('2026-08-20 14:30:00'));
+
+        // Act
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+
+        // Assert
+        $this->assertSame(3, $this->service->getSummary(Carbon::now(), windowHours: 1)->topBandConsecutiveIdlePolls);
+    }
+
+    #[Test]
+    public function recordTopBandPoll_givenARunDispatched_clearsTheIdleStreak(): void
+    {
+        // Arrange
+        Carbon::setTestNow(Carbon::parse('2026-08-20 14:30:00'));
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+
+        // Act
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 4);
+
+        // Assert
+        $this->assertSame(0, $this->service->getSummary(Carbon::now(), windowHours: 1)->topBandConsecutiveIdlePolls);
+    }
+
+    #[Test]
+    public function recordTopBandPoll_givenNothingAvailable_doesNotGrowTheIdleStreak(): void
+    {
+        // Arrange - a band with nothing available has correctly found nothing; only silence with
+        // runs on the table is a signal
+        Carbon::setTestNow(Carbon::parse('2026-08-20 14:30:00'));
+
+        // Act
+        $this->service->recordTopBandPoll(available: 0, dispatched: 0);
+        $this->service->recordTopBandPoll(available: 0, dispatched: 0);
+
+        // Assert
+        $this->assertSame(0, $this->service->getSummary(Carbon::now(), windowHours: 1)->topBandConsecutiveIdlePolls);
+    }
+
+    #[Test]
+    public function recordTopBandPoll_givenIdlePollsSpanningTheCounterTtl_keepsTheStreak(): void
+    {
+        // Arrange - an incident that outlives the counter's TTL is the one this signal is for; the
+        // streak must not expire out from under it and restart the threshold from zero
+        Carbon::setTestNow(Carbon::parse('2026-08-20 14:30:00'));
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+
+        // Act
+        Carbon::setTestNow(Carbon::parse('2026-08-22 13:30:00'));
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+
+        Carbon::setTestNow(Carbon::parse('2026-08-24 12:30:00'));
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+
+        // Assert
+        $this->assertSame(3, $this->service->getSummary(Carbon::now(), windowHours: 1)->topBandConsecutiveIdlePolls);
+    }
+
+    #[Test]
+    public function recordTopBandPoll_givenNoPollForLongerThanTheCounterTtl_forgetsTheStreak(): void
+    {
+        // Arrange - polling stopped entirely rather than the band recovering, so the count is stale
+        Carbon::setTestNow(Carbon::parse('2026-08-20 14:30:00'));
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+
+        // Act
+        Carbon::setTestNow(Carbon::parse('2026-08-22 15:30:00'));
+
+        // Assert
+        $this->assertSame(0, $this->service->getSummary(Carbon::now(), windowHours: 1)->topBandConsecutiveIdlePolls);
+    }
+
+    #[Test]
+    public function reportSummary_givenIdleStreakPastTheThreshold_reportsTheIdleTopBand(): void
+    {
+        // Arrange
+        config(['keystoneguru.raider_io.combat_log_polling.health.top_band_idle_polls' => 3]);
+        Carbon::setTestNow(Carbon::parse('2026-08-20 14:30:00'));
+        for ($i = 0; $i < 3; $i++) {
+            $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+        }
+
+        $this->log->expects($this->once())->method('reportTopBandIdle')->with('2026-08-20-14', 3, 3);
+
+        // Act
+        $degraded = $this->service->reportSummary($this->service->getSummary(Carbon::now(), windowHours: 1));
+
+        // Assert - an idle top band is its own signal and does not make the window degraded
+        $this->assertFalse($degraded);
+    }
+
+    #[Test]
+    public function reportSummary_givenIdleStreakBelowTheThreshold_doesNotReportTheIdleTopBand(): void
+    {
+        // Arrange - the top band legitimately has nothing to do in an hour where no new run appeared
+        config(['keystoneguru.raider_io.combat_log_polling.health.top_band_idle_polls' => 12]);
+        Carbon::setTestNow(Carbon::parse('2026-08-20 14:30:00'));
+        for ($i = 0; $i < 11; $i++) {
+            $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+        }
+
+        $this->log->expects($this->never())->method('reportTopBandIdle');
+
+        // Act + Assert
+        $this->service->reportSummary($this->service->getSummary(Carbon::now(), windowHours: 1));
+    }
+
+    #[Test]
+    public function getSummary_givenNothingButAnIdleTopBand_isNotEmpty(): void
+    {
+        // Arrange - an hour in which the only thing that happened is the top band staying silent is
+        // exactly what combatlog:reportpollinghealth must not skip over
+        Carbon::setTestNow(Carbon::parse('2026-08-20 14:30:00'));
+        $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+
+        // Act
+        $summary = $this->service->getSummary(Carbon::now(), windowHours: 1);
+
+        // Assert
+        $this->assertFalse($summary->isEmpty());
+    }
+
+    #[Test]
     public function getFailureRate_givenFailuresWithoutDispatchedRuns_returnsOne(): void
     {
         // Arrange - search API errors happen before any run is picked, so nothing was dispatched
