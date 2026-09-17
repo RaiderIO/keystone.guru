@@ -5,6 +5,7 @@ namespace Database\Factories\KillZone;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
+use App\Models\KillZone\KillZoneSpell;
 use App\Service\Coordinates\CoordinatesService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
@@ -49,6 +50,18 @@ class KillZoneFactory extends Factory
                 KillZoneEnemy::factory()
                     ->forEnemy($enemy)
                     ->create(['kill_zone_id' => $killZone->id]);
+            }
+        });
+    }
+
+    public function withSpells(int ...$spellIds): self
+    {
+        return $this->afterCreating(static function (KillZone $killZone) use ($spellIds): void {
+            foreach ($spellIds as $spellId) {
+                KillZoneSpell::create([
+                    'kill_zone_id' => $killZone->id,
+                    'spell_id'     => $spellId,
+                ]);
             }
         });
     }

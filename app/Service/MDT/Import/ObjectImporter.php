@@ -10,6 +10,7 @@ use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Arrow;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
@@ -26,8 +27,15 @@ use Illuminate\Support\Facades\DB;
 
 class ObjectImporter
 {
-    /** @var int */
-    private const int IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS = 50;
+    /** @var int A note closer than this to an enemy of a pull is attached to that pull instead of becoming a map icon */
+    public const int IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS = 50;
+
+    /** @var array<string, int> Names users write on MDT notes for a spell other than the spell's own name */
+    private const array SPELL_IDS_BY_ALIAS = [
+        'timewarp'             => Spell::SPELL_TIME_WARP,
+        'ancient hysteria'     => Spell::SPELL_ANCIENT_HYSTERIA,
+        'fury of the ancients' => Spell::SPELL_FURY_OF_THE_ASPECTS,
+    ];
 
     public function __construct(
         private readonly CoordinatesServiceInterface            $coordinatesService,
@@ -59,6 +67,9 @@ class ObjectImporter
             $mappingVersion,
             $mappingVersion->facade_enabled,
         )->get();
+
+        /** @var array<string, int>|null $spellIdsByName */
+        $spellIdsByName = null;
 
         foreach ($importStringObjects->getMdtObjects() as $objectIndex => $object) {
             try {
@@ -168,7 +179,16 @@ class ObjectImporter
                 // Map comment (n = note)
                 // MethodDungeonTools.lua:2523
                 elseif (isset($object['n']) && $object['n']) {
-                    $this->parseObjectComment($importStringObjects, $mappingVersion, $floor, $details, $assignNotesToPulls);
+                    $spellIdsByName ??= $this->getSpellIdsByName();
+
+                    $this->parseObjectComment(
+                        $importStringObjects,
+                        $mappingVersion,
+                        $floor,
+                        $details,
+                        $assignNotesToPulls,
+                        $spellIdsByName,
+                    );
                 }
             } catch (ImportWarning $warning) {
                 $importStringObjects->getWarnings()->push($warning);
@@ -269,7 +289,8 @@ class ObjectImporter
     }
 
     /**
-     * @param array<int, mixed> $details
+     * @param array<int, mixed>  $details
+     * @param array<string, int> $spellIdsByName
      */
     private function parseObjectComment(
         ImportStringObjects $importStringObjects,
@@ -277,6 +298,7 @@ class ObjectImporter
         Floor               $floor,
         array               $details,
         bool                $assignNotesToPulls,
+        array               $spellIdsByName,
     ): void {
         $latLng = Conversion::convertMDTCoordinateToLatLng([
             'x' => $details[0],
@@ -304,77 +326,36 @@ class ObjectImporter
             }
         }
 
-        $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($latLng);
-
         // Try to see if we can import this comment and apply it to our pulls directly instead
-        foreach ($importStringObjects->getKillZoneAttributes() as $killZoneIndex => $killZoneAttribute) {
-            foreach ($killZoneAttribute['killZoneEnemies'] as $killZoneEnemy) {
-                $enemyIngameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(
-                    new LatLng($killZoneEnemy['enemy']->lat, $killZoneEnemy['enemy']->lng, $latLng->getFloor()),
+        $killZoneIndex = $this->findNearestKillZoneIndex($importStringObjects, $latLng);
+        if ($killZoneIndex !== null) {
+            $killZoneAttribute = $importStringObjects->getKillZoneAttributes()->get($killZoneIndex);
+            $newAttributes     = null;
+
+            // A note that only lists spell names (one per line) assigns those spells to the pull instead
+            $spellIds = $this->resolveSpellIdsFromComment((string)$details[4], $spellIdsByName);
+            if ($spellIds !== null) {
+                $assignedSpellIds = array_column($killZoneAttribute['spells'], 'spell_id');
+                foreach ($spellIds as $spellId) {
+                    if (!in_array($spellId, $assignedSpellIds, true)) {
+                        $killZoneAttribute['spells'][] = ['spell_id' => $spellId];
+                    }
+                }
+
+                $newAttributes = ['spells' => $killZoneAttribute['spells']];
+            } elseif ($assignNotesToPulls && empty($killZoneAttribute['description'])) {
+                // A pull holds one description - any further notes are rendered on the map as usual
+                $newAttributes = ['description' => $details[4]];
+            }
+
+            if ($newAttributes !== null) {
+                $importStringObjects->getKillZoneAttributes()->put(
+                    $killZoneIndex,
+                    array_merge($killZoneAttribute, $newAttributes),
                 );
 
-                if ($this->coordinatesService->distanceBetweenPoints(
-                    $enemyIngameXY->getX(),
-                    $ingameXY->getX(),
-                    $enemyIngameXY->getY(),
-                    $ingameXY->getY(),
-                ) < self::IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS) {
-                    $bloodLustNames = [
-                        'bloodlust',
-                        'heroism',
-                        'fury of the ancients',
-                        'time warp',
-                        'timewarp',
-                        'ancient hysteria',
-                    ];
-
-                    // If the user wants to put heroism/bloodlust on this pull, directly assign it instead
-                    $commentLower = strtolower(trim((string)$details[4]));
-                    if (in_array($commentLower, $bloodLustNames)) {
-                        $spellId = 0;
-
-                        if ($commentLower === 'bloodlust') {
-                            $spellId = Spell::SPELL_BLOODLUST;
-                        } elseif ($commentLower === 'heroism') {
-                            $spellId = Spell::SPELL_HEROISM;
-                        } elseif ($commentLower === 'fury of the aspects') { // @phpstan-ignore identical.alwaysFalse
-                            $spellId = Spell::SPELL_FURY_OF_THE_ASPECTS;
-                        } elseif ($commentLower === 'time warp' || $commentLower === 'timewarp') {
-                            $spellId = Spell::SPELL_TIME_WARP;
-                        } elseif ($commentLower === 'ancient hysteria') {
-                            $spellId = Spell::SPELL_ANCIENT_HYSTERIA;
-                        } elseif ($commentLower === 'drums') { // @phpstan-ignore identical.alwaysFalse
-                            $spellId = Spell::SPELL_THUNDEROUS_DRUMS;
-                        } elseif ($commentLower === 'primal rage') { // @phpstan-ignore identical.alwaysFalse
-                            $spellId = Spell::SPELL_PRIMAL_RAGE;
-                        } elseif ($commentLower === 'harriers cry') { // @phpstan-ignore identical.alwaysFalse
-                            $spellId = Spell::SPELL_HARRIERS_CRY;
-                        }
-
-                        $newAttributes = $killZoneAttribute['spells'][] = [
-                            'spell_id' => $spellId,
-                        ];
-                    } elseif ($assignNotesToPulls) {
-                        // Add it as a comment instead
-                        $newAttributes = ['description' => $details[4]];
-                    }
-
-                    // If a description was already set and we're trying to set it again..
-                    if (empty($newAttributes) || (!empty($killZoneAttribute['description']) && !empty($newAttributes['description']))) {
-                        // Tough luck - the pull was already assigned a description, can't do it again
-                        // But do render them on the map as usual
-                        break 2;
-                    }
-
-                    // Set description directly on the object
-                    $importStringObjects->getKillZoneAttributes()->put(
-                        $killZoneIndex,
-                        array_merge($killZoneAttribute, $newAttributes),
-                    );
-
-                    // Map icon was assigned to killzone instead - return, we're done
-                    return;
-                }
+                // Map icon was assigned to killzone instead - return, we're done
+                return;
             }
         }
 
@@ -385,6 +366,98 @@ class ObjectImporter
             // Bulk-inserted past MapIcon::setCommentAttribute()'s own stripping
             'comment' => new HtmlSanitizer()->stripAllTags((string)$details[4]),
         ], $latLng->toArray()));
+    }
+
+    /**
+     * The index of the kill zone with an enemy closest to $latLng, on the same floor and within
+     * IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS, or null if there is none.
+     */
+    private function findNearestKillZoneIndex(ImportStringObjects $importStringObjects, LatLng $latLng): ?int
+    {
+        $floor           = $latLng->getFloor();
+        $ingameXY        = $this->coordinatesService->calculateIngameLocationForMapLocation($latLng);
+        $nearestIndex    = null;
+        $nearestDistance = (float)self::IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS;
+
+        foreach ($importStringObjects->getKillZoneAttributes() as $killZoneIndex => $killZoneAttribute) {
+            foreach ($killZoneAttribute['killZoneEnemies'] as $killZoneEnemy) {
+                /** @var Enemy $enemy */
+                $enemy = $killZoneEnemy['enemy'];
+                if ($enemy->floor_id !== $floor->id) {
+                    continue;
+                }
+
+                $distance = $this->coordinatesService->distanceIngameXY(
+                    $this->coordinatesService->calculateIngameLocationForMapLocation(
+                        new LatLng($enemy->lat, $enemy->lng, $floor),
+                    ),
+                    $ingameXY,
+                );
+
+                if ($distance < $nearestDistance) {
+                    $nearestDistance = $distance;
+                    $nearestIndex    = $killZoneIndex;
+                }
+            }
+        }
+
+        return $nearestIndex;
+    }
+
+    /**
+     * @param  array<string, int>   $spellIdsByName
+     * @return array<int, int>|null The IDs of the spells if every non-empty line of the comment is a spell name, null otherwise.
+     */
+    private function resolveSpellIdsFromComment(string $comment, array $spellIdsByName): ?array
+    {
+        $spellIds = [];
+
+        foreach (preg_split('/\R/u', $comment) ?: [] as $line) {
+            $line = mb_strtolower(trim($line));
+            if ($line === '') {
+                continue;
+            }
+
+            if (!isset($spellIdsByName[$line])) {
+                return null;
+            }
+
+            $spellIds[] = $spellIdsByName[$line];
+        }
+
+        return $spellIds === [] ? null : array_values(array_unique($spellIds));
+    }
+
+    /**
+     * Every spell that can be assigned to a pull, by its lower-cased name in both en_US and the current locale -
+     * the MDT export writes a pull's spells in the exporting user's locale.
+     *
+     * @return array<string, int>
+     */
+    private function getSpellIdsByName(): array
+    {
+        $result = self::SPELL_IDS_BY_ALIAS;
+
+        $spells = Spell::query()
+            ->where('selectable', true)
+            ->orWhereIn('id', Spell::BLOODLUSTY_SPELLS)
+            ->orderBy('id')
+            ->get(['id', 'name'])
+            // Bloodlust effects claim a name shared with any other spell
+            ->sortBy(static fn(Spell $spell): int => in_array($spell->id, Spell::BLOODLUSTY_SPELLS, true) ? 0 : 1);
+
+        foreach ($spells as $spell) {
+            foreach ([__($spell->name, [], 'en_US'), __($spell->name)] as $translatedName) {
+                // An untranslated name comes back as its translation key
+                if (!is_string($translatedName) || $translatedName === $spell->name) {
+                    continue;
+                }
+
+                $result[mb_strtolower(trim($translatedName))] ??= $spell->id;
+            }
+        }
+
+        return $result;
     }
 
     /**
