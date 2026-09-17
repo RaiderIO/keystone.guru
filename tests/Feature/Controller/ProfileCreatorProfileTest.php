@@ -271,6 +271,75 @@ final class ProfileCreatorProfileTest extends PublicTestCase
      * Pinning somebody else's collection would surface it from a profile that does not own it.
      */
     #[Test]
+    public function updateCreatorProfile_givenAFailedValidation_keepsTheSubmittedPins(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $storedCollection    = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
+        $submittedCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
+
+        $storedRoute    = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null]);
+        $submittedRoute = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null]);
+
+        $collectionPin                              = new UserPinnedDungeonRouteCollection();
+        $collectionPin->user_id                     = $creator->id;
+        $collectionPin->dungeon_route_collection_id = $storedCollection->id;
+        $collectionPin->order                       = 0;
+        $collectionPin->save();
+
+        $routePin                   = new UserPinnedDungeonRoute();
+        $routePin->user_id          = $creator->id;
+        $routePin->dungeon_route_id = $storedRoute->id;
+        $routePin->order            = 0;
+        $routePin->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)
+                ->from(route('profile.edit'))
+                ->followingRedirects()
+                ->patch(route('profile.creator.update'), [
+                    'social_links' => [
+                        UserSocialLinkPlatform::Twitch->value => 'https://evil.example.com/someone',
+                    ],
+                    'pinned_dungeon_routes'            => [$submittedRoute->id],
+                    'pinned_dungeon_route_collections' => [$submittedCollection->id],
+                ]);
+
+            // Assert
+            $response->assertOk();
+            $content = (string)$response->getContent();
+
+            foreach ([$submittedRoute->id, $submittedCollection->id] as $submittedId) {
+                $this->assertMatchesRegularExpression(
+                    sprintf('/value="%d"\s+selected/', $submittedId),
+                    $content,
+                    'The submitted pin must stay selected after a failed validation',
+                );
+            }
+
+            foreach ([$storedRoute->id, $storedCollection->id] as $storedId) {
+                $this->assertDoesNotMatchRegularExpression(
+                    sprintf('/value="%d"\s+selected/', $storedId),
+                    $content,
+                    'A pin the user just deselected must not come back',
+                );
+            }
+        } finally {
+            $collectionPin->delete();
+            $routePin->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $submittedCollection->delete();
+            $storedCollection->delete();
+            $submittedRoute->delete();
+            $storedRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function updateCreatorProfile_givenACollectionOwnedByAnotherUser_failsValidation(): void
     {
         // Arrange

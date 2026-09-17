@@ -19,6 +19,13 @@ use Illuminate\Support\Collection;
 $ownDungeonRouteCollections      ??= collect();
 $pinnedDungeonRouteCollectionIds ??= [];
 
+// After a failed validation both pickers must show what was submitted, not what is stored - otherwise
+// resubmitting the corrected form silently saves the previous pins. An empty submission stays empty
+if (session()->hasOldInput()) {
+    $pinnedDungeonRouteIds           = array_map(intval(...), (array)old('pinned_dungeon_routes', []));
+    $pinnedDungeonRouteCollectionIds = array_map(intval(...), (array)old('pinned_dungeon_route_collections', []));
+}
+
 $existingSocialLinks = $user->socialLinks->keyBy('platform');
 ?>
 <div class="tab-pane fade" id="creator" role="tabpanel" aria-labelledby="creator-tab">
