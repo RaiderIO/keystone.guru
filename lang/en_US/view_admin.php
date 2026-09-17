@@ -729,6 +729,8 @@ return [
             'combatlog_route_coverage_description'                    => 'Per dungeon of the current season, how close the Auto Route Creator gets to 100% enemy forces.',
             'combatlog_route_enemy_failures'                          => 'CombatLogRoute enemy failure heatmap',
             'combatlog_route_enemy_failures_description'              => 'Heatmap of positions where the CombatLogRoute builder could not resolve enemies.',
+            'combatlog_route_enemy_resolutions'                       => 'CombatLogRoute enemy resolution distance heatmap',
+            'combatlog_route_enemy_resolutions_description'           => 'Heatmap of how far off the CombatLogRoute builder\'s successful enemy matches were - hot spots are enemies that are likely placed wrong.',
             'combatlog_run_data'                                      => 'Prune combat log run data',
             'combatlog_run_data_description'                          => 'NULL post_body for old seasons to reclaim disk space.',
             'subheader_wagogg'                                        => 'Wago.gg',
@@ -825,6 +827,10 @@ return [
                 'enemy_failures' => [
                     'title'  => 'CombatLogRoute enemy failure heatmap',
                     'header' => 'CombatLogRoute enemy failure heatmap',
+                ],
+                'enemy_resolutions' => [
+                    'title'  => 'CombatLogRoute enemy resolution distance heatmap',
+                    'header' => 'CombatLogRoute enemy resolution distance heatmap',
                 ],
                 'coverage' => [
                     'title'                 => 'ARC enemy forces coverage',

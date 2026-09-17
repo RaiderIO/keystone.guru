@@ -33,6 +33,8 @@ class HeatPlugin extends MapPlugin {
         this.weightMaxByFloorId = [];
         this.mouseTooltip = null;
         this.mouseTooltipEnabled = true;
+        /** How the renderer folds together cells that land in the same screen space bucket - see setCombineMode() */
+        this.combineMode = HEAT_COMBINE_MODE_SUM;
 
         let state = getState();
 
@@ -188,6 +190,8 @@ class HeatPlugin extends MapPlugin {
             pane: this.showOnTop ? 'tooltipPane' : 'overlayPane',
         }));
 
+        this._applyCombineMode();
+
         this.heatLayer.addTo(this.map.leafletMap);
         // The map defers plugin loading until it has a non-zero size, so floor data may have already
         // arrived (and been stored but not rendered while heatLayer was still null); (re)apply it now.
@@ -327,10 +331,114 @@ class HeatPlugin extends MapPlugin {
 
         this.setLatLngs([]);
     }
+
+    /**
+     * Weights that are a distance rather than a count need HEAT_COMBINE_MODE_MAX: the renderer folds every point
+     * that lands in the same screen space bucket into one, and adding two distances up produces a value that is
+     * neither of them - a cluster of moderate cells then outshines a single far outlier, and the tooltip, which
+     * reports the real cell value, disagrees with the colour under the cursor. Adding counts up is correct, so
+     * HEAT_COMBINE_MODE_SUM stays the default.
+     *
+     * @param mode {String}
+     */
+    setCombineMode(mode) {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
+        this.combineMode = mode;
+        this._applyCombineMode();
+
+        if (this.heatLayer !== null) {
+            this.heatLayer.redraw();
+        }
+    }
+
+    /**
+     * The override is assigned to the layer instance rather than to L.HeatLayer: the class only exists once the
+     * vendor bundle has run, which is not guaranteed at the time this file is evaluated.
+     * @private
+     */
+    _applyCombineMode() {
+        if (this.heatLayer === null) {
+            return;
+        }
+
+        if (this.combineMode === HEAT_COMBINE_MODE_MAX) {
+            this.heatLayer._redraw = heatLayerRedrawCombiningByMax;
+        } else {
+            delete this.heatLayer._redraw;
+        }
+    }
+}
+
+/**
+ * L.HeatLayer::_redraw, with the bucket merge keeping the strongest value instead of adding the values up. The rest
+ * of the geometry - bucket size, the two cell offset, the bounds check - matches the vendored implementation, which
+ * this must stay in step with.
+ */
+function heatLayerRedrawCombiningByMax() {
+    if (!this._map) {
+        return;
+    }
+
+    const radius   = this._heat._r;
+    const size     = this._map.getSize();
+    const bounds   = new L.Bounds(L.point([-radius, -radius]), size.add([radius, radius]));
+    const cellSize = radius / 2;
+    const panePos  = this._map._getMapPanePos();
+    const offsetX  = panePos.x % cellSize;
+    const offsetY  = panePos.y % cellSize;
+
+    const grid = [];
+    let max    = 1;
+
+    for (let i = 0; i < this._latlngs.length; i++) {
+        const latLng = this._latlngs[i];
+        const point  = this._map.latLngToContainerPoint(latLng);
+        const x      = Math.floor((point.x - offsetX) / cellSize) + 2;
+        const y      = Math.floor((point.y - offsetY) / cellSize) + 2;
+        const value  = latLng.alt !== undefined ? latLng.alt : (latLng[2] !== undefined ? +latLng[2] : 1);
+
+        grid[y] = grid[y] || [];
+        const cell = grid[y][x];
+
+        if (cell === undefined) {
+            const newCell = [point.x, point.y, value];
+            newCell.p     = point;
+            grid[y][x]    = newCell;
+        } else if (value > cell[2]) {
+            cell[0] = point.x;
+            cell[1] = point.y;
+            cell[2] = value;
+            cell.p  = point;
+        }
+
+        if (grid[y][x][2] > max) {
+            max = grid[y][x][2];
+        }
+    }
+
+    const data = [];
+    for (let y = 0; y < grid.length; y++) {
+        if (!grid[y]) {
+            continue;
+        }
+
+        for (let x = 0; x < grid[y].length; x++) {
+            const cell = grid[y][x];
+            if (cell && bounds.contains(cell.p)) {
+                data.push([Math.round(cell[0]), Math.round(cell[1]), Math.min(cell[2], max)]);
+            }
+        }
+    }
+
+    this._heat.max(max);
+    this._heat.data(data).draw(this.options.minOpacity);
+    this._frame = null;
 }
 
 // Guarded export for the test runner (Vitest). This is a no-op in the browser,
 // where `module` is undefined, so it does not affect the concatenated bundle.
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = HeatPlugin;
+    module.exports.heatLayerRedrawCombiningByMax = heatLayerRedrawCombiningByMax;
 }

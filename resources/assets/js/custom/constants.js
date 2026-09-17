@@ -253,6 +253,10 @@ const COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION = 'player_position';
 const COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION = 'enemy_position';
 const COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_FAILURE = 'enemy_failure';
 
+/** How the heatmap renderer folds together points that share a screen space bucket - see HeatPlugin::setCombineMode */
+const HEAT_COMBINE_MODE_SUM = 'sum';
+const HEAT_COMBINE_MODE_MAX = 'max';
+
 // User roles
 const USER_ROLE_ADMIN = 'admin';
 const USER_ROLE_INTERNAL_TEAM = 'internal_team';
