@@ -3,26 +3,21 @@
 namespace App\Service\MDT;
 
 use App\Logic\MDT\Conversion;
-use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\IO\MDTStringFormat;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Enemy;
-use App\Models\KillZone\KillZone;
-use App\Models\Mapping\MappingVersion;
-use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Export\ArrowExporter;
+use App\Service\MDT\Export\EnemyAssignmentExporter;
 use App\Service\MDT\Export\KillZoneDescriptionExporter;
 use App\Service\MDT\Export\KillZoneSpellsExporter;
 use App\Service\MDT\Export\LineExporter;
 use App\Service\MDT\Export\MapIconExporter;
+use App\Service\MDT\Export\PullExporter;
 use App\Service\MDT\Logging\MDTExportStringServiceLoggingInterface;
 use Exception;
 use Illuminate\Support\Collection;
-use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * This file handles any and all conversion from DungeonRoutes to MDT Export strings and vice versa.
@@ -39,13 +34,13 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     private DungeonRoute $dungeonRoute;
 
     public function __construct(
-        private readonly CacheServiceInterface       $cacheService,
-        private readonly CoordinatesServiceInterface $coordinatesService,
         private readonly MapIconExporter             $mapIconExporter,
         private readonly LineExporter                $lineExporter,
         private readonly ArrowExporter               $arrowExporter,
         private readonly KillZoneDescriptionExporter $killZoneDescriptionExporter,
         private readonly KillZoneSpellsExporter      $killZoneSpellsExporter,
+        private readonly PullExporter                $pullExporter,
+        private readonly EnemyAssignmentExporter     $enemyAssignmentExporter,
         MDTExportStringServiceLoggingInterface       $log,
     ) {
         parent::__construct($log);
@@ -80,141 +75,6 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
         foreach ($this->killZoneSpellsExporter->export($this->dungeonRoute, $warnings) as $item) {
             $result[$currentObjectIndex++] = $item;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param  Collection<int, ImportWarning> $warnings
-     * @return array<int, mixed>
-     *
-     * @throws InvalidArgumentException
-     */
-    private function extractPulls(MappingVersion $mappingVersion, Collection $warnings): array
-    {
-        $result = [];
-
-        // Get a list of MDT enemies as Keystone.guru enemies - we need this to know how to convert
-        /** @var Collection<int, Enemy> $mdtEnemies */
-        $mdtEnemies = new MDTDungeon($this->cacheService, $this->coordinatesService, $this->dungeonRoute->dungeon)
-            ->getClonesAsEnemies($mappingVersion, $this->dungeonRoute->dungeon->floors);
-
-        // Lua is 1 based, not 0 based
-        $pullIndex = 1;
-        /** @var Collection<int, KillZone> $killZones */
-        $killZones = $this->dungeonRoute->loadMissing(['killZones.enemies.floor'])->killZones;
-        foreach ($killZones as $killZone) {
-            $pull = [];
-
-            // Lua is 1 based, not 0 based
-            $enemyIndex      = 1;
-            $enemiesAdded    = 0;
-            $killZoneEnemies = $killZone->getEnemies();
-            foreach ($killZoneEnemies as $enemy) {
-                // MDT does not handle prideful NPCs
-                if ($enemy->npc->isPrideful()) {
-                    continue;
-                }
-
-                // Find the MDT enemy - we need to know the mdt_npc_index
-                $mdtNpcIndex = -1;
-                foreach ($mdtEnemies as $mdtEnemyCandidate) {
-                    if ($mdtEnemyCandidate->npc_id === $enemy->getMdtNpcId() && $mdtEnemyCandidate->mdt_id === $enemy->mdt_id) {
-                        $mdtNpcIndex = $mdtEnemyCandidate->mdt_npc_index;
-                        break;
-                    }
-                }
-
-                // If we couldn't find the enemy in MDT..
-                if ($mdtNpcIndex === -1) {
-                    // Add a warning as long as it's not a boss - we don't particularly care since they have 0 count anyways
-                    if (!$enemy->npc->isBoss()) {
-                        $warnings->push(new ImportWarning(
-                            sprintf(__('services.mdt.io.export_string.category.pull'), $pullIndex),
-                            sprintf(__('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), __($enemy->npc->name), $enemy->id, $enemy->getMdtNpcId()),
-                            ['details' => __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')],
-                        ));
-                    }
-
-                    continue;
-                }
-
-                // Create an array if it didn't exist yet
-                if (!isset($pull[$mdtNpcIndex])) {
-                    $pull[$mdtNpcIndex] = [];
-                }
-
-                // For this enemy, kill this clone
-                $pull[$mdtNpcIndex][] = $enemy->mdt_id;
-                $enemiesAdded++;
-            }
-
-            // Do not add an empty pull if the killed enemy in our killzone was removed because it didn't exist in MDT, and that caused the pull to be empty
-            if ($killZoneEnemies->count() !== 0 && $enemiesAdded === 0) {
-                $warnings->push(new ImportWarning(
-                    sprintf(__('services.mdt.io.export_string.category.pull'), $pullIndex),
-                    __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_caused_empty_pull'),
-                ));
-
-                continue;
-            }
-
-            $pull['color'] = str_starts_with($killZone->color, '#') ? substr($killZone->color, 1) : $killZone->color;
-
-            $result[$pullIndex++] = $pull;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Builds MDT's raid target icon assignments ({mdtNpcIndex: {mdtCloneIndex: raidTargetIndex}}) -
-     * the counterpart consumed by RaidMarkerImporter on import - from this route's raid markers.
-     * npc_id/mdt_id on DungeonRouteEnemyRaidMarker are already the durable, mapping-version-current
-     * identity (see #1453), so they're used directly instead of re-resolving through the enemy_id.
-     *
-     * @param  Collection<int, ImportWarning> $warnings
-     * @return array<int, mixed>
-     */
-    private function extractEnemyAssignments(MappingVersion $mappingVersion, Collection $warnings): array
-    {
-        $result = [];
-
-        $enemyRaidMarkers = $this->dungeonRoute->enemyRaidMarkers;
-        if ($enemyRaidMarkers->isEmpty()) {
-            return $result;
-        }
-
-        /** @var Collection<int, Enemy> $mdtEnemies */
-        $mdtEnemies = new MDTDungeon($this->cacheService, $this->coordinatesService, $this->dungeonRoute->dungeon)
-            ->getClonesAsEnemies($mappingVersion, $this->dungeonRoute->dungeon->floors);
-
-        foreach ($enemyRaidMarkers as $enemyRaidMarker) {
-            $mdtNpcIndex = -1;
-            foreach ($mdtEnemies as $mdtEnemyCandidate) {
-                if ($mdtEnemyCandidate->npc_id === $enemyRaidMarker->npc_id && $mdtEnemyCandidate->mdt_id === $enemyRaidMarker->mdt_id) {
-                    $mdtNpcIndex = $mdtEnemyCandidate->mdt_npc_index;
-                    break;
-                }
-            }
-
-            if ($mdtNpcIndex === -1) {
-                $warnings->push(new ImportWarning(
-                    __('services.mdt.io.export_string.category.raid_markers'),
-                    sprintf(
-                        __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_raid_marker'),
-                        $enemyRaidMarker->raidMarker->name,
-                        $enemyRaidMarker->npc_id,
-                    ),
-                    ['details' => __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')],
-                ));
-
-                continue;
-            }
-
-            $result[$mdtNpcIndex] ??= [];
-            $result[$mdtNpcIndex][$enemyRaidMarker->mdt_id] = $enemyRaidMarker->raid_marker_id;
         }
 
         return $result;
@@ -265,8 +125,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                         'riftOffsets' => [
 
                         ],
-                        'pulls'            => $this->extractPulls($this->dungeonRoute->mappingVersion, $warnings),
-                        'enemyAssignments' => $this->extractEnemyAssignments($this->dungeonRoute->mappingVersion, $warnings),
+                        'pulls'            => $this->pullExporter->export($this->dungeonRoute, $this->dungeonRoute->mappingVersion, $warnings),
+                        'enemyAssignments' => $this->enemyAssignmentExporter->export($this->dungeonRoute, $this->dungeonRoute->mappingVersion, $warnings),
                         'currentSublevel'  => 1,
                     ],
                     'text' => $this->dungeonRoute->title,
