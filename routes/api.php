@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\InternalTeam\Cache\APICacheController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogEnemyFailureController;
+use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogEnemyResolutionController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogObservationController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRouteController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRunController;
@@ -35,6 +36,7 @@ Route::prefix('v1')->group(static function () {
         Route::middleware(['api_role:admin|ai_agent'])->group(static function () {
             Route::get('seasons/{season}/runs/{runId}/segments', new APICombatLogRunController()->segments(...))->name('api.v1.combatlog.run.segments');
             Route::get('enemy-failures/{dungeon}', new APICombatLogEnemyFailureController()->index(...))->name('api.v1.combatlog.enemy_failures.index');
+            Route::get('enemy-resolutions/{dungeon}', new APICombatLogEnemyResolutionController()->index(...))->name('api.v1.combatlog.enemy_resolutions.index');
             Route::get('route/{dungeonRoute}/post-body', new APICombatLogRouteController()->postBody(...))->name('api.v1.combatlog.route.post_body');
             Route::prefix('observations')->group(static function () {
                 Route::middleware('throttle:api-combatlog-observations-density')->get('density', new APICombatLogObservationController()->density(...))->name('api.v1.combatlog.observations.density');

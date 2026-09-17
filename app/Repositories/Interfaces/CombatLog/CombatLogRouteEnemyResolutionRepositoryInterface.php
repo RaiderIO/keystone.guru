@@ -3,6 +3,7 @@
 namespace App\Repositories\Interfaces\CombatLog;
 
 use App\Models\CombatLog\CombatLogRouteEnemyResolution;
+use App\Models\Dungeon;
 use App\Repositories\BaseRepositoryInterface;
 use Carbon\CarbonInterface;
 use Illuminate\Support\Collection;
@@ -24,4 +25,21 @@ interface CombatLogRouteEnemyResolutionRepositoryInterface extends BaseRepositor
      * Deletes the resolutions recorded before $cutoff, in batches, and answers how many rows went.
      */
     public function deleteOlderThan(CarbonInterface $cutoff, int $batchSize): int;
+
+    /**
+     * A page of the dungeon's resolutions in ascending id order, starting after $afterId. Fetches one row MORE than
+     * $limit so the caller can tell whether another page exists (pop it before handing the page to anyone).
+     *
+     * @param  int[]|null                                     $npcIds
+     * @return Collection<int, CombatLogRouteEnemyResolution>
+     */
+    public function getPageAfterId(
+        Dungeon          $dungeon,
+        int              $afterId,
+        int              $limit,
+        ?int             $mappingVersionId = null,
+        ?array           $npcIds = null,
+        ?CarbonInterface $since = null,
+        ?float           $minDistance = null,
+    ): Collection;
 }
