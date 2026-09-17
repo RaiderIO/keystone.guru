@@ -223,7 +223,7 @@ return [
             'shared_by'      => 'Zaubereinträge mit dieser Änderung: :count',
         ],
         'tuning_build_released_at' => [
-            'went_live' => '',
+            'went_live' => 'Live gegangen am :date',
         ],
     ],
     'tuning' => [
