@@ -44,7 +44,12 @@ class CombatLogRouteEnemyResolutionHeatmapResult implements Arrayable
         private readonly int                          $minSamples,
         private readonly array                        $dungeonRoutes = [],
     ) {
-        $this->useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+        // As in the map itself: a mapping version without a facade of its own renders the real floors whatever the
+        // viewer's style says, and the cells have to follow the floors that are actually on screen. The facade floor
+        // has to exist too - converting cells onto a floor that is never drawn puts them nowhere.
+        $this->useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE &&
+            $mappingVersion->facade_enabled &&
+            $dungeon->floors->firstWhere('facade', true) !== null;
     }
 
     public function toArray(): array

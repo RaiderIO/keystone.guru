@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteDeleteEnemyFailuresFormRequest;
 use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteDeleteEnemyResolutionsFormRequest;
 use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteGetEnemyFailuresFormRequest;
+use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteGetEnemyResolutionLinesFormRequest;
 use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteGetEnemyResolutionsFormRequest;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\CombatLog\CombatLogRouteEnemyResolution;
@@ -57,6 +58,21 @@ class AjaxAdminCombatLogRouteController extends Controller
                 ->toArray(),
             StatusCode::OK,
         );
+    }
+
+    public function getEnemyResolutionLines(
+        AjaxAdminCombatLogRouteGetEnemyResolutionLinesFormRequest $request,
+        CombatLogRouteEnemyResolutionServiceInterface             $combatLogRouteEnemyResolutionService,
+    ): JsonResponse {
+        return response()->json([
+            'data' => $combatLogRouteEnemyResolutionService->getResolutionLines(
+                $request->dungeon(),
+                $request->mappingVersion(),
+                $request->validated('npc_id'),
+                $request->minDistance(),
+                $request->limit(),
+            ),
+        ], StatusCode::OK);
     }
 
     public function deleteEnemyResolutions(AjaxAdminCombatLogRouteDeleteEnemyResolutionsFormRequest $request): JsonResponse

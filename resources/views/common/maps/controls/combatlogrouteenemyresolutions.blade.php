@@ -25,6 +25,16 @@ $minDistanceRecorded = (int)config('keystoneguru.enemy_resolution.record_min_dis
     'mappingVersionId'               => $mappingVersion->id,
     'pageUrl'                        => route('admin.tools.combatlog.route.enemy_resolutions.view'),
     'getEnemyResolutionsUrl'         => route('ajax.admin.combatlogroute.enemy_resolutions'),
+    'linesUrl'                       => route('ajax.admin.combatlogroute.enemy_resolutions.lines'),
+    'showLinesSelector'              => '#combatlogroute_enemy_resolutions_show_lines',
+    'linePopupTexts'                 => [
+        'npc'           => __('view_common.maps.controls.combatlogrouteenemyresolutions.line_popup.npc'),
+        'distance'      => __('view_common.maps.controls.combatlogrouteenemyresolutions.line_popup.distance'),
+        'weighted'      => __('view_common.maps.controls.combatlogrouteenemyresolutions.line_popup.weighted'),
+        'route'         => __('view_common.maps.controls.combatlogrouteenemyresolutions.line_popup.route'),
+        'importedRoute' => __('view_common.maps.controls.combatlogrouteenemyresolutions.line_popup.imported_route'),
+        'noRoute'       => __('view_common.maps.controls.combatlogrouteenemyresolutions.line_popup.no_route'),
+    ],
     'deleteUrl'                      => route('ajax.admin.combatlogroute.enemy_resolutions.delete'),
     'filterMappingVersionIdSelector' => '#combatlogroute_enemy_resolutions_filter_mapping_version_id',
     'filterNpcIdSelector'            => '#combatlogroute_enemy_resolutions_filter_npc_id',
@@ -86,6 +96,16 @@ $minDistanceRecorded = (int)config('keystoneguru.enemy_resolution.record_min_dis
                    id="combatlogroute_enemy_resolutions_filter_min_distance"
                    class="form-control"
                    placeholder="{{ $minDistanceRecorded }}">
+        </div>
+
+        <div class="form-check mb-1">
+            <input type="checkbox" class="form-check-input" id="combatlogroute_enemy_resolutions_show_lines" checked>
+            <label class="form-check-label" for="combatlogroute_enemy_resolutions_show_lines">
+                {{ __('view_common.maps.controls.combatlogrouteenemyresolutions.show_lines') }}
+            </label>
+        </div>
+        <div class="small text-muted mb-2">
+            {{ __('view_common.maps.controls.combatlogrouteenemyresolutions.lines_legend', ['count' => \App\Http\Requests\Ajax\AjaxAdminCombatLogRouteGetEnemyResolutionLinesFormRequest::LIMIT_DEFAULT]) }}
         </div>
 
         <div id="combatlogroute_enemy_resolutions_summary" class="small mb-2"></div>

@@ -499,6 +499,16 @@ return [
                 'clear_resolutions'       => 'Clear resolutions',
                 'clear_resolutions_title' => 'Delete all resolution records for this dungeon',
                 'matching_routes'         => 'Worst routes',
+                'show_lines'              => 'Show lines to the matched enemy',
+                'lines_legend'            => 'The :count worst matches of the current filter across every floor of this dungeon, from where the fight started to the enemy it was attributed to.',
+                'line_popup'              => [
+                    'npc'            => ':name (:id)',
+                    'distance'       => 'Resolved to enemy :enemy, :distance yd away',
+                    'weighted'       => 'Kill priority had the matcher judge it as :weighted yd',
+                    'route'          => 'Open route :key',
+                    'imported_route' => 'Recorded on :source, route :id there',
+                    'no_route'       => 'No route recorded for this match',
+                ],
             ],
             'header' => [
                 'toggle_navigation'              => 'Toggle navigation',
