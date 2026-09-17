@@ -22,6 +22,7 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\MDT\Export\Traits\ConvertsHtmlToMdtComment;
 use App\Service\MDT\Import\ObjectImporter;
 use App\Service\MDT\Logging\MDTExportStringServiceLoggingInterface;
 use Exception;
@@ -39,6 +40,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  */
 class MDTExportStringService extends MDTBaseService implements MDTExportStringServiceInterface
 {
+    use ConvertsHtmlToMdtComment;
     use RemembersToFile;
 
     /** @var int How far away do we create notes in MDT */
@@ -561,34 +563,6 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         }
 
         return $killZoneIds;
-    }
-
-    /**
-     * Convert HTML to a format MDT understands:
-     * - Replace <a href="...">...</a> with "(href)"
-     * - Strip all remaining HTML tags.
-     */
-    private function convertHtmlToMdtComment(?string $html): string
-    {
-        $html ??= '';
-
-        if ($html === '') {
-            return '';
-        }
-
-        // Replace anchors with "(href)"
-        $html = preg_replace_callback(
-            '/<a\b[^>]*?href=(?:"([^"]+)"|\'([^\']+)\')[^>]*>.*?<\/a>/i',
-            static function (array $matches): string {
-                $href = $matches[1] !== '' ? $matches[1] : $matches[2];
-
-                return sprintf('(%s)', $href);
-            },
-            $html,
-        );
-
-        // Strip any remaining HTML tags
-        return trim(strip_tags((string)$html));
     }
 
     /**
