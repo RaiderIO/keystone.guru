@@ -19,6 +19,7 @@ use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Export\ArrowExporter;
+use App\Service\MDT\Export\KillZoneDescriptionExporter;
 use App\Service\MDT\Export\LineExporter;
 use App\Service\MDT\Export\MapIconExporter;
 use App\Service\MDT\Export\Traits\ConvertsHtmlToMdtComment;
@@ -41,9 +42,6 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 {
     use ConvertsHtmlToMdtComment;
     use RemembersToFile;
-
-    /** @var int How far away do we create notes in MDT */
-    private const int KILL_ZONE_DESCRIPTION_DISTANCE = 3;
 
     /**
      * @var int Map units between a pull's lowest enemy and its spells note. MDT draws an enemy portrait ~13 and a
@@ -72,6 +70,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         private readonly MapIconExporter             $mapIconExporter,
         private readonly LineExporter                $lineExporter,
         private readonly ArrowExporter               $arrowExporter,
+        private readonly KillZoneDescriptionExporter $killZoneDescriptionExporter,
         MDTExportStringServiceLoggingInterface       $log,
     ) {
         parent::__construct($log);
@@ -100,7 +99,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $result[$currentObjectIndex++] = $item;
         }
 
-        foreach ($this->extractKillZoneDescriptionObjects() as $item) {
+        foreach ($this->killZoneDescriptionExporter->export($this->dungeonRoute, $warnings) as $item) {
             $result[$currentObjectIndex++] = $item;
         }
 
@@ -109,55 +108,6 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         }
 
         return $result;
-    }
-
-    /**
-     * For each kill zone, extract its description as an MDT note object.
-     *
-     * @return array<int, mixed>
-     */
-    private function extractKillZoneDescriptionObjects(): array
-    {
-        $objects = [];
-
-        $this->dungeonRoute->loadMissing(['killZones.enemies.floor', 'killZones.floor']);
-
-        foreach ($this->dungeonRoute->killZones as $killZone) {
-            if (!isset($killZone->description)) {
-                continue;
-            }
-
-            $floor  = $killZone->getDominantFloor();
-            $latLng = $killZone->getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(self::KILL_ZONE_DESCRIPTION_DISTANCE);
-
-            // Maybe the pull had no enemies
-            if ($latLng === null) {
-                continue;
-            }
-
-            if ($this->dungeonRoute->mappingVersion->facade_enabled) {
-                $latLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
-                    $this->dungeonRoute->mappingVersion,
-                    $latLng,
-                );
-            }
-
-            $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($latLng);
-
-            $objects[] = [
-                'n' => true,
-                'd' => [
-                    1 => $mdtCoordinates['x'],
-                    2 => $mdtCoordinates['y'],
-                    3 => $floor->mdt_sub_level ?? $floor->index,
-                    4 => true,
-                    5 => $this->convertHtmlToMdtComment($killZone->description),
-                    // MDT does not support HTML tags - get rid of them.
-                ],
-            ];
-        }
-
-        return $objects;
     }
 
     /**
