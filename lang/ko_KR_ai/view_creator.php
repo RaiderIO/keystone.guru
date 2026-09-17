@@ -8,10 +8,10 @@ return [
         'search_label'       => '제작자 검색',
         'search_placeholder' => '이름으로 검색',
         'search_submit'      => '검색',
-        'category_label'     => '',
-        'category_any'       => '',
+        'category_label'     => '제작자가 공유하는 컬렉션의 종류로 필터링',
+        'category_any'       => '모든 컬렉션',
         'empty'              => '아직 등록된 제작자가 없습니다.',
-        'empty_for_category' => '',
+        'empty_for_category' => '아직 ":category" 컬렉션을 공유하는 제작자가 없습니다.',
         'empty_for_search'   => '":search"와(과) 일치하는 제작자를 찾을 수 없습니다.',
     ],
     'featured' => [

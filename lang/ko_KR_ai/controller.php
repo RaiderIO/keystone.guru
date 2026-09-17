@@ -192,10 +192,10 @@ return [
     ],
     'dungeonroutecollection' => [
         'flash' => [
-            'collection_created'      => '',
-            'collection_updated'      => '',
-            'collection_deleted'      => '',
-            'max_collections_reached' => '',
+            'collection_created'      => '컬렉션이 생성되었습니다',
+            'collection_updated'      => '컬렉션이 업데이트되었습니다',
+            'collection_deleted'      => '컬렉션이 삭제되었습니다',
+            'max_collections_reached' => '컬렉션은 최대 :max개까지 만들 수 있습니다.',
         ],
     ],
     'profile' => [

@@ -15,7 +15,7 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => '이것은 귀하의 경로가 MDT에 알려진 NPC의 적을 처치하지만 Keystone.guru가 아직 그 적을 MDT 등가물과 연결하지 않았거나 MDT에 존재하지 않음을 나타냅니다.',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => '선택한 모든 적을 MDT에서 찾을 수 없어 비어 있는 풀로 인해 이 풀은 삭제되었습니다.',
                 'unable_to_find_mdt_enemy_for_kg_raid_marker'       => '%s 공격대 마커가 있는 적에 대한 MDT 등가물을 찾을 수 없습니다 (npc_id: %s).',
-                'unable_to_place_kill_zone_spells_note'             => '',
+                'unable_to_place_kill_zone_spells_note'             => '이 풀에 지정된 주문은 내보내지지 않았습니다. 해당 주문은 풀 옆의 MDT 메모로 내보내지지만, 이 풀에는 그 메모를 배치할 적이나 처치 구역이 없습니다.',
                 'route_title_contains_non_ascii_char_bug'           => '경로 제목에 아직 해결되지 않은 Keystone.guru의 인코딩 버그를 유발하는 것으로 알려진 비 ASCII 문자가 포함되어 있습니다.
                                                         경로 제목에서 문제가 되는 모든 문자가 제거되었습니다. 불편을 끼쳐드려 죄송하며 이 문제를 조속히 해결할 수 있기를 바랍니다.',
                 'route_title_contains_non_ascii_char_bug_details' => '기존 제목: %s, 새로운 제목: %s',

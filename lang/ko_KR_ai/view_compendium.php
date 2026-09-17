@@ -223,7 +223,7 @@ return [
             'shared_by'      => '이 변경을 공유하는 주문 기록 :count개',
         ],
         'tuning_build_released_at' => [
-            'went_live' => '',
+            'went_live' => ':date에 적용됨',
         ],
     ],
     'tuning' => [
