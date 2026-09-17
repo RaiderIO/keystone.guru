@@ -29,12 +29,7 @@ class CombatLogRouteEnemyFailureAnalysisResult implements Arrayable
         public readonly int                          $minRoutes,
         public readonly int                          $skippedCount,
     ) {
-        // As in the map itself: a mapping version without a facade of its own renders the real floors whatever the
-        // viewer's style says, and the cells have to follow the floors that are actually on screen. The facade floor
-        // has to exist too - converting cells onto a floor that is never drawn puts them nowhere.
-        $this->useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE &&
-            $mappingVersion->facade_enabled &&
-            $mappingVersion->dungeon->floors->firstWhere('facade', true) !== null;
+        $this->useFacade = User::shouldUseFacadeMapStyle($mappingVersion);
     }
 
     public function toArray(): array
