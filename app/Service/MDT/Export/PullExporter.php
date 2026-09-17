@@ -88,7 +88,7 @@ class PullExporter
                 $enemiesAdded++;
             }
 
-            // Do not add an empty pull if the killed enemy in our killzone was removed because it didn't exist in MDT, and that caused the pull to be empty
+            // A pull whose every enemy is unknown to MDT would export as an empty pull - warn instead
             if ($killZoneEnemies->count() !== 0 && $enemiesAdded === 0) {
                 $warnings->push(new ImportWarning(
                     sprintf(__('services.mdt.io.export_string.category.pull'), $pullIndex),

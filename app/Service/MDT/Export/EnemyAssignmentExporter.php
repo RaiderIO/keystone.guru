@@ -23,7 +23,7 @@ class EnemyAssignmentExporter
      * Builds MDT's raid target icon assignments ({mdtNpcIndex: {mdtCloneIndex: raidTargetIndex}}) -
      * the counterpart consumed by RaidMarkerImporter on import - from this route's raid markers.
      * npc_id/mdt_id on DungeonRouteEnemyRaidMarker are already the durable, mapping-version-current
-     * identity (see #1453), so they're used directly instead of re-resolving through the enemy_id.
+     * identity, so they are read directly rather than through the enemy_id.
      *
      * @param  Collection<int, ImportWarning> $warnings
      * @return array<int, mixed>
