@@ -17,7 +17,6 @@ use Illuminate\Support\Collection;
 @endsection
 
 @section('content')
-    @include('common.general.messages')
 
     <p class="text-body-secondary">
         {{ __('view_collection.index.description') }}
@@ -59,7 +58,7 @@ use Illuminate\Support\Collection;
                         @endif
                     </td>
                     <td>
-                        {{ __(sprintf('view_collection.published_state.%s', $dungeonRouteCollection->getPublishedStateName())) }}
+                        {{ __(sprintf('js.publish_state_title_%s', $dungeonRouteCollection->getPublishedStateName())) }}
                         @if($dungeonRouteCollection->team !== null)
                             ({{ $dungeonRouteCollection->team->name }})
                         @endif

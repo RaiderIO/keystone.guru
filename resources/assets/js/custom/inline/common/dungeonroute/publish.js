@@ -1,9 +1,7 @@
 /**
  * @typedef {Object} CommonDungeonroutePublishOptions
- * @property {string} publishSelector
- * @property {string[]} publishStates
+ * @property {string} publishSelector The server-rendered common.forms.publishedstate select.
  * @property {string[]} publishStatesAvailable
- * @property {string} publishStateSelected
  */
 
 /**
@@ -16,44 +14,6 @@ class CommonDungeonroutePublish extends InlineCode {
         let self = this;
 
         let $select = $(this.options.publishSelector);
-
-        let icons = {
-            [PUBLISHED_STATE_UNPUBLISHED]: 'fa-plane-arrival',
-            [PUBLISHED_STATE_TEAM]: 'fa-users',
-            [PUBLISHED_STATE_WORLD]: 'fa-globe',
-            [PUBLISHED_STATE_WORLD_WITH_LINK]: 'fa-link',
-        }
-
-        for (let index in this.options.publishStates) {
-            if (this.options.publishStates.hasOwnProperty(index)) {
-                let publishState = this.options.publishStates[index];
-
-                let template = Handlebars.templates['select_option_icon_subtext_template'];
-
-                let optionData = {
-                    value: publishState,
-                    text: lang.get(`js.publish_state_title_${publishState}`),
-                    selected: this.options.publishStateSelected === publishState ? 'selected' : false,
-                };
-
-                // If the user cannot activate an option for some reason, disable it but keep it visible
-                if (!this.options.publishStatesAvailable.includes(publishState)) {
-                    optionData.disabled = true;
-                }
-                let option = jQuery('<option>', optionData);
-
-
-                let data = {
-                    title: lang.get(`js.publish_state_title_${publishState}`),
-                    subtext: lang.get(`js.publish_state_subtext_${publishState}`),
-                    fa_class: icons[publishState]
-                };
-
-                $select.append(
-                    $(option).attr('data-content', template(data))
-                );
-            }
-        }
 
         // When changed, trigger the change in the backend too
         $select.bind('change', function () {

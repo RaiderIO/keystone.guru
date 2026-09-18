@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'published_state' => [
-        'unpublished'     => 'Only me',
-        'team'            => 'My team',
-        'world_with_link' => 'Everyone with the link',
-        'world'           => 'Everyone',
+    'published_state_subtext' => [
+        'unpublished'     => 'Only you may view this collection',
+        'team'            => 'Only members of the team chosen below may view this collection',
+        'world_with_link' => 'Anyone with the link may view this collection',
+        'world'           => 'Anyone may view this collection',
     ],
     'index' => [
         'title'                   => 'My collections',
