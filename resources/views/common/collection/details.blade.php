@@ -100,27 +100,26 @@ foreach ($teams as $team) {
     </div>
 @endif
 
-<div class="mb-3{{ $errors->has('dungeon_routes') ? ' has-error' : '' }}">
-    {{ html()->label(__('view_common.collection.details.dungeon_routes'), 'dungeon_routes') }}
+<div class="mb-3">
     @if($ownDungeonRoutes->isEmpty())
+        {{ html()->label(__('view_common.collection.details.dungeon_routes'), 'dungeon_routes') }}
         <p class="text-body-secondary">
             {{ __('view_common.collection.details.dungeon_routes_none') }}
         </p>
     @else
-        <select name="dungeon_routes[]" id="dungeon_routes" class="form-select"
-                multiple size="{{ min(15, max(3, $ownDungeonRoutes->count())) }}">
-            @foreach($ownDungeonRoutes as $ownDungeonRoute)
-                <option value="{{ $ownDungeonRoute->id }}"
-                        @if(in_array($ownDungeonRoute->id, $selectedDungeonRouteIds, true)) selected @endif>
-                    {{ $ownDungeonRoute->title }} &mdash; {{ __($ownDungeonRoute->dungeon?->name ?? '') }}
-                </option>
-            @endforeach
-        </select>
-        <small class="form-text text-body-secondary">
-            {{ __('view_common.collection.details.dungeon_routes_help', ['max' => DungeonRouteCollection::MAX_ROUTES]) }}
-        </small>
+        @include('common.forms.orderedselect', [
+            'id' => 'dungeon_routes',
+            'name' => 'dungeon_routes',
+            'label' => __('view_common.collection.details.dungeon_routes'),
+            'options' => $ownDungeonRoutes->mapWithKeys(static fn(DungeonRoute $ownDungeonRoute): array => [
+                $ownDungeonRoute->id => sprintf('%s — %s', $ownDungeonRoute->title, __($ownDungeonRoute->dungeon?->name ?? '')),
+            ])->all(),
+            'selectedIds' => $selectedDungeonRouteIds,
+            'max' => DungeonRouteCollection::MAX_ROUTES,
+            'help' => __('view_common.collection.details.dungeon_routes_help'),
+            'emptyText' => __('view_common.collection.details.dungeon_routes_empty'),
+        ])
     @endif
-    @include('common.forms.form-error', ['key' => 'dungeon_routes'])
 </div>
 
 {{ html()->input('submit')->value($dungeonRouteCollection !== null ? __('view_common.collection.details.save') : __('view_common.collection.details.submit'))->class('btn btn-info') }}

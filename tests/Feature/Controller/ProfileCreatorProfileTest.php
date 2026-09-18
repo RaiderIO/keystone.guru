@@ -312,21 +312,10 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             $response->assertOk();
             $content = (string)$response->getContent();
 
-            foreach ([$submittedRoute->id, $submittedCollection->id] as $submittedId) {
-                $this->assertMatchesRegularExpression(
-                    sprintf('/value="%d"\s+selected/', $submittedId),
-                    $content,
-                    'The submitted pin must stay selected after a failed validation',
-                );
-            }
-
-            foreach ([$storedRoute->id, $storedCollection->id] as $storedId) {
-                $this->assertDoesNotMatchRegularExpression(
-                    sprintf('/value="%d"\s+selected/', $storedId),
-                    $content,
-                    'A pin the user just deselected must not come back',
-                );
-            }
+            // The submitted pins stay listed after a failed validation, and the ones the user
+            // just removed do not come back
+            $this->assertSame([$submittedRoute->id], $this->listedIds($content, 'pinned_dungeon_routes'));
+            $this->assertSame([$submittedCollection->id], $this->listedIds($content, 'pinned_dungeon_route_collections'));
         } finally {
             $collectionPin->delete();
             $routePin->delete();
@@ -335,6 +324,101 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             $storedCollection->delete();
             $submittedRoute->delete();
             $storedRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenPinsStoredInNonAlphabeticalOrder_listsThemInStoredOrder(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $alphaRoute = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null, 'title' => 'ZzTestAlpha']);
+        $bravoRoute = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null, 'title' => 'ZzTestBravo']);
+
+        $alphaCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id, 'name' => 'ZzTestAlpha']);
+        $bravoCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id, 'name' => 'ZzTestBravo']);
+
+        foreach ([$bravoRoute, $alphaRoute] as $order => $dungeonRoute) {
+            $routePin                   = new UserPinnedDungeonRoute();
+            $routePin->user_id          = $creator->id;
+            $routePin->dungeon_route_id = $dungeonRoute->id;
+            $routePin->order            = $order;
+            $routePin->save();
+        }
+
+        foreach ([$bravoCollection, $alphaCollection] as $order => $dungeonRouteCollection) {
+            $collectionPin                              = new UserPinnedDungeonRouteCollection();
+            $collectionPin->user_id                     = $creator->id;
+            $collectionPin->dungeon_route_collection_id = $dungeonRouteCollection->id;
+            $collectionPin->order                       = $order;
+            $collectionPin->save();
+        }
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.edit'));
+
+            // Assert
+            $response->assertOk();
+            $content = (string)$response->getContent();
+            $this->assertSame([$bravoRoute->id, $alphaRoute->id], $this->listedIds($content, 'pinned_dungeon_routes'));
+            $this->assertSame(
+                [$bravoCollection->id, $alphaCollection->id],
+                $this->listedIds($content, 'pinned_dungeon_route_collections'),
+            );
+        } finally {
+            UserPinnedDungeonRoute::where('user_id', $creator->id)->delete();
+            UserPinnedDungeonRouteCollection::where('user_id', $creator->id)->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $bravoCollection->delete();
+            $alphaCollection->delete();
+            $bravoRoute->delete();
+            $alphaRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function updateCreatorProfile_givenPinsInNonAlphabeticalOrder_storesThemInSubmittedOrder(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $alphaRoute = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null, 'title' => 'ZzTestAlpha']);
+        $bravoRoute = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null, 'title' => 'ZzTestBravo']);
+
+        $alphaCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id, 'name' => 'ZzTestAlpha']);
+        $bravoCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id, 'name' => 'ZzTestBravo']);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'pinned_dungeon_routes'            => [$bravoRoute->id, $alphaRoute->id],
+                'pinned_dungeon_route_collections' => [$bravoCollection->id, $alphaCollection->id],
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $this->assertSame(
+                [$bravoRoute->id, $alphaRoute->id],
+                $creator->pinnedDungeonRoutes()->pluck('dungeon_route_id')->all(),
+            );
+            $this->assertSame(
+                [$bravoCollection->id, $alphaCollection->id],
+                $creator->pinnedDungeonRouteCollections()->pluck('dungeon_route_collection_id')->all(),
+            );
+        } finally {
+            UserPinnedDungeonRoute::where('user_id', $creator->id)->delete();
+            UserPinnedDungeonRouteCollection::where('user_id', $creator->id)->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $bravoCollection->delete();
+            $alphaCollection->delete();
+            $bravoRoute->delete();
+            $alphaRoute->delete();
             $creator->delete();
         }
     }
@@ -766,5 +850,21 @@ final class ProfileCreatorProfileTest extends PublicTestCase
         $user->addRole(Role::ROLE_USER);
 
         return $user;
+    }
+
+    /**
+     * The ids the ordered pick list renders for a field, in list order. Its row template carries id 0.
+     *
+     * @return array<int, int>
+     */
+    private function listedIds(string $content, string $name): array
+    {
+        preg_match_all(
+            sprintf('/<input type="hidden" name="%s\[\]" value="(\d+)">/', preg_quote($name, '/')),
+            $content,
+            $matches,
+        );
+
+        return array_values(array_filter(array_map(intval(...), $matches[1])));
     }
 }

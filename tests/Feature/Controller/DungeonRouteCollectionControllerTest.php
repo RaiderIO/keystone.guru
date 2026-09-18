@@ -227,10 +227,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $this->assertMatchesRegularExpression(
-                sprintf('/<option value="%d"\s+selected\s*>/', $dungeonRoute->id),
-                $response->getContent(),
-            );
+            $this->assertSame([$dungeonRoute->id], $this->listedIds((string)$response->getContent(), 'dungeon_routes'));
             $this->assertSame(0, DungeonRouteCollection::where('user_id', $creator->id)->count());
         } finally {
             Feature::for($creator)->forget(CreatorProfiles::class);
@@ -266,14 +263,157 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $this->assertDoesNotMatchRegularExpression(
-                sprintf('/<option value="%d"\s+selected\s*>/', $dungeonRoute->id),
-                $response->getContent(),
-            );
+            $this->assertSame([], $this->listedIds((string)$response->getContent(), 'dungeon_routes'));
         } finally {
             $dungeonRouteCollection->delete();
             Feature::for($creator)->forget(CreatorProfiles::class);
             $dungeonRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function savenew_givenAFailedValidation_keepsTheSubmittedOrder(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        $alpha   = $this->createRouteFor($creator, PublishedState::WORLD, 'ZzTestAlpha');
+        $bravo   = $this->createRouteFor($creator, PublishedState::WORLD, 'ZzTestBravo');
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act - no name, so validation fails and the form is shown again
+            $response = $this->actingAs($creator)
+                ->from(route('collections.new'))
+                ->followingRedirects()
+                ->post(route('collections.savenew'), [
+                    'published_state' => PublishedState::WORLD,
+                    'dungeon_routes'  => [$bravo->id, $alpha->id],
+                ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame(
+                [$bravo->id, $alpha->id],
+                $this->listedIds((string)$response->getContent(), 'dungeon_routes'),
+            );
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $bravo->delete();
+            $alpha->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenRoutesStoredInNonAlphabeticalOrder_listsThemInStoredOrder(): void
+    {
+        // Arrange
+        $creator                = $this->createCreator();
+        $alpha                  = $this->createRouteFor($creator, PublishedState::WORLD, 'ZzTestAlpha');
+        $bravo                  = $this->createRouteFor($creator, PublishedState::WORLD, 'ZzTestBravo');
+        $charlie                = $this->createRouteFor($creator, PublishedState::WORLD, 'ZzTestCharlie');
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
+        foreach ([$charlie, $alpha, $bravo] as $order => $dungeonRoute) {
+            DungeonRouteCollectionRoute::create([
+                'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+                'dungeon_route_id'            => $dungeonRoute->id,
+                'order'                       => $order,
+            ]);
+        }
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)
+                ->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame(
+                [$charlie->id, $alpha->id, $bravo->id],
+                $this->listedIds((string)$response->getContent(), 'dungeon_routes'),
+            );
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $charlie->delete();
+            $bravo->delete();
+            $alpha->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenRoutesInNonAlphabeticalOrder_storesThemInSubmittedOrder(): void
+    {
+        // Arrange
+        $creator                = $this->createCreator();
+        $alpha                  = $this->createRouteFor($creator, PublishedState::WORLD, 'ZzTestAlpha');
+        $bravo                  = $this->createRouteFor($creator, PublishedState::WORLD, 'ZzTestBravo');
+        $charlie                = $this->createRouteFor($creator, PublishedState::WORLD, 'ZzTestCharlie');
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(
+                route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+                [
+                    'name'            => 'ZzTestOrderedCollection',
+                    'published_state' => PublishedState::WORLD,
+                    'dungeon_routes'  => [$bravo->id, $charlie->id, $alpha->id],
+                ],
+            );
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $this->assertSame(
+                [$bravo->id, $charlie->id, $alpha->id],
+                $dungeonRouteCollection->refresh()->dungeonRoutes->pluck('id')->all(),
+            );
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $charlie->delete();
+            $bravo->delete();
+            $alpha->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenAFullCollection_disablesAddingRoutes(): void
+    {
+        // Arrange
+        $creator       = $this->createCreator();
+        $dungeonRoutes = collect(range(1, DungeonRouteCollection::MAX_ROUTES + 1))
+            ->map(fn(): DungeonRoute => $this->createRouteFor($creator));
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
+        foreach ($dungeonRoutes->take(DungeonRouteCollection::MAX_ROUTES)->values() as $order => $dungeonRoute) {
+            DungeonRouteCollectionRoute::create([
+                'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+                'dungeon_route_id'            => $dungeonRoute->id,
+                'order'                       => $order,
+            ]);
+        }
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)
+                ->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+            // Assert
+            $response->assertOk();
+            $content = (string)$response->getContent();
+            $this->assertMatchesRegularExpression('/<select id="dungeon_routes_add"[^>]*\sdisabled/s', $content);
+            $this->assertMatchesRegularExpression('/<button id="dungeon_routes_add_button"[^>]*\sdisabled/s', $content);
+            $this->assertCount(DungeonRouteCollection::MAX_ROUTES, $this->listedIds($content, 'dungeon_routes'));
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $dungeonRoutes->each(fn(DungeonRoute $dungeonRoute) => $dungeonRoute->delete());
             $creator->delete();
         }
     }
@@ -913,13 +1053,38 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         return $admin;
     }
 
-    private function createRouteFor(User $user, string $publishedState = PublishedState::WORLD): DungeonRoute
-    {
-        return DungeonRoute::factory()->create([
+    private function createRouteFor(
+        User    $user,
+        string  $publishedState = PublishedState::WORLD,
+        ?string $title = null,
+    ): DungeonRoute {
+        $attributes = [
             'author_id'          => $user->id,
             'expires_at'         => null,
             'published_state_id' => PublishedState::ALL[$publishedState],
-        ]);
+        ];
+
+        if ($title !== null) {
+            $attributes['title'] = $title;
+        }
+
+        return DungeonRoute::factory()->create($attributes);
+    }
+
+    /**
+     * The ids the ordered pick list renders for a field, in list order. Its row template carries id 0.
+     *
+     * @return array<int, int>
+     */
+    private function listedIds(string $content, string $name): array
+    {
+        preg_match_all(
+            sprintf('/<input type="hidden" name="%s\[\]" value="(\d+)">/', preg_quote($name, '/')),
+            $content,
+            $matches,
+        );
+
+        return array_values(array_filter(array_map(intval(...), $matches[1])));
     }
 
     private function createTeamFor(User $user): Team

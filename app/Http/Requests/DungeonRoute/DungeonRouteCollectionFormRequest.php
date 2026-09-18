@@ -67,7 +67,7 @@ class DungeonRouteCollectionFormRequest extends FormRequest
             'dungeon_routes.*' => [
                 'required',
                 'integer',
-                // dungeon_route_collection_routes is unique on (collection, route): the select
+                // dungeon_route_collection_routes is unique on (collection, route): the form
                 // cannot produce duplicates, but a hand-crafted post could, and the insert would
                 // then fail on the constraint rather than as a validation error
                 'distinct',
