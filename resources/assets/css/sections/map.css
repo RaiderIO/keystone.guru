@@ -573,6 +573,28 @@
 .user_mouse_position .inner {
     background-color: black;
     border-radius: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* The font size is set per marker in JS, so it scales with the zoom level */
+.user_mouse_position_initials {
+    line-height: 1;
+}
+
+.theme #edit_route_echo_members_container .dropdown .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Smaller than the surrounding nav-link: two wide capitals at 1.15rem do not fit the 30px circle */
+.theme #edit_route_echo_members_container .dropdown .nav-link .echo_user_initials {
+    font-size: 0.9rem;
+    line-height: 1;
 }
 
 .theme .echo_user {

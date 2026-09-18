@@ -25,7 +25,8 @@ function isAlertDismissed(string $id): bool
 }
 
 /**
- * Get the initials from a name
+ * Get the initials from a name - at most two letters, so they fit the fixed-size avatar circles
+ * they are rendered in.
  */
 function initials(string $name): string
 {
@@ -39,12 +40,8 @@ function initials(string $name): string
     $parts = preg_split('/\s+/u', $name) ?: [];
 
     if (count($parts) > 1) {
-        // Take the first character of each word (multibyte‑safe)
-        $letters = array_map(
-            static fn(string $part) => mb_substr($part, 0, 1, 'UTF-8'),
-            $parts,
-        );
-        $result = implode('', $letters);
+        // First character of the first and of the last word (multibyte‑safe)
+        $result = mb_substr($parts[0], 0, 1, 'UTF-8') . mb_substr($parts[count($parts) - 1], 0, 1, 'UTF-8');
     } else {
         // Single word: first two characters (multibyte‑safe)
         $result = mb_substr($name, 0, 2, 'UTF-8');
