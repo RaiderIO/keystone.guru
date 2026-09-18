@@ -199,4 +199,115 @@ final class SiteHeaderTest extends PublicTestCase
         $this->assertSame(1, substr_count($html, 'ksg-nav-entry--primary'));
         $this->assertSame(2, substr_count($html, 'ksg-nav-entry-desc'));
     }
+
+    #[Test]
+    public function category_givenMenuEndAndModalTab_rendersTheRightAlignedPanelAndTabAttribute(): void
+    {
+        // Arrange
+        $entries = [
+            [
+                'modal'       => '#edit_route_admin_settings_modal',
+                'modalTab'    => '#combatlog_info_tab',
+                'fa'          => 'fas fa-scroll',
+                'text'        => 'Combatlog info',
+                'description' => 'The combat log run this route was created from',
+            ],
+        ];
+
+        // Act
+        $html = view('common.layout.nav.category', [
+            'id'            => 'navCategoryTest',
+            'fa'            => 'fas fa-toolbox',
+            'text'          => 'Developer',
+            'entries'       => $entries,
+            'menuEnd'       => true,
+            'isActiveRoute' => fn(string $route, bool $strict = false) => null,
+        ])->render();
+
+        // Assert
+        $this->assertStringContainsString('dropdown-menu-end', $html);
+        $this->assertStringContainsString('data-bs-target="#edit_route_admin_settings_modal"', $html);
+        $this->assertStringContainsString('data-modal-tab="#combatlog_info_tab"', $html);
+    }
+
+    #[Test]
+    public function category_givenNoMenuEndOrModalTab_rendersNeither(): void
+    {
+        // Arrange
+        $entries = [
+            [
+                'modal'       => '#create_route_modal',
+                'fa'          => 'fas fa-plus',
+                'text'        => 'Create route',
+                'description' => 'Plan your own route on the dungeon map',
+            ],
+        ];
+
+        // Act
+        $html = view('common.layout.nav.category', [
+            'id'            => 'navCategoryTest',
+            'fa'            => 'fa fa-route',
+            'text'          => 'Routes',
+            'entries'       => $entries,
+            'isActiveRoute' => fn(string $route, bool $strict = false) => null,
+        ])->render();
+
+        // Assert
+        $this->assertStringNotContainsString('dropdown-menu-end', $html);
+        $this->assertStringNotContainsString('data-modal-tab', $html);
+    }
+
+    #[Test]
+    public function header_givenDeveloperEntries_rendersTheDeveloperSectionBeforeCreateRoute(): void
+    {
+        // Arrange
+        $developerEntries = [
+            [
+                'route'       => 'https://example.test/developer',
+                'fa'          => 'fas fa-cog',
+                'text'        => 'Edit mapping version',
+                'description' => 'Open the mapping editor',
+            ],
+        ];
+
+        // Act
+        $html = view('common.layout.header', ['developerEntries' => $developerEntries])->render();
+
+        // Assert
+        $developerPosition   = strpos($html, 'id="navCategoryDeveloper"');
+        $createRoutePosition = strpos($html, 'data-bs-target="#create_route_modal"', (int)$developerPosition);
+
+        $this->assertNotFalse($developerPosition);
+        $this->assertStringContainsString(__('view_common.layout.header.category_developer'), $html);
+        $this->assertStringContainsString('https://example.test/developer', $html);
+        // The Routes category also opens the create route modal, so this anchors on the one after the section
+        $this->assertNotFalse($createRoutePosition, 'The Developer section must come before the Create route button.');
+    }
+
+    #[Test]
+    public function header_givenNoDeveloperEntries_omitsTheDeveloperSection(): void
+    {
+        // Act
+        $html = view('common.layout.header')->render();
+
+        // Assert
+        $this->assertStringNotContainsString('id="navCategoryDeveloper"', $html);
+    }
+
+    #[Test]
+    public function home_givenAnAdmin_omitsTheDeveloperSection(): void
+    {
+        // Arrange
+        $admin = User::findOrFail(1);
+        $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
+
+        // Act
+        $response = $this->actingAs($admin)
+            ->withHeader('User-Agent', self::DESKTOP_USER_AGENT)
+            ->get('/');
+
+        // Assert
+        $response->assertOk();
+        $this->assertStringNotContainsString('id="navCategoryDeveloper"', $response->getContent());
+    }
 }

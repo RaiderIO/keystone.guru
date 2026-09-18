@@ -189,14 +189,6 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
             @endauth
 
             @isset($dungeonroute)
-                @if($isUserAdmin)
-                    @component('common.maps.controls.buttons.headerbutton')
-                        <button id="edit_route_admin_settings_button" class="btn btn-info btn-sm w-100"
-                                data-bs-toggle="modal" data-bs-target="#edit_route_admin_settings_modal">
-                            <i class="fas fa-toolbox"></i> {{ __('view_common.maps.controls.header.edit_route_admin_settings') }}
-                        </button>
-                    @endcomponent
-                @endif
 
                 @component('common.maps.controls.buttons.headerbutton')
                     <button id="simulate_route_button" class="btn btn-info btn-sm w-100"
@@ -289,14 +281,6 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
                             @endif
                         @endauth
                         @isset($dungeonroute)
-                            @if($isUserAdmin)
-                                <li>
-                                    <a class="dropdown-item" href="#"
-                                       data-bs-toggle="modal" data-bs-target="#edit_route_admin_settings_modal">
-                                        <i class="fas fa-toolbox"></i> {{ __('view_common.maps.controls.header.edit_route_admin_settings') }}
-                                    </a>
-                                </li>
-                            @endif
                             <li>
                                 <a class="dropdown-item" href="#"
                                    data-bs-toggle="modal" data-bs-target="#simulate_modal">

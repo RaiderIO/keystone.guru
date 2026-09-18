@@ -22,6 +22,7 @@ use Illuminate\Support\Collection;
  * @var bool                         $showExpansionNav
  * @var Collection<string, string>   $dungeonContextLinks
  * @var string|false                 $headerId
+ * @var array<int, array<string, mixed>> $developerEntries
  */
 
 $showMore                 ??= false;
@@ -34,6 +35,7 @@ $dungeonContextLinks      ??= null;
 // The map view passes false (not null - ??= would overwrite null) - its own #map_header wraps
 // this include, and a stray #site_header would make siteheader.js measure the wrong element.
 $headerId                 ??= 'site_header';
+$developerEntries         ??= [];
 // Defense in depth for #3806 - GlobalComposer normally supplies this, but view composers are
 // skipped entirely on paths ViewService::shouldLoadViewVariables() blacklists (e.g. /ajax/),
 // so an HTML error view rendered for one of those paths would otherwise crash here.
@@ -265,6 +267,17 @@ if (Feature::active(NpcCompendium::class)) {
                 @endif
             </ul>
             <ul class="navbar-nav">
+                @if($developerEntries !== [])
+                    @include('common.layout.nav.category', [
+                        'id' => 'navCategoryDeveloper',
+                        'fa' => 'fas fa-toolbox',
+                        'text' => __('view_common.layout.header.category_developer'),
+                        'entries' => $developerEntries,
+                        'columns' => 1,
+                        'menuEnd' => true,
+                        'isActiveRoute' => $isActiveRoute,
+                    ])
+                @endif
                 <li class="nav-item px-2">
                     <a class="btn btn-accent" href="#"
                        data-bs-toggle="modal" data-bs-target="#create_route_modal">

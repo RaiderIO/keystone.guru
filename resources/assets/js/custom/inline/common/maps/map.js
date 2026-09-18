@@ -117,6 +117,12 @@ class CommonMapsMap extends InlineCode {
                 $('#share_modal').on('show.bs.modal', this._fetchMdtExportString.bind(this));
             }
 
+            // Only rendered for admins on maps with a dungeon route
+            let routeAdminSettingsModal = document.getElementById('edit_route_admin_settings_modal');
+            if (routeAdminSettingsModal !== null) {
+                routeAdminSettingsModal.addEventListener('show.bs.modal', this._selectModalTab.bind(this));
+            }
+
             // MDT clones button
             $('#map_enemy_visuals_map_mdt_clones_to_enemies').bind('change', function () {
                 getState().setMdtMappingModeEnabled(
@@ -714,6 +720,24 @@ class CommonMapsMap extends InlineCode {
         // Update our cookie so that we know upon page refresh
         Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);
 
+    }
+
+    /**
+     * Shows the tab named by the `data-modal-tab` attribute of the element that opened the modal, if any.
+     *
+     * @param {Event} showModalEvent
+     * @private
+     */
+    _selectModalTab(showModalEvent) {
+        let tabSelector = showModalEvent.relatedTarget?.dataset?.modalTab;
+        if (!tabSelector) {
+            return;
+        }
+
+        let tabTrigger = document.querySelector(tabSelector);
+        if (tabTrigger !== null) {
+            bootstrap.Tab.getOrCreateInstance(tabTrigger).show();
+        }
     }
 
     /**

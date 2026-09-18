@@ -73,6 +73,36 @@ $controlOptions      ??= [];
 $parameters          ??= [];
 $dungeonContextLinks ??= null;
 
+$developerEntries = [];
+if ($dungeonroute !== null && $isUserAdmin) {
+    $developerEntries = [
+        [
+            'modal'       => '#edit_route_admin_settings_modal',
+            'modalTab'    => '#dungeon_route_info_tab',
+            'fa'          => 'fas fa-info-circle',
+            'text'        => __('view_common.modal.routeadminsettings.dungeon_route_info'),
+            'description' => __('view_common.layout.header.dev_route_info_description'),
+        ],
+        [
+            'modal'       => '#edit_route_admin_settings_modal',
+            'modalTab'    => '#combatlog_info_tab',
+            'fa'          => 'fas fa-scroll',
+            'text'        => __('view_common.modal.routeadminsettings.combatlog_info'),
+            'description' => __('view_common.layout.header.dev_combatlog_info_description'),
+        ],
+        [
+            'route'       => route('admin.floor.edit.mapping', [
+                'dungeon'         => $dungeonroute->dungeon,
+                'floor'           => $dungeonroute->dungeon->floors->first(),
+                'mapping_version' => $dungeonroute->mapping_version_id,
+            ]),
+            'fa'          => 'fas fa-cog',
+            'text'        => __('view_common.modal.routeadminsettings.edit_mapping_version'),
+            'description' => __('view_common.layout.header.dev_mapping_version_description'),
+        ],
+    ];
+}
+
 // Ensure default values for showing/hiding certain elements
 $show['controls']              ??= [];
 $show['controls']['enemyInfo'] ??= true;
@@ -272,6 +302,7 @@ if ($isAdmin) {
                 'showExpansionNav' => false,
                 'forceShrink' => true,
                 'dungeonContextLinks' => $dungeonContextLinks,
+                'developerEntries' => $developerEntries,
             ])
             @include('common.maps.controls.header', [
                 'echo' => $echo,
