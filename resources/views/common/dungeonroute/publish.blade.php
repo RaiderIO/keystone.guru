@@ -17,9 +17,16 @@ $publishStatesAvailable = PublishedState::getAvailablePublishedStates($dungeonro
 
 @include('common.general.inline', ['path' => 'common/dungeonroute/publish', 'options' => [
     'publishSelector' => '#map_route_publish',
-    'publishStates' => $publishStates,
     'publishStatesAvailable' => $publishStatesAvailable,
-    'publishStateSelected' => $dungeonroute->publishedstate->name,
 ]])
 
-{{ html()->select('map_route_publish', [], 1)->id('map_route_publish')->class('form-control selectpicker')->attribute('size', count($publishStates)) }}
+@include('common.forms.publishedstate', [
+    'id' => 'map_route_publish',
+    'name' => 'map_route_publish',
+    'publishedStates' => $publishStates->all(),
+    'availablePublishedStates' => $publishStatesAvailable->all(),
+    'selected' => $dungeonroute->publishedstate->name,
+    'subtexts' => $publishStates->mapWithKeys(static fn(string $publishState): array => [
+        $publishState => __(sprintf('js.publish_state_subtext_%s', $publishState)),
+    ])->all(),
+])

@@ -26,15 +26,11 @@ if (session()->hasOldInput()) {
     $selectedDungeonRouteIds = array_map(intval(...), (array)old('dungeon_routes', []));
 }
 
-$publishedStateOptions = [];
-foreach (DungeonRouteCollection::AVAILABLE_PUBLISHED_STATES as $publishedState) {
-    // Sharing with a team is only meaningful when the user is actually in one
-    if ($publishedState === PublishedState::TEAM && $teams->isEmpty()) {
-        continue;
-    }
-
-    $publishedStateOptions[$publishedState] = __(sprintf('view_collection.published_state.%s', $publishedState));
-}
+// Sharing with a team is only meaningful when the user is actually in one
+$availablePublishedStates = array_values(array_filter(
+    DungeonRouteCollection::AVAILABLE_PUBLISHED_STATES,
+    static fn(string $publishedState): bool => $publishedState !== PublishedState::TEAM || $teams->isNotEmpty(),
+));
 
 $categoryOptions = [null => __('view_common.collection.details.category_none')];
 foreach ($categories as $category) {
@@ -46,8 +42,6 @@ foreach ($teams as $team) {
     $teamOptions[$team->id] = $team->name;
 }
 ?>
-
-@include('common.general.messages')
 
 @isset($dungeonRouteCollection)
     {{ html()->modelForm($dungeonRouteCollection, 'PATCH', route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]))->open() }}
@@ -81,8 +75,16 @@ foreach ($teams as $team) {
 
 <div class="mb-3{{ $errors->has('published_state') ? ' has-error' : '' }}">
     {{ html()->label(__('view_common.collection.details.published_state'), 'published_state') }}
-    {{ html()->select('published_state', $publishedStateOptions, $dungeonRouteCollection?->getPublishedStateName() ?? PublishedState::UNPUBLISHED)
-        ->class('form-select') }}
+    @include('common.forms.publishedstate', [
+        'id' => 'published_state',
+        'name' => 'published_state',
+        'publishedStates' => DungeonRouteCollection::AVAILABLE_PUBLISHED_STATES,
+        'availablePublishedStates' => $availablePublishedStates,
+        'selected' => old('published_state', $dungeonRouteCollection?->getPublishedStateName() ?? PublishedState::UNPUBLISHED),
+        'subtexts' => collect(DungeonRouteCollection::AVAILABLE_PUBLISHED_STATES)->mapWithKeys(static fn(string $publishedState): array => [
+            $publishedState => __(sprintf('view_collection.published_state_subtext.%s', $publishedState)),
+        ])->all(),
+    ])
     <small class="form-text text-body-secondary">
         {{ __('view_common.collection.details.published_state_help') }}
     </small>

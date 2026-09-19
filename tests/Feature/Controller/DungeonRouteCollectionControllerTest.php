@@ -67,6 +67,33 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenAWorldPublishedCollection_showsItsVisibility(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'name'               => 'ZzTestCollectionVisibility',
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('collections.index'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(e(__('view_collection.index.published_state.world')), false);
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function savenew_givenValidPayload_createsTheCollectionWithItsRoutes(): void
     {
         // Arrange
@@ -414,6 +441,172 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             $dungeonRouteCollection->delete();
             Feature::for($creator)->forget(CreatorProfiles::class);
             $dungeonRoutes->each(fn(DungeonRoute $dungeonRoute) => $dungeonRoute->delete());
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function create_givenAUserWithoutTeams_rendersTheVisibilityPickerWithTeamDisabled(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('collections.new'));
+
+            // Assert
+            $response->assertOk();
+            $content = (string)$response->getContent();
+
+            $this->assertMatchesRegularExpression(
+                '/<select id="published_state" name="published_state" class="form-control selectpicker"/',
+                $content,
+            );
+            $this->assertMatchesRegularExpression('/<option value="unpublished"[^>]*\sselected/', $content);
+            $this->assertMatchesRegularExpression('/<option value="team"[^>]*\sdisabled/', $content);
+            $this->assertDoesNotMatchRegularExpression('/<option value="world"[^>]*\sdisabled/', $content);
+            $response->assertSee(e(__('view_collection.published_state_subtext.world_with_link')), false);
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenAWorldPublishedCollection_selectsItsStateInThePicker(): void
+    {
+        // Arrange
+        $creator                = $this->createCreator();
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)
+                ->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+            // Assert
+            $response->assertOk();
+            $content = (string)$response->getContent();
+            $this->assertMatchesRegularExpression('/<option value="world"[^>]*\sselected/', $content);
+            $this->assertDoesNotMatchRegularExpression('/<option value="unpublished"[^>]*\sselected/', $content);
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function savenew_givenAFailedValidation_keepsTheSubmittedVisibility(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act - no name, so validation fails and the form is shown again
+            $response = $this->actingAs($creator)
+                ->from(route('collections.new'))
+                ->followingRedirects()
+                ->post(route('collections.savenew'), [
+                    'published_state' => PublishedState::WORLD_WITH_LINK,
+                ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertMatchesRegularExpression(
+                '/<option value="world_with_link"[^>]*\sselected/',
+                (string)$response->getContent(),
+            );
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function savenew_givenValidPayload_showsTheCreatedMessageOnce(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)
+                ->followingRedirects()
+                ->post(route('collections.savenew'), [
+                    'name'            => 'ZzTestFlashOnce',
+                    'published_state' => PublishedState::UNPUBLISHED,
+                ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame(
+                1,
+                substr_count((string)$response->getContent(), e(__('controller.dungeonroutecollection.flash.collection_created'))),
+            );
+        } finally {
+            DungeonRouteCollection::where('user_id', $creator->id)->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function savenew_givenAFailedValidation_showsEachErrorOnce(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act - no name
+            $response = $this->actingAs($creator)
+                ->from(route('collections.new'))
+                ->followingRedirects()
+                ->post(route('collections.savenew'), [
+                    'published_state' => PublishedState::UNPUBLISHED,
+                ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame(1, substr_count((string)$response->getContent(), 'class="alert alert-danger'));
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenOwnCollection_showsTheDeletedMessageOnceOnTheIndex(): void
+    {
+        // Arrange
+        $creator                = $this->createCreator();
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)
+                ->followingRedirects()
+                ->delete(route('collections.delete', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame(
+                1,
+                substr_count((string)$response->getContent(), e(__('controller.dungeonroutecollection.flash.collection_deleted'))),
+            );
+        } finally {
+            DungeonRouteCollection::where('user_id', $creator->id)->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
             $creator->delete();
         }
     }
