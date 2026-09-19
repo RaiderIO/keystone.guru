@@ -163,7 +163,6 @@ class TeamTableView extends TableView {
         super();
 
         this._teamPublicKey = '';
-        this._addMode = false;
         this._isUserModerator = false;
     }
 
@@ -173,14 +172,6 @@ class TeamTableView extends TableView {
      */
     setTeamPublicKey(value) {
         this._teamPublicKey = value;
-    }
-
-    /**
-     * Sets 'add route mode' to be enabled or not.
-     * @param value True or false.
-     */
-    setAddMode(value) {
-        this._addMode = value;
     }
 
     setIsUserModerator(value) {
@@ -200,11 +191,7 @@ class TeamTableView extends TableView {
      * @returns {{team_public_key: *}}
      */
     getAjaxParameters() {
-        let params = {team_public_key: this._teamPublicKey};
-        if (this._addMode) {
-            params.available = 1;
-        }
-        return params;
+        return {team_public_key: this._teamPublicKey};
     }
 
     getColumns(view) {

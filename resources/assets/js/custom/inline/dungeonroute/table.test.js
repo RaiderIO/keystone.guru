@@ -60,18 +60,6 @@ function buildTableContext(currentUserId = 1) {
 }
 
 describe('DungeonrouteTable._getAddRemoveRouteTemplate', () => {
-    it('_getAddRemoveRouteTemplate_givenRouteNotOnTeam_returnsAddRouteTemplateWithPublicKeyOnly', () => {
-        // Arrange
-        const row = buildRow({has_team: false, public_key: 'abc123'});
-
-        // Act
-        const result = DungeonrouteTable.prototype._getAddRemoveRouteTemplate.call(buildTableContext(1), row);
-
-        // Assert
-        expect(result.templateName).toBe('team_dungeonroute_table_add_route_actions');
-        expect(result.variables).toEqual({public_key: 'abc123'});
-    });
-
     it('_getAddRemoveRouteTemplate_givenOwnedRouteOnTeam_returnsOwnRouteActionsTemplateWithProfileActionsVariables', () => {
         // Arrange
         const row = buildRow({has_team: true, author: {id: 1}});

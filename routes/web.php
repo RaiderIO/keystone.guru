@@ -40,6 +40,7 @@ use App\Http\Controllers\Ajax\AjaxAdminCombatLogRouteController;
 use App\Http\Controllers\Ajax\AjaxArrowController;
 use App\Http\Controllers\Ajax\AjaxBrushlineController;
 use App\Http\Controllers\Ajax\AjaxDungeonFloorSwitchMarkerController;
+use App\Http\Controllers\Ajax\AjaxDungeonRouteCollectionController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteSearchController;
 use App\Http\Controllers\Ajax\AjaxEnemyController;
@@ -675,6 +676,13 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::middleware(['auth', 'role:user|admin'])->group(static function () {
             Route::post('/profile/adfree/{user:public_key}', new AjaxProfileController()->addAdFreeGiveaway(...));
             Route::delete('/profile/adfree/{user:public_key}', new AjaxProfileController()->removeAdFreeGiveaway(...));
+
+            Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
+                ->prefix('collection/{dungeonRouteCollection}/routes')->group(static function () {
+                    Route::post('/', new AjaxDungeonRouteCollectionController()->storeRoutes(...))->name('ajax.collection.routes.store');
+                    Route::delete('/', new AjaxDungeonRouteCollectionController()->deleteRoutes(...))->name('ajax.collection.routes.delete');
+                    Route::put('/order', new AjaxDungeonRouteCollectionController()->updateRoutesOrder(...))->name('ajax.collection.routes.order');
+                });
         });
 
         // Metrics
@@ -840,6 +848,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::put('/changedefaultrole', new AjaxTeamController()->changeDefaultRole(...));
                 Route::put('/routepublishing', new AjaxTeamController()->changeRoutePublishing(...));
                 Route::put('/changerole', new AjaxTeamController()->changeRole(...));
+                Route::post('/route', new AjaxTeamController()->addRoutes(...));
                 Route::post('/route/{dungeonroute}', new AjaxTeamController()->addRoute(...));
                 Route::delete('/member/{user}', new AjaxTeamController()->removeMember(...));
                 Route::delete('/route/{dungeonroute}', new AjaxTeamController()->removeRoute(...));

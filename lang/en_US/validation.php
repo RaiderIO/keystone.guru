@@ -60,6 +60,21 @@ return [
         'npc_dungeon_ids' => [
             'required' => 'Select at least one dungeon - an NPC with no dungeon has no way to derive which game version it belongs to.',
         ],
+        'route_list_game_version_id' => [
+            'exists' => 'That game version does not exist.',
+        ],
+        'route_list_season_id' => [
+            'exists' => 'That season does not exist.',
+        ],
+        'route_list_dungeon_ids' => [
+            'min'    => 'Limit the routes to at least one dungeon, or leave the dungeons out.',
+            'exists' => 'One or more of those dungeons do not exist.',
+        ],
+        'team_add_routes' => [
+            'required' => 'Pick at least one route to add to the team.',
+            'max'      => 'You can add at most :max routes to a team at once.',
+            'exists'   => 'One or more of those routes do not exist.',
+        ],
         'collection_name' => [
             'required' => 'A collection needs a name.',
             'max'      => 'A collection name may not be longer than :max characters.',
@@ -74,10 +89,27 @@ return [
         'collection_category_id' => [
             'exists' => 'That is not a category you can file a collection under.',
         ],
+        'collection_game_version_id' => [
+            'required' => 'Select the game version this collection is for.',
+            'exists'   => 'That is not a game version you can make a collection for.',
+            'fixed'    => 'The game version of a collection cannot change once it holds a route.',
+        ],
+        'collection_season_id' => [
+            'exists'     => 'That season does not exist.',
+            'no_seasons' => 'This game version has no seasons - leave the season empty to make a free-form collection.',
+            'expansion'  => 'That season does not belong to this game version.',
+            'fixed'      => 'The season of a collection is fixed once it is created - it can only be made free-form.',
+        ],
         'collection_dungeon_routes' => [
-            'max'      => 'A collection may hold at most :max routes.',
-            'exists'   => 'You can only collect routes that you created yourself.',
-            'distinct' => 'A route may only appear once in a collection.',
+            'max'          => 'A collection may hold at most :max routes.',
+            'exists'       => 'You can only collect routes that you created yourself.',
+            'distinct'     => 'A route may only appear once in a collection.',
+            'game_version' => 'This route is not for the game version of this collection.',
+            'season'       => 'This route is not for the season of this collection.',
+            'required'     => 'Choose at least one route.',
+            'already_in'   => 'This route is already in the collection.',
+            'not_in'       => 'This route is not in the collection.',
+            'missing'      => 'The new order must hold every route of the collection. Reload the page and try again.',
         ],
     ],
     'date'              => 'The :attribute is not a valid date.',

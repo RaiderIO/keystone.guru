@@ -225,3 +225,120 @@ describe('CommonFormsOrderedselect', () => {
         expect(document.activeElement).toBe(document.querySelector('#routes_add'));
     });
 });
+
+describe('CommonFormsOrderedselect in ajax mode', () => {
+    let previousJquery;
+    let control;
+
+    beforeEach(() => {
+        previousJquery = globalThis.$;
+        globalThis.$   = jQuery;
+
+        document.body.innerHTML = `
+            <div id="routes">
+                <ol id="routes_list">${itemHtml(2, 'Bravo')}${itemHtml(1, 'Alpha')}</ol>
+                <p id="routes_empty" hidden>Empty</p>
+                <button id="routes_add_button" type="button">Add route</button>
+                <span id="routes_full" hidden>Full</span>
+                <div id="routes_status"></div>
+                <template id="routes_template">${itemHtml(0, '')}</template>
+            </div>`;
+
+        control = new CommonFormsOrderedselect('routes', 'common/forms/orderedselect', Object.assign({}, OPTIONS, {
+            ajax:         true,
+            rootSelector: '#routes',
+            fullCount:    2,
+        }));
+        control.activate();
+    });
+
+    afterEach(() => {
+        globalThis.$            = previousJquery;
+        document.body.innerHTML = '';
+    });
+
+    /**
+     * @param {string} name
+     * @returns {HTMLElement}
+     */
+    function itemNamed(name) {
+        return [...document.querySelectorAll('#routes_list .ordered_select_item')]
+            .find((item) => item.querySelector('.ordered_select_label').textContent === name);
+    }
+
+    it('onMoveClicked_givenAjaxMode_firesMovedOnTheRoot', () => {
+        // Arrange
+        const moved = vi.fn();
+        jQuery('#routes').on('orderedselect:moved', moved);
+
+        // Act
+        itemNamed('Alpha').querySelector('.ordered_select_up').click();
+
+        // Assert
+        expect(moved).toHaveBeenCalledTimes(1);
+        expect(control.getIds()).toEqual(['1', '2']);
+    });
+
+    it('onRemoveClicked_givenAjaxMode_firesRemovedWithTheItemAndItsPosition', () => {
+        // Arrange
+        const removed = vi.fn();
+        jQuery('#routes').on('orderedselect:removed', removed);
+
+        // Act
+        itemNamed('Alpha').querySelector('.ordered_select_remove').click();
+
+        // Assert
+        expect(removed.mock.calls[0][1]).toEqual({id: '1', name: 'Alpha', position: 2});
+        expect(control.getIds()).toEqual(['2']);
+    });
+
+    it('addButton_givenAjaxMode_doesNotAddAnythingItself', () => {
+        // Arrange - nothing beyond beforeEach
+
+        // Act
+        document.querySelector('#routes_add_button').click();
+
+        // Assert
+        expect(control.getIds()).toEqual(['2', '1']);
+    });
+
+    it('addItem_givenANewItem_appendsItWithoutFiringAnEvent', () => {
+        // Arrange
+        const removed = vi.fn();
+        const moved = vi.fn();
+        jQuery('#routes').on('orderedselect:removed', removed).on('orderedselect:moved', moved);
+
+        // Act
+        control.addItem(3, 'Charlie');
+        control.addItem(3, 'Charlie');
+
+        // Assert
+        expect(control.getIds()).toEqual(['2', '1', '3']);
+        expect(itemNamed('Charlie').querySelector('.ordered_select_position').textContent).toBe('3');
+        expect(removed).not.toHaveBeenCalled();
+        expect(moved).not.toHaveBeenCalled();
+    });
+
+    it('removeItemAndSetIds_givenAnUndo_restoreTheFormerList', () => {
+        // Arrange
+        control.addItem(3, 'Charlie');
+
+        // Act
+        control.removeItem(2);
+        control.setIds(['3', '1', '99']);
+
+        // Assert
+        expect(control.getIds()).toEqual(['3', '1']);
+    });
+
+    it('setFullCount_givenTheGroupReachesMax_disablesTheAddButton', () => {
+        // Arrange - max is 3 and this list holds only 2
+
+        // Act
+        control.setFullCount(3);
+
+        // Assert
+        expect(document.querySelector('#routes_add_button').disabled).toBe(true);
+        expect(document.querySelector('#routes_full').hidden).toBe(false);
+    });
+});
