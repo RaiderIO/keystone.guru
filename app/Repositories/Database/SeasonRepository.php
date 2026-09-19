@@ -3,14 +3,26 @@
 namespace App\Repositories\Database;
 
 use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Models\Season;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
+use Illuminate\Support\Collection;
 
 class SeasonRepository extends DatabaseRepository implements SeasonRepositoryInterface
 {
     public function __construct()
     {
         parent::__construct(Season::class);
+    }
+
+    public function getActiveSeasonsForExpansion(Expansion $expansion): Collection
+    {
+        return Season::query()
+            ->with(['expansion'])
+            ->where('expansion_id', $expansion->id)
+            ->where('active', true)
+            ->orderByDesc('start')
+            ->get();
     }
 
     public function getMostRecentSeasonForDungeon(Dungeon $dungeon): ?Season

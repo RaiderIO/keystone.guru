@@ -1,11 +1,27 @@
 <?php
 
+use App\Http\Requests\DungeonRoute\DungeonRouteCollectionIndexFormRequest;
 use App\Models\DungeonRoute\DungeonRouteCollection;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
  * @var Collection<int, DungeonRouteCollection> $dungeonRouteCollections
+ * @var Collection<int, int>                    $coveredDungeonCounts  Keyed by collection id.
+ * @var Collection<int, GameVersion>            $gameVersions
+ * @var GameVersion                             $selectedGameVersion
+ * @var Collection<int, Season>                 $seasons
+ * @var int|string|null                         $selectedSeasonFilter
  */
+
+$gameVersionOptions = $gameVersions->mapWithKeys(static fn(GameVersion $gameVersion): array => [
+    $gameVersion->id => __($gameVersion->name),
+])->all();
+
+$seasonOptions = ['' => __('view_collection.index.filter_season_all')]
+    + $seasons->mapWithKeys(static fn(Season $season): array => [$season->id => $season->name_long])->all()
+    + [DungeonRouteCollectionIndexFormRequest::SEASON_NONE => __('view_collection.index.filter_season_none')];
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_collection.index.title')])
 
@@ -22,19 +38,36 @@ use Illuminate\Support\Collection;
         {{ __('view_collection.index.description') }}
     </p>
 
+    {{ html()->form('GET', route('collections.index'))->class('row g-2 align-items-end mb-3')->open() }}
+    <div class="col-auto">
+        {{ html()->label(__('view_collection.index.filter_game_version'), 'game_version_id')->class('form-label') }}
+        {{ html()->select('game_version_id', $gameVersionOptions, $selectedGameVersion->id)->class('form-select') }}
+    </div>
+    @if($selectedGameVersion->has_seasons)
+        <div class="col-auto">
+            {{ html()->label(__('view_collection.index.filter_season'), 'season')->class('form-label') }}
+            {{ html()->select('season', $seasonOptions, $selectedSeasonFilter === null ? '' : (string)$selectedSeasonFilter)->class('form-select') }}
+        </div>
+    @endif
+    <div class="col-auto">
+        {{ html()->input('submit')->value(__('view_collection.index.filter_submit'))->class('btn btn-primary') }}
+    </div>
+    {{ html()->form()->close() }}
+
     @if($dungeonRouteCollections->isEmpty())
         <div class="card">
             <div class="card-body text-center">
-                {{ __('view_collection.index.no_collections') }}
+                {{ request()->hasAny(['game_version_id', 'season']) ? __('view_collection.index.no_collections_filtered') : __('view_collection.index.no_collections') }}
             </div>
         </div>
     @else
         <table class="table table-striped align-middle">
             <thead>
             <tr>
-                <th width="40%">{{ __('view_collection.index.table_header_name') }}</th>
+                <th width="30%">{{ __('view_collection.index.table_header_name') }}</th>
+                <th width="20%">{{ __('view_collection.index.table_header_kind') }}</th>
                 <th width="15%">{{ __('view_collection.index.table_header_category') }}</th>
-                <th width="20%">{{ __('view_collection.index.table_header_visibility') }}</th>
+                <th width="10%">{{ __('view_collection.index.table_header_visibility') }}</th>
                 <th width="10%">{{ __('view_collection.index.table_header_routes') }}</th>
                 <th width="15%"></th>
             </tr>
@@ -47,6 +80,21 @@ use Illuminate\Support\Collection;
                         <a href="{{ route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]) }}">
                             {{ $dungeonRouteCollection->name }}
                         </a>
+                    </td>
+                    <td>
+                        @php($coveredDungeonCount = $coveredDungeonCounts->get($dungeonRouteCollection->id, 0))
+                        @if($dungeonRouteCollection->isSeasonSet() && $dungeonRouteCollection->season !== null)
+                            {{ __('view_collection.kind.season_set', [
+                                'season' => $dungeonRouteCollection->season->name,
+                                'covered' => $coveredDungeonCount,
+                                'total' => $dungeonRouteCollection->season->dungeons->count(),
+                            ]) }}
+                        @else
+                            {{ trans_choice('view_collection.kind.free_form', $coveredDungeonCount, [
+                                'game_version' => __($dungeonRouteCollection->gameVersion->name),
+                                'count' => $coveredDungeonCount,
+                            ]) }}
+                        @endif
                     </td>
                     <td>
                         @if($dungeonRouteCollection->dungeonRouteCollectionCategory !== null)

@@ -7,7 +7,9 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
 use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
+use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\Team;
 use App\Models\TeamUser;
@@ -1251,8 +1253,13 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         string  $publishedState = PublishedState::WORLD,
         ?string $title = null,
     ): DungeonRoute {
+        $mappingVersion = $this->retailMappingVersion();
+
         $attributes = [
             'author_id'          => $user->id,
+            'dungeon_id'         => $mappingVersion->dungeon_id,
+            'mapping_version_id' => $mappingVersion->id,
+            'season_id'          => null,
             'expires_at'         => null,
             'published_state_id' => PublishedState::ALL[$publishedState],
         ];
@@ -1262,6 +1269,18 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         }
 
         return DungeonRoute::factory()->create($attributes);
+    }
+
+    /**
+     * A retail mapping version of a challenge mode dungeon, so a route on it may join a retail collection.
+     */
+    private function retailMappingVersion(): MappingVersion
+    {
+        return MappingVersion::query()
+            ->where('game_version_id', GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL])
+            ->whereHas('dungeon', static fn($query) => $query->whereNotNull('challenge_mode_id'))
+            ->orderByDesc('id')
+            ->firstOrFail();
     }
 
     /**

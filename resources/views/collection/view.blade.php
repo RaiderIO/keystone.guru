@@ -2,14 +2,28 @@
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
+use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
 use Illuminate\Support\Collection;
 
 /**
- * @var DungeonRouteCollection        $dungeonRouteCollection
- * @var Collection<int, DungeonRoute> $dungeonRoutes
+ * @var DungeonRouteCollection                       $dungeonRouteCollection
+ * @var Collection<int, DungeonRoute>                $dungeonRoutes
+ * @var Collection<int, DungeonRouteCollectionGroup> $dungeonRouteGroups
+ * @var int                                          $coveredDungeonCount
  */
 
 $title = sprintf(__('view_collection.view.title'), $dungeonRouteCollection->name);
+
+$kindLabel = $dungeonRouteCollection->isSeasonSet() && $dungeonRouteCollection->season !== null
+    ? __('view_collection.kind.season_set', [
+        'season'  => $dungeonRouteCollection->season->name,
+        'covered' => $coveredDungeonCount,
+        'total'   => $dungeonRouteCollection->season->dungeons->count(),
+    ])
+    : trans_choice('view_collection.kind.free_form', $coveredDungeonCount, [
+        'game_version' => __($dungeonRouteCollection->gameVersion->name),
+        'count'        => $coveredDungeonCount,
+    ]);
 ?>
 @extends('layouts.sitepage', [
     'wide' => true,
@@ -30,6 +44,8 @@ $title = sprintf(__('view_collection.view.title'), $dungeonRouteCollection->name
                     {{ __('view_collection.view.by_author', ['author' => $dungeonRouteCollection->user->name]) }}
                 </a>
                 &middot;
+                {{ $kindLabel }}
+                &middot;
                 {{ trans_choice('view_collection.view.route_count', $dungeonRoutes->count(), ['count' => $dungeonRoutes->count()]) }}
                 @if($dungeonRouteCollection->dungeonRouteCollectionCategory !== null)
                     &middot;
@@ -47,18 +63,32 @@ $title = sprintf(__('view_collection.view.title'), $dungeonRouteCollection->name
         </div>
     </div>
 
-    @if($dungeonRoutes->isEmpty())
+    @if($dungeonRoutes->isEmpty() && !$dungeonRouteCollection->isSeasonSet())
         <div class="card">
             <div class="card-body text-center">
                 {{ __('view_collection.view.no_routes') }}
             </div>
         </div>
     @else
-        @include('common.dungeonroute.cardlist', [
-            'cols' => 3,
-            'currentAffixGroup' => null,
-            'dungeonroutes' => $dungeonRoutes,
-            'showDungeonImage' => true,
-        ])
+        @foreach($dungeonRouteGroups as $dungeonRouteGroup)
+            <section class="collection_group mb-4">
+                <h2 class="h5">
+                    {{ __($dungeonRouteGroup->dungeon?->name ?? '') }}
+                </h2>
+
+                @if($dungeonRouteGroup->dungeonRoutes->isEmpty())
+                    <p class="text-body-secondary mb-0">
+                        {{ __('view_collection.view.slot_empty', ['dungeon' => __($dungeonRouteGroup->dungeon?->name ?? '')]) }}
+                    </p>
+                @else
+                    @include('common.dungeonroute.cardlist', [
+                        'cols' => 3,
+                        'currentAffixGroup' => null,
+                        'dungeonroutes' => $dungeonRouteGroup->dungeonRoutes,
+                        'showDungeonImage' => true,
+                    ])
+                @endif
+            </section>
+        @endforeach
     @endif
 @endsection

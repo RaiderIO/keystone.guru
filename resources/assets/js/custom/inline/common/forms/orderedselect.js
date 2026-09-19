@@ -20,7 +20,8 @@
 
 /**
  * Keeps an ordered list of chosen items: add from a select, reorder by dragging or with the up/down
- * buttons, remove. Each item carries a hidden input, so the form posts the ids in list order.
+ * buttons, remove. Each item carries a hidden input, so the form posts the ids in list order. Every change
+ * triggers `orderedselect:changed` on the list, which bubbles.
  *
  * @property {CommonFormsOrderedselectOptions} options
  */
@@ -61,11 +62,15 @@ class CommonFormsOrderedselect extends InlineCode {
         }
 
         let $option = $select.find(`option[value="${id}"]`);
-        let name = $option.text().trim();
+        let detail = $option.attr('data-detail');
+        let isDetailWarning = $option.attr('data-detail-warning') === '1';
+        // An option carrying a detail shows it in its text too; data-label holds the bare label
+        let name = ($option.attr('data-label') ?? $option.text()).trim();
 
         let $item = $($(this.options.templateSelector).prop('content').firstElementChild.cloneNode(true));
         $item.attr('data-id', id);
         $item.find('.ordered_select_label').text(name);
+        this._applyDetail($item, detail, isDetailWarning);
         $item.find('input[type="hidden"]').val(id);
         $(this.options.listSelector).append($item);
 
@@ -80,6 +85,33 @@ class CommonFormsOrderedselect extends InlineCode {
             $item.find('.ordered_select_remove').trigger('focus');
         } else {
             $select.trigger('focus');
+        }
+    }
+
+    /**
+     * Shows the option's secondary text next to its label, flagged when it is a warning.
+     *
+     * @param {jQuery} $item
+     * @param {string|undefined} detail
+     * @param {boolean} isWarning
+     * @private
+     */
+    _applyDetail($item, detail, isWarning) {
+        let $detail = $item.find('.ordered_select_detail');
+        if (detail === undefined) {
+            $detail.prop('hidden', true);
+            return;
+        }
+
+        let $warningText = $detail.find('.ordered_select_detail_warning_text');
+        $detail.prop('hidden', false).toggleClass('ordered_select_detail_warning', isWarning);
+        $detail.find('.ordered_select_detail_text').text(detail);
+        $detail.find('.ordered_select_detail_icon').prop('hidden', !isWarning);
+        $warningText.prop('hidden', !isWarning);
+        if (isWarning && $warningText.length > 0) {
+            $detail.attr('title', $warningText.text().trim());
+        } else {
+            $detail.removeAttr('title');
         }
     }
 
@@ -167,6 +199,8 @@ class CommonFormsOrderedselect extends InlineCode {
         $(this.options.fullSelector).prop('hidden', !isFull);
         $(this.options.addSelectSelector).prop('disabled', isFull);
         $(this.options.addButtonSelector).prop('disabled', isFull);
+
+        $(this.options.listSelector).trigger('orderedselect:changed');
     }
 
     /**

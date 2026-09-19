@@ -106,6 +106,8 @@ use App\Service\DungeonRoute\CoverageService;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteCollectionService;
+use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteKillZoneService;
 use App\Service\DungeonRoute\DungeonRouteKillZoneServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteSaveService;
@@ -341,6 +343,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Depends on SeasonService
         $this->app->bind(AffixGroupEaseTierServiceInterface::class, AffixGroupEaseTierService::class);
+        $this->app->bind(DungeonRouteCollectionServiceInterface::class, DungeonRouteCollectionService::class);
 
         // Depends on CacheService, CoordinatesService, OverpulledEnemyService, SeasonService
         $this->app->bind(MapContextServiceInterface::class, MapContextService::class);

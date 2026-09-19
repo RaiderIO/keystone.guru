@@ -3,15 +3,20 @@
 namespace App\Http\Controllers\DungeonRoute;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DungeonRoute\DungeonRouteCollectionCreateFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteCollectionFormRequest;
+use App\Http\Requests\DungeonRoute\DungeonRouteCollectionIndexFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
+use App\Models\Season;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRouteRepositoryInterface;
+use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -23,38 +28,93 @@ use Session;
 
 class DungeonRouteCollectionController extends Controller
 {
-    /**
-     * Lists all collections of the currently logged in user.
-     */
-    public function index(): View
-    {
+    public function index(
+        DungeonRouteCollectionIndexFormRequest $request,
+        DungeonRouteCollectionServiceInterface $dungeonRouteCollectionService,
+    ): View {
         /** @var User $user */
-        $user = Auth::user();
+        $user        = Auth::user();
+        $gameVersion = $request->gameVersion();
+        $season      = $request->season();
 
-        return view('collection.index', [
+        $dungeonRouteCollections = $user->dungeonRouteCollections()
+            ->with([
+                'team',
+                'dungeonRouteCollectionCategory',
+                'gameVersion',
+                'season.dungeons',
+                'dungeonRoutes.mappingVersion',
+            ])
             // The overview shows a route count per collection - counted in the query rather than
             // per row, which would be a query per collection
-            'dungeonRouteCollections' => $user->dungeonRouteCollections()
-                ->with(['team', 'dungeonRouteCollectionCategory'])
-                ->withCount('dungeonRouteCollectionRoutes')
-                ->get(),
+            ->withCount('dungeonRouteCollectionRoutes')
+            ->where('game_version_id', $gameVersion->id)
+            ->when($season !== null, static fn(Builder $query) => $query->where('season_id', $season?->id))
+            ->when($request->isFreeFormOnly(), static fn(Builder $query) => $query->whereNull('season_id'))
+            ->get();
+
+        $dungeonRouteCollections = $dungeonRouteCollectionService->sortForOverview($dungeonRouteCollections);
+
+        return view('collection.index', [
+            'dungeonRouteCollections' => $dungeonRouteCollections,
+            'coveredDungeonCounts'    => $dungeonRouteCollections->mapWithKeys(
+                static fn(DungeonRouteCollection $dungeonRouteCollection): array => [
+                    $dungeonRouteCollection->id => $dungeonRouteCollectionService->getCoveredDungeonCount(
+                        $dungeonRouteCollection,
+                        $dungeonRouteCollection->dungeonRoutes,
+                    ),
+                ],
+            ),
+            'gameVersions'         => $request->selectableGameVersions(),
+            'selectedGameVersion'  => $gameVersion,
+            'seasons'              => $dungeonRouteCollectionService->getSelectableSeasons($gameVersion),
+            'selectedSeasonFilter' => $request->isFreeFormOnly()
+                ? DungeonRouteCollectionIndexFormRequest::SEASON_NONE
+                : $season?->id,
         ]);
     }
 
     /**
-     * Shows the form for a brand new collection.
+     * Shows the form for a brand new collection, always for the game version selected on the site. The season_id
+     * query parameter picks the season it opens with, which the form uses to rebuild its route picker when the user
+     * picks another season.
      */
-    public function create(): View
-    {
+    public function create(
+        DungeonRouteCollectionCreateFormRequest $request,
+        DungeonRouteCollectionServiceInterface  $dungeonRouteCollectionService,
+    ): View {
         /** @var User $user */
-        $user = Auth::user();
+        $user        = Auth::user();
+        $gameVersion = $request->gameVersion();
+        $hasOldInput = $request->session()->hasOldInput();
+
+        // The requested season wins, then what a failed validation submitted, then the current season
+
+        if (!$gameVersion->has_seasons) {
+            $season = null;
+        } elseif ($request->hasSeason()) {
+            $season = $request->season();
+        } elseif ($hasOldInput) {
+            $season = Season::query()
+                ->where('expansion_id', $gameVersion->expansion_id)
+                ->find((int)$request->old('season_id'));
+        } else {
+            $season = $dungeonRouteCollectionService->getCurrentSeason($gameVersion);
+        }
+        $season?->load(['expansion', 'dungeons']);
+
+        $ownDungeonRoutes = $this->getOwnDungeonRoutes($user);
 
         return view('collection.new', [
-            'dungeonRouteCollection'  => null,
-            'ownDungeonRoutes'        => $this->getOwnDungeonRoutes($user),
-            'selectedDungeonRouteIds' => [],
-            'teams'                   => $user->teams,
-            'categories'              => DungeonRouteCollectionCategory::all(),
+            'dungeonRouteCollection' => null,
+            'editSections'           => $dungeonRouteCollectionService->getEditSections($gameVersion, $season, $ownDungeonRoutes, collect()),
+            'ownDungeonRoutes'       => $ownDungeonRoutes,
+            'hasOwnDungeonRoutes'    => $ownDungeonRoutes->isNotEmpty(),
+            'selectedGameVersion'    => $gameVersion,
+            'seasons'                => $dungeonRouteCollectionService->getSelectableSeasons($gameVersion),
+            'selectedSeason'         => $season,
+            'teams'                  => $user->teams,
+            'categories'             => DungeonRouteCollectionCategory::all(),
         ]);
     }
 
@@ -89,6 +149,8 @@ class DungeonRouteCollectionController extends Controller
                 'user_id'                              => $user->id,
                 'team_id'                              => $request->team()?->id,
                 'dungeon_route_collection_category_id' => $request->dungeonRouteCollectionCategory()?->id,
+                'game_version_id'                      => $request->gameVersion()->id,
+                'season_id'                            => $request->season()?->id,
                 'public_key'                           => DungeonRouteCollection::generateRandomPublicKey(),
                 'published_state_id'                   => $request->publishedStateId(),
                 'name'                                 => $request->validated('name'),
@@ -110,18 +172,39 @@ class DungeonRouteCollectionController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function edit(Request $request, DungeonRouteCollection $dungeonRouteCollection): View
-    {
+    public function edit(
+        Request                                $request,
+        DungeonRouteCollection                 $dungeonRouteCollection,
+        DungeonRouteCollectionServiceInterface $dungeonRouteCollectionService,
+    ): View {
         Gate::authorize('edit', $dungeonRouteCollection);
 
-        $dungeonRouteCollection->load(['dungeonRoutes', 'user']);
+        $dungeonRouteCollection->load([
+            'dungeonRoutes.dungeon',
+            'dungeonRoutes.mappingVersion',
+            'user',
+            'gameVersion',
+            'season.expansion',
+            'season.dungeons',
+        ]);
+
+        // Scoped to the collection's own owner, not the acting user - otherwise an admin
+        // editing someone else's collection would see an empty picker and no shared teams
+        $ownDungeonRoutes = $this->getOwnDungeonRoutes($dungeonRouteCollection->user);
 
         return view('collection.edit', [
             'dungeonRouteCollection' => $dungeonRouteCollection,
-            // Scoped to the collection's own owner, not the acting user - otherwise an admin
-            // editing someone else's collection would see an empty picker and no shared teams
-            'ownDungeonRoutes'        => $this->getOwnDungeonRoutes($dungeonRouteCollection->user),
+            'editSections'           => $dungeonRouteCollectionService->getEditSections(
+                $dungeonRouteCollection->gameVersion,
+                $dungeonRouteCollection->season,
+                $ownDungeonRoutes,
+                $dungeonRouteCollection->dungeonRoutes,
+            ),
+            'ownDungeonRoutes'        => $ownDungeonRoutes,
+            'hasOwnDungeonRoutes'     => $ownDungeonRoutes->isNotEmpty() || $dungeonRouteCollection->dungeonRoutes->isNotEmpty(),
             'selectedDungeonRouteIds' => $dungeonRouteCollection->dungeonRoutes->pluck('id')->all(),
+            'selectedGameVersion'     => $dungeonRouteCollection->gameVersion,
+            'selectedSeason'          => $dungeonRouteCollection->season,
             'teams'                   => $dungeonRouteCollection->user->teams,
             'categories'              => DungeonRouteCollectionCategory::all(),
         ]);
@@ -151,6 +234,8 @@ class DungeonRouteCollectionController extends Controller
             $dungeonRouteCollectionRepository->update($dungeonRouteCollection, [
                 'team_id'                              => $request->team()?->id,
                 'dungeon_route_collection_category_id' => $request->dungeonRouteCollectionCategory()?->id,
+                'game_version_id'                      => $request->gameVersion()->id,
+                'season_id'                            => $request->season()?->id,
                 'published_state_id'                   => $request->publishedStateId(),
                 'name'                                 => $request->validated('name'),
                 'description'                          => $request->validated('description'),
@@ -189,8 +274,11 @@ class DungeonRouteCollectionController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function view(Request $request, DungeonRouteCollection $dungeonRouteCollection): View
-    {
+    public function view(
+        Request                                $request,
+        DungeonRouteCollection                 $dungeonRouteCollection,
+        DungeonRouteCollectionServiceInterface $dungeonRouteCollectionService,
+    ): View {
         Gate::authorize('view', $dungeonRouteCollection);
 
         // The routes render through the shared route card, which needs the same relation set
@@ -198,6 +286,9 @@ class DungeonRouteCollectionController extends Controller
         $dungeonRouteCollection->load([
             'user',
             'dungeonRouteCollectionCategory',
+            'gameVersion',
+            'season.expansion',
+            'season.dungeons',
             'dungeonRoutes.author.iconfile',
             'dungeonRoutes.affixes',
             'dungeonRoutes.ratings',
@@ -209,11 +300,15 @@ class DungeonRouteCollectionController extends Controller
             'dungeonRoutes.team',
         ]);
 
+        // A collection being public never publishes the routes in it - an unpublished route
+        // stays hidden from everyone but its author
+        $dungeonRoutes = $dungeonRouteCollection->getViewableDungeonRoutes(Auth::user());
+
         return view('collection.view', [
             'dungeonRouteCollection' => $dungeonRouteCollection,
-            // A collection being public never publishes the routes in it - an unpublished route
-            // stays hidden from everyone but its author
-            'dungeonRoutes' => $dungeonRouteCollection->getViewableDungeonRoutes(Auth::user()),
+            'dungeonRoutes'          => $dungeonRoutes,
+            'dungeonRouteGroups'     => $dungeonRouteCollectionService->getDungeonRouteGroups($dungeonRouteCollection, $dungeonRoutes),
+            'coveredDungeonCount'    => $dungeonRouteCollectionService->getCoveredDungeonCount($dungeonRouteCollection, $dungeonRoutes),
         ]);
     }
 
@@ -228,7 +323,7 @@ class DungeonRouteCollectionController extends Controller
         return DungeonRoute::query()
             ->where('author_id', $user->id)
             ->whereNull('expires_at')
-            ->with(['dungeon'])
+            ->with(['dungeon', 'mappingVersion'])
             ->orderBy('title')
             ->get();
     }

@@ -2,13 +2,20 @@
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
 use App\Models\Team;
+use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<int, DungeonRoute> $ownDungeonRoutes
- * @var array<int, int>               $selectedDungeonRouteIds
- * @var Collection<int, Team>         $teams
+ * @var Collection<int, DungeonRouteCollectionGroup>    $editSections
+ * @var bool                                            $hasOwnDungeonRoutes
+ * @var GameVersion                                     $selectedGameVersion
+ * @var Collection<int, Season>                         $seasons
+ * @var Season|null                                     $selectedSeason
+ * @var Collection<int, DungeonRoute>                  $ownDungeonRoutes
+ * @var Collection<int, Team>                           $teams
  * @var Collection<int, DungeonRouteCollectionCategory> $categories
  */
 ?>
@@ -20,8 +27,13 @@ use Illuminate\Support\Collection;
     <div class="container">
         @include('common.collection.details', [
             'dungeonRouteCollection' => null,
+            'editSections' => $editSections,
+            'hasOwnDungeonRoutes' => $hasOwnDungeonRoutes,
+            'selectedDungeonRouteIds' => [],
+            'selectedGameVersion' => $selectedGameVersion,
+            'seasons' => $seasons,
+            'selectedSeason' => $selectedSeason,
             'ownDungeonRoutes' => $ownDungeonRoutes,
-            'selectedDungeonRouteIds' => $selectedDungeonRouteIds,
             'teams' => $teams,
             'categories' => $categories,
         ])
