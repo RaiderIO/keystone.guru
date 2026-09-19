@@ -54,8 +54,8 @@ class DungeonRouteCollectionFormRequest extends FormRequest
                 Rule::exists('team_users', 'team_id')
                     ->where('user_id', $userId),
             ],
-            // Required for a new collection; an existing one keeps its game version when none is posted
-            'game_version_id' => array_merge($this->existingDungeonRouteCollection() === null ? [] : ['sometimes'], [
+            // Required for a collection without one yet; any other keeps its game version when none is posted
+            'game_version_id' => array_merge($this->existingDungeonRouteCollection()?->game_version_id === null ? [] : ['sometimes'], [
                 'required',
                 'integer',
                 Rule::exists('game_versions', 'id')->where('active', 1),
@@ -246,7 +246,8 @@ class DungeonRouteCollectionFormRequest extends FormRequest
         $dungeonRouteCollection = $this->existingDungeonRouteCollection();
         $gameVersionId          = $this->input('game_version_id');
 
-        if ($dungeonRouteCollection === null || $gameVersionId === null || (int)$gameVersionId === $dungeonRouteCollection->game_version_id) {
+        // A collection without a game version yet must be able to get one, whatever it holds
+        if ($dungeonRouteCollection?->game_version_id === null || $gameVersionId === null || (int)$gameVersionId === $dungeonRouteCollection->game_version_id) {
             return;
         }
 
@@ -261,15 +262,17 @@ class DungeonRouteCollectionFormRequest extends FormRequest
      */
     private function validateSeason(Validator $validator): void
     {
-        $seasonId = $this->input('season_id');
-        if ($seasonId === null) {
+        $seasonId               = $this->input('season_id');
+        $dungeonRouteCollection = $this->existingDungeonRouteCollection();
+        if ($seasonId !== null && $dungeonRouteCollection !== null && (int)$seasonId !== $dungeonRouteCollection->season_id) {
+            $validator->errors()->add('season_id', __('validation.custom.collection_season_id.fixed'));
+
             return;
         }
 
-        $dungeonRouteCollection = $this->existingDungeonRouteCollection();
-        if ($dungeonRouteCollection !== null && (int)$seasonId !== $dungeonRouteCollection->season_id) {
-            $validator->errors()->add('season_id', __('validation.custom.collection_season_id.fixed'));
-
+        // The season kept when none is posted must fit the game version just as much as a posted one
+        $season = $this->season();
+        if ($season === null) {
             return;
         }
 
@@ -280,7 +283,7 @@ class DungeonRouteCollectionFormRequest extends FormRequest
             return;
         }
 
-        if ($this->season()?->expansion_id !== $gameVersion->expansion_id) {
+        if ($season->expansion_id !== $gameVersion->expansion_id) {
             $validator->errors()->add('season_id', __('validation.custom.collection_season_id.expansion'));
         }
     }

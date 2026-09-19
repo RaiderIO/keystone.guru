@@ -32,7 +32,7 @@ $categories              ??= collect();
 
 $isNew = $dungeonRouteCollection === null;
 // The game version is fixed once a route is in the collection
-$mayChangeGameVersion = $isNew || $dungeonRouteCollection->dungeonRoutes->isEmpty();
+$mayChangeGameVersion = $isNew || $dungeonRouteCollection->game_version_id === null || $dungeonRouteCollection->dungeonRoutes->isEmpty();
 
 $gameVersionOptions = $gameVersions->mapWithKeys(static fn(GameVersion $gameVersion): array => [
     $gameVersion->id => __($gameVersion->name),

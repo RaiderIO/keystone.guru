@@ -474,6 +474,90 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
     }
 
     #[Test]
+    public function update_givenAGameVersionWithoutSeasonsForAnEmptySeasonSetWithoutPostingTheSeason_failsValidation(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id]);
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
+
+        // Act
+        $response = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection), [
+            'name'            => 'ZzTestSeasonSet',
+            'published_state' => PublishedState::WORLD,
+            'game_version_id' => $this->gameVersionWithoutSeasons()->id,
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors(['season_id' => __('validation.custom.collection_season_id.no_seasons')]);
+        $dungeonRouteCollection->refresh();
+        $this->assertSame($this->retail()->id, $dungeonRouteCollection->game_version_id);
+        $this->assertSame($season->id, $dungeonRouteCollection->season_id);
+    }
+
+    #[Test]
+    public function update_givenAPopulatedCollectionWithoutAGameVersion_assignsTheGameVersion(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $dungeonRoute           = $this->createRoute($this->retailMappingVersions()->first());
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
+        DungeonRouteCollection::query()->whereKey($dungeonRouteCollection->id)->update(['game_version_id' => null]);
+        $this->addRoutes($dungeonRouteCollection, [$dungeonRoute]);
+        $newDungeonRoute = $this->createRoute($this->retailMappingVersions()->get(1));
+
+        // Act
+        $response = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection->refresh()), [
+            'name'            => 'ZzTestNoGameVersionYet',
+            'published_state' => PublishedState::WORLD,
+            'game_version_id' => $this->retail()->id,
+            'dungeon_routes'  => [$dungeonRoute->id, $newDungeonRoute->id],
+        ]);
+
+        // Assert
+        $response->assertSessionHasNoErrors();
+        $dungeonRouteCollection->refresh();
+        $this->assertSame($this->retail()->id, $dungeonRouteCollection->game_version_id);
+        $this->assertSame([$dungeonRoute->id, $newDungeonRoute->id], $dungeonRouteCollection->dungeonRoutes->pluck('id')->all());
+    }
+
+    #[Test]
+    public function update_givenACollectionWithoutAGameVersionAndNoneIsPosted_failsValidation(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
+        DungeonRouteCollection::query()->whereKey($dungeonRouteCollection->id)->update(['game_version_id' => null]);
+
+        // Act
+        $response = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection->refresh()), [
+            'name'            => 'ZzTestNoGameVersionYet',
+            'published_state' => PublishedState::WORLD,
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors('game_version_id');
+    }
+
+    #[Test]
+    public function edit_givenAPopulatedCollectionWithoutAGameVersion_offersTheGameVersionSelect(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $dungeonRoute           = $this->createRoute($this->retailMappingVersions()->first());
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
+        DungeonRouteCollection::query()->whereKey($dungeonRouteCollection->id)->update(['game_version_id' => null]);
+        $this->addRoutes($dungeonRouteCollection, [$dungeonRoute]);
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection->refresh()]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertMatchesRegularExpression('/<select[^>]*name="game_version_id"/', (string)$response->getContent());
+    }
+
+    #[Test]
     public function view_givenASeasonSet_showsOneSlotPerPoolDungeonInPoolOrderWithGaps(): void
     {
         // Arrange
