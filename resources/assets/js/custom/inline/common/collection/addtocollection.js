@@ -31,6 +31,7 @@
  @property {string|null} blocked_text
  @property {string} store_url
  @property {string} delete_url
+ @property {boolean|undefined} is_saving  Set while a change to this collection is being saved.
  */
 
 /**
@@ -131,7 +132,7 @@ class CommonCollectionAddtocollection extends InlineCode {
             type: 'checkbox',
             'class': 'form-check-input',
             id: inputId,
-        }).prop('checked', collection.is_member).prop('disabled', isDisabled);
+        }).prop('checked', collection.is_member).prop('disabled', isDisabled || collection.is_saving === true);
 
         let $label = $('<label>', {'class': 'form-check-label', 'for': inputId})
             .append($('<span>', {'class': 'd-block', text: collection.name}))
@@ -209,12 +210,21 @@ class CommonCollectionAddtocollection extends InlineCode {
     _setMember(collection, isMember, publicKey, onSaved) {
         let self = this;
 
+        // One change at a time per collection, so an add and a remove can never race each other
+        if (collection.is_saving === true) {
+            return;
+        }
+
+        collection.is_saving = true;
+        this._replaceRow(collection, publicKey);
+
         $.ajax({
             type: isMember ? 'POST' : 'DELETE',
             url: isMember ? collection.store_url : collection.delete_url,
             dataType: 'json',
             data: {dungeon_routes: [publicKey]},
             success: function () {
+                collection.is_saving = false;
                 collection.is_member = isMember;
                 collection.route_count += isMember ? 1 : -1;
                 if (!isMember && collection.blocked_reason === null && collection.route_count >= collection.max_routes) {
@@ -229,6 +239,7 @@ class CommonCollectionAddtocollection extends InlineCode {
                 onSaved();
             },
             error: function (xhr) {
+                collection.is_saving = false;
                 showErrorNotification(self._escape(self._getErrorMessage(xhr)));
                 self._replaceRow(collection, publicKey);
             },

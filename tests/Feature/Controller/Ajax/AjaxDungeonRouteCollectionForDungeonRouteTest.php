@@ -269,7 +269,7 @@ final class AjaxDungeonRouteCollectionForDungeonRouteTest extends PublicTestCase
     }
 
     /**
-     * @param  TestResponse<JsonResponse>        $response
+     * @param  TestResponse<JsonResponse>       $response
      * @return array<int, array<string, mixed>>
      */
     private function collectionsOf(TestResponse $response): array

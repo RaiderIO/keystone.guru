@@ -275,6 +275,24 @@ describe('CommonCollectionAddtocollection', () => {
         expect(toasts.length).toBe(0);
     });
 
+    it('toggle_givenASaveInProgress_disablesTheCheckboxAndIgnoresAnotherChange', () => {
+        // Arrange
+        openWith(listResponse([collection()]));
+
+        // Act
+        jQuery('#add_to_collection_colA').prop('checked', true).trigger('change');
+        let isDisabledWhileSaving = jQuery('#add_to_collection_colA').prop('disabled');
+        jQuery('#add_to_collection_colA').prop('checked', false).trigger('change');
+        let requestCount = ajaxCalls.length;
+        ajaxCalls.shift().success({});
+
+        // Assert
+        expect(isDisabledWhileSaving).toBe(true);
+        expect(requestCount).toBe(1);
+        expect(jQuery('#add_to_collection_colA').prop('disabled')).toBe(false);
+        expect(jQuery('#add_to_collection_colA').prop('checked')).toBe(true);
+    });
+
     it('open_givenALoadFailure_saysSo', () => {
         // Arrange
 

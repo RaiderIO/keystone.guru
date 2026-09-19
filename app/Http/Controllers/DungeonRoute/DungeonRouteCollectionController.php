@@ -117,6 +117,13 @@ class DungeonRouteCollectionController extends Controller
         $ownDungeonRoutes      = $this->getOwnDungeonRoutes($user);
         $matchingDungeonRoutes = $dungeonRouteCollectionService->filterMatchingDungeonRoutes($gameVersion, $season, $ownDungeonRoutes);
 
+        // A route of an inactive season starts a set of that season, so the season select must offer it
+        $seasonsPerGameVersion = $this->getSeasonsPerGameVersion($gameVersions, $dungeonRouteCollectionService);
+        $selectableSeasons     = $seasonsPerGameVersion->get($gameVersion->id);
+        if ($season !== null && $selectableSeasons !== null && !$selectableSeasons->contains('id', $season->id)) {
+            $selectableSeasons->prepend($season);
+        }
+
         $selectedDungeonRouteIds = [];
         $tagDungeonRoutesLeftOut = 0;
         $dungeonRoute            = $request->dungeonRoute();
@@ -143,7 +150,7 @@ class DungeonRouteCollectionController extends Controller
             'selectedDungeonRouteIds' => $selectedDungeonRouteIds,
             'gameVersions'            => $gameVersions,
             'selectedGameVersion'     => $gameVersion,
-            'seasonsPerGameVersion'   => $this->getSeasonsPerGameVersion($gameVersions, $dungeonRouteCollectionService),
+            'seasonsPerGameVersion'   => $seasonsPerGameVersion,
             'selectedSeason'          => $season,
             'teams'                   => $user->teams,
             'categories'              => DungeonRouteCollectionCategory::all(),

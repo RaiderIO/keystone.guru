@@ -337,6 +337,27 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
     }
 
     #[Test]
+    public function create_givenARouteOfAnInactiveSeason_offersThatSeasonSelected(): void
+    {
+        // Arrange
+        $owner        = $this->createUser();
+        $season       = $this->createRetailSeason();
+        $dungeonRoute = $this->createRoute($owner, $this->retailMappingVersion(), $season);
+
+        // Act
+        $response = $this->actingAs($owner)->get(route('collections.new', ['dungeon_route' => $dungeonRoute->public_key]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertFalse((bool)$season->active);
+        $this->assertContains($season->id, $response->viewData('seasonsPerGameVersion')->get($this->retail()->id)->pluck('id')->all());
+        $this->assertMatchesRegularExpression(
+            sprintf('/<option value="%d" selected="selected">/', $season->id),
+            (string)$response->getContent(),
+        );
+    }
+
+    #[Test]
     public function create_givenARouteOfAGameVersionWithoutSeasons_startsFreeForm(): void
     {
         // Arrange
