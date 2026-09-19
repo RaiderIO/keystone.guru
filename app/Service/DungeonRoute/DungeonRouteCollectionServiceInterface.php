@@ -39,6 +39,16 @@ interface DungeonRouteCollectionServiceInterface
     ): Collection;
 
     /**
+     * The enemy forces of each route against its mapping version's requirement ("500 / 498"), flagged as a warning
+     * when the route falls short. Routes without a mapping version, or whose mapping version requires no enemy forces
+     * (dungeons without enemy forces, such as most classic ones), get no entry. Expects the mapping versions loaded.
+     *
+     * @param  Collection<int, DungeonRoute>                    $dungeonRoutes
+     * @return array<int, array{text: string, isWarning: bool}> Keyed by route id.
+     */
+    public function getEnemyForcesDetails(Collection $dungeonRoutes): array;
+
+    /**
      * "Season 2 set · 5/8 dungeons" for a season set, "Cataclysm · 4 dungeons" for a free-form collection.
      *
      * @param Collection<int, DungeonRoute> $dungeonRoutes The routes to count, with their mapping versions loaded.

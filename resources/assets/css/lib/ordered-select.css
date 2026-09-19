@@ -39,6 +39,16 @@
     overflow-wrap: anywhere;
 }
 
+.ordered_select .ordered_select_detail {
+    color: var(--theme-light);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.ordered_select .ordered_select_detail.ordered_select_detail_warning {
+    color: var(--bs-warning);
+}
+
 .ordered_select .ordered_select_item .btn {
     min-width: 2rem;
     min-height: 2rem;

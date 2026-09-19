@@ -13,8 +13,13 @@
  * @var int                $max          Maximum number of items in the list.
  * @var string|null        $help         Help text below the control.
  * @var string             $emptyText    Shown in place of the list while it is empty.
+ * @var array<int, array{text: string, isWarning?: bool}> $optionDetails Optional secondary text per option id, shown
+ *                                                                      next to its label; a warning is flagged.
+ * @var string|null        $detailWarningText Read out (and shown on hover) for a flagged detail.
  */
-$help       ??= null;
+$help              ??= null;
+$optionDetails     ??= [];
+$detailWarningText ??= null;
 $labelClass ??= 'form-label';
 $errors     ??= collect();
 
@@ -40,6 +45,8 @@ $errorKey    = $name;
                 'name' => $name,
                 'itemId' => $selectedId,
                 'itemLabel' => $options[$selectedId],
+                'itemDetail' => $optionDetails[$selectedId] ?? null,
+                'detailWarningText' => $detailWarningText,
                 'position' => $index + 1,
             ])
         @endforeach
@@ -54,7 +61,10 @@ $errorKey    = $name;
                 aria-describedby="{{ $helpId }}" @disabled($isFull)>
             <option value="">{{ __('view_common.forms.orderedselect.choose') }}</option>
             @foreach($options as $optionId => $optionLabel)
-                <option value="{{ $optionId }}" @disabled(in_array($optionId, $selectedIds, true))>{{ $optionLabel }}</option>
+                @php($optionDetail = $optionDetails[$optionId] ?? null)
+                <option value="{{ $optionId }}" @disabled(in_array($optionId, $selectedIds, true))
+                    @if($optionDetail !== null) data-label="{{ $optionLabel }}" data-detail="{{ $optionDetail['text'] }}" data-detail-warning="{{ ($optionDetail['isWarning'] ?? false) ? 1 : 0 }}" @endif
+                >{{ $optionDetail !== null ? sprintf('%s (%s)', $optionLabel, $optionDetail['text']) : $optionLabel }}</option>
             @endforeach
         </select>
         <button id="{{ $id }}_add_button" type="button" class="btn btn-primary" @disabled($isFull)>
@@ -79,6 +89,8 @@ $errorKey    = $name;
             'name' => $name,
             'itemId' => 0,
             'itemLabel' => '',
+            'itemDetail' => null,
+            'detailWarningText' => $detailWarningText,
             'position' => 0,
         ])
     </template>

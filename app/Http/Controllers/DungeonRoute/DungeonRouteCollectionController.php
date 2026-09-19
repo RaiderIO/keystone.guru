@@ -110,6 +110,7 @@ class DungeonRouteCollectionController extends Controller
             'dungeonRouteCollection' => null,
             'editSections'           => $dungeonRouteCollectionService->getEditSections($gameVersion, $season, $ownDungeonRoutes, collect()),
             'ownDungeonRoutes'       => $ownDungeonRoutes,
+            'enemyForcesDetails'     => $dungeonRouteCollectionService->getEnemyForcesDetails($ownDungeonRoutes),
             'hasOwnDungeonRoutes'    => $ownDungeonRoutes->isNotEmpty(),
             'gameVersions'           => $gameVersions,
             'selectedGameVersion'    => $gameVersion,
@@ -202,7 +203,10 @@ class DungeonRouteCollectionController extends Controller
                 $ownDungeonRoutes,
                 $dungeonRouteCollection->dungeonRoutes,
             ),
-            'ownDungeonRoutes'        => $ownDungeonRoutes,
+            'ownDungeonRoutes'   => $ownDungeonRoutes,
+            'enemyForcesDetails' => $dungeonRouteCollectionService->getEnemyForcesDetails(
+                $ownDungeonRoutes->concat($dungeonRouteCollection->dungeonRoutes),
+            ),
             'hasOwnDungeonRoutes'     => $ownDungeonRoutes->isNotEmpty() || $dungeonRouteCollection->dungeonRoutes->isNotEmpty(),
             'selectedDungeonRouteIds' => $dungeonRouteCollection->dungeonRoutes->pluck('id')->all(),
             'gameVersions'            => GameVersion::query()

@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
  * @var GameVersion                                     $selectedGameVersion
  * @var Collection<int, Collection<int, Season>>        $seasonsPerGameVersion
  * @var Season|null                                     $selectedSeason
+ * @var array<int, array{text: string, isWarning: bool}> $enemyForcesDetails
  * @var Collection<int, Team>                           $teams
  * @var Collection<int, DungeonRouteCollectionCategory> $categories
  */
@@ -33,6 +34,7 @@ use Illuminate\Support\Collection;
             'selectedGameVersion' => $selectedGameVersion,
             'seasonsPerGameVersion' => $seasonsPerGameVersion,
             'selectedSeason' => $selectedSeason,
+            'enemyForcesDetails' => $enemyForcesDetails,
             'teams' => $teams,
             'categories' => $categories,
         ])
@@ -44,25 +46,23 @@ use Illuminate\Support\Collection;
 
     <script type="text/javascript">
         $(function () {
-            let $gameVersion = $('#game_version_id');
             let initialKind = null;
 
             // The route picker is built for one game version and season; once either changes it would offer the wrong routes
             function applyKind() {
-                let gameVersionId = $gameVersion.val();
+                let gameVersionId = $('.collection_game_version:checked').val();
                 $('.collection_season').each(function () {
                     let isSelected = String($(this).data('game-version-id')) === gameVersionId;
-                    $(this).prop('hidden', !isSelected).find('select').prop('disabled', !isSelected);
+                    $(this).prop('hidden', !isSelected).find('input').prop('disabled', !isSelected);
                 });
 
-                let kind = `${gameVersionId}-${$('.collection_season:not([hidden]) select').val() ?? ''}`;
+                let kind = `${gameVersionId}-${$('.collection_season:not([hidden]) input:checked').val() ?? ''}`;
                 initialKind ??= kind;
                 $('#collection_dungeon_routes').prop('hidden', kind !== initialKind).find('input').prop('disabled', kind !== initialKind);
                 $('#collection_dungeon_routes_kind_changed').prop('hidden', kind === initialKind);
             }
 
-            $gameVersion.on('change', applyKind);
-            $('.collection_season select').on('change', applyKind);
+            $('.collection_game_version, .collection_season input').on('change', applyKind);
             applyKind();
         });
     </script>

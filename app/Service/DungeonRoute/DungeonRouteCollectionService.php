@@ -63,6 +63,25 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
         );
     }
 
+    public function getEnemyForcesDetails(Collection $dungeonRoutes): array
+    {
+        $result = [];
+
+        foreach ($dungeonRoutes as $dungeonRoute) {
+            $mappingVersion = $dungeonRoute->mappingVersion;
+            if ($mappingVersion === null || $mappingVersion->enemy_forces_required <= 0) {
+                continue;
+            }
+
+            $result[$dungeonRoute->id] = [
+                'text'      => sprintf('%d / %d', $dungeonRoute->enemy_forces, $mappingVersion->enemy_forces_required),
+                'isWarning' => $dungeonRoute->enemy_forces < $mappingVersion->enemy_forces_required,
+            ];
+        }
+
+        return $result;
+    }
+
     public function getKindLabel(DungeonRouteCollection $dungeonRouteCollection, Collection $dungeonRoutes): string
     {
         $coveredDungeonIds = $dungeonRoutes

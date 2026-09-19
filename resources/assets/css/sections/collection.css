@@ -1,0 +1,33 @@
+/** Route collections - the season set's dungeon slots on the collection form */
+
+/* A dark-imagery object in every theme, like the route poster card: the dungeon image is the background, demoted
+   behind a black scrim, and the text drawn straight on it stays white with the legibility shadow. */
+.collection_slot {
+    border-radius: 6px;
+    overflow: hidden;
+    /* Scrim-family fallback, not a theme color: keeps the white text readable while the image loads or is missing */
+    background-color: #222;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.collection_slot .collection_slot_scrim {
+    background: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0.8) 0%,
+        rgba(0, 0, 0, 0.65) 40%,
+        rgba(0, 0, 0, 0.85) 100%);
+}
+
+.collection_slot .ordered_select > .d-flex label,
+.collection_slot .ordered_select .ordered_select_count,
+.collection_slot .ordered_select .ordered_select_empty,
+.collection_slot .ordered_select .form-text {
+    color: #fff !important;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.collection_season_icon {
+    width: 16px;
+    height: 16px;
+}

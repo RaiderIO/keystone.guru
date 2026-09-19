@@ -19,6 +19,7 @@ use Illuminate\Support\Collection;
  * @var GameVersion|null                                       $selectedGameVersion
  * @var Collection<int, Collection<int, Season>>               $seasonsPerGameVersion Keyed by game version id; new collections only.
  * @var Season|null                                            $selectedSeason
+ * @var array<int, array{text: string, isWarning: bool}>       $enemyForcesDetails Keyed by route id.
  * @var Collection<int, Team>                                  $teams
  * @var Collection<int, DungeonRouteCollectionCategory>        $categories
  */
@@ -27,21 +28,13 @@ $dungeonRouteCollection  ??= null;
 $selectedDungeonRouteIds ??= [];
 $seasonsPerGameVersion   ??= collect();
 $selectedSeason          ??= null;
+$enemyForcesDetails      ??= [];
 $teams                   ??= collect();
 $categories              ??= collect();
 
 $isNew = $dungeonRouteCollection === null;
 // The game version is fixed once a route is in the collection
 $mayChangeGameVersion = $isNew || $dungeonRouteCollection->game_version_id === null || $dungeonRouteCollection->dungeonRoutes->isEmpty();
-
-$gameVersionOptions = $gameVersions->mapWithKeys(static fn(GameVersion $gameVersion): array => [
-    $gameVersion->id => __($gameVersion->name),
-])->all();
-
-/** @var Collection<int, array<int|string, string>> $seasonOptionsPerGameVersion */
-$seasonOptionsPerGameVersion = $seasonsPerGameVersion->map(static fn(Collection $seasons): array => ['' => __('view_common.collection.details.season_none')] + $seasons->mapWithKeys(static fn(Season $season): array => [
-    $season->id => $season->name_long,
-])->all());
 
 // After a failed validation the picker must show what was submitted, not what is stored - otherwise
 // resubmitting the corrected form saves the collection with no routes. An empty submission stays empty
@@ -87,53 +80,62 @@ foreach ($teams as $team) {
     @include('common.forms.form-error', ['key' => 'description'])
 </div>
 
-<div class="mb-3{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
-    {{ html()->label(__('view_common.collection.details.game_version'), 'game_version_id') }}
+<fieldset class="mb-3{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
+    <legend class="form-label fs-6">{{ __('view_common.collection.details.game_version') }}</legend>
     @if($mayChangeGameVersion)
-        {{ html()->select('game_version_id', $gameVersionOptions, $selectedGameVersion?->id)->class('form-select') }}
-        <small class="form-text text-body-secondary">
-            {{ __('view_common.collection.details.game_version_help') }}
-        </small>
+        <div id="collection_game_version_container" class="btn-group flex-wrap" role="group">
+            @foreach($gameVersions as $gameVersion)
+                <input type="radio" name="game_version_id" id="game_version_id_{{ $gameVersion->id }}"
+                       class="btn-check collection_game_version" value="{{ $gameVersion->id }}"
+                    @checked($gameVersion->id === $selectedGameVersion?->id)>
+                <label class="btn btn-secondary" for="game_version_id_{{ $gameVersion->id }}">
+                    {{ __($gameVersion->name) }}
+                </label>
+            @endforeach
+        </div>
     @else
-        <p id="game_version_id" class="form-control-plaintext mb-0">
+        <p id="game_version_id" class="form-control-plaintext py-0 mb-0">
             {{ __($selectedGameVersion?->name ?? GameVersion::getDefaultGameVersion()->name) }}
+            <small class="text-body-secondary">&middot; {{ __('view_common.collection.details.game_version_fixed') }}</small>
         </p>
-        <small class="form-text text-body-secondary">
-            {{ __('view_common.collection.details.game_version_fixed') }}
-        </small>
     @endif
     @include('common.forms.form-error', ['key' => 'game_version_id'])
-</div>
+</fieldset>
 
 @if($isNew)
     {{-- One season field per game version with seasons; only the selected game version's is shown and posted --}}
-    @foreach($seasonOptionsPerGameVersion as $gameVersionId => $seasonOptions)
+    @foreach($seasonsPerGameVersion as $gameVersionId => $seasons)
         @php($isSelectedGameVersion = $gameVersionId === $selectedGameVersion?->id)
-        <div class="mb-3 collection_season{{ $errors->has('season_id') ? ' has-error' : '' }}"
-             data-game-version-id="{{ $gameVersionId }}" @if(!$isSelectedGameVersion) hidden @endif>
-            {{ html()->label(__('view_common.collection.details.season'), sprintf('season_id_%d', $gameVersionId)) }}
-            {{ html()->select('season_id', $seasonOptions, $isSelectedGameVersion ? $selectedSeason?->id : '')
-                ->id(sprintf('season_id_%d', $gameVersionId))
-                ->class('form-select')
-                ->disabled(!$isSelectedGameVersion) }}
-            <small class="form-text text-body-secondary">
+        <fieldset class="mb-3 collection_season{{ $errors->has('season_id') ? ' has-error' : '' }}"
+                  data-game-version-id="{{ $gameVersionId }}" @if(!$isSelectedGameVersion) hidden @endif
+                  aria-describedby="season_help_{{ $gameVersionId }}">
+            <legend class="form-label fs-6">{{ __('view_common.collection.details.season') }}</legend>
+            @include('common.collection.seasonradios', [
+                'idPrefix' => sprintf('season_id_%d', $gameVersionId),
+                'seasons' => $seasons,
+                'selectedSeasonId' => $isSelectedGameVersion ? $selectedSeason?->id : null,
+                'disabled' => !$isSelectedGameVersion,
+            ])
+            <small id="season_help_{{ $gameVersionId }}" class="form-text text-body-secondary d-block">
                 {{ __('view_common.collection.details.season_help') }}
             </small>
             @include('common.forms.form-error', ['key' => 'season_id'])
-        </div>
+        </fieldset>
     @endforeach
 @elseif($dungeonRouteCollection->isSeasonSet() && $selectedSeason !== null)
-    <div class="mb-3{{ $errors->has('season_id') ? ' has-error' : '' }}">
-        {{ html()->label(__('view_common.collection.details.season'), 'season_id') }}
-        {{ html()->select('season_id', [
-            $selectedSeason->id => $selectedSeason->name_long,
-            '' => __('view_common.collection.details.season_none'),
-        ], $selectedSeason->id)->class('form-select') }}
-        <small class="form-text text-body-secondary">
+    <fieldset class="mb-3{{ $errors->has('season_id') ? ' has-error' : '' }}" aria-describedby="season_help">
+        <legend class="form-label fs-6">{{ __('view_common.collection.details.season') }}</legend>
+        @include('common.collection.seasonradios', [
+            'idPrefix' => 'season_id',
+            'seasons' => collect([$selectedSeason]),
+            'selectedSeasonId' => $selectedSeason->id,
+            'disabled' => false,
+        ])
+        <small id="season_help" class="form-text text-body-secondary d-block">
             {{ __('view_common.collection.details.season_make_free_form') }}
         </small>
         @include('common.forms.form-error', ['key' => 'season_id'])
-    </div>
+    </fieldset>
 @endif
 
 <div class="mb-3{{ $errors->has('category_id') ? ' has-error' : '' }}">
@@ -181,9 +183,41 @@ foreach ($teams as $team) {
             {{ __('view_common.collection.details.dungeon_routes_none') }}
         </p>
     @else
+        @php($slotSections = $editSections->filter(static fn(DungeonRouteCollectionGroup $editSection): bool => $editSection->matchesCollection && $editSection->dungeon !== null))
+        <p class="form-text text-body-secondary mt-0">
+            {{ __('view_common.collection.details.dungeon_routes_help') }}
+        </p>
+
+        @if($slotSections->isNotEmpty())
+            <div class="row row-cols-1 row-cols-lg-2 g-3 mb-3">
+                @foreach($slotSections as $editSection)
+                    <div class="col">
+                        <div class="collection_slot h-100" style="background-image: url('{{ $editSection->dungeon->getImageUrl() }}')">
+                            <div class="collection_slot_scrim h-100 p-3">
+                                @include('common.forms.orderedselect', [
+                                    'id' => sprintf('dungeon_routes_%d', $editSection->dungeon->id),
+                                    'name' => 'dungeon_routes',
+                                    'label' => __($editSection->dungeon->name),
+                                    'labelClass' => 'form-label fw-bold',
+                                    'options' => $editSection->dungeonRoutes->mapWithKeys(static fn(DungeonRoute $dungeonRoute): array => [
+                                        $dungeonRoute->id => $dungeonRoute->title,
+                                    ])->all(),
+                                    'optionDetails' => $enemyForcesDetails,
+                                    'detailWarningText' => __('view_common.collection.details.enemy_forces_short'),
+                                    'selectedIds' => $selectedDungeonRouteIds,
+                                    'max' => DungeonRouteCollection::MAX_ROUTES,
+                                    'emptyText' => __('view_common.collection.details.dungeon_routes_slot_empty', ['dungeon' => __($editSection->dungeon->name)]),
+                                ])
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
         @foreach($editSections as $editSection)
-            <div class="mb-3">
-                @if(!$editSection->matchesCollection)
+            @if(!$editSection->matchesCollection)
+                <div class="mb-3">
                     @include('common.forms.orderedselect', [
                         'id' => 'dungeon_routes_foreign',
                         'name' => 'dungeon_routes',
@@ -192,26 +226,16 @@ foreach ($teams as $team) {
                         'options' => $editSection->dungeonRoutes->mapWithKeys(static fn(DungeonRoute $dungeonRoute): array => [
                             $dungeonRoute->id => sprintf('%s — %s', $dungeonRoute->title, __($dungeonRoute->dungeon?->name ?? '')),
                         ])->all(),
+                        'optionDetails' => $enemyForcesDetails,
+                        'detailWarningText' => __('view_common.collection.details.enemy_forces_short'),
                         'selectedIds' => $selectedDungeonRouteIds,
                         'max' => DungeonRouteCollection::MAX_ROUTES,
                         'help' => __('view_common.collection.details.dungeon_routes_foreign_help'),
                         'emptyText' => __('view_common.collection.details.dungeon_routes_empty'),
                     ])
-                @elseif($editSection->dungeon !== null)
-                    @include('common.forms.orderedselect', [
-                        'id' => sprintf('dungeon_routes_%d', $editSection->dungeon->id),
-                        'name' => 'dungeon_routes',
-                        'label' => __($editSection->dungeon->name),
-                        'labelClass' => 'form-label fw-bold',
-                        'options' => $editSection->dungeonRoutes->mapWithKeys(static fn(DungeonRoute $dungeonRoute): array => [
-                            $dungeonRoute->id => $dungeonRoute->title,
-                        ])->all(),
-                        'selectedIds' => $selectedDungeonRouteIds,
-                        'max' => DungeonRouteCollection::MAX_ROUTES,
-                        'help' => __('view_common.collection.details.dungeon_routes_slot_help', ['dungeon' => __($editSection->dungeon->name)]),
-                        'emptyText' => __('view_common.collection.details.dungeon_routes_slot_empty', ['dungeon' => __($editSection->dungeon->name)]),
-                    ])
-                @else
+                </div>
+            @elseif($editSection->dungeon === null)
+                <div class="mb-3">
                     @include('common.forms.orderedselect', [
                         'id' => 'dungeon_routes',
                         'name' => 'dungeon_routes',
@@ -219,13 +243,14 @@ foreach ($teams as $team) {
                         'options' => $editSection->dungeonRoutes->mapWithKeys(static fn(DungeonRoute $dungeonRoute): array => [
                             $dungeonRoute->id => sprintf('%s — %s', $dungeonRoute->title, __($dungeonRoute->dungeon?->name ?? '')),
                         ])->all(),
+                        'optionDetails' => $enemyForcesDetails,
+                        'detailWarningText' => __('view_common.collection.details.enemy_forces_short'),
                         'selectedIds' => $selectedDungeonRouteIds,
                         'max' => DungeonRouteCollection::MAX_ROUTES,
-                        'help' => __('view_common.collection.details.dungeon_routes_help'),
                         'emptyText' => __('view_common.collection.details.dungeon_routes_empty'),
                     ])
-                @endif
-            </div>
+                </div>
+            @endif
         @endforeach
         @foreach(collect($errors->get('dungeon_routes.*'))->flatten()->unique() as $dungeonRoutesError)
             <div class="invalid-feedback d-block" role="alert">

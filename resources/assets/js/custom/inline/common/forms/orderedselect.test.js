@@ -46,6 +46,11 @@ function itemHtml(id, name) {
             <span class="ordered_select_handle"></span>
             <span class="ordered_select_position">0</span>
             <span class="ordered_select_label">${name}</span>
+            <span class="ordered_select_detail" hidden>
+                <i class="ordered_select_detail_icon" hidden></i>
+                <span class="ordered_select_detail_text"></span>
+                <span class="ordered_select_detail_warning_text" hidden>Below target</span>
+            </span>
             <button type="button" class="ordered_select_up"></button>
             <button type="button" class="ordered_select_down"></button>
             <button type="button" class="ordered_select_remove"></button>
@@ -71,6 +76,8 @@ describe('CommonFormsOrderedselect', () => {
                     <option value="2" disabled>Bravo</option>
                     <option value="3">Charlie</option>
                     <option value="4">Delta</option>
+                    <option value="5" data-label="Echo" data-detail="490 / 498" data-detail-warning="1">Echo (490 / 498)</option>
+                    <option value="6" data-label="Foxtrot" data-detail="500 / 498" data-detail-warning="0">Foxtrot (500 / 498)</option>
                 </select>
                 <button id="routes_add_button" type="button">Add</button>
                 <span id="routes_full" hidden>Full</span>
@@ -134,6 +141,48 @@ describe('CommonFormsOrderedselect', () => {
         expect(document.querySelector('#routes_add option[value="3"]').disabled).toBe(true);
         expect(document.querySelector('#routes_add').value).toBe('');
         expect(document.querySelector('#routes_status').textContent).toBe('Added Charlie at position 3');
+    });
+
+    it('addSelected_givenAnOptionWithAWarningDetail_showsTheDetailFlagged', () => {
+        // Arrange - done in beforeEach
+
+        // Act
+        addOption('5');
+
+        // Assert
+        const item   = itemNamed('Echo');
+        const detail = item.querySelector('.ordered_select_detail');
+        expect(detail.hidden).toBe(false);
+        expect(detail.classList.contains('ordered_select_detail_warning')).toBe(true);
+        expect(item.querySelector('.ordered_select_detail_text').textContent).toBe('490 / 498');
+        expect(item.querySelector('.ordered_select_detail_icon').hidden).toBe(false);
+        expect(detail.getAttribute('title')).toBe('Below target');
+        expect(document.querySelector('#routes_status').textContent).toBe('Added Echo at position 3');
+    });
+
+    it('addSelected_givenAnOptionWithAPlainDetail_showsTheDetailUnflagged', () => {
+        // Arrange - done in beforeEach
+
+        // Act
+        addOption('6');
+
+        // Assert
+        const item   = itemNamed('Foxtrot');
+        const detail = item.querySelector('.ordered_select_detail');
+        expect(detail.hidden).toBe(false);
+        expect(detail.classList.contains('ordered_select_detail_warning')).toBe(false);
+        expect(item.querySelector('.ordered_select_detail_icon').hidden).toBe(true);
+        expect(detail.hasAttribute('title')).toBe(false);
+    });
+
+    it('addSelected_givenAnOptionWithoutADetail_keepsTheDetailHidden', () => {
+        // Arrange - done in beforeEach
+
+        // Act
+        addOption('3');
+
+        // Assert
+        expect(itemNamed('Charlie').querySelector('.ordered_select_detail').hidden).toBe(true);
     });
 
     it('addSelected_givenTheListReachesMax_disablesAddingAndShowsTheFullNote', () => {
