@@ -71,6 +71,7 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
                 ->where('model_class', $criterion->getModelClass())
                 ->where('model_id', $criterion->getModelId())
                 ->where('mythic_level_min', $band->min)
+                ->where('mythic_level_max', $band->max)
                 ->where('date', $date)
                 ->where('count', '>', 0)
                 ->decrement('count');
@@ -145,6 +146,7 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
             ->where('combat_log_version', $combatLogVersion)
             ->where('model_class', $modelClass)
             ->where('mythic_level_min', $band->min)
+            ->where('mythic_level_max', $band->max)
             ->where('date', Carbon::now()->toDateString())
             // The same comparison PollingBudgetWindow::isAtCeiling() makes, pushed into SQL.
             ->whereRaw('`count` * ? >= `threshold` * ?', [
@@ -187,12 +189,12 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
                 'model_class'        => $criterion->getModelClass(),
                 'model_id'           => $criterion->getModelId(),
                 'mythic_level_min'   => $band->min,
+                'mythic_level_max'   => $band->max,
                 'date'               => $date,
             ],
             [
-                'mythic_level_max' => $band->max,
-                'count'            => 0,
-                'threshold'        => $this->getDefaultThreshold($criterion->getModelClass(), $criterion->getModelId(), $band),
+                'count'     => 0,
+                'threshold' => $this->getDefaultThreshold($criterion->getModelClass(), $criterion->getModelId(), $band),
             ],
         );
     }

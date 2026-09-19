@@ -43,7 +43,7 @@
                                  across every band the page is otherwise thousands of pixels tall. The
                                  header carries the whole overview so it rarely needs expanding. --}}
                             <div class="accordion mb-3">
-                                @foreach($modelCriteria->groupBy('mythic_level_min') as $bandCriteria)
+                                @foreach($modelCriteria->groupBy(fn(CombatLogParsingCriterion $criterion): string => $criterion->getBandName()) as $bandCriteria)
                                     @php
                                         /** @var CombatLogParsingCriterion $firstOfBand */
                                         $firstOfBand = $bandCriteria->first();
@@ -66,10 +66,11 @@
                                         };
 
                                         $collapseId = sprintf(
-                                            'criteria-band-%d-%s-%d',
+                                            'criteria-band-%d-%s-%d-%s',
                                             $version,
                                             Str::slug(class_basename($modelClass)),
                                             $firstOfBand->mythic_level_min,
+                                            $firstOfBand->mythic_level_max ?? 'top',
                                         );
                                     @endphp
                                     <div class="accordion-item">

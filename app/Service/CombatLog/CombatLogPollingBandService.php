@@ -127,9 +127,8 @@ class CombatLogPollingBandService implements CombatLogPollingBandServiceInterfac
     }
 
     /**
-     * Matching on the minimum level alone is enough here even though a top band row can share its
-     * mythic_level_min with a spread band (see getDefaultThreshold() in
-     * CombatLogParsingCriteriaService): the caller has already returned for the top band, and the
+     * Matching on the minimum level alone is enough here even though a top band can start on the
+     * same level as a spread band: the caller has already returned for the top band, and the
      * spread bands are disjoint by construction.
      *
      * @param list<KeyLevelBand> $bands

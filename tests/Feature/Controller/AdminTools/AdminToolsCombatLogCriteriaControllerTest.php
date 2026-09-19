@@ -52,7 +52,7 @@ final class AdminToolsCombatLogCriteriaControllerTest extends PublicTestCase
             $response->assertOk();
             $content = $response->getContent();
 
-            $this->assertStringContainsString('id="criteria-band-' . $criterion->combat_log_version . '-characterrace-90"', $content);
+            $this->assertStringContainsString('id="criteria-band-' . $criterion->combat_log_version . '-characterrace-90-94"', $content);
             $this->assertStringContainsString($nightElf->getName(), $content);
             $this->assertStringNotContainsString(sprintf('#%d', $nightElf->id), $content);
         } finally {
@@ -80,8 +80,8 @@ final class AdminToolsCombatLogCriteriaControllerTest extends PublicTestCase
             $content = $response->getContent();
 
             // Both bands are their own accordion item, and both start collapsed
-            $this->assertStringContainsString('id="criteria-band-' . $fulfilled->combat_log_version . '-dungeon-90"', $content);
-            $this->assertStringContainsString('id="criteria-band-' . $unfulfilled->combat_log_version . '-dungeon-95"', $content);
+            $this->assertStringContainsString('id="criteria-band-' . $fulfilled->combat_log_version . '-dungeon-90-94"', $content);
+            $this->assertStringContainsString('id="criteria-band-' . $unfulfilled->combat_log_version . '-dungeon-95-99"', $content);
             $this->assertSame(
                 substr_count($content, 'class="accordion-item"'),
                 substr_count($content, 'accordion-button collapsed'),
@@ -94,6 +94,35 @@ final class AdminToolsCombatLogCriteriaControllerTest extends PublicTestCase
         } finally {
             $fulfilled->delete();
             $unfulfilled->delete();
+        }
+    }
+
+    /**
+     * A top band and a spread band that start on the same key level are different bands with their
+     * own rows, so each gets its own accordion item instead of rendering as whichever came first.
+     */
+    #[Test]
+    public function criteria_givenATopBandAndASpreadBandOnTheSameFloor_rendersBothBands(): void
+    {
+        // Arrange
+        $topBand    = CombatLogParsingCriterion::factory()->forDungeon(999901)->forBand(90, null)->withCount(3)->create(['threshold' => 0]);
+        $spreadBand = CombatLogParsingCriterion::factory()->forDungeon(999901)->forBand(90, 91)->withCount(1)->create();
+
+        try {
+            // Act
+            $response = $this->get(route('admin.tools.combatlog.criteria.view'));
+
+            // Assert
+            $response->assertOk();
+            $content = $response->getContent();
+
+            $this->assertStringContainsString('id="criteria-band-' . $topBand->combat_log_version . '-dungeon-90-top"', $content);
+            $this->assertStringContainsString('id="criteria-band-' . $spreadBand->combat_log_version . '-dungeon-90-91"', $content);
+            $this->assertStringContainsString(sprintf('name="thresholds[%d]"', $spreadBand->id), $content);
+            $this->assertStringNotContainsString(sprintf('name="thresholds[%d]"', $topBand->id), $content);
+        } finally {
+            $topBand->delete();
+            $spreadBand->delete();
         }
     }
 
