@@ -244,6 +244,44 @@ describe('CommonCollectionRoutes', () => {
         expect(toasts[0].opts.buttons).toBeUndefined();
     });
 
+    it('onRemoved_givenATitleWithMarkup_escapesItInTheToast', () => {
+        // Arrange
+        document.querySelector('#slot_1 [data-id="11"] .ordered_select_label').textContent = '<img src=x onerror=alert(1)>';
+
+        // Act
+        document.querySelector('#slot_1 [data-id="11"] .ordered_select_remove').click();
+        lastCall('DELETE').success({});
+
+        // Assert
+        expect(toasts[0].text).toBe('Removed &lt;img src=x onerror=alert(1)&gt;');
+    });
+
+    it('onRemoved_givenAMoveWaitingToBeSaved_stillStoresTheMovedOrder', () => {
+        // Arrange - move Bravo up, then remove the off-pool route before the debounced save fires
+        document.querySelector('#slot_1 [data-id="12"] .ordered_select_up').click();
+        document.querySelector('#off_pool [data-id="13"] .ordered_select_remove').click();
+        lastCall('DELETE').success({});
+
+        // Act
+        vi.advanceTimersByTime(500);
+
+        // Assert
+        expect(lastCall('PUT').data).toEqual({dungeon_routes: ['keyB', 'keyA']});
+    });
+
+    it('onAdded_givenAMoveWaitingToBeSaved_stillStoresTheMovedOrder', () => {
+        // Arrange
+        document.querySelector('#slot_1 [data-id="12"] .ordered_select_up').click();
+        const added = [{id: 21, public_key: 'keyC', title: 'Charlie', dungeon_id: 2, dungeon: 'Two'}];
+        jQuery('#picker').trigger('routepicker:added', [{publicKeys: ['keyC'], response: {dungeon_routes: added}}]);
+
+        // Act
+        vi.advanceTimersByTime(500);
+
+        // Assert
+        expect(lastCall('PUT').data).toEqual({dungeon_routes: ['keyB', 'keyA', 'keyC', 'keyOld']});
+    });
+
     it('onMoved_givenSeveralMovesInARow_storesTheWholeOrderOnce', () => {
         // Arrange
         const bravo = () => document.querySelector('#slot_1 [data-id="12"]');
