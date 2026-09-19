@@ -200,6 +200,33 @@ describe('CommonDungeonroutePicker', () => {
         expect(document.querySelector('#picker_loading').hidden).toBe(false);
     });
 
+    it('open_givenADungeonAfterTheFirstLoad_putsTheDungeonFilterOnItAndLoadsAgain', () => {
+        // Arrange
+        picker.reload();
+        respondWithRoutes([route('a')]);
+
+        // Act
+        picker.open({dungeonId: 3});
+
+        // Assert
+        expect(document.querySelector('#picker_dungeon').value).toBe('3');
+        expect(ajaxCalls).toHaveLength(2);
+        expect(ajaxCalls[1].data.columns[1].search.value).toBe('3');
+        expect(offcanvas.show).toHaveBeenCalledTimes(1);
+    });
+
+    it('open_givenTheDungeonTheFilterIsAlreadyOn_doesNotLoadAgain', () => {
+        // Arrange
+        picker.reload();
+        respondWithRoutes([route('a')]);
+
+        // Act
+        picker.open({dungeonId: -1});
+
+        // Assert
+        expect(ajaxCalls).toHaveLength(1);
+    });
+
     it('load_givenRoutes_rendersTheRowDetailsAndMarksExistingAndUnpublishedRoutes', () => {
         // Arrange
         picker.reload();
