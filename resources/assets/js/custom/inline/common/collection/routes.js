@@ -94,7 +94,6 @@ class CommonCollectionRoutes extends InlineCode {
         this._showUndoableToast(text.replace(':count', dungeonRoutes.length), function () {
             self._request('DELETE', self.options.deleteUrl, publicKeys, function () {
                 dungeonRoutes.forEach(dungeonRoute => self._removeFromLists(dungeonRoute.id));
-                self._savedOrder = self._getOrder();
                 showInfoNotification(self.options.undoneText);
             });
         });
@@ -115,7 +114,8 @@ class CommonCollectionRoutes extends InlineCode {
         this._refreshCount();
 
         this._request('DELETE', this.options.deleteUrl, [publicKey], function () {
-            self._savedOrder = self._getOrder();
+            // What the server now stores; moves still waiting for their debounced save must stay unsaved
+            self._savedOrder = self._savedOrder.filter(id => id !== removed.id);
             delete self._publicKeys[removed.id];
             self._refreshPicker();
 
@@ -130,7 +130,7 @@ class CommonCollectionRoutes extends InlineCode {
                 });
             };
 
-            self._showUndoableToast(self.options.removedText.replace(':name', removed.name), undo);
+            self._showUndoableToast(self.options.removedText.replace(':name', self._escape(removed.name)), undo);
         }, function () {
             orderedSelect.addItem(removed.id, removed.name);
             orderedSelect.setIds(previousSectionOrder);
@@ -194,9 +194,10 @@ class CommonCollectionRoutes extends InlineCode {
 
             self._publicKeys[dungeonRoute.id] = dungeonRoute.public_key;
             self._getOrderedSelect(section).addItem(dungeonRoute.id, name);
+            // The server appends added routes to the end of the stored order
+            self._savedOrder.push(String(dungeonRoute.id));
         });
 
-        this._savedOrder = this._getOrder();
         this._refreshCount();
         this._refreshPicker();
     }
@@ -223,6 +224,7 @@ class CommonCollectionRoutes extends InlineCode {
 
         this.options.sections.forEach(section => self._getOrderedSelect(section).removeItem(id));
         delete this._publicKeys[id];
+        this._savedOrder = this._savedOrder.filter(savedId => savedId !== String(id));
 
         this._refreshCount();
         this._refreshPicker();
@@ -326,6 +328,16 @@ class CommonCollectionRoutes extends InlineCode {
         }
 
         showSuccessNotification(text, opts);
+    }
+
+    /**
+     * Notifications render their text as HTML, and route titles are user input.
+     * @param {string} text
+     * @returns {string}
+     * @private
+     */
+    _escape(text) {
+        return $('<div>').text(text).html();
     }
 
     /**
