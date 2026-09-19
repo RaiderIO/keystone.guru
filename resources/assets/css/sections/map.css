@@ -584,6 +584,14 @@
     line-height: 1;
 }
 
+/* The nav-link is narrower than this list item, and the round border drawn on the item is the
+   circle the initials read against - so the link has to be centered in it, not left aligned */
+#edit_route_echo_members_container .list-group-item.echo_user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .theme #edit_route_echo_members_container .dropdown .nav-link {
     display: flex;
     align-items: center;
@@ -593,7 +601,7 @@
 
 /* Smaller than the surrounding nav-link: two wide capitals at 1.15rem do not fit the 30px circle */
 .theme #edit_route_echo_members_container .dropdown .nav-link .echo_user_initials {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     line-height: 1;
 }
 
