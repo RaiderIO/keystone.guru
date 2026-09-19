@@ -19,6 +19,12 @@ return [
         'table_header_visibility' => 'Visible to',
         'table_header_routes'     => 'Routes',
         'view'                    => 'View',
+        'published_state'         => [
+            'unpublished'     => 'Unpublished',
+            'team'            => 'Team only',
+            'world'           => 'Public',
+            'world_with_link' => 'Public with link',
+        ],
     ],
     'new' => [
         'title'  => 'New collection',

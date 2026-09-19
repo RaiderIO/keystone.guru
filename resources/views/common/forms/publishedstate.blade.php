@@ -1,8 +1,9 @@
 <?php
 /**
  * Who may see something: a picker listing each published state with its icon, title and a subtext
- * explaining what it means for the thing being shared. States the user may not pick stay visible
- * but disabled, so it is clear they exist.
+ * explaining what it means for the thing being shared. A state the user cannot pick is rendered as
+ * a disabled option instead of being left out, so the user can see that the state exists and that
+ * something is missing before they may choose it - a team, for example.
  *
  * @var string                $id                       Id of the select.
  * @var string                $name                     Form field name of the select.

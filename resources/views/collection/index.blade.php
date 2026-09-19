@@ -58,7 +58,7 @@ use Illuminate\Support\Collection;
                         @endif
                     </td>
                     <td>
-                        {{ __(sprintf('js.publish_state_title_%s', $dungeonRouteCollection->getPublishedStateName())) }}
+                        {{ __(sprintf('view_collection.index.published_state.%s', $dungeonRouteCollection->getPublishedStateName())) }}
                         @if($dungeonRouteCollection->team !== null)
                             ({{ $dungeonRouteCollection->team->name }})
                         @endif

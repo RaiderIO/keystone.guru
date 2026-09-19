@@ -67,6 +67,33 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenAWorldPublishedCollection_showsItsVisibility(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'name'               => 'ZzTestCollectionVisibility',
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('collections.index'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(e(__('view_collection.index.published_state.world')), false);
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function savenew_givenValidPayload_createsTheCollectionWithItsRoutes(): void
     {
         // Arrange
