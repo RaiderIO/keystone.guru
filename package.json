@@ -27,7 +27,7 @@
         "php-array-parser": "^1.0.1",
         "pusher-js": "^8.6.0",
         "sass": "^1.104.1",
-        "vitest": "^5.0.0"
+        "vitest": "^5.0.1"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^7.3.1",
