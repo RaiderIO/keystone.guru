@@ -190,6 +190,122 @@ describe('CommonGeneralSiteheader scroll anchoring', () => {
     });
 });
 
+describe('CommonGeneralSiteheader minimum scrollable distance', () => {
+    /**
+     * @param {boolean} currentlyShrunk
+     * @returns {CommonGeneralSiteheader}
+     */
+    function makeSiteheader(currentlyShrunk) {
+        document.body.innerHTML = `<div id="site_header" class="ksg-header${currentlyShrunk ? ' ksg-header--shrink' : ''}"></div>`;
+
+        const siteheader = new CommonGeneralSiteheader('siteheader', 'common/general/siteheader', {});
+        siteheader.shrinkTarget = document.getElementById('site_header');
+
+        return siteheader;
+    }
+
+    /**
+     * @param {number} scrollY
+     * @param {number} scrollableDistance
+     */
+    function scrollPage(scrollY, scrollableDistance) {
+        window.innerHeight = 1000;
+        vi.spyOn(document.documentElement, 'scrollHeight', 'get').mockReturnValue(1000 + scrollableDistance);
+        window.scrollY = scrollY;
+    }
+
+    /**
+     * @param {CommonGeneralSiteheader} siteheader
+     * @returns {boolean}
+     */
+    function isShrunk(siteheader) {
+        return siteheader.shrinkTarget.classList.contains('ksg-header--shrink');
+    }
+
+    const headerHeightLoss = 40;
+
+    beforeEach(() => {
+        vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
+        document.documentElement.style.removeProperty('overflow-anchor');
+    });
+
+    it('updateShrink_givenShrinkPushedTheDistanceBelowTheMinimum_staysShrunk', () => {
+        // Arrange: shrunk at the bottom of a page that had 220px to scroll at full size
+        const siteheader = makeSiteheader(true);
+        scrollPage(220 - headerHeightLoss, 220 - headerHeightLoss);
+
+        // Act
+        siteheader._updateShrink();
+
+        // Assert
+        expect(isShrunk(siteheader)).toBe(true);
+    });
+
+    it('updateShrink_givenDistanceJustAboveTheMinimum_shrinksOnceWithoutFlapping', () => {
+        // Arrange: full-size header, scrolled to the bottom of a page with 220px to scroll
+        const siteheader = makeSiteheader(false);
+        let toggles = 0;
+        let previouslyShrunk = false;
+
+        // Act: every frame the header's own height change moves the page between 220 and 180
+        for (let frame = 0; frame < 10; frame++) {
+            const scrollableDistance = isShrunk(siteheader) ? 220 - headerHeightLoss : 220;
+            scrollPage(scrollableDistance, scrollableDistance);
+            siteheader._updateShrink();
+
+            if (isShrunk(siteheader) !== previouslyShrunk) {
+                toggles++;
+                previouslyShrunk = isShrunk(siteheader);
+            }
+        }
+
+        // Assert
+        expect(isShrunk(siteheader)).toBe(true);
+        expect(toggles).toBe(1);
+    });
+
+    it('updateShrink_givenPageNeverReachesTheMinimum_neverShrinks', () => {
+        // Arrange: full-size header at the bottom of a page with only 190px to scroll
+        const siteheader = makeSiteheader(false);
+        scrollPage(190, 190);
+
+        // Act
+        siteheader._updateShrink();
+
+        // Assert
+        expect(isShrunk(siteheader)).toBe(false);
+    });
+
+    it('updateShrink_givenExactlyTheMinimumDistance_shrinks', () => {
+        // Arrange
+        const siteheader = makeSiteheader(false);
+        scrollPage(CommonGeneralSiteheader.MIN_SCROLLABLE_DISTANCE, CommonGeneralSiteheader.MIN_SCROLLABLE_DISTANCE);
+
+        // Act
+        siteheader._updateShrink();
+
+        // Assert
+        expect(isShrunk(siteheader)).toBe(true);
+    });
+
+    it('updateShrink_givenShrunkOnAShortPageAndScrolledBackToTheTop_unshrinks', () => {
+        // Arrange: shrunk below the minimum distance, back near the top
+        const siteheader = makeSiteheader(true);
+        scrollPage(39, 220 - headerHeightLoss);
+
+        // Act
+        siteheader._updateShrink();
+
+        // Assert: the hysteresis still decides the way back
+        expect(isShrunk(siteheader)).toBe(false);
+        expect(document.documentElement.style.overflowAnchor).toBe('none');
+    });
+});
+
 describe('calculateNavbarCollapseMaxHeight', () => {
     it('calculateNavbarCollapseMaxHeight_givenRoomBelowTheBrandRow_returnsTheRemainingViewport', () => {
         // A 640px tall phone viewport with a 56px brand row above the collapse
