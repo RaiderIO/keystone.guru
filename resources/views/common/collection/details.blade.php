@@ -174,6 +174,7 @@ foreach ($teams as $team) {
     </div>
 @endif
 
+@if($isNew)
 <div id="collection_dungeon_routes" class="mb-3">
     @if(!$hasOwnDungeonRoutes)
         {{ html()->label(__('view_common.collection.details.dungeon_routes'), 'dungeon_routes') }}
@@ -235,7 +236,6 @@ foreach ($teams as $team) {
     @endif
 </div>
 
-@if($isNew)
     <p id="collection_dungeon_routes_kind_changed" class="text-body-secondary" hidden>
         {{ __('view_common.collection.details.kind_changed') }}
     </p>

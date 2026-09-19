@@ -196,12 +196,15 @@ class DungeonRouteCollectionController extends Controller
 
         return view('collection.edit', [
             'dungeonRouteCollection' => $dungeonRouteCollection,
-            'editSections'           => $dungeonRouteCollectionService->getEditSections(
+            // Only the routes in the collection are listed; new ones are picked in the route picker drawer
+            'editSections' => $dungeonRouteCollectionService->getEditSections(
                 $dungeonRouteCollection->gameVersion,
                 $dungeonRouteCollection->season,
-                $ownDungeonRoutes,
+                $dungeonRouteCollection->dungeonRoutes,
                 $dungeonRouteCollection->dungeonRoutes,
             ),
+            // The picker lists the acting user's own routes, so it only offers what may join when that is the owner
+            'mayAddDungeonRoutes'     => $dungeonRouteCollection->isOwnedByUser(),
             'ownDungeonRoutes'        => $ownDungeonRoutes,
             'hasOwnDungeonRoutes'     => $ownDungeonRoutes->isNotEmpty() || $dungeonRouteCollection->dungeonRoutes->isNotEmpty(),
             'selectedDungeonRouteIds' => $dungeonRouteCollection->dungeonRoutes->pluck('id')->all(),
@@ -244,7 +247,10 @@ class DungeonRouteCollectionController extends Controller
                 'description'                          => $request->validated('description'),
             ]);
 
-            self::syncDungeonRoutes($dungeonRouteCollection, $request->dungeonRoutes(), $dungeonRouteCollectionRouteRepository);
+            // The edit page saves its routes through the ajax endpoints; its details form does not post them
+            if ($request->has('dungeon_routes')) {
+                self::syncDungeonRoutes($dungeonRouteCollection, $request->dungeonRoutes(), $dungeonRouteCollectionRouteRepository);
+            }
         });
 
         Session::flash('status', __('controller.dungeonroutecollection.flash.collection_updated'));

@@ -592,7 +592,13 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         foreach ($mappingVersions as $mappingVersion) {
             $this->assertStringContainsString(sprintf('id="dungeon_routes_%d"', $mappingVersion->dungeon_id), $content);
         }
-        $this->assertStringContainsString('ZzTestOffered', $content);
+        $this->assertStringContainsString('ZzTestInSlot', $content);
+        foreach ($mappingVersions as $mappingVersion) {
+            $this->assertStringContainsString(sprintf('id="dungeon_routes_%d_add_button"', $mappingVersion->dungeon_id), $content);
+        }
+        // Routes are offered by the route picker, which only lists routes of the collection's season
+        $this->assertStringContainsString(sprintf('"season_id":%d', $season->id), $content);
+        $this->assertStringNotContainsString('ZzTestOffered', $content, 'Routes not in the collection are only listed by the picker');
         $this->assertStringNotContainsString('ZzTestNotOfTheSeason', $content, 'A route of another season is not offered');
     }
 

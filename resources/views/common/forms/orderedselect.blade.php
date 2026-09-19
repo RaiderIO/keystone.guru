@@ -13,24 +13,37 @@
  * @var int                $max          Maximum number of items in the list.
  * @var string|null        $help         Help text below the control.
  * @var string             $emptyText    Shown in place of the list while it is empty.
+ * @var bool               $ajax         Changes are reported to the host page as events instead of being posted with a
+ *                                       form; the add select makes way for a button the host page wires up.
+ * @var string|null        $addLabel     Text of that button (ajax mode).
+ * @var bool               $showAdd      Whether that button is shown (ajax mode).
+ * @var bool               $showCount    Whether the "n / max" counter is shown.
+ * @var int|null           $fullCount    What counts towards $max, when that is more than this list (ajax mode).
  */
 $help       ??= null;
 $labelClass ??= 'form-label';
 $errors     ??= collect();
+$ajax       ??= false;
+$addLabel   ??= __('view_common.forms.orderedselect.add');
+$showCount  ??= true;
+$showAdd    ??= true;
 
 $selectedIds = array_values(array_filter($selectedIds, static fn(int $selectedId): bool => isset($options[$selectedId])));
-$isFull      = count($selectedIds) >= $max;
+$fullCount   ??= count($selectedIds);
+$isFull      = $fullCount >= $max;
 $helpId      = sprintf('%s_help', $id);
 $errorKey    = $name;
 ?>
 <div id="{{ $id }}" class="ordered_select">
     <div class="d-flex align-items-baseline">
-        <label id="{{ $id }}_label" for="{{ $id }}_add" class="{{ $labelClass }}">
+        <label id="{{ $id }}_label" @if(!$ajax) for="{{ $id }}_add" @endif class="{{ $labelClass }}">
             {{ $label }}
         </label>
-        <span id="{{ $id }}_count" class="ordered_select_count text-body-secondary ms-auto">
-            {{ __('view_common.forms.orderedselect.count', ['count' => count($selectedIds), 'max' => $max]) }}
-        </span>
+        @if($showCount)
+            <span id="{{ $id }}_count" class="ordered_select_count text-body-secondary ms-auto">
+                {{ __('view_common.forms.orderedselect.count', ['count' => count($selectedIds), 'max' => $max]) }}
+            </span>
+        @endif
     </div>
 
     <ol id="{{ $id }}_list" class="list-group ordered_select_list mb-2" aria-labelledby="{{ $id }}_label"
@@ -49,18 +62,25 @@ $errorKey    = $name;
         {{ $emptyText }}
     </p>
 
-    <div class="input-group">
-        <select id="{{ $id }}_add" class="form-select{{ $errors->has($errorKey) ? ' is-invalid' : '' }}"
+    @if($ajax && $showAdd)
+        <button id="{{ $id }}_add_button" type="button" class="btn btn-primary btn-sm ordered_select_add"
                 aria-describedby="{{ $helpId }}" @disabled($isFull)>
-            <option value="">{{ __('view_common.forms.orderedselect.choose') }}</option>
-            @foreach($options as $optionId => $optionLabel)
-                <option value="{{ $optionId }}" @disabled(in_array($optionId, $selectedIds, true))>{{ $optionLabel }}</option>
-            @endforeach
-        </select>
-        <button id="{{ $id }}_add_button" type="button" class="btn btn-primary" @disabled($isFull)>
-            <i class="fas fa-plus" aria-hidden="true"></i> {{ __('view_common.forms.orderedselect.add') }}
+            <i class="fas fa-plus" aria-hidden="true"></i> {{ $addLabel }}
         </button>
-    </div>
+    @elseif(!$ajax)
+        <div class="input-group">
+            <select id="{{ $id }}_add" class="form-select{{ $errors->has($errorKey) ? ' is-invalid' : '' }}"
+                    aria-describedby="{{ $helpId }}" @disabled($isFull)>
+                <option value="">{{ __('view_common.forms.orderedselect.choose') }}</option>
+                @foreach($options as $optionId => $optionLabel)
+                    <option value="{{ $optionId }}" @disabled(in_array($optionId, $selectedIds, true))>{{ $optionLabel }}</option>
+                @endforeach
+            </select>
+            <button id="{{ $id }}_add_button" type="button" class="btn btn-primary" @disabled($isFull)>
+                <i class="fas fa-plus" aria-hidden="true"></i> {{ __('view_common.forms.orderedselect.add') }}
+            </button>
+        </div>
+    @endif
 
     <small id="{{ $helpId }}" class="form-text text-body-secondary d-block">
         <span id="{{ $id }}_full" @if(!$isFull) hidden @endif>
@@ -84,7 +104,7 @@ $errorKey    = $name;
     </template>
 </div>
 
-@include('common.general.inline', ['path' => 'common/forms/orderedselect', 'options' => [
+@include('common.general.inline', ['path' => 'common/forms/orderedselect', 'id' => sprintf('%s_inline', $id), 'options' => [
     'listSelector'      => sprintf('#%s_list', $id),
     'templateSelector'  => sprintf('#%s_template', $id),
     'addSelectSelector' => sprintf('#%s_add', $id),
@@ -94,6 +114,9 @@ $errorKey    = $name;
     'fullSelector'      => sprintf('#%s_full', $id),
     'statusSelector'    => sprintf('#%s_status', $id),
     'max'               => $max,
+    'ajax'              => $ajax,
+    'rootSelector'      => sprintf('#%s', $id),
+    'fullCount'         => $ajax ? $fullCount : null,
     'countText'         => __('view_common.forms.orderedselect.count'),
     'moveUpText'        => __('view_common.forms.orderedselect.move_up'),
     'moveDownText'      => __('view_common.forms.orderedselect.move_down'),

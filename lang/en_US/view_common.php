@@ -3,6 +3,21 @@
 return [
 
     'collection' => [
+        'routes' => [
+            'heading'       => 'Routes',
+            'count'         => ':count / :max routes',
+            'help'          => 'Changes to the routes are saved right away. Drag a route by its handle, or use its arrows, to set the order the collection shows it in.',
+            'owner_only'    => 'Only the owner of this collection can add routes to it.',
+            'add_routes'    => 'Add routes',
+            'add_route_for' => 'Add route for :dungeon',
+            'picker_title'  => 'Add routes to :name',
+            'added_one'     => 'Added 1 route.',
+            'added_many'    => 'Added :count routes.',
+            'removed'       => 'Removed :name.',
+            'undo'          => 'Undo',
+            'undone'        => 'Undone.',
+            'save_failed'   => 'Your change could not be saved. Reload the page and try again.',
+        ],
         'details' => [
             'name'                        => 'Name',
             'description'                 => 'Description',
