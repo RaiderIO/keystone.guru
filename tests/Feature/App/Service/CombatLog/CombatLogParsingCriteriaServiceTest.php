@@ -604,6 +604,107 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         );
     }
 
+    /**
+     * A probed max key level that moves onto a band boundary mid-day turns the top band 17+ into the
+     * spread band 17-18 plus a top band 19+, or the other way round. Both shapes start on 17.
+     */
+    #[Test]
+    public function recordParsed_givenATopBandAndASpreadBandOnTheSameFloor_keepsSeparateRowsAndCounts(): void
+    {
+        // Arrange
+        $today = Carbon::now()->toDateString();
+        $this->service->recordParsed(self::VERSION, $this->defaultCriteria(new KeyLevelBand(17, null)), $today);
+        $this->service->recordParsed(self::VERSION, $this->defaultCriteria(new KeyLevelBand(17, null)), $today);
+
+        // Act
+        $this->service->recordParsed(self::VERSION, $this->defaultCriteria(new KeyLevelBand(17, 18)), $today);
+
+        // Assert
+        $rows = CombatLogParsingCriterion::query()
+            ->where('model_class', Dungeon::class)
+            ->where('model_id', self::DUNGEON_ID)
+            ->where('date', $today)
+            ->get()
+            ->keyBy(fn(CombatLogParsingCriterion $criterion): string => $criterion->getBandName());
+
+        $this->assertCount(2, $rows);
+        $this->assertEquals(2, $rows->get('17+')->count);
+        $this->assertEquals(0, $rows->get('17+')->threshold);
+        $this->assertEquals(1, $rows->get('17-18')->count);
+        $this->assertEquals(
+            (int)config('keystoneguru.raider_io.combat_log_polling.bands.default_threshold'),
+            $rows->get('17-18')->threshold,
+        );
+    }
+
+    /**
+     * A top band row carries a threshold of 0, and any count is at a ceiling of 0. Reusing that row
+     * for the spread band would stop it polling the model for the rest of the day.
+     */
+    #[Test]
+    public function shouldParse_givenATopBandRowOnTheSameFloorEarlierToday_returnsTrue(): void
+    {
+        // Arrange - earlier today 17+ was the top band and parsed runs
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->forBand(17, null)->withCount(5)->create(['threshold' => 0]);
+        CombatLogParsingCriterion::factory()->forClassSpec(self::SPEC_ID)->forBand(17, null)->withCount(5)->create(['threshold' => 0]);
+
+        // Act - the max key level rose, so 17-18 is now a budgeted spread band
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(17, 18)), PollingBudgetWindow::full());
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    #[Test]
+    public function getModelsEligibleForPolling_givenATopBandRowOnTheSameFloorToday_includesDungeon(): void
+    {
+        // Arrange
+        $season = Season::query()->has('dungeons')->firstOrFail();
+        /** @var Dungeon $dungeon */
+        $dungeon = $season->dungeons()->firstOrFail();
+
+        try {
+            CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->forBand(17, null)->withCount(5)->create(['threshold' => 0]);
+
+            // Act
+            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, new KeyLevelBand(17, 18), PollingBudgetWindow::full());
+
+            // Assert
+            $this->assertTrue($result->contains('id', $dungeon->id));
+        } finally {
+            CombatLogParsingCriterion::query()
+                ->where('model_class', Dungeon::class)
+                ->where('model_id', $dungeon->id)
+                ->delete();
+        }
+    }
+
+    #[Test]
+    public function releaseParsed_givenASpreadBandSharingItsFloorWithTheTopBand_decrementsOnlyTheSpreadBand(): void
+    {
+        // Arrange
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->forBand(17, null)->withCount(5)->create(['threshold' => 0]);
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->forBand(17, 18)->withCount(3)->create();
+        $today = Carbon::now()->toDateString();
+
+        // Act
+        $this->service->releaseParsed(
+            self::VERSION,
+            [new CombatLogParsingCriterionCheck(Dungeon::class, self::DUNGEON_ID, new KeyLevelBand(17, 18))],
+            $today,
+        );
+
+        // Assert
+        $this->assertEquals(5, CombatLogParsingCriterion::query()
+            ->where('model_id', self::DUNGEON_ID)
+            ->whereNull('mythic_level_max')
+            ->value('count'));
+        $this->assertEquals(2, CombatLogParsingCriterion::query()
+            ->where('model_id', self::DUNGEON_ID)
+            ->where('mythic_level_max', 18)
+            ->value('count'));
+    }
+
     #[Test]
     public function getModelsEligibleForPolling_givenDungeonAtThresholdInOtherBand_includesDungeon(): void
     {
