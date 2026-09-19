@@ -13,9 +13,8 @@ interface DungeonRouteCollectionServiceInterface
 {
     /**
      * The routes of a collection as it is shown: a season set has one slot per pool dungeon in pool order, empty
-     * slots included; a free-form collection one group per dungeon in order of first appearance. Routes that do not
-     * match the collection follow in a trailing group. Expects the season's dungeons and every route's mapping
-     * version to be loaded.
+     * slots included; a free-form collection one group per dungeon in order of first appearance. Expects the
+     * season's dungeons and every route's dungeon to be loaded.
      *
      * @param  Collection<int, DungeonRoute>                $dungeonRoutes In collection order.
      * @return Collection<int, DungeonRouteCollectionGroup>
@@ -24,36 +23,19 @@ interface DungeonRouteCollectionServiceInterface
 
     /**
      * The sections of the route picker for a collection of the passed game version and season: one per pool dungeon
-     * for a season set, a single flat list otherwise, each offering the own routes that may join. Member routes that
-     * do not match follow in a trailing section, from which they can only be removed.
+     * for a season set, a single flat list otherwise, each offering the own routes that may join.
      *
-     * @param  Collection<int, DungeonRoute>                $ownDungeonRoutes    Every route the owner may collect.
-     * @param  Collection<int, DungeonRoute>                $memberDungeonRoutes The routes currently in the collection.
+     * @param  Collection<int, DungeonRoute>                $ownDungeonRoutes Every route the owner may collect.
      * @return Collection<int, DungeonRouteCollectionGroup>
      */
-    public function getEditSections(
-        ?GameVersion $gameVersion,
-        ?Season      $season,
-        Collection   $ownDungeonRoutes,
-        Collection   $memberDungeonRoutes,
-    ): Collection;
+    public function getEditSections(GameVersion $gameVersion, ?Season $season, Collection $ownDungeonRoutes): Collection;
 
     /**
-     * The enemy forces of each route against its mapping version's requirement ("500 / 498"), flagged as a warning
-     * when the route falls short. Routes without a mapping version, or whose mapping version requires no enemy forces
-     * (dungeons without enemy forces, such as most classic ones), get no entry. Expects the mapping versions loaded.
+     * How many distinct dungeons the passed routes cover - of the season's pool for a season set.
      *
-     * @param  Collection<int, DungeonRoute>                    $dungeonRoutes
-     * @return array<int, array{text: string, isWarning: bool}> Keyed by route id.
+     * @param Collection<int, DungeonRoute> $dungeonRoutes
      */
-    public function getEnemyForcesDetails(Collection $dungeonRoutes): array;
-
-    /**
-     * "Season 2 set · 5/8 dungeons" for a season set, "Cataclysm · 4 dungeons" for a free-form collection.
-     *
-     * @param Collection<int, DungeonRoute> $dungeonRoutes The routes to count, with their mapping versions loaded.
-     */
-    public function getKindLabel(DungeonRouteCollection $dungeonRouteCollection, Collection $dungeonRoutes): string;
+    public function getCoveredDungeonCount(DungeonRouteCollection $dungeonRouteCollection, Collection $dungeonRoutes): int;
 
     /**
      * Sorts collections for the overview: sets of the current season first, then free-form collections, then sets

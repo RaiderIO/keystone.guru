@@ -51,6 +51,5 @@ return [
         'route_count' => '{0} No routes|{1} :count route|[2,*] :count routes',
         'no_routes'   => 'This collection does not contain any routes that you may view.',
         'slot_empty'  => 'No route for :dungeon yet.',
-        'foreign'     => 'Doesn\'t match this collection',
     ],
 ];

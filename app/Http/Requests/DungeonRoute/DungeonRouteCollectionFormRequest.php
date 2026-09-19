@@ -129,8 +129,7 @@ class DungeonRouteCollectionFormRequest extends FormRequest
 
     /**
      * The game version the collection has after saving. It is never posted: a new collection takes the game version
-     * selected on the site, an existing one keeps its own, and one saved without any yet takes its owner's current
-     * game version.
+     * selected on the site, an existing one keeps its own.
      */
     public function gameVersion(): GameVersion
     {
@@ -144,7 +143,7 @@ class DungeonRouteCollectionFormRequest extends FormRequest
                 return $gameVersionService->getGameVersion(Auth::user());
             }
 
-            return $dungeonRouteCollection->getGameVersionOrOwnersCurrent();
+            return $dungeonRouteCollection->gameVersion;
         });
     }
 

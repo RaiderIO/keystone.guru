@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\DungeonRoute\DungeonRouteCollection;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -15,7 +16,7 @@ use Illuminate\Support\Collection;
  * @var array<int, int>                                 $selectedDungeonRouteIds
  * @var GameVersion                                     $selectedGameVersion
  * @var Season|null                                     $selectedSeason
- * @var array<int, array{text: string, isWarning: bool}> $enemyForcesDetails
+ * @var Collection<int, DungeonRoute>                  $ownDungeonRoutes
  * @var Collection<int, Team>                           $teams
  * @var Collection<int, DungeonRouteCollectionCategory> $categories
  */
@@ -45,7 +46,7 @@ $title = sprintf(__('view_collection.edit.title'), $dungeonRouteCollection->name
             'selectedDungeonRouteIds' => $selectedDungeonRouteIds,
             'selectedGameVersion' => $selectedGameVersion,
             'selectedSeason' => $selectedSeason,
-            'enemyForcesDetails' => $enemyForcesDetails,
+            'ownDungeonRoutes' => $ownDungeonRoutes,
             'teams' => $teams,
             'categories' => $categories,
         ])

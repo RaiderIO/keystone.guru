@@ -7,6 +7,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
@@ -18,32 +19,25 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
     private const int OVERVIEW_RANK_OTHER_SEASON   = 2;
 
     public function __construct(
-        private readonly SeasonServiceInterface $seasonService,
+        private readonly SeasonServiceInterface    $seasonService,
+        private readonly SeasonRepositoryInterface $seasonRepository,
     ) {
     }
 
     public function getDungeonRouteGroups(DungeonRouteCollection $dungeonRouteCollection, Collection $dungeonRoutes): Collection
     {
-        [$matchingDungeonRoutes, $foreignDungeonRoutes] = $dungeonRoutes->partition(
-            static fn(DungeonRoute $dungeonRoute): bool => $dungeonRouteCollection->mayContainDungeonRoute($dungeonRoute),
+        $season = $dungeonRouteCollection->season;
+
+        return $this->groupPerDungeon(
+            $dungeonRouteCollection->isSeasonSet() && $season !== null ? $season->dungeons : collect(),
+            $dungeonRoutes->values(),
         );
-
-        $season       = $dungeonRouteCollection->season;
-        $poolDungeons = $dungeonRouteCollection->isSeasonSet() && $season !== null ? $season->dungeons : collect();
-
-        $groups = $this->groupPerDungeon($poolDungeons, $matchingDungeonRoutes->values());
-
-        return $this->appendForeignGroup($groups, $foreignDungeonRoutes->values());
     }
 
-    public function getEditSections(
-        ?GameVersion $gameVersion,
-        ?Season      $season,
-        Collection   $ownDungeonRoutes,
-        Collection   $memberDungeonRoutes,
-    ): Collection {
+    public function getEditSections(GameVersion $gameVersion, ?Season $season, Collection $ownDungeonRoutes): Collection
+    {
         $kind = new DungeonRouteCollection([
-            'game_version_id' => $gameVersion?->id,
+            'game_version_id' => $gameVersion->id,
             'season_id'       => $season?->id,
         ]);
 
@@ -51,61 +45,23 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
             ->filter(static fn(DungeonRoute $dungeonRoute): bool => $kind->mayContainDungeonRoute($dungeonRoute))
             ->values();
 
-        $sections = $season === null
-            ? collect([new DungeonRouteCollectionGroup(null, $selectableDungeonRoutes)])
-            : $this->groupPerDungeon($season->dungeons, $selectableDungeonRoutes);
-
-        return $this->appendForeignGroup(
-            $sections,
-            $memberDungeonRoutes
-                ->reject(static fn(DungeonRoute $dungeonRoute): bool => $kind->mayContainDungeonRoute($dungeonRoute))
-                ->values(),
-        );
-    }
-
-    public function getEnemyForcesDetails(Collection $dungeonRoutes): array
-    {
-        $result = [];
-
-        foreach ($dungeonRoutes as $dungeonRoute) {
-            $mappingVersion = $dungeonRoute->mappingVersion;
-            if ($mappingVersion === null || $mappingVersion->enemy_forces_required <= 0) {
-                continue;
-            }
-
-            $result[$dungeonRoute->id] = [
-                'text'      => sprintf('%d / %d', $dungeonRoute->enemy_forces, $mappingVersion->enemy_forces_required),
-                'isWarning' => $dungeonRoute->enemy_forces < $mappingVersion->enemy_forces_required,
-            ];
+        if ($season === null) {
+            return collect([new DungeonRouteCollectionGroup(null, $selectableDungeonRoutes)]);
         }
 
-        return $result;
+        return $this->groupPerDungeon($season->dungeons, $selectableDungeonRoutes);
     }
 
-    public function getKindLabel(DungeonRouteCollection $dungeonRouteCollection, Collection $dungeonRoutes): string
+    public function getCoveredDungeonCount(DungeonRouteCollection $dungeonRouteCollection, Collection $dungeonRoutes): int
     {
-        $coveredDungeonIds = $dungeonRoutes
-            ->filter(static fn(DungeonRoute $dungeonRoute): bool => $dungeonRouteCollection->mayContainDungeonRoute($dungeonRoute))
-            ->pluck('dungeon_id')
-            ->unique();
+        $coveredDungeonIds = $dungeonRoutes->pluck('dungeon_id')->unique();
 
         $season = $dungeonRouteCollection->season;
         if ($dungeonRouteCollection->isSeasonSet() && $season !== null) {
-            $poolDungeonIds = $season->dungeons->pluck('id');
-
-            return __('view_collection.kind.season_set', [
-                'season'  => $season->name,
-                'covered' => $coveredDungeonIds->intersect($poolDungeonIds)->count(),
-                'total'   => $poolDungeonIds->count(),
-            ]);
+            $coveredDungeonIds = $coveredDungeonIds->intersect($season->dungeons->pluck('id'));
         }
 
-        $gameVersion = $dungeonRouteCollection->gameVersion ?? GameVersion::getDefaultGameVersion();
-
-        return trans_choice('view_collection.kind.free_form', $coveredDungeonIds->count(), [
-            'game_version' => __($gameVersion->name),
-            'count'        => $coveredDungeonIds->count(),
-        ]);
+        return $coveredDungeonIds->count();
     }
 
     public function sortForOverview(Collection $dungeonRouteCollections): Collection
@@ -124,12 +80,7 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
             return collect();
         }
 
-        return Season::query()
-            ->with(['expansion'])
-            ->where('expansion_id', $gameVersion->expansion_id)
-            ->where('active', true)
-            ->orderByDesc('start')
-            ->get();
+        return $this->seasonRepository->getActiveSeasonsForExpansion($gameVersion->expansion);
     }
 
     public function getCurrentSeason(GameVersion $gameVersion): ?Season
@@ -147,8 +98,7 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
             return self::OVERVIEW_RANK_FREE_FORM;
         }
 
-        $gameVersion   = $dungeonRouteCollection->gameVersion;
-        $currentSeason = $gameVersion !== null ? $this->getCurrentSeason($gameVersion) : null;
+        $currentSeason = $this->getCurrentSeason($dungeonRouteCollection->gameVersion);
 
         return $currentSeason !== null && $currentSeason->id === $dungeonRouteCollection->season_id
             ? self::OVERVIEW_RANK_CURRENT_SEASON
@@ -181,19 +131,5 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
             ));
 
         return $poolGroups->concat($otherGroups->values())->values();
-    }
-
-    /**
-     * @param  Collection<int, DungeonRouteCollectionGroup> $groups
-     * @param  Collection<int, DungeonRoute>                $foreignDungeonRoutes
-     * @return Collection<int, DungeonRouteCollectionGroup>
-     */
-    private function appendForeignGroup(Collection $groups, Collection $foreignDungeonRoutes): Collection
-    {
-        if ($foreignDungeonRoutes->isEmpty()) {
-            return $groups;
-        }
-
-        return $groups->push(new DungeonRouteCollectionGroup(null, $foreignDungeonRoutes, false));
     }
 }

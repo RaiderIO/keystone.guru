@@ -3,6 +3,7 @@
 namespace App\Repositories\Interfaces;
 
 use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Models\Season;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -20,6 +21,13 @@ use Illuminate\Support\Collection;
  */
 interface SeasonRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * The active seasons of an expansion, newest first.
+     *
+     * @return Collection<int, Season>
+     */
+    public function getActiveSeasonsForExpansion(Expansion $expansion): Collection;
+
     public function getMostRecentSeasonForDungeon(Dungeon $dungeon): ?Season;
 
     public function getUpcomingSeasonForDungeon(Dungeon $dungeon): ?Season;

@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var Collection<int, DungeonRouteCollection> $dungeonRouteCollections
- * @var Collection<int, string>                 $kindLabels            Keyed by collection id.
+ * @var Collection<int, int>                    $coveredDungeonCounts  Keyed by collection id.
  * @var Collection<int, GameVersion>            $gameVersions
  * @var GameVersion                             $selectedGameVersion
  * @var Collection<int, Season>                 $seasons
@@ -82,7 +82,19 @@ $seasonOptions = ['' => __('view_collection.index.filter_season_all')]
                         </a>
                     </td>
                     <td>
-                        {{ $kindLabels->get($dungeonRouteCollection->id) }}
+                        @php($coveredDungeonCount = $coveredDungeonCounts->get($dungeonRouteCollection->id, 0))
+                        @if($dungeonRouteCollection->isSeasonSet() && $dungeonRouteCollection->season !== null)
+                            {{ __('view_collection.kind.season_set', [
+                                'season' => $dungeonRouteCollection->season->name,
+                                'covered' => $coveredDungeonCount,
+                                'total' => $dungeonRouteCollection->season->dungeons->count(),
+                            ]) }}
+                        @else
+                            {{ trans_choice('view_collection.kind.free_form', $coveredDungeonCount, [
+                                'game_version' => __($dungeonRouteCollection->gameVersion->name),
+                                'count' => $coveredDungeonCount,
+                            ]) }}
+                        @endif
                     </td>
                     <td>
                         @if($dungeonRouteCollection->dungeonRouteCollectionCategory !== null)

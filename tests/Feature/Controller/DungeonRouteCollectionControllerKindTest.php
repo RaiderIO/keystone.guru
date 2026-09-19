@@ -321,27 +321,6 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
     }
 
     #[Test]
-    public function update_givenAForeignRouteAlreadyInTheCollection_keepsIt(): void
-    {
-        // Arrange
-        $creator                = $this->creator();
-        $foreignDungeonRoute    = $this->createRoute($this->nonRetailMappingVersion());
-        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
-        $this->addRoutes($dungeonRouteCollection, [$foreignDungeonRoute]);
-
-        // Act
-        $response = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection), [
-            'name'            => 'ZzTestLegacyMixed',
-            'published_state' => PublishedState::WORLD,
-            'dungeon_routes'  => [$foreignDungeonRoute->id],
-        ]);
-
-        // Assert
-        $response->assertSessionHasNoErrors();
-        $this->assertSame([$foreignDungeonRoute->id], $dungeonRouteCollection->refresh()->dungeonRoutes->pluck('id')->all());
-    }
-
-    #[Test]
     public function update_givenADifferentSeason_failsValidation(): void
     {
         // Arrange
@@ -446,71 +425,6 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $dungeonRouteCollection->refresh();
         $this->assertSame($this->retail()->id, $dungeonRouteCollection->game_version_id);
         $this->assertSame($season->id, $dungeonRouteCollection->season_id);
-    }
-
-    #[Test]
-    public function update_givenAPopulatedCollectionWithoutAGameVersion_assignsTheOwnersCurrentGameVersion(): void
-    {
-        // Arrange
-        $creator                = $this->creator();
-        $dungeonRoute           = $this->createRoute($this->retailMappingVersions()->first());
-        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
-        DungeonRouteCollection::query()->whereKey($dungeonRouteCollection->id)->update(['game_version_id' => null]);
-        $this->addRoutes($dungeonRouteCollection, [$dungeonRoute]);
-        $newDungeonRoute = $this->createRoute($this->retailMappingVersions()->get(1));
-
-        // Act
-        $response = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection->refresh()), [
-            'name'            => 'ZzTestNoGameVersionYet',
-            'published_state' => PublishedState::WORLD,
-            'dungeon_routes'  => [$dungeonRoute->id, $newDungeonRoute->id],
-        ]);
-
-        // Assert
-        $response->assertSessionHasNoErrors();
-        $dungeonRouteCollection->refresh();
-        $this->assertSame($this->retail()->id, $dungeonRouteCollection->game_version_id);
-        $this->assertSame([$dungeonRoute->id, $newDungeonRoute->id], $dungeonRouteCollection->dungeonRoutes->pluck('id')->all());
-    }
-
-    #[Test]
-    public function update_givenAnEmptyCollectionWithoutAGameVersion_assignsTheOwnersCurrentGameVersion(): void
-    {
-        // Arrange
-        $creator     = $this->creator();
-        $gameVersion = $this->gameVersionWithoutSeasons();
-        $creator->update(['game_version_id' => $gameVersion->id]);
-        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
-        DungeonRouteCollection::query()->whereKey($dungeonRouteCollection->id)->update(['game_version_id' => null]);
-
-        // Act
-        $response = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection->refresh()), [
-            'name'            => 'ZzTestNoGameVersionYet',
-            'published_state' => PublishedState::WORLD,
-        ]);
-
-        // Assert
-        $response->assertSessionHasNoErrors();
-        $this->assertSame($gameVersion->id, $dungeonRouteCollection->refresh()->game_version_id);
-    }
-
-    #[Test]
-    public function edit_givenACollectionWithoutAGameVersion_showsTheOwnersCurrentGameVersion(): void
-    {
-        // Arrange
-        $creator     = $this->creator();
-        $gameVersion = $this->gameVersionWithoutSeasons();
-        $creator->update(['game_version_id' => $gameVersion->id]);
-        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
-        DungeonRouteCollection::query()->whereKey($dungeonRouteCollection->id)->update(['game_version_id' => null]);
-
-        // Act
-        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection->refresh()]));
-
-        // Assert
-        $response->assertOk();
-        $this->assertSame($gameVersion->id, $response->viewData('selectedGameVersion')->id);
-        $response->assertDontSee('name="game_version_id"', false);
     }
 
     #[Test]
@@ -810,31 +724,6 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $this->assertSame([$firstDungeonA->id, $firstDungeonB->id], $groups->get(0)->dungeonRoutes->pluck('id')->all());
         $this->assertSame([$secondDungeon->id], $groups->get(1)->dungeonRoutes->pluck('id')->all());
         $response->assertSeeText(trans_choice('view_collection.kind.free_form', 2, ['game_version' => __($this->retail()->name), 'count' => 2]));
-    }
-
-    #[Test]
-    public function view_givenALegacyMixedCollection_showsTheForeignRoutesInATrailingGroup(): void
-    {
-        // Arrange
-        $this->creator();
-        $foreignDungeonRoute    = $this->createRoute($this->nonRetailMappingVersion(), null, 'ZzTestForeign');
-        $dungeonRoute           = $this->createRoute($this->retailMappingVersions()->first(), null, 'ZzTestRetail');
-        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
-        $this->addRoutes($dungeonRouteCollection, [$foreignDungeonRoute, $dungeonRoute]);
-
-        // Act
-        $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
-
-        // Assert
-        $response->assertOk();
-        /** @var Collection<int, DungeonRouteCollectionGroup> $groups */
-        $groups = $response->viewData('dungeonRouteGroups');
-        $this->assertCount(2, $groups);
-        $this->assertTrue($groups->get(0)->matchesCollection);
-        $this->assertSame([$dungeonRoute->id], $groups->get(0)->dungeonRoutes->pluck('id')->all());
-        $this->assertFalse($groups->get(1)->matchesCollection, 'The foreign routes trail the matching ones');
-        $this->assertSame([$foreignDungeonRoute->id], $groups->get(1)->dungeonRoutes->pluck('id')->all());
-        $response->assertSeeText(__('view_collection.view.foreign'));
     }
 
     #[Test]

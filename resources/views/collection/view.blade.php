@@ -9,10 +9,21 @@ use Illuminate\Support\Collection;
  * @var DungeonRouteCollection                       $dungeonRouteCollection
  * @var Collection<int, DungeonRoute>                $dungeonRoutes
  * @var Collection<int, DungeonRouteCollectionGroup> $dungeonRouteGroups
- * @var string                                       $kindLabel
+ * @var int                                          $coveredDungeonCount
  */
 
 $title = sprintf(__('view_collection.view.title'), $dungeonRouteCollection->name);
+
+$kindLabel = $dungeonRouteCollection->isSeasonSet() && $dungeonRouteCollection->season !== null
+    ? __('view_collection.kind.season_set', [
+        'season'  => $dungeonRouteCollection->season->name,
+        'covered' => $coveredDungeonCount,
+        'total'   => $dungeonRouteCollection->season->dungeons->count(),
+    ])
+    : trans_choice('view_collection.kind.free_form', $coveredDungeonCount, [
+        'game_version' => __($dungeonRouteCollection->gameVersion->name),
+        'count'        => $coveredDungeonCount,
+    ]);
 ?>
 @extends('layouts.sitepage', [
     'wide' => true,
@@ -62,11 +73,7 @@ $title = sprintf(__('view_collection.view.title'), $dungeonRouteCollection->name
         @foreach($dungeonRouteGroups as $dungeonRouteGroup)
             <section class="collection_group mb-4">
                 <h2 class="h5">
-                    @if(!$dungeonRouteGroup->matchesCollection)
-                        {{ __('view_collection.view.foreign') }}
-                    @else
-                        {{ __($dungeonRouteGroup->dungeon?->name ?? '') }}
-                    @endif
+                    {{ __($dungeonRouteGroup->dungeon?->name ?? '') }}
                 </h2>
 
                 @if($dungeonRouteGroup->dungeonRoutes->isEmpty())

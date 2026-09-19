@@ -19,7 +19,7 @@ use Illuminate\Support\Collection;
  * @var GameVersion                                            $selectedGameVersion
  * @var Collection<int, Season>                                $seasons               New collections only.
  * @var Season|null                                            $selectedSeason
- * @var array<int, array{text: string, isWarning: bool}>       $enemyForcesDetails Keyed by route id.
+ * @var Collection<int, DungeonRoute>                          $ownDungeonRoutes
  * @var Collection<int, Team>                                  $teams
  * @var Collection<int, DungeonRouteCollectionCategory>        $categories
  */
@@ -28,11 +28,22 @@ $dungeonRouteCollection  ??= null;
 $selectedDungeonRouteIds ??= [];
 $seasons                 ??= collect();
 $selectedSeason          ??= null;
-$enemyForcesDetails      ??= [];
 $teams                   ??= collect();
 $categories              ??= collect();
 
 $isNew = $dungeonRouteCollection === null;
+
+// The pick list takes a generic detail per option: a route's enemy forces against what its mapping version requires,
+// flagged when the route falls short. Dungeons that require none (most classic ones) get no detail.
+$enemyForcesDetails = $ownDungeonRoutes
+    ->filter(static fn(DungeonRoute $dungeonRoute): bool => $dungeonRoute->mappingVersion?->enemy_forces_required > 0)
+    ->mapWithKeys(static fn(DungeonRoute $dungeonRoute): array => [
+        $dungeonRoute->id => [
+            'text'      => sprintf('%d / %d', $dungeonRoute->enemy_forces, $dungeonRoute->mappingVersion->enemy_forces_required),
+            'isWarning' => $dungeonRoute->enemy_forces < $dungeonRoute->mappingVersion->enemy_forces_required,
+        ],
+    ])
+    ->all();
 
 // After a failed validation the picker must show what was submitted, not what is stored - otherwise
 // resubmitting the corrected form saves the collection with no routes. An empty submission stays empty
@@ -172,7 +183,7 @@ foreach ($teams as $team) {
             {{ __('view_common.collection.details.dungeon_routes_none') }}
         </p>
     @else
-        @php($slotSections = $editSections->filter(static fn(DungeonRouteCollectionGroup $editSection): bool => $editSection->matchesCollection && $editSection->dungeon !== null))
+        @php($slotSections = $editSections->filter(static fn(DungeonRouteCollectionGroup $editSection): bool => $editSection->dungeon !== null))
         <div class="d-flex align-items-baseline mb-2">
             <p class="form-text text-body-secondary my-0">
                 {{ __('view_common.collection.details.dungeon_routes_help') }}
@@ -214,25 +225,7 @@ foreach ($teams as $team) {
         @endif
 
         @foreach($editSections as $editSection)
-            @if(!$editSection->matchesCollection)
-                <div class="mb-3">
-                    @include('common.forms.orderedselect', [
-                        'id' => 'dungeon_routes_foreign',
-                        'name' => 'dungeon_routes',
-                        'label' => __('view_common.collection.details.dungeon_routes_foreign'),
-                        'labelClass' => 'form-label fw-bold',
-                        'options' => $editSection->dungeonRoutes->mapWithKeys(static fn(DungeonRoute $dungeonRoute): array => [
-                            $dungeonRoute->id => sprintf('%s — %s', $dungeonRoute->title, __($dungeonRoute->dungeon?->name ?? '')),
-                        ])->all(),
-                        'optionDetails' => $enemyForcesDetails,
-                        'detailWarningText' => __('view_common.collection.details.enemy_forces_short'),
-                        'selectedIds' => $selectedDungeonRouteIds,
-                        'max' => DungeonRouteCollection::MAX_ROUTES,
-                        'help' => __('view_common.collection.details.dungeon_routes_foreign_help'),
-                        'emptyText' => __('view_common.collection.details.dungeon_routes_empty'),
-                    ])
-                </div>
-            @elseif($editSection->dungeon === null)
+            @if($editSection->dungeon === null)
                 <div class="mb-3">
                     @include('common.forms.orderedselect', [
                         'id' => 'dungeon_routes',

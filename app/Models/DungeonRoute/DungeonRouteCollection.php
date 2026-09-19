@@ -32,7 +32,7 @@ use Override;
  * @property int         $user_id
  * @property int|null    $team_id
  * @property int|null    $dungeon_route_collection_category_id
- * @property int|null    $game_version_id                      Only null until the backfill of existing collections ran.
+ * @property int         $game_version_id
  * @property int|null    $season_id                            Set for a season set, null for a free-form collection.
  * @property string      $public_key
  * @property int         $published_state_id
@@ -45,7 +45,7 @@ use Override;
  * @property User                                                 $user
  * @property Team|null                                            $team
  * @property DungeonRouteCollectionCategory|null                  $dungeonRouteCollectionCategory
- * @property GameVersion|null                                     $gameVersion
+ * @property GameVersion                                          $gameVersion
  * @property Season|null                                          $season
  * @property PublishedState                                       $publishedState
  * @property EloquentCollection<int, DungeonRouteCollectionRoute> $dungeonRouteCollectionRoutes
@@ -95,6 +95,15 @@ class DungeonRouteCollection extends Model
         'updated_at',
         'created_at',
     ];
+
+    /** @return array<string, string> */
+    protected function casts(): array
+    {
+        return [
+            'game_version_id' => 'integer',
+            'season_id'       => 'integer',
+        ];
+    }
 
     /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
@@ -162,23 +171,6 @@ class DungeonRouteCollection extends Model
     }
 
     /**
-     * The collection's game version; one that has none yet (written before the game version existed) takes its
-     * owner's current game version.
-     */
-    public function getGameVersionOrOwnersCurrent(): GameVersion
-    {
-        if ($this->gameVersion !== null) {
-            return $this->gameVersion;
-        }
-
-        $owner = $this->user;
-
-        return $owner->game_version_id > 0 && $owner->gameVersion !== null
-            ? $owner->gameVersion
-            : GameVersion::getDefaultGameVersion();
-    }
-
-    /**
      * Whether a route may be in this collection: its own mapping version must be of the collection's game version
      * (never judged by its dungeon, which spans several game versions), and for a season set the route must be of
      * the collection's season. Expects the route's mapping version to be loaded.
@@ -191,7 +183,7 @@ class DungeonRouteCollection extends Model
             return false;
         }
 
-        if ($this->game_version_id !== null && $mappingVersion->game_version_id !== $this->game_version_id) {
+        if ($mappingVersion->game_version_id !== $this->game_version_id) {
             return false;
         }
 
@@ -245,15 +237,6 @@ class DungeonRouteCollection extends Model
     public function getRouteKeyName(): string
     {
         return 'public_key';
-    }
-
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return [
-            'game_version_id' => 'integer',
-            'season_id'       => 'integer',
-        ];
     }
 
     #[Override]
