@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var GameVersion                $currentUserGameVersion
+ * @var GameVersion|null           $selectGameVersion    The game version whose dungeons are offered; defaults to the user's current one.
  * @var Collection<int, Dungeon>   $allDungeons
  * @var Collection<int, Dungeon>   $allRaids
  * @var Collection<int, Dungeon>   $allActiveDungeons
@@ -19,13 +20,14 @@ use Illuminate\Support\Collection;
  * @var Season|null                $nextSeason
  */
 
+$selectGameVersion    ??= $currentUserGameVersion;
 $id                   ??= 'dungeon_id_select';
 $name                 ??= 'dungeon_id';
 $label                ??= __('view_common.dungeon.select.dungeon');
 $required             ??= true;
 $showAll              = !isset($showAll) || $showAll;
-$showSeasons          = isset($showSeasons) && $showSeasons && $currentUserGameVersion->has_seasons;
-$allowSeasonSelection = isset($allowSeasonSelection) && $allowSeasonSelection && $currentUserGameVersion->has_seasons;
+$showSeasons          = isset($showSeasons) && $showSeasons && $selectGameVersion->has_seasons;
+$allowSeasonSelection = isset($allowSeasonSelection) && $allowSeasonSelection && $selectGameVersion->has_seasons;
 $showExpansions       = isset($showExpansions) && $showExpansions;
 // Show all dungeons if we're debugging
 $activeOnly        ??= true; // !config('app.debug');
@@ -33,6 +35,8 @@ $showSiegeWarning  ??= false;
 $selected          ??= null;
 $ignoreGameVersion ??= false;
 $multiple          ??= false;
+// Adds the "All dungeons" option to an explicit $dungeons list as well
+$showAllOfGiven   ??= false;
 $dungeonsSelect   = [];
 $seasonDungeonIds = collect();
 
@@ -67,7 +71,7 @@ if (!isset($dungeons)) {
     }
 
     if ($showExpansions) {
-        $validExpansions = $allExpansions->when(!$ignoreGameVersion, static fn(Collection $collection) => $collection->filter(static fn(\App\Models\Expansion $expansion) => $expansion->hasDungeonForGameVersion($currentUserGameVersion)));
+        $validExpansions = $allExpansions->when(!$ignoreGameVersion, static fn(Collection $collection) => $collection->filter(static fn(\App\Models\Expansion $expansion) => $expansion->hasDungeonForGameVersion($selectGameVersion)));
 
         foreach ($validExpansions as $expansion) {
             $key                                                        = sprintf('expansion-%d', $expansion->id);
@@ -91,6 +95,8 @@ if (!isset($dungeons)) {
     }
 
     $dungeons = $activeOnly ? $allActiveDungeons->merge($allActiveRaids) : $allDungeons->merge($allRaids);
+} else if ($showAllOfGiven) {
+    $dungeonsSelect[__('view_common.dungeon.select.all')] = [-1 => __('view_common.dungeon.select.all_dungeons')];
 }
 
 $dungeonsByExpansion = $dungeons->load([
@@ -114,7 +120,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
                 static fn(Collection $collection) => $collection->filter(
                     static fn(Dungeon $dungeon) => $dungeon->mappingVersions->contains(
                         'game_version_id',
-                        $currentUserGameVersion->id
+                        $selectGameVersion->id
                     )
                 )
             )
