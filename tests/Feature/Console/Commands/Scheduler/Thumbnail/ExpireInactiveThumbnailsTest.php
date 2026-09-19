@@ -256,6 +256,38 @@ final class ExpireInactiveThumbnailsTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function handle_givenDeletionFailsHalfway_stillResetsTimestampsSoDisplayQueuesRender(): void
+    {
+        // Arrange
+        Queue::fake();
+        $dungeonRoute = null;
+        $thumbnails   = collect();
+
+        try {
+            [$dungeonRoute, $thumbnails] = $this->createRouteWithThumbnails(
+                [DungeonRouteThumbnailVariant::Standard, DungeonRouteThumbnailVariant::Standard],
+                inactiveDays: 120,
+            );
+            // The second thumbnail's stored object cannot be deleted, as when a storage call fails
+            File::query()->whereKey($thumbnails->last()->file_id)->update(['disk' => 'disk-that-does-not-exist']);
+
+            // Act
+            $this->artisan(ExpireInactiveThumbnails::class)->assertSuccessful();
+            $result = app()->make(ThumbnailServiceInterface::class)->dungeonRoutesDisplayed(collect([$dungeonRoute->refresh()]));
+
+            // Assert
+            $this->assertSame(self::NEVER_RENDERED_UPDATED_AT, $dungeonRoute->thumbnail_updated_at->toDateTimeString());
+            $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $thumbnails->last()->id]);
+            $this->assertTrue($result);
+            Queue::assertPushed(ProcessRouteFloorThumbnail::class);
+        } finally {
+            // The row still points at the broken disk, which would make its cleanup fail as well
+            File::query()->whereIn('id', $thumbnails->pluck('file_id'))->update(['disk' => config('filesystems.default')]);
+            $this->deleteRoute($dungeonRoute, $thumbnails);
+        }
+    }
+
     /**
      * A non-sandbox route with one file-backed thumbnail per requested variant, last edited $inactiveDays ago.
      *

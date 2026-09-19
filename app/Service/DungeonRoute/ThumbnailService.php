@@ -456,13 +456,16 @@ class ThumbnailService implements ThumbnailServiceInterface
         $expired = 0;
         foreach ($dungeonRouteIds as $dungeonRouteId) {
             try {
+                // Reset first: a deletion that fails halfway must not leave a route with missing floors that
+                // still reads as fresh, since a display would then never queue the render that repairs it
+                $this->dungeonRouteRepository->resetThumbnailTimestamps(collect([$dungeonRouteId]));
+
                 // Through the model, so the File and the stored object go with the row
                 $this->dungeonRouteThumbnailRepository
                     ->inactiveVariantThumbnailsQuery(collect([$dungeonRouteId]))
                     ->get()
                     ->each(static fn(DungeonRouteThumbnail $thumbnail) => $thumbnail->delete());
 
-                $this->dungeonRouteRepository->resetThumbnailTimestamps(collect([$dungeonRouteId]));
                 $expired++;
             } catch (Throwable $exception) {
                 // One route that cannot be cleaned up must not keep the routes behind it from expiring
