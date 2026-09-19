@@ -23,12 +23,20 @@ interface DungeonRouteCollectionServiceInterface
 
     /**
      * The sections of the route picker for a collection of the passed game version and season: one per pool dungeon
-     * for a season set, a single flat list otherwise, each offering the own routes that may join.
+     * for a season set, a single flat list otherwise, each offering the own routes that may join. The routes already
+     * in the collection are always offered, whether they may still join or not - the picker posts what it offers, so
+     * leaving one out would drop it from the collection on the next save.
      *
-     * @param  Collection<int, DungeonRoute>                $ownDungeonRoutes Every route the owner may collect.
+     * @param  Collection<int, DungeonRoute>                $ownDungeonRoutes    Every route the owner may collect.
+     * @param  Collection<int, DungeonRoute>                $memberDungeonRoutes The routes currently in the collection.
      * @return Collection<int, DungeonRouteCollectionGroup>
      */
-    public function getEditSections(GameVersion $gameVersion, ?Season $season, Collection $ownDungeonRoutes): Collection;
+    public function getEditSections(
+        GameVersion $gameVersion,
+        ?Season     $season,
+        Collection  $ownDungeonRoutes,
+        Collection  $memberDungeonRoutes,
+    ): Collection;
 
     /**
      * How many distinct dungeons the passed routes cover - of the season's pool for a season set.

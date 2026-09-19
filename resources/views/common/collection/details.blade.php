@@ -36,6 +36,8 @@ $isNew = $dungeonRouteCollection === null;
 // The pick list takes a generic detail per option: a route's enemy forces against what its mapping version requires,
 // flagged when the route falls short. Dungeons that require none (most classic ones) get no detail.
 $enemyForcesDetails = $ownDungeonRoutes
+    ->concat($isNew ? collect() : $dungeonRouteCollection->dungeonRoutes)
+    ->unique('id')
     ->filter(static fn(DungeonRoute $dungeonRoute): bool => $dungeonRoute->mappingVersion?->enemy_forces_required > 0)
     ->mapWithKeys(static fn(DungeonRoute $dungeonRoute): array => [
         $dungeonRoute->id => [

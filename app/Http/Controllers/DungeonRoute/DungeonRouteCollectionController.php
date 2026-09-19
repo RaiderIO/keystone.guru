@@ -107,7 +107,7 @@ class DungeonRouteCollectionController extends Controller
 
         return view('collection.new', [
             'dungeonRouteCollection' => null,
-            'editSections'           => $dungeonRouteCollectionService->getEditSections($gameVersion, $season, $ownDungeonRoutes),
+            'editSections'           => $dungeonRouteCollectionService->getEditSections($gameVersion, $season, $ownDungeonRoutes, collect()),
             'ownDungeonRoutes'       => $ownDungeonRoutes,
             'hasOwnDungeonRoutes'    => $ownDungeonRoutes->isNotEmpty(),
             'selectedGameVersion'    => $gameVersion,
@@ -198,6 +198,7 @@ class DungeonRouteCollectionController extends Controller
                 $dungeonRouteCollection->gameVersion,
                 $dungeonRouteCollection->season,
                 $ownDungeonRoutes,
+                $dungeonRouteCollection->dungeonRoutes,
             ),
             'ownDungeonRoutes'        => $ownDungeonRoutes,
             'hasOwnDungeonRoutes'     => $ownDungeonRoutes->isNotEmpty() || $dungeonRouteCollection->dungeonRoutes->isNotEmpty(),

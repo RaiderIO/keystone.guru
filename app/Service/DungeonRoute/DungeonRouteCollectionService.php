@@ -34,15 +34,20 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
         );
     }
 
-    public function getEditSections(GameVersion $gameVersion, ?Season $season, Collection $ownDungeonRoutes): Collection
-    {
+    public function getEditSections(
+        GameVersion $gameVersion,
+        ?Season     $season,
+        Collection  $ownDungeonRoutes,
+        Collection  $memberDungeonRoutes,
+    ): Collection {
         $kind = new DungeonRouteCollection([
             'game_version_id' => $gameVersion->id,
             'season_id'       => $season?->id,
         ]);
 
-        $selectableDungeonRoutes = $ownDungeonRoutes
-            ->filter(static fn(DungeonRoute $dungeonRoute): bool => $kind->mayContainDungeonRoute($dungeonRoute))
+        $selectableDungeonRoutes = $memberDungeonRoutes
+            ->concat($ownDungeonRoutes->filter(static fn(DungeonRoute $dungeonRoute): bool => $kind->mayContainDungeonRoute($dungeonRoute)))
+            ->unique('id')
             ->values();
 
         if ($season === null) {

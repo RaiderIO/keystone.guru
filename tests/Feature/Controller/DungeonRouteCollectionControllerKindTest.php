@@ -669,6 +669,37 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         );
     }
 
+    /**
+     * The picker posts exactly what it offers, and saving replaces every membership with what was posted - so a
+     * member the picker leaves out is silently dropped, even by a save that never touched the routes.
+     */
+    #[Test]
+    public function update_givenAMemberRouteThePickerWouldNotOffer_keepsItOnANameOnlySave(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $ineligibleDungeonRoute = $this->createRoute($this->nonRetailMappingVersion(), null, 'ZzTestIneligible');
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
+        $this->addRoutes($dungeonRouteCollection, [$ineligibleDungeonRoute]);
+
+        // Act - render the form, then submit exactly what it posts, with only the name changed
+        $editResponse = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+        $response     = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection), [
+            'name'            => 'ZzTestRenamedOnly',
+            'published_state' => PublishedState::WORLD,
+            'dungeon_routes'  => $this->listedDungeonRouteIds((string)$editResponse->getContent()),
+        ]);
+
+        // Assert
+        $editResponse->assertOk();
+        $this->assertStringContainsString('ZzTestIneligible', (string)$editResponse->getContent(), 'The form must offer the routes already in the collection');
+        $this->assertSame([$ineligibleDungeonRoute->id], $this->listedDungeonRouteIds((string)$editResponse->getContent()));
+        $response->assertSessionHasNoErrors();
+        $dungeonRouteCollection->refresh();
+        $this->assertSame('ZzTestRenamedOnly', $dungeonRouteCollection->name);
+        $this->assertSame([$ineligibleDungeonRoute->id], $dungeonRouteCollection->dungeonRoutes->pluck('id')->all());
+    }
+
     #[Test]
     public function view_givenASeasonSet_showsOneSlotPerPoolDungeonInPoolOrderWithGaps(): void
     {
@@ -1084,6 +1115,18 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
                 'order'                       => $order,
             ]);
         }
+    }
+
+    /**
+     * The ids the pick list renders, in list order. Its row template carries id 0.
+     *
+     * @return array<int, int>
+     */
+    private function listedDungeonRouteIds(string $content): array
+    {
+        preg_match_all('/<input type="hidden" name="dungeon_routes\[\]" value="(\d+)">/', $content, $matches);
+
+        return array_values(array_filter(array_map(intval(...), $matches[1])));
     }
 
     private function updateUrl(DungeonRouteCollection $dungeonRouteCollection): string
