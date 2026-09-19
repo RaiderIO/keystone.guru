@@ -45,6 +45,9 @@ class CommonCollectionRoutes extends InlineCode {
         /** @type {string[]} Route ids in the order the server last stored */
         this._savedOrder = [];
         this._orderTimeout = null;
+        this._orderSaving  = false;
+        /** @type {Function[]} Callbacks of the saves that came in while one was in flight */
+        this._orderQueue = null;
     }
 
     activate() {
@@ -153,6 +156,18 @@ class CommonCollectionRoutes extends InlineCode {
      */
     _saveOrder(onSaved) {
         let self = this;
+
+        // Only the in-flight request decides what is stored, so a save on top of one waits for it - otherwise a list
+        // put back into the stored order looks unchanged here while the request still writes the superseded one
+        if (this._orderSaving) {
+            this._orderQueue ??= [];
+            if (typeof onSaved === 'function') {
+                this._orderQueue.push(onSaved);
+            }
+
+            return;
+        }
+
         let order = this._getOrder();
 
         if (order.join(',') === this._savedOrder.join(',')) {
@@ -163,13 +178,36 @@ class CommonCollectionRoutes extends InlineCode {
             return;
         }
 
+        this._orderSaving = true;
+
         this._request('PUT', this.options.orderUrl, order.map(id => this._publicKeys[id]), function () {
-            self._savedOrder = order;
+            self._savedOrder  = order;
+            self._orderSaving = false;
             if (typeof onSaved === 'function') {
                 onSaved();
             }
+
+            self._saveQueuedOrder();
         }, function () {
+            self._orderSaving = false;
             self._restoreOrder(self._savedOrder);
+            self._saveQueuedOrder();
+        });
+    }
+
+    /**
+     * Stores whatever the lists hold now, for the saves that arrived while a request was in flight.
+     * @private
+     */
+    _saveQueuedOrder() {
+        let queue = this._orderQueue;
+        if (queue === null) {
+            return;
+        }
+
+        this._orderQueue = null;
+        this._saveOrder(function () {
+            queue.forEach(onSaved => onSaved());
         });
     }
 

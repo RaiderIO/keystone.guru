@@ -282,6 +282,25 @@ describe('CommonCollectionRoutes', () => {
         expect(lastCall('PUT').data).toEqual({dungeon_routes: ['keyB', 'keyA', 'keyC', 'keyOld']});
     });
 
+    it('onMoved_givenTheListIsPutBackWhileASaveIsInFlight_storesTheRestoredOrderToo', () => {
+        // Arrange - move Bravo up and let that save start, then move it back before the save answers
+        const bravo = () => document.querySelector('#slot_1 [data-id="12"]');
+        bravo().querySelector('.ordered_select_up').click();
+        vi.advanceTimersByTime(500);
+        const inFlight = lastCall('PUT');
+        bravo().querySelector('.ordered_select_down').click();
+        vi.advanceTimersByTime(500);
+
+        // Act
+        inFlight.success({});
+
+        // Assert
+        const puts = ajaxCalls.filter((call) => call.type === 'PUT');
+        expect(puts).toHaveLength(2);
+        expect(puts[0].data).toEqual({dungeon_routes: ['keyB', 'keyA', 'keyOld']});
+        expect(puts[1].data).toEqual({dungeon_routes: ['keyA', 'keyB', 'keyOld']});
+    });
+
     it('onMoved_givenSeveralMovesInARow_storesTheWholeOrderOnce', () => {
         // Arrange
         const bravo = () => document.querySelector('#slot_1 [data-id="12"]');
