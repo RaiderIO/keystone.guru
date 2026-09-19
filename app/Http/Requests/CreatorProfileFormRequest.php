@@ -69,7 +69,7 @@ class CreatorProfileFormRequest extends FormRequest
             'pinned_dungeon_routes.*' => [
                 'required',
                 'integer',
-                // user_pinned_dungeon_routes is unique on (user_id, dungeon_route_id): the select
+                // user_pinned_dungeon_routes is unique on (user_id, dungeon_route_id): the form
                 // cannot produce duplicates, but a hand-crafted post could, and the insert would
                 // then fail on the constraint rather than as a validation error
                 'distinct',

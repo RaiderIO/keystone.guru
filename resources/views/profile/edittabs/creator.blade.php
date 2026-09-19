@@ -83,60 +83,52 @@ $existingSocialLinks = $user->socialLinks->keyBy('platform');
         </div>
     @endforeach
 
-    <h5 class="mt-4">
-        {{ __('view_profile.edit.creator_pinned_routes') }}
-    </h5>
-
-    <div class="mb-3{{ $errors->has('pinned_dungeon_routes') ? ' has-error' : '' }}">
+    <div class="mt-4 mb-3">
         @if($ownDungeonRoutes->isEmpty())
+            <h5>{{ __('view_profile.edit.creator_pinned_routes') }}</h5>
             <p class="text-muted">
                 {{ __('view_profile.edit.creator_pinned_routes_none') }}
             </p>
         @else
-            <select name="pinned_dungeon_routes[]" id="pinned_dungeon_routes" class="form-select"
-                    multiple size="{{ min(10, max(3, $ownDungeonRoutes->count())) }}">
-                @foreach($ownDungeonRoutes as $ownDungeonRoute)
-                    <option value="{{ $ownDungeonRoute->id }}"
-                            @if(in_array($ownDungeonRoute->id, $pinnedDungeonRouteIds, true)) selected @endif>
-                        {{ $ownDungeonRoute->title }} &mdash; {{ __($ownDungeonRoute->dungeon?->name ?? '') }}
-                    </option>
-                @endforeach
-            </select>
-            <small class="form-text text-muted">
-                {{ __('view_profile.edit.creator_pinned_routes_help', ['max' => UserPinnedDungeonRoute::MAX_PINNED_ROUTES]) }}
-            </small>
+            @include('common.forms.orderedselect', [
+                'id' => 'pinned_dungeon_routes',
+                'name' => 'pinned_dungeon_routes',
+                'label' => __('view_profile.edit.creator_pinned_routes'),
+                'labelClass' => 'h5',
+                'options' => $ownDungeonRoutes->mapWithKeys(static fn(DungeonRoute $ownDungeonRoute): array => [
+                    $ownDungeonRoute->id => sprintf('%s — %s', $ownDungeonRoute->title, __($ownDungeonRoute->dungeon?->name ?? '')),
+                ])->all(),
+                'selectedIds' => $pinnedDungeonRouteIds,
+                'max' => UserPinnedDungeonRoute::MAX_PINNED_ROUTES,
+                'help' => __('view_profile.edit.creator_pinned_routes_help'),
+                'emptyText' => __('view_profile.edit.creator_pinned_routes_empty'),
+            ])
         @endif
-        @include('common.forms.form-error', ['key' => 'pinned_dungeon_routes'])
     </div>
 
-    <h5 class="mt-4">
-        {{ __('view_profile.edit.creator_pinned_collections') }}
-    </h5>
-
-    <div class="mb-3{{ $errors->has('pinned_dungeon_route_collections') ? ' has-error' : '' }}">
+    <div class="mt-4 mb-3">
         @if($ownDungeonRouteCollections->isEmpty())
+            <h5>{{ __('view_profile.edit.creator_pinned_collections') }}</h5>
             <p class="text-muted">
                 {{ __('view_profile.edit.creator_pinned_collections_none') }}
             </p>
         @else
-            <select name="pinned_dungeon_route_collections[]" id="pinned_dungeon_route_collections"
-                    class="form-select" multiple
-                    size="{{ min(10, max(3, $ownDungeonRouteCollections->count())) }}">
-                @foreach($ownDungeonRouteCollections as $ownDungeonRouteCollection)
-                    <option value="{{ $ownDungeonRouteCollection->id }}"
-                            @if(in_array($ownDungeonRouteCollection->id, $pinnedDungeonRouteCollectionIds, true)) selected @endif>
-                        {{ $ownDungeonRouteCollection->name }}
-                        @if($ownDungeonRouteCollection->dungeonRouteCollectionCategory !== null)
-                            &mdash; {{ $ownDungeonRouteCollection->dungeonRouteCollectionCategory->getTranslatedName() }}
-                        @endif
-                    </option>
-                @endforeach
-            </select>
-            <small class="form-text text-muted">
-                {{ __('view_profile.edit.creator_pinned_collections_help', ['max' => UserPinnedDungeonRouteCollection::MAX_PINNED_COLLECTIONS]) }}
-            </small>
+            @include('common.forms.orderedselect', [
+                'id' => 'pinned_dungeon_route_collections',
+                'name' => 'pinned_dungeon_route_collections',
+                'label' => __('view_profile.edit.creator_pinned_collections'),
+                'labelClass' => 'h5',
+                'options' => $ownDungeonRouteCollections->mapWithKeys(static fn(DungeonRouteCollection $ownDungeonRouteCollection): array => [
+                    $ownDungeonRouteCollection->id => $ownDungeonRouteCollection->dungeonRouteCollectionCategory === null
+                        ? $ownDungeonRouteCollection->name
+                        : sprintf('%s — %s', $ownDungeonRouteCollection->name, $ownDungeonRouteCollection->dungeonRouteCollectionCategory->getTranslatedName()),
+                ])->all(),
+                'selectedIds' => $pinnedDungeonRouteCollectionIds,
+                'max' => UserPinnedDungeonRouteCollection::MAX_PINNED_COLLECTIONS,
+                'help' => __('view_profile.edit.creator_pinned_collections_help'),
+                'emptyText' => __('view_profile.edit.creator_pinned_collections_empty'),
+            ])
         @endif
-        @include('common.forms.form-error', ['key' => 'pinned_dungeon_route_collections'])
     </div>
 
     <h5 class="mt-4">

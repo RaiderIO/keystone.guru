@@ -311,8 +311,6 @@ class ProfileController extends Controller
                 ]);
             }
 
-            // $order is submission order (DOM order of the <select multiple>), not the order the
-            // user clicked the options in
             $user->pinnedDungeonRoutes()->delete();
 
             foreach ($request->pinnedDungeonRoutes() as $order => $dungeonRoute) {

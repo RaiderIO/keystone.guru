@@ -1,0 +1,74 @@
+/* The reorderable pick list of resources/views/common/forms/orderedselect.blade.php.
+
+   Selectors are two classes deep: every theme's compiled Bootstrap loads after custom.css and its
+   `.darkly ol` reset (0,1,1) would otherwise restore the 2rem list padding. */
+
+.ordered_select .ordered_select_list {
+    padding-left: 0;
+}
+
+.ordered_select .ordered_select_item {
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    color: var(--theme-text-contrast);
+    background-color: var(--theme-bg-card);
+    border-color: var(--theme-border-subtle);
+}
+
+.ordered_select .ordered_select_handle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    min-height: 2rem;
+    color: var(--theme-light);
+    cursor: grab;
+    /* Lets a touch drag start on the handle instead of scrolling the page */
+    touch-action: none;
+}
+
+.ordered_select .ordered_select_position {
+    min-width: 1.5rem;
+    color: var(--theme-light);
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+}
+
+.ordered_select .ordered_select_label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.ordered_select .ordered_select_item .btn {
+    min-width: 2rem;
+    min-height: 2rem;
+    color: var(--theme-text-contrast);
+}
+
+.ordered_select .ordered_select_item .btn:hover:not(:disabled) {
+    color: var(--theme-link-hover);
+}
+
+.ordered_select .ordered_select_item .btn:focus-visible {
+    outline: 2px solid var(--theme-btn-accent);
+    outline-offset: -2px;
+    box-shadow: none;
+}
+
+.ordered_select .ordered_select_item .btn:disabled {
+    border-color: transparent;
+    opacity: 0.35;
+}
+
+.ordered_select .ordered_select_item.draggable-source--is-dragging {
+    opacity: 0.4;
+}
+
+.ordered_select_item.draggable-mirror {
+    z-index: 1050;
+    list-style: none;
+    background-color: var(--theme-bg-card);
+    border: 1px solid var(--theme-btn-accent);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.45);
+    cursor: grabbing;
+}
