@@ -22,6 +22,38 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
     ) {
     }
 
+    public function getAddBlockedReason(DungeonRouteCollection $dungeonRouteCollection, DungeonRoute $dungeonRoute, int $routeCount): ?string
+    {
+        $mappingVersion = $dungeonRoute->mappingVersion;
+
+        if ($mappingVersion === null ||
+            ($dungeonRouteCollection->game_version_id !== null && $mappingVersion->game_version_id !== $dungeonRouteCollection->game_version_id)) {
+            return self::ADD_BLOCKED_GAME_VERSION;
+        }
+
+        if (!$dungeonRouteCollection->mayContainDungeonRoute($dungeonRoute)) {
+            return self::ADD_BLOCKED_SEASON;
+        }
+
+        if ($routeCount >= DungeonRouteCollection::MAX_ROUTES) {
+            return self::ADD_BLOCKED_FULL;
+        }
+
+        return null;
+    }
+
+    public function filterMatchingDungeonRoutes(?GameVersion $gameVersion, ?Season $season, Collection $dungeonRoutes): Collection
+    {
+        $kind = new DungeonRouteCollection([
+            'game_version_id' => $gameVersion?->id,
+            'season_id'       => $season?->id,
+        ]);
+
+        return $dungeonRoutes
+            ->filter(static fn(DungeonRoute $dungeonRoute): bool => $kind->mayContainDungeonRoute($dungeonRoute))
+            ->values();
+    }
+
     public function getDungeonRouteGroups(DungeonRouteCollection $dungeonRouteCollection, Collection $dungeonRoutes): Collection
     {
         [$matchingDungeonRoutes, $foreignDungeonRoutes] = $dungeonRoutes->partition(

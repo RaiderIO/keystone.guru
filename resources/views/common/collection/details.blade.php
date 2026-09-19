@@ -21,6 +21,9 @@ use Illuminate\Support\Collection;
  * @var Season|null                                            $selectedSeason
  * @var Collection<int, Team>                                  $teams
  * @var Collection<int, DungeonRouteCollectionCategory>        $categories
+ * @var string|null                                            $prefillName          New collections only.
+ * @var string|null                                            $prefillDescription   New collections only.
+ * @var bool                                                   $mayCreateCollection  New collections only; false at the collection cap.
  */
 
 $dungeonRouteCollection  ??= null;
@@ -29,6 +32,9 @@ $seasonsPerGameVersion   ??= collect();
 $selectedSeason          ??= null;
 $teams                   ??= collect();
 $categories              ??= collect();
+$prefillName             ??= null;
+$prefillDescription      ??= null;
+$mayCreateCollection     ??= true;
 
 $isNew = $dungeonRouteCollection === null;
 // The game version is fixed once a route is in the collection
@@ -74,13 +80,13 @@ foreach ($teams as $team) {
 
 <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
     {{ html()->label(__('view_common.collection.details.name') . '<span class="form-required">*</span>', 'name') }}
-    {{ html()->text('name', $dungeonRouteCollection?->name)->class('form-control')->attribute('maxlength', 128) }}
+    {{ html()->text('name', $dungeonRouteCollection?->name ?? $prefillName)->class('form-control')->attribute('maxlength', 128) }}
     @include('common.forms.form-error', ['key' => 'name'])
 </div>
 
 <div class="mb-3{{ $errors->has('description') ? ' has-error' : '' }}">
     {{ html()->label(__('view_common.collection.details.description'), 'description') }}
-    {{ html()->textarea('description', $dungeonRouteCollection?->description)
+    {{ html()->textarea('description', $dungeonRouteCollection?->description ?? $prefillDescription)
         ->class('form-control')
         ->rows(3)
         ->attribute('maxlength', 1000) }}
@@ -241,7 +247,14 @@ foreach ($teams as $team) {
     </p>
 @endif
 
-{{ html()->input('submit')->value($dungeonRouteCollection !== null ? __('view_common.collection.details.save') : __('view_common.collection.details.submit'))->class('btn btn-info') }}
+@if($isNew && !$mayCreateCollection)
+    {{ html()->input('submit')->value(__('view_common.collection.details.submit'))->class('btn btn-info')->disabled()->attribute('aria-describedby', 'collection_max_collections') }}
+    <p id="collection_max_collections" class="text-warning mt-2">
+        {{ __('view_collection.index.max_collections', ['max' => DungeonRouteCollection::MAX_COLLECTIONS]) }}
+    </p>
+@else
+    {{ html()->input('submit')->value($dungeonRouteCollection !== null ? __('view_common.collection.details.save') : __('view_common.collection.details.submit'))->class('btn btn-info') }}
+@endif
 
 {{ html()->closeModelForm() }}
 

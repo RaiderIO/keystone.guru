@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
  * @var GameVersion                             $selectedGameVersion
  * @var Collection<int, Season>                 $seasons
  * @var int|string|null                         $selectedSeasonFilter
+ * @var bool                                    $mayCreateCollection
  */
 
 $gameVersionOptions = $gameVersions->mapWithKeys(static fn(GameVersion $gameVersion): array => [
@@ -27,9 +28,15 @@ $seasonOptions = ['' => __('view_collection.index.filter_season_all')]
 
 @section('header-title', __('view_collection.index.header'))
 @section('header-addition')
-    <a href="{{ route('collections.new') }}" class="btn btn-success text-white float-end" role="button">
-        <i class="fas fa-plus"></i> {{ __('view_collection.index.create_collection') }}
-    </a>
+    @if($mayCreateCollection)
+        <a href="{{ route('collections.new') }}" class="btn btn-success text-white float-end" role="button">
+            <i class="fas fa-plus"></i> {{ __('view_collection.index.create_collection') }}
+        </a>
+    @else
+        <button type="button" class="btn btn-success float-end" disabled aria-describedby="collections_max_collections">
+            <i class="fas fa-plus"></i> {{ __('view_collection.index.create_collection') }}
+        </button>
+    @endif
 @endsection
 
 @section('content')
@@ -37,6 +44,11 @@ $seasonOptions = ['' => __('view_collection.index.filter_season_all')]
     <p class="text-body-secondary">
         {{ __('view_collection.index.description') }}
     </p>
+    @if(!$mayCreateCollection)
+        <p id="collections_max_collections" class="text-warning">
+            {{ __('view_collection.index.max_collections', ['max' => DungeonRouteCollection::MAX_COLLECTIONS]) }}
+        </p>
+    @endif
 
     {{ html()->form('GET', route('collections.index'))->class('row g-2 align-items-end mb-3')->open() }}
     <div class="col-auto">
