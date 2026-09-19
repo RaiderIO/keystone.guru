@@ -39,8 +39,10 @@ function calculateNavbarCollapseMaxHeight(viewportHeight, collapseTop, bottomMar
 
 class CommonGeneralSiteheader extends InlineCode {
     /**
-     * Never shrink when the page barely scrolls - the height change itself would make up
-     * most of the scrollable distance.
+     * Never start shrinking when the page barely scrolls - the height change itself would make up
+     * most of the scrollable distance. Only checked while the header is at full size: shrinking
+     * shortens the document by the height it loses, so re-checking it while shrunk lets the
+     * header's own shrink flip the guard and flap the header.
      */
     static MIN_SCROLLABLE_DISTANCE = 200;
 
@@ -117,7 +119,7 @@ class CommonGeneralSiteheader extends InlineCode {
         const scrollableDistance = document.documentElement.scrollHeight - window.innerHeight;
         const currentlyShrunk = this.shrinkTarget.classList.contains('ksg-header--shrink');
 
-        const shrunk = scrollableDistance >= CommonGeneralSiteheader.MIN_SCROLLABLE_DISTANCE &&
+        const shrunk = (currentlyShrunk || scrollableDistance >= CommonGeneralSiteheader.MIN_SCROLLABLE_DISTANCE) &&
             shouldShrinkHeader(window.scrollY, currentlyShrunk);
 
         if (shrunk !== currentlyShrunk) {
