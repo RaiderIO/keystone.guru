@@ -4,14 +4,16 @@ namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Service\GameVersion\GameVersionServiceInterface;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Fluent;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
 /**
- * The query of the new-collection form: which game version and season it opens with, so its route picker can be
- * rebuilt for whatever the user picks.
+ * The query of the new-collection form: which season it opens with, so its route picker can be rebuilt for whatever
+ * season the user picks. The game version is always the one selected on the site.
  */
 class DungeonRouteCollectionCreateFormRequest extends FormRequest
 {
@@ -32,11 +34,6 @@ class DungeonRouteCollectionCreateFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'game_version_id' => [
-                'nullable',
-                'integer',
-                Rule::exists('game_versions', 'id')->where('active', 1),
-            ],
             'season_id' => [
                 'nullable',
                 Rule::when(
@@ -51,8 +48,7 @@ class DungeonRouteCollectionCreateFormRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'game_version_id.exists' => __('validation.custom.collection_game_version_id.exists'),
-            'season_id.exists'       => __('validation.custom.collection_season_id.exists'),
+            'season_id.exists' => __('validation.custom.collection_season_id.exists'),
         ];
     }
 
@@ -63,7 +59,7 @@ class DungeonRouteCollectionCreateFormRequest extends FormRequest
     {
         return [
             function (Validator $validator): void {
-                if ($validator->errors()->hasAny(['game_version_id', 'season_id'])) {
+                if ($validator->errors()->has('season_id')) {
                     return;
                 }
 
@@ -72,7 +68,7 @@ class DungeonRouteCollectionCreateFormRequest extends FormRequest
                     return;
                 }
 
-                $gameVersion = $this->gameVersion() ?? GameVersion::getUserOrDefaultGameVersion();
+                $gameVersion = $this->gameVersion();
                 if (!$gameVersion->has_seasons) {
                     $validator->errors()->add('season_id', __('validation.custom.collection_season_id.no_seasons'));
                 } elseif ($season->expansion_id !== $gameVersion->expansion_id) {
@@ -83,14 +79,15 @@ class DungeonRouteCollectionCreateFormRequest extends FormRequest
     }
 
     /**
-     * The requested game version, if any.
+     * The game version selected on the site, which every new collection is for.
      */
-    public function gameVersion(): ?GameVersion
+    public function gameVersion(): GameVersion
     {
-        return once(function (): ?GameVersion {
-            $gameVersionId = $this->query('game_version_id');
+        return once(function (): GameVersion {
+            /** @var GameVersionServiceInterface $gameVersionService */
+            $gameVersionService = app(GameVersionServiceInterface::class);
 
-            return $gameVersionId === null ? null : GameVersion::query()->findOrFail((int)$gameVersionId);
+            return $gameVersionService->getGameVersion(Auth::user());
         });
     }
 

@@ -15,8 +15,7 @@ const OPTIONS = {
     totalSelector:           '#collection_dungeon_routes_total',
     loadingSelector:         '#collection_dungeon_routes_loading',
     errorSelector:           '#collection_dungeon_routes_error',
-    gameVersionSelector:     '.collection_game_version',
-    seasonContainerSelector: '.collection_season',
+    seasonSelector:          'input[name="season_id"]',
     max:                     24,
     countText:               ':count / :max',
     formUrl:                 'http://localhost/collections/new',
@@ -40,9 +39,8 @@ describe('CommonCollectionDetails', () => {
 
         document.body.innerHTML = `
             <form>
-                <input type="radio" class="collection_game_version" name="game_version_id" id="gv_1" value="1" checked>
-                <input type="radio" class="collection_game_version" name="game_version_id" id="gv_5" value="5">
-                <fieldset class="collection_season" data-game-version-id="1">
+                <fieldset>
+                    <input type="radio" name="season_id" id="s_17" value="17">
                     <input type="radio" name="season_id" id="s_18" value="18" checked>
                     <input type="radio" name="season_id" id="s_none" value="">
                 </fieldset>
@@ -86,7 +84,7 @@ describe('CommonCollectionDetails', () => {
         expect(document.querySelector('#collection_dungeon_routes_total').textContent).toBe('2 / 24');
     });
 
-    it('onKindChanged_givenFreeFormPicked_fetchesThePickerForNoSeasonAndShowsTheLoadingState', () => {
+    it('onSeasonChanged_givenFreeFormPicked_fetchesThePickerForNoSeasonAndShowsTheLoadingState', () => {
         // Arrange
         document.querySelector('#s_none').checked = true;
 
@@ -94,21 +92,19 @@ describe('CommonCollectionDetails', () => {
         jQuery('#s_none').trigger('change');
 
         // Assert
-        expect(fetchedUrls).toEqual(['http://localhost/collections/new?game_version_id=1&season_id=none']);
+        expect(fetchedUrls).toEqual(['http://localhost/collections/new?season_id=none']);
         expect(document.querySelector('#collection_dungeon_routes_loading').hidden).toBe(false);
         expect(document.querySelector('#slot_add').disabled).toBe(true);
     });
 
-    it('onKindChanged_givenAGameVersionWithoutSeasons_hidesTheSeasonsAndFetchesWithoutASeason', () => {
+    it('onSeasonChanged_givenAnotherSeason_fetchesThePickerForThatSeason', () => {
         // Arrange
-        document.querySelector('#gv_5').checked = true;
+        document.querySelector('#s_17').checked = true;
 
         // Act
-        jQuery('#gv_5').trigger('change');
+        jQuery('#s_17').trigger('change');
 
         // Assert
-        expect(document.querySelector('.collection_season').hidden).toBe(true);
-        expect(document.querySelector('#s_18').disabled).toBe(true);
-        expect(fetchedUrls).toEqual(['http://localhost/collections/new?game_version_id=5']);
+        expect(fetchedUrls).toEqual(['http://localhost/collections/new?season_id=17']);
     });
 });

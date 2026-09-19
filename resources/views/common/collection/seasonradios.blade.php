@@ -9,20 +9,20 @@ use Illuminate\Support\Collection;
  * @var string                  $idPrefix
  * @var Collection<int, Season> $seasons          With their expansion loaded.
  * @var int|null                $selectedSeasonId Null selects free-form.
- * @var bool                    $disabled
  */
 ?>
 <div class="btn-group flex-wrap collection_season_radios" role="group">
     @foreach($seasons as $season)
         <input type="radio" name="season_id" id="{{ $idPrefix }}_{{ $season->id }}" class="btn-check"
-               value="{{ $season->id }}" @checked($season->id === $selectedSeasonId) @disabled($disabled)>
+               value="{{ $season->id }}" @checked($season->id === $selectedSeasonId)>
         <label class="btn btn-secondary" for="{{ $idPrefix }}_{{ $season->id }}">
-            <img src="{{ $season->expansion->getIconUrl() }}" alt="" class="collection_season_icon">
-            {{ $season->name_long }}
+            {{-- The label only says "Season N"; the icon's alt text names the expansion --}}
+            <img src="{{ $season->expansion->getIconUrl() }}" alt="{{ __($season->expansion->name) }}" class="collection_season_icon">
+            {{ $season->name }}
         </label>
     @endforeach
     <input type="radio" name="season_id" id="{{ $idPrefix }}_none" class="btn-check"
-           value="" @checked($selectedSeasonId === null) @disabled($disabled)>
+           value="" @checked($selectedSeasonId === null)>
     <label class="btn btn-secondary" for="{{ $idPrefix }}_none">
         {{ __('view_common.collection.details.season_none') }}
     </label>

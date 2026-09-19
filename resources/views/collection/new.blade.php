@@ -10,9 +10,8 @@ use Illuminate\Support\Collection;
 /**
  * @var Collection<int, DungeonRouteCollectionGroup>    $editSections
  * @var bool                                            $hasOwnDungeonRoutes
- * @var Collection<int, GameVersion>                    $gameVersions
  * @var GameVersion                                     $selectedGameVersion
- * @var Collection<int, Collection<int, Season>>        $seasonsPerGameVersion
+ * @var Collection<int, Season>                         $seasons
  * @var Season|null                                     $selectedSeason
  * @var array<int, array{text: string, isWarning: bool}> $enemyForcesDetails
  * @var Collection<int, Team>                           $teams
@@ -30,9 +29,8 @@ use Illuminate\Support\Collection;
             'editSections' => $editSections,
             'hasOwnDungeonRoutes' => $hasOwnDungeonRoutes,
             'selectedDungeonRouteIds' => [],
-            'gameVersions' => $gameVersions,
             'selectedGameVersion' => $selectedGameVersion,
-            'seasonsPerGameVersion' => $seasonsPerGameVersion,
+            'seasons' => $seasons,
             'selectedSeason' => $selectedSeason,
             'enemyForcesDetails' => $enemyForcesDetails,
             'teams' => $teams,

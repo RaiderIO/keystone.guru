@@ -15,7 +15,7 @@
 .collection_slot .collection_slot_scrim {
     background: linear-gradient(to bottom,
         rgba(0, 0, 0, 0.8) 0%,
-        rgba(0, 0, 0, 0.65) 40%,
+        rgba(0, 0, 0, 0.35) 40%,
         rgba(0, 0, 0, 0.85) 100%);
 }
 
@@ -28,6 +28,6 @@
 }
 
 .collection_season_icon {
-    width: 16px;
+    width: auto;
     height: 16px;
 }

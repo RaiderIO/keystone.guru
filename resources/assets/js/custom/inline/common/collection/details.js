@@ -4,17 +4,16 @@
  @property {string}      totalSelector           The "n / max" counter over every slot.
  @property {string}      loadingSelector         Shown while the picker is being rebuilt.
  @property {string}      errorSelector           Shown when rebuilding the picker failed.
- @property {string}      gameVersionSelector     The game version radios.
- @property {string}      seasonContainerSelector One season fieldset per game version with seasons, carrying data-game-version-id.
+ @property {string}      seasonSelector          The season radios; absent on a game version without seasons.
  @property {Number}      max
  @property {string}      countText               Contains :count and :max.
- @property {string|null} formUrl                 The new-collection form, which renders the picker for the game_version_id and season_id it is given; null when the picker never changes.
+ @property {string|null} formUrl                 The new-collection form, which renders the picker for the season_id it is given; null when the picker never changes.
  @property {string}      seasonNone              The season_id value that asks for a free-form collection.
  */
 
 /**
  * The collection form's route picker: keeps the collection-wide route counter current and, on a new collection,
- * rebuilds the picker for the game version and season the user picks.
+ * rebuilds the picker for the season the user picks.
  *
  * @property {CommonCollectionDetailsOptions} options
  */
@@ -29,9 +28,7 @@ class CommonCollectionDetails extends InlineCode {
         this._refreshTotal();
 
         if (this.options.formUrl !== null) {
-            $(this.options.gameVersionSelector).on('change', this._onKindChanged.bind(this));
-            $(`${this.options.seasonContainerSelector} input`).on('change', this._onKindChanged.bind(this));
-            this._applySeasonVisibility();
+            $(this.options.seasonSelector).on('change', this._onSeasonChanged.bind(this));
         }
     }
 
@@ -47,33 +44,10 @@ class CommonCollectionDetails extends InlineCode {
     }
 
     /**
-     * Shows only the selected game version's season field, and keeps the hidden ones from being posted.
-     *
-     * @returns {{gameVersionId: string, seasonId: string|null}} seasonId is null for a game version without seasons.
      * @private
      */
-    _applySeasonVisibility() {
-        let gameVersionId = String($(`${this.options.gameVersionSelector}:checked`).val());
-        let seasonId = null;
-
-        $(this.options.seasonContainerSelector).each(function () {
-            let $container = $(this);
-            let isSelected = String($container.data('game-version-id')) === gameVersionId;
-
-            $container.prop('hidden', !isSelected).find('input').prop('disabled', !isSelected);
-            if (isSelected) {
-                seasonId = String($container.find('input:checked').val() ?? '');
-            }
-        });
-
-        return {gameVersionId: gameVersionId, seasonId: seasonId};
-    }
-
-    /**
-     * @private
-     */
-    _onKindChanged() {
-        let kind = this._applySeasonVisibility();
+    _onSeasonChanged() {
+        let seasonId = String($(`${this.options.seasonSelector}:checked`).val() ?? '');
         let requestNumber = ++this._requestCount;
         let $dungeonRoutes = $(this.options.dungeonRoutesSelector);
 
@@ -82,10 +56,7 @@ class CommonCollectionDetails extends InlineCode {
         $(this.options.errorSelector).prop('hidden', true);
 
         let url = new URL(this.options.formUrl, window.location.href);
-        url.searchParams.set('game_version_id', kind.gameVersionId);
-        if (kind.seasonId !== null) {
-            url.searchParams.set('season_id', kind.seasonId === '' ? this.options.seasonNone : kind.seasonId);
-        }
+        url.searchParams.set('season_id', seasonId === '' ? this.options.seasonNone : seasonId);
 
         fetch(url.toString(), {credentials: 'same-origin', headers: {'X-Requested-With': 'XMLHttpRequest'}})
             .then((response) => {

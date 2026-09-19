@@ -9,12 +9,11 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\Team;
-use Illuminate\Database\Query\Builder;
+use App\Service\GameVersion\GameVersionServiceInterface;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Validator;
 
 class DungeonRouteCollectionFormRequest extends FormRequest
@@ -56,12 +55,6 @@ class DungeonRouteCollectionFormRequest extends FormRequest
                 Rule::exists('team_users', 'team_id')
                     ->where('user_id', $userId),
             ],
-            // Required for a collection without one yet; any other keeps its game version when none is posted
-            'game_version_id' => array_merge($this->existingDungeonRouteCollection()?->game_version_id === null ? [] : ['sometimes'], [
-                'required',
-                'integer',
-                $this->gameVersionExistsRule(),
-            ]),
             // Null makes a free-form collection. Whether the season fits the game version is checked in after()
             'season_id' => [
                 'nullable',
@@ -104,8 +97,6 @@ class DungeonRouteCollectionFormRequest extends FormRequest
             'team_id.required_if'       => __('validation.custom.collection_team_id.required_if'),
             'team_id.exists'            => __('validation.custom.collection_team_id.exists'),
             'category_id.exists'        => __('validation.custom.collection_category_id.exists'),
-            'game_version_id.required'  => __('validation.custom.collection_game_version_id.required'),
-            'game_version_id.exists'    => __('validation.custom.collection_game_version_id.exists'),
             'season_id.exists'          => __('validation.custom.collection_season_id.exists'),
             'dungeon_routes.max'        => __('validation.custom.collection_dungeon_routes.max'),
             'dungeon_routes.*.exists'   => __('validation.custom.collection_dungeon_routes.exists'),
@@ -120,15 +111,14 @@ class DungeonRouteCollectionFormRequest extends FormRequest
     {
         return [
             function (Validator $validator): void {
-                if ($validator->errors()->hasAny(['game_version_id', 'season_id'])) {
+                if ($validator->errors()->has('season_id')) {
                     return;
                 }
 
-                $this->validateGameVersionChange($validator);
                 $this->validateSeason($validator);
             },
             function (Validator $validator): void {
-                if ($validator->errors()->hasAny(['game_version_id', 'season_id', 'dungeon_routes', 'dungeon_routes.*'])) {
+                if ($validator->errors()->hasAny(['season_id', 'dungeon_routes', 'dungeon_routes.*'])) {
                     return;
                 }
 
@@ -138,18 +128,23 @@ class DungeonRouteCollectionFormRequest extends FormRequest
     }
 
     /**
-     * The game version the collection has after saving: the posted one, or the existing collection's own.
+     * The game version the collection has after saving. It is never posted: a new collection takes the game version
+     * selected on the site, an existing one keeps its own, and one saved without any yet takes its owner's current
+     * game version.
      */
-    public function gameVersion(): ?GameVersion
+    public function gameVersion(): GameVersion
     {
-        return once(function (): ?GameVersion {
-            $gameVersionId = $this->input('game_version_id');
+        return once(function (): GameVersion {
+            $dungeonRouteCollection = $this->existingDungeonRouteCollection();
 
-            if ($gameVersionId === null) {
-                return $this->existingDungeonRouteCollection()?->gameVersion;
+            if ($dungeonRouteCollection === null) {
+                /** @var GameVersionServiceInterface $gameVersionService */
+                $gameVersionService = app(GameVersionServiceInterface::class);
+
+                return $gameVersionService->getGameVersion(Auth::user());
             }
 
-            return GameVersion::query()->findOrFail((int)$gameVersionId);
+            return $dungeonRouteCollection->getGameVersionOrOwnersCurrent();
         });
     }
 
@@ -241,27 +236,9 @@ class DungeonRouteCollectionFormRequest extends FormRequest
     }
 
     /**
-     * A collection's game version is fixed once it holds a route.
-     */
-    private function validateGameVersionChange(Validator $validator): void
-    {
-        $dungeonRouteCollection = $this->existingDungeonRouteCollection();
-        $gameVersionId          = $this->input('game_version_id');
-
-        // A collection without a game version yet must be able to get one, whatever it holds
-        if ($dungeonRouteCollection?->game_version_id === null || $gameVersionId === null || (int)$gameVersionId === $dungeonRouteCollection->game_version_id) {
-            return;
-        }
-
-        if ($dungeonRouteCollection->dungeonRouteCollectionRoutes()->exists()) {
-            $validator->errors()->add('game_version_id', __('validation.custom.collection_game_version_id.fixed'));
-        }
-    }
-
-    /**
      * A season only exists on a game version with seasons, must be of that game version's expansion, and is fixed
      * at creation: an existing collection's season may only stay the same or be dropped. Checked on creation and
-     * whenever the game version or season changes.
+     * whenever the season changes.
      */
     private function validateSeason(Validator $validator): void
     {
@@ -281,13 +258,13 @@ class DungeonRouteCollectionFormRequest extends FormRequest
 
         // A binding that does not change always stands, so a season set stays editable after its expansion moved on
         if ($dungeonRouteCollection !== null
-            && $this->gameVersion()?->id === $dungeonRouteCollection->game_version_id
+            && $this->gameVersion()->id === $dungeonRouteCollection->game_version_id
             && $season->id === $dungeonRouteCollection->season_id) {
             return;
         }
 
         $gameVersion = $this->gameVersion();
-        if ($gameVersion === null || !$gameVersion->has_seasons) {
+        if (!$gameVersion->has_seasons) {
             $validator->errors()->add('season_id', __('validation.custom.collection_season_id.no_seasons'));
 
             return;
@@ -332,7 +309,7 @@ class DungeonRouteCollectionFormRequest extends FormRequest
             }
 
             $mappingVersion = $dungeonRoute->mappingVersion;
-            if ($mappingVersion === null || $gameVersion === null || $mappingVersion->game_version_id !== $gameVersion->id) {
+            if ($mappingVersion === null || $mappingVersion->game_version_id !== $gameVersion->id) {
                 $validator->errors()->add(
                     sprintf('dungeon_routes.%d', $index),
                     __('validation.custom.collection_dungeon_routes.game_version'),
@@ -344,22 +321,6 @@ class DungeonRouteCollectionFormRequest extends FormRequest
                 );
             }
         }
-    }
-
-    /**
-     * An active game version, or the one the collection already has - the backfill may have given it an inactive one.
-     */
-    private function gameVersionExistsRule(): Exists
-    {
-        $currentGameVersionId = $this->existingDungeonRouteCollection()?->game_version_id;
-
-        return Rule::exists('game_versions', 'id')->where(static function (Builder $query) use ($currentGameVersionId): void {
-            $query->where('active', 1);
-
-            if ($currentGameVersionId !== null) {
-                $query->orWhere('id', $currentGameVersionId);
-            }
-        });
     }
 
     private function existingDungeonRouteCollection(): ?DungeonRouteCollection

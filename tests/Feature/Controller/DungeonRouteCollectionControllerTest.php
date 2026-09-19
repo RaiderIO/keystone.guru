@@ -108,7 +108,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
-                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestWeeklyRoutes',
                 'description'     => 'My routes for this week',
                 'published_state' => PublishedState::WORLD,
@@ -155,7 +154,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
-                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestOneTooMany',
                 'published_state' => PublishedState::WORLD,
                 'dungeon_routes'  => [],
@@ -187,7 +185,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
-                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestTooManyRoutes',
                 'published_state' => PublishedState::WORLD,
                 'dungeon_routes'  => $dungeonRoutes->pluck('id')->all(),
@@ -223,7 +220,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
-                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestForeignRoutes',
                 'published_state' => PublishedState::WORLD,
                 'dungeon_routes'  => [$foreignRoute->id],
@@ -254,7 +250,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 ->from(route('collections.new'))
                 ->followingRedirects()
                 ->post(route('collections.savenew'), [
-                    'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                     'published_state' => PublishedState::WORLD,
                     'dungeon_routes'  => [$dungeonRoute->id],
                 ]);
@@ -321,7 +316,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 ->from(route('collections.new'))
                 ->followingRedirects()
                 ->post(route('collections.savenew'), [
-                    'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                     'published_state' => PublishedState::WORLD,
                     'dungeon_routes'  => [$bravo->id, $alpha->id],
                 ]);
@@ -523,7 +517,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 ->from(route('collections.new'))
                 ->followingRedirects()
                 ->post(route('collections.savenew'), [
-                    'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                     'published_state' => PublishedState::WORLD_WITH_LINK,
                 ]);
 
@@ -551,7 +544,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             $response = $this->actingAs($creator)
                 ->followingRedirects()
                 ->post(route('collections.savenew'), [
-                    'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                     'name'            => 'ZzTestFlashOnce',
                     'published_state' => PublishedState::UNPUBLISHED,
                 ]);
@@ -582,7 +574,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 ->from(route('collections.new'))
                 ->followingRedirects()
                 ->post(route('collections.savenew'), [
-                    'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                     'published_state' => PublishedState::UNPUBLISHED,
                 ]);
 
@@ -632,7 +623,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
-                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestTeamlessCollection',
                 'published_state' => PublishedState::TEAM,
             ]);
@@ -662,7 +652,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
-                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestForeignTeamCollection',
                 'published_state' => PublishedState::TEAM,
                 'team_id'         => $team->id,
@@ -691,7 +680,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
-                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestCategorisedCollection',
                 'published_state' => PublishedState::WORLD,
                 'category_id'     => DungeonRouteCollectionCategoryType::PugFriendly->id(),
@@ -726,7 +714,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
-                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestBogusCategoryCollection',
                 'published_state' => PublishedState::WORLD,
                 'category_id'     => 99999,

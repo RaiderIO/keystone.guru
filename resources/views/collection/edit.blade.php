@@ -13,8 +13,7 @@ use Illuminate\Support\Collection;
  * @var Collection<int, DungeonRouteCollectionGroup>    $editSections
  * @var bool                                            $hasOwnDungeonRoutes
  * @var array<int, int>                                 $selectedDungeonRouteIds
- * @var Collection<int, GameVersion>                    $gameVersions
- * @var GameVersion|null                                $selectedGameVersion
+ * @var GameVersion                                     $selectedGameVersion
  * @var Season|null                                     $selectedSeason
  * @var array<int, array{text: string, isWarning: bool}> $enemyForcesDetails
  * @var Collection<int, Team>                           $teams
@@ -44,7 +43,6 @@ $title = sprintf(__('view_collection.edit.title'), $dungeonRouteCollection->name
             'editSections' => $editSections,
             'hasOwnDungeonRoutes' => $hasOwnDungeonRoutes,
             'selectedDungeonRouteIds' => $selectedDungeonRouteIds,
-            'gameVersions' => $gameVersions,
             'selectedGameVersion' => $selectedGameVersion,
             'selectedSeason' => $selectedSeason,
             'enemyForcesDetails' => $enemyForcesDetails,
