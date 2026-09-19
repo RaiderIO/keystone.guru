@@ -5,6 +5,7 @@ namespace Tests\Feature\View\Common\DungeonRoute;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\Team;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\ViewException;
 use InvalidArgumentException;
@@ -123,6 +124,33 @@ final class PickerTest extends PublicTestCase
 
         // Act
         $this->renderPicker(['sourceScope' => 'everyone']);
+
+        // Assert - the expected exception
+    }
+
+    #[Test]
+    public function render_givenTheUnassignedByMembersScope_listsTheTeamsUnassignedMemberRoutes(): void
+    {
+        // Arrange
+        $team = new Team(['name' => 'Picker Raiders', 'public_key' => 'abc1234']);
+
+        // Act
+        [$html, $options] = $this->renderPicker(['sourceScope' => 'unassigned_by_members', 'sourceTeam' => $team]);
+
+        // Assert
+        $this->assertSame(['team_public_key' => 'abc1234', 'available' => 1], $options['sourceParameters']);
+        $this->assertStringContainsString('Picker Raiders', $html);
+        $this->assertStringNotContainsString('id="test_picker_tags"', $html);
+    }
+
+    #[Test]
+    public function render_givenTheUnassignedByMembersScopeWithoutATeam_throws(): void
+    {
+        // Arrange
+        $this->expectException(InvalidArgumentException::class);
+
+        // Act
+        $this->renderPicker(['sourceScope' => 'unassigned_by_members']);
 
         // Assert - the expected exception
     }

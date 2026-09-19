@@ -70,6 +70,11 @@ return [
             'min'    => 'Limit the routes to at least one dungeon, or leave the dungeons out.',
             'exists' => 'One or more of those dungeons do not exist.',
         ],
+        'team_add_routes' => [
+            'required' => 'Pick at least one route to add to the team.',
+            'max'      => 'You can add at most :max routes to a team at once.',
+            'exists'   => 'One or more of those routes do not exist.',
+        ],
         'collection_name' => [
             'required' => 'A collection needs a name.',
             'max'      => 'A collection name may not be longer than :max characters.',

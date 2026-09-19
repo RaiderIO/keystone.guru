@@ -7,38 +7,8 @@ class DungeonRouteTableTeam {
     activate() {
         console.assert(this instanceof DungeonRouteTableTeam, 'this is not a DungeonRouteTableTeam', this);
 
-        let $addToThisTeam = $('.dungeonroute-add-to-this-team');
-        $addToThisTeam.unbind('click').bind('click', this._addToThisTeam.bind(this));
-
         let $removeFromThisTeam = $('.dungeonroute-remove-from-this-team');
         $removeFromThisTeam.unbind('click').bind('click', this._removeFromThisTeam.bind(this));
-    }
-
-    /**
-     * Adds the route to the currently assigned team.
-     * @param clickEvent
-     * @private
-     */
-    _addToThisTeam(clickEvent) {
-        console.assert(this instanceof DungeonRouteTableTeam, 'this is not a DungeonRouteTableTeam', this);
-
-        let teamPublicKey = this._dungeonrouteTable.getTableView().getTeamPublicKey();
-        if (teamPublicKey !== null) {
-            let key = $(clickEvent.currentTarget).attr('data-publickey');
-
-            guardedAjaxClick(clickEvent.currentTarget, {
-                type: 'POST',
-                url: `/ajax/team/${teamPublicKey}/route/${key}`,
-                dataType: 'json',
-                success: function (json) {
-                    showSuccessNotification(lang.get('js.team_add_route_successful'));
-                    // Refresh the table
-                    $('#dungeonroute_filter').trigger('click');
-                }
-            });
-        } else {
-            console.error('Unable to add to team, team ID not set!');
-        }
     }
 
     /**
@@ -62,12 +32,13 @@ class DungeonRouteTableTeam {
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('js.team_remove_route_successful'));
+                    $(document).trigger('team:routeremoved', [key]);
                     // Refresh the table
                     $('#dungeonroute_filter').trigger('click');
                 }
             });
         } else {
-            console.error('Unable to add to team, team ID not set!');
+            console.error('Unable to remove from team, team ID not set!');
         }
     }
 }

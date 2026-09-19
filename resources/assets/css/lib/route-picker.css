@@ -7,8 +7,14 @@
 }
 
 @media (max-width: 991.98px) {
+    /* A host page wider than the phone widens the layout viewport a fixed element is sized against;
+       viewport units stay at the device's size, so the drawer and its footer remain on screen. */
     .route_picker.offcanvas {
-        --bs-offcanvas-width: 100%;
+        --bs-offcanvas-width: 100vw;
+        left: 0;
+        right: auto;
+        bottom: auto;
+        height: 100dvh;
     }
 }
 
