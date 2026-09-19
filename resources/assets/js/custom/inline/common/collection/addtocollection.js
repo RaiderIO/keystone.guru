@@ -34,7 +34,7 @@
  */
 
 /**
- * The "Add to collection…" dialog: the current user's collections as switches for one of their own routes. A switch
+ * The "Add to collection…" dialog: the current user's collections as checkboxes for one of their own routes. A checkbox
  * saves at once and shows a toast from which the change can be undone. Collections the route may not join are shown
  * disabled with the reason, and the dialog ends with "New collection with this route…".
  *
@@ -129,7 +129,6 @@ class CommonCollectionAddtocollection extends InlineCode {
 
         let $input = $('<input>', {
             type: 'checkbox',
-            role: 'switch',
             'class': 'form-check-input',
             id: inputId,
         }).prop('checked', collection.is_member).prop('disabled', isDisabled);
@@ -150,7 +149,7 @@ class CommonCollectionAddtocollection extends InlineCode {
             'class': `list-group-item d-flex align-items-start gap-2${isDisabled ? ' text-body-secondary' : ''}`,
             'data-public-key': collection.public_key,
         })
-            .append($('<div>', {'class': 'form-check form-switch mb-0 flex-grow-1 text-break'}).append($input, $label))
+            .append($('<div>', {'class': 'form-check mb-0 flex-grow-1 text-break'}).append($input, $label))
             .append($('<span>', {
                 'class': 'badge text-bg-secondary add_to_collection_count',
                 text: this.options.countText.replace(':count', collection.route_count).replace(':max', collection.max_routes),
