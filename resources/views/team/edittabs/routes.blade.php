@@ -1,11 +1,14 @@
 <?php
 
+use App\Models\GameVersion\GameVersion;
 use App\Models\Team;
 
 /**
- * @var Team   $team
- * @var bool   $userIsModerator
- * @var string $inlineId
+ * @var Team        $team
+ * @var bool        $userIsModerator
+ * @var string      $inlineId
+ * @var string      $routePickerId
+ * @var GameVersion $currentUserGameVersion
  */
 ?>
 <div class="tab-pane fade" id="routes" role="tabpanel" aria-labelledby="routes-tab">
@@ -27,13 +30,22 @@ use App\Models\Team;
                         <i class="fas fa-plus"></i> {{ __('view_team.edittabs.routes.add_route') }}
                     </button>
                 @endif
-                <button id="view_existing_routes" class="btn btn-warning"
-                        style="display: none;">
-                    <i class="fas fa-backward"></i> {{ __('view_team.edittabs.routes.stop_adding_routes') }}
-                </button>
             </div>
         </div>
 
         @include('common.dungeonroute.table', ['inlineId' => $inlineId, 'view' => 'team', 'team' => $team])
     </div>
 </div>
+
+@if($userIsModerator)
+    @include('common.dungeonroute.picker', [
+        'id' => $routePickerId,
+        'title' => sprintf(__('view_team.edittabs.routes.picker_title'), $team->name),
+        'sourceScope' => 'unassigned_by_members',
+        'sourceTeam' => $team,
+        'lockedGameVersion' => $currentUserGameVersion,
+        'existingPublicKeys' => $team->dungeonRoutes()->pluck('public_key')->all(),
+        'addUrl' => sprintf('/ajax/team/%s/route', $team->public_key),
+        'openButtonSelector' => '#add_route_btn',
+    ])
+@endif

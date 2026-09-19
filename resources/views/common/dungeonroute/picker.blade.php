@@ -6,7 +6,9 @@
  *
  * @var string              $id                  Prefix for every element id of the drawer.
  * @var string              $title               The drawer's heading, naming the target.
- * @var string              $sourceScope         Where the routes come from; only 'mine' (your own routes) exists.
+ * @var string              $sourceScope         Where the routes come from: 'mine' (your own routes) or 'unassigned_by_members'
+ *                                               (routes of $sourceTeam's members that are in no team yet).
+ * @var Team|null           $sourceTeam          The team whose members' routes 'unassigned_by_members' lists.
  * @var GameVersion         $lockedGameVersion   Only routes of this game version are listed.
  * @var Season|null         $lockedSeason        When set, only routes of this season and its dungeons are listed.
  * @var Dungeon|null        $preselectedDungeon  Dungeon the dungeon filter starts on; the user may change it.
@@ -23,9 +25,11 @@ use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\Tags\TagCategory;
+use App\Models\Team;
 use App\Service\Season\SeasonServiceInterface;
 
 $sourceScope        ??= 'mine';
+$sourceTeam         ??= null;
 $lockedSeason       ??= null;
 $preselectedDungeon ??= null;
 $existingPublicKeys ??= [];
@@ -35,8 +39,14 @@ $addFieldName       ??= 'dungeon_routes';
 $openButtonSelector ??= null;
 
 [$sourceParameters, $sourceLabel] = match ($sourceScope) {
-    'mine'  => [['mine' => 1], __('view_common.dungeonroute.picker.source_mine')],
-    default => throw new InvalidArgumentException(sprintf('Unknown route picker source scope %s', $sourceScope)),
+    'mine'                  => [['mine' => 1], __('view_common.dungeonroute.picker.source_mine')],
+    'unassigned_by_members' => $sourceTeam instanceof Team
+        ? [
+            ['team_public_key' => $sourceTeam->public_key, 'available' => 1],
+            sprintf(__('view_common.dungeonroute.picker.source_unassigned_by_members'), $sourceTeam->name),
+        ]
+        : throw new InvalidArgumentException('Route picker source scope unassigned_by_members needs a sourceTeam'),
+    default                 => throw new InvalidArgumentException(sprintf('Unknown route picker source scope %s', $sourceScope)),
 };
 
 $lockedParameters = ['game_version_id' => $lockedGameVersion->id];

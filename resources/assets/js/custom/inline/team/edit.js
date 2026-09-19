@@ -1,6 +1,7 @@
 /**
  * @typedef {Object} TeamEditOptions
  * @property {string} routesTableInlineId
+ * @property {string|null} routePickerInlineId   Null when the user may not add routes to the team.
  * @property {Object[]} data
  * @property {string} teamName
  * @property {string} teamPublicKey
@@ -13,7 +14,6 @@
  * @property {string} inviteLinkInputSelector
  * @property {string} inviteLinkRefreshSelector
  * @property {string} addRouteBtnSelector
- * @property {string} viewExistingRoutesSelector
  * @property {string} deleteTeamSelector
  * @property {string} dungeonrouteFilterSelector
  * @property {string} defaultRoleSelector
@@ -30,6 +30,11 @@ class TeamEdit extends InlineCode {
     constructor(id, bladePath, options) {
         super(id, bladePath, options);
         this._dt = null;
+        /** @type {CommonDungeonroutePicker|null} */
+        this._routePicker = null;
+        this._routePickerShownBefore = false;
+        /** @type {Set<string>} */
+        this._teamRoutePublicKeys = new Set();
     }
 
     activate() {
@@ -44,9 +49,6 @@ class TeamEdit extends InlineCode {
             tableView.setIsUserModerator(this.options.userIsModerator);
         }
 
-        let routesTableInlineCode = _inlineManager.getInlineCodeById(this.options.routesTableInlineId);
-        let tableView = routesTableInlineCode.getTableView();
-
         $(this.options.inviteLinkCopyButtonSelector).unbind('click').bind('click', function () {
             copyToClipboard($(self.options.inviteLinkInputSelector).val());
         });
@@ -56,23 +58,9 @@ class TeamEdit extends InlineCode {
             self.refreshInviteLink();
         });
 
-        // Add route to team button - only if enabled (user is Moderator)
-        $(this.options.addRouteBtnSelector + ':enabled').unbind('click').bind('click', function () {
-            tableView.setAddMode(true);
-
-            routesTableInlineCode.refreshTable();
-            $(this).hide();
-            $(self.options.viewExistingRoutesSelector).show();
-        });
-
-        // Cancel button when done adding routes
-        $(this.options.viewExistingRoutesSelector).unbind('click').bind('click', function () {
-            tableView.setAddMode(false);
-
-            routesTableInlineCode.refreshTable();
-            $(this).hide();
-            $(self.options.addRouteBtnSelector).show();
-        });
+        if (this.options.routePickerInlineId) {
+            this._activateRoutePicker(_inlineManager.getInlineCodeById(this.options.routePickerInlineId));
+        }
 
         $(this.options.deleteTeamSelector).unbind('click').bind('click', function (clickEvent) {
             showConfirmYesCancel(lang.get('js.delete_team_confirm_label'), function () {
@@ -127,6 +115,129 @@ class TeamEdit extends InlineCode {
             });
         });
 
+    }
+
+    /**
+     * The drawer's "Add routes" button opens it; the host keeps the drawer's "already in" set in step
+     * with the team and owns the toast and Undo.
+     * @param {CommonDungeonroutePicker} routePicker
+     * @private
+     */
+    _activateRoutePicker(routePicker) {
+        let self = this;
+
+        this._routePicker = routePicker;
+        this._teamRoutePublicKeys = new Set(routePicker.options.existingPublicKeys || []);
+
+        routePicker.onAdded(this._onRoutesAdded.bind(this));
+
+        $(routePicker.options.drawerSelector).on('show.bs.offcanvas', function () {
+            // The drawer loads its first page on its own; later opens may be looking at a stale page
+            if (self._routePickerShownBefore) {
+                self._routePicker.reload();
+            }
+            self._routePickerShownBefore = true;
+        });
+
+        $(document).on('team:routeremoved', function (event, publicKey) {
+            self._forgetTeamRoutes([publicKey]);
+        });
+    }
+
+    /**
+     * @param {{publicKeys: string[], response: {public_keys: string[]}|undefined}} result
+     * @private
+     */
+    _onRoutesAdded(result) {
+        let self = this;
+
+        // Routes that were on the team already are not the drawer's to undo
+        let addedPublicKeys = result.response && Array.isArray(result.response.public_keys) ?
+            result.response.public_keys : result.publicKeys;
+
+        addedPublicKeys.forEach(publicKey => this._teamRoutePublicKeys.add(publicKey));
+        this._refreshRoutesTable();
+
+        if (addedPublicKeys.length === 0) {
+            return;
+        }
+
+        showSuccessNotification(this._getRoutesAddedText(addedPublicKeys.length), {
+            timeout: 8000,
+            buttons: [
+                Noty.button(lang.get('js.team_add_routes_undo_label'), 'btn btn-sm btn-light', function (n) {
+                    n.close();
+                    self._undoAddRoutes(addedPublicKeys);
+                }),
+            ],
+        });
+    }
+
+    /**
+     * @param {Number} count
+     * @returns {string}
+     * @private
+     */
+    _getRoutesAddedText(count) {
+        return count === 1 ?
+            lang.get('js.team_add_route_successful') :
+            lang.get('js.team_add_routes_successful', {count: count});
+    }
+
+    /**
+     * Undo is the team's own remove, once per added route.
+     * @param {string[]} publicKeys
+     * @private
+     */
+    _undoAddRoutes(publicKeys) {
+        let self = this;
+
+        // Every remove settles before the table refreshes, whether it succeeded or not
+        let removals = publicKeys.map(function (publicKey) {
+            let removal = $.Deferred();
+
+            $.ajax({
+                type: 'POST',
+                url: `/ajax/team/${self.options.teamPublicKey}/route/${publicKey}`,
+                data: {
+                    _method: 'DELETE'
+                },
+                dataType: 'json',
+            }).done(() => removal.resolve(true)).fail(() => removal.resolve(false));
+
+            return removal.promise();
+        });
+
+        $.when.apply($, removals).done(function () {
+            let isEveryRemovalSuccessful = Array.prototype.slice.call(arguments).every(isSuccessful => isSuccessful);
+            if (isEveryRemovalSuccessful) {
+                showInfoNotification(lang.get('js.team_add_routes_undone'));
+            } else {
+                showErrorNotification(lang.get('js.team_add_routes_undo_failed'));
+            }
+
+            self._forgetTeamRoutes(publicKeys);
+            self._refreshRoutesTable();
+        });
+    }
+
+    /**
+     * @param {string[]} publicKeys Routes that left the team.
+     * @private
+     */
+    _forgetTeamRoutes(publicKeys) {
+        publicKeys.forEach(publicKey => this._teamRoutePublicKeys.delete(publicKey));
+
+        if (this._routePicker !== null) {
+            this._routePicker.setExistingPublicKeys(Array.from(this._teamRoutePublicKeys));
+        }
+    }
+
+    /**
+     * @private
+     */
+    _refreshRoutesTable() {
+        $(this.options.dungeonrouteFilterSelector).trigger('click');
     }
 
     /**

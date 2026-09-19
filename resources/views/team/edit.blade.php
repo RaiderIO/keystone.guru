@@ -16,6 +16,7 @@ use App\Models\User;
 $title                        = sprintf(__('view_team.edit.title'), $team->name);
 $routesTableInlineId          = 'team_edit_routes_table';
 $routePublishingTableInlineId = 'team_edit_route_publishing_table';
+$routePickerId                = 'team_edit_route_picker';
 
 /** @var User $user */
 $user      = Auth::user();
@@ -68,8 +69,9 @@ foreach ($team->teamUsers as $teamUser) {
     </a>
 @endsection
 @include('common.general.inline', ['path' => 'team/edit', 'options' => [
-    'dependenciesById' => [$routesTableInlineId, $routePublishingTableInlineId],
+    'dependenciesById' => $userIsModerator ? [$routesTableInlineId, $routePublishingTableInlineId, $routePickerId] : [$routesTableInlineId, $routePublishingTableInlineId],
     'routesTableInlineId' => $routesTableInlineId,
+    'routePickerInlineId' => $userIsModerator ? $routePickerId : null,
 
     'data' => $data,
     'teamName' => $team->name,
@@ -84,7 +86,6 @@ foreach ($team->teamUsers as $teamUser) {
     'inviteLinkInputSelector' => '#team_members_invite_link',
     'inviteLinkRefreshSelector' => '#team_invite_link_refresh',
     'addRouteBtnSelector' => '#add_route_btn',
-    'viewExistingRoutesSelector' => '#view_existing_routes',
     'deleteTeamSelector' => '#delete_team',
     'dungeonrouteFilterSelector' => '#dungeonroute_filter',
     'defaultRoleSelector' => '#default_role',
@@ -110,6 +111,7 @@ foreach ($team->teamUsers as $teamUser) {
             'inlineId' => $routesTableInlineId,
             'team' => $team,
             'userIsModerator' => $userIsModerator,
+            'routePickerId' => $routePickerId,
         ])
         @include('team.edittabs.members', [
             'team' => $team,

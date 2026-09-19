@@ -534,20 +534,12 @@ class DungeonrouteTable extends InlineCode {
      * Picks the action-dropdown Handlebars template AND its variables together for the
      * "addremoveroute" team table column, so the two can never drift apart (unlike returning just
      * the template name and re-deriving the variables from it elsewhere): an owned route on the
-     * team gets the full profile-style action set (with "remove from team" added), a not-owned
-     * route only gets "remove from team", and a route not yet on the team gets the "add to team"
-     * action.
+     * team gets the full profile-style action set (with "remove from team" added), and a not-owned
+     * route only gets "remove from team".
      * @param row
      * @returns {{templateName: string, variables: Object}}
      */
     _getAddRemoveRouteTemplate(row) {
-        if (!row.has_team) {
-            return {
-                templateName: 'team_dungeonroute_table_add_route_actions',
-                variables: {public_key: row.public_key},
-            };
-        }
-
         if (row.author.id === this.options.currentUserId) {
             return {
                 templateName: 'team_dungeonroute_table_route_actions_own_route',
