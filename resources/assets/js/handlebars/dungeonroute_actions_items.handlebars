@@ -49,6 +49,11 @@
                 <a class="dropdown-item dungeonroute-add-tag cursor-pointer" data-publickey="{{public_key}}">
                     <i class="fas fa-tag"></i> {{add_remove_tag_label}}
                 </a>
+                {{#if show_add_to_collection}}
+                <a class="dropdown-item dungeonroute-add-to-collection cursor-pointer" data-publickey="{{public_key}}">
+                    <i class="fas fa-layer-group"></i> {{add_to_collection_label}}
+                </a>
+                {{/if}}
 
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item dungeonroute-clone cursor-pointer" data-publickey="{{public_key}}">

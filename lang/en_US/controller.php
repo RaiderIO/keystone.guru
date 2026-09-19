@@ -192,10 +192,12 @@ return [
     ],
     'dungeonroutecollection' => [
         'flash' => [
-            'collection_created'      => 'Collection created',
-            'collection_updated'      => 'Collection updated',
-            'collection_deleted'      => 'Collection deleted',
-            'max_collections_reached' => 'You may have at most :max collections.',
+            'collection_created'             => 'Collection created',
+            'collection_updated'             => 'Collection updated',
+            'collection_deleted'             => 'Collection deleted',
+            'max_collections_reached'        => 'You may have at most :max collections.',
+            'collection_duplicated'          => 'Collection duplicated. Only you can see the copy until you change who it is visible to.',
+            'collection_duplicated_left_out' => '{1} :count route was left out because it does not match the chosen season.|[2,*] :count routes were left out because they do not match the chosen season.',
         ],
     ],
     'profile' => [

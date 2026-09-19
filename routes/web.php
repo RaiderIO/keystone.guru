@@ -40,6 +40,7 @@ use App\Http\Controllers\Ajax\AjaxAdminCombatLogRouteController;
 use App\Http\Controllers\Ajax\AjaxArrowController;
 use App\Http\Controllers\Ajax\AjaxBrushlineController;
 use App\Http\Controllers\Ajax\AjaxDungeonFloorSwitchMarkerController;
+use App\Http\Controllers\Ajax\AjaxDungeonRouteCollectionController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteSearchController;
 use App\Http\Controllers\Ajax\AjaxEnemyController;
@@ -376,6 +377,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::get('/', new DungeonRouteCollectionController()->edit(...))->name('collections.edit');
                     Route::patch('/', new DungeonRouteCollectionController()->update(...))->name('collections.update');
                     Route::delete('/', new DungeonRouteCollectionController()->delete(...))->name('collections.delete');
+                    Route::middleware('throttle:create-collection')->group(static function () {
+                        Route::post('duplicate', new DungeonRouteCollectionController()->duplicate(...))->name('collections.duplicate');
+                    });
                 });
             });
 
@@ -675,6 +679,16 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::middleware(['auth', 'role:user|admin'])->group(static function () {
             Route::post('/profile/adfree/{user:public_key}', new AjaxProfileController()->addAdFreeGiveaway(...));
             Route::delete('/profile/adfree/{user:public_key}', new AjaxProfileController()->removeAdFreeGiveaway(...));
+
+            Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
+                ->get('/collections', new AjaxDungeonRouteCollectionController()->forDungeonRoute(...))
+                ->name('ajax.collections.fordungeonroute');
+            Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
+                ->prefix('collection/{dungeonRouteCollection}/routes')->group(static function () {
+                    Route::post('/', new AjaxDungeonRouteCollectionController()->storeRoutes(...))->name('ajax.collection.routes.store');
+                    Route::delete('/', new AjaxDungeonRouteCollectionController()->deleteRoutes(...))->name('ajax.collection.routes.delete');
+                    Route::put('/order', new AjaxDungeonRouteCollectionController()->updateRoutesOrder(...))->name('ajax.collection.routes.order');
+                });
         });
 
         // Metrics

@@ -1,0 +1,90 @@
+/* The route picker side drawer of resources/views/common/dungeonroute/picker.blade.php. */
+
+.route_picker.offcanvas {
+    --bs-offcanvas-width: 640px;
+    color: var(--theme-text-contrast);
+    background-color: var(--theme-bg-card);
+}
+
+@media (max-width: 991.98px) {
+    .route_picker.offcanvas {
+        --bs-offcanvas-width: 100%;
+    }
+}
+
+.route_picker .offcanvas-header,
+.route_picker .route_picker_filters,
+.route_picker .route_picker_footer {
+    border-color: var(--theme-border-subtle) !important;
+}
+
+.route_picker .route_picker_footer {
+    background-color: var(--theme-bg-card-footer);
+}
+
+.route_picker .route_picker_list .route_picker_row {
+    padding: 0;
+    color: var(--theme-text-contrast);
+    background-color: transparent;
+    border-color: var(--theme-border-subtle);
+}
+
+.route_picker .route_picker_row_label {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.route_picker .route_picker_row_selected {
+    box-shadow: inset 3px 0 0 var(--theme-btn-accent);
+}
+
+.route_picker .route_picker_row_existing .route_picker_row_label {
+    cursor: default;
+}
+
+.route_picker .route_picker_row_existing .route_picker_thumbnail,
+.route_picker .route_picker_row_existing .route_picker_title {
+    opacity: 0.6;
+}
+
+.route_picker .route_picker_checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1px solid currentColor;
+}
+
+.route_picker .route_picker_thumbnail {
+    width: 96px;
+    height: 64px;
+    object-fit: cover;
+}
+
+.route_picker .route_picker_details {
+    min-width: 0;
+}
+
+.route_picker .route_picker_title {
+    overflow-wrap: anywhere;
+}
+
+.route_picker .route_picker_meta > span:not(:empty) + span:not(:empty)::before {
+    content: '\00b7';
+    margin: 0 0.35rem;
+}
+
+@media (max-width: 575.98px) {
+    .route_picker .route_picker_thumbnail {
+        width: 64px;
+        height: 43px;
+    }
+}
+
+.route_picker .route_picker_details > span,
+.route_picker .route_picker_full {
+    display: block;
+}
+
+.route_picker .route_picker_details > [hidden],
+.route_picker .route_picker_full[hidden] {
+    display: none;
+}

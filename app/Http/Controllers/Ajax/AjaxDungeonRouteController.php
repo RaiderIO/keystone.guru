@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteListFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSearchFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSimulateFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSubmitFormRequest;
@@ -69,7 +70,7 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function get(Request $request, ThumbnailServiceInterface $thumbnailService, SeasonServiceInterface $seasonService, SeasonAffixGroupServiceInterface $seasonAffixGroupService)
+    public function get(AjaxDungeonRouteListFormRequest $request, ThumbnailServiceInterface $thumbnailService, SeasonServiceInterface $seasonService, SeasonAffixGroupServiceInterface $seasonAffixGroupService)
     {
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);
@@ -127,6 +128,21 @@ class AjaxDungeonRouteController extends Controller
                 'dungeon_routes.id',
                 'mapping_versions.dungeon_id',
             ]);
+
+        $gameVersion = $request->gameVersion();
+        if ($gameVersion !== null) {
+            $routes = $routes->where('mapping_versions.game_version_id', $gameVersion->id);
+        }
+
+        $season = $request->season();
+        if ($season !== null) {
+            $routes = $routes->where('dungeon_routes.season_id', $season->id);
+        }
+
+        $dungeons = $request->dungeons();
+        if ($dungeons !== null) {
+            $routes = $routes->whereIn('dungeon_routes.dungeon_id', $dungeons->pluck('id'));
+        }
 
         /** @var User $user */
         $user = Auth::user();

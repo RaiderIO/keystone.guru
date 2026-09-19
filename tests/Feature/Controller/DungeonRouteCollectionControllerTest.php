@@ -7,7 +7,9 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
 use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
+use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\Team;
 use App\Models\TeamUser;
@@ -106,6 +108,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestWeeklyRoutes',
                 'description'     => 'My routes for this week',
                 'published_state' => PublishedState::WORLD,
@@ -152,6 +155,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestOneTooMany',
                 'published_state' => PublishedState::WORLD,
                 'dungeon_routes'  => [],
@@ -183,6 +187,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestTooManyRoutes',
                 'published_state' => PublishedState::WORLD,
                 'dungeon_routes'  => $dungeonRoutes->pluck('id')->all(),
@@ -218,6 +223,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestForeignRoutes',
                 'published_state' => PublishedState::WORLD,
                 'dungeon_routes'  => [$foreignRoute->id],
@@ -248,6 +254,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 ->from(route('collections.new'))
                 ->followingRedirects()
                 ->post(route('collections.savenew'), [
+                    'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                     'published_state' => PublishedState::WORLD,
                     'dungeon_routes'  => [$dungeonRoute->id],
                 ]);
@@ -263,8 +270,12 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         }
     }
 
+    /**
+     * The edit page's routes save on their own, so a details form that fails validation neither posts nor changes
+     * them - the page lists the stored routes again.
+     */
     #[Test]
-    public function edit_givenAFailedValidationWithNoRoutesSubmitted_keepsTheSelectionEmpty(): void
+    public function edit_givenAFailedValidationWithNoRoutesSubmitted_keepsListingTheStoredRoutes(): void
     {
         // Arrange
         $creator                = $this->createCreator();
@@ -280,7 +291,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         $editUrl = route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]);
 
         try {
-            // Act - the stored route was deselected, but the missing name fails validation
+            // Act - no routes are posted, and the missing name fails validation
             $response = $this->actingAs($creator)
                 ->from($editUrl)
                 ->followingRedirects()
@@ -290,7 +301,8 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $this->assertSame([], $this->listedIds((string)$response->getContent(), 'dungeon_routes'));
+            $this->assertSame([$dungeonRoute->id], $this->listedIds((string)$response->getContent(), 'dungeon_routes'));
+            $this->assertSame([$dungeonRoute->id], $dungeonRouteCollection->refresh()->dungeonRoutes->pluck('id')->all());
         } finally {
             $dungeonRouteCollection->delete();
             Feature::for($creator)->forget(CreatorProfiles::class);
@@ -314,6 +326,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 ->from(route('collections.new'))
                 ->followingRedirects()
                 ->post(route('collections.savenew'), [
+                    'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                     'published_state' => PublishedState::WORLD,
                     'dungeon_routes'  => [$bravo->id, $alpha->id],
                 ]);
@@ -434,7 +447,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             // Assert
             $response->assertOk();
             $content = (string)$response->getContent();
-            $this->assertMatchesRegularExpression('/<select id="dungeon_routes_add"[^>]*\sdisabled/s', $content);
+            // Routes are added through the route picker, which the add button opens
             $this->assertMatchesRegularExpression('/<button id="dungeon_routes_add_button"[^>]*\sdisabled/s', $content);
             $this->assertCount(DungeonRouteCollection::MAX_ROUTES, $this->listedIds($content, 'dungeon_routes'));
         } finally {
@@ -515,6 +528,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 ->from(route('collections.new'))
                 ->followingRedirects()
                 ->post(route('collections.savenew'), [
+                    'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                     'published_state' => PublishedState::WORLD_WITH_LINK,
                 ]);
 
@@ -542,6 +556,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             $response = $this->actingAs($creator)
                 ->followingRedirects()
                 ->post(route('collections.savenew'), [
+                    'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                     'name'            => 'ZzTestFlashOnce',
                     'published_state' => PublishedState::UNPUBLISHED,
                 ]);
@@ -572,6 +587,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 ->from(route('collections.new'))
                 ->followingRedirects()
                 ->post(route('collections.savenew'), [
+                    'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                     'published_state' => PublishedState::UNPUBLISHED,
                 ]);
 
@@ -621,6 +637,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestTeamlessCollection',
                 'published_state' => PublishedState::TEAM,
             ]);
@@ -650,6 +667,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestForeignTeamCollection',
                 'published_state' => PublishedState::TEAM,
                 'team_id'         => $team->id,
@@ -678,6 +696,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestCategorisedCollection',
                 'published_state' => PublishedState::WORLD,
                 'category_id'     => DungeonRouteCollectionCategoryType::PugFriendly->id(),
@@ -712,6 +731,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 'name'            => 'ZzTestBogusCategoryCollection',
                 'published_state' => PublishedState::WORLD,
                 'category_id'     => 99999,
@@ -1251,8 +1271,13 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         string  $publishedState = PublishedState::WORLD,
         ?string $title = null,
     ): DungeonRoute {
+        $mappingVersion = $this->retailMappingVersion();
+
         $attributes = [
             'author_id'          => $user->id,
+            'dungeon_id'         => $mappingVersion->dungeon_id,
+            'mapping_version_id' => $mappingVersion->id,
+            'season_id'          => null,
             'expires_at'         => null,
             'published_state_id' => PublishedState::ALL[$publishedState],
         ];
@@ -1262,6 +1287,18 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         }
 
         return DungeonRoute::factory()->create($attributes);
+    }
+
+    /**
+     * A retail mapping version of a challenge mode dungeon, so a route on it may join a retail collection.
+     */
+    private function retailMappingVersion(): MappingVersion
+    {
+        return MappingVersion::query()
+            ->where('game_version_id', GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL])
+            ->whereHas('dungeon', static fn($query) => $query->whereNotNull('challenge_mode_id'))
+            ->orderByDesc('id')
+            ->firstOrFail();
     }
 
     /**
