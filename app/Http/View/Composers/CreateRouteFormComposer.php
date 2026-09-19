@@ -27,7 +27,9 @@ readonly class CreateRouteFormComposer implements ViewComposerInterface
         /** @var Season $currentSeason */
         $currentSeason = $this->viewService->getCurrentSeasonForRegion($gameServerRegion);
 
-        $seasonLoader = static fn(?Season $season) => $season
+        // ViewService may hand every caller the same Season instance (it does in the local environment);
+        // hiding relations on it would hide them from the affix picker, which reads `dungeons` and `expansion`
+        $seasonLoader = static fn(?Season $season) => ($season === null ? null : clone $season)
             ?->load([
                 'seasonDungeons' => static function ($query) {
                     $query->without([

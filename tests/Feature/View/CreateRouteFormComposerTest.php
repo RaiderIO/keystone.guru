@@ -11,6 +11,8 @@ use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\IsolatesSeededUpcomingSeasons;
@@ -150,6 +152,38 @@ final class CreateRouteFormComposerTest extends PublicTestCase
         } finally {
             $user->delete();
         }
+    }
+
+    /**
+     * In the local environment ViewService hands every caller the same Season instance, so a relation
+     * the create-route form hides would disappear from the affix picker rendered inside it as well.
+     */
+    #[Test]
+    public function compose_givenASharedCurrentSeason_leavesItsRelationsVisibleToOtherViews(): void
+    {
+        // Arrange
+        $currentSeason = app(ViewServiceInterface::class)
+            ->getCurrentSeasonForRegion(app(RequestViewContextInterface::class)->getUserOrDefaultRegion())
+            ->load(['dungeons.floors']);
+
+        $this->instance(ViewServiceInterface::class, Mockery::mock(ViewServiceInterface::class, static function (MockInterface $mock) use ($currentSeason): void {
+            $mock->shouldReceive('getCurrentSeasonForRegion')->andReturn($currentSeason);
+            $mock->shouldReceive('getNextSeasonForRegion')->andReturn(null);
+        }));
+
+        $view = view('common.forms.createroute');
+
+        // Act
+        app(CreateRouteFormComposer::class)->compose($view);
+
+        // Assert
+        $sharedSeason = $currentSeason->toArray();
+        $this->assertArrayHasKey('dungeons', $sharedSeason);
+        $this->assertArrayHasKey('expansion', $sharedSeason);
+
+        $composedSeason = $view->getData()['currentSeason']->toArray();
+        $this->assertArrayNotHasKey('dungeons', $composedSeason);
+        $this->assertArrayHasKey('season_dungeons', $composedSeason);
     }
 
     private function deleteSeason(Season $season): void
