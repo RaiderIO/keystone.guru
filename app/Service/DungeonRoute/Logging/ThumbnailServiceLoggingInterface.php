@@ -71,6 +71,10 @@ interface ThumbnailServiceLoggingInterface
 
     public function dungeonRoutesDisplayedStampLastAccessedAtException(Throwable $exception): void;
 
+    public function expireInactiveThumbnailsException(int $dungeonRouteId, Throwable $exception): void;
+
+    public function expireHeroThumbnailsException(int $thumbnailId, Throwable $exception): void;
+
     public function doCreateThumbnailEnd(): void;
 
     public function copyThumbnailsException(

@@ -299,6 +299,22 @@ return [
         'refresh_recent_days' => 7,
 
         /**
+         * The amount of days without an edit or a display after which the daily sweep deletes a route's standard and
+         * front page thumbnails. The next display renders them again.
+         */
+        'expire_inactive_days' => 90,
+
+        /**
+         * The maximum amount of routes the daily sweep expires in a single run, so a large backlog is worked off gradually.
+         */
+        'expire_inactive_count' => 10000,
+
+        /**
+         * The amount of days after a route left the discover hero set that its hero and front page thumbnails are deleted.
+         */
+        'hero_expire_days' => 14,
+
+        /**
          * The maximum attempts a thumbnail generation can take before it is failed and not queued again
          */
         'max_attempts' => 3,

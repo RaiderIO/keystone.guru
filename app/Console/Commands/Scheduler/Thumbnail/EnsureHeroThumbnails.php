@@ -22,7 +22,7 @@ class EnsureHeroThumbnails extends SchedulerCommand
      *
      * @var string
      */
-    protected $description = 'Ensures the wide hero-band thumbnail, and the thinner-lined front page thumbnail, exist and are fresh for the routes shown as heroes on the discovery pages (Raider.IO weekly routes + top community routes per dungeon).';
+    protected $description = 'Ensures the wide hero-band thumbnail, and the thinner-lined front page thumbnail, exist and are fresh for the routes shown as heroes on the discovery pages (Raider.IO weekly routes + top community routes per dungeon), and deletes them for routes that left that set.';
 
     public function handle(
         SeasonServiceInterface    $seasonService,
@@ -43,6 +43,8 @@ class EnsureHeroThumbnails extends SchedulerCommand
 
             $heroRoutes = $discoverService->heroRoutes($currentSeason);
 
+            $thumbnailService->markHeroRoutes($heroRoutes);
+
             // The front page's "popular this week" section shows the top route per dungeon, which is
             // already a subset of these hero routes (heroRoutes() includes the top N per dungeon, N >= 1),
             // so the front-page variant is queued for the same set rather than resolved separately.
@@ -56,6 +58,8 @@ class EnsureHeroThumbnails extends SchedulerCommand
             }
 
             $this->info(sprintf('Queued hero thumbnails for %d of %d candidate routes', $queued, $heroRoutes->count()));
+
+            $this->info(sprintf('Deleted %d hero thumbnails of routes that left the hero set', $thumbnailService->expireHeroThumbnailsOutsideHeroSet()));
 
             return 0;
         });

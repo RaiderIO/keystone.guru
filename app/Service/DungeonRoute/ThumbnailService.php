@@ -442,6 +442,69 @@ class ThumbnailService implements ThumbnailServiceInterface
     /**
      * {@inheritDoc}
      */
+    public function expireInactiveThumbnails(?int $limit = null, bool $dryRun = false): int
+    {
+        $dungeonRouteIds = $this->dungeonRouteRepository->getDungeonRouteIdsWithInactiveThumbnails(
+            now()->subDays(config('keystoneguru.thumbnail.expire_inactive_days')),
+            $limit ?? config('keystoneguru.thumbnail.expire_inactive_count'),
+        );
+
+        if ($dryRun) {
+            return $dungeonRouteIds->count();
+        }
+
+        $expired = 0;
+        foreach ($dungeonRouteIds as $dungeonRouteId) {
+            try {
+                // Through the model, so the File and the stored object go with the row
+                $this->dungeonRouteThumbnailRepository
+                    ->inactiveVariantThumbnailsQuery(collect([$dungeonRouteId]))
+                    ->get()
+                    ->each(static fn(DungeonRouteThumbnail $thumbnail) => $thumbnail->delete());
+
+                $this->dungeonRouteRepository->resetThumbnailTimestamps(collect([$dungeonRouteId]));
+                $expired++;
+            } catch (Throwable $exception) {
+                // One route that cannot be cleaned up must not keep the routes behind it from expiring
+                $this->log->expireInactiveThumbnailsException($dungeonRouteId, $exception);
+            }
+        }
+
+        return $expired;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function markHeroRoutes(Collection $heroRoutes): void
+    {
+        $this->dungeonRouteRepository->stampLastHeroAt($heroRoutes->pluck('id'));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function expireHeroThumbnailsOutsideHeroSet(): int
+    {
+        $expired = 0;
+        $this->dungeonRouteThumbnailRepository
+            ->heroThumbnailsOutsideHeroSetQuery(now()->subDays(config('keystoneguru.thumbnail.hero_expire_days')))
+            ->lazyById()
+            ->each(function (DungeonRouteThumbnail $thumbnail) use (&$expired) {
+                try {
+                    $thumbnail->delete();
+                    $expired++;
+                } catch (Throwable $exception) {
+                    $this->log->expireHeroThumbnailsException($thumbnail->id, $exception);
+                }
+            });
+
+        return $expired;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function queueThumbnailRefreshForApi(
         DungeonRoute $dungeonRoute,
         ?int         $viewportWidth = null,

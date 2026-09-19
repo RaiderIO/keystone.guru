@@ -7,6 +7,7 @@ use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -56,4 +57,20 @@ interface DungeonRouteThumbnailRepositoryInterface extends BaseRepositoryInterfa
      * @return Collection<int, int>
      */
     public function getDungeonRouteIdsWithVariant(DungeonRouteThumbnailVariant $variant, ?int $dungeonId = null): Collection;
+
+    /**
+     * The standard and front page thumbnails of the given routes.
+     *
+     * @param  Collection<int, int>           $dungeonRouteIds
+     * @return Builder<DungeonRouteThumbnail>
+     */
+    public function inactiveVariantThumbnailsQuery(Collection $dungeonRouteIds): Builder;
+
+    /**
+     * The hero and front page thumbnails of routes that have not been in the hero set since $notInHeroSetSince.
+     * A route that was never stamped is judged by the age of the thumbnail itself.
+     *
+     * @return Builder<DungeonRouteThumbnail>
+     */
+    public function heroThumbnailsOutsideHeroSetQuery(Carbon $notInHeroSetSince): Builder;
 }

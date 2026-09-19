@@ -12,6 +12,7 @@ use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Stub\StubRepository;
 use Closure;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class DungeonRouteRepository extends StubRepository implements DungeonRouteRepositoryInterface
@@ -39,6 +40,30 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
      * @param Collection<int, int> $dungeonRouteIds
      */
     public function stampLastAccessedAt(Collection $dungeonRouteIds): int
+    {
+        return $dungeonRouteIds->count();
+    }
+
+    /**
+     * @param Collection<int, int> $dungeonRouteIds
+     */
+    public function stampLastHeroAt(Collection $dungeonRouteIds): int
+    {
+        return $dungeonRouteIds->count();
+    }
+
+    /**
+     * @return Collection<int, int>
+     */
+    public function getDungeonRouteIdsWithInactiveThumbnails(Carbon $inactiveSince, int $limit): Collection
+    {
+        return collect();
+    }
+
+    /**
+     * @param Collection<int, int> $dungeonRouteIds
+     */
+    public function resetThumbnailTimestamps(Collection $dungeonRouteIds): int
     {
         return $dungeonRouteIds->count();
     }

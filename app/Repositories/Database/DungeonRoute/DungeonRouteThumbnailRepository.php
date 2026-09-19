@@ -90,6 +90,46 @@ class DungeonRouteThumbnailRepository extends DatabaseRepository implements Dung
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function inactiveVariantThumbnailsQuery(Collection $dungeonRouteIds): Builder
+    {
+        return DungeonRouteThumbnail::query()
+            ->without('floor')
+            ->whereIn('dungeon_route_id', $dungeonRouteIds)
+            ->whereIn('variant', [
+                DungeonRouteThumbnailVariant::Standard->value,
+                DungeonRouteThumbnailVariant::FrontPage->value,
+            ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function heroThumbnailsOutsideHeroSetQuery(Carbon $notInHeroSetSince): Builder
+    {
+        $cutoff = $notInHeroSetSince->toDateTimeString();
+
+        return DungeonRouteThumbnail::query()
+            ->without('floor')
+            ->whereIn('variant', [
+                DungeonRouteThumbnailVariant::Hero->value,
+                DungeonRouteThumbnailVariant::FrontPage->value,
+            ])
+            ->where(static function (Builder $builder) use ($cutoff) {
+                $builder->whereHas('dungeonRoute', static function (Builder $routeBuilder) use ($cutoff) {
+                    $routeBuilder->where('last_hero_at', '<', $cutoff);
+                })->orWhere(static function (Builder $builder) use ($cutoff) {
+                    // A route that was never stamped is judged by the thumbnail itself
+                    $builder->where('updated_at', '<', $cutoff)
+                        ->whereHas('dungeonRoute', static function (Builder $routeBuilder) {
+                            $routeBuilder->whereNull('last_hero_at');
+                        });
+                });
+            });
+    }
+
+    /**
      * @param  Builder<DungeonRouteThumbnail> $query
      * @param  array<int, int|string>         $dungeonRouteIds
      * @return Builder<DungeonRouteThumbnail>

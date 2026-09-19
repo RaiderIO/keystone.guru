@@ -11,6 +11,7 @@ use App\Models\Floor\Floor;
 use App\Models\Season;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
@@ -147,6 +148,160 @@ final class EnsureHeroThumbnailsTest extends PublicTestCase
     }
 
     /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenHeroRoutes_stampsLastHeroAt(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        [$dungeonRoute, $thumbnails] = $this->createRouteWithFreshThumbnails([DungeonRouteThumbnailVariant::Hero]);
+        $this->mockHeroRouteResolution($dungeonRoute);
+
+        try {
+            $updatedAt = $dungeonRoute->updated_at->toDateTimeString();
+
+            // Act
+            $this->artisan(EnsureHeroThumbnails::class)->assertSuccessful();
+
+            // Assert
+            $dungeonRoute->refresh();
+            $this->assertTrue($dungeonRoute->last_hero_at->isToday());
+            $this->assertSame($updatedAt, $dungeonRoute->updated_at->toDateTimeString());
+        } finally {
+            $this->deleteThumbnails($thumbnails);
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenRouteThatLeftTheHeroSetLongAgo_deletesHeroAndFrontPageThumbnailsOnly(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        [$dungeonRoute, $thumbnails] = $this->createRouteWithFreshThumbnails([
+            DungeonRouteThumbnailVariant::Hero,
+            DungeonRouteThumbnailVariant::FrontPage,
+            DungeonRouteThumbnailVariant::Standard,
+            DungeonRouteThumbnailVariant::Custom,
+        ]);
+        $this->mockHeroRouteResolution(null);
+
+        try {
+            $this->setLastHeroAt($dungeonRoute, now()->subDays(15));
+
+            // Act
+            $this->artisan(EnsureHeroThumbnails::class)->assertSuccessful();
+
+            // Assert
+            $this->assertVariantsRemaining(
+                $thumbnails,
+                [DungeonRouteThumbnailVariant::Standard, DungeonRouteThumbnailVariant::Custom],
+            );
+        } finally {
+            $this->deleteThumbnails($thumbnails);
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenRouteThatLeftTheHeroSetRecently_keepsItsThumbnails(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        [$dungeonRoute, $thumbnails] = $this->createRouteWithFreshThumbnails([
+            DungeonRouteThumbnailVariant::Hero,
+            DungeonRouteThumbnailVariant::FrontPage,
+        ]);
+        $this->mockHeroRouteResolution(null);
+
+        try {
+            $this->setLastHeroAt($dungeonRoute, now()->subDays(5));
+
+            // Act
+            $this->artisan(EnsureHeroThumbnails::class)->assertSuccessful();
+
+            // Assert
+            $this->assertVariantsRemaining(
+                $thumbnails,
+                [DungeonRouteThumbnailVariant::Hero, DungeonRouteThumbnailVariant::FrontPage],
+            );
+        } finally {
+            $this->deleteThumbnails($thumbnails);
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenRouteStillInTheHeroSetWithOldStamp_keepsItsThumbnailsAndRefreshesTheStamp(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        [$dungeonRoute, $thumbnails] = $this->createRouteWithFreshThumbnails([DungeonRouteThumbnailVariant::Hero]);
+        $this->mockHeroRouteResolution($dungeonRoute);
+
+        try {
+            $this->setLastHeroAt($dungeonRoute, now()->subDays(60));
+
+            // Act
+            $this->artisan(EnsureHeroThumbnails::class)->assertSuccessful();
+
+            // Assert
+            $this->assertVariantsRemaining($thumbnails, [DungeonRouteThumbnailVariant::Hero]);
+            $this->assertTrue($dungeonRoute->refresh()->last_hero_at->isToday());
+        } finally {
+            $this->deleteThumbnails($thumbnails);
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenUnstampedRouteOutsideTheHeroSet_judgesItByTheThumbnailAge(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        [$oldRoute, $oldThumbnails]       = $this->createRouteWithFreshThumbnails([DungeonRouteThumbnailVariant::Hero]);
+        [$recentRoute, $recentThumbnails] = $this->createRouteWithFreshThumbnails([DungeonRouteThumbnailVariant::Hero]);
+        $this->mockHeroRouteResolution(null);
+
+        try {
+            DungeonRouteThumbnail::query()->whereIn('id', $oldThumbnails->pluck('id'))
+                ->update(['updated_at' => now()->subDays(20)->toDateTimeString()]);
+            DungeonRouteThumbnail::query()->whereIn('id', $recentThumbnails->pluck('id'))
+                ->update(['updated_at' => now()->subDays(2)->toDateTimeString()]);
+
+            // Act
+            $this->artisan(EnsureHeroThumbnails::class)->assertSuccessful();
+
+            // Assert
+            $this->assertVariantsRemaining($oldThumbnails, []);
+            $this->assertVariantsRemaining($recentThumbnails, [DungeonRouteThumbnailVariant::Hero]);
+        } finally {
+            $this->deleteThumbnails($oldThumbnails);
+            $this->deleteThumbnails($recentThumbnails);
+            $oldRoute->delete();
+            $recentRoute->delete();
+        }
+    }
+
+    /**
      * A route whose thumbnails exist for every floor the refresh would render, for each of the given
      * variants, each stamped newer than the route itself - the exact condition
      * hasFreshThumbnailForVariant() gates on.
@@ -188,15 +343,36 @@ final class EnsureHeroThumbnailsTest extends PublicTestCase
     /**
      * @throws Exception
      */
-    private function mockHeroRouteResolution(DungeonRoute $dungeonRoute): void
+    private function mockHeroRouteResolution(?DungeonRoute $dungeonRoute): void
     {
         $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
         $seasonService->method('getCurrentSeason')->willReturn(Season::query()->firstOrFail());
         app()->instance(SeasonServiceInterface::class, $seasonService);
 
         $discoverService = $this->createMockPublic(DiscoverServiceInterface::class);
-        $discoverService->method('heroRoutes')->willReturn(collect([$dungeonRoute]));
+        $discoverService->method('heroRoutes')->willReturn($dungeonRoute === null ? collect() : collect([$dungeonRoute]));
         app()->instance(DiscoverServiceInterface::class, $discoverService);
+    }
+
+    private function setLastHeroAt(DungeonRoute $dungeonRoute, Carbon $lastHeroAt): void
+    {
+        // Through the query builder so Eloquent does not overwrite updated_at
+        DungeonRoute::query()->whereKey($dungeonRoute->id)->toBase()->update(['last_hero_at' => $lastHeroAt->toDateTimeString()]);
+    }
+
+    /**
+     * @param Collection<int, DungeonRouteThumbnail>   $thumbnails
+     * @param array<int, DungeonRouteThumbnailVariant> $expectedVariants The variants that must still exist
+     */
+    private function assertVariantsRemaining(Collection $thumbnails, array $expectedVariants): void
+    {
+        foreach ($thumbnails as $thumbnail) {
+            if (in_array($thumbnail->variant, $expectedVariants, true)) {
+                $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $thumbnail->id]);
+            } else {
+                $this->assertDatabaseMissing('dungeon_route_thumbnails', ['id' => $thumbnail->id]);
+            }
+        }
     }
 
     /**
