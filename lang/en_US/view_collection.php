@@ -44,6 +44,7 @@ return [
     'edit' => [
         'title'           => 'Edit %s',
         'view_collection' => 'View collection',
+        'details'         => 'Details',
     ],
     'view' => [
         'title'       => '%s',

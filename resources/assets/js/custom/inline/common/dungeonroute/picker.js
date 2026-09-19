@@ -100,8 +100,14 @@ class CommonDungeonroutePicker extends InlineCode {
 
     /**
      * Opens the drawer; the first open loads the first page.
+     * @param {Object} filters
+     * @param {Number|string|null} [filters.dungeonId] Puts the dungeon filter on this value first.
      */
-    open() {
+    open(filters = {}) {
+        if (filters.dungeonId !== null && typeof filters.dungeonId !== 'undefined' && this._setDungeonFilter(filters.dungeonId) && this._loaded) {
+            this.reload();
+        }
+
         bootstrap.Offcanvas.getOrCreateInstance($(this.options.drawerSelector)[0]).show();
     }
 
@@ -153,6 +159,29 @@ class CommonDungeonroutePicker extends InlineCode {
         }
 
         return Math.max(0, this.options.max - this._existing.size - this._selected.length);
+    }
+
+    /**
+     * @param {Number|string} dungeonId
+     * @returns {boolean} Whether the filter changed.
+     * @private
+     */
+    _setDungeonFilter(dungeonId) {
+        let select = $(this.options.dungeonSelectSelector)[0];
+        let value = String(dungeonId);
+
+        if (typeof select === 'undefined' || select.value === value) {
+            return false;
+        }
+
+        if (select.tomselect) {
+            // Silent, so the change handler does not load a page of its own on top of ours
+            select.tomselect.setValue(value, true);
+        } else {
+            select.value = value;
+        }
+
+        return select.value === value;
     }
 
     /**

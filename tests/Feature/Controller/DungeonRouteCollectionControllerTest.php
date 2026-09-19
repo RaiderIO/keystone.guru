@@ -265,8 +265,12 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         }
     }
 
+    /**
+     * The edit page's routes save on their own, so a details form that fails validation neither posts nor changes
+     * them - the page lists the stored routes again.
+     */
     #[Test]
-    public function edit_givenAFailedValidationWithNoRoutesSubmitted_keepsTheSelectionEmpty(): void
+    public function edit_givenAFailedValidationWithNoRoutesSubmitted_keepsListingTheStoredRoutes(): void
     {
         // Arrange
         $creator                = $this->createCreator();
@@ -282,7 +286,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         $editUrl = route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]);
 
         try {
-            // Act - the stored route was deselected, but the missing name fails validation
+            // Act - no routes are posted, and the missing name fails validation
             $response = $this->actingAs($creator)
                 ->from($editUrl)
                 ->followingRedirects()
@@ -292,7 +296,8 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $this->assertSame([], $this->listedIds((string)$response->getContent(), 'dungeon_routes'));
+            $this->assertSame([$dungeonRoute->id], $this->listedIds((string)$response->getContent(), 'dungeon_routes'));
+            $this->assertSame([$dungeonRoute->id], $dungeonRouteCollection->refresh()->dungeonRoutes->pluck('id')->all());
         } finally {
             $dungeonRouteCollection->delete();
             Feature::for($creator)->forget(CreatorProfiles::class);
@@ -436,7 +441,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             // Assert
             $response->assertOk();
             $content = (string)$response->getContent();
-            $this->assertMatchesRegularExpression('/<select id="dungeon_routes_add"[^>]*\sdisabled/s', $content);
+            // Routes are added through the route picker, which the add button opens
             $this->assertMatchesRegularExpression('/<button id="dungeon_routes_add_button"[^>]*\sdisabled/s', $content);
             $this->assertCount(DungeonRouteCollection::MAX_ROUTES, $this->listedIds($content, 'dungeon_routes'));
         } finally {

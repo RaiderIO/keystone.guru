@@ -17,17 +17,28 @@
  *                                                                      next to its label; a warning is flagged.
  * @var string|null        $detailWarningText Read out (and shown on hover) for a flagged detail.
  * @var string|null        $countText    The counter's text, with :count and :max; defaults to "n / max".
+ * @var bool               $ajax         Changes are reported to the host page as events instead of being posted with a
+ *                                       form; the add select makes way for a button the host page wires up.
+ * @var string|null        $addLabel     Text of that button (ajax mode).
+ * @var bool               $showAdd      Whether that button is shown (ajax mode).
+ * @var bool               $showCount    Whether the "n / max" counter is shown.
+ * @var int|null           $fullCount    What counts towards $max, when that is more than this list (ajax mode).
  */
 $help              ??= null;
 $optionDetails     ??= [];
 $detailWarningText ??= null;
 $labelClass ??= 'form-label';
 $errors     ??= collect();
+$ajax       ??= false;
+$addLabel   ??= __('view_common.forms.orderedselect.add');
+$showCount  ??= true;
+$showAdd    ??= true;
 
 $countText ??= __('view_common.forms.orderedselect.count');
 
 $selectedIds = array_values(array_filter($selectedIds, static fn(int $selectedId): bool => isset($options[$selectedId])));
-$isFull      = count($selectedIds) >= $max;
+$fullCount   ??= count($selectedIds);
+$isFull      = $fullCount >= $max;
 $helpId      = sprintf('%s_help', $id);
 $errorKey    = $name;
 
@@ -41,6 +52,9 @@ $inlineOptions = [
     'fullSelector'      => sprintf('#%s_full', $id),
     'statusSelector'    => sprintf('#%s_status', $id),
     'max'               => $max,
+    'ajax'              => $ajax,
+    'rootSelector'      => sprintf('#%s', $id),
+    'fullCount'         => $ajax ? $fullCount : null,
     'countText'         => $countText,
     'moveUpText'        => __('view_common.forms.orderedselect.move_up'),
     'moveDownText'      => __('view_common.forms.orderedselect.move_down'),
@@ -53,12 +67,14 @@ $inlineOptions = [
 {{-- data-inline-options lets a script activate this control again after swapping it into the page --}}
 <div id="{{ $id }}" class="ordered_select" data-inline-options="{{ json_encode($inlineOptions) }}">
     <div class="d-flex align-items-baseline">
-        <label id="{{ $id }}_label" for="{{ $id }}_add" class="{{ $labelClass }}">
+        <label id="{{ $id }}_label" @if(!$ajax) for="{{ $id }}_add" @endif class="{{ $labelClass }}">
             {{ $label }}
         </label>
-        <span id="{{ $id }}_count" class="ordered_select_count text-body-secondary ms-auto">
-            {{ str_replace([':count', ':max'], [count($selectedIds), $max], $countText) }}
-        </span>
+        @if($showCount)
+            <span id="{{ $id }}_count" class="ordered_select_count text-body-secondary ms-auto">
+                {{ str_replace([':count', ':max'], [count($selectedIds), $max], $countText) }}
+            </span>
+        @endif
     </div>
 
     <ol id="{{ $id }}_list" class="list-group ordered_select_list mb-2" aria-labelledby="{{ $id }}_label"
@@ -79,21 +95,28 @@ $inlineOptions = [
         {{ $emptyText }}
     </p>
 
-    <div class="input-group">
-        <select id="{{ $id }}_add" class="form-select{{ $errors->has($errorKey) ? ' is-invalid' : '' }}"
+    @if($ajax && $showAdd)
+        <button id="{{ $id }}_add_button" type="button" class="btn btn-primary btn-sm ordered_select_add"
                 aria-describedby="{{ $helpId }}" @disabled($isFull)>
-            <option value="">{{ __('view_common.forms.orderedselect.choose') }}</option>
-            @foreach($options as $optionId => $optionLabel)
-                @php($optionDetail = $optionDetails[$optionId] ?? null)
-                <option value="{{ $optionId }}" @disabled(in_array($optionId, $selectedIds, true))
-                    @if($optionDetail !== null) data-label="{{ $optionLabel }}" data-detail="{{ $optionDetail['text'] }}" data-detail-warning="{{ ($optionDetail['isWarning'] ?? false) ? 1 : 0 }}" @endif
-                >{{ $optionDetail !== null ? sprintf('%s (%s)', $optionLabel, $optionDetail['text']) : $optionLabel }}</option>
-            @endforeach
-        </select>
-        <button id="{{ $id }}_add_button" type="button" class="btn btn-primary" @disabled($isFull)>
-            <i class="fas fa-plus" aria-hidden="true"></i> {{ __('view_common.forms.orderedselect.add') }}
+            <i class="fas fa-plus" aria-hidden="true"></i> {{ $addLabel }}
         </button>
-    </div>
+    @elseif(!$ajax)
+        <div class="input-group">
+            <select id="{{ $id }}_add" class="form-select{{ $errors->has($errorKey) ? ' is-invalid' : '' }}"
+                    aria-describedby="{{ $helpId }}" @disabled($isFull)>
+                <option value="">{{ __('view_common.forms.orderedselect.choose') }}</option>
+                @foreach($options as $optionId => $optionLabel)
+                    @php($optionDetail = $optionDetails[$optionId] ?? null)
+                    <option value="{{ $optionId }}" @disabled(in_array($optionId, $selectedIds, true))
+                        @if($optionDetail !== null) data-label="{{ $optionLabel }}" data-detail="{{ $optionDetail['text'] }}" data-detail-warning="{{ ($optionDetail['isWarning'] ?? false) ? 1 : 0 }}" @endif
+                    >{{ $optionDetail !== null ? sprintf('%s (%s)', $optionLabel, $optionDetail['text']) : $optionLabel }}</option>
+                @endforeach
+            </select>
+            <button id="{{ $id }}_add_button" type="button" class="btn btn-primary" @disabled($isFull)>
+                <i class="fas fa-plus" aria-hidden="true"></i> {{ __('view_common.forms.orderedselect.add') }}
+            </button>
+        </div>
+    @endif
 
     <small id="{{ $helpId }}" class="form-text text-body-secondary d-block">
         <span id="{{ $id }}_full" @if(!$isFull) hidden @endif>
@@ -119,4 +142,4 @@ $inlineOptions = [
     </template>
 </div>
 
-@include('common.general.inline', ['path' => 'common/forms/orderedselect', 'options' => $inlineOptions])
+@include('common.general.inline', ['path' => 'common/forms/orderedselect', 'id' => sprintf('%s_inline', $id), 'options' => $inlineOptions])

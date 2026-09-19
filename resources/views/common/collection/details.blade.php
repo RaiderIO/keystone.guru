@@ -171,6 +171,7 @@ foreach ($teams as $team) {
     </div>
 @endif
 
+@if($isNew)
 <div id="collection_dungeon_routes_loading" class="text-body-secondary mb-2" role="status" hidden>
     <i class="fas fa-spinner fa-spin" aria-hidden="true"></i> {{ __('view_common.collection.details.dungeon_routes_loading') }}
 </div>
@@ -261,10 +262,10 @@ foreach ($teams as $team) {
     'seasonSelector' => 'input[name="season_id"]',
     'max' => DungeonRouteCollection::MAX_ROUTES,
     'countText' => __('view_common.forms.orderedselect.count'),
-    // Only a new collection rebuilds its picker; an existing one's season is fixed
-    'formUrl' => $isNew ? route('collections.new') : null,
+    'formUrl' => route('collections.new'),
     'seasonNone' => DungeonRouteCollectionCreateFormRequest::SEASON_NONE,
 ]])
+@endif
 
 {{ html()->input('submit')->value($dungeonRouteCollection !== null ? __('view_common.collection.details.save') : __('view_common.collection.details.submit'))->class('btn btn-info') }}
 

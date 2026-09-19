@@ -664,7 +664,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $this->assertMatchesRegularExpression(sprintf('/id="dungeon_routes_%d_count"[^>]*>\s*2\s*</', $mappingVersions->get(0)->dungeon_id), $content);
         $this->assertMatchesRegularExpression(sprintf('/id="dungeon_routes_%d_count"[^>]*>\s*0\s*</', $mappingVersions->get(1)->dungeon_id), $content);
         $this->assertMatchesRegularExpression(
-            sprintf('/id="collection_dungeon_routes_total"[^>]*>\s*%s\s*</', preg_quote(__('view_common.forms.orderedselect.count', ['count' => 2, 'max' => DungeonRouteCollection::MAX_ROUTES]), '/')),
+            sprintf('/id="collection_routes_count"[^>]*>\s*%s\s*</', preg_quote(__('view_common.collection.routes.count', ['count' => 2, 'max' => DungeonRouteCollection::MAX_ROUTES]), '/')),
             $content,
         );
     }
@@ -794,7 +794,13 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         foreach ($mappingVersions as $mappingVersion) {
             $this->assertStringContainsString(sprintf('id="dungeon_routes_%d"', $mappingVersion->dungeon_id), $content);
         }
-        $this->assertStringContainsString('ZzTestOffered', $content);
+        $this->assertStringContainsString('ZzTestInSlot', $content);
+        foreach ($mappingVersions as $mappingVersion) {
+            $this->assertStringContainsString(sprintf('id="dungeon_routes_%d_add_button"', $mappingVersion->dungeon_id), $content);
+        }
+        // Routes are offered by the route picker, which only lists routes of the collection's season
+        $this->assertStringContainsString(sprintf('"season_id":%d', $season->id), $content);
+        $this->assertStringNotContainsString('ZzTestOffered', $content, 'Routes not in the collection are only listed by the picker');
         $this->assertStringNotContainsString('ZzTestNotOfTheSeason', $content, 'A route of another season is not offered');
     }
 
@@ -856,11 +862,9 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $season         = $this->createSeason(['expansion_id' => $this->retail()->expansion_id], [$mappingVersion->dungeon_id]);
         $enough         = $this->createRoute($mappingVersion, $season, 'ZzTestEnough');
         $short          = $this->createRoute($mappingVersion, $season, 'ZzTestShort');
-        $offered        = $this->createRoute($mappingVersion, $season, 'ZzTestOffered');
         $required       = $mappingVersion->enemy_forces_required;
         DungeonRoute::query()->whereKey($enough->id)->update(['enemy_forces' => $required + 2]);
         DungeonRoute::query()->whereKey($short->id)->update(['enemy_forces' => $required - 1]);
-        DungeonRoute::query()->whereKey($offered->id)->update(['enemy_forces' => $required - 1]);
         $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
         $this->addRoutes($dungeonRouteCollection, [$enough, $short]);
 
@@ -878,9 +882,28 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
             sprintf('/data-id="%d".*?<span class="ordered_select_detail ordered_select_detail_warning"[^>]*>.*?%s/s', $short->id, preg_quote(sprintf('%d / %d', $required - 1, $required), '/')),
             $content,
         );
+    }
+
+    #[Test]
+    public function create_givenARouteShortOnEnemyForces_offersItFlagged(): void
+    {
+        // Arrange
+        $creator = $this->creator();
+        $creator->update(['game_version_id' => $this->retail()->id]);
+        $mappingVersion = $this->retailMappingVersions()->first(static fn(MappingVersion $mappingVersion): bool => $mappingVersion->enemy_forces_required > 1);
+        $season         = $this->createSeason(['expansion_id' => $this->retail()->expansion_id, 'active' => true], [$mappingVersion->dungeon_id]);
+        $offered        = $this->createRoute($mappingVersion, $season, 'ZzTestOffered');
+        $required       = $mappingVersion->enemy_forces_required;
+        DungeonRoute::query()->whereKey($offered->id)->update(['enemy_forces' => $required - 1]);
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collections.new', ['season_id' => $season->id]));
+
+        // Assert
+        $response->assertOk();
         $this->assertMatchesRegularExpression(
             sprintf('/<option value="%d"[^>]*data-detail="%s" data-detail-warning="1"/', $offered->id, preg_quote(sprintf('%d / %d', $required - 1, $required), '/')),
-            $content,
+            (string)$response->getContent(),
         );
     }
 

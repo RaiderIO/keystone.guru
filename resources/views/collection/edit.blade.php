@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
  * @var DungeonRouteCollection                          $dungeonRouteCollection
  * @var Collection<int, DungeonRouteCollectionGroup>    $editSections
  * @var bool                                            $hasOwnDungeonRoutes
+ * @var bool                                            $mayAddDungeonRoutes
  * @var array<int, int>                                 $selectedDungeonRouteIds
  * @var GameVersion                                     $selectedGameVersion
  * @var Season|null                                     $selectedSeason
@@ -39,6 +40,14 @@ $title = sprintf(__('view_collection.edit.title'), $dungeonRouteCollection->name
 
 @section('content')
     <div class="container">
+        @include('common.collection.routes', [
+            'dungeonRouteCollection' => $dungeonRouteCollection,
+            'editSections' => $editSections,
+            'hasOwnDungeonRoutes' => $hasOwnDungeonRoutes,
+            'mayAddDungeonRoutes' => $mayAddDungeonRoutes,
+        ])
+
+        <h2 class="h4">{{ __('view_collection.edit.details') }}</h2>
         @include('common.collection.details', [
             'dungeonRouteCollection' => $dungeonRouteCollection,
             'editSections' => $editSections,
