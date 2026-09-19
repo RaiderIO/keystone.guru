@@ -18,9 +18,8 @@ function getUserMousePositionIcon(userMousePosition) {
 
     let width = c.map.mapicon.calculateSize(32);
     let height = c.map.mapicon.calculateSize(32);
-    // 4 for padding
-    let textWidth = width - (4 + 18); // 10 for the icon
-    textWidth += (c.map.leafletSettings.maxNativeZoom - getState().getMapZoomLevel());
+    // Two initials at this ratio of the marker stay inside the circle at every zoom level
+    let fontSize = Math.floor(Math.min(width, height) * 0.4);
 
     let handlebarsData = $.extend({}, {
         public_key: userMousePosition.public_key,
@@ -29,7 +28,7 @@ function getUserMousePositionIcon(userMousePosition) {
         avatar_url: userMousePosition.avatar_url,
         width: width,
         height: height,
-        textWidth: textWidth
+        fontSize: fontSize
     });
 
     return L.divIcon({
@@ -189,4 +188,13 @@ class UserMousePosition extends MapObject {
         getState().unregister('mapzoomlevel:changed', this);
         this.unregister('object:changed', this);
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        getUserMousePositionIcon,
+        UserMousePosition,
+    };
 }
