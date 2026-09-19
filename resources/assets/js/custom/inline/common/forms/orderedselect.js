@@ -20,7 +20,8 @@
 
 /**
  * Keeps an ordered list of chosen items: add from a select, reorder by dragging or with the up/down
- * buttons, remove. Each item carries a hidden input, so the form posts the ids in list order.
+ * buttons, remove. Each item carries a hidden input, so the form posts the ids in list order. Every change
+ * triggers `orderedselect:changed` on the list, which bubbles.
  *
  * @property {CommonFormsOrderedselectOptions} options
  */
@@ -198,6 +199,8 @@ class CommonFormsOrderedselect extends InlineCode {
         $(this.options.fullSelector).prop('hidden', !isFull);
         $(this.options.addSelectSelector).prop('disabled', isFull);
         $(this.options.addButtonSelector).prop('disabled', isFull);
+
+        $(this.options.listSelector).trigger('orderedselect:changed');
     }
 
     /**

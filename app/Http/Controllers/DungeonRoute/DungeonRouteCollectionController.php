@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\DungeonRoute;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DungeonRoute\DungeonRouteCollectionCreateFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteCollectionFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteCollectionIndexFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -84,24 +85,35 @@ class DungeonRouteCollectionController extends Controller
     }
 
     /**
-     * Shows the form for a brand new collection.
+     * Shows the form for a brand new collection. The game_version_id and season_id query parameters pick what it
+     * opens with, which the form uses to rebuild its route picker when the user picks another game version or season.
      */
     public function create(
-        Request                                $request,
-        DungeonRouteCollectionServiceInterface $dungeonRouteCollectionService,
+        DungeonRouteCollectionCreateFormRequest $request,
+        DungeonRouteCollectionServiceInterface  $dungeonRouteCollectionService,
     ): View {
         /** @var User $user */
         $user         = Auth::user();
         $gameVersions = GameVersion::active()->get();
+        $hasOldInput  = $request->session()->hasOldInput();
 
-        // After a failed validation the form shows what was submitted, otherwise the user's current game version and
-        // its current season
-        $oldGameVersionId = $request->old('game_version_id');
-        $gameVersion      = $gameVersions->firstWhere('id', (int)$oldGameVersionId) ?? GameVersion::getUserOrDefaultGameVersion();
+        // The requested game version and season win, then what a failed validation submitted, then the user's
+        // current game version and its current season
+        $gameVersion = $request->gameVersion()
+            ?? ($hasOldInput ? $gameVersions->firstWhere('id', (int)$request->old('game_version_id')) : null)
+            ?? GameVersion::getUserOrDefaultGameVersion();
 
-        $season = $request->session()->hasOldInput()
-            ? Season::query()->find((int)$request->old('season_id'))
-            : $dungeonRouteCollectionService->getCurrentSeason($gameVersion);
+        if (!$gameVersion->has_seasons) {
+            $season = null;
+        } elseif ($request->hasSeason()) {
+            $season = $request->season();
+        } elseif ($hasOldInput) {
+            $season = Season::query()
+                ->where('expansion_id', $gameVersion->expansion_id)
+                ->find((int)$request->old('season_id'));
+        } else {
+            $season = $dungeonRouteCollectionService->getCurrentSeason($gameVersion);
+        }
         $season?->load(['expansion', 'dungeons']);
 
         $ownDungeonRoutes = $this->getOwnDungeonRoutes($user);

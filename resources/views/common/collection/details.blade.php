@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Requests\DungeonRoute\DungeonRouteCollectionCreateFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
@@ -176,6 +177,13 @@ foreach ($teams as $team) {
     </div>
 @endif
 
+<div id="collection_dungeon_routes_loading" class="text-body-secondary mb-2" role="status" hidden>
+    <i class="fas fa-spinner fa-spin" aria-hidden="true"></i> {{ __('view_common.collection.details.dungeon_routes_loading') }}
+</div>
+<div id="collection_dungeon_routes_error" class="text-danger small mb-2" role="alert" hidden>
+    {{ __('view_common.collection.details.dungeon_routes_load_failed') }}
+</div>
+
 <div id="collection_dungeon_routes" class="mb-3">
     @if(!$hasOwnDungeonRoutes)
         {{ html()->label(__('view_common.collection.details.dungeon_routes'), 'dungeon_routes') }}
@@ -184,9 +192,17 @@ foreach ($teams as $team) {
         </p>
     @else
         @php($slotSections = $editSections->filter(static fn(DungeonRouteCollectionGroup $editSection): bool => $editSection->matchesCollection && $editSection->dungeon !== null))
-        <p class="form-text text-body-secondary mt-0">
-            {{ __('view_common.collection.details.dungeon_routes_help') }}
-        </p>
+        <div class="d-flex align-items-baseline mb-2">
+            <p class="form-text text-body-secondary my-0">
+                {{ __('view_common.collection.details.dungeon_routes_help') }}
+            </p>
+            @if($slotSections->isNotEmpty())
+                {{-- The slots only count their own routes; the limit holds for the collection as a whole --}}
+                <span id="collection_dungeon_routes_total" class="text-body-secondary ms-auto">
+                    {{ __('view_common.forms.orderedselect.count', ['count' => count($selectedDungeonRouteIds), 'max' => DungeonRouteCollection::MAX_ROUTES]) }}
+                </span>
+            @endif
+        </div>
 
         @if($slotSections->isNotEmpty())
             <div class="row row-cols-1 row-cols-lg-2 g-3 mb-3">
@@ -206,6 +222,7 @@ foreach ($teams as $team) {
                                     'detailWarningText' => __('view_common.collection.details.enemy_forces_short'),
                                     'selectedIds' => $selectedDungeonRouteIds,
                                     'max' => DungeonRouteCollection::MAX_ROUTES,
+                                    'countText' => __('view_common.collection.details.dungeon_routes_slot_count'),
                                     'emptyText' => __('view_common.collection.details.dungeon_routes_slot_empty', ['dungeon' => __($editSection->dungeon->name)]),
                                 ])
                             </div>
@@ -260,11 +277,19 @@ foreach ($teams as $team) {
     @endif
 </div>
 
-@if($isNew)
-    <p id="collection_dungeon_routes_kind_changed" class="text-body-secondary" hidden>
-        {{ __('view_common.collection.details.kind_changed') }}
-    </p>
-@endif
+@include('common.general.inline', ['path' => 'common/collection/details', 'options' => [
+    'dungeonRoutesSelector' => '#collection_dungeon_routes',
+    'totalSelector' => '#collection_dungeon_routes_total',
+    'loadingSelector' => '#collection_dungeon_routes_loading',
+    'errorSelector' => '#collection_dungeon_routes_error',
+    'gameVersionSelector' => '.collection_game_version',
+    'seasonContainerSelector' => '.collection_season',
+    'max' => DungeonRouteCollection::MAX_ROUTES,
+    'countText' => __('view_common.forms.orderedselect.count'),
+    // Only a new collection rebuilds its picker; an existing one's game version and season are fixed
+    'formUrl' => $isNew ? route('collections.new') : null,
+    'seasonNone' => DungeonRouteCollectionCreateFormRequest::SEASON_NONE,
+]])
 
 {{ html()->input('submit')->value($dungeonRouteCollection !== null ? __('view_common.collection.details.save') : __('view_common.collection.details.submit'))->class('btn btn-info') }}
 

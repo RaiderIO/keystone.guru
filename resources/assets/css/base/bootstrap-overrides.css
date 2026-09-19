@@ -30,6 +30,14 @@
     border-color: var(--bs-btn-active-border-color);
 }
 
+/* A checked secondary toggle (heatmap region picker, collection game version/season) takes the accent: the stock
+   secondary active background is only a shade darker than the resting one and reads as unchecked. */
+.theme .btn-check:checked + .btn-secondary {
+    color: var(--theme-btn-accent-text);
+    background-color: var(--theme-btn-accent);
+    border-color: var(--theme-btn-accent);
+}
+
 .theme .btn-check:checked:focus-visible + .btn {
     box-shadow: var(--bs-btn-focus-box-shadow);
 }

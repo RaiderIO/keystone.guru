@@ -40,30 +40,3 @@ use Illuminate\Support\Collection;
         ])
     </div>
 @endsection
-
-@section('scripts')
-    @parent
-
-    <script type="text/javascript">
-        $(function () {
-            let initialKind = null;
-
-            // The route picker is built for one game version and season; once either changes it would offer the wrong routes
-            function applyKind() {
-                let gameVersionId = $('.collection_game_version:checked').val();
-                $('.collection_season').each(function () {
-                    let isSelected = String($(this).data('game-version-id')) === gameVersionId;
-                    $(this).prop('hidden', !isSelected).find('input').prop('disabled', !isSelected);
-                });
-
-                let kind = `${gameVersionId}-${$('.collection_season:not([hidden]) input:checked').val() ?? ''}`;
-                initialKind ??= kind;
-                $('#collection_dungeon_routes').prop('hidden', kind !== initialKind).find('input').prop('disabled', kind !== initialKind);
-                $('#collection_dungeon_routes_kind_changed').prop('hidden', kind === initialKind);
-            }
-
-            $('.collection_game_version, .collection_season input').on('change', applyKind);
-            applyKind();
-        });
-    </script>
-@endsection

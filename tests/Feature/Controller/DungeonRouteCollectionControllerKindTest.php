@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller;
 
 use App\Features\CreatorProfiles;
+use App\Http\Requests\DungeonRoute\DungeonRouteCollectionCreateFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteCollectionIndexFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Laravel\Pennant\Feature;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\Traits\CreatesSeason;
@@ -654,6 +656,138 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $this->assertMatchesRegularExpression(
             sprintf('/data-id="%d".*?<span class="ordered_select_detail"\s+hidden/s', $dungeonRoute->id),
             (string)$response->getContent(),
+        );
+    }
+
+    #[Test]
+    public function create_givenAGameVersionAndSeasonQuery_opensWithThemAndOffersThatSeasonsRoutes(): void
+    {
+        // Arrange
+        $creator = $this->creator();
+        $creator->update(['game_version_id' => $this->retail()->id]);
+        $mappingVersion = $this->retailMappingVersions()->first();
+        $season         = $this->createSeason(['expansion_id' => $this->retail()->expansion_id, 'active' => true], [$mappingVersion->dungeon_id]);
+        $this->createRoute($mappingVersion, $season, 'ZzTestOfTheRequestedSeason');
+        $this->createRoute($mappingVersion, null, 'ZzTestOfNoSeason');
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collections.new', [
+            'game_version_id' => $this->retail()->id,
+            'season_id'       => $season->id,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame($season->id, $response->viewData('selectedSeason')?->id);
+        $content = (string)$response->getContent();
+        $this->assertStringContainsString(sprintf('id="dungeon_routes_%d"', $mappingVersion->dungeon_id), $content);
+        $this->assertStringContainsString('ZzTestOfTheRequestedSeason', $content);
+        $this->assertStringNotContainsString('ZzTestOfNoSeason', $content);
+    }
+
+    #[Test]
+    public function create_givenTheNoSeasonQuery_opensFreeForm(): void
+    {
+        // Arrange
+        $creator = $this->creator();
+        $creator->update(['game_version_id' => $this->retail()->id]);
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collections.new', [
+            'game_version_id' => $this->retail()->id,
+            'season_id'       => DungeonRouteCollectionCreateFormRequest::SEASON_NONE,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertNull($response->viewData('selectedSeason'));
+        $this->assertMatchesRegularExpression(
+            sprintf('/<input type="radio" name="season_id" id="season_id_%d_none"[^>]*checked/', $this->retail()->id),
+            (string)$response->getContent(),
+        );
+    }
+
+    #[Test]
+    public function create_givenAGameVersionWithoutSeasonsQuery_opensItWithoutASeason(): void
+    {
+        // Arrange
+        $creator = $this->creator();
+        $creator->update(['game_version_id' => $this->retail()->id]);
+        $gameVersion = $this->gameVersionWithoutSeasons();
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collections.new', ['game_version_id' => $gameVersion->id]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame($gameVersion->id, $response->viewData('selectedGameVersion')->id);
+        $this->assertNull($response->viewData('selectedSeason'));
+    }
+
+    #[Test]
+    #[DataProvider('invalidCreateQueryProvider')]
+    public function create_givenAnInvalidQuery_failsValidation(string $case, string $errorKey): void
+    {
+        // Arrange
+        $creator = $this->creator();
+        $query   = match ($case) {
+            'unknown_game_version'      => ['game_version_id' => (int)GameVersion::query()->max('id') + 1000],
+            'inactive_game_version'     => ['game_version_id' => $this->inactiveGameVersion()->id],
+            'game_version_not_a_number' => ['game_version_id' => 'retail'],
+            'unknown_season'            => ['game_version_id' => $this->retail()->id, 'season_id' => (int)Season::query()->max('id') + 1000],
+            'season_not_a_number'       => ['game_version_id' => $this->retail()->id, 'season_id' => 'current'],
+            'season_on_no_seasons'      => ['game_version_id' => $this->gameVersionWithoutSeasons()->id, 'season_id' => $this->currentRetailSeason()->id],
+            'season_of_other_expansion' => ['game_version_id' => $this->retail()->id, 'season_id' => $this->createSeason(['expansion_id' => $this->gameVersionWithoutSeasons()->expansion_id])->id],
+            default                     => throw new \InvalidArgumentException($case),
+        };
+
+        // Act
+        $response = $this->actingAs($creator)->getJson(route('collections.new', $query));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors($errorKey);
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function invalidCreateQueryProvider(): array
+    {
+        return [
+            'unknown game version'        => ['unknown_game_version', 'game_version_id'],
+            'inactive game version'       => ['inactive_game_version', 'game_version_id'],
+            'game version not a number'   => ['game_version_not_a_number', 'game_version_id'],
+            'unknown season'              => ['unknown_season', 'season_id'],
+            'season not a number'         => ['season_not_a_number', 'season_id'],
+            'season on a version without' => ['season_on_no_seasons', 'season_id'],
+            'season of another expansion' => ['season_of_other_expansion', 'season_id'],
+        ];
+    }
+
+    #[Test]
+    public function edit_givenASeasonSet_countsEachSlotAndTheCollectionAsAWhole(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $mappingVersions        = $this->retailMappingVersions()->take(2)->values();
+        $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id], $mappingVersions->pluck('dungeon_id')->all());
+        $first                  = $this->createRoute($mappingVersions->get(0), $season);
+        $second                 = $this->createRoute($mappingVersions->get(0), $season);
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
+        $this->addRoutes($dungeonRouteCollection, [$first, $second]);
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $content = (string)$response->getContent();
+        $this->assertMatchesRegularExpression(sprintf('/id="dungeon_routes_%d_count"[^>]*>\s*2\s*</', $mappingVersions->get(0)->dungeon_id), $content);
+        $this->assertMatchesRegularExpression(sprintf('/id="dungeon_routes_%d_count"[^>]*>\s*0\s*</', $mappingVersions->get(1)->dungeon_id), $content);
+        $this->assertMatchesRegularExpression(
+            sprintf('/id="collection_dungeon_routes_total"[^>]*>\s*%s\s*</', preg_quote(__('view_common.forms.orderedselect.count', ['count' => 2, 'max' => DungeonRouteCollection::MAX_ROUTES]), '/')),
+            $content,
         );
     }
 
