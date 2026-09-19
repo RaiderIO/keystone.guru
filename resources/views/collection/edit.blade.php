@@ -1,16 +1,22 @@
 <?php
 
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
 use App\Models\Team;
+use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
 use Illuminate\Support\Collection;
 
 /**
- * @var DungeonRouteCollection        $dungeonRouteCollection
- * @var Collection<int, DungeonRoute> $ownDungeonRoutes
- * @var array<int, int>               $selectedDungeonRouteIds
- * @var Collection<int, Team>         $teams
+ * @var DungeonRouteCollection                          $dungeonRouteCollection
+ * @var Collection<int, DungeonRouteCollectionGroup>    $editSections
+ * @var bool                                            $hasOwnDungeonRoutes
+ * @var array<int, int>                                 $selectedDungeonRouteIds
+ * @var Collection<int, GameVersion>                    $gameVersions
+ * @var GameVersion|null                                $selectedGameVersion
+ * @var Season|null                                     $selectedSeason
+ * @var Collection<int, Team>                           $teams
  * @var Collection<int, DungeonRouteCollectionCategory> $categories
  */
 
@@ -34,8 +40,12 @@ $title = sprintf(__('view_collection.edit.title'), $dungeonRouteCollection->name
     <div class="container">
         @include('common.collection.details', [
             'dungeonRouteCollection' => $dungeonRouteCollection,
-            'ownDungeonRoutes' => $ownDungeonRoutes,
+            'editSections' => $editSections,
+            'hasOwnDungeonRoutes' => $hasOwnDungeonRoutes,
             'selectedDungeonRouteIds' => $selectedDungeonRouteIds,
+            'gameVersions' => $gameVersions,
+            'selectedGameVersion' => $selectedGameVersion,
+            'selectedSeason' => $selectedSeason,
             'teams' => $teams,
             'categories' => $categories,
         ])

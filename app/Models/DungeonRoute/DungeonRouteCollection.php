@@ -2,8 +2,10 @@
 
 namespace App\Models\DungeonRoute;
 
+use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
+use App\Models\Season;
 use App\Models\Team;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\User;
@@ -30,6 +32,8 @@ use Override;
  * @property int         $user_id
  * @property int|null    $team_id
  * @property int|null    $dungeon_route_collection_category_id
+ * @property int|null    $game_version_id                      Only null until the backfill of existing collections ran.
+ * @property int|null    $season_id                            Set for a season set, null for a free-form collection.
  * @property string      $public_key
  * @property int         $published_state_id
  * @property string      $name
@@ -41,6 +45,8 @@ use Override;
  * @property User                                                 $user
  * @property Team|null                                            $team
  * @property DungeonRouteCollectionCategory|null                  $dungeonRouteCollectionCategory
+ * @property GameVersion|null                                     $gameVersion
+ * @property Season|null                                          $season
  * @property PublishedState                                       $publishedState
  * @property EloquentCollection<int, DungeonRouteCollectionRoute> $dungeonRouteCollectionRoutes
  * @property EloquentCollection<int, DungeonRoute>                $dungeonRoutes
@@ -80,6 +86,8 @@ class DungeonRouteCollection extends Model
         'user_id',
         'team_id',
         'dungeon_route_collection_category_id',
+        'game_version_id',
+        'season_id',
         'public_key',
         'published_state_id',
         'name',
@@ -106,6 +114,18 @@ class DungeonRouteCollection extends Model
         return $this->belongsTo(DungeonRouteCollectionCategory::class);
     }
 
+    /** @return BelongsTo<GameVersion, $this> */
+    public function gameVersion(): BelongsTo
+    {
+        return $this->belongsTo(GameVersion::class);
+    }
+
+    /** @return BelongsTo<Season, $this> */
+    public function season(): BelongsTo
+    {
+        return $this->belongsTo(Season::class);
+    }
+
     /** @return BelongsTo<PublishedState, $this> */
     public function publishedState(): BelongsTo
     {
@@ -130,6 +150,35 @@ class DungeonRouteCollection extends Model
     public function userPinnedDungeonRouteCollections(): HasMany
     {
         return $this->hasMany(UserPinnedDungeonRouteCollection::class);
+    }
+
+    /**
+     * A season set holds the routes of one season, one slot per dungeon of its pool; any other collection is
+     * free-form.
+     */
+    public function isSeasonSet(): bool
+    {
+        return $this->season_id !== null;
+    }
+
+    /**
+     * Whether a route may be in this collection: its own mapping version must be of the collection's game version
+     * (never judged by its dungeon, which spans several game versions), and for a season set the route must be of
+     * the collection's season. Expects the route's mapping version to be loaded.
+     */
+    public function mayContainDungeonRoute(DungeonRoute $dungeonRoute): bool
+    {
+        $mappingVersion = $dungeonRoute->mappingVersion;
+
+        if ($mappingVersion === null) {
+            return false;
+        }
+
+        if ($this->game_version_id !== null && $mappingVersion->game_version_id !== $this->game_version_id) {
+            return false;
+        }
+
+        return !$this->isSeasonSet() || $dungeonRoute->season_id === $this->season_id;
     }
 
     public function getPublishedStateName(): string
@@ -179,6 +228,15 @@ class DungeonRouteCollection extends Model
     public function getRouteKeyName(): string
     {
         return 'public_key';
+    }
+
+    /** @return array<string, string> */
+    protected function casts(): array
+    {
+        return [
+            'game_version_id' => 'integer',
+            'season_id'       => 'integer',
+        ];
     }
 
     #[Override]

@@ -74,10 +74,23 @@ return [
         'collection_category_id' => [
             'exists' => 'That is not a category you can file a collection under.',
         ],
+        'collection_game_version_id' => [
+            'required' => 'Select the game version this collection is for.',
+            'exists'   => 'That is not a game version you can make a collection for.',
+            'fixed'    => 'The game version of a collection cannot change once it holds a route.',
+        ],
+        'collection_season_id' => [
+            'exists'     => 'That season does not exist.',
+            'no_seasons' => 'This game version has no seasons - leave the season empty to make a free-form collection.',
+            'expansion'  => 'That season does not belong to this game version.',
+            'fixed'      => 'The season of a collection is fixed once it is created - it can only be made free-form.',
+        ],
         'collection_dungeon_routes' => [
-            'max'      => 'A collection may hold at most :max routes.',
-            'exists'   => 'You can only collect routes that you created yourself.',
-            'distinct' => 'A route may only appear once in a collection.',
+            'max'          => 'A collection may hold at most :max routes.',
+            'exists'       => 'You can only collect routes that you created yourself.',
+            'distinct'     => 'A route may only appear once in a collection.',
+            'game_version' => 'This route is not for the game version of this collection.',
+            'season'       => 'This route is not for the season of this collection.',
         ],
     ],
     'date'              => 'The :attribute is not a valid date.',
