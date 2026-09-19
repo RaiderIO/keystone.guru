@@ -558,6 +558,85 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
     }
 
     #[Test]
+    public function update_givenASeasonSetWhoseSeasonIsNoLongerOfTheGameVersionsExpansion_savesIt(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $mappingVersion         = $this->retailMappingVersions()->first();
+        $season                 = $this->createSeason(['expansion_id' => $this->gameVersionWithoutSeasons()->expansion_id], [$mappingVersion->dungeon_id]);
+        $dungeonRoute           = $this->createRoute($mappingVersion, $season);
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
+
+        // Act
+        $response = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection), [
+            'name'            => 'ZzTestRenamedAfterRollover',
+            'published_state' => PublishedState::WORLD_WITH_LINK,
+            'season_id'       => $season->id,
+            'dungeon_routes'  => [$dungeonRoute->id],
+        ]);
+
+        // Assert
+        $response->assertSessionHasNoErrors();
+        $dungeonRouteCollection->refresh();
+        $this->assertSame('ZzTestRenamedAfterRollover', $dungeonRouteCollection->name);
+        $this->assertSame(PublishedState::ALL[PublishedState::WORLD_WITH_LINK], $dungeonRouteCollection->published_state_id);
+        $this->assertSame($season->id, $dungeonRouteCollection->season_id);
+        $this->assertSame([$dungeonRoute->id], $dungeonRouteCollection->dungeonRoutes->pluck('id')->all());
+    }
+
+    #[Test]
+    public function update_givenACollectionOnAnInactiveGameVersion_savesItWithoutChangingTheGameVersion(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $gameVersion            = $this->inactiveGameVersion();
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($gameVersion));
+
+        // Act
+        $response = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection), [
+            'name'            => 'ZzTestInactiveGameVersion',
+            'published_state' => PublishedState::WORLD,
+            'game_version_id' => $gameVersion->id,
+        ]);
+
+        // Assert
+        $response->assertSessionHasNoErrors();
+        $this->assertSame($gameVersion->id, $dungeonRouteCollection->refresh()->game_version_id);
+    }
+
+    #[Test]
+    public function index_givenACollectionOnAnInactiveGameVersion_keepsItReachable(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $gameVersion            = $this->inactiveGameVersion();
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($gameVersion));
+
+        // Act
+        $overviewResponse = $this->actingAs($creator)->get(route('collections.index'));
+        $filteredResponse = $this->actingAs($creator)->get(route('collections.index', ['game_version_id' => $gameVersion->id]));
+
+        // Assert
+        $overviewResponse->assertOk();
+        $this->assertContains($gameVersion->id, $overviewResponse->viewData('gameVersions')->pluck('id')->all(), 'The filter offers the inactive game version');
+        $filteredResponse->assertSessionHasNoErrors();
+        $this->assertSame([$dungeonRouteCollection->id], $filteredResponse->viewData('dungeonRouteCollections')->pluck('id')->all());
+    }
+
+    #[Test]
+    public function index_givenAnInactiveGameVersionTheUserHasNoCollectionOn_failsValidation(): void
+    {
+        // Arrange
+        $creator = $this->creator();
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collections.index', ['game_version_id' => $this->inactiveGameVersion()->id]));
+
+        // Assert
+        $response->assertSessionHasErrors('game_version_id');
+    }
+
+    #[Test]
     public function view_givenASeasonSet_showsOneSlotPerPoolDungeonInPoolOrderWithGaps(): void
     {
         // Arrange
@@ -851,6 +930,11 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
     private function gameVersionWithoutSeasons(): GameVersion
     {
         return GameVersion::query()->where('has_seasons', false)->where('active', true)->orderBy('id')->firstOrFail();
+    }
+
+    private function inactiveGameVersion(): GameVersion
+    {
+        return GameVersion::query()->findOrFail(GameVersion::ALL[GameVersion::GAME_VERSION_BETA]);
     }
 
     private function currentRetailSeason(): Season

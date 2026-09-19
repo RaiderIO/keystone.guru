@@ -4,6 +4,8 @@ namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Fluent;
 use Illuminate\Validation\Rule;
@@ -30,7 +32,7 @@ class DungeonRouteCollectionIndexFormRequest extends FormRequest
             'game_version_id' => [
                 'nullable',
                 'integer',
-                Rule::exists('game_versions', 'id')->where('active', 1),
+                Rule::exists('game_versions', 'id')->whereIn('id', $this->getSelectableGameVersionIds()),
             ],
             // Empty for every collection, SEASON_NONE for the free-form ones, or a season id
             'season' => [
@@ -41,6 +43,19 @@ class DungeonRouteCollectionIndexFormRequest extends FormRequest
                 ),
             ],
         ];
+    }
+
+    /**
+     * The game versions the overview may filter on: every active one, plus any the user's own collections carry.
+     *
+     * @return Collection<int, GameVersion>
+     */
+    public function selectableGameVersions(): Collection
+    {
+        return once(fn(): Collection => GameVersion::query()
+            ->whereIn('id', $this->getSelectableGameVersionIds())
+            ->orderBy('id')
+            ->get());
     }
 
     /**
@@ -80,6 +95,32 @@ class DungeonRouteCollectionIndexFormRequest extends FormRequest
             }
 
             return Season::query()->findOrFail((int)$season);
+        });
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function getSelectableGameVersionIds(): array
+    {
+        return once(function (): array {
+            /** @var User|null $user */
+            $user = $this->user();
+
+            $ownGameVersionIds = $user?->dungeonRouteCollections()
+                ->whereNotNull('game_version_id')
+                ->distinct()
+                ->pluck('game_version_id')
+                ->all() ?? [];
+
+            return GameVersion::query()
+                ->where('active', 1)
+                ->pluck('id')
+                ->merge($ownGameVersionIds)
+                ->map(static fn(mixed $id): int => (int)$id)
+                ->unique()
+                ->values()
+                ->all();
         });
     }
 }

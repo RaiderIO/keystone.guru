@@ -74,7 +74,7 @@ class DungeonRouteCollectionController extends Controller
                     ),
                 ],
             ),
-            'gameVersions'         => GameVersion::active()->get(),
+            'gameVersions'         => $request->selectableGameVersions(),
             'selectedGameVersion'  => $gameVersion,
             'seasons'              => $dungeonRouteCollectionService->getSelectableSeasons($gameVersion),
             'selectedSeasonFilter' => $request->isFreeFormOnly()
@@ -205,11 +205,15 @@ class DungeonRouteCollectionController extends Controller
             'ownDungeonRoutes'        => $ownDungeonRoutes,
             'hasOwnDungeonRoutes'     => $ownDungeonRoutes->isNotEmpty() || $dungeonRouteCollection->dungeonRoutes->isNotEmpty(),
             'selectedDungeonRouteIds' => $dungeonRouteCollection->dungeonRoutes->pluck('id')->all(),
-            'gameVersions'            => GameVersion::active()->get(),
-            'selectedGameVersion'     => $dungeonRouteCollection->gameVersion,
-            'selectedSeason'          => $dungeonRouteCollection->season,
-            'teams'                   => $dungeonRouteCollection->user->teams,
-            'categories'              => DungeonRouteCollectionCategory::all(),
+            'gameVersions'            => GameVersion::query()
+                ->where('active', 1)
+                ->when($dungeonRouteCollection->game_version_id !== null, static fn(Builder $query) => $query->orWhere('id', $dungeonRouteCollection->game_version_id))
+                ->orderBy('id')
+                ->get(),
+            'selectedGameVersion' => $dungeonRouteCollection->gameVersion,
+            'selectedSeason'      => $dungeonRouteCollection->season,
+            'teams'               => $dungeonRouteCollection->user->teams,
+            'categories'          => DungeonRouteCollectionCategory::all(),
         ]);
     }
 
