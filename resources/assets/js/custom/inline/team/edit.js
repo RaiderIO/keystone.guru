@@ -33,8 +33,6 @@ class TeamEdit extends InlineCode {
         /** @type {CommonDungeonroutePicker|null} */
         this._routePicker = null;
         this._routePickerShownBefore = false;
-        /** @type {Set<string>} */
-        this._teamRoutePublicKeys = new Set();
     }
 
     activate() {
@@ -118,8 +116,9 @@ class TeamEdit extends InlineCode {
     }
 
     /**
-     * The drawer's "Add routes" button opens it; the host keeps the drawer's "already in" set in step
-     * with the team and owns the toast and Undo.
+     * The drawer's "Add routes" button opens it; the host owns the toast and Undo. The drawer's source
+     * never lists routes that are on a team, and its max caps one add at what the endpoint accepts, so
+     * every open after the first starts from a fresh page with nothing marked as already added.
      * @param {CommonDungeonroutePicker} routePicker
      * @private
      */
@@ -127,20 +126,15 @@ class TeamEdit extends InlineCode {
         let self = this;
 
         this._routePicker = routePicker;
-        this._teamRoutePublicKeys = new Set(routePicker.options.existingPublicKeys || []);
 
         routePicker.onAdded(this._onRoutesAdded.bind(this));
 
         $(routePicker.options.drawerSelector).on('show.bs.offcanvas', function () {
-            // The drawer loads its first page on its own; later opens may be looking at a stale page
             if (self._routePickerShownBefore) {
+                self._routePicker.setExistingPublicKeys([]);
                 self._routePicker.reload();
             }
             self._routePickerShownBefore = true;
-        });
-
-        $(document).on('team:routeremoved', function (event, publicKey) {
-            self._forgetTeamRoutes([publicKey]);
         });
     }
 
@@ -155,7 +149,6 @@ class TeamEdit extends InlineCode {
         let addedPublicKeys = result.response && Array.isArray(result.response.public_keys) ?
             result.response.public_keys : result.publicKeys;
 
-        addedPublicKeys.forEach(publicKey => this._teamRoutePublicKeys.add(publicKey));
         this._refreshRoutesTable();
 
         if (addedPublicKeys.length === 0) {
@@ -216,21 +209,8 @@ class TeamEdit extends InlineCode {
                 showErrorNotification(lang.get('js.team_add_routes_undo_failed'));
             }
 
-            self._forgetTeamRoutes(publicKeys);
             self._refreshRoutesTable();
         });
-    }
-
-    /**
-     * @param {string[]} publicKeys Routes that left the team.
-     * @private
-     */
-    _forgetTeamRoutes(publicKeys) {
-        publicKeys.forEach(publicKey => this._teamRoutePublicKeys.delete(publicKey));
-
-        if (this._routePicker !== null) {
-            this._routePicker.setExistingPublicKeys(Array.from(this._teamRoutePublicKeys));
-        }
     }
 
     /**

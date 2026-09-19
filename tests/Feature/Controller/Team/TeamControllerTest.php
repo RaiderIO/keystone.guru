@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Team;
 
+use App\Http\Requests\Team\TeamAddRoutesFormRequest;
 use App\Models\Laratrust\Role;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
@@ -135,6 +136,7 @@ final class TeamControllerTest extends PublicTestCase
         $response->assertOk();
         $response->assertSee('id="team_edit_route_picker"', false);
         $response->assertSee(json_encode(sprintf('/ajax/team/%s/route', $this->team->public_key)), false);
+        $response->assertSee(sprintf('"max":%d', TeamAddRoutesFormRequest::MAX_ROUTES_PER_REQUEST), false);
         $response->assertDontSee('id="view_existing_routes"', false);
     }
 
