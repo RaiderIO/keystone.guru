@@ -650,9 +650,8 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     public function save_givenExistingRouteWithAffixGroups_replacesOldAffixGroups(): void
     {
         // Arrange
+        $route  = DungeonRoute::factory()->create();
         $season = $this->loadTwwS3Season();
-        // The route's own season decides which affix groups a save accepts, so it must be the season the selection comes from
-        $route = DungeonRoute::factory()->create(['season_id' => $season->id]);
 
         $affixGroups = $season->affixGroups->filter(fn($ag) => !$ag->hasAffix('Teeming') && $ag->id > 0)->values();
         $this->assertGreaterThanOrEqual(2, $affixGroups->count(), 'Need at least 2 non-teeming affix groups for this test');
@@ -798,8 +797,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     public function save_givenAffixSelectionButNoActiveSeason_clearsExistingAffixes(): void
     {
         // Arrange
-        // Without a season of its own the route falls back to the (absent) season the service resolves
-        $route      = DungeonRoute::factory()->create(['season_id' => null]);
+        $route      = DungeonRoute::factory()->create();
         $season     = $this->loadTwwS3Season();
         $affixGroup = $season->affixGroups->first(fn($ag) => !$ag->hasAffix('Teeming') && $ag->id > 0);
         $this->assertNotNull($affixGroup, 'Expected at least one non-teeming affix group in TWW S3');
