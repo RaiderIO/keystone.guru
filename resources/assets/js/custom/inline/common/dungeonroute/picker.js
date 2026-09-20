@@ -340,7 +340,7 @@ class CommonDungeonroutePicker extends InlineCode {
         let $list = $(this.options.listSelector).empty();
         let template = $(this.options.rowTemplateSelector).prop('content').firstElementChild;
 
-        this._rows = {};
+        this._rows = this._getSelectedRows();
 
         for (let index in rows) {
             if (!rows.hasOwnProperty(index)) {
@@ -378,6 +378,24 @@ class CommonDungeonroutePicker extends InlineCode {
         }
 
         this._refreshRows();
+    }
+
+    /**
+     * A ticked route keeps its row after it scrolls off the listing: the host page is handed the row of every
+     * route it adds, and a selection may span pages and filters.
+     * @returns {Object<string, Object>}
+     * @private
+     */
+    _getSelectedRows() {
+        let rows = {};
+
+        for (let publicKey of this._selected) {
+            if (typeof this._rows[publicKey] !== 'undefined') {
+                rows[publicKey] = this._rows[publicKey];
+            }
+        }
+
+        return rows;
     }
 
     /**

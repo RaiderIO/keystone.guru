@@ -415,6 +415,32 @@ describe('CommonDungeonroutePicker', () => {
         expect(picker.getSelectedPublicKeys()).toEqual(['a']);
     });
 
+    it('add_givenTicksFromAnEarlierPage_handsTheHostTheirRowsToo', () => {
+        // Arrange
+        document.body.innerHTML = MARKUP;
+        picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS, {addUrl: null}));
+        picker.activate();
+        ajaxCalls.length = 0;
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')], 4);
+        tick('a');
+        document.querySelector('#picker_next').click();
+        respondWithRoutes([route('c'), route('d')], 4);
+        tick('c');
+        const callback = vi.fn();
+        picker.onAdded(callback);
+
+        // Act
+        document.querySelector('#picker_add').click();
+
+        // Assert
+        expect(callback).toHaveBeenCalledWith({
+            publicKeys: ['a', 'c'],
+            rows:       [expect.objectContaining({public_key: 'a'}), expect.objectContaining({public_key: 'c'})],
+            response:   null,
+        });
+    });
+
     it('add_givenTickedRoutes_postsThemAndReportsTheResultToTheHost', () => {
         // Arrange
         picker.reload();
