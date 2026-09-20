@@ -4,7 +4,9 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
+use App\Models\KillZone\KillZone;
 use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
 use App\Models\Season;
@@ -317,6 +319,70 @@ final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
             // A sandbox route never shows up in a route table
             'expires_at' => null,
         ], $attributes));
+    }
+
+    /**
+     * The route picker draws a route's pull graph from this, so it asks for it; the route table does not
+     * and must not pay for the query.
+     */
+    #[Test]
+    public function get_givenWithPullForces_returnsTheEnemyForcesOfEveryPull(): void
+    {
+        // Arrange
+        $user  = null;
+        $route = null;
+
+        try {
+            $user  = $this->createUserWithUserRole();
+            $route = $this->createOwnRoute($user);
+            $enemy = Enemy::query()
+                ->where('mapping_version_id', $route->mapping_version_id)
+                ->whereNotNull('npc_id')
+                ->whereNotNull('floor_id')
+                ->firstOrFail();
+            KillZone::factory()
+                ->withEnemies($enemy)
+                ->create(['dungeon_route_id' => $route->id, 'floor_id' => $enemy->floor_id, 'index' => 1]);
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->get($this->mineQuery(['with_pull_forces' => 1]));
+
+            // Assert
+            $response->assertOk();
+            $pullForces = $response->json('data.0.pull_forces');
+            $this->assertIsArray($pullForces);
+            $this->assertCount(1, $pullForces);
+            $this->assertArrayHasKey('enemy_forces', $pullForces[0]);
+            $this->assertArrayHasKey('has_boss', $pullForces[0]);
+        } finally {
+            $route?->delete();
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function get_givenNoWithPullForces_leavesThemOut(): void
+    {
+        // Arrange
+        $user  = null;
+        $route = null;
+
+        try {
+            $user  = $this->createUserWithUserRole();
+            $route = $this->createOwnRoute($user);
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->get($this->mineQuery([]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertArrayNotHasKey('pull_forces', $response->json('data.0'));
+        } finally {
+            $route?->delete();
+            $user?->delete();
+        }
     }
 
     /**

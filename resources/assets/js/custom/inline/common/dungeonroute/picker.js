@@ -35,6 +35,8 @@
  @property {string} keyRangeText              Contains :min and :max.
  @property {string} enemyForcesText           Contains :count and :required.
  @property {string} viewsText                 Contains %s.
+ @property {string} pullsOneText
+ @property {string} pullsManyText             Contains :count.
  @property {string} votesText                 Contains %s.
  @property {string} selectedNoneText
  @property {string} selectedOneText
@@ -257,6 +259,8 @@ class CommonDungeonroutePicker extends InlineCode {
             search: {value: '', regex: 'false'},
             requirements: $(this.options.requirementsSelectSelector).val() || [],
             tags: $(this.options.tagsSelectSelector).val() || [],
+            // The rows draw a route's pull graph, which the endpoint only pays for when asked
+            with_pull_forces: 1,
         }, this.options.sourceParameters, this.options.lockedParameters);
     }
 
@@ -364,6 +368,7 @@ class CommonDungeonroutePicker extends InlineCode {
                 .html(this._getRatingHtml(row))
                 .attr('title', this._format(this.options.votesText, {'%s': ratingCount}))
                 .prop('hidden', ratingCount === 0);
+            $row.find('.route_picker_pull_graph').html(this._getPullGraphHtml(row));
             $row.find('.route_picker_views')
                 .html(`<i class="fas fa-eye"></i> ${this._abbreviate(parseInt(row.views) || 0)}`)
                 .attr('title', this._format(this.options.viewsText, {'%s': parseInt(row.views) || 0}));
@@ -597,6 +602,61 @@ class CommonDungeonroutePicker extends InlineCode {
         }
 
         return stars.join('');
+    }
+
+    /**
+     * The route's "fingerprint": one bar per pull, its height the pull's share of the biggest trash pull,
+     * bosses full height in the accent colour. Mirrors common.dungeonroute.pullgraph, which draws the same
+     * graph on the route rows of the site.
+     *
+     * @param {Object} row
+     * @returns {string}
+     * @private
+     */
+    _getPullGraphHtml(row) {
+        let barWidth = 3;
+        let barGap = 1;
+        let minBar = 2;
+        let maxBars = 30;
+        let chartHeight = 22;
+
+        let pullForces = row.pull_forces || [];
+        // A pull that grants no forces and holds no boss says nothing - drop it before the cap, so it
+        // neither renders as noise nor eats into the bar budget
+        let bars = pullForces.filter(pull => pull.enemy_forces > 0 || pull.has_boss).slice(0, maxBars);
+
+        if (bars.length === 0) {
+            return '';
+        }
+
+        let maxForces = Math.max(0, ...bars.filter(pull => !pull.has_boss).map(pull => pull.enemy_forces));
+        let chartWidth = (bars.length * (barWidth + barGap)) - barGap;
+
+        let rects = bars.map(function (pull, index) {
+            let barHeight = pull.has_boss
+                ? chartHeight
+                : (maxForces > 0 ? Math.max(minBar, Math.round((pull.enemy_forces / maxForces) * chartHeight)) : minBar);
+            let fill = pull.has_boss ? 'rgba(240, 180, 60, 0.9)' : 'currentColor';
+
+            return `<rect x="${index * (barWidth + barGap)}" y="${chartHeight - barHeight}" ` +
+                `width="${barWidth}" height="${barHeight}" fill="${fill}"></rect>`;
+        }).join('');
+
+        let text = pullForces.length === 1 ? this.options.pullsOneText : this.options.pullsManyText;
+        let title = this._escape(this._format(text, {count: pullForces.length}));
+
+        return `<span class="d-inline-flex" data-bs-toggle="tooltip" title="${title}">` +
+            `<svg width="${chartWidth}" height="${chartHeight}" viewBox="0 0 ${chartWidth} ${chartHeight}" ` +
+            `role="img" aria-hidden="true" preserveAspectRatio="none">${rects}</svg></span>`;
+    }
+
+    /**
+     * @param {string} text
+     * @returns {string}
+     * @private
+     */
+    _escape(text) {
+        return $('<div>').text(text).html();
     }
 
     /**

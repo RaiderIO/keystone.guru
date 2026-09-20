@@ -38,7 +38,9 @@ use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\User;
+use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteKillZoneServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -70,8 +72,13 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function get(AjaxDungeonRouteListFormRequest $request, ThumbnailServiceInterface $thumbnailService, SeasonServiceInterface $seasonService, SeasonAffixGroupServiceInterface $seasonAffixGroupService)
-    {
+    public function get(
+        AjaxDungeonRouteListFormRequest      $request,
+        ThumbnailServiceInterface            $thumbnailService,
+        SeasonServiceInterface               $seasonService,
+        SeasonAffixGroupServiceInterface     $seasonAffixGroupService,
+        DungeonRouteKillZoneServiceInterface $dungeonRouteKillZoneService,
+    ) {
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);
         $userId        = (int)$request->get('user_id', 0);
@@ -275,9 +282,40 @@ class AjaxDungeonRouteController extends Controller
             /** @var array<int, mixed> $data */
             $data = $result['data'];
             $thumbnailService->dungeonRoutesDisplayed(collect($data));
+
+            if ($request->wantsPullForces()) {
+                self::addPullForces(collect($data), $dungeonRouteKillZoneService);
+            }
         }
 
         return $result;
+    }
+
+    /**
+     * Stamps the enemy forces of every pull onto the routes of one page, so a caller can draw the route's
+     * pull graph. Batched over the page (see DungeonRouteEnemyForcesPageResolver) rather than queried per
+     * route, and stamped after the limit so only the rows actually returned are paid for.
+     *
+     * @param Collection<int, DungeonRoute> $dungeonRoutes
+     */
+    private static function addPullForces(
+        Collection                           $dungeonRoutes,
+        DungeonRouteKillZoneServiceInterface $dungeonRouteKillZoneService,
+    ): void {
+        $forcesByRouteId = $dungeonRouteKillZoneService->getEnemyForcesPerKillZoneForRoutes($dungeonRoutes);
+
+        foreach ($dungeonRoutes as $dungeonRoute) {
+            $dungeonRoute->setAttribute(
+                'pull_forces',
+                $forcesByRouteId->get($dungeonRoute->id, collect())
+                    ->map(static fn(KillZoneEnemyForces $pull): array => [
+                        'enemy_forces' => $pull->enemyForces,
+                        'has_boss'     => $pull->hasBoss,
+                    ])
+                    ->values()
+                    ->all(),
+            );
+        }
     }
 
     /**

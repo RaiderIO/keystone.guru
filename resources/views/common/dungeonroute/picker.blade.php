@@ -117,6 +117,8 @@ $inlineOptions = [
     'keyRangeText'               => __('view_common.dungeonroute.picker.key_range'),
     'enemyForcesText'            => __('view_common.dungeonroute.picker.enemy_forces'),
     'viewsText'                  => __('view_common.dungeonroute.cardrow.views'),
+    'pullsOneText'               => __('view_common.dungeonroute.picker.pulls_one'),
+    'pullsManyText'              => __('view_common.dungeonroute.picker.pulls_many'),
     'votesText'                  => __('view_common.dungeonroute.rating.nr_of_votes'),
     'selectedNoneText'           => __('view_common.dungeonroute.picker.selected_none'),
     'selectedOneText'            => __('view_common.dungeonroute.picker.selected_one'),
@@ -240,6 +242,8 @@ $inlineOptions = [
                         <span class="leaderboard_enemy_forces route_picker_enemy_forces text-warning me-3" hidden></span>
                         <span class="leaderboard_rating route_picker_rating me-3" hidden></span>
                         <span class="leaderboard_level_chip route_picker_key_range me-3" hidden></span>
+                        {{-- Always rendered, graph or no graph, so the columns line up down the list --}}
+                        <span class="leaderboard_pull_graph route_picker_pull_graph me-3"></span>
                         <span class="leaderboard_views route_picker_views"></span>
                     </span>
                 </span>

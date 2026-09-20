@@ -53,15 +53,25 @@ class AjaxDungeonRouteListFormRequest extends FormRequest
     }
 
     /**
+     * Whether every listed route carries its enemy forces per pull. It costs a grouped query over the
+     * page, so only a caller that draws them asks for it.
+     */
+    public function wantsPullForces(): bool
+    {
+        return (bool)$this->validated('with_pull_forces');
+    }
+
+    /**
      * @return array<string, array<int, string|Rule>|string|Rule>
      */
     public function rules(): array
     {
         return [
-            'game_version_id' => ['nullable', 'integer', Rule::exists(GameVersion::class, 'id')],
-            'season_id'       => ['nullable', 'integer', Rule::exists(Season::class, 'id')],
-            'dungeon_ids'     => ['nullable', 'array', 'min:1'],
-            'dungeon_ids.*'   => ['integer', 'distinct', Rule::exists(Dungeon::class, 'id')],
+            'game_version_id'  => ['nullable', 'integer', Rule::exists(GameVersion::class, 'id')],
+            'season_id'        => ['nullable', 'integer', Rule::exists(Season::class, 'id')],
+            'dungeon_ids'      => ['nullable', 'array', 'min:1'],
+            'dungeon_ids.*'    => ['integer', 'distinct', Rule::exists(Dungeon::class, 'id')],
+            'with_pull_forces' => ['nullable', 'boolean'],
         ];
     }
 

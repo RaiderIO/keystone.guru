@@ -168,6 +168,8 @@ return [
             'key_level'                => '+:level',
             'key_range'                => '+:min – +:max',
             'enemy_forces'             => ':count/:required enemy forces',
+            'pulls_one'                => '1 pull',
+            'pulls_many'               => ':count pulls',
             'selected_none'            => 'No routes selected',
             'selected_one'             => '1 route selected',
             'selected_many'            => ':count routes selected',

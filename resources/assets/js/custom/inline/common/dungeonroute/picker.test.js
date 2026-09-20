@@ -50,6 +50,8 @@ const OPTIONS = {
     keyRangeText:               '+:min - +:max',
     enemyForcesText:            ':count/:required',
     viewsText:                  '%s views',
+    pullsOneText:               '1 pull',
+    pullsManyText:              ':count pulls',
     votesText:                  '%s votes',
     affixGroups:                {7: [{class: 'fortified', name: 'Fortified'}]},
     selectedNoneText:           'None selected',
@@ -81,6 +83,7 @@ function route(publicKey, overrides = {}) {
         enemy_forces:                  310,
         enemy_forces_required:         300,
         enemy_forces_required_teeming: 350,
+        pull_forces:                   [{enemy_forces: 40, has_boss: false}, {enemy_forces: 0, has_boss: true}],
         has_thumbnail:                 false,
         thumbnails:                    [],
         dungeon:                       {name: 'dungeons.ara_kara', key: 'arakara', expansion: {shortname: 'tww'}},
@@ -127,6 +130,7 @@ const MARKUP = `
                                     <span class="leaderboard_enemy_forces route_picker_enemy_forces" hidden></span>
                                     <span class="leaderboard_rating route_picker_rating" hidden></span>
                                     <span class="leaderboard_level_chip route_picker_key_range" hidden></span>
+                                    <span class="leaderboard_pull_graph route_picker_pull_graph"></span>
                                     <span class="leaderboard_views route_picker_views"></span>
                                 </span>
                             </span>
@@ -217,6 +221,7 @@ describe('CommonDungeonroutePicker', () => {
         expect(data.columns[0]).toMatchObject({name: 'title', search: {value: 'Tyrannical'}});
         expect(data.columns[1]).toMatchObject({name: 'dungeon_id', search: {value: '-1'}});
         expect(data.columns[3]).toMatchObject({name: 'routeattributes.name', search: {value: ['-1']}});
+        expect(data.with_pull_forces).toBe(1);
         expect(document.querySelector('#picker_loading').hidden).toBe(false);
     });
 
@@ -273,6 +278,12 @@ describe('CommonDungeonroutePicker', () => {
         expect(existing.querySelector('.route_picker_thumbnail').style.backgroundImage)
             .toContain('https://assets/images/dungeons/tww/arakara_3-2.jpg');
 
+        // One bar per pull that carries forces or a boss, the boss bar full height in the accent colour
+        const graph = existing.querySelector('.route_picker_pull_graph');
+        expect(graph.querySelectorAll('svg rect')).toHaveLength(2);
+        expect(graph.querySelectorAll('svg rect')[1].getAttribute('height')).toBe('22');
+        expect(graph.querySelector('[data-bs-toggle="tooltip"]').getAttribute('title')).toBe('2 pulls');
+
         const fresh = rowOf('fresh');
         expect(fresh.querySelector('.route_picker_checkbox').disabled).toBe(false);
         expect(fresh.querySelector('.route_picker_unpublished').hidden).toBe(false);
@@ -284,6 +295,19 @@ describe('CommonDungeonroutePicker', () => {
         expect(document.querySelector('#picker_range').textContent).toBe('1-2 of 5');
         expect(document.querySelector('#picker_previous').disabled).toBe(true);
         expect(document.querySelector('#picker_next').disabled).toBe(false);
+    });
+
+    it('load_givenARouteWithoutPulls_leavesTheGraphSlotEmptyButInPlace', () => {
+        // Arrange
+        picker.reload();
+
+        // Act - a pull granting no forces and holding no boss says nothing, so no bar is drawn for it
+        respondWithRoutes([route('a', {pull_forces: [{enemy_forces: 0, has_boss: false}]})]);
+
+        // Assert
+        const graph = rowOf('a').querySelector('.route_picker_pull_graph');
+        expect(graph).not.toBeNull();
+        expect(graph.innerHTML).toBe('');
     });
 
     it('load_givenNoRoutes_showsTheEmptyState', () => {
