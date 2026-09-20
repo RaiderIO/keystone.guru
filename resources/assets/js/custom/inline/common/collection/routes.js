@@ -219,7 +219,7 @@ class CommonCollectionRoutes extends InlineCode {
     }
 
     /**
-     * Adds a removed route again - the server appends it - and then stores the order it was removed from.
+     * Undoes taking a route out: the server appends the route, so the order it had before is stored afterwards.
      *
      * @param {string} publicKey
      * @param {CommonFormsOrderedselect} orderedSelect
