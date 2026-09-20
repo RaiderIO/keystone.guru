@@ -134,6 +134,9 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         $response->assertJsonPath('dungeon_routes.0.id', $bravo->id);
         $response->assertJsonPath('dungeon_routes.0.title', $bravo->title);
         $response->assertJsonPath('dungeon_routes.0.dungeon_id', $bravo->dungeon_id);
+        // The page fills the route's new row from this, so it reads like the rows the server rendered
+        $response->assertJsonPath('dungeon_routes.0.enemy_forces', $bravo->enemy_forces);
+        $response->assertJsonPath('dungeon_routes.0.enemy_forces_required', $bravo->mappingVersion->enemy_forces_required);
         $response->assertJsonPath('dungeon_routes.1.public_key', $alpha->public_key);
     }
 

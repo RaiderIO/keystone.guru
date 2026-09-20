@@ -69,6 +69,10 @@ class AjaxDungeonRouteCollectionController extends Controller
                 'title'      => $dungeonRoute->title,
                 'dungeon_id' => $dungeonRoute->dungeon_id,
                 'dungeon'    => __($dungeonRoute->dungeon->name),
+                // The list the route joins shows its enemy forces against the requirement, so the row
+                // it gets reads the same as the ones already rendered by the server
+                'enemy_forces'          => $dungeonRoute->enemy_forces,
+                'enemy_forces_required' => $dungeonRoute->mappingVersion->enemy_forces_required,
             ])->values(),
         ]);
     }

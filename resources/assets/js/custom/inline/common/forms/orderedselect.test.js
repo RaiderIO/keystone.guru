@@ -337,8 +337,33 @@ describe('CommonFormsOrderedselect in ajax mode', () => {
         itemNamed('Alpha').querySelector('.ordered_select_remove').click();
 
         // Assert
-        expect(removed.mock.calls[0][1]).toEqual({id: '1', name: 'Alpha', position: 2});
+        expect(removed.mock.calls[0][1]).toEqual({id: '1', name: 'Alpha', detail: null, position: 2});
         expect(control.getIds()).toEqual(['2']);
+    });
+
+    it('addItem_givenADetail_showsItNextToTheLabelLikeAServerRenderedItem', () => {
+        // Arrange - nothing beyond beforeEach
+
+        // Act
+        control.addItem('9', 'Charlie', {text: '120 / 140', isWarning: true});
+
+        // Assert
+        const detail = itemNamed('Charlie').querySelector('.ordered_select_detail');
+        expect(detail.hidden).toBe(false);
+        expect(detail.querySelector('.ordered_select_detail_text').textContent).toBe('120 / 140');
+        expect(detail.classList.contains('ordered_select_detail_warning')).toBe(true);
+        expect(control.getDetail('9')).toEqual({text: '120 / 140', isWarning: true});
+    });
+
+    it('addItem_givenNoDetail_leavesTheItemWithout', () => {
+        // Arrange - nothing beyond beforeEach
+
+        // Act
+        control.addItem('9', 'Charlie');
+
+        // Assert
+        expect(itemNamed('Charlie').querySelector('.ordered_select_detail').hidden).toBe(true);
+        expect(control.getDetail('9')).toBeNull();
     });
 
     it('addButton_givenAjaxMode_doesNotAddAnythingItself', () => {

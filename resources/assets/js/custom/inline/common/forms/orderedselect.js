@@ -27,7 +27,7 @@
  * triggers `orderedselect:changed` on the list, which bubbles.
  *
  * In ajax mode the host page saves every change itself: a move fires `orderedselect:moved` and a remove
- * `orderedselect:removed` ({id, name, position}) on the root, and the host adds items, undoes changes and
+ * `orderedselect:removed` ({id, name, detail, position}) on the root, and the host adds items, undoes changes and
  * tells the control how full it is through addItem(), removeItem(), setIds() and setFullCount().
  *
  * @property {CommonFormsOrderedselectOptions} options
@@ -63,8 +63,10 @@ class CommonFormsOrderedselect extends InlineCode {
      * Appends an item without announcing it as a change of the user's (ajax mode: the host saved it already).
      * @param {string|Number} id
      * @param {string} name
+     * @param {{text: string, isWarning?: boolean}|null} [detail] Secondary text next to the label, as the
+     *        server-rendered items carry; without it the item shows none.
      */
-    addItem(id, name) {
+    addItem(id, name, detail = null) {
         if (this._findItem(id).length > 0) {
             return;
         }
@@ -72,10 +74,28 @@ class CommonFormsOrderedselect extends InlineCode {
         let $item = $($(this.options.templateSelector).prop('content').firstElementChild.cloneNode(true));
         $item.attr('data-id', id);
         $item.find('.ordered_select_label').text(name);
+        this._applyDetail($item, detail === null ? undefined : detail.text, detail !== null && (detail.isWarning === true));
         $item.find('input[type="hidden"]').val(id);
         $(this.options.listSelector).append($item);
 
         this._refresh();
+    }
+
+    /**
+     * @param {string|Number} id
+     * @returns {{text: string, isWarning: boolean}|null} What the item shows next to its label, if anything.
+     */
+    getDetail(id) {
+        let $detail = this._findItem(id).find('.ordered_select_detail');
+
+        if ($detail.length === 0 || $detail.prop('hidden')) {
+            return null;
+        }
+
+        return {
+            text:      $detail.find('.ordered_select_detail_text').text(),
+            isWarning: $detail.hasClass('ordered_select_detail_warning'),
+        };
     }
 
     /**
@@ -240,6 +260,7 @@ class CommonFormsOrderedselect extends InlineCode {
 
         let name = this._getName($item);
         let id = $item.attr('data-id');
+        let detail = this.getDetail(id);
         let position = this._getItems().index($item) + 1;
         $(this.options.addSelectSelector).find(`option[value="${id}"]`).prop('disabled', false);
         $item.remove();
@@ -248,7 +269,7 @@ class CommonFormsOrderedselect extends InlineCode {
         this._announce(this.options.removedStatusText, name, 0);
 
         if (this.options.ajax) {
-            $(this.options.rootSelector).trigger('orderedselect:removed', [{id: id, name: name, position: position}]);
+            $(this.options.rootSelector).trigger('orderedselect:removed', [{id: id, name: name, detail: detail, position: position}]);
         }
 
         if ($neighbour.length > 0) {

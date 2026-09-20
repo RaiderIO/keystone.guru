@@ -118,7 +118,7 @@ class CommonCollectionRoutes extends InlineCode {
      * instead, which is what the lists are filled from then.
      *
      * @param {{publicKeys: string[], rows: Object[], response: *}} result
-     * @returns {{publicKey: string, title: string, dungeonId: Number|null, dungeonName: string}[]}
+     * @returns {{publicKey: string, title: string, dungeonId: Number|null, dungeonName: string, detail: Object|null}[]}
      * @private
      */
     _toDungeonRoutes(result) {
@@ -132,6 +132,7 @@ class CommonCollectionRoutes extends InlineCode {
                 title:       dungeonRoute.title,
                 dungeonId:   dungeonRoute.dungeon_id,
                 dungeonName: dungeonRoute.dungeon,
+                detail:      this._enemyForcesDetail(dungeonRoute.enemy_forces, dungeonRoute.enemy_forces_required),
             }));
         }
 
@@ -140,12 +141,37 @@ class CommonCollectionRoutes extends InlineCode {
             title:       row.title,
             dungeonId:   row.dungeon.id,
             dungeonName: typeof lang !== 'undefined' ? lang.get(row.dungeon.name) : row.dungeon.name,
+            detail:      this._enemyForcesDetail(
+                row.enemy_forces,
+                row.teeming === 1 ? row.enemy_forces_required_teeming : row.enemy_forces_required,
+            ),
         }));
     }
 
     /**
+     * What a route's row says next to its title: its enemy forces against what its mapping version needs,
+     * flagged when it falls short. Mirrors common/collection/routes.blade.php, which renders the same
+     * detail for the routes the page arrived with - a freshly added row must read no differently.
+     *
+     * @param {Number|string} enemyForces
+     * @param {Number|string} required
+     * @returns {{text: string, isWarning: boolean}|null} Null for a dungeon that requires no enemy forces.
+     * @private
+     */
+    _enemyForcesDetail(enemyForces, required) {
+        let forces = parseInt(enemyForces) || 0;
+        let needed = parseInt(required) || 0;
+
+        if (needed <= 0) {
+            return null;
+        }
+
+        return {text: `${forces} / ${needed}`, isWarning: forces < needed};
+    }
+
+    /**
      * @param {CommonCollectionRoutesSection} section
-     * @param {{id: string, name: string, position: Number}} removed
+     * @param {{id: string, name: string, detail: Object|null, position: Number}} removed
      * @private
      */
     _onRemoved(section, removed) {
@@ -182,7 +208,7 @@ class CommonCollectionRoutes extends InlineCode {
 
             self._showUndoableToast(self.options.removedText.replace(':name', self._escape(removed.name)), undo);
         }, function () {
-            orderedSelect.addItem(publicKey, removed.name);
+            orderedSelect.addItem(publicKey, removed.name, removed.detail);
             orderedSelect.setIds(previousSectionOrder);
             self._refreshCount();
         });
@@ -282,7 +308,7 @@ class CommonCollectionRoutes extends InlineCode {
 
             let name = section.withDungeonName ? `${dungeonRoute.title} — ${dungeonRoute.dungeonName}` : dungeonRoute.title;
 
-            self._getOrderedSelect(section).addItem(dungeonRoute.publicKey, name);
+            self._getOrderedSelect(section).addItem(dungeonRoute.publicKey, name, dungeonRoute.detail);
             // The server appends added routes to the end of the stored order
             self._savedOrder.push(dungeonRoute.publicKey);
         });

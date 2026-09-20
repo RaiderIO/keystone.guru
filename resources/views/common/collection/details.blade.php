@@ -66,18 +66,6 @@ foreach ($teams as $team) {
     @include('common.forms.form-error', ['key' => 'description'])
 </div>
 
-<div class="mb-3">
-    <span class="form-label d-block mb-1">{{ __('view_common.collection.details.game_version') }}</span>
-    <p id="collection_game_version" class="mb-0">
-        <img src="{{ ksgAssetImage(sprintf('gameversions/%s.png', $selectedGameVersion->key)) }}" alt="" height="17"
-             class="align-text-bottom">
-        {{ __($selectedGameVersion->name) }}
-    </p>
-    <small class="form-text text-body-secondary">
-        {{ __($isNew ? 'view_common.collection.details.game_version_help' : 'view_common.collection.details.game_version_fixed') }}
-    </small>
-</div>
-
 @if($isNew)
     @if($selectedGameVersion->has_seasons)
         <fieldset class="mb-3{{ $errors->has('season_id') ? ' has-error' : '' }}" aria-describedby="season_help">

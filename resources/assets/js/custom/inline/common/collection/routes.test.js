@@ -25,6 +25,11 @@ function listHtml(prefix, items) {
             <span class="ordered_select_handle"></span>
             <span class="ordered_select_position">0</span>
             <span class="ordered_select_label">${name}</span>
+            <span class="ordered_select_detail" hidden>
+                <i class="ordered_select_detail_icon" hidden></i>
+                <span class="ordered_select_detail_text"></span>
+                <span class="visually-hidden ordered_select_detail_warning_text" hidden>Short on enemy forces</span>
+            </span>
             <button type="button" class="ordered_select_up"></button>
             <button type="button" class="ordered_select_down"></button>
             <button type="button" class="ordered_select_remove"></button>
@@ -190,8 +195,8 @@ describe('CommonCollectionRoutes', () => {
     it('onAdded_givenRoutesFromThePicker_putsEachInItsDungeonsSlotAndOffersUndo', () => {
         // Arrange
         const added = [
-            {id: 21, public_key: 'keyC', title: 'Charlie', dungeon_id: 2, dungeon: 'Two'},
-            {id: 22, public_key: 'keyD', title: 'Delta', dungeon_id: 1, dungeon: 'One'},
+            {id: 21, public_key: 'keyC', title: 'Charlie', dungeon_id: 2, dungeon: 'Two', enemy_forces: 300, enemy_forces_required: 280},
+            {id: 22, public_key: 'keyD', title: 'Delta', dungeon_id: 1, dungeon: 'One', enemy_forces: 100, enemy_forces_required: 280},
         ];
 
         // Act
@@ -204,11 +209,30 @@ describe('CommonCollectionRoutes', () => {
         expect(picker.setExistingPublicKeys).toHaveBeenLastCalledWith(['keyA', 'keyB', 'keyD', 'keyC', 'keyOld']);
         expect(toasts[0].text).toBe('Added 2');
         expect(toasts[0].opts.buttons[0].text).toBe('Undo');
+        // The row must read like the ones the server rendered, not wait for a page refresh for it
+        expect(lists.slot_2_inline.getDetail('keyC')).toEqual({text: '300 / 280', isWarning: false});
+        expect(lists.slot_1_inline.getDetail('keyD')).toEqual({text: '100 / 280', isWarning: true});
+    });
+
+    it('onRemoved_givenTheDeleteFails_putsTheEnemyForcesBackWithTheRoute', () => {
+        // Arrange
+        const detail = document.querySelector('#slot_1 [data-id="keyA"] .ordered_select_detail');
+        detail.hidden = false;
+        detail.classList.add('ordered_select_detail_warning');
+        detail.querySelector('.ordered_select_detail_text').textContent = '90 / 280';
+
+        // Act
+        document.querySelector('#slot_1 [data-id="keyA"] .ordered_select_remove').click();
+        lastCall('DELETE').error();
+
+        // Assert
+        expect(lists.slot_1_inline.getIds()).toEqual(['keyA', 'keyB']);
+        expect(lists.slot_1_inline.getDetail('keyA')).toEqual({text: '90 / 280', isWarning: true});
     });
 
     it('onAdded_givenUndo_removesTheAddedRoutesAgain', () => {
         // Arrange
-        const added = [{id: 21, public_key: 'keyC', title: 'Charlie', dungeon_id: 2, dungeon: 'Two'}];
+        const added = [{id: 21, public_key: 'keyC', title: 'Charlie', dungeon_id: 2, dungeon: 'Two', enemy_forces: 300, enemy_forces_required: 280}];
         jQuery('#picker').trigger('routepicker:added', [{publicKeys: ['keyC'], response: {dungeon_routes: added}}]);
 
         // Act
@@ -357,12 +381,21 @@ describe('CommonCollectionRoutes', () => {
         // Act - a drawer with no endpoint of its own reports the rows it picked from
         jQuery('#picker').trigger('routepicker:added', [{
             publicKeys: ['keyC'],
-            rows:       [{public_key: 'keyC', title: 'Charlie', dungeon: {id: 2, name: 'dungeons.two'}}],
+            rows:       [{
+                public_key:                    'keyC',
+                title:                         'Charlie',
+                dungeon:                       {id: 2, name: 'dungeons.two'},
+                teeming:                       0,
+                enemy_forces:                  100,
+                enemy_forces_required:         280,
+                enemy_forces_required_teeming: 330,
+            }],
             response:   null,
         }]);
 
         // Assert
         expect(lists.slot_2_inline.getIds()).toEqual(['keyC']);
+        expect(lists.slot_2_inline.getDetail('keyC')).toEqual({text: '100 / 280', isWarning: true});
         expect(document.querySelector('#count').textContent).toBe('4 / 24');
         expect(ajaxCalls).toHaveLength(0);
         expect(toasts[0].text).toBe('Added 1');
