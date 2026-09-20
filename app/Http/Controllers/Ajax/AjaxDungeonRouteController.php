@@ -134,22 +134,10 @@ class AjaxDungeonRouteController extends Controller
             ->groupBy([
                 'dungeon_routes.id',
                 'mapping_versions.dungeon_id',
-            ]);
-
-        $gameVersion = $request->gameVersion();
-        if ($gameVersion !== null) {
-            $routes = $routes->where('mapping_versions.game_version_id', $gameVersion->id);
-        }
-
-        $season = $request->season();
-        if ($season !== null) {
-            $routes = $routes->where('dungeon_routes.season_id', $season->id);
-        }
-
-        $dungeons = $request->dungeons();
-        if ($dungeons !== null) {
-            $routes = $routes->whereIn('dungeon_routes.dungeon_id', $dungeons->pluck('id'));
-        }
+            ])
+            ->when($request->gameVersion(), static fn(Builder $query, GameVersion $gameVersion) => $query->where('mapping_versions.game_version_id', $gameVersion->id))
+            ->when($request->season(), static fn(Builder $query, Season $season) => $query->where('dungeon_routes.season_id', $season->id))
+            ->when($request->dungeons(), static fn(Builder $query, Collection $dungeons) => $query->whereIn('dungeon_routes.dungeon_id', $dungeons->pluck('id')));
 
         /** @var User $user */
         $user = Auth::user();

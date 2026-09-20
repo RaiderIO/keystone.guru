@@ -13,8 +13,10 @@ use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Events\TransactionBeginning;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Testing\TestResponse;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
@@ -77,7 +79,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
 
         // Assert
         $response->assertUnauthorized();
-        $this->assertSame([], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -94,7 +96,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
 
         // Assert
         $response->assertForbidden();
-        $this->assertSame([], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -119,17 +121,17 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         // Arrange
         $owner                  = $this->createUser();
         $mappingVersions        = $this->retailMappingVersions()->take(2)->values();
-        $member                 = $this->createRoute($owner, $mappingVersions->get(0));
+        $existing               = $this->createRoute($owner, $mappingVersions->get(0));
         $alpha                  = $this->createRoute($owner, $mappingVersions->get(0));
         $bravo                  = $this->createRoute($owner, $mappingVersions->get(1));
-        $dungeonRouteCollection = $this->createFreeFormCollection($owner, [$member]);
+        $dungeonRouteCollection = $this->createFreeFormCollection($owner, [$existing]);
 
         // Act
         $response = $this->actingAs($owner)->ajax('postJson', $this->storeUrl($dungeonRouteCollection), [$bravo, $alpha]);
 
         // Assert
         $response->assertOk();
-        $this->assertSame([$member->id, $bravo->id, $alpha->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$existing->id, $bravo->id, $alpha->id], $this->dungeonRouteIds($dungeonRouteCollection));
         $response->assertJsonPath('dungeon_routes.0.public_key', $bravo->public_key);
         $response->assertJsonPath('dungeon_routes.0.id', $bravo->id);
         $response->assertJsonPath('dungeon_routes.0.title', $bravo->title);
@@ -157,7 +159,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $this->assertSame([$dungeonRoute->id], $this->memberIds($dungeonRouteCollection));
+            $this->assertSame([$dungeonRoute->id], $this->dungeonRouteIds($dungeonRouteCollection));
         } finally {
             Feature::for($admin)->forget(CreatorProfiles::class);
         }
@@ -178,7 +180,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         // Assert
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['dungeon_routes.0' => __('validation.custom.collection_dungeon_routes.exists')]);
-        $this->assertSame([], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -211,7 +213,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         // Assert
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['dungeon_routes.0' => __('validation.custom.collection_dungeon_routes.game_version')]);
-        $this->assertSame([], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -245,7 +247,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $this->assertSame([$dungeonRoute->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$dungeonRoute->id], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -264,7 +266,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         // Assert
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['dungeon_routes.0' => __('validation.custom.collection_dungeon_routes.season')]);
-        $this->assertSame([], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -281,7 +283,41 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         // Assert
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['dungeon_routes.0' => __('validation.custom.collection_dungeon_routes.already_in')]);
-        $this->assertSame([$dungeonRoute->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$dungeonRoute->id], $this->dungeonRouteIds($dungeonRouteCollection));
+    }
+
+    #[Test]
+    public function storeRoutes_givenAConcurrentRequestAddedOneOfTheRoutesAfterValidation_addsOnlyTheOther(): void
+    {
+        // Arrange
+        $owner                  = $this->createUser();
+        $alpha                  = $this->createRoute($owner, $this->retailMappingVersion());
+        $bravo                  = $this->createRoute($owner, $this->retailMappingVersion());
+        $dungeonRouteCollection = $this->createFreeFormCollection($owner);
+
+        // The transaction begins once validation has passed, which is where a concurrent add slips in
+        $concurrentAddDone = false;
+        Event::listen(TransactionBeginning::class, static function () use (&$concurrentAddDone, $dungeonRouteCollection, $alpha): void {
+            if ($concurrentAddDone) {
+                return;
+            }
+
+            $concurrentAddDone = true;
+            DungeonRouteCollectionRoute::create([
+                'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+                'dungeon_route_id'            => $alpha->id,
+                'order'                       => 0,
+            ]);
+        });
+
+        // Act
+        $response = $this->actingAs($owner)->ajax('postJson', $this->storeUrl($dungeonRouteCollection), [$alpha, $bravo]);
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame([$alpha->id, $bravo->id], $this->dungeonRouteIds($dungeonRouteCollection));
+        $response->assertJsonCount(1, 'dungeon_routes');
+        $response->assertJsonPath('dungeon_routes.0.public_key', $bravo->public_key);
     }
 
     #[Test]
@@ -334,7 +370,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         // Assert
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['dungeon_routes' => __('validation.custom.collection_dungeon_routes.max', ['max' => DungeonRouteCollection::MAX_ROUTES])]);
-        $this->assertCount(DungeonRouteCollection::MAX_ROUTES - 1, $this->memberIds($dungeonRouteCollection));
+        $this->assertCount(DungeonRouteCollection::MAX_ROUTES - 1, $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -354,7 +390,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $this->assertCount(DungeonRouteCollection::MAX_ROUTES, $this->memberIds($dungeonRouteCollection));
+        $this->assertCount(DungeonRouteCollection::MAX_ROUTES, $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -370,7 +406,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
 
         // Assert
         $response->assertUnauthorized();
-        $this->assertSame([$dungeonRoute->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$dungeonRoute->id], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -387,7 +423,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
 
         // Assert
         $response->assertForbidden();
-        $this->assertSame([$dungeonRoute->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$dungeonRoute->id], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -407,7 +443,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $response->assertJsonPath('dungeon_routes', [$alpha->public_key]);
-        $this->assertSame([$charlie->id, $bravo->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$charlie->id, $bravo->id], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -423,7 +459,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $this->assertSame([], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -431,9 +467,9 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
     {
         // Arrange
         $owner                  = $this->createUser();
-        $member                 = $this->createRoute($owner, $this->retailMappingVersion());
+        $existing               = $this->createRoute($owner, $this->retailMappingVersion());
         $notAMember             = $this->createRoute($owner, $this->retailMappingVersion());
-        $dungeonRouteCollection = $this->createFreeFormCollection($owner, [$member]);
+        $dungeonRouteCollection = $this->createFreeFormCollection($owner, [$existing]);
 
         // Act
         $response = $this->actingAs($owner)->ajax('deleteJson', $this->deleteUrl($dungeonRouteCollection), [$notAMember]);
@@ -441,7 +477,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         // Assert
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['dungeon_routes.0' => __('validation.custom.collection_dungeon_routes.not_in')]);
-        $this->assertSame([$member->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$existing->id], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -450,10 +486,10 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         // Arrange
         $owner                  = $this->createUser();
         $mappingVersion         = $this->retailMappingVersion();
-        $member                 = $this->createRoute($owner, $mappingVersion);
+        $existing               = $this->createRoute($owner, $mappingVersion);
         $alpha                  = $this->createRoute($owner, $mappingVersion);
         $bravo                  = $this->createRoute($owner, $mappingVersion);
-        $dungeonRouteCollection = $this->createFreeFormCollection($owner, [$member]);
+        $dungeonRouteCollection = $this->createFreeFormCollection($owner, [$existing]);
         $this->actingAs($owner)->ajax('postJson', $this->storeUrl($dungeonRouteCollection), [$alpha, $bravo])->assertOk();
 
         // Act
@@ -461,7 +497,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $this->assertSame([$member->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$existing->id], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -483,7 +519,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         // Assert
         $storeResponse->assertOk();
         $orderResponse->assertOk();
-        $this->assertSame([$alpha->id, $bravo->id, $charlie->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$alpha->id, $bravo->id, $charlie->id], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -500,7 +536,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
 
         // Assert
         $response->assertUnauthorized();
-        $this->assertSame([$alpha->id, $bravo->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$alpha->id, $bravo->id], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -518,7 +554,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
 
         // Assert
         $response->assertForbidden();
-        $this->assertSame([$alpha->id, $bravo->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$alpha->id, $bravo->id], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -537,7 +573,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $this->assertSame([$charlie->id, $alpha->id, $bravo->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$charlie->id, $alpha->id, $bravo->id], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -557,7 +593,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         // Assert
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['dungeon_routes.2' => __('validation.custom.collection_dungeon_routes.not_in')]);
-        $this->assertSame([$alpha->id, $bravo->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$alpha->id, $bravo->id], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -595,7 +631,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         // Assert
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['dungeon_routes' => __('validation.custom.collection_dungeon_routes.missing')]);
-        $this->assertSame([$alpha->id, $bravo->id, $charlie->id], $this->memberIds($dungeonRouteCollection));
+        $this->assertSame([$alpha->id, $bravo->id, $charlie->id], $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -694,7 +730,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
     /**
      * @return array<int, int> Route ids in collection order.
      */
-    private function memberIds(DungeonRouteCollection $dungeonRouteCollection): array
+    private function dungeonRouteIds(DungeonRouteCollection $dungeonRouteCollection): array
     {
         return DungeonRouteCollectionRoute::query()
             ->where('dungeon_route_collection_id', $dungeonRouteCollection->id)

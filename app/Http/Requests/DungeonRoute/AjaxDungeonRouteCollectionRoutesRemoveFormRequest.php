@@ -31,12 +31,12 @@ class AjaxDungeonRouteCollectionRoutesRemoveFormRequest extends AjaxDungeonRoute
                     return;
                 }
 
-                $memberPublicKeys = $this->memberPublicKeys();
+                $dungeonRoutePublicKeys = $this->dungeonRoutePublicKeys();
 
                 /** @var array<int, string> $publicKeys */
                 $publicKeys = $this->input('dungeon_routes');
                 foreach ($publicKeys as $index => $publicKey) {
-                    if (!in_array($publicKey, $memberPublicKeys, true)) {
+                    if (!in_array($publicKey, $dungeonRoutePublicKeys, true)) {
                         $validator->errors()->add(
                             sprintf('dungeon_routes.%d', $index),
                             __('validation.custom.collection_dungeon_routes.not_in'),

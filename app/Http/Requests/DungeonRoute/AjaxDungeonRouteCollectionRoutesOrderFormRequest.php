@@ -32,12 +32,12 @@ class AjaxDungeonRouteCollectionRoutesOrderFormRequest extends AjaxDungeonRouteC
                     return;
                 }
 
-                $memberPublicKeys = $this->memberPublicKeys();
+                $dungeonRoutePublicKeys = $this->dungeonRoutePublicKeys();
 
                 /** @var array<int, string> $publicKeys */
                 $publicKeys = $this->input('dungeon_routes');
                 foreach ($publicKeys as $index => $publicKey) {
-                    if (!in_array($publicKey, $memberPublicKeys, true)) {
+                    if (!in_array($publicKey, $dungeonRoutePublicKeys, true)) {
                         $validator->errors()->add(
                             sprintf('dungeon_routes.%d', $index),
                             __('validation.custom.collection_dungeon_routes.not_in'),
@@ -45,7 +45,7 @@ class AjaxDungeonRouteCollectionRoutesOrderFormRequest extends AjaxDungeonRouteC
                     }
                 }
 
-                if (array_diff($memberPublicKeys, $publicKeys) !== []) {
+                if (array_diff($dungeonRoutePublicKeys, $publicKeys) !== []) {
                     $validator->errors()->add('dungeon_routes', __('validation.custom.collection_dungeon_routes.missing'));
                 }
             },

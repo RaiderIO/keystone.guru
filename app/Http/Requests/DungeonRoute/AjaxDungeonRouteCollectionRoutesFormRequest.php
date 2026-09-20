@@ -74,7 +74,7 @@ abstract class AjaxDungeonRouteCollectionRoutesFormRequest extends FormRequest
      *
      * @return array<int, string>
      */
-    protected function memberPublicKeys(): array
+    protected function dungeonRoutePublicKeys(): array
     {
         return once(fn(): array => DungeonRoute::query()
             ->join('dungeon_route_collection_routes', 'dungeon_route_collection_routes.dungeon_route_id', '=', 'dungeon_routes.id')

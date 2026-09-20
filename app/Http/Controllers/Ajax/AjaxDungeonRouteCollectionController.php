@@ -12,6 +12,7 @@ use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRouteRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
@@ -36,22 +37,26 @@ class AjaxDungeonRouteCollectionController extends Controller
 
         $dungeonRoutes = $request->dungeonRoutes();
 
-        DB::transaction(static function () use ($dungeonRouteCollection, $dungeonRoutes, $dungeonRouteCollectionRouteRepository): void {
+        $addedDungeonRoutes = DB::transaction(static function () use ($dungeonRouteCollection, $dungeonRoutes, $dungeonRouteCollectionRouteRepository): Collection {
             // Serialises concurrent adds to one collection, so two requests that each fit cannot overshoot the cap together
             DungeonRouteCollection::query()->whereKey($dungeonRouteCollection->id)->lockForUpdate()->first();
 
-            $members = DungeonRouteCollectionRoute::query()
+            $dungeonRouteCollectionRoutes = DungeonRouteCollectionRoute::query()
                 ->where('dungeon_route_collection_id', $dungeonRouteCollection->id);
 
-            if ((clone $members)->count() + $dungeonRoutes->count() > DungeonRouteCollection::MAX_ROUTES) {
+            // Validation ran before the lock, so a concurrent request may have added some of these routes since
+            $existingDungeonRouteIds = (clone $dungeonRouteCollectionRoutes)->pluck('dungeon_route_id');
+            $dungeonRoutes           = $dungeonRoutes->whereNotIn('id', $existingDungeonRouteIds)->values();
+
+            if ($existingDungeonRouteIds->count() + $dungeonRoutes->count() > DungeonRouteCollection::MAX_ROUTES) {
                 throw ValidationException::withMessages([
                     'dungeon_routes' => __('validation.custom.collection_dungeon_routes.max', ['max' => DungeonRouteCollection::MAX_ROUTES]),
                 ]);
             }
 
-            $nextOrder = (int)$members->max('order') + 1;
+            $nextOrder = (int)$dungeonRouteCollectionRoutes->max('order') + 1;
 
-            foreach ($dungeonRoutes->values() as $index => $dungeonRoute) {
+            foreach ($dungeonRoutes as $index => $dungeonRoute) {
                 $dungeonRouteCollectionRouteRepository->create([
                     'dungeon_route_collection_id' => $dungeonRouteCollection->id,
                     'dungeon_route_id'            => $dungeonRoute->id,
@@ -60,10 +65,12 @@ class AjaxDungeonRouteCollectionController extends Controller
             }
 
             DungeonRouteCollection::query()->whereKey($dungeonRouteCollection->id)->update(['updated_at' => now()]);
+
+            return $dungeonRoutes;
         });
 
         return response()->json([
-            'dungeon_routes' => $dungeonRoutes->map(static fn(DungeonRoute $dungeonRoute): array => [
+            'dungeon_routes' => $addedDungeonRoutes->map(static fn(DungeonRoute $dungeonRoute): array => [
                 'id'         => $dungeonRoute->id,
                 'public_key' => $dungeonRoute->public_key,
                 'title'      => $dungeonRoute->title,

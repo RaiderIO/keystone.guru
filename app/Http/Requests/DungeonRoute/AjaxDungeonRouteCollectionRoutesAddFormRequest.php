@@ -43,7 +43,7 @@ class AjaxDungeonRouteCollectionRoutesAddFormRequest extends AjaxDungeonRouteCol
                 }
 
                 $dungeonRouteCollection = $this->dungeonRouteCollection();
-                $memberPublicKeys       = $this->memberPublicKeys();
+                $dungeonRoutePublicKeys = $this->dungeonRoutePublicKeys();
                 /** @var array<int, string> $publicKeys */
                 $publicKeys    = $this->input('dungeon_routes');
                 $dungeonRoutes = $this->findDungeonRoutesInOrder($publicKeys)->keyBy('public_key');
@@ -56,7 +56,7 @@ class AjaxDungeonRouteCollectionRoutesAddFormRequest extends AjaxDungeonRouteCol
                         continue;
                     }
 
-                    if (in_array($publicKey, $memberPublicKeys, true)) {
+                    if (in_array($publicKey, $dungeonRoutePublicKeys, true)) {
                         $validator->errors()->add($key, __('validation.custom.collection_dungeon_routes.already_in'));
                     } elseif (!$dungeonRouteCollection->mayContainDungeonRoute($dungeonRoute)) {
                         $isOfGameVersion = $dungeonRoute->mappingVersion !== null &&
@@ -68,7 +68,7 @@ class AjaxDungeonRouteCollectionRoutesAddFormRequest extends AjaxDungeonRouteCol
                     }
                 }
 
-                if (count($memberPublicKeys) + count($publicKeys) > DungeonRouteCollection::MAX_ROUTES) {
+                if (count($dungeonRoutePublicKeys) + count($publicKeys) > DungeonRouteCollection::MAX_ROUTES) {
                     $validator->errors()->add('dungeon_routes', __('validation.custom.collection_dungeon_routes.max', [
                         'max' => DungeonRouteCollection::MAX_ROUTES,
                     ]));
