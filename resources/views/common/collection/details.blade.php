@@ -25,7 +25,8 @@ $selectedSeason         ??= null;
 $teams                  ??= collect();
 $categories             ??= collect();
 
-$isNew = $dungeonRouteCollection === null;
+$isNew        = $dungeonRouteCollection === null;
+$deleteFormId = 'collection_delete_form';
 
 // Sharing with a team is only meaningful when the user is actually in one
 $availablePublishedStates = array_values(array_filter(
@@ -156,12 +157,23 @@ foreach ($teams as $team) {
 ]])
 @endif
 
-{{ html()->input('submit')->value($dungeonRouteCollection !== null ? __('view_common.collection.details.save') : __('view_common.collection.details.submit'))->class('btn btn-info') }}
-
 {{ html()->closeModelForm() }}
 
 @isset($dungeonRouteCollection)
-    {{ html()->form('DELETE', route('collections.delete', ['dungeonRouteCollection' => $dungeonRouteCollection]))->class('mt-4')->open() }}
-    {{ html()->input('submit')->value(__('view_common.collection.details.delete'))->class('btn btn-danger') }}
+    {{ html()->form('DELETE', route('collections.delete', ['dungeonRouteCollection' => $dungeonRouteCollection]))->id($deleteFormId)->open() }}
     {{ html()->closeModelForm() }}
 @endisset
+
+{{-- Both buttons sit outside the form they submit, so saving and deleting share one row --}}
+<div class="d-flex align-items-center">
+    {{ html()->input('submit')
+        ->value($dungeonRouteCollection !== null ? __('view_common.collection.details.save') : __('view_common.collection.details.submit'))
+        ->class('btn btn-info')
+        ->attribute('form', $formId) }}
+    @isset($dungeonRouteCollection)
+        {{ html()->input('submit')
+            ->value(__('view_common.collection.details.delete'))
+            ->class('btn btn-danger ms-auto')
+            ->attribute('form', $deleteFormId) }}
+    @endisset
+</div>

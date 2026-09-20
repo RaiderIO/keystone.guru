@@ -889,6 +889,31 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
     }
 
     /**
+     * Saving and deleting share one row, which only works because each button sits outside the form it
+     * submits and names it - a form cannot be nested in another.
+     */
+    #[Test]
+    public function edit_givenACollection_putsSaveAndDeleteOnOneRow(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $content = (string)$response->getContent();
+        $this->assertMatchesRegularExpression('/<form[^>]+id="collection_delete_form"/', $content);
+        $this->assertMatchesRegularExpression(
+            '/<div class="d-flex align-items-center">.*?form="collection_details_form".*?form="collection_delete_form".*?<\/div>/s',
+            $content,
+            'Both buttons live in the same row, the delete one last',
+        );
+    }
+
+    /**
      * The routes section sits above the form that creates the collection, so its hidden inputs only reach
      * the server when they name that form.
      */
