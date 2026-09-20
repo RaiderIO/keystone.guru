@@ -24,11 +24,23 @@ class SearchInlineBase extends InlineCode {
             }
         }
 
-        // Set default values for the filters
-        let queryParams = getQueryParams();
+        if (this._syncsWithUrl()) {
+            // Set default values for the filters
+            let queryParams = getQueryParams();
 
-        // Restore URL -> filters values
-        this._restoreFiltersFromQueryParams(queryParams);
+            // Restore URL -> filters values
+            this._restoreFiltersFromQueryParams(queryParams);
+        }
+    }
+
+    /**
+     * A search that is only a part of its page (a drawer, a dialog) does not own the page's URL.
+     *
+     * @returns {boolean} Whether the filters are restored from, and written to, the URL of the page.
+     * @protected
+     */
+    _syncsWithUrl() {
+        return true;
     }
 
     /**
@@ -206,7 +218,9 @@ class SearchInlineBase extends InlineCode {
         let searchParams = new SearchParams(this.filters, queryParameters);
 
         this._updateFilters();
-        this._updateUrl(searchParams, queryParametersUrlBlacklist);
+        if (this._syncsWithUrl()) {
+            this._updateUrl(searchParams, queryParametersUrlBlacklist);
+        }
 
         // Only search if the search parameters have changed
         if (this._previousSearchParams === null || !this._previousSearchParams.equals(searchParams)) {

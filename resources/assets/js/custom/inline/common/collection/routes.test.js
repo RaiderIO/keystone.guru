@@ -7,12 +7,27 @@
 // ---------------------------------------------------------------------------
 
 const jQuery = require('jquery');
+const Lang   = require('lang.js');
 
 const {InlineCode}    = require('../../inlinecode');
 globalThis.InlineCode = InlineCode;
 
 const {CommonFormsOrderedselect} = require('../forms/orderedselect');
 const {CommonCollectionRoutes}   = require('./routes');
+const {PickerDungeonRoute}       = require('../dungeonroute/pickerdungeonroute');
+
+const MESSAGES = {
+    'en.js':       {
+        collection_dungeonroutes_count:       ':count / :max',
+        collection_dungeonroutes_added_one:   'Added 1',
+        collection_dungeonroutes_added_many:  'Added :count',
+        collection_dungeonroutes_removed:     'Removed :name',
+        collection_dungeonroutes_undo:        'Undo',
+        collection_dungeonroutes_undone:      'Undone',
+        collection_dungeonroutes_save_failed: 'Failed',
+    },
+    'en.dungeons': {two: 'Two'},
+};
 
 /**
  * @param {string} prefix
@@ -88,6 +103,7 @@ describe('CommonCollectionRoutes', () => {
 
         previousGlobals = {
             $:                       globalThis.$,
+            lang:                    globalThis.lang,
             _inlineManager:          globalThis._inlineManager,
             Noty:                    globalThis.Noty,
             showSuccessNotification: globalThis.showSuccessNotification,
@@ -95,6 +111,7 @@ describe('CommonCollectionRoutes', () => {
             showErrorNotification:   globalThis.showErrorNotification,
         };
         globalThis.$ = jQuery;
+        globalThis.lang = new Lang({messages: MESSAGES, locale: 'en'});
 
         ajaxCalls = [];
         jQuery.ajax = vi.fn((settings) => {
@@ -126,8 +143,8 @@ describe('CommonCollectionRoutes', () => {
         };
 
         routesOptions = {
-            pickerInlineId: 'picker_inline',
-            pickerSelector: '#picker',
+            dungeonRoutePickerInlineId: 'picker_inline',
+            dungeonRoutePickerSelector: '#picker',
             countSelector:  '#count',
             sections:       [
                 {inlineId: 'slot_1_inline', rootSelector: '#slot_1', addButtonSelector: '#slot_1_add_button', dungeonId: 1, canAdd: true, withDungeonName: false},
@@ -138,13 +155,6 @@ describe('CommonCollectionRoutes', () => {
             deleteUrl:      '/delete',
             orderUrl:       '/order',
             max:            24,
-            countText:      ':count / :max',
-            addedOneText:   'Added 1',
-            addedManyText:  'Added :count',
-            removedText:    'Removed :name',
-            undoText:       'Undo',
-            undoneText:     'Undone',
-            saveFailedText: 'Failed',
         };
 
         new CommonCollectionRoutes('routes', 'common/collection/routes', routesOptions).activate();
@@ -200,7 +210,7 @@ describe('CommonCollectionRoutes', () => {
         ];
 
         // Act
-        jQuery('#picker').trigger('routepicker:added', [{publicKeys: ['keyC', 'keyD'], response: {dungeon_routes: added}}]);
+        jQuery('#picker').trigger('dungeonroutepicker:added', [{publicKeys: ['keyC', 'keyD'], response: {dungeon_routes: added}}]);
 
         // Assert
         expect(lists.slot_2_inline.getIds()).toEqual(['keyC']);
@@ -233,7 +243,7 @@ describe('CommonCollectionRoutes', () => {
     it('onAdded_givenUndo_removesTheAddedRoutesAgain', () => {
         // Arrange
         const added = [{id: 21, public_key: 'keyC', title: 'Charlie', dungeon_id: 2, dungeon: 'Two', enemy_forces: 300, enemy_forces_required: 280}];
-        jQuery('#picker').trigger('routepicker:added', [{publicKeys: ['keyC'], response: {dungeon_routes: added}}]);
+        jQuery('#picker').trigger('dungeonroutepicker:added', [{publicKeys: ['keyC'], response: {dungeon_routes: added}}]);
 
         // Act
         toasts[0].opts.buttons[0].callback({close: vi.fn()});
@@ -317,7 +327,7 @@ describe('CommonCollectionRoutes', () => {
         // Arrange
         document.querySelector('#slot_1 [data-id="keyB"] .ordered_select_up').click();
         const added = [{id: 21, public_key: 'keyC', title: 'Charlie', dungeon_id: 2, dungeon: 'Two'}];
-        jQuery('#picker').trigger('routepicker:added', [{publicKeys: ['keyC'], response: {dungeon_routes: added}}]);
+        jQuery('#picker').trigger('dungeonroutepicker:added', [{publicKeys: ['keyC'], response: {dungeon_routes: added}}]);
 
         // Act
         vi.advanceTimersByTime(500);
@@ -378,10 +388,10 @@ describe('CommonCollectionRoutes', () => {
         // Arrange
         asNewCollection();
 
-        // Act - a drawer with no endpoint of its own reports the rows it picked from
-        jQuery('#picker').trigger('routepicker:added', [{
+        // Act - a drawer with no endpoint of its own reports the routes it picked from
+        jQuery('#picker').trigger('dungeonroutepicker:added', [{
             publicKeys: ['keyC'],
-            rows:       [{
+            dungeonRoutes: [new PickerDungeonRoute({
                 public_key:                    'keyC',
                 title:                         'Charlie',
                 dungeon:                       {id: 2, name: 'dungeons.two'},
@@ -389,8 +399,8 @@ describe('CommonCollectionRoutes', () => {
                 enemy_forces:                  100,
                 enemy_forces_required:         280,
                 enemy_forces_required_teeming: 330,
-            }],
-            response:   null,
+            })],
+            response:      null,
         }]);
 
         // Assert

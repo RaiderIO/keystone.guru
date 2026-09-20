@@ -84,7 +84,6 @@ $inlineOptions = [
     'requirementsSelectSelector' => sprintf('#%s', $requirementsSelectId),
     'tagsSelectSelector'         => sprintf('#%s', $tagsSelectId),
     'listSelector'               => sprintf('#%s_list', $id),
-    'rowTemplateSelector'        => sprintf('#%s_row_template', $id),
     'loadingSelector'            => sprintf('#%s_loading', $id),
     'emptySelector'              => sprintf('#%s_empty', $id),
     'errorSelector'              => sprintf('#%s_error', $id),
@@ -112,22 +111,6 @@ $inlineOptions = [
             'name'  => $affix->name,
         ])->all(),
     ])->all(),
-    'rangeText'                  => __('view_common.dungeonroute.picker.range'),
-    'keyLevelText'               => __('view_common.dungeonroute.picker.key_level'),
-    'keyRangeText'               => __('view_common.dungeonroute.picker.key_range'),
-    'enemyForcesText'            => __('view_common.dungeonroute.picker.enemy_forces'),
-    'viewsText'                  => __('view_common.dungeonroute.cardrow.views'),
-    'pullsOneText'               => __('view_common.dungeonroute.picker.pulls_one'),
-    'pullsManyText'              => __('view_common.dungeonroute.picker.pulls_many'),
-    'votesText'                  => __('view_common.dungeonroute.rating.nr_of_votes'),
-    'selectedNoneText'           => __('view_common.dungeonroute.picker.selected_none'),
-    'selectedOneText'            => __('view_common.dungeonroute.picker.selected_one'),
-    'selectedManyText'           => __('view_common.dungeonroute.picker.selected_many'),
-    'fullText'                   => __('view_common.dungeonroute.picker.full'),
-    'addNoneText'                => __('view_common.dungeonroute.picker.add_none'),
-    'addOneText'                 => __('view_common.dungeonroute.picker.add_one'),
-    'addManyText'                => __('view_common.dungeonroute.picker.add_many'),
-    'addFailedText'              => __('view_common.dungeonroute.picker.add_failed'),
 ];
 ?>
 {{-- The data-inline-* attributes let a script activate the drawer again after swapping it into the page --}}
@@ -213,43 +196,6 @@ $inlineOptions = [
     </div>
 
     <div id="{{ $id }}_status" class="visually-hidden" role="status" aria-live="polite"></div>
-
-    {{-- The same row a route gets in a list on the site (common.dungeonroute.cardrow), with the rank
-         column giving way to the tick box and the per-pull graph left to the route's own page. --}}
-    <template id="{{ $id }}_row_template">
-        <li class="route_picker_row card_dungeonroute leaderboard_row d-flex align-items-center">
-            <label class="route_picker_row_label d-flex align-items-center flex-fill mb-0">
-                <span class="leaderboard_rank d-flex align-items-center justify-content-end">
-                    <input type="checkbox" class="form-check-input route_picker_checkbox mt-0">
-                </span>
-                <span class="d-flex align-items-center flex-fill flex-wrap leaderboard_row_inner">
-                    <span class="leaderboard_thumbnail route_picker_thumbnail"></span>
-                    <span class="leaderboard_main">
-                        <span class="leaderboard_title d-block">
-                            <span class="route_picker_title"></span>
-                            <span class="route_picker_unpublished badge bg-warning text-dark ms-1" hidden>
-                                <i class="fas fa-eye-slash" aria-hidden="true"></i>
-                                {{ __('view_common.dungeonroute.picker.unpublished') }}
-                            </span>
-                            <span class="route_picker_already_in badge bg-secondary ms-1" hidden>
-                                <i class="fas fa-check" aria-hidden="true"></i>
-                                {{ __('view_common.dungeonroute.picker.already_in') }}
-                            </span>
-                        </span>
-                        <span class="leaderboard_author route_picker_dungeon text-muted small d-block"></span>
-                    </span>
-                    <span class="leaderboard_stats d-flex align-items-center text-muted small ms-auto">
-                        <span class="leaderboard_enemy_forces route_picker_enemy_forces text-warning me-3" hidden></span>
-                        <span class="leaderboard_rating route_picker_rating me-3" hidden></span>
-                        <span class="leaderboard_level_chip route_picker_key_range me-3" hidden></span>
-                        {{-- Always rendered, graph or no graph, so the columns line up down the list --}}
-                        <span class="leaderboard_pull_graph route_picker_pull_graph me-3"></span>
-                        <span class="leaderboard_views route_picker_views"></span>
-                    </span>
-                </span>
-            </label>
-        </li>
-    </template>
 </div>
 
 @include('common.general.inline', ['path' => 'common/dungeonroute/picker', 'id' => $id, 'options' => $inlineOptions])

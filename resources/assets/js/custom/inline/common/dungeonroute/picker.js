@@ -9,7 +9,6 @@
  @property {string} requirementsSelectSelector
  @property {string} tagsSelectSelector
  @property {string} listSelector              The <ul> the route rows are rendered into.
- @property {string} rowTemplateSelector       <template> holding one blank route row.
  @property {string} loadingSelector
  @property {string} emptySelector
  @property {string} errorSelector
@@ -30,50 +29,54 @@
  @property {string} addFieldName
  @property {string} fallbackImageBaseUrl
  @property {Object<string, {class: string, name: string}[]>} affixGroups Affixes per affix group id, for the filter's icons.
- @property {string} rangeText                 Contains :from, :to and :total.
- @property {string} keyLevelText              Contains :level.
- @property {string} keyRangeText              Contains :min and :max.
- @property {string} enemyForcesText           Contains :count and :required.
- @property {string} viewsText                 Contains %s.
- @property {string} pullsOneText
- @property {string} pullsManyText             Contains :count.
- @property {string} votesText                 Contains %s.
- @property {string} selectedNoneText
- @property {string} selectedOneText
- @property {string} selectedManyText          Contains :count.
- @property {string} fullText                  Contains :max.
- @property {string} addNoneText
- @property {string} addOneText
- @property {string} addManyText               Contains :count.
- @property {string} addFailedText
+ */
+
+/**
+ @typedef {Object} CommonDungeonroutePickerResult
+ @property {string[]} publicKeys
+ @property {PickerDungeonRoute[]} dungeonRoutes  The listed routes the public keys were ticked on.
+ @property {*} response                          What the add url answered; null when the drawer posted nothing.
  */
 
 /**
  * Side drawer listing the source's routes, page by page, to tick and add to a target in one go. It knows
- * nothing about the target beyond the options: it fires `routepicker:added` on the drawer element (and
- * calls every onAdded() callback) with the added public keys, the rows they were picked from and, when
- * the drawer posts them itself, the endpoint's response - so the host can store them and show its toast.
+ * nothing about the target beyond the options: it fires `dungeonroutepicker:added` on the drawer element (and
+ * calls every onAdded() callback) with a CommonDungeonroutePickerResult, so the host can store the routes and
+ * show its toast.
  *
  * @property {CommonDungeonroutePickerOptions} options
  */
-class CommonDungeonroutePicker extends InlineCode {
+class CommonDungeonroutePicker extends SearchInlineBase {
 
     constructor(id, bladePath, options) {
-        super(id, bladePath, options);
+        super(new SearchHandlerDungeonRoutePicker(options), id, bladePath, options);
+
+        this.dialog = new DrawerDialog({
+            drawerSelector: options.drawerSelector,
+            openButtonSelector: options.openButtonSelector,
+            confirmButtonSelector: options.addButtonSelector,
+            statusSelector: options.statusSelector,
+        });
+
+        let onFilterChanged = this._onFilterChanged.bind(this);
+        this.filters = {
+            'title': new SearchFilterTitle(options.titleSearchSelector, onFilterChanged),
+            'dungeon': new SearchFilterInputChange(options.dungeonSelectSelector, onFilterChanged),
+            'affixes': new SearchFilterInputChange(options.affixSelectSelector, onFilterChanged),
+            'attributes': new SearchFilterInputChange(options.attributesSelectSelector, onFilterChanged),
+            'requirements': new SearchFilterInputChange(options.requirementsSelectSelector, onFilterChanged),
+            'tags': new SearchFilterInputChange(options.tagsSelectSelector, onFilterChanged),
+        };
 
         this._page = 0;
         this._total = 0;
-        this._draw = 0;
-        this._loaded = false;
         this._saving = false;
-        this._request = null;
-        this._titleSearchTimeout = null;
         /** @type {Set<string>} */
         this._existing = new Set(this.options.existingPublicKeys || []);
         /** @type {string[]} Ticked public keys, in the order they were ticked */
         this._selected = [];
-        /** @type {Object<string, Object>} The row every listed route was rendered from, by public key */
-        this._rows = {};
+        /** @type {Object<string, PickerDungeonRoute>} Every listed or ticked route, by public key */
+        this._dungeonRoutes = {};
         this._onAddedCallbacks = [];
     }
 
@@ -82,27 +85,13 @@ class CommonDungeonroutePicker extends InlineCode {
 
         this._decorateAffixOptions();
 
-        let $drawer = $(this.options.drawerSelector);
-
-        if (this.options.openButtonSelector) {
-            $(document).on('click', this.options.openButtonSelector, this._onOpenClicked.bind(this));
-        }
-
-        $drawer.on('show.bs.offcanvas', this._onShow.bind(this));
-
-        $(this.options.titleSearchSelector).on('input', this._onTitleSearchInput.bind(this));
-        $([
-            this.options.dungeonSelectSelector,
-            this.options.affixSelectSelector,
-            this.options.attributesSelectSelector,
-            this.options.requirementsSelectSelector,
-            this.options.tagsSelectSelector,
-        ].join(',')).on('change', this.reload.bind(this));
+        this.dialog.activate();
+        this.dialog.onFirstShow(this.reload.bind(this));
+        this.dialog.onConfirm(this._addDungeonRoutes.bind(this));
 
         $(this.options.previousSelector).on('click', this._goToPage.bind(this, -1));
         $(this.options.nextSelector).on('click', this._goToPage.bind(this, 1));
         $(this.options.listSelector).on('change', '.route_picker_checkbox', this._onCheckboxChanged.bind(this));
-        $(this.options.addButtonSelector).on('click', this._add.bind(this));
 
         this._refreshSelection();
     }
@@ -113,19 +102,20 @@ class CommonDungeonroutePicker extends InlineCode {
      * @param {Number|string|null} [filters.dungeonId] Puts the dungeon filter on this value first.
      */
     open(filters = {}) {
-        if (filters.dungeonId !== null && typeof filters.dungeonId !== 'undefined' && this._setDungeonFilter(filters.dungeonId) && this._loaded) {
+        if (filters.dungeonId !== null && typeof filters.dungeonId !== 'undefined' &&
+            this._setDungeonFilter(filters.dungeonId) && this.dialog.hasBeenShown()) {
             this.reload();
         }
 
-        bootstrap.Offcanvas.getOrCreateInstance($(this.options.drawerSelector)[0]).show();
+        this.dialog.open();
     }
 
     close() {
-        bootstrap.Offcanvas.getOrCreateInstance($(this.options.drawerSelector)[0]).hide();
+        this.dialog.close();
     }
 
     /**
-     * Registers a callback called with ({publicKeys: string[], response: *}) after every successful add.
+     * Registers a callback called with a CommonDungeonroutePickerResult after every successful add.
      * @param {Function} callback
      */
     onAdded(callback) {
@@ -156,7 +146,9 @@ class CommonDungeonroutePicker extends InlineCode {
      */
     reload() {
         this._page = 0;
-        this._load();
+        // The same filters may list other routes by now
+        this._previousSearchParams = null;
+        this._search();
     }
 
     /**
@@ -168,6 +160,14 @@ class CommonDungeonroutePicker extends InlineCode {
         }
 
         return Math.max(0, this.options.max - this._existing.size - this._selected.length);
+    }
+
+    /**
+     * @returns {boolean}
+     * @protected
+     */
+    _syncsWithUrl() {
+        return false;
     }
 
     /**
@@ -187,36 +187,23 @@ class CommonDungeonroutePicker extends InlineCode {
             // Silent, so the change handler does not load a page of its own on top of ours
             select.tomselect.setValue(value, true);
         } else {
-            select.value = value;
+            this.filters.dungeon.setValue(value);
         }
 
         return select.value === value;
     }
 
     /**
-     * @param {Event} event
+     * A filter also reports when it merely lost focus; an unchanged search must not redraw the list under the user.
      * @private
      */
-    _onOpenClicked(event) {
-        event.preventDefault();
-        this.open();
-    }
-
-    /**
-     * @private
-     */
-    _onShow() {
-        if (!this._loaded) {
-            this.reload();
+    _onFilterChanged() {
+        if (!this.dialog.hasBeenShown()) {
+            return;
         }
-    }
 
-    /**
-     * @private
-     */
-    _onTitleSearchInput() {
-        clearTimeout(this._titleSearchTimeout);
-        this._titleSearchTimeout = setTimeout(this.reload.bind(this), 300);
+        this._page = 0;
+        this._search();
     }
 
     /**
@@ -226,87 +213,32 @@ class CommonDungeonroutePicker extends InlineCode {
     _goToPage(direction) {
         let lastPage = Math.max(0, Math.ceil(this._total / this.options.pageSize) - 1);
         this._page = Math.min(lastPage, Math.max(0, this._page + direction));
-        this._load();
-    }
-
-    /**
-     * Builds a request in the DataTables server-side protocol that /ajax/routes speaks.
-     * @returns {Object}
-     * @private
-     */
-    _getRequestData() {
-        let column = function (data, name, searchValue, orderable) {
-            return {
-                data: data,
-                name: name,
-                searchable: 'true',
-                orderable: orderable ? 'true' : 'false',
-                search: {value: searchValue, regex: 'false'},
-            };
-        };
-
-        return $.extend({
-            draw: this._draw,
-            start: this._page * this.options.pageSize,
-            length: this.options.pageSize,
-            columns: [
-                column('title', 'title', ($(this.options.titleSearchSelector).val() || '').trim(), true),
-                column('dungeon', 'dungeon_id', $(this.options.dungeonSelectSelector).val() || '', false),
-                column('affixes', 'affixes.id', $(this.options.affixSelectSelector).val() || [], false),
-                column('routeattributes', 'routeattributes.name', $(this.options.attributesSelectSelector).val() || [], false),
-            ],
-            order: [{column: 0, dir: 'asc'}],
-            search: {value: '', regex: 'false'},
-            requirements: $(this.options.requirementsSelectSelector).val() || [],
-            tags: $(this.options.tagsSelectSelector).val() || [],
-            // The rows draw a route's pull graph, which the endpoint only pays for when asked
-            with_pull_forces: 1,
-        }, this.options.sourceParameters, this.options.lockedParameters);
+        this._search();
     }
 
     /**
      * @private
      */
-    _load() {
+    _search() {
         let self = this;
 
-        if (this._request !== null) {
-            this._request.abort();
-        }
-
-        this._draw++;
-        this._loaded = true;
-        this._setState('loading');
-
-        let draw = this._draw;
-        this._request = $.ajax({
-            type: 'GET',
-            url: this.options.listUrl,
-            dataType: 'json',
-            data: this._getRequestData(),
-            cache: false,
+        super._search({
+            beforeSend: function () {
+                self._setState('loading');
+            },
             success: function (json) {
-                // A slower, older response must not overwrite the newest one
-                if (parseInt(json.draw) !== self._draw) {
-                    return;
-                }
-
                 self._total = json.recordsFiltered;
-                self._renderRows(json.data);
+                self._renderRows(json.data.map(row => new PickerDungeonRoute(row)));
                 self._setState(json.data.length === 0 ? 'empty' : 'loaded');
             },
-            error: function (xhr, textStatus) {
-                if (textStatus !== 'abort') {
-                    self._total = 0;
-                    self._renderRows([]);
-                    self._setState('error');
-                }
+            error: function () {
+                self._total = 0;
+                self._renderRows([]);
+                self._setState('error');
             },
-            complete: function () {
-                if (draw === self._draw) {
-                    self._request = null;
-                }
-            },
+        }, {
+            offset: this._page * this.options.pageSize,
+            limit: this.options.pageSize,
         });
     }
 
@@ -322,7 +254,7 @@ class CommonDungeonroutePicker extends InlineCode {
 
         let from = this._total === 0 ? 0 : this._page * this.options.pageSize + 1;
         let to = Math.min(this._total, (this._page + 1) * this.options.pageSize);
-        $(this.options.rangeSelector).text(state === 'loaded' ? this._format(this.options.rangeText, {
+        $(this.options.rangeSelector).text(state === 'loaded' ? lang.get('js.dungeonroute_picker_range', {
             from: from,
             to: to,
             total: this._total,
@@ -333,69 +265,31 @@ class CommonDungeonroutePicker extends InlineCode {
     }
 
     /**
-     * @param {Object[]} rows
+     * @param {PickerDungeonRoute[]} dungeonRoutes
      * @private
      */
-    _renderRows(rows) {
-        let $list = $(this.options.listSelector).empty();
-        let template = $(this.options.rowTemplateSelector).prop('content').firstElementChild;
+    _renderRows(dungeonRoutes) {
+        let self = this;
+        let template = Handlebars.templates['dungeonroute_picker_row'];
 
-        this._rows = this._getSelectedRows();
-
-        for (let index in rows) {
-            if (!rows.hasOwnProperty(index)) {
-                continue;
+        // A ticked route is kept after it leaves the listing: the host page is handed every route it adds,
+        // and a selection may span pages and filters
+        let kept = {};
+        this._selected.forEach(function (publicKey) {
+            if (typeof self._dungeonRoutes[publicKey] !== 'undefined') {
+                kept[publicKey] = self._dungeonRoutes[publicKey];
             }
+        });
+        this._dungeonRoutes = kept;
 
-            let row = rows[index];
-            let $row = $(template.cloneNode(true));
-            let keyRange = this._getKeyRange(row);
-            let enemyForces = this._getEnemyForcesWarning(row);
-            let ratingCount = parseInt(row.rating_count) || 0;
+        $(this.options.listSelector).html(dungeonRoutes.map(function (dungeonRoute) {
+            self._dungeonRoutes[dungeonRoute.publicKey] = dungeonRoute;
 
-            this._rows[row.public_key] = row;
-
-            $row.attr('data-public-key', row.public_key);
-            $row.find('.route_picker_checkbox').val(row.public_key);
-            $row.find('.route_picker_thumbnail').css('background-image', `url('${this._getThumbnailUrl(row)}')`);
-            $row.find('.route_picker_title').text(row.title);
-            $row.find('.route_picker_dungeon').text(this._translate(row.dungeon.name));
-            $row.find('.route_picker_key_range').text(keyRange).prop('hidden', keyRange === '');
-            $row.find('.route_picker_enemy_forces')
-                .html(`<i class="fas fa-exclamation-triangle"></i> ${enemyForces}`)
-                .prop('hidden', enemyForces === '');
-            $row.find('.route_picker_rating')
-                .html(this._getRatingHtml(row))
-                .attr('title', this._format(this.options.votesText, {'%s': ratingCount}))
-                .prop('hidden', ratingCount === 0);
-            $row.find('.route_picker_pull_graph').html(this._getPullGraphHtml(row));
-            $row.find('.route_picker_views')
-                .html(`<i class="fas fa-eye"></i> ${this._abbreviate(parseInt(row.views) || 0)}`)
-                .attr('title', this._format(this.options.viewsText, {'%s': parseInt(row.views) || 0}));
-            $row.find('.route_picker_unpublished').prop('hidden', row.published !== 'unpublished');
-
-            $list.append($row);
-        }
+            return template($.extend({}, getHandlebarsDefaultVariables(),
+                dungeonRoute.toTemplateData(self.options.fallbackImageBaseUrl)));
+        }).join(''));
 
         this._refreshRows();
-    }
-
-    /**
-     * A ticked route keeps its row after it scrolls off the listing: the host page is handed the row of every
-     * route it adds, and a selection may span pages and filters.
-     * @returns {Object<string, Object>}
-     * @private
-     */
-    _getSelectedRows() {
-        let rows = {};
-
-        for (let publicKey of this._selected) {
-            if (typeof this._rows[publicKey] !== 'undefined') {
-                rows[publicKey] = this._rows[publicKey];
-            }
-        }
-
-        return rows;
     }
 
     /**
@@ -404,24 +298,18 @@ class CommonDungeonroutePicker extends InlineCode {
      */
     _decorateAffixOptions() {
         let affixGroups = this.options.affixGroups || {};
-        let template = typeof Handlebars === 'undefined'
-            ? null
-            : Handlebars.templates['affixgroup_select_option_template'];
+        let template = Handlebars.templates['affixgroup_select_option_template'];
 
-        if (template !== null && typeof template !== 'undefined') {
-            for (let affixGroupId in affixGroups) {
-                if (!affixGroups.hasOwnProperty(affixGroupId)) {
-                    continue;
-                }
-
-                $(`${this.options.affixSelectSelector} option[value='${affixGroupId}']`)
-                    .attr('data-content', template({affixes: affixGroups[affixGroupId]}));
+        for (let affixGroupId in affixGroups) {
+            if (!affixGroups.hasOwnProperty(affixGroupId)) {
+                continue;
             }
+
+            $(`${this.options.affixSelectSelector} option[value='${affixGroupId}']`)
+                .attr('data-content', template({affixes: affixGroups[affixGroupId]}));
         }
 
-        if (typeof refreshSelectPickers === 'function') {
-            refreshSelectPickers();
-        }
+        refreshSelectPickers();
     }
 
     /**
@@ -472,26 +360,22 @@ class CommonDungeonroutePicker extends InlineCode {
      */
     _refreshSelection() {
         let count = this._selected.length;
-        let remaining = this.getRemaining();
+        let plural = count === 0 ? 'none' : (count === 1 ? 'one' : 'many');
 
-        let selectionText = count === 0 ? this.options.selectedNoneText :
-            (count === 1 ? this.options.selectedOneText : this.options.selectedManyText);
-        let addText = count === 0 ? this.options.addNoneText :
-            (count === 1 ? this.options.addOneText : this.options.addManyText);
-
-        $(this.options.selectionSelector).text(this._format(selectionText, {count: count}));
+        $(this.options.selectionSelector).text(lang.get(`js.dungeonroute_picker_selected_${plural}`, {count: count}));
         $(this.options.fullSelector)
-            .text(this._format(this.options.fullText, {max: this.options.max}))
-            .prop('hidden', remaining !== 0);
-        $(this.options.addButtonSelector)
-            .text(this._format(addText, {count: count}))
-            .prop('disabled', count === 0 || this._saving);
+            .text(lang.get('js.dungeonroute_picker_full', {max: this.options.max}))
+            .prop('hidden', this.getRemaining() !== 0);
+        this.dialog.setConfirmButton(
+            lang.get(`js.dungeonroute_picker_add_${plural}`, {count: count}),
+            count > 0 && !this._saving,
+        );
     }
 
     /**
      * @private
      */
-    _add() {
+    _addDungeonRoutes() {
         let self = this;
         let publicKeys = this.getSelectedPublicKeys();
 
@@ -523,7 +407,7 @@ class CommonDungeonroutePicker extends InlineCode {
                 self.close();
             },
             error: function () {
-                $(self.options.statusSelector).text(self.options.addFailedText);
+                self.dialog.setStatus(lang.get('js.dungeonroute_picker_add_failed'));
             },
             complete: function () {
                 self._saving = false;
@@ -539,196 +423,19 @@ class CommonDungeonroutePicker extends InlineCode {
      */
     _reportAdded(publicKeys, response) {
         let self = this;
-        let rows = publicKeys.map(publicKey => self._rows[publicKey]).filter(row => typeof row !== 'undefined');
+        let dungeonRoutes = publicKeys
+            .map(publicKey => self._dungeonRoutes[publicKey])
+            .filter(dungeonRoute => typeof dungeonRoute !== 'undefined');
 
         publicKeys.forEach(publicKey => self._existing.add(publicKey));
         this._selected = [];
         this._refreshRows();
         this._refreshSelection();
 
-        let result = {publicKeys: publicKeys, rows: rows, response: response};
-        $(this.options.drawerSelector).trigger('routepicker:added', [result]);
+        /** @type {CommonDungeonroutePickerResult} */
+        let result = {publicKeys: publicKeys, dungeonRoutes: dungeonRoutes, response: response};
+        this.dialog.trigger('dungeonroutepicker:added', [result]);
         this._onAddedCallbacks.forEach(callback => callback(result));
-    }
-
-    /**
-     * @param {Object} row
-     * @returns {string}
-     * @private
-     */
-    _getThumbnailUrl(row) {
-        if (row.has_thumbnail && row.thumbnails && row.thumbnails.length > 0) {
-            return row.thumbnails[0].url;
-        }
-
-        return `${this.options.fallbackImageBaseUrl}/dungeons/${row.dungeon.expansion.shortname}/${row.dungeon.key}_3-2.jpg`;
-    }
-
-    /**
-     * @param {Object} row
-     * @returns {string}
-     * @private
-     */
-    _getKeyRange(row) {
-        if (row.level_min === null || typeof row.level_min === 'undefined') {
-            return '';
-        }
-
-        if (row.level_max === null || typeof row.level_max === 'undefined' || row.level_min === row.level_max) {
-            return this._format(this.options.keyLevelText, {level: row.level_min});
-        }
-
-        return this._format(this.options.keyRangeText, {min: row.level_min, max: row.level_max});
-    }
-
-    /**
-     * The enemy forces of a route that does not make the required count, like the route rows on the site;
-     * a route that does need not say so.
-     *
-     * @param {Object} row
-     * @returns {string}
-     * @private
-     */
-    _getEnemyForcesWarning(row) {
-        let required = parseInt(row.teeming === 1 ? row.enemy_forces_required_teeming : row.enemy_forces_required) || 0;
-        let enemyForces = parseInt(row.enemy_forces) || 0;
-
-        if (required === 0 || enemyForces >= required) {
-            return '';
-        }
-
-        return this._format(this.options.enemyForcesText, {count: enemyForces, required: required});
-    }
-
-    /**
-     * @param {Object} row
-     * @returns {string} Five stars, half and empty ones included - the markup of common.dungeonroute.rating.
-     * @private
-     */
-    _getRatingHtml(row) {
-        let rating = Math.round(parseFloat(row.rating) || 0);
-        let stars = [];
-
-        for (let star = 1; star <= 5; star++) {
-            if (rating === (star * 2) - 1) {
-                stars.push('<i class="fas fa-star-half-alt"></i>');
-            } else if (rating >= star * 2) {
-                stars.push('<i class="fas fa-star"></i>');
-            } else {
-                stars.push('<i class="far fa-star"></i>');
-            }
-        }
-
-        return stars.join('');
-    }
-
-    /**
-     * The route's "fingerprint": one bar per pull, its height the pull's share of the biggest trash pull,
-     * bosses full height in the accent colour. Mirrors common.dungeonroute.pullgraph, which draws the same
-     * graph on the route rows of the site.
-     *
-     * @param {Object} row
-     * @returns {string}
-     * @private
-     */
-    _getPullGraphHtml(row) {
-        let barWidth = 3;
-        let barGap = 1;
-        let minBar = 2;
-        let maxBars = 30;
-        let chartHeight = 22;
-
-        let pullForces = row.pull_forces || [];
-        // A pull that grants no forces and holds no boss says nothing - drop it before the cap, so it
-        // neither renders as noise nor eats into the bar budget
-        let bars = pullForces.filter(pull => pull.enemy_forces > 0 || pull.has_boss).slice(0, maxBars);
-
-        if (bars.length === 0) {
-            return '';
-        }
-
-        let maxForces = Math.max(0, ...bars.filter(pull => !pull.has_boss).map(pull => pull.enemy_forces));
-        let chartWidth = (bars.length * (barWidth + barGap)) - barGap;
-
-        let rects = bars.map(function (pull, index) {
-            let barHeight = pull.has_boss
-                ? chartHeight
-                : (maxForces > 0 ? Math.max(minBar, Math.round((pull.enemy_forces / maxForces) * chartHeight)) : minBar);
-            let fill = pull.has_boss ? 'rgba(240, 180, 60, 0.9)' : 'currentColor';
-
-            return `<rect x="${index * (barWidth + barGap)}" y="${chartHeight - barHeight}" ` +
-                `width="${barWidth}" height="${barHeight}" fill="${fill}"></rect>`;
-        }).join('');
-
-        let text = pullForces.length === 1 ? this.options.pullsOneText : this.options.pullsManyText;
-        let title = this._escape(this._format(text, {count: pullForces.length}));
-
-        return `<span class="d-inline-flex" data-bs-toggle="tooltip" title="${title}">` +
-            `<svg width="${chartWidth}" height="${chartHeight}" viewBox="0 0 ${chartWidth} ${chartHeight}" ` +
-            `role="img" aria-hidden="true" preserveAspectRatio="none">${rects}</svg></span>`;
-    }
-
-    /**
-     * @param {string} text
-     * @returns {string}
-     * @private
-     */
-    _escape(text) {
-        return $('<div>').text(text).html();
-    }
-
-    /**
-     * Mirrors the abbreviateNumber() PHP helper the route rows render their counts with.
-     * @param {Number} number
-     * @returns {string}
-     * @private
-     */
-    _abbreviate(number) {
-        let round = value => String(parseFloat(value.toFixed(1)));
-
-        if (number >= 1000000) {
-            return `${round(number / 1000000)}M`;
-        }
-
-        if (number >= 1000) {
-            return `${round(number / 1000)}K`;
-        }
-
-        return String(number);
-    }
-
-    /**
-     * @param {string} key
-     * @returns {string}
-     * @private
-     */
-    _translate(key) {
-        return typeof lang !== 'undefined' ? lang.get(key) : key;
-    }
-
-    /**
-     * @param {string} text
-     * @param {Object} replacements
-     * @returns {string}
-     * @private
-     */
-    _format(text, replacements) {
-        let result = text;
-        for (let key in replacements) {
-            if (!replacements.hasOwnProperty(key)) {
-                continue;
-            }
-
-            if (key === '%s') {
-                // The counts the route rows render come from sprintf() strings, not :placeholder ones
-                result = result.split('%s').join(replacements[key]);
-            } else {
-                // The lookahead keeps :to from matching inside :total
-                result = result.replace(new RegExp(`:${key}(?![a-z_])`, 'g'), replacements[key]);
-            }
-        }
-
-        return result;
     }
 }
 

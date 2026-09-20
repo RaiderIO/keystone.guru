@@ -10,21 +10,14 @@
 
 /**
  @typedef {Object} CommonCollectionRoutesOptions
- @property {string|null} pickerInlineId   Inline code id of the route picker; null when routes cannot be added.
- @property {string} pickerSelector
+ @property {string|null} dungeonRoutePickerInlineId   Inline code id of the route picker; null when routes cannot be added.
+ @property {string} dungeonRoutePickerSelector
  @property {string} countSelector
  @property {CommonCollectionRoutesSection[]} sections
  @property {string|null} storeUrl       Null on a collection that does not exist yet, which posts its routes with its form.
  @property {string|null} deleteUrl
  @property {string|null} orderUrl
  @property {Number} max
- @property {string} countText           Contains :count and :max.
- @property {string} addedOneText
- @property {string} addedManyText       Contains :count.
- @property {string} removedText         Contains :name.
- @property {string} undoText
- @property {string} undoneText
- @property {string} saveFailedText
  */
 
 /**
@@ -65,7 +58,7 @@ class CommonCollectionRoutes extends InlineCode {
                 });
         });
 
-        $(this.options.pickerSelector).on('routepicker:added', function (event, result) {
+        $(this.options.dungeonRoutePickerSelector).on('dungeonroutepicker:added', function (event, result) {
             self._onAdded(result);
         });
 
@@ -84,7 +77,7 @@ class CommonCollectionRoutes extends InlineCode {
     }
 
     /**
-     * @param {{publicKeys: string[], rows: Object[], response: *}} result
+     * @param {CommonDungeonroutePickerResult} result
      * @private
      */
     _onAdded(result) {
@@ -93,8 +86,9 @@ class CommonCollectionRoutes extends InlineCode {
 
         this._insert(dungeonRoutes);
 
-        let text = dungeonRoutes.length === 1 ? this.options.addedOneText : this.options.addedManyText;
-        text = text.replace(':count', dungeonRoutes.length);
+        let text = dungeonRoutes.length === 1
+            ? lang.get('js.collection_dungeonroutes_added_one')
+            : lang.get('js.collection_dungeonroutes_added_many', {count: dungeonRoutes.length});
 
         // Nothing was stored, so there is nothing to undo - removing a route from the list is one click
         if (this._isLocal) {
@@ -106,18 +100,25 @@ class CommonCollectionRoutes extends InlineCode {
         let publicKeys = dungeonRoutes.map(dungeonRoute => dungeonRoute.publicKey);
 
         this._showUndoableToast(text, function () {
-            self._request('DELETE', self.options.deleteUrl, publicKeys, function () {
-                publicKeys.forEach(publicKey => self._removeFromLists(publicKey));
-                showInfoNotification(self.options.undoneText);
+            $.ajax({
+                type: 'DELETE',
+                url: self.options.deleteUrl,
+                dataType: 'json',
+                data: {dungeon_routes: publicKeys},
+                success: function () {
+                    publicKeys.forEach(publicKey => self._removeFromLists(publicKey));
+                    showInfoNotification(lang.get('js.collection_dungeonroutes_undone'));
+                },
+                error: self._onSaveFailed.bind(self),
             });
         });
     }
 
     /**
-     * The picker reports the rows it picked from; a collection that saves at once reports what it stored
+     * The picker reports the routes it picked from; a collection that saves at once reports what it stored
      * instead, which is what the lists are filled from then.
      *
-     * @param {{publicKeys: string[], rows: Object[], response: *}} result
+     * @param {CommonDungeonroutePickerResult} result
      * @returns {{publicKey: string, title: string, dungeonId: Number|null, dungeonName: string, detail: Object|null}[]}
      * @private
      */
@@ -136,15 +137,12 @@ class CommonCollectionRoutes extends InlineCode {
             }));
         }
 
-        return (result.rows || []).map(row => ({
-            publicKey:   row.public_key,
-            title:       row.title,
-            dungeonId:   row.dungeon.id,
-            dungeonName: typeof lang !== 'undefined' ? lang.get(row.dungeon.name) : row.dungeon.name,
-            detail:      this._enemyForcesDetail(
-                row.enemy_forces,
-                row.teeming === 1 ? row.enemy_forces_required_teeming : row.enemy_forces_required,
-            ),
+        return (result.dungeonRoutes || []).map(dungeonRoute => ({
+            publicKey:   dungeonRoute.publicKey,
+            title:       dungeonRoute.title,
+            dungeonId:   dungeonRoute.dungeonId,
+            dungeonName: dungeonRoute.getDungeonName(),
+            detail:      this._enemyForcesDetail(dungeonRoute.getEnemyForces(), dungeonRoute.getEnemyForcesRequired()),
         }));
     }
 
@@ -190,27 +188,60 @@ class CommonCollectionRoutes extends InlineCode {
         let orderedSelect = this._getOrderedSelect(section);
         let previousSectionOrder = previousOrder.filter(id => id === publicKey || orderedSelect.getIds().includes(id));
 
-        this._request('DELETE', this.options.deleteUrl, [publicKey], function () {
-            // What the server now stores; moves still waiting for their debounced save must stay unsaved
-            self._savedOrder = self._savedOrder.filter(id => id !== publicKey);
-            self._refreshPicker();
+        $.ajax({
+            type: 'DELETE',
+            url: this.options.deleteUrl,
+            dataType: 'json',
+            data: {dungeon_routes: [publicKey]},
+            success: function () {
+                // What the server now stores; moves still waiting for their debounced save must stay unsaved
+                self._savedOrder = self._savedOrder.filter(id => id !== publicKey);
+                self._refreshPicker();
 
-            // The picker cannot offer a route back into a section it does not fill, so there is nothing to undo
-            let undo = section.canAdd ? function () {
-                self._request('POST', self.options.storeUrl, [publicKey], function (response) {
-                    self._insert(self._toDungeonRoutes({publicKeys: [publicKey], rows: [], response: response}));
-                    orderedSelect.setIds(previousSectionOrder);
-                    self._saveOrder(function () {
-                        showInfoNotification(self.options.undoneText);
-                    });
+                // The picker cannot offer a route back into a section it does not fill, so there is nothing to undo
+                let undo = section.canAdd
+                    ? self._undoRemoval.bind(self, publicKey, orderedSelect, previousSectionOrder)
+                    : null;
+
+                self._showUndoableToast(
+                    lang.get('js.collection_dungeonroutes_removed', {name: self._escape(removed.name)}),
+                    undo,
+                );
+            },
+            error: function () {
+                self._onSaveFailed();
+
+                orderedSelect.addItem(publicKey, removed.name, removed.detail);
+                orderedSelect.setIds(previousSectionOrder);
+                self._refreshCount();
+            },
+        });
+    }
+
+    /**
+     * Adds a removed route again - the server appends it - and then stores the order it was removed from.
+     *
+     * @param {string} publicKey
+     * @param {CommonFormsOrderedselect} orderedSelect
+     * @param {string[]} previousSectionOrder
+     * @private
+     */
+    _undoRemoval(publicKey, orderedSelect, previousSectionOrder) {
+        let self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: this.options.storeUrl,
+            dataType: 'json',
+            data: {dungeon_routes: [publicKey]},
+            success: function (response) {
+                self._insert(self._toDungeonRoutes({publicKeys: [publicKey], dungeonRoutes: [], response: response}));
+                orderedSelect.setIds(previousSectionOrder);
+                self._saveOrder(function () {
+                    showInfoNotification(lang.get('js.collection_dungeonroutes_undone'));
                 });
-            } : null;
-
-            self._showUndoableToast(self.options.removedText.replace(':name', self._escape(removed.name)), undo);
-        }, function () {
-            orderedSelect.addItem(publicKey, removed.name, removed.detail);
-            orderedSelect.setIds(previousSectionOrder);
-            self._refreshCount();
+            },
+            error: this._onSaveFailed.bind(this),
         });
     }
 
@@ -258,18 +289,27 @@ class CommonCollectionRoutes extends InlineCode {
 
         this._orderSaving = true;
 
-        this._request('PUT', this.options.orderUrl, order, function () {
-            self._savedOrder  = order;
-            self._orderSaving = false;
-            if (typeof onSaved === 'function') {
-                onSaved();
-            }
+        $.ajax({
+            type: 'PUT',
+            url: this.options.orderUrl,
+            dataType: 'json',
+            data: {dungeon_routes: order},
+            success: function () {
+                self._savedOrder  = order;
+                self._orderSaving = false;
+                if (typeof onSaved === 'function') {
+                    onSaved();
+                }
 
-            self._saveQueuedOrder();
-        }, function () {
-            self._orderSaving = false;
-            self._restoreOrder(self._savedOrder);
-            self._saveQueuedOrder();
+                self._saveQueuedOrder();
+            },
+            error: function () {
+                self._onSaveFailed();
+
+                self._orderSaving = false;
+                self._restoreOrder(self._savedOrder);
+                self._saveQueuedOrder();
+            },
         });
     }
 
@@ -380,7 +420,7 @@ class CommonCollectionRoutes extends InlineCode {
         let self = this;
         let count = this._getOrder().length;
 
-        $(this.options.countSelector).text(this.options.countText.replace(':count', count).replace(':max', this.options.max));
+        $(this.options.countSelector).text(lang.get('js.collection_dungeonroutes_count', {count: count, max: this.options.max}));
         this.options.sections.forEach(section => self._getOrderedSelect(section).setFullCount(count));
     }
 
@@ -395,30 +435,10 @@ class CommonCollectionRoutes extends InlineCode {
     }
 
     /**
-     * @param {string} type
-     * @param {string} url
-     * @param {string[]} publicKeys
-     * @param {Function} onSuccess
-     * @param {Function|null} onError
      * @private
      */
-    _request(type, url, publicKeys, onSuccess, onError = null) {
-        let self = this;
-
-        $.ajax({
-            type: type,
-            url: url,
-            dataType: 'json',
-            data: {dungeon_routes: publicKeys},
-            success: onSuccess,
-            error: function () {
-                showErrorNotification(self.options.saveFailedText);
-
-                if (typeof onError === 'function') {
-                    onError();
-                }
-            },
-        });
+    _onSaveFailed() {
+        showErrorNotification(lang.get('js.collection_dungeonroutes_save_failed'));
     }
 
     /**
@@ -433,7 +453,7 @@ class CommonCollectionRoutes extends InlineCode {
             opts = {
                 timeout: 8000,
                 buttons: [
-                    Noty.button(this.options.undoText, 'btn btn-sm btn-light collection_routes_undo', function (noty) {
+                    Noty.button(lang.get('js.collection_dungeonroutes_undo'), 'btn btn-sm btn-light collection_routes_undo', function (noty) {
                         noty.close();
                         undo();
                     }),
@@ -468,7 +488,9 @@ class CommonCollectionRoutes extends InlineCode {
      * @private
      */
     _getPicker() {
-        return this.options.pickerInlineId === null ? null : _inlineManager.getInlineCodeById(this.options.pickerInlineId);
+        return this.options.dungeonRoutePickerInlineId === null
+            ? null
+            : _inlineManager.getInlineCodeById(this.options.dungeonRoutePickerInlineId);
     }
 }
 

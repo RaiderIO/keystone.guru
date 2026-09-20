@@ -1,11 +1,11 @@
 /**
  @typedef {Object} CommonCollectionDetailsOptions
- @property {string} routesSelector       The routes section, swapped as a whole when the season changes.
- @property {string} loadingSelector      Shown while the section is being rebuilt.
- @property {string} errorSelector        Shown when rebuilding the section failed.
- @property {string} seasonSelector       The season radios; absent on a game version without seasons.
- @property {string} formUrl              The new-collection form, which renders the section for the season_id it is given.
- @property {string} seasonNone           The season_id value that asks for a free-form collection.
+ @property {string} dungeonRoutesSelector  The routes section, swapped as a whole when the season changes.
+ @property {string} loadingSelector        Shown while the section is being rebuilt.
+ @property {string} errorSelector          Shown when rebuilding the section failed.
+ @property {string} seasonSelector         The season radios; absent on a game version without seasons.
+ @property {string} formUrl                The new-collection form, which renders the section for the season_id it is given.
+ @property {string} seasonNone             The season_id value that asks for a free-form collection.
  */
 
 /**
@@ -31,9 +31,9 @@ class CommonCollectionDetails extends InlineCode {
     _onSeasonChanged() {
         let seasonId = String($(`${this.options.seasonSelector}:checked`).val() ?? '');
         let requestNumber = ++this._requestCount;
-        let $routes = $(this.options.routesSelector);
+        let $dungeonRoutes = $(this.options.dungeonRoutesSelector);
 
-        $routes.attr('aria-busy', 'true').find('input, select, button').prop('disabled', true);
+        $dungeonRoutes.attr('aria-busy', 'true').find('input, select, button').prop('disabled', true);
         $(this.options.loadingSelector).prop('hidden', false);
         $(this.options.errorSelector).prop('hidden', true);
 
@@ -55,12 +55,12 @@ class CommonCollectionDetails extends InlineCode {
                 }
 
                 let $replacement = $(new DOMParser().parseFromString(html, 'text/html'))
-                    .find(this.options.routesSelector);
+                    .find(this.options.dungeonRoutesSelector);
                 if ($replacement.length === 0) {
                     throw new Error('The response holds no routes section');
                 }
 
-                $(this.options.routesSelector).replaceWith($replacement);
+                $(this.options.dungeonRoutesSelector).replaceWith($replacement);
                 this._activateInlineCode($replacement);
                 $(this.options.loadingSelector).prop('hidden', true);
             })
@@ -70,7 +70,7 @@ class CommonCollectionDetails extends InlineCode {
                 }
 
                 console.error(error);
-                $(this.options.routesSelector).removeAttr('aria-busy');
+                $(this.options.dungeonRoutesSelector).removeAttr('aria-busy');
                 $(this.options.loadingSelector).prop('hidden', true);
                 $(this.options.errorSelector).prop('hidden', false);
             });

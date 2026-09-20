@@ -136,7 +136,7 @@ foreach ($teams as $team) {
 
 @if($isNew)
 @include('common.general.inline', ['path' => 'common/collection/details', 'options' => [
-    'routesSelector' => '#collection_routes',
+    'dungeonRoutesSelector' => '#collection_routes',
     'loadingSelector' => '#collection_routes_loading',
     'errorSelector' => '#collection_routes_error',
     'seasonSelector' => 'input[name="season_id"]',

@@ -11,7 +11,7 @@ globalThis.InlineCode = InlineCode;
 const {CommonCollectionDetails} = require('./details');
 
 const OPTIONS = {
-    routesSelector:  '#collection_routes',
+    dungeonRoutesSelector:  '#collection_routes',
     loadingSelector: '#collection_routes_loading',
     errorSelector:   '#collection_routes_error',
     seasonSelector:  'input[name="season_id"]',

@@ -27,19 +27,19 @@ $isNew                  = $dungeonRouteCollection === null;
 
 // A route of a dungeon outside the season's pool has no section of its own, so the sections are not the whole
 // collection - an existing collection counts its own routes instead
-$memberDungeonRoutes = $isNew
+$collectionDungeonRoutes = $isNew
     ? $editSections->flatMap(static fn(DungeonRouteCollectionGroup $editSection): Collection => $editSection->dungeonRoutes)
         ->unique('id')
         ->values()
     : $dungeonRouteCollection->dungeonRoutes;
-$memberCount = $memberDungeonRoutes->count();
-$pickerId    = 'collection_route_picker';
+$collectionDungeonRouteCount = $collectionDungeonRoutes->count();
+$pickerId                    = 'collection_route_picker';
 // A route may only be added to a dungeon the collection actually covers; a free-form collection covers every dungeon
 $poolDungeonIds = $selectedSeason?->dungeons->pluck('id')->all() ?? [];
 
 // A route's enemy forces against what its mapping version requires, flagged when the route falls short. Dungeons
 // that require none (most classic ones) get no detail.
-$enemyForcesDetails = $memberDungeonRoutes
+$enemyForcesDetails = $collectionDungeonRoutes
     ->filter(static fn(DungeonRoute $dungeonRoute): bool => $dungeonRoute->mappingVersion?->enemy_forces_required > 0)
     ->mapWithKeys(static fn(DungeonRoute $dungeonRoute): array => [
         $dungeonRoute->public_key => [
@@ -73,7 +73,7 @@ $orderedSelectOptions = static function (array $section) use (
     $enemyForcesDetails,
     $formId,
     $mayAddDungeonRoutes,
-    $memberCount,
+    $collectionDungeonRouteCount,
 ): array {
     /** @var DungeonRouteCollectionGroup $editSection */
     $editSection = $section['section'];
@@ -86,7 +86,7 @@ $orderedSelectOptions = static function (array $section) use (
         'ajax'              => true,
         'showCount'         => $dungeonName !== null,
         'countText'         => __('view_common.collection.details.dungeon_routes_slot_count'),
-        'fullCount'         => $memberCount,
+        'fullCount'         => $collectionDungeonRouteCount,
         'showAdd'           => $mayAddDungeonRoutes && $section['canAdd'],
         'label'             => $dungeonName ?? __('view_common.collection.details.dungeon_routes'),
         'labelClass'        => 'form-label fw-bold',
@@ -113,10 +113,10 @@ $flatSections = array_values(array_filter($sections, static fn(array $section): 
 
 $inlineId      = 'collection_routes_inline';
 $inlineOptions = [
-    'pickerInlineId' => $mayAddDungeonRoutes ? $pickerId : null,
-    'pickerSelector' => sprintf('#%s', $pickerId),
-    'countSelector'  => '#collection_routes_count',
-    'sections'       => array_map(static fn(array $section): array => [
+    'dungeonRoutePickerInlineId' => $mayAddDungeonRoutes ? $pickerId : null,
+    'dungeonRoutePickerSelector' => sprintf('#%s', $pickerId),
+    'countSelector'              => '#collection_routes_count',
+    'sections'                   => array_map(static fn(array $section): array => [
         'inlineId'          => $section['inlineId'],
         'rootSelector'      => sprintf('#%s', $section['id']),
         'addButtonSelector' => sprintf('#%s_add_button', $section['id']),
@@ -125,17 +125,10 @@ $inlineOptions = [
         'withDungeonName'   => $section['dungeonId'] === null,
     ], $sections),
     // A collection that does not exist yet has nothing to save to: its routes are posted with the form that creates it
-    'deleteUrl'      => $isNew ? null : route('ajax.collection.routes.delete', ['dungeonRouteCollection' => $dungeonRouteCollection]),
-    'orderUrl'       => $isNew ? null : route('ajax.collection.routes.order', ['dungeonRouteCollection' => $dungeonRouteCollection]),
-    'storeUrl'       => $isNew ? null : route('ajax.collection.routes.store', ['dungeonRouteCollection' => $dungeonRouteCollection]),
-    'max'            => DungeonRouteCollection::MAX_ROUTES,
-    'countText'      => __('view_common.collection.routes.count'),
-    'addedOneText'   => __('view_common.collection.routes.added_one'),
-    'addedManyText'  => __('view_common.collection.routes.added_many'),
-    'removedText'    => __('view_common.collection.routes.removed'),
-    'undoText'       => __('view_common.collection.routes.undo'),
-    'undoneText'     => __('view_common.collection.routes.undone'),
-    'saveFailedText' => __('view_common.collection.routes.save_failed'),
+    'deleteUrl'                  => $isNew ? null : route('ajax.collection.routes.delete', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+    'orderUrl'                   => $isNew ? null : route('ajax.collection.routes.order', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+    'storeUrl'                   => $isNew ? null : route('ajax.collection.routes.store', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+    'max'                        => DungeonRouteCollection::MAX_ROUTES,
 ];
 ?>
 {{-- The data-inline-* attributes let a script activate this section again after swapping it into the page --}}
@@ -145,7 +138,7 @@ $inlineOptions = [
     <div class="d-flex align-items-baseline mb-2">
         <h2 id="collection_routes_heading" class="h4 mb-0">{{ __('view_common.collection.routes.heading') }}</h2>
         <span id="collection_routes_count" class="text-body-secondary ms-auto">
-            {{ __('view_common.collection.routes.count', ['count' => $memberCount, 'max' => DungeonRouteCollection::MAX_ROUTES]) }}
+            {{ __('view_common.collection.routes.count', ['count' => $collectionDungeonRouteCount, 'max' => DungeonRouteCollection::MAX_ROUTES]) }}
         </span>
     </div>
     <p class="form-text text-body-secondary mt-0">
@@ -205,7 +198,7 @@ $inlineOptions = [
             'lockedGameVersion' => $selectedGameVersion,
             'lockedSeason' => $selectedSeason,
             'preselectedDungeon' => null,
-            'existingPublicKeys' => $memberDungeonRoutes->pluck('public_key')->all(),
+            'existingPublicKeys' => $collectionDungeonRoutes->pluck('public_key')->all(),
             'max' => DungeonRouteCollection::MAX_ROUTES,
             // A new collection has nothing to post to yet: its routes are added to the form and saved with it
             'addUrl' => $isNew ? null : route('ajax.collection.routes.store', ['dungeonRouteCollection' => $dungeonRouteCollection]),

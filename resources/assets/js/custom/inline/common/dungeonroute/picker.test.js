@@ -8,12 +8,53 @@
 // `bootstrap.Offcanvas` is stubbed, since jsdom has neither a server nor Bootstrap.
 // ---------------------------------------------------------------------------
 
-const jQuery = require('jquery');
+const fs         = require('node:fs');
+const path       = require('node:path');
+const jQuery     = require('jquery');
+const Handlebars = require('handlebars');
+const Lang       = require('lang.js');
 
 const {InlineCode}    = require('../../inlinecode');
 globalThis.InlineCode = InlineCode;
 
+const {SearchInlineBase}    = require('../../base/searchinlinebase');
+globalThis.SearchInlineBase = SearchInlineBase;
+globalThis.SearchParams     = require('../search/searchparams').SearchParams;
+globalThis.SearchHandler    = require('../search/searchhandler').SearchHandler;
+globalThis.SearchHandlerDungeonRoutePicker = require('../search/searchhandlerdungeonroutepicker').SearchHandlerDungeonRoutePicker;
+globalThis.SearchFilter            = require('../search/filters/filter').SearchFilter;
+globalThis.SearchFilterInput       = require('../search/filters/filterinput').SearchFilterInput;
+globalThis.SearchFilterInputChange = require('../search/filters/filterinputchange').SearchFilterInputChange;
+globalThis.SearchFilterInputText   = require('../search/filters/filterinputtext').SearchFilterInputText;
+globalThis.SearchFilterTitle       = require('../search/filters/filterinputtexttitle').SearchFilterTitle;
+globalThis.DrawerDialog            = require('../drawer/drawerdialog').DrawerDialog;
+globalThis.PickerDungeonRoute      = require('./pickerdungeonroute').PickerDungeonRoute;
+
 const {CommonDungeonroutePicker} = require('./picker');
+
+const MESSAGES = {
+    'en.js':       {
+        dungeonroute_picker_range:             ':from-:to of :total',
+        dungeonroute_picker_already_in_label:  'Already added',
+        dungeonroute_picker_unpublished_label: 'Unpublished',
+        dungeonroute_picker_key_level:         '+:level',
+        dungeonroute_picker_key_range:         '+:min - +:max',
+        dungeonroute_picker_enemy_forces:      ':count/:required',
+        dungeonroute_picker_pulls_one:         '1 pull',
+        dungeonroute_picker_pulls_many:        ':count pulls',
+        dungeonroute_picker_views:             ':count views',
+        dungeonroute_picker_votes:             ':count votes',
+        dungeonroute_picker_selected_none:     'None selected',
+        dungeonroute_picker_selected_one:      '1 selected',
+        dungeonroute_picker_selected_many:     ':count selected',
+        dungeonroute_picker_full:              'Limit is :max',
+        dungeonroute_picker_add_none:          'Add routes',
+        dungeonroute_picker_add_one:           'Add 1 route',
+        dungeonroute_picker_add_many:          'Add :count routes',
+        dungeonroute_picker_add_failed:        'Adding failed',
+    },
+    'en.dungeons': {ara_kara: 'Ara-Kara'},
+};
 
 const OPTIONS = {
     drawerSelector:             '#picker',
@@ -25,7 +66,6 @@ const OPTIONS = {
     requirementsSelectSelector: '#picker_requirements',
     tagsSelectSelector:         '#picker_tags',
     listSelector:               '#picker_list',
-    rowTemplateSelector:        '#picker_row_template',
     loadingSelector:            '#picker_loading',
     emptySelector:              '#picker_empty',
     errorSelector:              '#picker_error',
@@ -45,23 +85,7 @@ const OPTIONS = {
     addUrl:                     '/target/add',
     addFieldName:               'dungeon_routes',
     fallbackImageBaseUrl:       'https://assets/images',
-    rangeText:                  ':from-:to of :total',
-    keyLevelText:               '+:level',
-    keyRangeText:               '+:min - +:max',
-    enemyForcesText:            ':count/:required',
-    viewsText:                  '%s views',
-    pullsOneText:               '1 pull',
-    pullsManyText:              ':count pulls',
-    votesText:                  '%s votes',
     affixGroups:                {7: [{class: 'fortified', name: 'Fortified'}]},
-    selectedNoneText:           'None selected',
-    selectedOneText:            '1 selected',
-    selectedManyText:           ':count selected',
-    fullText:                   'Limit is :max',
-    addNoneText:                'Add routes',
-    addOneText:                 'Add 1 route',
-    addManyText:                'Add :count routes',
-    addFailedText:              'Adding failed',
 };
 
 /**
@@ -86,7 +110,7 @@ function route(publicKey, overrides = {}) {
         pull_forces:                   [{enemy_forces: 40, has_boss: false}, {enemy_forces: 0, has_boss: true}],
         has_thumbnail:                 false,
         thumbnails:                    [],
-        dungeon:                       {name: 'dungeons.ara_kara', key: 'arakara', expansion: {shortname: 'tww'}},
+        dungeon:                       {id: 3, name: 'dungeons.ara_kara', key: 'arakara', expansion: {shortname: 'tww'}},
     }, overrides);
 }
 
@@ -110,38 +134,12 @@ const MARKUP = `
                 <span id="picker_full" hidden></span>
                 <button id="picker_add"></button>
                 <div id="picker_status"></div>
-                <template id="picker_row_template">
-                    <li class="route_picker_row card_dungeonroute leaderboard_row">
-                        <label class="route_picker_row_label">
-                            <span class="leaderboard_rank">
-                                <input type="checkbox" class="route_picker_checkbox">
-                            </span>
-                            <span class="leaderboard_row_inner">
-                                <span class="leaderboard_thumbnail route_picker_thumbnail"></span>
-                                <span class="leaderboard_main">
-                                    <span class="leaderboard_title">
-                                        <span class="route_picker_title"></span>
-                                        <span class="route_picker_unpublished" hidden></span>
-                                        <span class="route_picker_already_in" hidden></span>
-                                    </span>
-                                    <span class="leaderboard_author route_picker_dungeon"></span>
-                                </span>
-                                <span class="leaderboard_stats">
-                                    <span class="leaderboard_enemy_forces route_picker_enemy_forces" hidden></span>
-                                    <span class="leaderboard_rating route_picker_rating" hidden></span>
-                                    <span class="leaderboard_level_chip route_picker_key_range" hidden></span>
-                                    <span class="leaderboard_pull_graph route_picker_pull_graph"></span>
-                                    <span class="leaderboard_views route_picker_views"></span>
-                                </span>
-                            </span>
-                        </label>
-                    </li>
-                </template>
             </div>`;
 
 describe('CommonDungeonroutePicker', () => {
     let previousJquery;
     let previousBootstrap;
+    const templatesDir = path.join(__dirname, '../../../../handlebars');
     let ajaxCalls;
     let offcanvas;
     let picker;
@@ -151,11 +149,27 @@ describe('CommonDungeonroutePicker', () => {
         previousBootstrap = globalThis.bootstrap;
         globalThis.$      = jQuery;
 
+        globalThis.lang = new Lang({messages: MESSAGES, locale: 'en'});
+        globalThis.refreshSelectPickers          = vi.fn();
+        globalThis.getHandlebarsDefaultVariables = () => MESSAGES['en.js'];
+        globalThis.Handlebars                    = Handlebars;
+        Handlebars.templates = {};
+        ['dungeonroute_picker_row', 'affixgroup_select_option_template'].forEach((name) => {
+            Handlebars.templates[name] = Handlebars.compile(
+                fs.readFileSync(path.join(templatesDir, `${name}.handlebars`), 'utf8'),
+            );
+        });
+
         ajaxCalls = [];
         jQuery.ajax = vi.fn((settings) => {
             ajaxCalls.push(settings);
+            if (typeof settings.beforeSend === 'function') {
+                settings.beforeSend();
+            }
 
-            return {abort: vi.fn()};
+            settings.xhr = {abort: vi.fn()};
+
+            return settings.xhr;
         });
 
         offcanvas = {show: vi.fn(), hide: vi.fn()};
@@ -180,8 +194,8 @@ describe('CommonDungeonroutePicker', () => {
      */
     function respondWithRoutes(rows, total = rows.length) {
         const request = ajaxCalls.filter((call) => call.type === 'GET').pop();
-        request.success({draw: request.data.draw, recordsFiltered: total, data: rows});
-        request.complete();
+        request.success({draw: request.data.draw, recordsFiltered: total, data: rows}, 'success', {status: 200});
+        request.complete({}, 'success');
     }
 
     /**
@@ -227,7 +241,7 @@ describe('CommonDungeonroutePicker', () => {
 
     it('open_givenADungeonAfterTheFirstLoad_putsTheDungeonFilterOnItAndLoadsAgain', () => {
         // Arrange
-        picker.reload();
+        jQuery('#picker').trigger('show.bs.offcanvas');
         respondWithRoutes([route('a')]);
 
         // Act
@@ -242,7 +256,7 @@ describe('CommonDungeonroutePicker', () => {
 
     it('open_givenTheDungeonTheFilterIsAlreadyOn_doesNotLoadAgain', () => {
         // Arrange
-        picker.reload();
+        jQuery('#picker').trigger('show.bs.offcanvas');
         respondWithRoutes([route('a')]);
 
         // Act
@@ -269,11 +283,10 @@ describe('CommonDungeonroutePicker', () => {
         expect(existing.querySelector('.route_picker_already_in').hidden).toBe(false);
         expect(existing.querySelector('.route_picker_key_range').textContent).toBe('+2 - +10');
         // Enough enemy forces, so the row says nothing about them - just like the route rows on the site
-        expect(existing.querySelector('.route_picker_enemy_forces').hidden).toBe(true);
+        expect(existing.querySelector('.route_picker_enemy_forces')).toBeNull();
         expect(existing.querySelector('.route_picker_views').textContent).toContain('1.5K');
         expect(existing.querySelector('.route_picker_views').getAttribute('title')).toBe('1500 views');
-        expect(existing.querySelector('.route_picker_rating').hidden).toBe(false);
-        expect(existing.querySelector('.route_picker_rating').getAttribute('title')).toBe('4 votes');
+                expect(existing.querySelector('.route_picker_rating').getAttribute('title')).toBe('4 votes');
         expect(existing.querySelector('.route_picker_rating').querySelectorAll('.fas.fa-star')).toHaveLength(4);
         expect(existing.querySelector('.route_picker_thumbnail').style.backgroundImage)
             .toContain('https://assets/images/dungeons/tww/arakara_3-2.jpg');
@@ -286,10 +299,10 @@ describe('CommonDungeonroutePicker', () => {
 
         const fresh = rowOf('fresh');
         expect(fresh.querySelector('.route_picker_checkbox').disabled).toBe(false);
-        expect(fresh.querySelector('.route_picker_unpublished').hidden).toBe(false);
+        expect(fresh.querySelector('.route_picker_unpublished')).not.toBeNull();
+        expect(existing.querySelector('.route_picker_unpublished')).toBeNull();
         expect(fresh.querySelector('.route_picker_key_range').textContent).toBe('+2');
-        expect(fresh.querySelector('.route_picker_enemy_forces').hidden).toBe(false);
-        expect(fresh.querySelector('.route_picker_enemy_forces').textContent).toContain('290/300');
+                expect(fresh.querySelector('.route_picker_enemy_forces').textContent).toContain('290/300');
         expect(fresh.querySelector('.route_picker_thumbnail').style.backgroundImage).toContain('https://thumb/1.jpg');
 
         expect(document.querySelector('#picker_range').textContent).toBe('1-2 of 5');
@@ -307,7 +320,7 @@ describe('CommonDungeonroutePicker', () => {
         // Assert
         const graph = rowOf('a').querySelector('.route_picker_pull_graph');
         expect(graph).not.toBeNull();
-        expect(graph.innerHTML).toBe('');
+        expect(graph.innerHTML.trim()).toBe('');
     });
 
     it('load_givenNoRoutes_showsTheEmptyState', () => {
@@ -322,19 +335,94 @@ describe('CommonDungeonroutePicker', () => {
         expect(document.querySelector('#picker_next').disabled).toBe(true);
     });
 
-    it('load_givenAnOlderResponseArrivesLast_keepsTheNewestRows', () => {
+    it('reload_givenARequestStillInFlight_abortsItSoItCannotOverwriteTheNewestRows', () => {
         // Arrange
         picker.reload();
         const olderRequest = ajaxCalls[0];
-        picker.reload();
-        respondWithRoutes([route('newest')]);
 
         // Act
-        olderRequest.success({draw: olderRequest.data.draw, recordsFiltered: 1, data: [route('stale')]});
+        picker.reload();
 
         // Assert
-        expect(rowOf('newest')).not.toBeNull();
-        expect(rowOf('stale')).toBeNull();
+        expect(olderRequest.xhr.abort).toHaveBeenCalledTimes(1);
+        expect(ajaxCalls).toHaveLength(2);
+    });
+
+    it('titleFilter_givenItLosesFocusUnchanged_keepsTheListedRowsAndTheirTicks', () => {
+        // Arrange
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        respondWithRoutes([route('a')]);
+        tick('a');
+
+        // Act
+        jQuery('#picker_title_search').trigger('focusout');
+
+        // Assert
+        expect(ajaxCalls).toHaveLength(1);
+        expect(rowOf('a').querySelector('.route_picker_checkbox').checked).toBe(true);
+    });
+
+    it('titleFilter_givenANewTitleAndEnter_listsTheFirstPageForIt', () => {
+        // Arrange
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        respondWithRoutes([route('a'), route('b')], 5);
+        document.querySelector('#picker_next').click();
+        respondWithRoutes([route('c')], 5);
+        document.querySelector('#picker_title_search').value = 'Fort';
+
+        // Act
+        jQuery('#picker_title_search').trigger(jQuery.Event('keydown', {keyCode: 13}));
+
+        // Assert
+        expect(ajaxCalls).toHaveLength(3);
+        expect(ajaxCalls[2].data.start).toBe(0);
+        expect(ajaxCalls[2].data.columns[0].search.value).toBe('Fort');
+    });
+
+    it('dungeonFilter_givenAChangeBeforeTheDrawerWasEverShown_doesNotListYet', () => {
+        // Act
+        jQuery('#picker_dungeon').val('3').trigger('change');
+
+        // Assert
+        expect(ajaxCalls).toHaveLength(0);
+    });
+
+    it('reload_givenUnchangedFilters_listsTheRoutesAgain', () => {
+        // Arrange
+        picker.reload();
+        respondWithRoutes([route('a')]);
+
+        // Act
+        picker.reload();
+
+        // Assert
+        expect(ajaxCalls).toHaveLength(2);
+    });
+
+    it('load_givenTheRequestFails_showsTheErrorState', () => {
+        // Arrange
+        picker.reload();
+
+        // Act
+        ajaxCalls[0].error({}, 'error');
+
+        // Assert
+        expect(document.querySelector('#picker_error').hidden).toBe(false);
+        expect(document.querySelector('#picker_list').children).toHaveLength(0);
+    });
+
+    it('activate_givenQueryParametersNamedLikeAFilter_leavesTheFiltersAndTheUrlAlone', () => {
+        // Arrange
+        globalThis.getQueryParams = vi.fn(() => ({title: 'from the url'}));
+        const pushState = vi.spyOn(history, 'pushState');
+
+        // Act
+        picker.reload();
+
+        // Assert
+        expect(globalThis.getQueryParams).not.toHaveBeenCalled();
+        expect(pushState).not.toHaveBeenCalled();
+        expect(ajaxCalls[0].data.columns[0].search.value).toBe('');
     });
 
     it('goToPage_givenNext_requestsTheNextPage', () => {
@@ -436,7 +524,7 @@ describe('CommonDungeonroutePicker', () => {
         // Assert
         expect(callback).toHaveBeenCalledWith({
             publicKeys: ['a', 'c'],
-            rows:       [expect.objectContaining({public_key: 'a'}), expect.objectContaining({public_key: 'c'})],
+            dungeonRoutes: [expect.objectContaining({publicKey: 'a'}), expect.objectContaining({publicKey: 'c'})],
             response:   null,
         });
     });
@@ -450,7 +538,7 @@ describe('CommonDungeonroutePicker', () => {
         const callback = vi.fn();
         const eventHandler = vi.fn();
         picker.onAdded(callback);
-        jQuery('#picker').on('routepicker:added', eventHandler);
+        jQuery('#picker').on('dungeonroutepicker:added', eventHandler);
 
         // Act
         document.querySelector('#picker_add').click();
@@ -488,7 +576,7 @@ describe('CommonDungeonroutePicker', () => {
         expect(ajaxCalls.filter((call) => call.type === 'POST')).toHaveLength(0);
         expect(callback).toHaveBeenCalledWith({
             publicKeys: ['a'],
-            rows:       [expect.objectContaining({public_key: 'a'})],
+            dungeonRoutes: [expect.objectContaining({publicKey: 'a'})],
             response:   null,
         });
         expect(offcanvas.hide).toHaveBeenCalledTimes(1);

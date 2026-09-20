@@ -23,6 +23,15 @@ class SearchHandler {
     }
 
     /**
+     * @param searchParams {SearchParams}
+     * @returns {Object} What is sent to the search url.
+     * @protected
+     */
+    getRequestData(searchParams) {
+        return searchParams.params;
+    }
+
+    /**
      *
      * @param searchParams {SearchParams}
      * @param options {{}}
@@ -42,7 +51,7 @@ class SearchHandler {
             type: 'GET',
             url: this.getSearchUrl(),
             dataType: 'html',
-            data: searchParams.params,
+            data: this.getRequestData(searchParams),
             beforeSend: function () {
                 self.loading = true;
                 if (typeof self.options.loaderFn === 'function') {
@@ -58,6 +67,11 @@ class SearchHandler {
             success: function (html, textStatus, xhr) {
                 if (options.hasOwnProperty('success')) {
                     options.success(html, textStatus, xhr);
+                }
+            },
+            error: function (xhr, textStatus) {
+                if (textStatus !== 'abort' && options.hasOwnProperty('error')) {
+                    options.error(xhr, textStatus);
                 }
             },
             complete: function (jqXHR, textStatus) {
