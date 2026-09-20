@@ -38,8 +38,9 @@ return [
         'no_collections_filtered' => 'You have no collections for this game version and season.',
     ],
     'new' => [
-        'title'  => 'New collection',
-        'header' => 'New collection',
+        'title'   => 'New collection',
+        'header'  => 'New collection',
+        'details' => 'Details',
     ],
     'edit' => [
         'title'           => 'Edit %s',

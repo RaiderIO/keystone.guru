@@ -25,9 +25,9 @@ use Illuminate\Support\Collection;
 $columnClass          ??= 'col-lg ps-1 pe-1';
 $dungeonSelectOptions ??= [];
 
-$requirements = ['enough_enemy_forces' => __('view_common.dungeonroute.table.enemy_enemy_forces')];
+$requirements = ['enough_enemy_forces' => __('view_common.dungeonroute.tablefilters.enemy_enemy_forces')];
 if ($showFavoriteRequirement) {
-    $requirements['favorite'] = __('view_common.dungeonroute.table.favorite');
+    $requirements['favorite'] = __('view_common.dungeonroute.tablefilters.favorite');
 }
 ?>
 <div class="{{ $columnClass }}">
@@ -41,15 +41,15 @@ if ($showFavoriteRequirement) {
     ], $dungeonSelectOptions))
 </div>
 <div class="{{ $columnClass }}">
-    {{ html()->label(__('view_common.dungeonroute.table.affixes'), sprintf('%s[]', $affixSelectId)) }}
+    {{ html()->label(__('view_common.dungeonroute.tablefilters.affixes'), sprintf('%s[]', $affixSelectId)) }}
     {{
         html()
             ->multiselect(sprintf('%s[]', $affixSelectId), $affixgroups->pluck('text', 'id'))
             ->id($affixSelectId)
             ->class('form-control affixselect selectpicker')
             ->data('selected-text-format', 'count > 1')
-            ->data('none-selected-text', __('view_common.dungeonroute.table.select_affixes'))
-            ->data('count-selected-text', __('view_common.dungeonroute.table.affixes_selected'))
+            ->data('none-selected-text', __('view_common.dungeonroute.tablefilters.select_affixes'))
+            ->data('count-selected-text', __('view_common.dungeonroute.tablefilters.affixes_selected'))
          }}
 </div>
 <div class="{{ $columnClass }}">
@@ -60,31 +60,31 @@ if ($showFavoriteRequirement) {
     ])
 </div>
 <div class="{{ $columnClass }}">
-    {{ html()->label(__('view_common.dungeonroute.table.requirements'), $requirementsSelectId) }}
+    {{ html()->label(__('view_common.dungeonroute.tablefilters.requirements'), $requirementsSelectId) }}
     {{
         html()
             ->multiselect('dungeon_id', $requirements, 0)
             ->id($requirementsSelectId)
             ->class('form-control selectpicker')
             ->data('selected-text-format', 'count > 1')
-            ->data('none-selected-text', __('view_common.dungeonroute.table.select_requirements'))
-            ->data('count-selected-text', __('view_common.dungeonroute.table.requirements_selected'))
+            ->data('none-selected-text', __('view_common.dungeonroute.tablefilters.select_requirements'))
+            ->data('count-selected-text', __('view_common.dungeonroute.tablefilters.requirements_selected'))
     }}
 </div>
 @if($showTags)
     <div class="{{ $columnClass }}">
-        {{ html()->label(__('view_common.dungeonroute.table.tags'), sprintf('%s[]', $tagsSelectId)) }}
+        {{ html()->label(__('view_common.dungeonroute.tablefilters.tags'), sprintf('%s[]', $tagsSelectId)) }}
         {{
             html()
                 ->multiselect(sprintf('%s[]', $tagsSelectId), $searchTags->pluck('name', 'name'))
                 ->id($tagsSelectId)
                 ->class('form-control selectpicker')
                 ->attribute('title', $searchTags->isEmpty() ?
-                    __('view_common.dungeonroute.table.tags_title') : __('view_common.dungeonroute.table.select_tags')
+                    __('view_common.dungeonroute.tablefilters.tags_title') : __('view_common.dungeonroute.tablefilters.select_tags')
                 )
                 ->data('selected-text-format', 'count > 1')
-                ->data('none-selected-text', __('view_common.dungeonroute.table.select_tags'))
-                ->data('count-selected-text', __('view_common.dungeonroute.table.tags_selected'))
+                ->data('none-selected-text', __('view_common.dungeonroute.tablefilters.select_tags'))
+                ->data('count-selected-text', __('view_common.dungeonroute.tablefilters.tags_selected'))
          }}
     </div>
 @endif

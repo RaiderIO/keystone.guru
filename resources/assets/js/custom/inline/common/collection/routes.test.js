@@ -16,7 +16,7 @@ const {CommonCollectionRoutes}   = require('./routes');
 
 /**
  * @param {string} prefix
- * @param {Array<[Number, string]>} items
+ * @param {Array<[string, string]>} items Public key and title of every route in the list.
  * @returns {string}
  */
 function listHtml(prefix, items) {
@@ -38,7 +38,7 @@ function listHtml(prefix, items) {
             <button id="${prefix}_add_button" type="button"></button>
             <span id="${prefix}_full" hidden></span>
             <div id="${prefix}_status"></div>
-            <template id="${prefix}_template">${item(0, '')}</template>
+            <template id="${prefix}_template">${item('', '')}</template>
         </div>`;
 }
 
@@ -76,6 +76,7 @@ describe('CommonCollectionRoutes', () => {
     let toasts;
     let picker;
     let lists;
+    let routesOptions;
 
     beforeEach(() => {
         vi.useFakeTimers();
@@ -104,9 +105,9 @@ describe('CommonCollectionRoutes', () => {
         document.body.innerHTML = `
             <span id="count"></span>
             <div id="picker"></div>
-            ${listHtml('slot_1', [[11, 'Alpha'], [12, 'Bravo']])}
+            ${listHtml('slot_1', [['keyA', 'Alpha'], ['keyB', 'Bravo']])}
             ${listHtml('slot_2', [])}
-            ${listHtml('off_pool', [[13, 'Old']])}`;
+            ${listHtml('off_pool', [['keyOld', 'Old']])}`;
 
         lists = {};
         ['slot_1', 'slot_2', 'off_pool'].forEach((prefix) => {
@@ -119,7 +120,7 @@ describe('CommonCollectionRoutes', () => {
             getInlineCodeById: (id) => (id === 'picker_inline' ? picker : lists[id]),
         };
 
-        new CommonCollectionRoutes('routes', 'common/collection/routes', {
+        routesOptions = {
             pickerInlineId: 'picker_inline',
             pickerSelector: '#picker',
             countSelector:  '#count',
@@ -128,7 +129,6 @@ describe('CommonCollectionRoutes', () => {
                 {inlineId: 'slot_2_inline', rootSelector: '#slot_2', addButtonSelector: '#slot_2_add_button', dungeonId: 2, canAdd: true, withDungeonName: false},
                 {inlineId: 'off_pool_inline', rootSelector: '#off_pool', addButtonSelector: '#off_pool_add_button', dungeonId: 3, canAdd: false, withDungeonName: false},
             ],
-            dungeonRoutes:  {11: 'keyA', 12: 'keyB', 13: 'keyOld'},
             storeUrl:       '/store',
             deleteUrl:      '/delete',
             orderUrl:       '/order',
@@ -140,8 +140,28 @@ describe('CommonCollectionRoutes', () => {
             undoText:       'Undo',
             undoneText:     'Undone',
             saveFailedText: 'Failed',
-        }).activate();
+        };
+
+        new CommonCollectionRoutes('routes', 'common/collection/routes', routesOptions).activate();
     });
+
+    /**
+     * Replaces the controller with the one a collection that does not exist yet gets: no endpoints to save to.
+     */
+    function asNewCollection() {
+        // Re-parsing the markup drops the handlers the edit-page controller bound to it in beforeEach
+        document.body.innerHTML = document.body.innerHTML;
+        ['slot_1', 'slot_2', 'off_pool'].forEach((prefix) => {
+            lists[`${prefix}_inline`] = new CommonFormsOrderedselect(`${prefix}_inline`, 'common/forms/orderedselect', orderedSelectOptions(prefix));
+            lists[`${prefix}_inline`].activate();
+        });
+
+        new CommonCollectionRoutes('routes', 'common/collection/routes', Object.assign({}, routesOptions, {
+            storeUrl:  null,
+            deleteUrl: null,
+            orderUrl:  null,
+        })).activate();
+    }
 
     afterEach(() => {
         vi.useRealTimers();
@@ -178,10 +198,10 @@ describe('CommonCollectionRoutes', () => {
         jQuery('#picker').trigger('routepicker:added', [{publicKeys: ['keyC', 'keyD'], response: {dungeon_routes: added}}]);
 
         // Assert
-        expect(lists.slot_2_inline.getIds()).toEqual(['21']);
-        expect(lists.slot_1_inline.getIds()).toEqual(['11', '12', '22']);
+        expect(lists.slot_2_inline.getIds()).toEqual(['keyC']);
+        expect(lists.slot_1_inline.getIds()).toEqual(['keyA', 'keyB', 'keyD']);
         expect(document.querySelector('#count').textContent).toBe('5 / 24');
-        expect(picker.setExistingPublicKeys).toHaveBeenLastCalledWith(['keyA', 'keyB', 'keyOld', 'keyC', 'keyD']);
+        expect(picker.setExistingPublicKeys).toHaveBeenLastCalledWith(['keyA', 'keyB', 'keyD', 'keyC', 'keyOld']);
         expect(toasts[0].text).toBe('Added 2');
         expect(toasts[0].opts.buttons[0].text).toBe('Undo');
     });
@@ -204,7 +224,7 @@ describe('CommonCollectionRoutes', () => {
 
     it('onRemoved_givenARoute_deletesItAndUndoPutsItBackInPlace', () => {
         // Arrange
-        document.querySelector('#slot_1 [data-id="11"] .ordered_select_remove').click();
+        document.querySelector('#slot_1 [data-id="keyA"] .ordered_select_remove').click();
         lastCall('DELETE').success({});
 
         // Act
@@ -215,7 +235,7 @@ describe('CommonCollectionRoutes', () => {
         expect(ajaxCalls[0]).toMatchObject({type: 'DELETE', url: '/delete', data: {dungeon_routes: ['keyA']}});
         expect(toasts[0].text).toBe('Removed Alpha');
         expect(lastCall('POST').data).toEqual({dungeon_routes: ['keyA']});
-        expect(lists.slot_1_inline.getIds()).toEqual(['11', '12']);
+        expect(lists.slot_1_inline.getIds()).toEqual(['keyA', 'keyB']);
         expect(lastCall('PUT')).toMatchObject({url: '/order', data: {dungeon_routes: ['keyA', 'keyB', 'keyOld']}});
     });
 
@@ -223,11 +243,11 @@ describe('CommonCollectionRoutes', () => {
         // Arrange - nothing beyond beforeEach
 
         // Act
-        document.querySelector('#slot_1 [data-id="11"] .ordered_select_remove').click();
+        document.querySelector('#slot_1 [data-id="keyA"] .ordered_select_remove').click();
         lastCall('DELETE').error();
 
         // Assert
-        expect(lists.slot_1_inline.getIds()).toEqual(['11', '12']);
+        expect(lists.slot_1_inline.getIds()).toEqual(['keyA', 'keyB']);
         expect(globalThis.showErrorNotification).toHaveBeenCalledWith('Failed');
         expect(toasts).toHaveLength(0);
     });
@@ -236,7 +256,7 @@ describe('CommonCollectionRoutes', () => {
         // Arrange - nothing beyond beforeEach
 
         // Act
-        document.querySelector('#off_pool [data-id="13"] .ordered_select_remove').click();
+        document.querySelector('#off_pool [data-id="keyOld"] .ordered_select_remove').click();
         lastCall('DELETE').success({});
 
         // Assert
@@ -246,10 +266,10 @@ describe('CommonCollectionRoutes', () => {
 
     it('onRemoved_givenATitleWithMarkup_escapesItInTheToast', () => {
         // Arrange
-        document.querySelector('#slot_1 [data-id="11"] .ordered_select_label').textContent = '<img src=x onerror=alert(1)>';
+        document.querySelector('#slot_1 [data-id="keyA"] .ordered_select_label').textContent = '<img src=x onerror=alert(1)>';
 
         // Act
-        document.querySelector('#slot_1 [data-id="11"] .ordered_select_remove').click();
+        document.querySelector('#slot_1 [data-id="keyA"] .ordered_select_remove').click();
         lastCall('DELETE').success({});
 
         // Assert
@@ -258,8 +278,8 @@ describe('CommonCollectionRoutes', () => {
 
     it('onRemoved_givenAMoveWaitingToBeSaved_stillStoresTheMovedOrder', () => {
         // Arrange - move Bravo up, then remove the off-pool route before the debounced save fires
-        document.querySelector('#slot_1 [data-id="12"] .ordered_select_up').click();
-        document.querySelector('#off_pool [data-id="13"] .ordered_select_remove').click();
+        document.querySelector('#slot_1 [data-id="keyB"] .ordered_select_up').click();
+        document.querySelector('#off_pool [data-id="keyOld"] .ordered_select_remove').click();
         lastCall('DELETE').success({});
 
         // Act
@@ -271,7 +291,7 @@ describe('CommonCollectionRoutes', () => {
 
     it('onAdded_givenAMoveWaitingToBeSaved_stillStoresTheMovedOrder', () => {
         // Arrange
-        document.querySelector('#slot_1 [data-id="12"] .ordered_select_up').click();
+        document.querySelector('#slot_1 [data-id="keyB"] .ordered_select_up').click();
         const added = [{id: 21, public_key: 'keyC', title: 'Charlie', dungeon_id: 2, dungeon: 'Two'}];
         jQuery('#picker').trigger('routepicker:added', [{publicKeys: ['keyC'], response: {dungeon_routes: added}}]);
 
@@ -284,7 +304,7 @@ describe('CommonCollectionRoutes', () => {
 
     it('onMoved_givenTheListIsPutBackWhileASaveIsInFlight_storesTheRestoredOrderToo', () => {
         // Arrange - move Bravo up and let that save start, then move it back before the save answers
-        const bravo = () => document.querySelector('#slot_1 [data-id="12"]');
+        const bravo = () => document.querySelector('#slot_1 [data-id="keyB"]');
         bravo().querySelector('.ordered_select_up').click();
         vi.advanceTimersByTime(500);
         const inFlight = lastCall('PUT');
@@ -303,7 +323,7 @@ describe('CommonCollectionRoutes', () => {
 
     it('onMoved_givenSeveralMovesInARow_storesTheWholeOrderOnce', () => {
         // Arrange
-        const bravo = () => document.querySelector('#slot_1 [data-id="12"]');
+        const bravo = () => document.querySelector('#slot_1 [data-id="keyB"]');
 
         // Act
         bravo().querySelector('.ordered_select_up').click();
@@ -319,7 +339,7 @@ describe('CommonCollectionRoutes', () => {
 
     it('onMoved_givenTheOrderEndsUnchanged_storesNothing', () => {
         // Arrange
-        const bravo = () => document.querySelector('#slot_1 [data-id="12"]');
+        const bravo = () => document.querySelector('#slot_1 [data-id="keyB"]');
 
         // Act
         bravo().querySelector('.ordered_select_up').click();
@@ -330,15 +350,61 @@ describe('CommonCollectionRoutes', () => {
         expect(ajaxCalls.filter((call) => call.type === 'PUT')).toHaveLength(0);
     });
 
+    it('onAdded_givenACollectionBeingCreated_fillsTheListsWithoutSavingAnything', () => {
+        // Arrange
+        asNewCollection();
+
+        // Act - a drawer with no endpoint of its own reports the rows it picked from
+        jQuery('#picker').trigger('routepicker:added', [{
+            publicKeys: ['keyC'],
+            rows:       [{public_key: 'keyC', title: 'Charlie', dungeon: {id: 2, name: 'dungeons.two'}}],
+            response:   null,
+        }]);
+
+        // Assert
+        expect(lists.slot_2_inline.getIds()).toEqual(['keyC']);
+        expect(document.querySelector('#count').textContent).toBe('4 / 24');
+        expect(ajaxCalls).toHaveLength(0);
+        expect(toasts[0].text).toBe('Added 1');
+        expect(toasts[0].opts.buttons).toBeUndefined();
+    });
+
+    it('onRemoved_givenACollectionBeingCreated_onlyUpdatesTheCount', () => {
+        // Arrange
+        asNewCollection();
+
+        // Act
+        document.querySelector('#slot_1 [data-id="keyA"] .ordered_select_remove').click();
+
+        // Assert
+        expect(lists.slot_1_inline.getIds()).toEqual(['keyB']);
+        expect(document.querySelector('#count').textContent).toBe('2 / 24');
+        expect(ajaxCalls).toHaveLength(0);
+        expect(toasts).toHaveLength(0);
+    });
+
+    it('onMoved_givenACollectionBeingCreated_storesNothing', () => {
+        // Arrange
+        asNewCollection();
+
+        // Act - the form posts the lists in their own order
+        document.querySelector('#slot_1 [data-id="keyB"] .ordered_select_up').click();
+        vi.advanceTimersByTime(500);
+
+        // Assert
+        expect(lists.slot_1_inline.getIds()).toEqual(['keyB', 'keyA']);
+        expect(ajaxCalls).toHaveLength(0);
+    });
+
     it('onMoved_givenTheSaveFails_restoresTheStoredOrder', () => {
         // Arrange
-        document.querySelector('#slot_1 [data-id="12"] .ordered_select_up').click();
+        document.querySelector('#slot_1 [data-id="keyB"] .ordered_select_up').click();
         vi.advanceTimersByTime(500);
 
         // Act
         lastCall('PUT').error();
 
         // Assert
-        expect(lists.slot_1_inline.getIds()).toEqual(['11', '12']);
+        expect(lists.slot_1_inline.getIds()).toEqual(['keyA', 'keyB']);
     });
 });

@@ -2,14 +2,16 @@
 /**
  * One row of common.forms.orderedselect. Also rendered inside its <template>, which the script clones.
  *
- * @var string $name
- * @var int    $itemId
+ * @var string      $name
+ * @var string|null $formId Set when the control sits outside the form its hidden inputs are posted with.
+ * @var int|string  $itemId
  * @var string $itemLabel
  * @var array{text: string, isWarning?: bool}|null $itemDetail
  * @var string|null $detailWarningText
  * @var int    $position
  */
 $itemDetail        ??= null;
+$formId            ??= null;
 $detailWarningText ??= null;
 $isDetailWarning   = (bool)($itemDetail['isWarning'] ?? false);
 ?>
@@ -40,5 +42,5 @@ $isDetailWarning   = (bool)($itemDetail['isWarning'] ?? false);
             aria-label="{{ __('view_common.forms.orderedselect.remove', ['name' => $itemLabel]) }}">
         <i class="fas fa-times" aria-hidden="true"></i>
     </button>
-    <input type="hidden" name="{{ $name }}[]" value="{{ $itemId }}">
+    <input type="hidden" name="{{ $name }}[]" value="{{ $itemId }}"@if($formId !== null) form="{{ $formId }}"@endif>
 </li>

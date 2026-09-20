@@ -49,6 +49,9 @@ const OPTIONS = {
     keyLevelText:               '+:level',
     keyRangeText:               '+:min - +:max',
     enemyForcesText:            ':count/:required',
+    viewsText:                  '%s views',
+    votesText:                  '%s votes',
+    affixGroups:                {7: [{class: 'fortified', name: 'Fortified'}]},
     selectedNoneText:           'None selected',
     selectedOneText:            '1 selected',
     selectedManyText:           ':count selected',
@@ -72,6 +75,9 @@ function route(publicKey, overrides = {}) {
         level_min:                     2,
         level_max:                     10,
         teeming:                       0,
+        views:                         1500,
+        rating:                        8,
+        rating_count:                  4,
         enemy_forces:                  310,
         enemy_forces_required:         300,
         enemy_forces_required_teeming: 350,
@@ -80,6 +86,54 @@ function route(publicKey, overrides = {}) {
         dungeon:                       {name: 'dungeons.ara_kara', key: 'arakara', expansion: {shortname: 'tww'}},
     }, overrides);
 }
+
+const MARKUP = `
+            <button class="open_picker">Open</button>
+            <div id="picker">
+                <input id="picker_title_search" value="">
+                <select id="picker_dungeon"><option value="-1" selected>All</option><option value="3">Ara-Kara</option></select>
+                <select id="picker_affixes" multiple><option value="7">Fortified</option></select>
+                <select id="picker_attributes" multiple><option value="-1" selected>None</option></select>
+                <select id="picker_requirements" multiple><option value="favorite">Favorite</option></select>
+                <select id="picker_tags" multiple><option value="mine">mine</option></select>
+                <p id="picker_loading" hidden></p>
+                <p id="picker_empty" hidden></p>
+                <p id="picker_error" hidden></p>
+                <div aria-busy="false"><ul id="picker_list"></ul></div>
+                <button id="picker_previous"></button>
+                <span id="picker_range"></span>
+                <button id="picker_next"></button>
+                <span id="picker_selection"></span>
+                <span id="picker_full" hidden></span>
+                <button id="picker_add"></button>
+                <div id="picker_status"></div>
+                <template id="picker_row_template">
+                    <li class="route_picker_row card_dungeonroute leaderboard_row">
+                        <label class="route_picker_row_label">
+                            <span class="leaderboard_rank">
+                                <input type="checkbox" class="route_picker_checkbox">
+                            </span>
+                            <span class="leaderboard_row_inner">
+                                <span class="leaderboard_thumbnail route_picker_thumbnail"></span>
+                                <span class="leaderboard_main">
+                                    <span class="leaderboard_title">
+                                        <span class="route_picker_title"></span>
+                                        <span class="route_picker_unpublished" hidden></span>
+                                        <span class="route_picker_already_in" hidden></span>
+                                    </span>
+                                    <span class="leaderboard_author route_picker_dungeon"></span>
+                                </span>
+                                <span class="leaderboard_stats">
+                                    <span class="leaderboard_enemy_forces route_picker_enemy_forces" hidden></span>
+                                    <span class="leaderboard_rating route_picker_rating" hidden></span>
+                                    <span class="leaderboard_level_chip route_picker_key_range" hidden></span>
+                                    <span class="leaderboard_views route_picker_views"></span>
+                                </span>
+                            </span>
+                        </label>
+                    </li>
+                </template>
+            </div>`;
 
 describe('CommonDungeonroutePicker', () => {
     let previousJquery;
@@ -103,41 +157,7 @@ describe('CommonDungeonroutePicker', () => {
         offcanvas = {show: vi.fn(), hide: vi.fn()};
         globalThis.bootstrap = {Offcanvas: {getOrCreateInstance: vi.fn(() => offcanvas)}};
 
-        document.body.innerHTML = `
-            <button class="open_picker">Open</button>
-            <div id="picker">
-                <input id="picker_title_search" value="">
-                <select id="picker_dungeon"><option value="-1" selected>All</option><option value="3">Ara-Kara</option></select>
-                <select id="picker_affixes" multiple><option value="7">Fortified</option></select>
-                <select id="picker_attributes" multiple><option value="-1" selected>None</option></select>
-                <select id="picker_requirements" multiple><option value="favorite">Favorite</option></select>
-                <select id="picker_tags" multiple><option value="mine">mine</option></select>
-                <p id="picker_loading" hidden></p>
-                <p id="picker_empty" hidden></p>
-                <p id="picker_error" hidden></p>
-                <div aria-busy="false"><ul id="picker_list"></ul></div>
-                <button id="picker_previous"></button>
-                <span id="picker_range"></span>
-                <button id="picker_next"></button>
-                <span id="picker_selection"></span>
-                <span id="picker_full" hidden></span>
-                <button id="picker_add"></button>
-                <div id="picker_status"></div>
-                <template id="picker_row_template">
-                    <li class="route_picker_row">
-                        <label>
-                            <input type="checkbox" class="route_picker_checkbox">
-                            <img class="route_picker_thumbnail" src="" alt="">
-                            <span class="route_picker_title"></span>
-                            <span class="route_picker_dungeon"></span>
-                            <span class="route_picker_key_range"></span>
-                            <span class="route_picker_enemy_forces"></span>
-                            <span class="route_picker_unpublished" hidden></span>
-                            <span class="route_picker_already_in" hidden></span>
-                        </label>
-                    </li>
-                </template>
-            </div>`;
+        document.body.innerHTML = MARKUP;
 
         picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS));
         picker.activate();
@@ -234,7 +254,7 @@ describe('CommonDungeonroutePicker', () => {
         // Act
         respondWithRoutes([
             route('existing'),
-            route('fresh', {published: 'unpublished', level_max: 2, has_thumbnail: true, thumbnails: [{url: 'https://thumb/1.jpg'}]}),
+            route('fresh', {published: 'unpublished', level_max: 2, enemy_forces: 290, has_thumbnail: true, thumbnails: [{url: 'https://thumb/1.jpg'}]}),
         ], 5);
 
         // Assert
@@ -243,14 +263,23 @@ describe('CommonDungeonroutePicker', () => {
         expect(existing.querySelector('.route_picker_checkbox').disabled).toBe(true);
         expect(existing.querySelector('.route_picker_already_in').hidden).toBe(false);
         expect(existing.querySelector('.route_picker_key_range').textContent).toBe('+2 - +10');
-        expect(existing.querySelector('.route_picker_enemy_forces').textContent).toBe('310/300');
-        expect(existing.querySelector('.route_picker_thumbnail').getAttribute('src')).toBe('https://assets/images/dungeons/tww/arakara_3-2.jpg');
+        // Enough enemy forces, so the row says nothing about them - just like the route rows on the site
+        expect(existing.querySelector('.route_picker_enemy_forces').hidden).toBe(true);
+        expect(existing.querySelector('.route_picker_views').textContent).toContain('1.5K');
+        expect(existing.querySelector('.route_picker_views').getAttribute('title')).toBe('1500 views');
+        expect(existing.querySelector('.route_picker_rating').hidden).toBe(false);
+        expect(existing.querySelector('.route_picker_rating').getAttribute('title')).toBe('4 votes');
+        expect(existing.querySelector('.route_picker_rating').querySelectorAll('.fas.fa-star')).toHaveLength(4);
+        expect(existing.querySelector('.route_picker_thumbnail').style.backgroundImage)
+            .toContain('https://assets/images/dungeons/tww/arakara_3-2.jpg');
 
         const fresh = rowOf('fresh');
         expect(fresh.querySelector('.route_picker_checkbox').disabled).toBe(false);
         expect(fresh.querySelector('.route_picker_unpublished').hidden).toBe(false);
         expect(fresh.querySelector('.route_picker_key_range').textContent).toBe('+2');
-        expect(fresh.querySelector('.route_picker_thumbnail').getAttribute('src')).toBe('https://thumb/1.jpg');
+        expect(fresh.querySelector('.route_picker_enemy_forces').hidden).toBe(false);
+        expect(fresh.querySelector('.route_picker_enemy_forces').textContent).toContain('290/300');
+        expect(fresh.querySelector('.route_picker_thumbnail').style.backgroundImage).toContain('https://thumb/1.jpg');
 
         expect(document.querySelector('#picker_range').textContent).toBe('1-2 of 5');
         expect(document.querySelector('#picker_previous').disabled).toBe(true);
@@ -382,8 +411,36 @@ describe('CommonDungeonroutePicker', () => {
         // Assert
         expect(post.url).toBe('/target/add');
         expect(post.data).toEqual({dungeon_routes: ['b', 'a']});
-        expect(callback).toHaveBeenCalledWith({publicKeys: ['b', 'a'], response: {added: 2}});
-        expect(eventHandler.mock.calls[0][1]).toEqual({publicKeys: ['b', 'a'], response: {added: 2}});
+        expect(callback).toHaveBeenCalledWith(expect.objectContaining({publicKeys: ['b', 'a'], response: {added: 2}}));
+        expect(eventHandler.mock.calls[0][1]).toMatchObject({publicKeys: ['b', 'a'], response: {added: 2}});
+        expect(offcanvas.hide).toHaveBeenCalledTimes(1);
+        expect(picker.getSelectedPublicKeys()).toEqual([]);
+        expect(rowOf('a').querySelector('.route_picker_already_in').hidden).toBe(false);
+    });
+
+    it('add_givenNoAddUrl_handsTheRoutesToTheHostWithoutPostingThem', () => {
+        // Arrange
+        // A clean DOM, so only the drawer under test is bound to it
+        document.body.innerHTML = MARKUP;
+        picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS, {addUrl: null}));
+        picker.activate();
+        ajaxCalls.length = 0;
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')]);
+        tick('a');
+        const callback = vi.fn();
+        picker.onAdded(callback);
+
+        // Act
+        document.querySelector('#picker_add').click();
+
+        // Assert
+        expect(ajaxCalls.filter((call) => call.type === 'POST')).toHaveLength(0);
+        expect(callback).toHaveBeenCalledWith({
+            publicKeys: ['a'],
+            rows:       [expect.objectContaining({public_key: 'a'})],
+            response:   null,
+        });
         expect(offcanvas.hide).toHaveBeenCalledTimes(1);
         expect(picker.getSelectedPublicKeys()).toEqual([]);
         expect(rowOf('a').querySelector('.route_picker_already_in').hidden).toBe(false);

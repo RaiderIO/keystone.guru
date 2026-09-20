@@ -1,8 +1,8 @@
 <?php
 /**
  * A side drawer to pick routes and add them to a target in one go. The drawer knows nothing about the
- * target: it lists the source's routes through /ajax/routes within the locked constraints, POSTs the
- * ticked public keys to $addUrl, and reports the result to the host page, which owns the toast and Undo.
+ * target: it lists the source's routes through /ajax/routes within the locked constraints, hands the
+ * ticked routes to the host page and, when it has a $addUrl, POSTs them there first.
  *
  * @var string              $id                  Prefix for every element id of the drawer.
  * @var string              $title               The drawer's heading, naming the target.
@@ -12,11 +12,13 @@
  * @var Dungeon|null        $preselectedDungeon  Dungeon the dungeon filter starts on; the user may change it.
  * @var array<int, string>  $existingPublicKeys  Routes already in the target: listed, but cannot be ticked.
  * @var int|null            $max                 Most routes the target may hold, null for no limit.
- * @var string              $addUrl              Receives a POST of `{$addFieldName}[]` holding the ticked public keys.
+ * @var string|null         $addUrl              Receives a POST of `{$addFieldName}[]` holding the ticked public keys;
+ *                                               null leaves saving entirely to the host page.
  * @var string              $addFieldName
  * @var string|null         $openButtonSelector  Clicking any element matching this opens the drawer.
  */
 
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -28,6 +30,7 @@ $lockedSeason       ??= null;
 $preselectedDungeon ??= null;
 $existingPublicKeys ??= [];
 $max                ??= null;
+$addUrl             ??= null;
 $addFieldName       ??= 'dungeon_routes';
 $openButtonSelector ??= null;
 
@@ -70,8 +73,65 @@ $affixSelectId        = sprintf('%s_affixes', $id);
 $attributesSelectId   = sprintf('%s_attributes', $id);
 $requirementsSelectId = sprintf('%s_requirements', $id);
 $tagsSelectId         = sprintf('%s_tags', $id);
+
+$inlineOptions = [
+    'drawerSelector'             => sprintf('#%s', $id),
+    'openButtonSelector'         => $openButtonSelector,
+    'titleSearchSelector'        => sprintf('#%s_title_search', $id),
+    'dungeonSelectSelector'      => sprintf('#%s', $dungeonSelectId),
+    'affixSelectSelector'        => sprintf('#%s', $affixSelectId),
+    'attributesSelectSelector'   => sprintf('#%s', $attributesSelectId),
+    'requirementsSelectSelector' => sprintf('#%s', $requirementsSelectId),
+    'tagsSelectSelector'         => sprintf('#%s', $tagsSelectId),
+    'listSelector'               => sprintf('#%s_list', $id),
+    'rowTemplateSelector'        => sprintf('#%s_row_template', $id),
+    'loadingSelector'            => sprintf('#%s_loading', $id),
+    'emptySelector'              => sprintf('#%s_empty', $id),
+    'errorSelector'              => sprintf('#%s_error', $id),
+    'previousSelector'           => sprintf('#%s_previous', $id),
+    'nextSelector'               => sprintf('#%s_next', $id),
+    'rangeSelector'              => sprintf('#%s_range', $id),
+    'selectionSelector'          => sprintf('#%s_selection', $id),
+    'fullSelector'               => sprintf('#%s_full', $id),
+    'addButtonSelector'          => sprintf('#%s_add', $id),
+    'statusSelector'             => sprintf('#%s_status', $id),
+    'listUrl'                    => '/ajax/routes',
+    'pageSize'                   => 25,
+    'sourceParameters'           => $sourceParameters,
+    'lockedParameters'           => $lockedParameters,
+    'existingPublicKeys'         => array_values($existingPublicKeys),
+    'max'                        => $max,
+    'addUrl'                     => $addUrl,
+    'addFieldName'               => $addFieldName,
+    'fallbackImageBaseUrl'       => trim(ksgAssetImage(), '/'),
+    // The affix filter's options are decorated with their affix icons client side, the same way the
+    // route table does it - the drawer carries the data so it survives being re-rendered
+    'affixGroups'                => $affixgroups->mapWithKeys(static fn(AffixGroup $affixGroup): array => [
+        $affixGroup->id => $affixGroup->affixes->map(static fn($affix): array => [
+            'class' => $affix->image_name,
+            'name'  => $affix->name,
+        ])->all(),
+    ])->all(),
+    'rangeText'                  => __('view_common.dungeonroute.picker.range'),
+    'keyLevelText'               => __('view_common.dungeonroute.picker.key_level'),
+    'keyRangeText'               => __('view_common.dungeonroute.picker.key_range'),
+    'enemyForcesText'            => __('view_common.dungeonroute.picker.enemy_forces'),
+    'viewsText'                  => __('view_common.dungeonroute.cardrow.views'),
+    'votesText'                  => __('view_common.dungeonroute.rating.nr_of_votes'),
+    'selectedNoneText'           => __('view_common.dungeonroute.picker.selected_none'),
+    'selectedOneText'            => __('view_common.dungeonroute.picker.selected_one'),
+    'selectedManyText'           => __('view_common.dungeonroute.picker.selected_many'),
+    'fullText'                   => __('view_common.dungeonroute.picker.full'),
+    'addNoneText'                => __('view_common.dungeonroute.picker.add_none'),
+    'addOneText'                 => __('view_common.dungeonroute.picker.add_one'),
+    'addManyText'                => __('view_common.dungeonroute.picker.add_many'),
+    'addFailedText'              => __('view_common.dungeonroute.picker.add_failed'),
+];
 ?>
-<div id="{{ $id }}" class="offcanvas offcanvas-end route_picker" tabindex="-1" aria-labelledby="{{ $id }}_title">
+{{-- The data-inline-* attributes let a script activate the drawer again after swapping it into the page --}}
+<div id="{{ $id }}" class="offcanvas offcanvas-end route_picker" tabindex="-1" aria-labelledby="{{ $id }}_title"
+     data-inline-id="{{ $id }}" data-inline-path="common/dungeonroute/picker"
+     data-inline-options="{{ json_encode($inlineOptions) }}">
     <div class="offcanvas-header border-bottom">
         <div class="min-w-0">
             <h2 id="{{ $id }}_title" class="offcanvas-title h5 mb-0">{{ $title }}</h2>
@@ -82,7 +142,7 @@ $tagsSelectId         = sprintf('%s_tags', $id);
     </div>
 
     <div class="offcanvas-body p-0">
-        <div class="route_picker_filters border-bottom px-3 pt-3">
+        <div class="route_picker_filters border-bottom p-3">
             <div class="mb-3">
                 <label for="{{ $id }}_title_search" class="form-label">
                     {{ __('view_common.dungeonroute.picker.title_search') }}
@@ -118,7 +178,7 @@ $tagsSelectId         = sprintf('%s_tags', $id);
             <p id="{{ $id }}_error" class="route_picker_message text-danger px-3 py-4 mb-0" hidden>
                 {{ __('view_common.dungeonroute.picker.load_failed') }}
             </p>
-            <ul id="{{ $id }}_list" class="list-group list-group-flush route_picker_list"></ul>
+            <ul id="{{ $id }}_list" class="list-unstyled route_picker_list mb-0"></ul>
 
             <nav class="d-flex align-items-center gap-2 px-3 py-2"
                  aria-label="{{ __('view_common.dungeonroute.picker.pagination') }}">
@@ -152,26 +212,35 @@ $tagsSelectId         = sprintf('%s_tags', $id);
 
     <div id="{{ $id }}_status" class="visually-hidden" role="status" aria-live="polite"></div>
 
+    {{-- The same row a route gets in a list on the site (common.dungeonroute.cardrow), with the rank
+         column giving way to the tick box and the per-pull graph left to the route's own page. --}}
     <template id="{{ $id }}_row_template">
-        <li class="list-group-item route_picker_row">
-            <label class="route_picker_row_label d-flex align-items-center gap-3 mb-0">
-                <input type="checkbox" class="form-check-input route_picker_checkbox flex-shrink-0 mt-0">
-                <img class="route_picker_thumbnail flex-shrink-0 rounded" src="" alt="" loading="lazy"
-                     width="96" height="64">
-                <span class="route_picker_details flex-grow-1">
-                    <span class="route_picker_title d-block fw-semibold"></span>
-                    <span class="route_picker_meta d-block small text-body-secondary">
-                        <span class="route_picker_dungeon"></span>
-                        <span class="route_picker_key_range"></span>
-                        <span class="route_picker_enemy_forces"></span>
+        <li class="route_picker_row card_dungeonroute leaderboard_row d-flex align-items-center">
+            <label class="route_picker_row_label d-flex align-items-center flex-fill mb-0">
+                <span class="leaderboard_rank d-flex align-items-center justify-content-end">
+                    <input type="checkbox" class="form-check-input route_picker_checkbox mt-0">
+                </span>
+                <span class="d-flex align-items-center flex-fill flex-wrap leaderboard_row_inner">
+                    <span class="leaderboard_thumbnail route_picker_thumbnail"></span>
+                    <span class="leaderboard_main">
+                        <span class="leaderboard_title d-block">
+                            <span class="route_picker_title"></span>
+                            <span class="route_picker_unpublished badge bg-warning text-dark ms-1" hidden>
+                                <i class="fas fa-eye-slash" aria-hidden="true"></i>
+                                {{ __('view_common.dungeonroute.picker.unpublished') }}
+                            </span>
+                            <span class="route_picker_already_in badge bg-secondary ms-1" hidden>
+                                <i class="fas fa-check" aria-hidden="true"></i>
+                                {{ __('view_common.dungeonroute.picker.already_in') }}
+                            </span>
+                        </span>
+                        <span class="leaderboard_author route_picker_dungeon text-muted small d-block"></span>
                     </span>
-                    <span class="route_picker_unpublished small text-warning" hidden>
-                        <i class="fas fa-eye-slash" aria-hidden="true"></i>
-                        {{ __('view_common.dungeonroute.picker.unpublished') }}
-                    </span>
-                    <span class="route_picker_already_in small text-body-secondary" hidden>
-                        <i class="fas fa-check" aria-hidden="true"></i>
-                        {{ __('view_common.dungeonroute.picker.already_in') }}
+                    <span class="leaderboard_stats d-flex align-items-center text-muted small ms-auto">
+                        <span class="leaderboard_enemy_forces route_picker_enemy_forces text-warning me-3" hidden></span>
+                        <span class="leaderboard_rating route_picker_rating me-3" hidden></span>
+                        <span class="leaderboard_level_chip route_picker_key_range me-3" hidden></span>
+                        <span class="leaderboard_views route_picker_views"></span>
                     </span>
                 </span>
             </label>
@@ -179,52 +248,4 @@ $tagsSelectId         = sprintf('%s_tags', $id);
     </template>
 </div>
 
-@section('scripts')
-    @parent
-
-    @include('common.handlebars.affixgroupsselect', ['id' => $affixSelectId, 'affixgroups' => $affixgroups])
-@endsection
-
-@include('common.general.inline', ['path' => 'common/dungeonroute/picker', 'id' => $id, 'options' => [
-    'drawerSelector'         => sprintf('#%s', $id),
-    'openButtonSelector'     => $openButtonSelector,
-    'titleSearchSelector'    => sprintf('#%s_title_search', $id),
-    'dungeonSelectSelector'  => sprintf('#%s', $dungeonSelectId),
-    'affixSelectSelector'    => sprintf('#%s', $affixSelectId),
-    'attributesSelectSelector' => sprintf('#%s', $attributesSelectId),
-    'requirementsSelectSelector' => sprintf('#%s', $requirementsSelectId),
-    'tagsSelectSelector'     => sprintf('#%s', $tagsSelectId),
-    'listSelector'           => sprintf('#%s_list', $id),
-    'rowTemplateSelector'    => sprintf('#%s_row_template', $id),
-    'loadingSelector'        => sprintf('#%s_loading', $id),
-    'emptySelector'          => sprintf('#%s_empty', $id),
-    'errorSelector'          => sprintf('#%s_error', $id),
-    'previousSelector'       => sprintf('#%s_previous', $id),
-    'nextSelector'           => sprintf('#%s_next', $id),
-    'rangeSelector'          => sprintf('#%s_range', $id),
-    'selectionSelector'      => sprintf('#%s_selection', $id),
-    'fullSelector'           => sprintf('#%s_full', $id),
-    'addButtonSelector'      => sprintf('#%s_add', $id),
-    'statusSelector'         => sprintf('#%s_status', $id),
-    'listUrl'                => '/ajax/routes',
-    'pageSize'               => 25,
-    'sourceParameters'       => $sourceParameters,
-    'lockedParameters'       => $lockedParameters,
-    'existingPublicKeys'     => array_values($existingPublicKeys),
-    'max'                    => $max,
-    'addUrl'                 => $addUrl,
-    'addFieldName'           => $addFieldName,
-    'fallbackImageBaseUrl'   => trim(ksgAssetImage(), '/'),
-    'rangeText'              => __('view_common.dungeonroute.picker.range'),
-    'keyLevelText'           => __('view_common.dungeonroute.picker.key_level'),
-    'keyRangeText'           => __('view_common.dungeonroute.picker.key_range'),
-    'enemyForcesText'        => __('view_common.dungeonroute.picker.enemy_forces'),
-    'selectedNoneText'       => __('view_common.dungeonroute.picker.selected_none'),
-    'selectedOneText'        => __('view_common.dungeonroute.picker.selected_one'),
-    'selectedManyText'       => __('view_common.dungeonroute.picker.selected_many'),
-    'fullText'               => __('view_common.dungeonroute.picker.full'),
-    'addNoneText'            => __('view_common.dungeonroute.picker.add_none'),
-    'addOneText'             => __('view_common.dungeonroute.picker.add_one'),
-    'addManyText'            => __('view_common.dungeonroute.picker.add_many'),
-    'addFailedText'          => __('view_common.dungeonroute.picker.add_failed'),
-]])
+@include('common.general.inline', ['path' => 'common/dungeonroute/picker', 'id' => $id, 'options' => $inlineOptions])

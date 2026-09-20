@@ -85,7 +85,10 @@ return [
             'pulls'     => 'Hodor',
         ],
         'table' => [
-            'team'                  => 'Hodor',
+            'team'   => 'Hodor',
+            'filter' => 'Hodor',
+        ],
+        'tablefilters' => [
             'affixes'               => 'Hodor',
             'select_affixes'        => 'Hodor',
             'affixes_selected'      => 'Hodor',
@@ -98,7 +101,6 @@ return [
             'tags_title'            => 'Hodor',
             'select_tags'           => 'Hodor',
             'tags_selected'         => 'Hodor',
-            'filter'                => 'Hodor',
         ],
         'tier' => [
             'data_by_archon_gg' => 'Hodor',

@@ -14,10 +14,9 @@
  @property {string} pickerSelector
  @property {string} countSelector
  @property {CommonCollectionRoutesSection[]} sections
- @property {Object<string, string>} dungeonRoutes  Route id => public key of every route in the collection.
- @property {string} storeUrl
- @property {string} deleteUrl
- @property {string} orderUrl
+ @property {string|null} storeUrl       Null on a collection that does not exist yet, which posts its routes with its form.
+ @property {string|null} deleteUrl
+ @property {string|null} orderUrl
  @property {Number} max
  @property {string} countText           Contains :count and :max.
  @property {string} addedOneText
@@ -29,9 +28,11 @@
  */
 
 /**
- * The route lists of a collection's edit page. Every change saves at once: routes picked in the route picker are
- * added, a removed route is removed and a moved route stores the new order of the whole collection, each followed
- * by a toast; adding and removing can be undone from it.
+ * The route lists of a collection, on the page that creates one as well as on the page that edits one. An
+ * existing collection saves every change at once - routes picked in the route picker are added, a removed
+ * route is removed and a moved route stores the new order of the whole collection, each followed by a toast
+ * that adding and removing can be undone from. A collection that does not exist yet only fills its lists;
+ * the form that creates it posts them.
  *
  * @property {CommonCollectionRoutesOptions} options
  */
@@ -40,9 +41,9 @@ class CommonCollectionRoutes extends InlineCode {
     constructor(id, bladePath, options) {
         super(id, bladePath, options);
 
-        /** @type {Object<string, string>} */
-        this._publicKeys = Object.assign({}, this.options.dungeonRoutes);
-        /** @type {string[]} Route ids in the order the server last stored */
+        /** Whether the routes are only collected in the form, to be saved with it */
+        this._isLocal = this.options.storeUrl === null || typeof this.options.storeUrl === 'undefined';
+        /** @type {string[]} Route public keys in the order the server last stored */
         this._savedOrder = [];
         this._orderTimeout = null;
         this._orderSaving  = false;
@@ -65,7 +66,7 @@ class CommonCollectionRoutes extends InlineCode {
         });
 
         $(this.options.pickerSelector).on('routepicker:added', function (event, result) {
-            self._onAdded(result.response.dungeon_routes);
+            self._onAdded(result);
         });
 
         this._savedOrder = this._getOrder();
@@ -83,23 +84,63 @@ class CommonCollectionRoutes extends InlineCode {
     }
 
     /**
-     * @param {Object[]} dungeonRoutes As returned by the store endpoint.
+     * @param {{publicKeys: string[], rows: Object[], response: *}} result
      * @private
      */
-    _onAdded(dungeonRoutes) {
+    _onAdded(result) {
         let self = this;
+        let dungeonRoutes = this._toDungeonRoutes(result);
 
         this._insert(dungeonRoutes);
 
-        let publicKeys = dungeonRoutes.map(dungeonRoute => dungeonRoute.public_key);
         let text = dungeonRoutes.length === 1 ? this.options.addedOneText : this.options.addedManyText;
+        text = text.replace(':count', dungeonRoutes.length);
 
-        this._showUndoableToast(text.replace(':count', dungeonRoutes.length), function () {
+        // Nothing was stored, so there is nothing to undo - removing a route from the list is one click
+        if (this._isLocal) {
+            showSuccessNotification(text);
+
+            return;
+        }
+
+        let publicKeys = dungeonRoutes.map(dungeonRoute => dungeonRoute.publicKey);
+
+        this._showUndoableToast(text, function () {
             self._request('DELETE', self.options.deleteUrl, publicKeys, function () {
-                dungeonRoutes.forEach(dungeonRoute => self._removeFromLists(dungeonRoute.id));
+                publicKeys.forEach(publicKey => self._removeFromLists(publicKey));
                 showInfoNotification(self.options.undoneText);
             });
         });
+    }
+
+    /**
+     * The picker reports the rows it picked from; a collection that saves at once reports what it stored
+     * instead, which is what the lists are filled from then.
+     *
+     * @param {{publicKeys: string[], rows: Object[], response: *}} result
+     * @returns {{publicKey: string, title: string, dungeonId: Number|null, dungeonName: string}[]}
+     * @private
+     */
+    _toDungeonRoutes(result) {
+        let stored = result.response === null || typeof result.response === 'undefined'
+            ? null
+            : result.response.dungeon_routes;
+
+        if (stored) {
+            return stored.map(dungeonRoute => ({
+                publicKey:   dungeonRoute.public_key,
+                title:       dungeonRoute.title,
+                dungeonId:   dungeonRoute.dungeon_id,
+                dungeonName: dungeonRoute.dungeon,
+            }));
+        }
+
+        return (result.rows || []).map(row => ({
+            publicKey:   row.public_key,
+            title:       row.title,
+            dungeonId:   row.dungeon.id,
+            dungeonName: typeof lang !== 'undefined' ? lang.get(row.dungeon.name) : row.dungeon.name,
+        }));
     }
 
     /**
@@ -109,23 +150,29 @@ class CommonCollectionRoutes extends InlineCode {
      */
     _onRemoved(section, removed) {
         let self = this;
-        let publicKey = this._publicKeys[removed.id];
-        let previousOrder = this._savedOrder.slice();
-        let orderedSelect = this._getOrderedSelect(section);
-        let previousSectionOrder = previousOrder.filter(id => id === removed.id || orderedSelect.getIds().includes(id));
+        let publicKey = removed.id;
 
         this._refreshCount();
 
+        if (this._isLocal) {
+            this._refreshPicker();
+
+            return;
+        }
+
+        let previousOrder = this._savedOrder.slice();
+        let orderedSelect = this._getOrderedSelect(section);
+        let previousSectionOrder = previousOrder.filter(id => id === publicKey || orderedSelect.getIds().includes(id));
+
         this._request('DELETE', this.options.deleteUrl, [publicKey], function () {
             // What the server now stores; moves still waiting for their debounced save must stay unsaved
-            self._savedOrder = self._savedOrder.filter(id => id !== removed.id);
-            delete self._publicKeys[removed.id];
+            self._savedOrder = self._savedOrder.filter(id => id !== publicKey);
             self._refreshPicker();
 
             // The picker cannot offer a route back into a section it does not fill, so there is nothing to undo
             let undo = section.canAdd ? function () {
                 self._request('POST', self.options.storeUrl, [publicKey], function (response) {
-                    self._insert(response.dungeon_routes);
+                    self._insert(self._toDungeonRoutes({publicKeys: [publicKey], rows: [], response: response}));
                     orderedSelect.setIds(previousSectionOrder);
                     self._saveOrder(function () {
                         showInfoNotification(self.options.undoneText);
@@ -135,7 +182,7 @@ class CommonCollectionRoutes extends InlineCode {
 
             self._showUndoableToast(self.options.removedText.replace(':name', self._escape(removed.name)), undo);
         }, function () {
-            orderedSelect.addItem(removed.id, removed.name);
+            orderedSelect.addItem(publicKey, removed.name);
             orderedSelect.setIds(previousSectionOrder);
             self._refreshCount();
         });
@@ -146,6 +193,11 @@ class CommonCollectionRoutes extends InlineCode {
      * @private
      */
     _onMoved() {
+        // The form posts the lists in their own order, so there is nothing to store on a move
+        if (this._isLocal) {
+            return;
+        }
+
         clearTimeout(this._orderTimeout);
         this._orderTimeout = setTimeout(this._saveOrder.bind(this, null), 400);
     }
@@ -180,7 +232,7 @@ class CommonCollectionRoutes extends InlineCode {
 
         this._orderSaving = true;
 
-        this._request('PUT', this.options.orderUrl, order.map(id => this._publicKeys[id]), function () {
+        this._request('PUT', this.options.orderUrl, order, function () {
             self._savedOrder  = order;
             self._orderSaving = false;
             if (typeof onSaved === 'function') {
@@ -213,7 +265,7 @@ class CommonCollectionRoutes extends InlineCode {
 
     /**
      * Puts newly added routes in the list they belong in: their dungeon's slot, or the one flat list.
-     * @param {Object[]} dungeonRoutes As returned by the store endpoint.
+     * @param {{publicKey: string, title: string, dungeonId: Number|null, dungeonName: string}[]} dungeonRoutes
      * @private
      */
     _insert(dungeonRoutes) {
@@ -228,12 +280,11 @@ class CommonCollectionRoutes extends InlineCode {
                 return;
             }
 
-            let name = section.withDungeonName ? `${dungeonRoute.title} — ${dungeonRoute.dungeon}` : dungeonRoute.title;
+            let name = section.withDungeonName ? `${dungeonRoute.title} — ${dungeonRoute.dungeonName}` : dungeonRoute.title;
 
-            self._publicKeys[dungeonRoute.id] = dungeonRoute.public_key;
-            self._getOrderedSelect(section).addItem(dungeonRoute.id, name);
+            self._getOrderedSelect(section).addItem(dungeonRoute.publicKey, name);
             // The server appends added routes to the end of the stored order
-            self._savedOrder.push(String(dungeonRoute.id));
+            self._savedOrder.push(dungeonRoute.publicKey);
         });
 
         this._refreshCount();
@@ -241,35 +292,34 @@ class CommonCollectionRoutes extends InlineCode {
     }
 
     /**
-     * @param {Object} dungeonRoute
+     * @param {{dungeonId: Number|null}} dungeonRoute
      * @returns {CommonCollectionRoutesSection|null}
      * @private
      */
     _findSectionFor(dungeonRoute) {
         let candidates = this.options.sections.filter(section => section.canAdd);
 
-        return candidates.find(section => section.dungeonId === dungeonRoute.dungeon_id) ||
+        return candidates.find(section => section.dungeonId === dungeonRoute.dungeonId) ||
             candidates.find(section => section.dungeonId === null) ||
             null;
     }
 
     /**
-     * @param {string|Number} id
+     * @param {string} publicKey
      * @private
      */
-    _removeFromLists(id) {
+    _removeFromLists(publicKey) {
         let self = this;
 
-        this.options.sections.forEach(section => self._getOrderedSelect(section).removeItem(id));
-        delete this._publicKeys[id];
-        this._savedOrder = this._savedOrder.filter(savedId => savedId !== String(id));
+        this.options.sections.forEach(section => self._getOrderedSelect(section).removeItem(publicKey));
+        this._savedOrder = this._savedOrder.filter(savedPublicKey => savedPublicKey !== publicKey);
 
         this._refreshCount();
         this._refreshPicker();
     }
 
     /**
-     * @param {string[]} order Route ids.
+     * @param {string[]} order Route public keys.
      * @private
      */
     _restoreOrder(order) {
@@ -280,7 +330,7 @@ class CommonCollectionRoutes extends InlineCode {
 
     /**
      * Read from the page rather than from the lists' inline code, which may not be initialised yet on activate().
-     * @returns {string[]} Every route id, in page order.
+     * @returns {string[]} Every route public key, in page order.
      * @private
      */
     _getOrder() {
@@ -314,7 +364,7 @@ class CommonCollectionRoutes extends InlineCode {
     _refreshPicker() {
         let picker = this._getPicker();
         if (picker !== null) {
-            picker.setExistingPublicKeys(Object.values(this._publicKeys));
+            picker.setExistingPublicKeys(this._getOrder());
         }
     }
 

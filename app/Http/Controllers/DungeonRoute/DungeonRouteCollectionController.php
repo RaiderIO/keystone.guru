@@ -103,13 +103,14 @@ class DungeonRouteCollectionController extends Controller
         }
         $season?->load(['expansion', 'dungeons']);
 
-        $ownDungeonRoutes = $this->getOwnDungeonRoutes($user);
+        // After a failed validation the sections must show what was submitted, not an empty collection -
+        // otherwise resubmitting the corrected form saves the collection with no routes
+        $selectedDungeonRoutes = $this->getSubmittedDungeonRoutes($user, (array)$request->old('dungeon_routes', []));
 
         return view('collection.new', [
             'dungeonRouteCollection' => null,
-            'editSections'           => $dungeonRouteCollectionService->getEditSections($gameVersion, $season, $ownDungeonRoutes, collect()),
-            'ownDungeonRoutes'       => $ownDungeonRoutes,
-            'hasOwnDungeonRoutes'    => $ownDungeonRoutes->isNotEmpty(),
+            'editSections'           => $dungeonRouteCollectionService->getEditSections($gameVersion, $season, collect(), $selectedDungeonRoutes),
+            'hasOwnDungeonRoutes'    => $this->hasOwnDungeonRoutes($user),
             'selectedGameVersion'    => $gameVersion,
             'seasons'                => $dungeonRouteCollectionService->getSelectableSeasons($gameVersion),
             'selectedSeason'         => $season,
@@ -188,10 +189,6 @@ class DungeonRouteCollectionController extends Controller
             'season.dungeons',
         ]);
 
-        // Scoped to the collection's own owner, not the acting user - otherwise an admin
-        // editing someone else's collection would see an empty picker and no shared teams
-        $ownDungeonRoutes = $this->getOwnDungeonRoutes($dungeonRouteCollection->user);
-
         return view('collection.edit', [
             'dungeonRouteCollection' => $dungeonRouteCollection,
             // Only the routes in the collection are listed; new ones are picked in the route picker drawer
@@ -202,14 +199,15 @@ class DungeonRouteCollectionController extends Controller
                 $dungeonRouteCollection->dungeonRoutes,
             ),
             // The picker lists the acting user's own routes, so it only offers what may join when that is the owner
-            'mayAddDungeonRoutes'     => $dungeonRouteCollection->isOwnedByUser(),
-            'ownDungeonRoutes'        => $ownDungeonRoutes,
-            'hasOwnDungeonRoutes'     => $ownDungeonRoutes->isNotEmpty() || $dungeonRouteCollection->dungeonRoutes->isNotEmpty(),
-            'selectedDungeonRouteIds' => $dungeonRouteCollection->dungeonRoutes->pluck('id')->all(),
-            'selectedGameVersion'     => $dungeonRouteCollection->gameVersion,
-            'selectedSeason'          => $dungeonRouteCollection->season,
-            'teams'                   => $dungeonRouteCollection->user->teams,
-            'categories'              => DungeonRouteCollectionCategory::all(),
+            'mayAddDungeonRoutes' => $dungeonRouteCollection->isOwnedByUser(),
+            // Scoped to the collection's own owner, not the acting user - an admin editing someone
+            // else's collection must not be told the owner has no routes
+            'hasOwnDungeonRoutes' => $this->hasOwnDungeonRoutes($dungeonRouteCollection->user)
+                || $dungeonRouteCollection->dungeonRoutes->isNotEmpty(),
+            'selectedGameVersion' => $dungeonRouteCollection->gameVersion,
+            'selectedSeason'      => $dungeonRouteCollection->season,
+            'teams'               => $dungeonRouteCollection->user->teams,
+            'categories'          => DungeonRouteCollectionCategory::all(),
         ]);
     }
 
@@ -319,19 +317,44 @@ class DungeonRouteCollectionController extends Controller
     }
 
     /**
-     * The routes a user may put in a collection. Sandbox routes expire, so they are deliberately
-     * not offered.
-     *
-     * @return Collection<int, DungeonRoute>
+     * Whether the user has any route to put in a collection at all. Sandbox routes expire, so they are
+     * deliberately not counted.
      */
-    private function getOwnDungeonRoutes(User $user): Collection
+    private function hasOwnDungeonRoutes(User $user): bool
     {
         return DungeonRoute::query()
             ->where('author_id', $user->id)
             ->whereNull('expires_at')
+            ->exists();
+    }
+
+    /**
+     * The routes a submission that failed validation held, in the order it held them, constrained to the
+     * user's own routes.
+     *
+     * @param array<int, mixed> $publicKeys
+     *
+     * @return Collection<int, DungeonRoute>
+     */
+    private function getSubmittedDungeonRoutes(User $user, array $publicKeys): Collection
+    {
+        $publicKeys = array_values(array_filter(array_map(strval(...), $publicKeys)));
+        if ($publicKeys === []) {
+            return collect();
+        }
+
+        $dungeonRoutes = DungeonRoute::query()
+            ->where('author_id', $user->id)
+            ->whereNull('expires_at')
+            ->whereIn('public_key', $publicKeys)
             ->with(['dungeon', 'mappingVersion'])
-            ->orderBy('title')
-            ->get();
+            ->get()
+            ->keyBy('public_key');
+
+        return collect($publicKeys)
+            ->map(static fn(string $publicKey): ?DungeonRoute => $dungeonRoutes->get($publicKey))
+            ->filter()
+            ->values();
     }
 
     /**

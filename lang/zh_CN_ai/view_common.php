@@ -105,7 +105,10 @@ return [
             'pulls'     => '{1} :count 次拉怪|[2,*] :count 次拉怪',
         ],
         'table' => [
-            'team'                  => '团队',
+            'team'   => '团队',
+            'filter' => '筛选',
+        ],
+        'tablefilters' => [
             'affixes'               => '词缀',
             'select_affixes'        => '选择词缀',
             'affixes_selected'      => '已选择 {0} 个词缀',
@@ -118,7 +121,6 @@ return [
             'tags_title'            => '没有可用标签',
             'select_tags'           => '选择标签',
             'tags_selected'         => '选择了 {0} 个标签',
-            'filter'                => '筛选',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - 数据来自 https://www.archon.gg/wow',

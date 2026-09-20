@@ -22,15 +22,13 @@
     background-color: var(--theme-bg-card-footer);
 }
 
+/* The rows are the site's route row (see sections/discover.css), so only what the drawer adds is set here. */
 .route_picker .route_picker_list .route_picker_row {
-    padding: 0;
     color: var(--theme-text-contrast);
-    background-color: transparent;
-    border-color: var(--theme-border-subtle);
 }
 
 .route_picker .route_picker_row_label {
-    padding: 0.5rem 1rem;
+    padding: 0 1rem;
     cursor: pointer;
 }
 
@@ -43,7 +41,7 @@
 }
 
 .route_picker .route_picker_row_existing .route_picker_thumbnail,
-.route_picker .route_picker_row_existing .route_picker_title {
+.route_picker .route_picker_row_existing .leaderboard_main {
     opacity: 0.6;
 }
 
@@ -53,38 +51,27 @@
     border: 1px solid currentColor;
 }
 
-.route_picker .route_picker_thumbnail {
-    width: 96px;
-    height: 64px;
-    object-fit: cover;
-}
-
-.route_picker .route_picker_details {
-    min-width: 0;
+/* The row's own rank column becomes the tick box's column, so the rows still line up */
+.route_picker .leaderboard_rank {
+    height: 44px;
 }
 
 .route_picker .route_picker_title {
     overflow-wrap: anywhere;
 }
 
-.route_picker .route_picker_meta > span:not(:empty) + span:not(:empty)::before {
-    content: '\00b7';
-    margin: 0 0.35rem;
+/* The drawer is far narrower than the page the row was designed for: the stats may wrap under the
+   title rather than squeezing it into a sliver. */
+.route_picker .leaderboard_stats {
+    flex-wrap: wrap;
 }
 
-@media (max-width: 575.98px) {
-    .route_picker .route_picker_thumbnail {
-        width: 64px;
-        height: 43px;
-    }
-}
-
-.route_picker .route_picker_details > span,
 .route_picker .route_picker_full {
     display: block;
 }
 
-.route_picker .route_picker_details > [hidden],
-.route_picker .route_picker_full[hidden] {
+.route_picker .route_picker_full[hidden],
+.route_picker .leaderboard_stats > [hidden],
+.route_picker .leaderboard_title [hidden] {
     display: none;
 }

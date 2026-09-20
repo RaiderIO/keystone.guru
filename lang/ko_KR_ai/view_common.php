@@ -105,7 +105,10 @@ return [
             'pulls'     => '{1} 풀 :count개|[2,*] 풀 :count개',
         ],
         'table' => [
-            'team'                  => '팀',
+            'team'   => '팀',
+            'filter' => '필터',
+        ],
+        'tablefilters' => [
             'affixes'               => '접미사',
             'select_affixes'        => '접미사 선택',
             'affixes_selected'      => '{0} 접미사 선택됨',
@@ -118,7 +121,6 @@ return [
             'tags_title'            => '사용 가능한 태그 없음',
             'select_tags'           => '태그 선택',
             'tags_selected'         => '{0} 태그 선택됨',
-            'filter'                => '필터',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - 데이터 제공: https://www.archon.gg/wow',

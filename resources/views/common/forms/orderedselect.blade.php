@@ -8,8 +8,9 @@
  * @var string             $name         The array field name, posted as `{$name}[]`.
  * @var string             $label        Visible label of the control.
  * @var string             $labelClass   Classes of the label, e.g. to render it as a section heading.
- * @var array<int, string> $options      Every item that may be added, keyed by id, in the add select's order.
- * @var array<int, int>    $selectedIds  The ids currently in the list, in list order.
+ * @var array<int|string, string> $options Every item that may be added, keyed by id, in the add select's order.
+ * @var array<int, int|string> $selectedIds The ids currently in the list, in list order.
+ * @var string|null        $formId       Form the hidden inputs belong to, for a control rendered outside of it.
  * @var int                $max          Maximum number of items in the list.
  * @var string|null        $help         Help text below the control.
  * @var string             $emptyText    Shown in place of the list while it is empty.
@@ -25,6 +26,7 @@
  * @var int|null           $fullCount    What counts towards $max, when that is more than this list (ajax mode).
  */
 $help              ??= null;
+$formId            ??= null;
 $optionDetails     ??= [];
 $detailWarningText ??= null;
 $labelClass ??= 'form-label';
@@ -36,7 +38,7 @@ $showAdd    ??= true;
 
 $countText ??= __('view_common.forms.orderedselect.count');
 
-$selectedIds = array_values(array_filter($selectedIds, static fn(int $selectedId): bool => isset($options[$selectedId])));
+$selectedIds = array_values(array_filter($selectedIds, static fn(int|string $selectedId): bool => isset($options[$selectedId])));
 $fullCount   ??= count($selectedIds);
 $isFull      = $fullCount >= $max;
 $helpId      = sprintf('%s_help', $id);
@@ -64,8 +66,9 @@ $inlineOptions = [
     'removedStatusText' => __('view_common.forms.orderedselect.removed_status'),
 ];
 ?>
-{{-- data-inline-options lets a script activate this control again after swapping it into the page --}}
-<div id="{{ $id }}" class="ordered_select" data-inline-options="{{ json_encode($inlineOptions) }}">
+{{-- The data-inline-* attributes let a script activate this control again after swapping it into the page --}}
+<div id="{{ $id }}" class="ordered_select" data-inline-id="{{ sprintf('%s_inline', $id) }}"
+     data-inline-path="common/forms/orderedselect" data-inline-options="{{ json_encode($inlineOptions) }}">
     <div class="d-flex align-items-baseline">
         <label id="{{ $id }}_label" @if(!$ajax) for="{{ $id }}_add" @endif class="{{ $labelClass }}">
             {{ $label }}
@@ -82,6 +85,7 @@ $inlineOptions = [
         @foreach($selectedIds as $index => $selectedId)
             @include('common.forms.orderedselectitem', [
                 'name' => $name,
+                'formId' => $formId,
                 'itemId' => $selectedId,
                 'itemLabel' => $options[$selectedId],
                 'itemDetail' => $optionDetails[$selectedId] ?? null,
@@ -133,7 +137,8 @@ $inlineOptions = [
     <template id="{{ $id }}_template">
         @include('common.forms.orderedselectitem', [
             'name' => $name,
-            'itemId' => 0,
+            'formId' => $formId,
+            'itemId' => '',
             'itemLabel' => '',
             'itemDetail' => null,
             'detailWarningText' => $detailWarningText,

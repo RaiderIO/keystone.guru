@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\DungeonRoute\DungeonRouteCollection;
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -14,15 +13,14 @@ use Illuminate\Support\Collection;
  * @var Collection<int, DungeonRouteCollectionGroup>    $editSections
  * @var bool                                            $hasOwnDungeonRoutes
  * @var bool                                            $mayAddDungeonRoutes
- * @var array<int, int>                                 $selectedDungeonRouteIds
  * @var GameVersion                                     $selectedGameVersion
  * @var Season|null                                     $selectedSeason
- * @var Collection<int, DungeonRoute>                  $ownDungeonRoutes
  * @var Collection<int, Team>                           $teams
  * @var Collection<int, DungeonRouteCollectionCategory> $categories
  */
 
-$title = sprintf(__('view_collection.edit.title'), $dungeonRouteCollection->name);
+$formId = 'collection_details_form';
+$title  = sprintf(__('view_collection.edit.title'), $dungeonRouteCollection->name);
 ?>
 @extends('layouts.sitepage', [
     'showAds' => false,
@@ -45,17 +43,17 @@ $title = sprintf(__('view_collection.edit.title'), $dungeonRouteCollection->name
             'editSections' => $editSections,
             'hasOwnDungeonRoutes' => $hasOwnDungeonRoutes,
             'mayAddDungeonRoutes' => $mayAddDungeonRoutes,
+            'selectedGameVersion' => $selectedGameVersion,
+            'selectedSeason' => $selectedSeason,
+            'formId' => null,
         ])
 
         <h2 class="h4">{{ __('view_collection.edit.details') }}</h2>
         @include('common.collection.details', [
             'dungeonRouteCollection' => $dungeonRouteCollection,
-            'editSections' => $editSections,
-            'hasOwnDungeonRoutes' => $hasOwnDungeonRoutes,
-            'selectedDungeonRouteIds' => $selectedDungeonRouteIds,
+            'formId' => $formId,
             'selectedGameVersion' => $selectedGameVersion,
             'selectedSeason' => $selectedSeason,
-            'ownDungeonRoutes' => $ownDungeonRoutes,
             'teams' => $teams,
             'categories' => $categories,
         ])

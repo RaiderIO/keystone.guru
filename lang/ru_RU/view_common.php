@@ -85,7 +85,10 @@ return [
             'pulls'     => '',
         ],
         'table' => [
-            'team'                  => '',
+            'team'   => '',
+            'filter' => '',
+        ],
+        'tablefilters' => [
             'affixes'               => '',
             'select_affixes'        => '',
             'affixes_selected'      => '',
@@ -98,7 +101,6 @@ return [
             'tags_title'            => '',
             'select_tags'           => '',
             'tags_selected'         => '',
-            'filter'                => '',
         ],
         'tier' => [
             'data_by_archon_gg' => '',

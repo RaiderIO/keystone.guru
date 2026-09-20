@@ -111,7 +111,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 'name'            => 'ZzTestWeeklyRoutes',
                 'description'     => 'My routes for this week',
                 'published_state' => PublishedState::WORLD,
-                'dungeon_routes'  => [$dungeonRoute->id],
+                'dungeon_routes'  => [$dungeonRoute->public_key],
             ]);
 
             // Assert
@@ -187,7 +187,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
                 'name'            => 'ZzTestTooManyRoutes',
                 'published_state' => PublishedState::WORLD,
-                'dungeon_routes'  => $dungeonRoutes->pluck('id')->all(),
+                'dungeon_routes'  => $dungeonRoutes->pluck('public_key')->all(),
             ]);
 
             // Assert
@@ -222,7 +222,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
                 'name'            => 'ZzTestForeignRoutes',
                 'published_state' => PublishedState::WORLD,
-                'dungeon_routes'  => [$foreignRoute->id],
+                'dungeon_routes'  => [$foreignRoute->public_key],
             ]);
 
             // Assert
@@ -251,12 +251,12 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 ->followingRedirects()
                 ->post(route('collections.savenew'), [
                     'published_state' => PublishedState::WORLD,
-                    'dungeon_routes'  => [$dungeonRoute->id],
+                    'dungeon_routes'  => [$dungeonRoute->public_key],
                 ]);
 
             // Assert
             $response->assertOk();
-            $this->assertSame([$dungeonRoute->id], $this->listedIds((string)$response->getContent(), 'dungeon_routes'));
+            $this->assertSame([$dungeonRoute->public_key], $this->listedPublicKeys((string)$response->getContent(), 'dungeon_routes'));
             $this->assertSame(0, DungeonRouteCollection::where('user_id', $creator->id)->count());
         } finally {
             Feature::for($creator)->forget(CreatorProfiles::class);
@@ -296,7 +296,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $this->assertSame([$dungeonRoute->id], $this->listedIds((string)$response->getContent(), 'dungeon_routes'));
+            $this->assertSame([$dungeonRoute->public_key], $this->listedPublicKeys((string)$response->getContent(), 'dungeon_routes'));
             $this->assertSame([$dungeonRoute->id], $dungeonRouteCollection->refresh()->dungeonRoutes->pluck('id')->all());
         } finally {
             $dungeonRouteCollection->delete();
@@ -322,14 +322,14 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 ->followingRedirects()
                 ->post(route('collections.savenew'), [
                     'published_state' => PublishedState::WORLD,
-                    'dungeon_routes'  => [$bravo->id, $alpha->id],
+                    'dungeon_routes'  => [$bravo->public_key, $alpha->public_key],
                 ]);
 
             // Assert
             $response->assertOk();
             $this->assertSame(
-                [$bravo->id, $alpha->id],
-                $this->listedIds((string)$response->getContent(), 'dungeon_routes'),
+                [$bravo->public_key, $alpha->public_key],
+                $this->listedPublicKeys((string)$response->getContent(), 'dungeon_routes'),
             );
         } finally {
             Feature::for($creator)->forget(CreatorProfiles::class);
@@ -365,8 +365,8 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             // Assert
             $response->assertOk();
             $this->assertSame(
-                [$charlie->id, $alpha->id, $bravo->id],
-                $this->listedIds((string)$response->getContent(), 'dungeon_routes'),
+                [$charlie->public_key, $alpha->public_key, $bravo->public_key],
+                $this->listedPublicKeys((string)$response->getContent(), 'dungeon_routes'),
             );
         } finally {
             $dungeonRouteCollection->delete();
@@ -396,7 +396,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 [
                     'name'            => 'ZzTestOrderedCollection',
                     'published_state' => PublishedState::WORLD,
-                    'dungeon_routes'  => [$bravo->id, $charlie->id, $alpha->id],
+                    'dungeon_routes'  => [$bravo->public_key, $charlie->public_key, $alpha->public_key],
                 ],
             );
 
@@ -443,7 +443,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             $content = (string)$response->getContent();
             // Routes are added through the route picker, which the add button opens
             $this->assertMatchesRegularExpression('/<button id="dungeon_routes_add_button"[^>]*\sdisabled/s', $content);
-            $this->assertCount(DungeonRouteCollection::MAX_ROUTES, $this->listedIds($content, 'dungeon_routes'));
+            $this->assertCount(DungeonRouteCollection::MAX_ROUTES, $this->listedPublicKeys($content, 'dungeon_routes'));
         } finally {
             $dungeonRouteCollection->delete();
             Feature::for($creator)->forget(CreatorProfiles::class);
@@ -824,7 +824,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 [
                     'name'            => 'ZzTestRenamedCollection',
                     'published_state' => PublishedState::WORLD,
-                    'dungeon_routes'  => [$second->id],
+                    'dungeon_routes'  => [$second->public_key],
                 ],
             );
 
@@ -880,8 +880,9 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     /**
-     * The picker must list the collection owner's routes, not the admin's - otherwise an admin's
-     * save submits an empty selection and silently wipes every route in someone else's collection.
+     * The route picker only offers the acting user's own routes, so an admin editing someone else's
+     * collection may not add to it - but the page must still show the collection as the owner's, not
+     * claim the owner has no routes at all.
      */
     #[Test]
     public function edit_givenAdminEditingAnotherUsersCollection_showsTheOwnersOwnRoutes(): void
@@ -907,12 +908,18 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            /** @var Collection<int, DungeonRoute> $ownDungeonRoutes */
-            $ownDungeonRoutes = $response->viewData('ownDungeonRoutes');
-            $this->assertSame(
-                [$dungeonRoute->id],
-                $ownDungeonRoutes->pluck('id')->all(),
-                "The picker must show the collection owner's routes, not the acting admin's",
+            $this->assertFalse(
+                $response->viewData('mayAddDungeonRoutes'),
+                'Only the owner may add routes, so the admin gets no route picker',
+            );
+            $this->assertTrue(
+                $response->viewData('hasOwnDungeonRoutes'),
+                "The owner's routes decide this, not the acting admin's",
+            );
+            $this->assertStringContainsString(
+                $dungeonRoute->public_key,
+                (string)$response->getContent(),
+                'The routes already in the collection are shown either way',
             );
         } finally {
             DungeonRouteCollectionRoute::where('dungeon_route_collection_id', $dungeonRouteCollection->id)->delete();
@@ -946,7 +953,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 [
                     'name'            => $dungeonRouteCollection->name,
                     'published_state' => PublishedState::WORLD,
-                    'dungeon_routes'  => [$dungeonRoute->id],
+                    'dungeon_routes'  => [$dungeonRoute->public_key],
                 ],
             );
 
@@ -1293,15 +1300,20 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
      *
      * @return array<int, int>
      */
-    private function listedIds(string $content, string $name): array
+    /**
+     * The public keys the rendered lists hold, in page order.
+     *
+     * @return array<int, string>
+     */
+    private function listedPublicKeys(string $content, string $name): array
     {
         preg_match_all(
-            sprintf('/<input type="hidden" name="%s\[\]" value="(\d+)">/', preg_quote($name, '/')),
+            sprintf('/<input type="hidden" name="%s\[\]" value="([^"]*)"/', preg_quote($name, '/')),
             $content,
             $matches,
         );
 
-        return array_values(array_filter(array_map(intval(...), $matches[1])));
+        return array_values(array_filter($matches[1]));
     }
 
     private function createTeamFor(User $user): Team

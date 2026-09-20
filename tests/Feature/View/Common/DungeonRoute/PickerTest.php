@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\View\Common\DungeonRoute;
 
+use App\Models\Affix;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -113,6 +115,60 @@ final class PickerTest extends PublicTestCase
 
         // Assert
         $this->assertNull($options['max']);
+    }
+
+    #[Test]
+    public function render_givenNoAddUrl_passesNullSoTheHostSavesThePickedRoutes(): void
+    {
+        // Arrange - nothing beyond the defaults
+
+        // Act
+        [, $options] = $this->renderPicker(['addUrl' => null]);
+
+        // Assert
+        $this->assertNull($options['addUrl']);
+    }
+
+    #[Test]
+    public function render_givenALockedSeason_carriesItsAffixGroupsForTheFilterIcons(): void
+    {
+        // Arrange
+        /** @var Season $season */
+        $season      = Season::query()->has('dungeons')->has('affixGroups')->with(['dungeons'])->firstOrFail();
+        $affixGroups = $season->affixGroups()->with('affixes')->get();
+
+        // Act
+        [, $options] = $this->renderPicker(['lockedSeason' => $season]);
+
+        // Assert
+        $this->assertSame(
+            $affixGroups->pluck('id')->all(),
+            array_keys($options['affixGroups']),
+        );
+        /** @var AffixGroup $affixGroup */
+        $affixGroup = $affixGroups->first();
+        $this->assertSame(
+            $affixGroup->affixes->map(static fn(Affix $affix): array => ['class' => $affix->image_name, 'name' => $affix->name])->all(),
+            $options['affixGroups'][$affixGroup->id],
+        );
+    }
+
+    /**
+     * The drawer must carry everything it needs to be rebuilt: the new-collection form swaps it in when the
+     * user picks another season, without the page scripts that set it up on load.
+     */
+    #[Test]
+    public function render_givenTheDrawer_carriesItsOwnInlineCodeAttributes(): void
+    {
+        // Arrange - nothing beyond the defaults
+
+        // Act
+        [$html, $options] = $this->renderPicker();
+
+        // Assert
+        $this->assertStringContainsString('data-inline-id="test_picker"', $html);
+        $this->assertStringContainsString('data-inline-path="common/dungeonroute/picker"', $html);
+        $this->assertStringContainsString(e(json_encode($options)), $html);
     }
 
     #[Test]
