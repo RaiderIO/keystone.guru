@@ -71,6 +71,9 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         this._page = 0;
         this._total = 0;
         this._saving = false;
+        this._failed = false;
+        /** @type {string|null} The filter values of the last search, without its paging */
+        this._previousFilterParams = null;
         /** @type {Set<string>} */
         this._existing = new Set(this.options.existingPublicKeys || []);
         /** @type {string[]} Ticked public keys, in the order they were ticked */
@@ -87,6 +90,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
 
         this.dialog.activate();
         this.dialog.onFirstShow(this.reload.bind(this));
+        this.dialog.onShow(this._retryAfterFailure.bind(this));
         this.dialog.onConfirm(this._addDungeonRoutes.bind(this));
 
         $(this.options.previousSelector).on('click', this._goToPage.bind(this, -1));
@@ -198,12 +202,30 @@ class CommonDungeonroutePicker extends SearchInlineBase {
      * @private
      */
     _onFilterChanged() {
-        if (!this.dialog.hasBeenShown()) {
+        if (!this.dialog.hasBeenShown() ||
+            (!this._failed && this._previousFilterParams === this._getFilterParams())) {
             return;
         }
 
-        this._page = 0;
-        this._search();
+        this.reload();
+    }
+
+    /**
+     * Opening the drawer again is the obvious way to try a list that failed to load once more.
+     * @private
+     */
+    _retryAfterFailure() {
+        if (this._failed) {
+            this.reload();
+        }
+    }
+
+    /**
+     * @returns {string}
+     * @private
+     */
+    _getFilterParams() {
+        return JSON.stringify(new SearchParams(this.filters).params);
     }
 
     /**
@@ -222,6 +244,9 @@ class CommonDungeonroutePicker extends SearchInlineBase {
     _search() {
         let self = this;
 
+        this._failed = false;
+        this._previousFilterParams = this._getFilterParams();
+
         super._search({
             beforeSend: function () {
                 self._setState('loading');
@@ -232,6 +257,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
                 self._setState(json.data.length === 0 ? 'empty' : 'loaded');
             },
             error: function () {
+                self._failed = true;
                 self._total = 0;
                 self._renderRows([]);
                 self._setState('error');

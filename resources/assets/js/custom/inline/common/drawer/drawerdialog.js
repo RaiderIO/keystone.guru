@@ -20,6 +20,7 @@ class DrawerDialog {
 
         this._shownBefore = false;
         this._onFirstShowCallbacks = [];
+        this._onShowCallbacks = [];
         this._onConfirmCallbacks = [];
     }
 
@@ -37,7 +38,11 @@ class DrawerDialog {
             if (!self._shownBefore) {
                 self._shownBefore = true;
                 self._onFirstShowCallbacks.forEach(callback => callback());
+
+                return;
             }
+
+            self._onShowCallbacks.forEach(callback => callback());
         });
 
         $(this.options.confirmButtonSelector).on('click', function () {
@@ -65,6 +70,13 @@ class DrawerDialog {
      */
     onFirstShow(callback) {
         this._onFirstShowCallbacks.push(callback);
+    }
+
+    /**
+     * @param {Function} callback Called every time the drawer opens after the first time.
+     */
+    onShow(callback) {
+        this._onShowCallbacks.push(callback);
     }
 
     /**

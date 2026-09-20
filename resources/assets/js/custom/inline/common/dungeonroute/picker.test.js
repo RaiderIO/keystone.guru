@@ -362,6 +362,58 @@ describe('CommonDungeonroutePicker', () => {
         expect(rowOf('a').querySelector('.route_picker_checkbox').checked).toBe(true);
     });
 
+    it('titleFilter_givenItLosesFocusUnchangedOnALaterPage_staysOnThatPage', () => {
+        // Arrange
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        respondWithRoutes([route('a'), route('b')], 5);
+        document.querySelector('#picker_next').click();
+        respondWithRoutes([route('c')], 5);
+
+        // Act
+        jQuery('#picker_title_search').trigger('focusout');
+
+        // Assert
+        expect(ajaxCalls).toHaveLength(2);
+        expect(rowOf('c')).not.toBeNull();
+    });
+
+    it('show_givenTheListFailedToLoad_triesAgain', () => {
+        // Arrange
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        ajaxCalls[0].error({}, 'error');
+
+        // Act
+        jQuery('#picker').trigger('show.bs.offcanvas');
+
+        // Assert
+        expect(ajaxCalls).toHaveLength(2);
+        expect(document.querySelector('#picker_loading').hidden).toBe(false);
+    });
+
+    it('show_givenTheListLoaded_doesNotLoadAgain', () => {
+        // Arrange
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        respondWithRoutes([route('a')]);
+
+        // Act
+        jQuery('#picker').trigger('show.bs.offcanvas');
+
+        // Assert
+        expect(ajaxCalls).toHaveLength(1);
+    });
+
+    it('titleFilter_givenItLosesFocusAfterTheListFailedToLoad_triesAgain', () => {
+        // Arrange
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        ajaxCalls[0].error({}, 'error');
+
+        // Act
+        jQuery('#picker_title_search').trigger('focusout');
+
+        // Assert
+        expect(ajaxCalls).toHaveLength(2);
+    });
+
     it('titleFilter_givenANewTitleAndEnter_listsTheFirstPageForIt', () => {
         // Arrange
         jQuery('#picker').trigger('show.bs.offcanvas');

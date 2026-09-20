@@ -75,6 +75,20 @@ describe('DrawerDialog', () => {
         expect(dialog.hasBeenShown()).toBe(true);
     });
 
+    it('onShow_givenTheDrawerIsShownThreeTimes_callsBackForEveryShowAfterTheFirst', () => {
+        // Arrange
+        const callback = vi.fn();
+        dialog.onShow(callback);
+
+        // Act
+        jQuery('#drawer').trigger('show.bs.offcanvas');
+        jQuery('#drawer').trigger('show.bs.offcanvas');
+        jQuery('#drawer').trigger('show.bs.offcanvas');
+
+        // Assert
+        expect(callback).toHaveBeenCalledTimes(2);
+    });
+
     it('onConfirm_givenTheConfirmButtonIsClicked_callsBackWithoutClosing', () => {
         // Arrange
         const callback = vi.fn();

@@ -149,7 +149,7 @@ return [
             'title_search_placeholder' => 'Search by title',
             'loading'                  => 'Loading routes...',
             'empty'                    => 'No routes match these filters.',
-            'load_failed'              => 'The routes could not be loaded. Change a filter to try again.',
+            'load_failed'              => 'The routes could not be loaded. Change a filter, or open this again, to retry.',
             'previous'                 => 'Previous',
             'next'                     => 'Next',
             'pagination'               => 'Route pages',
