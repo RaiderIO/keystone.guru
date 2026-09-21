@@ -32,7 +32,6 @@ class DungeonRouteTableTeam {
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('js.team_remove_route_successful'));
-                    $(document).trigger('team:routeremoved', [key]);
                     // Refresh the table
                     $('#dungeonroute_filter').trigger('click');
                 }

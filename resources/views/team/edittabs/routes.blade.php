@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Requests\Team\TeamAddRoutesFormRequest;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Team;
 
@@ -44,7 +45,7 @@ use App\Models\Team;
         'sourceScope' => 'unassigned_by_members',
         'sourceTeam' => $team,
         'lockedGameVersion' => $currentUserGameVersion,
-        'existingPublicKeys' => $team->dungeonRoutes()->pluck('public_key')->all(),
+        'max' => TeamAddRoutesFormRequest::MAX_ROUTES_PER_REQUEST,
         'addUrl' => sprintf('/ajax/team/%s/route', $team->public_key),
         'openButtonSelector' => '#add_route_btn',
     ])
