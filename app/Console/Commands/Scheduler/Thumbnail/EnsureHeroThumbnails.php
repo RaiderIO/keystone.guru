@@ -59,7 +59,9 @@ class EnsureHeroThumbnails extends SchedulerCommand
 
             $this->info(sprintf('Queued hero thumbnails for %d of %d candidate routes', $queued, $heroRoutes->count()));
 
-            $this->info(sprintf('Deleted %d hero thumbnails of routes that left the hero set', $thumbnailService->expireHeroThumbnailsOutsideHeroSet()));
+            $expiredCount = $thumbnailService->expireHeroThumbnailsOutsideHeroSet();
+
+            $this->info(sprintf('Deleted %d hero thumbnails of routes that left the hero set', $expiredCount));
 
             return 0;
         });

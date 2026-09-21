@@ -12,7 +12,7 @@ class ExpireInactiveThumbnails extends SchedulerCommand
      *
      * @var string
      */
-    protected $signature = 'thumbnail:expireinactive {--dry-run : Only report how many routes would be expired} {--limit= : The maximum amount of routes to expire, defaults to keystoneguru.thumbnail.expire_inactive_count}';
+    protected $signature = 'thumbnail:expireinactive {--dry-run : Only report how many routes would be expired} {--limit= : The maximum amount of routes to expire}';
 
     /**
      * The console command description.
