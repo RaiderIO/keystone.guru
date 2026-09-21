@@ -2,7 +2,7 @@ class EnemyVisualModifierTruesight extends EnemyVisualModifier {
     constructor(enemyvisual, index) {
         super(enemyvisual, index);
         // If it's loaded already, set it now
-        this.iconName = this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.truesight === 1 ? 'truesight' : '';
+        this.iconName = this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.truesight ? 'truesight' : '';
     }
 
     /**
@@ -50,4 +50,12 @@ class EnemyVisualModifierTruesight extends EnemyVisualModifier {
             classes: 'modifier_external ' + this.iconName,
         });
     }
+}
+
+// Exported for unit tests only. Guarded so it is inert in the browser, where `module` is undefined
+// and this file is concatenated into the bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemyVisualModifierTruesight,
+    };
 }

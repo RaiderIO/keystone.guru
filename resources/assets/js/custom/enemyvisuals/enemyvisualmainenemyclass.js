@@ -47,7 +47,7 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
     _updateIconName() {
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
-            if (npc.classification_id >= NPC_CLASSIFICATION_ID_BOSS) {
+            if ([NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(npc.classification_id)) {
                 this.iconName = 'boss';
             } else {
                 // Enchanted Emissary
@@ -104,4 +104,12 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
         // No longer interested in this
         this.enemyvisual.enemy.unregister('mdt_connected', this);
     }
+}
+
+// Exported for unit tests only. Guarded so it is inert in the browser, where `module` is undefined
+// and this file is concatenated into the bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemyVisualMainEnemyClass,
+    };
 }

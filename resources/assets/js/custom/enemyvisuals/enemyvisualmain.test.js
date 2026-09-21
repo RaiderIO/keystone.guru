@@ -15,6 +15,10 @@ global.EnemyVisualIcon = class EnemyVisualIcon extends Signalable {
         super();
         this.enemyvisual = enemyvisual;
     }
+
+    _getTemplateData() {
+        return {};
+    }
 };
 
 const {EnemyVisualMain} = require('./enemyvisualmain');
@@ -197,4 +201,76 @@ test('constructor_givenEnemySetNpcSignal_clearsSizeCache', () => {
     registeredCallback();
 
     expect(visual._sizeCache).toEqual([]);
+});
+
+function makeTemplateDataFakeThis({classificationId, dangerousBorder = true, npcDangerous = false}) {
+    global.$.extend = Object.assign;
+    global.AFFIX_SHROUDED = 'shrouded';
+    global.getState = () => ({
+        hasEnemyAggressivenessBorder: () => false,
+        hasEnemyDangerousBorder: () => dangerousBorder,
+        getMapContext: () => ({hasAffix: () => false}),
+        isMapAdmin: () => false,
+    });
+
+    const enemy = {
+        npc: {dangerous: npcDangerous, classification_id: classificationId},
+        enemy_patrol_id: null,
+        isImportant: () => [NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(classificationId),
+        isRareNpc: () => classificationId === NPC_CLASSIFICATION_ID_RARE,
+        isAwakenedNpc: () => false,
+        isShrouded: () => false,
+        isShroudedZulGamux: () => false,
+        isNotShrouded: () => false,
+        isInspiring: () => false,
+        isEncrypted: () => false,
+        isPridefulNpc: () => false,
+        isTormented: () => false,
+        isRequiresActivation: () => false,
+    };
+
+    return {
+        enemyvisual: {enemy},
+        iconName: '',
+        isSpeedrunRequiredNpc: () => false,
+    };
+}
+
+test('_getTemplateData_givenRareNpcWithDangerousBorder_addsDangerousAndRareClasses', () => {
+    global.NPC_CLASSIFICATION_ID_RARE = 'rare';
+    const fakeThis = makeTemplateDataFakeThis({classificationId: NPC_CLASSIFICATION_ID_RARE});
+
+    const data = EnemyVisualMain.prototype._getTemplateData.call(fakeThis);
+
+    expect(data.main_visual_inner_classes.split(' ')).toEqual(expect.arrayContaining(['dangerous', 'rare']));
+});
+
+test('_getTemplateData_givenRareNpcWithoutDangerousBorder_addsNoBorderClasses', () => {
+    global.NPC_CLASSIFICATION_ID_RARE = 'rare';
+    const fakeThis = makeTemplateDataFakeThis({classificationId: NPC_CLASSIFICATION_ID_RARE, dangerousBorder: false});
+
+    const data = EnemyVisualMain.prototype._getTemplateData.call(fakeThis);
+
+    expect(data.main_visual_inner_classes.split(' ')).not.toContain('rare');
+    expect(data.main_visual_inner_classes.split(' ')).not.toContain('dangerous');
+});
+
+test('_getTemplateData_givenBossNpc_addsDangerousButNotRareClass', () => {
+    global.NPC_CLASSIFICATION_ID_RARE = 'rare';
+    const fakeThis = makeTemplateDataFakeThis({classificationId: NPC_CLASSIFICATION_ID_BOSS});
+
+    const data = EnemyVisualMain.prototype._getTemplateData.call(fakeThis);
+
+    expect(data.main_visual_inner_classes.split(' ')).toContain('dangerous');
+    expect(data.main_visual_inner_classes.split(' ')).not.toContain('rare');
+});
+
+test('_getTemplateData_givenPlainNpc_addsNoBorderClasses', () => {
+    global.NPC_CLASSIFICATION_ID_RARE = 'rare';
+    const fakeThis = makeTemplateDataFakeThis({classificationId: 'normal'});
+
+    const data = EnemyVisualMain.prototype._getTemplateData.call(fakeThis);
+
+    expect(data.main_visual_inner_classes.split(' ')).not.toContain('dangerous');
+    expect(data.main_visual_inner_classes.split(' ')).not.toContain('rare');
 });
