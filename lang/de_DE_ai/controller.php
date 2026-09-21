@@ -101,6 +101,10 @@ return [
             'upgrade_applied'           => 'Das Upgrade wurde auf deine Route angewendet.',
             'upgrade_discarded'         => 'Der Upgrade-Entwurf wurde verworfen.',
         ],
+        'continue_in_newer_season' => [
+            'limit_reached'   => '',
+            'no_newer_season' => '',
+        ],
     ],
     'dungeonroutediscover' => [
         'popular' => 'Beliebte Routen',
@@ -192,10 +196,12 @@ return [
     ],
     'dungeonroutecollection' => [
         'flash' => [
-            'collection_created'      => 'Sammlung erstellt',
-            'collection_updated'      => 'Sammlung aktualisiert',
-            'collection_deleted'      => 'Sammlung gelöscht',
-            'max_collections_reached' => 'Du darfst höchstens :max Sammlungen haben.',
+            'collection_created'             => 'Sammlung erstellt',
+            'collection_updated'             => 'Sammlung aktualisiert',
+            'collection_deleted'             => 'Sammlung gelöscht',
+            'max_collections_reached'        => 'Du darfst höchstens :max Sammlungen haben.',
+            'collection_duplicated'          => '',
+            'collection_duplicated_left_out' => '',
         ],
     ],
     'profile' => [

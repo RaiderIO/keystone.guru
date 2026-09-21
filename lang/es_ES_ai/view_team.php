@@ -32,7 +32,7 @@ return [
             'title'                  => 'Lista de rutas',
             'add_route'              => 'Agregar ruta',
             'add_route_no_moderator' => 'Debes ser un Moderador de este equipo para agregar rutas',
-            'stop_adding_routes'     => 'Dejar de agregar rutas',
+            'picker_title'           => '',
         ],
         'tags' => [
             'title'       => 'Etiquetas',

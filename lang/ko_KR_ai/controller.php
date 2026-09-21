@@ -101,6 +101,10 @@ return [
             'upgrade_applied'           => '업그레이드가 경로에 적용되었습니다.',
             'upgrade_discarded'         => '업그레이드 초안을 폐기했습니다.',
         ],
+        'continue_in_newer_season' => [
+            'limit_reached'   => '',
+            'no_newer_season' => '',
+        ],
     ],
     'dungeonroutediscover' => [
         'popular' => '인기 경로',
@@ -192,10 +196,12 @@ return [
     ],
     'dungeonroutecollection' => [
         'flash' => [
-            'collection_created'      => '컬렉션이 생성되었습니다',
-            'collection_updated'      => '컬렉션이 업데이트되었습니다',
-            'collection_deleted'      => '컬렉션이 삭제되었습니다',
-            'max_collections_reached' => '컬렉션은 최대 :max개까지 만들 수 있습니다.',
+            'collection_created'             => '컬렉션이 생성되었습니다',
+            'collection_updated'             => '컬렉션이 업데이트되었습니다',
+            'collection_deleted'             => '컬렉션이 삭제되었습니다',
+            'max_collections_reached'        => '컬렉션은 최대 :max개까지 만들 수 있습니다.',
+            'collection_duplicated'          => '',
+            'collection_duplicated_left_out' => '',
         ],
     ],
     'profile' => [

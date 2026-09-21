@@ -32,7 +32,7 @@ return [
             'title'                  => 'Elenco percorsi',
             'add_route'              => 'Aggiungi percorso',
             'add_route_no_moderator' => 'Devi essere un Moderatore di questo team per aggiungere percorsi',
-            'stop_adding_routes'     => 'Interrompi l\'aggiunta di percorsi',
+            'picker_title'           => '',
         ],
         'tags' => [
             'title'       => 'Tag',

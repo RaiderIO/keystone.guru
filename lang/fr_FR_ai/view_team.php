@@ -32,7 +32,7 @@ return [
             'title'                  => 'Liste des routes',
             'add_route'              => 'Ajouter une route',
             'add_route_no_moderator' => 'Vous devez être modérateur de cette équipe pour ajouter des routes',
-            'stop_adding_routes'     => 'Arrêter d\'ajouter des routes',
+            'picker_title'           => '',
         ],
         'tags' => [
             'title'       => 'Balises',

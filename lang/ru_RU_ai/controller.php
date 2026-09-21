@@ -101,6 +101,10 @@ return [
             'upgrade_applied'           => 'Обновление применено к Вашему маршруту.',
             'upgrade_discarded'         => 'Черновик обновления удалён.',
         ],
+        'continue_in_newer_season' => [
+            'limit_reached'   => '',
+            'no_newer_season' => '',
+        ],
     ],
     'dungeonroutediscover' => [
         'popular' => 'Популярные маршруты',
@@ -192,10 +196,12 @@ return [
     ],
     'dungeonroutecollection' => [
         'flash' => [
-            'collection_created'      => 'Коллекция создана',
-            'collection_updated'      => 'Коллекция обновлена',
-            'collection_deleted'      => 'Коллекция удалена',
-            'max_collections_reached' => 'У Вас может быть не более :max коллекций.',
+            'collection_created'             => 'Коллекция создана',
+            'collection_updated'             => 'Коллекция обновлена',
+            'collection_deleted'             => 'Коллекция удалена',
+            'max_collections_reached'        => 'У Вас может быть не более :max коллекций.',
+            'collection_duplicated'          => '',
+            'collection_duplicated_left_out' => '',
         ],
     ],
     'profile' => [

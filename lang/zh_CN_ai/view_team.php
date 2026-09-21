@@ -32,7 +32,7 @@ return [
             'title'                  => '路线列表',
             'add_route'              => '添加路线',
             'add_route_no_moderator' => '您必须是该团队的版主才能添加路线',
-            'stop_adding_routes'     => '停止添加路线',
+            'picker_title'           => '',
         ],
         'tags' => [
             'title'       => '标签',

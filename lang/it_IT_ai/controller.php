@@ -101,6 +101,10 @@ return [
             'upgrade_applied'           => 'L\'aggiornamento è stato applicato al tuo percorso.',
             'upgrade_discarded'         => 'La bozza di aggiornamento è stata scartata.',
         ],
+        'continue_in_newer_season' => [
+            'limit_reached'   => '',
+            'no_newer_season' => '',
+        ],
     ],
     'dungeonroutediscover' => [
         'popular' => 'Percorsi popolari',
@@ -192,10 +196,12 @@ return [
     ],
     'dungeonroutecollection' => [
         'flash' => [
-            'collection_created'      => 'Raccolta creata',
-            'collection_updated'      => 'Raccolta aggiornata',
-            'collection_deleted'      => 'Raccolta eliminata',
-            'max_collections_reached' => 'Puoi avere al massimo :max raccolte.',
+            'collection_created'             => 'Raccolta creata',
+            'collection_updated'             => 'Raccolta aggiornata',
+            'collection_deleted'             => 'Raccolta eliminata',
+            'max_collections_reached'        => 'Puoi avere al massimo :max raccolte.',
+            'collection_duplicated'          => '',
+            'collection_duplicated_left_out' => '',
         ],
     ],
     'profile' => [

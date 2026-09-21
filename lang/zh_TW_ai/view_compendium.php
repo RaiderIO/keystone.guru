@@ -222,6 +222,9 @@ return [
             'changed_to'     => '',
             'shared_by'      => '',
         ],
+        'tuning_build_released_at' => [
+            'went_live' => '',
+        ],
     ],
     'tuning' => [
         'index' => [

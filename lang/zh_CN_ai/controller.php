@@ -101,6 +101,10 @@ return [
             'upgrade_applied'           => '升级已应用到您的路线。',
             'upgrade_discarded'         => '已放弃该升级草稿。',
         ],
+        'continue_in_newer_season' => [
+            'limit_reached'   => '',
+            'no_newer_season' => '',
+        ],
     ],
     'dungeonroutediscover' => [
         'popular' => '热门路线',
@@ -192,10 +196,12 @@ return [
     ],
     'dungeonroutecollection' => [
         'flash' => [
-            'collection_created'      => '合集已创建',
-            'collection_updated'      => '合集已更新',
-            'collection_deleted'      => '合集已删除',
-            'max_collections_reached' => '您最多只能拥有 :max 个合集。',
+            'collection_created'             => '合集已创建',
+            'collection_updated'             => '合集已更新',
+            'collection_deleted'             => '合集已删除',
+            'max_collections_reached'        => '您最多只能拥有 :max 个合集。',
+            'collection_duplicated'          => '',
+            'collection_duplicated_left_out' => '',
         ],
     ],
     'profile' => [
