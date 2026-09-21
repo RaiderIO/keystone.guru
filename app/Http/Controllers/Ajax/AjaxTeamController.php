@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Team\TeamAddRoutesFormRequest;
 use App\Http\Requests\Team\TeamChangeRoleFormRequest;
 use App\Http\Requests\Team\TeamDefaultRoleFormRequest;
 use App\Http\Requests\Team\TeamRoutePublishingFormRequest;
@@ -16,12 +17,14 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode\Http;
+use Throwable;
 
 class AjaxTeamController extends Controller
 {
@@ -99,6 +102,38 @@ class AjaxTeamController extends Controller
         $team->addRoute($dungeonroute);
 
         return response()->noContent();
+    }
+
+    /**
+     * Adds every requested route or none: the same rules as addRoute() apply to each route, and one
+     * route failing them leaves all of them where they were.
+     *
+     * @throws Throwable
+     */
+    public function addRoutes(TeamAddRoutesFormRequest $request, Team $team): JsonResponse
+    {
+        $dungeonRoutes = $request->dungeonRoutes();
+        $memberIds     = $team->members()->pluck('users.id');
+
+        foreach ($dungeonRoutes as $dungeonRoute) {
+            $author = $dungeonRoute->author;
+            abort_unless($author !== null && $memberIds->contains($author->id), Http::FORBIDDEN);
+
+            abort_unless($dungeonRoute->team_id === null || $dungeonRoute->team_id === $team->id, Http::NOT_FOUND);
+        }
+
+        $addedPublicKeys = DB::transaction(static function () use ($team, $dungeonRoutes): array {
+            $addedPublicKeys = [];
+            foreach ($dungeonRoutes as $dungeonRoute) {
+                if ($team->addRoute($dungeonRoute)) {
+                    $addedPublicKeys[] = $dungeonRoute->public_key;
+                }
+            }
+
+            return $addedPublicKeys;
+        });
+
+        return response()->json(['public_keys' => $addedPublicKeys]);
     }
 
     /**

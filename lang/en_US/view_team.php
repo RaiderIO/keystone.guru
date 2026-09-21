@@ -30,9 +30,9 @@ return [
         ],
         'routes' => [
             'title'                  => 'Route list',
-            'add_route'              => 'Add route',
+            'add_route'              => 'Add routes',
             'add_route_no_moderator' => 'You must be a Moderator of this team to add routes',
-            'stop_adding_routes'     => 'Stop adding routes',
+            'picker_title'           => 'Add routes to %s',
         ],
         'tags' => [
             'title'       => 'Tags',

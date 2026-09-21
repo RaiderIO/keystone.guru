@@ -60,18 +60,6 @@ function buildTableContext(currentUserId = 1) {
 }
 
 describe('DungeonrouteTable._getAddRemoveRouteTemplate', () => {
-    it('_getAddRemoveRouteTemplate_givenRouteNotOnTeam_returnsAddRouteTemplateWithPublicKeyOnly', () => {
-        // Arrange
-        const row = buildRow({has_team: false, public_key: 'abc123'});
-
-        // Act
-        const result = DungeonrouteTable.prototype._getAddRemoveRouteTemplate.call(buildTableContext(1), row);
-
-        // Assert
-        expect(result.templateName).toBe('team_dungeonroute_table_add_route_actions');
-        expect(result.variables).toEqual({public_key: 'abc123'});
-    });
-
     it('_getAddRemoveRouteTemplate_givenOwnedRouteOnTeam_returnsOwnRouteActionsTemplateWithProfileActionsVariables', () => {
         // Arrange
         const row = buildRow({has_team: true, author: {id: 1}});
@@ -299,5 +287,103 @@ describe('DungeonrouteTable._renderAuthor', () => {
 
         // Assert
         expect(result).toBe('');
+    });
+});
+
+/**
+ * Swaps the setup file's minimal `$` stub for real jQuery around each test of the calling
+ * describe block, since the methods under test query the DOM and issue AJAX requests.
+ */
+function useRealJQuery() {
+    let stubbedJQuery;
+
+    beforeEach(() => {
+        stubbedJQuery = globalThis.$;
+        globalThis.$ = require('jquery');
+    });
+
+    afterEach(() => {
+        globalThis.$ = stubbedJQuery;
+    });
+}
+
+describe('DungeonrouteTable._applyFilters', () => {
+    useRealJQuery();
+
+    /**
+     * @param {Object|null} dt
+     * @returns {Object}
+     */
+    function buildFilterContext(dt) {
+        return Object.assign(Object.create(DungeonrouteTable.prototype), {
+            _dt: dt,
+            options: {
+                dungeonSelectId: '#missing_dungeon',
+                affixSelectId: '#missing_affix',
+                attributesSelectId: '#missing_attributes',
+            },
+        });
+    }
+
+    it('_applyFilters_givenTableNotBuiltYet_doesNothing', () => {
+        // Arrange
+        const context = buildFilterContext(null);
+
+        // Act
+        const act = () => DungeonrouteTable.prototype._applyFilters.call(context);
+
+        // Assert
+        expect(act).not.toThrow();
+    });
+
+    it('_applyFilters_givenBuiltTable_searchesTheFilterColumnsAndRedraws', () => {
+        // Arrange
+        const columnSearch = vi.fn();
+        const dt = {
+            settings: () => ({
+                init: () => ({
+                    columns: [{name: 'title'}, {name: 'dungeon_id'}, {name: 'affixes.id'}, {name: 'routeattributes.name'}],
+                }),
+            }),
+            column: vi.fn(() => ({search: columnSearch})),
+            draw: vi.fn(),
+        };
+
+        // Act
+        DungeonrouteTable.prototype._applyFilters.call(buildFilterContext(dt));
+
+        // Assert
+        expect(dt.column).toHaveBeenCalledTimes(3);
+        expect(dt.column).toHaveBeenNthCalledWith(1, 1);
+        expect(dt.column).toHaveBeenNthCalledWith(2, 2);
+        expect(dt.column).toHaveBeenNthCalledWith(3, 3);
+        expect(columnSearch).toHaveBeenNthCalledWith(2, []);
+        expect(dt.draw).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('DungeonrouteTable._promptDeleteDungeonRouteClicked', () => {
+    useRealJQuery();
+
+    it('_promptDeleteDungeonRouteClicked_givenConfirmedDelete_refreshesTheTableThroughTheFilterButton', () => {
+        // Arrange
+        document.body.innerHTML = '<button id="filter"></button><a class="dungeonroute-delete" data-publickey="abc123"></a>';
+        const filterClicked = vi.fn();
+        document.getElementById('filter').addEventListener('click', filterClicked);
+        globalThis.lang = {get: (key) => key};
+        globalThis.showSuccessNotification = vi.fn();
+        globalThis.showConfirmYesCancel = (message, onYes) => onYes();
+        vi.spyOn($, 'ajax').mockImplementation((settings) => settings.success({}));
+        const context = Object.assign(Object.create(DungeonrouteTable.prototype), {options: {filterButtonSelector: '#filter'}});
+        const boundHandler = DungeonrouteTable.prototype._promptDeleteDungeonRouteClicked.bind(context);
+        const clickEvent = {target: document.querySelector('.dungeonroute-delete'), preventDefault: vi.fn()};
+
+        // Act
+        boundHandler(clickEvent);
+
+        // Assert
+        expect($.ajax).toHaveBeenCalledWith(expect.objectContaining({type: 'DELETE', url: '/ajax/abc123'}));
+        expect(filterClicked).toHaveBeenCalledTimes(1);
+        expect(clickEvent.preventDefault).toHaveBeenCalledTimes(1);
     });
 });

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Team;
 
+use App\Http\Requests\Team\TeamAddRoutesFormRequest;
 use App\Models\Laratrust\Role;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
@@ -121,6 +122,49 @@ final class TeamControllerTest extends PublicTestCase
         // Assert
         $response->assertRedirect(route('team.edit', $this->team));
         $response->assertStatus(301);
+    }
+
+    #[Test]
+    public function edit_givenATeamModerator_rendersTheRoutePickerForThisTeam(): void
+    {
+        // Arrange - setUp() made user 1 the team's admin
+
+        // Act
+        $response = $this->get(route('team.edit', $this->team));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('id="team_edit_route_picker"', false);
+        $response->assertSee(json_encode(sprintf('/ajax/team/%s/route', $this->team->public_key)), false);
+        $response->assertSee(sprintf('"max":%d', TeamAddRoutesFormRequest::MAX_ROUTES_PER_REQUEST), false);
+        $response->assertDontSee('id="view_existing_routes"', false);
+    }
+
+    #[Test]
+    public function edit_givenATeamMemberWithoutModeratorRole_rendersNoRoutePicker(): void
+    {
+        // Arrange
+        $member   = null;
+        $teamUser = null;
+
+        try {
+            $member = User::factory()->create();
+            $member->addRole(Role::ROLE_USER);
+            $member->legal_agreed = true;
+            $member->save();
+            $teamUser = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $member->id, 'role' => TeamUser::ROLE_MEMBER]);
+            $this->actingAs($member);
+
+            // Act
+            $response = $this->get(route('team.edit', $this->team));
+
+            // Assert
+            $response->assertOk();
+            $response->assertDontSee('id="team_edit_route_picker"', false);
+        } finally {
+            $teamUser?->delete();
+            $member?->delete();
+        }
     }
 
     #[Test]

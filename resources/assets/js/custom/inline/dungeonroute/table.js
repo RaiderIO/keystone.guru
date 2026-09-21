@@ -51,35 +51,47 @@ class DungeonrouteTable extends InlineCode {
 
         let self = this;
 
-        $(this.options.filterButtonSelector).unbind('click').bind('click', function () {
-            // Build the search parameters
-            let dungeonId = $(self.options.dungeonSelectId).val();
-            // .val() on a zero-element jQuery collection (e.g. a select that doesn't exist for
-            // this table's view) returns undefined, which would otherwise be sent to the server
-            // as the literal search value 'undefined' instead of an empty array. See the same
-            // guard on requirements/tags below.
-            let affixes = $(self.options.affixSelectId).val() || [];
-            let attributes = $(self.options.attributesSelectId).val() || [];
-
-            // Find wherever the columns are we're looking for, then filter using them
-            // https://stackoverflow.com/questions/32598279/how-to-get-name-of-datatable-column
-            $.each(self._dt.settings().init().columns, function (index, value) {
-                if (value.name === 'dungeon_id') {
-                    self._dt.column(index).search(dungeonId);
-                } else if (value.name === 'affixes.id') {
-                    self._dt.column(index).search(affixes);
-                } else if (value.name === 'routeattributes.name') {
-                    self._dt.column(index).search(attributes);
-                }
-            });
-            self._dt.draw();
-        });
+        $(this.options.filterButtonSelector).unbind('click').bind('click', this._applyFilters.bind(this));
 
         $(this.options.tableListViewToggleSelector).unbind('click').bind('click', function () {
             // Display the correct table
             self.setViewMode($(this).data('viewmode'));
             self.refreshTable();
         });
+    }
+
+    /**
+     * Applies the filter selection to the table's columns and redraws it. Does nothing while the
+     * table has not been built yet: a tab shown from the URL hash can click the filter button
+     * before the page's ready callback calls refreshTable().
+     * @private
+     */
+    _applyFilters() {
+        if (this._dt === null) {
+            return;
+        }
+
+        // Build the search parameters
+        let dungeonId = $(this.options.dungeonSelectId).val();
+        // .val() on a zero-element jQuery collection (e.g. a select that doesn't exist for
+        // this table's view) returns undefined, which would otherwise be sent to the server
+        // as the literal search value 'undefined' instead of an empty array. See the same
+        // guard on requirements/tags below.
+        let affixes = $(this.options.affixSelectId).val() || [];
+        let attributes = $(this.options.attributesSelectId).val() || [];
+
+        // Find wherever the columns are we're looking for, then filter using them
+        // https://stackoverflow.com/questions/32598279/how-to-get-name-of-datatable-column
+        $.each(this._dt.settings().init().columns, (index, value) => {
+            if (value.name === 'dungeon_id') {
+                this._dt.column(index).search(dungeonId);
+            } else if (value.name === 'affixes.id') {
+                this._dt.column(index).search(affixes);
+            } else if (value.name === 'routeattributes.name') {
+                this._dt.column(index).search(attributes);
+            }
+        });
+        this._dt.draw();
     }
 
     /**
@@ -230,7 +242,7 @@ class DungeonrouteTable extends InlineCode {
             $continueInSeasonBtns.unbind('click').bind('click', self._continueInSeasonClicked.bind(self));
 
             let $deleteBtns = $('.dungeonroute-delete');
-            $deleteBtns.unbind('click').bind('click', self._promptDeleteDungeonRouteClicked);
+            $deleteBtns.unbind('click').bind('click', self._promptDeleteDungeonRouteClicked.bind(self));
 
             $('.scheduled-publish-save').unbind('click').bind('click', function () {
                 let $form     = $(this).closest('.scheduled-publish-form');
@@ -537,20 +549,12 @@ class DungeonrouteTable extends InlineCode {
      * Picks the action-dropdown Handlebars template AND its variables together for the
      * "addremoveroute" team table column, so the two can never drift apart (unlike returning just
      * the template name and re-deriving the variables from it elsewhere): an owned route on the
-     * team gets the full profile-style action set (with "remove from team" added), a not-owned
-     * route only gets "remove from team", and a route not yet on the team gets the "add to team"
-     * action.
+     * team gets the full profile-style action set (with "remove from team" added), and a not-owned
+     * route only gets "remove from team".
      * @param row
      * @returns {{templateName: string, variables: Object}}
      */
     _getAddRemoveRouteTemplate(row) {
-        if (!row.has_team) {
-            return {
-                templateName: 'team_dungeonroute_table_add_route_actions',
-                variables: {public_key: row.public_key},
-            };
-        }
-
         if (row.author.id === this.options.currentUserId) {
             return {
                 templateName: 'team_dungeonroute_table_route_actions_own_route',
