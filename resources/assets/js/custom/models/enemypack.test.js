@@ -8,6 +8,10 @@ global.Polyline = class Polyline {
     }
 
     rebindTooltip() {}
+
+    loadRemoteMapObject() {}
+};
+global.MapContextMappingVersionEdit = class MapContextMappingVersionEdit {
 };
 global.MAP_OBJECT_GROUP_ENEMY = 'enemy';
 global.MAP_OBJECT_GROUP_ENEMY_PACK = 'enemypack';
@@ -158,5 +162,36 @@ describe('EnemyPack polyline seams', () => {
 
         // Assert
         expect(weight).toBe(c.map.enemypack.polygonOptions.weight);
+    });
+});
+
+describe('EnemyPack.loadRemoteMapObject', () => {
+    it('loadRemoteMapObject_givenThePack_buildsTheHullFromItsEnemies', () => {
+        // Arrange
+        const enemyPack = createEnemyPack();
+        enemyPack.setRawEnemies = vi.fn();
+        enemyPack._updateHullLayer = vi.fn();
+        const enemies = [{id: 1}];
+
+        // Act
+        enemyPack.loadRemoteMapObject({id: 99, enemies: enemies, polyline: {}});
+
+        // Assert
+        expect(enemyPack.setRawEnemies).toHaveBeenCalledWith(enemies);
+        expect(enemyPack._updateHullLayer).toHaveBeenCalledTimes(1);
+    });
+
+    it('loadRemoteMapObject_givenTheNestedPolyline_leavesTheEnemiesAndHullAlone', () => {
+        // Arrange
+        const enemyPack = createEnemyPack();
+        enemyPack.setRawEnemies = vi.fn();
+        enemyPack._updateHullLayer = vi.fn();
+
+        // Act
+        enemyPack.loadRemoteMapObject({color: '#5993D2', vertices_json: '[]'}, {name: 'polyline', attributes: []});
+
+        // Assert
+        expect(enemyPack.setRawEnemies).not.toHaveBeenCalled();
+        expect(enemyPack._updateHullLayer).not.toHaveBeenCalled();
     });
 });

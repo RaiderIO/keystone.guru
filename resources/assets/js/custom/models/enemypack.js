@@ -127,8 +127,8 @@ class EnemyPack extends Polyline {
     loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
         super.loadRemoteMapObject(remoteMapObject, parentAttribute);
 
-        // Only called when not in admin state
-        if (!(getState().getMapContext() instanceof MapContextMappingVersionEdit)) {
+        // The nested polyline is loaded through this same method; only the pack itself carries its enemies
+        if (parentAttribute === null && !(getState().getMapContext() instanceof MapContextMappingVersionEdit)) {
             // Re-set the layer now that we know of the raw enemies
             this.setRawEnemies(remoteMapObject.enemies);
             this._updateHullLayer();
