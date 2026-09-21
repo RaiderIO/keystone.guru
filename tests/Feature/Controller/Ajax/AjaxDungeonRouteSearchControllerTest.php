@@ -8,6 +8,8 @@ use App\Models\KillZone\KillZone;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\User;
+use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
+use App\Service\DungeonRoute\DungeonRouteKillZoneServiceInterface;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -24,21 +26,31 @@ final class AjaxDungeonRouteSearchControllerTest extends AjaxPublicTestCase
     use ProvidesDungeon;
 
     #[Test]
-    public function get_givenAMatchingRoute_returnsItAsARoutePickerRow(): void
+    public function get_givenMatchingRoutes_returnsThemAsRoutePickerRows(): void
     {
         // Arrange
-        $user  = null;
-        $route = null;
+        $user       = null;
+        $route      = null;
+        $otherRoute = null;
 
         try {
+            $title = Str::random(30);
             $user  = User::factory()->create();
             $route = $this->createPublishedRoute($user, [
+                'title'        => sprintf('%s first', $title),
+                'popularity'   => 2,
                 'level_min'    => 4,
                 'level_max'    => 12,
                 'views'        => 1234,
                 'rating'       => 7,
                 'rating_count' => 3,
                 'enemy_forces' => 250,
+            ]);
+            $otherRoute = $this->createPublishedRoute($user, [
+                'title'              => sprintf('%s second', $title),
+                'popularity'         => 1,
+                'dungeon_id'         => $route->dungeon_id,
+                'mapping_version_id' => $route->mapping_version_id,
             ]);
             $enemy = Enemy::query()
                 ->where('mapping_version_id', $route->mapping_version_id)
@@ -50,11 +62,12 @@ final class AjaxDungeonRouteSearchControllerTest extends AjaxPublicTestCase
                 ->create(['dungeon_route_id' => $route->id, 'floor_id' => $enemy->floor_id, 'index' => 1]);
 
             // Act
-            $response = $this->post($this->searchUrl($route->mappingVersion), ['title' => $route->title]);
+            $response = $this->post($this->searchUrl($route->mappingVersion), ['title' => $title]);
 
             // Assert
             $response->assertOk();
-            $response->assertJsonCount(1);
+            $response->assertJsonCount(2);
+            $this->assertSame([$route->public_key, $otherRoute->public_key], array_column($response->json(), 'public_key'));
             $response->assertJson([[
                 'public_key'                    => $route->public_key,
                 'title'                         => $route->title,
@@ -76,11 +89,19 @@ final class AjaxDungeonRouteSearchControllerTest extends AjaxPublicTestCase
                     'expansion' => ['shortname' => $route->dungeon->expansion->shortname],
                 ],
             ]]);
-            $pullForces = $response->json('0.pull_forces');
-            $this->assertCount(1, $pullForces);
-            $this->assertArrayHasKey('enemy_forces', $pullForces[0]);
-            $this->assertArrayHasKey('has_boss', $pullForces[0]);
+            $expectedPullForces = app(DungeonRouteKillZoneServiceInterface::class)
+                ->getEnemyForcesPerKillZone($route)
+                ->map(static fn(KillZoneEnemyForces $pull): array => [
+                    'enemy_forces' => $pull->enemyForces,
+                    'has_boss'     => $pull->hasBoss,
+                ])
+                ->values()
+                ->all();
+            $this->assertCount(1, $expectedPullForces);
+            $this->assertSame($expectedPullForces, $response->json('0.pull_forces'));
+            $this->assertSame([], $response->json('1.pull_forces'));
         } finally {
+            $otherRoute?->delete();
             $route?->delete();
             $user?->delete();
         }

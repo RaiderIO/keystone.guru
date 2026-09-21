@@ -68,6 +68,7 @@ final class ViewServiceTest extends PublicTestCase
     {
         yield ['/ajax/brushline'];
         yield ['/ajax/route'];
+        yield ['/ajax/dungeonroute/search/retail/pit-of-saron'];
 
         yield ['/api/v1/dungeon'];
         yield ['/api/v1/route'];
