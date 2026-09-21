@@ -102,8 +102,8 @@ return [
             'upgrade_discarded'         => 'Черновик обновления удалён.',
         ],
         'continue_in_newer_season' => [
-            'limit_reached'   => '',
-            'no_newer_season' => '',
+            'limit_reached'   => 'Вы достигли максимального количества маршрутов, которое можете создать.',
+            'no_newer_season' => 'Этот маршрут нельзя продолжить в более новом сезоне: его подземелье не входит ни в один из них, или Вы уже продолжили его там.',
         ],
     ],
     'dungeonroutediscover' => [
@@ -200,8 +200,8 @@ return [
             'collection_updated'             => 'Коллекция обновлена',
             'collection_deleted'             => 'Коллекция удалена',
             'max_collections_reached'        => 'У Вас может быть не более :max коллекций.',
-            'collection_duplicated'          => '',
-            'collection_duplicated_left_out' => '',
+            'collection_duplicated'          => 'Коллекция скопирована. Пока Вы не измените, кому она видна, копию видите только Вы.',
+            'collection_duplicated_left_out' => '{1} :count маршрут не был добавлен, так как не соответствует выбранному сезону.|[2,*] Маршрутов не добавлено, так как они не соответствуют выбранному сезону: :count.',
         ],
     ],
     'profile' => [
