@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\DungeonRoute\DungeonRouteCollection;
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -13,15 +12,15 @@ use Illuminate\Support\Collection;
  * @var DungeonRouteCollection                          $dungeonRouteCollection
  * @var Collection<int, DungeonRouteCollectionGroup>    $editSections
  * @var bool                                            $hasOwnDungeonRoutes
- * @var array<int, int>                                 $selectedDungeonRouteIds
+ * @var bool                                            $mayAddDungeonRoutes
  * @var GameVersion                                     $selectedGameVersion
  * @var Season|null                                     $selectedSeason
- * @var Collection<int, DungeonRoute>                  $ownDungeonRoutes
  * @var Collection<int, Team>                           $teams
  * @var Collection<int, DungeonRouteCollectionCategory> $categories
  */
 
-$title = sprintf(__('view_collection.edit.title'), $dungeonRouteCollection->name);
+$formId = 'collection_details_form';
+$title  = sprintf(__('view_collection.edit.title'), $dungeonRouteCollection->name);
 ?>
 @extends('layouts.sitepage', [
     'showAds' => false,
@@ -39,14 +38,22 @@ $title = sprintf(__('view_collection.edit.title'), $dungeonRouteCollection->name
 
 @section('content')
     <div class="container">
-        @include('common.collection.details', [
+        @include('common.collection.routes', [
             'dungeonRouteCollection' => $dungeonRouteCollection,
             'editSections' => $editSections,
             'hasOwnDungeonRoutes' => $hasOwnDungeonRoutes,
-            'selectedDungeonRouteIds' => $selectedDungeonRouteIds,
+            'mayAddDungeonRoutes' => $mayAddDungeonRoutes,
             'selectedGameVersion' => $selectedGameVersion,
             'selectedSeason' => $selectedSeason,
-            'ownDungeonRoutes' => $ownDungeonRoutes,
+            'formId' => null,
+        ])
+
+        <h2 class="h4">{{ __('view_collection.edit.details') }}</h2>
+        @include('common.collection.details', [
+            'dungeonRouteCollection' => $dungeonRouteCollection,
+            'formId' => $formId,
+            'selectedGameVersion' => $selectedGameVersion,
+            'selectedSeason' => $selectedSeason,
             'teams' => $teams,
             'categories' => $categories,
         ])

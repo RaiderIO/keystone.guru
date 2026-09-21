@@ -85,7 +85,10 @@ return [
             'pulls'     => '',
         ],
         'table' => [
-            'team'                  => 'Команда',
+            'team'   => 'Команда',
+            'filter' => 'Фільтрувати',
+        ],
+        'tablefilters' => [
             'affixes'               => 'Модифікатори',
             'select_affixes'        => 'Вибрати',
             'affixes_selected'      => '{0} вибрано',
@@ -98,7 +101,6 @@ return [
             'tags_title'            => 'Немає міток',
             'select_tags'           => 'Вибрати',
             'tags_selected'         => '{0} вибрано',
-            'filter'                => 'Фільтрувати',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s — дані від https://www.archon.gg/wow',

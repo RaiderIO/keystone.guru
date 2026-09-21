@@ -1,57 +1,32 @@
 <?php
 
 use App\Http\Requests\DungeonRoute\DungeonRouteCollectionCreateFormRequest;
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use App\Models\GameVersion\GameVersion;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\Team;
-use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
 use Illuminate\Support\Collection;
 
 /**
  * @var DungeonRouteCollection|null                            $dungeonRouteCollection
- * @var Collection<int, DungeonRouteCollectionGroup>           $editSections
- * @var bool                                                   $hasOwnDungeonRoutes
- * @var array<int, int>                                        $selectedDungeonRouteIds
+ * @var string                                                 $formId    Id of the form, which the routes section posts into.
  * @var GameVersion                                            $selectedGameVersion
  * @var Collection<int, Season>                                $seasons               New collections only.
  * @var Season|null                                            $selectedSeason
- * @var Collection<int, DungeonRoute>                          $ownDungeonRoutes
  * @var Collection<int, Team>                                  $teams
  * @var Collection<int, DungeonRouteCollectionCategory>        $categories
  */
 
-$dungeonRouteCollection  ??= null;
-$selectedDungeonRouteIds ??= [];
-$seasons                 ??= collect();
-$selectedSeason          ??= null;
-$teams                   ??= collect();
-$categories              ??= collect();
+$dungeonRouteCollection ??= null;
+$seasons                ??= collect();
+$selectedSeason         ??= null;
+$teams                  ??= collect();
+$categories             ??= collect();
 
-$isNew = $dungeonRouteCollection === null;
-
-// The pick list takes a generic detail per option: a route's enemy forces against what its mapping version requires,
-// flagged when the route falls short. Dungeons that require none (most classic ones) get no detail.
-$enemyForcesDetails = $ownDungeonRoutes
-    ->concat($isNew ? collect() : $dungeonRouteCollection->dungeonRoutes)
-    ->unique('id')
-    ->filter(static fn(DungeonRoute $dungeonRoute): bool => $dungeonRoute->mappingVersion?->enemy_forces_required > 0)
-    ->mapWithKeys(static fn(DungeonRoute $dungeonRoute): array => [
-        $dungeonRoute->id => [
-            'text'      => sprintf('%d / %d', $dungeonRoute->enemy_forces, $dungeonRoute->mappingVersion->enemy_forces_required),
-            'isWarning' => $dungeonRoute->enemy_forces < $dungeonRoute->mappingVersion->enemy_forces_required,
-        ],
-    ])
-    ->all();
-
-// After a failed validation the picker must show what was submitted, not what is stored - otherwise
-// resubmitting the corrected form saves the collection with no routes. An empty submission stays empty
-if (session()->hasOldInput()) {
-    $selectedDungeonRouteIds = array_map(intval(...), (array)old('dungeon_routes', []));
-}
+$isNew        = $dungeonRouteCollection === null;
+$deleteFormId = 'collection_delete_form';
 
 // Sharing with a team is only meaningful when the user is actually in one
 $availablePublishedStates = array_values(array_filter(
@@ -71,9 +46,9 @@ foreach ($teams as $team) {
 ?>
 
 @isset($dungeonRouteCollection)
-    {{ html()->modelForm($dungeonRouteCollection, 'PATCH', route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]))->open() }}
+    {{ html()->modelForm($dungeonRouteCollection, 'PATCH', route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]))->id($formId)->open() }}
 @else
-    {{ html()->form('POST', route('collections.savenew'))->open() }}
+    {{ html()->form('POST', route('collections.savenew'))->id($formId)->open() }}
 @endisset
 
 <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -89,18 +64,6 @@ foreach ($teams as $team) {
         ->rows(3)
         ->attribute('maxlength', 1000) }}
     @include('common.forms.form-error', ['key' => 'description'])
-</div>
-
-<div class="mb-3">
-    <span class="form-label d-block mb-1">{{ __('view_common.collection.details.game_version') }}</span>
-    <p id="collection_game_version" class="mb-0">
-        <img src="{{ ksgAssetImage(sprintf('gameversions/%s.png', $selectedGameVersion->key)) }}" alt="" height="17"
-             class="align-text-bottom">
-        {{ __($selectedGameVersion->name) }}
-    </p>
-    <small class="form-text text-body-secondary">
-        {{ __($isNew ? 'view_common.collection.details.game_version_help' : 'view_common.collection.details.game_version_fixed') }}
-    </small>
 </div>
 
 @if($isNew)
@@ -171,107 +134,34 @@ foreach ($teams as $team) {
     </div>
 @endif
 
-<div id="collection_dungeon_routes_loading" class="text-body-secondary mb-2" role="status" hidden>
-    <i class="fas fa-spinner fa-spin" aria-hidden="true"></i> {{ __('view_common.collection.details.dungeon_routes_loading') }}
-</div>
-<div id="collection_dungeon_routes_error" class="text-danger small mb-2" role="alert" hidden>
-    {{ __('view_common.collection.details.dungeon_routes_load_failed') }}
-</div>
-
-<div id="collection_dungeon_routes" class="mb-3">
-    @if(!$hasOwnDungeonRoutes)
-        {{ html()->label(__('view_common.collection.details.dungeon_routes'), 'dungeon_routes') }}
-        <p class="text-body-secondary">
-            {{ __('view_common.collection.details.dungeon_routes_none') }}
-        </p>
-    @else
-        @php($slotSections = $editSections->filter(static fn(DungeonRouteCollectionGroup $editSection): bool => $editSection->dungeon !== null))
-        <div class="d-flex align-items-baseline mb-2">
-            <p class="form-text text-body-secondary my-0">
-                {{ __('view_common.collection.details.dungeon_routes_help') }}
-            </p>
-            @if($slotSections->isNotEmpty())
-                {{-- The slots only count their own routes; the limit holds for the collection as a whole --}}
-                <span id="collection_dungeon_routes_total" class="text-body-secondary ms-auto">
-                    {{ __('view_common.forms.orderedselect.count', ['count' => count($selectedDungeonRouteIds), 'max' => DungeonRouteCollection::MAX_ROUTES]) }}
-                </span>
-            @endif
-        </div>
-
-        @if($slotSections->isNotEmpty())
-            <div class="row row-cols-1 row-cols-lg-2 g-3 mb-3">
-                @foreach($slotSections as $editSection)
-                    <div class="col">
-                        <div class="collection_slot h-100" style="background-image: url('{{ $editSection->dungeon->getImageUrl() }}')">
-                            <div class="collection_slot_scrim h-100 p-3">
-                                @include('common.forms.orderedselect', [
-                                    'id' => sprintf('dungeon_routes_%d', $editSection->dungeon->id),
-                                    'name' => 'dungeon_routes',
-                                    'label' => __($editSection->dungeon->name),
-                                    'labelClass' => 'form-label fw-bold',
-                                    'options' => $editSection->dungeonRoutes->mapWithKeys(static fn(DungeonRoute $dungeonRoute): array => [
-                                        $dungeonRoute->id => $dungeonRoute->title,
-                                    ])->all(),
-                                    'optionDetails' => $enemyForcesDetails,
-                                    'detailWarningText' => __('view_common.collection.details.enemy_forces_short'),
-                                    'selectedIds' => $selectedDungeonRouteIds,
-                                    'max' => DungeonRouteCollection::MAX_ROUTES,
-                                    'countText' => __('view_common.collection.details.dungeon_routes_slot_count'),
-                                    'emptyText' => __('view_common.collection.details.dungeon_routes_slot_empty', ['dungeon' => __($editSection->dungeon->name)]),
-                                ])
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @endif
-
-        @foreach($editSections as $editSection)
-            @if($editSection->dungeon === null)
-                <div class="mb-3">
-                    @include('common.forms.orderedselect', [
-                        'id' => 'dungeon_routes',
-                        'name' => 'dungeon_routes',
-                        'label' => __('view_common.collection.details.dungeon_routes'),
-                        'options' => $editSection->dungeonRoutes->mapWithKeys(static fn(DungeonRoute $dungeonRoute): array => [
-                            $dungeonRoute->id => sprintf('%s — %s', $dungeonRoute->title, __($dungeonRoute->dungeon?->name ?? '')),
-                        ])->all(),
-                        'optionDetails' => $enemyForcesDetails,
-                        'detailWarningText' => __('view_common.collection.details.enemy_forces_short'),
-                        'selectedIds' => $selectedDungeonRouteIds,
-                        'max' => DungeonRouteCollection::MAX_ROUTES,
-                        'emptyText' => __('view_common.collection.details.dungeon_routes_empty'),
-                    ])
-                </div>
-            @endif
-        @endforeach
-        @foreach(collect($errors->get('dungeon_routes.*'))->flatten()->unique() as $dungeonRoutesError)
-            <div class="invalid-feedback d-block" role="alert">
-                <strong>{{ $dungeonRoutesError }}</strong>
-            </div>
-        @endforeach
-    @endif
-</div>
-
+@if($isNew)
 @include('common.general.inline', ['path' => 'common/collection/details', 'options' => [
-    'dungeonRoutesSelector' => '#collection_dungeon_routes',
-    'totalSelector' => '#collection_dungeon_routes_total',
-    'loadingSelector' => '#collection_dungeon_routes_loading',
-    'errorSelector' => '#collection_dungeon_routes_error',
+    'dungeonRoutesSelector' => '#collection_routes',
+    'loadingSelector' => '#collection_routes_loading',
+    'errorSelector' => '#collection_routes_error',
     'seasonSelector' => 'input[name="season_id"]',
-    'max' => DungeonRouteCollection::MAX_ROUTES,
-    'countText' => __('view_common.forms.orderedselect.count'),
-    // Only a new collection rebuilds its picker; an existing one's season is fixed
-    'formUrl' => $isNew ? route('collections.new') : null,
+    'formUrl' => route('collections.new'),
     'seasonNone' => DungeonRouteCollectionCreateFormRequest::SEASON_NONE,
 ]])
-
-{{ html()->input('submit')->value($dungeonRouteCollection !== null ? __('view_common.collection.details.save') : __('view_common.collection.details.submit'))->class('btn btn-info') }}
+@endif
 
 {{ html()->closeModelForm() }}
 
 @isset($dungeonRouteCollection)
-    {{ html()->form('DELETE', route('collections.delete', ['dungeonRouteCollection' => $dungeonRouteCollection]))->class('mt-4')->open() }}
-    {{ html()->input('submit')->value(__('view_common.collection.details.delete'))->class('btn btn-danger') }}
+    {{ html()->form('DELETE', route('collections.delete', ['dungeonRouteCollection' => $dungeonRouteCollection]))->id($deleteFormId)->open() }}
     {{ html()->closeModelForm() }}
 @endisset
+
+{{-- Both buttons sit outside the form they submit, so saving and deleting share one row --}}
+<div class="d-flex align-items-center">
+    {{ html()->input('submit')
+        ->value($dungeonRouteCollection !== null ? __('view_common.collection.details.save') : __('view_common.collection.details.submit'))
+        ->class('btn btn-info')
+        ->attribute('form', $formId) }}
+    @isset($dungeonRouteCollection)
+        {{ html()->input('submit')
+            ->value(__('view_common.collection.details.delete'))
+            ->class('btn btn-danger ms-auto')
+            ->attribute('form', $deleteFormId) }}
+    @endisset
+</div>

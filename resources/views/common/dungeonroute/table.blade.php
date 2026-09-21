@@ -117,70 +117,17 @@ if (Auth::check()) {
             {{ html()->text('team_name', $team->name)->class('form-control')->isReadonly() }}
         </div>
     @endisset
-    <div class="col-lg ps-1 pe-1">
-        @include('common.dungeon.select', [
-            'id' => $dungeonSelectId,
-            'allowSeasonSelection' => true,
-            'showSeasons' => true,
-            'showAll' => true,
-            'showExpansions' => true,
-            'required' => false,
-        ])
-    </div>
-    <div class="col-lg ps-1 pe-1">
-        {{ html()->label(__('view_common.dungeonroute.table.affixes'), sprintf('%s[]', $affixSelectId)) }}
-        {{
-            html()
-                ->multiselect(sprintf('%s[]', $affixSelectId), $affixgroups->pluck('text', 'id'))
-                ->id($affixSelectId)
-                ->class('form-control affixselect selectpicker')
-                ->data('selected-text-format', 'count > 1')
-                ->data('none-selected-text', __('view_common.dungeonroute.table.select_affixes'))
-                ->data('count-selected-text', __('view_common.dungeonroute.table.affixes_selected'))
-             }}
-    </div>
-    <div class="col-lg ps-1 pe-1">
-        @include('common.dungeonroute.attributes', [
-            'id' => $attributesSelectId,
-            'selectedIds' => array_merge( [-1], $allRouteAttributes->pluck('id')->toArray() ),
-            'showNoAttributes' => true,
-        ])
-    </div>
-    <div class="col-lg ps-1 pe-1">
-        <?php
-        $requirements = ['enough_enemy_forces' => __('view_common.dungeonroute.table.enemy_enemy_forces')];
-        if (Auth::check() && $view !== 'favorites') {
-            $requirements['favorite'] = __('view_common.dungeonroute.table.favorite');
-        }
-        ?>
-        {{ html()->label(__('view_common.dungeonroute.table.requirements'), $requirementsSelectId) }}
-        {{
-            html()
-                ->multiselect('dungeon_id', $requirements, 0)
-                ->id($requirementsSelectId)
-                ->class('form-control selectpicker')
-                ->data('selected-text-format', 'count > 1')
-                ->data('none-selected-text', __('view_common.dungeonroute.table.select_requirements'))
-                ->data('count-selected-text', __('view_common.dungeonroute.table.requirements_selected'))
-        }}
-    </div>
-    @if(($view === 'profile' || $view === 'team'))
-        <div class="col-lg ps-1 pe-1">
-            {{ html()->label(__('view_common.dungeonroute.table.tags'), sprintf('%s[]', $tagsSelectId)) }}
-            {{
-                html()
-                    ->multiselect(sprintf('%s[]', $tagsSelectId), $searchTags->pluck('name', 'name'))
-                    ->id($tagsSelectId)
-                    ->class('form-control selectpicker')
-                    ->attribute('title', $searchTags->isEmpty() ?
-                        __('view_common.dungeonroute.table.tags_title') : __('view_common.dungeonroute.table.select_tags')
-                    )
-                    ->data('selected-text-format', 'count > 1')
-                    ->data('none-selected-text', __('view_common.dungeonroute.table.select_tags'))
-                    ->data('count-selected-text', __('view_common.dungeonroute.table.tags_selected'))
-             }}
-        </div>
-    @endif
+    @include('common.dungeonroute.tablefilters', [
+        'dungeonSelectId' => $dungeonSelectId,
+        'affixSelectId' => $affixSelectId,
+        'attributesSelectId' => $attributesSelectId,
+        'requirementsSelectId' => $requirementsSelectId,
+        'tagsSelectId' => $tagsSelectId,
+        'affixgroups' => $affixgroups,
+        'searchTags' => $searchTags,
+        'showFavoriteRequirement' => Auth::check() && $view !== 'favorites',
+        'showTags' => $view === 'profile' || $view === 'team',
+    ])
     <div class="col-lg ps-1 pe-1">
         {{-- Block spacer matching the bare label height (24px) above the neighbouring select
              columns, so the button lines up with the select boxes. The former mb-2 added an extra

@@ -1,0 +1,59 @@
+<li class="route_picker_row card_dungeonroute leaderboard_row d-flex align-items-center" data-public-key="{{ public_key }}">
+    <label class="route_picker_row_label d-flex align-items-center flex-fill mb-0">
+        <span class="leaderboard_rank d-flex align-items-center justify-content-end">
+            <input type="checkbox" class="form-check-input route_picker_checkbox mt-0" value="{{ public_key }}">
+        </span>
+        <span class="d-flex align-items-center flex-fill flex-wrap leaderboard_row_inner">
+            <span class="leaderboard_thumbnail route_picker_thumbnail"
+                  style="background-image: url('{{ thumbnail_url }}')"></span>
+            <span class="leaderboard_main">
+                <span class="leaderboard_title d-block">
+                    <span class="route_picker_title">{{ title }}</span>
+                    {{#if is_unpublished}}
+                        <span class="route_picker_unpublished badge bg-warning text-dark ms-1">
+                            <i class="fas fa-eye-slash" aria-hidden="true"></i>
+                            {{ dungeonroute_picker_unpublished_label }}
+                        </span>
+                    {{/if}}
+                    <span class="route_picker_already_in badge bg-secondary ms-1" hidden>
+                        <i class="fas fa-check" aria-hidden="true"></i>
+                        {{ dungeonroute_picker_already_in_label }}
+                    </span>
+                </span>
+                <span class="leaderboard_author route_picker_dungeon text-muted small d-block">{{ dungeon_name }}</span>
+            </span>
+            <span class="leaderboard_stats d-flex align-items-center text-muted small ms-auto">
+                {{#if enemy_forces_warning}}
+                    <span class="leaderboard_enemy_forces route_picker_enemy_forces text-warning me-3">
+                        <i class="fas fa-exclamation-triangle"></i> {{ enemy_forces_warning }}
+                    </span>
+                {{/if}}
+                {{#if rating}}
+                    <span class="leaderboard_rating route_picker_rating me-3" title="{{ rating.title }}">
+                        {{#each rating.stars}}<i class="{{ this }}"></i>{{/each}}
+                    </span>
+                {{/if}}
+                {{#if key_range}}
+                    <span class="leaderboard_level_chip route_picker_key_range me-3">{{ key_range }}</span>
+                {{/if}}
+                {{!-- Always rendered, graph or no graph, so the columns line up down the list --}}
+                <span class="leaderboard_pull_graph route_picker_pull_graph me-3">
+                    {{#if pull_graph}}
+                        <span class="d-inline-flex" data-bs-toggle="tooltip" title="{{ pull_graph.title }}">
+                            <svg width="{{ pull_graph.width }}" height="{{ pull_graph.height }}"
+                                 viewBox="0 0 {{ pull_graph.width }} {{ pull_graph.height }}"
+                                 role="img" aria-hidden="true" preserveAspectRatio="none">
+                                {{#each pull_graph.bars}}
+                                    <rect x="{{ x }}" y="{{ y }}" width="{{ width }}" height="{{ height }}" fill="{{ fill }}"></rect>
+                                {{/each}}
+                            </svg>
+                        </span>
+                    {{/if}}
+                </span>
+                <span class="leaderboard_views route_picker_views" title="{{ views_title }}">
+                    <i class="fas fa-eye"></i> {{ views }}
+                </span>
+            </span>
+        </span>
+    </label>
+</li>

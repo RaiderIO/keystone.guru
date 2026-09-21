@@ -105,7 +105,10 @@ return [
             'pulls'     => '{1} :count pull|[2,*] :count pulls',
         ],
         'table' => [
-            'team'                  => 'Equipo',
+            'team'   => 'Equipo',
+            'filter' => 'Filtro',
+        ],
+        'tablefilters' => [
             'affixes'               => 'Afijos',
             'select_affixes'        => 'Seleccionar afijos',
             'affixes_selected'      => '{0} afijos seleccionados',
@@ -118,7 +121,6 @@ return [
             'tags_title'            => 'No hay etiquetas disponibles',
             'select_tags'           => 'Seleccionar etiquetas',
             'tags_selected'         => '{0} etiquetas seleccionadas',
-            'filter'                => 'Filtro',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - datos por https://www.archon.gg/wow',

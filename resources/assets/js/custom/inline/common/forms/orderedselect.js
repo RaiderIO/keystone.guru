@@ -9,6 +9,9 @@
  @property {string} fullSelector      The note shown once the list holds max items.
  @property {string} statusSelector    Polite live region announcing every change.
  @property {Number} max
+ @property {boolean} ajax             Report changes as events on the root instead of adding from the select.
+ @property {string} rootSelector      The control's root element, which the ajax mode events are fired on.
+ @property {Number|null} fullCount    What counts towards max in ajax mode, when that is more than this list.
  @property {string} countText         Contains :count and :max.
  @property {string} moveUpText        Contains :name.
  @property {string} moveDownText      Contains :name.
@@ -23,6 +26,10 @@
  * buttons, remove. Each item carries a hidden input, so the form posts the ids in list order. Every change
  * triggers `orderedselect:changed` on the list, which bubbles.
  *
+ * In ajax mode the host page saves every change itself: a move fires `orderedselect:moved` and a remove
+ * `orderedselect:removed` ({id, name, detail, position}) on the root, and the host adds items, undoes changes and
+ * tells the control how full it is through addItem(), removeItem(), setIds() and setFullCount().
+ *
  * @property {CommonFormsOrderedselectOptions} options
  */
 class CommonFormsOrderedselect extends InlineCode {
@@ -32,7 +39,9 @@ class CommonFormsOrderedselect extends InlineCode {
 
         let $list = $(this.options.listSelector);
 
-        $(this.options.addButtonSelector).unbind('click').bind('click', this._addSelected.bind(this));
+        if (!this.options.ajax) {
+            $(this.options.addButtonSelector).unbind('click').bind('click', this._addSelected.bind(this));
+        }
         $list.on('click', '.ordered_select_up', this._onMoveClicked.bind(this, -1));
         $list.on('click', '.ordered_select_down', this._onMoveClicked.bind(this, 1));
         $list.on('click', '.ordered_select_remove', this._onRemoveClicked.bind(this));
@@ -44,10 +53,104 @@ class CommonFormsOrderedselect extends InlineCode {
                 mirror: {constrainDimensions: true},
             });
             // drag:stopped fires once the original item is back in the DOM at its new position
-            this._sortable.on('drag:stopped', this._refresh.bind(this));
+            this._sortable.on('drag:stopped', this._onDragStopped.bind(this));
         }
 
         this._refresh();
+    }
+
+    /**
+     * Appends an item without announcing it as a change of the user's (ajax mode: the host saved it already).
+     * @param {string|Number} id
+     * @param {string} name
+     * @param {{text: string, isWarning?: boolean}|null} [detail] Secondary text next to the label, as the
+     *        server-rendered items carry; without it the item shows none.
+     */
+    addItem(id, name, detail = null) {
+        if (this._findItem(id).length > 0) {
+            return;
+        }
+
+        let $item = $($(this.options.templateSelector).prop('content').firstElementChild.cloneNode(true));
+        $item.attr('data-id', id);
+        $item.find('.ordered_select_label').text(name);
+        this._applyDetail($item, detail === null ? undefined : detail.text, detail !== null && (detail.isWarning === true));
+        $item.find('input[type="hidden"]').val(id);
+        $(this.options.listSelector).append($item);
+
+        this._refresh();
+    }
+
+    /**
+     * @param {string|Number} id
+     * @returns {{text: string, isWarning: boolean}|null} What the item shows next to its label, if anything.
+     */
+    getDetail(id) {
+        let $detail = this._findItem(id).find('.ordered_select_detail');
+
+        if ($detail.length === 0 || $detail.prop('hidden')) {
+            return null;
+        }
+
+        return {
+            text:      $detail.find('.ordered_select_detail_text').text(),
+            isWarning: $detail.hasClass('ordered_select_detail_warning'),
+        };
+    }
+
+    /**
+     * Removes an item without announcing it as a change of the user's.
+     * @param {string|Number} id
+     */
+    removeItem(id) {
+        this._findItem(id).remove();
+        this._refresh();
+    }
+
+    /**
+     * @returns {string[]} The ids in list order.
+     */
+    getIds() {
+        return this._getItems().map((index, element) => $(element).attr('data-id')).get();
+    }
+
+    /**
+     * Puts the items in the passed order; ids that are not in the list are ignored.
+     * @param {Array<string|Number>} ids
+     */
+    setIds(ids) {
+        let $list = $(this.options.listSelector);
+        ids.forEach(id => $list.append(this._findItem(id)));
+
+        this._refresh();
+    }
+
+    /**
+     * @param {Number} fullCount What counts towards max, e.g. every item of a group of lists.
+     */
+    setFullCount(fullCount) {
+        this.options.fullCount = fullCount;
+        this._refresh();
+    }
+
+    /**
+     * @param {string|Number} id
+     * @returns {jQuery}
+     * @private
+     */
+    _findItem(id) {
+        return this._getItems().filter((index, element) => $(element).attr('data-id') === String(id));
+    }
+
+    /**
+     * @private
+     */
+    _onDragStopped() {
+        this._refresh();
+
+        if (this.options.ajax) {
+            $(this.options.rootSelector).trigger('orderedselect:moved');
+        }
     }
 
     /**
@@ -132,6 +235,10 @@ class CommonFormsOrderedselect extends InlineCode {
         this._refresh();
         this._announce(this.options.movedStatusText, this._getName($item), this._getItems().index($item) + 1);
 
+        if (this.options.ajax) {
+            $(this.options.rootSelector).trigger('orderedselect:moved');
+        }
+
         // At the top or bottom this button just became disabled; hand focus to the one that still works
         let $focus = $(event.currentTarget);
         if ($focus.prop('disabled')) {
@@ -152,14 +259,23 @@ class CommonFormsOrderedselect extends InlineCode {
         }
 
         let name = this._getName($item);
-        $(this.options.addSelectSelector).find(`option[value="${$item.attr('data-id')}"]`).prop('disabled', false);
+        let id = $item.attr('data-id');
+        let detail = this.getDetail(id);
+        let position = this._getItems().index($item) + 1;
+        $(this.options.addSelectSelector).find(`option[value="${id}"]`).prop('disabled', false);
         $item.remove();
 
         this._refresh();
         this._announce(this.options.removedStatusText, name, 0);
 
+        if (this.options.ajax) {
+            $(this.options.rootSelector).trigger('orderedselect:removed', [{id: id, name: name, detail: detail, position: position}]);
+        }
+
         if ($neighbour.length > 0) {
             $neighbour.find('.ordered_select_remove').trigger('focus');
+        } else if (this.options.ajax) {
+            $(this.options.addButtonSelector).trigger('focus');
         } else {
             $(this.options.addSelectSelector).trigger('focus');
         }
@@ -174,7 +290,8 @@ class CommonFormsOrderedselect extends InlineCode {
         let self = this;
         let $items = this._getItems();
         let count = $items.length;
-        let isFull = count >= this.options.max;
+        let fullCount = this.options.ajax && typeof this.options.fullCount === 'number' ? this.options.fullCount : count;
+        let isFull = fullCount >= this.options.max;
 
         $items.each(function (index, element) {
             let $item = $(element);

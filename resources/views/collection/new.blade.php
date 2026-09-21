@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -14,10 +13,12 @@ use Illuminate\Support\Collection;
  * @var GameVersion                                     $selectedGameVersion
  * @var Collection<int, Season>                         $seasons
  * @var Season|null                                     $selectedSeason
- * @var Collection<int, DungeonRoute>                  $ownDungeonRoutes
  * @var Collection<int, Team>                           $teams
  * @var Collection<int, DungeonRouteCollectionCategory> $categories
  */
+
+// The routes section sits above the form it posts into, so its hidden inputs name that form
+$formId = 'collection_details_form';
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_collection.new.title')])
 
@@ -25,15 +26,23 @@ use Illuminate\Support\Collection;
 
 @section('content')
     <div class="container">
-        @include('common.collection.details', [
+        @include('common.collection.routes', [
             'dungeonRouteCollection' => null,
             'editSections' => $editSections,
             'hasOwnDungeonRoutes' => $hasOwnDungeonRoutes,
-            'selectedDungeonRouteIds' => [],
+            'mayAddDungeonRoutes' => true,
+            'selectedGameVersion' => $selectedGameVersion,
+            'selectedSeason' => $selectedSeason,
+            'formId' => $formId,
+        ])
+
+        <h2 class="h4">{{ __('view_collection.new.details') }}</h2>
+        @include('common.collection.details', [
+            'dungeonRouteCollection' => null,
+            'formId' => $formId,
             'selectedGameVersion' => $selectedGameVersion,
             'seasons' => $seasons,
             'selectedSeason' => $selectedSeason,
-            'ownDungeonRoutes' => $ownDungeonRoutes,
             'teams' => $teams,
             'categories' => $categories,
         ])

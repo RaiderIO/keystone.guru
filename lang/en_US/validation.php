@@ -60,6 +60,16 @@ return [
         'npc_dungeon_ids' => [
             'required' => 'Select at least one dungeon - an NPC with no dungeon has no way to derive which game version it belongs to.',
         ],
+        'route_list_game_version_id' => [
+            'exists' => 'That game version does not exist.',
+        ],
+        'route_list_season_id' => [
+            'exists' => 'That season does not exist.',
+        ],
+        'route_list_dungeon_ids' => [
+            'min'    => 'Limit the routes to at least one dungeon, or leave the dungeons out.',
+            'exists' => 'One or more of those dungeons do not exist.',
+        ],
         'collection_name' => [
             'required' => 'A collection needs a name.',
             'max'      => 'A collection name may not be longer than :max characters.',
@@ -86,6 +96,10 @@ return [
             'distinct'     => 'A route may only appear once in a collection.',
             'game_version' => 'This route is not for the game version of this collection.',
             'season'       => 'This route is not for the season of this collection.',
+            'required'     => 'Choose at least one route.',
+            'already_in'   => 'This route is already in the collection.',
+            'not_in'       => 'This route is not in the collection.',
+            'missing'      => 'The new order must hold every route of the collection. Reload the page and try again.',
         ],
     ],
     'date'              => 'The :attribute is not a valid date.',

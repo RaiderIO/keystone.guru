@@ -76,12 +76,12 @@ class DungeonRouteCollectionFormRequest extends FormRequest
             // could put (and thereby surface) someone else's route in their collection
             'dungeon_routes.*' => [
                 'required',
-                'integer',
+                'string',
                 // dungeon_route_collection_routes is unique on (collection, route): the form
                 // cannot produce duplicates, but a hand-crafted post could, and the insert would
                 // then fail on the constraint rather than as a validation error
                 'distinct',
-                Rule::exists('dungeon_routes', 'id')
+                Rule::exists('dungeon_routes', 'public_key')
                     ->where('author_id', $userId),
             ],
         ];
@@ -214,21 +214,21 @@ class DungeonRouteCollectionFormRequest extends FormRequest
     public function dungeonRoutes(): Collection
     {
         return once(function (): Collection {
-            /** @var array<int, int> $ids */
-            $ids = $this->validated('dungeon_routes') ?? [];
+            /** @var array<int, string> $publicKeys */
+            $publicKeys = $this->validated('dungeon_routes') ?? [];
 
-            if ($ids === []) {
+            if ($publicKeys === []) {
                 return collect();
             }
 
             $dungeonRoutes = DungeonRoute::query()
-                ->whereIn('id', $ids)
+                ->whereIn('public_key', $publicKeys)
                 ->get()
-                ->keyBy('id');
+                ->keyBy('public_key');
 
             // Preserve the order the user submitted them in, which becomes the display order
-            return collect($ids)
-                ->map(static fn(int $id): ?DungeonRoute => $dungeonRoutes->get($id))
+            return collect($publicKeys)
+                ->map(static fn(string $publicKey): ?DungeonRoute => $dungeonRoutes->get($publicKey))
                 ->filter()
                 ->values();
         });
@@ -281,9 +281,9 @@ class DungeonRouteCollectionFormRequest extends FormRequest
      */
     private function validateDungeonRoutesMatchTheCollection(Validator $validator): void
     {
-        /** @var array<int, int|string> $ids */
-        $ids = (array)($this->input('dungeon_routes') ?? []);
-        if ($ids === []) {
+        /** @var array<int, string> $publicKeys */
+        $publicKeys = (array)($this->input('dungeon_routes') ?? []);
+        if ($publicKeys === []) {
             return;
         }
 
@@ -297,12 +297,12 @@ class DungeonRouteCollectionFormRequest extends FormRequest
 
         $dungeonRoutes = DungeonRoute::query()
             ->with(['mappingVersion'])
-            ->whereIn('id', $ids)
+            ->whereIn('public_key', $publicKeys)
             ->get()
-            ->keyBy('id');
+            ->keyBy('public_key');
 
-        foreach ($ids as $index => $id) {
-            $dungeonRoute = $dungeonRoutes->get((int)$id);
+        foreach ($publicKeys as $index => $publicKey) {
+            $dungeonRoute = $dungeonRoutes->get($publicKey);
             if ($dungeonRoute === null || in_array($dungeonRoute->id, $memberIds, true)) {
                 continue;
             }

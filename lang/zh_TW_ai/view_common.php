@@ -85,7 +85,10 @@ return [
             'pulls'     => '',
         ],
         'table' => [
-            'team'                  => '隊伍',
+            'team'   => '隊伍',
+            'filter' => '篩選',
+        ],
+        'tablefilters' => [
             'affixes'               => '詞綴',
             'select_affixes'        => '選擇詞綴',
             'affixes_selected'      => '{0} 個詞綴已選擇',
@@ -98,7 +101,6 @@ return [
             'tags_title'            => '無可用標籤',
             'select_tags'           => '選擇標籤',
             'tags_selected'         => '{0} 個標籤已選擇',
-            'filter'                => '篩選',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - 數據來源 https://www.archon.gg/wow',

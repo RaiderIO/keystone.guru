@@ -3,6 +3,17 @@
 return [
 
     'collection' => [
+        'routes' => [
+            'heading'          => 'Routes',
+            'count'            => ':count / :max routes',
+            'help'             => 'Changes to the routes are saved right away. Drag a route by its handle, or use its arrows, to set the order the collection shows it in.',
+            'help_new'         => 'Pick the routes this collection starts with. They are saved once you create it. Drag a route by its handle, or use its arrows, to set the order the collection shows it in.',
+            'picker_title_new' => 'Add routes to this collection',
+            'owner_only'       => 'Only the owner of this collection can add routes to it.',
+            'add_routes'       => 'Add routes',
+            'add_route_for'    => 'Add route for :dungeon',
+            'picker_title'     => 'Add routes to :name',
+        ],
         'details' => [
             'name'                       => 'Name',
             'description'                => 'Description',
@@ -14,9 +25,6 @@ return [
             'team'                       => 'Team',
             'team_none'                  => 'No team',
             'team_help'                  => 'The team to share this collection with, when the collection is visible to your team.',
-            'game_version'               => 'Game version',
-            'game_version_help'          => 'The game version selected on the site. Switch it at the top of the page to make a collection for another one.',
-            'game_version_fixed'         => 'A collection keeps the game version it was made for.',
             'season'                     => 'Season',
             'season_none'                => 'No season (free-form)',
             'season_help'                => 'One slot per dungeon of the season; can\'t be changed later.',
@@ -29,7 +37,6 @@ return [
             'dungeon_routes_load_failed' => 'Your routes for this game version and season could not be loaded. Pick it again to retry.',
             'enemy_forces_short'         => 'Below the required enemy forces',
             'dungeon_routes_empty'       => 'No routes in this collection yet.',
-            'dungeon_routes_help'        => 'Only your own routes can be added.',
             'save'                       => 'Save',
             'submit'                     => 'Create collection',
             'delete'                     => 'Delete collection',
@@ -118,7 +125,10 @@ return [
             'pulls'     => '{1} :count pull|[2,*] :count pulls',
         ],
         'table' => [
-            'team'                  => 'Team',
+            'team'   => 'Team',
+            'filter' => 'Filter',
+        ],
+        'tablefilters' => [
             'affixes'               => 'Affixes',
             'select_affixes'        => 'Select affixes',
             'affixes_selected'      => '{0} affixes selected',
@@ -131,7 +141,20 @@ return [
             'tags_title'            => 'No tags available',
             'select_tags'           => 'Select tags',
             'tags_selected'         => '{0} tags selected',
-            'filter'                => 'Filter',
+        ],
+        'picker' => [
+            'close'                    => 'Close',
+            'source_mine'              => 'Your routes',
+            'title_search'             => 'Title',
+            'title_search_placeholder' => 'Search by title',
+            'loading'                  => 'Loading routes...',
+            'empty'                    => 'No routes match these filters.',
+            'load_failed'              => 'The routes could not be loaded. Change a filter, or open this again, to retry.',
+            'previous'                 => 'Previous',
+            'next'                     => 'Next',
+            'pagination'               => 'Route pages',
+            'cancel'                   => 'Cancel',
+            'add_none'                 => 'Add routes',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - data by https://www.archon.gg/wow',

@@ -209,7 +209,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $response = $this->actingAs($creator)->post(route('collections.savenew'), [
             'name'            => 'ZzTestWrongGameVersion',
             'published_state' => PublishedState::WORLD,
-            'dungeon_routes'  => [$dungeonRoute->id],
+            'dungeon_routes'  => [$dungeonRoute->public_key],
         ]);
 
         // Assert
@@ -229,7 +229,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $response = $this->actingAs($creator)->post(route('collections.savenew'), [
             'name'            => 'ZzTestNoMappingVersion',
             'published_state' => PublishedState::WORLD,
-            'dungeon_routes'  => [$dungeonRoute->id],
+            'dungeon_routes'  => [$dungeonRoute->public_key],
         ]);
 
         // Assert
@@ -250,7 +250,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
             'name'            => 'ZzTestWrongSeason',
             'published_state' => PublishedState::WORLD,
             'season_id'       => $currentSeason->id,
-            'dungeon_routes'  => [$dungeonRoute->id],
+            'dungeon_routes'  => [$dungeonRoute->public_key],
         ]);
 
         // Assert
@@ -271,7 +271,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $response = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection), [
             'name'            => 'ZzTestSeasonSet',
             'published_state' => PublishedState::WORLD,
-            'dungeon_routes'  => [$dungeonRoute->id],
+            'dungeon_routes'  => [$dungeonRoute->public_key],
         ]);
 
         // Assert
@@ -293,7 +293,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $response = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection), [
             'name'            => 'ZzTestSeasonSet',
             'published_state' => PublishedState::WORLD,
-            'dungeon_routes'  => [$dungeonRoute->id],
+            'dungeon_routes'  => [$dungeonRoute->public_key],
         ]);
 
         // Assert
@@ -313,7 +313,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $response = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection), [
             'name'            => 'ZzTestFreeForm',
             'published_state' => PublishedState::WORLD,
-            'dungeon_routes'  => [$dungeonRoute->id],
+            'dungeon_routes'  => [$dungeonRoute->public_key],
         ]);
 
         // Assert
@@ -394,7 +394,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
             'name'            => 'ZzTestNowFreeForm',
             'published_state' => PublishedState::WORLD,
             'season_id'       => '',
-            'dungeon_routes'  => [$dungeonRoute->id],
+            'dungeon_routes'  => [$dungeonRoute->public_key],
         ]);
 
         // Assert
@@ -442,7 +442,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
             'name'            => 'ZzTestRenamedAfterRollover',
             'published_state' => PublishedState::WORLD_WITH_LINK,
             'season_id'       => $season->id,
-            'dungeon_routes'  => [$dungeonRoute->id],
+            'dungeon_routes'  => [$dungeonRoute->public_key],
         ]);
 
         // Assert
@@ -521,7 +521,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $this->assertMatchesRegularExpression(
-            sprintf('/data-id="%d".*?<span class="ordered_select_detail"\s+hidden/s', $dungeonRoute->id),
+            sprintf('/data-id="%s".*?<span class="ordered_select_detail"\s+hidden/s', preg_quote($dungeonRoute->public_key, '/')),
             (string)$response->getContent(),
         );
     }
@@ -534,8 +534,6 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $creator->update(['game_version_id' => $this->retail()->id]);
         $mappingVersion = $this->retailMappingVersions()->first();
         $season         = $this->createSeason(['expansion_id' => $this->retail()->expansion_id, 'active' => true], [$mappingVersion->dungeon_id]);
-        $this->createRoute($mappingVersion, $season, 'ZzTestOfTheRequestedSeason');
-        $this->createRoute($mappingVersion, null, 'ZzTestOfNoSeason');
 
         // Act
         $response = $this->actingAs($creator)->get(route('collections.new', [
@@ -547,8 +545,12 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $this->assertSame($season->id, $response->viewData('selectedSeason')?->id);
         $content = (string)$response->getContent();
         $this->assertStringContainsString(sprintf('id="dungeon_routes_%d"', $mappingVersion->dungeon_id), $content);
-        $this->assertStringContainsString('ZzTestOfTheRequestedSeason', $content);
-        $this->assertStringNotContainsString('ZzTestOfNoSeason', $content);
+        $this->assertStringContainsString('id="collection_route_picker"', $content, 'A new collection picks its routes in the drawer too');
+        $this->assertStringContainsString(
+            e(sprintf('"season_id":%d', $season->id)),
+            $content,
+            'The drawer only lists routes of the season the form opened on',
+        );
     }
 
     #[Test]
@@ -664,7 +666,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $this->assertMatchesRegularExpression(sprintf('/id="dungeon_routes_%d_count"[^>]*>\s*2\s*</', $mappingVersions->get(0)->dungeon_id), $content);
         $this->assertMatchesRegularExpression(sprintf('/id="dungeon_routes_%d_count"[^>]*>\s*0\s*</', $mappingVersions->get(1)->dungeon_id), $content);
         $this->assertMatchesRegularExpression(
-            sprintf('/id="collection_dungeon_routes_total"[^>]*>\s*%s\s*</', preg_quote(__('view_common.forms.orderedselect.count', ['count' => 2, 'max' => DungeonRouteCollection::MAX_ROUTES]), '/')),
+            sprintf('/id="collection_routes_count"[^>]*>\s*%s\s*</', preg_quote(__('view_common.collection.routes.count', ['count' => 2, 'max' => DungeonRouteCollection::MAX_ROUTES]), '/')),
             $content,
         );
     }
@@ -687,13 +689,13 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $response     = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection), [
             'name'            => 'ZzTestRenamedOnly',
             'published_state' => PublishedState::WORLD,
-            'dungeon_routes'  => $this->listedDungeonRouteIds((string)$editResponse->getContent()),
+            'dungeon_routes'  => $this->listedDungeonRoutePublicKeys((string)$editResponse->getContent()),
         ]);
 
         // Assert
         $editResponse->assertOk();
         $this->assertStringContainsString('ZzTestIneligible', (string)$editResponse->getContent(), 'The form must offer the routes already in the collection');
-        $this->assertSame([$ineligibleDungeonRoute->id], $this->listedDungeonRouteIds((string)$editResponse->getContent()));
+        $this->assertSame([$ineligibleDungeonRoute->public_key], $this->listedDungeonRoutePublicKeys((string)$editResponse->getContent()));
         $response->assertSessionHasNoErrors();
         $dungeonRouteCollection->refresh();
         $this->assertSame('ZzTestRenamedOnly', $dungeonRouteCollection->name);
@@ -794,7 +796,13 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         foreach ($mappingVersions as $mappingVersion) {
             $this->assertStringContainsString(sprintf('id="dungeon_routes_%d"', $mappingVersion->dungeon_id), $content);
         }
-        $this->assertStringContainsString('ZzTestOffered', $content);
+        $this->assertStringContainsString('ZzTestInSlot', $content);
+        foreach ($mappingVersions as $mappingVersion) {
+            $this->assertStringContainsString(sprintf('id="dungeon_routes_%d_add_button"', $mappingVersion->dungeon_id), $content);
+        }
+        // Routes are offered by the route picker, which only lists routes of the collection's season
+        $this->assertStringContainsString(sprintf('"season_id":%d', $season->id), $content);
+        $this->assertStringNotContainsString('ZzTestOffered', $content, 'Routes not in the collection are only listed by the picker');
         $this->assertStringNotContainsString('ZzTestNotOfTheSeason', $content, 'A route of another season is not offered');
     }
 
@@ -842,7 +850,9 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
             ),
             $content,
         );
-        $this->assertStringNotContainsString(e($season->name_long), $content, 'The label leaves the expansion to the icon');
+        // Scoped to the radio itself: the route picker drawer names the season in full on purpose
+        preg_match(sprintf('/<label class="btn btn-secondary" for="season_id_%d">.*?<\/label>/s', $season->id), $content, $label);
+        $this->assertStringNotContainsString(e($season->name_long), $label[0] ?? '', 'The label leaves the expansion to the icon');
         $this->assertMatchesRegularExpression('/<input type="radio" name="season_id" id="season_id_none"[^>]*value=""/', $content);
         $this->assertStringNotContainsString('name="game_version_id"', $content);
     }
@@ -856,11 +866,9 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $season         = $this->createSeason(['expansion_id' => $this->retail()->expansion_id], [$mappingVersion->dungeon_id]);
         $enough         = $this->createRoute($mappingVersion, $season, 'ZzTestEnough');
         $short          = $this->createRoute($mappingVersion, $season, 'ZzTestShort');
-        $offered        = $this->createRoute($mappingVersion, $season, 'ZzTestOffered');
         $required       = $mappingVersion->enemy_forces_required;
         DungeonRoute::query()->whereKey($enough->id)->update(['enemy_forces' => $required + 2]);
         DungeonRoute::query()->whereKey($short->id)->update(['enemy_forces' => $required - 1]);
-        DungeonRoute::query()->whereKey($offered->id)->update(['enemy_forces' => $required - 1]);
         $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
         $this->addRoutes($dungeonRouteCollection, [$enough, $short]);
 
@@ -871,16 +879,138 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $response->assertOk();
         $content = (string)$response->getContent();
         $this->assertMatchesRegularExpression(
-            sprintf('/data-id="%d".*?<span class="ordered_select_detail"\s[^>]*>.*?%s/s', $enough->id, preg_quote(sprintf('%d / %d', $required + 2, $required), '/')),
+            sprintf('/data-id="%s".*?<span class="ordered_select_detail"\s[^>]*>.*?%s/s', preg_quote($enough->public_key, '/'), preg_quote(sprintf('%d / %d', $required + 2, $required), '/')),
             $content,
         );
         $this->assertMatchesRegularExpression(
-            sprintf('/data-id="%d".*?<span class="ordered_select_detail ordered_select_detail_warning"[^>]*>.*?%s/s', $short->id, preg_quote(sprintf('%d / %d', $required - 1, $required), '/')),
+            sprintf('/data-id="%s".*?<span class="ordered_select_detail ordered_select_detail_warning"[^>]*>.*?%s/s', preg_quote($short->public_key, '/'), preg_quote(sprintf('%d / %d', $required - 1, $required), '/')),
             $content,
         );
+    }
+
+    /**
+     * Saving and deleting share one row, which only works because each button sits outside the form it
+     * submits and names it - a form cannot be nested in another.
+     */
+    #[Test]
+    public function edit_givenACollection_putsSaveAndDeleteOnOneRow(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $content = (string)$response->getContent();
+        $this->assertMatchesRegularExpression('/<form[^>]+id="collection_delete_form"/', $content);
         $this->assertMatchesRegularExpression(
-            sprintf('/<option value="%d"[^>]*data-detail="%s" data-detail-warning="1"/', $offered->id, preg_quote(sprintf('%d / %d', $required - 1, $required), '/')),
+            '/<div class="d-flex align-items-center">.*?form="collection_details_form".*?form="collection_delete_form".*?<\/div>/s',
             $content,
+            'Both buttons live in the same row, the delete one last',
+        );
+    }
+
+    /**
+     * The routes section sits above the form that creates the collection, so its hidden inputs only reach
+     * the server when they name that form.
+     */
+    #[Test]
+    public function create_givenASubmittedRoute_postsItsListWithTheDetailsForm(): void
+    {
+        // Arrange
+        $creator = $this->creator();
+        $creator->update(['game_version_id' => $this->retail()->id]);
+        $mappingVersion = $this->retailMappingVersions()->first();
+        $season         = $this->createSeason(['expansion_id' => $this->retail()->expansion_id, 'active' => true], [$mappingVersion->dungeon_id]);
+        $dungeonRoute   = $this->createRoute($mappingVersion, $season, 'ZzTestSubmitted');
+
+        // Act - no name, so validation fails and the form comes back holding the submitted route
+        $response = $this->actingAs($creator)
+            ->from(route('collections.new', ['season_id' => $season->id]))
+            ->followingRedirects()
+            ->post(route('collections.savenew'), [
+                'published_state' => PublishedState::WORLD,
+                'season_id'       => $season->id,
+                'dungeon_routes'  => [$dungeonRoute->public_key],
+            ]);
+
+        // Assert
+        $response->assertOk();
+        $content = (string)$response->getContent();
+        $this->assertMatchesRegularExpression('/<form[^>]+id="collection_details_form"/', $content);
+        $this->assertMatchesRegularExpression(
+            sprintf(
+                '/<input type="hidden" name="dungeon_routes\[\]" value="%s" form="collection_details_form"/',
+                preg_quote($dungeonRoute->public_key, '/'),
+            ),
+            $content,
+        );
+    }
+
+    /**
+     * Both pages show the collection's routes the same way: the drawer adds them, a slot per dungeon holds
+     * them. Only saving differs.
+     */
+    #[Test]
+    public function createAndEdit_givenTheSameSeason_renderTheSameRoutesSection(): void
+    {
+        // Arrange
+        $creator = $this->creator();
+        $creator->update(['game_version_id' => $this->retail()->id]);
+        $mappingVersion         = $this->retailMappingVersions()->first();
+        $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id, 'active' => true], [$mappingVersion->dungeon_id]);
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
+
+        // Act
+        $createResponse = $this->actingAs($creator)->get(route('collections.new', ['season_id' => $season->id]));
+        $editResponse   = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $createResponse->assertOk();
+        $editResponse->assertOk();
+        foreach ([$createResponse, $editResponse] as $response) {
+            $content = (string)$response->getContent();
+            $this->assertStringContainsString('id="collection_routes"', $content);
+            $this->assertStringContainsString('id="collection_route_picker"', $content);
+            $this->assertStringContainsString('class="collection_slot h-100"', $content);
+            $this->assertStringContainsString(sprintf('id="dungeon_routes_%d_add_button"', $mappingVersion->dungeon_id), $content);
+        }
+    }
+
+    #[Test]
+    public function create_givenASubmittedRouteShortOnEnemyForces_showsItFlagged(): void
+    {
+        // Arrange
+        $creator = $this->creator();
+        $creator->update(['game_version_id' => $this->retail()->id]);
+        $mappingVersion = $this->retailMappingVersions()->first(static fn(MappingVersion $mappingVersion): bool => $mappingVersion->enemy_forces_required > 1);
+        $season         = $this->createSeason(['expansion_id' => $this->retail()->expansion_id, 'active' => true], [$mappingVersion->dungeon_id]);
+        $offered        = $this->createRoute($mappingVersion, $season, 'ZzTestOffered');
+        $required       = $mappingVersion->enemy_forces_required;
+        DungeonRoute::query()->whereKey($offered->id)->update(['enemy_forces' => $required - 1]);
+
+        // Act - no name, so validation fails and the form comes back holding the submitted route
+        $response = $this->actingAs($creator)
+            ->from(route('collections.new', ['season_id' => $season->id]))
+            ->followingRedirects()
+            ->post(route('collections.savenew'), [
+                'published_state' => PublishedState::WORLD,
+                'season_id'       => $season->id,
+                'dungeon_routes'  => [$offered->public_key],
+            ]);
+
+        // Assert
+        $response->assertOk();
+        $this->assertMatchesRegularExpression(
+            sprintf(
+                '/data-id="%s".*?<span class="ordered_select_detail ordered_select_detail_warning"[^>]*>.*?%s/s',
+                preg_quote($offered->public_key, '/'),
+                preg_quote(sprintf('%d / %d', $required - 1, $required), '/'),
+            ),
+            (string)$response->getContent(),
         );
     }
 
@@ -1122,11 +1252,16 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
      *
      * @return array<int, int>
      */
-    private function listedDungeonRouteIds(string $content): array
+    /**
+     * The route public keys the rendered lists hold, in page order.
+     *
+     * @return array<int, string>
+     */
+    private function listedDungeonRoutePublicKeys(string $content): array
     {
-        preg_match_all('/<input type="hidden" name="dungeon_routes\[\]" value="(\d+)">/', $content, $matches);
+        preg_match_all('/<input type="hidden" name="dungeon_routes\[\]" value="([^"]*)"/', $content, $matches);
 
-        return array_values(array_filter(array_map(intval(...), $matches[1])));
+        return array_values(array_filter($matches[1]));
     }
 
     private function updateUrl(DungeonRouteCollection $dungeonRouteCollection): string

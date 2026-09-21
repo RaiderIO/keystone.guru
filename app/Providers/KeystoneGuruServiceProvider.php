@@ -469,6 +469,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer([
             'common.dungeonroute.attributes',
             'common.dungeonroute.table',
+            'common.dungeonroute.tablefilters',
         ], RouteAttributesComposer::class);
 
         view()->composer('common.dungeonroute.publish', RoutePublishComposer::class);

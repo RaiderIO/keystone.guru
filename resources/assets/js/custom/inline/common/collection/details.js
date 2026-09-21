@@ -1,19 +1,17 @@
 /**
  @typedef {Object} CommonCollectionDetailsOptions
- @property {string}      dungeonRoutesSelector   The route picker section, swapped as a whole when the kind changes.
- @property {string}      totalSelector           The "n / max" counter over every slot.
- @property {string}      loadingSelector         Shown while the picker is being rebuilt.
- @property {string}      errorSelector           Shown when rebuilding the picker failed.
- @property {string}      seasonSelector          The season radios; absent on a game version without seasons.
- @property {Number}      max
- @property {string}      countText               Contains :count and :max.
- @property {string|null} formUrl                 The new-collection form, which renders the picker for the season_id it is given; null when the picker never changes.
- @property {string}      seasonNone              The season_id value that asks for a free-form collection.
+ @property {string} dungeonRoutesSelector  The routes section, swapped as a whole when the season changes.
+ @property {string} loadingSelector        Shown while the section is being rebuilt.
+ @property {string} errorSelector          Shown when rebuilding the section failed.
+ @property {string} seasonSelector         The season radios; absent on a game version without seasons.
+ @property {string} formUrl                The new-collection form, which renders the section for the season_id it is given.
+ @property {string} seasonNone             The season_id value that asks for a free-form collection.
  */
 
 /**
- * The collection form's route picker: keeps the collection-wide route counter current and, on a new collection,
- * rebuilds the picker for the season the user picks.
+ * The season a new collection is created for: the routes section covers the season's dungeons and offers only its
+ * routes, so picking another season rebuilds the section from the server rather than the whole page - the details
+ * filled in so far stay as they are.
  *
  * @property {CommonCollectionDetailsOptions} options
  */
@@ -24,23 +22,7 @@ class CommonCollectionDetails extends InlineCode {
 
         this._requestCount = 0;
 
-        $(document).on('orderedselect:changed', this.options.dungeonRoutesSelector, this._refreshTotal.bind(this));
-        this._refreshTotal();
-
-        if (this.options.formUrl !== null) {
-            $(this.options.seasonSelector).on('change', this._onSeasonChanged.bind(this));
-        }
-    }
-
-    /**
-     * @private
-     */
-    _refreshTotal() {
-        let count = $(this.options.dungeonRoutesSelector).find('.ordered_select_item input[type="hidden"]').length;
-
-        $(this.options.totalSelector).text(
-            this.options.countText.replace(':count', count).replace(':max', this.options.max)
-        );
+        $(this.options.seasonSelector).on('change', this._onSeasonChanged.bind(this));
     }
 
     /**
@@ -75,12 +57,11 @@ class CommonCollectionDetails extends InlineCode {
                 let $replacement = $(new DOMParser().parseFromString(html, 'text/html'))
                     .find(this.options.dungeonRoutesSelector);
                 if ($replacement.length === 0) {
-                    throw new Error('The response holds no route picker');
+                    throw new Error('The response holds no routes section');
                 }
 
                 $(this.options.dungeonRoutesSelector).replaceWith($replacement);
-                this._activateOrderedSelects($replacement);
-                this._refreshTotal();
+                this._activateInlineCode($replacement);
                 $(this.options.loadingSelector).prop('hidden', true);
             })
             .catch((error) => {
@@ -96,20 +77,31 @@ class CommonCollectionDetails extends InlineCode {
     }
 
     /**
-     * The swapped-in controls arrive without the scripts that activated them on page load.
+     * The swapped-in markup arrives without the scripts that activated it on page load. Every control is
+     * rebuilt under the id it had before, so the references they hold to one another keep pointing at the
+     * live instances.
      *
-     * @param {jQuery} $container
+     * @param {jQuery} $section
      * @private
      */
-    _activateOrderedSelects($container) {
-        let requestNumber = this._requestCount;
+    _activateInlineCode($section) {
+        let selector = '[data-inline-id][data-inline-path][data-inline-options]';
+        // The section's own controller comes last: it looks the others up as it activates. jQuery's add()
+        // would sort it back to the front, so the two sets are concatenated by hand.
+        let elements = $section.find(selector).toArray().concat($section.filter(selector).toArray());
 
-        $container.find('.ordered_select[data-inline-options]').each(function () {
-            let id = `${this.id}_${requestNumber}`;
+        elements.forEach(function (element) {
+            let $element = $(element);
 
-            _inlineManager.init(id, 'common/forms/orderedselect', $(this).data('inline-options'));
-            _inlineManager.activate(id);
+            _inlineManager.init($element.data('inline-id'), $element.data('inline-path'), $element.data('inline-options'));
         });
+
+        elements.forEach(element => _inlineManager.activate($(element).data('inline-id')));
+
+        // Tom Select drives the drawer's filter selects, which arrive as plain <select> elements
+        if (typeof refreshSelectPickers === 'function') {
+            refreshSelectPickers();
+        }
     }
 }
 

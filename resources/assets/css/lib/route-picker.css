@@ -1,0 +1,77 @@
+/* The route picker side drawer of resources/views/common/dungeonroute/picker.blade.php. */
+
+.route_picker.offcanvas {
+    --bs-offcanvas-width: 640px;
+    color: var(--theme-text-contrast);
+    background-color: var(--theme-bg-card);
+}
+
+@media (max-width: 991.98px) {
+    .route_picker.offcanvas {
+        --bs-offcanvas-width: 100%;
+    }
+}
+
+.route_picker .offcanvas-header,
+.route_picker .route_picker_filters,
+.route_picker .route_picker_footer {
+    border-color: var(--theme-border-subtle) !important;
+}
+
+.route_picker .route_picker_footer {
+    background-color: var(--theme-bg-card-footer);
+}
+
+/* The rows are the site's route row (see sections/discover.css), so only what the drawer adds is set here. */
+.route_picker .route_picker_list .route_picker_row {
+    color: var(--theme-text-contrast);
+}
+
+.route_picker .route_picker_row_label {
+    padding: 0 1rem;
+    cursor: pointer;
+}
+
+.route_picker .route_picker_row_selected {
+    box-shadow: inset 3px 0 0 var(--theme-btn-accent);
+}
+
+.route_picker .route_picker_row_existing .route_picker_row_label {
+    cursor: default;
+}
+
+.route_picker .route_picker_row_existing .route_picker_thumbnail,
+.route_picker .route_picker_row_existing .leaderboard_main {
+    opacity: 0.6;
+}
+
+.route_picker .route_picker_checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1px solid currentColor;
+}
+
+/* The row's own rank column becomes the tick box's column, so the rows still line up */
+.route_picker .leaderboard_rank {
+    height: 44px;
+}
+
+.route_picker .route_picker_title {
+    overflow-wrap: anywhere;
+}
+
+/* The drawer is far narrower than the page the row was designed for: the stats may wrap under the
+   title rather than squeezing it into a sliver. */
+.route_picker .leaderboard_stats {
+    flex-wrap: wrap;
+}
+
+.route_picker .route_picker_full {
+    display: block;
+}
+
+.route_picker .route_picker_full[hidden],
+.route_picker .leaderboard_stats > [hidden],
+.route_picker .leaderboard_title [hidden] {
+    display: none;
+}

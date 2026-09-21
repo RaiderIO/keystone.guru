@@ -105,7 +105,10 @@ return [
             'pulls'     => '{1} :count пул|[2,*] :count пулов',
         ],
         'table' => [
-            'team'                  => 'Команда',
+            'team'   => 'Команда',
+            'filter' => 'Фильтр',
+        ],
+        'tablefilters' => [
             'affixes'               => 'Аффиксы',
             'select_affixes'        => 'Выберите аффиксы',
             'affixes_selected'      => '{0} аффиксов выбрано',
@@ -118,7 +121,6 @@ return [
             'tags_title'            => 'Нет доступных тегов',
             'select_tags'           => 'Выберите теги',
             'tags_selected'         => '{0} тегов выбрано',
-            'filter'                => 'Фильтр',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s -  данные https://mplus.subcreation.net',
