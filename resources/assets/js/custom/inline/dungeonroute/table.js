@@ -96,6 +96,23 @@ class DungeonrouteTable extends InlineCode {
     }
 
     /**
+     * Redraws the table in place, staying on the current page. Row actions that leave the filter
+     * untouched use this instead of the filter button, whose redraw resets paging to page 1.
+     * @param {boolean} rowRemoved Whether the action removed a row from the listing; steps back one page when that
+     * empties the current page, which DataTables would otherwise show as an empty page.
+     */
+    redrawKeepingPage(rowRemoved = false) {
+        if (rowRemoved) {
+            let pageInfo = this._dt.page.info();
+            if (pageInfo.page > 0 && pageInfo.end - pageInfo.start <= 1) {
+                this._dt.page('previous');
+            }
+        }
+
+        this._dt.draw(false);
+    }
+
+    /**
      * Gets the view that is handling the display of the table.
      */
     getTableView() {
@@ -259,7 +276,7 @@ class DungeonrouteTable extends InlineCode {
                     dataType: 'json',
                     success: function () {
                         showSuccessNotification(lang.get('js.scheduled_publish_saved'));
-                        $(self.options.filterButtonSelector).trigger('click');
+                        self.redrawKeepingPage();
                     }
                 });
             });
@@ -274,7 +291,7 @@ class DungeonrouteTable extends InlineCode {
                     dataType: 'json',
                     success: function () {
                         showSuccessNotification(lang.get('js.scheduled_publish_cleared'));
-                        $(self.options.filterButtonSelector).trigger('click');
+                        self.redrawKeepingPage();
                     }
                 });
             });
@@ -693,8 +710,7 @@ class DungeonrouteTable extends InlineCode {
             dataType: 'json',
             success: function (json) {
                 showSuccessNotification(lang.get('js.route_published_state_changed'));
-                // Refresh the table
-                $(self.options.filterButtonSelector).trigger('click');
+                self.redrawKeepingPage();
             }
         });
     }
@@ -716,8 +732,7 @@ class DungeonrouteTable extends InlineCode {
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_delete_successful'));
-                    // Refresh the table
-                    $(self.options.filterButtonSelector).trigger('click');
+                    self.redrawKeepingPage(true);
                 }
             });
         });
@@ -771,8 +786,7 @@ class DungeonrouteTable extends InlineCode {
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_clone_successful'));
-                    // Refresh the table
-                    $(self.options.filterButtonSelector).trigger('click');
+                    self.redrawKeepingPage();
                 }
             });
         }, null, {closeWith: ['button']});
@@ -818,8 +832,7 @@ class DungeonrouteTable extends InlineCode {
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_migration_successful'));
-                    // Refresh the table
-                    $(self.options.filterButtonSelector).trigger('click');
+                    self.redrawKeepingPage();
                 }
             });
         }, null, {closeWith: ['button']});
@@ -847,8 +860,7 @@ class DungeonrouteTable extends InlineCode {
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_continue_in_season_successful'));
-                    // Refresh the table
-                    $(self.options.filterButtonSelector).trigger('click');
+                    self.redrawKeepingPage();
                 }
             });
         }, null, {closeWith: ['button']});

@@ -19,6 +19,7 @@ class DungeonRouteTableTeam {
     _removeFromThisTeam(clickEvent) {
         console.assert(this instanceof DungeonRouteTableTeam, 'this is not a DungeonRouteTableTeam', this);
 
+        let self = this;
         let teamPublicKey = this._dungeonrouteTable.getTableView().getTeamPublicKey();
         if (teamPublicKey !== null) {
             let key = $(clickEvent.currentTarget).attr('data-publickey');
@@ -32,12 +33,15 @@ class DungeonRouteTableTeam {
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('js.team_remove_route_successful'));
-                    // Refresh the table
-                    $('#dungeonroute_filter').trigger('click');
+                    self._dungeonrouteTable.redrawKeepingPage(true);
                 }
             });
         } else {
             console.error('Unable to remove from team, team ID not set!');
         }
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {DungeonRouteTableTeam};
 }

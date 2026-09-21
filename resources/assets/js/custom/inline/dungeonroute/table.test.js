@@ -402,25 +402,80 @@ describe('DungeonrouteTable._applyFilters', () => {
 describe('DungeonrouteTable._promptDeleteDungeonRouteClicked', () => {
     useRealJQuery();
 
-    it('_promptDeleteDungeonRouteClicked_givenConfirmedDelete_refreshesTheTableThroughTheFilterButton', () => {
-        // Arrange
+    /**
+     * @param {Object} pageInfo
+     * @returns {{dt: Object, context: Object, boundHandler: Function, clickEvent: Object}}
+     */
+    function arrangeConfirmedDelete(pageInfo) {
         document.body.innerHTML = '<button id="filter"></button><a class="dungeonroute-delete" data-publickey="abc123"></a>';
-        const filterClicked = vi.fn();
-        document.getElementById('filter').addEventListener('click', filterClicked);
         globalThis.lang = {get: (key) => key};
         globalThis.showSuccessNotification = vi.fn();
         globalThis.showConfirmYesCancel = (message, onYes) => onYes();
         vi.spyOn($, 'ajax').mockImplementation((settings) => settings.success({}));
-        const context = Object.assign(Object.create(DungeonrouteTable.prototype), {options: {filterButtonSelector: '#filter'}});
+        const calls = [];
+        const dt = {
+            page: Object.assign(vi.fn((direction) => calls.push(`page:${direction}`)), {info: () => pageInfo}),
+            draw: vi.fn((resetPaging) => calls.push(`draw:${resetPaging}`)),
+        };
+        const context = Object.assign(Object.create(DungeonrouteTable.prototype), {_dt: dt, options: {filterButtonSelector: '#filter'}});
         const boundHandler = DungeonrouteTable.prototype._promptDeleteDungeonRouteClicked.bind(context);
         const clickEvent = {target: document.querySelector('.dungeonroute-delete'), preventDefault: vi.fn()};
+
+        return {dt, calls, boundHandler, clickEvent};
+    }
+
+    it('_promptDeleteDungeonRouteClicked_givenConfirmedDeleteOnMiddlePage_redrawsInPlaceKeepingThePage', () => {
+        // Arrange
+        const {dt, calls, boundHandler, clickEvent} = arrangeConfirmedDelete({page: 1, pages: 3, start: 25, end: 50});
+        const filterClicked = vi.fn();
+        document.getElementById('filter').addEventListener('click', filterClicked);
 
         // Act
         boundHandler(clickEvent);
 
         // Assert
         expect($.ajax).toHaveBeenCalledWith(expect.objectContaining({type: 'DELETE', url: '/ajax/abc123'}));
-        expect(filterClicked).toHaveBeenCalledTimes(1);
+        expect(dt.draw).toHaveBeenCalledTimes(1);
+        expect(calls).toEqual(['draw:false']);
+        expect(filterClicked).not.toHaveBeenCalled();
         expect(clickEvent.preventDefault).toHaveBeenCalledTimes(1);
+    });
+
+    it('_promptDeleteDungeonRouteClicked_givenDeletingLastRowOfLaterPage_stepsBackOnePageBeforeRedrawing', () => {
+        // Arrange
+        const {calls, boundHandler, clickEvent} = arrangeConfirmedDelete({page: 2, pages: 3, start: 50, end: 51});
+
+        // Act
+        boundHandler(clickEvent);
+
+        // Assert
+        expect(calls).toEqual(['page:previous', 'draw:false']);
+    });
+
+    it('_promptDeleteDungeonRouteClicked_givenDeletingOnlyRowOfFirstPage_staysOnFirstPage', () => {
+        // Arrange
+        const {dt, calls, boundHandler, clickEvent} = arrangeConfirmedDelete({page: 0, pages: 1, start: 0, end: 1});
+
+        // Act
+        boundHandler(clickEvent);
+
+        // Assert
+        expect(dt.page).not.toHaveBeenCalled();
+        expect(calls).toEqual(['draw:false']);
+    });
+});
+
+describe('DungeonrouteTable.redrawKeepingPage', () => {
+    it('redrawKeepingPage_givenNoRowRemoved_redrawsWithoutTouchingThePage', () => {
+        // Arrange
+        const dt = {page: Object.assign(vi.fn(), {info: vi.fn()}), draw: vi.fn()};
+        const context = Object.assign(Object.create(DungeonrouteTable.prototype), {_dt: dt});
+
+        // Act
+        DungeonrouteTable.prototype.redrawKeepingPage.call(context);
+
+        // Assert
+        expect(dt.page).not.toHaveBeenCalled();
+        expect(dt.draw).toHaveBeenCalledWith(false);
     });
 });
