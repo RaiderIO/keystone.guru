@@ -21,7 +21,7 @@
         "esbuild": "^0.28.2",
         "fast-glob": "^3.3.3",
         "jquery": "^4.0.0",
-        "jsdom": "^30.0.1",
+        "jsdom": "^30.1.0",
         "laravel-echo": "^2.5.0",
         "lodash": "^4.18.1",
         "php-array-parser": "^1.0.1",
