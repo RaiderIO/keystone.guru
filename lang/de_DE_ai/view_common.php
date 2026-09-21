@@ -4,7 +4,7 @@ return [
 
     'collection' => [
         'addtocollection' => [
-            'title' => 'Zu Sammlung hinzufügen',
+            'title' => 'Zu einer Sammlung hinzufügen',
             'help'  => 'Eine Route wird sofort am Ende einer Sammlung hinzugefügt.',
         ],
         'routes' => [
@@ -38,7 +38,7 @@ return [
             'dungeon_routes_slot_empty'  => 'Noch keine Route für :dungeon.',
             'dungeon_routes_slot_count'  => ':count',
             'dungeon_routes_loading'     => 'Deine Routen für diese Spielversion und Saison werden geladen...',
-            'dungeon_routes_load_failed' => 'Deine Routen für diese Spielversion und Saison konnten nicht geladen werden. Wähle sie erneut aus, um es noch einmal zu versuchen.',
+            'dungeon_routes_load_failed' => 'Deine Routen für diese Spielversion und Saison konnten nicht geladen werden. Triff deine Auswahl erneut, um es noch einmal zu versuchen.',
             'enemy_forces_short'         => 'Unter den benötigten Feindkräften',
             'dungeon_routes_empty'       => 'Noch keine Routen in dieser Sammlung.',
             'save'                       => 'Speichern',
@@ -149,12 +149,12 @@ return [
         'picker' => [
             'close'                        => 'Schließen',
             'source_mine'                  => 'Deine Routen',
-            'source_unassigned_by_members' => 'Routen von Mitgliedern von %s, die noch in keinem Team sind',
+            'source_unassigned_by_members' => 'Noch keinem Team zugeordnete Routen von Mitgliedern von %s',
             'title_search'                 => 'Titel',
             'title_search_placeholder'     => 'Nach Titel suchen',
             'loading'                      => 'Routen werden geladen...',
             'empty'                        => 'Keine Routen entsprechen diesen Filtern.',
-            'load_failed'                  => 'Die Routen konnten nicht geladen werden. Ändere einen Filter oder öffne dies erneut, um es noch einmal zu versuchen.',
+            'load_failed'                  => 'Die Routen konnten nicht geladen werden. Ändere einen Filter oder öffne das Fenster erneut, um es noch einmal zu versuchen.',
             'previous'                     => 'Zurück',
             'next'                         => 'Weiter',
             'pagination'                   => 'Routenseiten',
@@ -647,7 +647,7 @@ return [
             'view' => [
                 'edit_this_route_title'          => 'Bearbeiten',
                 'clone_this_route_title'         => 'Klonen',
-                'add_to_collection_title'        => 'Zu Sammlung hinzufügen',
+                'add_to_collection_title'        => 'Zu einer Sammlung hinzufügen',
                 'report_for_moderation'          => 'Melden',
                 'report_for_moderation_finished' => 'Gemeldet',
             ],
