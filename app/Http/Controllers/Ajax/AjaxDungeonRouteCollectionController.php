@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionRoutesAddFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionRoutesOrderFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionRoutesRemoveFormRequest;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionsForRouteFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
+use App\Models\User;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRouteRepositoryInterface;
+use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
@@ -22,6 +25,75 @@ use Illuminate\Validation\ValidationException;
  */
 class AjaxDungeonRouteCollectionController extends Controller
 {
+    /**
+     * The current user's collections as seen from one of their own routes: whether the route is in each of them and,
+     * when it is not, whether it may be added or why not. Collections the route may join come first.
+     */
+    public function forDungeonRoute(
+        AjaxDungeonRouteCollectionsForRouteFormRequest $request,
+        DungeonRouteCollectionServiceInterface         $dungeonRouteCollectionService,
+    ): JsonResponse {
+        /** @var User $user */
+        $user         = $request->user();
+        $dungeonRoute = $request->dungeonRoute();
+
+        $dungeonRouteCollections = $dungeonRouteCollectionService->sortForOverview(
+            $user->dungeonRouteCollections()
+                ->with(['gameVersion', 'season.expansion', 'season.dungeons', 'dungeonRoutes.mappingVersion'])
+                ->get(),
+        );
+
+        $collectionCount = $dungeonRouteCollections->count();
+        $mayCreate       = $collectionCount < DungeonRouteCollection::MAX_COLLECTIONS;
+
+        $rows = $dungeonRouteCollections->map(static function (DungeonRouteCollection $dungeonRouteCollection) use (
+            $dungeonRoute,
+            $dungeonRouteCollectionService,
+        ): array {
+            $routeCount    = $dungeonRouteCollection->dungeonRoutes->count();
+            $isMember      = $dungeonRouteCollection->dungeonRoutes->contains('id', $dungeonRoute->id);
+            $blockedReason = $isMember ? null : $dungeonRouteCollectionService->getAddBlockedReason($dungeonRouteCollection, $dungeonRoute, $routeCount);
+
+            return [
+                'public_key' => $dungeonRouteCollection->public_key,
+                'name'       => $dungeonRouteCollection->name,
+                'kind_label' => self::getKindLabel(
+                    $dungeonRouteCollection,
+                    $dungeonRouteCollectionService->getCoveredDungeonCount($dungeonRouteCollection, $dungeonRouteCollection->dungeonRoutes),
+                ),
+                'route_count'    => $routeCount,
+                'max_routes'     => DungeonRouteCollection::MAX_ROUTES,
+                'is_member'      => $isMember,
+                'blocked_reason' => $blockedReason,
+                'blocked_text'   => match ($blockedReason) {
+                    DungeonRouteCollectionServiceInterface::ADD_BLOCKED_GAME_VERSION => __('view_common.collection.addtocollection.blocked_game_version', [
+                        'game_version' => __($dungeonRouteCollection->gameVersion->name),
+                    ]),
+                    DungeonRouteCollectionServiceInterface::ADD_BLOCKED_SEASON => __('view_common.collection.addtocollection.blocked_season', [
+                        'season' => $dungeonRouteCollection->season->name_long ?? '',
+                    ]),
+                    DungeonRouteCollectionServiceInterface::ADD_BLOCKED_FULL => __('view_common.collection.addtocollection.blocked_full'),
+                    default                                                  => null,
+                },
+                'store_url'  => route('ajax.collection.routes.store', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+                'delete_url' => route('ajax.collection.routes.delete', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+            ];
+        });
+
+        [$available, $blocked] = $rows->partition(static fn(array $row): bool => $row['is_member'] || $row['blocked_reason'] === null);
+
+        return response()->json([
+            'collections'         => $available->concat($blocked)->values(),
+            'collection_count'    => $collectionCount,
+            'max_collections'     => DungeonRouteCollection::MAX_COLLECTIONS,
+            'may_create'          => $mayCreate,
+            'create_url'          => route('collections.new', ['dungeon_route' => $dungeonRoute->public_key]),
+            'create_blocked_text' => $mayCreate ? null : __('view_common.collection.addtocollection.max_collections', [
+                'max' => DungeonRouteCollection::MAX_COLLECTIONS,
+            ]),
+        ]);
+    }
+
     /**
      * Appends the posted routes to the end of the collection, in posted order.
      *
@@ -137,6 +209,27 @@ class AjaxDungeonRouteCollectionController extends Controller
 
         return response()->json([
             'dungeon_routes' => $dungeonRoutes->pluck('public_key')->values(),
+        ]);
+    }
+
+    /**
+     * What a collection covers, in the same words the collection overview uses.
+     */
+    private static function getKindLabel(DungeonRouteCollection $dungeonRouteCollection, int $coveredDungeonCount): string
+    {
+        $season = $dungeonRouteCollection->season;
+
+        if ($dungeonRouteCollection->isSeasonSet() && $season !== null) {
+            return __('view_collection.kind.season_set', [
+                'season'  => $season->name,
+                'covered' => $coveredDungeonCount,
+                'total'   => $season->dungeons->count(),
+            ]);
+        }
+
+        return trans_choice('view_collection.kind.free_form', $coveredDungeonCount, [
+            'game_version' => __($dungeonRouteCollection->gameVersion->name),
+            'count'        => $coveredDungeonCount,
         ]);
     }
 }

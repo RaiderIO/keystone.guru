@@ -15,6 +15,7 @@
  * @property {string|null} teamPublicKey
  * @property {Object[]} teams
  * @property {Object[]} autoCompleteTags
+ * @property {boolean} showAddToCollection Whether own routes offer "Add to collection…".
  */
 
 /**
@@ -614,7 +615,9 @@ class DungeonrouteTable extends InlineCode {
                 lang.get('js.route_continue_in_season_hint', {season: continuationSeason.name}),
             // Both arrive for free through DungeonRoute's $appends
             is_upgrade_draft: row.is_upgrade_draft === true,
-            has_upgrade_draft: row.has_upgrade_draft === true
+            has_upgrade_draft: row.has_upgrade_draft === true,
+            // Collections only hold their owner's own routes, and a sandbox route expires
+            show_add_to_collection: this.options?.showAddToCollection === true && row.author.id === this.options.currentUserId
         };
     }
 

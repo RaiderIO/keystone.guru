@@ -79,6 +79,7 @@ return [
     'publish_label'                                   => 'Publish',
     'unpublish_label'                                 => 'Unpublish',
     'add_remove_tag_label'                            => 'Add/remove tags',
+    'add_to_collection_label'                         => 'Add to collection…',
     'clone_label'                                     => 'Clone',
     'clone_to_profile_label'                          => 'Clone to my profile',
     'clone_to_team_label'                             => 'Clone to Team',

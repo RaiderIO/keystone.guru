@@ -92,6 +92,21 @@ describe('CommonCollectionDetails', () => {
         expect(fetchedUrls).toEqual(['http://localhost/collections/new?season_id=17']);
     });
 
+    it('onSeasonChanged_givenTheCollectionStartsFromATag_keepsThatTagInTheRequest', () => {
+        // Arrange
+        new CommonCollectionDetails('details_tag', 'common/collection/details', {
+            ...OPTIONS,
+            formUrlParams: {tag: 'This week'},
+        }).activate();
+        document.querySelector('#s_17').checked = true;
+
+        // Act
+        jQuery('#s_17').trigger('change');
+
+        // Assert
+        expect(fetchedUrls).toContain('http://localhost/collections/new?season_id=17&tag=This+week');
+    });
+
     it('onSeasonChanged_givenTheSectionComesBack_activatesEveryControlInItUnderTheIdItHad', async () => {
         // Arrange
         const initialised = [];

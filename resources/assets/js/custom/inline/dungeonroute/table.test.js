@@ -205,6 +205,43 @@ describe('DungeonrouteTable._getProfileActionsTemplateVariables', () => {
     });
 });
 
+describe('DungeonrouteTable._getProfileActionsTemplateVariables add to collection', () => {
+    it('_getProfileActionsTemplateVariables_givenOwnRouteWithAddToCollectionShown_setsShowAddToCollectionTrue', () => {
+        // Arrange
+        const context = buildTableContext(1);
+        context.options.showAddToCollection = true;
+
+        // Act
+        const result = DungeonrouteTable.prototype._getProfileActionsTemplateVariables.call(context, buildRow({author: {id: 1}}));
+
+        // Assert
+        expect(result.show_add_to_collection).toBe(true);
+    });
+
+    it('_getProfileActionsTemplateVariables_givenSomeoneElsesRoute_setsShowAddToCollectionFalse', () => {
+        // Arrange
+        const context = buildTableContext(1);
+        context.options.showAddToCollection = true;
+
+        // Act
+        const result = DungeonrouteTable.prototype._getProfileActionsTemplateVariables.call(context, buildRow({author: {id: 2}}));
+
+        // Assert
+        expect(result.show_add_to_collection).toBe(false);
+    });
+
+    it('_getProfileActionsTemplateVariables_givenAddToCollectionNotShown_setsShowAddToCollectionFalse', () => {
+        // Arrange
+        const context = buildTableContext(1);
+
+        // Act
+        const result = DungeonrouteTable.prototype._getProfileActionsTemplateVariables.call(context, buildRow({author: {id: 1}}));
+
+        // Assert
+        expect(result.show_add_to_collection).toBe(false);
+    });
+});
+
 describe('DungeonrouteTable._renderTitle', () => {
     /**
      * The real title template, compiled from the same source the build precompiles, so the test
