@@ -1,0 +1,13 @@
+<li class="add_to_collection_row list-group-item d-flex align-items-start gap-2{{#if is_disabled}} text-body-secondary{{/if}}" data-public-key="{{ public_key }}">
+    <div class="form-check mb-0 flex-grow-1 text-break">
+        <input type="checkbox" class="form-check-input add_to_collection_checkbox" id="add_to_collection_{{ public_key }}"{{#if contains_dungeon_route}} checked{{/if}}{{#if is_input_disabled}} disabled{{/if}}>
+        <label class="form-check-label" for="add_to_collection_{{ public_key }}">
+            <span class="d-block">{{ name }}</span>
+            <small class="d-block text-body-secondary">{{ kind_text }}</small>
+            {{#if blocked_text}}
+                <small class="d-block text-warning add_to_collection_reason">{{ blocked_text }}</small>
+            {{/if}}
+        </label>
+    </div>
+    <span class="badge text-bg-secondary add_to_collection_count">{{ count_text }}</span>
+</li>

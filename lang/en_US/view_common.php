@@ -4,22 +4,8 @@ return [
 
     'collection' => [
         'addtocollection' => [
-            'title'                => 'Add to collection',
-            'help'                 => 'A route is added to the end of a collection right away.',
-            'loading'              => 'Loading your collections…',
-            'load_failed'          => 'Your collections could not be loaded. Try again later.',
-            'count'                => ':count / :max',
-            'new_collection'       => 'New collection with this route…',
-            'no_collections'       => 'You have no collections yet.',
-            'max_collections'      => 'You have :max collections, the most you may have.',
-            'blocked_game_version' => 'Only :game_version routes',
-            'blocked_season'       => 'Only :season routes',
-            'blocked_full'         => 'Full',
-            'added'                => 'Added to :name.',
-            'removed'              => 'Removed from :name.',
-            'undo'                 => 'Undo',
-            'undone'               => 'Undone.',
-            'save_failed'          => 'Your change could not be saved. Try again.',
+            'title' => 'Add to collection',
+            'help'  => 'A route is added to the end of a collection right away.',
         ],
         'routes' => [
             'heading'          => 'Routes',
@@ -613,7 +599,6 @@ return [
                 'view_route'                     => 'View route',
                 'save_to_profile'                => 'Save to profile',
                 'simulate_route'                 => 'Simulate',
-                'add_to_collection'              => 'Add to collection',
                 'edit_route_settings'            => 'Route settings',
                 'edit_mapping_version'           => 'Edit mapping version',
                 'share'                          => 'Share',
@@ -662,6 +647,7 @@ return [
             'view' => [
                 'edit_this_route_title'          => 'Edit',
                 'clone_this_route_title'         => 'Clone',
+                'add_to_collection_title'        => 'Add to collection',
                 'report_for_moderation'          => 'Report',
                 'report_for_moderation_finished' => 'Reported',
             ],

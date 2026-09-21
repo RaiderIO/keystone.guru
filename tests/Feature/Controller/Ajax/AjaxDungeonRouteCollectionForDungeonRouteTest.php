@@ -143,7 +143,6 @@ final class AjaxDungeonRouteCollectionForDungeonRouteTest extends PublicTestCase
         $response->assertOk();
         $response->assertJsonPath('collections', []);
         $response->assertJsonPath('may_create', true);
-        $response->assertJsonPath('create_blocked_text', null);
         $response->assertJsonPath('create_url', route('collections.new', ['dungeon_route' => $dungeonRoute->public_key]));
     }
 
@@ -171,20 +170,17 @@ final class AjaxDungeonRouteCollectionForDungeonRouteTest extends PublicTestCase
         $rows = collect($this->collectionsOf($response))->keyBy('public_key');
         $this->assertCount(5, $rows);
 
-        $this->assertTrue($rows[$member->public_key]['is_member']);
+        $this->assertTrue($rows[$member->public_key]['contains_dungeon_route']);
         $this->assertNull($rows[$member->public_key]['blocked_reason']);
         $this->assertSame(1, $rows[$member->public_key]['route_count']);
 
-        $this->assertFalse($rows[$eligible->public_key]['is_member']);
+        $this->assertFalse($rows[$eligible->public_key]['contains_dungeon_route']);
         $this->assertNull($rows[$eligible->public_key]['blocked_reason']);
         $this->assertSame(DungeonRouteCollection::MAX_ROUTES, $rows[$eligible->public_key]['max_routes']);
         $this->assertSame(route('ajax.collection.routes.store', ['dungeonRouteCollection' => $eligible]), $rows[$eligible->public_key]['store_url']);
 
         $this->assertSame(DungeonRouteCollectionServiceInterface::ADD_BLOCKED_SEASON, $rows[$wrongSeason->public_key]['blocked_reason']);
-        $this->assertSame(
-            __('view_common.collection.addtocollection.blocked_season', ['season' => $otherSeason->name_long]),
-            $rows[$wrongSeason->public_key]['blocked_text'],
-        );
+        $this->assertSame($otherSeason->name_long, $rows[$wrongSeason->public_key]['season']['name_long']);
         $this->assertSame(DungeonRouteCollectionServiceInterface::ADD_BLOCKED_GAME_VERSION, $rows[$wrongVersion->public_key]['blocked_reason']);
         $this->assertSame(DungeonRouteCollectionServiceInterface::ADD_BLOCKED_FULL, $rows[$full->public_key]['blocked_reason']);
         $this->assertSame(DungeonRouteCollection::MAX_ROUTES, $rows[$full->public_key]['route_count']);
@@ -192,6 +188,33 @@ final class AjaxDungeonRouteCollectionForDungeonRouteTest extends PublicTestCase
         // Collections the route may be toggled in come before the ones it cannot join
         $order = collect($this->collectionsOf($response))->pluck('public_key');
         $this->assertEqualsCanonicalizing([$member->public_key, $eligible->public_key], $order->take(2)->all());
+    }
+
+    #[Test]
+    public function forDungeonRoute_givenASeasonSetAndAFreeFormCollection_returnsWhatEachCovers(): void
+    {
+        // Arrange
+        $owner        = $this->createUser();
+        $season       = $this->createRetailSeason();
+        $dungeonRoute = $this->createRoute($owner, $this->retailMappingVersion(), $season);
+        $seasonSet    = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season), $owner, [$dungeonRoute]);
+        $freeForm     = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()), $owner);
+
+        // Act
+        $response = $this->actingAs($owner)->request($dungeonRoute);
+
+        // Assert
+        $response->assertOk();
+        $rows = collect($this->collectionsOf($response))->keyBy('public_key');
+
+        $this->assertSame($season->name, $rows[$seasonSet->public_key]['season']['name']);
+        $this->assertSame($season->name_long, $rows[$seasonSet->public_key]['season']['name_long']);
+        $this->assertSame($season->dungeons()->count(), $rows[$seasonSet->public_key]['season']['dungeon_count']);
+        $this->assertSame(1, $rows[$seasonSet->public_key]['covered_dungeon_count']);
+        $this->assertSame($this->retail()->name, $rows[$seasonSet->public_key]['game_version']);
+
+        $this->assertNull($rows[$freeForm->public_key]['season']);
+        $this->assertSame(0, $rows[$freeForm->public_key]['covered_dungeon_count']);
     }
 
     #[Test]
@@ -208,7 +231,7 @@ final class AjaxDungeonRouteCollectionForDungeonRouteTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $response->assertJsonPath('collections.0.public_key', $full->public_key);
-        $response->assertJsonPath('collections.0.is_member', true);
+        $response->assertJsonPath('collections.0.contains_dungeon_route', true);
         $response->assertJsonPath('collections.0.blocked_reason', null);
     }
 
@@ -247,7 +270,7 @@ final class AjaxDungeonRouteCollectionForDungeonRouteTest extends PublicTestCase
     }
 
     #[Test]
-    public function forDungeonRoute_givenTheCollectionCap_disablesNewCollectionWithTheReason(): void
+    public function forDungeonRoute_givenTheCollectionCap_reportsThatNoCollectionMayBeCreated(): void
     {
         // Arrange
         $owner        = $this->createUser();
@@ -262,10 +285,8 @@ final class AjaxDungeonRouteCollectionForDungeonRouteTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $response->assertJsonPath('collection_count', DungeonRouteCollection::MAX_COLLECTIONS);
+        $response->assertJsonPath('max_collections', DungeonRouteCollection::MAX_COLLECTIONS);
         $response->assertJsonPath('may_create', false);
-        $response->assertJsonPath('create_blocked_text', __('view_common.collection.addtocollection.max_collections', [
-            'max' => DungeonRouteCollection::MAX_COLLECTIONS,
-        ]));
     }
 
     /**

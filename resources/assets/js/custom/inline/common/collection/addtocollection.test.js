@@ -4,12 +4,42 @@
 // replaced per test.
 // ---------------------------------------------------------------------------
 
-const jQuery = require('jquery');
+const fs         = require('node:fs');
+const path       = require('node:path');
+const jQuery     = require('jquery');
+const Handlebars = require('handlebars');
+const Lang       = require('lang.js');
 
 const {InlineCode}    = require('../../inlinecode');
 globalThis.InlineCode = InlineCode;
 
+globalThis.AddToCollectionRow = require('./addtocollectionrow').AddToCollectionRow;
+
 const {CommonCollectionAddtocollection} = require('./addtocollection');
+
+const MESSAGES = {
+    'en.js':           {
+        add_to_collection_loading:              'Loading',
+        add_to_collection_load_failed:          'Load failed',
+        add_to_collection_count:                ':count / :max',
+        add_to_collection_new_collection:       'New collection with this route…',
+        add_to_collection_no_collections:       'No collections',
+        add_to_collection_max_collections:      'You have :max collections.',
+        add_to_collection_kind_season_set:      ':season set · :covered/:total dungeons',
+        add_to_collection_kind_free_form_none:  ':game_version · no dungeons',
+        add_to_collection_kind_free_form_one:   ':game_version · :count dungeon',
+        add_to_collection_kind_free_form_many:  ':game_version · :count dungeons',
+        add_to_collection_blocked_game_version: 'Only :game_version routes',
+        add_to_collection_blocked_season:       'Only :season routes',
+        add_to_collection_blocked_full:         'Full',
+        add_to_collection_added:                'Added to :name.',
+        add_to_collection_removed:              'Removed from :name.',
+        add_to_collection_undo:                 'Undo',
+        add_to_collection_undone:               'Undone.',
+        add_to_collection_save_failed:          'Save failed',
+    },
+    'en.gameversions': {retail: 'Retail'},
+};
 
 /**
  * @param {Object} overrides
@@ -19,12 +49,13 @@ function collection(overrides = {}) {
     return Object.assign({
         public_key:     'colA',
         name:           'Season set',
-        kind_label:     'Season 3 set · 1/8 dungeons',
         route_count:    3,
         max_routes:     24,
-        is_member:      false,
-        blocked_reason: null,
-        blocked_text:   null,
+        game_version:           'gameversions.retail',
+        season:                 {name: 'Season 3', name_long: 'Midnight Season 3', dungeon_count: 8},
+        covered_dungeon_count:  1,
+        contains_dungeon_route: false,
+        blocked_reason:         null,
         store_url:      '/store/colA',
         delete_url:     '/delete/colA',
     }, overrides);
@@ -42,7 +73,6 @@ function listResponse(collections, overrides = {}) {
         max_collections:     25,
         may_create:          true,
         create_url:          '/collections/new?dungeon_route=route1',
-        create_blocked_text: null,
     }, overrides);
 }
 
@@ -56,6 +86,8 @@ describe('CommonCollectionAddtocollection', () => {
     beforeEach(() => {
         previousGlobals = {
             $:                       globalThis.$,
+            lang:                    globalThis.lang,
+            Handlebars:              globalThis.Handlebars,
             bootstrap:               globalThis.bootstrap,
             Noty:                    globalThis.Noty,
             showSuccessNotification: globalThis.showSuccessNotification,
@@ -63,6 +95,14 @@ describe('CommonCollectionAddtocollection', () => {
             showErrorNotification:   globalThis.showErrorNotification,
         };
         globalThis.$ = jQuery;
+
+        globalThis.lang       = new Lang({messages: MESSAGES, locale: 'en'});
+        globalThis.Handlebars = Handlebars;
+        Handlebars.templates  = {
+            add_to_collection_row: Handlebars.compile(
+                fs.readFileSync(path.join(__dirname, '../../../../handlebars/add_to_collection_row.handlebars'), 'utf8'),
+            ),
+        };
 
         ajaxCalls = [];
         jQuery.ajax = vi.fn((settings) => {
@@ -93,17 +133,6 @@ describe('CommonCollectionAddtocollection', () => {
             listSelector:       '#list',
             newSelector:        '#new',
             forDungeonRouteUrl: '/ajax/collections',
-            loadingText:        'Loading',
-            loadFailedText:     'Load failed',
-            countText:          ':count / :max',
-            newCollectionText:  'New collection with this route…',
-            noCollectionsText:  'No collections',
-            fullText:           'Full',
-            addedText:          'Added to :name.',
-            removedText:        'Removed from :name.',
-            undoText:           'Undo',
-            undoneText:         'Undone.',
-            saveFailedText:     'Save failed',
         });
         code.activate();
     });
@@ -149,10 +178,10 @@ describe('CommonCollectionAddtocollection', () => {
     it('render_givenCollections_showsCountsAndDisablesTheOnesTheRouteCannotJoin', () => {
         // Arrange
         let json = listResponse([
-            collection({public_key: 'member', is_member: true}),
+            collection({public_key: 'member', contains_dungeon_route: true}),
             collection({public_key: 'open'}),
-            collection({public_key: 'season', blocked_reason: 'season', blocked_text: 'Only Season 2 routes'}),
-            collection({public_key: 'full', route_count: 24, blocked_reason: 'full', blocked_text: 'Full'}),
+            collection({public_key: 'season', blocked_reason: 'season'}),
+            collection({public_key: 'full', route_count: 24, blocked_reason: 'full'}),
         ]);
 
         // Act
@@ -164,9 +193,32 @@ describe('CommonCollectionAddtocollection', () => {
         expect(jQuery('#add_to_collection_member').prop('checked')).toBe(true);
         expect(jQuery('#add_to_collection_open').prop('disabled')).toBe(false);
         expect(jQuery('#add_to_collection_season').prop('disabled')).toBe(true);
-        expect($rows.eq(2).find('.add_to_collection_reason').text()).toBe('Only Season 2 routes');
+        expect($rows.eq(2).find('.add_to_collection_reason').text()).toBe('Only Midnight Season 3 routes');
         expect(jQuery('#add_to_collection_full').prop('disabled')).toBe(true);
+        expect($rows.eq(3).find('.add_to_collection_reason').text()).toBe('Full');
         expect($rows.eq(3).find('.add_to_collection_count').text()).toBe('24 / 24');
+    });
+
+    it('render_givenCollectionsOfEveryKind_wordsWhatEachCovers', () => {
+        // Arrange
+        let json = listResponse([
+            collection({public_key: 'set'}),
+            collection({public_key: 'none', season: null, covered_dungeon_count: 0}),
+            collection({public_key: 'one', season: null, covered_dungeon_count: 1}),
+            collection({public_key: 'many', season: null, covered_dungeon_count: 5}),
+        ]);
+
+        // Act
+        openWith(json);
+
+        // Assert
+        let kinds = jQuery('#list > li').map((index, element) => jQuery(element).find('small').first().text()).get();
+        expect(kinds).toEqual([
+            'Season 3 set · 1/8 dungeons',
+            'Retail · no dungeons',
+            'Retail · 1 dungeon',
+            'Retail · 5 dungeons',
+        ]);
     });
 
     it('render_givenACollectionNameWithMarkup_rendersItAsText', () => {
@@ -183,7 +235,7 @@ describe('CommonCollectionAddtocollection', () => {
 
     it('render_givenTheCollectionCap_disablesNewCollectionWithTheReason', () => {
         // Arrange
-        let json = listResponse([collection()], {may_create: false, create_blocked_text: 'You have 25 collections.'});
+        let json = listResponse([collection()], {may_create: false, max_collections: 25});
 
         // Act
         openWith(json);
@@ -232,9 +284,9 @@ describe('CommonCollectionAddtocollection', () => {
         expect(showInfoNotification).toHaveBeenCalledWith('Undone.');
     });
 
-    it('toggle_givenAMemberCollection_removesTheRoute', () => {
+    it('toggle_givenACollectionThatHoldsTheRoute_removesTheRoute', () => {
         // Arrange
-        openWith(listResponse([collection({is_member: true})]));
+        openWith(listResponse([collection({contains_dungeon_route: true})]));
 
         // Act
         jQuery('#add_to_collection_colA').prop('checked', false).trigger('change');
@@ -249,7 +301,7 @@ describe('CommonCollectionAddtocollection', () => {
 
     it('toggle_givenARemovalFromAFullCollection_makesItAvailableAgain', () => {
         // Arrange
-        openWith(listResponse([collection({is_member: true, route_count: 24})]));
+        openWith(listResponse([collection({contains_dungeon_route: true, route_count: 24})]));
 
         // Act
         jQuery('#add_to_collection_colA').prop('checked', false).trigger('change');

@@ -6,32 +6,6 @@
  @property {string} listSelector
  @property {string} newSelector
  @property {string} forDungeonRouteUrl
- @property {string} loadingText
- @property {string} loadFailedText
- @property {string} countText          Contains :count and :max.
- @property {string} newCollectionText
- @property {string} noCollectionsText
- @property {string} fullText
- @property {string} addedText          Contains :name.
- @property {string} removedText        Contains :name.
- @property {string} undoText
- @property {string} undoneText
- @property {string} saveFailedText
- */
-
-/**
- @typedef {Object} CommonCollectionAddtocollectionCollection
- @property {string} public_key
- @property {string} name
- @property {string} kind_label
- @property {Number} route_count
- @property {Number} max_routes
- @property {boolean} is_member
- @property {string|null} blocked_reason   'game_version', 'season', 'full' or null.
- @property {string|null} blocked_text
- @property {string} store_url
- @property {string} delete_url
- @property {boolean|undefined} is_saving  Set while a change to this collection is being saved.
  */
 
 /**
@@ -48,8 +22,8 @@ class CommonCollectionAddtocollection extends InlineCode {
 
         /** @type {string|null} */
         this._publicKey = null;
-        /** @type {CommonCollectionAddtocollectionCollection[]} */
-        this._collections = [];
+        /** @type {AddToCollectionRow[]} */
+        this._rows = [];
     }
 
     activate() {
@@ -72,9 +46,9 @@ class CommonCollectionAddtocollection extends InlineCode {
         let self = this;
 
         this._publicKey = publicKey;
-        this._collections = [];
+        this._rows = [];
 
-        $(this.options.statusSelector).text(this.options.loadingText);
+        $(this.options.statusSelector).text(lang.get('js.add_to_collection_loading'));
         $(this.options.listSelector).empty().prop('hidden', true);
         $(this.options.newSelector).empty();
 
@@ -91,11 +65,11 @@ class CommonCollectionAddtocollection extends InlineCode {
                     return;
                 }
 
-                self._collections = json.collections;
+                self._rows = json.collections.map(collection => new AddToCollectionRow(collection));
                 self._render(json);
             },
             error: function () {
-                $(self.options.statusSelector).text(self.options.loadFailedText);
+                $(self.options.statusSelector).text(lang.get('js.add_to_collection_load_failed'));
             },
         });
     }
@@ -108,53 +82,30 @@ class CommonCollectionAddtocollection extends InlineCode {
         let self = this;
         let $list = $(this.options.listSelector);
 
-        $(this.options.statusSelector).text(json.collections.length === 0 ? this.options.noCollectionsText : '');
+        $(this.options.statusSelector).text(this._rows.length === 0 ? lang.get('js.add_to_collection_no_collections') : '');
 
-        $list.empty().prop('hidden', json.collections.length === 0);
-        json.collections.forEach(function (collection) {
-            $list.append(self._renderCollection(collection));
+        $list.empty().prop('hidden', this._rows.length === 0);
+        this._rows.forEach(function (row) {
+            $list.append(self._renderRow(row));
         });
 
         this._renderNewCollection(json);
     }
 
     /**
-     * @param {CommonCollectionAddtocollectionCollection} collection
+     * @param {AddToCollectionRow} row
      * @returns {jQuery}
      * @private
      */
-    _renderCollection(collection) {
+    _renderRow(row) {
         let self = this;
-        let inputId = `add_to_collection_${collection.public_key}`;
-        let isDisabled = !collection.is_member && collection.blocked_reason !== null;
+        let $row = $(Handlebars.templates['add_to_collection_row'](row.toTemplateData()));
 
-        let $input = $('<input>', {
-            type: 'checkbox',
-            'class': 'form-check-input',
-            id: inputId,
-        }).prop('checked', collection.is_member).prop('disabled', isDisabled || collection.is_saving === true);
-
-        let $label = $('<label>', {'class': 'form-check-label', 'for': inputId})
-            .append($('<span>', {'class': 'd-block', text: collection.name}))
-            .append($('<small>', {'class': 'd-block text-body-secondary', text: collection.kind_label}));
-
-        if (isDisabled) {
-            $label.append($('<small>', {'class': 'd-block text-warning add_to_collection_reason', text: collection.blocked_text}));
-        }
-
-        $input.on('change', function () {
-            self._onToggled(collection, $(this).is(':checked'));
+        $row.find('.add_to_collection_checkbox').on('change', function () {
+            self._onToggled(row, $(this).is(':checked'));
         });
 
-        return $('<li>', {
-            'class': `list-group-item d-flex align-items-start gap-2${isDisabled ? ' text-body-secondary' : ''}`,
-            'data-public-key': collection.public_key,
-        })
-            .append($('<div>', {'class': 'form-check mb-0 flex-grow-1 text-break'}).append($input, $label))
-            .append($('<span>', {
-                'class': 'badge text-bg-secondary add_to_collection_count',
-                text: this.options.countText.replace(':count', collection.route_count).replace(':max', collection.max_routes),
-            }));
+        return $row;
     }
 
     /**
@@ -164,34 +115,38 @@ class CommonCollectionAddtocollection extends InlineCode {
     _renderNewCollection(json) {
         let $new = $(this.options.newSelector).empty();
         let $icon = $('<i>', {'class': 'fas fa-plus'});
+        let text = ` ${lang.get('js.add_to_collection_new_collection')}`;
 
         if (json.may_create) {
             $new.append($('<a>', {'class': 'btn btn-outline-success w-100', href: json.create_url})
-                .append($icon, document.createTextNode(` ${this.options.newCollectionText}`)));
+                .append($icon, document.createTextNode(text)));
 
             return;
         }
 
         $new.append($('<button>', {type: 'button', 'class': 'btn btn-outline-secondary w-100', disabled: true})
-            .append($icon, document.createTextNode(` ${this.options.newCollectionText}`)));
-        $new.append($('<small>', {'class': 'd-block text-warning mt-1', text: json.create_blocked_text}));
+            .append($icon, document.createTextNode(text)));
+        $new.append($('<small>', {
+            'class': 'd-block text-warning mt-1',
+            text: lang.get('js.add_to_collection_max_collections', {max: json.max_collections}),
+        }));
     }
 
     /**
-     * @param {CommonCollectionAddtocollectionCollection} collection
+     * @param {AddToCollectionRow} row
      * @param {boolean} isChecked
      * @private
      */
-    _onToggled(collection, isChecked) {
+    _onToggled(row, isChecked) {
         let self = this;
         let publicKey = this._publicKey;
 
-        this._setMember(collection, isChecked, publicKey, function () {
-            let text = (isChecked ? self.options.addedText : self.options.removedText).replace(':name', self._escape(collection.name));
+        this._setContainsDungeonRoute(row, isChecked, publicKey, function () {
+            let text = lang.get(isChecked ? 'js.add_to_collection_added' : 'js.add_to_collection_removed', {name: self._escape(row.name)});
 
             self._showUndoableToast(text, function () {
-                self._setMember(collection, !isChecked, publicKey, function () {
-                    showInfoNotification(self.options.undoneText);
+                self._setContainsDungeonRoute(row, !isChecked, publicKey, function () {
+                    showInfoNotification(lang.get('js.add_to_collection_undone'));
                 });
             });
         });
@@ -201,65 +156,57 @@ class CommonCollectionAddtocollection extends InlineCode {
      * Adds the route to, or removes it from, the collection and updates its row once saved; a failed save restores
      * the row.
      *
-     * @param {CommonCollectionAddtocollectionCollection} collection
-     * @param {boolean} isMember
+     * @param {AddToCollectionRow} row
+     * @param {boolean} containsDungeonRoute
      * @param {string} publicKey
      * @param {Function} onSaved
      * @private
      */
-    _setMember(collection, isMember, publicKey, onSaved) {
+    _setContainsDungeonRoute(row, containsDungeonRoute, publicKey, onSaved) {
         let self = this;
 
         // One change at a time per collection, so an add and a remove can never race each other
-        if (collection.is_saving === true) {
+        if (row.isSaving) {
             return;
         }
 
-        collection.is_saving = true;
-        this._replaceRow(collection, publicKey);
+        row.isSaving = true;
+        this._replaceRow(row, publicKey);
 
         $.ajax({
-            type: isMember ? 'POST' : 'DELETE',
-            url: isMember ? collection.store_url : collection.delete_url,
+            type: containsDungeonRoute ? 'POST' : 'DELETE',
+            url: containsDungeonRoute ? row.storeUrl : row.deleteUrl,
             dataType: 'json',
             data: {dungeon_routes: [publicKey]},
             success: function () {
-                collection.is_saving = false;
-                collection.is_member = isMember;
-                collection.route_count += isMember ? 1 : -1;
-                if (!isMember && collection.blocked_reason === null && collection.route_count >= collection.max_routes) {
-                    collection.blocked_reason = 'full';
-                    collection.blocked_text = self.options.fullText;
-                } else if (collection.blocked_reason === 'full' && collection.route_count < collection.max_routes) {
-                    collection.blocked_reason = null;
-                    collection.blocked_text = null;
-                }
+                row.isSaving = false;
+                row.setContainsDungeonRoute(containsDungeonRoute);
 
-                self._replaceRow(collection, publicKey);
+                self._replaceRow(row, publicKey);
                 onSaved();
             },
             error: function (xhr) {
-                collection.is_saving = false;
+                row.isSaving = false;
                 showErrorNotification(self._escape(self._getErrorMessage(xhr)));
-                self._replaceRow(collection, publicKey);
+                self._replaceRow(row, publicKey);
             },
         });
     }
 
     /**
-     * @param {CommonCollectionAddtocollectionCollection} collection
+     * @param {AddToCollectionRow} row
      * @param {string} publicKey The route the change was made for; the dialog may show another route by now.
      * @private
      */
-    _replaceRow(collection, publicKey) {
+    _replaceRow(row, publicKey) {
         if (this._publicKey !== publicKey) {
             return;
         }
 
         $(this.options.listSelector)
             .children()
-            .filter((index, element) => $(element).attr('data-public-key') === collection.public_key)
-            .replaceWith(this._renderCollection(collection));
+            .filter((index, element) => $(element).attr('data-public-key') === row.publicKey)
+            .replaceWith(this._renderRow(row));
     }
 
     /**
@@ -277,7 +224,7 @@ class CommonCollectionAddtocollection extends InlineCode {
             }
         }
 
-        return this.options.saveFailedText;
+        return lang.get('js.add_to_collection_save_failed');
     }
 
     /**
@@ -289,7 +236,7 @@ class CommonCollectionAddtocollection extends InlineCode {
         showSuccessNotification(text, {
             timeout: 8000,
             buttons: [
-                Noty.button(this.options.undoText, 'btn btn-sm btn-light add_to_collection_undo', function (noty) {
+                Noty.button(lang.get('js.add_to_collection_undo'), 'btn btn-sm btn-light add_to_collection_undo', function (noty) {
                     noty.close();
                     undo();
                 }),

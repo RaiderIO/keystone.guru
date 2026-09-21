@@ -67,6 +67,25 @@ final class DungeonRouteAddToCollectionEntryTest extends PublicTestCase
     }
 
     #[Test]
+    public function view_givenTheOwner_offersAddToCollectionInTheLeftMenuAndNotInTheHeader(): void
+    {
+        // Arrange
+        $owner        = $this->createUser();
+        $dungeonRoute = $this->createRoute($owner);
+
+        // Act
+        $content = $this->actingAs($owner)->followingRedirects()->get($this->viewUrl($dungeonRoute))->getContent();
+
+        // Assert
+        $this->assertSame(1, substr_count($content, self::BUTTON_ID));
+        $this->assertGreaterThan(
+            strpos($content, 'route_sidebar route_manipulation_tools left'),
+            strpos($content, self::BUTTON_ID),
+        );
+        $this->assertStringNotContainsString('dropdown-item dungeonroute-add-to-collection', $content);
+    }
+
+    #[Test]
     public function view_givenSomeoneElse_doesNotOfferAddToCollection(): void
     {
         // Arrange

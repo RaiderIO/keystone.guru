@@ -1,6 +1,5 @@
 <?php
 
-use App\Features\CreatorProfiles;
 use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
@@ -14,7 +13,6 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
-use Laravel\Pennant\Feature;
 
 /**
  * @var string|null         $headerTitle
@@ -35,10 +33,6 @@ $user               = Auth::user();
 $mayUserEdit        = $dungeonroute !== null && Gate::allows('edit', $dungeonroute);
 $showShare          = !empty($show['share']) && in_array(true, $show['share'], true);
 $showCreateRouteBtn = isset($dungeonroute) && $dungeonroute->isSandbox();
-// Only on the route page, never in the map editor or a live session; collections hold their owner's own routes
-$showAddToCollection = isset($dungeonroute) && !$edit && !($mapContext instanceof MapContextLiveSession)
-    && $user !== null && $dungeonroute->author_id === $user->id && !$dungeonroute->isSandbox()
-    && Feature::active(CreatorProfiles::class);
 
 $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 
@@ -196,15 +190,6 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
 
             @isset($dungeonroute)
 
-                @if($showAddToCollection)
-                    @component('common.maps.controls.buttons.headerbutton')
-                        <button id="add_to_collection_button" class="btn btn-info btn-sm w-100 dungeonroute-add-to-collection"
-                                data-publickey="{{ $dungeonroute->public_key }}">
-                            <i class="fas fa-layer-group"></i> {{ __('view_common.maps.controls.header.add_to_collection') }}
-                        </button>
-                    @endcomponent
-                @endif
-
                 @component('common.maps.controls.buttons.headerbutton')
                     <button id="simulate_route_button" class="btn btn-info btn-sm w-100"
                             data-bs-toggle="modal" data-bs-target="#simulate_modal">
@@ -296,14 +281,6 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
                             @endif
                         @endauth
                         @isset($dungeonroute)
-                            @if($showAddToCollection)
-                                <li>
-                                    <a class="dropdown-item dungeonroute-add-to-collection" href="#"
-                                       data-publickey="{{ $dungeonroute->public_key }}">
-                                        <i class="fas fa-layer-group"></i> {{ __('view_common.maps.controls.header.add_to_collection') }}
-                                    </a>
-                                </li>
-                            @endif
                             <li>
                                 <a class="dropdown-item" href="#"
                                    data-bs-toggle="modal" data-bs-target="#simulate_modal">
@@ -374,10 +351,6 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
         @component('common.general.modal', ['id' => 'edit_route_settings_modal', 'size' => 'xl'])
             @include('common.modal.routesettings', ['dungeonroute' => $dungeonroute])
         @endcomponent
-    @endif
-
-    @if($showAddToCollection)
-        @include('common.collection.addtocollection', ['triggerSelector' => '.dungeonroute-add-to-collection'])
     @endif
 
     @component('common.general.modal', ['id' => 'simulate_modal', 'size' => 'xl'])
