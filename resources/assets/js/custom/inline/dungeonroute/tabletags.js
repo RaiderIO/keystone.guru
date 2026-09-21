@@ -27,12 +27,13 @@ class DungeonRouteTableTagsHandler {
 
         this._addTagPublicKey = publicKey;
 
+        let dungeonrouteTable = this._dungeonrouteTable;
+
         showConfirmFinished(template($.extend({}, getHandlebarsDefaultVariables(), {
             publicKey: publicKey,
             teams: this._dungeonrouteTable.options.teams
         })), function () {
-            // Refresh the table
-            $('#dungeonroute_filter').trigger('click');
+            dungeonrouteTable.redrawKeepingPage();
         }, {closeWith: ['button']});
 
 
