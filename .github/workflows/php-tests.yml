@@ -2,20 +2,19 @@ name: PHP Tests
 
 # No base-branch filter: stacked PRs (one PR targeting another open PR's branch) must run the
 # same tests as PRs against master (#4074).
-# Draft PRs skip this suite (#4343); it runs on ready_for_review, on pushes to non-draft PRs,
-# and on pushes to a draft carrying the `run full ci` label (add the label, then push to trigger
-# a run — #4473: a `labeled` trigger produces a run for every label, and a run whose job is
-# skipped by `if:` leaves the required php-tests check permanently unreported for that
-# commit, blocking merge even though an earlier run on the same commit already passed them).
+# No draft filter: a draft PR is verified continuously while it is worked on, so that leaving
+# draft is an immediately actionable signal rather than the point at which the suite first runs.
+# ready_for_review is deliberately absent from the trigger list — the head commit already has a
+# run by then, and re-triggering on it only duplicates a 7-minute job.
 #
-# workflow_dispatch is the manual recovery for exactly that dead end: GitHub occasionally drops a
-# non-push pull_request event outright (no run object is created, so no `if:` is ever evaluated),
-# which leaves the required php-tests check unreported for a head commit that is otherwise ready.
+# workflow_dispatch is the manual recovery for a dropped event: GitHub occasionally drops a
+# non-push pull_request event outright (no run object is created at all), which leaves the
+# required php-tests check unreported for a head commit that is otherwise ready.
 # `gh workflow run php-tests.yml --ref <branch>` attaches a fresh php-tests check run to that
 # commit, with no push and no close/reopen cycle.
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
 
 permissions:
@@ -32,13 +31,6 @@ jobs:
   php-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      github.event.action == 'ready_for_review' ||
-      (contains(fromJSON('["opened", "reopened", "synchronize"]'), github.event.action) &&
-        (github.event.pull_request.draft == false ||
-         contains(github.event.pull_request.labels.*.name, 'run full ci')))
 
     name: php-tests
 
