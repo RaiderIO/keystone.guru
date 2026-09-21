@@ -194,7 +194,6 @@ function setFakeState({
         },
         unregister: () => {
         },
-        getAuras: () => [],
         // MapContextMappingVersion hard-codes both of these ("when mapping a dungeon assume we have
         // all affixes so things show up properly"), so the editor cannot be short an affix or
         // non-teeming. Honouring that here keeps the caller's affixes/teeming from describing a
