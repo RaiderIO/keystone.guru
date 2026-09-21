@@ -601,7 +601,7 @@ class Save extends Command
             ->values();
         $enemies = $enemiesCollection->each($roundLatLngFn);
 
-        $enemyPacks   = $floor->enemyPacksForExport->values()->each($roundLatLngVerticesFn);
+        $enemyPacks   = $floor->enemyPacksForExport->values()->each($roundLatLngPolyLinesFn);
         $enemyPatrols = $floor->enemyPatrolsForExport->makeVisible(['mdtPolyline'])->values()->each($roundLatLngPolyLinesFn);
         /** @var EloquentCollection<int, DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport
