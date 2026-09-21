@@ -426,6 +426,7 @@ class Save extends Command
                 'thumbnail_refresh_queued_at',
                 'thumbnail_updated_at',
                 'last_accessed_at',
+                'last_hero_at',
                 'unlisted',
                 'published_at',
                 'faction',

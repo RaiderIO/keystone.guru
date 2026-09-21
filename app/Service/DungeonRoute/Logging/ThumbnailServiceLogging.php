@@ -154,6 +154,16 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->warning(__METHOD__, get_defined_vars());
     }
 
+    public function expireInactiveThumbnailsException(int $dungeonRouteId, Throwable $exception): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function expireHeroThumbnailsException(int $thumbnailId, Throwable $exception): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function doCreateThumbnailEnd(): void
     {
         $this->end(__METHOD__);

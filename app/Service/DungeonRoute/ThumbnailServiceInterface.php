@@ -31,6 +31,32 @@ interface ThumbnailServiceInterface
     public function dungeonRoutesDisplayed(Collection $dungeonRoutes): bool;
 
     /**
+     * Deletes the standard and front page thumbnails (and their files) of routes that were neither edited nor
+     * displayed for keystoneguru.thumbnail.expire_inactive_days, and resets their thumbnail timestamps so the
+     * next display renders them again. Custom (API) thumbnails are left alone.
+     *
+     * @param  int|null $limit  The maximum amount of routes to expire; defaults to keystoneguru.thumbnail.expire_inactive_count.
+     * @param  bool     $dryRun Only count the routes that would be expired.
+     * @return int      The amount of routes that were (or, on a dry run, would be) expired.
+     */
+    public function expireInactiveThumbnails(?int $limit = null, bool $dryRun = false): int;
+
+    /**
+     * Records that the given routes are in the discover hero set right now.
+     *
+     * @param Collection<int, DungeonRoute> $heroRoutes
+     */
+    public function markHeroRoutes(Collection $heroRoutes): void;
+
+    /**
+     * Deletes the hero and front page thumbnails (and their files) of routes that left the hero set more than
+     * keystoneguru.thumbnail.hero_expire_days ago.
+     *
+     * @return int The amount of thumbnails that were deleted.
+     */
+    public function expireHeroThumbnailsOutsideHeroSet(): int;
+
+    /**
      * @return Collection<int, DungeonRouteThumbnailJob>
      */
     public function queueThumbnailRefreshForApi(

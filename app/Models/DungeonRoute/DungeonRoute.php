@@ -113,6 +113,7 @@ use Override;
  * @property Carbon               $thumbnail_refresh_queued_at
  * @property Carbon               $thumbnail_updated_at
  * @property Carbon|null          $last_accessed_at
+ * @property Carbon|null          $last_hero_at
  * @property Carbon               $updated_at
  * @property Carbon               $created_at
  * @property Carbon               $published_at
@@ -216,6 +217,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'thumbnail_refresh_queued_at',
         'thumbnail_updated_at',
         'last_accessed_at',
+        'last_hero_at',
         'published_at',
         'published_state_id',
         'published_state',
@@ -261,6 +263,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             'thumbnail_refresh_queued_at' => 'datetime',
             'thumbnail_updated_at'        => 'datetime',
             'last_accessed_at'            => 'datetime',
+            'last_hero_at'                => 'datetime',
             'published_at'                => 'datetime',
             'expires_at'                  => 'datetime',
             'created_at'                  => 'datetime',

@@ -11,6 +11,7 @@ use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use Closure;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -42,6 +43,30 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
      * @return int                  The amount of routes that were stamped.
      */
     public function stampLastAccessedAt(Collection $dungeonRouteIds): int;
+
+    /**
+     * Sets last_hero_at to now for the given routes, without touching updated_at.
+     *
+     * @param  Collection<int, int> $dungeonRouteIds
+     * @return int                  The amount of routes that were stamped.
+     */
+    public function stampLastHeroAt(Collection $dungeonRouteIds): int;
+
+    /**
+     * The IDs of routes that have a standard or front page thumbnail while neither their last edit nor their
+     * last display is more recent than $inactiveSince. Custom (API) thumbnails do not count.
+     *
+     * @return Collection<int, int>
+     */
+    public function getDungeonRouteIdsWithInactiveThumbnails(Carbon $inactiveSince, int $limit): Collection;
+
+    /**
+     * Puts the thumbnail timestamps of the given routes back to their never-rendered defaults, so the next
+     * display queues a render. Does not touch updated_at.
+     *
+     * @param Collection<int, int> $dungeonRouteIds
+     */
+    public function resetThumbnailTimestamps(Collection $dungeonRouteIds): int;
 
     /** @return Collection<string, Collection<int, WeeklyRoute>> */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection;

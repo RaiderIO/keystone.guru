@@ -22,6 +22,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Random\RandomException;
@@ -29,6 +30,11 @@ use stdClass;
 
 class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteRepositoryInterface
 {
+    /** The column defaults of a route whose thumbnail has never been rendered. */
+    private const string THUMBNAIL_REFRESH_QUEUED_AT_DEFAULT = '1970-01-01 00:00:00';
+
+    private const string THUMBNAIL_UPDATED_AT_DEFAULT = '1970-01-01 12:00:00';
+
     public function __construct(
         private readonly SeasonServiceInterface $seasonService,
     ) {
@@ -124,6 +130,63 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             ->where($notAccessedToday)
             ->toBase()
             ->update(['last_accessed_at' => now()->toDateTimeString()]);
+    }
+
+    /**
+     * @param Collection<int, int> $dungeonRouteIds
+     */
+    public function stampLastHeroAt(Collection $dungeonRouteIds): int
+    {
+        if ($dungeonRouteIds->isEmpty()) {
+            return 0;
+        }
+
+        // Through the base query builder: Eloquent would bump updated_at, which marks the thumbnail as stale
+        return DungeonRoute::query()
+            ->whereIn('id', $dungeonRouteIds)
+            ->toBase()
+            ->update(['last_hero_at' => now()->toDateTimeString()]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDungeonRouteIdsWithInactiveThumbnails(Carbon $inactiveSince, int $limit): Collection
+    {
+        return DungeonRoute::query()
+            ->where('updated_at', '<', $inactiveSince->toDateTimeString())
+            ->where(static function (EloquentBuilder $builder) use ($inactiveSince) {
+                $builder->whereNull('last_accessed_at')
+                    ->orWhere('last_accessed_at', '<', $inactiveSince->toDateTimeString());
+            })
+            ->whereHas('dungeonRouteThumbnails', static function (EloquentBuilder $builder) {
+                $builder->whereIn('variant', [
+                    DungeonRouteThumbnailVariant::Standard->value,
+                    DungeonRouteThumbnailVariant::FrontPage->value,
+                ]);
+            })
+            ->orderBy('id')
+            ->limit($limit)
+            ->pluck('id');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function resetThumbnailTimestamps(Collection $dungeonRouteIds): int
+    {
+        if ($dungeonRouteIds->isEmpty()) {
+            return 0;
+        }
+
+        // Through the base query builder: Eloquent would bump updated_at
+        return DungeonRoute::query()
+            ->whereIn('id', $dungeonRouteIds)
+            ->toBase()
+            ->update([
+                'thumbnail_refresh_queued_at' => self::THUMBNAIL_REFRESH_QUEUED_AT_DEFAULT,
+                'thumbnail_updated_at'        => self::THUMBNAIL_UPDATED_AT_DEFAULT,
+            ]);
     }
 
     /**

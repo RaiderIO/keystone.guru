@@ -80,6 +80,12 @@ $commands[] = Schedule::command('metric:savepending')->everyMinute();
 // Cleanup the generated custom thumbnails
 $commands[] = Schedule::command('thumbnail:deleteexpiredjobs')->everyFifteenMinutes();
 
+// Thumbnails of routes nobody edits or looks at are deleted and rendered again if the route is ever displayed.
+// The stored files live on the production disk, so skip it locally.
+if (!app()->environment('local')) {
+    $commands[] = Schedule::command('thumbnail:expireinactive')->dailyAt('04:00');
+}
+
 // Keep the wide hero-band thumbnails fresh for the routes shown as heroes on the discovery pages.
 // Rendering needs headless chrome, so skip it locally like the other thumbnail refreshers.
 if (!app()->environment('local')) {
