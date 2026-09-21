@@ -86,16 +86,27 @@ final class GenerateTestRoutesTest extends PublicTestCase
     }
 
     #[Test]
-    public function handle_givenDelete_deletesGeneratedRoutes(): void
+    public function handle_givenDeleteWithAuthor_deletesOnlyThatAuthorsGeneratedRoutes(): void
     {
         // Arrange
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
-        $this->artisan('dungeonroute:generatetest', ['--dungeon' => [$dungeon->key], '--count' => 2])->assertSuccessful();
+        $author  = null;
 
-        // Act
-        $this->artisan('dungeonroute:generatetest', ['--delete' => true])->assertSuccessful();
+        try {
+            $author = User::factory()->create();
+            $this->artisan('dungeonroute:generatetest', ['--dungeon' => [$dungeon->key], '--count' => 2, '--author' => $author->id])->assertSuccessful();
+            $this->artisan('dungeonroute:generatetest', ['--dungeon' => [$dungeon->key], '--count' => 1])->assertSuccessful();
 
-        // Assert
-        $this->assertSame(0, app(TestDungeonRouteGeneratorServiceInterface::class)->countGenerated());
+            // Act
+            $this->artisan('dungeonroute:generatetest', ['--delete' => true, '--author' => $author->id])->assertSuccessful();
+
+            // Assert
+            $service = app(TestDungeonRouteGeneratorServiceInterface::class);
+            $this->assertSame(0, $service->countGenerated($author));
+            $this->assertSame(1, DungeonRoute::query()->where('id', '>', $this->maxDungeonRouteIdBefore)->where('author_id', 1)->count(), 'Another author\'s generated route must survive');
+        } finally {
+            DungeonRoute::query()->where('id', '>', $this->maxDungeonRouteIdBefore)->get()->each->delete();
+            $author?->delete();
+        }
     }
 }

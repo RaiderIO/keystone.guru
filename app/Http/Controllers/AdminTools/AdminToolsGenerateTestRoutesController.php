@@ -32,7 +32,7 @@ class AdminToolsGenerateTestRoutesController extends Controller
             'dungeons'        => Dungeon::query()->active()->with('expansion')->get()->sortBy(static fn(Dungeon $dungeon) => __($dungeon->name)),
             'publishedStates' => array_keys(PublishedState::ALL),
             'maxCount'        => TestDungeonRouteGeneratorServiceInterface::MAX_ROUTES_PER_DUNGEON,
-            'generatedCount'  => $testDungeonRouteGeneratorService->countGenerated(),
+            'generatedCount'  => $testDungeonRouteGeneratorService->countGenerated($this->getUser()),
         ]);
     }
 
@@ -43,8 +43,7 @@ class AdminToolsGenerateTestRoutesController extends Controller
         abort_unless($testDungeonRouteGeneratorService->isAvailable(), 404);
 
         $dungeon = $request->getDungeon();
-        /** @var User $user */
-        $user = Auth::user();
+        $user    = $this->getUser();
 
         try {
             $dungeonRoutes = $testDungeonRouteGeneratorService->generate(
@@ -66,7 +65,7 @@ class AdminToolsGenerateTestRoutesController extends Controller
                 'enemy_forces' => $dungeonRoute->enemy_forces,
             ])->values(),
             'enemy_forces_required' => $dungeonRoutes->first()?->mappingVersion->enemy_forces_required,
-            'generated_count'       => $testDungeonRouteGeneratorService->countGenerated(),
+            'generated_count'       => $testDungeonRouteGeneratorService->countGenerated($user),
         ]);
     }
 
@@ -75,9 +74,17 @@ class AdminToolsGenerateTestRoutesController extends Controller
         abort_unless($testDungeonRouteGeneratorService->isAvailable(), 404);
 
         try {
-            return response()->json($testDungeonRouteGeneratorService->deleteGenerated(self::DELETE_BATCH_SIZE));
+            return response()->json($testDungeonRouteGeneratorService->deleteGenerated(self::DELETE_BATCH_SIZE, $this->getUser()));
         } catch (TestDungeonRouteGeneratorException $exception) {
             return response()->json(['message' => $exception->getMessage()], 422);
         }
+    }
+
+    private function getUser(): User
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        return $user;
     }
 }

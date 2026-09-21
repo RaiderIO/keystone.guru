@@ -82,7 +82,13 @@ class AdminToolsDungeonrouteGeneratetestroutes extends InlineCode {
                 self._generateNext(dungeonIds, index + 1, count, publishedState);
             },
             error: function (xhr) {
-                self._onError(xhr);
+                // A dungeon the generator cannot handle (no mapping or no enemies) should not stop the rest of a season
+                if (xhr.status === 422) {
+                    self._logError(xhr);
+                    self._generateNext(dungeonIds, index + 1, count, publishedState);
+                } else {
+                    self._onError(xhr);
+                }
             }
         });
     }
@@ -138,9 +144,17 @@ class AdminToolsDungeonrouteGeneratetestroutes extends InlineCode {
      * @private
      */
     _onError(xhr) {
+        this._logError(xhr);
+        this._setRunning(false);
+    }
+
+    /**
+     * @param {Object} xhr
+     * @private
+     */
+    _logError(xhr) {
         let message = xhr.responseJSON ? (xhr.responseJSON.message || xhr.responseText) : xhr.responseText;
         this._log(this._format(this.options.translations.error, {message: message}));
-        this._setRunning(false);
     }
 
     /**

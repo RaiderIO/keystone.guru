@@ -32,13 +32,14 @@ interface TestDungeonRouteGeneratorServiceInterface
     public function generate(Dungeon $dungeon, User $author, int $count, int $publishedStateId): Collection;
 
     /**
-     * Deletes at most $limit generated routes, one model at a time so every delete hook runs.
+     * Deletes at most $limit generated routes (of $author only, when given), one model at a time so every
+     * delete hook runs.
      *
      * @return array{deleted: int, remaining: int}
      *
      * @throws TestDungeonRouteGeneratorException
      */
-    public function deleteGenerated(int $limit): array;
+    public function deleteGenerated(int $limit, ?User $author = null): array;
 
-    public function countGenerated(): int;
+    public function countGenerated(?User $author = null): int;
 }

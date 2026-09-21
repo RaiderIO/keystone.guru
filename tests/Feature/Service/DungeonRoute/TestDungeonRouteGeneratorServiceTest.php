@@ -8,13 +8,14 @@ use App\Models\Enemy;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcClassification;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\PublishedState;
 use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\Models\User;
 use App\Service\DungeonRoute\Exceptions\TestDungeonRouteGeneratorException;
 use App\Service\DungeonRoute\TestDungeonRouteGeneratorServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\JoinClause;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -48,7 +49,7 @@ final class TestDungeonRouteGeneratorServiceTest extends PublicTestCase
         [$dungeon, $mappingVersion] = $this->findDungeon(
             challengeMode: true,
             minEnemies:    1,
-            resolve:       fn(Dungeon $dungeon, MappingVersion $mappingVersion) => $this->sumEnemyForces($mappingVersion, null) >= $mappingVersion->enemy_forces_required
+            resolve:       fn(Dungeon $dungeon, MappingVersion $mappingVersion) => $this->sumEnemyForces($mappingVersion, false) >= $mappingVersion->enemy_forces_required
                 && $mappingVersion->enemy_forces_required > 0 ? true : null,
         );
         $dungeonRoutes = collect();
@@ -75,7 +76,7 @@ final class TestDungeonRouteGeneratorServiceTest extends PublicTestCase
             challengeMode: true,
             minEnemies:    1,
             resolve:       fn(Dungeon $dungeon, MappingVersion $mappingVersion) => $this->sumEnemyForces($mappingVersion, true) < $mappingVersion->enemy_forces_required
-                && $this->sumEnemyForces($mappingVersion, null) >= $mappingVersion->enemy_forces_required ? true : null,
+                && $this->sumEnemyForces($mappingVersion, false) >= $mappingVersion->enemy_forces_required ? true : null,
         );
         $dungeonRoutes = collect();
 
@@ -140,53 +141,77 @@ final class TestDungeonRouteGeneratorServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function isAvailable_givenAppType_returnsWhetherGenerationIsAllowed(): void
+    #[DataProvider('isAvailable_givenAppTypeAndEnv_returnsWhetherGenerationIsAllowed_dataProvider')]
+    public function isAvailable_givenAppTypeAndEnv_returnsWhetherGenerationIsAllowed(string $appType, string $appEnv, bool $expected): void
     {
         // Arrange
-        $availability = [];
+        config(['app.type' => $appType, 'app.env' => $appEnv]);
 
         // Act
-        foreach (['local', 'staging', 'production', 'mapping'] as $appType) {
-            config(['app.type' => $appType]);
-            $availability[$appType] = $this->service->isAvailable();
-        }
+        $result = $this->service->isAvailable();
 
         // Assert
-        $this->assertSame([
-            'local'      => true,
-            'staging'    => true,
-            'production' => false,
-            'mapping'    => false,
-        ], $availability);
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @return array<string, array{string, string, bool}>
+     */
+    public static function isAvailable_givenAppTypeAndEnv_returnsWhetherGenerationIsAllowed_dataProvider(): array
+    {
+        return [
+            'local'                                  => ['local', 'local', true],
+            'staging runs with a production APP_ENV' => ['staging', 'production', true],
+            'production'                             => ['production', 'production', false],
+            'mapping'                                => ['mapping', 'local', false],
+            'unset APP_TYPE on a production APP_ENV' => ['local', 'production', false],
+        ];
     }
 
     #[Test]
-    public function deleteGenerated_givenGeneratedAndRegularRoutes_deletesOnlyGeneratedRoutes(): void
+    public function deleteGenerated_givenGeneratedAndRegularRoutes_deletesOnlyTheAuthorsGeneratedRoutes(): void
     {
         // Arrange
         $dungeon       = $this->getDungeonWithCurrentMappingVersionWithEnemies();
+        $author        = null;
+        $otherUser     = null;
         $dungeonRoutes = collect();
         $regularRoute  = null;
+        $taggedRoute   = null;
 
         try {
-            $regularRoute  = DungeonRoute::factory()->create(['dungeon_id' => $dungeon->id, 'expires_at' => null]);
-            $dungeonRoutes = $this->service->generate($dungeon, User::findOrFail(1), 3, PublishedState::ALL[PublishedState::UNPUBLISHED]);
-            $countBefore   = $this->service->countGenerated();
+            $author       = User::factory()->create();
+            $otherUser    = User::factory()->create();
+            $regularRoute = DungeonRoute::factory()->create(['author_id' => $author->id, 'dungeon_id' => $dungeon->id, 'expires_at' => null]);
+            $taggedRoute  = DungeonRoute::factory()->create(['author_id' => $author->id, 'dungeon_id' => $dungeon->id, 'expires_at' => null]);
+            // Another user's personal tag with the marker name must not turn the route into a generated one
+            Tag::create([
+                'context_id'      => $otherUser->id,
+                'context_class'   => User::class,
+                'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL],
+                'model_id'        => $taggedRoute->id,
+                'model_class'     => DungeonRoute::class,
+                'name'            => TestDungeonRouteGeneratorServiceInterface::TAG_NAME,
+            ]);
+            $dungeonRoutes = $this->service->generate($dungeon, $author, 3, PublishedState::ALL[PublishedState::UNPUBLISHED]);
 
             // Act
-            $firstBatch  = $this->service->deleteGenerated(2);
-            $secondBatch = $this->service->deleteGenerated(2);
+            $firstBatch  = $this->service->deleteGenerated(2, $author);
+            $secondBatch = $this->service->deleteGenerated(2, $author);
 
             // Assert
-            $this->assertSame(2, $firstBatch['deleted']);
-            $this->assertSame($countBefore - 2, $firstBatch['remaining']);
-            $this->assertSame($countBefore - 2 - $secondBatch['deleted'], $secondBatch['remaining']);
+            $this->assertSame(['deleted' => 2, 'remaining' => 1], $firstBatch);
+            $this->assertSame(['deleted' => 1, 'remaining' => 0], $secondBatch);
             $this->assertFalse(DungeonRoute::query()->whereIn('id', $dungeonRoutes->pluck('id'))->exists(), 'Generated routes must be deleted');
             $this->assertSame(0, Tag::query()->whereIn('model_id', $dungeonRoutes->pluck('id'))->where('model_class', DungeonRoute::class)->count(), 'The marker tags must be deleted with the routes');
             $this->assertTrue(DungeonRoute::query()->whereKey($regularRoute->id)->exists(), 'A regular route must never be deleted');
+            $this->assertTrue(DungeonRoute::query()->whereKey($taggedRoute->id)->exists(), 'A route tagged by someone other than its author must never be deleted');
         } finally {
             DungeonRoute::query()->whereIn('id', $dungeonRoutes->pluck('id'))->get()->each->delete();
             $regularRoute?->delete();
+            $taggedRoute?->delete();
+            $author?->delete();
+            $otherUser?->delete();
         }
     }
 
@@ -196,6 +221,7 @@ final class TestDungeonRouteGeneratorServiceTest extends PublicTestCase
 
         $this->assertSame($mappingVersion->id, $dungeonRoute->mapping_version_id);
         $this->assertNull($dungeonRoute->expires_at, 'A generated route must not be a sandbox route');
+        $this->assertTrue($dungeonRoute->published_at->isAfter(now()->subHour()), 'A generated route must be published now, not at the column default');
         $this->assertGreaterThanOrEqual($mappingVersion->enemy_forces_required, $dungeonRoute->enemy_forces);
         $this->assertSame($dungeonRoute->getEnemyForces(), $dungeonRoute->enemy_forces);
 
@@ -214,6 +240,12 @@ final class TestDungeonRouteGeneratorServiceTest extends PublicTestCase
             ->pluck('enemy_id');
 
         $this->assertEmpty($bossEnemyIds->diff($killedEnemyIds), 'Every boss must be killed');
+
+        $packCount = Enemy::query()->where('mapping_version_id', $mappingVersion->id)->whereNotNull('enemy_pack_id')->distinct()->count('enemy_pack_id');
+        if ($packCount > 0) {
+            $averagePackSize = Enemy::query()->where('mapping_version_id', $mappingVersion->id)->whereNotNull('enemy_pack_id')->count() / $packCount;
+            $this->assertGreaterThan($averagePackSize, $killedEnemyIds->count() / $dungeonRoute->killZones()->count(), 'Pulls must be bigger than a single pack');
+        }
         $this->assertTrue(
             Tag::query()->where('model_id', $dungeonRoute->id)->where('model_class', DungeonRoute::class)
                 ->where('name', TestDungeonRouteGeneratorServiceInterface::TAG_NAME)->exists(),
@@ -222,19 +254,32 @@ final class TestDungeonRouteGeneratorServiceTest extends PublicTestCase
     }
 
     /**
-     * @param bool|null $packed true for enemies in a pack only, null for every enemy
+     * Total forces the generator can reach from its pull candidates, counted the way
+     * DungeonRoute::getEnemyForces() counts them: once per (npc, mdt id) key, every enemy sharing the key.
+     *
+     * @param bool $packedOnly only count candidates that belong to a pack
      */
-    private function sumEnemyForces(MappingVersion $mappingVersion, ?bool $packed): int
+    private function sumEnemyForces(MappingVersion $mappingVersion, bool $packedOnly): int
     {
+        $enemies        = Enemy::query()->where('mapping_version_id', $mappingVersion->id)->get();
+        $npcEnemyForces = NpcEnemyForces::query()->where('mapping_version_id', $mappingVersion->id)->pluck('enemy_forces', 'npc_id');
+        $keyOf          = static fn(Enemy $enemy) => $enemy->mdt_id === null ? null : sprintf('%d-%d', $enemy->mdt_npc_id ?? $enemy->npc_id, $enemy->mdt_id);
+
+        $forcesByKey = $enemies->groupBy($keyOf)->map(static fn($sharingKey) => $sharingKey->sum(
+            static fn(Enemy $enemy) => (int)($enemy->enemy_forces_override ?? $npcEnemyForces->get($enemy->mdt_npc_id ?? $enemy->npc_id, 0)),
+        ));
+
         return (int)Enemy::query()
-            ->join('npc_enemy_forces', static fn(JoinClause $join) => $join
-                ->on('npc_enemy_forces.npc_id', '=', 'enemies.npc_id')
-                ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id))
-            ->where('enemies.mapping_version_id', $mappingVersion->id)
-            ->whereNotNull('enemies.floor_id')
-            ->whereNull('enemies.teeming')
-            ->whereNull('enemies.seasonal_type')
-            ->when($packed === true, static fn(Builder $query) => $query->whereNotNull('enemies.enemy_pack_id'))
-            ->sum('npc_enemy_forces.enemy_forces');
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->whereNotNull('floor_id')
+            ->whereNotNull('npc_id')
+            ->whereNotNull('mdt_id')
+            ->whereNull('teeming')
+            ->whereNull('seasonal_type')
+            ->when($packedOnly, static fn(Builder $query) => $query->whereNotNull('enemy_pack_id'))
+            ->get()
+            ->map($keyOf)
+            ->unique()
+            ->sum(static fn(string $key) => $forcesByKey->get($key, 0));
     }
 }

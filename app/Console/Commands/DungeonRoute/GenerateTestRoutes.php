@@ -16,6 +16,8 @@ class GenerateTestRoutes extends Command
 {
     private const int DELETE_BATCH_SIZE = 25;
 
+    private const int DEFAULT_AUTHOR_ID = 1;
+
     /**
      * The name and signature of the console command.
      *
@@ -25,9 +27,9 @@ class GenerateTestRoutes extends Command
         {--dungeon=* : Dungeon key(s) to generate routes for}
         {--season= : Season id to generate routes for every dungeon of, or "current"}
         {--count=5 : Routes per dungeon (1-20)}
-        {--author=1 : User id that owns the routes}
+        {--author= : User id that owns the routes, default 1. When deleting, only delete the routes of this user}
         {--published-state=world : unpublished, team, world_with_link or world}
-        {--delete : Delete every generated test route instead}';
+        {--delete : Delete generated test routes instead}';
 
     /**
      * The console command description.
@@ -41,8 +43,16 @@ class GenerateTestRoutes extends Command
         SeasonServiceInterface                    $seasonService,
     ): int {
         try {
+            $authorId = $this->option('author');
+            $author   = User::find((int)($authorId ?? self::DEFAULT_AUTHOR_ID));
+            if ($author === null) {
+                $this->error(sprintf('No user with id %s.', $authorId));
+
+                return self::FAILURE;
+            }
+
             if ($this->option('delete')) {
-                return $this->deleteGenerated($testDungeonRouteGeneratorService);
+                return $this->deleteGenerated($testDungeonRouteGeneratorService, $authorId === null ? null : $author);
             }
 
             $dungeons = $this->resolveDungeons($seasonService);
@@ -55,13 +65,6 @@ class GenerateTestRoutes extends Command
             $publishedState = (string)$this->option('published-state');
             if (!isset(PublishedState::ALL[$publishedState])) {
                 $this->error(sprintf('Unknown published state %s.', $publishedState));
-
-                return self::FAILURE;
-            }
-
-            $author = User::find((int)$this->option('author'));
-            if ($author === null) {
-                $this->error(sprintf('No user with id %s.', $this->option('author')));
 
                 return self::FAILURE;
             }
@@ -88,11 +91,11 @@ class GenerateTestRoutes extends Command
     /**
      * @throws TestDungeonRouteGeneratorException
      */
-    private function deleteGenerated(TestDungeonRouteGeneratorServiceInterface $testDungeonRouteGeneratorService): int
+    private function deleteGenerated(TestDungeonRouteGeneratorServiceInterface $testDungeonRouteGeneratorService, ?User $author): int
     {
         $deleted = 0;
         do {
-            $result = $testDungeonRouteGeneratorService->deleteGenerated(self::DELETE_BATCH_SIZE);
+            $result = $testDungeonRouteGeneratorService->deleteGenerated(self::DELETE_BATCH_SIZE, $author);
             $deleted += $result['deleted'];
         } while ($result['deleted'] > 0 && $result['remaining'] > 0);
 

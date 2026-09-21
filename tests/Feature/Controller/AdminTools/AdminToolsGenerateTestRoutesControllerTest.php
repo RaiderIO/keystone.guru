@@ -172,25 +172,37 @@ final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function deleteBatch_givenGeneratedRoutes_deletesThem(): void
+    public function deleteBatch_givenGeneratedRoutesOfTwoAdmins_deletesOnlyTheCurrentAdminsRoutes(): void
     {
         // Arrange
         $dungeon       = $this->getDungeonWithCurrentMappingVersionWithEnemies();
+        $service       = app(TestDungeonRouteGeneratorServiceInterface::class);
+        $admin         = null;
+        $otherAdmin    = null;
         $dungeonRoutes = collect();
 
         try {
-            $dungeonRoutes = app(TestDungeonRouteGeneratorServiceInterface::class)
-                ->generate($dungeon, User::findOrFail(1), 1, PublishedState::ALL[PublishedState::UNPUBLISHED]);
+            $admin      = User::factory()->create();
+            $otherAdmin = User::factory()->create();
+            $admin->addRole(Role::firstWhere('name', Role::ROLE_ADMIN));
+            $otherAdmin->addRole(Role::firstWhere('name', Role::ROLE_ADMIN));
+            $ownRoutes     = $service->generate($dungeon, $admin, 1, PublishedState::ALL[PublishedState::UNPUBLISHED]);
+            $otherRoutes   = $service->generate($dungeon, $otherAdmin, 1, PublishedState::ALL[PublishedState::UNPUBLISHED]);
+            $dungeonRoutes = $ownRoutes->concat($otherRoutes);
+            $this->be($admin);
 
             // Act
             $response = $this->postJson(route('admin.tools.dungeonroute.generatetestroutes.delete_batch'));
 
             // Assert
             $response->assertOk();
-            $response->assertJsonStructure(['deleted', 'remaining']);
-            $this->assertFalse(DungeonRoute::query()->whereKey($dungeonRoutes->first()->id)->exists());
+            $response->assertExactJson(['deleted' => 1, 'remaining' => 0]);
+            $this->assertFalse(DungeonRoute::query()->whereKey($ownRoutes->first()->id)->exists());
+            $this->assertTrue(DungeonRoute::query()->whereKey($otherRoutes->first()->id)->exists(), 'Another admin\'s generated route must survive');
         } finally {
             DungeonRoute::query()->whereIn('id', $dungeonRoutes->pluck('id'))->get()->each->delete();
+            $admin?->delete();
+            $otherAdmin?->delete();
         }
     }
 }
