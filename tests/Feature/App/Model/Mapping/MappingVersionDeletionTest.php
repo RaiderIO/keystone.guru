@@ -88,7 +88,7 @@ final class MappingVersionDeletionTest extends PublicTestCase
         }
 
         $existingMappingVersion = $dungeon->getCurrentMappingVersion();
-        $existingPolylines      = $existingMappingVersion->enemyPacks()->get()
+        $existingPolylines      = $existingMappingVersion->enemyPacks()->with('polyline')->get()
             ->map(static fn(EnemyPack $enemyPack) => sprintf('%s %s', $enemyPack->polyline?->color, $enemyPack->polyline?->vertices_json))
             ->sort()
             ->values();
@@ -108,7 +108,7 @@ final class MappingVersionDeletionTest extends PublicTestCase
 
         try {
             // Assert
-            $clonedEnemyPacks = $newMappingVersion->enemyPacks()->get();
+            $clonedEnemyPacks = $newMappingVersion->enemyPacks()->with('polyline')->get();
             $this->assertEquals(
                 $existingPolylines,
                 $clonedEnemyPacks

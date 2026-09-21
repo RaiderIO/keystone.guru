@@ -127,6 +127,23 @@ final class AjaxEnemyPackControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function store_givenNoPolyline_returnsValidationError(): void
+    {
+        // Arrange
+        $enemyPackCount = EnemyPack::query()->count();
+        $payload        = $this->payload('#ff002b', self::VERTICES_JSON);
+        unset($payload['polyline']);
+
+        // Act
+        $response = $this->postJson($this->createUrl(), $payload);
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['polyline.vertices_json']);
+        $this->assertSame($enemyPackCount, EnemyPack::query()->count());
+    }
+
+    #[Test]
     public function delete_givenAnExistingEnemyPack_deletesItAndItsPolyline(): void
     {
         // Arrange

@@ -18,6 +18,7 @@ trait ValidatesMappingPolyline
             'polyline.color_animated' => 'nullable|string',
             'polyline.weight'         => 'int',
             'polyline.vertices_json'  => [
+                'required',
                 'json',
                 new JsonStringCountRule(2),
             ],

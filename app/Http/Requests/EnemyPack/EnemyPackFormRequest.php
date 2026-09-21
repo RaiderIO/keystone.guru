@@ -2,20 +2,16 @@
 
 namespace App\Http\Requests\EnemyPack;
 
-use App\Http\Requests\Traits\CastInputData;
 use App\Http\Requests\Traits\ValidatesMappingPolyline;
 use App\Models\Enemy;
-use App\Models\EnemyPack;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Polyline;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class EnemyPackFormRequest extends FormRequest
 {
-    use CastInputData;
     use ValidatesMappingPolyline;
 
     /**
@@ -24,12 +20,6 @@ class EnemyPackFormRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
-    }
-
-    protected function prepareForValidation(): void
-    {
-        $this->castInputData($this, EnemyPack::class);
-        $this->castInputData($this, Polyline::class, 'polyline');
     }
 
     /** @return array<string, mixed> */

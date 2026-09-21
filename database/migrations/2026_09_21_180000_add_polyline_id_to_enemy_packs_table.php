@@ -19,12 +19,15 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('enemy_packs', function (Blueprint $table) {
-            $table->integer('polyline_id')->nullable()->after('label');
-            $table->text('vertices_json')->nullable()->change();
+        // DDL commits implicitly: when the backfill below fails, the column exists but the migration is not recorded
+        if (!Schema::hasColumn('enemy_packs', 'polyline_id')) {
+            Schema::table('enemy_packs', function (Blueprint $table) {
+                $table->integer('polyline_id')->nullable()->after('label');
+                $table->text('vertices_json')->nullable()->change();
 
-            $table->index('polyline_id');
-        });
+                $table->index('polyline_id');
+            });
+        }
 
         $this->backfillPolylines();
     }
@@ -34,13 +37,13 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        // Packs created after up() ran only have their shape on the polyline
+        // Once up() ran, a pack's current shape and colour live only on its polyline
         DB::statement(<<<'SQL'
             UPDATE enemy_packs
             INNER JOIN polylines ON polylines.id = enemy_packs.polyline_id
             SET enemy_packs.vertices_json = polylines.vertices_json,
-                enemy_packs.color = COALESCE(enemy_packs.color, polylines.color)
-            WHERE enemy_packs.vertices_json IS NULL
+                enemy_packs.color = polylines.color,
+                enemy_packs.color_animated = polylines.color_animated
             SQL);
 
         DB::table('polylines')->where('model_class', EnemyPack::class)->delete();

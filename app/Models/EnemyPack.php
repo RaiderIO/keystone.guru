@@ -44,8 +44,6 @@ class EnemyPack extends Model implements HasPolylineInterface, MappingModelClone
 
     public $timestamps = false;
 
-    public $with = ['polyline'];
-
     protected $fillable = [
         'id',
         'mapping_version_id',

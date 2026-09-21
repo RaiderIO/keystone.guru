@@ -366,6 +366,7 @@ class MappingVersion extends Model
         /** @var EloquentCollection<int, EnemyPack> $enemyPacks */
         $enemyPacks = $this->enemyPacks()->with([
             'floor',
+            'polyline',
             'enemies:enemies.id,enemies.enemy_pack_id',
         ])->get();
 
@@ -560,7 +561,7 @@ class MappingVersion extends Model
             $previousMappingVersion->load([
                 'dungeonFloorSwitchMarkers',
                 'enemies',
-                'enemyPacks',
+                'enemyPacks.polyline',
                 'enemyPatrols',
                 'mapIcons',
                 'mountableAreas',

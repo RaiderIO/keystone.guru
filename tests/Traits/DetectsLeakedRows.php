@@ -24,7 +24,6 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Patreon\PatreonBenefit;
-use App\Models\Polyline;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\SeasonDungeon;
@@ -79,7 +78,7 @@ trait DetectsLeakedRows
      * @var array<string, array<int, class-string>>
      */
     private const array LEAK_GUARD_APPENDED_TABLES = [
-        'phpunit' => [Enemy::class, EnemyPack::class, Polyline::class, Spell::class, NpcEnemyForces::class],
+        'phpunit' => [Enemy::class, EnemyPack::class, Spell::class, NpcEnemyForces::class],
     ];
 
     /**

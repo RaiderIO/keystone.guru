@@ -204,7 +204,7 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
             $newMappingVersion = $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $gameVersion, true);
 
             // Assert
-            $enemyPacks = $newMappingVersion->enemyPacks()->get();
+            $enemyPacks = $newMappingVersion->enemyPacks()->with('polyline')->get();
             $this->assertNotEmpty($enemyPacks, 'The MDT import should have created enemy packs.');
 
             foreach ($enemyPacks as $enemyPack) {

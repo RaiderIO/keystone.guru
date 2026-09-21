@@ -347,7 +347,7 @@ class Floor extends Model implements MappingModelInterface
     /** @return HasMany<EnemyPack, $this> */
     public function enemyPacksForExport(): HasMany
     {
-        return $this->hasMany(EnemyPack::class)->orderBy('id');
+        return $this->hasMany(EnemyPack::class)->with('polyline')->orderBy('id');
     }
 
     /** @return HasMany<EnemyPatrol, $this> */
