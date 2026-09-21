@@ -96,20 +96,22 @@ class DungeonrouteTable extends InlineCode {
     }
 
     /**
-     * Redraws the table in place, staying on the current page. Row actions that leave the filter
-     * untouched use this instead of the filter button, whose redraw resets paging to page 1.
-     * @param {boolean} rowRemoved Whether the action removed a row from the listing; steps back one page when that
-     * empties the current page, which DataTables would otherwise show as an empty page.
+     * Redraws the table in place, without resetting to page 1.
      */
-    redrawKeepingPage(rowRemoved = false) {
-        if (rowRemoved) {
-            let pageInfo = this._dt.page.info();
-            if (pageInfo.page > 0 && pageInfo.end - pageInfo.start <= 1) {
-                this._dt.page('previous');
-            }
-        }
-
+    redrawKeepingPage() {
         this._dt.draw(false);
+    }
+
+    /**
+     * Steps back one page when a page after the first comes back empty, instead of leaving the user on a
+     * 'no routes' page once the last row of that page has left the listing.
+     * @param {Object} settings DataTables settings of the draw that just finished
+     * @private
+     */
+    _stepBackFromEmptyPage(settings) {
+        if (settings.json.data.length === 0 && this._dt.page.info().page > 0) {
+            this._dt.page('previous').draw(false);
+        }
     }
 
     /**
@@ -203,6 +205,8 @@ class DungeonrouteTable extends InlineCode {
                 'cache': false
             },
             'drawCallback': function (settings) {
+                self._stepBackFromEmptyPage(settings);
+
                 // Don't do anything when the message 'no data available' is showing
                 if (settings.json.data.length > 0) {
                     // For each row in the body
@@ -732,7 +736,7 @@ class DungeonrouteTable extends InlineCode {
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_delete_successful'));
-                    self.redrawKeepingPage(true);
+                    self.redrawKeepingPage();
                 }
             });
         });

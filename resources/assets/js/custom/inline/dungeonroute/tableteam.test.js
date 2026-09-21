@@ -6,7 +6,7 @@ describe('DungeonRouteTableTeam._removeFromThisTeam', () => {
         globalThis.lang = {get: (key) => key};
         globalThis.showSuccessNotification = vi.fn();
         globalThis.guardedAjaxClick = vi.fn((element, settings) => settings.success({}));
-        const clickEvent = {currentTarget: {getAttribute: () => 'abc123'}};
+        const clickEvent = {currentTarget: {}};
         globalThis.$ = vi.fn(() => ({attr: () => 'abc123'}));
         const dungeonrouteTable = {
             getTableView: () => ({getTeamPublicKey: () => 'team123'}),
@@ -19,6 +19,6 @@ describe('DungeonRouteTableTeam._removeFromThisTeam', () => {
 
         // Assert
         expect(guardedAjaxClick).toHaveBeenCalledWith(clickEvent.currentTarget, expect.objectContaining({url: '/ajax/team/team123/route/abc123'}));
-        expect(dungeonrouteTable.redrawKeepingPage).toHaveBeenCalledWith(true);
+        expect(dungeonrouteTable.redrawKeepingPage).toHaveBeenCalledExactlyOnceWith();
     });
 });

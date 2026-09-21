@@ -33,7 +33,7 @@ class DungeonRouteTableTeam {
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('js.team_remove_route_successful'));
-                    self._dungeonrouteTable.redrawKeepingPage(true);
+                    self._dungeonrouteTable.redrawKeepingPage();
                 }
             });
         } else {

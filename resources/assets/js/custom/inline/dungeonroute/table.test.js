@@ -399,83 +399,131 @@ describe('DungeonrouteTable._applyFilters', () => {
     });
 });
 
-describe('DungeonrouteTable._promptDeleteDungeonRouteClicked', () => {
+/**
+ * A `this` context whose DataTable is a spy, with a `#filter` button that records clicks so a test
+ * can assert the action redrew in place instead of going through the filter button.
+ * @returns {{context: Object, dt: Object, filterClicked: Function}}
+ */
+function arrangeRowActionContext() {
+    document.body.innerHTML = '<button id="filter"></button><a class="dungeonroute-delete dungeonroute-continue-in-season" data-publickey="abc123" data-season="Season 3"></a>';
+    const filterClicked = vi.fn();
+    document.getElementById('filter').addEventListener('click', filterClicked);
+    globalThis.lang = {get: (key) => key};
+    globalThis.showSuccessNotification = vi.fn();
+    globalThis.showConfirmYesCancel = (message, onYes) => onYes();
+    vi.spyOn($, 'ajax').mockImplementation((settings) => settings.success({}));
+    const dt = {draw: vi.fn()};
+    const context = Object.assign(Object.create(DungeonrouteTable.prototype), {_dt: dt, options: {filterButtonSelector: '#filter'}});
+
+    return {context, dt, filterClicked};
+}
+
+describe('DungeonrouteTable row actions', () => {
     useRealJQuery();
 
-    /**
-     * @param {Object} pageInfo
-     * @returns {{dt: Object, context: Object, boundHandler: Function, clickEvent: Object}}
-     */
-    function arrangeConfirmedDelete(pageInfo) {
-        document.body.innerHTML = '<button id="filter"></button><a class="dungeonroute-delete" data-publickey="abc123"></a>';
-        globalThis.lang = {get: (key) => key};
-        globalThis.showSuccessNotification = vi.fn();
-        globalThis.showConfirmYesCancel = (message, onYes) => onYes();
-        vi.spyOn($, 'ajax').mockImplementation((settings) => settings.success({}));
-        const calls = [];
-        const dt = {
-            page: Object.assign(vi.fn((direction) => calls.push(`page:${direction}`)), {info: () => pageInfo}),
-            draw: vi.fn((resetPaging) => calls.push(`draw:${resetPaging}`)),
-        };
-        const context = Object.assign(Object.create(DungeonrouteTable.prototype), {_dt: dt, options: {filterButtonSelector: '#filter'}});
-        const boundHandler = DungeonrouteTable.prototype._promptDeleteDungeonRouteClicked.bind(context);
+    it('_promptDeleteDungeonRouteClicked_givenConfirmedDelete_redrawsInPlaceKeepingThePage', () => {
+        // Arrange
+        const {context, dt, filterClicked} = arrangeRowActionContext();
         const clickEvent = {target: document.querySelector('.dungeonroute-delete'), preventDefault: vi.fn()};
 
-        return {dt, calls, boundHandler, clickEvent};
-    }
-
-    it('_promptDeleteDungeonRouteClicked_givenConfirmedDeleteOnMiddlePage_redrawsInPlaceKeepingThePage', () => {
-        // Arrange
-        const {dt, calls, boundHandler, clickEvent} = arrangeConfirmedDelete({page: 1, pages: 3, start: 25, end: 50});
-        const filterClicked = vi.fn();
-        document.getElementById('filter').addEventListener('click', filterClicked);
-
         // Act
-        boundHandler(clickEvent);
+        DungeonrouteTable.prototype._promptDeleteDungeonRouteClicked.call(context, clickEvent);
 
         // Assert
         expect($.ajax).toHaveBeenCalledWith(expect.objectContaining({type: 'DELETE', url: '/ajax/abc123'}));
-        expect(dt.draw).toHaveBeenCalledTimes(1);
-        expect(calls).toEqual(['draw:false']);
+        expect(dt.draw).toHaveBeenCalledExactlyOnceWith(false);
         expect(filterClicked).not.toHaveBeenCalled();
         expect(clickEvent.preventDefault).toHaveBeenCalledTimes(1);
     });
 
-    it('_promptDeleteDungeonRouteClicked_givenDeletingLastRowOfLaterPage_stepsBackOnePageBeforeRedrawing', () => {
+    it('_changePublishState_givenSuccessfulChange_redrawsInPlaceKeepingThePage', () => {
         // Arrange
-        const {calls, boundHandler, clickEvent} = arrangeConfirmedDelete({page: 2, pages: 3, start: 50, end: 51});
+        const {context, dt, filterClicked} = arrangeRowActionContext();
 
         // Act
-        boundHandler(clickEvent);
+        DungeonrouteTable.prototype._changePublishState.call(context, 'abc123', 'unpublished');
 
         // Assert
-        expect(calls).toEqual(['page:previous', 'draw:false']);
+        expect($.ajax).toHaveBeenCalledWith(expect.objectContaining({url: '/ajax/abc123/publishedState'}));
+        expect(dt.draw).toHaveBeenCalledExactlyOnceWith(false);
+        expect(filterClicked).not.toHaveBeenCalled();
     });
 
-    it('_promptDeleteDungeonRouteClicked_givenDeletingOnlyRowOfFirstPage_staysOnFirstPage', () => {
+    it.each([
+        ['_migrateTo', (context, clickEvent) => DungeonrouteTable.prototype._migrateTo.call(context, clickEvent, 'encrypted'), '/ajax/abc123/migrate/encrypted'],
+        ['_continueInSeasonClicked', (context, clickEvent) => DungeonrouteTable.prototype._continueInSeasonClicked.call(context, clickEvent), '/ajax/abc123/continue'],
+    ])('%s_givenConfirmedAction_redrawsInPlaceKeepingThePage', (name, act, expectedUrl) => {
         // Arrange
-        const {dt, calls, boundHandler, clickEvent} = arrangeConfirmedDelete({page: 0, pages: 1, start: 0, end: 1});
+        const {context, dt, filterClicked} = arrangeRowActionContext();
+        const clickEvent = {target: document.querySelector('.dungeonroute-delete'), preventDefault: vi.fn()};
 
         // Act
-        boundHandler(clickEvent);
+        act(context, clickEvent);
+
+        // Assert
+        expect($.ajax).toHaveBeenCalledWith(expect.objectContaining({url: expectedUrl}));
+        expect(dt.draw).toHaveBeenCalledExactlyOnceWith(false);
+        expect(filterClicked).not.toHaveBeenCalled();
+    });
+});
+
+describe('DungeonrouteTable._stepBackFromEmptyPage', () => {
+    /**
+     * @param {number} page
+     * @returns {{context: Object, dt: Object}}
+     */
+    function arrangeStepBackContext(page) {
+        const chain = {draw: vi.fn()};
+        const dt = {page: Object.assign(vi.fn(() => chain), {info: () => ({page})}), chain};
+
+        return {context: Object.assign(Object.create(DungeonrouteTable.prototype), {_dt: dt}), dt};
+    }
+
+    it('_stepBackFromEmptyPage_givenEmptyPageAfterFirst_stepsBackOnePageAndRedrawsInPlace', () => {
+        // Arrange
+        const {context, dt} = arrangeStepBackContext(2);
+
+        // Act
+        DungeonrouteTable.prototype._stepBackFromEmptyPage.call(context, {json: {data: []}});
+
+        // Assert
+        expect(dt.page).toHaveBeenCalledExactlyOnceWith('previous');
+        expect(dt.chain.draw).toHaveBeenCalledExactlyOnceWith(false);
+    });
+
+    it('_stepBackFromEmptyPage_givenEmptyFirstPage_staysPut', () => {
+        // Arrange
+        const {context, dt} = arrangeStepBackContext(0);
+
+        // Act
+        DungeonrouteTable.prototype._stepBackFromEmptyPage.call(context, {json: {data: []}});
 
         // Assert
         expect(dt.page).not.toHaveBeenCalled();
-        expect(calls).toEqual(['draw:false']);
+    });
+
+    it('_stepBackFromEmptyPage_givenPageWithSingleRow_staysPut', () => {
+        // Arrange
+        const {context, dt} = arrangeStepBackContext(2);
+
+        // Act
+        DungeonrouteTable.prototype._stepBackFromEmptyPage.call(context, {json: {data: [{public_key: 'abc123'}]}});
+
+        // Assert
+        expect(dt.page).not.toHaveBeenCalled();
     });
 });
 
 describe('DungeonrouteTable.redrawKeepingPage', () => {
-    it('redrawKeepingPage_givenNoRowRemoved_redrawsWithoutTouchingThePage', () => {
+    it('redrawKeepingPage_givenBuiltTable_redrawsWithoutResettingPaging', () => {
         // Arrange
-        const dt = {page: Object.assign(vi.fn(), {info: vi.fn()}), draw: vi.fn()};
+        const dt = {draw: vi.fn()};
         const context = Object.assign(Object.create(DungeonrouteTable.prototype), {_dt: dt});
 
         // Act
         DungeonrouteTable.prototype.redrawKeepingPage.call(context);
 
         // Assert
-        expect(dt.page).not.toHaveBeenCalled();
-        expect(dt.draw).toHaveBeenCalledWith(false);
+        expect(dt.draw).toHaveBeenCalledExactlyOnceWith(false);
     });
 });
