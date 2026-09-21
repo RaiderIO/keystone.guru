@@ -193,7 +193,7 @@ class CommonMapsMap extends InlineCode {
             hidden_map_object_groups_added_mountablearea: 0,
             map_facade_style: 'split_floors',
             map_zoom_speed: '50',
-            map_number_style: 'percentage',
+            map_number_style: 'enemy_forces',
             kill_zones_number_style: 'percentage',
             pulls_sidebar_floor_switch_visibility: 1,
             dungeon_speedrun_required_npcs_show_all: 0,

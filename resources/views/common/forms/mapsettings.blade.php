@@ -5,7 +5,7 @@ use App\Models\User;
 $mapFacadeStyleChecked            = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
 $killzonePathWeight               = User::getCurrentUserKillzonePathWeight();
 $mapZoomSpeed                     = $_COOKIE['map_zoom_speed'] ?? '50';
-$mapNumberStyleChecked            = ($_COOKIE['map_number_style'] ?? 'percentage') === 'percentage';
+$mapNumberStyleChecked            = ($_COOKIE['map_number_style'] ?? 'enemy_forces') === 'percentage';
 $mapHeatmapShowTooltips           = $_COOKIE['map_heatmap_show_tooltips'] ?? 1;
 $mapHeatmapShowOnTop              = (bool)($_COOKIE['map_heatmap_show_on_top'] ?? false);
 $mapUnkilledEnemyOpacity          = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';

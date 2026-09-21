@@ -437,8 +437,8 @@ describe('StateManager cookie-backed display settings', () => {
         expect(received).toHaveLength(1);
     });
 
-    test('getMapNumberStyle_givenNoStoredValue_defaultsToPercentage', () => {
-        expect(makeStateManager().getMapNumberStyle()).toBe(NUMBER_STYLE_PERCENTAGE);
+    test('getMapNumberStyle_givenNoStoredValue_defaultsToEnemyForces', () => {
+        expect(makeStateManager().getMapNumberStyle()).toBe(NUMBER_STYLE_ENEMY_FORCES);
     });
 
     test('getKillZonePathWeight_givenNoStoredValue_fallsBackToTheDefaultWeight', () => {

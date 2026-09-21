@@ -54,6 +54,19 @@ final class MapSettingsTest extends PublicTestCase
     }
 
     #[Test]
+    public function render_givenNoCookies_leavesPercentageNumberStyleUnchecked(): void
+    {
+        // Arrange
+        unset($_COOKIE['map_number_style']);
+
+        // Act
+        $html = view('common.forms.mapsettings', ['edit' => false])->render();
+
+        // Assert
+        $this->assertFalse($this->isInputChecked($html, 'killzones_pulls_settings_map_number_style'));
+    }
+
+    #[Test]
     public function render_givenEnemyForcesNumberStyleCookie_leavesPercentageNumberStyleUnchecked(): void
     {
         // Arrange

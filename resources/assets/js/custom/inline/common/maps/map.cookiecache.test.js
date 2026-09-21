@@ -68,17 +68,17 @@ describe('CommonMapsMap._initDefaults cookie cache handling', () => {
         initDefaults();
 
         expect(cookieJar.get('map_enemy_dangerous_border')).toBe('0');
-        expect(cookieJar.get('map_number_style')).toBe('percentage');
+        expect(cookieJar.get('map_number_style')).toBe('enemy_forces');
     });
 
     test('_initDefaults_givenExistingCookies_keepsTheUsersChoice', () => {
         cookieJar.set('map_enemy_dangerous_border', '1');
-        cookieJar.set('map_number_style', 'enemy_forces');
+        cookieJar.set('map_number_style', 'percentage');
 
         initDefaults();
 
         expect(cookieJar.get('map_enemy_dangerous_border')).toBe('1');
-        expect(cookieJar.get('map_number_style')).toBe('enemy_forces');
+        expect(cookieJar.get('map_number_style')).toBe('percentage');
     });
 
     test('_initDefaults_givenTheTabIsFocusedAgain_invalidatesTheCookieCache', () => {
