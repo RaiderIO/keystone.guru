@@ -189,6 +189,18 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             ]);
     }
 
+    public function getClonesOf(Collection $publicKeys): Collection
+    {
+        if ($publicKeys->isEmpty()) {
+            return collect();
+        }
+
+        return DungeonRoute::query()
+            ->select(['id', 'clone_of', 'author_id', 'team_id', 'season_id'])
+            ->whereIn('clone_of', $publicKeys)
+            ->get();
+    }
+
     /**
      * @return Collection<string, Collection<int, WeeklyRoute>>
      */

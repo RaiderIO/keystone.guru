@@ -108,4 +108,13 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
      * @param Closure(Collection<int, DungeonRoute>): void $callback
      */
     public function chunkBySeasonAndDungeonIds(?Season $season, ?Collection $dungeonIds, int $chunkSize, Closure $callback): void;
+
+    /**
+     * The routes cloned from one of the given routes, holding only the columns needed to tell which season
+     * each clone is in and who made it.
+     *
+     * @param  Collection<int, string>       $publicKeys
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getClonesOf(Collection $publicKeys): Collection;
 }

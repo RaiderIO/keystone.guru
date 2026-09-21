@@ -75,4 +75,36 @@ class SeasonRepository extends DatabaseRepository implements SeasonRepositoryInt
 
         return $season;
     }
+
+    public function getNewestSeasonsForDungeons(Collection $dungeonIds): Collection
+    {
+        if ($dungeonIds->isEmpty()) {
+            return collect();
+        }
+
+        // Same bounds as getUpcomingSeasonForDungeon() ?? getMostRecentSeasonForDungeon(): the upcoming season is
+        // always newer than any started one, so the newest season below the placeholder cap is the answer
+        return Season::selectRaw('seasons.*, season_dungeons.dungeon_id as season_dungeon_id')
+            ->with(['expansion'])
+            ->join('season_dungeons', 'seasons.id', 'season_dungeons.season_id')
+            ->whereIn('season_dungeons.dungeon_id', $dungeonIds)
+            ->where('seasons.start', '<', now()->addYears(3))
+            ->orderBy('seasons.start')
+            ->get()
+            // keyBy() keeps the last season per dungeon, which is the newest with the ascending order
+            ->keyBy(static fn(Season $season): int => (int)$season->getAttribute('season_dungeon_id'))
+            ->map(static fn(Season $season): Season => $season->makeHidden(['season_dungeon_id']));
+    }
+
+    public function getSeasonsByIds(Collection $seasonIds): Collection
+    {
+        if ($seasonIds->isEmpty()) {
+            return collect();
+        }
+
+        return Season::query()
+            ->whereIn('id', $seasonIds)
+            ->get()
+            ->keyBy('id');
+    }
 }

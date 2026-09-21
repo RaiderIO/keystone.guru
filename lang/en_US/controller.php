@@ -101,6 +101,10 @@ return [
             'upgrade_applied'           => 'The upgrade was applied to your route.',
             'upgrade_discarded'         => 'The upgrade draft was discarded.',
         ],
+        'continue_in_newer_season' => [
+            'limit_reached'   => 'You have reached the maximum amount of routes you can create.',
+            'no_newer_season' => 'This route cannot be continued in a newer season: its dungeon is not part of one, or you already continued it there.',
+        ],
     ],
     'dungeonroutediscover' => [
         'popular' => 'Popular routes',

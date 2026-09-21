@@ -226,6 +226,9 @@ class DungeonrouteTable extends InlineCode {
             let $migrateToShroudedBtns = $('.dungeonroute-migrate-to-shrouded');
             $migrateToShroudedBtns.unbind('click').bind('click', self._migrateToShroudedClicked.bind(self));
 
+            let $continueInSeasonBtns = $('.dungeonroute-continue-in-season');
+            $continueInSeasonBtns.unbind('click').bind('click', self._continueInSeasonClicked.bind(self));
+
             let $deleteBtns = $('.dungeonroute-delete');
             $deleteBtns.unbind('click').bind('click', self._promptDeleteDungeonRouteClicked);
 
@@ -591,13 +594,20 @@ class DungeonrouteTable extends InlineCode {
         let rowHasEncryptedAffix = rowHasAffix(row, AFFIX_ENCRYPTED);
         let rowHasShroudedAffix = rowHasAffix(row, AFFIX_SHROUDED);
 
-        // @TODO add an additional check to see if the current route's dungeon is part of previous season?
+        let continuationSeason = row.continuation_season ?? null;
+
         return {
             public_key: row.public_key,
             published: row.published,
             show_migrate_to_encrypted: isShadowlandsRoute && !rowHasEncryptedAffix && !rowHasShroudedAffix,
             show_migrate_to_shrouded: isShadowlandsRoute && !rowHasShroudedAffix,
             has_new_mapping_version: row.dungeon_latest_mapping_version_id !== row.mapping_version_id,
+            show_continue_in_season: continuationSeason !== null,
+            continuation_season_name: continuationSeason === null ? null : continuationSeason.name,
+            continue_in_season_label: continuationSeason === null ? null :
+                lang.get('js.route_continue_in_season_label', {season: continuationSeason.name}),
+            continue_in_season_hint: continuationSeason === null ? null :
+                lang.get('js.route_continue_in_season_hint', {season: continuationSeason.name}),
             // Both arrive for free through DungeonRoute's $appends
             is_upgrade_draft: row.is_upgrade_draft === true,
             has_upgrade_draft: row.has_upgrade_draft === true
@@ -808,6 +818,35 @@ class DungeonrouteTable extends InlineCode {
         }, null, {closeWith: ['button']});
 
         // Prevent clicking clone from opening the route after it returns
+        clickEvent.preventDefault();
+        return false;
+    }
+
+    /**
+     * Copies the route into the newer season its dungeon is part of; the original stays in its own season.
+     * @param clickEvent
+     * @returns {boolean}
+     * @private
+     */
+    _continueInSeasonClicked(clickEvent) {
+        let self = this;
+        let $target = $(clickEvent.target).closest('.dungeonroute-continue-in-season');
+        let publicKey = $target.data('publickey');
+
+        showConfirmYesCancel(lang.get('js.route_continue_in_season_confirm_warning', {season: $target.data('season')}), function () {
+            $.ajax({
+                type: 'POST',
+                url: `/ajax/${publicKey}/continue`,
+                dataType: 'json',
+                success: function (json) {
+                    showSuccessNotification(lang.get('js.route_continue_in_season_successful'));
+                    // Refresh the table
+                    $(self.options.filterButtonSelector).trigger('click');
+                }
+            });
+        }, null, {closeWith: ['button']});
+
+        // Prevent clicking the action from opening the route
         clickEvent.preventDefault();
         return false;
     }
