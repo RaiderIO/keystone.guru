@@ -1,7 +1,8 @@
 <li class="route_picker_row card_dungeonroute leaderboard_row d-flex align-items-center" data-public-key="{{ public_key }}">
     <label class="route_picker_row_label d-flex align-items-center flex-fill mb-0">
         <span class="leaderboard_rank d-flex align-items-center justify-content-end">
-            <input type="checkbox" class="form-check-input route_picker_checkbox mt-0" value="{{ public_key }}">
+            <input type="{{#if is_radio}}radio{{else}}checkbox{{/if}}" class="form-check-input route_picker_checkbox mt-0"
+                   value="{{ public_key }}"{{#if input_name}} name="{{ input_name }}"{{/if}}>
         </span>
         <span class="d-flex align-items-center flex-fill flex-wrap leaderboard_row_inner">
             <span class="leaderboard_thumbnail route_picker_thumbnail"
