@@ -358,6 +358,9 @@ class MDTDungeon
 
                         local L = {}
 
+                        function MDT:RegisterDungeonLocation(dungeonIndex, location)
+                        end
+
                         function UnitFactionGroup(who)
                             return "Horde"
                         end
