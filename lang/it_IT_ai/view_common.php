@@ -23,7 +23,7 @@ return [
             'description'                => 'Descrizione',
             'category'                   => 'Categoria',
             'category_none'              => 'Nessuna categoria',
-            'category_help'              => 'Il tipo di percorsi che contiene questa raccolta. Il livello chiave è escluso di proposito: una raccolta amichevole per Pug lo è a qualsiasi livello chiave.',
+            'category_help'              => 'Quanto sono difficili i percorsi di questa raccolta.',
             'published_state'            => 'Visibile a',
             'published_state_help'       => 'Condividere una raccolta non pubblica mai i percorsi che contiene: un percorso non pubblicato resta nascosto.',
             'team'                       => 'Team',

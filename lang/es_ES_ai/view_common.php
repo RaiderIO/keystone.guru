@@ -23,7 +23,7 @@ return [
             'description'                => 'Descripción',
             'category'                   => 'Categoría',
             'category_none'              => 'Sin categoría',
-            'category_help'              => 'Qué tipo de rutas contiene esta colección. El nivel de llave queda fuera a propósito: una colección apta para grupos aleatorios lo es en cualquier nivel de llave.',
+            'category_help'              => 'Qué dificultad tienen las rutas de esta colección.',
             'published_state'            => 'Visible para',
             'published_state_help'       => 'Compartir una colección nunca publica las rutas que contiene: una ruta que no está publicada sigue oculta.',
             'team'                       => 'Equipo',

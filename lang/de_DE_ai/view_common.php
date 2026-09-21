@@ -23,7 +23,7 @@ return [
             'description'                => 'Beschreibung',
             'category'                   => 'Kategorie',
             'category_none'              => 'Keine Kategorie',
-            'category_help'              => 'Welche Art von Routen diese Sammlung enthält. Die Schlüsselstufe ist absichtlich kein Teil davon - eine PUG-freundliche Sammlung ist auf jeder Schlüsselstufe PUG-freundlich.',
+            'category_help'              => 'Wie schwierig die Routen in dieser Sammlung sind.',
             'published_state'            => 'Sichtbar für',
             'published_state_help'       => 'Das Teilen einer Sammlung veröffentlicht niemals die Routen darin - eine Route, die nicht veröffentlicht ist, bleibt verborgen.',
             'team'                       => 'Team',

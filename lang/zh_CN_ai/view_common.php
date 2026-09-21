@@ -23,7 +23,7 @@ return [
             'description'                => '描述',
             'category'                   => '类别',
             'category_none'              => '无类别',
-            'category_help'              => '此合集收录哪一类路线。钥匙等级特意不计入其中——PUG 友好的合集在任何钥匙等级下都是 PUG 友好的。',
+            'category_help'              => '此合集中路线的难度。',
             'published_state'            => '可见对象',
             'published_state_help'       => '共享合集绝不会发布其中的路线——未发布的路线仍然处于隐藏状态。',
             'team'                       => '团队',

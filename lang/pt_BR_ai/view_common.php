@@ -23,7 +23,7 @@ return [
             'description'                => 'Descrição',
             'category'                   => 'Categoria',
             'category_none'              => 'Sem categoria',
-            'category_help'              => 'Que tipo de rotas esta coleção contém. O nível da chave é deixado de fora de propósito: uma coleção amigável para PUG é amigável para PUG em qualquer nível de chave.',
+            'category_help'              => 'O nível de dificuldade das rotas desta coleção.',
             'published_state'            => 'Visível para',
             'published_state_help'       => 'Compartilhar uma coleção nunca publica as rotas dentro dela: uma rota que não está publicada continua oculta.',
             'team'                       => 'Equipe',

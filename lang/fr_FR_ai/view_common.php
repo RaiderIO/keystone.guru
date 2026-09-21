@@ -23,7 +23,7 @@ return [
             'description'                => 'Description',
             'category'                   => 'Catégorie',
             'category_none'              => 'Aucune catégorie',
-            'category_help'              => 'Le genre d\'itinéraires que contient cette collection. Le niveau de clé en est délibérément exclu : une collection adaptée aux PUG l\'est à n\'importe quel niveau de clé.',
+            'category_help'              => 'Le niveau de difficulté des itinéraires de cette collection.',
             'published_state'            => 'Visible par',
             'published_state_help'       => 'Partager une collection ne publie jamais les itinéraires qu\'elle contient : un itinéraire non publié reste masqué.',
             'team'                       => 'Équipe',
