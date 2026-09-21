@@ -241,28 +241,14 @@ class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServi
     }
 
     /**
-     * The forces a pulled kill zone enemy key adds to a route, computed the way DungeonRoute::getEnemyForces()
-     * does for a route without teeming or shrouded: every enemy sharing the key counts, once per route.
-     *
-     * @return Collection<string, int>
+     * @return Collection<string, int> the forces a pulled kill zone enemy key adds to a route
      */
     private function getEnemyForcesByKey(MappingVersion $mappingVersion): Collection
     {
-        $npcEnemyForces = NpcEnemyForces::query()
-            ->where('mapping_version_id', $mappingVersion->id)
-            ->pluck('enemy_forces', 'npc_id');
-
-        $result = collect();
-        foreach (Enemy::query()->where('mapping_version_id', $mappingVersion->id)->get() as $enemy) {
-            $key = TestRoutePullPlanner::getEnemyKey($enemy);
-            if ($key === null) {
-                continue;
-            }
-
-            $result->put($key, $result->get($key, 0) + (int)($enemy->enemy_forces_override ?? $npcEnemyForces->get($enemy->mdt_npc_id ?? $enemy->npc_id, 0)));
-        }
-
-        return $result;
+        return TestRoutePullPlanner::getEnemyForcesByKey(
+            Enemy::query()->where('mapping_version_id', $mappingVersion->id)->get(),
+            NpcEnemyForces::query()->where('mapping_version_id', $mappingVersion->id)->pluck('enemy_forces', 'npc_id'),
+        );
     }
 
     /**

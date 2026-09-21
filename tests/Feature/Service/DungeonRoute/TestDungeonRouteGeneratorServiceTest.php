@@ -255,7 +255,8 @@ final class TestDungeonRouteGeneratorServiceTest extends PublicTestCase
 
     /**
      * Total forces the generator can reach from its pull candidates, counted the way
-     * DungeonRoute::getEnemyForces() counts them: once per (npc, mdt id) key, every enemy sharing the key.
+     * DungeonRoute::getEnemyForces() counts them: once per (npc, mdt id) key, at the rounded average forces
+     * of the enemies sharing the key.
      *
      * @param bool $packedOnly only count candidates that belong to a pack
      */
@@ -265,9 +266,9 @@ final class TestDungeonRouteGeneratorServiceTest extends PublicTestCase
         $npcEnemyForces = NpcEnemyForces::query()->where('mapping_version_id', $mappingVersion->id)->pluck('enemy_forces', 'npc_id');
         $keyOf          = static fn(Enemy $enemy) => $enemy->mdt_id === null ? null : sprintf('%d-%d', $enemy->mdt_npc_id ?? $enemy->npc_id, $enemy->mdt_id);
 
-        $forcesByKey = $enemies->groupBy($keyOf)->map(static fn($sharingKey) => $sharingKey->sum(
+        $forcesByKey = $enemies->groupBy($keyOf)->map(static fn($sharingKey) => (int)round($sharingKey->avg(
             static fn(Enemy $enemy) => (int)($enemy->enemy_forces_override ?? $npcEnemyForces->get($enemy->mdt_npc_id ?? $enemy->npc_id, 0)),
-        ));
+        )));
 
         return (int)Enemy::query()
             ->where('mapping_version_id', $mappingVersion->id)

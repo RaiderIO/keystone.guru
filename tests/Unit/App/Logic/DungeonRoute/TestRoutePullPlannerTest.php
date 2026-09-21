@@ -157,6 +157,73 @@ final class TestRoutePullPlannerTest extends TestCase
         $this->assertSame(0, $planner->getForces());
     }
 
+    #[Test]
+    public function plan_givenDuplicatedKeyWorthForces_countsTheKeyOnceAtItsAverageForces(): void
+    {
+        // Arrange
+        $duplicates = collect([
+            $this->makeKeyedEnemy(id: 1, floorId: 1, npcId: 500, mdtId: 7, forcesOverride: 4),
+            $this->makeKeyedEnemy(id: 2, floorId: 1, npcId: 500, mdtId: 7, forcesOverride: 6),
+            $this->makeKeyedEnemy(id: 3, floorId: 1, npcId: 500, mdtId: 7, forcesOverride: 8),
+        ]);
+        $enemyForcesByKey = TestRoutePullPlanner::getEnemyForcesByKey($duplicates, collect());
+        $planner          = new TestRoutePullPlanner($enemyForcesByKey);
+
+        // Act
+        $planner->plan(collect([$duplicates]), collect([1 => 1]), 100);
+
+        // Assert
+        $this->assertSame(6, $planner->getForces(), 'A key shared by three enemies must add their average forces once, not their sum');
+    }
+
+    #[Test]
+    public function getEnemyForcesByKey_givenDuplicatedKey_returnsTheRoundedAverageForcesOfThatKey(): void
+    {
+        // Arrange
+        $enemies = collect([
+            $this->makeKeyedEnemy(id: 1, floorId: 1, npcId: 500, mdtId: 7),
+            $this->makeKeyedEnemy(id: 2, floorId: 1, npcId: 500, mdtId: 7),
+            $this->makeKeyedEnemy(id: 3, floorId: 1, npcId: 500, mdtId: 7, forcesOverride: 6),
+            $this->makeKeyedEnemy(id: 4, floorId: 1, npcId: 600, mdtId: 7, mdtNpcId: 500),
+        ]);
+
+        // Act
+        $enemyForcesByKey = TestRoutePullPlanner::getEnemyForcesByKey($enemies, collect([500 => 3]));
+
+        // Assert
+        $this->assertSame(['500-7' => 4], $enemyForcesByKey->all(), 'The MDT npc id keys the enemy and picks its forces; (3 + 3 + 6 + 3) / 4 rounds to 4');
+    }
+
+    #[Test]
+    public function getEnemyForcesByKey_givenUniqueKeys_returnsEachEnemysForces(): void
+    {
+        // Arrange
+        $enemies = collect([
+            $this->makeKeyedEnemy(id: 1, floorId: 1, npcId: 500, mdtId: 1),
+            $this->makeKeyedEnemy(id: 2, floorId: 1, npcId: 500, mdtId: 2, forcesOverride: 9),
+            $this->makeKeyedEnemy(id: 3, floorId: 1, npcId: 700, mdtId: 3),
+        ]);
+
+        // Act
+        $enemyForcesByKey = TestRoutePullPlanner::getEnemyForcesByKey($enemies, collect([500 => 3]));
+
+        // Assert
+        $this->assertSame(['500-1' => 3, '500-2' => 9, '700-3' => 0], $enemyForcesByKey->all());
+    }
+
+    #[Test]
+    public function getEnemyForcesByKey_givenEnemyWithoutMdtId_returnsNoKeyForIt(): void
+    {
+        // Arrange
+        $enemies = collect([$this->makeKeyedEnemy(id: 1, floorId: 1, npcId: 500, mdtId: null)]);
+
+        // Act
+        $enemyForcesByKey = TestRoutePullPlanner::getEnemyForcesByKey($enemies, collect([500 => 3]));
+
+        // Assert
+        $this->assertTrue($enemyForcesByKey->isEmpty());
+    }
+
     /**
      * Every pull stays on one floor, the floors are visited in index order, and no enemy is pulled twice.
      *
@@ -214,6 +281,28 @@ final class TestRoutePullPlannerTest extends TestCase
         }
 
         return $packs;
+    }
+
+    private function makeKeyedEnemy(
+        int  $id,
+        int  $floorId,
+        int  $npcId,
+        ?int $mdtId,
+        ?int $forcesOverride = null,
+        ?int $mdtNpcId = null,
+    ): Enemy {
+        $enemy = new Enemy();
+        $enemy->forceFill([
+            'id'                    => $id,
+            'floor_id'              => $floorId,
+            'npc_id'                => $npcId,
+            'mdt_npc_id'            => $mdtNpcId,
+            'mdt_id'                => $mdtId,
+            'enemy_forces_override' => $forcesOverride,
+        ]);
+        $enemy->setRelation('npc', null);
+
+        return $enemy;
     }
 
     private function makeEnemy(int $floorId, int $forces, bool $boss = false): Enemy

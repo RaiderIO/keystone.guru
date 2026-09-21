@@ -201,7 +201,25 @@ class TestRoutePullPlanner
     }
 
     /**
-     * The key DungeonRoute::getEnemyForces() counts forces by: every enemy sharing it counts, once per route.
+     * The forces each kill zone enemy key adds to a route, computed the way DungeonRoute::getEnemyForces() does
+     * for a route without teeming or shrouded: the rounded average forces of the enemies sharing the key.
+     *
+     * @param  Collection<int, Enemy>  $enemies               the enemies of one mapping version
+     * @param  Collection<int, int>    $npcEnemyForcesByNpcId the mapping version's enemy forces, by npc id
+     * @return Collection<string, int>
+     */
+    public static function getEnemyForcesByKey(Collection $enemies, Collection $npcEnemyForcesByNpcId): Collection
+    {
+        return $enemies
+            ->filter(static fn(Enemy $enemy) => self::getEnemyKey($enemy) !== null)
+            ->groupBy(static fn(Enemy $enemy) => self::getEnemyKey($enemy))
+            ->map(static fn(Collection $sharingKey) => (int)round($sharingKey->avg(
+                static fn(Enemy $enemy) => (int)($enemy->enemy_forces_override ?? $npcEnemyForcesByNpcId->get($enemy->mdt_npc_id ?? $enemy->npc_id, 0)),
+            )));
+    }
+
+    /**
+     * The key DungeonRoute::getEnemyForces() groups forces by; a route counts each key once.
      */
     public static function getEnemyKey(Enemy $enemy): ?string
     {
