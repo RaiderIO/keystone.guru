@@ -118,6 +118,23 @@ final class DungeonRouteAddToCollectionEntryTest extends PublicTestCase
     }
 
     #[Test]
+    public function view_givenTheOwnersSandboxRoute_doesNotOfferAddToCollection(): void
+    {
+        // Arrange
+        $owner        = $this->createUser();
+        $dungeonRoute = $this->createRoute($owner);
+        $dungeonRoute->update(['expires_at' => now()->addDay()]);
+
+        // Act
+        $response = $this->actingAs($owner)->followingRedirects()->get($this->viewUrl($dungeonRoute));
+
+        // Assert
+        $response->assertOk();
+        $response->assertDontSee(self::BUTTON_ID, false);
+        $response->assertDontSee(self::MODAL_ID, false);
+    }
+
+    #[Test]
     public function view_givenTheFeatureIsInactive_doesNotOfferAddToCollection(): void
     {
         // Arrange

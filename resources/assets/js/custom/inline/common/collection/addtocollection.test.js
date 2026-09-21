@@ -265,6 +265,30 @@ describe('CommonCollectionAddtocollection', () => {
         expect(toasts[0].opts.buttons[0].text).toBe('Undo');
     });
 
+    it('toggle_givenACollectionNameWithMarkup_escapesItInTheToastAndTheError', () => {
+        // Arrange
+        openWith(listResponse([collection({name: '<img src=x onerror=alert(1)>'})]));
+
+        // Act
+        jQuery('#add_to_collection_colA').prop('checked', true).trigger('change');
+        ajaxCalls.shift().success({});
+
+        // Assert
+        expect(toasts[0].text).toBe('Added to &lt;img src=x onerror=alert(1)&gt;.');
+    });
+
+    it('toggle_givenARejectedSaveWithMarkup_escapesTheServerMessage', () => {
+        // Arrange
+        openWith(listResponse([collection()]));
+
+        // Act
+        jQuery('#add_to_collection_colA').prop('checked', true).trigger('change');
+        ajaxCalls.shift().error({responseJSON: {errors: {dungeon_routes: ['<b>nope</b>']}}});
+
+        // Assert
+        expect(showErrorNotification).toHaveBeenCalledWith('&lt;b&gt;nope&lt;/b&gt;');
+    });
+
     it('undo_givenAnAddedRoute_removesItAgain', () => {
         // Arrange
         openWith(listResponse([collection()]));
