@@ -10,8 +10,8 @@ return [
         'routes' => [
             'heading'          => '路线',
             'count'            => ':count / :max 条路线',
-            'help'             => '对路线的更改会立即保存。拖动路线的手柄，或使用其箭头，来设置合集中显示它的顺序。',
-            'help_new'         => '选择此合集初始包含的路线。它们会在您创建合集后保存。拖动路线的手柄，或使用其箭头，来设置合集中显示它的顺序。',
+            'help'             => '对路线的更改会立即保存。拖动路线的手柄或使用箭头，以设置它在合集中的显示顺序。',
+            'help_new'         => '选择此合集初始包含的路线。它们会在您创建合集后保存。拖动路线的手柄或使用箭头，以设置它在合集中的显示顺序。',
             'picker_title_new' => '向此合集添加路线',
             'owner_only'       => '只有此合集的所有者可以向其中添加路线。',
             'add_routes'       => '添加路线',
@@ -149,7 +149,7 @@ return [
         'picker' => [
             'close'                        => '关闭',
             'source_mine'                  => '您的路线',
-            'source_unassigned_by_members' => '%s 成员尚未加入任何团队的路线',
+            'source_unassigned_by_members' => '%s 成员创建的、尚未归属任何团队的路线',
             'title_search'                 => '标题',
             'title_search_placeholder'     => '按标题搜索',
             'loading'                      => '正在加载路线...',

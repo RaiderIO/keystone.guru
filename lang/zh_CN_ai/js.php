@@ -567,7 +567,7 @@ return [
     'add_to_collection_new_collection'                                     => '用此路线新建合集…',
     'add_to_collection_no_collections'                                     => '您还没有任何合集。',
     'add_to_collection_max_collections'                                    => '您已有 :max 个合集，已达上限。',
-    'add_to_collection_kind_season_set'                                    => ':season 赛季套组 · :covered/:total 个地下城',
+    'add_to_collection_kind_season_set'                                    => ':season 套组 · :covered/:total 个地下城',
     'add_to_collection_kind_free_form_none'                                => ':game_version · 无地下城',
     'add_to_collection_kind_free_form_one'                                 => ':game_version · :count 个地下城',
     'add_to_collection_kind_free_form_many'                                => ':game_version · :count 个地下城',

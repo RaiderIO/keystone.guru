@@ -8,7 +8,7 @@ return [
         'world'           => '任何人都可以查看此合集',
     ],
     'kind' => [
-        'season_set' => ':season 赛季套组 · :covered/:total 个地下城',
+        'season_set' => ':season 套组 · :covered/:total 个地下城',
         'free_form'  => '{0} :game_version · 无地下城|{1} :game_version · :count 个地下城|[2,*] :game_version · :count 个地下城',
     ],
     'index' => [
