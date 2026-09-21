@@ -18,7 +18,7 @@ $showAddToCollection = $dungeonroute->author_id === Auth::id() && !$dungeonroute
             <button id="add_to_collection_button" type="button" class="btn btn-info dungeonroute-add-to-collection"
                     data-publickey="{{ $dungeonroute->public_key }}"
                     aria-label="{{ __('view_common.maps.controls.view.add_to_collection_title') }}">
-                <i class="fas fa-layer-group"></i>
+                <i class="fas fa-plus"></i>
                 <span class="map_controls_element_label_toggle" style="display: none;">
                     {{ __('view_common.maps.controls.view.add_to_collection_title') }}
                 </span>
