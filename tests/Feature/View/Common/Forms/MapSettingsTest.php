@@ -10,11 +10,8 @@ use Tests\TestCases\PublicTestCase;
 #[Group('MapSettings')]
 final class MapSettingsTest extends PublicTestCase
 {
-    /**
-     * Mirrors the defaults map.js writes into the cookies on first load, so the form must agree with them.
-     */
     #[Test]
-    public function render_givenNoCookies_checksDangerousBorderBox(): void
+    public function render_givenNoCookies_leavesDangerousBorderBoxUnchecked(): void
     {
         // Arrange
         unset($_COOKIE['map_enemy_dangerous_border']);
@@ -23,21 +20,21 @@ final class MapSettingsTest extends PublicTestCase
         $html = view('common.forms.mapsettings', ['edit' => false])->render();
 
         // Assert
-        $this->assertTrue($this->isInputChecked($html, 'map_settings_enemy_dangerous_border'));
+        $this->assertFalse($this->isInputChecked($html, 'map_settings_enemy_dangerous_border'));
     }
 
     #[Test]
-    public function render_givenDangerousBorderCookieDisabled_leavesDangerousBorderBoxUnchecked(): void
+    public function render_givenDangerousBorderCookieEnabled_checksDangerousBorderBox(): void
     {
         // Arrange
-        $_COOKIE['map_enemy_dangerous_border'] = '0';
+        $_COOKIE['map_enemy_dangerous_border'] = '1';
 
         try {
             // Act
             $html = view('common.forms.mapsettings', ['edit' => false])->render();
 
             // Assert
-            $this->assertFalse($this->isInputChecked($html, 'map_settings_enemy_dangerous_border'));
+            $this->assertTrue($this->isInputChecked($html, 'map_settings_enemy_dangerous_border'));
         } finally {
             unset($_COOKIE['map_enemy_dangerous_border']);
         }
@@ -57,16 +54,20 @@ final class MapSettingsTest extends PublicTestCase
     }
 
     #[Test]
-    public function render_givenNoCookies_leavesPercentageNumberStyleUnchecked(): void
+    public function render_givenEnemyForcesNumberStyleCookie_leavesPercentageNumberStyleUnchecked(): void
     {
         // Arrange
-        unset($_COOKIE['map_number_style']);
+        $_COOKIE['map_number_style'] = 'enemy_forces';
 
-        // Act
-        $html = view('common.forms.mapsettings', ['edit' => false])->render();
+        try {
+            // Act
+            $html = view('common.forms.mapsettings', ['edit' => false])->render();
 
-        // Assert - the toggle is "on" for percentage, and the JS default number style is enemy forces
-        $this->assertFalse($this->isInputChecked($html, 'killzones_pulls_settings_map_number_style'));
+            // Assert
+            $this->assertFalse($this->isInputChecked($html, 'killzones_pulls_settings_map_number_style'));
+        } finally {
+            unset($_COOKIE['map_number_style']);
+        }
     }
 
     #[Test]

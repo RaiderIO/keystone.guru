@@ -30,7 +30,8 @@ class EnemyVisualMain extends EnemyVisualIcon {
                 mainVisualOuterClasses.push(npc.aggressiveness);
             }
 
-            if (state.hasEnemyDangerousBorder() && (npc.dangerous || this.enemyvisual.enemy.isImportant() || this.enemyvisual.enemy.isRareNpc())) {
+            let alwaysHasDangerousBorder = this.enemyvisual.enemy.isBossNpc() || this.enemyvisual.enemy.isRareNpc();
+            if ((state.hasEnemyDangerousBorder() || alwaysHasDangerousBorder) && (npc.dangerous || this.enemyvisual.enemy.isImportant())) {
                 mainVisualInnerClasses.push('dangerous');
                 if (this.enemyvisual.enemy.isRareNpc()) {
                     mainVisualInnerClasses.push('rare');
@@ -147,7 +148,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
         }
 
         // Dangerous = less space
-        if ((this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) || this.enemyvisual.enemy.isImportant() || this.enemyvisual.enemy.isRareNpc() || this.enemyvisual.enemy.enemy_patrol_id !== null) {
+        if ((this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) || this.enemyvisual.enemy.isImportant() || this.enemyvisual.enemy.enemy_patrol_id !== null) {
             width -= 2;
 
             // Obsolete enemies require additional subtraction to keep it looking nice
