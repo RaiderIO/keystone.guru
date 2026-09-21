@@ -1,7 +1,7 @@
 // Follows the global-script recipe from killzone.test.js: stub the collaborators the class body
 // touches at LOAD time, then require the source.
 
-global.VersionableMapObject = class VersionableMapObject {
+global.Polyline = class Polyline {
     constructor(map, layer) {
         this.map = map;
         this.layer = layer;
@@ -20,13 +20,13 @@ global.L = {
     polygon: () => ({on: () => {}}),
 };
 
-global.hull = () => [[0, 0], [1, 1], [2, 2]];
-
 let lastOffsetPolygonMargin = null;
-global.createOffsetPolygon = (vertices, margin) => {
+let lastOffsetPolygonPoints = null;
+global.createOffsetHullPolygon = (points, margin) => {
     lastOffsetPolygonMargin = margin;
+    lastOffsetPolygonPoints = points;
 
-    return [{lat: 0, lng: 0}];
+    return {on: () => {}};
 };
 
 global.c = {
@@ -34,7 +34,7 @@ global.c = {
         enemypack: {
             margin: 2,
             arcSegments: () => 5,
-            polygonOptions: {},
+            polygonOptions: {weight: 1},
         },
     },
 };
@@ -112,5 +112,51 @@ describe('EnemyPack._updateHullLayer', () => {
 
         // Assert
         expect(lastOffsetPolygonMargin).toBe(c.map.enemypack.margin);
+    });
+});
+
+describe('EnemyPack polyline seams', () => {
+    it('updateHullLayer_givenVisibleEnemies_buildsTheHullAroundTheirPositions', () => {
+        // Arrange
+        const enemyPack = createEnemyPack();
+
+        // Act
+        enemyPack._updateHullLayer();
+
+        // Assert
+        expect(lastOffsetPolygonPoints).toEqual([[1, 1], [2, 2]]);
+    });
+
+    it('isWeightEditable_givenEnemyPack_returnsFalse', () => {
+        // Arrange
+        const enemyPack = createEnemyPack();
+
+        // Act
+        const isWeightEditable = enemyPack._isWeightEditable();
+
+        // Assert
+        expect(isWeightEditable).toBe(false);
+    });
+
+    it('isAnimatable_givenEnemyPack_returnsFalse', () => {
+        // Arrange
+        const enemyPack = createEnemyPack();
+
+        // Act
+        const isAnimatable = enemyPack._isAnimatable();
+
+        // Assert
+        expect(isAnimatable).toBe(false);
+    });
+
+    it('getPolylineWeightDefault_givenEnemyPack_returnsTheHullPolygonWeight', () => {
+        // Arrange
+        const enemyPack = createEnemyPack();
+
+        // Act
+        const weight = enemyPack._getPolylineWeightDefault();
+
+        // Assert
+        expect(weight).toBe(c.map.enemypack.polygonOptions.weight);
     });
 });

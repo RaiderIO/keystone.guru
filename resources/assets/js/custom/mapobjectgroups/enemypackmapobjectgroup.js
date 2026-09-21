@@ -1,8 +1,15 @@
-class EnemyPackMapObjectGroup extends PolygonMapObjectGroup {
+class EnemyPackMapObjectGroup extends PolylineMapObjectGroup {
     constructor(manager, editable) {
         super(manager, MAP_OBJECT_GROUP_ENEMY_PACK, editable);
 
         this.fa_class = 'fa-draw-polygon';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _isClosedShape() {
+        return true;
     }
 
     /**

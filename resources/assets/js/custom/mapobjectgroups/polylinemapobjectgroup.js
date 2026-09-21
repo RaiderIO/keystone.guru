@@ -8,32 +8,35 @@ class PolylineMapObjectGroup extends MapObjectGroup {
     }
 
     /**
+     * Whether the polylines in this group are closed shapes, drawn as a polygon, rather than open lines.
+     * @returns {boolean}
+     * @protected
+     */
+    _isClosedShape() {
+        return false;
+    }
+
+    /**
      * Converts polyline.vertices_json to a list of L.LatLngs
      * @param remoteMapObject {Object}
      * @returns {[]}
      * @protected
      */
     _restorePoints(remoteMapObject) {
-        // Create the polyline first
-        let polyline = remoteMapObject.polyline;
-        let points = [];
-        if (polyline !== null && typeof polyline.vertices_json !== 'undefined') {
-            let vertices = JSON.parse(polyline.vertices_json);
-
-            for (let j = 0; j < vertices.length; j++) {
-                let vertex = vertices[j];
-                points.push([vertex.lat, vertex.lng]);
-            }
-        }
-
-        return points;
+        return this._verticesJsonToPoints(remoteMapObject.polyline?.vertices_json);
     }
 
     /**
      * @inheritDoc
      */
     _createLayer(remoteMapObject) {
-        return L.polyline(this._restorePoints(remoteMapObject), this._getPolylineOptions());
+        let points = this._restorePoints(remoteMapObject);
+
+        if (this._isClosedShape()) {
+            return points.length > 0 ? L.polygon(points, this._getPolylineOptions()) : null;
+        }
+
+        return L.polyline(points, this._getPolylineOptions());
     }
 
     /**
@@ -45,4 +48,10 @@ class PolylineMapObjectGroup extends MapObjectGroup {
 
         return mapObject;
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {PolylineMapObjectGroup};
 }

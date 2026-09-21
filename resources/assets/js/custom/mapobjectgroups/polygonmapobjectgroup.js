@@ -21,19 +21,7 @@ class PolygonMapObjectGroup extends MapObjectGroup {
      * @protected
      */
     _restorePoints(remoteMapObject) {
-        let points = [];
-
-        if (typeof remoteMapObject.vertices_json !== 'undefined') {
-            // Create the polyline first
-            let vertices = JSON.parse(remoteMapObject.vertices_json);
-
-            for (let j = 0; j < vertices.length; j++) {
-                let vertex = vertices[j];
-                points.push([vertex.lat, vertex.lng]);
-            }
-        }
-
-        return points;
+        return this._verticesJsonToPoints(remoteMapObject.vertices_json);
     }
 
     /**
