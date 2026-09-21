@@ -445,7 +445,7 @@ return [
     'team_remove_route_successful'                                         => 'Ruta eliminada del equipo exitosamente',
     'team_add_routes_successful'                                           => 'Rutas agregadas al equipo: :count',
     'team_add_routes_undo_label'                                           => 'Deshacer',
-    'team_add_routes_undone'                                               => 'Las rutas agregadas se quitaron del equipo otra vez',
+    'team_add_routes_undone'                                               => 'Las rutas agregadas se quitaron del equipo',
     'team_add_routes_undo_failed'                                          => 'No se pudieron quitar del equipo todas las rutas agregadas',
     'ad_free_giveaway_label'                                               => 'Sorteo sin anuncios',
     'ad_free_giveaway_user_already_ad_free_label'                          => 'El usuario ya está sin anuncios',
