@@ -59,7 +59,26 @@ describe('CommonMapsMap._initDefaults cookie cache handling', () => {
         initDefaults();
 
         expect(invalidateCookieCache).toHaveBeenCalled();
+        expect(cookieJar.get('map_enemy_dangerous_border')).toBe('0');
+    });
+
+    test('_initDefaults_givenAFreshPage_writesTheSameDefaultsAsTheMapSettingsForm', () => {
+        // mapsettings.blade.php renders its checkboxes from these cookies with its own fallbacks;
+        // the two must agree or the form contradicts the map on first load.
+        initDefaults();
+
+        expect(cookieJar.get('map_enemy_dangerous_border')).toBe('0');
+        expect(cookieJar.get('map_number_style')).toBe('percentage');
+    });
+
+    test('_initDefaults_givenExistingCookies_keepsTheUsersChoice', () => {
+        cookieJar.set('map_enemy_dangerous_border', '1');
+        cookieJar.set('map_number_style', 'enemy_forces');
+
+        initDefaults();
+
         expect(cookieJar.get('map_enemy_dangerous_border')).toBe('1');
+        expect(cookieJar.get('map_number_style')).toBe('enemy_forces');
     });
 
     test('_initDefaults_givenTheTabIsFocusedAgain_invalidatesTheCookieCache', () => {
