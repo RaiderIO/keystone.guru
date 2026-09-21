@@ -539,7 +539,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/dungeonroute/mappingversions', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersions(...))->name('admin.tools.dungeonroute.mappingversionusage');
                 Route::post('/dungeonroute/mappingversions/{mappingVersion}/upgrade', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersionsUpgrade(...))->name('admin.tools.dungeonroute.mappingversionusage.upgrade');
                 Route::get('/dungeonroute/generatetestroutes', new AdminToolsGenerateTestRoutesController()->index(...))->name('admin.tools.dungeonroute.generatetestroutes');
-                Route::post('/dungeonroute/generatetestroutes/generate', new AdminToolsGenerateTestRoutesController()->generate(...))->name('admin.tools.dungeonroute.generatetestroutes.generate');
+                Route::post('/dungeonroute/generatetestroutes/generate-batch', new AdminToolsGenerateTestRoutesController()->generateBatch(...))->name('admin.tools.dungeonroute.generatetestroutes.generate_batch');
                 Route::post('/dungeonroute/generatetestroutes/delete-batch', new AdminToolsGenerateTestRoutesController()->deleteBatch(...))->name('admin.tools.dungeonroute.generatetestroutes.delete_batch');
                 Route::get('/dungeonroute/{dungeonRoute:id}', new AdminToolsDungeonRouteController()->dungeonrouteView(...))->name('admin.tools.dungeonroute.view.get');
 

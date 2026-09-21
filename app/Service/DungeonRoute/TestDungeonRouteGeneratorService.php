@@ -2,6 +2,7 @@
 
 namespace App\Service\DungeonRoute;
 
+use App\Logic\DungeonRoute\TestRoutePullPlanner;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -31,13 +32,6 @@ class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServi
     private const int TARGET_FORCES_PERCENTAGE_MIN = 100;
 
     private const int TARGET_FORCES_PERCENTAGE_MAX = 112;
-
-    private const int SKIP_PULL_CANDIDATE_PERCENTAGE = 25;
-
-    /** Packs average about three enemies; real routes pull closer to five at a time. */
-    private const int PULL_SIZE_MIN = 4;
-
-    private const int PULL_SIZE_MAX = 7;
 
     public function __construct(
         private readonly SeasonServiceInterface $seasonService,
@@ -75,10 +69,11 @@ class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServi
             );
         }
 
-        $enemyForcesByKey = $this->getEnemyForcesByKey($mappingVersion);
-        $season           = $dungeon->getActiveSeason($this->seasonService);
-        $keyLevelMin      = $season === null ? (int)config('keystoneguru.keystone.levels.default_min') : $season->key_level_min;
-        $keyLevelMax      = $season === null ? (int)config('keystoneguru.keystone.levels.default_max') : $season->key_level_max;
+        $enemyForcesByKey    = $this->getEnemyForcesByKey($mappingVersion);
+        $floorIndexByFloorId = $dungeon->floors()->pluck('index', 'id');
+        $season              = $dungeon->getActiveSeason($this->seasonService);
+        $keyLevelMin         = $season === null ? (int)config('keystoneguru.keystone.levels.default_min') : $season->key_level_min;
+        $keyLevelMax         = $season === null ? (int)config('keystoneguru.keystone.levels.default_max') : $season->key_level_max;
 
         $result = collect();
         for ($i = 1; $i <= $count; $i++) {
@@ -91,6 +86,7 @@ class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServi
                 random_int($keyLevelMin, max($keyLevelMin, $keyLevelMax - 5)),
                 $keyLevelMax,
                 $pullCandidates,
+                $floorIndexByFloorId,
                 $enemyForcesByKey,
             )));
         }
@@ -120,6 +116,7 @@ class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServi
 
     /**
      * @param Collection<int, Collection<int, Enemy>> $pullCandidates
+     * @param Collection<int, int>                    $floorIndexByFloorId
      * @param Collection<string, int>                 $enemyForcesByKey
      */
     private function generateRoute(
@@ -131,6 +128,7 @@ class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServi
         int            $levelMin,
         int            $keyLevelMax,
         Collection     $pullCandidates,
+        Collection     $floorIndexByFloorId,
         Collection     $enemyForcesByKey,
     ): DungeonRoute {
         $dungeonRoute = DungeonRoute::create([
@@ -161,7 +159,10 @@ class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServi
         $targetForces = (int)ceil(
             $mappingVersion->enemy_forces_required * random_int(self::TARGET_FORCES_PERCENTAGE_MIN, self::TARGET_FORCES_PERCENTAGE_MAX) / 100,
         );
-        $this->createPulls($dungeonRoute, $pullCandidates, $enemyForcesByKey, $targetForces);
+        $pulls = new TestRoutePullPlanner($enemyForcesByKey)->plan($pullCandidates, $floorIndexByFloorId, $targetForces);
+        foreach ($pulls as $index => $enemies) {
+            $this->createPull($dungeonRoute, $enemies, $index + 1);
+        }
 
         // published_at is guarded, so create() would drop it
         $dungeonRoute->forceFill([
@@ -188,74 +189,6 @@ class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServi
                 ->where('tags.model_class', DungeonRoute::class)
                 ->where('tags.tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])
                 ->where('tags.name', self::TAG_NAME));
-    }
-
-    /**
-     * Merges consecutive candidates on the same floor into pulls of a random minimum size until the route
-     * reaches the target enemy forces or the candidates run out, then adds every boss that was not pulled
-     * yet as a pull of its own.
-     *
-     * @param Collection<int, Collection<int, Enemy>> $pullCandidates
-     * @param Collection<string, int>                 $enemyForcesByKey
-     */
-    private function createPulls(
-        DungeonRoute $dungeonRoute,
-        Collection   $pullCandidates,
-        Collection   $enemyForcesByKey,
-        int          $targetForces,
-    ): void {
-        // Skipping a random part of the candidates on the first pass keeps routes of the same dungeon apart
-        [$skipped, $firstPass] = $pullCandidates->partition(static fn() => random_int(1, 100) <= self::SKIP_PULL_CANDIDATE_PERCENTAGE);
-
-        $index          = 1;
-        $forces         = 0;
-        $killedKeys     = [];
-        $pulledEnemyIds = [];
-        $pull           = collect();
-        $pullSize       = random_int(self::PULL_SIZE_MIN, self::PULL_SIZE_MAX);
-
-        $flush = function () use ($dungeonRoute, $enemyForcesByKey, &$index, &$forces, &$killedKeys, &$pulledEnemyIds, &$pull, &$pullSize): void {
-            $this->createPull($dungeonRoute, $pull, $index++);
-
-            foreach ($pull as $enemy) {
-                $pulledEnemyIds[] = $enemy->id;
-
-                $key = $this->getEnemyKey($enemy);
-                if ($key !== null && !isset($killedKeys[$key])) {
-                    $killedKeys[$key] = true;
-                    $forces += $enemyForcesByKey->get($key, 0);
-                }
-            }
-
-            $pull     = collect();
-            $pullSize = random_int(self::PULL_SIZE_MIN, self::PULL_SIZE_MAX);
-        };
-
-        foreach ($firstPass->concat($skipped) as $enemies) {
-            if ($pull->isNotEmpty() && $pull->first()->floor_id !== $enemies->first()->floor_id) {
-                $flush();
-            }
-
-            $pull = $pull->concat($enemies);
-
-            if ($pull->count() >= $pullSize) {
-                $flush();
-
-                if ($forces >= $targetForces) {
-                    break;
-                }
-            }
-        }
-
-        if ($pull->isNotEmpty()) {
-            $flush();
-        }
-
-        $remainingBosses = $pullCandidates->flatten(1)
-            ->filter(static fn(Enemy $enemy) => $enemy->npc?->isBoss() && !in_array($enemy->id, $pulledEnemyIds, true));
-        foreach ($remainingBosses as $boss) {
-            $this->createPull($dungeonRoute, collect([$boss]), $index++);
-        }
     }
 
     /**
@@ -321,7 +254,7 @@ class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServi
 
         $result = collect();
         foreach (Enemy::query()->where('mapping_version_id', $mappingVersion->id)->get() as $enemy) {
-            $key = $this->getEnemyKey($enemy);
+            $key = TestRoutePullPlanner::getEnemyKey($enemy);
             if ($key === null) {
                 continue;
             }
@@ -330,13 +263,6 @@ class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServi
         }
 
         return $result;
-    }
-
-    private function getEnemyKey(Enemy $enemy): ?string
-    {
-        $npcId = $enemy->mdt_npc_id ?? $enemy->npc_id;
-
-        return $npcId === null || $enemy->mdt_id === null ? null : sprintf('%d-%d', $npcId, $enemy->mdt_id);
     }
 
     /**

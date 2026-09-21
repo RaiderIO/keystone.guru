@@ -575,4 +575,14 @@ return [
     'dungeonroute_picker_add_many'                                         => 'Add :count routes',
     'dungeonroute_picker_add_failed'                                       => 'The routes could not be added.',
 
+    'admin_generate_test_routes_invalid_count'      => 'Enter a route count between 1 and :max.',
+    'admin_generate_test_routes_generating'         => 'Generating :count route(s) for :dungeons dungeon(s)...',
+    'admin_generate_test_routes_dungeon_done'       => ':dungeon: :count route(s)',
+    'admin_generate_test_routes_error'              => 'Error: :message',
+    'admin_generate_test_routes_delete_all_confirm' => 'Delete every test route you generated?',
+    'admin_generate_test_routes_deleting'           => 'Deleting your generated test routes...',
+    'admin_generate_test_routes_deleted'            => 'Deleted :processed, :remaining remaining.',
+    'admin_generate_test_routes_processed'          => ':count processed',
+    'admin_generate_test_routes_done'               => 'Done.',
+
 ];

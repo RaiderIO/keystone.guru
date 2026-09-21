@@ -61,48 +61,76 @@ use Illuminate\Support\Collection;
         </div>
     </div>
 
+    <div class="mb-2">
+        <div class="progress mb-1">
+            <div id="generate_progress_bar"
+                 class="progress-bar progress-bar-striped progress-bar-animated"
+                 role="progressbar"
+                 style="width: 0"
+                 aria-valuenow="0"
+                 aria-valuemin="0"
+                 aria-valuemax="100">
+            </div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <small class="text-muted" id="generate_progress_label">–</small>
+            <small class="text-muted">
+                {{ __('view_admin.tools.dungeonroute.generatetestroutes.remaining') }}:
+                <span id="generate_remaining_count">–</span>
+                &nbsp;&nbsp;
+                {{ __('view_admin.tools.dungeonroute.generatetestroutes.elapsed') }}:
+                <span id="generate_timer">00:00:00</span>
+                &nbsp;&nbsp;
+                {{ __('view_admin.tools.dungeonroute.generatetestroutes.eta') }}:
+                <span id="generate_eta">–</span>
+            </small>
+        </div>
+    </div>
+
     <div class="mb-3 d-flex gap-2 align-items-center">
-        <button id="generate_start" class="btn btn-primary">
+        <button id="generate_start_btn" class="btn btn-primary">
             <i class="fas fa-plus"></i> {{ __('view_admin.tools.dungeonroute.generatetestroutes.generate') }}
         </button>
-        <button id="generate_delete_all" class="btn btn-outline-danger">
+        <button id="generate_pause_btn" class="btn btn-warning d-none">
+            <i class="fas fa-pause"></i> {{ __('view_admin.tools.dungeonroute.generatetestroutes.pause') }}
+        </button>
+        <button id="generate_resume_btn" class="btn btn-warning d-none">
+            <i class="fas fa-play"></i> {{ __('view_admin.tools.dungeonroute.generatetestroutes.resume') }}
+        </button>
+        <button id="generate_stop_btn" class="btn btn-secondary d-none">
+            <i class="fas fa-stop"></i> {{ __('view_admin.tools.dungeonroute.generatetestroutes.stop') }}
+        </button>
+        <button id="generate_delete_all_btn" class="btn btn-outline-danger">
             <i class="fas fa-trash"></i> {{ __('view_admin.tools.dungeonroute.generatetestroutes.delete_all') }}
         </button>
-        <small class="text-muted" id="generate_generated_count">
-            {{ __('view_admin.tools.dungeonroute.generatetestroutes.generated_count', ['count' => $generatedCount]) }}
+        <small class="text-muted">
+            {{ __('view_admin.tools.dungeonroute.generatetestroutes.generated_count') }}:
+            <span id="generate_generated_count">{{ $generatedCount }}</span>
         </small>
     </div>
 
-    <div class="progress mb-2">
-        <div id="generate_progress_bar" class="progress-bar" role="progressbar" style="width: 0"
-             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
-
-    <div id="generate_log" class="bg-dark text-light p-3 rounded font-monospace small"
-         style="height: 400px; overflow-y: scroll; white-space: pre-wrap;"></div>
+    <pre id="generate_log"
+         class="bg-dark text-light p-3 rounded"
+         style="height: 400px; overflow-y: scroll; white-space: pre-wrap; word-break: break-all;"></pre>
 @endsection
 
 @include('common.general.inline', ['path' => 'admin/tools/dungeonroute/generatetestroutes', 'options' => [
-    'generateUrl'            => route('admin.tools.dungeonroute.generatetestroutes.generate'),
+    'generateBatchUrl'       => route('admin.tools.dungeonroute.generatetestroutes.generate_batch'),
     'deleteBatchUrl'         => route('admin.tools.dungeonroute.generatetestroutes.delete_batch'),
     'maxCount'               => $maxCount,
     'targetSelector'         => '#generate_target',
     'countSelector'          => '#generate_count',
     'publishedStateSelector' => '#generate_published_state',
-    'startBtnSelector'       => '#generate_start',
-    'deleteAllBtnSelector'   => '#generate_delete_all',
+    'deleteAllBtnSelector'   => '#generate_delete_all_btn',
     'generatedCountSelector' => '#generate_generated_count',
     'progressBarSelector'    => '#generate_progress_bar',
+    'progressLabelSelector'  => '#generate_progress_label',
     'logSelector'            => '#generate_log',
-    'translations'           => [
-        'invalidCount'     => __('view_admin.tools.dungeonroute.generatetestroutes.log_invalid_count', ['max' => $maxCount]),
-        'generating'       => __('view_admin.tools.dungeonroute.generatetestroutes.log_generating'),
-        'dungeonDone'      => __('view_admin.tools.dungeonroute.generatetestroutes.log_dungeon_done'),
-        'deleteAllConfirm' => __('view_admin.tools.dungeonroute.generatetestroutes.delete_all_confirm'),
-        'deleting'         => __('view_admin.tools.dungeonroute.generatetestroutes.log_deleting'),
-        'deleted'          => __('view_admin.tools.dungeonroute.generatetestroutes.log_deleted'),
-        'generatedCount'   => __('view_admin.tools.dungeonroute.generatetestroutes.generated_count'),
-        'done'             => __('view_admin.tools.dungeonroute.generatetestroutes.log_done'),
-        'error'            => __('view_admin.tools.dungeonroute.generatetestroutes.log_error'),
-    ],
+    'startBtnSelector'       => '#generate_start_btn',
+    'pauseBtnSelector'       => '#generate_pause_btn',
+    'resumeBtnSelector'      => '#generate_resume_btn',
+    'stopBtnSelector'        => '#generate_stop_btn',
+    'timerSelector'          => '#generate_timer',
+    'etaSelector'            => '#generate_eta',
+    'remainingCountSelector' => '#generate_remaining_count',
 ]])

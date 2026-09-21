@@ -36,7 +36,7 @@ class AdminToolsGenerateTestRoutesController extends Controller
         ]);
     }
 
-    public function generate(
+    public function generateBatch(
         AdminToolsDungeonRouteGenerateTestRoutesRequest $request,
         TestDungeonRouteGeneratorServiceInterface       $testDungeonRouteGeneratorService,
     ): JsonResponse {
@@ -57,8 +57,9 @@ class AdminToolsGenerateTestRoutesController extends Controller
         }
 
         return response()->json([
-            'dungeon' => __($dungeon->name),
-            'routes'  => $dungeonRoutes->map(static fn(DungeonRoute $dungeonRoute) => [
+            'processed' => $dungeonRoutes->count(),
+            'dungeon'   => __($dungeon->name),
+            'routes'    => $dungeonRoutes->map(static fn(DungeonRoute $dungeonRoute) => [
                 'public_key'   => $dungeonRoute->public_key,
                 'title'        => $dungeonRoute->title,
                 'url'          => route('dungeonroute.view', ['dungeon' => $dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()]),
@@ -74,10 +75,15 @@ class AdminToolsGenerateTestRoutesController extends Controller
         abort_unless($testDungeonRouteGeneratorService->isAvailable(), 404);
 
         try {
-            return response()->json($testDungeonRouteGeneratorService->deleteGenerated(self::DELETE_BATCH_SIZE, $this->getUser()));
+            $result = $testDungeonRouteGeneratorService->deleteGenerated(self::DELETE_BATCH_SIZE, $this->getUser());
         } catch (TestDungeonRouteGeneratorException $exception) {
             return response()->json(['message' => $exception->getMessage()], 422);
         }
+
+        return response()->json([
+            'processed' => $result['deleted'],
+            'remaining' => $result['remaining'],
+        ]);
     }
 
     private function getUser(): User

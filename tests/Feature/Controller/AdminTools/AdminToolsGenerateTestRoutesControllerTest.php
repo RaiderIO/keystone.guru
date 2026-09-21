@@ -41,6 +41,8 @@ final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
         $response->assertOk();
         $response->assertSee('id="generate_target"', false);
         $response->assertSee(sprintf('max="%d"', TestDungeonRouteGeneratorServiceInterface::MAX_ROUTES_PER_DUNGEON), false);
+        $response->assertSee('"generateBatchUrl"', false);
+        $response->assertDontSee('"translations"', false);
     }
 
     #[Test]
@@ -74,7 +76,7 @@ final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function generate_givenValidRequest_returnsCreatedRoutesOwnedByTheAdmin(): void
+    public function generateBatch_givenValidRequest_returnsCreatedRoutesOwnedByTheAdmin(): void
     {
         // Arrange
         $dungeon    = $this->getDungeonWithCurrentMappingVersionWithEnemies();
@@ -82,7 +84,7 @@ final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
 
         try {
             // Act
-            $response = $this->postJson(route('admin.tools.dungeonroute.generatetestroutes.generate'), [
+            $response = $this->postJson(route('admin.tools.dungeonroute.generatetestroutes.generate_batch'), [
                 'dungeon_id'      => $dungeon->id,
                 'count'           => 2,
                 'published_state' => PublishedState::TEAM,
@@ -92,7 +94,8 @@ final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
             // Assert
             $response->assertOk();
             $response->assertJsonCount(2, 'routes');
-            $response->assertJsonStructure(['dungeon', 'routes' => [['public_key', 'title', 'url', 'enemy_forces']], 'enemy_forces_required', 'generated_count']);
+            $response->assertJsonStructure(['processed', 'dungeon', 'routes' => [['public_key', 'title', 'url', 'enemy_forces']], 'enemy_forces_required', 'generated_count']);
+            $response->assertJsonPath('processed', 2);
             $dungeonRoutes = DungeonRoute::query()->whereIn('public_key', $publicKeys)->get();
             $this->assertCount(2, $dungeonRoutes);
             foreach ($dungeonRoutes as $dungeonRoute) {
@@ -106,14 +109,14 @@ final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function generate_givenCountAboveMax_returnsValidationError(): void
+    public function generateBatch_givenCountAboveMax_returnsValidationError(): void
     {
         // Arrange
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
         $before  = DungeonRoute::query()->count();
 
         // Act
-        $response = $this->postJson(route('admin.tools.dungeonroute.generatetestroutes.generate'), [
+        $response = $this->postJson(route('admin.tools.dungeonroute.generatetestroutes.generate_batch'), [
             'dungeon_id'      => $dungeon->id,
             'count'           => TestDungeonRouteGeneratorServiceInterface::MAX_ROUTES_PER_DUNGEON + 1,
             'published_state' => PublishedState::WORLD,
@@ -126,7 +129,7 @@ final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function generate_givenProductionAppType_returnsNotFound(): void
+    public function generateBatch_givenProductionAppType_returnsNotFound(): void
     {
         // Arrange
         config(['app.type' => 'production']);
@@ -134,7 +137,7 @@ final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
         $before  = DungeonRoute::query()->count();
 
         // Act
-        $response = $this->postJson(route('admin.tools.dungeonroute.generatetestroutes.generate'), [
+        $response = $this->postJson(route('admin.tools.dungeonroute.generatetestroutes.generate_batch'), [
             'dungeon_id'      => $dungeon->id,
             'count'           => 1,
             'published_state' => PublishedState::WORLD,
@@ -146,7 +149,7 @@ final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function generate_givenNonAdmin_returnsForbidden(): void
+    public function generateBatch_givenNonAdmin_returnsForbidden(): void
     {
         // Arrange
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
@@ -158,7 +161,7 @@ final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
             $this->be($user);
 
             // Act
-            $response = $this->postJson(route('admin.tools.dungeonroute.generatetestroutes.generate'), [
+            $response = $this->postJson(route('admin.tools.dungeonroute.generatetestroutes.generate_batch'), [
                 'dungeon_id'      => $dungeon->id,
                 'count'           => 1,
                 'published_state' => PublishedState::WORLD,
@@ -196,7 +199,7 @@ final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $response->assertExactJson(['deleted' => 1, 'remaining' => 0]);
+            $response->assertExactJson(['processed' => 1, 'remaining' => 0]);
             $this->assertFalse(DungeonRoute::query()->whereKey($ownRoutes->first()->id)->exists());
             $this->assertTrue(DungeonRoute::query()->whereKey($otherRoutes->first()->id)->exists(), 'Another admin\'s generated route must survive');
         } finally {
