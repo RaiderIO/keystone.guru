@@ -200,7 +200,7 @@ return [
             'collection_updated'             => 'Coleção atualizada',
             'collection_deleted'             => 'Coleção excluída',
             'max_collections_reached'        => 'Você pode ter no máximo :max coleções.',
-            'collection_duplicated'          => 'Coleção duplicada. Só você pode ver a cópia até mudar para quem ela está visível.',
+            'collection_duplicated'          => 'Coleção duplicada. Só você pode ver a cópia até alterar quem pode vê-la.',
             'collection_duplicated_left_out' => '{1} :count rota ficou de fora porque não corresponde à temporada escolhida.|[2,*] :count rotas ficaram de fora porque não correspondem à temporada escolhida.',
         ],
     ],

@@ -27,7 +27,7 @@ return [
         'view'                    => 'Ver',
         'published_state'         => [
             'unpublished'     => 'Não publicada',
-            'team'            => 'Somente equipe',
+            'team'            => 'Apenas equipe',
             'world'           => 'Pública',
             'world_with_link' => 'Pública com link',
         ],
