@@ -95,6 +95,7 @@ return [
                 'dungeonroute_view'                           => 'View dungeon route',
                 'dungeonroute_view_contents'                  => 'Route contents',
                 'dungeonroute_mapping_version_usage'          => 'Mapping version usage',
+                'dungeonroute_generate_test_routes'           => 'Generate test routes',
                 'enemyforces_recalculate'                     => 'Recalculate enemy forces',
                 'features_list'                               => 'Features',
                 'mdt_dungeon_mapping_hash'                    => 'Dungeon mapping hash',

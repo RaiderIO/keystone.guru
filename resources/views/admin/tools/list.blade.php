@@ -62,6 +62,12 @@
                         <a href="{{ route('admin.tools.dungeonroute.mappingversionusage') }}">{{ __('view_admin.tools.list.view_dungeonroute_mapping_version_usage') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.view_dungeonroute_mapping_version_usage_description') }}</small>
                     </li>
+                    @if($testDungeonRouteGeneratorAvailable)
+                        <li class="list-group-item">
+                            <a href="{{ route('admin.tools.dungeonroute.generatetestroutes') }}">{{ __('view_admin.tools.list.generate_test_routes') }}</a>
+                            <small class="text-muted d-block">{{ __('view_admin.tools.list.generate_test_routes_description') }}</small>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>
