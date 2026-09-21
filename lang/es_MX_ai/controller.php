@@ -102,8 +102,8 @@ return [
             'upgrade_discarded'         => 'Se descartó el borrador de actualización.',
         ],
         'continue_in_newer_season' => [
-            'limit_reached'   => '',
-            'no_newer_season' => '',
+            'limit_reached'   => 'Alcanzaste el número máximo de rutas que puedes crear.',
+            'no_newer_season' => 'Esta ruta no se puede continuar en una temporada más reciente: su mazmorra no forma parte de ninguna, o ya la continuaste ahí.',
         ],
     ],
     'dungeonroutediscover' => [
@@ -200,8 +200,8 @@ return [
             'collection_updated'             => 'Colección actualizada',
             'collection_deleted'             => 'Colección eliminada',
             'max_collections_reached'        => 'Puedes tener como máximo :max colecciones.',
-            'collection_duplicated'          => '',
-            'collection_duplicated_left_out' => '',
+            'collection_duplicated'          => 'Colección duplicada. Solo tú puedes ver la copia hasta que cambies para quién es visible.',
+            'collection_duplicated_left_out' => '{1} :count ruta quedó fuera porque no coincide con la temporada elegida.|[2,*] :count rutas quedaron fuera porque no coinciden con la temporada elegida.',
         ],
     ],
     'profile' => [
