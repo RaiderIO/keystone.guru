@@ -149,7 +149,7 @@ return [
         'picker' => [
             'close'                        => 'Fermer',
             'source_mine'                  => 'Vos itinéraires',
-            'source_unassigned_by_members' => 'Itinéraires des membres de %s qui ne sont encore dans aucune équipe',
+            'source_unassigned_by_members' => 'Itinéraires des membres de %s pas encore attribués à une équipe',
             'title_search'                 => 'Titre',
             'title_search_placeholder'     => 'Rechercher par titre',
             'loading'                      => 'Chargement des itinéraires...',
