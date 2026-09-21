@@ -232,11 +232,6 @@ class EnemyVisual extends Signalable {
             modifiers.push(new EnemyVisualModifierTeeming(this, 4));
         }
 
-        // For each active aura, add a new modifier
-        for (let i = 0; i < this.enemy.active_auras.length; i++) {
-            modifiers.push(new EnemyVisualModifierActiveAura(this, 5 + i, this.enemy.active_auras[i]));
-        }
-
         return modifiers;
     }
 

@@ -9,10 +9,8 @@ use App\Http\Requests\Enemy\APIEnemyFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
-use App\Models\EnemyActiveAura;
 use App\Models\Mapping\MappingVersion;
 use App\Models\RaidMarker;
-use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
@@ -63,23 +61,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
 
         return $this->storeModel($coordinatesService, $mappingVersion, $validated, Enemy::class, $enemy, static function (
             Enemy $enemy,
-        ) use ($request, $coordinatesService, $previousFloor) {
-            $activeAuras = $request->get('active_auras', []);
-            // Clear current active auras
-            $enemy->enemyActiveAuras()->delete();
-            foreach ($activeAuras as $activeAura) {
-                if (!empty($activeAura)) {
-                    $spell = Spell::findOrFail($activeAura);
-                    // Only when the passed spell is actually an aura
-                    if ($spell->aura) {
-                        EnemyActiveAura::insert([
-                            'enemy_id' => $enemy->id,
-                            'spell_id' => $activeAura,
-                        ]);
-                    }
-                }
-            }
-
+        ) use ($coordinatesService, $previousFloor) {
             $enemy->load([
                 'npc',
                 'npc.enemyForces',

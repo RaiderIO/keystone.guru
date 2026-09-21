@@ -30,7 +30,6 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailJobRepositoryInterface;
 use App\Repositories\Interfaces\Enemies\OverpulledEnemyRepositoryInterface;
 use App\Repositories\Interfaces\Enemies\PridefulEnemyRepositoryInterface;
-use App\Repositories\Interfaces\EnemyActiveAuraRepositoryInterface;
 use App\Repositories\Interfaces\EnemyPackRepositoryInterface;
 use App\Repositories\Interfaces\EnemyPatrolRepositoryInterface;
 use App\Repositories\Interfaces\EnemyRepositoryInterface;
@@ -1114,22 +1113,6 @@ class RepositoryFixtures
         array          $methodsToMock = [],
     ): MockObject|DungeonFloorSwitchMarkerRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilderPublic(DungeonFloorSwitchMarkerRepositoryInterface::class);
-
-        if (!empty($methodsToMock)) {
-            $mockBuilder->onlyMethods($methodsToMock);
-        }
-
-        return $mockBuilder->getMock();
-    }
-
-    /**
-     * @param array<int, string> $methodsToMock
-     */
-    public static function getEnemyActiveAuraRepositoryMock(
-        PublicTestCase $testCase,
-        array          $methodsToMock = [],
-    ): MockObject|EnemyActiveAuraRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilderPublic(EnemyActiveAuraRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);

@@ -61,7 +61,6 @@ class Enemy extends VersionableMapObject {
         this.enemyPatrol = null;
         /** @type {Enemy|Null} If we are an awakened NPC, we're linking it to another Awakened NPC that's next to the boss */
         this.linked_awakened_enemy = null;
-        this.active_auras = [];
         /** @type {Enemy|null} If we have an enemy that we're sharing exclusivity with (Theater of Pain mini bosses) */
         this.exclusive_enemy = null;
 
@@ -118,20 +117,6 @@ class Enemy extends VersionableMapObject {
         }
 
         let self = this;
-
-        let selectAuras = [];
-        let auras = getState().getMapContext().getAuras();
-        for (let index in auras) {
-            if (auras.hasOwnProperty(index)) {
-                let aura = auras[index];
-                selectAuras.push({
-                    id: aura.id,
-                    name: `${aura.name} (${aura.id})`,
-                    html: `<img src="${aura.icon_url}" alt="${aura.name}" width="32px"/> ${aura.name}</a>`
-                });
-            }
-        }
-
 
         return this._cachedAttributes = super._getAttributes(force).concat([
             new Attribute({
@@ -321,18 +306,6 @@ class Enemy extends VersionableMapObject {
                     self.seasonal_index = value;
                 },
                 category: 'advanced',
-            }),
-            new Attribute({
-                name: 'active_auras',
-                type: 'select',
-                admin: true,
-                default: null,
-                values: selectAuras,
-                multiple: true,
-                setter: function (value) {
-                    self.active_auras = value;
-                },
-                category: 'legacy'
             }),
             new Attribute({
                 name: 'required',
