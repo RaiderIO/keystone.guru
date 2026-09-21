@@ -377,6 +377,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::get('/', new DungeonRouteCollectionController()->edit(...))->name('collections.edit');
                     Route::patch('/', new DungeonRouteCollectionController()->update(...))->name('collections.update');
                     Route::delete('/', new DungeonRouteCollectionController()->delete(...))->name('collections.delete');
+                    Route::middleware('throttle:create-collection')->group(static function () {
+                        Route::post('duplicate', new DungeonRouteCollectionController()->duplicate(...))->name('collections.duplicate');
+                    });
                 });
             });
 
@@ -677,6 +680,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('/profile/adfree/{user:public_key}', new AjaxProfileController()->addAdFreeGiveaway(...));
             Route::delete('/profile/adfree/{user:public_key}', new AjaxProfileController()->removeAdFreeGiveaway(...));
 
+            Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
+                ->get('/collections', new AjaxDungeonRouteCollectionController()->forDungeonRoute(...))
+                ->name('ajax.collections.fordungeonroute');
             Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
                 ->prefix('collection/{dungeonRouteCollection}/routes')->group(static function () {
                     Route::post('/', new AjaxDungeonRouteCollectionController()->storeRoutes(...))->name('ajax.collection.routes.store');

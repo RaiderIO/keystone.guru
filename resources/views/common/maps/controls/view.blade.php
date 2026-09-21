@@ -25,6 +25,8 @@ use Illuminate\Support\Collection;
                         @include('common.maps.controls.elements.dungeonroute.clone', ['dungeonroute' => $dungeonroute])
                     @endif
 
+                    @include('common.maps.controls.elements.dungeonroute.addtocollection', ['dungeonroute' => $dungeonroute])
+
                     @include('common.maps.controls.elements.dungeonroute.report', ['dungeonroute' => $dungeonroute])
 
                     @include('common.maps.controls.elements.rating', ['dungeonroute' => $dungeonroute])

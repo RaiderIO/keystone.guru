@@ -17,6 +17,10 @@ use Illuminate\Support\Collection;
  * @var Season|null                                            $selectedSeason
  * @var Collection<int, Team>                                  $teams
  * @var Collection<int, DungeonRouteCollectionCategory>        $categories
+ * @var string|null                                            $prefillName          New collections only.
+ * @var string|null                                            $prefillDescription   New collections only.
+ * @var bool                                                   $mayCreateCollection  New collections only; false at the collection cap.
+ * @var array<string, string>                                  $formUrlParams        New collections only; the query the routes section is rebuilt with.
  */
 
 $dungeonRouteCollection ??= null;
@@ -24,6 +28,10 @@ $seasons                ??= collect();
 $selectedSeason         ??= null;
 $teams                  ??= collect();
 $categories             ??= collect();
+$prefillName            ??= null;
+$prefillDescription     ??= null;
+$mayCreateCollection    ??= true;
+$formUrlParams          ??= [];
 
 $isNew        = $dungeonRouteCollection === null;
 $deleteFormId = 'collection_delete_form';
@@ -53,13 +61,13 @@ foreach ($teams as $team) {
 
 <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
     {{ html()->label(__('view_common.collection.details.name') . '<span class="form-required">*</span>', 'name') }}
-    {{ html()->text('name', $dungeonRouteCollection?->name)->class('form-control')->attribute('maxlength', 128) }}
+    {{ html()->text('name', $dungeonRouteCollection?->name ?? $prefillName)->class('form-control')->attribute('maxlength', 128) }}
     @include('common.forms.form-error', ['key' => 'name'])
 </div>
 
 <div class="mb-3{{ $errors->has('description') ? ' has-error' : '' }}">
     {{ html()->label(__('view_common.collection.details.description'), 'description') }}
-    {{ html()->textarea('description', $dungeonRouteCollection?->description)
+    {{ html()->textarea('description', $dungeonRouteCollection?->description ?? $prefillDescription)
         ->class('form-control')
         ->rows(3)
         ->attribute('maxlength', 1000) }}
@@ -142,6 +150,7 @@ foreach ($teams as $team) {
     'seasonSelector' => 'input[name="season_id"]',
     'formUrl' => route('collections.new'),
     'seasonNone' => DungeonRouteCollectionCreateFormRequest::SEASON_NONE,
+    'formUrlParams' => $formUrlParams,
 ]])
 @endif
 
@@ -154,10 +163,19 @@ foreach ($teams as $team) {
 
 {{-- Both buttons sit outside the form they submit, so saving and deleting share one row --}}
 <div class="d-flex align-items-center">
-    {{ html()->input('submit')
-        ->value($dungeonRouteCollection !== null ? __('view_common.collection.details.save') : __('view_common.collection.details.submit'))
-        ->class('btn btn-info')
-        ->attribute('form', $formId) }}
+    @if($isNew && !$mayCreateCollection)
+        {{ html()->input('submit')
+            ->value(__('view_common.collection.details.submit'))
+            ->class('btn btn-info')
+            ->attribute('form', $formId)
+            ->disabled()
+            ->attribute('aria-describedby', 'collection_max_collections') }}
+    @else
+        {{ html()->input('submit')
+            ->value($dungeonRouteCollection !== null ? __('view_common.collection.details.save') : __('view_common.collection.details.submit'))
+            ->class('btn btn-info')
+            ->attribute('form', $formId) }}
+    @endif
     @isset($dungeonRouteCollection)
         {{ html()->input('submit')
             ->value(__('view_common.collection.details.delete'))
@@ -165,3 +183,9 @@ foreach ($teams as $team) {
             ->attribute('form', $deleteFormId) }}
     @endisset
 </div>
+
+@if($isNew && !$mayCreateCollection)
+    <p id="collection_max_collections" class="text-warning mt-2">
+        {{ __('view_collection.index.max_collections', ['max' => DungeonRouteCollection::MAX_COLLECTIONS]) }}
+    </p>
+@endif

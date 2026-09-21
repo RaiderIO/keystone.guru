@@ -95,6 +95,9 @@ return [
             'expansion'  => 'That season does not belong to this game version.',
             'fixed'      => 'The season of a collection is fixed once it is created - it can only be made free-form.',
         ],
+        'collection_tag' => [
+            'exists' => 'You have no tag with that name.',
+        ],
         'collection_dungeon_routes' => [
             'max'          => 'A collection may hold at most :max routes.',
             'exists'       => 'You can only collect routes that you created yourself.',

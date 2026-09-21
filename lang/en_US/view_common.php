@@ -3,6 +3,10 @@
 return [
 
     'collection' => [
+        'addtocollection' => [
+            'title' => 'Add to collection',
+            'help'  => 'A route is added to the end of a collection right away.',
+        ],
         'routes' => [
             'heading'          => 'Routes',
             'count'            => ':count / :max routes',
@@ -643,6 +647,7 @@ return [
             'view' => [
                 'edit_this_route_title'          => 'Edit',
                 'clone_this_route_title'         => 'Clone',
+                'add_to_collection_title'        => 'Add to collection',
                 'report_for_moderation'          => 'Report',
                 'report_for_moderation_finished' => 'Reported',
             ],

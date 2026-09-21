@@ -1,6 +1,7 @@
 @inject('seasonService', 'App\Service\Season\SeasonService')
 <?php
 
+use App\Features\CreatorProfiles;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\RouteAttribute;
 use App\Models\Tags\Tag;
@@ -9,6 +10,7 @@ use App\Models\Team;
 use App\Service\Season\SeasonService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Laravel\Pennant\Feature;
 
 /**
  * @var SeasonService                   $seasonService
@@ -35,6 +37,9 @@ $affixSelectId        ??= 'dungeonroute_affixes_select';
 $attributesSelectId   ??= 'dungeonroute_attributes_select';
 $requirementsSelectId ??= 'dungeonroute_requirements_select';
 $tagsSelectId         ??= 'dungeonroute_tags_select';
+
+// "Add to collection…" is offered on My routes only
+$showAddToCollection = $view === 'profile' && Auth::check() && Feature::active(CreatorProfiles::class);
 
 /** @var string $view */
 $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
@@ -86,8 +91,13 @@ if (Auth::check()) {
                 $teamUsersBuilder->isModerator(Auth::id());
             })->get() : [],
             'autoCompleteTags' => $autoCompleteTags,
+            'showAddToCollection' => $showAddToCollection,
         ],
 ])
+
+@if($showAddToCollection)
+    @include('common.collection.addtocollection', ['triggerSelector' => '.dungeonroute-add-to-collection'])
+@endif
 
 @section('scripts')
     @parent

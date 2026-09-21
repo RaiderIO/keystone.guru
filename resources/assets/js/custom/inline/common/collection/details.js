@@ -6,6 +6,7 @@
  @property {string} seasonSelector         The season radios; absent on a game version without seasons.
  @property {string} formUrl                The new-collection form, which renders the section for the season_id it is given.
  @property {string} seasonNone             The season_id value that asks for a free-form collection.
+ @property {Object} formUrlParams          Query the form is rebuilt with, next to the season: the route or tag the collection starts from.
  */
 
 /**
@@ -39,6 +40,9 @@ class CommonCollectionDetails extends InlineCode {
 
         let url = new URL(this.options.formUrl, window.location.href);
         url.searchParams.set('season_id', seasonId === '' ? this.options.seasonNone : seasonId);
+        Object.entries(this.options.formUrlParams ?? {}).forEach(function ([key, value]) {
+            url.searchParams.set(key, value);
+        });
 
         fetch(url.toString(), {credentials: 'same-origin', headers: {'X-Requested-With': 'XMLHttpRequest'}})
             .then((response) => {
