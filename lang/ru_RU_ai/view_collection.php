@@ -8,7 +8,7 @@ return [
         'world'           => 'Эту коллекцию может просматривать любой',
     ],
     'kind' => [
-        'season_set' => 'Набор :season · подземелья: :covered/:total',
+        'season_set' => 'Набор: :season · подземелья: :covered/:total',
         'free_form'  => '{0} :game_version · нет подземелий|{1} :game_version · :count подземелье|[2,*] :game_version · подземелий: :count',
     ],
     'index' => [
