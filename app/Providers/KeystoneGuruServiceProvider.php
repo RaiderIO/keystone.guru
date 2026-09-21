@@ -122,6 +122,8 @@ use App\Service\DungeonRoute\DungeonRouteUpgradeDraftService;
 use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
 use App\Service\DungeonRoute\MapDrawingService;
 use App\Service\DungeonRoute\MapDrawingServiceInterface;
+use App\Service\DungeonRoute\TestDungeonRouteGeneratorService;
+use App\Service\DungeonRoute\TestDungeonRouteGeneratorServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\EnemyForces\EnemyForcesDb2Service;
@@ -293,6 +295,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(DungeonRouteSeasonContinuationServiceInterface::class, DungeonRouteSeasonContinuationService::class);
         $this->app->bind(DungeonRouteSearchServiceInterface::class, DungeonRouteSearchService::class);
         $this->app->bind(DungeonRouteKillZoneServiceInterface::class, DungeonRouteKillZoneService::class);
+        $this->app->bind(TestDungeonRouteGeneratorServiceInterface::class, TestDungeonRouteGeneratorService::class);
         $this->app->bind(ImageServiceInterface::class, ImageService::class);
         $this->app->bind(MessageBannerServiceInterface::class, MessageBannerService::class);
         $this->app->bind(MapDrawingServiceInterface::class, MapDrawingService::class);

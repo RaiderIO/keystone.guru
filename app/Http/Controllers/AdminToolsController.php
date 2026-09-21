@@ -9,6 +9,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\User;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
+use App\Service\DungeonRoute\TestDungeonRouteGeneratorServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use Exception;
@@ -19,9 +20,11 @@ use Session;
 
 class AdminToolsController extends Controller
 {
-    public function index(): View
+    public function index(TestDungeonRouteGeneratorServiceInterface $testDungeonRouteGeneratorService): View
     {
-        return view('admin.tools.list');
+        return view('admin.tools.list', [
+            'testDungeonRouteGeneratorAvailable' => $testDungeonRouteGeneratorService->isAvailable(),
+        ]);
     }
 
     public function combatlog(
