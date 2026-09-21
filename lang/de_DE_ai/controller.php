@@ -102,8 +102,8 @@ return [
             'upgrade_discarded'         => 'Der Upgrade-Entwurf wurde verworfen.',
         ],
         'continue_in_newer_season' => [
-            'limit_reached'   => '',
-            'no_newer_season' => '',
+            'limit_reached'   => 'Du hast die maximale Anzahl an Routen erreicht, die du erstellen kannst.',
+            'no_newer_season' => 'Diese Route kann nicht in einer neueren Saison fortgesetzt werden: Der Dungeon der Route gehört zu keiner, oder du hast sie dort bereits fortgesetzt.',
         ],
     ],
     'dungeonroutediscover' => [
@@ -200,8 +200,8 @@ return [
             'collection_updated'             => 'Sammlung aktualisiert',
             'collection_deleted'             => 'Sammlung gelöscht',
             'max_collections_reached'        => 'Du darfst höchstens :max Sammlungen haben.',
-            'collection_duplicated'          => '',
-            'collection_duplicated_left_out' => '',
+            'collection_duplicated'          => 'Sammlung dupliziert. Nur du kannst die Kopie sehen, bis du änderst, für wen sie sichtbar ist.',
+            'collection_duplicated_left_out' => '{1} :count Route wurde ausgelassen, weil sie nicht zur gewählten Saison passt.|[2,*] :count Routen wurden ausgelassen, weil sie nicht zur gewählten Saison passen.',
         ],
     ],
     'profile' => [

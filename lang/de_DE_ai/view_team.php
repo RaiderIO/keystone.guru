@@ -32,7 +32,7 @@ return [
             'title'                  => 'Routenliste',
             'add_route'              => 'Route hinzufügen',
             'add_route_no_moderator' => 'Du musst Moderator dieses Teams sein, um Routen hinzuzufügen',
-            'picker_title'           => '',
+            'picker_title'           => 'Routen zu %s hinzufügen',
         ],
         'tags' => [
             'title'       => 'Tags',
