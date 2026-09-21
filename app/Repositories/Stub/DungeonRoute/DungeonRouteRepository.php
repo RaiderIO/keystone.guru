@@ -121,4 +121,9 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     public function chunkBySeasonAndDungeonIds(?Season $season, ?Collection $dungeonIds, int $chunkSize, Closure $callback): void
     {
     }
+
+    public function getClonesOf(Collection $publicKeys): Collection
+    {
+        return collect();
+    }
 }

@@ -177,6 +177,44 @@ describe('DungeonrouteTable._getProfileActionsTemplateVariables', () => {
         // Assert
         expect(result.has_new_mapping_version).toBe(false);
     });
+
+    it('_getProfileActionsTemplateVariables_givenContinuationSeason_showsContinueInSeason', () => {
+        // Arrange
+        const getSpy = vi.spyOn(lang, 'get');
+        const row = buildRow({continuation_season: {id: 18, name: 'The War Within Season 3'}});
+
+        // Act
+        const result = DungeonrouteTable.prototype._getProfileActionsTemplateVariables(row);
+
+        // Assert
+        expect(result.show_continue_in_season).toBe(true);
+        expect(result.continuation_season_name).toBe('The War Within Season 3');
+        expect(getSpy).toHaveBeenCalledWith('js.route_continue_in_season_label', {season: 'The War Within Season 3'});
+        expect(getSpy).toHaveBeenCalledWith('js.route_continue_in_season_hint', {season: 'The War Within Season 3'});
+    });
+
+    it('_getProfileActionsTemplateVariables_givenNullContinuationSeason_hidesContinueInSeason', () => {
+        // Arrange
+        const row = buildRow({continuation_season: null});
+
+        // Act
+        const result = DungeonrouteTable.prototype._getProfileActionsTemplateVariables(row);
+
+        // Assert
+        expect(result.show_continue_in_season).toBe(false);
+        expect(result.continue_in_season_label).toBeNull();
+    });
+
+    it('_getProfileActionsTemplateVariables_givenRowWithoutContinuationSeason_hidesContinueInSeason', () => {
+        // Arrange: public listings carry no continuation_season key at all
+        const row = buildRow();
+
+        // Act
+        const result = DungeonrouteTable.prototype._getProfileActionsTemplateVariables(row);
+
+        // Assert
+        expect(result.show_continue_in_season).toBe(false);
+    });
 });
 
 describe('DungeonrouteTable._renderTitle', () => {

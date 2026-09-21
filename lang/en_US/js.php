@@ -226,6 +226,10 @@ return [
         enemies specific to previous seasons assigned to your pulls (Encrypted enemies for example) will be removed from all pulls.
         Shrouded enemies will be added to your route if they were part of your existing pulls. Are you sure you wish to continue with the migration?',
     'route_migration_successful'                      => 'Route migrated successfully',
+    'route_continue_in_season_label'                  => 'Continue in :season',
+    'route_continue_in_season_hint'                   => 'This route was made for an earlier season. Its dungeon is part of :season - continue the route there to use it in that season\'s collections.',
+    'route_continue_in_season_confirm_warning'        => 'A copy of this route will be made for :season, on the dungeon\'s latest mapping. The copy starts unpublished and only keeps the affixes that are part of :season. Your original route stays as it is. Do you wish to continue?',
+    'route_continue_in_season_successful'             => 'Route continued in the new season - you can find the copy in your routes',
     'sharing_label'                                   => 'Sharing',
     'route_table_published_state_unpublished'         => 'This route is unpublished',
     'route_table_published_state_team'                => 'This route is visible for all members of teams you are in',

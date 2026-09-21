@@ -71,6 +71,13 @@
                         <i class="fas fa-fast-forward"></i> {{migrate_to_shrouded_label}}
                     </a>
                 {{/if}}
+                {{#if show_continue_in_season }}
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item dungeonroute-continue-in-season cursor-pointer"
+                       data-publickey="{{public_key}}" data-season="{{continuation_season_name}}">
+                        <i class="fas fa-forward"></i> {{continue_in_season_label}}
+                    </a>
+                {{/if}}
                 {{> @partial-block}}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item dungeonroute-delete text-danger cursor-pointer" data-publickey="{{public_key}}">
@@ -82,6 +89,9 @@
     <div class="col">
         {{#if has_new_mapping_version}}
             <i class="fas fa-exclamation-triangle text-warning ps-2 pt-2" title="{{new_mapping_version_label}}" data-bs-toggle="tooltip"></i>
+        {{/if}}
+        {{#if show_continue_in_season}}
+            <i class="fas fa-calendar-alt text-info ps-2 pt-2" title="{{continue_in_season_hint}}" data-bs-toggle="tooltip"></i>
         {{/if}}
         {{#if is_upgrade_draft}}
             <span class="badge bg-info ms-2" title="{{upgrade_draft_badge_title}}" data-bs-toggle="tooltip">{{upgrade_draft_badge_label}}</span>

@@ -42,6 +42,8 @@ use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteKillZoneServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteSeasonContinuationServiceInterface;
+use App\Service\DungeonRoute\Exceptions\SeasonContinuationException;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\MDT\MDTExportStringServiceInterface;
@@ -73,11 +75,12 @@ class AjaxDungeonRouteController extends Controller
      * @throws Exception
      */
     public function get(
-        AjaxDungeonRouteListFormRequest      $request,
-        ThumbnailServiceInterface            $thumbnailService,
-        SeasonServiceInterface               $seasonService,
-        SeasonAffixGroupServiceInterface     $seasonAffixGroupService,
-        DungeonRouteKillZoneServiceInterface $dungeonRouteKillZoneService,
+        AjaxDungeonRouteListFormRequest                $request,
+        ThumbnailServiceInterface                      $thumbnailService,
+        SeasonServiceInterface                         $seasonService,
+        SeasonAffixGroupServiceInterface               $seasonAffixGroupService,
+        DungeonRouteKillZoneServiceInterface           $dungeonRouteKillZoneService,
+        DungeonRouteSeasonContinuationServiceInterface $seasonContinuationService,
     ) {
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);
@@ -274,9 +277,38 @@ class AjaxDungeonRouteController extends Controller
             if ($request->wantsPullForces()) {
                 self::addPullForces(collect($data), $dungeonRouteKillZoneService);
             }
+
+            // Only the author's and the team's own tables render the actions that use this
+            if ($mine || $teamPublicKey) {
+                self::addContinuationSeasons(collect($data), $seasonContinuationService);
+            }
         }
 
         return $result;
+    }
+
+    /**
+     * Stamps the newer season each route of one page can be continued in (or null) onto it.
+     *
+     * @param Collection<int, DungeonRoute> $dungeonRoutes
+     */
+    private static function addContinuationSeasons(
+        Collection                                     $dungeonRoutes,
+        DungeonRouteSeasonContinuationServiceInterface $seasonContinuationService,
+    ): void {
+        $continuationSeasons = $seasonContinuationService->getContinuationSeasons($dungeonRoutes);
+
+        foreach ($dungeonRoutes as $dungeonRoute) {
+            $continuationSeason = $continuationSeasons->get($dungeonRoute->id);
+
+            $dungeonRoute->setAttribute(
+                'continuation_season',
+                $continuationSeason === null ? null : [
+                    'id'   => $continuationSeason->id,
+                    'name' => $continuationSeason->name_long,
+                ],
+            );
+        }
     }
 
     /**
@@ -718,6 +750,30 @@ class AjaxDungeonRouteController extends Controller
         } else {
             return response(['result' => 'error']);
         }
+    }
+
+    /**
+     * @throws AuthorizationException
+     * @throws Throwable
+     */
+    public function continueInNewerSeason(
+        DungeonRouteSeasonContinuationServiceInterface $seasonContinuationService,
+        DungeonRoute                                   $dungeonRoute,
+    ): Response {
+        Gate::authorize('clone', $dungeonRoute);
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        abort_unless($user->canCreateDungeonRoute(), Http::FORBIDDEN, __('controller.dungeonroute.continue_in_newer_season.limit_reached'));
+
+        try {
+            $continuation = $seasonContinuationService->continueInNewerSeason($dungeonRoute);
+        } catch (SeasonContinuationException) {
+            abort(422, __('controller.dungeonroute.continue_in_newer_season.no_newer_season'));
+        }
+
+        return response(['public_key' => $continuation->public_key], Http::CREATED);
     }
 
     /**

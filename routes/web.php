@@ -805,6 +805,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
             Route::middleware('throttle:create-dungeonroute')->group(static function () {
                 Route::post('/clone/team/{team}', new AjaxDungeonRouteController()->cloneToTeam(...));
+                Route::post('/continue', new AjaxDungeonRouteController()->continueInNewerSeason(...))->name('ajax.dungeonroute.continue');
             });
 
             // The signature is relative: it covers the path and query string only, so whichever
