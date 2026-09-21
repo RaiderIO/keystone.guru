@@ -791,7 +791,6 @@
 
 /** Odd case where the background would otherwise be white and it'd show through the border */
 .enemy_icon.enemy_portrait.dangerous,
-.enemy_icon.enemy_portrait.rare,
 .enemy_icon.enemy_portrait.patrol {
     background-color: black;
 }

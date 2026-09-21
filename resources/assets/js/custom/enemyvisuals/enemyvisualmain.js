@@ -147,7 +147,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
         }
 
         // Dangerous = less space
-        if ((this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) || this.enemyvisual.enemy.isImportant() || this.enemyvisual.enemy.enemy_patrol_id !== null) {
+        if ((this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) || this.enemyvisual.enemy.isImportant() || this.enemyvisual.enemy.isRareNpc() || this.enemyvisual.enemy.enemy_patrol_id !== null) {
             width -= 2;
 
             // Obsolete enemies require additional subtraction to keep it looking nice
