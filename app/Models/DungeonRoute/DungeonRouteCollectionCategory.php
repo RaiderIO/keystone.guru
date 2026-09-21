@@ -9,9 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * The kind of routes a collection holds - what a viewer is signing up for when they open it.
- * Deliberately says nothing about key level: a "PUG friendly" collection is PUG friendly at any
- * key level.
+ * The difficulty level of the routes a collection holds - what a viewer is signing up for when they
+ * open it.
  *
  * @property int    $id
  * @property string $name

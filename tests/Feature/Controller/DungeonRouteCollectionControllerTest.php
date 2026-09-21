@@ -687,7 +687,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             $response = $this->actingAs($creator)->post(route('collections.savenew'), [
                 'name'            => 'ZzTestCategorisedCollection',
                 'published_state' => PublishedState::WORLD,
-                'category_id'     => DungeonRouteCollectionCategoryType::PugFriendly->id(),
+                'category_id'     => DungeonRouteCollectionCategoryType::Beginner->id(),
             ]);
 
             // Assert
@@ -699,7 +699,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
 
             $this->assertNotNull($dungeonRouteCollection);
             $this->assertSame(
-                DungeonRouteCollectionCategoryType::PugFriendly->id(),
+                DungeonRouteCollectionCategoryType::Beginner->id(),
                 $dungeonRouteCollection->dungeon_route_collection_category_id,
             );
         } finally {

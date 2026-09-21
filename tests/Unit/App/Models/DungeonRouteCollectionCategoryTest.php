@@ -38,7 +38,7 @@ final class DungeonRouteCollectionCategoryTest extends PublicTestCase
     {
         // Arrange
         $category = DungeonRouteCollectionCategory::query()
-            ->where('name', DungeonRouteCollectionCategoryType::PugFriendly->value)
+            ->where('name', DungeonRouteCollectionCategoryType::Beginner->value)
             ->firstOrFail();
 
         // Act
@@ -46,11 +46,11 @@ final class DungeonRouteCollectionCategoryTest extends PublicTestCase
 
         // Assert
         $this->assertSame(
-            __(sprintf('dungeonroutecollectioncategories.%s', DungeonRouteCollectionCategoryType::PugFriendly->value)),
+            __(sprintf('dungeonroutecollectioncategories.%s', DungeonRouteCollectionCategoryType::Beginner->value)),
             $result,
         );
         $this->assertNotSame(
-            sprintf('dungeonroutecollectioncategories.%s', DungeonRouteCollectionCategoryType::PugFriendly->value),
+            sprintf('dungeonroutecollectioncategories.%s', DungeonRouteCollectionCategoryType::Beginner->value),
             $result,
             'A missing translation would render the key itself',
         );

@@ -360,6 +360,34 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenTheSeededCategories_offersEveryDifficulty(): void
+    {
+        // Arrange
+        $viewer = User::factory()->create();
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index'));
+
+            // Assert
+            $response->assertOk();
+            $this->assertEqualsCanonicalizing(
+                [
+                    DungeonRouteCollectionCategoryType::Beginner->id(),
+                    DungeonRouteCollectionCategoryType::Intermediate->id(),
+                    DungeonRouteCollectionCategoryType::Expert->id(),
+                    DungeonRouteCollectionCategoryType::Mdi->id(),
+                ],
+                $response->viewData('categories')->pluck('id')->all(),
+            );
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
     public function index_givenAnOverlongSearch_failsValidation(): void
     {
         // Arrange
