@@ -198,7 +198,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
 
         if ($userGameVersion->has_seasons) {
             // Can still be null if there are no seasons for this dungeon, like in Classic
-            $attributes['season_id'] = $activeSeason?->id;
+            $attributes['season_id'] = $this->resolveSeasonIdForSave($dungeonRoute, $dungeon, $new, $activeSeason);
         }
 
         if ($user?->hasRole(Role::ROLE_ADMIN)) {
@@ -545,6 +545,19 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         }
 
         return ['level_min' => $levelMin, 'level_max' => $levelMax];
+    }
+
+    /**
+     * A route's season is decided when it is created and stays fixed for its lifetime; it is only
+     * resolved again when the route has no season at all, or when the save moved it to another dungeon.
+     */
+    private function resolveSeasonIdForSave(DungeonRoute $dungeonRoute, Dungeon $dungeon, bool $new, ?Season $editSeason): ?int
+    {
+        if ($new || $dungeonRoute->season_id === null || $dungeonRoute->dungeon_id !== $dungeon->id) {
+            return $editSeason?->id;
+        }
+
+        return $dungeonRoute->season_id;
     }
 
     private function resolveSeasonForEdit(Dungeon $dungeon): ?Season

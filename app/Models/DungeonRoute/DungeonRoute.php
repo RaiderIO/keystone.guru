@@ -80,7 +80,7 @@ use Override;
  * @property int                  $author_id
  * @property int                  $dungeon_id
  * @property int|null             $mapping_version_id
- * @property int                  $season_id
+ * @property int|null             $season_id
  * @property int                  $faction_id
  * @property int|null             $team_id
  * @property int                  $published_state_id

@@ -962,6 +962,93 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     }
 
     // -------------------------------------------------------------------------
+    // save — season assignment
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function save_givenExistingRouteOfEarlierSeason_keepsItsOwnSeason(): void
+    {
+        // Arrange
+        $route = DungeonRoute::factory()->create(['season_id' => Season::SEASON_TWW_S2]);
+
+        $service   = $this->buildService(seasonService: $this->seasonServiceReturning($this->loadTwwS3Season()));
+        $validated = [
+            'dungeon_id'          => $route->dungeon_id,
+            'faction_id'          => $route->faction_id,
+            'dungeon_route_title' => 'Season Kept Test',
+        ];
+
+        try {
+            // Act
+            $result = $service->save($route, $validated);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertEquals(
+                Season::SEASON_TWW_S2,
+                $route->fresh()->season_id,
+                'Editing a route must not move it to a newer season',
+            );
+        } finally {
+            $this->cleanupRoute($route);
+        }
+    }
+
+    #[Test]
+    public function save_givenExistingRouteWithoutSeason_assignsResolvedSeason(): void
+    {
+        // Arrange
+        $route = DungeonRoute::factory()->create(['season_id' => null]);
+
+        $service   = $this->buildService(seasonService: $this->seasonServiceReturning($this->loadTwwS3Season()));
+        $validated = [
+            'dungeon_id'          => $route->dungeon_id,
+            'faction_id'          => $route->faction_id,
+            'dungeon_route_title' => 'Season Backfill Test',
+        ];
+
+        try {
+            // Act
+            $result = $service->save($route, $validated);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertEquals(Season::SEASON_TWW_S3, $route->fresh()->season_id);
+        } finally {
+            $this->cleanupRoute($route);
+        }
+    }
+
+    #[Test]
+    public function save_givenExistingRouteMovedToAnotherDungeon_resolvesSeasonAgain(): void
+    {
+        // Arrange
+        $route = DungeonRoute::factory()->create(['season_id' => Season::SEASON_TWW_S2]);
+
+        $otherDungeon = $this->getDungeonWithNonFacadeFloor(
+            static fn(Builder $query) => $query->whereNotNull('challenge_mode_id')->where('id', '!=', $route->dungeon_id),
+        );
+
+        $service   = $this->buildService(seasonService: $this->seasonServiceReturning($this->loadTwwS3Season()));
+        $validated = [
+            'dungeon_id'          => $otherDungeon->id,
+            'faction_id'          => $route->faction_id,
+            'dungeon_route_title' => 'Season Redetermined Test',
+        ];
+
+        try {
+            // Act
+            $result = $service->save($route, $validated);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertEquals(Season::SEASON_TWW_S3, $route->fresh()->season_id);
+        } finally {
+            $this->cleanupRoute($route);
+        }
+    }
+
+    // -------------------------------------------------------------------------
     // save — dungeon start map icon
     // -------------------------------------------------------------------------
 
