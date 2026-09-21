@@ -19,6 +19,7 @@ use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\MapIcon;
 use App\Models\MountableArea;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\Polyline;
 use App\Models\Traits\SeederModel;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
@@ -370,7 +371,11 @@ class MappingVersion extends Model
 
         if ($this->facade_enabled && $useFacade) {
             $enemyPacks = $enemyPacks->map(function (EnemyPack $enemyPack) use ($coordinatesService) {
-                $newFloor = $this->convertVerticesForFacade($coordinatesService, $enemyPack, $enemyPack->floor);
+                if ($enemyPack->polyline === null) {
+                    return $enemyPack;
+                }
+
+                $newFloor = $this->convertVerticesForFacade($coordinatesService, $enemyPack->polyline, $enemyPack->floor);
                 $enemyPack->setRelation('floor', $newFloor);
                 $enemyPack->floor_id = $newFloor->id;
 
@@ -691,6 +696,11 @@ class MappingVersion extends Model
         static::deleting(static function (MappingVersion $mappingVersion) {
             $mappingVersion->dungeonFloorSwitchMarkers()->delete();
             $mappingVersion->enemies()->delete();
+            // A mass delete on the relation skips EnemyPack::deleting, which is what deletes a pack's polyline
+            Polyline::query()
+                ->where('model_class', EnemyPack::class)
+                ->whereIn('model_id', $mappingVersion->enemyPacks()->select('id'))
+                ->delete();
             $mappingVersion->enemyPacks()->delete();
 
             foreach ($mappingVersion->enemyPatrols as $enemyPatrol) {

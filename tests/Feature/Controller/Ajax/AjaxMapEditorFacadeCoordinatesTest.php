@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App\Logic\Structs\LatLng;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
@@ -213,6 +214,80 @@ final class AjaxMapEditorFacadeCoordinatesTest extends AjaxPublicTestCase
     }
 
     /**
+     * The admin map editor draws packs on real floors: those vertices and that floor are stored exactly as they came
+     * in, the same as when the pack still held its own vertices.
+     */
+    #[Test]
+    public function store_givenEnemyPackOnRealFloorOfFacadeMappingVersion_storesVerticesVerbatim(): void
+    {
+        // Arrange
+        [$mappingVersion, , , $realFloor] = $this->findConvertibleFacadeLocation();
+
+        $verticesJson = json_encode([['lat' => -100.5, 'lng' => 100.5], ['lat' => -120.5, 'lng' => 120.5], ['lat' => -110.5, 'lng' => 130.5]]);
+        $enemyPackId  = null;
+
+        try {
+            // Act
+            $response = $this->post(route('ajax.admin.enemypack.create', ['mappingVersion' => $mappingVersion]), $this->enemyPackPayload($mappingVersion, $realFloor, $verticesJson));
+
+            // Assert
+            $response->assertCreated();
+            $enemyPackId = json_decode($response->content(), true)['id'];
+
+            /** @var EnemyPack $storedEnemyPack */
+            $storedEnemyPack = EnemyPack::query()->findOrFail($enemyPackId);
+            $this->assertEquals($realFloor->id, $storedEnemyPack->floor_id);
+            $this->assertEquals($verticesJson, $storedEnemyPack->polyline->vertices_json);
+        } finally {
+            $this->deleteEnemyPack($enemyPackId);
+        }
+    }
+
+    /**
+     * A pack posted on the facade floor goes through the same conversion as every other polyline owner: stored on the
+     * real floor its first vertex belongs to - where its enemies live - with the facade vertices echoed back. It used
+     * to be stored verbatim on the facade floor, which left it on a floor that the split floors view never shows.
+     */
+    #[Test]
+    public function store_givenEnemyPackOnFacadeFloor_savesVerticesOnRealFloorAndEchoesFacadeVertices(): void
+    {
+        // Arrange
+        [$mappingVersion, $facadeFloor, $facadeLatLng, $expectedFloor] = $this->findConvertibleFacadeLocation();
+
+        $verticesJson = json_encode([$facadeLatLng->toArray(), $facadeLatLng->toArray(), $facadeLatLng->toArray()]);
+        $enemyPackId  = null;
+
+        try {
+            // Act
+            $response = $this->post(route('ajax.admin.enemypack.create', ['mappingVersion' => $mappingVersion]), $this->enemyPackPayload($mappingVersion, $facadeFloor, $verticesJson));
+
+            // Assert - the client gets its own facade vertices back on the facade floor
+            $response->assertCreated();
+            $responseArr = json_decode($response->content(), true);
+            $enemyPackId = $responseArr['id'];
+            $this->assertEquals($facadeFloor->id, $responseArr['floor_id']);
+            $this->assertEquals($verticesJson, $responseArr['polyline']['vertices_json']);
+
+            // ... while the stored pack and its vertices sit on the real floor
+            /** @var EnemyPack $storedEnemyPack */
+            $storedEnemyPack = EnemyPack::query()->findOrFail($enemyPackId);
+            $this->assertEquals($expectedFloor->id, $storedEnemyPack->floor_id);
+            $this->assertNotEquals($verticesJson, $storedEnemyPack->polyline->vertices_json);
+
+            // ... and the facade map context converts them back to what was drawn
+            $mapContextEnemyPack = $mappingVersion->mapContextEnemyPacks(app(CoordinatesServiceInterface::class), true)
+                ->firstOrFail(static fn(EnemyPack $enemyPack) => $enemyPack->id === $enemyPackId);
+            $this->assertEquals($facadeFloor->id, $mapContextEnemyPack->floor_id);
+            foreach (json_decode($mapContextEnemyPack->polyline->vertices_json, true) as $vertex) {
+                $this->assertEqualsWithDelta($facadeLatLng->getLat(), $vertex['lat'], 0.0001);
+                $this->assertEqualsWithDelta($facadeLatLng->getLng(), $vertex['lng'], 0.0001);
+            }
+        } finally {
+            $this->deleteEnemyPack($enemyPackId);
+        }
+    }
+
+    /**
      * A floor union positions a floor onto the facade floor, so its own floor_id IS the facade floor
      * and its lat/lng are facade coordinates. Converting them would move every floor it places.
      */
@@ -310,6 +385,34 @@ final class AjaxMapEditorFacadeCoordinatesTest extends AjaxPublicTestCase
             'dungeon_id'         => $mappingVersion->dungeon_id,
             'mapping_version_id' => $mappingVersion->id,
         ]);
+    }
+
+    /** @return array<string, mixed> */
+    private function enemyPackPayload(MappingVersion $mappingVersion, Floor $floor, string $verticesJson): array
+    {
+        return [
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $floor->id,
+            'teeming'            => null,
+            'faction'            => 'any',
+            'label'              => 'Enemy pack',
+            'polyline'           => [
+                'color'          => '#f00000',
+                'color_animated' => null,
+                'weight'         => EnemyPack::DEFAULT_WEIGHT,
+                'vertices_json'  => $verticesJson,
+            ],
+        ];
+    }
+
+    private function deleteEnemyPack(?int $enemyPackId): void
+    {
+        if ($enemyPackId === null) {
+            return;
+        }
+
+        Polyline::query()->where('model_id', $enemyPackId)->where('model_class', EnemyPack::class)->delete();
+        EnemyPack::query()->whereKey($enemyPackId)->delete();
     }
 
     /** @return array<string, mixed> */

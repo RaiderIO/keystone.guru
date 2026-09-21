@@ -3,44 +3,48 @@
 namespace App\Models;
 
 use App\Models\Floor\Floor;
-use App\Models\Interfaces\ConvertsVerticesInterface;
-use App\Models\Interfaces\HasVerticesInterface;
-use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
+use App\Models\Interfaces\HasPolylineInterface;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Traits\HasVertices;
+use App\Models\Traits\HasPolyline;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Override;
 
 /**
- * @property int         $id
- * @property int         $mapping_version_id
- * @property int         $floor_id
- * @property int         $group
- * @property string      $teeming
- * @property string      $faction
- * @property string|null $color
- * @property string|null $color_animated
- * @property string      $label
- * @property string      $vertices_json
+ * @property int      $id
+ * @property int      $mapping_version_id
+ * @property int      $floor_id
+ * @property int      $group
+ * @property string   $teeming
+ * @property string   $faction
+ * @property string   $label
+ * @property int|null $polyline_id
  *
  * @property Floor                          $floor
+ * @property Polyline|null                  $polyline
  * @property EloquentCollection<int, Enemy> $enemies
  *
  * @mixin Eloquent
  */
-class EnemyPack extends Model implements HasVerticesInterface, ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
+class EnemyPack extends Model implements HasPolylineInterface, MappingModelCloneableInterface, MappingModelInterface
 {
-    use CloneForNewMappingVersionNoRelations;
-    use HasVertices;
+    use HasPolyline;
     use SeederModel;
 
+    /** Mirrors the front-end's c.map.enemypack.defaultColor() */
+    public const string DEFAULT_COLOR = '#5993D2';
+
+    public const int DEFAULT_WEIGHT = 1;
+
     public $timestamps = false;
+
+    public $with = ['polyline'];
 
     protected $fillable = [
         'id',
@@ -49,15 +53,17 @@ class EnemyPack extends Model implements HasVerticesInterface, ConvertsVerticesI
         'group',
         'teeming',
         'faction',
-        'color',
-        'color_animated',
         'label',
-        'vertices_json',
+        'polyline_id',
     ];
 
     protected $hidden = [
         'mappingVersion',
         'floor',
+        'polyline_id',
+        'color',
+        'color_animated',
+        'vertices_json',
     ];
 
     protected function casts(): array
@@ -66,6 +72,7 @@ class EnemyPack extends Model implements HasVerticesInterface, ConvertsVerticesI
             'mapping_version_id' => 'integer',
             'floor_id'           => 'integer',
             'group'              => 'integer',
+            'polyline_id'        => 'integer',
         ];
     }
 
@@ -98,5 +105,33 @@ class EnemyPack extends Model implements HasVerticesInterface, ConvertsVerticesI
     public function getDungeonId(): ?int
     {
         return $this->floor->dungeon_id;
+    }
+
+    public function cloneForNewMappingVersion(
+        MappingVersion         $mappingVersion,
+        ?MappingModelInterface $newParent = null,
+    ): EnemyPack {
+        /** @var static $clonedEnemyPack */
+        $clonedEnemyPack         = clone $this;
+        $clonedEnemyPack->exists = false;
+        unset($clonedEnemyPack->id, $clonedEnemyPack->color, $clonedEnemyPack->color_animated, $clonedEnemyPack->vertices_json);
+        $clonedEnemyPack->mapping_version_id = $mappingVersion->id;
+        $clonedEnemyPack->save();
+
+        $clonedPolyline = $this->polyline?->cloneForNewMappingVersion($mappingVersion, $clonedEnemyPack);
+        $clonedEnemyPack->update(['polyline_id' => $clonedPolyline?->id]);
+        $clonedEnemyPack->setRelation('polyline', $clonedPolyline);
+
+        return $clonedEnemyPack;
+    }
+
+    #[Override]
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::deleting(static function (EnemyPack $enemyPack) {
+            $enemyPack->polyline?->delete();
+        });
     }
 }

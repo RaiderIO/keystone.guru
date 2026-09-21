@@ -3,19 +3,20 @@
 namespace App\Http\Requests\EnemyPatrol;
 
 use App\Http\Requests\Traits\CastInputData;
+use App\Http\Requests\Traits\ValidatesMappingPolyline;
 use App\Models\Enemy;
 use App\Models\EnemyPatrol;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Polyline;
-use App\Rules\JsonStringCountRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class EnemyPatrolFormRequest extends FormRequest
 {
     use CastInputData;
+    use ValidatesMappingPolyline;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -34,7 +35,7 @@ class EnemyPatrolFormRequest extends FormRequest
     /** @return array<string, mixed> */
     public function rules(): array
     {
-        return [
+        return array_merge([
             'id'                 => 'int',
             'mapping_version_id' => [
                 'required',
@@ -56,14 +57,7 @@ class EnemyPatrolFormRequest extends FormRequest
                     null,
                 ])),
             ],
-            'faction'                 => [Rule::in(array_merge(array_keys(Faction::ALL), ['any']))],
-            'polyline.color'          => 'string',
-            'polyline.color_animated' => 'nullable|string',
-            'polyline.weight'         => 'int',
-            'polyline.vertices_json'  => [
-                'json',
-                new JsonStringCountRule(2),
-            ],
-        ];
+            'faction' => [Rule::in(array_merge(array_keys(Faction::ALL), ['any']))],
+        ], $this->mappingPolylineRules());
     }
 }

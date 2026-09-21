@@ -723,9 +723,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::put('/enemy/{enemy}', new AjaxEnemyController()->store(...));
                     Route::delete('/enemy/{enemy}', new AjaxEnemyController()->delete(...));
 
-                    Route::post('/enemypack', new AjaxEnemyPackController()->store(...));
-                    Route::put('/enemypack/{enemyPack}', new AjaxEnemyPackController()->store(...));
-                    Route::delete('/enemypack/{enemyPack}', new AjaxEnemyPackController()->delete(...));
+                    Route::post('/enemypack', new AjaxEnemyPackController()->store(...))->name('ajax.admin.enemypack.create');
+                    Route::put('/enemypack/{enemyPack}', new AjaxEnemyPackController()->store(...))->name('ajax.admin.enemypack.update');
+                    Route::delete('/enemypack/{enemyPack}', new AjaxEnemyPackController()->delete(...))->name('ajax.admin.enemypack.delete');
 
                     Route::post('/enemypatrol', new AjaxEnemyPatrolController()->store(...))->name('ajax.admin.enemypatrol.create');
                     Route::put('/enemypatrol/{enemyPatrol}', new AjaxEnemyPatrolController()->store(...))->name('ajax.admin.enemypatrol.update');

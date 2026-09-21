@@ -20,6 +20,9 @@ class MapContextMappingVersionData implements Arrayable
 {
     use RemembersToFile;
 
+    /** Bump whenever the shape of the cached data changes, so a deploy never serves the previous shape */
+    private const int DATA_VERSION = 2;
+
     public function __construct(
         protected CacheServiceInterface       $cacheService,
         protected CoordinatesServiceInterface $coordinatesService,
@@ -45,8 +48,14 @@ class MapContextMappingVersionData implements Arrayable
         ]);
 
         // Get the DungeonData
-        $mappingVersionDataKey = sprintf('dungeon_%d_%d_%s', $this->dungeon->id, $this->mappingVersion->id, $this->mapFacadeStyle);
-        $mappingVersionData    = $this->rememberLocal($mappingVersionDataKey, 86400, fn() => $this->cacheService->remember(
+        $mappingVersionDataKey = sprintf(
+            'dungeon_%d_%d_%s_v%d',
+            $this->dungeon->id,
+            $this->mappingVersion->id,
+            $this->mapFacadeStyle,
+            self::DATA_VERSION,
+        );
+        $mappingVersionData = $this->rememberLocal($mappingVersionDataKey, 86400, fn() => $this->cacheService->remember(
             $mappingVersionDataKey,
             function () {
                 $useFacade = $this->mapFacadeStyle === 'facade';

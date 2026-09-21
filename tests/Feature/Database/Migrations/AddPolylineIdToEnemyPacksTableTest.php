@@ -40,7 +40,7 @@ final class AddPolylineIdToEnemyPacksTableTest extends PublicTestCase
             $enemyPack = $this->findEnemyPack($enemyPackId);
             $this->assertNotNull($enemyPack->polyline_id);
 
-            $polyline = DB::table('polylines')->find($enemyPack->polyline_id);
+            $polyline = $this->findPolyline($enemyPack->polyline_id);
             $this->assertSame(EnemyPack::class, $polyline->model_class);
             $this->assertSame($enemyPackId, (int)$polyline->model_id);
             $this->assertSame('#ff002b', $polyline->color);
@@ -65,7 +65,7 @@ final class AddPolylineIdToEnemyPacksTableTest extends PublicTestCase
             $this->runBackfill();
 
             // Assert
-            $polyline = DB::table('polylines')->find($this->findEnemyPack($enemyPackId)->polyline_id);
+            $polyline = $this->findPolyline($this->findEnemyPack($enemyPackId)->polyline_id);
             $this->assertSame('#5993D2', $polyline->color);
         } finally {
             DB::rollBack();
@@ -144,7 +144,7 @@ final class AddPolylineIdToEnemyPacksTableTest extends PublicTestCase
             $this->runBackfill();
 
             // Assert
-            $polyline = DB::table('polylines')->find($polylineId);
+            $polyline = $this->findPolyline($polylineId);
             $this->assertSame('#123456', $polyline->color);
             $this->assertSame('[]', $polyline->vertices_json);
             $this->assertSame(1, DB::table('polylines')
@@ -182,6 +182,13 @@ final class AddPolylineIdToEnemyPacksTableTest extends PublicTestCase
 
     private function findEnemyPack(int $enemyPackId): stdClass
     {
+        /** @var stdClass */
         return DB::table('enemy_packs')->find($enemyPackId);
+    }
+
+    private function findPolyline(int $polylineId): stdClass
+    {
+        /** @var stdClass */
+        return DB::table('polylines')->find($polylineId);
     }
 }
