@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\Enemy;
+use App\Models\Mapping\MappingChangeLog;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
@@ -40,14 +41,20 @@ final class AjaxEnemyControllerStoreTest extends AjaxPublicTestCase
             $queries[] = $query->sql;
         });
 
-        // Act
-        $response = $this->put(sprintf('/ajax/admin/mappingVersion/%d/enemy/%d', $mappingVersion->id, $enemy->id), $payload);
+        $lastMappingChangeLogId = (int)MappingChangeLog::query()->max('id');
 
-        // Assert
-        $response->assertSuccessful();
-        $this->assertEmpty(
-            array_filter($queries, static fn(string $sql) => str_contains($sql, 'enemy_active_auras')),
-            'Saving an enemy must not query enemy_active_auras',
-        );
+        try {
+            // Act
+            $response = $this->put(sprintf('/ajax/admin/mappingVersion/%d/enemy/%d', $mappingVersion->id, $enemy->id), $payload);
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertEmpty(
+                array_filter($queries, static fn(string $sql) => str_contains($sql, 'enemy_active_auras')),
+                'Saving an enemy must not query enemy_active_auras',
+            );
+        } finally {
+            MappingChangeLog::query()->where('id', '>', $lastMappingChangeLogId)->delete();
+        }
     }
 }
