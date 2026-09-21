@@ -6,10 +6,13 @@
         "group": 6,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 6",
-        "vertices_json": "[{\"lat\":-195.5099,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":197.6776},{\"lat\":-195.5099,\"lng\":197.6776}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-195.5099,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":197.6776},{\"lat\":-195.5099,\"lng\":197.6776}]"
+        }
     },
     {
         "id": 7705,
@@ -18,10 +21,13 @@
         "group": 11,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 11",
-        "vertices_json": "[{\"lat\":-133.3652,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":197.0774},{\"lat\":-133.3652,\"lng\":197.0774}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-133.3652,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":197.0774},{\"lat\":-133.3652,\"lng\":197.0774}]"
+        }
     },
     {
         "id": 7706,
@@ -30,10 +36,13 @@
         "group": 12,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 12",
-        "vertices_json": "[{\"lat\":-118.5901,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":199.3709},{\"lat\":-118.5901,\"lng\":199.3709}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-118.5901,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":199.3709},{\"lat\":-118.5901,\"lng\":199.3709}]"
+        }
     },
     {
         "id": 7707,
@@ -42,10 +51,13 @@
         "group": 17,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 17",
-        "vertices_json": "[{\"lat\":-87.7155,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":204.6502},{\"lat\":-87.7155,\"lng\":204.6502}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-87.7155,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":204.6502},{\"lat\":-87.7155,\"lng\":204.6502}]"
+        }
     },
     {
         "id": 7709,
@@ -54,10 +66,13 @@
         "group": 16,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 16",
-        "vertices_json": "[{\"lat\":-102.5734,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":199.2592},{\"lat\":-102.5734,\"lng\":199.2592}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-102.5734,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":199.2592},{\"lat\":-102.5734,\"lng\":199.2592}]"
+        }
     },
     {
         "id": 7711,
@@ -66,10 +81,13 @@
         "group": 7,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 7",
-        "vertices_json": "[{\"lat\":-179.8199,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":198.154},{\"lat\":-179.8199,\"lng\":198.154}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-179.8199,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":198.154},{\"lat\":-179.8199,\"lng\":198.154}]"
+        }
     },
     {
         "id": 7712,
@@ -78,10 +96,13 @@
         "group": 14,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 14",
-        "vertices_json": "[{\"lat\":-113.0104,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":175.8616},{\"lat\":-113.0104,\"lng\":175.8616}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-113.0104,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":175.8616},{\"lat\":-113.0104,\"lng\":175.8616}]"
+        }
     },
     {
         "id": 7713,
@@ -90,10 +111,13 @@
         "group": 15,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 15",
-        "vertices_json": "[{\"lat\":-109.894,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":219.9005},{\"lat\":-109.894,\"lng\":219.9005}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-109.894,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":219.9005},{\"lat\":-109.894,\"lng\":219.9005}]"
+        }
     },
     {
         "id": 7714,
@@ -102,10 +126,13 @@
         "group": 8,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 8",
-        "vertices_json": "[{\"lat\":-161.6448,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":198.2716},{\"lat\":-161.6448,\"lng\":198.2716}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-161.6448,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":198.2716},{\"lat\":-161.6448,\"lng\":198.2716}]"
+        }
     },
     {
         "id": 7715,
@@ -114,10 +141,13 @@
         "group": 13,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 13",
-        "vertices_json": "[{\"lat\":-110.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":184.0222},{\"lat\":-110.8255,\"lng\":184.0222}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-110.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":184.0222},{\"lat\":-110.8255,\"lng\":184.0222}]"
+        }
     },
     {
         "id": 7716,
@@ -126,10 +156,13 @@
         "group": 9,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 9",
-        "vertices_json": "[{\"lat\":-150.4625,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":191.3247},{\"lat\":-150.4625,\"lng\":191.3247}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-150.4625,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":191.3247},{\"lat\":-150.4625,\"lng\":191.3247}]"
+        }
     },
     {
         "id": 7717,
@@ -138,10 +171,13 @@
         "group": 10,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 10",
-        "vertices_json": "[{\"lat\":-150.2548,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":199.3953},{\"lat\":-150.2548,\"lng\":199.3953}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-150.2548,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":199.3953},{\"lat\":-150.2548,\"lng\":199.3953}]"
+        }
     },
     {
         "id": 7718,
@@ -150,10 +186,13 @@
         "group": 18,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 18",
-        "vertices_json": "[{\"lat\":-61.1335,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":208.4451},{\"lat\":-61.1335,\"lng\":208.4451}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-61.1335,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":208.4451},{\"lat\":-61.1335,\"lng\":208.4451}]"
+        }
     },
     {
         "id": 7719,
@@ -162,10 +201,13 @@
         "group": 19,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 19",
-        "vertices_json": "[{\"lat\":-132.0859,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":174.2525},{\"lat\":-132.0859,\"lng\":174.2525}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-132.0859,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":174.2525},{\"lat\":-132.0859,\"lng\":174.2525}]"
+        }
     },
     {
         "id": 7913,
@@ -174,10 +216,13 @@
         "group": 6,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 6",
-        "vertices_json": "[{\"lat\":-195.5099,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":197.6776},{\"lat\":-195.5099,\"lng\":197.6776}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-195.5099,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":197.6776},{\"lat\":-195.5099,\"lng\":197.6776}]"
+        }
     },
     {
         "id": 7914,
@@ -186,10 +231,13 @@
         "group": 11,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 11",
-        "vertices_json": "[{\"lat\":-133.3652,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":197.0774},{\"lat\":-133.3652,\"lng\":197.0774}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-133.3652,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":197.0774},{\"lat\":-133.3652,\"lng\":197.0774}]"
+        }
     },
     {
         "id": 7915,
@@ -198,10 +246,13 @@
         "group": 12,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 12",
-        "vertices_json": "[{\"lat\":-118.5901,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":199.3709},{\"lat\":-118.5901,\"lng\":199.3709}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-118.5901,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":199.3709},{\"lat\":-118.5901,\"lng\":199.3709}]"
+        }
     },
     {
         "id": 7916,
@@ -210,10 +261,13 @@
         "group": 17,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 17",
-        "vertices_json": "[{\"lat\":-87.7155,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":204.6502},{\"lat\":-87.7155,\"lng\":204.6502}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-87.7155,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":204.6502},{\"lat\":-87.7155,\"lng\":204.6502}]"
+        }
     },
     {
         "id": 7918,
@@ -222,10 +276,13 @@
         "group": 16,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 16",
-        "vertices_json": "[{\"lat\":-102.5734,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":199.2592},{\"lat\":-102.5734,\"lng\":199.2592}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-102.5734,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":199.2592},{\"lat\":-102.5734,\"lng\":199.2592}]"
+        }
     },
     {
         "id": 7920,
@@ -234,10 +291,13 @@
         "group": 7,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 7",
-        "vertices_json": "[{\"lat\":-179.8199,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":198.154},{\"lat\":-179.8199,\"lng\":198.154}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-179.8199,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":198.154},{\"lat\":-179.8199,\"lng\":198.154}]"
+        }
     },
     {
         "id": 7921,
@@ -246,10 +306,13 @@
         "group": 14,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 14",
-        "vertices_json": "[{\"lat\":-113.0104,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":175.8616},{\"lat\":-113.0104,\"lng\":175.8616}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-113.0104,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":175.8616},{\"lat\":-113.0104,\"lng\":175.8616}]"
+        }
     },
     {
         "id": 7922,
@@ -258,10 +321,13 @@
         "group": 15,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 15",
-        "vertices_json": "[{\"lat\":-109.894,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":219.9005},{\"lat\":-109.894,\"lng\":219.9005}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-109.894,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":219.9005},{\"lat\":-109.894,\"lng\":219.9005}]"
+        }
     },
     {
         "id": 7923,
@@ -270,10 +336,13 @@
         "group": 8,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 8",
-        "vertices_json": "[{\"lat\":-161.6448,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":198.2716},{\"lat\":-161.6448,\"lng\":198.2716}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-161.6448,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":198.2716},{\"lat\":-161.6448,\"lng\":198.2716}]"
+        }
     },
     {
         "id": 7924,
@@ -282,10 +351,13 @@
         "group": 13,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 13",
-        "vertices_json": "[{\"lat\":-110.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":184.0222},{\"lat\":-110.8255,\"lng\":184.0222}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-110.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":184.0222},{\"lat\":-110.8255,\"lng\":184.0222}]"
+        }
     },
     {
         "id": 7925,
@@ -294,10 +366,13 @@
         "group": 9,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 9",
-        "vertices_json": "[{\"lat\":-150.4625,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":191.3247},{\"lat\":-150.4625,\"lng\":191.3247}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-150.4625,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":191.3247},{\"lat\":-150.4625,\"lng\":191.3247}]"
+        }
     },
     {
         "id": 7926,
@@ -306,10 +381,13 @@
         "group": 10,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 10",
-        "vertices_json": "[{\"lat\":-150.2548,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":199.3953},{\"lat\":-150.2548,\"lng\":199.3953}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-150.2548,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":199.3953},{\"lat\":-150.2548,\"lng\":199.3953}]"
+        }
     },
     {
         "id": 7927,
@@ -318,10 +396,13 @@
         "group": 18,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 18",
-        "vertices_json": "[{\"lat\":-61.1335,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":208.4451},{\"lat\":-61.1335,\"lng\":208.4451}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-61.1335,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":208.4451},{\"lat\":-61.1335,\"lng\":208.4451}]"
+        }
     },
     {
         "id": 7928,
@@ -330,10 +411,13 @@
         "group": 19,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 19",
-        "vertices_json": "[{\"lat\":-132.0859,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":174.2525},{\"lat\":-132.0859,\"lng\":174.2525}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-132.0859,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":174.2525},{\"lat\":-132.0859,\"lng\":174.2525}]"
+        }
     },
     {
         "id": 8831,
@@ -342,10 +426,13 @@
         "group": 6,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 6",
-        "vertices_json": "[{\"lat\":-195.5099,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":197.6776},{\"lat\":-195.5099,\"lng\":197.6776}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-195.5099,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":197.6776},{\"lat\":-195.5099,\"lng\":197.6776}]"
+        }
     },
     {
         "id": 8832,
@@ -354,10 +441,13 @@
         "group": 11,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 11",
-        "vertices_json": "[{\"lat\":-133.3652,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":197.0774},{\"lat\":-133.3652,\"lng\":197.0774}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-133.3652,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":197.0774},{\"lat\":-133.3652,\"lng\":197.0774}]"
+        }
     },
     {
         "id": 8833,
@@ -366,10 +456,13 @@
         "group": 12,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 12",
-        "vertices_json": "[{\"lat\":-118.5901,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":199.3709},{\"lat\":-118.5901,\"lng\":199.3709}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-118.5901,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":199.3709},{\"lat\":-118.5901,\"lng\":199.3709}]"
+        }
     },
     {
         "id": 8834,
@@ -378,10 +471,13 @@
         "group": 17,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 17",
-        "vertices_json": "[{\"lat\":-87.7155,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":204.6502},{\"lat\":-87.7155,\"lng\":204.6502}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-87.7155,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":204.6502},{\"lat\":-87.7155,\"lng\":204.6502}]"
+        }
     },
     {
         "id": 8835,
@@ -390,10 +486,13 @@
         "group": 16,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 16",
-        "vertices_json": "[{\"lat\":-102.5734,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":199.2592},{\"lat\":-102.5734,\"lng\":199.2592}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-102.5734,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":199.2592},{\"lat\":-102.5734,\"lng\":199.2592}]"
+        }
     },
     {
         "id": 8836,
@@ -402,10 +501,13 @@
         "group": 7,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 7",
-        "vertices_json": "[{\"lat\":-179.8199,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":198.154},{\"lat\":-179.8199,\"lng\":198.154}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-179.8199,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":198.154},{\"lat\":-179.8199,\"lng\":198.154}]"
+        }
     },
     {
         "id": 8837,
@@ -414,10 +516,13 @@
         "group": 14,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 14",
-        "vertices_json": "[{\"lat\":-113.0104,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":175.8616},{\"lat\":-113.0104,\"lng\":175.8616}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-113.0104,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":175.8616},{\"lat\":-113.0104,\"lng\":175.8616}]"
+        }
     },
     {
         "id": 8838,
@@ -426,10 +531,13 @@
         "group": 15,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 15",
-        "vertices_json": "[{\"lat\":-109.894,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":219.9005},{\"lat\":-109.894,\"lng\":219.9005}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-109.894,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":219.9005},{\"lat\":-109.894,\"lng\":219.9005}]"
+        }
     },
     {
         "id": 8839,
@@ -438,10 +546,13 @@
         "group": 8,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 8",
-        "vertices_json": "[{\"lat\":-161.6448,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":198.2716},{\"lat\":-161.6448,\"lng\":198.2716}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-161.6448,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":198.2716},{\"lat\":-161.6448,\"lng\":198.2716}]"
+        }
     },
     {
         "id": 8840,
@@ -450,10 +561,13 @@
         "group": 13,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 13",
-        "vertices_json": "[{\"lat\":-110.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":184.0222},{\"lat\":-110.8255,\"lng\":184.0222}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-110.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":184.0222},{\"lat\":-110.8255,\"lng\":184.0222}]"
+        }
     },
     {
         "id": 8841,
@@ -462,10 +576,13 @@
         "group": 9,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 9",
-        "vertices_json": "[{\"lat\":-150.4625,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":191.3247},{\"lat\":-150.4625,\"lng\":191.3247}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-150.4625,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":191.3247},{\"lat\":-150.4625,\"lng\":191.3247}]"
+        }
     },
     {
         "id": 8842,
@@ -474,10 +591,13 @@
         "group": 10,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 10",
-        "vertices_json": "[{\"lat\":-150.2548,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":199.3953},{\"lat\":-150.2548,\"lng\":199.3953}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-150.2548,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":199.3953},{\"lat\":-150.2548,\"lng\":199.3953}]"
+        }
     },
     {
         "id": 8843,
@@ -486,10 +606,13 @@
         "group": 18,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 18",
-        "vertices_json": "[{\"lat\":-61.1335,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":208.4451},{\"lat\":-61.1335,\"lng\":208.4451}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-61.1335,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":208.4451},{\"lat\":-61.1335,\"lng\":208.4451}]"
+        }
     },
     {
         "id": 8844,
@@ -498,10 +621,13 @@
         "group": 19,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 19",
-        "vertices_json": "[{\"lat\":-132.0859,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":174.2525},{\"lat\":-132.0859,\"lng\":174.2525}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-132.0859,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":174.2525},{\"lat\":-132.0859,\"lng\":174.2525}]"
+        }
     },
     {
         "id": 8884,
@@ -510,10 +636,13 @@
         "group": 6,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 6",
-        "vertices_json": "[{\"lat\":-195.5099,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":197.6776},{\"lat\":-195.5099,\"lng\":197.6776}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-195.5099,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":197.6776},{\"lat\":-195.5099,\"lng\":197.6776}]"
+        }
     },
     {
         "id": 8885,
@@ -522,10 +651,13 @@
         "group": 11,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 11",
-        "vertices_json": "[{\"lat\":-133.3652,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":197.0774},{\"lat\":-133.3652,\"lng\":197.0774}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-133.3652,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":197.0774},{\"lat\":-133.3652,\"lng\":197.0774}]"
+        }
     },
     {
         "id": 8886,
@@ -534,10 +666,13 @@
         "group": 12,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 12",
-        "vertices_json": "[{\"lat\":-118.5901,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":199.3709},{\"lat\":-118.5901,\"lng\":199.3709}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-118.5901,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":199.3709},{\"lat\":-118.5901,\"lng\":199.3709}]"
+        }
     },
     {
         "id": 8887,
@@ -546,10 +681,13 @@
         "group": 17,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 17",
-        "vertices_json": "[{\"lat\":-87.7155,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":204.6502},{\"lat\":-87.7155,\"lng\":204.6502}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-87.7155,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":204.6502},{\"lat\":-87.7155,\"lng\":204.6502}]"
+        }
     },
     {
         "id": 8889,
@@ -558,10 +696,13 @@
         "group": 16,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 16",
-        "vertices_json": "[{\"lat\":-102.5734,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":199.2592},{\"lat\":-102.5734,\"lng\":199.2592}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-102.5734,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":199.2592},{\"lat\":-102.5734,\"lng\":199.2592}]"
+        }
     },
     {
         "id": 8891,
@@ -570,10 +711,13 @@
         "group": 7,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 7",
-        "vertices_json": "[{\"lat\":-179.8199,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":198.154},{\"lat\":-179.8199,\"lng\":198.154}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-179.8199,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":198.154},{\"lat\":-179.8199,\"lng\":198.154}]"
+        }
     },
     {
         "id": 8892,
@@ -582,10 +726,13 @@
         "group": 14,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 14",
-        "vertices_json": "[{\"lat\":-113.0104,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":175.8616},{\"lat\":-113.0104,\"lng\":175.8616}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-113.0104,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":175.8616},{\"lat\":-113.0104,\"lng\":175.8616}]"
+        }
     },
     {
         "id": 8893,
@@ -594,10 +741,13 @@
         "group": 15,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 15",
-        "vertices_json": "[{\"lat\":-109.894,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":219.9005},{\"lat\":-109.894,\"lng\":219.9005}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-109.894,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":219.9005},{\"lat\":-109.894,\"lng\":219.9005}]"
+        }
     },
     {
         "id": 8894,
@@ -606,10 +756,13 @@
         "group": 8,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 8",
-        "vertices_json": "[{\"lat\":-161.6448,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":198.2716},{\"lat\":-161.6448,\"lng\":198.2716}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-161.6448,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":198.2716},{\"lat\":-161.6448,\"lng\":198.2716}]"
+        }
     },
     {
         "id": 8895,
@@ -618,10 +771,13 @@
         "group": 13,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 13",
-        "vertices_json": "[{\"lat\":-110.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":184.0222},{\"lat\":-110.8255,\"lng\":184.0222}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-110.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":184.0222},{\"lat\":-110.8255,\"lng\":184.0222}]"
+        }
     },
     {
         "id": 8896,
@@ -630,10 +786,13 @@
         "group": 9,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 9",
-        "vertices_json": "[{\"lat\":-150.4625,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":191.3247},{\"lat\":-150.4625,\"lng\":191.3247}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-150.4625,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":191.3247},{\"lat\":-150.4625,\"lng\":191.3247}]"
+        }
     },
     {
         "id": 8897,
@@ -642,10 +801,13 @@
         "group": 10,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 10",
-        "vertices_json": "[{\"lat\":-150.2548,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":199.3953},{\"lat\":-150.2548,\"lng\":199.3953}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-150.2548,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":199.3953},{\"lat\":-150.2548,\"lng\":199.3953}]"
+        }
     },
     {
         "id": 8898,
@@ -654,10 +816,13 @@
         "group": 18,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 18",
-        "vertices_json": "[{\"lat\":-61.1335,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":208.4451},{\"lat\":-61.1335,\"lng\":208.4451}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-61.1335,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":208.4451},{\"lat\":-61.1335,\"lng\":208.4451}]"
+        }
     },
     {
         "id": 8899,
@@ -666,10 +831,13 @@
         "group": 19,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 19",
-        "vertices_json": "[{\"lat\":-132.0859,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":174.2525},{\"lat\":-132.0859,\"lng\":174.2525}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-132.0859,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":174.2525},{\"lat\":-132.0859,\"lng\":174.2525}]"
+        }
     },
     {
         "id": 9194,
@@ -678,10 +846,13 @@
         "group": 6,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 6",
-        "vertices_json": "[{\"lat\":-195.5099,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":197.6776},{\"lat\":-195.5099,\"lng\":197.6776}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-195.5099,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":190.2482},{\"lat\":-193.4621,\"lng\":197.6776},{\"lat\":-195.5099,\"lng\":197.6776}]"
+        }
     },
     {
         "id": 9195,
@@ -690,10 +861,13 @@
         "group": 11,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 11",
-        "vertices_json": "[{\"lat\":-133.3652,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":197.0774},{\"lat\":-133.3652,\"lng\":197.0774}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-133.3652,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":188.0434},{\"lat\":-127.2349,\"lng\":197.0774},{\"lat\":-133.3652,\"lng\":197.0774}]"
+        }
     },
     {
         "id": 9196,
@@ -702,10 +876,13 @@
         "group": 12,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 12",
-        "vertices_json": "[{\"lat\":-118.5901,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":199.3709},{\"lat\":-118.5901,\"lng\":199.3709}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-118.5901,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":187.8164},{\"lat\":-111.9693,\"lng\":199.3709},{\"lat\":-118.5901,\"lng\":199.3709}]"
+        }
     },
     {
         "id": 9197,
@@ -714,10 +891,13 @@
         "group": 17,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 17",
-        "vertices_json": "[{\"lat\":-87.7155,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":204.6502},{\"lat\":-87.7155,\"lng\":204.6502}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-87.7155,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":183.8997},{\"lat\":-81.7802,\"lng\":204.6502},{\"lat\":-87.7155,\"lng\":204.6502}]"
+        }
     },
     {
         "id": 9199,
@@ -726,10 +906,13 @@
         "group": 16,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 16",
-        "vertices_json": "[{\"lat\":-102.5734,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":199.2592},{\"lat\":-102.5734,\"lng\":199.2592}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-102.5734,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":190.7897},{\"lat\":-95.521,\"lng\":199.2592},{\"lat\":-102.5734,\"lng\":199.2592}]"
+        }
     },
     {
         "id": 9201,
@@ -738,10 +921,13 @@
         "group": 7,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 7",
-        "vertices_json": "[{\"lat\":-179.8199,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":198.154},{\"lat\":-179.8199,\"lng\":198.154}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-179.8199,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":189.6105},{\"lat\":-177.7956,\"lng\":198.154},{\"lat\":-179.8199,\"lng\":198.154}]"
+        }
     },
     {
         "id": 9202,
@@ -750,10 +936,13 @@
         "group": 14,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 14",
-        "vertices_json": "[{\"lat\":-113.0104,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":175.8616},{\"lat\":-113.0104,\"lng\":175.8616}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-113.0104,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":168.6138},{\"lat\":-105.5727,\"lng\":175.8616},{\"lat\":-113.0104,\"lng\":175.8616}]"
+        }
     },
     {
         "id": 9203,
@@ -762,10 +951,13 @@
         "group": 15,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 15",
-        "vertices_json": "[{\"lat\":-109.894,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":219.9005},{\"lat\":-109.894,\"lng\":219.9005}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-109.894,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":212.7365},{\"lat\":-102.9399,\"lng\":219.9005},{\"lat\":-109.894,\"lng\":219.9005}]"
+        }
     },
     {
         "id": 9204,
@@ -774,10 +966,13 @@
         "group": 8,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 8",
-        "vertices_json": "[{\"lat\":-161.6448,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":198.2716},{\"lat\":-161.6448,\"lng\":198.2716}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-161.6448,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":189.0183},{\"lat\":-159.5853,\"lng\":198.2716},{\"lat\":-161.6448,\"lng\":198.2716}]"
+        }
     },
     {
         "id": 9205,
@@ -786,10 +981,13 @@
         "group": 13,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 13",
-        "vertices_json": "[{\"lat\":-110.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":184.0222},{\"lat\":-110.8255,\"lng\":184.0222}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-110.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":182.0222},{\"lat\":-108.8255,\"lng\":184.0222},{\"lat\":-110.8255,\"lng\":184.0222}]"
+        }
     },
     {
         "id": 9206,
@@ -798,10 +996,13 @@
         "group": 9,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 9",
-        "vertices_json": "[{\"lat\":-150.4625,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":191.3247},{\"lat\":-150.4625,\"lng\":191.3247}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-150.4625,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":185.3081},{\"lat\":-142.6908,\"lng\":191.3247},{\"lat\":-150.4625,\"lng\":191.3247}]"
+        }
     },
     {
         "id": 9207,
@@ -810,10 +1011,13 @@
         "group": 10,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 10",
-        "vertices_json": "[{\"lat\":-150.2548,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":199.3953},{\"lat\":-150.2548,\"lng\":199.3953}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-150.2548,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":193.8633},{\"lat\":-141.746,\"lng\":199.3953},{\"lat\":-150.2548,\"lng\":199.3953}]"
+        }
     },
     {
         "id": 9208,
@@ -822,10 +1026,13 @@
         "group": 18,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 18",
-        "vertices_json": "[{\"lat\":-61.1335,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":208.4451},{\"lat\":-61.1335,\"lng\":208.4451}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-61.1335,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":178.8342},{\"lat\":-37.2272,\"lng\":208.4451},{\"lat\":-61.1335,\"lng\":208.4451}]"
+        }
     },
     {
         "id": 9209,
@@ -834,10 +1041,13 @@
         "group": 19,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 19",
-        "vertices_json": "[{\"lat\":-132.0859,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":174.2525},{\"lat\":-132.0859,\"lng\":174.2525}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-132.0859,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":161.8168},{\"lat\":-122.6089,\"lng\":174.2525},{\"lat\":-132.0859,\"lng\":174.2525}]"
+        }
     },
     {
         "id": 25905,
@@ -846,10 +1056,13 @@
         "group": 6,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 6",
-        "vertices_json": "[{\"lat\":-195.51,\"lng\":190.25},{\"lat\":-193.46,\"lng\":190.25},{\"lat\":-193.46,\"lng\":197.68},{\"lat\":-195.51,\"lng\":197.68}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-195.51,\"lng\":190.25},{\"lat\":-193.46,\"lng\":190.25},{\"lat\":-193.46,\"lng\":197.68},{\"lat\":-195.51,\"lng\":197.68}]"
+        }
     },
     {
         "id": 25906,
@@ -858,10 +1071,13 @@
         "group": 11,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 11",
-        "vertices_json": "[{\"lat\":-133.37,\"lng\":188.04},{\"lat\":-127.23,\"lng\":188.04},{\"lat\":-127.23,\"lng\":197.08},{\"lat\":-133.37,\"lng\":197.08}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-133.37,\"lng\":188.04},{\"lat\":-127.23,\"lng\":188.04},{\"lat\":-127.23,\"lng\":197.08},{\"lat\":-133.37,\"lng\":197.08}]"
+        }
     },
     {
         "id": 25907,
@@ -870,10 +1086,13 @@
         "group": 12,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 12",
-        "vertices_json": "[{\"lat\":-118.59,\"lng\":187.82},{\"lat\":-111.97,\"lng\":187.82},{\"lat\":-111.97,\"lng\":199.37},{\"lat\":-118.59,\"lng\":199.37}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-118.59,\"lng\":187.82},{\"lat\":-111.97,\"lng\":187.82},{\"lat\":-111.97,\"lng\":199.37},{\"lat\":-118.59,\"lng\":199.37}]"
+        }
     },
     {
         "id": 25908,
@@ -882,10 +1101,13 @@
         "group": 17,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 17",
-        "vertices_json": "[{\"lat\":-87.72,\"lng\":183.9},{\"lat\":-81.78,\"lng\":183.9},{\"lat\":-81.78,\"lng\":204.65},{\"lat\":-87.72,\"lng\":204.65}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-87.72,\"lng\":183.9},{\"lat\":-81.78,\"lng\":183.9},{\"lat\":-81.78,\"lng\":204.65},{\"lat\":-87.72,\"lng\":204.65}]"
+        }
     },
     {
         "id": 25910,
@@ -894,10 +1116,13 @@
         "group": 16,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 16",
-        "vertices_json": "[{\"lat\":-102.57,\"lng\":190.79},{\"lat\":-95.52,\"lng\":190.79},{\"lat\":-95.52,\"lng\":199.26},{\"lat\":-102.57,\"lng\":199.26}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-102.57,\"lng\":190.79},{\"lat\":-95.52,\"lng\":190.79},{\"lat\":-95.52,\"lng\":199.26},{\"lat\":-102.57,\"lng\":199.26}]"
+        }
     },
     {
         "id": 25912,
@@ -906,10 +1131,13 @@
         "group": 7,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 7",
-        "vertices_json": "[{\"lat\":-179.82,\"lng\":189.61},{\"lat\":-177.8,\"lng\":189.61},{\"lat\":-177.8,\"lng\":198.15},{\"lat\":-179.82,\"lng\":198.15}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-179.82,\"lng\":189.61},{\"lat\":-177.8,\"lng\":189.61},{\"lat\":-177.8,\"lng\":198.15},{\"lat\":-179.82,\"lng\":198.15}]"
+        }
     },
     {
         "id": 25913,
@@ -918,10 +1146,13 @@
         "group": 14,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 14",
-        "vertices_json": "[{\"lat\":-113.01,\"lng\":168.61},{\"lat\":-105.57,\"lng\":168.61},{\"lat\":-105.57,\"lng\":175.86},{\"lat\":-113.01,\"lng\":175.86}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-113.01,\"lng\":168.61},{\"lat\":-105.57,\"lng\":168.61},{\"lat\":-105.57,\"lng\":175.86},{\"lat\":-113.01,\"lng\":175.86}]"
+        }
     },
     {
         "id": 25914,
@@ -930,10 +1161,13 @@
         "group": 15,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 15",
-        "vertices_json": "[{\"lat\":-109.89,\"lng\":212.74},{\"lat\":-102.94,\"lng\":212.74},{\"lat\":-102.94,\"lng\":219.9},{\"lat\":-109.89,\"lng\":219.9}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-109.89,\"lng\":212.74},{\"lat\":-102.94,\"lng\":212.74},{\"lat\":-102.94,\"lng\":219.9},{\"lat\":-109.89,\"lng\":219.9}]"
+        }
     },
     {
         "id": 25915,
@@ -942,10 +1176,13 @@
         "group": 8,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 8",
-        "vertices_json": "[{\"lat\":-161.64,\"lng\":189.02},{\"lat\":-159.59,\"lng\":189.02},{\"lat\":-159.59,\"lng\":198.27},{\"lat\":-161.64,\"lng\":198.27}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-161.64,\"lng\":189.02},{\"lat\":-159.59,\"lng\":189.02},{\"lat\":-159.59,\"lng\":198.27},{\"lat\":-161.64,\"lng\":198.27}]"
+        }
     },
     {
         "id": 25916,
@@ -954,10 +1191,13 @@
         "group": 13,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 13",
-        "vertices_json": "[{\"lat\":-110.83,\"lng\":182.02},{\"lat\":-108.83,\"lng\":182.02},{\"lat\":-108.83,\"lng\":184.02},{\"lat\":-110.83,\"lng\":184.02}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-110.83,\"lng\":182.02},{\"lat\":-108.83,\"lng\":182.02},{\"lat\":-108.83,\"lng\":184.02},{\"lat\":-110.83,\"lng\":184.02}]"
+        }
     },
     {
         "id": 25917,
@@ -966,10 +1206,13 @@
         "group": 9,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 9",
-        "vertices_json": "[{\"lat\":-150.46,\"lng\":185.31},{\"lat\":-142.69,\"lng\":185.31},{\"lat\":-142.69,\"lng\":191.32},{\"lat\":-150.46,\"lng\":191.32}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-150.46,\"lng\":185.31},{\"lat\":-142.69,\"lng\":185.31},{\"lat\":-142.69,\"lng\":191.32},{\"lat\":-150.46,\"lng\":191.32}]"
+        }
     },
     {
         "id": 25918,
@@ -978,10 +1221,13 @@
         "group": 10,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 10",
-        "vertices_json": "[{\"lat\":-150.25,\"lng\":193.86},{\"lat\":-141.75,\"lng\":193.86},{\"lat\":-141.75,\"lng\":199.4},{\"lat\":-150.25,\"lng\":199.4}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-150.25,\"lng\":193.86},{\"lat\":-141.75,\"lng\":193.86},{\"lat\":-141.75,\"lng\":199.4},{\"lat\":-150.25,\"lng\":199.4}]"
+        }
     },
     {
         "id": 25919,
@@ -990,10 +1236,13 @@
         "group": 18,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 18",
-        "vertices_json": "[{\"lat\":-61.13,\"lng\":178.83},{\"lat\":-37.23,\"lng\":178.83},{\"lat\":-37.23,\"lng\":208.45},{\"lat\":-61.13,\"lng\":208.45}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-61.13,\"lng\":178.83},{\"lat\":-37.23,\"lng\":178.83},{\"lat\":-37.23,\"lng\":208.45},{\"lat\":-61.13,\"lng\":208.45}]"
+        }
     },
     {
         "id": 25920,
@@ -1002,9 +1251,12 @@
         "group": 19,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 19",
-        "vertices_json": "[{\"lat\":-132.09,\"lng\":161.82},{\"lat\":-122.61,\"lng\":161.82},{\"lat\":-122.61,\"lng\":174.25},{\"lat\":-132.09,\"lng\":174.25}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-132.09,\"lng\":161.82},{\"lat\":-122.61,\"lng\":161.82},{\"lat\":-122.61,\"lng\":174.25},{\"lat\":-132.09,\"lng\":174.25}]"
+        }
     }
 ]

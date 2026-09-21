@@ -6,9 +6,12 @@
         "group": 12,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 12",
-        "vertices_json": "[{\"lat\":-108.1733,\"lng\":88.8012},{\"lat\":-106.1733,\"lng\":88.8012},{\"lat\":-106.1733,\"lng\":90.8012},{\"lat\":-108.1733,\"lng\":90.8012}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-108.1733,\"lng\":88.8012},{\"lat\":-106.1733,\"lng\":88.8012},{\"lat\":-106.1733,\"lng\":90.8012},{\"lat\":-108.1733,\"lng\":90.8012}]"
+        }
     }
 ]

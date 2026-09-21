@@ -6,9 +6,12 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-101.588,\"lng\":178.479},{\"lat\":-124.9209,\"lng\":179.0534},{\"lat\":-119.7518,\"lng\":212.8682},{\"lat\":-99.2906,\"lng\":208.058}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-101.588,\"lng\":178.479},{\"lat\":-124.9209,\"lng\":179.0534},{\"lat\":-119.7518,\"lng\":212.8682},{\"lat\":-99.2906,\"lng\":208.058}]"
+        }
     }
 ]

@@ -6,10 +6,13 @@
         "group": 19,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 19",
-        "vertices_json": "[{\"lat\":-145.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":201.1012},{\"lat\":-145.3294,\"lng\":201.1012}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-145.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":201.1012},{\"lat\":-145.3294,\"lng\":201.1012}]"
+        }
     },
     {
         "id": 8146,
@@ -18,10 +21,13 @@
         "group": 19,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 19",
-        "vertices_json": "[{\"lat\":-145.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":201.1012},{\"lat\":-145.3294,\"lng\":201.1012}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-145.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":201.1012},{\"lat\":-145.3294,\"lng\":201.1012}]"
+        }
     },
     {
         "id": 8304,
@@ -30,10 +36,13 @@
         "group": 19,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 19",
-        "vertices_json": "[{\"lat\":-145.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":201.1012},{\"lat\":-145.3294,\"lng\":201.1012}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-145.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":201.1012},{\"lat\":-145.3294,\"lng\":201.1012}]"
+        }
     },
     {
         "id": 8708,
@@ -42,10 +51,13 @@
         "group": 19,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 19",
-        "vertices_json": "[{\"lat\":-145.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":201.1012},{\"lat\":-145.3294,\"lng\":201.1012}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-145.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":201.1012},{\"lat\":-145.3294,\"lng\":201.1012}]"
+        }
     },
     {
         "id": 9150,
@@ -54,10 +66,13 @@
         "group": 19,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 19",
-        "vertices_json": "[{\"lat\":-145.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":201.1012},{\"lat\":-145.3294,\"lng\":201.1012}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-145.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":201.1012},{\"lat\":-145.3294,\"lng\":201.1012}]"
+        }
     },
     {
         "id": 9291,
@@ -66,9 +81,12 @@
         "group": 19,
         "teeming": null,
         "faction": "any",
-        "color": null,
-        "color_animated": null,
         "label": "Imported from MDT - group 19",
-        "vertices_json": "[{\"lat\":-145.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":201.1012},{\"lat\":-145.3294,\"lng\":201.1012}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-145.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":199.1012},{\"lat\":-143.3294,\"lng\":201.1012},{\"lat\":-145.3294,\"lng\":201.1012}]"
+        }
     }
 ]
