@@ -8,8 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * Plans the pulls of a generated test route floor by floor: every floor gets an equal share of the target
- * enemy forces, and whatever a floor could not deliver is owed by the next one. A floor is only left once
- * its share is met or it has nothing left to pull, so a route walks through the dungeon floor after floor.
+ * enemy forces (a floor too small for it gives what it has, the other floors split the rest), and whatever a
+ * floor falls short of its share is owed by the next one. A floor is only left once the route has caught up
+ * with its share or the floor has nothing left to pull, so a route walks through the dungeon floor after floor.
  */
 class TestRoutePullPlanner
 {
@@ -57,22 +58,20 @@ class TestRoutePullPlanner
             ->sortKeys()
             ->sortBy(static fn(Collection $floorCandidates, int $floorId) => $floorIndexByFloorId->get($floorId, PHP_INT_MAX));
 
-        $floorBudget = $targetForces / max(1, $candidatesByFloor->count());
-        $owedForces  = 0;
-        $leftovers   = collect();
-        foreach ($candidatesByFloor as $floorCandidates) {
-            $budget           = $floorBudget + $owedForces;
-            $floorStartForces = $this->forces;
+        $floorShares      = $this->getFloorShares($candidatesByFloor, $targetForces);
+        $cumulativeTarget = 0;
+        $leftovers        = collect();
+        foreach ($candidatesByFloor as $floorId => $floorCandidates) {
+            // Measured against the running total, so a floor owes whatever the floors before it fell short
+            $cumulativeTarget += $floorShares->get($floorId);
 
             $leftovers = $leftovers->concat(
-                $this->pullUntil($this->shuffleCandidates($floorCandidates), fn() => $this->forces - $floorStartForces >= $budget),
+                $this->pullUntil($this->shuffleCandidates($floorCandidates), fn() => $this->forces >= $cumulativeTarget),
             );
             $this->pullBosses($floorCandidates);
-
-            $owedForces = max(0, $budget - ($this->forces - $floorStartForces));
         }
 
-        // Only reached when the last floor runs dry before the route is complete
+        // Only reached when the floors ran dry, or when enemies on different floors share their forces
         if ($this->forces < $targetForces) {
             $this->pullUntil($leftovers, fn() => $this->forces >= $targetForces);
         }
@@ -83,6 +82,33 @@ class TestRoutePullPlanner
     public function getForces(): int
     {
         return $this->forces;
+    }
+
+    /**
+     * Splits the target evenly over the floors; a floor that cannot deliver its share in full gives what it has
+     * and the rest is split over the other floors, so a small last floor does not leave the route short.
+     *
+     * @param  Collection<int, Collection<int, Collection<int, Enemy>>> $candidatesByFloor
+     * @return Collection<int, float>                                   the forces each floor should deliver, by floor id
+     */
+    private function getFloorShares(Collection $candidatesByFloor, int $targetForces): Collection
+    {
+        $capacityByFloorId = $candidatesByFloor->map(fn(Collection $floorCandidates) => $floorCandidates->flatten(1)
+            ->map(static fn(Enemy $enemy) => self::getEnemyKey($enemy))
+            ->filter()
+            ->unique()
+            ->sum(fn(string $key) => $this->enemyForcesByKey->get($key, 0)));
+
+        $shares          = collect();
+        $remainingForces = $targetForces;
+        $floorsLeft      = $capacityByFloorId->count();
+        foreach ($capacityByFloorId->sort() as $floorId => $capacity) {
+            $share = min($capacity, $remainingForces / $floorsLeft--);
+            $shares->put($floorId, $share);
+            $remainingForces -= $share;
+        }
+
+        return $shares;
     }
 
     /**

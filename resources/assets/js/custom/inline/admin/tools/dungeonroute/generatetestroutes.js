@@ -82,6 +82,7 @@ class AdminToolsDungeonrouteGeneratetestroutes extends InlineCodeAjaxBatchProces
     }
 
     _complete() {
+        this._state = 'completed';
         this._pauseTimerSegment();
         this._setProgress(100, lang.get('js.admin_generate_test_routes_processed', {count: this._processedSoFar}));
         this._setButtonState('completed');

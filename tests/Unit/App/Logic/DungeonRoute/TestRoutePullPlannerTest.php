@@ -69,9 +69,12 @@ final class TestRoutePullPlannerTest extends TestCase
 
         // Assert
         $this->assertGreaterThanOrEqual(90, $planner->getForces());
-        foreach ($floorIndexByFloorId->keys() as $floorId) {
+        $this->assertLessThan(90 + self::MAX_PULL_OVERSHOOT, $planner->getForces(), 'Overshoot must not pile up across floors');
+        $forcesSoFar = 0;
+        foreach ($floorIndexByFloorId as $floorId => $floorIndex) {
             $floorForces = $this->forcesOnFloor($pulls, $floorId);
-            $this->assertGreaterThanOrEqual(30, $floorForces, sprintf('Floor %d must deliver its share', $floorId));
+            $forcesSoFar += $floorForces;
+            $this->assertGreaterThanOrEqual(30 * $floorIndex, $forcesSoFar, sprintf('Floor %d must catch the route up with its share', $floorId));
             $this->assertLessThan(30 + self::MAX_PULL_OVERSHOOT, $floorForces, sprintf('Floor %d must be left once its share is met', $floorId));
         }
         $this->assertEmpty(array_diff($bossIds, $this->pulledEnemyIds($pulls)), 'Every boss must be pulled');
@@ -102,7 +105,7 @@ final class TestRoutePullPlannerTest extends TestCase
     }
 
     #[Test]
-    public function plan_givenLastFloorRunningDry_fillsUpFromEarlierFloors(): void
+    public function plan_givenLastFloorTooSmallForItsShare_movesTheRestToEarlierFloors(): void
     {
         // Arrange
         $floorIndexByFloorId = collect([1 => 1, 2 => 2]);
@@ -114,8 +117,10 @@ final class TestRoutePullPlannerTest extends TestCase
 
         // Assert
         $this->assertGreaterThanOrEqual(100, $planner->getForces());
-        $this->assertSame(3, $this->forcesOnFloor($pulls, 2));
-        $this->assertCount(count(array_unique($this->pulledEnemyIds($pulls))), $this->pulledEnemyIds($pulls), 'No enemy may be pulled twice');
+        $this->assertLessThan(100 + self::MAX_PULL_OVERSHOOT, $planner->getForces());
+        $this->assertGreaterThanOrEqual(97, $this->forcesOnFloor($pulls, 1), 'The earlier floor must take over the share the last floor cannot deliver');
+        $this->assertLessThanOrEqual(3, $this->forcesOnFloor($pulls, 2));
+        $this->assertPullsAreValid($pulls, $floorIndexByFloorId);
     }
 
     #[Test]
