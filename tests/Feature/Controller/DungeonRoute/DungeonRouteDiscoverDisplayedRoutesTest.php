@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Controller\DungeonRoute;
 
-use App\Features\DungeonRouteListRework;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
@@ -15,7 +14,6 @@ use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -28,7 +26,6 @@ final class DungeonRouteDiscoverDisplayedRoutesTest extends PublicTestCase
     public function discoverDungeon_givenLeaderboardShowingRoute_reportsRouteAsDisplayed(): void
     {
         // Arrange
-        Feature::define(DungeonRouteListRework::class, true);
         $dungeonRoute = null;
 
         try {
@@ -54,7 +51,6 @@ final class DungeonRouteDiscoverDisplayedRoutesTest extends PublicTestCase
     public function discoverDungeon_givenLeaderboardPage_reportsWeeklyRouteOnlyOnTheFirstPage(int $page, bool $expectWeeklyRoute): void
     {
         // Arrange
-        Feature::define(DungeonRouteListRework::class, true);
         $weeklyDungeonRoute = null;
 
         try {
@@ -108,7 +104,6 @@ final class DungeonRouteDiscoverDisplayedRoutesTest extends PublicTestCase
     public function page_givenRouteListingPage_reportsTheRoutesItRenders(string $routeName, array $parameterKeys, array $viewKeys): void
     {
         // Arrange
-        Feature::define(DungeonRouteListRework::class, false);
         $gameVersion = GameVersion::getDefaultGameVersion();
         $season      = app(SeasonServiceInterface::class)->getCurrentSeason($gameVersion->expansion);
         $dungeon     = $season->dungeons()->active()->firstOrFail();
@@ -137,18 +132,15 @@ final class DungeonRouteDiscoverDisplayedRoutesTest extends PublicTestCase
     public static function page_givenRouteListingPage_provider(): array
     {
         return [
-            'home'                    => ['home', [], ['popularDungeonRoutesByDungeon']],
-            'affixes'                 => ['misc.affixes', [], ['dungeonroutes']],
-            'popular'                 => ['dungeonroutes.popular', ['gameVersion'], ['dungeonroutes']],
-            'new'                     => ['dungeonroutes.new', ['gameVersion'], ['dungeonroutes']],
-            'season'                  => ['dungeonroutes.season', ['gameVersion', 'season'], ['dungeonroutes']],
-            'season popular'          => ['dungeonroutes.season.popular', ['gameVersion', 'season'], ['dungeonroutes']],
-            'season new'              => ['dungeonroutes.season.new', ['gameVersion', 'season'], ['dungeonroutes']],
-            'expansion'               => ['dungeonroutes.expansion', ['expansion'], ['dungeonroutes']],
-            'expansion season'        => ['dungeonroutes.expansion.season', ['expansion', 'season'], ['dungeonroutes']],
-            'legacy dungeon overview' => ['dungeonroutes.discoverdungeon', ['gameVersion', 'dungeon'], ['dungeonroutes']],
-            'legacy dungeon popular'  => ['dungeonroutes.discoverdungeon.popular', ['gameVersion', 'dungeon'], ['dungeonroutes']],
-            'legacy dungeon new'      => ['dungeonroutes.discoverdungeon.new', ['gameVersion', 'dungeon'], ['dungeonroutes']],
+            'home'             => ['home', [], ['popularDungeonRoutesByDungeon']],
+            'affixes'          => ['misc.affixes', [], ['dungeonroutes']],
+            'popular'          => ['dungeonroutes.popular', ['gameVersion'], ['dungeonroutes']],
+            'new'              => ['dungeonroutes.new', ['gameVersion'], ['dungeonroutes']],
+            'season'           => ['dungeonroutes.season', ['gameVersion', 'season'], ['dungeonroutes']],
+            'season popular'   => ['dungeonroutes.season.popular', ['gameVersion', 'season'], ['dungeonroutes']],
+            'season new'       => ['dungeonroutes.season.new', ['gameVersion', 'season'], ['dungeonroutes']],
+            'expansion'        => ['dungeonroutes.expansion', ['expansion'], ['dungeonroutes']],
+            'expansion season' => ['dungeonroutes.expansion.season', ['expansion', 'season'], ['dungeonroutes']],
         ];
     }
 

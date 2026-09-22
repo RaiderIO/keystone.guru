@@ -389,7 +389,7 @@ return [
             'category'       => 12,
             'affix_overview' => 12,
             'per_dungeon'    => 8,
-            /** Routes per page on the reworked (DungeonRouteListRework) dungeon leaderboard */
+            /** Routes per page on the dungeon leaderboard */
             'leaderboard' => 18,
         ],
         /** How many routes to load more when the user uses the infinite scroll */

@@ -4,7 +4,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
- * The featured-creators rail that opens the reworked per-dungeon route page.
+ * The featured-creators rail that opens the per-dungeon route page.
  *
  * It sits above the hero band, and it cannot sit between the hero band and the leaderboard even
  * though that looks like the natural middle ground: with no Raider.IO weekly routes the hero band is

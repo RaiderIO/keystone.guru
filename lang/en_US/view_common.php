@@ -55,7 +55,6 @@ return [
         ],
         'griddiscover' => [
             'popular' => 'Popular',
-            'new'     => 'New',
         ],
         'list' => [
             'more'        => 'More',

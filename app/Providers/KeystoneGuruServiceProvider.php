@@ -431,7 +431,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         view()->composer([
             'dungeonroute.discover.category',
-            'dungeonroute.discover.dungeon.category',
             'dungeonroute.discover.season.category',
             'misc.affixes',
             'dungeonroute.discover.discover',

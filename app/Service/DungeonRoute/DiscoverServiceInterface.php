@@ -76,7 +76,7 @@ interface DiscoverServiceInterface
 
     /**
      * The popular routes of a single dungeon, wrapped in a classic length-aware paginator so the
-     * reworked discovery leaderboard can render numbered pages. Bypasses the discover cache (the
+     * discovery leaderboard can render numbered pages. Bypasses the discover cache (the
      * cache key is not offset-aware); per-row card caching still applies.
      *
      * @return LengthAwarePaginator<int, DungeonRoute>

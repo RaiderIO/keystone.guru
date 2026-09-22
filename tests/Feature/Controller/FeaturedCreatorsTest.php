@@ -3,7 +3,6 @@
 namespace Tests\Feature\Controller;
 
 use App\Features\CreatorProfiles;
-use App\Features\DungeonRouteListRework;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
@@ -101,11 +100,10 @@ final class FeaturedCreatorsTest extends PublicTestCase
     }
 
     #[Test]
-    public function discoverDungeon_givenBothFlagsActive_rendersTheFeaturedRail(): void
+    public function discoverDungeon_givenCreatorProfilesActive_rendersTheFeaturedRail(): void
     {
         // Arrange - a creator at the threshold guarantees the rail has at least one entry to render
         Feature::define(CreatorProfiles::class, true);
-        Feature::define(DungeonRouteListRework::class, true);
 
         $creator = User::factory()->create();
         $routes  = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes());
@@ -137,27 +135,6 @@ final class FeaturedCreatorsTest extends PublicTestCase
     {
         // Arrange
         Feature::define(CreatorProfiles::class, false);
-        Feature::define(DungeonRouteListRework::class, true);
-
-        // Act
-        $response = $this->get($this->dungeonRouteListUrl());
-
-        // Assert
-        $response->assertOk();
-        $response->assertDontSee('discover_creator_rail', false);
-        $response->assertDontSee(__('view_creator.featured.title'));
-    }
-
-    /**
-     * The rail is written for the reworked hero-band/leaderboard layout and is included from that
-     * branch only - it must not leak into the legacy multi-panel overview it was never styled for.
-     */
-    #[Test]
-    public function discoverDungeon_givenListReworkInactive_doesNotRenderTheFeaturedRail(): void
-    {
-        // Arrange
-        Feature::define(CreatorProfiles::class, true);
-        Feature::define(DungeonRouteListRework::class, false);
 
         // Act
         $response = $this->get($this->dungeonRouteListUrl());
