@@ -2,12 +2,10 @@
 
 namespace Tests\Feature\Controller\Dungeon;
 
-use App\Features\Heatmap;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -26,8 +24,6 @@ final class DungeonHeatmapControllerFloorResolutionTest extends PublicTestCase
     {
         parent::setUp();
 
-        Feature::define(Heatmap::class, true);
-
         $admin                             = User::findOrFail(1);
         $this->originalAdminMapFacadeStyle = $admin->map_facade_style;
         $admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_SPLIT_FLOORS]);
@@ -38,7 +34,6 @@ final class DungeonHeatmapControllerFloorResolutionTest extends PublicTestCase
     {
         try {
             User::findOrFail(1)->update(['map_facade_style' => $this->originalAdminMapFacadeStyle]);
-            Feature::purge(Heatmap::class);
         } finally {
             parent::tearDown();
         }

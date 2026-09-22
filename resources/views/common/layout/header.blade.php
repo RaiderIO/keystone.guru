@@ -1,6 +1,5 @@
 <?php
 
-use App\Features\Heatmap;
 use App\Features\NpcCompendium;
 use App\Features\SearchPageRework;
 use App\Models\Dungeon;
@@ -96,7 +95,7 @@ $routeEntries = [
 ];
 
 $dungeonEntries = [];
-if (Feature::active(Heatmap::class) && $currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
+if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
     $dungeonEntries[] = [
         'route'       => route('dungeon.heatmap.gameversion', ['gameVersion' => $currentUserGameVersion]),
         'fa'          => 'fas fa-fire text-danger',

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Dungeon;
 
-use App\Features\Heatmap;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Heatmap\HeatmapEmbedUrlFormRequest;
 use App\Http\Requests\Heatmap\HeatmapUrlFormRequest;
@@ -24,7 +23,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Laravel\Pennant\Feature;
 
 class DungeonHeatmapController extends Controller
 {
@@ -238,7 +236,7 @@ class DungeonHeatmapController extends Controller
 
         $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
-        $heatmapActive = Feature::active(Heatmap::class) && ($dungeon->heatmap_enabled || isset($validated['token']));
+        $heatmapActive = $dungeon->heatmap_enabled || isset($validated['token']);
 
         $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON_HEATMAP_EMBED);
 
@@ -314,8 +312,7 @@ class DungeonHeatmapController extends Controller
             !$dungeon->active ||
             !$dungeon->heatmap_enabled ||
             $currentMappingVersion === null ||
-            $mostRecentSeason === null ||
-            !Feature::active(Heatmap::class)
+            $mostRecentSeason === null
         ) {
             if ($embed) {
                 return view('dungeon.heatmap.gameversion.embedunsupported', [
