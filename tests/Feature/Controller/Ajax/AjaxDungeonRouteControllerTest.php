@@ -566,9 +566,8 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
     }
 
     /**
-     * Guards #4083: unlike htmlsearch() (whose FormRequest rejects an unrecognised `?expansion=`
-     * shortname via Rule::in() before it ever reaches the controller), htmlsearchcategory() takes
-     * a plain Request and looks the shortname up directly - an unknown shortname makes
+     * htmlsearchcategory() takes a plain Request and looks the `?expansion=`
+     * shortname up directly - an unknown shortname makes
      * Expansion::where()->first() return null, which was then passed straight into
      * BaseDiscoverService::withExpansion()/ExpansionService::getCurrentAffixGroup() - both typed
      * to require a non-null Expansion - raising a TypeError instead of just skipping the filter.

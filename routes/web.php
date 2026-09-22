@@ -177,9 +177,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::get('patreon-link', new PatreonController()->link(...))->name('patreon.link');
     Route::get('patreon-oauth', new PatreonController()->oauthRedirect(...))->name('patreon.oauth.redirect');
     Route::get('dungeonroutes', new SiteController()->dungeonroutes(...));
-    Route::middleware('throttle:search-dungeonroute')->group(static function () {
-        Route::get('search', new DungeonRouteDiscoverController()->search(...))->name('dungeonroutes.search');
-    });
+    Route::get('search', new DungeonRouteDiscoverController()->search(...))->name('dungeonroutes.search');
 
     // Compendium
     Route::prefix('compendium')->group(static function () {
@@ -661,7 +659,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::middleware('throttle:search-dungeonroute')->group(static function () {
             Route::get('/routes', new AjaxDungeonRouteController()->get(...));
 
-            Route::get('/search', new AjaxDungeonRouteController()->htmlsearch(...));
             Route::get('/search/{category}', new AjaxDungeonRouteController()->htmlsearchcategory(...));
 
             Route::get('/dungeonroute/{dungeonRoute}/mapcontext', new AjaxDungeonRouteSearchController()->getMapContext(...));
