@@ -3,6 +3,7 @@
 namespace Tests\Feature\View;
 
 use App\Features\NpcCompendium;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use Laravel\Pennant\Feature;
@@ -44,6 +45,24 @@ final class SiteHeaderTest extends PublicTestCase
 
         $this->assertStringContainsString('data-bs-target="#login_modal"', $html);
         $this->assertStringContainsString('data-bs-target="#register_modal"', $html);
+    }
+
+    #[Test]
+    public function home_givenAGuestOnRetail_showsTheHeatmapEntry(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+        $retail = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+
+        // Act
+        $response = $this->withHeader('User-Agent', self::DESKTOP_USER_AGENT)->get('/');
+
+        // Assert
+        $response->assertOk();
+        $this->assertStringContainsString(
+            route('dungeon.heatmap.gameversion', ['gameVersion' => $retail]),
+            $response->getContent(),
+        );
     }
 
     #[Test]
