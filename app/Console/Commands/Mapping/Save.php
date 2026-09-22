@@ -625,7 +625,7 @@ class Save extends Command
             ->each(static fn(MapIcon $item) => $item->setRelation('floor', $floor))
             ->values()
             ->each($roundLatLngFn);
-        $mountableAreas = $floor->mountableAreasForExport->values()->each($roundLatLngVerticesFn);
+        $mountableAreas = $floor->mountableAreasForExport->values()->each($roundLatLngPolyLinesFn);
         /** @var EloquentCollection<int, Model&HasLatLngInterface> $enemyForcesCheckpoints */
         $enemyForcesCheckpoints = $floor->enemyForcesCheckpointsForExport
             ->each(static fn(EnemyForcesCheckpoint $item) => $item->setRelation('floor', $floor))

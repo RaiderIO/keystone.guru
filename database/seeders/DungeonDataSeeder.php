@@ -518,8 +518,8 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         }
         // Delete all map icons that are always there
         DB::table('map_icons')->whereNotNull('mapping_version_id')->delete();
-        // Delete polylines related to enemy patrols and enemy packs
-        DB::table('polylines')->whereIn('model_class', [EnemyPatrol::class, EnemyPack::class])->delete();
+        // Delete polylines related to enemy patrols, enemy packs and mountable areas
+        DB::table('polylines')->whereIn('model_class', [EnemyPatrol::class, EnemyPack::class, MountableArea::class])->delete();
     }
 
     public static function getAffectedModelClasses(): array
