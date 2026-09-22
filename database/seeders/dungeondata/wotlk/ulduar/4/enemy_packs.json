@@ -6,10 +6,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-154.6978,\"lng\":187.8068},{\"lat\":-168.7656,\"lng\":193.017},{\"lat\":-162.2764,\"lng\":205.6638},{\"lat\":-152.1873,\"lng\":200}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-154.6978,\"lng\":187.8068},{\"lat\":-168.7656,\"lng\":193.017},{\"lat\":-162.2764,\"lng\":205.6638},{\"lat\":-152.1873,\"lng\":200}]"
+        }
     },
     {
         "id": 2821,
@@ -18,10 +21,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-134.1883,\"lng\":191.8802},{\"lat\":-143.9457,\"lng\":188.1857},{\"lat\":-148.3034,\"lng\":200.3114},{\"lat\":-138.7498,\"lng\":202.9375}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-134.1883,\"lng\":191.8802},{\"lat\":-143.9457,\"lng\":188.1857},{\"lat\":-148.3034,\"lng\":200.3114},{\"lat\":-138.7498,\"lng\":202.9375}]"
+        }
     },
     {
         "id": 2822,
@@ -30,10 +36,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-166.688,\"lng\":205.8125},{\"lat\":-175.681,\"lng\":194.8643},{\"lat\":-183.1175,\"lng\":202.8218},{\"lat\":-172.8391,\"lng\":214.1423}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-166.688,\"lng\":205.8125},{\"lat\":-175.681,\"lng\":194.8643},{\"lat\":-183.1175,\"lng\":202.8218},{\"lat\":-172.8391,\"lng\":214.1423}]"
+        }
     },
     {
         "id": 2857,
@@ -42,10 +51,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-154.6978,\"lng\":187.8068},{\"lat\":-168.7656,\"lng\":193.017},{\"lat\":-162.2764,\"lng\":205.6638},{\"lat\":-152.1873,\"lng\":200}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-154.6978,\"lng\":187.8068},{\"lat\":-168.7656,\"lng\":193.017},{\"lat\":-162.2764,\"lng\":205.6638},{\"lat\":-152.1873,\"lng\":200}]"
+        }
     },
     {
         "id": 2858,
@@ -54,10 +66,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-134.1883,\"lng\":191.8802},{\"lat\":-143.9457,\"lng\":188.1857},{\"lat\":-148.3034,\"lng\":200.3114},{\"lat\":-138.7498,\"lng\":202.9375}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-134.1883,\"lng\":191.8802},{\"lat\":-143.9457,\"lng\":188.1857},{\"lat\":-148.3034,\"lng\":200.3114},{\"lat\":-138.7498,\"lng\":202.9375}]"
+        }
     },
     {
         "id": 2859,
@@ -66,9 +81,12 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-166.688,\"lng\":205.8125},{\"lat\":-175.681,\"lng\":194.8643},{\"lat\":-183.1175,\"lng\":202.8218},{\"lat\":-172.8391,\"lng\":214.1423}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-166.688,\"lng\":205.8125},{\"lat\":-175.681,\"lng\":194.8643},{\"lat\":-183.1175,\"lng\":202.8218},{\"lat\":-172.8391,\"lng\":214.1423}]"
+        }
     }
 ]

@@ -8,6 +8,7 @@ use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Polyline;
 use App\Service\Mapping\MappingServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
@@ -111,8 +112,9 @@ final class MappingVersionControllerAtomicityTest extends PublicTestCase
         ]);
 
         try {
-            $enemyPackCountBefore = EnemyPack::where('mapping_version_id', $newMappingVersion->id)->count();
-            $mapIconCountBefore   = MapIcon::where('mapping_version_id', $newMappingVersion->id)->count();
+            $enemyPackCountBefore         = EnemyPack::where('mapping_version_id', $newMappingVersion->id)->count();
+            $enemyPackPolylineCountBefore = $this->countEnemyPackPolylines($newMappingVersion);
+            $mapIconCountBefore           = MapIcon::where('mapping_version_id', $newMappingVersion->id)->count();
             $this->assertGreaterThan(0, $enemyPackCountBefore, 'Enemy packs should have been cloned into the new MappingVersion.');
             $this->assertGreaterThan(0, $mapIconCountBefore, 'Map icons should have been cloned into the new MappingVersion.');
 
@@ -145,6 +147,11 @@ final class MappingVersionControllerAtomicityTest extends PublicTestCase
                 'A failure mid-delete must roll back relations already deleted by an earlier step (enemy packs).',
             );
             $this->assertSame(
+                $enemyPackPolylineCountBefore,
+                $this->countEnemyPackPolylines($newMappingVersion),
+                'A failure mid-delete must roll back the enemy pack polylines deleted before the packs themselves.',
+            );
+            $this->assertSame(
                 $mapIconCountBefore,
                 MapIcon::where('mapping_version_id', $newMappingVersion->id)->count(),
                 'A failure mid-delete must roll back the map icon whose deletion threw.',
@@ -157,5 +164,12 @@ final class MappingVersionControllerAtomicityTest extends PublicTestCase
             Event::forget('eloquent.deleting: ' . MapIcon::class);
             $newMappingVersion->fresh()?->delete();
         }
+    }
+
+    private function countEnemyPackPolylines(MappingVersion $mappingVersion): int
+    {
+        return Polyline::where('model_class', EnemyPack::class)
+            ->whereIn('model_id', EnemyPack::where('mapping_version_id', $mappingVersion->id)->select('id'))
+            ->count();
     }
 }

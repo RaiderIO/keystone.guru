@@ -775,9 +775,16 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     'teeming'            => null,
                     'faction'            => Faction::FACTION_ANY,
                     'label'              => sprintf('Imported from MDT - group %d', $groupIndex),
+                ]);
+                $enemyPackPolyline = Polyline::create([
+                    'model_id'    => $enemyPack->id,
+                    'model_class' => EnemyPack::class,
+                    'color'       => EnemyPack::DEFAULT_COLOR,
+                    'weight'      => EnemyPack::DEFAULT_WEIGHT,
                     // 3. Create a new bounding box according to the new enemies lat/lngs
                     'vertices_json' => json_encode($this->getVerticesBoundingBoxFromEnemies($boundingBoxEnemies)),
                 ]);
+                $enemyPack->update(['polyline_id' => $enemyPackPolyline->id]);
                 $this->log->importEnemyPacksSaveNewEnemyPackOK($enemyPack->id, $mdtEnemiesWithGroupsByEnemyPack->count());
 
                 try {

@@ -73,13 +73,13 @@ class Polyline extends VersionableMapObject {
                     new Attribute({
                         name: 'color_animated',
                         type: 'color',
-                        edit: getState().hasPatreonBenefit(c.patreonbenefits.animated_polylines),
+                        edit: this._isAnimatable() && getState().hasPatreonBenefit(c.patreonbenefits.animated_polylines),
                         setter: this.setPolylineColorAnimated.bind(this),
                         // This default sets enemy patrols to animate by default - do not want?
                         default: function () {
                             let result = null;
 
-                            if (self.id === null && getState().hasPatreonBenefit(c.patreonbenefits.animated_polylines)) {
+                            if (self.id === null && self._isAnimatable() && getState().hasPatreonBenefit(c.patreonbenefits.animated_polylines)) {
                                 result = c.map.polyline.defaultColorAnimated;
                             }
 
@@ -89,10 +89,11 @@ class Polyline extends VersionableMapObject {
                     new Attribute({
                         name: 'weight',
                         type: 'select',
+                        edit: this._isWeightEditable(),
                         setter: this.setPolylineWeight.bind(this),
                         values: weights,
                         show_default: false,
-                        default: c.map.polyline.defaultWeight
+                        default: this._getPolylineWeightDefault.bind(this)
                     }),
                     new Attribute({
                         name: 'vertices_json',
@@ -114,6 +115,33 @@ class Polyline extends VersionableMapObject {
      */
     _getPolylineColorDefault() {
         return c.map.polyline.defaultColor;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     * @protected
+     */
+    _getPolylineWeightDefault() {
+        return c.map.polyline.defaultWeight;
+    }
+
+    /**
+     * Whether the user picks the weight of this polyline. When not, the weight is stored but the layer keeps its own style.
+     * @returns {boolean}
+     * @protected
+     */
+    _isWeightEditable() {
+        return true;
+    }
+
+    /**
+     * Whether this polyline can be given an animated layer.
+     * @returns {boolean}
+     * @protected
+     */
+    _isAnimatable() {
+        return true;
     }
 
     /**
@@ -191,7 +219,7 @@ class Polyline extends VersionableMapObject {
         this._setAnimatedLayerVisibility(false);
         this.layerAnimated = null;
 
-        if (this.polyline.color_animated !== null) {
+        if (this.polyline.color_animated !== null && this._isAnimatable()) {
             this.layerAnimated = L.polyline.antPath(this.getVertices(),
                 $.extend({}, c.map.polyline.polylineOptionsAnimated, {
                     color: this.polyline.color,
@@ -212,6 +240,11 @@ class Polyline extends VersionableMapObject {
         console.assert(this instanceof Polyline, 'this was not a Polyline', this);
 
         this.polyline.weight = weight;
+
+        if (!this._isWeightEditable()) {
+            return;
+        }
+
         this.layer.setStyle({
             weight: this.polyline.weight
         });
@@ -232,7 +265,9 @@ class Polyline extends VersionableMapObject {
     getVertices() {
         console.assert(this instanceof Polyline, 'this is not a Polyline', this);
 
-        let coordinates = this.layer.toGeoJSON().geometry.coordinates;
+        let geometry = this.layer.toGeoJSON().geometry;
+        // A polygon is a list of rings; its outer ring repeats the first vertex at the end to close it
+        let coordinates = geometry.type === 'Polygon' ? geometry.coordinates[0].slice(0, -1) : geometry.coordinates;
         let result = [];
         for (let i = 0; i < coordinates.length; i++) {
             // 0 is lng, 1 is lat
@@ -249,4 +284,10 @@ class Polyline extends VersionableMapObject {
         this.map.unregister('map:beforerefresh', this);
         this.unregister(['shown', 'hidden'], this);
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {Polyline};
 }

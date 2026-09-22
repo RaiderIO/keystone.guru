@@ -105,33 +105,9 @@ class MountableArea extends VersionableMapObject {
     _updateHullLayer() {
         console.assert(this instanceof MountableArea, 'this is not a MountableArea', this);
 
-        let result = null;
-        let latLngs = this.getVertices();
+        let points = this.getVertices().map(latLng => [latLng.lat, latLng.lng]);
 
-        // Build a layer based off a hull if we're supposed to
-        if (latLngs.length > 1) {
-            let vertices = [];
-            for (let i = 0; i < latLngs.length; i++) {
-                vertices.push([latLngs[i].lat, latLngs[i].lng]);
-            }
-
-            let hullPoints = hull(vertices, 100);
-            // Only if we can actually make an offset
-            if (hullPoints.length > 1) {
-                try {
-                    let offsetLatLngs = createOffsetPolygon(
-                        hullPoints.map(point => ({lat: point[0], lng: point[1]})),
-                        c.map.mountablearea.margin,
-                        c.map.mountablearea.arcSegments(hullPoints.length)
-                    );
-
-                    result = L.polygon([offsetLatLngs], c.map.mountablearea.polygonOptions);
-                } catch (error) {
-                    // Not particularly interesting to spam the console with
-                    console.error('Unable to create offset for mountable area', this.id, error);
-                }
-            }
-        }
+        let result = createOffsetHullPolygon(points, c.map.mountablearea.margin, c.map.mountablearea.arcSegments, c.map.mountablearea.polygonOptions);
 
         let mountableAreaMapObjectGroup = this.map.mapObjectGroupManager.getMountableAreaMapObjectGroup();
         mountableAreaMapObjectGroup.setLayerToMapObject(result, this);

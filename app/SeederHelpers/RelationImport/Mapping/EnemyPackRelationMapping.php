@@ -4,6 +4,7 @@ namespace App\SeederHelpers\RelationImport\Mapping;
 
 use App\Models\EnemyPack;
 use App\SeederHelpers\RelationImport\Conditionals\MappingVersionConditional;
+use App\SeederHelpers\RelationImport\Parsers\Relation\EnemyPackPolylineRelationParser;
 
 class EnemyPackRelationMapping extends RelationMapping
 {
@@ -16,6 +17,9 @@ class EnemyPackRelationMapping extends RelationMapping
 
         $this->setConditionals(collect([
             new MappingVersionConditional(),
+        ]));
+        $this->setPreSaveRelationParsers(collect([
+            new EnemyPackPolylineRelationParser(),
         ]));
     }
 }

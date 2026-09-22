@@ -16,11 +16,10 @@ L.Draw.EnemyPack = L.Draw.Polygon.extend({
 /**
  * @property {Number} floor_id
  * @property {Number|null} group
- * @property {string} color
  * @property {String} label
- * @property {Array} vertices
+ * @property {Object} polyline
  */
-class EnemyPack extends VersionableMapObject {
+class EnemyPack extends Polyline {
     constructor(map, layer) {
         super(map, layer, {name: 'enemypack', has_route_model_binding: true});
 
@@ -44,6 +43,28 @@ class EnemyPack extends VersionableMapObject {
     /**
      * @inheritDoc
      */
+    _getPolylineWeightDefault() {
+        return c.map.enemypack.polygonOptions.weight;
+    }
+
+    /**
+     * Outside the mapping editor a pack is drawn as the hull of its enemies, so its own weight is never shown.
+     * @inheritDoc
+     */
+    _isWeightEditable() {
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _isAnimatable() {
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
     _getAttributes(force) {
         console.assert(this instanceof EnemyPack, 'this was not an EnemyPack', this);
 
@@ -55,35 +76,15 @@ class EnemyPack extends VersionableMapObject {
 
         return this._cachedAttributes = super._getAttributes(force).concat([
             new Attribute({
-                name: 'floor_id',
-                type: 'int',
-                edit: false, // Not directly changeable by user
-                default: getState().getCurrentFloor().id
-            }),
-            new Attribute({
                 name: 'group',
                 type: 'int',
                 default: null
-            }),
-            new Attribute({
-                name: 'color',
-                type: 'color',
-                setter: this.setColor.bind(this),
-                default: this._getPolylineColorDefault.bind(this)
             }),
             new Attribute({
                 name: 'label',
                 type: 'text',
                 edit: false, // Not directly changeable by user
                 default: 'Enemy pack'
-            }),
-            new Attribute({
-                name: 'vertices_json',
-                type: 'string',
-                edit: false,
-                getter: function () {
-                    return JSON.stringify(self.getVertices());
-                }
             }),
             new Attribute({
                 name: 'mark_as_skippable',
@@ -121,28 +122,13 @@ class EnemyPack extends VersionableMapObject {
     }
 
     /**
-     * Sets the color of the pack.
-     * @param color
-     */
-    setColor(color) {
-        console.assert(this instanceof EnemyPack, 'this was not an EnemyPack', this);
-
-        this.color = color;
-        this.layer.setStyle({
-            fillColor: this.color ?? this._getPolylineColorDefault(),
-            color: this.color ?? this._getPolylineColorDefault()
-        });
-        this.layer.redraw();
-    }
-
-    /**
      * @inheritDoc
      **/
     loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
         super.loadRemoteMapObject(remoteMapObject, parentAttribute);
 
-        // Only called when not in admin state
-        if (!(getState().getMapContext() instanceof MapContextMappingVersionEdit)) {
+        // The nested polyline is loaded through this same method; only the pack itself carries its enemies
+        if (parentAttribute === null && !(getState().getMapContext() instanceof MapContextMappingVersionEdit)) {
             // Re-set the layer now that we know of the raw enemies
             this.setRawEnemies(remoteMapObject.enemies);
             this._updateHullLayer();
@@ -183,7 +169,6 @@ class EnemyPack extends VersionableMapObject {
     _updateHullLayer() {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
-        let result = null;
         let self = this;
 
         // Convert raw enemies to current enemies
@@ -200,31 +185,15 @@ class EnemyPack extends VersionableMapObject {
             }
         }
 
-        // Build a layer based off a hull if we're supposed to
-        if (latLngs.length > 1) {
-            let hullPoints = hull(latLngs, 100);
-            // Only if we can actually make an offset
-            if (hullPoints.length > 1) {
-                try {
-                    let floor = getState().getMapContext().getFloorById(this.floor_id);
-                    let enemyPackMargin = (floor !== false && floor.enemy_pack_margin !== null && floor.enemy_pack_margin !== undefined) ?
-                        floor.enemy_pack_margin : c.map.enemypack.margin;
+        let floor = getState().getMapContext().getFloorById(this.floor_id);
+        let enemyPackMargin = (floor !== false && floor.enemy_pack_margin !== null && floor.enemy_pack_margin !== undefined) ?
+            floor.enemy_pack_margin : c.map.enemypack.margin;
 
-                    let offsetLatLngs = createOffsetPolygon(
-                        hullPoints.map(point => ({lat: point[0], lng: point[1]})),
-                        enemyPackMargin,
-                        c.map.enemypack.arcSegments(hullPoints.length)
-                    );
-
-                    result = L.polygon([offsetLatLngs], c.map.enemypack.polygonOptions);
-                    result.on('click', function (clickEvent) {
-                        self.signal('enemypack:clicked', {clickEvent: clickEvent});
-                    });
-                } catch (error) {
-                    // Not particularly interesting to spam the console with
-                    console.error('Unable to create offset for pack', this.id, error);
-                }
-            }
+        let result = createOffsetHullPolygon(latLngs, enemyPackMargin, c.map.enemypack.arcSegments, c.map.enemypack.polygonOptions);
+        if (result !== null) {
+            result.on('click', function (clickEvent) {
+                self.signal('enemypack:clicked', {clickEvent: clickEvent});
+            });
         }
 
         let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getEnemyPackMapObjectGroup();
@@ -290,21 +259,6 @@ class EnemyPack extends VersionableMapObject {
             result += enemy.getEnemyForces();
         }
 
-        return result;
-    }
-
-    /**
-     *
-     * @returns {[]}
-     */
-    getVertices() {
-        console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
-
-        let coordinates = this.layer.toGeoJSON().geometry.coordinates[0];
-        let result = [];
-        for (let i = 0; i < coordinates.length - 1; i++) {
-            result.push({lat: coordinates[i][1], lng: coordinates[i][0]});
-        }
         return result;
     }
 

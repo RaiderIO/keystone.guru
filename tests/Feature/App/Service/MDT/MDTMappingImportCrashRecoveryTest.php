@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Service\MDT;
 
 use App\Models\Dungeon;
+use App\Models\EnemyPack;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\CacheServiceInterface;
@@ -164,6 +165,56 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
                 $newMappingVersion->fresh()->mdt_mapping_hash,
                 'A successful import must stamp the new mapping version with the freshly computed MDT hash.',
             );
+        } finally {
+            $newMappingVersion?->delete();
+
+            $dungeon->update(['mdt_id' => $originalDungeonMdtId]);
+        }
+    }
+
+    /**
+     * Stubs importNpcsDataFromMDT() for the reason the test above gives.
+     */
+    #[Test]
+    public function importMappingVersionFromMDT_givenImportSucceeds_givesEveryImportedEnemyPackItsBoundingBoxPolyline(): void
+    {
+        // Arrange
+        /** @var Dungeon $dungeon */
+        $dungeon     = Dungeon::query()->where('key', 'throne_of_the_tides')->firstOrFail();
+        $gameVersion = GameVersion::query()->findOrFail($dungeon->getCurrentMappingVersion()->game_version_id);
+
+        $mappingService = $this->app->make(MappingServiceInterface::class);
+
+        $mappingImportService = $this->getMockBuilderPublic(MDTMappingImportService::class)
+            ->setConstructorArgs([
+                $this->app->make(CacheServiceInterface::class),
+                $this->app->make(CoordinatesServiceInterface::class),
+                $this->app->make(MDTAddonVersionServiceInterface::class),
+                $this->app->make(MDTMappingImportServiceLoggingInterface::class),
+            ])
+            ->onlyMethods(['importNpcsDataFromMDT'])
+            ->getMock();
+
+        $originalDungeonMdtId = $dungeon->mdt_id;
+
+        $newMappingVersion = null;
+
+        try {
+            // Act
+            $newMappingVersion = $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $gameVersion, true);
+
+            // Assert
+            $enemyPacks = $newMappingVersion->enemyPacks()->with('polyline')->get();
+            $this->assertNotEmpty($enemyPacks, 'The MDT import should have created enemy packs.');
+
+            foreach ($enemyPacks as $enemyPack) {
+                /** @var EnemyPack $enemyPack */
+                $this->assertNotNull($enemyPack->polyline, sprintf('Enemy pack %d has no polyline', $enemyPack->id));
+                $this->assertSame($enemyPack->polyline->id, $enemyPack->polyline_id);
+                $this->assertSame(EnemyPack::DEFAULT_COLOR, $enemyPack->polyline->color);
+                // A bounding box
+                $this->assertCount(4, json_decode($enemyPack->polyline->vertices_json, true));
+            }
         } finally {
             $newMappingVersion?->delete();
 

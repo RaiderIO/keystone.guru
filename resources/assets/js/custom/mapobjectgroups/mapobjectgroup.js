@@ -134,6 +134,27 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
+     * Converts a vertices_json string to a list of [lat, lng] points.
+     * @param verticesJson {String|null|undefined}
+     * @returns {Array}
+     * @protected
+     */
+    _verticesJsonToPoints(verticesJson) {
+        let points = [];
+
+        if (typeof verticesJson === 'string') {
+            let vertices = JSON.parse(verticesJson);
+
+            for (let j = 0; j < vertices.length; j++) {
+                let vertex = vertices[j];
+                points.push([vertex.lat, vertex.lng]);
+            }
+        }
+
+        return points;
+    }
+
+    /**
      *
      * @param remoteMapObject {Object}
      * @protected

@@ -365,12 +365,17 @@ class MappingVersion extends Model
         /** @var EloquentCollection<int, EnemyPack> $enemyPacks */
         $enemyPacks = $this->enemyPacks()->with([
             'floor',
+            'polyline',
             'enemies:enemies.id,enemies.enemy_pack_id',
         ])->get();
 
         if ($this->facade_enabled && $useFacade) {
             $enemyPacks = $enemyPacks->map(function (EnemyPack $enemyPack) use ($coordinatesService) {
-                $newFloor = $this->convertVerticesForFacade($coordinatesService, $enemyPack, $enemyPack->floor);
+                if ($enemyPack->polyline === null) {
+                    return $enemyPack;
+                }
+
+                $newFloor = $this->convertVerticesForFacade($coordinatesService, $enemyPack->polyline, $enemyPack->floor);
                 $enemyPack->setRelation('floor', $newFloor);
                 $enemyPack->floor_id = $newFloor->id;
 
@@ -555,7 +560,7 @@ class MappingVersion extends Model
             $previousMappingVersion->load([
                 'dungeonFloorSwitchMarkers',
                 'enemies',
-                'enemyPacks',
+                'enemyPacks.polyline',
                 'enemyPatrols',
                 'mapIcons',
                 'mountableAreas',
@@ -691,7 +696,9 @@ class MappingVersion extends Model
         static::deleting(static function (MappingVersion $mappingVersion) {
             $mappingVersion->dungeonFloorSwitchMarkers()->delete();
             $mappingVersion->enemies()->delete();
-            $mappingVersion->enemyPacks()->delete();
+            foreach ($mappingVersion->enemyPacks()->with('polyline')->get() as $enemyPack) {
+                $enemyPack->delete();
+            }
 
             foreach ($mappingVersion->enemyPatrols as $enemyPatrol) {
                 $enemyPatrol->delete();

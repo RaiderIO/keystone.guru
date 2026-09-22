@@ -582,10 +582,10 @@ class Save extends Command
             return $model;
         };
         $roundLatLngPolyLinesFn = static function (mixed $model) use ($roundLatLngVerticesFn) {
-            /** @var Model&HasVerticesInterface $polyline */
+            /** @var (Model&HasVerticesInterface)|null $polyline */
             $polyline = $model->polyline;
 
-            return $roundLatLngVerticesFn($polyline);
+            return $polyline === null ? $model : $roundLatLngVerticesFn($polyline);
         };
 //        $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
@@ -601,7 +601,7 @@ class Save extends Command
             ->values();
         $enemies = $enemiesCollection->each($roundLatLngFn);
 
-        $enemyPacks   = $floor->enemyPacksForExport->values()->each($roundLatLngVerticesFn);
+        $enemyPacks   = $floor->enemyPacksForExport->values()->each($roundLatLngPolyLinesFn);
         $enemyPatrols = $floor->enemyPatrolsForExport->makeVisible(['mdtPolyline'])->values()->each($roundLatLngPolyLinesFn);
         /** @var EloquentCollection<int, DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport

@@ -6,10 +6,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-120.2626,\"lng\":124.6677},{\"lat\":-128.1728,\"lng\":126.4676},{\"lat\":-127.1781,\"lng\":132.5778},{\"lat\":-119.5995,\"lng\":131.2042}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-120.2626,\"lng\":124.6677},{\"lat\":-128.1728,\"lng\":126.4676},{\"lat\":-127.1781,\"lng\":132.5778},{\"lat\":-119.5995,\"lng\":131.2042}]"
+        }
     },
     {
         "id": 6077,
@@ -18,10 +21,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-91.2188,\"lng\":162.0625},{\"lat\":-94.5313,\"lng\":161.5},{\"lat\":-94,\"lng\":167.3125},{\"lat\":-91.4063,\"lng\":166.875}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-91.2188,\"lng\":162.0625},{\"lat\":-94.5313,\"lng\":161.5},{\"lat\":-94,\"lng\":167.3125},{\"lat\":-91.4063,\"lng\":166.875}]"
+        }
     },
     {
         "id": 6078,
@@ -30,10 +36,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-85.7813,\"lng\":156.2813},{\"lat\":-89.4375,\"lng\":155.9375},{\"lat\":-88.6875,\"lng\":159.5313},{\"lat\":-85.4688,\"lng\":159.4375}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-85.7813,\"lng\":156.2813},{\"lat\":-89.4375,\"lng\":155.9375},{\"lat\":-88.6875,\"lng\":159.5313},{\"lat\":-85.4688,\"lng\":159.4375}]"
+        }
     },
     {
         "id": 6080,
@@ -42,10 +51,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-64.6074,\"lng\":218.8316},{\"lat\":-70.8124,\"lng\":211.4898},{\"lat\":-73.607,\"lng\":214.7581},{\"lat\":-67.4494,\"lng\":222.9051}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-64.6074,\"lng\":218.8316},{\"lat\":-70.8124,\"lng\":211.4898},{\"lat\":-73.607,\"lng\":214.7581},{\"lat\":-67.4494,\"lng\":222.9051}]"
+        }
     },
     {
         "id": 6081,
@@ -54,10 +66,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-79.5278,\"lng\":205.427},{\"lat\":-86.159,\"lng\":203.4849},{\"lat\":-88.0063,\"lng\":208.8847},{\"lat\":-80.8066,\"lng\":211.774}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-79.5278,\"lng\":205.427},{\"lat\":-86.159,\"lng\":203.4849},{\"lat\":-88.0063,\"lng\":208.8847},{\"lat\":-80.8066,\"lng\":211.774}]"
+        }
     },
     {
         "id": 6082,
@@ -66,10 +81,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-145.793,\"lng\":204.1481},{\"lat\":-152.8979,\"lng\":207.6532},{\"lat\":-148.5402,\"lng\":213.8108},{\"lat\":-144.3246,\"lng\":209.4057}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-145.793,\"lng\":204.1481},{\"lat\":-152.8979,\"lng\":207.6532},{\"lat\":-148.5402,\"lng\":213.8108},{\"lat\":-144.3246,\"lng\":209.4057}]"
+        }
     },
     {
         "id": 6083,
@@ -78,10 +96,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-118.889,\"lng\":205.6164},{\"lat\":-124.7624,\"lng\":203.627},{\"lat\":-125.7097,\"lng\":206.5637},{\"lat\":-119.5995,\"lng\":210.4478}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-118.889,\"lng\":205.6164},{\"lat\":-124.7624,\"lng\":203.627},{\"lat\":-125.7097,\"lng\":206.5637},{\"lat\":-119.5995,\"lng\":210.4478}]"
+        }
     },
     {
         "id": 6084,
@@ -90,10 +111,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-99.2794,\"lng\":219.4},{\"lat\":-105.816,\"lng\":219.5421},{\"lat\":-105.6739,\"lng\":226.8838},{\"lat\":-99.3742,\"lng\":226.647}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-99.2794,\"lng\":219.4},{\"lat\":-105.816,\"lng\":219.5421},{\"lat\":-105.6739,\"lng\":226.8838},{\"lat\":-99.3742,\"lng\":226.647}]"
+        }
     },
     {
         "id": 6085,
@@ -102,10 +126,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-116.125,\"lng\":228.9063},{\"lat\":-120.875,\"lng\":229.0625},{\"lat\":-120.8125,\"lng\":235.3125},{\"lat\":-116.4375,\"lng\":234.6875}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-116.125,\"lng\":228.9063},{\"lat\":-120.875,\"lng\":229.0625},{\"lat\":-120.8125,\"lng\":235.3125},{\"lat\":-116.4375,\"lng\":234.6875}]"
+        }
     },
     {
         "id": 6173,
@@ -114,10 +141,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-198.625,\"lng\":25.5625},{\"lat\":-199.1875,\"lng\":33.3125},{\"lat\":-204.25,\"lng\":35.375},{\"lat\":-205.9375,\"lng\":29.6875},{\"lat\":-204.5625,\"lng\":24.75}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-198.625,\"lng\":25.5625},{\"lat\":-199.1875,\"lng\":33.3125},{\"lat\":-204.25,\"lng\":35.375},{\"lat\":-205.9375,\"lng\":29.6875},{\"lat\":-204.5625,\"lng\":24.75}]"
+        }
     },
     {
         "id": 6174,
@@ -126,10 +156,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-55.0657,\"lng\":162.1101},{\"lat\":-58.1529,\"lng\":165.269},{\"lat\":-65.2604,\"lng\":160.8896},{\"lat\":-61.6707,\"lng\":157.2281},{\"lat\":-54.7068,\"lng\":161.3921}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-55.0657,\"lng\":162.1101},{\"lat\":-58.1529,\"lng\":165.269},{\"lat\":-65.2604,\"lng\":160.8896},{\"lat\":-61.6707,\"lng\":157.2281},{\"lat\":-54.7068,\"lng\":161.3921}]"
+        }
     },
     {
         "id": 6175,
@@ -138,10 +171,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-51.2607,\"lng\":175.3201},{\"lat\":-53.9888,\"lng\":181.0636},{\"lat\":-59.8041,\"lng\":178.5508},{\"lat\":-55.9273,\"lng\":170.1509},{\"lat\":-50.7581,\"lng\":173.0227}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-51.2607,\"lng\":175.3201},{\"lat\":-53.9888,\"lng\":181.0636},{\"lat\":-59.8041,\"lng\":178.5508},{\"lat\":-55.9273,\"lng\":170.1509},{\"lat\":-50.7581,\"lng\":173.0227}]"
+        }
     },
     {
         "id": 6176,
@@ -150,10 +186,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-48.6924,\"lng\":205.427},{\"lat\":-50.4923,\"lng\":208.6952},{\"lat\":-64.8442,\"lng\":217.1264},{\"lat\":-68.0651,\"lng\":212.8634},{\"lat\":-53.2395,\"lng\":198.2747}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-48.6924,\"lng\":205.427},{\"lat\":-50.4923,\"lng\":208.6952},{\"lat\":-64.8442,\"lng\":217.1264},{\"lat\":-68.0651,\"lng\":212.8634},{\"lat\":-53.2395,\"lng\":198.2747}]"
+        }
     },
     {
         "id": 6177,
@@ -162,10 +201,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-78.1541,\"lng\":214.4265},{\"lat\":-81.2803,\"lng\":220.2526},{\"lat\":-85.3538,\"lng\":218.5},{\"lat\":-82.8434,\"lng\":212.5319}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-78.1541,\"lng\":214.4265},{\"lat\":-81.2803,\"lng\":220.2526},{\"lat\":-85.3538,\"lng\":218.5},{\"lat\":-82.8434,\"lng\":212.5319}]"
+        }
     },
     {
         "id": 6178,
@@ -174,10 +216,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-127.1307,\"lng\":254.1667},{\"lat\":-128.1254,\"lng\":258.2876},{\"lat\":-134.6146,\"lng\":256.6298},{\"lat\":-133.0989,\"lng\":250.6616}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-127.1307,\"lng\":254.1667},{\"lat\":-128.1254,\"lng\":258.2876},{\"lat\":-134.6146,\"lng\":256.6298},{\"lat\":-133.0989,\"lng\":250.6616}]"
+        }
     },
     {
         "id": 6179,
@@ -186,10 +231,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-119.1732,\"lng\":254.4509},{\"lat\":-120.0258,\"lng\":261.6032},{\"lat\":-126.6571,\"lng\":261.0822},{\"lat\":-125.8045,\"lng\":253.4089}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-119.1732,\"lng\":254.4509},{\"lat\":-120.0258,\"lng\":261.6032},{\"lat\":-126.6571,\"lng\":261.0822},{\"lat\":-125.8045,\"lng\":253.4089}]"
+        }
     },
     {
         "id": 6180,
@@ -198,10 +246,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-71.9492,\"lng\":250.1406},{\"lat\":-72.1386,\"lng\":255.3509},{\"lat\":-77.4436,\"lng\":257.1034},{\"lat\":-78.8173,\"lng\":251.2774}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-71.9492,\"lng\":250.1406},{\"lat\":-72.1386,\"lng\":255.3509},{\"lat\":-77.4436,\"lng\":257.1034},{\"lat\":-78.8173,\"lng\":251.2774}]"
+        }
     },
     {
         "id": 6181,
@@ -210,10 +261,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-61.8128,\"lng\":238.4412},{\"lat\":-64.7022,\"lng\":246.5408},{\"lat\":-70.5756,\"lng\":245.1198},{\"lat\":-67.2599,\"lng\":237.1149}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-61.8128,\"lng\":238.4412},{\"lat\":-64.7022,\"lng\":246.5408},{\"lat\":-70.5756,\"lng\":245.1198},{\"lat\":-67.2599,\"lng\":237.1149}]"
+        }
     },
     {
         "id": 6182,
@@ -222,10 +276,13 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-133.249,\"lng\":319.1946},{\"lat\":-140.2848,\"lng\":313.9536},{\"lat\":-136.4079,\"lng\":308.3537},{\"lat\":-129.6593,\"lng\":314.3844}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-133.249,\"lng\":319.1946},{\"lat\":-140.2848,\"lng\":313.9536},{\"lat\":-136.4079,\"lng\":308.3537},{\"lat\":-129.6593,\"lng\":314.3844}]"
+        }
     },
     {
         "id": 6183,
@@ -234,9 +291,12 @@
         "group": null,
         "teeming": null,
         "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-126.5722,\"lng\":301.5333},{\"lat\":-137.3412,\"lng\":298.4462},{\"lat\":-135.1156,\"lng\":292.9181},{\"lat\":-124.7774,\"lng\":295.3591},{\"lat\":-126.1414,\"lng\":301.5333}]"
+        "polyline": {
+            "color": "#5993D2",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-126.5722,\"lng\":301.5333},{\"lat\":-137.3412,\"lng\":298.4462},{\"lat\":-135.1156,\"lng\":292.9181},{\"lat\":-124.7774,\"lng\":295.3591},{\"lat\":-126.1414,\"lng\":301.5333}]"
+        }
     }
 ]
