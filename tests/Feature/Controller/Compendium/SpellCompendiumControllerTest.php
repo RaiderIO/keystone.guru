@@ -8,6 +8,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
 use App\Models\Spell\SpellTuningChange;
+use App\Models\Translation\Translation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Laravel\Pennant\Feature;
@@ -397,8 +398,13 @@ final class SpellCompendiumControllerTest extends PublicTestCase
         [$dungeon]      = $this->findDungeon(dungeonActive: true);
         [$otherDungeon] = $this->findDungeon(dungeonActive: true, constraint: static fn(Builder $query) => $query->where('id', '!=', $dungeon->id));
 
-        $includedSpell = $this->createSpell();
-        $excludedSpell = $this->createSpell();
+        // An empty search still ORs `LIKE '%%'` over the spell and dungeon name translations, which drops a row
+        // where both are NULL - and the drawn dungeon's name is not guaranteed to be a translated key
+        $translatedName = Translation::query()->where('locale', 'en_US')->orderBy('id')->value('key');
+        $this->assertNotNull($translatedName);
+
+        $includedSpell = $this->createSpell(['name' => $translatedName]);
+        $excludedSpell = $this->createSpell(['name' => $translatedName]);
 
         // Collected as they are created, so a throw on the second one still hands the first to the finally.
         // `spell_dungeons` seeds empty on a shared MySQL server, so a leak here is permanent
