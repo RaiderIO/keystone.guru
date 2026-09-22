@@ -87,7 +87,7 @@ return [
                 'displaced'               => 'Engaged :distance yd from where :subject is mapped, in :routes routes (:share% of all), always in the same direction and keeping its shape. Move :subject to where it is engaged.',
                 'displaced_shape_unknown' => 'Engaged :distance yd from where :subject is mapped, in :routes routes (:share% of all), always in the same direction. Too few of its enemies were matched to tell whether it kept its shape or bunched up, so check which it is before moving :subject to where it is engaged.',
                 'converged'               => 'Engaged :distance yd from where :subject is mapped, in :routes routes (:share% of all), but bunched up (shape ratio :ratio): it runs to the group before its first logged event, so this is where the group fights. Leave the mapping alone.',
-                'scatter'                 => 'Engaged on average :distance yd from where :subject is mapped, in :routes routes, but in every direction (consistency :consistency). Body pulls or patrols - nothing to move.',
+                'scatter'                 => 'Engaged :distance yd from where :subject is mapped on average, in :routes routes, but in every direction (consistency :consistency). Body pulls or patrols - nothing to move.',
             ],
         ],
     ],

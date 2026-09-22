@@ -32,6 +32,8 @@ final class CombatLogRouteEnemyResolutionAnalysisServiceTest extends PublicTestC
 
     private const int NPC_ID = 99951;
 
+    private const int OTHER_NPC_ID = 99952;
+
     private CombatLogRouteEnemyResolutionAnalysisServiceInterface $service;
 
     private CoordinatesServiceInterface $coordinatesService;
@@ -57,7 +59,7 @@ final class CombatLogRouteEnemyResolutionAnalysisServiceTest extends PublicTestC
         $this->service            = app(CombatLogRouteEnemyResolutionAnalysisServiceInterface::class);
         $this->coordinatesService = app(CoordinatesServiceInterface::class);
 
-        [$this->dungeon] = $this->findDungeon(facadeEnabled: false, constraint: static function (Builder $query): void {
+        [$this->dungeon] = $this->findDungeon(facadeEnabled: false, minActiveFloors: 2, constraint: static function (Builder $query): void {
             $query->whereHas('floors', static fn(Builder $floors) => $floors->where('facade', 0)->where('ingame_max_x', '!=', 0));
         });
 
@@ -267,6 +269,108 @@ final class CombatLogRouteEnemyResolutionAnalysisServiceTest extends PublicTestC
     }
 
     #[Test]
+    public function analyze_givenScatter_reportsTheAverageOffsetRatherThanTheCentroidDistance(): void
+    {
+        // Arrange - 60 yd off in opposite directions: the centroids coincide, every engagement is still 60 yd off
+        $enemy = $this->createEnemy(0, 0);
+        foreach ([[60, 0], [-60, 0], [0, 60], [0, -60]] as $index => [$offsetX, $offsetY]) {
+            foreach (range(1, 3) as $repeat) {
+                $this->createResolution($enemy, $this->centerX + $offsetX, $this->centerY + $offsetY, $index * 10 + $repeat);
+            }
+        }
+
+        // Act
+        $groups = $this->analyze();
+
+        // Assert
+        $this->assertSame(EnemyResolutionVerdict::Scatter, $groups[0]->verdict);
+        $this->assertLessThan(1, $groups[0]->displacement);
+        $this->assertStringContainsString('Engaged 60 yd', $groups[0]->suggestion);
+    }
+
+    /**
+     * The engagement is recorded on the floor the log was on, the enemy's position on the enemy's own floor - measuring
+     * one against the other through a single floor's bounds would invent a displacement.
+     */
+    #[Test]
+    public function analyze_givenEnemyOnAnotherFloorThanTheEngagement_skipsTheResolution(): void
+    {
+        // Arrange
+        /** @var Floor $otherFloor */
+        $otherFloor = $this->dungeon->floors()->where('id', '!=', $this->floor->id)->firstOrFail();
+        $enemy      = $this->createEnemy(0, 0);
+        Enemy::query()->whereKey($enemy->id)->update(['floor_id' => $otherFloor->id]);
+        $this->createResolution($enemy, $this->centerX + 60, $this->centerY, 1);
+
+        // Act
+        $result = $this->service->analyze($this->dungeon, $this->mappingVersion, [self::NPC_ID]);
+
+        // Assert
+        $this->assertSame([], $result->groups);
+        $this->assertSame(1, $result->skippedCount);
+    }
+
+    #[Test]
+    public function analyze_givenFloorOfAnotherDungeon_skipsTheResolution(): void
+    {
+        // Arrange
+        $enemy = $this->createEnemy(0, 0);
+        $this->createResolution($enemy, $this->centerX + 60, $this->centerY, 1);
+        /** @var Floor $foreignFloor */
+        $foreignFloor = Floor::query()->where('dungeon_id', '!=', $this->dungeon->id)->firstOrFail();
+        CombatLogRouteEnemyResolution::query()->whereIn('id', $this->createdResolutionIds)->update(['floor_id' => $foreignFloor->id]);
+
+        // Act
+        $result = $this->service->analyze($this->dungeon, $this->mappingVersion, [self::NPC_ID]);
+
+        // Assert
+        $this->assertSame([], $result->groups);
+        $this->assertSame(1, $result->skippedCount);
+    }
+
+    #[Test]
+    public function analyze_givenNpcFilter_leavesOtherNpcsOut(): void
+    {
+        // Arrange
+        $enemy = $this->createEnemy(0, 0);
+        $this->createResolution($enemy, $this->centerX + 60, $this->centerY, 1);
+        $other = $this->createEnemy(200, 0, npcId: self::OTHER_NPC_ID);
+        $this->createResolution($other, $this->centerX + 260, $this->centerY, 2);
+
+        // Act
+        $groups = $this->analyze();
+
+        // Assert
+        $this->assertCount(1, $groups);
+        $this->assertSame([$enemy->id], $groups[0]->enemyIds);
+    }
+
+    /**
+     * A group's share of routes is measured against every route of the mapping version - filtering down to one npc
+     * must not turn a rare group into one seen in every route.
+     */
+    #[Test]
+    public function analyze_givenNpcFilter_measuresRouteShareAgainstEveryRoute(): void
+    {
+        // Arrange - the filtered npc in 2 routes, another npc in 8 others
+        $enemy = $this->createEnemy(0, 0);
+        foreach (range(1, 2) as $routeId) {
+            $this->createResolution($enemy, $this->centerX + 60, $this->centerY, $routeId);
+        }
+        $other = $this->createEnemy(200, 0, npcId: self::OTHER_NPC_ID);
+        foreach (range(11, 18) as $routeId) {
+            $this->createResolution($other, $this->centerX + 260, $this->centerY, $routeId);
+        }
+
+        // Act
+        $result = $this->service->analyze($this->dungeon, $this->mappingVersion, [self::NPC_ID]);
+
+        // Assert
+        $this->assertSame(10, $result->routeCount);
+        $this->assertEqualsWithDelta(0.2, $result->groups[0]->routeShare, 0.001);
+    }
+
+    #[Test]
     public function analyze_givenNoResolutions_returnsNoGroups(): void
     {
         // Act
@@ -327,7 +431,7 @@ final class CombatLogRouteEnemyResolutionAnalysisServiceTest extends PublicTestC
         return array_map(fn(array $offset): Enemy => $this->createEnemy($offset[0], $offset[1], $enemyPack->id), $offsets);
     }
 
-    private function createEnemy(float $offsetX, float $offsetY, ?int $enemyPackId = null): Enemy
+    private function createEnemy(float $offsetX, float $offsetY, ?int $enemyPackId = null, int $npcId = self::NPC_ID): Enemy
     {
         $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
             new IngameXY($this->centerX + $offsetX, $this->centerY + $offsetY, $this->floor),
@@ -337,7 +441,7 @@ final class CombatLogRouteEnemyResolutionAnalysisServiceTest extends PublicTestC
             'mapping_version_id' => $this->mappingVersion->id,
             'enemy_pack_id'      => $enemyPackId,
             'floor_id'           => $this->floor->id,
-            'npc_id'             => self::NPC_ID,
+            'npc_id'             => $npcId,
             'teeming'            => null,
             'required'           => true,
             'lat'                => $latLng->getLat(),
@@ -365,7 +469,7 @@ final class CombatLogRouteEnemyResolutionAnalysisServiceTest extends PublicTestC
             'dungeon_id'         => $this->dungeon->id,
             'floor_id'           => $this->floor->id,
             'mapping_version_id' => $this->mappingVersion->id,
-            'npc_id'             => self::NPC_ID,
+            'npc_id'             => $enemy->npc_id,
             'enemy_id'           => $enemy->id,
             'lat'                => $engaged->getLat(),
             'lng'                => $engaged->getLng(),

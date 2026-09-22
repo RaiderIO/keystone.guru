@@ -171,8 +171,9 @@ class AdminToolsAutoRouteCoverageController extends Controller
 
         $routes = [];
         foreach ($dungeonRoutes as $dungeonRoute) {
-            $challengeModeRun     = $challengeModeRuns->get($dungeonRoute->id);
-            $enemyResolutionCount = $challengeModeRun?->created_at?->greaterThanOrEqualTo($resolutionsRecordedSince)
+            $challengeModeRun = $challengeModeRuns->get($dungeonRoute->id);
+            // A route regenerated inside the window records fresh resolutions, whenever its run was
+            $enemyResolutionCount = $enemyResolutions->has($dungeonRoute->id) || $challengeModeRun?->created_at?->greaterThanOrEqualTo($resolutionsRecordedSince)
                 ? (int)$enemyResolutions->get($dungeonRoute->id, 0)
                 : null;
 

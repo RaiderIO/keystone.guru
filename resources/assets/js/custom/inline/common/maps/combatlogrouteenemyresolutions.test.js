@@ -116,7 +116,8 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
             }),
         };
 
-        vi.spyOn($, 'ajax').mockReturnValue({done: () => ({})});
+        const jqXhrStub = {done: function () { return this; }, fail: function () { return this; }};
+        vi.spyOn($, 'ajax').mockReturnValue(jqXhrStub);
         globalThis.getQueryParams = getQueryParams;
     });
 
@@ -512,7 +513,10 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
         instance.activate();
 
         const pending = [];
-        $.ajax.mockImplementation((options) => ({done: (callback) => { if (options.url.endsWith('/groups')) pending.push(callback); return {}; }}));
+        $.ajax.mockImplementation((options) => ({
+            done: function (callback) { if (options.url.endsWith('/groups')) pending.push(callback); return this; },
+            fail: function () { return this; },
+        }));
         instance._fetchGroups([1]);
         instance._fetchGroups([2]);
         pending[1]({data: [group({enemy_pack_id: 2})]});
@@ -551,5 +555,23 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
 
         expect(html).not.toContain('<b>x</b>');
         expect(html).not.toContain('<img');
+    });
+
+    test('fetchGroups_givenFailedRequest_clearsTheArrowsOfThePreviousFilter', () => {
+        const instance = createInstance();
+        instance.activate();
+        instance._groups = [group()];
+        instance._redrawGroups();
+
+        let failCallback;
+        $.ajax.mockImplementation(() => ({
+            done: function () { return this; },
+            fail: function (callback) { failCallback = callback; return this; },
+        }));
+        instance._fetchGroups([]);
+        failCallback();
+
+        expect(instance._groups).toEqual([]);
+        expect(layerGroupStub.layers).toEqual([]);
     });
 });

@@ -168,6 +168,15 @@ class CommonMapsCombatlogrouteenemyresolutions extends SearchInlineBase {
 
                 this._groups = (json && json.data) || [];
                 this._redrawGroups();
+            })
+            .fail(() => {
+                if (requestId !== this._groupRequestId) {
+                    return;
+                }
+
+                // Arrows of the previous filter would otherwise sit under the new heatmap, verdicts and all
+                this._groups = [];
+                this._redrawGroups();
             });
     }
 

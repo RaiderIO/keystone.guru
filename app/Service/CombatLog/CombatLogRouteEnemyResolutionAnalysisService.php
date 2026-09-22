@@ -59,14 +59,16 @@ readonly class CombatLogRouteEnemyResolutionAnalysisService implements CombatLog
         // 1. Every analysable resolution as a pair of ingame points, grouped per mapped pack and floor
         /** @var array<string, array<int, ResolutionPoint>> $pointsPerGroup */
         $pointsPerGroup = [];
-        /** @var array<string, true> $allRoutes */
-        $allRoutes    = [];
-        $skippedCount = 0;
+        $skippedCount   = 0;
 
         foreach ($resolutions as $resolution) {
             /** @var Floor|null $floor */
             $floor = $floors->get($resolution->floor_id);
-            if ($floor === null || $floor->facade) {
+            /** @var Enemy|null $enemy */
+            $enemy = $enemies->get($resolution->enemy_id);
+            // The engagement is recorded on the floor the log was on, the enemy's position on its own floor - across
+            // two floors neither the conversion nor the distance means anything
+            if ($floor === null || $floor->facade || ($enemy !== null && $enemy->floor_id !== $floor->id)) {
                 $skippedCount++;
 
                 continue;
@@ -81,13 +83,7 @@ readonly class CombatLogRouteEnemyResolutionAnalysisService implements CombatLog
                 continue;
             }
 
-            $route = $this->getRouteKey($resolution);
-            if ($route !== null) {
-                $allRoutes[$route] = true;
-            }
-
-            /** @var Enemy|null $enemy */
-            $enemy    = $enemies->get($resolution->enemy_id);
+            $route    = $this->getRouteKey($resolution);
             $groupKey = $enemy?->enemy_pack_id === null
                 ? sprintf('%d|enemy|%d', $floor->id, $resolution->enemy_id)
                 : sprintf('%d|pack|%d', $floor->id, $enemy->enemy_pack_id);
@@ -104,7 +100,7 @@ readonly class CombatLogRouteEnemyResolutionAnalysisService implements CombatLog
             ];
         }
 
-        $totalRouteCount = count($allRoutes);
+        $totalRouteCount = $this->countRoutes($dungeon, $mappingVersion);
 
         /** @var Collection<int, Npc> $npcs */
         $npcs = Npc::query()->whereIn('id', $resolutions->pluck('npc_id')->filter()->unique())->get()->keyBy('id');
@@ -143,6 +139,22 @@ readonly class CombatLogRouteEnemyResolutionAnalysisService implements CombatLog
     }
 
     /**
+     * The routes that recorded any long resolution in the mapping version, regardless of the npc and distance filters -
+     * a group's share of routes must not change with what else is filtered out.
+     */
+    private function countRoutes(Dungeon $dungeon, MappingVersion $mappingVersion): int
+    {
+        return CombatLogRouteEnemyResolution::query()
+            ->where('dungeon_id', $dungeon->id)
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->whereNotNull('dungeon_route_id')
+            ->distinct()
+            ->toBase()
+            ->get(['source', 'dungeon_route_id'])
+            ->count();
+    }
+
+    /**
      * An imported row's route id belongs to the deployment it came from, so the id alone does not identify a route.
      */
     private function getRouteKey(CombatLogRouteEnemyResolution $resolution): ?string
@@ -174,12 +186,14 @@ readonly class CombatLogRouteEnemyResolutionAnalysisService implements CombatLog
         $mappedY  = array_sum(array_column($points, 'mapped_y')) / $count;
 
         // How much the individual offsets agree on a direction, regardless of how long they are
-        $unitX = 0.0;
-        $unitY = 0.0;
+        $unitX       = 0.0;
+        $unitY       = 0.0;
+        $totalLength = 0.0;
         foreach ($points as $point) {
             $offsetX = $point['engaged_x'] - $point['mapped_x'];
             $offsetY = $point['engaged_y'] - $point['mapped_y'];
             $length  = sqrt($offsetX ** 2 + $offsetY ** 2);
+            $totalLength += $length;
             if ($length > 0) {
                 $unitX += $offsetX / $length;
                 $unitY += $offsetY / $length;
@@ -240,8 +254,9 @@ readonly class CombatLogRouteEnemyResolutionAnalysisService implements CombatLog
                 'services.combatlog.enemy_resolution_analysis.suggestion.%s',
                 $verdict === EnemyResolutionVerdict::Displaced && $shapeRatio === null ? 'displaced_shape_unknown' : $verdict->value,
             ), [
-                'subject'     => $subject,
-                'distance'    => round($displacement),
+                'subject' => $subject,
+                // Offsets in every direction cancel out in the centroids, so scatter reports how far off they each were
+                'distance'    => round($verdict === EnemyResolutionVerdict::Scatter ? $totalLength / $count : $displacement),
                 'routes'      => $routeCount,
                 'share'       => round($routeShare * 100),
                 'ratio'       => $shapeRatio === null ? '-' : round($shapeRatio, 2),
