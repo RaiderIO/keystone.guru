@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => 'No :npc in range on this floor, but there is one within :distance yd on another floor. The recorded floor is inferred from the previous npc in the log, so this is most likely that inference - verify before changing the mapping.',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => 'Mapped in the wrong place',
+                'converged' => 'Runs to the group before logged',
+                'scatter'   => 'Scattered',
+            ],
+            'subject' => [
+                'pack'  => 'pack :group (id :pack_id)',
+                'enemy' => 'enemy :enemy_id',
+            ],
+            'suggestion' => [
+                'displaced'               => 'Engaged :distance yd from where :subject is mapped, in :routes routes (:share% of all), always in the same direction and keeping its shape. Move :subject to where it is engaged.',
+                'displaced_shape_unknown' => 'Engaged :distance yd from where :subject is mapped, in :routes routes (:share% of all), always in the same direction. Too few of its enemies were matched to tell whether it kept its shape or bunched up, so check which it is before moving :subject to where it is engaged.',
+                'converged'               => 'Engaged :distance yd from where :subject is mapped, in :routes routes (:share% of all), but bunched up (shape ratio :ratio): it runs to the group before its first logged event, so this is where the group fights. Leave the mapping alone.',
+                'scatter'                 => 'Engaged on average :distance yd from where :subject is mapped, in :routes routes, but in every direction (consistency :consistency). Body pulls or patrols - nothing to move.',
+            ],
+        ],
     ],
 
 ];

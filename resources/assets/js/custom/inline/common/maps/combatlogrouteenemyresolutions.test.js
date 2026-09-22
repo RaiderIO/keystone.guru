@@ -34,6 +34,23 @@ globalThis.SearchHandlerCombatLogRouteEnemyResolutions = SearchHandlerCombatLogR
 
 const {CommonMapsCombatlogrouteenemyresolutions} = require('./combatlogrouteenemyresolutions');
 
+const Lang = require('lang.js');
+
+const MESSAGES = {
+    'en.js': {
+        enemy_resolution_group_verdict_displaced: 'Mapped in the wrong place',
+        enemy_resolution_group_verdict_converged: 'Runs to the group before logged',
+        enemy_resolution_group_verdict_scatter:   'Scattered',
+        enemy_resolution_group_pack:              'Pack :group (id :id)',
+        enemy_resolution_group_enemy:             'Enemy :id',
+        enemy_resolution_group_resolutions:       ':count long matches in :routes routes (:share% of routes)',
+        enemy_resolution_group_displacement:      'Engaged :distance yd from where it is mapped',
+        enemy_resolution_group_consistency:       'Direction consistency :consistency, shape ratio :ratio',
+        enemy_resolution_group_seen:              'Seen :first - :last',
+        enemy_resolution_group_low_volume:        'Few routes - treat with caution',
+    },
+};
+
 describe('CommonMapsCombatlogrouteenemyresolutions', () => {
     let dungeonMapStub;
     let stateStub;
@@ -55,7 +72,9 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
             <div id="routes_container"></div>
             <div id="routes_list"></div>
             <input type="checkbox" id="show_lines" checked>
+            <input type="checkbox" id="show_groups" checked>
         `;
+        globalThis.lang = new Lang({messages: MESSAGES, locale: 'en'});
 
         dungeonMapStub = {
             pluginHeat: {
@@ -88,6 +107,13 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
                 bindPopup: function (html) { this.popup = html; return this; },
                 addTo: function (group) { group.layers.push(this); return this; },
             }),
+            circleMarker: (latLng, options) => ({
+                latLng,
+                options,
+                popup: null,
+                bindPopup: function (html) { this.popup = html; return this; },
+                addTo: function (group) { group.layers.push(this); return this; },
+            }),
         };
 
         vi.spyOn($, 'ajax').mockReturnValue({done: () => ({})});
@@ -104,6 +130,15 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
         dungeon_route_public_key: null, dungeon_route_url: null,
     }, overrides);
 
+    const group = (overrides = {}) => Object.assign({
+        floor_id: 5, enemy_pack_id: 30136, enemy_pack_group: 64, enemy_ids: [1, 2, 3], npc_names: 'Npc',
+        count: 400, route_count: 300, route_share: 0.87,
+        engaged_centroid: {lat: -50, lng: 60}, mapped_centroid: {lat: -52, lng: 63},
+        displacement: 44.2, direction_consistency: 0.91, shape_ratio: 0.94,
+        first_seen: '2026-09-18T09:08:05+00:00', last_seen: '2026-09-22T15:20:02+00:00',
+        verdict: 'displaced', low_volume: false, suggestion: 'Move it',
+    }, overrides);
+
     function createInstance() {
         return new CommonMapsCombatlogrouteenemyresolutions('combatlogrouteenemyresolutions', 'common/maps/combatlogrouteenemyresolutions', {
             dungeonId: 123,
@@ -112,6 +147,9 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
             getEnemyResolutionsUrl: '/ajax/admin/combatlogroute/enemy-resolutions',
             linesUrl: '/ajax/admin/combatlogroute/enemy-resolutions/lines',
             showLinesSelector: '#show_lines',
+            groupsUrl: '/ajax/admin/combatlogroute/enemy-resolutions/groups',
+            showGroupsSelector: '#show_groups',
+            verdictColors: {displaced: '#e74c3c', converged: '#3498db', scatter: '#95a5a6'},
             linePopupTexts: {
                 npc: ':name (:id)',
                 distance: 'Resolved to enemy :enemy, :distance yd away',
@@ -419,5 +457,99 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
         instance._redrawLines();
 
         expect(layerGroupStub.layers[0].popup).toContain('Deadly Thing (42)');
+    });
+
+    test('search_alsoFetchesGroupsWithTheSameFilters', () => {
+        const instance = createInstance();
+        $('#filter_npc_id').append('<option value="42" selected>x</option>');
+        $('#filter_min_distance').val('75');
+
+        instance.activate();
+
+        const groupsCall = $.ajax.mock.calls.find((call) => call[0].url === '/ajax/admin/combatlogroute/enemy-resolutions/groups');
+        expect(groupsCall).toBeDefined();
+        expect(groupsCall[0].data).toEqual({dungeon_id: 123, mapping_version_id: 10, npc_id: [42], min_distance: '75'});
+    });
+
+    test('redrawGroups_drawsOnlyCurrentFloorGroupsAsAnArrowFromMappedToEngaged', () => {
+        const instance = createInstance();
+        instance.activate();
+
+        instance._groups = [group({floor_id: 5}), group({floor_id: 6})];
+        instance._redrawGroups();
+
+        // A line and a marker at either end, for the one group on this floor
+        expect(layerGroupStub.layers.length).toBe(3);
+        expect(layerGroupStub.layers[0].latLngs).toEqual([[-52, 63], [-50, 60]]);
+        expect(layerGroupStub.layers[0].options.color).toBe('#e74c3c');
+        expect(layerGroupStub.layers[1].latLng).toEqual([-52, 63]);
+        expect(layerGroupStub.layers[2].latLng).toEqual([-50, 60]);
+    });
+
+    test('redrawGroups_givenLowVolumeGroup_fadesIt', () => {
+        const instance = createInstance();
+        instance.activate();
+
+        instance._groups = [group({low_volume: true}), group({low_volume: false})];
+        instance._redrawGroups();
+
+        expect(layerGroupStub.layers[0].options.opacity).toBeLessThan(layerGroupStub.layers[3].options.opacity);
+    });
+
+    test('redrawGroups_givenCheckboxUnchecked_drawsNothing', () => {
+        const instance = createInstance();
+        instance.activate();
+        $('#show_groups').prop('checked', false);
+
+        instance._groups = [group()];
+        instance._redrawGroups();
+
+        expect(layerGroupStub.layers).toEqual([]);
+    });
+
+    test('fetchGroups_givenStaleResponseArrivingLate_ignoresIt', () => {
+        const instance = createInstance();
+        instance.activate();
+
+        const pending = [];
+        $.ajax.mockImplementation((options) => ({done: (callback) => { if (options.url.endsWith('/groups')) pending.push(callback); return {}; }}));
+        instance._fetchGroups([1]);
+        instance._fetchGroups([2]);
+        pending[1]({data: [group({enemy_pack_id: 2})]});
+        pending[0]({data: [group({enemy_pack_id: 1})]});
+
+        expect(instance._groups.map((entry) => entry.enemy_pack_id)).toEqual([2]);
+    });
+
+    test('getGroupPopupHtml_givenPackGroup_namesThePackVerdictAndSuggestion', () => {
+        const instance = createInstance();
+
+        const html = instance._getGroupPopupHtml(group());
+
+        expect(html).toContain('Pack 64 (id 30136)');
+        expect(html).toContain('Mapped in the wrong place');
+        expect(html).toContain('400 long matches in 300 routes (87% of routes)');
+        expect(html).toContain('Engaged 44 yd from where it is mapped');
+        expect(html).toContain('Move it');
+        expect(html).not.toContain('Few routes');
+    });
+
+    test('getGroupPopupHtml_givenPacklessLowVolumeGroup_namesTheEnemyAndWarns', () => {
+        const instance = createInstance();
+
+        const html = instance._getGroupPopupHtml(group({enemy_pack_id: null, enemy_pack_group: null, enemy_ids: [77], low_volume: true, shape_ratio: null}));
+
+        expect(html).toContain('Enemy 77');
+        expect(html).toContain('shape ratio -');
+        expect(html).toContain('Few routes - treat with caution');
+    });
+
+    test('getGroupPopupHtml_escapesServerText', () => {
+        const instance = createInstance();
+
+        const html = instance._getGroupPopupHtml(group({npc_names: '<b>x</b>', suggestion: '<img src=x>'}));
+
+        expect(html).not.toContain('<b>x</b>');
+        expect(html).not.toContain('<img');
     });
 });

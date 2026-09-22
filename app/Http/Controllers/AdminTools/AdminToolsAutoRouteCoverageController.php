@@ -8,6 +8,7 @@ use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
+use App\Service\CombatLog\CombatLogRouteEnemyResolutionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -31,9 +32,10 @@ class AdminToolsAutoRouteCoverageController extends Controller
     private const MAX_DETAIL_ROUTES = 25;
 
     public function index(
-        AdminToolsAutoRouteCoverageRequest         $request,
-        SeasonServiceInterface                     $seasonService,
-        CombatLogRouteEnemyFailureServiceInterface $combatLogRouteEnemyFailureService,
+        AdminToolsAutoRouteCoverageRequest            $request,
+        SeasonServiceInterface                        $seasonService,
+        CombatLogRouteEnemyFailureServiceInterface    $combatLogRouteEnemyFailureService,
+        CombatLogRouteEnemyResolutionServiceInterface $combatLogRouteEnemyResolutionService,
     ): View {
         $days   = $request->getDays();
         $season = $seasonService->getCurrentSeason();
@@ -52,11 +54,12 @@ class AdminToolsAutoRouteCoverageController extends Controller
         $challengeModeRuns = $this->getChallengeModeRuns($dungeons->keys()->all(), $days);
         $dungeonRoutes     = $this->getDungeonRoutes($challengeModeRuns->pluck('dungeon_route_id')->all());
         $enemyFailures     = $combatLogRouteEnemyFailureService->getFailureCountsPerDungeonRoute($dungeonRoutes);
+        $enemyResolutions  = $combatLogRouteEnemyResolutionService->getResolutionCountsPerDungeonRoute($dungeonRoutes);
 
         return view('admin.tools.combatlog.route.coverage', [
             'season'   => $season,
             'days'     => $days,
-            'dungeons' => $this->buildDungeonOverview($dungeons, $challengeModeRuns, $dungeonRoutes, $enemyFailures),
+            'dungeons' => $this->buildDungeonOverview($dungeons, $challengeModeRuns, $dungeonRoutes, $enemyFailures, $enemyResolutions),
         ]);
     }
 
@@ -109,6 +112,7 @@ class AdminToolsAutoRouteCoverageController extends Controller
      * @param Collection<int, ChallengeModeRun> $challengeModeRuns
      * @param Collection<int, DungeonRoute>     $dungeonRoutes
      * @param Collection<int, int>              $enemyFailures
+     * @param Collection<int, int>              $enemyResolutions
      *
      * @return Collection<int, array<string, mixed>>
      */
@@ -117,6 +121,7 @@ class AdminToolsAutoRouteCoverageController extends Controller
         Collection $challengeModeRuns,
         Collection $dungeonRoutes,
         Collection $enemyFailures,
+        Collection $enemyResolutions,
     ): Collection {
         $routesByDungeonId = $dungeonRoutes->groupBy('dungeon_id');
 
@@ -127,6 +132,7 @@ class AdminToolsAutoRouteCoverageController extends Controller
                 collect($routesByDungeonId->get($dungeon->id, collect())),
                 $challengeModeRuns,
                 $enemyFailures,
+                $enemyResolutions,
             );
         }
 
@@ -139,6 +145,7 @@ class AdminToolsAutoRouteCoverageController extends Controller
      * @param Collection<int, DungeonRoute>     $dungeonRoutes     the Auto Route Creator routes of this dungeon
      * @param Collection<int, ChallengeModeRun> $challengeModeRuns keyed by dungeon route id
      * @param Collection<int, int>              $enemyFailures     keyed by dungeon route id
+     * @param Collection<int, int>              $enemyResolutions  keyed by dungeon route id
      *
      * @return array<string, mixed>
      */
@@ -147,6 +154,7 @@ class AdminToolsAutoRouteCoverageController extends Controller
         Collection $dungeonRoutes,
         Collection $challengeModeRuns,
         Collection $enemyFailures,
+        Collection $enemyResolutions,
     ): array {
         $buckets = [
             'critical' => 0,
@@ -156,13 +164,29 @@ class AdminToolsAutoRouteCoverageController extends Controller
             'unknown'  => 0,
         ];
 
+        // Resolutions are pruned after the retention window, so older routes would count as perfect matches
+        $resolutionsRecordedSince = Carbon::now()->subDays((int)config('keystoneguru.enemy_resolution.retention_days'));
+        $resolutionRouteCount     = 0;
+        $resolutionCount          = 0;
+
         $routes = [];
         foreach ($dungeonRoutes as $dungeonRoute) {
+            $challengeModeRun     = $challengeModeRuns->get($dungeonRoute->id);
+            $enemyResolutionCount = $challengeModeRun?->created_at?->greaterThanOrEqualTo($resolutionsRecordedSince)
+                ? (int)$enemyResolutions->get($dungeonRoute->id, 0)
+                : null;
+
             $route = $this->buildRouteRow(
                 $dungeonRoute,
-                $challengeModeRuns->get($dungeonRoute->id),
+                $challengeModeRun,
                 (int)$enemyFailures->get($dungeonRoute->id, 0),
+                $enemyResolutionCount,
             );
+
+            if ($enemyResolutionCount !== null) {
+                $resolutionRouteCount++;
+                $resolutionCount += $enemyResolutionCount;
+            }
 
             $buckets[$route['bucket']]++;
             $routes[] = $route;
@@ -174,35 +198,40 @@ class AdminToolsAutoRouteCoverageController extends Controller
         $total = count($routes);
 
         return [
-            'dungeon'           => $dungeon,
-            'total'             => $total,
-            'buckets'           => $buckets,
-            'problemPercentage' => $total > 0 ? round((($buckets['critical'] + $buckets['warning']) / $total) * 100, 1) : 0.0,
-            'routes'            => collect(array_slice($routes, 0, self::MAX_DETAIL_ROUTES)),
-            'hiddenRouteCount'  => max(0, $total - self::MAX_DETAIL_ROUTES),
+            'dungeon'             => $dungeon,
+            'total'               => $total,
+            'buckets'             => $buckets,
+            'problemPercentage'   => $total > 0 ? round((($buckets['critical'] + $buckets['warning']) / $total) * 100, 1) : 0.0,
+            'resolutionsPerRoute' => $resolutionRouteCount > 0 ? round($resolutionCount / $resolutionRouteCount, 1) : null,
+            'routes'              => collect(array_slice($routes, 0, self::MAX_DETAIL_ROUTES)),
+            'hiddenRouteCount'    => max(0, $total - self::MAX_DETAIL_ROUTES),
         ];
     }
 
     /**
+     * @param int|null $enemyResolutionCount null when the run is older than the resolutions are kept for
+     *
      * @return array<string, mixed>
      */
     private function buildRouteRow(
         DungeonRoute      $dungeonRoute,
         ?ChallengeModeRun $challengeModeRun,
         int               $enemyFailureCount,
+        ?int              $enemyResolutionCount,
     ): array {
         $required   = $dungeonRoute->mappingVersion->enemy_forces_required;
         $percentage = $required > 0 ? round(($dungeonRoute->enemy_forces / $required) * 100, 2) : null;
 
         return [
-            'dungeonRoute'        => $dungeonRoute,
-            'percentage'          => $percentage,
-            'bucket'              => $this->getBucket($percentage),
-            'enemyForcesRequired' => $required,
-            'enemyFailureCount'   => $enemyFailureCount,
-            'level'               => $challengeModeRun?->level,
-            'duplicate'           => (bool)$challengeModeRun?->duplicate,
-            'createdAt'           => $challengeModeRun?->created_at,
+            'dungeonRoute'         => $dungeonRoute,
+            'percentage'           => $percentage,
+            'bucket'               => $this->getBucket($percentage),
+            'enemyForcesRequired'  => $required,
+            'enemyFailureCount'    => $enemyFailureCount,
+            'enemyResolutionCount' => $enemyResolutionCount,
+            'level'                => $challengeModeRun?->level,
+            'duplicate'            => (bool)$challengeModeRun?->duplicate,
+            'createdAt'            => $challengeModeRun?->created_at,
         ];
     }
 

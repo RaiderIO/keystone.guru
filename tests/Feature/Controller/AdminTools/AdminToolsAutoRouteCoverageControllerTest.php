@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\AdminTools;
 
 use App\Models\CombatLog\ChallengeModeRun;
+use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
@@ -30,6 +31,9 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
     /** @var array<int> */
     private array $createdChallengeModeRunIds = [];
 
+    /** @var array<int> */
+    private array $createdResolutionIds = [];
+
     #[\Override]
     protected function setUp(): void
     {
@@ -42,6 +46,7 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
     protected function tearDown(): void
     {
         try {
+            CombatLogRouteEnemyResolution::query()->whereIn('id', $this->createdResolutionIds)->delete();
             ChallengeModeRun::query()->whereIn('id', $this->createdChallengeModeRunIds)->delete();
             DungeonRoute::query()->whereIn('id', $this->createdDungeonRouteIds)->delete();
         } finally {
@@ -182,12 +187,89 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
     }
 
     /**
+     * An imported row's dungeon_route_id names a route of the deployment it came from, so it must not be counted
+     * against the local route that happens to share the id.
+     */
+    #[Test]
+    public function index_givenRouteWithResolutions_countsOnlyLocallyRecordedOnes(): void
+    {
+        // Arrange - 0 enemy forces sorts the route first, inside the listed worst routes
+        $dungeon      = $this->getCurrentSeasonDungeon();
+        $dungeonRoute = $this->createAutoRoute($dungeon, 0);
+        $this->createResolutions($dungeonRoute, 3);
+        $this->createResolutions($dungeonRoute, 2, 'production');
+
+        // Act
+        $route = $this->getRouteRow($dungeon, $dungeonRoute);
+
+        // Assert
+        $this->assertSame(3, $route['enemyResolutionCount']);
+    }
+
+    #[Test]
+    public function index_givenRouteWithoutResolutions_countsZero(): void
+    {
+        // Arrange
+        $dungeon      = $this->getCurrentSeasonDungeon();
+        $dungeonRoute = $this->createAutoRoute($dungeon, 0);
+
+        // Act
+        $route = $this->getRouteRow($dungeon, $dungeonRoute);
+
+        // Assert
+        $this->assertSame(0, $route['enemyResolutionCount']);
+    }
+
+    /**
+     * Resolutions are pruned after the retention window, so an older route having none says nothing about it.
+     */
+    #[Test]
+    public function index_givenRunOlderThanResolutionRetention_countsNothing(): void
+    {
+        // Arrange
+        $dungeon      = $this->getCurrentSeasonDungeon();
+        $retention    = (int)config('keystoneguru.enemy_resolution.retention_days');
+        $dungeonRoute = $this->createAutoRoute($dungeon, 0, createdAt: Carbon::now()->subDays($retention + 5));
+
+        // Act
+        $route = $this->getRouteRow($dungeon, $dungeonRoute, $retention + 30);
+
+        // Assert
+        $this->assertNull($route['enemyResolutionCount']);
+    }
+
+    #[Test]
+    public function index_givenRoutesWithResolutions_averagesThemPerDungeon(): void
+    {
+        // Arrange
+        $dungeon = $this->getCurrentSeasonDungeon();
+        $this->createResolutions($this->createAutoRoute($dungeon, 0), 3);
+        $this->createResolutions($this->createAutoRoute($dungeon, 0), 1);
+
+        // Act
+        $row = $this->getDungeonRow($dungeon);
+
+        // Assert - the seeded database may hold more routes; the average must match the routes it describes
+        $this->assertSame(0, $row['hiddenRouteCount'], 'Too many seeded routes to check the average against the listed ones');
+        $counts = $row['routes']->pluck('enemyResolutionCount')->filter(static fn(?int $count) => $count !== null);
+        $this->assertSame(round($counts->sum() / $counts->count(), 1), $row['resolutionsPerRoute']);
+    }
+
+    /**
      * The bucket counts the page reports for a single dungeon. The seeded test database may already hold Auto Route
      * Creator routes, so tests compare a before/after snapshot rather than absolute numbers.
      *
      * @return array<string, int>
      */
     private function getBucketsForDungeon(Dungeon $dungeon, ?int $days = null): array
+    {
+        return $this->getDungeonRow($dungeon, $days)['buckets'];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getDungeonRow(Dungeon $dungeon, ?int $days = null): array
     {
         $response = $this->get(route('admin.tools.combatlog.route.coverage.view', $days === null ? [] : ['days' => $days]));
         $response->assertOk();
@@ -200,7 +282,31 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
 
         $this->assertNotNull($row, sprintf('Dungeon %d is not part of the current season overview', $dungeon->id));
 
-        return $row['buckets'];
+        return $row;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getRouteRow(Dungeon $dungeon, DungeonRoute $dungeonRoute, ?int $days = null): array
+    {
+        /** @var array<string, mixed>|null $route */
+        $route = $this->getDungeonRow($dungeon, $days)['routes']
+            ->first(static fn(array $route): bool => $route['dungeonRoute']->id === $dungeonRoute->id);
+
+        $this->assertNotNull($route, sprintf('Route %d is not among the listed worst routes', $dungeonRoute->id));
+
+        return $route;
+    }
+
+    private function createResolutions(DungeonRoute $dungeonRoute, int $count, ?string $source = null): void
+    {
+        for ($i = 0; $i < $count; $i++) {
+            $this->createdResolutionIds[] = CombatLogRouteEnemyResolution::factory()->create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'source'           => $source,
+            ])->id;
+        }
     }
 
     /**
