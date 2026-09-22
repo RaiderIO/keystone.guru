@@ -18,6 +18,9 @@ final class TestRoutePullPlannerTest extends TestCase
     /** A pull closes once it holds at least 7 enemies, so a pack of 3 can push it to 9. */
     private const int MAX_PULL_OVERSHOOT = 9;
 
+    /** A pull is never closed below 4 enemies unless its floor or the candidates run out. */
+    private const int MIN_PULL_SIZE = 4;
+
     private int $nextEnemyId = 1;
 
     /** @var Collection<string, int> */
@@ -141,6 +144,23 @@ final class TestRoutePullPlannerTest extends TestCase
         $this->assertSame(12, $planner->getForces());
         $this->assertEqualsCanonicalizing($candidates->flatten(1)->pluck('id')->all(), $this->pulledEnemyIds($pulls));
         $this->assertPullsAreValid($pulls, $floorIndexByFloorId);
+    }
+
+    #[Test]
+    public function plan_givenPacksSmallerThanThePullSize_mergesThemIntoLargerPulls(): void
+    {
+        // Arrange - packs of 3, more than enough of them that the target is met before they run out
+        $candidates = $this->makePacks(floorId: 1, packCount: 40);
+        $planner    = new TestRoutePullPlanner($this->enemyForcesByKey);
+
+        // Act
+        $pulls = $planner->plan($candidates, collect([1 => 1]), 60);
+
+        // Assert
+        $this->assertNotEmpty($pulls);
+        foreach ($pulls as $pull) {
+            $this->assertGreaterThanOrEqual(self::MIN_PULL_SIZE, $pull->count(), 'Pulls must be bigger than a single pack');
+        }
     }
 
     #[Test]

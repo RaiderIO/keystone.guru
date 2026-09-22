@@ -241,11 +241,6 @@ final class TestDungeonRouteGeneratorServiceTest extends PublicTestCase
 
         $this->assertEmpty($bossEnemyIds->diff($killedEnemyIds), 'Every boss must be killed');
 
-        $packCount = Enemy::query()->where('mapping_version_id', $mappingVersion->id)->whereNotNull('enemy_pack_id')->distinct()->count('enemy_pack_id');
-        if ($packCount > 0) {
-            $averagePackSize = Enemy::query()->where('mapping_version_id', $mappingVersion->id)->whereNotNull('enemy_pack_id')->count() / $packCount;
-            $this->assertGreaterThan($averagePackSize, $killedEnemyIds->count() / $dungeonRoute->killZones()->count(), 'Pulls must be bigger than a single pack');
-        }
         $this->assertTrue(
             Tag::query()->where('model_id', $dungeonRoute->id)->where('model_class', DungeonRoute::class)
                 ->where('name', TestDungeonRouteGeneratorServiceInterface::TAG_NAME)->exists(),
