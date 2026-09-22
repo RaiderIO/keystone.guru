@@ -1093,6 +1093,132 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function view_givenACollection_titlesThePageWithItsNameAndAuthor(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for(null)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'name'               => 'ZzTestTitledCollection',
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+
+        try {
+            // Act
+            $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(sprintf('<title>%s', e(__('view_collection.view.title_by_author', [
+                'name'   => 'ZzTestTitledCollection',
+                'author' => $creator->name,
+            ]))), false);
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for(null)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    /**
+     * A viewer must not be told the collection holds routes they may not see - that reads as an
+     * access error and leaks that unpublished routes exist.
+     */
+    #[Test]
+    public function view_givenOnlyUnpublishedRoutesViewedByAGuest_showsTheNeutralEmptyState(): void
+    {
+        // Arrange
+        $creator     = $this->createCreator();
+        $unpublished = $this->createRouteFor($creator, PublishedState::UNPUBLISHED, 'ZzTestHiddenRoute');
+        Feature::for(null)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $unpublished->id,
+            'order'                       => 0,
+        ]);
+
+        try {
+            // Act
+            $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(e(__('view_collection.view.no_routes')), false);
+            $response->assertDontSee(e(__('view_collection.view.no_routes_owner')), false);
+            $response->assertDontSee(route('collections.edit', $dungeonRouteCollection), false);
+            $response->assertDontSee('ZzTestHiddenRoute');
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for(null)->forget(CreatorProfiles::class);
+            $unpublished->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function view_givenAnEmptyCollectionViewedByItsOwner_linksToAddingRoutes(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(
+                route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+            );
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(e(__('view_collection.view.no_routes_owner')), false);
+            $response->assertSee(route('collections.edit', $dungeonRouteCollection), false);
+            $response->assertDontSee(e(__('view_collection.view.no_routes')), false);
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenOwnCollection_namesTheCollectionInTheBreadcrumb(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id' => $creator->id,
+            'name'    => 'ZzTestBreadcrumbCollection',
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('collections.edit', $dungeonRouteCollection));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(e(__('breadcrumbs.home.edit_collection', ['name' => 'ZzTestBreadcrumbCollection'])), false);
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function view_givenAnUnpublishedCollection_returnsForbiddenForOtherUsers(): void
     {
         // Arrange

@@ -55,7 +55,7 @@ return [
         'my_tags'          => 'My tags',
         'my_collections'   => 'My collections',
         'new_collection'   => 'New collection',
-        'edit_collection'  => 'Edit collection',
+        'edit_collection'  => 'Edit :name',
         'my_teams'         => 'My teams',
         'overview'         => 'Overview',
         'new_team'         => 'New team',

@@ -26,7 +26,7 @@ $selectedCategory ??= null;
 
 @section('content')
     <p class="text-body-secondary">
-        {{ __('view_creator.directory.description') }}
+        {{ __('view_creator.directory.description', ['min' => config('keystoneguru.creators.min_published_routes')]) }}
     </p>
 
     <form method="GET" action="{{ route('creators.index') }}" class="row g-2 mb-4" role="search">
@@ -61,7 +61,7 @@ $selectedCategory ??= null;
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}"
                                 @if($selectedCategory?->id === $category->id) selected @endif>
-                            {{ $category->getTranslatedName() }}
+                            {{ __('view_creator.directory.category_option', ['category' => $category->getTranslatedName()]) }}
                         </option>
                     @endforeach
                 </select>

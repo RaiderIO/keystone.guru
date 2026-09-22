@@ -308,7 +308,7 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
     }
 
     /**
-     * The category select posts an empty string for "Any collection", which must browse unfiltered
+     * The category select posts an empty string for "All creators", which must browse unfiltered
      * rather than fail the integer rule.
      */
     #[Test]
@@ -381,6 +381,32 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
                 ],
                 $response->viewData('categories')->pluck('id')->all(),
             );
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenTheSeededCategories_labelsTheFilterByWhatACreatorShares(): void
+    {
+        // Arrange
+        $viewer = User::factory()->create();
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(e(__('view_creator.directory.category_any')), false);
+            $response->assertSee(e(__('view_creator.directory.category_option', [
+                'category' => __('dungeonroutecollectioncategories.mdi'),
+            ])), false);
+            $response->assertSee(e(__('view_creator.directory.description', [
+                'min' => $this->minPublishedRoutes(),
+            ])), false);
         } finally {
             Feature::for($viewer)->forget(CreatorProfiles::class);
             $viewer->delete();
