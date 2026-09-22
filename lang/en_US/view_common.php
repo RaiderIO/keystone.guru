@@ -579,6 +579,8 @@ return [
                 'matching_routes'         => 'Worst routes',
                 'show_lines'              => 'Show lines to the matched enemy',
                 'lines_legend'            => 'The :count worst matches of the current filter across every floor of this dungeon, from where the fight started to the enemy it was attributed to.',
+                'show_groups'             => 'Show packs matched from far away',
+                'groups_legend'           => 'An arrow per pack, from where it is mapped to where it is engaged - faded when seen in few routes:',
                 'line_popup'              => [
                     'npc'            => ':name (:id)',
                     'distance'       => 'Resolved to enemy :enemy, :distance yd away',

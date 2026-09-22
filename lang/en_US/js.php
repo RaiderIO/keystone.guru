@@ -609,4 +609,15 @@ return [
     'admin_generate_test_routes_processed'          => ':count processed',
     'admin_generate_test_routes_done'               => 'Done.',
 
+    'enemy_resolution_group_verdict_displaced' => 'Mapped in the wrong place',
+    'enemy_resolution_group_verdict_converged' => 'Runs to the group before logged',
+    'enemy_resolution_group_verdict_scatter'   => 'Scattered',
+    'enemy_resolution_group_pack'              => 'Pack :group (id :id)',
+    'enemy_resolution_group_enemy'             => 'Enemy :id',
+    'enemy_resolution_group_resolutions'       => ':count long matches in :routes routes (:share% of routes)',
+    'enemy_resolution_group_displacement'      => 'Engaged :distance yd from where it is mapped',
+    'enemy_resolution_group_consistency'       => 'Direction consistency :consistency, shape ratio :ratio',
+    'enemy_resolution_group_seen'              => 'Seen :first - :last',
+    'enemy_resolution_group_low_volume'        => 'Few routes - treat with caution',
+
 ];

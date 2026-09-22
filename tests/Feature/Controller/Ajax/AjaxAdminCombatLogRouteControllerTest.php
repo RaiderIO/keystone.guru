@@ -747,6 +747,111 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
         }
     }
 
+    #[Test]
+    public function getEnemyResolutionGroups_givenNoMappingVersionId_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions.groups', [
+            'dungeon_id' => $this->dungeon->id,
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('mapping_version_id');
+    }
+
+    #[Test]
+    public function getEnemyResolutionGroups_givenValidDungeon_returnsGroupResponseShape(): void
+    {
+        $created = [];
+
+        try {
+            // Arrange
+            $created[] = $this->createResolution(-50.0, 100.0, 60.0, npcId: 99907);
+
+            // Act
+            $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions.groups', [
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+                'npc_id'             => [99907],
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertJsonStructure([
+                'data' => [[
+                    'floor_id',
+                    'enemy_pack_id',
+                    'enemy_pack_group',
+                    'enemy_ids',
+                    'npc_names',
+                    'count',
+                    'route_count',
+                    'route_share',
+                    'engaged_centroid' => ['lat', 'lng'],
+                    'mapped_centroid'  => ['lat', 'lng'],
+                    'displacement',
+                    'direction_consistency',
+                    'shape_ratio',
+                    'first_seen',
+                    'last_seen',
+                    'verdict',
+                    'low_volume',
+                    'suggestion',
+                ]],
+                'verdicts',
+                'route_count',
+                'min_routes',
+                'min_route_share',
+                'skipped_count',
+            ]);
+            $this->assertCount(1, $response->json('data'));
+            $this->assertSame($this->floor->id, $response->json('data.0.floor_id'));
+            $this->assertEqualsWithDelta(-50.0, $response->json('data.0.engaged_centroid.lat'), 0.01);
+            $this->assertEqualsWithDelta(-49.0, $response->json('data.0.mapped_centroid.lat'), 0.01);
+        } finally {
+            CombatLogRouteEnemyResolution::whereIn('id', $created)->delete();
+        }
+    }
+
+    #[Test]
+    public function getEnemyResolutionGroups_givenNegativeMinDistance_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions.groups', [
+            'dungeon_id'         => $this->dungeon->id,
+            'mapping_version_id' => $this->mappingVersion->id,
+            'min_distance'       => -1,
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('min_distance');
+    }
+
+    #[Test]
+    public function getEnemyResolutionGroups_givenNonAdmin_returnsForbidden(): void
+    {
+        // Arrange
+        $nonAdmin = User::factory()->create();
+
+        try {
+            $this->assertFalse($nonAdmin->hasRole(Role::ROLE_ADMIN));
+            $this->actingAs($nonAdmin);
+
+            // Act
+            $response = $this->get(route('ajax.admin.combatlogroute.enemy_resolutions.groups', [
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+            ]));
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+        } finally {
+            $nonAdmin->delete();
+        }
+    }
+
     /**
      * @return int The id of the created record
      */

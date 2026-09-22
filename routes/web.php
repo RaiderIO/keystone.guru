@@ -771,6 +771,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                         ->name('ajax.admin.combatlogroute.enemy_resolutions');
                     Route::get('/enemy-resolutions/lines', new AjaxAdminCombatLogRouteController()->getEnemyResolutionLines(...))
                         ->name('ajax.admin.combatlogroute.enemy_resolutions.lines');
+                    Route::get('/enemy-resolutions/groups', new AjaxAdminCombatLogRouteController()->getEnemyResolutionGroups(...))
+                        ->name('ajax.admin.combatlogroute.enemy_resolutions.groups');
                     Route::delete('/enemy-resolutions', new AjaxAdminCombatLogRouteController()->deleteEnemyResolutions(...))
                         ->name('ajax.admin.combatlogroute.enemy_resolutions.delete');
                 });
