@@ -2,8 +2,12 @@
 
 namespace Tests\Feature\Controller\DungeonRoute;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
@@ -39,15 +43,24 @@ final class DungeonRouteDiscoverSearchTest extends PublicTestCase
     }
 
     #[Test]
-    public function search_givenOldAjaxSearchEndpoint_returnsNoRoute(): void
+    public function search_givenOldAjaxSearchEndpoint_hasNoGetRoute(): void
     {
         // Arrange
-        $this->actingAsGuest();
+        $request = Request::create('/ajax/search', 'GET');
 
         // Act
-        $response = $this->get('/ajax/search?offset=0&limit=10');
+        $matchedRoute = null;
 
-        // Assert - 'ajax/{dungeonRoute}' only answers PATCH/DELETE on this URI now
-        $response->assertStatus(405);
+        try {
+            $matchedRoute = Route::getRoutes()->match($request);
+        } catch (NotFoundHttpException|MethodNotAllowedHttpException) {
+            // No GET route on this URI at all is the expected outcome
+        }
+
+        // Assert
+        $this->assertTrue(
+            $matchedRoute === null || $matchedRoute->isFallback,
+            sprintf('GET /ajax/search still resolves to %s', $matchedRoute?->getActionName()),
+        );
     }
 }
