@@ -144,14 +144,15 @@ readonly class CombatLogRouteEnemyResolutionAnalysisService implements CombatLog
      */
     private function countRoutes(Dungeon $dungeon, MappingVersion $mappingVersion): int
     {
-        return CombatLogRouteEnemyResolution::query()
+        $routes = CombatLogRouteEnemyResolution::query()
+            ->select(['source', 'dungeon_route_id'])
             ->where('dungeon_id', $dungeon->id)
             ->where('mapping_version_id', $mappingVersion->id)
             ->whereNotNull('dungeon_route_id')
             ->distinct()
-            ->toBase()
-            ->get(['source', 'dungeon_route_id'])
-            ->count();
+            ->toBase();
+
+        return $routes->newQuery()->fromSub($routes, 'routes')->count();
     }
 
     /**
