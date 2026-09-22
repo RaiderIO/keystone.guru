@@ -165,19 +165,6 @@ Breadcrumbs::for('dungeonroutes.discoverdungeon', static function (Generator $tr
 });
 
 /**
- * Dungeon categories
- */
-Breadcrumbs::for('dungeonroutes.discoverdungeon.popular', static function (Generator $trail, GameVersion $gameVersion, Dungeon $dungeon) {
-    $trail->parent('dungeonroutes.discoverdungeon', $gameVersion, $dungeon);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.popular'), route('dungeonroutes.discoverdungeon.popular', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon]));
-});
-
-Breadcrumbs::for('dungeonroutes.discoverdungeon.new', static function (Generator $trail, GameVersion $gameVersion, Dungeon $dungeon) {
-    $trail->parent('dungeonroutes.discoverdungeon', $gameVersion, $dungeon);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.new'), route('dungeonroutes.discoverdungeon.new', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon]));
-});
-
-/**
  * User profile pages
  */
 Breadcrumbs::for('profile.edit', static function (Generator $trail) {

@@ -2,14 +2,13 @@
 
 namespace Tests\Feature\View\Common\DungeonRoute;
 
-use App\Features\DungeonRouteListRework;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\File;
+use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -208,10 +207,9 @@ final class CardPosterTest extends PublicTestCase
     }
 
     #[Test]
-    public function cardlist_givenVerticalOrientationAndFeatureActive_rendersPosterCard(): void
+    public function cardlist_givenNoOrientation_rendersPosterCard(): void
     {
         // Arrange
-        Feature::define(DungeonRouteListRework::class, true);
         $dungeonroute = DungeonRoute::factory()->create();
 
         try {
@@ -220,7 +218,6 @@ final class CardPosterTest extends PublicTestCase
                 'dungeonroutes'     => new Collection([$dungeonroute]),
                 'currentAffixGroup' => null,
                 'affixgroup'        => null,
-                'orientation'       => 'vertical',
                 'cache'             => false,
             ])->render();
 
@@ -233,27 +230,26 @@ final class CardPosterTest extends PublicTestCase
     }
 
     #[Test]
-    public function cardlist_givenVerticalOrientationAndFeatureInactive_rendersVerticalCard(): void
+    public function render_givenCachedCardAndUserWithoutLocale_rendersPosterCard(): void
     {
-        // Arrange
-        Feature::define(DungeonRouteListRework::class, false);
+        // Arrange - a stored locale may be null; the card cache must key on the request's locale instead
+        $user = User::factory()->create();
+        $user->forceFill(['locale' => null]);
+        $this->actingAs($user);
         $dungeonroute = DungeonRoute::factory()->create();
 
         try {
             // Act
-            $html = view('common.dungeonroute.cardlist', [
-                'dungeonroutes'     => new Collection([$dungeonroute]),
-                'currentAffixGroup' => null,
-                'affixgroup'        => null,
-                'orientation'       => 'vertical',
-                'cache'             => false,
+            $html = view('common.dungeonroute.cardposter', [
+                'dungeonroute' => $dungeonroute,
+                'cache'        => true,
             ])->render();
 
             // Assert
-            $this->assertStringContainsString('card_dungeonroute vertical', $html);
-            $this->assertStringNotContainsString('card_dungeonroute poster', $html);
+            $this->assertStringContainsString('card_dungeonroute poster', $html);
         } finally {
             $dungeonroute->delete();
+            $user->delete();
         }
     }
 }

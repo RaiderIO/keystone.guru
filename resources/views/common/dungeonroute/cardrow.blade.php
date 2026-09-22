@@ -3,7 +3,6 @@
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
-use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteEnemyForcesPageResolver;
 use App\Service\DungeonRoute\DungeonRouteKillZoneServiceInterface;
@@ -146,9 +145,7 @@ $cacheFn = static function () use (
     <div class="leaderboard_rank text-secondary text-end">{{ $rank }}</div>
     <?php
     if ($cache) {
-        /** @var User|null $authUser */
-        $authUser          = Auth::user();
-        $currentUserLocale = Auth::check() ? $authUser->locale : 'en_US';
+        $currentUserLocale = app()->getLocale();
         echo $cacheService->rememberInHash(
             DungeonRoute::getCardCacheKey($dungeonroute->id),
             DungeonRoute::getCardCacheField('row', $currentUserLocale, 0, 0, (int)$isAdmin),

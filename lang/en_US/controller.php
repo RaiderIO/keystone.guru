@@ -113,10 +113,6 @@ return [
             'popular' => '%s popular routes',
             'new'     => '%s new routes',
         ],
-        'dungeon' => [
-            'popular' => '%s popular routes',
-            'new'     => '%s new routes',
-        ],
     ],
     'dungeonspeedrunrequirednpcs' => [
         'no_linked_npc' => 'No linked NPC',

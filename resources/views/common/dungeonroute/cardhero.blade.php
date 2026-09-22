@@ -3,7 +3,6 @@
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
-use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteEnemyForcesPageResolver;
 use App\Service\DungeonRoute\DungeonRouteKillZoneServiceInterface;
@@ -182,9 +181,7 @@ use (
 };
 
 if ($cache) {
-    /** @var User|null $authUser */
-    $authUser          = Auth::user();
-    $currentUserLocale = Auth::check() ? $authUser->locale : 'en_US';
+    $currentUserLocale = app()->getLocale();
 // Echo the result of this function - the archetype (or hero rank) is folded into the orientation so no two hero variants share a cache entry
     echo $cacheService->rememberInHash(
         DungeonRoute::getCardCacheKey($dungeonroute->id),
