@@ -6,6 +6,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\File;
+use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Group;
@@ -225,6 +226,30 @@ final class CardPosterTest extends PublicTestCase
             $this->assertStringNotContainsString('card_dungeonroute vertical', $html);
         } finally {
             $dungeonroute->delete();
+        }
+    }
+
+    #[Test]
+    public function render_givenCachedCardAndUserWithoutLocale_rendersPosterCard(): void
+    {
+        // Arrange - a stored locale may be null; the card cache must key on the request's locale instead
+        $user = User::factory()->create();
+        $user->forceFill(['locale' => null]);
+        $this->actingAs($user);
+        $dungeonroute = DungeonRoute::factory()->create();
+
+        try {
+            // Act
+            $html = view('common.dungeonroute.cardposter', [
+                'dungeonroute' => $dungeonroute,
+                'cache'        => true,
+            ])->render();
+
+            // Assert
+            $this->assertStringContainsString('card_dungeonroute poster', $html);
+        } finally {
+            $dungeonroute->delete();
+            $user->delete();
         }
     }
 }

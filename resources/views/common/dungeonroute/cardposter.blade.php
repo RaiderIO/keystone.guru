@@ -3,7 +3,6 @@
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
-use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 
 /**
@@ -151,9 +150,7 @@ use (
 };
 
 if ($cache) {
-    /** @var User|null $authUser */
-    $authUser          = Auth::user();
-    $currentUserLocale = Auth::check() ? $authUser->locale : 'en_US';
+    $currentUserLocale = app()->getLocale();
 // Echo the result of this function
     echo $cacheService->rememberInHash(
         DungeonRoute::getCardCacheKey($dungeonroute->id),
