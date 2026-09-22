@@ -131,8 +131,9 @@ class DungeonRouteCollectionController extends Controller
         } elseif ($tagName !== null) {
             $taggedDungeonRoutes = $this->getTaggedDungeonRoutes($user, $tagName);
 
-            $selectedDungeonRoutes = $dungeonRouteCollectionService
-                ->filterMatchingDungeonRoutes($gameVersion, $season, $taggedDungeonRoutes)
+            $matchingDungeonRoutes = $dungeonRouteCollectionService->filterMatchingDungeonRoutes($gameVersion, $season, $taggedDungeonRoutes);
+            $selectedDungeonRoutes = $matchingDungeonRoutes
+                ->diffKeys($dungeonRouteCollectionService->getDungeonRoutesOverDungeonLimit($matchingDungeonRoutes, collect()))
                 ->take(DungeonRouteCollection::MAX_ROUTES)
                 ->values();
 
@@ -349,7 +350,11 @@ class DungeonRouteCollectionController extends Controller
         $season      = $request->season();
 
         $dungeonRouteCollection->load(['dungeonRoutes.mappingVersion']);
-        $dungeonRoutes = $dungeonRouteCollectionService->filterMatchingDungeonRoutes($gameVersion, $season, $dungeonRouteCollection->dungeonRoutes);
+        $matchingDungeonRoutes = $dungeonRouteCollectionService->filterMatchingDungeonRoutes($gameVersion, $season, $dungeonRouteCollection->dungeonRoutes);
+        $dungeonRoutes         = $matchingDungeonRoutes
+            ->diffKeys($dungeonRouteCollectionService->getDungeonRoutesOverDungeonLimit($matchingDungeonRoutes, collect()))
+            ->take(DungeonRouteCollection::MAX_ROUTES)
+            ->values();
 
         $duplicate = DB::transaction(function () use (
             $user,
@@ -421,23 +426,13 @@ class DungeonRouteCollectionController extends Controller
     ): View {
         Gate::authorize('view', $dungeonRouteCollection);
 
-        // The routes render through the shared route card, which needs the same relation set
-        // DiscoverService eager loads - lazy loading is disabled, so a miss here is a 500
         $dungeonRouteCollection->load([
-            'user',
+            'user.iconfile',
             'dungeonRouteCollectionCategory',
             'gameVersion',
             'season.expansion',
             'season.dungeons',
-            'dungeonRoutes.author.iconfile',
-            'dungeonRoutes.affixes',
-            'dungeonRoutes.ratings',
-            'dungeonRoutes.mappingVersion',
-            'dungeonRoutes.thumbnails',
-            'dungeonRoutes.dungeon',
-            'dungeonRoutes.season.expansion',
-            // Needed by mayUserView() for team published routes
-            'dungeonRoutes.team',
+            'dungeonRoutes' => static fn($query) => $query->withCardRelations(),
         ]);
 
         // A collection being public never publishes the routes in it - an unpublished route

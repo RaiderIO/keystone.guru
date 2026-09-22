@@ -5,6 +5,8 @@
  * @var Collection<int, UserSocialLink> $socialLinks
  * @var Collection<int, DungeonRoute>   $pinnedDungeonRoutes
  * @var Collection<int, DungeonRouteCollection> $pinnedDungeonRouteCollections
+ * @var Collection<int, Collection<int, DungeonRoute>> $pinnedDungeonRouteCollectionDungeonRoutes Keyed by collection id.
+ * @var Collection<int, int>            $pinnedDungeonRouteCollectionCoveredDungeonCounts   Keyed by collection id.
  * @var int                             $publishedRouteCount
  */
 
@@ -18,6 +20,8 @@ $creatorProfileActive ??= false;
 $socialLinks          ??= collect();
 $pinnedDungeonRoutes  ??= collect();
 $pinnedDungeonRouteCollections ??= collect();
+$pinnedDungeonRouteCollectionDungeonRoutes        ??= collect();
+$pinnedDungeonRouteCollectionCoveredDungeonCounts ??= collect();
 $publishedRouteCount  ??= 0;
 
 $title  = sprintf(__('view_profile.view.title'), $user->name);
@@ -26,7 +30,6 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
 @extends('layouts.sitepage', [
     'wide' => true,
     'title' => $title,
-    'showAds' => false,
     'breadcrumbsParams' => [$user],
 ])
 
@@ -103,6 +106,8 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
                     <div class="col">
                         @include('common.collection.card', [
                             'dungeonRouteCollection' => $pinnedDungeonRouteCollection,
+                            'dungeonRoutes' => $pinnedDungeonRouteCollectionDungeonRoutes->get($pinnedDungeonRouteCollection->id, collect()),
+                            'coveredDungeonCount' => $pinnedDungeonRouteCollectionCoveredDungeonCounts->get($pinnedDungeonRouteCollection->id, 0),
                         ])
                     </div>
                 @endforeach

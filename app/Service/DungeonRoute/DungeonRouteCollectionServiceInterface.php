@@ -14,13 +14,33 @@ interface DungeonRouteCollectionServiceInterface
     public const string ADD_BLOCKED_GAME_VERSION = 'game_version';
     public const string ADD_BLOCKED_SEASON       = 'season';
     public const string ADD_BLOCKED_FULL         = 'full';
+    public const string ADD_BLOCKED_DUNGEON_FULL = 'dungeon_full';
 
     /**
      * Why a route that is not in the collection cannot be added to it: one of the ADD_BLOCKED_* constants, or null
      * when it can. A route of another game version (or without a mapping version) is reported before one of another
-     * season, and either before a full collection. Expects the route's mapping version to be loaded.
+     * season, either before a full collection, and a full collection before a full dungeon. Expects the route's
+     * mapping version to be loaded.
+     *
+     * @param int $dungeonRouteCountForDungeon How many routes of the route's dungeon the collection holds.
      */
-    public function getAddBlockedReason(DungeonRouteCollection $dungeonRouteCollection, DungeonRoute $dungeonRoute, int $routeCount): ?string;
+    public function getAddBlockedReason(
+        DungeonRouteCollection $dungeonRouteCollection,
+        DungeonRoute           $dungeonRoute,
+        int                    $routeCount,
+        int                    $dungeonRouteCountForDungeon,
+    ): ?string;
+
+    /**
+     * The passed routes that would take their dungeon past DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON when they
+     * join the kept routes, in passed order and keyed as passed. The kept routes count first and are never reported,
+     * so a collection that already held more routes of a dungeon keeps them.
+     *
+     * @param  Collection<int, DungeonRoute> $dungeonRoutes     The routes joining, in the order they join.
+     * @param  Collection<int, DungeonRoute> $keptDungeonRoutes The routes the collection keeps.
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getDungeonRoutesOverDungeonLimit(Collection $dungeonRoutes, Collection $keptDungeonRoutes): Collection;
 
     /**
      * The passed routes that may be in a collection of the passed game version and season, in passed order. Expects

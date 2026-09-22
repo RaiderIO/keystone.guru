@@ -50,10 +50,16 @@ class AjaxDungeonRouteCollectionController extends Controller
             $dungeonRoute,
             $dungeonRouteCollectionService,
         ): array {
-            $routeCount           = $dungeonRouteCollection->dungeonRoutes->count();
-            $containsDungeonRoute = $dungeonRouteCollection->dungeonRoutes->contains('id', $dungeonRoute->id);
-            $blockedReason        = $containsDungeonRoute ? null : $dungeonRouteCollectionService->getAddBlockedReason($dungeonRouteCollection, $dungeonRoute, $routeCount);
-            $season               = $dungeonRouteCollection->season;
+            $routeCount            = $dungeonRouteCollection->dungeonRoutes->count();
+            $sameDungeonRouteCount = $dungeonRouteCollection->dungeonRoutes->where('dungeon_id', $dungeonRoute->dungeon_id)->count();
+            $containsDungeonRoute  = $dungeonRouteCollection->dungeonRoutes->contains('id', $dungeonRoute->id);
+            $blockedReason         = $containsDungeonRoute ? null : $dungeonRouteCollectionService->getAddBlockedReason(
+                $dungeonRouteCollection,
+                $dungeonRoute,
+                $routeCount,
+                $sameDungeonRouteCount,
+            );
+            $season = $dungeonRouteCollection->season;
 
             return [
                 'public_key'   => $dungeonRouteCollection->public_key,
@@ -64,13 +70,15 @@ class AjaxDungeonRouteCollectionController extends Controller
                     'name_long'     => $season->name_long,
                     'dungeon_count' => $season->dungeons->count(),
                 ] : null,
-                'covered_dungeon_count'  => $dungeonRouteCollectionService->getCoveredDungeonCount($dungeonRouteCollection, $dungeonRouteCollection->dungeonRoutes),
-                'route_count'            => $routeCount,
-                'max_routes'             => DungeonRouteCollection::MAX_ROUTES,
-                'contains_dungeon_route' => $containsDungeonRoute,
-                'blocked_reason'         => $blockedReason,
-                'store_url'              => route('ajax.collection.routes.store', ['dungeonRouteCollection' => $dungeonRouteCollection]),
-                'delete_url'             => route('ajax.collection.routes.delete', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+                'covered_dungeon_count'    => $dungeonRouteCollectionService->getCoveredDungeonCount($dungeonRouteCollection, $dungeonRouteCollection->dungeonRoutes),
+                'route_count'              => $routeCount,
+                'max_routes'               => DungeonRouteCollection::MAX_ROUTES,
+                'same_dungeon_route_count' => $sameDungeonRouteCount,
+                'max_routes_per_dungeon'   => DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON,
+                'contains_dungeon_route'   => $containsDungeonRoute,
+                'blocked_reason'           => $blockedReason,
+                'store_url'                => route('ajax.collection.routes.store', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+                'delete_url'               => route('ajax.collection.routes.delete', ['dungeonRouteCollection' => $dungeonRouteCollection]),
             ];
         });
 
@@ -95,12 +103,18 @@ class AjaxDungeonRouteCollectionController extends Controller
         AjaxDungeonRouteCollectionRoutesAddFormRequest $request,
         DungeonRouteCollection                         $dungeonRouteCollection,
         DungeonRouteCollectionRouteRepositoryInterface $dungeonRouteCollectionRouteRepository,
+        DungeonRouteCollectionServiceInterface         $dungeonRouteCollectionService,
     ): JsonResponse {
         Gate::authorize('edit', $dungeonRouteCollection);
 
         $dungeonRoutes = $request->dungeonRoutes();
 
-        $addedDungeonRoutes = DB::transaction(static function () use ($dungeonRouteCollection, $dungeonRoutes, $dungeonRouteCollectionRouteRepository): Collection {
+        $addedDungeonRoutes = DB::transaction(static function () use (
+            $dungeonRouteCollection,
+            $dungeonRoutes,
+            $dungeonRouteCollectionRouteRepository,
+            $dungeonRouteCollectionService,
+        ): Collection {
             // Serialises concurrent adds to one collection, so two requests that each fit cannot overshoot the cap together
             DungeonRouteCollection::query()->whereKey($dungeonRouteCollection->id)->lockForUpdate()->first();
 
@@ -114,6 +128,17 @@ class AjaxDungeonRouteCollectionController extends Controller
             if ($existingDungeonRouteIds->count() + $dungeonRoutes->count() > DungeonRouteCollection::MAX_ROUTES) {
                 throw ValidationException::withMessages([
                     'dungeon_routes' => __('validation.custom.collection_dungeon_routes.max', ['max' => DungeonRouteCollection::MAX_ROUTES]),
+                ]);
+            }
+
+            $keptDungeonRoutes     = DungeonRoute::query()->whereIn('id', $existingDungeonRouteIds)->get(['id', 'dungeon_id']);
+            $overLimitDungeonRoute = $dungeonRouteCollectionService->getDungeonRoutesOverDungeonLimit($dungeonRoutes, $keptDungeonRoutes)->first();
+            if ($overLimitDungeonRoute !== null) {
+                throw ValidationException::withMessages([
+                    'dungeon_routes' => __('validation.custom.collection_dungeon_routes.max_dungeon', [
+                        'max'     => DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON,
+                        'dungeon' => __($overLimitDungeonRoute->dungeon->name),
+                    ]),
                 ]);
             }
 

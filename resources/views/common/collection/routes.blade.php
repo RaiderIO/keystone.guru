@@ -33,6 +33,10 @@ $collectionDungeonRoutes = $isNew
         ->values()
     : $dungeonRouteCollection->dungeonRoutes;
 $collectionDungeonRouteCount = $collectionDungeonRoutes->count();
+/** @var array<string, int> $collectionDungeonIds The dungeon of every route of the collection, by public key. */
+$collectionDungeonIds = $collectionDungeonRoutes->mapWithKeys(static fn(DungeonRoute $dungeonRoute): array => [
+    $dungeonRoute->public_key => $dungeonRoute->dungeon_id,
+])->all();
 $pickerId                    = 'collection_route_picker';
 // A route may only be added to a dungeon the collection actually covers; a free-form collection covers every dungeon
 $poolDungeonIds = $selectedSeason?->dungeons->pluck('id')->all() ?? [];
@@ -102,6 +106,7 @@ $orderedSelectOptions = static function (array $section) use (
         'detailWarningText' => __('view_common.collection.details.enemy_forces_short'),
         'selectedIds'       => $editSection->dungeonRoutes->pluck('public_key')->all(),
         'max'               => DungeonRouteCollection::MAX_ROUTES,
+        'itemMax'           => $dungeonName !== null ? DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON : null,
         'emptyText'         => $dungeonName !== null
             ? __('view_common.collection.details.dungeon_routes_slot_empty', ['dungeon' => $dungeonName])
             : __('view_common.collection.details.dungeon_routes_empty'),
@@ -129,6 +134,8 @@ $inlineOptions = [
     'orderUrl'                   => $isNew ? null : route('ajax.collection.routes.order', ['dungeonRouteCollection' => $dungeonRouteCollection]),
     'storeUrl'                   => $isNew ? null : route('ajax.collection.routes.store', ['dungeonRouteCollection' => $dungeonRouteCollection]),
     'max'                        => DungeonRouteCollection::MAX_ROUTES,
+    'dungeonIds'                 => $collectionDungeonIds,
+    'maxPerDungeon'              => DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON,
 ];
 ?>
 {{-- The data-inline-* attributes let a script activate this section again after swapping it into the page --}}
@@ -200,6 +207,8 @@ $inlineOptions = [
             'preselectedDungeon' => null,
             'existingPublicKeys' => $collectionDungeonRoutes->pluck('public_key')->all(),
             'max' => DungeonRouteCollection::MAX_ROUTES,
+            'maxPerDungeon' => DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON,
+            'existingDungeonIds' => $collectionDungeonIds,
             // A new collection has nothing to post to yet: its routes are added to the form and saved with it
             'addUrl' => $isNew ? null : route('ajax.collection.routes.store', ['dungeonRouteCollection' => $dungeonRouteCollection]),
             'addFieldName' => 'dungeon_routes',

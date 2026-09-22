@@ -14,6 +14,8 @@
  * @var Dungeon|null        $preselectedDungeon  Dungeon the dungeon filter starts on; the user may change it.
  * @var array<int, string>  $existingPublicKeys  Routes already in the target: listed, but cannot be ticked.
  * @var int|null            $max                 Most routes the target may hold, null for no limit.
+ * @var int|null            $maxPerDungeon       Most routes of one dungeon the target may hold, null for no limit.
+ * @var array<string, int>  $existingDungeonIds  The dungeon of each route already in the target, by public key.
  * @var string|null         $addUrl              Receives a POST of `{$addFieldName}[]` holding the ticked public keys;
  *                                               null leaves saving entirely to the host page.
  * @var string              $addFieldName
@@ -34,6 +36,8 @@ $lockedSeason       ??= null;
 $preselectedDungeon ??= null;
 $existingPublicKeys ??= [];
 $max                ??= null;
+$maxPerDungeon      ??= null;
+$existingDungeonIds ??= [];
 $addUrl             ??= null;
 $addFieldName       ??= 'dungeon_routes';
 $openButtonSelector ??= null;
@@ -110,6 +114,8 @@ $inlineOptions = [
     'lockedParameters'           => $lockedParameters,
     'existingPublicKeys'         => array_values($existingPublicKeys),
     'max'                        => $max,
+    'maxPerDungeon'              => $maxPerDungeon,
+    'existingDungeonIds'         => $existingDungeonIds,
     'addUrl'                     => $addUrl,
     'addFieldName'               => $addFieldName,
     'fallbackImageBaseUrl'       => trim(ksgAssetImage(), '/'),

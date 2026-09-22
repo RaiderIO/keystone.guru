@@ -18,6 +18,8 @@
  @property {string|null} deleteUrl
  @property {string|null} orderUrl
  @property {Number} max
+ @property {Object<string, Number>} dungeonIds The dungeon of every route the page arrived with, by public key.
+ @property {Number} maxPerDungeon
  */
 
 /**
@@ -42,6 +44,8 @@ class CommonCollectionRoutes extends InlineCode {
         this._orderSaving  = false;
         /** @type {Function[]} Callbacks of the saves that came in while one was in flight */
         this._orderQueue = null;
+        /** @type {Object<string, Number>} The dungeon of every route that has been in the lists, by public key */
+        this._dungeonIds = Object.assign({}, this.options.dungeonIds || {});
     }
 
     activate() {
@@ -198,8 +202,9 @@ class CommonCollectionRoutes extends InlineCode {
                 self._savedOrder = self._savedOrder.filter(id => id !== publicKey);
                 self._refreshPicker();
 
-                // The picker cannot offer a route back into a section it does not fill, so there is nothing to undo
-                let undo = section.canAdd
+                // The picker cannot offer a route back into a section it does not fill, and the server takes no route
+                // back into a dungeon that is still at its limit, so there is nothing to undo then
+                let undo = section.canAdd && self._hasRoomInDungeonOf(publicKey)
                     ? self._undoRemoval.bind(self, publicKey, orderedSelect, previousSectionOrder)
                     : null;
 
@@ -349,6 +354,7 @@ class CommonCollectionRoutes extends InlineCode {
             let name = section.withDungeonName ? `${dungeonRoute.title} — ${dungeonRoute.dungeonName}` : dungeonRoute.title;
 
             self._getOrderedSelect(section).addItem(dungeonRoute.publicKey, name, dungeonRoute.detail);
+            self._dungeonIds[dungeonRoute.publicKey] = dungeonRoute.dungeonId;
             // The server appends added routes to the end of the stored order
             self._savedOrder.push(dungeonRoute.publicKey);
         });
@@ -414,6 +420,26 @@ class CommonCollectionRoutes extends InlineCode {
     }
 
     /**
+     * @param {string} publicKey
+     * @returns {boolean} Whether the route's dungeon has room for it next to the routes in the lists.
+     * @private
+     */
+    _hasRoomInDungeonOf(publicKey) {
+        let self = this;
+        let dungeonId = this._dungeonIds[publicKey];
+
+        if (typeof this.options.maxPerDungeon !== 'number' || typeof dungeonId === 'undefined') {
+            return true;
+        }
+
+        let sameDungeonCount = this._getOrder()
+            .filter(orderPublicKey => orderPublicKey !== publicKey && self._dungeonIds[orderPublicKey] === dungeonId)
+            .length;
+
+        return sameDungeonCount < this.options.maxPerDungeon;
+    }
+
+    /**
      * @private
      */
     _refreshCount() {
@@ -430,7 +456,7 @@ class CommonCollectionRoutes extends InlineCode {
     _refreshPicker() {
         let picker = this._getPicker();
         if (picker !== null) {
-            picker.setExistingPublicKeys(this._getOrder());
+            picker.setExistingPublicKeys(this._getOrder(), this._dungeonIds);
         }
     }
 

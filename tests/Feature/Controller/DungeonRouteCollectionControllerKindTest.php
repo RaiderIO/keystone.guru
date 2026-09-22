@@ -775,6 +775,141 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
     }
 
     #[Test]
+    public function view_givenAnyCollection_rendersInTheCentredContentColumn(): void
+    {
+        // Arrange
+        $this->creator();
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
+
+        // Act
+        $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('col-md-8 offset-md-2', false);
+        $response->assertDontSee('flex-fill ps-lg-3 pe-lg-3', false);
+    }
+
+    #[Test]
+    public function view_givenAnEmptySeasonSet_showsTheEmptyStateInsteadOfDungeons(): void
+    {
+        // Arrange
+        $this->creator();
+        $mappingVersions        = $this->retailMappingVersions()->take(2)->values();
+        $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id], $mappingVersions->pluck('dungeon_id')->all());
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
+
+        // Act
+        $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeText(__('view_collection.view.no_routes'));
+        $response->assertDontSee('collection_slot', false);
+    }
+
+    #[Test]
+    public function view_givenASeasonSet_showsASlotForEveryPoolDungeon(): void
+    {
+        // Arrange
+        $this->creator();
+        $mappingVersions        = $this->retailMappingVersions()->take(2)->values();
+        $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id], $mappingVersions->pluck('dungeon_id')->all());
+        $coveredRoute           = $this->createRoute($mappingVersions->get(1), $season, 'ZzTestCoveredRoute');
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
+        $this->addRoutes($dungeonRouteCollection, [$coveredRoute]);
+
+        // Act
+        $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeInOrder([
+            sprintf('id="collection_dungeon_%d"', $mappingVersions->get(0)->dungeon_id),
+            __('view_collection.view.slot_empty', ['dungeon' => __($mappingVersions->get(0)->load('dungeon')->dungeon->name)]),
+            sprintf('id="collection_dungeon_%d"', $mappingVersions->get(1)->dungeon_id),
+            'ZzTestCoveredRoute',
+        ], false);
+    }
+
+    #[Test]
+    public function view_givenAFreeFormCollectionOfOneRoute_showsNoPositionNumber(): void
+    {
+        // Arrange
+        $this->creator();
+        $mappingVersion         = $this->retailMappingVersions()->first();
+        $dungeonRoute           = $this->createRoute($mappingVersion, null, 'ZzTestOnlyRoute');
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
+        $this->addRoutes($dungeonRouteCollection, [$dungeonRoute]);
+
+        // Act
+        $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertDontSee('collection_route_position', false);
+        $response->assertSeeText('ZzTestOnlyRoute');
+    }
+
+    #[Test]
+    public function view_givenSeveralRoutesOfOneDungeon_numbersThemInCollectionOrder(): void
+    {
+        // Arrange
+        $this->creator();
+        $mappingVersion         = $this->retailMappingVersions()->first();
+        $firstRoute             = $this->createRoute($mappingVersion, null, 'ZzTestFirstInOrder');
+        $secondRoute            = $this->createRoute($mappingVersion, null, 'ZzTestSecondInOrder');
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
+        $this->addRoutes($dungeonRouteCollection, [$secondRoute, $firstRoute]);
+
+        // Act
+        $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeInOrder([
+            'collection_route_position" aria-hidden="true">1<',
+            'ZzTestSecondInOrder',
+            'collection_route_position" aria-hidden="true">2<',
+            'ZzTestFirstInOrder',
+        ], false);
+    }
+
+    #[Test]
+    public function view_givenTheOwner_offersEditAndCopyLink(): void
+    {
+        // Arrange
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
+
+        // Act
+        $response = $this->actingAs($this->creator())->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]), false);
+        $response->assertSee('id="collection_copy_link"', false);
+        $this->assertTrue($response->viewData('dungeonRouteCollection')->user->relationLoaded('iconfile'), 'The header avatar must not lazy load');
+    }
+
+    #[Test]
+    public function view_givenAnotherViewer_offersCopyLinkButNoEdit(): void
+    {
+        // Arrange
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
+
+        // Act
+        $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertDontSee(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]), false);
+        $response->assertSee(
+            sprintf('data-url="%s"', route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection])),
+            false,
+        );
+    }
+
+    #[Test]
     public function edit_givenASeasonSet_rendersOneOrderedListPerPoolDungeon(): void
     {
         // Arrange

@@ -9,6 +9,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\Team;
+use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
@@ -276,8 +277,8 @@ class DungeonRouteCollectionFormRequest extends FormRequest
 
     /**
      * A route joins a collection only when its own mapping version is of the collection's game version and, for a
-     * season set, it is of the collection's season. Routes already in the collection may stay, so the owner of a
-     * collection that predates these rules can still save it.
+     * season set, it is of the collection's season, and when its dungeon has room left. Routes already in the
+     * collection may stay, so the owner of a collection that predates these rules can still save it.
      */
     private function validateDungeonRoutesMatchTheCollection(Validator $validator): void
     {
@@ -296,10 +297,26 @@ class DungeonRouteCollectionFormRequest extends FormRequest
         $season      = $this->season();
 
         $dungeonRoutes = DungeonRoute::query()
-            ->with(['mappingVersion'])
+            ->with(['mappingVersion', 'dungeon'])
             ->whereIn('public_key', $publicKeys)
             ->get()
             ->keyBy('public_key');
+
+        /** @var Collection<int, DungeonRoute> $submittedDungeonRoutes Keyed by position in the submitted list. */
+        $submittedDungeonRoutes = collect($publicKeys)
+            ->map(static fn(string $publicKey): ?DungeonRoute => $dungeonRoutes->get($publicKey))
+            ->filter();
+        [$keptDungeonRoutes, $joiningDungeonRoutes] = $submittedDungeonRoutes
+            ->partition(static fn(DungeonRoute $dungeonRoute): bool => in_array($dungeonRoute->id, $memberIds, true));
+
+        $overLimitDungeonRoutes = app(DungeonRouteCollectionServiceInterface::class)
+            ->getDungeonRoutesOverDungeonLimit($joiningDungeonRoutes, $keptDungeonRoutes);
+        foreach ($overLimitDungeonRoutes as $index => $dungeonRoute) {
+            $validator->errors()->add(sprintf('dungeon_routes.%d', $index), __('validation.custom.collection_dungeon_routes.max_dungeon', [
+                'max'     => DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON,
+                'dungeon' => __($dungeonRoute->dungeon->name),
+            ]));
+        }
 
         foreach ($publicKeys as $index => $publicKey) {
             $dungeonRoute = $dungeonRoutes->get($publicKey);

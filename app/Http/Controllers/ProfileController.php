@@ -22,6 +22,7 @@ use App\Repositories\Interfaces\UserPinnedDungeonRouteCollectionRepositoryInterf
 use App\Repositories\Interfaces\UserPinnedDungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\UserSocialLinkRepositoryInterface;
 use App\Service\DungeonRoute\CoverageServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -53,8 +54,12 @@ class ProfileController extends Controller
     /**
      * @return View
      */
-    public function view(Request $request, User $user, ThumbnailServiceInterface $thumbnailService): View
-    {
+    public function view(
+        Request                                $request,
+        User                                   $user,
+        ThumbnailServiceInterface              $thumbnailService,
+        DungeonRouteCollectionServiceInterface $dungeonRouteCollectionService,
+    ): View {
         $creatorProfileActive = Feature::active(CreatorProfiles::class);
 
         /** @var Collection<int, UserSocialLink> $socialLinks */
@@ -63,7 +68,11 @@ class ProfileController extends Controller
         $pinnedDungeonRoutes = collect();
         /** @var Collection<int, DungeonRouteCollection> $pinnedDungeonRouteCollections */
         $pinnedDungeonRouteCollections = collect();
-        $publishedRouteCount           = 0;
+        /** @var Collection<int, Collection<int, DungeonRoute>> $pinnedDungeonRouteCollectionDungeonRoutes Keyed by collection id. */
+        $pinnedDungeonRouteCollectionDungeonRoutes = collect();
+        /** @var Collection<int, int> $pinnedDungeonRouteCollectionCoveredDungeonCounts Keyed by collection id. */
+        $pinnedDungeonRouteCollectionCoveredDungeonCounts = collect();
+        $publishedRouteCount                              = 0;
 
         if ($creatorProfileActive) {
             $publishedRouteCount = DungeonRoute::query()
@@ -71,24 +80,10 @@ class ProfileController extends Controller
                 ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
                 ->count();
 
-            // The pinned routes render through the shared route card, which needs the same relation
-            // set DiscoverService eager loads - lazy loading is disabled, so a miss here is a 500
             $user->load([
                 'socialLinks',
-                'pinnedDungeonRoutes.dungeonRoute.author.iconfile',
-                'pinnedDungeonRoutes.dungeonRoute.affixes',
-                'pinnedDungeonRoutes.dungeonRoute.ratings',
-                'pinnedDungeonRoutes.dungeonRoute.mappingVersion',
-                'pinnedDungeonRoutes.dungeonRoute.thumbnails',
-                'pinnedDungeonRoutes.dungeonRoute.dungeon',
-                'pinnedDungeonRoutes.dungeonRoute.season.expansion',
-                // Needed by mayUserView() for team-published routes
-                'pinnedDungeonRoutes.dungeonRoute.team',
-                // The pinned collections render as a compact card - name, category and description
-                // only - so they need far less than the route cards above. The team is only there
-                // for mayUserView() on a team shared collection
-                'pinnedDungeonRouteCollections.dungeonRouteCollection.dungeonRouteCollectionCategory',
-                'pinnedDungeonRouteCollections.dungeonRouteCollection.team',
+                'pinnedDungeonRoutes.dungeonRoute'                     => static fn($query) => $query->withCardRelations(),
+                'pinnedDungeonRouteCollections.dungeonRouteCollection' => static fn($query) => $query->withTileRelations(),
             ]);
 
             $socialLinks = $user->socialLinks;
@@ -109,15 +104,27 @@ class ProfileController extends Controller
                 ->map(static fn(UserPinnedDungeonRouteCollection $pin): ?DungeonRouteCollection => $pin->dungeonRouteCollection)
                 ->filter(static fn(?DungeonRouteCollection $dungeonRouteCollection): bool => $dungeonRouteCollection?->mayUserView($viewer) ?? false)
                 ->values();
+
+            foreach ($pinnedDungeonRouteCollections as $pinnedDungeonRouteCollection) {
+                $viewableDungeonRoutes = $pinnedDungeonRouteCollection->getViewableDungeonRoutes($viewer);
+
+                $pinnedDungeonRouteCollectionDungeonRoutes->put($pinnedDungeonRouteCollection->id, $viewableDungeonRoutes);
+                $pinnedDungeonRouteCollectionCoveredDungeonCounts->put(
+                    $pinnedDungeonRouteCollection->id,
+                    $dungeonRouteCollectionService->getCoveredDungeonCount($pinnedDungeonRouteCollection, $viewableDungeonRoutes),
+                );
+            }
         }
 
         return view('profile.view', [
-            'user'                          => $user,
-            'creatorProfileActive'          => $creatorProfileActive,
-            'socialLinks'                   => $socialLinks,
-            'pinnedDungeonRoutes'           => $pinnedDungeonRoutes,
-            'pinnedDungeonRouteCollections' => $pinnedDungeonRouteCollections,
-            'publishedRouteCount'           => $publishedRouteCount,
+            'user'                                             => $user,
+            'creatorProfileActive'                             => $creatorProfileActive,
+            'socialLinks'                                      => $socialLinks,
+            'pinnedDungeonRoutes'                              => $pinnedDungeonRoutes,
+            'pinnedDungeonRouteCollections'                    => $pinnedDungeonRouteCollections,
+            'pinnedDungeonRouteCollectionDungeonRoutes'        => $pinnedDungeonRouteCollectionDungeonRoutes,
+            'pinnedDungeonRouteCollectionCoveredDungeonCounts' => $pinnedDungeonRouteCollectionCoveredDungeonCounts,
+            'publishedRouteCount'                              => $publishedRouteCount,
         ]);
     }
 

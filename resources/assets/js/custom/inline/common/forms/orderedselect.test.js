@@ -415,4 +415,31 @@ describe('CommonFormsOrderedselect in ajax mode', () => {
         expect(document.querySelector('#routes_add_button').disabled).toBe(true);
         expect(document.querySelector('#routes_full').hidden).toBe(false);
     });
+
+    it('addItem_givenTheListReachesItsItemMax_disablesTheAddButtonAndNamesThatMax', () => {
+        // Arrange
+        control.options.itemMax = 3;
+        control.options.fullText = 'Full (maximum :max)';
+
+        // Act
+        control.addItem('3', 'Charlie', null);
+
+        // Assert
+        expect(document.querySelector('#routes_add_button').disabled).toBe(true);
+        expect(document.querySelector('#routes_full').hidden).toBe(false);
+        expect(document.querySelector('#routes_full').textContent).toBe('Full (maximum 3)');
+    });
+
+    it('removeItem_givenTheListDropsBelowItsItemMax_enablesTheAddButtonAgain', () => {
+        // Arrange
+        control.options.itemMax = 2;
+        control.setFullCount(2);
+
+        // Act
+        control.removeItem(2);
+
+        // Assert
+        expect(document.querySelector('#routes_add_button').disabled).toBe(false);
+        expect(document.querySelector('#routes_full').hidden).toBe(true);
+    });
 });

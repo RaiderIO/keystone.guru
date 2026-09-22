@@ -379,13 +379,90 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function update_givenMoreNewRoutesOfADungeonThanFit_failsValidationOnTheOnePastTheLimit(): void
+    {
+        // Arrange
+        $creator                = $this->createCreator();
+        $alpha                  = $this->createRouteFor($creator);
+        $bravo                  = $this->createRouteFor($creator);
+        $charlie                = $this->createRouteFor($creator);
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(
+                route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+                [
+                    'name'            => 'ZzTestTooManyOfADungeon',
+                    'published_state' => PublishedState::WORLD,
+                    'dungeon_routes'  => [$alpha->public_key, $bravo->public_key, $charlie->public_key],
+                ],
+            );
+
+            // Assert
+            $response->assertSessionHasErrors(['dungeon_routes.2']);
+            $response->assertSessionDoesntHaveErrors(['dungeon_routes.0', 'dungeon_routes.1']);
+            $this->assertCount(0, $dungeonRouteCollection->refresh()->dungeonRoutes);
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $charlie->delete();
+            $bravo->delete();
+            $alpha->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenRoutesOfADungeonKeptFromBeforeTheLimit_savesThem(): void
+    {
+        // Arrange
+        $creator                = $this->createCreator();
+        $alpha                  = $this->createRouteFor($creator);
+        $bravo                  = $this->createRouteFor($creator);
+        $charlie                = $this->createRouteFor($creator);
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
+        foreach ([$alpha, $bravo, $charlie] as $order => $dungeonRoute) {
+            $dungeonRouteCollection->dungeonRoutes()->attach($dungeonRoute->id, ['order' => $order]);
+        }
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(
+                route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+                [
+                    'name'            => 'ZzTestKeptPastTheLimit',
+                    'published_state' => PublishedState::WORLD,
+                    'dungeon_routes'  => [$charlie->public_key, $alpha->public_key, $bravo->public_key],
+                ],
+            );
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $this->assertSame(
+                [$charlie->id, $alpha->id, $bravo->id],
+                $dungeonRouteCollection->refresh()->dungeonRoutes->pluck('id')->all(),
+            );
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $charlie->delete();
+            $bravo->delete();
+            $alpha->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function update_givenRoutesInNonAlphabeticalOrder_storesThemInSubmittedOrder(): void
     {
         // Arrange
         $creator                = $this->createCreator();
         $alpha                  = $this->createRouteFor($creator, PublishedState::WORLD, 'ZzTestAlpha');
         $bravo                  = $this->createRouteFor($creator, PublishedState::WORLD, 'ZzTestBravo');
-        $charlie                = $this->createRouteFor($creator, PublishedState::WORLD, 'ZzTestCharlie');
+        $charlie                = $this->createRouteFor($creator, PublishedState::WORLD, 'ZzTestCharlie', $this->otherRetailMappingVersion());
         $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
         Feature::for($creator)->activate(CreatorProfiles::class);
 
@@ -1387,11 +1464,12 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     private function createRouteFor(
-        User    $user,
-        string  $publishedState = PublishedState::WORLD,
-        ?string $title = null,
+        User            $user,
+        string          $publishedState = PublishedState::WORLD,
+        ?string         $title = null,
+        ?MappingVersion $mappingVersion = null,
     ): DungeonRoute {
-        $mappingVersion = $this->retailMappingVersion();
+        $mappingVersion ??= $this->retailMappingVersion();
 
         $attributes = [
             'author_id'          => $user->id,
@@ -1412,6 +1490,19 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     /**
      * A retail mapping version of a challenge mode dungeon, so a route on it may join a retail collection.
      */
+    /**
+     * A retail mapping version of another challenge mode dungeon than retailMappingVersion()'s.
+     */
+    private function otherRetailMappingVersion(): MappingVersion
+    {
+        return MappingVersion::query()
+            ->where('game_version_id', GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL])
+            ->whereHas('dungeon', static fn($query) => $query->whereNotNull('challenge_mode_id'))
+            ->where('dungeon_id', '!=', $this->retailMappingVersion()->dungeon_id)
+            ->orderByDesc('id')
+            ->firstOrFail();
+    }
+
     private function retailMappingVersion(): MappingVersion
     {
         return MappingVersion::query()

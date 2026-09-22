@@ -12,6 +12,8 @@ use App\Models\User;
 use App\Models\UserPinnedDungeonRouteCollection;
 use Database\Factories\DungeonRoute\DungeonRouteCollectionFactory;
 use Eloquent;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -62,9 +64,15 @@ class DungeonRouteCollection extends Model
     /**
      * How many routes a single collection may hold. A collection is meant to be a curated list -
      * without a cap the public collection page would eagerly load an unbounded amount of routes.
-     * Three routes for every dungeon of a season is plenty for a curated set.
+     * Two routes for every dungeon of a season is plenty for a curated set.
      */
-    public const int MAX_ROUTES = 24;
+    public const int MAX_ROUTES = 16;
+
+    /**
+     * How many routes of one dungeon a single collection may hold. Only routes joining are checked against it,
+     * so routes a collection already holds may stay.
+     */
+    public const int MAX_ROUTES_PER_DUNGEON = 2;
 
     /**
      * How many collections a single user may own.
@@ -231,6 +239,26 @@ class DungeonRouteCollection extends Model
         return $this->dungeonRoutes
             ->filter(static fn(DungeonRoute $dungeonRoute): bool => $dungeonRoute->mayUserView($user))
             ->values();
+    }
+
+    /**
+     * Eager load everything the collection tile and mayUserView() read, for the collection and its routes.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function withTileRelations(Builder $query): Builder
+    {
+        return $query->with([
+            'dungeonRouteCollectionCategory',
+            'team',
+            'gameVersion',
+            'season.dungeons',
+            'dungeonRoutes.thumbnails',
+            'dungeonRoutes.dungeon',
+            'dungeonRoutes.team',
+        ]);
     }
 
     #[Override]

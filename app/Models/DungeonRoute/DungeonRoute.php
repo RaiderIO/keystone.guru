@@ -792,6 +792,27 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             });
     }
 
+    /**
+     * Eager load everything the shared route cards and mayUserView() read.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function withCardRelations(Builder $query): Builder
+    {
+        return $query->with([
+            'author.iconfile',
+            'affixes',
+            'ratings',
+            'mappingVersion',
+            'thumbnails',
+            'dungeon',
+            'season.expansion',
+            'team',
+        ]);
+    }
+
     public function getPublishedAttribute(): string
     {
         return array_search($this->published_state_id, PublishedState::ALL, true);
