@@ -228,7 +228,7 @@ Breadcrumbs::for('collection.new', static function (Generator $trail) {
 
 Breadcrumbs::for('collection.edit', static function (Generator $trail, DungeonRouteCollection $dungeonRouteCollection) {
     $trail->parent('collection.index');
-    $trail->push(__('breadcrumbs.home.edit_collection'), route('collections.edit', $dungeonRouteCollection));
+    $trail->push(__('breadcrumbs.home.edit_collection', ['name' => $dungeonRouteCollection->name]), route('collections.edit', $dungeonRouteCollection));
 });
 
 Breadcrumbs::for('collection.view', static function (Generator $trail, DungeonRouteCollection $dungeonRouteCollection) {

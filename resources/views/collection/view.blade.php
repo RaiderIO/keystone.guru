@@ -12,7 +12,10 @@ use Illuminate\Support\Collection;
  * @var int                                          $coveredDungeonCount
  */
 
-$title = sprintf(__('view_collection.view.title'), $dungeonRouteCollection->name);
+$title = __('view_collection.view.title', [
+    'name'   => $dungeonRouteCollection->name,
+    'author' => $dungeonRouteCollection->user->name,
+]);
 
 $kindLabel = $dungeonRouteCollection->isSeasonSet() && $dungeonRouteCollection->season !== null
     ? __('view_collection.kind.season_set', [
@@ -66,7 +69,14 @@ $kindLabel = $dungeonRouteCollection->isSeasonSet() && $dungeonRouteCollection->
     @if($dungeonRoutes->isEmpty() && !$dungeonRouteCollection->isSeasonSet())
         <div class="card">
             <div class="card-body text-center">
-                {{ __('view_collection.view.no_routes') }}
+                @if($dungeonRouteCollection->mayUserEdit(Auth::user()))
+                    <p>{{ __('view_collection.view.no_routes_owner') }}</p>
+                    <a href="{{ route('collections.edit', $dungeonRouteCollection) }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> {{ __('view_collection.view.add_routes') }}
+                    </a>
+                @else
+                    {{ __('view_collection.view.no_routes') }}
+                @endif
             </div>
         </div>
     @else

@@ -4,8 +4,8 @@ return [
     'published_state_subtext' => [
         'unpublished'     => 'Only you may view this collection',
         'team'            => 'Only members of the team chosen below may view this collection',
-        'world_with_link' => 'Anyone with the link may view this collection',
-        'world'           => 'Anyone may view this collection',
+        'world_with_link' => 'Anyone with the link may view this collection; the creator directory does not list you under its category',
+        'world'           => 'Anyone may view this collection, and the creator directory can list you under its category',
     ],
     'kind' => [
         'season_set' => ':season set · :covered/:total dungeons',
@@ -14,10 +14,10 @@ return [
     'index' => [
         'title'                   => 'My collections',
         'header'                  => 'My collections',
-        'description'             => 'A collection is a shareable list of your routes, for example all your routes for this week.',
+        'description'             => 'A collection puts your routes on one page you can share with a single link - a route for every dungeon of the season, or your routes for newer players.',
         'create_collection'       => 'New collection',
         'max_collections'         => 'You have :max collections, the most you may have. Delete one to make a new one.',
-        'no_collections'          => 'You have not created any collections yet.',
+        'no_collections'          => 'You have no collections yet. Start one to share a route for every dungeon of the season with one link.',
         'no_category'             => 'No category',
         'table_header_name'       => 'Name',
         'table_header_category'   => 'Category',
@@ -60,10 +60,12 @@ return [
         'duplicate_submit'      => 'Duplicate collection',
     ],
     'view' => [
-        'title'       => '%s',
-        'by_author'   => 'A collection by :author',
-        'route_count' => '{0} No routes|{1} :count route|[2,*] :count routes',
-        'no_routes'   => 'This collection does not contain any routes that you may view.',
-        'slot_empty'  => 'No route for :dungeon yet.',
+        'title'           => ':name by :author',
+        'by_author'       => 'A collection by :author',
+        'route_count'     => '{0} No routes|{1} :count route|[2,*] :count routes',
+        'no_routes'       => 'There are no routes to show in this collection yet.',
+        'no_routes_owner' => 'This collection has no routes yet.',
+        'add_routes'      => 'Add routes',
+        'slot_empty'      => 'No route for :dungeon yet.',
     ],
 ];
