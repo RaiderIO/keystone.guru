@@ -9,7 +9,6 @@ const {
     isNumeric,
     decodeHtmlEntity,
     isPolygonClockwise,
-    createOffsetHullPolygon,
     getDistance,
     getDistanceSquared,
     getLatLngDistance,
@@ -133,82 +132,6 @@ describe('isPolygonClockwise', () => {
     it('returns false for counter-clockwise points', () => {
         const points = [{x: 0, y: 0}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}];
         expect(isPolygonClockwise(points)).toBe(false);
-    });
-});
-
-describe('createOffsetHullPolygon', () => {
-    let originalL;
-    let originalHull;
-    let originalOffsetPolygon;
-
-    beforeEach(() => {
-        originalL = globalThis.L;
-        originalHull = globalThis.hull;
-        originalOffsetPolygon = globalThis.offsetPolygon;
-
-        globalThis.L = {polygon: vi.fn((latLngs, options) => ({latLngs, options}))};
-        globalThis.hull = vi.fn((points) => points);
-        globalThis.offsetPolygon = vi.fn((points) => points);
-    });
-
-    afterEach(() => {
-        globalThis.L = originalL;
-        globalThis.hull = originalHull;
-        globalThis.offsetPolygon = originalOffsetPolygon;
-    });
-
-    it('createOffsetHullPolygon_givenPoints_returnsPolygonAroundTheirHull', () => {
-        // Arrange
-        const points = [[-10, 10], [-20, 20], [-10, 30]];
-        const arcSegments = vi.fn(() => 5);
-
-        // Act
-        const result = createOffsetHullPolygon(points, 2, arcSegments, {weight: 1});
-
-        // Assert
-        expect(globalThis.hull).toHaveBeenCalledWith(points, 100);
-        expect(arcSegments).toHaveBeenCalledWith(3);
-        expect(globalThis.offsetPolygon).toHaveBeenCalledWith(expect.any(Array), 2, 5);
-        expect(result.options).toEqual({weight: 1});
-        expect(result.latLngs[0]).toHaveLength(3);
-    });
-
-    it('createOffsetHullPolygon_givenSinglePoint_returnsNull', () => {
-        // Arrange
-        const points = [[-10, 10]];
-
-        // Act
-        const result = createOffsetHullPolygon(points, 2, () => 5, {});
-
-        // Assert
-        expect(result).toBeNull();
-        expect(globalThis.hull).not.toHaveBeenCalled();
-    });
-
-    it('createOffsetHullPolygon_givenHullOfOnePoint_returnsNull', () => {
-        // Arrange
-        globalThis.hull = vi.fn(() => [[-10, 10]]);
-
-        // Act
-        const result = createOffsetHullPolygon([[-10, 10], [-10, 10]], 2, () => 5, {});
-
-        // Assert
-        expect(result).toBeNull();
-        expect(globalThis.L.polygon).not.toHaveBeenCalled();
-    });
-
-    it('createOffsetHullPolygon_givenPolygonCreationThrows_returnsNull', () => {
-        // Arrange
-        globalThis.L = {polygon: vi.fn(() => { throw new Error('Invalid LatLng'); })};
-        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-        // Act
-        const result = createOffsetHullPolygon([[-10, 10], [-20, 20], [-10, 30]], 2, () => 5, {});
-
-        // Assert
-        expect(result).toBeNull();
-        expect(consoleError).toHaveBeenCalled();
-        consoleError.mockRestore();
     });
 });
 

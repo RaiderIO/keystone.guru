@@ -11,6 +11,7 @@ global.Polyline = class Polyline {
 
     loadRemoteMapObject() {}
 };
+global.HullPolyline = require('./hullpolyline').HullPolyline;
 global.MapContextMappingVersionEdit = class MapContextMappingVersionEdit {
 };
 global.MAP_OBJECT_GROUP_ENEMY = 'enemy';
@@ -26,11 +27,15 @@ global.L = {
 
 let lastOffsetPolygonMargin = null;
 let lastOffsetPolygonPoints = null;
-global.createOffsetHullPolygon = (points, margin) => {
-    lastOffsetPolygonMargin = margin;
+global.hull = (points) => {
     lastOffsetPolygonPoints = points;
 
-    return {on: () => {}};
+    return points;
+};
+global.createOffsetPolygon = (vertices, margin) => {
+    lastOffsetPolygonMargin = margin;
+
+    return vertices.map(vertex => [vertex.lat, vertex.lng]);
 };
 
 global.c = {

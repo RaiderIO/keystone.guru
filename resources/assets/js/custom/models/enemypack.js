@@ -19,7 +19,7 @@ L.Draw.EnemyPack = L.Draw.Polygon.extend({
  * @property {String} label
  * @property {Object} polyline
  */
-class EnemyPack extends Polyline {
+class EnemyPack extends HullPolyline {
     constructor(map, layer) {
         super(map, layer, {name: 'enemypack', has_route_model_binding: true});
 
@@ -45,21 +45,6 @@ class EnemyPack extends Polyline {
      */
     _getPolylineWeightDefault() {
         return c.map.enemypack.polygonOptions.weight;
-    }
-
-    /**
-     * Outside the mapping editor a pack is drawn as the hull of its enemies, so its own weight is never shown.
-     * @inheritDoc
-     */
-    _isWeightEditable() {
-        return false;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    _isAnimatable() {
-        return false;
     }
 
     /**
@@ -163,15 +148,12 @@ class EnemyPack extends Polyline {
     }
 
     /**
-     * Creates a new layer ready to be assigned somewhere.
-     * @returns {L.Layer|null}
+     * The positions of the pack's visible enemies.
+     * @inheritDoc
      */
-    _updateHullLayer() {
+    _getHullPoints() {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
-        let self = this;
-
-        // Convert raw enemies to current enemies
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         let latLngs = [];
         for (let i = 0; i < this.rawEnemies.length; i++) {
@@ -185,20 +167,55 @@ class EnemyPack extends Polyline {
             }
         }
 
-        let floor = getState().getMapContext().getFloorById(this.floor_id);
-        let enemyPackMargin = (floor !== false && floor.enemy_pack_margin !== null && floor.enemy_pack_margin !== undefined) ?
-            floor.enemy_pack_margin : c.map.enemypack.margin;
+        return latLngs;
+    }
 
-        let result = createOffsetHullPolygon(latLngs, enemyPackMargin, c.map.enemypack.arcSegments, c.map.enemypack.polygonOptions);
+    /**
+     * The pack's floor may override the global margin.
+     * @inheritDoc
+     */
+    _getHullMargin() {
+        let floor = getState().getMapContext().getFloorById(this.floor_id);
+
+        return (floor !== false && floor.enemy_pack_margin !== null && floor.enemy_pack_margin !== undefined) ?
+            floor.enemy_pack_margin : c.map.enemypack.margin;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getHullArcSegments() {
+        return c.map.enemypack.arcSegments;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getHullPolygonOptions() {
+        return c.map.enemypack.polygonOptions;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getHullMapObjectGroup() {
+        return this.map.mapObjectGroupManager.getEnemyPackMapObjectGroup();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _createHullLayer(points) {
+        let self = this;
+
+        let result = super._createHullLayer(points);
         if (result !== null) {
             result.on('click', function (clickEvent) {
                 self.signal('enemypack:clicked', {clickEvent: clickEvent});
             });
         }
 
-        let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getEnemyPackMapObjectGroup();
-        enemyPackMapObjectGroup.setLayerToMapObject(result, this);
-        this.rebindTooltip();
+        return result;
     }
 
     /**

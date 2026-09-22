@@ -14,7 +14,12 @@ L.Draw.MountableArea = L.Draw.Polygon.extend({
 
 // });
 
-class MountableArea extends VersionableMapObject {
+/**
+ * @property {Number} floor_id
+ * @property {Number|null} speed
+ * @property {Object} polyline
+ */
+class MountableArea extends HullPolyline {
     constructor(map, layer) {
         super(map, layer, {name: 'mountablearea', has_route_model_binding: true});
 
@@ -32,28 +37,12 @@ class MountableArea extends VersionableMapObject {
             return this._cachedAttributes;
         }
 
-        let self = this;
-
         return this._cachedAttributes = super._getAttributes(force).concat([
-            new Attribute({
-                name: 'floor_id',
-                type: 'int',
-                edit: false, // Not directly changeable by user
-                default: getState().getCurrentFloor().id
-            }),
             new Attribute({
                 name: 'speed',
                 type: 'int',
                 edit: true,
                 default: null
-            }),
-            new Attribute({
-                name: 'vertices',
-                type: 'array',
-                edit: false,
-                getter: function () {
-                    return self.getVertices();
-                }
             })
         ]);
     }
@@ -68,18 +57,18 @@ class MountableArea extends VersionableMapObject {
     }
 
     /**
-     * Sets the color of the pack.
-     * @param color
+     * @inheritDoc
      */
-    setColor(color) {
-        console.assert(this instanceof MountableArea, 'this was not a MountableArea', this);
+    _getPolylineWeightDefault() {
+        return c.map.mountablearea.polygonOptions.weight;
+    }
 
-        this.color = color;
-        this.layer.setStyle({
-            fillColor: this.color ?? this._getPolylineColorDefault(),
-            color: this.color ?? this._getPolylineColorDefault()
-        });
-        this.layer.redraw();
+    /**
+     * Mountable areas are always drawn in the same colour.
+     * @inheritDoc
+     */
+    _isColorEditable() {
+        return false;
     }
 
     /**
@@ -88,8 +77,8 @@ class MountableArea extends VersionableMapObject {
     loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
         super.loadRemoteMapObject(remoteMapObject, parentAttribute);
 
-        // Only called when not in admin state
-        if (!(getState().getMapContext() instanceof MapContextMappingVersionEdit)) {
+        // The nested polyline is loaded through this same method; build the hull once, for the area itself
+        if (parentAttribute === null && !(getState().getMapContext() instanceof MapContextMappingVersionEdit)) {
             this._updateHullLayer();
         }
     }
@@ -99,34 +88,41 @@ class MountableArea extends VersionableMapObject {
     }
 
     /**
-     * Creates a new layer ready to be assigned somewhere.
-     * @returns {L.Layer|null}
+     * The area's own vertices.
+     * @inheritDoc
      */
-    _updateHullLayer() {
+    _getHullPoints() {
         console.assert(this instanceof MountableArea, 'this is not a MountableArea', this);
 
-        let points = this.getVertices().map(latLng => [latLng.lat, latLng.lng]);
-
-        let result = createOffsetHullPolygon(points, c.map.mountablearea.margin, c.map.mountablearea.arcSegments, c.map.mountablearea.polygonOptions);
-
-        let mountableAreaMapObjectGroup = this.map.mapObjectGroupManager.getMountableAreaMapObjectGroup();
-        mountableAreaMapObjectGroup.setLayerToMapObject(result, this);
-        this.rebindTooltip();
+        return this.getVertices().map(latLng => [latLng.lat, latLng.lng]);
     }
 
     /**
-     *
-     * @returns {[]}
+     * @inheritDoc
      */
-    getVertices() {
-        console.assert(this instanceof MountableArea, 'this is not a MountableArea', this);
+    _getHullMargin() {
+        return c.map.mountablearea.margin;
+    }
 
-        let coordinates = this.layer.toGeoJSON().geometry.coordinates[0];
-        let result = [];
-        for (let i = 0; i < coordinates.length - 1; i++) {
-            result.push({lat: coordinates[i][1], lng: coordinates[i][0]});
-        }
-        return result;
+    /**
+     * @inheritDoc
+     */
+    _getHullArcSegments() {
+        return c.map.mountablearea.arcSegments;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getHullPolygonOptions() {
+        return c.map.mountablearea.polygonOptions;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getHullMapObjectGroup() {
+        return this.map.mapObjectGroupManager.getMountableAreaMapObjectGroup();
     }
 
     bindTooltip() {
@@ -147,4 +143,10 @@ class MountableArea extends VersionableMapObject {
 
         return 'Mountable area-' + this.id;
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {MountableArea};
 }
