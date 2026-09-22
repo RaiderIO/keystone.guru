@@ -429,7 +429,7 @@ describe('EnemyVisual shown/hidden handling (#3723)', () => {
     });
 });
 
-describe('EnemyVisual#_createModifiers (#679)', () => {
+describe('EnemyVisual#_createModifiers', () => {
     beforeEach(() => {
         global.EnemyVisualModifierRaidMarker = class {
             constructor(enemyvisual, index) {
@@ -464,7 +464,7 @@ describe('EnemyVisual#_createModifiers (#679)', () => {
         // Act
         const modifiers = EnemyVisual.prototype._createModifiers.call(self);
 
-        // Assert: no classification/elite-star modifier is created, truesight still is
+        // Assert
         expect(modifiers.map(modifier => modifier.name)).toEqual(['truesight']);
     });
 
@@ -483,5 +483,22 @@ describe('EnemyVisual#_createModifiers (#679)', () => {
 
         // Assert
         expect(modifiers).toEqual([]);
+    });
+
+    test('_createModifiers_givenNullNpc_createsNoTruesightModifier', () => {
+        // Arrange
+        const self = {
+            enemy: {
+                raid_marker_name: 'skull',
+                teeming: 'hidden',
+                npc: null,
+            },
+        };
+
+        // Act
+        const modifiers = EnemyVisual.prototype._createModifiers.call(self);
+
+        // Assert
+        expect(modifiers.map(modifier => modifier.name)).toEqual(['raidmarker']);
     });
 });
