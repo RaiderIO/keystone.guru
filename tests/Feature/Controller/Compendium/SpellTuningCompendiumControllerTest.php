@@ -2,13 +2,11 @@
 
 namespace Tests\Feature\Controller\Compendium;
 
-use App\Features\NpcCompendium;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
 use App\Models\Spell\SpellTuningChange;
 use App\Models\User;
-use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\Traits\CreatesDungeon;
@@ -31,21 +29,6 @@ final class SpellTuningCompendiumControllerTest extends PublicTestCase
         parent::setUp();
 
         $this->actingAs(User::findOrFail(1));
-        Feature::define(NpcCompendium::class, true);
-    }
-
-    #[Test]
-    public function index_givenFeatureDisabled_returnsNotFound(): void
-    {
-        // Arrange
-        $this->actingAsGuest();
-        Feature::define(NpcCompendium::class, false);
-
-        // Act
-        $response = $this->get(route('compendium.tuning.index'));
-
-        // Assert
-        $response->assertNotFound();
     }
 
     #[Test]

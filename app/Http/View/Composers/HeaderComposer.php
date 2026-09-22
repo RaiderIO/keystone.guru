@@ -2,7 +2,6 @@
 
 namespace App\Http\View\Composers;
 
-use App\Features\NpcCompendium;
 use App\Features\SearchPageRework;
 use App\Features\XalatathTheme;
 use App\Models\AffixGroup\AffixGroup;
@@ -35,7 +34,6 @@ readonly class HeaderComposer implements ViewComposerInterface
         // The header checks these on every page; one query resolves them all instead of one each.
         Feature::loadMissing([
             SearchPageRework::class,
-            NpcCompendium::class,
             XalatathTheme::class,
         ]);
 

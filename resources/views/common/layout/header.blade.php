@@ -1,6 +1,5 @@
 <?php
 
-use App\Features\NpcCompendium;
 use App\Features\SearchPageRework;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
@@ -110,54 +109,51 @@ $dungeonEntries[] = [
     'description' => __('view_common.layout.header.explore_description'),
 ];
 
-$compendiumEntries = [];
-if (Feature::active(NpcCompendium::class)) {
-    $compendiumContextDungeon = Dungeon::getUserOrDefaultDungeon();
-    $compendiumEntries        = [
-        [
-            'route'       => route('compendium.index'),
-            'fa'          => 'fas fa-book-open',
-            'text'        => __('view_common.layout.header.compendium_overview'),
-            'description' => __('view_common.layout.header.compendium_overview_description'),
-            'strict'      => true,
-        ],
-        [
-            'route'       => route('npc.compendium.index.dungeon', ['dungeon' => $compendiumContextDungeon]),
-            'fa'          => 'fas fa-dragon',
-            'text'        => __('view_common.layout.header.npc_compendium'),
-            'description' => __('view_common.layout.header.npc_compendium_description'),
-            'strict'      => true,
-        ],
-        [
-            'route'       => route('spell.compendium.index.dungeon', ['dungeon' => $compendiumContextDungeon]),
-            'fa'          => 'fas fa-magic',
-            'text'        => __('view_common.layout.header.spell_compendium'),
-            'description' => __('view_common.layout.header.spell_compendium_description'),
-            'strict'      => true,
-        ],
-        [
-            'route'       => route('compendium.class.index'),
-            'fa'          => 'fas fa-hat-wizard',
-            'text'        => __('view_common.layout.header.class_compendium'),
-            'description' => __('view_common.layout.header.class_compendium_description'),
-            'strict'      => true,
-        ],
-        [
-            'route'       => route('compendium.tuning.index'),
-            'fa'          => 'fas fa-balance-scale',
-            'text'        => __('view_common.layout.header.compendium_tuning'),
-            'description' => __('view_common.layout.header.compendium_tuning_description'),
-            'strict'      => true,
-        ],
-        [
-            'route'       => route('compendium.activity.index'),
-            'fa'          => 'fas fa-stream',
-            'text'        => __('view_common.layout.header.compendium_activity'),
-            'description' => __('view_common.layout.header.compendium_activity_description'),
-            'strict'      => true,
-        ],
-    ];
-}
+$compendiumContextDungeon = Dungeon::getUserOrDefaultDungeon();
+$compendiumEntries        = [
+    [
+        'route'       => route('compendium.index'),
+        'fa'          => 'fas fa-book-open',
+        'text'        => __('view_common.layout.header.compendium_overview'),
+        'description' => __('view_common.layout.header.compendium_overview_description'),
+        'strict'      => true,
+    ],
+    [
+        'route'       => route('npc.compendium.index.dungeon', ['dungeon' => $compendiumContextDungeon]),
+        'fa'          => 'fas fa-dragon',
+        'text'        => __('view_common.layout.header.npc_compendium'),
+        'description' => __('view_common.layout.header.npc_compendium_description'),
+        'strict'      => true,
+    ],
+    [
+        'route'       => route('spell.compendium.index.dungeon', ['dungeon' => $compendiumContextDungeon]),
+        'fa'          => 'fas fa-magic',
+        'text'        => __('view_common.layout.header.spell_compendium'),
+        'description' => __('view_common.layout.header.spell_compendium_description'),
+        'strict'      => true,
+    ],
+    [
+        'route'       => route('compendium.class.index'),
+        'fa'          => 'fas fa-hat-wizard',
+        'text'        => __('view_common.layout.header.class_compendium'),
+        'description' => __('view_common.layout.header.class_compendium_description'),
+        'strict'      => true,
+    ],
+    [
+        'route'       => route('compendium.tuning.index'),
+        'fa'          => 'fas fa-balance-scale',
+        'text'        => __('view_common.layout.header.compendium_tuning'),
+        'description' => __('view_common.layout.header.compendium_tuning_description'),
+        'strict'      => true,
+    ],
+    [
+        'route'       => route('compendium.activity.index'),
+        'fa'          => 'fas fa-stream',
+        'text'        => __('view_common.layout.header.compendium_activity'),
+        'description' => __('view_common.layout.header.compendium_activity_description'),
+        'strict'      => true,
+    ],
+];
 ?>
 <header @if($headerId !== false) id="{{ $headerId }}" @endif
         class="ksg-header {{ $forceShrink ? 'ksg-header--shrink ksg-header--shrink-forced' : '' }}">
@@ -254,16 +250,14 @@ if (Feature::active(NpcCompendium::class)) {
                     'columns' => 1,
                     'isActiveRoute' => $isActiveRoute,
                 ])
-                @if($compendiumEntries !== [])
-                    @include('common.layout.nav.category', [
-                        'id' => 'navCategoryCompendium',
-                        'fa' => 'fas fa-book-open',
-                        'text' => __('view_common.layout.header.compendium'),
-                        'entries' => $compendiumEntries,
-                        'columns' => 2,
-                        'isActiveRoute' => $isActiveRoute,
-                    ])
-                @endif
+                @include('common.layout.nav.category', [
+                    'id' => 'navCategoryCompendium',
+                    'fa' => 'fas fa-book-open',
+                    'text' => __('view_common.layout.header.compendium'),
+                    'entries' => $compendiumEntries,
+                    'columns' => 2,
+                    'isActiveRoute' => $isActiveRoute,
+                ])
             </ul>
             <ul class="navbar-nav">
                 @if($developerEntries !== [])

@@ -25,7 +25,6 @@
  * @property {string} tilesBaseUrl
  * @property {Object} parameters
  * @property {number} floorId
- * @property {boolean} npcCompendiumEnabled
  * @property {string} npcCompendiumBaseUrl
  */
 
@@ -602,7 +601,7 @@ class CommonMapsMap extends InlineCode {
             // embedded route map this can still run inside a sandboxed iframe without
             // `allow-popups` - window.open() then returns null, so fall through to the modal
             // instead of silently doing nothing.
-            if (this.options.npcCompendiumEnabled && window.open(`${this.options.npcCompendiumBaseUrl}/${enemy.npc.id}`) !== null) {
+            if (window.open(`${this.options.npcCompendiumBaseUrl}/${enemy.npc.id}`) !== null) {
                 return;
             }
 
