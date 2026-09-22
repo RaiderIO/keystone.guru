@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
  * @var int                                          $coveredDungeonCount
  */
 
-$title = __('view_collection.view.title', [
+$title = __('view_collection.view.title_by_author', [
     'name'   => $dungeonRouteCollection->name,
     'author' => $dungeonRouteCollection->user->name,
 ]);

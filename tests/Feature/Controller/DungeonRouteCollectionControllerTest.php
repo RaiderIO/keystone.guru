@@ -1111,7 +1111,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $response->assertSee(sprintf('<title>%s', e(__('view_collection.view.title', [
+            $response->assertSee(sprintf('<title>%s', e(__('view_collection.view.title_by_author', [
                 'name'   => 'ZzTestTitledCollection',
                 'author' => $creator->name,
             ]))), false);
@@ -1127,15 +1127,21 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
      * access error and leaks that unpublished routes exist.
      */
     #[Test]
-    public function view_givenAnEmptyCollectionViewedByAGuest_showsTheNeutralEmptyState(): void
+    public function view_givenOnlyUnpublishedRoutesViewedByAGuest_showsTheNeutralEmptyState(): void
     {
         // Arrange
-        $creator = $this->createCreator();
+        $creator     = $this->createCreator();
+        $unpublished = $this->createRouteFor($creator, PublishedState::UNPUBLISHED, 'ZzTestHiddenRoute');
         Feature::for(null)->activate(CreatorProfiles::class);
 
         $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
             'user_id'            => $creator->id,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $unpublished->id,
+            'order'                       => 0,
         ]);
 
         try {
@@ -1147,9 +1153,11 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             $response->assertSee(e(__('view_collection.view.no_routes')), false);
             $response->assertDontSee(e(__('view_collection.view.no_routes_owner')), false);
             $response->assertDontSee(route('collections.edit', $dungeonRouteCollection), false);
+            $response->assertDontSee('ZzTestHiddenRoute');
         } finally {
             $dungeonRouteCollection->delete();
             Feature::for(null)->forget(CreatorProfiles::class);
+            $unpublished->delete();
             $creator->delete();
         }
     }
@@ -1389,6 +1397,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             'author_id'          => $user->id,
             'dungeon_id'         => $mappingVersion->dungeon_id,
             'mapping_version_id' => $mappingVersion->id,
+            'season_id'          => null,
             'expires_at'         => null,
             'published_state_id' => PublishedState::ALL[$publishedState],
         ];

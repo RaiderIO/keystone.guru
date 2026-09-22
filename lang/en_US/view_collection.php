@@ -60,7 +60,7 @@ return [
         'duplicate_submit'      => 'Duplicate collection',
     ],
     'view' => [
-        'title'           => ':name by :author',
+        'title_by_author' => ':name by :author',
         'by_author'       => 'A collection by :author',
         'route_count'     => '{0} No routes|{1} :count route|[2,*] :count routes',
         'no_routes'       => 'There are no routes to show in this collection yet.',
