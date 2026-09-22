@@ -43,6 +43,19 @@ final class DungeonRouteDiscoverSearchTest extends PublicTestCase
     }
 
     #[Test]
+    public function search_givenRouteDefinition_isThrottledBySearchDungeonRouteLimiter(): void
+    {
+        // Arrange
+        $route = Route::getRoutes()->getByName('dungeonroutes.search');
+
+        // Act
+        $middleware = $route?->gatherMiddleware() ?? [];
+
+        // Assert
+        $this->assertContains('throttle:search-dungeonroute', $middleware);
+    }
+
+    #[Test]
     public function search_givenOldAjaxSearchEndpoint_hasNoGetRoute(): void
     {
         // Arrange
