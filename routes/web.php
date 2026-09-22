@@ -743,9 +743,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::put('/mapicon/{mapIcon}', new AjaxMapIconController()->adminStore(...));
                     Route::delete('/mapicon/{mapIcon}', new AjaxMapIconController()->adminDelete(...));
 
-                    Route::post('/mountablearea', new AjaxMountableAreaController()->store(...));
-                    Route::put('/mountablearea/{mountableArea}', new AjaxMountableAreaController()->store(...));
-                    Route::delete('/mountablearea/{mountableArea}', new AjaxMountableAreaController()->delete(...));
+                    Route::post('/mountablearea', new AjaxMountableAreaController()->store(...))->name('ajax.admin.mountablearea.create');
+                    Route::put('/mountablearea/{mountableArea}', new AjaxMountableAreaController()->store(...))->name('ajax.admin.mountablearea.update');
+                    Route::delete('/mountablearea/{mountableArea}', new AjaxMountableAreaController()->delete(...))->name('ajax.admin.mountablearea.delete');
 
                     Route::post('/enemyforcescheckpoint', new AjaxEnemyForcesCheckpointController()->store(...))->name('ajax.admin.enemyforcescheckpoint.create');
                     Route::put('/enemyforcescheckpoint/{enemyForcesCheckpoint}', new AjaxEnemyForcesCheckpointController()->store(...))->name('ajax.admin.enemyforcescheckpoint.update');

@@ -37,9 +37,6 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
     ): MountableArea {
         $validated = $request->validated();
 
-        $validated['vertices_json'] = json_encode($request->get('vertices'));
-        unset($validated['vertices']);
-
         /** @var MountableArea */
         return $this->storeModel($coordinatesService, $mappingVersion, $validated, MountableArea::class, $mountableArea);
     }

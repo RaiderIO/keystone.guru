@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\MountableArea;
 
+use App\Http\Requests\Traits\ValidatesMappingPolyline;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Foundation\Http\FormRequest;
@@ -9,6 +10,8 @@ use Illuminate\Validation\Rule;
 
 class MountableAreaFormRequest extends FormRequest
 {
+    use ValidatesMappingPolyline;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -20,7 +23,7 @@ class MountableAreaFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        return array_merge([
             'id'                 => 'required:int',
             'mapping_version_id' => [
                 'required',
@@ -30,8 +33,7 @@ class MountableAreaFormRequest extends FormRequest
                 'required',
                 Rule::exists(Floor::class, 'id'),
             ],
-            'speed'    => 'nullable|int',
-            'vertices' => 'required:array',
-        ];
+            'speed' => 'nullable|int',
+        ], $this->mappingPolylineRules());
     }
 }

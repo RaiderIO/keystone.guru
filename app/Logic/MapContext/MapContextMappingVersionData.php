@@ -21,7 +21,7 @@ class MapContextMappingVersionData implements Arrayable
     use RemembersToFile;
 
     /** Bump whenever the shape of the cached data changes, so a deploy never serves the previous shape */
-    private const int DATA_VERSION = 2;
+    private const int DATA_VERSION = 3;
 
     public function __construct(
         protected CacheServiceInterface       $cacheService,
