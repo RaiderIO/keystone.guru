@@ -4,6 +4,11 @@
         "mapping_version_id": 24,
         "floor_id": 65,
         "speed": null,
-        "vertices_json": "[{\"lat\":-49.9764,\"lng\":202.8743},{\"lat\":-171.701,\"lng\":203.0393},{\"lat\":-171.701,\"lng\":311.8987},{\"lat\":-48.8218,\"lng\":306.7856}]"
+        "polyline": {
+            "color": "#eb4934",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-49.9764,\"lng\":202.8743},{\"lat\":-171.701,\"lng\":203.0393},{\"lat\":-171.701,\"lng\":311.8987},{\"lat\":-48.8218,\"lng\":306.7856}]"
+        }
     }
 ]
