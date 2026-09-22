@@ -12,7 +12,6 @@ use Override;
 /**
  * @OA\Schema(schema="PullEnemy")
  * @OA\Property(type="int",property="npcId",example="222923")
- * @OA\Property(type="int",property="mdtIndex",example="5")
  * @OA\Property(type="int",property="enemyForces",example="4")
  *
  * @property KillZoneEnemy $resource
@@ -40,8 +39,7 @@ class KillZoneEnemyResource extends JsonResource
         $enemyForces = $this->npc->enemyForcesByMappingVersion($this->mappingVersion->id);
 
         return [
-            'npcId' => $this->npc_id,
-            //            'mdtIndex'    => $this->mdt_id,
+            'npcId'       => $this->npc_id,
             'enemyForces' => $enemyForces?->enemy_forces ?? 0, // @phpstan-ignore nullsafe.neverNull
         ];
     }
