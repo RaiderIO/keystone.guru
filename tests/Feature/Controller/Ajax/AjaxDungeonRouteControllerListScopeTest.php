@@ -8,6 +8,7 @@ use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
 use App\Models\KillZone\KillZone;
 use App\Models\Laratrust\Role;
+use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\User;
@@ -333,13 +334,20 @@ final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
         $route = null;
 
         try {
+            [$dungeon, $mappingVersion, $enemy] = $this->findDungeon(
+                challengeMode: true,
+                dungeonActive: true,
+                resolve: static fn(Dungeon $dungeon, MappingVersion $mappingVersion): ?Enemy => Enemy::query()
+                    ->where('mapping_version_id', $mappingVersion->id)
+                    ->whereNotNull('npc_id')
+                    ->whereNotNull('floor_id')
+                    ->first(),
+            );
             $user  = $this->createUserWithUserRole();
-            $route = $this->createOwnRoute($user);
-            $enemy = Enemy::query()
-                ->where('mapping_version_id', $route->mapping_version_id)
-                ->whereNotNull('npc_id')
-                ->whereNotNull('floor_id')
-                ->firstOrFail();
+            $route = $this->createOwnRoute($user, [
+                'dungeon_id'         => $dungeon->id,
+                'mapping_version_id' => $mappingVersion->id,
+            ]);
             KillZone::factory()
                 ->withEnemies($enemy)
                 ->create(['dungeon_route_id' => $route->id, 'floor_id' => $enemy->floor_id, 'index' => 1]);
