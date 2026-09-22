@@ -69,6 +69,7 @@ global.ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
 global.ENEMY_SEASONAL_TYPE_NO_SHROUDED = 'no_shrouded';
 global.ENEMY_SEASONAL_TYPE_REQUIRES_ACTIVATION = 'requires_activation';
 global.NPC_CLASSIFICATION_ID_BOSS = 3;
+global.NPC_CLASSIFICATION_ID_FINAL_BOSS = 4;
 global.NPC_CLASSIFICATION_ID_RARE = 5;
 global.NPC_TYPE_CRITTER = 3;
 global.NPC_ID_NATHREZIM_INFILTRATOR = 189878;
@@ -996,12 +997,22 @@ describe('Enemy NPC classification', () => {
         expect(makeEnemy({npc: null}).isBossNpc()).toBe(false);
     });
 
-    test('isBossNpc_givenARareNpc_returnsTrue', () => {
-        // The check is `>= NPC_CLASSIFICATION_ID_BOSS` (3) and rare is 5, so every rare counts as a
-        // boss here. Pinned deliberately: it drives isImportant(), and thus what stays visible.
+    test('isBossNpc_givenAFinalBossClassification_returnsTrue', () => {
         setFakeState();
 
-        expect(makeEnemy({npc: makeNpc({classificationId: NPC_CLASSIFICATION_ID_RARE})}).isBossNpc()).toBe(true);
+        expect(makeEnemy({npc: makeNpc({classificationId: NPC_CLASSIFICATION_ID_FINAL_BOSS})}).isBossNpc()).toBe(true);
+    });
+
+    test('isBossNpc_givenARareNpc_returnsFalse', () => {
+        setFakeState();
+
+        expect(makeEnemy({npc: makeNpc({classificationId: NPC_CLASSIFICATION_ID_RARE})}).isBossNpc()).toBe(false);
+    });
+
+    test('isImportant_givenARareNpc_returnsFalse', () => {
+        setFakeState();
+
+        expect(makeEnemy({npc: makeNpc({classificationId: NPC_CLASSIFICATION_ID_RARE})}).isImportant()).toBe(false);
     });
 
     test.each(NPC_IDS_AWAKENED)('isAwakenedNpc_givenAwakenedNpc%i_returnsTrue', (npcId) => {

@@ -223,7 +223,7 @@ class EnemyVisual extends Signalable {
             }
 
             // Truesight marker
-            if (this.enemy.npc.truesight === 1) {
+            if (this.enemy.npc.truesight) {
                 modifiers.push(new EnemyVisualModifierTruesight(this, 2));
             }
         }

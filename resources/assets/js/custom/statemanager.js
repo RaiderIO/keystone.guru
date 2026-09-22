@@ -602,7 +602,7 @@ class StateManager extends Signalable {
      * @returns {String}
      */
     getMapNumberStyle() {
-        return Cookies.get('map_number_style') ?? NUMBER_STYLE_PERCENTAGE;
+        return Cookies.get('map_number_style') ?? NUMBER_STYLE_ENEMY_FORCES;
     }
 
     /**

@@ -1205,7 +1205,7 @@ class Enemy extends VersionableMapObject {
      */
     isBossNpc() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.npc !== null && this.npc.classification_id >= NPC_CLASSIFICATION_ID_BOSS;
+        return this.npc !== null && [NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(this.npc.classification_id);
     }
 
     /**
