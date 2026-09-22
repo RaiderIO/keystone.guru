@@ -118,17 +118,16 @@ final class ErrorResponseTest extends PublicTestCase
     #[Test]
     public function fallback_givenPlainWrongMethodRequestToViewRenderingAjaxSearchRoute_returns405Json(): void
     {
-        // Act - '/ajax/search' is one of the handful of /ajax/ routes ViewService whitelists back
-        // into loading view variables, because it renders an HTML fragment on success. That
+        // Act - '/ajax/search/{category}' falls under the '/ajax/search' prefix ViewService whitelists
+        // back into loading view variables, because it renders an HTML fragment on success. That
         // whitelist is a view-layer concern only: the route is still an API request as far as
         // ApiRequestService is concerned, so its errors are still forced to JSON exactly as they
         // were before #3903 - same as the '/ajax/profile/adfree/1' case above.
-        $response = $this->post('/ajax/search');
+        $response = $this->post('/ajax/search/popular');
 
-        // Assert - Allow also lists PATCH/DELETE: 'ajax/{dungeonRoute}' matches this exact URI too,
-        // treating "search" as the dungeonRoute slug
+        // Assert
         $response->assertStatus(405);
-        $response->assertHeader('Allow', 'GET, HEAD, PATCH, DELETE');
+        $response->assertHeader('Allow', 'GET, HEAD');
         $response->assertJson(['message' => 'Method Not Allowed']);
     }
 

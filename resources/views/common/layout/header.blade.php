@@ -1,6 +1,5 @@
 <?php
 
-use App\Features\SearchPageRework;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -68,10 +67,6 @@ $isActiveRoute = function (string $route, bool $strict = false) {
     return $active;
 };
 
-$searchRoute = Feature::active(SearchPageRework::class)
-    ? route('dungeon.dungeonroute.search')
-    : route('dungeonroutes.search');
-
 $routeEntries = [
     [
         'route'       => route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion]),
@@ -80,7 +75,7 @@ $routeEntries = [
         'description' => __('view_common.layout.header.browse_routes_description'),
     ],
     [
-        'route'       => $searchRoute,
+        'route'       => route('dungeon.dungeonroute.search'),
         'fa'          => 'fas fa-search',
         'text'        => __('view_common.layout.header.find_routes'),
         'description' => __('view_common.layout.header.find_routes_description'),

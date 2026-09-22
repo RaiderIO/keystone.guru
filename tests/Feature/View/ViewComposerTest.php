@@ -11,7 +11,6 @@ use App\Http\View\Composers\AppLayoutComposer;
 use App\Http\View\Composers\CompositionComposer;
 use App\Http\View\Composers\CreateRouteFormComposer;
 use App\Http\View\Composers\DiscoverAffixGroupComposer;
-use App\Http\View\Composers\DiscoverSearchComposer;
 use App\Http\View\Composers\DungeonDifficultySelectComposer;
 use App\Http\View\Composers\DungeonGridTabsComposer;
 use App\Http\View\Composers\DungeonSelectComposer;
@@ -103,14 +102,6 @@ final class ViewComposerTest extends PublicTestCase
     {
         $this->assertComposerSetsKeys(EmbedComposer::class, 'misc.embedexplore', [
             'characterClassSpecializations',
-        ]);
-    }
-
-    #[Test]
-    public function discoverSearchComposer_givenView_setsSearchKeys(): void
-    {
-        $this->assertComposerSetsKeys(DiscoverSearchComposer::class, 'dungeonroute.discover.search', [
-            'currentExpansion', 'allAffixGroupsByActiveExpansion', 'featuredAffixesByActiveExpansion', 'currentSeason', 'nextSeason',
         ]);
     }
 

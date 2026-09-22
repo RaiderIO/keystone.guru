@@ -13,7 +13,6 @@ use App\Http\View\Composers\AuthFormComposer;
 use App\Http\View\Composers\CompositionComposer;
 use App\Http\View\Composers\CreateRouteFormComposer;
 use App\Http\View\Composers\DiscoverAffixGroupComposer;
-use App\Http\View\Composers\DiscoverSearchComposer;
 use App\Http\View\Composers\DungeonDifficultySelectComposer;
 use App\Http\View\Composers\DungeonGridTabsComposer;
 use App\Http\View\Composers\DungeonSelectComposer;
@@ -438,9 +437,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'dungeonroute.discover.discover',
             'dungeonroute.discover.dungeon.overview',
         ], DiscoverAffixGroupComposer::class);
-
-        // Dungeon grid view
-        view()->composer('dungeonroute.discover.search', DiscoverSearchComposer::class);
 
         view()->composer('creator.featured', FeaturedCreatorsComposer::class);
 

@@ -235,8 +235,8 @@ $.fn.rangeSlider = function (options) {
                     }
                 } else if (from !== undefined) {
                     // A stray `to` on a single-type slider is silently ignored, matching
-                    // ion-rangeslider's own behaviour there (filterinputrating.js's
-                    // setValue() always passes both, relying on this no-op for `to`).
+                    // ion-rangeslider's own behaviour there (MinSamplesRequiredHandler's
+                    // update() always passes both, relying on this no-op for `to`).
                     sliderApi.set([from]);
                 }
             },

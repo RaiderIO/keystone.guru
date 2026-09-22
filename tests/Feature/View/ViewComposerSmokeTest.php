@@ -44,13 +44,13 @@ final class ViewComposerSmokeTest extends PublicTestCase
     }
 
     #[Test]
-    public function search_givenGuest_returnsOk(): void
+    public function search_givenGuest_followsRedirectToOk(): void
     {
         // Arrange
         $this->actingAsGuest();
 
         // Act
-        $response = $this->get(route('dungeonroutes.search'));
+        $response = $this->followingRedirects()->get(route('dungeonroutes.search'));
 
         // Assert
         $response->assertOk();

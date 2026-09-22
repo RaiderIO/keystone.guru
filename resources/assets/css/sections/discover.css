@@ -6,8 +6,7 @@
  * framework and leaked onto any (future / third-party) `col-*` markup. The handful of elements that
  * actually relied on it are now handled explicitly:
  *  - absolutely positioned overlays anchoring to their column -> `position: relative` on that
- *    specific column below (and the `position-relative` utility on the search results column in
- *    dungeonroute/discover/search.blade.php);
+ *    specific column below;
  *  - standalone columns used as padded containers (not a direct child of a .row, so `.row > *` never
  *    pads them) -> gutter padding restored below. Inside a .row this computes to the same value
  *    `.row > *` already sets, so it stays correct there too.

@@ -23,16 +23,6 @@ class SearchHandlerDungeonRoute extends SearchHandler {
         });
     }
 
-
-    /**
-     *
-     * @protected
-     */
-    getSearchUrl() {
-        console.assert(this instanceof SearchHandlerDungeonRoute, 'this is not a SearchHandlerDungeonRoute', this);
-        return `/ajax/search`;
-    }
-
     /**
      * @param searchParams {SearchParams}
      * @param options {{}}

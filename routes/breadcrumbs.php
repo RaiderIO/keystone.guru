@@ -104,10 +104,6 @@ Breadcrumbs::for('dungeonroutes.gameVersion', static function (Generator $trail,
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.routes_game_version', ['gameVersion' => __($gameVersion->name)]), route('dungeonroutes.gameVersion', ['gameVersion' => $gameVersion]));
 });
-Breadcrumbs::for('dungeonroute.discover.search', static function (Generator $trail) {
-    $trail->parent('dungeonroutes');
-    $trail->push(__('breadcrumbs.home.dungeonroutes.search'), route('dungeonroutes.search'));
-});
 Breadcrumbs::for('dungeon.dungeonroute.search', static function (Generator $trail) {
     $trail->parent('dungeonroutes');
     $trail->push(__('breadcrumbs.home.dungeonroutes.search'), route('dungeon.dungeonroute.search'));

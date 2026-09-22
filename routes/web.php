@@ -661,7 +661,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::middleware('throttle:search-dungeonroute')->group(static function () {
             Route::get('/routes', new AjaxDungeonRouteController()->get(...));
 
-            Route::get('/search', new AjaxDungeonRouteController()->htmlsearch(...));
             Route::get('/search/{category}', new AjaxDungeonRouteController()->htmlsearchcategory(...));
 
             Route::get('/dungeonroute/{dungeonRoute}/mapcontext', new AjaxDungeonRouteSearchController()->getMapContext(...));

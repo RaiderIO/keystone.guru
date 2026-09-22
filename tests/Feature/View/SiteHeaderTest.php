@@ -323,4 +323,21 @@ final class SiteHeaderTest extends PublicTestCase
         $response->assertOk();
         $this->assertStringNotContainsString('id="navCategoryDeveloper"', $response->getContent());
     }
+
+    #[Test]
+    public function home_givenAGuest_linksFindRoutesToTheDungeonRouteSearch(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+
+        // Act
+        $response = $this->withHeader('User-Agent', self::DESKTOP_USER_AGENT)->get('/');
+
+        // Assert
+        $response->assertOk();
+        $html = $response->getContent();
+
+        $this->assertStringContainsString(sprintf('href="%s"', route('dungeon.dungeonroute.search')), $html);
+        $this->assertStringNotContainsString(sprintf('href="%s"', route('dungeonroutes.search')), $html);
+    }
 }

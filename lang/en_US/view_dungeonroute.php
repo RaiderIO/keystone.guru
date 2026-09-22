@@ -34,23 +34,6 @@ return [
         'panel' => [
             'show_more' => 'Show more',
         ],
-        'search' => [
-            'page_title'              => 'Search routes',
-            'header'                  => 'Search routes',
-            'title'                   => 'Title',
-            'title_placeholder'       => 'Filter by title',
-            'key_level'               => 'Key level',
-            'affixes'                 => 'Affixes',
-            'affixes_title'           => 'Select affixes',
-            'select_affixes'          => 'Select affixes',
-            'affixes_selected'        => '{0} affixes selected',
-            'enemy_forces'            => 'Enemy forces',
-            'enemy_forces_complete'   => 'Complete',
-            'enemy_forces_incomplete' => 'Incomplete',
-            'rating'                  => 'Rating',
-            'user'                    => 'User',
-            'user_placeholder'        => 'Filter by user',
-        ],
     ],
     'livesession' => [
         'title' => 'Live session - :title',

@@ -170,8 +170,8 @@ describe('$.fn.rangeSlider (#3596)', () => {
     });
 
     test('rangeSlider_givenUpdateOnSingleTypeWithStrayTo_ignoresTo', () => {
-        // Mirrors MinSamplesRequiredHandler/filterinputrating.js: both pass a `to`
-        // into a single-type slider's update(), where it's a pre-existing no-op.
+        // Mirrors MinSamplesRequiredHandler: it passes a `to` into a single-type
+        // slider's update(), where it's a pre-existing no-op.
         const input = createInput();
 
         $(input).rangeSlider({type: 'single', min: 0, max: 100, from: 10});

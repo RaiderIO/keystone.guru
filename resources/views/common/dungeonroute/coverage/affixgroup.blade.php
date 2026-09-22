@@ -136,10 +136,10 @@ $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static 
                             <div class="dungeonroute_coverage_search_dungeon_route">
                                 <a class="btn btn-sm w-100 new_route_style_create_search"
                                    style="display: {{ $newRouteStyle === 'search' ? 'block' : 'none' }}"
-                                   href="{{ route('dungeonroutes.search', [
-                                                'season' => $selectedSeason->id,
-                                                'affixgroups' => $affixGroup->id,
-                                                ]) }}&dungeons={{ $dungeon->id }}"
+                                   href="{{ route('dungeon.dungeonroute.search.gameversion.dungeon', [
+                                                'gameVersion' => $currentUserGameVersion,
+                                                'dungeon' => $dungeon,
+                                                ]) }}"
                                 >
                                     <i class="fa fa-search text-info">
 

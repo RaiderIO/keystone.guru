@@ -31,21 +31,9 @@ use Laravel\Pennant\Feature;
 
 class DungeonRouteDiscoverController extends Controller
 {
-    /**
-     * @return View
-     */
-    public function search(
-        SeasonServiceInterface $seasonService,
-    ): View {
-        $currentSeason = $seasonService->getCurrentSeason();
-        $nextSeason    = $seasonService->getNextSeasonOfExpansion();
-
-        return view('dungeonroute.discover.search', [
-            'currentSeasonKeyLevelMin' => $currentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'), // @phpstan-ignore nullsafe.neverNull
-            'currentSeasonKeyLevelMax' => $currentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'), // @phpstan-ignore nullsafe.neverNull
-            'nextSeasonKeyLevelMin'    => $nextSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'), // @phpstan-ignore nullsafe.neverNull
-            'nextSeasonKeyLevelMax'    => $nextSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'), // @phpstan-ignore nullsafe.neverNull
-        ]);
+    public function search(): RedirectResponse
+    {
+        return redirect()->route('dungeon.dungeonroute.search', [], 301);
     }
 
     public function discover(): RedirectResponse
