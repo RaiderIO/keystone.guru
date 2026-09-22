@@ -42,7 +42,7 @@ final class AjaxMountableAreaControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function store_givenNewMountableArea_createsTheAreaWithItsOwnPolyline(): void
+    public function store_givenNewMountableArea_createsTheAreaWithItsOwnPolylineAndMirrorsItsVertices(): void
     {
         // Arrange
         $mountableAreaId = null;
@@ -63,7 +63,7 @@ final class AjaxMountableAreaControllerTest extends AjaxPublicTestCase
             /** @var MountableArea $storedMountableArea */
             $storedMountableArea = MountableArea::query()->findOrFail($mountableAreaId);
             $this->assertSame($this->floor->id, $storedMountableArea->floor_id);
-            $this->assertNull($storedMountableArea->getRawOriginal('vertices_json'));
+            $this->assertSame(self::VERTICES_JSON, $storedMountableArea->getRawOriginal('vertices_json'));
 
             /** @var Polyline $storedPolyline */
             $storedPolyline = Polyline::query()->findOrFail($storedMountableArea->polyline_id);
@@ -78,7 +78,7 @@ final class AjaxMountableAreaControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function store_givenExistingMountableArea_updatesItsPolylineInPlace(): void
+    public function store_givenExistingMountableArea_updatesItsPolylineInPlaceAndMirrorsItsVertices(): void
     {
         // Arrange
         $mountableAreaId = json_decode($this->post($this->createUrl(), $this->payload(null, self::VERTICES_JSON))->content(), true)['id'];
@@ -104,6 +104,7 @@ final class AjaxMountableAreaControllerTest extends AjaxPublicTestCase
             $this->assertSame($polylineId, $storedMountableArea->polyline_id);
             $this->assertSame(1, Polyline::query()->where('model_class', MountableArea::class)->where('model_id', $mountableAreaId)->count());
             $this->assertSame($newVerticesJson, Polyline::query()->findOrFail($polylineId)->vertices_json);
+            $this->assertSame($newVerticesJson, $storedMountableArea->getRawOriginal('vertices_json'));
         } finally {
             $this->deleteMountableArea($mountableAreaId);
         }

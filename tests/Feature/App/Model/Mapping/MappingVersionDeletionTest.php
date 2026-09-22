@@ -185,7 +185,7 @@ final class MappingVersionDeletionTest extends PublicTestCase
                 $this->assertNotNull($clonedMountableArea->polyline);
                 $this->assertSame($clonedMountableArea->polyline->id, $clonedMountableArea->polyline_id);
                 $this->assertNotContains($clonedMountableArea->polyline_id, $existingPolylineIds);
-                $this->assertNull($clonedMountableArea->getRawOriginal('vertices_json'));
+                $this->assertSame($clonedMountableArea->polyline->vertices_json, $clonedMountableArea->getRawOriginal('vertices_json'));
             }
         } finally {
             $newMappingVersion->delete();

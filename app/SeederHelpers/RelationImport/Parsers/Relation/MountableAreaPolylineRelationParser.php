@@ -32,6 +32,8 @@ class MountableAreaPolylineRelationParser implements RelationParserInterface
         $value['model_id']    = $modelData['id'];
 
         $modelData['polyline_id'] = Polyline::insertGetId($value);
+        // The release before the column is dropped still reads the shape from vertices_json
+        $modelData['vertices_json'] = $value['vertices_json'];
 
         return $modelData;
     }

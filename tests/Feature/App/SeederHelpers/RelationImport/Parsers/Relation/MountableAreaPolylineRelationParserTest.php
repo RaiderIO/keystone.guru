@@ -14,7 +14,7 @@ use Tests\TestCases\PublicTestCase;
 final class MountableAreaPolylineRelationParserTest extends PublicTestCase
 {
     #[Test]
-    public function parseRelation_givenMountableAreaWithPolyline_insertsThePolylineAndLinksItToTheArea(): void
+    public function parseRelation_givenMountableAreaWithPolyline_insertsThePolylineLinksItAndMirrorsItsVertices(): void
     {
         // Arrange
         $parser = new MountableAreaPolylineRelationParser();
@@ -30,6 +30,7 @@ final class MountableAreaPolylineRelationParserTest extends PublicTestCase
 
             // Assert
             $this->assertSame(150, $result['speed']);
+            $this->assertSame('[{"lat":-10,"lng":10},{"lat":-20,"lng":20}]', $result['vertices_json']);
 
             /** @var Polyline $polyline */
             $polyline = Polyline::query()->findOrFail($result['polyline_id']);

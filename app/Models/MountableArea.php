@@ -155,5 +155,12 @@ class MountableArea extends Model implements HasPolylineInterface, MappingModelC
         static::deleting(static function (MountableArea $mountableArea) {
             $mountableArea->polyline?->delete();
         });
+
+        // The release before the column is dropped still reads the shape from vertices_json
+        Polyline::saved(static function (Polyline $polyline) {
+            if ($polyline->model_class === MountableArea::class) {
+                MountableArea::query()->whereKey($polyline->model_id)->update(['vertices_json' => $polyline->vertices_json]);
+            }
+        });
     }
 }
