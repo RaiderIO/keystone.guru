@@ -23,6 +23,8 @@
  * @property {String} sidebarSelector
  * @property {String} sidebarToggleSelector
  * @property {String} sidebarScrollSelector
+ * @property {String} sidebarSearchResultSelector
+ * @property {String} fallbackImageBaseUrl
  * @property {String} anchor
  * @property {String} edit
  *
@@ -193,33 +195,40 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
 
         super._search({
             success: function (response, textStatus, xhr) {
-                let $searchResultsContainer = $(self.options.sidebarSearchResultSelector);
-
-                let template = Handlebars.templates['map_sidebar_dungeon_route_search_results'];
-
-                $searchResultsContainer.empty();
-
-                if (xhr.status === 200) {
-                    $searchResultsContainer.html(
-                        template($.extend({}, getHandlebarsDefaultVariables(), {
-                            search_results: response,
-                        }))
-                    );
-
-                    self._activateSearchResults($searchResultsContainer);
-                } else {
-                    $searchResultsContainer.html(
-                        template($.extend({}, getHandlebarsDefaultVariables(), {
-                            search_results: false,
-                        }))
-                    );
-
-                    self._loadDungeonRoute(null);
-                }
-
-                (new ThumbnailRefresh()).refreshHandlers();
+                self._renderSearchResults(xhr.status === 200 ? response : null);
             },
         }, {}, ['dungeonId']);
+    }
+
+    /**
+     * Renders the found routes as the rows of the route picker, with a radio to show one of them on the map.
+     *
+     * @param {Object[]|null} rows The found routes, shaped as /ajax/routes rows; null when none were found.
+     * @private
+     */
+    _renderSearchResults(rows) {
+        let self = this;
+        let $searchResultsContainer = $(this.options.sidebarSearchResultSelector);
+        let template = Handlebars.templates['map_sidebar_dungeon_route_search_results'];
+        let rowTemplate = Handlebars.templates['dungeonroute_picker_row'];
+
+        $searchResultsContainer.html(
+            template($.extend({}, getHandlebarsDefaultVariables(), {
+                search_results: rows === null ? false : rows.map(function (row) {
+                    return rowTemplate($.extend({}, getHandlebarsDefaultVariables(),
+                        new PickerDungeonRoute(row).toTemplateData(self.options.fallbackImageBaseUrl), {
+                            is_radio: true,
+                            input_name: 'dungeonroute_search_route',
+                        }));
+                }).join(''),
+            }))
+        );
+
+        if (rows === null) {
+            this._loadDungeonRoute(null);
+        } else {
+            this._activateSearchResults($searchResultsContainer);
+        }
     }
 
     /**
@@ -232,33 +241,17 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
         console.assert(this instanceof CommonMapsDungeonroutesearchsidebar, 'this is not a CommonMapsDungeonroutesearchsidebar', this);
 
         let self = this;
-        let $currentlySelectedRoute = null;
-        $searchResultsContainer.find('.search_results .card_dungeonroute').each(function () {
-            let $routeRow = $(this);
-            // User clicked the radio button
-            $($routeRow.find('.apply_route_radio')).on('click', function (event) {
-                let $card = $(this).closest('.card_dungeonroute.horizontal');
-                self._loadDungeonRoute($card);
-
-                event.preventDefault();
-            });
-            // User clicked the route title
-            $($routeRow.find('.apply_route')).on('click', function (event) {
-                let $card = $(this).closest('.card_dungeonroute.horizontal');
-                self._loadDungeonRoute($card);
-
-                event.preventDefault();
-            });
-
-            // console.log($routeRow, $routeRow.data('publickey'), getState().getMapContext().getDungeonRoute()?.publicKey);
-            if ($currentlySelectedRoute === null &&
-                $routeRow.data('publickey') === getState().getMapContext().getDungeonRoute()?.publicKey) {
-                $currentlySelectedRoute = $routeRow;
-            }
+        $searchResultsContainer.find('.route_picker_checkbox').on('click', function () {
+            self._loadDungeonRoute($(this).closest('.route_picker_row'));
         });
 
+        let publicKey = getState().getMapContext().getDungeonRoute()?.publicKey;
+        let $currentlySelectedRoute = $searchResultsContainer.find('.route_picker_row').filter(function () {
+            return $(this).attr('data-public-key') === publicKey;
+        }).first();
+
         // Ensure that the correct route is selected still after refreshing the list of routes
-        if ($currentlySelectedRoute === null) {
+        if ($currentlySelectedRoute.length === 0) {
             this._loadDungeonRoute(null);
         } else {
             // Force to re-select the route (and not unselect it again)
@@ -276,20 +269,18 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
 
     /**
      *
-     * @param $card {jQuery|null}
+     * @param $row {jQuery|null}
      * @param force {boolean}
      * @private
      */
-    _loadDungeonRoute($card, force = false) {
-        let publicKey = $card?.data('publickey') ?? null;
+    _loadDungeonRoute($row, force = false) {
+        let publicKey = $row?.attr('data-public-key') ?? null;
         let mapContext = getState().getMapContext();
         let unset = mapContext.getDungeonRoute()?.publicKey === publicKey && !force;
 
-        // Reset to empty circles
-        $('.apply_route_radio').find('i').removeClass('fa-dot-circle').addClass('fa-circle');
-
-        // Reset borders on card
-        $('.card_dungeonroute.horizontal').removeClass('border-primary border-2').addClass('border-dark border-1');
+        let $rows = $(this.options.sidebarSearchResultSelector).find('.route_picker_row');
+        $rows.removeClass('route_picker_row_selected');
+        $rows.find('.route_picker_checkbox').prop('checked', false);
 
         if (publicKey === null) {
             mapContext.setDungeonRoute(null);
@@ -297,11 +288,8 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
         }
 
         if (!unset) {
-            // Apply the dot circle to this row
-            $card.find('.apply_route_radio i').removeClass('fa-circle').addClass('fa-dot-circle');
-
-            // Apply borders to card
-            $card.removeClass('border-dark').addClass('border-primary border-2');
+            $row.addClass('route_picker_row_selected');
+            $row.find('.route_picker_checkbox').prop('checked', true);
         }
 
         if (this.dungeonRouteCache[publicKey]) {
@@ -326,4 +314,10 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
             }
         });
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {CommonMapsDungeonroutesearchsidebar};
 }

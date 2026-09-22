@@ -524,15 +524,14 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         ?DungeonRoute            $excludeDungeonRoute = null,
     ): EloquentBuilder {
         $query = DungeonRoute::query()
-            // Everything the rendered search result cards read - DungeonRoute no longer eager loads relations globally
+            // Everything a search result reads
             ->with([
-                'author.iconfile',
                 'dungeon',
-                'affixes',
                 'mappingVersion',
-                'season.expansion',
                 'thumbnails',
-                'ratings',
+                // The pull forces read the route's seasonal affix
+                'affixes.affixes',
+                'season.expansion',
             ])
             ->when(
                 $filter->username !== null,

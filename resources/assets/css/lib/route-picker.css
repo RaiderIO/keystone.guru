@@ -81,3 +81,19 @@
 .route_picker .leaderboard_title [hidden] {
     display: none;
 }
+
+/* The map's route search sidebar lists the same rows in a narrower column still: the stats always go
+   under the title, so the title keeps its place next to the thumbnail. */
+.route_sidebar .route_picker .route_picker_row .leaderboard_main {
+    flex-basis: 0;
+}
+
+.route_sidebar .route_picker .route_picker_row .leaderboard_stats {
+    flex-basis: 100%;
+    justify-content: flex-end;
+}
+
+/* The drawer pads its rows to line up with its padded header and filters; the sidebar has neither. */
+.route_sidebar .route_picker .route_picker_row_label {
+    padding: 0;
+}

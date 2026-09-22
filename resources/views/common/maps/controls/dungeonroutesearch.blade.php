@@ -60,6 +60,7 @@ $showAds                                   ??= true;
     'sidebarToggleSelector' => '#dungeonroute_search_sidebar_trigger',
     'sidebarScrollSelector' => '#dungeonroute_search_sidebar .data_container',
     'sidebarSearchResultSelector' => '#dungeonroute_search_routes_container',
+    'fallbackImageBaseUrl' => trim(ksgAssetImage(), '/'),
     'anchor' => 'right',
     'edit' => $edit,
 ]])
@@ -133,7 +134,7 @@ $showAds                                   ??= true;
                     <input id="filter_username" type="text" class="form-control" name="username" value="{{ old('username') }}"/>
                 @endcomponent
 
-                <div id="dungeonroute_search_routes_container" class="mb-3">
+                <div id="dungeonroute_search_routes_container" class="route_picker mb-3">
 
                 </div>
             </div>
