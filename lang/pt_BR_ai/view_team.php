@@ -30,9 +30,9 @@ return [
         ],
         'routes' => [
             'title'                  => 'Lista de rotas',
-            'add_route'              => 'Adicionar rota',
+            'add_route'              => 'Adicionar rotas',
             'add_route_no_moderator' => 'Você deve ser um moderador desta equipe para adicionar rotas',
-            'stop_adding_routes'     => 'Parar de adicionar rotas',
+            'picker_title'           => 'Adicionar rotas a %s',
         ],
         'tags' => [
             'title'       => 'Tags',

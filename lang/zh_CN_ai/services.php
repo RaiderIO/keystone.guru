@@ -7,8 +7,6 @@ return [
             'export_string' => [
                 'category' => [
                     'pull'         => '拉取 %d',
-                    'title'        => '标题',
-                    'map_icon'     => '地图图标',
                     'raid_markers' => '团队标记',
                 ],
                 'unable_to_find_mdt_enemy_for_kg_enemy'             => '无法找到 Keystone.guru 敌人对应的 MDT 敌人，NPC %s（enemy_id: %d, npc_id: %d）。',
@@ -16,11 +14,6 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => '此拉取已被移除，因为在 MDT 中找不到所有选择的敌人，导致拉取为空。',
                 'unable_to_find_mdt_enemy_for_kg_raid_marker'       => '无法为带有 %s 团队标记的敌人找到对应的 MDT 数据（npc_id: %s）。',
                 'unable_to_place_kill_zone_spells_note'             => '分配给此次拉怪的法术未被导出：它们会作为 MDT 备注导出在该次拉怪旁边，但此次拉怪没有敌人也没有击杀区域来放置该备注。',
-                'route_title_contains_non_ascii_char_bug'           => '您的路线标题包含非 ASCII 字符，这些字符已知会触发 Keystone.guru 中一个尚未解决的编码错误。
-                                                        您的路线标题中的所有违规字符已被删除，我们对造成的不便表示歉意，并希望尽快解决此问题。',
-                'route_title_contains_non_ascii_char_bug_details' => '旧标题：%s，新标题：%s',
-                'map_icon_contains_non_ascii_char_bug'            => '您的一个地图图标评论包含非 ASCII 字符，这些字符已知会触发 Keystone.guru 中一个尚未解决的编码错误。您的地图评论中的所有违规字符已被删除，我们对造成的不便表示歉意，并希望尽快解决此问题。',
-                'map_icon_contains_non_ascii_char_bug_details'    => '旧评论："%s"，新评论："%s"',
             ],
             'import_string' => [
                 'category' => [

@@ -101,6 +101,10 @@ return [
             'upgrade_applied'           => '업그레이드가 경로에 적용되었습니다.',
             'upgrade_discarded'         => '업그레이드 초안을 폐기했습니다.',
         ],
+        'continue_in_newer_season' => [
+            'limit_reached'   => '만들 수 있는 경로의 최대 개수에 도달했습니다.',
+            'no_newer_season' => '이 경로는 더 새로운 시즌에서 이어갈 수 없습니다. 경로의 던전이 새 시즌에 포함되지 않았거나, 이미 그 시즌에서 이어갔습니다.',
+        ],
     ],
     'dungeonroutediscover' => [
         'popular' => '인기 경로',
@@ -192,10 +196,12 @@ return [
     ],
     'dungeonroutecollection' => [
         'flash' => [
-            'collection_created'      => '컬렉션이 생성되었습니다',
-            'collection_updated'      => '컬렉션이 업데이트되었습니다',
-            'collection_deleted'      => '컬렉션이 삭제되었습니다',
-            'max_collections_reached' => '컬렉션은 최대 :max개까지 만들 수 있습니다.',
+            'collection_created'             => '컬렉션이 생성되었습니다',
+            'collection_updated'             => '컬렉션이 업데이트되었습니다',
+            'collection_deleted'             => '컬렉션이 삭제되었습니다',
+            'max_collections_reached'        => '컬렉션은 최대 :max개까지 만들 수 있습니다.',
+            'collection_duplicated'          => '컬렉션을 복제했습니다. 공개 대상을 변경하기 전까지는 본인만 사본을 볼 수 있습니다.',
+            'collection_duplicated_left_out' => '{1} 선택한 시즌과 맞지 않아 경로 :count개가 제외되었습니다.|[2,*] 선택한 시즌과 맞지 않아 경로 :count개가 제외되었습니다.',
         ],
     ],
     'profile' => [

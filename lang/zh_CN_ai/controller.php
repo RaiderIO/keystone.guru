@@ -101,6 +101,10 @@ return [
             'upgrade_applied'           => '升级已应用到您的路线。',
             'upgrade_discarded'         => '已放弃该升级草稿。',
         ],
+        'continue_in_newer_season' => [
+            'limit_reached'   => '您创建的路线已达到上限。',
+            'no_newer_season' => '此路线无法在更新的赛季中延续：它的地下城不属于任何更新的赛季，或者您已经在该赛季中延续过它。',
+        ],
     ],
     'dungeonroutediscover' => [
         'popular' => '热门路线',
@@ -192,10 +196,12 @@ return [
     ],
     'dungeonroutecollection' => [
         'flash' => [
-            'collection_created'      => '合集已创建',
-            'collection_updated'      => '合集已更新',
-            'collection_deleted'      => '合集已删除',
-            'max_collections_reached' => '您最多只能拥有 :max 个合集。',
+            'collection_created'             => '合集已创建',
+            'collection_updated'             => '合集已更新',
+            'collection_deleted'             => '合集已删除',
+            'max_collections_reached'        => '您最多只能拥有 :max 个合集。',
+            'collection_duplicated'          => '合集已复制。在您更改其可见对象之前，只有您可以看到该副本。',
+            'collection_duplicated_left_out' => '{1} 有 :count 条路线因与所选赛季不符而未被包含。|[2,*] 有 :count 条路线因与所选赛季不符而未被包含。',
         ],
     ],
     'profile' => [

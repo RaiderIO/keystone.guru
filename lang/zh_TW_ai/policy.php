@@ -2,6 +2,7 @@
 
 return [
 
+    'view_collection_not_published'                       => '',
     'view_route_not_published'                            => '此路徑尚未發布，無法查看。請要求作者發布此路徑以查看。',
     'present_route_not_published'                         => '此路徑尚未發布，無法展示。請要求作者發布此路徑以展示。',
     'embed_route_not_published'                           => '此路徑尚未發布，無法查看。請要求作者發布此路徑以查看。',

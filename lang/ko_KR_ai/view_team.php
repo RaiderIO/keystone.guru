@@ -32,7 +32,7 @@ return [
             'title'                  => '경로 목록',
             'add_route'              => '경로 추가',
             'add_route_no_moderator' => '경로를 추가하려면 이 팀의 모더레이터여야 합니다',
-            'stop_adding_routes'     => '경로 추가 중지',
+            'picker_title'           => '%s에 경로 추가',
         ],
         'tags' => [
             'title'       => '태그',

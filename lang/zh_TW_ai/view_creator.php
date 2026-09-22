@@ -8,7 +8,10 @@ return [
         'search_label'       => '',
         'search_placeholder' => '',
         'search_submit'      => '',
+        'category_label'     => '',
+        'category_any'       => '',
         'empty'              => '',
+        'empty_for_category' => '',
         'empty_for_search'   => '',
     ],
     'featured' => [

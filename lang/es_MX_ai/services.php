@@ -7,8 +7,6 @@ return [
             'export_string' => [
                 'category' => [
                     'pull'         => 'Jalar %d',
-                    'title'        => 'Título',
-                    'map_icon'     => 'Ícono de mapa',
                     'raid_markers' => 'Marcadores de banda',
                 ],
                 'unable_to_find_mdt_enemy_for_kg_enemy'             => 'No se puede encontrar un equivalente de MDT para el enemigo de Keystone.guru con NPC %s (enemy_id: %d, npc_id: %d).',
@@ -16,11 +14,6 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Este jalón ha sido eliminado ya que no se pudieron encontrar todos los enemigos seleccionados en MDT, resultando en un jalón vacío.',
                 'unable_to_find_mdt_enemy_for_kg_raid_marker'       => 'No se pudo encontrar el equivalente de MDT para el enemigo con el marcador de banda %s (npc_id: %s).',
                 'unable_to_place_kill_zone_spells_note'             => 'Los hechizos asignados a este pull no se han exportado: se exportan como una nota de MDT junto al pull, pero este pull no tiene enemigos ni un área donde colocar esa nota.',
-                'route_title_contains_non_ascii_char_bug'           => 'El título de tu ruta contiene caracteres no ASCII que se sabe desencadenan un error de codificación no resuelto en Keystone.guru.
-                                                        El título de tu ruta ha sido despojado de todos los caracteres problemáticos, nos disculpamos por el inconveniente y esperamos resolver este problema pronto.',
-                'route_title_contains_non_ascii_char_bug_details' => 'Título anterior: %s, nuevo título: %s',
-                'map_icon_contains_non_ascii_char_bug'            => 'Uno de tus comentarios sobre un ícono de mapa tiene caracteres no ASCII que se sabe desencadenan un error de codificación no resuelto en Keystone.guru. Tu comentario de mapa ha sido despojado de todos los caracteres problemáticos, nos disculpamos por el inconveniente y esperamos resolver este problema pronto.',
-                'map_icon_contains_non_ascii_char_bug_details'    => 'Comentario anterior: "%s", nuevo comentario: "%s"',
             ],
             'import_string' => [
                 'category' => [
