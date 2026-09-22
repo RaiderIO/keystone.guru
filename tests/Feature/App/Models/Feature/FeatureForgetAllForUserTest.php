@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\App\Models\Feature;
 
-use App\Features\NpcCompendium;
+use App\Features\CreatorProfiles;
 use App\Models\Feature\Feature;
 use App\Models\Laratrust\Role;
 use App\Models\User;
@@ -44,7 +44,7 @@ final class FeatureForgetAllForUserTest extends PublicTestCase
         $user = User::factory()->create();
 
         try {
-            PennantFeature::for($user)->deactivate(NpcCompendium::class);
+            PennantFeature::for($user)->deactivate(CreatorProfiles::class);
             $this->assertSame(1, $this->countStoredFeaturesOf($user), 'Expected the stored value to be arranged.');
 
             // Act
@@ -66,7 +66,7 @@ final class FeatureForgetAllForUserTest extends PublicTestCase
 
         try {
             $user->addRole(Role::ROLE_INTERNAL_TEAM);
-            PennantFeature::for($user)->activate(NpcCompendium::class);
+            PennantFeature::for($user)->activate(CreatorProfiles::class);
             $this->assertSame(1, $this->countStoredFeaturesOf($user), 'Expected the stored value to be arranged.');
 
             // Act
@@ -89,7 +89,7 @@ final class FeatureForgetAllForUserTest extends PublicTestCase
 
         try {
             $user->addRole(Role::ROLE_INTERNAL_TEAM);
-            PennantFeature::for($user)->activate(NpcCompendium::class);
+            PennantFeature::for($user)->activate(CreatorProfiles::class);
             $this->assertSame(1, $this->countStoredFeaturesOf($user), 'Expected the stored value to be arranged.');
 
             // Act
@@ -112,7 +112,7 @@ final class FeatureForgetAllForUserTest extends PublicTestCase
 
         try {
             $user->addRole(Role::ROLE_INTERNAL_TEAM);
-            PennantFeature::for($user)->activate(NpcCompendium::class);
+            PennantFeature::for($user)->activate(CreatorProfiles::class);
             $this->assertSame(1, $this->countStoredFeaturesOf($user), 'Expected the stored value to be arranged.');
 
             // Act

@@ -1,5 +1,5 @@
-// #3957: right-clicking an enemy should open its NPC Compendium page in a new tab when the
-// NpcCompendium feature flag is enabled, instead of the `#enemy_details_modal` bootstrap modal.
+// Right-clicking an enemy opens its NPC Compendium page in a new tab; the `#enemy_details_modal`
+// bootstrap modal is only the fallback for when the popup is blocked.
 //
 // Follows the global-script recipe from map.favorite.test.js: stub the collaborators the class
 // body touches at load time, then require the source.
@@ -62,7 +62,7 @@ describe('CommonMapsMap._onEnemyContextMenu', () => {
 
     it('_onEnemyContextMenu_givenNoEnemyDetailsModalInDom_doesNothing', () => {
         // Arrange
-        let map = buildMap({npcCompendiumEnabled: true, npcCompendiumBaseUrl: '/compendium/npc'});
+        let map = buildMap({npcCompendiumBaseUrl: '/compendium/npc'});
 
         // Act
         map._onEnemyContextMenu({context: enemy});
@@ -71,10 +71,10 @@ describe('CommonMapsMap._onEnemyContextMenu', () => {
         expect(windowOpenSpy).not.toHaveBeenCalled();
     });
 
-    it('_onEnemyContextMenu_givenFlagEnabled_opensCompendiumPageInNewTabAndSkipsModal', () => {
+    it('_onEnemyContextMenu_givenEnemyDetailsModalInDom_opensCompendiumPageInNewTab', () => {
         // Arrange
         document.body.innerHTML = '<div id="enemy_details_modal"></div>';
-        let map = buildMap({npcCompendiumEnabled: true, npcCompendiumBaseUrl: '/compendium/npc'});
+        let map = buildMap({npcCompendiumBaseUrl: '/compendium/npc'});
 
         // Act
         map._onEnemyContextMenu({context: enemy});
@@ -83,24 +83,11 @@ describe('CommonMapsMap._onEnemyContextMenu', () => {
         expect(windowOpenSpy).toHaveBeenCalledWith('/compendium/npc/123');
     });
 
-    it('_onEnemyContextMenu_givenFlagDisabled_doesNotOpenNewTabAndShowsModal', () => {
-        // Arrange
-        document.body.innerHTML = '<div id="enemy_details_modal"></div><div id="enemy_details_modal_title_text"></div><div id="enemy_details_modal_body"></div>';
-        let map = buildMap({npcCompendiumEnabled: false, npcCompendiumBaseUrl: '/compendium/npc'});
-
-        // Act
-        map._onEnemyContextMenu({context: enemy});
-
-        // Assert
-        expect(windowOpenSpy).not.toHaveBeenCalled();
-        expect(modalShowSpy).toHaveBeenCalled();
-    });
-
-    it('_onEnemyContextMenu_givenFlagEnabledButPopupBlocked_fallsBackToModal', () => {
+    it('_onEnemyContextMenu_givenPopupBlocked_fallsBackToModal', () => {
         // Arrange - a sandboxed embed iframe without allow-popups returns null from window.open()
         document.body.innerHTML = '<div id="enemy_details_modal"></div><div id="enemy_details_modal_title_text"></div><div id="enemy_details_modal_body"></div>';
         windowOpenSpy.mockImplementation(() => null);
-        let map = buildMap({npcCompendiumEnabled: true, npcCompendiumBaseUrl: '/compendium/npc'});
+        let map = buildMap({npcCompendiumBaseUrl: '/compendium/npc'});
 
         // Act
         map._onEnemyContextMenu({context: enemy});

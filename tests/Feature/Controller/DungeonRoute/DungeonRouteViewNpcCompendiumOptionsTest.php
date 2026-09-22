@@ -2,32 +2,28 @@
 
 namespace Tests\Feature\Controller\DungeonRoute;
 
-use App\Features\NpcCompendium;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\PublishedState;
 use App\Models\User;
-use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * #3957: right-clicking an enemy on a route/explore map should open its NPC Compendium page in a
- * new tab when the NpcCompendium feature flag is enabled, instead of the enemy details modal. The
- * map JS reads this off the `npcCompendiumEnabled`/`npcCompendiumBaseUrl` inline options, which
- * only the real Blade render can prove are wired up correctly.
+ * Right-clicking an enemy on a route/explore map opens its NPC Compendium page in a new tab. The map
+ * JS reads the page's location off the `npcCompendiumBaseUrl` inline option, which only the real
+ * Blade render can prove is wired up correctly.
  */
 #[Group('Controller')]
 #[Group('DungeonRoute')]
-final class DungeonRouteViewNpcCompendiumFlagTest extends PublicTestCase
+final class DungeonRouteViewNpcCompendiumOptionsTest extends PublicTestCase
 {
     #[Test]
-    public function view_givenFeatureEnabled_exposesNpcCompendiumOptionsToMapJs(): void
+    public function view_givenPublishedRoute_exposesNpcCompendiumBaseUrlToMapJs(): void
     {
         // Arrange
         $owner = User::factory()->create();
         $route = $this->createRoute($owner);
-        Feature::define(NpcCompendium::class, true);
 
         try {
             $this->be($owner);
@@ -37,34 +33,11 @@ final class DungeonRouteViewNpcCompendiumFlagTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $response->assertSee('"npcCompendiumEnabled":true', false);
+            $response->assertDontSee('"npcCompendiumEnabled"', false);
             $response->assertSee(
                 '"npcCompendiumBaseUrl":"' . str_replace('/', '\/', url('/compendium/npc')),
                 false,
             );
-        } finally {
-            $route->delete();
-            $owner->delete();
-        }
-    }
-
-    #[Test]
-    public function view_givenFeatureDisabled_exposesDisabledNpcCompendiumOption(): void
-    {
-        // Arrange
-        $owner = User::factory()->create();
-        $route = $this->createRoute($owner);
-        Feature::define(NpcCompendium::class, false);
-
-        try {
-            $this->be($owner);
-
-            // Act
-            $response = $this->followingRedirects()->get($this->viewUrl($route));
-
-            // Assert
-            $response->assertOk();
-            $response->assertSee('"npcCompendiumEnabled":false', false);
         } finally {
             $route->delete();
             $owner->delete();

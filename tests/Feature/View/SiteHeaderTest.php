@@ -2,11 +2,9 @@
 
 namespace Tests\Feature\View;
 
-use App\Features\NpcCompendium;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\User;
-use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -37,11 +35,7 @@ final class SiteHeaderTest extends PublicTestCase
 
         $this->assertStringContainsString('id="navCategoryRoutes"', $html);
         $this->assertStringContainsString('id="navCategoryDungeons"', $html);
-        // The compendium category is behind an admin-controlled feature flag, so it is only in the bar
-        // when the flag is on - asserting it unconditionally would fail on the flag, not on the markup.
-        if (Feature::active(NpcCompendium::class)) {
-            $this->assertStringContainsString('id="navCategoryCompendium"', $html);
-        }
+        $this->assertStringContainsString('id="navCategoryCompendium"', $html);
 
         $this->assertStringContainsString('data-bs-target="#login_modal"', $html);
         $this->assertStringContainsString('data-bs-target="#register_modal"', $html);

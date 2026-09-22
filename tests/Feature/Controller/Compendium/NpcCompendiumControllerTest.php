@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Controller\Compendium;
 
-use App\Features\NpcCompendium;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
@@ -12,7 +11,6 @@ use App\Models\Season;
 use App\Models\User;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
-use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -52,38 +50,10 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         parent::setUp();
 
         $this->actingAs(User::findOrFail(1));
-        Feature::define(NpcCompendium::class, true);
     }
 
     #[Test]
-    public function index_givenNoAuthFeatureDisabled_returnsNotFound(): void
-    {
-        // Arrange
-        $this->actingAsGuest();
-        Feature::define(NpcCompendium::class, false);
-
-        // Act
-        $response = $this->get(route('npc.compendium.index'));
-
-        // Assert
-        $response->assertNotFound();
-    }
-
-    #[Test]
-    public function index_givenAdminFeatureDisabled_returnsNotFound(): void
-    {
-        // Arrange
-        Feature::define(NpcCompendium::class, false);
-
-        // Act
-        $response = $this->get(route('npc.compendium.index'));
-
-        // Assert
-        $response->assertNotFound();
-    }
-
-    #[Test]
-    public function index_givenNoAuthFeatureEnabled_returnsOk(): void
+    public function index_givenNoAuth_returnsOk(): void
     {
         // Arrange
         $this->actingAsGuest();
@@ -96,7 +66,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function index_givenAdminFeatureEnabled_returnsOk(): void
+    public function index_givenAdmin_returnsOk(): void
     {
         // Act
         $response = $this->get(route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::active()->firstOrFail()]));

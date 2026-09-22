@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controller\AdminTools;
 
-use App\Features\NpcCompendium;
+use App\Features\CreatorProfiles;
 use App\Models\Feature\Feature;
 use App\Models\Laratrust\Role;
 use App\Models\User;
@@ -37,28 +37,29 @@ final class AdminToolsFeaturesControllerTest extends PublicTestCase
     #[Test]
     public function toggleFeature_givenOrdinaryUserWithStoredFalseValue_grantsTheFeatureToThatUserOnceSwitchedOn(): void
     {
-        // Arrange - the admin switch starts off, and an ordinary user already has a stored 'false' from browsing
-        // the site before the toggle. The feature has no role gate anymore, so once the admin switch flips on,
-        // that stale 'false' must be purged rather than left to shadow the now-enabled switch
+        // Arrange - the admin switch starts off, and an entitled (internal team) user already has a stored 'false'
+        // from browsing the site before the toggle. Once the admin switch flips on, that stale 'false' must be
+        // purged rather than left to shadow the now-enabled switch
         $admin        = User::findOrFail(Feature::ADMIN_USER_ID);
         $ordinaryUser = User::factory()->create();
+        $ordinaryUser->addRole(Role::ROLE_INTERNAL_TEAM);
         $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
         $adminBackup = Feature::query()->where('scope', $this->serializeScopeOf($admin))
-            ->where('name', NpcCompendium::class)
+            ->where('name', CreatorProfiles::class)
             ->first();
 
         try {
-            PennantFeature::for($admin)->deactivate(NpcCompendium::class);
-            PennantFeature::for($ordinaryUser)->deactivate(NpcCompendium::class);
-            $this->assertFalse(Feature::getAdminValue(NpcCompendium::class), 'Expected the switch to be arranged off.');
+            PennantFeature::for($admin)->deactivate(CreatorProfiles::class);
+            PennantFeature::for($ordinaryUser)->deactivate(CreatorProfiles::class);
+            $this->assertFalse(Feature::getAdminValue(CreatorProfiles::class), 'Expected the switch to be arranged off.');
 
             // Act
             $this->be($admin);
-            $response = $this->post(route('admin.tools.features.toggle'), ['feature' => NpcCompendium::class]);
+            $response = $this->post(route('admin.tools.features.toggle'), ['feature' => CreatorProfiles::class]);
 
             // Assert
             $response->assertRedirect(route('admin.tools.features.list'));
-            $this->assertTrue(Feature::getAdminValue(NpcCompendium::class), 'Expected the switch to be flipped on.');
+            $this->assertTrue(Feature::getAdminValue(CreatorProfiles::class), 'Expected the switch to be flipped on.');
 
             $this->assertSame(
                 0,
@@ -66,15 +67,15 @@ final class AdminToolsFeaturesControllerTest extends PublicTestCase
                 'Expected the stale stored row to be purged, not left in place.',
             );
             $this->assertTrue(
-                PennantFeature::for($ordinaryUser)->active(NpcCompendium::class),
-                'Expected the feature to resolve to true for any user once the admin switch is on.',
+                PennantFeature::for($ordinaryUser)->active(CreatorProfiles::class),
+                'Expected the feature to resolve to true for an entitled user once the admin switch is on.',
             );
         } finally {
             $this->deleteStoredFeaturesOf($ordinaryUser);
             $ordinaryUser->delete();
 
             Feature::query()->where('scope', $this->serializeScopeOf($admin))
-                ->where('name', NpcCompendium::class)
+                ->where('name', CreatorProfiles::class)
                 ->delete();
             if ($adminBackup !== null) {
                 Feature::query()->insert([
@@ -98,22 +99,22 @@ final class AdminToolsFeaturesControllerTest extends PublicTestCase
         $ordinaryUser = User::factory()->create();
         $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
         $adminBackup = Feature::query()->where('scope', $this->serializeScopeOf($admin))
-            ->where('name', NpcCompendium::class)
+            ->where('name', CreatorProfiles::class)
             ->first();
 
         try {
-            PennantFeature::for($admin)->activate(NpcCompendium::class);
-            PennantFeature::for($ordinaryUser)->activate(NpcCompendium::class);
-            $this->assertTrue(Feature::getAdminValue(NpcCompendium::class), 'Expected the switch to be arranged on.');
+            PennantFeature::for($admin)->activate(CreatorProfiles::class);
+            PennantFeature::for($ordinaryUser)->activate(CreatorProfiles::class);
+            $this->assertTrue(Feature::getAdminValue(CreatorProfiles::class), 'Expected the switch to be arranged on.');
             $this->assertSame(1, $this->countStoredFeaturesOf($ordinaryUser), 'Expected the stored value to be arranged.');
 
             // Act
             $this->be($admin);
-            $response = $this->post(route('admin.tools.features.toggle'), ['feature' => NpcCompendium::class]);
+            $response = $this->post(route('admin.tools.features.toggle'), ['feature' => CreatorProfiles::class]);
 
             // Assert
             $response->assertRedirect(route('admin.tools.features.list'));
-            $this->assertFalse(Feature::getAdminValue(NpcCompendium::class), 'Expected the switch to be flipped off.');
+            $this->assertFalse(Feature::getAdminValue(CreatorProfiles::class), 'Expected the switch to be flipped off.');
             $this->assertSame(
                 0,
                 $this->countStoredFeaturesOf($ordinaryUser),
@@ -124,7 +125,7 @@ final class AdminToolsFeaturesControllerTest extends PublicTestCase
             $ordinaryUser->delete();
 
             Feature::query()->where('scope', $this->serializeScopeOf($admin))
-                ->where('name', NpcCompendium::class)
+                ->where('name', CreatorProfiles::class)
                 ->delete();
             if ($adminBackup !== null) {
                 Feature::query()->insert([

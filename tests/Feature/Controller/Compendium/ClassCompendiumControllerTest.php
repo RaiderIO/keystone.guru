@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Controller\Compendium;
 
-use App\Features\NpcCompendium;
 use App\Models\CharacterClass;
 use App\Models\Characteristic;
 use App\Models\Dungeon;
@@ -19,7 +18,6 @@ use App\Models\Spell\SpellMissType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -42,24 +40,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         parent::setUp();
 
         $this->actingAs(User::findOrFail(1));
-        Feature::define(NpcCompendium::class, true);
     }
 
     #[Test]
-    public function index_givenFeatureDisabled_returnsNotFound(): void
-    {
-        // Arrange
-        Feature::define(NpcCompendium::class, false);
-
-        // Act
-        $response = $this->get(route('compendium.class.index'));
-
-        // Assert
-        $response->assertNotFound();
-    }
-
-    #[Test]
-    public function index_givenFeatureEnabled_returnsOk(): void
+    public function index_givenAdmin_returnsOk(): void
     {
         // Act
         $response = $this->get(route('compendium.class.index'));
@@ -69,7 +53,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function index_givenFeatureEnabled_displaysAllClasses(): void
+    public function index_givenAdmin_displaysAllClasses(): void
     {
         // Act
         $response = $this->get(route('compendium.class.index'));

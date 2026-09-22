@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Controller\Compendium;
 
-use App\Features\NpcCompendium;
 use App\Models\Characteristic;
 use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogNpcEventType;
@@ -16,7 +15,6 @@ use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Facades\DB;
-use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -35,7 +33,6 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
         parent::setUp();
 
         $this->actingAs(User::findOrFail(1));
-        Feature::define(NpcCompendium::class, true);
 
         // Clean up sentinel rows a previously aborted run may have left behind
         CombatLogSpellEvent::query()->where('spell_id', self::TEST_SPELL_ID)->delete();
@@ -50,20 +47,7 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     }
 
     #[Test]
-    public function activityIndex_givenFeatureDisabled_returnsNotFound(): void
-    {
-        // Arrange
-        Feature::define(NpcCompendium::class, false);
-
-        // Act
-        $response = $this->get(route('compendium.activity.index'));
-
-        // Assert
-        $response->assertNotFound();
-    }
-
-    #[Test]
-    public function activityIndex_givenFeatureEnabled_redirectsToDungeon(): void
+    public function activityIndex_givenAdmin_redirectsToDungeon(): void
     {
         // Act
         $response = $this->get(route('compendium.activity.index'));
@@ -73,7 +57,7 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     }
 
     #[Test]
-    public function activity_givenFeatureEnabled_returnsOk(): void
+    public function activity_givenAdmin_returnsOk(): void
     {
         // Act
         $response = $this->get(route('compendium.activity', $this->dungeon));
@@ -133,7 +117,7 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     }
 
     #[Test]
-    public function activity_givenFeatureEnabledNoAuth_returnsOk(): void
+    public function activity_givenNoAuth_returnsOk(): void
     {
         // Arrange
         $this->actingAsGuest();
@@ -339,19 +323,6 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     {
         // Act
         $response = $this->get(sprintf('/compendium/dungeon/%s/activity/not-a-date', $this->dungeon->slug));
-
-        // Assert
-        $response->assertNotFound();
-    }
-
-    #[Test]
-    public function activityDay_givenFeatureDisabled_returnsNotFound(): void
-    {
-        // Arrange
-        Feature::define(NpcCompendium::class, false);
-
-        // Act
-        $response = $this->get(route('compendium.activity.day', ['dungeon' => $this->dungeon, 'date' => '2025-01-15']));
 
         // Assert
         $response->assertNotFound();
