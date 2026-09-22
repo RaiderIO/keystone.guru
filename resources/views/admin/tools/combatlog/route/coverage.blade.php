@@ -43,6 +43,13 @@
                 <th class="text-end">{{ __('view_admin.tools.combatlog.route.coverage.column_over') }}</th>
                 <th class="text-end">{{ __('view_admin.tools.combatlog.route.coverage.column_unknown') }}</th>
                 <th class="text-end">{{ __('view_admin.tools.combatlog.route.coverage.column_problem_share') }}</th>
+                <th class="text-end"
+                    data-bs-toggle="tooltip"
+                    title="{{ __('view_admin.tools.combatlog.route.coverage.column_resolutions_per_route_title', ['distance' => (int)config('keystoneguru.enemy_resolution.record_min_distance_yd'), 'days' => (int)config('keystoneguru.enemy_resolution.retention_days')]) }}">
+                    <a href="{{ route('admin.tools.combatlog.route.enemy_resolutions.view') }}" class="text-reset">
+                        {{ __('view_admin.tools.combatlog.route.coverage.column_resolutions_per_route') }}
+                    </a>
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -69,9 +76,12 @@
                         {{ $row['buckets']['unknown'] }}
                     </td>
                     <td class="text-end">{{ $row['problemPercentage'] }}%</td>
+                    <td class="text-end {{ $row['resolutionsPerRoute'] === null ? 'text-muted' : '' }}">
+                        {{ $row['resolutionsPerRoute'] ?? '-' }}
+                    </td>
                 </tr>
                 <tr class="collapse" id="{{ $collapseId }}">
-                    <td colspan="8" class="bg-body-tertiary">
+                    <td colspan="9" class="bg-body-tertiary">
                         @if($row['routes']->isEmpty())
                             <span class="text-muted">{{ __('view_admin.tools.combatlog.route.coverage.no_routes') }}</span>
                         @else
@@ -81,6 +91,7 @@
                                     <th class="text-end">{{ __('view_admin.tools.combatlog.route.coverage.detail_percentage') }}</th>
                                     <th class="text-end">{{ __('view_admin.tools.combatlog.route.coverage.detail_enemy_forces') }}</th>
                                     <th class="text-end">{{ __('view_admin.tools.combatlog.route.coverage.detail_enemy_failures') }}</th>
+                                    <th class="text-end">{{ __('view_admin.tools.combatlog.route.coverage.detail_enemy_resolutions') }}</th>
                                     <th class="text-end">{{ __('view_admin.tools.combatlog.route.coverage.detail_level') }}</th>
                                     <th>{{ __('view_admin.tools.combatlog.route.coverage.detail_created_at') }}</th>
                                     <th>{{ __('view_admin.tools.combatlog.route.coverage.detail_links') }}</th>
@@ -98,6 +109,9 @@
                                         </td>
                                         <td class="text-end {{ $route['enemyFailureCount'] > 0 ? 'text-danger' : 'text-muted' }}">
                                             {{ $route['enemyFailureCount'] }}
+                                        </td>
+                                        <td class="text-end {{ $route['enemyResolutionCount'] ? '' : 'text-muted' }}">
+                                            {{ $route['enemyResolutionCount'] ?? '-' }}
                                         </td>
                                         <td class="text-end">{{ $route['level'] ?? '-' }}</td>
                                         <td>

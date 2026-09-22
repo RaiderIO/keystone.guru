@@ -74,6 +74,8 @@ use App\Service\CombatLog\CombatLogRouteEnemyFailureAnalysisService;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureAnalysisServiceInterface;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureService;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
+use App\Service\CombatLog\CombatLogRouteEnemyResolutionAnalysisService;
+use App\Service\CombatLog\CombatLogRouteEnemyResolutionAnalysisServiceInterface;
 use App\Service\CombatLog\CombatLogRouteEnemyResolutionService;
 use App\Service\CombatLog\CombatLogRouteEnemyResolutionServiceInterface;
 use App\Service\CombatLog\CombatLogService;
@@ -122,6 +124,8 @@ use App\Service\DungeonRoute\DungeonRouteUpgradeDraftService;
 use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
 use App\Service\DungeonRoute\MapDrawingService;
 use App\Service\DungeonRoute\MapDrawingServiceInterface;
+use App\Service\DungeonRoute\TestDungeonRouteGeneratorService;
+use App\Service\DungeonRoute\TestDungeonRouteGeneratorServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\EnemyForces\EnemyForcesDb2Service;
@@ -293,6 +297,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(DungeonRouteSeasonContinuationServiceInterface::class, DungeonRouteSeasonContinuationService::class);
         $this->app->bind(DungeonRouteSearchServiceInterface::class, DungeonRouteSearchService::class);
         $this->app->bind(DungeonRouteKillZoneServiceInterface::class, DungeonRouteKillZoneService::class);
+        $this->app->bind(TestDungeonRouteGeneratorServiceInterface::class, TestDungeonRouteGeneratorService::class);
         $this->app->bind(ImageServiceInterface::class, ImageService::class);
         $this->app->bind(MessageBannerServiceInterface::class, MessageBannerService::class);
         $this->app->bind(MapDrawingServiceInterface::class, MapDrawingService::class);
@@ -363,6 +368,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogRouteEnemyFailureServiceInterface::class, CombatLogRouteEnemyFailureService::class);
         $this->app->bind(CombatLogRouteEnemyResolutionServiceInterface::class, CombatLogRouteEnemyResolutionService::class);
         $this->app->bind(CombatLogRouteEnemyFailureAnalysisServiceInterface::class, CombatLogRouteEnemyFailureAnalysisService::class);
+        $this->app->bind(CombatLogRouteEnemyResolutionAnalysisServiceInterface::class, CombatLogRouteEnemyResolutionAnalysisService::class);
         $this->app->bind(ResultEventDungeonRouteServiceInterface::class, ResultEventDungeonRouteService::class);
 
         // Depends on all of the above - pretty much

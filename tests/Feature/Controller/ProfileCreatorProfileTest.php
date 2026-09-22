@@ -71,6 +71,26 @@ final class ProfileCreatorProfileTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function view_givenFeatureActive_showsWhenTheCreatorJoined(): void
+    {
+        // Arrange
+        $creator = User::factory()->create(['created_at' => '2021-03-15 12:00:00']);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.view', ['user' => $creator]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(e(__('view_profile.view.member_since', ['date' => 'March 2021'])), false);
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
     /**
      * Pinning records intent only - the viewer's own visibility rules still decide what is shown.
      * If this regresses, pinning becomes a way to publish a private route by accident.

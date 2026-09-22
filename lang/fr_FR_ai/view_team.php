@@ -30,9 +30,9 @@ return [
         ],
         'routes' => [
             'title'                  => 'Liste des routes',
-            'add_route'              => 'Ajouter une route',
+            'add_route'              => 'Ajouter des itinéraires',
             'add_route_no_moderator' => 'Vous devez être modérateur de cette équipe pour ajouter des routes',
-            'stop_adding_routes'     => 'Arrêter d\'ajouter des routes',
+            'picker_title'           => 'Ajouter des routes à %s',
         ],
         'tags' => [
             'title'       => 'Balises',

@@ -32,6 +32,10 @@ return [
             'max'    => '',
             'exists' => '',
         ],
+        'pinned_dungeon_route_collections' => [
+            'max'    => '',
+            'exists' => '',
+        ],
         'social_links' => [
             'invalid_url_for_platform' => '',
         ],
@@ -55,6 +59,55 @@ return [
         ],
         'npc_dungeon_ids' => [
             'required' => '',
+        ],
+        'route_list_game_version_id' => [
+            'exists' => '',
+        ],
+        'route_list_season_id' => [
+            'exists' => '',
+        ],
+        'route_list_dungeon_ids' => [
+            'min'    => '',
+            'exists' => '',
+        ],
+        'team_add_routes' => [
+            'required' => '',
+            'max'      => '',
+            'exists'   => '',
+        ],
+        'collection_name' => [
+            'required' => '',
+            'max'      => '',
+        ],
+        'collection_description' => [
+            'max' => '',
+        ],
+        'collection_team_id' => [
+            'required_if' => '',
+            'exists'      => '',
+        ],
+        'collection_category_id' => [
+            'exists' => '',
+        ],
+        'collection_season_id' => [
+            'exists'     => '',
+            'no_seasons' => '',
+            'expansion'  => '',
+            'fixed'      => '',
+        ],
+        'collection_tag' => [
+            'exists' => '',
+        ],
+        'collection_dungeon_routes' => [
+            'max'          => '',
+            'exists'       => '',
+            'distinct'     => '',
+            'game_version' => '',
+            'season'       => '',
+            'required'     => '',
+            'already_in'   => '',
+            'not_in'       => '',
+            'missing'      => '',
         ],
     ],
     'date'              => ':Attribute 不是有效的日期。',

@@ -101,6 +101,10 @@ return [
             'upgrade_applied'           => '',
             'upgrade_discarded'         => '',
         ],
+        'continue_in_newer_season' => [
+            'limit_reached'   => '',
+            'no_newer_season' => '',
+        ],
     ],
     'dungeonroutediscover' => [
         'popular' => '受歡迎的路線',
@@ -188,6 +192,16 @@ return [
             'patreon_error_occurred'  => 'Patreon 端發生錯誤。請稍後再試。',
             'internal_error_occurred' => '處理 Patreon 回應時發生錯誤 - 它似乎格式不正確。錯誤已被記錄，將會處理。請稍後再試。',
             'link_cancelled'          => '',
+        ],
+    ],
+    'dungeonroutecollection' => [
+        'flash' => [
+            'collection_created'             => '',
+            'collection_updated'             => '',
+            'collection_deleted'             => '',
+            'max_collections_reached'        => '',
+            'collection_duplicated'          => '',
+            'collection_duplicated_left_out' => '',
         ],
     ],
     'profile' => [

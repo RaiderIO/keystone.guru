@@ -7,6 +7,9 @@
  * @property {String}   linesUrl
  * @property {String}   showLinesSelector
  * @property {Object}   linePopupTexts     npc, distance, weighted, route, importedRoute, noRoute
+ * @property {String}   groupsUrl
+ * @property {String}   showGroupsSelector
+ * @property {Object}   verdictColors      verdict key => colour
  * @property {String}   deleteUrl
  * @property {String}   filterMappingVersionIdSelector
  * @property {String}   filterNpcIdSelector
@@ -73,6 +76,11 @@ class CommonMapsCombatlogrouteenemyresolutions extends SearchInlineBase {
         $(this.options.showLinesSelector).on('change', () => this._redrawLines());
         getState().register('floorid:changed', this, () => this._redrawLines());
 
+        // Pack groups: same lifecycle as the lines
+        this._groups = [];
+        $(this.options.showGroupsSelector).on('change', () => this._redrawGroups());
+        getState().register('floorid:changed', this, () => this._redrawGroups());
+
         this._search();
     }
 
@@ -92,6 +100,7 @@ class CommonMapsCombatlogrouteenemyresolutions extends SearchInlineBase {
         super._search(options, queryParameters, queryParametersUrlBlacklist);
 
         this._fetchLines(npcIds);
+        this._fetchGroups(npcIds);
     }
 
     /**
@@ -128,6 +137,131 @@ class CommonMapsCombatlogrouteenemyresolutions extends SearchInlineBase {
                 this._lines = (json && json.data) || [];
                 this._redrawLines();
             });
+    }
+
+    /**
+     * @param {Number[]} npcIds
+     * @protected
+     */
+    _fetchGroups(npcIds) {
+        if (!this.options.groupsUrl) {
+            return;
+        }
+
+        let data = {dungeon_id: this.options.dungeonId, mapping_version_id: this.options.mappingVersionId};
+        if (npcIds.length > 0) {
+            data.npc_id = npcIds;
+        }
+
+        let minDistance = this.filters['min_distance'].getValue();
+        if (minDistance !== '' && minDistance !== null && typeof minDistance !== 'undefined') {
+            data.min_distance = minDistance;
+        }
+
+        let requestId = this._groupRequestId = (this._groupRequestId || 0) + 1;
+
+        $.ajax({type: 'GET', url: this.options.groupsUrl, data: data, dataType: 'json'})
+            .done((json) => {
+                if (requestId !== this._groupRequestId) {
+                    return;
+                }
+
+                this._groups = (json && json.data) || [];
+                this._redrawGroups();
+            })
+            .fail(() => {
+                if (requestId !== this._groupRequestId) {
+                    return;
+                }
+
+                // Arrows of the previous filter would otherwise sit under the new heatmap, verdicts and all
+                this._groups = [];
+                this._redrawGroups();
+            });
+    }
+
+    /**
+     * @returns {L.LayerGroup}
+     * @private
+     */
+    _getGroupLayerGroup() {
+        if (!this._groupLayerGroup) {
+            this._groupLayerGroup = L.layerGroup().addTo(getState().getDungeonMap().leafletMap);
+        }
+
+        return this._groupLayerGroup;
+    }
+
+    /**
+     * Draws a dashed arrow per pack group on the current floor, from its mapped centroid to where it is engaged, in its
+     * verdict's colour - faded when it was seen in few routes.
+     * @protected
+     */
+    _redrawGroups() {
+        let layerGroup = this._getGroupLayerGroup();
+        layerGroup.clearLayers();
+
+        let $toggle = $(this.options.showGroupsSelector);
+        if ($toggle.length > 0 && !$toggle.is(':checked')) {
+            return;
+        }
+
+        let currentFloor = getState().getCurrentFloor();
+        if (!currentFloor) {
+            return;
+        }
+
+        for (let group of this._groups) {
+            if (group.floor_id !== currentFloor.id) {
+                continue;
+            }
+
+            let color   = this.options.verdictColors[group.verdict] ?? '#ffffff';
+            let opacity = group.low_volume ? 0.3 : 0.9;
+            let mapped  = [group.mapped_centroid.lat, group.mapped_centroid.lng];
+            let engaged = [group.engaged_centroid.lat, group.engaged_centroid.lng];
+            let popup   = this._getGroupPopupHtml(group);
+
+            L.polyline([mapped, engaged], {color: color, weight: 3, opacity: opacity, dashArray: '6 4'})
+                .bindPopup(popup, {maxWidth: 360}).addTo(layerGroup);
+            L.circleMarker(mapped, {radius: 4, color: color, weight: 2, opacity: opacity, fillOpacity: 0})
+                .bindPopup(popup, {maxWidth: 360}).addTo(layerGroup);
+            L.circleMarker(engaged, {
+                radius: 5 + 2 * Math.log2(Math.max(1, group.route_count)),
+                color: color, weight: 2, opacity: opacity, fillColor: color, fillOpacity: group.low_volume ? 0.15 : 0.6,
+            }).bindPopup(popup, {maxWidth: 360}).addTo(layerGroup);
+        }
+    }
+
+    /**
+     * @param {Object} group
+     * @returns {String}
+     * @private
+     */
+    _getGroupPopupHtml(group) {
+        let escape = (text) => $('<span>').text(text ?? '').html();
+        let color  = this.options.verdictColors[group.verdict] ?? '#ffffff';
+        let title  = group.enemy_pack_id === null
+            ? lang.get('js.enemy_resolution_group_enemy', {id: group.enemy_ids[0]})
+            : lang.get('js.enemy_resolution_group_pack', {group: group.enemy_pack_group ?? '-', id: group.enemy_pack_id});
+
+        let rows = [
+            `<div><strong>${escape(title)}</strong> ` +
+            `<span class="badge" style="background-color: ${color}">${escape(lang.get(`js.enemy_resolution_group_verdict_${group.verdict}`))}</span></div>`,
+            `<div>${escape(group.npc_names)}</div>`,
+            `<div>${escape(lang.get('js.enemy_resolution_group_resolutions', {count: group.count, routes: group.route_count, share: Math.round(group.route_share * 100)}))}</div>`,
+            `<div>${escape(lang.get('js.enemy_resolution_group_displacement', {distance: Math.round(group.displacement)}))}</div>`,
+            `<div class="text-muted small">${escape(lang.get('js.enemy_resolution_group_consistency', {consistency: group.direction_consistency, ratio: group.shape_ratio ?? '-'}))}</div>`,
+            `<div class="text-muted small">${escape(lang.get('js.enemy_resolution_group_seen', {first: (group.first_seen ?? '').substring(0, 10), last: (group.last_seen ?? '').substring(0, 10)}))}</div>`,
+        ];
+
+        if (group.low_volume) {
+            rows.push(`<div class="text-warning small">${escape(lang.get('js.enemy_resolution_group_low_volume'))}</div>`);
+        }
+
+        rows.push(`<div class="mt-1"><em>${escape(group.suggestion)}</em></div>`);
+
+        return rows.join('');
     }
 
     /**

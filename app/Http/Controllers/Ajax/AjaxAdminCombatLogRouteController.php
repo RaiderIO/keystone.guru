@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteDeleteEnemyFailuresFormRequest;
 use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteDeleteEnemyResolutionsFormRequest;
 use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteGetEnemyFailuresFormRequest;
+use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteGetEnemyResolutionGroupsFormRequest;
 use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteGetEnemyResolutionLinesFormRequest;
 use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteGetEnemyResolutionsFormRequest;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureAnalysisServiceInterface;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
+use App\Service\CombatLog\CombatLogRouteEnemyResolutionAnalysisServiceInterface;
 use App\Service\CombatLog\CombatLogRouteEnemyResolutionServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Teapot\StatusCode;
@@ -73,6 +75,18 @@ class AjaxAdminCombatLogRouteController extends Controller
                 $request->limit(),
             ),
         ], StatusCode::OK);
+    }
+
+    public function getEnemyResolutionGroups(
+        AjaxAdminCombatLogRouteGetEnemyResolutionGroupsFormRequest $request,
+        CombatLogRouteEnemyResolutionAnalysisServiceInterface      $combatLogRouteEnemyResolutionAnalysisService,
+    ): JsonResponse {
+        return response()->json(
+            $combatLogRouteEnemyResolutionAnalysisService
+                ->analyze($request->dungeon(), $request->mappingVersion(), $request->validated('npc_id'), $request->minDistance())
+                ->toArray(),
+            StatusCode::OK,
+        );
     }
 
     public function deleteEnemyResolutions(AjaxAdminCombatLogRouteDeleteEnemyResolutionsFormRequest $request): JsonResponse

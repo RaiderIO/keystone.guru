@@ -96,6 +96,25 @@ class DungeonrouteTable extends InlineCode {
     }
 
     /**
+     * Redraws the table in place, without resetting to page 1.
+     */
+    redrawKeepingPage() {
+        this._dt.draw(false);
+    }
+
+    /**
+     * Steps back one page when a page after the first comes back empty, instead of leaving the user on a
+     * 'no routes' page once the last row of that page has left the listing.
+     * @param {Object} settings DataTables settings of the draw that just finished
+     * @private
+     */
+    _stepBackFromEmptyPage(settings) {
+        if (settings.json.data.length === 0 && this._dt.page.info().page > 0) {
+            this._dt.page('previous').draw(false);
+        }
+    }
+
+    /**
      * Gets the view that is handling the display of the table.
      */
     getTableView() {
@@ -186,6 +205,8 @@ class DungeonrouteTable extends InlineCode {
                 'cache': false
             },
             'drawCallback': function (settings) {
+                self._stepBackFromEmptyPage(settings);
+
                 // Don't do anything when the message 'no data available' is showing
                 if (settings.json.data.length > 0) {
                     // For each row in the body
@@ -259,7 +280,7 @@ class DungeonrouteTable extends InlineCode {
                     dataType: 'json',
                     success: function () {
                         showSuccessNotification(lang.get('js.scheduled_publish_saved'));
-                        $(self.options.filterButtonSelector).trigger('click');
+                        self.redrawKeepingPage();
                     }
                 });
             });
@@ -274,7 +295,7 @@ class DungeonrouteTable extends InlineCode {
                     dataType: 'json',
                     success: function () {
                         showSuccessNotification(lang.get('js.scheduled_publish_cleared'));
-                        $(self.options.filterButtonSelector).trigger('click');
+                        self.redrawKeepingPage();
                     }
                 });
             });
@@ -693,8 +714,7 @@ class DungeonrouteTable extends InlineCode {
             dataType: 'json',
             success: function (json) {
                 showSuccessNotification(lang.get('js.route_published_state_changed'));
-                // Refresh the table
-                $(self.options.filterButtonSelector).trigger('click');
+                self.redrawKeepingPage();
             }
         });
     }
@@ -716,8 +736,7 @@ class DungeonrouteTable extends InlineCode {
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_delete_successful'));
-                    // Refresh the table
-                    $(self.options.filterButtonSelector).trigger('click');
+                    self.redrawKeepingPage();
                 }
             });
         });
@@ -771,8 +790,7 @@ class DungeonrouteTable extends InlineCode {
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_clone_successful'));
-                    // Refresh the table
-                    $(self.options.filterButtonSelector).trigger('click');
+                    self.redrawKeepingPage();
                 }
             });
         }, null, {closeWith: ['button']});
@@ -818,8 +836,7 @@ class DungeonrouteTable extends InlineCode {
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_migration_successful'));
-                    // Refresh the table
-                    $(self.options.filterButtonSelector).trigger('click');
+                    self.redrawKeepingPage();
                 }
             });
         }, null, {closeWith: ['button']});
@@ -847,8 +864,7 @@ class DungeonrouteTable extends InlineCode {
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_continue_in_season_successful'));
-                    // Refresh the table
-                    $(self.options.filterButtonSelector).trigger('click');
+                    self.redrawKeepingPage();
                 }
             });
         }, null, {closeWith: ['button']});

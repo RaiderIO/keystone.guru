@@ -25,6 +25,7 @@ use App\Http\Controllers\AdminTools\AdminToolsDungeonRouteController;
 use App\Http\Controllers\AdminTools\AdminToolsEnemyForcesController;
 use App\Http\Controllers\AdminTools\AdminToolsExceptionController;
 use App\Http\Controllers\AdminTools\AdminToolsFeaturesController;
+use App\Http\Controllers\AdminTools\AdminToolsGenerateTestRoutesController;
 use App\Http\Controllers\AdminTools\AdminToolsMdtController;
 use App\Http\Controllers\AdminTools\AdminToolsMessageBannerController;
 use App\Http\Controllers\AdminTools\AdminToolsNpcController;
@@ -540,6 +541,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::post('/dungeonroute', new AdminToolsDungeonRouteController()->dungeonroutesubmit(...))->name('admin.tools.dungeonroute.view.submit');
                 Route::get('/dungeonroute/mappingversions', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersions(...))->name('admin.tools.dungeonroute.mappingversionusage');
                 Route::post('/dungeonroute/mappingversions/{mappingVersion}/upgrade', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersionsUpgrade(...))->name('admin.tools.dungeonroute.mappingversionusage.upgrade');
+                Route::get('/dungeonroute/generatetestroutes', new AdminToolsGenerateTestRoutesController()->index(...))->name('admin.tools.dungeonroute.generatetestroutes');
+                Route::post('/dungeonroute/generatetestroutes/generate-batch', new AdminToolsGenerateTestRoutesController()->generateBatch(...))->name('admin.tools.dungeonroute.generatetestroutes.generate_batch');
+                Route::post('/dungeonroute/generatetestroutes/delete-batch', new AdminToolsGenerateTestRoutesController()->deleteBatch(...))->name('admin.tools.dungeonroute.generatetestroutes.delete_batch');
                 Route::get('/dungeonroute/{dungeonRoute:id}', new AdminToolsDungeonRouteController()->dungeonrouteView(...))->name('admin.tools.dungeonroute.view.get');
 
                 // Enemy forces
@@ -767,6 +771,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                         ->name('ajax.admin.combatlogroute.enemy_resolutions');
                     Route::get('/enemy-resolutions/lines', new AjaxAdminCombatLogRouteController()->getEnemyResolutionLines(...))
                         ->name('ajax.admin.combatlogroute.enemy_resolutions.lines');
+                    Route::get('/enemy-resolutions/groups', new AjaxAdminCombatLogRouteController()->getEnemyResolutionGroups(...))
+                        ->name('ajax.admin.combatlogroute.enemy_resolutions.groups');
                     Route::delete('/enemy-resolutions', new AjaxAdminCombatLogRouteController()->deleteEnemyResolutions(...))
                         ->name('ajax.admin.combatlogroute.enemy_resolutions.delete');
                 });

@@ -13,10 +13,8 @@ use App\Models\Traits\HasLatLng;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SeederModel;
 use Eloquent;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int         $id
@@ -49,14 +47,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property float       $lat
  * @property float       $lng
  *
- * @property EnemyPack|null                           $enemyPack
- * @property Npc|null                                 $npc
- * @property Floor                                    $floor
- * @property EnemyPatrol|null                         $enemyPatrol
- * @property EnemyForcesCheckpoint|null               $enemyForcesCheckpoint
- * @property Enemy|null                               $exclusiveEnemy
- * @property MappingVersion                           $mappingVersion
- * @property EloquentCollection<int, EnemyActiveAura> $enemyActiveAuras
+ * @property EnemyPack|null             $enemyPack
+ * @property Npc|null                   $npc
+ * @property Floor                      $floor
+ * @property EnemyPatrol|null           $enemyPatrol
+ * @property EnemyForcesCheckpoint|null $enemyForcesCheckpoint
+ * @property Enemy|null                 $exclusiveEnemy
+ * @property MappingVersion             $mappingVersion
  *
  * @mixin Eloquent
  */
@@ -96,10 +93,8 @@ class Enemy extends Model implements MappingModelCloneableInterface, MappingMode
         'lng',
     ];
 
-    //    public    $appends    = ['active_auras'];
     public $with = [
         'npc',
-        //        'enemyActiveAuras'
     ];
 
     public $hidden = [
@@ -200,19 +195,6 @@ class Enemy extends Model implements MappingModelCloneableInterface, MappingMode
             : self::DISPLAY_TYPE_DEFAULT;
     }
 
-    /** @return array<int, int> */
-    public function getActiveAurasAttribute(): array
-    {
-        $result = [];
-
-        // Temporarily disabled to improve performance - not using this anyway
-        //        foreach ($this->enemyActiveAuras as $activeaura) {
-        //            $result[] = $activeaura->spell_id;
-        //        }
-
-        return $result;
-    }
-
     public function getMdtNpcId(): int
     {
         return $this->mdt_npc_id ?? $this->npc_id;
@@ -252,12 +234,6 @@ class Enemy extends Model implements MappingModelCloneableInterface, MappingMode
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
-    }
-
-    /** @return HasMany<EnemyActiveAura, $this> */
-    public function enemyActiveAuras(): HasMany
-    {
-        return $this->hasMany(EnemyActiveAura::class);
     }
 
     /** @return BelongsTo<Enemy, $this> */

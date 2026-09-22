@@ -101,6 +101,10 @@ return [
             'upgrade_applied'           => 'La mise à niveau a été appliquée à votre route.',
             'upgrade_discarded'         => 'Le brouillon de mise à niveau a été abandonné.',
         ],
+        'continue_in_newer_season' => [
+            'limit_reached'   => 'Vous avez atteint le nombre maximal d\'itinéraires que vous pouvez créer.',
+            'no_newer_season' => 'Cet itinéraire ne peut pas être poursuivi dans une saison plus récente : son donjon ne fait partie d\'aucune, ou vous l\'y avez déjà poursuivi.',
+        ],
     ],
     'dungeonroutediscover' => [
         'popular' => 'Itinéraires populaires',
@@ -192,10 +196,12 @@ return [
     ],
     'dungeonroutecollection' => [
         'flash' => [
-            'collection_created'      => 'Collection créée',
-            'collection_updated'      => 'Collection mise à jour',
-            'collection_deleted'      => 'Collection supprimée',
-            'max_collections_reached' => 'Vous pouvez avoir au maximum :max collections.',
+            'collection_created'             => 'Collection créée',
+            'collection_updated'             => 'Collection mise à jour',
+            'collection_deleted'             => 'Collection supprimée',
+            'max_collections_reached'        => 'Vous pouvez avoir au maximum :max collections.',
+            'collection_duplicated'          => 'Collection dupliquée. Vous seul pouvez voir la copie tant que vous ne modifiez pas qui peut la voir.',
+            'collection_duplicated_left_out' => '{1} :count itinéraire a été exclu, car il ne correspond pas à la saison choisie.|[2,*] :count itinéraires ont été exclus, car ils ne correspondent pas à la saison choisie.',
         ],
     ],
     'profile' => [

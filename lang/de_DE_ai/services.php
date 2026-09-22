@@ -7,8 +7,6 @@ return [
             'export_string' => [
                 'category' => [
                     'pull'         => 'Zug %d',
-                    'title'        => 'Titel',
-                    'map_icon'     => 'Kartensymbol',
                     'raid_markers' => 'Schlachtzugsmarkierungen',
                 ],
                 'unable_to_find_mdt_enemy_for_kg_enemy'             => 'MDT-Äquivalent für Keystone.guru-Feind mit NPC %s (enemy_id: %d, npc_id: %d) konnte nicht gefunden werden.',
@@ -16,11 +14,6 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Dieser Zug wurde entfernt, da alle ausgewählten Feinde in MDT nicht gefunden werden konnten, was zu einem ansonsten leeren Zug führte.',
                 'unable_to_find_mdt_enemy_for_kg_raid_marker'       => 'Für den Gegner mit der Schlachtzugsmarkierung %s konnte kein MDT-Äquivalent gefunden werden (npc_id: %s).',
                 'unable_to_place_kill_zone_spells_note'             => 'Die diesem Pull zugewiesenen Zauber wurden nicht exportiert: Sie werden als MDT-Notiz neben dem Pull exportiert, aber dieser Pull hat weder Gegner noch einen Bereich, an dem diese Notiz platziert werden könnte.',
-                'route_title_contains_non_ascii_char_bug'           => 'Dein Routentitel enthält nicht-ASCII-Zeichen, die bekanntermaßen einen noch ungelösten Codierungsfehler in Keystone.guru auslösen.
-                                                        Dein Routentitel wurde von allen störenden Zeichen befreit, wir entschuldigen uns für die Unannehmlichkeiten und hoffen, dieses Problem bald zu lösen.',
-                'route_title_contains_non_ascii_char_bug_details' => 'Alter Titel: %s, neuer Titel: %s',
-                'map_icon_contains_non_ascii_char_bug'            => 'Einer deiner Kommentare zu einem Kartensymbol enthält nicht-ASCII-Zeichen, die bekanntermaßen einen noch ungelösten Codierungsfehler in Keystone.guru auslösen. Dein Kartenkommentar wurde von allen störenden Zeichen befreit, wir entschuldigen uns für die Unannehmlichkeiten und hoffen, dieses Problem bald zu lösen.',
-                'map_icon_contains_non_ascii_char_bug_details'    => 'Alter Kommentar: "%s", neuer Kommentar: "%s"',
             ],
             'import_string' => [
                 'category' => [

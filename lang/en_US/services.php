@@ -7,8 +7,6 @@ return [
             'export_string' => [
                 'category' => [
                     'pull'         => 'Pull %d',
-                    'title'        => 'Title',
-                    'map_icon'     => 'Map icon',
                     'raid_markers' => 'Raid markers',
                 ],
                 'unable_to_find_mdt_enemy_for_kg_enemy'             => 'Unable to find MDT equivalent for Keystone.guru enemy with NPC %s (enemy_id: %d, npc_id: %d).',
@@ -16,11 +14,6 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'This pull has been removed since all selected enemies could not be found in MDT, resulting in an otherwise empty pull.',
                 'unable_to_find_mdt_enemy_for_kg_raid_marker'       => 'Unable to find MDT equivalent for the enemy with a %s raid marker (npc_id: %s).',
                 'unable_to_place_kill_zone_spells_note'             => 'The spells assigned to this pull were not exported: they are exported as an MDT note next to the pull, but this pull has no enemies or kill area to place that note at.',
-                'route_title_contains_non_ascii_char_bug'           => 'Your route title contains non-ascii characters that are known to trigger a yet unresolved encoding bug in Keystone.guru.
-                                Your route title has been stripped of all offending characters, we apologise for the inconvenience and hope to resolve this issue soon.',
-                'route_title_contains_non_ascii_char_bug_details' => 'Old title: %s, new title: %s',
-                'map_icon_contains_non_ascii_char_bug'            => 'One of your comments on a map icon has non-ascii characters that are known to trigger a yet unresolved encoding bug in Keystone.guru. Your map comment has been stripped of all offending characters, we apologise for the inconvenience and hope to resolve this issue soon.',
-                'map_icon_contains_non_ascii_char_bug_details'    => 'Old comment: "%s", new comment: "%s"',
             ],
             'import_string' => [
                 'category' => [
@@ -78,6 +71,23 @@ return [
                 'no_enemy_in_range'    => 'The nearest mapped :npc (enemy :enemy_id) is :distance yd away, beyond the :range yd engagement range. A pack of :npc is probably missing here, or mapped in the wrong place.',
                 'enemies_exhausted'    => ':enemies mapped :npc within range, but routes still fail here about :avg times each - the game probably has more :npc in this pack than the mapping does.',
                 'wrong_floor_artifact' => 'No :npc in range on this floor, but there is one within :distance yd on another floor. The recorded floor is inferred from the previous npc in the log, so this is most likely that inference - verify before changing the mapping.',
+            ],
+        ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => 'Mapped in the wrong place',
+                'converged' => 'Runs to the group before logged',
+                'scatter'   => 'Scattered',
+            ],
+            'subject' => [
+                'pack'  => 'pack :group (id :pack_id)',
+                'enemy' => 'enemy :enemy_id',
+            ],
+            'suggestion' => [
+                'displaced'               => 'Engaged :distance yd from where :subject is mapped, in :routes routes (:share% of all), always in the same direction and keeping its shape. Move :subject to where it is engaged.',
+                'displaced_shape_unknown' => 'Engaged :distance yd from where :subject is mapped, in :routes routes (:share% of all), always in the same direction. Too few of its enemies were matched to tell whether it kept its shape or bunched up, so check which it is before moving :subject to where it is engaged.',
+                'converged'               => 'Engaged :distance yd from where :subject is mapped, in :routes routes (:share% of all), but bunched up (shape ratio :ratio): it runs to the group before its first logged event, so this is where the group fights. Leave the mapping alone.',
+                'scatter'                 => 'Engaged :distance yd from where :subject is mapped on average, in :routes routes, but in every direction (consistency :consistency). Body pulls or patrols - nothing to move.',
             ],
         ],
     ],

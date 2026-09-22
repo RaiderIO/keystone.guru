@@ -191,6 +191,24 @@ readonly class CombatLogRouteEnemyResolutionService implements CombatLogRouteEne
         return $result;
     }
 
+    public function getResolutionCountsPerDungeonRoute(Collection $dungeonRoutes): Collection
+    {
+        if ($dungeonRoutes->isEmpty()) {
+            return collect();
+        }
+
+        /** @var Collection<int, int> $result */
+        $result = CombatLogRouteEnemyResolution::query()
+            ->whereIn('dungeon_route_id', $dungeonRoutes->keys()->all())
+            ->whereNull('source')
+            ->selectRaw('dungeon_route_id, COUNT(*) AS resolution_count')
+            ->groupBy('dungeon_route_id')
+            ->pluck('resolution_count', 'dungeon_route_id')
+            ->map(static fn($count): int => (int)$count);
+
+        return $result;
+    }
+
     /**
      * @param  int[]|null                             $npcIds
      * @return Builder<CombatLogRouteEnemyResolution>

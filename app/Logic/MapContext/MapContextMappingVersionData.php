@@ -68,14 +68,11 @@ class MapContextMappingVersionData implements Arrayable
                     ->unsetRelation('enemyPacks')
                     ->setHidden(['floors']);
 
-                $auras = collect();
-
                 /** @var Collection<int, Enemy> $enemies */
                 $enemies = $this->mappingVersion->enemies()
                     ->without('npc')
                     ->with(/*'npc', 'npc.type', 'npc.class',*/ 'floor')
-                    ->get()
-                    ->makeHidden(['enemy_active_auras']);
+                    ->get();
 
                 if ($this->mappingVersion->facade_enabled && $useFacade) {
                     foreach ($enemies as $enemy) {
@@ -97,7 +94,6 @@ class MapContextMappingVersionData implements Arrayable
                     $dungeon->toArray(),
                     [
                         'latestMappingVersion'      => $this->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
-                        'auras'                     => $auras,
                         'enemies'                   => $enemies,
                         'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
                         'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),

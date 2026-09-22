@@ -3,6 +3,7 @@
 namespace App\Service\CombatLog;
 
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
 use App\Service\CombatLog\Dtos\CombatLogRouteEnemyResolutionHeatmapResult;
 use App\Service\CombatLog\Enums\EnemyResolutionHeatmapMetric;
@@ -65,4 +66,13 @@ interface CombatLogRouteEnemyResolutionServiceInterface
      * @return Collection<int, int> mapping_version_id => recorded resolution count, for every mapping version of the dungeon
      */
     public function getResolutionCountsPerMappingVersion(Dungeon $dungeon): Collection;
+
+    /**
+     * How many long resolutions each of the given dungeon routes recorded. Only rows this environment recorded itself -
+     * an imported row's dungeon_route_id names a route of the deployment it came from.
+     *
+     * @param  Collection<int, DungeonRoute> $dungeonRoutes keyed by dungeon route id
+     * @return Collection<int, int>          dungeon_route_id => resolution count (routes without any are absent)
+     */
+    public function getResolutionCountsPerDungeonRoute(Collection $dungeonRoutes): Collection;
 }

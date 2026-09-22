@@ -3,6 +3,7 @@
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use App\Service\CombatLog\Dtos\EnemyResolutionAnalysis\EnemyResolutionVerdict;
 use App\Service\CombatLog\Enums\EnemyResolutionHeatmapMetric;
 use Illuminate\Support\Collection;
 
@@ -35,6 +36,11 @@ $minDistanceRecorded = (int)config('keystoneguru.enemy_resolution.record_min_dis
         'importedRoute' => __('view_common.maps.controls.combatlogrouteenemyresolutions.line_popup.imported_route'),
         'noRoute'       => __('view_common.maps.controls.combatlogrouteenemyresolutions.line_popup.no_route'),
     ],
+    'groupsUrl'                      => route('ajax.admin.combatlogroute.enemy_resolutions.groups'),
+    'showGroupsSelector'             => '#combatlogroute_enemy_resolutions_show_groups',
+    'verdictColors'                  => collect(EnemyResolutionVerdict::cases())
+        ->mapWithKeys(static fn(EnemyResolutionVerdict $verdict) => [$verdict->value => $verdict->color()])
+        ->all(),
     'deleteUrl'                      => route('ajax.admin.combatlogroute.enemy_resolutions.delete'),
     'filterMappingVersionIdSelector' => '#combatlogroute_enemy_resolutions_filter_mapping_version_id',
     'filterNpcIdSelector'            => '#combatlogroute_enemy_resolutions_filter_npc_id',
@@ -106,6 +112,21 @@ $minDistanceRecorded = (int)config('keystoneguru.enemy_resolution.record_min_dis
         </div>
         <div class="small text-muted mb-2">
             {{ __('view_common.maps.controls.combatlogrouteenemyresolutions.lines_legend', ['count' => \App\Http\Requests\Ajax\AjaxAdminCombatLogRouteGetEnemyResolutionLinesFormRequest::LIMIT_DEFAULT]) }}
+        </div>
+
+        <div class="form-check mb-1">
+            <input type="checkbox" class="form-check-input" id="combatlogroute_enemy_resolutions_show_groups" checked>
+            <label class="form-check-label" for="combatlogroute_enemy_resolutions_show_groups">
+                {{ __('view_common.maps.controls.combatlogrouteenemyresolutions.show_groups') }}
+            </label>
+        </div>
+        <div class="small mb-2">
+            <div class="text-muted">{{ __('view_common.maps.controls.combatlogrouteenemyresolutions.groups_legend') }}</div>
+            @foreach(EnemyResolutionVerdict::cases() as $verdict)
+                <div>
+                    <span class="d-inline-block rounded-circle me-1" style="width: 10px; height: 10px; background-color: {{ $verdict->color() }}"></span>{{ $verdict->label() }}
+                </div>
+            @endforeach
         </div>
 
         <div id="combatlogroute_enemy_resolutions_summary" class="small mb-2"></div>

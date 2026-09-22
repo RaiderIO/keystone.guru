@@ -46,7 +46,6 @@ class ViewService implements ViewServiceInterface
      */
     private const array VIEW_VARIABLES_URL_WHITELIST = [
         // search actually renders views back to the user which we need
-        '/ajax/dungeonroute/search',
         '/ajax/search',
         // Renders views through Ajax
         '/ajax/view',

@@ -101,6 +101,10 @@ return [
             'upgrade_applied'           => 'L\'aggiornamento è stato applicato al tuo percorso.',
             'upgrade_discarded'         => 'La bozza di aggiornamento è stata scartata.',
         ],
+        'continue_in_newer_season' => [
+            'limit_reached'   => 'Hai raggiunto il numero massimo di percorsi che puoi creare.',
+            'no_newer_season' => 'Questo percorso non può essere proseguito in una stagione più recente: il suo dungeon non fa parte di nessuna, oppure l\'hai già proseguito lì.',
+        ],
     ],
     'dungeonroutediscover' => [
         'popular' => 'Percorsi popolari',
@@ -192,10 +196,12 @@ return [
     ],
     'dungeonroutecollection' => [
         'flash' => [
-            'collection_created'      => 'Raccolta creata',
-            'collection_updated'      => 'Raccolta aggiornata',
-            'collection_deleted'      => 'Raccolta eliminata',
-            'max_collections_reached' => 'Puoi avere al massimo :max raccolte.',
+            'collection_created'             => 'Raccolta creata',
+            'collection_updated'             => 'Raccolta aggiornata',
+            'collection_deleted'             => 'Raccolta eliminata',
+            'max_collections_reached'        => 'Puoi avere al massimo :max raccolte.',
+            'collection_duplicated'          => 'Raccolta duplicata. Solo tu puoi vedere la copia finché non cambi chi può vederla.',
+            'collection_duplicated_left_out' => '{1} :count percorso è stato escluso perché non corrisponde alla stagione scelta.|[2,*] :count percorsi sono stati esclusi perché non corrispondono alla stagione scelta.',
         ],
     ],
     'profile' => [

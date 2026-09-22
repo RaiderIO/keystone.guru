@@ -228,7 +228,7 @@ Breadcrumbs::for('collection.new', static function (Generator $trail) {
 
 Breadcrumbs::for('collection.edit', static function (Generator $trail, DungeonRouteCollection $dungeonRouteCollection) {
     $trail->parent('collection.index');
-    $trail->push(__('breadcrumbs.home.edit_collection'), route('collections.edit', $dungeonRouteCollection));
+    $trail->push(__('breadcrumbs.home.edit_collection', ['name' => $dungeonRouteCollection->name]), route('collections.edit', $dungeonRouteCollection));
 });
 
 Breadcrumbs::for('collection.view', static function (Generator $trail, DungeonRouteCollection $dungeonRouteCollection) {
@@ -330,6 +330,10 @@ Breadcrumbs::for('admin.tools.dungeonroute.viewcontents', static function (Gener
 Breadcrumbs::for('admin.tools.dungeonroute.mappingversions', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.dungeonroute_mapping_version_usage'), route('admin.tools.dungeonroute.mappingversionusage'));
+});
+Breadcrumbs::for('admin.tools.dungeonroute.generatetestroutes', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.dungeonroute_generate_test_routes'), route('admin.tools.dungeonroute.generatetestroutes'));
 });
 Breadcrumbs::for('admin.tools.enemyforces.recalculate', static function (Generator $trail) {
     $trail->parent('admin.tools.list');

@@ -214,6 +214,21 @@ return [
         'retention_days' => 14,
     ],
 
+    /** Grouping and classification of recorded enemy resolutions per mapped pack (admin distance heatmap group layer, combatlog:analyzeenemyresolutions) */
+    'enemy_resolution_analysis' => [
+        /** A group seen in fewer distinct routes than this is flagged low-volume */
+        'min_routes' => 5,
+        /** A group seen in less than this share of the routes that recorded anything at all is flagged low-volume */
+        'min_route_share' => 0.05,
+        /** Length of the mean unit offset vector (0 = every direction, 1 = one direction) below which a group is scatter.
+         *  Measured on production: groups repeated across routes sit around 0.95, body pulls and patrols well below 0.6. */
+        'min_direction_consistency' => 0.6,
+        /** Spread of the members' engaged positions divided by the spread of their mapped positions. At or above this the
+         *  pack kept its shape and is mapped in the wrong place; below it the pack bunched up, which is what running to
+         *  the tank before the first logged event looks like. Measured on production: 1.2 vs 0.4 for the two groups. */
+        'min_shape_ratio' => 0.6,
+    ],
+
     /** The default max zoom level on the map */
     'zoom_max_default' => 5,
 
@@ -749,7 +764,7 @@ return [
     ],
 
     'mdt' => [
-        'version' => 'v6.2.17',
+        'version' => 'v6.2.19',
 
         /**
          * How long the signed MDT export url minted at page render stays valid. Deliberately
