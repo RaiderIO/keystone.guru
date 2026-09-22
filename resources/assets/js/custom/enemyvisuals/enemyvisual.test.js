@@ -428,3 +428,60 @@ describe('EnemyVisual shown/hidden handling (#3723)', () => {
         expect(cleanupCalls).toEqual([false]);
     });
 });
+
+describe('EnemyVisual#_createModifiers (#679)', () => {
+    beforeEach(() => {
+        global.EnemyVisualModifierRaidMarker = class {
+            constructor(enemyvisual, index) {
+                this.name = 'raidmarker';
+                this.index = index;
+            }
+        };
+        global.EnemyVisualModifierTruesight = class {
+            constructor(enemyvisual, index) {
+                this.name = 'truesight';
+                this.index = index;
+            }
+        };
+        global.EnemyVisualModifierTeeming = class {
+            constructor(enemyvisual, index) {
+                this.name = 'teeming';
+                this.index = index;
+            }
+        };
+    });
+
+    test('_createModifiers_givenEliteNpcWithTruesight_createsTruesightModifierOnly', () => {
+        // Arrange
+        const self = {
+            enemy: {
+                raid_marker_name: '',
+                teeming: 'hidden',
+                npc: {classification_id: 2, truesight: true},
+            },
+        };
+
+        // Act
+        const modifiers = EnemyVisual.prototype._createModifiers.call(self);
+
+        // Assert: no classification/elite-star modifier is created, truesight still is
+        expect(modifiers.map(modifier => modifier.name)).toEqual(['truesight']);
+    });
+
+    test('_createModifiers_givenNormalNpcWithoutTruesight_createsNoModifiers', () => {
+        // Arrange
+        const self = {
+            enemy: {
+                raid_marker_name: '',
+                teeming: 'hidden',
+                npc: {classification_id: 1, truesight: false},
+            },
+        };
+
+        // Act
+        const modifiers = EnemyVisual.prototype._createModifiers.call(self);
+
+        // Assert
+        expect(modifiers).toEqual([]);
+    });
+});

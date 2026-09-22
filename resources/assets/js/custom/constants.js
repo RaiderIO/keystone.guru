@@ -351,7 +351,6 @@ let c = {
             /**
              * At whatever zoom various modifiers are displayed on the map
              */
-            classification_display_zoom: 3,
             truesight_display_zoom: 3,
             teeming_display_zoom: 3,
             colors: [
