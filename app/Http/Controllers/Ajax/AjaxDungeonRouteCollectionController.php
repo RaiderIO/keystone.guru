@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRouteRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -109,7 +110,56 @@ class AjaxDungeonRouteCollectionController extends Controller
 
         $dungeonRoutes = $request->dungeonRoutes();
 
-        $addedDungeonRoutes = DB::transaction(static function () use (
+        try {
+            $addedDungeonRoutes = $this->addDungeonRoutesUnderLock(
+                $dungeonRouteCollection,
+                $dungeonRoutes,
+                $dungeonRouteCollectionRouteRepository,
+                $dungeonRouteCollectionService,
+            );
+        } catch (UniqueConstraintViolationException) {
+            // The membership recheck inside the lock already covers the ordinary race; retrying once more covers
+            // a duplicate insert that still slips past it, since the retry's own recheck then excludes it while
+            // still storing the rest of the batch
+            $addedDungeonRoutes = $this->addDungeonRoutesUnderLock(
+                $dungeonRouteCollection,
+                $dungeonRoutes,
+                $dungeonRouteCollectionRouteRepository,
+                $dungeonRouteCollectionService,
+            );
+        }
+
+        return response()->json([
+            'dungeon_routes' => $addedDungeonRoutes->map(static fn(DungeonRoute $dungeonRoute): array => [
+                'id'         => $dungeonRoute->id,
+                'public_key' => $dungeonRoute->public_key,
+                'title'      => $dungeonRoute->title,
+                'dungeon_id' => $dungeonRoute->dungeon_id,
+                'dungeon'    => __($dungeonRoute->dungeon->name),
+                // The list the route joins shows its enemy forces against the requirement, so the row
+                // it gets reads the same as the ones already rendered by the server
+                'enemy_forces'          => $dungeonRoute->enemy_forces,
+                'enemy_forces_required' => $dungeonRoute->mappingVersion->enemy_forces_required,
+            ])->values(),
+        ]);
+    }
+
+    /**
+     * Inserts the routes not already in the collection, re-checking membership, the cap and the per-dungeon limit under a row lock
+     * on the collection so two concurrent adds cannot overshoot the cap or double-insert the same route.
+     *
+     * @param  Collection<int, DungeonRoute>      $dungeonRoutes
+     * @return Collection<int, DungeonRoute>
+     * @throws ValidationException
+     * @throws UniqueConstraintViolationException
+     */
+    private function addDungeonRoutesUnderLock(
+        DungeonRouteCollection                         $dungeonRouteCollection,
+        Collection                                     $dungeonRoutes,
+        DungeonRouteCollectionRouteRepositoryInterface $dungeonRouteCollectionRouteRepository,
+        DungeonRouteCollectionServiceInterface         $dungeonRouteCollectionService,
+    ): Collection {
+        return DB::transaction(static function () use (
             $dungeonRouteCollection,
             $dungeonRoutes,
             $dungeonRouteCollectionRouteRepository,
@@ -156,20 +206,6 @@ class AjaxDungeonRouteCollectionController extends Controller
 
             return $dungeonRoutes;
         });
-
-        return response()->json([
-            'dungeon_routes' => $addedDungeonRoutes->map(static fn(DungeonRoute $dungeonRoute): array => [
-                'id'         => $dungeonRoute->id,
-                'public_key' => $dungeonRoute->public_key,
-                'title'      => $dungeonRoute->title,
-                'dungeon_id' => $dungeonRoute->dungeon_id,
-                'dungeon'    => __($dungeonRoute->dungeon->name),
-                // The list the route joins shows its enemy forces against the requirement, so the row
-                // it gets reads the same as the ones already rendered by the server
-                'enemy_forces'          => $dungeonRoute->enemy_forces,
-                'enemy_forces_required' => $dungeonRoute->mappingVersion->enemy_forces_required,
-            ])->values(),
-        ]);
     }
 
     /**
