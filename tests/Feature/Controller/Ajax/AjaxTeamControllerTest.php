@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
+use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
@@ -207,6 +208,30 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
 
             TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $admin->id)->delete();
             $admin->delete();
+        }
+    }
+
+    #[Test]
+    public function removeMember_givenMemberWithGiveawayFromTheFirstListedMember_revokesTheGiveaway(): void
+    {
+        // Arrange - setUp() added the moderator first, so they are at index 0 of the team's members
+        $giveaway = PatreonAdFreeGiveaway::create([
+            'giver_user_id'    => $this->moderator->id,
+            'receiver_user_id' => $this->member->id,
+        ]);
+
+        try {
+            $this->assertSame($this->moderator->id, $this->team->members->first()->id, 'Arrange failed: the giver must be listed first');
+            $this->team->unsetRelation('members');
+
+            // Act
+            $response = $this->delete(sprintf('/ajax/team/%s/member/%s', $this->team->getRouteKey(), $this->member->getRouteKey()));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseMissing('patreon_ad_free_giveaways', ['id' => $giveaway->id]);
+        } finally {
+            PatreonAdFreeGiveaway::where('id', $giveaway->id)->delete();
         }
     }
 
