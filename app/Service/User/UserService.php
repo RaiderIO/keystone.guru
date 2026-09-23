@@ -43,7 +43,7 @@ class UserService implements UserServiceInterface
             return false;
         }
 
-        return (bool)$this->cacheService->get($this->userAuthCacheKey(...$credentials));
+        return $this->findUserForCachedCredentials(...$credentials) !== null;
     }
 
     /**
@@ -56,10 +56,9 @@ class UserService implements UserServiceInterface
      */
     public function loginAsUser(string $email, string $password): bool
     {
-        $cacheKey = $this->userAuthCacheKey($email, $password);
-
-        // Fast-path: Check cache for authenticated user
-        if ($user = $this->cacheService->get($cacheKey)) {
+        // Fast-path: credentials verified recently, and the account has not changed since
+        $user = $this->findUserForCachedCredentials($email, $password);
+        if ($user !== null) {
             auth()->setUser($user);
 
             return true;
@@ -72,8 +71,14 @@ class UserService implements UserServiceInterface
             return false;
         }
 
-        // Cache user for 5 minutes (only caches the user object, not the password)
-        $this->cacheService->set($cacheKey, $user, self::CACHE_TTL_USER_AUTH);
+        $this->cacheService->set(
+            $this->userAuthCacheKey($email, $password),
+            [
+                'user_id'              => $user->id,
+                'password_fingerprint' => $this->passwordFingerprint($user),
+            ],
+            self::CACHE_TTL_USER_AUTH,
+        );
 
         // Authenticate the user
         auth()->setUser($user);
@@ -124,6 +129,35 @@ class UserService implements UserServiceInterface
             $username,
             $password,
         ];
+    }
+
+    /**
+     * Resolves cached verified credentials to their user, but only while the account still exists under the
+     * same email address with the same stored password hash - a password change or reset, or a deleted account,
+     * invalidates the cached verification immediately rather than when it expires.
+     */
+    private function findUserForCachedCredentials(string $email, string $password): ?User
+    {
+        $cached = $this->cacheService->get($this->userAuthCacheKey($email, $password));
+        if (!is_array($cached) || !isset($cached['user_id'], $cached['password_fingerprint'])) {
+            return null;
+        }
+
+        /** @var User|null $user */
+        $user = User::query()->find($cached['user_id']);
+        if ($user === null || $user->email !== $email) {
+            return null;
+        }
+
+        return hash_equals($this->passwordFingerprint($user), (string)$cached['password_fingerprint']) ? $user : null;
+    }
+
+    /**
+     * Keeps the stored password hash itself out of the cache.
+     */
+    private function passwordFingerprint(User $user): string
+    {
+        return hash_hmac('sha256', (string)$user->password, (string)config('app.key'));
     }
 
     /**

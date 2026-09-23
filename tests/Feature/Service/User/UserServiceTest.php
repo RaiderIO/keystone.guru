@@ -110,6 +110,120 @@ final class UserServiceTest extends PublicTestCase
         $this->assertSame(BasicAuthenticationResult::CredentialsRejected, $result);
     }
 
+    #[Test]
+    public function loginAsUserFromAuthenticationHeader_givenPreviouslyVerifiedCredentials_returnsSuccess(): void
+    {
+        // Arrange
+        $userService = app()->make(UserServiceInterface::class);
+        $password    = 'the-right-password';
+        $user        = User::factory()->create(['password' => Hash::make($password)]);
+        $request     = $this->createRequestWithCredentials($user->email, $password);
+
+        try {
+            $userService->loginAsUserFromAuthenticationHeader($request);
+
+            // Act
+            $result = $userService->loginAsUserFromAuthenticationHeader($request);
+
+            // Assert
+            $this->assertSame(BasicAuthenticationResult::Success, $result);
+            $this->assertSame($user->id, auth()->id());
+        } finally {
+            User::query()->where('id', $user->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function loginAsUserFromAuthenticationHeader_givenPasswordChangedAfterVerification_returnsCredentialsRejected(): void
+    {
+        // Arrange
+        $userService = app()->make(UserServiceInterface::class);
+        $oldPassword = 'the-old-password';
+        $user        = User::factory()->create(['password' => Hash::make($oldPassword)]);
+        $request     = $this->createRequestWithCredentials($user->email, $oldPassword);
+
+        try {
+            $this->assertSame(BasicAuthenticationResult::Success, $userService->loginAsUserFromAuthenticationHeader($request));
+            User::query()->whereKey($user->id)->update(['password' => Hash::make('the-new-password')]);
+
+            // Act
+            $result = $userService->loginAsUserFromAuthenticationHeader($request);
+
+            // Assert
+            $this->assertSame(BasicAuthenticationResult::CredentialsRejected, $result);
+        } finally {
+            User::query()->where('id', $user->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function loginAsUserFromAuthenticationHeader_givenUserDeletedAfterVerification_returnsCredentialsRejected(): void
+    {
+        // Arrange
+        $userService = app()->make(UserServiceInterface::class);
+        $password    = 'the-right-password';
+        $user        = User::factory()->create(['password' => Hash::make($password)]);
+        $request     = $this->createRequestWithCredentials($user->email, $password);
+
+        try {
+            $this->assertSame(BasicAuthenticationResult::Success, $userService->loginAsUserFromAuthenticationHeader($request));
+            User::query()->where('id', $user->id)->delete();
+
+            // Act
+            $result = $userService->loginAsUserFromAuthenticationHeader($request);
+
+            // Assert
+            $this->assertSame(BasicAuthenticationResult::CredentialsRejected, $result);
+        } finally {
+            User::query()->where('id', $user->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function hasVerifiedCredentialsCached_givenPreviouslyVerifiedCredentials_returnsTrue(): void
+    {
+        // Arrange
+        $userService = app()->make(UserServiceInterface::class);
+        $password    = 'the-right-password';
+        $user        = User::factory()->create(['password' => Hash::make($password)]);
+        $request     = $this->createRequestWithCredentials($user->email, $password);
+
+        try {
+            $userService->loginAsUserFromAuthenticationHeader($request);
+
+            // Act
+            $result = $userService->hasVerifiedCredentialsCached($request);
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            User::query()->where('id', $user->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function hasVerifiedCredentialsCached_givenPasswordChangedAfterVerification_returnsFalse(): void
+    {
+        // Arrange
+        $userService = app()->make(UserServiceInterface::class);
+        $oldPassword = 'the-old-password';
+        $user        = User::factory()->create(['password' => Hash::make($oldPassword)]);
+        $request     = $this->createRequestWithCredentials($user->email, $oldPassword);
+
+        try {
+            $userService->loginAsUserFromAuthenticationHeader($request);
+            User::query()->whereKey($user->id)->update(['password' => Hash::make('the-new-password')]);
+
+            // Act
+            $result = $userService->hasVerifiedCredentialsCached($request);
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            User::query()->where('id', $user->id)->delete();
+        }
+    }
+
     private function createRequestWithCredentials(string $username, string $password): Request
     {
         return $this->createRequestWithAuthorization(sprintf('Basic %s', base64_encode(sprintf('%s:%s', $username, $password))));
