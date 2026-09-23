@@ -25,6 +25,9 @@ export function buildLangBundles(rootDir, version, production) {
         .filter(entry => fs.statSync(path.join(langRoot, entry)).isDirectory());
 
     const buildLocales = parseBuildLocales(process.env.BUILD_LOCALES);
+    // Parsing en_US takes ~20s, so it is read at most once and only when a bundle needs it
+    let fallbackGroups = null;
+    const getFallbackGroups = () => fallbackGroups ??= readLocaleGroups(langRoot, 'en_US');
 
     const built = [];
     for (const locale of locales) {
@@ -32,13 +35,15 @@ export function buildLangBundles(rootDir, version, production) {
             continue;
         }
 
-        const messages  = {};
-        const localeDir = path.join(langRoot, locale);
-        const files     = fs.readdirSync(localeDir).filter(file => file.endsWith('.php')).sort();
-        for (const file of files) {
-            const source = fs.readFileSync(path.join(localeDir, file), 'utf8');
+        // Mirrors Laravel's server-side __() fallback to en_US, so a key a locale's translators
+        // haven't caught up on yet still renders instead of showing the raw key.
+        const groups = locale === 'en_US'
+            ? getFallbackGroups()
+            : mergeTranslationsWithFallback(readLocaleGroups(langRoot, locale), getFallbackGroups());
 
-            messages[`${locale}.${path.basename(file, '.php')}`] = parsePhpTranslationFile(source);
+        const messages = {};
+        for (const [group, value] of Object.entries(groups)) {
+            messages[`${locale}.${group}`] = value;
         }
 
         // Same runtime behavior as the old generated bundles: populate the Lang instance that
@@ -119,4 +124,71 @@ export function parsePhpTranslationFile(source) {
     expression = expression.replace(/\?>\s*$/, '_');
 
     return parser.parse(expression);
+}
+
+/**
+ * Parses every `lang/<locale>/*.php` file into a map of group name (the file's basename) to its
+ * parsed translations. Returns an empty map when the locale has no lang/ directory.
+ *
+ * @param {string} langRoot
+ * @param {string} locale
+ * @returns {Object<string, *>}
+ */
+function readLocaleGroups(langRoot, locale) {
+    const localeDir = path.join(langRoot, locale);
+    if (!fs.existsSync(localeDir)) {
+        return {};
+    }
+
+    const groups = {};
+    const files  = fs.readdirSync(localeDir).filter(file => file.endsWith('.php')).sort();
+    for (const file of files) {
+        const source = fs.readFileSync(path.join(localeDir, file), 'utf8');
+
+        groups[path.basename(file, '.php')] = parsePhpTranslationFile(source);
+    }
+
+    return groups;
+}
+
+/**
+ * Deep-merges a locale's parsed translations under the fallback's (en_US's), key by key and
+ * group by group, so a bundle carries every key the fallback has even where the locale's own
+ * file omits it. A locale value wins whenever the key exists on its side — including an empty
+ * string, which Laravel treats as an existing translation rather than a missing one — so only a
+ * key genuinely absent from the locale is filled from the fallback. A value that isn't a plain
+ * object (a scalar, or a PHP list array) is taken from whichever side has it wholesale, never
+ * merged element-wise; Laravel differs there (it falls back per list index, and treats an empty
+ * array as missing), which no lang file currently relies on.
+ *
+ * @param {*} localeValue
+ * @param {*} fallbackValue
+ * @returns {*}
+ */
+export function mergeTranslationsWithFallback(localeValue, fallbackValue) {
+    if (localeValue === undefined) {
+        return fallbackValue;
+    }
+    if (fallbackValue === undefined) {
+        return localeValue;
+    }
+    if (!isPlainObject(localeValue) || !isPlainObject(fallbackValue)) {
+        return localeValue;
+    }
+
+    const merged = {};
+    for (const key of new Set([...Object.keys(fallbackValue), ...Object.keys(localeValue)])) {
+        merged[key] = mergeTranslationsWithFallback(localeValue[key], fallbackValue[key]);
+    }
+
+    return merged;
+}
+
+/**
+ * @param {*} value
+ * @returns {boolean} Whether value is a plain (associative) object, as opposed to a PHP list
+ * array, a scalar, or null.
+ */
+function isPlainObject(value) {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
