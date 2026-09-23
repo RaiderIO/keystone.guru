@@ -40,6 +40,7 @@ use Illuminate\Support\Collection;
             'mappingVersion' => $dungeon->getCurrentMappingVersion(),
             'floor' => $floor,
             'edit' => false,
+            'canvasEnemyRendererAllowed' => true,
             'echo' => false,
             'mapContext' => $mapContext,
             'headerTitle' => __('view_dungeon.explore.gameversion.view.title', ['dungeon' => __($dungeon->name)]),
