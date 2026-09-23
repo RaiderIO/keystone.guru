@@ -9,7 +9,7 @@ use Tests\TestCases\PublicTestCase;
 
 /**
  * DDL implicitly commits in MySQL, so these tests cannot roll back like a data-only migration
- * test - up() and down() are paired within each test to leave the schema exactly as it started.
+ * test - every test ends by running up() so the schema is left migrated, with the table absent.
  */
 #[Group('Migrations')]
 final class DropEnemyActiveAurasTableTest extends PublicTestCase
@@ -23,13 +23,16 @@ final class DropEnemyActiveAurasTableTest extends PublicTestCase
         $migration = require database_path(self::MIGRATION);
 
         try {
+            $migration->down();
+            $this->assertTrue(Schema::hasTable('enemy_active_auras'));
+
             // Act
             $migration->up();
 
             // Assert
             $this->assertFalse(Schema::hasTable('enemy_active_auras'));
         } finally {
-            $migration->down();
+            $migration->up();
         }
     }
 
@@ -38,9 +41,11 @@ final class DropEnemyActiveAurasTableTest extends PublicTestCase
     {
         // Arrange
         $migration = require database_path(self::MIGRATION);
-        $migration->up();
 
         try {
+            $migration->up();
+            $this->assertFalse(Schema::hasTable('enemy_active_auras'));
+
             // Act
             $migration->down();
 
