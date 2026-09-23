@@ -228,17 +228,31 @@ class AjaxDungeonRouteCollectionController extends Controller
         $publishedState           = $dungeonRouteCollection->getPublishedStateName();
         $lessVisibleDungeonRoutes = $dungeonRouteCollectionService->getRoutesLessVisibleThanCollection($dungeonRouteCollection);
 
+        [$raisedCount, $skippedCount] = $this->raiseDungeonRoutes($lessVisibleDungeonRoutes, $publishedState, $user);
+
+        return response()->json([
+            'raised_count'  => $raisedCount,
+            'skipped_count' => $skippedCount,
+        ]);
+    }
+
+    /**
+     * @param  Collection<int, DungeonRoute> $dungeonRoutes
+     * @return array{0: int, 1: int}         the number of raised and of skipped routes
+     */
+    private function raiseDungeonRoutes(Collection $dungeonRoutes, string $publishedState, User $user): array
+    {
         $raisedDungeonRoutes = new Collection();
         $skippedCount        = 0;
 
         DB::transaction(function () use (
-            $lessVisibleDungeonRoutes,
+            $dungeonRoutes,
             $publishedState,
             $user,
             &$raisedDungeonRoutes,
             &$skippedCount,
         ): void {
-            foreach ($lessVisibleDungeonRoutes as $dungeonRoute) {
+            foreach ($dungeonRoutes as $dungeonRoute) {
                 if (Gate::forUser($user)->denies('publish', [$dungeonRoute, $publishedState])) {
                     $skippedCount++;
 
@@ -259,9 +273,6 @@ class AjaxDungeonRouteCollectionController extends Controller
             }
         });
 
-        return response()->json([
-            'raised_count'  => $raisedDungeonRoutes->count(),
-            'skipped_count' => $skippedCount,
-        ]);
+        return [$raisedDungeonRoutes->count(), $skippedCount];
     }
 }
