@@ -31,7 +31,7 @@ final class TeamControllerMembershipTest extends PublicTestCase
         parent::setUp();
 
         $this->team = Team::create([
-            'name'                     => sprintf('Team membership test %s', uniqid()),
+            'name'                     => sprintf('Team test %s', uniqid()),
             'public_key'               => Team::generateRandomPublicKey(),
             'invite_code'              => Team::generateRandomPublicKey(12, 'invite_code'),
             'description'              => 'Created by TeamControllerMembershipTest',
