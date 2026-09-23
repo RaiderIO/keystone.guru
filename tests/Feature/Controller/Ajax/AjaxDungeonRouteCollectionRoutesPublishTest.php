@@ -153,6 +153,25 @@ final class AjaxDungeonRouteCollectionRoutesPublishTest extends PublicTestCase
     }
 
     #[Test]
+    public function publishRoutes_givenRoutesWithoutATeamId_raisesThemWithoutLazyLoading(): void
+    {
+        // Arrange: Eloquent only flags lazy loading on models hydrated as part of a multi-model result
+        $owner                  = $this->createUser();
+        $firstDungeonRoute      = $this->createRoute($owner, PublishedState::UNPUBLISHED, null);
+        $secondDungeonRoute     = $this->createRoute($owner, PublishedState::UNPUBLISHED, null);
+        $dungeonRouteCollection = $this->createFreeFormCollection($owner, PublishedState::WORLD, [$firstDungeonRoute, $secondDungeonRoute]);
+
+        // Act
+        $response = $this->publish($owner, $dungeonRouteCollection);
+
+        // Assert
+        $response->assertOk();
+        $response->assertJson(['raised_count' => 2, 'skipped_count' => 0]);
+        $this->assertSame(PublishedState::ALL[PublishedState::WORLD], $firstDungeonRoute->fresh()->published_state_id);
+        $this->assertSame(PublishedState::ALL[PublishedState::WORLD], $secondDungeonRoute->fresh()->published_state_id);
+    }
+
+    #[Test]
     public function publishRoutes_givenNoRouteIsLessVisibleThanTheCollection_raisesNone(): void
     {
         // Arrange
@@ -221,13 +240,12 @@ final class AjaxDungeonRouteCollectionRoutesPublishTest extends PublicTestCase
      * A route on a mapping version of its own holding no enemies at all, so hasKilledAllRequiredEnemies() always
      * passes regardless of which dungeon the factory happens to pick.
      */
-    private function createRoute(User $author, string $publishedState): DungeonRoute
+    private function createRoute(User $author, string $publishedState, ?int $teamId = -1): DungeonRoute
     {
         $dungeonRoute = DungeonRoute::factory()->create([
             'author_id' => $author->id,
-            // Not in a team - dungeonRouteChanged() skips its own change log entirely, and the route change log is
-            // not this test's concern
-            'team_id'            => -1,
+            // -1 makes dungeonRouteChanged() skip its own change log entirely; null (the factory default) does not
+            'team_id'            => $teamId,
             'expires_at'         => null,
             'published_state_id' => PublishedState::ALL[$publishedState],
         ]);

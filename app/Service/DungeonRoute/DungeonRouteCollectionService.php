@@ -176,6 +176,7 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
             ->where('dungeon_route_collection_routes.dungeon_route_collection_id', $dungeonRouteCollection->id)
             ->where('dungeon_routes.published_state_id', '<', $dungeonRouteCollection->published_state_id)
             ->select('dungeon_routes.*')
+            ->with('team')
             ->get();
     }
 }
