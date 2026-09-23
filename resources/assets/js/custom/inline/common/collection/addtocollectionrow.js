@@ -8,6 +8,7 @@ class AddToCollectionRow {
     static BLOCKED_GAME_VERSION = 'game_version';
     static BLOCKED_SEASON = 'season';
     static BLOCKED_FULL = 'full';
+    static BLOCKED_DUNGEON_FULL = 'dungeon_full';
 
     /**
      * @param {Object} json One collection of the collections endpoint's response.
@@ -23,6 +24,10 @@ class AddToCollectionRow {
         this.dungeonRouteCount = json.route_count;
         /** @type {Number} */
         this.maxDungeonRoutes = json.max_routes;
+        /** @type {Number} How many routes of the route's own dungeon the collection holds */
+        this.sameDungeonRouteCount = json.same_dungeon_route_count;
+        /** @type {Number} */
+        this.maxDungeonRoutesPerDungeon = json.max_routes_per_dungeon;
         /** @type {boolean} */
         this.containsDungeonRoute = json.contains_dungeon_route;
         /** @type {string} */
@@ -39,6 +44,7 @@ class AddToCollectionRow {
     setContainsDungeonRoute(containsDungeonRoute) {
         this.containsDungeonRoute = containsDungeonRoute;
         this.dungeonRouteCount += containsDungeonRoute ? 1 : -1;
+        this.sameDungeonRouteCount += containsDungeonRoute ? 1 : -1;
     }
 
     /**
@@ -51,12 +57,17 @@ class AddToCollectionRow {
             return null;
         }
 
-        // Fullness follows the route count, which changes as routes are added and removed
-        if (this.json.blocked_reason !== null && this.json.blocked_reason !== AddToCollectionRow.BLOCKED_FULL) {
+        // Fullness follows the route counts, which change as routes are added and removed
+        let isFullnessReason = [AddToCollectionRow.BLOCKED_FULL, AddToCollectionRow.BLOCKED_DUNGEON_FULL].includes(this.json.blocked_reason);
+        if (this.json.blocked_reason !== null && !isFullnessReason) {
             return this.json.blocked_reason;
         }
 
-        return this.dungeonRouteCount >= this.maxDungeonRoutes ? AddToCollectionRow.BLOCKED_FULL : null;
+        if (this.dungeonRouteCount >= this.maxDungeonRoutes) {
+            return AddToCollectionRow.BLOCKED_FULL;
+        }
+
+        return this.sameDungeonRouteCount >= this.maxDungeonRoutesPerDungeon ? AddToCollectionRow.BLOCKED_DUNGEON_FULL : null;
     }
 
     /**
@@ -77,6 +88,8 @@ class AddToCollectionRow {
                 return lang.get('js.add_to_collection_blocked_season', {season: this.json.season?.name_long ?? ''});
             case AddToCollectionRow.BLOCKED_FULL:
                 return lang.get('js.add_to_collection_blocked_full');
+            case AddToCollectionRow.BLOCKED_DUNGEON_FULL:
+                return lang.get('js.add_to_collection_blocked_dungeon_full');
             default:
                 return null;
         }

@@ -163,19 +163,23 @@ describe('CommonCollectionRoutes', () => {
     /**
      * Replaces the controller with the one a collection that does not exist yet gets: no endpoints to save to.
      */
-    function asNewCollection() {
-        // Re-parsing the markup drops the handlers the edit-page controller bound to it in beforeEach
+    /**
+     * Replaces the controller with one built from other options.
+     * @param {Object} overrides
+     */
+    function withOptions(overrides) {
+        // Re-parsing the markup drops the handlers the controller bound to it in beforeEach
         document.body.innerHTML = document.body.innerHTML;
         ['slot_1', 'slot_2', 'off_pool'].forEach((prefix) => {
             lists[`${prefix}_inline`] = new CommonFormsOrderedselect(`${prefix}_inline`, 'common/forms/orderedselect', orderedSelectOptions(prefix));
             lists[`${prefix}_inline`].activate();
         });
 
-        new CommonCollectionRoutes('routes', 'common/collection/routes', Object.assign({}, routesOptions, {
-            storeUrl:  null,
-            deleteUrl: null,
-            orderUrl:  null,
-        })).activate();
+        new CommonCollectionRoutes('routes', 'common/collection/routes', Object.assign({}, routesOptions, overrides)).activate();
+    }
+
+    function asNewCollection() {
+        withOptions({storeUrl: null, deleteUrl: null, orderUrl: null});
     }
 
     afterEach(() => {
@@ -216,7 +220,10 @@ describe('CommonCollectionRoutes', () => {
         expect(lists.slot_2_inline.getIds()).toEqual(['keyC']);
         expect(lists.slot_1_inline.getIds()).toEqual(['keyA', 'keyB', 'keyD']);
         expect(document.querySelector('#count').textContent).toBe('5 / 24');
-        expect(picker.setExistingPublicKeys).toHaveBeenLastCalledWith(['keyA', 'keyB', 'keyD', 'keyC', 'keyOld']);
+        expect(picker.setExistingPublicKeys).toHaveBeenLastCalledWith(
+            ['keyA', 'keyB', 'keyD', 'keyC', 'keyOld'],
+            expect.objectContaining({keyC: 2, keyD: 1}),
+        );
         expect(toasts[0].text).toBe('Added 2');
         expect(toasts[0].opts.buttons[0].text).toBe('Undo');
         // The row must read like the ones the server rendered, not wait for a page refresh for it
@@ -253,7 +260,7 @@ describe('CommonCollectionRoutes', () => {
         expect(lastCall('DELETE').data).toEqual({dungeon_routes: ['keyC']});
         expect(lists.slot_2_inline.getIds()).toEqual([]);
         expect(document.querySelector('#count').textContent).toBe('3 / 24');
-        expect(picker.setExistingPublicKeys).toHaveBeenLastCalledWith(['keyA', 'keyB', 'keyOld']);
+        expect(picker.setExistingPublicKeys).toHaveBeenLastCalledWith(['keyA', 'keyB', 'keyOld'], expect.any(Object));
     });
 
     it('onRemoved_givenARoute_deletesItAndUndoPutsItBackInPlace', () => {
@@ -296,6 +303,31 @@ describe('CommonCollectionRoutes', () => {
         // Assert
         expect(toasts[0].text).toBe('Removed Old');
         expect(toasts[0].opts.buttons).toBeUndefined();
+    });
+
+    it('onRemoved_givenADungeonStillAtItsLimitWithoutTheRoute_offersNoUndo', () => {
+        // Arrange - the collection holds two routes of dungeon 1 but only one fits
+        withOptions({maxPerDungeon: 1, dungeonIds: {keyA: 1, keyB: 1}});
+
+        // Act
+        document.querySelector('#slot_1 [data-id="keyA"] .ordered_select_remove').click();
+        lastCall('DELETE').success({});
+
+        // Assert
+        expect(toasts[0].text).toBe('Removed Alpha');
+        expect(toasts[0].opts.buttons).toBeUndefined();
+    });
+
+    it('onRemoved_givenADungeonWithRoomForTheRoute_offersUndo', () => {
+        // Arrange
+        withOptions({maxPerDungeon: 2, dungeonIds: {keyA: 1, keyB: 1}});
+
+        // Act
+        document.querySelector('#slot_1 [data-id="keyA"] .ordered_select_remove').click();
+        lastCall('DELETE').success({});
+
+        // Assert
+        expect(toasts[0].opts.buttons[0].text).toBe('Undo');
     });
 
     it('onRemoved_givenATitleWithMarkup_escapesItInTheToast', () => {

@@ -222,15 +222,8 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         };
 
         return DungeonRoute::where('team_id', config('keystoneguru.raider_io.team_id'))
+            ->withCardRelations()
             ->with([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
-                // Everything the rendered route cards read - DungeonRoute no longer eager loads relations globally
-                'author.iconfile',
-                'dungeon',
-                'affixes',
-                'mappingVersion',
-                'season.expansion',
-                'thumbnails',
-                'ratings',
                 'tags' => $tagsFilterFn,
             ])
             ->withCount('favorites')

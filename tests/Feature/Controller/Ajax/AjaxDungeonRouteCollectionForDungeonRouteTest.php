@@ -147,6 +147,32 @@ final class AjaxDungeonRouteCollectionForDungeonRouteTest extends PublicTestCase
     }
 
     #[Test]
+    public function forDungeonRoute_givenACollectionWhoseDungeonIsFull_reportsDungeonFull(): void
+    {
+        // Arrange
+        $owner                  = $this->createUser();
+        $dungeonRoute           = $this->createRoute($owner, $this->retailMappingVersion());
+        $dungeonRouteCollection = $this->createCollection(
+            DungeonRouteCollection::factory()->freeForm($this->retail()),
+            $owner,
+            $this->createRoutes($owner, DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON),
+        );
+
+        // Act
+        $response = $this->actingAs($owner)->request($dungeonRoute);
+
+        // Assert
+        $response->assertOk();
+        $rows = collect($this->collectionsOf($response))->keyBy('public_key');
+        $this->assertSame(
+            DungeonRouteCollectionServiceInterface::ADD_BLOCKED_DUNGEON_FULL,
+            $rows[$dungeonRouteCollection->public_key]['blocked_reason'],
+        );
+        $this->assertSame(DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON, $rows[$dungeonRouteCollection->public_key]['same_dungeon_route_count']);
+        $this->assertSame(DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON, $rows[$dungeonRouteCollection->public_key]['max_routes_per_dungeon']);
+    }
+
+    #[Test]
     public function forDungeonRoute_givenCollectionsOfEveryKind_reportsMembershipAndWhyTheRouteCannotJoin(): void
     {
         // Arrange

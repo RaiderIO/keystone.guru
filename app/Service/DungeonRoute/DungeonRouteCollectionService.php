@@ -24,8 +24,12 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
     ) {
     }
 
-    public function getAddBlockedReason(DungeonRouteCollection $dungeonRouteCollection, DungeonRoute $dungeonRoute, int $routeCount): ?string
-    {
+    public function getAddBlockedReason(
+        DungeonRouteCollection $dungeonRouteCollection,
+        DungeonRoute           $dungeonRoute,
+        int                    $routeCount,
+        int                    $dungeonRouteCountForDungeon,
+    ): ?string {
         $mappingVersion = $dungeonRoute->mappingVersion;
 
         if ($mappingVersion === null || $mappingVersion->game_version_id !== $dungeonRouteCollection->game_version_id) {
@@ -40,7 +44,23 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
             return self::ADD_BLOCKED_FULL;
         }
 
+        if ($dungeonRouteCountForDungeon >= DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON) {
+            return self::ADD_BLOCKED_DUNGEON_FULL;
+        }
+
         return null;
+    }
+
+    public function getDungeonRoutesOverDungeonLimit(Collection $dungeonRoutes, Collection $keptDungeonRoutes): Collection
+    {
+        /** @var array<int, int> $dungeonRouteCounts Keyed by dungeon id. */
+        $dungeonRouteCounts = $keptDungeonRoutes->countBy('dungeon_id')->all();
+
+        return $dungeonRoutes->filter(static function (DungeonRoute $dungeonRoute) use (&$dungeonRouteCounts): bool {
+            $dungeonRouteCounts[$dungeonRoute->dungeon_id] = ($dungeonRouteCounts[$dungeonRoute->dungeon_id] ?? 0) + 1;
+
+            return $dungeonRouteCounts[$dungeonRoute->dungeon_id] > DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON;
+        });
     }
 
     public function filterMatchingDungeonRoutes(GameVersion $gameVersion, ?Season $season, Collection $dungeonRoutes): Collection

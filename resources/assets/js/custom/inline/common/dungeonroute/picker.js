@@ -25,6 +25,8 @@
  @property {Object} lockedParameters          Sent with every list request, the constraints the user cannot change.
  @property {string[]} existingPublicKeys      Routes already in the target.
  @property {Number|null} max                  Most routes the target may hold, null for no limit.
+ @property {Number|null} maxPerDungeon        Most routes of one dungeon the target may hold, null for no limit.
+ @property {Object<string, Number>} existingDungeonIds The dungeon of each route already in the target, by public key.
  @property {string|null} addUrl               Where the ticked routes are POSTed; null leaves saving to the host.
  @property {string} addFieldName
  @property {string} fallbackImageBaseUrl
@@ -76,6 +78,8 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         this._previousFilterParams = null;
         /** @type {Set<string>} */
         this._existing = new Set(this.options.existingPublicKeys || []);
+        /** @type {Object<string, Number>} */
+        this._existingDungeonIds = Object.assign({}, this.options.existingDungeonIds || {});
         /** @type {string[]} Ticked public keys, in the order they were ticked */
         this._selected = [];
         /** @type {Object<string, PickerDungeonRoute>} Every listed or ticked route, by public key */
@@ -129,9 +133,13 @@ class CommonDungeonroutePicker extends SearchInlineBase {
     /**
      * Replaces the routes already in the target, e.g. after the host undid an add or removed a route.
      * @param {string[]} publicKeys
+     * @param {Object<string, Number>|null} [dungeonIds] The dungeon of each of those routes, by public key.
      */
-    setExistingPublicKeys(publicKeys) {
+    setExistingPublicKeys(publicKeys, dungeonIds = null) {
         this._existing = new Set(publicKeys);
+        if (dungeonIds !== null) {
+            this._existingDungeonIds = Object.assign({}, dungeonIds);
+        }
         this._selected = this._selected.filter(publicKey => !this._existing.has(publicKey));
 
         this._refreshRows();
@@ -164,6 +172,33 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         }
 
         return Math.max(0, this.options.max - this._existing.size - this._selected.length);
+    }
+
+    /**
+     * @param {Number} dungeonId
+     * @returns {Number|null} How many more routes of the dungeon may be ticked, null when there is no limit.
+     */
+    getRemainingForDungeon(dungeonId) {
+        if (this.options.maxPerDungeon === null || typeof this.options.maxPerDungeon === 'undefined') {
+            return null;
+        }
+
+        let self = this;
+        let existingCount = [...this._existing].filter(publicKey => self._existingDungeonIds[publicKey] === dungeonId).length;
+        let selectedCount = this._selected.filter(publicKey => self._dungeonRoutes[publicKey]?.dungeonId === dungeonId).length;
+
+        return Math.max(0, this.options.maxPerDungeon - existingCount - selectedCount);
+    }
+
+    /**
+     * @param {string} publicKey
+     * @returns {boolean} Whether the listed route's dungeon has no room left.
+     * @private
+     */
+    _isDungeonFull(publicKey) {
+        let dungeonRoute = this._dungeonRoutes[publicKey];
+
+        return typeof dungeonRoute !== 'undefined' && this.getRemainingForDungeon(dungeonRoute.dungeonId) === 0;
     }
 
     /**
@@ -357,7 +392,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
             $row.find('.route_picker_already_in').prop('hidden', !isExisting);
             $row.find('.route_picker_checkbox')
                 .prop('checked', isExisting || isSelected)
-                .prop('disabled', isExisting || (isFull && !isSelected));
+                .prop('disabled', isExisting || ((isFull || self._isDungeonFull(publicKey)) && !isSelected));
         });
     }
 
@@ -370,7 +405,8 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         let publicKey = $checkbox.val();
 
         if ($checkbox.prop('checked')) {
-            if (!this._selected.includes(publicKey) && !this._existing.has(publicKey) && this.getRemaining() !== 0) {
+            if (!this._selected.includes(publicKey) && !this._existing.has(publicKey) && this.getRemaining() !== 0 &&
+                !this._isDungeonFull(publicKey)) {
                 this._selected.push(publicKey);
             }
         } else {
@@ -389,9 +425,15 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         let plural = count === 0 ? 'none' : (count === 1 ? 'one' : 'many');
 
         $(this.options.selectionSelector).text(lang.get(`js.dungeonroute_picker_selected_${plural}`, {count: count}));
+        let isFull = this.getRemaining() === 0;
+        let hasFullDungeon = !isFull && Object.keys(this._dungeonRoutes).some(publicKey =>
+            !this._existing.has(publicKey) && !this._selected.includes(publicKey) && this._isDungeonFull(publicKey));
+
         $(this.options.fullSelector)
-            .text(lang.get('js.dungeonroute_picker_full', {max: this.options.max}))
-            .prop('hidden', this.getRemaining() !== 0);
+            .text(isFull
+                ? lang.get('js.dungeonroute_picker_full', {max: this.options.max})
+                : lang.get('js.dungeonroute_picker_dungeon_full', {max: this.options.maxPerDungeon}))
+            .prop('hidden', !isFull && !hasFullDungeon);
         this.dialog.setConfirmButton(
             lang.get(`js.dungeonroute_picker_add_${plural}`, {count: count}),
             count > 0 && !this._saving,
@@ -454,6 +496,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
             .filter(dungeonRoute => typeof dungeonRoute !== 'undefined');
 
         publicKeys.forEach(publicKey => self._existing.add(publicKey));
+        dungeonRoutes.forEach(dungeonRoute => self._existingDungeonIds[dungeonRoute.publicKey] = dungeonRoute.dungeonId);
         this._selected = [];
         this._refreshRows();
         this._refreshSelection();

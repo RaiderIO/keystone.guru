@@ -12,6 +12,8 @@
  @property {boolean} ajax             Report changes as events on the root instead of adding from the select.
  @property {string} rootSelector      The control's root element, which the ajax mode events are fired on.
  @property {Number|null} fullCount    What counts towards max in ajax mode, when that is more than this list.
+ @property {Number|null} itemMax      Most items this list itself may hold, when that is below max.
+ @property {string} fullText          The full note's text, with :max.
  @property {string} countText         Contains :count and :max.
  @property {string} moveUpText        Contains :name.
  @property {string} moveDownText      Contains :name.
@@ -160,7 +162,7 @@ class CommonFormsOrderedselect extends InlineCode {
         let $select = $(this.options.addSelectSelector);
         let id = $select.val();
 
-        if (!id || this._getItems().length >= this.options.max) {
+        if (!id || this._getItems().length >= this.options.max || this._isItemsFull(this._getItems().length)) {
             return;
         }
 
@@ -291,7 +293,8 @@ class CommonFormsOrderedselect extends InlineCode {
         let $items = this._getItems();
         let count = $items.length;
         let fullCount = this.options.ajax && typeof this.options.fullCount === 'number' ? this.options.fullCount : count;
-        let isFull = fullCount >= this.options.max;
+        let isListFull = fullCount >= this.options.max;
+        let isFull = isListFull || this._isItemsFull(count);
 
         $items.each(function (index, element) {
             let $item = $(element);
@@ -313,11 +316,25 @@ class CommonFormsOrderedselect extends InlineCode {
         $(this.options.countSelector).text(
             this.options.countText.replace(':count', count).replace(':max', this.options.max)
         );
+        if (typeof this.options.fullText === 'string') {
+            $(this.options.fullSelector).text(
+                this.options.fullText.replace(':max', isListFull ? this.options.max : this.options.itemMax)
+            );
+        }
         $(this.options.fullSelector).prop('hidden', !isFull);
         $(this.options.addSelectSelector).prop('disabled', isFull);
         $(this.options.addButtonSelector).prop('disabled', isFull);
 
         $(this.options.listSelector).trigger('orderedselect:changed');
+    }
+
+    /**
+     * @param {Number} count
+     * @returns {boolean}
+     * @private
+     */
+    _isItemsFull(count) {
+        return typeof this.options.itemMax === 'number' && count >= this.options.itemMax;
     }
 
     /**

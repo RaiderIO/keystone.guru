@@ -24,6 +24,7 @@
  * @var bool               $showAdd      Whether that button is shown (ajax mode).
  * @var bool               $showCount    Whether the "n / max" counter is shown.
  * @var int|null           $fullCount    What counts towards $max, when that is more than this list (ajax mode).
+ * @var int|null           $itemMax      Maximum number of items in this list itself, when that is below $max (ajax mode).
  */
 $help              ??= null;
 $formId            ??= null;
@@ -40,7 +41,10 @@ $countText ??= __('view_common.forms.orderedselect.count');
 
 $selectedIds = array_values(array_filter($selectedIds, static fn(int|string $selectedId): bool => isset($options[$selectedId])));
 $fullCount   ??= count($selectedIds);
-$isFull      = $fullCount >= $max;
+$itemMax     ??= null;
+$isListFull  = $fullCount >= $max;
+$isItemsFull = $itemMax !== null && count($selectedIds) >= $itemMax;
+$isFull      = $isListFull || $isItemsFull;
 $helpId      = sprintf('%s_help', $id);
 $errorKey    = $name;
 
@@ -57,6 +61,8 @@ $inlineOptions = [
     'ajax'              => $ajax,
     'rootSelector'      => sprintf('#%s', $id),
     'fullCount'         => $ajax ? $fullCount : null,
+    'itemMax'           => $itemMax,
+    'fullText'          => __('view_common.forms.orderedselect.full'),
     'countText'         => $countText,
     'moveUpText'        => __('view_common.forms.orderedselect.move_up'),
     'moveDownText'      => __('view_common.forms.orderedselect.move_down'),
@@ -124,7 +130,7 @@ $inlineOptions = [
 
     <small id="{{ $helpId }}" class="form-text text-body-secondary d-block">
         <span id="{{ $id }}_full" @if(!$isFull) hidden @endif>
-            {{ __('view_common.forms.orderedselect.full', ['max' => $max]) }}
+            {{ __('view_common.forms.orderedselect.full', ['max' => $isListFull ? $max : $itemMax]) }}
         </span>
         @if($help !== null)
             {{ $help }}

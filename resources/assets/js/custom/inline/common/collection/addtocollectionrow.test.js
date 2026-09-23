@@ -17,6 +17,7 @@ const MESSAGES = {
         add_to_collection_blocked_game_version: 'Only :game_version routes',
         add_to_collection_blocked_season:       'Only :season routes',
         add_to_collection_blocked_full:         'Full',
+        add_to_collection_blocked_dungeon_full: 'Full for this dungeon',
     },
     'en.gameversions': {retail: 'Retail', classic: 'Classic Era'},
 };
@@ -34,6 +35,8 @@ function row(overrides = {}) {
         covered_dungeon_count:  1,
         route_count:            3,
         max_routes:             24,
+        same_dungeon_route_count: 1,
+        max_routes_per_dungeon: 2,
         contains_dungeon_route: false,
         blocked_reason:         null,
         store_url:              '/store/colA',
@@ -75,6 +78,18 @@ describe('AddToCollectionRow', () => {
         expect(text).toBe('Only Midnight Season 3 routes');
     });
 
+    it('getBlockedText_givenAFullDungeon_saysTheDungeonIsFull', () => {
+        // Arrange
+        let collection = row({blocked_reason: 'dungeon_full', same_dungeon_route_count: 2});
+
+        // Act
+        let text = collection.getBlockedText();
+
+        // Assert
+        expect(text).toBe('Full for this dungeon');
+        expect(collection.isBlocked()).toBe(true);
+    });
+
     it('getBlockedText_givenARouteThatMayJoin_returnsNull', () => {
         // Arrange
         let collection = row();
@@ -108,6 +123,29 @@ describe('AddToCollectionRow', () => {
         // Assert
         expect(collection.dungeonRouteCount).toBe(23);
         expect(collection.getBlockedReason()).toBeNull();
+    });
+
+    it('getBlockedReason_givenTheRouteWasRemovedFromItsFullDungeon_returnsNullAgain', () => {
+        // Arrange
+        let collection = row({contains_dungeon_route: true, same_dungeon_route_count: 2});
+
+        // Act
+        collection.setContainsDungeonRoute(false);
+
+        // Assert
+        expect(collection.sameDungeonRouteCount).toBe(1);
+        expect(collection.getBlockedReason()).toBeNull();
+    });
+
+    it('getBlockedReason_givenADungeonStillPastItsLimitAfterTheRouteWasRemoved_returnsDungeonFull', () => {
+        // Arrange - the collection held three routes of the dungeon from before the limit
+        let collection = row({contains_dungeon_route: true, same_dungeon_route_count: 3});
+
+        // Act
+        collection.setContainsDungeonRoute(false);
+
+        // Assert
+        expect(collection.getBlockedReason()).toBe('dungeon_full');
     });
 
     it('getBlockedReason_givenTheLastFreeSlotWasTakenByAnotherRoute_returnsFull', () => {

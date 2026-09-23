@@ -48,6 +48,7 @@ const MESSAGES = {
         dungeonroute_picker_selected_one:      '1 selected',
         dungeonroute_picker_selected_many:     ':count selected',
         dungeonroute_picker_full:              'Limit is :max',
+        dungeonroute_picker_dungeon_full:      'Dungeon limit is :max',
         dungeonroute_picker_add_none:          'Add routes',
         dungeonroute_picker_add_one:           'Add 1 route',
         dungeonroute_picker_add_many:          'Add :count routes',
@@ -520,6 +521,49 @@ describe('CommonDungeonroutePicker', () => {
 
         // Assert
         expect(rowOf('c').querySelector('.route_picker_checkbox').disabled).toBe(false);
+        expect(document.querySelector('#picker_full').hidden).toBe(true);
+    });
+
+    it('onCheckboxChanged_givenADungeonReachesMaxPerDungeon_disablesOnlyThatDungeonsRows', () => {
+        // Arrange - 'existing' is already in for dungeon 3, so one more route of dungeon 3 fits
+        picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS, {
+            max:                null,
+            maxPerDungeon:      2,
+            existingDungeonIds: {existing: 3},
+        }));
+        picker.activate();
+        picker.reload();
+        const otherDungeon = {id: 4, name: 'dungeons.ara_kara', key: 'other', expansion: {shortname: 'tww'}};
+        respondWithRoutes([route('a'), route('b'), route('c', {dungeon: otherDungeon})]);
+
+        // Act
+        tick('a');
+
+        // Assert
+        expect(picker.getRemainingForDungeon(3)).toBe(0);
+        expect(rowOf('a').querySelector('.route_picker_checkbox').disabled).toBe(false);
+        expect(rowOf('b').querySelector('.route_picker_checkbox').disabled).toBe(true);
+        expect(rowOf('c').querySelector('.route_picker_checkbox').disabled).toBe(false);
+        expect(document.querySelector('#picker_full').hidden).toBe(false);
+        expect(document.querySelector('#picker_full').textContent).toBe('Dungeon limit is 2');
+    });
+
+    it('setExistingPublicKeys_givenARouteOfAFullDungeonLeaves_makesThatDungeonsRowsTickableAgain', () => {
+        // Arrange
+        picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS, {
+            max:                null,
+            maxPerDungeon:      1,
+            existingDungeonIds: {existing: 3},
+        }));
+        picker.activate();
+        picker.reload();
+        respondWithRoutes([route('a')]);
+
+        // Act
+        picker.setExistingPublicKeys([], {});
+
+        // Assert
+        expect(rowOf('a').querySelector('.route_picker_checkbox').disabled).toBe(false);
         expect(document.querySelector('#picker_full').hidden).toBe(true);
     });
 

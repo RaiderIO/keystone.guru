@@ -131,6 +131,28 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
     }
 
     #[Test]
+    public function duplicate_givenMoreRoutesOfADungeonThanFit_leavesOutTheOnesPastTheLimitWithANotice(): void
+    {
+        // Arrange
+        $owner         = $this->createUser();
+        $season        = $this->createRetailSeason();
+        $dungeonRoutes = collect(range(1, DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON + 1))
+            ->map(fn(): DungeonRoute => $this->createRoute($owner, $this->retailMappingVersion(), $season));
+        $source = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()), $owner, $dungeonRoutes->all());
+
+        // Act
+        $response = $this->actingAs($owner)->post($this->duplicateUrl($source), ['season_id' => $season->id]);
+
+        // Assert
+        $duplicate = $this->latestCollectionOf($owner);
+        $response->assertSessionHas('warning', trans_choice('controller.dungeonroutecollection.flash.collection_duplicated_left_out', 1, ['count' => 1]));
+        $this->assertSame(
+            $dungeonRoutes->take(DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON)->pluck('id')->all(),
+            $this->memberIds($duplicate),
+        );
+    }
+
+    #[Test]
     public function duplicate_givenNoSeason_makesAFreeFormCopyThatKeepsEveryRouteOfTheGameVersion(): void
     {
         // Arrange
@@ -447,6 +469,29 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $this->assertSame(['tag' => 'ZzTest tag'], $response->viewData('startFromQuery'));
         $this->assertEqualsCanonicalizing(['ZzTest tag', 'ZzTest other tag'], $response->viewData('tagNames')->all());
         $response->assertSee('id="collection_tag_routes_left_out"', false);
+    }
+
+    #[Test]
+    public function create_givenATagWithMoreRoutesOfADungeonThanFit_preselectsOnlyAsManyAsFit(): void
+    {
+        // Arrange
+        $owner         = $this->createUser();
+        $season        = $this->createRetailSeason();
+        $dungeonRoutes = collect(range(1, DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON + 1))
+            ->map(fn(int $number): DungeonRoute => $this->createRoute($owner, $this->retailMappingVersion(), $season, sprintf('ZzTest %d', $number)));
+        $dungeonRoutes->each(fn(DungeonRoute $dungeonRoute) => $this->tag($owner, $dungeonRoute, 'ZzTest tag'));
+
+        // Act
+        $response = $this->actingAs($owner)->get(route('collections.new', [
+            'game_version_id' => $this->retail()->id,
+            'season_id'       => $season->id,
+            'tag'             => 'ZzTest tag',
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertCount(DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON, $this->preselectedDungeonRouteIds($response));
+        $this->assertSame(1, $response->viewData('tagDungeonRoutesLeftOut'));
     }
 
     #[Test]

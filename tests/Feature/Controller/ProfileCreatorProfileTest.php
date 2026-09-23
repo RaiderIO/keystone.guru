@@ -216,6 +216,70 @@ final class ProfileCreatorProfileTest extends PublicTestCase
     }
 
     #[Test]
+    public function view_givenAPinnedCollectionWithAnUnpublishedRoute_countsOnlyTheRoutesTheViewerMaySee(): void
+    {
+        // Arrange
+        $creator = User::factory()->create();
+        $viewer  = User::factory()->create();
+
+        $collection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            'name'               => 'ZzTestTileCollection',
+        ]);
+
+        $publishedRoute = DungeonRoute::factory()->create([
+            'author_id'          => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            'expires_at'         => null,
+        ]);
+        $unpublishedRoute = DungeonRoute::factory()->create([
+            'author_id'          => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+            'expires_at'         => null,
+        ]);
+        $collection->dungeonRoutes()->attach($publishedRoute->id, ['order' => 0]);
+        $collection->dungeonRoutes()->attach($unpublishedRoute->id, ['order' => 1]);
+
+        $pin                              = new UserPinnedDungeonRouteCollection();
+        $pin->user_id                     = $creator->id;
+        $pin->dungeon_route_collection_id = $collection->id;
+        $pin->order                       = 0;
+        $pin->save();
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('profile.view', ['user' => $creator]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas(
+                'pinnedDungeonRouteCollectionDungeonRoutes',
+                static fn($dungeonRoutesPerCollection): bool => $dungeonRoutesPerCollection->get($collection->id)->pluck('id')->all() === [$publishedRoute->id],
+            );
+            $response->assertViewHas(
+                'pinnedDungeonRouteCollections',
+                static fn($pinnedDungeonRouteCollections): bool => $pinnedDungeonRouteCollections->first()->relationLoaded('team') &&
+                    $pinnedDungeonRouteCollections->first()->dungeonRoutes->every(
+                        static fn(DungeonRoute $dungeonRoute): bool => $dungeonRoute->relationLoaded('thumbnails') && $dungeonRoute->relationLoaded('team'),
+                    ),
+            );
+            $response->assertSeeText(trans_choice('view_collection.view.route_count', 1, ['count' => 1]));
+            $response->assertDontSeeText(trans_choice('view_collection.view.route_count', 2, ['count' => 2]));
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $pin->delete();
+            $collection->delete();
+            $publishedRoute->delete();
+            $unpublishedRoute->delete();
+            $viewer->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function view_givenAPinnedPublishedCollection_showsItToOtherViewers(): void
     {
         // Arrange

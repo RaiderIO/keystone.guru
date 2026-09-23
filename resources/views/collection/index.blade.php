@@ -94,19 +94,10 @@ $seasonOptions = ['' => __('view_collection.index.filter_season_all')]
                         </a>
                     </td>
                     <td>
-                        @php($coveredDungeonCount = $coveredDungeonCounts->get($dungeonRouteCollection->id, 0))
-                        @if($dungeonRouteCollection->isSeasonSet() && $dungeonRouteCollection->season !== null)
-                            {{ __('view_collection.kind.season_set', [
-                                'season' => $dungeonRouteCollection->season->name,
-                                'covered' => $coveredDungeonCount,
-                                'total' => $dungeonRouteCollection->season->dungeons->count(),
-                            ]) }}
-                        @else
-                            {{ trans_choice('view_collection.kind.free_form', $coveredDungeonCount, [
-                                'game_version' => __($dungeonRouteCollection->gameVersion->name),
-                                'count' => $coveredDungeonCount,
-                            ]) }}
-                        @endif
+                        @include('common.collection.kind', [
+                            'dungeonRouteCollection' => $dungeonRouteCollection,
+                            'coveredDungeonCount' => $coveredDungeonCounts->get($dungeonRouteCollection->id, 0),
+                        ])
                     </td>
                     <td>
                         @if($dungeonRouteCollection->dungeonRouteCollectionCategory !== null)

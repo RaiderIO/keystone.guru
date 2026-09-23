@@ -100,6 +100,7 @@ return [
         ],
         'collection_dungeon_routes' => [
             'max'          => 'A collection may hold at most :max routes.',
+            'max_dungeon'  => 'A collection may hold at most :max routes for :dungeon.',
             'exists'       => 'You can only collect routes that you created yourself.',
             'distinct'     => 'A route may only appear once in a collection.',
             'game_version' => 'This route is not for the game version of this collection.',

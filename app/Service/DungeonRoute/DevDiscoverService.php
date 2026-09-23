@@ -24,16 +24,7 @@ class DevDiscoverService extends BaseDiscoverService
         return DungeonRoute::query()->limit(8)
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
-            ->with([
-                // The route cards render the author's avatar - User no longer eager loads iconfile globally
-                'author.iconfile',
-                'affixes',
-                'ratings',
-                'mappingVersion',
-                'thumbnails',
-                'dungeon',
-                'season.expansion',
-            ])
+            ->withCardRelations()
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             ->when($this->season === null, function (Builder $builder) {
@@ -60,16 +51,7 @@ class DevDiscoverService extends BaseDiscoverService
         return DungeonRoute::query()->limit(8)
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
-            ->with([
-                // The route cards render the author's avatar - User no longer eager loads iconfile globally
-                'author.iconfile',
-                'affixes',
-                'ratings',
-                'mappingVersion',
-                'thumbnails',
-                'dungeon',
-                'season.expansion',
-            ])
+            ->withCardRelations()
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             ->when($this->season === null, function (Builder $builder) {

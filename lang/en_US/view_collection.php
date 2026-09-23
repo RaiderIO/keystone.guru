@@ -45,7 +45,7 @@ return [
         'start_from_tag'      => 'Start from tag',
         'start_from_tag_none' => 'No tag',
         'start_from_tag_help' => 'Fills the collection with your routes that carry this tag, as far as they match the game version and season.',
-        'tag_routes_left_out' => '{1} :count route with this tag was left out because it does not match the game version or season.|[2,*] :count routes with this tag were left out because they do not match the game version or season.',
+        'tag_routes_left_out' => '{1} :count route with this tag was left out because it does not match the game version or season, or does not fit the route limits.|[2,*] :count routes with this tag were left out because they do not match the game version or season, or do not fit the route limits.',
     ],
     'edit' => [
         'title'                 => 'Edit %s',
@@ -67,5 +67,7 @@ return [
         'no_routes_owner' => 'This collection has no routes yet.',
         'add_routes'      => 'Add routes',
         'slot_empty'      => 'No route for :dungeon yet.',
+        'copy_link'       => 'Copy link',
+        'edit'            => 'Edit',
     ],
 ];
