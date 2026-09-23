@@ -44,14 +44,8 @@ class EnemyForcesCheckpointVisual {
     }
 
     /**
-     * Builds the pill's divIcon with an explicit, measured size and a centered anchor. Leaflet cannot
-     * center an auto-sized icon itself, and every workaround that touches the rendered element after the
-     * fact fails eventually: a CSS transform on the inner pill moves only the painted pill while the
-     * marker root - the element leaflet.draw's edit mode puts the dashed border on - stays put
-     * (misaligning border from label), and post-hoc inline margins are wiped whenever Leaflet re-creates
-     * the element from the icon options (visibility toggles, floor switches). Baking the measured size
-     * into iconSize/iconAnchor makes Leaflet itself re-apply the centering on every re-add, and keeps
-     * leaflet.draw's _offsetMarker() edit-mode compensation working since that adjusts the same margins.
+     * Builds the pill's divIcon with a measured size and centered anchor, so Leaflet re-applies the
+     * centering whenever it re-creates the element and leaflet.draw's edit-mode border stays aligned.
      * @param html {String}
      * @returns {L.DivIcon}
      * @private
