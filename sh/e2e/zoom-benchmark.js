@@ -37,8 +37,9 @@
  *                      Repeatable; measure two or more conditions alternately within one page load,
  *                      evaluating <js> in the page before each condition's gestures. Unlike --ab-css
  *                      this can swap whole layers, so each expression must set its full state (it
- *                      runs after any other condition). The order rotates every iteration and
- *                      reverses on every other one, so no condition always follows the same one.
+ *                      runs after any other condition). Iterations cycle through the rows of a
+ *                      Williams design, so every condition directly follows every other one equally
+ *                      often: whatever a gesture leaves behind (garbage, warm caches) cancels out.
  *                      A null control is two conditions with the same expression.
  *   --settle <ms>      Pause after switching condition, before measuring (default 300). A condition
  *                      that re-adds hundreds of markers needs longer to settle.
@@ -92,6 +93,28 @@ async function connectToService(host, port) {
     const wsEndpoint = version.webSocketDebuggerUrl.replace(/ws:\/\/[^/]+/, `ws://${address}:${port}`);
 
     return await puppeteer.connect({browserWSEndpoint: wsEndpoint, defaultViewport: null});
+}
+
+/**
+ * Rows of a Williams design for n conditions: each row is one presentation order, and across all
+ * rows every condition directly follows every other condition equally often. For two conditions
+ * this is the plain A B / B A alternation.
+ * @returns {number[][]}
+ */
+function williamsDesign(n) {
+    const first = [0];
+    for (let low = 1, high = n - 1; first.length < n;) {
+        first.push(low++);
+        if (first.length < n) {
+            first.push(high--);
+        }
+    }
+    const rows = [];
+    for (let r = 0; r < n; r++) {
+        rows.push(first.map(c => (c + r) % n));
+    }
+    // An odd n needs the mirror image of every row as well to balance.
+    return n % 2 === 0 ? rows : [...rows, ...rows.map(row => [...row].reverse())];
 }
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -273,16 +296,18 @@ async function measureGesture(page, cdp, direction, viewport) {
                 samples[condition + name] = [];
             }
         }
+        const orderRows = williamsDesign(conditions.length);
+        if (conditions.length > 1 && (steps % orderRows.length !== 0 || warmup % orderRows.length !== 0)) {
+            console.error(`warning: --steps and --warmup should be multiples of ${orderRows.length} to keep the order balanced`);
+        }
         // Each iteration zooms out and back in again, so the map stays within its zoom range no
         // matter how many steps are asked for.
         for (let i = 0; i < steps + warmup; i++) {
-            // Counterbalance the order: whichever condition is measured second inherits whatever
-            // the first one left warm, which the null control (--ab-css with a rule that changes
-            // nothing) shows as a systematic few ms. Alternating cancels it instead of hiding it.
-            // With more than two conditions a plain reversal would pin the middle one, so rotate too.
-            const rotation = i % conditions.length;
-            const rotated = [...conditions.slice(rotation), ...conditions.slice(0, rotation)];
-            const ordered = (i % 2 === 0) ? rotated : rotated.reverse();
+            // Counterbalance the order: a condition inherits whatever the one before it left warm,
+            // which the null control shows as a systematic few ms (and, with four conditions and
+            // a plain rotation, 10-20ms). Balancing who-follows-whom cancels it instead of hiding
+            // it, provided --steps covers whole cycles of the design's rows.
+            const ordered = orderRows[i % orderRows.length].map(index => conditions[index]);
             for (const condition of ordered) {
                 await setCondition(condition);
                 for (const [name, direction] of [['out', 1], ['in', -1]]) {
