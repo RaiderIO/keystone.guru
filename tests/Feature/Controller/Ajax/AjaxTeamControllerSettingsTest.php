@@ -51,7 +51,7 @@ final class AjaxTeamControllerSettingsTest extends AjaxPublicTestCase
     protected function tearDown(): void
     {
         try {
-            $this->team->load('members.patreonAdFreeGiveaway')->delete();
+            $this->team->delete();
             $this->member->delete();
             $this->moderator->delete();
             $this->teamAdmin->delete();

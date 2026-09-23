@@ -46,9 +46,7 @@ final class AjaxDungeonRouteCloneToTeamTest extends DungeonRouteTestBase
         try {
             DungeonRoute::query()->where('clone_of', $this->dungeonRoute->public_key)->get()->each->delete();
 
-            // Team's "deleting" hook walks members->patreonAdFreeGiveaway, which trips
-            // preventLazyLoading unless the chain is eager-loaded first.
-            $this->team->load('members.patreonAdFreeGiveaway')->delete();
+            $this->team->delete();
         } finally {
             parent::tearDown();
         }

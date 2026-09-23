@@ -50,7 +50,7 @@ final class AjaxTeamControllerRemoveMemberTest extends AjaxPublicTestCase
     {
         try {
             // The team may already be gone when a test disbanded it
-            Team::query()->whereKey($this->team->id)->first()?->load('members.patreonAdFreeGiveaway')->delete();
+            Team::query()->whereKey($this->team->id)->first()?->delete();
             $this->member->delete();
             $this->moderator->delete();
             $this->teamAdmin->delete();

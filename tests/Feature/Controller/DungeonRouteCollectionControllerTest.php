@@ -744,7 +744,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             $this->assertSame(0, DungeonRouteCollection::where('user_id', $creator->id)->count());
         } finally {
             Feature::for($creator)->forget(CreatorProfiles::class);
-            $this->deleteTeam($team);
+            $team->delete();
             $someoneElse->delete();
             $creator->delete();
         }
@@ -1411,7 +1411,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             $dungeonRouteCollection->delete();
             Feature::for($outsider)->forget(CreatorProfiles::class);
             Feature::for($member)->forget(CreatorProfiles::class);
-            $this->deleteTeam($team);
+            $team->delete();
             $outsider->delete();
             $member->delete();
             $creator->delete();
@@ -1546,15 +1546,5 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         $team->addMember($user, TeamUser::ROLE_ADMIN);
 
         return $team;
-    }
-
-    /**
-     * Team::deleting() walks its members and routes, which lazy loading refuses to hydrate on the
-     * fly - so they are loaded up front.
-     */
-    private function deleteTeam(Team $team): void
-    {
-        $team->load(['members.patreonAdFreeGiveaway', 'dungeonRoutes']);
-        $team->delete();
     }
 }

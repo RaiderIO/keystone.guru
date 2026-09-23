@@ -52,7 +52,7 @@ final class TeamControllerMembershipTest extends PublicTestCase
     {
         try {
             // The team is gone when a test deleted it
-            Team::query()->whereKey($this->team->id)->first()?->load('members.patreonAdFreeGiveaway')->delete();
+            Team::query()->whereKey($this->team->id)->first()?->delete();
             $this->moderator->delete();
             $this->teamAdmin->delete();
         } finally {
@@ -197,7 +197,7 @@ final class TeamControllerMembershipTest extends PublicTestCase
             $this->assertSame('A brand new team', $team->description);
             $this->assertSame(TeamUser::ROLE_ADMIN, $team->getUserRole($creator));
         } finally {
-            Team::query()->where('name', $name)->first()?->load('members.patreonAdFreeGiveaway')->delete();
+            Team::query()->where('name', $name)->first()?->delete();
             $creator->delete();
         }
     }
@@ -224,7 +224,7 @@ final class TeamControllerMembershipTest extends PublicTestCase
             $this->assertNotNull($team);
             $this->assertFalse((bool)$team->route_publishing_enabled);
         } finally {
-            Team::query()->where('name', $name)->first()?->load('members.patreonAdFreeGiveaway')->delete();
+            Team::query()->where('name', $name)->first()?->delete();
             $creator->delete();
         }
     }
@@ -360,10 +360,9 @@ final class TeamControllerMembershipTest extends PublicTestCase
     }
 
     #[Test]
-    public function delete_givenTeamAdminAsTheOnlyMember_deletesTheTeamAndRedirectsToTheTeamList(): void
+    public function delete_givenTeamAdminOfTeamWithOtherMembers_deletesTheTeamAndRedirectsToTheTeamList(): void
     {
         // Arrange
-        TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->moderator->id)->delete();
         $this->actingAs($this->teamAdmin);
 
         // Act

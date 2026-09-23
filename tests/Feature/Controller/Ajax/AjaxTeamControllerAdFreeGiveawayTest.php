@@ -55,7 +55,7 @@ final class AjaxTeamControllerAdFreeGiveawayTest extends AjaxPublicTestCase
                 ->orWhereIn('receiver_user_id', [$this->giver->id, $this->receiver->id])
                 ->delete();
 
-            $this->team->load('members.patreonAdFreeGiveaway')->delete();
+            $this->team->delete();
             $this->receiver->delete();
             $this->giver->delete();
         } finally {

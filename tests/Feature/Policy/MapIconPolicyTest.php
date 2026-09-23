@@ -84,7 +84,7 @@ final class MapIconPolicyTest extends PublicTestCase
             // Act & Assert
             $this->assertTrue($this->policy->update($user, $mapIcon)->allowed());
         } finally {
-            $this->deleteTeam($team);
+            $team->delete();
             $user->delete();
         }
     }
@@ -101,7 +101,7 @@ final class MapIconPolicyTest extends PublicTestCase
             // Act & Assert
             $this->assertTrue($this->policy->update($user, $mapIcon)->denied());
         } finally {
-            $this->deleteTeam($team);
+            $team->delete();
             $user->delete();
         }
     }
@@ -120,7 +120,7 @@ final class MapIconPolicyTest extends PublicTestCase
             // Act & Assert
             $this->assertTrue($this->policy->update($user, $mapIcon)->allowed());
         } finally {
-            $this->deleteTeam($team);
+            $team->delete();
             $user->delete();
         }
     }
@@ -139,7 +139,7 @@ final class MapIconPolicyTest extends PublicTestCase
             // Act & Assert
             $this->assertTrue($this->policy->update($outsider, $mapIcon)->denied());
         } finally {
-            $this->deleteTeam($team);
+            $team->delete();
             $outsider->delete();
             $member->delete();
         }
@@ -157,7 +157,7 @@ final class MapIconPolicyTest extends PublicTestCase
             // Act & Assert
             $this->assertTrue($this->policy->update(null, $mapIcon)->denied());
         } finally {
-            $this->deleteTeam($team);
+            $team->delete();
             $member->delete();
         }
     }
@@ -175,7 +175,7 @@ final class MapIconPolicyTest extends PublicTestCase
             // Act & Assert
             $this->assertTrue($this->policy->update($this->adminUser(), $mapIcon)->denied());
         } finally {
-            $this->deleteTeam($team);
+            $team->delete();
             $member->delete();
         }
     }
@@ -263,7 +263,7 @@ final class MapIconPolicyTest extends PublicTestCase
             // Act & Assert
             $this->assertTrue($this->policy->assignToTeam($user, new MapIcon(), $team));
         } finally {
-            $this->deleteTeam($team);
+            $team->delete();
             $user->delete();
         }
     }
@@ -279,7 +279,7 @@ final class MapIconPolicyTest extends PublicTestCase
             // Act & Assert
             $this->assertFalse($this->policy->assignToTeam($user, new MapIcon(), $team));
         } finally {
-            $this->deleteTeam($team);
+            $team->delete();
             $user->delete();
         }
     }
@@ -298,7 +298,7 @@ final class MapIconPolicyTest extends PublicTestCase
             $this->assertFalse($this->policy->assignToTeam($user, new MapIcon(), null));
             $this->assertFalse($this->policy->assignToTeam(null, new MapIcon(), $team));
         } finally {
-            $this->deleteTeam($team);
+            $team->delete();
             $outsider->delete();
             $user->delete();
         }
@@ -343,14 +343,5 @@ final class MapIconPolicyTest extends PublicTestCase
         );
 
         return $admin;
-    }
-
-    /**
-     * Team's "deleting" hook walks members->patreonAdFreeGiveaway, which trips preventLazyLoading
-     * unless the chain is eager-loaded first.
-     */
-    private function deleteTeam(Team $team): void
-    {
-        $team->load('members.patreonAdFreeGiveaway')->delete();
     }
 }
