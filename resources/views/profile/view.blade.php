@@ -7,13 +7,14 @@
  * @var Collection<int, DungeonRouteCollection> $pinnedDungeonRouteCollections
  * @var Collection<int, Collection<int, DungeonRoute>> $pinnedDungeonRouteCollectionDungeonRoutes Keyed by collection id.
  * @var Collection<int, int>            $pinnedDungeonRouteCollectionCoveredDungeonCounts   Keyed by collection id.
- * @var int                             $publishedRouteCount
+ * @var CreatorStats|null               $creatorStats Set whenever $creatorProfileActive is.
  */
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\User;
 use App\Models\UserSocialLink;
+use App\Service\Creator\Dtos\CreatorStats;
 use Illuminate\Support\Collection;
 
 $creatorProfileActive ??= false;
@@ -22,7 +23,6 @@ $pinnedDungeonRoutes  ??= collect();
 $pinnedDungeonRouteCollections ??= collect();
 $pinnedDungeonRouteCollectionDungeonRoutes        ??= collect();
 $pinnedDungeonRouteCollectionCoveredDungeonCounts ??= collect();
-$publishedRouteCount  ??= 0;
 
 $title  = sprintf(__('view_profile.view.title'), $user->name);
 $header = sprintf(__('view_profile.view.header'), $user->name);
@@ -64,9 +64,7 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
                     </h1>
 
                     <div class="text-body-secondary small mb-2">
-                        {{ __('view_profile.view.member_since', ['date' => $user->created_at->isoFormat('MMMM YYYY')]) }}
-                        &middot;
-                        {{ trans_choice('view_profile.view.route_count', $publishedRouteCount, ['count' => $publishedRouteCount]) }}
+                        {{ implode(' · ', $creatorStats->getProfileParts()) }}
                     </div>
 
                     @if(!empty($user->bio))

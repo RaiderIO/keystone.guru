@@ -8,6 +8,8 @@ use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
 use App\Models\PublishedState;
 use App\Models\User;
+use App\Service\Creator\CreatorDirectoryServiceInterface;
+use App\Service\Creator\Enums\CreatorDirectorySort;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
@@ -428,6 +430,101 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
             $response->assertSessionHasErrors('search');
         } finally {
             Feature::for($viewer)->forget(CreatorProfiles::class);
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenNoSort_sortsByActivityThisSeason(): void
+    {
+        // Arrange
+        $viewer = User::factory()->create();
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas('sort', CreatorDirectorySort::ActiveThisSeason);
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenTheMostRoutesSort_sortsByRouteCount(): void
+    {
+        // Arrange
+        $viewer = User::factory()->create();
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['sort' => CreatorDirectorySort::MostRoutes->value]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas('sort', CreatorDirectorySort::MostRoutes);
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenAnUnknownSort_failsValidation(): void
+    {
+        // Arrange
+        $viewer = User::factory()->create();
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['sort' => 'views']));
+
+            // Assert
+            $response->assertSessionHasErrors('sort');
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenACreatorWithRoutesThisSeason_rendersTheirSeasonStatLine(): void
+    {
+        // Arrange - searched for by name, so the creator is on the first page whatever else is listed
+        $viewer      = User::factory()->create();
+        $creator     = User::factory()->create();
+        $statsSeason = app(CreatorDirectoryServiceInterface::class)->getStatsSeason();
+        $this->assertNotNull($statsSeason, 'Expected the default game version to have a current season');
+
+        $routes = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes());
+        foreach ($routes as $route) {
+            $route->update(['season_id' => $statsSeason->id, 'views' => 1000]);
+        }
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['search' => $creator->name]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas('statsSeason', $statsSeason);
+            $response->assertSee(sprintf(
+                '%s · %s',
+                trans_choice('view_creator.stats.season_route_count', $this->minPublishedRoutes(), ['count' => $this->minPublishedRoutes()]),
+                trans_choice('view_creator.stats.views', 1000 * $this->minPublishedRoutes(), ['views' => abbreviateNumber(1000 * $this->minPublishedRoutes())]),
+            ));
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $this->deleteAll($routes);
+            $creator->delete();
             $viewer->delete();
         }
     }

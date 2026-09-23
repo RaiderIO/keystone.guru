@@ -375,8 +375,14 @@ return [
         /** How many creators to feature in the rail - four is what fits its 70rem measure without the shelf needing to scroll on a desktop */
         'featured_count' => 4,
 
-        /** The rail is a site-wide list off a heavy GROUP BY, so it may go this stale - see getFeaturedCreators() */
+        /** The rail is hidden below this many creators for its dungeon */
+        'featured_min_count' => 2,
+
+        /** The rail is cached per dungeon off a heavy GROUP BY, so it may go this stale - see getFeaturedCreators() */
         'featured_ttl' => '1 hour',
+
+        /** A creator's average rating is only shown once their routes have this many ratings between them */
+        'min_ratings_shown' => 5,
     ],
 
     /**

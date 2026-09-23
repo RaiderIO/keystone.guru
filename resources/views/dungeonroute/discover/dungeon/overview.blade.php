@@ -64,7 +64,7 @@ use Illuminate\Support\Collection;
     ?>
     <?php // Above the hero band, not between it and the leaderboard: startRank continues from the band into the list ?>
     @feature(\App\Features\CreatorProfiles::class)
-        @include('creator.featured')
+        @include('creator.featured', ['dungeon' => $dungeon])
     @endfeature
 
     @if($page === 1)
