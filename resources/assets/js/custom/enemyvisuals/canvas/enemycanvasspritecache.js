@@ -16,13 +16,14 @@ class EnemyCanvasSpriteCache {
 
     /**
      * @param options {Object}
-     * @param options.pixelRatio {Number} Device pixels per CSS pixel the sprites are rendered at.
+     * @param options.pixelRatio {Number} Device pixels per CSS pixel the sprites are rendered at. Defaults to
+     *        what L.Canvas renders at: 2 on any screen above 1x, else 1.
      * @param options.onImageLoaded {function(String)} Called with the url once an image finished loading.
      * @param options.createCanvas {function(Number, Number): HTMLCanvasElement}
      * @param options.createImage {function(): HTMLImageElement}
      */
     constructor(options = {}) {
-        this._pixelRatio = options.pixelRatio ?? (typeof window !== 'undefined' && window.devicePixelRatio ? window.devicePixelRatio : 1);
+        this._pixelRatio = options.pixelRatio ?? (typeof L !== 'undefined' && L.Browser.retina ? 2 : 1);
         this._onImageLoaded = options.onImageLoaded ?? (() => {
         });
         this._createCanvas = options.createCanvas ?? EnemyCanvasSpriteCache._createCanvasElement;

@@ -64,8 +64,7 @@ $isAdmin             = isset($admin) && $admin;
 $embed               = isset($embed) && $embed;
 $embedStyle          ??= '';
 $edit                = isset($edit) && $edit;
-$canvasEnemyRenderer = isset($canvasEnemyRendererAllowed) && $canvasEnemyRendererAllowed && !$edit && !$isAdmin
-    && Feature::active(CanvasEnemyRenderer::class);
+$canvasEnemyRenderer = CanvasEnemyRenderer::isEnabledForMap(isset($canvasEnemyRendererAllowed) && $canvasEnemyRendererAllowed, $edit, $isAdmin);
 $mapClasses          ??= '';
 $dungeonroute        ??= null;
 // The inline map JS reads affixes (and the setup/has_thumbnail appends) off the serialized route

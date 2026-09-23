@@ -69,8 +69,12 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         if (!(this._canvasRenderer instanceof L.Canvas)) {
             let leafletMap = this.manager.map.leafletMap;
             if (!leafletMap.getPane(ENEMY_CANVAS_PANE)) {
-                // Above the overlay pane's pulls and patrols, below the marker pane's DOM markers
-                leafletMap.createPane(ENEMY_CANVAS_PANE).style.zIndex = 590;
+                // Above the overlay pane's pulls and patrols, below the marker pane's DOM markers. Leaflet's
+                // canvas renderer never passes a click on to the layers underneath, so the map-sized canvas
+                // must not take pointer events at all; enemy hover is the map's own mousemove distance check.
+                let pane = leafletMap.createPane(ENEMY_CANVAS_PANE);
+                pane.style.zIndex = 590;
+                pane.style.pointerEvents = 'none';
             }
 
             this._canvasRenderer = L.canvas({pane: ENEMY_CANVAS_PANE});

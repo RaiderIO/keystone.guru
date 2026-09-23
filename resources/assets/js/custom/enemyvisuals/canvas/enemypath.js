@@ -18,8 +18,7 @@ let EnemyPath = L.CircleMarker.extend({
     options: {
         stroke: false,
         fill: false,
-        interactive: true,
-        bubblingMouseEvents: true,
+        interactive: false,
     },
 
     /**

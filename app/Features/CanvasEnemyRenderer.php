@@ -5,6 +5,7 @@ namespace App\Features;
 use App\Models\Feature\Feature;
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use Laravel\Pennant\Feature as Pennant;
 
 /**
  * Draws the enemies of read-only maps (explore, route view) on one shared canvas instead of one DOM
@@ -27,5 +28,14 @@ class CanvasEnemyRenderer
 
         // Ok, feature is enabled, now check if YOU can do it
         return $user?->hasRole(Role::ROLES_INTERNAL) ?? false;
+    }
+
+    /**
+     * Whether a map draws its enemies on canvas: the page opted in, it cannot edit enemies (an edit page
+     * or the mapping editor) and the feature is active for the current user.
+     */
+    public static function isEnabledForMap(bool $pageAllowsCanvas, bool $isEditPage, bool $isMappingEditor): bool
+    {
+        return $pageAllowsCanvas && !$isEditPage && !$isMappingEditor && Pennant::active(self::class);
     }
 }

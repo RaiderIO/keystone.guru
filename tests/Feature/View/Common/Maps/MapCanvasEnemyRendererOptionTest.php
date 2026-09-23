@@ -69,12 +69,16 @@ final class MapCanvasEnemyRendererOptionTest extends PublicTestCase
     #[Test]
     public function explore_givenGuest_keepsDomEnemies(): void
     {
-        // Act
-        $response = $this->get($this->exploreUrl());
+        try {
+            // Act
+            $response = $this->get($this->exploreUrl());
 
-        // Assert
-        $response->assertOk();
-        $response->assertSee(self::OPTION_OFF, false);
+            // Assert
+            $response->assertOk();
+            $response->assertSee(self::OPTION_OFF, false);
+        } finally {
+            Feature::for(null)->forget(CanvasEnemyRenderer::class);
+        }
     }
 
     #[Test]
