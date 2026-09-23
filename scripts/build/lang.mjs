@@ -35,7 +35,7 @@ export function buildLangBundles(rootDir, version, production) {
 
         let groups = readLocaleGroups(langRoot, locale);
         if (locale !== 'en_US') {
-            // Mirrors Laravel's server-side __() fallback to en_US (#4844), so a key a locale's
+            // Mirrors Laravel's server-side __() fallback to en_US, so a key a locale's
             // translators haven't caught up on yet still renders instead of showing the raw key.
             groups = mergeTranslationsWithFallback(groups, fallbackGroups);
         }
