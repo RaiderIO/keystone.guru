@@ -105,6 +105,9 @@ trait GeneratesDungeonRoutes
      * mdt_id does not exist in the MDT Lua file (e.g. KG has mdt_id=1 but MDT starts at 2).
      * Additionally, applies the same clone-index offset hacks as parseMdtNpcClonesInPull()
      * to exclude enemies that would fail to match during import due to duplicate-NPC merging.
+     * Finally, the MDT clone the import resolves must match exactly one enemy of the mapping version,
+     * and that enemy must be this one: the import attaches a pull to the first enemy sharing the
+     * clone's npc_id and mdt_id, which can be a different enemy far away from this one.
      *
      * @param  (Closure(Enemy): bool)|null $enemyFilter an extra per-enemy requirement of the caller's
      * @return Collection<int, Enemy>
@@ -125,6 +128,12 @@ trait GeneratesDungeonRoutes
         // Grouped lookup: mdt_npc_index => Collection<Enemy> (used to verify offset clone exists)
         $mdtClonesByNpcIndex = $mdtClones->groupBy('mdt_npc_index');
 
+        // Lookup: "effectiveNpcId_mdt_id" => every enemy of the mapping version the import could match to it
+        $enemiesByImportPair = $dungeonRoute->mappingVersion->enemies()
+            ->whereNotNull('mdt_id')
+            ->get()
+            ->groupBy(static fn(Enemy $enemy): string => sprintf('%d_%d', $enemy->mdt_npc_id ?? $enemy->npc_id, $enemy->mdt_id));
+
         $dungeon = $dungeonRoute->dungeon;
 
         return $dungeonRoute->mappingVersion->enemies()
@@ -133,7 +142,7 @@ trait GeneratesDungeonRoutes
             ->where(fn($q) => $q->where('seasonal_type', '!=', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER)->orWhereNull('seasonal_type'))
             ->whereNull('seasonal_index')
             ->get()
-            ->filter(static function (Enemy $enemy) use ($mdtCloneByPair, $mdtClonesByNpcIndex, $dungeon): bool {
+            ->filter(static function (Enemy $enemy) use ($mdtCloneByPair, $mdtClonesByNpcIndex, $enemiesByImportPair, $dungeon): bool {
                 $effectiveNpcId = $enemy->mdt_npc_id ?? $enemy->npc_id;
                 $mdtClone       = $mdtCloneByPair->get(sprintf('%d_%d', $effectiveNpcId, $enemy->mdt_id));
 
@@ -156,12 +165,15 @@ trait GeneratesDungeonRoutes
                     $importMdtId += 5;
                 }
 
-                if ($importMdtId === $enemy->mdt_id) {
-                    return true;
+                /** @var Enemy|null $importedMdtClone */
+                $importedMdtClone = $mdtClonesByNpcIndex->get($npcIndex)?->firstWhere('mdt_id', $importMdtId);
+                if ($importedMdtClone === null) {
+                    return false;
                 }
 
-                return $mdtClonesByNpcIndex->has($npcIndex) &&
-                    $mdtClonesByNpcIndex->get($npcIndex)->contains('mdt_id', $importMdtId);
+                $importedEnemies = $enemiesByImportPair->get(sprintf('%d_%d', $importedMdtClone->npc_id, $importedMdtClone->mdt_id));
+
+                return $importedEnemies?->count() === 1 && $importedEnemies->first()->id === $enemy->id;
             })
             ->filter(static fn(Enemy $enemy): bool => $enemyFilter === null || $enemyFilter($enemy))
             ->shuffle()
