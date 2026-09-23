@@ -1,11 +1,9 @@
 <?php
 
-use App\Features\DungeonRouteListRework;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
 use Illuminate\Support\Collection;
-use Laravel\Pennant\Feature;
 
 /**
  * @var DungeonRouteCollection                       $dungeonRouteCollection
@@ -19,11 +17,6 @@ $title  = __('view_collection.view.title_by_author', [
     'name'   => $dungeonRouteCollection->name,
     'author' => $author->name,
 ]);
-
-// The same card the route lists use: the poster while the list rework rolls out, the vertical card otherwise
-$cardView = Feature::active(DungeonRouteListRework::class)
-    ? 'common.dungeonroute.cardposter'
-    : 'common.dungeonroute.cardvertical';
 
 $groupAnchor = static fn(DungeonRouteCollectionGroup $dungeonRouteGroup): string => sprintf(
     'collection_dungeon_%d',
@@ -146,7 +139,7 @@ $isEmpty = $dungeonRoutes->isEmpty();
                                             @if($dungeonRouteCount > 1)
                                                 <span class="collection_route_position" aria-hidden="true">{{ $loop->iteration }}</span>
                                             @endif
-                                            @include($cardView, [
+                                            @include('common.dungeonroute.cardposter', [
                                                 'dungeonroute' => $dungeonRoute,
                                                 'currentAffixGroup' => null,
                                                 'tierAffixGroup' => null,
