@@ -177,6 +177,8 @@ export const customScripts = [
 
     // The canvas enemy renderer, used by EnemyVisual and EnemyMapObjectGroup when it is enabled
     'resources/assets/js/custom/enemyvisuals/canvas/enemycanvasstyleprobe.js',
+    'resources/assets/js/custom/enemyvisuals/canvas/enemycanvasspritecache.js',
+    'resources/assets/js/custom/enemyvisuals/canvas/enemypath.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisual.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualicon.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmain.js',

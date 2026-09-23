@@ -29,6 +29,7 @@ class EnemyCanvasStyleProbe {
      * @property innerImageBlendMode {String} A CanvasRenderingContext2D globalCompositeOperation.
      * @property contentBackgroundColor {String|null} Null when transparent or when there is no content element.
      * @property contentImageFit {String} 'cover' or 'contain'.
+     * @property contentImageBlendMode {String} A CanvasRenderingContext2D globalCompositeOperation.
      */
 
     /**
@@ -62,6 +63,7 @@ class EnemyCanvasStyleProbe {
             contentBackgroundColor: contentClasses === '' ?
                 null : EnemyCanvasStyleProbe.toCanvasColor(contentStyle.backgroundColor),
             contentImageFit: EnemyCanvasStyleProbe.toImageFit(contentStyle.backgroundSize),
+            contentImageBlendMode: EnemyCanvasStyleProbe.toCompositeOperation(contentStyle.backgroundBlendMode),
         };
 
         this._cache[key] = result;

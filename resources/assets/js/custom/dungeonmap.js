@@ -148,7 +148,7 @@ class DungeonMap extends Signalable {
 
                 // Add the new layer when we should
                 let newLayer = layerChangedEvent.data.newLayer;
-                if (newLayer !== null) {
+                if (newLayer !== null && !layerChangedEvent.data.objectgroup.isCanvasRendered()) {
                     if (mapObject.shouldBeVisible()) {
                         self.drawnLayers.addLayer(newLayer);
 
@@ -192,7 +192,7 @@ class DungeonMap extends Signalable {
             mapObjectGroup.register(['mapobject:shown', 'mapobject:hidden'], this, function (visibilityEvent) {
                 let mapObject = visibilityEvent.data.object;
                 // If it's visible now and the layer is not added already
-                if (mapObject.layer !== null) {
+                if (mapObject.layer !== null && !visibilityEvent.data.objectgroup.isCanvasRendered()) {
                     if (visibilityEvent.data.visible && !self.drawnLayers.hasLayer(mapObject.layer)) {
                         // Add it
                         self.drawnLayers.addLayer(mapObject.layer);

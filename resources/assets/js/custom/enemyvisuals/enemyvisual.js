@@ -29,6 +29,9 @@ class EnemyVisual extends Signalable {
         this.cachedLayerPoint = null;
         this.cachedRadius = 0;
 
+        this._canvasClasses = {outer: '', inner: ''};
+        this._canvasOpacity = 1;
+
         this._circleMenu = null;
         // True for the entire 500ms fade-out queued by _cleanupCircleMenu(true) - the window in which
         // _circleMenu is still non-null (nothing else marks a menu that is on its way out rather than
@@ -493,15 +496,18 @@ class EnemyVisual extends Signalable {
             //     border = `${borderThickness}px dashed red`;
             // }
 
+            let opacity = 100;
             if (this.isHighlighted() || hasKillZone || this.enemy.getOverpulledKillZoneId() !== null || this.enemy.isObsolete()) {
-                data.root_style = `opacity: 100%`;
+                opacity = 100;
             } else if (this.enemy.isImportant()) {
                 data.root_classes += ' important';
 
-                data.root_style = `opacity: ${getState().getUnkilledImportantEnemyOpacity()}%`;
+                opacity = getState().getUnkilledImportantEnemyOpacity();
             } else {
-                data.root_style = `opacity: ${getState().getUnkilledEnemyOpacity()}%`;
+                opacity = getState().getUnkilledEnemyOpacity();
             }
+            data.root_style = `opacity: ${opacity}%`;
+            this._canvasOpacity = opacity / 100;
 
             data.outer_border = border;
 
@@ -514,6 +520,7 @@ class EnemyVisual extends Signalable {
             }
 
             data = $.extend(data, this.mainVisual._getTemplateData());
+            this._canvasClasses = {outer: data.main_visual_outer_classes, inner: data.main_visual_inner_classes};
 
             let size = this.mainVisual.getSize();
 
@@ -619,6 +626,12 @@ class EnemyVisual extends Signalable {
     refreshSize(adjustParent = true) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
+        let canvasPath = this.getCanvasPath();
+        if (canvasPath !== null) {
+            this._refreshCanvasPath(canvasPath);
+            return;
+        }
+
         if (this._$mainVisual === null || this._$mainVisual.length === 0) {
             console.warn('Unable to refresh size of visual that no longer exists');
             return;
@@ -704,6 +717,76 @@ class EnemyVisual extends Signalable {
 
         // Hide/show modifiers based on zoom level
         this._refreshModifierVisibility(outerWidth, outerHeight, margin);
+    }
+
+    /**
+     * @returns {EnemyPath|null} The path drawing this enemy, or null when enemies are DOM markers.
+     */
+    getCanvasPath() {
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
+        if (!enemyMapObjectGroup.isCanvasRendered()) {
+            return null;
+        }
+
+        let canvasPath = enemyMapObjectGroup.getCanvasPath(this.layer);
+        canvasPath.setProjectedCallback(this._onCanvasPathProjected.bind(this));
+
+        return canvasPath;
+    }
+
+    /**
+     * @param layerPoint {L.Point}
+     * @param radius {Number}
+     * @private
+     */
+    _onCanvasPathProjected(layerPoint, radius) {
+        this.cachedLayerPoint = layerPoint;
+        this.cachedRadius = radius;
+    }
+
+    /**
+     * Hands the enemy's current size, border, opacity and image to its canvas path.
+     * @param canvasPath {EnemyPath}
+     * @private
+     */
+    _refreshCanvasPath(canvasPath) {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
+
+        let width = this.mainVisual.getSize().iconSize[0];
+        let margin = c.map.enemy.calculateMargin(width);
+
+        let killZone = this.enemy.getKillZone();
+        let hasKillZone = killZone instanceof KillZone;
+        let borderWidth = hasKillZone || this.enemy.getOverpulledKillZoneId() !== null ? getState().getMapZoomLevel() : 1;
+
+        let content = this.mainVisual.getCanvasContent();
+        let style = this.map.mapObjectGroupManager.getEnemyMapObjectGroup().getCanvasStyleProbe().read(
+            this._canvasClasses.outer,
+            this._canvasClasses.inner,
+            content === null ? '' : content.classes
+        );
+
+        let sprite = content === null ? {
+            backgroundColors: [style.innerBackgroundColor],
+            imageUrl: style.innerImageUrl,
+            imageFit: style.innerImageFit,
+            blendMode: style.innerImageBlendMode,
+        } : {
+            backgroundColors: [style.innerBackgroundColor, style.contentBackgroundColor],
+            imageUrl: content.imageUrl,
+            imageFit: style.contentImageFit,
+            blendMode: style.contentImageBlendMode,
+        };
+
+        canvasPath.setAppearance({
+            outerDiameter: width + (margin * 2),
+            borderWidth: borderWidth,
+            borderColor: hasKillZone ? killZone.color : 'black',
+            innerMargin: getState().hasEnemyAggressivenessBorder() ? margin : 0,
+            outerBackgroundColor: style.outerBackgroundColor,
+            opacity: this._canvasOpacity,
+            sprite: sprite,
+        });
     }
 
     /**

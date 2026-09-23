@@ -41,6 +41,21 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
     }
 
     /**
+     * @inheritDoc
+     */
+    getCanvasContent() {
+        let isObsoleteOrOverpulled = this.enemyvisual.enemy.isObsolete() || this.enemyvisual.enemy.getOverpulledKillZoneId() !== null;
+        let enemyPortraitUrl = this.enemyvisual.enemy.npc === null ?
+            `${this.enemyvisual.map.options.assetsBaseUrl}/images/enemyportraits/unknown.png` :
+            `${this.enemyvisual.map.options.assetsBaseUrl}/${this.enemyvisual.enemy.npc.enemy_portrait_url}`;
+
+        return {
+            classes: 'enemy_icon_npc_enemy_portrait_inner',
+            imageUrl: isObsoleteOrOverpulled ? null : enemyPortraitUrl,
+        };
+    }
+
+    /**
      * Called whenever the NPC of the enemy has been refreshed.
      */
     _refreshNpc() {

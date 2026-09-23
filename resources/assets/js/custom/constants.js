@@ -270,6 +270,7 @@ const LEAFLET_PANE_SHADOW = 'shadowPane';
 const LEAFLET_PANE_MARKER = 'markerPane';
 const LEAFLET_PANE_TOOLTIP = 'tooltipPane';
 const LEAFLET_PANE_POPUP = 'popupPane';
+const ENEMY_CANVAS_PANE = 'enemyCanvasPane';
 
 /**
  * Returns a function which returns the polyline_default_color cookie value or a random color if none was set.

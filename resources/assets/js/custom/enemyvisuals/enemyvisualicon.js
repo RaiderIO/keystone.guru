@@ -50,6 +50,15 @@ class EnemyVisualIcon extends Signalable {
     }
 
     /**
+     * What the canvas renderer draws inside the inner circle, for visuals whose image is not a
+     * stylesheet background of the inner element.
+     * @returns {{classes: String, imageUrl: String|null}|null}
+     */
+    getCanvasContent() {
+        return null;
+    }
+
+    /**
      *
      * @param name
      */
