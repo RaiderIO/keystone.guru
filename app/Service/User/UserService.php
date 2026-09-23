@@ -14,7 +14,8 @@ class UserService implements UserServiceInterface
 {
     use AuthenticatesUsers;
 
-    private const string CACHE_KEY_USER_AUTH = 'user_auth:%s-%s';
+    /** Versioned so that workers expecting a different payload shape never read each other's entries */
+    private const string CACHE_KEY_USER_AUTH = 'user_auth_v2:%s-%s';
     private const int CACHE_TTL_USER_AUTH    = 300;
 
     public function __construct(
@@ -143,9 +144,13 @@ class UserService implements UserServiceInterface
             return null;
         }
 
+        // Compared in the database so the email matches under the same collation as the cold lookup
         /** @var User|null $user */
-        $user = User::query()->find($cached['user_id']);
-        if ($user === null || $user->email !== $email) {
+        $user = User::query()
+            ->whereKey($cached['user_id'])
+            ->where('email', $email)
+            ->first();
+        if ($user === null) {
             return null;
         }
 
