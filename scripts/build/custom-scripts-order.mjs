@@ -175,6 +175,8 @@ export const customScripts = [
     'resources/assets/js/custom/mapstate/enemyselection/selectkillzoneenemyselectionoverpull.js',
     'resources/assets/js/custom/mapstate/enemyselection/viewkillzoneenemyselection.js',
 
+    // The canvas enemy renderer, used by EnemyVisual and EnemyMapObjectGroup when it is enabled
+    'resources/assets/js/custom/enemyvisuals/canvas/enemycanvasstyleprobe.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisual.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualicon.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmain.js',
