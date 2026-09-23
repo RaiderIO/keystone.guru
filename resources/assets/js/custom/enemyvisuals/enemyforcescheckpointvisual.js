@@ -5,7 +5,7 @@
  * delegates rendering to an instance of this class.
  */
 class EnemyForcesCheckpointVisual {
-    constructor(map, checkpoint, layer) {
+    constructor(map, checkpoint) {
         console.assert(this instanceof EnemyForcesCheckpointVisual, 'this is not an EnemyForcesCheckpointVisual', this);
         console.assert(checkpoint instanceof EnemyForcesCheckpoint, 'checkpoint was not an EnemyForcesCheckpoint', checkpoint);
 
@@ -13,10 +13,17 @@ class EnemyForcesCheckpointVisual {
         this.map = map;
         /** @type EnemyForcesCheckpoint */
         this.checkpoint = checkpoint;
-        this.layer = layer;
 
         // Satellite pill for the floor this checkpoint has enemies on, but isn't anchored to.
         this._satelliteLayerGroup = null;
+    }
+
+    /**
+     * Read through to the checkpoint: MapObjectGroup#setLayerToMapObject() may swap or null it.
+     * @returns {L.Layer|null}
+     */
+    get layer() {
+        return this.checkpoint.layer;
     }
 
     /**

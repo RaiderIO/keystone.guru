@@ -48,7 +48,7 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
         this.label = 'Enemy Forces Checkpoint';
 
         /** @type EnemyForcesCheckpointVisual */
-        this.visual = new EnemyForcesCheckpointVisual(this.map, this, this.layer);
+        this.visual = new EnemyForcesCheckpointVisual(this.map, this);
 
         // The value depends on the enemies (which load after the map objects are created), on the
         // number style setting, and on teeming - both the checkpoint's total and the required denominator

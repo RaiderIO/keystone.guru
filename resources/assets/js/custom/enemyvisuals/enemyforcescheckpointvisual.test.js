@@ -46,6 +46,7 @@ function createVisual({groupIsShown = true, currentFloorId = 2} = {}) {
     checkpoint.floor_id = 1;
     checkpoint.isMapObjectGroupShown = () => groupIsShown;
     checkpoint.getEnemies = () => enemies;
+    checkpoint.layer = null;
 
     const map = {
         leafletMap: {
@@ -53,7 +54,7 @@ function createVisual({groupIsShown = true, currentFloorId = 2} = {}) {
         },
     };
 
-    const visual = new EnemyForcesCheckpointVisual(map, checkpoint, null);
+    const visual = new EnemyForcesCheckpointVisual(map, checkpoint);
 
     global.getState = () => ({
         getCurrentFloor: () => ({id: currentFloorId}),
@@ -144,16 +145,15 @@ function createVisualForNumberStyle({killZonesNumberStyle, mapNumberStyle}) {
     checkpoint.getEnemyForces = () => 20;
     checkpoint.getFloorIds = () => [1];
 
-    const layer = {bindTooltip: (text) => (visual._boundTooltipText = text)};
+    checkpoint.layer = {bindTooltip: (text) => (visual._boundTooltipText = text)};
     const map = {
         options: {noUI: false},
         enemyForcesManager: {
-            getEnemyForcesForEnemies: () => 20,
             getEnemyForcesRequired: () => 100,
         },
     };
 
-    const visual = new EnemyForcesCheckpointVisual(map, checkpoint, layer);
+    const visual = new EnemyForcesCheckpointVisual(map, checkpoint);
 
     global.getState = () => ({
         getCurrentFloor: () => ({id: 1}),

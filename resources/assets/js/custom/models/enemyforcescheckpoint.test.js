@@ -36,10 +36,9 @@ global.L = {
 // The constructor builds a real EnemyForcesCheckpointVisual, so this stub only needs to prove
 // delegation happened - the visual's own behavior is covered in its own test file.
 global.EnemyForcesCheckpointVisual = class EnemyForcesCheckpointVisual {
-    constructor(map, checkpoint, layer) {
+    constructor(map, checkpoint) {
         this.map = map;
         this.checkpoint = checkpoint;
-        this.layer = layer;
         this.refreshPillCalls = 0;
         this.bindTooltipCalls = 0;
         this.cleanupCalls = 0;
@@ -73,7 +72,7 @@ describe('EnemyForcesCheckpoint rendering delegation', () => {
             unregister: () => {},
             mapObjectGroupManager: fakeMapObjectGroupManager(() => null),
         };
-        checkpoint.visual = new EnemyForcesCheckpointVisual(checkpoint.map, checkpoint, null);
+        checkpoint.visual = new EnemyForcesCheckpointVisual(checkpoint.map, checkpoint);
 
         return checkpoint;
     }
@@ -128,5 +127,59 @@ describe('EnemyForcesCheckpoint.isMapObjectGroupShown', () => {
         // Assert
         // No group to obey - never suppress on that basis.
         expect(result).toBe(true);
+    });
+});
+
+describe('EnemyForcesCheckpoint data accessors', () => {
+    function createCheckpoint(enemies) {
+        const checkpoint = Object.create(EnemyForcesCheckpoint.prototype);
+        checkpoint.id = 55;
+        checkpoint.map = {
+            mapObjectGroupManager: fakeMapObjectGroupManager((name) => name === MAP_OBJECT_GROUP_ENEMY ? {objects: enemies} : null),
+        };
+
+        return checkpoint;
+    }
+
+    it('getEnemies_givenEnemiesOfSeveralCheckpoints_returnsOnlyItsOwn', () => {
+        // Arrange
+        const own = {id: 1, enemy_forces_checkpoint_id: 55};
+        const other = {id: 2, enemy_forces_checkpoint_id: 56};
+        const none = {id: 3, enemy_forces_checkpoint_id: null};
+        const checkpoint = createCheckpoint({1: own, 2: other, 3: none});
+
+        // Act
+        const result = checkpoint.getEnemies();
+
+        // Assert
+        expect(result).toEqual([own]);
+    });
+
+    it('getEnemies_givenNoEnemyMapObjectGroup_returnsEmpty', () => {
+        // Arrange
+        const checkpoint = createCheckpoint({});
+        checkpoint.map = {mapObjectGroupManager: fakeMapObjectGroupManager(() => null)};
+
+        // Act
+        const result = checkpoint.getEnemies();
+
+        // Assert
+        expect(result).toEqual([]);
+    });
+
+    it('getFloorIds_givenFacadeEnemies_prefersSourceFloorIdAndDeduplicates', () => {
+        // Arrange
+        const checkpoint = createCheckpoint({
+            1: {id: 1, enemy_forces_checkpoint_id: 55, floor_id: 100, source_floor_id: 2},
+            2: {id: 2, enemy_forces_checkpoint_id: 55, floor_id: 100, source_floor_id: 3},
+            3: {id: 3, enemy_forces_checkpoint_id: 55, floor_id: 2, source_floor_id: null},
+            4: {id: 4, enemy_forces_checkpoint_id: 56, floor_id: 9, source_floor_id: null},
+        });
+
+        // Act
+        const result = checkpoint.getFloorIds();
+
+        // Assert
+        expect(result).toEqual([2, 3]);
     });
 });
