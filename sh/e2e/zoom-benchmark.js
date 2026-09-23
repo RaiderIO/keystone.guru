@@ -17,8 +17,8 @@
  *
  * Options:
  *   --url <url>        Page to measure (default the Black Temple facade floor, 552 enemies)
- *   --start-zoom <n>   Zoom level to sit at while measuring (default 5). The default view fits the
- *                      whole floor on screen, which is not where the cost is - at zoom 5 only ~50
+ *   --start-zoom <n>   Zoom level to sit at while measuring (default 5), or `fit` to stay on the view
+ *                      the page opens with. That view fits the whole floor on screen, which is not where the cost is - at zoom 5 only ~50
  *                      of Black Temple's 552 enemies are on screen, which is where a user reading
  *                      a route actually works. Set programmatically; the measured gestures are
  *                      still real wheel gestures from there.
@@ -33,6 +33,15 @@
  *                      noise on a loaded dev machine is comfortably larger than the effects being
  *                      measured here, and it drifts over a run, so comparing two separate runs
  *                      cannot resolve them; interleaving the conditions can.
+ *   --condition <name>=<js>
+ *                      Repeatable; measure two or more conditions alternately within one page load,
+ *                      evaluating <js> in the page before each condition's gestures. Unlike --ab-css
+ *                      this can swap whole layers, so each expression must set its full state (it
+ *                      runs after any other condition). The order rotates every iteration and
+ *                      reverses on every other one, so no condition always follows the same one.
+ *                      A null control is two conditions with the same expression.
+ *   --settle <ms>      Pause after switching condition, before measuring (default 300). A condition
+ *                      that re-adds hundreds of markers needs longer to settle.
  *   --json             Print the raw per-gesture samples alongside the summary.
  *
  * CHROME_HOST/CHROME_PORT override the chrome service (default chrome:9222), as in browse.js.
@@ -169,7 +178,17 @@ async function measureGesture(page, cdp, direction, viewport) {
 
 (async () => {
     const url = arg('url', DEFAULT_URL);
-    const startZoom = parseFloat(arg('start-zoom', '5'));
+    const startZoomArg = arg('start-zoom', '5');
+    const startZoom = startZoomArg === 'fit' ? null : parseFloat(startZoomArg);
+    const settleMs = parseInt(arg('settle', '300'), 10);
+    const jsConditions = [];
+    process.argv.forEach((value, i) => {
+        if (value === '--condition') {
+            const raw = process.argv[i + 1];
+            const separator = raw.indexOf('=');
+            jsConditions.push({name: raw.slice(0, separator), js: raw.slice(separator + 1)});
+        }
+    });
     const steps = parseInt(arg('steps', '7'), 10);
     const warmup = parseInt(arg('warmup', '2'), 10);
     const [width, height] = arg('viewport', '1920x1080').split('x').map(Number);
@@ -197,8 +216,11 @@ async function measureGesture(page, cdp, direction, viewport) {
         );
         await sleep(2000);
 
-        await page.evaluate(zoom => getState().getDungeonMap().leafletMap.setZoom(zoom), startZoom);
-        await sleep(2000);
+        if (startZoom !== null) {
+            await page.evaluate(zoom => getState().getDungeonMap().leafletMap.setZoom(zoom), startZoom);
+            await sleep(2000);
+        }
+        const measuredZoom = await page.evaluate(() => getState().getDungeonMap().leafletMap.getZoom());
 
         const markerCount = await page.evaluate(() => document.querySelectorAll('.leaflet-marker-icon').length);
 
@@ -228,17 +250,23 @@ async function measureGesture(page, cdp, direction, viewport) {
                 style.disabled = true;
             }, abCss);
         }
-        const setAbCondition = async on => {
-            if (abCss === null) {
+        const setCondition = async condition => {
+            if (jsConditions.length > 0) {
+                const {js} = jsConditions.find(c => c.name + ' ' === condition);
+                await page.evaluate(js);
+            } else if (abCss !== null) {
+                await page.evaluate(enabled => {
+                    document.getElementById('__zoomBenchAb').disabled = !enabled;
+                }, condition === 'B ');
+            } else {
                 return;
             }
-            await page.evaluate(enabled => {
-                document.getElementById('__zoomBenchAb').disabled = !enabled;
-            }, on);
-            await sleep(300);
+            await sleep(settleMs);
         };
 
-        const conditions = abCss === null ? [''] : ['A ', 'B '];
+        const conditions = jsConditions.length > 0 ?
+            jsConditions.map(c => c.name + ' ') :
+            (abCss === null ? [''] : ['A ', 'B ']);
         const samples = {};
         for (const condition of conditions) {
             for (const name of ['out', 'in']) {
@@ -251,9 +279,12 @@ async function measureGesture(page, cdp, direction, viewport) {
             // Counterbalance the order: whichever condition is measured second inherits whatever
             // the first one left warm, which the null control (--ab-css with a rule that changes
             // nothing) shows as a systematic few ms. Alternating cancels it instead of hiding it.
-            const ordered = (i % 2 === 0) ? conditions : [...conditions].reverse();
+            // With more than two conditions a plain reversal would pin the middle one, so rotate too.
+            const rotation = i % conditions.length;
+            const rotated = [...conditions.slice(rotation), ...conditions.slice(0, rotation)];
+            const ordered = (i % 2 === 0) ? rotated : rotated.reverse();
             for (const condition of ordered) {
-                await setAbCondition(condition === 'B ');
+                await setCondition(condition);
                 for (const [name, direction] of [['out', 1], ['in', -1]]) {
                     const result = await measureGesture(page, cdp, direction, viewport);
                     if (result === null) {
@@ -270,7 +301,9 @@ async function measureGesture(page, cdp, direction, viewport) {
         const summary = {
             url,
             viewport: `${width}x${height}`,
-            startZoom,
+            startZoom: startZoomArg,
+            measuredZoom: +measuredZoom.toFixed(2),
+            conditions: jsConditions.length > 0 ? jsConditions : undefined,
             markersOnPage: markerCount,
             markersMeasured: measuredState.markers,
             markersCulled: measuredState.culled,
@@ -281,7 +314,8 @@ async function measureGesture(page, cdp, direction, viewport) {
             results: {}
         };
         for (const key of Object.keys(samples)) {
-            const [condition, name] = key.includes(' ') ? key.split(' ') : ['', key];
+            const separator = key.lastIndexOf(' ');
+            const [condition, name] = separator === -1 ? ['', key] : [key.slice(0, separator), key.slice(separator + 1)];
             summary.results[`${condition ? condition + ': ' : ''}zoom ${name}`] = {
                 samples: samples[key].length,
                 stallMs: +median(samples[key].map(s => s.stall)).toFixed(1),
