@@ -740,11 +740,6 @@
     margin-left: -9px !important;
 }
 
-.boss_enemy_icon {
-    width: 32px;
-    height: 32px;
-}
-
 .enemy_aggressiveness_correction {
     margin-top: -6px;
 }
@@ -888,10 +883,6 @@
 .enemy_icon_npc_class.awakened,
 .enemy_icon_npc_type.awakened {
     background-color: #9200c4 !important;
-}
-
-.aggressive_enemy_icon {
-    background-color: #dc3c3c;
 }
 
 .dangerous {

@@ -248,15 +248,6 @@ table.dataTable thead .sorting_desc_disabled {
   background-image: url('#{$asset-url}/images/enemytypes/undead.png') !important;
 }
 
-.aggressive_enemy_icon {
-  background-image: url('#{$asset-url}/images/mapicon/unset.png') !important; /* no-repeat center !important; */
-}
-
-.classification_icon_elite {
-  background-image: url('#{$asset-url}/images/enemyclassifications/elite.png') !important;
-}
-
-
 /** Enemy modifiers/attributes */
 .truesight {
   background: white url('#{$asset-url}/images/enemymodifiers/truesight.png') no-repeat center !important;
@@ -264,11 +255,6 @@ table.dataTable thead .sorting_desc_disabled {
 
 .teeming {
   background: white url('#{$asset-url}/images/enemymodifiers/teeming.png') no-repeat center !important;
-}
-
-
-.boss_enemy_icon {
-  background: url('#{$asset-url}/images/enemyclassifications/boss.png') no-repeat center !important;
 }
 
 .door_icon {

@@ -216,16 +216,9 @@ class EnemyVisual extends Signalable {
             modifiers.push(new EnemyVisualModifierRaidMarker(this, 0));
         }
 
-        // Only for elite enemies
-        if (this.enemy.npc !== null) {
-            if (this.enemy.npc.classification_id !== 1) {
-                modifiers.push(new EnemyVisualModifierClassification(this, 1));
-            }
-
-            // Truesight marker
-            if (this.enemy.npc.truesight) {
-                modifiers.push(new EnemyVisualModifierTruesight(this, 2));
-            }
+        // Truesight marker
+        if (this.enemy.npc !== null && this.enemy.npc.truesight) {
+            modifiers.push(new EnemyVisualModifierTruesight(this, 2));
         }
 
         if (this.enemy.teeming === 'visible') {
