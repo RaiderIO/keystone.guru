@@ -183,6 +183,38 @@ test('getSize_givenFractionalZoomLevelsRoundingToDifferentSteps_missesCache', ()
     expect(Object.keys(fakeThis._sizeCache)).toHaveLength(2);
 });
 
+test('getSize_givenFractionalCalculatedSize_returnsWholePixels', () => {
+    const fakeThis = makeFakeSizeThis(4.3);
+    const originalCalculateSize = c.map.enemy.calculateSize;
+    c.map.enemy.calculateSize = () => 20.6;
+
+    try {
+        const size = EnemyVisualMain.prototype.getSize.call(fakeThis);
+
+        // 20.6 + the zoom offset of round(4.3 * 2) = 9 -> 29.6, rounded to 30
+        expect(size.iconSize).toEqual([30, 30]);
+    } finally {
+        c.map.enemy.calculateSize = originalCalculateSize;
+    }
+});
+
+test('getSize_givenBossSizeFactorProducingFraction_returnsWholePixels', () => {
+    const fakeThis = makeFakeSizeThis(2);
+    fakeThis.enemyvisual.enemy.npc.classification_id = NPC_CLASSIFICATION_ID_BOSS;
+    const originalCalculateSize = c.map.enemy.calculateSize;
+    c.map.enemy.calculateSize = () => 10.3;
+
+    try {
+        const size = EnemyVisualMain.prototype.getSize.call(fakeThis);
+
+        // 10.3 * boss factor 2 = 20.6, + zoom offset 4 = 24.6 -> 25
+        expect(Number.isInteger(size.iconSize[0])).toBe(true);
+        expect(size.iconSize).toEqual([25, 25]);
+    } finally {
+        c.map.enemy.calculateSize = originalCalculateSize;
+    }
+});
+
 test('constructor_givenEnemySetNpcSignal_clearsSizeCache', () => {
     let registeredCallback = null;
     const enemyvisual = {
