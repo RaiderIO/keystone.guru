@@ -326,13 +326,11 @@ class DungeonRouteCollectionController extends Controller
             /** @var User $user */
             $user = Auth::user();
 
-            $raisableDungeonRouteCount = $dungeonRouteCollectionService
-                ->getRoutesLessVisibleThanCollection($dungeonRouteCollection)
-                ->filter(static fn(DungeonRoute $dungeonRoute): bool => Gate::forUser($user)->allows('publish', [
-                    $dungeonRoute,
-                    $dungeonRouteCollection->getPublishedStateName(),
-                ]))
-                ->count();
+            $raisableDungeonRouteCount = $dungeonRouteCollectionService->filterRoutesRaisableToCollection(
+                $dungeonRouteCollection,
+                $dungeonRouteCollectionService->getRoutesLessVisibleThanCollection($dungeonRouteCollection),
+                $user,
+            )->count();
 
             if ($raisableDungeonRouteCount > 0) {
                 Session::flash('collection_publish_routes_confirm', [

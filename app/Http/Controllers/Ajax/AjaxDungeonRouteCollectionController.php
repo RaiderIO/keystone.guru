@@ -228,37 +228,27 @@ class AjaxDungeonRouteCollectionController extends Controller
         $publishedState           = $dungeonRouteCollection->getPublishedStateName();
         $lessVisibleDungeonRoutes = $dungeonRouteCollectionService->getRoutesLessVisibleThanCollection($dungeonRouteCollection);
 
-        [$raisedCount, $skippedCount] = $this->raiseDungeonRoutes($lessVisibleDungeonRoutes, $publishedState, $user);
+        $raisableDungeonRoutes = $dungeonRouteCollectionService->filterRoutesRaisableToCollection(
+            $dungeonRouteCollection,
+            $lessVisibleDungeonRoutes,
+            $user,
+        );
+
+        $this->raiseDungeonRoutes($raisableDungeonRoutes, $publishedState);
 
         return response()->json([
-            'raised_count'  => $raisedCount,
-            'skipped_count' => $skippedCount,
+            'raised_count'  => $raisableDungeonRoutes->count(),
+            'skipped_count' => $lessVisibleDungeonRoutes->count() - $raisableDungeonRoutes->count(),
         ]);
     }
 
     /**
-     * @param  Collection<int, DungeonRoute> $dungeonRoutes
-     * @return array{0: int, 1: int}         the number of raised and of skipped routes
+     * @param Collection<int, DungeonRoute> $dungeonRoutes
      */
-    private function raiseDungeonRoutes(Collection $dungeonRoutes, string $publishedState, User $user): array
+    private function raiseDungeonRoutes(Collection $dungeonRoutes, string $publishedState): void
     {
-        $raisedDungeonRoutes = new Collection();
-        $skippedCount        = 0;
-
-        DB::transaction(function () use (
-            $dungeonRoutes,
-            $publishedState,
-            $user,
-            &$raisedDungeonRoutes,
-            &$skippedCount,
-        ): void {
+        DB::transaction(function () use ($dungeonRoutes, $publishedState): void {
             foreach ($dungeonRoutes as $dungeonRoute) {
-                if (Gate::forUser($user)->denies('publish', [$dungeonRoute, $publishedState])) {
-                    $skippedCount++;
-
-                    continue;
-                }
-
                 $beforeDungeonRoute = clone $dungeonRoute;
 
                 $dungeonRoute->published_state_id = PublishedState::ALL[$publishedState];
@@ -268,11 +258,7 @@ class AjaxDungeonRouteCollectionController extends Controller
                 $dungeonRoute->save();
 
                 $this->dungeonRouteChanged($dungeonRoute, $beforeDungeonRoute, $dungeonRoute);
-
-                $raisedDungeonRoutes->push($dungeonRoute);
             }
         });
-
-        return [$raisedDungeonRoutes->count(), $skippedCount];
     }
 }

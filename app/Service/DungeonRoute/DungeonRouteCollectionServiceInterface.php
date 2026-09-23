@@ -6,6 +6,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\User;
 use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
 use Illuminate\Support\Collection;
 
@@ -96,4 +97,18 @@ interface DungeonRouteCollectionServiceInterface
      * @return Collection<int, DungeonRoute>
      */
     public function getRoutesLessVisibleThanCollection(DungeonRouteCollection $dungeonRouteCollection): Collection;
+
+    /**
+     * The subset of $dungeonRoutes that $user may raise to the collection's published state: routes they own (any
+     * route for an admin), in the collection's team when that state is Team, whose dungeon and the user's benefits
+     * allow that state, and that pass the publish policy.
+     *
+     * @param  Collection<int, DungeonRoute> $dungeonRoutes
+     * @return Collection<int, DungeonRoute>
+     */
+    public function filterRoutesRaisableToCollection(
+        DungeonRouteCollection $dungeonRouteCollection,
+        Collection             $dungeonRoutes,
+        User                   $user,
+    ): Collection;
 }

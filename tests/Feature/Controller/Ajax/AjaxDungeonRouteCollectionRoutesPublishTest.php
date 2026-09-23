@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Features\CreatorProfiles;
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
@@ -11,6 +12,7 @@ use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\User;
+use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Testing\TestResponse;
@@ -172,6 +174,64 @@ final class AjaxDungeonRouteCollectionRoutesPublishTest extends PublicTestCase
     }
 
     #[Test]
+    public function publishRoutes_givenAnUnlistedCollectionAndNoUnlistedRoutesBenefit_skipsTheRoutes(): void
+    {
+        // Arrange
+        $owner                  = $this->createUser();
+        $dungeonRoute           = $this->createRoute($owner, PublishedState::UNPUBLISHED);
+        $dungeonRouteCollection = $this->createFreeFormCollection($owner, PublishedState::WORLD_WITH_LINK, [$dungeonRoute]);
+
+        // Act
+        $response = $this->publish($owner, $dungeonRouteCollection);
+
+        // Assert
+        $response->assertOk();
+        $response->assertJson(['raised_count' => 0, 'skipped_count' => 1]);
+        $this->assertSame(PublishedState::ALL[PublishedState::UNPUBLISHED], $dungeonRoute->fresh()->published_state_id);
+    }
+
+    #[Test]
+    public function filterRoutesRaisableToCollection_givenARouteInAnInactiveDungeon_leavesItOutOfAWorldCollection(): void
+    {
+        // Arrange: the seeded test data holds no inactive dungeon, so one route's dungeon is flagged inactive in memory
+        $owner                  = $this->createUser();
+        $activeRoute            = $this->createRoute($owner, PublishedState::UNPUBLISHED);
+        $inactiveRoute          = $this->createRoute($owner, PublishedState::UNPUBLISHED);
+        $dungeonRouteCollection = $this->createFreeFormCollection($owner, PublishedState::WORLD, [$activeRoute, $inactiveRoute]);
+
+        $inactiveDungeon         = clone $inactiveRoute->dungeon;
+        $inactiveDungeon->active = false;
+        $inactiveRoute->setRelation('dungeon', $inactiveDungeon);
+
+        // Act
+        $raisableDungeonRoutes = app(DungeonRouteCollectionServiceInterface::class)->filterRoutesRaisableToCollection(
+            $dungeonRouteCollection,
+            collect([$activeRoute, $inactiveRoute]),
+            $owner,
+        );
+
+        // Assert
+        $this->assertSame([$activeRoute->id], $raisableDungeonRoutes->pluck('id')->all());
+    }
+
+    #[Test]
+    public function publishRoutes_givenATeamCollectionAndARouteOutsideItsTeam_skipsTheRoute(): void
+    {
+        // Arrange
+        $owner                  = $this->createUser();
+        $dungeonRoute           = $this->createRoute($owner, PublishedState::UNPUBLISHED);
+        $dungeonRouteCollection = $this->createFreeFormCollection($owner, PublishedState::TEAM, [$dungeonRoute]);
+
+        // Act
+        $response = $this->publish($owner, $dungeonRouteCollection);
+
+        // Assert
+        $response->assertOk();
+        $response->assertJson(['raised_count' => 0, 'skipped_count' => 1]);
+        $this->assertSame(PublishedState::ALL[PublishedState::UNPUBLISHED], $dungeonRoute->fresh()->published_state_id);
+    }
+
+    #[Test]
     public function publishRoutes_givenNoRouteIsLessVisibleThanTheCollection_raisesNone(): void
     {
         // Arrange
@@ -242,8 +302,18 @@ final class AjaxDungeonRouteCollectionRoutesPublishTest extends PublicTestCase
      */
     private function createRoute(User $author, string $publishedState, ?int $teamId = -1): DungeonRoute
     {
+        // Only an active dungeon may be made public, and the factory would otherwise pick any dungeon at random
+        $dungeon = Dungeon::query()
+            ->where('active', true)
+            ->whereNotNull('challenge_mode_id')
+            ->whereHas('floors')
+            ->get()
+            ->first(static fn(Dungeon $dungeon): bool => $dungeon->getCurrentMappingVersion() !== null);
+
         $dungeonRoute = DungeonRoute::factory()->create([
-            'author_id' => $author->id,
+            'author_id'          => $author->id,
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
             // -1 makes dungeonRouteChanged() skip its own change log entirely; null (the factory default) does not
             'team_id'            => $teamId,
             'expires_at'         => null,

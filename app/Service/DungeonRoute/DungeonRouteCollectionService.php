@@ -6,11 +6,15 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Laratrust\Role;
+use App\Models\PublishedState;
 use App\Models\Season;
+use App\Models\User;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 
 class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInterface
 {
@@ -176,7 +180,23 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
             ->where('dungeon_route_collection_routes.dungeon_route_collection_id', $dungeonRouteCollection->id)
             ->where('dungeon_routes.published_state_id', '<', $dungeonRouteCollection->published_state_id)
             ->select('dungeon_routes.*')
-            ->with('team')
+            ->with(['team', 'dungeon'])
             ->get();
+    }
+
+    public function filterRoutesRaisableToCollection(
+        DungeonRouteCollection $dungeonRouteCollection,
+        Collection             $dungeonRoutes,
+        User                   $user,
+    ): Collection {
+        $publishedState = $dungeonRouteCollection->getPublishedStateName();
+        $isAdmin        = $user->hasRole(Role::ROLE_ADMIN);
+
+        // Cheapest checks first: the publish policy loads every enemy and pull of the route
+        return $dungeonRoutes->filter(static fn(DungeonRoute $dungeonRoute): bool => ($isAdmin || $dungeonRoute->isOwnedByUser($user)) &&
+            // A team-published route is only visible to the route's own team, so only the collection's team counts
+            ($publishedState !== PublishedState::TEAM || ($dungeonRouteCollection->team_id !== null && $dungeonRoute->team_id === $dungeonRouteCollection->team_id)) &&
+            PublishedState::getAvailablePublishedStates($dungeonRoute, $user)->contains($publishedState) &&
+            Gate::forUser($user)->allows('publish', [$dungeonRoute, $publishedState]))->values();
     }
 }
