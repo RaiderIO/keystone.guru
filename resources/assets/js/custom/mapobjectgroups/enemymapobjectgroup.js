@@ -8,6 +8,93 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         this._focusedEnemy = null;
 
         getState().register('mdtmappingmodeenabled:changed', this, this._onMdtMappingModeEnabledChanged.bind(this));
+
+        this._spikeCanvasLayer = null;
+        this._spikeCircles = [];
+        this._spikeOnZoomEnd = this._spikeResizeCircles.bind(this);
+
+        // Throwaway benchmark spike, never called by the page itself: 'dom' (as shipped), 'canvas'
+        // (flat circles on one shared L.Canvas) or 'none' (enemies hidden entirely).
+        window.__ksgCanvasEnemySpike = this._spikeSetEnemyRenderMode.bind(this);
+    }
+
+    /**
+     * @param mode {String} 'dom', 'canvas' or 'none'
+     * @private
+     */
+    _spikeSetEnemyRenderMode(mode) {
+        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+
+        let leafletMap = this.manager.map.leafletMap;
+
+        if (this._spikeCanvasLayer === null) {
+            this._spikeBuildCanvasLayer();
+        }
+
+        if (mode === 'canvas') {
+            this._spikeResizeCircles();
+            if (!leafletMap.hasLayer(this._spikeCanvasLayer)) {
+                leafletMap.addLayer(this._spikeCanvasLayer);
+                leafletMap.on('zoomend', this._spikeOnZoomEnd);
+            }
+        } else if (leafletMap.hasLayer(this._spikeCanvasLayer)) {
+            leafletMap.off('zoomend', this._spikeOnZoomEnd);
+            leafletMap.removeLayer(this._spikeCanvasLayer);
+        }
+
+        this.setVisibility(mode === 'dom');
+    }
+
+    /**
+     * Builds one flat circle per enemy currently shown on the floor, all drawn by one L.Canvas.
+     * @private
+     */
+    _spikeBuildCanvasLayer() {
+        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+
+        let colors = {aggressive: '#dc3c3c', neutral: '#cccc2d', unfriendly: '#ff9900', friendly: '#15c415'};
+        let renderer = L.canvas({padding: 0.1});
+
+        this._spikeCanvasLayer = new L.LayerGroup();
+        this._spikeCircles = [];
+        for (let key in this.objects) {
+            let enemy = this.objects[key];
+            if (enemy.layer === null || enemy.visual === null || !this.layerGroup.hasLayer(enemy.layer)) {
+                continue;
+            }
+
+            let aggressiveness = enemy.npc === null ? 'aggressive' : enemy.npc.aggressiveness;
+            let color = colors.hasOwnProperty(aggressiveness) ? colors[aggressiveness] : colors.aggressive;
+            let circle = L.circleMarker(enemy.layer.getLatLng(), {
+                renderer: renderer,
+                radius: 10,
+                color: '#000000',
+                weight: 1,
+                fillColor: color,
+                fillOpacity: 1,
+                interactive: false
+            });
+
+            this._spikeCircles.push({enemy: enemy, circle: circle});
+            this._spikeCanvasLayer.addLayer(circle);
+        }
+    }
+
+    /**
+     * Mirrors the DOM markers' per-zoom resize so the canvas does the same per-gesture work.
+     * @private
+     */
+    _spikeResizeCircles() {
+        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+
+        for (let i = 0; i < this._spikeCircles.length; i++) {
+            let entry = this._spikeCircles[i];
+            let mainVisual = entry.enemy.visual === null ? null : entry.enemy.visual.mainVisual;
+            let radius = mainVisual === null ? 10 : mainVisual.getSize().iconSize[0] / 2;
+            if (entry.circle.getRadius() !== radius) {
+                entry.circle.setRadius(radius);
+            }
+        }
     }
 
     /**
