@@ -212,6 +212,30 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function removeMember_givenMemberWithGiveawayFromTheFirstListedMember_revokesTheGiveaway(): void
+    {
+        // Arrange - setUp() added the moderator first, so they are at index 0 of the team's members
+        $giveaway = PatreonAdFreeGiveaway::create([
+            'giver_user_id'    => $this->moderator->id,
+            'receiver_user_id' => $this->member->id,
+        ]);
+
+        try {
+            $this->assertSame($this->moderator->id, $this->team->members->first()->id, 'Arrange failed: the giver must be listed first');
+            $this->team->unsetRelation('members');
+
+            // Act
+            $response = $this->delete(sprintf('/ajax/team/%s/member/%s', $this->team->getRouteKey(), $this->member->getRouteKey()));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseMissing('patreon_ad_free_giveaways', ['id' => $giveaway->id]);
+        } finally {
+            PatreonAdFreeGiveaway::where('id', $giveaway->id)->delete();
+        }
+    }
+
+    #[Test]
     public function addRoute_givenARouteAuthoredOutsideTheTeam_returnsForbiddenAndLeavesItUnassigned(): void
     {
         // Arrange - a route with no team yet, authored by someone who is not in this team at all

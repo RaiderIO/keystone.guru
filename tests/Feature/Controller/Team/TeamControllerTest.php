@@ -168,6 +168,44 @@ final class TeamControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function delete_givenTeamWithAnotherMember_deletesTheTeamAndRedirectsToTheTeamList(): void
+    {
+        // A second member matters: loading two or more members arms lazy-loading prevention on each
+        // of them, so the deleting hook must eager-load their ad-free giveaways
+        $member = null;
+
+        try {
+            // Arrange
+            $member = User::factory()->create();
+            $member->addRole(Role::ROLE_USER);
+            TeamUser::create(['team_id' => $this->team->id, 'user_id' => $member->id, 'role' => TeamUser::ROLE_MEMBER]);
+
+            // Act
+            $response = $this->delete(route('team.delete', $this->team));
+
+            // Assert
+            $response->assertRedirect(route('team.list'));
+            $this->assertDatabaseMissing('teams', ['id' => $this->team->id]);
+            $this->assertDatabaseMissing('team_users', ['team_id' => $this->team->id]);
+        } finally {
+            if ($member !== null) {
+                TeamUser::where('user_id', $member->id)->delete();
+                $member->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function inviteaccept_givenUnknownInviteCode_returnsNotFound(): void
+    {
+        // Act
+        $response = $this->get(route('team.invite.accept', ['invitecode' => 'doesnotexist']));
+
+        // Assert
+        $response->assertNotFound();
+    }
+
+    #[Test]
     public function createTag_givenTeamMember_createsTheTag(): void
     {
         $tagName = sprintf('test-team-tag-%s', fake()->uuid());

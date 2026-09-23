@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\PublishedState;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
@@ -502,6 +503,103 @@ final class TeamTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function removeMember_givenGiveawayFromTheFirstListedMember_revokesTheGiveaway(): void
+    {
+        // Collection::search() returns the index of the match, so a giver at index 0 reads as falsy
+        $giver    = null;
+        $receiver = null;
+        $team     = null;
+        $giveaway = null;
+
+        try {
+            // Arrange
+            $giver    = User::factory()->create();
+            $receiver = User::factory()->create();
+            $team     = $this->createTeam();
+            $team->addMember($giver, TeamUser::ROLE_ADMIN);
+            $team->addMember($receiver, TeamUser::ROLE_MEMBER);
+            $giveaway = $this->createAdFreeGiveaway($giver, $receiver);
+
+            $this->assertSame($giver->id, $team->members->first()->id, 'Arrange failed: the giver must be listed first');
+
+            // Act
+            $team->removeMember($receiver);
+
+            // Assert
+            $this->assertDatabaseMissing('patreon_ad_free_giveaways', ['id' => $giveaway->id]);
+        } finally {
+            $this->cleanUpAdFreeGiveaway($giveaway);
+            $this->cleanUp(null, null, $team, $giver);
+            $receiver?->delete();
+        }
+    }
+
+    #[Test]
+    public function deleting_givenGiveawayFromTheFirstListedMember_revokesTheGiveaway(): void
+    {
+        $giver    = null;
+        $receiver = null;
+        $team     = null;
+        $giveaway = null;
+
+        try {
+            // Arrange
+            $giver    = User::factory()->create();
+            $receiver = User::factory()->create();
+            $team     = $this->createTeam();
+            $team->addMember($giver, TeamUser::ROLE_ADMIN);
+            $team->addMember($receiver, TeamUser::ROLE_MEMBER);
+            $giveaway = $this->createAdFreeGiveaway($giver, $receiver);
+
+            $this->assertSame($giver->id, $team->members->first()->id, 'Arrange failed: the giver must be listed first');
+
+            // Act
+            $team->delete();
+            $team = null;
+
+            // Assert
+            $this->assertDatabaseMissing('patreon_ad_free_giveaways', ['id' => $giveaway->id]);
+        } finally {
+            $this->cleanUpAdFreeGiveaway($giveaway);
+            $this->cleanUp(null, null, $team, $giver);
+            $receiver?->delete();
+        }
+    }
+
+    #[Test]
+    public function deleting_givenGiveawayFromOutsideTheTeam_keepsTheGiveaway(): void
+    {
+        $giver    = null;
+        $member   = null;
+        $receiver = null;
+        $team     = null;
+        $giveaway = null;
+
+        try {
+            // Arrange
+            $giver    = User::factory()->create();
+            $member   = User::factory()->create();
+            $receiver = User::factory()->create();
+            $team     = $this->createTeam();
+            $team->addMember($member, TeamUser::ROLE_ADMIN);
+            $team->addMember($receiver, TeamUser::ROLE_MEMBER);
+            $giveaway = $this->createAdFreeGiveaway($giver, $receiver);
+
+            // Act
+            $team->delete();
+            $team = null;
+
+            // Assert
+            $this->assertDatabaseHas('patreon_ad_free_giveaways', ['id' => $giveaway->id]);
+        } finally {
+            $this->cleanUpAdFreeGiveaway($giveaway);
+            $this->cleanUp(null, null, $team, $giver);
+            $member?->delete();
+            $receiver?->delete();
+        }
+    }
+
     private function createTeamTag(Team $team, DungeonRoute $dungeonRoute): Tag
     {
         return Tag::create([
@@ -541,6 +639,21 @@ final class TeamTest extends PublicTestCase
             'invite_code'  => fake()->unique()->uuid(),
             'default_role' => TeamUser::ROLE_MEMBER,
         ]);
+    }
+
+    private function createAdFreeGiveaway(User $giver, User $receiver): PatreonAdFreeGiveaway
+    {
+        return PatreonAdFreeGiveaway::create([
+            'giver_user_id'    => $giver->id,
+            'receiver_user_id' => $receiver->id,
+        ]);
+    }
+
+    private function cleanUpAdFreeGiveaway(?PatreonAdFreeGiveaway $giveaway): void
+    {
+        if ($giveaway !== null) {
+            PatreonAdFreeGiveaway::where('id', $giveaway->id)->delete();
+        }
     }
 
     private function cleanUp(?Tag $tag, ?DungeonRoute $route, ?Team $team, ?User $user): void

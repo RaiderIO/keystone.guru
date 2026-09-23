@@ -374,7 +374,7 @@ class Team extends Model
         if ($this->isUserMember($member)) {
             try {
                 // If the user has a ad-free giveaway, see if we need to revoke it because they got removed from this team
-                if ($member->patreonAdFreeGiveaway !== null && $this->members->pluck('id')->search($member->patreonAdFreeGiveaway->giver_user_id)) {
+                if ($member->patreonAdFreeGiveaway !== null && $this->members->contains('id', $member->patreonAdFreeGiveaway->giver_user_id)) {
                     $member->patreonAdFreeGiveaway->delete();
                 }
 
@@ -523,10 +523,11 @@ class Team extends Model
             // Delete icons
             $team->iconfile?->delete();
             // Remove any ad-free giveaways if the giver was part of this team
+            $team->loadMissing('members.patreonAdFreeGiveaway');
             foreach ($team->members->filter(fn(User $member) => $member->patreonAdFreeGiveaway !== null) as $teamMember) {
                 /** @var User $teamMember */
                 // If the giver of the patreon ad-free giveaway was part of this team
-                if ($team->members->pluck('id')->search($teamMember->patreonAdFreeGiveaway->giver_user_id)) {
+                if ($team->members->contains('id', $teamMember->patreonAdFreeGiveaway->giver_user_id)) {
                     // The team connection no longer exists, and this user LOSES their ad-free giveaway connection
                     $teamMember->patreonAdFreeGiveaway->delete();
                 }

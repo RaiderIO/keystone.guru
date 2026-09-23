@@ -201,8 +201,12 @@ class TeamController extends Controller
      */
     public function inviteaccept(Request $request, string $invitecode)
     {
-        /** @var Team $team */
+        /** @var Team|null $team */
         $team = Team::where('invite_code', $invitecode)->first();
+
+        if ($team === null) {
+            abort(StatusCode::NOT_FOUND, __('controller.team.flash.unable_to_find_team_for_invite_code'));
+        }
 
         if ($team->isCurrentUserMember()) {
             $result = view('team.invite', [
