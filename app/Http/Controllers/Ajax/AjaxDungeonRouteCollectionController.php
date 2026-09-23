@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionRoutesAddFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionRoutesOrderFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionRoutesPublishFormRequest;
@@ -12,7 +11,6 @@ use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionsForRouteFormReques
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
-use App\Models\PublishedState;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRouteRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
@@ -28,8 +26,6 @@ use Illuminate\Validation\ValidationException;
  */
 class AjaxDungeonRouteCollectionController extends Controller
 {
-    use ChangesDungeonRoute;
-
     /**
      * The current user's collections as seen from one of their own routes: whether the route is in each of them and,
      * when it is not, whether it may be added or why not. Collections the route may join come first. Names are
@@ -225,7 +221,6 @@ class AjaxDungeonRouteCollectionController extends Controller
 
         /** @var User $user */
         $user                     = $request->user();
-        $publishedState           = $dungeonRouteCollection->getPublishedStateName();
         $lessVisibleDungeonRoutes = $dungeonRouteCollectionService->getRoutesLessVisibleThanCollection($dungeonRouteCollection);
 
         $raisableDungeonRoutes = $dungeonRouteCollectionService->filterRoutesRaisableToCollection(
@@ -234,31 +229,11 @@ class AjaxDungeonRouteCollectionController extends Controller
             $user,
         );
 
-        $this->raiseDungeonRoutes($raisableDungeonRoutes, $publishedState);
+        $dungeonRouteCollectionService->raiseRoutesToCollection($dungeonRouteCollection, $raisableDungeonRoutes);
 
         return response()->json([
             'raised_count'  => $raisableDungeonRoutes->count(),
             'skipped_count' => $lessVisibleDungeonRoutes->count() - $raisableDungeonRoutes->count(),
         ]);
-    }
-
-    /**
-     * @param Collection<int, DungeonRoute> $dungeonRoutes
-     */
-    private function raiseDungeonRoutes(Collection $dungeonRoutes, string $publishedState): void
-    {
-        DB::transaction(function () use ($dungeonRoutes, $publishedState): void {
-            foreach ($dungeonRoutes as $dungeonRoute) {
-                $beforeDungeonRoute = clone $dungeonRoute;
-
-                $dungeonRoute->published_state_id = PublishedState::ALL[$publishedState];
-                if ($publishedState === PublishedState::WORLD) {
-                    $dungeonRoute->published_at = now();
-                }
-                $dungeonRoute->save();
-
-                $this->dungeonRouteChanged($dungeonRoute, $beforeDungeonRoute, $dungeonRoute);
-            }
-        });
     }
 }

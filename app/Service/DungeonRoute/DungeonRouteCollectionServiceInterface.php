@@ -111,4 +111,12 @@ interface DungeonRouteCollectionServiceInterface
         Collection             $dungeonRoutes,
         User                   $user,
     ): Collection;
+
+    /**
+     * Sets every passed route to the collection's published state and logs the change on each route's team. Does
+     * not authorize: pass only routes returned by filterRoutesRaisableToCollection().
+     *
+     * @param Collection<int, DungeonRoute> $dungeonRoutes
+     */
+    public function raiseRoutesToCollection(DungeonRouteCollection $dungeonRouteCollection, Collection $dungeonRoutes): void;
 }

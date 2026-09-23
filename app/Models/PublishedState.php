@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 /**
  * @property int                                   $id
@@ -46,6 +47,16 @@ class PublishedState extends Model
         self::WORLD           => 4,
     ];
 
+    /**
+     * Every published state, least visible first.
+     */
+    public const array VISIBILITY_ORDER = [
+        self::UNPUBLISHED,
+        self::TEAM,
+        self::WORLD_WITH_LINK,
+        self::WORLD,
+    ];
+
     /** @return HasMany<DungeonRoute, $this> */
     public function dungeonRoutes(): HasMany
     {
@@ -78,5 +89,28 @@ class PublishedState extends Model
         }
 
         return $result;
+    }
+
+    public static function isMoreVisibleThan(string $publishedState, string $otherPublishedState): bool
+    {
+        return self::getVisibilityRank($publishedState) > self::getVisibilityRank($otherPublishedState);
+    }
+
+    /**
+     * @return Collection<int, string> Least visible first.
+     */
+    public static function getLessVisibleThan(string $publishedState): Collection
+    {
+        return collect(array_slice(self::VISIBILITY_ORDER, 0, self::getVisibilityRank($publishedState)));
+    }
+
+    private static function getVisibilityRank(string $publishedState): int
+    {
+        $rank = array_search($publishedState, self::VISIBILITY_ORDER, true);
+        if ($rank === false) {
+            throw new InvalidArgumentException(sprintf('Unknown published state %s', $publishedState));
+        }
+
+        return $rank;
     }
 }

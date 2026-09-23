@@ -295,7 +295,7 @@ class DungeonRouteCollectionController extends Controller
     ): RedirectResponse {
         Gate::authorize('edit', $dungeonRouteCollection);
 
-        $previousPublishedStateId = $dungeonRouteCollection->published_state_id;
+        $previousPublishedState = $dungeonRouteCollection->getPublishedStateName();
 
         // The collection and its routes are saved together: a failure partway through would
         // otherwise leave the collection renamed while its routes still describe the old state
@@ -322,7 +322,7 @@ class DungeonRouteCollectionController extends Controller
         });
 
         // Only a raise offers to bring the routes along - lowering the collection's own state never should
-        if ($dungeonRouteCollection->published_state_id > $previousPublishedStateId) {
+        if (PublishedState::isMoreVisibleThan($dungeonRouteCollection->getPublishedStateName(), $previousPublishedState)) {
             /** @var User $user */
             $user = Auth::user();
 
