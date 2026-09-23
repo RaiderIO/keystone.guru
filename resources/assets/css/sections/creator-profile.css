@@ -1,13 +1,8 @@
 /**
  * Creator podium - the public profile hero shown above a creator's routes.
  *
- * The hero is a Bootstrap .card so it picks up each bootswatch theme's card background. Do NOT
- * reach for the bg-body-* utilities here: this site ships one stylesheet per theme rather than
- * using Bootstrap 5.3's data-bs-theme attribute, and bootswatch leaves --bs-tertiary-bg at its
- * light default (#f8f9fa) even under darkly/vapor - bg-body-tertiary renders a white panel with
- * white text. --bs-secondary-color *is* themed, so text-body-secondary is safe.
- *
- * Only geometry and motion live in this file; colour comes from the theme.
+ * Colour comes from the theme. Do not reach for the bg-body-* utilities: bootswatch leaves --bs-tertiary-bg at its
+ * light default under darkly/vapor, so bg-body-tertiary renders a white panel with white text.
  */
 
 .creator_hero_avatar {
@@ -17,7 +12,7 @@
     object-fit: cover;
 }
 
-/* Initials fallback for users without an uploaded avatar, mirroring the sizing above */
+/* The creator rail's neutral disc: bg-secondary is light under lux, so white initials on it are unreadable */
 .creator_hero_initials {
     width: 96px;
     height: 96px;
@@ -25,6 +20,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: rgba(128, 128, 128, 0.25);
+    color: var(--theme-text-contrast);
     font-size: 2rem;
     font-weight: 600;
     line-height: 1;
@@ -47,41 +44,39 @@
     gap: 0.5rem;
 }
 
-/*
- * Deliberately not btn-outline-secondary: bootswatch's $secondary is a dark grey under darkly and
- * vapor, which on the equally dark card reads as an invisible button - and picking a light variant
- * instead would fail the same way under lux. Inheriting currentColor tracks each theme's body text,
- * so the icons stay legible on all three.
- */
+/* Not btn-outline-secondary: bootswatch's $secondary is as dark as the card under darkly and vapor. The icon's colour
+   is stated on the icon: each theme's link rule outweighs any colour set on the link itself. */
 .creator_hero_social_link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border: 1px solid currentColor;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid rgba(128, 128, 128, 0.5);
     border-radius: 50%;
-    color: inherit;
-    opacity: 0.75;
+    font-size: 1.125rem;
     text-decoration: none;
-    transition: transform 0.12s ease-in-out, opacity 0.12s ease-in-out;
+    transition: border-color 0.12s ease, background-color 0.12s ease;
+}
+
+.creator_hero_social_link > i {
+    color: var(--theme-text-contrast);
 }
 
 .creator_hero_social_link:hover,
 .creator_hero_social_link:focus-visible {
-    color: inherit;
-    opacity: 1;
-    transform: translateY(-2px);
+    border-color: var(--theme-btn-accent);
+    background-color: rgba(128, 128, 128, 0.15);
+}
+
+.creator_hero_social_link:focus-visible {
+    outline: 2px solid var(--theme-btn-accent);
+    outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
     .creator_hero_social_link {
         transition: none;
-    }
-
-    .creator_hero_social_link:hover,
-    .creator_hero_social_link:focus-visible {
-        transform: none;
     }
 }
 
@@ -97,4 +92,8 @@
     .creator_hero_bio {
         text-align: left;
     }
+}
+
+.creator_profile_edit_intro {
+    max-width: 70ch;
 }

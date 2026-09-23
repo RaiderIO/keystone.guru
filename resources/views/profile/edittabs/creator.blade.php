@@ -27,19 +27,28 @@ if (session()->hasOldInput()) {
 }
 
 $existingSocialLinks = $user->socialLinks->keyBy('platform');
+
+/**
+ * The help text and, when the field failed validation, its error message - what a field's aria-describedby lists.
+ */
+$describedBy = static fn(string $errorKey, string $errorId, string $helpId): string => trim(sprintf(
+    '%s %s',
+    $helpId,
+    $errors->has($errorKey) ? $errorId : '',
+));
 ?>
 <div class="tab-pane fade" id="creator" role="tabpanel" aria-labelledby="creator-tab">
     <h4>
         {{ __('view_profile.edit.creator') }}
     </h4>
 
-    <p>
+    <p class="creator_profile_edit_intro">
         {{ __('view_profile.edit.creator_description') }}
     </p>
 
     <p>
-        <a href="{{ route('profile.view', ['user' => $user]) }}">
-            <i class="fas fa-external-link-alt"></i> {{ __('view_profile.edit.creator_view_public_profile') }}
+        <a href="{{ route('profile.view', ['user' => $user]) }}" class="btn btn-primary" role="button">
+            <i class="fas fa-external-link-alt" aria-hidden="true"></i> {{ __('view_profile.edit.creator_view_public_profile') }}
         </a>
     </p>
 
@@ -53,35 +62,49 @@ $existingSocialLinks = $user->socialLinks->keyBy('platform');
             ->class('form-control')
             ->rows(4)
             ->attribute('maxlength', 500)
-            ->placeholder(__('view_profile.edit.creator_bio_placeholder')) }}
-        <small class="form-text text-muted">
+            ->placeholder(__('view_profile.edit.creator_bio_placeholder'))
+            ->attributeIf($errors->has('bio'), 'aria-invalid', 'true')
+            ->attribute('aria-describedby', $describedBy('bio', 'bio_error', 'bio_help')) }}
+        <small id="bio_help" class="form-text text-muted">
             {{ __('view_profile.edit.creator_bio_help', ['max' => 500]) }}
         </small>
-        @include('common.forms.form-error', ['key' => 'bio'])
+        @include('common.forms.form-error', ['key' => 'bio', 'errorId' => 'bio_error'])
     </div>
 
     <h5 class="mt-4">
         {{ __('view_profile.edit.creator_socials') }}
     </h5>
-    <p>
-        <small class="form-text text-muted">
-            {{ __('view_profile.edit.creator_socials_help') }}
-        </small>
+    <p id="social_links_help" class="form-text text-muted">
+        {{ __('view_profile.edit.creator_socials_help') }}
     </p>
 
-    @foreach(UserSocialLinkPlatform::cases() as $platform)
-        <?php $errorKey = sprintf('social_links.%s', $platform->value); ?>
-        <div class="mb-3{{ $errors->has($errorKey) ? ' has-error' : '' }}">
-            <label for="social_links_{{ $platform->value }}">
-                <i class="{{ $platform->icon() }}"></i>
-                {{ __(sprintf('view_profile.view.platform.%s', $platform->value)) }}
-            </label>
-            {{ html()->text(sprintf('social_links[%s]', $platform->value), $existingSocialLinks->get($platform->value)?->url)
-                ->id(sprintf('social_links_%s', $platform->value))
-                ->class('form-control') }}
-            @include('common.forms.form-error', ['key' => $errorKey])
-        </div>
-    @endforeach
+    <div class="row g-3 mb-3">
+        @foreach(UserSocialLinkPlatform::cases() as $platform)
+            <?php
+            $errorKey = sprintf('social_links.%s', $platform->value);
+            $inputId  = sprintf('social_links_%s', $platform->value);
+            $errorId  = sprintf('%s_error', $inputId);
+            ?>
+            <div class="col-12 col-lg-6{{ $errors->has($errorKey) ? ' has-error' : '' }}">
+                <label for="{{ $inputId }}" class="form-label mb-1">
+                    {{ __(sprintf('view_profile.view.platform.%s', $platform->value)) }}
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text" aria-hidden="true">
+                        <i class="{{ $platform->icon() }} fa-fw"></i>
+                    </span>
+                    {{ html()->text(sprintf('social_links[%s]', $platform->value), $existingSocialLinks->get($platform->value)?->url)
+                        ->id($inputId)
+                        ->class('form-control')
+                        ->attribute('inputmode', 'url')
+                        ->attribute('autocomplete', 'url')
+                        ->attributeIf($errors->has($errorKey), 'aria-invalid', 'true')
+                        ->attribute('aria-describedby', $describedBy($errorKey, $errorId, 'social_links_help')) }}
+                </div>
+                @include('common.forms.form-error', ['key' => $errorKey, 'errorId' => $errorId])
+            </div>
+        @endforeach
+    </div>
 
     <div class="mt-4 mb-3">
         @if($ownDungeonRoutes->isEmpty())
@@ -137,17 +160,19 @@ $existingSocialLinks = $user->socialLinks->keyBy('platform');
 
     <div class="mb-3{{ $errors->has('hide_from_creator_directory') ? ' has-error' : '' }}">
         <div class="form-check">
-            {{ html()->checkbox('hide_from_creator_directory', $user->hide_from_creator_directory, 1)->class('form-check-input') }}
+            {{ html()->checkbox('hide_from_creator_directory', $user->hide_from_creator_directory, 1)
+                ->class('form-check-input')
+                ->attribute('aria-describedby', 'hide_from_creator_directory_help') }}
             <label for="hide_from_creator_directory" class="form-check-label">
                 {{ __('view_profile.edit.creator_directory_hide') }}
             </label>
         </div>
-        <small class="form-text text-muted d-block">
+        <small id="hide_from_creator_directory_help" class="form-text text-muted d-block">
             {{ __('view_profile.edit.creator_directory_hide_help') }}
         </small>
         @include('common.forms.form-error', ['key' => 'hide_from_creator_directory'])
     </div>
 
-    {{ html()->input('submit')->value(__('view_profile.edit.creator_save'))->class('btn btn-info') }}
+    {{ html()->input('submit')->value(__('view_profile.edit.creator_save'))->class('btn btn-primary') }}
     {{ html()->closeModelForm() }}
 </div>

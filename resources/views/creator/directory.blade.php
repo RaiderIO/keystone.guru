@@ -29,7 +29,7 @@ $selectedCategory ??= null;
 @endsection
 
 @section('content')
-    <p class="text-body-secondary">
+    <p class="creator_directory_intro text-body-secondary">
         {{ __('view_creator.directory.description', ['min' => config('keystoneguru.creators.min_published_routes')]) }}
     </p>
 

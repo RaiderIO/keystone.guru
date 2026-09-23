@@ -65,7 +65,7 @@ $isEmpty = $dungeonRoutes->isEmpty();
                         {{ trans_choice('view_collection.view.route_count', $dungeonRoutes->count(), ['count' => $dungeonRoutes->count()]) }}
                     </span>
                     @if($dungeonRouteCollection->dungeonRouteCollectionCategory !== null)
-                        <span class="badge bg-info">
+                        <span class="badge text-bg-primary">
                             {{ $dungeonRouteCollection->dungeonRouteCollectionCategory->getTranslatedName() }}
                         </span>
                     @endif

@@ -29,19 +29,19 @@ $seasonOptions = ['' => __('view_collection.index.filter_season_all')]
 @section('header-title', __('view_collection.index.header'))
 @section('header-addition')
     @if($mayCreateCollection)
-        <a href="{{ route('collections.new') }}" class="btn btn-success text-white float-end" role="button">
-            <i class="fas fa-plus"></i> {{ __('view_collection.index.create_collection') }}
+        <a href="{{ route('collections.new') }}" class="btn btn-primary float-end" role="button">
+            <i class="fas fa-plus" aria-hidden="true"></i> {{ __('view_collection.index.create_collection') }}
         </a>
     @else
-        <button type="button" class="btn btn-success float-end" disabled aria-describedby="collections_max_collections">
-            <i class="fas fa-plus"></i> {{ __('view_collection.index.create_collection') }}
+        <button type="button" class="btn btn-primary float-end" disabled aria-describedby="collections_max_collections">
+            <i class="fas fa-plus" aria-hidden="true"></i> {{ __('view_collection.index.create_collection') }}
         </button>
     @endif
 @endsection
 
 @section('content')
 
-    <p class="text-body-secondary">
+    <p class="collection_index_intro text-body-secondary">
         {{ __('view_collection.index.description') }}
     </p>
     @if(!$mayCreateCollection)
@@ -73,59 +73,61 @@ $seasonOptions = ['' => __('view_collection.index.filter_season_all')]
             </div>
         </div>
     @else
-        <table class="table table-striped align-middle">
-            <thead>
-            <tr>
-                <th width="30%">{{ __('view_collection.index.table_header_name') }}</th>
-                <th width="20%">{{ __('view_collection.index.table_header_kind') }}</th>
-                <th width="15%">{{ __('view_collection.index.table_header_category') }}</th>
-                <th width="10%">{{ __('view_collection.index.table_header_visibility') }}</th>
-                <th width="10%">{{ __('view_collection.index.table_header_routes') }}</th>
-                <th width="15%"></th>
-            </tr>
-            </thead>
-
-            <tbody>
-            @foreach($dungeonRouteCollections as $dungeonRouteCollection)
+        <div class="table-responsive">
+            <table class="table table-striped align-middle collection_index_table">
+                <thead>
                 <tr>
-                    <td>
-                        <a href="{{ route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]) }}">
-                            {{ $dungeonRouteCollection->name }}
-                        </a>
-                    </td>
-                    <td>
-                        @include('common.collection.kind', [
-                            'dungeonRouteCollection' => $dungeonRouteCollection,
-                            'coveredDungeonCount' => $coveredDungeonCounts->get($dungeonRouteCollection->id, 0),
-                        ])
-                    </td>
-                    <td>
-                        @if($dungeonRouteCollection->dungeonRouteCollectionCategory !== null)
-                            {{ $dungeonRouteCollection->dungeonRouteCollectionCategory->getTranslatedName() }}
-                        @else
-                            <span class="text-body-secondary">
-                                {{ __('view_collection.index.no_category') }}
-                            </span>
-                        @endif
-                    </td>
-                    <td>
-                        {{ __(sprintf('view_collection.index.published_state.%s', $dungeonRouteCollection->getPublishedStateName())) }}
-                        @if($dungeonRouteCollection->team !== null)
-                            ({{ $dungeonRouteCollection->team->name }})
-                        @endif
-                    </td>
-                    <td>
-                        {{ $dungeonRouteCollection->dungeon_route_collection_routes_count }}
-                    </td>
-                    <td>
-                        <a href="{{ route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]) }}"
-                           class="float-end">
-                            <i class="fas fa-external-link-alt"></i> {{ __('view_collection.index.view') }}
-                        </a>
-                    </td>
+                    <th width="30%">{{ __('view_collection.index.table_header_name') }}</th>
+                    <th width="20%">{{ __('view_collection.index.table_header_kind') }}</th>
+                    <th width="15%">{{ __('view_collection.index.table_header_category') }}</th>
+                    <th width="10%">{{ __('view_collection.index.table_header_visibility') }}</th>
+                    <th width="10%">{{ __('view_collection.index.table_header_routes') }}</th>
+                    <th width="15%"></th>
                 </tr>
-            @endforeach
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                @foreach($dungeonRouteCollections as $dungeonRouteCollection)
+                    <tr>
+                        <td>
+                            <a href="{{ route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]) }}">
+                                {{ $dungeonRouteCollection->name }}
+                            </a>
+                        </td>
+                        <td>
+                            @include('common.collection.kind', [
+                                'dungeonRouteCollection' => $dungeonRouteCollection,
+                                'coveredDungeonCount' => $coveredDungeonCounts->get($dungeonRouteCollection->id, 0),
+                            ])
+                        </td>
+                        <td>
+                            @if($dungeonRouteCollection->dungeonRouteCollectionCategory !== null)
+                                {{ $dungeonRouteCollection->dungeonRouteCollectionCategory->getTranslatedName() }}
+                            @else
+                                <span class="text-body-secondary">
+                                    {{ __('view_collection.index.no_category') }}
+                                </span>
+                            @endif
+                        </td>
+                        <td>
+                            {{ __(sprintf('view_collection.index.published_state.%s', $dungeonRouteCollection->getPublishedStateName())) }}
+                            @if($dungeonRouteCollection->team !== null)
+                                ({{ $dungeonRouteCollection->team->name }})
+                            @endif
+                        </td>
+                        <td>
+                            {{ $dungeonRouteCollection->dungeon_route_collection_routes_count }}
+                        </td>
+                        <td>
+                            <a href="{{ route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]) }}"
+                               class="float-end">
+                                <i class="fas fa-external-link-alt" aria-hidden="true"></i> {{ __('view_collection.index.view') }}
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
     @endif
 @endsection

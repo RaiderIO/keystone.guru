@@ -28,7 +28,7 @@ use App\Models\DungeonRoute\DungeonRouteCollection;
         <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
             {{ __('view_collection.edit.publish_routes_confirm_no') }}
         </button>
-        <button type="button" id="collection_publish_routes_confirm_yes_button" class="btn btn-info">
+        <button type="button" id="collection_publish_routes_confirm_yes_button" class="btn btn-primary">
             {{ __('view_collection.edit.publish_routes_confirm_yes', ['state' => $publishedStateLabel]) }}
         </button>
     </div>

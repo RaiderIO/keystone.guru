@@ -140,14 +140,14 @@ $breadcrumbsParams ??= [];
                     <div class="row my-4">
                         @hasSection('header-addition')
                             <div class="col text-center">
-                                <h4>@yield('header-title')</h4>
+                                <h1 class="h4">@yield('header-title')</h1>
                             </div>
                             <div class="ms-auto">
                                 @yield('header-addition')
                             </div>
                         @else
                             <div class="col-lg-12 text-center">
-                                <h4>@yield('header-title')</h4>
+                                <h1 class="h4">@yield('header-title')</h1>
                             </div>
                         @endif
                     </div>

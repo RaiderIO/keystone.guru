@@ -643,7 +643,7 @@ final class ProfileCreatorProfileTest extends PublicTestCase
 
             // Assert
             $response->assertSessionHasNoErrors();
-            $response->assertRedirect(route('profile.edit'));
+            $response->assertRedirect(sprintf('%s#creator', route('profile.edit')));
 
             $creator->refresh();
             $this->assertSame('Routes for everyone', $creator->bio);
@@ -944,6 +944,84 @@ final class ProfileCreatorProfileTest extends PublicTestCase
      * The profile routes sit behind the role:user|admin middleware, and a factory user carries no
      * roles at all - without this it is a 403 rather than the behaviour under test.
      */
+    #[Test]
+    public function view_givenFeatureActive_rendersTheCreatorsNameAsTheOnlyH1(): void
+    {
+        // Arrange
+        $creator = User::factory()->create(['name' => 'ZzTestHeadingCreator']);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.view', ['user' => $creator]));
+
+            // Assert
+            $response->assertOk();
+            $content = (string)$response->getContent();
+            $this->assertSame(1, substr_count($content, '<h1'));
+            $this->assertMatchesRegularExpression('/<h1 class="creator_hero_name h3">\s*ZzTestHeadingCreator\s*<\/h1>/', $content);
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function view_givenFeatureInactive_rendersThePageTitleAsTheH1(): void
+    {
+        // Arrange
+        $creator = User::factory()->create();
+        Feature::for($creator)->deactivate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.view', ['user' => $creator]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertMatchesRegularExpression(
+                sprintf('/<h1 class="h4">\\s*%s\\s*<\\/h1>/', preg_quote(e(sprintf(__('view_profile.view.header'), $creator->name)), '/')),
+                (string)$response->getContent(),
+            );
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function updateCreatorProfile_givenAnInvalidSocialUrl_returnsToTheCreatorTabWithTheErrorDescribingTheInput(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)
+                ->from(route('profile.edit'))
+                ->patch(route('profile.creator.update'), [
+                    'social_links' => [
+                        UserSocialLinkPlatform::Twitch->value => 'https://evil.example.com/someone',
+                    ],
+                ]);
+            $editResponse = $this->actingAs($creator)->get(route('profile.edit'));
+
+            // Assert
+            $response->assertRedirect(sprintf('%s#creator', route('profile.edit')));
+            $content = (string)$editResponse->getContent();
+            $this->assertMatchesRegularExpression(
+                '/<input[^>]*id="social_links_twitch"[^>]*aria-describedby="social_links_help social_links_twitch_error"/',
+                $content,
+            );
+            $this->assertStringContainsString('id="social_links_twitch_error"', $content);
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            UserSocialLink::where('user_id', $creator->id)->delete();
+            $creator->delete();
+        }
+    }
+
     private function createCreator(): User
     {
         $user = User::factory()->create();

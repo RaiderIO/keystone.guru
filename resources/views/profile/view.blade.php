@@ -38,13 +38,16 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
     'user' => $user
 ]])
 
-@section('header-title')
-    {{ $header }}
-@endsection
+{{-- The creator hero carries the page's h1 --}}
+@if(!$creatorProfileActive)
+    @section('header-title')
+        {{ $header }}
+    @endsection
+@endif
 
 @section('content')
     @if($creatorProfileActive)
-        <div class="card mb-4">
+        <div class="card my-4">
             <div class="card-body creator_hero row g-3 align-items-center">
                 <div class="col-auto">
                     @if($user->iconfile !== null)
@@ -52,7 +55,7 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
                              alt="{{ $user->name }}"
                              class="creator_hero_avatar"/>
                     @else
-                        <div class="creator_hero_initials bg-secondary text-white" aria-hidden="true">
+                        <div class="creator_hero_initials" aria-hidden="true">
                             {{ $user->initials }}
                         </div>
                     @endif

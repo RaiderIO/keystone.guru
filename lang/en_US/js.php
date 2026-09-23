@@ -578,6 +578,7 @@ return [
     'add_to_collection_undo'                                               => 'Undo',
     'add_to_collection_undone'                                             => 'Undone.',
     'add_to_collection_save_failed'                                        => 'Your change could not be saved. Try again.',
+    'collection_delete_confirm'                                            => 'Delete this collection? Its routes are not deleted, but the collection and its link are gone for good.',
     'dungeonroute_picker_range'                                            => ':from–:to of :total',
     'dungeonroute_picker_already_in_label'                                 => 'Already added',
     'dungeonroute_picker_unpublished_label'                                => 'Hidden from others until published',
