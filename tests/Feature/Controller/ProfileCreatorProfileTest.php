@@ -72,11 +72,24 @@ final class ProfileCreatorProfileTest extends PublicTestCase
     }
 
     #[Test]
-    public function view_givenFeatureActive_showsWhenTheCreatorJoined(): void
+    public function view_givenFeatureActive_showsTheCreatorsRouteStats(): void
     {
-        // Arrange
-        $creator = User::factory()->create(['created_at' => '2021-03-15 12:00:00']);
+        // Arrange - one world-published route, and an unlisted one that must not be counted
+        $creator = User::factory()->create();
         Feature::for($creator)->activate(CreatorProfiles::class);
+        $routes = collect([
+            DungeonRoute::factory()->create([
+                'author_id'          => $creator->id,
+                'expires_at'         => null,
+                'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+                'published_at'       => now()->subDays(3),
+            ]),
+            DungeonRoute::factory()->create([
+                'author_id'          => $creator->id,
+                'expires_at'         => null,
+                'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
+            ]),
+        ]);
 
         try {
             // Act
@@ -84,8 +97,11 @@ final class ProfileCreatorProfileTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $response->assertSee(e(__('view_profile.view.member_since', ['date' => 'March 2021'])), false);
+            $this->assertSame(1, $response->viewData('creatorStats')->publishedRouteCount);
+            $response->assertSee(e(trans_choice('view_creator.stats.route_count_total', 1, ['count' => 1])), false);
+            $response->assertSee(e(__('view_creator.stats.last_published', ['time' => now()->subDays(3)->diffForHumans()])), false);
         } finally {
+            $routes->each(static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->delete());
             Feature::for($creator)->forget(CreatorProfiles::class);
             $creator->delete();
         }

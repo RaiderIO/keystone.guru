@@ -113,8 +113,6 @@ return [
         'pinned_collections' => 'Pinned collections',
         'pinned_routes'      => 'Pinned routes',
         'all_routes'         => 'All routes',
-        'route_count'        => '{0} No published routes|{1} :count published route|[2,*] :count published routes',
-        'member_since'       => 'Member since :date',
         'social_link'        => 'Visit :platform',
         'platform'           => [
             'twitch'    => 'Twitch',

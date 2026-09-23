@@ -1,17 +1,19 @@
 <?php
 
+use App\Models\Season;
 use App\Models\User;
+use App\Service\Creator\Dtos\CreatorStats;
 
 /**
  * A single creator tile, as the creator directory renders it. The featured-creators rail on the
  * per-dungeon route page deliberately uses its own flatter markup instead - see
  * creator/featured.blade.php for why.
  *
- * @var User $creator
+ * @var User        $creator     A user from UserRepository::buildListedCreatorsQuery(), which carries the stats columns.
+ * @var Season|null $statsSeason The season those stats were counted for.
  */
 
-// Set by the withCount() in CreatorDirectoryService; fall back rather than lazy-count per card
-$publishedRouteCount = $creator->published_route_count ?? 0;
+$creatorStats = CreatorStats::fromAttributes($creator->getAttributes(), $statsSeason);
 ?>
 <a href="{{ route('profile.view', ['user' => $creator]) }}" class="creator_card card h-100 text-decoration-none">
     <div class="card-body text-center">
@@ -30,7 +32,7 @@ $publishedRouteCount = $creator->published_route_count ?? 0;
         </div>
 
         <div class="text-body-secondary small">
-            {{ trans_choice('view_creator.card.route_count', $publishedRouteCount, ['count' => $publishedRouteCount]) }}
+            {{ implode(' · ', $creatorStats->getSummaryParts()) }}
         </div>
     </div>
 </a>

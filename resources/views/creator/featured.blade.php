@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Dungeon;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -18,8 +19,9 @@ use Illuminate\Database\Eloquent\Collection;
  *
  * Two earlier passes read as a list of tags rather than as people, and neither cause was size: the
  * label sat inline ahead of the entries ("label: item item item" is tag-list grammar), and each
- * entry carried one short string. Hence the heading on its own line, and the published route count
- * under each name - which is also the evidence that makes a featured creator worth clicking.
+ * entry carried one short string. Hence the heading on its own line, and the creator's route count
+ * for this dungeon under each name - which is also the evidence that makes a featured creator worth
+ * clicking.
  *
  * The entries are deliberately not creator.card: that tile is the directory's skin, and its fixed
  * vertical composition cannot compress to a rail. See creator-featured.css.
@@ -29,6 +31,7 @@ use Illuminate\Database\Eloquent\Collection;
  * defaulted here: the composer is bound to this exact view, so an undefined variable means the
  * binding is gone - which should be a loud error, not a section that silently stops rendering.
  *
+ * @var Dungeon               $dungeon
  * @var Collection<int, User> $featuredCreators
  */
 ?>
@@ -36,14 +39,15 @@ use Illuminate\Database\Eloquent\Collection;
     {{-- A named landmark rather than a heading: the label is a link, not a heading element, so
          without this the rail is a run of sibling links at the top of the page with nothing to
          announce it or navigate to it by. What this is, is navigation. --}}
-    <nav class="discover_creator_rail mt-4" aria-label="{{ __('view_creator.featured.title') }}">
+    <?php $featuredTitle = __('view_creator.featured.title_dungeon', ['dungeon' => __($dungeon->name)]); ?>
+    <nav class="discover_creator_rail mt-4" aria-label="{{ $featuredTitle }}">
         {{-- On its own line, not inline ahead of the entries: "label: item item item" on one line is
              the grammar of a tag list, and the rail read as one. The link doubles as the label. --}}
         <div class="discover_creator_rail_heading">
             <a href="{{ route('creators.index') }}"
                class="discover_creator_rail_label"
                title="{{ __('view_creator.featured.see_all') }}">
-                {{ __('view_creator.featured.title') }}
+                {{ $featuredTitle }}
                 <i class="fas fa-angle-right" aria-hidden="true"></i>
             </a>
         </div>
@@ -51,8 +55,7 @@ use Illuminate\Database\Eloquent\Collection;
         <div class="discover_creator_rail_entries">
             @foreach($featuredCreators as $creator)
                 <?php
-                // Set by the withCount() in CreatorDirectoryService; fall back rather than lazy-count per entry
-                $publishedRouteCount = $creator->published_route_count ?? 0;
+                $dungeonRouteCount = (int)$creator->dungeon_route_count;
                 ?>
                 <a href="{{ route('profile.view', ['user' => $creator]) }}"
                    class="discover_creator_entry"
@@ -60,7 +63,10 @@ use Illuminate\Database\Eloquent\Collection;
                         the entry's fixed width, and the tooltip is its only reveal path --}}
                    title="{{ __('view_creator.featured.entry_title', [
                        'name'   => $creator->name,
-                       'routes' => trans_choice('view_creator.card.route_count', $publishedRouteCount, ['count' => $publishedRouteCount]),
+                       'routes' => trans_choice('view_creator.featured.dungeon_route_count', $dungeonRouteCount, [
+                           'count'   => $dungeonRouteCount,
+                           'dungeon' => __($dungeon->name),
+                       ]),
                    ]) }}">
                     @if($creator->iconfile !== null)
                         {{-- Decorative: the name is already the link's own text, right beside it --}}
@@ -80,7 +86,8 @@ use Illuminate\Database\Eloquent\Collection;
                         {{-- The count is the evidence that makes a featured creator worth a click;
                              hiding it in the tooltip is what made an entry read as a bare tag --}}
                         <span class="discover_creator_count text-body-secondary">
-                            {{ trans_choice('view_creator.card.route_count', $publishedRouteCount, ['count' => $publishedRouteCount]) }}
+                            {{-- The heading names the dungeon; repeating a long name here would clip it --}}
+                            {{ trans_choice('view_creator.featured.route_count', $dungeonRouteCount, ['count' => $dungeonRouteCount]) }}
                         </span>
                     </span>
                 </a>

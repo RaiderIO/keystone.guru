@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
+use App\Service\Creator\Enums\CreatorDirectorySort;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreatorDirectoryFormRequest extends FormRequest
 {
@@ -30,6 +32,10 @@ class CreatorDirectoryFormRequest extends FormRequest
                 'integer',
                 'exists:dungeon_route_collection_categories,id',
             ],
+            'sort' => [
+                'nullable',
+                Rule::enum(CreatorDirectorySort::class),
+            ],
         ];
     }
 
@@ -39,7 +45,13 @@ class CreatorDirectoryFormRequest extends FormRequest
         return [
             'search.max'         => __('validation.custom.creator_search.max'),
             'category_id.exists' => __('validation.custom.collection_category_id.exists'),
+            'sort'               => __('validation.custom.creator_sort.enum'),
         ];
+    }
+
+    public function sort(): CreatorDirectorySort
+    {
+        return CreatorDirectorySort::tryFrom((string)$this->validated('sort')) ?? CreatorDirectorySort::ActiveThisSeason;
     }
 
     /**

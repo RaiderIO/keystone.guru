@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
+use App\Models\Season;
 use App\Models\User;
+use App\Service\Creator\Enums\CreatorDirectorySort;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -10,6 +12,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
  * @var string|null                                            $search
  * @var Collection<int, DungeonRouteCollectionCategory>        $categories
  * @var DungeonRouteCollectionCategory|null                    $selectedCategory
+ * @var CreatorDirectorySort                                   $sort
+ * @var Season|null                                            $statsSeason
  */
 
 $categories       ??= collect();
@@ -51,21 +55,43 @@ $selectedCategory ??= null;
         </div>
 
         @if($categories->isNotEmpty())
-            <div class="col-12 col-md-4 col-lg-3">
-                <label for="creator_category" class="visually-hidden">
-                    {{ __('view_creator.directory.category_label') }}
-                </label>
-                {{-- Submitted by the search button next to it, so this needs no JS of its own --}}
-                <select id="creator_category" name="category_id" class="form-select">
-                    <option value="">{{ __('view_creator.directory.category_any') }}</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}"
-                                @if($selectedCategory?->id === $category->id) selected @endif>
-                            {{ __('view_creator.directory.category_option', ['category' => $category->getTranslatedName()]) }}
-                        </option>
-                    @endforeach
-                </select>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="input-group">
+                    <label for="creator_category" class="input-group-text">
+                        {{ __('view_creator.directory.category_label') }}
+                    </label>
+                    {{-- Submitted by the search button, so this needs no JS of its own --}}
+                    <select id="creator_category" name="category_id" class="form-select">
+                        <option value="">{{ __('view_creator.directory.category_any') }}</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}"
+                                    @if($selectedCategory?->id === $category->id) selected @endif>
+                                {{ __('view_creator.directory.category_option', ['category' => $category->getTranslatedName()]) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 @include('common.forms.form-error', ['key' => 'category_id'])
+            </div>
+        @endif
+
+        {{-- Without a season there is nothing for "active this season" to order by --}}
+        @if($statsSeason !== null)
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="input-group">
+                    <label for="creator_sort" class="input-group-text">
+                        {{ __('view_creator.directory.sort_label') }}
+                    </label>
+                    <select id="creator_sort" name="sort" class="form-select">
+                        @foreach(CreatorDirectorySort::cases() as $sortOption)
+                            <option value="{{ $sortOption->value }}"
+                                    @if($sort === $sortOption) selected @endif>
+                                {{ $sortOption->label() }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                @include('common.forms.form-error', ['key' => 'sort'])
             </div>
         @endif
     </form>
@@ -84,7 +110,7 @@ $selectedCategory ??= null;
         <div class="row g-3 row-cols-2 row-cols-md-3 row-cols-xl-4">
             @foreach($creators as $creator)
                 <div class="col">
-                    @include('creator.card', ['creator' => $creator])
+                    @include('creator.card', ['creator' => $creator, 'statsSeason' => $statsSeason])
                 </div>
             @endforeach
         </div>

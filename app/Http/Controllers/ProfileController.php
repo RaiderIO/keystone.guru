@@ -10,7 +10,6 @@ use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\LiveSession;
-use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
@@ -21,6 +20,7 @@ use App\Models\UserSocialLink;
 use App\Repositories\Interfaces\UserPinnedDungeonRouteCollectionRepositoryInterface;
 use App\Repositories\Interfaces\UserPinnedDungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\UserSocialLinkRepositoryInterface;
+use App\Service\Creator\CreatorDirectoryServiceInterface;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
@@ -59,6 +59,7 @@ class ProfileController extends Controller
         User                                   $user,
         ThumbnailServiceInterface              $thumbnailService,
         DungeonRouteCollectionServiceInterface $dungeonRouteCollectionService,
+        CreatorDirectoryServiceInterface       $creatorDirectoryService,
     ): View {
         $creatorProfileActive = Feature::active(CreatorProfiles::class);
 
@@ -72,13 +73,10 @@ class ProfileController extends Controller
         $pinnedDungeonRouteCollectionDungeonRoutes = collect();
         /** @var Collection<int, int> $pinnedDungeonRouteCollectionCoveredDungeonCounts Keyed by collection id. */
         $pinnedDungeonRouteCollectionCoveredDungeonCounts = collect();
-        $publishedRouteCount                              = 0;
+        $creatorStats                                     = null;
 
         if ($creatorProfileActive) {
-            $publishedRouteCount = DungeonRoute::query()
-                ->where('author_id', $user->id)
-                ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
-                ->count();
+            $creatorStats = $creatorDirectoryService->getCreatorStats($user);
 
             $user->load([
                 'socialLinks',
@@ -124,7 +122,7 @@ class ProfileController extends Controller
             'pinnedDungeonRouteCollections'                    => $pinnedDungeonRouteCollections,
             'pinnedDungeonRouteCollectionDungeonRoutes'        => $pinnedDungeonRouteCollectionDungeonRoutes,
             'pinnedDungeonRouteCollectionCoveredDungeonCounts' => $pinnedDungeonRouteCollectionCoveredDungeonCounts,
-            'publishedRouteCount'                              => $publishedRouteCount,
+            'creatorStats'                                     => $creatorStats,
         ]);
     }
 

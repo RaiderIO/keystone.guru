@@ -45,6 +45,9 @@ return [
         'creator_search' => [
             'max' => 'A creator name is at most :max characters, so a longer search cannot match anyone.',
         ],
+        'creator_sort' => [
+            'enum' => 'Sort the creators by activity this season or by their number of routes.',
+        ],
         'autoroutecoverage_days' => [
             'integer' => 'The amount of days must be a whole number.',
             'min'     => 'The overview must cover at least :min day.',
