@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
+use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
@@ -345,6 +346,64 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
         }
     }
 
+    #[Test]
+    public function addAdFreeGiveaway_givenReceiverNotInTeam_returnsNotFound(): void
+    {
+        // Arrange - an admin giver, since User::hasPatreonBenefit() grants admins every benefit
+        $giver    = $this->createAdFreeGiveawayGiver();
+        $receiver = User::factory()->create();
+        $receiver->addRole(Role::ROLE_USER);
+
+        try {
+            // Act
+            $response = $this->actingAs($giver)->post($this->adFreeGiveawayUrl($receiver));
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertFalse(PatreonAdFreeGiveaway::query()->where('receiver_user_id', $receiver->id)->exists());
+        } finally {
+            PatreonAdFreeGiveaway::query()->where('receiver_user_id', $receiver->id)->delete();
+            $receiver->delete();
+            TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $giver->id)->delete();
+            $giver->delete();
+        }
+    }
+
+    #[Test]
+    public function addAdFreeGiveaway_givenReceiverInTeam_returnsCreated(): void
+    {
+        // Arrange
+        $giver = $this->createAdFreeGiveawayGiver();
+
+        try {
+            // Act
+            $response = $this->actingAs($giver)->post($this->adFreeGiveawayUrl($this->member));
+
+            // Assert
+            $response->assertCreated();
+            $this->assertTrue(
+                PatreonAdFreeGiveaway::query()
+                    ->where('giver_user_id', $giver->id)
+                    ->where('receiver_user_id', $this->member->id)
+                    ->exists(),
+            );
+        } finally {
+            PatreonAdFreeGiveaway::query()->where('receiver_user_id', $this->member->id)->delete();
+            TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $giver->id)->delete();
+            $giver->delete();
+        }
+    }
+
+    private function createAdFreeGiveawayGiver(): User
+    {
+        $giver = User::factory()->create();
+        $giver->addRole(Role::ROLE_ADMIN);
+
+        TeamUser::create(['team_id' => $this->team->id, 'user_id' => $giver->id, 'role' => TeamUser::ROLE_MEMBER]);
+
+        return $giver;
+    }
+
     private function createTeam(): Team
     {
         return Team::create([
@@ -360,6 +419,11 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     private function teamRouteUrl(Team $team, DungeonRoute $dungeonRoute): string
     {
         return sprintf('/ajax/team/%s/route/%s', $team->getRouteKey(), $dungeonRoute->getRouteKey());
+    }
+
+    private function adFreeGiveawayUrl(User $receiver): string
+    {
+        return sprintf('/ajax/team/%s/member/%s/adfree', $this->team->getRouteKey(), $receiver->getRouteKey());
     }
 
     private function changeRoleUrl(): string

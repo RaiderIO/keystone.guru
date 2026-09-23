@@ -237,6 +237,8 @@ class AjaxTeamController extends Controller
     {
         Gate::authorize('can-ad-free-giveaway', $team);
 
+        abort_unless($team->isUserMember($user), Http::NOT_FOUND);
+
         /** @var User $currentUser */
         $currentUser = Auth::user();
 
