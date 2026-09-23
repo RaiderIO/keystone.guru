@@ -210,15 +210,19 @@ describe('buildLangBundles', () => {
         expect(lang.get('js.add_to_collection_label')).toBe('Add to collection');
     });
 
-    it('buildLangBundles_givenEnUs_isNotMergedWithItselfAndStaysUnchanged', () => {
+    it('buildLangBundles_givenGroupAndKeyOnlyTheLocaleHas_keepsThem', () => {
         const lang = buildAndRunBundleWithFallback(
-            'en_US',
-            'en_US',
-            {js: "<?php\n\nreturn ['edit_label' => 'Edit'];\n"},
+            'uk_UA',
+            'uk_UA',
+            {
+                js:    "<?php\n\nreturn ['edit_label' => 'Редагувати', 'uk_only_label' => 'Лише тут'];\n",
+                extra: "<?php\n\nreturn ['note' => 'Нотатка'];\n",
+            },
             {js: "<?php\n\nreturn ['edit_label' => 'Edit'];\n"},
         );
 
-        expect(lang.messages[`${lang.getLocale()}.js`]).toEqual({edit_label: 'Edit'});
+        expect(lang.get('js.uk_only_label')).toBe('Лише тут');
+        expect(lang.get('extra.note')).toBe('Нотатка');
     });
 });
 

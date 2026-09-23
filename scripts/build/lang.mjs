@@ -24,8 +24,10 @@ export function buildLangBundles(rootDir, version, production) {
     const locales = fs.readdirSync(langRoot)
         .filter(entry => fs.statSync(path.join(langRoot, entry)).isDirectory());
 
-    const buildLocales    = parseBuildLocales(process.env.BUILD_LOCALES);
-    const fallbackGroups  = readLocaleGroups(langRoot, 'en_US');
+    const buildLocales = parseBuildLocales(process.env.BUILD_LOCALES);
+    // Parsing en_US takes ~20s, so it is read at most once and only when a bundle needs it
+    let fallbackGroups = null;
+    const getFallbackGroups = () => fallbackGroups ??= readLocaleGroups(langRoot, 'en_US');
 
     const built = [];
     for (const locale of locales) {
@@ -33,12 +35,11 @@ export function buildLangBundles(rootDir, version, production) {
             continue;
         }
 
-        let groups = readLocaleGroups(langRoot, locale);
-        if (locale !== 'en_US') {
-            // Mirrors Laravel's server-side __() fallback to en_US, so a key a locale's
-            // translators haven't caught up on yet still renders instead of showing the raw key.
-            groups = mergeTranslationsWithFallback(groups, fallbackGroups);
-        }
+        // Mirrors Laravel's server-side __() fallback to en_US, so a key a locale's translators
+        // haven't caught up on yet still renders instead of showing the raw key.
+        const groups = locale === 'en_US'
+            ? getFallbackGroups()
+            : mergeTranslationsWithFallback(readLocaleGroups(langRoot, locale), getFallbackGroups());
 
         const messages = {};
         for (const [group, value] of Object.entries(groups)) {
@@ -157,7 +158,8 @@ function readLocaleGroups(langRoot, locale) {
  * string, which Laravel treats as an existing translation rather than a missing one — so only a
  * key genuinely absent from the locale is filled from the fallback. A value that isn't a plain
  * object (a scalar, or a PHP list array) is taken from whichever side has it wholesale, never
- * merged element-wise.
+ * merged element-wise; Laravel differs there (it falls back per list index, and treats an empty
+ * array as missing), which no lang file currently relies on.
  *
  * @param {*} localeValue
  * @param {*} fallbackValue
