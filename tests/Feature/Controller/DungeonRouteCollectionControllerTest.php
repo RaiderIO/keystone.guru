@@ -14,6 +14,7 @@ use App\Models\PublishedState;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
@@ -879,6 +880,177 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function update_givenThePublishedStateWasRaisedWithALessVisibleRouteInIt_offersToRaiseTheRouteToo(): void
+    {
+        // Arrange
+        $creator                  = $this->createCreator();
+        [$route, $mappingVersion] = $this->createRouteWithEmptyMappingVersion($creator, PublishedState::UNPUBLISHED);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
+        ]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $route->id,
+            'order'                       => 0,
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(
+                route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+                [
+                    'name'            => $dungeonRouteCollection->name,
+                    'published_state' => PublishedState::WORLD,
+                ],
+            );
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $response->assertSessionHas('collection_publish_routes_confirm', [
+                'count'           => 1,
+                'published_state' => PublishedState::WORLD,
+            ]);
+            // Only offered, never raised on save itself - the user still has to confirm
+            $this->assertSame(PublishedState::ALL[PublishedState::UNPUBLISHED], $route->fresh()->published_state_id);
+        } finally {
+            $dungeonRouteCollection->delete();
+            $route->delete();
+            $mappingVersion->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenThePublishedStateWasRaisedButNoRouteIsLessVisible_doesNotOfferToRaiseAnything(): void
+    {
+        // Arrange
+        $creator                  = $this->createCreator();
+        [$route, $mappingVersion] = $this->createRouteWithEmptyMappingVersion($creator, PublishedState::WORLD);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+        ]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $route->id,
+            'order'                       => 0,
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(
+                route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+                [
+                    'name'            => $dungeonRouteCollection->name,
+                    'published_state' => PublishedState::WORLD,
+                ],
+            );
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $response->assertSessionMissing('collection_publish_routes_confirm');
+        } finally {
+            $dungeonRouteCollection->delete();
+            $route->delete();
+            $mappingVersion->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenThePublishedStateWasNotRaised_doesNotOfferToRaiseAnyRoute(): void
+    {
+        // Arrange - lowering the collection's own state never should bring its routes along
+        $creator                  = $this->createCreator();
+        [$route, $mappingVersion] = $this->createRouteWithEmptyMappingVersion($creator, PublishedState::UNPUBLISHED);
+        $team                     = $this->createTeamFor($creator);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $route->id,
+            'order'                       => 0,
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(
+                route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+                [
+                    'name'            => $dungeonRouteCollection->name,
+                    'published_state' => PublishedState::TEAM,
+                    'team_id'         => $team->id,
+                ],
+            );
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $response->assertSessionMissing('collection_publish_routes_confirm');
+        } finally {
+            $dungeonRouteCollection->delete();
+            $route->delete();
+            $mappingVersion->delete();
+            $this->deleteTeam($team);
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenALessVisibleRouteOwnedBySomeoneElse_excludesItFromTheOffer(): void
+    {
+        // Arrange - a legacy collection may hold a route of another author (added before that was disallowed); the
+        // owner of the collection may not publish it, so raising it is never offered
+        $creator                         = $this->createCreator();
+        $otherAuthor                     = User::factory()->create();
+        [$foreignRoute, $mappingVersion] = $this->createRouteWithEmptyMappingVersion($otherAuthor, PublishedState::UNPUBLISHED);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
+        ]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $foreignRoute->id,
+            'order'                       => 0,
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(
+                route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+                [
+                    'name'            => $dungeonRouteCollection->name,
+                    'published_state' => PublishedState::WORLD,
+                ],
+            );
+
+            // Assert - the acting user may edit the collection, but does not own the foreign route in it
+            $response->assertSessionHasNoErrors();
+            $response->assertSessionMissing('collection_publish_routes_confirm');
+        } finally {
+            $dungeonRouteCollection->delete();
+            $foreignRoute->delete();
+            $mappingVersion->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $otherAuthor->delete();
+            $creator->delete();
+        }
+    }
+
     /**
      * The route picker only offers the acting user's own routes, so an admin editing someone else's
      * collection may not add to it - but the page must still show the collection as the owner's, not
@@ -1407,6 +1579,44 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         }
 
         return DungeonRoute::factory()->create($attributes);
+    }
+
+    /**
+     * A route on a mapping version of its own holding no enemies at all, so hasKilledAllRequiredEnemies() always
+     * passes regardless of which dungeon the factory happens to pick - needed for a route the "raise its published
+     * state" offer is meant to actually be able to raise.
+     *
+     * @return array{0: DungeonRoute, 1: MappingVersion}
+     */
+    private function createRouteWithEmptyMappingVersion(User $user, string $publishedState): array
+    {
+        $route = DungeonRoute::factory()->create([
+            'author_id'          => $user->id,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[$publishedState],
+        ]);
+
+        $current = $route->mappingVersion;
+        $now     = Carbon::now()->toDateTimeString();
+
+        // Inserted quietly, as MappingService::copyMappingVersionToDungeon() does - the model's mutators would
+        // otherwise touch fields this test does not care about
+        $mappingVersion = MappingVersion::findOrFail(MappingVersion::insertGetId([
+            'game_version_id'                 => $current->game_version_id,
+            'dungeon_id'                      => $route->dungeon_id,
+            'version'                         => $current->version + 1,
+            'enemy_forces_required'           => $current->enemy_forces_required,
+            'enemy_forces_required_teeming'   => $current->enemy_forces_required_teeming,
+            'enemy_forces_shrouded'           => $current->enemy_forces_shrouded,
+            'enemy_forces_shrouded_zul_gamux' => $current->enemy_forces_shrouded_zul_gamux,
+            'timer_max_seconds'               => $current->timer_max_seconds,
+            'created_at'                      => $now,
+            'updated_at'                      => $now,
+        ]));
+
+        $route->update(['mapping_version_id' => $mappingVersion->id, 'teeming' => false]);
+
+        return [$route, $mappingVersion];
     }
 
     /**

@@ -86,4 +86,14 @@ interface DungeonRouteCollectionServiceInterface
      * The current season of the game version's expansion, or null for a game version without seasons.
      */
     public function getCurrentSeason(GameVersion $gameVersion): ?Season;
+
+    /**
+     * The collection's own routes whose published state is less visible than the collection's own - the candidates
+     * for the "make them visible too" confirmation offered after raising a collection's published state.
+     * Authorization is not applied here: the caller still has to filter with `Gate::allows('publish', ...)` per
+     * route, since only some of them may belong to the acting user.
+     *
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getRoutesLessVisibleThanCollection(DungeonRouteCollection $dungeonRouteCollection): Collection;
 }

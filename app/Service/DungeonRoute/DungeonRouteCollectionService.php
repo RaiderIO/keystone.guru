@@ -168,4 +168,14 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
 
         return $poolGroups->concat($otherGroups->values())->values();
     }
+
+    public function getRoutesLessVisibleThanCollection(DungeonRouteCollection $dungeonRouteCollection): Collection
+    {
+        return DungeonRoute::query()
+            ->join('dungeon_route_collection_routes', 'dungeon_route_collection_routes.dungeon_route_id', '=', 'dungeon_routes.id')
+            ->where('dungeon_route_collection_routes.dungeon_route_collection_id', $dungeonRouteCollection->id)
+            ->where('dungeon_routes.published_state_id', '<', $dungeonRouteCollection->published_state_id)
+            ->select('dungeon_routes.*')
+            ->get();
+    }
 }

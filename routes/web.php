@@ -689,6 +689,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::post('/', new AjaxDungeonRouteCollectionController()->storeRoutes(...))->name('ajax.collection.routes.store');
                     Route::delete('/', new AjaxDungeonRouteCollectionController()->deleteRoutes(...))->name('ajax.collection.routes.delete');
                     Route::put('/order', new AjaxDungeonRouteCollectionController()->updateRoutesOrder(...))->name('ajax.collection.routes.order');
+                    Route::post('/publish', new AjaxDungeonRouteCollectionController()->publishRoutes(...))->name('ajax.collection.routes.publish');
                 });
         });
 
