@@ -195,6 +195,37 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function apiRoute_givenDifferentlyCapitalisedVerifiedEmailWhileTheBucketIsFull_stillAuthenticates(): void
+    {
+        // Arrange - the email lookup is case-insensitive, so a differently capitalised email is the same caller
+        $caller       = User::factory()->create(['password' => Hash::make(self::PASSWORD)]);
+        $email        = mb_strtoupper($caller->email);
+        $usernameKey  = sprintf('api-authentication:127.0.0.1|%s', sha1(mb_strtolower($email)));
+        $dungeonIndex = route('api.v1.combatlog.dungeon.index');
+        $this->pretendNotRunningUnitTests();
+
+        try {
+            $this->get($dungeonIndex, $this->credentialsOf($email, self::PASSWORD))->assertStatus(StatusCode::OK);
+
+            RateLimiter::clear($usernameKey);
+            for ($attempt = 0; $attempt < $this->maxFailedAttempts(); ++$attempt) {
+                RateLimiter::hit($usernameKey, 60);
+            }
+
+            // Act
+            $cachedResponse = $this->get($dungeonIndex, $this->credentialsOf($email, self::PASSWORD));
+
+            // Assert
+            $cachedResponse->assertStatus(StatusCode::OK);
+            $this->assertSame(0, RateLimiter::attempts($usernameKey));
+        } finally {
+            $this->pretendRunningUnitTests();
+            RateLimiter::clear($usernameKey);
+            $caller->delete();
+        }
+    }
+
     private function middleware(): ApiAuthenticationThrottle
     {
         $userService = $this->createMockPublic(UserServiceInterface::class);
