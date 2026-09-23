@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import Lang from 'lang.js';
 import {describe, expect, it} from 'vitest';
-import {buildLangBundles, parseBuildLocales, parsePhpTranslationFile, shouldBuildLocale} from './lang.mjs';
+import {buildLangBundles, mergeTranslationsWithFallback, parseBuildLocales, parsePhpTranslationFile, shouldBuildLocale} from './lang.mjs';
 
 describe('parsePhpTranslationFile', () => {
     it('parsePhpTranslationFile_givenSimpleArray_returnsObject', () => {
@@ -44,6 +44,54 @@ return array(
 
         expect(typeof parsed).toBe('object');
         expect(Object.keys(parsed).length).toBeGreaterThan(0);
+    });
+});
+
+describe('mergeTranslationsWithFallback', () => {
+    it('mergeTranslationsWithFallback_givenLocaleMissingAKey_returnsFallbackValue', () => {
+        expect(mergeTranslationsWithFallback({}, {edit_label: 'Edit'})).toEqual({edit_label: 'Edit'});
+    });
+
+    it('mergeTranslationsWithFallback_givenLocaleMissingANestedKey_returnsFallbackValueForIt', () => {
+        const locale   = {menu: {home: 'Домівка'}};
+        const fallback = {menu: {home: 'Home', settings: 'Settings'}};
+
+        expect(mergeTranslationsWithFallback(locale, fallback)).toEqual({
+            menu: {home: 'Домівка', settings: 'Settings'},
+        });
+    });
+
+    it('mergeTranslationsWithFallback_givenLocaleHasTheKey_keepsTheLocaleValue', () => {
+        expect(mergeTranslationsWithFallback({edit_label: 'Редагувати'}, {edit_label: 'Edit'}))
+            .toEqual({edit_label: 'Редагувати'});
+    });
+
+    it('mergeTranslationsWithFallback_givenLocaleValueIsAnEmptyString_keepsTheEmptyString', () => {
+        // Laravel treats an existing empty translation as present, not missing
+        expect(mergeTranslationsWithFallback({edit_label: ''}, {edit_label: 'Edit'})).toEqual({edit_label: ''});
+    });
+
+    it('mergeTranslationsWithFallback_givenLocaleValueIsAListArray_takesTheLocaleArrayWhole', () => {
+        expect(mergeTranslationsWithFallback({items: ['a']}, {items: ['a', 'b', 'c']})).toEqual({items: ['a']});
+    });
+
+    it('mergeTranslationsWithFallback_givenLocaleMissingAWholeGroup_takesTheFallbackGroupWhole', () => {
+        const locale   = {js: {edit_label: 'Редагувати'}};
+        const fallback = {js: {edit_label: 'Edit'}, auth: {failed: 'Failed'}};
+
+        expect(mergeTranslationsWithFallback(locale, fallback)).toEqual({
+            js: {edit_label: 'Редагувати'},
+            auth: {failed: 'Failed'},
+        });
+    });
+
+    it('mergeTranslationsWithFallback_givenFallbackMessages_leavesFallbackObjectUnchanged', () => {
+        const fallback         = {js: {edit_label: 'Edit'}};
+        const fallbackSnapshot = JSON.parse(JSON.stringify(fallback));
+
+        mergeTranslationsWithFallback({js: {}}, fallback);
+
+        expect(fallback).toEqual(fallbackSnapshot);
     });
 });
 
@@ -101,6 +149,75 @@ describe('buildLangBundles', () => {
         const lang = buildAndRunBundle('en_US', 'en_US', {js: "<?php\n\nreturn ['edit_label' => 'Edit'];\n"});
 
         expect(lang.get('js.edit_label')).toBe('Edit');
+        expect(lang.messages[`${lang.getLocale()}.js`]).toEqual({edit_label: 'Edit'});
+    });
+
+    /**
+     * Same as buildAndRunBundle, but also writes an en_US lang/ directory so the target locale's
+     * bundle is built with the en_US fallback merged in.
+     *
+     * @param {string} locale         The locale directory to build a bundle for.
+     * @param {string} htmlLang       The value of the `<html lang>` attribute Lang.js inferred.
+     * @param {Object} localeMessages Map of translation file basename to its PHP source, for `locale`.
+     * @param {Object} enUsMessages   Map of translation file basename to its PHP source, for en_US.
+     * @returns {Lang} The Lang instance the bundle populated.
+     */
+    function buildAndRunBundleWithFallback(locale, htmlLang, localeMessages, enUsMessages) {
+        const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ksg-lang-'));
+
+        try {
+            fs.mkdirSync(path.join(rootDir, 'lang', locale), {recursive: true});
+            for (const [file, source] of Object.entries(localeMessages)) {
+                fs.writeFileSync(path.join(rootDir, 'lang', locale, `${file}.php`), source);
+            }
+
+            fs.mkdirSync(path.join(rootDir, 'lang', 'en_US'), {recursive: true});
+            for (const [file, source] of Object.entries(enUsMessages)) {
+                fs.writeFileSync(path.join(rootDir, 'lang', 'en_US', `${file}.php`), source);
+            }
+
+            const appEnv        = process.env.APP_ENV;
+            process.env.APP_ENV = 'testing';
+            try {
+                buildLangBundles(rootDir, 'v1', false);
+            } finally {
+                if (appEnv === undefined) {
+                    delete process.env.APP_ENV;
+                } else {
+                    process.env.APP_ENV = appEnv;
+                }
+            }
+
+            const code   = fs.readFileSync(path.join(rootDir, 'public', 'js', `lang-${locale}-v1.js`), 'utf8');
+            const window = {Lang, lang: new Lang({messages: {}, locale: htmlLang})};
+            new Function('window', code)(window);
+
+            return window.lang;
+        } finally {
+            fs.rmSync(rootDir, {recursive: true, force: true});
+        }
+    }
+
+    it('buildLangBundles_givenLocaleMissingAKeyEnUsHas_resolvesTheEnUsValue', () => {
+        const lang = buildAndRunBundleWithFallback(
+            'uk_UA',
+            'uk_UA',
+            {js: "<?php\n\nreturn ['edit_label' => 'Редагувати'];\n"},
+            {js: "<?php\n\nreturn ['edit_label' => 'Edit', 'add_to_collection_label' => 'Add to collection'];\n"},
+        );
+
+        expect(lang.get('js.edit_label')).toBe('Редагувати');
+        expect(lang.get('js.add_to_collection_label')).toBe('Add to collection');
+    });
+
+    it('buildLangBundles_givenEnUs_isNotMergedWithItselfAndStaysUnchanged', () => {
+        const lang = buildAndRunBundleWithFallback(
+            'en_US',
+            'en_US',
+            {js: "<?php\n\nreturn ['edit_label' => 'Edit'];\n"},
+            {js: "<?php\n\nreturn ['edit_label' => 'Edit'];\n"},
+        );
+
         expect(lang.messages[`${lang.getLocale()}.js`]).toEqual({edit_label: 'Edit'});
     });
 });
