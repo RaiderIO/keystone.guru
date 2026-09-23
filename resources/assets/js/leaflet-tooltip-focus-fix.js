@@ -27,6 +27,11 @@
 //
 // Layer.include() merges into L.Layer.prototype, which is where Tooltip.js puts
 // these methods, so this must run after leaflet has been required.
+//
+// Fixed upstream (https://github.com/Leaflet/Leaflet/issues/9071, fix
+// https://github.com/Leaflet/Leaflet/pull/9232) on main, which ships as 2.x;
+// the 1.x line does not have it. Remove this shim on the upgrade to a release
+// that contains it - leaflet-tooltip-focus-fix.test.js then goes red.
 // ---------------------------------------------------------------------------
 
 /**
