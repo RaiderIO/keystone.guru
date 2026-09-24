@@ -135,6 +135,9 @@ class AppServiceProvider extends ServiceProvider
     protected function configureRateLimiting(): void
     {
         RateLimiter::for('create-dungeonroute', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 100)->by($this->userKey($request)));
+        // Every drag in the collaborative map editor is a write, and sandbox routes accept them without a session - the
+        // ceiling sits above the whole site's busiest measured hour of editor writes (~1000), so only abuse reaches it
+        RateLimiter::for('edit-dungeonroute', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
         RateLimiter::for('create-tag', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 60)->by($this->userKey($request)));
         RateLimiter::for('create-collection', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 30)->by($this->userKey($request)));
         RateLimiter::for('create-team', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 5)->by($this->userKey($request)));
@@ -150,7 +153,7 @@ class AppServiceProvider extends ServiceProvider
         });
         // Every attempt costs a password hash comparison, and the per-username lockout of ThrottlesLogins does not
         // bound a caller that rotates usernames. Account access, so the ceiling is set well above what real traffic produces
-        RateLimiter::for('login', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
+        RateLimiter::for('login', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 120)->by($this->userKey($request)));
         RateLimiter::for('reset-password', function (Request $request) {
             // Same as create-user: only the form submission is interesting, showing the form is free
             if ($request->method() === 'GET') {
@@ -158,21 +161,21 @@ class AppServiceProvider extends ServiceProvider
             }
 
             // Account recovery, so the ceiling is set well above what real traffic produces
-            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 300)->by($this->userKey($request));
+            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 60)->by($this->userKey($request));
         });
 
         // Writes a row per call and is reachable without a session, but it is only sent on two explicit user
         // actions - so the ceiling sits far above what the front-end can produce
-        RateLimiter::for('store-metric', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 6000)->by($this->userKey($request)));
+        RateLimiter::for('store-metric', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 600)->by($this->userKey($request)));
 
         // Heavy GET requests
         RateLimiter::for('search-dungeonroute', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 600)->by($this->userKey($request)));
         // Every call is an outbound request to the Raider.IO API, and the front-end fires one per filter change
-        RateLimiter::for('heatmap-data', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
+        RateLimiter::for('heatmap-data', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 600)->by($this->userKey($request)));
 
         // This consumes the same resources as creating a route - so we limit it
-        RateLimiter::for('mdt-details', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
-        RateLimiter::for('mdt-export', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
+        RateLimiter::for('mdt-details', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 300)->by($this->userKey($request)));
+        RateLimiter::for('mdt-export', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 600)->by($this->userKey($request)));
         RateLimiter::for('simulate', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 120)->by($this->userKey($request)));
     }
 

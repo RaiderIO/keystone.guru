@@ -643,11 +643,11 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::prefix('tag')->group(static function () {
             Route::middleware('throttle:create-tag')->group(static function () {
                 Route::post('/', new AjaxTagController()->store(...))->name('ajax.tag.create');
-            });
-            Route::delete('/{tag}', new AjaxTagController()->delete(...))->name('ajax.tag.delete');
+                Route::delete('/{tag}', new AjaxTagController()->delete(...))->name('ajax.tag.delete');
 
-            Route::put('/{tag}/all', new AjaxTagController()->updateAll(...))->name('ajax.tag.updateall');
-            Route::delete('/{tag}/all', new AjaxTagController()->deleteAll(...))->name('ajax.tag.deleteall');
+                Route::put('/{tag}/all', new AjaxTagController()->updateAll(...))->name('ajax.tag.updateall');
+                Route::delete('/{tag}/all', new AjaxTagController()->deleteAll(...))->name('ajax.tag.deleteall');
+            });
         });
         Route::prefix('heatmap')->middleware('throttle:heatmap-data')->group(static function () {
             Route::get('/data', new AjaxHeatmapController()->getData(...))->name('ajax.heatmap.data');
@@ -782,35 +782,38 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         // May be performed without being logged in (sandbox functionality)
         Route::prefix('{dungeonRoute}')->group(static function () {
             Route::get('/brushline/{brushline}', new AjaxBrushlineController()->show(...))->name('ajax.dungeonroute.brushline.show');
-            Route::post('/brushline', new AjaxBrushlineController()->store(...))->name('ajax.dungeonroute.brushline.create');
-            Route::put('/brushline/{brushline}', new AjaxBrushlineController()->store(...))->name('ajax.dungeonroute.brushline.update');
-            Route::delete('/brushline/{brushline}', new AjaxBrushlineController()->delete(...))->name('ajax.dungeonroute.brushline.delete');
-
             Route::get('/killzone/paths', new AjaxKillZoneController()->paths(...));
-            Route::put('/killzone/mass', new AjaxKillZoneController()->storeAll(...));
-            Route::post('/killzone', new AjaxKillZoneController()->store(...));
-            Route::put('/killzone/{killZone}', new AjaxKillZoneController()->store(...));
-            Route::delete('/killzone/{killZone}', new AjaxKillZoneController()->delete(...));
-            Route::delete('/killzone', new AjaxKillZoneController()->deleteAll(...));
-
-            Route::post('/mapicon', new AjaxMapIconController()->dungeonRouteStore(...));
-            Route::put('/mapicon/{mapIcon}', new AjaxMapIconController()->dungeonRouteStore(...));
-            Route::delete('/mapicon/{mapIcon}', new AjaxMapIconController()->delete(...));
-
-            Route::post('/pridefulenemy/{enemy}', new AjaxPridefulEnemyController()->store(...));
-            Route::delete('/pridefulenemy/{enemy}', new AjaxPridefulEnemyController()->delete(...));
-
             Route::get('/path/{path}', new AjaxPathController()->show(...))->name('ajax.dungeonroute.path.show');
-            Route::post('/path', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.create');
-            Route::put('/path/{path}', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.update');
-            Route::delete('/path/{path}', new AjaxPathController()->delete(...))->name('ajax.dungeonroute.path.delete');
-
             Route::get('/arrow/{arrow}', new AjaxArrowController()->show(...))->name('ajax.dungeonroute.arrow.show');
-            Route::post('/arrow', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.create');
-            Route::put('/arrow/{arrow}', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.update');
-            Route::delete('/arrow/{arrow}', new AjaxArrowController()->delete(...))->name('ajax.dungeonroute.arrow.delete');
 
-            Route::post('/raidmarker/{enemy}', new AjaxEnemyController()->setRaidMarker(...));
+            Route::middleware('throttle:edit-dungeonroute')->group(static function () {
+                Route::post('/brushline', new AjaxBrushlineController()->store(...))->name('ajax.dungeonroute.brushline.create');
+                Route::put('/brushline/{brushline}', new AjaxBrushlineController()->store(...))->name('ajax.dungeonroute.brushline.update');
+                Route::delete('/brushline/{brushline}', new AjaxBrushlineController()->delete(...))->name('ajax.dungeonroute.brushline.delete');
+
+                Route::put('/killzone/mass', new AjaxKillZoneController()->storeAll(...));
+                Route::post('/killzone', new AjaxKillZoneController()->store(...));
+                Route::put('/killzone/{killZone}', new AjaxKillZoneController()->store(...));
+                Route::delete('/killzone/{killZone}', new AjaxKillZoneController()->delete(...));
+                Route::delete('/killzone', new AjaxKillZoneController()->deleteAll(...));
+
+                Route::post('/mapicon', new AjaxMapIconController()->dungeonRouteStore(...));
+                Route::put('/mapicon/{mapIcon}', new AjaxMapIconController()->dungeonRouteStore(...));
+                Route::delete('/mapicon/{mapIcon}', new AjaxMapIconController()->delete(...));
+
+                Route::post('/pridefulenemy/{enemy}', new AjaxPridefulEnemyController()->store(...));
+                Route::delete('/pridefulenemy/{enemy}', new AjaxPridefulEnemyController()->delete(...));
+
+                Route::post('/path', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.create');
+                Route::put('/path/{path}', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.update');
+                Route::delete('/path/{path}', new AjaxPathController()->delete(...))->name('ajax.dungeonroute.path.delete');
+
+                Route::post('/arrow', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.create');
+                Route::put('/arrow/{arrow}', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.update');
+                Route::delete('/arrow/{arrow}', new AjaxArrowController()->delete(...))->name('ajax.dungeonroute.arrow.delete');
+
+                Route::post('/raidmarker/{enemy}', new AjaxEnemyController()->setRaidMarker(...));
+            });
 
             Route::middleware('throttle:create-dungeonroute')->group(static function () {
                 Route::post('/clone/team/{team}', new AjaxDungeonRouteController()->cloneToTeam(...));

@@ -11,17 +11,15 @@ use ReflectionProperty;
 use Tests\TestCase;
 
 /**
- * The mdt-export limiter buckets anonymous callers by $request->ip(), which in production resolves
- * to the load balancer rather than the visitor (#4536) - every anonymous visitor behind one ALB
- * node therefore shares a single bucket. That makes the configured number a site-wide ceiling, not
- * a per-visitor one, so lowering it to a per-visitor-looking value takes the endpoint down for
- * everyone (#4535, Sentry PHP-LARAVEL-S6).
+ * The limiter buckets anonymous callers by $request->ip(), so its number is a per-visitor ceiling only
+ * while that resolves to the visitor. Should it collapse to a proxy address again, every visitor shares
+ * one bucket, and 600 an hour sits well below the site-wide peak of ~1,650 exports an hour.
  */
 #[Group('RateLimiting')]
 final class MdtExportRateLimitTest extends TestCase
 {
     #[Test]
-    public function mdtExportLimiter_givenAnonymousRequest_allowsTheSiteWideHourlyCeiling(): void
+    public function mdtExportLimiter_givenAnonymousRequest_allowsThePerVisitorHourlyCeiling(): void
     {
         // Arrange
         $this->overrideHttpRateLimit(null);
@@ -31,7 +29,7 @@ final class MdtExportRateLimitTest extends TestCase
             $limit = $this->resolveLimit('mdt-export');
 
             // Assert
-            $this->assertSame(1200, $limit->maxAttempts);
+            $this->assertSame(600, $limit->maxAttempts);
             $this->assertSame(3600, $limit->decaySeconds);
         } finally {
             $this->overrideHttpRateLimit(null);
