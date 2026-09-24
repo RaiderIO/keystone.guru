@@ -156,8 +156,30 @@ tables, card grids, and filter sidebars pack tightly at the 1rem spacer rhythm, 
   deliberately spacious section in an otherwise dense system.
 - **Ad slots are load-bearing:** anonymous users see ads (Patreon removes them); layouts
   must keep those slots viable. Never design a page that collapses without the ad column.
+  The placements are fixed by The Ad Space Rule below.
 - **Breakpoints:** stock Bootstrap 5 (576/768/992/1200/1400); mobile is mobile web, and the
   footer and headers center/stack below 768px.
+
+### The Ad Space Rule
+
+Ads pay for the site. The ad provider places them and they **float on top of the page** —
+the layout does not render them, it only has to leave room for them. These placements are
+fixed; an ad showing up anywhere else is an ad-provider problem, not a layout to design
+around.
+
+- **Non-map pages:** one ad rail on the left and one on the right, each 300px wide on a
+  1440p screen, plus a bottom-floating banner. Ads may also be embedded mid-page, between
+  content sections.
+- **Map pages:** a bottom-floating banner, and possibly an ad in the bottom right, below the
+  pull sidebar.
+- Every page that shows ads keeps its content clear of those areas: on a 2560px-wide
+  viewport at least 300px free on each side, and nothing vital under the bottom banner (or,
+  on map pages, under the bottom of the pull sidebar). The default `layouts.sitepage` column
+  (`col-md-8 offset-md-2`) satisfies this; the `wide` and `custom` sitepage modes do not by
+  themselves.
+- A page that genuinely needs the full browser width opts out of ads with
+  `'showAds' => false` — never ship a full-width page with ads on, where the side rails
+  float over its content.
 
 ## Elevation & Depth
 
@@ -233,7 +255,7 @@ invent a second hero treatment.
 - **Do** keep density: 0.9375rem controls, 1rem rhythm, tight card grids — whitespace is spent only where it aids scanning.
 - **Do** use Keystone Green (accent variables) for the one action or state that matters on a screen.
 - **Do** reuse the poster-card pattern (cover image + gradient scrim + scrimmed white text + lift shadow) for any featured/hero content.
-- **Do** keep ad-slot placements viable on anonymous-user layouts.
+- **Do** keep ad-slot placements viable on anonymous-user layouts: 300px side rails and a bottom banner on non-map pages, a bottom banner and a bottom-right slot on map pages (The Ad Space Rule).
 
 ### Don't:
 - **Don't** hardcode darkly hexes in component CSS — it silently breaks lux and vapor.
