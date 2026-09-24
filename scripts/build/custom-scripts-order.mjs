@@ -186,6 +186,9 @@ export const customScripts = [
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainmdt.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainnpctype.js',
 
+    // Depends on models/enemyforcescheckpoint.js (checkpoint instanceof EnemyForcesCheckpoint assertion)
+    'resources/assets/js/custom/enemyvisuals/enemyforcescheckpointvisual.js',
+
     'resources/assets/js/custom/enemyvisuals/modifiers/modifier.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierraidmarker.js',
     'resources/assets/js/custom/enemyvisuals/modifiers/modifierteeming.js',
