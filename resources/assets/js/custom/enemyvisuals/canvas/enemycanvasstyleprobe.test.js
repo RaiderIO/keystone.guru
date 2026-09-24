@@ -10,7 +10,7 @@ const STYLESHEET = `
     .dangerous { border: 3px dashed #ff9900; }
     .inspiring { border: 3px solid #ffd500; }
     .patrol { border: 3px dashed #0017be; }
-    .forces_text { color: #ffffff; font: italic bold 12px Arial, sans-serif; }
+    .forces_text { color: #ffffff; font: italic 700 12px Arial, sans-serif; }
     .modifier { width: 25px; height: 25px; background-color: white; border: 1px solid black; border-radius: 18px; box-sizing: border-box; }
     .modifier_external { width: 16px; height: 16px; }
     .skull_marker { background-image: url('https://assets.example/raidmarkers.png'); background-position: -66px -22px; }
@@ -208,7 +208,7 @@ test('read_givenTextClasses_returnsTextColourAndFont', () => {
 
     // Assert
     expect(style.textColor).toBe('rgb(255, 255, 255)');
-    expect(EnemyCanvasStyleProbe.toCanvasFont(style, 14)).toBe('italic bold 14px Arial, sans-serif');
+    expect(EnemyCanvasStyleProbe.toCanvasFont(style, 14)).toBe('italic 700 14px Arial, sans-serif');
 });
 
 test('read_givenNoTextClasses_returnsNoText', () => {
