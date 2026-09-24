@@ -9,6 +9,8 @@ use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\File;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use Illuminate\Console\Scheduling\Event;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
@@ -286,6 +288,24 @@ final class ExpireInactiveThumbnailsTest extends PublicTestCase
             File::query()->whereIn('id', $thumbnails->pluck('file_id'))->update(['disk' => config('filesystems.default')]);
             $this->deleteRoute($dungeonRoute, $thumbnails);
         }
+    }
+
+    #[Test]
+    public function schedule_givenNonLocalEnvironment_runsHourlyWithoutOverlapping(): void
+    {
+        // Arrange
+        $schedule = app()->make(Schedule::class);
+
+        // Act
+        $events = collect($schedule->events())
+            ->filter(static fn(Event $event) => str_contains((string)$event->command, 'thumbnail:expireinactive'));
+
+        // Assert
+        $this->assertCount(1, $events);
+        $event = $events->first();
+        $this->assertSame('0 * * * *', $event->expression);
+        $this->assertTrue($event->withoutOverlapping);
+        $this->assertTrue($event->onOneServer);
     }
 
     /**
