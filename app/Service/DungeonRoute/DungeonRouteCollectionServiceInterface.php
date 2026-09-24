@@ -6,6 +6,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\User;
 use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
 use Illuminate\Support\Collection;
 
@@ -106,4 +107,36 @@ interface DungeonRouteCollectionServiceInterface
      * The current season of the game version's expansion, or null for a game version without seasons.
      */
     public function getCurrentSeason(GameVersion $gameVersion): ?Season;
+
+    /**
+     * The collection's own routes whose published state is less visible than the collection's own - the candidates
+     * for the "make them visible too" confirmation offered after raising a collection's published state.
+     * Authorization is not applied here: the caller still has to filter with `Gate::allows('publish', ...)` per
+     * route, since only some of them may belong to the acting user.
+     *
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getRoutesLessVisibleThanCollection(DungeonRouteCollection $dungeonRouteCollection): Collection;
+
+    /**
+     * The subset of $dungeonRoutes that $user may raise to the collection's published state: routes they own (any
+     * route for an admin), in the collection's team when that state is Team, whose dungeon and the user's benefits
+     * allow that state, and that pass the publish policy.
+     *
+     * @param  Collection<int, DungeonRoute> $dungeonRoutes
+     * @return Collection<int, DungeonRoute>
+     */
+    public function filterRoutesRaisableToCollection(
+        DungeonRouteCollection $dungeonRouteCollection,
+        Collection             $dungeonRoutes,
+        User                   $user,
+    ): Collection;
+
+    /**
+     * Sets every passed route to the collection's published state and logs the change on each route's team. Does
+     * not authorize: pass only routes returned by filterRoutesRaisableToCollection().
+     *
+     * @param Collection<int, DungeonRoute> $dungeonRoutes
+     */
+    public function raiseRoutesToCollection(DungeonRouteCollection $dungeonRouteCollection, Collection $dungeonRoutes): void;
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionRoutesAddFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionRoutesOrderFormRequest;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionRoutesPublishFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionRoutesRemoveFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionsForRouteFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -261,6 +262,39 @@ class AjaxDungeonRouteCollectionController extends Controller
 
         return response()->json([
             'dungeon_routes' => $dungeonRoutes->pluck('public_key')->values(),
+        ]);
+    }
+
+    /**
+     * Raises every route of the collection that is less visible than the collection's own published state, up to
+     * that same state - offered as a confirmation after the collection's own published state was raised. The routes
+     * to raise are computed here, from the collection itself, never taken from the request: only routes the acting
+     * user may actually publish are raised, and the response reports how many were skipped for that reason.
+     *
+     * @throws AuthorizationException
+     */
+    public function publishRoutes(
+        AjaxDungeonRouteCollectionRoutesPublishFormRequest $request,
+        DungeonRouteCollection                             $dungeonRouteCollection,
+        DungeonRouteCollectionServiceInterface             $dungeonRouteCollectionService,
+    ): JsonResponse {
+        Gate::authorize('edit', $dungeonRouteCollection);
+
+        /** @var User $user */
+        $user                     = $request->user();
+        $lessVisibleDungeonRoutes = $dungeonRouteCollectionService->getRoutesLessVisibleThanCollection($dungeonRouteCollection);
+
+        $raisableDungeonRoutes = $dungeonRouteCollectionService->filterRoutesRaisableToCollection(
+            $dungeonRouteCollection,
+            $lessVisibleDungeonRoutes,
+            $user,
+        );
+
+        $dungeonRouteCollectionService->raiseRoutesToCollection($dungeonRouteCollection, $raisableDungeonRoutes);
+
+        return response()->json([
+            'raised_count'  => $raisableDungeonRoutes->count(),
+            'skipped_count' => $lessVisibleDungeonRoutes->count() - $raisableDungeonRoutes->count(),
         ]);
     }
 }

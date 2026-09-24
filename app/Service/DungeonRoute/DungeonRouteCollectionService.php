@@ -2,18 +2,26 @@
 
 namespace App\Service\DungeonRoute;
 
+use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Laratrust\Role;
+use App\Models\PublishedState;
 use App\Models\Season;
+use App\Models\User;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInterface
 {
+    use ChangesDungeonRoute;
+
     private const int OVERVIEW_RANK_CURRENT_SEASON = 0;
     private const int OVERVIEW_RANK_FREE_FORM      = 1;
     private const int OVERVIEW_RANK_OTHER_SEASON   = 2;
@@ -187,5 +195,55 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
             ));
 
         return $poolGroups->concat($otherGroups->values())->values();
+    }
+
+    public function getRoutesLessVisibleThanCollection(DungeonRouteCollection $dungeonRouteCollection): Collection
+    {
+        return DungeonRoute::query()
+            ->join('dungeon_route_collection_routes', 'dungeon_route_collection_routes.dungeon_route_id', '=', 'dungeon_routes.id')
+            ->where('dungeon_route_collection_routes.dungeon_route_collection_id', $dungeonRouteCollection->id)
+            ->whereIn(
+                'dungeon_routes.published_state_id',
+                PublishedState::getLessVisibleThan($dungeonRouteCollection->getPublishedStateName())
+                    ->map(static fn(string $publishedState): int => PublishedState::ALL[$publishedState]),
+            )
+            ->select('dungeon_routes.*')
+            ->with(['team', 'dungeon'])
+            ->get();
+    }
+
+    public function filterRoutesRaisableToCollection(
+        DungeonRouteCollection $dungeonRouteCollection,
+        Collection             $dungeonRoutes,
+        User                   $user,
+    ): Collection {
+        $publishedState = $dungeonRouteCollection->getPublishedStateName();
+        $isAdmin        = $user->hasRole(Role::ROLE_ADMIN);
+
+        // Cheapest checks first: the publish policy loads every enemy and pull of the route
+        return $dungeonRoutes->filter(static fn(DungeonRoute $dungeonRoute): bool => ($isAdmin || $dungeonRoute->isOwnedByUser($user)) &&
+            // A team-published route is only visible to the route's own team, so only the collection's team counts
+            ($publishedState !== PublishedState::TEAM || ($dungeonRouteCollection->team_id !== null && $dungeonRoute->team_id === $dungeonRouteCollection->team_id)) &&
+            PublishedState::getAvailablePublishedStates($dungeonRoute, $user)->contains($publishedState) &&
+            Gate::forUser($user)->allows('publish', [$dungeonRoute, $publishedState]))->values();
+    }
+
+    public function raiseRoutesToCollection(DungeonRouteCollection $dungeonRouteCollection, Collection $dungeonRoutes): void
+    {
+        $publishedState = $dungeonRouteCollection->getPublishedStateName();
+
+        DB::transaction(function () use ($dungeonRoutes, $publishedState): void {
+            foreach ($dungeonRoutes as $dungeonRoute) {
+                $beforeDungeonRoute = clone $dungeonRoute;
+
+                $dungeonRoute->published_state_id = PublishedState::ALL[$publishedState];
+                if ($publishedState === PublishedState::WORLD) {
+                    $dungeonRoute->published_at = now();
+                }
+                $dungeonRoute->save();
+
+                $this->dungeonRouteChanged($dungeonRoute, $beforeDungeonRoute, $dungeonRoute);
+            }
+        });
     }
 }

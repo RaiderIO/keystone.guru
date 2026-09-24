@@ -29,6 +29,11 @@ $title  = sprintf(__('view_collection.edit.title'), $dungeonRouteCollection->nam
 
 $duplicateTotal            = $dungeonRouteCollection->dungeonRoutes->count();
 $duplicateSelectedSeasonId = $dungeonRouteCollection->season_id ?? '';
+
+$publishRoutesConfirm      = session('collection_publish_routes_confirm');
+$publishRoutesConfirmState = $publishRoutesConfirm !== null
+    ? __(sprintf('view_collection.index.published_state.%s', $publishRoutesConfirm['published_state']))
+    : null;
 ?>
 @extends('layouts.sitepage', [
     'showAds' => false,
@@ -83,6 +88,14 @@ $duplicateSelectedSeasonId = $dungeonRouteCollection->season_id ?? '';
             @endif
             {{ html()->form()->close() }}
         @endcomponent
+    @endif
+
+    @if($publishRoutesConfirm !== null)
+        @include('common.collection.publishroutesconfirm', [
+            'dungeonRouteCollection' => $dungeonRouteCollection,
+            'publishedState'         => $publishRoutesConfirm['published_state'],
+            'publishedStateLabel'    => $publishRoutesConfirmState,
+        ])
     @endif
 
     <div class="container">

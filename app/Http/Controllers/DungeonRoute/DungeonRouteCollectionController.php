@@ -292,8 +292,11 @@ class DungeonRouteCollectionController extends Controller
         DungeonRouteCollection                         $dungeonRouteCollection,
         DungeonRouteCollectionRepositoryInterface      $dungeonRouteCollectionRepository,
         DungeonRouteCollectionRouteRepositoryInterface $dungeonRouteCollectionRouteRepository,
+        DungeonRouteCollectionServiceInterface         $dungeonRouteCollectionService,
     ): RedirectResponse {
         Gate::authorize('edit', $dungeonRouteCollection);
+
+        $previousPublishedState = $dungeonRouteCollection->getPublishedStateName();
 
         // The collection and its routes are saved together: a failure partway through would
         // otherwise leave the collection renamed while its routes still describe the old state
@@ -318,6 +321,25 @@ class DungeonRouteCollectionController extends Controller
                 self::syncDungeonRoutes($dungeonRouteCollection, $request->dungeonRoutes(), $dungeonRouteCollectionRouteRepository);
             }
         });
+
+        // Only a raise offers to bring the routes along - lowering the collection's own state never should
+        if (PublishedState::isMoreVisibleThan($dungeonRouteCollection->getPublishedStateName(), $previousPublishedState)) {
+            /** @var User $user */
+            $user = Auth::user();
+
+            $raisableDungeonRouteCount = $dungeonRouteCollectionService->filterRoutesRaisableToCollection(
+                $dungeonRouteCollection,
+                $dungeonRouteCollectionService->getRoutesLessVisibleThanCollection($dungeonRouteCollection),
+                $user,
+            )->count();
+
+            if ($raisableDungeonRouteCount > 0) {
+                Session::flash('collection_publish_routes_confirm', [
+                    'count'           => $raisableDungeonRouteCount,
+                    'published_state' => $dungeonRouteCollection->getPublishedStateName(),
+                ]);
+            }
+        }
 
         Session::flash('status', __('controller.dungeonroutecollection.flash.collection_updated'));
 
