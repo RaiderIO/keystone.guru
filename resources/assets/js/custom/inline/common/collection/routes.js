@@ -90,6 +90,12 @@ class CommonCollectionRoutes extends InlineCode {
 
         this._insert(dungeonRoutes);
 
+        // Every posted route was already a member (a race, or a double submit) - nothing was inserted, so there
+        // is nothing to undo and nothing to tell the user beyond what the picker already shows
+        if (dungeonRoutes.length === 0) {
+            return;
+        }
+
         let text = dungeonRoutes.length === 1
             ? lang.get('js.collection_dungeonroutes_added_one')
             : lang.get('js.collection_dungeonroutes_added_many', {count: dungeonRoutes.length});

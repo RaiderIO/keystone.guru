@@ -109,7 +109,6 @@ return [
             'game_version' => 'This route is not for the game version of this collection.',
             'season'       => 'This route is not for the season of this collection.',
             'required'     => 'Choose at least one route.',
-            'already_in'   => 'This route is already in the collection.',
             'not_in'       => 'This route is not in the collection.',
             'missing'      => 'The new order must hold every route of the collection. Reload the page and try again.',
         ],

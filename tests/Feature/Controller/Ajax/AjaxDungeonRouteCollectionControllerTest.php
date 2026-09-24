@@ -12,13 +12,18 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\User;
+use App\Repositories\Database\DungeonRoute\DungeonRouteCollectionRouteRepository;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRouteRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Events\TransactionBeginning;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Testing\TestResponse;
 use Laravel\Pennant\Feature;
+use PDOException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\Traits\CreatesSeason;
@@ -334,9 +339,9 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function storeRoutes_givenARouteAlreadyInTheCollection_failsValidation(): void
+    public function storeRoutes_givenARouteAlreadyInTheCollection_isANoOpSuccess(): void
     {
-        // Arrange
+        // Arrange - the endpoint is idempotent by intent
         $owner                  = $this->createUser();
         $dungeonRoute           = $this->createRoute($owner, $this->retailMappingVersion());
         $dungeonRouteCollection = $this->createFreeFormCollection($owner, [$dungeonRoute]);
@@ -345,9 +350,107 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         $response = $this->actingAs($owner)->ajax('postJson', $this->storeUrl($dungeonRouteCollection), [$dungeonRoute]);
 
         // Assert
-        $response->assertUnprocessable();
-        $response->assertJsonValidationErrors(['dungeon_routes.0' => __('validation.custom.collection_dungeon_routes.already_in')]);
+        $response->assertOk();
+        $response->assertJsonCount(0, 'dungeon_routes');
         $this->assertSame([$dungeonRoute->id], $this->dungeonRouteIds($dungeonRouteCollection));
+    }
+
+    #[Test]
+    public function storeRoutes_givenARouteAlreadyInTheCollectionAndTheCollectionIsFull_isANoOpSuccess(): void
+    {
+        // Arrange - re-adding a member must not count against the cap it is already occupying
+        $owner          = $this->createUser();
+        $mappingVersion = $this->retailMappingVersion();
+        $members        = collect(range(1, DungeonRouteCollection::MAX_ROUTES))
+            ->map(fn(): DungeonRoute => $this->createRoute($owner, $mappingVersion))
+            ->all();
+        $dungeonRouteCollection = $this->createFreeFormCollection($owner, $members);
+
+        // Act
+        $response = $this->actingAs($owner)->ajax('postJson', $this->storeUrl($dungeonRouteCollection), [$members[0]]);
+
+        // Assert
+        $response->assertOk();
+        $response->assertJsonCount(0, 'dungeon_routes');
+        $this->assertCount(DungeonRouteCollection::MAX_ROUTES, $this->dungeonRouteIds($dungeonRouteCollection));
+    }
+
+    #[Test]
+    public function storeRoutes_givenAConcurrentRequestAddedTheOnlyPostedRouteAfterValidation_isANoOpSuccess(): void
+    {
+        // Arrange - the route is not yet a member when the Form Request validates, so it only becomes one after
+        // the transaction begins; the membership recheck under the lock must still make this a no-op success
+        $owner                  = $this->createUser();
+        $dungeonRoute           = $this->createRoute($owner, $this->retailMappingVersion());
+        $dungeonRouteCollection = $this->createFreeFormCollection($owner);
+
+        $concurrentAddDone = false;
+        Event::listen(TransactionBeginning::class, static function () use (&$concurrentAddDone, $dungeonRouteCollection, $dungeonRoute): void {
+            if ($concurrentAddDone) {
+                return;
+            }
+
+            $concurrentAddDone = true;
+            DungeonRouteCollectionRoute::create([
+                'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+                'dungeon_route_id'            => $dungeonRoute->id,
+                'order'                       => 0,
+            ]);
+        });
+
+        // Act
+        $response = $this->actingAs($owner)->ajax('postJson', $this->storeUrl($dungeonRouteCollection), [$dungeonRoute]);
+
+        // Assert
+        $response->assertOk();
+        $response->assertJsonCount(0, 'dungeon_routes');
+        $this->assertSame([$dungeonRoute->id], $this->dungeonRouteIds($dungeonRouteCollection));
+    }
+
+    #[Test]
+    public function storeRoutes_givenTheInsertHitsTheUniqueConstraintOnce_retriesAndStoresTheRest(): void
+    {
+        // Arrange - alpha is already a member and gets filtered before the insert loop on both attempts; the
+        // repository throws only on the loop's first call, forcing bravo's insert through the retry
+        $owner                  = $this->createUser();
+        $alpha                  = $this->createRoute($owner, $this->retailMappingVersion());
+        $bravo                  = $this->createRoute($owner, $this->retailMappingVersion());
+        $dungeonRouteCollection = $this->createFreeFormCollection($owner, [$alpha]);
+
+        $fakeRepository = new class extends DungeonRouteCollectionRouteRepository {
+            public int $callCount = 0;
+
+            public function create(array $attributes): Model
+            {
+                $this->callCount++;
+
+                if ($this->callCount === 1) {
+                    throw new UniqueConstraintViolationException(
+                        'mysql',
+                        'insert into `dungeon_route_collection_routes` ...',
+                        [],
+                        new PDOException('SQLSTATE[23000]: Integrity constraint violation'),
+                    );
+                }
+
+                return parent::create($attributes);
+            }
+        };
+        $this->app->instance(DungeonRouteCollectionRouteRepositoryInterface::class, $fakeRepository);
+
+        try {
+            // Act
+            $response = $this->actingAs($owner)->ajax('postJson', $this->storeUrl($dungeonRouteCollection), [$alpha, $bravo]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertJsonCount(1, 'dungeon_routes');
+            $response->assertJsonPath('dungeon_routes.0.public_key', $bravo->public_key);
+            $this->assertSame([$alpha->id, $bravo->id], $this->dungeonRouteIds($dungeonRouteCollection));
+            $this->assertSame(2, $fakeRepository->callCount);
+        } finally {
+            $this->app->forgetInstance(DungeonRouteCollectionRouteRepositoryInterface::class);
+        }
     }
 
     #[Test]

@@ -9,9 +9,9 @@ use Illuminate\Validation\Validator;
 use Override;
 
 /**
- * Appends routes to a collection. Every route must be the owner's own, not in the collection yet, match the
- * collection's game version (and season, for a season set), and neither the collection nor any of its dungeons
- * may grow past its cap.
+ * Appends routes to a collection. Every route must be the owner's own and match the collection's game version
+ * (and season, for a season set); a route already in the collection is skipped rather than rejected. Neither the
+ * collection nor any of its dungeons may grow past its cap.
  */
 class AjaxDungeonRouteCollectionRoutesAddFormRequest extends AjaxDungeonRouteCollectionRoutesFormRequest
 {
@@ -48,8 +48,9 @@ class AjaxDungeonRouteCollectionRoutesAddFormRequest extends AjaxDungeonRouteCol
                 $dungeonRouteCollection = $this->dungeonRouteCollection();
                 $dungeonRoutePublicKeys = $this->dungeonRoutePublicKeys();
                 /** @var array<int, string> $publicKeys */
-                $publicKeys    = $this->input('dungeon_routes');
-                $dungeonRoutes = $this->findDungeonRoutesInOrder($publicKeys)->keyBy('public_key');
+                $publicKeys        = $this->input('dungeon_routes');
+                $dungeonRoutes     = $this->findDungeonRoutesInOrder($publicKeys)->keyBy('public_key');
+                $newPublicKeyCount = 0;
 
                 foreach ($publicKeys as $index => $publicKey) {
                     $dungeonRoute = $dungeonRoutes->get($publicKey);
@@ -59,9 +60,14 @@ class AjaxDungeonRouteCollectionRoutesAddFormRequest extends AjaxDungeonRouteCol
                         continue;
                     }
 
+                    // Already a member: the controller's own membership recheck under the cap lock is authoritative
                     if (in_array($publicKey, $dungeonRoutePublicKeys, true)) {
-                        $validator->errors()->add($key, __('validation.custom.collection_dungeon_routes.already_in'));
-                    } elseif (!$dungeonRouteCollection->mayContainDungeonRoute($dungeonRoute)) {
+                        continue;
+                    }
+
+                    $newPublicKeyCount++;
+
+                    if (!$dungeonRouteCollection->mayContainDungeonRoute($dungeonRoute)) {
                         $isOfGameVersion = $dungeonRoute->mappingVersion !== null &&
                             $dungeonRoute->mappingVersion->game_version_id === $dungeonRouteCollection->game_version_id;
 
@@ -88,7 +94,7 @@ class AjaxDungeonRouteCollectionRoutesAddFormRequest extends AjaxDungeonRouteCol
                     ]));
                 }
 
-                if (count($dungeonRoutePublicKeys) + count($publicKeys) > DungeonRouteCollection::MAX_ROUTES) {
+                if (count($dungeonRoutePublicKeys) + $newPublicKeyCount > DungeonRouteCollection::MAX_ROUTES) {
                     $validator->errors()->add('dungeon_routes', __('validation.custom.collection_dungeon_routes.max', [
                         'max' => DungeonRouteCollection::MAX_ROUTES,
                     ]));

@@ -231,6 +231,19 @@ describe('CommonCollectionRoutes', () => {
         expect(lists.slot_1_inline.getDetail('keyD')).toEqual({text: '100 / 280', isWarning: true});
     });
 
+    it('onAdded_givenNoRoutesWereStored_showsNoToast', () => {
+        // Arrange - every posted route was already a member, so the controller stored none of them
+
+        // Act
+        jQuery('#picker').trigger('dungeonroutepicker:added', [{publicKeys: ['keyA'], response: {dungeon_routes: []}}]);
+
+        // Assert
+        expect(lists.slot_1_inline.getIds()).toEqual(['keyA', 'keyB']);
+        expect(lists.slot_2_inline.getIds()).toEqual([]);
+        expect(toasts).toEqual([]);
+        expect(globalThis.showInfoNotification).not.toHaveBeenCalled();
+    });
+
     it('onRemoved_givenTheDeleteFails_putsTheEnemyForcesBackWithTheRoute', () => {
         // Arrange
         const detail = document.querySelector('#slot_1 [data-id="keyA"] .ordered_select_detail');
