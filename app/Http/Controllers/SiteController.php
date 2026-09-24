@@ -9,6 +9,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Team;
+use App\Models\User;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
@@ -25,6 +26,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
@@ -71,12 +73,16 @@ class SiteController extends Controller
             ->flatten();
         $thumbnailService->dungeonRoutesDisplayed($popularDungeonRoutesByDungeon);
 
+        /** @var User|null $user */
+        $user = Auth::user();
+
         return view('home.layout', [
             'currentSeason'                 => $season,
             'weeklyRouteDungeons'           => Dungeon::whereIn('key', $weeklyRoutes->keys())->orderBy('id')->get(),
             'weeklyRoutes'                  => $weeklyRoutes,
             'popularDungeonRoutesByDungeon' => $popularDungeonRoutesByDungeon,
             'userOrDefaultGameVersion'      => $userOrDefaultGameVersion,
+            'isPayingPatron'                => $user?->isPayingPatron() ?? false,
             // HeaderComposer only injects this into the header view itself - the dungeon context
             // links this page overrides are built in the view, so it needs its own copy
             'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion),

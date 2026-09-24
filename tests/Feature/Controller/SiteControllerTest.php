@@ -5,6 +5,9 @@ namespace Tests\Feature\Controller;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
+use App\Models\Patreon\PatreonBenefit;
+use App\Models\Patreon\PatreonUserBenefit;
+use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
 use Illuminate\Support\Facades\Redis;
 use PHPUnit\Framework\Attributes\Group;
@@ -44,6 +47,59 @@ final class SiteControllerTest extends PublicTestCase
         } finally {
             $user->delete();
         }
+    }
+
+    #[Test]
+    public function index_givenPayingPatron_showsThankYouTile(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+
+        try {
+            $this->grantPaidPatreonBenefit($user);
+
+            // Act
+            $response = $this->actingAs($user)->get(route('home'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(__('view_home.sections.featured.patreon_thank_you_title'));
+            $response->assertDontSee('https://www.patreon.com/c/keystoneguru', false);
+        } finally {
+            $user->patreonUserLink()->first()?->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenAuthenticatedNonPatron_showsPatreonCallToAction(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->get(route('home'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('https://www.patreon.com/c/keystoneguru', false);
+            $response->assertDontSee(__('view_home.sections.featured.patreon_thank_you_title'));
+        } finally {
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenGuest_showsPatreonCallToAction(): void
+    {
+        // Act
+        $response = $this->get(route('home'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('https://www.patreon.com/c/keystoneguru', false);
+        $response->assertDontSee(__('view_home.sections.featured.patreon_thank_you_title'));
     }
 
     /**
@@ -223,5 +279,16 @@ final class SiteControllerTest extends PublicTestCase
                 unlink($inputPath);
             }
         }
+    }
+
+    private function grantPaidPatreonBenefit(User $user): void
+    {
+        $patreonUserLink = PatreonUserLink::factory()->create(['user_id' => $user->id]);
+        $user->update(['patreon_user_link_id' => $patreonUserLink->id]);
+
+        PatreonUserBenefit::create([
+            'patreon_user_link_id' => $patreonUserLink->id,
+            'patreon_benefit_id'   => PatreonBenefit::ALL[PatreonBenefit::AD_FREE],
+        ]);
     }
 }

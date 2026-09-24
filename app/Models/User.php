@@ -354,6 +354,21 @@ class User extends Authenticatable implements LaratrustUser
         return $result;
     }
 
+    /**
+     * Whether this user is actually paying for their Patreon benefits right now - admins (who implicitly have
+     * every benefit), links fabricated by the admin pages and links overridden by an active manual grant all
+     * have benefits without paying for them, and are not counted.
+     */
+    public function isPayingPatron(): bool
+    {
+        // Explicitly load the relation so this also works on users hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('patreonUserLink.activeManualGrant');
+
+        return $this->patreonUserLink !== null &&
+            !$this->patreonUserLink->manually_granted &&
+            $this->patreonUserLink->patreonBenefits->isNotEmpty();
+    }
+
     public function hasAdFreeGiveaway(): bool
     {
         return PatreonAdFreeGiveaway::where('receiver_user_id', $this->id)->exists();
