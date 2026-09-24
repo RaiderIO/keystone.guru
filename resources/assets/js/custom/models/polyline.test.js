@@ -93,3 +93,16 @@ describe('Polyline.setPolylineColorAnimated', () => {
         expect(polyline._setAnimatedLayerVisibility).not.toHaveBeenCalledWith(true);
     });
 });
+
+describe('Polyline._isColorEditable', () => {
+    it('isColorEditable_givenPolyline_returnsTrue', () => {
+        // Arrange
+        const polyline = buildPolyline({type: 'LineString', coordinates: []});
+
+        // Act
+        const isColorEditable = polyline._isColorEditable();
+
+        // Assert
+        expect(isColorEditable).toBe(true);
+    });
+});

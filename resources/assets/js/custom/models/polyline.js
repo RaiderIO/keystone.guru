@@ -67,6 +67,7 @@ class Polyline extends VersionableMapObject {
                     new Attribute({
                         name: 'color',
                         type: 'color',
+                        edit: this._isColorEditable(),
                         setter: this.setPolylineColor.bind(this),
                         default: this._getPolylineColorDefault.bind(this)
                     }),
@@ -124,6 +125,15 @@ class Polyline extends VersionableMapObject {
      */
     _getPolylineWeightDefault() {
         return c.map.polyline.defaultWeight;
+    }
+
+    /**
+     * Whether the user picks the colour of this polyline.
+     * @returns {boolean}
+     * @protected
+     */
+    _isColorEditable() {
+        return true;
     }
 
     /**

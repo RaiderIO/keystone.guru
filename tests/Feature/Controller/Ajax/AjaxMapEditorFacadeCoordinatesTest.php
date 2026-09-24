@@ -12,6 +12,7 @@ use App\Models\Floor\FloorUnionArea;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
+use App\Models\MountableArea;
 use App\Models\Path;
 use App\Models\Polyline;
 use App\Models\User;
@@ -288,6 +289,79 @@ final class AjaxMapEditorFacadeCoordinatesTest extends AjaxPublicTestCase
     }
 
     /**
+     * The admin map editor draws mountable areas on real floors: those vertices and that floor are stored exactly as
+     * they came in.
+     */
+    #[Test]
+    public function store_givenMountableAreaOnRealFloorOfFacadeMappingVersion_storesVerticesVerbatim(): void
+    {
+        // Arrange
+        [$mappingVersion, , , $realFloor] = $this->findConvertibleFacadeLocation();
+
+        $verticesJson    = json_encode([['lat' => -100.5, 'lng' => 100.5], ['lat' => -120.5, 'lng' => 120.5], ['lat' => -110.5, 'lng' => 130.5]]);
+        $mountableAreaId = null;
+
+        try {
+            // Act
+            $response = $this->post(route('ajax.admin.mountablearea.create', ['mappingVersion' => $mappingVersion]), $this->mountableAreaPayload($mappingVersion, $realFloor, $verticesJson));
+
+            // Assert
+            $response->assertCreated();
+            $mountableAreaId = json_decode($response->content(), true)['id'];
+
+            /** @var MountableArea $storedMountableArea */
+            $storedMountableArea = MountableArea::query()->findOrFail($mountableAreaId);
+            $this->assertEquals($realFloor->id, $storedMountableArea->floor_id);
+            $this->assertEquals($verticesJson, $storedMountableArea->polyline->vertices_json);
+        } finally {
+            $this->deleteMountableArea($mountableAreaId);
+        }
+    }
+
+    /**
+     * A mountable area posted on the facade floor is stored on the real floor its first vertex belongs to, with the
+     * facade vertices echoed back, and the facade map context converts it back to what was drawn.
+     */
+    #[Test]
+    public function store_givenMountableAreaOnFacadeFloor_savesVerticesOnRealFloorAndEchoesFacadeVertices(): void
+    {
+        // Arrange
+        [$mappingVersion, $facadeFloor, $facadeLatLng, $expectedFloor] = $this->findConvertibleFacadeLocation();
+
+        $verticesJson    = json_encode([$facadeLatLng->toArray(), $facadeLatLng->toArray(), $facadeLatLng->toArray()]);
+        $mountableAreaId = null;
+
+        try {
+            // Act
+            $response = $this->post(route('ajax.admin.mountablearea.create', ['mappingVersion' => $mappingVersion]), $this->mountableAreaPayload($mappingVersion, $facadeFloor, $verticesJson));
+
+            // Assert - the client gets its own facade vertices back on the facade floor
+            $response->assertCreated();
+            $responseArr     = json_decode($response->content(), true);
+            $mountableAreaId = $responseArr['id'];
+            $this->assertEquals($facadeFloor->id, $responseArr['floor_id']);
+            $this->assertEquals($verticesJson, $responseArr['polyline']['vertices_json']);
+
+            // ... while the stored area and its vertices sit on the real floor
+            /** @var MountableArea $storedMountableArea */
+            $storedMountableArea = MountableArea::query()->findOrFail($mountableAreaId);
+            $this->assertEquals($expectedFloor->id, $storedMountableArea->floor_id);
+            $this->assertNotEquals($verticesJson, $storedMountableArea->polyline->vertices_json);
+
+            // ... and the facade map context converts them back to what was drawn
+            $mapContextMountableArea = $mappingVersion->mapContextMountableAreas(app(CoordinatesServiceInterface::class), true)
+                ->firstOrFail(static fn(MountableArea $mountableArea) => $mountableArea->id === $mountableAreaId);
+            $this->assertEquals($facadeFloor->id, $mapContextMountableArea->floor_id);
+            foreach (json_decode($mapContextMountableArea->polyline->vertices_json, true) as $vertex) {
+                $this->assertEqualsWithDelta($facadeLatLng->getLat(), $vertex['lat'], 0.0001);
+                $this->assertEqualsWithDelta($facadeLatLng->getLng(), $vertex['lng'], 0.0001);
+            }
+        } finally {
+            $this->deleteMountableArea($mountableAreaId);
+        }
+    }
+
+    /**
      * A floor union positions a floor onto the facade floor, so its own floor_id IS the facade floor
      * and its lat/lng are facade coordinates. Converting them would move every floor it places.
      */
@@ -413,6 +487,33 @@ final class AjaxMapEditorFacadeCoordinatesTest extends AjaxPublicTestCase
 
         Polyline::query()->where('model_id', $enemyPackId)->where('model_class', EnemyPack::class)->delete();
         EnemyPack::query()->whereKey($enemyPackId)->delete();
+    }
+
+    /** @return array<string, mixed> */
+    private function mountableAreaPayload(MappingVersion $mappingVersion, Floor $floor, string $verticesJson): array
+    {
+        return [
+            'id'                 => 0,
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $floor->id,
+            'speed'              => null,
+            'polyline'           => [
+                'color'          => MountableArea::DEFAULT_COLOR,
+                'color_animated' => null,
+                'weight'         => MountableArea::DEFAULT_WEIGHT,
+                'vertices_json'  => $verticesJson,
+            ],
+        ];
+    }
+
+    private function deleteMountableArea(?int $mountableAreaId): void
+    {
+        if ($mountableAreaId === null) {
+            return;
+        }
+
+        Polyline::query()->where('model_id', $mountableAreaId)->where('model_class', MountableArea::class)->delete();
+        MountableArea::query()->whereKey($mountableAreaId)->delete();
     }
 
     /** @return array<string, mixed> */

@@ -57,40 +57,6 @@ function slugify(text) {
         .replace(/^-+|-+$/g, '');
 }
 
-/**
- * Builds a polygon around the concave hull of a set of points, pushed outwards by a margin.
- *
- * @param points {Array} List of [lat, lng] points
- * @param margin {Number}
- * @param arcSegments {Function} Receives the number of hull points, returns the number of segments of each rounded corner
- * @param polygonOptions {Object}
- * @returns {L.Polygon|null} Null when fewer than two points were given, or no offset could be made
- */
-function createOffsetHullPolygon(points, margin, arcSegments, polygonOptions) {
-    let result = null;
-
-    if (points.length > 1) {
-        let hullPoints = hull(points, 100);
-        // Only if we can actually make an offset
-        if (hullPoints.length > 1) {
-            try {
-                let offsetLatLngs = createOffsetPolygon(
-                    hullPoints.map(point => ({lat: point[0], lng: point[1]})),
-                    margin,
-                    arcSegments(hullPoints.length)
-                );
-
-                result = L.polygon([offsetLatLngs], polygonOptions);
-            } catch (error) {
-                // Not particularly interesting to spam the console with
-                console.error('Unable to create offset hull polygon', error);
-            }
-        }
-    }
-
-    return result;
-}
-
 function createOffsetPolygon(vertices, offset, arcSegments, roundCornersOnly = false) {
     let latLngs = vertices.map(point => ({x: point.lng, y: point.lat}));
 
@@ -706,7 +672,6 @@ if (typeof module !== 'undefined' && module.exports) {
         isNumeric,
         decodeHtmlEntity,
         isPolygonClockwise,
-        createOffsetHullPolygon,
         getDistance,
         getDistanceSquared,
         getLatLngDistance,

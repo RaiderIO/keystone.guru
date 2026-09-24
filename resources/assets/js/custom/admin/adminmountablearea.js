@@ -1,8 +1,6 @@
 class AdminMountableArea extends MountableArea {
     constructor(map, layer) {
-        super(map, layer, {name: 'mountablearea', has_route_model_binding: true});
-
-        this.color = null;
+        super(map, layer);
     }
 
     isEditableByPopup() {

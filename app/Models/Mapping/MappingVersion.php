@@ -474,7 +474,11 @@ class MappingVersion extends Model
 
         if ($this->facade_enabled && $useFacade) {
             $mountableAreas = $mountableAreas->map(function (MountableArea $mountableArea) use ($coordinatesService) {
-                $newFloor = $this->convertVerticesForFacade($coordinatesService, $mountableArea, $mountableArea->floor);
+                if ($mountableArea->polyline === null) {
+                    return $mountableArea;
+                }
+
+                $newFloor = $this->convertVerticesForFacade($coordinatesService, $mountableArea->polyline, $mountableArea->floor);
                 $mountableArea->setRelation('floor', $newFloor);
                 $mountableArea->floor_id = $newFloor->id;
 
@@ -709,7 +713,9 @@ class MappingVersion extends Model
             foreach ($mappingVersion->mapIcons as $mapIcon) {
                 $mapIcon->delete();
             }
-            $mappingVersion->mountableAreas()->delete();
+            foreach ($mappingVersion->mountableAreas as $mountableArea) {
+                $mountableArea->delete();
+            }
             $mappingVersion->enemyForcesCheckpoints()->delete();
             $mappingVersion->floorUnions()->delete();
             $mappingVersion->floorUnionAreas()->delete();
