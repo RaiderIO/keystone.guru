@@ -32,7 +32,7 @@ class MapObjectGroup extends Signalable {
         // Whenever the map refreshes, we need to add ourselves to the map again
         this.manager.map.register('map:refresh', this, (function () {
             // Rebuild the layer group
-            self.layerGroup = new L.LayerGroup();
+            self.layerGroup = self._createLayerGroup();
         }).bind(this));
         getState().getMapContext().register('teeming:changed', this, this._updateVisibility.bind(this));
 
@@ -47,6 +47,24 @@ class MapObjectGroup extends Signalable {
      */
     _getMapPane() {
         return LEAFLET_PANE_MARKER;
+    }
+
+    /**
+     * @returns {L.LayerGroup}
+     * @protected
+     */
+    _createLayerGroup() {
+        return new L.LayerGroup([], {
+            pane: this._getMapPane()
+        });
+    }
+
+    /**
+     * True when this group's objects are drawn on a canvas rather than put on the map as their own layers.
+     * @returns {boolean}
+     */
+    isCanvasRendered() {
+        return false;
     }
 
     /**
@@ -693,9 +711,7 @@ class MapObjectGroup extends Signalable {
         this.setVisibility(true);
 
         this.objects = {};
-        this.layerGroup = new L.LayerGroup([], {
-            pane: this._getMapPane()
-        });
+        this.layerGroup = this._createLayerGroup();
 
         return this;
     }

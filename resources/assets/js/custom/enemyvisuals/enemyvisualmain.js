@@ -210,8 +210,11 @@ class EnemyVisualMain extends EnemyVisualIcon {
         }
 
 
+        // Whole pixels only: the canvas renderer caches each enemy's image per integer size, and a
+        // fractional size would make that cache as unbounded as this one would be unquantised.
+        let quantisedSize = Math.max(1, Math.round(calculatedSize + zoomLevelOffset));
         this._sizeCache[zoomLevelOffset] = {
-            iconSize: [calculatedSize + zoomLevelOffset, calculatedSize + zoomLevelOffset]
+            iconSize: [quantisedSize, quantisedSize]
         };
         return this.getSize();
     }

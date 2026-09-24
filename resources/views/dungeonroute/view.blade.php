@@ -51,6 +51,7 @@ if (count($affixes) == 0) {
             'mappingVersion' => $dungeonroute->mappingVersion,
             'dungeonroute' => $dungeonroute,
             'edit' => false,
+            'canvasEnemyRendererAllowed' => true,
             'floorId' => $floor->id,
             'noUI' => (bool)$dungeonroute->demo,
             'gestureHandling' => (bool)$dungeonroute->demo,

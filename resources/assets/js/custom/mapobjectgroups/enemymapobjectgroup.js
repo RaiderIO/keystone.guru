@@ -11,6 +11,108 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     }
 
     /**
+     * Enemies are drawn on one shared canvas when the page asked for it, and never where they can be
+     * edited: dragging and the edit toolbar need real markers.
+     * @inheritDoc
+     */
+    isCanvasRendered() {
+        let options = this.manager.map.options;
+
+        return options.canvasEnemyRenderer === true && !options.edit && !getState().isMapAdmin();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _createLayerGroup() {
+        if (!this.isCanvasRendered()) {
+            return super._createLayerGroup();
+        }
+
+        return new EnemyCanvasLayerGroup([], {
+            resolvePath: this.getCanvasPath.bind(this),
+        });
+    }
+
+    /**
+     * The canvas path that draws the enemy owning this marker, created on first use.
+     * @param marker {L.Marker}
+     * @returns {EnemyPath}
+     */
+    getCanvasPath(marker) {
+        if (!(marker._enemyCanvasPath instanceof EnemyPath)) {
+            marker._enemyCanvasPath = new EnemyPath(marker.getLatLng(), {
+                renderer: this._getCanvasRenderer(),
+                spriteCache: this._getCanvasSpriteCache(),
+            });
+        }
+
+        return marker._enemyCanvasPath;
+    }
+
+    /**
+     * @returns {EnemyCanvasStyleProbe}
+     */
+    getCanvasStyleProbe() {
+        if (!(this._canvasStyleProbe instanceof EnemyCanvasStyleProbe)) {
+            this._canvasStyleProbe = new EnemyCanvasStyleProbe();
+        }
+
+        return this._canvasStyleProbe;
+    }
+
+    /**
+     * @returns {L.Canvas}
+     * @private
+     */
+    _getCanvasRenderer() {
+        if (!(this._canvasRenderer instanceof L.Canvas)) {
+            let leafletMap = this.manager.map.leafletMap;
+            if (!leafletMap.getPane(ENEMY_CANVAS_PANE)) {
+                // Above the overlay pane's pulls and patrols, below the marker pane's DOM markers. Leaflet's
+                // canvas renderer never passes a click on to the layers underneath, so the map-sized canvas
+                // must not take pointer events at all; enemy hover is the map's own mousemove distance check.
+                let pane = leafletMap.createPane(ENEMY_CANVAS_PANE);
+                pane.style.zIndex = 590;
+                pane.style.pointerEvents = 'none';
+            }
+
+            this._canvasRenderer = L.canvas({pane: ENEMY_CANVAS_PANE});
+        }
+
+        return this._canvasRenderer;
+    }
+
+    /**
+     * @returns {EnemyCanvasSpriteCache}
+     * @private
+     */
+    _getCanvasSpriteCache() {
+        if (!(this._canvasSpriteCache instanceof EnemyCanvasSpriteCache)) {
+            let self = this;
+            this._canvasSpriteCache = new EnemyCanvasSpriteCache({
+                onImageLoaded: function () {
+                    self._redrawCanvasPaths();
+                },
+            });
+        }
+
+        return this._canvasSpriteCache;
+    }
+
+    /**
+     * @private
+     */
+    _redrawCanvasPaths() {
+        for (let key in this.objects) {
+            let layer = this.objects[key].layer;
+            if (layer !== null && layer._enemyCanvasPath instanceof EnemyPath) {
+                layer._enemyCanvasPath.redraw();
+            }
+        }
+    }
+
+    /**
      * Called when the MDT mapping mode enabled has changed
      * @private
      */

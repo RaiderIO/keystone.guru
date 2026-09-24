@@ -1,5 +1,6 @@
 <?php
 
+use App\Features\CanvasEnemyRenderer;
 use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
@@ -15,6 +16,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Laravel\Pennant\Feature;
 
 /**
  * @var User|null                  $user
@@ -30,6 +32,7 @@ use Illuminate\Support\Collection;
  * @var bool|null                  $embed
  * @var string|null                $embedStyle
  * @var bool|null                  $edit
+ * @var bool|null                  $canvasEnemyRendererAllowed Whether this page may draw its enemies on canvas
  * @var array<string, mixed>       $show
  * @var array<string, mixed>|null  $controlOptions
  * @var bool                       $adFree
@@ -61,6 +64,7 @@ $isAdmin             = isset($admin) && $admin;
 $embed               = isset($embed) && $embed;
 $embedStyle          ??= '';
 $edit                = isset($edit) && $edit;
+$canvasEnemyRenderer = CanvasEnemyRenderer::isEnabledForMap(isset($canvasEnemyRendererAllowed) && $canvasEnemyRendererAllowed, $edit, $isAdmin);
 $mapClasses          ??= '';
 $dungeonroute        ??= null;
 // The inline map JS reads affixes (and the setup/has_thumbnail appends) off the serialized route
@@ -219,6 +223,7 @@ if ($isAdmin) {
     'parameters' => $parameters,
     'floorId' => $floor->id,
     'npcCompendiumBaseUrl' => url('/compendium/npc'),
+    'canvasEnemyRenderer' => $canvasEnemyRenderer,
 ], $adminOptions)])
 
 @section('scripts')
