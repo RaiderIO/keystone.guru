@@ -13,14 +13,7 @@
  @property {string} rootSelector      The control's root element, which the ajax mode events are fired on.
  @property {Number|null} fullCount    What counts towards max in ajax mode, when that is more than this list.
  @property {Number|null} itemMax      Most items this list itself may hold, when that is below max.
- @property {string} fullText          The full note's text, with :max.
- @property {string} countText         Contains :count and :max.
- @property {string} moveUpText        Contains :name.
- @property {string} moveDownText      Contains :name.
- @property {string} removeText        Contains :name.
- @property {string} addedStatusText   Contains :name and :position.
- @property {string} movedStatusText   Contains :name and :position.
- @property {string} removedStatusText Contains :name.
+ @property {boolean} showCountMax     Whether the counter reads "n / max" rather than just "n".
  */
 
 /**
@@ -183,7 +176,7 @@ class CommonFormsOrderedselect extends InlineCode {
         $select.val('');
 
         this._refresh();
-        this._announce(this.options.addedStatusText, name, this._getItems().length);
+        this._announce('js.orderedselect_added_status', name, this._getItems().length);
 
         // The add select is disabled once the list is full, so keep focus on something usable
         if ($select.prop('disabled')) {
@@ -235,7 +228,7 @@ class CommonFormsOrderedselect extends InlineCode {
         }
 
         this._refresh();
-        this._announce(this.options.movedStatusText, this._getName($item), this._getItems().index($item) + 1);
+        this._announce('js.orderedselect_moved_status', this._getName($item), this._getItems().index($item) + 1);
 
         if (this.options.ajax) {
             $(this.options.rootSelector).trigger('orderedselect:moved');
@@ -268,7 +261,7 @@ class CommonFormsOrderedselect extends InlineCode {
         $item.remove();
 
         this._refresh();
-        this._announce(this.options.removedStatusText, name, 0);
+        this._announce('js.orderedselect_removed_status', name, 0);
 
         if (this.options.ajax) {
             $(this.options.rootSelector).trigger('orderedselect:removed', [{id: id, name: name, detail: detail, position: position}]);
@@ -303,24 +296,23 @@ class CommonFormsOrderedselect extends InlineCode {
             $item.find('.ordered_select_position').text(index + 1);
             $item.find('.ordered_select_up')
                 .prop('disabled', index === 0)
-                .attr('aria-label', self._format(self.options.moveUpText, name));
+                .attr('aria-label', lang.get('js.orderedselect_move_up', {name: name}));
             $item.find('.ordered_select_down')
                 .prop('disabled', index === count - 1)
-                .attr('aria-label', self._format(self.options.moveDownText, name));
+                .attr('aria-label', lang.get('js.orderedselect_move_down', {name: name}));
             $item.find('.ordered_select_remove')
-                .attr('aria-label', self._format(self.options.removeText, name));
+                .attr('aria-label', lang.get('js.orderedselect_remove', {name: name}));
         });
 
         $(this.options.listSelector).prop('hidden', count === 0);
         $(this.options.emptySelector).prop('hidden', count > 0);
-        $(this.options.countSelector).text(
-            this.options.countText.replace(':count', count).replace(':max', this.options.max)
+        $(this.options.countSelector).text(this.options.showCountMax === false
+            ? String(count)
+            : lang.get('js.orderedselect_count', {count: count, max: this.options.max})
         );
-        if (typeof this.options.fullText === 'string') {
-            $(this.options.fullSelector).text(
-                this.options.fullText.replace(':max', isListFull ? this.options.max : this.options.itemMax)
-            );
-        }
+        $(this.options.fullSelector).text(
+            lang.get('js.orderedselect_full', {max: isListFull ? this.options.max : this.options.itemMax})
+        );
         $(this.options.fullSelector).prop('hidden', !isFull);
         $(this.options.addSelectSelector).prop('disabled', isFull);
         $(this.options.addButtonSelector).prop('disabled', isFull);
@@ -359,23 +351,13 @@ class CommonFormsOrderedselect extends InlineCode {
     }
 
     /**
-     * @param {string} text
-     * @param {string} name
-     * @returns {string}
-     * @private
-     */
-    _format(text, name) {
-        return text.replace(':name', name);
-    }
-
-    /**
-     * @param {string} text
+     * @param {string} key Translation key; its text may contain :name and :position.
      * @param {string} name
      * @param {Number} position
      * @private
      */
-    _announce(text, name, position) {
-        $(this.options.statusSelector).text(this._format(text, name).replace(':position', position));
+    _announce(key, name, position) {
+        $(this.options.statusSelector).text(lang.get(key, {name: name, position: position}));
     }
 }
 

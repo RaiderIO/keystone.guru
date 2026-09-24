@@ -31,15 +31,15 @@ $isDetailWarning   = (bool)($itemDetail['isWarning'] ?? false);
         @endif
     </span>
     <button type="button" class="btn btn-sm ordered_select_up"
-            aria-label="{{ __('view_common.forms.orderedselect.move_up', ['name' => $itemLabel]) }}">
+            aria-label="{{ __('js.orderedselect_move_up', ['name' => $itemLabel]) }}">
         <i class="fas fa-arrow-up" aria-hidden="true"></i>
     </button>
     <button type="button" class="btn btn-sm ordered_select_down"
-            aria-label="{{ __('view_common.forms.orderedselect.move_down', ['name' => $itemLabel]) }}">
+            aria-label="{{ __('js.orderedselect_move_down', ['name' => $itemLabel]) }}">
         <i class="fas fa-arrow-down" aria-hidden="true"></i>
     </button>
     <button type="button" class="btn btn-sm ordered_select_remove"
-            aria-label="{{ __('view_common.forms.orderedselect.remove', ['name' => $itemLabel]) }}">
+            aria-label="{{ __('js.orderedselect_remove', ['name' => $itemLabel]) }}">
         <i class="fas fa-times" aria-hidden="true"></i>
     </button>
     <input type="hidden" name="{{ $name }}[]" value="{{ $itemId }}"@if($formId !== null) form="{{ $formId }}"@endif>

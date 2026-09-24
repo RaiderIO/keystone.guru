@@ -58,6 +58,16 @@ return [
     'medium'              => 'Moyen',
     'strong'              => 'Fort',
 
+    // Forms: ordered select
+    'orderedselect_count'          => ':count / :max',
+    'orderedselect_move_up'        => 'Monter :name',
+    'orderedselect_move_down'      => 'Descendre :name',
+    'orderedselect_remove'         => 'Retirer :name',
+    'orderedselect_added_status'   => 'Ajout de :name en position :position',
+    'orderedselect_moved_status'   => 'Déplacement de :name en position :position',
+    'orderedselect_removed_status' => 'Retrait de :name',
+    'orderedselect_full'           => 'La liste est pleine : retirez un élément pour en ajouter un autre (maximum :max).',
+
     // Map: toolbar and drawing
     'path'                                        => 'Chemin',
     'path_title'                                  => 'Tracer un chemin. Raccourci : <b>:hotkey</b>',

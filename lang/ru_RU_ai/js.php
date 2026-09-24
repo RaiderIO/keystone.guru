@@ -58,6 +58,16 @@ return [
     'medium'              => 'Средний',
     'strong'              => 'Сложный',
 
+    // Forms: ordered select
+    'orderedselect_count'          => ':count / :max',
+    'orderedselect_move_up'        => 'Переместить :name вверх',
+    'orderedselect_move_down'      => 'Переместить :name вниз',
+    'orderedselect_remove'         => 'Удалить :name',
+    'orderedselect_added_status'   => 'Добавлено: :name, позиция :position',
+    'orderedselect_moved_status'   => 'Перемещено: :name, позиция :position',
+    'orderedselect_removed_status' => 'Удалено: :name',
+    'orderedselect_full'           => 'Список заполнен: удалите элемент, чтобы добавить другой (максимум :max).',
+
     // Map: toolbar and drawing
     'path'                                        => 'Маршрут',
     'path_title'                                  => 'Нарисовать маршрут. Горячая клавиша: <b>1</b>',

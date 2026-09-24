@@ -58,6 +58,16 @@ return [
     'medium'              => '中等',
     'strong'              => '强',
 
+    // Forms: ordered select
+    'orderedselect_count'          => ':count / :max',
+    'orderedselect_move_up'        => '上移 :name',
+    'orderedselect_move_down'      => '下移 :name',
+    'orderedselect_remove'         => '移除 :name',
+    'orderedselect_added_status'   => '已将 :name 添加到第 :position 位',
+    'orderedselect_moved_status'   => '已将 :name 移动到第 :position 位',
+    'orderedselect_removed_status' => '已移除 :name',
+    'orderedselect_full'           => '列表已满：请移除一项后再添加其他项（最多 :max 项）。',
+
     // Map: toolbar and drawing
     'path'                                        => '路径',
     'path_title'                                  => '绘制一条路径。快捷键: <b>:hotkey</b>',

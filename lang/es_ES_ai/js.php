@@ -58,6 +58,16 @@ return [
     'medium'              => 'Medio',
     'strong'              => 'Fuerte',
 
+    // Forms: ordered select
+    'orderedselect_count'          => ':count / :max',
+    'orderedselect_move_up'        => 'Subir :name',
+    'orderedselect_move_down'      => 'Bajar :name',
+    'orderedselect_remove'         => 'Quitar :name',
+    'orderedselect_added_status'   => 'Se ha agregado :name en la posición :position',
+    'orderedselect_moved_status'   => 'Se ha movido :name a la posición :position',
+    'orderedselect_removed_status' => 'Se ha quitado :name',
+    'orderedselect_full'           => 'La lista está llena: quita uno para agregar otro (máximo :max).',
+
     // Map: toolbar and drawing
     'path'                                        => 'Camino',
     'path_title'                                  => 'Dibuja un camino. Tecla de acceso rápido: <b>:hotkey</b>',

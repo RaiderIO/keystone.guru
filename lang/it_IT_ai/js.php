@@ -58,6 +58,16 @@ return [
     'medium'              => 'Medio',
     'strong'              => 'Forte',
 
+    // Forms: ordered select
+    'orderedselect_count'          => ':count / :max',
+    'orderedselect_move_up'        => 'Sposta :name in alto',
+    'orderedselect_move_down'      => 'Sposta :name in basso',
+    'orderedselect_remove'         => 'Rimuovi :name',
+    'orderedselect_added_status'   => ':name aggiunto in posizione :position',
+    'orderedselect_moved_status'   => ':name spostato in posizione :position',
+    'orderedselect_removed_status' => ':name rimosso',
+    'orderedselect_full'           => 'L\'elenco è pieno: rimuovine uno per aggiungerne un altro (massimo :max).',
+
     // Map: toolbar and drawing
     'path'                                        => 'Percorso',
     'path_title'                                  => 'Disegna un percorso. Tasto rapido: <b>:hotkey</b>',

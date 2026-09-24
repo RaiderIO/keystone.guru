@@ -58,6 +58,16 @@ return [
     'medium'              => 'Médio',
     'strong'              => 'Forte',
 
+    // Forms: ordered select
+    'orderedselect_count'          => ':count / :max',
+    'orderedselect_move_up'        => 'Mover :name para cima',
+    'orderedselect_move_down'      => 'Mover :name para baixo',
+    'orderedselect_remove'         => 'Remover :name',
+    'orderedselect_added_status'   => ':name adicionado na posição :position',
+    'orderedselect_moved_status'   => ':name movido para a posição :position',
+    'orderedselect_removed_status' => ':name removido',
+    'orderedselect_full'           => 'A lista está cheia: remova um para adicionar outro (máximo :max).',
+
     // Map: toolbar and drawing
     'path'                                        => 'Caminho',
     'path_title'                                  => 'Desenhe um caminho. Atalho: <b>:hotkey</b>',

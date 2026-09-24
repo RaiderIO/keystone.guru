@@ -58,6 +58,16 @@ return [
     'medium'              => '中等',
     'strong'              => '強壯',
 
+    // Forms: ordered select
+    'orderedselect_count'          => '',
+    'orderedselect_move_up'        => '',
+    'orderedselect_move_down'      => '',
+    'orderedselect_remove'         => '',
+    'orderedselect_added_status'   => '',
+    'orderedselect_moved_status'   => '',
+    'orderedselect_removed_status' => '',
+    'orderedselect_full'           => '',
+
     // Map: toolbar and drawing
     'path'                                        => '路徑',
     'path_title'                                  => '繪製一條路徑。快捷鍵：<b>:hotkey</b>',

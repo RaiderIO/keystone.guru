@@ -25,6 +25,14 @@ const MESSAGES = {
         collection_dungeonroutes_undo:        'Undo',
         collection_dungeonroutes_undone:      'Undone',
         collection_dungeonroutes_save_failed: 'Failed',
+        orderedselect_count:                  ':count / :max',
+        orderedselect_move_up:                'Up :name',
+        orderedselect_move_down:              'Down :name',
+        orderedselect_remove:                 'Remove :name',
+        orderedselect_added_status:           'Added :name',
+        orderedselect_moved_status:           'Moved :name',
+        orderedselect_removed_status:         'Removed :name',
+        orderedselect_full:                   'Full (maximum :max)',
     },
     'en.dungeons': {two: 'Two'},
 };
@@ -80,13 +88,7 @@ function orderedSelectOptions(prefix) {
         ajax:              true,
         rootSelector:      `#${prefix}`,
         fullCount:         3,
-        countText:         ':count / :max',
-        moveUpText:        'Up :name',
-        moveDownText:      'Down :name',
-        removeText:        'Remove :name',
-        addedStatusText:   'Added :name',
-        movedStatusText:   'Moved :name',
-        removedStatusText: 'Removed :name',
+        showCountMax:      false,
     };
 }
 

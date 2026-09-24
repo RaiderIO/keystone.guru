@@ -58,6 +58,16 @@ return [
     'medium'              => '중간',
     'strong'              => '강함',
 
+    // Forms: ordered select
+    'orderedselect_count'          => ':count / :max',
+    'orderedselect_move_up'        => ':name 위로 이동',
+    'orderedselect_move_down'      => ':name 아래로 이동',
+    'orderedselect_remove'         => ':name 제거',
+    'orderedselect_added_status'   => ':name을(를) :position번째 위치에 추가했습니다',
+    'orderedselect_moved_status'   => ':name을(를) :position번째 위치로 이동했습니다',
+    'orderedselect_removed_status' => ':name을(를) 제거했습니다',
+    'orderedselect_full'           => '목록이 가득 찼습니다. 다른 항목을 추가하려면 하나를 제거하세요 (최대 :max개).',
+
     // Map: toolbar and drawing
     'path'                                        => '경로',
     'path_title'                                  => '경로를 그립니다. 단축키: <b>:hotkey</b>',
