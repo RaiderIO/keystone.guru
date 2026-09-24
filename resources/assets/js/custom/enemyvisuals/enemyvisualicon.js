@@ -50,9 +50,17 @@ class EnemyVisualIcon extends Signalable {
     }
 
     /**
+     * @typedef {Object} EnemyVisualCanvasContent
+     * @property classes {String} Classes of the element inside the inner circle.
+     * @property imageUrl {String|null}
+     * @property text {{value: String|null, classes: String, fontSize: Number}|null} Text centred on the enemy;
+     *           a null value draws the ::before glyph of an element with the given classes instead.
+     */
+
+    /**
      * What the canvas renderer draws inside the inner circle, for visuals whose image is not a
-     * stylesheet background of the inner element.
-     * @returns {{classes: String, imageUrl: String|null}|null}
+     * stylesheet background of the inner element, or that show text.
+     * @returns {EnemyVisualCanvasContent|null}
      */
     getCanvasContent() {
         return null;

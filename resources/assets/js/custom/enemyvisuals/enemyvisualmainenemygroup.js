@@ -34,6 +34,17 @@ class EnemyVisualMainEnemyGroup extends EnemyVisualMain {
     }
 
     /**
+     * @inheritDoc
+     */
+    getCanvasContent() {
+        return {
+            classes: 'enemy_icon_npc_enemy_group_inner',
+            imageUrl: null,
+            text: {value: this._getDisplayText(), classes: 'my-auto w-100', fontSize: this._getTextWidth()},
+        };
+    }
+
+    /**
      * Called whenever the NPC of the enemy has been refreshed.
      */
     _refreshNpc() {
