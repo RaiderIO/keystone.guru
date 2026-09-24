@@ -5,6 +5,7 @@ namespace App\Service\Mapping;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDescriptionTranslation;
+use App\Models\Spell\SpellTuningBuild;
 use App\Models\Spell\SpellTuningChange;
 use App\Service\WagoTools\GameLocale;
 
@@ -86,6 +87,21 @@ class MappingExportService implements MappingExportServiceInterface
             ->makeHidden(['id']);
 
         return $translations->toArray();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function serializeSpellTuningBuilds(): array
+    {
+        // Same as the changes: no ids, so the file only churns when the data does
+        return SpellTuningBuild::query()
+            ->orderBy('game_version_id')
+            ->orderBy('to_build_number')
+            ->orderBy('id')
+            ->get()
+            ->makeHidden(['id'])
+            ->toArray();
     }
 
     /**

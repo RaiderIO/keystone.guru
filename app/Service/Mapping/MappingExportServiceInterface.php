@@ -30,6 +30,14 @@ interface MappingExportServiceInterface
     public function serializeSpellDescriptionTranslations(GameLocale $locale): array;
 
     /**
+     * Serializes every compared spell tuning build to the array written to spell_tuning_builds.json, in a
+     * stable order and without ids so the file only changes when the data does.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function serializeSpellTuningBuilds(): array;
+
+    /**
      * Serializes every spell tuning change to the array written to spell_tuning_changes.json, in a
      * stable order and without ids so the file only changes when the data does.
      *

@@ -3,6 +3,7 @@
 namespace App\Service\Spell\Tuning;
 
 use App\Models\Spell\SpellTuningChangeType;
+use App\Repositories\Interfaces\Spell\SpellTuningBuildRepositoryInterface;
 use App\Repositories\Interfaces\Spell\SpellTuningChangeRepositoryInterface;
 use App\Service\Spell\Description\Dtos\SpellDescriptionValue;
 use App\Service\Spell\Tuning\Dtos\SpellTuningChangeDto;
@@ -23,6 +24,7 @@ class SpellTuningDiffService implements SpellTuningDiffServiceInterface
     public const float RELATIVE_EPSILON = 1e-6;
 
     public function __construct(
+        private readonly SpellTuningBuildRepositoryInterface    $spellTuningBuildRepository,
         private readonly SpellTuningChangeRepositoryInterface   $spellTuningChangeRepository,
         private readonly SpellTuningDiffServiceLoggingInterface $log,
     ) {
@@ -71,13 +73,23 @@ class SpellTuningDiffService implements SpellTuningDiffServiceInterface
 
         try {
             // A failed lookup on a re-run must not wipe the date an earlier run already recorded
-            $toBuildReleasedAt ??= $this->spellTuningChangeRepository->findBuildReleasedAt($result->gameVersionId, $result->toBuild);
+            $toBuildReleasedAt ??= $this->spellTuningBuildRepository->findReleasedAt($result->gameVersionId, $result->toBuild);
 
-            return $this->spellTuningChangeRepository->replaceForBuild(
+            $stored = $this->spellTuningChangeRepository->replaceForBuild(
                 $result->gameVersionId,
                 $result->toBuild,
                 $result->toRows($toBuildReleasedAt),
             );
+
+            $this->spellTuningBuildRepository->record(
+                $result->gameVersionId,
+                $result->fromBuild,
+                $result->toBuild,
+                SpellTuningChangeDto::buildNumber($result->toBuild),
+                $toBuildReleasedAt,
+            );
+
+            return $stored;
         } finally {
             $this->log->storeEnd();
         }

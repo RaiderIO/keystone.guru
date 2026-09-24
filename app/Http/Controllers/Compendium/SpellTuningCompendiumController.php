@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Compendium;
 use App\Http\Controllers\Controller;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
+use App\Repositories\Interfaces\Spell\SpellTuningBuildRepositoryInterface;
 use App\Repositories\Interfaces\Spell\SpellTuningChangeRepositoryInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
 use Illuminate\Support\Facades\Auth;
@@ -23,14 +24,16 @@ class SpellTuningCompendiumController extends Controller
      * scanning a whole build's changes in one place is what the page is for.
      */
     public function index(
+        SpellTuningBuildRepositoryInterface  $spellTuningBuildRepository,
         SpellTuningChangeRepositoryInterface $spellTuningChangeRepository,
         DungeonServiceInterface              $dungeonService,
     ): View {
-        return $this->renderIndex($spellTuningChangeRepository, $dungeonService);
+        return $this->renderIndex($spellTuningBuildRepository, $spellTuningChangeRepository, $dungeonService);
     }
 
     public function indexDungeon(
         Dungeon                              $dungeon,
+        SpellTuningBuildRepositoryInterface  $spellTuningBuildRepository,
         SpellTuningChangeRepositoryInterface $spellTuningChangeRepository,
         DungeonServiceInterface              $dungeonService,
     ): View {
@@ -38,21 +41,24 @@ class SpellTuningCompendiumController extends Controller
         // dungeon as well, so the header's dungeon selection follows along (as on explore/heatmap)
         $dungeonService->setDungeonContext($dungeon, Auth::user());
 
-        return $this->renderIndex($spellTuningChangeRepository, $dungeonService, $dungeon);
+        return $this->renderIndex($spellTuningBuildRepository, $spellTuningChangeRepository, $dungeonService, $dungeon);
     }
 
     private function renderIndex(
+        SpellTuningBuildRepositoryInterface  $spellTuningBuildRepository,
         SpellTuningChangeRepositoryInterface $spellTuningChangeRepository,
         DungeonServiceInterface              $dungeonService,
         ?Dungeon                             $dungeon = null,
     ): View {
         $gameVersion = GameVersion::getUserOrDefaultGameVersion();
 
-        $builds         = $spellTuningChangeRepository->getBuilds($gameVersion->id, $dungeon, self::BUILDS_PER_PAGE);
+        $builds         = $spellTuningBuildRepository->getBuilds($gameVersion->id, $dungeon, self::BUILDS_PER_PAGE);
         $changesByBuild = [];
 
         foreach ($builds->items() as $build) {
-            $changesByBuild[$build['to_build']] = $spellTuningChangeRepository->getForBuild($gameVersion->id, $build['to_build'], $dungeon);
+            $changesByBuild[$build['to_build']] = $build['spell_count'] === 0
+                ? collect()
+                : $spellTuningChangeRepository->getForBuild($gameVersion->id, $build['to_build'], $dungeon);
         }
 
         return view('compendium.tuning.index', [

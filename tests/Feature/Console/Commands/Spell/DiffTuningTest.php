@@ -3,6 +3,7 @@
 namespace Tests\Feature\Console\Commands\Spell;
 
 use App\Models\GameVersion\GameVersion;
+use App\Models\Spell\SpellTuningBuild;
 use App\Models\Spell\SpellTuningChange;
 use App\Models\Spell\SpellTuningChangeType;
 use App\Service\WagoTools\WagoToolsServiceInterface;
@@ -69,6 +70,7 @@ final class DiffTuningTest extends PublicTestCase
     {
         File::delete([$this->fromPath, $this->toPath]);
         SpellTuningChange::query()->where('to_build', self::TO_BUILD)->delete();
+        SpellTuningBuild::query()->where('to_build', self::TO_BUILD)->delete();
 
         parent::tearDown();
     }
@@ -107,6 +109,39 @@ final class DiffTuningTest extends PublicTestCase
         $this->assertSame(SpellTuningChangeType::DescriptionRewritten, $changes[2]->change_type);
         $this->assertSame('Stuns for 3 sec.', $changes[2]->old_text);
         $this->assertSame('Stuns for 3 sec and deals 9,698 damage.', $changes[2]->new_text);
+    }
+
+    #[Test]
+    public function handle_givenTwoFiles_recordsTheComparedBuild(): void
+    {
+        // Act
+        $this->runDiff();
+
+        // Assert
+        $build = SpellTuningBuild::query()->where('game_version_id', $this->gameVersionId)->where('to_build', self::TO_BUILD)->sole();
+        $this->assertSame(self::FROM_BUILD, $build->from_build);
+        $this->assertSame(2, $build->to_build_number);
+        $this->assertSame(self::TO_BUILD_RELEASED_AT, $build->to_build_released_at?->toDateTimeString());
+    }
+
+    #[Test]
+    public function handle_givenBuildsWithoutChanges_recordsTheBuildAndStoresNoChanges(): void
+    {
+        // Act
+        $this->artisan('spell:difftuning', [
+            '--from'       => $this->fromPath,
+            '--to'         => $this->fromPath,
+            '--from-build' => self::FROM_BUILD,
+            '--to-build'   => self::TO_BUILD,
+        ])
+            ->expectsOutputToContain('0 of 3 compared spells changed')
+            ->assertExitCode(0);
+
+        // Assert
+        $this->assertSame(0, SpellTuningChange::query()->where('to_build', self::TO_BUILD)->count());
+        $build = SpellTuningBuild::query()->where('game_version_id', $this->gameVersionId)->where('to_build', self::TO_BUILD)->sole();
+        $this->assertSame(self::FROM_BUILD, $build->from_build);
+        $this->assertSame(self::TO_BUILD_RELEASED_AT, $build->to_build_released_at?->toDateTimeString());
     }
 
     #[Test]
@@ -207,6 +242,7 @@ final class DiffTuningTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, SpellTuningChange::query()->where('to_build', self::TO_BUILD)->count());
+        $this->assertSame(0, SpellTuningBuild::query()->where('to_build', self::TO_BUILD)->count());
     }
 
     #[Test]
@@ -228,6 +264,7 @@ final class DiffTuningTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, SpellTuningChange::query()->where('to_build', self::TO_BUILD)->count());
+        $this->assertSame(0, SpellTuningBuild::query()->where('to_build', self::TO_BUILD)->count());
     }
 
     #[Test]

@@ -79,7 +79,7 @@ use Illuminate\Support\Collection;
                 <div>
                     @include('compendium.sections.tuning_change_list', [
                         'changes'          => $changesByBuild[$build['to_build']],
-                        'emptyKey'         => 'view_compendium.tuning.index.empty',
+                        'emptyKey'         => $contextDungeon === null ? 'view_compendium.tuning.index.build_no_changes' : 'view_compendium.tuning.index.build_no_changes_dungeon',
                         'showSpellSubject' => true,
                         'showDungeons'     => $contextDungeon === null,
                     ])
