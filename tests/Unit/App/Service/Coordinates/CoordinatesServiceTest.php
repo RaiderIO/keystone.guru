@@ -103,6 +103,8 @@ final class CoordinatesServiceTest extends PublicTestCase
         // MDT ships no group/clone data for Den of Nalorakk's hand-authored packs, so its MDT
         // clone list is far short of KG's enemy count (19 vs 33 for npc 241809 alone).
         DungeonKey::DEN_OF_NALORAKK->value,
+        // 3 of its 206 MDT enemies sit 21-24 units off MDT's positions.
+        DungeonKey::PLAGUEFALL->value,
     ];
 
     /**
