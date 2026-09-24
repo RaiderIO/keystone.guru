@@ -57,7 +57,7 @@ class ProfileFormRequest extends FormRequest
                 'min:3',
                 'max:24',
                 Rule::unique('users', 'name')->ignore($user, 'id'),
-                new UserSlugAvailableRule($user->id),
+                new UserSlugAvailableRule($user),
             ],
             'email' => [
                 'nullable',

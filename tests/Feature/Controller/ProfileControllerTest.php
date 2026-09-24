@@ -197,6 +197,42 @@ final class ProfileControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function update_givenUnchangedNameHoldingASuffixedSlug_updatesTheProfile(): void
+    {
+        $user      = null;
+        $slugOwner = null;
+
+        try {
+            // Arrange
+            $number         = random_int(100000, 999999);
+            $slugOwner      = User::factory()->create(['name' => sprintf('foo#bar%d', $number)]);
+            $user           = $this->userWithUserRole();
+            $user->name     = sprintf('foo-bar%d', $number);
+            $user->password = '';
+            $user->save();
+
+            // Act
+            $response = $this->actingAs($user)->patch(sprintf('/profile/%d', $user->id), [
+                'name'                  => $user->name,
+                'echo_color'            => '#abcdef',
+                'timezone'              => 'Europe/Amsterdam',
+                'game_server_region_id' => 0,
+            ]);
+
+            // Assert
+            $this->assertSame(sprintf('foo-bar%d-2', $number), $user->slug);
+            $response->assertSessionHasNoErrors();
+            $response->assertRedirect(route('profile.edit'));
+            $refreshedUser = User::findOrFail($user->id);
+            $this->assertSame('Europe/Amsterdam', $refreshedUser->timezone);
+            $this->assertSame(sprintf('foo-bar%d-2', $number), $refreshedUser->slug);
+        } finally {
+            $user?->delete();
+            $slugOwner?->delete();
+        }
+    }
+
+    #[Test]
     public function update_givenNewName_movesTheProfileToTheNewSlug(): void
     {
         $user = null;

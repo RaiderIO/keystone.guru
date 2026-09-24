@@ -160,6 +160,53 @@ final class ProfileSlugRouteTest extends PublicTestCase
     }
 
     #[Test]
+    public function getSlugAttribute_givenPersistedUserWithoutSlug_assignsOneSoItsLinkResolves(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = User::factory()->create(['name' => sprintf('Wotuu#%d', random_int(100000, 999999))]);
+            User::query()->whereKey($user->id)->update(['slug' => null]);
+            $slugless = User::findOrFail($user->id);
+
+            // Act
+            $url = route('profile.view', ['user' => $slugless]);
+
+            // Assert
+            $expectedSlug = str_replace('#', '-', mb_strtolower($user->name));
+            $this->assertSame(url(sprintf('/user/%s', $expectedSlug)), $url);
+            $this->assertSame($expectedSlug, User::query()->whereKey($user->id)->value('slug'));
+            $this->assertFalse($slugless->isDirty('slug'));
+            $this->get($url)->assertOk();
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function getSlugAttribute_givenPartialSelectWithoutSlug_returnsTheStoredSlugUnchanged(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = User::factory()->create(['name' => sprintf('Wotuu%d', random_int(100000, 999999))]);
+            User::query()->whereKey($user->id)->update(['slug' => sprintf('custom-%d', $user->id)]);
+            $partialUser = User::query()->select(['id'])->findOrFail($user->id);
+
+            // Act
+            $slug = $partialUser->slug;
+
+            // Assert
+            $this->assertSame(sprintf('custom-%d', $user->id), $slug);
+            $this->assertSame(sprintf('custom-%d', $user->id), User::query()->whereKey($user->id)->value('slug'));
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
     public function save_givenSlugClaimedBetweenCheckAndWrite_retriesWithTheNextFreeSlug(): void
     {
         // Arrange

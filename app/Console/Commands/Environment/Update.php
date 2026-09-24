@@ -74,6 +74,9 @@ class Update extends Command
             '--force'    => true,
         ]);
 
+        // A rolling deploy keeps the previous release creating users without a slug after the migration's backfill ran
+        $this->call('user:generateslugs');
+
         // User permissions are funky for local environments - tell git to ignore them
         if ($appType === 'local') {
             $this->shell([

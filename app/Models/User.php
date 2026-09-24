@@ -200,6 +200,41 @@ class User extends Authenticatable implements LaratrustUser
         return initials($this->name);
     }
 
+    /**
+     * A user the previous release created without a slug gets one the first time it is read, so building a link
+     * to them never fails. The write is guarded on the slug still being empty, so a concurrent assignment wins
+     * and is read back instead of overwritten.
+     */
+    public function getSlugAttribute(?string $value): ?string
+    {
+        if ($value !== null || !$this->exists) {
+            return $value;
+        }
+
+        $userSlugService = app(UserSlugServiceInterface::class);
+        $name            = $this->attributes['name'] ?? User::query()->whereKey($this->id)->value('name');
+
+        for ($attempt = 1; $attempt <= self::SLUG_SAVE_ATTEMPTS; $attempt++) {
+            try {
+                User::query()
+                    ->whereKey($this->id)
+                    ->whereNull('slug')
+                    ->update(['slug' => $userSlugService->findAvailableSlug((string)$name, $this->id)]);
+
+                break;
+            } catch (UniqueConstraintViolationException) {
+                continue;
+            }
+        }
+
+        $slug = User::query()->whereKey($this->id)->value('slug');
+
+        $this->attributes['slug'] = $slug;
+        $this->syncOriginalAttribute('slug');
+
+        return $slug;
+    }
+
     public function getIsAdminAttribute(): bool
     {
         return $this->hasRole(Role::ROLE_ADMIN);
@@ -488,7 +523,7 @@ class User extends Authenticatable implements LaratrustUser
         parent::boot();
 
         static::saving(static function (User $user) {
-            if (empty($user->slug) || $user->isDirty('name')) {
+            if (empty($user->getAttributes()['slug'] ?? null) || $user->isDirty('name')) {
                 $user->slug = app(UserSlugServiceInterface::class)->findAvailableSlug($user->name, $user->id);
             }
         });
