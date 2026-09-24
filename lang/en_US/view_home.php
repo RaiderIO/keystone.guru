@@ -52,6 +52,9 @@ return [
             'revamped_search_alt' => 'Revamped search',
             'weekly_route_alt'    => 'Raider.IO weekly route',
             'patreon_alt'         => 'Patreon',
+
+            'patreon_thank_you_title' => 'Thank you for your support!',
+            'patreon_thank_you_body'  => 'Your Patreon subscription keeps Keystone.guru running. Click here to see the benefits you unlocked.',
         ],
         'about' => [
             'title'               => 'About',

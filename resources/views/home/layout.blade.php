@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
  * @var bool                                             $isMobile
  * @var GameVersion                                      $userOrDefaultGameVersion
  * @var Collection<int, Dungeon>                         $gameVersionDungeons
+ * @var bool                                             $isPayingPatron
  */
 
 ?>
@@ -35,7 +36,7 @@ use Illuminate\Support\Collection;
 
 
 @section('content')
-    @include('home.sections.featured')
+    @include('home.sections.featured', ['isPayingPatron' => $isPayingPatron])
 
     @if(GameVersion::getUserOrDefaultGameVersion()->key === GameVersion::GAME_VERSION_RETAIL && $weeklyRoutes->isNotEmpty())
         @include('home.sections.routes.weeklyroute', ['dungeons' => $weeklyRouteDungeons, 'weeklyRoutes' => $weeklyRoutes])
