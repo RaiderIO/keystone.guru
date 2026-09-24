@@ -140,6 +140,24 @@ test('_refreshCanvasPath_givenTextContent_bakesTextAtItsSizeIntoSprite', () => {
     expect(appearance.sprite.text).toEqual({value: '7', font: '400 14px Arial', color: 'rgb(255, 255, 255)'});
 });
 
+test.each([
+    [14.2, 14],
+    [14.49, 14],
+    [14.5, 15],
+])('_refreshCanvasPath_givenFractionalTextSize%s_bakesWholePixelSize%s', (fontSize, expected) => {
+    // Arrange
+    const fakeThis = makeFakeThis({
+        content: {classes: 'enemy_icon_npc_enemy_forces_inner', imageUrl: null, text: {value: '7', classes: '', fontSize: fontSize}},
+        style: {textColor: 'rgb(255, 255, 255)', textFontFamily: 'Arial'},
+    });
+
+    // Act
+    const appearance = refresh(fakeThis);
+
+    // Assert
+    expect(appearance.sprite.text.font).toBe(`${expected}px Arial`);
+});
+
 test('_refreshCanvasPath_givenGlyphContent_drawsGlyphFromStyle', () => {
     // Arrange
     const fakeThis = makeFakeThis({

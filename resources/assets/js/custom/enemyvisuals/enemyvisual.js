@@ -808,7 +808,8 @@ class EnemyVisual extends Signalable {
         sprite.stateBorder = stateBorder;
         sprite.text = textValue === null || style.textColor === null ? null : {
             value: textValue,
-            font: EnemyCanvasStyleProbe.toCanvasFont(style, text.fontSize),
+            // Whole pixels: the text size follows the fractional zoom level, and it is part of the sprite's cache key
+            font: EnemyCanvasStyleProbe.toCanvasFont(style, Math.round(text.fontSize)),
             color: style.textColor,
         };
 
