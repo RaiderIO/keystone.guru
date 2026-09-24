@@ -1079,7 +1079,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             $dungeonRouteCollection->delete();
             $route->delete();
             $mappingVersion->delete();
-            $this->deleteTeam($team);
+            $team->delete();
             Feature::for($creator)->forget(CreatorProfiles::class);
             $creator->delete();
         }
@@ -1689,7 +1689,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         } finally {
             $dungeonRouteCollection->delete();
             Feature::for($creator)->forget(CreatorProfiles::class);
-            $this->deleteTeam($team);
+            $team->delete();
             $creator->delete();
         }
     }
@@ -1720,7 +1720,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         } finally {
             $dungeonRouteCollection->delete();
             Feature::for($creator)->forget(CreatorProfiles::class);
-            $this->deleteTeam($team);
+            $team->delete();
             $creator->delete();
         }
     }
