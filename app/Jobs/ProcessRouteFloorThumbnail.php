@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Exceptions\ThumbnailRenderFailedException;
+use App\Jobs\Enums\QueueName;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
@@ -38,7 +39,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
         protected bool                         $force = false,
         protected DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
     ) {
-        $this->queue = sprintf('%s-thumbnail', config('app.type'));
+        $this->queue = QueueName::Thumbnail->queueName();
         $this->tries = (int)config('keystoneguru.thumbnail.max_attempts');
     }
 

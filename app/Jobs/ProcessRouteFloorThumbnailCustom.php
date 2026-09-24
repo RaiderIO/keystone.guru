@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Enums\QueueName;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLoggingInterface;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
@@ -30,7 +31,7 @@ class ProcessRouteFloorThumbnailCustom implements ShouldQueue
         protected int                             $attempts = 0,
     ) {
         // Not passed as a constructor parameter since it's not serializable
-        $this->queue = sprintf('%s-thumbnail-api', config('app.type'));
+        $this->queue = QueueName::ThumbnailApi->queueName();
     }
 
     /**

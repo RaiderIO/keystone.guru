@@ -2,9 +2,10 @@
 
 namespace Tests\Feature\Jobs;
 
-use App\Jobs\CombatLog\ProcessCombatLogFanout;
 use App\Jobs\CombatLog\ProcessCombatLogFromS3;
 use App\Jobs\CombatLog\ProcessCombatLogSegments;
+use App\Jobs\DropCaches;
+use App\Jobs\Enums\QueueName;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Jobs\ProcessRouteFloorThumbnailCustom;
 use App\Jobs\RefreshDiscoverCache;
@@ -13,6 +14,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use App\Models\Season;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\File;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -54,6 +56,10 @@ final class JobQueueNameTest extends PublicTestCase
                 static fn() => new RefreshDiscoverCache(),
                 sprintf('%s-long-running', self::APP_TYPE),
             ],
+            'DropCaches' => [
+                static fn() => new DropCaches(),
+                sprintf('%s-long-running', self::APP_TYPE),
+            ],
             'RegenerateCombatLogRoute' => [
                 static fn() => new RegenerateCombatLogRoute(1),
                 sprintf('%s-long-running', self::APP_TYPE),
@@ -73,10 +79,6 @@ final class JobQueueNameTest extends PublicTestCase
             'ProcessCombatLogFromS3' => [
                 static fn() => new ProcessCombatLogFromS3('bucket', 'path.log.zip', 1),
                 sprintf('%s-cl-process', self::APP_TYPE),
-            ],
-            'ProcessCombatLogFanout' => [
-                static fn() => new ProcessCombatLogFanout('bucket', 'path/', 1),
-                sprintf('%s-cl-fanout', self::APP_TYPE),
             ],
         ];
     }
@@ -121,8 +123,7 @@ final class JobQueueNameTest extends PublicTestCase
     }
 
     /**
-     * The mirror of the test above: a queue with no supervisor means those jobs pile up unprocessed, which is how
-     * 'cl-fanout' went unconsumed locally before #3804. Only asserted for 'local' - the 'production' block is
+     * The mirror of the test above: a queue with no supervisor means those jobs pile up unprocessed. Only asserted for 'local' - the 'production' block is
      * deliberately partial because AWS runs its workers as ECS services against SQS rather than through Horizon.
      */
     #[Test]
@@ -147,6 +148,59 @@ final class JobQueueNameTest extends PublicTestCase
                 sprintf('No local Horizon supervisor watches the "%s" queue, so those jobs are never processed', $expectedSuffix),
             );
         }
+    }
+
+    /**
+     * QueueSize measures exactly the QueueName cases, so every queue a job dispatches to must be one and no case may
+     * go unused.
+     */
+    #[Test]
+    public function queueNameCases_givenDispatchedQueues_matchExactly(): void
+    {
+        // Arrange
+        $dispatchedSuffixes = self::dispatchedQueueSuffixes();
+
+        // Act
+        $caseValues = array_map(static fn(QueueName $queueName) => $queueName->value, QueueName::cases());
+
+        // Assert
+        $this->assertEqualsCanonicalizing($caseValues, $dispatchedSuffixes);
+    }
+
+    /**
+     * A queue name spelled out as a string anywhere but QueueName would dodge the telemetry and the Horizon checks above.
+     */
+    #[Test]
+    public function appSource_givenQueueAssignments_onlyUsesQueueNameEnum(): void
+    {
+        // Arrange
+        $offenders = [];
+
+        // Act
+        foreach (File::allFiles(app_path()) as $file) {
+            $contents = $file->getContents();
+            if (preg_match_all('/(?:\$this->queue\s*=|onQueue\(|Queue::size\()\s*+(?:sprintf|[\'"])[^;]*/', $contents, $matches)) {
+                foreach ($matches[0] as $match) {
+                    $offenders[] = sprintf('%s: %s', $file->getRelativePathname(), $match);
+                }
+            }
+        }
+
+        // Assert
+        $this->assertSame([], $offenders, 'Queue names must come from QueueName');
+    }
+
+    #[Test]
+    public function queueName_givenAppType_prefixesTheStage(): void
+    {
+        // Arrange
+        Config::set('app.type', self::APP_TYPE);
+
+        // Act
+        $queueName = QueueName::ThumbnailApi->queueName();
+
+        // Assert
+        $this->assertSame(sprintf('%s-thumbnail-api', self::APP_TYPE), $queueName);
     }
 
     /**

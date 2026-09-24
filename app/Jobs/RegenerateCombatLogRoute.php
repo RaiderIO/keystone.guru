@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Enums\QueueName;
 use App\Jobs\Logging\RegenerateCombatLogRouteLoggingInterface;
 use App\Models\DungeonRoute\DungeonRoute;
 use GuzzleHttp\Client;
@@ -24,7 +25,7 @@ class RegenerateCombatLogRoute implements ShouldQueue
 
     public function __construct(private readonly int $dungeonRouteId)
     {
-        $this->queue = sprintf('%s-long-running', config('app.type'));
+        $this->queue = QueueName::LongRunning->queueName();
     }
 
     /**
