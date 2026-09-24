@@ -232,6 +232,75 @@ final class ProcessRouteFloorThumbnailTest extends PublicTestCase
     }
 
     /**
+     * A discarded job must not leave the route looking like a refresh is still pending: the repository
+     * reads a marker newer than thumbnail_updated_at as "queued" and skips the route for
+     * refresh_requeue_hours (72h), which would keep its thumbnail stale long after the pause is lifted.
+     *
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    #[Test]
+    public function handle_givenGenerationPaused_rewindsTheQueueMarkerSoTheRouteIsRefreshedAfterResuming(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        $dungeonRoute = $this->createDungeonRouteDueForThumbnail();
+        DungeonRoute::query()->whereKey($dungeonRoute->id)->toBase()->update([
+            'thumbnail_refresh_queued_at' => Carbon::now()->toDateTimeString(),
+        ]);
+        $updatedAt = $dungeonRoute->refresh()->updated_at->toDateTimeString();
+
+        $toggleService = $this->createMockPublic(ThumbnailGenerationToggleServiceInterface::class);
+        $toggleService->method('isPaused')->willReturn(true);
+        app()->instance(ThumbnailGenerationToggleServiceInterface::class, $toggleService);
+
+        try {
+            // Act
+            new ProcessRouteFloorThumbnail($dungeonRoute, 1, true)->handle();
+
+            // Assert
+            $dungeonRoute->refresh();
+            $this->assertSame('1970-01-01 00:00:00', $dungeonRoute->thumbnail_refresh_queued_at->toDateTimeString());
+            $this->assertSame($updatedAt, $dungeonRoute->updated_at->toDateTimeString());
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * Only the standard refresh records the marker, so a hero job has none of its own to rewind - and
+     * rewinding it anyway would wrongly make the route's standard thumbnail look due.
+     *
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    #[Test]
+    public function handle_givenGenerationPausedAndHeroVariant_leavesTheQueueMarkerAlone(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        $dungeonRoute = $this->createDungeonRouteDueForThumbnail();
+        $queuedAt     = Carbon::now()->startOfSecond()->toDateTimeString();
+        DungeonRoute::query()->whereKey($dungeonRoute->id)->toBase()->update([
+            'thumbnail_refresh_queued_at' => $queuedAt,
+        ]);
+
+        $toggleService = $this->createMockPublic(ThumbnailGenerationToggleServiceInterface::class);
+        $toggleService->method('isPaused')->willReturn(true);
+        app()->instance(ThumbnailGenerationToggleServiceInterface::class, $toggleService);
+
+        try {
+            // Act
+            new ProcessRouteFloorThumbnail($dungeonRoute, 1, true, DungeonRouteThumbnailVariant::Hero)->handle();
+
+            // Assert
+            $this->assertSame($queuedAt, $dungeonRoute->refresh()->thumbnail_refresh_queued_at->toDateTimeString());
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
      * A route whose thumbnail is considered out of date, so handle() actually attempts a render
      * rather than short-circuiting on handleThumbnailAlreadyUpToDate().
      */

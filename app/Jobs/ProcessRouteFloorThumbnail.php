@@ -23,6 +23,11 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     use SerializesModels;
 
     /**
+     * The dungeon_routes.thumbnail_refresh_queued_at column default, meaning "no refresh is queued".
+     */
+    private const string THUMBNAIL_REFRESH_NEVER_QUEUED_AT = '1970-01-01 00:00:00';
+
+    /**
      * How many times the queue worker will run this job before giving up and calling failed().
      * Set from config rather than a fixed property so keystoneguru.thumbnail.max_attempts stays the
      * single place that number lives. This overrides the `tries` the thumbnail Horizon supervisors
@@ -66,10 +71,11 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
 
         // Jobs queued before generation was paused would otherwise still render. Returning rather than
         // release()ing: a release consumes an attempt against $tries, so a pause outlasting the backoff
-        // schedule would fail every queued job. The route's thumbnail simply stays stale until the next
-        // display or scheduled refresh re-queues it after resuming.
+        // schedule would fail every queued job.
         if (app()->make(ThumbnailGenerationToggleServiceInterface::class)->isPaused()) {
             $log->handleThumbnailGenerationPaused();
+
+            $this->resetThumbnailRefreshQueuedAt();
 
             return;
         }
@@ -117,6 +123,25 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
         } finally {
             $log->handleEnd($result !== null);
         }
+    }
+
+    /**
+     * Rewinds the route's queue marker to the column's "never queued" default, so that discarding this job
+     * does not make the route ineligible for a refresh for refresh_requeue_hours (72h) afterwards - which is
+     * how DungeonRouteRepository::getDungeonRoutesWithExpiredThumbnails() reads a marker newer than
+     * thumbnail_updated_at. Written through the query builder so the route's own updated_at is untouched.
+     * Only the standard variant sets the marker; the others are gated on variant freshness instead.
+     */
+    private function resetThumbnailRefreshQueuedAt(): void
+    {
+        if ($this->variant !== DungeonRouteThumbnailVariant::Standard) {
+            return;
+        }
+
+        DungeonRoute::query()
+            ->whereKey($this->dungeonRoute->id)
+            ->toBase()
+            ->update(['thumbnail_refresh_queued_at' => self::THUMBNAIL_REFRESH_NEVER_QUEUED_AT]);
     }
 
     /**
