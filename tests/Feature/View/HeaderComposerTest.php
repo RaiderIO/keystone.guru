@@ -147,6 +147,30 @@ final class HeaderComposerTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function compose_givenGuestWithGameVersionCookie_setsTheCookieGameVersionDungeons(): void
+    {
+        // Arrange
+        $classicEra = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_CLASSIC_ERA;
+
+        try {
+            $view = view('common.layout.header');
+
+            // Act
+            app(HeaderComposer::class)->compose($view);
+
+            // Assert
+            $dungeons = $view->getData()['gameVersionDungeons'];
+
+            $this->assertNotEmpty($dungeons);
+            $this->assertEquals([$classicEra->expansion_id], $dungeons->pluck('expansion_id')->unique()->values()->all());
+        } finally {
+            unset($_COOKIE['game_version']);
+        }
+    }
+
     /**
      * The "Routes by expansion" dropdown was cut from the bar in #4465 - every destination now lives
      * inside a category panel. The map view still passes `showExpansionNav`, so the header must keep

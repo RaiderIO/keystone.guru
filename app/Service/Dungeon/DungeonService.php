@@ -125,7 +125,7 @@ class DungeonService implements DungeonServiceInterface
         // instead: the "next season" card that HeaderComposer adds to the dungeon context bar.
         $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
 
-        return $currentSeason === null ? $gameVersion->expansion->dungeons : $this->getSeasonDungeons($currentSeason);
+        return $currentSeason === null ? $gameVersion->expansion->dungeons()->get() : $this->getSeasonDungeons($currentSeason);
     }
 
     /**

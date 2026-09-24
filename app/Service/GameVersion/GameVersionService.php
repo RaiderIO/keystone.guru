@@ -42,7 +42,7 @@ class GameVersionService implements GameVersionServiceInterface
         }
 
         if ($gameVersion === null) {
-            $gameVersion = GameVersion::getUserOrDefaultGameVersion();
+            $gameVersion = ($user === null ? null : GameVersion::getUserGameVersion($user)) ?? GameVersion::getDefaultGameVersion();
 
             $this->setGameVersion($gameVersion, $user);
         }
