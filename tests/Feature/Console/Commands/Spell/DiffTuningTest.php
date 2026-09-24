@@ -6,12 +6,14 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\SpellTuningBuild;
 use App\Models\Spell\SpellTuningChange;
 use App\Models\Spell\SpellTuningChangeType;
+use App\Repositories\Interfaces\Spell\SpellTuningBuildRepositoryInterface;
 use App\Service\WagoTools\WagoToolsServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
+use RuntimeException;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -142,6 +144,35 @@ final class DiffTuningTest extends PublicTestCase
         $build = SpellTuningBuild::query()->where('game_version_id', $this->gameVersionId)->where('to_build', self::TO_BUILD)->sole();
         $this->assertSame(self::FROM_BUILD, $build->from_build);
         $this->assertSame(self::TO_BUILD_RELEASED_AT, $build->to_build_released_at?->toDateTimeString());
+    }
+
+    #[Test]
+    public function handle_givenRecordingTheBuildFails_keepsThePreviousChanges(): void
+    {
+        // Arrange - the first run stored three changes; the second would replace them with none
+        $this->runDiff();
+
+        $spellTuningBuildRepository = $this->createMockPublic(SpellTuningBuildRepositoryInterface::class);
+        $spellTuningBuildRepository->method('record')->willThrowException(new RuntimeException('record failed'));
+        app()->instance(SpellTuningBuildRepositoryInterface::class, $spellTuningBuildRepository);
+
+        // Act
+        $thrown = null;
+
+        try {
+            $this->artisan('spell:difftuning', [
+                '--from'       => $this->fromPath,
+                '--to'         => $this->fromPath,
+                '--from-build' => self::FROM_BUILD,
+                '--to-build'   => self::TO_BUILD,
+            ])->run();
+        } catch (RuntimeException $exception) {
+            $thrown = $exception;
+        }
+
+        // Assert
+        $this->assertSame('record failed', $thrown?->getMessage());
+        $this->assertSame(3, SpellTuningChange::query()->where('to_build', self::TO_BUILD)->count());
     }
 
     #[Test]

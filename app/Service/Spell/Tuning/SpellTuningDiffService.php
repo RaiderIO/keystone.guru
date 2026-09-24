@@ -12,6 +12,7 @@ use App\Service\Spell\Tuning\Dtos\SpellTuningSnapshot;
 use App\Service\Spell\Tuning\Dtos\SpellTuningSnapshotSpell;
 use App\Service\Spell\Tuning\Logging\SpellTuningDiffServiceLoggingInterface;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
 class SpellTuningDiffService implements SpellTuningDiffServiceInterface
@@ -75,21 +76,24 @@ class SpellTuningDiffService implements SpellTuningDiffServiceInterface
             // A failed lookup on a re-run must not wipe the date an earlier run already recorded
             $toBuildReleasedAt ??= $this->spellTuningBuildRepository->findReleasedAt($result->gameVersionId, $result->toBuild);
 
-            $stored = $this->spellTuningChangeRepository->replaceForBuild(
-                $result->gameVersionId,
-                $result->toBuild,
-                $result->toRows($toBuildReleasedAt),
-            );
+            // The tuning page lists builds from their record, so changes must never land without one
+            return DB::transaction(function () use ($result, $toBuildReleasedAt): int {
+                $stored = $this->spellTuningChangeRepository->replaceForBuild(
+                    $result->gameVersionId,
+                    $result->toBuild,
+                    $result->toRows($toBuildReleasedAt),
+                );
 
-            $this->spellTuningBuildRepository->record(
-                $result->gameVersionId,
-                $result->fromBuild,
-                $result->toBuild,
-                SpellTuningChangeDto::buildNumber($result->toBuild),
-                $toBuildReleasedAt,
-            );
+                $this->spellTuningBuildRepository->record(
+                    $result->gameVersionId,
+                    $result->fromBuild,
+                    $result->toBuild,
+                    SpellTuningChangeDto::buildNumber($result->toBuild),
+                    $toBuildReleasedAt,
+                );
 
-            return $stored;
+                return $stored;
+            });
         } finally {
             $this->log->storeEnd();
         }
