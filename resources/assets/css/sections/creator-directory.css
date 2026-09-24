@@ -1,54 +1,71 @@
 /**
  * Creator directory tiles.
  *
- * As with creator-profile.css, colour is left to the theme: the tile is a Bootstrap .card and text
- * uses text-body-secondary. Do not reach for bg-body-* utilities - this site ships one class-scoped
- * stylesheet per bootswatch theme rather than using data-bs-theme, so --bs-tertiary-bg stays at its
- * light default and renders an unreadable panel under darkly/vapor.
+ * Colour comes from the theme; see creator-profile.css for why the bg-body-* utilities are off limits. Lift is kept for
+ * the route poster cards, so a tile answers hover with its border instead.
  */
 
+.creator_directory_intro {
+    max-width: 70ch;
+}
+
 .creator_card {
-    color: inherit;
-    transition: transform 0.12s ease-in-out;
+    border: 1px solid transparent;
+    transition: border-color 0.12s ease;
 }
 
 .creator_card:hover,
 .creator_card:focus-visible {
-    color: inherit;
-    transform: translateY(-2px);
+    border-color: rgba(128, 128, 128, 0.5);
+}
+
+.creator_card:focus-visible {
+    outline: 2px solid var(--theme-btn-accent);
+    outline-offset: 2px;
 }
 
 .creator_card_avatar,
 .creator_card_initials {
     width: 72px;
     height: 72px;
+    border: 2px solid rgba(128, 128, 128, 0.35);
     border-radius: 50%;
     object-fit: cover;
+    transition: border-color 0.12s ease;
 }
 
+.creator_card:hover .creator_card_avatar,
+.creator_card:focus-visible .creator_card_avatar,
+.creator_card:hover .creator_card_initials,
+.creator_card:focus-visible .creator_card_initials {
+    border-color: var(--theme-btn-accent);
+}
+
+/* The creator rail's neutral disc: bg-secondary is light under lux, so white initials on it are unreadable */
 .creator_card_initials {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-left: auto;
     margin-right: auto;
+    background-color: rgba(128, 128, 128, 0.25);
+    color: var(--theme-text-contrast);
     font-size: 1.5rem;
     font-weight: 600;
     line-height: 1;
 }
 
+/* Colours are stated on the children: each theme's link rule outweighs any colour set on the tile itself */
 .creator_card_name {
+    color: var(--theme-text-contrast);
     font-weight: 600;
     word-break: break-word;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .creator_card {
+    .creator_card,
+    .creator_card_avatar,
+    .creator_card_initials {
         transition: none;
-    }
-
-    .creator_card:hover,
-    .creator_card:focus-visible {
-        transform: none;
     }
 }

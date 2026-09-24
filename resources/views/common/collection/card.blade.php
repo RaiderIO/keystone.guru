@@ -34,7 +34,7 @@ $coverUrls = $dungeonRoutes
     <span class="collection_card_scrim">
         <span class="collection_card_top">
             @if($dungeonRouteCollection->dungeonRouteCollectionCategory !== null)
-                <span class="badge bg-info">
+                <span class="badge text-bg-primary">
                     {{ $dungeonRouteCollection->dungeonRouteCollectionCategory->getTranslatedName() }}
                 </span>
             @endif

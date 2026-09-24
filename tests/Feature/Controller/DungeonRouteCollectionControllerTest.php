@@ -1615,6 +1615,116 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function index_givenFeatureActive_rendersThePageTitleAsTheOnlyH1(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('collections.index'));
+
+            // Assert
+            $response->assertOk();
+            $content = (string)$response->getContent();
+            $this->assertSame(1, substr_count($content, '<h1'));
+            $this->assertStringContainsString(sprintf('<h1 class="h4">%s</h1>', e(__('view_collection.index.header'))), $content);
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function savenew_givenAFailedValidation_describesTheNameWithItsError(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act - no name
+            $response = $this->actingAs($creator)
+                ->from(route('collections.new'))
+                ->followingRedirects()
+                ->post(route('collections.savenew'), [
+                    'published_state' => PublishedState::UNPUBLISHED,
+                ]);
+
+            // Assert
+            $response->assertOk();
+            $content = (string)$response->getContent();
+            $this->assertMatchesRegularExpression('/<input[^>]*id="name"[^>]*\srequired/', $content);
+            $this->assertMatchesRegularExpression('/<input[^>]*id="name"[^>]*aria-invalid="true"/', $content);
+            $this->assertMatchesRegularExpression('/<input[^>]*id="name"[^>]*aria-describedby="name_error"/', $content);
+            $this->assertStringContainsString('id="name_error"', $content);
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenACollectionNotVisibleToATeam_hidesTheTeamField(): void
+    {
+        // Arrange
+        $creator                = $this->createCreator();
+        $team                   = $this->createTeamFor($creator);
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+        ]);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)
+                ->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertMatchesRegularExpression('/<div id="collection_team_field"[^>]*\shidden\s*>/', (string)$response->getContent());
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $this->deleteTeam($team);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenACollectionVisibleToATeam_showsTheTeamField(): void
+    {
+        // Arrange
+        $creator                = $this->createCreator();
+        $team                   = $this->createTeamFor($creator);
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'team_id'            => $team->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
+        ]);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)
+                ->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+            // Assert
+            $response->assertOk();
+            $content = (string)$response->getContent();
+            $this->assertStringContainsString('<div id="collection_team_field"', $content);
+            $this->assertDoesNotMatchRegularExpression('/<div id="collection_team_field"[^>]*\shidden\s*>/', $content);
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $this->deleteTeam($team);
+            $creator->delete();
+        }
+    }
+
     private function createCreator(): User
     {
         $user = User::factory()->create();

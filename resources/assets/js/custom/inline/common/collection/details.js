@@ -4,12 +4,19 @@
  @property {string} loadingSelector        Shown while the section is being rebuilt.
  @property {string} errorSelector          Shown when rebuilding the section failed.
  @property {string} seasonSelector         The season radios; absent on a game version without seasons.
- @property {string} formUrl                The new-collection form, which renders the section for the season_id it is given.
+ @property {string|null} formUrl           The new-collection form, which renders the section for the season_id it is given.
+                                           Null for an existing collection, whose season cannot be switched.
  @property {string} seasonNone             The season_id value that asks for a free-form collection.
  @property {Object} formUrlParams          Query the form is rebuilt with, next to the season: the route or tag the collection starts from.
+ @property {string} publishedStateSelector The visibility select.
+ @property {string} teamPublishedState     The visibility that shares the collection with a team.
+ @property {string} teamFieldSelector      The team field, only shown for that visibility; absent when the user has no team.
+ @property {string|null} deleteFormSelector The form deleting the collection; null for a new one.
  */
 
 /**
+ * The details form of a collection.
+ *
  * The season a new collection is created for: the routes section covers the season's dungeons and offers only its
  * routes, so picking another season rebuilds the section from the server rather than the whole page - the details
  * filled in so far stay as they are.
@@ -23,7 +30,39 @@ class CommonCollectionDetails extends InlineCode {
 
         this._requestCount = 0;
 
-        $(this.options.seasonSelector).on('change', this._onSeasonChanged.bind(this));
+        if (this.options.formUrl) {
+            $(this.options.seasonSelector).on('change', this._onSeasonChanged.bind(this));
+        }
+
+        $(this.options.publishedStateSelector).on('change', this._refreshTeamField.bind(this));
+        this._refreshTeamField();
+
+        if (this.options.deleteFormSelector) {
+            $(this.options.deleteFormSelector).on('submit', this._onDeleteSubmit.bind(this));
+        }
+    }
+
+    /**
+     * @private
+     */
+    _refreshTeamField() {
+        let isTeam = $(this.options.publishedStateSelector).val() === this.options.teamPublishedState;
+
+        $(this.options.teamFieldSelector).prop('hidden', !isTeam);
+    }
+
+    /**
+     * @param {Event} event
+     * @private
+     */
+    _onDeleteSubmit(event) {
+        event.preventDefault();
+
+        let form = event.currentTarget;
+        showConfirmYesCancel(lang.get('js.collection_delete_confirm'), function () {
+            // The native submit skips this handler, so the confirmed delete goes through
+            form.submit();
+        });
     }
 
     /**

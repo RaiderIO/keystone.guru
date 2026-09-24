@@ -27,6 +27,17 @@
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
 }
 
+.collection_index_intro {
+    max-width: 70ch;
+}
+
+/* Darkly compiles the table background from its navy $body-bg; the site's tables sit on the card surface instead.
+   Each theme scopes its .table rule under .theme.<name>, which a single class does not outweigh. */
+.theme table.table.collection_index_table {
+    --bs-table-bg: var(--theme-bg-card);
+    min-width: 40rem;
+}
+
 .collection_season_icon {
     width: auto;
     height: 16px;

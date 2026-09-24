@@ -339,7 +339,7 @@ class ProfileController extends Controller
 
         Session::flash('status', __('controller.profile.flash.creator_profile_updated'));
 
-        return redirect()->route('profile.edit');
+        return redirect()->to(sprintf('%s#creator', route('profile.edit')));
     }
 
     /**

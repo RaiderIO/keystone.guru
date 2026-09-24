@@ -17,6 +17,10 @@ const OPTIONS = {
     seasonSelector:  'input[name="season_id"]',
     formUrl:         'http://localhost/collections/new',
     seasonNone:      'none',
+    publishedStateSelector: '#published_state',
+    teamPublishedState:     'team',
+    teamFieldSelector:      '#collection_team_field',
+    deleteFormSelector:     '#collection_delete_form',
 };
 
 describe('CommonCollectionDetails', () => {
@@ -24,6 +28,8 @@ describe('CommonCollectionDetails', () => {
     let previousFetch;
     let previousInlineManager;
     let previousRefreshSelectPickers;
+    let previousShowConfirmYesCancel;
+    let previousLang;
     let fetchedUrls;
     let resolveFetch;
 
@@ -32,6 +38,10 @@ describe('CommonCollectionDetails', () => {
         previousFetch               = globalThis.fetch;
         previousInlineManager       = globalThis._inlineManager;
         previousRefreshSelectPickers = globalThis.refreshSelectPickers;
+        previousShowConfirmYesCancel = globalThis.showConfirmYesCancel;
+        previousLang                 = globalThis.lang;
+        globalThis.showConfirmYesCancel = vi.fn();
+        globalThis.lang                 = {get: (key) => key};
         globalThis.$                = jQuery;
         fetchedUrls                 = [];
         globalThis.fetch            = (url) => {
@@ -55,7 +65,13 @@ describe('CommonCollectionDetails', () => {
                     <input type="radio" name="season_id" id="s_18" value="18" checked>
                     <input type="radio" name="season_id" id="s_none" value="">
                 </fieldset>
-            </form>`;
+                <select id="published_state">
+                    <option value="unpublished" selected>Only me</option>
+                    <option value="team">Team</option>
+                </select>
+                <div id="collection_team_field"></div>
+            </form>
+            <form id="collection_delete_form"></form>`;
 
         new CommonCollectionDetails('details', 'common/collection/details', OPTIONS).activate();
     });
@@ -65,6 +81,9 @@ describe('CommonCollectionDetails', () => {
         globalThis.fetch                = previousFetch;
         globalThis._inlineManager       = previousInlineManager;
         globalThis.refreshSelectPickers = previousRefreshSelectPickers;
+        globalThis.showConfirmYesCancel = previousShowConfirmYesCancel;
+        globalThis.lang                 = previousLang;
+        vi.restoreAllMocks();
         document.body.innerHTML = '';
     });
 
@@ -162,5 +181,69 @@ describe('CommonCollectionDetails', () => {
         expect(document.querySelector('#collection_routes_error').hidden).toBe(false);
         expect(document.querySelector('#collection_routes_loading').hidden).toBe(true);
         expect(document.querySelector('#collection_routes')).not.toBeNull();
+    });
+
+    it('onSeasonChanged_givenAnExistingCollection_leavesTheSectionAlone', () => {
+        // Arrange
+        document.body.querySelectorAll('input[name="season_id"]').forEach((input) => jQuery(input).off('change'));
+        new CommonCollectionDetails('details_existing', 'common/collection/details', {
+            ...OPTIONS,
+            formUrl: null,
+        }).activate();
+        document.querySelector('#s_17').checked = true;
+
+        // Act
+        jQuery('#s_17').trigger('change');
+
+        // Assert
+        expect(fetchedUrls).toEqual([]);
+    });
+
+    it('activate_givenAVisibilityOtherThanTeam_hidesTheTeamField', () => {
+        // Arrange (activated in beforeEach with "Only me" selected)
+
+        // Act
+        const hidden = document.querySelector('#collection_team_field').hidden;
+
+        // Assert
+        expect(hidden).toBe(true);
+    });
+
+    it('refreshTeamField_givenTeamVisibilityPicked_showsTheTeamField', () => {
+        // Arrange
+        jQuery('#published_state').val('team');
+
+        // Act
+        jQuery('#published_state').trigger('change');
+
+        // Assert
+        expect(document.querySelector('#collection_team_field').hidden).toBe(false);
+    });
+
+    it('onDeleteSubmit_givenTheDeleteIsSubmitted_asksForConfirmationInsteadOfDeleting', () => {
+        // Arrange
+        const submit = vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(() => {});
+        const event  = new Event('submit', {cancelable: true});
+
+        // Act
+        document.querySelector('#collection_delete_form').dispatchEvent(event);
+
+        // Assert
+        expect(event.defaultPrevented).toBe(true);
+        expect(globalThis.showConfirmYesCancel).toHaveBeenCalledWith('js.collection_delete_confirm', expect.any(Function));
+        expect(submit).not.toHaveBeenCalled();
+    });
+
+    it('onDeleteSubmit_givenTheDeleteIsConfirmed_submitsTheForm', () => {
+        // Arrange
+        const submit = vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(() => {});
+        document.querySelector('#collection_delete_form').dispatchEvent(new Event('submit', {cancelable: true}));
+        const confirmDelete = globalThis.showConfirmYesCancel.mock.calls[0][1];
+
+        // Act
+        confirmDelete();
+
+        // Assert
+        expect(submit).toHaveBeenCalledTimes(1);
     });
 });

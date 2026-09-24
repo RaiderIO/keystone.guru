@@ -51,6 +51,17 @@ $teamOptions = [null => __('view_common.collection.details.team_none')];
 foreach ($teams as $team) {
     $teamOptions[$team->id] = $team->name;
 }
+
+/**
+ * The help text and, when the field failed validation, its error message - what a field's aria-describedby lists.
+ */
+$describedBy = static fn(string $key, ?string $helpId = null): string => trim(sprintf(
+    '%s %s',
+    $helpId ?? '',
+    $errors->has($key) ? sprintf('%s_error', $key) : '',
+));
+
+$selectedPublishedState = old('published_state', $dungeonRouteCollection?->getPublishedStateName() ?? PublishedState::UNPUBLISHED);
 ?>
 
 @isset($dungeonRouteCollection)
@@ -61,8 +72,13 @@ foreach ($teams as $team) {
 
 <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
     {{ html()->label(__('view_common.collection.details.name') . '<span class="form-required">*</span>', 'name') }}
-    {{ html()->text('name', $dungeonRouteCollection?->name ?? $prefillName)->class('form-control')->attribute('maxlength', 128) }}
-    @include('common.forms.form-error', ['key' => 'name'])
+    {{ html()->text('name', $dungeonRouteCollection?->name ?? $prefillName)
+        ->class('form-control')
+        ->attribute('maxlength', 128)
+        ->required()
+        ->attributeIf($errors->has('name'), 'aria-invalid', 'true')
+        ->attributeIf($errors->has('name'), 'aria-describedby', $describedBy('name')) }}
+    @include('common.forms.form-error', ['key' => 'name', 'errorId' => 'name_error'])
 </div>
 
 <div class="mb-3{{ $errors->has('description') ? ' has-error' : '' }}">
@@ -70,8 +86,10 @@ foreach ($teams as $team) {
     {{ html()->textarea('description', $dungeonRouteCollection?->description ?? $prefillDescription)
         ->class('form-control')
         ->rows(3)
-        ->attribute('maxlength', 1000) }}
-    @include('common.forms.form-error', ['key' => 'description'])
+        ->attribute('maxlength', 1000)
+        ->attributeIf($errors->has('description'), 'aria-invalid', 'true')
+        ->attributeIf($errors->has('description'), 'aria-describedby', $describedBy('description')) }}
+    @include('common.forms.form-error', ['key' => 'description', 'errorId' => 'description_error'])
 </div>
 
 @if($isNew)
@@ -106,11 +124,13 @@ foreach ($teams as $team) {
 
 <div class="mb-3{{ $errors->has('category_id') ? ' has-error' : '' }}">
     {{ html()->label(__('view_common.collection.details.category'), 'category_id') }}
-    {{ html()->select('category_id', $categoryOptions, $dungeonRouteCollection?->dungeon_route_collection_category_id)->class('form-select') }}
-    <small class="form-text text-body-secondary">
+    {{ html()->select('category_id', $categoryOptions, $dungeonRouteCollection?->dungeon_route_collection_category_id)
+        ->class('form-select')
+        ->attribute('aria-describedby', $describedBy('category_id', 'category_id_help')) }}
+    <small id="category_id_help" class="form-text text-body-secondary">
         {{ __('view_common.collection.details.category_help') }}
     </small>
-    @include('common.forms.form-error', ['key' => 'category_id'])
+    @include('common.forms.form-error', ['key' => 'category_id', 'errorId' => 'category_id_error'])
 </div>
 
 <div class="mb-3{{ $errors->has('published_state') ? ' has-error' : '' }}">
@@ -120,39 +140,46 @@ foreach ($teams as $team) {
         'name' => 'published_state',
         'publishedStates' => DungeonRouteCollection::AVAILABLE_PUBLISHED_STATES,
         'availablePublishedStates' => $availablePublishedStates,
-        'selected' => old('published_state', $dungeonRouteCollection?->getPublishedStateName() ?? PublishedState::UNPUBLISHED),
+        'selected' => $selectedPublishedState,
         'subtexts' => collect(DungeonRouteCollection::AVAILABLE_PUBLISHED_STATES)->mapWithKeys(static fn(string $publishedState): array => [
             $publishedState => __(sprintf('view_collection.published_state_subtext.%s', $publishedState)),
         ])->all(),
     ])
-    <small class="form-text text-body-secondary">
+    <small id="published_state_help" class="form-text text-body-secondary">
         {{ __('view_common.collection.details.published_state_help') }}
     </small>
-    @include('common.forms.form-error', ['key' => 'published_state'])
+    @include('common.forms.form-error', ['key' => 'published_state', 'errorId' => 'published_state_error'])
 </div>
 
 @if($teams->isNotEmpty())
-    <div class="mb-3{{ $errors->has('team_id') ? ' has-error' : '' }}">
+    {{-- Only a collection visible to a team has a team to pick --}}
+    <div id="collection_team_field" class="mb-3{{ $errors->has('team_id') ? ' has-error' : '' }}"
+         @if($selectedPublishedState !== PublishedState::TEAM) hidden @endif>
         {{ html()->label(__('view_common.collection.details.team'), 'team_id') }}
-        {{ html()->select('team_id', $teamOptions, $dungeonRouteCollection?->team_id)->class('form-select') }}
-        <small class="form-text text-body-secondary">
+        {{ html()->select('team_id', $teamOptions, $dungeonRouteCollection?->team_id)
+            ->class('form-select')
+            ->attribute('aria-describedby', $describedBy('team_id', 'team_id_help')) }}
+        <small id="team_id_help" class="form-text text-body-secondary">
             {{ __('view_common.collection.details.team_help') }}
         </small>
-        @include('common.forms.form-error', ['key' => 'team_id'])
+        @include('common.forms.form-error', ['key' => 'team_id', 'errorId' => 'team_id_error'])
     </div>
 @endif
 
-@if($isNew)
 @include('common.general.inline', ['path' => 'common/collection/details', 'options' => [
     'dungeonRoutesSelector' => '#collection_routes',
     'loadingSelector' => '#collection_routes_loading',
     'errorSelector' => '#collection_routes_error',
     'seasonSelector' => 'input[name="season_id"]',
-    'formUrl' => route('collections.new'),
+    // Only a new collection's season can be switched to another one
+    'formUrl' => $isNew ? route('collections.new') : null,
     'seasonNone' => DungeonRouteCollectionCreateFormRequest::SEASON_NONE,
     'formUrlParams' => $formUrlParams,
+    'publishedStateSelector' => '#published_state',
+    'teamPublishedState' => PublishedState::TEAM,
+    'teamFieldSelector' => '#collection_team_field',
+    'deleteFormSelector' => $isNew ? null : sprintf('#%s', $deleteFormId),
 ]])
-@endif
 
 {{ html()->closeModelForm() }}
 
@@ -166,14 +193,14 @@ foreach ($teams as $team) {
     @if($isNew && !$mayCreateCollection)
         {{ html()->input('submit')
             ->value(__('view_common.collection.details.submit'))
-            ->class('btn btn-info')
+            ->class('btn btn-primary')
             ->attribute('form', $formId)
             ->disabled()
             ->attribute('aria-describedby', 'collection_max_collections') }}
     @else
         {{ html()->input('submit')
             ->value($dungeonRouteCollection !== null ? __('view_common.collection.details.save') : __('view_common.collection.details.submit'))
-            ->class('btn btn-info')
+            ->class('btn btn-primary')
             ->attribute('form', $formId) }}
     @endif
     @isset($dungeonRouteCollection)

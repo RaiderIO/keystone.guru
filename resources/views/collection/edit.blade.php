@@ -45,12 +45,12 @@ $publishRoutesConfirmState = $publishRoutesConfirm !== null
 @section('header-addition')
     @if($mayDuplicate)
         <button type="button" class="btn btn-secondary float-end ms-2" data-bs-toggle="modal" data-bs-target="#duplicate_collection_modal">
-            <i class="fas fa-clone"></i> {{ __('view_collection.edit.duplicate') }}
+            <i class="fas fa-clone" aria-hidden="true"></i> {{ __('view_collection.edit.duplicate') }}
         </button>
     @endif
     <a href="{{ route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]) }}"
-       class="btn btn-info float-end" role="button">
-        <i class="fas fa-external-link-alt"></i> {{ __('view_collection.edit.view_collection') }}
+       class="btn btn-primary float-end" role="button">
+        <i class="fas fa-external-link-alt" aria-hidden="true"></i> {{ __('view_collection.edit.view_collection') }}
     </a>
 @endsection
 
@@ -79,9 +79,9 @@ $publishRoutesConfirmState = $publishRoutesConfirm !== null
                 {{ __('view_collection.edit.duplicate_keeps', ['kept' => $duplicateMatchingCounts[$duplicateSelectedSeasonId] ?? 0, 'total' => $duplicateTotal]) }}
             </p>
             @if($mayCreateCollection)
-                {{ html()->input('submit')->value(__('view_collection.edit.duplicate_submit'))->class('btn btn-info') }}
+                {{ html()->input('submit')->value(__('view_collection.edit.duplicate_submit'))->class('btn btn-primary') }}
             @else
-                {{ html()->input('submit')->value(__('view_collection.edit.duplicate_submit'))->class('btn btn-info')->disabled()->attribute('aria-describedby', 'duplicate_collection_max') }}
+                {{ html()->input('submit')->value(__('view_collection.edit.duplicate_submit'))->class('btn btn-primary')->disabled()->attribute('aria-describedby', 'duplicate_collection_max') }}
                 <p id="duplicate_collection_max" class="text-warning mt-2 mb-0">
                     {{ __('view_collection.index.max_collections', ['max' => DungeonRouteCollection::MAX_COLLECTIONS]) }}
                 </p>

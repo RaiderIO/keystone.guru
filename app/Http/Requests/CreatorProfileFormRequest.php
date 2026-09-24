@@ -190,4 +190,12 @@ class CreatorProfileFormRequest extends FormRequest
                 ->values();
         });
     }
+
+    /**
+     * Back to the Creator tab rather than the page's first tab, where the errors would be out of sight.
+     */
+    protected function getRedirectUrl(): string
+    {
+        return sprintf('%s#creator', route('profile.edit'));
+    }
 }
