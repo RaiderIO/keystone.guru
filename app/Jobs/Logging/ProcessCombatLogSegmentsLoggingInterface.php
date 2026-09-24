@@ -10,7 +10,27 @@ interface ProcessCombatLogSegmentsLoggingInterface
 
     public function handleDownloadingSegment(int $runId, int $segmentId, string $downloadUrl, string $tempPath): void;
 
-    public function handleSegmentDownloadFailed(int $runId, int $segmentId, string $tempPath): void;
+    public function handleSegmentUrlExpiredRefetching(int $runId, int $segmentId, int $httpCode, int $curlErrorNumber): void;
+
+    public function handleSegmentDownloadFailed(
+        int     $runId,
+        int     $segmentId,
+        string  $tempPath,
+        int     $httpCode,
+        int     $curlErrorNumber,
+        string  $curlError,
+        float   $durationSeconds,
+        ?string $urlHost,
+    ): void;
+
+    public function handleSegmentPermanentlyUndownloadable(
+        int     $runId,
+        int     $segmentId,
+        int     $httpCode,
+        int     $curlErrorNumber,
+        string  $curlError,
+        ?string $urlHost,
+    ): void;
 
     public function handleSegmentIsNotACombatLog(int $runId, int $segmentId, string $tempPath): void;
 

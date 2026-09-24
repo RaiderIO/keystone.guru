@@ -21,6 +21,12 @@ enum CombatLogPollingFailureReason: string
     case SegmentsUnavailable = 'segments_unavailable';
 
     /**
+     * A segment failed to download in a way no retry fixes - a body that cannot be decoded, or a 4xx
+     * other than an expired or denied signature - so the run was skipped without retrying.
+     */
+    case SegmentUndownloadable = 'segment_undownloadable';
+
+    /**
      * The job gave up after exhausting its retries. Chiefly a segment that could not be downloaded or
      * wasn't a combat log at all, but also whatever infrastructure blip took the last attempt down.
      */
