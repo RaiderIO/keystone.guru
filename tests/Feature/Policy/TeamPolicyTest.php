@@ -48,7 +48,7 @@ final class TeamPolicyTest extends PublicTestCase
             // Act & Assert
             $this->assertSame($expected, $this->policy->changeRole($actor, $team->fresh(), $target, $newRole));
         } finally {
-            $this->deleteTeam($team);
+            $team->delete();
             $target->delete();
             $actor->delete();
         }
@@ -84,7 +84,7 @@ final class TeamPolicyTest extends PublicTestCase
                 $this->policy->changeRole($outsider, $team->fresh(), $target, TeamUser::ROLE_MODERATOR),
             );
         } finally {
-            $this->deleteTeam($team);
+            $team->delete();
             $target->delete();
             $outsider->delete();
         }
@@ -102,7 +102,7 @@ final class TeamPolicyTest extends PublicTestCase
             // Act & Assert
             $this->assertTrue($this->policy->moderateRoute($user, $team->fresh()));
         } finally {
-            $this->deleteTeam($team);
+            $team->delete();
             $user->delete();
         }
     }
@@ -119,7 +119,7 @@ final class TeamPolicyTest extends PublicTestCase
             // Act & Assert - AjaxTeamController used to repeat this check inline after the gate
             $this->assertFalse($this->policy->moderateRoute($user, $team->fresh()));
         } finally {
-            $this->deleteTeam($team);
+            $team->delete();
             $user->delete();
         }
     }
@@ -143,14 +143,5 @@ final class TeamPolicyTest extends PublicTestCase
             'user_id' => $user->id,
             'role'    => $role,
         ]);
-    }
-
-    /**
-     * Team's "deleting" hook walks members->patreonAdFreeGiveaway, which trips preventLazyLoading
-     * unless the chain is eager-loaded first.
-     */
-    private function deleteTeam(Team $team): void
-    {
-        $team->load('members.patreonAdFreeGiveaway')->delete();
     }
 }

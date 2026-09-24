@@ -53,9 +53,7 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     protected function tearDown(): void
     {
         try {
-            // Team's "deleting" hook walks members->patreonAdFreeGiveaway, which trips
-            // preventLazyLoading unless the chain is eager-loaded first.
-            $this->team->load('members.patreonAdFreeGiveaway')->delete();
+            $this->team->delete();
             $this->member->delete();
             $this->moderator->delete();
         } finally {
@@ -292,7 +290,7 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
             $this->assertSame($otherTeam->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
         } finally {
             $dungeonRoute->delete();
-            $otherTeam->load('members.patreonAdFreeGiveaway')->delete();
+            $otherTeam->delete();
         }
     }
 
@@ -330,7 +328,7 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
             $this->assertSame($otherTeam->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
         } finally {
             $dungeonRoute->delete();
-            $otherTeam->load('members.patreonAdFreeGiveaway')->delete();
+            $otherTeam->delete();
         }
     }
 

@@ -51,9 +51,7 @@ final class AjaxTeamControllerAddRoutesTest extends AjaxPublicTestCase
     protected function tearDown(): void
     {
         try {
-            // Team's "deleting" hook walks members->patreonAdFreeGiveaway, which trips
-            // preventLazyLoading unless the chain is eager-loaded first.
-            $this->team->load('members.patreonAdFreeGiveaway')->delete();
+            $this->team->delete();
             $this->member->delete();
             $this->moderator->delete();
         } finally {
@@ -202,7 +200,7 @@ final class AjaxTeamControllerAddRoutesTest extends AjaxPublicTestCase
         } finally {
             $memberRoute->delete();
             $otherTeamsRoute->delete();
-            $otherTeam->load('members.patreonAdFreeGiveaway')->delete();
+            $otherTeam->delete();
         }
     }
 

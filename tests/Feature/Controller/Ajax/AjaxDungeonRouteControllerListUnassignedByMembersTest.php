@@ -53,7 +53,7 @@ final class AjaxDungeonRouteControllerListUnassignedByMembersTest extends AjaxPu
     protected function tearDown(): void
     {
         try {
-            $this->team->load('members.patreonAdFreeGiveaway')->delete();
+            $this->team->delete();
             $this->member->delete();
             $this->moderator->delete();
         } finally {
@@ -115,7 +115,7 @@ final class AjaxDungeonRouteControllerListUnassignedByMembersTest extends AjaxPu
             $onOtherTeam->delete();
             $byOutsider->delete();
             $unpublished->delete();
-            $otherTeam->load('members.patreonAdFreeGiveaway')->delete();
+            $otherTeam->delete();
             $outsider->delete();
         }
     }
