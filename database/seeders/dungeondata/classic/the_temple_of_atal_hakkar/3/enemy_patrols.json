@@ -40,5 +40,47 @@
             "vertices_json": "[{\"lat\":-28.7512,\"lng\":158.4397},{\"lat\":-36.2558,\"lng\":155.7922},{\"lat\":-43.148,\"lng\":160.0998},{\"lat\":-40.9942,\"lng\":162.7562},{\"lat\":-35.3225,\"lng\":158.5922},{\"lat\":-29.2918,\"lng\":160.8896}]"
         },
         "mdt_polyline": null
+    },
+    {
+        "id": 22545,
+        "mapping_version_id": 1084,
+        "floor_id": 244,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#c41f3b",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-125.033,\"lng\":133.2246},{\"lat\":-127.7313,\"lng\":132.5126},{\"lat\":-122.9799,\"lng\":111.9223},{\"lat\":-101.3353,\"lng\":119.7549},{\"lat\":-107.9635,\"lng\":140.2265},{\"lat\":-110.8964,\"lng\":139.099},{\"lat\":-104.972,\"lng\":121.001},{\"lat\":-121.0443,\"lng\":115.1265},{\"lat\":-125.0916,\"lng\":133.1652}]"
+        },
+        "mdt_polyline": null
+    },
+    {
+        "id": 22546,
+        "mapping_version_id": 1084,
+        "floor_id": 244,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#c41f3b",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-98.9773,\"lng\":263.0112},{\"lat\":-102.267,\"lng\":227.8452},{\"lat\":-124.5831,\"lng\":228.2048},{\"lat\":-127.0724,\"lng\":263.3711},{\"lat\":-124.0358,\"lng\":263.4115},{\"lat\":-121.7482,\"lng\":230.835},{\"lat\":-104.6676,\"lng\":230.5432},{\"lat\":-101.5111,\"lng\":263.3521},{\"lat\":-98.9302,\"lng\":262.996}]"
+        },
+        "mdt_polyline": null
+    },
+    {
+        "id": 22547,
+        "mapping_version_id": 1084,
+        "floor_id": 244,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-55.0564,\"lng\":127.4729},{\"lat\":-69.1429,\"lng\":122.4459},{\"lat\":-82.0799,\"lng\":130.6251},{\"lat\":-78.0371,\"lng\":135.6691},{\"lat\":-67.391,\"lng\":127.7625},{\"lat\":-56.0711,\"lng\":132.1248}]"
+        },
+        "mdt_polyline": null
     }
 ]
