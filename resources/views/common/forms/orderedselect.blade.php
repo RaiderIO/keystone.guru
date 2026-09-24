@@ -17,7 +17,7 @@
  * @var array<int, array{text: string, isWarning?: bool}> $optionDetails Optional secondary text per option id, shown
  *                                                                      next to its label; a warning is flagged.
  * @var string|null        $detailWarningText Read out (and shown on hover) for a flagged detail.
- * @var string|null        $countText    The counter's text, with :count and :max; defaults to "n / max".
+ * @var bool               $showCountMax Whether the counter reads "n / max" rather than just "n".
  * @var bool               $ajax         Changes are reported to the host page as events instead of being posted with a
  *                                       form; the add select makes way for a button the host page wires up.
  * @var string|null        $addLabel     Text of that button (ajax mode).
@@ -36,8 +36,7 @@ $ajax       ??= false;
 $addLabel   ??= __('view_common.forms.orderedselect.add');
 $showCount  ??= true;
 $showAdd    ??= true;
-
-$countText ??= __('view_common.forms.orderedselect.count');
+$showCountMax ??= true;
 
 $selectedIds = array_values(array_filter($selectedIds, static fn(int|string $selectedId): bool => isset($options[$selectedId])));
 $fullCount   ??= count($selectedIds);
@@ -62,14 +61,7 @@ $inlineOptions = [
     'rootSelector'      => sprintf('#%s', $id),
     'fullCount'         => $ajax ? $fullCount : null,
     'itemMax'           => $itemMax,
-    'fullText'          => __('view_common.forms.orderedselect.full'),
-    'countText'         => $countText,
-    'moveUpText'        => __('view_common.forms.orderedselect.move_up'),
-    'moveDownText'      => __('view_common.forms.orderedselect.move_down'),
-    'removeText'        => __('view_common.forms.orderedselect.remove'),
-    'addedStatusText'   => __('view_common.forms.orderedselect.added_status'),
-    'movedStatusText'   => __('view_common.forms.orderedselect.moved_status'),
-    'removedStatusText' => __('view_common.forms.orderedselect.removed_status'),
+    'showCountMax'      => $showCountMax,
 ];
 ?>
 {{-- The data-inline-* attributes let a script activate this control again after swapping it into the page --}}
@@ -81,7 +73,7 @@ $inlineOptions = [
         </label>
         @if($showCount)
             <span id="{{ $id }}_count" class="ordered_select_count text-body-secondary ms-auto">
-                {{ str_replace([':count', ':max'], [count($selectedIds), $max], $countText) }}
+                {{ $showCountMax ? __('js.orderedselect_count', ['count' => count($selectedIds), 'max' => $max]) : count($selectedIds) }}
             </span>
         @endif
     </div>
@@ -130,7 +122,7 @@ $inlineOptions = [
 
     <small id="{{ $helpId }}" class="form-text text-body-secondary d-block">
         <span id="{{ $id }}_full" @if(!$isFull) hidden @endif>
-            {{ __('view_common.forms.orderedselect.full', ['max' => $isListFull ? $max : $itemMax]) }}
+            {{ __('js.orderedselect_full', ['max' => $isListFull ? $max : $itemMax]) }}
         </span>
         @if($help !== null)
             {{ $help }}

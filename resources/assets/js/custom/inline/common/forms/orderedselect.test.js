@@ -10,6 +10,7 @@
 // ---------------------------------------------------------------------------
 
 const jQuery = require('jquery');
+const Lang   = require('lang.js');
 
 const {InlineCode}    = require('../../inlinecode');
 globalThis.InlineCode = InlineCode;
@@ -26,13 +27,19 @@ const OPTIONS = {
     fullSelector:      '#routes_full',
     statusSelector:    '#routes_status',
     max:               3,
-    countText:         ':count / :max',
-    moveUpText:        'Move :name up',
-    moveDownText:      'Move :name down',
-    removeText:        'Remove :name',
-    addedStatusText:   'Added :name at position :position',
-    movedStatusText:   'Moved :name to position :position',
-    removedStatusText: 'Removed :name',
+};
+
+const MESSAGES = {
+    'en.js': {
+        orderedselect_count:          ':count / :max',
+        orderedselect_move_up:        'Move :name up',
+        orderedselect_move_down:      'Move :name down',
+        orderedselect_remove:         'Remove :name',
+        orderedselect_added_status:   'Added :name at position :position',
+        orderedselect_moved_status:   'Moved :name to position :position',
+        orderedselect_removed_status: 'Removed :name',
+        orderedselect_full:           'Full (maximum :max)',
+    },
 };
 
 /**
@@ -60,10 +67,13 @@ function itemHtml(id, name) {
 
 describe('CommonFormsOrderedselect', () => {
     let previousJquery;
+    let previousLang;
 
     beforeEach(() => {
-        previousJquery = globalThis.$;
-        globalThis.$   = jQuery;
+        previousJquery  = globalThis.$;
+        previousLang    = globalThis.lang;
+        globalThis.$    = jQuery;
+        globalThis.lang = new Lang({messages: MESSAGES, locale: 'en'});
 
         document.body.innerHTML = `
             <form>
@@ -90,6 +100,7 @@ describe('CommonFormsOrderedselect', () => {
 
     afterEach(() => {
         globalThis.$            = previousJquery;
+        globalThis.lang         = previousLang;
         document.body.innerHTML = '';
     });
 
@@ -126,6 +137,8 @@ describe('CommonFormsOrderedselect', () => {
         expect([...document.querySelectorAll('.ordered_select_position')].map((el) => el.textContent)).toEqual(['1', '2']);
         expect(itemNamed('Bravo').querySelector('.ordered_select_up').disabled).toBe(true);
         expect(itemNamed('Alpha').querySelector('.ordered_select_down').disabled).toBe(true);
+        expect(itemNamed('Bravo').querySelector('.ordered_select_up').getAttribute('aria-label')).toBe('Move Bravo up');
+        expect(itemNamed('Bravo').querySelector('.ordered_select_down').getAttribute('aria-label')).toBe('Move Bravo down');
         expect(itemNamed('Bravo').querySelector('.ordered_select_remove').getAttribute('aria-label')).toBe('Remove Bravo');
         expect(document.querySelector('#routes_count').textContent).toBe('2 / 3');
     });
@@ -277,11 +290,14 @@ describe('CommonFormsOrderedselect', () => {
 
 describe('CommonFormsOrderedselect in ajax mode', () => {
     let previousJquery;
+    let previousLang;
     let control;
 
     beforeEach(() => {
-        previousJquery = globalThis.$;
-        globalThis.$   = jQuery;
+        previousJquery  = globalThis.$;
+        previousLang    = globalThis.lang;
+        globalThis.$    = jQuery;
+        globalThis.lang = new Lang({messages: MESSAGES, locale: 'en'});
 
         document.body.innerHTML = `
             <div id="routes">
@@ -303,6 +319,7 @@ describe('CommonFormsOrderedselect in ajax mode', () => {
 
     afterEach(() => {
         globalThis.$            = previousJquery;
+        globalThis.lang         = previousLang;
         document.body.innerHTML = '';
     });
 
@@ -405,6 +422,22 @@ describe('CommonFormsOrderedselect in ajax mode', () => {
         expect(control.getIds()).toEqual(['3', '1']);
     });
 
+    it('refresh_givenShowCountMaxFalse_showsTheBareCount', () => {
+        // Arrange
+        document.body.insertAdjacentHTML('beforeend', '<span id="routes_count"></span>');
+        control = new CommonFormsOrderedselect('routes', 'common/forms/orderedselect', Object.assign({}, OPTIONS, {
+            ajax:         true,
+            rootSelector: '#routes',
+            showCountMax: false,
+        }));
+
+        // Act
+        control.activate();
+
+        // Assert
+        expect(document.querySelector('#routes_count').textContent).toBe('2');
+    });
+
     it('setFullCount_givenTheGroupReachesMax_disablesTheAddButton', () => {
         // Arrange - max is 3 and this list holds only 2
 
@@ -419,7 +452,6 @@ describe('CommonFormsOrderedselect in ajax mode', () => {
     it('addItem_givenTheListReachesItsItemMax_disablesTheAddButtonAndNamesThatMax', () => {
         // Arrange
         control.options.itemMax = 3;
-        control.options.fullText = 'Full (maximum :max)';
 
         // Act
         control.addItem('3', 'Charlie', null);

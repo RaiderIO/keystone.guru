@@ -89,7 +89,7 @@ $orderedSelectOptions = static function (array $section) use (
         'formId'            => $formId,
         'ajax'              => true,
         'showCount'         => $dungeonName !== null,
-        'countText'         => __('view_common.collection.details.dungeon_routes_slot_count'),
+        'showCountMax'      => false,
         'fullCount'         => $collectionDungeonRouteCount,
         'showAdd'           => $mayAddDungeonRoutes && $section['canAdd'],
         'label'             => $dungeonName ?? __('view_common.collection.details.dungeon_routes'),
