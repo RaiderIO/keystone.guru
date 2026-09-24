@@ -10,6 +10,7 @@ use App\Models\Floor\Floor;
 use App\Models\User;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\DungeonRoute\TestDungeonRouteGeneratorServiceInterface;
+use App\Service\DungeonRoute\ThumbnailGenerationToggleServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use Exception;
@@ -20,10 +21,13 @@ use Session;
 
 class AdminToolsController extends Controller
 {
-    public function index(TestDungeonRouteGeneratorServiceInterface $testDungeonRouteGeneratorService): View
-    {
+    public function index(
+        TestDungeonRouteGeneratorServiceInterface $testDungeonRouteGeneratorService,
+        ThumbnailGenerationToggleServiceInterface $thumbnailGenerationToggleService,
+    ): View {
         return view('admin.tools.list', [
             'testDungeonRouteGeneratorAvailable' => $testDungeonRouteGeneratorService->isAvailable(),
+            'thumbnailGenerationPaused'          => $thumbnailGenerationToggleService->isPaused(),
         ]);
     }
 
@@ -97,6 +101,21 @@ class AdminToolsController extends Controller
         } else {
             $readOnlyModeService->setReadOnly(true);
             Session::flash('status', __('controller.admintools.flash.read_only_mode_enabled'));
+        }
+
+        return redirect()->route('admin.tools');
+    }
+
+    public function toggleThumbnailGeneration(
+        Request                                   $request,
+        ThumbnailGenerationToggleServiceInterface $thumbnailGenerationToggleService,
+    ): RedirectResponse {
+        if ($thumbnailGenerationToggleService->isPaused()) {
+            $thumbnailGenerationToggleService->setPaused(false);
+            Session::flash('status', __('controller.admintools.flash.thumbnail_generation_resumed'));
+        } else {
+            $thumbnailGenerationToggleService->setPaused(true);
+            Session::flash('status', __('controller.admintools.flash.thumbnail_generation_paused'));
         }
 
         return redirect()->route('admin.tools');

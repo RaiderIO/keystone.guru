@@ -125,6 +125,8 @@ use App\Service\DungeonRoute\MapDrawingService;
 use App\Service\DungeonRoute\MapDrawingServiceInterface;
 use App\Service\DungeonRoute\TestDungeonRouteGeneratorService;
 use App\Service\DungeonRoute\TestDungeonRouteGeneratorServiceInterface;
+use App\Service\DungeonRoute\ThumbnailGenerationToggleService;
+use App\Service\DungeonRoute\ThumbnailGenerationToggleServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\EnemyForces\EnemyForcesDb2Service;
@@ -331,6 +333,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Depends on CacheService
         $this->app->bind(ReadOnlyModeServiceInterface::class, ReadOnlyModeService::class);
+        $this->app->bind(ThumbnailGenerationToggleServiceInterface::class, ThumbnailGenerationToggleService::class);
         $this->app->bind(BannedIpAddressServiceInterface::class, BannedIpAddressService::class);
 
         // Depends on CacheService, CoordinatesService

@@ -317,6 +317,17 @@
                        href="{{ route('admin.tools.datadump.exportdungeondata') }}">{{ __('view_admin.tools.list.export_dungeon_data') }}</a>
                     <a class="btn btn-danger me-2 mb-2"
                        href="{{ route('admin.tools.readonly.toggle') }}">{{ __('view_admin.tools.list.toggle_readonly_mode') }}</a>
+                    {{ html()->form('POST', route('admin.tools.thumbnails.toggle'))->class('d-inline')->open() }}
+                    <button type="submit" class="btn {{ $thumbnailGenerationPaused ? 'btn-success' : 'btn-danger' }} me-2 mb-2">
+                        {{ $thumbnailGenerationPaused ? __('view_admin.tools.list.resume_thumbnail_generation') : __('view_admin.tools.list.pause_thumbnail_generation') }}
+                    </button>
+                    {{ html()->form()->close() }}
+                    <small class="text-muted d-block">{{ __('view_admin.tools.list.toggle_thumbnail_generation_description') }}</small>
+                    @if($thumbnailGenerationPaused)
+                        <div class="alert alert-warning mt-2 mb-0">
+                            <i class="fas fa-pause"></i> {{ __('view_admin.tools.list.thumbnail_generation_paused_state') }}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

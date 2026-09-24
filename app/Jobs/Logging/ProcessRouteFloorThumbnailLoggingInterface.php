@@ -12,6 +12,8 @@ interface ProcessRouteFloorThumbnailLoggingInterface
         int    $attempts,
     ): void;
 
+    public function handleThumbnailGenerationPaused(): void;
+
     public function handleCreateThumbnailError(): void;
 
     public function handleThumbnailAlreadyUpToDate(): void;

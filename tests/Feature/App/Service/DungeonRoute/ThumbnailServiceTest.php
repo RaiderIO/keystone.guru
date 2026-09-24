@@ -10,6 +10,7 @@ use App\Models\File;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInterface;
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
+use App\Service\DungeonRoute\ThumbnailGenerationToggleServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Exception;
@@ -31,23 +32,33 @@ final class ThumbnailServiceTest extends PublicTestCase
 {
     use ProvidesDungeon;
 
-    private function buildService(ThumbnailServiceLoggingInterface $log): ThumbnailService
+    private function buildService(ThumbnailServiceLoggingInterface $log, bool $paused = false): ThumbnailService
     {
         return new ThumbnailService(
             $this->createMockPublic(DungeonRouteRepositoryInterface::class),
             // Real (not mocked) - the freshness tests exercise its actual DB query against seeded thumbnails
             app()->make(DungeonRouteThumbnailRepositoryInterface::class),
             $log,
+            $this->buildThumbnailGenerationToggleService($paused),
         );
     }
 
-    private function buildServiceWithRealRepositories(): ThumbnailService
+    private function buildServiceWithRealRepositories(bool $paused = false): ThumbnailService
     {
         return new ThumbnailService(
             app()->make(DungeonRouteRepositoryInterface::class),
             app()->make(DungeonRouteThumbnailRepositoryInterface::class),
             $this->createMockPublic(ThumbnailServiceLoggingInterface::class),
+            $this->buildThumbnailGenerationToggleService($paused),
         );
+    }
+
+    private function buildThumbnailGenerationToggleService(bool $paused): ThumbnailGenerationToggleServiceInterface
+    {
+        $toggleService = $this->createMockPublic(ThumbnailGenerationToggleServiceInterface::class);
+        $toggleService->method('isPaused')->willReturn($paused);
+
+        return $toggleService;
     }
 
     /**
@@ -676,6 +687,80 @@ final class ThumbnailServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function queueThumbnailRefresh_givenGenerationPaused_returnsFalseAndDispatchesNothing(): void
+    {
+        // Arrange
+        Queue::fake();
+        $dungeonRoute = $this->createRouteWithFreshThumbnailTimestamps();
+
+        $log = $this->createMockPublic(ThumbnailServiceLoggingInterface::class);
+        $log->expects($this->once())->method('queueThumbnailRefreshPaused');
+
+        $service = $this->buildService($log, true);
+
+        try {
+            // Act
+            $result = $service->queueThumbnailRefresh($dungeonRoute, true);
+
+            // Assert - the queued-at stamp stays untouched, so the route is refreshed again right after resuming
+            $this->assertFalse($result);
+            Queue::assertNotPushed(ProcessRouteFloorThumbnail::class);
+            $this->assertSame('1970-01-01 00:00:00', $dungeonRoute->refresh()->thumbnail_refresh_queued_at->toDateTimeString());
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function queueThumbnailRefresh_givenHeroVariantAndGenerationPaused_returnsFalseAndDispatchesNothing(): void
+    {
+        // Arrange
+        Queue::fake();
+        $dungeon      = $this->getDungeonWithNonFacadeFloor();
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+        ]);
+
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class), true);
+
+        try {
+            // Act
+            $result = $service->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnailVariant::Hero);
+
+            // Assert
+            $this->assertFalse($result);
+            Queue::assertNotPushed(ProcessRouteFloorThumbnail::class);
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function dungeonRoutesDisplayed_givenGenerationPaused_stampsAccessButQueuesNothing(): void
+    {
+        // Arrange
+        Queue::fake();
+        $dungeonRoute = null;
+
+        try {
+            $dungeonRoute = $this->createRouteWithFreshThumbnailTimestamps();
+            $service      = $this->buildServiceWithRealRepositories(true);
+
+            // Act
+            $service->dungeonRoutesDisplayed(collect([$dungeonRoute]));
+
+            // Assert
+            Queue::assertNotPushed(ProcessRouteFloorThumbnail::class);
+            $dungeonRoute->refresh();
+            $this->assertNotNull($dungeonRoute->last_accessed_at);
+            $this->assertSame('1970-01-01 00:00:00', $dungeonRoute->thumbnail_refresh_queued_at->toDateTimeString());
+        } finally {
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
     public function queueThumbnailRefresh_givenHeroVariantAndNoHeroThumbnail_queuesAHeroJob(): void
     {
         // Arrange
@@ -950,6 +1035,7 @@ final class ThumbnailServiceTest extends PublicTestCase
             $dungeonRouteRepository,
             app()->make(DungeonRouteThumbnailRepositoryInterface::class),
             $log,
+            $this->buildThumbnailGenerationToggleService(false),
         );
 
         // Act

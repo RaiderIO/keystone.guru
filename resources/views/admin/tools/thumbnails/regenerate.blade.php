@@ -3,6 +3,11 @@
 @section('header-title', __('view_admin.tools.thumbnails.regenerate.header'))
 
 @section('content')
+    @if($thumbnailGenerationPaused)
+        <div class="alert alert-warning">
+            <i class="fas fa-pause"></i> {{ __('view_admin.tools.thumbnails.regenerate.paused') }}
+        </div>
+    @endif
     {{ html()->form('POST', route('admin.tools.thumbnails.regenerate.submit'))->open() }}
     <div class="mb-3">
         @include('common.dungeon.select', ['activeOnly' => false])

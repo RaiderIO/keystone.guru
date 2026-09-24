@@ -620,6 +620,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('cache/drop', new AdminToolsController()->dropcache(...))->name('admin.tools.cache.drop');
                 Route::get('datadump/exportdungeondata', new AdminToolsDataDumpController()->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
                 Route::get('readonly/toggle', new AdminToolsController()->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
+                Route::post('thumbnails/toggle', new AdminToolsController()->toggleThumbnailGeneration(...))->name('admin.tools.thumbnails.toggle');
 
                 // Telemetry
                 Route::get('telemetry', new AdminToolsTelemetryController()->index(...))->name('admin.tools.telemetry.view');

@@ -7,6 +7,7 @@ use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
+use App\Service\DungeonRoute\ThumbnailGenerationToggleServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -188,6 +189,43 @@ final class ProcessRouteFloorThumbnailTest extends PublicTestCase
         try {
             // Act
             new ProcessRouteFloorThumbnail($dungeonRoute, 1, true)->failed(new Exception('render failed'));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * A pause is meant to stop the render machinery entirely during a deploy, so a job that was already
+     * on the queue when the pause went in must not render either.
+     *
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    #[Test]
+    public function handle_givenGenerationPaused_doesNotCreateThumbnail(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        $dungeonRoute = $this->createDungeonRouteDueForThumbnail();
+
+        $thumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
+        $thumbnailService->expects($this->never())->method('createThumbnail');
+        app()->instance(ThumbnailServiceInterface::class, $thumbnailService);
+
+        $toggleService = $this->createMockPublic(ThumbnailGenerationToggleServiceInterface::class);
+        $toggleService->method('isPaused')->willReturn(true);
+        app()->instance(ThumbnailGenerationToggleServiceInterface::class, $toggleService);
+
+        $log = $this->createMockPublic(ProcessRouteFloorThumbnailLoggingInterface::class);
+        $log->expects($this->once())->method('handleThumbnailGenerationPaused');
+        app()->instance(ProcessRouteFloorThumbnailLoggingInterface::class, $log);
+
+        try {
+            // Act
+            new ProcessRouteFloorThumbnail($dungeonRoute, 1, true)->handle();
+
+            // Assert - no exception, so $tries is untouched and the job simply completes
+            Queue::assertNotPushed(ProcessRouteFloorThumbnail::class);
         } finally {
             $dungeonRoute->delete();
         }

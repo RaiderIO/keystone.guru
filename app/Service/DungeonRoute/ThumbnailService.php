@@ -36,9 +36,10 @@ class ThumbnailService implements ThumbnailServiceInterface
     private const int RENDER_PROCESS_TIMEOUT_SECONDS = 90;
 
     public function __construct(
-        private readonly DungeonRouteRepositoryInterface          $dungeonRouteRepository,
-        private readonly DungeonRouteThumbnailRepositoryInterface $dungeonRouteThumbnailRepository,
-        private readonly ThumbnailServiceLoggingInterface         $log,
+        private readonly DungeonRouteRepositoryInterface           $dungeonRouteRepository,
+        private readonly DungeonRouteThumbnailRepositoryInterface  $dungeonRouteThumbnailRepository,
+        private readonly ThumbnailServiceLoggingInterface          $log,
+        private readonly ThumbnailGenerationToggleServiceInterface $thumbnailGenerationToggleService,
     ) {
     }
 
@@ -347,6 +348,14 @@ class ThumbnailService implements ThumbnailServiceInterface
         bool                         $force = false,
         DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
     ): bool {
+        if ($this->thumbnailGenerationToggleService->isPaused()) {
+            // Deliberately before thumbnail_refresh_queued_at is stamped: stamping it would make every route
+            // displayed during the pause ineligible for a refresh for refresh_requeue_hours after resuming.
+            $this->log->queueThumbnailRefreshPaused($dungeonRoute->public_key);
+
+            return false;
+        }
+
         $result     = false;
         $isStandard = $variant === DungeonRouteThumbnailVariant::Standard;
 

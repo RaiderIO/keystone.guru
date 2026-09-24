@@ -6,6 +6,7 @@ use App\Exceptions\ThumbnailRenderFailedException;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
+use App\Service\DungeonRoute\ThumbnailGenerationToggleServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -62,6 +63,16 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
         // Cannot serialize these objects - so we have to create them here
         $thumbnailService = app()->make(ThumbnailServiceInterface::class);
         $log              = app()->make(ProcessRouteFloorThumbnailLoggingInterface::class);
+
+        // Jobs queued before generation was paused would otherwise still render. Returning rather than
+        // release()ing: a release consumes an attempt against $tries, so a pause outlasting the backoff
+        // schedule would fail every queued job. The route's thumbnail simply stays stale until the next
+        // display or scheduled refresh re-queues it after resuming.
+        if (app()->make(ThumbnailGenerationToggleServiceInterface::class)->isPaused()) {
+            $log->handleThumbnailGenerationPaused();
+
+            return;
+        }
 
         try {
             $log->handleStart(

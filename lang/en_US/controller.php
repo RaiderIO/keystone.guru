@@ -38,6 +38,8 @@ return [
             'mapping_version_upgrade_already_latest' => 'This mapping version is already the latest for its dungeon — no routes were queued.',
             'read_only_mode_disabled'                => 'Read-only mode disabled',
             'read_only_mode_enabled'                 => 'Read-only mode enabled',
+            'thumbnail_generation_paused'            => 'Thumbnail generation paused - no new thumbnails will be queued or rendered',
+            'thumbnail_generation_resumed'           => 'Thumbnail generation resumed',
         ],
     ],
     'affix' => [
