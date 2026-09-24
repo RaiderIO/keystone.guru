@@ -378,6 +378,29 @@ final class RegisterControllerTest extends PublicTestCase
         ];
     }
 
+    #[Test]
+    public function register_givenNameWhoseSlugIsTaken_returnsNameError(): void
+    {
+        // Arrange
+        $number    = random_int(100000, 999999);
+        $slugOwner = null;
+
+        try {
+            $slugOwner = User::factory()->create(['name' => sprintf('woe2#%d', $number)]);
+            $postData  = $this->validRegistrationData(['name' => sprintf('woe2-%d', $number)]);
+
+            // Act
+            $response = $this->postJson(route('register'), $postData);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['name' => __('rules.user_slug_available_rule.taken')]);
+            $this->assertNull(User::firstWhere('email', $postData['email']));
+        } finally {
+            $slugOwner?->delete();
+        }
+    }
+
     /**
      * @param  array<string, string> $overrides
      * @return array<string, string>

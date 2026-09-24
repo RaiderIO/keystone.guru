@@ -87,6 +87,8 @@ return [
         'creator_directory_hide_help'      => 'Creators with published routes are listed in the directory automatically. Tick this to keep your profile out of it - your routes stay published either way.',
         'creator_save'                     => 'Save creator profile',
         'creator_view_public_profile'      => 'View my public profile',
+        'creator_public_profile_url'       => 'Your public profile address:',
+        'creator_public_profile_url_help'  => 'This address follows your username. Changing your username changes it, and links that use the old address stop working.',
     ],
     'favorites' => [
         'title' => 'My favorites',

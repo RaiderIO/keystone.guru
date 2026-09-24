@@ -13,6 +13,6 @@ $isRaiderIOStaff ??= false;
     @if($isRaiderIOStaff)
         class="raider_io_staff_text"
     @endif
-    href="{{ route('profile.view', ['user' => $user->id]) }}">
+    href="{{ route('profile.view', ['user' => $user]) }}">
     {{ $slot }}
 </a>

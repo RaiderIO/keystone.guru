@@ -210,6 +210,8 @@ use App\Service\TimewalkingEvent\TimewalkingEventService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use App\Service\User\UserService;
 use App\Service\User\UserServiceInterface;
+use App\Service\User\UserSlugService;
+use App\Service\User\UserSlugServiceInterface;
 use App\Service\View\RequestViewContext;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewService;
@@ -275,6 +277,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogPollingBandServiceInterface::class, CombatLogPollingBandService::class);
         $this->app->bind(CombatLogPollingHealthServiceInterface::class, CombatLogPollingHealthService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
+        $this->app->bind(UserSlugServiceInterface::class, UserSlugService::class);
         $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);
         $this->app->bind(SpellServiceInterface::class, SpellService::class);
         $this->app->bind(SpellDescriptionParserInterface::class, SpellDescriptionParser::class);

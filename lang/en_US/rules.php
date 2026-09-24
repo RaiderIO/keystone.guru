@@ -23,5 +23,7 @@ return [
     'map_icon_type_role_check_rule' => [
         'message' => 'That map icon type is not available for your access level.',
     ],
-
+    'user_slug_available_rule' => [
+        'taken' => 'This username is taken.',
+    ],
 ];

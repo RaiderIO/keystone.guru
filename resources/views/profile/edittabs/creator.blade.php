@@ -52,6 +52,13 @@ $describedBy = static fn(string $errorKey, string $errorId, string $helpId): str
         </a>
     </p>
 
+    <p class="creator_profile_edit_url">
+        {{ __('view_profile.edit.creator_public_profile_url') }}
+        <code class="user-select-all">{{ rawurldecode(route('profile.view', ['user' => $user])) }}</code>
+        <br>
+        <small class="text-muted">{{ __('view_profile.edit.creator_public_profile_url_help') }}</small>
+    </p>
+
     @include('common.general.messages')
 
     {{ html()->modelForm($user, 'PATCH', route('profile.creator.update'))->open() }}

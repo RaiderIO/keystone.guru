@@ -166,6 +166,67 @@ final class ProfileControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function update_givenNameWhoseSlugIsTaken_returnsNameError(): void
+    {
+        $user      = null;
+        $slugOwner = null;
+
+        try {
+            // Arrange
+            $number         = random_int(100000, 999999);
+            $user           = $this->userWithUserRole();
+            $user->password = '';
+            $user->save();
+            $slugOwner = User::factory()->create(['name' => sprintf('woe2#%d', $number)]);
+
+            // Act
+            $response = $this->actingAs($user)->patch(sprintf('/profile/%d', $user->id), [
+                'name'                  => sprintf('woe2-%d', $number),
+                'echo_color'            => '#abcdef',
+                'timezone'              => 'Europe/Amsterdam',
+                'game_server_region_id' => 0,
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors(['name' => __('rules.user_slug_available_rule.taken')]);
+            $this->assertNotSame(sprintf('woe2-%d', $number), $user->fresh()?->name);
+        } finally {
+            $user?->delete();
+            $slugOwner?->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenNewName_movesTheProfileToTheNewSlug(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange - only OAuth accounts may change their username
+            $user           = $this->userWithUserRole();
+            $user->password = '';
+            $user->save();
+            $oldSlug = $user->slug;
+            $newName = sprintf('Renamed%d', random_int(100000, 999999));
+
+            // Act
+            $response = $this->actingAs($user)->patch(sprintf('/profile/%d', $user->id), [
+                'name'                  => $newName,
+                'echo_color'            => '#abcdef',
+                'timezone'              => 'Europe/Amsterdam',
+                'game_server_region_id' => 0,
+            ]);
+
+            // Assert
+            $response->assertRedirect(route('profile.edit'));
+            $this->assertSame(mb_strtolower($newName), $user->fresh()?->slug);
+            $this->get(sprintf('/user/%s', $oldSlug))->assertNotFound();
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
     public function updatePrivacy_givenSelf_updatesTheSetting(): void
     {
         $user = null;
