@@ -292,6 +292,33 @@ body {
     outline-offset: 2px;
   }
 
+  /** Google's own sign-in artwork, 44px tall like the other auth controls: the light variant on
+      lux, the dark one on every other theme. */
+  .btn-oauth-google {
+    display: inline-flex;
+    border-radius: 4px;
+
+    img {
+      width: auto;
+      height: 44px;
+    }
+  }
+
+  .btn-oauth-google:focus,
+  .btn-oauth-google:focus-visible {
+    outline: 2px solid var($--theme-text-contrast);
+    outline-offset: 2px;
+  }
+
+  .btn-oauth-google-light,
+  &.lux .btn-oauth-google-dark {
+    display: none;
+  }
+
+  &.lux .btn-oauth-google-light {
+    display: inline;
+  }
+
   /** The auth forms are the one surface every new visitor has to get through, often on a phone:
       every control there gets the 44px minimum touch target (WCAG 2.5.5) instead of Bootstrap's
       38px. Scoped rather than global so dense editor forms keep their compact controls. */

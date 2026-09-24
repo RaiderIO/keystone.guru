@@ -281,13 +281,38 @@ final class AuthFormAccessibilityTest extends PublicTestCase
 
         // Assert
         $buttons = $this->authFormScope($document, 'login_form')->querySelectorAll('.btn-oauth');
-        $this->assertSame(3, $buttons->length);
+        $this->assertSame(2, $buttons->length);
 
         foreach ($buttons as $button) {
             $this->assertNotSame('', trim($button->textContent), 'An OAuth button needs visible text as its name');
             foreach ($button->querySelectorAll('i') as $icon) {
                 $this->assertSame('true', $icon->getAttribute('aria-hidden'));
             }
+        }
+    }
+
+    #[Test]
+    public function googleButton_givenLoginPage_rendersBothThemeVariantsNamedByTheirAltText(): void
+    {
+        // Arrange & Act
+        $document = $this->renderDocument('login');
+
+        // Assert
+        $links = $this->authFormScope($document, 'login_form')->querySelectorAll('a.btn-oauth-google');
+        $this->assertSame(1, $links->length);
+
+        $link = $links->item(0);
+        $this->assertSame(route('login.google'), $link->getAttribute('href'));
+
+        $expected = [
+            'btn-oauth-google-light' => 'oauth/branding_guideline_sample_lt_sq_lg.png',
+            'btn-oauth-google-dark'  => 'oauth/branding_guideline_sample_dk_sq_lg.png',
+        ];
+        foreach ($expected as $class => $imagePath) {
+            $image = $link->querySelector(sprintf('img.%s', $class));
+            $this->assertNotNull($image, sprintf('Expected an img.%s inside the Google link', $class));
+            $this->assertSame(ksgAssetImage($imagePath), $image->getAttribute('src'));
+            $this->assertSame(__('view_common.forms.oauth.sign_in_with_google'), $image->getAttribute('alt'));
         }
     }
 
