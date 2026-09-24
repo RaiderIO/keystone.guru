@@ -14,18 +14,27 @@ trait AppliesMdtCloneIndexHack
      */
     private function applyDungeonCloneIndexHack(Dungeon $dungeon, int $npcIndex, int $cloneIndex): int
     {
-        if ($dungeon->key === DungeonKey::SIEGE_OF_BORALUS->value && $npcIndex === 35) {
-            return $cloneIndex + 15;
-        }
+        return $cloneIndex + $this->getDungeonCloneIndexOffset($dungeon, $npcIndex);
+    }
 
+    /**
+     * The inverse of applyDungeonCloneIndexHack(): turns an enemy's mdt_id back into the clone index MDT uses.
+     */
+    private function revertDungeonCloneIndexHack(Dungeon $dungeon, int $npcIndex, int $mdtId): int
+    {
+        return $mdtId - $this->getDungeonCloneIndexOffset($dungeon, $npcIndex);
+    }
+
+    private function getDungeonCloneIndexOffset(Dungeon $dungeon, int $npcIndex): int
+    {
         if ($dungeon->key === DungeonKey::TOL_DAGOR->value && $npcIndex === 11) {
-            return $cloneIndex + 2;
+            return 2;
         }
 
         if ($dungeon->key === DungeonKey::MISTS_OF_TIRNA_SCITHE->value && $npcIndex === 23) {
-            return $cloneIndex + 5;
+            return 5;
         }
 
-        return $cloneIndex;
+        return 0;
     }
 }

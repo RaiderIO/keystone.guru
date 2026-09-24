@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\App\Service\MDT;
 
+use App\Models\DungeonKey;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
+use App\Models\Enemy;
 use App\Models\RaidMarker;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -46,6 +48,48 @@ class MDTRaidMarkerTest extends MDTImportStringServiceTestBase
             $this->assertNotNull($importedRaidMarker, 'Expected the raid marker to survive the export/import round trip.');
             $this->assertSame(RaidMarker::ALL['skull'], $importedRaidMarker->raid_marker_id);
         } finally {
+            $importedRoute?->delete();
+            $dungeonRoute?->enemyRaidMarkers()->delete();
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function getDungeonRoute_givenRaidMarkerOnTolDagorEnemyOfOffsetMdtNpcIndex_preservesRaidMarkerOnThatEnemy(): void
+    {
+        $dungeonRoute  = null;
+        $importedRoute = null;
+
+        try {
+            // Arrange
+            $dungeonRoute = $this->createDungeonRouteForCurrentMappingVersion(DungeonKey::TOL_DAGOR);
+
+            /** @var Enemy $enemy */
+            $enemy = $dungeonRoute->mappingVersion->enemies()
+                ->where('npc_id', 131112)
+                ->where('mdt_id', 3)
+                ->sole();
+
+            DungeonRouteEnemyRaidMarker::create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'raid_marker_id'   => RaidMarker::ALL['skull'],
+                'npc_id'           => $enemy->npc_id,
+                'mdt_id'           => $enemy->mdt_id,
+                'enemy_id'         => $enemy->id,
+            ]);
+
+            $encodedString = $this->exportDungeonRouteToString($dungeonRoute);
+
+            // Act
+            $importedRoute = $this->importStringToDungeonRoute($encodedString);
+
+            // Assert
+            $importedRaidMarkers = $importedRoute->enemyRaidMarkers()->get();
+            $this->assertCount(1, $importedRaidMarkers);
+            $this->assertSame($enemy->mdt_id, $importedRaidMarkers->first()->mdt_id);
+            $this->assertSame(RaidMarker::ALL['skull'], $importedRaidMarkers->first()->raid_marker_id);
+        } finally {
+            $importedRoute?->enemyRaidMarkers()->delete();
             $importedRoute?->delete();
             $dungeonRoute?->enemyRaidMarkers()->delete();
             $dungeonRoute?->delete();
