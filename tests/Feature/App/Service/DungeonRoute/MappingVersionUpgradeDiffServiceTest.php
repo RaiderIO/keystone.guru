@@ -4,7 +4,6 @@ namespace Tests\Feature\App\Service\DungeonRoute;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
@@ -14,7 +13,6 @@ use App\Models\KillZone\KillZoneEnemy;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
-use App\Models\RaidMarker;
 use App\Service\DungeonRoute\Dtos\MappingVersionUpgradeDiffEnemy;
 use App\Service\DungeonRoute\Dtos\MappingVersionUpgradeDiffMovedEnemy;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
@@ -533,60 +531,6 @@ final class MappingVersionUpgradeDiffServiceTest extends DungeonRouteSaveService
             // Assert
             $this->assertNull($diff->newEnemyForces);
             $this->assertEquals($route->enemy_forces, $diff->oldEnemyForces);
-        } finally {
-            $this->tearDownCleanup();
-        }
-    }
-
-    // ------------------------------------------------------------------ raid markers, dungeon start
-
-    #[Test]
-    public function diff_givenRaidMarkerWithoutAMatchInTheNewMappingVersion_countsItAsLost(): void
-    {
-        // Arrange
-        [$dungeon, $oldMappingVersion, $newMappingVersion, $floor] = $this->createMappingVersionPair();
-
-        try {
-            $route = $this->createRoute($dungeon, $oldMappingVersion);
-
-            $enemy = $this->createEnemy($oldMappingVersion, $floor, ['npc_id' => 1, 'mdt_id' => 1]);
-
-            array_unshift($this->cleanup, DungeonRouteEnemyRaidMarker::create([
-                'dungeon_route_id' => $route->id,
-                'raid_marker_id'   => RaidMarker::query()->value('id'),
-                'npc_id'           => $enemy->npc_id,
-                'mdt_id'           => $enemy->mdt_id,
-                'enemy_id'         => $enemy->id,
-            ]));
-
-            // Act
-            $diff = $this->service()->diff($route, $newMappingVersion);
-
-            // Assert
-            $this->assertEquals(1, $diff->lostRaidMarkerCount);
-        } finally {
-            $this->tearDownCleanup();
-        }
-    }
-
-    #[Test]
-    public function diff_givenDungeonStartWithoutAMatchingComment_reportsTheDungeonStartAsLost(): void
-    {
-        // Arrange
-        [$dungeon, $oldMappingVersion, $newMappingVersion, $floor] = $this->createMappingVersionPair();
-
-        try {
-            $route = $this->createRoute($dungeon, $oldMappingVersion);
-
-            $oldStart = $this->createDungeonStartMapIcon($oldMappingVersion->id, $floor->id, 'mapping.start.east');
-            array_unshift($this->cleanup, $oldStart);
-            $route->update(['dungeon_start_map_icon_id' => $oldStart->id]);
-
-            // Act
-            $diff = $this->service()->diff($route, $newMappingVersion);
-
-            // Assert
-            $this->assertTrue($diff->dungeonStartLost);
         } finally {
             $this->tearDownCleanup();
         }

@@ -156,25 +156,6 @@ use App\Service\DungeonRoute\Dtos\MappingVersionUpgradeDiff;
     </ul>
 @endif
 
-@if($upgradeDiff->dungeonStartLost || $upgradeDiff->lostRaidMarkerCount > 0)
-    <h5>
-        <i class="fas fa-map-pin text-warning"></i>
-        {{ __('view_common.modal.mappingversionupgradediff.markers') }}
-    </h5>
-    <ul class="list-unstyled ms-3">
-        @if($upgradeDiff->dungeonStartLost)
-            <li>{{ __('view_common.modal.mappingversionupgradediff.dungeon_start_lost') }}</li>
-        @endif
-        @if($upgradeDiff->lostRaidMarkerCount > 0)
-            <li>
-                {{ trans_choice('view_common.modal.mappingversionupgradediff.raid_markers_lost', $upgradeDiff->lostRaidMarkerCount, [
-                    'count' => $upgradeDiff->lostRaidMarkerCount,
-                ]) }}
-            </li>
-        @endif
-    </ul>
-@endif
-
 <h5>
     <i class="fas fa-map text-body-secondary"></i>
     {{ __('view_common.modal.mappingversionupgradediff.dungeon_wide') }}

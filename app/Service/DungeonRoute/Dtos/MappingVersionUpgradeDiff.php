@@ -33,8 +33,6 @@ readonly class MappingVersionUpgradeDiff
         public ?int           $newEnemyForces,
         public int            $oldEnemyForcesRequired,
         public int            $newEnemyForcesRequired,
-        public int            $lostRaidMarkerCount,
-        public bool           $dungeonStartLost,
         public int            $addedEnemyCount,
         public int            $removedEnemyCount,
         public int            $oldEnemyPatrolCount,
@@ -51,8 +49,6 @@ readonly class MappingVersionUpgradeDiff
             || $this->emptiedPulls->isNotEmpty()
             || $this->movedPullEnemies->isNotEmpty()
             || $this->unkilledRequiredEnemies->isNotEmpty()
-            || $this->lostRaidMarkerCount > 0
-            || $this->dungeonStartLost
             || $this->hasEnemyForcesImpact();
     }
 

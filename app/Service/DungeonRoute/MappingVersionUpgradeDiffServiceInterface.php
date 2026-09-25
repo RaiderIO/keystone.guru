@@ -9,7 +9,7 @@ use App\Service\DungeonRoute\Dtos\MappingVersionUpgradeDiff;
 /**
  * Explains what a mapping version upgrade did to a dungeon route.
  *
- * The upgrade matches a route's pull enemies and raid markers on identity (the NPC id MDT knows, plus MDT's
+ * The upgrade matches a route's pull enemies on identity (the NPC id MDT knows, plus MDT's
  * clone index) and drops whatever the new mapping version has no enemy for. That is invisible in the editor -
  * a pull simply holds fewer enemies than the author left in it - so this puts it in front of them instead.
  */

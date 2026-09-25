@@ -3,7 +3,6 @@
 namespace App\Service\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\EnemyPatrol;
 use App\Models\KillZone\KillZoneEnemy;
@@ -23,8 +22,7 @@ use Override;
 readonly class MappingVersionUpgradeDiffService implements MappingVersionUpgradeDiffServiceInterface
 {
     public function __construct(
-        private CoordinatesServiceInterface  $coordinatesService,
-        private DungeonRouteServiceInterface $dungeonRouteService,
+        private CoordinatesServiceInterface $coordinatesService,
     ) {
     }
 
@@ -57,11 +55,8 @@ readonly class MappingVersionUpgradeDiffService implements MappingVersionUpgrade
         $newEnemiesByPullKey = $newEnemies
             ->filter(static fn(Enemy $enemy): bool => MappingVersionUpgradeMatchKey::forEnemyAsPullEnemy($enemy) !== null)
             ->groupBy(static fn(Enemy $enemy): string => MappingVersionUpgradeMatchKey::forEnemyAsPullEnemy($enemy));
-        $newEnemiesByMarkerKey = $newEnemies
-            ->filter(static fn(Enemy $enemy): bool => MappingVersionUpgradeMatchKey::forEnemyAsRaidMarker($enemy) !== null)
-            ->groupBy(static fn(Enemy $enemy): string => MappingVersionUpgradeMatchKey::forEnemyAsRaidMarker($enemy));
 
-        $original->loadMissing(['killZones.killZoneEnemies.npc', 'enemyRaidMarkers']);
+        $original->loadMissing('killZones.killZoneEnemies.npc');
 
         /** @var Collection<int, MappingVersionUpgradeDiffEnemy> $removedPullEnemies */
         $removedPullEnemies = collect();
@@ -145,9 +140,6 @@ readonly class MappingVersionUpgradeDiffService implements MappingVersionUpgrade
             newEnemyForces: $upgradedDungeonRoute?->enemy_forces,
             oldEnemyForcesRequired: $this->enemyForcesRequiredOf($oldMappingVersion, $teeming),
             newEnemyForcesRequired: $this->enemyForcesRequiredOf($newMappingVersion, $teeming),
-            lostRaidMarkerCount: $this->countLostRaidMarkers($original, $newEnemiesByMarkerKey),
-            dungeonStartLost: $original->dungeon_start_map_icon_id !== null
-                && $this->dungeonRouteService->findDungeonStartMapIconIdForMappingVersion($original, $newMappingVersion->id) === null,
             addedEnemyCount: $this->countEnemiesOnlyIn($newEnemies, $oldEnemies),
             removedEnemyCount: $this->countEnemiesOnlyIn($oldEnemies, $newEnemies),
             oldEnemyPatrolCount: EnemyPatrol::query()->where('mapping_version_id', $oldMappingVersion->id)->count(),
@@ -345,24 +337,6 @@ readonly class MappingVersionUpgradeDiffService implements MappingVersionUpgrade
     private function enemyForcesRequiredOf(MappingVersion $mappingVersion, bool $teeming): int
     {
         return $teeming ? $mappingVersion->enemy_forces_required_teeming : $mappingVersion->enemy_forces_required;
-    }
-
-    /**
-     * @param Collection<string, EloquentCollection<int, Enemy>> $newEnemiesByMarkerKey
-     */
-    private function countLostRaidMarkers(DungeonRoute $original, Collection $newEnemiesByMarkerKey): int
-    {
-        return $original->enemyRaidMarkers
-            ->filter(static function (DungeonRouteEnemyRaidMarker $raidMarker) use ($newEnemiesByMarkerKey): bool {
-                $matchKey = MappingVersionUpgradeMatchKey::forRaidMarker($raidMarker->npc_id, $raidMarker->mdt_id);
-                if ($matchKey === null) {
-                    return true;
-                }
-
-                // The upgrade refuses to guess when one identity resolves to several enemies, and drops the marker
-                return $newEnemiesByMarkerKey->get($matchKey)?->count() !== 1;
-            })
-            ->count();
     }
 
     /**
