@@ -7,6 +7,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\SeederModel;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\GameVersion\GameVersionServiceInterface;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -136,19 +137,22 @@ class GameVersion extends Model
     }
 
     /**
-     * @return GameVersion Gets the default game version.
+     * @return GameVersion The logged-in user's game version, the guest's game version cookie, or the default.
      */
     public static function getUserOrDefaultGameVersion(): GameVersion
     {
-        if (Auth::check()) {
-            /** @var User $user */
-            $user = Auth::user();
-            if ($user->game_version_id > 0 && $user->gameVersion !== null) {
-                return $user->gameVersion;
-            }
+        /** @var User|null $user */
+        $user = Auth::user();
+        if ($user === null) {
+            return App::make(GameVersionServiceInterface::class)->getGameVersion(null);
         }
 
-        return self::getDefaultGameVersion();
+        return self::getUserGameVersion($user) ?? self::getDefaultGameVersion();
+    }
+
+    public static function getUserGameVersion(User $user): ?GameVersion
+    {
+        return $user->game_version_id > 0 ? $user->gameVersion : null;
     }
 
     public static function getDefaultGameVersion(): GameVersion
