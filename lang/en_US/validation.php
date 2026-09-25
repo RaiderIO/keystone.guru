@@ -98,6 +98,9 @@ return [
             'expansion'  => 'That season does not belong to this game version.',
             'fixed'      => 'The season of a collection is fixed once it is created - it can only be made free-form.',
         ],
+        'vanity_key' => [
+            'prohibited' => 'A custom URL is a Patreon benefit.',
+        ],
         'collection_tag' => [
             'exists' => 'You have no tag with that name.',
         ],
