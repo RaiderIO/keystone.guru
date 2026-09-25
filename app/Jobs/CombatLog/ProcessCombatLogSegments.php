@@ -2,6 +2,7 @@
 
 namespace App\Jobs\CombatLog;
 
+use App\Jobs\Enums\QueueName;
 use App\Jobs\Logging\ProcessCombatLogSegmentsLoggingInterface;
 use App\Models\Season;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
@@ -67,7 +68,7 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
         private readonly array                         $criteria = [],
         private readonly ?string                       $criteriaDate = null,
     ) {
-        $this->queue = sprintf('%s-cl-process', config('app.type'));
+        $this->queue = QueueName::CombatLogProcess->queueName();
     }
 
     public function handle(

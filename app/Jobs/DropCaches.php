@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Enums\QueueName;
 use App\Service\Cache\CacheServiceInterface;
 use Artisan;
 use Illuminate\Bus\Queueable;
@@ -22,7 +23,7 @@ class DropCaches implements ShouldQueue
 
     public function __construct()
     {
-        $this->queue = sprintf('%s-long-running', config('app.type'));
+        $this->queue = QueueName::LongRunning->queueName();
     }
 
     public function handle(CacheServiceInterface $cacheService): void

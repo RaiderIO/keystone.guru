@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\DungeonRouteThumbnailJob;
 
+use App\Jobs\Enums\QueueName;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -42,7 +43,7 @@ class DungeonRouteThumbnailJobResource extends JsonResource
     #[Override]
     public function toArray(Request $request): array
     {
-        $queueSize = Queue::size(sprintf('%s-thumbnail-api', config('app.type')));
+        $queueSize = Queue::size(QueueName::ThumbnailApi->queueName());
 
         $isCompleted = $this->status === DungeonRouteThumbnailJob::STATUS_COMPLETED;
 

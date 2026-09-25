@@ -2,6 +2,7 @@
 
 namespace App\Jobs\CombatLog;
 
+use App\Jobs\Enums\QueueName;
 use App\Jobs\Logging\ProcessCombatLogPartLoggingInterface;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
@@ -29,7 +30,7 @@ class ProcessCombatLogFromS3 implements ShouldQueue
         private readonly string                        $diskName = 's3_combat_logs',
         private readonly ?CombatLogRunContextInterface $runContext = null,
     ) {
-        $this->queue = sprintf('%s-cl-process', config('app.type'));
+        $this->queue = QueueName::CombatLogProcess->queueName();
     }
 
     public function handle(

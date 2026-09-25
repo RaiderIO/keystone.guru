@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Enums\QueueName;
 use Artisan;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -22,7 +23,7 @@ class RefreshDiscoverCache implements ShouldQueue
 
     public function __construct()
     {
-        $this->queue = sprintf('%s-long-running', config('app.type'));
+        $this->queue = QueueName::LongRunning->queueName();
     }
 
     /**
