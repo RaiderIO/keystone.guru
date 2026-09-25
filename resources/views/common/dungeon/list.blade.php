@@ -25,6 +25,8 @@ $selected        ??= null;
 $subtextFn       ??= null;
 $width           ??= null;
 $showMore        ??= false;
+// Show the "More" card even when every dungeon fits in the strip
+$alwaysShowMore  ??= false;
 $maxColCount     ??= 8;
 // The upcoming season is shown as an extra card next to the dungeons, leading to a selection of just
 // its dungeons - it never takes the place of the current season's dungeons (#3761). Only set when the
@@ -58,7 +60,7 @@ $currentAffixGroup ??= null;
     <?php
     }
 
-    if($showMore && $dungeons->count() >= $maxColCount) {
+    if($showMore && ($alwaysShowMore || $dungeons->count() >= $maxColCount)) {
         ?>
         @include('common.dungeon.list.card', [
             'link' => $links->get('more'),

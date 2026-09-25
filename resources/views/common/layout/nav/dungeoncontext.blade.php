@@ -18,6 +18,7 @@ use Illuminate\Support\Collection;
  * @var Dungeon                                  $selectedDungeon
  * @var Collection<string, string>               $links
  * @var bool                                     $showMore
+ * @var bool                                     $alwaysShowMore
  * @var Season|null                              $nextSeason
  * @var string|null                              $nextSeasonLink
  * @var Collection<int, Collection<int, string>> $easeTiers
@@ -25,6 +26,7 @@ use Illuminate\Support\Collection;
  */
 
 $showMore          ??= false;
+$alwaysShowMore    ??= false;
 $nextSeason        ??= null;
 $nextSeasonLink    ??= null;
 $easeTiers         ??= collect();
@@ -67,7 +69,7 @@ $changeDungeonLabel = __('view_common.layout.nav.dungeoncontext.change_dungeon')
         @endforeach
         {{-- Explore, heatmap and route search cap the strip and add a 'more' link into their own full
              dungeon selection page - the mobile dropdown is capped the same way, so it needs it too --}}
-        @if($showMore && $dungeons->count() >= $maxColCount)
+        @if($showMore && ($alwaysShowMore || $dungeons->count() >= $maxColCount))
             <a class="dropdown-item d-flex align-items-center {{ $hasSelectedDungeon ? '' : 'active' }}"
                href="{{ $links->get('more') }}">
                 <img class="dungeon_context_nav_icon me-2" src="{{ $gameVersion->expansion->getWallpaperUrl() }}"

@@ -52,6 +52,17 @@ if ($showDungeonContext) {
     ]);
 }
 
+// Retail's strip holds the current season's dungeons, which are all that matter there. Every other game
+// version's dungeons are all relevant, so the full selection is always one click away - pages without a
+// selection page of their own fall back to the explore one.
+$alwaysShowMore = $showDungeonContext && $currentUserGameVersion->key !== GameVersion::GAME_VERSION_RETAIL;
+if ($alwaysShowMore) {
+    $showMore                    = true;
+    $resolvedDungeonContextLinks = $resolvedDungeonContextLinks->union([
+        'more' => route('dungeon.explore.gameversion.select', ['gameVersion' => $currentUserGameVersion]),
+    ]);
+}
+
 $isActiveRoute = function (string $route, bool $strict = false) {
     // Check if the route that we're currently on is the same as the route in the nav
     // If so, show it as active
@@ -180,6 +191,7 @@ $compendiumEntries        = [
                         'useAbbreviation' => true,
                         'selectable' => true,
                         'showMore' => $showMore,
+                        'alwaysShowMore' => $alwaysShowMore,
                         // Only set when the next season is close enough to be advertised (#3761)
                         'nextSeason' => $dungeonContextNextSeason,
                         'nextSeasonLink' => $dungeonContextNextSeasonLink,
@@ -211,6 +223,7 @@ $compendiumEntries        = [
                     'gameVersion' => $currentUserGameVersion,
                     'dungeons' => $gameVersionDungeons,
                     'showMore' => $showMore,
+                    'alwaysShowMore' => $alwaysShowMore,
                     'selectedDungeon' => $dungeonContextSelectedDungeon,
                     'links' => $resolvedDungeonContextLinks,
                     'nextSeason' => $dungeonContextNextSeason,
