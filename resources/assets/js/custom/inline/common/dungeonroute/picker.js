@@ -17,7 +17,7 @@
  @property {string} rangeSelector
  @property {string} selectionSelector         Says how many routes are ticked.
  @property {string} fullSelector              Says why no more routes can be ticked.
- @property {string} addButtonSelector
+ @property {string} confirmButtonSelector
  @property {string} statusSelector            Polite live region.
  @property {string} listUrl                   Server-side paged route list (DataTables protocol).
  @property {Number} pageSize
@@ -27,8 +27,11 @@
  @property {Number|null} max                  Most routes the target may hold, null for no limit.
  @property {Number|null} maxPerDungeon        Most routes of one dungeon the target may hold, null for no limit.
  @property {Object<string, Number>} existingDungeonIds The dungeon of each route already in the target, by public key.
- @property {string|null} addUrl               Where the ticked routes are POSTed; null leaves saving to the host.
- @property {string} addFieldName
+ @property {string} actionKeyPrefix          Lang key prefix of the confirm button's wording, e.g. dungeonroute_picker_add.
+ @property {string|null} actionUrl           Where the ticked routes are sent; null leaves acting on them to the host.
+ @property {string} actionFieldName
+ @property {string} actionMethod             HTTP method the ticked routes are sent with.
+ @property {boolean} confirmsAction          Whether the user confirms once more before the routes are sent.
  @property {string} fallbackImageBaseUrl
  @property {Object<string, {class: string, name: string}[]>} affixGroups Affixes per affix group id, for the filter's icons.
  */
@@ -37,14 +40,14 @@
  @typedef {Object} CommonDungeonroutePickerResult
  @property {string[]} publicKeys
  @property {PickerDungeonRoute[]} dungeonRoutes  The listed routes the public keys were ticked on.
- @property {*} response                          What the add url answered; null when the drawer posted nothing.
+ @property {*} response                          What the action url answered; null when the drawer sent nothing.
  */
 
 /**
- * Side drawer listing the source's routes, page by page, to tick and add to a target in one go. It knows
- * nothing about the target beyond the options: it fires `dungeonroutepicker:added` on the drawer element (and
- * calls every onAdded() callback) with a CommonDungeonroutePickerResult, so the host can store the routes and
- * show its toast.
+ * Side drawer listing the source's routes, page by page, to tick and act on in one go. It knows nothing about
+ * the target beyond the options: it fires `dungeonroutepicker:confirmed` on the drawer element (and calls every
+ * onConfirmed() callback) with a CommonDungeonroutePickerResult, so the host can store the routes and show its
+ * toast.
  *
  * @property {CommonDungeonroutePickerOptions} options
  */
@@ -56,7 +59,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         this.dialog = new DrawerDialog({
             drawerSelector: options.drawerSelector,
             openButtonSelector: options.openButtonSelector,
-            confirmButtonSelector: options.addButtonSelector,
+            confirmButtonSelector: options.confirmButtonSelector,
             statusSelector: options.statusSelector,
         });
 
@@ -84,7 +87,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         this._selected = [];
         /** @type {Object<string, PickerDungeonRoute>} Every listed or ticked route, by public key */
         this._dungeonRoutes = {};
-        this._onAddedCallbacks = [];
+        this._onConfirmedCallbacks = [];
     }
 
     activate() {
@@ -95,7 +98,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         this.dialog.activate();
         this.dialog.onFirstShow(this.reload.bind(this));
         this.dialog.onShow(this._retryAfterFailure.bind(this));
-        this.dialog.onConfirm(this._addDungeonRoutes.bind(this));
+        this.dialog.onConfirm(this._confirmDungeonRoutes.bind(this));
 
         $(this.options.previousSelector).on('click', this._goToPage.bind(this, -1));
         $(this.options.nextSelector).on('click', this._goToPage.bind(this, 1));
@@ -123,15 +126,15 @@ class CommonDungeonroutePicker extends SearchInlineBase {
     }
 
     /**
-     * Registers a callback called with a CommonDungeonroutePickerResult after every successful add.
+     * Registers a callback called with a CommonDungeonroutePickerResult after every successful action.
      * @param {Function} callback
      */
-    onAdded(callback) {
-        this._onAddedCallbacks.push(callback);
+    onConfirmed(callback) {
+        this._onConfirmedCallbacks.push(callback);
     }
 
     /**
-     * Replaces the routes already in the target, e.g. after the host undid an add or removed a route.
+     * Replaces the routes already in the target, e.g. after the host undid an action or removed a route.
      * @param {string[]} publicKeys
      * @param {Object<string, Number>|null} [dungeonIds] The dungeon of each of those routes, by public key.
      */
@@ -435,7 +438,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
                 : lang.get('js.dungeonroute_picker_dungeon_full', {max: this.options.maxPerDungeon}))
             .prop('hidden', !isFull && !hasFullDungeon);
         this.dialog.setConfirmButton(
-            lang.get(`js.dungeonroute_picker_add_${plural}`, {count: count}),
+            lang.get(`js.${this.options.actionKeyPrefix}_${plural}`, {count: count}),
             count > 0 && !this._saving,
         );
     }
@@ -443,17 +446,36 @@ class CommonDungeonroutePicker extends SearchInlineBase {
     /**
      * @private
      */
-    _addDungeonRoutes() {
-        let self = this;
+    _confirmDungeonRoutes() {
         let publicKeys = this.getSelectedPublicKeys();
 
         if (publicKeys.length === 0 || this._saving) {
             return;
         }
 
-        // Without an endpoint of its own the drawer only hands the routes over; the host page saves them
-        if (this.options.addUrl === null || typeof this.options.addUrl === 'undefined') {
-            this._reportAdded(publicKeys, null);
+        if (!this.options.confirmsAction) {
+            this._sendDungeonRoutes(publicKeys);
+
+            return;
+        }
+
+        let plural = publicKeys.length === 1 ? 'one' : 'many';
+        showConfirmYesCancel(
+            lang.get(`js.${this.options.actionKeyPrefix}_confirm_${plural}`, {count: publicKeys.length}),
+            this._sendDungeonRoutes.bind(this, publicKeys)
+        );
+    }
+
+    /**
+     * @param {string[]} publicKeys
+     * @private
+     */
+    _sendDungeonRoutes(publicKeys) {
+        let self = this;
+
+        // Without an endpoint of its own the drawer only hands the routes over; the host page acts on them
+        if (this.options.actionUrl === null || typeof this.options.actionUrl === 'undefined') {
+            this._reportConfirmed(publicKeys, null);
             this.close();
 
             return;
@@ -463,19 +485,19 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         this._refreshSelection();
 
         let data = {};
-        data[this.options.addFieldName] = publicKeys;
+        data[this.options.actionFieldName] = publicKeys;
 
         $.ajax({
-            type: 'POST',
-            url: this.options.addUrl,
+            type: this.options.actionMethod,
+            url: this.options.actionUrl,
             dataType: 'json',
             data: data,
             success: function (response) {
-                self._reportAdded(publicKeys, response);
+                self._reportConfirmed(publicKeys, response);
                 self.close();
             },
             error: function () {
-                self.dialog.setStatus(lang.get('js.dungeonroute_picker_add_failed'));
+                self.dialog.setStatus(lang.get(`js.${self.options.actionKeyPrefix}_failed`));
             },
             complete: function () {
                 self._saving = false;
@@ -489,7 +511,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
      * @param {*} response
      * @private
      */
-    _reportAdded(publicKeys, response) {
+    _reportConfirmed(publicKeys, response) {
         let self = this;
         let dungeonRoutes = publicKeys
             .map(publicKey => self._dungeonRoutes[publicKey])
@@ -503,8 +525,8 @@ class CommonDungeonroutePicker extends SearchInlineBase {
 
         /** @type {CommonDungeonroutePickerResult} */
         let result = {publicKeys: publicKeys, dungeonRoutes: dungeonRoutes, response: response};
-        this.dialog.trigger('dungeonroutepicker:added', [result]);
-        this._onAddedCallbacks.forEach(callback => callback(result));
+        this.dialog.trigger('dungeonroutepicker:confirmed', [result]);
+        this._onConfirmedCallbacks.forEach(callback => callback(result));
     }
 }
 

@@ -127,8 +127,10 @@ return [
             'pulls'     => '{1} :count pull|[2,*] :count pulls',
         ],
         'table' => [
-            'team'   => 'Team',
-            'filter' => 'Filter',
+            'team'                     => 'Team',
+            'filter'                   => 'Filter',
+            'mass_delete'              => 'Delete multiple routes',
+            'mass_delete_picker_title' => 'Delete multiple routes',
         ],
         'tablefilters' => [
             'affixes'               => 'Affixes',
@@ -158,6 +160,7 @@ return [
             'pagination'                   => 'Route pages',
             'cancel'                       => 'Cancel',
             'add_none'                     => 'Add routes',
+            'delete_none'                  => 'Delete routes',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - data by https://www.archon.gg/wow',

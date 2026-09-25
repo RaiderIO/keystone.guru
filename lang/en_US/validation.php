@@ -112,6 +112,12 @@ return [
             'not_in'       => 'This route is not in the collection.',
             'missing'      => 'The new order must hold every route of the collection. Reload the page and try again.',
         ],
+        'delete_bulk_dungeon_routes' => [
+            'required' => 'Choose at least one route to delete.',
+            'max'      => 'At most :max routes can be deleted at once.',
+            'exists'   => 'That route no longer exists.',
+            'distinct' => 'A route may only be deleted once.',
+        ],
     ],
     'date'              => 'The :attribute is not a valid date.',
     'date_equals'       => 'The :attribute must be a date equal to :date.',

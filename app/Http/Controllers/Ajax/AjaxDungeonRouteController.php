@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteDeleteBulkFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteListFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSimulateFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSubmitFormRequest;
@@ -52,6 +53,7 @@ use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
@@ -489,6 +491,38 @@ class AjaxDungeonRouteController extends Controller
         $this->dungeonRouteChanged($dungeonRoute, $dungeonRoute, null);
 
         return response()->noContent();
+    }
+
+    /**
+     * Deletes several routes at once, the way the route picker drawer's delete mode sends them.
+     *
+     * @throws Exception
+     */
+    public function deleteBulk(AjaxDungeonRouteDeleteBulkFormRequest $request): JsonResponse
+    {
+        $dungeonRoutes = $request->dungeonRoutes();
+
+        // Every route is authorized before any of them is deleted, so a request holding one route the caller
+        // may not delete deletes nothing at all
+        foreach ($dungeonRoutes as $dungeonRoute) {
+            Gate::authorize('delete', $dungeonRoute);
+        }
+
+        foreach ($dungeonRoutes as $dungeonRoute) {
+            // Per route rather than around the batch: deleting one route also writes to the combatlog
+            // connection and removes its thumbnails from disk, neither of which a rollback undoes
+            DB::transaction(function () use ($dungeonRoute): void {
+                if (!$dungeonRoute->delete()) {
+                    abort(500, 'Unable to delete dungeonroute');
+                }
+
+                $this->dungeonRouteChanged($dungeonRoute, $dungeonRoute, null);
+            });
+        }
+
+        return response()->json([
+            'dungeon_routes' => $dungeonRoutes->pluck('public_key')->values(),
+        ]);
     }
 
     /**

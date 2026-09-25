@@ -53,6 +53,12 @@ const MESSAGES = {
         dungeonroute_picker_add_one:           'Add 1 route',
         dungeonroute_picker_add_many:          'Add :count routes',
         dungeonroute_picker_add_failed:        'Adding failed',
+        dungeonroute_picker_delete_none:          'Delete routes',
+        dungeonroute_picker_delete_one:           'Delete 1 route',
+        dungeonroute_picker_delete_many:          'Delete :count routes',
+        dungeonroute_picker_delete_confirm_one:   'Delete this route permanently?',
+        dungeonroute_picker_delete_confirm_many:  'Delete these :count routes permanently?',
+        dungeonroute_picker_delete_failed:        'Deleting failed',
     },
     'en.dungeons': {ara_kara: 'Ara-Kara'},
 };
@@ -75,7 +81,7 @@ const OPTIONS = {
     rangeSelector:              '#picker_range',
     selectionSelector:          '#picker_selection',
     fullSelector:               '#picker_full',
-    addButtonSelector:          '#picker_add',
+    confirmButtonSelector:      '#picker_confirm',
     statusSelector:             '#picker_status',
     listUrl:                    '/ajax/routes',
     pageSize:                   2,
@@ -83,8 +89,11 @@ const OPTIONS = {
     lockedParameters:           {game_version_id: 1, season_id: 14, dungeon_ids: [3, 4]},
     existingPublicKeys:         ['existing'],
     max:                        3,
-    addUrl:                     '/target/add',
-    addFieldName:               'dungeon_routes',
+    actionKeyPrefix:            'dungeonroute_picker_add',
+    actionUrl:                  '/target/add',
+    actionFieldName:            'dungeon_routes',
+    actionMethod:               'POST',
+    confirmsAction:             false,
     fallbackImageBaseUrl:       'https://assets/images',
     affixGroups:                {7: [{class: 'fortified', name: 'Fortified'}]},
 };
@@ -133,7 +142,7 @@ const MARKUP = `
                 <button id="picker_next"></button>
                 <span id="picker_selection"></span>
                 <span id="picker_full" hidden></span>
-                <button id="picker_add"></button>
+                <button id="picker_confirm"></button>
                 <div id="picker_status"></div>
             </div>`;
 
@@ -152,6 +161,7 @@ describe('CommonDungeonroutePicker', () => {
 
         globalThis.lang = new Lang({messages: MESSAGES, locale: 'en'});
         globalThis.refreshSelectPickers          = vi.fn();
+        globalThis.showConfirmYesCancel          = vi.fn();
         globalThis.getHandlebarsDefaultVariables = () => MESSAGES['en.js'];
         globalThis.Handlebars                    = Handlebars;
         Handlebars.templates = {};
@@ -505,7 +515,7 @@ describe('CommonDungeonroutePicker', () => {
         expect(rowOf('a').querySelector('.route_picker_checkbox').disabled).toBe(false);
         expect(document.querySelector('#picker_full').hidden).toBe(false);
         expect(document.querySelector('#picker_full').textContent).toBe('Limit is 3');
-        expect(document.querySelector('#picker_add').textContent).toBe('Add 2 routes');
+        expect(document.querySelector('#picker_confirm').textContent).toBe('Add 2 routes');
         expect(document.querySelector('#picker_selection').textContent).toBe('2 selected');
     });
 
@@ -578,8 +588,8 @@ describe('CommonDungeonroutePicker', () => {
 
         // Assert
         expect(picker.getSelectedPublicKeys()).toEqual([]);
-        expect(document.querySelector('#picker_add').disabled).toBe(true);
-        expect(document.querySelector('#picker_add').textContent).toBe('Add routes');
+        expect(document.querySelector('#picker_confirm').disabled).toBe(true);
+        expect(document.querySelector('#picker_confirm').textContent).toBe('Add routes');
     });
 
     it('load_givenAnotherPage_keepsTicksFromTheFirstPage', () => {
@@ -602,7 +612,7 @@ describe('CommonDungeonroutePicker', () => {
     it('add_givenTicksFromAnEarlierPage_handsTheHostTheirRowsToo', () => {
         // Arrange
         document.body.innerHTML = MARKUP;
-        picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS, {addUrl: null}));
+        picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS, {actionUrl: null}));
         picker.activate();
         ajaxCalls.length = 0;
         picker.reload();
@@ -612,10 +622,10 @@ describe('CommonDungeonroutePicker', () => {
         respondWithRoutes([route('c'), route('d')], 4);
         tick('c');
         const callback = vi.fn();
-        picker.onAdded(callback);
+        picker.onConfirmed(callback);
 
         // Act
-        document.querySelector('#picker_add').click();
+        document.querySelector('#picker_confirm').click();
 
         // Assert
         expect(callback).toHaveBeenCalledWith({
@@ -633,11 +643,11 @@ describe('CommonDungeonroutePicker', () => {
         tick('a');
         const callback = vi.fn();
         const eventHandler = vi.fn();
-        picker.onAdded(callback);
-        jQuery('#picker').on('dungeonroutepicker:added', eventHandler);
+        picker.onConfirmed(callback);
+        jQuery('#picker').on('dungeonroutepicker:confirmed', eventHandler);
 
         // Act
-        document.querySelector('#picker_add').click();
+        document.querySelector('#picker_confirm').click();
         const post = ajaxCalls.find((call) => call.type === 'POST');
         post.success({added: 2});
         post.complete();
@@ -652,21 +662,21 @@ describe('CommonDungeonroutePicker', () => {
         expect(rowOf('a').querySelector('.route_picker_already_in').hidden).toBe(false);
     });
 
-    it('add_givenNoAddUrl_handsTheRoutesToTheHostWithoutPostingThem', () => {
+    it('add_givenNoActionUrl_handsTheRoutesToTheHostWithoutPostingThem', () => {
         // Arrange
         // A clean DOM, so only the drawer under test is bound to it
         document.body.innerHTML = MARKUP;
-        picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS, {addUrl: null}));
+        picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS, {actionUrl: null}));
         picker.activate();
         ajaxCalls.length = 0;
         picker.reload();
         respondWithRoutes([route('a'), route('b')]);
         tick('a');
         const callback = vi.fn();
-        picker.onAdded(callback);
+        picker.onConfirmed(callback);
 
         // Act
-        document.querySelector('#picker_add').click();
+        document.querySelector('#picker_confirm').click();
 
         // Assert
         expect(ajaxCalls.filter((call) => call.type === 'POST')).toHaveLength(0);
@@ -687,7 +697,7 @@ describe('CommonDungeonroutePicker', () => {
         tick('a');
 
         // Act
-        document.querySelector('#picker_add').click();
+        document.querySelector('#picker_confirm').click();
         const post = ajaxCalls.find((call) => call.type === 'POST');
         post.error({status: 422}, 'error');
         post.complete();
@@ -695,7 +705,101 @@ describe('CommonDungeonroutePicker', () => {
         // Assert
         expect(picker.getSelectedPublicKeys()).toEqual(['a']);
         expect(document.querySelector('#picker_status').textContent).toBe('Adding failed');
-        expect(document.querySelector('#picker_add').disabled).toBe(false);
+        expect(document.querySelector('#picker_confirm').disabled).toBe(false);
+        expect(offcanvas.hide).not.toHaveBeenCalled();
+    });
+
+    /**
+     * A drawer in delete mode, bound to a clean DOM so only it is bound to the markup.
+     * @returns {CommonDungeonroutePicker}
+     */
+    function deletePicker() {
+        document.body.innerHTML = MARKUP;
+        const deleteDrawer = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker',
+            Object.assign({}, OPTIONS, {
+                actionKeyPrefix: 'dungeonroute_picker_delete',
+                actionUrl:       '/ajax/routes',
+                actionMethod:    'DELETE',
+                confirmsAction:  true,
+                max:             null,
+                existingPublicKeys: [],
+            }));
+        deleteDrawer.activate();
+        ajaxCalls.length = 0;
+
+        return deleteDrawer;
+    }
+
+    it('refreshSelection_givenDeleteMode_namesTheDeleteActionOnTheConfirmButton', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')]);
+
+        // Act
+        tick('a');
+        tick('b');
+
+        // Assert
+        expect(document.querySelector('#picker_confirm').textContent).toBe('Delete 2 routes');
+    });
+
+    it('confirm_givenDeleteModeAndAConfirmedPrompt_sendsThemToTheDeleteEndpoint', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')]);
+        tick('a');
+        const callback = vi.fn();
+        picker.onConfirmed(callback);
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        const request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.success({dungeon_routes: ['a']});
+        request.complete();
+
+        // Assert
+        expect(globalThis.showConfirmYesCancel).toHaveBeenCalledWith('Delete this route permanently?', expect.any(Function));
+        expect(request.url).toBe('/ajax/routes');
+        expect(request.data).toEqual({dungeon_routes: ['a']});
+        expect(callback).toHaveBeenCalledWith(expect.objectContaining({publicKeys: ['a'], response: {dungeon_routes: ['a']}}));
+        expect(offcanvas.hide).toHaveBeenCalledTimes(1);
+    });
+
+    it('confirm_givenDeleteModeAndADismissedPrompt_sendsNothing', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a')]);
+        tick('a');
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+
+        // Assert
+        expect(ajaxCalls.filter((call) => call.type === 'DELETE')).toHaveLength(0);
+        expect(picker.getSelectedPublicKeys()).toEqual(['a']);
+    });
+
+    it('confirm_givenDeleteModeAndAFailingEndpoint_keepsTheSelectionAndSaysSo', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a')]);
+        tick('a');
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        const request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.error({status: 403}, 'error');
+        request.complete();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a']);
+        expect(document.querySelector('#picker_status').textContent).toBe('Deleting failed');
         expect(offcanvas.hide).not.toHaveBeenCalled();
     });
 

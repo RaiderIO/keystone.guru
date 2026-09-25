@@ -126,7 +126,7 @@ class TeamEdit extends InlineCode {
 
         this._routePicker = routePicker;
 
-        routePicker.onAdded(this._onRoutesAdded.bind(this));
+        routePicker.onConfirmed(this._onRoutesAdded.bind(this));
 
         routePicker.dialog.onShow(function () {
             self._routePicker.setExistingPublicKeys([]);

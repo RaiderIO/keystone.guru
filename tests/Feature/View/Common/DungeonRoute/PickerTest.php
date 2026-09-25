@@ -93,16 +93,16 @@ final class PickerTest extends PublicTestCase
             'title'              => 'Add routes to My set',
             'existingPublicKeys' => $existingPublicKeys,
             'max'                => 24,
-            'addUrl'             => '/some/target/add',
-            'addFieldName'       => 'route_keys',
+            'actionUrl'          => '/some/target/add',
+            'actionFieldName'    => 'route_keys',
         ]);
 
         // Assert
         $this->assertStringContainsString('Add routes to My set', $html);
         $this->assertSame($existingPublicKeys, $options['existingPublicKeys']);
         $this->assertSame(24, $options['max']);
-        $this->assertSame('/some/target/add', $options['addUrl']);
-        $this->assertSame('route_keys', $options['addFieldName']);
+        $this->assertSame('/some/target/add', $options['actionUrl']);
+        $this->assertSame('route_keys', $options['actionFieldName']);
         $this->assertSame(25, $options['pageSize']);
     }
 
@@ -119,15 +119,75 @@ final class PickerTest extends PublicTestCase
     }
 
     #[Test]
-    public function render_givenNoAddUrl_passesNullSoTheHostSavesThePickedRoutes(): void
+    public function render_givenNoActionUrl_passesNullSoTheHostActsOnThePickedRoutes(): void
     {
         // Arrange - nothing beyond the defaults
 
         // Act
-        [, $options] = $this->renderPicker(['addUrl' => null]);
+        [, $options] = $this->renderPicker(['actionUrl' => null]);
 
         // Assert
-        $this->assertNull($options['addUrl']);
+        $this->assertNull($options['actionUrl']);
+    }
+
+    #[Test]
+    public function render_givenNoAction_picksTheAddAction(): void
+    {
+        // Arrange - nothing beyond the defaults
+
+        // Act
+        [$html, $options] = $this->renderPicker();
+
+        // Assert
+        $this->assertSame('dungeonroute_picker_add', $options['actionKeyPrefix']);
+        $this->assertSame('POST', $options['actionMethod']);
+        $this->assertFalse($options['confirmsAction']);
+        $this->assertStringContainsString('btn btn-primary', $html);
+    }
+
+    #[Test]
+    public function render_givenTheDeleteAction_confirmsItAndSendsADelete(): void
+    {
+        // Arrange - nothing beyond the defaults
+
+        // Act
+        [$html, $options] = $this->renderPicker(['action' => 'delete']);
+
+        // Assert
+        $this->assertSame('dungeonroute_picker_delete', $options['actionKeyPrefix']);
+        $this->assertSame('DELETE', $options['actionMethod']);
+        $this->assertTrue($options['confirmsAction']);
+        $this->assertStringContainsString('btn btn-danger', $html);
+        $this->assertStringContainsString(__('view_common.dungeonroute.picker.delete_none'), $html);
+    }
+
+    #[Test]
+    public function render_givenAnUnknownAction_throws(): void
+    {
+        // Arrange
+        $this->expectException(InvalidArgumentException::class);
+
+        // Act
+        $this->renderPicker(['action' => 'publish']);
+
+        // Assert - the expected exception
+    }
+
+    #[Test]
+    public function render_givenNoLockedGameVersion_locksNothingAndOffersEveryGameVersionsDungeons(): void
+    {
+        // Arrange
+        /** @var Dungeon $classicDungeon */
+        $classicDungeon = Dungeon::query()
+            ->whereHas('mappingVersions', static fn($query) => $query->where('game_version_id', GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]))
+            ->firstOrFail();
+
+        // Act
+        [$html, $options] = $this->renderPicker(['lockedGameVersion' => null]);
+
+        // Assert
+        $this->assertSame([], $options['lockedParameters']);
+        $this->assertContains((string)$classicDungeon->id, $this->dungeonOptionValues($html));
     }
 
     #[Test]

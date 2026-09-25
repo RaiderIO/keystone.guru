@@ -2,6 +2,7 @@
 <?php
 
 use App\Features\CreatorProfiles;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteDeleteBulkFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\RouteAttribute;
 use App\Models\Tags\Tag;
@@ -40,6 +41,12 @@ $tagsSelectId         ??= 'dungeonroute_tags_select';
 
 // "Add to collection…" is offered on My routes only
 $showAddToCollection = $view === 'profile' && Auth::check() && Feature::active(CreatorProfiles::class);
+
+// Deleting several routes at once is offered on My routes only, and picks them in the route picker drawer
+// instead of putting a checkbox on every row of this table
+$showMassDelete   = $view === 'profile' && Auth::check();
+$massDeleteId     = sprintf('%s_mass_delete', $tableId);
+$massDeletePickerId = sprintf('%s_picker', $massDeleteId);
 
 /** @var string $view */
 $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
@@ -92,6 +99,7 @@ if (Auth::check()) {
             })->get() : [],
             'autoCompleteTags' => $autoCompleteTags,
             'showAddToCollection' => $showAddToCollection,
+            'massDeletePickerSelector' => $showMassDelete ? sprintf('#%s', $massDeletePickerId) : null,
         ],
 ])
 
@@ -163,6 +171,26 @@ if (Auth::check()) {
         </div>
     </div>
 </div>
+@if($showMassDelete)
+    <div class="d-flex justify-content-end mt-2">
+        <button id="{{ $massDeleteId }}" type="button" class="btn btn-outline-danger">
+            <i class="fas fa-trash-alt"></i> {{ __('view_common.dungeonroute.table.mass_delete') }}
+        </button>
+    </div>
+
+    @include('common.dungeonroute.picker', [
+        'id' => $massDeletePickerId,
+        'title' => __('view_common.dungeonroute.table.mass_delete_picker_title'),
+        'action' => 'delete',
+        'sourceScope' => 'mine',
+        'lockedGameVersion' => null,
+        'max' => AjaxDungeonRouteDeleteBulkFormRequest::MAX_DUNGEON_ROUTES,
+        'actionUrl' => route('api.dungeonroute.delete.bulk'),
+        'actionFieldName' => 'dungeon_routes',
+        'openButtonSelector' => sprintf('#%s', $massDeleteId),
+    ])
+@endif
+
 <table id="{{ $tableId }}" class="routes_table tablesorter default_table dt-responsive nowrap table-striped mt-2"
        width="100%">
     <thead>
