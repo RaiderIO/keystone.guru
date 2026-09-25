@@ -2,12 +2,15 @@
 
 namespace Tests\Feature\Controller\DungeonRoute;
 
+use App\Events\Models\Arrow\ArrowChangedEvent;
+use App\Models\Arrow;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\PublishedState;
 use App\Models\User;
 use App\Service\Floor\FloorResolutionServiceInterface;
+use App\Service\MapContext\MapContextServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\Traits\GrantsPatreonBenefits;
@@ -156,6 +159,52 @@ final class DungeonRouteVanityKeyTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    /**
+     * A presence channel is authorized once, when the client joins it. Naming it after a key that can be
+     * changed - or released and claimed by another route - would leave those clients listening to a name
+     * that has come to mean a different route.
+     */
+    #[Test]
+    public function getEchoChannelName_givenVanityKey_staysOnThePublicKey(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner, self::VANITY_KEY);
+
+        try {
+            // Act
+            $channelName = app(MapContextServiceInterface::class)
+                ->createMapContextDungeonRoute($route, User::MAP_FACADE_STYLE_SPLIT_FLOORS)
+                ->getEchoChannelName();
+
+            // Assert
+            $this->assertStringEndsWith(sprintf('-route-edit.%s', $route->public_key), $channelName);
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function broadcastOn_givenVanityKey_staysOnThePublicKeyChannel(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner, self::VANITY_KEY);
+
+        try {
+            // Act
+            $channels = new ArrowChangedEvent($route, $owner, new Arrow())->broadcastOn();
+
+            // Assert
+            $this->assertCount(1, $channels);
+            $this->assertStringEndsWith(sprintf('-route-edit.%s', $route->public_key), $channels[0]->name);
         } finally {
             $route->delete();
             $owner->delete();

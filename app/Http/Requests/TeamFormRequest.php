@@ -50,7 +50,7 @@ class TeamFormRequest extends FormRequest
             'name'        => $nameRules,
             'description' => 'string|nullable',
             'vanity_key'  => $canSetVanityKey
-                ? ['nullable', 'string', new VanityKeyRule(Team::class, $team, Team::RESERVED_VANITY_KEYS)]
+                ? ['nullable', 'string', new VanityKeyRule(Team::class, $team, Team::RESERVED_VANITY_KEYS, publicKeyIsPrefix: true)]
                 : ['prohibited'],
             'logo' => [
                 'nullable',
