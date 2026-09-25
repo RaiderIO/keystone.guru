@@ -24,5 +24,31 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 1084,
+        "floor_id": 242,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -136.275,
+        "lng": 236.8676,
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.altar_of_hakkar",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 1084,
+        "floor_id": 242,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -121.1539,
+        "lng": 220.0539,
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.deep_lurker_variant",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
