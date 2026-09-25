@@ -25,40 +25,48 @@ class SettingsTabRoute extends SettingsTab {
      * @private
      */
     _saveRouteSettings() {
+        let data = {
+            team_id: $('#team_id_select').val(),
+            dungeon_route_title: $('#dungeon_route_title').val(),
+            dungeon_route_description: c.map.sanitizeText($('#dungeon_route_description').val()),
+            dungeon_route_level: $('#dungeon_route_level').val(),
+            // teeming: $('#teeming').is(':checked') ? 1 : 0,
+            attributes: $('#attributes').val(),
+            faction_id: $('#faction_id').val(),
+            seasonal_index: $('#seasonal_index').val(),
+            class:
+                $('.classselect select').map(function () {
+                    return $(this).val();
+                }).get()
+            ,
+            specialization:
+                $('.specializationselect select').map(function () {
+                    return $(this).val();
+                }).get()
+            ,
+            race:
+                $('.raceselect select').map(function () {
+                    return $(this).val();
+                }).get()
+            ,
+            dungeon_start_map_icon_id: $('#dungeon_start_map_icon_id').val(),
+            unlisted: $('#unlisted').is(':checked') ? 1 : 0,
+            demo: $('#demo').is(':checked') && isUserAdmin ? 1 : 0,
+            route_select_affixes: $('#route_select_affixes').val(),
+            _method: 'PATCH'
+        };
+
+        // The field is only rendered for whoever may set a custom URL; sending it empty otherwise would clear it
+        let $vanityKey = $('#dungeon_route_vanity_key');
+        if ($vanityKey.length > 0) {
+            data.dungeon_route_vanity_key = $vanityKey.val();
+        }
+
         $.ajax({
             type: 'POST',
             url: `/ajax/${getState().getMapContext().getPublicKey()}`,
             dataType: 'json',
-            data: {
-                team_id: $('#team_id_select').val(),
-                dungeon_route_title: $('#dungeon_route_title').val(),
-                dungeon_route_description: c.map.sanitizeText($('#dungeon_route_description').val()),
-                dungeon_route_level: $('#dungeon_route_level').val(),
-                // teeming: $('#teeming').is(':checked') ? 1 : 0,
-                attributes: $('#attributes').val(),
-                faction_id: $('#faction_id').val(),
-                seasonal_index: $('#seasonal_index').val(),
-                class:
-                    $('.classselect select').map(function () {
-                        return $(this).val();
-                    }).get()
-                ,
-                specialization:
-                    $('.specializationselect select').map(function () {
-                        return $(this).val();
-                    }).get()
-                ,
-                race:
-                    $('.raceselect select').map(function () {
-                        return $(this).val();
-                    }).get()
-                ,
-                dungeon_start_map_icon_id: $('#dungeon_start_map_icon_id').val(),
-                unlisted: $('#unlisted').is(':checked') ? 1 : 0,
-                demo: $('#demo').is(':checked') && isUserAdmin ? 1 : 0,
-                route_select_affixes: $('#route_select_affixes').val(),
-                _method: 'PATCH'
-            },
+            data: data,
             beforeSend: function () {
                 $('#save_route_settings').hide();
                 $('#save_route_settings_saving').show();

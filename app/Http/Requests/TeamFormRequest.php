@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\Team;
+use App\Models\User;
+use App\Rules\VanityKeyRule;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -18,6 +21,15 @@ class TeamFormRequest extends FormRequest
         return Auth::check();
     }
 
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('vanity_key')) {
+            $vanityKey = strtolower(trim((string)$this->get('vanity_key')));
+
+            $this->merge(['vanity_key' => $vanityKey === '' ? null : $vanityKey]);
+        }
+    }
+
     /** @return array<string, mixed> */
     public function rules(): array
     {
@@ -30,10 +42,17 @@ class TeamFormRequest extends FormRequest
             $nameRules = Rule::unique('teams')->ignore($team);
         }
 
+        /** @var User|null $user */
+        $user            = Auth::user();
+        $canSetVanityKey = $user !== null && $user->hasPatreonBenefit(PatreonBenefit::CUSTOM_URLS);
+
         return [
             'name'        => $nameRules,
             'description' => 'string|nullable',
-            'logo'        => [
+            'vanity_key'  => $canSetVanityKey
+                ? ['nullable', 'string', new VanityKeyRule(Team::class, $team, Team::RESERVED_VANITY_KEYS)]
+                : ['prohibited'],
+            'logo' => [
                 'nullable',
                 File::image()
                     ->min(1)
@@ -45,6 +64,14 @@ class TeamFormRequest extends FormRequest
                         'png',
                     ]),
             ],
+        ];
+    }
+
+    /** @return array<string, string> */
+    public function messages(): array
+    {
+        return [
+            'vanity_key.prohibited' => __('validation.custom.vanity_key.prohibited'),
         ];
     }
 }
