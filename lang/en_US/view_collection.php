@@ -15,6 +15,8 @@ return [
         'title'                   => 'My collections',
         'header'                  => 'My collections',
         'description'             => 'A collection puts your routes on one page you can share with a single link - a route for every dungeon of the season, or your routes for newer players.',
+        'description_tags'        => 'A collection is meant to be shared. To sort your own routes for yourself without publishing anything, %s instead.',
+        'link_tags'               => 'tag them',
         'create_collection'       => 'New collection',
         'max_collections'         => 'You have :max collections, the most you may have. Delete one to make a new one.',
         'no_collections'          => 'You have no collections yet. Start one to share a route for every dungeon of the season with one link.',

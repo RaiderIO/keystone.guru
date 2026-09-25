@@ -43,6 +43,14 @@ $seasonOptions = ['' => __('view_collection.index.filter_season_all')]
 
     <p class="collection_index_intro text-body-secondary">
         {{ __('view_collection.index.description') }}
+        {!!
+            sprintf(
+                __('view_collection.index.description_tags'),
+                '<a href="' . route('profile.tags') . '">' .
+                __('view_collection.index.link_tags') .
+                '</a>'
+            )
+        !!}
     </p>
     @if(!$mayCreateCollection)
         <p id="collections_max_collections" class="text-warning">
