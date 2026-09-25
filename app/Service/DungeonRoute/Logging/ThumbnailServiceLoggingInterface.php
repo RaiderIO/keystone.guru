@@ -63,6 +63,8 @@ interface ThumbnailServiceLoggingInterface
 
     public function doCreateThumbnailRecoveredAfterReload(string $errors, string $previewUrl, string $variant, int $renderDurationMs): void;
 
+    public function queueThumbnailRefreshPaused(string $publicKey): void;
+
     public function queueThumbnailRefreshMappingVersionNull(string $publicKey): void;
 
     public function queueThumbnailRefreshDispatchedJob(string $publicKey, int $index, bool $force): void;

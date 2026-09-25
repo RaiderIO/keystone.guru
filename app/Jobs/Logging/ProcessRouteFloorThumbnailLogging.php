@@ -16,6 +16,11 @@ class ProcessRouteFloorThumbnailLogging extends StructuredLogging implements Pro
         $this->start(__METHOD__, get_defined_vars());
     }
 
+    public function handleThumbnailGenerationPaused(): void
+    {
+        $this->info(__METHOD__);
+    }
+
     public function handleCreateThumbnailError(): void
     {
         $this->warning(__METHOD__);

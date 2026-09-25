@@ -789,6 +789,10 @@ return [
             'export_dungeon_data_description'                         => 'Download a full data dump of all dungeons and their assets.',
             'toggle_readonly_mode'                                    => 'Toggle read-only mode',
             'toggle_readonly_mode_description'                        => 'Put the site into read-only mode, blocking all write operations.',
+            'pause_thumbnail_generation'                              => 'Pause thumbnail generation',
+            'resume_thumbnail_generation'                             => 'Resume thumbnail generation',
+            'toggle_thumbnail_generation_description'                 => 'Stop queueing and rendering new route thumbnails - useful during a deploy. Existing thumbnails keep being served. Jobs already on the queue are skipped rather than drained; use Horizon to drain them. The state lives in the cache, so dropping the caches resumes generation.',
+            'thumbnail_generation_paused_state'                       => 'Thumbnail generation is currently paused.',
         ],
         'artisancommands' => [
             'backfillkillzoneenemyid' => [
@@ -810,6 +814,7 @@ return [
             'regenerate' => [
                 'title'        => 'Mass regenerate thumbnails',
                 'header'       => 'Mass regenerate thumbnails',
+                'paused'       => 'Thumbnail generation is paused - submitting this form will queue nothing. Resume it on the admin tools page first.',
                 'only_missing' => 'Only queue routes with missing thumbnails',
                 'force'        => 'Force a re-render even if the thumbnail is considered up to date (needed to replace thumbnails that rendered blank). Pick a specific dungeon - combined with all dungeons this queues a real render for every route on the site',
                 'submit'       => 'Submit',

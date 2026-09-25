@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInterface;
+use App\Service\DungeonRoute\ThumbnailGenerationToggleServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -14,15 +15,19 @@ use Session;
 
 class AdminToolsThumbnailsController extends Controller
 {
-    public function thumbnailsregenerate(): View
-    {
-        return view('admin.tools.thumbnails.regenerate');
+    public function thumbnailsregenerate(
+        ThumbnailGenerationToggleServiceInterface $thumbnailGenerationToggleService,
+    ): View {
+        return view('admin.tools.thumbnails.regenerate', [
+            'thumbnailGenerationPaused' => $thumbnailGenerationToggleService->isPaused(),
+        ]);
     }
 
     public function thumbnailsregeneratesubmit(
-        Request                                  $request,
-        ThumbnailService                         $thumbnailService,
-        DungeonRouteThumbnailRepositoryInterface $dungeonRouteThumbnailRepository,
+        Request                                   $request,
+        ThumbnailService                          $thumbnailService,
+        DungeonRouteThumbnailRepositoryInterface  $dungeonRouteThumbnailRepository,
+        ThumbnailGenerationToggleServiceInterface $thumbnailGenerationToggleService,
     ): View {
         set_time_limit(3600);
 
@@ -80,6 +85,8 @@ class AdminToolsThumbnailsController extends Controller
             'failed'  => $failureCount,
         ]));
 
-        return view('admin.tools.thumbnails.regenerate');
+        return view('admin.tools.thumbnails.regenerate', [
+            'thumbnailGenerationPaused' => $thumbnailGenerationToggleService->isPaused(),
+        ]);
     }
 }

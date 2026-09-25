@@ -5,6 +5,7 @@ namespace Tests\Feature\Controller\AdminTools;
 use App\Jobs\DropCaches;
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use App\Service\DungeonRoute\ThumbnailGenerationToggleServiceInterface;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -31,5 +32,55 @@ final class AdminToolsControllerTest extends PublicTestCase
         // Assert
         $response->assertRedirect(route('admin.tools'));
         Queue::assertPushed(DropCaches::class);
+    }
+
+    #[Test]
+    public function toggleThumbnailGeneration_givenAdmin_flipsStateAndRedirects(): void
+    {
+        // Arrange
+        $admin         = User::findOrFail(self::ADMIN_USER_ID);
+        $toggleService = app()->make(ThumbnailGenerationToggleServiceInterface::class);
+
+        try {
+            $this->be($admin);
+
+            // Act
+            $pauseResponse = $this->post(route('admin.tools.thumbnails.toggle'));
+
+            // Assert
+            $pauseResponse->assertRedirect(route('admin.tools'));
+            $this->assertTrue($toggleService->isPaused());
+
+            // Act - toggling again resumes generation
+            $resumeResponse = $this->post(route('admin.tools.thumbnails.toggle'));
+
+            // Assert
+            $resumeResponse->assertRedirect(route('admin.tools'));
+            $this->assertFalse($toggleService->isPaused());
+        } finally {
+            $toggleService->setPaused(false);
+        }
+    }
+
+    #[Test]
+    public function toggleThumbnailGeneration_givenNonAdmin_isNotAllowed(): void
+    {
+        // Arrange
+        $user          = User::factory()->create();
+        $toggleService = app()->make(ThumbnailGenerationToggleServiceInterface::class);
+
+        try {
+            $this->be($user);
+
+            // Act
+            $response = $this->post(route('admin.tools.thumbnails.toggle'));
+
+            // Assert
+            $this->assertContains($response->getStatusCode(), [403, 404]);
+            $this->assertFalse($toggleService->isPaused());
+        } finally {
+            $toggleService->setPaused(false);
+            $user->delete();
+        }
     }
 }
