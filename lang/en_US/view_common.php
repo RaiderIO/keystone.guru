@@ -255,7 +255,7 @@ return [
             'battlenet_region'        => 'Battle.net region',
             'continue_with_battlenet' => 'Continue with Battle.net',
             'continue_with_discord'   => 'Continue with Discord',
-            'continue_with_google'    => 'Continue with Google',
+            'sign_in_with_google'     => 'Sign in with Google',
         ],
         'orderedselect' => [
             'choose' => 'Choose one to add...',

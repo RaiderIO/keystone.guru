@@ -48,10 +48,17 @@ $battleNetRegions = $allRegions->filter(
     </a>
 </div>
 
-<div class="mb-3">
-    <a href="{{ route('login.google') }}"
-       class="btn btn-oauth w-100 d-flex align-items-center justify-content-center gap-2">
-        <i class="fab fa-google" aria-hidden="true"></i>
-        {{ __('view_common.forms.oauth.continue_with_google') }}
+{{-- Google's branding guidelines require its own button artwork rather than our .btn-oauth; one
+     variant per theme, the other hidden by the theme stylesheet --}}
+<div class="mb-3 d-flex justify-content-center">
+    <a href="{{ route('login.google') }}" class="btn-oauth-google">
+        <img src="{{ ksgAssetImage('oauth/branding_guideline_sample_lt_sq_lg.png') }}"
+             class="btn-oauth-google-light"
+             width="354" height="80"
+             alt="{{ __('view_common.forms.oauth.sign_in_with_google') }}"/>
+        <img src="{{ ksgAssetImage('oauth/branding_guideline_sample_dk_sq_lg.png') }}"
+             class="btn-oauth-google-dark"
+             width="354" height="80"
+             alt="{{ __('view_common.forms.oauth.sign_in_with_google') }}"/>
     </a>
 </div>
