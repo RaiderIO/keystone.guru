@@ -52,13 +52,11 @@ class SpellTuningCompendiumController extends Controller
     ): View {
         $gameVersion = GameVersion::getUserOrDefaultGameVersion();
 
-        $builds         = $spellTuningBuildRepository->getBuilds($gameVersion->id, $dungeon, self::BUILDS_PER_PAGE);
+        $builds         = $spellTuningBuildRepository->getBuilds($gameVersion->id, self::BUILDS_PER_PAGE);
         $changesByBuild = [];
 
         foreach ($builds->items() as $build) {
-            $changesByBuild[$build['to_build']] = $build['spell_count'] === 0
-                ? collect()
-                : $spellTuningChangeRepository->getForBuild($gameVersion->id, $build['to_build'], $dungeon);
+            $changesByBuild[$build->to_build] = $spellTuningChangeRepository->getForBuild($gameVersion->id, $build->to_build, $dungeon);
         }
 
         return view('compendium.tuning.index', [

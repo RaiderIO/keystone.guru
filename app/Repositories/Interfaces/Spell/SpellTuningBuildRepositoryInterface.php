@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Interfaces\Spell;
 
-use App\Models\Dungeon;
 use App\Models\Spell\SpellTuningBuild;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -23,13 +22,11 @@ use Illuminate\Support\Collection;
 interface SpellTuningBuildRepositoryInterface extends BaseRepositoryInterface
 {
     /**
-     * Every compared build of a game version, newest first, including builds without changes. Each page
-     * item is `{from_build, to_build, to_build_number, to_build_released_at, spell_count}`, where
-     * `spell_count` optionally only counts spells linked to a dungeon.
+     * Every compared build of a game version, newest first, including builds without changes.
      *
-     * @return LengthAwarePaginator<int, covariant array{from_build: string, to_build: string, to_build_number: int, to_build_released_at: Carbon|null, spell_count: int}>
+     * @return LengthAwarePaginator<int, SpellTuningBuild>
      */
-    public function getBuilds(int $gameVersionId, ?Dungeon $dungeon, int $perPage): LengthAwarePaginator;
+    public function getBuilds(int $gameVersionId, int $perPage): LengthAwarePaginator;
 
     /**
      * When the given build went live, as recorded for it, or null when it is unknown or carries no date.

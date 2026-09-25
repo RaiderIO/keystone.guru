@@ -1,14 +1,14 @@
 <?php
 
 use App\Models\Dungeon;
+use App\Models\Spell\SpellTuningBuild;
 use App\Models\Spell\SpellTuningChange;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
  * @var Dungeon|null                                                                                     $contextDungeon      null on the unscoped page
- * @var LengthAwarePaginator<int, array{from_build: string, to_build: string, to_build_number: int, to_build_released_at: Carbon|null, spell_count: int}> $builds
+ * @var LengthAwarePaginator<int, SpellTuningBuild>                                                    $builds
  * @var array<string, Collection<int, SpellTuningChange>>                                                $changesByBuild      keyed by to_build
  * @var Collection<int, Dungeon>                                                                         $gameVersionDungeons
  */
@@ -61,24 +61,25 @@ use Illuminate\Support\Collection;
         <p class="text-muted">{{ __('view_compendium.tuning.index.empty') }}</p>
     @else
         @foreach($builds->items() as $build)
+            @php($spellCount = $changesByBuild[$build->to_build]->unique('spell_id')->count())
             <div class="compendium_record_section">
                 <div class="compendium_record_label">
                     {{-- h5: one step below the sitepage layout's h4 page title, so builds are jump targets --}}
-                    <h5 class="compendium_tuning_build_heading">{{ __('view_compendium.tuning.index.build_title', ['build' => $build['to_build']]) }}</h5>
-                    @if($build['to_build_released_at'] !== null)
+                    <h5 class="compendium_tuning_build_heading">{{ __('view_compendium.tuning.index.build_title', ['build' => $build->to_build]) }}</h5>
+                    @if($build->to_build_released_at !== null)
                         <div class="compendium_record_label_sub">
-                            @include('compendium.sections.tuning_build_released_at', ['releasedAt' => $build['to_build_released_at']])
+                            @include('compendium.sections.tuning_build_released_at', ['releasedAt' => $build->to_build_released_at])
                         </div>
                     @endif
                     <div class="compendium_record_label_sub">
-                        {{ __('view_compendium.tuning.index.build_subtitle', ['from' => $build['from_build']]) }}
+                        {{ __('view_compendium.tuning.index.build_subtitle', ['from' => $build->from_build]) }}
                         &middot;
-                        {{ trans_choice('view_compendium.tuning.index.changed_spells', $build['spell_count'], ['count' => $build['spell_count']]) }}
+                        {{ trans_choice('view_compendium.tuning.index.changed_spells', $spellCount, ['count' => $spellCount]) }}
                     </div>
                 </div>
                 <div>
                     @include('compendium.sections.tuning_change_list', [
-                        'changes'          => $changesByBuild[$build['to_build']],
+                        'changes'          => $changesByBuild[$build->to_build],
                         'emptyKey'         => $contextDungeon === null ? 'view_compendium.tuning.index.build_no_changes' : 'view_compendium.tuning.index.build_no_changes_dungeon',
                         'showSpellSubject' => true,
                         'showDungeons'     => $contextDungeon === null,

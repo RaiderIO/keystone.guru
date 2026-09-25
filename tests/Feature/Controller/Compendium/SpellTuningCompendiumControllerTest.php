@@ -276,6 +276,49 @@ final class SpellTuningCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenSeveralChangesOfOneSpell_countsEachSpellOnce(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+        [$spellA, $spellB] = Spell::query()
+            ->where('hidden_on_map', false)
+            ->where('game_version_id', GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL)->id)
+            ->orderBy('id')
+            ->limit(2)
+            ->get()
+            ->all();
+        $created = [];
+        $build   = null;
+
+        try {
+            $build = $this->createBuild();
+            foreach ([[$spellA, 0], [$spellA, 1], [$spellB, 0]] as [$spell, $valueIndex]) {
+                $created[] = SpellTuningChange::factory()->create([
+                    'spell_id'        => $spell->id,
+                    'game_version_id' => $spell->game_version_id,
+                    'from_build'      => self::FROM_BUILD,
+                    'to_build'        => self::TO_BUILD,
+                    'to_build_number' => self::TO_BUILD_NUMBER,
+                    'value_index'     => $valueIndex,
+                ]);
+            }
+
+            // Act
+            $response = $this->get(route('compendium.tuning.index'));
+
+            // Assert
+            $response->assertOk();
+            $section = $this->getBuildSection((string)$response->getContent(), self::TO_BUILD);
+            $this->assertStringContainsString(e(trans_choice('view_compendium.tuning.index.changed_spells', 2, ['count' => 2])), $section);
+        } finally {
+            foreach ($created as $change) {
+                $change->delete();
+            }
+            $build?->delete();
+        }
+    }
+
+    #[Test]
     public function indexDungeon_givenUnknownDungeon_returnsNotFound(): void
     {
         // Act

@@ -2,9 +2,8 @@
 
 namespace Tests\Feature\App\Repository;
 
-use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
-use App\Models\Spell\SpellDungeon;
 use App\Models\Spell\SpellTuningBuild;
 use App\Models\Spell\SpellTuningChange;
 use App\Repositories\Interfaces\Spell\SpellTuningBuildRepositoryInterface;
@@ -13,14 +12,11 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('SpellTuning')]
 final class SpellTuningBuildRepositoryTest extends PublicTestCase
 {
-    use CreatesDungeon;
-
     private const string OLD_BUILD = '0.0.0.00011';
 
     private const string MID_BUILD = '0.0.0.00012';
@@ -40,67 +36,55 @@ final class SpellTuningBuildRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    public function getBuilds_givenBuildsWithAndWithoutChanges_returnsAllNewestFirstWithSpellCounts(): void
+    public function getBuilds_givenBuildsWithAndWithoutChanges_returnsAllNewestFirst(): void
     {
         // Arrange
         /** @var Collection<int, Model> $created */
         $created = new Collection();
 
         try {
-            [$spellA, $spellB] = Spell::query()->where('hidden_on_map', false)->orderBy('id')->limit(2)->get()->all();
-            $gameVersionId     = $spellA->game_version_id;
+            $spell         = Spell::query()->where('hidden_on_map', false)->orderBy('id')->firstOrFail();
+            $gameVersionId = $spell->game_version_id;
 
             $created->push($this->createBuild($gameVersionId, self::OLD_BUILD, self::MID_BUILD, 12));
             $created->push($this->createBuild($gameVersionId, self::MID_BUILD, self::NEW_BUILD, 13));
             $created->push($this->createBuild($gameVersionId, self::NEW_BUILD, self::QUIET_BUILD, 14));
-            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spellA->id, 'game_version_id' => $gameVersionId, 'from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12]));
-            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spellA->id, 'game_version_id' => $gameVersionId, 'from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12, 'value_index' => 1]));
-            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spellB->id, 'game_version_id' => $gameVersionId, 'from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12]));
-            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spellA->id, 'game_version_id' => $gameVersionId, 'from_build' => self::MID_BUILD, 'to_build' => self::NEW_BUILD, 'to_build_number' => 13]));
+            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spell->id, 'game_version_id' => $gameVersionId, 'from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12]));
 
             // Act
-            $builds = $this->getTestBuilds($gameVersionId, null);
+            $builds = $this->getTestBuilds($gameVersionId);
 
             // Assert
-            $this->assertSame([self::QUIET_BUILD, self::NEW_BUILD, self::MID_BUILD], array_column($builds, 'to_build'));
-            $this->assertSame(self::NEW_BUILD, $builds[0]['from_build']);
-            $this->assertSame(0, $builds[0]['spell_count']);
-            $this->assertSame(self::MID_BUILD, $builds[1]['from_build']);
-            $this->assertSame(1, $builds[1]['spell_count']);
-            $this->assertSame(2, $builds[2]['spell_count']);
+            $this->assertSame([self::QUIET_BUILD, self::NEW_BUILD, self::MID_BUILD], array_map(static fn(SpellTuningBuild $build): string => $build->to_build, $builds));
+            $this->assertSame(self::NEW_BUILD, $builds[0]->from_build);
+            $this->assertSame(self::MID_BUILD, $builds[1]->from_build);
+            $this->assertSame(self::OLD_BUILD, $builds[2]->from_build);
         } finally {
             $created->each(static fn(Model $model) => $model->delete());
         }
     }
 
     #[Test]
-    public function getBuilds_givenDungeon_countsOnlySpellsOfThatDungeonAndKeepsOtherBuilds(): void
+    public function getBuilds_givenOtherGameVersion_leavesItsBuildsOut(): void
     {
         // Arrange
-        /** @var Collection<int, Model> $created */
+        /** @var Collection<int, SpellTuningBuild> $created */
         $created = new Collection();
 
         try {
-            [$spellIn, $spellOut] = Spell::query()->where('hidden_on_map', false)->orderBy('id')->limit(2)->get()->all();
-            $gameVersionId        = $spellIn->game_version_id;
-            $dungeon              = $this->createDungeon(['active' => true]);
+            $gameVersionId = Spell::query()->where('hidden_on_map', false)->orderBy('id')->firstOrFail()->game_version_id;
+            $otherVersion  = GameVersion::query()->whereKeyNot($gameVersionId)->orderBy('id')->firstOrFail();
 
-            $created->push(SpellDungeon::query()->create(['spell_id' => $spellIn->id, 'dungeon_id' => $dungeon->id]));
             $created->push($this->createBuild($gameVersionId, self::OLD_BUILD, self::MID_BUILD, 12));
-            $created->push($this->createBuild($gameVersionId, self::MID_BUILD, self::NEW_BUILD, 13));
-            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spellIn->id, 'game_version_id' => $gameVersionId, 'from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12]));
-            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spellOut->id, 'game_version_id' => $gameVersionId, 'from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12]));
-            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spellOut->id, 'game_version_id' => $gameVersionId, 'from_build' => self::MID_BUILD, 'to_build' => self::NEW_BUILD, 'to_build_number' => 13]));
+            $created->push($this->createBuild($otherVersion->id, self::MID_BUILD, self::NEW_BUILD, 13));
 
             // Act
-            $builds = $this->getTestBuilds($gameVersionId, $dungeon);
+            $builds = $this->getTestBuilds($gameVersionId);
 
             // Assert
-            $this->assertSame([self::NEW_BUILD, self::MID_BUILD], array_column($builds, 'to_build'));
-            $this->assertSame(0, $builds[0]['spell_count']);
-            $this->assertSame(1, $builds[1]['spell_count']);
+            $this->assertSame([self::MID_BUILD], array_map(static fn(SpellTuningBuild $build): string => $build->to_build, $builds));
         } finally {
-            $created->each(static fn(Model $model) => $model->delete());
+            $created->each(static fn(SpellTuningBuild $build) => $build->delete());
         }
     }
 
@@ -118,12 +102,12 @@ final class SpellTuningBuildRepositoryTest extends PublicTestCase
             $created->push($this->createBuild($gameVersionId, self::MID_BUILD, self::NEW_BUILD, 13, '2001-02-03 04:05:06'));
 
             // Act
-            $builds = collect($this->getTestBuilds($gameVersionId, null))->keyBy('to_build');
+            $builds = collect($this->getTestBuilds($gameVersionId))->keyBy('to_build');
 
             // Assert
-            $this->assertInstanceOf(Carbon::class, $builds[self::NEW_BUILD]['to_build_released_at']);
-            $this->assertSame('2001-02-03 04:05:06', $builds[self::NEW_BUILD]['to_build_released_at']->toDateTimeString());
-            $this->assertNull($builds[self::MID_BUILD]['to_build_released_at']);
+            $this->assertInstanceOf(Carbon::class, $builds[self::NEW_BUILD]->to_build_released_at);
+            $this->assertSame('2001-02-03 04:05:06', $builds[self::NEW_BUILD]->to_build_released_at->toDateTimeString());
+            $this->assertNull($builds[self::MID_BUILD]->to_build_released_at);
         } finally {
             $created->each(static fn(SpellTuningBuild $build) => $build->delete());
         }
@@ -221,12 +205,12 @@ final class SpellTuningBuildRepositoryTest extends PublicTestCase
     /**
      * The builds this test created, in the order the repository returned them; seeded builds are left out.
      *
-     * @return array<int, array{from_build: string, to_build: string, to_build_number: int, to_build_released_at: Carbon|null, spell_count: int}>
+     * @return array<int, SpellTuningBuild>
      */
-    private function getTestBuilds(int $gameVersionId, ?Dungeon $dungeon): array
+    private function getTestBuilds(int $gameVersionId): array
     {
-        return collect($this->repository->getBuilds($gameVersionId, $dungeon, 50)->items())
-            ->filter(static fn(array $build): bool => in_array($build['to_build'], [self::MID_BUILD, self::NEW_BUILD, self::QUIET_BUILD], true))
+        return collect($this->repository->getBuilds($gameVersionId, 50)->items())
+            ->filter(static fn(SpellTuningBuild $build): bool => in_array($build->to_build, [self::MID_BUILD, self::NEW_BUILD, self::QUIET_BUILD], true))
             ->values()
             ->all();
     }
