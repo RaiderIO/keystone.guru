@@ -8,5 +8,6 @@ return [
     'animated-polylines'      => 'Animated polylines',
     'advanced-simulation'     => 'Advanced simulation',
     'ad-free-team-members'    => 'Ad-free for team members',
+    'custom-urls'             => 'Custom URLs',
 
 ];

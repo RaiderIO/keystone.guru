@@ -29,4 +29,10 @@ return [
     'relative_url_rule' => [
         'not_relative' => 'The link must be a path on this site, starting with a single slash.',
     ],
+    'vanity_key_rule' => [
+        'invalid'  => 'A custom URL may only contain lowercase letters, numbers and dashes.',
+        'length'   => 'A custom URL must be between :min and :max characters long.',
+        'reserved' => 'That custom URL is reserved.',
+        'taken'    => 'That custom URL is already taken.',
+    ],
 ];
