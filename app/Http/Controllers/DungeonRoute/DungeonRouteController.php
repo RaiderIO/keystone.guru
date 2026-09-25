@@ -402,6 +402,10 @@ class DungeonRouteController extends Controller
     ): RedirectResponse {
         $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion);
 
+        // This action only ever redirects on to the floor URL, so flash data aimed at the editor - the status of
+        // an upgrade, a warning - would expire here, one request short of the page that renders it
+        $request->session()->reflash();
+
         return redirect()->route('dungeonroute.edit.floor', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
@@ -632,7 +636,10 @@ class DungeonRouteController extends Controller
             'dungeon'      => $draft->dungeon,
             'dungeonroute' => $draft,
             'title'        => $draft->getTitleSlug(),
-        ])->with('status', __('controller.dungeonroute.flash.upgrade_draft_created'));
+        ])
+            ->with('status', __('controller.dungeonroute.flash.upgrade_draft_created'))
+            // Opens the diff of what the upgrade changed once, on this landing only
+            ->with('upgrade_draft_created', true);
     }
 
     /**

@@ -11,6 +11,7 @@ use App\Models\Floor\Floor;
 use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Team;
+use App\Service\DungeonRoute\MappingVersionUpgradeDiffServiceInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 
@@ -35,6 +36,15 @@ $showShare          = !empty($show['share']) && in_array(true, $show['share'], t
 $showCreateRouteBtn = isset($dungeonroute) && $dungeonroute->isSandbox();
 
 $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
+
+// What the mapping version upgrade that produced this draft changed. Only an upgrade draft has one, and only
+// its author's edit page shows it.
+$upgradeDiff = ($edit ?? false) && $dungeonroute !== null && $dungeonroute->is_upgrade_draft
+    ? app(MappingVersionUpgradeDiffServiceInterface::class)->diffForUpgradeDraft($dungeonroute)
+    : null;
+// Opened by itself exactly once, on the redirect straight after pressing Upgrade, and only when the author is
+// actually being asked to repair something
+$upgradeDiffAutoOpen = $upgradeDiff !== null && $upgradeDiff->hasRouteImpact() && session()->has('upgrade_draft_created');
 
 // Whether the mobile overflow (kebab) menu has anything to show - mirrors the desktop button conditions below
 $hasMobileActions = isset($dungeonroute) || $showShare
@@ -356,6 +366,17 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
     @component('common.general.modal', ['id' => 'simulate_modal', 'size' => 'xl'])
         @include('common.modal.simulate', ['dungeonroute' => $dungeonroute])
     @endcomponent
+
+    @if($upgradeDiff !== null)
+        @component('common.general.modal', [
+            'id' => 'mapping_version_upgrade_diff_modal',
+            'size' => 'lg',
+            'keyboard' => true,
+            'active' => $upgradeDiffAutoOpen,
+        ])
+            @include('common.modal.mappingversionupgradediff', ['upgradeDiff' => $upgradeDiff])
+        @endcomponent
+    @endif
 
     @component('common.general.modal', ['id' => 'start_live_session_modal'])
         <h3 class="card-title">{{ __('view_common.maps.controls.header.start_live_session') }}</h3>

@@ -352,4 +352,101 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
             $this->tearDownCleanup();
         }
     }
+
+    #[Test]
+    public function editFloor_givenUpgradeDraft_rendersTheWhatChangedModal(): void
+    {
+        try {
+            // Arrange
+            $owner = $this->createUser();
+            $route = $this->createOutdatedRoute($owner);
+            $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+            ]));
+            $draft = DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $route->id)->firstOrFail();
+
+            // Act
+            $response = $this->actingAs($owner)->followingRedirects()->get(route('dungeonroute.edit', [
+                'dungeon'      => $draft->dungeon,
+                'dungeonroute' => $draft,
+                'title'        => $draft->getTitleSlug(),
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('mapping_version_upgrade_diff_modal');
+            // Landed on the draft directly rather than straight off Upgrade, so the modal waits to be opened
+            $response->assertDontSee('{"id":"#mapping_version_upgrade_diff_modal"}', false);
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function editFloor_givenRouteThatIsNotAnUpgradeDraft_doesNotRenderTheWhatChangedModal(): void
+    {
+        try {
+            // Arrange
+            $owner = $this->createUser();
+            $route = $this->createOutdatedRoute($owner);
+
+            // Act
+            $response = $this->actingAs($owner)->followingRedirects()->get(route('dungeonroute.edit', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertDontSee('mapping_version_upgrade_diff_modal');
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function editFloor_givenTheRedirectStraightAfterUpgrading_opensTheWhatChangedModalByItself(): void
+    {
+        try {
+            // Arrange - the upgrade redirects to dungeonroute.edit, which redirects on to the floor URL, so the
+            // flash that opens the modal has to survive a redirect it is not the target of
+            $owner = $this->createUser();
+            $route = $this->createOutdatedRoute($owner);
+
+            $newMappingVersion = MappingVersion::query()
+                ->where('dungeon_id', $route->dungeon_id)
+                ->orderByDesc('version')
+                ->firstOrFail();
+            $requiredEnemy = Enemy::create([
+                'mapping_version_id' => $newMappingVersion->id,
+                'floor_id'           => $route->dungeon->floors()->where('facade', false)->value('id'),
+                'npc_id'             => null,
+                'teeming'            => null,
+                'required'           => true,
+                'lat'                => -100.0,
+                'lng'                => 100.0,
+            ]);
+            array_unshift($this->cleanup, $requiredEnemy);
+
+            // Act
+            $response = $this->actingAs($owner)->followingRedirects()->get(route('dungeonroute.upgrade', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+            ]));
+
+            // Assert
+            $response->assertOk();
+            // The options the 'modal/active' inline code is handed - i.e. this modal, opened on load
+            $response->assertSee('{"id":"#mapping_version_upgrade_diff_modal"}', false);
+
+            $draft = DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $route->id)->firstOrFail();
+            array_unshift($this->cleanup, $draft);
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
 }

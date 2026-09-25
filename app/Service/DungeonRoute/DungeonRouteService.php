@@ -204,7 +204,7 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
         )->id;
 
         // Carry the chosen dungeon start over to the new mapping version (matched by comment)
-        $newDungeonStartMapIconId = $this->remapDungeonStartMapIconId($dungeonRoute, $newMappingVersionId);
+        $newDungeonStartMapIconId = $this->findDungeonStartMapIconIdForMappingVersion($dungeonRoute, $newMappingVersionId);
 
         DB::transaction(function () use ($dungeonRoute, $newMappingVersionId, $newDungeonStartMapIconId): void {
             $this->dungeonRouteRepository->update($dungeonRoute, [
@@ -239,13 +239,7 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
         DungeonRoute::dropCaches($dungeonRoute->id);
     }
 
-    /**
-     * Finds the dungeon start map icon in the new mapping version that matches the route's currently
-     * chosen start, matched by the map_icons.comment field. Returns null when the route has no chosen
-     * start, the old icon is gone, it has no comment to match on, or no matching icon exists in the
-     * new mapping version (which later falls back to the first dungeon start).
-     */
-    private function remapDungeonStartMapIconId(DungeonRoute $dungeonRoute, int $newMappingVersionId): ?int
+    public function findDungeonStartMapIconIdForMappingVersion(DungeonRoute $dungeonRoute, int $mappingVersionId): ?int
     {
         if ($dungeonRoute->dungeon_start_map_icon_id === null) {
             return null;
@@ -256,7 +250,7 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
             return null;
         }
 
-        $newMapIconId = MapIcon::where('mapping_version_id', $newMappingVersionId)
+        $newMapIconId = MapIcon::where('mapping_version_id', $mappingVersionId)
             ->where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START])
             ->where('comment', $oldMapIcon->comment)
             ->value('id');

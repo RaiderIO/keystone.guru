@@ -229,6 +229,13 @@ return [
         'min_shape_ratio' => 0.6,
     ],
 
+    /** What a dungeon route's mapping version upgrade is reported to have changed (MappingVersionUpgradeDiffService) */
+    'mapping_version_upgrade_diff' => [
+        /** A pull enemy the upgrade kept but that moved at least this many ingame yards is reported as moved. Below it
+         *  the pull still sits where the author drew it and a mapping nudge is not something to act on. */
+        'enemy_moved_min_distance_yd' => 10,
+    ],
+
     /** The default max zoom level on the map */
     'zoom_max_default' => 5,
 

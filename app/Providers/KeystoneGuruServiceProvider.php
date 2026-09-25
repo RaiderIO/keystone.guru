@@ -123,6 +123,8 @@ use App\Service\DungeonRoute\DungeonRouteUpgradeDraftService;
 use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
 use App\Service\DungeonRoute\MapDrawingService;
 use App\Service\DungeonRoute\MapDrawingServiceInterface;
+use App\Service\DungeonRoute\MappingVersionUpgradeDiffService;
+use App\Service\DungeonRoute\MappingVersionUpgradeDiffServiceInterface;
 use App\Service\DungeonRoute\TestDungeonRouteGeneratorService;
 use App\Service\DungeonRoute\TestDungeonRouteGeneratorServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
@@ -292,6 +294,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(DungeonRouteServiceInterface::class, DungeonRouteService::class);
         // Depends on DungeonRouteService, ThumbnailService
         $this->app->bind(DungeonRouteUpgradeDraftServiceInterface::class, DungeonRouteUpgradeDraftService::class);
+        // Depends on CoordinatesService, DungeonRouteService
+        $this->app->bind(MappingVersionUpgradeDiffServiceInterface::class, MappingVersionUpgradeDiffService::class);
         // Depends on DungeonRouteSaveService, DungeonRouteService
         $this->app->bind(DungeonRouteSeasonContinuationServiceInterface::class, DungeonRouteSeasonContinuationService::class);
         $this->app->bind(DungeonRouteSearchServiceInterface::class, DungeonRouteSearchService::class);
