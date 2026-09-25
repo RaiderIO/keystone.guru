@@ -73,6 +73,9 @@ class ClassCompendiumController extends Controller
             Spell::query()
                 ->where('category', SpellCategory::translationKeyFor($characterClass->key))
                 ->whereNotNull('characteristic_id')
+                // A PvP talent is unavailable in a dungeon, so listing it as crowd control for one is a
+                // lie the player only finds out about mid-pull
+                ->where('is_pvp_talent', false)
                 ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
                 ->with('characteristic')
                 ->get(),

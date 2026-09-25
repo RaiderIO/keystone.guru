@@ -5,6 +5,7 @@ namespace App\Repositories\Database;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
+use App\Service\CombatLog\DataExtractors\Characteristics\CharacteristicEvidenceRule;
 use Illuminate\Support\Collection;
 
 class SpellRepository extends DatabaseRepository implements SpellRepositoryInterface
@@ -36,12 +37,19 @@ class SpellRepository extends DatabaseRepository implements SpellRepositoryInter
     }
 
     /**
+     * The effects come along because {@see CharacteristicEvidenceRule} judges every one of these spells on
+     * them, and the extraction pipeline holds this catalog for the whole run.
+     *
      * @return Collection<int, Spell>
      */
     public function getAllWithCharacteristic(): Collection
     {
         return Spell::query()
             ->whereNotNull('characteristic_id')
+            // A PvP talent cannot be pressed in a dungeon, so an observation attributed to one is a
+            // mis-parse rather than evidence
+            ->where('is_pvp_talent', false)
+            ->with('spellEffects')
             ->get()
             ->keyBy('id');
     }

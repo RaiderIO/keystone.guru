@@ -11,4 +11,10 @@ interface SpellDescriptionImportServiceLoggingInterface
     public function importDescriptionsUnknownBuild(string $product): void;
 
     public function importDescriptionsNoDescriptionsFound(string $product, string $build): void;
+
+    public function persistPvpTalentFlagsTableUnavailable(string $build, string $message): void;
+
+    public function persistPvpTalentFlagsNoRows(string $build): void;
+
+    public function persistPvpTalentFlagsDone(string $build, int $pvpTalentSpellCount, int $flaggedCount, int $unflaggedCount): void;
 }

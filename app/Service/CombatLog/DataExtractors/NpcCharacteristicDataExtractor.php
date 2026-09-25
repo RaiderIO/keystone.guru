@@ -16,6 +16,7 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Spell\Spell as SpellModel;
 use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
+use App\Service\CombatLog\DataExtractors\Characteristics\CharacteristicEvidenceRule;
 use App\Service\CombatLog\DataExtractors\Logging\NpcCharacteristicDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
@@ -44,7 +45,12 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
      */
     private Collection $pendingNewNpcCharacteristics;
 
-    /** @var Collection<int, SpellModel> */
+    /**
+     * The curated characteristic spells whose application proves the characteristic - see
+     * {@see CharacteristicEvidenceRule}.
+     *
+     * @var Collection<int, SpellModel>
+     */
     private readonly Collection $spellsWithCharacteristics;
 
     private readonly NpcCharacteristicDataExtractorLoggingInterface $log;
@@ -58,12 +64,27 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
         $this->addedCharacteristics         = collect();
         $this->pendingObservations          = collect();
         $this->pendingNewNpcCharacteristics = collect();
-        $this->spellsWithCharacteristics    = $this->spellRepository->getAllWithCharacteristic();
 
         $log = App::make(NpcCharacteristicDataExtractorLoggingInterface::class);
         /** @var NpcCharacteristicDataExtractorLoggingInterface $log */
 
         $this->log = $log;
+
+        // Filtered once per extractor rather than per line: the catalog is the same for the whole run,
+        // and a rejected spell would otherwise log for every event it appears in
+        $this->spellsWithCharacteristics = $this->spellRepository->getAllWithCharacteristic()
+            ->filter(function (SpellModel $spell): bool {
+                if (CharacteristicEvidenceRule::isConclusive($spell)) {
+                    return true;
+                }
+
+                $this->log->constructSpellEvidenceNotConclusive(
+                    $spell->id,
+                    array_flip(Characteristic::ALL)[$spell->characteristic_id] ?? (string)$spell->characteristic_id,
+                );
+
+                return false;
+            });
     }
 
     public function beforeExtract(ExtractedDataResult $result, string $combatLogFilePath): void
@@ -119,6 +140,12 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
 
         if (!($npc instanceof Npc)) {
             $this->log->extractDataNpcNotFound($npcId);
+
+            return;
+        }
+
+        if (!CharacteristicEvidenceRule::isConclusiveOn($spell, $npc)) {
+            $this->log->extractDataEvidenceNotConclusiveOnNpc($npcId, $characteristicKey);
 
             return;
         }

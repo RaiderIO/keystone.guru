@@ -50,6 +50,7 @@ use Str;
  * @property bool        $selectable
  * @property bool        $hidden_on_map
  * @property int|null    $characteristic_id
+ * @property bool        $is_pvp_talent
  * @property Carbon      $fetched_data_at
  *
  * @property string $icon_url
@@ -135,6 +136,7 @@ class Spell extends Model implements MappingModelInterface
         'selectable',
         'hidden_on_map',
         'characteristic_id',
+        'is_pvp_talent',
         'icon_url',
         'fetched_data_at',
     ];
@@ -155,6 +157,7 @@ class Spell extends Model implements MappingModelInterface
             'selectable'               => 'boolean',
             'hidden_on_map'            => 'boolean',
             'characteristic_id'        => 'integer',
+            'is_pvp_talent'            => 'boolean',
             'fetched_data_at'          => 'datetime',
             'description_values'       => 'array',
             'damage_multiplier'        => 'float',
