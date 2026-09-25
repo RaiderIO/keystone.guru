@@ -27,10 +27,16 @@ use Tests\TestCases\PublicTestCase;
 #[Group('NpcCharacteristicDataExtractor')]
 final class NpcCharacteristicDataExtractorTest extends PublicTestCase
 {
-    private const int    NPC_ID          = 9995011;
-    private const int    SPELL_ID        = 118; // Polymorph → CHARACTERISTIC_POLYMORPH
-    private const string RAW_EVENT       = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Player-4184-005B8B04,"TestPlayer",0x512,0x0,Creature-0-2085-2290-22744-9995011-00012D4051,"TestNpc",0xa48,0x0,118,"Polymorph",0x40,DEBUFF';
-    private const string COMBAT_LOG_PATH = '/tmp/test.log';
+    private const int    NPC_ID   = 9995011;
+    private const int    SPELL_ID = 118; // Polymorph → CHARACTERISTIC_POLYMORPH
+
+    /**
+     * Infected Wounds: curated as a slow, but its aura effects are the snare *and* Rake's damage
+     * amplifier, so the amplifier alone applies the aura on a snare-immune boss.
+     */
+    private const int RIDER_AURA_SPELL_ID = 58180;
+    private const string RAW_EVENT        = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Player-4184-005B8B04,"TestPlayer",0x512,0x0,Creature-0-2085-2290-22744-9995011-00012D4051,"TestNpc",0xa48,0x0,118,"Polymorph",0x40,DEBUFF';
+    private const string COMBAT_LOG_PATH  = '/tmp/test.log';
 
     private NpcCharacteristicDataExtractor $extractor;
 
@@ -92,6 +98,17 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
     private function parsedEvent(): BaseEvent
     {
         return new CombatLogEntry(self::RAW_EVENT)->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
+    }
+
+    private function parsedEventForSpell(int $spellId, string $spellName): BaseEvent
+    {
+        $rawEvent = str_replace(
+            sprintf(',%d,"Polymorph",', self::SPELL_ID),
+            sprintf(',%d,"%s",', $spellId, $spellName),
+            self::RAW_EVENT,
+        );
+
+        return new CombatLogEntry($rawEvent)->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
     }
 
     /**
@@ -166,6 +183,46 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
                 ->where('characteristic_id', Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH])
                 ->count(),
         );
+    }
+
+    #[Test]
+    public function extractData_givenARiderAuraSpellAppliedToCreature_doesNotCreateNpcCharacteristic(): void
+    {
+        // Arrange
+        $this->createTestNpc();
+        $parsedEvent = $this->parsedEventForSpell(self::RIDER_AURA_SPELL_ID, 'Infected Wounds');
+
+        // Act
+        $this->runExtract([$parsedEvent]);
+
+        // Assert
+        $this->assertSame(0, $this->result->toArray()['createdNpcCharacteristics']);
+        $this->assertDatabaseMissing('npc_characteristics', ['npc_id' => self::NPC_ID]);
+        $this->assertDatabaseMissing('combat_log_npc_characteristic_observations', [
+            'npc_id' => self::NPC_ID,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function extractData_givenAPvpTalentSpellAppliedToCreature_doesNotCreateNpcCharacteristic(): void
+    {
+        // Arrange
+        $this->createTestNpc();
+        Spell::where('id', self::SPELL_ID)->update(['is_pvp_talent' => true]);
+
+        try {
+            // The catalog is read in the constructor, so the extractor has to be built after the flag
+            $this->extractor = new NpcCharacteristicDataExtractor(new SpellRepositorySwoole());
+
+            // Act
+            $this->runExtract([$this->parsedEvent()]);
+
+            // Assert
+            $this->assertSame(0, $this->result->toArray()['createdNpcCharacteristics']);
+            $this->assertDatabaseMissing('npc_characteristics', ['npc_id' => self::NPC_ID]);
+        } finally {
+            Spell::where('id', self::SPELL_ID)->update(['is_pvp_talent' => false]);
+        }
     }
 
     #[Test]

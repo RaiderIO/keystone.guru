@@ -9,6 +9,11 @@ class NpcCharacteristicDataExtractorLogging extends StructuredLogging implements
 {
     use InteractsWithRollbar;
 
+    public function constructSpellEvidenceNotConclusive(int $spellId, string $characteristicKey): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     public function extractDataAssignedCharacteristicToNpc(int $npcId, string $characteristicKey, string $rawEvent): void
     {
         $this->info(__METHOD__, get_defined_vars());
