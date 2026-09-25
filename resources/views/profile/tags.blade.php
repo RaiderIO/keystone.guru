@@ -19,16 +19,18 @@
          !!}
     </p>
 
-    <p>
-        {!!
-            sprintf(
-                __('view_profile.tags.collections'),
-                '<a href="' . route('collections.index') . '">' .
-                __('view_profile.tags.link_collections') .
-                '</a>'
-            )
-        !!}
-    </p>
+    @feature(\App\Features\CreatorProfiles::class)
+        <p>
+            {!!
+                sprintf(
+                    __('view_profile.tags.collections'),
+                    '<a href="' . route('collections.index') . '">' .
+                    __('view_profile.tags.link_collections') .
+                    '</a>'
+                )
+            !!}
+        </p>
+    @endfeature
 
     @include('common.tag.manager', ['context' => Auth::user(), 'category' => TagCategory::DUNGEON_ROUTE_PERSONAL])
 @endsection

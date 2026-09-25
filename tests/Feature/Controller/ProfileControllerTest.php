@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Controller;
 
+use App\Features\CreatorProfiles;
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -13,13 +15,14 @@ use Tests\TestCases\PublicTestCase;
 final class ProfileControllerTest extends PublicTestCase
 {
     #[Test]
-    public function tags_givenOwnProfile_pointsAtCollectionsForSharing(): void
+    public function tags_givenCreatorProfilesActive_pointsAtCollectionsForSharing(): void
     {
         $user = null;
 
         try {
             // Arrange
             $user = $this->userWithUserRole();
+            Feature::for($user)->activate(CreatorProfiles::class);
 
             // Act
             $response = $this->actingAs($user)->get(route('profile.tags'));
@@ -29,6 +32,33 @@ final class ProfileControllerTest extends PublicTestCase
             $response->assertSee(__('view_profile.tags.link_collections'));
             $response->assertSee(route('collections.index'));
         } finally {
+            if ($user !== null) {
+                Feature::for($user)->forget(CreatorProfiles::class);
+            }
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function tags_givenCreatorProfilesInactive_hidesTheCollectionsPointer(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange - /collections is behind the same feature, so the pointer would link to a 404
+            $user = $this->userWithUserRole();
+            Feature::for($user)->deactivate(CreatorProfiles::class);
+
+            // Act
+            $response = $this->actingAs($user)->get(route('profile.tags'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertDontSee(__('view_profile.tags.link_collections'));
+        } finally {
+            if ($user !== null) {
+                Feature::for($user)->forget(CreatorProfiles::class);
+            }
             $user?->delete();
         }
     }
