@@ -16,14 +16,17 @@ class VanityKeyRule implements ValidationRule
     public const MAX_LENGTH = 48;
 
     /**
-     * @param class-string<Model> $modelClass   The model the key is stored on.
-     * @param Model|null          $ignoreModel  The model being saved, whose own keys do not count as taken.
-     * @param array<int, string>  $reservedKeys Keys shadowed by a static route, which would never resolve.
+     * @param class-string<Model> $modelClass        The model the key is stored on.
+     * @param Model|null          $ignoreModel       The model being saved, whose own keys do not count as taken.
+     * @param array<int, string>  $reservedKeys      Keys shadowed by a static route, which would never resolve.
+     * @param bool                $publicKeyIsPrefix True when the model's route key is `<public key>-<slug>`, so
+     *                                               everything up to the first dash is a public key as well.
      */
     public function __construct(
         private readonly string $modelClass,
         private readonly ?Model $ignoreModel = null,
         private readonly array  $reservedKeys = [],
+        private readonly bool   $publicKeyIsPrefix = false,
     ) {
     }
 
@@ -47,14 +50,28 @@ class VanityKeyRule implements ValidationRule
             return;
         }
 
-        if ($this->isTaken('vanity_key', $value) || $this->isTaken('public_key', $value)) {
+        if ($this->isTaken('vanity_key', $value)) {
             $fail(__('rules.vanity_key_rule.taken'));
+
+            return;
+        }
+
+        // Both the whole key and, where the route key carries a slug behind it, its first segment: either
+        // form is a URL that already points at another row
+        $publicKeys = $this->publicKeyIsPrefix ? [$value, explode('-', $value, 2)[0]] : [$value];
+
+        foreach (array_unique($publicKeys) as $publicKey) {
+            if ($this->isTaken('public_key', $publicKey)) {
+                $fail(__('rules.vanity_key_rule.taken'));
+
+                return;
+            }
         }
     }
 
     /**
      * A key already held by another row of the same table is taken: the vanity key wins in route binding,
-     * so re-using another row's public key would make that row unreachable.
+     * so re-using another row's public key would take over that row's URL.
      */
     private function isTaken(string $column, string $value): bool
     {
