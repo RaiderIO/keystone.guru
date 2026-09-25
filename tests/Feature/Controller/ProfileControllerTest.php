@@ -13,6 +13,27 @@ use Tests\TestCases\PublicTestCase;
 final class ProfileControllerTest extends PublicTestCase
 {
     #[Test]
+    public function tags_givenOwnProfile_pointsAtCollectionsForSharing(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->get(route('profile.tags'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(__('view_profile.tags.link_collections'));
+            $response->assertSee(route('collections.index'));
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
     public function update_givenSelf_updatesTheProfile(): void
     {
         $user = null;

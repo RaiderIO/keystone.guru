@@ -13,6 +13,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
+ * A label a user (or a team) puts on their own content to find it back: never published, unordered, unbounded in
+ * number, and the thing every "my content" list filters on. The counterpart is DungeonRouteCollection, which
+ * publishes an ordered set under its own URL - tags organize, collections publish, and neither replaces the other.
+ *
+ * The context_class/model_class pair makes any model taggable, but a model only earns tags once the number a single
+ * user can own is unbounded; a model capped at a handful of rows is organized by its own fields instead.
+ *
  * @property int         $id
  * @property int         $context_id
  * @property string      $context_class

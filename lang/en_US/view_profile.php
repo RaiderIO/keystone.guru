@@ -106,6 +106,8 @@ return [
                 You can manage tags for your own routes here. Nobody else will be able to view your tags - for routes attached to a team
                 you can manage a separate set of tags for just that team by visiting the Tags section when viewing your team.',
         'link_your_personal_route_overview' => 'your personal route overview',
+        'collections'                       => 'Tags organize your routes for yourself, and are never published. To put a set of routes on one page that you can share with a single link, make %s instead.',
+        'link_collections'                  => 'a collection',
     ],
     'view' => [
         'title'              => '%s\'s routes',

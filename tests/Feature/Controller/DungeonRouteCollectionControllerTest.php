@@ -70,6 +70,27 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenAnyUser_pointsAtTagsForPrivateOrganizing(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('collections.index'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(__('view_collection.index.link_tags'));
+            $response->assertSee(route('profile.tags'));
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function index_givenAWorldPublishedCollection_showsItsVisibility(): void
     {
         // Arrange

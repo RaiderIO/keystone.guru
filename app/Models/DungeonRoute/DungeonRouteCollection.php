@@ -30,6 +30,10 @@ use Override;
  * for this week". Shares its visibility mechanics with DungeonRoute - a published state and a
  * public key - so that a collection can be linked around exactly like a route can.
  *
+ * A collection is not a tag with a URL: it is ordered, capped, and made to be read by other people, where a Tag is
+ * an unbounded private label that only ever filters lists. A collection carries no tags of its own - MAX_COLLECTIONS
+ * keeps the list short enough that its game version, season, category and visibility organize it already.
+ *
  * @property int         $id
  * @property int         $user_id
  * @property int|null    $team_id
