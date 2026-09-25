@@ -220,6 +220,41 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function showDungeon_givenAPvpTalentSpell_omitsItFromTheCrowdControlTable(): void
+    {
+        // Arrange - a PvP talent cannot be pressed in a dungeon, so it has no business in a table of
+        // what this class brings to one; the normal spell alongside it proves the table is rendered
+        $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $gameVersionId  = $dungeon->getCurrentMappingVersion()->game_version_id;
+
+        $classSpell = $this->createSpell([
+            'game_version_id'   => $gameVersionId,
+            'category'          => SpellCategory::translationKeyFor($characterClass->key),
+            'characteristic_id' => Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH],
+            'name'              => 'Test Class Spell',
+        ]);
+        $pvpTalentSpell = $this->createSpell([
+            'game_version_id'   => $gameVersionId,
+            'category'          => SpellCategory::translationKeyFor($characterClass->key),
+            'characteristic_id' => Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH],
+            'name'              => 'Test Pvp Talent Spell',
+            'is_pvp_talent'     => true,
+        ]);
+
+        // Act
+        $response = $this->get(route('compendium.class.show.dungeon', [
+            'characterClass' => $characterClass,
+            'dungeon'        => $dungeon,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeText(__($classSpell->name));
+        $response->assertDontSeeText(__($pvpTalentSpell->name));
+    }
+
+    #[Test]
     public function show_givenRogueClass_displaysVanishAndShadowmeldCounterSections(): void
     {
         // Arrange — Rogue has Vanish as a class ability, and can be a Night Elf (Shadowmeld racial)

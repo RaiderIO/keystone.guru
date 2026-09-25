@@ -28,4 +28,19 @@ class SpellDescriptionImportServiceLogging extends StructuredLogging implements 
     {
         $this->error(__METHOD__, get_defined_vars());
     }
+
+    public function persistPvpTalentFlagsTableUnavailable(string $build, string $message): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function persistPvpTalentFlagsNoRows(string $build): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function persistPvpTalentFlagsDone(string $build, int $pvpTalentSpellCount, int $flaggedCount, int $unflaggedCount): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
 }

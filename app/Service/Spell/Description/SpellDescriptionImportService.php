@@ -10,6 +10,7 @@ use App\Service\Spell\Description\Dtos\SpellDescriptionTemplates;
 use App\Service\Spell\Description\Dtos\SpellDescriptionValue;
 use App\Service\Spell\Description\Dtos\SpellEffectData;
 use App\Service\Spell\Description\Logging\SpellDescriptionImportServiceLoggingInterface;
+use App\Service\WagoTools\Exceptions\WagoToolsDownloadException;
 use App\Service\WagoTools\WagoToolsServiceInterface;
 use Closure;
 use Illuminate\Database\Eloquent\Collection;
@@ -100,6 +101,8 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
 
             $this->persistEffects(array_intersect_key($effects, $ourIds));
 
+            $this->persistPvpTalentFlags($build, $gameVersionId);
+
             $updatedCount = $this->renderAndPersist($context, $spells, $templates, $onProgress);
 
             $this->recordImportState($gameVersionId, $product, $build);
@@ -138,6 +141,58 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
 
         File::ensureDirectoryExists(dirname($path));
         File::put($path, json_encode($states, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL);
+    }
+
+    /**
+     * Mark the spells that are a PvP talent, so the parts of the site that only speak about dungeons can
+     * leave them out - a PvP talent is unavailable in one, and Strangulate showing up as a death knight's
+     * silence is a promise the player cannot keep.
+     *
+     * Only `PvpTalent.SpellID` is a PvP talent. `OverridesSpellID` names the normal spell the talent
+     * replaces on the action bar - Asphyxiate, the taunts, Blinding Light - which stays perfectly castable.
+     */
+    private function persistPvpTalentFlags(string $build, int $gameVersionId): void
+    {
+        $pvpTalentSpellIds = [];
+
+        try {
+            foreach ($this->wagoToolsService->readTable('PvpTalent', $build) as $row) {
+                $spellId = (int)($row['SpellID'] ?? 0);
+
+                if ($spellId !== 0) {
+                    $pvpTalentSpellIds[$spellId] = true;
+                }
+            }
+        } catch (WagoToolsDownloadException $exception) {
+            // A build whose client has no PvpTalent table at all (the classic products) says nothing
+            // about PvP talents either way, so nothing about ours may change on the strength of it
+            $this->log->persistPvpTalentFlagsTableUnavailable($build, $exception->getMessage());
+
+            return;
+        }
+
+        if ($pvpTalentSpellIds === []) {
+            $this->log->persistPvpTalentFlagsNoRows($build);
+
+            return;
+        }
+
+        $ids = array_keys($pvpTalentSpellIds);
+
+        $flaggedCount = Spell::query()
+            ->where('game_version_id', $gameVersionId)
+            ->whereIn('id', $ids)
+            ->where('is_pvp_talent', false)
+            ->update(['is_pvp_talent' => true]);
+
+        // A talent this build turned into a normal spell has to lose the flag again
+        $unflaggedCount = Spell::query()
+            ->where('game_version_id', $gameVersionId)
+            ->whereNotIn('id', $ids)
+            ->where('is_pvp_talent', true)
+            ->update(['is_pvp_talent' => false]);
+
+        $this->log->persistPvpTalentFlagsDone($build, count($ids), $flaggedCount, $unflaggedCount);
     }
 
     /**

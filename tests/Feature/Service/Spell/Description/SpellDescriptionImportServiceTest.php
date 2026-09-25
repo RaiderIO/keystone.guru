@@ -26,6 +26,9 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
 
     private const int SPELL_ID = 999999911;
 
+    /** A second spell of the test's own, standing in for the normal spell a PvP talent replaces. */
+    private const int OVERRIDDEN_SPELL_ID = 999999912;
+
     private const string IMPORT_STATE_DATA_PATH = 'data/spell_description/import_state.json';
 
     private string $originalImportStateJson;
@@ -116,6 +119,48 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function importDescriptions_givenAPvpTalentRow_flagsOnlyTheTalentSpell(): void
+    {
+        // Arrange - OverridesSpellID is the normal spell the talent replaces on the action bar, which
+        // stays perfectly castable in a dungeon and must keep its flag clear
+        $talentSpell     = null;
+        $overriddenSpell = null;
+        $flaggedBefore   = Spell::query()->where('is_pvp_talent', true)->pluck('id')->all();
+
+        try {
+            $this->writeDb2Tables(25);
+
+            $talentSpell     = $this->createSpell();
+            $overriddenSpell = $this->createSpell(self::OVERRIDDEN_SPELL_ID);
+
+            $this->writePvpTalentTable($talentSpell->id, $overriddenSpell->id);
+
+            // Act
+            $this->import();
+
+            // Assert
+            $this->assertTrue($talentSpell->fresh()->is_pvp_talent);
+            $this->assertFalse($overriddenSpell->fresh()->is_pvp_talent);
+        } finally {
+            $talentSpell?->delete();
+            $overriddenSpell?->delete();
+            // The run clears the flag on every spell the build does not call a PvP talent, and the
+            // seeded spells that carry it are shared with every other test in this schema
+            Spell::query()->whereIn('id', $flaggedBefore)->update(['is_pvp_talent' => true]);
+            $this->clearImportState();
+            $this->removeDb2Tables();
+        }
+    }
+
+    private function writePvpTalentTable(int $spellId, int $overridesSpellId): void
+    {
+        file_put_contents(
+            sprintf('%s/PvpTalent.csv', $this->getDb2Directory()),
+            sprintf("ID,SpecID,SpellID,OverridesSpellID\n1,62,%d,%d\n", $spellId, $overridesSpellId),
+        );
+    }
+
     private function import(): object
     {
         $result = app(SpellDescriptionImportServiceInterface::class)->importDescriptions(
@@ -136,10 +181,10 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
             ->delete();
     }
 
-    private function createSpell(): Spell
+    private function createSpell(?int $id = null): Spell
     {
         return Spell::create([
-            'id'              => self::SPELL_ID,
+            'id'              => $id ?? self::SPELL_ID,
             'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
             'dispel_type'     => 'spelldispeltype.none',
             'icon_name'       => 'inv_misc_questionmark',
@@ -201,6 +246,9 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
                 CSV,
             'SpellXDescriptionVariables' => <<<CSV
                 ID,SpellID,SpellDescriptionVariablesID
+                CSV,
+            'PvpTalent' => <<<CSV
+                ID,SpecID,SpellID,OverridesSpellID
                 CSV,
         ];
     }
