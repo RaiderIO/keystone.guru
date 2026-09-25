@@ -500,8 +500,15 @@ class AjaxDungeonRouteController extends Controller
      */
     public function deleteBulk(AjaxDungeonRouteDeleteBulkFormRequest $request): JsonResponse
     {
-        $dungeonRoutes = $request->dungeonRoutes();
+        return $this->deleteDungeonRoutes($request->dungeonRoutes());
+    }
 
+    /**
+     * @param  Collection<int, DungeonRoute> $dungeonRoutes
+     * @throws Exception
+     */
+    private function deleteDungeonRoutes(Collection $dungeonRoutes): JsonResponse
+    {
         // Every route is authorized before any of them is deleted, so a request holding one route the caller
         // may not delete deletes nothing at all
         foreach ($dungeonRoutes as $dungeonRoute) {
