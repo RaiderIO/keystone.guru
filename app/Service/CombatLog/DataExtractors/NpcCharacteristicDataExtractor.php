@@ -144,6 +144,12 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
             return;
         }
 
+        if (!CharacteristicEvidenceRule::isConclusiveOn($spell, $npc)) {
+            $this->log->extractDataEvidenceNotConclusiveOnNpc($npcId, $characteristicKey);
+
+            return;
+        }
+
         $dedupKey = sprintf('%d-%d', $npcId, $characteristicId);
         if ($this->addedCharacteristics->contains($dedupKey)) {
             $this->log->extractDataCharacteristicAlreadyAssigned($npcId, $characteristicKey);

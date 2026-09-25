@@ -10,5 +10,7 @@ interface NpcCharacteristicDataExtractorLoggingInterface
 
     public function extractDataNpcNotFound(int $npcId): void;
 
+    public function extractDataEvidenceNotConclusiveOnNpc(int $npcId, string $characteristicKey): void;
+
     public function extractDataCharacteristicAlreadyAssigned(int $npcId, string $characteristicKey): void;
 }

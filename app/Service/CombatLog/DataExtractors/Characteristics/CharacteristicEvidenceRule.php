@@ -3,6 +3,7 @@
 namespace App\Service\CombatLog\DataExtractors\Characteristics;
 
 use App\Models\Characteristic;
+use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellEffect;
 use App\Models\Spell\SpellMechanic;
@@ -26,8 +27,9 @@ use App\Models\Spell\SpellMechanic;
  * - every aura it applies is one of the characteristic's crowd control auras, so no rider effect exists
  *   that could have applied it to an immune target.
  *
- * Knock and grip have neither: a knockback is not an aura and cannot be immunity-checked through one, so
- * no aura application ever proves them.
+ * Knock has neither: a knockback is not an aura and cannot be immunity-checked through one. Any aura a
+ * knock spell applies is taken as proof on everything but a boss instead - bosses are immune to knocks,
+ * trash rarely is, and a compendium where nothing is knockable would say nothing at all.
  */
 final class CharacteristicEvidenceRule
 {
@@ -51,6 +53,16 @@ final class CharacteristicEvidenceRule
     private const int AURA_MOD_DETECT_RANGE   = 91;
     private const int AURA_MOD_STUN_2         = 298;
     private const int AURA_MOD_ROOT_2         = 455;
+
+    /**
+     * Characteristics no aura can prove, for which any aura their spell applies counts as proof unless the
+     * target is a boss.
+     *
+     * @var array<int, string>
+     */
+    private const array PROVEN_BY_ANY_AURA_EXCEPT_ON_BOSSES = [
+        Characteristic::CHARACTERISTIC_KNOCK,
+    ];
 
     /**
      * Per characteristic, the spell-level mechanics and the `SpellEffect.EffectAura` types that are that
@@ -85,7 +97,7 @@ final class CharacteristicEvidenceRule
             'auras'     => [self::AURA_MOD_SILENCE],
         ],
         // A knockback is effect 98 and a grip effect 77 - neither is an aura, so an aura application says
-        // nothing about either, and no spell is ever conclusive for them through this pipeline
+        // nothing about either; knock is judged by PROVEN_BY_ANY_AURA_EXCEPT_ON_BOSSES instead
         Characteristic::CHARACTERISTIC_KNOCK => [
             'mechanics' => [],
             'auras'     => [],
@@ -171,10 +183,17 @@ final class CharacteristicEvidenceRule
      */
     public static function isConclusive(Spell $spell): bool
     {
-        $evidence = self::EVIDENCE[array_flip(Characteristic::ALL)[$spell->characteristic_id] ?? ''] ?? null;
+        $characteristicKey = array_flip(Characteristic::ALL)[$spell->characteristic_id] ?? '';
+        $evidence          = self::EVIDENCE[$characteristicKey] ?? null;
 
         if ($evidence === null) {
             return false;
+        }
+
+        if (in_array($characteristicKey, self::PROVEN_BY_ANY_AURA_EXCEPT_ON_BOSSES, true)) {
+            return $spell->spellEffects->contains(
+                static fn(SpellEffect $spellEffect): bool => in_array($spellEffect->effect_type, self::AURA_APPLYING_EFFECT_TYPES, true),
+            );
         }
 
         foreach ($evidence['mechanics'] as $mechanic) {
@@ -194,5 +213,20 @@ final class CharacteristicEvidenceRule
         return $auraEffects->isNotEmpty() && $auraEffects->every(
             static fn(SpellEffect $spellEffect): bool => in_array($spellEffect->aura_type, $evidence['auras'], true),
         );
+    }
+
+    /**
+     * Whether a spell that {@see self::isConclusive()} also proves its characteristic on this particular
+     * NPC. Only false for a boss hit by a characteristic in PROVEN_BY_ANY_AURA_EXCEPT_ON_BOSSES.
+     */
+    public static function isConclusiveOn(Spell $spell, Npc $npc): bool
+    {
+        if (!$npc->isBoss()) {
+            return true;
+        }
+
+        $characteristicKey = array_flip(Characteristic::ALL)[$spell->characteristic_id] ?? '';
+
+        return !in_array($characteristicKey, self::PROVEN_BY_ANY_AURA_EXCEPT_ON_BOSSES, true);
     }
 }

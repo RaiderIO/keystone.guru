@@ -12,6 +12,7 @@ use App\Models\CombatLog\CombatLogNpcEventType;
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
+use App\Models\Npc\NpcClassification;
 use App\Models\Spell\Spell;
 use App\Repositories\Swoole\SpellRepositorySwoole;
 use App\Service\CombatLog\DataExtractors\Logging\NpcCharacteristicDataExtractorLoggingInterface;
@@ -35,8 +36,11 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
      * amplifier, so the amplifier alone applies the aura on a snare-immune boss.
      */
     private const int RIDER_AURA_SPELL_ID = 58180;
-    private const string RAW_EVENT        = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Player-4184-005B8B04,"TestPlayer",0x512,0x0,Creature-0-2085-2290-22744-9995011-00012D4051,"TestNpc",0xa48,0x0,118,"Polymorph",0x40,DEBUFF';
-    private const string COMBAT_LOG_PATH  = '/tmp/test.log';
+
+    /** Thunderstorm: curated as a knock, its daze is the only aura it logs. */
+    private const int KNOCK_SPELL_ID     = 51490;
+    private const string RAW_EVENT       = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Player-4184-005B8B04,"TestPlayer",0x512,0x0,Creature-0-2085-2290-22744-9995011-00012D4051,"TestNpc",0xa48,0x0,118,"Polymorph",0x40,DEBUFF';
+    private const string COMBAT_LOG_PATH = '/tmp/test.log';
 
     private NpcCharacteristicDataExtractor $extractor;
 
@@ -80,11 +84,11 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         }
     }
 
-    private function createTestNpc(): Npc
+    private function createTestNpc(string $classificationKey = NpcClassification::NPC_CLASSIFICATION_NORMAL): Npc
     {
         return Npc::create([
             'id'                => self::NPC_ID,
-            'classification_id' => 1,
+            'classification_id' => NpcClassification::ALL[$classificationKey],
             'npc_type_id'       => 1,
             'npc_class_id'      => 1,
             'display_id'        => null,
@@ -191,6 +195,42 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         // Arrange
         $this->createTestNpc();
         $parsedEvent = $this->parsedEventForSpell(self::RIDER_AURA_SPELL_ID, 'Infected Wounds');
+
+        // Act
+        $this->runExtract([$parsedEvent]);
+
+        // Assert
+        $this->assertSame(0, $this->result->toArray()['createdNpcCharacteristics']);
+        $this->assertDatabaseMissing('npc_characteristics', ['npc_id' => self::NPC_ID]);
+        $this->assertDatabaseMissing('combat_log_npc_characteristic_observations', [
+            'npc_id' => self::NPC_ID,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function extractData_givenAKnockSpellAppliedToTrash_createsNpcCharacteristic(): void
+    {
+        // Arrange
+        $this->createTestNpc(NpcClassification::NPC_CLASSIFICATION_ELITE);
+        $parsedEvent = $this->parsedEventForSpell(self::KNOCK_SPELL_ID, 'Thunderstorm');
+
+        // Act
+        $this->runExtract([$parsedEvent]);
+
+        // Assert
+        $this->assertSame(1, $this->result->toArray()['createdNpcCharacteristics']);
+        $this->assertDatabaseHas('npc_characteristics', [
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => Characteristic::ALL[Characteristic::CHARACTERISTIC_KNOCK],
+        ]);
+    }
+
+    #[Test]
+    public function extractData_givenAKnockSpellAppliedToABoss_doesNotCreateNpcCharacteristic(): void
+    {
+        // Arrange
+        $this->createTestNpc(NpcClassification::NPC_CLASSIFICATION_BOSS);
+        $parsedEvent = $this->parsedEventForSpell(self::KNOCK_SPELL_ID, 'Thunderstorm');
 
         // Act
         $this->runExtract([$parsedEvent]);
