@@ -209,6 +209,33 @@ final class TeamControllerVanityKeyTest extends PublicTestCase
         }
     }
 
+    /**
+     * A team URL is `<public key>-<name slug>`, and the binding falls back to the part before the first
+     * dash - so a vanity key starting with another team's public key would take over that team's URL.
+     */
+    #[Test]
+    public function update_givenVanityKeyStartingWithAnotherTeamsPublicKey_returnsValidationError(): void
+    {
+        // Arrange
+        $this->grantCustomUrlsBenefit($this->owner);
+        $otherTeam = $this->createTeam(['public_key' => 'abcdefg']);
+
+        try {
+            // Act
+            $response = $this->actingAs($this->owner)->patch($this->updateUrl(), [
+                'description' => '',
+                'vanity_key'  => sprintf('abcdefg-%s', 'hijacked-team'),
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('vanity_key');
+            $this->assertNull($this->team->refresh()->vanity_key);
+            $this->assertSame($otherTeam->id, new Team()->resolveRouteBinding($otherTeam->getRouteKey())?->id);
+        } finally {
+            $otherTeam->delete();
+        }
+    }
+
     #[Test]
     public function edit_givenPublicKeyUrlWhileVanityKeyIsSet_redirectsToTheCustomUrl(): void
     {
