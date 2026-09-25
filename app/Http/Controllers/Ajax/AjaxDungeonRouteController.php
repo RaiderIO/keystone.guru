@@ -515,20 +515,33 @@ class AjaxDungeonRouteController extends Controller
             Gate::authorize('delete', $dungeonRoute);
         }
 
-        foreach ($dungeonRoutes as $dungeonRoute) {
-            // Per route rather than around the batch: deleting one route also writes to the combatlog
-            // connection and removes its thumbnails from disk, neither of which a rollback undoes
-            DB::transaction(function () use ($dungeonRoute): void {
-                if (!$dungeonRoute->delete()) {
-                    abort(500, 'Unable to delete dungeonroute');
-                }
+        $deletedPublicKeys = [];
 
-                $this->dungeonRouteChanged($dungeonRoute, $dungeonRoute, null);
-            });
+        foreach ($dungeonRoutes as $dungeonRoute) {
+            try {
+                // Per route rather than around the batch: deleting one route also writes to the combatlog
+                // connection and removes its thumbnails from disk, neither of which a rollback undoes
+                DB::transaction(function () use ($dungeonRoute): void {
+                    if (!$dungeonRoute->delete()) {
+                        throw new Exception('Unable to delete dungeonroute');
+                    }
+
+                    $this->dungeonRouteChanged($dungeonRoute, $dungeonRoute, null);
+                });
+            } catch (Throwable $throwable) {
+                // The routes deleted so far are gone for good, so the caller is told which ones those were
+                // instead of an error carrying nothing: a retry of the whole selection fails validation on
+                // the deleted keys, which would leave the rest of the batch undeletable
+                report($throwable);
+
+                break;
+            }
+
+            $deletedPublicKeys[] = $dungeonRoute->public_key;
         }
 
         return response()->json([
-            'dungeon_routes' => $dungeonRoutes->pluck('public_key')->values(),
+            'dungeon_routes' => $deletedPublicKeys,
         ]);
     }
 

@@ -11,6 +11,7 @@ use App\Models\Laratrust\Role;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -81,11 +82,7 @@ final class AjaxDungeonRouteControllerDeleteBulkTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $response->assertJsonCount(2, 'dungeon_routes');
-        $this->assertEqualsCanonicalizing(
-            [$firstRoute->public_key, $secondRoute->public_key],
-            $response->json('dungeon_routes'),
-        );
+        $response->assertExactJson(['dungeon_routes' => [$firstRoute->public_key, $secondRoute->public_key]]);
         $this->assertNull($firstRoute->fresh());
         $this->assertNull($secondRoute->fresh());
         $this->assertNotNull($keptRoute->fresh());
@@ -163,6 +160,37 @@ final class AjaxDungeonRouteControllerDeleteBulkTest extends PublicTestCase
             ->where('dungeon_route_id', $dungeonRoute->id)
             ->where('team_id', $team->id)
             ->exists());
+    }
+
+    #[Test]
+    public function deleteBulk_givenOneRouteThatCannotBeDeleted_returnsOnlyTheRoutesItDidDelete(): void
+    {
+        // Arrange - the second route refuses to be deleted, the way a failure part-way into the batch looks
+        $author      = $this->createUser();
+        $firstRoute  = $this->createRoute($author);
+        $secondRoute = $this->createRoute($author);
+        $thirdRoute  = $this->createRoute($author);
+
+        DungeonRoute::deleting(static fn(DungeonRoute $dungeonRoute): ?bool => $dungeonRoute->id === $secondRoute->id ? false : null);
+
+        try {
+            // Act
+            $response = $this->deleteBulk($author, [
+                $firstRoute->public_key,
+                $secondRoute->public_key,
+                $thirdRoute->public_key,
+            ]);
+
+            // Assert - the keys that are really gone are named, so the caller can retry the rest
+            $response->assertOk();
+            $response->assertExactJson(['dungeon_routes' => [$firstRoute->public_key]]);
+            $this->assertNull($firstRoute->fresh());
+            $this->assertNotNull($secondRoute->fresh());
+            $this->assertNotNull($thirdRoute->fresh());
+        } finally {
+            // Only the listener registered above is removed; flushEventListeners() would drop the model's own
+            Event::forget('eloquent.deleting: ' . DungeonRoute::class);
+        }
     }
 
     #[Test]

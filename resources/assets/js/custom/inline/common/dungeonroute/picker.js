@@ -32,6 +32,10 @@
  @property {string} actionFieldName
  @property {string} actionMethod             HTTP method the ticked routes are sent with.
  @property {boolean} confirmsAction          Whether the user confirms once more before the routes are sent.
+ @property {boolean} removesActedRoutes      Whether the action removes the routes from the source, so they are gone
+                                             rather than "already in the target" afterwards.
+ @property {string|null} actedFieldName      Field of the response holding the public keys actually acted on; null
+                                             when every sent route is acted on.
  @property {string} fallbackImageBaseUrl
  @property {Object<string, {class: string, name: string}[]>} affixGroups Affixes per affix group id, for the filter's icons.
  */
@@ -73,6 +77,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
             'tags': new SearchFilterInputChange(options.tagsSelectSelector, onFilterChanged),
         };
 
+        this._listIsStale = false;
         this._page = 0;
         this._total = 0;
         this._saving = false;
@@ -97,7 +102,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
 
         this.dialog.activate();
         this.dialog.onFirstShow(this.reload.bind(this));
-        this.dialog.onShow(this._retryAfterFailure.bind(this));
+        this.dialog.onShow(this._reloadWhenOutOfDate.bind(this));
         this.dialog.onConfirm(this._confirmDungeonRoutes.bind(this));
 
         $(this.options.previousSelector).on('click', this._goToPage.bind(this, -1));
@@ -249,11 +254,12 @@ class CommonDungeonroutePicker extends SearchInlineBase {
     }
 
     /**
-     * Opening the drawer again is the obvious way to try a list that failed to load once more.
+     * Opening the drawer again is the obvious way to try a list that failed to load once more; a list the
+     * last action removed routes from is refetched for the same reason.
      * @private
      */
-    _retryAfterFailure() {
-        if (this._failed) {
+    _reloadWhenOutOfDate() {
+        if (this._failed || this._listIsStale) {
             this.reload();
         }
     }
@@ -283,6 +289,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         let self = this;
 
         this._failed = false;
+        this._listIsStale = false;
         this._previousFilterParams = this._getFilterParams();
 
         super._search({
@@ -493,7 +500,24 @@ class CommonDungeonroutePicker extends SearchInlineBase {
             dataType: 'json',
             data: data,
             success: function (response) {
-                self._reportConfirmed(publicKeys, response);
+                let actedPublicKeys = self._getActedPublicKeys(publicKeys, response);
+
+                if (actedPublicKeys.length > 0) {
+                    self._reportConfirmed(actedPublicKeys, response);
+                }
+
+                // A server that acted on fewer routes than it was sent keeps the rest ticked, so the user
+                // retries only those instead of a selection the endpoint would now reject
+                if (actedPublicKeys.length < publicKeys.length) {
+                    self.dialog.setStatus(lang.get(`js.${self.options.actionKeyPrefix}_failed`));
+
+                    if (self._listIsStale) {
+                        self.reload();
+                    }
+
+                    return;
+                }
+
                 self.close();
             },
             error: function () {
@@ -507,6 +531,23 @@ class CommonDungeonroutePicker extends SearchInlineBase {
     }
 
     /**
+     * The routes the server reports it acted on; every sent route when it reports nothing of its own.
+     * @param {string[]} publicKeys
+     * @param {*} response
+     * @returns {string[]}
+     * @private
+     */
+    _getActedPublicKeys(publicKeys, response) {
+        let field = this.options.actedFieldName;
+
+        if (!field || response === null || typeof response !== 'object' || !Array.isArray(response[field])) {
+            return publicKeys;
+        }
+
+        return publicKeys.filter(publicKey => response[field].includes(publicKey));
+    }
+
+    /**
      * @param {string[]} publicKeys
      * @param {*} response
      * @private
@@ -517,9 +558,17 @@ class CommonDungeonroutePicker extends SearchInlineBase {
             .map(publicKey => self._dungeonRoutes[publicKey])
             .filter(dungeonRoute => typeof dungeonRoute !== 'undefined');
 
-        publicKeys.forEach(publicKey => self._existing.add(publicKey));
-        dungeonRoutes.forEach(dungeonRoute => self._existingDungeonIds[dungeonRoute.publicKey] = dungeonRoute.dungeonId);
-        this._selected = [];
+        if (this.options.removesActedRoutes) {
+            // The routes are gone from the source, so they are not "already in the target" and must not keep
+            // occupying the max either - the next batch starts with the whole allowance again
+            publicKeys.forEach(publicKey => delete self._dungeonRoutes[publicKey]);
+            this._listIsStale = true;
+        } else {
+            publicKeys.forEach(publicKey => self._existing.add(publicKey));
+            dungeonRoutes.forEach(dungeonRoute => self._existingDungeonIds[dungeonRoute.publicKey] = dungeonRoute.dungeonId);
+        }
+
+        this._selected = this._selected.filter(publicKey => !publicKeys.includes(publicKey));
         this._refreshRows();
         this._refreshSelection();
 

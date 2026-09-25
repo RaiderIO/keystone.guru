@@ -26,7 +26,9 @@ class AjaxDungeonRouteDeleteBulkFormRequest extends FormRequest
     }
 
     /**
-     * The posted routes, with the relations the delete path reads on a collection of routes.
+     * The posted routes, in posted order, with the relations the delete path reads on a collection of routes.
+     * The order is the caller's: a batch that cannot be finished stops at a route the caller can point at,
+     * rather than at an arbitrary one.
      *
      * @return Collection<int, DungeonRoute>
      */
@@ -40,10 +42,16 @@ class AjaxDungeonRouteDeleteBulkFormRequest extends FormRequest
                 return collect();
             }
 
-            return DungeonRoute::query()
+            $dungeonRoutes = DungeonRoute::query()
                 ->with(['team'])
                 ->whereIn('public_key', $publicKeys)
-                ->get();
+                ->get()
+                ->keyBy('public_key');
+
+            return collect($publicKeys)
+                ->map(static fn(string $publicKey): ?DungeonRoute => $dungeonRoutes->get($publicKey))
+                ->filter()
+                ->values();
         });
     }
 

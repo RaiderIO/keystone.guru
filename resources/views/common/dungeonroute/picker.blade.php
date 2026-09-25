@@ -45,10 +45,11 @@ $actionUrl          ??= null;
 $actionFieldName    ??= 'dungeon_routes';
 $openButtonSelector ??= null;
 
-[$actionButtonClass, $actionMethod, $confirmsAction] = match ($action) {
-    'add'    => ['btn-primary', 'POST', false],
-    // Deleting is permanent, so the drawer asks once more before it sends anything
-    'delete' => ['btn-danger', 'DELETE', true],
+[$actionButtonClass, $actionMethod, $confirmsAction, $removesActedRoutes, $actedFieldName] = match ($action) {
+    'add'    => ['btn-primary', 'POST', false, false, null],
+    // Deleting is permanent, so the drawer asks once more before it sends anything; the deleted routes are
+    // gone from the source, and the endpoint answers with the ones it really deleted
+    'delete' => ['btn-danger', 'DELETE', true, true, 'dungeon_routes'],
     default  => throw new InvalidArgumentException(sprintf('Unknown route picker action %s', $action)),
 };
 
@@ -135,6 +136,8 @@ $inlineOptions = [
     'actionFieldName'            => $actionFieldName,
     'actionMethod'               => $actionMethod,
     'confirmsAction'             => $confirmsAction,
+    'removesActedRoutes'         => $removesActedRoutes,
+    'actedFieldName'             => $actedFieldName,
     'fallbackImageBaseUrl'       => trim(ksgAssetImage(), '/'),
     // The affix filter's options are decorated with their affix icons client side, the same way the
     // route table does it - the drawer carries the data so it survives being re-rendered

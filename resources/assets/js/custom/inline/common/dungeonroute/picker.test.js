@@ -713,17 +713,19 @@ describe('CommonDungeonroutePicker', () => {
      * A drawer in delete mode, bound to a clean DOM so only it is bound to the markup.
      * @returns {CommonDungeonroutePicker}
      */
-    function deletePicker() {
+    function deletePicker(overrides = {}) {
         document.body.innerHTML = MARKUP;
         const deleteDrawer = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker',
             Object.assign({}, OPTIONS, {
-                actionKeyPrefix: 'dungeonroute_picker_delete',
-                actionUrl:       '/ajax/routes',
-                actionMethod:    'DELETE',
-                confirmsAction:  true,
-                max:             null,
+                actionKeyPrefix:    'dungeonroute_picker_delete',
+                actionUrl:          '/ajax/routes',
+                actionMethod:       'DELETE',
+                confirmsAction:     true,
+                removesActedRoutes: true,
+                actedFieldName:     'dungeon_routes',
+                max:                null,
                 existingPublicKeys: [],
-            }));
+            }, overrides));
         deleteDrawer.activate();
         ajaxCalls.length = 0;
 
@@ -801,6 +803,75 @@ describe('CommonDungeonroutePicker', () => {
         expect(picker.getSelectedPublicKeys()).toEqual(['a']);
         expect(document.querySelector('#picker_status').textContent).toBe('Deleting failed');
         expect(offcanvas.hide).not.toHaveBeenCalled();
+    });
+
+    it('confirm_givenDeleteModeAndAMax_doesNotLetDeletedRoutesEatTheNextBatchesAllowance', () => {
+        // Arrange - a drawer that may only act on two routes at a time
+        picker = deletePicker({max: 2});
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')], 4);
+        tick('a');
+        tick('b');
+
+        // Act - delete both, then open the drawer again for the next batch
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        let request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.success({dungeon_routes: ['a', 'b']});
+        request.complete();
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        respondWithRoutes([route('c'), route('d')], 2);
+
+        // Assert - the whole allowance is available again, and the new page is tickable
+        expect(picker.getRemaining()).toBe(2);
+        expect(rowOf('c').querySelector('.route_picker_checkbox').disabled).toBe(false);
+        expect(rowOf('d').querySelector('.route_picker_checkbox').disabled).toBe(false);
+    });
+
+    it('confirm_givenTheServerActedOnFewerRoutesThanSent_keepsTheRestTickedAndStaysOpen', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')], 2);
+        tick('a');
+        tick('b');
+        const callback = vi.fn();
+        picker.onConfirmed(callback);
+
+        // Act - the endpoint reports it only got as far as the first route
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        const request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.success({dungeon_routes: ['a']});
+        request.complete();
+
+        // Assert
+        expect(callback).toHaveBeenCalledWith(expect.objectContaining({publicKeys: ['a']}));
+        expect(picker.getSelectedPublicKeys()).toEqual(['b']);
+        expect(document.querySelector('#picker_status').textContent).toBe('Deleting failed');
+        expect(offcanvas.hide).not.toHaveBeenCalled();
+    });
+
+    it('confirm_givenTheServerActedOnNoRouteAtAll_reportsNothingToTheHost', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a')], 1);
+        tick('a');
+        const callback = vi.fn();
+        picker.onConfirmed(callback);
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        const request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.success({dungeon_routes: []});
+        request.complete();
+
+        // Assert
+        expect(callback).not.toHaveBeenCalled();
+        expect(picker.getSelectedPublicKeys()).toEqual(['a']);
+        expect(document.querySelector('#picker_status').textContent).toBe('Deleting failed');
     });
 
     it('setExistingPublicKeys_givenAnUndoneAdd_makesTheRouteTickableAgain', () => {
