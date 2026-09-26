@@ -86,6 +86,11 @@ class GenerateItemIcons extends Command
             'inv_weapon_rifle_40.jpg'               => 'murder_row_loaded_pistol.png',
             'ui_profession_engineering.jpg'         => 'murder_row_overload_golem.png',
             'spell_lifegivingspeed.jpg'             => 'the_blinding_vale_flourishing_stride.png',
+            'trade_brewpoison.jpg'                  => 'altar_of_fangs_mutating_elixir.png',
+            'spell_deathknight_pathoffrost.jpg'     => 'den_of_nalorakk_rune_of_anchoring.png',
+            'inv_summerfest_firespirit.jpg'         => 'den_of_nalorakk_warding_incense.png',
+            'inv_helm_armor_domanaar_d_01.jpg'      => 'voidscar_arena_proof_of_endurance.png',
+            'inv_sword_1h_domanaar_b_01.jpg'        => 'voidscar_arena_proof_of_mastery.png',
         ];
 
         foreach ($imagePaths as $sourceImage => $targetImage) {

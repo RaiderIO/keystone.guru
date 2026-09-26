@@ -125,6 +125,11 @@ return [
     'murder_row_loaded_pistol'                        => 'Loaded Pistol',
     'murder_row_overload_golem'                       => 'Overload Golem',
     'the_blinding_vale_flourishing_stride'            => 'Flourishing Stride',
+    'altar_of_fangs_mutating_elixir'                  => 'Mutating Elixir',
+    'den_of_nalorakk_rune_of_anchoring'               => 'Rune of Anchoring',
+    'den_of_nalorakk_warding_incense'                 => 'Warding Incense',
+    'voidscar_arena_proof_of_endurance'               => 'Proof of Endurance',
+    'voidscar_arena_proof_of_mastery'                 => 'Proof of Mastery',
 
     'waystone' => 'Waystone',
 ];

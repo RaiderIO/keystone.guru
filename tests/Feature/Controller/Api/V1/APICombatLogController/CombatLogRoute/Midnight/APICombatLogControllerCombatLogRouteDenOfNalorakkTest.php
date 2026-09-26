@@ -30,7 +30,7 @@ class APICombatLogControllerCombatLogRouteDenOfNalorakkTest extends APICombatLog
         // Assert
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($postBody, $responseArr, 20, 740);
+        $this->validatePulls($postBody, $responseArr, 20, 726);
         $this->validateAffixes($responseArr);
         $this->validateBossesResolved($postBody, $responseArr);
     }

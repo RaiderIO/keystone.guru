@@ -59,6 +59,11 @@ final class ConversionMapPOIMapIconTypeTest extends TestCase
             'Felwyrm Egg'        => [1223570, MapIconType::MAP_ICON_TYPE_MURDER_ROW_FELWYRM_EGG],
             'Arcane Empowerment' => [1254550, MapIconType::MAP_ICON_TYPE_MAGISTERS_TERRACE_ARCANE_EMPOWERMENT],
             'Void Infusion'      => [244300, MapIconType::MAP_ICON_TYPE_SEAT_OF_THE_TRIUMVIRATE_VOID_INFUSION],
+            'Mutating Elixir'    => [1310012, MapIconType::MAP_ICON_TYPE_ALTAR_OF_FANGS_MUTATING_ELIXIR],
+            'Warding Incense'    => [1271545, MapIconType::MAP_ICON_TYPE_DEN_OF_NALORAKK_WARDING_INCENSE],
+            'Rune of Anchoring'  => [1271737, MapIconType::MAP_ICON_TYPE_DEN_OF_NALORAKK_RUNE_OF_ANCHORING],
+            'Proof of Endurance' => [1298903, MapIconType::MAP_ICON_TYPE_VOIDSCAR_ARENA_PROOF_OF_ENDURANCE],
+            'Proof of Mastery'   => [1298902, MapIconType::MAP_ICON_TYPE_VOIDSCAR_ARENA_PROOF_OF_MASTERY],
         ];
     }
 
