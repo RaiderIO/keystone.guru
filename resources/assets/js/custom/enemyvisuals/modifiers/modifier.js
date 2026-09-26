@@ -122,6 +122,28 @@ class EnemyVisualModifier extends EnemyVisualIcon {
     }
 
     /**
+     * The badge the canvas renderer draws for this modifier, as the DOM template would place it.
+     * @param currentZoomLevel {float}
+     * @param width {float}
+     * @param height {float}
+     * @param margin {float}
+     * @returns {{classes: String, left: Number, top: Number}|null} Null when the modifier shows nothing.
+     */
+    getCanvasBadge(currentZoomLevel, width, height, margin) {
+        if (this.iconName === '' || this.iconName === null || currentZoomLevel < this._getVisibleAtZoomLevel()) {
+            return null;
+        }
+
+        let templateData = this._getTemplateData(width, height, margin);
+
+        return {
+            classes: `modifier ${templateData.classes}`,
+            left: templateData.left,
+            top: templateData.top,
+        };
+    }
+
+    /**
      * Called whenever the visual has been built, with the actual element as a parameter. Override this function in
      * child classes if needed.
      * @param element
@@ -142,4 +164,12 @@ class EnemyVisualModifier extends EnemyVisualIcon {
         this.enemyvisual.enemy.unregister('hidden', this);
         this.enemyvisual.unregister('enemyvisual:builtvisual', this);
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemyVisualModifier,
+    };
 }

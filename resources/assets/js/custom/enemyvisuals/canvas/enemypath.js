@@ -7,12 +7,17 @@
  * @property outerBackgroundColor {String|null}
  * @property opacity {Number} 0 to 1.
  * @property sprite {EnemyCanvasSprite}
+ * @property [badges] {Array.<{box: EnemyCanvasBoxStyle, left: Number, top: Number}>} Positioned from the top
+ *           left corner of the enemy's outer circle, drawn on top of everything else.
+ * @property [selection] {EnemyCanvasBoxStyle|null} The halo around a selectable enemy, centred on it.
  */
 
 /**
- * One enemy drawn on the shared enemy L.Canvas: the outer circle and its fill, the pre-rendered
- * image layer from the sprite cache and the border. A CircleMarker underneath, so Leaflet's canvas
- * renderer projects, culls and hit-tests it (`_containsPoint`) like any other circle.
+ * One enemy drawn on the shared enemy L.Canvas: the aggressiveness ring, the pre-rendered image
+ * layer from the sprite cache (with the state border and text), the border, the selection halo and
+ * badges. None of them overlap except the badges, so the enemy's opacity reads as one layer's. A
+ * CircleMarker underneath, so Leaflet's canvas renderer projects, culls and hit-tests it
+ * (`_containsPoint`) like any other circle.
  */
 let EnemyPath = L.CircleMarker.extend({
     options: {
@@ -41,7 +46,7 @@ let EnemyPath = L.CircleMarker.extend({
     setAppearance: function (appearance) {
         this._appearance = appearance;
 
-        let radius = appearance.outerDiameter / 2;
+        let radius = EnemyPath.getDrawnRadius(appearance);
         if (radius !== this._radius) {
             this.setRadius(radius);
         } else {
@@ -60,7 +65,8 @@ let EnemyPath = L.CircleMarker.extend({
         L.CircleMarker.prototype._project.call(this);
 
         if (this._onProjected !== null) {
-            this._onProjected(this._point, this._radius);
+            let appearance = this._appearance;
+            this._onProjected(this._point, appearance === null ? this._radius : appearance.outerDiameter / 2);
         }
     },
 
@@ -79,14 +85,16 @@ let EnemyPath = L.CircleMarker.extend({
 
         ctx.globalAlpha = appearance.opacity;
 
-        if (appearance.outerBackgroundColor !== null && paddingRadius > 0) {
+        let spriteDiameter = EnemyCanvasSpriteCache.quantiseSize(paddingRadius * 2 - appearance.innerMargin * 2);
+
+        if (appearance.outerBackgroundColor !== null && paddingRadius > spriteDiameter / 2) {
             ctx.beginPath();
             ctx.arc(x, y, paddingRadius, 0, Math.PI * 2);
+            ctx.arc(x, y, spriteDiameter / 2, 0, Math.PI * 2, true);
             ctx.fillStyle = appearance.outerBackgroundColor;
             ctx.fill();
         }
 
-        let spriteDiameter = EnemyCanvasSpriteCache.quantiseSize(paddingRadius * 2 - appearance.innerMargin * 2);
         let sprite = this.options.spriteCache.get(appearance.sprite, spriteDiameter);
         if (sprite !== null) {
             ctx.drawImage(sprite, x - spriteDiameter / 2, y - spriteDiameter / 2, spriteDiameter, spriteDiameter);
@@ -105,9 +113,68 @@ let EnemyPath = L.CircleMarker.extend({
             ctx.stroke();
         }
 
+        let selection = appearance.selection ?? null;
+        if (selection !== null && selection.borderWidth > 0 && selection.borderColor !== null) {
+            let halfWidth = selection.width / 2 - selection.borderWidth / 2;
+            let halfHeight = selection.height / 2 - selection.borderWidth / 2;
+            EnemyCanvasSpriteCache.roundedRect(
+                ctx, x - halfWidth, y - halfHeight, halfWidth * 2, halfHeight * 2,
+                Math.max(0, Math.min(selection.borderRadius, halfWidth, halfHeight))
+            );
+            ctx.lineWidth = selection.borderWidth;
+            ctx.strokeStyle = selection.borderColor;
+            ctx.setLineDash(selection.borderDashed ?
+                EnemyCanvasSpriteCache.getDashPattern((halfWidth + halfHeight) * 4, selection.borderWidth) : []);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        let badges = appearance.badges ?? [];
+        let left = x - radius;
+        let top = y - radius;
+        for (let i = 0; i < badges.length; i++) {
+            let badge = badges[i];
+            let badgeCanvas = this.options.spriteCache.getBadge(badge.box);
+            if (badgeCanvas !== null) {
+                ctx.drawImage(badgeCanvas, left + badge.left, top + badge.top, badge.box.width, badge.box.height);
+            }
+        }
+
         ctx.globalAlpha = 1;
     },
 });
+
+/**
+ * Leaflet only redraws and culls the part of the canvas inside a path's radius, so badges that hang
+ * over the enemy's edge and the selection halo around it must fall inside it too.
+ * @param appearance {EnemyPathAppearance}
+ * @returns {Number} The radius Leaflet projects, redraws and culls the path with.
+ */
+EnemyPath.getDrawnRadius = function (appearance) {
+    let radius = appearance.outerDiameter / 2;
+    let reach = radius;
+
+    let selection = appearance.selection ?? null;
+    if (selection !== null) {
+        reach = Math.max(reach, Math.hypot(selection.width, selection.height) / 2);
+    }
+
+    let badges = appearance.badges ?? [];
+    for (let i = 0; i < badges.length; i++) {
+        let badge = badges[i];
+        let corners = [
+            [badge.left, badge.top],
+            [badge.left + badge.box.width, badge.top + badge.box.height],
+            [badge.left, badge.top + badge.box.height],
+            [badge.left + badge.box.width, badge.top],
+        ];
+        for (let j = 0; j < corners.length; j++) {
+            reach = Math.max(reach, Math.hypot(corners[j][0] - radius, corners[j][1] - radius));
+        }
+    }
+
+    return reach;
+};
 
 /**
  * Holds enemy markers exactly like an L.LayerGroup - so hasLayer(), visibility and every existing
@@ -169,3 +236,10 @@ let EnemyCanvasLayerGroup = L.LayerGroup.extend({
         return layer instanceof L.Marker ? this._resolvePath(layer) : layer;
     },
 });
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemyPath,
+        EnemyCanvasLayerGroup,
+    };
+}

@@ -55,7 +55,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
      */
     getCanvasStyleProbe() {
         if (!(this._canvasStyleProbe instanceof EnemyCanvasStyleProbe)) {
-            this._canvasStyleProbe = new EnemyCanvasStyleProbe();
+            // Inside the map container, so text inherits the colour and font the DOM icons do
+            this._canvasStyleProbe = new EnemyCanvasStyleProbe(this.manager.map.leafletMap.getContainer());
         }
 
         return this._canvasStyleProbe;
@@ -95,6 +96,15 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     self._redrawCanvasPaths();
                 },
             });
+
+            // Sprite text in a web font that is not loaded yet (the obsolete/overpulled icon glyphs) is
+            // rendered in a fallback font; the load that starts ends here
+            if (typeof document.fonts !== 'undefined') {
+                document.fonts.addEventListener('loadingdone', function () {
+                    self._canvasSpriteCache.clear();
+                    self._redrawCanvasPaths();
+                });
+            }
         }
 
         return this._canvasSpriteCache;

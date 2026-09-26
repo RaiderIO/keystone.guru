@@ -84,3 +84,25 @@ test('_getDisplayText_givenNotSpeedrunRequiredAndPercentageNumberStyle_returnsFo
 
     expect(EnemyVisualMainEnemyForces.prototype._getDisplayText.call(fakeThis)).toBe('42%');
 });
+
+test('getCanvasContent_givenEnemyForcesNumberStyle_returnsDisplayTextAtRefreshedFontSize', () => {
+    // Arrange
+    const fakeThis = makeFakeThis({
+        isSpeedrunRequiredNpc: false,
+        numberStyle: 'enemy_forces',
+        enemyForces: 12,
+        enemyForcesRequired: 300,
+    });
+    fakeThis._getDisplayText = EnemyVisualMainEnemyForces.prototype._getDisplayText;
+    fakeThis._getTextWidth = (textLength = 1) => 20 - textLength;
+
+    // Act
+    const content = EnemyVisualMainEnemyForces.prototype.getCanvasContent.call(fakeThis);
+
+    // Assert: refreshSize() sizes the DOM text for one character, whatever the text's length
+    expect(content).toEqual({
+        classes: 'enemy_icon_npc_enemy_forces_inner',
+        imageUrl: null,
+        text: {value: '12', classes: 'my-auto w-100', fontSize: 19},
+    });
+});

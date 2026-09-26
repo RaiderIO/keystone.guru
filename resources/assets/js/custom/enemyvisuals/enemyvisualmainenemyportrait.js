@@ -49,9 +49,17 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
             `${this.enemyvisual.map.options.assetsBaseUrl}/images/enemyportraits/unknown.png` :
             `${this.enemyvisual.map.options.assetsBaseUrl}/${this.enemyvisual.enemy.npc.enemy_portrait_url}`;
 
+        let text = null;
+        if (this.enemyvisual.enemy.isObsolete()) {
+            text = {value: null, classes: 'obsolete text-danger fa fa-times-circle', fontSize: this._getTextWidth(3)};
+        } else if (this.enemyvisual.enemy.getOverpulledKillZoneId() !== null) {
+            text = {value: null, classes: 'overpulled text-success fa fa-plus-circle', fontSize: this._getTextWidth(3)};
+        }
+
         return {
             classes: 'enemy_icon_npc_enemy_portrait_inner',
             imageUrl: isObsoleteOrOverpulled ? null : enemyPortraitUrl,
+            text: text,
         };
     }
 
@@ -69,4 +77,12 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
     getName() {
         return 'EnemyVisualMainEnemyPortrait';
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemyVisualMainEnemyPortrait,
+    };
 }
