@@ -136,7 +136,10 @@ const MARKUP = `
                 <p id="picker_loading" hidden></p>
                 <p id="picker_empty" hidden></p>
                 <p id="picker_error" hidden></p>
-                <div aria-busy="false"><ul id="picker_list"></ul></div>
+                <div aria-busy="false">
+                    <div class="route_picker_select_page" hidden><input id="picker_select_page" type="checkbox"></div>
+                    <ul id="picker_list"></ul>
+                </div>
                 <button id="picker_previous"></button>
                 <span id="picker_range"></span>
                 <button id="picker_next"></button>
@@ -723,6 +726,7 @@ describe('CommonDungeonroutePicker', () => {
                 confirmsAction:     true,
                 removesActedRoutes: true,
                 actedFieldName:     'dungeon_routes',
+                selectPageSelector: '#picker_select_page',
                 max:                null,
                 existingPublicKeys: [],
             }, overrides));
@@ -872,6 +876,183 @@ describe('CommonDungeonroutePicker', () => {
         expect(callback).not.toHaveBeenCalled();
         expect(picker.getSelectedPublicKeys()).toEqual(['a']);
         expect(document.querySelector('#picker_status').textContent).toBe('Deleting failed');
+    });
+
+    /**
+     * @returns {HTMLInputElement}
+     */
+    function selectPageBox() {
+        return document.querySelector('#picker_select_page');
+    }
+
+    it('selectPage_givenALoadedPage_ticksEveryRouteOnIt', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')]);
+
+        // Act
+        selectPageBox().click();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a', 'b']);
+        expect(selectPageBox().checked).toBe(true);
+        expect(selectPageBox().indeterminate).toBe(false);
+        expect(rowOf('a').querySelector('.route_picker_checkbox').checked).toBe(true);
+        expect(document.querySelector('#picker_confirm').textContent).toBe('Delete 2 routes');
+        expect(document.querySelector('#picker_status').textContent).toBe('2 selected');
+    });
+
+    it('selectPage_givenAMaxSmallerThanThePage_ticksInListedOrderUntilFull', () => {
+        // Arrange
+        picker = deletePicker({max: 2});
+        picker.reload();
+        respondWithRoutes([route('a'), route('b'), route('c')]);
+
+        // Act
+        selectPageBox().click();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a', 'b']);
+        expect(selectPageBox().checked).toBe(false);
+        expect(selectPageBox().indeterminate).toBe(true);
+        expect(selectPageBox().disabled).toBe(false);
+        expect(rowOf('c').querySelector('.route_picker_checkbox').disabled).toBe(true);
+        expect(document.querySelector('#picker_full').hidden).toBe(false);
+    });
+
+    it('selectPage_givenAFullPartlyTickedPage_unticksThePage', () => {
+        // Arrange
+        picker = deletePicker({max: 2});
+        picker.reload();
+        respondWithRoutes([route('a'), route('b'), route('c')]);
+        selectPageBox().click();
+
+        // Act
+        selectPageBox().click();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual([]);
+        expect(selectPageBox().checked).toBe(false);
+        expect(selectPageBox().indeterminate).toBe(false);
+        expect(rowOf('c').querySelector('.route_picker_checkbox').disabled).toBe(false);
+        expect(document.querySelector('#picker_status').textContent).toBe('None selected');
+    });
+
+    it('selectPage_givenAPartlyTickedPage_ticksTheRest', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b'), route('c')]);
+        tick('b');
+
+        // Act
+        selectPageBox().click();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['b', 'a', 'c']);
+        expect(selectPageBox().checked).toBe(true);
+    });
+
+    it('selectPage_givenATickedRow_showsThePageAsPartlyTicked', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')]);
+
+        // Act
+        tick('a');
+
+        // Assert
+        expect(selectPageBox().checked).toBe(false);
+        expect(selectPageBox().indeterminate).toBe(true);
+    });
+
+    it('selectPage_givenRoutesAlreadyInTheTarget_skipsThem', () => {
+        // Arrange
+        picker = deletePicker({existingPublicKeys: ['x']});
+        picker.reload();
+        respondWithRoutes([route('x'), route('a')]);
+
+        // Act
+        selectPageBox().click();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a']);
+        expect(selectPageBox().checked).toBe(true);
+    });
+
+    it('selectPage_givenTicksFromAnotherPage_unticksOnlyThisPage', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')], 4);
+        selectPageBox().click();
+        document.querySelector('#picker_next').click();
+        respondWithRoutes([route('c'), route('d')], 4);
+        selectPageBox().click();
+
+        // Act
+        selectPageBox().click();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a', 'b']);
+        expect(selectPageBox().checked).toBe(false);
+    });
+
+    it('selectPage_givenTheMaxWasReachedOnAnotherPage_isDisabled', () => {
+        // Arrange
+        picker = deletePicker({max: 2});
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')], 4);
+        selectPageBox().click();
+
+        // Act
+        document.querySelector('#picker_next').click();
+        respondWithRoutes([route('c'), route('d')], 4);
+
+        // Assert
+        expect(selectPageBox().checked).toBe(false);
+        expect(selectPageBox().indeterminate).toBe(false);
+        expect(selectPageBox().disabled).toBe(true);
+    });
+
+    it('selectPage_givenTheListIsLoadingOrEmpty_isHidden', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        const box = document.querySelector('.route_picker_select_page');
+        const hiddenWhileLoading = box.hidden;
+
+        // Act
+        respondWithRoutes([]);
+
+        // Assert
+        expect(hiddenWhileLoading).toBe(true);
+        expect(box.hidden).toBe(true);
+    });
+
+    it('selectPage_givenALoadedPage_isShown', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+
+        // Act
+        respondWithRoutes([route('a')]);
+
+        // Assert
+        expect(document.querySelector('.route_picker_select_page').hidden).toBe(false);
+    });
+
+    it('selectPage_givenAddMode_staysHidden', () => {
+        // Arrange - the add drawer has no selectPageSelector
+
+        // Act
+        picker.reload();
+        respondWithRoutes([route('a')]);
+
+        // Assert
+        expect(document.querySelector('.route_picker_select_page').hidden).toBe(true);
     });
 
     it('setExistingPublicKeys_givenAnUndoneAdd_makesTheRouteTickableAgain', () => {

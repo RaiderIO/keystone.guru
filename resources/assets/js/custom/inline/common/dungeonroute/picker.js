@@ -18,6 +18,7 @@
  @property {string} selectionSelector         Says how many routes are ticked.
  @property {string} fullSelector              Says why no more routes can be ticked.
  @property {string} confirmButtonSelector
+ @property {string|null} selectPageSelector   Tick box ticking every route of the listed page; null when the drawer has none.
  @property {string} statusSelector            Polite live region.
  @property {string} listUrl                   Server-side paged route list (DataTables protocol).
  @property {Number} pageSize
@@ -78,6 +79,8 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         };
 
         this._listIsStale = false;
+        /** @type {string} loading|loaded|empty|error */
+        this._state = 'empty';
         this._page = 0;
         this._total = 0;
         this._saving = false;
@@ -108,6 +111,9 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         $(this.options.previousSelector).on('click', this._goToPage.bind(this, -1));
         $(this.options.nextSelector).on('click', this._goToPage.bind(this, 1));
         $(this.options.listSelector).on('change', '.route_picker_checkbox', this._onCheckboxChanged.bind(this));
+        if (this.options.selectPageSelector) {
+            $(this.options.selectPageSelector).on('change', this._onSelectPageChanged.bind(this));
+        }
 
         this._refreshSelection();
     }
@@ -318,6 +324,9 @@ class CommonDungeonroutePicker extends SearchInlineBase {
      * @private
      */
     _setState(state) {
+        this._state = state;
+        this._refreshSelectPage();
+
         $(this.options.loadingSelector).prop('hidden', state !== 'loading');
         $(this.options.emptySelector).prop('hidden', state !== 'empty');
         $(this.options.errorSelector).prop('hidden', state !== 'error');
@@ -404,6 +413,78 @@ class CommonDungeonroutePicker extends SearchInlineBase {
                 .prop('checked', isExisting || isSelected)
                 .prop('disabled', isExisting || ((isFull || self._isDungeonFull(publicKey)) && !isSelected));
         });
+
+        this._refreshSelectPage();
+    }
+
+    /**
+     * @returns {string[]} The listed page's routes that are not in the target yet, in listed order.
+     * @private
+     */
+    _getPageSelectablePublicKeys() {
+        let self = this;
+
+        return $(this.options.listSelector).find('.route_picker_row').map(function () {
+            return $(this).attr('data-public-key');
+        }).get().filter(publicKey => !self._existing.has(publicKey));
+    }
+
+    /**
+     * @param {string} publicKey
+     * @returns {boolean} Whether ticking the route now would be accepted.
+     * @private
+     */
+    _canTick(publicKey) {
+        return !this._selected.includes(publicKey) && !this._existing.has(publicKey) && this.getRemaining() !== 0 &&
+            !this._isDungeonFull(publicKey);
+    }
+
+    /**
+     * Checked when every selectable route of the page is ticked, mixed when some are.
+     * @private
+     */
+    _refreshSelectPage() {
+        if (!this.options.selectPageSelector) {
+            return;
+        }
+
+        let self = this;
+        let selectable = this._getPageSelectablePublicKeys();
+        let selectedCount = selectable.filter(publicKey => self._selected.includes(publicKey)).length;
+        let canTickMore = selectable.some(publicKey => self._canTick(publicKey));
+        let $checkbox = $(this.options.selectPageSelector);
+
+        $checkbox.closest('.route_picker_select_page').prop('hidden', this._state !== 'loaded' || selectable.length === 0);
+        $checkbox
+            .prop('checked', selectable.length > 0 && selectedCount === selectable.length)
+            .prop('indeterminate', selectedCount > 0 && selectedCount < selectable.length)
+            .prop('disabled', selectedCount === 0 && !canTickMore);
+    }
+
+    /**
+     * Ticks the page's routes in listed order while they fit; with nothing more to tick, a click unticks the page.
+     * @private
+     */
+    _onSelectPageChanged() {
+        let self = this;
+        let selectable = this._getPageSelectablePublicKeys();
+
+        if (selectable.some(publicKey => self._canTick(publicKey))) {
+            selectable.forEach(function (publicKey) {
+                if (self._canTick(publicKey)) {
+                    self._selected.push(publicKey);
+                }
+            });
+        } else {
+            this._selected = this._selected.filter(publicKey => !selectable.includes(publicKey));
+        }
+
+        this._refreshRows();
+        this._refreshSelection();
+
+        let count = this._selected.length;
+        let plural = count === 0 ? 'none' : (count === 1 ? 'one' : 'many');
+        this.dialog.setStatus(lang.get(`js.dungeonroute_picker_selected_${plural}`, {count: count}));
     }
 
     /**
@@ -415,8 +496,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         let publicKey = $checkbox.val();
 
         if ($checkbox.prop('checked')) {
-            if (!this._selected.includes(publicKey) && !this._existing.has(publicKey) && this.getRemaining() !== 0 &&
-                !this._isDungeonFull(publicKey)) {
+            if (this._canTick(publicKey)) {
                 this._selected.push(publicKey);
             }
         } else {

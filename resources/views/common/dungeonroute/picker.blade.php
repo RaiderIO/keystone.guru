@@ -21,6 +21,8 @@
  *                                               null leaves acting on them entirely to the host page.
  * @var string              $actionFieldName
  * @var string|null         $openButtonSelector  Clicking any element matching this opens the drawer.
+ *
+ * Deleting also offers a tick box that ticks every route of the listed page at once.
  */
 
 use App\Models\AffixGroup\AffixGroup;
@@ -52,6 +54,7 @@ $openButtonSelector ??= null;
     'delete' => ['btn-danger', 'DELETE', true, true, 'dungeon_routes'],
     default  => throw new InvalidArgumentException(sprintf('Unknown route picker action %s', $action)),
 };
+$selectsPage = $action === 'delete';
 
 [$sourceParameters, $sourceLabel] = match ($sourceScope) {
     'mine'                  => [['mine' => 1], __('view_common.dungeonroute.picker.source_mine')],
@@ -122,6 +125,7 @@ $inlineOptions = [
     'selectionSelector'          => sprintf('#%s_selection', $id),
     'fullSelector'               => sprintf('#%s_full', $id),
     'confirmButtonSelector'      => sprintf('#%s_confirm', $id),
+    'selectPageSelector'         => $selectsPage ? sprintf('#%s_select_page', $id) : null,
     'statusSelector'             => sprintf('#%s_status', $id),
     'listUrl'                    => '/ajax/routes',
     'pageSize'                   => 25,
@@ -199,6 +203,17 @@ $inlineOptions = [
             <p id="{{ $id }}_error" class="route_picker_message text-danger px-3 py-4 mb-0" hidden>
                 {{ __('view_common.dungeonroute.picker.load_failed') }}
             </p>
+            @if($selectsPage)
+                <div class="route_picker_select_page border-bottom" hidden>
+                    <label class="route_picker_row_label d-flex align-items-center mb-0">
+                        <span class="leaderboard_rank d-flex align-items-center justify-content-end">
+                            <input id="{{ $id }}_select_page" type="checkbox"
+                                   class="form-check-input route_picker_checkbox mt-0">
+                        </span>
+                        <span class="small">{{ __('view_common.dungeonroute.picker.select_page') }}</span>
+                    </label>
+                </div>
+            @endif
             <ul id="{{ $id }}_list" class="list-unstyled route_picker_list mb-0"></ul>
 
             <nav class="d-flex align-items-center gap-2 px-3 py-2"

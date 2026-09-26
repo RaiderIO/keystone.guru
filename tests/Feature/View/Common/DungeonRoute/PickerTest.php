@@ -162,6 +162,33 @@ final class PickerTest extends PublicTestCase
     }
 
     #[Test]
+    public function render_givenTheDeleteAction_offersToTickThePage(): void
+    {
+        // Arrange - nothing beyond the defaults
+
+        // Act
+        [$html, $options] = $this->renderPicker(['action' => 'delete']);
+
+        // Assert
+        $this->assertSame('#test_picker_select_page', $options['selectPageSelector']);
+        $this->assertStringContainsString('id="test_picker_select_page"', $html);
+        $this->assertStringContainsString(__('view_common.dungeonroute.picker.select_page'), $html);
+    }
+
+    #[Test]
+    public function render_givenTheAddAction_doesNotOfferToTickThePage(): void
+    {
+        // Arrange - nothing beyond the defaults
+
+        // Act
+        [$html, $options] = $this->renderPicker();
+
+        // Assert
+        $this->assertNull($options['selectPageSelector']);
+        $this->assertStringNotContainsString('test_picker_select_page', $html);
+    }
+
+    #[Test]
     public function render_givenAnUnknownAction_throws(): void
     {
         // Arrange

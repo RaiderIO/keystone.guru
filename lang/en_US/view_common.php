@@ -160,6 +160,7 @@ return [
             'cancel'                       => 'Cancel',
             'add_none'                     => 'Add routes',
             'delete_none'                  => 'Delete routes',
+            'select_page'                  => 'Select all on this page',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - data by https://www.archon.gg/wow',
