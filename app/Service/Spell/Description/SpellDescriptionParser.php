@@ -5,6 +5,7 @@ namespace App\Service\Spell\Description;
 use App\Service\Spell\Description\Dtos\RenderedSpellDescription;
 use App\Service\Spell\Description\Dtos\SpellDescriptionValue;
 use App\Service\Spell\Description\Dtos\SpellDescriptionValueKind;
+use App\Service\Spell\Description\Dtos\SpellDurationFormats;
 
 /**
  * Turns a game client spell description template into readable text.
@@ -228,7 +229,7 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         $lastNumber = $value;
 
         if ($kind === SpellDescriptionValueKind::Duration) {
-            $builder->appendValue(new SpellDescriptionValue($kind, $this->formatDuration($value)));
+            $builder->appendValue(new SpellDescriptionValue($kind, $this->formatDuration($value, $context->getDurationFormats())));
 
             return;
         }
@@ -772,26 +773,52 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
     }
 
     /**
-     * The units are deliberately not translated: DB2 only hands us English description templates, so the
-     * text around the duration is English too and a localized unit would read worse than the game's own.
+     * The units come from the client's own `GlobalStrings` for the locale being rendered, so they read
+     * the way the sentence around them does - "8 sec", "8 Sek.", "8秒".
      *
      * @param float $seconds negative for a duration that lasts until it is cancelled
      */
-    private function formatDuration(float $seconds): string
+    private function formatDuration(float $seconds, SpellDurationFormats $formats): string
     {
         if ($seconds < 0) {
-            return 'until cancelled';
+            return $formats->untilCancelled;
         }
 
         if ($seconds < 60) {
-            return sprintf('%s sec', $this->formatNumber($seconds));
+            return $this->applyDurationFormat($formats->seconds, $seconds);
         }
 
         if ($seconds < 3600) {
-            return sprintf('%s min', $this->formatNumber($seconds / 60));
+            return $this->applyDurationFormat($formats->minutes, $seconds / 60);
         }
 
-        return sprintf('%s hr', $this->formatNumber($seconds / 3600));
+        if ($seconds < 86400) {
+            return $this->applyDurationFormat($formats->hours, $seconds / 3600);
+        }
+
+        return $this->applyDurationFormat($formats->days, $seconds / 86400);
+    }
+
+    /**
+     * Put a number into one of the client's duration formats. Its printf placeholder asks for a fixed
+     * decimal ("%.1f sec"), which the client shows and we do not - a duration of eight seconds reads
+     * better as "8 sec" than as "8.0 sec" - so the placeholder is replaced rather than handed to
+     * sprintf. The trailing `|4singular:plural;` several locales carry is resolved against the number.
+     */
+    private function applyDurationFormat(string $format, float $value): string
+    {
+        $text = preg_replace_callback(
+            '/%[-+ 0#\']*[\d.]*[a-zA-Z]/',
+            fn(): string => $this->formatNumber($value),
+            $format,
+            1,
+        ) ?? $format;
+
+        return preg_replace_callback(
+            '/\|\d+([^|;]*);/',
+            fn(array $matches): string => $this->chooseMacroOption($matches[1], $value),
+            $text,
+        ) ?? $text;
     }
 
     private function normalizeNewlines(string $template): string

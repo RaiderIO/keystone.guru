@@ -16,9 +16,6 @@ class WagoToolsService implements WagoToolsServiceInterface
 
     private const string TABLE_CSV_URL = 'https://wago.tools/db2/%s/csv?build=%s&locale=%s';
 
-    /** DB2 `_lang` columns are per-locale; we only ever render the English descriptions. */
-    private const string LOCALE = 'enUS';
-
     /** Only `Interface\ICONS\` entries are addressable on Wowhead's icon CDN. */
     private const string ICONS_FILE_PATH = 'interface\icons\\';
 
@@ -94,7 +91,7 @@ class WagoToolsService implements WagoToolsServiceInterface
         return null;
     }
 
-    public function getTableCsvPath(string $table, string $build): string
+    public function getTableCsvPath(string $table, string $build, GameLocale $locale = GameLocale::English): string
     {
         if (preg_match(self::BUILD_PATTERN, $build) !== 1) {
             throw new WagoToolsDownloadException(sprintf('%s is not a game build', $build));
@@ -104,7 +101,7 @@ class WagoToolsService implements WagoToolsServiceInterface
             throw new WagoToolsDownloadException(sprintf('%s is not a DB2 table', $table));
         }
 
-        $targetFile = $this->getTableCsvTargetPath($table, $build);
+        $targetFile = $this->getTableCsvTargetPath($table, $build, $locale);
 
         if (file_exists($targetFile) && filesize($targetFile) > 0) {
             $this->log->getTableCsvPathCacheHit($table, $build);
@@ -124,7 +121,7 @@ class WagoToolsService implements WagoToolsServiceInterface
         try {
             $this->log->downloadTableStart($table, $build);
 
-            if (!$this->curlDownloadToFile(sprintf(self::TABLE_CSV_URL, $table, $build, self::LOCALE), $temporaryFile)) {
+            if (!$this->curlDownloadToFile(sprintf(self::TABLE_CSV_URL, $table, $build, $locale->value), $temporaryFile)) {
                 throw new WagoToolsDownloadException(sprintf('Unable to download DB2 table %s for build %s', $table, $build));
             }
 
@@ -142,9 +139,9 @@ class WagoToolsService implements WagoToolsServiceInterface
         return $targetFile;
     }
 
-    public function readTable(string $table, string $build): Generator
+    public function readTable(string $table, string $build, GameLocale $locale = GameLocale::English): Generator
     {
-        $handle = fopen($this->getTableCsvPath($table, $build), 'r');
+        $handle = fopen($this->getTableCsvPath($table, $build, $locale), 'r');
 
         if ($handle === false) {
             throw new WagoToolsDownloadException(sprintf('Unable to open DB2 table %s for build %s', $table, $build));
@@ -241,9 +238,9 @@ class WagoToolsService implements WagoToolsServiceInterface
         return $response;
     }
 
-    private function getTableCsvTargetPath(string $table, string $build): string
+    private function getTableCsvTargetPath(string $table, string $build, GameLocale $locale): string
     {
-        return storage_path(sprintf('app/db2/%s/%s.csv', $build, $table));
+        return storage_path(sprintf('app/db2/%s/%s/%s.csv', $build, $locale->value, $table));
     }
 
     /**

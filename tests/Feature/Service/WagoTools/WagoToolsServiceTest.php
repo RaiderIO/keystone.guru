@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Service\WagoTools;
 
+use App\Service\WagoTools\GameLocale;
 use App\Service\WagoTools\Logging\WagoToolsServiceLoggingInterface;
 use App\Service\WagoTools\WagoToolsService;
 use App\Service\WagoTools\WagoToolsServiceInterface;
@@ -269,9 +270,9 @@ final class WagoToolsServiceTest extends PublicTestCase
         ]);
     }
 
-    private function writeTable(string $table, string $contents): void
+    private function writeTable(string $table, string $contents, GameLocale $locale = GameLocale::English): void
     {
-        $directory = $this->getDb2Directory();
+        $directory = $this->getDb2Directory($locale);
 
         if (!is_dir($directory)) {
             mkdir($directory, 0755, true);
@@ -286,17 +287,25 @@ final class WagoToolsServiceTest extends PublicTestCase
 
     private function removeTables(): void
     {
-        foreach (glob(sprintf('%s/*.csv', $this->getDb2Directory())) ?: [] as $filePath) {
-            unlink($filePath);
+        foreach (GameLocale::cases() as $locale) {
+            foreach (glob(sprintf('%s/*.csv', $this->getDb2Directory($locale))) ?: [] as $filePath) {
+                unlink($filePath);
+            }
+
+            if (is_dir($this->getDb2Directory($locale))) {
+                rmdir($this->getDb2Directory($locale));
+            }
         }
 
-        if (is_dir($this->getDb2Directory())) {
-            rmdir($this->getDb2Directory());
+        $buildDirectory = storage_path(sprintf('app/db2/%s', self::BUILD));
+
+        if (is_dir($buildDirectory)) {
+            rmdir($buildDirectory);
         }
     }
 
-    private function getDb2Directory(): string
+    private function getDb2Directory(GameLocale $locale = GameLocale::English): string
     {
-        return storage_path(sprintf('app/db2/%s', self::BUILD));
+        return storage_path(sprintf('app/db2/%s/%s', self::BUILD, $locale->value));
     }
 }

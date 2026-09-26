@@ -30,12 +30,15 @@ interface WagoToolsServiceInterface
     public function getBuildReleasedAt(string $product, string $build): ?Carbon;
 
     /**
-     * Download a DB2 table's CSV for the given build, and return the path it was saved to. Repeat calls
-     * for the same table and build re-use the file that is already on disk.
+     * Download a DB2 table's CSV for the given build and locale, and return the path it was saved to.
+     * Repeat calls for the same table, build and locale re-use the file that is already on disk.
+     *
+     * Only the `_lang` columns of a table differ per locale, so a table that has none is worth reading
+     * in one locale only - every locale downloads the same bytes into its own cache entry.
      *
      * @throws WagoToolsDownloadException
      */
-    public function getTableCsvPath(string $table, string $build): string;
+    public function getTableCsvPath(string $table, string $build, GameLocale $locale = GameLocale::English): string;
 
     /**
      * Yield the rows of a DB2 table's CSV one at a time, keyed by column name. These files run into tens
@@ -45,7 +48,7 @@ interface WagoToolsServiceInterface
      *
      * @throws WagoToolsDownloadException
      */
-    public function readTable(string $table, string $build): Generator;
+    public function readTable(string $table, string $build, GameLocale $locale = GameLocale::English): Generator;
 
     /**
      * Resolves interface texture FileDataIDs - the `info.texture` MDT puts on its map POIs - to the icon

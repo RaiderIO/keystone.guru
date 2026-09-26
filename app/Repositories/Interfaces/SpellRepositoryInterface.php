@@ -31,6 +31,16 @@ interface SpellRepositoryInterface extends BaseRepositoryInterface
     public function findAllById(Collection $spellIds): Collection;
 
     /**
+     * The same spells, with the relations their hover tooltip reads - the counterpart of
+     * NpcRepositoryInterface::findAllByIdWithTooltipRelations(). Kept apart from findAllById() because
+     * its other callers render no tooltip and would pay for the relation for nothing.
+     *
+     * @param  Collection<int, int>|Collection<int, Spell> $spellIds
+     * @return Collection<int, Spell>
+     */
+    public function findAllByIdWithTooltipRelations(Collection $spellIds): Collection;
+
+    /**
      * @return Collection<int, Spell> keyed by spell ID
      */
     public function getAllWithCharacteristic(): Collection;

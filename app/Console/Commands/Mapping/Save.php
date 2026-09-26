@@ -21,7 +21,9 @@ use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Models\SeasonDungeon;
+use App\SeederHelpers\RelationImport\Mapping\SpellDescriptionTranslationRelationMapping;
 use App\Service\Mapping\MappingExportServiceInterface;
+use App\Service\WagoTools\GameLocale;
 use App\Traits\SavesArrayToJsonFile;
 use Exception;
 use Illuminate\Console\Command;
@@ -72,6 +74,7 @@ class Save extends Command
         $this->saveDungeons($dungeonDataDir);
         $this->saveNpcs($dungeonDataDir);
         $this->saveSpells($dungeonDataDir);
+        $this->saveSpellDescriptionTranslations($dungeonDataDir);
         $this->saveSpellTuningChanges($dungeonDataDir);
         $this->saveDungeonData($dungeonDataDir);
 
@@ -237,6 +240,25 @@ class Save extends Command
         $this->info('Saving Spells');
 
         $this->saveDataToJsonFile($this->mappingExportService->serializeSpells(), $dungeonDataDir, 'spells.json');
+    }
+
+    /**
+     * @param  string    $dungeonDataDir
+     * @throws Exception
+     */
+    private function saveSpellDescriptionTranslations(string $dungeonDataDir): void
+    {
+        // Save every spell description in the locales the game client publishes besides English, one
+        // file per locale - together they are several times the size of the rest of the mapping
+        $this->info('Saving Spell description translations');
+
+        foreach (GameLocale::translated() as $locale) {
+            $this->saveDataToJsonFile(
+                $this->mappingExportService->serializeSpellDescriptionTranslations($locale),
+                $dungeonDataDir,
+                SpellDescriptionTranslationRelationMapping::getFileNameForLocale($locale),
+            );
+        }
     }
 
     /**

@@ -9,6 +9,7 @@ class SpellDescriptionImportResult
         public readonly int    $spellCount,
         public readonly int    $describedCount,
         public readonly int    $updatedCount,
+        public readonly int    $translatedCount = 0,
     ) {
     }
 }

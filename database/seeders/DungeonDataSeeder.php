@@ -25,6 +25,7 @@ use App\Models\Speedrun\DungeonSpeedrunDifficulty;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpcNpc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellDescriptionTranslation;
 use App\Models\Spell\SpellEffect;
 use App\Models\Spell\SpellTuningChange;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
@@ -42,9 +43,11 @@ use App\SeederHelpers\RelationImport\Mapping\MappingVersionRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\MountableAreaRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\NpcRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\RelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\SpellDescriptionTranslationRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\SpellRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\SpellTuningChangeRelationMapping;
 use App\SeederHelpers\RelationImport\Parsers\Relation\RelationParserInterface;
+use App\Service\WagoTools\GameLocale;
 use Exception;
 use FilesystemIterator;
 use Illuminate\Database\Eloquent\Model;
@@ -76,6 +79,11 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             new DungeonRouteRelationMapping(),
             new SpellRelationMapping(),
             new SpellTuningChangeRelationMapping(),
+            // One file per locale the game client publishes besides English
+            ...array_map(
+                static fn(GameLocale $locale): SpellDescriptionTranslationRelationMapping => new SpellDescriptionTranslationRelationMapping($locale),
+                GameLocale::translated(),
+            ),
 
             // Files inside floor folder
             new EnemyRelationMapping(),
@@ -529,6 +537,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             MappingCommitLog::class,
             Spell::class,
             SpellEffect::class,
+            SpellDescriptionTranslation::class,
             SpellTuningChange::class,
             // SpellDungeon, NpcCharacteristic and NpcSpell are combat-log-derived behavior and are
             // intentionally omitted: they are not exported to the seeders, so their live tables must

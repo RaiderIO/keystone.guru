@@ -2,6 +2,7 @@
 
 namespace App\Service\Spell\Description;
 
+use App\Service\Spell\Description\Dtos\SpellDurationFormats;
 use App\Service\Spell\Description\Dtos\SpellEffectData;
 
 /**
@@ -28,4 +29,7 @@ interface SpellDescriptionContextInterface
      * @return array<string, string>
      */
     public function getDescriptionVariables(int $spellId): array;
+
+    /** How the client writes a duration in the locale this context was built for. */
+    public function getDurationFormats(): SpellDurationFormats;
 }

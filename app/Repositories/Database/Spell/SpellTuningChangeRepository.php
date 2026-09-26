@@ -54,7 +54,7 @@ class SpellTuningChangeRepository extends DatabaseRepository implements SpellTun
     public function getForBuild(int $gameVersionId, string $toBuild, ?Dungeon $dungeon): Collection
     {
         return $this->scopeToDungeon(SpellTuningChange::query(), $dungeon)
-            ->with(['spell', 'spell.dungeons'])
+            ->with(['spell', 'spell.descriptionTranslation', 'spell.dungeons'])
             ->where('game_version_id', $gameVersionId)
             ->where('to_build', $toBuild)
             // Biggest swings first; rewritten descriptions and non-scalable changes (no delta) after them

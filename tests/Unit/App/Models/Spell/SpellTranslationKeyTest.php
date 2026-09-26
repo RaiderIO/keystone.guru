@@ -116,6 +116,21 @@ final class SpellTranslationKeyTest extends PublicTestCase
     }
 
     #[Test]
+    public function maskToTranslatedString_givenALocaleOtherThanTheApplicationLocale_translatesIntoThatLocale(): void
+    {
+        // Arrange
+        app()->setLocale('en_US');
+        $mask = SpellSchool::Physical->value;
+
+        // Act
+        $readable = SpellSchool::maskToTranslatedString($mask, 'fr_FR_ai');
+
+        // Assert
+        $this->assertSame(__('spellschools.physical', [], 'fr_FR_ai'), $readable);
+        $this->assertNotSame(__('spellschools.physical', [], 'en_US'), $readable);
+    }
+
+    #[Test]
     public function maskToTranslatedString_givenAnEmptyMask_returnsAnEmptyString(): void
     {
         // Arrange

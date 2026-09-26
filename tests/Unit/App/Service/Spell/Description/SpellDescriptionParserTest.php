@@ -4,6 +4,7 @@ namespace Tests\Unit\App\Service\Spell\Description;
 
 use App\Service\Spell\Description\ArraySpellDescriptionContext;
 use App\Service\Spell\Description\Dtos\SpellDescriptionValueKind;
+use App\Service\Spell\Description\Dtos\SpellDurationFormats;
 use App\Service\Spell\Description\Dtos\SpellEffectData;
 use App\Service\Spell\Description\SpellDescriptionContextInterface;
 use App\Service\Spell\Description\SpellDescriptionParser;
@@ -20,6 +21,12 @@ final class SpellDescriptionParserTest extends TestCase
 
     /** A second spell, for the cross-spell references descriptions are full of. */
     private const int OTHER_SPELL_ID = 2000;
+
+    /** A spell lasting two hours, for the units above a minute. */
+    private const int LONG_SPELL_ID = 3000;
+
+    /** A spell that lasts until it is dispelled, which the client stores as a negative duration. */
+    private const int ENDLESS_SPELL_ID = 4000;
 
     /**
      * Damage is a coefficient of the content the caster belongs to. A multiplier of ten means an amount
@@ -220,10 +227,55 @@ final class SpellDescriptionParserTest extends TestCase
         $this->assertNull($result->values[1]->coefficient);
     }
 
+    #[Test]
+    public function parse_givenTheClientsOwnDurationWording_writesTheUnitOfThatLocale(): void
+    {
+        // Arrange - the German client's GlobalStrings, as the importer reads them per locale
+        $parser  = new SpellDescriptionParser();
+        $context = $this->createContext(new SpellDurationFormats(
+            seconds: '%.1F Sek.',
+            minutes: '%.1F Min.',
+            untilCancelled: 'bis Abbruch',
+        ));
+
+        // Act
+        $result = $parser->parse($context, self::SPELL_ID, 'Betäubt das Ziel $d lang und $2000d lang erneut.');
+
+        // Assert - the placeholder asks for a decimal the client shows and we do not
+        $this->assertSame('Betäubt das Ziel 8 Sek. lang und 2 Min. lang erneut.', $result->render());
+    }
+
+    #[Test]
+    public function parse_givenADurationThatLastsUntilCancelled_writesTheClientsWordingForIt(): void
+    {
+        // Arrange
+        $parser  = new SpellDescriptionParser();
+        $context = $this->createContext(new SpellDurationFormats(untilCancelled: 'bis Abbruch'));
+
+        // Act
+        $result = $parser->parse($context, self::ENDLESS_SPELL_ID, 'Hält $d an.');
+
+        // Assert
+        $this->assertSame('Hält bis Abbruch an.', $result->render());
+    }
+
+    #[Test]
+    public function parse_givenADurationInHours_resolvesThePluralMacroTheClientsFormatCarries(): void
+    {
+        // Arrange - "%.1f |4hour:hrs;" is the client's own plural macro, picked on the number in front of it
+        $parser = new SpellDescriptionParser();
+
+        // Act
+        $result = $parser->parse($this->createContext(), self::LONG_SPELL_ID, 'Lasts $d.');
+
+        // Assert
+        $this->assertSame('Lasts 2 hrs.', $result->render());
+    }
+
     /**
      * A spell with a handful of effects, plus a second spell for the cross-spell references.
      */
-    private function createContext(): SpellDescriptionContextInterface
+    private function createContext(?SpellDurationFormats $durationFormats = null): SpellDescriptionContextInterface
     {
         return new ArraySpellDescriptionContext(
             effects: [
@@ -241,8 +293,10 @@ final class SpellDescriptionParserTest extends TestCase
                 ],
             ],
             durationsMs: [
-                self::SPELL_ID       => 8000,
-                self::OTHER_SPELL_ID => 120000,
+                self::SPELL_ID         => 8000,
+                self::OTHER_SPELL_ID   => 120000,
+                self::LONG_SPELL_ID    => 7200000,
+                self::ENDLESS_SPELL_ID => -1000,
             ],
             names: [
                 self::OTHER_SPELL_ID => 'Rending Slash',
@@ -253,6 +307,7 @@ final class SpellDescriptionParserTest extends TestCase
             descriptionVariables: [
                 self::SPELL_ID => ['mult' => '${3}'],
             ],
+            durationFormats: $durationFormats,
         );
     }
 }
