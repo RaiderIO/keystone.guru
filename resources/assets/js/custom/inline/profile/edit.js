@@ -5,6 +5,8 @@
  * @property {string} adFreeGiveawayCheckboxSelector
  * @property {string} echoColorSelector
  * @property {string} classColorSelector
+ * @property {string} publicProfileUrlSelector
+ * @property {string} publicProfileUrlCopyToClipboardSelector
  */
 
 /**
@@ -20,6 +22,11 @@ class ProfileEdit extends InlineCode {
         let $classColors = $(this.options.classColorSelector);
         $classColors.unbind('click').bind('click', function () {
             $(self.options.echoColorSelector).val($(this).data('color'));
+        });
+
+        $(this.options.publicProfileUrlCopyToClipboardSelector).unbind('click').bind('click', function () {
+            let $publicProfileUrl = $(self.options.publicProfileUrlSelector);
+            copyToClipboard($publicProfileUrl.val(), $publicProfileUrl);
         });
 
         $(this.options.userReportsTableSelector).DataTable({

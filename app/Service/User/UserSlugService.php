@@ -23,6 +23,8 @@ class UserSlugService implements UserSlugServiceInterface
             return self::FALLBACK_SLUG;
         }
 
+        // Every run of characters that is not a letter, combining mark, digit or underscore (in any script) becomes
+        // a single hyphen, so "Foo  Bar!" and "foo-bar" share the slug `foo-bar` while "Ørjan" and "张伟" stay intact
         $slug = preg_replace('/[^\pL\pM\pN_]+/u', '-', mb_strtolower($normalizedName));
         if ($slug === null) {
             return self::FALLBACK_SLUG;

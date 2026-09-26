@@ -60,7 +60,7 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
         $season = $this->seasonService->getCurrentSeasonForDungeon($dungeon);
 
         return $this->cacheService->remember(
-            sprintf('creators:featured:v2:%d:%d:%d', $dungeon->id, $season->id ?? 0, $limit),
+            sprintf('creators:featured:%d:%d:%d', $dungeon->id, $season->id ?? 0, $limit),
             function () use ($dungeon, $season, $limit): Collection {
                 $featuredCreators = $this->userRepository->buildFeaturedCreatorsForDungeonQuery($dungeon->id, $season?->id)
                     ->limit($limit)

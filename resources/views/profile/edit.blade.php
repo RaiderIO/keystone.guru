@@ -56,6 +56,8 @@ $menuTitle = sprintf(__('view_profile.edit.menu_title'), $user->name);
     'adFreeGiveawayCheckboxSelector' => '.ad_free_giveaway_checkbox',
     'echoColorSelector' => '#echo_color',
     'classColorSelector' => '.profile_class_color',
+    'publicProfileUrlSelector' => '#creator_public_profile_url',
+    'publicProfileUrlCopyToClipboardSelector' => '#creator_public_profile_url_copy_to_clipboard',
 ]])
 
 @section('scripts')

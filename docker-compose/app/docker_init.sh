@@ -16,6 +16,3 @@ php artisan horizon:install
 
 # Ensure there's default users in the database
 php artisan db:seed --class=LaratrustSeeder --database=migrate
-
-# Ensure the mapping is up to date
-php artisan environment:update
