@@ -878,8 +878,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         });
     });
 
+    Route::get('user/{user:slug}', new ProfileController()->view(...))->name('profile.view');
     // At the bottom to let routes such as profile/routes pass through first
-    Route::get('profile/{user}', new ProfileController()->view(...))->name('profile.view');
+    Route::get('profile/{user}', new ProfileController()->viewLegacy(...))->whereNumber('user')->name('profile.view.legacy');
 
     // View any dungeon route (catch all)
     Route::prefix('/route/{dungeon}/{dungeonroute}')->group(static function () {

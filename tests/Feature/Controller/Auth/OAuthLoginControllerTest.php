@@ -56,6 +56,38 @@ final class OAuthLoginControllerTest extends PublicTestCase
         ];
     }
 
+    #[Test]
+    public function handleProviderCallback_givenNicknameWhoseSlugIsTaken_createsTheUserWithASuffixedSlug(): void
+    {
+        // Arrange
+        $number     = random_int(100000, 999999);
+        $providerId = sprintf('%d', random_int(100000000, 999999999));
+        $oAuthId    = sprintf('%s@discord', $providerId);
+        $slugOwner  = null;
+
+        $this->mockSocialiteUser('discord', $providerId, sprintf('woe2#%d', $number));
+
+        try {
+            $slugOwner = User::factory()->create(['name' => sprintf('woe2 %d', $number)]);
+
+            // Act
+            $response = $this->get(route('login.discord.callback'));
+
+            // Assert
+            $response->assertRedirect();
+            /** @var User|null $user */
+            $user = User::query()->where('oauth_id', $oAuthId)->first();
+            $this->assertNotNull($user, 'The OAuth callback did not create the user');
+            $this->assertSame(sprintf('woe2-%d', $number), $slugOwner->slug);
+            $this->assertSame(sprintf('woe2-%d-2', $number), $user->slug);
+            $this->get(route('profile.view', ['user' => $slugOwner]))->assertOk();
+            $this->get(route('profile.view', ['user' => $user]))->assertOk();
+        } finally {
+            User::query()->where('oauth_id', $oAuthId)->first()?->delete();
+            $slugOwner?->delete();
+        }
+    }
+
     private function mockSocialiteUser(string $driver, string $providerId, string $nickname): void
     {
         $socialiteUser = new SocialiteUser()->map([

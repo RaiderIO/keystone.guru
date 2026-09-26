@@ -482,6 +482,54 @@ final class ProfileCreatorProfileTest extends PublicTestCase
     }
 
     #[Test]
+    public function edit_givenFeatureActive_showsThePublicProfileUrlInAReadonlyFieldWithACopyButton(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.edit'));
+
+            // Assert
+            $response->assertOk();
+            $this->assertMatchesRegularExpression(
+                sprintf(
+                    '/<input(?=[^>]*id="creator_public_profile_url")(?=[^>]*value="%s")(?=[^>]*readonly)[^>]*>/',
+                    preg_quote(e(route('profile.view', ['user' => $creator])), '/'),
+                ),
+                (string)$response->getContent(),
+            );
+            $response->assertSee('id="creator_public_profile_url_copy_to_clipboard"', false);
+            $response->assertSee('"publicProfileUrlCopyToClipboardSelector"', false);
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenFeatureInactive_doesNotShowThePublicProfileUrlField(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->deactivate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.edit'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertDontSee('id="creator_public_profile_url"', false);
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function updateCreatorProfile_givenPinsInNonAlphabeticalOrder_storesThemInSubmittedOrder(): void
     {
         // Arrange

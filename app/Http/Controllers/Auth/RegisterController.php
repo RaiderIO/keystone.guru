@@ -8,6 +8,7 @@ use App\Http\Middleware\TrustProxies;
 use App\Models\GameServerRegion;
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use App\Rules\UserSlugAvailableRule;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -65,7 +66,7 @@ class RegisterController extends Controller implements HasMiddleware
     protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
-            'name'         => 'required|alpha_dash|max:32|unique:users',
+            'name'         => ['required', 'alpha_dash', 'max:32', 'unique:users', new UserSlugAvailableRule()],
             'email'        => 'required|email|max:255|unique:users',
             'region'       => 'nullable|integer|exists:game_server_regions,id',
             'password'     => 'required|min:8|confirmed',

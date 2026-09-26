@@ -88,6 +88,14 @@ class UserRepository extends DatabaseRepository implements UserRepositoryInterfa
         return $row === null ? [] : (array)$row;
     }
 
+    public function isSlugTaken(string $slug, ?int $exceptUserId = null): bool
+    {
+        return User::query()
+            ->where('slug', $slug)
+            ->when($exceptUserId !== null, static fn(Builder $builder): Builder => $builder->whereKeyNot($exceptUserId))
+            ->exists();
+    }
+
     /** @return Builder<User> */
     private function buildListedCreatorsBaseQuery(?int $categoryId, ?int $seasonId): Builder
     {

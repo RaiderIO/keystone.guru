@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\GameServerRegion;
 use App\Models\User;
+use App\Rules\UserSlugAvailableRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -56,6 +57,7 @@ class ProfileFormRequest extends FormRequest
                 'min:3',
                 'max:24',
                 Rule::unique('users', 'name')->ignore($user, 'id'),
+                new UserSlugAvailableRule($user),
             ],
             'email' => [
                 'nullable',

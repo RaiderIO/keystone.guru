@@ -52,6 +52,26 @@ $describedBy = static fn(string $errorKey, string $errorId, string $helpId): str
         </a>
     </p>
 
+    <div class="mb-3 creator_profile_edit_url">
+        {{ html()->label(__('view_profile.edit.creator_public_profile_url'), 'creator_public_profile_url') }}
+        <div class="input-group">
+            {{ html()->text('creator_public_profile_url', rawurldecode(route('profile.view', ['user' => $user])))
+                ->id('creator_public_profile_url')
+                ->class('form-control')
+                ->attribute('aria-describedby', 'creator_public_profile_url_help')
+                ->isReadonly() }}
+            <button id="creator_public_profile_url_copy_to_clipboard" type="button" class="btn btn-info"
+                    data-bs-toggle="tooltip"
+                    title="{{ __('view_profile.edit.creator_public_profile_copy') }}"
+                    aria-label="{{ __('view_profile.edit.creator_public_profile_copy') }}">
+                <i class="far fa-copy" aria-hidden="true"></i>
+            </button>
+        </div>
+        <small id="creator_public_profile_url_help" class="form-text text-muted">
+            {{ __('view_profile.edit.creator_public_profile_url_help') }}
+        </small>
+    </div>
+
     @include('common.general.messages')
 
     {{ html()->modelForm($user, 'PATCH', route('profile.creator.update'))->open() }}

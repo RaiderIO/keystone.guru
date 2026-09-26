@@ -124,10 +124,9 @@ final class MigrationConnectionTest extends PublicTestCase
     }
 
     /**
-     * The rule above only holds if the callers pass an elevated `--database` in the first place, and a caller is
-     * exactly where this went wrong: `environment:update` kept its own copy of the options and was left on
-     * `combatlog` when the others moved. It runs on container startup via docker_init.sh, so it would have failed
-     * on a DROP migration somewhere nobody would think to look.
+     * The rule above only holds if the callers pass an elevated `--database` in the first place. A caller that keeps
+     * its own copy of the options is left on `combatlog` when the others move, and then fails on a DROP migration
+     * somewhere nobody would think to look.
      *
      * Scanned across the whole tree rather than asserted on the two commands, because a caller can be a shell
      * script or a CI workflow as easily as a PHP command - `sh/provision-phpunit-db.sh` and the php-ci-setup
@@ -180,8 +179,7 @@ final class MigrationConnectionTest extends PublicTestCase
      *
      * Scoped to source directories and source extensions on purpose: `docker-compose/` also holds the gitignored
      * MySQL data volumes, tens of gigabytes of them, and walking those took four minutes and died on the first
-     * root-owned file. `docker-compose/app` is named directly because docker_init.sh - the startup path that made
-     * the `environment:update` mismatch dangerous - lives there.
+     * root-owned file. `docker-compose/app` is named directly because the container startup script lives there.
      *
      * @return array<int, string>
      */

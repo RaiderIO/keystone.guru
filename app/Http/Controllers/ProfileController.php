@@ -51,16 +51,18 @@ class ProfileController extends Controller
         return view('profile.edit', $this->creatorProfileEditViewData());
     }
 
-    /**
-     * @return View
-     */
     public function view(
         Request                                $request,
         User                                   $user,
         ThumbnailServiceInterface              $thumbnailService,
         DungeonRouteCollectionServiceInterface $dungeonRouteCollectionService,
         CreatorDirectoryServiceInterface       $creatorDirectoryService,
-    ): View {
+    ): View|RedirectResponse {
+        // The slug column's collation matches /user/Wotuu to the stored `wotuu`; send those to the one canonical URL
+        if ($request->route()?->originalParameter('user') !== $user->slug) {
+            return $this->redirectToProfile($request, $user);
+        }
+
         $creatorProfileActive = Feature::active(CreatorProfiles::class);
 
         /** @var Collection<int, UserSocialLink> $socialLinks */
@@ -124,6 +126,11 @@ class ProfileController extends Controller
             'pinnedDungeonRouteCollectionCoveredDungeonCounts' => $pinnedDungeonRouteCollectionCoveredDungeonCounts,
             'creatorStats'                                     => $creatorStats,
         ]);
+    }
+
+    public function viewLegacy(Request $request, User $user): RedirectResponse
+    {
+        return $this->redirectToProfile($request, $user);
     }
 
     public function routes(
@@ -473,5 +480,17 @@ class ProfileController extends Controller
             'ownDungeonRouteCollections'      => $ownDungeonRouteCollections,
             'pinnedDungeonRouteCollectionIds' => $pinnedDungeonRouteCollectionIds,
         ];
+    }
+
+    private function redirectToProfile(Request $request, User $user): RedirectResponse
+    {
+        $url = route('profile.view', ['user' => $user]);
+
+        $queryString = $request->getQueryString();
+        if ($queryString !== null) {
+            $url = sprintf('%s?%s', $url, $queryString);
+        }
+
+        return redirect()->to($url, 301);
     }
 }

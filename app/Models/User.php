@@ -17,6 +17,7 @@ use App\Models\Tags\Tag;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
 use App\Models\Traits\HasTags;
+use App\Service\User\UserSlugServiceInterface;
 use BackedEnum;
 use Eloquent;
 use Exception;
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -42,6 +44,7 @@ use Override;
  * @property int         $game_version_id
  * @property int         $dungeon_id                  The dungeon context this user is in.
  * @property string      $name
+ * @property string|null $slug                        URL-safe, unique handle derived from the name; the public profile lives at /user/{slug}.
  * @property string|null $bio                         Free-form biography shown on the public creator profile.
  * @property bool        $hide_from_creator_directory Whether the user opted out of the creator directory.
  * @property string      $initials                    The initials (two letters) of a user so we can display it as the connected user in case of no avatar
@@ -119,6 +122,8 @@ class User extends Authenticatable implements LaratrustUser
 
     public const int DEFAULT_KILL_ZONE_PATH_WEIGHT = 5;
 
+    private const int SLUG_SAVE_ATTEMPTS = 3;
+
     public const string THEME_DARKLY   = 'darkly';
     public const string THEME_LUX      = 'lux';
     public const string THEME_XALATATH = 'vapor';
@@ -195,6 +200,41 @@ class User extends Authenticatable implements LaratrustUser
         return initials($this->name);
     }
 
+    /**
+     * A user the previous release created without a slug gets one the first time it is read, so building a link
+     * to them never fails. The write is guarded on the slug still being empty, so a concurrent assignment wins
+     * and is read back instead of overwritten.
+     */
+    public function getSlugAttribute(?string $value): ?string
+    {
+        if ($value !== null || !$this->exists) {
+            return $value;
+        }
+
+        $userSlugService = app(UserSlugServiceInterface::class);
+        $name            = $this->attributes['name'] ?? User::query()->whereKey($this->id)->value('name');
+
+        for ($attempt = 1; $attempt <= self::SLUG_SAVE_ATTEMPTS; $attempt++) {
+            try {
+                User::query()
+                    ->whereKey($this->id)
+                    ->whereNull('slug')
+                    ->update(['slug' => $userSlugService->findAvailableSlug((string)$name, $this->id)]);
+
+                break;
+            } catch (UniqueConstraintViolationException) {
+                continue;
+            }
+        }
+
+        $slug = User::query()->whereKey($this->id)->value('slug');
+
+        $this->attributes['slug'] = $slug;
+        $this->syncOriginalAttribute('slug');
+
+        return $slug;
+    }
+
     public function getIsAdminAttribute(): bool
     {
         return $this->hasRole(Role::ROLE_ADMIN);
@@ -203,6 +243,28 @@ class User extends Authenticatable implements LaratrustUser
     public function setNameAttribute(?string $value): void
     {
         $this->attributes['name'] = new HtmlSanitizer()->stripAllTags($value);
+    }
+
+    /**
+     * Another save can take the same slug between the saving hook's availability check and the
+     * write; the unique index rejects the write, and the retry picks the next free slug.
+     *
+     * @param array<string, mixed> $options
+     */
+    #[Override]
+    public function save(array $options = []): bool
+    {
+        for ($attempt = 1; ; $attempt++) {
+            try {
+                return parent::save($options);
+            } catch (UniqueConstraintViolationException $exception) {
+                if ($attempt >= self::SLUG_SAVE_ATTEMPTS || !str_contains($exception->getMessage(), 'users_slug_unique')) {
+                    throw $exception;
+                }
+
+                $this->slug = null;
+            }
+        }
     }
 
     /** @return HasMany<DungeonRoute, $this> */
@@ -459,6 +521,12 @@ class User extends Authenticatable implements LaratrustUser
     protected static function boot(): void
     {
         parent::boot();
+
+        static::saving(static function (User $user) {
+            if (empty($user->getAttributes()['slug'] ?? null) || $user->isDirty('name')) {
+                $user->slug = app(UserSlugServiceInterface::class)->findAvailableSlug($user->name, $user->id);
+            }
+        });
 
         // Delete user properly if it gets deleted
         static::deleting(static function (User $user) {

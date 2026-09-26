@@ -106,11 +106,6 @@ COPY --from=php-builder /usr/lib/lua/5.3/bit.so /usr/lib/lua/5.3/bit.so
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy scripts
-COPY docker_init.sh /usr/local/bin/docker_init.sh
-
-RUN chmod +x /usr/local/bin/docker_init.sh
-
 USER root
 
 # ----- copy the compiled WA parser from the builder stage -----
@@ -160,5 +155,3 @@ RUN groupadd -o -g "${PGID}" ksg \
  && cp /root/.bashrc /home/ksg/.bashrc \
  && cp -r /root/.composer /home/ksg/.composer \
  && chown -R ksg:ksg /home/ksg
-
-#ENTRYPOINT ["/usr/local/bin/docker_init.sh"]

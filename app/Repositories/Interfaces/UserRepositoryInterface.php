@@ -66,4 +66,10 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * @return array<string, mixed>
      */
     public function getCreatorStatsAttributes(int $userId, ?int $seasonId): array;
+
+    /**
+     * Whether a user other than $exceptUserId holds this slug. Compared under the column's
+     * collation, the same one its unique index enforces.
+     */
+    public function isSlugTaken(string $slug, ?int $exceptUserId = null): bool;
 }
