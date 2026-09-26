@@ -46,9 +46,18 @@ use Illuminate\Support\Collection;
             </div>
         @endif
 
-        <h3>
-            {{ __('view_profile.overview.route_overview') }}
-        </h3>
-        @include('common.dungeonroute.table', ['view' => 'profile'])
+        <div class="row align-items-center mb-2">
+            <div class="col">
+                <h3 class="mb-0">
+                    {{ __('view_profile.overview.route_overview') }}
+                </h3>
+            </div>
+            <div class="col-auto">
+                <button id="routes_table_mass_delete" type="button" class="btn btn-outline-danger btn-sm">
+                    <i class="fas fa-trash-alt" aria-hidden="true"></i> {{ __('view_profile.overview.delete_routes') }}
+                </button>
+            </div>
+        </div>
+        @include('common.dungeonroute.table', ['view' => 'profile', 'massDeleteOpenSelector' => '#routes_table_mass_delete'])
     </div>
 @endsection

@@ -43,10 +43,10 @@ $tagsSelectId         ??= 'dungeonroute_tags_select';
 $showAddToCollection = $view === 'profile' && Auth::check() && Feature::active(CreatorProfiles::class);
 
 // Deleting several routes at once is offered on My routes only, and picks them in the route picker drawer
-// instead of putting a checkbox on every row of this table
-$showMassDelete   = $view === 'profile' && Auth::check();
-$massDeleteId     = sprintf('%s_mass_delete', $tableId);
-$massDeletePickerId = sprintf('%s_picker', $massDeleteId);
+// instead of putting a checkbox on every row of this table; the host page renders the button that opens it
+$massDeleteOpenSelector ??= null;
+$showMassDelete         = $massDeleteOpenSelector !== null && $view === 'profile' && Auth::check();
+$massDeletePickerId     = sprintf('%s_mass_delete_picker', $tableId);
 
 /** @var string $view */
 $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
@@ -172,12 +172,6 @@ if (Auth::check()) {
     </div>
 </div>
 @if($showMassDelete)
-    <div class="d-flex justify-content-end mt-2">
-        <button id="{{ $massDeleteId }}" type="button" class="btn btn-outline-danger">
-            <i class="fas fa-trash-alt"></i> {{ __('view_common.dungeonroute.table.mass_delete') }}
-        </button>
-    </div>
-
     @include('common.dungeonroute.picker', [
         'id' => $massDeletePickerId,
         'title' => __('view_common.dungeonroute.table.mass_delete_picker_title'),
@@ -187,7 +181,7 @@ if (Auth::check()) {
         'max' => AjaxDungeonRouteDeleteBulkFormRequest::MAX_DUNGEON_ROUTES,
         'actionUrl' => route('api.dungeonroute.delete.bulk'),
         'actionFieldName' => 'dungeon_routes',
-        'openButtonSelector' => sprintf('#%s', $massDeleteId),
+        'openButtonSelector' => $massDeleteOpenSelector,
     ])
 @endif
 

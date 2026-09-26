@@ -129,7 +129,6 @@ return [
         'table' => [
             'team'                     => 'Team',
             'filter'                   => 'Filter',
-            'mass_delete'              => 'Delete multiple routes',
             'mass_delete_picker_title' => 'Delete multiple routes',
         ],
         'tablefilters' => [
