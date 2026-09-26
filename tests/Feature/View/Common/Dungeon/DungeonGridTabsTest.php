@@ -5,7 +5,7 @@ namespace Tests\Feature\View\Common\Dungeon;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
-use App\Models\RaidKey;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -14,17 +14,25 @@ use Tests\TestCases\PublicTestCase;
 #[Group('DungeonGridTabs')]
 final class DungeonGridTabsTest extends PublicTestCase
 {
+    private function classicEra(): GameVersion
+    {
+        return GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+    }
+
     /**
-     * The Burning Crusade's only non-raid instances mapped for Classic Era.
+     * @return Collection<int, int> Ids of the expansion's dungeons (raid: false) or raids (raid: true) mapped for Classic Era.
      */
-    private const array TBC_CLASSIC_DUNGEON_KEYS = [
-        RaidKey::GRUULS_LAIR->value,
-        RaidKey::MAGTHERIDONS_LAIR->value,
-    ];
+    private function instanceIds(string $expansionShortname, bool $raid): Collection
+    {
+        $expansion = Expansion::firstWhere('shortname', $expansionShortname);
+        $relation  = $raid ? $expansion->raids() : $expansion->dungeons();
+
+        return $relation->forGameVersion($this->classicEra())->pluck('dungeons.id');
+    }
 
     private function renderGridTabs(?callable $filterFn = null): string
     {
-        $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $gameVersion = $this->classicEra();
 
         return view('common.dungeon.gridtabs', [
             'id'          => 'test_dungeon',
@@ -37,16 +45,17 @@ final class DungeonGridTabsTest extends PublicTestCase
     }
 
     /**
-     * @param callable(): void $callback
+     * @param Collection<int, int> $dungeonIds
+     * @param callable(): void     $callback
      */
-    private function withTbcClassicDungeonsActive(bool $active, callable $callback): void
+    private function withDungeonsActive(Collection $dungeonIds, bool $active, callable $callback): void
     {
         $originalActive = Dungeon::query()
-            ->whereIn('key', self::TBC_CLASSIC_DUNGEON_KEYS)
+            ->whereIn('id', $dungeonIds)
             ->pluck('active', 'id');
 
         try {
-            Dungeon::query()->whereIn('key', self::TBC_CLASSIC_DUNGEON_KEYS)->update(['active' => $active]);
+            Dungeon::query()->whereIn('id', $dungeonIds)->update(['active' => $active]);
 
             $callback();
         } finally {
@@ -63,16 +72,21 @@ final class DungeonGridTabsTest extends PublicTestCase
     #[Test]
     public function render_givenExpansionWithOnlyInactiveDungeons_omitsItsDungeonTab(): void
     {
-        $this->withTbcClassicDungeonsActive(false, function (): void {
+        // Arrange - with the newer expansion's raids off too, Classic's dungeon tab would have been the first tab
+        $inactiveIds = $this->instanceIds(Expansion::EXPANSION_CLASSIC, false)
+            ->merge($this->instanceIds(Expansion::EXPANSION_TBC, true));
+        $this->assertTrue($this->instanceIds(Expansion::EXPANSION_CLASSIC, false)->isNotEmpty());
+
+        $this->withDungeonsActive($inactiveIds, false, function (): void {
             // Act
             $html = $this->renderGridTabs();
 
             // Assert
-            $this->assertStringNotContainsString(sprintf('id="%s-grid-tab"', Expansion::EXPANSION_TBC), $html);
-            $this->assertStringNotContainsString(sprintf('id="%s-grid-content"', Expansion::EXPANSION_TBC), $html);
-            $this->assertStringContainsString(sprintf('id="%s-raid-grid-tab"', Expansion::EXPANSION_TBC), $html);
+            $this->assertStringNotContainsString(sprintf('id="%s-grid-tab"', Expansion::EXPANSION_CLASSIC), $html);
+            $this->assertStringNotContainsString(sprintf('id="%s-grid-content"', Expansion::EXPANSION_CLASSIC), $html);
+            $this->assertStringContainsString(sprintf('id="%s-raid-grid-tab"', Expansion::EXPANSION_CLASSIC), $html);
             $this->assertMatchesRegularExpression(
-                sprintf('/id="%s-raid-grid-tab"\s+class="nav-link active"/', Expansion::EXPANSION_TBC),
+                sprintf('/id="%s-raid-grid-tab"\s+class="nav-link active"/', Expansion::EXPANSION_CLASSIC),
                 $html,
             );
         });
@@ -84,14 +98,18 @@ final class DungeonGridTabsTest extends PublicTestCase
     #[Test]
     public function render_givenExpansionWithActiveDungeons_rendersItsDungeonTab(): void
     {
-        $this->withTbcClassicDungeonsActive(true, function (): void {
+        // Arrange
+        $dungeonIds = $this->instanceIds(Expansion::EXPANSION_CLASSIC, false);
+        $this->assertTrue($dungeonIds->isNotEmpty());
+
+        $this->withDungeonsActive($dungeonIds, true, function (): void {
             // Act
             $html = $this->renderGridTabs();
 
             // Assert
-            $this->assertStringContainsString(sprintf('id="%s-grid-tab"', Expansion::EXPANSION_TBC), $html);
-            $this->assertStringContainsString(sprintf('id="%s-grid-content"', Expansion::EXPANSION_TBC), $html);
-            $this->assertStringContainsString(sprintf('id="%s-raid-grid-tab"', Expansion::EXPANSION_TBC), $html);
+            $this->assertStringContainsString(sprintf('id="%s-grid-tab"', Expansion::EXPANSION_CLASSIC), $html);
+            $this->assertStringContainsString(sprintf('id="%s-grid-content"', Expansion::EXPANSION_CLASSIC), $html);
+            $this->assertStringContainsString(sprintf('id="%s-raid-grid-tab"', Expansion::EXPANSION_CLASSIC), $html);
         });
     }
 
