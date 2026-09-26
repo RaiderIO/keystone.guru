@@ -96,6 +96,16 @@ class DungeonRouteController extends Controller
 
         $this->useBoundDungeon($dungeonroute, $dungeon);
 
+        // A route with a custom URL keeps resolving by its public key; that URL is not the canonical one
+        if (($request->route()->originalParameters()['dungeonroute'] ?? '') !== $dungeonroute->getRouteKey()) {
+            return redirect(route('dungeonroute.view.floor', [
+                'dungeon'      => $dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => $dungeonroute->getTitleSlug(),
+                'floorIndex'   => $floorIndex,
+            ] + $request->validated()), 301);
+        }
+
         if ($dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.view', [
                 'dungeon'      => $dungeon,

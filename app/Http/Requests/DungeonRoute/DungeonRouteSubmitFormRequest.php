@@ -5,10 +5,13 @@ namespace App\Http\Requests\DungeonRoute;
 use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Dungeon;
 use App\Models\DungeonDifficulty;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\User;
 use App\Rules\DungeonRouteLevelRule;
 use App\Rules\FactionSelectionRequiredRule;
+use App\Rules\VanityKeyRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -25,6 +28,12 @@ class DungeonRouteSubmitFormRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        if ($this->has('dungeon_route_vanity_key')) {
+            $vanityKey = strtolower(trim((string)$this->get('dungeon_route_vanity_key')));
+
+            $this->merge(['dungeon_route_vanity_key' => $vanityKey === '' ? null : $vanityKey]);
+        }
+
         if ($this->has('dungeon_route_description')) {
             $this->merge([
                 'dungeon_route_description' => new HtmlSanitizer()->sanitize($this->get('dungeon_route_description')),
@@ -38,8 +47,14 @@ class DungeonRouteSubmitFormRequest extends FormRequest
         /** @var User|null $user */
         $user = Auth::check() ? Auth::user() : null;
 
+        /** @var DungeonRoute|null $dungeonRoute */
+        $dungeonRoute = $this->route()?->parameter('dungeonRoute');
+
         $rules = [
-            'dungeon_route_title'       => 'nullable|string|max:80',
+            'dungeon_route_title'      => 'nullable|string|max:80',
+            'dungeon_route_vanity_key' => $user !== null && $user->hasPatreonBenefit(PatreonBenefit::CUSTOM_URLS)
+                ? ['nullable', 'string', new VanityKeyRule(DungeonRoute::class, $dungeonRoute)]
+                : ['prohibited'],
             'dungeon_route_description' => 'nullable|string|max:1000',
             'dungeon_route_sandbox'     => 'int',
             'dungeon_route_level'       => new DungeonRouteLevelRule(),
@@ -105,5 +120,13 @@ class DungeonRouteSubmitFormRequest extends FormRequest
         }
 
         return $rules;
+    }
+
+    /** @return array<string, string> */
+    public function messages(): array
+    {
+        return [
+            'dungeon_route_vanity_key.prohibited' => __('validation.custom.vanity_key.prohibited'),
+        ];
     }
 }

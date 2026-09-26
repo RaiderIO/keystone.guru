@@ -50,6 +50,10 @@ class TeamController extends Controller
             $team->public_key = Team::generateRandomPublicKey();
         }
 
+        if (array_key_exists('vanity_key', $validated)) {
+            $team->vanity_key = $validated['vanity_key'];
+        }
+
         $team->description  = $validated['description'];
         $team->invite_code  = Team::generateRandomPublicKey(12, 'invite_code');
         $team->icon_file_id = -1;

@@ -173,6 +173,8 @@ return [
             'dungeon_start_title'                            => 'This dungeon has multiple entrances. Select which one your route starts from; this affects the calculated path from the start to your first pull.',
             'description'                                    => 'Description',
             'description_title'                              => 'An optional description of your route. The description will be visible to others once you choose to publish your route. You can always edit your description later.',
+            'vanity_key'                                     => 'Custom URL',
+            'vanity_key_title'                               => 'Replaces the random key in this route\'s URL. Lowercase letters, numbers and dashes only. Leave it empty to keep the random key. The old URL keeps working.',
             'key_levels'                                     => 'Key levels',
             'key_levels_title'                               => 'Indicate for which key levels your route is suited. This can help others find your route more easily.',
             'migrate_to_seasonal_type'                       => 'Migrate route to :seasonalType',
@@ -878,6 +880,8 @@ return [
             'submit'                   => 'Submit',
             'disband_team'             => 'Disband team',
             'route_publishing_enabled' => 'Route publishing enabled',
+            'vanity_key'               => 'Custom URL',
+            'vanity_key_title'         => 'Replaces the random key in this team\'s URL. Lowercase letters, numbers and dashes only. Leave it empty to keep the random key.',
         ],
         'select' => [
             'select_team' => 'Select team...',

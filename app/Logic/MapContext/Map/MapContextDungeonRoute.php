@@ -59,7 +59,7 @@ class MapContextDungeonRoute extends MapContextBase
 
     public function getEchoChannelName(): string
     {
-        return sprintf('%s-route-edit.%s', config('app.type'), $this->dungeonRoute->getRouteKey());
+        return sprintf('%s-route-edit.%s', config('app.type'), $this->dungeonRoute->public_key);
     }
 
     /**

@@ -23,5 +23,11 @@ return [
     'map_icon_type_role_check_rule' => [
         'message' => 'That map icon type is not available for your access level.',
     ],
+    'vanity_key_rule' => [
+        'invalid'  => 'A custom URL may only contain lowercase letters, numbers and dashes.',
+        'length'   => 'A custom URL must be between :min and :max characters long.',
+        'reserved' => 'That custom URL is reserved.',
+        'taken'    => 'That custom URL is already taken.',
+    ],
 
 ];
