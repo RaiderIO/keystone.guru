@@ -17,6 +17,7 @@ use App\Models\User;
 use App\Models\UserPinnedDungeonRoute;
 use App\Models\UserPinnedDungeonRouteCollection;
 use App\Models\UserSocialLink;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\UserPinnedDungeonRouteCollectionRepositoryInterface;
 use App\Repositories\Interfaces\UserPinnedDungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\UserSocialLinkRepositoryInterface;
@@ -127,8 +128,9 @@ class ProfileController extends Controller
     }
 
     public function routes(
-        CoverageServiceInterface $coverageService,
-        SeasonServiceInterface   $seasonService,
+        CoverageServiceInterface        $coverageService,
+        SeasonServiceInterface          $seasonService,
+        DungeonRouteRepositoryInterface $dungeonRouteRepository,
     ): View {
         $season = null;
         if (isset($_COOKIE['dungeonroute_coverage_season_id'])) {
@@ -142,6 +144,7 @@ class ProfileController extends Controller
 
         return view('profile.overview', [
             'dungeonRoutes' => $coverageService->getForUser($user, $season),
+            'hasOwnRoutes'  => $dungeonRouteRepository->hasNonSandboxRoutesByAuthor($user),
         ]);
     }
 

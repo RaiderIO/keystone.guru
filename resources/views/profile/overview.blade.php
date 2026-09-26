@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
  * @var string                        $newRouteStyle
  * @var GameVersion                   $currentUserGameVersion
  * @var Collection<int, DungeonRoute> $dungeonRoutes
+ * @var bool                          $hasOwnRoutes
  */
 ?>
 
@@ -52,12 +53,17 @@ use Illuminate\Support\Collection;
                     {{ __('view_profile.overview.route_overview') }}
                 </h3>
             </div>
-            <div class="col-auto">
-                <button id="routes_table_mass_delete" type="button" class="btn btn-outline-danger btn-sm">
-                    <i class="fas fa-trash-alt" aria-hidden="true"></i> {{ __('view_profile.overview.delete_routes') }}
-                </button>
-            </div>
+            @if($hasOwnRoutes)
+                <div class="col-auto">
+                    <button id="routes_table_mass_delete" type="button" class="btn btn-outline-danger btn-sm">
+                        <i class="fas fa-trash-alt" aria-hidden="true"></i> {{ __('view_profile.overview.delete_routes') }}
+                    </button>
+                </div>
+            @endif
         </div>
-        @include('common.dungeonroute.table', ['view' => 'profile', 'massDeleteOpenSelector' => '#routes_table_mass_delete'])
+        @include('common.dungeonroute.table', [
+            'view' => 'profile',
+            'massDeleteOpenSelector' => $hasOwnRoutes ? '#routes_table_mass_delete' : null,
+        ])
     </div>
 @endsection

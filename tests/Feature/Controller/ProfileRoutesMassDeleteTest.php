@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
@@ -12,11 +13,11 @@ use Tests\TestCases\PublicTestCase;
 final class ProfileRoutesMassDeleteTest extends PublicTestCase
 {
     #[Test]
-    public function routes_givenAUser_rendersTheDeleteButtonInTheRouteOverviewHeader(): void
+    public function routes_givenAUserWithRoutes_rendersTheDeleteButtonInTheRouteOverviewHeader(): void
     {
         // Arrange
-        $user = User::factory()->create();
-        $user->addRole(Role::ROLE_USER);
+        $user         = $this->createUser();
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $user->id, 'expires_at' => null]);
 
         try {
             // Act
@@ -37,16 +38,17 @@ final class ProfileRoutesMassDeleteTest extends PublicTestCase
             $this->assertLessThan($filtersPosition, $buttonPosition);
             $this->assertSame(1, substr_count($html, 'id="routes_table_mass_delete"'));
         } finally {
+            $dungeonRoute->delete();
             $user->delete();
         }
     }
 
     #[Test]
-    public function routes_givenAUser_wiresTheDeleteButtonToTheDeletePicker(): void
+    public function routes_givenAUserWithRoutes_wiresTheDeleteButtonToTheDeletePicker(): void
     {
         // Arrange
-        $user = User::factory()->create();
-        $user->addRole(Role::ROLE_USER);
+        $user         = $this->createUser();
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $user->id, 'expires_at' => null]);
 
         try {
             // Act
@@ -58,16 +60,57 @@ final class ProfileRoutesMassDeleteTest extends PublicTestCase
             $response->assertSee('"openButtonSelector":"#routes_table_mass_delete"', false);
             $response->assertSee('"massDeletePickerSelector":"#routes_table_mass_delete_picker"', false);
         } finally {
+            $dungeonRoute->delete();
             $user->delete();
         }
     }
 
     #[Test]
-    public function favorites_givenAUser_leavesTheDeletePickerOut(): void
+    public function routes_givenAUserWithoutRoutes_leavesTheDeleteButtonOut(): void
     {
         // Arrange
-        $user = User::factory()->create();
-        $user->addRole(Role::ROLE_USER);
+        $user = $this->createUser();
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->get(route('profile.routes'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(__('view_profile.overview.route_overview'), false);
+            $response->assertDontSee('routes_table_mass_delete', false);
+            $response->assertSee('"massDeletePickerSelector":null', false);
+        } finally {
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function routes_givenAUserWithOnlySandboxRoutes_leavesTheDeleteButtonOut(): void
+    {
+        // Arrange
+        $user         = $this->createUser();
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $user->id, 'expires_at' => now()->addHour()]);
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->get(route('profile.routes'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertDontSee('routes_table_mass_delete', false);
+        } finally {
+            $dungeonRoute->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function favorites_givenAUserWithRoutes_leavesTheDeletePickerOut(): void
+    {
+        // Arrange
+        $user         = $this->createUser();
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $user->id, 'expires_at' => null]);
 
         try {
             // Act
@@ -78,7 +121,16 @@ final class ProfileRoutesMassDeleteTest extends PublicTestCase
             $response->assertDontSee('routes_table_mass_delete', false);
             $response->assertSee('"massDeletePickerSelector":null', false);
         } finally {
+            $dungeonRoute->delete();
             $user->delete();
         }
+    }
+
+    private function createUser(): User
+    {
+        $user = User::factory()->create();
+        $user->addRole(Role::ROLE_USER);
+
+        return $user;
     }
 }
