@@ -22,7 +22,7 @@ use App\Models\GameVersion\GameVersion;
     @include('common.general.linkpreview', [
         'title' => __('view_dungeon.dungeonroute.search.gameversion.dungeon.linkpreview_title', ['title' => $title]),
         'description' => $defaultDescription,
-        'image' => $dungeon->getImageUrl(),
+        'image' => $dungeon->getLinkPreviewImageUrl(),
     ])
 @endsection
 

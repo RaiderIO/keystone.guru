@@ -88,7 +88,7 @@ $gameVersionsSelect = $allGameVersions
             </td>
             <td>{{ $mappingVersion->id }}</td>
             <td data-order="{{ $mappingVersion->game_version_id }}">
-                <img src="{{ ksgAssetImage(sprintf('gameversions/%s.png', $mappingVersion->gameVersion->key)) }}"
+                <img src="{{ ksgAssetImage(sprintf('gameversions/%s.webp', $mappingVersion->gameVersion->key)) }}"
                      alt="{{ __($mappingVersion->gameVersion->name) }}"
                      title="{{ __($mappingVersion->gameVersion->name) }}"
                      data-bs-toggle="tooltip"

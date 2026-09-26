@@ -27,7 +27,7 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
             <div class="row g-0 align-items-center" style="height: 44px;">
                 <div class="col">
                     <a href="{{ route('home') }}" target="_blank">
-                        <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" class="header_embed_regular_logo"
+                        <img src="{{ ksgAssetImage('logo/logo_and_text.webp') }}" class="header_embed_regular_logo"
                              alt="{{ config('app.name') }}">
                     </a>
                 </div>

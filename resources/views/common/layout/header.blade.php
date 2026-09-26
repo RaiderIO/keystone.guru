@@ -212,7 +212,7 @@ $compendiumEntries        = [
      {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
     <div class="container px-1 bg-header rounded">
         <a class="navbar-brand" href="/">
-            <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
+            <img src="{{ ksgAssetImage('logo/logo_and_text.webp') }}" alt="{{ config('app.name') }}"
                  height="44" width="200">
         </a>
         {{-- Deliberately outside the collapse: the dungeon context is the topmost, most prominent bar

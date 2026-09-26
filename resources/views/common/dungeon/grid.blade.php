@@ -55,7 +55,7 @@ for( $i = 0; $i < $rowCount; ++$i ) { ?>
 
                         <img class="card-img-top"
                              src="{{ $dungeon->getImageUrl() }}"
-                             style="width: 100%" alt="{{ __($dungeon->name) }}"/>
+                             style="width: 100%" loading="lazy" alt="{{ __($dungeon->name) }}"/>
                         @isset($link)
                     </a>
                 @endisset

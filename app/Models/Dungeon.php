@@ -556,6 +556,14 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
 
     public function getImageUrl(): string
     {
+        return ksgAssetImage(sprintf('dungeons/%s/%s.webp', $this->expansion->shortname, $this->key));
+    }
+
+    /**
+     * Link preview crawlers do not all render webp, so previews keep the jpg.
+     */
+    public function getLinkPreviewImageUrl(): string
+    {
         return ksgAssetImage(sprintf('dungeons/%s/%s.jpg', $this->expansion->shortname, $this->key));
     }
 

@@ -18,21 +18,21 @@ $findRouteLink          = route('dungeonroutes.gameVersion', ['gameVersion' => $
         <div class="row g-0">
             <div class="col-md-4 mb-3 mb-md-0 mt-4">
                 <a href="{{ route('dungeon.dungeonroute.search') }}" class="d-block text-center">
-                    <img src="{{ ksgAssetImage('home/featured/revamped_search.png') }}" alt="{{ __('view_home.sections.featured.revamped_search_alt') }}"
-                         class="img-fluid rounded shadow-sm">
+                    <img src="{{ ksgAssetImage('home/featured/revamped_search.webp') }}" alt="{{ __('view_home.sections.featured.revamped_search_alt') }}"
+                         class="img-fluid rounded shadow-sm" loading="lazy">
                 </a>
             </div>
             <div class="col-md-4 mb-3 mb-md-0">
                 <a href="{{ $findRouteLink }}"
                    class="d-block text-center">
-                    <img src="{{ ksgAssetImage('home/featured/find_a_route.png') }}" alt="{{ __('view_home.sections.featured.weekly_route_alt') }}"
-                         class="img-fluid rounded shadow-sm border border-accent p-1" style="border-width: 2px !important;">
+                    <img src="{{ ksgAssetImage('home/featured/find_a_route.webp') }}" alt="{{ __('view_home.sections.featured.weekly_route_alt') }}"
+                         class="img-fluid rounded shadow-sm border border-accent p-1" style="border-width: 2px !important;" loading="lazy">
                 </a>
             </div>
             <div class="col-md-4 mt-4">
                 <a href="https://www.patreon.com/c/keystoneguru" class="d-block text-center">
-                    <img src="{{ ksgAssetImage('home/featured/patreon.png') }}" alt="{{ __('view_home.sections.featured.patreon_alt') }}"
-                         class="img-fluid rounded shadow-sm">
+                    <img src="{{ ksgAssetImage('home/featured/patreon.webp') }}" alt="{{ __('view_home.sections.featured.patreon_alt') }}"
+                         class="img-fluid rounded shadow-sm" loading="lazy">
                 </a>
             </div>
 
