@@ -34,7 +34,7 @@ use Illuminate\Support\Collection;
     @include('common.general.linkpreview', [
         'title' => sprintf(__('view_dungeonroute.view.linkpreview_title'), $title),
         'description' => $defaultDescription,
-        'image' => $dungeon->getImageUrl(),
+        'image' => $dungeon->getLinkPreviewImageUrl(),
     ])
 @endsection
 

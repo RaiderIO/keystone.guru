@@ -304,9 +304,9 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                                 {{ $region->short === $defaultRegion ? 'checked' : '' }}
                             >
                             <label class="btn btn-secondary" for="filter_region_{{ $region->short }}">
-                                <img src="{{ ksgAssetImage(sprintf('flags/%s.png', $region->short)) }}"
+                                <img src="{{ ksgAssetImage(sprintf('flags/%s.webp', $region->short)) }}"
                                      alt="{{ __($region->name) }}"
-                                     class="filter_region_icon">
+                                     class="filter_region_icon" loading="lazy">
                                 {{ __($region->name) }}
                             </label>
                         @endforeach

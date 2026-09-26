@@ -35,7 +35,7 @@ $sandbox = $dungeonroute->isSandbox();
             ($dungeonroute->isSandbox() ?
             sprintf(__('view_dungeonroute.edit.linkpreview_default_description_sandbox'), __($dungeonroute->dungeon->name)) :
             sprintf(__('view_dungeonroute.edit.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author->name)),
-            'image' => $dungeonroute->dungeon->getImageUrl(),
+            'image' => $dungeonroute->dungeon->getLinkPreviewImageUrl(),
     ])
 @endsection
 

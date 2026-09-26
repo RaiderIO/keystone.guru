@@ -57,7 +57,7 @@ $changeDungeonLabel = __('view_common.layout.nav.dungeoncontext.change_dungeon')
             ?>
             <a class="dropdown-item d-flex align-items-center {{ $selectedDungeon->key === $dungeon->key ? 'active' : '' }}"
                href="{{ $links->get($dungeon->key) }}">
-                <img class="dungeon_context_nav_icon me-2" src="{{ $dungeon->getImageUrl() }}" alt=""/>
+                <img class="dungeon_context_nav_icon me-2" src="{{ $dungeon->getImageUrl() }}" loading="lazy" alt=""/>
                 <span class="flex-grow-1 text-start">{{ __($dungeon->name) }}</span>
                 @if($thisWeekTier !== null)
                     <span class="dungeon_context_nav_tier ms-2" data-bs-toggle="tooltip"
@@ -73,7 +73,7 @@ $changeDungeonLabel = __('view_common.layout.nav.dungeoncontext.change_dungeon')
             <a class="dropdown-item d-flex align-items-center {{ $hasSelectedDungeon ? '' : 'active' }}"
                href="{{ $links->get('more') }}">
                 <img class="dungeon_context_nav_icon me-2" src="{{ $gameVersion->expansion->getWallpaperUrl() }}"
-                     alt="{{ __($gameVersion->expansion->name) }}"/>
+                     loading="lazy" alt="{{ __($gameVersion->expansion->name) }}"/>
                 <span class="flex-grow-1 text-start">{{ __('view_common.dungeon.list.more') }}</span>
             </a>
         @endif
@@ -82,7 +82,7 @@ $changeDungeonLabel = __('view_common.layout.nav.dungeoncontext.change_dungeon')
             <div class="dropdown-divider"></div>
             <a class="dropdown-item d-flex align-items-center" href="{{ $nextSeasonLink }}">
                 <img class="dungeon_context_nav_icon me-2" src="{{ $nextSeason->expansion->getWallpaperUrl() }}"
-                     alt="{{ __($nextSeason->expansion->name) }}"/>
+                     loading="lazy" alt="{{ __($nextSeason->expansion->name) }}"/>
                 <span class="flex-grow-1 text-start">{{ __('view_common.dungeon.list.next_season') }}</span>
             </a>
         @endif
