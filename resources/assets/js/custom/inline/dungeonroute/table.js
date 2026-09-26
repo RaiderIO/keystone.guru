@@ -16,6 +16,7 @@
  * @property {Object[]} teams
  * @property {Object[]} autoCompleteTags
  * @property {boolean} showAddToCollection Whether own routes offer "Add to collection…".
+ * @property {string|null} massDeletePickerSelector The route picker drawer deleting several routes at once, null when the view has none.
  */
 
 /**
@@ -59,6 +60,15 @@ class DungeonrouteTable extends InlineCode {
             self.setViewMode($(this).data('viewmode'));
             self.refreshTable();
         });
+
+        if (this.options.massDeletePickerSelector) {
+            $(this.options.massDeletePickerSelector).on('dungeonroutepicker:confirmed', function (event, result) {
+                let count = result.publicKeys.length;
+
+                showSuccessNotification(lang.get(`js.routes_delete_successful_${count === 1 ? 'one' : 'many'}`, {count: count}));
+                self.redrawKeepingPage();
+            });
+        }
     }
 
     /**

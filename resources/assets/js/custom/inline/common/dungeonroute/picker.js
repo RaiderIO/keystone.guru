@@ -17,7 +17,8 @@
  @property {string} rangeSelector
  @property {string} selectionSelector         Says how many routes are ticked.
  @property {string} fullSelector              Says why no more routes can be ticked.
- @property {string} addButtonSelector
+ @property {string} confirmButtonSelector
+ @property {string|null} selectPageSelector   Tick box ticking every route of the listed page; null when the drawer has none.
  @property {string} statusSelector            Polite live region.
  @property {string} listUrl                   Server-side paged route list (DataTables protocol).
  @property {Number} pageSize
@@ -27,8 +28,15 @@
  @property {Number|null} max                  Most routes the target may hold, null for no limit.
  @property {Number|null} maxPerDungeon        Most routes of one dungeon the target may hold, null for no limit.
  @property {Object<string, Number>} existingDungeonIds The dungeon of each route already in the target, by public key.
- @property {string|null} addUrl               Where the ticked routes are POSTed; null leaves saving to the host.
- @property {string} addFieldName
+ @property {string} actionKeyPrefix          Lang key prefix of the confirm button's wording, e.g. dungeonroute_picker_add.
+ @property {string|null} actionUrl           Where the ticked routes are sent; null leaves acting on them to the host.
+ @property {string} actionFieldName
+ @property {string} actionMethod             HTTP method the ticked routes are sent with.
+ @property {boolean} confirmsAction          Whether the user confirms once more before the routes are sent.
+ @property {boolean} removesActedRoutes      Whether the action removes the routes from the source, so they are gone
+                                             rather than "already in the target" afterwards.
+ @property {string|null} actedFieldName      Field of the response holding the public keys actually acted on; null
+                                             when every sent route is acted on.
  @property {string} fallbackImageBaseUrl
  @property {Object<string, {class: string, name: string}[]>} affixGroups Affixes per affix group id, for the filter's icons.
  */
@@ -37,14 +45,14 @@
  @typedef {Object} CommonDungeonroutePickerResult
  @property {string[]} publicKeys
  @property {PickerDungeonRoute[]} dungeonRoutes  The listed routes the public keys were ticked on.
- @property {*} response                          What the add url answered; null when the drawer posted nothing.
+ @property {*} response                          What the action url answered; null when the drawer sent nothing.
  */
 
 /**
- * Side drawer listing the source's routes, page by page, to tick and add to a target in one go. It knows
- * nothing about the target beyond the options: it fires `dungeonroutepicker:added` on the drawer element (and
- * calls every onAdded() callback) with a CommonDungeonroutePickerResult, so the host can store the routes and
- * show its toast.
+ * Side drawer listing the source's routes, page by page, to tick and act on in one go. It knows nothing about
+ * the target beyond the options: it fires `dungeonroutepicker:confirmed` on the drawer element (and calls every
+ * onConfirmed() callback) with a CommonDungeonroutePickerResult, so the host can store the routes and show its
+ * toast.
  *
  * @property {CommonDungeonroutePickerOptions} options
  */
@@ -56,7 +64,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         this.dialog = new DrawerDialog({
             drawerSelector: options.drawerSelector,
             openButtonSelector: options.openButtonSelector,
-            confirmButtonSelector: options.addButtonSelector,
+            confirmButtonSelector: options.confirmButtonSelector,
             statusSelector: options.statusSelector,
         });
 
@@ -70,6 +78,9 @@ class CommonDungeonroutePicker extends SearchInlineBase {
             'tags': new SearchFilterInputChange(options.tagsSelectSelector, onFilterChanged),
         };
 
+        this._listIsStale = false;
+        /** @type {string} loading|loaded|empty|error */
+        this._state = 'empty';
         this._page = 0;
         this._total = 0;
         this._saving = false;
@@ -84,7 +95,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         this._selected = [];
         /** @type {Object<string, PickerDungeonRoute>} Every listed or ticked route, by public key */
         this._dungeonRoutes = {};
-        this._onAddedCallbacks = [];
+        this._onConfirmedCallbacks = [];
     }
 
     activate() {
@@ -94,12 +105,15 @@ class CommonDungeonroutePicker extends SearchInlineBase {
 
         this.dialog.activate();
         this.dialog.onFirstShow(this.reload.bind(this));
-        this.dialog.onShow(this._retryAfterFailure.bind(this));
-        this.dialog.onConfirm(this._addDungeonRoutes.bind(this));
+        this.dialog.onShow(this._reloadWhenOutOfDate.bind(this));
+        this.dialog.onConfirm(this._confirmDungeonRoutes.bind(this));
 
         $(this.options.previousSelector).on('click', this._goToPage.bind(this, -1));
         $(this.options.nextSelector).on('click', this._goToPage.bind(this, 1));
         $(this.options.listSelector).on('change', '.route_picker_checkbox', this._onCheckboxChanged.bind(this));
+        if (this.options.selectPageSelector) {
+            $(this.options.selectPageSelector).on('change', this._onSelectPageChanged.bind(this));
+        }
 
         this._refreshSelection();
     }
@@ -123,15 +137,15 @@ class CommonDungeonroutePicker extends SearchInlineBase {
     }
 
     /**
-     * Registers a callback called with a CommonDungeonroutePickerResult after every successful add.
+     * Registers a callback called with a CommonDungeonroutePickerResult after every successful action.
      * @param {Function} callback
      */
-    onAdded(callback) {
-        this._onAddedCallbacks.push(callback);
+    onConfirmed(callback) {
+        this._onConfirmedCallbacks.push(callback);
     }
 
     /**
-     * Replaces the routes already in the target, e.g. after the host undid an add or removed a route.
+     * Replaces the routes already in the target, e.g. after the host undid an action or removed a route.
      * @param {string[]} publicKeys
      * @param {Object<string, Number>|null} [dungeonIds] The dungeon of each of those routes, by public key.
      */
@@ -246,11 +260,12 @@ class CommonDungeonroutePicker extends SearchInlineBase {
     }
 
     /**
-     * Opening the drawer again is the obvious way to try a list that failed to load once more.
+     * Opening the drawer again is the obvious way to try a list that failed to load once more; a list the
+     * last action removed routes from is refetched for the same reason.
      * @private
      */
-    _retryAfterFailure() {
-        if (this._failed) {
+    _reloadWhenOutOfDate() {
+        if (this._failed || this._listIsStale) {
             this.reload();
         }
     }
@@ -280,6 +295,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         let self = this;
 
         this._failed = false;
+        this._listIsStale = false;
         this._previousFilterParams = this._getFilterParams();
 
         super._search({
@@ -308,6 +324,9 @@ class CommonDungeonroutePicker extends SearchInlineBase {
      * @private
      */
     _setState(state) {
+        this._state = state;
+        this._refreshSelectPage();
+
         $(this.options.loadingSelector).prop('hidden', state !== 'loading');
         $(this.options.emptySelector).prop('hidden', state !== 'empty');
         $(this.options.errorSelector).prop('hidden', state !== 'error');
@@ -394,6 +413,78 @@ class CommonDungeonroutePicker extends SearchInlineBase {
                 .prop('checked', isExisting || isSelected)
                 .prop('disabled', isExisting || ((isFull || self._isDungeonFull(publicKey)) && !isSelected));
         });
+
+        this._refreshSelectPage();
+    }
+
+    /**
+     * @returns {string[]} The listed page's routes that are not in the target yet, in listed order.
+     * @private
+     */
+    _getPageSelectablePublicKeys() {
+        let self = this;
+
+        return $(this.options.listSelector).find('.route_picker_row').map(function () {
+            return $(this).attr('data-public-key');
+        }).get().filter(publicKey => !self._existing.has(publicKey));
+    }
+
+    /**
+     * @param {string} publicKey
+     * @returns {boolean} Whether ticking the route now would be accepted.
+     * @private
+     */
+    _canTick(publicKey) {
+        return !this._selected.includes(publicKey) && !this._existing.has(publicKey) && this.getRemaining() !== 0 &&
+            !this._isDungeonFull(publicKey);
+    }
+
+    /**
+     * Checked when every selectable route of the page is ticked, mixed when some are.
+     * @private
+     */
+    _refreshSelectPage() {
+        if (!this.options.selectPageSelector) {
+            return;
+        }
+
+        let self = this;
+        let selectable = this._getPageSelectablePublicKeys();
+        let selectedCount = selectable.filter(publicKey => self._selected.includes(publicKey)).length;
+        let canTickMore = selectable.some(publicKey => self._canTick(publicKey));
+        let $checkbox = $(this.options.selectPageSelector);
+
+        $checkbox.closest('.route_picker_select_page').prop('hidden', this._state !== 'loaded' || selectable.length === 0);
+        $checkbox
+            .prop('checked', selectable.length > 0 && selectedCount === selectable.length)
+            .prop('indeterminate', selectedCount > 0 && selectedCount < selectable.length)
+            .prop('disabled', selectedCount === 0 && !canTickMore);
+    }
+
+    /**
+     * Ticks the page's routes in listed order while they fit; with nothing more to tick, a click unticks the page.
+     * @private
+     */
+    _onSelectPageChanged() {
+        let self = this;
+        let selectable = this._getPageSelectablePublicKeys();
+
+        if (selectable.some(publicKey => self._canTick(publicKey))) {
+            selectable.forEach(function (publicKey) {
+                if (self._canTick(publicKey)) {
+                    self._selected.push(publicKey);
+                }
+            });
+        } else {
+            this._selected = this._selected.filter(publicKey => !selectable.includes(publicKey));
+        }
+
+        this._refreshRows();
+        this._refreshSelection();
+
+        let count = this._selected.length;
+        let plural = count === 0 ? 'none' : (count === 1 ? 'one' : 'many');
+        this.dialog.setStatus(lang.get(`js.dungeonroute_picker_selected_${plural}`, {count: count}));
     }
 
     /**
@@ -405,8 +496,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         let publicKey = $checkbox.val();
 
         if ($checkbox.prop('checked')) {
-            if (!this._selected.includes(publicKey) && !this._existing.has(publicKey) && this.getRemaining() !== 0 &&
-                !this._isDungeonFull(publicKey)) {
+            if (this._canTick(publicKey)) {
                 this._selected.push(publicKey);
             }
         } else {
@@ -431,29 +521,58 @@ class CommonDungeonroutePicker extends SearchInlineBase {
 
         $(this.options.fullSelector)
             .text(isFull
-                ? lang.get('js.dungeonroute_picker_full', {max: this.options.max})
+                ? lang.get(this._getFullKey(), {max: this.options.max})
                 : lang.get('js.dungeonroute_picker_dungeon_full', {max: this.options.maxPerDungeon}))
             .prop('hidden', !isFull && !hasFullDungeon);
         this.dialog.setConfirmButton(
-            lang.get(`js.dungeonroute_picker_add_${plural}`, {count: count}),
+            lang.get(`js.${this.options.actionKeyPrefix}_${plural}`, {count: count}),
             count > 0 && !this._saving,
         );
     }
 
     /**
+     * @returns {string} The action's own wording of the max, or the drawer's general one when it has none.
      * @private
      */
-    _addDungeonRoutes() {
-        let self = this;
+    _getFullKey() {
+        let actionKey = `js.${this.options.actionKeyPrefix}_full`;
+
+        return lang.has(actionKey) ? actionKey : 'js.dungeonroute_picker_full';
+    }
+
+    /**
+     * @private
+     */
+    _confirmDungeonRoutes() {
         let publicKeys = this.getSelectedPublicKeys();
 
         if (publicKeys.length === 0 || this._saving) {
             return;
         }
 
-        // Without an endpoint of its own the drawer only hands the routes over; the host page saves them
-        if (this.options.addUrl === null || typeof this.options.addUrl === 'undefined') {
-            this._reportAdded(publicKeys, null);
+        if (!this.options.confirmsAction) {
+            this._sendDungeonRoutes(publicKeys);
+
+            return;
+        }
+
+        let plural = publicKeys.length === 1 ? 'one' : 'many';
+        showConfirmYesCancel(
+            lang.get(`js.${this.options.actionKeyPrefix}_confirm_${plural}`, {count: publicKeys.length}),
+            this._sendDungeonRoutes.bind(this, publicKeys)
+        );
+    }
+
+    /**
+     * @param {string[]} publicKeys
+     * @private
+     */
+    _sendDungeonRoutes(publicKeys) {
+        let self = this;
+
+        // Without an endpoint of its own the drawer only hands the routes over; the host page acts on them
+        if (this.options.actionUrl === null || typeof this.options.actionUrl === 'undefined') {
+            this._reportConfirmed(publicKeys, null);
             this.close();
 
             return;
@@ -463,19 +582,48 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         this._refreshSelection();
 
         let data = {};
-        data[this.options.addFieldName] = publicKeys;
+        data[this.options.actionFieldName] = publicKeys;
 
         $.ajax({
-            type: 'POST',
-            url: this.options.addUrl,
+            type: this.options.actionMethod,
+            url: this.options.actionUrl,
             dataType: 'json',
             data: data,
             success: function (response) {
-                self._reportAdded(publicKeys, response);
+                let actedPublicKeys = self._getActedPublicKeys(publicKeys, response);
+
+                if (actedPublicKeys.length > 0) {
+                    self._reportConfirmed(actedPublicKeys, response);
+                }
+
+                // A server that acted on fewer routes than it was sent keeps the rest ticked, so the user
+                // retries only those instead of a selection the endpoint would now reject
+                if (actedPublicKeys.length < publicKeys.length) {
+                    self.dialog.setStatus(lang.get(`js.${self.options.actionKeyPrefix}_failed`));
+
+                    if (self._listIsStale) {
+                        self.reload();
+                    }
+
+                    return;
+                }
+
                 self.close();
             },
-            error: function () {
-                self.dialog.setStatus(lang.get('js.dungeonroute_picker_add_failed'));
+            error: function (xhr) {
+                let gonePublicKeys = self._getGonePublicKeys(publicKeys, xhr);
+
+                // An earlier request that committed but whose answer never arrived leaves its routes ticked;
+                // the endpoint now rejects them as unknown, and they would block every retry of the rest
+                if (gonePublicKeys.length > 0) {
+                    self._reportConfirmed(gonePublicKeys, null);
+                    self.dialog.setStatus(lang.get(`js.${self.options.actionKeyPrefix}_gone`, {count: gonePublicKeys.length}));
+                    self.reload();
+
+                    return;
+                }
+
+                self.dialog.setStatus(lang.get(`js.${self.options.actionKeyPrefix}_failed`));
             },
             complete: function () {
                 self._saving = false;
@@ -485,26 +633,70 @@ class CommonDungeonroutePicker extends SearchInlineBase {
     }
 
     /**
+     * The routes the server reports it acted on; every sent route when it reports nothing of its own.
+     * @param {string[]} publicKeys
+     * @param {*} response
+     * @returns {string[]}
+     * @private
+     */
+    _getActedPublicKeys(publicKeys, response) {
+        let field = this.options.actedFieldName;
+
+        if (!field || response === null || typeof response !== 'object' || !Array.isArray(response[field])) {
+            return publicKeys;
+        }
+
+        return publicKeys.filter(publicKey => response[field].includes(publicKey));
+    }
+
+    /**
+     * The sent routes a validation error names as unknown, for an action that removes its routes.
+     * @param {string[]} publicKeys
+     * @param {Object} xhr
+     * @returns {string[]}
+     * @private
+     */
+    _getGonePublicKeys(publicKeys, xhr) {
+        let errors = xhr?.responseJSON?.errors;
+
+        if (!this.options.removesActedRoutes || xhr?.status !== 422 || errors === null || typeof errors !== 'object') {
+            return [];
+        }
+
+        let prefix = `${this.options.actionFieldName}.`;
+
+        return publicKeys.filter((publicKey, index) => errors.hasOwnProperty(`${prefix}${index}`));
+    }
+
+    /**
      * @param {string[]} publicKeys
      * @param {*} response
      * @private
      */
-    _reportAdded(publicKeys, response) {
+    _reportConfirmed(publicKeys, response) {
         let self = this;
         let dungeonRoutes = publicKeys
             .map(publicKey => self._dungeonRoutes[publicKey])
             .filter(dungeonRoute => typeof dungeonRoute !== 'undefined');
 
-        publicKeys.forEach(publicKey => self._existing.add(publicKey));
-        dungeonRoutes.forEach(dungeonRoute => self._existingDungeonIds[dungeonRoute.publicKey] = dungeonRoute.dungeonId);
-        this._selected = [];
+        if (this.options.removesActedRoutes) {
+            // The routes are gone from the source, so they are not "already in the target" and must not keep
+            // occupying the max either - the next batch starts with the whole allowance again
+            publicKeys.forEach(publicKey => delete self._dungeonRoutes[publicKey]);
+            this._listIsStale = true;
+        } else {
+            publicKeys.forEach(publicKey => self._existing.add(publicKey));
+            dungeonRoutes.forEach(dungeonRoute => self._existingDungeonIds[dungeonRoute.publicKey] = dungeonRoute.dungeonId);
+        }
+
+        this._selected = this._selected.filter(publicKey => !publicKeys.includes(publicKey));
         this._refreshRows();
         this._refreshSelection();
 
         /** @type {CommonDungeonroutePickerResult} */
         let result = {publicKeys: publicKeys, dungeonRoutes: dungeonRoutes, response: response};
-        this.dialog.trigger('dungeonroutepicker:added', [result]);
-        this._onAddedCallbacks.forEach(callback => callback(result));
+        this.dialog.trigger('dungeonroutepicker:confirmed', [result]);
+        this._onConfirmedCallbacks.forEach(callback => callback(result));
     }
 }
 

@@ -53,6 +53,14 @@ const MESSAGES = {
         dungeonroute_picker_add_one:           'Add 1 route',
         dungeonroute_picker_add_many:          'Add :count routes',
         dungeonroute_picker_add_failed:        'Adding failed',
+        dungeonroute_picker_delete_none:          'Delete routes',
+        dungeonroute_picker_delete_one:           'Delete 1 route',
+        dungeonroute_picker_delete_many:          'Delete :count routes',
+        dungeonroute_picker_delete_confirm_one:   'Delete this route permanently?',
+        dungeonroute_picker_delete_confirm_many:  'Delete these :count routes permanently?',
+        dungeonroute_picker_delete_failed:        'Deleting failed',
+        dungeonroute_picker_delete_full:          'Delete at most :max',
+        dungeonroute_picker_delete_gone:          ':count already gone',
     },
     'en.dungeons': {ara_kara: 'Ara-Kara'},
 };
@@ -75,7 +83,7 @@ const OPTIONS = {
     rangeSelector:              '#picker_range',
     selectionSelector:          '#picker_selection',
     fullSelector:               '#picker_full',
-    addButtonSelector:          '#picker_add',
+    confirmButtonSelector:      '#picker_confirm',
     statusSelector:             '#picker_status',
     listUrl:                    '/ajax/routes',
     pageSize:                   2,
@@ -83,8 +91,11 @@ const OPTIONS = {
     lockedParameters:           {game_version_id: 1, season_id: 14, dungeon_ids: [3, 4]},
     existingPublicKeys:         ['existing'],
     max:                        3,
-    addUrl:                     '/target/add',
-    addFieldName:               'dungeon_routes',
+    actionKeyPrefix:            'dungeonroute_picker_add',
+    actionUrl:                  '/target/add',
+    actionFieldName:            'dungeon_routes',
+    actionMethod:               'POST',
+    confirmsAction:             false,
     fallbackImageBaseUrl:       'https://assets/images',
     affixGroups:                {7: [{class: 'fortified', name: 'Fortified'}]},
 };
@@ -127,13 +138,16 @@ const MARKUP = `
                 <p id="picker_loading" hidden></p>
                 <p id="picker_empty" hidden></p>
                 <p id="picker_error" hidden></p>
-                <div aria-busy="false"><ul id="picker_list"></ul></div>
+                <div aria-busy="false">
+                    <div class="route_picker_select_page" hidden><input id="picker_select_page" type="checkbox"></div>
+                    <ul id="picker_list"></ul>
+                </div>
                 <button id="picker_previous"></button>
                 <span id="picker_range"></span>
                 <button id="picker_next"></button>
                 <span id="picker_selection"></span>
                 <span id="picker_full" hidden></span>
-                <button id="picker_add"></button>
+                <button id="picker_confirm"></button>
                 <div id="picker_status"></div>
             </div>`;
 
@@ -152,6 +166,7 @@ describe('CommonDungeonroutePicker', () => {
 
         globalThis.lang = new Lang({messages: MESSAGES, locale: 'en'});
         globalThis.refreshSelectPickers          = vi.fn();
+        globalThis.showConfirmYesCancel          = vi.fn();
         globalThis.getHandlebarsDefaultVariables = () => MESSAGES['en.js'];
         globalThis.Handlebars                    = Handlebars;
         Handlebars.templates = {};
@@ -505,7 +520,7 @@ describe('CommonDungeonroutePicker', () => {
         expect(rowOf('a').querySelector('.route_picker_checkbox').disabled).toBe(false);
         expect(document.querySelector('#picker_full').hidden).toBe(false);
         expect(document.querySelector('#picker_full').textContent).toBe('Limit is 3');
-        expect(document.querySelector('#picker_add').textContent).toBe('Add 2 routes');
+        expect(document.querySelector('#picker_confirm').textContent).toBe('Add 2 routes');
         expect(document.querySelector('#picker_selection').textContent).toBe('2 selected');
     });
 
@@ -578,8 +593,8 @@ describe('CommonDungeonroutePicker', () => {
 
         // Assert
         expect(picker.getSelectedPublicKeys()).toEqual([]);
-        expect(document.querySelector('#picker_add').disabled).toBe(true);
-        expect(document.querySelector('#picker_add').textContent).toBe('Add routes');
+        expect(document.querySelector('#picker_confirm').disabled).toBe(true);
+        expect(document.querySelector('#picker_confirm').textContent).toBe('Add routes');
     });
 
     it('load_givenAnotherPage_keepsTicksFromTheFirstPage', () => {
@@ -602,7 +617,7 @@ describe('CommonDungeonroutePicker', () => {
     it('add_givenTicksFromAnEarlierPage_handsTheHostTheirRowsToo', () => {
         // Arrange
         document.body.innerHTML = MARKUP;
-        picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS, {addUrl: null}));
+        picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS, {actionUrl: null}));
         picker.activate();
         ajaxCalls.length = 0;
         picker.reload();
@@ -612,10 +627,10 @@ describe('CommonDungeonroutePicker', () => {
         respondWithRoutes([route('c'), route('d')], 4);
         tick('c');
         const callback = vi.fn();
-        picker.onAdded(callback);
+        picker.onConfirmed(callback);
 
         // Act
-        document.querySelector('#picker_add').click();
+        document.querySelector('#picker_confirm').click();
 
         // Assert
         expect(callback).toHaveBeenCalledWith({
@@ -633,11 +648,11 @@ describe('CommonDungeonroutePicker', () => {
         tick('a');
         const callback = vi.fn();
         const eventHandler = vi.fn();
-        picker.onAdded(callback);
-        jQuery('#picker').on('dungeonroutepicker:added', eventHandler);
+        picker.onConfirmed(callback);
+        jQuery('#picker').on('dungeonroutepicker:confirmed', eventHandler);
 
         // Act
-        document.querySelector('#picker_add').click();
+        document.querySelector('#picker_confirm').click();
         const post = ajaxCalls.find((call) => call.type === 'POST');
         post.success({added: 2});
         post.complete();
@@ -652,21 +667,21 @@ describe('CommonDungeonroutePicker', () => {
         expect(rowOf('a').querySelector('.route_picker_already_in').hidden).toBe(false);
     });
 
-    it('add_givenNoAddUrl_handsTheRoutesToTheHostWithoutPostingThem', () => {
+    it('add_givenNoActionUrl_handsTheRoutesToTheHostWithoutPostingThem', () => {
         // Arrange
         // A clean DOM, so only the drawer under test is bound to it
         document.body.innerHTML = MARKUP;
-        picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS, {addUrl: null}));
+        picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS, {actionUrl: null}));
         picker.activate();
         ajaxCalls.length = 0;
         picker.reload();
         respondWithRoutes([route('a'), route('b')]);
         tick('a');
         const callback = vi.fn();
-        picker.onAdded(callback);
+        picker.onConfirmed(callback);
 
         // Act
-        document.querySelector('#picker_add').click();
+        document.querySelector('#picker_confirm').click();
 
         // Assert
         expect(ajaxCalls.filter((call) => call.type === 'POST')).toHaveLength(0);
@@ -687,7 +702,7 @@ describe('CommonDungeonroutePicker', () => {
         tick('a');
 
         // Act
-        document.querySelector('#picker_add').click();
+        document.querySelector('#picker_confirm').click();
         const post = ajaxCalls.find((call) => call.type === 'POST');
         post.error({status: 422}, 'error');
         post.complete();
@@ -695,8 +710,436 @@ describe('CommonDungeonroutePicker', () => {
         // Assert
         expect(picker.getSelectedPublicKeys()).toEqual(['a']);
         expect(document.querySelector('#picker_status').textContent).toBe('Adding failed');
-        expect(document.querySelector('#picker_add').disabled).toBe(false);
+        expect(document.querySelector('#picker_confirm').disabled).toBe(false);
         expect(offcanvas.hide).not.toHaveBeenCalled();
+    });
+
+    /**
+     * A drawer in delete mode, bound to a clean DOM so only it is bound to the markup.
+     * @returns {CommonDungeonroutePicker}
+     */
+    function deletePicker(overrides = {}) {
+        document.body.innerHTML = MARKUP;
+        const deleteDrawer = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker',
+            Object.assign({}, OPTIONS, {
+                actionKeyPrefix:    'dungeonroute_picker_delete',
+                actionUrl:          '/ajax/routes',
+                actionMethod:       'DELETE',
+                confirmsAction:     true,
+                removesActedRoutes: true,
+                actedFieldName:     'dungeon_routes',
+                selectPageSelector: '#picker_select_page',
+                max:                null,
+                existingPublicKeys: [],
+            }, overrides));
+        deleteDrawer.activate();
+        ajaxCalls.length = 0;
+
+        return deleteDrawer;
+    }
+
+    it('refreshSelection_givenDeleteMode_namesTheDeleteActionOnTheConfirmButton', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')]);
+
+        // Act
+        tick('a');
+        tick('b');
+
+        // Assert
+        expect(document.querySelector('#picker_confirm').textContent).toBe('Delete 2 routes');
+    });
+
+    it('confirm_givenDeleteModeAndAConfirmedPrompt_sendsThemToTheDeleteEndpoint', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')]);
+        tick('a');
+        const callback = vi.fn();
+        picker.onConfirmed(callback);
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        const request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.success({dungeon_routes: ['a']});
+        request.complete();
+
+        // Assert
+        expect(globalThis.showConfirmYesCancel).toHaveBeenCalledWith('Delete this route permanently?', expect.any(Function));
+        expect(request.url).toBe('/ajax/routes');
+        expect(request.data).toEqual({dungeon_routes: ['a']});
+        expect(callback).toHaveBeenCalledWith(expect.objectContaining({publicKeys: ['a'], response: {dungeon_routes: ['a']}}));
+        expect(offcanvas.hide).toHaveBeenCalledTimes(1);
+    });
+
+    it('confirm_givenDeleteModeAndADismissedPrompt_sendsNothing', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a')]);
+        tick('a');
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+
+        // Assert
+        expect(ajaxCalls.filter((call) => call.type === 'DELETE')).toHaveLength(0);
+        expect(picker.getSelectedPublicKeys()).toEqual(['a']);
+    });
+
+    it('confirm_givenDeleteModeAndAFailingEndpoint_keepsTheSelectionAndSaysSo', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a')]);
+        tick('a');
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        const request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.error({status: 403}, 'error');
+        request.complete();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a']);
+        expect(document.querySelector('#picker_status').textContent).toBe('Deleting failed');
+        expect(offcanvas.hide).not.toHaveBeenCalled();
+    });
+
+    it('confirm_givenDeleteModeAndAMax_doesNotLetDeletedRoutesEatTheNextBatchesAllowance', () => {
+        // Arrange - a drawer that may only act on two routes at a time
+        picker = deletePicker({max: 2});
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')], 4);
+        tick('a');
+        tick('b');
+
+        // Act - delete both, then open the drawer again for the next batch
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        let request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.success({dungeon_routes: ['a', 'b']});
+        request.complete();
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        respondWithRoutes([route('c'), route('d')], 2);
+
+        // Assert - the whole allowance is available again, and the new page is tickable
+        expect(picker.getRemaining()).toBe(2);
+        expect(rowOf('c').querySelector('.route_picker_checkbox').disabled).toBe(false);
+        expect(rowOf('d').querySelector('.route_picker_checkbox').disabled).toBe(false);
+    });
+
+    it('confirm_givenTheServerActedOnFewerRoutesThanSent_keepsTheRestTickedAndStaysOpen', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')], 2);
+        tick('a');
+        tick('b');
+        const callback = vi.fn();
+        picker.onConfirmed(callback);
+
+        // Act - the endpoint reports it only got as far as the first route
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        const request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.success({dungeon_routes: ['a']});
+        request.complete();
+
+        // Assert
+        expect(callback).toHaveBeenCalledWith(expect.objectContaining({publicKeys: ['a']}));
+        expect(picker.getSelectedPublicKeys()).toEqual(['b']);
+        expect(document.querySelector('#picker_status').textContent).toBe('Deleting failed');
+        expect(offcanvas.hide).not.toHaveBeenCalled();
+    });
+
+    it('confirm_givenARetryOfADeleteWhoseAnswerWasLost_forgetsTheDeletedRoutesAndKeepsTheRest', () => {
+        // Arrange - the first request deleted 'a' and 'b' but its answer never arrived
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b'), route('c')]);
+        tick('a');
+        tick('b');
+        tick('c');
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        let request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.error({status: 0}, 'timeout');
+        request.complete();
+        const callback = vi.fn();
+        picker.onConfirmed(callback);
+
+        // Act - the retry is rejected for the two routes that are gone
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[1][1]();
+        request = ajaxCalls.filter((call) => call.type === 'DELETE').pop();
+        request.error({
+            status:       422,
+            responseJSON: {errors: {'dungeon_routes.0': ['gone'], 'dungeon_routes.1': ['gone']}},
+        }, 'error');
+        request.complete();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['c']);
+        expect(callback).toHaveBeenCalledWith(expect.objectContaining({publicKeys: ['a', 'b'], response: null}));
+        expect(document.querySelector('#picker_status').textContent).toBe('2 already gone');
+        expect(document.querySelector('#picker_confirm').textContent).toBe('Delete 1 route');
+        expect(ajaxCalls.filter((call) => call.type === 'GET').length).toBeGreaterThan(1);
+        expect(offcanvas.hide).not.toHaveBeenCalled();
+    });
+
+    it('confirm_givenAValidationErrorWithoutRejectedRoutes_keepsTheSelectionAndSaysSo', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a')]);
+        tick('a');
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        const request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.error({status: 422, responseJSON: {errors: {'dungeon_routes': ['too many']}}}, 'error');
+        request.complete();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a']);
+        expect(document.querySelector('#picker_status').textContent).toBe('Deleting failed');
+    });
+
+    it('confirm_givenAddModeAndARejectedRoute_keepsTheSelection', () => {
+        // Arrange - an add drawer does not remove its routes, so an unknown route is not "already acted on"
+        picker.reload();
+        respondWithRoutes([route('a')]);
+        tick('a');
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+        const request = ajaxCalls.find((call) => call.type === 'POST');
+        request.error({status: 422, responseJSON: {errors: {'dungeon_routes.0': ['unknown']}}}, 'error');
+        request.complete();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a']);
+        expect(document.querySelector('#picker_status').textContent).toBe('Adding failed');
+    });
+
+    it('confirm_givenTheServerActedOnNoRouteAtAll_reportsNothingToTheHost', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a')], 1);
+        tick('a');
+        const callback = vi.fn();
+        picker.onConfirmed(callback);
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        const request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.success({dungeon_routes: []});
+        request.complete();
+
+        // Assert
+        expect(callback).not.toHaveBeenCalled();
+        expect(picker.getSelectedPublicKeys()).toEqual(['a']);
+        expect(document.querySelector('#picker_status').textContent).toBe('Deleting failed');
+    });
+
+    /**
+     * @returns {HTMLInputElement}
+     */
+    function selectPageBox() {
+        return document.querySelector('#picker_select_page');
+    }
+
+    it('selectPage_givenALoadedPage_ticksEveryRouteOnIt', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')]);
+
+        // Act
+        selectPageBox().click();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a', 'b']);
+        expect(selectPageBox().checked).toBe(true);
+        expect(selectPageBox().indeterminate).toBe(false);
+        expect(rowOf('a').querySelector('.route_picker_checkbox').checked).toBe(true);
+        expect(document.querySelector('#picker_confirm').textContent).toBe('Delete 2 routes');
+        expect(document.querySelector('#picker_status').textContent).toBe('2 selected');
+    });
+
+    it('selectPage_givenAMaxSmallerThanThePage_ticksInListedOrderUntilFull', () => {
+        // Arrange
+        picker = deletePicker({max: 2});
+        picker.reload();
+        respondWithRoutes([route('a'), route('b'), route('c')]);
+
+        // Act
+        selectPageBox().click();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a', 'b']);
+        expect(selectPageBox().checked).toBe(false);
+        expect(selectPageBox().indeterminate).toBe(true);
+        expect(selectPageBox().disabled).toBe(false);
+        expect(rowOf('c').querySelector('.route_picker_checkbox').disabled).toBe(true);
+        expect(document.querySelector('#picker_full').hidden).toBe(false);
+    });
+
+    it('refreshSelection_givenDeleteModeAtTheMax_namesTheDeleteLimit', () => {
+        // Arrange
+        picker = deletePicker({max: 1});
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')]);
+
+        // Act
+        tick('a');
+
+        // Assert
+        expect(document.querySelector('#picker_full').hidden).toBe(false);
+        expect(document.querySelector('#picker_full').textContent).toBe('Delete at most 1');
+    });
+
+    it('selectPage_givenAFullPartlyTickedPage_unticksThePage', () => {
+        // Arrange
+        picker = deletePicker({max: 2});
+        picker.reload();
+        respondWithRoutes([route('a'), route('b'), route('c')]);
+        selectPageBox().click();
+
+        // Act
+        selectPageBox().click();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual([]);
+        expect(selectPageBox().checked).toBe(false);
+        expect(selectPageBox().indeterminate).toBe(false);
+        expect(rowOf('c').querySelector('.route_picker_checkbox').disabled).toBe(false);
+        expect(document.querySelector('#picker_status').textContent).toBe('None selected');
+    });
+
+    it('selectPage_givenAPartlyTickedPage_ticksTheRest', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b'), route('c')]);
+        tick('b');
+
+        // Act
+        selectPageBox().click();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['b', 'a', 'c']);
+        expect(selectPageBox().checked).toBe(true);
+    });
+
+    it('selectPage_givenATickedRow_showsThePageAsPartlyTicked', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')]);
+
+        // Act
+        tick('a');
+
+        // Assert
+        expect(selectPageBox().checked).toBe(false);
+        expect(selectPageBox().indeterminate).toBe(true);
+    });
+
+    it('selectPage_givenRoutesAlreadyInTheTarget_skipsThem', () => {
+        // Arrange
+        picker = deletePicker({existingPublicKeys: ['x']});
+        picker.reload();
+        respondWithRoutes([route('x'), route('a')]);
+
+        // Act
+        selectPageBox().click();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a']);
+        expect(selectPageBox().checked).toBe(true);
+    });
+
+    it('selectPage_givenTicksFromAnotherPage_unticksOnlyThisPage', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')], 4);
+        selectPageBox().click();
+        document.querySelector('#picker_next').click();
+        respondWithRoutes([route('c'), route('d')], 4);
+        selectPageBox().click();
+
+        // Act
+        selectPageBox().click();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a', 'b']);
+        expect(selectPageBox().checked).toBe(false);
+    });
+
+    it('selectPage_givenTheMaxWasReachedOnAnotherPage_isDisabled', () => {
+        // Arrange
+        picker = deletePicker({max: 2});
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')], 4);
+        selectPageBox().click();
+
+        // Act
+        document.querySelector('#picker_next').click();
+        respondWithRoutes([route('c'), route('d')], 4);
+
+        // Assert
+        expect(selectPageBox().checked).toBe(false);
+        expect(selectPageBox().indeterminate).toBe(false);
+        expect(selectPageBox().disabled).toBe(true);
+    });
+
+    it('selectPage_givenTheListIsLoadingOrEmpty_isHidden', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        const box = document.querySelector('.route_picker_select_page');
+        const hiddenWhileLoading = box.hidden;
+
+        // Act
+        respondWithRoutes([]);
+
+        // Assert
+        expect(hiddenWhileLoading).toBe(true);
+        expect(box.hidden).toBe(true);
+    });
+
+    it('selectPage_givenALoadedPage_isShown', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+
+        // Act
+        respondWithRoutes([route('a')]);
+
+        // Assert
+        expect(document.querySelector('.route_picker_select_page').hidden).toBe(false);
+    });
+
+    it('selectPage_givenAddMode_staysHidden', () => {
+        // Arrange - the add drawer has no selectPageSelector
+
+        // Act
+        picker.reload();
+        respondWithRoutes([route('a')]);
+
+        // Assert
+        expect(document.querySelector('.route_picker_select_page').hidden).toBe(true);
     });
 
     it('setExistingPublicKeys_givenAnUndoneAdd_makesTheRouteTickableAgain', () => {

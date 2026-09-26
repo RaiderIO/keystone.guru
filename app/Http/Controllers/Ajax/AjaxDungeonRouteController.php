@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteDeleteBulkFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteListFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSimulateFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSubmitFormRequest;
@@ -52,6 +53,7 @@ use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
@@ -489,6 +491,58 @@ class AjaxDungeonRouteController extends Controller
         $this->dungeonRouteChanged($dungeonRoute, $dungeonRoute, null);
 
         return response()->noContent();
+    }
+
+    /**
+     * Deletes several routes at once, the way the route picker drawer's delete mode sends them.
+     *
+     * @throws Exception
+     */
+    public function deleteBulk(AjaxDungeonRouteDeleteBulkFormRequest $request): JsonResponse
+    {
+        return $this->deleteDungeonRoutes($request->dungeonRoutes());
+    }
+
+    /**
+     * @param  Collection<int, DungeonRoute> $dungeonRoutes
+     * @throws Exception
+     */
+    private function deleteDungeonRoutes(Collection $dungeonRoutes): JsonResponse
+    {
+        // Every route is authorized before any of them is deleted, so a request holding one route the caller
+        // may not delete deletes nothing at all
+        foreach ($dungeonRoutes as $dungeonRoute) {
+            Gate::authorize('delete', $dungeonRoute);
+        }
+
+        $deletedPublicKeys = [];
+
+        foreach ($dungeonRoutes as $dungeonRoute) {
+            try {
+                // Per route rather than around the batch: deleting one route also writes to the combatlog
+                // connection and removes its thumbnails from disk, neither of which a rollback undoes
+                DB::transaction(function () use ($dungeonRoute): void {
+                    if (!$dungeonRoute->delete()) {
+                        throw new Exception('Unable to delete dungeonroute');
+                    }
+
+                    $this->dungeonRouteChanged($dungeonRoute, $dungeonRoute, null);
+                });
+            } catch (Throwable $throwable) {
+                // The routes deleted so far are gone for good, so the caller is told which ones those were
+                // instead of an error carrying nothing: a retry of the whole selection fails validation on
+                // the deleted keys, which would leave the rest of the batch undeletable
+                report($throwable);
+
+                break;
+            }
+
+            $deletedPublicKeys[] = $dungeonRoute->public_key;
+        }
+
+        return response()->json([
+            'dungeon_routes' => $deletedPublicKeys,
+        ]);
     }
 
     /**

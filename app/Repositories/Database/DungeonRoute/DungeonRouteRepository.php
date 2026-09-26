@@ -11,6 +11,7 @@ use App\Models\Npc\NpcClassification;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\Tags\TagCategory;
+use App\Models\User;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
@@ -199,6 +200,18 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             ->select(['id', 'clone_of', 'author_id', 'team_id', 'season_id'])
             ->whereIn('clone_of', $publicKeys)
             ->get();
+    }
+
+    public function hasNonSandboxRoutesByAuthor(User $user): bool
+    {
+        return DungeonRoute::query()
+            ->where('author_id', $user->id)
+            // Same try-route exclusion as the route list: expires_at is 0 on some rows and null on others
+            ->where(static function (EloquentBuilder $query): void {
+                $query->where('expires_at', 0)
+                    ->orWhereNull('expires_at');
+            })
+            ->exists();
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Repositories\Interfaces\DungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Season;
+use App\Models\User;
 use App\Repositories\BaseRepositoryInterface;
 use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
@@ -117,4 +118,9 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, DungeonRoute>
      */
     public function getClonesOf(Collection $publicKeys): Collection;
+
+    /**
+     * Whether the user authored at least one route that is not a sandbox (try) route.
+     */
+    public function hasNonSandboxRoutesByAuthor(User $user): bool;
 }

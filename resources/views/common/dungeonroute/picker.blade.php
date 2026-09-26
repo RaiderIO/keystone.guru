@@ -1,25 +1,28 @@
 <?php
 /**
- * A side drawer to pick routes and add them to a target in one go. The drawer knows nothing about the
- * target: it lists the source's routes through /ajax/routes within the locked constraints, hands the
- * ticked routes to the host page and, when it has a $addUrl, POSTs them there first.
+ * A side drawer to pick routes and act on them in one go. The drawer knows nothing about the target: it
+ * lists the source's routes through /ajax/routes within the locked constraints, hands the ticked routes to
+ * the host page and, when it has an $actionUrl, sends them there first.
  *
  * @var string              $id                  Prefix for every element id of the drawer.
  * @var string              $title               The drawer's heading, naming the target.
  * @var string              $sourceScope         Where the routes come from: 'mine' (your own routes) or 'unassigned_by_members'
  *                                               (routes of $sourceTeam's members that are in no team yet).
  * @var Team|null           $sourceTeam          The team whose members' routes 'unassigned_by_members' lists.
- * @var GameVersion         $lockedGameVersion   Only routes of this game version are listed.
+ * @var string              $action              What the confirm button does with the ticked routes: 'add' or 'delete'.
+ * @var GameVersion|null    $lockedGameVersion   Only routes of this game version are listed; null lists every one.
  * @var Season|null         $lockedSeason        When set, only routes of this season and its dungeons are listed.
  * @var Dungeon|null        $preselectedDungeon  Dungeon the dungeon filter starts on; the user may change it.
  * @var array<int, string>  $existingPublicKeys  Routes already in the target: listed, but cannot be ticked.
  * @var int|null            $max                 Most routes the target may hold, null for no limit.
  * @var int|null            $maxPerDungeon       Most routes of one dungeon the target may hold, null for no limit.
  * @var array<string, int>  $existingDungeonIds  The dungeon of each route already in the target, by public key.
- * @var string|null         $addUrl              Receives a POST of `{$addFieldName}[]` holding the ticked public keys;
- *                                               null leaves saving entirely to the host page.
- * @var string              $addFieldName
+ * @var string|null         $actionUrl           Receives `{$actionFieldName}[]` holding the ticked public keys;
+ *                                               null leaves acting on them entirely to the host page.
+ * @var string              $actionFieldName
  * @var string|null         $openButtonSelector  Clicking any element matching this opens the drawer.
+ *
+ * Deleting also offers a tick box that ticks every route of the listed page at once.
  */
 
 use App\Models\AffixGroup\AffixGroup;
@@ -30,17 +33,28 @@ use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Service\Season\SeasonServiceInterface;
 
+$action             ??= 'add';
 $sourceScope        ??= 'mine';
 $sourceTeam         ??= null;
+$lockedGameVersion  ??= null;
 $lockedSeason       ??= null;
 $preselectedDungeon ??= null;
 $existingPublicKeys ??= [];
 $max                ??= null;
 $maxPerDungeon      ??= null;
 $existingDungeonIds ??= [];
-$addUrl             ??= null;
-$addFieldName       ??= 'dungeon_routes';
+$actionUrl          ??= null;
+$actionFieldName    ??= 'dungeon_routes';
 $openButtonSelector ??= null;
+
+[$actionButtonClass, $actionMethod, $confirmsAction, $removesActedRoutes, $actedFieldName] = match ($action) {
+    'add'    => ['btn-primary', 'POST', false, false, null],
+    // Deleting is permanent, so the drawer asks once more before it sends anything; the deleted routes are
+    // gone from the source, and the endpoint answers with the ones it really deleted
+    'delete' => ['btn-danger', 'DELETE', true, true, 'dungeon_routes'],
+    default  => throw new InvalidArgumentException(sprintf('Unknown route picker action %s', $action)),
+};
+$selectsPage = $action === 'delete';
 
 [$sourceParameters, $sourceLabel] = match ($sourceScope) {
     'mine'                  => [['mine' => 1], __('view_common.dungeonroute.picker.source_mine')],
@@ -53,8 +67,8 @@ $openButtonSelector ??= null;
     default                 => throw new InvalidArgumentException(sprintf('Unknown route picker source scope %s', $sourceScope)),
 };
 
-$lockedParameters = ['game_version_id' => $lockedGameVersion->id];
-$scopeLabels      = [$sourceLabel, __($lockedGameVersion->name)];
+$lockedParameters = $lockedGameVersion === null ? [] : ['game_version_id' => $lockedGameVersion->id];
+$scopeLabels      = $lockedGameVersion === null ? [$sourceLabel] : [$sourceLabel, __($lockedGameVersion->name)];
 
 if ($lockedSeason !== null) {
     $lockedParameters['season_id']   = $lockedSeason->id;
@@ -69,7 +83,11 @@ if ($lockedSeason !== null) {
         'selected'          => $preselectedDungeon->id ?? -1,
     ];
 } else {
-    $dungeonSelectOptions = ['selectGameVersion' => $lockedGameVersion];
+    // Without a locked game version every game version's dungeons are offered, matching what is listed, and
+    // the filter starts on all of them instead of on the current season
+    $dungeonSelectOptions = $lockedGameVersion === null
+        ? ['ignoreGameVersion' => true, 'activeOnly' => false, 'selected' => -1]
+        : ['selectGameVersion' => $lockedGameVersion];
     if ($preselectedDungeon !== null) {
         $dungeonSelectOptions['selected'] = $preselectedDungeon->id;
     }
@@ -106,7 +124,8 @@ $inlineOptions = [
     'rangeSelector'              => sprintf('#%s_range', $id),
     'selectionSelector'          => sprintf('#%s_selection', $id),
     'fullSelector'               => sprintf('#%s_full', $id),
-    'addButtonSelector'          => sprintf('#%s_add', $id),
+    'confirmButtonSelector'      => sprintf('#%s_confirm', $id),
+    'selectPageSelector'         => $selectsPage ? sprintf('#%s_select_page', $id) : null,
     'statusSelector'             => sprintf('#%s_status', $id),
     'listUrl'                    => '/ajax/routes',
     'pageSize'                   => 25,
@@ -116,8 +135,13 @@ $inlineOptions = [
     'max'                        => $max,
     'maxPerDungeon'              => $maxPerDungeon,
     'existingDungeonIds'         => $existingDungeonIds,
-    'addUrl'                     => $addUrl,
-    'addFieldName'               => $addFieldName,
+    'actionKeyPrefix'            => sprintf('dungeonroute_picker_%s', $action),
+    'actionUrl'                  => $actionUrl,
+    'actionFieldName'            => $actionFieldName,
+    'actionMethod'               => $actionMethod,
+    'confirmsAction'             => $confirmsAction,
+    'removesActedRoutes'         => $removesActedRoutes,
+    'actedFieldName'             => $actedFieldName,
     'fallbackImageBaseUrl'       => trim(ksgAssetImage(), '/'),
     // The affix filter's options are decorated with their affix icons client side, the same way the
     // route table does it - the drawer carries the data so it survives being re-rendered
@@ -179,6 +203,17 @@ $inlineOptions = [
             <p id="{{ $id }}_error" class="route_picker_message text-danger px-3 py-4 mb-0" hidden>
                 {{ __('view_common.dungeonroute.picker.load_failed') }}
             </p>
+            @if($selectsPage)
+                <div class="route_picker_select_page border-bottom" hidden>
+                    <label class="route_picker_row_label d-flex align-items-center mb-0">
+                        <span class="leaderboard_rank d-flex align-items-center justify-content-end">
+                            <input id="{{ $id }}_select_page" type="checkbox"
+                                   class="form-check-input route_picker_checkbox mt-0">
+                        </span>
+                        <span class="small">{{ __('view_common.dungeonroute.picker.select_page') }}</span>
+                    </label>
+                </div>
+            @endif
             <ul id="{{ $id }}_list" class="list-unstyled route_picker_list mb-0"></ul>
 
             <nav class="d-flex align-items-center gap-2 px-3 py-2"
@@ -205,8 +240,8 @@ $inlineOptions = [
             <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">
                 {{ __('view_common.dungeonroute.picker.cancel') }}
             </button>
-            <button id="{{ $id }}_add" type="button" class="btn btn-primary" disabled>
-                {{ __('view_common.dungeonroute.picker.add_none') }}
+            <button id="{{ $id }}_confirm" type="button" class="btn {{ $actionButtonClass }}" disabled>
+                {{ __(sprintf('view_common.dungeonroute.picker.%s_none', $action)) }}
             </button>
         </div>
     </div>

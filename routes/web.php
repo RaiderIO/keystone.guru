@@ -668,6 +668,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('/dungeonroute/search/{gameVersion}/{dungeon}', new AjaxDungeonRouteSearchController()->get(...));
         });
 
+        Route::middleware(['auth', 'role:user|admin', 'throttle:delete-dungeonroutes'])->group(static function () {
+            Route::delete('/routes', new AjaxDungeonRouteController()->deleteBulk(...))->name('api.dungeonroute.delete.bulk');
+        });
+
         Route::middleware('throttle:mdt-details')->group(static function () {
             Route::post('/mdt/details', new MDTImportController()->details(...))->name('mdt.details');
         });
