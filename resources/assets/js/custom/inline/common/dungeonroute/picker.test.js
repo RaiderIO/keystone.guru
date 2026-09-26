@@ -59,6 +59,7 @@ const MESSAGES = {
         dungeonroute_picker_delete_confirm_one:   'Delete this route permanently?',
         dungeonroute_picker_delete_confirm_many:  'Delete these :count routes permanently?',
         dungeonroute_picker_delete_failed:        'Deleting failed',
+        dungeonroute_picker_delete_full:          'Delete at most :max',
     },
     'en.dungeons': {ara_kara: 'Ara-Kara'},
 };
@@ -919,6 +920,20 @@ describe('CommonDungeonroutePicker', () => {
         expect(selectPageBox().disabled).toBe(false);
         expect(rowOf('c').querySelector('.route_picker_checkbox').disabled).toBe(true);
         expect(document.querySelector('#picker_full').hidden).toBe(false);
+    });
+
+    it('refreshSelection_givenDeleteModeAtTheMax_namesTheDeleteLimit', () => {
+        // Arrange
+        picker = deletePicker({max: 1});
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')]);
+
+        // Act
+        tick('a');
+
+        // Assert
+        expect(document.querySelector('#picker_full').hidden).toBe(false);
+        expect(document.querySelector('#picker_full').textContent).toBe('Delete at most 1');
     });
 
     it('selectPage_givenAFullPartlyTickedPage_unticksThePage', () => {

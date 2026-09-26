@@ -521,13 +521,23 @@ class CommonDungeonroutePicker extends SearchInlineBase {
 
         $(this.options.fullSelector)
             .text(isFull
-                ? lang.get('js.dungeonroute_picker_full', {max: this.options.max})
+                ? lang.get(this._getFullKey(), {max: this.options.max})
                 : lang.get('js.dungeonroute_picker_dungeon_full', {max: this.options.maxPerDungeon}))
             .prop('hidden', !isFull && !hasFullDungeon);
         this.dialog.setConfirmButton(
             lang.get(`js.${this.options.actionKeyPrefix}_${plural}`, {count: count}),
             count > 0 && !this._saving,
         );
+    }
+
+    /**
+     * @returns {string} The action's own wording of the max, or the drawer's general one when it has none.
+     * @private
+     */
+    _getFullKey() {
+        let actionKey = `js.${this.options.actionKeyPrefix}_full`;
+
+        return lang.has(actionKey) ? actionKey : 'js.dungeonroute_picker_full';
     }
 
     /**
