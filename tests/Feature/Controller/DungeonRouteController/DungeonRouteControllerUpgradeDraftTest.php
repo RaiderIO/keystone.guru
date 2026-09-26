@@ -46,7 +46,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
      */
     private function createOutdatedRoute(User $owner): DungeonRoute
     {
-        $dungeon        = $this->getDungeonWithNonFacadeFloor();
+        $dungeon        = $this->findDungeon(facadeEnabled: false, requireDefaultFloor: true)[0];
         $mappingVersion = $dungeon->getCurrentMappingVersion();
 
         $newMappingVersion = MappingVersion::create([
@@ -366,6 +366,8 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
                 'title'        => $route->getTitleSlug(),
             ]));
             $draft = DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $route->id)->firstOrFail();
+            // The upgrade's flash would otherwise survive into the next request and auto-open the modal
+            $this->flushSession();
 
             // Act
             $response = $this->actingAs($owner)->followingRedirects()->get(route('dungeonroute.edit', [
