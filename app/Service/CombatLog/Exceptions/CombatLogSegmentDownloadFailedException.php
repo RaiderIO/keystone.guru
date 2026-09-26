@@ -2,6 +2,7 @@
 
 namespace App\Service\CombatLog\Exceptions;
 
+use App\Service\Traits\Dtos\CurlDownloadResult;
 use RuntimeException;
 
 /**
@@ -14,4 +15,14 @@ use RuntimeException;
  */
 class CombatLogSegmentDownloadFailedException extends RuntimeException
 {
+    public static function forSegment(int $segmentId, int $runId, CurlDownloadResult $downloadResult): self
+    {
+        return new self(sprintf(
+            'Failed to download segment %d for run %d (http=%d, curl=%d)',
+            $segmentId,
+            $runId,
+            $downloadResult->httpCode,
+            $downloadResult->errorNumber,
+        ));
+    }
 }

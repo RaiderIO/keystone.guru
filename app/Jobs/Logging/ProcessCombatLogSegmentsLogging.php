@@ -26,11 +26,35 @@ class ProcessCombatLogSegmentsLogging extends StructuredLogging implements Proce
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function handleSegmentDownloadFailed(int $runId, int $segmentId, string $tempPath): void
+    public function handleSegmentUrlExpiredRefetching(int $runId, int $segmentId, int $httpCode, int $curlErrorNumber): void
     {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function handleSegmentDownloadFailed(
+        int     $runId,
+        int     $segmentId,
+        string  $tempPath,
+        int     $httpCode,
+        int     $curlErrorNumber,
+        string  $curlError,
+        float   $durationSeconds,
+        ?string $urlHost,
+    ): void {
         // One run's segments failing to download costs nothing: the run is skipped, the parsing
         // budget it consumed is given back, and the next poll spends it elsewhere. Only the volume
         // of these matters, which combatlog:reportpollinghealth reports on hourly (#4173).
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function handleSegmentPermanentlyUndownloadable(
+        int     $runId,
+        int     $segmentId,
+        int     $httpCode,
+        int     $curlErrorNumber,
+        string  $curlError,
+        ?string $urlHost,
+    ): void {
         $this->warning(__METHOD__, get_defined_vars());
     }
 

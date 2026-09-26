@@ -19,6 +19,7 @@ use App\Service\CombatLog\Exceptions\CombatLogSegmentDownloadFailedException;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
+use App\Service\Traits\Dtos\CurlDownloadResult;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -82,15 +83,15 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
 
         $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
             ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION, $runContext])
-            ->onlyMethods(['curlSaveToFile'])
+            ->onlyMethods(['curlDownloadToFile'])
             ->getMock();
 
         $job->expects($this->exactly(2))
-            ->method('curlSaveToFile')
-            ->willReturnCallback(function (string $url, string $tempPath): bool {
+            ->method('curlDownloadToFile')
+            ->willReturnCallback(function (string $url, string $tempPath): CurlDownloadResult {
                 file_put_contents($tempPath, sprintf('content from %s', $url));
 
-                return true;
+                return self::downloadResult(true, 200);
             });
 
         // Act
@@ -134,9 +135,9 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
 
         $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
             ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
-            ->onlyMethods(['curlSaveToFile'])
+            ->onlyMethods(['curlDownloadToFile'])
             ->getMock();
-        $job->method('curlSaveToFile')->willReturnCallback($this->writeSegmentContents(...));
+        $job->method('curlDownloadToFile')->willReturnCallback($this->writeSegmentContents(...));
 
         // Act
         app()->call([$job, 'handle']);
@@ -194,9 +195,9 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
 
         $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
             ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
-            ->onlyMethods(['curlSaveToFile'])
+            ->onlyMethods(['curlDownloadToFile'])
             ->getMock();
-        $job->method('curlSaveToFile')->willReturnCallback($this->writeSegmentContents(...));
+        $job->method('curlDownloadToFile')->willReturnCallback($this->writeSegmentContents(...));
 
         // Act
         app()->call([$job, 'handle']);
@@ -298,16 +299,310 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
 
         $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
             ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
-            ->onlyMethods(['curlSaveToFile'])
+            ->onlyMethods(['curlDownloadToFile'])
             ->getMock();
 
         $job->expects($this->once())
-            ->method('curlSaveToFile')
-            ->willReturn(false);
+            ->method('curlDownloadToFile')
+            ->willReturn(self::downloadResult(false, 500));
 
         // Assert + Act
         $this->expectException(CombatLogSegmentDownloadFailedException::class);
         app()->call([$job, 'handle']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[DataProvider('permanentDownloadFailureProvider')]
+    public function handle_givenPermanentDownloadFailure_releasesCriteriaBudgetAndDoesNotThrow(
+        int $httpCode,
+        int $errorNumber,
+    ): void {
+        // Arrange
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->expects($this->once())
+            ->method('getCombatLogSegmentsForRun')
+            ->willReturn(new CombatLogSegmentsResponse(
+                sourceUserId: 1,
+                segments:     [new CombatLogSegment(id: 1, type: 'combat_log', downloadUrl: self::DOWNLOAD_URL_1)],
+            ));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $extractionService = $this->createMockPublic(CombatLogDataExtractionServiceInterface::class);
+        $extractionService->expects($this->never())->method('extractData');
+        app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
+
+        $criteriaService = $this->createMockPublic(CombatLogParsingCriteriaServiceInterface::class);
+        $criteriaService->expects($this->once())
+            ->method('releaseParsed')
+            ->with(self::COMBAT_LOG_VERSION, $this->criteria(), self::CRITERIA_DATE);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->once())
+            ->method('recordFailure')
+            ->with(CombatLogPollingFailureReason::SegmentUndownloadable);
+        $healthService->expects($this->never())->method('recordSucceeded');
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
+        $log->expects($this->once())
+            ->method('handleSegmentPermanentlyUndownloadable')
+            ->with(self::RUN_ID, 1, $httpCode, $errorNumber, $this->isString(), 'raider.io');
+        $log->expects($this->never())->method('handleSegmentDownloadFailed');
+        $log->expects($this->never())->method('handleSegmentUrlExpiredRefetching');
+        $log->expects($this->once())->method('handleEnd')->with(self::RUN_ID, false);
+        app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
+
+        $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION, null, $this->criteria(), self::CRITERIA_DATE])
+            ->onlyMethods(['curlDownloadToFile'])
+            ->getMock();
+        $job->expects($this->once())
+            ->method('curlDownloadToFile')
+            ->willReturn(self::downloadResult(false, $httpCode, $errorNumber));
+
+        // Act
+        app()->call([$job, 'handle']);
+
+        // Assert - handled by mock expectations above
+    }
+
+    /**
+     * @return array<string, array{int, int}>
+     */
+    public static function permanentDownloadFailureProvider(): array
+    {
+        return [
+            'bad content encoding' => [200, CURLE_BAD_CONTENT_ENCODING],
+            'missing object (404)' => [404, CURLE_OK],
+            'gone (410)'           => [410, CURLE_OK],
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[DataProvider('transientDownloadFailureProvider')]
+    public function handle_givenTransientDownloadFailure_throwsCombatLogSegmentDownloadFailedExceptionForRetry(
+        int $httpCode,
+        int $errorNumber,
+    ): void {
+        // Arrange - a single segment is the first segment, whose URL is fresh: no refetch happens for it
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->expects($this->once())
+            ->method('getCombatLogSegmentsForRun')
+            ->willReturn(new CombatLogSegmentsResponse(
+                sourceUserId: 1,
+                segments:     [new CombatLogSegment(id: 1, type: 'combat_log', downloadUrl: self::DOWNLOAD_URL_1)],
+            ));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $criteriaService = $this->createMockPublic(CombatLogParsingCriteriaServiceInterface::class);
+        $criteriaService->expects($this->never())->method('releaseParsed');
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->never())->method('recordFailure');
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
+        $log->expects($this->once())
+            ->method('handleSegmentDownloadFailed')
+            ->with(self::RUN_ID, 1, $this->isString(), $httpCode, $errorNumber, $this->isString(), 0.5, 'raider.io');
+        $log->expects($this->never())->method('handleSegmentPermanentlyUndownloadable');
+        $log->expects($this->never())->method('handleSegmentUrlExpiredRefetching');
+        app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
+
+        $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION, null, $this->criteria(), self::CRITERIA_DATE])
+            ->onlyMethods(['curlDownloadToFile'])
+            ->getMock();
+        $job->expects($this->once())
+            ->method('curlDownloadToFile')
+            ->willReturn(self::downloadResult(false, $httpCode, $errorNumber));
+
+        // Assert + Act
+        $this->expectException(CombatLogSegmentDownloadFailedException::class);
+        $this->expectExceptionMessage(sprintf('(http=%d, curl=%d)', $httpCode, $errorNumber));
+        app()->call([$job, 'handle']);
+    }
+
+    /**
+     * @return array<string, array{int, int}>
+     */
+    public static function transientDownloadFailureProvider(): array
+    {
+        return [
+            'service unavailable (503)' => [503, CURLE_OK],
+            'expired or denied (403)'   => [403, CURLE_OK],
+            'too many requests (429)'   => [429, CURLE_OK],
+            'could not connect'         => [0, CURLE_COULDNT_CONNECT],
+            'timed out'                 => [200, CURLE_OPERATION_TIMEDOUT],
+            'connection reset'          => [200, CURLE_RECV_ERROR],
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenExpiredUrlOnLaterSegment_refetchesSegmentListAndSucceeds(): void
+    {
+        // Arrange
+        $refreshedUrl2 = 'https://raider.io/segments/42/2.txt?refreshed=1';
+
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->expects($this->exactly(2))
+            ->method('getCombatLogSegmentsForRun')
+            ->willReturnOnConsecutiveCalls(
+                new CombatLogSegmentsResponse(
+                    sourceUserId: 1,
+                    segments:     [
+                        new CombatLogSegment(id: 1, type: 'combat_log', downloadUrl: self::DOWNLOAD_URL_1),
+                        new CombatLogSegment(id: 2, type: 'combat_log', downloadUrl: self::DOWNLOAD_URL_2),
+                    ],
+                ),
+                new CombatLogSegmentsResponse(
+                    sourceUserId: 1,
+                    segments:     [
+                        new CombatLogSegment(id: 1, type: 'combat_log', downloadUrl: 'https://raider.io/segments/42/1.txt?refreshed=1'),
+                        new CombatLogSegment(id: 2, type: 'combat_log', downloadUrl: $refreshedUrl2),
+                    ],
+                ),
+            );
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $extractionService = $this->createMockPublic(CombatLogDataExtractionServiceInterface::class);
+        $extractionService->expects($this->exactly(2))->method('extractData');
+        app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->once())->method('recordSucceeded');
+        $healthService->expects($this->never())->method('recordFailure');
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
+        $log->expects($this->once())
+            ->method('handleSegmentUrlExpiredRefetching')
+            ->with(self::RUN_ID, 2, 403, CURLE_OK);
+        $log->expects($this->never())->method('handleSegmentDownloadFailed');
+        $log->expects($this->once())->method('handleEnd')->with(self::RUN_ID, true);
+        app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
+
+        $requestedUrls = [];
+        $job           = $this->getMockBuilder(ProcessCombatLogSegments::class)
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
+            ->onlyMethods(['curlDownloadToFile'])
+            ->getMock();
+        $job->expects($this->exactly(3))
+            ->method('curlDownloadToFile')
+            ->willReturnCallback(function (string $url, string $tempPath) use (&$requestedUrls): CurlDownloadResult {
+                $requestedUrls[] = $url;
+
+                return $url === self::DOWNLOAD_URL_2
+                    ? self::downloadResult(false, 403)
+                    : $this->writeSegmentContents($url, $tempPath);
+            });
+
+        // Act
+        app()->call([$job, 'handle']);
+
+        // Assert
+        $this->assertSame([self::DOWNLOAD_URL_1, self::DOWNLOAD_URL_2, $refreshedUrl2], $requestedUrls);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenExpiredUrlTwiceOnLaterSegment_refetchesOnceAndThrowsForRetry(): void
+    {
+        // Arrange
+        $segmentsResponse = new CombatLogSegmentsResponse(
+            sourceUserId: 1,
+            segments:     [
+                new CombatLogSegment(id: 1, type: 'combat_log', downloadUrl: self::DOWNLOAD_URL_1),
+                new CombatLogSegment(id: 2, type: 'combat_log', downloadUrl: self::DOWNLOAD_URL_2),
+            ],
+        );
+
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->expects($this->exactly(2))
+            ->method('getCombatLogSegmentsForRun')
+            ->willReturn($segmentsResponse);
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $extractionService = $this->createMockPublic(CombatLogDataExtractionServiceInterface::class);
+        $extractionService->expects($this->never())->method('extractData');
+        app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
+
+        $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
+        $log->expects($this->once())->method('handleSegmentUrlExpiredRefetching');
+        $log->expects($this->once())->method('handleSegmentDownloadFailed');
+        app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
+
+        $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
+            ->onlyMethods(['curlDownloadToFile'])
+            ->getMock();
+        $job->expects($this->exactly(3))
+            ->method('curlDownloadToFile')
+            ->willReturnCallback(fn(string $url, string $tempPath): CurlDownloadResult => $url === self::DOWNLOAD_URL_2
+                ? self::downloadResult(false, 403)
+                : $this->writeSegmentContents($url, $tempPath));
+
+        // Assert + Act
+        $this->expectException(CombatLogSegmentDownloadFailedException::class);
+        app()->call([$job, 'handle']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenSegmentDownloadFails_logsHostButNotQueryString(): void
+    {
+        // Arrange - the query string of a presigned URL holds its signature
+        $presignedUrl = 'https://logs.raiderio.net/42/01_segment.txt.gz?X-Amz-Signature=secret';
+
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('getCombatLogSegmentsForRun')
+            ->willReturn(new CombatLogSegmentsResponse(
+                sourceUserId: 1,
+                segments:     [new CombatLogSegment(id: 1, type: 'combat_log', downloadUrl: $presignedUrl)],
+            ));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $loggedArguments = [];
+        $log             = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
+        $log->expects($this->once())
+            ->method('handleSegmentDownloadFailed')
+            ->willReturnCallback(function (mixed ...$arguments) use (&$loggedArguments): void {
+                $loggedArguments = $arguments;
+            });
+        app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
+
+        $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
+            ->onlyMethods(['curlDownloadToFile'])
+            ->getMock();
+        $job->method('curlDownloadToFile')->willReturn(self::downloadResult(false, 500));
+
+        // Act
+        try {
+            app()->call([$job, 'handle']);
+            $this->fail('Expected CombatLogSegmentDownloadFailedException');
+        } catch (CombatLogSegmentDownloadFailedException) {
+            // Expected - the failure is re-thrown for a retry
+        }
+
+        // Assert
+        $this->assertSame('logs.raiderio.net', end($loggedArguments));
+        $this->assertStringNotContainsString('X-Amz-Signature', json_encode($loggedArguments));
     }
 
     /**
@@ -340,14 +635,14 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
 
         $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
             ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
-            ->onlyMethods(['curlSaveToFile'])
+            ->onlyMethods(['curlDownloadToFile'])
             ->getMock();
 
-        $job->method('curlSaveToFile')
-            ->willReturnCallback(function (string $url, string $tempPath) use ($body): bool {
+        $job->method('curlDownloadToFile')
+            ->willReturnCallback(function (string $url, string $tempPath) use ($body): CurlDownloadResult {
                 file_put_contents($tempPath, $body);
 
-                return true;
+                return self::downloadResult(true, 200);
             });
 
         // Assert + Act
@@ -382,9 +677,9 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
 
         $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
             ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
-            ->onlyMethods(['curlSaveToFile'])
+            ->onlyMethods(['curlDownloadToFile'])
             ->getMock();
-        $job->method('curlSaveToFile')->willReturnCallback($this->writeSegmentContents(...));
+        $job->method('curlDownloadToFile')->willReturnCallback($this->writeSegmentContents(...));
 
         // Assert + Act
         $this->expectException(RedisException::class);
@@ -493,9 +788,9 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
 
         $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
             ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION, null, $this->criteria(), self::CRITERIA_DATE])
-            ->onlyMethods(['curlSaveToFile'])
+            ->onlyMethods(['curlDownloadToFile'])
             ->getMock();
-        $job->method('curlSaveToFile')->willReturnCallback($this->writeSegmentContents(...));
+        $job->method('curlDownloadToFile')->willReturnCallback($this->writeSegmentContents(...));
 
         // Act
         app()->call([$job, 'handle']);
@@ -532,9 +827,9 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
 
         $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
             ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION, null, $this->criteria(), self::CRITERIA_DATE])
-            ->onlyMethods(['curlSaveToFile'])
+            ->onlyMethods(['curlDownloadToFile'])
             ->getMock();
-        $job->method('curlSaveToFile')->willReturnCallback($this->writeSegmentContents(...));
+        $job->method('curlDownloadToFile')->willReturnCallback($this->writeSegmentContents(...));
 
         // Act
         app()->call([$job, 'handle']);
@@ -661,10 +956,21 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
     /**
      * Stand-in for a successful download: writes plausible combat log content to the segment's temp path.
      */
-    private function writeSegmentContents(string $url, string $tempPath): bool
+    private function writeSegmentContents(string $url, string $tempPath): CurlDownloadResult
     {
         file_put_contents($tempPath, sprintf('8/2/2026 20:15:01.123-4  ENCOUNTER_START,from %s', $url));
 
-        return true;
+        return self::downloadResult(true, 200);
+    }
+
+    private static function downloadResult(bool $succeeded, int $httpCode, int $errorNumber = CURLE_OK): CurlDownloadResult
+    {
+        return new CurlDownloadResult(
+            succeeded:       $succeeded,
+            httpCode:        $httpCode,
+            errorNumber:     $errorNumber,
+            errorMessage:    $errorNumber === CURLE_OK ? '' : sprintf('curl error %d', $errorNumber),
+            durationSeconds: 0.5,
+        );
     }
 }
