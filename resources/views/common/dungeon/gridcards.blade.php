@@ -50,7 +50,7 @@ for ($i = 0; $i < $rowCount; ++$i) { ?>
                         </h5>
                         <img class="card-img-top"
                              src="{{ $dungeon->getImageUrl() }}"
-                             style="width: 100%; height: 100%" alt="{{ __($dungeon->name) }}"/>
+                             style="width: 100%; height: 100%" loading="lazy" alt="{{ __($dungeon->name) }}"/>
                     </a>
                 </div>
                 @if($names)

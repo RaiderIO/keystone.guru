@@ -33,7 +33,7 @@ if (count($affixes) == 0) {
     @include('common.general.linkpreview', [
         'title' => sprintf(__('view_dungeonroute.view.linkpreview_title'), $dungeonroute->title),
         'description' => empty($dungeonroute->description) ? $defaultDescription : $dungeonroute->description,
-        'image' => $dungeonroute->dungeon->getImageUrl(),
+        'image' => $dungeonroute->dungeon->getLinkPreviewImageUrl(),
     ])
 @endsection
 

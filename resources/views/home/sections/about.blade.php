@@ -8,7 +8,7 @@
     </div>
     <div class="row my-4">
         <div class="col-auto">
-            <img alt="Logo" src="{{ ksgAssetImage('logo/logo.png') }}" style="width: 80px;"/>
+            <img alt="Logo" src="{{ ksgAssetImage('logo/logo.webp') }}" style="width: 80px;" loading="lazy"/>
         </div>
         <div class="col">
             <h4>{{ __('view_home.sections.about.tagline') }}</h4>
