@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\App\Service\MDT\Export;
 
+use App\Models\DungeonKey;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Service\MDT\Export\PullExporter;
@@ -80,6 +81,83 @@ final class PullExporterTest extends MDTExportStringServiceTestBase
 
             // Assert
             $this->assertSame('ABCDEF', $pulls[1]['color']);
+        } finally {
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function export_givenTolDagorEnemyOfOffsetMdtNpcIndex_returnsMdtCloneIndex(): void
+    {
+        $dungeonRoute = null;
+
+        try {
+            // Arrange - Tol Dagor's second MDT npc index for npc 131112 starts at mdt_id 3 for its clone 1
+            $dungeonRoute = $this->createDungeonRouteForCurrentMappingVersion(DungeonKey::TOL_DAGOR);
+
+            /** @var Enemy $enemy */
+            $enemy = $dungeonRoute->mappingVersion->enemies()
+                ->where('npc_id', 131112)
+                ->where('mdt_id', 3)
+                ->sole();
+            KillZone::factory()
+                ->withEnemies($enemy)
+                ->create([
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'index'            => 1,
+                    'description'      => null,
+                    'floor_id'         => null,
+                    'lat'              => null,
+                    'lng'              => null,
+                ]);
+
+            $warnings = collect();
+
+            // Act
+            $pulls = app(PullExporter::class)->export($dungeonRoute, $dungeonRoute->mappingVersion, $warnings);
+
+            // Assert
+            $this->assertEmpty($warnings);
+            $this->assertSame([11 => [1]], array_diff_key($pulls[1], ['color' => null]));
+        } finally {
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function export_givenEnemyWhoseMdtIdExistsOnTwoFloors_returnsCloneOnItsOwnFloor(): void
+    {
+        $dungeonRoute = null;
+
+        try {
+            // Arrange - MDT numbers clones per floor, so npc 131112's mdt_id 2 exists on both of Tol Dagor's
+            // floors: npc index 11 on the first floor, npc index 7 on the second, where this enemy is
+            $dungeonRoute = $this->createDungeonRouteForCurrentMappingVersion(DungeonKey::TOL_DAGOR);
+
+            /** @var Enemy $enemy */
+            $enemy = $dungeonRoute->mappingVersion->enemies()
+                ->where('npc_id', 131112)
+                ->where('mdt_id', 2)
+                ->sole();
+            KillZone::factory()
+                ->withEnemies($enemy)
+                ->create([
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'index'            => 1,
+                    'description'      => null,
+                    'floor_id'         => null,
+                    'lat'              => null,
+                    'lng'              => null,
+                ]);
+
+            $warnings = collect();
+
+            // Act
+            $pulls = app(PullExporter::class)->export($dungeonRoute, $dungeonRoute->mappingVersion, $warnings);
+
+            // Assert
+            $this->assertEmpty($warnings);
+            $this->assertSame([7 => [2]], array_diff_key($pulls[1], ['color' => null]));
         } finally {
             $dungeonRoute?->delete();
         }

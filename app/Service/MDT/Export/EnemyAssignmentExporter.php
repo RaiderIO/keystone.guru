@@ -9,10 +9,15 @@ use App\Models\Enemy;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\MDT\Export\Traits\FindsMdtNpcIndex;
+use App\Service\MDT\Import\Traits\AppliesMdtCloneIndexHack;
 use Illuminate\Support\Collection;
 
 class EnemyAssignmentExporter
 {
+    use AppliesMdtCloneIndexHack;
+    use FindsMdtNpcIndex;
+
     public function __construct(
         private readonly CacheServiceInterface       $cacheService,
         private readonly CoordinatesServiceInterface $coordinatesService,
@@ -32,7 +37,7 @@ class EnemyAssignmentExporter
     {
         $result = [];
 
-        $enemyRaidMarkers = $dungeonRoute->enemyRaidMarkers;
+        $enemyRaidMarkers = $dungeonRoute->loadMissing(['enemyRaidMarkers.enemy'])->enemyRaidMarkers;
         if ($enemyRaidMarkers->isEmpty()) {
             return $result;
         }
@@ -42,13 +47,7 @@ class EnemyAssignmentExporter
             ->getClonesAsEnemies($mappingVersion, $dungeonRoute->dungeon->floors);
 
         foreach ($enemyRaidMarkers as $enemyRaidMarker) {
-            $mdtNpcIndex = -1;
-            foreach ($mdtEnemies as $mdtEnemyCandidate) {
-                if ($mdtEnemyCandidate->npc_id === $enemyRaidMarker->npc_id && $mdtEnemyCandidate->mdt_id === $enemyRaidMarker->mdt_id) {
-                    $mdtNpcIndex = $mdtEnemyCandidate->mdt_npc_index;
-                    break;
-                }
-            }
+            $mdtNpcIndex = $this->findMdtNpcIndex($mdtEnemies, $enemyRaidMarker->npc_id, $enemyRaidMarker->mdt_id, $enemyRaidMarker->enemy?->floor_id);
 
             if ($mdtNpcIndex === -1) {
                 $warnings->push(new ImportWarning(
@@ -65,7 +64,7 @@ class EnemyAssignmentExporter
             }
 
             $result[$mdtNpcIndex] ??= [];
-            $result[$mdtNpcIndex][$enemyRaidMarker->mdt_id] = $enemyRaidMarker->raid_marker_id;
+            $result[$mdtNpcIndex][$this->revertDungeonCloneIndexHack($dungeonRoute->dungeon, $mdtNpcIndex, $enemyRaidMarker->mdt_id)] = $enemyRaidMarker->raid_marker_id;
         }
 
         return $result;

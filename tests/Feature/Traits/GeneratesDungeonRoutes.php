@@ -4,6 +4,7 @@ namespace Tests\Feature\Traits;
 
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
+use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -27,6 +28,17 @@ trait GeneratesDungeonRoutes
         return DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
+        ]);
+    }
+
+    protected function createDungeonRouteForCurrentMappingVersion(DungeonKey $dungeonKey): DungeonRoute
+    {
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::query()->where('key', $dungeonKey->value)->firstOrFail();
+
+        return DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
         ]);
     }
 
@@ -103,8 +115,8 @@ trait GeneratesDungeonRoutes
      * enemies that would be skipped by the import service based on route conditions.
      * Also cross-checks against the actual MDT clone data to exclude enemies whose
      * mdt_id does not exist in the MDT Lua file (e.g. KG has mdt_id=1 but MDT starts at 2).
-     * Additionally, applies the same clone-index offset hacks as parseMdtNpcClonesInPull()
-     * to exclude enemies that would fail to match during import due to duplicate-NPC merging.
+     * Additionally, excludes enemies of an MDT npc index carrying a clone-index offset (see AppliesMdtCloneIndexHack):
+     * their exported clone index differs from their mdt_id, which callers comparing the two do not expect.
      * Finally, the MDT clone the import resolves must match exactly one enemy of the mapping version,
      * and that enemy must be this one: the import attaches a pull to the first enemy sharing the
      * clone's npc_id and mdt_id, which can be a different enemy far away from this one.
@@ -125,6 +137,11 @@ trait GeneratesDungeonRoutes
             static fn(Enemy $clone): string => sprintf('%d_%d', $clone->npc_id, $clone->mdt_id),
         );
 
+        // Same, per floor: the export prefers the MDT clone on the enemy's own floor
+        $mdtCloneByPairAndFloor = $mdtClones->keyBy(
+            static fn(Enemy $clone): string => sprintf('%d_%d_%d', $clone->npc_id, $clone->mdt_id, $clone->floor_id),
+        );
+
         // Grouped lookup: mdt_npc_index => Collection<Enemy> (used to verify offset clone exists)
         $mdtClonesByNpcIndex = $mdtClones->groupBy('mdt_npc_index');
 
@@ -142,31 +159,26 @@ trait GeneratesDungeonRoutes
             ->where(fn($q) => $q->where('seasonal_type', '!=', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER)->orWhereNull('seasonal_type'))
             ->whereNull('seasonal_index')
             ->get()
-            ->filter(static function (Enemy $enemy) use ($mdtCloneByPair, $mdtClonesByNpcIndex, $enemiesByImportPair, $dungeon): bool {
+            ->filter(static function (Enemy $enemy) use ($mdtCloneByPair, $mdtCloneByPairAndFloor, $mdtClonesByNpcIndex, $enemiesByImportPair, $dungeon): bool {
                 $effectiveNpcId = $enemy->mdt_npc_id ?? $enemy->npc_id;
-                $mdtClone       = $mdtCloneByPair->get(sprintf('%d_%d', $effectiveNpcId, $enemy->mdt_id));
+                $mdtClone       = $mdtCloneByPairAndFloor->get(sprintf('%d_%d_%d', $effectiveNpcId, $enemy->mdt_id, $enemy->floor_id)) ??
+                    $mdtCloneByPair->get(sprintf('%d_%d', $effectiveNpcId, $enemy->mdt_id));
 
                 if ($mdtClone === null) {
                     return false;
                 }
 
-                $npcIndex    = $mdtClone->mdt_npc_index;
-                $importMdtId = $enemy->mdt_id;
+                $npcIndex = $mdtClone->mdt_npc_index;
 
-                // Mirror the clone-index offset hacks from MDTImportStringService::parseMdtNpcClonesInPull().
-                // These compensate for MDT's duplicate-NPC merging, which shifts clone indices for
-                // specific NPCs. Without this check, enemies near the top of the accessible clone
-                // range would pass the MDT-existence filter but fail during import.
-                if ($dungeon->key === DungeonKey::SIEGE_OF_BORALUS->value && $npcIndex === 35) {
-                    $importMdtId += 15;
-                } elseif ($dungeon->key === DungeonKey::TOL_DAGOR->value && $npcIndex === 11) {
-                    $importMdtId += 2;
-                } elseif ($dungeon->key === DungeonKey::MISTS_OF_TIRNA_SCITHE->value && $npcIndex === 23) {
-                    $importMdtId += 5;
+                if (
+                    ($dungeon->key === DungeonKey::TOL_DAGOR->value && $npcIndex === 11) ||
+                    ($dungeon->key === DungeonKey::MISTS_OF_TIRNA_SCITHE->value && $npcIndex === 23)
+                ) {
+                    return false;
                 }
 
                 /** @var Enemy|null $importedMdtClone */
-                $importedMdtClone = $mdtClonesByNpcIndex->get($npcIndex)?->firstWhere('mdt_id', $importMdtId);
+                $importedMdtClone = $mdtClonesByNpcIndex->get($npcIndex)?->firstWhere('mdt_id', $enemy->mdt_id);
                 if ($importedMdtClone === null) {
                     return false;
                 }

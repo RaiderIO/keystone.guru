@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\App\Service\MDT;
 
+use App\Models\DungeonKey;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\Npc\NpcEnemyForces;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -140,5 +142,63 @@ class MDTImportStringServicePullsTest extends MDTImportStringServiceTestBase
             $importedRoute?->delete();
             $dungeonRoute?->delete();
         }
+    }
+
+    #[Test]
+    #[Group('MDTImportStringServicePulls')]
+    #[DataProvider('getDungeonRoute_givenEnemyOfOffsetOrFormerlyOffsetMdtNpcIndex_returnsSameEnemy_Provider')]
+    public function getDungeonRoute_givenEnemyOfOffsetOrFormerlyOffsetMdtNpcIndex_returnsSameEnemy(
+        DungeonKey $dungeonKey,
+        int        $npcId,
+        int        $mdtId,
+    ): void {
+        $dungeonRoute  = null;
+        $importedRoute = null;
+
+        try {
+            // Arrange
+            $dungeonRoute = $this->createDungeonRouteForCurrentMappingVersion($dungeonKey);
+
+            /** @var Enemy $enemy */
+            $enemy = $dungeonRoute->mappingVersion->enemies()
+                ->where('npc_id', $npcId)
+                ->where('mdt_id', $mdtId)
+                ->sole();
+
+            KillZone::factory()->withEnemies($enemy)->create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'index'            => 1,
+                'description'      => null,
+            ]);
+
+            $warnings      = collect();
+            $encodedString = $this->exportDungeonRouteToString($dungeonRoute, $warnings);
+
+            // Act
+            $importedRoute = $this->importStringToDungeonRoute($encodedString);
+            $importedRoute->load(['killZones.killZoneEnemies']);
+
+            // Assert
+            $this->assertEmpty($warnings);
+            $this->assertCount(1, $importedRoute->killZones);
+            $this->assertSame([$enemy->id], $importedRoute->killZones->first()->killZoneEnemies->pluck('enemy_id')->all());
+        } finally {
+            $importedRoute?->delete();
+            $dungeonRoute?->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{DungeonKey, int, int}>
+     */
+    public static function getDungeonRoute_givenEnemyOfOffsetOrFormerlyOffsetMdtNpcIndex_returnsSameEnemy_Provider(): array
+    {
+        return [
+            'Tol Dagor, mdt npc index 11, clone 1' => [DungeonKey::TOL_DAGOR, 131112, 3],
+            'Tol Dagor, mdt npc index 11, clone 2' => [DungeonKey::TOL_DAGOR, 131112, 4],
+            'Tol Dagor, mdt npc index 11, clone 3' => [DungeonKey::TOL_DAGOR, 131112, 5],
+            'Tol Dagor, mdt npc index 11, clone 4' => [DungeonKey::TOL_DAGOR, 131112, 6],
+            'Siege of Boralus, mdt npc index 35'   => [DungeonKey::SIEGE_OF_BORALUS, 137614, 1],
+        ];
     }
 }

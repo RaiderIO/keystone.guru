@@ -10,11 +10,16 @@ use App\Models\KillZone\KillZone;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\MDT\Export\Traits\FindsMdtNpcIndex;
+use App\Service\MDT\Import\Traits\AppliesMdtCloneIndexHack;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class PullExporter
 {
+    use AppliesMdtCloneIndexHack;
+    use FindsMdtNpcIndex;
+
     public function __construct(
         private readonly CacheServiceInterface       $cacheService,
         private readonly CoordinatesServiceInterface $coordinatesService,
@@ -56,13 +61,7 @@ class PullExporter
                 }
 
                 // Find the MDT enemy - we need to know the mdt_npc_index
-                $mdtNpcIndex = -1;
-                foreach ($mdtEnemies as $mdtEnemyCandidate) {
-                    if ($mdtEnemyCandidate->npc_id === $enemy->getMdtNpcId() && $mdtEnemyCandidate->mdt_id === $enemy->mdt_id) {
-                        $mdtNpcIndex = $mdtEnemyCandidate->mdt_npc_index;
-                        break;
-                    }
-                }
+                $mdtNpcIndex = $this->findMdtNpcIndex($mdtEnemies, $enemy->getMdtNpcId(), $enemy->mdt_id, $enemy->floor_id);
 
                 // If we couldn't find the enemy in MDT..
                 if ($mdtNpcIndex === -1) {
@@ -84,7 +83,7 @@ class PullExporter
                 }
 
                 // For this enemy, kill this clone
-                $pull[$mdtNpcIndex][] = $enemy->mdt_id;
+                $pull[$mdtNpcIndex][] = $this->revertDungeonCloneIndexHack($dungeonRoute->dungeon, $mdtNpcIndex, $enemy->mdt_id);
                 $enemiesAdded++;
             }
 

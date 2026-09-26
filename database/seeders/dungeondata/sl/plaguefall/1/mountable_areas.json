@@ -10,5 +10,17 @@
             "weight": 1,
             "vertices_json": "[{\"lat\":-8.75,\"lng\":100},{\"lat\":-238.5,\"lng\":108.25},{\"lat\":-224.5,\"lng\":291.5},{\"lat\":-6.5,\"lng\":268.25}]"
         }
+    },
+    {
+        "id": 301,
+        "mapping_version_id": 1083,
+        "floor_id": 81,
+        "speed": null,
+        "polyline": {
+            "color": "#eb4934",
+            "color_animated": null,
+            "weight": 1,
+            "vertices_json": "[{\"lat\":-8.75,\"lng\":100},{\"lat\":-238.5,\"lng\":108.25},{\"lat\":-224.5,\"lng\":291.5},{\"lat\":-6.5,\"lng\":268.25}]"
+        }
     }
 ]
