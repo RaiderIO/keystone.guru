@@ -16,14 +16,14 @@ colors:
   form-required-red: "#c40000"
 typography:
   body:
-    fontFamily: "Salesforce Sans, Arial, sans-serif"
+    fontFamily: "Arial, sans-serif"
     fontSize: "0.9375rem"
     lineHeight: 1.6
   headline:
-    fontFamily: "Salesforce Sans, Arial, sans-serif"
+    fontFamily: "Arial, sans-serif"
     fontWeight: 500
   label:
-    fontFamily: "Salesforce Sans, Arial, sans-serif"
+    fontFamily: "Arial, sans-serif"
     fontSize: "0.875rem"
 rounded:
   sm: "0.25rem"
@@ -118,17 +118,16 @@ work from one rule set. A hardcoded `#303030` is a bug even when it looks right.
 
 ## Typography
 
-**Body Font:** Arial (declared as "Salesforce Sans, Arial, sans-serif")
+**Body Font:** Arial (declared as "Arial, sans-serif")
 **Character:** Deliberately plain and instrumental — type is for reading data, not for
 voice. Density comes from a slightly-under-default size with a generous line height.
 
-> **Interim reality, recorded on purpose:** the `@font-face` for "Salesforce Sans" points
-> to `/webfonts/Renogare-Regular.otf`, which is not shipped — everything renders in Arial.
-> **Renogare is the intended brand font** (it is what Raider.IO uses and wants adopted),
-> but adopting it requires real look-and-feel work (it runs large for this UI) that is
-> deliberately deferred. Do not "fix" this piecemeal: adopting Renogare is a scoped
-> redesign task, not a font-file swap. Until then, Arial is canon. The bundled
-> `raleway.woff2` is unreferenced legacy.
+> **Recorded on purpose:** the site ships no webfont for body copy. **Renogare is the
+> intended brand font** (it is what Raider.IO uses and wants adopted), but adopting it
+> requires real look-and-feel work (it runs large for this UI) that is deliberately
+> deferred. Do not "fix" this piecemeal: adopting Renogare is a scoped redesign task, not
+> a font-file swap. Until then, Arial is canon. The bundled `raleway.woff2` is
+> unreferenced legacy.
 
 ### Hierarchy
 - **Body** (400, 0.9375rem, 1.6): the global size — body, buttons, form controls, and dropdowns are all stepped down from Bootstrap's 1rem for density.
