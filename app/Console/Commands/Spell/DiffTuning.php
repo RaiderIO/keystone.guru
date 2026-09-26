@@ -97,7 +97,7 @@ class DiffTuning extends Command
 
         $stored = $spellTuningDiffService->store($result, $toBuildReleasedAt);
 
-        $this->info(sprintf('Stored %d changes for build %s. Run mapping:save to write them to database/seeders/dungeondata/spell_tuning_changes.json.', $stored, $to->build));
+        $this->info(sprintf('Stored %d changes for build %s. Run mapping:save to write them to database/seeders/dungeondata/spell_tuning_builds.json and spell_tuning_changes.json.', $stored, $to->build));
 
         return self::SUCCESS;
     }

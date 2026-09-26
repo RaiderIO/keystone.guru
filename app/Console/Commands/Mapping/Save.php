@@ -267,9 +267,10 @@ class Save extends Command
      */
     private function saveSpellTuningChanges(string $dungeonDataDir): void
     {
-        // Save the build-over-build spell tuning changes computed by spell:difftuning
+        // Save the build-over-build spell tuning changes computed by spell:difftuning, and the builds it compared
         $this->info('Saving Spell tuning changes');
 
+        $this->saveDataToJsonFile($this->mappingExportService->serializeSpellTuningBuilds(), $dungeonDataDir, 'spell_tuning_builds.json');
         $this->saveDataToJsonFile($this->mappingExportService->serializeSpellTuningChanges(), $dungeonDataDir, 'spell_tuning_changes.json');
     }
 

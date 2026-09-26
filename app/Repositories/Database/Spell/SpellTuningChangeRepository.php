@@ -7,9 +7,7 @@ use App\Models\Spell\SpellDungeon;
 use App\Models\Spell\SpellTuningChange;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\Spell\SpellTuningChangeRepositoryInterface;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -32,25 +30,6 @@ class SpellTuningChangeRepository extends DatabaseRepository implements SpellTun
             ->get();
     }
 
-    public function getBuilds(int $gameVersionId, ?Dungeon $dungeon, int $perPage): LengthAwarePaginator
-    {
-        return $this->scopeToDungeon(SpellTuningChange::query(), $dungeon)
-            ->select(['from_build', 'to_build', 'to_build_number'])
-            ->selectRaw('COUNT(DISTINCT spell_id) AS spell_count')
-            ->selectRaw('MAX(to_build_released_at) AS to_build_released_at')
-            ->where('game_version_id', $gameVersionId)
-            ->groupBy(['from_build', 'to_build', 'to_build_number'])
-            ->orderByDesc('to_build_number')
-            ->paginate($perPage)
-            ->through(static fn(SpellTuningChange $row): array => [
-                'from_build'           => $row->from_build,
-                'to_build'             => $row->to_build,
-                'to_build_number'      => $row->to_build_number,
-                'to_build_released_at' => $row->to_build_released_at,
-                'spell_count'          => (int)$row->getAttribute('spell_count'),
-            ]);
-    }
-
     public function getForBuild(int $gameVersionId, string $toBuild, ?Dungeon $dungeon): Collection
     {
         return $this->scopeToDungeon(SpellTuningChange::query(), $dungeon)
@@ -62,16 +41,6 @@ class SpellTuningChangeRepository extends DatabaseRepository implements SpellTun
             ->orderBy('spell_id')
             ->orderBy('value_index')
             ->get();
-    }
-
-    public function findBuildReleasedAt(int $gameVersionId, string $toBuild): ?Carbon
-    {
-        $releasedAt = SpellTuningChange::query()
-            ->where('game_version_id', $gameVersionId)
-            ->where('to_build', $toBuild)
-            ->max('to_build_released_at');
-
-        return $releasedAt === null ? null : Carbon::parse($releasedAt, 'UTC');
     }
 
     public function replaceForBuild(int $gameVersionId, string $toBuild, array $rows): int
