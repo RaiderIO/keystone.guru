@@ -29,7 +29,7 @@ class EnemyVisual extends Signalable {
         this.cachedLayerPoint = null;
         this.cachedRadius = 0;
 
-        this._canvasClasses = {outer: '', inner: ''};
+        this._canvasClasses = {outer: '', inner: '', innerStyle: ''};
         this._canvasOpacity = 1;
 
         this._circleMenu = null;
@@ -464,14 +464,7 @@ class EnemyVisual extends Signalable {
                 selection_classes_base: '',
             };
 
-            let mapState = this.map.getMapState();
-
-            let isDeletable = mapState instanceof DeleteMapState && this.enemy.isDeletable();
-            let isSelectable = (
-                mapState instanceof EnemySelection && mapState.drawsEnemyEditBorder() && this.enemy.isSelectable()
-            ) || (
-                mapState instanceof EditMapState && this.enemy.isEditable()
-            ) || isDeletable;
+            let {isSelectable, isDeletable} = this._getSelectionState();
 
             // Set a default color which may be overridden by any visuals
             let borderThickness = getState().getMapZoomLevel();
@@ -513,7 +506,11 @@ class EnemyVisual extends Signalable {
             }
 
             data = $.extend(data, this.mainVisual._getTemplateData());
-            this._canvasClasses = {outer: data.main_visual_outer_classes, inner: data.main_visual_inner_classes};
+            this._canvasClasses = {
+                outer: data.main_visual_outer_classes,
+                inner: data.main_visual_inner_classes,
+                innerStyle: data.main_visual_inner_style,
+            };
 
             let size = this.mainVisual.getSize();
 
@@ -563,6 +560,24 @@ class EnemyVisual extends Signalable {
     }
 
     /**
+     * @returns {{isSelectable: Boolean, isDeletable: Boolean}} Whether the current map state draws the
+     *          selection halo around this enemy, and in its delete colour.
+     * @private
+     */
+    _getSelectionState() {
+        let mapState = this.map.getMapState();
+
+        let isDeletable = mapState instanceof DeleteMapState && this.enemy.isDeletable();
+        let isSelectable = (
+            mapState instanceof EnemySelection && mapState.drawsEnemyEditBorder() && this.enemy.isSelectable()
+        ) || (
+            mapState instanceof EditMapState && this.enemy.isEditable()
+        ) || isDeletable;
+
+        return {isSelectable: isSelectable, isDeletable: isDeletable};
+    }
+
+    /**
      * Updates the color of the border for this visual
      * @param color string
      * @param isFaded {Boolean}
@@ -570,6 +585,20 @@ class EnemyVisual extends Signalable {
      */
     _updateBorder(color, isFaded = false) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
+
+        let canvasPath = this.getCanvasPath();
+        if (canvasPath !== null) {
+            if (!isFaded) {
+                this._canvasOpacity = 1;
+            } else if (this.enemy.isImportant()) {
+                this._canvasOpacity = getState().getUnkilledImportantEnemyOpacity() / 100;
+            } else {
+                this._canvasOpacity = getState().getUnkilledEnemyOpacity() / 100;
+            }
+            this._refreshCanvasPath(canvasPath);
+            return;
+        }
+
         if (this._$mainVisual !== null && this._$mainVisual.length > 0) {
             this._$mainVisual.find('.outer').css('border-color', color);
             // Fade out or not depending on what the user wanted
@@ -631,14 +660,7 @@ class EnemyVisual extends Signalable {
         }
 
 
-        let mapState = this.map.getMapState();
-
-        let isDeletable = mapState instanceof DeleteMapState && this.enemy.isDeletable();
-        let isSelectable = (
-            mapState instanceof EnemySelection && mapState.drawsEnemyEditBorder() && this.enemy.isSelectable()
-        ) || (
-            mapState instanceof EditMapState && this.enemy.isEditable()
-        ) || isDeletable;
+        let {isSelectable} = this._getSelectionState();
 
         let size = this.mainVisual.getSize();
 
@@ -738,7 +760,8 @@ class EnemyVisual extends Signalable {
     }
 
     /**
-     * Hands the enemy's current size, border, opacity and image to its canvas path.
+     * Hands the enemy's current size, borders, opacity, image, text, badges and selection halo to its
+     * canvas path.
      * @param canvasPath {EnemyPath}
      * @private
      */
@@ -747,17 +770,28 @@ class EnemyVisual extends Signalable {
 
         let width = this.mainVisual.getSize().iconSize[0];
         let margin = c.map.enemy.calculateMargin(width);
+        let outerDiameter = width + (margin * 2);
 
         let killZone = this.enemy.getKillZone();
         let hasKillZone = killZone instanceof KillZone;
         let borderWidth = hasKillZone || this.enemy.getOverpulledKillZoneId() !== null ? getState().getMapZoomLevel() : 1;
 
         let content = this.mainVisual.getCanvasContent();
-        let style = this.map.mapObjectGroupManager.getEnemyMapObjectGroup().getCanvasStyleProbe().read(
+        let text = content === null ? null : (content.text ?? null);
+        let styleProbe = this.map.mapObjectGroupManager.getEnemyMapObjectGroup().getCanvasStyleProbe();
+        let style = styleProbe.read(
             this._canvasClasses.outer,
             this._canvasClasses.inner,
-            content === null ? '' : content.classes
+            content === null ? '' : content.classes,
+            this._canvasClasses.innerStyle,
+            text === null ? null : text.classes
         );
+
+        let stateBorder = style.innerBorderWidth > 0 && style.innerBorderColor !== null ? {
+            width: style.innerBorderWidth,
+            color: style.innerBorderColor,
+            dashed: style.innerBorderDashed,
+        } : null;
 
         let sprite = content === null ? {
             backgroundColors: [style.innerBackgroundColor],
@@ -770,15 +804,43 @@ class EnemyVisual extends Signalable {
             imageFit: style.contentImageFit,
             blendMode: style.contentImageBlendMode,
         };
+        let textValue = text === null ? null : (text.value ?? style.textGlyph);
+        sprite.stateBorder = stateBorder;
+        sprite.text = textValue === null || style.textColor === null ? null : {
+            value: textValue,
+            // Whole pixels: the text size follows the fractional zoom level, and it is part of the sprite's cache key
+            font: EnemyCanvasStyleProbe.toCanvasFont(style, Math.round(text.fontSize)),
+            color: style.textColor,
+        };
+
+        let zoomLevel = getState().getMapZoomLevel();
+
+        let badges = [];
+        for (let i = 0; i < this._modifiers.length; i++) {
+            // Placed by the outer size, as refreshSize() places the DOM modifiers
+            let badge = this._modifiers[i].getCanvasBadge(zoomLevel, outerDiameter, outerDiameter, margin);
+            if (badge !== null) {
+                badges.push({box: styleProbe.readBox(badge.classes), left: badge.left, top: badge.top});
+            }
+        }
+
+        let {isSelectable, isDeletable} = this._getSelectionState();
 
         canvasPath.setAppearance({
-            outerDiameter: width + (margin * 2),
+            outerDiameter: outerDiameter,
             borderWidth: borderWidth,
             borderColor: hasKillZone ? killZone.color : 'black',
             innerMargin: getState().hasEnemyAggressivenessBorder() ? margin : 0,
             outerBackgroundColor: style.outerBackgroundColor,
             opacity: this._canvasOpacity,
             sprite: sprite,
+            badges: badges,
+            selection: isSelectable ? {
+                ...styleProbe.readBox(`selected_enemy_icon leaflet-edit-marker-selected${isDeletable ? ' delete' : ''}`),
+                // Sized inline by refreshSize(): 4px of halo on every side of the enemy
+                width: outerDiameter + 8,
+                height: outerDiameter + 8,
+            } : null,
         });
     }
 

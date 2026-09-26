@@ -39,6 +39,19 @@ class EnemyVisualMainEnemySkippable extends EnemyVisualMain {
     }
 
     /**
+     * @inheritDoc
+     */
+    getCanvasContent() {
+        let displayText = this._getDisplayText();
+
+        return {
+            classes: 'enemy_icon_npc_enemy_skippable_inner',
+            imageUrl: null,
+            text: {value: displayText, classes: 'my-auto w-100', fontSize: this._getTextWidth(displayText.length)},
+        };
+    }
+
+    /**
      * Called whenever the NPC of the enemy has been refreshed.
      */
     _refreshNpc() {
