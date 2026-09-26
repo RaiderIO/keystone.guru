@@ -4,6 +4,7 @@ namespace Tests\Feature\Mapping;
 
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellTuningBuild;
 use App\Models\Spell\SpellTuningChange;
 use App\SeederHelpers\RelationImport\Mapping\SpellRelationMapping;
 use App\Service\Mapping\MappingExportServiceInterface;
@@ -174,6 +175,32 @@ class MappingExportServiceTest extends TestCase
      * The id is assigned by whichever environment loads the file, and enum casts must land as their raw
      * strings - an object in the export would not survive json_encode/seeder insert unchanged.
      */
+    #[Test]
+    public function serializeSpellTuningBuilds_givenRows_returnsNoIdAndMysqlDateTime(): void
+    {
+        // Arrange
+        /** @var MappingExportServiceInterface $mappingExportService */
+        $mappingExportService = app(MappingExportServiceInterface::class);
+        $build                = SpellTuningBuild::factory()->create(['to_build' => '0.0.0.00097', 'to_build_number' => 97, 'to_build_released_at' => '2001-02-03 04:05:06']);
+
+        try {
+            // Act
+            $exported = collect($mappingExportService->serializeSpellTuningBuilds())->firstWhere('to_build', '0.0.0.00097');
+
+            // Assert
+            Assert::assertNotNull($exported, 'The created build was not exported');
+            Assert::assertSame([
+                'game_version_id'      => $build->game_version_id,
+                'from_build'           => $build->from_build,
+                'to_build'             => '0.0.0.00097',
+                'to_build_number'      => 97,
+                'to_build_released_at' => '2001-02-03 04:05:06',
+            ], $exported);
+        } finally {
+            $build->delete();
+        }
+    }
+
     #[Test]
     public function serializeSpellTuningChanges_givenRows_returnsNoIdAndOnlyScalars(): void
     {

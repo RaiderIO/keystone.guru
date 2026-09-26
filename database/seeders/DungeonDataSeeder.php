@@ -27,6 +27,7 @@ use App\Models\Speedrun\DungeonSpeedrunRequiredNpcNpc;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDescriptionTranslation;
 use App\Models\Spell\SpellEffect;
+use App\Models\Spell\SpellTuningBuild;
 use App\Models\Spell\SpellTuningChange;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRelationMapping;
@@ -45,6 +46,7 @@ use App\SeederHelpers\RelationImport\Mapping\NpcRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\RelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\SpellDescriptionTranslationRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\SpellRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\SpellTuningBuildRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\SpellTuningChangeRelationMapping;
 use App\SeederHelpers\RelationImport\Parsers\Relation\RelationParserInterface;
 use App\Service\WagoTools\GameLocale;
@@ -78,6 +80,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             new NpcRelationMapping(),
             new DungeonRouteRelationMapping(),
             new SpellRelationMapping(),
+            new SpellTuningBuildRelationMapping(),
             new SpellTuningChangeRelationMapping(),
             // One file per locale the game client publishes besides English
             ...array_map(
@@ -538,6 +541,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             Spell::class,
             SpellEffect::class,
             SpellDescriptionTranslation::class,
+            SpellTuningBuild::class,
             SpellTuningChange::class,
             // SpellDungeon, NpcCharacteristic and NpcSpell are combat-log-derived behavior and are
             // intentionally omitted: they are not exported to the seeders, so their live tables must

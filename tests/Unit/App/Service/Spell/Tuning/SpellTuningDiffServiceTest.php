@@ -3,6 +3,7 @@
 namespace Tests\Unit\App\Service\Spell\Tuning;
 
 use App\Models\Spell\SpellTuningChangeType;
+use App\Repositories\Interfaces\Spell\SpellTuningBuildRepositoryInterface;
 use App\Repositories\Interfaces\Spell\SpellTuningChangeRepositoryInterface;
 use App\Service\Spell\Description\Dtos\SpellDescriptionValueKind;
 use App\Service\Spell\Tuning\Dtos\SpellTuningDiffResult;
@@ -27,6 +28,8 @@ final class SpellTuningDiffServiceTest extends PublicTestCase
 
     private const int SPELL_ID = 1300877;
 
+    private SpellTuningBuildRepositoryInterface&MockObject $buildRepository;
+
     private SpellTuningChangeRepositoryInterface&MockObject $repository;
 
     private SpellTuningDiffService $service;
@@ -36,8 +39,10 @@ final class SpellTuningDiffServiceTest extends PublicTestCase
     {
         parent::setUp();
 
-        $this->repository = $this->createMock(SpellTuningChangeRepositoryInterface::class);
-        $this->service    = new SpellTuningDiffService(
+        $this->buildRepository = $this->createMock(SpellTuningBuildRepositoryInterface::class);
+        $this->repository      = $this->createMock(SpellTuningChangeRepositoryInterface::class);
+        $this->service         = new SpellTuningDiffService(
+            $this->buildRepository,
             $this->repository,
             $this->createMock(SpellTuningDiffServiceLoggingInterface::class),
         );
@@ -381,7 +386,7 @@ final class SpellTuningDiffServiceTest extends PublicTestCase
         $to     = $this->snapshot(self::TO_BUILD, [$this->spell(values: [$this->damage('38,793', 4.0)])]);
         $result = $this->service->diff($from, $to);
 
-        $this->repository->expects($this->never())->method('findBuildReleasedAt');
+        $this->buildRepository->expects($this->never())->method('findReleasedAt');
         $this->repository->expects($this->once())->method('replaceForBuild')->willReturn(1);
 
         // Act
@@ -396,8 +401,8 @@ final class SpellTuningDiffServiceTest extends PublicTestCase
         $to     = $this->snapshot(self::TO_BUILD, [$this->spell(values: [$this->damage('38,793', 4.0)])]);
         $result = $this->service->diff($from, $to);
 
-        $this->repository->expects($this->once())
-            ->method('findBuildReleasedAt')
+        $this->buildRepository->expects($this->once())
+            ->method('findReleasedAt')
             ->with(self::GAME_VERSION_ID, self::TO_BUILD)
             ->willReturn(Carbon::createFromFormat('Y-m-d H:i:s', '2026-08-20 19:18:02', 'UTC'));
         $this->repository->expects($this->once())
@@ -414,6 +419,47 @@ final class SpellTuningDiffServiceTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $stored);
+    }
+
+    #[Test]
+    public function store_givenResult_recordsTheComparedBuild(): void
+    {
+        // Arrange
+        $from       = $this->snapshot(self::FROM_BUILD, [$this->spell(values: [$this->damage('29,095', 3.0)])]);
+        $to         = $this->snapshot(self::TO_BUILD, [$this->spell(values: [$this->damage('38,793', 4.0)])]);
+        $result     = $this->service->diff($from, $to);
+        $releasedAt = Carbon::createFromFormat('Y-m-d H:i:s', '2026-08-20 19:18:02', 'UTC');
+
+        $this->repository->method('replaceForBuild')->willReturn(1);
+        $this->buildRepository->expects($this->once())
+            ->method('record')
+            ->with(self::GAME_VERSION_ID, self::FROM_BUILD, self::TO_BUILD, 69404, $releasedAt);
+
+        // Act
+        $this->service->store($result, $releasedAt);
+    }
+
+    #[Test]
+    public function store_givenNoChanges_stillRecordsTheComparedBuild(): void
+    {
+        // Arrange
+        $from   = $this->snapshot(self::FROM_BUILD, [$this->spell(values: [$this->damage('29,095', 3.0)])]);
+        $to     = $this->snapshot(self::TO_BUILD, [$this->spell(values: [$this->damage('29,095', 3.0)])]);
+        $result = $this->service->diff($from, $to);
+
+        $this->repository->expects($this->once())
+            ->method('replaceForBuild')
+            ->with(self::GAME_VERSION_ID, self::TO_BUILD, [])
+            ->willReturn(0);
+        $this->buildRepository->expects($this->once())
+            ->method('record')
+            ->with(self::GAME_VERSION_ID, self::FROM_BUILD, self::TO_BUILD, 69404, null);
+
+        // Act
+        $stored = $this->service->store($result);
+
+        // Assert
+        $this->assertSame(0, $stored);
     }
 
     #[Test]

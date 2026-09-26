@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CharacterClass;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
-use App\Models\Spell\SpellTuningChange;
+use App\Models\Spell\SpellTuningBuild;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
@@ -21,7 +21,7 @@ class CompendiumController extends Controller
             'npc'           => Npc::count(),
             'spell'         => Spell::count(),
             'class'         => CharacterClass::count(),
-            'tuning_builds' => SpellTuningChange::query()->distinct()->count('to_build'),
+            'tuning_builds' => SpellTuningBuild::query()->count(),
         ]);
     }
 

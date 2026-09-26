@@ -289,7 +289,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(SpellDescriptionPatchCheckServiceInterface::class, SpellDescriptionPatchCheckService::class);
         // Depends on SpellDescriptionImportStateRepository
         $this->app->bind(SpellTuningSnapshotLoaderInterface::class, SpellTuningSnapshotLoader::class);
-        // Depends on SpellTuningChangeRepository
+        // Depends on SpellTuningBuildRepository, SpellTuningChangeRepository
         $this->app->bind(SpellTuningDiffServiceInterface::class, SpellTuningDiffService::class);
         $this->app->bind(ChallengeModeRunDataServiceInterface::class, ChallengeModeRunDataService::class);
         $this->app->bind(CombatLogEventServiceInterface::class, CombatLogEventService::class);

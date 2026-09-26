@@ -113,6 +113,7 @@ use App\Repositories\Database\Spell\SpellDescriptionImportStateRepository;
 use App\Repositories\Database\Spell\SpellDescriptionTranslationRepository;
 use App\Repositories\Database\Spell\SpellDungeonRepository;
 use App\Repositories\Database\Spell\SpellEffectRepository;
+use App\Repositories\Database\Spell\SpellTuningBuildRepository;
 use App\Repositories\Database\Spell\SpellTuningChangeRepository;
 use App\Repositories\Database\SpellRepository;
 use App\Repositories\Database\Tags\TagCategoryRepository;
@@ -239,6 +240,7 @@ use App\Repositories\Interfaces\Spell\SpellDescriptionImportStateRepositoryInter
 use App\Repositories\Interfaces\Spell\SpellDescriptionTranslationRepositoryInterface;
 use App\Repositories\Interfaces\Spell\SpellDungeonRepositoryInterface;
 use App\Repositories\Interfaces\Spell\SpellEffectRepositoryInterface;
+use App\Repositories\Interfaces\Spell\SpellTuningBuildRepositoryInterface;
 use App\Repositories\Interfaces\Spell\SpellTuningChangeRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Repositories\Interfaces\Tags\TagCategoryRepositoryInterface;
@@ -364,6 +366,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SpellDescriptionTranslationRepositoryInterface::class, SpellDescriptionTranslationRepository::class);
         $this->app->bind(SpellEffectRepositoryInterface::class, SpellEffectRepository::class);
         $this->app->bind(SpellDescriptionImportStateRepositoryInterface::class, SpellDescriptionImportStateRepository::class);
+        $this->app->bind(SpellTuningBuildRepositoryInterface::class, SpellTuningBuildRepository::class);
         $this->app->bind(SpellTuningChangeRepositoryInterface::class, SpellTuningChangeRepository::class);
 
         // Tags

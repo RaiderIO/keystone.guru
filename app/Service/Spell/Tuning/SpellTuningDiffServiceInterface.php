@@ -18,7 +18,8 @@ interface SpellTuningDiffServiceInterface
 
     /**
      * Stores a result, replacing whatever was recorded for its target build before so re-running the
-     * diff for the same build pair is idempotent. Returns the number of rows stored.
+     * diff for the same build pair is idempotent. The build itself is recorded as compared even when the
+     * result holds no changes. Returns the number of change rows stored.
      *
      * @param Carbon|null $toBuildReleasedAt when the target build went live; null keeps whatever date is already
      *                                       recorded for the build

@@ -5,8 +5,6 @@ namespace App\Repositories\Interfaces\Spell;
 use App\Models\Dungeon;
 use App\Models\Spell\SpellTuningChange;
 use App\Repositories\BaseRepositoryInterface;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -30,25 +28,12 @@ interface SpellTuningChangeRepositoryInterface extends BaseRepositoryInterface
     public function getForSpell(int $spellId): Collection;
 
     /**
-     * The builds that carry changes for a game version, newest first, optionally only counting spells
-     * linked to a dungeon. Each page item is `{from_build, to_build, to_build_number, to_build_released_at, spell_count}`.
-     *
-     * @return LengthAwarePaginator<int, covariant array{from_build: string, to_build: string, to_build_number: int, to_build_released_at: Carbon|null, spell_count: int}>
-     */
-    public function getBuilds(int $gameVersionId, ?Dungeon $dungeon, int $perPage): LengthAwarePaginator;
-
-    /**
      * Every change a build introduced, largest damage swing first, optionally only for spells linked to
      * a dungeon. Spells (with their dungeons) are eager loaded for the spell link and chips.
      *
      * @return Collection<int, SpellTuningChange>
      */
     public function getForBuild(int $gameVersionId, string $toBuild, ?Dungeon $dungeon): Collection;
-
-    /**
-     * When the given build went live, as recorded on its changes, or null when none of them carries a date.
-     */
-    public function findBuildReleasedAt(int $gameVersionId, string $toBuild): ?Carbon;
 
     /**
      * Replaces every change recorded for the given build with $rows, so re-running the diff for the

@@ -6,7 +6,6 @@ use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
 use App\Models\Spell\SpellTuningChange;
 use App\Repositories\Interfaces\Spell\SpellTuningChangeRepositoryInterface;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -58,102 +57,6 @@ final class SpellTuningChangeRepositoryTest extends PublicTestCase
             $this->assertSame([0, 0, 1], $changes->pluck('value_index')->all());
         } finally {
             $created->each(static fn(SpellTuningChange $change) => $change->delete());
-        }
-    }
-
-    #[Test]
-    public function getBuilds_givenChanges_returnsBuildsNewestFirstWithSpellCounts(): void
-    {
-        // Arrange
-        /** @var Collection<int, SpellTuningChange> $created */
-        $created = new Collection();
-
-        try {
-            [$spellA, $spellB] = Spell::query()->where('hidden_on_map', false)->orderBy('id')->limit(2)->get()->all();
-            $gameVersionId     = $spellA->game_version_id;
-
-            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spellA->id, 'game_version_id' => $gameVersionId, 'from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12]));
-            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spellA->id, 'game_version_id' => $gameVersionId, 'from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12, 'value_index' => 1]));
-            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spellB->id, 'game_version_id' => $gameVersionId, 'from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12]));
-            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spellA->id, 'game_version_id' => $gameVersionId, 'from_build' => self::MID_BUILD, 'to_build' => self::NEW_BUILD, 'to_build_number' => 13]));
-
-            // Act
-            $builds = collect($this->repository->getBuilds($gameVersionId, null, 50)->items())
-                ->filter(static fn(array $build): bool => in_array($build['to_build'], [self::MID_BUILD, self::NEW_BUILD], true))
-                ->values();
-
-            // Assert
-            $this->assertCount(2, $builds);
-            $this->assertSame(self::NEW_BUILD, $builds[0]['to_build']);
-            $this->assertSame(self::MID_BUILD, $builds[0]['from_build']);
-            $this->assertSame(1, $builds[0]['spell_count']);
-            $this->assertSame(self::MID_BUILD, $builds[1]['to_build']);
-            $this->assertSame(2, $builds[1]['spell_count']);
-        } finally {
-            $created->each(static fn(SpellTuningChange $change) => $change->delete());
-        }
-    }
-
-    #[Test]
-    public function getBuilds_givenReleasedAt_returnsItAsCarbonAndNullWhenUnknown(): void
-    {
-        // Arrange
-        /** @var Collection<int, SpellTuningChange> $created */
-        $created = new Collection();
-
-        try {
-            $spell         = Spell::query()->where('hidden_on_map', false)->orderBy('id')->firstOrFail();
-            $gameVersionId = $spell->game_version_id;
-
-            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spell->id, 'game_version_id' => $gameVersionId, 'from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12, 'to_build_released_at' => null]));
-            $created->push(SpellTuningChange::factory()->create(['spell_id' => $spell->id, 'game_version_id' => $gameVersionId, 'from_build' => self::MID_BUILD, 'to_build' => self::NEW_BUILD, 'to_build_number' => 13, 'to_build_released_at' => '2001-02-03 04:05:06']));
-
-            // Act
-            $builds = collect($this->repository->getBuilds($gameVersionId, null, 50)->items())
-                ->keyBy('to_build');
-
-            // Assert
-            $this->assertInstanceOf(Carbon::class, $builds[self::NEW_BUILD]['to_build_released_at']);
-            $this->assertSame('2001-02-03 04:05:06', $builds[self::NEW_BUILD]['to_build_released_at']->toDateTimeString());
-            $this->assertNull($builds[self::MID_BUILD]['to_build_released_at']);
-        } finally {
-            $created->each(static fn(SpellTuningChange $change) => $change->delete());
-        }
-    }
-
-    #[Test]
-    public function findBuildReleasedAt_givenDatedBuild_returnsItsDate(): void
-    {
-        // Arrange
-        $change = SpellTuningChange::factory()->create(['from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12, 'to_build_released_at' => '2001-02-03 04:05:06']);
-
-        try {
-            // Act
-            $releasedAt = $this->repository->findBuildReleasedAt($change->game_version_id, self::MID_BUILD);
-
-            // Assert
-            $this->assertSame('2001-02-03 04:05:06', $releasedAt?->toDateTimeString());
-        } finally {
-            $change->delete();
-        }
-    }
-
-    #[Test]
-    public function findBuildReleasedAt_givenUndatedOrUnknownBuild_returnsNull(): void
-    {
-        // Arrange
-        $change = SpellTuningChange::factory()->create(['from_build' => self::OLD_BUILD, 'to_build' => self::MID_BUILD, 'to_build_number' => 12, 'to_build_released_at' => null]);
-
-        try {
-            // Act
-            $undated = $this->repository->findBuildReleasedAt($change->game_version_id, self::MID_BUILD);
-            $unknown = $this->repository->findBuildReleasedAt($change->game_version_id, self::NEW_BUILD);
-
-            // Assert
-            $this->assertNull($undated);
-            $this->assertNull($unknown);
-        } finally {
-            $change->delete();
         }
     }
 
