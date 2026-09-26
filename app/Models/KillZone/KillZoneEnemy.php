@@ -11,14 +11,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $kill_zone_id
- * @property int $npc_id
- * @property int $mdt_id
- * @property int $enemy_id
+ * @property int      $id
+ * @property int      $kill_zone_id
+ * @property int|null $npc_id
+ * @property int|null $mdt_id
+ * @property int|null $enemy_id
  *
  * @property KillZone   $killZone
- * @property Npc        $npc
+ * @property Npc|null   $npc
  * @property Enemy|null $enemy
  *
  * @mixin Eloquent

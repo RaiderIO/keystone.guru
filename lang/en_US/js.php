@@ -401,6 +401,7 @@ return [
     'mapping_version_upgrade_apply_confirm'        => 'Apply this draft to the route it upgrades? The route\'s current contents and settings are replaced by this draft\'s, and the draft is deleted. This cannot be undone.',
     'mapping_version_upgrade_discard_confirm'      => 'Discard this upgrade draft? All changes you made to it are lost. The route it upgrades is left untouched. This cannot be undone.',
     'mapping_version_upgrade_continue_label'       => 'Continue upgrade draft',
+    'mapping_version_upgrade_diff_label'           => 'What changed?',
     'upgrade_draft_badge_label'                    => 'Upgrade draft',
     'upgrade_draft_badge_title'                    => 'This is an upgrade draft. It cannot be shared on its own - apply it to the route it upgrades to publish your changes.',
     'upgrade_draft_in_progress_badge_label'        => 'Draft in progress',

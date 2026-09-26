@@ -6,6 +6,12 @@
         {{/if}}
     </div>
     <div class="col-auto">
+        <a class="btn btn-sm btn-info cursor-pointer" data-bs-toggle="modal"
+           data-bs-target="#mapping_version_upgrade_diff_modal">
+            <i class="fa fa-list"></i> {{ mapping_version_upgrade_diff_label }}
+        </a>
+    </div>
+    <div class="col-auto ms-3">
         <a class="btn btn-sm btn-success cursor-pointer upgrade_draft_apply">
             <i class="fa fa-check"></i> {{ mapping_version_upgrade_apply_label }}
         </a>
