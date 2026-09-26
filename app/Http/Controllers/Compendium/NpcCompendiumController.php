@@ -63,7 +63,7 @@ class NpcCompendiumController extends Controller
             return redirect(route('npc.compendium.show', $npc), 301);
         }
 
-        $npc->load(['classification', 'type', 'dungeons.expansion', 'npcSpells', 'npcHealths', 'characteristics', 'spells']);
+        $npc->load(['classification', 'type', 'dungeons.expansion', 'npcSpells', 'npcHealths', 'characteristics', 'spells', 'spells.descriptionTranslation']);
 
         $currentGameVersion = GameVersion::getUserOrDefaultGameVersion();
 
@@ -161,7 +161,7 @@ class NpcCompendiumController extends Controller
         $npcs = Npc::query()
             // The datatable renders the spells column off the serialized spells relation, and the
             // hover tooltip off the four relations behind tooltip_data (#4096)
-            ->with(['spells', 'classification', 'type', 'characteristics', 'npcHealths'])
+            ->with(['spells', 'spells.descriptionTranslation', 'classification', 'type', 'characteristics', 'npcHealths'])
             // tooltip_data is not appended by default - it would land in the map context as well,
             // which renders no tooltips and would carry the text for nothing (see Npc::$appends)
             ->afterQuery(static fn(EloquentCollection $npcs): EloquentCollection => $npcs->each->append('tooltip_data'))

@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
+use App\Service\WagoTools\GameLocale;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -156,6 +157,6 @@ final class DiffEnemyForcesTest extends PublicTestCase
 
     private function getDb2Directory(): string
     {
-        return storage_path(sprintf('app/db2/%s', self::BUILD));
+        return storage_path(sprintf('app/db2/%s/%s', self::BUILD, GameLocale::English->value));
     }
 }

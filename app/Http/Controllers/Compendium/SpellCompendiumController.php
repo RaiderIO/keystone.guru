@@ -66,7 +66,7 @@ class SpellCompendiumController extends Controller
             return redirect(route('spell.compendium.show', $spell), 301);
         }
 
-        $spell->load(['gameVersion', 'dungeons.expansion', 'characteristic']);
+        $spell->load(['gameVersion', 'dungeons.expansion', 'characteristic', 'descriptionTranslation']);
 
         // type/characteristics/npcHealths are what the NPC links' hover tooltips read (#4096)
         $npcs = $spell->npcs()->with(['classification', 'dungeons', 'type', 'characteristics', 'npcHealths'])->get();
@@ -92,7 +92,8 @@ class SpellCompendiumController extends Controller
                 GROUP_CONCAT(DISTINCT dungeon_translations.translation ORDER BY dungeon_translations.translation SEPARATOR ", ") AS dungeon_names')
             // The "used by" column renders an NPC link per npc, each carrying its own hover tooltip
             // (#4096) - which reads these four relations
-            ->with(['npcs', 'npcs.classification', 'npcs.type', 'npcs.characteristics', 'npcs.npcHealths'])
+            // descriptionTranslation is what the spell's own tooltip reads in a non-English locale
+            ->with(['descriptionTranslation', 'npcs', 'npcs.classification', 'npcs.type', 'npcs.characteristics', 'npcs.npcHealths'])
             ->afterQuery(static function (EloquentCollection $spells): EloquentCollection {
                 // tooltip_data is deliberately not appended by default - see Npc::$appends
                 foreach ($spells as $spell) {

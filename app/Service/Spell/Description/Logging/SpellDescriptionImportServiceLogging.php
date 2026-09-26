@@ -43,4 +43,14 @@ class SpellDescriptionImportServiceLogging extends StructuredLogging implements 
     {
         $this->info(__METHOD__, get_defined_vars());
     }
+
+    public function importTranslationsLocaleStart(string $locale): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function importTranslationsLocaleEmpty(string $locale): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
 }

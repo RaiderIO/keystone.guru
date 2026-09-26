@@ -3,6 +3,8 @@
 namespace Tests\Feature\View\Common;
 
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellDescriptionTranslation;
+use App\Service\WagoTools\GameLocale;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -71,6 +73,118 @@ final class SpellLinkTest extends PublicTestCase
         } finally {
             $spell?->delete();
         }
+    }
+
+    #[Test]
+    public function render_givenALocaleTheClientPublishes_returnsThatLocalesDescription(): void
+    {
+        // Arrange - a French visitor reads the French client's own sentence, not the English one
+        $spell = null;
+
+        try {
+            $spell = $this->createSpell('Slams the ground for 8 sec.');
+            $this->createTranslation(GameLocale::French, 'Frappe le sol pendant 8 s.');
+
+            app()->setLocale('fr_FR');
+
+            // Act
+            $result = view('common.spell.link', ['spell' => $spell->fresh()])->render();
+
+            // Assert
+            $this->assertStringContainsString('Frappe le sol pendant 8 s.', $result);
+            $this->assertStringNotContainsString('Slams the ground', $result);
+        } finally {
+            $this->deleteTranslations();
+            $spell?->delete();
+        }
+    }
+
+    #[Test]
+    public function render_givenALocaleTheClientPublishesButWeHaveNoDescriptionFor_fallsBackToEnglish(): void
+    {
+        // Arrange - half a translation is worse than none; English is what the rest of the site falls back to
+        $spell = null;
+
+        try {
+            $spell = $this->createSpell('Slams the ground for 8 sec.');
+            $this->createTranslation(GameLocale::French, 'Frappe le sol pendant 8 s.');
+
+            app()->setLocale('de_DE');
+
+            // Act
+            $result = view('common.spell.link', ['spell' => $spell->fresh()])->render();
+
+            // Assert
+            $this->assertStringContainsString('Slams the ground for 8 sec.', $result);
+        } finally {
+            $this->deleteTranslations();
+            $spell?->delete();
+        }
+    }
+
+    #[Test]
+    public function render_givenTheAiVariantOfALocale_readsTheSameClientData(): void
+    {
+        // Arrange - `fr_FR_ai` is the same language, so it reads the same client text
+        $spell = null;
+
+        try {
+            $spell = $this->createSpell('Slams the ground for 8 sec.');
+            $this->createTranslation(GameLocale::French, 'Frappe le sol pendant 8 s.');
+
+            app()->setLocale('fr_FR_ai');
+
+            // Act
+            $result = view('common.spell.link', ['spell' => $spell->fresh()])->render();
+
+            // Assert
+            $this->assertStringContainsString('Frappe le sol pendant 8 s.', $result);
+        } finally {
+            $this->deleteTranslations();
+            $spell?->delete();
+        }
+    }
+
+    #[Test]
+    public function getTooltipDataAttribute_givenASpellSelectedWithoutItsDescriptionColumns_isNullWithoutLoadingTheTranslation(): void
+    {
+        // Arrange - a kill zone's spells are selected as id + icon_name and serialized into every route
+        // payload; there is no description in those columns to render, in any locale
+        $spell = null;
+
+        try {
+            $spell = $this->createSpell('Slams the ground for 8 sec.');
+            $this->createTranslation(GameLocale::French, 'Frappe le sol pendant 8 s.');
+
+            app()->setLocale('fr_FR_ai');
+
+            /** @var Spell $partial */
+            $partial = Spell::query()->select(['id', 'icon_name'])->findOrFail(self::SPELL_ID);
+
+            // Act
+            $tooltipData = $partial->tooltip_data;
+
+            // Assert - and no lazy load, which throws outside production
+            $this->assertNull($tooltipData);
+            $this->assertFalse($partial->relationLoaded('descriptionTranslation'));
+        } finally {
+            $this->deleteTranslations();
+            $spell?->delete();
+        }
+    }
+
+    private function createTranslation(GameLocale $locale, string $format): SpellDescriptionTranslation
+    {
+        return SpellDescriptionTranslation::create([
+            'spell_id'           => self::SPELL_ID,
+            'locale'             => $locale->value,
+            'description_format' => $format,
+        ]);
+    }
+
+    private function deleteTranslations(): void
+    {
+        SpellDescriptionTranslation::query()->where('spell_id', self::SPELL_ID)->delete();
     }
 
     private function createSpell(?string $description): Spell

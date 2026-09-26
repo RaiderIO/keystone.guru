@@ -2,6 +2,7 @@
 
 namespace App\Service\Spell\Description;
 
+use App\Service\Spell\Description\Dtos\SpellDurationFormats;
 use App\Service\Spell\Description\Dtos\SpellEffectData;
 
 /**
@@ -17,11 +18,12 @@ class ArraySpellDescriptionContext implements SpellDescriptionContextInterface
      * @param array<int, array<string, string>>       $descriptionVariables spell id => variable name => expression
      */
     public function __construct(
-        private readonly array $effects = [],
-        private readonly array $durationsMs = [],
-        private readonly array $names = [],
-        private readonly array $templates = [],
-        private readonly array $descriptionVariables = [],
+        private readonly array                 $effects = [],
+        private readonly array                 $durationsMs = [],
+        private readonly array                 $names = [],
+        private readonly array                 $templates = [],
+        private readonly array                 $descriptionVariables = [],
+        private readonly ?SpellDurationFormats $durationFormats = null,
     ) {
     }
 
@@ -48,5 +50,10 @@ class ArraySpellDescriptionContext implements SpellDescriptionContextInterface
     public function getDescriptionVariables(int $spellId): array
     {
         return $this->descriptionVariables[$spellId] ?? [];
+    }
+
+    public function getDurationFormats(): SpellDurationFormats
+    {
+        return $this->durationFormats ?? new SpellDurationFormats();
     }
 }

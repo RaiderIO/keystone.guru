@@ -6,12 +6,14 @@ use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
+use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\CombatLog\CombatLogNpcEventRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogSpellEventRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcDungeonRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcSpellRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
@@ -133,7 +135,13 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
     {
         $npcEvents->groupBy('model_class')->each(function (Collection $group, string $class): void {
             /** @var class-string<Model> $class */
-            $models = $class::query()->whereIn('id', $group->pluck('model_id'))->get()->keyBy('id');
+            // A spell model is rendered as a spell link, whose tooltip reads the description of the
+            // locale being viewed
+            $models = $class::query()
+                ->when($class === Spell::class, static fn(Builder $builder) => $builder->with('descriptionTranslation'))
+                ->whereIn('id', $group->pluck('model_id'))
+                ->get()
+                ->keyBy('id');
             $group->each(fn(CombatLogNpcEvent $event) => $event->setRelation('model', $models->get($event->model_id)));
         });
     }
@@ -161,7 +169,7 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             return;
         }
 
-        $spells = $this->spellRepository->findAllById($spellEvents->pluck('spell_id')->unique());
+        $spells = $this->spellRepository->findAllByIdWithTooltipRelations($spellEvents->pluck('spell_id')->unique());
 
         $spellEvents->each(fn(CombatLogSpellEvent $event) => $event->setRelation('spell', $spells->get($event->spell_id)));
     }

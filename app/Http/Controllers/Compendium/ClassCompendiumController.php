@@ -76,6 +76,8 @@ class ClassCompendiumController extends Controller
                 // A PvP talent is unavailable in a dungeon, so listing it as crowd control for one is a
                 // lie the player only finds out about mid-pull
                 ->where('is_pvp_talent', false)
+                // What the spell links' hover tooltips read in a non-English locale
+                ->with('descriptionTranslation')
                 ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
                 ->with('characteristic')
                 ->get(),
@@ -219,6 +221,8 @@ class ClassCompendiumController extends Controller
             // Scoped to the context dungeon so the listed spells match the section's "for this dungeon" framing
             $spells = Spell::query()
                 ->visible()
+                // What the spell links' hover tooltips read in a non-English locale
+                ->with('descriptionTranslation')
                 ->whereRaw(sprintf('counters_mask & %d != 0', $bit))
                 ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
                 ->whereIn('id', static function ($query) use ($dungeon): void {
@@ -263,6 +267,7 @@ class ClassCompendiumController extends Controller
         // Scoped to the context dungeon so the listed spells match the section's "for this dungeon" framing
         $spells = Spell::query()
             ->visible()
+            ->with('descriptionTranslation')
             ->whereRaw('miss_types_mask & ? != 0', [SpellMissType::Reflect->value])
             ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
             ->whereIn('id', static function ($query) use ($dungeon): void {

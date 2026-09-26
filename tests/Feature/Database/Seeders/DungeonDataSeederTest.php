@@ -6,7 +6,9 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellDescriptionTranslation;
 use App\Models\Spell\SpellDungeon;
+use App\Service\WagoTools\GameLocale;
 use Illuminate\Testing\Constraints\HasInDatabase;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -38,6 +40,7 @@ final class DungeonDataSeederTest extends PublicTestCase
     private const string INVARIANT_SPELL_COLUMNS = 'Live spell behavior columns are preserved across a re-seed (#3354)';
     private const string INVARIANT_PIVOT_ROWS    = 'Combat-log-derived pivot rows survive a re-seed (#3354)';
     private const string INVARIANT_DEMO_ROUTES   = 'Demo dungeon routes survive a re-seed with demo = true (#3376)';
+    private const string INVARIANT_TRANSLATIONS  = 'Every locale\'s spell descriptions are loaded from its own seeder file';
 
     #[Test]
     public function run_givenOverriddenSpellColumnsAndSentinelPivotRows_restoresSeededStateInOneRun(): void
@@ -110,6 +113,15 @@ final class DungeonDataSeederTest extends PublicTestCase
                 DungeonRoute::query()->where('demo', true)->count(),
                 self::INVARIANT_DEMO_ROUTES,
             );
+            // Assert - one file per locale, each registered as its own RelationMapping; a locale missing
+            // from that list loads nothing and leaves every visitor on it reading English
+            foreach (GameLocale::translated() as $locale) {
+                $this->assertGreaterThan(
+                    0,
+                    SpellDescriptionTranslation::query()->where('locale', $locale->value)->count(),
+                    sprintf('%s - %s', self::INVARIANT_TRANSLATIONS, $locale->value),
+                );
+            }
         } finally {
             SpellDungeon::query()->where('spell_id', self::SENTINEL_SPELL_ID)->delete();
             NpcCharacteristic::query()->where('npc_id', self::SENTINEL_NPC_ID)->delete();

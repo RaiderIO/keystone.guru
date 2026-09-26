@@ -5,12 +5,15 @@ namespace App\Service\Spell\Description;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellEffect;
 use App\Repositories\Interfaces\Spell\SpellDescriptionImportStateRepositoryInterface;
+use App\Repositories\Interfaces\Spell\SpellDescriptionTranslationRepositoryInterface;
 use App\Service\Spell\Description\Dtos\SpellDescriptionImportResult;
 use App\Service\Spell\Description\Dtos\SpellDescriptionTemplates;
 use App\Service\Spell\Description\Dtos\SpellDescriptionValue;
+use App\Service\Spell\Description\Dtos\SpellDurationFormats;
 use App\Service\Spell\Description\Dtos\SpellEffectData;
 use App\Service\Spell\Description\Logging\SpellDescriptionImportServiceLoggingInterface;
 use App\Service\WagoTools\Exceptions\WagoToolsDownloadException;
+use App\Service\WagoTools\GameLocale;
 use App\Service\WagoTools\WagoToolsServiceInterface;
 use Closure;
 use Illuminate\Database\Eloquent\Collection;
@@ -48,6 +51,7 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
         private readonly WagoToolsServiceInterface                      $wagoToolsService,
         private readonly SpellDescriptionParserInterface                $spellDescriptionParser,
         private readonly SpellDescriptionImportStateRepositoryInterface $spellDescriptionImportStateRepository,
+        private readonly SpellDescriptionTranslationRepositoryInterface $spellDescriptionTranslationRepository,
         private readonly SpellDescriptionImportServiceLoggingInterface  $log,
     ) {
     }
@@ -89,21 +93,47 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
             }
 
             $wantedIds = $templates->getWantedIds($ourIds);
-            $effects   = $this->readEffects($build, $wantedIds);
+
+            // Everything but the description text itself is the same in every locale, so it is read once
+            // and handed to each locale's render pass
+            $effects              = $this->readEffects($build, $wantedIds);
+            $durationsMs          = $this->readDurations($build, $wantedIds);
+            $descriptionVariables = $this->readDescriptionVariables($build);
 
             $context = new ArraySpellDescriptionContext(
                 effects: $effects,
-                durationsMs: $this->readDurations($build, $wantedIds),
+                durationsMs: $durationsMs,
                 names: $this->readNames($build, $wantedIds),
                 templates: $templates->described,
-                descriptionVariables: $this->readDescriptionVariables($build),
+                descriptionVariables: $descriptionVariables,
+                durationFormats: $this->readDurationFormats($build, GameLocale::English),
             );
 
             $this->persistEffects(array_intersect_key($effects, $ourIds));
 
             $this->persistPvpTalentFlags($build, $gameVersionId);
 
-            $updatedCount = $this->renderAndPersist($context, $spells, $templates, $onProgress);
+            // The progress bar spans the English pass and one pass per translated locale
+            $localeCount = 1 + count(GameLocale::translated());
+            $totalUnits  = $spells->count() * $localeCount;
+
+            $updatedCount = $this->renderAndPersist(
+                $context,
+                $spells,
+                $templates,
+                $this->offsetProgress($onProgress, 0, $totalUnits),
+            );
+
+            $translatedCount = $this->importTranslations(
+                $build,
+                $spells,
+                $ourIds,
+                $effects,
+                $durationsMs,
+                $descriptionVariables,
+                $onProgress,
+                $totalUnits,
+            );
 
             $this->recordImportState($gameVersionId, $product, $build);
 
@@ -112,6 +142,7 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
                 spellCount: $spells->count(),
                 describedCount: count(array_intersect_key($templates->described, $ourIds)),
                 updatedCount: $updatedCount,
+                translatedCount: $translatedCount,
             );
         } finally {
             $this->log->importDescriptionsEnd();
@@ -302,7 +333,7 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
      *
      * @param array<int, bool> $ourIds
      */
-    private function readDescriptionTemplates(string $build, array $ourIds): SpellDescriptionTemplates
+    private function readDescriptionTemplates(string $build, array $ourIds, GameLocale $locale = GameLocale::English): SpellDescriptionTemplates
     {
         $described     = [];
         $presentIds    = [];
@@ -312,7 +343,7 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
         for ($pass = 0; $pass < self::MAX_REFERENCE_PASSES && $wantedIds !== []; $pass++) {
             $newlyDescribed = [];
 
-            foreach ($this->wagoToolsService->readTable('Spell', $build) as $row) {
+            foreach ($this->wagoToolsService->readTable('Spell', $build, $locale) as $row) {
                 $spellId = (int)($row['ID'] ?? 0);
 
                 // Recorded for every row, so we can tell "this build dropped the description" apart from
@@ -361,6 +392,148 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
         }
 
         return $referencedIds;
+    }
+
+    /**
+     * Render every spell's description again in each locale the game client publishes, and store those
+     * alongside the English one.
+     *
+     * Only the text differs per locale: the effects, durations and variables a description reads its
+     * numbers from are the same client data in every language, so they are passed in rather than read
+     * again. The numbers still come out in a different order per locale - "8 sec of Shadow damage" is
+     * not the same sentence order as its German counterpart - which is why each locale keeps its own
+     * values alongside its own format.
+     *
+     * @param Collection<int, Spell>                  $spells
+     * @param array<int, bool>                        $ourIds
+     * @param array<int, array<int, SpellEffectData>> $effects
+     * @param array<int, int>                         $durationsMs
+     * @param array<int, array<string, string>>       $descriptionVariables
+     * @param Closure(int, int): void|null            $onProgress
+     */
+    private function importTranslations(
+        string     $build,
+        Collection $spells,
+        array      $ourIds,
+        array      $effects,
+        array      $durationsMs,
+        array      $descriptionVariables,
+        ?Closure   $onProgress,
+        int        $totalUnits,
+    ): int {
+        $translatedCount = 0;
+        $localeIndex     = 0;
+
+        foreach (GameLocale::translated() as $locale) {
+            $localeIndex++;
+
+            $this->log->importTranslationsLocaleStart($locale->value);
+
+            $templates = $this->readDescriptionTemplates($build, $ourIds, $locale);
+
+            // A locale whose Spell table describes nothing we know is a download that went wrong; the
+            // English pass has already refused that case for the build as a whole, so here it is this
+            // one locale that is skipped rather than everything it would otherwise delete.
+            if ($templates->described === [] && $spells->isNotEmpty()) {
+                $this->log->importTranslationsLocaleEmpty($locale->value);
+
+                continue;
+            }
+
+            $context = new ArraySpellDescriptionContext(
+                effects: $effects,
+                durationsMs: $durationsMs,
+                names: $this->readNames($build, $templates->getWantedIds($ourIds), $locale),
+                templates: $templates->described,
+                descriptionVariables: $descriptionVariables,
+                durationFormats: $this->readDurationFormats($build, $locale),
+            );
+
+            $considered       = [];
+            $formatsAndValues = [];
+            $handled          = 0;
+            $progress         = $this->offsetProgress($onProgress, $localeIndex * $spells->count(), $totalUnits);
+
+            foreach ($spells as $spell) {
+                $handled++;
+
+                // As in the English pass: a build that has never heard of the spell has no opinion on
+                // it, so its row is left alone rather than deleted
+                if ($templates->isPresent($spell->id)) {
+                    $considered[$spell->id] = true;
+
+                    $template    = $templates->described[$spell->id] ?? null;
+                    $description = $template === null
+                        ? null
+                        : $this->spellDescriptionParser->parse($context, $spell->id, $template, $spell->damage_multiplier ?? 0.0);
+
+                    if ($description !== null && !$description->isEmpty()) {
+                        $formatsAndValues[$spell->id] = [
+                            'format' => $description->format,
+                            'values' => array_map(
+                                static fn(SpellDescriptionValue $value): array => $value->toArray(),
+                                $description->values,
+                            ),
+                        ];
+                    }
+                }
+
+                if ($progress !== null && $handled % self::PROGRESS_INTERVAL === 0) {
+                    $progress($handled, $spells->count());
+                }
+            }
+
+            if ($progress !== null) {
+                $progress($handled, $spells->count());
+            }
+
+            $translatedCount += $this->spellDescriptionTranslationRepository->replaceForLocale(
+                $locale,
+                $considered,
+                $formatsAndValues,
+            );
+        }
+
+        return $translatedCount;
+    }
+
+    /**
+     * The client's own duration wording for a locale, e.g. `%.1f sec` / `%.1F Sek.`.
+     */
+    private function readDurationFormats(string $build, GameLocale $locale): SpellDurationFormats
+    {
+        $wantedTags    = array_flip(SpellDurationFormats::GLOBAL_STRING_TAGS);
+        $globalStrings = [];
+
+        foreach ($this->wagoToolsService->readTable('GlobalStrings', $build, $locale) as $row) {
+            $tag = $row['BaseTag'] ?? '';
+
+            if (isset($wantedTags[$tag])) {
+                $globalStrings[$tag] = $row['TagText_lang'] ?? '';
+            }
+        }
+
+        return SpellDurationFormats::fromGlobalStrings($globalStrings);
+    }
+
+    /**
+     * A progress callback reporting into one bar that spans every locale's pass, so that a pass reports
+     * its own count and the bar sees where that sits in the whole import.
+     *
+     * @param  Closure(int, int): void|null $onProgress
+     * @return Closure(int, int): void|null
+     */
+    private function offsetProgress(?Closure $onProgress, int $offset, int $totalUnits): ?Closure
+    {
+        if ($onProgress === null) {
+            return null;
+        }
+
+        // The pass's own total is discarded: a pass counts the spells it handled, the bar counts every
+        // spell of every locale
+        return static function (int $handled, int $passTotal) use ($onProgress, $offset, $totalUnits): void {
+            $onProgress($offset + $handled, $totalUnits);
+        };
     }
 
     /**
@@ -472,11 +645,11 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
      * @param  array<int, bool>   $wantedIds
      * @return array<int, string>
      */
-    private function readNames(string $build, array $wantedIds): array
+    private function readNames(string $build, array $wantedIds, GameLocale $locale = GameLocale::English): array
     {
         $names = [];
 
-        foreach ($this->wagoToolsService->readTable('SpellName', $build) as $row) {
+        foreach ($this->wagoToolsService->readTable('SpellName', $build, $locale) as $row) {
             $spellId = (int)($row['ID'] ?? 0);
 
             if (!isset($wantedIds[$spellId])) {

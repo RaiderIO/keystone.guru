@@ -5,6 +5,7 @@ namespace App\Console\Commands\WagoTools;
 use App\Models\GameVersion\GameVersion;
 use App\Service\Spell\Description\SpellDescriptionImportServiceInterface;
 use App\Service\WagoTools\Exceptions\WagoToolsDownloadException;
+use App\Service\WagoTools\GameLocale;
 use Illuminate\Console\Command;
 
 class ImportSpellDescriptions extends Command
@@ -40,7 +41,7 @@ class ImportSpellDescriptions extends Command
         }
 
         $this->info(sprintf('Importing %s spell descriptions from product %s', $gameVersionKey, $product));
-        $this->comment('The DB2 tables are around 140MB in total - the first run for a build downloads them.');
+        $this->comment('The DB2 tables are around 140MB, plus roughly 30MB per translated locale - the first run for a build downloads them.');
 
         $progressBar = null;
 
@@ -75,6 +76,12 @@ class ImportSpellDescriptions extends Command
             $result->spellCount,
             $result->build,
             $result->updatedCount,
+        ));
+
+        $this->info(sprintf(
+            'Stored %d translated descriptions across %d locales.',
+            $result->translatedCount,
+            count(GameLocale::translated()),
         ));
 
         $this->comment('Run mapping:save to export the new descriptions into the seeders.');

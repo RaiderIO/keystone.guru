@@ -36,6 +36,15 @@ class SpellRepository extends DatabaseRepository implements SpellRepositoryInter
             ->keyBy('id');
     }
 
+    public function findAllByIdWithTooltipRelations(Collection $spellIds): Collection
+    {
+        return Spell::query()
+            ->with('descriptionTranslation')
+            ->whereIn('id', $spellIds)
+            ->get()
+            ->keyBy('id');
+    }
+
     /**
      * The effects come along because {@see CharacteristicEvidenceRule} judges every one of these spells on
      * them, and the extraction pipeline holds this catalog for the whole run.

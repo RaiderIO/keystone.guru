@@ -17,4 +17,8 @@ interface SpellDescriptionImportServiceLoggingInterface
     public function persistPvpTalentFlagsNoRows(string $build): void;
 
     public function persistPvpTalentFlagsDone(string $build, int $pvpTalentSpellCount, int $flaggedCount, int $unflaggedCount): void;
+
+    public function importTranslationsLocaleStart(string $locale): void;
+
+    public function importTranslationsLocaleEmpty(string $locale): void;
 }

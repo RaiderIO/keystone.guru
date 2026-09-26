@@ -1931,7 +1931,7 @@
             },
             {
                 "kind": "duration",
-                "text": "1 hr"
+                "text": "1 hour"
             }
         ],
         "damage_multiplier": null,
@@ -2748,7 +2748,7 @@
         "description_values": [
             {
                 "kind": "duration",
-                "text": "1 hr"
+                "text": "1 hour"
             },
             {
                 "kind": "duration",
@@ -3058,7 +3058,7 @@
         "description_values": [
             {
                 "kind": "duration",
-                "text": "1 hr"
+                "text": "1 hour"
             },
             {
                 "kind": "value",
@@ -4030,7 +4030,7 @@
         "description_values": [
             {
                 "kind": "duration",
-                "text": "1 hr"
+                "text": "1 hour"
             },
             {
                 "kind": "value",
@@ -16728,7 +16728,7 @@
             },
             {
                 "kind": "duration",
-                "text": "2 hr"
+                "text": "2 hrs"
             }
         ],
         "damage_multiplier": null,
@@ -53781,7 +53781,7 @@
         "description_values": [
             {
                 "kind": "duration",
-                "text": "4 hr"
+                "text": "4 hrs"
             }
         ],
         "damage_multiplier": null,
@@ -94507,7 +94507,7 @@
             },
             {
                 "kind": "duration",
-                "text": "until cancelled"
+                "text": "until canceled"
             },
             {
                 "kind": "period",
@@ -94573,7 +94573,7 @@
             },
             {
                 "kind": "duration",
-                "text": "until cancelled"
+                "text": "until canceled"
             },
             {
                 "kind": "period",
@@ -97253,7 +97253,7 @@
             },
             {
                 "kind": "duration",
-                "text": "until cancelled"
+                "text": "until canceled"
             },
             {
                 "kind": "period",
@@ -130462,7 +130462,7 @@
             },
             {
                 "kind": "duration",
-                "text": "until cancelled"
+                "text": "until canceled"
             }
         ],
         "damage_multiplier": null,
@@ -170625,7 +170625,7 @@
             },
             {
                 "kind": "duration",
-                "text": "until cancelled"
+                "text": "until canceled"
             }
         ],
         "damage_multiplier": null,
@@ -178392,7 +178392,7 @@
             },
             {
                 "kind": "duration",
-                "text": "until cancelled"
+                "text": "until canceled"
             }
         ],
         "damage_multiplier": null,
@@ -178443,7 +178443,7 @@
             },
             {
                 "kind": "duration",
-                "text": "until cancelled"
+                "text": "until canceled"
             }
         ],
         "damage_multiplier": null,
@@ -223205,7 +223205,7 @@
         "description_values": [
             {
                 "kind": "duration",
-                "text": "until cancelled"
+                "text": "until canceled"
             }
         ],
         "damage_multiplier": null,
@@ -229281,7 +229281,7 @@
             },
             {
                 "kind": "duration",
-                "text": "until cancelled"
+                "text": "until canceled"
             }
         ],
         "damage_multiplier": null,
@@ -229717,7 +229717,7 @@
         "description_values": [
             {
                 "kind": "duration",
-                "text": "1 hr"
+                "text": "1 hour"
             },
             {
                 "kind": "duration",
@@ -234490,7 +234490,7 @@
             },
             {
                 "kind": "duration",
-                "text": "until cancelled"
+                "text": "until canceled"
             }
         ],
         "damage_multiplier": null,
@@ -234541,7 +234541,7 @@
             },
             {
                 "kind": "duration",
-                "text": "until cancelled"
+                "text": "until canceled"
             }
         ],
         "damage_multiplier": null,

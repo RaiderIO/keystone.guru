@@ -20,14 +20,16 @@ trait BitmaskEnum
 
     /**
      * Every case set in the given mask, translated and comma separated, in declaration order.
+     *
+     * @param string|null $locale the locale to translate into; the application locale when null
      */
-    public static function maskToTranslatedString(int $mask): string
+    public static function maskToTranslatedString(int $mask, ?string $locale = null): string
     {
         $result = [];
 
         foreach (self::cases() as $case) {
             if ($case->isSetIn($mask)) {
-                $result[] = __($case->translationKey());
+                $result[] = __($case->translationKey(), [], $locale);
             }
         }
 

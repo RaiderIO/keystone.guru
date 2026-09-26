@@ -4,7 +4,9 @@ namespace App\Service\Mapping;
 
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellDescriptionTranslation;
 use App\Models\Spell\SpellTuningChange;
+use App\Service\WagoTools\GameLocale;
 
 class MappingExportService implements MappingExportServiceInterface
 {
@@ -68,6 +70,22 @@ class MappingExportService implements MappingExportServiceInterface
         }
 
         return $npcs->toArray();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function serializeSpellDescriptionTranslations(GameLocale $locale): array
+    {
+        // The id is assigned on insert by whichever environment loads the file; leaving it out keeps the
+        // file from churning on every re-run, and the explicit order keeps it deterministic.
+        $translations = SpellDescriptionTranslation::query()
+            ->where('locale', $locale->value)
+            ->orderBy('spell_id')
+            ->get()
+            ->makeHidden(['id']);
+
+        return $translations->toArray();
     }
 
     /**

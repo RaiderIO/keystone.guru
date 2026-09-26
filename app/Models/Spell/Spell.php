@@ -12,6 +12,7 @@ use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
 use App\Service\Spell\Description\Dtos\RenderedSpellDescription;
 use App\Service\Spell\Description\Dtos\SpellDescriptionValue;
+use App\Service\WagoTools\GameLocale;
 use Carbon\Exceptions\InvalidFormatException;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Str;
@@ -56,13 +58,15 @@ use Str;
  * @property string $icon_url
  * @property string $wowhead_tooltip_data
  *
- * @property GameVersion                                $gameVersion
- * @property EloquentCollection<int, Dungeon>           $dungeons
- * @property EloquentCollection<int, SpellDungeon>      $spellDungeons
- * @property EloquentCollection<int, SpellEffect>       $spellEffects
- * @property EloquentCollection<int, SpellTuningChange> $tuningChanges
- * @property EloquentCollection<int, Npc>               $npcs
- * @property Characteristic|null                        $characteristic
+ * @property GameVersion                                          $gameVersion
+ * @property EloquentCollection<int, Dungeon>                     $dungeons
+ * @property EloquentCollection<int, SpellDungeon>                $spellDungeons
+ * @property SpellDescriptionTranslation|null                     $descriptionTranslation
+ * @property EloquentCollection<int, SpellDescriptionTranslation> $descriptionTranslations
+ * @property EloquentCollection<int, SpellEffect>                 $spellEffects
+ * @property EloquentCollection<int, SpellTuningChange>           $tuningChanges
+ * @property EloquentCollection<int, Npc>                         $npcs
+ * @property Characteristic|null                                  $characteristic
  *
  * @method static Builder<self> visible()
  *
@@ -77,7 +81,12 @@ class Spell extends Model implements MappingModelInterface
 
     public $timestamps = false;
 
-    public $hidden = ['pivot'];
+    /**
+     * The description translation relations are eager loaded wherever a tooltip is rendered, but never
+     * serialized: what they hold already travels inside `tooltip_data`, and shipping it alongside would
+     * send every description twice.
+     */
+    public $hidden = ['pivot', 'descriptionTranslation', 'descriptionTranslations'];
 
     /** Dispel types that carry no information, and so earn no row in the tooltip. */
     private const array UNINFORMATIVE_DISPEL_TYPES = [
@@ -172,6 +181,30 @@ class Spell extends Model implements MappingModelInterface
      */
     public function getDescriptionAttribute(): ?string
     {
+        return $this->getRenderedDescription(app()->getLocale())?->render();
+    }
+
+    /**
+     * The description in `$locale`: the game client's own text for that locale when we imported one,
+     * and the English description otherwise.
+     */
+    private function getRenderedDescription(string $locale): ?RenderedSpellDescription
+    {
+        // A spell selected without its description columns - a kill zone's spells, which carry an id and
+        // an icon and nothing else - has no description to render, and so no translation to look up
+        if (!array_key_exists('description_format', $this->attributes)) {
+            return null;
+        }
+
+        $translation = $this->findDescriptionTranslation(GameLocale::forAppLocale($locale));
+
+        if ($translation !== null) {
+            return new RenderedSpellDescription(
+                $translation->description_format,
+                array_map(SpellDescriptionValue::fromArray(...), $translation->description_values ?? []),
+            );
+        }
+
         if ($this->description_format === null) {
             return null;
         }
@@ -179,7 +212,7 @@ class Spell extends Model implements MappingModelInterface
         return new RenderedSpellDescription(
             $this->description_format,
             array_map(SpellDescriptionValue::fromArray(...), $this->description_values ?? []),
-        )->render();
+        );
     }
 
     /**
@@ -193,20 +226,60 @@ class Spell extends Model implements MappingModelInterface
      */
     public function getTooltipDataAttribute(): ?array
     {
-        if ($this->description_format === null) {
+        return $this->getTooltipData(app()->getLocale());
+    }
+
+    /**
+     * The `tooltip_data` payload in an explicit locale rather than the application's.
+     *
+     * The description comes from `descriptionTranslations` when the caller eager loaded it (constrained to
+     * `$locale`), so building the payload for another locale needs no change to the application locale.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getTooltipData(string $locale): ?array
+    {
+        $description = $this->getRenderedDescription($locale);
+
+        if ($description === null) {
             return null;
         }
 
         return array_filter([
-            'name'       => __($this->name),
-            'format'     => $this->description_format,
-            'values'     => $this->description_values ?? [],
-            'schools'    => SpellSchool::maskToTranslatedString($this->schools_mask) ?: null,
-            'dispelType' => $this->hasUninformativeDispelType() ? null : __($this->dispel_type),
-            'mechanic'   => $this->mechanic ? __($this->mechanic) : null,
+            'name'   => __($this->name, [], $locale),
+            'format' => $description->format,
+            'values' => array_map(
+                static fn(SpellDescriptionValue $value): array => $value->toArray(),
+                $description->values,
+            ),
+            'schools'    => SpellSchool::maskToTranslatedString($this->schools_mask, $locale) ?: null,
+            'dispelType' => $this->hasUninformativeDispelType() ? null : __($this->dispel_type, [], $locale),
+            'mechanic'   => $this->mechanic ? __($this->mechanic, [], $locale) : null,
             'castTime'   => $this->cast_time > 0 ? $this->cast_time / 1000 : null,
             'duration'   => $this->duration > 0 ? $this->duration / 1000 : null,
         ], static fn(mixed $value): bool => $value !== null && $value !== []);
+    }
+
+    /**
+     * The imported description for `$gameLocale`, or null when there is none - always for English, whose
+     * description lives on the spell itself, so no relation is read for an English visitor.
+     *
+     * Prefers `descriptionTranslations` when it was eager loaded (the caller constrains it to the locale
+     * it builds for); otherwise `descriptionTranslation`, which is bound to the application locale, when
+     * that is the locale asked for.
+     */
+    private function findDescriptionTranslation(GameLocale $gameLocale): ?SpellDescriptionTranslation
+    {
+        if ($gameLocale === GameLocale::English) {
+            return null;
+        }
+
+        if (!$this->relationLoaded('descriptionTranslations')
+            && $gameLocale === GameLocale::forAppLocale(app()->getLocale())) {
+            return $this->descriptionTranslation;
+        }
+
+        return $this->descriptionTranslations->firstWhere('locale', $gameLocale->value);
     }
 
     /**
@@ -299,6 +372,30 @@ class Spell extends Model implements MappingModelInterface
     public function dungeons(): BelongsToMany
     {
         return $this->belongsToMany(Dungeon::class, 'spell_dungeons', 'spell_id', 'dungeon_id');
+    }
+
+    /**
+     * The description in the locale being viewed, when the game client publishes one for it. English is
+     * not among them - it is stored on the spell itself - so this relation is empty for every English
+     * visitor, and eager loading it in that case is a query for nothing.
+     *
+     * @return HasOne<SpellDescriptionTranslation, $this>
+     */
+    public function descriptionTranslation(): HasOne
+    {
+        return $this->hasOne(SpellDescriptionTranslation::class)
+            ->where('locale', GameLocale::forAppLocale(app()->getLocale())->value);
+    }
+
+    /**
+     * The description in every locale the game client publishes besides English. Eager load it with a
+     * locale constraint to build a tooltip for a locale other than the application's.
+     *
+     * @return HasMany<SpellDescriptionTranslation, $this>
+     */
+    public function descriptionTranslations(): HasMany
+    {
+        return $this->hasMany(SpellDescriptionTranslation::class);
     }
 
     /** @return HasMany<SpellEffect, $this> */

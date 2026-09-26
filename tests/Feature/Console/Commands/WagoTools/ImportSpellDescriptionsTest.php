@@ -5,7 +5,9 @@ namespace Tests\Feature\Console\Commands\WagoTools;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDescriptionImportState;
+use App\Models\Spell\SpellDescriptionTranslation;
 use App\Models\Spell\SpellEffect;
+use App\Service\WagoTools\GameLocale;
 use Illuminate\Support\Facades\File;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -50,6 +52,12 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
     #[\Override]
     protected function tearDown(): void
     {
+        // Every import also writes a description per translated locale for whichever fixture spells the
+        // test created; those rows outlive the spell rows the tests delete themselves
+        SpellDescriptionTranslation::query()
+            ->whereIn('spell_id', [self::SPELL_ID, self::REFERENCED_SPELL_ID, self::UNKNOWN_SPELL_ID])
+            ->delete();
+
         File::put(database_path(self::IMPORT_STATE_DATA_PATH), $this->originalImportStateJson);
 
         $this->restoreSpellDescriptionImportState();
@@ -309,40 +317,59 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
                 ID,SpellID,SpellDescriptionVariablesID
                 1,999999901,900001
                 CSV,
+            'GlobalStrings' => <<<CSV
+                ID,BaseTag,TagText_lang,Flags
+                9868,SPELL_DURATION_SEC,"%.1f sec",1
+                CSV,
         ];
     }
 
-    /** @param array<string, string> $overrides */
+    /**
+     * The same rows in every locale the import renders for - the command reads the client's text once
+     * per locale it publishes.
+     *
+     * @param array<string, string> $overrides
+     */
     private function writeDb2Tables(array $overrides = []): void
     {
-        $directory = $this->getDb2Directory();
+        foreach (GameLocale::cases() as $locale) {
+            $directory = $this->getDb2Directory($locale);
 
-        if (!is_dir($directory)) {
-            mkdir($directory, 0755, true);
-        }
+            if (!is_dir($directory)) {
+                mkdir($directory, 0755, true);
+            }
 
-        foreach ($overrides + $this->getDb2Tables() as $table => $contents) {
-            // Heredocs keep the indentation of the code they sit in, which a CSV cannot have
-            file_put_contents(
-                sprintf('%s/%s.csv', $directory, $table),
-                implode("\n", array_map(trim(...), explode("\n", $contents))),
-            );
+            foreach ($overrides + $this->getDb2Tables() as $table => $contents) {
+                // Heredocs keep the indentation of the code they sit in, which a CSV cannot have
+                file_put_contents(
+                    sprintf('%s/%s.csv', $directory, $table),
+                    implode("\n", array_map(trim(...), explode("\n", $contents))),
+                );
+            }
         }
     }
 
     private function removeDb2Tables(): void
     {
-        foreach (glob(sprintf('%s/*.csv', $this->getDb2Directory())) ?: [] as $filePath) {
-            unlink($filePath);
+        foreach (GameLocale::cases() as $locale) {
+            foreach (glob(sprintf('%s/*.csv', $this->getDb2Directory($locale))) ?: [] as $filePath) {
+                unlink($filePath);
+            }
+
+            if (is_dir($this->getDb2Directory($locale))) {
+                rmdir($this->getDb2Directory($locale));
+            }
         }
 
-        if (is_dir($this->getDb2Directory())) {
-            rmdir($this->getDb2Directory());
+        $buildDirectory = storage_path(sprintf('app/db2/%s', self::BUILD));
+
+        if (is_dir($buildDirectory)) {
+            rmdir($buildDirectory);
         }
     }
 
-    private function getDb2Directory(): string
+    private function getDb2Directory(GameLocale $locale = GameLocale::English): string
     {
-        return storage_path(sprintf('app/db2/%s', self::BUILD));
+        return storage_path(sprintf('app/db2/%s/%s', self::BUILD, $locale->value));
     }
 }

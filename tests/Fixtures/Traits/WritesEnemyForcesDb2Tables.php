@@ -7,6 +7,7 @@ use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
+use App\Service\WagoTools\GameLocale;
 use Tests\TestCase;
 
 /**
@@ -175,10 +176,17 @@ trait WritesEnemyForcesDb2Tables
         if (is_dir($this->getDb2Directory())) {
             rmdir($this->getDb2Directory());
         }
+
+        $buildDirectory = storage_path(sprintf('app/db2/%s', $this->getDb2Build()));
+
+        if (is_dir($buildDirectory)) {
+            rmdir($buildDirectory);
+        }
     }
 
+    /** The cache is per locale; these tables carry no `_lang` column, so they are read as English. */
     private function getDb2Directory(): string
     {
-        return storage_path(sprintf('app/db2/%s', $this->getDb2Build()));
+        return storage_path(sprintf('app/db2/%s/%s', $this->getDb2Build(), GameLocale::English->value));
     }
 }

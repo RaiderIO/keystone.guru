@@ -15,7 +15,10 @@ use App\Models\Spell\SpellMissType;
 use App\Models\Spell\SpellSchool;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
+use App\Service\WagoTools\GameLocale;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -39,10 +42,16 @@ class MapContextStaticData implements Arrayable
     public function toArray(): array
     {
         $staticKey = sprintf('static_data_%s', $this->locale);
-        $static    = $this->rememberLocal($staticKey, 86400, function () use (
+
+        $static = $this->rememberLocal($staticKey, 86400, function () use (
             $staticKey,
         ) {
+            $gameLocale = GameLocale::forAppLocale($this->locale);
+
             $selectableSpells = Spell::where('selectable', true)
+                ->when($gameLocale !== GameLocale::English, static fn(Builder $query) => $query->with([
+                    'descriptionTranslations' => static fn(Relation $relation) => $relation->where('locale', $gameLocale->value),
+                ]))
                 ->selectRaw('spells.*, translations.translation as name')
                 ->leftJoin('translations', function (JoinClause $clause) {
                     $clause->on('translations.key', '=', 'spells.name')
@@ -53,7 +62,14 @@ class MapContextStaticData implements Arrayable
                     'debuff',
                     'selectable',
                     'fetched_data_at',
-                ]);
+                    'tooltip_data',
+                ])
+                // The `tooltip_data` accessor resolves through the application locale; this payload is
+                // built for `$this->locale`, which `make:mapcontextstatic` varies within one process
+                ->map(fn(Spell $spell): array => array_merge($spell->toArray(), [
+                    'tooltip_data' => $spell->getTooltipData($this->locale),
+                ]))
+                ->all();
 
             $characterClasses = CharacterClass::all();
             $mapIconTypes     = MapIconType::all()->keyBy('id');
