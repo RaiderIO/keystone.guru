@@ -610,7 +610,19 @@ class CommonDungeonroutePicker extends SearchInlineBase {
 
                 self.close();
             },
-            error: function () {
+            error: function (xhr) {
+                let gonePublicKeys = self._getGonePublicKeys(publicKeys, xhr);
+
+                // An earlier request that committed but whose answer never arrived leaves its routes ticked;
+                // the endpoint now rejects them as unknown, and they would block every retry of the rest
+                if (gonePublicKeys.length > 0) {
+                    self._reportConfirmed(gonePublicKeys, null);
+                    self.dialog.setStatus(lang.get(`js.${self.options.actionKeyPrefix}_gone`, {count: gonePublicKeys.length}));
+                    self.reload();
+
+                    return;
+                }
+
                 self.dialog.setStatus(lang.get(`js.${self.options.actionKeyPrefix}_failed`));
             },
             complete: function () {
@@ -635,6 +647,25 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         }
 
         return publicKeys.filter(publicKey => response[field].includes(publicKey));
+    }
+
+    /**
+     * The sent routes a validation error names as unknown, for an action that removes its routes.
+     * @param {string[]} publicKeys
+     * @param {Object} xhr
+     * @returns {string[]}
+     * @private
+     */
+    _getGonePublicKeys(publicKeys, xhr) {
+        let errors = xhr?.responseJSON?.errors;
+
+        if (!this.options.removesActedRoutes || xhr?.status !== 422 || errors === null || typeof errors !== 'object') {
+            return [];
+        }
+
+        let prefix = `${this.options.actionFieldName}.`;
+
+        return publicKeys.filter((publicKey, index) => errors.hasOwnProperty(`${prefix}${index}`));
     }
 
     /**

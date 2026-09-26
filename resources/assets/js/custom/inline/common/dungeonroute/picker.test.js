@@ -60,6 +60,7 @@ const MESSAGES = {
         dungeonroute_picker_delete_confirm_many:  'Delete these :count routes permanently?',
         dungeonroute_picker_delete_failed:        'Deleting failed',
         dungeonroute_picker_delete_full:          'Delete at most :max',
+        dungeonroute_picker_delete_gone:          ':count already gone',
     },
     'en.dungeons': {ara_kara: 'Ara-Kara'},
 };
@@ -855,6 +856,77 @@ describe('CommonDungeonroutePicker', () => {
         expect(picker.getSelectedPublicKeys()).toEqual(['b']);
         expect(document.querySelector('#picker_status').textContent).toBe('Deleting failed');
         expect(offcanvas.hide).not.toHaveBeenCalled();
+    });
+
+    it('confirm_givenARetryOfADeleteWhoseAnswerWasLost_forgetsTheDeletedRoutesAndKeepsTheRest', () => {
+        // Arrange - the first request deleted 'a' and 'b' but its answer never arrived
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b'), route('c')]);
+        tick('a');
+        tick('b');
+        tick('c');
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        let request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.error({status: 0}, 'timeout');
+        request.complete();
+        const callback = vi.fn();
+        picker.onConfirmed(callback);
+
+        // Act - the retry is rejected for the two routes that are gone
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[1][1]();
+        request = ajaxCalls.filter((call) => call.type === 'DELETE').pop();
+        request.error({
+            status:       422,
+            responseJSON: {errors: {'dungeon_routes.0': ['gone'], 'dungeon_routes.1': ['gone']}},
+        }, 'error');
+        request.complete();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['c']);
+        expect(callback).toHaveBeenCalledWith(expect.objectContaining({publicKeys: ['a', 'b'], response: null}));
+        expect(document.querySelector('#picker_status').textContent).toBe('2 already gone');
+        expect(document.querySelector('#picker_confirm').textContent).toBe('Delete 1 route');
+        expect(ajaxCalls.filter((call) => call.type === 'GET').length).toBeGreaterThan(1);
+        expect(offcanvas.hide).not.toHaveBeenCalled();
+    });
+
+    it('confirm_givenAValidationErrorWithoutRejectedRoutes_keepsTheSelectionAndSaysSo', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a')]);
+        tick('a');
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        const request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.error({status: 422, responseJSON: {errors: {'dungeon_routes': ['too many']}}}, 'error');
+        request.complete();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a']);
+        expect(document.querySelector('#picker_status').textContent).toBe('Deleting failed');
+    });
+
+    it('confirm_givenAddModeAndARejectedRoute_keepsTheSelection', () => {
+        // Arrange - an add drawer does not remove its routes, so an unknown route is not "already acted on"
+        picker.reload();
+        respondWithRoutes([route('a')]);
+        tick('a');
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+        const request = ajaxCalls.find((call) => call.type === 'POST');
+        request.error({status: 422, responseJSON: {errors: {'dungeon_routes.0': ['unknown']}}}, 'error');
+        request.complete();
+
+        // Assert
+        expect(picker.getSelectedPublicKeys()).toEqual(['a']);
+        expect(document.querySelector('#picker_status').textContent).toBe('Adding failed');
     });
 
     it('confirm_givenTheServerActedOnNoRouteAtAll_reportsNothingToTheHost', () => {

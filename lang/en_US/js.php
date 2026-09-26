@@ -545,6 +545,7 @@ return [
     'dungeonroute_picker_delete_confirm_many' => 'Delete these :count routes permanently? They cannot be restored.',
     'dungeonroute_picker_delete_failed'       => 'The routes could not be deleted.',
     'dungeonroute_picker_delete_full'         => 'You can delete up to :max routes at a time.',
+    'dungeonroute_picker_delete_gone'         => ':count of these routes were already deleted. The rest are still selected.',
 
     // MDT import
     'import_notes_label'     => 'Import notes',
