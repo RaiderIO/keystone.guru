@@ -16,6 +16,7 @@ enum DungeonKey: string
     case DIRE_MAUL_NORTH             = 'dire_maul_north';             //diremaul
     case DIRE_MAUL_EAST              = 'dire_maul_east';              //diremaul
     case GNOMEREGAN                  = 'gnomeregan';                  //gnomeregan
+    case KALIMDOR                    = 'kalimdor';
     case KARAZHAN_CRYPTS             = 'karazhan_crypts';
     case LOWER_BLACKROCK_SPIRE       = 'lower_blackrock_spire';       //blackrockspire
     case MARAUDON                    = 'maraudon';
@@ -199,6 +200,7 @@ enum DungeonKey: string
             self::DIRE_MAUL_NORTH,
             self::DIRE_MAUL_EAST,
             self::GNOMEREGAN,
+            self::KALIMDOR,
             self::KARAZHAN_CRYPTS,
             self::LOWER_BLACKROCK_SPIRE,
             self::MARAUDON,

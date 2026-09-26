@@ -67,6 +67,7 @@ class GameVersion extends Model
     public const string GAME_VERSION_CATA         = 'cata';
     public const string GAME_VERSION_MOP          = 'mop';
     public const string GAME_VERSION_LEGION_REMIX = 'legion-remix';
+    public const string GAME_VERSION_FOREVER      = 'forever';
 
     public const array ALL = [
         self::GAME_VERSION_RETAIL       => 1,
@@ -76,6 +77,7 @@ class GameVersion extends Model
         self::GAME_VERSION_CATA         => 5,
         self::GAME_VERSION_MOP          => 6,
         self::GAME_VERSION_LEGION_REMIX => 7,
+        self::GAME_VERSION_FOREVER      => 8,
     ];
 
     /**

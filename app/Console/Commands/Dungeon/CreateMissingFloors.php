@@ -59,7 +59,7 @@ class CreateMissingFloors extends Command
 
                 $facade = '';
                 if (__($floorKey, [], 'en_US') === __($dungeon->name, [], 'en_US') &&
-                    $dungeon->floors->count() > 1) {
+                    count($translatedFloors) > 1) {
                     $floorAttributes['facade']        = 1;
                     $floorAttributes['mdt_sub_level'] = 1;
                     $floorAttributes['ui_map_id']     = 0;

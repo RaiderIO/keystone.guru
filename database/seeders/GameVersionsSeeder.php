@@ -70,6 +70,14 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
                 'has_seasons'  => false,
                 'active'       => true,
             ],
+            [
+                'expansion_id' => Expansion::ALL[Expansion::EXPANSION_CLASSIC],
+                'key'          => GameVersion::GAME_VERSION_FOREVER,
+                'name'         => 'gameversions.forever.name',
+                'description'  => 'gameversions.forever.description',
+                'has_seasons'  => false,
+                'active'       => false,
+            ],
         ];
 
         GameVersion::from(DatabaseSeeder::getTempTableName(GameVersion::class))->insert($gameVersionAttributes);
