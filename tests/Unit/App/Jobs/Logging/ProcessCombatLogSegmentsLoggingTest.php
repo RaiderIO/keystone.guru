@@ -88,6 +88,60 @@ final class ProcessCombatLogSegmentsLoggingTest extends PublicTestCase
         $log = app(ProcessCombatLogSegmentsLoggingInterface::class);
 
         // Act
-        $log->handleSegmentDownloadFailed(37830910, 1, '/tmp/run_37830910_segment_1.txt');
+        $log->handleSegmentDownloadFailed(
+            37830910,
+            1,
+            '/tmp/run_37830910_segment_1.txt',
+            503,
+            CURLE_OK,
+            '',
+            0.4,
+            'logs.raiderio.net',
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handleSegmentPermanentlyUndownloadable_givenCalled_logsAtWarningNotError(): void
+    {
+        // Arrange
+        $logManager = LoggingFixtures::createLogManager($this);
+        app()->instance('log', $logManager);
+
+        $logManager->expects($this->once())->method('log')->with('WARNING');
+
+        /** @var ProcessCombatLogSegmentsLoggingInterface $log */
+        $log = app(ProcessCombatLogSegmentsLoggingInterface::class);
+
+        // Act
+        $log->handleSegmentPermanentlyUndownloadable(
+            37830910,
+            1,
+            200,
+            CURLE_BAD_CONTENT_ENCODING,
+            'Error while processing content unencoding',
+            'logs.raiderio.net',
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handleSegmentUrlExpiredRefetching_givenCalled_logsAtInfo(): void
+    {
+        // Arrange
+        $logManager = LoggingFixtures::createLogManager($this);
+        app()->instance('log', $logManager);
+
+        $logManager->expects($this->once())->method('log')->with('INFO');
+
+        /** @var ProcessCombatLogSegmentsLoggingInterface $log */
+        $log = app(ProcessCombatLogSegmentsLoggingInterface::class);
+
+        // Act
+        $log->handleSegmentUrlExpiredRefetching(37830910, 2, 403, CURLE_OK);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Service\Traits;
 
+use App\Service\Traits\Dtos\CurlDownloadResult;
+
 trait Curl
 {
     /**
@@ -12,24 +14,32 @@ trait Curl
         return $this->curlGetResponse($url, $options)['body'];
     }
 
-    /**
-     * @param  string $url
-     * @param  string $filePath
-     * @return bool
-     */
     public function curlSaveToFile(string $url, string $filePath): bool
+    {
+        return $this->curlDownloadToFile($url, $filePath)->succeeded;
+    }
+
+    /**
+     * Download $url to $filePath, keeping the transport outcome so a failure can be told apart from another.
+     */
+    public function curlDownloadToFile(string $url, string $filePath): CurlDownloadResult
     {
         $response = $this->curlGetResponse($url);
 
         // A failed HTTP request still has a body - S3, for example, answers an expired or denied presigned URL
         // with an XML `Error` document. Saving that body would hand a bogus file to whatever consumes it, so
         // treat any error response as a download failure instead (see #3789).
-        if ($response['body'] === false || $response['errorNumber'] !== CURLE_OK
-            || $response['httpCode'] < 200 || $response['httpCode'] >= 300) {
-            return false;
-        }
+        $succeeded = $response['body'] !== false && $response['errorNumber'] === CURLE_OK
+            && $response['httpCode'] >= 200 && $response['httpCode'] < 300
+            && file_put_contents($filePath, $response['body']) !== false;
 
-        return file_put_contents($filePath, $response['body']) !== false;
+        return new CurlDownloadResult(
+            succeeded:       $succeeded,
+            httpCode:        $response['httpCode'],
+            errorNumber:     $response['errorNumber'],
+            errorMessage:    $response['errorMessage'],
+            durationSeconds: $response['durationSeconds'],
+        );
     }
 
     /**
@@ -71,8 +81,8 @@ trait Curl
      * Note `httpCode` is 0 for non-HTTP protocols, and when the request never got a response at all, so callers
      * should judge failure on `errorNumber` first.
      *
-     * @param  array<int, mixed>                                         $options
-     * @return array{body: string|bool, httpCode: int, errorNumber: int}
+     * @param  array<int, mixed>                                                                                       $options
+     * @return array{body: string|bool, httpCode: int, errorNumber: int, errorMessage: string, durationSeconds: float}
      */
     protected function curlGetResponse(string $url, array $options = []): array
     {
@@ -101,13 +111,21 @@ trait Curl
         ]);
 
         try {
-            $response    = curl_exec($ch);
-            $httpCode    = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-            $errorNumber = curl_errno($ch);
+            $response        = curl_exec($ch);
+            $httpCode        = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+            $errorNumber     = curl_errno($ch);
+            $errorMessage    = curl_error($ch);
+            $durationSeconds = (float)curl_getinfo($ch, CURLINFO_TOTAL_TIME);
         } finally {
             curl_close($ch);
         }
 
-        return ['body' => $response, 'httpCode' => $httpCode, 'errorNumber' => $errorNumber];
+        return [
+            'body'            => $response,
+            'httpCode'        => $httpCode,
+            'errorNumber'     => $errorNumber,
+            'errorMessage'    => $errorMessage,
+            'durationSeconds' => $durationSeconds,
+        ];
     }
 }

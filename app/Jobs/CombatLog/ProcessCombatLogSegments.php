@@ -17,6 +17,7 @@ use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Traits\CombatLogSegmentFile;
 use App\Service\Traits\Curl;
+use App\Service\Traits\Dtos\CurlDownloadResult;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -104,7 +105,7 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
             usort($segments, fn(CombatLogSegment $a, CombatLogSegment $b): int => $a->id <=> $b->id);
 
             // Download every part first while the presigned URLs are still fresh, then extract each.
-            foreach ($segments as $segment) {
+            foreach ($segments as $index => $segment) {
                 $tempPath = sprintf(
                     '%s/run_%d_segment_%d.%s',
                     sys_get_temp_dir(),
@@ -114,12 +115,39 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
                 );
                 $log->handleDownloadingSegment($this->runId, $segment->id, $segment->downloadUrl, $tempPath);
 
-                if (!$this->curlSaveToFile($segment->downloadUrl, $tempPath)) {
-                    $log->handleSegmentDownloadFailed($this->runId, $segment->id, $tempPath);
+                $downloadResult = $this->downloadSegment($raiderIOApiService, $log, $segment, $index > 0, $tempPath);
 
-                    throw new CombatLogSegmentDownloadFailedException(
-                        sprintf('Failed to download segment %d for run %d', $segment->id, $this->runId),
+                if (!$downloadResult->succeeded) {
+                    $urlHost = parse_url($segment->downloadUrl, PHP_URL_HOST) ?: null;
+
+                    if ($downloadResult->isPermanent()) {
+                        $log->handleSegmentPermanentlyUndownloadable(
+                            $this->runId,
+                            $segment->id,
+                            $downloadResult->httpCode,
+                            $downloadResult->errorNumber,
+                            $downloadResult->errorMessage,
+                            $urlHost,
+                        );
+
+                        $healthService->recordFailure(CombatLogPollingFailureReason::SegmentUndownloadable);
+                        $this->releaseCriteriaBudget();
+
+                        return;
+                    }
+
+                    $log->handleSegmentDownloadFailed(
+                        $this->runId,
+                        $segment->id,
+                        $tempPath,
+                        $downloadResult->httpCode,
+                        $downloadResult->errorNumber,
+                        $downloadResult->errorMessage,
+                        $downloadResult->durationSeconds,
+                        $urlHost,
                     );
+
+                    throw CombatLogSegmentDownloadFailedException::forSegment($segment->id, $this->runId, $downloadResult);
                 }
 
                 $tempFiles[] = $tempPath;
@@ -216,6 +244,41 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
 
         app(CombatLogParsingCriteriaServiceInterface::class)
             ->releaseParsed($this->combatLogVersion, $this->criteria, $this->criteriaDate);
+    }
+
+    /**
+     * Segments are downloaded one after another on URLs that were all signed up front, so a slow earlier
+     * segment can run a later one's URL past its expiry. Such a segment gets exactly one retry on a freshly
+     * signed URL within this attempt.
+     */
+    private function downloadSegment(
+        RaiderIOApiServiceInterface              $raiderIOApiService,
+        ProcessCombatLogSegmentsLoggingInterface $log,
+        CombatLogSegment                         $segment,
+        bool                                     $mayRefreshUrl,
+        string                                   $tempPath,
+    ): CurlDownloadResult {
+        $downloadResult = $this->curlDownloadToFile($segment->downloadUrl, $tempPath);
+
+        if (!$mayRefreshUrl || !$downloadResult->isExpiredOrDenied()) {
+            return $downloadResult;
+        }
+
+        $log->handleSegmentUrlExpiredRefetching(
+            $this->runId,
+            $segment->id,
+            $downloadResult->httpCode,
+            $downloadResult->errorNumber,
+        );
+
+        $refreshedSegments = $raiderIOApiService->getCombatLogSegmentsForRun($this->season, $this->runId)->segments ?? [];
+        foreach ($refreshedSegments as $refreshedSegment) {
+            if ($refreshedSegment->id === $segment->id) {
+                return $this->curlDownloadToFile($refreshedSegment->downloadUrl, $tempPath);
+            }
+        }
+
+        return $downloadResult;
     }
 
     public function uniqueId(): string
