@@ -511,17 +511,22 @@ class AjaxDungeonRouteController extends Controller
         $deletedPublicKeys = [];
 
         foreach ($dungeonRoutes as $dungeonRoute) {
-            try {
-                // Per route rather than around the batch: deleting one route also writes to the combatlog
-                // connection and removes its thumbnails from disk, neither of which a rollback undoes
-                DB::transaction(function () use ($dungeonRoute): void {
-                    if (!$dungeonRoute->delete()) {
-                        throw new Exception('Unable to delete dungeonroute');
-                    }
+            // Per route rather than around the batch: deleting one route also writes to the combatlog
+            // connection and removes its thumbnails from disk, neither of which a rollback undoes.
+            // Not DB::transaction(): route:cache unbinds $this when it is only read inside a nested closure
+            DB::beginTransaction();
 
-                    $this->dungeonRouteChanged($dungeonRoute, $dungeonRoute, null);
-                });
+            try {
+                if (!$dungeonRoute->delete()) {
+                    throw new Exception('Unable to delete dungeonroute');
+                }
+
+                $this->dungeonRouteChanged($dungeonRoute, $dungeonRoute, null);
+
+                DB::commit();
             } catch (Throwable $throwable) {
+                DB::rollBack();
+
                 // The routes deleted so far are gone for good, so the caller is told which ones those were
                 // instead of an error carrying nothing: a retry of the whole selection fails validation on
                 // the deleted keys, which would leave the rest of the batch undeletable
