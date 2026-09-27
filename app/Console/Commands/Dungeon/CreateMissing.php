@@ -16,7 +16,7 @@ class CreateMissing extends Command
      *
      * @var string
      */
-    protected $signature = 'dungeon:createmissing';
+    protected $signature = 'dungeon:createmissing {expansion : The expansion shortname to add missing dungeons for, e.g. classic}';
 
     /**
      * The console command description.
@@ -32,9 +32,16 @@ class CreateMissing extends Command
         /** @var Collection<string, Dungeon> $dungeons */
         $dungeons = Dungeon::all()->keyBy('key');
 
+        $onlyExpansionKey = $this->argument('expansion');
+        if (!isset(Expansion::ALL[$onlyExpansionKey])) {
+            $this->error(sprintf('Unknown expansion %s', $onlyExpansionKey));
+
+            return self::FAILURE;
+        }
+
         foreach (DungeonKey::casesByExpansionKey() as $expansionKey => $dungeonKeys) {
-            // Temp, I just want classic dungeons for now
-            if ($expansionKey !== Expansion::EXPANSION_MOP) {
+            // Not every expansion's dungeons are wanted in the database (e.g. TBC, Cata), so only add them one expansion at a time
+            if ($expansionKey !== $onlyExpansionKey) {
                 continue;
             }
 
