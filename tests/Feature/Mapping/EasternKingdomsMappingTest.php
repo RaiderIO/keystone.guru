@@ -28,6 +28,7 @@ final class EasternKingdomsMappingTest extends TestCase
         $facadeFloors = $dungeon->floors->where('facade', true);
 
         // Assert
+        $this->assertSame('dungeons.classic.eastern_kingdoms.abbreviation', $dungeon->abbreviation);
         $this->assertCount(26, $realFloors);
         $this->assertCount(1, $facadeFloors);
         $this->assertSame('dungeons.classic.eastern_kingdoms.floors.elwynn_forest', $dungeon->floors->firstWhere('default', true)->name);
