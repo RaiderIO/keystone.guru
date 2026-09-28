@@ -166,6 +166,8 @@ return [
             'default_title'                      => 'If marked as default, this floor is opened first when editing routes for this dungeon (only one should be marked as default)',
             'facade'                             => 'Facade',
             'facade_title'                       => 'Facade floors do not actually have enemies on them, but using Floor Unions and Floor Union Areas you can make them render enemies of other floors instead.',
+            'facade_navigation'                  => 'Facade navigation',
+            'facade_navigation_title'            => 'Only on a facade floor. Hovering a Floor Union Area highlights it and clicking it opens that floor, while the other floors stay reachable in facade view.',
             'connected_floors'                   => 'Connected floors',
             'connected_floors_title'             => 'A connected floor is any other floor that we may reach from this floor',
             'connected'                          => 'Connected',

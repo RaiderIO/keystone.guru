@@ -40,6 +40,7 @@ use Illuminate\Support\Collection;
  * @property string      $name
  * @property bool        $default
  * @property bool        $facade
+ * @property bool        $facade_navigation                  On a facade floor: hovering a floor union area highlights it, clicking it navigates to that floor
  * @property int         $min_enemy_size
  * @property int         $max_enemy_size
  * @property int|null    $enemy_engagement_max_range         When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
@@ -250,6 +251,7 @@ class Floor extends Model implements MappingModelInterface
         'name',
         'default',
         'facade',
+        'facade_navigation',
         'min_enemy_size',
         'max_enemy_size',
         'enemy_engagement_max_range',
@@ -469,6 +471,16 @@ class Floor extends Model implements MappingModelInterface
         ?string        $mapFacadeStyle = null,
     ): Builder {
         $useFacade = (($mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle()) === User::MAP_FACADE_STYLE_FACADE) && $mappingVersion->facade_enabled;
+
+        if ($useFacade && User::shouldUseFacadeNavigation($mappingVersion, $mapFacadeStyle)) {
+            // Resolve the requested floor, facade or not, otherwise fall back to the facade floor
+            return $builder->where(
+                static fn(Builder $builder) => $builder->where('index', $floorIndex)
+                    ->orWhere('facade', 1),
+            )->orderByRaw('(`index` = ?) DESC', [$floorIndex])
+                ->orderByDesc('facade')
+                ->limit(1);
+        }
 
         // Facade should be FORCED to use floor index 1
         if ($useFacade && $floorIndex > 1) {

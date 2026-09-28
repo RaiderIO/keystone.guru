@@ -502,6 +502,17 @@ class User extends Authenticatable implements LaratrustUser
             $mappingVersion->dungeon->floors->firstWhere('facade', true) !== null;
     }
 
+    /**
+     * Whether the facade floor of $mappingVersion lets the viewer hover its floor union areas and click through to
+     * the floor behind them. The other floors then stay reachable in facade view instead of redirecting to the facade.
+     */
+    public static function shouldUseFacadeNavigation(MappingVersion $mappingVersion, ?string $mapFacadeStyle = null): bool
+    {
+        return ($mapFacadeStyle ?? self::getCurrentUserMapFacadeStyle()) === self::MAP_FACADE_STYLE_FACADE &&
+            $mappingVersion->facade_enabled &&
+            (bool)$mappingVersion->dungeon->floors->firstWhere('facade', true)?->facade_navigation;
+    }
+
     public static function getCurrentUserKillzonePathWeight(): int
     {
         return Auth::user()?->kill_zone_path_weight ?? (int)($_COOKIE['kill_zone_path_weight'] ?? self::DEFAULT_KILL_ZONE_PATH_WEIGHT); // @phpstan-ignore nullsafe.neverNull

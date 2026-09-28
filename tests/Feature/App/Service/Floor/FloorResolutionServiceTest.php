@@ -138,4 +138,118 @@ final class FloorResolutionServiceTest extends PublicTestCase
         // Assert
         $this->assertSame(1, $resolved->floor->facade);
     }
+
+    #[Test]
+    public function resolveRequestedFloor_givenFacadeNavigationAndNonFacadeFloorIndex_returnsThatFloorAsCanonical(): void
+    {
+        // Arrange
+        $this->admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
+        /** @var Floor $floor */
+        $floor = $dungeon->floors()->where('facade', 0)->firstOrFail();
+
+        try {
+            $facadeFloor->update(['facade_navigation' => 1]);
+            $mappingVersion->unsetRelation('dungeon');
+
+            // Act
+            $resolved = app(FloorResolutionServiceInterface::class)->resolveRequestedFloor($dungeon, $mappingVersion, (string)$floor->index);
+
+            // Assert
+            $this->assertSame($floor->id, $resolved->floor->id);
+            $this->assertTrue($resolved->isCanonical);
+        } finally {
+            $facadeFloor->update(['facade_navigation' => 0]);
+        }
+    }
+
+    #[Test]
+    public function resolveRequestedFloor_givenFacadeNavigationAndFacadeFloorIndex_returnsFacadeFloorAsCanonical(): void
+    {
+        // Arrange
+        $this->admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
+
+        try {
+            $facadeFloor->update(['facade_navigation' => 1]);
+            $mappingVersion->unsetRelation('dungeon');
+
+            // Act
+            $resolved = app(FloorResolutionServiceInterface::class)->resolveRequestedFloor($dungeon, $mappingVersion, (string)$facadeFloor->index);
+
+            // Assert
+            $this->assertSame($facadeFloor->id, $resolved->floor->id);
+            $this->assertTrue($resolved->isCanonical);
+        } finally {
+            $facadeFloor->update(['facade_navigation' => 0]);
+        }
+    }
+
+    #[Test]
+    public function resolveRequestedFloor_givenFacadeNavigationAndNonExistentFloorIndex_fallsBackToFacadeFloorAsNonCanonical(): void
+    {
+        // Arrange
+        $this->admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
+
+        try {
+            $facadeFloor->update(['facade_navigation' => 1]);
+            $mappingVersion->unsetRelation('dungeon');
+
+            // Act
+            $resolved = app(FloorResolutionServiceInterface::class)->resolveRequestedFloor($dungeon, $mappingVersion, '999999');
+
+            // Assert
+            $this->assertSame($facadeFloor->id, $resolved->floor->id);
+            $this->assertFalse($resolved->isCanonical);
+        } finally {
+            $facadeFloor->update(['facade_navigation' => 0]);
+        }
+    }
+
+    #[Test]
+    public function resolveRequestedFloor_givenFacadeStyleWithoutFacadeNavigation_returnsFacadeFloorAsNonCanonical(): void
+    {
+        // Arrange
+        $this->admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        /** @var Floor $floor */
+        $floor = $dungeon->floors()->where('facade', 0)->firstOrFail();
+
+        // Act
+        $resolved = app(FloorResolutionServiceInterface::class)->resolveRequestedFloor($dungeon, $mappingVersion, (string)$floor->index);
+
+        // Assert
+        $this->assertSame(1, $resolved->floor->facade);
+        $this->assertFalse($resolved->isCanonical);
+    }
+
+    #[Test]
+    public function resolveRequestedFloor_givenFacadeNavigationAndSplitFloorsStyle_returnsThatFloorAsCanonical(): void
+    {
+        // Arrange - the admin's style is split floors (setUp)
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
+
+        try {
+            $facadeFloor->update(['facade_navigation' => 1]);
+            $mappingVersion->unsetRelation('dungeon');
+
+            // Act
+            $resolved = app(FloorResolutionServiceInterface::class)->resolveRequestedFloor($dungeon, $mappingVersion, (string)$facadeFloor->index);
+
+            // Assert - split floors never serve the facade floor, flag or not
+            $this->assertSame(0, $resolved->floor->facade);
+            $this->assertFalse($resolved->isCanonical);
+        } finally {
+            $facadeFloor->update(['facade_navigation' => 0]);
+        }
+    }
 }
