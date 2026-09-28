@@ -117,8 +117,8 @@ final class EasternKingdomsMappingTest extends TestCase
         $facade             = $dungeon->floors->firstWhere('facade', true);
         $mappingVersion     = $this->getMappingVersion();
 
+        /** @var Floor $floor */
         foreach ($dungeon->floors->where('facade', false) as $floor) {
-            /** @var Floor $floor */
             foreach ([[0.5, 0.5], [0.1, 0.9], [0.9, 0.2]] as [$fractionX, $fractionY]) {
                 $ingameXY = new IngameXY(
                     $floor->ingame_min_x + ($floor->ingame_max_x - $floor->ingame_min_x) * $fractionX,
