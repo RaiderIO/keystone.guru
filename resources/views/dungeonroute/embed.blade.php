@@ -22,7 +22,7 @@ if (count($affixes) == 0) {
 $useFacade       = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
 $showEmbedHeader = !isset($embedOptions['show']['header']) || $embedOptions['show']['header'];
 
-if ($dungeon->floorsForMapFacade($dungeonroute->mappingVersion, $useFacade)->active()->count() === 1) {
+if ($dungeon->floorsForMapFacade($dungeonroute->mappingVersion, $useFacade, true)->active()->count() === 1) {
     $embedOptions['show']['floorSelection'] = false;
 }
 ?>
