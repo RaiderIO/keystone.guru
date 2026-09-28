@@ -178,20 +178,12 @@ class FacadeFloorNavigationPlugin extends MapPlugin {
             return;
         }
 
-        let latLng = this._toLatLng(event.latlng);
-        let floorUnion = this._getFloorUnionAtLatLng(latLng);
-        if (floorUnion === null) {
+        let floorUnion = this._getFloorUnionAtLatLng(this._toLatLng(event.latlng));
+        if (floorUnion === null || !getState().isVisibleFloorId(floorUnion.target_floor_id)) {
             return;
         }
 
-        let targetFloor = getState().getMapContext().getFloorById(floorUnion.target_floor_id);
-        if (!targetFloor || !getState().isVisibleFloorId(targetFloor.id)) {
-            return;
-        }
-
-        let targetLatLng = this._getCoordinatesService().convertFacadeMapLocationToMapLocation(latLng, targetFloor);
-
-        getState().setFloorId(targetFloor.id, [targetLatLng.getLat(), targetLatLng.getLng()]);
+        getState().setFloorId(floorUnion.target_floor_id);
     }
 }
 

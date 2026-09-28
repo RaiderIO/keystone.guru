@@ -187,14 +187,13 @@ describe('FacadeFloorNavigationPlugin mouse handling', () => {
         expect(plugin.hoveredFloorUnion).toBeNull();
     });
 
-    it('click_givenPointInsideFloorUnionArea_setsTargetFloorCenteredOnConvertedPoint', () => {
+    it('click_givenPointInsideFloorUnionArea_setsTargetFloor', () => {
         const {plugin, state} = createPlugin();
         plugin.addToMap();
 
-        // The centre of the union maps onto the centre of the target floor
         plugin._onLeafletMapClick({latlng: {lat: -64, lng: 96}});
 
-        expect(state.setFloorId).toHaveBeenCalledWith(TARGET_FLOOR.id, [-128, 192]);
+        expect(state.setFloorId).toHaveBeenCalledWith(TARGET_FLOOR.id);
     });
 
     it('click_givenPointOutsideFloorUnionAreas_doesNothing', () => {
