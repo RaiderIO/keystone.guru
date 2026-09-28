@@ -21737,7 +21737,7 @@
         "raid": 0,
         "key": "eastern_kingdoms",
         "name": "dungeons.classic.eastern_kingdoms.name",
-        "abbreviation": null,
+        "abbreviation": "dungeons.classic.eastern_kingdoms.abbreviation",
         "slug": "eastern-kingdoms",
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
