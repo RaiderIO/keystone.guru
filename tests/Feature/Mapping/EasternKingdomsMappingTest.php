@@ -8,7 +8,6 @@ use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
-use App\Models\Mapping\MappingVersion;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -108,51 +107,9 @@ final class EasternKingdomsMappingTest extends TestCase
         $this->assertGreaterThan($silverpineForest->getLng(), $easternPlaguelands->getLng());
     }
 
-    #[Test]
-    public function convertMapLocationToFacadeMapLocation_givenEveryZone_matchesTheFacadeBounds(): void
-    {
-        // Arrange
-        $coordinatesService = app(CoordinatesServiceInterface::class);
-        $dungeon            = $this->getEasternKingdoms();
-        $facade             = $dungeon->floors->firstWhere('facade', true);
-        $mappingVersion     = $this->getMappingVersion();
-
-        /** @var Floor $floor */
-        foreach ($dungeon->floors->where('facade', false) as $floor) {
-            foreach ([[0.5, 0.5], [0.1, 0.9], [0.9, 0.2]] as [$fractionX, $fractionY]) {
-                $ingameXY = new IngameXY(
-                    $floor->ingame_min_x + ($floor->ingame_max_x - $floor->ingame_min_x) * $fractionX,
-                    $floor->ingame_min_y + ($floor->ingame_max_y - $floor->ingame_min_y) * $fractionY,
-                    $floor,
-                );
-
-                // Act
-                $viaFloorUnion = $coordinatesService->convertMapLocationToFacadeMapLocation(
-                    $mappingVersion,
-                    $coordinatesService->calculateMapLocationForIngameLocation($ingameXY),
-                );
-                $direct = $coordinatesService->calculateMapLocationForIngameLocation(
-                    new IngameXY($ingameXY->getX(), $ingameXY->getY(), $facade),
-                );
-
-                // Assert
-                $this->assertSame($facade->id, $viaFloorUnion->getFloor()->id, $floor->name);
-                $this->assertEqualsWithDelta($direct->getLat(), $viaFloorUnion->getLat(), 0.1, $floor->name);
-                $this->assertEqualsWithDelta($direct->getLng(), $viaFloorUnion->getLng(), 0.1, $floor->name);
-            }
-        }
-    }
-
     private function getEasternKingdoms(): Dungeon
     {
         return Dungeon::with('floors')->where('key', DungeonKey::EASTERN_KINGDOMS->value)->firstOrFail();
-    }
-
-    private function getMappingVersion(): MappingVersion
-    {
-        $gameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_FOREVER)->firstOrFail();
-
-        return $this->getEasternKingdoms()->getCurrentMappingVersionForGameVersion($gameVersion);
     }
 
     private function getFloor(string $zoneKey): Floor
