@@ -2,10 +2,10 @@
 
 return [
     'difficulty' => [
-        1 => '난이도 1',
-        2 => '난이도 2',
-        3 => '난이도 3',
-        4 => '난이도 4',
+        1 => '10인',
+        2 => '25인',
+        3 => '20인',
+        4 => '40인',
     ],
     'classic' => [
         'blackfathom_deeps' => [
@@ -44,26 +44,26 @@ return [
             ],
         ],
         'dire_maul_east' => [
-            'name'         => '혈투의 전당 (동쪽)',
+            'name'         => '혈투의 전장 - 동쪽',
             'abbreviation' => '',
             'floors'       => [
-                'warpwood_quarter'         => '왜곡나무 지구',
-                'the_shrine_of_eldretharr' => '엘드레타르의 사당',
+                'warpwood_quarter'         => '굽이나무 지구',
+                'the_shrine_of_eldretharr' => '엘드레사르 제단',
             ],
         ],
         'dire_maul_north' => [
-            'name'         => '혈투의 전당 (북쪽)',
+            'name'         => '혈투의 전장 - 북쪽',
             'abbreviation' => '',
             'floors'       => [
                 'gordok_commons' => '고르독 광장',
             ],
         ],
         'dire_maul_west' => [
-            'name'         => '혈투의 전당 (서쪽)',
+            'name'         => '혈투의 전장 - 서쪽',
             'abbreviation' => '',
             'floors'       => [
-                'capital_gardens'        => '수도의 정원',
-                'court_of_the_highborne' => '고귀족의 안뜰',
+                'capital_gardens'        => '수도 정원',
+                'court_of_the_highborne' => '명가의 궁정',
                 'prison_of_immol_thar'   => '이몰타르의 감옥',
             ],
         ],
@@ -104,10 +104,10 @@ return [
             'name'         => '놈리건',
             'abbreviation' => '',
             'floors'       => [
-                'the_hall_of_gears' => '톱니의 전당',
-                'the_dormitory'     => '숙소',
-                'launch_bay'        => '발사 구역',
-                'tinkers_court'     => '땜장이의 안뜰',
+                'the_hall_of_gears' => '톱니바퀴의 전당',
+                'the_dormitory'     => '거주 지구',
+                'launch_bay'        => '출격실',
+                'tinkers_court'     => '땜장이 왕실',
             ],
         ],
         'gnomeregan_sod' => [
@@ -164,12 +164,12 @@ return [
             'name'         => '검은바위 첨탑 하층',
             'abbreviation' => '',
             'floors'       => [
-                'tazz_alor'          => '타즈알로르',
-                'skitterweb_tunnels' => '스키터웹 터널',
-                'hordemar_city'      => '호르데마르 도시',
-                'hall_of_blackhand'  => '검은손의 전당',
-                'halycons_lair'      => '할리콘의 소굴',
-                'chamber_of_battle'  => '전투의 전당',
+                'tazz_alor'          => '타즈알로',
+                'skitterweb_tunnels' => '그물걸이 통로',
+                'hordemar_city'      => '호드마르 도시',
+                'hall_of_blackhand'  => '블랙핸드의 전당',
+                'halycons_lair'      => '할리콘의 둥지',
+                'chamber_of_battle'  => '전투의 방',
             ],
         ],
         'maraudon' => [
@@ -253,28 +253,28 @@ return [
             ],
         ],
         'scarlet_monastery_armory' => [
-            'name'         => '스칼렛 수도원 무기고',
+            'name'         => '붉은십자군 수도원 - 무기고',
             'abbreviation' => '',
             'floors'       => [
                 'armory' => '무기고',
             ],
         ],
         'scarlet_monastery_cathedral' => [
-            'name'         => '스칼렛 수도원 대성당',
+            'name'         => '붉은십자군 수도원 - 대성당',
             'abbreviation' => '',
             'floors'       => [
-                'cathedral' => '대성당',
+                'cathedral' => '예배당',
             ],
         ],
         'scarlet_monastery_graveyard' => [
-            'name'         => '스칼렛 수도원 묘지',
+            'name'         => '붉은십자군 수도원 - 묘지',
             'abbreviation' => '',
             'floors'       => [
-                'graveyard' => '묘지',
+                'graveyard' => '무덤',
             ],
         ],
         'scarlet_monastery_library' => [
-            'name'         => '스칼렛 수도원 도서관',
+            'name'         => '붉은십자군 수도원 - 도서관',
             'abbreviation' => '',
             'floors'       => [
                 'library' => '도서관',
@@ -315,7 +315,7 @@ return [
             'name'         => '안퀴라즈 사원',
             'abbreviation' => '',
             'floors'       => [
-                'the_hive_undergrounds' => '군체 지하 구역',
+                'the_hive_undergrounds' => '지하 부화장',
                 'the_temple_gates'      => '사원의 문',
                 'vault_of_cthun'        => '크툰의 금고',
             ],
@@ -343,7 +343,7 @@ return [
                 'the_pit_of_refuse'         => '가라앉은 사원',
                 'hall_of_serpents'          => '뱀의 전당',
                 'entrance'                  => '입구',
-                'the_temple_of_atal_hakkar' => '아탈학카르의 사원',
+                'the_temple_of_atal_hakkar' => '아탈학카르 신전',
                 'hall_of_the_cursed'        => '저주받은 자의 전당',
             ],
         ],
@@ -356,10 +356,10 @@ return [
             ],
         ],
         'upper_blackrock_spire' => [
-            'name'         => '검은바위 첨탑',
+            'name'         => '검은바위 첨탑 상층',
             'abbreviation' => '',
             'floors'       => [
-                'dragonspire_hall'  => '용의 첨탑 전당',
+                'dragonspire_hall'  => '용첨탑 전당',
                 'the_rookery'       => '부화장',
                 'hall_of_blackhand' => '블랙핸드의 전당',
             ],
@@ -392,7 +392,7 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'karabor_sewers'            => '카라보르 하수도',
-                'illidari_training_grounds' => '',
+                'illidari_training_grounds' => '일리다리 훈련장',
                 'sanctuary_of_shadows'      => '어둠의 성역',
                 'halls_of_anguish'          => '고뇌의 전당',
                 'gorefiends_vigil'          => '고어핀드의 경비초소',
@@ -447,18 +447,18 @@ return [
             ],
         ],
         'sunwell_plateau' => [
-            'name'         => '',
+            'name'         => '태양샘 고원',
             'abbreviation' => '',
             'floors'       => [
-                'sunwell_plateau'       => '',
-                'shrine_of_the_eclipse' => '',
+                'sunwell_plateau'       => '태양샘 고원',
+                'shrine_of_the_eclipse' => '일식 제단',
             ],
         ],
         'the_battle_for_mount_hyjal' => [
-            'name'         => '',
+            'name'         => '하이잘 산 전투',
             'abbreviation' => '',
             'floors'       => [
-                'the_battle_for_mount_hyjal' => '',
+                'the_battle_for_mount_hyjal' => '하이잘 산 전투',
             ],
         ],
         'the_eye' => [
@@ -553,15 +553,15 @@ return [
                 'the_arachnid_quarter'  => '거미 지구',
                 'the_military_quarter'  => '군사 지구',
                 'the_plague_quarter'    => '역병 지구',
-                'the_lower_necropolis'  => '하층 네크로폴리스',
-                'the_upper_necropolis'  => '상층 네크로폴리스',
+                'the_lower_necropolis'  => '죽음의 사원 하층부',
+                'the_upper_necropolis'  => '죽음의 사원 상층부',
             ],
         ],
         'onyxias_lair' => [
-            'name'         => '오닉시아의 소굴',
+            'name'         => '오닉시아의 둥지',
             'abbreviation' => '',
             'floors'       => [
-                'onyxias_lair' => '오닉시아의 소굴',
+                'onyxias_lair' => '오닉시아의 둥지',
             ],
         ],
         'pit_of_saron' => [
@@ -801,7 +801,7 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'temple_of_the_jade_serpent' => '옥룡사',
-                'scrollkeepers_sanctum'      => '두루마리 수호자의 성소',
+                'scrollkeepers_sanctum'      => '두루마리 관리인의 성소',
             ],
         ],
     ],
@@ -932,22 +932,22 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'servants_quarters'    => '하인 숙소',
-                'upper_livery_stables' => '상층 마구간',
+                'upper_livery_stables' => '마구간 상층',
                 'the_banquet_hall'     => '연회장',
                 'the_guest_chambers'   => '객실',
-                'opera_hall_balcony'   => '오페라 전당 발코니',
+                'opera_hall_balcony'   => '오페라 극장 발코니',
                 'masters_terrace'      => '주인의 테라스',
                 'lower_karazhan'       => '하층 카라잔',
             ],
         ],
         'maw_of_souls' => [
-            'name'         => '지옥어귀 벼랑',
+            'name'         => '영혼의 아귀',
             'abbreviation' => '',
             'floors'       => [
                 'helmouth_cliffs' => '지옥어귀 벼랑',
                 'the_hold'        => '요새',
                 'the_naglfar'     => '나글파르',
-                'maw_of_souls'    => '지옥어귀 벼랑',
+                'maw_of_souls'    => '영혼의 아귀',
             ],
         ],
         'neltharions_lair' => [
@@ -1013,7 +1013,7 @@ return [
             ],
         ],
         'mechagon_junkyard' => [
-            'name'         => '메카곤 고철장',
+            'name'         => '작전명: 메카곤 - 고철장',
             'abbreviation' => '',
             'floors'       => [
                 'mechagon_island' => '메카곤 섬',
@@ -1021,22 +1021,22 @@ return [
             ],
         ],
         'mechagon_workshop' => [
-            'name'         => '작전명: 메카곤',
+            'name'         => '작전명: 메카곤 - 작업장',
             'abbreviation' => '',
             'floors'       => [
                 'the_robodrome'               => '로봇 전투장',
-                'waste_pipes'                 => '폐기물 관',
+                'waste_pipes'                 => '폐기물 도관',
                 'the_under_junk'              => '지하 쓰레기장',
                 'mechagon_city'               => '메카곤 시',
-                'operation_mechagon_workshop' => '작전명: 메카곤',
+                'operation_mechagon_workshop' => '작전명: 메카곤 - 작업장',
             ],
         ],
         'orgrimmar_horrific_vision' => [
-            'name'         => '오그리마의 끔찍한 환영',
+            'name'         => '오그리마의 공포의 환영',
             'abbreviation' => '',
             'floors'       => [
-                'orgrimmar_horrific_vision' => '오그리마의 끔찍한 환영',
-                'the_drag'                  => '상점가',
+                'orgrimmar_horrific_vision' => '오그리마의 공포의 환영',
+                'the_drag'                  => '골목길',
             ],
         ],
         'shrine_of_the_storm' => [
@@ -1055,10 +1055,10 @@ return [
             ],
         ],
         'stormwind_horrific_vision' => [
-            'name'         => '스톰윈드의 끔찍한 환영',
+            'name'         => '스톰윈드의 공포의 환영',
             'abbreviation' => '',
             'floors'       => [
-                'stormwind_horrific_vision' => '스톰윈드의 끔찍한 환영',
+                'stormwind_horrific_vision' => '스톰윈드의 공포의 환영',
             ],
         ],
         'temple_of_sethraliss' => [
@@ -1164,24 +1164,24 @@ return [
             ],
         ],
         'tazavesh_so_leahs_gambit' => [
-            'name'         => '타자베쉬: 소레아의 책략',
+            'name'         => '타자베쉬: 소레아의 승부수',
             'abbreviation' => '',
             'floors'       => [
                 'stormheim'                => '스톰하임',
-                'aggramars_vault'          => '아그라마르의 금고',
-                'boralus_harbor'           => '보랄루스 항구',
-                'the_opulent_nexus'        => '호화로운 넥서스',
-                'tazavesh_so_leahs_gambit' => '타자베쉬: 소레아의 책략',
+                'aggramars_vault'          => '아그라마르의 석실',
+                'boralus_harbor'           => '보랄러스 항구',
+                'the_opulent_nexus'        => '호사로운 요지',
+                'tazavesh_so_leahs_gambit' => '타자베쉬: 소레아의 승부수',
             ],
         ],
         'tazavesh_streets_of_wonder' => [
             'name'         => '타자베쉬: 경이의 거리',
             'abbreviation' => '',
             'floors'       => [
-                'the_veiled_market'          => '가려진 시장',
-                'the_grand_menagerie'        => '대 전시관',
-                'the_post'                   => '우체국',
-                'myzas_oasis'                => '미자의 오아시스',
+                'the_veiled_market'          => '미지의 시장',
+                'the_grand_menagerie'        => '대사육장',
+                'the_post'                   => '우.정.국.',
+                'myzas_oasis'                => '마이자의 오아시스',
                 'tazavesh_streets_of_wonder' => '타자베쉬: 경이의 거리',
             ],
         ],
@@ -1228,25 +1228,25 @@ return [
             'name'         => '무한의 여명: 갈라크론드의 몰락',
             'abbreviation' => '',
             'floors'       => [
-                'galakronds_fall'         => '갈라크론드의 몰락',
-                'sanctum_of_chronology'   => '연대기의 성소',
-                'millennias_threshold'    => '천년의 문턱',
-                'locus_of_eternity'       => '영원의 초점',
-                'spoke_of_endless_winter' => '끝없는 겨울의 바퀴살',
-                'crossroads_of_fate'      => '운명의 갈림길',
+                'galakronds_fall'         => '갈라크론드의 추락지',
+                'sanctum_of_chronology'   => '세기의 성소',
+                'millennias_threshold'    => '천추의 경계',
+                'locus_of_eternity'       => '영원의 거점',
+                'spoke_of_endless_winter' => '끝없는 겨울의 바큇살',
+                'crossroads_of_fate'      => '운명의 교차로',
             ],
         ],
         'dawn_of_the_infinite_murozonds_rise' => [
-            'name'         => '무한의 여명: 무로존드의 봉기',
+            'name'         => '무한의 여명: 무르도즈노의 현신',
             'abbreviation' => '',
             'floors'       => [
-                'murozonds_rise'         => '무로존드의 봉기',
-                'sanctum_of_chronology'  => '연대기의 성소',
-                'millennias_threshold'   => '천년의 문턱',
-                'locus_of_eternity'      => '영원의 초점',
-                'crossroads_of_fate'     => '운명의 갈림길',
-                'infinite_conflux'       => '무한의 합류지',
-                'twisting_approach'      => '뒤틀린 접근로',
+                'murozonds_rise'         => '무르도즈노의 현신',
+                'sanctum_of_chronology'  => '세기의 성소',
+                'millennias_threshold'   => '천추의 경계',
+                'locus_of_eternity'      => '영원의 거점',
+                'crossroads_of_fate'     => '운명의 교차로',
+                'infinite_conflux'       => '무한의 합일점',
+                'twisting_approach'      => '비틀린 통로',
                 'immemorial_battlefield' => '태고의 전장',
             ],
         ],
@@ -1414,7 +1414,7 @@ return [
             'name'         => '날로라크의 소굴',
             'abbreviation' => '',
             'floors'       => [
-                'dreamers_passage'  => '날로라크의 소굴',
+                'dreamers_passage'  => '꿈꾸는 자의 통행로',
                 'the_foraging'      => '채집터',
                 'the_heart_of_rage' => '분노의 심장',
                 'den_of_nalorakk'   => '날로라크의 소굴',
@@ -1425,14 +1425,14 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'magisters_terrace'          => '마법학자의 정원',
-                'arcane_atheneum'            => '마법학자의 정원',
+                'arcane_atheneum'            => '비전 학당',
                 'grand_magister_asylum'      => '대마법학자의 피신처',
                 'grand_magister_asylum_void' => '',
                 'magisters_terrace_void'     => '',
                 'tower_of_theory'            => '이론의 탑',
                 'central_tower'              => '중앙 탑',
                 'upper_tower'                => '상부 탑',
-                'celestial_orrey'            => '',
+                'celestial_orrey'            => '천체 의기',
             ],
         ],
         'maisara_caverns' => [

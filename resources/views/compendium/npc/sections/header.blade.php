@@ -20,7 +20,7 @@ $classificationBadge = match ($npc->classification->key ?? '') {
 $flags = [];
 foreach (['dangerous', 'truesight', /*'bursting', 'bolstering', 'sanguine',*/ 'runs_away_in_fear'] as $flag) {
     if ($npc->{$flag}) {
-        $flags[] = __('view_admin.npc.edit.' . $flag);
+        $flags[] = __(sprintf('view_compendium.npc.sections.header.%s', $flag));
     }
 }
 ?>
@@ -58,7 +58,7 @@ foreach (['dangerous', 'truesight', /*'bursting', 'bolstering', 'sanguine',*/ 'r
             </span>
             @if($npc->type)
                 <span class="compendium_chip">
-                    {{ $npc->type->type }}
+                    {{ __(sprintf('npctypes.%s', $npc->type->type_key)) }}
                 </span>
             @endif
 {{--            @if($npc->class)--}}

@@ -8,13 +8,29 @@ use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
+use App\Service\WagoTools\GameLocale;
+use App\Service\WagoTools\WagoToolsServiceInterface;
 use App\Service\Wowhead\WowheadTranslationServiceInterface;
 use Exception;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class SyncZoneNames extends BaseSyncCommand
 {
     use ExportsTranslations;
+
+    public const string SOURCE_UI_MAP_GROUP_MEMBER    = 'UiMapGroupMember';
+    public const string SOURCE_UI_MAP                 = 'UiMap';
+    public const string SOURCE_MAP                    = 'Map';
+    public const string SOURCE_AREA_TABLE             = 'AreaTable';
+    public const string SOURCE_LFG_DUNGEONS           = 'LfgDungeons';
+    public const string SOURCE_CLASSIC_ERA_UI_MAP     = 'ClassicEraUiMap';
+    public const string SOURCE_ANNIVERSARY_LFG        = 'AnniversaryLfgDungeons';
+    public const string SOURCE_DIFFICULTY             = 'Difficulty';
+    public const string SOURCE_CLASSIC_ERA_DIFFICULTY = 'ClassicEraDifficulty';
+
+    /** A source whose localized names match its English ones this often has no client in that locale. */
+    private const float UNTRANSLATED_SOURCE_RATIO = 0.9;
 
     const array EXCLUDE_DUNGEONS = [
         DungeonKey::SCARLET_MONASTERY_ARMORY->value,
@@ -46,11 +62,45 @@ class SyncZoneNames extends BaseSyncCommand
     ];
 
     /**
+     * The DB2 tables the game's own zone names are read from, in the order they are tried when a name is looked
+     * up by its English text. UiMapGroupMember holds the names of dungeon floors, so it goes first. The overworld
+     * floors of the classic continents only exist as Classic Era UI maps (e.g. "The Barrens"), and the separate
+     * Scarlet Monastery and Dire Maul wings only in the dungeon finder of the Classic clients. Difficulty holds the
+     * raid sizes ("10 Player"); 20 player raids only exist in Classic.
+     *
+     * @var array<string, array{product: string, table: string, idColumn: string, nameColumn: string}>
+     */
+    private const array GAME_DATA_NAME_SOURCES = [
+        self::SOURCE_UI_MAP_GROUP_MEMBER    => ['product' => 'wow', 'table' => 'UiMapGroupMember', 'idColumn' => 'UiMapID', 'nameColumn' => 'Name_lang'],
+        self::SOURCE_UI_MAP                 => ['product' => 'wow', 'table' => 'UiMap', 'idColumn' => 'ID', 'nameColumn' => 'Name_lang'],
+        self::SOURCE_MAP                    => ['product' => 'wow', 'table' => 'Map', 'idColumn' => 'ID', 'nameColumn' => 'MapName_lang'],
+        self::SOURCE_AREA_TABLE             => ['product' => 'wow', 'table' => 'AreaTable', 'idColumn' => 'ID', 'nameColumn' => 'AreaName_lang'],
+        self::SOURCE_LFG_DUNGEONS           => ['product' => 'wow', 'table' => 'LFGDungeons', 'idColumn' => 'ID', 'nameColumn' => 'Name_lang'],
+        self::SOURCE_CLASSIC_ERA_UI_MAP     => ['product' => 'wow_classic_era', 'table' => 'UiMap', 'idColumn' => 'ID', 'nameColumn' => 'Name_lang'],
+        self::SOURCE_ANNIVERSARY_LFG        => ['product' => 'wow_anniversary', 'table' => 'LFGDungeons', 'idColumn' => 'ID', 'nameColumn' => 'Name_lang'],
+        self::SOURCE_DIFFICULTY             => ['product' => 'wow', 'table' => 'Difficulty', 'idColumn' => 'ID', 'nameColumn' => 'Name_lang'],
+        self::SOURCE_CLASSIC_ERA_DIFFICULTY => ['product' => 'wow_classic_era', 'table' => 'Difficulty', 'idColumn' => 'ID', 'nameColumn' => 'Name_lang'],
+    ];
+
+    /**
+     * en_US names that are our own wording of a zone the game names differently.
+     */
+    private const array GAME_DATA_NAME_ALIASES = [
+        'Orgrimmar (Horrific Vision)' => 'Horrific Vision of Orgrimmar',
+        'Stormwind (Horrific Vision)' => 'Horrific Vision of Stormwind',
+        '10-man'                      => '10 Player',
+        '20-man'                      => '20 Player',
+        '25-man'                      => '25 Player',
+        '40-man'                      => '40 Player',
+    ];
+
+    /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'localization:synczonenames';
+    protected $signature = 'localization:synczonenames
+                            {--overwrite : Replace existing dungeon and floor names with the name the game data has for them}';
 
     /**
      * The console command description.
@@ -65,15 +115,33 @@ class SyncZoneNames extends BaseSyncCommand
      *
      * @throws Exception
      */
-    public function handle(WowheadTranslationServiceInterface $wowheadTranslationService): void
-    {
+    public function handle(
+        WowheadTranslationServiceInterface $wowheadTranslationService,
+        WagoToolsServiceInterface          $wagoToolsService,
+    ): void {
         $updatedTranslations = $this->syncDungeonNames($wowheadTranslationService);
 
         $updatedTranslations = $this->syncFloorNames($wowheadTranslationService, $updatedTranslations);
 
         $updatedTranslations = $this->syncContinentNames($wowheadTranslationService, $updatedTranslations);
 
+        $updatedTranslations = $this->syncGameDataNames($wagoToolsService, $updatedTranslations, (bool)$this->option('overwrite'));
+
         $this->saveTranslationsToDisk($updatedTranslations);
+    }
+
+    /**
+     * Dungeons keyed by their zone ID. Dungeons without one (the classic continents, the Horrific Visions)
+     * are left out: they would all collide on zone ID 0, and no Wowhead zone matches them anyway.
+     *
+     * @return Collection<int, Dungeon>
+     */
+    public function getDungeonsByZoneId(): Collection
+    {
+        return Dungeon::with(['expansion', 'floors'])
+            ->where('zone_id', '>', 0)
+            ->get()
+            ->keyBy('zone_id');
     }
 
     /**
@@ -131,12 +199,7 @@ class SyncZoneNames extends BaseSyncCommand
     private function syncFloorNames(WowheadTranslationServiceInterface $wowheadTranslationService, array $existingTranslationsByLocale): array
     {
         $floorNamesByLocale = $wowheadTranslationService->getFloorNames();
-        // Zone ID 0 is shared by every dungeon without an instance zone (the continents among them), so keying on it
-        // would keep only one of them
-        $dungeonsByZoneId = Dungeon::with(['expansion', 'floors'])
-            ->where('zone_id', '>', 0)
-            ->get()
-            ->keyBy('zone_id');
+        $dungeonsByZoneId   = $this->getDungeonsByZoneId();
 
         $englishFloorNames = $floorNamesByLocale->get('en_US', []);
         if (empty($englishFloorNames)) {
@@ -376,6 +439,282 @@ class SyncZoneNames extends BaseSyncCommand
         }
 
         return '';
+    }
+
+    /**
+     * Fills every dungeon and floor name that Wowhead's instance and zone lists do not carry, from the game's
+     * own DB2 tables. The en_US name is matched against the game's English names. Existing names are kept, unless
+     * $overwrite is set.
+     *
+     * @param  array<string, mixed> $translationsByLocale
+     * @return array<string, mixed>
+     */
+    private function syncGameDataNames(WagoToolsServiceInterface $wagoToolsService, array $translationsByLocale, bool $overwrite): array
+    {
+        $buildsByProduct = [];
+        foreach (self::GAME_DATA_NAME_SOURCES as $source) {
+            $build = $buildsByProduct[$source['product']] ??= $wagoToolsService->getLatestBuild($source['product']);
+            if ($build === null) {
+                $this->error(sprintf('Unable to resolve a game build for product %s, skipping game data names', $source['product']));
+
+                return $translationsByLocale;
+            }
+        }
+
+        $englishTranslations  = Arr::dot(__('dungeons', [], 'en_US'));
+        $gameDataIdsByKey     = $this->getGameDataIdsByKey(Dungeon::with('floors')->get());
+        $englishGameDataNames = $this->readGameDataNames($wagoToolsService, $buildsByProduct, GameLocale::English);
+
+        foreach (GameLocale::translated() as $gameLocale) {
+            $locale       = $gameLocale->appLocale();
+            $translations = $translationsByLocale[$locale] ?? __('dungeons', [], $locale);
+            if (!is_array($translations)) {
+                $translations = [];
+            }
+
+            $missingEnglishNames = [];
+            foreach ($englishTranslations as $key => $englishName) {
+                // Only raid sizes (difficulty.<id>) and dungeon and floor names (<expansion>.<dungeon>.name,
+                // <expansion>.<dungeon>.floors.<floor>) are game data
+                if (preg_match('/^(difficulty\.\d+|[^.]+\.[^.]+\.(name|floors\.[^.]+))$/', (string)$key) !== 1 || !is_string($englishName) || $englishName === '') {
+                    continue;
+                }
+
+                if ($overwrite || empty(Arr::get($translations, (string)$key))) {
+                    $missingEnglishNames[(string)$key] = $englishName;
+                }
+            }
+
+            $localizedGameDataNames = $this->readGameDataNames($wagoToolsService, $buildsByProduct, $gameLocale);
+            $gameDataNameSources    = [];
+            foreach ($englishGameDataNames as $sourceKey => $englishNames) {
+                $gameDataNameSources[$sourceKey] = [
+                    'english'   => $englishNames,
+                    'localized' => $this->isUntranslated($englishNames, $localizedGameDataNames[$sourceKey]) ? [] : $localizedGameDataNames[$sourceKey],
+                ];
+            }
+
+            $resolvedNames = $this->resolveGameDataNames($missingEnglishNames, $gameDataIdsByKey, $gameDataNameSources, Arr::dot($translations));
+            $changedCount  = 0;
+            foreach ($resolvedNames as $key => $localizedName) {
+                $existingName = Arr::get($translations, $key);
+                if ($existingName !== $localizedName) {
+                    if (!empty($existingName)) {
+                        $this->comment(sprintf('- Replacing %s "%s" with "%s" in %s', $key, $existingName, $localizedName, $locale));
+                    }
+
+                    Arr::set($translations, $key, $localizedName);
+                    $changedCount++;
+                }
+            }
+
+            $this->info(sprintf('Set %d of %d looked up names for %s from game data', $changedCount, count($missingEnglishNames), $locale));
+            foreach (array_diff_key($missingEnglishNames, $resolvedNames) as $key => $englishName) {
+                $this->warn(sprintf('- No game data name for %s ("%s") in %s', $key, $englishName, $locale));
+            }
+
+            foreach ($translations as &$dungeons) {
+                if (is_array($dungeons)) {
+                    ksort($dungeons);
+                }
+            }
+            unset($dungeons);
+
+            $translationsByLocale[$locale] = $translations;
+        }
+
+        return $translationsByLocale;
+    }
+
+    /**
+     * The DB2 rows that are known to describe each dungeon and floor name: a dungeon's instance map and zone,
+     * a floor's UI map. A facade floor has no UI map of its own and shows the whole dungeon.
+     *
+     * @param  Collection<int, Dungeon>                      $dungeons
+     * @return array<string, list<array{0: string, 1: int}>> translation key (without "dungeons.") => [source, ID]
+     */
+    public function getGameDataIdsByKey(Collection $dungeons): array
+    {
+        $result = [];
+        foreach ($dungeons as $dungeon) {
+            $dungeonIds = [];
+            if ($dungeon->map_id >= 0) {
+                $dungeonIds[] = [self::SOURCE_MAP, $dungeon->map_id];
+            }
+
+            if ($dungeon->zone_id > 0) {
+                $dungeonIds[] = [self::SOURCE_AREA_TABLE, $dungeon->zone_id];
+            }
+
+            $this->addGameDataIds($result, $dungeon->name, $dungeonIds);
+
+            foreach ($dungeon->floors as $floor) {
+                $this->addGameDataIds($result, $floor->name, $floor->ui_map_id > 0 ? [
+                    [self::SOURCE_UI_MAP_GROUP_MEMBER, $floor->ui_map_id],
+                    [self::SOURCE_UI_MAP, $floor->ui_map_id],
+                ] : $dungeonIds);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Looks up each en_US name in the game's English names and returns the name the game uses for it in the
+     * other locale. The DB2 rows known to belong to the key are tried first, then every source in order by
+     * English name alone. A lookup that yields more than one different localized name is ambiguous and
+     * skipped. Names found nowhere are left out, and so are keys whose existing name is already one the game
+     * uses for that English name (the game often has it both with and without an article).
+     *
+     * @param  array<string, string>                                                                          $englishNamesByKey
+     * @param  array<string, list<array{0: string, 1: int|string}>>                                           $gameDataIdsByKey
+     * @param  array<string, array{english: array<int|string, string>, localized: array<int|string, string>}> $gameDataNameSources
+     * @param  array<string, mixed>                                                                           $existingNamesByKey
+     * @return array<string, string>
+     */
+    public function resolveGameDataNames(
+        array $englishNamesByKey,
+        array $gameDataIdsByKey,
+        array $gameDataNameSources,
+        array $existingNamesByKey = [],
+    ): array {
+        $idsByNormalizedName = [];
+        foreach ($gameDataNameSources as $sourceKey => $source) {
+            foreach ($source['english'] as $id => $englishName) {
+                $idsByNormalizedName[$sourceKey][$this->normalizeFloorName($englishName)][] = $id;
+            }
+        }
+
+        $result = [];
+        foreach ($englishNamesByKey as $key => $englishName) {
+            $normalizedName = $this->normalizeFloorName(self::GAME_DATA_NAME_ALIASES[$englishName] ?? $englishName);
+            if ($normalizedName === '') {
+                continue;
+            }
+
+            // The rows known to belong to this key, as long as the game calls them the same in English
+            $candidateGroups = [[]];
+            foreach ($gameDataIdsByKey[$key] ?? [] as [$sourceKey, $id]) {
+                $gameDataEnglishName = $gameDataNameSources[$sourceKey]['english'][$id] ?? null;
+                if ($gameDataEnglishName !== null && $this->normalizeFloorName($gameDataEnglishName) === $normalizedName) {
+                    $candidateGroups[0][] = [$sourceKey, $id];
+                }
+            }
+
+            foreach (array_keys($gameDataNameSources) as $sourceKey) {
+                $candidateGroups[] = array_map(
+                    static fn(int|string $id): array => [$sourceKey, $id],
+                    $idsByNormalizedName[$sourceKey][$normalizedName] ?? [],
+                );
+            }
+
+            $existingName = $existingNamesByKey[$key] ?? null;
+            if (is_string($existingName) && $existingName !== '' && $this->isGameDataName($existingName, $candidateGroups, $gameDataNameSources)) {
+                continue;
+            }
+
+            foreach ($candidateGroups as $candidates) {
+                $localizedNames = [];
+                foreach ($candidates as [$sourceKey, $id]) {
+                    $localizedName = trim($gameDataNameSources[$sourceKey]['localized'][$id] ?? '');
+                    if ($localizedName !== '') {
+                        $localizedNames[$this->normalizeWhitespace($localizedName)] ??= $localizedName;
+                    }
+                }
+
+                if (count($localizedNames) === 1) {
+                    $result[$key] = (string)reset($localizedNames);
+                    break;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param list<list<array{0: string, 1: int|string}>>                                                    $candidateGroups
+     * @param array<string, array{english: array<int|string, string>, localized: array<int|string, string>}> $gameDataNameSources
+     */
+    private function isGameDataName(string $name, array $candidateGroups, array $gameDataNameSources): bool
+    {
+        foreach ($candidateGroups as $candidates) {
+            foreach ($candidates as [$sourceKey, $id]) {
+                if ($this->normalizeWhitespace($gameDataNameSources[$sourceKey]['localized'][$id] ?? '') === $this->normalizeWhitespace($name)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * The Classic clients have no Italian (and not every table is translated in every locale); their DB2 export then
+     * carries the English text in that locale's column, which must not end up in the locale's translations.
+     *
+     * @param array<int|string, string> $englishNames
+     * @param array<int|string, string> $localizedNames
+     */
+    public function isUntranslated(array $englishNames, array $localizedNames): bool
+    {
+        $comparableCount = 0;
+        $identicalCount  = 0;
+        foreach ($englishNames as $id => $englishName) {
+            if ($englishName === '' || !isset($localizedNames[$id]) || $localizedNames[$id] === '') {
+                continue;
+            }
+
+            $comparableCount++;
+            if ($localizedNames[$id] === $englishName) {
+                $identicalCount++;
+            }
+        }
+
+        return $comparableCount === 0 || $identicalCount / $comparableCount >= self::UNTRANSLATED_SOURCE_RATIO;
+    }
+
+    /**
+     * @param array<string, list<array{0: string, 1: int}>> $gameDataIdsByKey
+     * @param list<array{0: string, 1: int}>                $ids
+     */
+    private function addGameDataIds(array &$gameDataIdsByKey, string $translationKey, array $ids): void
+    {
+        if (!str_starts_with($translationKey, 'dungeons.')) {
+            return;
+        }
+
+        $key = substr($translationKey, strlen('dungeons.'));
+        foreach ($ids as $id) {
+            $gameDataIdsByKey[$key][] = $id;
+        }
+    }
+
+    /**
+     * @param  array<string, string|null>               $buildsByProduct
+     * @return array<string, array<int|string, string>> source => ID => name
+     */
+    private function readGameDataNames(WagoToolsServiceInterface $wagoToolsService, array $buildsByProduct, GameLocale $gameLocale): array
+    {
+        $result = [];
+        foreach (self::GAME_DATA_NAME_SOURCES as $sourceKey => $source) {
+            $names = [];
+            foreach ($wagoToolsService->readTable($source['table'], (string)$buildsByProduct[$source['product']], $gameLocale) as $row) {
+                $names[$row[$source['idColumn']] ?? ''] = $row[$source['nameColumn']] ?? '';
+            }
+
+            $result[$sourceKey] = $names;
+        }
+
+        return $result;
+    }
+
+    /**
+     * The game writes the same name with a regular and a non-breaking space ("20 joueurs").
+     */
+    private function normalizeWhitespace(string $name): string
+    {
+        return trim((string)preg_replace('/\s+/u', ' ', $name));
     }
 
     /**

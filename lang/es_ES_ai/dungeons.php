@@ -44,26 +44,26 @@ return [
             ],
         ],
         'dire_maul_east' => [
-            'name'         => 'La Masacre – Este',
+            'name'         => 'La Masacre: Este',
             'abbreviation' => '',
             'floors'       => [
-                'warpwood_quarter'         => 'Distrito Cortezavil',
+                'warpwood_quarter'         => 'Barrio Alabeo',
                 'the_shrine_of_eldretharr' => 'Santuario de Eldretharr',
             ],
         ],
         'dire_maul_north' => [
-            'name'         => 'La Masacre – Norte',
+            'name'         => 'La Masacre: Norte',
             'abbreviation' => '',
             'floors'       => [
-                'gordok_commons' => 'Sala Gordok',
+                'gordok_commons' => 'Ágora de Gordok',
             ],
         ],
         'dire_maul_west' => [
-            'name'         => 'La Masacre – Oeste',
+            'name'         => 'La Masacre: Oeste',
             'abbreviation' => '',
             'floors'       => [
-                'capital_gardens'        => 'Jardines Capitales',
-                'court_of_the_highborne' => 'Patio de los Altonato',
+                'capital_gardens'        => 'Jardines de la Capital',
+                'court_of_the_highborne' => 'Corte de los Altonato',
                 'prison_of_immol_thar'   => 'Prisión de Immol\'thar',
             ],
         ],
@@ -104,10 +104,10 @@ return [
             'name'         => 'Gnomeregan',
             'abbreviation' => '',
             'floors'       => [
-                'the_hall_of_gears' => 'The Hall Of Gears',
-                'the_dormitory'     => 'The Dormitory',
-                'launch_bay'        => 'Launch Bay',
-                'tinkers_court'     => 'Tinkers Court',
+                'the_hall_of_gears' => 'La Sala de Máquinas',
+                'the_dormitory'     => 'Los Dormitorios',
+                'launch_bay'        => 'Aeropuerto',
+                'tinkers_court'     => 'Cámara Manitas',
             ],
         ],
         'gnomeregan_sod' => [
@@ -165,11 +165,11 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'tazz_alor'          => 'Tazz\'Alor',
-                'skitterweb_tunnels' => 'Túneles Tejezarpa',
+                'skitterweb_tunnels' => 'Túneles de Arácnidas',
                 'hordemar_city'      => 'Ciudad Hordemar',
                 'hall_of_blackhand'  => 'Sala de Puño Negro',
                 'halycons_lair'      => 'Guarida de Halycon',
-                'chamber_of_battle'  => 'Cámara de la Batalla',
+                'chamber_of_battle'  => 'Sala de la Batalla',
             ],
         ],
         'maraudon' => [
@@ -253,28 +253,28 @@ return [
             ],
         ],
         'scarlet_monastery_armory' => [
-            'name'         => 'Monasterio Escarlata – Armería',
+            'name'         => 'Monasterio Escarlata: Armería',
             'abbreviation' => '',
             'floors'       => [
-                'armory' => 'Armería',
+                'armory' => 'Arsenal',
             ],
         ],
         'scarlet_monastery_cathedral' => [
-            'name'         => 'Monasterio Escarlata – Catedral',
+            'name'         => 'Monasterio Escarlata: Catedral',
             'abbreviation' => '',
             'floors'       => [
                 'cathedral' => 'Catedral',
             ],
         ],
         'scarlet_monastery_graveyard' => [
-            'name'         => 'Monasterio Escarlata – Cementerio',
+            'name'         => 'Monasterio Escarlata: Cementerio',
             'abbreviation' => '',
             'floors'       => [
                 'graveyard' => 'Cementerio',
             ],
         ],
         'scarlet_monastery_library' => [
-            'name'         => 'Monasterio Escarlata – Biblioteca',
+            'name'         => 'Monasterio Escarlata: Biblioteca',
             'abbreviation' => '',
             'floors'       => [
                 'library' => 'Biblioteca',
@@ -343,7 +343,7 @@ return [
                 'the_pit_of_refuse'         => 'Templo Sumergido',
                 'hall_of_serpents'          => 'Sala de las Serpientes',
                 'entrance'                  => 'Entrada',
-                'the_temple_of_atal_hakkar' => 'Templo de Atal\'Hakkar',
+                'the_temple_of_atal_hakkar' => 'El Templo de Atal\'Hakkar',
                 'hall_of_the_cursed'        => 'Sala de los Malditos',
             ],
         ],
@@ -356,11 +356,11 @@ return [
             ],
         ],
         'upper_blackrock_spire' => [
-            'name'         => 'Cumbre de Roca Negra',
+            'name'         => 'Cumbre de Roca Negra Superior',
             'abbreviation' => '',
             'floors'       => [
-                'dragonspire_hall'  => 'Sala del Pináculo de Dragones',
-                'the_rookery'       => 'El Criadero',
+                'dragonspire_hall'  => 'Sala Dracopico',
+                'the_rookery'       => 'El Grajero',
                 'hall_of_blackhand' => 'Sala de Puño Negro',
             ],
         ],
@@ -392,7 +392,7 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'karabor_sewers'            => 'Cloacas de Karabor',
-                'illidari_training_grounds' => '',
+                'illidari_training_grounds' => 'Campo de Entrenamiento Illidari',
                 'sanctuary_of_shadows'      => 'Santuario de las Sombras',
                 'halls_of_anguish'          => 'Salas de Angustia',
                 'gorefiends_vigil'          => 'Vigilia de Sanguino',
@@ -447,18 +447,18 @@ return [
             ],
         ],
         'sunwell_plateau' => [
-            'name'         => '',
+            'name'         => 'Meseta de La Fuente del Sol',
             'abbreviation' => '',
             'floors'       => [
-                'sunwell_plateau'       => '',
-                'shrine_of_the_eclipse' => '',
+                'sunwell_plateau'       => 'Meseta de La Fuente del Sol',
+                'shrine_of_the_eclipse' => 'Santuario del Eclipse',
             ],
         ],
         'the_battle_for_mount_hyjal' => [
-            'name'         => '',
+            'name'         => 'La Batalla del Monte Hyjal',
             'abbreviation' => '',
             'floors'       => [
-                'the_battle_for_mount_hyjal' => '',
+                'the_battle_for_mount_hyjal' => 'La Batalla del Monte Hyjal',
             ],
         ],
         'the_eye' => [
@@ -801,7 +801,7 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'temple_of_the_jade_serpent' => 'Templo del Dragón de Jade',
-                'scrollkeepers_sanctum'      => 'Scrollkeepers Sanctum',
+                'scrollkeepers_sanctum'      => 'El Sagrario del Escribiente',
             ],
         ],
     ],
@@ -923,7 +923,7 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'the_high_gate'              => 'La Puerta Insigne',
-                'fields_of_the_eternal_hunt' => 'Campos de la Caza Eterna',
+                'fields_of_the_eternal_hunt' => 'Campos de la Cacería Eterna',
                 'halls_of_valor'             => 'Cámaras del Valor',
             ],
         ],
@@ -931,23 +931,23 @@ return [
             'name'         => 'Karazhan Inferior',
             'abbreviation' => '',
             'floors'       => [
-                'servants_quarters'    => 'Aposentos de los Sirvientes',
-                'upper_livery_stables' => 'Establos Superiores',
-                'the_banquet_hall'     => 'Sala de Banquetes',
-                'the_guest_chambers'   => 'Habitaciones de Huéspedes',
-                'opera_hall_balcony'   => 'Balcón del Salón de la Ópera',
-                'masters_terrace'      => 'Terraza del Maestro',
+                'servants_quarters'    => 'Alcobas de los Sirvientes',
+                'upper_livery_stables' => 'Caballerizas Superiores',
+                'the_banquet_hall'     => 'La Sala de Banquetes',
+                'the_guest_chambers'   => 'Los Aposentos de los Invitados',
+                'opera_hall_balcony'   => 'Balcón de la Sala de la Ópera',
+                'masters_terrace'      => 'El Bancal del Maestro',
                 'lower_karazhan'       => 'Karazhan Inferior',
             ],
         ],
         'maw_of_souls' => [
-            'name'         => 'Acantilados Boca Infernal',
+            'name'         => 'Fauce de Almas',
             'abbreviation' => '',
             'floors'       => [
                 'helmouth_cliffs' => 'Acantilados Boca Infernal',
                 'the_hold'        => 'El Bastión',
                 'the_naglfar'     => 'Naglfar',
-                'maw_of_souls'    => 'Acantilados Boca Infernal',
+                'maw_of_souls'    => 'Fauce de Almas',
             ],
         ],
         'neltharions_lair' => [
@@ -994,7 +994,7 @@ return [
             'name'         => 'Atal\'Dazar',
             'abbreviation' => '',
             'floors'       => [
-                'atal_dazar'       => 'Atal Dazar',
+                'atal_dazar'       => 'Atal\'Dazar',
                 'sacrificial_pits' => 'Fosa de Sacrificios',
             ],
         ],
@@ -1013,30 +1013,30 @@ return [
             ],
         ],
         'mechagon_junkyard' => [
-            'name'         => 'Desguace de Mechagon',
+            'name'         => 'Operación: Mecandria - Desguace',
             'abbreviation' => '',
             'floors'       => [
-                'mechagon_island' => 'Isla de Mechagon',
+                'mechagon_island' => 'Isla de Mecandria',
                 'tunnels'         => 'Túneles',
             ],
         ],
         'mechagon_workshop' => [
-            'name'         => 'Operación: Mecandria',
+            'name'         => 'Operación: Mecandria - Taller',
             'abbreviation' => '',
             'floors'       => [
                 'the_robodrome'               => 'Robotódromo',
-                'waste_pipes'                 => 'Waste Pipes',
+                'waste_pipes'                 => 'Tubos de Desagüe',
                 'the_under_junk'              => 'Sotocachivache',
                 'mechagon_city'               => 'Ciudad de Mecandria',
-                'operation_mechagon_workshop' => 'Operación: Mecandria',
+                'operation_mechagon_workshop' => 'Operación: Mecandria - Taller',
             ],
         ],
         'orgrimmar_horrific_vision' => [
-            'name'         => 'Orgrimmar Horrific Vision',
+            'name'         => 'Visión horripilante de Orgrimmar',
             'abbreviation' => '',
             'floors'       => [
-                'orgrimmar_horrific_vision' => 'Orgrimmar Horrific Vision',
-                'the_drag'                  => 'The Drag',
+                'orgrimmar_horrific_vision' => 'Visión horripilante de Orgrimmar',
+                'the_drag'                  => 'La Calle Mayor',
             ],
         ],
         'shrine_of_the_storm' => [
@@ -1055,10 +1055,10 @@ return [
             ],
         ],
         'stormwind_horrific_vision' => [
-            'name'         => 'Stormwind Horrific Vision',
+            'name'         => 'Visión horripilante de Ventormenta',
             'abbreviation' => '',
             'floors'       => [
-                'stormwind_horrific_vision' => 'Stormwind Horrific Vision',
+                'stormwind_horrific_vision' => 'Visión horripilante de Ventormenta',
             ],
         ],
         'temple_of_sethraliss' => [
@@ -1168,21 +1168,21 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'stormheim'                => 'Tormenheim',
-                'aggramars_vault'          => 'Bóveda de Aggramar',
+                'aggramars_vault'          => 'Cámara de Aggramar',
                 'boralus_harbor'           => 'Puerto de Boralus',
                 'the_opulent_nexus'        => 'Nexo Opulento',
-                'tazavesh_so_leahs_gambit' => 'Tazavesh So Leahs Gambit',
+                'tazavesh_so_leahs_gambit' => 'Tazavesh: Gambito de So\'leah',
             ],
         ],
         'tazavesh_streets_of_wonder' => [
             'name'         => 'Tazavesh: Calles de las Maravillas',
             'abbreviation' => '',
             'floors'       => [
-                'the_veiled_market'          => 'El Mercado Velado',
-                'the_grand_menagerie'        => 'La Gran Menagerie',
-                'the_post'                   => 'La Oficina Postal',
+                'the_veiled_market'          => 'Mercado Velado',
+                'the_grand_menagerie'        => 'Gran Animalario',
+                'the_post'                   => 'Oficina de Correos',
                 'myzas_oasis'                => 'Oasis de Myza',
-                'tazavesh_streets_of_wonder' => 'Calles de las Maravillas',
+                'tazavesh_streets_of_wonder' => 'Tazavesh: Calles de las Maravillas',
             ],
         ],
         'the_necrotic_wake' => [
@@ -1225,28 +1225,28 @@ return [
             ],
         ],
         'dawn_of_the_infinite_galakronds_fall' => [
-            'name'         => 'Amanecer del Infinito: La Caída de Galakrond',
+            'name'         => 'El Amanecer del Infinito: la Caída de Galakrond',
             'abbreviation' => '',
             'floors'       => [
-                'galakronds_fall'         => 'La Caída de Galakrond',
+                'galakronds_fall'         => 'Caída de Galakrond',
                 'sanctum_of_chronology'   => 'Sagrario de la Cronología',
                 'millennias_threshold'    => 'Umbral de los Milenios',
-                'locus_of_eternity'       => 'Locus de la Eternidad',
-                'spoke_of_endless_winter' => 'Radio del Invierno Infinito',
+                'locus_of_eternity'       => 'Enclave de la Eternidad',
+                'spoke_of_endless_winter' => 'Radio del Invierno Interminable',
                 'crossroads_of_fate'      => 'Encrucijada del Destino',
             ],
         ],
         'dawn_of_the_infinite_murozonds_rise' => [
-            'name'         => 'Amanecer del Infinito: El Ascenso de Murozond',
+            'name'         => 'El Amanecer del Infinito: el Ascenso de Murozond',
             'abbreviation' => '',
             'floors'       => [
                 'murozonds_rise'         => 'Ascenso de Murozond',
                 'sanctum_of_chronology'  => 'Sagrario de la Cronología',
                 'millennias_threshold'   => 'Umbral de los Milenios',
-                'locus_of_eternity'      => 'Locus de la Eternidad',
+                'locus_of_eternity'      => 'Enclave de la Eternidad',
                 'crossroads_of_fate'     => 'Encrucijada del Destino',
                 'infinite_conflux'       => 'Confluencia Infinita',
-                'twisting_approach'      => 'Acceso Retorcido',
+                'twisting_approach'      => 'Vereda Sinuosa',
                 'immemorial_battlefield' => 'Campo de Batalla Inmemorial',
             ],
         ],
@@ -1414,7 +1414,7 @@ return [
             'name'         => 'Guarida de Nalorakk',
             'abbreviation' => '',
             'floors'       => [
-                'dreamers_passage'  => 'Guarida de Nalorakk',
+                'dreamers_passage'  => 'Pasaje de la Soñadora',
                 'the_foraging'      => 'La Cosecha',
                 'the_heart_of_rage' => 'El Corazón de la Ira',
                 'den_of_nalorakk'   => 'Guarida de Nalorakk',
@@ -1425,14 +1425,14 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'magisters_terrace'          => 'Bancal del Magister',
-                'arcane_atheneum'            => 'Bancal del Magister',
+                'arcane_atheneum'            => 'Ateneo Arcano',
                 'grand_magister_asylum'      => 'Asilo del Gran Magister',
                 'grand_magister_asylum_void' => '',
                 'magisters_terrace_void'     => '',
                 'tower_of_theory'            => 'Torre de la Teoría',
                 'central_tower'              => 'Torre Central',
                 'upper_tower'                => 'Torre Superior',
-                'celestial_orrey'            => '',
+                'celestial_orrey'            => 'Planetario Celestial',
             ],
         ],
         'maisara_caverns' => [

@@ -100,7 +100,10 @@ return [
         ],
         'sections' => [
             'header' => [
-                'level' => '레벨',
+                'level'             => '레벨',
+                'dangerous'         => '위험함',
+                'truesight'         => '진실의 눈',
+                'runs_away_in_fear' => '공포에 질려 도망침',
             ],
             'characteristics' => [
                 'title'        => '특성',
