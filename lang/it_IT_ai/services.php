@@ -75,19 +75,19 @@ return [
         ],
         'enemy_resolution_analysis' => [
             'verdict' => [
-                'displaced' => '',
-                'converged' => '',
-                'scatter'   => '',
+                'displaced' => 'Mappato nel posto sbagliato',
+                'converged' => 'Raggiunge il gruppo prima di essere registrato',
+                'scatter'   => 'Sparso',
             ],
             'subject' => [
-                'pack'  => '',
-                'enemy' => '',
+                'pack'  => 'pacchetto :group (id :pack_id)',
+                'enemy' => 'nemico :enemy_id',
             ],
             'suggestion' => [
-                'displaced'               => '',
-                'displaced_shape_unknown' => '',
-                'converged'               => '',
-                'scatter'                 => '',
+                'displaced'               => 'Ingaggiato a :distance iarde da dove :subject è mappato (percorsi: :routes, ovvero :share% del totale), sempre nella stessa direzione e mantenendo la sua forma. Sposta :subject dove viene ingaggiato.',
+                'displaced_shape_unknown' => 'Ingaggiato a :distance iarde da dove :subject è mappato (percorsi: :routes, ovvero :share% del totale), sempre nella stessa direzione. Troppo pochi dei suoi nemici sono stati associati per capire se ha mantenuto la sua forma o si è raggruppato, quindi verificalo prima di spostare :subject dove viene ingaggiato.',
+                'converged'               => 'Ingaggiato a :distance iarde da dove :subject è mappato (percorsi: :routes, ovvero :share% del totale), ma raggruppato (rapporto di forma :ratio): corre verso il gruppo prima del suo primo evento registrato, quindi è lì che il gruppo combatte. Lascia la mappatura così com\'è.',
+                'scatter'                 => 'Ingaggiato in media a :distance iarde da dove :subject è mappato (percorsi: :routes), ma in ogni direzione (coerenza :consistency). Body pull o pattuglie - niente da spostare.',
             ],
         ],
     ],

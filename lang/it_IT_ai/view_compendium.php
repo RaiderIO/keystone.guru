@@ -238,8 +238,8 @@ return [
             'build_title'              => 'Build :build',
             'build_subtitle'           => 'confrontata con :from',
             'changed_spells'           => 'Incantesimi modificati: :count|Incantesimi modificati: :count',
-            'build_no_changes'         => '',
-            'build_no_changes_dungeon' => '',
+            'build_no_changes'         => 'Questa build non ha modificato i valori di nessun incantesimo degli NPC.',
+            'build_no_changes_dungeon' => 'Questa build non ha modificato i valori di nessun incantesimo degli NPC in questo dungeon.',
         ],
     ],
     'class' => [

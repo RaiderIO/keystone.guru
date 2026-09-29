@@ -24,6 +24,6 @@ return [
         'message' => 'Quel tipo di icona mappa non è disponibile per il tuo livello di accesso.',
     ],
     'user_slug_available_rule' => [
-        'taken' => '',
+        'taken' => 'Questo nome utente è già in uso.',
     ],
 ];
