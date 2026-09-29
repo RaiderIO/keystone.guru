@@ -87,6 +87,9 @@ return [
         'creator_directory_hide_help'      => 'Los creadores con rutas publicadas se listan automáticamente en el directorio. Marca esta casilla para mantener tu perfil fuera de él; tus rutas seguirán publicadas de cualquier forma.',
         'creator_save'                     => 'Guardar perfil de creador',
         'creator_view_public_profile'      => 'Ver mi perfil público',
+        'creator_public_profile_url'       => 'La dirección de tu perfil público',
+        'creator_public_profile_copy'      => 'Copiar la dirección de tu perfil público al portapapeles',
+        'creator_public_profile_url_help'  => 'Esta dirección depende de tu nombre de usuario. Si cambias tu nombre de usuario, también cambia, y los enlaces que usen la dirección anterior dejarán de funcionar.',
     ],
     'favorites' => [
         'title' => 'Mis favoritos',
@@ -95,6 +98,7 @@ return [
         'title'          => 'Resumen',
         'route_coverage' => 'Cobertura de ruta',
         'route_overview' => 'Resumen de ruta',
+        'delete_routes'  => 'Eliminar rutas…',
     ],
     'routes' => [
         'title' => 'Mis rutas',
@@ -106,6 +110,8 @@ return [
                     Puedes administrar etiquetas para tus propias rutas aquí. Nadie más podrá ver tus etiquetas; para rutas adjuntas a un equipo
                     puedes administrar un conjunto separado de etiquetas solo para ese equipo visitando la sección de Etiquetas al ver tu equipo.',
         'link_your_personal_route_overview' => 'tu resumen personal de ruta',
+        'collections'                       => 'Las etiquetas organizan tus rutas solo para ti y nunca se publican. Para reunir un conjunto de rutas en una página que puedas compartir con un solo enlace, crea %s en su lugar.',
+        'link_collections'                  => 'una colección',
     ],
     'view' => [
         'title'              => 'Rutas de %s',
@@ -113,8 +119,6 @@ return [
         'pinned_collections' => 'Colecciones fijadas',
         'pinned_routes'      => 'Rutas fijadas',
         'all_routes'         => 'Todas las rutas',
-        'route_count'        => '{0} Sin rutas publicadas|{1} :count ruta publicada|[2,*] :count rutas publicadas',
-        'member_since'       => 'Creando rutas desde :date',
         'social_link'        => 'Visitar :platform',
         'platform'           => [
             'twitch'    => 'Twitch',

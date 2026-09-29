@@ -38,6 +38,8 @@ return [
             'mapping_version_upgrade_already_latest' => 'Diese Mapping-Version ist bereits die neueste für ihren Dungeon — es wurden keine Routen eingereiht.',
             'read_only_mode_disabled'                => 'Schreibgeschützter Modus deaktiviert',
             'read_only_mode_enabled'                 => 'Schreibgeschützter Modus aktiviert',
+            'thumbnail_generation_paused'            => 'Vorschaubild-Erzeugung pausiert - es werden keine neuen Vorschaubilder eingereiht oder gerendert',
+            'thumbnail_generation_resumed'           => 'Vorschaubild-Erzeugung fortgesetzt',
         ],
     ],
     'affix' => [
@@ -110,10 +112,6 @@ return [
         'popular' => 'Beliebte Routen',
         'new'     => 'Neu',
         'season'  => [
-            'popular' => '%s beliebte Routen',
-            'new'     => '%s neue Routen',
-        ],
-        'dungeon' => [
             'popular' => '%s beliebte Routen',
             'new'     => '%s neue Routen',
         ],

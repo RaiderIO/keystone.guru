@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => 'Aucun :npc n\'est à portée à cet étage, mais il y en a un à moins de :distance yards à un autre étage. L\'étage enregistré est déduit du PNJ précédent dans le journal de combat ; cette déduction est donc très probablement à l\'origine du problème. Vérifiez ce point avant de modifier le mapping.',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => 'Mappé au mauvais endroit',
+                'converged' => 'Rejoint le groupe avant d\'être journalisé',
+                'scatter'   => 'Dispersé',
+            ],
+            'subject' => [
+                'pack'  => 'le pack :group (id :pack_id)',
+                'enemy' => 'l\'ennemi :enemy_id',
+            ],
+            'suggestion' => [
+                'displaced'               => 'Engagé à :distance yards de l\'endroit où :subject est mappé (itinéraires : :routes, soit :share% du total), toujours dans la même direction et en conservant sa forme. Déplacez :subject là où il est engagé.',
+                'displaced_shape_unknown' => 'Engagé à :distance yards de l\'endroit où :subject est mappé (itinéraires : :routes, soit :share% du total), toujours dans la même direction. Trop peu de ses ennemis ont été associés pour savoir s\'il a conservé sa forme ou s\'est regroupé : vérifiez-le avant de déplacer :subject là où il est engagé.',
+                'converged'               => 'Engagé à :distance yards de l\'endroit où :subject est mappé (itinéraires : :routes, soit :share% du total), mais regroupé (rapport de forme :ratio) : il court vers le groupe avant son premier événement journalisé, c\'est donc là que le groupe combat. Ne modifiez pas le mapping.',
+                'scatter'                 => 'Engagé en moyenne à :distance yards de l\'endroit où :subject est mappé (itinéraires : :routes), mais dans toutes les directions (cohérence :consistency). Body pulls ou patrouilles - rien à déplacer.',
+            ],
+        ],
     ],
 
 ];

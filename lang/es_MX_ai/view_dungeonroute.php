@@ -5,12 +5,9 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'           => 'Ruta Semanal de Raider.IO',
-                'weekly_routes'          => 'Rutas semanales de Raider.IO',
-                'community_routes'       => 'Rutas de la comunidad',
-                'popular'                => 'Rutas populares',
-                'newly_published_routes' => 'Rutas recién publicadas',
-                'archetypes'             => [
+                'weekly_routes'    => 'Rutas semanales de Raider.IO',
+                'community_routes' => 'Rutas de la comunidad',
+                'archetypes'       => [
                     'pug_friendly' => [
                         'label'       => 'Apto para PUG',
                         'description' => 'Pulls tolerantes para grupos de desconocidos',
@@ -33,23 +30,6 @@ return [
         ],
         'panel' => [
             'show_more' => 'Mostrar más',
-        ],
-        'search' => [
-            'page_title'              => 'Buscar rutas',
-            'header'                  => 'Buscar rutas',
-            'title'                   => 'Título',
-            'title_placeholder'       => 'Filtrar por título',
-            'key_level'               => 'Nivel clave',
-            'affixes'                 => 'Afijos',
-            'affixes_title'           => 'Seleccionar afijos',
-            'select_affixes'          => 'Seleccionar afijos',
-            'affixes_selected'        => '{0} afijos seleccionados',
-            'enemy_forces'            => 'Fuerzas enemigas',
-            'enemy_forces_complete'   => 'Completo',
-            'enemy_forces_incomplete' => 'Incompleto',
-            'rating'                  => 'Calificación',
-            'user'                    => 'Usuario',
-            'user_placeholder'        => 'Filtrar por usuario',
         ],
     ],
     'livesession' => [

@@ -54,7 +54,6 @@ return [
         ],
         'griddiscover' => [
             'popular' => 'Популярные',
-            'new'     => 'Новые',
         ],
         'list' => [
             'more'        => 'Еще',
@@ -128,8 +127,9 @@ return [
             'pulls'     => '{1} :count пул|[2,*] :count пулов',
         ],
         'table' => [
-            'team'   => 'Команда',
-            'filter' => 'Фильтр',
+            'team'                     => 'Команда',
+            'filter'                   => 'Фильтр',
+            'mass_delete_picker_title' => 'Удалить несколько маршрутов',
         ],
         'tablefilters' => [
             'affixes'               => 'Аффиксы',
@@ -159,6 +159,8 @@ return [
             'pagination'                   => 'Страницы маршрутов',
             'cancel'                       => 'Отмена',
             'add_none'                     => 'Добавить маршруты',
+            'delete_none'                  => 'Удалить маршруты',
+            'select_page'                  => 'Выбрать все на этой странице',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s -  данные https://mplus.subcreation.net',
@@ -256,7 +258,7 @@ return [
             'battlenet_region'        => 'Регион Battle.net',
             'continue_with_battlenet' => 'Продолжить через Battle.net',
             'continue_with_discord'   => 'Продолжить через Discord',
-            'continue_with_google'    => 'Продолжить через Google',
+            'sign_in_with_google'     => 'Войти через Google',
         ],
         'orderedselect' => [
             'choose' => 'Выберите элемент для добавления...',
@@ -570,6 +572,8 @@ return [
                 'matching_routes'         => 'Худшие маршруты',
                 'show_lines'              => 'Показать линии к сопоставленному врагу',
                 'lines_legend'            => 'Худшие сопоставления (:count) текущего фильтра по всем уровням этого подземелья, от места начала боя до врага, которому он был отнесён.',
+                'show_groups'             => 'Показать паки, сопоставленные издалека',
+                'groups_legend'           => 'Одна стрелка на пак, от места разметки до места вступления в бой; бледная, если пак встречался в малом числе маршрутов:',
                 'line_popup'              => [
                     'npc'            => ':name (:id)',
                     'distance'       => 'Сопоставлен с врагом :enemy, на расстоянии :distance ярд.',
@@ -679,6 +683,32 @@ return [
         ],
         'enemydetails' => [
             'report_an_issue' => 'Сообщить о проблеме',
+        ],
+        'mappingversionupgradediff' => [
+            'title'                                 => 'Что изменилось?',
+            'description'                           => 'Этот черновик был обновлен с версии карты :oldVersion до :newVersion. Ничто из перечисленного ниже не вступит в силу, пока Вы не примените черновик.',
+            'no_route_impact'                       => 'Обновление ничего не изменило в Вашем маршруте.',
+            'pull'                                  => 'Пул :index',
+            'unknown_npc'                           => 'Неизвестный враг',
+            'emptied_pulls'                         => 'Пулы, лишившиеся всех врагов',
+            'removed_pull_enemies'                  => 'Враги, удаленные из Ваших пулов',
+            'removed_pull_enemies_description'      => 'В новой версии карты этих врагов больше нет, поэтому они были исключены из Ваших пулов.',
+            'unkilled_required_enemies'             => 'Обязательные враги, которых Ваш маршрут не убивает',
+            'unkilled_required_enemies_description' => 'Маршрут нельзя опубликовать, а этот черновик нельзя применить к опубликованному маршруту, пока каждый из этих врагов не окажется в пуле.',
+            'newly_required'                        => 'Новое',
+            'moved_pull_enemies'                    => 'Перемещенные враги',
+            'moved_pull_enemies_description'        => 'Эти враги по-прежнему в Ваших пулах, но новая версия карты размещает их в другом месте - линии, которые Вы к ним нарисовали, могут больше не подходить.',
+            'moved_yards'                           => 'перемещен на :yards ярд.',
+            'moved_to_floor'                        => 'перемещен на уровень: :floor',
+            'enemy_forces'                          => 'Силы врага',
+            'enemy_forces_total'                    => 'Ваш маршрут: :old -> :new',
+            'enemy_forces_required'                 => 'Нужно для прохождения подземелья: :old -> :new',
+            'enemy_forces_npc'                      => ':npc: :old -> :new за одного врага',
+            'dungeon_wide'                          => 'В других частях подземелья',
+            'dungeon_wide_unchanged'                => 'Враги и патрули не добавлялись и не удалялись.',
+            'enemies_added'                         => '{1} Добавлен один враг.|[2,*] Добавлено врагов: :count.',
+            'enemies_removed'                       => '{1} Удален один враг.|[2,*] Удалено врагов: :count.',
+            'enemy_patrols'                         => 'Патрули: :old -> :new',
         ],
         'userreport' => [
             'dungeonroute' => [

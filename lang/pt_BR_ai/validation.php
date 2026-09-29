@@ -45,6 +45,9 @@ return [
         'creator_search' => [
             'max' => '',
         ],
+        'creator_sort' => [
+            'enum' => '',
+        ],
         'autoroutecoverage_days' => [
             'integer' => '',
             'min'     => '',
@@ -100,14 +103,20 @@ return [
         ],
         'collection_dungeon_routes' => [
             'max'          => '',
+            'max_dungeon'  => '',
             'exists'       => '',
             'distinct'     => '',
             'game_version' => '',
             'season'       => '',
             'required'     => '',
-            'already_in'   => '',
             'not_in'       => '',
             'missing'      => '',
+        ],
+        'delete_bulk_dungeon_routes' => [
+            'required' => '',
+            'max'      => '',
+            'exists'   => '',
+            'distinct' => '',
         ],
     ],
     'date'              => 'O campo :attribute não contém uma data válida.',

@@ -54,7 +54,6 @@ return [
         ],
         'griddiscover' => [
             'popular' => 'Popular',
-            'new'     => 'Nuevo',
         ],
         'list' => [
             'more'        => 'Más',
@@ -128,8 +127,9 @@ return [
             'pulls'     => '{1} :count pull|[2,*] :count pulls',
         ],
         'table' => [
-            'team'   => 'Equipo',
-            'filter' => 'Filtro',
+            'team'                     => 'Equipo',
+            'filter'                   => 'Filtro',
+            'mass_delete_picker_title' => 'Eliminar varias rutas',
         ],
         'tablefilters' => [
             'affixes'               => 'Afijos',
@@ -159,6 +159,8 @@ return [
             'pagination'                   => 'Páginas de rutas',
             'cancel'                       => 'Cancelar',
             'add_none'                     => 'Agregar rutas',
+            'delete_none'                  => 'Eliminar rutas',
+            'select_page'                  => 'Seleccionar todo en esta página',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - datos por https://www.archon.gg/wow',
@@ -256,7 +258,7 @@ return [
             'battlenet_region'        => 'Región de Battle.net',
             'continue_with_battlenet' => 'Continuar con Battle.net',
             'continue_with_discord'   => 'Continuar con Discord',
-            'continue_with_google'    => 'Continuar con Google',
+            'sign_in_with_google'     => 'Iniciar sesión con Google',
         ],
         'orderedselect' => [
             'choose' => 'Elige uno para agregar...',
@@ -570,6 +572,8 @@ return [
                 'matching_routes'         => 'Peores rutas',
                 'show_lines'              => 'Mostrar líneas hasta el enemigo asignado',
                 'lines_legend'            => 'Las :count peores asignaciones del filtro actual en todos los pisos de esta mazmorra, desde donde empezó el combate hasta el enemigo al que se atribuyó.',
+                'show_groups'             => 'Mostrar packs asignados desde lejos',
+                'groups_legend'           => 'Una flecha por pack, desde donde está mapeado hasta donde empieza el combate; atenuada si se vio en pocas rutas:',
                 'line_popup'              => [
                     'npc'            => ':name (:id)',
                     'distance'       => 'Asignado al enemigo :enemy, a :distance yardas',
@@ -679,6 +683,32 @@ return [
         ],
         'enemydetails' => [
             'report_an_issue' => 'Reportar un problema',
+        ],
+        'mappingversionupgradediff' => [
+            'title'                                 => '¿Qué cambió?',
+            'description'                           => 'Este borrador se actualizó de la versión de mapeo :oldVersion a la :newVersion. Nada de lo que aparece abajo se publica hasta que apliques el borrador.',
+            'no_route_impact'                       => 'La actualización no cambió nada de tu ruta.',
+            'pull'                                  => 'Pull :index',
+            'unknown_npc'                           => 'Enemigo desconocido',
+            'emptied_pulls'                         => 'Pulls que perdieron todos sus enemigos',
+            'removed_pull_enemies'                  => 'Enemigos quitados de tus pulls',
+            'removed_pull_enemies_description'      => 'La nueva versión de mapeo ya no tiene estos enemigos, así que se quitaron de tus pulls.',
+            'unkilled_required_enemies'             => 'Enemigos obligatorios que tu ruta no mata',
+            'unkilled_required_enemies_description' => 'La ruta no se puede publicar, y este borrador no se puede aplicar a una ruta publicada, hasta que todos estos enemigos estén en un pull.',
+            'newly_required'                        => 'Nuevo',
+            'moved_pull_enemies'                    => 'Enemigos que se movieron',
+            'moved_pull_enemies_description'        => 'Estos enemigos siguen en tus pulls, pero la nueva versión de mapeo los coloca en otro lugar: puede que las líneas que dibujaste hacia ellos ya no coincidan.',
+            'moved_yards'                           => 'movido :yards yardas',
+            'moved_to_floor'                        => 'movido a :floor',
+            'enemy_forces'                          => 'Fuerzas enemigas',
+            'enemy_forces_total'                    => 'Tu ruta: :old -> :new',
+            'enemy_forces_required'                 => 'Necesarias para completar la mazmorra: :old -> :new',
+            'enemy_forces_npc'                      => ':npc: :old -> :new por enemigo',
+            'dungeon_wide'                          => 'En el resto de la mazmorra',
+            'dungeon_wide_unchanged'                => 'No se agregaron ni quitaron enemigos ni patrullas.',
+            'enemies_added'                         => '{1} Se agregó un enemigo.|[2,*] Se agregaron :count enemigos.',
+            'enemies_removed'                       => '{1} Se quitó un enemigo.|[2,*] Se quitaron :count enemigos.',
+            'enemy_patrols'                         => 'Patrullas: :old -> :new',
         ],
         'userreport' => [
             'dungeonroute' => [

@@ -54,7 +54,6 @@ return [
         ],
         'griddiscover' => [
             'popular' => 'Popolare',
-            'new'     => 'Nuovo',
         ],
         'list' => [
             'more'        => 'Altro',
@@ -128,8 +127,9 @@ return [
             'pulls'     => '{1} :count pull|[2,*] :count pull',
         ],
         'table' => [
-            'team'   => 'Squadra',
-            'filter' => 'Filtro',
+            'team'                     => 'Squadra',
+            'filter'                   => 'Filtro',
+            'mass_delete_picker_title' => 'Elimina più percorsi',
         ],
         'tablefilters' => [
             'affixes'               => 'Affissi',
@@ -159,6 +159,8 @@ return [
             'pagination'                   => 'Pagine dei percorsi',
             'cancel'                       => 'Annulla',
             'add_none'                     => 'Aggiungi percorsi',
+            'delete_none'                  => 'Elimina percorsi',
+            'select_page'                  => 'Seleziona tutti in questa pagina',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - dati da https://www.archon.gg/wow',
@@ -256,7 +258,7 @@ return [
             'battlenet_region'        => 'Regione Battle.net',
             'continue_with_battlenet' => 'Continua con Battle.net',
             'continue_with_discord'   => 'Continua con Discord',
-            'continue_with_google'    => 'Continua con Google',
+            'sign_in_with_google'     => 'Accedi con Google',
         ],
         'orderedselect' => [
             'choose' => 'Scegline uno da aggiungere...',
@@ -570,6 +572,8 @@ return [
                 'matching_routes'         => 'Percorsi peggiori',
                 'show_lines'              => 'Mostra le linee verso il nemico associato',
                 'lines_legend'            => 'Le :count associazioni peggiori del filtro attuale su tutti i piani di questo dungeon, da dove è iniziato il combattimento fino al nemico a cui è stato attribuito.',
+                'show_groups'             => 'Mostra i pacchetti associati da lontano',
+                'groups_legend'           => 'Una freccia per pacchetto, da dove è mappato a dove viene ingaggiato - sbiadita quando compare in pochi percorsi:',
                 'line_popup'              => [
                     'npc'            => ':name (:id)',
                     'distance'       => 'Associato al nemico :enemy, a :distance iarde di distanza',
@@ -679,6 +683,32 @@ return [
         ],
         'enemydetails' => [
             'report_an_issue' => 'Segnala un problema',
+        ],
+        'mappingversionupgradediff' => [
+            'title'                                 => 'Cosa è cambiato?',
+            'description'                           => 'Questa bozza è stata aggiornata dalla versione di mappatura :oldVersion alla :newVersion. Nulla di quanto segue è attivo finché non applichi la bozza.',
+            'no_route_impact'                       => 'L\'aggiornamento non ha cambiato nulla nel tuo percorso.',
+            'pull'                                  => 'Pull :index',
+            'unknown_npc'                           => 'Nemico sconosciuto',
+            'emptied_pulls'                         => 'Pull che hanno perso tutti i nemici',
+            'removed_pull_enemies'                  => 'Nemici rimossi dai tuoi pull',
+            'removed_pull_enemies_description'      => 'La nuova versione di mappatura non contiene più questi nemici, quindi sono stati tolti dai tuoi pull.',
+            'unkilled_required_enemies'             => 'Nemici obbligatori che il tuo percorso non uccide',
+            'unkilled_required_enemies_description' => 'Il percorso non può essere pubblicato, e questa bozza non può essere applicata a un percorso pubblicato, finché ognuno di questi non è in un pull.',
+            'newly_required'                        => 'Nuovo',
+            'moved_pull_enemies'                    => 'Nemici spostati',
+            'moved_pull_enemies_description'        => 'Questi nemici sono ancora nei tuoi pull, ma la nuova versione di mappatura li colloca altrove - le linee che hai tracciato verso di loro potrebbero non essere più corrette.',
+            'moved_yards'                           => 'spostato di :yards iarde',
+            'moved_to_floor'                        => 'spostato su :floor',
+            'enemy_forces'                          => 'Forze nemiche',
+            'enemy_forces_total'                    => 'Il tuo percorso: :old -> :new',
+            'enemy_forces_required'                 => 'Necessarie per completare il dungeon: :old -> :new',
+            'enemy_forces_npc'                      => ':npc: :old -> :new per nemico',
+            'dungeon_wide'                          => 'Altrove nel dungeon',
+            'dungeon_wide_unchanged'                => 'Nessun nemico o pattuglia è stato aggiunto o rimosso.',
+            'enemies_added'                         => '{1} È stato aggiunto un nemico.|[2,*] Sono stati aggiunti :count nemici.',
+            'enemies_removed'                       => '{1} È stato rimosso un nemico.|[2,*] Sono stati rimossi :count nemici.',
+            'enemy_patrols'                         => 'Pattuglie: :old -> :new',
         ],
         'userreport' => [
             'dungeonroute' => [

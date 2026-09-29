@@ -87,6 +87,9 @@ return [
         'creator_directory_hide_help'      => '拥有已发布路线的创作者会自动列入该目录。勾选此项可将您的资料排除在外——无论如何，您的路线仍会保持已发布状态。',
         'creator_save'                     => '保存创作者资料',
         'creator_view_public_profile'      => '查看我的公开资料',
+        'creator_public_profile_url'       => '您的公开资料地址',
+        'creator_public_profile_copy'      => '将您的公开资料地址复制到剪贴板',
+        'creator_public_profile_url_help'  => '此地址跟随您的用户名。更改用户名会改变此地址，使用旧地址的链接将失效。',
     ],
     'favorites' => [
         'title' => '我的收藏',
@@ -95,6 +98,7 @@ return [
         'title'          => '概览',
         'route_coverage' => '路线覆盖',
         'route_overview' => '路线概览',
+        'delete_routes'  => '删除路线…',
     ],
     'routes' => [
         'title' => '我的路线',
@@ -106,6 +110,8 @@ return [
                     您可以在此处管理自己的路线标签。其他人无法查看您的标签 - 对于附属于团队的路线，
                     您可以通过查看团队时访问标签部分来为该团队单独管理一组标签。',
         'link_your_personal_route_overview' => '您的个人路线概览',
+        'collections'                       => '标签用于为您自己整理路线，且永远不会被发布。如果想把一组路线放在一个页面上并通过一个链接分享，请改为创建%s。',
+        'link_collections'                  => '合集',
     ],
     'view' => [
         'title'              => '%s的路线',
@@ -113,8 +119,6 @@ return [
         'pinned_collections' => '置顶合集',
         'pinned_routes'      => '置顶路线',
         'all_routes'         => '所有路线',
-        'route_count'        => '{0} 没有已发布的路线|{1} :count 条已发布的路线|[2,*] :count 条已发布的路线',
-        'member_since'       => '自 :date 起创作路线',
         'social_link'        => '访问 :platform',
         'platform'           => [
             'twitch'    => 'Twitch',

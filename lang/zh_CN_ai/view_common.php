@@ -54,7 +54,6 @@ return [
         ],
         'griddiscover' => [
             'popular' => '热门',
-            'new'     => '新',
         ],
         'list' => [
             'more'        => '更多',
@@ -128,8 +127,9 @@ return [
             'pulls'     => '{1} :count 次拉怪|[2,*] :count 次拉怪',
         ],
         'table' => [
-            'team'   => '团队',
-            'filter' => '筛选',
+            'team'                     => '团队',
+            'filter'                   => '筛选',
+            'mass_delete_picker_title' => '删除多条路线',
         ],
         'tablefilters' => [
             'affixes'               => '词缀',
@@ -159,6 +159,8 @@ return [
             'pagination'                   => '路线分页',
             'cancel'                       => '取消',
             'add_none'                     => '添加路线',
+            'delete_none'                  => '删除路线',
+            'select_page'                  => '全选本页',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - 数据来自 https://www.archon.gg/wow',
@@ -256,7 +258,7 @@ return [
             'battlenet_region'        => '战网地区',
             'continue_with_battlenet' => '使用战网继续',
             'continue_with_discord'   => '使用 Discord 继续',
-            'continue_with_google'    => '使用 Google 继续',
+            'sign_in_with_google'     => '使用 Google 账号登录',
         ],
         'orderedselect' => [
             'choose' => '选择要添加的项...',
@@ -570,6 +572,8 @@ return [
                 'matching_routes'         => '最差的路线',
                 'show_lines'              => '显示到匹配敌人的连线',
                 'lines_legend'            => '当前筛选条件下此地下城所有楼层中最差的 :count 个匹配，从战斗开始的位置连到被归属的敌人。',
+                'show_groups'             => '显示远距离匹配的包',
+                'groups_legend'           => '每个包一个箭头，从其映射位置指向其交战位置——仅在少数路线中出现时显示为淡色：',
                 'line_popup'              => [
                     'npc'            => ':name (:id)',
                     'distance'       => '匹配到敌人 :enemy，相距 :distance 码',
@@ -676,6 +680,32 @@ return [
         ],
         'enemydetails' => [
             'report_an_issue' => '报告问题',
+        ],
+        'mappingversionupgradediff' => [
+            'title'                                 => '有哪些变化？',
+            'description'                           => '此草稿已从映射版本 :oldVersion 升级到 :newVersion。在您应用草稿之前，以下内容都不会生效。',
+            'no_route_impact'                       => '此次升级未改变您路线中的任何内容。',
+            'pull'                                  => '拉怪 :index',
+            'unknown_npc'                           => '未知敌人',
+            'emptied_pulls'                         => '失去所有敌人的拉怪',
+            'removed_pull_enemies'                  => '从您的拉怪中移除的敌人',
+            'removed_pull_enemies_description'      => '新的映射版本中已不再有这些敌人，因此它们已从您的拉怪中移除。',
+            'unkilled_required_enemies'             => '您的路线未击杀的必需敌人',
+            'unkilled_required_enemies_description' => '在这些敌人全部加入拉怪之前，该路线无法发布，此草稿也无法应用到已发布的路线。',
+            'newly_required'                        => '新增',
+            'moved_pull_enemies'                    => '位置发生变化的敌人',
+            'moved_pull_enemies_description'        => '这些敌人仍在您的拉怪中，但新的映射版本将它们放在了其他位置——您朝它们绘制的线条可能不再合适。',
+            'moved_yards'                           => '移动了 :yards 码',
+            'moved_to_floor'                        => '移至 :floor',
+            'enemy_forces'                          => '敌方部队',
+            'enemy_forces_total'                    => '您的路线：:old -> :new',
+            'enemy_forces_required'                 => '完成地下城所需：:old -> :new',
+            'enemy_forces_npc'                      => ':npc：每个敌人 :old -> :new',
+            'dungeon_wide'                          => '地下城的其他地方',
+            'dungeon_wide_unchanged'                => '没有新增或移除敌人或巡逻。',
+            'enemies_added'                         => '{1} 新增了一个敌人。|[2,*] 新增了 :count 个敌人。',
+            'enemies_removed'                       => '{1} 移除了一个敌人。|[2,*] 移除了 :count 个敌人。',
+            'enemy_patrols'                         => '巡逻：:old -> :new',
         ],
         'userreport' => [
             'dungeonroute' => [

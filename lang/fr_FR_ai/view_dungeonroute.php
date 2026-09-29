@@ -5,12 +5,9 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'           => 'Itinéraire hebdomadaire Raider.IO',
-                'weekly_routes'          => 'Itinéraires hebdomadaires Raider.IO',
-                'community_routes'       => 'Itinéraires de la communauté',
-                'popular'                => 'Itinéraires populaires',
-                'newly_published_routes' => 'Itinéraires nouvellement publiés',
-                'archetypes'             => [
+                'weekly_routes'    => 'Itinéraires hebdomadaires Raider.IO',
+                'community_routes' => 'Itinéraires de la communauté',
+                'archetypes'       => [
                     'pug_friendly' => [
                         'label'       => 'Adapté aux PUG',
                         'description' => 'Pulls laissant une bonne marge d\'erreur aux groupes de joueurs qui ne se connaissent pas',
@@ -33,23 +30,6 @@ return [
         ],
         'panel' => [
             'show_more' => 'Afficher plus',
-        ],
-        'search' => [
-            'page_title'              => 'Rechercher des itinéraires',
-            'header'                  => 'Rechercher des itinéraires',
-            'title'                   => 'Titre',
-            'title_placeholder'       => 'Filtrer par titre',
-            'key_level'               => 'Niveau de clé',
-            'affixes'                 => 'Affixes',
-            'affixes_title'           => 'Sélectionner les affixes',
-            'select_affixes'          => 'Sélectionner des affixes',
-            'affixes_selected'        => '{0} affixes sélectionnés',
-            'enemy_forces'            => 'Forces ennemies',
-            'enemy_forces_complete'   => 'Complet',
-            'enemy_forces_incomplete' => 'Incomplet',
-            'rating'                  => 'Évaluation',
-            'user'                    => 'Utilisateur',
-            'user_placeholder'        => 'Filtrer par utilisateur',
         ],
     ],
     'livesession' => [

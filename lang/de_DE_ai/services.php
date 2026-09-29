@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => 'Kein :npc ist auf dieser Etage in Reichweite, aber auf einer anderen Etage befindet sich einer innerhalb von :distance Yards. Die aufgezeichnete Etage wird aus dem vorherigen NPC im Log abgeleitet; daher liegt das höchstwahrscheinlich an dieser Ableitung. Prüfe das, bevor du das Mapping änderst.',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => 'An der falschen Stelle gemappt',
+                'converged' => 'Läuft vor dem ersten Log-Eintrag zur Gruppe',
+                'scatter'   => 'Verstreut',
+            ],
+            'subject' => [
+                'pack'  => 'Pack :group (ID :pack_id)',
+                'enemy' => 'Gegner :enemy_id',
+            ],
+            'suggestion' => [
+                'displaced'               => 'Der Kampf begann :distance Yards von der Stelle entfernt, an der :subject gemappt ist (Routen: :routes, :share% aller Routen), immer in dieselbe Richtung und mit erhaltener Form. Verschiebe :subject an die Stelle, an der der Kampf beginnt.',
+                'displaced_shape_unknown' => 'Der Kampf begann :distance Yards von der Stelle entfernt, an der :subject gemappt ist (Routen: :routes, :share% aller Routen), immer in dieselbe Richtung. Zu wenige seiner Gegner wurden zugeordnet, um zu erkennen, ob die Form erhalten blieb oder sich zusammengezogen hat - prüfe das, bevor du :subject an die Stelle verschiebst, an der der Kampf beginnt.',
+                'converged'               => 'Der Kampf begann :distance Yards von der Stelle entfernt, an der :subject gemappt ist (Routen: :routes, :share% aller Routen), aber zusammengezogen (Formverhältnis :ratio): Die Bewegung zur Gruppe erfolgt vor dem ersten Log-Eintrag, hier kämpft die Gruppe also. Lass das Mapping, wie es ist.',
+                'scatter'                 => 'Der Kampf begann im Schnitt :distance Yards von der Stelle entfernt, an der :subject gemappt ist (Routen: :routes), aber in alle Richtungen (Konsistenz :consistency). Body-Pulls oder Patrouillen - nichts zu verschieben.',
+            ],
+        ],
     ],
 
 ];

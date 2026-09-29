@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => '이 층의 범위 내에는 :npc이(가) 없지만, 다른 층의 :distance야드 이내에는 하나 있습니다. 기록된 층은 로그의 이전 NPC를 바탕으로 추론되므로, 층이 잘못 기록된 것은 이 추론 때문일 가능성이 높습니다. 매핑을 변경하기 전에 확인하세요.',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => '잘못된 위치에 매핑됨',
+                'converged' => '기록 전에 그룹 쪽으로 달려옴',
+                'scatter'   => '흩어짐',
+            ],
+            'subject' => [
+                'pack'  => '묶음 :group (id :pack_id)',
+                'enemy' => '적 :enemy_id',
+            ],
+            'suggestion' => [
+                'displaced'               => '경로 :routes개(전체의 :share%)에서 :subject은(는) 매핑된 위치로부터 :distance야드 떨어진 곳에서 교전했으며, 항상 같은 방향이었고 형태도 유지했습니다. :subject을(를) 교전 위치로 옮기세요.',
+                'displaced_shape_unknown' => '경로 :routes개(전체의 :share%)에서 :subject은(는) 매핑된 위치로부터 :distance야드 떨어진 곳에서 교전했으며, 항상 같은 방향이었습니다. 매칭된 적이 너무 적어 형태를 유지했는지 한데 뭉쳤는지 판단할 수 없으므로, :subject을(를) 교전 위치로 옮기기 전에 어느 쪽인지 확인하세요.',
+                'converged'               => '경로 :routes개(전체의 :share%)에서 :subject은(는) 매핑된 위치로부터 :distance야드 떨어진 곳에서 교전했지만, 한데 뭉쳐 있었습니다(형태 비율 :ratio). 첫 기록 이벤트 전에 그룹 쪽으로 달려오므로, 이곳은 그룹이 전투하는 위치입니다. 매핑은 그대로 두세요.',
+                'scatter'                 => '경로 :routes개에서 :subject은(는) 매핑된 위치로부터 평균 :distance야드 떨어진 곳에서 교전했지만, 방향이 제각각이었습니다(일관성 :consistency). 몸으로 끈 풀이거나 순찰이므로 옮길 것이 없습니다.',
+            ],
+        ],
     ],
 
 ];

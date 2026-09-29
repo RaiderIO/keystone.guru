@@ -54,7 +54,6 @@ return [
         ],
         'griddiscover' => [
             'popular' => 'Popular',
-            'new'     => 'Novo',
         ],
         'list' => [
             'more'        => 'Mais',
@@ -128,8 +127,9 @@ return [
             'pulls'     => '{1} :count pull|[2,*] :count pulls',
         ],
         'table' => [
-            'team'   => 'Equipe',
-            'filter' => 'Filtro',
+            'team'                     => 'Equipe',
+            'filter'                   => 'Filtro',
+            'mass_delete_picker_title' => 'Excluir várias rotas',
         ],
         'tablefilters' => [
             'affixes'               => 'Afixos',
@@ -159,6 +159,8 @@ return [
             'pagination'                   => 'Páginas de rotas',
             'cancel'                       => 'Cancelar',
             'add_none'                     => 'Adicionar rotas',
+            'delete_none'                  => 'Excluir rotas',
+            'select_page'                  => 'Selecionar todas nesta página',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - dados por https://www.archon.gg/wow',
@@ -256,7 +258,7 @@ return [
             'battlenet_region'        => 'Região do Battle.net',
             'continue_with_battlenet' => 'Continuar com o Battle.net',
             'continue_with_discord'   => 'Continuar com o Discord',
-            'continue_with_google'    => 'Continuar com o Google',
+            'sign_in_with_google'     => 'Fazer login com o Google',
         ],
         'orderedselect' => [
             'choose' => 'Escolha um para adicionar...',
@@ -570,6 +572,8 @@ return [
                 'matching_routes'         => 'Piores rotas',
                 'show_lines'              => 'Mostrar linhas até o inimigo correspondido',
                 'lines_legend'            => 'As :count piores correspondências do filtro atual em todos os andares desta masmorra, do local onde o combate começou até o inimigo ao qual foi atribuído.',
+                'show_groups'             => 'Mostrar pacotes com correspondência distante',
+                'groups_legend'           => 'Uma seta por pacote, de onde ele está mapeado até onde é engajado - esmaecida quando aparece em poucas rotas:',
                 'line_popup'              => [
                     'npc'            => ':name (:id)',
                     'distance'       => 'Correspondido ao inimigo :enemy, a :distance jardas de distância',
@@ -679,6 +683,32 @@ return [
         ],
         'enemydetails' => [
             'report_an_issue' => 'Reportar um problema',
+        ],
+        'mappingversionupgradediff' => [
+            'title'                                 => 'O que mudou?',
+            'description'                           => 'Este rascunho foi atualizado da versão de mapeamento :oldVersion para a :newVersion. Nada abaixo entra no ar até você aplicar o rascunho.',
+            'no_route_impact'                       => 'A atualização não mudou nada na sua rota.',
+            'pull'                                  => 'Pull :index',
+            'unknown_npc'                           => 'Inimigo desconhecido',
+            'emptied_pulls'                         => 'Pulls que perderam todos os inimigos',
+            'removed_pull_enemies'                  => 'Inimigos removidos dos seus pulls',
+            'removed_pull_enemies_description'      => 'A nova versão de mapeamento não tem mais esses inimigos, então eles foram retirados dos seus pulls.',
+            'unkilled_required_enemies'             => 'Inimigos obrigatórios que sua rota não mata',
+            'unkilled_required_enemies_description' => 'A rota não pode ser publicada, e este rascunho não pode ser aplicado a uma rota publicada, até que cada um deles esteja em um pull.',
+            'newly_required'                        => 'Novo',
+            'moved_pull_enemies'                    => 'Inimigos que mudaram de lugar',
+            'moved_pull_enemies_description'        => 'Esses inimigos ainda estão nos seus pulls, mas a nova versão de mapeamento os coloca em outro lugar - as linhas que você desenhou até eles podem não se encaixar mais.',
+            'moved_yards'                           => 'movido :yards jardas',
+            'moved_to_floor'                        => 'movido para :floor',
+            'enemy_forces'                          => 'Forças inimigas',
+            'enemy_forces_total'                    => 'Sua rota: :old -> :new',
+            'enemy_forces_required'                 => 'Necessário para concluir a masmorra: :old -> :new',
+            'enemy_forces_npc'                      => ':npc: :old -> :new por inimigo',
+            'dungeon_wide'                          => 'Em outras partes da masmorra',
+            'dungeon_wide_unchanged'                => 'Nenhum inimigo ou patrulha foi adicionado ou removido.',
+            'enemies_added'                         => '{1} Um inimigo foi adicionado.|[2,*] :count inimigos foram adicionados.',
+            'enemies_removed'                       => '{1} Um inimigo foi removido.|[2,*] :count inimigos foram removidos.',
+            'enemy_patrols'                         => 'Patrulhas: :old -> :new',
         ],
         'userreport' => [
             'dungeonroute' => [

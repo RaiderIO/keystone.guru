@@ -125,6 +125,11 @@ return [
     'murder_row_loaded_pistol'                        => 'Pistola carica',
     'murder_row_overload_golem'                       => 'Golem sovraccarico',
     'the_blinding_vale_flourishing_stride'            => 'Passo rigoglioso',
+    'altar_of_fangs_mutating_elixir'                  => 'Elisir mutante',
+    'den_of_nalorakk_rune_of_anchoring'               => 'Runa d\'ancoraggio',
+    'den_of_nalorakk_warding_incense'                 => 'Incenso di protezione',
+    'voidscar_arena_proof_of_endurance'               => 'Prova di resistenza',
+    'voidscar_arena_proof_of_mastery'                 => 'Prova di maestria',
 
     'waystone' => 'Pietra miliare',
 ];

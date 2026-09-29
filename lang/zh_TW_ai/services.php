@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => '',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => '',
+                'converged' => '',
+                'scatter'   => '',
+            ],
+            'subject' => [
+                'pack'  => '',
+                'enemy' => '',
+            ],
+            'suggestion' => [
+                'displaced'               => '',
+                'displaced_shape_unknown' => '',
+                'converged'               => '',
+                'scatter'                 => '',
+            ],
+        ],
     ],
 
 ];

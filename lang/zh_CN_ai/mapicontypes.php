@@ -125,6 +125,11 @@ return [
     'murder_row_loaded_pistol'                        => '已装填的手枪',
     'murder_row_overload_golem'                       => '超载魔像',
     'the_blinding_vale_flourishing_stride'            => '繁茂步伐',
+    'altar_of_fangs_mutating_elixir'                  => '变异药剂',
+    'den_of_nalorakk_rune_of_anchoring'               => '锚定符文',
+    'den_of_nalorakk_warding_incense'                 => '守护熏香',
+    'voidscar_arena_proof_of_endurance'               => '耐力之证',
+    'voidscar_arena_proof_of_mastery'                 => '精通之证',
 
     'waystone' => '路标石',
 ];

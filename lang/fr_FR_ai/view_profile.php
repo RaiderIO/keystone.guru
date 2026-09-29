@@ -87,6 +87,9 @@ return [
         'creator_directory_hide_help'      => 'Les créateurs ayant des itinéraires publiés sont listés automatiquement dans l\'annuaire. Cochez cette case pour garder votre profil hors de celui-ci - vos itinéraires restent publiés dans tous les cas.',
         'creator_save'                     => 'Enregistrer le profil de créateur',
         'creator_view_public_profile'      => 'Voir mon profil public',
+        'creator_public_profile_url'       => 'Adresse de votre profil public',
+        'creator_public_profile_copy'      => 'Copier l\'adresse de votre profil public dans le presse-papiers',
+        'creator_public_profile_url_help'  => 'Cette adresse suit votre nom d\'utilisateur. Si vous changez de nom d\'utilisateur, elle change aussi, et les liens qui utilisent l\'ancienne adresse cessent de fonctionner.',
     ],
     'favorites' => [
         'title' => 'Mes favoris',
@@ -95,6 +98,7 @@ return [
         'title'          => 'Aperçu',
         'route_coverage' => 'Couverture de l\'itinéraire',
         'route_overview' => 'Aperçu de l\'itinéraire',
+        'delete_routes'  => 'Supprimer des itinéraires…',
     ],
     'routes' => [
         'title' => 'Mes itinéraires',
@@ -106,6 +110,8 @@ return [
                     Vous pouvez gérer les étiquettes pour vos propres itinéraires ici. Personne d\'autre ne pourra voir vos étiquettes - pour les itinéraires attachés à une équipe
                     vous pouvez gérer un ensemble distinct d\'étiquettes pour cette équipe en visitant la section Étiquettes lors de la visualisation de votre équipe.',
         'link_your_personal_route_overview' => 'votre aperçu personnel des itinéraires',
+        'collections'                       => 'Les étiquettes organisent vos itinéraires pour vous seul et ne sont jamais publiées. Pour réunir un ensemble d\'itinéraires sur une seule page que vous pouvez partager avec un seul lien, créez plutôt %s.',
+        'link_collections'                  => 'une collection',
     ],
     'view' => [
         'title'              => 'Itinéraires de %s',
@@ -113,8 +119,6 @@ return [
         'pinned_collections' => 'Collections épinglées',
         'pinned_routes'      => 'Itinéraires épinglés',
         'all_routes'         => 'Tous les itinéraires',
-        'route_count'        => '{0} Aucun itinéraire publié|{1} :count itinéraire publié|[2,*] :count itinéraires publiés',
-        'member_since'       => 'Crée des itinéraires depuis le :date',
         'social_link'        => 'Visiter :platform',
         'platform'           => [
             'twitch'    => 'Twitch',

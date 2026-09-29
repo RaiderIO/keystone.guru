@@ -5,12 +5,9 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'           => 'Raider.IO Еженедельный маршрут',
-                'weekly_routes'          => 'Еженедельные маршруты Raider.IO',
-                'community_routes'       => 'Маршруты сообщества',
-                'popular'                => 'Популярные маршруты',
-                'newly_published_routes' => 'Новые маршруты',
-                'archetypes'             => [
+                'weekly_routes'    => 'Еженедельные маршруты Raider.IO',
+                'community_routes' => 'Маршруты сообщества',
+                'archetypes'       => [
                     'pug_friendly' => [
                         'label'       => 'Подходит для PUG',
                         'description' => 'Щадящие пуллы для групп незнакомцев',
@@ -33,23 +30,6 @@ return [
         ],
         'panel' => [
             'show_more' => 'Показать еще',
-        ],
-        'search' => [
-            'page_title'              => 'Поиск маршрута',
-            'header'                  => 'Поиск маршрута',
-            'title'                   => 'Название',
-            'title_placeholder'       => 'Фильтр по названию',
-            'key_level'               => 'Уровень ключа',
-            'affixes'                 => 'Аффикс',
-            'affixes_title'           => 'Выбрать аффикс',
-            'select_affixes'          => 'Выбрать аффиксы',
-            'affixes_selected'        => '{0} аффиксов выбрано',
-            'enemy_forces'            => 'Силы врага',
-            'enemy_forces_complete'   => 'Завершенные',
-            'enemy_forces_incomplete' => 'Незавершенные',
-            'rating'                  => 'Рейтинг',
-            'user'                    => 'Пользователь',
-            'user_placeholder'        => 'Фильтр по пользователю',
         ],
     ],
     'livesession' => [

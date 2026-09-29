@@ -54,7 +54,6 @@ return [
         ],
         'griddiscover' => [
             'popular' => '熱門',
-            'new'     => '新',
         ],
         'list' => [
             'more'        => '',
@@ -128,8 +127,9 @@ return [
             'pulls'     => '',
         ],
         'table' => [
-            'team'   => '隊伍',
-            'filter' => '篩選',
+            'team'                     => '隊伍',
+            'filter'                   => '篩選',
+            'mass_delete_picker_title' => '',
         ],
         'tablefilters' => [
             'affixes'               => '詞綴',
@@ -159,6 +159,8 @@ return [
             'pagination'                   => '',
             'cancel'                       => '',
             'add_none'                     => '',
+            'delete_none'                  => '',
+            'select_page'                  => '',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - 數據來源 https://www.archon.gg/wow',
@@ -256,7 +258,7 @@ return [
             'battlenet_region'        => '',
             'continue_with_battlenet' => '',
             'continue_with_discord'   => '',
-            'continue_with_google'    => '',
+            'sign_in_with_google'     => '',
         ],
         'orderedselect' => [
             'choose' => '',
@@ -570,6 +572,8 @@ return [
                 'matching_routes'         => '',
                 'show_lines'              => '',
                 'lines_legend'            => '',
+                'show_groups'             => '',
+                'groups_legend'           => '',
                 'line_popup'              => [
                     'npc'            => '',
                     'distance'       => '',
@@ -679,6 +683,32 @@ return [
         ],
         'enemydetails' => [
             'report_an_issue' => '',
+        ],
+        'mappingversionupgradediff' => [
+            'title'                                 => '',
+            'description'                           => '',
+            'no_route_impact'                       => '',
+            'pull'                                  => '',
+            'unknown_npc'                           => '',
+            'emptied_pulls'                         => '',
+            'removed_pull_enemies'                  => '',
+            'removed_pull_enemies_description'      => '',
+            'unkilled_required_enemies'             => '',
+            'unkilled_required_enemies_description' => '',
+            'newly_required'                        => '',
+            'moved_pull_enemies'                    => '',
+            'moved_pull_enemies_description'        => '',
+            'moved_yards'                           => '',
+            'moved_to_floor'                        => '',
+            'enemy_forces'                          => '',
+            'enemy_forces_total'                    => '',
+            'enemy_forces_required'                 => '',
+            'enemy_forces_npc'                      => '',
+            'dungeon_wide'                          => '',
+            'dungeon_wide_unchanged'                => '',
+            'enemies_added'                         => '',
+            'enemies_removed'                       => '',
+            'enemy_patrols'                         => '',
         ],
         'userreport' => [
             'dungeonroute' => [

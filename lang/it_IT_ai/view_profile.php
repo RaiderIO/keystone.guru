@@ -87,6 +87,9 @@ return [
         'creator_directory_hide_help'      => 'I creatori con percorsi pubblicati vengono elencati automaticamente nell\'elenco. Seleziona questa opzione per tenere il tuo profilo fuori dall\'elenco - i tuoi percorsi restano pubblicati in entrambi i casi.',
         'creator_save'                     => 'Salva profilo creatore',
         'creator_view_public_profile'      => 'Visualizza il mio profilo pubblico',
+        'creator_public_profile_url'       => 'L\'indirizzo del tuo profilo pubblico',
+        'creator_public_profile_copy'      => 'Copia negli appunti l\'indirizzo del tuo profilo pubblico',
+        'creator_public_profile_url_help'  => 'Questo indirizzo segue il tuo nome utente. Se cambi nome utente cambia anche l\'indirizzo, e i link che usano quello vecchio smettono di funzionare.',
     ],
     'favorites' => [
         'title' => 'I miei preferiti',
@@ -95,6 +98,7 @@ return [
         'title'          => 'Panoramica',
         'route_coverage' => 'Copertura del percorso',
         'route_overview' => 'Panoramica del percorso',
+        'delete_routes'  => 'Elimina percorsi…',
     ],
     'routes' => [
         'title' => 'I miei percorsi',
@@ -106,6 +110,8 @@ return [
                     Puoi gestire i tag per i tuoi percorsi qui. Nessun altro potrà visualizzare i tuoi tag - per i percorsi allegati a un team
                     puoi gestire un insieme separato di tag solo per quel team visitando la sezione Tag quando visualizzi il tuo team.',
         'link_your_personal_route_overview' => 'la tua panoramica personale dei percorsi',
+        'collections'                       => 'I tag organizzano i tuoi percorsi solo per te e non vengono mai pubblicati. Per mettere un insieme di percorsi in un\'unica pagina da condividere con un solo link, crea invece %s.',
+        'link_collections'                  => 'una raccolta',
     ],
     'view' => [
         'title'              => 'Percorsi di %s',
@@ -113,8 +119,6 @@ return [
         'pinned_collections' => 'Raccolte appuntate',
         'pinned_routes'      => 'Percorsi appuntati',
         'all_routes'         => 'Tutti i percorsi',
-        'route_count'        => '{0} Nessun percorso pubblicato|{1} :count percorso pubblicato|[2,*] :count percorsi pubblicati',
-        'member_since'       => 'Crea percorsi da :date',
         'social_link'        => 'Visita :platform',
         'platform'           => [
             'twitch'    => 'Twitch',

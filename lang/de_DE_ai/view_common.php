@@ -54,7 +54,6 @@ return [
         ],
         'griddiscover' => [
             'popular' => 'Beliebt',
-            'new'     => 'Neu',
         ],
         'list' => [
             'more'        => 'Mehr',
@@ -128,8 +127,9 @@ return [
             'pulls'     => '{1} :count Pull|[2,*] :count Pulls',
         ],
         'table' => [
-            'team'   => 'Team',
-            'filter' => 'Filter',
+            'team'                     => 'Team',
+            'filter'                   => 'Filter',
+            'mass_delete_picker_title' => 'Mehrere Routen löschen',
         ],
         'tablefilters' => [
             'affixes'               => 'Affixe',
@@ -159,6 +159,8 @@ return [
             'pagination'                   => 'Routenseiten',
             'cancel'                       => 'Abbrechen',
             'add_none'                     => 'Routen hinzufügen',
+            'delete_none'                  => 'Routen löschen',
+            'select_page'                  => 'Alle auf dieser Seite auswählen',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - Daten von https://www.archon.gg/wow',
@@ -256,7 +258,7 @@ return [
             'battlenet_region'        => 'Battle.net-Region',
             'continue_with_battlenet' => 'Weiter mit Battle.net',
             'continue_with_discord'   => 'Weiter mit Discord',
-            'continue_with_google'    => 'Weiter mit Google',
+            'sign_in_with_google'     => 'Über Google anmelden',
         ],
         'orderedselect' => [
             'choose' => 'Wähle einen Eintrag zum Hinzufügen...',
@@ -570,6 +572,8 @@ return [
                 'matching_routes'         => 'Schlechteste Routen',
                 'show_lines'              => 'Linien zum zugeordneten Gegner anzeigen',
                 'lines_legend'            => 'Die :count schlechtesten Zuordnungen des aktuellen Filters über alle Etagen dieses Dungeons, von dort, wo der Kampf begann, bis zu dem Gegner, dem er zugeordnet wurde.',
+                'show_groups'             => 'Packs anzeigen, die aus großer Entfernung zugeordnet wurden',
+                'groups_legend'           => 'Ein Pfeil pro Pack, von der gemappten Stelle bis dorthin, wo der Kampf begann - blass, wenn er nur in wenigen Routen vorkam:',
                 'line_popup'              => [
                     'npc'            => ':name (:id)',
                     'distance'       => 'Gegner :enemy zugeordnet, :distance Yards entfernt',
@@ -679,6 +683,32 @@ return [
         ],
         'enemydetails' => [
             'report_an_issue' => 'Ein Problem melden',
+        ],
+        'mappingversionupgradediff' => [
+            'title'                                 => 'Was hat sich geändert?',
+            'description'                           => 'Dieser Entwurf wurde von Mapping-Version :oldVersion auf :newVersion aktualisiert. Nichts hiervon ist live, bis du den Entwurf anwendest.',
+            'no_route_impact'                       => 'Das Upgrade hat an deiner Route nichts verändert.',
+            'pull'                                  => 'Pull :index',
+            'unknown_npc'                           => 'Unbekannter Gegner',
+            'emptied_pulls'                         => 'Pulls, die alle Gegner verloren haben',
+            'removed_pull_enemies'                  => 'Aus deinen Pulls entfernte Gegner',
+            'removed_pull_enemies_description'      => 'Die neue Mapping-Version enthält diese Gegner nicht mehr, daher wurden sie aus deinen Pulls entfernt.',
+            'unkilled_required_enemies'             => 'Benötigte Gegner, die deine Route nicht tötet',
+            'unkilled_required_enemies_description' => 'Die Route kann nicht veröffentlicht werden, und dieser Entwurf kann nicht auf eine veröffentlichte Route angewendet werden, solange nicht jeder dieser Gegner in einem Pull ist.',
+            'newly_required'                        => 'Neu',
+            'moved_pull_enemies'                    => 'Verschobene Gegner',
+            'moved_pull_enemies_description'        => 'Diese Gegner sind noch in deinen Pulls, aber die neue Mapping-Version platziert sie woanders - die Linien, die du zu ihnen gezeichnet hast, passen möglicherweise nicht mehr.',
+            'moved_yards'                           => 'um :yards Yards verschoben',
+            'moved_to_floor'                        => 'verschoben nach :floor',
+            'enemy_forces'                          => 'Feindkräfte',
+            'enemy_forces_total'                    => 'Deine Route: :old -> :new',
+            'enemy_forces_required'                 => 'Benötigt, um den Dungeon abzuschließen: :old -> :new',
+            'enemy_forces_npc'                      => ':npc: :old -> :new pro Gegner',
+            'dungeon_wide'                          => 'Anderswo im Dungeon',
+            'dungeon_wide_unchanged'                => 'Es wurden keine Gegner oder Patrouillen hinzugefügt oder entfernt.',
+            'enemies_added'                         => '{1} Ein Gegner wurde hinzugefügt.|[2,*] :count Gegner wurden hinzugefügt.',
+            'enemies_removed'                       => '{1} Ein Gegner wurde entfernt.|[2,*] :count Gegner wurden entfernt.',
+            'enemy_patrols'                         => 'Patrouillen: :old -> :new',
         ],
         'userreport' => [
             'dungeonroute' => [

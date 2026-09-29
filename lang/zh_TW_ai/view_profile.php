@@ -86,6 +86,9 @@ return [
         'creator_directory_hide_help'      => '',
         'creator_save'                     => '',
         'creator_view_public_profile'      => '',
+        'creator_public_profile_url'       => '',
+        'creator_public_profile_copy'      => '',
+        'creator_public_profile_url_help'  => '',
     ],
     'favorites' => [
         'title' => '我的最愛',
@@ -94,6 +97,7 @@ return [
         'title'          => '概覽',
         'route_coverage' => '路線覆蓋',
         'route_overview' => '路線概覽',
+        'delete_routes'  => '',
     ],
     'routes' => [
         'title' => '我的路線',
@@ -103,6 +107,8 @@ return [
         'header'                            => '我的標籤',
         'description'                       => '標籤功能允許您以適合自己的方式組織路線。您可以通過查看每條路線的操作來添加標籤到路線 %s。您可以在此管理您自己的路線標籤。沒有人可以查看您的標籤 - 對於附加到團隊的路線，您可以通過查看團隊時訪問標籤部分來管理僅該團隊的標籤集。',
         'link_your_personal_route_overview' => '您的個人路線概覽',
+        'collections'                       => '',
+        'link_collections'                  => '',
     ],
     'view' => [
         'title'              => '%s 的路線',
@@ -110,8 +116,6 @@ return [
         'pinned_collections' => '',
         'pinned_routes'      => '',
         'all_routes'         => '',
-        'route_count'        => '',
-        'member_since'       => '',
         'social_link'        => '',
         'platform'           => [
             'twitch'    => '',

@@ -125,6 +125,11 @@ return [
     'murder_row_loaded_pistol'                        => 'Pistola cargada',
     'murder_row_overload_golem'                       => 'Gólem de sobrecarga',
     'the_blinding_vale_flourishing_stride'            => 'Paso floreciente',
+    'altar_of_fangs_mutating_elixir'                  => 'Elixir mutante',
+    'den_of_nalorakk_rune_of_anchoring'               => 'Runa de anclaje',
+    'den_of_nalorakk_warding_incense'                 => 'Incienso protector',
+    'voidscar_arena_proof_of_endurance'               => 'Prueba de resistencia',
+    'voidscar_arena_proof_of_mastery'                 => 'Prueba de maestría',
 
     'waystone' => 'Piedra guía',
 ];

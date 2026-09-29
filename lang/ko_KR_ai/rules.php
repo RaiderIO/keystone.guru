@@ -23,5 +23,7 @@ return [
     'map_icon_type_role_check_rule' => [
         'message' => '해당 지도 아이콘 유형은 사용자의 접근 수준에서 사용할 수 없습니다.',
     ],
-
+    'user_slug_available_rule' => [
+        'taken' => '이미 사용 중인 사용자 이름입니다.',
+    ],
 ];

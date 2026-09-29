@@ -23,5 +23,7 @@ return [
     'map_icon_type_role_check_rule' => [
         'message' => '该地图图标类型不适用于您的访问级别。',
     ],
-
+    'user_slug_available_rule' => [
+        'taken' => '此用户名已被占用。',
+    ],
 ];

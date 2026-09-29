@@ -87,6 +87,9 @@ return [
         'creator_directory_hide_help'      => 'Creator mit veröffentlichten Routen werden automatisch im Verzeichnis gelistet. Aktiviere dies, um dein Profil herauszuhalten - deine Routen bleiben in jedem Fall veröffentlicht.',
         'creator_save'                     => 'Creator-Profil speichern',
         'creator_view_public_profile'      => 'Mein öffentliches Profil ansehen',
+        'creator_public_profile_url'       => 'Deine öffentliche Profiladresse',
+        'creator_public_profile_copy'      => 'Deine öffentliche Profiladresse in die Zwischenablage kopieren',
+        'creator_public_profile_url_help'  => 'Diese Adresse richtet sich nach deinem Benutzernamen. Änderst du deinen Benutzernamen, ändert sie sich mit, und Links mit der alten Adresse funktionieren nicht mehr.',
     ],
     'favorites' => [
         'title' => 'Meine Favoriten',
@@ -95,6 +98,7 @@ return [
         'title'          => 'Übersicht',
         'route_coverage' => 'Routenabdeckung',
         'route_overview' => 'Routenübersicht',
+        'delete_routes'  => 'Routen löschen…',
     ],
     'routes' => [
         'title' => 'Meine Routen',
@@ -106,6 +110,8 @@ return [
                     Du kannst Tags für deine eigenen Routen hier verwalten. Niemand anderes wird deine Tags sehen können - für Routen, die einem Team zugeordnet sind,
                     kannst du einen separaten Satz von Tags nur für dieses Team verwalten, indem du den Abschnitt Tags besuchst, wenn du dein Team ansiehst.',
         'link_your_personal_route_overview' => 'Deine persönliche Routenübersicht',
+        'collections'                       => 'Tags organisieren deine Routen nur für dich und werden nie veröffentlicht. Um mehrere Routen auf einer Seite zusammenzufassen, die du mit einem einzigen Link teilen kannst, erstelle stattdessen %s.',
+        'link_collections'                  => 'eine Sammlung',
     ],
     'view' => [
         'title'              => '%s\'s Routen',
@@ -113,8 +119,6 @@ return [
         'pinned_collections' => 'Angeheftete Sammlungen',
         'pinned_routes'      => 'Angeheftete Routen',
         'all_routes'         => 'Alle Routen',
-        'route_count'        => '{0} Keine veröffentlichten Routen|{1} :count veröffentlichte Route|[2,*] :count veröffentlichte Routen',
-        'member_since'       => 'Erstellt Routen seit :date',
         'social_link'        => ':platform besuchen',
         'platform'           => [
             'twitch'    => 'Twitch',

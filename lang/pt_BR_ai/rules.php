@@ -23,5 +23,7 @@ return [
     'map_icon_type_role_check_rule' => [
         'message' => 'Esse tipo de ícone de mapa não está disponível para seu nível de acesso.',
     ],
-
+    'user_slug_available_rule' => [
+        'taken' => 'Este nome de usuário já está em uso.',
+    ],
 ];

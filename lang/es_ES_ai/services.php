@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => 'No hay ningún :npc dentro del alcance en esta planta, pero hay uno a menos de :distance yardas en otra. La planta registrada se deduce a partir del NPC anterior del registro, así que lo más probable es que el fallo se deba a esa deducción; verifícalo antes de cambiar el mapeo.',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => 'Mapeado en el lugar equivocado',
+                'converged' => 'Corre hacia el grupo antes de quedar registrado',
+                'scatter'   => 'Disperso',
+            ],
+            'subject' => [
+                'pack'  => 'el pack :group (id :pack_id)',
+                'enemy' => 'el enemigo :enemy_id',
+            ],
+            'suggestion' => [
+                'displaced'               => 'El combate empezó a :distance yardas de donde está mapeado :subject (rutas: :routes, el :share% del total), siempre en la misma dirección y manteniendo su forma. Mueve :subject a donde empieza el combate.',
+                'displaced_shape_unknown' => 'El combate empezó a :distance yardas de donde está mapeado :subject (rutas: :routes, el :share% del total), siempre en la misma dirección. Se han asignado muy pocos de sus enemigos para saber si mantuvo su forma o se agrupó, así que compruébalo antes de mover :subject a donde empieza el combate.',
+                'converged'               => 'El combate empezó a :distance yardas de donde está mapeado :subject (rutas: :routes, el :share% del total), pero agrupado (proporción de forma :ratio): corre hacia el grupo antes de su primer evento registrado, así que es aquí donde lucha el grupo. No toques el mapeo.',
+                'scatter'                 => 'El combate empezó de media a :distance yardas de donde está mapeado :subject (rutas: :routes), pero en todas las direcciones (consistencia :consistency). Body pulls o patrullas: no hay nada que mover.',
+            ],
+        ],
     ],
 
 ];
