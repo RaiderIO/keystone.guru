@@ -12,6 +12,7 @@ use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\IsolatesSeededUpcomingSeasons;
@@ -270,6 +271,45 @@ final class HeaderComposerTest extends PublicTestCase
         $this->assertNotNull($selector);
         $this->assertStringContainsString('https://example.test/more', $selector);
         $this->assertStringContainsString(__('view_common.dungeon.list.more'), $selector);
+    }
+
+    /**
+     * Dungeon abbreviations are keystone.guru's own short names, so no game-data sync fills them and every
+     * non-English locale file carries them as an empty string - which the header rendered as a blank label.
+     */
+    #[Test]
+    #[DataProvider('render_givenNonEnglishLocale_rendersTheDungeonAbbreviationInThatLocaleOrEnglish_dataProvider')]
+    public function render_givenNonEnglishLocale_rendersTheDungeonAbbreviationInThatLocaleOrEnglish(
+        string $germanAbbreviation,
+        bool   $expectsEnglish,
+    ): void {
+        // Arrange
+        $dungeon             = Dungeon::getUserOrDefaultDungeon();
+        $englishAbbreviation = __($dungeon->abbreviation, [], 'en_US');
+        $this->assertNotSame('', $englishAbbreviation, 'The default dungeon needs an English abbreviation');
+        // Loads the whole group first: addLines() on a group that was never loaded would stand in for all of it
+        __($dungeon->abbreviation, [], 'de_DE_ai');
+        app('translator')->addLines([$dungeon->abbreviation => $germanAbbreviation], 'de_DE_ai');
+        app()->setLocale('de_DE_ai');
+
+        // Act
+        $selector = $this->getMobileDungeonSelectorHtml(view('common.layout.header')->render());
+
+        // Assert
+        $this->assertNotNull($selector);
+        $this->assertSame(1, preg_match('/<span class="dungeon_context_nav_label[^"]*">\s*(.*?)\s*<\/span>/s', $selector, $matches));
+        $this->assertSame(e($expectsEnglish ? $englishAbbreviation : $germanAbbreviation), $matches[1]);
+    }
+
+    /**
+     * @return array<string, array{string, bool}>
+     */
+    public static function render_givenNonEnglishLocale_rendersTheDungeonAbbreviationInThatLocaleOrEnglish_dataProvider(): array
+    {
+        return [
+            'translated'   => ['TESTKÜRZEL', false],
+            'untranslated' => ['', true],
+        ];
     }
 
     /**
