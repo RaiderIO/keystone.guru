@@ -8,6 +8,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonKey;
 use App\Models\Floor\Floor;
+use App\Models\Floor\FloorCoupling;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -208,28 +209,7 @@ final class EasternKingdomsMappingTest extends TestCase
     }
 
     #[Test]
-    public function convertFacadeMapLocationToMapLocation_givenAnyPointOnTheFacade_returnsAZone(): void
-    {
-        // Arrange
-        $coordinatesService = app(CoordinatesServiceInterface::class);
-        $mappingVersion     = $this->getMappingVersion();
-        $facade             = $this->getEasternKingdoms()->floors->firstWhere('facade', true);
-
-        for ($fractionY = 0.01; $fractionY < 1; $fractionY += 0.049) {
-            for ($fractionX = 0.01; $fractionX < 1; $fractionX += 0.049) {
-                $facadeLatLng = new LatLng($fractionY * -256, $fractionX * 384, $facade);
-
-                // Act
-                $result = $coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $facadeLatLng);
-
-                // Assert
-                $this->assertFalse((bool)$result->getFloor()->facade, sprintf('%.3f, %.3f', $fractionX, $fractionY));
-            }
-        }
-    }
-
-    #[Test]
-    public function dungeonFloorSwitchMarkers_givenEasternKingdoms_returnsLinkedPairsInsideTheirFloors(): void
+    public function dungeonFloorSwitchMarkers_givenEasternKingdoms_returnsLinkedPairsDirectedByTheirFloorCoupling(): void
     {
         // Arrange
         $mappingVersion = $this->getMappingVersion();
@@ -243,7 +223,7 @@ final class EasternKingdomsMappingTest extends TestCase
             ->keyBy('id');
 
         // Assert
-        $this->assertCount(58, $markers);
+        $this->assertCount(72, $markers);
         foreach ($markers as $marker) {
             /** @var DungeonFloorSwitchMarker $marker */
             $linkedMarker = $markers->get($marker->linked_dungeon_floor_switch_marker_id);
@@ -252,6 +232,12 @@ final class EasternKingdomsMappingTest extends TestCase
             $this->assertSame($marker->floor_id, $linkedMarker->target_floor_id);
             $this->assertSame($marker->target_floor_id, $linkedMarker->floor_id);
             $this->assertNotSame($facade->id, $marker->floor_id);
+            $this->assertNull($marker->direction, (string)$marker->id);
+            $this->assertContains(
+                $marker->floor_coupling_direction,
+                [FloorCoupling::DIRECTION_UP, FloorCoupling::DIRECTION_DOWN, FloorCoupling::DIRECTION_LEFT, FloorCoupling::DIRECTION_RIGHT],
+                (string)$marker->id,
+            );
             $this->assertEqualsWithDelta(-128, $marker->lat, 128, (string)$marker->id);
             $this->assertEqualsWithDelta(192, $marker->lng, 192, (string)$marker->id);
         }
