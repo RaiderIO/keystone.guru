@@ -138,6 +138,8 @@ class AppServiceProvider extends ServiceProvider
         // Every drag in the collaborative map editor is a write, and sandbox routes accept them without a session - the
         // ceiling sits above the whole site's busiest measured hour of editor writes (~1000), so only abuse reaches it
         RateLimiter::for('edit-dungeonroute', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
+        // One call deletes up to a hundred routes, each costing a dozen-plus queries and its thumbnail files
+        RateLimiter::for('delete-dungeonroutes', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 60)->by($this->userKey($request)));
         RateLimiter::for('create-tag', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 60)->by($this->userKey($request)));
         RateLimiter::for('create-collection', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 30)->by($this->userKey($request)));
         RateLimiter::for('create-team', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 5)->by($this->userKey($request)));

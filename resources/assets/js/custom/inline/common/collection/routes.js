@@ -62,7 +62,7 @@ class CommonCollectionRoutes extends InlineCode {
                 });
         });
 
-        $(this.options.dungeonRoutePickerSelector).on('dungeonroutepicker:added', function (event, result) {
+        $(this.options.dungeonRoutePickerSelector).on('dungeonroutepicker:confirmed', function (event, result) {
             self._onAdded(result);
         });
 

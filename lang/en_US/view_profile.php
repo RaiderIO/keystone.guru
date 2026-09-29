@@ -98,6 +98,7 @@ return [
         'title'          => 'Overview',
         'route_coverage' => 'Route coverage',
         'route_overview' => 'Route overview',
+        'delete_routes'  => 'Delete routes…',
     ],
     'routes' => [
         'title' => 'My routes',

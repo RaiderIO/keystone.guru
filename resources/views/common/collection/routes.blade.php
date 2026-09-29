@@ -210,8 +210,8 @@ $inlineOptions = [
             'maxPerDungeon' => DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON,
             'existingDungeonIds' => $collectionDungeonIds,
             // A new collection has nothing to post to yet: its routes are added to the form and saved with it
-            'addUrl' => $isNew ? null : route('ajax.collection.routes.store', ['dungeonRouteCollection' => $dungeonRouteCollection]),
-            'addFieldName' => 'dungeon_routes',
+            'actionUrl' => $isNew ? null : route('ajax.collection.routes.store', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+            'actionFieldName' => 'dungeon_routes',
             'openButtonSelector' => null,
         ])
     @endif

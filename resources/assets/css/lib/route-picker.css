@@ -57,6 +57,22 @@
     border: 1px solid currentColor;
 }
 
+/* The page's tick box sits in the same column as the rows' tick boxes: padded like a route row */
+.route_picker .route_picker_select_page {
+    padding: 0.5rem 0.25rem;
+    border-color: var(--theme-border-subtle) !important;
+}
+
+.route_picker .route_picker_select_page .leaderboard_rank {
+    flex: 0 0 2.75rem;
+    width: 2.75rem;
+    padding-right: 0.75rem;
+}
+
+.route_picker .route_picker_select_page[hidden] {
+    display: none;
+}
+
 /* The row's own rank column becomes the tick box's column, so the rows still line up */
 .route_picker .leaderboard_rank {
     height: 44px;

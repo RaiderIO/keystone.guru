@@ -216,7 +216,7 @@ describe('CommonCollectionRoutes', () => {
         ];
 
         // Act
-        jQuery('#picker').trigger('dungeonroutepicker:added', [{publicKeys: ['keyC', 'keyD'], response: {dungeon_routes: added}}]);
+        jQuery('#picker').trigger('dungeonroutepicker:confirmed', [{publicKeys: ['keyC', 'keyD'], response: {dungeon_routes: added}}]);
 
         // Assert
         expect(lists.slot_2_inline.getIds()).toEqual(['keyC']);
@@ -237,7 +237,7 @@ describe('CommonCollectionRoutes', () => {
         // Arrange - every posted route was already a member, so the controller stored none of them
 
         // Act
-        jQuery('#picker').trigger('dungeonroutepicker:added', [{publicKeys: ['keyA'], response: {dungeon_routes: []}}]);
+        jQuery('#picker').trigger('dungeonroutepicker:confirmed', [{publicKeys: ['keyA'], response: {dungeon_routes: []}}]);
 
         // Assert
         expect(lists.slot_1_inline.getIds()).toEqual(['keyA', 'keyB']);
@@ -265,7 +265,7 @@ describe('CommonCollectionRoutes', () => {
     it('onAdded_givenUndo_removesTheAddedRoutesAgain', () => {
         // Arrange
         const added = [{id: 21, public_key: 'keyC', title: 'Charlie', dungeon_id: 2, dungeon: 'Two', enemy_forces: 300, enemy_forces_required: 280}];
-        jQuery('#picker').trigger('dungeonroutepicker:added', [{publicKeys: ['keyC'], response: {dungeon_routes: added}}]);
+        jQuery('#picker').trigger('dungeonroutepicker:confirmed', [{publicKeys: ['keyC'], response: {dungeon_routes: added}}]);
 
         // Act
         toasts[0].opts.buttons[0].callback({close: vi.fn()});
@@ -374,7 +374,7 @@ describe('CommonCollectionRoutes', () => {
         // Arrange
         document.querySelector('#slot_1 [data-id="keyB"] .ordered_select_up').click();
         const added = [{id: 21, public_key: 'keyC', title: 'Charlie', dungeon_id: 2, dungeon: 'Two'}];
-        jQuery('#picker').trigger('dungeonroutepicker:added', [{publicKeys: ['keyC'], response: {dungeon_routes: added}}]);
+        jQuery('#picker').trigger('dungeonroutepicker:confirmed', [{publicKeys: ['keyC'], response: {dungeon_routes: added}}]);
 
         // Act
         vi.advanceTimersByTime(500);
@@ -436,7 +436,7 @@ describe('CommonCollectionRoutes', () => {
         asNewCollection();
 
         // Act - a drawer with no endpoint of its own reports the routes it picked from
-        jQuery('#picker').trigger('dungeonroutepicker:added', [{
+        jQuery('#picker').trigger('dungeonroutepicker:confirmed', [{
             publicKeys: ['keyC'],
             dungeonRoutes: [new PickerDungeonRoute({
                 public_key:                    'keyC',

@@ -5,6 +5,7 @@ namespace App\Repositories\Stub\DungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Season;
+use App\Models\User;
 use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
@@ -125,5 +126,10 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     public function getClonesOf(Collection $publicKeys): Collection
     {
         return collect();
+    }
+
+    public function hasNonSandboxRoutesByAuthor(User $user): bool
+    {
+        return false;
     }
 }

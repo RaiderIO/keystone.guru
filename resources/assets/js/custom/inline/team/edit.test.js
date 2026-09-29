@@ -72,7 +72,7 @@ describe('TeamEdit route picker host', () => {
         const picker = {
             options: {drawerSelector: '#drawer'},
             dialog,
-            onAdded: vi.fn(),
+            onConfirmed: vi.fn(),
             setExistingPublicKeys: vi.fn(),
             reload: vi.fn(),
         };

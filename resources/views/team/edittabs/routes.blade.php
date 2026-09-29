@@ -46,7 +46,7 @@ use App\Models\Team;
         'sourceTeam' => $team,
         'lockedGameVersion' => $currentUserGameVersion,
         'max' => TeamAddRoutesFormRequest::MAX_ROUTES_PER_REQUEST,
-        'addUrl' => sprintf('/ajax/team/%s/route', $team->public_key),
+        'actionUrl' => sprintf('/ajax/team/%s/route', $team->public_key),
         'openButtonSelector' => '#add_route_btn',
     ])
 @endif

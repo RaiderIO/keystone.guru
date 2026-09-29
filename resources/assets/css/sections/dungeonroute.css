@@ -1,3 +1,10 @@
+/* Bootstrap's focus ring on an outline danger button is a half-transparent red that is hard to see on the dark page */
+#routes_table_mass_delete:focus-visible {
+    outline: 2px solid var(--theme-btn-accent);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
 .tag.edit {
     cursor: pointer;
 }

@@ -6,6 +6,7 @@ use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
+use App\Models\User;
 use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
@@ -481,6 +482,82 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, $result);
+    }
+
+    #[Test]
+    public function hasNonSandboxRoutesByAuthor_givenAnOwnedRoute_returnsTrue(): void
+    {
+        // Arrange
+        $user         = User::factory()->create();
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $user->id, 'expires_at' => null]);
+
+        try {
+            // Act
+            $result = $this->repository->hasNonSandboxRoutesByAuthor($user);
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            $dungeonRoute->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function hasNonSandboxRoutesByAuthor_givenOnlySandboxRoutes_returnsFalse(): void
+    {
+        // Arrange
+        $user         = User::factory()->create();
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $user->id, 'expires_at' => now()->addHour()]);
+
+        try {
+            // Act
+            $result = $this->repository->hasNonSandboxRoutesByAuthor($user);
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            $dungeonRoute->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function hasNonSandboxRoutesByAuthor_givenOnlySomeoneElsesRoute_returnsFalse(): void
+    {
+        // Arrange
+        $user         = User::factory()->create();
+        $otherUser    = User::factory()->create();
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $otherUser->id, 'expires_at' => null]);
+
+        try {
+            // Act
+            $result = $this->repository->hasNonSandboxRoutesByAuthor($user);
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            $dungeonRoute->delete();
+            $otherUser->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function hasNonSandboxRoutesByAuthor_givenNoRoutes_returnsFalse(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+
+        try {
+            // Act
+            $result = $this->repository->hasNonSandboxRoutesByAuthor($user);
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            $user->delete();
+        }
     }
 
     private function createRouteWithThumbnailState(
