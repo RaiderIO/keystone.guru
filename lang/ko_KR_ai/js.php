@@ -400,7 +400,7 @@ return [
     'mapping_version_upgrade_apply_confirm'        => '이 초안을 업그레이드 대상 경로에 적용하시겠습니까? 해당 경로의 현재 내용과 설정이 이 초안의 것으로 대체되고, 초안은 삭제됩니다. 이 작업은 되돌릴 수 없습니다.',
     'mapping_version_upgrade_discard_confirm'      => '이 업그레이드 초안을 폐기하시겠습니까? 초안에 적용한 모든 변경 사항이 사라집니다. 업그레이드 대상 경로는 그대로 유지됩니다. 이 작업은 되돌릴 수 없습니다.',
     'mapping_version_upgrade_continue_label'       => '업그레이드 초안 이어서 작업',
-    'mapping_version_upgrade_diff_label'           => '무엇이 바뀌었나요?',
+    'mapping_version_upgrade_diff_label'           => '무엇이 바뀌었습니까?',
     'upgrade_draft_badge_label'                    => '업그레이드 초안',
     'upgrade_draft_badge_title'                    => '이것은 업그레이드 초안입니다. 단독으로 공유할 수 없습니다. 변경 사항을 게시하려면 업그레이드 대상 경로에 적용하세요.',
     'upgrade_draft_in_progress_badge_label'        => '초안 작업 중',

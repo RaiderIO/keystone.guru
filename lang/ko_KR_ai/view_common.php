@@ -685,7 +685,7 @@ return [
             'report_an_issue' => '문제 신고',
         ],
         'mappingversionupgradediff' => [
-            'title'                                 => '무엇이 바뀌었나요?',
+            'title'                                 => '무엇이 바뀌었습니까?',
             'description'                           => '이 초안은 매핑 버전 :oldVersion에서 :newVersion(으)로 업그레이드되었습니다. 초안을 적용하기 전까지는 아래 내용이 반영되지 않습니다.',
             'no_route_impact'                       => '이번 업그레이드로 경로에서 바뀐 것은 없습니다.',
             'pull'                                  => '풀 :index',
