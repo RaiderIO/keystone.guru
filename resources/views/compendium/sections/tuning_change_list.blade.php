@@ -44,7 +44,7 @@ $formatCoefficient = static fn(?float $coefficient): string => $coefficient === 
 $rows = $changes
     ->groupBy(static fn(SpellTuningChange $change): string => $showSpellSubject
         ? implode('|', [
-            __($change->spell->name),
+            $change->spell->getTranslatedName(),
             $change->change_type->value,
             $change->kind->value ?? '',
             // Texts AND coefficients: old_text is '' (not null) for coefficient-only changes, so a

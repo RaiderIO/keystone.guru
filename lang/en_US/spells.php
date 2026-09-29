@@ -8182,7 +8182,7 @@ return [
     1314883 => 'Hunting Leap',
     1314884 => 'Hunting Leap',
     1314885 => 'Hunting Leap',
-    1317558 => 'Spells',
+    1317558 => 'Melee',
     9995099 => 'TestHiddenSpell',
 ]
 ;

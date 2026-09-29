@@ -84,7 +84,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             if ($enemy->npc !== null) {
                 $enemy->npc->name = __($enemy->npc->name);
                 foreach ($enemy->npc->spells as $spell) {
-                    $spell->name           = __($spell->name);
+                    $spell->name           = $spell->getTranslatedName();
                     $spell->category       = __($spell->category);
                     $spell->cooldown_group = __($spell->cooldown_group);
                 }

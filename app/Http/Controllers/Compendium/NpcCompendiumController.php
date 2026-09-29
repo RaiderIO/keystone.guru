@@ -158,6 +158,10 @@ class NpcCompendiumController extends Controller
     {
         $mappingVersion = $request->dungeon()->getCurrentMappingVersion();
 
+        $locale         = app()->getLocale();
+        $fallbackLocale = config('app.fallback_locale');
+        $dungeonName    = "COALESCE(NULLIF(dungeon_translations.translation, ''), dungeon_fallback_translations.translation)";
+
         $npcs = Npc::query()
             // The datatable renders the spells column off the serialized spells relation, and the
             // hover tooltip off the four relations behind tooltip_data (#4096)
@@ -165,22 +169,27 @@ class NpcCompendiumController extends Controller
             // tooltip_data is not appended by default - it would land in the map context as well,
             // which renders no tooltips and would carry the text for nothing (see Npc::$appends)
             ->afterQuery(static fn(EloquentCollection $npcs): EloquentCollection => $npcs->each->append('tooltip_data'))
-            // An NPC whose name was never moved to a translation key has no translations row; its name is the key itself
-            ->selectRaw('npcs.*, COALESCE(npc_name_translations.translation, npcs.name) as name, GROUP_CONCAT(DISTINCT dungeon_translations.translation SEPARATOR ", ") AS dungeon_names')
+            ->selectRaw(sprintf(
+                'npcs.*, %s as name, GROUP_CONCAT(DISTINCT %s SEPARATOR ", ") AS dungeon_names',
+                NameColumnHandler::NAME_EXPRESSION,
+                $dungeonName,
+            ))
             ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
             ->join('mapping_versions', 'enemies.mapping_version_id', '=', 'mapping_versions.id')
             ->join('dungeons', 'mapping_versions.dungeon_id', '=', 'dungeons.id')
-            ->leftJoin('translations as dungeon_translations', static function (JoinClause $clause) {
+            ->leftJoin('translations as dungeon_translations', static function (JoinClause $clause) use ($locale) {
                 $clause->on('dungeon_translations.key', '=', 'dungeons.name')
-                    ->where('dungeon_translations.locale', '=', 'en_US');
+                    ->where('dungeon_translations.locale', '=', $locale);
             })
-            ->leftJoin('translations as npc_name_translations', static function (JoinClause $clause) {
-                $clause->on('npc_name_translations.key', '=', 'npcs.name')
-                    ->where('npc_name_translations.locale', '=', 'en_US');
-            })
+            ->leftJoin('translations as dungeon_fallback_translations', static function (JoinClause $clause) use ($fallbackLocale) {
+                $clause->on('dungeon_fallback_translations.key', '=', 'dungeons.name')
+                    ->where('dungeon_fallback_translations.locale', '=', $fallbackLocale);
+            });
+
+        NameColumnHandler::joinNameTranslations($npcs, $locale, $fallbackLocale)
             ->groupBy('npcs.id')
             ->orderBy('npcs.classification_id', 'DESC')
-            ->orderBy('npc_name_translations.translation');
+            ->orderByRaw(NameColumnHandler::NAME_EXPRESSION);
 
         if ($mappingVersion !== null) {
             $npcs->where('enemies.mapping_version_id', $mappingVersion->id);
@@ -191,7 +200,7 @@ class NpcCompendiumController extends Controller
         return $datatablesHandler->setBuilder($npcs)
             ->addColumnHandler([
                 new NameColumnHandler($datatablesHandler),
-                new DungeonColumnHandler($datatablesHandler),
+                new DungeonColumnHandler($datatablesHandler, $dungeonName),
             ])
             ->applyRequestToBuilder()
             ->getResult();

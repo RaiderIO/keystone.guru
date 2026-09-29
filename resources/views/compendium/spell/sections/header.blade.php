@@ -10,11 +10,11 @@ use App\Models\Spell\SpellSchool;
 <div class="compendium_identity">
     <img src="{{ $spell->icon_url }}"
          width="88" height="88"
-         alt="{{ __($spell->name) }}"
+         alt="{{ $spell->getTranslatedName() }}"
          loading="lazy"
          class="compendium_identity_portrait"/>
     <div class="compendium_identity_body">
-        <h2 class="compendium_identity_title">{{ __($spell->name) }}</h2>
+        <h2 class="compendium_identity_title">{{ $spell->getTranslatedName() }}</h2>
         <div class="compendium_identity_meta">
             @if($spell->aura)
                 <span class="badge text-bg-info">

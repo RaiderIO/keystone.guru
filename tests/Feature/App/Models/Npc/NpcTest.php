@@ -103,4 +103,21 @@ final class NpcTest extends PublicTestCase
             $npc?->delete();
         }
     }
+
+    #[Test]
+    public function getRouteKey_givenLocaleWithEmptyNameTranslation_slugsEnglishName(): void
+    {
+        // Arrange
+        app('translator')->addLines(['npcs.999999004' => 'English Name'], 'en_US');
+        app('translator')->addLines(['npcs.999999004' => ''], 'de_DE_ai');
+        $npc     = new Npc(['name' => 'npcs.999999004']);
+        $npc->id = 999999004;
+        app()->setLocale('de_DE_ai');
+
+        // Act
+        $routeKey = $npc->getRouteKey();
+
+        // Assert
+        $this->assertSame('999999004-english-name', $routeKey);
+    }
 }
