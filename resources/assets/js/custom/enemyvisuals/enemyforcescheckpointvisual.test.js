@@ -29,16 +29,18 @@ const {EnemyForcesCheckpointVisual} = require('./enemyforcescheckpointvisual');
  * Builds a visual with just the collaborators `_refreshSatellitePill` reaches for, backed by a fake
  * checkpoint carrying the two enemies that make it want a satellite on floor 2.
  *
- * @param options {{groupIsShown?: Boolean, currentFloorId?: Number}}
+ * @param options {{groupIsShown?: Boolean, currentFloorId?: Number, enemies?: Object[]}}
  */
-function createVisual({groupIsShown = true, currentFloorId = 2} = {}) {
-    const removedLayers = [];
-    const addedLayers = [];
-
-    const enemies = [
+function createVisual({
+    groupIsShown = true,
+    currentFloorId = 2,
+    enemies = [
         {id: 1, floor_id: 2, source_floor_id: null, lat: 10, lng: 20},
         {id: 2, floor_id: 2, source_floor_id: null, lat: 30, lng: 40},
-    ];
+    ],
+} = {}) {
+    const removedLayers = [];
+    const addedLayers = [];
 
     const checkpoint = Object.create(EnemyForcesCheckpoint.prototype);
     checkpoint.id = 55;
@@ -119,6 +121,26 @@ describe('EnemyForcesCheckpointVisual._refreshSatellitePill', () => {
         // Arrange
         // The checkpoint's own marker already covers its anchor floor.
         const {visual} = createVisual({groupIsShown: true, currentFloorId: 1});
+
+        // Act
+        visual._refreshSatellitePill('<div>10%</div>');
+
+        // Assert
+        expect(visual._satelliteLayerGroup).toBeNull();
+    });
+
+    it('refreshSatellitePill_givenFacadeLayoutAndCurrentFloorIsASourceFloor_drawsNothing', () => {
+        // Arrange
+        // Facade layout: anchor and members sit on facade floor 1 in facade coordinates, and the user
+        // navigated from the facade to real floor 2, where the members really live.
+        const {visual} = createVisual({
+            groupIsShown: true,
+            currentFloorId: 2,
+            enemies: [
+                {id: 1, floor_id: 1, source_floor_id: 2, lat: 10, lng: 20},
+                {id: 2, floor_id: 1, source_floor_id: 2, lat: 30, lng: 40},
+            ],
+        });
 
         // Act
         visual._refreshSatellitePill('<div>10%</div>');
