@@ -24,6 +24,6 @@ return [
         'message' => 'Dieser Kartensymboltyp ist für dein Zugriffslevel nicht verfügbar.',
     ],
     'user_slug_available_rule' => [
-        'taken' => '',
+        'taken' => 'Dieser Benutzername ist bereits vergeben.',
     ],
 ];

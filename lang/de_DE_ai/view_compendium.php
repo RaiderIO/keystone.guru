@@ -238,8 +238,8 @@ return [
             'build_title'              => 'Build :build',
             'build_subtitle'           => 'verglichen mit :from',
             'changed_spells'           => ':count Zauber geändert|:count Zauber geändert',
-            'build_no_changes'         => '',
-            'build_no_changes_dungeon' => '',
+            'build_no_changes'         => 'Dieser Build hat die Werte keines NPC-Zaubers verändert.',
+            'build_no_changes_dungeon' => 'Dieser Build hat die Werte keines NPC-Zaubers in diesem Dungeon verändert.',
         ],
     ],
     'class' => [
