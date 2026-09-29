@@ -614,6 +614,7 @@ return [
                 'settings_title'              => 'Map/pull settings',
                 'new_pull'                    => 'New pull',
                 'delete_all_pulls_title'      => 'Delete all pulls',
+                'cycle_pulls_hotkey_title'    => 'Previous/next pull: A / D or [ / ]',
                 'toggle_all_required_enemies' => 'Toggle all required enemies',
                 'loading'                     => 'Loading...',
                 'no_pulls_created_edit'       => 'No pulls created. Click on the button above or on an enemy to add them to your first pull.',

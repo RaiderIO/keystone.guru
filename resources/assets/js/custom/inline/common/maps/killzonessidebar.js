@@ -601,68 +601,117 @@ class CommonMapsKillzonessidebar extends InlineCode {
             this.sidebar.showSidebar();
         }
 
-        // Handle selection of pulls with A+D or arrow keys
-        $(document).keypress(function (keyPressEvent) {
-            if ($(keyPressEvent.target).attr('id') !== 'map') {
-                // Ignore key presses that aren't on the map itself
-                return;
-            }
+        $(document).off('keydown.killzonessidebar').on('keydown.killzonessidebar', this._onDocumentKeyDown.bind(this));
+    }
 
-            // A key
-            let selectPrevious = keyPressEvent.charCode === 97;
-            // D key
-            let selectNext = keyPressEvent.charCode === 100;
+    /**
+     * Whether a keyboard event should be left alone because the user is typing, has a dialog open or is using a shortcut.
+     * @param keyEvent {KeyboardEvent|jQuery.Event}
+     * @returns {boolean}
+     * @private
+     */
+    _shouldIgnoreKeyEvent(keyEvent) {
+        if (keyEvent.ctrlKey || keyEvent.metaKey || keyEvent.altKey) {
+            return true;
+        }
 
-            if (selectPrevious || selectNext) {
-                // Get the currently selected killzone
-                let mapState = self.map.getMapState();
-                let newSelectedKillZone = null;
+        if ($(keyEvent.target).closest('input, textarea, select, [contenteditable]').length > 0) {
+            return true;
+        }
 
-                if (mapState instanceof SelectKillZoneEnemySelectionOverpull ||
-                    mapState instanceof EditKillZoneEnemySelection ||
-                    mapState instanceof ViewKillZoneEnemySelection) {
-                    if (selectNext) {
-                        // Search from the first to the end
-                        for (let key in killZoneMapObjectGroup.objects) {
-                            let killZone = killZoneMapObjectGroup.objects[key];
-                            if (killZone.index > mapState.getMapObject().index) {
-                                newSelectedKillZone = killZone;
-                                break;
-                            }
-                        }
-                    } else {
-                        // Search from the end to the first
-                        let killZoneObjectsReversed = _.values(killZoneMapObjectGroup.objects).reverse();
-                        for (let i = 0; i < killZoneObjectsReversed.length; i++) {
-                            let killZone = killZoneObjectsReversed[i];
-                            if (killZone.index < mapState.getMapObject().index) {
-                                newSelectedKillZone = killZone;
-                                break;
-                            }
-                        }
-                    }
-                } else if (mapState === null) {
-                    // Grab the first
-                    newSelectedKillZone = _.first(killZoneMapObjectGroup.objects);
-                }
+        return $('.modal.show').length > 0 || this.map.hasPopupOpen();
+    }
 
-                // Only if we have one to select
-                if (newSelectedKillZone instanceof KillZone) {
-                    let newMapState = null;
-                    if (getState().getMapContext() instanceof MapContextLiveSession) {
-                        newMapState = new SelectKillZoneEnemySelectionOverpull(self.map, newSelectedKillZone, mapState);
-                    } else if (self.map.options.edit) {
-                        newMapState = new EditKillZoneEnemySelection(self.map, newSelectedKillZone, mapState);
-                    } else {
-                        newMapState = new ViewKillZoneEnemySelection(self.map, newSelectedKillZone, mapState);
-                    }
-                    self.map.setMapState(newMapState);
+    /**
+     * Cycles through the pulls with A/D or [/].
+     * @param keyEvent {KeyboardEvent|jQuery.Event}
+     * @private
+     */
+    _onDocumentKeyDown(keyEvent) {
+        console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
-                    // Move the map to the killzone's center location
-                    self.map.focusOnKillZone(newSelectedKillZone);
-                }
-            }
-        });
+        if (typeof keyEvent.key !== 'string') {
+            return;
+        }
+
+        let key = keyEvent.key.toLowerCase();
+        let direction = null;
+        if (key === 'a' || key === '[') {
+            direction = -1;
+        } else if (key === 'd' || key === ']') {
+            direction = 1;
+        }
+
+        if (direction === null || this._shouldIgnoreKeyEvent(keyEvent)) {
+            return;
+        }
+
+        this._selectAdjacentKillZone(direction);
+    }
+
+    /**
+     * Finds the pull next to the given one, ordered by pull index.
+     * @param currentKillZone {KillZone|null} The currently selected pull, if any.
+     * @param direction {Number} 1 for the next pull, -1 for the previous pull.
+     * @returns {KillZone|null}
+     * @private
+     */
+    _getAdjacentKillZone(currentKillZone, direction) {
+        let killZones = _.sortBy(_.values(this.map.mapObjectGroupManager.getKillZoneMapObjectGroup().objects), 'index');
+
+        if (currentKillZone === null) {
+            return (direction > 0 ? _.first(killZones) : _.last(killZones)) ?? null;
+        }
+
+        let result = null;
+        if (direction > 0) {
+            result = _.find(killZones, (killZone) => killZone.index > currentKillZone.index);
+        } else {
+            result = _.findLast(killZones, (killZone) => killZone.index < currentKillZone.index);
+        }
+
+        return result ?? null;
+    }
+
+    /**
+     * Selects the pull next to the selected one, focuses the map on it and scrolls it into view in the sidebar.
+     * @param direction {Number} 1 for the next pull, -1 for the previous pull.
+     * @private
+     */
+    _selectAdjacentKillZone(direction) {
+        let mapState = this.map.getMapState();
+
+        let currentKillZone = null;
+        if (mapState instanceof SelectKillZoneEnemySelectionOverpull ||
+            mapState instanceof EditKillZoneEnemySelection ||
+            mapState instanceof ViewKillZoneEnemySelection) {
+            currentKillZone = mapState.getMapObject();
+        } else if (mapState !== null) {
+            // Some other tool is active (drawing, for example) - do not cancel it
+            return;
+        }
+
+        let newSelectedKillZone = this._getAdjacentKillZone(currentKillZone, direction);
+        if (!(newSelectedKillZone instanceof KillZone)) {
+            return;
+        }
+
+        let newMapState = null;
+        if (getState().getMapContext() instanceof MapContextLiveSession) {
+            newMapState = new SelectKillZoneEnemySelectionOverpull(this.map, newSelectedKillZone, mapState);
+        } else if (this.map.options.edit) {
+            newMapState = new EditKillZoneEnemySelection(this.map, newSelectedKillZone, mapState);
+        } else {
+            newMapState = new ViewKillZoneEnemySelection(this.map, newSelectedKillZone, mapState);
+        }
+        this.map.setMapState(newMapState);
+
+        this.map.focusOnKillZone(newSelectedKillZone);
+
+        let rowElement = document.getElementById(`map_killzonessidebar_killzone_${newSelectedKillZone.id}`);
+        if (rowElement !== null) {
+            rowElement.scrollIntoView({block: 'nearest'});
+        }
     }
 
     /**
@@ -677,5 +726,11 @@ class CommonMapsKillzonessidebar extends InlineCode {
         killZoneMapObjectGroup.unregister(['object:add', 'object:deleted', 'killzone:new', 'killzone:overpulledenemyadded', 'killzone:overpulledenemyremoved'], this);
 
         getState().unregister('killzonesnumberstyle:changed', this);
+
+        $(document).off('keydown.killzonessidebar');
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {CommonMapsKillzonessidebar};
 }
