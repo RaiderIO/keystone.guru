@@ -38,5 +38,13 @@
         "name": "mapping.checkpoints.df.ruby_life_pools.ruby_overlook_name",
         "lat": -65.138,
         "lng": 128.3731
+    },
+    {
+        "id": 42,
+        "mapping_version_id": 1088,
+        "floor_id": 155,
+        "name": "mapping.checkpoints.df.ruby_life_pools.ruby_overlook_name",
+        "lat": -65.138,
+        "lng": 128.3731
     }
 ]

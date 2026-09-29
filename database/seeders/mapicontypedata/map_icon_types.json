@@ -788,6 +788,41 @@
         "admin_only": true
     },
     {
+        "key": "altar_of_fangs_mutating_elixir",
+        "name": "mapicontypes.altar_of_fangs_mutating_elixir",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "den_of_nalorakk_rune_of_anchoring",
+        "name": "mapicontypes.den_of_nalorakk_rune_of_anchoring",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "den_of_nalorakk_warding_incense",
+        "name": "mapicontypes.den_of_nalorakk_warding_incense",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "voidscar_arena_proof_of_endurance",
+        "name": "mapicontypes.voidscar_arena_proof_of_endurance",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "voidscar_arena_proof_of_mastery",
+        "name": "mapicontypes.voidscar_arena_proof_of_mastery",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
         "key": "waystone",
         "name": "mapicontypes.waystone",
         "width": 32,

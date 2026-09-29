@@ -162,6 +162,11 @@ class MapIconType extends Model
     public const string MAP_ICON_TYPE_MURDER_ROW_LOADED_PISTOL                        = 'murder_row_loaded_pistol';
     public const string MAP_ICON_TYPE_MURDER_ROW_OVERLOAD_GOLEM                       = 'murder_row_overload_golem';
     public const string MAP_ICON_TYPE_THE_BLINDING_VALE_FLOURISHING_STRIDE            = 'the_blinding_vale_flourishing_stride';
+    public const string MAP_ICON_TYPE_ALTAR_OF_FANGS_MUTATING_ELIXIR                  = 'altar_of_fangs_mutating_elixir';
+    public const string MAP_ICON_TYPE_DEN_OF_NALORAKK_RUNE_OF_ANCHORING               = 'den_of_nalorakk_rune_of_anchoring';
+    public const string MAP_ICON_TYPE_DEN_OF_NALORAKK_WARDING_INCENSE                 = 'den_of_nalorakk_warding_incense';
+    public const string MAP_ICON_TYPE_VOIDSCAR_ARENA_PROOF_OF_ENDURANCE               = 'voidscar_arena_proof_of_endurance';
+    public const string MAP_ICON_TYPE_VOIDSCAR_ARENA_PROOF_OF_MASTERY                 = 'voidscar_arena_proof_of_mastery';
 
     public const string MAP_ICON_TYPE_WAYSTONE = 'waystone';
 
@@ -320,6 +325,12 @@ class MapIconType extends Model
         self::MAP_ICON_TYPE_THE_BLINDING_VALE_FLOURISHING_STRIDE => 122,
 
         self::MAP_ICON_TYPE_WAYSTONE => 123,
+
+        self::MAP_ICON_TYPE_ALTAR_OF_FANGS_MUTATING_ELIXIR    => 124,
+        self::MAP_ICON_TYPE_DEN_OF_NALORAKK_RUNE_OF_ANCHORING => 125,
+        self::MAP_ICON_TYPE_DEN_OF_NALORAKK_WARDING_INCENSE   => 126,
+        self::MAP_ICON_TYPE_VOIDSCAR_ARENA_PROOF_OF_ENDURANCE => 127,
+        self::MAP_ICON_TYPE_VOIDSCAR_ARENA_PROOF_OF_MASTERY   => 128,
     ];
 
     public function getIconUrlAttribute(): string
