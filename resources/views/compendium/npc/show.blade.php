@@ -10,7 +10,7 @@ use App\Models\Npc\NpcHealth;
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$npc],
-    'title'             => __('view_compendium.npc.show.title', ['name' => __($npc->name)]),
+    'title'             => __('view_compendium.npc.show.title', ['name' => $npc->getTranslatedName()]),
 ])
 
 @section('scripts')

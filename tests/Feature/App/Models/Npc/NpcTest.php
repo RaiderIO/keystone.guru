@@ -103,4 +103,80 @@ final class NpcTest extends PublicTestCase
             $npc?->delete();
         }
     }
+
+    #[Test]
+    public function getTranslatedName_givenLocaleWithTranslation_returnsThatTranslation(): void
+    {
+        // Arrange
+        app('translator')->addLines(['npcs.999999001' => 'English Name'], 'en_US');
+        app('translator')->addLines(['npcs.999999001' => 'Deutscher Name'], 'de_DE_ai');
+        $npc = new Npc(['name' => 'npcs.999999001']);
+
+        // Act
+        $translatedName = $npc->getTranslatedName('de_DE_ai');
+
+        // Assert
+        $this->assertSame('Deutscher Name', $translatedName);
+    }
+
+    #[Test]
+    public function getTranslatedName_givenLocaleWithEmptyTranslation_returnsEnglishName(): void
+    {
+        // Arrange
+        app('translator')->addLines(['npcs.999999002' => 'English Name'], 'en_US');
+        app('translator')->addLines(['npcs.999999002' => ''], 'de_DE_ai');
+        $npc = new Npc(['name' => 'npcs.999999002']);
+
+        // Act
+        $translatedName = $npc->getTranslatedName('de_DE_ai');
+
+        // Assert
+        $this->assertSame('English Name', $translatedName);
+    }
+
+    #[Test]
+    public function getTranslatedName_givenNoLocale_usesApplicationLocale(): void
+    {
+        // Arrange
+        app('translator')->addLines(['npcs.999999003' => 'English Name'], 'en_US');
+        app('translator')->addLines(['npcs.999999003' => 'Nom français'], 'fr_FR_ai');
+        $npc = new Npc(['name' => 'npcs.999999003']);
+        app()->setLocale('fr_FR_ai');
+
+        // Act
+        $translatedName = $npc->getTranslatedName();
+
+        // Assert
+        $this->assertSame('Nom français', $translatedName);
+    }
+
+    #[Test]
+    public function getTranslatedName_givenNameThatIsNoTranslationKey_returnsNameItself(): void
+    {
+        // Arrange
+        $npc = new Npc(['name' => 'Some Untranslated Npc']);
+
+        // Act
+        $translatedName = $npc->getTranslatedName('de_DE_ai');
+
+        // Assert
+        $this->assertSame('Some Untranslated Npc', $translatedName);
+    }
+
+    #[Test]
+    public function getRouteKey_givenLocaleWithEmptyNameTranslation_slugsEnglishName(): void
+    {
+        // Arrange
+        app('translator')->addLines(['npcs.999999004' => 'English Name'], 'en_US');
+        app('translator')->addLines(['npcs.999999004' => ''], 'de_DE_ai');
+        $npc     = new Npc(['name' => 'npcs.999999004']);
+        $npc->id = 999999004;
+        app()->setLocale('de_DE_ai');
+
+        // Act
+        $routeKey = $npc->getRouteKey();
+
+        // Assert
+        $this->assertSame('999999004-english-name', $routeKey);
+    }
 }

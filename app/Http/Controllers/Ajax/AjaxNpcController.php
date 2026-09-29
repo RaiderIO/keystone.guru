@@ -72,11 +72,11 @@ class AjaxNpcController extends Controller
             ->leftJoin('translations', static function (JoinClause $clause) {
                 $clause->on('translations.key', '=', 'dungeons.name')
                     ->on('translations.locale', '=', DB::raw('"en_US"'));
-            })
-            ->leftJoin('translations as npc_name_translations', function (JoinClause $clause) {
-                $clause->on('npc_name_translations.key', '=', 'npcs.name')
-                    ->where('npc_name_translations.locale', '=', 'en_US');
-            })
+            });
+
+        // The admin list stays in English, whatever the admin's own locale
+        $fallbackLocale = config('app.fallback_locale');
+        NameColumnHandler::joinNameTranslations($npcs, $fallbackLocale, $fallbackLocale)
             ->leftJoin('mapping_versions', function (JoinClause $clause) {
                 $clause->on('mapping_versions.dungeon_id', '=', 'dungeons.id')
                     ->whereRaw('mapping_versions.id = (SELECT MAX(mv2.id) FROM mapping_versions mv2 WHERE mv2.dungeon_id = dungeons.id)');

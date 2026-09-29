@@ -27,11 +27,11 @@ foreach (['dangerous', 'truesight', /*'bursting', 'bolstering', 'sanguine',*/ 'r
 <div class="compendium_identity">
     <img src="{{ ksgAsset($npc->enemy_portrait_url) }}"
          width="88" height="88"
-         alt="{{ __($npc->name) }}"
+         alt="{{ $npc->getTranslatedName() }}"
          loading="lazy"
          class="compendium_identity_portrait"/>
     <div class="compendium_identity_body">
-        <h2 class="compendium_identity_title">{{ __($npc->name) }}</h2>
+        <h2 class="compendium_identity_title">{{ $npc->getTranslatedName() }}</h2>
         <div class="compendium_identity_meta">
             @if($npc->classification)
                 <span class="badge {{ $classificationBadge }}">

@@ -4,13 +4,16 @@ namespace Tests\Feature\Controller\Compendium;
 
 use App\Models\Dungeon;
 use App\Models\Enemy;
+use App\Models\Faction;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Season;
+use App\Models\Translation\Translation;
 use App\Models\User;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -454,5 +457,147 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         $data = $response->json();
         $this->assertArrayHasKey('data', $data);
         $this->assertArrayHasKey('recordsTotal', $data);
+    }
+
+    #[Test]
+    #[DataProvider('localizedNpcNameProvider')]
+    public function get_givenNonEnglishLocale_returnsNpcNameInThatLocaleOrEnglish(string $localizedName, string $expectedName): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findDungeon(dungeonActive: true, minEnemies: 1);
+        $nameKey                    = sprintf('npcs.test_%d', random_int(100_000_000, 999_999_999));
+        $npc                        = $this->createNpcInDatabase(['name' => $nameKey]);
+        $enemy                      = null;
+        $translations               = collect();
+
+        try {
+            $translations->push(Translation::create(['locale' => 'en_US', 'key' => $nameKey, 'translation' => 'English Npc Name']));
+            $translations->push(Translation::create(['locale' => 'de_DE_ai', 'key' => $nameKey, 'translation' => $localizedName]));
+            $enemy = $this->createEnemyOfNpcOnMappingVersion($npc, $mappingVersion);
+
+            // Act
+            $response = $this->call('GET', route('ajax.npc.compendium.search'), array_merge($this->datatableParams, [
+                'dungeon_id' => $dungeon->id,
+                'length'     => 500,
+                'lang'       => 'de_DE_ai',
+            ]), [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+
+            // Assert
+            $response->assertOk();
+            /** @var list<array<string, mixed>> $rows */
+            $rows  = $response->json('data');
+            $names = array_column($rows, 'name', 'id');
+            $this->assertArrayHasKey($npc->id, $names);
+            $this->assertSame($expectedName, $names[$npc->id]);
+        } finally {
+            $enemy?->delete();
+            Translation::query()->whereIn('id', $translations->pluck('id'))->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function localizedNpcNameProvider(): array
+    {
+        return [
+            'translated'   => ['Deutscher Npc-Name', 'Deutscher Npc-Name'],
+            'untranslated' => ['', 'English Npc Name'],
+        ];
+    }
+
+    #[Test]
+    public function get_givenNonEnglishLocaleAndEnglishNameSearch_findsNpc(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findDungeon(dungeonActive: true, minEnemies: 1);
+        $nameKey                    = sprintf('npcs.test_%d', random_int(100_000_000, 999_999_999));
+        $npc                        = $this->createNpcInDatabase(['name' => $nameKey]);
+        $enemy                      = null;
+        $translations               = collect();
+
+        try {
+            $translations->push(Translation::create(['locale' => 'en_US', 'key' => $nameKey, 'translation' => 'Xyzzy English Npc Name']));
+            $translations->push(Translation::create(['locale' => 'de_DE_ai', 'key' => $nameKey, 'translation' => 'Deutscher Npc-Name']));
+            $enemy = $this->createEnemyOfNpcOnMappingVersion($npc, $mappingVersion);
+
+            $params                    = array_merge($this->datatableParams, ['dungeon_id' => $dungeon->id, 'lang' => 'de_DE_ai']);
+            $params['search']['value'] = 'Xyzzy English';
+
+            // Act
+            $response = $this->call('GET', route('ajax.npc.compendium.search'), $params, [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$npc->id], array_column($response->json('data'), 'id'));
+            $this->assertSame('Deutscher Npc-Name', $response->json('data.0.name'));
+        } finally {
+            $enemy?->delete();
+            Translation::query()->whereIn('id', $translations->pluck('id'))->delete();
+        }
+    }
+
+    #[Test]
+    public function get_givenNonEnglishLocaleAndDungeonWithoutTranslation_showsAndFindsEnglishDungeonName(): void
+    {
+        // Arrange
+        $dungeonNameKey = sprintf('dungeons.test_%d', random_int(100_000_000, 999_999_999));
+        $dungeon        = $this->createDungeon(['active' => true, 'name' => $dungeonNameKey]);
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $this->assertNotNull($mappingVersion);
+        $npc          = $this->createNpcInDatabase();
+        $enemy        = null;
+        $translations = collect();
+
+        try {
+            $translations->push(Translation::create(['locale' => 'en_US', 'key' => $dungeonNameKey, 'translation' => 'Xyzzy English Dungeon']));
+            $translations->push(Translation::create(['locale' => 'de_DE_ai', 'key' => $dungeonNameKey, 'translation' => '']));
+            $enemy = Enemy::query()->create([
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $dungeon->floors()->firstOrFail()->id,
+                'npc_id'             => $npc->id,
+                'faction'            => Faction::ALL[Faction::FACTION_UNSPECIFIED],
+                'required'           => false,
+                'skippable'          => false,
+                'hyper_respawn'      => false,
+                'lat'                => -100,
+                'lng'                => 100,
+            ]);
+
+            $params                    = array_merge($this->datatableParams, ['dungeon_id' => $dungeon->id, 'lang' => 'de_DE_ai']);
+            $params['search']['value'] = 'Xyzzy English Dungeon';
+
+            // Act
+            $response = $this->call('GET', route('ajax.npc.compendium.search'), $params, [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$npc->id], array_column($response->json('data'), 'id'));
+            $this->assertSame('Xyzzy English Dungeon', $response->json('data.0.dungeon_names'));
+        } finally {
+            $enemy?->delete();
+            Translation::query()->whereIn('id', $translations->pluck('id'))->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('localizedNpcNameProvider')]
+    public function show_givenNonEnglishLocale_rendersNpcNameInThatLocaleOrEnglish(string $localizedName, string $expectedName): void
+    {
+        // Arrange
+        $nameKey = sprintf('npcs.%d', random_int(100_000_000, 999_999_999));
+        app('translator')->addLines([$nameKey => 'English Npc Name'], 'en_US');
+        app('translator')->addLines([$nameKey => $localizedName], 'de_DE_ai');
+        $npc = $this->createNpcInDatabase(['name' => $nameKey]);
+        // The canonical slug is the name in the visitor's locale, so the URL is built in that locale too
+        app()->setLocale('de_DE_ai');
+        $url = route('npc.compendium.show', ['npc' => $npc, 'lang' => 'de_DE_ai']);
+
+        // Act
+        $response = $this->get($url);
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee(sprintf('<h2 class="compendium_identity_title">%s</h2>', $expectedName), false);
     }
 }
