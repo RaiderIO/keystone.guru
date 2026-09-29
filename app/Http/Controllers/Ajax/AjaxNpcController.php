@@ -11,9 +11,9 @@ use App\Logic\Datatables\ColumnHandler\Npc\NameColumnHandler;
 use App\Logic\Datatables\NpcsDatatablesHandler;
 use App\Models\Npc\Npc;
 use App\Models\User;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use Exception;
 use Illuminate\Broadcasting\BroadcastException;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -58,43 +58,9 @@ class AjaxNpcController extends Controller
      *
      * @throws Exception
      */
-    public function get(Request $request): array
+    public function get(Request $request, NpcRepositoryInterface $npcRepository): array
     {
-        $locale         = app()->getLocale();
-        $fallbackLocale = config('app.fallback_locale');
-        $dungeonName    = "COALESCE(NULLIF(dungeon_translations.translation, ''), dungeon_fallback_translations.translation)";
-
-        $npcs = Npc::with([
-            'type',
-            'classification',
-            'enemyForces',
-        ])
-            ->selectRaw(sprintf(
-                'npcs.*, %s as name, GROUP_CONCAT(DISTINCT %s SEPARATOR ", ") AS dungeon_names, COUNT(enemies.id) as enemy_count',
-                NameColumnHandler::NAME_EXPRESSION,
-                $dungeonName,
-            ))
-            ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
-            ->leftJoin('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
-            ->leftJoin('translations as dungeon_translations', static function (JoinClause $clause) use ($locale) {
-                $clause->on('dungeon_translations.key', '=', 'dungeons.name')
-                    ->where('dungeon_translations.locale', '=', $locale);
-            })
-            ->leftJoin('translations as dungeon_fallback_translations', static function (JoinClause $clause) use ($fallbackLocale) {
-                $clause->on('dungeon_fallback_translations.key', '=', 'dungeons.name')
-                    ->where('dungeon_fallback_translations.locale', '=', $fallbackLocale);
-            });
-
-        NameColumnHandler::joinNameTranslations($npcs, $locale, $fallbackLocale)
-            ->leftJoin('mapping_versions', function (JoinClause $clause) {
-                $clause->on('mapping_versions.dungeon_id', '=', 'dungeons.id')
-                    ->whereRaw('mapping_versions.id = (SELECT MAX(mv2.id) FROM mapping_versions mv2 WHERE mv2.dungeon_id = dungeons.id)');
-            })
-            ->leftJoin('enemies', function (JoinClause $clause) {
-                $clause->on('enemies.npc_id', '=', 'npcs.id')
-                    ->on('enemies.mapping_version_id', '=', 'mapping_versions.id');
-            })
-            ->groupBy('npcs.id');
+        $npcs = $npcRepository->getAdminListBuilder(app()->getLocale());
 
         $datatablesHandler = (new NpcsDatatablesHandler($request));
 
@@ -102,7 +68,7 @@ class AjaxNpcController extends Controller
             ->addColumnHandler([
                 new IdColumnHandler($datatablesHandler),
                 new NameColumnHandler($datatablesHandler),
-                new DungeonColumnHandler($datatablesHandler, $dungeonName),
+                new DungeonColumnHandler($datatablesHandler, NpcRepositoryInterface::ADMIN_LIST_DUNGEON_NAME_EXPRESSION),
             ])
             ->applyRequestToBuilder()
             ->getResult();

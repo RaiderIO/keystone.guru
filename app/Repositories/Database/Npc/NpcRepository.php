@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Database\Npc;
 
+use App\Logic\Datatables\ColumnHandler\Npc\NameColumnHandler;
 use App\Models\DungeonKey;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
@@ -157,5 +158,45 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
             ->with(['classification', 'type', 'characteristics', 'npcHealths'])
             ->get()
             ->keyBy('id');
+    }
+
+    /**
+     * @return Builder<Npc>
+     */
+    public function getAdminListBuilder(string $locale): Builder
+    {
+        $fallbackLocale = config('app.fallback_locale');
+
+        $builder = Npc::with([
+            'type',
+            'classification',
+            'enemyForces',
+        ])
+            ->selectRaw(sprintf(
+                'npcs.*, %s as name, GROUP_CONCAT(DISTINCT %s SEPARATOR ", ") AS dungeon_names, COUNT(enemies.id) as enemy_count',
+                NameColumnHandler::NAME_EXPRESSION,
+                self::ADMIN_LIST_DUNGEON_NAME_EXPRESSION,
+            ))
+            ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
+            ->leftJoin('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
+            ->leftJoin('translations as dungeon_translations', static function (JoinClause $clause) use ($locale) {
+                $clause->on('dungeon_translations.key', '=', 'dungeons.name')
+                    ->where('dungeon_translations.locale', '=', $locale);
+            })
+            ->leftJoin('translations as dungeon_fallback_translations', static function (JoinClause $clause) use ($fallbackLocale) {
+                $clause->on('dungeon_fallback_translations.key', '=', 'dungeons.name')
+                    ->where('dungeon_fallback_translations.locale', '=', $fallbackLocale);
+            });
+
+        return NameColumnHandler::joinNameTranslations($builder, $locale, $fallbackLocale)
+            ->leftJoin('mapping_versions', static function (JoinClause $clause) {
+                $clause->on('mapping_versions.dungeon_id', '=', 'dungeons.id')
+                    ->whereRaw('mapping_versions.id = (SELECT MAX(mv2.id) FROM mapping_versions mv2 WHERE mv2.dungeon_id = dungeons.id)');
+            })
+            ->leftJoin('enemies', static function (JoinClause $clause) {
+                $clause->on('enemies.npc_id', '=', 'npcs.id')
+                    ->on('enemies.mapping_version_id', '=', 'mapping_versions.id');
+            })
+            ->groupBy('npcs.id');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Repositories\Interfaces\Npc;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Repositories\BaseRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 /**
@@ -20,6 +21,9 @@ use Illuminate\Support\Collection;
  */
 interface NpcRepositoryInterface extends BaseRepositoryInterface
 {
+    /** The SQL expression for a dungeon's name in {@see self::getAdminListBuilder()}, falling back to English. */
+    public const string ADMIN_LIST_DUNGEON_NAME_EXPRESSION = "COALESCE(NULLIF(dungeon_translations.translation, ''), dungeon_fallback_translations.translation)";
+
     /**
      * @return Collection<int, Npc>
      */
@@ -38,4 +42,12 @@ interface NpcRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, Npc>
      */
     public function findAllByIdWithTooltipRelations(Collection $npcIds): Collection;
+
+    /**
+     * One row per NPC for the admin NPC list, with its name and dungeon names in the given locale and its enemy
+     * count on each dungeon's latest mapping version.
+     *
+     * @return Builder<Npc>
+     */
+    public function getAdminListBuilder(string $locale): Builder;
 }

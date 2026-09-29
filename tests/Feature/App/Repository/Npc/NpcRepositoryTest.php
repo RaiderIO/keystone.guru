@@ -7,8 +7,10 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\Translation\Translation;
 use App\Repositories\Database\Npc\NpcRepository;
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -185,5 +187,58 @@ final class NpcRepositoryTest extends PublicTestCase
             Npc::query()->where('id', $npcId)->delete();
             $mappingVersionUnderTest->delete();
         }
+    }
+
+    #[Test]
+    #[DataProvider('adminListLocalizedNameProvider')]
+    public function getAdminListBuilder_givenLocale_returnsNpcNameInThatLocaleOrEnglish(string $localizedName, string $expectedName): void
+    {
+        // Arrange
+        $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
+
+        $npcId        = 999999002;
+        $translations = collect();
+
+        try {
+            $npc = Npc::query()->create([
+                'id'                => $npcId,
+                'classification_id' => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
+                'npc_type_id'       => 1,
+                'npc_class_id'      => 1,
+                'name'              => sprintf('npc.%d.name', $npcId),
+                'aggressiveness'    => Npc::AGGRESSIVENESS_AGGRESSIVE,
+                'dangerous'         => false,
+                'truesight'         => false,
+                'runs_away_in_fear' => false,
+            ]);
+            $dungeon->npcs()->attach($npc->id);
+            $translations->push(Translation::query()->create(['locale' => 'en_US', 'key' => $npc->name, 'translation' => 'English Repository Npc']));
+            $translations->push(Translation::query()->create(['locale' => 'de_DE_ai', 'key' => $npc->name, 'translation' => $localizedName]));
+
+            // Act
+            /** @var Npc|null $result */
+            $result = $this->repository->getAdminListBuilder('de_DE_ai')->where('npcs.id', $npcId)->first();
+
+            // Assert
+            $this->assertNotNull($result);
+            $this->assertSame($expectedName, $result->name);
+            $this->assertSame(0, (int)$result->getAttribute('enemy_count'));
+            $this->assertNotEmpty($result->getAttribute('dungeon_names'));
+        } finally {
+            $dungeon->npcs()->detach($npcId);
+            Npc::query()->where('id', $npcId)->delete();
+            Translation::query()->whereIn('id', $translations->pluck('id'))->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function adminListLocalizedNameProvider(): array
+    {
+        return [
+            'translated'   => ['Deutscher Repository-Npc', 'Deutscher Repository-Npc'],
+            'untranslated' => ['', 'English Repository Npc'],
+        ];
     }
 }
