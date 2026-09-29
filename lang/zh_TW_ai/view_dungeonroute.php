@@ -5,12 +5,9 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'           => 'Raider.IO 每周路線',
-                'weekly_routes'          => '',
-                'community_routes'       => '',
-                'popular'                => '熱門路線',
-                'newly_published_routes' => '新發布的路線',
-                'archetypes'             => [
+                'weekly_routes'    => '',
+                'community_routes' => '',
+                'archetypes'       => [
                     'pug_friendly' => [
                         'label'       => '',
                         'description' => '',
@@ -33,23 +30,6 @@ return [
         ],
         'panel' => [
             'show_more' => '顯示更多',
-        ],
-        'search' => [
-            'page_title'              => '搜尋路線',
-            'header'                  => '搜尋路線',
-            'title'                   => '標題',
-            'title_placeholder'       => '按標題篩選',
-            'key_level'               => '鑰匙等級',
-            'affixes'                 => '詞綴',
-            'affixes_title'           => '選擇詞綴',
-            'select_affixes'          => '選擇詞綴',
-            'affixes_selected'        => '已選擇 {0} 個詞綴',
-            'enemy_forces'            => '敵方力量',
-            'enemy_forces_complete'   => '完成',
-            'enemy_forces_incomplete' => '未完成',
-            'rating'                  => '評分',
-            'user'                    => '用戶',
-            'user_placeholder'        => '按用戶篩選',
         ],
     ],
     'livesession' => [

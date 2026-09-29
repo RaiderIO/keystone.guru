@@ -95,6 +95,7 @@ return [
                 'dungeonroute_view'                           => 'Visualizza percorso del dungeon',
                 'dungeonroute_view_contents'                  => 'Contenuti del percorso',
                 'dungeonroute_mapping_version_usage'          => 'Utilizzo della versione di mappatura',
+                'dungeonroute_generate_test_routes'           => '',
                 'enemyforces_recalculate'                     => 'Ricalcola forze nemiche',
                 'features_list'                               => 'Funzionalità',
                 'mdt_dungeon_mapping_hash'                    => 'Hash di mappatura del dungeon',

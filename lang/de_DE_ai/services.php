@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => 'Kein :npc ist auf dieser Etage in Reichweite, aber auf einer anderen Etage befindet sich einer innerhalb von :distance Yards. Die aufgezeichnete Etage wird aus dem vorherigen NPC im Log abgeleitet; daher liegt das höchstwahrscheinlich an dieser Ableitung. Prüfe das, bevor du das Mapping änderst.',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => '',
+                'converged' => '',
+                'scatter'   => '',
+            ],
+            'subject' => [
+                'pack'  => '',
+                'enemy' => '',
+            ],
+            'suggestion' => [
+                'displaced'               => '',
+                'displaced_shape_unknown' => '',
+                'converged'               => '',
+                'scatter'                 => '',
+            ],
+        ],
     ],
 
 ];

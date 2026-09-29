@@ -38,6 +38,8 @@ return [
             'mapping_version_upgrade_already_latest' => '이 매핑 버전은 해당 던전에서 이미 최신 버전입니다 — 대기열에 추가된 경로가 없습니다.',
             'read_only_mode_disabled'                => '읽기 전용 모드 비활성화됨',
             'read_only_mode_enabled'                 => '읽기 전용 모드 활성화됨',
+            'thumbnail_generation_paused'            => '',
+            'thumbnail_generation_resumed'           => '',
         ],
     ],
     'affix' => [
@@ -112,10 +114,6 @@ return [
         'season'  => [
             'popular' => '%s 인기 경로',
             'new'     => '%s개의 새로운 경로',
-        ],
-        'dungeon' => [
-            'popular' => '%s 인기 있는 경로',
-            'new'     => '%s 새로운 경로',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [

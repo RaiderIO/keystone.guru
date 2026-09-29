@@ -30,5 +30,9 @@ return [
         'name'        => 'Legion Remix',
         'description' => 'Legion Remix',
     ],
+    'forever' => [
+        'name'        => '',
+        'description' => '',
+    ],
 
 ];

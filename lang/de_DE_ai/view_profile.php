@@ -87,6 +87,9 @@ return [
         'creator_directory_hide_help'      => 'Creator mit veröffentlichten Routen werden automatisch im Verzeichnis gelistet. Aktiviere dies, um dein Profil herauszuhalten - deine Routen bleiben in jedem Fall veröffentlicht.',
         'creator_save'                     => 'Creator-Profil speichern',
         'creator_view_public_profile'      => 'Mein öffentliches Profil ansehen',
+        'creator_public_profile_url'       => '',
+        'creator_public_profile_copy'      => '',
+        'creator_public_profile_url_help'  => '',
     ],
     'favorites' => [
         'title' => 'Meine Favoriten',
@@ -95,6 +98,7 @@ return [
         'title'          => 'Übersicht',
         'route_coverage' => 'Routenabdeckung',
         'route_overview' => 'Routenübersicht',
+        'delete_routes'  => '',
     ],
     'routes' => [
         'title' => 'Meine Routen',
@@ -106,6 +110,8 @@ return [
                     Du kannst Tags für deine eigenen Routen hier verwalten. Niemand anderes wird deine Tags sehen können - für Routen, die einem Team zugeordnet sind,
                     kannst du einen separaten Satz von Tags nur für dieses Team verwalten, indem du den Abschnitt Tags besuchst, wenn du dein Team ansiehst.',
         'link_your_personal_route_overview' => 'Deine persönliche Routenübersicht',
+        'collections'                       => '',
+        'link_collections'                  => '',
     ],
     'view' => [
         'title'              => '%s\'s Routen',
@@ -113,8 +119,6 @@ return [
         'pinned_collections' => 'Angeheftete Sammlungen',
         'pinned_routes'      => 'Angeheftete Routen',
         'all_routes'         => 'Alle Routen',
-        'route_count'        => '{0} Keine veröffentlichten Routen|{1} :count veröffentlichte Route|[2,*] :count veröffentlichte Routen',
-        'member_since'       => 'Erstellt Routen seit :date',
         'social_link'        => ':platform besuchen',
         'platform'           => [
             'twitch'    => 'Twitch',

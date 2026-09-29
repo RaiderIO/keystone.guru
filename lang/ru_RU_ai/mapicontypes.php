@@ -125,6 +125,11 @@ return [
     'murder_row_loaded_pistol'                        => 'Заряженный пистолет',
     'murder_row_overload_golem'                       => 'Голем перегрузки',
     'the_blinding_vale_flourishing_stride'            => 'Цветущий шаг',
+    'altar_of_fangs_mutating_elixir'                  => '',
+    'den_of_nalorakk_rune_of_anchoring'               => '',
+    'den_of_nalorakk_warding_incense'                 => '',
+    'voidscar_arena_proof_of_endurance'               => '',
+    'voidscar_arena_proof_of_mastery'                 => '',
 
     'waystone' => 'Путевой камень',
 ];

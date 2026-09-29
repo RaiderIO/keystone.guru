@@ -87,6 +87,9 @@ return [
         'creator_directory_hide_help'      => 'Los creadores con rutas publicadas aparecen automáticamente en el directorio. Marca esta opción para mantener tu perfil fuera de él - tus rutas permanecen publicadas de todos modos.',
         'creator_save'                     => 'Guardar perfil de creador',
         'creator_view_public_profile'      => 'Ver mi perfil público',
+        'creator_public_profile_url'       => '',
+        'creator_public_profile_copy'      => '',
+        'creator_public_profile_url_help'  => '',
     ],
     'favorites' => [
         'title' => 'Mis favoritos',
@@ -95,6 +98,7 @@ return [
         'title'          => 'Visión general',
         'route_coverage' => 'Cobertura de ruta',
         'route_overview' => 'Descripción general de la ruta',
+        'delete_routes'  => '',
     ],
     'routes' => [
         'title' => 'Mis rutas',
@@ -106,6 +110,8 @@ return [
                     Puedes gestionar etiquetas para tus propias rutas aquí. Nadie más podrá ver tus etiquetas; para rutas adjuntas a un equipo
                     puedes gestionar un conjunto separado de etiquetas solo para ese equipo visitando la sección de Etiquetas al ver tu equipo.',
         'link_your_personal_route_overview' => 'tu descripción general de rutas personal',
+        'collections'                       => '',
+        'link_collections'                  => '',
     ],
     'view' => [
         'title'              => 'Rutas de %s',
@@ -113,8 +119,6 @@ return [
         'pinned_collections' => 'Colecciones fijadas',
         'pinned_routes'      => 'Rutas fijadas',
         'all_routes'         => 'Todas las rutas',
-        'route_count'        => '{0} Sin rutas publicadas|{1} :count ruta publicada|[2,*] :count rutas publicadas',
-        'member_since'       => 'Creando rutas desde :date',
         'social_link'        => 'Visitar :platform',
         'platform'           => [
             'twitch'    => 'Twitch',

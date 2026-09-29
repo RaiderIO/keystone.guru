@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => '이 층의 범위 내에는 :npc이(가) 없지만, 다른 층의 :distance야드 이내에는 하나 있습니다. 기록된 층은 로그의 이전 NPC를 바탕으로 추론되므로, 층이 잘못 기록된 것은 이 추론 때문일 가능성이 높습니다. 매핑을 변경하기 전에 확인하세요.',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => '',
+                'converged' => '',
+                'scatter'   => '',
+            ],
+            'subject' => [
+                'pack'  => '',
+                'enemy' => '',
+            ],
+            'suggestion' => [
+                'displaced'               => '',
+                'displaced_shape_unknown' => '',
+                'converged'               => '',
+                'scatter'                 => '',
+            ],
+        ],
     ],
 
 ];

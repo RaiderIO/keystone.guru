@@ -125,6 +125,11 @@ return [
     'murder_row_loaded_pistol'                        => 'Geladene Pistole',
     'murder_row_overload_golem'                       => 'Überlastungsgolem',
     'the_blinding_vale_flourishing_stride'            => 'Blühender Schritt',
+    'altar_of_fangs_mutating_elixir'                  => '',
+    'den_of_nalorakk_rune_of_anchoring'               => '',
+    'den_of_nalorakk_warding_incense'                 => '',
+    'voidscar_arena_proof_of_endurance'               => '',
+    'voidscar_arena_proof_of_mastery'                 => '',
 
     'waystone' => 'Wegstein',
 ];

@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => 'Nenhum :npc está ao alcance neste andar, mas há um em outro andar a no máximo :distance jardas. O andar registrado é inferido com base no NPC anterior do registro, então isso muito provavelmente se deve a essa inferência; verifique antes de alterar o mapeamento.',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => '',
+                'converged' => '',
+                'scatter'   => '',
+            ],
+            'subject' => [
+                'pack'  => '',
+                'enemy' => '',
+            ],
+            'suggestion' => [
+                'displaced'               => '',
+                'displaced_shape_unknown' => '',
+                'converged'               => '',
+                'scatter'                 => '',
+            ],
+        ],
     ],
 
 ];

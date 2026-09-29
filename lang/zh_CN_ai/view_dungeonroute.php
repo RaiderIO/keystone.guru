@@ -5,12 +5,9 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'           => 'Raider.IO 每周路线',
-                'weekly_routes'          => 'Raider.IO 每周路线',
-                'community_routes'       => '社区路线',
-                'popular'                => '热门路线',
-                'newly_published_routes' => '新发布的路线',
-                'archetypes'             => [
+                'weekly_routes'    => 'Raider.IO 每周路线',
+                'community_routes' => '社区路线',
+                'archetypes'       => [
                     'pug_friendly' => [
                         'label'       => 'PUG 友好',
                         'description' => '为陌生人组成的队伍提供宽容的拉怪安排',
@@ -33,23 +30,6 @@ return [
         ],
         'panel' => [
             'show_more' => '显示更多',
-        ],
-        'search' => [
-            'page_title'              => '搜索路线',
-            'header'                  => '搜索路线',
-            'title'                   => '标题',
-            'title_placeholder'       => '按标题过滤',
-            'key_level'               => '钥石等级',
-            'affixes'                 => '词缀',
-            'affixes_title'           => '选择词缀',
-            'select_affixes'          => '选择词缀',
-            'affixes_selected'        => '已选择 {0} 个词缀',
-            'enemy_forces'            => '敌方力量',
-            'enemy_forces_complete'   => '完成',
-            'enemy_forces_incomplete' => '未完成',
-            'rating'                  => '评分',
-            'user'                    => '用户',
-            'user_placeholder'        => '按用户过滤',
         ],
     ],
     'livesession' => [

@@ -95,6 +95,7 @@ return [
                 'dungeonroute_view'                           => 'Просмотр маршрута подземелья',
                 'dungeonroute_view_contents'                  => 'Содержимое маршрута',
                 'dungeonroute_mapping_version_usage'          => 'Использование версии карты',
+                'dungeonroute_generate_test_routes'           => '',
                 'enemyforces_recalculate'                     => 'Пересчет сил врага',
                 'features_list'                               => 'Функции',
                 'mdt_dungeon_mapping_hash'                    => 'Хеш карты подземелья',

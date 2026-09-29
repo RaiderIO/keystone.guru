@@ -23,5 +23,7 @@ return [
     'map_icon_type_role_check_rule' => [
         'message' => 'Ese tipo de ícono de mapa no está disponible para tu nivel de acceso.',
     ],
-
+    'user_slug_available_rule' => [
+        'taken' => '',
+    ],
 ];

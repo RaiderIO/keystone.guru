@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => 'На этом уровне :npc в радиусе нет, но есть один в пределах :distance ярд. на другом уровне. Записанный уровень определяется по предыдущему НПЦ в логе, поэтому это, скорее всего, результат такого определения — проверьте это, прежде чем менять разметку.',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => '',
+                'converged' => '',
+                'scatter'   => '',
+            ],
+            'subject' => [
+                'pack'  => '',
+                'enemy' => '',
+            ],
+            'suggestion' => [
+                'displaced'               => '',
+                'displaced_shape_unknown' => '',
+                'converged'               => '',
+                'scatter'                 => '',
+            ],
+        ],
     ],
 
 ];

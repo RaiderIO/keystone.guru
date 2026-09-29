@@ -95,6 +95,7 @@ return [
                 'dungeonroute_view'                           => '던전 경로 보기',
                 'dungeonroute_view_contents'                  => '경로 내용',
                 'dungeonroute_mapping_version_usage'          => '매핑 버전 사용 현황',
+                'dungeonroute_generate_test_routes'           => '',
                 'enemyforces_recalculate'                     => '적 병력 재계산',
                 'features_list'                               => '기능',
                 'mdt_dungeon_mapping_hash'                    => '던전 매핑 해시',

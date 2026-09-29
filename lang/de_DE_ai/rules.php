@@ -23,5 +23,7 @@ return [
     'map_icon_type_role_check_rule' => [
         'message' => 'Dieser Kartensymboltyp ist für dein Zugriffslevel nicht verfügbar.',
     ],
-
+    'user_slug_available_rule' => [
+        'taken' => '',
+    ],
 ];

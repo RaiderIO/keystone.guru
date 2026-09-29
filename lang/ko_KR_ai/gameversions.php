@@ -30,5 +30,9 @@ return [
         'name'        => '군단 리믹스',
         'description' => '군단 리믹스',
     ],
+    'forever' => [
+        'name'        => '',
+        'description' => '',
+    ],
 
 ];

@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => 'Aucun :npc n\'est à portée à cet étage, mais il y en a un à moins de :distance yards à un autre étage. L\'étage enregistré est déduit du PNJ précédent dans le journal de combat ; cette déduction est donc très probablement à l\'origine du problème. Vérifiez ce point avant de modifier le mapping.',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => '',
+                'converged' => '',
+                'scatter'   => '',
+            ],
+            'subject' => [
+                'pack'  => '',
+                'enemy' => '',
+            ],
+            'suggestion' => [
+                'displaced'               => '',
+                'displaced_shape_unknown' => '',
+                'converged'               => '',
+                'scatter'                 => '',
+            ],
+        ],
     ],
 
 ];

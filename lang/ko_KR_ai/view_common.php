@@ -54,7 +54,6 @@ return [
         ],
         'griddiscover' => [
             'popular' => '인기',
-            'new'     => '새로운',
         ],
         'list' => [
             'more'        => '더 보기',
@@ -128,8 +127,9 @@ return [
             'pulls'     => '{1} 풀 :count개|[2,*] 풀 :count개',
         ],
         'table' => [
-            'team'   => '팀',
-            'filter' => '필터',
+            'team'                     => '팀',
+            'filter'                   => '필터',
+            'mass_delete_picker_title' => '',
         ],
         'tablefilters' => [
             'affixes'               => '접미사',
@@ -159,6 +159,8 @@ return [
             'pagination'                   => '경로 페이지',
             'cancel'                       => '취소',
             'add_none'                     => '경로 추가',
+            'delete_none'                  => '',
+            'select_page'                  => '',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - 데이터 제공: https://www.archon.gg/wow',
@@ -256,7 +258,7 @@ return [
             'battlenet_region'        => '배틀넷 지역',
             'continue_with_battlenet' => '배틀넷으로 계속하기',
             'continue_with_discord'   => 'Discord로 계속하기',
-            'continue_with_google'    => 'Google로 계속하기',
+            'sign_in_with_google'     => '',
         ],
         'orderedselect' => [
             'choose' => '추가할 항목을 선택하세요...',
@@ -570,6 +572,8 @@ return [
                 'matching_routes'         => '최악의 경로',
                 'show_lines'              => '매칭된 적까지 선 표시',
                 'lines_legend'            => '현재 필터에서 이 던전의 모든 층에 걸쳐 가장 나쁜 :count개의 매칭으로, 전투가 시작된 지점부터 매칭된 적까지 이어집니다.',
+                'show_groups'             => '',
+                'groups_legend'           => '',
                 'line_popup'              => [
                     'npc'            => ':name (:id)',
                     'distance'       => '적 :enemy에 매칭됨, :distance야드 거리',
@@ -679,6 +683,32 @@ return [
         ],
         'enemydetails' => [
             'report_an_issue' => '문제 신고',
+        ],
+        'mappingversionupgradediff' => [
+            'title'                                 => '',
+            'description'                           => '',
+            'no_route_impact'                       => '',
+            'pull'                                  => '',
+            'unknown_npc'                           => '',
+            'emptied_pulls'                         => '',
+            'removed_pull_enemies'                  => '',
+            'removed_pull_enemies_description'      => '',
+            'unkilled_required_enemies'             => '',
+            'unkilled_required_enemies_description' => '',
+            'newly_required'                        => '',
+            'moved_pull_enemies'                    => '',
+            'moved_pull_enemies_description'        => '',
+            'moved_yards'                           => '',
+            'moved_to_floor'                        => '',
+            'enemy_forces'                          => '',
+            'enemy_forces_total'                    => '',
+            'enemy_forces_required'                 => '',
+            'enemy_forces_npc'                      => '',
+            'dungeon_wide'                          => '',
+            'dungeon_wide_unchanged'                => '',
+            'enemies_added'                         => '',
+            'enemies_removed'                       => '',
+            'enemy_patrols'                         => '',
         ],
         'userreport' => [
             'dungeonroute' => [

@@ -30,5 +30,9 @@ return [
         'name'        => '軍團再臨重混版',
         'description' => '軍團再臨重混版',
     ],
+    'forever' => [
+        'name'        => '',
+        'description' => '',
+    ],
 
 ];

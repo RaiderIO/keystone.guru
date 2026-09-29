@@ -38,6 +38,8 @@ return [
             'mapping_version_upgrade_already_latest' => '此映射版本已是该地下城的最新版本——未加入任何路线队列。',
             'read_only_mode_disabled'                => '只读模式已禁用',
             'read_only_mode_enabled'                 => '只读模式已启用',
+            'thumbnail_generation_paused'            => '',
+            'thumbnail_generation_resumed'           => '',
         ],
     ],
     'affix' => [
@@ -112,10 +114,6 @@ return [
         'season'  => [
             'popular' => '%s 热门路线',
             'new'     => '%s 新路线',
-        ],
-        'dungeon' => [
-            'popular' => '%s 受欢迎的路线',
-            'new'     => '%s 条新路线',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [

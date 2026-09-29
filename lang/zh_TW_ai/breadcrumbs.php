@@ -95,6 +95,7 @@ return [
                 'dungeonroute_view'                           => '',
                 'dungeonroute_view_contents'                  => '',
                 'dungeonroute_mapping_version_usage'          => '',
+                'dungeonroute_generate_test_routes'           => '',
                 'enemyforces_recalculate'                     => '',
                 'features_list'                               => '',
                 'mdt_dungeon_mapping_hash'                    => '',

@@ -5,12 +5,9 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'           => 'Percorso Settimanale Raider.IO',
-                'weekly_routes'          => 'Percorsi settimanali Raider.IO',
-                'community_routes'       => 'Percorsi della community',
-                'popular'                => 'Percorsi popolari',
-                'newly_published_routes' => 'Percorsi appena pubblicati',
-                'archetypes'             => [
+                'weekly_routes'    => 'Percorsi settimanali Raider.IO',
+                'community_routes' => 'Percorsi della community',
+                'archetypes'       => [
                     'pug_friendly' => [
                         'label'       => 'Amichevole per Pug',
                         'description' => 'Pull tolleranti per gruppi di sconosciuti',
@@ -33,23 +30,6 @@ return [
         ],
         'panel' => [
             'show_more' => 'Mostra di più',
-        ],
-        'search' => [
-            'page_title'              => 'Cerca percorsi',
-            'header'                  => 'Cerca percorsi',
-            'title'                   => 'Titolo',
-            'title_placeholder'       => 'Filtra per titolo',
-            'key_level'               => 'Livello chiave',
-            'affixes'                 => 'Affissi',
-            'affixes_title'           => 'Seleziona affissi',
-            'select_affixes'          => 'Seleziona affissi',
-            'affixes_selected'        => '{0} affissi selezionati',
-            'enemy_forces'            => 'Forze nemiche',
-            'enemy_forces_complete'   => 'Completato',
-            'enemy_forces_incomplete' => 'Incompleto',
-            'rating'                  => 'Valutazione',
-            'user'                    => 'Utente',
-            'user_placeholder'        => 'Filtra per utente',
         ],
     ],
     'livesession' => [

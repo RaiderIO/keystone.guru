@@ -87,6 +87,9 @@ return [
         'creator_directory_hide_help'      => 'Criadores com rotas publicadas são listados automaticamente no diretório. Marque esta opção para manter seu perfil fora dele — suas rotas continuarão publicadas de qualquer forma.',
         'creator_save'                     => 'Salvar perfil de criador',
         'creator_view_public_profile'      => 'Ver meu perfil público',
+        'creator_public_profile_url'       => '',
+        'creator_public_profile_copy'      => '',
+        'creator_public_profile_url_help'  => '',
     ],
     'favorites' => [
         'title' => 'Meus favoritos',
@@ -95,6 +98,7 @@ return [
         'title'          => 'Visão geral',
         'route_coverage' => 'Cobertura de rota',
         'route_overview' => 'Visão geral da rota',
+        'delete_routes'  => '',
     ],
     'routes' => [
         'title' => 'Minhas rotas',
@@ -106,6 +110,8 @@ return [
                     Você pode gerenciar tags para suas próprias rotas aqui. Ninguém mais poderá ver suas tags - para rotas anexadas a uma equipe
                     você pode gerenciar um conjunto separado de tags apenas para essa equipe visitando a seção Tags ao visualizar sua equipe.',
         'link_your_personal_route_overview' => 'sua visão geral pessoal de rotas',
+        'collections'                       => '',
+        'link_collections'                  => '',
     ],
     'view' => [
         'title'              => 'Rotas de %s',
@@ -113,8 +119,6 @@ return [
         'pinned_collections' => 'Coleções fixadas',
         'pinned_routes'      => 'Rotas fixadas',
         'all_routes'         => 'Todas as rotas',
-        'route_count'        => '{0} Nenhuma rota publicada|{1} :count rota publicada|[2,*] :count rotas publicadas',
-        'member_since'       => 'Criando rotas desde :date',
         'social_link'        => 'Visitar :platform',
         'platform'           => [
             'twitch'    => 'Twitch',

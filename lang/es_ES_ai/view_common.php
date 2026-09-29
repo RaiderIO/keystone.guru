@@ -54,7 +54,6 @@ return [
         ],
         'griddiscover' => [
             'popular' => 'Popular',
-            'new'     => 'Nuevo',
         ],
         'list' => [
             'more'        => 'Más',
@@ -128,8 +127,9 @@ return [
             'pulls'     => '{1} :count pull|[2,*] :count pulls',
         ],
         'table' => [
-            'team'   => 'Equipo',
-            'filter' => 'Filtrar',
+            'team'                     => 'Equipo',
+            'filter'                   => 'Filtrar',
+            'mass_delete_picker_title' => '',
         ],
         'tablefilters' => [
             'affixes'               => 'Afijos',
@@ -159,6 +159,8 @@ return [
             'pagination'                   => 'Páginas de rutas',
             'cancel'                       => 'Cancelar',
             'add_none'                     => 'Agregar rutas',
+            'delete_none'                  => '',
+            'select_page'                  => '',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - datos por https://www.archon.gg/wow',
@@ -256,7 +258,7 @@ return [
             'battlenet_region'        => 'Región de Battle.net',
             'continue_with_battlenet' => 'Continuar con Battle.net',
             'continue_with_discord'   => 'Continuar con Discord',
-            'continue_with_google'    => 'Continuar con Google',
+            'sign_in_with_google'     => '',
         ],
         'orderedselect' => [
             'choose' => 'Elige uno para agregar...',
@@ -570,6 +572,8 @@ return [
                 'matching_routes'         => 'Peores rutas',
                 'show_lines'              => 'Mostrar líneas hasta el enemigo asignado',
                 'lines_legend'            => 'Las :count peores asignaciones del filtro actual en todas las plantas de esta mazmorra, desde donde empezó el combate hasta el enemigo al que se atribuyó.',
+                'show_groups'             => '',
+                'groups_legend'           => '',
                 'line_popup'              => [
                     'npc'            => ':name (:id)',
                     'distance'       => 'Asignado al enemigo :enemy, a :distance yardas',
@@ -679,6 +683,32 @@ return [
         ],
         'enemydetails' => [
             'report_an_issue' => 'Reportar un problema',
+        ],
+        'mappingversionupgradediff' => [
+            'title'                                 => '',
+            'description'                           => '',
+            'no_route_impact'                       => '',
+            'pull'                                  => '',
+            'unknown_npc'                           => '',
+            'emptied_pulls'                         => '',
+            'removed_pull_enemies'                  => '',
+            'removed_pull_enemies_description'      => '',
+            'unkilled_required_enemies'             => '',
+            'unkilled_required_enemies_description' => '',
+            'newly_required'                        => '',
+            'moved_pull_enemies'                    => '',
+            'moved_pull_enemies_description'        => '',
+            'moved_yards'                           => '',
+            'moved_to_floor'                        => '',
+            'enemy_forces'                          => '',
+            'enemy_forces_total'                    => '',
+            'enemy_forces_required'                 => '',
+            'enemy_forces_npc'                      => '',
+            'dungeon_wide'                          => '',
+            'dungeon_wide_unchanged'                => '',
+            'enemies_added'                         => '',
+            'enemies_removed'                       => '',
+            'enemy_patrols'                         => '',
         ],
         'userreport' => [
             'dungeonroute' => [

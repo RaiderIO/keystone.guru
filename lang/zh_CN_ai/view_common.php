@@ -54,7 +54,6 @@ return [
         ],
         'griddiscover' => [
             'popular' => '热门',
-            'new'     => '新',
         ],
         'list' => [
             'more'        => '更多',
@@ -128,8 +127,9 @@ return [
             'pulls'     => '{1} :count 次拉怪|[2,*] :count 次拉怪',
         ],
         'table' => [
-            'team'   => '团队',
-            'filter' => '筛选',
+            'team'                     => '团队',
+            'filter'                   => '筛选',
+            'mass_delete_picker_title' => '',
         ],
         'tablefilters' => [
             'affixes'               => '词缀',
@@ -159,6 +159,8 @@ return [
             'pagination'                   => '路线分页',
             'cancel'                       => '取消',
             'add_none'                     => '添加路线',
+            'delete_none'                  => '',
+            'select_page'                  => '',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - 数据来自 https://www.archon.gg/wow',
@@ -256,7 +258,7 @@ return [
             'battlenet_region'        => '战网地区',
             'continue_with_battlenet' => '使用战网继续',
             'continue_with_discord'   => '使用 Discord 继续',
-            'continue_with_google'    => '使用 Google 继续',
+            'sign_in_with_google'     => '',
         ],
         'orderedselect' => [
             'choose' => '选择要添加的项...',
@@ -570,6 +572,8 @@ return [
                 'matching_routes'         => '最差的路线',
                 'show_lines'              => '显示到匹配敌人的连线',
                 'lines_legend'            => '当前筛选条件下此地下城所有楼层中最差的 :count 个匹配，从战斗开始的位置连到被归属的敌人。',
+                'show_groups'             => '',
+                'groups_legend'           => '',
                 'line_popup'              => [
                     'npc'            => ':name (:id)',
                     'distance'       => '匹配到敌人 :enemy，相距 :distance 码',
@@ -676,6 +680,32 @@ return [
         ],
         'enemydetails' => [
             'report_an_issue' => '报告问题',
+        ],
+        'mappingversionupgradediff' => [
+            'title'                                 => '',
+            'description'                           => '',
+            'no_route_impact'                       => '',
+            'pull'                                  => '',
+            'unknown_npc'                           => '',
+            'emptied_pulls'                         => '',
+            'removed_pull_enemies'                  => '',
+            'removed_pull_enemies_description'      => '',
+            'unkilled_required_enemies'             => '',
+            'unkilled_required_enemies_description' => '',
+            'newly_required'                        => '',
+            'moved_pull_enemies'                    => '',
+            'moved_pull_enemies_description'        => '',
+            'moved_yards'                           => '',
+            'moved_to_floor'                        => '',
+            'enemy_forces'                          => '',
+            'enemy_forces_total'                    => '',
+            'enemy_forces_required'                 => '',
+            'enemy_forces_npc'                      => '',
+            'dungeon_wide'                          => '',
+            'dungeon_wide_unchanged'                => '',
+            'enemies_added'                         => '',
+            'enemies_removed'                       => '',
+            'enemy_patrols'                         => '',
         ],
         'userreport' => [
             'dungeonroute' => [

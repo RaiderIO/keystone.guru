@@ -30,5 +30,9 @@ return [
         'name'        => 'Remix di Legione',
         'description' => 'Remix di Legione',
     ],
+    'forever' => [
+        'name'        => '',
+        'description' => '',
+    ],
 
 ];

@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => 'No hay ningún :npc dentro del alcance en esta planta, pero hay uno a menos de :distance yardas en otra. La planta registrada se deduce a partir del NPC anterior del registro, así que lo más probable es que el fallo se deba a esa deducción; verifícalo antes de cambiar el mapeo.',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => '',
+                'converged' => '',
+                'scatter'   => '',
+            ],
+            'subject' => [
+                'pack'  => '',
+                'enemy' => '',
+            ],
+            'suggestion' => [
+                'displaced'               => '',
+                'displaced_shape_unknown' => '',
+                'converged'               => '',
+                'scatter'                 => '',
+            ],
+        ],
     ],
 
 ];

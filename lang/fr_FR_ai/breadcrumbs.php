@@ -95,6 +95,7 @@ return [
                 'dungeonroute_view'                           => 'Voir la route de donjon',
                 'dungeonroute_view_contents'                  => 'Contenu de la route',
                 'dungeonroute_mapping_version_usage'          => 'Utilisation de la version de mapping',
+                'dungeonroute_generate_test_routes'           => '',
                 'enemyforces_recalculate'                     => 'Recalculer les forces ennemies',
                 'features_list'                               => 'Fonctionnalités',
                 'mdt_dungeon_mapping_hash'                    => 'Hash de mapping du donjon',

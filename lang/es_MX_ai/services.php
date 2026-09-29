@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => 'No hay ningún :npc dentro del alcance en este piso, pero hay uno a menos de :distance yardas en otro piso. El piso registrado se infiere a partir del NPC anterior en el registro, así que lo más probable es que se deba a esa inferencia; verifícalo antes de cambiar el mapeo.',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => '',
+                'converged' => '',
+                'scatter'   => '',
+            ],
+            'subject' => [
+                'pack'  => '',
+                'enemy' => '',
+            ],
+            'suggestion' => [
+                'displaced'               => '',
+                'displaced_shape_unknown' => '',
+                'converged'               => '',
+                'scatter'                 => '',
+            ],
+        ],
     ],
 
 ];

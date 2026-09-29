@@ -5,12 +5,9 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'           => 'Raider.IO 주간 경로',
-                'weekly_routes'          => 'Raider.IO 주간 경로',
-                'community_routes'       => '커뮤니티 경로',
-                'popular'                => '인기 있는 경로',
-                'newly_published_routes' => '새로 게시된 경로',
-                'archetypes'             => [
+                'weekly_routes'    => 'Raider.IO 주간 경로',
+                'community_routes' => '커뮤니티 경로',
+                'archetypes'       => [
                     'pug_friendly' => [
                         'label'       => '쉽게 참여 가능',
                         'description' => '낯선 사람들로 이루어진 그룹에게 관대한 풀입니다.',
@@ -33,23 +30,6 @@ return [
         ],
         'panel' => [
             'show_more' => '더 보기',
-        ],
-        'search' => [
-            'page_title'              => '경로 검색',
-            'header'                  => '경로 검색',
-            'title'                   => '제목',
-            'title_placeholder'       => '제목으로 필터',
-            'key_level'               => '키 레벨',
-            'affixes'                 => '보정',
-            'affixes_title'           => '보정 선택',
-            'select_affixes'          => '어픽스 선택',
-            'affixes_selected'        => '{0}개의 보정 선택됨',
-            'enemy_forces'            => '적군',
-            'enemy_forces_complete'   => '완료',
-            'enemy_forces_incomplete' => '미완료',
-            'rating'                  => '평점',
-            'user'                    => '사용자',
-            'user_placeholder'        => '사용자로 필터',
         ],
     ],
     'livesession' => [

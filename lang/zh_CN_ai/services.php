@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => '本楼层范围内没有 :npc，但另一个楼层上有一个在 :distance 码以内。记录的楼层是根据日志中前一个 NPC 推断出来的，因此这很可能就是该推断造成的——请先核实再修改映射。',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => '',
+                'converged' => '',
+                'scatter'   => '',
+            ],
+            'subject' => [
+                'pack'  => '',
+                'enemy' => '',
+            ],
+            'suggestion' => [
+                'displaced'               => '',
+                'displaced_shape_unknown' => '',
+                'converged'               => '',
+                'scatter'                 => '',
+            ],
+        ],
     ],
 
 ];

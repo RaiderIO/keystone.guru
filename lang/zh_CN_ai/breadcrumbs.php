@@ -95,6 +95,7 @@ return [
                 'dungeonroute_view'                           => '查看地下城路线',
                 'dungeonroute_view_contents'                  => '路线内容',
                 'dungeonroute_mapping_version_usage'          => '映射版本使用情况',
+                'dungeonroute_generate_test_routes'           => '',
                 'enemyforces_recalculate'                     => '重新计算敌方部队',
                 'features_list'                               => '功能',
                 'mdt_dungeon_mapping_hash'                    => '地下城映射哈希',

@@ -38,6 +38,8 @@ return [
             'mapping_version_upgrade_already_latest' => 'Questa versione di mappatura è già l\'ultima per il suo dungeon — nessun percorso è stato accodato.',
             'read_only_mode_disabled'                => 'Modalità sola lettura disattivata',
             'read_only_mode_enabled'                 => 'Modalità sola lettura attivata',
+            'thumbnail_generation_paused'            => '',
+            'thumbnail_generation_resumed'           => '',
         ],
     ],
     'affix' => [
@@ -110,10 +112,6 @@ return [
         'popular' => 'Percorsi popolari',
         'new'     => 'Nuovo',
         'season'  => [
-            'popular' => '%s percorsi popolari',
-            'new'     => '%s nuovi percorsi',
-        ],
-        'dungeon' => [
             'popular' => '%s percorsi popolari',
             'new'     => '%s nuovi percorsi',
         ],

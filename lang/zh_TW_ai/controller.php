@@ -38,6 +38,8 @@ return [
             'mapping_version_upgrade_already_latest' => '',
             'read_only_mode_disabled'                => '唯讀模式已停用',
             'read_only_mode_enabled'                 => '唯讀模式已啟用',
+            'thumbnail_generation_paused'            => '',
+            'thumbnail_generation_resumed'           => '',
         ],
     ],
     'affix' => [
@@ -112,10 +114,6 @@ return [
         'season'  => [
             'popular' => '%s 受歡迎的路線',
             'new'     => '%s 新的路線',
-        ],
-        'dungeon' => [
-            'popular' => '%s 受歡迎的路線',
-            'new'     => '%s 新路線',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [

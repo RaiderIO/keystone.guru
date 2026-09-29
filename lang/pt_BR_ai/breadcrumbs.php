@@ -95,6 +95,7 @@ return [
                 'dungeonroute_view'                           => 'Ver rota de masmorra',
                 'dungeonroute_view_contents'                  => 'Conteúdo da rota',
                 'dungeonroute_mapping_version_usage'          => 'Uso da versão de mapeamento',
+                'dungeonroute_generate_test_routes'           => '',
                 'enemyforces_recalculate'                     => 'Recalcular forças inimigas',
                 'features_list'                               => 'Recursos',
                 'mdt_dungeon_mapping_hash'                    => 'Hash de mapeamento da masmorra',

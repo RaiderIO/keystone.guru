@@ -38,6 +38,8 @@ return [
             'mapping_version_upgrade_already_latest' => 'Esta versão de mapeamento já é a mais recente para sua masmorra — nenhuma rota foi enfileirada.',
             'read_only_mode_disabled'                => 'Modo somente leitura desativado',
             'read_only_mode_enabled'                 => 'Modo somente leitura ativado',
+            'thumbnail_generation_paused'            => '',
+            'thumbnail_generation_resumed'           => '',
         ],
     ],
     'affix' => [
@@ -110,10 +112,6 @@ return [
         'popular' => 'Rotas populares',
         'new'     => 'Novo',
         'season'  => [
-            'popular' => '%s rotas populares',
-            'new'     => '%s novas rotas',
-        ],
-        'dungeon' => [
             'popular' => '%s rotas populares',
             'new'     => '%s novas rotas',
         ],

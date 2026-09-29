@@ -54,7 +54,6 @@ return [
         ],
         'griddiscover' => [
             'popular' => 'Популярные',
-            'new'     => 'Новые',
         ],
         'list' => [
             'more'        => 'Еще',
@@ -128,8 +127,9 @@ return [
             'pulls'     => '{1} :count пул|[2,*] :count пулов',
         ],
         'table' => [
-            'team'   => 'Команда',
-            'filter' => 'Фильтр',
+            'team'                     => 'Команда',
+            'filter'                   => 'Фильтр',
+            'mass_delete_picker_title' => '',
         ],
         'tablefilters' => [
             'affixes'               => 'Аффиксы',
@@ -159,6 +159,8 @@ return [
             'pagination'                   => 'Страницы маршрутов',
             'cancel'                       => 'Отмена',
             'add_none'                     => 'Добавить маршруты',
+            'delete_none'                  => '',
+            'select_page'                  => '',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s -  данные https://mplus.subcreation.net',
@@ -256,7 +258,7 @@ return [
             'battlenet_region'        => 'Регион Battle.net',
             'continue_with_battlenet' => 'Продолжить через Battle.net',
             'continue_with_discord'   => 'Продолжить через Discord',
-            'continue_with_google'    => 'Продолжить через Google',
+            'sign_in_with_google'     => '',
         ],
         'orderedselect' => [
             'choose' => 'Выберите элемент для добавления...',
@@ -570,6 +572,8 @@ return [
                 'matching_routes'         => 'Худшие маршруты',
                 'show_lines'              => 'Показать линии к сопоставленному врагу',
                 'lines_legend'            => 'Худшие сопоставления (:count) текущего фильтра по всем уровням этого подземелья, от места начала боя до врага, которому он был отнесён.',
+                'show_groups'             => '',
+                'groups_legend'           => '',
                 'line_popup'              => [
                     'npc'            => ':name (:id)',
                     'distance'       => 'Сопоставлен с врагом :enemy, на расстоянии :distance ярд.',
@@ -679,6 +683,32 @@ return [
         ],
         'enemydetails' => [
             'report_an_issue' => 'Сообщить о проблеме',
+        ],
+        'mappingversionupgradediff' => [
+            'title'                                 => '',
+            'description'                           => '',
+            'no_route_impact'                       => '',
+            'pull'                                  => '',
+            'unknown_npc'                           => '',
+            'emptied_pulls'                         => '',
+            'removed_pull_enemies'                  => '',
+            'removed_pull_enemies_description'      => '',
+            'unkilled_required_enemies'             => '',
+            'unkilled_required_enemies_description' => '',
+            'newly_required'                        => '',
+            'moved_pull_enemies'                    => '',
+            'moved_pull_enemies_description'        => '',
+            'moved_yards'                           => '',
+            'moved_to_floor'                        => '',
+            'enemy_forces'                          => '',
+            'enemy_forces_total'                    => '',
+            'enemy_forces_required'                 => '',
+            'enemy_forces_npc'                      => '',
+            'dungeon_wide'                          => '',
+            'dungeon_wide_unchanged'                => '',
+            'enemies_added'                         => '',
+            'enemies_removed'                       => '',
+            'enemy_patrols'                         => '',
         ],
         'userreport' => [
             'dungeonroute' => [

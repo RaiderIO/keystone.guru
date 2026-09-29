@@ -38,6 +38,8 @@ return [
             'mapping_version_upgrade_already_latest' => 'Esta versión de mapeo ya es la más reciente para su mazmorra; no se puso en cola ninguna ruta.',
             'read_only_mode_disabled'                => 'Modo de solo lectura deshabilitado',
             'read_only_mode_enabled'                 => 'Modo de solo lectura habilitado',
+            'thumbnail_generation_paused'            => '',
+            'thumbnail_generation_resumed'           => '',
         ],
     ],
     'affix' => [
@@ -110,10 +112,6 @@ return [
         'popular' => 'Rutas populares',
         'new'     => 'Nuevo',
         'season'  => [
-            'popular' => '%s rutas populares',
-            'new'     => '%s nuevas rutas',
-        ],
-        'dungeon' => [
             'popular' => '%s rutas populares',
             'new'     => '%s nuevas rutas',
         ],

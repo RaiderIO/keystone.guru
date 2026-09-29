@@ -73,6 +73,23 @@ return [
                 'wrong_floor_artifact' => 'Nessun :npc a portata su questo piano, ma ce n\'è uno entro :distance iarde su un altro piano. Il piano registrato viene dedotto dall\'NPC precedente nel log, quindi l\'anomalia è molto probabilmente dovuta a tale deduzione: verifica prima di modificare la mappatura.',
             ],
         ],
+        'enemy_resolution_analysis' => [
+            'verdict' => [
+                'displaced' => '',
+                'converged' => '',
+                'scatter'   => '',
+            ],
+            'subject' => [
+                'pack'  => '',
+                'enemy' => '',
+            ],
+            'suggestion' => [
+                'displaced'               => '',
+                'displaced_shape_unknown' => '',
+                'converged'               => '',
+                'scatter'                 => '',
+            ],
+        ],
     ],
 
 ];

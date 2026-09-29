@@ -23,5 +23,7 @@ return [
     'map_icon_type_role_check_rule' => [
         'message' => '該地圖圖示類型不適用於您的訪問級別。',
     ],
-
+    'user_slug_available_rule' => [
+        'taken' => '',
+    ],
 ];

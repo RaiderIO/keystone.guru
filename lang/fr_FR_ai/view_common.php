@@ -54,7 +54,6 @@ return [
         ],
         'griddiscover' => [
             'popular' => 'Populaire',
-            'new'     => 'Nouveau',
         ],
         'list' => [
             'more'        => 'Plus',
@@ -128,8 +127,9 @@ return [
             'pulls'     => '{1} :count pull|[2,*] :count pulls',
         ],
         'table' => [
-            'team'   => 'Équipe',
-            'filter' => 'Filtrer',
+            'team'                     => 'Équipe',
+            'filter'                   => 'Filtrer',
+            'mass_delete_picker_title' => '',
         ],
         'tablefilters' => [
             'affixes'               => 'Affixes',
@@ -159,6 +159,8 @@ return [
             'pagination'                   => 'Pages d\'itinéraires',
             'cancel'                       => 'Annuler',
             'add_none'                     => 'Ajouter des itinéraires',
+            'delete_none'                  => '',
+            'select_page'                  => '',
         ],
         'tier' => [
             'data_by_archon_gg' => '%s - données par https://www.archon.gg/wow',
@@ -256,7 +258,7 @@ return [
             'battlenet_region'        => 'Région Battle.net',
             'continue_with_battlenet' => 'Continuer avec Battle.net',
             'continue_with_discord'   => 'Continuer avec Discord',
-            'continue_with_google'    => 'Continuer avec Google',
+            'sign_in_with_google'     => '',
         ],
         'orderedselect' => [
             'choose' => 'Choisissez un élément à ajouter...',
@@ -570,6 +572,8 @@ return [
                 'matching_routes'         => 'Pires itinéraires',
                 'show_lines'              => 'Afficher les lignes vers l\'ennemi associé',
                 'lines_legend'            => 'Les :count pires associations du filtre actuel sur tous les étages de ce donjon, depuis l\'endroit où le combat a commencé jusqu\'à l\'ennemi auquel il a été attribué.',
+                'show_groups'             => '',
+                'groups_legend'           => '',
                 'line_popup'              => [
                     'npc'            => ':name (:id)',
                     'distance'       => 'Associé à l\'ennemi :enemy, à :distance yards',
@@ -679,6 +683,32 @@ return [
         ],
         'enemydetails' => [
             'report_an_issue' => 'Signaler un problème',
+        ],
+        'mappingversionupgradediff' => [
+            'title'                                 => '',
+            'description'                           => '',
+            'no_route_impact'                       => '',
+            'pull'                                  => '',
+            'unknown_npc'                           => '',
+            'emptied_pulls'                         => '',
+            'removed_pull_enemies'                  => '',
+            'removed_pull_enemies_description'      => '',
+            'unkilled_required_enemies'             => '',
+            'unkilled_required_enemies_description' => '',
+            'newly_required'                        => '',
+            'moved_pull_enemies'                    => '',
+            'moved_pull_enemies_description'        => '',
+            'moved_yards'                           => '',
+            'moved_to_floor'                        => '',
+            'enemy_forces'                          => '',
+            'enemy_forces_total'                    => '',
+            'enemy_forces_required'                 => '',
+            'enemy_forces_npc'                      => '',
+            'dungeon_wide'                          => '',
+            'dungeon_wide_unchanged'                => '',
+            'enemies_added'                         => '',
+            'enemies_removed'                       => '',
+            'enemy_patrols'                         => '',
         ],
         'userreport' => [
             'dungeonroute' => [

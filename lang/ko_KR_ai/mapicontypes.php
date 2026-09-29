@@ -125,6 +125,11 @@ return [
     'murder_row_loaded_pistol'                        => '장전된 권총',
     'murder_row_overload_golem'                       => '과부하 골렘',
     'the_blinding_vale_flourishing_stride'            => '무성한 발걸음',
+    'altar_of_fangs_mutating_elixir'                  => '',
+    'den_of_nalorakk_rune_of_anchoring'               => '',
+    'den_of_nalorakk_warding_incense'                 => '',
+    'voidscar_arena_proof_of_endurance'               => '',
+    'voidscar_arena_proof_of_mastery'                 => '',
 
     'waystone' => '이정표 돌',
 ];

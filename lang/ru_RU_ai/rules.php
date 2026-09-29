@@ -23,5 +23,7 @@ return [
     'map_icon_type_role_check_rule' => [
         'message' => 'Этот тип иконки карты недоступен для вашего уровня доступа.',
     ],
-
+    'user_slug_available_rule' => [
+        'taken' => '',
+    ],
 ];
