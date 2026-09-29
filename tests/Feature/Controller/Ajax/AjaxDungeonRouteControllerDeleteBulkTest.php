@@ -7,12 +7,19 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteChange;
 use App\Models\DungeonRoute\DungeonRouteFavorite;
+use App\Models\DungeonRoute\DungeonRouteThumbnail;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
+use App\Models\File;
 use App\Models\Laratrust\Role;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Exceptions;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
+use League\Flysystem\UnableToDeleteFile;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -194,6 +201,50 @@ final class AjaxDungeonRouteControllerDeleteBulkTest extends PublicTestCase
     }
 
     #[Test]
+    public function deleteBulk_givenSeveralRoutesWithThumbnailsTheDiskFailsToDelete_deletesEveryRoute(): void
+    {
+        // Arrange - the S3 disks throw on a failed delete (a 403 from DeleteObject); that must not stop the
+        // route owning the thumbnail, nor the routes after it, from being deleted
+        Exceptions::fake();
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->method('delete')
+            ->willThrowException(UnableToDeleteFile::atLocation('thumbnails/route.jpg', 'Access Denied'));
+        Storage::set('s3_user_uploads', $filesystem);
+
+        $author        = $this->createUser();
+        $dungeonRoutes = [];
+        $files         = [];
+        for ($index = 0; $index < 4; $index++) {
+            $dungeonRoute    = $this->createRoute($author);
+            $dungeonRoutes[] = $dungeonRoute;
+            $files[]         = $this->createThumbnail($dungeonRoute, 's3_user_uploads');
+        }
+
+        $publicKeys = array_map(static fn(DungeonRoute $dungeonRoute): string => $dungeonRoute->public_key, $dungeonRoutes);
+
+        try {
+            // Act
+            $response = $this->deleteBulk($author, $publicKeys);
+
+            // Assert
+            $response->assertOk();
+            $response->assertExactJson(['dungeon_routes' => $publicKeys]);
+            foreach ($dungeonRoutes as $dungeonRoute) {
+                $this->assertNull($dungeonRoute->fresh());
+                $this->assertDatabaseMissing('dungeon_route_thumbnails', ['dungeon_route_id' => $dungeonRoute->id]);
+            }
+
+            foreach ($files as $file) {
+                $this->assertDatabaseMissing('files', ['id' => $file->id]);
+            }
+
+            Exceptions::assertReported(UnableToDeleteFile::class);
+        } finally {
+            File::query()->whereIn('id', array_map(static fn(File $file): int => $file->id, $files))->delete();
+        }
+    }
+
+    #[Test]
     public function deleteBulk_givenAnEmptyArray_returnsValidationError(): void
     {
         // Arrange
@@ -287,6 +338,26 @@ final class AjaxDungeonRouteControllerDeleteBulkTest extends PublicTestCase
         $this->createdTeams[] = $team;
 
         return $team;
+    }
+
+    private function createThumbnail(DungeonRoute $dungeonRoute, string $disk): File
+    {
+        $file = File::create([
+            'model_id'    => $dungeonRoute->id,
+            'model_class' => DungeonRoute::class,
+            'disk'        => $disk,
+            'path'        => sprintf('thumbnails/%s/%s_1.jpg', $dungeonRoute->public_key, $dungeonRoute->public_key),
+        ]);
+
+        DungeonRouteThumbnail::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $dungeonRoute->dungeon->floors->first()->id,
+            'file_id'          => $file->id,
+            'custom'           => false,
+            'variant'          => DungeonRouteThumbnailVariant::Standard,
+        ]);
+
+        return $file;
     }
 
     private function createRoute(User $author, int $teamId = -1): DungeonRoute
