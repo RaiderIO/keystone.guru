@@ -22,5 +22,5 @@ $size ??= 20;
              alt="__('view_common.npc.link.boss')" width="16" height="16" class="me-1"
              title="{{ __('view_common.npc.link.boss') }}" data-bs-toggle="tooltip"/>
     @endif
-    {{ $npc->getTranslatedName() }}
+    {{ __($npc->name) }}
 </a>

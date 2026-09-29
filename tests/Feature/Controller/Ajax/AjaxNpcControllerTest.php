@@ -8,6 +8,7 @@ use App\Models\Faction;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Translation\Translation;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -106,6 +107,77 @@ final class AjaxNpcControllerTest extends AjaxPublicTestCase
                 $newMappingVersion->delete();
             }
         }
+    }
+
+    #[Test]
+    #[DataProvider('localizedNpcNameProvider')]
+    public function get_givenNonEnglishLocale_returnsNpcNameInThatLocaleOrEnglish(string $localizedName, string $expectedName): void
+    {
+        // Arrange
+        [$dungeon] = $this->findDungeon();
+
+        $npc          = null;
+        $translations = collect();
+
+        try {
+            $npc = Npc::create([
+                'id'                => self::NPC_ID,
+                'classification_id' => 1,
+                'npc_type_id'       => 1,
+                'npc_class_id'      => 1,
+                'display_id'        => null,
+                'name'              => sprintf('npc.%d.name', self::NPC_ID),
+                'aggressiveness'    => Npc::AGGRESSIVENESS_AGGRESSIVE,
+                'dangerous'         => 0,
+                'truesight'         => 0,
+            ]);
+            $npc->dungeons()->attach($dungeon->id);
+            $translations->push(Translation::create(['locale' => 'en_US', 'key' => $npc->name, 'translation' => 'English Admin Npc']));
+            $translations->push(Translation::create(['locale' => 'de_DE_ai', 'key' => $npc->name, 'translation' => $localizedName]));
+
+            // Act
+            $response = $this->get(sprintf('/ajax/admin/npc?%s', http_build_query([
+                'draw'    => 1,
+                'start'   => 0,
+                'length'  => 100000,
+                'lang'    => 'de_DE_ai',
+                'columns' => [
+                    [
+                        'data'       => 0,
+                        'name'       => 'name',
+                        'searchable' => 'true',
+                        'orderable'  => 'true',
+                        'search'     => ['value' => '', 'regex' => 'false'],
+                    ],
+                ],
+                'search' => ['value' => '', 'regex' => 'false'],
+            ])));
+
+            // Assert
+            $response->assertOk();
+            /** @var list<array<string, mixed>> $rows */
+            $rows  = $response->json('data');
+            $names = array_column($rows, 'name', 'id');
+            $this->assertArrayHasKey(self::NPC_ID, $names);
+            $this->assertSame($expectedName, $names[self::NPC_ID]);
+        } finally {
+            if ($npc !== null) {
+                $npc->dungeons()->detach($dungeon->id);
+                $npc->delete();
+            }
+            Translation::query()->whereIn('id', $translations->pluck('id'))->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function localizedNpcNameProvider(): array
+    {
+        return [
+            'translated'   => ['Deutscher Admin-Npc', 'Deutscher Admin-Npc'],
+            'untranslated' => ['', 'English Admin Npc'],
+        ];
     }
 
     private function createEnemy(int $mappingVersionId, int $floorId): Enemy

@@ -8,6 +8,7 @@ use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Overrides\AiLocaleMessageSelector;
 use App\Overrides\CustomRateLimiter;
+use App\Overrides\EmptyTranslationFallbackTranslator;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -124,6 +125,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->extend(RateLimiter::class, fn($command, $app) => new CustomRateLimiter($app->make('cache')->driver(
             $app['config']->get('cache.limiter'),
         )));
+
+        // An empty translation falls back to en_US instead of rendering a blank - see EmptyTranslationFallbackTranslator
+        $this->app->extend('translator', static fn(Translator $translator) => EmptyTranslationFallbackTranslator::fromTranslator($translator));
 
         // trans_choice()'s plural rules don't know the `*_ai` locales - see AiLocaleMessageSelector
         $this->app->afterResolving('translator', static fn(Translator $translator) => $translator->setSelector(new AiLocaleMessageSelector()));

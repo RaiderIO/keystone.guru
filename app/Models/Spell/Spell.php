@@ -174,9 +174,8 @@ class Spell extends Model implements MappingModelInterface
     }
 
     /**
-     * The spell's name in `$locale` (the application's when null), or its English name when that locale
-     * has none: the spell name sync leaves a spell Wowhead does not know about as an empty string in
-     * every non-English locale file, and `__()` returns that empty string rather than falling back.
+     * The spell's name in `$locale` (the application's when null); an empty translation falls back to
+     * English through {@see \App\Overrides\EmptyTranslationFallbackTranslator}.
      */
     public function getTranslatedName(?string $locale = null): ?string
     {
@@ -185,10 +184,6 @@ class Spell extends Model implements MappingModelInterface
         }
 
         $translatedName = __($this->name, [], $locale);
-
-        if (!is_string($translatedName) || $translatedName === '') {
-            $translatedName = __($this->name, [], config('app.fallback_locale'));
-        }
 
         return is_string($translatedName) ? $translatedName : $this->name;
     }

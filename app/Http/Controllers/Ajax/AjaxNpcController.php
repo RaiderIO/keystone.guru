@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Models\Npc\NpcDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
-use App\Logic\Datatables\ColumnHandler\Npc\DungeonColumnHandler;
+use App\Logic\Datatables\ColumnHandler\Compendium\DungeonColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Npc\IdColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Npc\NameColumnHandler;
 use App\Logic\Datatables\NpcsDatatablesHandler;
@@ -17,7 +17,6 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
 
 class AjaxNpcController extends Controller
@@ -61,22 +60,32 @@ class AjaxNpcController extends Controller
      */
     public function get(Request $request): array
     {
+        $locale         = app()->getLocale();
+        $fallbackLocale = config('app.fallback_locale');
+        $dungeonName    = "COALESCE(NULLIF(dungeon_translations.translation, ''), dungeon_fallback_translations.translation)";
+
         $npcs = Npc::with([
             'type',
             'classification',
             'enemyForces',
         ])
-            ->selectRaw('npcs.*, npc_name_translations.translation as name, GROUP_CONCAT(DISTINCT translations.translation SEPARATOR ", ") AS dungeon_names, COUNT(enemies.id) as enemy_count')
+            ->selectRaw(sprintf(
+                'npcs.*, %s as name, GROUP_CONCAT(DISTINCT %s SEPARATOR ", ") AS dungeon_names, COUNT(enemies.id) as enemy_count',
+                NameColumnHandler::NAME_EXPRESSION,
+                $dungeonName,
+            ))
             ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
             ->leftJoin('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
-            ->leftJoin('translations', static function (JoinClause $clause) {
-                $clause->on('translations.key', '=', 'dungeons.name')
-                    ->on('translations.locale', '=', DB::raw('"en_US"'));
+            ->leftJoin('translations as dungeon_translations', static function (JoinClause $clause) use ($locale) {
+                $clause->on('dungeon_translations.key', '=', 'dungeons.name')
+                    ->where('dungeon_translations.locale', '=', $locale);
+            })
+            ->leftJoin('translations as dungeon_fallback_translations', static function (JoinClause $clause) use ($fallbackLocale) {
+                $clause->on('dungeon_fallback_translations.key', '=', 'dungeons.name')
+                    ->where('dungeon_fallback_translations.locale', '=', $fallbackLocale);
             });
 
-        // The admin list stays in English, whatever the admin's own locale
-        $fallbackLocale = config('app.fallback_locale');
-        NameColumnHandler::joinNameTranslations($npcs, $fallbackLocale, $fallbackLocale)
+        NameColumnHandler::joinNameTranslations($npcs, $locale, $fallbackLocale)
             ->leftJoin('mapping_versions', function (JoinClause $clause) {
                 $clause->on('mapping_versions.dungeon_id', '=', 'dungeons.id')
                     ->whereRaw('mapping_versions.id = (SELECT MAX(mv2.id) FROM mapping_versions mv2 WHERE mv2.dungeon_id = dungeons.id)');
@@ -93,7 +102,7 @@ class AjaxNpcController extends Controller
             ->addColumnHandler([
                 new IdColumnHandler($datatablesHandler),
                 new NameColumnHandler($datatablesHandler),
-                new DungeonColumnHandler($datatablesHandler),
+                new DungeonColumnHandler($datatablesHandler, $dungeonName),
             ])
             ->applyRequestToBuilder()
             ->getResult();

@@ -141,23 +141,7 @@ class Npc extends Model implements MappingModelInterface
     #[\Override]
     public function getRouteKey(): string
     {
-        return sprintf('%d-%s', $this->id, Str::slug($this->getTranslatedName()));
-    }
-
-    /**
-     * The NPC's name in `$locale` (the application's when null), or its English name when that locale
-     * has none: an NPC name missing from a non-English locale file is an empty string there, and `__()`
-     * returns that empty string rather than falling back.
-     */
-    public function getTranslatedName(?string $locale = null): string
-    {
-        $translatedName = __($this->name, [], $locale);
-
-        if (!is_string($translatedName) || $translatedName === '') {
-            $translatedName = __($this->name, [], config('app.fallback_locale'));
-        }
-
-        return is_string($translatedName) ? $translatedName : $this->name;
+        return sprintf('%d-%s', $this->id, Str::slug(__($this->name)));
     }
 
     public function getEnemyPortraitUrlAttribute(): string
@@ -181,7 +165,7 @@ class Npc extends Model implements MappingModelInterface
     public function getTooltipDataAttribute(): array
     {
         return array_filter([
-            'name'        => $this->getTranslatedName(),
+            'name'        => __($this->name),
             'portraitUrl' => ksgAsset($this->enemy_portrait_url),
             // A handful of seeded NPCs carry a classification_id no npc_classifications row matches,
             // so this relation really can come back null - the badge is then left out entirely
