@@ -80,8 +80,8 @@ return [
                 'scatter'   => 'Sparso',
             ],
             'subject' => [
-                'pack'  => 'pacchetto :group (id :pack_id)',
-                'enemy' => 'nemico :enemy_id',
+                'pack'  => 'il pacchetto :group (id :pack_id)',
+                'enemy' => 'il nemico :enemy_id',
             ],
             'suggestion' => [
                 'displaced'               => 'Ingaggiato a :distance iarde da dove :subject è mappato (percorsi: :routes, ovvero :share% del totale), sempre nella stessa direzione e mantenendo la sua forma. Sposta :subject dove viene ingaggiato.',
