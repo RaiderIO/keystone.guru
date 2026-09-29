@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use League\Flysystem\FilesystemException;
 use Override;
 use RuntimeException;
 
@@ -101,7 +102,15 @@ class File extends Model
             return true;
         }
 
-        return Storage::disk($this->disk)->delete($this->path);
+        // A disk configured with 'throw' => true (the S3 disks) throws instead of returning false; a file that
+        // stays behind on disk must not stop the database row, or the model owning it, from being deleted
+        try {
+            return Storage::disk($this->disk)->delete($this->path);
+        } catch (FilesystemException $exception) {
+            report($exception);
+
+            return false;
+        }
     }
 
     /**

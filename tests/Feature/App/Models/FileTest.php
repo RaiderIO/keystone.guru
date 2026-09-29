@@ -3,7 +3,10 @@
 namespace Tests\Feature\App\Models;
 
 use App\Models\File;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Storage;
+use League\Flysystem\UnableToDeleteFile;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -93,5 +96,56 @@ final class FileTest extends PublicTestCase
             $this->app['env'] = $originalEnv;
             $file->delete();
         }
+    }
+
+    #[Test]
+    public function deleteFromDisk_givenADiskThatThrowsOnDelete_reportsTheExceptionAndReturnsFalse(): void
+    {
+        // Arrange - an S3 disk is configured to throw, e.g. on a 403 from DeleteObject
+        Exceptions::fake();
+        $this->useDiskThatFailsToDelete('s3_user_uploads');
+
+        $file = $this->createFile('s3_user_uploads', 'some/path.jpg');
+
+        try {
+            // Act
+            $result = $file->deleteFromDisk();
+
+            // Assert
+            $this->assertFalse($result);
+            Exceptions::assertReported(UnableToDeleteFile::class);
+        } finally {
+            File::query()->whereKey($file->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenADiskThatThrowsOnDelete_stillDeletesTheRow(): void
+    {
+        // Arrange
+        Exceptions::fake();
+        $this->useDiskThatFailsToDelete('s3_user_uploads');
+
+        $file = $this->createFile('s3_user_uploads', 'some/path.jpg');
+
+        try {
+            // Act
+            $result = $file->delete();
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertDatabaseMissing('files', ['id' => $file->id]);
+        } finally {
+            File::query()->whereKey($file->id)->delete();
+        }
+    }
+
+    private function useDiskThatFailsToDelete(string $disk): void
+    {
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->method('delete')
+            ->willThrowException(UnableToDeleteFile::atLocation('some/path.jpg', 'Access Denied'));
+
+        Storage::set($disk, $filesystem);
     }
 }
