@@ -2,15 +2,15 @@
 
 namespace App\Console\Commands\Localization\Zone;
 
+use App\Console\Commands\Localization\BaseSyncCommand;
 use App\Console\Commands\Localization\Traits\ExportsTranslations;
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\Floor\Floor;
 use App\Service\Wowhead\WowheadTranslationServiceInterface;
 use Exception;
-use Illuminate\Console\Command;
 
-class SyncZoneNames extends Command
+class SyncZoneNames extends BaseSyncCommand
 {
     use ExportsTranslations;
 
@@ -70,7 +70,7 @@ class SyncZoneNames extends Command
     {
         $dungeonNamesByLocale = $wowheadTranslationService->getDungeonNames();
 
-        $dungeonsById = Dungeon::all()
+        $dungeonsById = Dungeon::with('expansion')->get()
             ->keyBy('id');
 
         // Get the existing spell names from the localization file and merge with the fetched names
@@ -118,7 +118,7 @@ class SyncZoneNames extends Command
     private function syncFloorNames(WowheadTranslationServiceInterface $wowheadTranslationService, array $existingTranslationsByLocale): array
     {
         $floorNamesByLocale = $wowheadTranslationService->getFloorNames();
-        $dungeonsByZoneId   = Dungeon::all()
+        $dungeonsByZoneId   = Dungeon::with(['expansion', 'floors'])->get()
             ->keyBy('zone_id');
 
         $englishFloorNames = $floorNamesByLocale->get('en_US', []);
@@ -154,7 +154,7 @@ class SyncZoneNames extends Command
             foreach ($floorNames as $floorIndex => $floorName) {
                 $found = false;
                 foreach ($dungeon->floors as $floor) {
-                    if ($floorName === __($floor->name, [], 'en_US')) {
+                    if ($this->normalizeFloorName($floorName) === $this->normalizeFloorName(__($floor->name, [], 'en_US'))) {
                         // We found the KSG floor for this name, so we can store where to find it in $dungeonZoneIdIndexReference
                         $dungeonZoneIdIndexReference[$floor->id] = [
                             'index' => $floorIndex,
@@ -237,14 +237,10 @@ class SyncZoneNames extends Command
                     $dungeonTranslationKey = explode('.', $dungeon->name)[2];
 
                     // Add the facade floor name to the list of floor names "retrieved" from Wowhead so we can resolve facade floor names
-                    $floorNamesForLocale[$zoneId][] = $existingTranslationsByLocale[$locale][$dungeon->expansion->shortname][$dungeonTranslationKey]['name'];
-
-                    $updatedTranslations[$dungeon->expansion->shortname][$dungeonTranslationKey] = [
-                        'floors' => [],
-                    ];
+                    $floorNamesForLocale[$zoneId][] = $existingTranslationsByLocale[$locale][$dungeon->expansion->shortname][$dungeonTranslationKey]['name'] ?? '';
 
                     foreach ($floorData as $floorId => $data) {
-                        if (!isset($floorNamesForLocale[$zoneId][$data['index']])) {
+                        if (empty($floorNamesForLocale[$zoneId][$data['index']])) {
                             $this->warn(sprintf('No floor name found for zone ID %d and index %d in locale %s', $zoneId, $data['index'], $locale));
                             continue;
                         }
@@ -281,16 +277,22 @@ class SyncZoneNames extends Command
     }
 
     /**
+     * Wowhead and the en_US floor names differ in punctuation and case only ("Vereesa's Repose - Upper" vs
+     * "Vereesa's Repose Upper"), so floors are matched on letters and digits alone.
+     */
+    public function normalizeFloorName(string $floorName): string
+    {
+        return mb_strtolower((string)preg_replace('/[^\p{L}\p{N}]/u', '', $floorName));
+    }
+
+    /**
      * @param array<string, mixed> $updatedTranslations
      */
     private function saveTranslationsToDisk(array $updatedTranslations): void
     {
         foreach ($updatedTranslations as $locale => $newTranslations) {
-            /** @var array<string, string> $longToShort */
-            $longToShort = array_flip(config('language.short_to_long', ''));
-            $aiLocale    = sprintf('%s_ai', $locale);
-            if (isset($longToShort[$aiLocale])) {
-                $this->exportTranslations($aiLocale, 'dungeons.php', $newTranslations);
+            if ($this->hasAILanguage($locale)) {
+                $this->exportTranslations(sprintf('%s_ai', $locale), 'dungeons.php', $newTranslations);
             }
             $this->exportTranslations($locale, 'dungeons.php', $newTranslations);
         }

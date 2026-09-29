@@ -23,6 +23,9 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
 
     private const string IDENTIFYING_TOKEN_ZONE_NAMES = 'var g_zone_areas = ';
 
+    /** Wowhead answers its zone pages with a 403 bot challenge for a full browser user agent, but not for this one. */
+    private const string ZONE_PAGE_USER_AGENT = 'Mozilla/5.0';
+
     private const array LOCALE_URL_MAPPING = [
         'en_US' => '',
         'ko_KR' => 'ko/',
@@ -172,7 +175,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
                     $url = sprintf('https://wowhead.com/%szones/instances', $wowheadLocale);
                     $this->log->getDungeonNamesWowheadUrl($url);
 
-                    $response = $this->curlGet($url);
+                    $response = $this->curlGet($url, [CURLOPT_USERAGENT => self::ZONE_PAGE_USER_AGENT]);
 
                     $response = Str::replace('data.page.listPage.listviews', 'dataPageListPageListviews', $response);
 
@@ -182,8 +185,13 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
 //                    /** @var Dom\Node\AbstractNode $scriptElement */
 //                    $scriptElement = $dom->find('script');
 
-                    /** @var Dom\Node\AbstractNode $scriptElement */
+                    /** @var Dom\Node\AbstractNode|null $scriptElement */
                     $scriptElement = $dom->getElementById('dataPageListPageListviews');
+                    if ($scriptElement === null) {
+                        $this->log->getDungeonNamesElementNotFound();
+
+                        continue;
+                    }
 
                     $json = json_decode($scriptElement->innerhtml, true);
                     if (is_array($json)) {

@@ -9,7 +9,7 @@
         "mdt_id": 12,
         "raid": 0,
         "key": "arcway",
-        "name": "The Arcway",
+        "name": "dungeons.legion.arcway.name",
         "abbreviation": "dungeons.legion.arcway.abbreviation",
         "slug": "arcway",
         "heatmap_enabled": 0,
