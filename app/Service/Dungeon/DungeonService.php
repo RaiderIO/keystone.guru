@@ -125,7 +125,11 @@ class DungeonService implements DungeonServiceInterface
         // instead: the "next season" card that HeaderComposer adds to the dungeon context bar.
         $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
 
-        return $currentSeason === null ? $gameVersion->expansion->dungeons()->get() : $this->getSeasonDungeons($currentSeason);
+        // An expansion's dungeons can include ones only mapped for another game version sharing that expansion
+        // (e.g. a continent mapped for WoW: Forever only) - those cannot be opened under this game version.
+        return $currentSeason === null
+            ? $gameVersion->expansion->dungeons()->forGameVersion($gameVersion)->get()
+            : $this->getSeasonDungeons($currentSeason);
     }
 
     /**
