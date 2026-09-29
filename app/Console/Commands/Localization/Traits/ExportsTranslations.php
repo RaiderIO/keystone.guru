@@ -10,7 +10,7 @@ use Illuminate\Console\Command;
 trait ExportsTranslations
 {
     /**
-     * @param array<string, mixed> $data
+     * @param array<string|int, mixed> $data
      */
     public function exportTranslations(
         string $locale,

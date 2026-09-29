@@ -18,4 +18,16 @@ interface WowheadTranslationServiceInterface
 
     /** @return Collection<string, mixed> */
     public function getFloorNames(): Collection;
+
+    /**
+     * Every zone Wowhead lists for the game version, not only instances.
+     *
+     * @return Collection<string, array<int, string>> Zone names by zone ID, per locale.
+     */
+    public function getZoneNames(GameVersion $gameVersion): Collection;
+
+    /**
+     * @return Collection<string, array<string, string>> Continent names by Wowhead continent key (e.g. POSTMASTER_PIPE_KALIMDOR), per locale.
+     */
+    public function getContinentNames(): Collection;
 }

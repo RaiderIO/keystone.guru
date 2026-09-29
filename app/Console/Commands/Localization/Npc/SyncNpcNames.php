@@ -39,25 +39,40 @@ class SyncNpcNames extends BaseSyncCommand
         $gameVersion    = GameVersion::firstWhere('key', $gameVersionKey);
 
         $npcNamesByLocale = $wowheadService->getNpcNames($gameVersion);
+        $englishNpcNames  = __('npcs', [], 'en_US');
 
         foreach ($npcNamesByLocale as $locale => $npcNames) {
             /** @var Collection<int, string> $npcNames */
-            // Get the existing NPC names from the localization file and merge with the fetched names
-            $existingNpcNames = __('npcs', [], $locale);
+            $newNpcNames = $this->mergeNpcNames(__('npcs', [], $locale), $englishNpcNames, $npcNames->toArray());
 
-            // Get the keys that are present in the existing array
-            // And then merge the new names with the existing ones, updating them
-            $newNpcNames = array_replace(
-                $existingNpcNames,
-                array_intersect_key($npcNames->toArray(), $existingNpcNames),
-            );
-
-            ksort($newNpcNames);
             $this->exportTranslations($locale, 'npcs.php', $newNpcNames);
 
             if ($this->hasAILanguage($locale)) {
                 $this->exportTranslations(sprintf('%s_ai', $locale), 'npcs.php', $newNpcNames);
             }
         }
+    }
+
+    /**
+     * Overwrites the existing names with the fetched ones for every NPC that en_US knows, so NPCs added to
+     * en_US since the last sync are added too. A name the source does not have (empty) is left out, so the
+     * English fallback covers it instead of an empty string.
+     *
+     * @param  array<int, string> $existingNpcNames
+     * @param  array<int, string> $englishNpcNames
+     * @param  array<int, string> $fetchedNpcNames
+     * @return array<int, string>
+     */
+    public function mergeNpcNames(array $existingNpcNames, array $englishNpcNames, array $fetchedNpcNames): array
+    {
+        $fetchedNpcNames = array_filter(
+            array_intersect_key($fetchedNpcNames, $englishNpcNames),
+            static fn(?string $npcName): bool => $npcName !== null && trim($npcName) !== '',
+        );
+
+        $newNpcNames = array_replace($existingNpcNames, $fetchedNpcNames);
+        ksort($newNpcNames);
+
+        return $newNpcNames;
     }
 }
