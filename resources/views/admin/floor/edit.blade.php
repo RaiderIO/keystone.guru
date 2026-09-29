@@ -61,6 +61,17 @@ $floor ??= null;
             </div>
             @include('common.forms.form-error', ['key' => 'facade'])
         </div>
+
+        <div class="col {{ $errors->has('facade_navigation') ? ' has-error' : '' }}">
+            <div class="form-check">
+                {{ html()->checkbox('facade_navigation', $floor?->facade_navigation, 1)->class('form-check-input') }}
+                {{ html()->label(__('view_admin.floor.edit.facade_navigation'), 'facade_navigation')->class('fw-bold form-check-label') }}
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
+                    __('view_admin.floor.edit.facade_navigation_title')
+                     }}"></i>
+            </div>
+            @include('common.forms.form-error', ['key' => 'facade_navigation'])
+        </div>
     </div>
 
     <div class="mb-3{{ $errors->has('index') ? ' has-error' : '' }}">

@@ -19,6 +19,8 @@ class CombatLogEventGridAggregationResult implements Arrayable
 {
     private bool $useFacade;
 
+    private bool $useFacadeNavigation;
+
     private ?MappingVersion $currentMappingVersion = null;
 
     /**
@@ -33,6 +35,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
     ) {
         $this->currentMappingVersion = $combatLogEventFilter->getDungeon()->getCurrentMappingVersion();
         $this->useFacade             = User::shouldUseFacadeMapStyle($this->currentMappingVersion);
+        $this->useFacadeNavigation   = $this->useFacade && User::shouldUseFacadeNavigation($this->currentMappingVersion);
     }
 
     public function toArray(): array
@@ -41,8 +44,9 @@ class CombatLogEventGridAggregationResult implements Arrayable
         /** @var Collection<int, Floor> $floors */
         $floors = $dungeon->floors->keyBy('id');
 
-        $weightMax = 0;
-        $data      = [];
+        $weightMax          = 0;
+        $data               = [];
+        $navigableFloorData = [];
         foreach ($this->results as $floorId => $rows) {
             /** @var Floor $floor */
             $floor = $floors->get($floorId);
@@ -70,7 +74,8 @@ class CombatLogEventGridAggregationResult implements Arrayable
                 }
             }
 
-            $latLngs = [];
+            $latLngs      = [];
+            $floorLatLngs = [];
             foreach ($rawData as $row) {
                 [
                     $x,
@@ -78,12 +83,20 @@ class CombatLogEventGridAggregationResult implements Arrayable
                     $count,
                 ] = $row;
 
-                $latLngArray           = $this->convertIngameLocationToLatLngArray(new IngameXY($x, $y, $floor));
+                $ingameXY              = new IngameXY($x, $y, $floor);
+                $latLngArray           = $this->convertIngameLocationToLatLngArray($ingameXY, $this->useFacade);
                 $latLngArray['weight'] = $count;
 
                 $latLngs[] = $latLngArray;
                 if ($weightMax < $count) {
                     $weightMax = $count;
+                }
+
+                if ($this->useFacadeNavigation) {
+                    $floorLatLngArray           = $this->convertIngameLocationToLatLngArray($ingameXY, false);
+                    $floorLatLngArray['weight'] = $count;
+
+                    $floorLatLngs[] = $floorLatLngArray;
                 }
             }
 
@@ -91,6 +104,13 @@ class CombatLogEventGridAggregationResult implements Arrayable
                 'floor_id' => $floorId,
                 'lat_lngs' => $latLngs,
             ];
+
+            if ($this->useFacadeNavigation) {
+                $navigableFloorData[$floorId] = [
+                    'floor_id' => $floorId,
+                    'lat_lngs' => $floorLatLngs,
+                ];
+            }
         }
 
         // Do not split up by floors - but instead add it all to the facade floor instead
@@ -116,7 +136,8 @@ class CombatLogEventGridAggregationResult implements Arrayable
                 }
 
                 $facadeData[$facadeFloor->id]['lat_lngs'] = array_merge(...$latLngsToCombine);
-                $data                                     = $facadeData;
+                // With facade navigation the viewer can also open the real floors, which need their own cells
+                $data = $facadeData + $navigableFloorData;
             }
         }
 
@@ -154,7 +175,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
     /**
      * @return array<string, float>
      */
-    private function convertIngameLocationToLatLngArray(IngameXY $ingameXY): array
+    private function convertIngameLocationToLatLngArray(IngameXY $ingameXY, bool $useFacade): array
     {
         $dungeon = $this->combatLogEventFilter->getDungeon();
 
@@ -163,7 +184,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
 
         $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation($ingameXY);
 
-        $latLngArray = ($this->useFacade ?
+        $latLngArray = ($useFacade ?
             $this->coordinatesService->convertMapLocationToFacadeMapLocation($this->currentMappingVersion, $latLng) :
             $latLng)->toArray();
 
@@ -183,6 +204,16 @@ class CombatLogEventGridAggregationResult implements Arrayable
     public function setUseFacade(bool $useFacade): self
     {
         $this->useFacade = $useFacade;
+
+        return $this;
+    }
+
+    /**
+     * Only for unit tests really.
+     */
+    public function setUseFacadeNavigation(bool $useFacadeNavigation): self
+    {
+        $this->useFacadeNavigation = $useFacadeNavigation;
 
         return $this;
     }

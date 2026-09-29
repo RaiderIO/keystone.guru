@@ -1231,3 +1231,21 @@
     display: flex;
     align-items: center;
 }
+
+.facade_floor_navigation_hover {
+    cursor: pointer;
+}
+
+.facade_floor_navigation_tooltip {
+    font-size: 16px;
+    font-weight: bold;
+    background-color: unset;
+    border: unset;
+    box-shadow: unset;
+    color: white;
+    text-shadow: black 2px 2px;
+}
+
+.facade_floor_navigation_tooltip:before {
+    content: unset;
+}

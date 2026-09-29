@@ -283,10 +283,17 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
         return $this->floors()->active();
     }
 
-    /** @return HasMany<Floor, $this> */
-    public function floorsForMapFacade(MappingVersion $mappingVersion, ?bool $useFacade = null): HasMany
+    /**
+     * @param  bool                  $withFacadeNavigation Also return the non-facade floors when the facade floor offers facade navigation
+     * @return HasMany<Floor, $this>
+     */
+    public function floorsForMapFacade(MappingVersion $mappingVersion, ?bool $useFacade = null, bool $withFacadeNavigation = false): HasMany
     {
         $useFacade ??= $mappingVersion->facade_enabled;
+
+        if ($useFacade && $withFacadeNavigation && User::shouldUseFacadeNavigation($mappingVersion, User::MAP_FACADE_STYLE_FACADE)) {
+            return $this->hasMany(Floor::class)->orderBy('index');
+        }
 
         // If we use facade
         // If we have facade, only return facade floor

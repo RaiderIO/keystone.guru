@@ -35,6 +35,7 @@ export const customScripts = [
     'resources/assets/js/custom/mapplugins/mapplugin.js',
     'resources/assets/js/custom/mapplugins/patherplugin.js',
     'resources/assets/js/custom/mapplugins/heatplugin.js',
+    'resources/assets/js/custom/mapplugins/facadefloornavigationplugin.js',
 
     // Map object groups
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroup.js',

@@ -204,4 +204,64 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
             'floorIndex'  => $defaultFloor->index,
         ]));
     }
+
+    #[Test]
+    public function viewDungeonFloor_givenFacadeNavigationAndNonFacadeFloorIndex_returnsOk(): void
+    {
+        // Arrange
+        $admin = User::findOrFail(1);
+        $admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
+        $this->be($admin);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, dungeonActive: true, requireDefaultFloor: true);
+        $gameVersion                = $mappingVersion->gameVersion;
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
+        /** @var Floor $floor */
+        $floor = $dungeon->floors()->where('facade', 0)->where('active', 1)->firstOrFail();
+
+        try {
+            $facadeFloor->update(['facade_navigation' => 1]);
+
+            // Act
+            $response = $this->get(route('dungeon.explore.gameversion.view.floor', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+                'floorIndex'  => $floor->index,
+            ]));
+
+            // Assert
+            $response->assertOk();
+        } finally {
+            $facadeFloor->update(['facade_navigation' => 0]);
+        }
+    }
+
+    #[Test]
+    public function viewDungeonFloor_givenFacadeStyleWithoutFacadeNavigation_redirectsToFacadeFloor(): void
+    {
+        // Arrange
+        $admin = User::findOrFail(1);
+        $admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
+        $this->be($admin);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, dungeonActive: true, requireDefaultFloor: true);
+        $gameVersion                = $mappingVersion->gameVersion;
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
+        /** @var Floor $floor */
+        $floor = $dungeon->floors()->where('facade', 0)->where('active', 1)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('dungeon.explore.gameversion.view.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => $floor->index,
+        ]));
+
+        // Assert
+        $response->assertRedirect(route('dungeon.explore.gameversion.view.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => $facadeFloor->index,
+        ]));
+    }
 }

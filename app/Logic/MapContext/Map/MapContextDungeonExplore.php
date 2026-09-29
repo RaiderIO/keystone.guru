@@ -42,6 +42,7 @@ class MapContextDungeonExplore extends MapContextMappingVersion
         return $this->dungeon->floorsForMapFacade(
             $this->mappingVersion,
             $this->mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE,
+            true,
         )->active()->get()->toArray();
     }
 

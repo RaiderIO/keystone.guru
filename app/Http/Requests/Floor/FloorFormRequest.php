@@ -21,9 +21,10 @@ class FloorFormRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'active'  => $this->input('active', 0),
-            'default' => $this->input('default', 0),
-            'facade'  => $this->input('facade', 0),
+            'active'            => $this->input('active', 0),
+            'default'           => $this->input('default', 0),
+            'facade'            => $this->input('facade', 0),
+            'facade_navigation' => $this->input('facade_navigation', 0),
         ]);
     }
 
@@ -40,6 +41,10 @@ class FloorFormRequest extends FormRequest
                 'bool',
             ],
             'facade' => [
+                'nullable',
+                'bool',
+            ],
+            'facade_navigation' => [
                 'nullable',
                 'bool',
             ],

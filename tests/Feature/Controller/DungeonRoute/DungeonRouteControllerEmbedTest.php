@@ -92,6 +92,61 @@ final class DungeonRouteControllerEmbedTest extends PublicTestCase
      * A published, non-sandbox route owned by $owner. Sandbox routes (which the factory creates by
      * default) are editable by anyone, so expires_at must be null here.
      */
+    #[Test]
+    public function embed_givenFacadeNavigation_showsFloorSelection(): void
+    {
+        // Arrange - guests default to the facade map style
+        $owner                      = User::factory()->create();
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        $route                      = $this->createRouteOn($owner, $dungeon->id, $mappingVersion->id);
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
+
+        try {
+            $facadeFloor->update(['facade_navigation' => 1]);
+
+            // Act
+            $response = $this->get(route('dungeonroute.embed', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('id="map_floor_selection_dropdown"', false);
+        } finally {
+            $facadeFloor->update(['facade_navigation' => 0]);
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function embed_givenFacadeWithoutFacadeNavigation_hidesFloorSelection(): void
+    {
+        // Arrange - guests default to the facade map style
+        $owner                      = User::factory()->create();
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        $route                      = $this->createRouteOn($owner, $dungeon->id, $mappingVersion->id);
+
+        try {
+            // Act
+            $response = $this->get(route('dungeonroute.embed', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertDontSee('id="map_floor_selection_dropdown"', false);
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
     private function createRoute(User $owner): DungeonRoute
     {
         // facadeEnabled: false - guests default to the facade map style (User::DEFAULT_MAP_FACADE_STYLE),
@@ -104,6 +159,17 @@ final class DungeonRouteControllerEmbedTest extends PublicTestCase
             // from it - overriding dungeon_id alone leaves mapping_version_id pointing at that other
             // dungeon's mapping version, so it must be overridden here too.
             'mapping_version_id' => $mappingVersion->id,
+            'author_id'          => $owner->id,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+    }
+
+    private function createRouteOn(User $owner, int $dungeonId, int $mappingVersionId): DungeonRoute
+    {
+        return DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeonId,
+            'mapping_version_id' => $mappingVersionId,
             'author_id'          => $owner->id,
             'expires_at'         => null,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],

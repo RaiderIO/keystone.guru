@@ -39,6 +39,7 @@ class MapContextDungeonRoute extends MapContextBase
         return $this->dungeonRoute->dungeon->floorsForMapFacade(
             $this->dungeonRoute->mappingVersion,
             $this->mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE,
+            true,
         )->active()->get()->toArray();
     }
 

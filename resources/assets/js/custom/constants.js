@@ -659,6 +659,21 @@ let c = {
         floorunionarea: {
             color: '#00b08c',
         },
+        facadefloornavigation: {
+            polygonOptions: {
+                color: '#ffffff',
+                weight: 2,
+                opacity: 0.9,
+                fillColor: '#ffffff',
+                fillOpacity: 0.15,
+                interactive: false,
+            },
+            tooltipOptions: {
+                permanent: true,
+                direction: 'center',
+                className: 'facade_floor_navigation_tooltip',
+            },
+        },
         placeholderColors: {},
         editsidebar: {
             pullGradient: {

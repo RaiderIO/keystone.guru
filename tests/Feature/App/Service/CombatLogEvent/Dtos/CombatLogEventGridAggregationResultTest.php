@@ -12,6 +12,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\Fixtures\Traits\CreatesCombatLogEvent;
 use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
@@ -21,6 +22,7 @@ final class CombatLogEventGridAggregationResultTest extends PublicTestCase
 {
     use CreatesDungeon;
     use CreatesCombatLogEvent;
+    use ProvidesDungeon;
 
     /**
      * A mapping version without a facade of its own renders the real floors even for a viewer whose map style is
@@ -69,5 +71,67 @@ final class CombatLogEventGridAggregationResultTest extends PublicTestCase
         } finally {
             $user->update(['map_facade_style' => $originalMapFacadeStyle]);
         }
+    }
+
+    #[Test]
+    public function toArray_givenFacadeNavigation_returnsFacadeFloorAndEveryRealFloor(): void
+    {
+        // Arrange
+        [$dungeon] = $this->findDungeon(facadeEnabled: true);
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
+
+        $filter = new CombatLogEventFilter(
+            app(SeasonServiceInterface::class),
+            $dungeon,
+            CombatLogEventEventType::NpcDeath,
+            CombatLogEventDataType::PlayerPosition,
+        );
+
+        $results = $this->createGridAggregationResult($dungeon, 2);
+
+        $result = (new CombatLogEventGridAggregationResult(app(CoordinatesServiceInterface::class), $filter, $results, 1))
+            ->setUseFacade(true)
+            ->setUseFacadeNavigation(true);
+
+        // Act
+        $array = $result->toArray();
+
+        // Assert
+        /** @var array<int, array{floor_id: int, lat_lngs: array<int, mixed>}> $data */
+        $data             = $array['data'];
+        $latLngsByFloorId = array_column($data, 'lat_lngs', 'floor_id');
+        $this->assertCount(array_sum(array_map('count', $results)), $latLngsByFloorId[$facadeFloor->id]);
+        foreach ($results as $floorId => $rows) {
+            $this->assertCount(count($rows), $latLngsByFloorId[$floorId]);
+        }
+    }
+
+    #[Test]
+    public function toArray_givenFacadeWithoutFacadeNavigation_returnsOnlyFacadeFloor(): void
+    {
+        // Arrange
+        [$dungeon] = $this->findDungeon(facadeEnabled: true);
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
+
+        $filter = new CombatLogEventFilter(
+            app(SeasonServiceInterface::class),
+            $dungeon,
+            CombatLogEventEventType::NpcDeath,
+            CombatLogEventDataType::PlayerPosition,
+        );
+
+        $results = $this->createGridAggregationResult($dungeon, 2);
+
+        $result = (new CombatLogEventGridAggregationResult(app(CoordinatesServiceInterface::class), $filter, $results, 1))
+            ->setUseFacade(true)
+            ->setUseFacadeNavigation(false);
+
+        // Act
+        $array = $result->toArray();
+
+        // Assert
+        $this->assertSame([$facadeFloor->id], array_column($array['data'], 'floor_id'));
     }
 }
