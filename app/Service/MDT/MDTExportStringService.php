@@ -103,7 +103,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                     'dungeon',
                 ]);
 
-                $affixes = $this->dungeonRoute->affixes()->with(['season'])->get();
+                $affixes = $this->dungeonRoute->affixes()->with(['season.affixGroups'])->get();
                 /** @var AffixGroup|null $firstAffixGroup */
                 $firstAffixGroup = $affixes->first();
 

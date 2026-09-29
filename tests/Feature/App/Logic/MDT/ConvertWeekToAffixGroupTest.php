@@ -4,11 +4,14 @@ namespace Tests\Feature\App\Logic\MDT;
 
 use App\Logic\MDT\Conversion;
 use App\Models\Affix;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Season;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
@@ -101,10 +104,9 @@ final class ConvertWeekToAffixGroupTest extends TestCase
 
     /**
      * mdtWeek 0 is a legitimate week, not a "not provided" sentinel: seasons.start_affix_group_index
-     * is documented as the 0-based offset that week 0 resolves to, and convertAffixGroupToWeek()
-     * emits 0 for one affix group per rotation. For a season whose rotation starts at index 0 the
-     * non-TWW_S1 offset makes the raw index -1, which used to miss the collection and log
-     * "Unable to find affix group for mdtWeek" (Sentry PHP-LARAVEL-TV) before falling back.
+     * is documented as the 0-based offset that week 0 resolves to. For a season whose rotation starts
+     * at index 0 the non-TWW_S1 offset makes the raw index -1, which must wrap to the end of the
+     * rotation rather than miss the collection and log an error (Sentry PHP-LARAVEL-TV).
      *
      * @throws Exception
      */
@@ -211,5 +213,211 @@ final class ConvertWeekToAffixGroupTest extends TestCase
         // Assert
         $this->assertNotContains(null, $resolvedIds);
         $this->assertCount($season->affixGroups->count(), array_unique($resolvedIds));
+    }
+
+    /**
+     * Exporting an affix group to an MDT week and importing that week again must land on the same
+     * affix group, for every affix group of every seeded season - including a season whose seeded
+     * affix groups are fewer than its declared affix_group_count.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function convertAffixGroupToWeek_givenEveryAffixGroupOfEverySeason_returnsWeekThatImportsToSameAffixGroup(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::where('key', 'mechagonjunkyard')->firstOrFail();
+        $seasons = Season::with('affixGroups')->get();
+
+        $this->assertNotEmpty($seasons);
+
+        foreach ($seasons as $season) {
+            $seasonService = $this->createSeasonServicePinnedTo($season);
+
+            foreach ($season->affixGroups as $affixGroup) {
+                // Act
+                $week          = Conversion::convertAffixGroupToWeek(AffixGroup::findOrFail($affixGroup->id));
+                $importedGroup = Conversion::convertWeekToAffixGroup($seasonService, $dungeon, $week);
+
+                // Assert
+                $this->assertSame(
+                    $affixGroup->id,
+                    $importedGroup?->id,
+                    sprintf('Season %d: affix group %d exported as week %d', $season->id, $affixGroup->id, $week),
+                );
+            }
+        }
+    }
+
+    /**
+     * Importing an MDT week and exporting the resulting affix group must return the same week, for
+     * every week of every seeded season's rotation (1..count, or 0..count-1 for TWW S1).
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function convertWeekToAffixGroup_givenEveryWeekOfEverySeason_returnsAffixGroupThatExportsToSameWeek(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::where('key', 'mechagonjunkyard')->firstOrFail();
+        $seasons = Season::with('affixGroups')->get();
+
+        foreach ($seasons as $season) {
+            $seasonService = $this->createSeasonServicePinnedTo($season);
+            $firstWeek     = $season->id === Season::SEASON_TWW_S1 ? 0 : 1;
+
+            foreach (range($firstWeek, $firstWeek + $season->affixGroups->count() - 1) as $mdtWeek) {
+                // Act
+                $affixGroup = Conversion::convertWeekToAffixGroup($seasonService, $dungeon, $mdtWeek);
+
+                // Assert
+                $this->assertNotNull($affixGroup, sprintf('Season %d: week %d', $season->id, $mdtWeek));
+                $this->assertSame(
+                    $mdtWeek,
+                    Conversion::convertAffixGroupToWeek(AffixGroup::findOrFail($affixGroup->id)),
+                    sprintf('Season %d: week %d imported as affix group %d', $season->id, $mdtWeek, $affixGroup->id),
+                );
+            }
+        }
+    }
+
+    /**
+     * The season's starting affix group is week 1 (week 0 for TWW S1), and the affix group before it
+     * in the rotation is the last week.
+     */
+    #[Test]
+    #[DataProvider('convertAffixGroupToWeek_givenSeasonStartingAffixGroup_returnsFirstWeekDataProvider')]
+    public function convertAffixGroupToWeek_givenSeasonStartingAffixGroup_returnsFirstWeek(
+        int $seasonId,
+        int $expectedFirstWeek,
+    ): void {
+        // Arrange
+        $season        = Season::with('affixGroups')->findOrFail($seasonId);
+        $count         = $season->affixGroups->count();
+        $startingGroup = $season->affixGroups->get($season->start_affix_group_index);
+        $previousGroup = $season->affixGroups->get(($season->start_affix_group_index + $count - 1) % $count);
+
+        // Act
+        $startingWeek = Conversion::convertAffixGroupToWeek(AffixGroup::findOrFail($startingGroup->id));
+        $previousWeek = Conversion::convertAffixGroupToWeek(AffixGroup::findOrFail($previousGroup->id));
+
+        // Assert
+        $this->assertSame($expectedFirstWeek, $startingWeek);
+        $this->assertSame($expectedFirstWeek + $count - 1, $previousWeek);
+    }
+
+    /**
+     * @return array<string, array{int, int}>
+     */
+    public static function convertAffixGroupToWeek_givenSeasonStartingAffixGroup_returnsFirstWeekDataProvider(): array
+    {
+        return [
+            'Shadowlands S4, starts at index 0'    => [Season::SEASON_SL_S4, 1],
+            'The War Within S1, starts at index 3' => [Season::SEASON_TWW_S1, 0],
+        ];
+    }
+
+    /**
+     * Week 0 on a season whose weeks run 1..count is the same rotation slot as week count; exporting the
+     * affix group it imports as yields that canonical week.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function convertAffixGroupToWeek_givenAffixGroupImportedFromWeekZero_returnsLastWeekOfRotation(): void
+    {
+        // Arrange
+        $dungeon       = Dungeon::where('key', 'mechagonjunkyard')->firstOrFail();
+        $season        = Season::with('affixGroups')->findOrFail(Season::SEASON_SL_S4);
+        $seasonService = $this->createSeasonServicePinnedTo($season);
+        $affixGroup    = Conversion::convertWeekToAffixGroup($seasonService, $dungeon, 0);
+        $this->assertNotNull($affixGroup);
+
+        // Act
+        $week = Conversion::convertAffixGroupToWeek(AffixGroup::findOrFail($affixGroup->id));
+
+        // Assert
+        $this->assertSame($season->affixGroups->count(), $week);
+    }
+
+    /**
+     * The season relation is loaded by the conversion itself, so an affix group fetched on its own
+     * does not trip lazy loading (which throws under the test configuration).
+     */
+    #[Test]
+    public function convertAffixGroupToWeek_givenSeasonRelationNotLoaded_returnsWeekWithoutLazyLoading(): void
+    {
+        // Arrange
+        $affixGroupId = Season::with('affixGroups')->findOrFail(Season::SEASON_SL_S4)->affixGroups->first()->id;
+        $affixGroup   = AffixGroup::findOrFail($affixGroupId);
+        $this->assertFalse($affixGroup->relationLoaded('season'));
+
+        // Act
+        $week = Conversion::convertAffixGroupToWeek($affixGroup);
+
+        // Assert
+        $this->assertSame(1, $week);
+    }
+
+    /**
+     * An affix group missing from its (already loaded) season's affix groups cannot be positioned in
+     * the rotation - log it and fall back to the season's first week rather than throw.
+     */
+    #[Test]
+    public function convertAffixGroupToWeek_givenAffixGroupMissingFromLoadedSeasonAffixGroups_returnsFirstWeekAndLogsError(): void
+    {
+        // Arrange
+        $season     = Season::findOrFail(Season::SEASON_SL_S4);
+        $affixGroup = AffixGroup::where('season_id', $season->id)->firstOrFail();
+        $season->setRelation('affixGroups', new Collection());
+        $affixGroup->setRelation('season', $season);
+
+        Log::shouldReceive('error')->once();
+
+        // Act
+        $week = Conversion::convertAffixGroupToWeek($affixGroup);
+
+        // Assert
+        $this->assertSame(1, $week);
+    }
+
+    /**
+     * A season without any seeded affix groups cannot resolve a week; return null so the importer
+     * falls back to the current affix group.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function convertWeekToAffixGroup_givenSeasonWithoutAffixGroups_returnsNullAndLogsError(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::where('key', 'mechagonjunkyard')->firstOrFail();
+        $season  = new Season([
+            'start_affix_group_index' => 0,
+            'affix_group_count'       => 12,
+        ]);
+        $season->setRelation('affixGroups', new Collection());
+        $seasonService = $this->createSeasonServicePinnedTo($season);
+
+        Log::shouldReceive('error')->once();
+
+        // Act
+        $affixGroup = Conversion::convertWeekToAffixGroup($seasonService, $dungeon, 1);
+
+        // Assert
+        $this->assertNull($affixGroup);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createSeasonServicePinnedTo(Season $season): SeasonServiceInterface
+    {
+        $seasonService = $this->createMock(SeasonServiceInterface::class);
+        $seasonService->method('getCurrentSeasonForDungeon')->willReturn($season);
+        $seasonService->method('getUpcomingSeasonForDungeon')->willReturn($season);
+        $seasonService->method('getMostRecentSeasonForDungeon')->willReturn($season);
+
+        return $seasonService;
     }
 }
