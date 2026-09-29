@@ -238,8 +238,8 @@ return [
             'build_title'              => 'Build :build',
             'build_subtitle'           => 'comparado con :from',
             'changed_spells'           => 'Hechizos modificados: :count|Hechizos modificados: :count',
-            'build_no_changes'         => 'Esta build no ha cambiado los valores de ningún hechizo de NPC.',
-            'build_no_changes_dungeon' => 'Esta build no ha cambiado los valores de ningún hechizo de NPC en esta mazmorra.',
+            'build_no_changes'         => 'Este build no ha cambiado los valores de ningún hechizo de NPC.',
+            'build_no_changes_dungeon' => 'Este build no ha cambiado los valores de ningún hechizo de NPC en esta mazmorra.',
         ],
     ],
     'class' => [
