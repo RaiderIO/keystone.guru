@@ -7,8 +7,10 @@ use App\Console\Commands\Localization\Traits\ExportsTranslations;
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Service\Wowhead\WowheadTranslationServiceInterface;
 use Exception;
+use Illuminate\Support\Collection;
 
 class SyncZoneNames extends BaseSyncCommand
 {
@@ -32,6 +34,15 @@ class SyncZoneNames extends BaseSyncCommand
 
         DungeonKey::TAZAVESH_SO_LEAHS_GAMBIT->value,
         DungeonKey::TAZAVESH_STREETS_OF_WONDER->value,
+    ];
+
+    /**
+     * Continent dungeons whose floors are open-world zones rather than instance areas, by the Wowhead continent key
+     * that holds the continent's own name.
+     */
+    const array CONTINENT_DUNGEONS = [
+        DungeonKey::KALIMDOR->value         => 'POSTMASTER_PIPE_KALIMDOR',
+        DungeonKey::EASTERN_KINGDOMS->value => 'POSTMASTER_PIPE_EASTERNKINGDOMS',
     ];
 
     /**
@@ -59,6 +70,8 @@ class SyncZoneNames extends BaseSyncCommand
         $updatedTranslations = $this->syncDungeonNames($wowheadTranslationService);
 
         $updatedTranslations = $this->syncFloorNames($wowheadTranslationService, $updatedTranslations);
+
+        $updatedTranslations = $this->syncContinentNames($wowheadTranslationService, $updatedTranslations);
 
         $this->saveTranslationsToDisk($updatedTranslations);
     }
@@ -118,7 +131,11 @@ class SyncZoneNames extends BaseSyncCommand
     private function syncFloorNames(WowheadTranslationServiceInterface $wowheadTranslationService, array $existingTranslationsByLocale): array
     {
         $floorNamesByLocale = $wowheadTranslationService->getFloorNames();
-        $dungeonsByZoneId   = Dungeon::with(['expansion', 'floors'])->get()
+        // Zone ID 0 is shared by every dungeon without an instance zone (the continents among them), so keying on it
+        // would keep only one of them
+        $dungeonsByZoneId = Dungeon::with(['expansion', 'floors'])
+            ->where('zone_id', '>', 0)
+            ->get()
             ->keyBy('zone_id');
 
         $englishFloorNames = $floorNamesByLocale->get('en_US', []);
@@ -277,6 +294,91 @@ class SyncZoneNames extends BaseSyncCommand
     }
 
     /**
+     * Fills the continent dungeons (Kalimdor, Eastern Kingdoms): each floor is an open-world zone, found by its en_US
+     * name in Wowhead's retail zone list and, failing that, the classic one ("The Barrens" only exists there). The
+     * continent's own name and facade floor come from Wowhead's continent names.
+     *
+     * @param  array<string, mixed> $existingTranslationsByLocale
+     * @return array<string, mixed>
+     */
+    public function syncContinentNames(
+        WowheadTranslationServiceInterface $wowheadTranslationService,
+        array                              $existingTranslationsByLocale,
+    ): array {
+        $continentNamesByLocale = $wowheadTranslationService->getContinentNames();
+        $zoneNamesBySource      = [
+            $wowheadTranslationService->getZoneNames(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL)),
+            $wowheadTranslationService->getZoneNames(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA)),
+        ];
+
+        $continentDungeons = Dungeon::with(['expansion', 'floors'])
+            ->whereIn('key', array_keys(self::CONTINENT_DUNGEONS))
+            ->get();
+
+        foreach ($continentDungeons as $dungeon) {
+            /** @var Dungeon $dungeon */
+            $expansionKey          = $dungeon->expansion->shortname;
+            $dungeonTranslationKey = explode('.', $dungeon->name)[2];
+            $continentKey          = self::CONTINENT_DUNGEONS[$dungeon->key];
+
+            foreach ($continentNamesByLocale as $locale => $continentNames) {
+                /** @var array<string, string> $continentNames */
+                $namesByTranslationKey = ['name' => $continentNames[$continentKey] ?? ''];
+
+                foreach ($dungeon->floors as $floor) {
+                    /** @var Floor $floor */
+                    $floorTranslationKey = sprintf('floors.%s', explode('.', $floor->name)[4]);
+                    if ($floor->facade) {
+                        $namesByTranslationKey[$floorTranslationKey] = $namesByTranslationKey['name'];
+
+                        continue;
+                    }
+
+                    $namesByTranslationKey[$floorTranslationKey] = $this->findZoneName(
+                        $zoneNamesBySource,
+                        __($floor->name, [], 'en_US'),
+                        $locale,
+                    );
+
+                    if ($namesByTranslationKey[$floorTranslationKey] === '') {
+                        $this->warn(sprintf('No zone name found for %s floor "%s" in locale %s', $dungeon->key, __($floor->name, [], 'en_US'), $locale));
+                    }
+                }
+
+                foreach ($namesByTranslationKey as $translationKey => $name) {
+                    $path = sprintf('%s.%s.%s', $expansionKey, $dungeonTranslationKey, $translationKey);
+                    // Only if we didn't have a translation yet, we add it, so manual corrections are not overwritten
+                    if ($name !== '' && empty(data_get($existingTranslationsByLocale[$locale] ?? [], $path))) {
+                        data_set($existingTranslationsByLocale, sprintf('%s.%s', $locale, $path), $name);
+                    }
+                }
+            }
+        }
+
+        return $existingTranslationsByLocale;
+    }
+
+    /**
+     * @param  array<int, Collection<string, array<int, string>>> $zoneNamesBySource
+     * @return string                                             The zone's name in $locale, or an empty string if no source knows the zone.
+     */
+    private function findZoneName(array $zoneNamesBySource, string $englishZoneName, string $locale): string
+    {
+        $normalizedEnglishZoneName = $this->normalizeFloorName($englishZoneName);
+
+        foreach ($zoneNamesBySource as $zoneNamesByLocale) {
+            // Wowhead lists several zones per name (dev copies, phased versions); the lowest ID is the original zone
+            foreach ($zoneNamesByLocale->get('en_US', []) as $zoneId => $zoneName) {
+                if ($this->normalizeFloorName($zoneName) === $normalizedEnglishZoneName) {
+                    return $zoneNamesByLocale->get($locale, [])[$zoneId] ?? '';
+                }
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * Wowhead and the en_US floor names differ in punctuation and case only ("Vereesa's Repose - Upper" vs
      * "Vereesa's Repose Upper"), so floors are matched on letters and digits alone.
      */
@@ -292,9 +394,74 @@ class SyncZoneNames extends BaseSyncCommand
     {
         foreach ($updatedTranslations as $locale => $newTranslations) {
             if ($this->hasAILanguage($locale)) {
-                $this->exportTranslations(sprintf('%s_ai', $locale), 'dungeons.php', $newTranslations);
+                $aiLocale = sprintf('%s_ai', $locale);
+                $this->exportTranslations(
+                    $aiLocale,
+                    'dungeons.php',
+                    $this->mergeIntoAiTranslations(__('dungeons', [], 'en_US'), __('dungeons', [], $aiLocale), $newTranslations),
+                );
             }
             $this->exportTranslations($locale, 'dungeons.php', $newTranslations);
         }
+    }
+
+    /**
+     * An _ai locale holds every en_US key, empty until a name is known, and keeps names its base locale lacks. So the
+     * en_US keys and the existing _ai file come first, and only non-empty base names are laid over them.
+     *
+     * @param  array<string, mixed>|string $englishTranslations
+     * @param  array<string, mixed>|string $existingAiTranslations
+     * @param  array<string, mixed>        $newTranslations
+     * @return array<string, mixed>
+     */
+    public function mergeIntoAiTranslations(
+        array|string $englishTranslations,
+        array|string $existingAiTranslations,
+        array        $newTranslations,
+    ): array {
+        $mergedTranslations = array_replace_recursive(
+            $this->withEmptyNames(is_array($englishTranslations) ? $englishTranslations : []),
+            is_array($existingAiTranslations) ? $existingAiTranslations : [],
+            $this->withoutEmptyNames($newTranslations),
+        );
+        foreach ($mergedTranslations as &$dungeons) {
+            if (is_array($dungeons)) {
+                ksort($dungeons);
+            }
+        }
+
+        return $mergedTranslations;
+    }
+
+    /**
+     * @param  array<string, mixed> $translations
+     * @return array<string, mixed>
+     */
+    private function withEmptyNames(array $translations): array
+    {
+        $result = [];
+        foreach ($translations as $key => $value) {
+            $result[$key] = is_array($value) ? $this->withEmptyNames($value) : '';
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param  array<string, mixed> $translations
+     * @return array<string, mixed>
+     */
+    private function withoutEmptyNames(array $translations): array
+    {
+        $result = [];
+        foreach ($translations as $key => $value) {
+            if (is_array($value)) {
+                $result[$key] = $this->withoutEmptyNames($value);
+            } elseif ($value !== null && $value !== '') {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
     }
 }

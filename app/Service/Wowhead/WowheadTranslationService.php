@@ -23,6 +23,10 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
 
     private const string IDENTIFYING_TOKEN_ZONE_NAMES = 'var g_zone_areas = ';
 
+    private const string IDENTIFYING_TOKEN_CONTINENT_NAMES = "WH.setPageData('maps.continents', ";
+
+    private const string LISTVIEW_PATTERN = '/<script[^>]*id="data\\.page\\.listPage\\.listviews"[^>]*>(.*?)<\\/script>/s';
+
     /** Wowhead answers its zone pages with a 403 bot challenge for a full browser user agent, but not for this one. */
     private const string ZONE_PAGE_USER_AGENT = 'Mozilla/5.0';
 
@@ -249,5 +253,72 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
         }
 
         return collect($result);
+    }
+
+    public function getZoneNames(GameVersion $gameVersion): Collection
+    {
+        $gameVersionPath = match ($gameVersion->key) {
+            GameVersion::GAME_VERSION_RETAIL      => '',
+            GameVersion::GAME_VERSION_CLASSIC_ERA => 'classic/',
+            default                               => null,
+        };
+
+        $result = collect();
+        if ($gameVersionPath === null) {
+            return $result;
+        }
+
+        foreach (self::LOCALE_URL_MAPPING as $locale => $wowheadLocale) {
+            $response = $this->curlGet(
+                sprintf('https://www.wowhead.com/%s%szones', $gameVersionPath, $wowheadLocale),
+                [CURLOPT_USERAGENT => self::ZONE_PAGE_USER_AGENT],
+            );
+
+            if (preg_match(self::LISTVIEW_PATTERN, $response, $matches) !== 1) {
+                continue;
+            }
+
+            $listviews = json_decode($matches[1], true);
+            if (!is_array($listviews)) {
+                continue;
+            }
+
+            $zoneNames = [];
+            foreach ($listviews[0]['data'] ?? [] as $zoneData) {
+                /** @var array{id: int, name: string} $zoneData */
+                $zoneNames[$zoneData['id']] = $zoneData['name'];
+            }
+
+            ksort($zoneNames);
+            $result->put($locale, $zoneNames);
+        }
+
+        return $result;
+    }
+
+    public function getContinentNames(): Collection
+    {
+        $result = collect();
+        foreach (self::LOCALE_URL_MAPPING as $locale => $wowheadLocale) {
+            $response = $this->curlGet(sprintf('https://nether.wowhead.com/%sdata/zones', $wowheadLocale));
+
+            $start = strpos($response, self::IDENTIFYING_TOKEN_CONTINENT_NAMES);
+            if ($start === false) {
+                continue;
+            }
+
+            $start += strlen(self::IDENTIFYING_TOKEN_CONTINENT_NAMES);
+            $end = strpos($response, '}', $start);
+            if ($end === false) {
+                continue;
+            }
+
+            $continentNames = json_decode(substr($response, $start, $end - $start + 1), true);
+            if (is_array($continentNames)) {
+                $result->put($locale, $continentNames);
+            }
+        }
+
+        return $result;
     }
 }
