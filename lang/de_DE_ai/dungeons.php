@@ -2,10 +2,10 @@
 
 return [
     'difficulty' => [
-        1 => '10-Spieler',
-        2 => '25-Spieler',
-        3 => '20-Spieler',
-        4 => '40-Spieler',
+        1 => '10 Spieler',
+        2 => '25 Spieler',
+        3 => '20 Spieler',
+        4 => '40 Spieler',
     ],
     'classic' => [
         'blackfathom_deeps' => [
@@ -44,7 +44,7 @@ return [
             ],
         ],
         'dire_maul_east' => [
-            'name'         => 'Düsterbruch – Ost',
+            'name'         => 'Düsterbruch - Ost',
             'abbreviation' => '',
             'floors'       => [
                 'warpwood_quarter'         => 'Wucherborkenviertel',
@@ -52,17 +52,17 @@ return [
             ],
         ],
         'dire_maul_north' => [
-            'name'         => 'Düsterbruch – Nord',
+            'name'         => 'Düsterbruch - Nord',
             'abbreviation' => '',
             'floors'       => [
                 'gordok_commons' => 'Gordokhallen',
             ],
         ],
         'dire_maul_west' => [
-            'name'         => 'Düsterbruch – West',
+            'name'         => 'Düsterbruch - West',
             'abbreviation' => '',
             'floors'       => [
-                'capital_gardens'        => 'Hauptgärten',
+                'capital_gardens'        => 'Hauptstadtgärten',
                 'court_of_the_highborne' => 'Hof der Hochgeborenen',
                 'prison_of_immol_thar'   => 'Gefängnis von Immol\'thar',
             ],
@@ -111,7 +111,7 @@ return [
             ],
         ],
         'gnomeregan_sod' => [
-            'name'         => 'Gnomeregan (SoD)',
+            'name'         => 'Gnomeregan',
             'abbreviation' => '',
             'floors'       => [
                 'the_hall_of_gears' => 'Die Halle der Zahnräder',
@@ -164,12 +164,12 @@ return [
             'name'         => 'Untere Schwarzfelsspitze',
             'abbreviation' => '',
             'floors'       => [
-                'tazz_alor'          => 'Tazz’Alor',
-                'skitterweb_tunnels' => 'Netztunnel',
-                'hordemar_city'      => 'Hordemarstadt',
+                'tazz_alor'          => 'Tazz\'Alor',
+                'skitterweb_tunnels' => 'Listspinnertunnel',
+                'hordemar_city'      => 'Hordemar',
                 'hall_of_blackhand'  => 'Schwarzfausthalle',
                 'halycons_lair'      => 'Halycons Hort',
-                'chamber_of_battle'  => 'Kammer des Kampfes',
+                'chamber_of_battle'  => 'Kammer der Schlachten',
             ],
         ],
         'maraudon' => [
@@ -184,7 +184,7 @@ return [
             'name'         => 'Der Geschmolzene Kern',
             'abbreviation' => '',
             'floors'       => [
-                'moltencore' => '',
+                'moltencore' => 'Geschmolzener Kern',
             ],
         ],
         'naxxramas_classic' => [
@@ -253,28 +253,28 @@ return [
             ],
         ],
         'scarlet_monastery_armory' => [
-            'name'         => 'Scharlachrotes Kloster – Waffenkammer',
+            'name'         => 'Scharlachrotes Kloster - Waffenkammer',
             'abbreviation' => '',
             'floors'       => [
-                'armory' => 'Waffenkammer',
+                'armory' => 'Arsenal',
             ],
         ],
         'scarlet_monastery_cathedral' => [
-            'name'         => 'Scharlachrotes Kloster – Kathedrale',
+            'name'         => 'Scharlachrotes Kloster - Kathedrale',
             'abbreviation' => '',
             'floors'       => [
                 'cathedral' => 'Kathedrale',
             ],
         ],
         'scarlet_monastery_graveyard' => [
-            'name'         => 'Scharlachrotes Kloster – Friedhof',
+            'name'         => 'Scharlachrotes Kloster - Friedhof',
             'abbreviation' => '',
             'floors'       => [
                 'graveyard' => 'Friedhof',
             ],
         ],
         'scarlet_monastery_library' => [
-            'name'         => 'Scharlachrotes Kloster – Bibliothek',
+            'name'         => 'Scharlachrotes Kloster - Bibliothek',
             'abbreviation' => '',
             'floors'       => [
                 'library' => 'Bibliothek',
@@ -343,7 +343,7 @@ return [
                 'the_pit_of_refuse'         => 'Versunkener Tempel',
                 'hall_of_serpents'          => 'Halle der Schlangen',
                 'entrance'                  => 'Eingang',
-                'the_temple_of_atal_hakkar' => 'Tempel von Atal’Hakkar',
+                'the_temple_of_atal_hakkar' => 'Der Tempel von Atal\'Hakkar',
                 'hall_of_the_cursed'        => 'Halle der Verfluchten',
             ],
         ],
@@ -392,7 +392,7 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'karabor_sewers'            => 'Kanäle von Karabor',
-                'illidari_training_grounds' => '',
+                'illidari_training_grounds' => 'Ausbildungsgelände der Illidari',
                 'sanctuary_of_shadows'      => 'Zuflucht der Schatten',
                 'halls_of_anguish'          => 'Hallen der Pein',
                 'gorefiends_vigil'          => 'Blutschattens Wacht',
@@ -447,18 +447,18 @@ return [
             ],
         ],
         'sunwell_plateau' => [
-            'name'         => '',
+            'name'         => 'Sonnenbrunnenplateau',
             'abbreviation' => '',
             'floors'       => [
-                'sunwell_plateau'       => '',
-                'shrine_of_the_eclipse' => '',
+                'sunwell_plateau'       => 'Sonnenbrunnenplateau',
+                'shrine_of_the_eclipse' => 'Schrein der Finsternis',
             ],
         ],
         'the_battle_for_mount_hyjal' => [
-            'name'         => '',
+            'name'         => 'Die Schlacht um den Hyjal',
             'abbreviation' => '',
             'floors'       => [
-                'the_battle_for_mount_hyjal' => '',
+                'the_battle_for_mount_hyjal' => 'Die Schlacht um den Hyjal',
             ],
         ],
         'the_eye' => [
@@ -539,7 +539,7 @@ return [
                 'the_rampart_of_skulls' => 'Das Schädelbollwerk',
                 'deathbringers_rise'    => 'Dom des Todesbringers',
                 'the_frost_queens_lair' => 'Der Hort der Frostkönigin',
-                'the_upper_reaches'     => 'Die Oberen Bereiche',
+                'the_upper_reaches'     => 'Der Obere Bereich',
                 'royal_quarters'        => 'Königliche Quartiere',
                 'the_frozen_throne'     => 'Der Frostthron',
                 'frostmourne'           => 'Frostgram',
@@ -931,7 +931,7 @@ return [
             'name'         => 'Karazhan – Untere Ebenen',
             'abbreviation' => '',
             'floors'       => [
-                'servants_quarters'    => 'Dienerquartiere',
+                'servants_quarters'    => 'Bedienstetenunterkünfte',
                 'upper_livery_stables' => 'Obere Nobelställe',
                 'the_banquet_hall'     => 'Der Bankettsaal',
                 'the_guest_chambers'   => 'Die Gästezimmer',
@@ -941,13 +941,13 @@ return [
             ],
         ],
         'maw_of_souls' => [
-            'name'         => 'Die Helmaulklippen',
+            'name'         => 'Der Seelenschlund',
             'abbreviation' => '',
             'floors'       => [
                 'helmouth_cliffs' => 'Helmaulklippen',
                 'the_hold'        => 'Der Frachtraum',
                 'the_naglfar'     => 'Die Naglfar',
-                'maw_of_souls'    => 'Die Helmaulklippen',
+                'maw_of_souls'    => 'Der Seelenschlund',
             ],
         ],
         'neltharions_lair' => [
@@ -1013,30 +1013,30 @@ return [
             ],
         ],
         'mechagon_junkyard' => [
-            'name'         => 'Operation Mechagon: Schrottplatz',
+            'name'         => 'Operation: Mechagon - Schrottplatz',
             'abbreviation' => '',
             'floors'       => [
-                'mechagon_island' => 'Insel Mechagon',
+                'mechagon_island' => 'Mechagon',
                 'tunnels'         => 'Tunnel',
             ],
         ],
         'mechagon_workshop' => [
-            'name'         => 'Operation Mechagon: Werkstatt',
+            'name'         => 'Operation: Mechagon - Werkstatt',
             'abbreviation' => '',
             'floors'       => [
                 'the_robodrome'               => 'Das Robodrom',
-                'waste_pipes'                 => 'Abwasserrohre',
+                'waste_pipes'                 => 'Abflussrohre',
                 'the_under_junk'              => 'Die Unterhalde',
                 'mechagon_city'               => 'Stadt Mechagon',
-                'operation_mechagon_workshop' => 'Operation Mechagon: Werkstatt',
+                'operation_mechagon_workshop' => 'Operation: Mechagon - Werkstatt',
             ],
         ],
         'orgrimmar_horrific_vision' => [
-            'name'         => '',
+            'name'         => 'Verstörende Vision von Orgrimmar',
             'abbreviation' => '',
             'floors'       => [
-                'orgrimmar_horrific_vision' => '',
-                'the_drag'                  => '',
+                'orgrimmar_horrific_vision' => 'Verstörende Vision von Orgrimmar',
+                'the_drag'                  => 'Die Gasse',
             ],
         ],
         'shrine_of_the_storm' => [
@@ -1055,10 +1055,10 @@ return [
             ],
         ],
         'stormwind_horrific_vision' => [
-            'name'         => '',
+            'name'         => 'Verstörende Vision von Sturmwind',
             'abbreviation' => '',
             'floors'       => [
-                'stormwind_horrific_vision' => '',
+                'stormwind_horrific_vision' => 'Verstörende Vision von Sturmwind',
             ],
         ],
         'temple_of_sethraliss' => [
@@ -1164,25 +1164,25 @@ return [
             ],
         ],
         'tazavesh_so_leahs_gambit' => [
-            'name'         => 'Tazavesh: So\'leah\'s Gambit',
+            'name'         => 'Tazavesh: So\'leahs Schachzug',
             'abbreviation' => '',
             'floors'       => [
                 'stormheim'                => 'Sturmheim',
-                'aggramars_vault'          => 'Aggramars Schatzkammer',
+                'aggramars_vault'          => 'Aggramars Kammer',
                 'boralus_harbor'           => 'Hafen von Boralus',
-                'the_opulent_nexus'        => 'Das Opulente Nexus',
-                'tazavesh_so_leahs_gambit' => 'So\'leah\'s Gambit',
+                'the_opulent_nexus'        => 'Der Opulente Nexus',
+                'tazavesh_so_leahs_gambit' => 'Tazavesh: So\'leahs Schachzug',
             ],
         ],
         'tazavesh_streets_of_wonder' => [
-            'name'         => 'Tazavesh: Straßen des Wunders',
+            'name'         => 'Tazavesh: Wundersame Straßen',
             'abbreviation' => '',
             'floors'       => [
-                'the_veiled_market'          => 'Der Verschleierte Markt',
+                'the_veiled_market'          => 'Der Verhüllte Markt',
                 'the_grand_menagerie'        => 'Die Große Menagerie',
-                'the_post'                   => 'Die Post',
+                'the_post'                   => 'Die P.O.S.T.',
                 'myzas_oasis'                => 'Myzas Oase',
-                'tazavesh_streets_of_wonder' => 'Straßen des Wunders',
+                'tazavesh_streets_of_wonder' => 'Tazavesh: Wundersame Straßen',
             ],
         ],
         'the_necrotic_wake' => [
@@ -1229,25 +1229,25 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'galakronds_fall'         => 'Galakronds Sturz',
-                'sanctum_of_chronology'   => 'Sanktum der Chronologie',
-                'millennias_threshold'    => 'Schwelle der Jahrtausende',
-                'locus_of_eternity'       => 'Ort der Ewigkeit',
+                'sanctum_of_chronology'   => 'Sanktum der Zeitfolge',
+                'millennias_threshold'    => 'Jahrhundertschwelle',
+                'locus_of_eternity'       => 'Locus der Ewigkeit',
                 'spoke_of_endless_winter' => 'Speiche des Endlosen Winters',
-                'crossroads_of_fate'      => 'Kreuzung des Schicksals',
+                'crossroads_of_fate'      => 'Schicksalsscheideweg',
             ],
         ],
         'dawn_of_the_infinite_murozonds_rise' => [
-            'name'         => 'Dämmerung des Ewigen: Murozonds Aufstieg',
+            'name'         => 'Dämmerung des Ewigen: Murozonds Erhebung',
             'abbreviation' => '',
             'floors'       => [
-                'murozonds_rise'         => 'Murozonds Aufstieg',
-                'sanctum_of_chronology'  => 'Sanktum der Chronologie',
-                'millennias_threshold'   => 'Schwelle der Jahrtausende',
-                'locus_of_eternity'      => 'Ort der Ewigkeit',
-                'crossroads_of_fate'     => 'Kreuzung des Schicksals',
-                'infinite_conflux'       => 'Der Unendliche Konflux',
-                'twisting_approach'      => 'Gewundener Anmarsch',
-                'immemorial_battlefield' => 'Uraltes Schlachtfeld',
+                'murozonds_rise'         => 'Murozonds Erhebung',
+                'sanctum_of_chronology'  => 'Sanktum der Zeitfolge',
+                'millennias_threshold'   => 'Jahrhundertschwelle',
+                'locus_of_eternity'      => 'Locus der Ewigkeit',
+                'crossroads_of_fate'     => 'Schicksalsscheideweg',
+                'infinite_conflux'       => 'Ewiger Konflux',
+                'twisting_approach'      => 'Gewundener Aufgang',
+                'immemorial_battlefield' => 'Altvorderes Schlachtfeld',
             ],
         ],
         'halls_of_infusion' => [
@@ -1414,7 +1414,7 @@ return [
             'name'         => 'Nalorakks Bau',
             'abbreviation' => '',
             'floors'       => [
-                'dreamers_passage'  => 'Nalorakks Bau',
+                'dreamers_passage'  => 'Passage des Träumers',
                 'the_foraging'      => 'Vorratssuche',
                 'the_heart_of_rage' => 'Herz des Zorns',
                 'den_of_nalorakk'   => 'Nalorakks Bau',
@@ -1425,14 +1425,14 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'magisters_terrace'          => 'Terrasse der Magister',
-                'arcane_atheneum'            => 'Terrasse der Magister',
+                'arcane_atheneum'            => 'Arkanes Athenäum',
                 'grand_magister_asylum'      => 'Zuflucht des Großmagisters',
                 'grand_magister_asylum_void' => '',
                 'magisters_terrace_void'     => '',
                 'tower_of_theory'            => 'Turm der Theorie',
                 'central_tower'              => 'Mittelturm',
                 'upper_tower'                => 'Oberer Turm',
-                'celestial_orrey'            => '',
+                'celestial_orrey'            => 'Himmlisches Sonnensystemmodell',
             ],
         ],
         'maisara_caverns' => [

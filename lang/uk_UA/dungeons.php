@@ -1369,7 +1369,7 @@ return [
                 'tower_of_theory'            => 'Tower of Theory',
                 'central_tower'              => 'Central Tower',
                 'upper_tower'                => 'Upper Tower',
-                'celestial_orrey'            => 'Celestial Orrey',
+                'celestial_orrey'            => 'Celestial Orrery',
             ],
         ],
         'maisara_caverns' => [

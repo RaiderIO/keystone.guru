@@ -4,6 +4,8 @@ namespace Tests\Feature\View\Compendium;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcType;
+use Illuminate\Support\Facades\App;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -23,6 +25,50 @@ final class NpcHeaderTest extends PublicTestCase
 
         // Assert
         $this->assertStringContainsString($npc->wowhead_url, $result);
+    }
+
+    #[Test]
+    public function render_givenNpcWithType_showsTheTranslatedType(): void
+    {
+        // Arrange
+        $npc = Npc::with(['classification', 'type'])
+            ->where('npc_type_id', NpcType::UNDEAD)
+            ->firstOrFail();
+        $originalLocale = App::getLocale();
+
+        try {
+            App::setLocale('de_DE_ai');
+
+            // Act
+            $result = view('compendium.npc.sections.header', ['npc' => $npc, 'currentNpcHealth' => null])->render();
+        } finally {
+            App::setLocale($originalLocale);
+        }
+
+        // Assert
+        $this->assertStringContainsString(__('npctypes.undead', [], 'de_DE_ai'), $result);
+        $this->assertNotSame('Undead', __('npctypes.undead', [], 'de_DE_ai'));
+    }
+
+    #[Test]
+    public function render_givenDangerousNpc_showsTheTranslatedFlag(): void
+    {
+        // Arrange
+        $npc            = Npc::with(['classification', 'type'])->where('dangerous', true)->firstOrFail();
+        $originalLocale = App::getLocale();
+
+        try {
+            App::setLocale('de_DE_ai');
+
+            // Act
+            $result = view('compendium.npc.sections.header', ['npc' => $npc, 'currentNpcHealth' => null])->render();
+        } finally {
+            App::setLocale($originalLocale);
+        }
+
+        // Assert
+        $this->assertStringContainsString(__('view_compendium.npc.sections.header.dangerous', [], 'de_DE_ai'), $result);
+        $this->assertNotSame('', __('view_compendium.npc.sections.header.dangerous', [], 'de_DE_ai'));
     }
 
     #[Test]

@@ -100,7 +100,10 @@ return [
         ],
         'sections' => [
             'header' => [
-                'level' => 'Nivel',
+                'level'             => 'Nivel',
+                'dangerous'         => 'Peligroso',
+                'truesight'         => 'Vista verdadera',
+                'runs_away_in_fear' => 'Huye de miedo',
             ],
             'characteristics' => [
                 'title'        => 'Características',

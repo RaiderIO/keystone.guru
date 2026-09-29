@@ -94,7 +94,10 @@ return [
         ],
         'sections' => [
             'header' => [
-                'level' => 'Hodor',
+                'level'             => 'Hodor',
+                'dangerous'         => 'Hodor',
+                'truesight'         => 'Hodor',
+                'runs_away_in_fear' => 'Hodor',
             ],
             'characteristics' => [
                 'title'        => 'Hodor',

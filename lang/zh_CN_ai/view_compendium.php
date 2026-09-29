@@ -100,7 +100,10 @@ return [
         ],
         'sections' => [
             'header' => [
-                'level' => '等级',
+                'level'             => '等级',
+                'dangerous'         => '危险',
+                'truesight'         => '洞察真视',
+                'runs_away_in_fear' => '恐惧逃跑',
             ],
             'characteristics' => [
                 'title'        => '特性',

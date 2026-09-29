@@ -168,7 +168,9 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
         $this->log->getDungeonNamesStart();
 
         try {
-            $dungeons = Dungeon::all()
+            $dungeons = Dungeon::query()
+                ->where('zone_id', '>', 0)
+                ->get()
                 ->keyBy('zone_id');
 
             $result = [];

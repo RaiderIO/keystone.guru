@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property int                          $id
- * @property string                       $type
+ * @property int    $id
+ * @property string $type
+ * @property-read string                  $type_key
  * @property EloquentCollection<int, Npc> $npcs
  *
  * @mixin Eloquent
@@ -56,9 +57,12 @@ class NpcType extends Model
 
     public $timestamps = false;
 
+    /**
+     * The key of this type in the npctypes translation file, e.g. `not_specified`.
+     */
     public function getTypeKeyAttribute(): string
     {
-        return strtolower($this->type);
+        return str_replace(' ', '_', strtolower($this->type));
     }
 
     /**
