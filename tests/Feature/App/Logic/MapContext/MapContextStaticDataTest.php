@@ -6,6 +6,7 @@ use App\Models\Faction;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDescriptionTranslation;
 use App\Models\Spell\SpellSchool;
+use App\Models\Translation\Translation;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\WagoTools\GameLocale;
 use Illuminate\Support\Collection;
@@ -198,6 +199,83 @@ final class MapContextStaticDataTest extends PublicTestCase
             $this->deleteTranslations();
             $spell?->delete();
         }
+    }
+
+    #[Test]
+    public function toArray_givenLocaleWithSpellNameTranslation_returnsLocalizedName(): void
+    {
+        // Arrange
+        $spell = null;
+
+        try {
+            $spell = $this->createSelectableSpell();
+            $this->createNameTranslations('Test Slam', 'Testschlag');
+
+            // Act
+            $name = $this->getSelectableSpells('de_DE_ai')->firstWhere('id', self::SPELL_ID)['name'];
+
+            // Assert
+            $this->assertSame('Testschlag', $name);
+        } finally {
+            $this->deleteNameTranslations();
+            $spell?->delete();
+        }
+    }
+
+    #[Test]
+    public function toArray_givenLocaleWithEmptySpellNameTranslation_returnsEnglishName(): void
+    {
+        // Arrange
+        $spell = null;
+
+        try {
+            $spell = $this->createSelectableSpell();
+            $this->createNameTranslations('Test Slam', '');
+
+            // Act
+            $name = $this->getSelectableSpells('de_DE_ai')->firstWhere('id', self::SPELL_ID)['name'];
+
+            // Assert
+            $this->assertSame('Test Slam', $name);
+        } finally {
+            $this->deleteNameTranslations();
+            $spell?->delete();
+        }
+    }
+
+    #[Test]
+    public function toArray_givenLocaleWithoutSpellNameTranslationRow_returnsEnglishName(): void
+    {
+        // Arrange
+        $spell = null;
+
+        try {
+            $spell = $this->createSelectableSpell();
+            $this->createNameTranslations('Test Slam', null);
+
+            // Act
+            $name = $this->getSelectableSpells('de_DE_ai')->firstWhere('id', self::SPELL_ID)['name'];
+
+            // Assert
+            $this->assertSame('Test Slam', $name);
+        } finally {
+            $this->deleteNameTranslations();
+            $spell?->delete();
+        }
+    }
+
+    private function createNameTranslations(string $english, ?string $german): void
+    {
+        Translation::create(['locale' => 'en_US', 'key' => 'spells.test', 'translation' => $english]);
+
+        if ($german !== null) {
+            Translation::create(['locale' => 'de_DE_ai', 'key' => 'spells.test', 'translation' => $german]);
+        }
+    }
+
+    private function deleteNameTranslations(): void
+    {
+        Translation::query()->where('key', 'spells.test')->delete();
     }
 
     private function createSelectableSpell(): Spell

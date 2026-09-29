@@ -66,9 +66,24 @@ describe('mergeTranslationsWithFallback', () => {
             .toEqual({edit_label: 'Редагувати'});
     });
 
-    it('mergeTranslationsWithFallback_givenLocaleValueIsAnEmptyString_keepsTheEmptyString', () => {
-        // Laravel treats an existing empty translation as present, not missing
-        expect(mergeTranslationsWithFallback({edit_label: ''}, {edit_label: 'Edit'})).toEqual({edit_label: ''});
+    it('mergeTranslationsWithFallback_givenLocaleValueIsAnEmptyString_returnsFallbackValue', () => {
+        // Mirrors the server side's EmptyTranslationFallbackTranslator: an empty translation is an untranslated one
+        expect(mergeTranslationsWithFallback({edit_label: ''}, {edit_label: 'Edit'})).toEqual({edit_label: 'Edit'});
+    });
+
+    it('mergeTranslationsWithFallback_givenLocaleAndFallbackValuesAreEmptyStrings_keepsTheEmptyString', () => {
+        expect(mergeTranslationsWithFallback({decimal: ''}, {decimal: ''})).toEqual({decimal: ''});
+    });
+
+    it('mergeTranslationsWithFallback_givenEmptyLocaleValueAndNoFallbackKey_keepsTheEmptyString', () => {
+        expect(mergeTranslationsWithFallback({edit_label: ''}, {})).toEqual({edit_label: ''});
+    });
+
+    it('mergeTranslationsWithFallback_givenEmptyNestedLocaleValue_returnsFallbackValueForIt', () => {
+        const locale   = {npcs: {123: 'Kobold', 456: ''}};
+        const fallback = {npcs: {123: 'Kobold', 456: 'Gnoll'}};
+
+        expect(mergeTranslationsWithFallback(locale, fallback)).toEqual({npcs: {123: 'Kobold', 456: 'Gnoll'}});
     });
 
     it('mergeTranslationsWithFallback_givenLocaleValueIsAListArray_takesTheLocaleArrayWhole', () => {

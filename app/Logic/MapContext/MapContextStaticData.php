@@ -2,6 +2,7 @@
 
 namespace App\Logic\MapContext;
 
+use App\Logic\Datatables\ColumnHandler\Spell\NameColumnHandler as SpellNameColumnHandler;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\Faction;
@@ -19,8 +20,6 @@ use App\Service\WagoTools\GameLocale;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Support\Facades\DB;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
@@ -48,15 +47,12 @@ class MapContextStaticData implements Arrayable
         ) {
             $gameLocale = GameLocale::forAppLocale($this->locale);
 
-            $selectableSpells = Spell::where('selectable', true)
+            $selectableSpells = SpellNameColumnHandler::joinNameTranslations(Spell::query(), $this->locale, config('app.fallback_locale'))
+                ->where('selectable', true)
                 ->when($gameLocale !== GameLocale::English, static fn(Builder $query) => $query->with([
                     'descriptionTranslations' => static fn(Relation $relation) => $relation->where('locale', $gameLocale->value),
                 ]))
-                ->selectRaw('spells.*, translations.translation as name')
-                ->leftJoin('translations', function (JoinClause $clause) {
-                    $clause->on('translations.key', '=', 'spells.name')
-                        ->on('translations.locale', '=', DB::raw(sprintf('"%s"', $this->locale)));
-                })
+                ->selectRaw(sprintf('spells.*, %s as name', SpellNameColumnHandler::NAME_EXPRESSION))
                 ->get()
                 ->makeHidden([
                     'debuff',
