@@ -9,8 +9,8 @@
 //
 // `shouldBeVisible()` is the interesting one: it is a chain of four independent
 // filters (floor, teeming, seasonal index, faction) of which only the middle two
-// sit behind the `!isMapAdmin()` guard. That asymmetry is half of the open bug
-// #1389 - see the `(#1389)` describe block for the other half.
+// sit behind the `!isMapAdmin()` guard; the faction filter is spared for admins by the
+// map context sending the faction key 'any'.
 // ---------------------------------------------------------------------------
 
 // 1a. Seasonal type and teeming constants referenced as bare globals by shouldBeVisible().
@@ -306,27 +306,10 @@ describe('MapObject.shouldBeVisible - faction filter', () => {
     });
 });
 
-describe('MapObject.shouldBeVisible - faction filter in the admin mapping editor (#1389)', () => {
-    // Two independent things combine into #1389:
-    //
-    //  1. the faction check sits OUTSIDE the `!isMapAdmin()` guard that the teeming and seasonal
-    //     checks live in, so it still runs for map admins, and
-    //  2. the admin map context does not send the faction *key* 'any' but the string
-    //     'unspecified': MapContextMappingVersion::toArray() emits
-    //     `__(strtolower(Faction 'unspecified'->name))`, and 'unspecified' is not a resolvable
-    //     translation key, so it comes through verbatim. It therefore never equals 'any', and the
-    //     `faction !== 'any'` escape hatch that spares every other map never fires.
-    //
-    // The result is that faction-specific enemies disappear from the mapping editor. These tests
-    // pin the current behaviour; fixing #1389 on either side flips the first expectation to
-    // `true`, and the sibling tests above keep the non-admin paths honest meanwhile.
-    it('currently hides a faction-specific object from the admin mapping editor', () => {
-        setFakeState({faction: 'unspecified', mapAdmin: true});
-
-        expect(makeMapObject({faction: 'alliance'}).shouldBeVisible()).toBe(false);
-    });
-
-    it('would show it if the admin map context sent the faction-agnostic key instead', () => {
+describe('MapObject.shouldBeVisible - faction filter in the admin mapping editor', () => {
+    // The admin map context sends the faction-agnostic key 'any' (MapContextMappingVersion::toArray()),
+    // so the `faction !== 'any'` escape hatch spares faction-specific objects in the mapping editor.
+    it('shows a faction-specific object when the admin map context sends the faction-agnostic key', () => {
         setFakeState({faction: 'any', mapAdmin: true});
 
         expect(makeMapObject({faction: 'alliance'}).shouldBeVisible()).toBe(true);
