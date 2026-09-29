@@ -40,6 +40,97 @@ final class SpellTest extends PublicTestCase
     }
 
     #[Test]
+    public function getTranslatedName_givenLocaleWithTranslation_returnsThatTranslation(): void
+    {
+        // Arrange
+        app('translator')->addLines(['spells.999999001' => 'English Name'], 'en_US');
+        app('translator')->addLines(['spells.999999001' => 'Deutscher Name'], 'de_DE_ai');
+        $spell = new Spell(['name' => 'spells.999999001']);
+
+        // Act
+        $translatedName = $spell->getTranslatedName('de_DE_ai');
+
+        // Assert
+        $this->assertSame('Deutscher Name', $translatedName);
+    }
+
+    #[Test]
+    public function getTranslatedName_givenLocaleWithEmptyTranslation_returnsEnglishName(): void
+    {
+        // Arrange
+        app('translator')->addLines(['spells.999999002' => 'English Name'], 'en_US');
+        app('translator')->addLines(['spells.999999002' => ''], 'de_DE_ai');
+        $spell = new Spell(['name' => 'spells.999999002']);
+
+        // Act
+        $translatedName = $spell->getTranslatedName('de_DE_ai');
+
+        // Assert
+        $this->assertSame('English Name', $translatedName);
+    }
+
+    #[Test]
+    public function getTranslatedName_givenNoLocale_usesApplicationLocale(): void
+    {
+        // Arrange
+        app('translator')->addLines(['spells.999999003' => 'English Name'], 'en_US');
+        app('translator')->addLines(['spells.999999003' => 'Nom français'], 'fr_FR_ai');
+        $spell = new Spell(['name' => 'spells.999999003']);
+        app()->setLocale('fr_FR_ai');
+
+        // Act
+        $translatedName = $spell->getTranslatedName();
+
+        // Assert
+        $this->assertSame('Nom français', $translatedName);
+    }
+
+    #[Test]
+    public function getTranslatedName_givenNameThatIsNoTranslationKey_returnsNameItself(): void
+    {
+        // Arrange
+        $spell = new Spell(['name' => 'Some Untranslated Spell']);
+
+        // Act
+        $translatedName = $spell->getTranslatedName('de_DE_ai');
+
+        // Assert
+        $this->assertSame('Some Untranslated Spell', $translatedName);
+    }
+
+    #[Test]
+    public function getTooltipData_givenLocaleWithEmptyNameTranslation_returnsEnglishName(): void
+    {
+        // Arrange
+        app('translator')->addLines(['spells.999999004' => 'English Name'], 'en_US');
+        app('translator')->addLines(['spells.999999004' => ''], 'de_DE_ai');
+        $spell       = $this->makeSpell('spelldispeltype.magic');
+        $spell->name = 'spells.999999004';
+
+        // Act
+        $tooltipData = $spell->getTooltipData('de_DE_ai');
+
+        // Assert
+        $this->assertSame('English Name', $tooltipData['name']);
+    }
+
+    #[Test]
+    public function getRouteKey_givenLocaleWithEmptyNameTranslation_slugsEnglishName(): void
+    {
+        // Arrange
+        app('translator')->addLines(['spells.999999005' => 'English Name'], 'en_US');
+        app('translator')->addLines(['spells.999999005' => ''], 'de_DE_ai');
+        $spell = new Spell(['id' => 999999005, 'name' => 'spells.999999005']);
+        app()->setLocale('de_DE_ai');
+
+        // Act
+        $routeKey = $spell->getRouteKey();
+
+        // Assert
+        $this->assertSame('999999005-english-name', $routeKey);
+    }
+
+    #[Test]
     #[DataProvider('uninformativeOrDriftedDispelTypeProvider')]
     public function getTooltipDataAttribute_givenUninformativeOrDriftedDispelType_omitsDispelTypeRow(string $dispelType): void
     {

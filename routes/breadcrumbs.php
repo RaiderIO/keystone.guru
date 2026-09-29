@@ -538,7 +538,7 @@ Breadcrumbs::for('compendium.spell.index', static function (Generator $trail) {
 
 Breadcrumbs::for('compendium.spell.show', static function (Generator $trail, Spell $spell) {
     $trail->parent('compendium.spell.index');
-    $trail->push(__('breadcrumbs.home.compendium.spell_show', ['name' => __($spell->name)]), route('spell.compendium.show', $spell));
+    $trail->push(__('breadcrumbs.home.compendium.spell_show', ['name' => $spell->getTranslatedName()]), route('spell.compendium.show', $spell));
 });
 
 Breadcrumbs::for('compendium.activity.index', static function (Generator $trail, Dungeon $dungeon) {

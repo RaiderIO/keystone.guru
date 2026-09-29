@@ -89,7 +89,7 @@ $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
         };
     }
 
-    $spellName = e($event->spell ? __($event->spell->name) : sprintf('#%d', $event->spell_id));
+    $spellName = e($event->spell ? $event->spell->getTranslatedName() : sprintf('#%d', $event->spell_id));
 
     // Counters and immunity bypasses are properties of what a *player* can do about the spell, so the generic
     // "Affected by :property" wording does not fit them

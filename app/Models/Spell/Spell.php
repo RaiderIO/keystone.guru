@@ -35,7 +35,7 @@ use Str;
  * @property string                 $dispel_type
  * @property string                 $mechanic
  * @property string                 $icon_name
- * @property string                 $name
+ * @property string|null            $name
  * @property string|null            $description_template
  * @property string|null            $description_format
  * @property array<int, mixed>|null $description_values
@@ -174,6 +174,26 @@ class Spell extends Model implements MappingModelInterface
     }
 
     /**
+     * The spell's name in `$locale` (the application's when null), or its English name when that locale
+     * has none: the spell name sync leaves a spell Wowhead does not know about as an empty string in
+     * every non-English locale file, and `__()` returns that empty string rather than falling back.
+     */
+    public function getTranslatedName(?string $locale = null): ?string
+    {
+        if ($this->name === null) {
+            return null;
+        }
+
+        $translatedName = __($this->name, [], $locale);
+
+        if (!is_string($translatedName) || $translatedName === '') {
+            $translatedName = __($this->name, [], config('app.fallback_locale'));
+        }
+
+        return is_string($translatedName) ? $translatedName : $this->name;
+    }
+
+    /**
      * The description as it reads with the values it was rendered with.
      *
      * Kept as an accessor rather than a column: the format and its values are the source of truth, so
@@ -246,7 +266,7 @@ class Spell extends Model implements MappingModelInterface
         }
 
         return array_filter([
-            'name'   => __($this->name, [], $locale),
+            'name'   => $this->getTranslatedName($locale),
             'format' => $description->format,
             'values' => array_map(
                 static fn(SpellDescriptionValue $value): array => $value->toArray(),
@@ -340,7 +360,7 @@ class Spell extends Model implements MappingModelInterface
     #[\Override]
     public function getRouteKey(): string
     {
-        return sprintf('%d-%s', $this->id, Str::slug(__($this->name)));
+        return sprintf('%d-%s', $this->id, Str::slug((string)$this->getTranslatedName()));
     }
 
     /** @return Builder<self> */

@@ -87,9 +87,17 @@ class SpellCompendiumController extends Controller
     {
         $dungeon = $request->dungeon();
 
+        $locale         = app()->getLocale();
+        $fallbackLocale = config('app.fallback_locale');
+        $dungeonName    = "COALESCE(NULLIF(dungeon_translations.translation, ''), dungeon_fallback_translations.translation)";
+
         $spells = Spell::query()
-            ->selectRaw('spells.*, spell_name_translations.translation as name,
-                GROUP_CONCAT(DISTINCT dungeon_translations.translation ORDER BY dungeon_translations.translation SEPARATOR ", ") AS dungeon_names')
+            ->selectRaw(sprintf(
+                'spells.*, %s as name, GROUP_CONCAT(DISTINCT %s ORDER BY %s SEPARATOR ", ") AS dungeon_names',
+                NameColumnHandler::NAME_EXPRESSION,
+                $dungeonName,
+                $dungeonName,
+            ))
             // The "used by" column renders an NPC link per npc, each carrying its own hover tooltip
             // (#4096) - which reads these four relations
             // descriptionTranslation is what the spell's own tooltip reads in a non-English locale
@@ -105,17 +113,19 @@ class SpellCompendiumController extends Controller
             })
             ->leftJoin('spell_dungeons', 'spell_dungeons.spell_id', '=', 'spells.id')
             ->leftJoin('dungeons', 'spell_dungeons.dungeon_id', '=', 'dungeons.id')
-            ->leftJoin('translations as dungeon_translations', static function (JoinClause $clause) {
+            ->leftJoin('translations as dungeon_translations', static function (JoinClause $clause) use ($locale) {
                 $clause->on('dungeon_translations.key', '=', 'dungeons.name')
-                    ->where('dungeon_translations.locale', '=', 'en_US');
+                    ->where('dungeon_translations.locale', '=', $locale);
             })
-            ->leftJoin('translations as spell_name_translations', static function (JoinClause $clause) {
-                $clause->on('spell_name_translations.key', '=', 'spells.name')
-                    ->where('spell_name_translations.locale', '=', 'en_US');
-            })
+            ->leftJoin('translations as dungeon_fallback_translations', static function (JoinClause $clause) use ($fallbackLocale) {
+                $clause->on('dungeon_fallback_translations.key', '=', 'dungeons.name')
+                    ->where('dungeon_fallback_translations.locale', '=', $fallbackLocale);
+            });
+
+        NameColumnHandler::joinNameTranslations($spells, $locale, $fallbackLocale)
             ->where('spells.hidden_on_map', false)
             ->groupBy('spells.id')
-            ->orderBy('spell_name_translations.translation');
+            ->orderByRaw(NameColumnHandler::NAME_EXPRESSION);
 
         if ($dungeon !== null) {
             $spells->where('spell_dungeons.dungeon_id', $dungeon->id);

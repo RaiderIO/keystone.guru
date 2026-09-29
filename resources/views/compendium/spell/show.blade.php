@@ -17,7 +17,7 @@ use Illuminate\Support\Collection;
 @extends('layouts.sitepage', [
     'breadcrumbs'       => 'compendium.spell.show',
     'breadcrumbsParams' => [$spell],
-    'title'             => __('view_compendium.spell.show.title', ['name' => __($spell->name)]),
+    'title'             => __('view_compendium.spell.show.title', ['name' => $spell->getTranslatedName()]),
 ])
 
 @section('scripts')

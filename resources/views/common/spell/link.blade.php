@@ -15,4 +15,4 @@ $size ??= 20;
    @if($spell->tooltip_data !== null) data-spell-tooltip="{{ json_encode($spell->tooltip_data) }}"
    @else data-wowhead="{{ $spell->wowhead_tooltip_data }}" data-wh-iconize-link="false" @endif><img src="{{ $spell->icon_url }}"
          width="{{ $size }}" height="{{ $size }}"
-         class="me-1" loading="lazy" alt=""/>{{ __($spell->name) }}</a>
+         class="me-1" loading="lazy" alt=""/>{{ $spell->getTranslatedName() }}</a>

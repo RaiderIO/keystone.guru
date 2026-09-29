@@ -10,6 +10,7 @@ use App\Models\Spell\SpellTuningChange;
 use App\Models\Translation\Translation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -411,6 +412,106 @@ final class SpellCompendiumControllerTest extends PublicTestCase
         } finally {
             SpellDungeon::query()->whereIn('id', $couplings->pluck('id'))->delete();
         }
+    }
+
+    #[Test]
+    #[DataProvider('localizedSpellNameProvider')]
+    public function get_givenNonEnglishLocale_returnsSpellNameInThatLocaleOrEnglish(string $localizedName, string $expectedName): void
+    {
+        // Arrange
+        [$dungeon] = $this->findDungeon(dungeonActive: true);
+        $nameKey   = sprintf('spells.test_%d', random_int(100_000_000, 999_999_999));
+        $spell     = $this->createSpell(['name' => $nameKey]);
+
+        $translations = collect();
+        $couplings    = collect();
+
+        try {
+            $translations->push(Translation::create(['locale' => 'en_US', 'key' => $nameKey, 'translation' => 'English Spell Name']));
+            $translations->push(Translation::create(['locale' => 'de_DE_ai', 'key' => $nameKey, 'translation' => $localizedName]));
+            $couplings->push(SpellDungeon::create(['spell_id' => $spell->id, 'dungeon_id' => $dungeon->id]));
+
+            // Act
+            $response = $this->call('GET', route('ajax.spell.compendium.search'), array_merge($this->datatableParams, [
+                'dungeon_id' => $dungeon->id,
+                'lang'       => 'de_DE_ai',
+            ]), [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+
+            // Assert
+            $response->assertOk();
+            /** @var list<array<string, mixed>> $rows */
+            $rows  = $response->json('data');
+            $names = array_column($rows, 'name', 'id');
+            $this->assertArrayHasKey($spell->id, $names);
+            $this->assertSame($expectedName, $names[$spell->id]);
+        } finally {
+            SpellDungeon::query()->whereIn('id', $couplings->pluck('id'))->delete();
+            Translation::query()->whereIn('id', $translations->pluck('id'))->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function localizedSpellNameProvider(): array
+    {
+        return [
+            'translated'   => ['Deutscher Zaubername', 'Deutscher Zaubername'],
+            'untranslated' => ['', 'English Spell Name'],
+        ];
+    }
+
+    #[Test]
+    public function get_givenNonEnglishLocaleAndEnglishNameSearch_findsSpell(): void
+    {
+        // Arrange
+        [$dungeon] = $this->findDungeon(dungeonActive: true);
+        $nameKey   = sprintf('spells.test_%d', random_int(100_000_000, 999_999_999));
+        $spell     = $this->createSpell(['name' => $nameKey]);
+
+        $translations = collect();
+        $couplings    = collect();
+
+        try {
+            $translations->push(Translation::create(['locale' => 'en_US', 'key' => $nameKey, 'translation' => 'Xyzzy English Spell Name']));
+            $translations->push(Translation::create(['locale' => 'de_DE_ai', 'key' => $nameKey, 'translation' => 'Deutscher Zaubername']));
+            $couplings->push(SpellDungeon::create(['spell_id' => $spell->id, 'dungeon_id' => $dungeon->id]));
+
+            $params                    = array_merge($this->datatableParams, ['dungeon_id' => $dungeon->id, 'lang' => 'de_DE_ai']);
+            $params['search']['value'] = 'Xyzzy English';
+
+            // Act
+            $response = $this->call('GET', route('ajax.spell.compendium.search'), $params, [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$spell->id], array_column($response->json('data'), 'id'));
+            $this->assertSame('Deutscher Zaubername', $response->json('data.0.name'));
+        } finally {
+            SpellDungeon::query()->whereIn('id', $couplings->pluck('id'))->delete();
+            Translation::query()->whereIn('id', $translations->pluck('id'))->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('localizedSpellNameProvider')]
+    public function show_givenNonEnglishLocale_rendersSpellNameInThatLocaleOrEnglish(string $localizedName, string $expectedName): void
+    {
+        // Arrange
+        $nameKey = sprintf('spells.%d', random_int(100_000_000, 999_999_999));
+        app('translator')->addLines([$nameKey => 'English Spell Name'], 'en_US');
+        app('translator')->addLines([$nameKey => $localizedName], 'de_DE_ai');
+        $spell = $this->createSpell(['name' => $nameKey]);
+        // The canonical slug is the name in the visitor's locale, so the URL is built in that locale too
+        app()->setLocale('de_DE_ai');
+        $url = route('spell.compendium.show', ['spell' => $spell, 'lang' => 'de_DE_ai']);
+
+        // Act
+        $response = $this->get($url);
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee(sprintf('<h2 class="compendium_identity_title">%s</h2>', $expectedName), false);
     }
 
     #[Test]
