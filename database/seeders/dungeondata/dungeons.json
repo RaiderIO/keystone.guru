@@ -21641,7 +21641,44 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1466,
+                        "floor1_id": 474,
+                        "floor2_id": 480,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1470,
+                        "floor1_id": 474,
+                        "floor2_id": 486,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1475,
+                        "floor1_id": 474,
+                        "floor2_id": 475,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1477,
+                        "floor1_id": 474,
+                        "floor2_id": 490,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1479,
+                        "floor1_id": 474,
+                        "floor2_id": 481,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1480,
+                        "floor1_id": 474,
+                        "floor2_id": 493,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21666,7 +21703,38 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1474,
+                        "floor1_id": 475,
+                        "floor2_id": 474,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1487,
+                        "floor1_id": 475,
+                        "floor2_id": 490,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1488,
+                        "floor1_id": 475,
+                        "floor2_id": 477,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1490,
+                        "floor1_id": 475,
+                        "floor2_id": 482,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1492,
+                        "floor1_id": 475,
+                        "floor2_id": 476,
+                        "direction": "right"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21691,7 +21759,14 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1493,
+                        "floor1_id": 476,
+                        "floor2_id": 475,
+                        "direction": "left"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21716,7 +21791,20 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1485,
+                        "floor1_id": 477,
+                        "floor2_id": 492,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1489,
+                        "floor1_id": 477,
+                        "floor2_id": 475,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21741,7 +21829,14 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1483,
+                        "floor1_id": 478,
+                        "floor2_id": 492,
+                        "direction": "right"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21766,7 +21861,32 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1494,
+                        "floor1_id": 479,
+                        "floor2_id": 490,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1496,
+                        "floor1_id": 479,
+                        "floor2_id": 483,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1509,
+                        "floor1_id": 479,
+                        "floor2_id": 488,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1517,
+                        "floor1_id": 479,
+                        "floor2_id": 486,
+                        "direction": "right"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21791,7 +21911,20 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1467,
+                        "floor1_id": 480,
+                        "floor2_id": 474,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1468,
+                        "floor1_id": 480,
+                        "floor2_id": 487,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21816,7 +21949,14 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1478,
+                        "floor1_id": 481,
+                        "floor2_id": 474,
+                        "direction": "left"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21841,7 +21981,26 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1491,
+                        "floor1_id": 482,
+                        "floor2_id": 475,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1504,
+                        "floor1_id": 482,
+                        "floor2_id": 484,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1506,
+                        "floor1_id": 482,
+                        "floor2_id": 496,
+                        "direction": "right"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21866,7 +22025,20 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1497,
+                        "floor1_id": 483,
+                        "floor2_id": 479,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1510,
+                        "floor1_id": 483,
+                        "floor2_id": 493,
+                        "direction": "right"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21891,7 +22063,14 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1505,
+                        "floor1_id": 484,
+                        "floor2_id": 482,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21916,7 +22095,14 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1511,
+                        "floor1_id": 485,
+                        "floor2_id": 496,
+                        "direction": "right"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21941,7 +22127,32 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1471,
+                        "floor1_id": 486,
+                        "floor2_id": 474,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1472,
+                        "floor1_id": 486,
+                        "floor2_id": 494,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1513,
+                        "floor1_id": 486,
+                        "floor2_id": 490,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1514,
+                        "floor1_id": 486,
+                        "floor2_id": 479,
+                        "direction": "left"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21966,7 +22177,14 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1469,
+                        "floor1_id": 487,
+                        "floor2_id": 480,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -21991,7 +22209,14 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1508,
+                        "floor1_id": 488,
+                        "floor2_id": 479,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -22016,7 +22241,14 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1503,
+                        "floor1_id": 489,
+                        "floor2_id": 495,
+                        "direction": "right"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -22041,7 +22273,32 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1476,
+                        "floor1_id": 490,
+                        "floor2_id": 474,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1486,
+                        "floor1_id": 490,
+                        "floor2_id": 475,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1495,
+                        "floor1_id": 490,
+                        "floor2_id": 479,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1512,
+                        "floor1_id": 490,
+                        "floor2_id": 486,
+                        "direction": "left"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -22066,7 +22323,20 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1499,
+                        "floor1_id": 491,
+                        "floor2_id": 493,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1500,
+                        "floor1_id": 491,
+                        "floor2_id": 495,
+                        "direction": "left"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -22091,7 +22361,20 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1482,
+                        "floor1_id": 492,
+                        "floor2_id": 478,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1484,
+                        "floor1_id": 492,
+                        "floor2_id": 477,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -22116,7 +22399,26 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1481,
+                        "floor1_id": 493,
+                        "floor2_id": 474,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1498,
+                        "floor1_id": 493,
+                        "floor2_id": 491,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1515,
+                        "floor1_id": 493,
+                        "floor2_id": 483,
+                        "direction": "left"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -22141,7 +22443,14 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1473,
+                        "floor1_id": 494,
+                        "floor2_id": 486,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -22166,7 +22475,20 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1501,
+                        "floor1_id": 495,
+                        "floor2_id": 491,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1502,
+                        "floor1_id": 495,
+                        "floor2_id": 489,
+                        "direction": "left"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
@@ -22191,7 +22513,20 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1507,
+                        "floor1_id": 496,
+                        "floor2_id": 482,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1516,
+                        "floor1_id": 496,
+                        "floor2_id": 485,
+                        "direction": "left"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
