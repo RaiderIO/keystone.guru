@@ -75,19 +75,19 @@ return [
         ],
         'enemy_resolution_analysis' => [
             'verdict' => [
-                'displaced' => '',
-                'converged' => '',
-                'scatter'   => '',
+                'displaced' => '映射位置错误',
+                'converged' => '记录前已跑向队伍',
+                'scatter'   => '分散',
             ],
             'subject' => [
-                'pack'  => '',
-                'enemy' => '',
+                'pack'  => '包 :group（id :pack_id）',
+                'enemy' => '敌人 :enemy_id',
             ],
             'suggestion' => [
-                'displaced'               => '',
-                'displaced_shape_unknown' => '',
-                'converged'               => '',
-                'scatter'                 => '',
+                'displaced'               => '在 :routes 条路线中（占全部的 :share%），:subject 在距其映射位置 :distance 码处交战，方向始终一致且保持了形状。请将 :subject 移动到其交战的位置。',
+                'displaced_shape_unknown' => '在 :routes 条路线中（占全部的 :share%），:subject 在距其映射位置 :distance 码处交战，方向始终一致。匹配到的敌人太少，无法判断它是保持了形状还是聚成了一团，因此在将 :subject 移动到其交战位置之前，请先确认是哪种情况。',
+                'converged'               => '在 :routes 条路线中（占全部的 :share%），:subject 在距其映射位置 :distance 码处交战，但聚成了一团（形状比例 :ratio）：它在第一条记录事件之前就跑向了队伍，因此这里是队伍作战的位置。请保持映射不变。',
+                'scatter'                 => '在 :routes 条路线中，:subject 平均在距其映射位置 :distance 码处交战，但方向各不相同（一致性 :consistency）。这是贴身拉怪或巡逻——无需移动。',
             ],
         ],
     ],

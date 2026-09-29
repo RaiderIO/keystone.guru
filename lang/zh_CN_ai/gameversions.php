@@ -31,8 +31,8 @@ return [
         'description' => '军团再临混音版',
     ],
     'forever' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => '永恒版',
+        'description' => 'WoW：永恒版',
     ],
 
 ];

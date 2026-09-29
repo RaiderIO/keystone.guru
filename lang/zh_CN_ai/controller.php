@@ -38,8 +38,8 @@ return [
             'mapping_version_upgrade_already_latest' => '此映射版本已是该地下城的最新版本——未加入任何路线队列。',
             'read_only_mode_disabled'                => '只读模式已禁用',
             'read_only_mode_enabled'                 => '只读模式已启用',
-            'thumbnail_generation_paused'            => '',
-            'thumbnail_generation_resumed'           => '',
+            'thumbnail_generation_paused'            => '缩略图生成已暂停——不会再有新的缩略图加入队列或进行渲染',
+            'thumbnail_generation_resumed'           => '缩略图生成已恢复',
         ],
     ],
     'affix' => [

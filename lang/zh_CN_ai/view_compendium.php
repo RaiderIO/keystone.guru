@@ -238,8 +238,8 @@ return [
             'build_title'              => '版本 :build',
             'build_subtitle'           => '与 :from 对比',
             'changed_spells'           => ':count 个法术已更改|:count 个法术已更改',
-            'build_no_changes'         => '',
-            'build_no_changes_dungeon' => '',
+            'build_no_changes'         => '此版本没有改变任何 NPC 法术的数值。',
+            'build_no_changes_dungeon' => '此版本没有改变此地下城中任何 NPC 法术的数值。',
         ],
     ],
     'class' => [
