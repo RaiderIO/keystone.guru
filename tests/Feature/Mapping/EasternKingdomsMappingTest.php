@@ -208,6 +208,27 @@ final class EasternKingdomsMappingTest extends TestCase
     }
 
     #[Test]
+    public function convertFacadeMapLocationToMapLocation_givenAnyPointOnTheFacade_returnsAZone(): void
+    {
+        // Arrange
+        $coordinatesService = app(CoordinatesServiceInterface::class);
+        $mappingVersion     = $this->getMappingVersion();
+        $facade             = $this->getEasternKingdoms()->floors->firstWhere('facade', true);
+
+        for ($fractionY = 0.01; $fractionY < 1; $fractionY += 0.049) {
+            for ($fractionX = 0.01; $fractionX < 1; $fractionX += 0.049) {
+                $facadeLatLng = new LatLng($fractionY * -256, $fractionX * 384, $facade);
+
+                // Act
+                $result = $coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $facadeLatLng);
+
+                // Assert
+                $this->assertFalse((bool)$result->getFloor()->facade, sprintf('%.3f, %.3f', $fractionX, $fractionY));
+            }
+        }
+    }
+
+    #[Test]
     public function dungeonFloorSwitchMarkers_givenEasternKingdoms_returnsLinkedPairsInsideTheirFloors(): void
     {
         // Arrange
