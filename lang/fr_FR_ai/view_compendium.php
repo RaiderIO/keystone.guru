@@ -238,8 +238,8 @@ return [
             'build_title'              => 'Build :build',
             'build_subtitle'           => 'comparé à :from',
             'changed_spells'           => 'Sorts modifiés : :count|Sorts modifiés : :count',
-            'build_no_changes'         => '',
-            'build_no_changes_dungeon' => '',
+            'build_no_changes'         => 'Ce build n\'a modifié les valeurs d\'aucun sort de PNJ.',
+            'build_no_changes_dungeon' => 'Ce build n\'a modifié les valeurs d\'aucun sort de PNJ dans ce donjon.',
         ],
     ],
     'class' => [

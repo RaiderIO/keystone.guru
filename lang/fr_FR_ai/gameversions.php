@@ -31,8 +31,8 @@ return [
         'description' => 'Remix de Légion',
     ],
     'forever' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Forever',
+        'description' => 'WoW: Forever',
     ],
 
 ];

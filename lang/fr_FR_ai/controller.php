@@ -38,8 +38,8 @@ return [
             'mapping_version_upgrade_already_latest' => 'Cette version de mapping est déjà la plus récente pour son donjon — aucune route n\'a été mise en file d\'attente.',
             'read_only_mode_disabled'                => 'Mode lecture seule désactivé',
             'read_only_mode_enabled'                 => 'Mode lecture seule activé',
-            'thumbnail_generation_paused'            => '',
-            'thumbnail_generation_resumed'           => '',
+            'thumbnail_generation_paused'            => 'Génération des vignettes en pause - aucune nouvelle vignette ne sera mise en file d\'attente ni générée',
+            'thumbnail_generation_resumed'           => 'Génération des vignettes reprise',
         ],
     ],
     'affix' => [

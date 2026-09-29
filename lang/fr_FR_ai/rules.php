@@ -24,6 +24,6 @@ return [
         'message' => 'Ce type d\'icône de carte n\'est pas disponible pour votre niveau d\'accès.',
     ],
     'user_slug_available_rule' => [
-        'taken' => '',
+        'taken' => 'Ce nom d\'utilisateur est déjà pris.',
     ],
 ];
