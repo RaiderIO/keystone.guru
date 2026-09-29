@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->index('dungeon_start_id');
         });
 
-        // Has to run before the seeder: seeding deletes the map icons dungeon_start_map_icon_id points at
+        // Has to run before the seeder: seeding recreates the map icons dungeon_start_map_icon_id points at under new ids
         Artisan::call('dungeonroute:backfilldungeonstartid');
     }
 

@@ -1,5 +1,31 @@
 [
     {
+        "mapping_version_id": 170,
+        "floor_id": 219,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -245.5,
+        "lng": 233.75,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 193,
+        "floor_id": 219,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -245.5,
+        "lng": 233.75,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
         "mapping_version_id": 193,
         "floor_id": 219,
         "dungeon_route_id": null,
@@ -73,6 +99,19 @@
         "lat": -47.312,
         "lng": 302.3948,
         "comment": "mapping.map_icons.classic.scarlet_monastery_armory.herods_door",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 232,
+        "floor_id": 219,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -245.5,
+        "lng": 233.75,
+        "comment": null,
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

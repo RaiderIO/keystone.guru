@@ -18,11 +18,13 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Interfaces\CloneForNewMappingVersionInterface;
 use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\MapIcon;
+use App\Models\MapIconType;
 use App\Models\MountableArea;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Traits\SeederModel;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -422,6 +424,9 @@ class MappingVersion extends Model
     {
         /** @var EloquentCollection<int, MapIcon> $mapIcons */
         $mapIcons = $this->mapIcons()
+            // Legacy dungeon start icons stay seeded for the code still running during a deploy; DungeonStart replaces them
+            ->where(static fn(Builder $query) => $query->whereNull('map_icon_type_id')
+                ->orWhere('map_icon_type_id', '!=', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START]))
             ->with(['floor'])
             ->get();
 

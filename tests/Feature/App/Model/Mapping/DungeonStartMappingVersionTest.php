@@ -4,7 +4,10 @@ namespace Tests\Feature\App\Model\Mapping;
 
 use App\Models\Dungeon;
 use App\Models\DungeonStart;
+use App\Models\MapIcon;
+use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -74,6 +77,40 @@ final class DungeonStartMappingVersionTest extends PublicTestCase
             $this->assertFalse(DungeonStart::query()->where('mapping_version_id', $newMappingVersion->id)->exists());
         } finally {
             DungeonStart::query()->where('mapping_version_id', $newMappingVersion->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function mapContextMapIcons_givenLegacyDungeonStartMapIcon_leavesItOut(): void
+    {
+        // Arrange
+        $mappingVersion = $this->getMappingVersionThatWillBeCloned();
+        $floorId        = $mappingVersion->dungeon->floors->first()->id;
+        $legacyStart    = MapIcon::create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $floorId,
+            'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
+            'lat'                => self::SENTINEL_LAT,
+            'lng'                => 100.0,
+        ]);
+        $graveyard = MapIcon::create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $floorId,
+            'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD],
+            'lat'                => self::SENTINEL_LAT,
+            'lng'                => 110.0,
+        ]);
+
+        try {
+            // Act
+            $mapIconIds = $mappingVersion->mapContextMapIcons(app(CoordinatesServiceInterface::class), false)->pluck('id');
+
+            // Assert
+            $this->assertNotContains($legacyStart->id, $mapIconIds);
+            $this->assertContains($graveyard->id, $mapIconIds);
+        } finally {
+            $legacyStart->delete();
+            $graveyard->delete();
         }
     }
 

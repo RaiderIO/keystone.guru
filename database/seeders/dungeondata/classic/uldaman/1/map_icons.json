@@ -1,5 +1,57 @@
 [
     {
+        "mapping_version_id": 179,
+        "floor_id": 238,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -177.9686,
+        "lng": 109.849,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 179,
+        "floor_id": 238,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -186.5454,
+        "lng": 260.9327,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 222,
+        "floor_id": 238,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -177.9686,
+        "lng": 109.849,
+        "comment": "mapping.map_icons.classic.uldaman.echomok_cavern_entrance",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 222,
+        "floor_id": 238,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -185.7188,
+        "lng": 260.875,
+        "comment": "mapping.map_icons.classic.uldaman.hall_of_the_keepers_entrance",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
         "mapping_version_id": 222,
         "floor_id": 238,
         "dungeon_route_id": null,
