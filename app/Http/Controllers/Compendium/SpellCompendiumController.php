@@ -136,7 +136,7 @@ class SpellCompendiumController extends Controller
         return $datatablesHandler->setBuilder($spells)
             ->addColumnHandler([
                 new NameColumnHandler($datatablesHandler),
-                new DungeonColumnHandler($datatablesHandler),
+                new DungeonColumnHandler($datatablesHandler, $dungeonName),
             ])
             ->applyRequestToBuilder()
             ->getResult();

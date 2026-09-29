@@ -9,8 +9,14 @@ use Override;
 
 class DungeonColumnHandler extends SimpleColumnHandler
 {
-    public function __construct(DatatablesHandler $dtHandler)
-    {
+    /**
+     * @param string $searchExpression the SQL expression the displayed dungeon name is built from, so a search
+     *                                 matches what the visitor reads
+     */
+    public function __construct(
+        DatatablesHandler       $dtHandler,
+        private readonly string $searchExpression = 'dungeon_translations.translation',
+    ) {
         parent::__construct($dtHandler, 'dungeon_id', 'dungeon_names');
     }
 
@@ -22,6 +28,6 @@ class DungeonColumnHandler extends SimpleColumnHandler
                 $order,
                 $generalSearch,
     ): void {
-        $subBuilder->orWhere('dungeon_translations.translation', 'LIKE', sprintf('%%%s%%', $generalSearch));
+        $subBuilder->orWhereRaw(sprintf('%s LIKE ?', $this->searchExpression), [sprintf('%%%s%%', $generalSearch)]);
     }
 }

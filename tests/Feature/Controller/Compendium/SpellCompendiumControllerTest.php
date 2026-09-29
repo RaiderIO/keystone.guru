@@ -494,6 +494,40 @@ final class SpellCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function get_givenNonEnglishLocaleAndDungeonWithoutTranslation_showsAndFindsEnglishDungeonName(): void
+    {
+        // Arrange
+        $dungeonNameKey = sprintf('dungeons.test_%d', random_int(100_000_000, 999_999_999));
+        $spellNameKey   = sprintf('spells.test_%d', random_int(100_000_000, 999_999_999));
+        $dungeon        = $this->createDungeon(['active' => true, 'name' => $dungeonNameKey], withMappingVersion: false, withDefaultFloor: false);
+        $spell          = $this->createSpell(['name' => $spellNameKey]);
+
+        $translations = collect();
+        $couplings    = collect();
+
+        try {
+            $translations->push(Translation::create(['locale' => 'en_US', 'key' => $dungeonNameKey, 'translation' => 'Xyzzy English Dungeon']));
+            $translations->push(Translation::create(['locale' => 'de_DE_ai', 'key' => $dungeonNameKey, 'translation' => '']));
+            $translations->push(Translation::create(['locale' => 'en_US', 'key' => $spellNameKey, 'translation' => 'English Spell Name']));
+            $couplings->push(SpellDungeon::create(['spell_id' => $spell->id, 'dungeon_id' => $dungeon->id]));
+
+            $params                    = array_merge($this->datatableParams, ['dungeon_id' => $dungeon->id, 'lang' => 'de_DE_ai']);
+            $params['search']['value'] = 'Xyzzy English Dungeon';
+
+            // Act
+            $response = $this->call('GET', route('ajax.spell.compendium.search'), $params, [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$spell->id], array_column($response->json('data'), 'id'));
+            $this->assertSame('Xyzzy English Dungeon', $response->json('data.0.dungeon_names'));
+        } finally {
+            SpellDungeon::query()->whereIn('id', $couplings->pluck('id'))->delete();
+            Translation::query()->whereIn('id', $translations->pluck('id'))->delete();
+        }
+    }
+
+    #[Test]
     #[DataProvider('localizedSpellNameProvider')]
     public function show_givenNonEnglishLocale_rendersSpellNameInThatLocaleOrEnglish(string $localizedName, string $expectedName): void
     {
