@@ -4,10 +4,9 @@ namespace Tests\Feature\App\Service\DungeonRoute;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\MapIcon;
-use App\Models\MapIconType;
+use App\Models\DungeonStart;
 use App\Models\Mapping\MappingVersion;
-use App\Repositories\Interfaces\MapIconRepositoryInterface;
+use App\Repositories\Interfaces\DungeonStartRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteSaveService;
 use App\Service\DungeonRoute\Logging\DungeonRouteSaveServiceLoggingInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
@@ -25,13 +24,13 @@ abstract class DungeonRouteSaveServiceTestCase extends PublicTestCase
         ?SeasonServiceInterface                  $seasonService = null,
         ?ThumbnailServiceInterface               $thumbnailService = null,
         ?DungeonRouteSaveServiceLoggingInterface $log = null,
-        ?MapIconRepositoryInterface              $mapIconRepository = null,
+        ?DungeonStartRepositoryInterface         $dungeonStartRepository = null,
     ): DungeonRouteSaveService {
         return new DungeonRouteSaveService(
             $seasonService ?? $this->createMockPublic(SeasonServiceInterface::class),
             $thumbnailService ?? $this->createMockPublic(ThumbnailServiceInterface::class),
             $log ?? $this->createMockPublic(DungeonRouteSaveServiceLoggingInterface::class),
-            $mapIconRepository ?? app(MapIconRepositoryInterface::class),
+            $dungeonStartRepository ?? app(DungeonStartRepositoryInterface::class),
         );
     }
 
@@ -83,19 +82,14 @@ abstract class DungeonRouteSaveServiceTestCase extends PublicTestCase
         ]);
     }
 
-    protected function createDungeonStartMapIcon(int $mappingVersionId, int $floorId, ?string $comment = 'mapping.start.east'): MapIcon
+    protected function createDungeonStart(int $mappingVersionId, int $floorId, ?string $comment = 'mapping.start.east'): DungeonStart
     {
-        return MapIcon::create([
+        return DungeonStart::factory()->create([
             'mapping_version_id' => $mappingVersionId,
             'floor_id'           => $floorId,
-            'dungeon_route_id'   => null,
-            'team_id'            => null,
-            'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
             'lat'                => -100.0,
             'lng'                => 100.0,
             'comment'            => $comment,
-            'permanent_tooltip'  => false,
-            'seasonal_index'     => 0,
         ]);
     }
 }

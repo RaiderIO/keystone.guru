@@ -20,7 +20,7 @@ final class DungeonRouteServiceUpgradeMappingVersionTest extends DungeonRouteSav
     }
 
     #[Test]
-    public function upgradeMappingVersion_givenMatchingComment_remapsDungeonStartMapIconId(): void
+    public function upgradeMappingVersion_givenMatchingComment_remapsDungeonStartId(): void
     {
         // Arrange
         $dungeon    = $this->getDungeonWithNonFacadeFloor(fn(Builder $query) => $query->whereNotNull('challenge_mode_id'));
@@ -29,9 +29,9 @@ final class DungeonRouteServiceUpgradeMappingVersionTest extends DungeonRouteSav
         $floorId    = $dungeon->floors()->where('facade', false)->value('id');
 
         $route    = DungeonRoute::factory()->create(['dungeon_id' => $dungeon->id, 'mapping_version_id' => $existingMV->id]);
-        $oldStart = $this->createDungeonStartMapIcon($existingMV->id, $floorId, 'mapping.start.east');
-        $newStart = $this->createDungeonStartMapIcon($newMV->id, $floorId, 'mapping.start.east');
-        $route->update(['dungeon_start_map_icon_id' => $oldStart->id]);
+        $oldStart = $this->createDungeonStart($existingMV->id, $floorId, 'mapping.start.east');
+        $newStart = $this->createDungeonStart($newMV->id, $floorId, 'mapping.start.east');
+        $route->update(['dungeon_start_id' => $oldStart->id]);
 
         try {
             // Act
@@ -40,7 +40,7 @@ final class DungeonRouteServiceUpgradeMappingVersionTest extends DungeonRouteSav
             // Assert
             $fresh = $route->fresh();
             $this->assertEquals($newMV->id, $fresh->mapping_version_id);
-            $this->assertEquals($newStart->id, $fresh->dungeon_start_map_icon_id);
+            $this->assertEquals($newStart->id, $fresh->dungeon_start_id);
         } finally {
             $route->delete();
             $newStart->delete();
@@ -50,7 +50,7 @@ final class DungeonRouteServiceUpgradeMappingVersionTest extends DungeonRouteSav
     }
 
     #[Test]
-    public function upgradeMappingVersion_givenNoMatchingComment_setsDungeonStartMapIconIdToNull(): void
+    public function upgradeMappingVersion_givenNoMatchingComment_setsDungeonStartIdToNull(): void
     {
         // Arrange
         $dungeon    = $this->getDungeonWithNonFacadeFloor(fn(Builder $query) => $query->whereNotNull('challenge_mode_id'));
@@ -59,9 +59,9 @@ final class DungeonRouteServiceUpgradeMappingVersionTest extends DungeonRouteSav
         $floorId    = $dungeon->floors()->where('facade', false)->value('id');
 
         $route    = DungeonRoute::factory()->create(['dungeon_id' => $dungeon->id, 'mapping_version_id' => $existingMV->id]);
-        $oldStart = $this->createDungeonStartMapIcon($existingMV->id, $floorId, 'mapping.start.east');
-        $newStart = $this->createDungeonStartMapIcon($newMV->id, $floorId, 'mapping.start.west');
-        $route->update(['dungeon_start_map_icon_id' => $oldStart->id]);
+        $oldStart = $this->createDungeonStart($existingMV->id, $floorId, 'mapping.start.east');
+        $newStart = $this->createDungeonStart($newMV->id, $floorId, 'mapping.start.west');
+        $route->update(['dungeon_start_id' => $oldStart->id]);
 
         try {
             // Act
@@ -70,7 +70,7 @@ final class DungeonRouteServiceUpgradeMappingVersionTest extends DungeonRouteSav
             // Assert
             $fresh = $route->fresh();
             $this->assertEquals($newMV->id, $fresh->mapping_version_id);
-            $this->assertNull($fresh->dungeon_start_map_icon_id);
+            $this->assertNull($fresh->dungeon_start_id);
         } finally {
             $route->delete();
             $newStart->delete();
@@ -80,7 +80,7 @@ final class DungeonRouteServiceUpgradeMappingVersionTest extends DungeonRouteSav
     }
 
     #[Test]
-    public function upgradeMappingVersion_givenNoChosenStart_keepsDungeonStartMapIconIdNull(): void
+    public function upgradeMappingVersion_givenNoChosenStart_keepsDungeonStartIdNull(): void
     {
         // Arrange
         $dungeon    = $this->getDungeonWithNonFacadeFloor(fn(Builder $query) => $query->whereNotNull('challenge_mode_id'));
@@ -88,9 +88,9 @@ final class DungeonRouteServiceUpgradeMappingVersionTest extends DungeonRouteSav
         $newMV      = $this->createNewerMappingVersion($dungeon, $existingMV);
 
         $route = DungeonRoute::factory()->create([
-            'dungeon_id'                => $dungeon->id,
-            'mapping_version_id'        => $existingMV->id,
-            'dungeon_start_map_icon_id' => null,
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $existingMV->id,
+            'dungeon_start_id'   => null,
         ]);
 
         try {
@@ -100,7 +100,7 @@ final class DungeonRouteServiceUpgradeMappingVersionTest extends DungeonRouteSav
             // Assert
             $fresh = $route->fresh();
             $this->assertEquals($newMV->id, $fresh->mapping_version_id);
-            $this->assertNull($fresh->dungeon_start_map_icon_id);
+            $this->assertNull($fresh->dungeon_start_id);
         } finally {
             $route->delete();
             $newMV->delete();

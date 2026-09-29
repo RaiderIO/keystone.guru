@@ -66,7 +66,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                         // Belt and braces - the saving hook forces this too
                         'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
                         // Still valid here; upgradeMappingVersion() remaps it onto the new mapping version
-                        'dungeon_start_map_icon_id' => $original->dungeon_start_map_icon_id,
+                        'dungeon_start_id' => $original->dungeon_start_id,
                         // Deliberately unchanged - no clone prefix, this route replaces the original
                         'title'                      => $original->title,
                         'description'                => $original->description,
@@ -277,9 +277,9 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
     private function applyAttributes(DungeonRoute $draft): array
     {
         return [
-            'mapping_version_id'        => $draft->mapping_version_id,
-            'dungeon_start_map_icon_id' => $draft->dungeon_start_map_icon_id,
-            'dungeon_id'                => $draft->dungeon_id,
+            'mapping_version_id' => $draft->mapping_version_id,
+            'dungeon_start_id'   => $draft->dungeon_start_id,
+            'dungeon_id'         => $draft->dungeon_id,
             // season_id, dungeon_difficulty and demo are all written by DungeonRouteSaveService::persist(),
             // so a draft can genuinely diverge on them - assign, never assume identical
             'season_id'                  => $draft->season_id,

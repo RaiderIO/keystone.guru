@@ -1,0 +1,74 @@
+[
+    {
+        "id": 223,
+        "mapping_version_id": 69,
+        "floor_id": 153,
+        "target_dungeon_id": null,
+        "lat": -97.5017,
+        "lng": 233.1987,
+        "comment": null
+    },
+    {
+        "id": 224,
+        "mapping_version_id": 79,
+        "floor_id": 153,
+        "target_dungeon_id": null,
+        "lat": -97.5017,
+        "lng": 233.1987,
+        "comment": null
+    },
+    {
+        "id": 225,
+        "mapping_version_id": 85,
+        "floor_id": 153,
+        "target_dungeon_id": null,
+        "lat": -97.5017,
+        "lng": 233.1987,
+        "comment": null
+    },
+    {
+        "id": 226,
+        "mapping_version_id": 88,
+        "floor_id": 153,
+        "target_dungeon_id": null,
+        "lat": -97.5017,
+        "lng": 233.1987,
+        "comment": null
+    },
+    {
+        "id": 227,
+        "mapping_version_id": 96,
+        "floor_id": 153,
+        "target_dungeon_id": null,
+        "lat": -97.5017,
+        "lng": 233.1987,
+        "comment": null
+    },
+    {
+        "id": 228,
+        "mapping_version_id": 314,
+        "floor_id": 153,
+        "target_dungeon_id": null,
+        "lat": -97.5017,
+        "lng": 233.1987,
+        "comment": null
+    },
+    {
+        "id": 229,
+        "mapping_version_id": 315,
+        "floor_id": 153,
+        "target_dungeon_id": null,
+        "lat": -97.5017,
+        "lng": 233.1987,
+        "comment": null
+    },
+    {
+        "id": 230,
+        "mapping_version_id": 326,
+        "floor_id": 153,
+        "target_dungeon_id": null,
+        "lat": -97.5017,
+        "lng": 233.1987,
+        "comment": null
+    }
+]

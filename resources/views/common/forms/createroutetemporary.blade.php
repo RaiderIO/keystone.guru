@@ -69,7 +69,7 @@ $dungeonSelectId = 'dungeon_id_select_temporary';
     ])
 
     @include('common.dungeonroute.create.dungeonstartselect', [
-        'id' => 'dungeon_start_map_icon_id_temporary',
+        'id' => 'dungeon_start_id_temporary',
         'dungeonSelectId' => $dungeonSelectId
     ])
 

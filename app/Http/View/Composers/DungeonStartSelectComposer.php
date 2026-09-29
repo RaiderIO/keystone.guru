@@ -3,15 +3,15 @@
 namespace App\Http\View\Composers;
 
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Repositories\Interfaces\MapIconRepositoryInterface;
+use App\Repositories\Interfaces\DungeonStartRepositoryInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\View\View;
 
 readonly class DungeonStartSelectComposer implements ViewComposerInterface
 {
     public function __construct(
-        private readonly ViewServiceInterface       $viewService,
-        private readonly MapIconRepositoryInterface $mapIconRepository,
+        private readonly ViewServiceInterface            $viewService,
+        private readonly DungeonStartRepositoryInterface $dungeonStartRepository,
     ) {
     }
 
@@ -25,7 +25,7 @@ readonly class DungeonStartSelectComposer implements ViewComposerInterface
         // Edit mode: the route may use an older mapping version than the dungeon's current one, so source the
         // options from the route's own mapping version to ensure the stored value is present and selectable.
         if ($dungeonroute !== null) {
-            $routeStarts = $this->mapIconRepository->getDungeonStartsForMappingVersion($dungeonroute->mapping_version_id);
+            $routeStarts = $this->dungeonStartRepository->getDungeonStartsForMappingVersion($dungeonroute->mapping_version_id);
 
             if ($routeStarts->count() > 1) {
                 $dungeonStartsByDungeonId = $dungeonStartsByDungeonId->put($dungeonroute->dungeon_id, $routeStarts);

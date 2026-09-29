@@ -351,6 +351,11 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function importMapPOIsCreatedNewDungeonStart(int $dungeonStartId, int $floorId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     /**
      * @param array<string, mixed> $latLng
      */
@@ -375,7 +380,7 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
     /**
      * @param array<string, float> $latLng
      */
-    public function importMapPOIsHaveExistingDungeonStartMapIcon(array $latLng): void
+    public function importMapPOIsHaveExistingDungeonStart(array $latLng): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }

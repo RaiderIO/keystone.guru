@@ -9,9 +9,9 @@ use Illuminate\Support\Collection;
  * @var string                                                         $dungeonSelectId
  **/
 
-$id           ??= 'dungeon_start_map_icon_id';
+$id           ??= 'dungeon_start_id';
 $dungeonroute ??= null;
-$selectedId   = $dungeonroute?->dungeon_start_map_icon_id;
+$selectedId   = $dungeonroute?->dungeon_start_id;
 ?>
 @include('common.general.inline', [
     'path'    => 'common/dungeonroute/create/dungeonstartselect',
@@ -31,5 +31,5 @@ $selectedId   = $dungeonroute?->dungeon_start_map_icon_id;
             __('view_common.forms.createroute.dungeon_start_title')
              }}"></i>
     </label>
-    {{ html()->select('dungeon_start_map_icon_id', [], $selectedId)->id($id)->class('form-control selectpicker') }}
+    {{ html()->select('dungeon_start_id', [], $selectedId)->id($id)->class('form-control selectpicker') }}
 </div>

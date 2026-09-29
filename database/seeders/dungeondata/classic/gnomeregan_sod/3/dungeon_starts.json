@@ -1,0 +1,11 @@
+[
+    {
+        "id": 108,
+        "mapping_version_id": 304,
+        "floor_id": 272,
+        "target_dungeon_id": null,
+        "lat": -123.125,
+        "lng": 333.6875,
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.basement_entrance"
+    }
+]

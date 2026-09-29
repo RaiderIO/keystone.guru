@@ -444,23 +444,6 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
         });
     }
 
-    public function getDungeonStart(): ?MapIcon
-    {
-        $result = null;
-
-        foreach ($this->floors as $floor) {
-            foreach ($floor->mapIcons()->get() as $mapIcon) {
-                /** @var MapIcon $mapIcon */
-                if ($mapIcon->map_icon_type_id === MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START]) {
-                    $result = $mapIcon;
-                    break;
-                }
-            }
-        }
-
-        return $result;
-    }
-
     public function getFacadeFloor(): ?Floor
     {
         return $this->floors->first(static fn(Floor $floor) => $floor->facade);

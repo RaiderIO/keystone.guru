@@ -233,7 +233,7 @@ describe('createroute.serialization', () => {
         const chosenStart = DUNGEON_STARTS_BY_DUNGEON_ID[RETAIL_DUNGEON_BETA_ID][2];
 
         // Act
-        selectValue(document.getElementById('dungeon_start_map_icon_id'), chosenStart.id);
+        selectValue(document.getElementById('dungeon_start_id'), chosenStart.id);
 
         // Assert
         assertPayloadsMatch(serializeForm(form), resolveFixture(fixtures['retail-multiple-start-icons'], {
@@ -241,7 +241,7 @@ describe('createroute.serialization', () => {
             key_level_min: KEY_LEVEL_MIN,
             key_level_max: KEY_LEVEL_MAX,
             affix_group_id: AFFIX_GROUP_DEFAULT_ID,
-            dungeon_start_map_icon_id: chosenStart.id,
+            dungeon_start_id: chosenStart.id,
         }));
     });
 

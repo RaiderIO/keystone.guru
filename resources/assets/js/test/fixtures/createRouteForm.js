@@ -140,7 +140,7 @@ function dungeonDifficultySelectHtml(id, dungeonSelectId) {
 function dungeonStartSelectHtml(id) {
     return `
         <div id="${id}_container" class="mb-3" style="display: none;">
-            <select id="${id}" name="dungeon_start_map_icon_id" class="form-control selectpicker"></select>
+            <select id="${id}" name="dungeon_start_id" class="form-control selectpicker"></select>
         </div>`;
 }
 
@@ -238,7 +238,7 @@ function buildCreateRouteForm({
     const hasSeasons        = gameVersion === 'retail';
     const dungeonSelectId   = temporary ? 'dungeon_id_select_temporary' : 'dungeon_id_select';
     const difficultySelectId = temporary ? 'dungeon_difficulty_select_temporary' : 'dungeon_difficulty_select';
-    const startSelectId     = temporary ? 'dungeon_start_map_icon_id_temporary' : 'dungeon_start_map_icon_id';
+    const startSelectId     = temporary ? 'dungeon_start_id_temporary' : 'dungeon_start_id';
     const levelInputId      = temporary ? 'temporary_dungeon_route_level' : 'dungeon_route_level';
 
     const levelHtml = hasSeasons ? `
@@ -298,7 +298,7 @@ function buildCreateRouteForm({
 function buildInlineOptions({temporary = false, defaultSelectedAffixes = [AFFIX_GROUP_DEFAULT_ID]} = {}) {
     const dungeonSelectId     = temporary ? 'dungeon_id_select_temporary' : 'dungeon_id_select';
     const difficultySelectId = temporary ? 'dungeon_difficulty_select_temporary' : 'dungeon_difficulty_select';
-    const startSelectId       = temporary ? 'dungeon_start_map_icon_id_temporary' : 'dungeon_start_map_icon_id';
+    const startSelectId       = temporary ? 'dungeon_start_id_temporary' : 'dungeon_start_id';
     const levelSelector       = temporary ? '#temporary_dungeon_route_level' : '#dungeon_route_level';
 
     const currentSeason = {

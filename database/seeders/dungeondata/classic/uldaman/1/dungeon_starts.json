@@ -1,0 +1,38 @@
+[
+    {
+        "id": 150,
+        "mapping_version_id": 179,
+        "floor_id": 238,
+        "target_dungeon_id": null,
+        "lat": -177.9686,
+        "lng": 109.849,
+        "comment": null
+    },
+    {
+        "id": 151,
+        "mapping_version_id": 179,
+        "floor_id": 238,
+        "target_dungeon_id": null,
+        "lat": -186.5454,
+        "lng": 260.9327,
+        "comment": null
+    },
+    {
+        "id": 152,
+        "mapping_version_id": 222,
+        "floor_id": 238,
+        "target_dungeon_id": null,
+        "lat": -177.9686,
+        "lng": 109.849,
+        "comment": "mapping.map_icons.classic.uldaman.echomok_cavern_entrance"
+    },
+    {
+        "id": 153,
+        "mapping_version_id": 222,
+        "floor_id": 238,
+        "target_dungeon_id": null,
+        "lat": -185.7188,
+        "lng": 260.875,
+        "comment": "mapping.map_icons.classic.uldaman.hall_of_the_keepers_entrance"
+    }
+]

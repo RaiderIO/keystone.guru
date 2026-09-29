@@ -6,6 +6,7 @@ use App\Logic\MDT\Conversion;
 use App\Logic\Structs\LatLng;
 use App\Models\Characteristic;
 use App\Models\DungeonFloorSwitchMarker;
+use App\Models\DungeonStart;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\MapIcon;
@@ -283,23 +284,26 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d }
                 }
             }
 
-            // Export graveyards and dungeon entrances
-            foreach ($floor->mapIcons($mappingVersion)->with('floor')->whereIn('map_icon_type_id', [
+            foreach ($floor->mapIcons($mappingVersion)->with('floor')->where(
+                'map_icon_type_id',
                 MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD],
-                MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
-            ])->get() as $mapIcon) {
+            )->get() as $mapIcon) {
                 /** @var MapIcon $mapIcon */
-                $type = $mapIcon->map_icon_type_id === MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD] ?
-                    'graveyard' :
-                    'dungeonEntrance';
-
-                $mapPOIsOnFloor[++$mapPOIIndex] = array_filter([
-                    'type' => $type,
+                $mapPOIsOnFloor[++$mapPOIIndex] = [
+                    'type' => 'graveyard',
                     ...$this->getMapPOICoordinate($mapIcon->getLatLng()),
-                    'graveyardDescription' => $type === 'graveyard' ? ($mapIcon->comment ?? '') : null,
+                    'graveyardDescription' => $mapIcon->comment ?? '',
+                ];
+            }
+
+            foreach ($mappingVersion->dungeonStarts()->where('floor_id', $floor->id)->with('floor')->get() as $dungeonStart) {
+                /** @var DungeonStart $dungeonStart */
+                $mapPOIsOnFloor[++$mapPOIIndex] = [
+                    'type' => 'dungeonEntrance',
+                    ...$this->getMapPOICoordinate($dungeonStart->getLatLng()),
                     // Every dungeonEntrance MDT has is sized up like this, and nothing else ever is
-                    'sizeMult' => $type === 'dungeonEntrance' ? 1.5 : null,
-                ], static fn($value) => $value !== null);
+                    'sizeMult' => 1.5,
+                ];
             }
 
             $mapPOIs[$subLevel] = $mapPOIsOnFloor;

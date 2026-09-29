@@ -1,0 +1,92 @@
+[
+    {
+        "id": 303,
+        "mapping_version_id": 10,
+        "floor_id": 28,
+        "target_dungeon_id": null,
+        "lat": -141.3523,
+        "lng": 343.7318,
+        "comment": null
+    },
+    {
+        "id": 304,
+        "mapping_version_id": 116,
+        "floor_id": 28,
+        "target_dungeon_id": null,
+        "lat": -141.3523,
+        "lng": 343.7318,
+        "comment": null
+    },
+    {
+        "id": 305,
+        "mapping_version_id": 124,
+        "floor_id": 28,
+        "target_dungeon_id": null,
+        "lat": -141.3523,
+        "lng": 343.7318,
+        "comment": null
+    },
+    {
+        "id": 306,
+        "mapping_version_id": 134,
+        "floor_id": 28,
+        "target_dungeon_id": null,
+        "lat": -141.3523,
+        "lng": 343.7318,
+        "comment": null
+    },
+    {
+        "id": 307,
+        "mapping_version_id": 140,
+        "floor_id": 28,
+        "target_dungeon_id": null,
+        "lat": -141.3523,
+        "lng": 343.7318,
+        "comment": null
+    },
+    {
+        "id": 308,
+        "mapping_version_id": 143,
+        "floor_id": 28,
+        "target_dungeon_id": null,
+        "lat": -141.3523,
+        "lng": 343.7318,
+        "comment": null
+    },
+    {
+        "id": 309,
+        "mapping_version_id": 148,
+        "floor_id": 28,
+        "target_dungeon_id": null,
+        "lat": -141.3523,
+        "lng": 343.7318,
+        "comment": null
+    },
+    {
+        "id": 310,
+        "mapping_version_id": 156,
+        "floor_id": 28,
+        "target_dungeon_id": null,
+        "lat": -141.3523,
+        "lng": 343.7318,
+        "comment": null
+    },
+    {
+        "id": 311,
+        "mapping_version_id": 621,
+        "floor_id": 28,
+        "target_dungeon_id": null,
+        "lat": -141.3523,
+        "lng": 343.7318,
+        "comment": null
+    },
+    {
+        "id": 312,
+        "mapping_version_id": 636,
+        "floor_id": 28,
+        "target_dungeon_id": null,
+        "lat": -141.3523,
+        "lng": 343.7318,
+        "comment": null
+    }
+]

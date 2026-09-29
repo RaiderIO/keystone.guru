@@ -401,7 +401,7 @@ final class DungeonRouteControllerSaveNewTest extends DungeonRouteControllerCrea
             'class'                      => ['class'],
             'unlisted'                   => ['unlisted'],
             'dungeon_difficulty'         => ['dungeon_difficulty'],
-            'dungeon_start_map_icon_id'  => ['dungeon_start_map_icon_id'],
+            'dungeon_start_id'           => ['dungeon_start_id'],
         ];
     }
 

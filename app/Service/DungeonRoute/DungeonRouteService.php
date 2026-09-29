@@ -6,13 +6,12 @@ use App\Jobs\RefreshEnemyForces;
 use App\Jobs\UpgradeDungeonRouteMappingVersion;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteScheduledPublish;
-use App\Models\MapIcon;
-use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\PublishedState;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteEnemyRaidMarkerRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\DungeonStartRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLoggingInterface;
 use Exception;
@@ -26,6 +25,7 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
         private DungeonRouteRepositoryInterface                $dungeonRouteRepository,
         private KillZoneEnemyRepositoryInterface               $killZoneEnemyRepository,
         private DungeonRouteEnemyRaidMarkerRepositoryInterface $dungeonRouteEnemyRaidMarkerRepository,
+        private DungeonStartRepositoryInterface                $dungeonStartRepository,
         private ThumbnailServiceInterface                      $thumbnailService,
         private DungeonRouteServiceLoggingInterface            $log,
     ) {
@@ -204,12 +204,12 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
         )->id;
 
         // Carry the chosen dungeon start over to the new mapping version (matched by comment)
-        $newDungeonStartMapIconId = $this->remapDungeonStartMapIconId($dungeonRoute, $newMappingVersionId);
+        $newDungeonStartId = $this->remapDungeonStartId($dungeonRoute, $newMappingVersionId);
 
-        DB::transaction(function () use ($dungeonRoute, $newMappingVersionId, $newDungeonStartMapIconId): void {
+        DB::transaction(function () use ($dungeonRoute, $newMappingVersionId, $newDungeonStartId): void {
             $this->dungeonRouteRepository->update($dungeonRoute, [
-                'mapping_version_id'        => $newMappingVersionId,
-                'dungeon_start_map_icon_id' => $newDungeonStartMapIconId,
+                'mapping_version_id' => $newMappingVersionId,
+                'dungeon_start_id'   => $newDungeonStartId,
             ]);
 
             $killZoneIds = $dungeonRoute->killZones->pluck('id');
@@ -240,28 +240,21 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
     }
 
     /**
-     * Finds the dungeon start map icon in the new mapping version that matches the route's currently
-     * chosen start, matched by the map_icons.comment field. Returns null when the route has no chosen
-     * start, the old icon is gone, it has no comment to match on, or no matching icon exists in the
-     * new mapping version (which later falls back to the first dungeon start).
+     * Finds the dungeon start in the new mapping version that matches the route's currently chosen start,
+     * matched by the dungeon_starts.comment field. Returns null when the route has no chosen start, the old
+     * start is gone, it has no comment to match on, or no matching start exists in the new mapping version
+     * (which later falls back to the first dungeon start).
      */
-    private function remapDungeonStartMapIconId(DungeonRoute $dungeonRoute, int $newMappingVersionId): ?int
+    private function remapDungeonStartId(DungeonRoute $dungeonRoute, int $newMappingVersionId): ?int
     {
-        if ($dungeonRoute->dungeon_start_map_icon_id === null) {
+        if ($dungeonRoute->dungeon_start_id === null) {
             return null;
         }
 
-        $oldMapIcon = MapIcon::find($dungeonRoute->dungeon_start_map_icon_id);
-        if ($oldMapIcon === null || empty($oldMapIcon->comment)) {
-            return null;
-        }
-
-        $newMapIconId = MapIcon::where('mapping_version_id', $newMappingVersionId)
-            ->where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START])
-            ->where('comment', $oldMapIcon->comment)
-            ->value('id');
-
-        return $newMapIconId !== null ? (int)$newMapIconId : null;
+        return $this->dungeonStartRepository->findMatchingDungeonStartIdInMappingVersion(
+            $dungeonRoute->dungeon_start_id,
+            $newMappingVersionId,
+        );
     }
 
     public function upgradeMappingVersionBulk(MappingVersion $mappingVersion): int

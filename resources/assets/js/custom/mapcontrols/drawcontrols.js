@@ -46,6 +46,10 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
             handler: new L.Draw.DungeonFloorSwitchMarker(map, this.options.dungeonfloorswitchmarker),
             title: this.options.dungeonfloorswitchmarker.title
         }, {
+            enabled: this.options.dungeonstart,
+            handler: new L.Draw.DungeonStart(map, this.options.dungeonstart),
+            title: this.options.dungeonstart.title
+        }, {
             enabled: this.options.usermouseposition,
             handler: new L.Draw.UserMousePosition(map, this.options.usermouseposition),
             title: this.options.usermouseposition.title
@@ -330,6 +334,7 @@ class DrawControls extends MapControl {
                 enemypatrol: false,
                 enemy: false,
                 dungeonfloorswitchmarker: false,
+                dungeonstart: false,
                 usermouseposition: false,
                 mountablearea: false,
                 enemyforcescheckpoint: false,

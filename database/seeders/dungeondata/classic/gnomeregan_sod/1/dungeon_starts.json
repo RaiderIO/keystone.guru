@@ -1,0 +1,11 @@
+[
+    {
+        "id": 107,
+        "mapping_version_id": 304,
+        "floor_id": 270,
+        "target_dungeon_id": null,
+        "lat": -71.5833,
+        "lng": 247.2428,
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.main_entrance"
+    }
+]

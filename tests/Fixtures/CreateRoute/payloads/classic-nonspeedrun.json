@@ -7,7 +7,7 @@
         {"name": "dungeon_id", "value": "{{dungeon_id}}"},
         {"name": "team_id", "value": "-1"},
         {"name": "dungeon_difficulty", "value": ""},
-        {"name": "dungeon_start_map_icon_id", "value": ""},
+        {"name": "dungeon_start_id", "value": ""},
         {"name": "dungeon_route_title", "value": "My Test Route"},
         {"name": "faction_id", "value": "1"},
         {"name": "class[]", "value": "0"},

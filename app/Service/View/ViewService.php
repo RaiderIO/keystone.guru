@@ -10,12 +10,11 @@ use App\Models\CharacterRace;
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonStart;
 use App\Models\Expansion;
 use App\Models\Faction;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
-use App\Models\MapIcon;
-use App\Models\MapIconType;
 use App\Models\PublishedState;
 use App\Models\RouteAttribute;
 use App\Models\Season;
@@ -360,22 +359,18 @@ class ViewService implements ViewServiceInterface
                 ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => $dungeon->getCurrentMappingVersion()?->id])
                 ->filter();
 
-            $dungeonStartsByCurrentMappingVersionId = MapIcon::where(
-                'map_icon_type_id',
-                MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
-            )
+            $dungeonStartsByCurrentMappingVersionId = DungeonStart::query()
                 ->whereIn('mapping_version_id', $currentMappingVersionIdByDungeonId->values())
+                ->orderBy('id')
                 ->get(['id', 'mapping_version_id', 'comment'])
                 ->groupBy('mapping_version_id');
 
             return $currentMappingVersionIdByDungeonId
                 ->mapWithKeys(static fn(int $mappingVersionId, int $dungeonId) => [$dungeonId => $dungeonStartsByCurrentMappingVersionId->get($mappingVersionId) ?? collect()])
-                ->filter(static fn(Collection $mapIcons) => $mapIcons->count() > 1)
-                ->map(static fn(Collection $mapIcons) => $mapIcons->values()->map(static fn(MapIcon $mapIcon, int $index) => [
-                    'id'   => $mapIcon->id,
-                    'text' => ($mapIcon->comment ?? '') !== '' ?
-                        (string)__($mapIcon->comment) :
-                        sprintf('%s #%d', __('mapicontypes.dungeon_start'), $index + 1),
+                ->filter(static fn(Collection $dungeonStarts) => $dungeonStarts->count() > 1)
+                ->map(static fn(Collection $dungeonStarts) => $dungeonStarts->values()->map(static fn(DungeonStart $dungeonStart, int $index) => [
+                    'id'   => $dungeonStart->id,
+                    'text' => $dungeonStart->getDisplayText($index),
                 ]));
         });
     }

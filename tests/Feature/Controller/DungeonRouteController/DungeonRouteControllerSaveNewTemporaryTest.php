@@ -5,7 +5,7 @@ namespace Tests\Feature\Controller\DungeonRouteController;
 use App\Models\Dungeon;
 use App\Models\DungeonDifficulty;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\MapIcon;
+use App\Models\DungeonStart;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -348,19 +348,19 @@ final class DungeonRouteControllerSaveNewTemporaryTest extends DungeonRouteContr
     }
 
     #[Test]
-    public function saveNewTemporary_givenValidStartMapIcon_setsStartMapIconId(): void
+    public function saveNewTemporary_givenValidDungeonStart_setsDungeonStartId(): void
     {
         // Arrange
-        [$dungeon, $mapIcon] = $this->getDungeonWithStartIcon();
-        $sinceId             = (int)DungeonRoute::query()->max('id');
+        [$dungeon, $dungeonStart] = $this->getDungeonWithDungeonStart();
+        $sinceId                  = (int)DungeonRoute::query()->max('id');
 
         $dungeonRoute = null;
 
         try {
             // Act
             $response = $this->post(route('dungeonroute.temporary.savenew'), [
-                'dungeon_id'                => $dungeon->id,
-                'dungeon_start_map_icon_id' => $mapIcon->id,
+                'dungeon_id'       => $dungeon->id,
+                'dungeon_start_id' => $dungeonStart->id,
             ]);
 
             // Assert
@@ -368,28 +368,28 @@ final class DungeonRouteControllerSaveNewTemporaryTest extends DungeonRouteContr
 
             $dungeonRoute = $this->latestRouteSince($sinceId);
             $this->assertNotNull($dungeonRoute);
-            $this->assertSame($mapIcon->id, $dungeonRoute->dungeon_start_map_icon_id);
+            $this->assertSame($dungeonStart->id, $dungeonRoute->dungeon_start_id);
         } finally {
             $dungeonRoute?->delete();
         }
     }
 
     #[Test]
-    public function saveNewTemporary_givenForeignStartMapIcon_resolvesToNull(): void
+    public function saveNewTemporary_givenForeignDungeonStart_resolvesToNull(): void
     {
         // Arrange
-        // A map icon id that is not a dungeon start of the posted dungeon's mapping version must not error, it resolves to null
-        $dungeon       = $this->getActiveDungeon();
-        $foreignIconId = (int)MapIcon::query()->max('id') + 1000;
-        $sinceId       = (int)DungeonRoute::query()->max('id');
+        // An id that is not a dungeon start of the posted dungeon's mapping version must not error, it resolves to null
+        $dungeon        = $this->getActiveDungeon();
+        $foreignStartId = (int)DungeonStart::query()->max('id') + 1000;
+        $sinceId        = (int)DungeonRoute::query()->max('id');
 
         $dungeonRoute = null;
 
         try {
             // Act
             $response = $this->post(route('dungeonroute.temporary.savenew'), [
-                'dungeon_id'                => $dungeon->id,
-                'dungeon_start_map_icon_id' => $foreignIconId,
+                'dungeon_id'       => $dungeon->id,
+                'dungeon_start_id' => $foreignStartId,
             ]);
 
             // Assert
@@ -397,7 +397,7 @@ final class DungeonRouteControllerSaveNewTemporaryTest extends DungeonRouteContr
 
             $dungeonRoute = $this->latestRouteSince($sinceId);
             $this->assertNotNull($dungeonRoute);
-            $this->assertNull($dungeonRoute->dungeon_start_map_icon_id);
+            $this->assertNull($dungeonRoute->dungeon_start_id);
         } finally {
             $dungeonRoute?->delete();
         }
@@ -472,8 +472,8 @@ final class DungeonRouteControllerSaveNewTemporaryTest extends DungeonRouteContr
     public static function temporaryOptionalEmptyFieldProvider(): array
     {
         return [
-            'dungeon_difficulty'        => ['dungeon_difficulty'],
-            'dungeon_start_map_icon_id' => ['dungeon_start_map_icon_id'],
+            'dungeon_difficulty' => ['dungeon_difficulty'],
+            'dungeon_start_id'   => ['dungeon_start_id'],
         ];
     }
 }
