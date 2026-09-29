@@ -66,4 +66,15 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
             })
             ->first();
     }
+
+    /**
+     * @return Collection<int, Dungeon>
+     */
+    public function getActiveForGameVersion(GameVersion $gameVersion): Collection
+    {
+        return Dungeon::query()
+            ->active()
+            ->forGameVersion($gameVersion)
+            ->get();
+    }
 }

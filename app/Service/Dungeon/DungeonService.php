@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
@@ -22,6 +23,7 @@ class DungeonService implements DungeonServiceInterface
         private readonly SeasonServiceInterface         $seasonService,
         private readonly DungeonServiceLoggingInterface $log,
         private readonly GameVersionServiceInterface    $gameVersionService,
+        private readonly DungeonRepositoryInterface     $dungeonRepository,
     ) {
     }
 
@@ -138,10 +140,7 @@ class DungeonService implements DungeonServiceInterface
      */
     private function getGameVersionDungeons(GameVersion $gameVersion): Collection
     {
-        return Dungeon::query()
-            ->active()
-            ->forGameVersion($gameVersion)
-            ->get()
+        return $this->dungeonRepository->getActiveForGameVersion($gameVersion)
             ->sortBy([
                 static fn(Dungeon $a, Dungeon $b) => $a->getSelectorGroup()->sortOrder() <=> $b->getSelectorGroup()->sortOrder(),
                 static fn(Dungeon $a, Dungeon $b) => strcasecmp(Str::ascii(__($a->name)), Str::ascii(__($b->name))),

@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Service\Dungeon\DungeonService;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\DungeonService;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
@@ -41,6 +42,7 @@ final class GetDungeonContextTest extends PublicTestCase
                 $seasonService,
                 $log ?? $this->createMockPublic(DungeonServiceLoggingInterface::class),
                 $gameVersionService ?? $this->createMockPublic(GameVersionServiceInterface::class),
+                $this->createMockPublic(DungeonRepositoryInterface::class),
             ])
             ->onlyMethods(['setDungeonContext'])
             ->getMock();

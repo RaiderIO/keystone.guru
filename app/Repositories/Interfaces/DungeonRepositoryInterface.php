@@ -33,4 +33,9 @@ interface DungeonRepositoryInterface extends BaseRepositoryInterface
     public function getByInstanceId(int $instanceId): ?Dungeon;
 
     public function getByMappingVersion(int $challengeModeId, GameVersion $gameVersion, ?int $mappingVersion): ?Dungeon;
+
+    /**
+     * @return Collection<int, Dungeon>
+     */
+    public function getActiveForGameVersion(GameVersion $gameVersion): Collection;
 }

@@ -10,6 +10,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Models\SeasonDungeon;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\DungeonService;
 use App\Service\Dungeon\DungeonServiceInterface;
@@ -96,8 +97,8 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
     }
 
     /**
-     * Builds the service with everything but the season service stubbed out - the season service is
-     * the only collaborator this method's behaviour depends on.
+     * Builds the service with everything but the season service and the dungeon repository stubbed out -
+     * those are the only collaborators this method's behaviour depends on.
      */
     private function buildService(SeasonServiceInterface $seasonService): DungeonService
     {
@@ -106,6 +107,7 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
             $seasonService,
             $this->createMockPublic(DungeonServiceLoggingInterface::class),
             $this->createMockPublic(GameVersionServiceInterface::class),
+            app(DungeonRepositoryInterface::class),
         );
     }
 
