@@ -80,8 +80,8 @@ return [
                 'scatter'   => 'Dispersé',
             ],
             'subject' => [
-                'pack'  => 'pack :group (id :pack_id)',
-                'enemy' => 'ennemi :enemy_id',
+                'pack'  => 'le pack :group (id :pack_id)',
+                'enemy' => 'l\'ennemi :enemy_id',
             ],
             'suggestion' => [
                 'displaced'               => 'Engagé à :distance yards de l\'endroit où :subject est mappé (itinéraires : :routes, soit :share% du total), toujours dans la même direction et en conservant sa forme. Déplacez :subject là où il est engagé.',
