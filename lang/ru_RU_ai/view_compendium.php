@@ -238,8 +238,8 @@ return [
             'build_title'              => 'Сборка :build',
             'build_subtitle'           => 'в сравнении с :from',
             'changed_spells'           => 'Изменено заклинаний: :count|Изменено заклинаний: :count',
-            'build_no_changes'         => '',
-            'build_no_changes_dungeon' => '',
+            'build_no_changes'         => 'В этой сборке не изменились значения ни одного заклинания НПЦ.',
+            'build_no_changes_dungeon' => 'В этой сборке не изменились значения ни одного заклинания НПЦ в этом подземелье.',
         ],
     ],
     'class' => [

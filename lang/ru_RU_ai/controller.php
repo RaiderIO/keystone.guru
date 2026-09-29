@@ -38,8 +38,8 @@ return [
             'mapping_version_upgrade_already_latest' => 'Эта версия карты уже является последней для данного подземелья - маршруты не были поставлены в очередь.',
             'read_only_mode_disabled'                => 'Режим только для чтения отключен',
             'read_only_mode_enabled'                 => 'Режим только для чтения включен',
-            'thumbnail_generation_paused'            => '',
-            'thumbnail_generation_resumed'           => '',
+            'thumbnail_generation_paused'            => 'Создание эскизов приостановлено - новые эскизы не будут ставиться в очередь или отрисовываться',
+            'thumbnail_generation_resumed'           => 'Создание эскизов возобновлено',
         ],
     ],
     'affix' => [
