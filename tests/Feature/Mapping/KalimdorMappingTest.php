@@ -9,6 +9,7 @@ use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonKey;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
+use App\Models\Floor\FloorCoupling;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -203,7 +204,7 @@ final class KalimdorMappingTest extends TestCase
             ->keyBy('id');
 
         // Assert
-        $this->assertCount(44, $markers);
+        $this->assertCount(56, $markers);
         foreach ($markers as $marker) {
             /** @var DungeonFloorSwitchMarker $marker */
             $linkedMarker = $markers->get($marker->linked_dungeon_floor_switch_marker_id);
@@ -214,6 +215,32 @@ final class KalimdorMappingTest extends TestCase
             $this->assertNotSame($facade->id, $marker->floor_id);
             $this->assertEqualsWithDelta(-128, $marker->lat, 128, (string)$marker->id);
             $this->assertEqualsWithDelta(192, $marker->lng, 192, (string)$marker->id);
+        }
+    }
+
+    #[Test]
+    public function dungeonFloorSwitchMarkers_givenKalimdor_useTheirFloorCouplingDirectionUnlessOverridden(): void
+    {
+        // Arrange
+        $mappingVersion = $this->getMappingVersion();
+        $floorIds       = $this->getKalimdor()->floors->pluck('id');
+
+        // Act
+        $markers = DungeonFloorSwitchMarker::query()
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->get();
+        $couplings = FloorCoupling::query()
+            ->whereIn('floor1_id', $floorIds)
+            ->get()
+            ->keyBy(static fn(FloorCoupling $floorCoupling): string => sprintf('%d-%d', $floorCoupling->floor1_id, $floorCoupling->floor2_id));
+
+        // Assert
+        $this->assertCount($markers->unique(static fn(DungeonFloorSwitchMarker $marker): string => sprintf('%d-%d', $marker->floor_id, $marker->target_floor_id))->count(), $couplings);
+        foreach ($markers as $marker) {
+            /** @var DungeonFloorSwitchMarker $marker */
+            $floorCoupling = $couplings->get(sprintf('%d-%d', $marker->floor_id, $marker->target_floor_id));
+            $this->assertNotNull($floorCoupling, (string)$marker->id);
+            $this->assertNotSame($floorCoupling->direction, $marker->direction, (string)$marker->id);
         }
     }
 

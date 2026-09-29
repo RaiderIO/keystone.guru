@@ -6,7 +6,7 @@
         "source_floor_id": null,
         "target_floor_id": 491,
         "linked_dungeon_floor_switch_marker_id": 3734,
-        "direction": "right",
+        "direction": null,
         "hidden_in_facade": false,
         "lat": -217.6,
         "lng": 272.64
@@ -18,7 +18,7 @@
         "source_floor_id": null,
         "target_floor_id": 489,
         "linked_dungeon_floor_switch_marker_id": 3737,
-        "direction": "left",
+        "direction": null,
         "hidden_in_facade": false,
         "lat": -56.32,
         "lng": 111.36
