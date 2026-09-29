@@ -238,8 +238,8 @@ return [
             'build_title'              => '빌드 :build',
             'build_subtitle'           => ':from 대비',
             'changed_spells'           => ':count개 주문 변경됨|:count개 주문 변경됨',
-            'build_no_changes'         => '',
-            'build_no_changes_dungeon' => '',
+            'build_no_changes'         => '이 빌드에서는 NPC 주문의 수치가 하나도 바뀌지 않았습니다.',
+            'build_no_changes_dungeon' => '이 빌드에서는 이 던전의 NPC 주문 수치가 하나도 바뀌지 않았습니다.',
         ],
     ],
     'class' => [

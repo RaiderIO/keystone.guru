@@ -31,8 +31,8 @@ return [
         'description' => '군단 리믹스',
     ],
     'forever' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => '포에버',
+        'description' => 'WoW: 포에버',
     ],
 
 ];

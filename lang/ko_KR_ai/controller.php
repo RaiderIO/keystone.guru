@@ -38,8 +38,8 @@ return [
             'mapping_version_upgrade_already_latest' => '이 매핑 버전은 해당 던전에서 이미 최신 버전입니다 — 대기열에 추가된 경로가 없습니다.',
             'read_only_mode_disabled'                => '읽기 전용 모드 비활성화됨',
             'read_only_mode_enabled'                 => '읽기 전용 모드 활성화됨',
-            'thumbnail_generation_paused'            => '',
-            'thumbnail_generation_resumed'           => '',
+            'thumbnail_generation_paused'            => '썸네일 생성이 일시 중지되었습니다 - 새 썸네일이 대기열에 추가되거나 렌더링되지 않습니다',
+            'thumbnail_generation_resumed'           => '썸네일 생성이 재개되었습니다',
         ],
     ],
     'affix' => [

@@ -87,9 +87,9 @@ return [
         'creator_directory_hide_help'      => '게시된 경로가 있는 제작자는 디렉터리에 자동으로 등록됩니다. 이 항목을 선택하면 프로필이 디렉터리에서 제외됩니다 - 어느 쪽이든 경로는 계속 게시된 상태로 유지됩니다.',
         'creator_save'                     => '제작자 프로필 저장',
         'creator_view_public_profile'      => '내 공개 프로필 보기',
-        'creator_public_profile_url'       => '',
-        'creator_public_profile_copy'      => '',
-        'creator_public_profile_url_help'  => '',
+        'creator_public_profile_url'       => '내 공개 프로필 주소',
+        'creator_public_profile_copy'      => '공개 프로필 주소를 클립보드에 복사',
+        'creator_public_profile_url_help'  => '이 주소는 사용자 이름을 따릅니다. 사용자 이름을 변경하면 주소도 바뀌며, 이전 주소를 사용하는 링크는 더 이상 작동하지 않습니다.',
     ],
     'favorites' => [
         'title' => '내 즐겨찾기',
@@ -98,7 +98,7 @@ return [
         'title'          => '개요',
         'route_coverage' => '경로 커버리지',
         'route_overview' => '경로 개요',
-        'delete_routes'  => '',
+        'delete_routes'  => '경로 삭제…',
     ],
     'routes' => [
         'title' => '내 경로',
@@ -109,8 +109,8 @@ return [
         'description' => '태그 기능을 사용하면 경로를 원하는 방식으로 조직할 수 있습니다. %s에서 각 경로에 대한 작업을 보면서 경로에 태그를 추가할 수 있습니다.
                     여기에서 자신의 경로에 대한 태그를 관리할 수 있습니다. 다른 사람은 귀하의 태그를 볼 수 없으며, 팀에 속한 경로에 대해서는 팀을 볼 때 태그 섹션을 방문하여 별도의 태그 집합을 관리할 수 있습니다.',
         'link_your_personal_route_overview' => '개인 경로 개요',
-        'collections'                       => '',
-        'link_collections'                  => '',
+        'collections'                       => '태그는 나만을 위해 경로를 정리하는 기능이며, 절대 게시되지 않습니다. 하나의 링크로 공유할 수 있는 한 페이지에 여러 경로를 모으려면 대신 %s 만드세요.',
+        'link_collections'                  => '컬렉션을',
     ],
     'view' => [
         'title'              => '%s의 경로',
