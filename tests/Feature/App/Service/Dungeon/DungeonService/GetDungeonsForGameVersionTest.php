@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Models\SeasonDungeon;
 use App\Service\Cookies\CookieServiceInterface;
@@ -28,6 +29,8 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
 {
     use CreatesSeason;
 
+    private const string DUNGEON_KEY = 'get_dungeons_for_game_version_test';
+
     /**
      * Two seasons of the test's own with disjoint dungeons, read back in one query so both come out of a
      * multi-row result.
@@ -45,6 +48,58 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
         $seasons = Season::query()->whereKey([$currentSeasonId, $nextSeasonId])->get()->keyBy('id');
 
         return [$seasons->get($currentSeasonId), $seasons->get($nextSeasonId)];
+    }
+
+    /**
+     * An active, non-raid Classic dungeon of the test's own, without any mapping version.
+     */
+    private function createClassicDungeon(): Dungeon
+    {
+        return Dungeon::create([
+            'expansion_id'     => Expansion::ALL[Expansion::EXPANSION_CLASSIC],
+            'active'           => 1,
+            'raid'             => 0,
+            'speedrun_enabled' => false,
+            'zone_id'          => 0,
+            'map_id'           => 0,
+            'mdt_id'           => 0,
+            'name'             => 'dungeons.classic.deadmines.name',
+            'key'              => self::DUNGEON_KEY,
+            'slug'             => self::DUNGEON_KEY,
+        ]);
+    }
+
+    private function createMappingVersion(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion
+    {
+        return MappingVersion::create([
+            'game_version_id'                 => $gameVersion->id,
+            'dungeon_id'                      => $dungeon->id,
+            'version'                         => 1,
+            'enemy_forces_required'           => 0,
+            'enemy_forces_required_teeming'   => null,
+            'enemy_forces_shrouded'           => 0,
+            'enemy_forces_shrouded_zul_gamux' => 0,
+            'timer_max_seconds'               => 1800,
+        ]);
+    }
+
+    private function deleteDungeon(?Dungeon $dungeon): void
+    {
+        if ($dungeon === null) {
+            return;
+        }
+
+        MappingVersion::query()->where('dungeon_id', $dungeon->id)->delete();
+        Dungeon::query()->whereKey($dungeon->id)->delete();
+    }
+
+    private function buildServiceWithoutCurrentSeason(): DungeonService
+    {
+        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
+        $seasonService->method('getCurrentSeason')->willReturn(null);
+        $seasonService->method('getNextSeason')->willReturn(null);
+
+        return $this->buildService($seasonService);
     }
 
     /**
@@ -170,6 +225,82 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
             $gameVersion->expansion->dungeons->pluck('id')->all(),
             $dungeons->pluck('id')->all(),
         );
+    }
+
+    /**
+     * Scenario: an expansion's dungeon that was never mapped cannot be opened, so it must not be offered.
+     */
+    #[Test]
+    public function getDungeonsForGameVersion_givenADungeonWithoutMappingVersions_doesNotReturnIt(): void
+    {
+        $dungeon = null;
+
+        try {
+            // Arrange
+            $dungeon     = $this->createClassicDungeon();
+            $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+
+            // Act
+            $dungeons = $this->buildServiceWithoutCurrentSeason()->getDungeonsForGameVersion($gameVersion);
+
+            // Assert
+            $this->assertNotContains($dungeon->id, $dungeons->pluck('id')->all());
+            $this->assertNotEmpty($dungeons);
+        } finally {
+            $this->deleteDungeon($dungeon);
+        }
+    }
+
+    #[Test]
+    public function getDungeonsForGameVersion_givenADungeonWithAMappingVersionForTheGameVersion_returnsIt(): void
+    {
+        $dungeon = null;
+
+        try {
+            // Arrange
+            $dungeon     = $this->createClassicDungeon();
+            $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+            $this->createMappingVersion($dungeon, $gameVersion);
+
+            // Act
+            $dungeons = $this->buildServiceWithoutCurrentSeason()->getDungeonsForGameVersion($gameVersion);
+
+            // Assert
+            $this->assertContains($dungeon->id, $dungeons->pluck('id')->all());
+        } finally {
+            $this->deleteDungeon($dungeon);
+        }
+    }
+
+    /**
+     * Scenario: Eastern Kingdoms and Kalimdor belong to the Classic expansion but are only mapped for WoW:
+     * Forever, which shares that expansion - they showed up under Classic Era anyway.
+     */
+    #[Test]
+    public function getDungeonsForGameVersion_givenADungeonMappedOnlyForAnotherGameVersionOfTheSameExpansion_doesNotReturnIt(): void
+    {
+        $dungeon = null;
+
+        try {
+            // Arrange
+            $dungeon            = $this->createClassicDungeon();
+            $classicGameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+            $foreverGameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_FOREVER);
+            $this->assertSame($classicGameVersion->expansion_id, $foreverGameVersion->expansion_id);
+            $this->createMappingVersion($dungeon, $foreverGameVersion);
+
+            $service = $this->buildServiceWithoutCurrentSeason();
+
+            // Act
+            $classicDungeons = $service->getDungeonsForGameVersion($classicGameVersion);
+            $foreverDungeons = $service->getDungeonsForGameVersion($foreverGameVersion);
+
+            // Assert
+            $this->assertNotContains($dungeon->id, $classicDungeons->pluck('id')->all());
+            $this->assertContains($dungeon->id, $foreverDungeons->pluck('id')->all());
+        } finally {
+            $this->deleteDungeon($dungeon);
+        }
     }
 
     /**
