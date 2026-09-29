@@ -238,8 +238,8 @@ return [
             'build_title'              => 'Build :build',
             'build_subtitle'           => 'comparada com :from',
             'changed_spells'           => 'Feitiços alterados: :count|Feitiços alterados: :count',
-            'build_no_changes'         => '',
-            'build_no_changes_dungeon' => '',
+            'build_no_changes'         => 'Esta build não alterou os números de nenhum feitiço de NPC.',
+            'build_no_changes_dungeon' => 'Esta build não alterou os números de nenhum feitiço de NPC nesta masmorra.',
         ],
     ],
     'class' => [

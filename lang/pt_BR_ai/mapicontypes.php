@@ -125,11 +125,11 @@ return [
     'murder_row_loaded_pistol'                        => 'Pistola Carregada',
     'murder_row_overload_golem'                       => 'Golem de Sobrecarga',
     'the_blinding_vale_flourishing_stride'            => 'Passo Florescente',
-    'altar_of_fangs_mutating_elixir'                  => '',
-    'den_of_nalorakk_rune_of_anchoring'               => '',
-    'den_of_nalorakk_warding_incense'                 => '',
-    'voidscar_arena_proof_of_endurance'               => '',
-    'voidscar_arena_proof_of_mastery'                 => '',
+    'altar_of_fangs_mutating_elixir'                  => 'Elixir Mutante',
+    'den_of_nalorakk_rune_of_anchoring'               => 'Runa de Ancoragem',
+    'den_of_nalorakk_warding_incense'                 => 'Incenso Protetor',
+    'voidscar_arena_proof_of_endurance'               => 'Prova de Resistência',
+    'voidscar_arena_proof_of_mastery'                 => 'Prova de Maestria',
 
     'waystone' => 'Pedra de Marco',
 ];

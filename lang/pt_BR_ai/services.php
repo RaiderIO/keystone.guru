@@ -75,19 +75,19 @@ return [
         ],
         'enemy_resolution_analysis' => [
             'verdict' => [
-                'displaced' => '',
-                'converged' => '',
-                'scatter'   => '',
+                'displaced' => 'Mapeado no lugar errado',
+                'converged' => 'Corre até o grupo antes de ser registrado',
+                'scatter'   => 'Disperso',
             ],
             'subject' => [
-                'pack'  => '',
-                'enemy' => '',
+                'pack'  => 'pacote :group (id :pack_id)',
+                'enemy' => 'inimigo :enemy_id',
             ],
             'suggestion' => [
-                'displaced'               => '',
-                'displaced_shape_unknown' => '',
-                'converged'               => '',
-                'scatter'                 => '',
+                'displaced'               => 'Engajado a :distance jardas de onde :subject está mapeado (rotas: :routes, ou :share% do total), sempre na mesma direção e mantendo sua forma. Mova :subject para onde ele é engajado.',
+                'displaced_shape_unknown' => 'Engajado a :distance jardas de onde :subject está mapeado (rotas: :routes, ou :share% do total), sempre na mesma direção. Poucos dos seus inimigos tiveram correspondência para dizer se ele manteve a forma ou se agrupou, então verifique qual é o caso antes de mover :subject para onde ele é engajado.',
+                'converged'               => 'Engajado a :distance jardas de onde :subject está mapeado (rotas: :routes, ou :share% do total), mas agrupado (proporção de forma :ratio): ele corre até o grupo antes do seu primeiro evento registrado, então é ali que o grupo luta. Deixe o mapeamento como está.',
+                'scatter'                 => 'Engajado em média a :distance jardas de onde :subject está mapeado (rotas: :routes), mas em todas as direções (consistência :consistency). Body pulls ou patrulhas - nada a mover.',
             ],
         ],
     ],

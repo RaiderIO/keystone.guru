@@ -24,6 +24,6 @@ return [
         'message' => 'Esse tipo de ícone de mapa não está disponível para seu nível de acesso.',
     ],
     'user_slug_available_rule' => [
-        'taken' => '',
+        'taken' => 'Este nome de usuário já está em uso.',
     ],
 ];

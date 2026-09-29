@@ -87,9 +87,9 @@ return [
         'creator_directory_hide_help'      => 'Criadores com rotas publicadas são listados automaticamente no diretório. Marque esta opção para manter seu perfil fora dele — suas rotas continuarão publicadas de qualquer forma.',
         'creator_save'                     => 'Salvar perfil de criador',
         'creator_view_public_profile'      => 'Ver meu perfil público',
-        'creator_public_profile_url'       => '',
-        'creator_public_profile_copy'      => '',
-        'creator_public_profile_url_help'  => '',
+        'creator_public_profile_url'       => 'Endereço do seu perfil público',
+        'creator_public_profile_copy'      => 'Copiar o endereço do seu perfil público para a área de transferência',
+        'creator_public_profile_url_help'  => 'Este endereço acompanha o seu nome de usuário. Se você mudar o nome de usuário, ele muda também, e os links que usam o endereço antigo deixam de funcionar.',
     ],
     'favorites' => [
         'title' => 'Meus favoritos',
@@ -98,7 +98,7 @@ return [
         'title'          => 'Visão geral',
         'route_coverage' => 'Cobertura de rota',
         'route_overview' => 'Visão geral da rota',
-        'delete_routes'  => '',
+        'delete_routes'  => 'Excluir rotas…',
     ],
     'routes' => [
         'title' => 'Minhas rotas',
@@ -110,8 +110,8 @@ return [
                     Você pode gerenciar tags para suas próprias rotas aqui. Ninguém mais poderá ver suas tags - para rotas anexadas a uma equipe
                     você pode gerenciar um conjunto separado de tags apenas para essa equipe visitando a seção Tags ao visualizar sua equipe.',
         'link_your_personal_route_overview' => 'sua visão geral pessoal de rotas',
-        'collections'                       => '',
-        'link_collections'                  => '',
+        'collections'                       => 'As tags organizam suas rotas só para você e nunca são publicadas. Para colocar um conjunto de rotas em uma única página que você pode compartilhar com um só link, crie %s em vez disso.',
+        'link_collections'                  => 'uma coleção',
     ],
     'view' => [
         'title'              => 'Rotas de %s',
