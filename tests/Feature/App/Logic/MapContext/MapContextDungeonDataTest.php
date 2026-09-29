@@ -4,6 +4,11 @@ namespace Tests\Feature\App\Logic\MapContext;
 
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClassification;
+use App\Models\Npc\NpcDungeon;
+use App\Models\Npc\NpcType;
+use App\Models\Translation\Translation;
 use App\Models\User;
 use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Support\Facades\Cache;
@@ -15,6 +20,10 @@ use Tests\TestCases\PublicTestCase;
 #[Group('MapContext')]
 final class MapContextDungeonDataTest extends PublicTestCase
 {
+    private const int NPC_ID = 999999301;
+
+    private const string NPC_NAME_KEY = 'npcs.999999301';
+
     #[Override]
     protected function setUp(): void
     {
@@ -75,5 +84,96 @@ final class MapContextDungeonDataTest extends PublicTestCase
                 $this->assertNotNull($floorUnion['target_floor'][$ingameBound]);
             }
         }
+    }
+
+    #[Test]
+    public function toArray_givenLocaleWithNpcNameTranslation_returnsLocalizedName(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::query()->whereHas('npcs')->firstOrFail();
+
+        try {
+            $this->createNpcWithNameTranslations($dungeon, 'Test Kobold', 'Testkobold');
+
+            // Act
+            $name = $this->getDungeonNpcName($dungeon, 'de_DE_ai');
+
+            // Assert
+            $this->assertSame('Testkobold', $name);
+        } finally {
+            $this->deleteNpcWithNameTranslations();
+        }
+    }
+
+    #[Test]
+    public function toArray_givenLocaleWithEmptyNpcNameTranslation_returnsEnglishName(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::query()->whereHas('npcs')->firstOrFail();
+
+        try {
+            $this->createNpcWithNameTranslations($dungeon, 'Test Kobold', '');
+
+            // Act
+            $name = $this->getDungeonNpcName($dungeon, 'de_DE_ai');
+
+            // Assert
+            $this->assertSame('Test Kobold', $name);
+        } finally {
+            $this->deleteNpcWithNameTranslations();
+        }
+    }
+
+    #[Test]
+    public function toArray_givenLocaleWithoutNpcNameTranslationRow_returnsEnglishName(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::query()->whereHas('npcs')->firstOrFail();
+
+        try {
+            $this->createNpcWithNameTranslations($dungeon, 'Test Kobold', null);
+
+            // Act
+            $name = $this->getDungeonNpcName($dungeon, 'de_DE_ai');
+
+            // Assert
+            $this->assertSame('Test Kobold', $name);
+        } finally {
+            $this->deleteNpcWithNameTranslations();
+        }
+    }
+
+    private function createNpcWithNameTranslations(Dungeon $dungeon, string $english, ?string $german): void
+    {
+        Npc::create([
+            'id'                => self::NPC_ID,
+            'classification_id' => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
+            'npc_type_id'       => NpcType::HUMANOID,
+            'name'              => self::NPC_NAME_KEY,
+            'aggressiveness'    => 'aggressive',
+        ]);
+        NpcDungeon::create(['npc_id' => self::NPC_ID, 'dungeon_id' => $dungeon->id]);
+        Translation::create(['locale' => 'en_US', 'key' => self::NPC_NAME_KEY, 'translation' => $english]);
+
+        if ($german !== null) {
+            Translation::create(['locale' => 'de_DE_ai', 'key' => self::NPC_NAME_KEY, 'translation' => $german]);
+        }
+    }
+
+    private function deleteNpcWithNameTranslations(): void
+    {
+        Translation::query()->where('key', self::NPC_NAME_KEY)->delete();
+        NpcDungeon::query()->where('npc_id', self::NPC_ID)->delete();
+        Npc::query()->whereKey(self::NPC_ID)->delete();
+    }
+
+    private function getDungeonNpcName(Dungeon $dungeon, string $locale): ?string
+    {
+        /** @var array<int, array<string, mixed>> $dungeonNpcs */
+        $dungeonNpcs = json_decode(json_encode(
+            app(MapContextServiceInterface::class)->createMapContextDungeonData($dungeon, $locale)->toArray()['dungeonNpcs'],
+        ), true);
+
+        return collect($dungeonNpcs)->firstWhere('id', self::NPC_ID)['name'] ?? null;
     }
 }

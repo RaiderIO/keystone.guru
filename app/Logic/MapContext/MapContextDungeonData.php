@@ -2,6 +2,8 @@
 
 namespace App\Logic\MapContext;
 
+use App\Logic\Datatables\ColumnHandler\Npc\NameColumnHandler as NpcNameColumnHandler;
+use App\Logic\Datatables\ColumnHandler\Spell\NameColumnHandler as SpellNameColumnHandler;
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
@@ -9,8 +11,6 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Support\Facades\DB;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
@@ -38,12 +38,12 @@ class MapContextDungeonData implements Arrayable
         $dungeonNpcDataKey = sprintf('dungeon_npcs_%d_%s', $this->dungeon->id, $this->locale);
         $dungeonNpcData    = $this->rememberLocal($dungeonNpcDataKey, 86400, fn() => $this->cacheService->remember(
             $dungeonNpcDataKey,
-            fn() => $this->dungeon->npcs()
-                ->selectRaw('npcs.*, translations.translation as name')
-                ->leftJoin('translations', function (JoinClause $clause) {
-                    $clause->on('translations.key', '=', 'npcs.name')
-                        ->on('translations.locale', '=', DB::raw(sprintf('"%s"', $this->locale)));
-                })
+            fn() => NpcNameColumnHandler::joinNameTranslations(
+                $this->dungeon->npcs()->getQuery(),
+                $this->locale,
+                config('app.fallback_locale'),
+            )
+                ->selectRaw(sprintf('npcs.*, %s as name', NpcNameColumnHandler::NAME_EXPRESSION))
                 ->with([
                     // The front-end reads these relations off the npc objects in this payload (enemy visuals + tooltips)
                     'type',
@@ -94,12 +94,8 @@ class MapContextDungeonData implements Arrayable
                 }
 
                 // Load full spell data once, with localization
-                return Spell::query()
-                    ->selectRaw('spells.*, translations.translation as name')
-                    ->leftJoin('translations', function (JoinClause $clause) {
-                        $clause->on('translations.key', '=', 'spells.name')
-                            ->on('translations.locale', '=', DB::raw(sprintf('"%s"', $this->locale)));
-                    })
+                return SpellNameColumnHandler::joinNameTranslations(Spell::query(), $this->locale, config('app.fallback_locale'))
+                    ->selectRaw(sprintf('spells.*, %s as name', SpellNameColumnHandler::NAME_EXPRESSION))
                     ->whereIn('spells.id', $spellIds)
                     ->get()
                     ->makeHidden([

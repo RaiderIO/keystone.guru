@@ -3,10 +3,12 @@
 namespace Tests\Feature\Controller;
 
 use App\Models\Dungeon;
+use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Redis;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
@@ -223,5 +225,39 @@ final class SiteControllerTest extends PublicTestCase
                 unlink($inputPath);
             }
         }
+    }
+
+    #[Test]
+    #[DataProvider('affixes_givenNonEnglishLocale_rendersRegionNameInThatLocaleOrEnglish_dataProvider')]
+    public function affixes_givenNonEnglishLocale_rendersRegionNameInThatLocaleOrEnglish(?string $germanRegionName, bool $expectsEnglish): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+        $region      = GameServerRegion::getUserOrDefaultRegion();
+        $englishName = __($region->name, [], 'en_US');
+        // Loads the whole group first: addLines() on a group that was never loaded would stand in for all of it
+        __($region->name, [], 'de_DE_ai');
+        if ($germanRegionName !== null) {
+            app('translator')->addLines([$region->name => $germanRegionName], 'de_DE_ai');
+        }
+        $expectedName = $expectsEnglish ? $englishName : $germanRegionName;
+
+        // Act
+        $response = $this->get(route('misc.affixes', ['lang' => 'de_DE_ai']));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee(sprintf(__('view_misc.affixes.header', [], 'de_DE_ai'), $expectedName));
+    }
+
+    /**
+     * @return array<string, array{string|null, bool}>
+     */
+    public static function affixes_givenNonEnglishLocale_rendersRegionNameInThatLocaleOrEnglish_dataProvider(): array
+    {
+        return [
+            'translated'   => ['Testregion Amerika', false],
+            'untranslated' => ['', true],
+        ];
     }
 }

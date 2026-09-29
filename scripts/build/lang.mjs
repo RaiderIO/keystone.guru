@@ -154,9 +154,9 @@ function readLocaleGroups(langRoot, locale) {
 /**
  * Deep-merges a locale's parsed translations under the fallback's (en_US's), key by key and
  * group by group, so a bundle carries every key the fallback has even where the locale's own
- * file omits it. A locale value wins whenever the key exists on its side — including an empty
- * string, which Laravel treats as an existing translation rather than a missing one — so only a
- * key genuinely absent from the locale is filled from the fallback. A value that isn't a plain
+ * file omits it. A locale value wins whenever the key exists on its side, except an empty string
+ * where the fallback has text: that is an untranslated key, and it takes the fallback's value just
+ * as the server side's EmptyTranslationFallbackTranslator does. A value that isn't a plain
  * object (a scalar, or a PHP list array) is taken from whichever side has it wholesale, never
  * merged element-wise; Laravel differs there (it falls back per list index, and treats an empty
  * array as missing), which no lang file currently relies on.
@@ -171,6 +171,9 @@ export function mergeTranslationsWithFallback(localeValue, fallbackValue) {
     }
     if (fallbackValue === undefined) {
         return localeValue;
+    }
+    if (localeValue === '' && typeof fallbackValue === 'string') {
+        return fallbackValue;
     }
     if (!isPlainObject(localeValue) || !isPlainObject(fallbackValue)) {
         return localeValue;
