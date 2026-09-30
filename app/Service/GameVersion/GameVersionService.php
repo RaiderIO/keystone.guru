@@ -39,6 +39,10 @@ class GameVersionService implements GameVersionServiceInterface
             // the cached list of active game versions before asking the database.
             $gameVersion = $gameVersionId === 0 ? null :
                 ($this->viewService->getAllGameVersions()->firstWhere('id', $gameVersionId) ?? GameVersion::find($gameVersionId));
+
+            if ($gameVersion?->isRetired()) {
+                $gameVersion = null;
+            }
         }
 
         if ($gameVersion === null) {

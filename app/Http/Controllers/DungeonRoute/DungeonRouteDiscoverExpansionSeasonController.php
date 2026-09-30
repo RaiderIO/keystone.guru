@@ -30,7 +30,7 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
         DiscoverServiceInterface  $discoverService,
         ThumbnailServiceInterface $thumbnailService,
     ) {
-        $gameVersion = GameVersion::firstWhere('expansion_id', $expansion->id) ?? GameVersion::getDefaultGameVersion();
+        $gameVersion = GameVersion::active()->firstWhere('expansion_id', $expansion->id) ?? GameVersion::getDefaultGameVersion();
 
         $season = Season::where('expansion_id', $expansion->id)
             ->where('index', $seasonIndex)->first();

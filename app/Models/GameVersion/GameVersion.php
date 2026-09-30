@@ -81,6 +81,16 @@ class GameVersion extends Model
     ];
 
     /**
+     * Game versions whose flavour is not playable on its own, mapped to the game version their
+     * content now lives under.
+     */
+    public const array RETIRED_INTO = [
+        self::GAME_VERSION_WRATH        => self::GAME_VERSION_RETAIL,
+        self::GAME_VERSION_CATA         => self::GAME_VERSION_RETAIL,
+        self::GAME_VERSION_LEGION_REMIX => self::GAME_VERSION_RETAIL,
+    ];
+
+    /**
      * https://stackoverflow.com/a/34485411/771270
      */
     #[Override]
@@ -114,6 +124,11 @@ class GameVersion extends Model
     public function mappingVersions(): HasMany
     {
         return $this->hasMany(MappingVersion::class);
+    }
+
+    public function isRetired(): bool
+    {
+        return isset(self::RETIRED_INTO[$this->key]);
     }
 
     /**
@@ -154,7 +169,11 @@ class GameVersion extends Model
 
     public static function getUserGameVersion(User $user): ?GameVersion
     {
-        return $user->game_version_id > 0 ? $user->gameVersion : null;
+        if ($user->game_version_id <= 0 || $user->gameVersion === null || $user->gameVersion->isRetired()) {
+            return null;
+        }
+
+        return $user->gameVersion;
     }
 
     public static function getDefaultGameVersion(): GameVersion

@@ -39,14 +39,14 @@ final class NpcGameVersionTest extends PublicTestCase
     {
         // Arrange
         $retailDungeon = $this->getDungeonForGameVersion(GameVersion::GAME_VERSION_RETAIL);
-        $wrathDungeon  = $this->getDungeonForGameVersion(GameVersion::GAME_VERSION_WRATH);
+        $mopDungeon    = $this->getDungeonForGameVersion(GameVersion::GAME_VERSION_MOP);
 
         $npc = null;
 
         try {
             $npc = $this->createNpcInDungeons(
-                [$retailDungeon, $wrathDungeon],
-                GameVersion::ALL[GameVersion::GAME_VERSION_WRATH],
+                [$retailDungeon, $mopDungeon],
+                GameVersion::ALL[GameVersion::GAME_VERSION_MOP],
             );
 
             // Act
@@ -62,25 +62,25 @@ final class NpcGameVersionTest extends PublicTestCase
     #[Test]
     public function getGameVersionId_givenNpcInSeveralGameVersions_returnsTheViewedOneForEachOfThem(): void
     {
-        // Arrange - the Naxxramas case: the same NPC id is mapped in both a Classic and a Wrath dungeon
+        // Arrange - the Naxxramas case: the same NPC id is mapped in a dungeon of two game versions
         $classicDungeon = $this->getDungeonForGameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA);
-        $wrathDungeon   = $this->getDungeonForGameVersion(GameVersion::GAME_VERSION_WRATH);
+        $mopDungeon     = $this->getDungeonForGameVersion(GameVersion::GAME_VERSION_MOP);
 
         $npc = null;
 
         try {
             $npc = $this->createNpcInDungeons(
-                [$classicDungeon, $wrathDungeon],
+                [$classicDungeon, $mopDungeon],
                 GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA],
             );
 
             // Act
             $classicGameVersionId = $npc->getGameVersionId($this->getMappingVersion($classicDungeon));
-            $wrathGameVersionId   = $npc->getGameVersionId($this->getMappingVersion($wrathDungeon));
+            $mopGameVersionId     = $npc->getGameVersionId($this->getMappingVersion($mopDungeon));
 
             // Assert
             $this->assertSame(GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA], $classicGameVersionId);
-            $this->assertSame(GameVersion::ALL[GameVersion::GAME_VERSION_WRATH], $wrathGameVersionId);
+            $this->assertSame(GameVersion::ALL[GameVersion::GAME_VERSION_MOP], $mopGameVersionId);
         } finally {
             $this->cleanUpNpc($npc);
         }
@@ -140,22 +140,22 @@ final class NpcGameVersionTest extends PublicTestCase
     {
         // Arrange
         $classicDungeon = $this->getDungeonForGameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA);
-        $wrathDungeon   = $this->getDungeonForGameVersion(GameVersion::GAME_VERSION_WRATH);
+        $mopDungeon     = $this->getDungeonForGameVersion(GameVersion::GAME_VERSION_MOP);
 
         $npc = null;
 
         try {
             $npc = $this->createNpcInDungeons(
-                [$classicDungeon, $wrathDungeon],
+                [$classicDungeon, $mopDungeon],
                 GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA],
             );
 
             // Act
-            $wowheadUrl = $npc->getWowheadUrl($this->getMappingVersion($wrathDungeon));
+            $wowheadUrl = $npc->getWowheadUrl($this->getMappingVersion($mopDungeon));
 
             // Assert
             $this->assertStringStartsWith(
-                sprintf('https://www.wowhead.com/wrath/npc=%d', self::TEST_NPC_ID),
+                sprintf('https://www.wowhead.com/mop-classic/npc=%d', self::TEST_NPC_ID),
                 $wowheadUrl,
             );
         } finally {

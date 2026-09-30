@@ -12,6 +12,7 @@ use App\Http\Middleware\LegalAgreed;
 use App\Http\Middleware\OnlyAjax;
 use App\Http\Middleware\PoweredBySwoole;
 use App\Http\Middleware\ReadOnlyMode;
+use App\Http\Middleware\RedirectRetiredGameVersion;
 use App\Http\Middleware\ResetsMapFacadeStyleOverride;
 use App\Http\Middleware\StartSessionUnlessThrowaway;
 use App\Http\Middleware\TracksUserIpAddress;
@@ -99,6 +100,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->replace(\Illuminate\Http\Middleware\TrustProxies::class, TrustProxies::class);
 
         $middleware->web(replace: [StartSession::class => StartSessionUnlessThrowaway::class]);
+
+        $middleware->appendToGroup('web', RedirectRetiredGameVersion::class);
+        $middleware->appendToGroup('api', RedirectRetiredGameVersion::class);
 
         $middleware->alias([
             'ajax'                      => OnlyAjax::class,

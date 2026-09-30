@@ -36,7 +36,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
                 'name'         => 'gameversions.wotlk.name',
                 'description'  => 'gameversions.wotlk.description',
                 'has_seasons'  => false,
-                'active'       => true,
+                'active'       => false,
             ],
             [
                 'expansion_id' => Expansion::ALL[Expansion::EXPANSION_TWW],
@@ -52,7 +52,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
                 'name'         => 'gameversions.cata.name',
                 'description'  => 'gameversions.cata.description',
                 'has_seasons'  => false,
-                'active'       => true,
+                'active'       => false,
             ],
             [
                 'expansion_id' => Expansion::ALL[Expansion::EXPANSION_MOP],
@@ -68,7 +68,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
                 'name'         => 'gameversions.legion-remix.name',
                 'description'  => 'gameversions.legion-remix.description',
                 'has_seasons'  => false,
-                'active'       => true,
+                'active'       => false,
             ],
             [
                 'expansion_id' => Expansion::ALL[Expansion::EXPANSION_CLASSIC],
