@@ -185,7 +185,9 @@ class EnemyForcesCheckpointVisual {
         for (let index in enemies) {
             let enemy = enemies[index];
 
-            if ((enemy.source_floor_id ?? enemy.floor_id) === currentFloorId) {
+            // Not source_floor_id: in the facade layout lat/lng are facade-floor coordinates, meaningless
+            // on the real floor that source_floor_id names.
+            if (enemy.floor_id === currentFloorId) {
                 latLngs.push({lat: enemy.lat, lng: enemy.lng});
             }
         }
