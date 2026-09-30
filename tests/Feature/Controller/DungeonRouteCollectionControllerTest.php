@@ -70,6 +70,44 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenAnotherUsersCollection_doesNotListIt(): void
+    {
+        // Arrange
+        $creator     = $this->createCreator();
+        $someoneElse = $this->createCreator();
+        $creator->update(['game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL]]);
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $ownCollection     = null;
+        $foreignCollection = null;
+
+        try {
+            $ownCollection = DungeonRouteCollection::factory()->create([
+                'user_id' => $creator->id,
+                'name'    => 'ZzTestCollectionOfMine',
+            ]);
+            $foreignCollection = DungeonRouteCollection::factory()->create([
+                'user_id' => $someoneElse->id,
+                'name'    => 'ZzTestCollectionOfSomeoneElse',
+            ]);
+
+            // Act
+            $response = $this->actingAs($creator)->get(route('collections.index'));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$ownCollection->id], $response->viewData('dungeonRouteCollections')->pluck('id')->all());
+            $response->assertDontSee('ZzTestCollectionOfSomeoneElse');
+        } finally {
+            $foreignCollection?->delete();
+            $ownCollection?->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $someoneElse->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function index_givenAnyUser_pointsAtTagsForPrivateOrganizing(): void
     {
         // Arrange
@@ -979,6 +1017,71 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function edit_givenAnotherUsersCollection_returnsForbidden(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        $viewer  = $this->createCreator();
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(
+                route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+            );
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $viewer->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenAnotherUsersCollection_returnsForbiddenAndKeepsIt(): void
+    {
+        // Arrange
+        $creator      = $this->createCreator();
+        $viewer       = $this->createCreator();
+        $dungeonRoute = $this->createRouteFor($creator);
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $dungeonRoute->id,
+            'order'                       => 0,
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->delete(
+                route('collections.delete', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+            );
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNotNull(DungeonRouteCollection::find($dungeonRouteCollection->id));
+            $this->assertSame(
+                1,
+                DungeonRouteCollectionRoute::where('dungeon_route_collection_id', $dungeonRouteCollection->id)->count(),
+            );
+        } finally {
+            DungeonRouteCollectionRoute::where('dungeon_route_collection_id', $dungeonRouteCollection->id)->delete();
+            DungeonRouteCollection::where('id', $dungeonRouteCollection->id)->delete();
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $dungeonRoute->delete();
+            $viewer->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function update_givenThePublishedStateWasRaisedWithALessVisibleRouteInIt_offersToRaiseTheRouteToo(): void
     {
         // Arrange
@@ -1829,9 +1932,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     /**
-     * A retail mapping version of a challenge mode dungeon, so a route on it may join a retail collection.
-     */
-    /**
      * A retail mapping version of another challenge mode dungeon than retailMappingVersion()'s.
      */
     private function otherRetailMappingVersion(): MappingVersion
@@ -1844,6 +1944,9 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             ->firstOrFail();
     }
 
+    /**
+     * A retail mapping version of a challenge mode dungeon, so a route on it may join a retail collection.
+     */
     private function retailMappingVersion(): MappingVersion
     {
         return MappingVersion::query()
@@ -1853,11 +1956,6 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             ->firstOrFail();
     }
 
-    /**
-     * The ids the ordered pick list renders for a field, in list order. Its row template carries id 0.
-     *
-     * @return array<int, int>
-     */
     /**
      * The public keys the rendered lists hold, in page order.
      *
