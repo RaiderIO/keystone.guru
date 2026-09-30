@@ -132,6 +132,9 @@ COPY usr/local/etc/php/conf.d/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 # the infra config bucket, which additionally enables OPcache for CLI.
 COPY usr/local/etc/php/conf.d/jit.ini /usr/local/etc/php/conf.d/jit.ini
 
+# Kept out of jit.ini so it also reaches the production Swoole container, which overwrites jit.ini.
+COPY usr/local/etc/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+
 # Only copy this file over to prevent overriding the entire folder which will be changed by docker-php-ext-enable
 COPY usr/local/etc/php-fpm.d/ /usr/local/etc/php-fpm.d/
 
