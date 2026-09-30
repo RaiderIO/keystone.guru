@@ -168,6 +168,7 @@ describe('CommonDungeonroutePicker', () => {
         globalThis.refreshSelectPickers          = vi.fn();
         globalThis.showConfirmYesCancel          = vi.fn();
         globalThis.getHandlebarsDefaultVariables = () => MESSAGES['en.js'];
+        globalThis.isColorDark                   = () => false;
         globalThis.Handlebars                    = Handlebars;
         Handlebars.templates = {};
         ['dungeonroute_picker_row', 'affixgroup_select_option_template'].forEach((name) => {
@@ -1155,5 +1156,49 @@ describe('CommonDungeonroutePicker', () => {
         expect(checkbox.checked).toBe(false);
         expect(checkbox.disabled).toBe(false);
         expect(rowOf('existing').querySelector('.route_picker_already_in').hidden).toBe(true);
+    });
+
+    it('render_givenShowTagsAndATaggedRoute_rendersOneChipPerTag', () => {
+        // Arrange
+        picker.options.showTags = true;
+        jQuery('#picker').trigger('show.bs.offcanvas');
+
+        // Act
+        respondWithRoutes([
+            route('tagged', {tagspersonal: [{name: 'WIP', color: '#ff0000'}, {name: 'Guild', color: null}]}),
+            route('plain', {tagspersonal: []}),
+        ]);
+
+        // Assert
+        const chips = rowOf('tagged').querySelectorAll('.route_picker_tag');
+        expect(Array.from(chips).map((chip) => chip.textContent.trim())).toEqual(['WIP', 'Guild']);
+        expect(chips[0].getAttribute('style')).toContain('#ff0000');
+        expect(rowOf('plain').querySelector('.route_picker_tags')).toBeNull();
+    });
+
+    it('render_givenUncolouredTag_usesOnlyTheThemeBadgeColours', () => {
+        // Arrange
+        picker.options.showTags = true;
+        jQuery('#picker').trigger('show.bs.offcanvas');
+
+        // Act
+        respondWithRoutes([route('tagged', {tagspersonal: [{name: 'Guild', color: null}]})]);
+
+        // Assert
+        const chip = rowOf('tagged').querySelector('.route_picker_tag');
+        expect(chip.classList.contains('text-bg-primary')).toBe(true);
+        expect(chip.classList.contains('text-dark')).toBe(false);
+        expect(chip.classList.contains('text-white')).toBe(false);
+    });
+
+    it('render_givenShowTagsOff_rendersNoTagContainer', () => {
+        // Arrange
+        jQuery('#picker').trigger('show.bs.offcanvas');
+
+        // Act
+        respondWithRoutes([route('tagged', {tagspersonal: [{name: 'WIP', color: null}]})]);
+
+        // Assert
+        expect(rowOf('tagged').querySelector('.route_picker_tags')).toBeNull();
     });
 });

@@ -5,9 +5,14 @@ namespace Tests\Feature\View\Common\DungeonRoute;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\Models\Team;
+use App\Models\User;
+use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\ViewException;
 use InvalidArgumentException;
@@ -284,6 +289,60 @@ final class PickerTest extends PublicTestCase
         $this->assertSame(['team_public_key' => 'abc1234', 'available' => 1], $options['sourceParameters']);
         $this->assertStringContainsString('Picker Raiders', $html);
         $this->assertStringNotContainsString('id="test_picker_tags"', $html);
+    }
+
+    #[Test]
+    public function render_givenTheMineScope_offersOnlyTagsOnARouteAndTellsTheScriptToShowThem(): void
+    {
+        // Arrange
+        $user             = null;
+        $filterSearchTags = null;
+
+        try {
+            $user = User::factory()->create();
+            foreach ([['Carried', 1], ['Carried', 2], ['Orphan', null]] as [$name, $modelId]) {
+                Tag::query()->create([
+                    'context_id'      => $user->id,
+                    'context_class'   => User::class,
+                    'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL],
+                    'model_id'        => $modelId,
+                    'model_class'     => DungeonRoute::class,
+                    'name'            => $name,
+                ]);
+            }
+            View::composer('common.dungeonroute.tablefilters', static function (ViewContract $view) use (&$filterSearchTags): void {
+                $filterSearchTags = $view->getData()['searchTags'];
+            });
+            $this->actingAs($user);
+
+            // Act
+            [$html, $options] = $this->renderPicker();
+
+            // Assert
+            $this->assertTrue($options['showTags']);
+            $this->assertSame(['Carried'], $filterSearchTags->pluck('name')->all());
+            $this->assertContainsOnlyInstancesOf(Tag::class, $filterSearchTags);
+            $this->assertSame(1, substr_count($html, '<option value="Carried">'));
+            $this->assertStringNotContainsString('<option value="Orphan">', $html);
+        } finally {
+            if ($user !== null) {
+                Tag::query()->where('context_id', $user->id)->where('context_class', User::class)->delete();
+                $user->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function render_givenTheUnassignedByMembersScope_doesNotShowRouteTags(): void
+    {
+        // Arrange
+        $team = new Team(['name' => 'Picker Raiders', 'public_key' => 'abc1234']);
+
+        // Act
+        [, $options] = $this->renderPicker(['sourceScope' => 'unassigned_by_members', 'sourceTeam' => $team]);
+
+        // Assert
+        $this->assertFalse($options['showTags']);
     }
 
     #[Test]

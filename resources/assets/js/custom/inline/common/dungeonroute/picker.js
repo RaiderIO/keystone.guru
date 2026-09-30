@@ -366,7 +366,7 @@ class CommonDungeonroutePicker extends SearchInlineBase {
             self._dungeonRoutes[dungeonRoute.publicKey] = dungeonRoute;
 
             return template($.extend({}, getHandlebarsDefaultVariables(),
-                dungeonRoute.toTemplateData(self.options.fallbackImageBaseUrl)));
+                dungeonRoute.toTemplateData(self.options.fallbackImageBaseUrl, !!self.options.showTags)));
         }).join(''));
 
         this._refreshRows();

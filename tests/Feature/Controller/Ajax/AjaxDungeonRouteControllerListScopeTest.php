@@ -11,6 +11,8 @@ use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\Season;
+use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -329,6 +331,40 @@ final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
             // A sandbox route never shows up in a route table
             'expires_at' => null,
         ], $attributes));
+    }
+
+    #[Test]
+    public function get_givenMineScopeAndATaggedRoute_returnsThePersonalTagsOfTheRoute(): void
+    {
+        // Arrange
+        $user  = null;
+        $route = null;
+
+        try {
+            $user  = $this->createUserWithUserRole();
+            $route = $this->createOwnRoute($user);
+            Tag::query()->create([
+                'context_id'      => $user->id,
+                'context_class'   => User::class,
+                'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL],
+                'model_id'        => $route->id,
+                'model_class'     => DungeonRoute::class,
+                'name'            => 'Pickable',
+                'color'           => '#ff0000',
+            ]);
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->get($this->mineQuery([]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame(['Pickable'], array_column($response->json('data.0.tagspersonal'), 'name'));
+        } finally {
+            Tag::query()->where('context_id', $user?->id)->where('context_class', User::class)->delete();
+            $route?->delete();
+            $user?->delete();
+        }
     }
 
     /**

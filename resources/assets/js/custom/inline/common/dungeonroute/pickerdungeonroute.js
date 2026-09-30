@@ -53,6 +53,19 @@ class PickerDungeonRoute {
     }
 
     /**
+     * @returns {{name: string, color: string|null, dark: boolean}[]}
+     */
+    getTags() {
+        let tags = this.json.tagspersonal ?? this.json.tagsteam ?? [];
+
+        return tags.map(tag => ({
+            name: tag.name,
+            color: tag.color ?? null,
+            dark: tag.color ? isColorDark(tag.color) : false,
+        }));
+    }
+
+    /**
      * @param {string} fallbackImageBaseUrl
      * @returns {string}
      */
@@ -177,13 +190,15 @@ class PickerDungeonRoute {
 
     /**
      * @param {string} fallbackImageBaseUrl
+     * @param {boolean} showTags Whether the row lists the route's tags.
      * @returns {Object} The variables of the dungeonroute_picker_row template.
      */
-    toTemplateData(fallbackImageBaseUrl) {
+    toTemplateData(fallbackImageBaseUrl, showTags = false) {
         return {
             public_key: this.publicKey,
             title: this.title,
             dungeon_name: this.getDungeonName(),
+            tags: showTags ? this.getTags() : [],
             thumbnail_url: this.getThumbnailUrl(fallbackImageBaseUrl),
             is_unpublished: this.isUnpublished(),
             key_range: this.getKeyRangeText(),
