@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int|null $linked_dungeon_floor_switch_marker_id
  * @property float    $lat
  * @property float    $lng
- * @property string   $direction
+ * @property ?string  $direction
  * @property bool     $hidden_in_facade
  * @property string   $floorCouplingDirection
  *
