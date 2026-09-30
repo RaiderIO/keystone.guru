@@ -37,8 +37,7 @@ abstract class MapContextMappingVersion extends MapContextBase
         return array_merge(parent::toArray(), [
             'teeming'       => true,
             'seasonalIndex' => -1,
-            // First should be unspecified
-            'faction' => __(strtolower((string)Faction::where('key', Faction::FACTION_UNSPECIFIED)->first()->name)),
+            'faction'       => Faction::FACTION_ANY,
         ]);
     }
 }
