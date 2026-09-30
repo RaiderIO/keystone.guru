@@ -9,6 +9,7 @@ use App\Models\EnemyPack;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Polyline;
+use App\Models\User;
 use App\Service\Mapping\MappingServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
@@ -164,6 +165,43 @@ final class MappingVersionControllerAtomicityTest extends PublicTestCase
             Event::forget('eloquent.deleting: ' . MapIcon::class);
             $newMappingVersion->fresh()?->delete();
         }
+    }
+
+    #[Test]
+    public function saveNew_givenUnknownAction_returnsInternalServerErrorAndCreatesNothing(): void
+    {
+        // Arrange
+        $dungeon                   = Dungeon::active()->whereHas('mappingVersions')->firstOrFail();
+        $gameVersionId             = $dungeon->mappingVersions()->value('game_version_id');
+        $mappingVersionCountBefore = MappingVersion::query()->where('dungeon_id', $dungeon->id)->count();
+
+        // Act
+        $response = $this->actingAs(User::findOrFail(1))->get(route('admin.mappingversion.new', [
+            'dungeon'      => $dungeon,
+            'game_version' => $gameVersionId,
+            'action'       => 'Not an action',
+        ]));
+
+        // Assert
+        $response->assertInternalServerError();
+        $this->assertSame($mappingVersionCountBefore, MappingVersion::query()->where('dungeon_id', $dungeon->id)->count());
+    }
+
+    #[Test]
+    public function saveNew_givenUnknownGameVersion_returnsNotFound(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::active()->whereHas('mappingVersions')->firstOrFail();
+
+        // Act
+        $response = $this->actingAs(User::findOrFail(1))->get(route('admin.mappingversion.new', [
+            'dungeon'      => $dungeon,
+            'game_version' => 999999,
+            'action'       => 'Add mapping version',
+        ]));
+
+        // Assert
+        $response->assertNotFound();
     }
 
     private function countEnemyPackPolylines(MappingVersion $mappingVersion): int

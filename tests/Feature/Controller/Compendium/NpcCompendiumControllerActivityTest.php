@@ -17,12 +17,15 @@ use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('Compendium')]
 final class NpcCompendiumControllerActivityTest extends PublicTestCase
 {
+    use CreatesDungeon;
+
     private const int TEST_SPELL_ID = 9995098;
 
     private Dungeon $dungeon;
@@ -49,11 +52,45 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     #[Test]
     public function activityIndex_givenAdmin_redirectsToDungeon(): void
     {
-        // Act
-        $response = $this->get(route('compendium.activity.index'));
+        // Arrange - a context dungeon of the current season, so it is the one the index must bounce to
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $this->dungeon->id;
+        $user->save();
 
-        // Assert
-        $response->assertRedirect();
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('compendium.activity.index'));
+
+            // Assert
+            $response->assertRedirect(route('compendium.activity', ['dungeon' => $this->dungeon]));
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
+    public function activity_givenDungeonOutsideCurrentSeason_redirectsToContextDungeon(): void
+    {
+        // Arrange - an active dungeon of no season at all, and a context dungeon of the current one
+        $dungeonOutsideSeason = $this->createDungeon(['active' => true]);
+        $user                 = User::findOrFail(1);
+        $originalDungeonId    = $user->dungeon_id;
+        $user->dungeon_id     = $this->dungeon->id;
+        $user->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('compendium.activity', $dungeonOutsideSeason));
+
+            // Assert
+            $response->assertRedirect(route('compendium.activity', ['dungeon' => $this->dungeon]));
+            $this->assertSame($this->dungeon->id, User::findOrFail(1)->dungeon_id);
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
     }
 
     #[Test]
@@ -184,24 +221,7 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
         $uniqueDate = '2025-06-16';
         $npcId      = DB::table('npc_dungeons')->where('dungeon_id', $this->dungeon->id)->value('npc_id');
 
-        $spell = Spell::create([
-            'id'              => self::TEST_SPELL_ID,
-            'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA],
-            'dispel_type'     => '',
-            'mechanic'        => '',
-            'icon_name'       => '',
-            'name'            => 'TestActivityDaySpell',
-            'schools_mask'    => 1,
-            'miss_types_mask' => 0,
-            'aura'            => false,
-            'debuff'          => false,
-            'cast_time'       => 0,
-            'duration'        => 0,
-            'selectable'      => false,
-            'hidden_on_map'   => false,
-            'fetched_data_at' => now(),
-        ]);
-        NpcSpell::create(['npc_id' => $npcId, 'spell_id' => self::TEST_SPELL_ID]);
+        $spell = $this->createTestSpellOnNpc($npcId);
 
         // insert(), not create(): created_at is not fillable so create() silently drops it
         $eventId = CombatLogSpellEvent::query()->insertGetId([
@@ -240,10 +260,11 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     {
         // Arrange - a "something started applying" event from each of the NPC and spell tables,
         // on the same unique day, must render with the same icon/color regardless of which table
-        // the event came from
+        // the event came from. The spell is cast by an NPC of the dungeon, or its event is not in the feed at all
         $uniqueDate       = '2025-07-21';
         $npcId            = DB::table('npc_dungeons')->where('dungeon_id', $this->dungeon->id)->value('npc_id');
         $characteristicId = Characteristic::query()->orderBy('id')->value('id');
+        $this->createTestSpellOnNpc($npcId);
 
         $npcEventId = CombatLogNpcEvent::query()->insertGetId([
             'npc_id'      => $npcId,
@@ -271,9 +292,20 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
                 '<i class="fas fa-plus"></i>',
             ], false);
             $response->assertDontSee('fa-arrow-up');
+
+            $content = (string)$response->getContent();
+            foreach ([sprintf('npc-event-%d', $npcEventId), sprintf('spell-event-%d', $spellEventId)] as $anchorId) {
+                $this->assertStringContainsString(
+                    '<span class="compendium_log_icon text-success">',
+                    $this->getEventRowHtml($content, $anchorId),
+                    sprintf('Row %s does not carry the "added" glyph', $anchorId),
+                );
+            }
         } finally {
             CombatLogNpcEvent::query()->where('id', $npcEventId)->delete();
             CombatLogSpellEvent::query()->where('id', $spellEventId)->delete();
+            NpcSpell::query()->where('spell_id', self::TEST_SPELL_ID)->delete();
+            Spell::query()->where('id', self::TEST_SPELL_ID)->delete();
         }
     }
 
@@ -282,10 +314,11 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     {
         // Arrange - a "something stopped applying" event from each of the NPC and spell tables, on
         // the same unique day, must render with the same icon/color regardless of which table the
-        // event came from
+        // event came from. The spell is cast by an NPC of the dungeon, or its event is not in the feed at all
         $uniqueDate       = '2025-07-22';
         $npcId            = DB::table('npc_dungeons')->where('dungeon_id', $this->dungeon->id)->value('npc_id');
         $characteristicId = Characteristic::query()->orderBy('id')->value('id');
+        $this->createTestSpellOnNpc($npcId);
 
         $npcEventId = CombatLogNpcEvent::query()->insertGetId([
             'npc_id'      => $npcId,
@@ -312,9 +345,20 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
                 '<i class="fas fa-minus"></i>',
             ], false);
             $response->assertDontSee('fa-times');
+
+            $content = (string)$response->getContent();
+            foreach ([sprintf('npc-event-%d', $npcEventId), sprintf('spell-event-%d', $spellEventId)] as $anchorId) {
+                $this->assertStringContainsString(
+                    '<span class="compendium_log_icon text-danger">',
+                    $this->getEventRowHtml($content, $anchorId),
+                    sprintf('Row %s does not carry the "removed" glyph', $anchorId),
+                );
+            }
         } finally {
             CombatLogNpcEvent::query()->where('id', $npcEventId)->delete();
             CombatLogSpellEvent::query()->where('id', $spellEventId)->delete();
+            NpcSpell::query()->where('spell_id', self::TEST_SPELL_ID)->delete();
+            Spell::query()->where('id', self::TEST_SPELL_ID)->delete();
         }
     }
 
@@ -326,5 +370,56 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
 
         // Assert
         $response->assertNotFound();
+    }
+
+    #[Test]
+    public function activityDay_givenNonExistentCalendarDate_returnsNotFound(): void
+    {
+        // Act - well-formed, but Carbon would roll it over into March 2nd
+        $response = $this->get(route('compendium.activity.day', ['dungeon' => $this->dungeon, 'date' => '2025-02-30']));
+
+        // Assert
+        $response->assertNotFound();
+    }
+
+    /**
+     * A spell cast by the given NPC, which is what puts the spell's events in that NPC's dungeon feed.
+     */
+    private function createTestSpellOnNpc(int $npcId): Spell
+    {
+        $spell = Spell::create([
+            'id'              => self::TEST_SPELL_ID,
+            'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA],
+            'dispel_type'     => '',
+            'mechanic'        => '',
+            'icon_name'       => '',
+            'name'            => 'TestActivityDaySpell',
+            'schools_mask'    => 1,
+            'miss_types_mask' => 0,
+            'aura'            => false,
+            'debuff'          => false,
+            'cast_time'       => 0,
+            'duration'        => 0,
+            'selectable'      => false,
+            'hidden_on_map'   => false,
+            'fetched_data_at' => now(),
+        ]);
+        NpcSpell::create(['npc_id' => $npcId, 'spell_id' => self::TEST_SPELL_ID]);
+
+        return $spell;
+    }
+
+    /**
+     * The markup of one event row, from its anchor up to the next row.
+     */
+    private function getEventRowHtml(string $content, string $anchorId): string
+    {
+        $start = strpos($content, sprintf('id="%s"', $anchorId));
+        $this->assertNotFalse($start, sprintf('No row rendered for event %s', $anchorId));
+
+        $rowClass = 'class="compendium_log_row"';
+        $end      = strpos($content, $rowClass, (int)strpos($content, $rowClass, $start) + strlen($rowClass));
+
+        return $end === false ? substr($content, $start) : substr($content, $start, $end - $start);
     }
 }

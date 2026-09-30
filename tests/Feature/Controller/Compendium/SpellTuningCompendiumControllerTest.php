@@ -219,6 +219,26 @@ final class SpellTuningCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function indexDungeon_givenDungeonOtherThanContextDungeon_makesItTheContextDungeon(): void
+    {
+        // Arrange - a guest's context lives in a cookie tests cannot read, so this goes through a user's column
+        $dungeon           = $this->createDungeon(['active' => true]);
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->get(route('compendium.tuning', ['dungeon' => $dungeon]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame($dungeon->id, User::findOrFail(1)->dungeon_id);
+        } finally {
+            User::query()->whereKey($user->id)->update(['dungeon_id' => $originalDungeonId]);
+        }
+    }
+
+    #[Test]
     public function index_givenBuildWithoutChanges_rendersItWithNoChangesMessage(): void
     {
         // Arrange
