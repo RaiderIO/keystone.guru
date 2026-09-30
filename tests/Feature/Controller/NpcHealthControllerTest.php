@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Controller;
 
+use App\Models\GameVersion\GameVersion;
+use App\Models\Laratrust\Role;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcHealth;
 use App\Models\User;
@@ -9,12 +11,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\CreatesNpc;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('Npc')]
 final class NpcHealthControllerTest extends PublicTestCase
 {
+    use CreatesNpc;
+
     private const int CLASSIFICATIONLESS_NPC_ID = 999999601;
 
     /** npcs.json seeds a few NPCs with this classification_id (e.g. Freehold's emissaries 155432-155434); no npc_classifications row has it */
@@ -113,6 +118,127 @@ final class NpcHealthControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
+    }
+
+    #[Test]
+    public function savenew_givenValidHealth_createsNpcHealthAndRedirectsToItsEditPage(): void
+    {
+        // Arrange
+        $npc = $this->createNpcInDatabase();
+
+        try {
+            // Act
+            $response = $this->post(route('admin.npc.npchealth.savenew', ['npc' => $npc->id]), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+                'health'          => '1,234,567',
+                'percentage'      => 100,
+            ]);
+
+            // Assert
+            $npcHealth = NpcHealth::query()->where('npc_id', $npc->id)->firstOrFail();
+            $response->assertRedirect(route('admin.npc.npchealth.edit', ['npc' => $npc, 'npcHealth' => $npcHealth]));
+            $response->assertSessionHas('status', __('view_admin.npchealth.flash.npc_health_created'));
+            $this->assertSame(GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL], $npcHealth->game_version_id);
+            $this->assertSame(1234567, $npcHealth->health);
+            $this->assertNull($npcHealth->percentage);
+        } finally {
+            NpcHealth::query()->where('npc_id', $npc->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function savenew_givenNonNumericHealth_returnsValidationErrorAndCreatesNothing(): void
+    {
+        // Arrange
+        $npc = $this->createNpcInDatabase();
+
+        try {
+            // Act
+            $response = $this->post(route('admin.npc.npchealth.savenew', ['npc' => $npc->id]), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+                'health'          => 'lots',
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('health');
+            $this->assertFalse(NpcHealth::query()->where('npc_id', $npc->id)->exists());
+        } finally {
+            NpcHealth::query()->where('npc_id', $npc->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenValidHealth_updatesNpcHealthAndRedirectsToItsEditPage(): void
+    {
+        // Arrange
+        $npc       = $this->createNpcInDatabase();
+        $npcHealth = NpcHealth::query()->create([
+            'npc_id'          => $npc->id,
+            'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+            'health'          => 1000,
+        ]);
+
+        try {
+            // Act
+            $response = $this->patch(route('admin.npc.npchealth.update', ['npc' => $npc->id, 'npcHealth' => $npcHealth->id]), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+                'health'          => '2.500',
+                'percentage'      => 50,
+            ]);
+
+            // Assert
+            $response->assertRedirect(route('admin.npc.npchealth.edit', ['npc' => $npc, 'npcHealth' => $npcHealth]));
+            $response->assertSessionHas('status', __('view_admin.npchealth.flash.npc_health_updated'));
+            $npcHealth->refresh();
+            $this->assertSame(2500, $npcHealth->health);
+            $this->assertSame(50, $npcHealth->percentage);
+        } finally {
+            NpcHealth::query()->where('npc_id', $npc->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenNpcHealth_deletesItAndRedirectsToTheNpc(): void
+    {
+        // Arrange
+        $npc       = $this->createNpcInDatabase();
+        $npcHealth = NpcHealth::query()->create([
+            'npc_id'          => $npc->id,
+            'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+            'health'          => 1000,
+        ]);
+
+        try {
+            // Act
+            $response = $this->delete(route('admin.npc.npchealth.delete', ['npc' => $npc->id, 'npcHealth' => $npcHealth->id]));
+
+            // Assert
+            $response->assertRedirect(route('admin.npc.edit', ['npc' => $npc]));
+            $response->assertSessionHas('status', __('view_admin.npchealth.flash.npc_health_deleted'));
+            $this->assertFalse(NpcHealth::query()->whereKey($npcHealth->id)->exists());
+        } finally {
+            NpcHealth::query()->where('npc_id', $npc->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenNonAdmin_returnsForbidden(): void
+    {
+        // Arrange
+        $npcHealth = $this->getSeededNpcHealthWithDungeons();
+        $user      = User::factory()->create();
+        $user->addRole(Role::firstWhere('name', Role::ROLE_USER));
+
+        try {
+            // Act
+            $response = $this->actingAs($user)
+                ->get(route('admin.npc.npchealth.edit', ['npc' => $npcHealth->npc_id, 'npcHealth' => $npcHealth->id]));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $user->delete();
+        }
     }
 
     private function getSeededNpcHealthWithDungeons(): NpcHealth

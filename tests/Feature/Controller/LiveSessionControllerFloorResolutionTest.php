@@ -41,7 +41,68 @@ final class LiveSessionControllerFloorResolutionTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
+            $response->assertViewHas('floor', static fn(Floor $renderedFloor) => $renderedFloor->id === $floor->id);
+            $response->assertViewHas('liveSession', static fn(LiveSession $renderedLiveSession) => $renderedLiveSession->id === $liveSession->id);
         } finally {
+            $this->cleanupLiveSession($liveSession, $route, $owner);
+        }
+    }
+
+    #[Test]
+    public function viewFloor_givenExpiredLiveSession_returnsGone(): void
+    {
+        // Arrange
+        [$owner, $route, $liveSession] = $this->createLiveSession();
+        LiveSession::query()->whereKey($liveSession->id)->update(['expires_at' => now()->subMinute()]);
+
+        try {
+            $this->be($owner);
+
+            // Act
+            $response = $this->get(route('dungeonroute.livesession.viewfloor', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+                'liveSession'  => $liveSession,
+                'floorIndex'   => 1,
+            ]));
+
+            // Assert
+            $response->assertGone();
+        } finally {
+            $this->cleanupLiveSession($liveSession, $route, $owner);
+        }
+    }
+
+    #[Test]
+    public function viewFloor_givenLiveSessionOfAnotherRoute_returnsNotFound(): void
+    {
+        // Arrange
+        [$owner, $route, $liveSession] = $this->createLiveSession();
+        $otherRoute                    = null;
+
+        try {
+            $otherRoute = DungeonRoute::factory()->create([
+                'dungeon_id'         => $route->dungeon_id,
+                'author_id'          => $owner->id,
+                'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+                'expires_at'         => null,
+            ]);
+            $this->be($owner);
+
+            // Act
+            $response = $this->get(route('dungeonroute.livesession.viewfloor', [
+                'dungeon'      => $otherRoute->dungeon,
+                'dungeonroute' => $otherRoute,
+                'title'        => $otherRoute->getTitleSlug(),
+                'liveSession'  => $liveSession,
+                'floorIndex'   => 1,
+            ]));
+
+            // Assert
+            $response->assertNotFound();
+        } finally {
+            $otherRoute?->delete();
             $this->cleanupLiveSession($liveSession, $route, $owner);
         }
     }

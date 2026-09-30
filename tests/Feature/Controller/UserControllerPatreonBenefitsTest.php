@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller;
 
 use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
+use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
 use Illuminate\Support\Carbon;
@@ -66,6 +67,35 @@ final class UserControllerPatreonBenefitsTest extends PublicTestCase
 
             $this->assertTrue(
                 $user->patreonUserLink->patreonBenefits()->where('patreon_benefits.id', PatreonBenefit::ALL[PatreonBenefit::AD_FREE])->exists(),
+            );
+        } finally {
+            $user->patreonUserLink()->first()?->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function storePatreonBenefits_givenUserWithExistingBenefits_replacesThemWithTheSubmittedSet(): void
+    {
+        // Arrange
+        $user = $this->createPatreonLinkedUser();
+        $user->patreonUserLink->patreonBenefits()->attach(PatreonBenefit::ALL[PatreonBenefit::AD_FREE]);
+
+        try {
+            // Act
+            $response = $this->put("/ajax/user/{$user->id}/patreon/benefits", [
+                'patreonBenefits' => [PatreonBenefit::ALL[PatreonBenefit::UNLISTED_ROUTES]],
+            ], self::AJAX_HEADERS);
+
+            // Assert
+            $response->assertNoContent();
+
+            $this->assertSame(
+                [PatreonBenefit::ALL[PatreonBenefit::UNLISTED_ROUTES]],
+                PatreonUserBenefit::query()
+                    ->where('patreon_user_link_id', $user->patreon_user_link_id)
+                    ->pluck('patreon_benefit_id')
+                    ->all(),
             );
         } finally {
             $user->patreonUserLink()->first()?->delete();

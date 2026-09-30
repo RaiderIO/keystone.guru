@@ -8,9 +8,11 @@ use App\Models\Patreon\PatreonManualGrant;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
+use App\Service\Patreon\PatreonServiceInterface;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use RuntimeException;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
@@ -40,6 +42,7 @@ final class UserControllerGrantAllBenefitsTest extends PublicTestCase
 
             // Assert
             $response->assertRedirect(route('admin.users'));
+            $response->assertSessionHas('status', __('controller.user.flash.all_benefits_granted_successfully'));
 
             $user->refresh();
             $this->assertNotNull($user->patreon_user_link_id);
@@ -163,6 +166,31 @@ final class UserControllerGrantAllBenefitsTest extends PublicTestCase
                 ->where('patreon_user_link_id', $user->refresh()->patreon_user_link_id)
                 ->count());
             $this->assertSame(1, PatreonManualGrant::query()->active()->where('user_id', $user->id)->count());
+        } finally {
+            $this->cleanUp($user);
+        }
+    }
+
+    #[Test]
+    public function grantAllBenefits_givenServiceFailure_redirectsWithWarningFlash(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+
+        $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
+        $patreonService->expects($this->once())
+            ->method('grantAllBenefits')
+            ->willThrowException(new RuntimeException('Simulated grant failure'));
+        app()->instance(PatreonServiceInterface::class, $patreonService);
+
+        try {
+            // Act
+            $response = $this->post("/admin/user/{$user->id}/grantAllBenefits", ['reason' => self::REASON]);
+
+            // Assert
+            $response->assertRedirect(route('admin.users'));
+            $response->assertSessionHas('warning', __('controller.user.flash.error_granting_all_benefits'));
+            $response->assertSessionMissing('status');
         } finally {
             $this->cleanUp($user);
         }

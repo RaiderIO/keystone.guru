@@ -41,5 +41,6 @@ final class MDTImportControllerTest extends PublicTestCase
 
         // Assert
         $response->assertBadRequest();
+        $response->assertJson(['message' => __('controller.mdtimport.error.mdt_string_parsing_failed')]);
     }
 }
