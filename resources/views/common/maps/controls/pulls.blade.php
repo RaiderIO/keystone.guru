@@ -73,6 +73,10 @@ $showAds                ??= true;
                                 <i class='fas fa-cog'></i>
                             </button>
                         </div>
+                        <div class="col-auto ps-2 d-flex align-items-center" data-bs-toggle="tooltip"
+                             title="{{ __('view_common.maps.controls.pulls.cycle_pulls_hotkey_title') }}">
+                            <i class="fas fa-keyboard"></i>
+                        </div>
                         <div class="col ps-2 pe-2">
                             <div id="killzones_new_pull" class="btn btn-success w-100">
                                 <i class="fas fa-plus"></i> {{__('view_common.maps.controls.pulls.new_pull')}}
@@ -99,6 +103,10 @@ $showAds                ??= true;
                         <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#map_settings_modal">
                             <i class='fas fa-cog'></i>
                         </button>
+                    </div>
+                    <div class="col-auto ps-2 d-flex align-items-center" data-bs-toggle="tooltip"
+                         title="{{ __('view_common.maps.controls.pulls.cycle_pulls_hotkey_title') }}">
+                        <i class="fas fa-keyboard"></i>
                     </div>
                     <div class="col">
                         @if( $dungeon->speedrun_enabled )
