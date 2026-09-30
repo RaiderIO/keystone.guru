@@ -88,6 +88,9 @@ final class DungeonRouteViewSidebarTest extends PublicTestCase
             // Assert
             $response->assertOk();
             $response->assertSee(__('view_common.maps.controls.elements.rating.unable_to_rate_own_route'));
+            $ratingDropdown = $this->ratingDropdownHtml((string)$response->getContent());
+            $this->assertStringContainsString(e(__('view_common.maps.controls.elements.rating.unable_to_rate_own_route')), $ratingDropdown);
+            $this->assertStringNotContainsString(e(__('view_common.maps.controls.elements.rating.your_rating')), $ratingDropdown);
         } finally {
             $route->delete();
             $owner->delete();
@@ -117,6 +120,20 @@ final class DungeonRouteViewSidebarTest extends PublicTestCase
             $owner->delete();
             $nonOwner->delete();
         }
+    }
+
+    /**
+     * The header's live-session notice repeats the rating notice's text, so the rating dropdown is asserted on by itself.
+     */
+    private function ratingDropdownHtml(string $content): string
+    {
+        $start = strpos($content, 'id="map_rating_dropdown"');
+        $this->assertNotFalse($start, 'The page must render the rating dropdown.');
+
+        $end = strpos($content, '</div>', $start);
+        $this->assertNotFalse($end);
+
+        return substr($content, $start, $end - $start);
     }
 
     /**

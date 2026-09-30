@@ -354,6 +354,120 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
     }
 
     #[Test]
+    public function upgrade_givenNonOwner_returnsForbiddenAndCreatesNoDraft(): void
+    {
+        try {
+            // Arrange
+            $owner    = $this->createUser();
+            $nonOwner = $this->createUser();
+            $route    = $this->createOutdatedRoute($owner);
+
+            // Act
+            $response = $this->actingAs($nonOwner)->get(route('dungeonroute.upgrade', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+            ]));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame(0, DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $route->id)->count());
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function applyUpgrade_givenNonOwner_returnsForbiddenAndKeepsDraft(): void
+    {
+        try {
+            // Arrange
+            $owner    = $this->createUser();
+            $nonOwner = $this->createUser();
+            $route    = $this->createOutdatedRoute($owner);
+            $draft    = app(DungeonRouteUpgradeDraftServiceInterface::class)->findOrCreateDraft($route);
+            $this->killRequiredEnemiesOn($draft);
+
+            // Act
+            $response = $this->actingAs($nonOwner)->post(route('dungeonroute.upgrade.apply', [
+                'dungeon'      => $draft->dungeon,
+                'dungeonroute' => $draft,
+                'title'        => $draft->getTitleSlug(),
+            ]));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNotNull(DungeonRoute::find($draft->id), 'A forbidden Apply must not delete the draft');
+            $this->assertSame(
+                $route->mapping_version_id,
+                DungeonRoute::findOrFail($route->id)->mapping_version_id,
+                'A forbidden Apply must not move the original onto the new mapping version',
+            );
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function applyUpgrade_givenJsonRequest_returnsTheOriginalsEditUrl(): void
+    {
+        try {
+            // Arrange
+            $owner = $this->createUser();
+            $route = $this->createOutdatedRoute($owner);
+            $draft = app(DungeonRouteUpgradeDraftServiceInterface::class)->findOrCreateDraft($route);
+            $this->killRequiredEnemiesOn($draft);
+
+            // Act
+            $response = $this->actingAs($owner)->postJson(route('dungeonroute.upgrade.apply', [
+                'dungeon'      => $draft->dungeon,
+                'dungeonroute' => $draft,
+                'title'        => $draft->getTitleSlug(),
+            ]));
+
+            // Assert
+            $original = DungeonRoute::findOrFail($route->id);
+            $response->assertOk();
+            $response->assertJson([
+                'redirect_url' => route('dungeonroute.edit', [
+                    'dungeon'      => $original->dungeon,
+                    'dungeonroute' => $original,
+                    'title'        => $original->getTitleSlug(),
+                ]),
+                'status' => __('controller.dungeonroute.flash.upgrade_applied'),
+            ]);
+            $this->assertNull(DungeonRoute::find($draft->id), 'Apply deletes the draft');
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function discardUpgrade_givenNonOwner_returnsForbiddenAndKeepsDraft(): void
+    {
+        try {
+            // Arrange
+            $owner    = $this->createUser();
+            $nonOwner = $this->createUser();
+            $route    = $this->createOutdatedRoute($owner);
+            $draft    = app(DungeonRouteUpgradeDraftServiceInterface::class)->findOrCreateDraft($route);
+
+            // Act
+            $response = $this->actingAs($nonOwner)->post(route('dungeonroute.upgrade.discard', [
+                'dungeon'      => $draft->dungeon,
+                'dungeonroute' => $draft,
+                'title'        => $draft->getTitleSlug(),
+            ]));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNotNull(DungeonRoute::find($draft->id), 'A forbidden Discard must not delete the draft');
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
     public function editFloor_givenUpgradeDraft_rendersTheWhatChangedModal(): void
     {
         try {

@@ -7,12 +7,14 @@ use App\Models\GameVersion\GameVersion;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('DungeonRoute')]
 final class DungeonRouteSearchControllerTest extends PublicTestCase
 {
+    use CreatesDungeon;
     use ProvidesDungeon;
 
     #[Test]
@@ -33,5 +35,24 @@ final class DungeonRouteSearchControllerTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $response->assertViewHas('floor', static fn(Floor $floor) => $floor->id === $expectedFloor->id);
+    }
+
+    #[Test]
+    public function searchByDungeon_givenDungeonWithoutMappingVersionForGameVersion_redirectsToDungeonSelect(): void
+    {
+        // Arrange
+        $dungeon     = $this->createDungeon(['active' => true], withMappingVersion: false);
+        $gameVersion = GameVersion::getDefaultGameVersion();
+
+        // Act
+        $response = $this->get(route('dungeon.dungeonroute.search.gameversion.dungeon', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+        ]));
+
+        // Assert
+        $response->assertRedirect(route('dungeon.dungeonroute.search.gameversion.select', [
+            'gameVersion' => $gameVersion,
+        ]));
     }
 }

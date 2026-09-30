@@ -89,4 +89,34 @@ final class DungeonRoutePreviewTest extends PublicTestCase
             $dungeonRoute->delete();
         }
     }
+
+    #[Test]
+    public function preview_givenNoConfiguredSecretAndEmptySecret_isForbidden(): void
+    {
+        // Arrange
+        config(['keystoneguru.thumbnail.preview_secret' => '']);
+
+        [$dungeon, $mappingVersion] = $this->findDungeon();
+
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        try {
+            // Act
+            $response = $this->get(route('dungeonroute.preview', [
+                'dungeon'      => $dungeon,
+                'dungeonroute' => $dungeonRoute->public_key,
+                'title'        => $dungeonRoute->getTitleSlug(),
+                'floorIndex'   => $dungeon->floors()->active()->firstOrFail()->index,
+                'secret'       => '',
+            ]));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
 }

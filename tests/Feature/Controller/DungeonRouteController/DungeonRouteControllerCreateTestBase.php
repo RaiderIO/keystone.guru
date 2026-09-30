@@ -36,6 +36,18 @@ abstract class DungeonRouteControllerCreateTestBase extends PublicTestCase
             ->firstOrFail();
     }
 
+    protected function getActiveDungeonOtherThan(Dungeon $excludedDungeon): Dungeon
+    {
+        return Dungeon::query()
+            ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
+            ->where('expansions.active', true)
+            ->where('dungeons.active', true)
+            ->where('dungeons.speedrun_enabled', false)
+            ->where('dungeons.id', '!=', $excludedDungeon->id)
+            ->select('dungeons.*')
+            ->firstOrFail();
+    }
+
     protected function getActiveSpeedrunDungeon(): Dungeon
     {
         $dungeon = Dungeon::query()

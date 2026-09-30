@@ -45,6 +45,7 @@ final class DungeonRouteSharePublishedStateTest extends PublicTestCase
                 $content,
             );
             $this->assertMatchesRegularExpression('/<option value="world"[^>]*\sselected/', $content);
+            $this->assertDoesNotMatchRegularExpression('/<option value="world"[^>]*\sdisabled/', $content);
             $response->assertSee(e(__('js.publish_state_subtext_team')), false);
         } finally {
             $route->delete();

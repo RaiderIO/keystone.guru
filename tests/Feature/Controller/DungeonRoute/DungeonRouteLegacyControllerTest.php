@@ -1,7 +1,11 @@
 <?php
 
 namespace Tests\Feature\Controller\DungeonRoute;
+
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\PublishedState;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -123,5 +127,57 @@ class DungeonRouteLegacyControllerTest extends PublicTestCase
 
         // Assert
         $response->assertNotFound();
+    }
+
+    /**
+     * @param array<string, string> $legacyParameters
+     * @param array<string, string> $canonicalParameters
+     */
+    #[Test]
+    #[DataProvider('legacyRouteProvider')]
+    public function legacyRoute_givenExistingRoute_redirectsToTheCanonicalRoute(
+        string $legacyRouteName,
+        string $canonicalRouteName,
+        array  $legacyParameters,
+        array  $canonicalParameters,
+    ): void {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'author_id'          => 1,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAsUser()->get(route($legacyRouteName, ['dungeonRoute' => $dungeonRoute] + $legacyParameters));
+
+            // Assert
+            $response->assertRedirect(route($canonicalRouteName, [
+                'dungeon'      => $dungeonRoute->dungeon,
+                'dungeonroute' => $dungeonRoute,
+                'title'        => $dungeonRoute->getTitleSlug(),
+            ] + $canonicalParameters));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string, string, array<string, string>, array<string, string>}>
+     */
+    public static function legacyRouteProvider(): array
+    {
+        return [
+            'view'        => ['dungeonroute.viewold', 'dungeonroute.view', [], []],
+            'view floor'  => ['dungeonroute.viewold.floor', 'dungeonroute.view.floor', ['floorIndex' => '2'], ['floorIndex' => '2']],
+            'embed'       => ['dungeonroute.embedold', 'dungeonroute.embed', [], ['floorIndex' => '1']],
+            'embed floor' => ['dungeonroute.embedold.floor', 'dungeonroute.embed', ['floorIndex' => '2'], ['floorIndex' => '2']],
+            'preview'     => ['dungeonroute.previewold', 'dungeonroute.preview', ['floorIndex' => '2'], ['floorIndex' => '2']],
+            'edit'        => ['dungeonroute.editold', 'dungeonroute.edit', [], []],
+            'edit floor'  => ['dungeonroute.editold.floor', 'dungeonroute.edit.floor', ['floorIndex' => '2'], ['floorIndex' => '2']],
+            'clone'       => ['dungeonroute.cloneold', 'dungeonroute.clone', [], []],
+            'claim'       => ['dungeonroute.claimold', 'dungeonroute.claim', [], []],
+        ];
     }
 }

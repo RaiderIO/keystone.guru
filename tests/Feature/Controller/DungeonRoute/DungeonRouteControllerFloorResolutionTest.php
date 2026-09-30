@@ -40,6 +40,65 @@ final class DungeonRouteControllerFloorResolutionTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
+            $response->assertViewHas('floor', static fn(Floor $viewFloor) => $viewFloor->id === $floor->id);
+            $response->assertViewHas('dungeonroute', static fn(DungeonRoute $viewRoute) => $viewRoute->id === $route->id);
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function viewFloor_givenUnpublishedRouteAndGuest_returnsForbidden(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner);
+        $route->update(['published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED]]);
+        /** @var Floor $floor */
+        $floor = Floor::where('dungeon_id', $route->dungeon_id)->defaultOrFacade($route->mappingVersion)->first();
+
+        try {
+            // Act
+            $response = $this->get(route('dungeonroute.view.floor', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+                'floorIndex'   => $floor->index,
+            ]));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function viewFloor_givenOutdatedTitleSlug_redirectsToTheCanonicalView(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner);
+        /** @var Floor $floor */
+        $floor = Floor::where('dungeon_id', $route->dungeon_id)->defaultOrFacade($route->mappingVersion)->first();
+
+        try {
+            // Act
+            $response = $this->get(route('dungeonroute.view.floor', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => 'an-outdated-title',
+                'floorIndex'   => $floor->index,
+            ]));
+
+            // Assert
+            $response->assertRedirect(route('dungeonroute.view', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+            ]));
         } finally {
             $route->delete();
             $owner->delete();
@@ -209,6 +268,32 @@ final class DungeonRouteControllerFloorResolutionTest extends PublicTestCase
             $response->assertOk();
         } finally {
             ChallengeModeRun::query()->whereKey($challengeModeRunId)->delete();
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function presentFloor_givenRouteWithoutChallengeModeRun_returnsForbidden(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner);
+        /** @var Floor $floor */
+        $floor = Floor::where('dungeon_id', $route->dungeon_id)->defaultOrFacade($route->mappingVersion)->first();
+
+        try {
+            // Act
+            $response = $this->get(route('dungeonroute.present.floor', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+                'floorIndex'   => $floor->index,
+            ]));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
             $route->delete();
             $owner->delete();
         }
