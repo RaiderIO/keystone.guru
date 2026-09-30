@@ -37,10 +37,14 @@ final class DungeonRouteControllerSaveNewTest extends DungeonRouteControllerCrea
 
             // Assert
             $response->assertSessionHasNoErrors();
-            $response->assertRedirect();
 
             $dungeonRoute = $this->latestRouteSince($sinceId);
             $this->assertNotNull($dungeonRoute);
+            $response->assertRedirect(route('dungeonroute.edit', [
+                'dungeon'      => $dungeonRoute->dungeon,
+                'dungeonroute' => $dungeonRoute,
+                'title'        => $dungeonRoute->getTitleSlug(),
+            ]));
             $this->assertSame($user->id, $dungeonRoute->author_id);
             $this->assertSame('My route', $dungeonRoute->title);
             // Non-temporary routes do not expire

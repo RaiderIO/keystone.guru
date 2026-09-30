@@ -88,6 +88,54 @@ final class DungeonRouteControllerEmbedTest extends PublicTestCase
         $response->assertNotFound();
     }
 
+    #[Test]
+    public function embed_givenUnpublishedRouteAndGuest_returnsForbidden(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner);
+        $route->update(['published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED]]);
+
+        try {
+            // Act
+            $response = $this->get(route('dungeonroute.embed', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+            ]));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function embed_givenSandboxRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner);
+        $route->update(['expires_at' => now()->addHour()]);
+
+        try {
+            // Act
+            $response = $this->get(route('dungeonroute.embed', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+            ]));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
     /**
      * A published, non-sandbox route owned by $owner. Sandbox routes (which the factory creates by
      * default) are editable by anyone, so expires_at must be null here.

@@ -4,16 +4,20 @@ namespace Tests\Feature\Controller\DungeonRoute;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\GameVersion\GameVersion;
 use App\Models\PublishedState;
+use App\Models\Season;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -114,16 +118,27 @@ final class DungeonRouteDiscoverDisplayedRoutesTest extends PublicTestCase
             'dungeon'     => $dungeon,
         ])->only($parameterKeys)->all();
 
-        $displayedRouteIds = $this->captureDisplayedRouteIds(1);
+        $dungeonRoute = null;
 
-        // Act
-        $response = $this->get(route($routeName, $parameters));
+        try {
+            $dungeonRoute = $this->createQualifyingRouteOn($dungeon, $gameVersion, $season);
+            Cache::store('tmp_file')->flush();
 
-        // Assert
-        $response->assertOk();
-        $renderedRouteIds = collect($viewKeys)
-            ->flatMap(fn(string $viewKey) => $this->collectDungeonRouteIds($response->viewData($viewKey)));
-        $this->assertEqualsCanonicalizing($renderedRouteIds->unique()->values()->all(), $displayedRouteIds->unique()->values()->all());
+            $displayedRouteIds = $this->captureDisplayedRouteIds(1);
+
+            // Act
+            $response = $this->get(route($routeName, $parameters));
+
+            // Assert
+            $response->assertOk();
+            $renderedRouteIds = collect($viewKeys)
+                ->flatMap(fn(string $viewKey) => $this->collectDungeonRouteIds($response->viewData($viewKey)));
+            $this->assertContains($dungeonRoute->id, $renderedRouteIds->all(), 'The page must render a route, or comparing it against the reported routes proves nothing.');
+            $this->assertEqualsCanonicalizing($renderedRouteIds->unique()->values()->all(), $displayedRouteIds->unique()->values()->all());
+        } finally {
+            $dungeonRoute?->delete();
+            Cache::store('tmp_file')->flush();
+        }
     }
 
     /**
@@ -177,6 +192,37 @@ final class DungeonRouteDiscoverDisplayedRoutesTest extends PublicTestCase
             $value instanceof Collection, is_array($value) => collect($value)->flatMap(fn(mixed $item) => $this->collectDungeonRouteIds($item)),
             default                                        => collect(),
         };
+    }
+
+    /**
+     * A published, non-expired route on $dungeon's mapping version for $gameVersion that satisfies the discover filters,
+     * tagged with $season's affix group of this week so the affix overview lists it too.
+     */
+    private function createQualifyingRouteOn(Dungeon $dungeon, GameVersion $gameVersion, Season $season): DungeonRoute
+    {
+        $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
+        $this->assertNotNull($mappingVersion, 'Expected the current season dungeon to be mapped for the default game version');
+
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+            'season_id'          => $dungeon->getActiveSeason(app(SeasonServiceInterface::class))?->id,
+            'team_id'            => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            'teeming'            => false,
+            'enemy_forces'       => $mappingVersion->enemy_forces_required,
+            'expires_at'         => null,
+            'published_at'       => Carbon::now(),
+        ]);
+
+        $currentAffixGroup = app(SeasonAffixGroupServiceInterface::class)->getCurrentAffixGroup($season);
+        $this->assertNotNull($currentAffixGroup, 'Expected the current season to have an affix group this week');
+        DungeonRouteAffixGroup::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'affix_group_id'   => $currentAffixGroup->id,
+        ]);
+
+        return $dungeonRoute;
     }
 
     /**

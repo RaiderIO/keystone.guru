@@ -609,7 +609,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
 
     #[Test]
     #[DataProvider('invalidCreateQueryProvider')]
-    public function create_givenAnInvalidQuery_failsValidation(string $case, string $errorKey): void
+    public function create_givenAnInvalidQuery_failsValidation(string $case, string $errorKey, ?string $errorMessageKey): void
     {
         // Arrange
         $creator = $this->creator();
@@ -629,19 +629,19 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
 
         // Assert
         $response->assertUnprocessable();
-        $response->assertJsonValidationErrors($errorKey);
+        $response->assertJsonValidationErrors($errorMessageKey === null ? $errorKey : [$errorKey => __($errorMessageKey)]);
     }
 
     /**
-     * @return array<string, array{string, string}>
+     * @return array<string, array{string, string, string|null}>
      */
     public static function invalidCreateQueryProvider(): array
     {
         return [
-            'unknown season'              => ['unknown_season', 'season_id'],
-            'season not a number'         => ['season_not_a_number', 'season_id'],
-            'season on a version without' => ['season_on_no_seasons', 'season_id'],
-            'season of another expansion' => ['season_of_other_expansion', 'season_id'],
+            'unknown season'              => ['unknown_season', 'season_id', 'validation.custom.collection_season_id.exists'],
+            'season not a number'         => ['season_not_a_number', 'season_id', null],
+            'season on a version without' => ['season_on_no_seasons', 'season_id', 'validation.custom.collection_season_id.no_seasons'],
+            'season of another expansion' => ['season_of_other_expansion', 'season_id', 'validation.custom.collection_season_id.expansion'],
         ];
     }
 
@@ -1382,11 +1382,6 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         }
     }
 
-    /**
-     * The ids the pick list renders, in list order. Its row template carries id 0.
-     *
-     * @return array<int, int>
-     */
     /**
      * The route public keys the rendered lists hold, in page order.
      *

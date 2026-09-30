@@ -33,10 +33,14 @@ final class DungeonRouteControllerSaveNewTemporaryTest extends DungeonRouteContr
 
             // Assert
             $response->assertSessionHasNoErrors();
-            $response->assertRedirect();
 
             $dungeonRoute = $this->latestRouteSince($sinceId);
             $this->assertNotNull($dungeonRoute);
+            $response->assertRedirect(route('dungeonroute.edit', [
+                'dungeon'      => $dungeonRoute->dungeon,
+                'dungeonroute' => $dungeonRoute,
+                'title'        => $dungeonRoute->getTitleSlug(),
+            ]));
             $this->assertSame($dungeon->id, $dungeonRoute->dungeon_id);
             // A guest is author -1
             $this->assertSame(-1, $dungeonRoute->author_id);
@@ -393,6 +397,35 @@ final class DungeonRouteControllerSaveNewTemporaryTest extends DungeonRouteContr
 
             $dungeonRoute = $this->latestRouteSince($sinceId);
             $this->assertNotNull($dungeonRoute);
+            $this->assertNull($dungeonRoute->dungeon_start_map_icon_id);
+        } finally {
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function saveNewTemporary_givenStartMapIconOfAnotherDungeon_resolvesToNull(): void
+    {
+        // Arrange
+        [$iconDungeon, $mapIcon] = $this->getDungeonWithStartIcon();
+        $dungeon                 = $this->getActiveDungeonOtherThan($iconDungeon);
+        $sinceId                 = (int)DungeonRoute::query()->max('id');
+
+        $dungeonRoute = null;
+
+        try {
+            // Act
+            $response = $this->post(route('dungeonroute.temporary.savenew'), [
+                'dungeon_id'                => $dungeon->id,
+                'dungeon_start_map_icon_id' => $mapIcon->id,
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+
+            $dungeonRoute = $this->latestRouteSince($sinceId);
+            $this->assertNotNull($dungeonRoute);
+            $this->assertSame($dungeon->id, $dungeonRoute->dungeon_id);
             $this->assertNull($dungeonRoute->dungeon_start_map_icon_id);
         } finally {
             $dungeonRoute?->delete();

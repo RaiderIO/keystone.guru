@@ -183,7 +183,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $response = $this->actingAs($owner)->post($this->duplicateUrl($source), ['season_id' => $season->id]);
 
         // Assert
-        $response->assertSessionHasErrors(['season_id']);
+        $response->assertSessionHasErrors(['season_id' => __('validation.custom.collection_season_id.no_seasons')]);
         $this->assertSame(1, DungeonRouteCollection::query()->where('user_id', $owner->id)->count());
     }
 
@@ -199,7 +199,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $response = $this->actingAs($owner)->post($this->duplicateUrl($source), ['season_id' => $season->id]);
 
         // Assert
-        $response->assertSessionHasErrors(['season_id']);
+        $response->assertSessionHasErrors(['season_id' => __('validation.custom.collection_season_id.expansion')]);
         $this->assertSame(1, DungeonRouteCollection::query()->where('user_id', $owner->id)->count());
     }
 
@@ -547,7 +547,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $response = $this->actingAs($owner)->get(route('collections.new', ['season_id' => $season->id]));
 
         // Assert
-        $response->assertSessionHasErrors(['season_id']);
+        $response->assertSessionHasErrors(['season_id' => __('validation.custom.collection_season_id.no_seasons')]);
     }
 
     private function duplicateUrl(DungeonRouteCollection $dungeonRouteCollection): string
