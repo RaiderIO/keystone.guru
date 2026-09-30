@@ -145,24 +145,75 @@ final class DungeonHeatmapControllerFloorResolutionTest extends PublicTestCase
     #[Test]
     public function embed_givenDungeonWithoutHeatmapSupport_returnsUnsupportedView(): void
     {
+        // Arrange - a dungeon the heatmap otherwise supports, so the flag is the only reason it can be turned away
+        [$dungeon, $mappingVersion] = $this->findHeatmapDungeon();
+        $gameVersion                = $mappingVersion->gameVersion;
+
+        try {
+            Dungeon::query()->whereKey($dungeon->id)->update(['heatmap_enabled' => 0]);
+
+            // Act
+            $response = $this->get(route('dungeon.heatmap.gameversion.embed.floor', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+                'floorIndex'  => 1,
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewIs('dungeon.heatmap.gameversion.embedunsupported');
+        } finally {
+            Dungeon::query()->whereKey($dungeon->id)->update(['heatmap_enabled' => 1]);
+        }
+    }
+
+    #[Test]
+    public function viewDungeon_givenDungeonWithoutHeatmapSupport_redirectsToSelect(): void
+    {
         // Arrange
-        [$dungeon, $mappingVersion] = $this->findDungeon(
-            dungeonActive:       true,
-            requireDefaultFloor: true,
-            constraint:          static fn(Builder $query) => $query->where('heatmap_enabled', 0),
-        );
-        $gameVersion = $mappingVersion->gameVersion;
+        [$dungeon, $mappingVersion] = $this->findHeatmapDungeon();
+        $gameVersion                = $mappingVersion->gameVersion;
 
-        // Act
-        $response = $this->get(route('dungeon.heatmap.gameversion.embed.floor', [
-            'gameVersion' => $gameVersion,
-            'dungeon'     => $dungeon,
-            'floorIndex'  => 1,
-        ]));
+        try {
+            Dungeon::query()->whereKey($dungeon->id)->update(['heatmap_enabled' => 0]);
 
-        // Assert
-        $response->assertOk();
-        $response->assertViewIs('dungeon.heatmap.gameversion.embedunsupported');
+            // Act
+            $response = $this->get(route('dungeon.heatmap.gameversion.view', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+            ]));
+
+            // Assert
+            $response->assertRedirect(route('dungeon.heatmap.gameversion.select', ['gameVersion' => $gameVersion]));
+        } finally {
+            Dungeon::query()->whereKey($dungeon->id)->update(['heatmap_enabled' => 1]);
+        }
+    }
+
+    #[Test]
+    public function viewDungeonFloor_givenDungeonWithoutHeatmapSupport_redirectsToSelect(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findHeatmapDungeon();
+        $gameVersion                = $mappingVersion->gameVersion;
+        /** @var Floor $floor */
+        $floor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
+
+        try {
+            Dungeon::query()->whereKey($dungeon->id)->update(['heatmap_enabled' => 0]);
+
+            // Act
+            $response = $this->get(route('dungeon.heatmap.gameversion.view.floor', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+                'floorIndex'  => $floor->index,
+            ]));
+
+            // Assert
+            $response->assertRedirect(route('dungeon.heatmap.gameversion.select', ['gameVersion' => $gameVersion]));
+        } finally {
+            Dungeon::query()->whereKey($dungeon->id)->update(['heatmap_enabled' => 1]);
+        }
     }
 
     #[Test]

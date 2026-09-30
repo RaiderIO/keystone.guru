@@ -109,7 +109,7 @@ final class LoginControllerTest extends PublicTestCase
             ]);
 
             // Assert
-            $response->assertRedirect();
+            $response->assertRedirect('/');
             $this->assertAuthenticatedAs($user);
         } finally {
             auth()->logout();
@@ -137,6 +137,34 @@ final class LoginControllerTest extends PublicTestCase
             $response->assertSee('form-control is-invalid', false);
             $response->assertSee('aria-invalid="true"', false);
             $response->assertSee('invalid-feedback', false);
+            // The register modal on the same page renders its own email field with the same markup
+            $this->assertMatchesRegularExpression(
+                '/<input id="login_email"[^>]*class="form-control is-invalid"[^>]*aria-invalid="true"[^>]*>\s*<div\s+class="invalid-feedback d-block"/',
+                (string)$response->getContent(),
+            );
+        } finally {
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function login_givenAccountWithANonBcryptPassword_redirectsToLoginWithErrors(): void
+    {
+        // Arrange - the hasher throws for a stored value that is not a bcrypt hash
+        $user = User::factory()->create();
+        User::query()->whereKey($user->id)->update(['password' => 'not-a-bcrypt-hash']);
+
+        try {
+            // Act
+            $response = $this->post(route('login'), [
+                'email'    => $user->email,
+                'password' => 'not-a-bcrypt-hash',
+            ]);
+
+            // Assert
+            $response->assertRedirect(route('login', ['redirect' => '/']));
+            $response->assertSessionHasErrors(['email' => __('auth.failed')]);
+            $this->assertGuest();
         } finally {
             $user->delete();
         }

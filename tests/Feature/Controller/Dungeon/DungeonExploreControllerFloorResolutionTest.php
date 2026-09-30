@@ -3,18 +3,21 @@
 namespace Tests\Feature\Controller\Dungeon;
 
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\User;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('DungeonExplore')]
 final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
 {
+    use CreatesDungeon;
     use ProvidesDungeon;
 
     private ?string $originalAdminMapFacadeStyle = null;
@@ -263,5 +266,79 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
             'dungeon'     => $dungeon,
             'floorIndex'  => $facadeFloor->index,
         ]));
+    }
+
+    #[Test]
+    public function viewDungeon_givenInactiveDungeon_redirectsToSelect(): void
+    {
+        // Arrange - inactive, but with a current mapping version and a default floor, so activity is the only
+        // reason it can be turned away
+        $dungeon     = $this->createDungeon(['active' => false]);
+        $gameVersion = $dungeon->getCurrentMappingVersion()->gameVersion;
+
+        // Act
+        $response = $this->get(route('dungeon.explore.gameversion.view', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+        ]));
+
+        // Assert
+        $response->assertRedirect(route('dungeon.explore.gameversion.select', ['gameVersion' => $gameVersion]));
+    }
+
+    #[Test]
+    public function viewDungeonFloor_givenInactiveDungeon_redirectsToSelect(): void
+    {
+        // Arrange
+        $dungeon     = $this->createDungeon(['active' => false]);
+        $gameVersion = $dungeon->getCurrentMappingVersion()->gameVersion;
+
+        // Act
+        $response = $this->get(route('dungeon.explore.gameversion.view.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => 1,
+        ]));
+
+        // Assert
+        $response->assertRedirect(route('dungeon.explore.gameversion.select', ['gameVersion' => $gameVersion]));
+    }
+
+    #[Test]
+    public function viewDungeonFloor_givenGameVersionWithoutMappingVersion_redirectsToSelect(): void
+    {
+        // Arrange - active and mapped, but only for the default game version
+        $dungeon          = $this->createDungeon(['active' => true]);
+        $otherGameVersion = GameVersion::query()
+            ->where('id', '!=', $dungeon->getCurrentMappingVersion()->game_version_id)
+            ->firstOrFail();
+
+        // Act
+        $response = $this->get(route('dungeon.explore.gameversion.view.floor', [
+            'gameVersion' => $otherGameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => 1,
+        ]));
+
+        // Assert
+        $response->assertRedirect(route('dungeon.explore.gameversion.select', ['gameVersion' => $otherGameVersion]));
+    }
+
+    #[Test]
+    public function embed_givenInactiveDungeon_redirectsToSelect(): void
+    {
+        // Arrange
+        $dungeon     = $this->createDungeon(['active' => false]);
+        $gameVersion = $dungeon->getCurrentMappingVersion()->gameVersion;
+
+        // Act
+        $response = $this->get(route('dungeon.explore.gameversion.embed.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => 1,
+        ]));
+
+        // Assert
+        $response->assertRedirect(route('dungeon.explore.gameversion.select', ['gameVersion' => $gameVersion]));
     }
 }

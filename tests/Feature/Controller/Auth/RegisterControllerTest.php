@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\Auth;
 
 use App\Http\Controllers\Auth\RegisterController;
 use App\Models\GameServerRegion;
+use App\Models\Laratrust\Role;
 use App\Models\User;
 use Illuminate\Database\UniqueConstraintViolationException;
 use PDOException;
@@ -127,6 +128,8 @@ final class RegisterControllerTest extends PublicTestCase
             $response->assertCreated();
             $user = User::firstWhere('email', $postData['email']);
             $this->assertNotNull($user, 'Registration should have created the user');
+            $this->assertTrue($user->hasRole(Role::ROLE_USER), 'A registered user must get the user role');
+            $this->assertAuthenticatedAs($user);
         } finally {
             auth()->logout();
             $this->deleteRegisteredUser($user);
@@ -274,6 +277,38 @@ final class RegisterControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function register_givenCreateRacesIntoANameCollision_reportsTheNameInsteadOfTheEmailFallback(): void
+    {
+        // Arrange - the colliding row lands between validation and create(), so only the re-run validator can see it
+        $postData      = $this->validRegistrationData();
+        $collidingUser = null;
+        $controller    = $this->createPartialMockPublic(RegisterController::class, ['create']);
+        $controller->method('create')->willReturnCallback(static function () use ($postData, &$collidingUser): never {
+            $collidingUser = User::factory()->create(['name' => $postData['name']]);
+
+            throw new UniqueConstraintViolationException(
+                'mysql',
+                'insert into `users` ...',
+                [],
+                new PDOException('Duplicate entry for key users_name_unique'),
+            );
+        });
+        $this->app->instance(RegisterController::class, $controller);
+
+        try {
+            // Act
+            $response = $this->postJson(route('register'), $postData);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['name']);
+            $response->assertJsonMissingValidationErrors(['email']);
+        } finally {
+            $collidingUser?->delete();
+        }
+    }
+
+    #[Test]
     public function register_givenNoLegalAgreedMs_createsUserAnyway(): void
     {
         // Arrange - the write-only legal_agreed_ms tracking was removed, so neither the form nor
@@ -384,10 +419,10 @@ final class RegisterControllerTest extends PublicTestCase
         // Arrange
         $number    = random_int(100000, 999999);
         $slugOwner = null;
+        $postData  = $this->validRegistrationData(['name' => sprintf('woe2-%d', $number)]);
 
         try {
             $slugOwner = User::factory()->create(['name' => sprintf('woe2#%d', $number)]);
-            $postData  = $this->validRegistrationData(['name' => sprintf('woe2-%d', $number)]);
 
             // Act
             $response = $this->postJson(route('register'), $postData);
@@ -397,6 +432,7 @@ final class RegisterControllerTest extends PublicTestCase
             $response->assertJsonValidationErrors(['name' => __('rules.user_slug_available_rule.taken')]);
             $this->assertNull(User::firstWhere('email', $postData['email']));
         } finally {
+            $this->deleteRegisteredUser(User::firstWhere('email', $postData['email']));
             $slugOwner?->delete();
         }
     }

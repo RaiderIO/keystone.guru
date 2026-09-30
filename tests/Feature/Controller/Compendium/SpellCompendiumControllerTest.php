@@ -415,6 +415,40 @@ final class SpellCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function get_givenHiddenSpellInDungeon_omitsItFromTheResults(): void
+    {
+        // Arrange - a visible spell alongside it, so an empty result cannot pass for the hidden one being filtered
+        [$dungeon] = $this->findDungeon(dungeonActive: true);
+
+        $translatedName = Translation::query()->where('locale', 'en_US')->orderBy('id')->value('key');
+        $this->assertNotNull($translatedName);
+
+        $visibleSpell = $this->createSpell(['name' => $translatedName]);
+        $hiddenSpell  = $this->createSpell(['name' => $translatedName, 'hidden_on_map' => true]);
+
+        $couplings = collect();
+
+        try {
+            $couplings->push(SpellDungeon::create(['spell_id' => $visibleSpell->id, 'dungeon_id' => $dungeon->id]));
+            $couplings->push(SpellDungeon::create(['spell_id' => $hiddenSpell->id, 'dungeon_id' => $dungeon->id]));
+
+            // Act
+            $response = $this->call('GET', route('ajax.spell.compendium.search'), array_merge($this->datatableParams, [
+                'dungeon_id' => $dungeon->id,
+                'length'     => 500,
+            ]), [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+
+            // Assert
+            $response->assertOk();
+            $returnedSpellIds = array_column($response->json('data'), 'id');
+            $this->assertContains($visibleSpell->id, $returnedSpellIds);
+            $this->assertNotContains($hiddenSpell->id, $returnedSpellIds);
+        } finally {
+            SpellDungeon::query()->whereIn('id', $couplings->pluck('id'))->delete();
+        }
+    }
+
+    #[Test]
     #[DataProvider('localizedSpellNameProvider')]
     public function get_givenNonEnglishLocale_returnsSpellNameInThatLocaleOrEnglish(string $localizedName, string $expectedName): void
     {
