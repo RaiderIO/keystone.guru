@@ -88,6 +88,7 @@ use Override;
  * @property int|null             $dungeon_start_id
  * @property string|null          $clone_of
  * @property int|null             $upgrade_of_dungeon_route_id
+ * @property DungeonRouteDraftSource|null $draft_source              Null on a route that is not a draft; see getEffectiveDraftSource()
  * @property string               $title
  * @property string               $description
  * @property int|null             $level_min
@@ -229,6 +230,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'public_key',
         'clone_of',
         'upgrade_of_dungeon_route_id',
+        'draft_source',
         'author_id',
         'dungeon_id',
         'mapping_version_id',
@@ -275,6 +277,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             'level_min'                   => 'integer',
             'level_max'                   => 'integer',
             'rating'                      => 'float',
+            'draft_source'                => DungeonRouteDraftSource::class,
         ];
     }
 
@@ -831,6 +834,19 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function getIsUpgradeDraftAttribute(): bool
     {
         return $this->upgrade_of_dungeon_route_id !== null;
+    }
+
+    /**
+     * What produced this draft, or null when this route is not a draft. A draft whose draft_source is null
+     * predates the column, and every draft back then was a mapping version upgrade.
+     */
+    public function getEffectiveDraftSource(): ?DungeonRouteDraftSource
+    {
+        if (!$this->is_upgrade_draft) {
+            return null;
+        }
+
+        return $this->draft_source ?? DungeonRouteDraftSource::MappingUpgrade;
     }
 
     public function getHasUpgradeDraftAttribute(): bool
