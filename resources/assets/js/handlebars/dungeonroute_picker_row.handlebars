@@ -22,6 +22,13 @@
                     </span>
                 </span>
                 <span class="leaderboard_author route_picker_dungeon text-muted small d-block">{{ dungeon_name }}</span>
+                {{#if tags.length}}
+                    <span class="route_picker_tags d-block text-truncate">
+                        {{#each tags}}
+                            <span class="route_picker_tag tag badge rounded-pill me-1 {{#if dark}}text-white{{else}}text-dark{{/if}}{{#unless color}} text-bg-primary{{/unless}}"{{#if color}} style="background-color: {{ color }}"{{/if}}>{{ name }}</span>
+                        {{/each}}
+                    </span>
+                {{/if}}
             </span>
             <span class="leaderboard_stats d-flex align-items-center text-muted small ms-auto">
                 {{#if enemy_forces_warning}}

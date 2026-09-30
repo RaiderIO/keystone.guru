@@ -29,8 +29,9 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
-use App\Models\Tags\TagCategory;
 use App\Models\Team;
+use App\Models\User;
+use App\Repositories\Interfaces\Tags\TagRepositoryInterface;
 use App\Service\Season\SeasonServiceInterface;
 
 $action             ??= 'add';
@@ -96,8 +97,10 @@ if ($lockedSeason !== null) {
 $affixSeason = $lockedSeason ?? app(SeasonServiceInterface::class)->getCurrentSeason();
 $affixgroups = $affixSeason?->affixGroups()->with('affixes')->get() ?? collect();
 
-$searchTags = Auth::check()
-    ? Auth::user()->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])->unique(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])->get()
+/** @var User|null $viewer */
+$viewer     = Auth::user();
+$searchTags = $viewer !== null
+    ? app(TagRepositoryInterface::class)->getPersonalRouteTagNames($viewer)->map(static fn(string $name): array => ['name' => $name])
     : collect();
 
 $dungeonSelectId      = sprintf('%s_dungeon', $id);
@@ -115,6 +118,7 @@ $inlineOptions = [
     'attributesSelectSelector'   => sprintf('#%s', $attributesSelectId),
     'requirementsSelectSelector' => sprintf('#%s', $requirementsSelectId),
     'tagsSelectSelector'         => sprintf('#%s', $tagsSelectId),
+    'showTags'                   => $sourceScope === 'mine',
     'listSelector'               => sprintf('#%s_list', $id),
     'loadingSelector'            => sprintf('#%s_loading', $id),
     'emptySelector'              => sprintf('#%s_empty', $id),

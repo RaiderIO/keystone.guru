@@ -11,7 +11,7 @@
  * @var string                          $tagsSelectId
  * @var Collection<int, AffixGroup>     $affixgroups
  * @var Collection<int, RouteAttribute> $allRouteAttributes
- * @var Collection<int, Tag>            $searchTags
+ * @var Collection<int, Tag|array{name: string}> $searchTags
  * @var bool                            $showFavoriteRequirement
  * @var bool                            $showTags
  * @var array<string, mixed>            $dungeonSelectOptions Extra parameters for common.dungeon.select.

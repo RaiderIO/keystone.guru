@@ -17,6 +17,7 @@ use App\Models\Tags\TagCategory;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRouteRepositoryInterface;
+use App\Repositories\Interfaces\Tags\TagRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -88,6 +89,7 @@ class DungeonRouteCollectionController extends Controller
     public function create(
         DungeonRouteCollectionCreateFormRequest $request,
         DungeonRouteCollectionServiceInterface  $dungeonRouteCollectionService,
+        TagRepositoryInterface                  $tagRepository,
     ): View {
         /** @var User $user */
         $user        = Auth::user();
@@ -151,7 +153,7 @@ class DungeonRouteCollectionController extends Controller
             'selectedSeason'          => $season,
             'teams'                   => $user->teams,
             'categories'              => DungeonRouteCollectionCategory::all(),
-            'tagNames'                => $this->getTagNames($user),
+            'tagNames'                => $tagRepository->getPersonalRouteTagNames($user),
             'selectedTagName'         => $tagName,
             'tagDungeonRoutesLeftOut' => $tagDungeonRoutesLeftOut,
             'prefillName'             => $request->validated('name'),
@@ -508,24 +510,6 @@ class DungeonRouteCollectionController extends Controller
             ->map(static fn(string $publicKey): ?DungeonRoute => $dungeonRoutes->get($publicKey))
             ->filter()
             ->values();
-    }
-
-    /**
-     * The names of the user's personal route tags that are on at least one route, alphabetically.
-     *
-     * @return Collection<int, string>
-     */
-    private function getTagNames(User $user): Collection
-    {
-        return Tag::query()
-            ->where('context_id', $user->id)
-            ->where('context_class', User::class)
-            ->where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])
-            ->where('model_class', DungeonRoute::class)
-            ->whereNotNull('model_id')
-            ->distinct()
-            ->orderBy('name')
-            ->pluck('name');
     }
 
     /**

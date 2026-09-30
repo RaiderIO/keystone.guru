@@ -6,6 +6,7 @@
 const Lang = require('lang.js');
 
 const {PickerDungeonRoute} = require('./pickerdungeonroute');
+const {isColorDark} = require('../../../colorutil');
 
 const MESSAGES = {
     'en.js':       {
@@ -51,6 +52,7 @@ describe('PickerDungeonRoute', () => {
     beforeEach(() => {
         previousLang    = globalThis.lang;
         globalThis.lang = new Lang({messages: MESSAGES, locale: 'en'});
+        globalThis.isColorDark = isColorDark;
     });
 
     afterEach(() => {
@@ -116,5 +118,36 @@ describe('PickerDungeonRoute', () => {
         expect(data.is_unpublished).toBe(true);
         expect(data.thumbnail_url).toBe('https://assets/images/dungeons/tww/arakara_3-2.jpg');
         expect(data.views_title).toBe('1500 views');
+    });
+
+    it('getTags_givenPersonalTags_returnsThemWithTheirDarkness', () => {
+        // Arrange
+        const route = dungeonRoute({tagspersonal: [{name: 'WIP', color: '#000000'}, {name: 'Guild', color: null}]});
+
+        // Act
+        const tags = route.getTags();
+
+        // Assert
+        expect(tags).toEqual([
+            {name: 'WIP', color: '#000000', dark: true},
+            {name: 'Guild', color: null, dark: false},
+        ]);
+    });
+
+    it('getTags_givenOnlyTeamTags_returnsTheTeamTags', () => {
+        expect(dungeonRoute({tagsteam: [{name: 'Team', color: '#ffffff'}]}).getTags()).toEqual([
+            {name: 'Team', color: '#ffffff', dark: false},
+        ]);
+    });
+
+    it('getTags_givenNoTagRelation_returnsAnEmptyArray', () => {
+        expect(dungeonRoute().getTags()).toEqual([]);
+    });
+
+    it('toTemplateData_givenTagsHidden_carriesNoTags', () => {
+        const route = dungeonRoute({tagspersonal: [{name: 'WIP', color: null}]});
+
+        expect(route.toTemplateData('https://assets/images').tags).toEqual([]);
+        expect(route.toTemplateData('https://assets/images', true).tags).toHaveLength(1);
     });
 });
