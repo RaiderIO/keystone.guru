@@ -177,13 +177,15 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
             $this->assertMdtStringFitsRoute($original, $details);
 
             // The replacement is imported and upgraded as a standalone route first; the existing draft is only
-            // discarded once it can be swapped for a replacement that is known to be complete
-            $draft = $this->mdtImportStringService->setEncodedString($mdtString)->getDungeonRoute(
+            // discarded once it can be swapped for a replacement that is known to be complete. The import persists
+            // its route, pulls and objects in separate writes; one transaction (deliberately not retried) keeps a
+            // failure part-way from leaving a partial route behind that counts against the author's route limit.
+            $draft = DB::transaction(fn(): DungeonRoute => $this->mdtImportStringService->setEncodedString($mdtString)->getDungeonRoute(
                 $warnings,
                 collect(),
                 sandbox: false,
                 save: true,
-            );
+            ));
 
             try {
                 $this->copyOriginalMetadataInto($original, $draft);
