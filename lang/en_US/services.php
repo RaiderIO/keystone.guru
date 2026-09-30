@@ -54,11 +54,12 @@ return [
     ],
     'dungeonroute' => [
         'upgrade_draft' => [
-            'mdt_import_route_is_draft'   => 'An MDT string cannot be imported into a draft. Import it into the route this draft belongs to instead.',
-            'mdt_import_route_is_sandbox' => 'An MDT string cannot be imported into a temporary route. Save the route first, or import the string as a new route.',
-            'mdt_import_pending_draft'    => 'This route already has a draft. Discard it to import the MDT string, or apply or discard the draft first.',
-            'mdt_import_other_dungeon'    => 'This MDT string is for :stringDungeon, but this route is for :routeDungeon. Import a string for :routeDungeon instead.',
-            'mdt_import_outdated_mapping' => 'This MDT string was made with an outdated version of Mythic Dungeon Tools. Import it into an up-to-date Mythic Dungeon Tools, fix the route there and export it again.',
+            'mdt_import_route_is_draft'    => 'An MDT string cannot be imported into a draft. Import it into the route this draft belongs to instead.',
+            'mdt_import_route_is_sandbox'  => 'An MDT string cannot be imported into a temporary route. Save the route first, or import the string as a new route.',
+            'mdt_import_pending_draft'     => 'This route already has a draft. Discard it to import the MDT string, or apply or discard the draft first.',
+            'mdt_import_other_dungeon'     => 'This MDT string is for :stringDungeon, but this route is for :routeDungeon. Import a string for :routeDungeon instead.',
+            'mdt_import_string_has_errors' => 'This MDT string cannot be imported: :errors Nothing was changed.',
+            'mdt_import_outdated_mapping'  => 'This MDT string was made with an outdated version of Mythic Dungeon Tools. Import it into an up-to-date Mythic Dungeon Tools, fix the route there and export it again.',
         ],
     ],
     'combatlogservice' => [
