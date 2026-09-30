@@ -6,11 +6,13 @@ use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class DungeonService implements DungeonServiceInterface
 {
@@ -21,6 +23,7 @@ class DungeonService implements DungeonServiceInterface
         private readonly SeasonServiceInterface         $seasonService,
         private readonly DungeonServiceLoggingInterface $log,
         private readonly GameVersionServiceInterface    $gameVersionService,
+        private readonly DungeonRepositoryInterface     $dungeonRepository,
     ) {
     }
 
@@ -125,11 +128,24 @@ class DungeonService implements DungeonServiceInterface
         // instead: the "next season" card that HeaderComposer adds to the dungeon context bar.
         $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
 
-        // An expansion's dungeons can include ones only mapped for another game version sharing that expansion
-        // (e.g. a continent mapped for WoW: Forever only) - those cannot be opened under this game version.
-        return $currentSeason === null
-            ? $gameVersion->expansion->dungeons()->forGameVersion($gameVersion)->get()
-            : $this->getSeasonDungeons($currentSeason);
+        return $currentSeason === null ? $this->getGameVersionDungeons($gameVersion) : $this->getSeasonDungeons($currentSeason);
+    }
+
+    /**
+     * Every active dungeon and raid that has a mapping for the game version, ordered by selector group and then
+     * by translated name. Names are compared transliterated to ASCII: the app image ships without ext-intl, so
+     * there is no Collator, and a byte compare would sort accented initials after Z.
+     *
+     * @return Collection<int, Dungeon>
+     */
+    private function getGameVersionDungeons(GameVersion $gameVersion): Collection
+    {
+        return $this->dungeonRepository->getActiveForGameVersion($gameVersion)
+            ->sortBy([
+                static fn(Dungeon $a, Dungeon $b) => $a->getSelectorGroup()->sortOrder() <=> $b->getSelectorGroup()->sortOrder(),
+                static fn(Dungeon $a, Dungeon $b) => strcasecmp(Str::ascii(__($a->name)), Str::ascii(__($b->name))),
+            ])
+            ->values();
     }
 
     /**

@@ -594,6 +594,15 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
         return $this->has_wallpaper;
     }
 
+    public function getSelectorGroup(): DungeonSelectorGroup
+    {
+        if (DungeonKey::tryFrom($this->key)?->isContinent() ?? false) {
+            return DungeonSelectorGroup::WORLD;
+        }
+
+        return $this->raid ? DungeonSelectorGroup::RAID : DungeonSelectorGroup::DUNGEON;
+    }
+
     /**
      * Finds the expansion key (one of the {@see Expansion} EXPANSION_* constants) that a dungeon or raid key belongs to.
      */
