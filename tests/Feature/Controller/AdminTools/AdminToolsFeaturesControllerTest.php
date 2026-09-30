@@ -146,13 +146,19 @@ final class AdminToolsFeaturesControllerTest extends PublicTestCase
     {
         // Arrange
         $this->be(User::findOrFail(Feature::ADMIN_USER_ID));
+        $maxFeatureId = (int)Feature::query()->max('id');
 
-        // Act
-        $response = $this->get(route('admin.tools.features.list'));
+        try {
+            // Act
+            $response = $this->get(route('admin.tools.features.list'));
 
-        // Assert
-        $response->assertOk();
-        $response->assertViewHas('features', static fn($features): bool => $features->contains(CreatorProfiles::class));
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas('features', static fn($features): bool => $features->contains(CreatorProfiles::class));
+        } finally {
+            // Rendering resolves every feature for the admin, which stores a value for each one not stored yet
+            Feature::query()->where('id', '>', $maxFeatureId)->delete();
+        }
     }
 
     #[Test]
