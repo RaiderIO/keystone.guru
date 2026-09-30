@@ -50,6 +50,19 @@ const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_FLOOR_UNION_AREA
 ];
 
+/**
+ * The groups whose contents belong to a single dungeon route: every one of them has to be reset and
+ * reloaded when the route shown on a map is swapped.
+ */
+const MAP_OBJECT_GROUP_NAMES_DUNGEON_ROUTE = [
+    MAP_OBJECT_GROUP_PATH,
+    MAP_OBJECT_GROUP_BRUSHLINE,
+    MAP_OBJECT_GROUP_ARROW,
+    MAP_OBJECT_GROUP_MAPICON,
+    MAP_OBJECT_GROUP_KILLZONE,
+    MAP_OBJECT_GROUP_KILLZONE_PATH,
+];
+
 // Map
 const MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
 const MAP_FACADE_STYLE_FACADE = 'facade';
@@ -775,6 +788,7 @@ if (typeof module !== 'undefined' && module.exports) {
         MAP_FACADE_STYLE_FACADE,
         MAP_FACADE_STYLE_BOTH,
         MAP_OBJECT_GROUP_NAMES,
+        MAP_OBJECT_GROUP_NAMES_DUNGEON_ROUTE,
         MAP_OBJECT_GROUP_USER_MOUSE_POSITION,
         MAP_OBJECT_GROUP_BRUSHLINE,
         MAP_OBJECT_GROUP_ENEMY,

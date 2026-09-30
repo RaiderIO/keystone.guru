@@ -7,15 +7,7 @@ class MapContextDungeonRouteSearch extends MapContextDungeonExplore {
 
         this._options.dungeonRoute = dungeonRoute;
 
-        let toReset = [
-            MAP_OBJECT_GROUP_PATH,
-            MAP_OBJECT_GROUP_BRUSHLINE,
-            MAP_OBJECT_GROUP_KILLZONE,
-            MAP_OBJECT_GROUP_KILLZONE_PATH,
-            MAP_OBJECT_GROUP_MAPICON,
-        ];
-
-        for (let name of toReset) {
+        for (let name of MAP_OBJECT_GROUP_NAMES_DUNGEON_ROUTE) {
             getMapObjectGroup(name).reset().load();
         }
 
@@ -67,4 +59,12 @@ class MapContextDungeonRouteSearch extends MapContextDungeonExplore {
     getKillZonePaths() {
         return this._options.dungeonRoute?.killZonePaths ?? [];
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        MapContextDungeonRouteSearch,
+    };
 }
