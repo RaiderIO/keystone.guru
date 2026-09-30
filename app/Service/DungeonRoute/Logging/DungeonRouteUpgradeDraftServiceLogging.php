@@ -29,7 +29,7 @@ class DungeonRouteUpgradeDraftServiceLogging extends StructuredLogging implement
         $this->end(__METHOD__, get_defined_vars());
     }
 
-    public function createDraftFromMdtStringStart(int $originalDungeonRouteId, bool $discardExistingDraft): void
+    public function createDraftFromMdtStringStart(int $originalDungeonRouteId, ?int $discardExistingDraftId): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }

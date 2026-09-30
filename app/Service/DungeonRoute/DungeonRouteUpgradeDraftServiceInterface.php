@@ -8,6 +8,7 @@ use App\Logic\MDT\Exception\InvalidMDTStringException;
 use App\Logic\MDT\Exception\MDTStringParseException;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\DungeonRoute\Exceptions\PendingUpgradeDraftException;
+use App\Service\DungeonRoute\Exceptions\StaleUpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
 use Illuminate\Support\Collection;
@@ -43,12 +44,14 @@ interface DungeonRouteUpgradeDraftServiceInterface
      * to it. A pending draft being discarded is only removed once the new draft is fully imported and upgraded,
      * so a failure leaves the pending draft untouched.
      *
-     * @param  Collection<int, ImportWarning> $warnings             Receives the import's warnings.
-     * @param  bool                           $discardExistingDraft Whether a pending draft of $original may be discarded
-     *                                                              to make room for this one.
+     * @param  Collection<int, ImportWarning> $warnings               Receives the import's warnings.
+     * @param  int|null                       $discardExistingDraftId The id of the pending draft of $original the author
+     *                                                                confirmed may be discarded to make room for this one.
      * @return DungeonRoute                   The new draft.
      *
-     * @throws PendingUpgradeDraftException When $original already has a draft and $discardExistingDraft is false.
+     * @throws PendingUpgradeDraftException When $original already has a draft and $discardExistingDraftId is null.
+     * @throws StaleUpgradeDraftException   When $original's draft is not the one $discardExistingDraftId names: it was
+     *                                      replaced since the author confirmed. The new route is removed again.
      * @throws UpgradeDraftException        When $original is a draft or a sandbox route, or the string is rejected.
      * @throws MDTStringParseException
      * @throws InvalidMDTStringException
@@ -59,7 +62,7 @@ interface DungeonRouteUpgradeDraftServiceInterface
         DungeonRoute $original,
         string       $mdtString,
         Collection   $warnings,
-        bool         $discardExistingDraft = false,
+        ?int         $discardExistingDraftId = null,
     ): DungeonRoute;
 
     /**

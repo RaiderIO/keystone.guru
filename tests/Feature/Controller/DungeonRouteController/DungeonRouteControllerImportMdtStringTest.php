@@ -226,14 +226,67 @@ final class DungeonRouteControllerImportMdtStringTest extends MDTImportStringSer
 
             // Act
             $response = $this->actingAs($owner)->postJson($this->importUrl($original), [
-                'import_string'          => $mdtString,
-                'discard_existing_draft' => true,
+                'import_string'             => $mdtString,
+                'discard_existing_draft_id' => $existingDraft->id,
             ]);
 
             // Assert
             $response->assertOk();
             $this->assertNull(DungeonRoute::find($existingDraft->id));
             $this->assertSame(DungeonRouteDraftSource::MdtImport, $original->upgradeDraft()->first()?->draft_source);
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function importMdtString_givenConfirmationForReplacedDraft_returnsConflictAndKeepsCurrentDraft(): void
+    {
+        try {
+            // Arrange
+            [$source, $mdtString] = $this->createSourceRouteAndString();
+            $owner                = $this->createUser();
+            $original             = $this->createOriginal($owner, $source);
+            $draftA               = $this->createExistingDraft($original);
+            $payload              = [
+                'import_string'             => $mdtString,
+                'discard_existing_draft_id' => $draftA->id,
+            ];
+            $this->actingAs($owner)->postJson($this->importUrl($original), $payload)->assertOk();
+            $draftB = $original->upgradeDraft()->firstOrFail();
+            array_unshift($this->cleanup, $draftB);
+            $maxRouteId = DungeonRoute::query()->max('id');
+
+            // Act
+            $response = $this->actingAs($owner)->postJson($this->importUrl($original), $payload);
+
+            // Assert
+            $response->assertConflict();
+            $this->assertSame(__('services.dungeonroute.upgrade_draft.mdt_import_draft_changed'), $response->json('message'));
+            $this->assertSame($draftB->id, $original->upgradeDraft()->first()?->id, 'The replacement the first request made must survive');
+            $this->assertFalse(DungeonRoute::query()->where('id', '>', $maxRouteId)->exists(), 'The refused import leaves no route behind');
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function importMdtString_givenNonIntegerDraftId_returnsUnprocessable(): void
+    {
+        try {
+            // Arrange
+            $owner    = $this->createUser();
+            $original = $this->createOriginal($owner);
+
+            // Act
+            $response = $this->actingAs($owner)->postJson($this->importUrl($original), [
+                'import_string'             => 'irrelevant',
+                'discard_existing_draft_id' => 'not-an-id',
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors('discard_existing_draft_id');
         } finally {
             $this->tearDownCleanup();
         }

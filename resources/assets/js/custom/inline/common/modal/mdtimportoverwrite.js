@@ -9,7 +9,8 @@
  * @property {string} resetSelector
  * @property {string} discardExistingDraftSelector
  * @property {string} submitSelector
- * @property {boolean} hasPendingDraft
+ * @property {number|null} pendingDraftId The draft the route had when the page rendered - the one the author is
+ *                                        asked to confirm discarding
  * @property {string} detailsUrl
  * @property {string} importUrl
  */
@@ -129,17 +130,31 @@ class CommonModalMdtimportoverwrite extends InlineCode {
             return false;
         }
 
-        return !this.options.hasPendingDraft || $(this.options.discardExistingDraftSelector).is(':checked');
+        return !this._hasPendingDraft() || $(this.options.discardExistingDraftSelector).is(':checked');
     }
 
     /**
-     * @returns {{import_string: string, discard_existing_draft: number}}
+     * @returns {boolean}
+     * @private
+     */
+    _hasPendingDraft() {
+        return this.options.pendingDraftId !== null && typeof this.options.pendingDraftId !== 'undefined';
+    }
+
+    /**
+     * @returns {{import_string: string, discard_existing_draft_id?: number}} The discarded draft is named by id, so the
+     *                    server can refuse when the route's current draft differs from the one the author confirmed.
      */
     buildImportPayload() {
-        return {
-            'import_string': this._previewedImportString,
-            'discard_existing_draft': this.options.hasPendingDraft && $(this.options.discardExistingDraftSelector).is(':checked') ? 1 : 0
+        let payload = {
+            'import_string': this._previewedImportString
         };
+
+        if (this._hasPendingDraft() && $(this.options.discardExistingDraftSelector).is(':checked')) {
+            payload['discard_existing_draft_id'] = this.options.pendingDraftId;
+        }
+
+        return payload;
     }
 
     /**
