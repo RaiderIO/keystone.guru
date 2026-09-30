@@ -15,7 +15,7 @@ use Tests\TestCases\PublicTestCase;
 final class TagRepositoryTest extends PublicTestCase
 {
     #[Test]
-    public function getPersonalRouteTagNames_givenTaggedAndOrphanAndForeignTags_returnsOnlyOwnTagsOnARouteOnce(): void
+    public function getPersonalRouteTags_givenTaggedAndOrphanAndForeignTags_returnsOnlyOwnTagsOnARouteOncePerName(): void
     {
         // Arrange
         $owner = null;
@@ -31,10 +31,10 @@ final class TagRepositoryTest extends PublicTestCase
             $this->createTag($other, 'Foreign', 1);
 
             // Act
-            $names = $this->app->make(TagRepositoryInterface::class)->getPersonalRouteTagNames($owner);
+            $tags = $this->app->make(TagRepositoryInterface::class)->getPersonalRouteTags($owner);
 
             // Assert
-            $this->assertSame(['Alpha', 'Zeta'], $names->all());
+            $this->assertSame(['Alpha', 'Zeta'], $tags->pluck('name')->all());
         } finally {
             foreach ([$owner, $other] as $user) {
                 if ($user !== null) {
@@ -46,7 +46,7 @@ final class TagRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    public function getPersonalRouteTagNames_givenUserWithoutTags_returnsNothing(): void
+    public function getPersonalRouteTags_givenUserWithoutTags_returnsNothing(): void
     {
         // Arrange
         $user = null;
@@ -55,10 +55,10 @@ final class TagRepositoryTest extends PublicTestCase
             $user = User::factory()->create();
 
             // Act
-            $names = $this->app->make(TagRepositoryInterface::class)->getPersonalRouteTagNames($user);
+            $tags = $this->app->make(TagRepositoryInterface::class)->getPersonalRouteTags($user);
 
             // Assert
-            $this->assertTrue($names->isEmpty());
+            $this->assertTrue($tags->isEmpty());
         } finally {
             $user?->delete();
         }

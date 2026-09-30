@@ -17,16 +17,20 @@ class TagRepository extends DatabaseRepository implements TagRepositoryInterface
         parent::__construct(Tag::class);
     }
 
-    public function getPersonalRouteTagNames(User $user): Collection
+    public function getPersonalRouteTags(User $user): Collection
     {
-        return Tag::query()
+        $firstTagIdPerName = Tag::query()
+            ->selectRaw('MIN(id)')
             ->where('context_id', $user->id)
             ->where('context_class', User::class)
             ->where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])
             ->where('model_class', DungeonRoute::class)
             ->whereNotNull('model_id')
-            ->distinct()
+            ->groupBy('name');
+
+        return Tag::query()
+            ->whereIn('id', $firstTagIdPerName)
             ->orderBy('name')
-            ->pluck('name');
+            ->get();
     }
 }

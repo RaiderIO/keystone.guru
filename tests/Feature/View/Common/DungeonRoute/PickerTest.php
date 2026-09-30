@@ -12,6 +12,7 @@ use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\ViewException;
 use InvalidArgumentException;
@@ -294,11 +295,12 @@ final class PickerTest extends PublicTestCase
     public function render_givenTheMineScope_offersOnlyTagsOnARouteAndTellsTheScriptToShowThem(): void
     {
         // Arrange
-        $user = null;
+        $user             = null;
+        $filterSearchTags = null;
 
         try {
             $user = User::factory()->create();
-            foreach (['Carried' => 1, 'Orphan' => null] as $name => $modelId) {
+            foreach ([['Carried', 1], ['Carried', 2], ['Orphan', null]] as [$name, $modelId]) {
                 Tag::query()->create([
                     'context_id'      => $user->id,
                     'context_class'   => User::class,
@@ -308,6 +310,9 @@ final class PickerTest extends PublicTestCase
                     'name'            => $name,
                 ]);
             }
+            View::composer('common.dungeonroute.tablefilters', static function (ViewContract $view) use (&$filterSearchTags): void {
+                $filterSearchTags = $view->getData()['searchTags'];
+            });
             $this->actingAs($user);
 
             // Act
@@ -315,7 +320,9 @@ final class PickerTest extends PublicTestCase
 
             // Assert
             $this->assertTrue($options['showTags']);
-            $this->assertStringContainsString('<option value="Carried">', $html);
+            $this->assertSame(['Carried'], $filterSearchTags->pluck('name')->all());
+            $this->assertContainsOnlyInstancesOf(Tag::class, $filterSearchTags);
+            $this->assertSame(1, substr_count($html, '<option value="Carried">'));
             $this->assertStringNotContainsString('<option value="Orphan">', $html);
         } finally {
             if ($user !== null) {

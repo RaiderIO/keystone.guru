@@ -100,7 +100,7 @@ $affixgroups = $affixSeason?->affixGroups()->with('affixes')->get() ?? collect()
 /** @var User|null $viewer */
 $viewer     = Auth::user();
 $searchTags = $viewer !== null
-    ? app(TagRepositoryInterface::class)->getPersonalRouteTagNames($viewer)->map(static fn(string $name): array => ['name' => $name])
+    ? app(TagRepositoryInterface::class)->getPersonalRouteTags($viewer)
     : collect();
 
 $dungeonSelectId      = sprintf('%s_dungeon', $id);

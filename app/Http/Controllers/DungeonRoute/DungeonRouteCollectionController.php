@@ -153,7 +153,7 @@ class DungeonRouteCollectionController extends Controller
             'selectedSeason'          => $season,
             'teams'                   => $user->teams,
             'categories'              => DungeonRouteCollectionCategory::all(),
-            'tagNames'                => $tagRepository->getPersonalRouteTagNames($user),
+            'tagNames'                => $tagRepository->getPersonalRouteTags($user)->pluck('name'),
             'selectedTagName'         => $tagName,
             'tagDungeonRoutesLeftOut' => $tagDungeonRoutesLeftOut,
             'prefillName'             => $request->validated('name'),

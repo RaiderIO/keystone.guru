@@ -21,9 +21,9 @@ use Illuminate\Support\Collection;
 interface TagRepositoryInterface extends BaseRepositoryInterface
 {
     /**
-     * The distinct names of the user's personal route tags that sit on at least one route, alphabetically.
+     * The user's personal route tags that sit on at least one route, one per name, alphabetically.
      *
-     * @return Collection<int, string>
+     * @return Collection<int, Tag>
      */
-    public function getPersonalRouteTagNames(User $user): Collection;
+    public function getPersonalRouteTags(User $user): Collection;
 }
