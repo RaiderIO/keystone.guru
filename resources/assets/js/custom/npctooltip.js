@@ -14,7 +14,7 @@
     // see compendium/npc/sections/header.blade.php
     const CLASSIFICATION_BADGE_CLASSES = {
         boss: 'text-bg-danger',
-        final_boss: 'text-bg-danger',
+        finalboss: 'text-bg-danger',
         rare: 'text-bg-warning',
         elite: 'text-bg-info',
     };

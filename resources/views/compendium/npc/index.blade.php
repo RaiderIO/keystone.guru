@@ -68,6 +68,7 @@ use Illuminate\Support\Collection;
                                 portrait_url: `${assetsBaseUrl}/${row.enemy_portrait_url}`,
                                 is_boss: bossClassificationIds.includes(row.classification_id),
                                 boss_icon_url: skullIconUrl,
+                                boss_label: lang.get('js.boss_label'),
                                 name: data ?? '',
                                 npc_tooltip: row.tooltip_data ? JSON.stringify(row.tooltip_data) : null,
                             });

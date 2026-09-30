@@ -440,3 +440,50 @@ describe('Enemy raid marker shortcut hint (#3703)', () => {
         expect(adminEnemy.supportsRaidMarkerMenu()).toBe(false);
     });
 });
+
+// ---------------------------------------------------------------------------
+// Enemy#getWowheadLinkForGameVersion: the map's spell links open Wowhead in the visitor's language.
+// ---------------------------------------------------------------------------
+
+// Constants referenced as bare globals, with their real values from constants.js.
+global.GAME_VERSION_WOTLK = 'wotlk';
+global.GAME_VERSION_CLASSIC_ERA = 'classic';
+global.WOWHEAD_LOCALE_PATHS = {de_DE: 'de', es_MX: 'mx', zh_CN: 'cn'};
+
+describe('Enemy#getWowheadLinkForGameVersion', () => {
+    const originalGetLocale = globalThis.lang.getLocale;
+
+    afterEach(() => {
+        globalThis.lang.getLocale = originalGetLocale;
+    });
+
+    test.each([
+        ['en_US', 'retail', 'https://www.wowhead.com/spell=123/frost-nova'],
+        ['de_DE_ai', 'retail', 'https://www.wowhead.com/de/spell=123/frost-nova'],
+        ['de_DE', 'classic', 'https://www.wowhead.com/classic/de/spell=123/frost-nova'],
+        ['es_MX_ai', 'wotlk', 'https://www.wowhead.com/wrath/mx/spell=123/frost-nova'],
+        ['uk_UA', 'retail', 'https://www.wowhead.com/spell=123/frost-nova'],
+    ])('getWowheadLinkForGameVersion_givenLocale %s on %s_returnsThatLocalesWowheadPage', (locale, gameVersionKey, expected) => {
+        // Arrange
+        globalThis.lang.getLocale = () => locale;
+        const enemy = new Enemy(makeFakeMap(), null);
+
+        // Act
+        const result = enemy.getWowheadLinkForGameVersion({key: gameVersionKey}, {id: 123, name: 'Frost Nova'});
+
+        // Assert
+        expect(result).toBe(expected);
+    });
+
+    test('getWowheadLinkForGameVersion_givenNameWithoutLatinCharacters_omitsTheSlug', () => {
+        // Arrange
+        globalThis.lang.getLocale = () => 'zh_CN_ai';
+        const enemy = new Enemy(makeFakeMap(), null);
+
+        // Act
+        const result = enemy.getWowheadLinkForGameVersion({key: 'retail'}, {id: 123, name: '冰霜新星'});
+
+        // Assert
+        expect(result).toBe('https://www.wowhead.com/cn/spell=123');
+    });
+});

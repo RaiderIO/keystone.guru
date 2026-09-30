@@ -44,6 +44,27 @@ enum GameLocale: string
     }
 
     /**
+     * The path segment Wowhead serves this locale's pages under (`de` in `wowhead.com/de/npc=...`),
+     * or null for English, which Wowhead serves unprefixed.
+     */
+    public function wowheadPath(): ?string
+    {
+        return match ($this) {
+            self::English            => null,
+            self::German             => 'de',
+            self::Spanish            => 'es',
+            self::SpanishMexican     => 'mx',
+            self::French             => 'fr',
+            self::Italian            => 'it',
+            self::Korean             => 'ko',
+            self::BrazilianPortugese => 'pt',
+            self::Russian            => 'ru',
+            self::ChineseSimplified  => 'cn',
+            self::ChineseTraditional => 'tw',
+        };
+    }
+
+    /**
      * The game locale whose description a visitor on `$appLocale` should read.
      *
      * The AI variants of our locales (`de_DE_ai`) are the same language, so they read the same client

@@ -43,9 +43,47 @@ final class NpcTooltipDataTest extends PublicTestCase
         $this->assertSame(__(sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_ELITE)), $result['classification']);
         $this->assertSame(NpcClassification::NPC_CLASSIFICATION_ELITE, $result['classificationKey']);
         $this->assertSame(1_234_567, $result['health']);
-        $this->assertSame('Humanoid', $result['type']);
-        $this->assertSame([__('view_admin.npc.edit.dangerous')], $result['flags']);
+        $this->assertSame(__('npctypes.humanoid'), $result['type']);
+        $this->assertSame([__('view_compendium.npc.sections.header.dangerous')], $result['flags']);
         $this->assertSame(['Stun', 'Slow'], array_column($result['characteristics'], 'name'));
+    }
+
+    #[Test]
+    public function tooltipData_givenGermanLocale_returnsTheLabelsTheNpcPageShows(): void
+    {
+        // Arrange - the flags must come from the compendium's own strings; admin strings are not
+        // translated for visitors and fell back to English
+        $npc = $this->makeNpc([
+            'dangerous'         => true,
+            'truesight'         => true,
+            'runs_away_in_fear' => true,
+        ], NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS);
+        $npc->setRelation('type', new NpcType(['id' => NpcType::BEAST, 'type' => 'Beast']));
+
+        $this->setHealth($npc, 500_000);
+        $this->setCharacteristics($npc, []);
+
+        $originalLocale = app()->getLocale();
+
+        try {
+            app()->setLocale('de_DE_ai');
+
+            // Act
+            $result = $npc->tooltip_data;
+        } finally {
+            app()->setLocale($originalLocale);
+        }
+
+        // Assert
+        $this->assertSame([
+            __('view_compendium.npc.sections.header.dangerous', [], 'de_DE_ai'),
+            __('view_compendium.npc.sections.header.truesight', [], 'de_DE_ai'),
+            __('view_compendium.npc.sections.header.runs_away_in_fear', [], 'de_DE_ai'),
+        ], $result['flags']);
+        $this->assertSame(__('npcclassifications.finalboss', [], 'de_DE_ai'), $result['classification']);
+        $this->assertSame(__('npctypes.beast', [], 'de_DE_ai'), $result['type']);
+        $this->assertNotContains('Dangerous', $result['flags']);
+        $this->assertNotSame('Beast', $result['type']);
     }
 
     #[Test]

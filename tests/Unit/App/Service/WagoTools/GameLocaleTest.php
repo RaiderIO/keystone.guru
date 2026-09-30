@@ -39,6 +39,32 @@ final class GameLocaleTest extends TestCase
     }
 
     #[Test]
+    #[DataProvider('wowheadPathProvider')]
+    public function wowheadPath_givenAGameLocale_returnsWowheadsLocalePath(GameLocale $gameLocale, ?string $expected): void
+    {
+        // Act
+        $result = $gameLocale->wowheadPath();
+
+        // Assert
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @return array<string, array{0: GameLocale, 1: string|null}>
+     */
+    public static function wowheadPathProvider(): array
+    {
+        return [
+            'English is unprefixed'      => [GameLocale::English, null],
+            'German'                     => [GameLocale::German, 'de'],
+            'Mexican Spanish is its own' => [GameLocale::SpanishMexican, 'mx'],
+            'Brazilian Portuguese'       => [GameLocale::BrazilianPortugese, 'pt'],
+            'simplified Chinese'         => [GameLocale::ChineseSimplified, 'cn'],
+            'traditional Chinese'        => [GameLocale::ChineseTraditional, 'tw'],
+        ];
+    }
+
+    #[Test]
     public function translated_returnsEveryLocaleButEnglish(): void
     {
         // Act - English descriptions live on the spell itself, so they are not among the stored translations
