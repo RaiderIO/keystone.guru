@@ -75,51 +75,51 @@ use Illuminate\Support\Str;
 use Override;
 
 /**
- * @property int                  $id
- * @property string               $public_key
- * @property int                  $author_id
- * @property int                  $dungeon_id
- * @property int|null             $mapping_version_id
- * @property int|null             $season_id
- * @property int                  $faction_id
- * @property int|null             $team_id
- * @property int                  $published_state_id
- * @property int|null             $dungeon_start_map_icon_id
- * @property int|null             $dungeon_start_id
- * @property string|null          $clone_of
- * @property int|null             $upgrade_of_dungeon_route_id
- * @property DungeonRouteDraftSource|null $draft_source              Null on a route that is not a draft; see getEffectiveDraftSource()
- * @property string               $title
- * @property string               $description
- * @property int|null             $level_min
- * @property int|null             $level_max
- * @property string               $difficulty
- * @property int                  $seasonal_index
- * @property int                  $enemy_forces
- * @property bool                 $teeming
- * @property bool                 $demo
- * @property array<string, mixed> $setup                           Attribute
- * @property bool                 $is_upgrade_draft                Attribute
- * @property bool                 $has_upgrade_draft               Attribute
- * @property bool                 $has_thumbnail                   Attribute
- * @property int                  $has_enemy_forces                Computed column added by CoverageService::selectRaw()
- * @property int                  $mapping_version_game_version_id Computed column added by AjaxDungeonRouteController::get()'s selectRaw()
- * @property string               $pull_gradient
- * @property bool                 $pull_gradient_apply_always
- * @property int                  $dungeon_difficulty
- * @property int                  $views
- * @property int                  $views_embed
- * @property int                  $popularity
- * @property float                $rating
- * @property int                  $rating_count
- * @property Carbon               $thumbnail_refresh_queued_at
- * @property Carbon               $thumbnail_updated_at
- * @property Carbon|null          $last_accessed_at
- * @property Carbon|null          $last_hero_at
- * @property Carbon               $updated_at
- * @property Carbon               $created_at
- * @property Carbon               $published_at
- * @property Carbon|null          $expires_at
+ * @property int                          $id
+ * @property string                       $public_key
+ * @property int                          $author_id
+ * @property int                          $dungeon_id
+ * @property int|null                     $mapping_version_id
+ * @property int|null                     $season_id
+ * @property int                          $faction_id
+ * @property int|null                     $team_id
+ * @property int                          $published_state_id
+ * @property int|null                     $dungeon_start_map_icon_id
+ * @property int|null                     $dungeon_start_id
+ * @property string|null                  $clone_of
+ * @property int|null                     $upgrade_of_dungeon_route_id
+ * @property DungeonRouteDraftSource|null $draft_source                    Null on a route that is not a draft; see getEffectiveDraftSource()
+ * @property string                       $title
+ * @property string                       $description
+ * @property int|null                     $level_min
+ * @property int|null                     $level_max
+ * @property string                       $difficulty
+ * @property int                          $seasonal_index
+ * @property int                          $enemy_forces
+ * @property bool                         $teeming
+ * @property bool                         $demo
+ * @property array<string, mixed>         $setup                           Attribute
+ * @property bool                         $is_upgrade_draft                Attribute
+ * @property bool                         $has_upgrade_draft               Attribute
+ * @property bool                         $has_thumbnail                   Attribute
+ * @property int                          $has_enemy_forces                Computed column added by CoverageService::selectRaw()
+ * @property int                          $mapping_version_game_version_id Computed column added by AjaxDungeonRouteController::get()'s selectRaw()
+ * @property string                       $pull_gradient
+ * @property bool                         $pull_gradient_apply_always
+ * @property int                          $dungeon_difficulty
+ * @property int                          $views
+ * @property int                          $views_embed
+ * @property int                          $popularity
+ * @property float                        $rating
+ * @property int                          $rating_count
+ * @property Carbon                       $thumbnail_refresh_queued_at
+ * @property Carbon                       $thumbnail_updated_at
+ * @property Carbon|null                  $last_accessed_at
+ * @property Carbon|null                  $last_hero_at
+ * @property Carbon                       $updated_at
+ * @property Carbon                       $created_at
+ * @property Carbon                       $published_at
+ * @property Carbon|null                  $expires_at
  *
  * @property MappingVersion|null               $mappingVersion
  * @property Dungeon                           $dungeon
@@ -1050,6 +1050,13 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                     $this->team !== null &&
                     $this->team->isUserCollaborator($user) &&
                     $this->published_state_id !== PublishedState::ALL[PublishedState::UNPUBLISHED]
+                ) ||
+                // A draft is always unpublished, so a team collaborator may edit it whenever they may edit its original
+                (
+                    $this->is_upgrade_draft &&
+                    $this->team !== null &&
+                    $this->team->isUserCollaborator($user) &&
+                    ($this->upgradeOfDungeonRoute()->first()?->mayUserEdit($user) ?? false)
                 );
         }
     }

@@ -2,9 +2,15 @@
 
 namespace App\Service\DungeonRoute;
 
+use App\Logic\MDT\Exception\ImportWarning;
+use App\Logic\MDT\Exception\InvalidMDTDungeonException;
+use App\Logic\MDT\Exception\InvalidMDTStringException;
+use App\Logic\MDT\Exception\MDTStringParseException;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Service\DungeonRoute\Exceptions\PendingUpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
+use Illuminate\Support\Collection;
 use Throwable;
 
 /**
@@ -26,6 +32,41 @@ interface DungeonRouteUpgradeDraftServiceInterface
      * @throws Throwable
      */
     public function findOrCreateDraft(DungeonRoute $original): DungeonRoute;
+
+    /**
+     * Imports an MDT string as the draft of $original, so that applying the draft replaces the original's
+     * contents with the string's while the original keeps its identity, audience and metadata.
+     *
+     * The string is rejected before anything is persisted when it is for another dungeon, or when it was
+     * built against a mapping version older than the dungeon's newest MDT-synced one. When keystone.guru's
+     * current mapping version is newer than that MDT-synced one, the draft is upgraded to it.
+     *
+     * @param  Collection<int, ImportWarning> $warnings             Receives the import's warnings.
+     * @param  bool                           $discardExistingDraft Whether a pending draft of $original may be discarded
+     *                                                              to make room for this one.
+     * @return DungeonRoute                   The new draft.
+     *
+     * @throws PendingUpgradeDraftException When $original already has a draft and $discardExistingDraft is false.
+     * @throws UpgradeDraftException        When $original is a draft or a sandbox route, or the string is rejected.
+     * @throws MDTStringParseException
+     * @throws InvalidMDTStringException
+     * @throws InvalidMDTDungeonException
+     * @throws Throwable
+     */
+    public function createDraftFromMdtString(
+        DungeonRoute $original,
+        string       $mdtString,
+        Collection   $warnings,
+        bool         $discardExistingDraft = false,
+    ): DungeonRoute;
+
+    /**
+     * Counts, per kind, the content $original holds that an MDT import draft replaces - only the kinds that
+     * are present.
+     *
+     * @return array<string, int> Keyed by a DungeonRouteUpgradeDraftService::MDT_IMPORT_LOSS_* kind.
+     */
+    public function getMdtImportContentLoss(DungeonRoute $original): array;
 
     /**
      * Replaces the contents and settings of the draft's original with the draft's, preserving the

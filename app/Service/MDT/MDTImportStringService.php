@@ -171,6 +171,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $importStringPulls->isRouteTeeming() ?
                     $importStringPulls->getMappingVersion()->enemy_forces_required_teeming :
                     $importStringPulls->getMappingVersion()->enemy_forces_required,
+                $mappingVersion,
             );
         } finally {
             $this->log->getDetailsEnd();

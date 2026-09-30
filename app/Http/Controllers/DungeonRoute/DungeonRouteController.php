@@ -5,19 +5,26 @@ namespace App\Http\Controllers\DungeonRoute;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DungeonRoute\DungeonRouteBaseUrlFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteEmbedUrlFormRequest;
+use App\Http\Requests\DungeonRoute\DungeonRouteImportMdtStringFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRoutePreviewUrlFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteSubmitFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteSubmitTemporaryFormRequest;
 use App\Http\Requests\DungeonRoute\MigrateToSeasonalTypeFormRequest;
+use App\Logic\MDT\Exception\ImportWarning;
+use App\Logic\MDT\Exception\InvalidMDTStringException;
+use App\Logic\MDT\Exception\MDTStringParseException;
+use App\Logic\MDT\IO\MDTStringFormat;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteDraftSource;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\User;
 use App\Models\UserReport;
 use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
+use App\Service\DungeonRoute\Exceptions\PendingUpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -37,9 +44,11 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Psr\SimpleCache\InvalidArgumentException;
 use Session;
+use Teapot\StatusCode;
 use Throwable;
 
 class DungeonRouteController extends Controller
@@ -660,6 +669,8 @@ class DungeonRouteController extends Controller
     ): RedirectResponse|JsonResponse {
         Gate::authorize('applyUpgrade', $dungeonroute);
 
+        $draftSource = $dungeonroute->getEffectiveDraftSource();
+
         try {
             $original = $dungeonRouteUpgradeDraftService->apply($dungeonroute);
         } catch (UpgradeDraftException $upgradeDraftException) {
@@ -688,7 +699,9 @@ class DungeonRouteController extends Controller
                 'dungeonroute' => $original,
                 'title'        => $original->getTitleSlug(),
             ]),
-            __('controller.dungeonroute.flash.upgrade_applied'),
+            $draftSource === DungeonRouteDraftSource::MdtImport
+                ? __('controller.dungeonroute.flash.mdt_import_applied')
+                : __('controller.dungeonroute.flash.upgrade_applied'),
         );
     }
 
@@ -709,7 +722,8 @@ class DungeonRouteController extends Controller
     ): RedirectResponse|JsonResponse {
         Gate::authorize('discardUpgrade', $dungeonroute);
 
-        $original = $dungeonroute->upgradeOfDungeonRoute;
+        $original    = $dungeonroute->upgradeOfDungeonRoute;
+        $draftSource = $dungeonroute->getEffectiveDraftSource();
 
         $dungeonRouteUpgradeDraftService->discard($dungeonroute);
 
@@ -726,8 +740,79 @@ class DungeonRouteController extends Controller
         return $this->redirectAfterUpgradeDraftAction(
             $request,
             $redirectUrl,
-            __('controller.dungeonroute.flash.upgrade_discarded'),
+            $draftSource === DungeonRouteDraftSource::MdtImport
+                ? __('controller.dungeonroute.flash.mdt_import_discarded')
+                : __('controller.dungeonroute.flash.upgrade_discarded'),
         );
+    }
+
+    /**
+     * Imports an MDT string as a draft of the route, so that applying the draft replaces the route's contents
+     * while it keeps its link, audience and metadata. Ajax only: answers with the draft's edit page.
+     *
+     * @throws AuthorizationException
+     * @throws Throwable
+     */
+    public function importMdtString(
+        DungeonRouteImportMdtStringFormRequest   $request,
+        DungeonRouteUpgradeDraftServiceInterface $dungeonRouteUpgradeDraftService,
+        Dungeon                                  $dungeon,
+        DungeonRoute                             $dungeonroute,
+        ?string                                  $title,
+    ): JsonResponse {
+        Gate::authorize('edit', $dungeonroute);
+
+        // The draft is a route of the original's author until it is applied, so it counts against their limit
+        $author = $dungeonroute->author;
+        if ($author === null || !$author->canCreateDungeonRoute()) {
+            abort(StatusCode::FORBIDDEN, sprintf(
+                __('view_dungeonroute.limitreached.limit_reached_description'),
+                config('keystoneguru.registered_user_dungeonroute_limit'),
+            ));
+        }
+
+        $importString = $request->validated('import_string');
+        /** @var \Illuminate\Support\Collection<int, ImportWarning> $warnings */
+        $warnings = collect();
+
+        try {
+            $draft = $dungeonRouteUpgradeDraftService->createDraftFromMdtString(
+                $dungeonroute,
+                $importString,
+                $warnings,
+                $request->isDiscardExistingDraft(),
+            );
+        } catch (PendingUpgradeDraftException $pendingUpgradeDraftException) {
+            abort(StatusCode::CONFLICT, $pendingUpgradeDraftException->getMessage());
+        } catch (UpgradeDraftException $upgradeDraftException) {
+            abort(StatusCode::BAD_REQUEST, $upgradeDraftException->getMessage());
+        } catch (MDTStringParseException) {
+            abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_parsing_failed'));
+        } catch (InvalidMDTStringException) {
+            abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
+        } catch (Exception $exception) {
+            // We're not interested if the string was 100% not an MDT string - it will never work then
+            if (MDTStringFormat::isValid($importString)) {
+                report($exception);
+            }
+
+            Log::error($exception->getMessage());
+
+            abort(StatusCode::BAD_REQUEST, sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $exception->getMessage()));
+        }
+
+        session()->flash('status', __('controller.dungeonroute.flash.mdt_import_draft_created'));
+        if ($warnings->isNotEmpty()) {
+            session()->flash('mdt_import_warnings', $warnings->map(static fn(ImportWarning $warning): string => $warning->getMessage())->values()->all());
+        }
+
+        return response()->json([
+            'redirect_url' => route('dungeonroute.edit', [
+                'dungeon'      => $draft->dungeon,
+                'dungeonroute' => $draft,
+                'title'        => $draft->getTitleSlug(),
+            ]),
+        ]);
     }
 
     /**
