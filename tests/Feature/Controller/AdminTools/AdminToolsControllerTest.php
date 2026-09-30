@@ -31,6 +31,7 @@ final class AdminToolsControllerTest extends PublicTestCase
 
         // Assert
         $response->assertRedirect(route('admin.tools'));
+        $response->assertSessionHas('status', __('controller.admintools.flash.caches_drop_queued'));
         Queue::assertPushed(DropCaches::class);
     }
 
@@ -70,13 +71,14 @@ final class AdminToolsControllerTest extends PublicTestCase
         $toggleService = app()->make(ThumbnailGenerationToggleServiceInterface::class);
 
         try {
+            $user->addRole(Role::firstWhere('name', Role::ROLE_USER));
             $this->be($user);
 
             // Act
             $response = $this->post(route('admin.tools.thumbnails.toggle'));
 
             // Assert
-            $this->assertContains($response->getStatusCode(), [403, 404]);
+            $response->assertForbidden();
             $this->assertFalse($toggleService->isPaused());
         } finally {
             $toggleService->setPaused(false);

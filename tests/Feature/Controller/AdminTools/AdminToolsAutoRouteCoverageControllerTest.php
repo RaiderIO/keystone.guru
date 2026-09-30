@@ -83,6 +83,43 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenDaysBelowMinimum_returnsValidationError(): void
+    {
+        // Arrange
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.coverage.view', ['days' => 0]));
+
+        // Assert
+        $response->assertSessionHasErrors(['days' => __('validation.custom.autoroutecoverage_days.min', ['min' => 1])]);
+    }
+
+    #[Test]
+    public function index_givenDaysAboveMaximum_returnsValidationError(): void
+    {
+        // Arrange
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.coverage.view', ['days' => 366]));
+
+        // Assert
+        $response->assertSessionHasErrors(['days' => __('validation.custom.autoroutecoverage_days.max', ['max' => 365])]);
+    }
+
+    #[Test]
+    public function index_givenDays_passesThemToTheView(): void
+    {
+        // Arrange
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.coverage.view', ['days' => 30]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertViewHas('days', 30);
+    }
+
+    #[Test]
     public function index_givenRoutesInEachBucket_returnsCorrectBucketCounts(): void
     {
         // Arrange

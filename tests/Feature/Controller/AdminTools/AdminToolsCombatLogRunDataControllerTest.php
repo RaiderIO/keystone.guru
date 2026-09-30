@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\AdminTools;
 
 use App\Models\CombatLog\ChallengeModeRunData;
+use App\Models\Laratrust\Role;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -48,6 +49,79 @@ final class AdminToolsCombatLogRunDataControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenRunDataOfASeason_countsItUnderThatSeasonAndCoversItsId(): void
+    {
+        // Arrange
+        $season  = sprintf('season-test-%s', bin2hex(random_bytes(4)));
+        $runData = ChallengeModeRunData::forceCreate([
+            'challenge_mode_run_id' => 0,
+            'run_id'                => sprintf('%s - logged: #40 - run: #40', $season),
+            'correlation_id'        => 'test-index',
+            'post_body'             => '{"index":true}',
+            'processed'             => 0,
+        ]);
+        $this->createdRunDataIds[] = $runData->id;
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.rundata'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertViewHas('seasonStats', static fn($seasonStats): bool => (int)$seasonStats->firstWhere('season', $season)?->total === 1);
+        $response->assertViewHas('maxId', static fn(int $maxId): bool => $maxId >= $runData->id);
+        $response->assertViewHas('minId', static fn(int $minId): bool => $minId > 0 && $minId <= $runData->id);
+    }
+
+    #[Test]
+    public function pruneBatch_givenNoSeasons_returnsValidationError(): void
+    {
+        // Arrange
+
+        // Act
+        $response = $this->postJson(route('admin.tools.combatlog.rundata.prune_batch'), [
+            'min_id' => 0,
+            'max_id' => 1,
+        ]);
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['seasons']);
+    }
+
+    #[Test]
+    public function pruneBatch_givenNonAdmin_returnsForbiddenWithoutPruning(): void
+    {
+        // Arrange
+        $runData = ChallengeModeRunData::forceCreate([
+            'challenge_mode_run_id' => 0,
+            'run_id'                => 'season-tww-2 - logged: #41 - run: #41',
+            'correlation_id'        => 'test-non-admin',
+            'post_body'             => '{"non_admin":true}',
+            'processed'             => 0,
+        ]);
+        $this->createdRunDataIds[] = $runData->id;
+        $user                      = User::factory()->create();
+
+        try {
+            $user->addRole(Role::firstWhere('name', Role::ROLE_USER));
+            $this->be($user);
+
+            // Act
+            $response = $this->postJson(route('admin.tools.combatlog.rundata.prune_batch'), [
+                'seasons' => ['season-tww-3'],
+                'min_id'  => $runData->id,
+                'max_id'  => $runData->id,
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNotEmpty($runData->fresh()->post_body);
+        } finally {
+            $user->delete();
+        }
+    }
+
+    #[Test]
     public function prune_givenSelectedSeasons_nullsPostBodyForOtherSeasons(): void
     {
         // Arrange
@@ -90,7 +164,7 @@ final class AdminToolsCombatLogRunDataControllerTest extends PublicTestCase
         ]);
 
         // Assert
-        $response->assertOk()->assertJsonStructure(['pruned']);
+        $response->assertOk()->assertExactJson(['pruned' => 1]);
         $this->assertNotEmpty($keepSeason->fresh()->post_body);
         $this->assertNotEmpty($ptrRow->fresh()->post_body);
         $this->assertEmpty($pruneRow->fresh()->post_body);
@@ -129,7 +203,7 @@ final class AdminToolsCombatLogRunDataControllerTest extends PublicTestCase
         ]);
 
         // Assert
-        $response->assertOk()->assertJsonStructure(['pruned']);
+        $response->assertOk()->assertExactJson(['pruned' => 1]);
         $this->assertNotEmpty($parentRow->fresh()->post_body);
         $this->assertEmpty($ptrRow->fresh()->post_body);
     }
@@ -164,7 +238,7 @@ final class AdminToolsCombatLogRunDataControllerTest extends PublicTestCase
         ]);
 
         // Assert
-        $response->assertOk()->assertJsonStructure(['pruned']);
+        $response->assertOk()->assertExactJson(['pruned' => 1]);
         $this->assertEmpty($inRangeRow->fresh()->post_body);
         $this->assertNotEmpty($outOfRangeRow->fresh()->post_body);
     }

@@ -90,6 +90,8 @@ final class AdminToolsPatreonGrantsControllerTest extends PublicTestCase
 
             // Assert
             $response->assertRedirect(route('admin.tools.patreon.grants.view'));
+            $response->assertSessionHas('status', __('controller.admintools.flash.patreon_manual_grant_revoked', ['user' => $user->name]));
+            $response->assertSessionMissing('warning');
 
             $this->assertDatabaseMissing('patreon_user_links', ['id' => $patreonUserLink->id]);
             $this->assertDatabaseMissing('patreon_user_benefits', ['patreon_user_link_id' => $patreonUserLink->id]);
@@ -153,9 +155,47 @@ final class AdminToolsPatreonGrantsControllerTest extends PublicTestCase
 
             // Assert
             $response->assertRedirect(route('admin.tools.patreon.grants.view'));
-            $response->assertSessionHas('warning');
+            $response->assertSessionHas('warning', __('controller.admintools.flash.patreon_manual_grant_nothing_to_revoke', ['user' => $user->name]));
+            $response->assertSessionMissing('status');
         } finally {
             $this->cleanUp($user);
+        }
+    }
+
+    #[Test]
+    public function revoke_givenUnknownUser_returnsNotFound(): void
+    {
+        // Arrange
+        $unknownUserId = (int)User::query()->max('id') + 1000;
+
+        // Act
+        $response = $this->delete(route('admin.tools.patreon.grants.revoke', ['user' => $unknownUserId]));
+
+        // Assert
+        $response->assertNotFound();
+    }
+
+    #[Test]
+    public function revoke_asNonAdmin_returnsForbiddenAndKeepsTheGrant(): void
+    {
+        // Arrange
+        $grantee         = User::factory()->create();
+        $patreonUserLink = $this->createFabricatedPatreonLink($grantee);
+        $nonAdmin        = User::factory()->create();
+
+        try {
+            $nonAdmin->addRole(Role::firstWhere('name', Role::ROLE_USER));
+            $this->be($nonAdmin);
+
+            // Act
+            $response = $this->delete(route('admin.tools.patreon.grants.revoke', ['user' => $grantee->id]));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertDatabaseHas('patreon_user_links', ['id' => $patreonUserLink->id]);
+        } finally {
+            $this->cleanUp($grantee);
+            $this->cleanUp($nonAdmin);
         }
     }
 

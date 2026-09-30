@@ -142,7 +142,23 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view'));
 
         // Assert
-        $response->assertRedirect();
+        $response->assertRedirect(route('login'));
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyFailures_givenDungeonIdOtherThanTheDungeonContext_redirectsToTheContextDungeon(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon      = Dungeon::getUserOrDefaultDungeon();
+        $otherDungeon = Dungeon::query()->where('id', '!=', $dungeon->id)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view', ['dungeon_id' => $otherDungeon->id]));
+
+        // Assert
+        $response->assertRedirect(route('admin.tools.combatlog.route.enemy_failures.view', ['dungeon_id' => $dungeon->id]));
     }
 
     #[Test]
@@ -273,6 +289,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
+        $response->assertViewHas('floor', static fn(Floor $viewedFloor): bool => $viewedFloor->id === $floor->id);
     }
 
     #[Test]
@@ -313,6 +330,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         ]));
 
         // Assert
+        $this->assertContains($expectedResponse->getStatusCode(), [200, 302]);
         $response->assertStatus($expectedResponse->getStatusCode());
         if ($expectedResponse->isRedirect()) {
             $response->assertRedirect($expectedResponse->headers->get('Location'));
@@ -328,7 +346,23 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         ]));
 
         // Assert
-        $response->assertRedirect();
+        $response->assertRedirect(route('login'));
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyFailuresFloor_givenDungeonIdOtherThanTheDungeonContext_redirectsToTheContextDungeon(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon      = Dungeon::getUserOrDefaultDungeon();
+        $otherDungeon = Dungeon::query()->where('id', '!=', $dungeon->id)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view.floor', ['floorIndex' => 1, 'dungeon_id' => $otherDungeon->id]));
+
+        // Assert
+        $response->assertRedirect(route('admin.tools.combatlog.route.enemy_failures.view', ['dungeon_id' => $dungeon->id]));
     }
 
     #[Test]
@@ -459,7 +493,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view'));
 
         // Assert
-        $response->assertRedirect();
+        $response->assertRedirect(route('login'));
     }
 
     #[Test]
@@ -479,6 +513,22 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         } finally {
             $nonAdmin->delete();
         }
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutions_givenDungeonIdOtherThanTheDungeonContext_redirectsToTheContextDungeon(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon      = Dungeon::getUserOrDefaultDungeon();
+        $otherDungeon = Dungeon::query()->where('id', '!=', $dungeon->id)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view', ['dungeon_id' => $otherDungeon->id]));
+
+        // Assert
+        $response->assertRedirect(route('admin.tools.combatlog.route.enemy_resolutions.view', ['dungeon_id' => $dungeon->id]));
     }
 
     #[Test]
@@ -574,6 +624,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
+        $response->assertViewHas('floor', static fn(Floor $viewedFloor): bool => $viewedFloor->id === $floor->id);
     }
 
     #[Test]
@@ -614,6 +665,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         ]));
 
         // Assert
+        $this->assertContains($expectedResponse->getStatusCode(), [200, 302]);
         $response->assertStatus($expectedResponse->getStatusCode());
         if ($expectedResponse->isRedirect()) {
             $response->assertRedirect($expectedResponse->headers->get('Location'));
@@ -629,7 +681,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         ]));
 
         // Assert
-        $response->assertRedirect();
+        $response->assertRedirect(route('login'));
     }
 
     #[Test]
@@ -651,6 +703,22 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         } finally {
             $nonAdmin->delete();
         }
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyResolutionsFloor_givenDungeonIdOtherThanTheDungeonContext_redirectsToTheContextDungeon(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon      = Dungeon::getUserOrDefaultDungeon();
+        $otherDungeon = Dungeon::query()->where('id', '!=', $dungeon->id)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_resolutions.view.floor', ['floorIndex' => 1, 'dungeon_id' => $otherDungeon->id]));
+
+        // Assert
+        $response->assertRedirect(route('admin.tools.combatlog.route.enemy_resolutions.view', ['dungeon_id' => $dungeon->id]));
     }
 
     #[Test]
@@ -722,6 +790,9 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
+        $response->assertViewHas('seasons', static fn(array $seasons): bool => $seasons[''] === __('view_admin.tools.combatlog.regenerate.season_any') &&
+            count($seasons) === Season::query()->count() + 1);
+        $response->assertViewHas('periods', static fn(array $periods): bool => $periods !== []);
     }
 
     #[Test]
@@ -836,7 +907,8 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
         [$season, $periods, $dungeons] = $this->findSeasonWithWeeklyPeriods();
 
-        $prunedDungeonRoute = $this->createDungeonRouteWithChallengeModeRun($dungeons->get(0), $season->id);
+        $prunedDungeonRoute   = $this->createDungeonRouteWithChallengeModeRun($dungeons->get(0), $season->id);
+        $includedDungeonRoute = $this->createDungeonRouteWithChallengeModeRun($dungeons->get(0), $season->id, $periods->first());
 
         // Act
         $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
@@ -847,7 +919,9 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Assert
         $response->assertOk();
 
-        $this->assertNotContains($prunedDungeonRoute->id, $this->getDispatchedDungeonRouteIds($queue));
+        $dispatchedDungeonRouteIds = $this->getDispatchedDungeonRouteIds($queue);
+        $this->assertContains($includedDungeonRoute->id, $dispatchedDungeonRouteIds);
+        $this->assertNotContains($prunedDungeonRoute->id, $dispatchedDungeonRouteIds);
     }
 
     #[Test]

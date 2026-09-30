@@ -203,6 +203,71 @@ final class AdminToolsThumbnailsControllerTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function thumbnailsregenerate_givenAdmin_rendersThePausedState(): void
+    {
+        // Arrange
+        $this->be($this->getAdmin());
+
+        // Act
+        $response = $this->get(route('admin.tools.thumbnails.regenerate.view'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertViewIs('admin.tools.thumbnails.regenerate');
+        $response->assertViewHas('thumbnailGenerationPaused', false);
+    }
+
+    #[Test]
+    public function thumbnailsregeneratesubmit_givenOnlyMissing_queuesOnlyRoutesWithoutThumbnails(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        $dungeon      = $this->createDungeon();
+        $routeWithout = null;
+        $routeWith    = null;
+        $thumbnail    = null;
+
+        try {
+            $routeWithout = DungeonRoute::factory()->create([
+                'dungeon_id'         => $dungeon->id,
+                'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            ]);
+            $routeWith = DungeonRoute::factory()->create([
+                'dungeon_id'         => $dungeon->id,
+                'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            ]);
+            $thumbnail = DungeonRouteThumbnail::create([
+                'dungeon_route_id' => $routeWith->id,
+                'floor_id'         => $dungeon->floors()->firstOrFail()->id,
+                'variant'          => DungeonRouteThumbnailVariant::Standard,
+            ]);
+
+            // Act
+            $this->be($this->getAdmin());
+            $response = $this->post(route('admin.tools.thumbnails.regenerate.submit'), [
+                'dungeon_id'   => $dungeon->id,
+                'only_missing' => 1,
+                'force'        => 1,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertSessionHas('status', __('controller.admintools.flash.thumbnail_regenerate_result', [
+                'success' => 1,
+                'total'   => 1,
+                'failed'  => 0,
+            ]));
+            Queue::assertPushed(ProcessRouteFloorThumbnail::class, $this->isJobFor($routeWithout));
+            Queue::assertNotPushed(ProcessRouteFloorThumbnail::class, $this->isJobFor($routeWith));
+        } finally {
+            $thumbnail?->delete();
+            $routeWith?->delete();
+            $routeWithout?->delete();
+        }
+    }
+
     /**
      * A route with a complete hero thumbnail set - one per floor the refresh renders - stamped either after
      * the route's last content change (fresh) or before it (stale). The set must be complete either way:

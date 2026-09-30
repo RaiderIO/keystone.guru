@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\AdminTools;
 
 use App\Models\BannedIpAddress;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -68,22 +69,90 @@ final class AdminToolsBannedIpAddressControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(self::ADMIN_USER_ID));
 
-        // Act
-        $response = $this->post(route('admin.tools.bannedipaddresses.store'), [
-            'ip_address' => '203.0.113.30',
-            'reason'     => 'Abuse',
-        ]);
+        try {
+            // Act
+            $response = $this->post(route('admin.tools.bannedipaddresses.store'), [
+                'ip_address' => '203.0.113.30',
+                'reason'     => 'Abuse',
+            ]);
 
-        // Assert
-        $response->assertRedirect(route('admin.tools.bannedipaddresses.view'));
-        $this->assertDatabaseHas('banned_ip_addresses', [
-            'ip_address' => '203.0.113.30',
-            'reason'     => 'Abuse',
-            'created_by' => self::ADMIN_USER_ID,
-        ]);
+            // Assert
+            $response->assertRedirect(route('admin.tools.bannedipaddresses.view'));
+            $response->assertSessionHas('status', __('controller.admintools.flash.banned_ip_address_added'));
+            $this->assertDatabaseHas('banned_ip_addresses', [
+                'ip_address' => '203.0.113.30',
+                'reason'     => 'Abuse',
+                'created_by' => self::ADMIN_USER_ID,
+                'expires_at' => null,
+            ]);
+        } finally {
+            BannedIpAddress::query()->where('ip_address', '203.0.113.30')->delete();
+        }
+    }
 
-        $created            = BannedIpAddress::query()->where('ip_address', '203.0.113.30')->firstOrFail();
-        $this->createdIds[] = $created->id;
+    #[Test]
+    public function store_givenFutureExpiry_storesTheExpiry(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(self::ADMIN_USER_ID));
+        $expiresAt = Carbon::now()->addDays(3)->startOfSecond();
+
+        try {
+            // Act
+            $response = $this->post(route('admin.tools.bannedipaddresses.store'), [
+                'ip_address' => '203.0.113.33',
+                'expires_at' => $expiresAt->toDateTimeString(),
+            ]);
+
+            // Assert
+            $response->assertRedirect(route('admin.tools.bannedipaddresses.view'));
+            $bannedIpAddress = BannedIpAddress::query()->where('ip_address', '203.0.113.33')->firstOrFail();
+            $this->assertNull($bannedIpAddress->reason);
+            $this->assertTrue($expiresAt->equalTo($bannedIpAddress->expires_at));
+        } finally {
+            BannedIpAddress::query()->where('ip_address', '203.0.113.33')->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenPastExpiry_returnsValidationError(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(self::ADMIN_USER_ID));
+
+        try {
+            // Act
+            $response = $this->post(route('admin.tools.bannedipaddresses.store'), [
+                'ip_address' => '203.0.113.34',
+                'expires_at' => Carbon::now()->subDay()->toDateTimeString(),
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('expires_at');
+            $this->assertDatabaseMissing('banned_ip_addresses', ['ip_address' => '203.0.113.34']);
+        } finally {
+            BannedIpAddress::query()->where('ip_address', '203.0.113.34')->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenNonAdmin_returnsForbiddenWithoutCreatingBan(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(self::NON_ADMIN_USER_ID));
+
+        try {
+            // Act
+            $response = $this->post(route('admin.tools.bannedipaddresses.store'), [
+                'ip_address' => '203.0.113.35',
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertDatabaseMissing('banned_ip_addresses', ['ip_address' => '203.0.113.35']);
+        } finally {
+            BannedIpAddress::query()->where('ip_address', '203.0.113.35')->delete();
+        }
     }
 
     #[Test]
@@ -124,13 +193,29 @@ final class AdminToolsBannedIpAddressControllerTest extends PublicTestCase
     {
         // Arrange
         $this->be(User::findOrFail(self::ADMIN_USER_ID));
-        $bannedIpAddress = BannedIpAddress::factory()->create(['ip_address' => '203.0.113.31']);
+        $bannedIpAddress    = BannedIpAddress::factory()->create(['ip_address' => '203.0.113.31']);
+        $this->createdIds[] = $bannedIpAddress->id;
 
         // Act
         $response = $this->delete(route('admin.tools.bannedipaddresses.destroy', ['bannedIpAddress' => $bannedIpAddress->id]));
 
         // Assert
         $response->assertRedirect(route('admin.tools.bannedipaddresses.view'));
+        $response->assertSessionHas('status', __('controller.admintools.flash.banned_ip_address_removed'));
         $this->assertDatabaseMissing('banned_ip_addresses', ['id' => $bannedIpAddress->id]);
+    }
+
+    #[Test]
+    public function destroy_givenUnknownBan_returnsNotFound(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(self::ADMIN_USER_ID));
+        $unknownId = (int)BannedIpAddress::query()->max('id') + 1000;
+
+        // Act
+        $response = $this->delete(route('admin.tools.bannedipaddresses.destroy', ['bannedIpAddress' => $unknownId]));
+
+        // Assert
+        $response->assertNotFound();
     }
 }

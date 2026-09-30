@@ -151,6 +151,39 @@ final class AdminToolsCombatLogCriteriaControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function updatethresholds_givenThresholdBelowOne_returnsValidationErrorAndKeepsTheThreshold(): void
+    {
+        // Arrange
+        $criterion         = CombatLogParsingCriterion::factory()->forDungeon(999903)->forBand(12, 16)->create();
+        $originalThreshold = $criterion->threshold;
+
+        try {
+            // Act
+            $response = $this->post(route('admin.tools.combatlog.criteria.thresholds'), [
+                'thresholds' => [$criterion->id => 0],
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors(sprintf('thresholds.%d', $criterion->id));
+            $this->assertSame($originalThreshold, $criterion->fresh()->threshold);
+        } finally {
+            $criterion->delete();
+        }
+    }
+
+    #[Test]
+    public function updatethresholds_givenNoThresholds_returnsValidationError(): void
+    {
+        // Arrange
+
+        // Act
+        $response = $this->post(route('admin.tools.combatlog.criteria.thresholds'), []);
+
+        // Assert
+        $response->assertSessionHasErrors('thresholds');
+    }
+
+    #[Test]
     public function criteriareset_givenExistingCountsForToday_resetsCountsToZero(): void
     {
         // Arrange
