@@ -111,3 +111,54 @@ test('buildImportPayload_givenUnconfirmedPendingDraft_neverSendsDraftId', () => 
     // Assert
     expect(payload).toEqual({import_string: '!~MDT2~abc'});
 });
+
+test('importStringPasted_givenEarlierPreviewAnsweringAfterResetAndNewPaste_submitsLatestString', () => {
+    // Arrange
+    const modal    = makeModal(null);
+    const requests = [];
+    const ajax     = $.ajax;
+    $.ajax         = (options) => requests.push(options);
+    global.Handlebars = {templates: {import_string_details_template: () => ''}};
+    global.getHandlebarsDefaultVariables = () => ({});
+    global.lang = {get: (key) => key};
+    global.refreshTooltips = () => {};
+    const answer = {dungeon: 'd', pulls: 1, paths: 0, lines: 0, arrows: 0, notes: 0, enemy_forces: 1, enemy_forces_max: 2, warnings: [], errors: []};
+
+    try {
+        modal._importStringPasted('!~MDT2~A');
+        modal._reset();
+        modal._importStringPasted('!~MDT2~B');
+
+        // Act
+        requests[1].success(answer);
+        requests[0].success(answer);
+
+        // Assert
+        expect(modal.buildImportPayload().import_string).toBe('!~MDT2~B');
+    } finally {
+        $.ajax = ajax;
+    }
+});
+
+test('importStringPasted_givenPreviewAnsweringAfterReset_keepsSubmitDisabled', () => {
+    // Arrange
+    const modal    = makeModal(null);
+    const requests = [];
+    const ajax     = $.ajax;
+    $.ajax         = (options) => requests.push(options);
+    const answer = {dungeon: 'd', pulls: 1, paths: 0, lines: 0, arrows: 0, notes: 0, enemy_forces: 1, enemy_forces_max: 2, warnings: [], errors: []};
+
+    try {
+        modal._importStringPasted('!~MDT2~A');
+        modal._reset();
+
+        // Act
+        requests[0].success(answer);
+
+        // Assert
+        expect(modal.canSubmit()).toBe(false);
+        expect($('#submit').prop('disabled')).toBe(true);
+    } finally {
+        $.ajax = ajax;
+    }
+});
