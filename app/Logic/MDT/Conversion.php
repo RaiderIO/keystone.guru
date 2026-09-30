@@ -519,44 +519,56 @@ class Conversion
             return null;
         }
 
-        // For each season this is different
-        $affixGroup = null;
-        if ($season->affixGroups->count() !== 0) {
-            // Week 0 is a legitimate MDT week - seasons.start_affix_group_index is documented as the
-            // 0-based offset that week 0 resolves to, and convertAffixGroupToWeek() emits 0 for one
-            // affix group per rotation. The non-TWW_S1 offset of -1 therefore makes the raw index
-            // negative for any season starting at index 0, which Collection::get() cannot resolve,
-            // so wrap it back into range instead of falling through to the error branch below.
-            if ($season->id === Season::SEASON_TWW_S1) {
-                $rawIndex = $season->start_affix_group_index + $mdtWeek;
-            } else {
-                $rawIndex = $season->start_affix_group_index + ($mdtWeek - 1);
-            }
-
-            $affixGroup = $season->affixGroups->get(self::wrapAffixGroupIndex($rawIndex, $season->affixGroups->count()));
-        }
-
-        // $affixGroup = $season->affixgroups->get(($season->start_affix_group_index - ($mdtWeek - 1)));
-        if ($affixGroup === null) {
-            logger()->error('Unable to find affix group for mdtWeek - returning first affix group instead', [
-                'mdtWeek' => $mdtWeek,
+        if ($season->affixGroups->isEmpty()) {
+            logger()->error('Season has no affix groups', [
+                'seasonId' => $season->id,
+                'mdtWeek'  => $mdtWeek,
             ]);
 
-            $affixGroup = $season->affixGroups->getNth($season->start_affix_group_index);
+            return null;
         }
 
-        return $affixGroup;
+        // Week 0 is a legitimate MDT week - seasons.start_affix_group_index is documented as the
+        // 0-based offset that week 0 resolves to. The non-TWW_S1 offset of -1 therefore makes the raw
+        // index negative for any season starting at index 0, which Collection::get() cannot resolve,
+        // so wrap it back into range.
+        $affixGroupCount = $season->affixGroups->count();
+        $rawIndex        = $season->start_affix_group_index + $mdtWeek - self::getAffixGroupWeekOffset($season);
+
+        return $season->affixGroups->get(self::wrapAffixGroupIndex($rawIndex, $affixGroupCount));
     }
 
+    /**
+     * Convert an affix group to the MDT week that {@see self::convertWeekToAffixGroup()} resolves back to
+     * the same affix group, for a dungeon whose season is the affix group's season.
+     *
+     * The week is derived from the affix group's position in its season's rotation. Weeks are 1..count,
+     * except for TWW_S1 where they are 0..count-1.
+     */
     public static function convertAffixGroupToWeek(AffixGroup $affixGroup): int
     {
-        // For each season this is different
-        if ($affixGroup->season_id === Season::SEASON_TWW_S1) {
-            return ($affixGroup->id - 2) % $affixGroup->season->affix_group_count;
+        $affixGroup->loadMissing('season.affixGroups');
+
+        $season   = $affixGroup->season;
+        $position = $season->affixGroups->search(
+            static fn(AffixGroup $seasonAffixGroup) => $seasonAffixGroup->id === $affixGroup->id,
+        );
+
+        if ($position === false) {
+            logger()->error('Affix group not found in its season\'s affix groups', [
+                'affixGroupId' => $affixGroup->id,
+                'seasonId'     => $season->id,
+            ]);
+
+            return self::getAffixGroupWeekOffset($season);
         }
 
-        // We need to figure out which week it is in the rotation
-        return ($affixGroup->id - 1) % $affixGroup->season->affix_group_count;
+        $weekIndex = self::wrapAffixGroupIndex(
+            $position - $season->start_affix_group_index,
+            $season->affixGroups->count(),
+        );
+
+        return $weekIndex + self::getAffixGroupWeekOffset($season);
     }
 
     public static function isDungeonInMainlineMDT(Dungeon $dungeon): bool
@@ -605,5 +617,13 @@ class Conversion
     private static function wrapAffixGroupIndex(int $index, int $count): int
     {
         return (($index % $count) + $count) % $count;
+    }
+
+    /**
+     * The MDT week that resolves to a season's starting affix group.
+     */
+    private static function getAffixGroupWeekOffset(Season $season): int
+    {
+        return $season->id === Season::SEASON_TWW_S1 ? 0 : 1;
     }
 }
