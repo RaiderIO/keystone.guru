@@ -77,6 +77,23 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function syncRuns_givenLimit_returnsOnlyThatManyNewestRuns(): void
+    {
+        // Arrange
+        $this->actingAsAdmin();
+        $base = $this->afterEveryRecordedSyncRun();
+        $this->createSyncRun(['started_at' => $base->copy()->addHour()]);
+        $newer = $this->createSyncRun(['started_at' => $base->copy()->addHours(2)]);
+
+        // Act
+        $response = $this->getJson(route('api.v1.patreon.sync_runs', ['limit' => 1]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame([$newer->id], array_column($response->json('data'), 'id'));
+    }
+
+    #[Test]
     public function syncRuns_givenAiAgent_returnsOk(): void
     {
         // Arrange - the role the local tooling authenticates as against production

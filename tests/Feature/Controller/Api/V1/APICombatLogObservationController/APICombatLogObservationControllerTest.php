@@ -76,16 +76,17 @@ final class APICombatLogObservationControllerTest extends PublicTestCase
         $spellTuples = $response->json('data.spell_property_observations.tuples');
         $spellTuple  = collect($spellTuples)->first(fn(array $t) => $t['spell_id'] === $spell->id && $t['property'] === SpellProperty::Aura->value);
         $this->assertNotNull($spellTuple, 'Expected the seeded spell tuple to be present');
-        $this->assertGreaterThanOrEqual(2, $spellTuple['days_observed']);
+        $this->assertSame(2, $spellTuple['days_observed']);
 
         /** @var array<int, array<string, mixed>> $npcTuples */
         $npcTuples = $response->json('data.npc_characteristic_observations.tuples');
         $npcTuple  = collect($npcTuples)->first(fn(array $t) => $t['npc_id'] === $npc->id && $t['characteristic_id'] === $characteristic->id);
         $this->assertNotNull($npcTuple, 'Expected the seeded NPC tuple to be present');
-        $this->assertGreaterThanOrEqual(1, $npcTuple['days_observed']);
+        $this->assertSame(1, $npcTuple['days_observed']);
 
-        $this->assertGreaterThanOrEqual(1, $response->json('data.spell_property_observations.row_count'));
-        $this->assertGreaterThanOrEqual(1, $response->json('data.npc_characteristic_observations.row_count'));
+        $this->assertSame(CombatLogSpellPropertyObservation::query()->count(), $response->json('data.spell_property_observations.row_count'));
+        $this->assertSame(CombatLogNpcCharacteristicObservation::query()->count(), $response->json('data.npc_characteristic_observations.row_count'));
+        $this->assertSame(Carbon::today()->toDateString(), $response->json('data.spell_property_observations.observed_on.max'));
     }
 
     #[Test]

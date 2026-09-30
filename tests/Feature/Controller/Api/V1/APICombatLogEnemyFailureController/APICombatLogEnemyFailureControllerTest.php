@@ -151,6 +151,28 @@ final class APICombatLogEnemyFailureControllerTest extends PublicTestCase
         $this->assertSame([$matching->id], array_column($response->json('data'), 'id'));
     }
 
+    #[Test]
+    public function index_givenSince_returnsOnlyRowsCreatedFromThatMoment(): void
+    {
+        // Arrange
+        $this->actingAsAdmin();
+
+        $old = $this->createFailure();
+        $new = $this->createFailure();
+        CombatLogRouteEnemyFailure::query()->whereKey($old->id)->update(['created_at' => now()->subDays(10)]);
+
+        // Act
+        $response = $this->getJson(route('api.v1.combatlog.enemy_failures.index', [
+            'dungeon'  => $this->dungeon->slug,
+            'after_id' => $old->id - 1,
+            'since'    => now()->subDay()->toDateTimeString(),
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame([$new->id], array_column($response->json('data'), 'id'));
+    }
+
     /**
      * An imported row keeps the dungeon_route_id it had on the deployment it came from, which identifies a completely
      * different route here as soon as the two numbers collide. Resolving it against a local route would hand out a

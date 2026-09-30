@@ -111,6 +111,7 @@ final class SiteControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
+        $response->assertSee('site-footer__worktree', false);
         $response->assertSee('1234-some-worktree');
     }
 

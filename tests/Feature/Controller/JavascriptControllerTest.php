@@ -28,6 +28,8 @@ final class JavascriptControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
+        $response->assertHeader('Content-Type', 'application/javascript; charset=UTF-8');
+        $this->assertStringStartsWith('let mapContextStaticData = {', (string)$response->getContent());
     }
 
     #[Test]

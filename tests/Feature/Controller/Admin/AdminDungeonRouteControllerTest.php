@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Controller\Admin;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
@@ -59,7 +61,10 @@ final class AdminDungeonRouteControllerTest extends PublicTestCase
     public function index_givenDungeonFilter_returnsOnlyMatchingDungeon(): void
     {
         // Arrange
-        $otherRoute = DungeonRoute::factory()->create(['author_id' => 1]);
+        $otherRoute = DungeonRoute::factory()->create([
+            'author_id'  => 1,
+            'dungeon_id' => Dungeon::query()->whereKeyNot($this->dungeonRoute->dungeon_id)->firstOrFail()->id,
+        ]);
 
         try {
             // Act
@@ -70,10 +75,7 @@ final class AdminDungeonRouteControllerTest extends PublicTestCase
             // Assert
             $response->assertOk();
             $response->assertSee($this->dungeonRoute->public_key);
-
-            if ($otherRoute->dungeon_id !== $this->dungeonRoute->dungeon_id) {
-                $response->assertDontSee($otherRoute->public_key);
-            }
+            $response->assertDontSee($otherRoute->public_key);
         } finally {
             $otherRoute->delete();
         }
@@ -126,6 +128,45 @@ final class AdminDungeonRouteControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenPublicKeyFilter_returnsOnlyThatRoute(): void
+    {
+        // Arrange
+        $otherRoute = DungeonRoute::factory()->create(['author_id' => 1]);
+
+        try {
+            // Act
+            $response = $this->get(route('admin.dungeonroutes', [
+                'public_key' => $this->dungeonRoute->public_key,
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas('models', fn($models) => $models->pluck('id')->all() === [$this->dungeonRoute->id]);
+        } finally {
+            $otherRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenNonAdmin_returnsForbidden(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $user->addRole(Role::firstWhere('name', Role::ROLE_USER));
+        $this->be($user);
+
+        try {
+            // Act
+            $response = $this->get(route('admin.dungeonroutes'));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $user->delete();
+        }
+    }
+
+    #[Test]
     public function edit_givenExistingRoute_returnsOk(): void
     {
         // Arrange
@@ -135,6 +176,8 @@ final class AdminDungeonRouteControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
+        $response->assertViewHas('dungeonRoute', fn(DungeonRoute $dungeonRoute) => $dungeonRoute->id === $this->dungeonRoute->id);
+        $response->assertSee($this->dungeonRoute->public_key);
     }
 
     #[Test]
@@ -166,6 +209,7 @@ final class AdminDungeonRouteControllerTest extends PublicTestCase
         // Assert
         $response->assertRedirect();
         $response->assertSessionHasErrors('published_state_id');
+        $this->assertEquals(PublishedState::ALL[PublishedState::WORLD], $this->dungeonRoute->fresh()->published_state_id);
     }
 
     #[Test]

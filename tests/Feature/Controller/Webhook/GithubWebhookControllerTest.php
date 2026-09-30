@@ -94,6 +94,57 @@ final class GithubWebhookControllerTest extends TestCase
     }
 
     #[Test]
+    public function github_givenNoSignatureHeader_doesNotSendDiscordEmbeds(): void
+    {
+        // Arrange
+        $this->expectDiscordEmbeds(0);
+        $payload = json_encode(['ref' => 'refs/heads/master', 'commits' => [$this->distinctCommit()]], JSON_THROW_ON_ERROR);
+
+        // Act
+        $response = $this->call(
+            'POST',
+            route('webhook.github'),
+            [],
+            [],
+            [],
+            $this->transformHeadersToServerVars(['Content-Type' => 'application/json']),
+            $payload,
+        );
+
+        // Assert
+        $this->assertNotSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+    }
+
+    /**
+     * @param array<string, mixed> $commitOverrides
+     */
+    #[Test]
+    #[DataProvider('skippedCommitProvider')]
+    public function github_givenOnlySkippedCommits_doesNotSendDiscordEmbeds(array $commitOverrides): void
+    {
+        // Arrange
+        $this->expectDiscordEmbeds(0);
+
+        // Act
+        $response = $this->postWebhook('refs/heads/master', [array_merge($this->distinctCommit(), $commitOverrides)]);
+
+        // Assert
+        $response->assertNoContent();
+    }
+
+    /**
+     * @return array<string, array{array<string, mixed>}>
+     */
+    public static function skippedCommitProvider(): array
+    {
+        return [
+            'not distinct'         => [['distinct' => false]],
+            'github system commit' => [['committer' => ['name' => 'Github', 'email' => 'noreply@github.com']]],
+            'merge commit'         => [['message' => 'Merge remote-tracking branch \'origin/master\'']],
+        ];
+    }
+
+    #[Test]
     #[DataProvider('unsetConfiguredSecretProvider')]
     public function github_givenUnsetConfiguredSecret_throwsRuntimeExceptionEvenWithMatchingSignature(mixed $configuredSecret): void
     {

@@ -513,6 +513,70 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
     }
 
     #[Test]
+    public function saveNew_givenStaleDifficultyForNonSpeedrunDungeon_createsRouteWithNullDifficulty(): void
+    {
+        // Arrange - the browser clears the stale value itself (classic-speedrun-then-switch.json); this posts
+        // the value an older client would still send, which the save service has to discard on its own
+        Queue::fake();
+        $classicGameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $user               = User::factory()->create(['game_version_id' => $classicGameVersion->id]);
+        $dungeon            = $this->classicNonSpeedrunDungeon($classicGameVersion);
+
+        $fields = $this->loadFixture('classic-speedrun-then-switch', [
+            'dungeon_id' => $dungeon->id,
+        ]);
+        $fields['dungeon_difficulty'] = '1';
+
+        $dungeonRoute = null;
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->post(route('dungeonroute.savenew'), $fields);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $response->assertRedirect();
+
+            $dungeonRoute = $this->findCreatedRoute($dungeon, $user);
+            $this->assertNotNull($dungeonRoute);
+            $this->assertNull($dungeonRoute->getRawOriginal('dungeon_difficulty'));
+        } finally {
+            $dungeonRoute?->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function saveNew_givenUnknownDungeonId_returnsValidationErrorAndCreatesNoRoute(): void
+    {
+        // Arrange
+        Queue::fake();
+        $user     = User::factory()->create();
+        $dungeon  = $this->retailDungeon();
+        $season   = $this->retailSeasonFor($dungeon);
+        $affixIds = $this->nonTeemingAffixGroupIds($season, 1);
+
+        $fields = $this->loadFixture('retail-minimal-defaults', [
+            'dungeon_id'     => (int)Dungeon::query()->max('id') + 1000,
+            'key_level_min'  => $season->key_level_min,
+            'key_level_max'  => $season->key_level_max,
+            'affix_group_id' => $affixIds[0],
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->post(route('dungeonroute.savenew'), $fields);
+
+            // Assert
+            $response->assertSessionHasErrors('dungeon_id');
+            $this->assertFalse(DungeonRoute::query()->where('author_id', $user->id)->exists());
+        } finally {
+            DungeonRoute::query()->where('author_id', $user->id)->get()->each(static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->delete());
+            $user->delete();
+        }
+    }
+
+    #[Test]
     public function saveNewTemporary_givenGuestMinimalFixture_createsTemporaryRouteAsGuest(): void
     {
         // Arrange

@@ -3,9 +3,11 @@
 namespace Tests\Feature\Controller\Api\V1\APIDungeonRouteDiscoverController;
 
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use Closure;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -70,6 +72,12 @@ final class APIDungeonRouteDiscoverControllerTest extends PublicTestCase
         $gameVersion = GameVersion::firstOrFail();
         $mock        = $this->mockDiscoverService();
         $mock->expects($this->once())->method('withLimit')->with(5)->willReturnSelf();
+        $mock->expects($this->once())->method('withBuilder')->with($this->callback(static function (Closure $applyToBuilder): bool {
+            $builder = DungeonRoute::query();
+            $applyToBuilder($builder);
+
+            return $builder->getQuery()->offset === 20;
+        }))->willReturnSelf();
 
         // Act
         $response = $this->getJson(route('api.v1.discover.popular', [
