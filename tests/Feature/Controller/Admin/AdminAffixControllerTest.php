@@ -31,6 +31,7 @@ final class AdminAffixControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
+        $response->assertViewHas('models', fn($models) => $models->pluck('key')->all() === Affix::query()->orderBy('key')->pluck('key')->all());
     }
 
     #[Test]
@@ -170,6 +171,37 @@ final class AdminAffixControllerTest extends PublicTestCase
             $this->assertSame('Updated description', $updated->description);
         } finally {
             $affix->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenKeyOfAnotherAffix_returnsValidationError(): void
+    {
+        // Arrange
+        $affix = null;
+
+        try {
+            $affix = Affix::create([
+                'key'         => 'TestUpdateAffixDuplicateKey',
+                'affix_id'    => 997,
+                'name'        => 'Original name',
+                'description' => 'Original description',
+            ]);
+            $otherAffixKey = Affix::query()->whereKeyNot($affix->id)->value('key');
+
+            // Act
+            $response = $this->patch(route('admin.affix.update', $affix), [
+                'key'         => $otherAffixKey,
+                'affix_id'    => 997,
+                'name'        => 'Updated name',
+                'description' => 'Updated description',
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('key');
+            $this->assertSame('Original name', $affix->fresh()->name);
+        } finally {
+            $affix?->delete();
         }
     }
 }

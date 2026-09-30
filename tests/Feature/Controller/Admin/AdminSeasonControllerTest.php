@@ -81,6 +81,8 @@ final class AdminSeasonControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
+        $response->assertViewHas('season', fn(Season $viewSeason) => $viewSeason->id === $season->id);
+        $response->assertViewHas('selectedDungeonIds', $season->seasonDungeons()->pluck('dungeon_id')->toArray());
     }
 
     #[Test]

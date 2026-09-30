@@ -167,6 +167,28 @@ final class APICombatLogEnemyResolutionControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenSince_returnsOnlyRowsCreatedFromThatMoment(): void
+    {
+        // Arrange
+        $this->actingAsAdmin();
+
+        $old = $this->createResolution();
+        $new = $this->createResolution();
+        CombatLogRouteEnemyResolution::query()->whereKey($old->id)->update(['created_at' => now()->subDays(10)]);
+
+        // Act
+        $response = $this->getJson(route('api.v1.combatlog.enemy_resolutions.index', [
+            'dungeon'  => $this->dungeon->slug,
+            'after_id' => $old->id - 1,
+            'since'    => now()->subDay()->toDateTimeString(),
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame([$new->id], array_column($response->json('data'), 'id'));
+    }
+
+    #[Test]
     public function index_givenMinDistance_returnsOnlyRowsAtLeastThatFarOff(): void
     {
         // Arrange — one row below the threshold and one above it, judged on weighted_distance

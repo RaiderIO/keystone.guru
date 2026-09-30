@@ -66,13 +66,47 @@ final class AdminExpansionControllerTest extends PublicTestCase
 
             // Assert
             $response->assertRedirect(route('admin.expansion.edit', $shortname));
-            $this->assertTrue(
-                Expansion::query()->where('shortname', $shortname)->exists(),
-                'Expansion should be created without requiring an icon upload',
-            );
+            $created = Expansion::query()->where('shortname', $shortname)->first();
+            $this->assertNotNull($created, 'Expansion should be created without requiring an icon upload');
+            $this->assertSame('Test Expansion', $created->name);
+            $this->assertSame('#ffffff', $created->color);
+            $this->assertEquals(1, $created->active);
         } finally {
             Expansion::query()->where('shortname', $shortname)->delete();
         }
+    }
+
+    #[Test]
+    public function savenew_givenShortnameOfExistingExpansion_returnsValidationError(): void
+    {
+        // Arrange
+        $existing = Expansion::query()->firstOrFail();
+        $name     = 'Test Duplicate Shortname Expansion';
+
+        // Act
+        $response = $this->post(route('admin.expansion.savenew'), [
+            'active'    => 1,
+            'name'      => $name,
+            'shortname' => $existing->shortname,
+            'color'     => '#ffffff',
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors('shortname');
+        $this->assertFalse(Expansion::query()->where('name', $name)->exists());
+    }
+
+    #[Test]
+    public function get_asAdmin_returnsAllExpansions(): void
+    {
+        // Arrange
+
+        // Act
+        $response = $this->get(route('admin.expansions'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertViewHas('expansions', fn($expansions) => $expansions->count() === Expansion::query()->count());
     }
 
     #[Test]

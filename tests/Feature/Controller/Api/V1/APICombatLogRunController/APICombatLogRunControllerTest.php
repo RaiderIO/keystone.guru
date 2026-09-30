@@ -102,6 +102,34 @@ final class APICombatLogRunControllerTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
+    public function segments_givenResponseWithoutSegments_shouldReturnNotFound(): void
+    {
+        // Arrange
+        $this->actingAsAdmin();
+
+        $season = Season::query()->firstOrFail();
+
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->expects($this->once())
+            ->method('getCombatLogSegmentsForRun')
+            ->willReturn(new CombatLogSegmentsResponse(1, []));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        // Act
+        $response = $this->getJson(route('api.v1.combatlog.run.segments', [
+            'season' => $season->id,
+            'runId'  => self::RUN_ID,
+        ]));
+
+        // Assert
+        $response->assertStatus(StatusCode::NOT_FOUND);
+        $response->assertJsonStructure(['error']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
     public function segments_givenUnknownSeason_shouldReturnUnprocessable(): void
     {
         // Arrange

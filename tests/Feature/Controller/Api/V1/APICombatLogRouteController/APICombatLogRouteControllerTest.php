@@ -70,6 +70,37 @@ final class APICombatLogRouteControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function postBody_givenRouteWithMultipleRuns_returnsTheLatestRunsJson(): void
+    {
+        // Arrange
+        $this->actingAsAdmin();
+
+        $dungeonRoute = $this->createCombatLogRoute('{"run":"first"}');
+        $latestRun    = ChallengeModeRun::create([
+            'dungeon_id'       => $this->dungeon->id,
+            'dungeon_route_id' => $dungeonRoute->id,
+            'level'            => 12,
+            'success'          => 1,
+            'total_time_ms'    => 2000,
+            'duplicate'        => 0,
+        ]);
+        ChallengeModeRunData::create([
+            'challenge_mode_run_id' => $latestRun->id,
+            'run_id'                => sprintf('test-run-latest-%d', $dungeonRoute->id),
+            'correlation_id'        => sprintf('test-correlation-latest-%d', $dungeonRoute->id),
+            'post_body'             => '{"run":"latest"}',
+            'processed'             => 1,
+        ]);
+
+        // Act
+        $response = $this->get(route('api.v1.combatlog.route.post_body', ['dungeonRoute' => $dungeonRoute->public_key]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame('{"run":"latest"}', $response->getContent());
+    }
+
+    #[Test]
     public function postBody_givenRouteWithoutRunData_returnsNotFound(): void
     {
         // Arrange

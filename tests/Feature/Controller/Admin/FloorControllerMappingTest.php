@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Admin;
 
 use App\Models\Dungeon;
+use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\Dungeon\DungeonServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
@@ -57,5 +58,43 @@ final class FloorControllerMappingTest extends PublicTestCase
             'floor'           => $otherDungeonNewestFloor,
             'mapping_version' => $otherDungeonNewestMappingVersion,
         ]), false);
+    }
+
+    #[Test]
+    public function mapping_givenMappingVersionOfAnotherDungeon_redirectsToDungeonEdit(): void
+    {
+        // Arrange
+        $dungeon                    = Dungeon::query()->whereHas('floors')->whereHas('mappingVersions')->firstOrFail();
+        $floor                      = $dungeon->floors()->firstOrFail();
+        $otherDungeonMappingVersion = MappingVersion::query()->where('dungeon_id', '!=', $dungeon->id)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.floor.edit.mapping', [
+            'dungeon'         => $dungeon,
+            'floor'           => $floor,
+            'mapping_version' => $otherDungeonMappingVersion,
+        ]));
+
+        // Assert
+        $response->assertRedirect(route('admin.dungeon.edit', ['dungeon' => $dungeon]));
+        $response->assertSessionHas('warning');
+    }
+
+    #[Test]
+    public function mapping_givenUnknownMappingVersion_returnsNotFound(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::query()->whereHas('floors')->firstOrFail();
+        $floor   = $dungeon->floors()->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.floor.edit.mapping', [
+            'dungeon'         => $dungeon,
+            'floor'           => $floor,
+            'mapping_version' => (int)MappingVersion::query()->max('id') + 1000,
+        ]));
+
+        // Assert
+        $response->assertNotFound();
     }
 }
