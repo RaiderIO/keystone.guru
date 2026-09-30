@@ -1,7 +1,7 @@
-{{#> dungeonroute_actions_items clone_action_label=clone_to_profile_label}}
+{{#> dungeonroute_actions_items clone_action_label=(t 'clone_to_profile_label')}}
 <div class="dropdown-divider"></div>
 <a class="dropdown-item dungeonroute-remove-from-this-team text-danger cursor-pointer"
    data-publickey="{{public_key}}">
-    <i class="fas fa-minus"></i> {{remove_route_label}}
+    <i class="fas fa-minus"></i> {{t 'remove_route_label'}}
 </a>
 {{/dungeonroute_actions_items}}

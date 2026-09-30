@@ -1,8 +1,8 @@
-<h3>{{add_remove_tag_label}}</h3>
+<h3>{{t 'add_remove_tag_label'}}</h3>
 <div id="no_tags" class="mb-3" style="display: none">
     <div class="row">
         <div class="col">
-            {{ no_tags_assigned_label }}
+            {{ t 'no_tags_assigned_label' }}
         </div>
     </div>
 </div>
@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col">
             <label for="new_tag_input">
-                {{current_tags_label}}:
+                {{t 'current_tags_label'}}:
             </label>
         </div>
     </div>
@@ -23,7 +23,7 @@
 <div class="row g-0 mt-1">
     <div class="col position-relative">
         <input id="new_tag_input" type="text" class="form-control"
-                                                  placeholder="{{ placeholder_new_tag_label }}"/>
+                                                  placeholder="{{ t 'placeholder_new_tag_label' }}"/>
         <ul id="new_tag_autocomplete" class="dropdown-menu w-100"></ul>
     </div>
     <div class="col-auto">
@@ -34,6 +34,6 @@
 </div>
 <div class="row">
     <div class="col">
-        <span>{{add_tag_with_enter_label}}</span>
+        <span>{{t 'add_tag_with_enter_label'}}</span>
     </div>
 </div>

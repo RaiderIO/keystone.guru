@@ -1,7 +1,7 @@
 <div class="dropdown">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="userActionsButton" data-bs-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-        {{actions_label}}
+        {{t 'actions_label'}}
     </button>
     <div class="dropdown-menu" aria-labelledby="userActionsButton">
         {{#each roles}}
@@ -9,7 +9,7 @@
                 <form method="POST" action="/admin/user/{{../user.id}}/make/{{name}}" accept-charset="UTF-8"
                       autocomplete="off">
                     <input name="_token" type="hidden" value="{{../csrf_token}}">
-                    <input class="btn btn-info w-100" name="submit" type="submit" value="{{../make_label}} {{display_name}}">
+                    <input class="btn btn-info w-100" name="submit" type="submit" value="{{t 'make_label'}} {{display_name}}">
                 </form>
             </a>
         {{/each}}
@@ -19,7 +19,7 @@
                   autocomplete="off">
                 <input name="_method" type="hidden" value="DELETE">
                 <input name="_token" type="hidden" value="{{csrf_token}}">
-                <input class="btn btn-danger w-100" name="submit" type="submit" value="{{delete_user_label}}">
+                <input class="btn btn-danger w-100" name="submit" type="submit" value="{{t 'delete_user_label'}}">
             </form>
         </a>
         <div class="dropdown-divider"></div>
@@ -27,14 +27,14 @@
            data-bs-toggle="modal" data-bs-target="#user_ip_addresses_modal"
            data-ip-addresses="{{user.ip_addresses_string}}"
         >
-            {{view_ip_addresses_label}}
+            {{t 'view_ip_addresses_label'}}
         </a>
         <a class="dropdown-item" href="#"
            data-bs-toggle="modal" data-bs-target="#grant_all_benefits_modal"
            data-user-id="{{user.id}}"
            data-user-name="{{user.name}}"
         >
-            {{grant_all_benefits_label}}
+            {{t 'grant_all_benefits_label'}}
         </a>
     </div>
 </div>

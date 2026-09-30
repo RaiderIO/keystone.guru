@@ -11,47 +11,47 @@
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                     data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                {{actions_label}}
+                {{t 'actions_label'}}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 {{#if is_user_admin}}
-                <h6 class="dropdown-header">{{admin_label}}</h6>
+                <h6 class="dropdown-header">{{t 'admin_label'}}</h6>
                 <a class="dropdown-item dungeonroute-refresh-thumbnails cursor-pointer"
                    data-publickey="{{public_key}}">
-                    <i class="fas fa-sync"></i> {{refresh_thumbnails_label}}
+                    <i class="fas fa-sync"></i> {{t 'refresh_thumbnails_label'}}
                 </a>
                 {{/if}}
                 {{#unless is_upgrade_draft}}
-                <h6 class="dropdown-header">{{sharing_label}}</h6>
+                <h6 class="dropdown-header">{{t 'sharing_label'}}</h6>
                 <a class="dropdown-item dungeonroute-publishedstate text-warning cursor-pointer {{#ifCond published '=='
                                                                                                           'unpublished'}} active {{/ifCond}}"
                    data-publickey="{{public_key}}" data-publishedstate="unpublished">
-                    <i class="fas fa-plane-arrival"></i> {{publish_state_title_unpublished}}
+                    <i class="fas fa-plane-arrival"></i> {{t 'publish_state_title_unpublished'}}
                 </a>
                 <a class="dropdown-item dungeonroute-publishedstate cursor-pointer {{#ifCond published '=='
                                                                                              'team'}} active {{/ifCond}}"
                    data-publickey="{{public_key}}" data-publishedstate="team">
-                    <i class="fas fa-users"></i> {{publish_state_title_team}}
+                    <i class="fas fa-users"></i> {{t 'publish_state_title_team'}}
                 </a>
                 <a class="dropdown-item dungeonroute-publishedstate cursor-pointer {{#ifCond published '=='
                                                                                              'world'}} active {{/ifCond}}"
                    data-publickey="{{public_key}}" data-publishedstate="world">
-                    <i class="fas fa-globe"></i> {{publish_state_title_world}}
+                    <i class="fas fa-globe"></i> {{t 'publish_state_title_world'}}
                 </a>
                 <a class="dropdown-item dungeonroute-publishedstate cursor-pointer {{#ifCond published '=='
                                                                                              'world_with_link'}} active {{/ifCond}}"
                    data-publickey="{{public_key}}" data-publishedstate="world_with_link">
-                    <i class="fas fa-link"></i> {{publish_state_title_world_with_link}}
+                    <i class="fas fa-link"></i> {{t 'publish_state_title_world_with_link'}}
                 </a>
                 {{/unless}}
 
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item dungeonroute-add-tag cursor-pointer" data-publickey="{{public_key}}">
-                    <i class="fas fa-tag"></i> {{add_remove_tag_label}}
+                    <i class="fas fa-tag"></i> {{t 'add_remove_tag_label'}}
                 </a>
                 {{#if show_add_to_collection}}
                 <a class="dropdown-item dungeonroute-add-to-collection cursor-pointer" data-publickey="{{public_key}}">
-                    <i class="fas fa-layer-group"></i> {{add_to_collection_label}}
+                    <i class="fas fa-layer-group"></i> {{t 'add_to_collection_label'}}
                 </a>
                 {{/if}}
 
@@ -60,20 +60,20 @@
                     <i class="fas fa-clone"></i> {{clone_action_label}}
                 </a>
                 <a class="dropdown-item dungeonroute-clone-to-team cursor-pointer" data-publickey="{{public_key}}">
-                    <i class="fas fa-clone"></i> {{clone_to_team_label}}
+                    <i class="fas fa-clone"></i> {{t 'clone_to_team_label'}}
                 </a>
                 {{#if show_migrate_to_encrypted }}
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item dungeonroute-migrate-to-encrypted cursor-pointer"
                        data-publickey="{{public_key}}">
-                        <i class="fas fa-fast-forward"></i> {{migrate_to_encrypted_label}}
+                        <i class="fas fa-fast-forward"></i> {{t 'migrate_to_encrypted_label'}}
                     </a>
                 {{/if}}
                 {{#if show_migrate_to_shrouded }}
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item dungeonroute-migrate-to-shrouded cursor-pointer"
                        data-publickey="{{public_key}}">
-                        <i class="fas fa-fast-forward"></i> {{migrate_to_shrouded_label}}
+                        <i class="fas fa-fast-forward"></i> {{t 'migrate_to_shrouded_label'}}
                     </a>
                 {{/if}}
                 {{#if show_continue_in_season }}
@@ -86,23 +86,23 @@
                 {{> @partial-block}}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item dungeonroute-delete text-danger cursor-pointer" data-publickey="{{public_key}}">
-                    <i class="fas fa-trash"></i> {{delete_label}}
+                    <i class="fas fa-trash"></i> {{t 'delete_label'}}
                 </a>
             </div>
         </div>
     </div>
     <div class="col">
         {{#if has_new_mapping_version}}
-            <i class="fas fa-exclamation-triangle text-warning ps-2 pt-2" title="{{new_mapping_version_label}}" data-bs-toggle="tooltip"></i>
+            <i class="fas fa-exclamation-triangle text-warning ps-2 pt-2" title="{{t 'new_mapping_version_label'}}" data-bs-toggle="tooltip"></i>
         {{/if}}
         {{#if show_continue_in_season}}
             <i class="fas fa-calendar-alt text-info ps-2 pt-2" title="{{continue_in_season_hint}}" data-bs-toggle="tooltip"></i>
         {{/if}}
         {{#if is_upgrade_draft}}
-            <span class="badge bg-info ms-2" title="{{upgrade_draft_badge_title}}" data-bs-toggle="tooltip">{{upgrade_draft_badge_label}}</span>
+            <span class="badge bg-info ms-2" title="{{t 'upgrade_draft_badge_title'}}" data-bs-toggle="tooltip">{{t 'upgrade_draft_badge_label'}}</span>
         {{/if}}
         {{#if has_upgrade_draft}}
-            <span class="badge bg-secondary ms-2" title="{{upgrade_draft_in_progress_badge_title}}" data-bs-toggle="tooltip">{{upgrade_draft_in_progress_badge_label}}</span>
+            <span class="badge bg-secondary ms-2" title="{{t 'upgrade_draft_in_progress_badge_title'}}" data-bs-toggle="tooltip">{{t 'upgrade_draft_in_progress_badge_label'}}</span>
         {{/if}}
     </div>
 </div>
