@@ -59,9 +59,6 @@ class EnemyPack extends Model implements HasPolylineInterface, MappingModelClone
         'mappingVersion',
         'floor',
         'polyline_id',
-        'color',
-        'color_animated',
-        'vertices_json',
     ];
 
     protected function casts(): array
@@ -112,7 +109,7 @@ class EnemyPack extends Model implements HasPolylineInterface, MappingModelClone
         /** @var static $clonedEnemyPack */
         $clonedEnemyPack         = clone $this;
         $clonedEnemyPack->exists = false;
-        unset($clonedEnemyPack->id, $clonedEnemyPack->color, $clonedEnemyPack->color_animated, $clonedEnemyPack->vertices_json);
+        unset($clonedEnemyPack->id);
         $clonedEnemyPack->mapping_version_id = $mappingVersion->id;
         $clonedEnemyPack->save();
 
