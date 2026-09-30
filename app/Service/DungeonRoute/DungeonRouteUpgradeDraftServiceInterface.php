@@ -37,9 +37,11 @@ interface DungeonRouteUpgradeDraftServiceInterface
      * Imports an MDT string as the draft of $original, so that applying the draft replaces the original's
      * contents with the string's while the original keeps its identity, audience and metadata.
      *
-     * The string is rejected before anything is persisted when it is for another dungeon, or when it was
-     * built against a mapping version older than the dungeon's newest MDT-synced one. When keystone.guru's
-     * current mapping version is newer than that MDT-synced one, the draft is upgraded to it.
+     * The string is rejected before anything is persisted when its preview has errors, when it is for another
+     * dungeon, or when it was built against a mapping version older than the dungeon's newest MDT-synced one.
+     * When keystone.guru's current mapping version is newer than that MDT-synced one, the draft is upgraded
+     * to it. A pending draft being discarded is only removed once the new draft is fully imported and upgraded,
+     * so a failure leaves the pending draft untouched.
      *
      * @param  Collection<int, ImportWarning> $warnings             Receives the import's warnings.
      * @param  bool                           $discardExistingDraft Whether a pending draft of $original may be discarded
