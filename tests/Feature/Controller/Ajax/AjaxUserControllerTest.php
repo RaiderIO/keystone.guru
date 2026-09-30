@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\AjaxPublicTestCase;
@@ -33,6 +34,7 @@ final class AjaxUserControllerTest extends AjaxPublicTestCase
 
         // Assert
         $response->assertOk();
+        $this->assertUserRowsAreDecorated($response);
     }
 
     #[Test]
@@ -61,5 +63,23 @@ final class AjaxUserControllerTest extends AjaxPublicTestCase
 
         // Assert
         $response->assertOk();
+        $this->assertUserRowsAreDecorated($response);
+    }
+
+    /**
+     * @param TestResponse<\Symfony\Component\HttpFoundation\Response> $response
+     */
+    private function assertUserRowsAreDecorated(TestResponse $response): void
+    {
+        $response->assertJsonStructure([
+            'draw',
+            'recordsTotal',
+            'recordsFiltered',
+            'data' => [
+                '*' => ['id', 'name', 'roles_string', 'routes', 'ip_addresses_string'],
+            ],
+        ]);
+
+        $this->assertNotEmpty($response->json('data'));
     }
 }

@@ -495,6 +495,109 @@ final class AjaxTagControllerTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function store_givenATagTheRouteAlreadyHas_returnsConflictAndCreatesNoDuplicate(): void
+    {
+        $author = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $name   = sprintf('test-tag-%s', fake()->uuid());
+            $this->createUserTagFor($author, $route, $name);
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'category'      => TagCategory::DUNGEON_ROUTE_PERSONAL,
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertConflict();
+            $this->assertSame(1, Tag::where('name', $name)->count());
+        } finally {
+            $this->cleanUpTagsOfUsers([$author]);
+            $this->cleanUp(route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
+    public function updateAll_givenOwnTag_renamesEveryTagWithThatNameInTheSameContextOnly(): void
+    {
+        $owner      = null;
+        $other      = null;
+        $route      = null;
+        $otherRoute = null;
+
+        try {
+            // Arrange
+            $owner      = $this->createUserWithUserRole();
+            $other      = $this->createUserWithUserRole();
+            $route      = DungeonRoute::factory()->create(['author_id' => $owner->id]);
+            $otherRoute = DungeonRoute::factory()->create(['author_id' => $owner->id]);
+            $name       = sprintf('test-tag-%s', fake()->uuid());
+            $tag        = $this->createUserTagFor($owner, $route, $name);
+            $siblingTag = $this->createUserTagFor($owner, $otherRoute, $name);
+            $foreignTag = $this->createUserTagFor($other, $route, $name);
+            $newName    = sprintf('test-tag-renamed-%s', fake()->uuid());
+
+            // Act
+            $response = $this->actingAs($owner)->put(sprintf('/ajax/tag/%d/all', $tag->id), [
+                'name'  => $newName,
+                'color' => '#ff0000',
+            ]);
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseHas('tags', ['id' => $tag->id, 'name' => $newName, 'color' => '#ff0000']);
+            $this->assertDatabaseHas('tags', ['id' => $siblingTag->id, 'name' => $newName, 'color' => '#ff0000']);
+            $this->assertDatabaseHas('tags', ['id' => $foreignTag->id, 'name' => $name]);
+        } finally {
+            $this->cleanUpTagsOfUsers([$owner, $other]);
+            $this->cleanUp(route: $otherRoute);
+            $this->cleanUp(route: $route, users: [$owner, $other]);
+        }
+    }
+
+    #[Test]
+    public function deleteAll_givenOwnTag_deletesEveryTagWithThatNameInTheSameContextOnly(): void
+    {
+        $owner      = null;
+        $other      = null;
+        $route      = null;
+        $otherRoute = null;
+
+        try {
+            // Arrange
+            $owner      = $this->createUserWithUserRole();
+            $other      = $this->createUserWithUserRole();
+            $route      = DungeonRoute::factory()->create(['author_id' => $owner->id]);
+            $otherRoute = DungeonRoute::factory()->create(['author_id' => $owner->id]);
+            $name       = sprintf('test-tag-%s', fake()->uuid());
+            $tag        = $this->createUserTagFor($owner, $route, $name);
+            $siblingTag = $this->createUserTagFor($owner, $otherRoute, $name);
+            $foreignTag = $this->createUserTagFor($other, $route, $name);
+
+            // Act
+            $response = $this->actingAs($owner)->delete(sprintf('/ajax/tag/%d/all', $tag->id));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseMissing('tags', ['id' => $tag->id]);
+            $this->assertDatabaseMissing('tags', ['id' => $siblingTag->id]);
+            $this->assertDatabaseHas('tags', ['id' => $foreignTag->id]);
+        } finally {
+            $this->cleanUpTagsOfUsers([$owner, $other]);
+            $this->cleanUp(route: $otherRoute);
+            $this->cleanUp(route: $route, users: [$owner, $other]);
+        }
+    }
+
     private function createUserWithUserRole(): User
     {
         $user = User::factory()->create(['public_key' => User::generateRandomPublicKey()]);
@@ -520,7 +623,7 @@ final class AjaxTagControllerTest extends PublicTestCase
         }
     }
 
-    private function createUserTagFor(User $user, ?DungeonRoute $dungeonRoute = null): Tag
+    private function createUserTagFor(User $user, ?DungeonRoute $dungeonRoute = null, ?string $name = null): Tag
     {
         return Tag::create([
             'context_id'      => $user->id,
@@ -528,7 +631,7 @@ final class AjaxTagControllerTest extends PublicTestCase
             'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL],
             'model_id'        => $dungeonRoute?->id,
             'model_class'     => $dungeonRoute === null ? null : DungeonRoute::class,
-            'name'            => sprintf('test-tag-%s', fake()->uuid()),
+            'name'            => $name ?? sprintf('test-tag-%s', fake()->uuid()),
             'color'           => null,
         ]);
     }

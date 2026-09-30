@@ -7,6 +7,8 @@ use App\Models\DungeonRoute\DungeonRouteChange;
 use App\Models\Floor\Floor;
 use App\Models\Path;
 use App\Models\Polyline;
+use App\Models\PublishedState;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
@@ -280,5 +282,134 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
             // would also wipe its own boot() listeners for the rest of the PHPUnit process
             Event::forget('eloquent.creating: ' . DungeonRouteChange::class);
         }
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function delete_givenAnExistingPath_deletesItAndItsPolyline(): void
+    {
+        // Arrange
+        $pathId     = $this->createPath();
+        $polylineId = Path::query()->findOrFail($pathId)->polyline_id;
+
+        // Act
+        $response = $this->delete(route('ajax.dungeonroute.path.delete', [
+            'dungeonRoute' => $this->dungeonRoute,
+            'path'         => $pathId,
+        ]));
+
+        // Assert
+        $response->assertNoContent();
+        $this->assertNull(Path::find($pathId));
+        $this->assertNull(Polyline::find($polylineId));
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function store_givenAUserWhoCannotEditTheDungeonRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $this->makeDungeonRouteNonSandbox(PublishedState::WORLD);
+        $outsider = User::factory()->create();
+
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->get()
+            ->random();
+
+        try {
+            $this->actingAs($outsider);
+
+            // Act
+            $response = $this->post(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $this->dungeonRoute]), [
+                'floor_id' => $randomFloor->id,
+                'polyline' => PolylineFixtures::createPolyline($randomFloor),
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertEquals(0, $this->dungeonRoute->paths()->count());
+        } finally {
+            $outsider->delete();
+        }
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function delete_givenAUserWhoCannotEditTheDungeonRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $pathId = $this->createPath();
+        $this->makeDungeonRouteNonSandbox(PublishedState::WORLD);
+        $outsider = User::factory()->create();
+
+        try {
+            $this->actingAs($outsider);
+
+            // Act
+            $response = $this->delete(route('ajax.dungeonroute.path.delete', [
+                'dungeonRoute' => $this->dungeonRoute,
+                'path'         => $pathId,
+            ]));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNotNull(Path::find($pathId));
+        } finally {
+            $outsider->delete();
+        }
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function show_givenAUserWhoCannotViewTheDungeonRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $pathId = $this->createPath();
+        $this->makeDungeonRouteNonSandbox(PublishedState::UNPUBLISHED);
+        $outsider = User::factory()->create();
+
+        try {
+            $this->actingAs($outsider);
+
+            // Act
+            $response = $this->get(route('ajax.dungeonroute.path.show', [
+                'dungeonRoute' => $this->dungeonRoute,
+                'path'         => $pathId,
+            ]));
+
+            // Assert
+            $response->assertForbidden();
+            $response->assertJsonMissingPath('model_data');
+        } finally {
+            $outsider->delete();
+        }
+    }
+
+    private function createPath(): int
+    {
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->get()
+            ->random();
+
+        $createResponse = $this->post(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $randomFloor->id,
+            'polyline' => PolylineFixtures::createPolyline($randomFloor),
+        ]);
+        $createResponse->assertCreated();
+
+        return json_decode($createResponse->content(), true)['id'];
+    }
+
+    private function makeDungeonRouteNonSandbox(string $publishedState): void
+    {
+        $this->dungeonRoute->update([
+            'author_id'          => 1,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[$publishedState],
+        ]);
     }
 }

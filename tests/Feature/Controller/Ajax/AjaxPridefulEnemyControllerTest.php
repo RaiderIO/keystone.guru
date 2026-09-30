@@ -5,6 +5,8 @@ namespace Tests\Feature\Controller\Ajax;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
+use App\Models\PublishedState;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
@@ -48,6 +50,11 @@ final class AjaxPridefulEnemyControllerTest extends DungeonRouteTestBase
         // Assert
         $response->assertCreated();
         $this->assertEquals(1, PridefulEnemy::query()->where('dungeon_route_id', $this->dungeonRoute->id)->count());
+        $this->assertDatabaseHas(PridefulEnemy::class, [
+            'dungeon_route_id' => $this->dungeonRoute->id,
+            'enemy_id'         => $enemy->id,
+            'floor_id'         => $enemy->floor_id,
+        ]);
         $this->assertNotEquals($updatedBefore, $this->dungeonRoute->fresh()->updated_at);
     }
 
@@ -86,6 +93,81 @@ final class AjaxPridefulEnemyControllerTest extends DungeonRouteTestBase
             // Remove only the listener registered above - DungeonRoute::flushEventListeners() would
             // also wipe DungeonRoute::boot()'s own listeners for the rest of the PHPUnit process
             Event::forget('eloquent.updating: ' . DungeonRoute::class);
+        }
+    }
+
+    #[Test]
+    public function store_givenAnEnemyThatIsAlreadyPrideful_updatesTheExistingRow(): void
+    {
+        // Arrange
+        $enemy = $this->randomEnemy();
+        $this->post($this->url($enemy), [
+            'floor_id' => $enemy->floor_id,
+            'lat'      => $enemy->lat,
+            'lng'      => $enemy->lng,
+        ])->assertCreated();
+
+        // Act
+        $response = $this->post($this->url($enemy), [
+            'floor_id' => $enemy->floor_id,
+            'lat'      => -12.5,
+            'lng'      => 34.5,
+        ]);
+
+        // Assert
+        $response->assertOk();
+        /** @var PridefulEnemy $pridefulEnemy */
+        $pridefulEnemy = PridefulEnemy::query()->where('dungeon_route_id', $this->dungeonRoute->id)->sole();
+        $this->assertEquals(-12.5, $pridefulEnemy->lat);
+        $this->assertEquals(34.5, $pridefulEnemy->lng);
+    }
+
+    #[Test]
+    public function delete_givenAPridefulEnemy_removesIt(): void
+    {
+        // Arrange
+        $enemy = $this->randomEnemy();
+        $this->post($this->url($enemy), [
+            'floor_id' => $enemy->floor_id,
+            'lat'      => $enemy->lat,
+            'lng'      => $enemy->lng,
+        ])->assertCreated();
+
+        // Act
+        $response = $this->delete($this->url($enemy));
+
+        // Assert
+        $response->assertNoContent();
+        $this->assertEquals(0, PridefulEnemy::query()->where('dungeon_route_id', $this->dungeonRoute->id)->count());
+    }
+
+    #[Test]
+    public function store_givenAUserWhoCannotEditTheDungeonRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $enemy = $this->randomEnemy();
+        $this->dungeonRoute->update([
+            'author_id'          => 1,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+        $outsider = User::factory()->create();
+
+        try {
+            $this->actingAs($outsider);
+
+            // Act
+            $response = $this->post($this->url($enemy), [
+                'floor_id' => $enemy->floor_id,
+                'lat'      => $enemy->lat,
+                'lng'      => $enemy->lng,
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertEquals(0, PridefulEnemy::query()->where('dungeon_route_id', $this->dungeonRoute->id)->count());
+        } finally {
+            $outsider->delete();
         }
     }
 

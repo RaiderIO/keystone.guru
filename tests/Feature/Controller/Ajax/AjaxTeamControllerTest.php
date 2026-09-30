@@ -416,6 +416,81 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
         }
     }
 
+    #[Test]
+    public function changeRole_givenAPlainMember_returnsForbiddenAndKeepsTheRole(): void
+    {
+        // Arrange
+        $this->actingAs($this->member);
+
+        // Act
+        $response = $this->put($this->changeRoleUrl(), [
+            'username' => $this->moderator->name,
+            'role'     => TeamUser::ROLE_MEMBER,
+        ]);
+
+        // Assert
+        $response->assertForbidden();
+        $this->assertSame(
+            TeamUser::ROLE_MODERATOR,
+            TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->moderator->id)->value('role'),
+        );
+    }
+
+    #[Test]
+    public function changeRole_givenAModeratorPromotingPastTheirOwnRank_returnsForbiddenAndKeepsTheRole(): void
+    {
+        // Act
+        $response = $this->put($this->changeRoleUrl(), [
+            'username' => $this->member->name,
+            'role'     => TeamUser::ROLE_ADMIN,
+        ]);
+
+        // Assert
+        $response->assertForbidden();
+        $this->assertSame(
+            TeamUser::ROLE_MEMBER,
+            TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->member->id)->value('role'),
+        );
+    }
+
+    #[Test]
+    public function addRoute_givenAPlainMember_returnsForbiddenAndLeavesItUnassigned(): void
+    {
+        // Arrange - the member's own route, so only the moderator requirement can refuse it
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => null]);
+        $this->actingAs($this->member);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenAPlainMember_returnsForbiddenAndLeavesItAssigned(): void
+    {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => $this->team->id]);
+        $this->actingAs($this->member);
+
+        try {
+            // Act
+            $response = $this->delete($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame($this->team->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
     private function createAdFreeGiveawayGiver(): User
     {
         $giver = User::factory()->create();
