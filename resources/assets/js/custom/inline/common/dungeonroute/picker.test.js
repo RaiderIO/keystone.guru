@@ -1176,6 +1176,21 @@ describe('CommonDungeonroutePicker', () => {
         expect(rowOf('plain').querySelector('.route_picker_tags')).toBeNull();
     });
 
+    it('render_givenUncolouredTag_usesOnlyTheThemeBadgeColours', () => {
+        // Arrange
+        picker.options.showTags = true;
+        jQuery('#picker').trigger('show.bs.offcanvas');
+
+        // Act
+        respondWithRoutes([route('tagged', {tagspersonal: [{name: 'Guild', color: null}]})]);
+
+        // Assert
+        const chip = rowOf('tagged').querySelector('.route_picker_tag');
+        expect(chip.classList.contains('text-bg-primary')).toBe(true);
+        expect(chip.classList.contains('text-dark')).toBe(false);
+        expect(chip.classList.contains('text-white')).toBe(false);
+    });
+
     it('render_givenShowTagsOff_rendersNoTagContainer', () => {
         // Arrange
         jQuery('#picker').trigger('show.bs.offcanvas');

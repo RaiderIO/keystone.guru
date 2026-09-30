@@ -25,7 +25,7 @@
                 {{#if tags.length}}
                     <span class="route_picker_tags d-block text-truncate">
                         {{#each tags}}
-                            <span class="route_picker_tag tag badge rounded-pill me-1 {{#if dark}}text-white{{else}}text-dark{{/if}}{{#unless color}} text-bg-primary{{/unless}}"{{#if color}} style="background-color: {{ color }}"{{/if}}>{{ name }}</span>
+                            <span class="route_picker_tag tag badge rounded-pill me-1 {{#if color}}{{#if dark}}text-white{{else}}text-dark{{/if}}{{else}}text-bg-primary{{/if}}"{{#if color}} style="background-color: {{ color }}"{{/if}}>{{ name }}</span>
                         {{/each}}
                     </span>
                 {{/if}}
