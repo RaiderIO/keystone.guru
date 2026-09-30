@@ -122,4 +122,156 @@ final class AjaxProfileControllerTest extends PublicTestCase
             $admin->delete();
         }
     }
+
+    #[Test]
+    public function addAdFreeGiveaway_givenGiverWithoutGiveawaysLeft_returnsUnprocessable(): void
+    {
+        // Arrange - a plain user carries no AD_FREE_TEAM_MEMBERS benefit, so has no giveaways to hand out
+        $giver = User::factory()->create();
+        $giver->addRole(Role::ROLE_USER);
+
+        $target = User::factory()->create([
+            'public_key' => User::generateRandomPublicKey(),
+        ]);
+
+        try {
+            $this->actingAs($giver);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/profile/adfree/%s', $target->public_key), [], self::AJAX_HEADERS);
+
+            // Assert
+            $response->assertUnprocessable();
+            $this->assertFalse(PatreonAdFreeGiveaway::query()->where('receiver_user_id', $target->id)->exists());
+        } finally {
+            PatreonAdFreeGiveaway::query()->where('receiver_user_id', $target->id)->delete();
+            $target->delete();
+            $giver->delete();
+        }
+    }
+
+    #[Test]
+    public function addAdFreeGiveaway_givenReceiverThatAlreadyHasAGiveaway_returnsUnprocessable(): void
+    {
+        // Arrange
+        $admin = User::factory()->create();
+        $admin->addRole(Role::ROLE_ADMIN);
+
+        $otherGiver = User::factory()->create();
+        $target     = User::factory()->create([
+            'public_key' => User::generateRandomPublicKey(),
+        ]);
+
+        try {
+            PatreonAdFreeGiveaway::create([
+                'giver_user_id'    => $otherGiver->id,
+                'receiver_user_id' => $target->id,
+            ]);
+
+            $this->actingAs($admin);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/profile/adfree/%s', $target->public_key), [], self::AJAX_HEADERS);
+
+            // Assert
+            $response->assertUnprocessable();
+            $this->assertFalse(PatreonAdFreeGiveaway::query()->where('giver_user_id', $admin->id)->exists());
+        } finally {
+            PatreonAdFreeGiveaway::query()->where('receiver_user_id', $target->id)->delete();
+            $target->delete();
+            $otherGiver->delete();
+            $admin->delete();
+        }
+    }
+
+    #[Test]
+    public function removeAdFreeGiveaway_givenTheGiver_deletesTheGiveaway(): void
+    {
+        // Arrange
+        $giver = User::factory()->create();
+        $giver->addRole(Role::ROLE_USER);
+
+        $target = User::factory()->create([
+            'public_key' => User::generateRandomPublicKey(),
+        ]);
+
+        try {
+            PatreonAdFreeGiveaway::create([
+                'giver_user_id'    => $giver->id,
+                'receiver_user_id' => $target->id,
+            ]);
+
+            $this->actingAs($giver);
+
+            // Act
+            $response = $this->delete(sprintf('/ajax/profile/adfree/%s', $target->public_key), [], self::AJAX_HEADERS);
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertFalse(PatreonAdFreeGiveaway::query()->where('receiver_user_id', $target->id)->exists());
+        } finally {
+            PatreonAdFreeGiveaway::query()->where('receiver_user_id', $target->id)->delete();
+            $target->delete();
+            $giver->delete();
+        }
+    }
+
+    #[Test]
+    public function removeAdFreeGiveaway_givenSomeoneOtherThanTheGiver_returnsForbidden(): void
+    {
+        // Arrange
+        $giver    = User::factory()->create();
+        $outsider = User::factory()->create();
+        $outsider->addRole(Role::ROLE_USER);
+
+        $target = User::factory()->create([
+            'public_key' => User::generateRandomPublicKey(),
+        ]);
+
+        try {
+            PatreonAdFreeGiveaway::create([
+                'giver_user_id'    => $giver->id,
+                'receiver_user_id' => $target->id,
+            ]);
+
+            $this->actingAs($outsider);
+
+            // Act
+            $response = $this->delete(sprintf('/ajax/profile/adfree/%s', $target->public_key), [], self::AJAX_HEADERS);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertTrue(PatreonAdFreeGiveaway::query()->where('receiver_user_id', $target->id)->exists());
+        } finally {
+            PatreonAdFreeGiveaway::query()->where('receiver_user_id', $target->id)->delete();
+            $target->delete();
+            $outsider->delete();
+            $giver->delete();
+        }
+    }
+
+    #[Test]
+    public function removeAdFreeGiveaway_givenReceiverWithoutAGiveaway_returnsUnprocessable(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $user->addRole(Role::ROLE_USER);
+
+        $target = User::factory()->create([
+            'public_key' => User::generateRandomPublicKey(),
+        ]);
+
+        try {
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->delete(sprintf('/ajax/profile/adfree/%s', $target->public_key), [], self::AJAX_HEADERS);
+
+            // Assert
+            $response->assertUnprocessable();
+        } finally {
+            $target->delete();
+            $user->delete();
+        }
+    }
 }

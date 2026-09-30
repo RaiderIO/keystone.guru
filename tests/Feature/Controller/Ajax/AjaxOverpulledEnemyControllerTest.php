@@ -105,6 +105,24 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
         }
     }
 
+    #[Test]
+    public function store_givenAnExpiredLiveSession_returnsForbiddenAndSavesNothing(): void
+    {
+        // Arrange
+        $enemies = $this->distinctEnemies(1);
+        LiveSession::query()->whereKey($this->liveSession->id)->update(['expires_at' => now()->subHour()]);
+
+        // Act
+        $response = $this->post($this->url(), [
+            'kill_zone_id' => 1,
+            'enemy_ids'    => $enemies->pluck('id')->toArray(),
+        ]);
+
+        // Assert
+        $response->assertForbidden();
+        $this->assertEquals(0, OverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
+    }
+
     /**
      * @return Collection<int, Enemy>
      */

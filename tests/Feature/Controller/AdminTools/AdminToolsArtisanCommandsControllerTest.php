@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Controller\AdminTools;
 
+use App\Models\KillZone\KillZoneEnemy;
+use App\Models\Laratrust\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use PHPUnit\Framework\Attributes\Group;
@@ -33,6 +35,28 @@ final class AdminToolsArtisanCommandsControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function backfillKillZoneEnemyId_givenKillZoneEnemyWithoutEnemyId_countsItAndEndsTheRangeAtIt(): void
+    {
+        // Arrange
+        $killZoneEnemy = null;
+
+        try {
+            $killZoneEnemy = KillZoneEnemy::factory()->create(['enemy_id' => null]);
+
+            // Act
+            $response = $this->get(route('admin.tools.artisancommands.backfillkillzoneenemyid.view'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas('count', KillZoneEnemy::query()->whereNull('enemy_id')->count());
+            $response->assertViewHas('minId', (int)KillZoneEnemy::query()->whereNull('enemy_id')->min('id'));
+            $response->assertViewHas('maxId', $killZoneEnemy->id);
+        } finally {
+            $killZoneEnemy?->delete();
+        }
+    }
+
+    #[Test]
     public function run_givenWhitelistedCommand_returnsJsonWithOutput(): void
     {
         // Arrange
@@ -54,6 +78,7 @@ final class AdminToolsArtisanCommandsControllerTest extends PublicTestCase
     public function run_givenNonWhitelistedCommand_returns422(): void
     {
         // Arrange
+        Artisan::shouldReceive('call')->never();
 
         // Act
         $response = $this->post(route('admin.tools.artisancommands.run'), [
@@ -63,5 +88,31 @@ final class AdminToolsArtisanCommandsControllerTest extends PublicTestCase
 
         // Assert
         $response->assertStatus(422);
+        $response->assertJsonPath('error', 'Command "some:dangerous-command" is not allowed.');
+    }
+
+    #[Test]
+    public function run_givenNonAdmin_returnsForbiddenWithoutRunningTheCommand(): void
+    {
+        // Arrange
+        $user = null;
+        Artisan::shouldReceive('call')->never();
+
+        try {
+            $user = User::factory()->create();
+            $user->addRole(Role::firstWhere('name', Role::ROLE_USER));
+            $this->be($user);
+
+            // Act
+            $response = $this->post(route('admin.tools.artisancommands.run'), [
+                'command' => 'ksg:backfill-kill-zone-enemy-id',
+                'options' => [],
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $user?->delete();
+        }
     }
 }

@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Attributes\SlowTest;
 use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
@@ -18,6 +19,7 @@ use Tests\TestCases\PublicTestCase;
 #[SlowTest]
 final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
 {
+    use CreatesDungeon;
     use ProvidesDungeon;
 
     #[\Override]
@@ -125,6 +127,28 @@ final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
         // Assert
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['count']);
+        $this->assertSame($before, DungeonRoute::query()->count());
+    }
+
+    #[Test]
+    public function generateBatch_givenDungeonWithoutEnemies_returnsUnprocessableWithTheGeneratorMessage(): void
+    {
+        // Arrange
+        $dungeon = $this->createDungeon();
+        $before  = DungeonRoute::query()->count();
+
+        // Act
+        $response = $this->postJson(route('admin.tools.dungeonroute.generatetestroutes.generate_batch'), [
+            'dungeon_id'      => $dungeon->id,
+            'count'           => 1,
+            'published_state' => PublishedState::WORLD,
+        ]);
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertExactJson([
+            'message' => sprintf('Dungeon %s has no enemies on mapping version %d', $dungeon->key, $dungeon->getCurrentMappingVersion()->id),
+        ]);
         $this->assertSame($before, DungeonRoute::query()->count());
     }
 

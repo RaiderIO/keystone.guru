@@ -8,6 +8,7 @@ use App\Models\Floor\Floor;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
+use App\Models\PublishedState;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
@@ -288,6 +289,71 @@ final class AjaxMapIconControllerTest extends DungeonRouteTestBase
             $team->delete();
             $outsider->delete();
         }
+    }
+
+    #[Test]
+    public function dungeonRouteStore_givenAUserWhoCannotEditTheDungeonRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $this->makeDungeonRouteNonSandbox();
+        $outsider = User::factory()->create();
+        $floor    = $this->randomNonFacadeFloor($this->dungeonRoute);
+
+        try {
+            $this->actingAs($outsider);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/mapicon', $this->dungeonRoute->getRouteKey()), [
+                'mapping_version_id'         => null,
+                'floor_id'                   => $floor->id,
+                'team_id'                    => null,
+                'map_icon_type_id'           => $this->nonAdminMapIconType()->id,
+                'linked_awakened_obelisk_id' => null,
+                'lat'                        => -100,
+                'lng'                        => 100,
+                'comment'                    => 'Placed by an outsider',
+                'permanent_tooltip'          => 0,
+                'seasonal_index'             => null,
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertEquals(0, $this->dungeonRoute->mapicons()->count());
+        } finally {
+            $outsider->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenAUserWhoCannotEditTheDungeonRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $mapIcon = $this->createMapIcon();
+        $this->makeDungeonRouteNonSandbox();
+        $outsider = User::factory()->create();
+
+        try {
+            $this->actingAs($outsider);
+
+            // Act
+            $response = $this->delete($this->mapIconUrl($this->dungeonRoute, $mapIcon));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNotNull(MapIcon::find($mapIcon->id));
+        } finally {
+            $mapIcon->delete();
+            $outsider->delete();
+        }
+    }
+
+    private function makeDungeonRouteNonSandbox(): void
+    {
+        $this->dungeonRoute->update([
+            'author_id'          => 1,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
     }
 
     /** @return array<string, mixed> */

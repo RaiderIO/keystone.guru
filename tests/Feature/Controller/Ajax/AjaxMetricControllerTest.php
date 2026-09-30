@@ -38,6 +38,10 @@ final class AjaxMetricControllerTest extends AjaxPublicTestCase
 
             // Assert
             $response->assertStatus(StatusCode::FORBIDDEN);
+            $this->assertDatabaseMissing(Metric::class, [
+                'model_class' => DungeonRoute::class,
+                'model_id'    => $route->id,
+            ]);
         } finally {
             $route->delete();
             $nonOwner->delete();
@@ -64,6 +68,50 @@ final class AjaxMetricControllerTest extends AjaxPublicTestCase
 
             // Assert
             $response->assertNoContent();
+            $this->assertDatabaseHas(Metric::class, [
+                'model_class' => DungeonRoute::class,
+                'model_id'    => $route->id,
+                'category'    => Metric::CATEGORY_DUNGEON_ROUTE_MDT_COPY,
+                'tag'         => Metric::TAG_MDT_COPY_VIEW,
+                'value'       => 1,
+            ]);
+        } finally {
+            Metric::query()
+                ->where('model_class', DungeonRoute::class)
+                ->where('model_id', $route->id)
+                ->delete();
+            $route->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenViewableRouteReportedThroughGenericEndpoint_storesTheMetric(): void
+    {
+        // Arrange
+        $route = DungeonRoute::factory()->create([
+            'author_id'          => 1,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            'expires_at'         => null,
+        ]);
+
+        try {
+            // Act
+            $response = $this->post('/ajax/metric', [
+                'model_id'    => $route->id,
+                'model_class' => DungeonRoute::class,
+                'category'    => Metric::CATEGORY_DUNGEON_ROUTE_MDT_COPY,
+                'tag'         => Metric::TAG_MDT_COPY_VIEW,
+                'value'       => 1,
+            ]);
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseHas(Metric::class, [
+                'model_class' => DungeonRoute::class,
+                'model_id'    => $route->id,
+                'category'    => Metric::CATEGORY_DUNGEON_ROUTE_MDT_COPY,
+                'tag'         => Metric::TAG_MDT_COPY_VIEW,
+            ]);
         } finally {
             Metric::query()
                 ->where('model_class', DungeonRoute::class)
@@ -99,6 +147,10 @@ final class AjaxMetricControllerTest extends AjaxPublicTestCase
 
             // Assert
             $response->assertStatus(StatusCode::FORBIDDEN);
+            $this->assertDatabaseMissing(Metric::class, [
+                'model_class' => DungeonRoute::class,
+                'model_id'    => $route->id,
+            ]);
         } finally {
             $route->delete();
             $nonOwner->delete();
@@ -136,6 +188,8 @@ final class AjaxMetricControllerTest extends AjaxPublicTestCase
     {
         // Arrange - the generic endpoint is also used for non-DungeonRoute metrics; those must
         // keep working unauthenticated/ungated
+        $maxMetricId = (int)Metric::query()->max('id');
+
         try {
             // Act
             $response = $this->post('/ajax/metric', [
@@ -148,6 +202,15 @@ final class AjaxMetricControllerTest extends AjaxPublicTestCase
 
             // Assert
             $response->assertNoContent();
+            $this->assertTrue(
+                Metric::query()
+                    ->where('id', '>', $maxMetricId)
+                    ->whereNull('model_class')
+                    ->whereNull('model_id')
+                    ->where('category', Metric::CATEGORY_DUNGEON_ROUTE_MDT_COPY)
+                    ->where('tag', Metric::TAG_MDT_COPY_VIEW)
+                    ->exists(),
+            );
         } finally {
             Metric::query()
                 ->whereNull('model_class')

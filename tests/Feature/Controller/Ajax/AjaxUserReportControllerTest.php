@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
 use App\Models\User;
@@ -59,6 +60,89 @@ final class AjaxUserReportControllerTest extends AjaxPublicTestCase
             $this->reportsFor($dungeonRoute)->delete();
             $dungeonRoute->delete();
             $reporter->delete();
+        }
+    }
+
+    #[Test]
+    public function dungeonrouteStore_givenNoMessage_returnsValidationErrorAndStoresNothing(): void
+    {
+        // Arrange
+        $reporter     = $this->createUserWithUserRole();
+        $dungeonRoute = $this->createRouteOwnedByAnotherUser(PublishedState::WORLD);
+
+        try {
+            $this->actingAs($reporter);
+
+            // Act
+            $response = $this->postJson(sprintf('/ajax/userreport/dungeonroute/%s', $dungeonRoute->public_key), [
+                'category' => 'other',
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['message']);
+            $this->assertSame(0, $this->reportsFor($dungeonRoute)->count());
+        } finally {
+            $this->reportsFor($dungeonRoute)->delete();
+            $dungeonRoute->delete();
+            $reporter->delete();
+        }
+    }
+
+    #[Test]
+    public function enemyStore_givenValidPayload_createsTheReport(): void
+    {
+        // Arrange
+        $reporter = $this->createUserWithUserRole();
+        /** @var Enemy $enemy */
+        $enemy = Enemy::query()->firstOrFail();
+
+        try {
+            $this->actingAs($reporter);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/userreport/enemy/%s', $enemy->id), $this->validPayload());
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseHas(UserReport::class, [
+                'model_class' => Enemy::class,
+                'model_id'    => $enemy->id,
+                'user_id'     => $reporter->id,
+                'category'    => 'other',
+                'message'     => 'Something is off with this route',
+            ]);
+        } finally {
+            UserReport::query()->where('user_id', $reporter->id)->delete();
+            $reporter->delete();
+        }
+    }
+
+    #[Test]
+    public function status_givenAdmin_updatesTheReportStatus(): void
+    {
+        // Arrange
+        $userReport = UserReport::create([
+            'model_id'    => 1,
+            'model_class' => Enemy::class,
+            'user_id'     => 1,
+            'category'    => 'other',
+            'message'     => 'Created by AjaxUserReportControllerTest',
+            'contact_ok'  => false,
+            'status'      => 0,
+        ]);
+
+        try {
+            // Act
+            $response = $this->put(sprintf('/ajax/userreport/%s/status', $userReport->id), [
+                'status' => 1,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertEquals(1, $userReport->fresh()->status);
+        } finally {
+            $userReport->delete();
         }
     }
 
