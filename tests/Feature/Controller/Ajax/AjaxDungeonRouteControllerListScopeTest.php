@@ -233,13 +233,19 @@ final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
     public function get_givenScopeConstraintsWithoutMine_stillOnlyReturnsWorldPublishedRoutes(): void
     {
         // Arrange
-        $user  = null;
-        $route = null;
+        $user       = null;
+        $route      = null;
+        $worldRoute = null;
 
         try {
             $user  = $this->createUserWithUserRole();
             $route = $this->createOwnRoute($user, [
                 'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+            ]);
+            $worldRoute = $this->createOwnRoute($user, [
+                'title'              => $route->title,
+                'dungeon_id'         => $route->dungeon_id,
+                'mapping_version_id' => $route->mapping_version_id,
             ]);
             $this->actingAs($user);
 
@@ -254,8 +260,11 @@ final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
 
             // Assert
             $response->assertOk();
-            $this->assertNotContains($route->public_key, array_column($response->json('data'), 'public_key'));
+            $publicKeys = array_column($response->json('data'), 'public_key');
+            $this->assertContains($worldRoute->public_key, $publicKeys);
+            $this->assertNotContains($route->public_key, $publicKeys);
         } finally {
+            $worldRoute?->delete();
             $route?->delete();
             $user?->delete();
         }

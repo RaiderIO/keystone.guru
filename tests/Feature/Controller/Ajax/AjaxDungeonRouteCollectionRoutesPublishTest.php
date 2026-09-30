@@ -128,6 +128,7 @@ final class AjaxDungeonRouteCollectionRoutesPublishTest extends PublicTestCase
         $this->assertSame(PublishedState::ALL[PublishedState::WORLD], $unpublished->fresh()->published_state_id);
         $this->assertSame(PublishedState::ALL[PublishedState::WORLD], $team->fresh()->published_state_id);
         $this->assertTrue($unpublished->fresh()->published_at->greaterThanOrEqualTo($beforePublish));
+        $this->assertSame(PublishedState::ALL[PublishedState::WORLD], $alreadyWorld->fresh()->published_state_id);
     }
 
     #[Test]
