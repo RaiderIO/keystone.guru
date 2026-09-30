@@ -166,7 +166,10 @@ final class HeaderComposerTest extends PublicTestCase
             $dungeons = $view->getData()['gameVersionDungeons'];
 
             $this->assertNotEmpty($dungeons);
-            $this->assertEquals([$classicEra->expansion_id], $dungeons->pluck('expansion_id')->unique()->values()->all());
+            $this->assertEqualsCanonicalizing(
+                Dungeon::query()->active()->forGameVersion($classicEra)->pluck('id')->all(),
+                $dungeons->pluck('id')->all(),
+            );
         } finally {
             unset($_COOKIE['game_version']);
         }

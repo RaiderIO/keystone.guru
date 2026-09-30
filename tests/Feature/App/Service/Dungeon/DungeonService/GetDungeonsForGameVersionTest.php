@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Service\Dungeon\DungeonService;
 
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
+use App\Models\DungeonSelectorGroup;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
@@ -18,6 +19,7 @@ use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\Traits\CreatesSeason;
@@ -93,15 +95,6 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
         Dungeon::query()->whereKey($dungeon->id)->delete();
     }
 
-    private function buildServiceWithoutCurrentSeason(): DungeonService
-    {
-        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
-        $seasonService->method('getCurrentSeason')->willReturn(null);
-        $seasonService->method('getNextSeason')->willReturn(null);
-
-        return $this->buildService($seasonService);
-    }
-
     /**
      * Builds the service with everything but the season service stubbed out - the season service is
      * the only collaborator this method's behaviour depends on.
@@ -114,6 +107,15 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
             $this->createMockPublic(DungeonServiceLoggingInterface::class),
             $this->createMockPublic(GameVersionServiceInterface::class),
         );
+    }
+
+    private function createSeasonlessSeasonService(): SeasonServiceInterface
+    {
+        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
+        $seasonService->method('getCurrentSeason')->willReturn(null);
+        $seasonService->method('getNextSeason')->willReturn(null);
+
+        return $seasonService;
     }
 
     /**
@@ -205,26 +207,22 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
     }
 
     /**
-     * Scenario: an expansion without an active season - the game version's expansion is all we can show.
+     * Scenario: a game version without seasons - every active dungeon and raid mapped for it is relevant.
      */
     #[Test]
-    public function getDungeonsForGameVersion_givenNoCurrentSeason_returnsTheExpansionsDungeons(): void
+    public function getDungeonsForGameVersion_givenNoCurrentSeason_returnsEveryActiveDungeonAndRaidMappedForTheGameVersion(): void
     {
         // Arrange
-        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
-        $seasonService->method('getCurrentSeason')->willReturn(null);
-        $seasonService->method('getNextSeason')->willReturn(null);
-
-        $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $expected    = Dungeon::query()->active()->forGameVersion($gameVersion)->pluck('id')->all();
 
         // Act
-        $dungeons = $this->buildService($seasonService)->getDungeonsForGameVersion($gameVersion);
+        $dungeons = $this->buildService($this->createSeasonlessSeasonService())->getDungeonsForGameVersion($gameVersion);
 
         // Assert
-        $this->assertEqualsCanonicalizing(
-            $gameVersion->expansion->dungeons->pluck('id')->all(),
-            $dungeons->pluck('id')->all(),
-        );
+        $this->assertEqualsCanonicalizing($expected, $dungeons->pluck('id')->all());
+        $this->assertTrue($dungeons->contains(static fn(Dungeon $dungeon) => $dungeon->raid), 'Expected Classic Era raids');
+        $this->assertTrue($dungeons->contains(static fn(Dungeon $dungeon) => !$dungeon->raid), 'Expected Classic Era dungeons');
     }
 
     /**
@@ -241,7 +239,7 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
             $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
 
             // Act
-            $dungeons = $this->buildServiceWithoutCurrentSeason()->getDungeonsForGameVersion($gameVersion);
+            $dungeons = $this->buildService($this->createSeasonlessSeasonService())->getDungeonsForGameVersion($gameVersion);
 
             // Assert
             $this->assertNotContains($dungeon->id, $dungeons->pluck('id')->all());
@@ -249,6 +247,93 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
         } finally {
             $this->deleteDungeon($dungeon);
         }
+    }
+
+    /**
+     * Scenario: Cataclysm's expansion holds dungeons that were never mapped for the Cataclysm game version.
+     */
+    #[Test]
+    public function getDungeonsForGameVersion_givenNoCurrentSeason_excludesDungeonsWithoutAMappingVersionForTheGameVersion(): void
+    {
+        // Arrange
+        $gameVersion      = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CATA);
+        $unmappedDungeons = $gameVersion->expansion->dungeons()
+            ->whereDoesntHave('mappingVersions', static fn($query) => $query->where('game_version_id', $gameVersion->id))
+            ->pluck('id')
+            ->all();
+
+        $this->assertNotEmpty($unmappedDungeons, 'Need a Cataclysm dungeon without a Cataclysm mapping version');
+
+        // Act
+        $dungeons = $this->buildService($this->createSeasonlessSeasonService())->getDungeonsForGameVersion($gameVersion);
+
+        // Assert
+        $this->assertNotEmpty($dungeons);
+        $this->assertSame([], array_values(array_intersect($unmappedDungeons, $dungeons->pluck('id')->all())));
+    }
+
+    #[Test]
+    public function getDungeonsForGameVersion_givenNoCurrentSeason_excludesInactiveDungeons(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+        /** @var Dungeon $deactivatedDungeon */
+        $deactivatedDungeon = Dungeon::query()->active()->forGameVersion($gameVersion)->orderBy('id')->firstOrFail();
+
+        try {
+            $deactivatedDungeon->update(['active' => false]);
+
+            // Act
+            $dungeons = $this->buildService($this->createSeasonlessSeasonService())->getDungeonsForGameVersion($gameVersion);
+
+            // Assert
+            $this->assertNotEmpty($dungeons);
+            $this->assertNotContains($deactivatedDungeon->id, $dungeons->pluck('id')->all());
+        } finally {
+            $deactivatedDungeon->update(['active' => true]);
+        }
+    }
+
+    #[Test]
+    public function getDungeonsForGameVersion_givenNoCurrentSeason_ordersBySelectorGroupThenByName(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+
+        // Act
+        $dungeons = $this->buildService($this->createSeasonlessSeasonService())->getDungeonsForGameVersion($gameVersion);
+
+        // Assert
+        $this->assertSame(range(0, $dungeons->count() - 1), $dungeons->keys()->all());
+
+        $sortKeys = $dungeons->map(static fn(Dungeon $dungeon) => [
+            $dungeon->getSelectorGroup()->sortOrder(),
+            strtolower(Str::ascii(__($dungeon->name))),
+        ])->all();
+        $expectedSortKeys = $sortKeys;
+        usort($expectedSortKeys, static fn(array $a, array $b) => [$a[0], $a[1]] <=> [$b[0], $b[1]]);
+
+        $this->assertSame($expectedSortKeys, $sortKeys);
+    }
+
+    #[Test]
+    public function getDungeonsForGameVersion_givenNoCurrentSeasonAndAMappedContinent_listsTheContinentFirst(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_FOREVER);
+        $kalimdor    = Dungeon::firstWhere('key', DungeonKey::KALIMDOR->value);
+
+        $this->assertTrue(
+            $kalimdor->active && $kalimdor->getCurrentMappingVersionForGameVersion($gameVersion) !== null,
+            'Need Kalimdor active and mapped for Forever',
+        );
+
+        // Act
+        $dungeons = $this->buildService($this->createSeasonlessSeasonService())->getDungeonsForGameVersion($gameVersion);
+
+        // Assert
+        $this->assertSame(DungeonSelectorGroup::WORLD, $dungeons->first()->getSelectorGroup());
+        $this->assertContains($kalimdor->id, $dungeons->pluck('id')->all());
     }
 
     #[Test]
@@ -263,7 +348,7 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
             $this->createMappingVersion($dungeon, $gameVersion);
 
             // Act
-            $dungeons = $this->buildServiceWithoutCurrentSeason()->getDungeonsForGameVersion($gameVersion);
+            $dungeons = $this->buildService($this->createSeasonlessSeasonService())->getDungeonsForGameVersion($gameVersion);
 
             // Assert
             $this->assertContains($dungeon->id, $dungeons->pluck('id')->all());
@@ -289,7 +374,7 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
             $this->assertSame($classicGameVersion->expansion_id, $foreverGameVersion->expansion_id);
             $this->createMappingVersion($dungeon, $foreverGameVersion);
 
-            $service = $this->buildServiceWithoutCurrentSeason();
+            $service = $this->buildService($this->createSeasonlessSeasonService());
 
             // Act
             $classicDungeons = $service->getDungeonsForGameVersion($classicGameVersion);

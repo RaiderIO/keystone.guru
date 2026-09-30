@@ -353,6 +353,18 @@ enum DungeonKey: string
     }
 
     /**
+     * True if this key is a whole continent (one zone per floor) rather than an instance.
+     */
+    public function isContinent(): bool
+    {
+        return match ($this) {
+            self::EASTERN_KINGDOMS,
+            self::KALIMDOR => true,
+            default        => false,
+        };
+    }
+
+    /**
      * All cases of this enum, grouped by the expansion key they belong to.
      *
      * @return array<string, list<self>>
