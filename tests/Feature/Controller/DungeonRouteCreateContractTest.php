@@ -16,7 +16,6 @@ use App\Models\Season;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
-use App\Repositories\Interfaces\DungeonStartRepositoryInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
@@ -306,13 +305,13 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $this->assertNotNull($mappingVersion);
 
-        $startIcons = app(DungeonStartRepositoryInterface::class)->getDungeonStartsForMappingVersion($mappingVersion->id);
+        $startIcons = $mappingVersion->dungeonStarts;
         // Judgment call: the seeded DB's currently-active season dungeons only ever have a single dungeon start
         // icon. retailDungeon() prefers a dungeon with >1 start icons where one exists (documented in its
         // docblock); if none exists at all in the seeded data we fall back to the single icon so the fixture is
         // still exercised (with a lone icon instead of a real "multiple" choice).
         $this->assertNotEmpty($startIcons, 'Chosen dungeon must have at least one dungeon start icon.');
-        $startIconId = (int)$startIcons->first()['id'];
+        $startIconId = $startIcons->first()->id;
 
         $fields = $this->loadFixture('retail-multiple-start-icons', [
             'dungeon_id'       => $dungeon->id,
@@ -769,13 +768,11 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             ->filter(static fn(Dungeon $dungeon): bool => $dungeon->hasMappingVersionWithSeasons())
             ->values();
 
-        $dungeonStartRepository = app(DungeonStartRepositoryInterface::class);
-
-        $withMultipleStartIcons = $candidates->first(static function (Dungeon $dungeon) use ($dungeonStartRepository): bool {
+        $withMultipleStartIcons = $candidates->first(static function (Dungeon $dungeon): bool {
             $mappingVersion = $dungeon->getCurrentMappingVersion();
 
             return $mappingVersion !== null
-                && $dungeonStartRepository->getDungeonStartsForMappingVersion($mappingVersion->id)->count() > 1;
+                && $mappingVersion->dungeonStarts()->count() > 1;
         });
 
         $dungeon = $withMultipleStartIcons ?? $candidates->first();

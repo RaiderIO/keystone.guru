@@ -4,7 +4,6 @@ namespace App\Repositories\Database;
 
 use App\Models\DungeonStart;
 use App\Repositories\Interfaces\DungeonStartRepositoryInterface;
-use Illuminate\Support\Collection;
 
 class DungeonStartRepository extends DatabaseRepository implements DungeonStartRepositoryInterface
 {
@@ -19,22 +18,6 @@ class DungeonStartRepository extends DatabaseRepository implements DungeonStartR
             ->whereKey($id)
             ->where('mapping_version_id', $mappingVersionId)
             ->exists();
-    }
-
-    /**
-     * @return Collection<int, array{id: int, text: string}>
-     */
-    public function getDungeonStartsForMappingVersion(int $mappingVersionId): Collection
-    {
-        return DungeonStart::query()
-            ->where('mapping_version_id', $mappingVersionId)
-            ->orderBy('id')
-            ->get(['id', 'comment'])
-            ->values()
-            ->map(static fn(DungeonStart $dungeonStart, int $index) => [
-                'id'   => $dungeonStart->id,
-                'text' => $dungeonStart->getDisplayText($index),
-            ]);
     }
 
     public function findMatchingDungeonStartIdInMappingVersion(int $dungeonStartId, int $mappingVersionId): ?int

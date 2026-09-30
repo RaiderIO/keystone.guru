@@ -99,6 +99,7 @@ return [
     'dungeonfloorswitchmarker_title'              => 'Draw a dungeon floor switch marker. Hotkey: <b>:hotkey</b>',
     'dungeonstart'                                => 'Start',
     'dungeonstart_title'                          => 'Place a dungeon start',
+    'dungeonstart_tooltip'                        => 'Dungeon Start',
     'mountablearea'                               => 'Mountable',
     'mountablearea_title'                         => 'Draw an area in which players are allowed to mount. Hotkey: <b>:hotkey</b>',
     'floorunion'                                  => 'Union',

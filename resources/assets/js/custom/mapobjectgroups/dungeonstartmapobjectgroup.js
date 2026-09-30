@@ -17,7 +17,7 @@ class DungeonStartMapObjectGroup extends MapObjectGroup {
      */
     _createLayer(remoteMapObject) {
         console.assert(this instanceof DungeonStartMapObjectGroup, 'this is not a DungeonStartMapObjectGroup', this);
-        let layer = new LeafletIconMarker();
+        let layer = new LeafletDungeonStartMarker();
         layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
         return layer;
     }

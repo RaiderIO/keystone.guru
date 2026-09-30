@@ -22,13 +22,6 @@ interface DungeonStartRepositoryInterface extends BaseRepositoryInterface
     public function isDungeonStartOfMappingVersion(int $id, int $mappingVersionId): bool;
 
     /**
-     * Returns the dungeon starts of the given mapping version, mapped to [{id, text}] shape.
-     *
-     * @return Collection<int, array{id: int, text: string}>
-     */
-    public function getDungeonStartsForMappingVersion(int $mappingVersionId): Collection;
-
-    /**
      * The dungeon start in the new mapping version with the same comment as the given start, or null when the
      * start has no comment or no such start exists.
      */

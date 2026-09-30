@@ -69,6 +69,7 @@ use Override;
  * @property EloquentCollection<int, EnemyPatrol>                $enemyPatrols
  * @property EloquentCollection<int, MapIcon>                    $mapIcons
  * @property EloquentCollection<int, DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
+ * @property EloquentCollection<int, DungeonStart>               $dungeonStarts
  * @property EloquentCollection<int, MountableArea>              $mountableAreas
  * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs
  * @property EloquentCollection<int, DungeonSpeedrunDifficulty>  $dungeonSpeedrunDifficulties
@@ -372,6 +373,12 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
     public function dungeonFloorSwitchMarkers(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonFloorSwitchMarker::class, Floor::class);
+    }
+
+    /** @return HasManyThrough<DungeonStart, Floor, $this> */
+    public function dungeonStarts(): HasManyThrough
+    {
+        return $this->hasManyThrough(DungeonStart::class, Floor::class);
     }
 
     /** @return HasManyThrough<MountableArea, Floor, $this> */
