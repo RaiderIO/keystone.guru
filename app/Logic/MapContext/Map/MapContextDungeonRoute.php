@@ -104,6 +104,7 @@ class MapContextDungeonRoute extends MapContextBase
             // actually a draft, so the client cannot be coaxed into offering the buttons.
             'isUpgradeDraft'               => $this->dungeonRoute->is_upgrade_draft,
             'hasUpgradeDraft'              => $this->dungeonRoute->has_upgrade_draft,
+            'draftSource'                  => $this->dungeonRoute->getEffectiveDraftSource()?->value,
             'upgradeOfDungeonRouteTitle'   => $upgradeOfDungeonRoute?->title,
             'upgradeOfDungeonRouteEditUrl' => $upgradeOfDungeonRoute === null ? null : route('dungeonroute.edit', [
                 'dungeon'      => $upgradeOfDungeonRoute->dungeon,

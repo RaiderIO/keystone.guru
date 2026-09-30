@@ -310,6 +310,60 @@ final class DungeonRouteControllerImportMdtStringTest extends MDTImportStringSer
         }
     }
 
+    #[Test]
+    public function edit_givenOwnedRoute_showsImportMdtStringAction(): void
+    {
+        try {
+            // Arrange
+            $owner    = $this->createUser();
+            $original = $this->createOriginal($owner);
+
+            // Act
+            $response = $this->actingAs($owner)->followingRedirects()->get(route('dungeonroute.edit', [
+                'dungeon'      => $original->dungeon,
+                'dungeonroute' => $original,
+                'title'        => $original->getTitleSlug(),
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('mdt_import_overwrite_modal', false);
+            // The inline code options carry the url JSON encoded
+            $response->assertSee(trim((string)json_encode($this->importUrl($original)), '"'), false);
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function edit_givenMdtImportDraftWithFlashedWarnings_showsWarningsAndNoImportAction(): void
+    {
+        try {
+            // Arrange
+            $owner    = $this->createUser();
+            $original = $this->createOriginal($owner);
+            $draft    = $this->createExistingDraft($original, DungeonRouteDraftSource::MdtImport);
+
+            // Act
+            $response = $this->actingAs($owner)
+                ->withSession(['mdt_import_warnings' => ['Unable to find an enemy for this pull']])
+                ->followingRedirects()
+                ->get(route('dungeonroute.edit', [
+                    'dungeon'      => $draft->dungeon,
+                    'dungeonroute' => $draft,
+                    'title'        => $draft->getTitleSlug(),
+                ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('mdt_import_warnings_modal', false);
+            $response->assertSee('Unable to find an enemy for this pull');
+            $response->assertDontSee('mdt_import_overwrite_modal', false);
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
     private function importUrl(DungeonRoute $original): string
     {
         return route('dungeonroute.upgrade.mdtimport', [
