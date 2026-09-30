@@ -8,7 +8,8 @@ use App\Models\DungeonRoute\DungeonRoute;
  * @var DungeonRoute       $dungeonroute
  * @var array<string, int> $contentLoss  What the route holds that the string replaces, per kind
  */
-$hasPendingDraft = $dungeonroute->has_upgrade_draft;
+$pendingDraftId  = $dungeonroute->upgradeDraft?->id;
+$hasPendingDraft = $pendingDraftId !== null;
 ?>
 @include('common.general.inline', ['path' => 'common/modal/mdtimportoverwrite', 'options' => [
     'modalSelector' => '#mdt_import_overwrite_modal',
@@ -20,7 +21,7 @@ $hasPendingDraft = $dungeonroute->has_upgrade_draft;
     'resetSelector' => '.mdt_import_overwrite_reset',
     'discardExistingDraftSelector' => '#mdt_import_overwrite_discard_existing_draft',
     'submitSelector' => '#mdt_import_overwrite_submit',
-    'hasPendingDraft' => $hasPendingDraft,
+    'pendingDraftId' => $pendingDraftId,
     'detailsUrl' => route('mdt.details'),
     'importUrl' => route('dungeonroute.upgrade.mdtimport', [
         'dungeon' => $dungeonroute->dungeon,

@@ -12,6 +12,7 @@ use App\Models\MDTImport;
 use App\Models\PublishedState;
 use App\Models\User;
 use App\Service\DungeonRoute\Exceptions\PendingUpgradeDraftException;
+use App\Service\DungeonRoute\Exceptions\StaleUpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
 use App\Service\DungeonRoute\Logging\DungeonRouteUpgradeDraftServiceLoggingInterface;
@@ -151,9 +152,9 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
         DungeonRoute $original,
         string       $mdtString,
         Collection   $warnings,
-        bool         $discardExistingDraft = false,
+        ?int         $discardExistingDraftId = null,
     ): DungeonRoute {
-        $this->log->createDraftFromMdtStringStart($original->id, $discardExistingDraft);
+        $this->log->createDraftFromMdtStringStart($original->id, $discardExistingDraftId);
 
         $draft = null;
 
@@ -166,9 +167,10 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                 throw new UpgradeDraftException(__('services.dungeonroute.upgrade_draft.mdt_import_route_is_sandbox'));
             }
 
-            if (!$discardExistingDraft && $original->upgradeDraft()->exists()) {
-                throw new PendingUpgradeDraftException(__('services.dungeonroute.upgrade_draft.mdt_import_pending_draft'));
-            }
+            $this->assertExistingDraftMayBeDiscarded(
+                DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $original->id)->value('id'),
+                $discardExistingDraftId,
+            );
 
             // Only parses - nothing is persisted until the string is known to fit this route
             $details = $this->mdtImportStringService->setEncodedString($mdtString)->getDetails(collect(), collect());
@@ -195,7 +197,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                     $this->dungeonRouteService->upgradeMappingVersion($draft);
                 }
 
-                $discardedDraftId = $this->swapInAsDraft($original, $draft, $discardExistingDraft);
+                $discardedDraftId = $this->swapInAsDraft($original, $draft, $discardExistingDraftId);
 
                 $draft->refresh();
             } catch (UniqueConstraintViolationException $exception) {
@@ -368,6 +370,28 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
     }
 
     /**
+     * @param int|null $existingDraftId        The draft $original has right now, if any.
+     * @param int|null $discardExistingDraftId The draft the author confirmed discarding, if any.
+     *
+     * @throws PendingUpgradeDraftException When there is a draft and discarding it was not confirmed.
+     * @throws StaleUpgradeDraftException   When there is a draft, but it is not the one the author confirmed discarding.
+     */
+    private function assertExistingDraftMayBeDiscarded(?int $existingDraftId, ?int $discardExistingDraftId): void
+    {
+        if ($existingDraftId === null) {
+            return;
+        }
+
+        if ($discardExistingDraftId === null) {
+            throw new PendingUpgradeDraftException(__('services.dungeonroute.upgrade_draft.mdt_import_pending_draft'));
+        }
+
+        if ($existingDraftId !== $discardExistingDraftId) {
+            throw new StaleUpgradeDraftException(__('services.dungeonroute.upgrade_draft.mdt_import_draft_changed'));
+        }
+    }
+
+    /**
      * Rejects, before anything is persisted, a string the preview found errors in, that is for another dungeon
      * or that was built against an MDT mapping older than the newest one MDT ships for the dungeon.
      *
@@ -455,25 +479,24 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
      * @return int|null The id of the discarded draft, if there was one.
      *
      * @throws PendingUpgradeDraftException       When $original has a draft and discarding it was not confirmed.
+     * @throws StaleUpgradeDraftException         When $original's draft is not the one discarding was confirmed for.
      * @throws UniqueConstraintViolationException When $original gained a draft in the meantime.
      * @throws Throwable
      */
-    private function swapInAsDraft(DungeonRoute $original, DungeonRoute $draft, bool $discardExistingDraft): ?int
+    private function swapInAsDraft(DungeonRoute $original, DungeonRoute $draft, ?int $discardExistingDraftId): ?int
     {
         // Deliberately no retry count: a retry after the existing draft's delete was rolled back could only
         // repeat the same writes, and the caller removes the replacement on any failure
-        return DB::transaction(function () use ($original, $draft, $discardExistingDraft): ?int {
+        return DB::transaction(function () use ($original, $draft, $discardExistingDraftId): ?int {
             $lockedOriginal = DungeonRoute::query()->whereKey($original->id)->lockForUpdate()->first();
             if ($lockedOriginal === null) {
                 throw new UpgradeDraftException('The route this draft is for no longer exists.');
             }
 
             $existingDraft = DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $lockedOriginal->id)->first();
-            if ($existingDraft !== null) {
-                if (!$discardExistingDraft) {
-                    throw new PendingUpgradeDraftException(__('services.dungeonroute.upgrade_draft.mdt_import_pending_draft'));
-                }
+            $this->assertExistingDraftMayBeDiscarded($existingDraft?->id, $discardExistingDraftId);
 
+            if ($existingDraft !== null) {
                 $this->log->createDraftFromMdtStringDiscardingExistingDraft($lockedOriginal->id, $existingDraft->id);
                 // The deleting hook does everything else
                 $existingDraft->delete();

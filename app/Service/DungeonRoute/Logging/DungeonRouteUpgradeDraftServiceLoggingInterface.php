@@ -12,7 +12,7 @@ interface DungeonRouteUpgradeDraftServiceLoggingInterface
 
     public function findOrCreateDraftEnd(int $draftDungeonRouteId): void;
 
-    public function createDraftFromMdtStringStart(int $originalDungeonRouteId, bool $discardExistingDraft): void;
+    public function createDraftFromMdtStringStart(int $originalDungeonRouteId, ?int $discardExistingDraftId): void;
 
     public function createDraftFromMdtStringDiscardingExistingDraft(int $originalDungeonRouteId, int $draftDungeonRouteId): void;
 
