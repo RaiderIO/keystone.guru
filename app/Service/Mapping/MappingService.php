@@ -197,13 +197,7 @@ class MappingService implements MappingServiceInterface
             return null;
         }
 
-        /** @var MappingVersion|null $newestMdtMappingVersion */
-        $newestMdtMappingVersion = $dungeon->mappingVersions()
-            ->where('game_version_id', $currentMappingVersion->game_version_id)
-            ->where('mdt_changes_pending', false)
-            ->reorder('mapping_versions.version', 'desc')
-            ->without('dungeon')
-            ->first();
+        $newestMdtMappingVersion = $this->getNewestMdtSyncedMappingVersion($dungeon, $currentMappingVersion->game_version_id);
 
         $fallbackMappingVersion = $newestMdtMappingVersion ?? $currentMappingVersion;
 
@@ -257,6 +251,17 @@ class MappingService implements MappingServiceInterface
         // Re-fetch as a single model (mirroring getCurrentMappingVersion) so downstream lazy-loads such as
         // ->enemies are permitted; models pulled from the candidate collection above would trip the guard.
         return $dungeon->mappingVersions()->without('dungeon')->find($match->id) ?? $fallbackMappingVersion;
+    }
+
+    public function getNewestMdtSyncedMappingVersion(Dungeon $dungeon, int $gameVersionId): ?MappingVersion
+    {
+        /** @var MappingVersion|null */
+        return $dungeon->mappingVersions()
+            ->where('game_version_id', $gameVersionId)
+            ->where('mdt_changes_pending', false)
+            ->reorder('mapping_versions.version', 'desc')
+            ->without('dungeon')
+            ->first();
     }
 
     public function copyMappingVersionToDungeon(MappingVersion $sourceMappingVersion, Dungeon $dungeon): MappingVersion

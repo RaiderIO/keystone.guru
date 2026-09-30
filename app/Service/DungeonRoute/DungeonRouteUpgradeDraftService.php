@@ -5,12 +5,20 @@ namespace App\Service\DungeonRoute;
 use App\Events\LiveSession\RouteReplacedEvent;
 use App\Jobs\RefreshEnemyForces;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteAffixGroup;
+use App\Models\DungeonRoute\DungeonRouteDraftSource;
+use App\Models\MDTImport;
 use App\Models\PublishedState;
 use App\Models\User;
+use App\Service\DungeonRoute\Exceptions\PendingUpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
 use App\Service\DungeonRoute\Logging\DungeonRouteUpgradeDraftServiceLoggingInterface;
+use App\Service\Mapping\MappingServiceInterface;
+use App\Service\MDT\MDTImportStringServiceInterface;
+use App\Service\MDT\Models\ImportStringDetails;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Override;
@@ -18,10 +26,24 @@ use Throwable;
 
 readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDraftServiceInterface
 {
+    public const string MDT_IMPORT_LOSS_PATHS                  = 'paths';
+    public const string MDT_IMPORT_LOSS_BRUSHLINES             = 'brushlines';
+    public const string MDT_IMPORT_LOSS_ARROWS                 = 'arrows';
+    public const string MDT_IMPORT_LOSS_MAP_ICONS              = 'map_icons';
+    public const string MDT_IMPORT_LOSS_PULL_COLORS            = 'pull_colors';
+    public const string MDT_IMPORT_LOSS_PULL_DESCRIPTIONS      = 'pull_descriptions';
+    public const string MDT_IMPORT_LOSS_RAID_MARKERS           = 'raid_markers';
+    public const string MDT_IMPORT_LOSS_PLAYER_CLASSES         = 'player_classes';
+    public const string MDT_IMPORT_LOSS_PLAYER_SPECIALIZATIONS = 'player_specializations';
+    public const string MDT_IMPORT_LOSS_PLAYER_RACES           = 'player_races';
+    public const string MDT_IMPORT_LOSS_ROUTE_ATTRIBUTES       = 'route_attributes';
+
     public function __construct(
         private DungeonRouteServiceInterface                    $dungeonRouteService,
         private ThumbnailServiceInterface                       $thumbnailService,
         private DungeonRouteUpgradeDraftServiceLoggingInterface $log,
+        private MDTImportStringServiceInterface                 $mdtImportStringService,
+        private MappingServiceInterface                         $mappingService,
     ) {
     }
 
@@ -54,6 +76,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                     $draft = DungeonRoute::create([
                         'public_key'                  => DungeonRoute::generateRandomPublicKey(),
                         'upgrade_of_dungeon_route_id' => $original->id,
+                        'draft_source'                => DungeonRouteDraftSource::MappingUpgrade,
                         // A draft is not a clone - it is going to become the original again
                         'clone_of'           => null,
                         'author_id'          => $original->author_id,
@@ -123,6 +146,100 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
     }
 
     #[Override]
+    public function createDraftFromMdtString(
+        DungeonRoute $original,
+        string       $mdtString,
+        Collection   $warnings,
+        bool         $discardExistingDraft = false,
+    ): DungeonRoute {
+        $this->log->createDraftFromMdtStringStart($original->id, $discardExistingDraft);
+
+        $draft = null;
+
+        try {
+            if ($original->is_upgrade_draft) {
+                throw new UpgradeDraftException(__('services.dungeonroute.upgrade_draft.mdt_import_route_is_draft'));
+            }
+
+            if ($original->isSandbox()) {
+                throw new UpgradeDraftException(__('services.dungeonroute.upgrade_draft.mdt_import_route_is_sandbox'));
+            }
+
+            $existingDraft = $original->upgradeDraft()->first();
+            if ($existingDraft !== null && !$discardExistingDraft) {
+                throw new PendingUpgradeDraftException(__('services.dungeonroute.upgrade_draft.mdt_import_pending_draft'));
+            }
+
+            // Only parses - nothing is persisted until the string is known to fit this route
+            $details = $this->mdtImportStringService->setEncodedString($mdtString)->getDetails(collect(), collect());
+            $this->assertMdtStringFitsRoute($original, $details);
+
+            if ($existingDraft !== null) {
+                $this->log->createDraftFromMdtStringDiscardingExistingDraft($original->id, $existingDraft->id);
+                $this->discard($existingDraft);
+            }
+
+            $draft = $this->mdtImportStringService->setEncodedString($mdtString)->getDungeonRoute(
+                $warnings,
+                collect(),
+                sandbox: false,
+                save: true,
+            );
+
+            try {
+                $this->markAsMdtImportDraft($original, $draft);
+
+                $draft->refresh();
+
+                // The string is on the newest mapping version MDT ships, but keystone.guru is ahead of MDT
+                $currentMappingVersion = $draft->dungeon->getCurrentMappingVersion($draft->mappingVersion->gameVersion);
+                if ($currentMappingVersion !== null && $currentMappingVersion->id !== $draft->mapping_version_id) {
+                    $this->log->createDraftFromMdtStringUpgradingMappingVersion($draft->id, $currentMappingVersion->id);
+                    $this->dungeonRouteService->upgradeMappingVersion($draft);
+                    $draft->refresh();
+                }
+            } catch (UniqueConstraintViolationException $exception) {
+                // A draft of $original was created concurrently (dungeon_routes_upgrade_of_unique)
+                $this->log->createDraftFromMdtStringFailed($original->id, $draft->id, $exception->getMessage());
+                $draft->delete();
+                $draft = null;
+
+                throw new PendingUpgradeDraftException(__('services.dungeonroute.upgrade_draft.mdt_import_pending_draft'));
+            } catch (Throwable $throwable) {
+                $this->log->createDraftFromMdtStringFailed($original->id, $draft->id, $throwable->getMessage());
+                $draft->delete();
+                $draft = null;
+
+                throw $throwable;
+            }
+
+            return $draft;
+        } finally {
+            $this->log->createDraftFromMdtStringEnd($draft instanceof DungeonRoute ? $draft->id : 0);
+        }
+    }
+
+    #[Override]
+    public function getMdtImportContentLoss(DungeonRoute $original): array
+    {
+        $counts = [
+            self::MDT_IMPORT_LOSS_PATHS                  => $original->paths()->count(),
+            self::MDT_IMPORT_LOSS_BRUSHLINES             => $original->brushlines()->count(),
+            self::MDT_IMPORT_LOSS_ARROWS                 => $original->arrows()->count(),
+            self::MDT_IMPORT_LOSS_MAP_ICONS              => $original->routeMapIcons()->count(),
+            self::MDT_IMPORT_LOSS_PULL_COLORS            => $original->killZones()->whereNotNull('color')->where('color', '!=', '')->count(),
+            self::MDT_IMPORT_LOSS_PULL_DESCRIPTIONS      => $original->killZones()->whereNotNull('description')->where('description', '!=', '')->count(),
+            self::MDT_IMPORT_LOSS_RAID_MARKERS           => $original->enemyRaidMarkers()->count(),
+            self::MDT_IMPORT_LOSS_PLAYER_CLASSES         => $original->playerclasses()->count(),
+            self::MDT_IMPORT_LOSS_PLAYER_SPECIALIZATIONS => $original->playerspecializations()->count(),
+            self::MDT_IMPORT_LOSS_PLAYER_RACES           => $original->playerraces()->count(),
+            self::MDT_IMPORT_LOSS_ROUTE_ATTRIBUTES       => $original->routeattributesraw()->count(),
+        ];
+
+        return array_filter($counts, static fn(int $count): bool => $count > 0);
+    }
+
+    #[Override]
     public function apply(DungeonRoute $draft, bool $enforcePublishInvariant = true): DungeonRoute
     {
         if (!$draft->is_upgrade_draft) {
@@ -160,7 +277,11 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                     && !$lockedDraft->hasKilledAllRequiredEnemies()
                 ) {
                     if ($enforcePublishInvariant) {
-                        throw new UpgradeDraftException(__('policy.apply_upgrade_draft_not_all_required_enemies_killed'));
+                        throw new UpgradeDraftException(
+                            $lockedDraft->getEffectiveDraftSource() === DungeonRouteDraftSource::MdtImport
+                                ? __('policy.apply_mdt_import_draft_not_all_required_enemies_killed')
+                                : __('policy.apply_upgrade_draft_not_all_required_enemies_killed'),
+                        );
                     }
 
                     $this->log->applyPublishInvariantBypassed($lockedDraft->id, $original->id);
@@ -181,6 +302,12 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                 // Guarantees enemy_forces against the freshly copied kill zones. Safe inside the
                 // transaction: handle() does its own find(), so it cannot see a stale relation.
                 new RefreshEnemyForces($original->id)->handle();
+
+                // The import that produced this content now describes the original, replacing its previous one
+                if ($lockedDraft->getEffectiveDraftSource() === DungeonRouteDraftSource::MdtImport) {
+                    MDTImport::query()->where('dungeon_route_id', $original->id)->delete();
+                    MDTImport::query()->where('dungeon_route_id', $lockedDraft->id)->update(['dungeon_route_id' => $original->id]);
+                }
 
                 // cloneRelationsInto() copies rather than moves, so the draft still owns its own rows and
                 // its deleting hook cleans exactly those up
@@ -234,6 +361,80 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
         DungeonRoute::dropCaches($draftId);
 
         $this->log->discardEnd($draftId);
+    }
+
+    /**
+     * Rejects, before anything is persisted, a string that is for another dungeon or that was built against
+     * an MDT mapping older than the newest one MDT ships for the dungeon.
+     *
+     * @throws UpgradeDraftException
+     */
+    private function assertMdtStringFitsRoute(DungeonRoute $original, ImportStringDetails $details): void
+    {
+        if ($details->getDungeon()->id !== $original->dungeon_id) {
+            throw new UpgradeDraftException(__('services.dungeonroute.upgrade_draft.mdt_import_other_dungeon', [
+                'stringDungeon' => __($details->getDungeon()->name),
+                'routeDungeon'  => __($original->dungeon->name),
+            ]));
+        }
+
+        $stringMappingVersion = $details->getMappingVersion();
+        if ($stringMappingVersion === null) {
+            return;
+        }
+
+        $newestMdtMappingVersion = $this->mappingService->getNewestMdtSyncedMappingVersion(
+            $details->getDungeon(),
+            $stringMappingVersion->game_version_id,
+        );
+
+        if ($newestMdtMappingVersion !== null && $stringMappingVersion->version < $newestMdtMappingVersion->version) {
+            throw new UpgradeDraftException(__('services.dungeonroute.upgrade_draft.mdt_import_outdated_mapping'));
+        }
+    }
+
+    /**
+     * Turns the freshly imported route into the draft of $original in one write, and gives it the original's
+     * metadata and affixes: Apply copies those from the draft, and the original's must survive the import.
+     *
+     * @throws UniqueConstraintViolationException When $original gained a draft in the meantime.
+     * @throws Throwable
+     */
+    private function markAsMdtImportDraft(DungeonRoute $original, DungeonRoute $draft): void
+    {
+        DB::transaction(static function () use ($original, $draft): void {
+            // The query builder: demo is not fillable, and a retried Eloquent save would silently no-op
+            DungeonRoute::query()->whereKey($draft->id)->update([
+                'upgrade_of_dungeon_route_id' => $original->id,
+                'draft_source'                => DungeonRouteDraftSource::MdtImport->value,
+                'author_id'                   => $original->author_id,
+                'team_id'                     => $original->team_id,
+                'season_id'                   => $original->season_id,
+                'faction_id'                  => $original->faction_id,
+                'title'                       => $original->title,
+                'description'                 => $original->description,
+                'level_min'                   => $original->level_min,
+                'level_max'                   => $original->level_max,
+                'difficulty'                  => $original->difficulty,
+                'dungeon_difficulty'          => $original->dungeon_difficulty,
+                // Follows the affix groups, which come from the original as well
+                'seasonal_index'             => $original->seasonal_index,
+                'pull_gradient'              => $original->pull_gradient,
+                'pull_gradient_apply_always' => $original->pull_gradient_apply_always,
+                'demo'                       => $original->demo,
+                'published_state_id'         => PublishedState::ALL[PublishedState::UNPUBLISHED],
+            ]);
+
+            DungeonRouteAffixGroup::query()->where('dungeon_route_id', $draft->id)->delete();
+            DungeonRouteAffixGroup::query()->insert(
+                $original->affixGroups()->pluck('affix_group_id')
+                    ->map(static fn(int $affixGroupId): array => [
+                        'dungeon_route_id' => $draft->id,
+                        'affix_group_id'   => $affixGroupId,
+                    ])
+                    ->all(),
+            );
+        });
     }
 
     /**
