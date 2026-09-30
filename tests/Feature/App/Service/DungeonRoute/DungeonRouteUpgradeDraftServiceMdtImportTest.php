@@ -16,6 +16,7 @@ use App\Models\PublishedState;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteUpgradeDraftService;
 use App\Service\DungeonRoute\Exceptions\PendingUpgradeDraftException;
@@ -24,6 +25,9 @@ use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\Logging\DungeonRouteUpgradeDraftServiceLoggingInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
+use App\Service\MDT\Import\ObjectImporter;
+use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
+use App\Service\MDT\MDTImportStringService;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\Models\ImportStringDetails;
 use Illuminate\Database\Eloquent\Model;
@@ -391,6 +395,55 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
 
             // Assert
             $this->assertInstanceOf(RuntimeException::class, $exception);
+            $this->assertSame($existingDraft->id, $original->upgradeDraft()->first()?->id, 'The existing draft must survive a failed import');
+            $this->assertSame(1, $existingDraft->brushlines()->count(), 'The existing draft keeps its content');
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function createDraftFromMdtString_givenImportFailingAfterPullsPersisted_removesPartialRouteAndKeepsExistingDraft(): void
+    {
+        try {
+            // Arrange
+            [$source, $mdtString] = $this->createSourceRouteAndString();
+            $original             = $this->createOriginal($source->dungeon_id, $source->mapping_version_id);
+            $existingDraft        = $this->createExistingDraft($original);
+            $this->createBrushlineForRoute($existingDraft);
+
+            $objectImporter = $this->getMockBuilder(ObjectImporter::class)
+                ->setConstructorArgs([
+                    app(CoordinatesServiceInterface::class),
+                    app(MDTImportStringServiceLoggingInterface::class),
+                ])
+                ->onlyMethods(['applyObjectsToDungeonRoute'])
+                ->getMock();
+            $objectImporter->method('applyObjectsToDungeonRoute')->willThrowException(new RuntimeException('Object persistence failed'));
+            $mdtImportStringService = app()->make(MDTImportStringService::class, ['objectImporter' => $objectImporter]);
+            $maxRouteId             = DungeonRoute::query()->max('id');
+
+            // Act
+            $exception = null;
+
+            try {
+                $this->buildService(mdtImportStringService: $mdtImportStringService)
+                    ->createDraftFromMdtString($original, $mdtString, collect(), discardExistingDraftId: $existingDraft->id);
+            } catch (RuntimeException $runtimeException) {
+                $exception = $runtimeException;
+            }
+
+            // Assert
+            $this->assertInstanceOf(RuntimeException::class, $exception);
+            $this->assertSame('Object persistence failed', $exception->getMessage());
+            $this->assertFalse(
+                DungeonRoute::query()->where('id', '>', $maxRouteId)->exists(),
+                'The partially imported route must not survive the failure',
+            );
+            $this->assertFalse(
+                KillZone::query()->where('dungeon_route_id', '>', $maxRouteId)->exists(),
+                'Nor may the pulls it had already persisted',
+            );
             $this->assertSame($existingDraft->id, $original->upgradeDraft()->first()?->id, 'The existing draft must survive a failed import');
             $this->assertSame(1, $existingDraft->brushlines()->count(), 'The existing draft keeps its content');
         } finally {
