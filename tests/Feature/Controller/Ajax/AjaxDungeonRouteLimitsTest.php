@@ -79,6 +79,7 @@ final class AjaxDungeonRouteLimitsTest extends DungeonRouteTestBase
 
             // Assert
             $response->assertSuccessful();
+            $this->assertSame(1, $this->dungeonRoute->killZones()->count());
         } finally {
             $this->dungeonRoute->killZones()->delete();
         }

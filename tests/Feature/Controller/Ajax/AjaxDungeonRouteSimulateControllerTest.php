@@ -7,7 +7,9 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\Mapping\MappingVersion;
+use App\Models\PublishedState;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
+use App\Models\User;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -65,8 +67,35 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
             // Assert
             $response->assertOk();
             $response->assertJsonStructure(['string']);
+            $this->assertStringContainsString('fight_style=DungeonRoute', $response->json('string'));
+            $this->assertStringContainsString('keystone_level=20', $response->json('string'));
         } finally {
             SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function simulate_givenRouteUserMayNotView_returnsForbidden(): void
+    {
+        // Arrange - a sandbox route is viewable by anyone, so make it a real, unpublished one
+        $viewer = User::factory()->create();
+        $this->dungeonRoute->update([
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+        ]);
+
+        try {
+            $this->actingAs($viewer);
+
+            // Act
+            $response = $this->post($this->simulateUrl(), $this->validPayload());
+
+            // Assert
+            $response->assertForbidden();
+            $response->assertJsonMissingPath('string');
+        } finally {
+            SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
+            $viewer->delete();
         }
     }
 
@@ -75,7 +104,7 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
      */
     #[Test]
     #[DataProvider('simulate_givenInvalidField_returnsUnprocessableEntity_dataProvider')]
-    public function simulate_givenInvalidField_returnsUnprocessableEntity(array $override): void
+    public function simulate_givenInvalidField_returnsUnprocessableEntity(array $override, string $expectedErrorKey): void
     {
         // Arrange - merge override into the valid payload; a null value means the key should be absent
         $payload = $this->validPayload();
@@ -92,28 +121,29 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
 
         // Assert
         $response->assertUnprocessable();
+        $response->assertJsonValidationErrors([$expectedErrorKey]);
     }
 
     /**
-     * @return array<string, list<array<string, int|list<string>|string|null>>>
+     * @return array<string, array{0: array<string, int|list<string>|string|null>, 1: string}>
      */
     public static function simulate_givenInvalidField_returnsUnprocessableEntity_dataProvider(): array
     {
         // raid_buffs_mask max = 2 ** (count(SimulationCraftRaidBuffs::cases()) - 1) = 2 ** 9 = 512
         return [
-            'missing key_level'                            => [['key_level' => null]],
-            'key_level above max (40)'                     => [['key_level' => 41]],
-            'missing shrouded_bounty_type'                 => [['shrouded_bounty_type' => null]],
-            'invalid shrouded_bounty_type'                 => [['shrouded_bounty_type' => 'invalid']],
-            'invalid affix item'                           => [['affix' => ['invalid_affix']]],
-            'missing thundering_clear_seconds'             => [['thundering_clear_seconds' => null]],
-            'thundering_clear_seconds above max (15)'      => [['thundering_clear_seconds' => 16]],
-            'missing raid_buffs_mask'                      => [['raid_buffs_mask' => null]],
-            'raid_buffs_mask above max (1024)'             => [['raid_buffs_mask' => 1205]],
-            'missing hp_percent'                           => [['hp_percent' => null]],
-            'missing ranged_pull_compensation_yards'       => [['ranged_pull_compensation_yards' => null]],
-            'invalid use_mounts (not 0 or 1)'              => [['use_mounts' => 2]],
-            'non-integer simulate_bloodlust_per_pull item' => [['simulate_bloodlust_per_pull' => ['not-an-int']]],
+            'missing key_level'                            => [['key_level' => null], 'key_level'],
+            'key_level above max (40)'                     => [['key_level' => 41], 'key_level'],
+            'missing shrouded_bounty_type'                 => [['shrouded_bounty_type' => null], 'shrouded_bounty_type'],
+            'invalid shrouded_bounty_type'                 => [['shrouded_bounty_type' => 'invalid'], 'shrouded_bounty_type'],
+            'invalid affix item'                           => [['affix' => ['invalid_affix']], 'affix.0'],
+            'missing thundering_clear_seconds'             => [['thundering_clear_seconds' => null], 'thundering_clear_seconds'],
+            'thundering_clear_seconds above max (15)'      => [['thundering_clear_seconds' => 16], 'thundering_clear_seconds'],
+            'missing raid_buffs_mask'                      => [['raid_buffs_mask' => null], 'raid_buffs_mask'],
+            'raid_buffs_mask above max (1024)'             => [['raid_buffs_mask' => 1205], 'raid_buffs_mask'],
+            'missing hp_percent'                           => [['hp_percent' => null], 'hp_percent'],
+            'missing ranged_pull_compensation_yards'       => [['ranged_pull_compensation_yards' => null], 'ranged_pull_compensation_yards'],
+            'invalid use_mounts (not 0 or 1)'              => [['use_mounts' => 2], 'use_mounts'],
+            'non-integer simulate_bloodlust_per_pull item' => [['simulate_bloodlust_per_pull' => ['not-an-int']], 'simulate_bloodlust_per_pull.0'],
         ];
     }
 

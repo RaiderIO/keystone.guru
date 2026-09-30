@@ -158,6 +158,56 @@ final class AjaxDungeonRouteSearchControllerTest extends AjaxPublicTestCase
         $response->assertJsonStructure(['data' => ['limit']]);
     }
 
+    #[Test]
+    public function getMapContext_givenRouteUserMayView_returnsTheRoutesMapContext(): void
+    {
+        // Arrange
+        $user  = null;
+        $route = null;
+
+        try {
+            $user  = User::factory()->create();
+            $route = $this->createPublishedRoute($user);
+
+            // Act
+            $response = $this->get(sprintf('/ajax/dungeonroute/%s/mapcontext', $route->public_key));
+
+            // Assert
+            $response->assertOk();
+            $response->assertJsonPath('publicKey', $route->public_key);
+        } finally {
+            $route?->delete();
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function getMapContext_givenRouteUserMayNotView_returnsNoMapContext(): void
+    {
+        // Arrange
+        $viewer = null;
+        $route  = null;
+
+        try {
+            $viewer = User::factory()->create();
+            $route  = $this->createPublishedRoute(User::findOrFail(1), [
+                'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+            ]);
+            $this->actingAs($viewer);
+
+            // Act
+            $response = $this->get(sprintf('/ajax/dungeonroute/%s/mapcontext', $route->public_key));
+
+            // Assert
+            $this->assertFalse($response->isSuccessful());
+            $response->assertJsonMissingPath('publicKey');
+            $response->assertJsonPath('message', __('policy.view_route_not_published'));
+        } finally {
+            $route?->delete();
+            $viewer?->delete();
+        }
+    }
+
     /**
      * @param array<string, mixed> $attributes
      */

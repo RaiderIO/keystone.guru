@@ -5,6 +5,7 @@ namespace Tests\Feature\Controller\Ajax;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\RaidMarker;
+use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\DungeonRouteTestBase;
@@ -68,6 +69,57 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
 
             // Assert
             $response->assertSuccessful();
+            $this->assertDatabaseMissing('dungeon_route_enemy_raid_markers', ['dungeon_route_id' => $this->dungeonRoute->id]);
+        } finally {
+            DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function setRaidMarker_givenRouteUserMayNotEdit_returnsForbidden(): void
+    {
+        // Arrange - a sandbox route is editable by anyone, so make it a real route of user 1
+        /** @var Enemy $enemy */
+        $enemy = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)
+            ->orderBy('id')
+            ->first();
+        $nonOwner = User::factory()->create();
+        $this->dungeonRoute->update(['expires_at' => null]);
+
+        try {
+            $this->actingAs($nonOwner);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/raidmarker/%s', $this->dungeonRoute->public_key, $enemy->id), [
+                'raid_marker_name' => 'skull',
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertDatabaseMissing('dungeon_route_enemy_raid_markers', ['dungeon_route_id' => $this->dungeonRoute->id]);
+        } finally {
+            DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
+            $nonOwner->delete();
+        }
+    }
+
+    #[Test]
+    public function setRaidMarker_givenUnknownRaidMarkerName_returnsNotFound(): void
+    {
+        // Arrange
+        /** @var Enemy $enemy */
+        $enemy = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)
+            ->orderBy('id')
+            ->first();
+
+        try {
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/raidmarker/%s', $this->dungeonRoute->public_key, $enemy->id), [
+                'raid_marker_name' => 'not_a_raid_marker',
+            ]);
+
+            // Assert
+            $response->assertNotFound();
             $this->assertDatabaseMissing('dungeon_route_enemy_raid_markers', ['dungeon_route_id' => $this->dungeonRoute->id]);
         } finally {
             DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $this->dungeonRoute->id)->delete();

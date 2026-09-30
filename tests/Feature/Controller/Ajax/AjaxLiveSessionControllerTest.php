@@ -7,6 +7,7 @@ use App\Models\Laratrust\Role;
 use App\Models\LiveSession;
 use App\Models\PublishedState;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
@@ -65,6 +66,32 @@ final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
             $response->assertOk();
             $response->assertJsonStructure(['expires_in']);
             $this->assertNotNull($liveSession->fresh()->expires_at);
+        } finally {
+            $this->deleteLiveSession($liveSession);
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenAlreadyEndedSession_keepsItsExpiryAndReturnsTheTimeLeft(): void
+    {
+        // Arrange
+        $this->freezeSecond();
+        $owner       = $this->createUserWithUserRole();
+        $liveSession = $this->createLiveSession($owner);
+        $expiresAt   = now()->addMinutes(10);
+        LiveSession::query()->whereKey($liveSession->id)->update(['expires_at' => $expiresAt]);
+
+        try {
+            $this->be($owner);
+
+            // Act
+            $response = $this->delete($this->deleteUrl($liveSession));
+
+            // Assert
+            $response->assertOk();
+            $response->assertJsonPath('expires_in', 600);
+            $this->assertEquals($expiresAt->toDateTimeString(), Carbon::parse($liveSession->fresh()->expires_at)->toDateTimeString());
         } finally {
             $this->deleteLiveSession($liveSession);
             $owner->delete();

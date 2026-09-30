@@ -20,6 +20,8 @@ use Tests\Fixtures\ServiceFixtures;
 use Tests\Fixtures\Traits\CreatesCombatLogEvent;
 use Tests\Fixtures\Traits\CreatesDungeon;
 
+#[Group('Controller')]
+#[Group('HeatmapController')]
 final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 {
     use CreatesCombatLogEvent;
@@ -32,8 +34,6 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
      * @throws Exception
      */
     #[Test]
-    #[Group('Controller')]
-    #[Group('HeatmapController')]
     public function getData_givenSimpleFilter_shouldReturnData(): void
     {
         // Arrange
@@ -54,6 +54,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 
         $responseArr = json_decode($response->content(), true);
 
+        $this->assertCount($dungeon->floors()->where('facade', false)->count(), $responseArr['data']);
         foreach ($responseArr['data'] as $floorRow) {
             $this->assertCount($rowCountPerFloor, $floorRow['lat_lngs']);
         }
@@ -65,8 +66,6 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
      * @throws Exception
      */
     #[Test]
-    #[Group('Controller')]
-    #[Group('HeatmapController')]
     public function getData_givenDungeonWithFacade_shouldReturnData(): void
     {
         // Arrange
@@ -101,8 +100,6 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
      * @throws Exception
      */
     #[Test]
-    #[Group('Controller')]
-    #[Group('HeatmapController')]
     public function getData_givenTimerFractionFilterAndDungeonWithoutTimer_returnsBadRequest(): void
     {
         // Arrange
@@ -125,6 +122,25 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
             'Mapping version does not have a timer max seconds value',
             json_decode($response->content(), true)['message'],
         );
+    }
+
+    #[Test]
+    public function getData_givenMissingDungeonId_returnsUnprocessableEntity(): void
+    {
+        // Arrange
+        $combatLogEventService = $this->createMock(CombatLogEventServiceInterface::class);
+        $combatLogEventService->expects($this->never())->method('getGridAggregation');
+        app()->instance(CombatLogEventServiceInterface::class, $combatLogEventService);
+
+        // Act
+        $response = $this->getJson(route('ajax.heatmap.data', [
+            'type'     => self::EVENT_TYPE->value,
+            'dataType' => self::DATA_TYPE->value,
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['dungeonId']);
     }
 
     /**
