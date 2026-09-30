@@ -63,7 +63,6 @@ final class AjaxMountableAreaControllerTest extends AjaxPublicTestCase
             /** @var MountableArea $storedMountableArea */
             $storedMountableArea = MountableArea::query()->findOrFail($mountableAreaId);
             $this->assertSame($this->floor->id, $storedMountableArea->floor_id);
-            $this->assertSame(self::VERTICES_JSON, $storedMountableArea->getRawOriginal('vertices_json'));
 
             /** @var Polyline $storedPolyline */
             $storedPolyline = Polyline::query()->findOrFail($storedMountableArea->polyline_id);
@@ -104,7 +103,6 @@ final class AjaxMountableAreaControllerTest extends AjaxPublicTestCase
             $this->assertSame($polylineId, $storedMountableArea->polyline_id);
             $this->assertSame(1, Polyline::query()->where('model_class', MountableArea::class)->where('model_id', $mountableAreaId)->count());
             $this->assertSame($newVerticesJson, Polyline::query()->findOrFail($polylineId)->vertices_json);
-            $this->assertSame($newVerticesJson, $storedMountableArea->getRawOriginal('vertices_json'));
         } finally {
             $this->deleteMountableArea($mountableAreaId);
         }

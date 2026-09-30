@@ -30,7 +30,7 @@ final class MountableAreaPolylineRelationParserTest extends PublicTestCase
 
             // Assert
             $this->assertSame(150, $result['speed']);
-            $this->assertSame('[{"lat":-10,"lng":10},{"lat":-20,"lng":20}]', $result['vertices_json']);
+            $this->assertArrayNotHasKey('vertices_json', $result);
 
             /** @var Polyline $polyline */
             $polyline = Polyline::query()->findOrFail($result['polyline_id']);
