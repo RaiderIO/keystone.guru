@@ -4,17 +4,17 @@
            value="{{scheduled_publish_at}}" />
     <select class="form-control form-control-sm scheduled-publish-state selectpicker">
         {{#select scheduled_publish_state}}
-            <option value="world_with_link">{{scheduled_publish_state_world_with_link_label}}</option>
-            <option value="world">{{scheduled_publish_state_world_label}}</option>
+            <option value="world_with_link">{{t 'scheduled_publish_state_world_with_link_label'}}</option>
+            <option value="world">{{t 'scheduled_publish_state_world_label'}}</option>
         {{/select}}
     </select>
     <div class="d-flex mt-1">
         <button class="btn btn-primary btn-sm scheduled-publish-save flex-fill me-1">
-            <i class="fas fa-save"></i> {{scheduled_publish_save_label}}
+            <i class="fas fa-save"></i> {{t 'scheduled_publish_save_label'}}
         </button>
         {{#if scheduled_publish_at}}
         <button class="btn btn-danger btn-sm scheduled-publish-clear">
-            <i class="fas fa-trash"></i> {{scheduled_publish_clear_label}}
+            <i class="fas fa-trash"></i> {{t 'scheduled_publish_clear_label'}}
         </button>
         {{/if}}
     </div>

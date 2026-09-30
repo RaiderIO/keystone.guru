@@ -1,14 +1,14 @@
 <div class="map_enemy_tooltip leaflet-draw-section">
     <div class="row">
-        <div class="col-5 g-0">{{ npc_name_label }}</div>
+        <div class="col-5 g-0">{{ t 'npc_name_label' }}</div>
         <div class="col-7 g-0">{{ npc_name }}</div>
     </div>
     <div class="row">
-        <div class="col-5 g-0">{{ enemy_forces_label }}</div>
+        <div class="col-5 g-0">{{ t 'enemy_forces_label' }}</div>
         <div class="col-7 g-0">{{{ enemy_forces }}}</div>
     </div>
     <div class="row">
-        <div class="col-12 fw-bold">{{ health_section_label }}</div>
+        <div class="col-12 fw-bold">{{ t 'health_section_label' }}</div>
     </div>
     {{#each healths}}
         <div class="row">
@@ -23,75 +23,75 @@
     {{/each}}
     {{#if is_teeming}}
         <div class="row">
-            <div class="col-5 g-0">{{ teeming_label }}</div>
+            <div class="col-5 g-0">{{ t 'teeming_label' }}</div>
             <div class="col-7 g-0">{{ teeming }}</div>
         </div>
     {{/if}}
     {{#if is_user_admin}}
         <div class="row">
-            <div class="col-12 fw-bold">{{ admin_only_label }}</div>
+            <div class="col-12 fw-bold">{{ t 'admin_only_label' }}</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ id_label }}</div>
+            <div class="col-5 g-0">{{ t 'id_label' }}</div>
             <div class="col-7 g-0">{{ id }}</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ seasonal_type_label }}</div>
+            <div class="col-5 g-0">{{ t 'seasonal_type_label' }}</div>
             <div class="col-7 g-0">{{ seasonal_type }}</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ seasonal_index_label }}</div>
+            <div class="col-5 g-0">{{ t 'seasonal_index_label' }}</div>
             <div class="col-7 g-0">{{ seasonal_index }}</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ faction_label }}</div>
+            <div class="col-5 g-0">{{ t 'faction_label' }}</div>
             <div class="col-7 g-0">{{ faction }}</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ size_label }}</div>
+            <div class="col-5 g-0">{{ t 'size_label' }}</div>
             <div class="col-7 g-0">{{ size }}</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ npc_id_label }}</div>
+            <div class="col-5 g-0">{{ t 'npc_id_label' }}</div>
             <div class="col-7 g-0">{{ npc_id }} ({{ npc_id_type }})</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ exclusive_enemy_id_label }}</div>
+            <div class="col-5 g-0">{{ t 'exclusive_enemy_id_label' }}</div>
             <div class="col-7 g-0">{{ exclusive_enemy_id }} </div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ attached_to_pack_label }}</div>
+            <div class="col-5 g-0">{{ t 'attached_to_pack_label' }}</div>
             <div class="col-7 g-0">{{ attached_to_pack }}</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ attached_to_patrol_label }}</div>
+            <div class="col-5 g-0">{{ t 'attached_to_patrol_label' }}</div>
             <div class="col-7 g-0">{{ attached_to_patrol }}</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ skippable_label }}</div>
+            <div class="col-5 g-0">{{ t 'skippable_label' }}</div>
             <div class="col-7 g-0">{{ skippable }}</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ visual_label }}</div>
+            <div class="col-5 g-0">{{ t 'visual_label' }}</div>
             <div class="col-7 g-0">{{ visual }}</div>
         </div>
         <div class="row">
-            <div class="col-12 fw-bold">{{ mdt_label }}</div>
+            <div class="col-12 fw-bold">{{ t 'mdt_label' }}</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ enemy_id_label }}</div>
+            <div class="col-5 g-0">{{ t 'enemy_id_label' }}</div>
             <div class="col-7 g-0">{{ enemy_id }}</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ is_mdt_label }}</div>
+            <div class="col-5 g-0">{{ t 'is_mdt_label' }}</div>
             <div class="col-7 g-0">{{ is_mdt }}</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ mdt_id_label }}</div>
+            <div class="col-5 g-0">{{ t 'mdt_id_label' }}</div>
             <div class="col-7 g-0">{{ mdt_id }}</div>
         </div>
         <div class="row">
-            <div class="col-5 g-0">{{ mdt_npc_id_label }}</div>
+            <div class="col-5 g-0">{{ t 'mdt_npc_id_label' }}</div>
             <div class="col-7 g-0">{{ mdt_npc_id }}</div>
         </div>
     {{/if}}

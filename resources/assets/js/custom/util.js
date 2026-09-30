@@ -163,26 +163,21 @@ function rotateLatLng(centerLatLng, latLng, degrees) {
     return latLng;
 }
 
-function _getHandlebarsTranslations() {
-    let locale = lang.getLocale();
-    return lang.messages[locale + '.js'];
-}
-
-/** Some built-in caching since this function is called a lot */
-let _defaultVariables = null;
-
 /**
- * Get the default handlebars variables (all translations, etc.)
+ * Get the default handlebars variables. Translations are not among them: templates resolve those
+ * with the `t` helper (`{{t 'key'}}`, registered in bootstrap.js).
+ *
+ * @returns {{is_map_admin: boolean, is_user_admin: boolean, csrf_token: string}}
  */
 function getHandlebarsDefaultVariables() {
-    if (_defaultVariables === null) {
-        _defaultVariables = $.extend({}, _getHandlebarsTranslations(), {
-            is_map_admin: typeof getState === 'function' && getState() !== false ? getState().isMapAdmin() : false,
-            is_user_admin: isUserAdmin, // Defined in sitescripts
-            csrf_token: csrfToken // Defined in sitescripts
-        });
-    }
-    return _defaultVariables;
+    // Through globalThis for the same reason as _getCurrentMapObjectGroupManager()
+    let state = typeof globalThis.getState === 'function' ? globalThis.getState() : false;
+
+    return {
+        is_map_admin: state ? state.isMapAdmin() : false,
+        is_user_admin: isUserAdmin, // Defined in sitescripts
+        csrf_token: csrfToken // Defined in sitescripts
+    };
 }
 
 /**

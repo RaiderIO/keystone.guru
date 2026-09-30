@@ -32,3 +32,9 @@ globalThis.getState = globalThis.getState ?? (() => false);
 
 // Cookie accessor (js-cookie). `constants.js` reads cookie values at load time.
 globalThis.Cookies = globalThis.Cookies ?? {get: () => null};
+
+// The `t` translation helper bootstrap.js registers on the bundle's Handlebars, for tests that
+// compile the real .handlebars sources. Resolves through whichever `lang` is current at render time.
+require('handlebars').registerHelper('t', function (key) {
+    return lang.get('js.' + key);
+});
