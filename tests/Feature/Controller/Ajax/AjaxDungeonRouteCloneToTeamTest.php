@@ -3,6 +3,8 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
+use App\Models\PublishedState;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
@@ -66,6 +68,56 @@ final class AjaxDungeonRouteCloneToTeamTest extends DungeonRouteTestBase
 
         $this->assertNotNull($clone);
         $this->assertSame($this->team->id, $clone->team_id);
+    }
+
+    #[Test]
+    public function cloneToTeam_givenAUserWhoMayNotAddRoutesToTheTeam_returnsAnErrorAndClonesNothing(): void
+    {
+        // Arrange - a plain member may not add routes; that takes a moderator or higher
+        /** @var User $user */
+        $user = Auth::user();
+        TeamUser::query()
+            ->where('team_id', $this->team->id)
+            ->where('user_id', $user->id)
+            ->update(['role' => TeamUser::ROLE_MEMBER]);
+
+        // Act
+        $response = $this->post($this->cloneToTeamUrl());
+
+        // Assert
+        $response->assertOk();
+        $response->assertExactJson(['result' => 'error']);
+        $this->assertEquals(0, DungeonRoute::query()->where('clone_of', $this->dungeonRoute->public_key)->count());
+    }
+
+    #[Test]
+    public function cloneToTeam_givenARouteTheUserMayNotView_returnsForbidden(): void
+    {
+        // Arrange
+        $otherUser = null;
+
+        try {
+            $this->dungeonRoute->update([
+                'expires_at'         => null,
+                'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+            ]);
+            $otherUser = User::factory()->create();
+            $otherUser->addRole(Role::ROLE_USER);
+            TeamUser::create(['team_id' => $this->team->id, 'user_id' => $otherUser->id, 'role' => TeamUser::ROLE_ADMIN]);
+            $this->actingAs($otherUser);
+
+            // Act
+            $response = $this->post($this->cloneToTeamUrl());
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertEquals(0, DungeonRoute::query()->where('clone_of', $this->dungeonRoute->public_key)->count());
+        } finally {
+            if ($otherUser !== null) {
+                TeamUser::query()->where('user_id', $otherUser->id)->delete();
+                $otherUser->delete();
+            }
+        }
     }
 
     /**

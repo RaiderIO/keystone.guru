@@ -490,6 +490,34 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
     }
 
     /**
+     * A valid signature only proves the url was handed out, not that the caller may still see the
+     * route - it may have been unpublished since, or the url shared with someone else.
+     */
+    #[Test]
+    public function mdtExport_givenValidSignedUrlOfRouteUserMayNotView_returnsForbidden(): void
+    {
+        // Arrange
+        $viewer       = $this->createUserWithUserRole();
+        $dungeonRoute = $this->createMdtSupportedDungeonRoute([
+            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+        ]);
+
+        try {
+            $this->actingAs($viewer);
+
+            // Act
+            $response = $this->get($this->signedMdtExportUrl($dungeonRoute));
+
+            // Assert
+            $response->assertForbidden();
+            $response->assertJsonMissingPath('mdt_string');
+        } finally {
+            $dungeonRoute->delete();
+            $viewer->delete();
+        }
+    }
+
+    /**
      * The signature covers the path, so a url minted for one route cannot be replayed against
      * another - which is what keeps a single harvested url from becoming a key to the whole site.
      */
@@ -552,17 +580,20 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
         );
     }
 
-    private function createMdtSupportedDungeonRoute(): DungeonRoute
+    /**
+     * @param array<string, mixed> $attributes
+     */
+    private function createMdtSupportedDungeonRoute(array $attributes = []): DungeonRoute
     {
         [$dungeon, $mappingVersion] = $this->findDungeon(
             resolve: static fn(Dungeon $dungeon) => $dungeon->mdt_supported ? true : null,
         );
 
-        return DungeonRoute::factory()->create([
+        return DungeonRoute::factory()->create(array_merge([
             'expires_at'         => null,
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
-        ]);
+        ], $attributes));
     }
 
     /**
@@ -674,6 +705,33 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
             DungeonRouteRating::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
             $dungeonRoute->delete();
             $rater->delete();
+        }
+    }
+
+    #[Test]
+    public function rate_givenOwnRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $owner        = $this->createUserWithUserRole();
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'author_id'          => $owner->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            'expires_at'         => null,
+        ]);
+
+        try {
+            $this->actingAs($owner);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/rate', $dungeonRoute->public_key), ['rating' => 10]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame(0, DungeonRouteRating::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
+        } finally {
+            DungeonRouteRating::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
+            $dungeonRoute->delete();
+            $owner->delete();
         }
     }
 

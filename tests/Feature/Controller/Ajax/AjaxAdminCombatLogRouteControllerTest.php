@@ -71,6 +71,7 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 
         // Assert
         $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('dungeon_id');
     }
 
     #[Test]
@@ -186,6 +187,7 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 
         // Assert
         $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('dungeon_id');
     }
 
     #[Test]
@@ -240,6 +242,8 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
             $bodyData   = $body['data'];
             $floorEntry = collect($bodyData)->firstWhere('floor_id', $this->floor->id);
             $this->assertNotNull($floorEntry);
+            $this->assertNotEmpty($floorEntry['lat_lngs']);
+            $this->assertGreaterThanOrEqual(2, $body['failure_count']);
 
             foreach ($floorEntry['lat_lngs'] as $latLng) {
                 $this->assertArrayHasKey('lat', $latLng);
@@ -349,7 +353,9 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
         $created = [];
 
         try {
-            // Arrange
+            // Arrange - a second dungeon's row is what proves the delete is scoped
+            $otherDungeon = Dungeon::query()->where('id', '!=', $this->dungeon->id)->firstOrFail();
+
             $failure = CombatLogRouteEnemyFailure::create([
                 'dungeon_id'         => $this->dungeon->id,
                 'floor_id'           => $this->floor->id,
@@ -360,6 +366,16 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
             ]);
             $created[] = $failure->id;
 
+            $keptFailure = CombatLogRouteEnemyFailure::create([
+                'dungeon_id'         => $otherDungeon->id,
+                'floor_id'           => $otherDungeon->floors()->firstOrFail()->id,
+                'mapping_version_id' => $otherDungeon->getCurrentMappingVersion()->id,
+                'npc_id'             => null,
+                'lat'                => -50.0,
+                'lng'                => 100.0,
+            ]);
+            $created[] = $keptFailure->id;
+
             // Act
             $response = $this->delete(route('ajax.admin.combatlogroute.enemy_failures.delete'), [
                 'dungeon_id' => $this->dungeon->id,
@@ -369,11 +385,9 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
             $response->assertOk();
 
             $this->assertNull(CombatLogRouteEnemyFailure::find($failure->id));
-            $created = [];
+            $this->assertNotNull(CombatLogRouteEnemyFailure::find($keptFailure->id));
         } finally {
-            if (!empty($created)) {
-                CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
-            }
+            CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
         }
     }
 
@@ -382,8 +396,17 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
     {
         // Arrange
         $nonAdmin = User::factory()->create();
+        $failure  = null;
 
         try {
+            $failure = CombatLogRouteEnemyFailure::create([
+                'dungeon_id'         => $this->dungeon->id,
+                'floor_id'           => $this->floor->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+                'npc_id'             => null,
+                'lat'                => -50.0,
+                'lng'                => 100.0,
+            ]);
             $this->assertFalse($nonAdmin->hasRole(Role::ROLE_ADMIN));
             $this->actingAs($nonAdmin);
 
@@ -394,7 +417,9 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 
             // Assert
             $response->assertStatus(StatusCode::FORBIDDEN);
+            $this->assertNotNull(CombatLogRouteEnemyFailure::find($failure->id));
         } finally {
+            $failure?->delete();
             $nonAdmin->delete();
         }
     }
@@ -406,6 +431,7 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 
         // Assert
         $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('dungeon_id');
     }
 
     #[Test]
@@ -583,6 +609,7 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 
         // Assert
         $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('dungeon_id');
     }
 
     #[Test]
@@ -618,9 +645,11 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
     public function deleteEnemyResolutions_givenNonAdmin_returnsForbidden(): void
     {
         // Arrange
-        $nonAdmin = User::factory()->create();
+        $nonAdmin     = User::factory()->create();
+        $resolutionId = null;
 
         try {
+            $resolutionId = $this->createResolution(-50.0, 100.0, 60.0);
             $this->assertFalse($nonAdmin->hasRole(Role::ROLE_ADMIN));
             $this->actingAs($nonAdmin);
 
@@ -631,7 +660,12 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 
             // Assert
             $response->assertStatus(StatusCode::FORBIDDEN);
+            $this->assertNotNull(CombatLogRouteEnemyResolution::find($resolutionId));
         } finally {
+            if ($resolutionId !== null) {
+                CombatLogRouteEnemyResolution::query()->whereKey($resolutionId)->delete();
+            }
+
             $nonAdmin->delete();
         }
     }

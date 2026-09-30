@@ -95,6 +95,50 @@ final class AjaxEnemyPatrolControllerTest extends AjaxPublicTestCase
         }
     }
 
+    #[Test]
+    public function store_givenExistingEnemyPatrolWithAnMdtPolyline_updatesItAndKeepsTheMdtPolyline(): void
+    {
+        // Arrange
+        $enemyPatrol = $this->createEnemyPatrol();
+        $polylineId  = $enemyPatrol->polyline_id;
+        $enemyPatrol->update(['mdt_polyline_id' => $polylineId]);
+
+        $lastMappingChangeLogId = (int)MappingChangeLog::query()->max('id');
+        $newVerticesJson        = json_encode([['lat' => -10, 'lng' => 10], ['lat' => -20, 'lng' => 20]]);
+
+        try {
+            // Act - the editor never sends mdt_polyline_id back
+            $response = $this->put(route('ajax.admin.enemypatrol.update', [
+                'mappingVersion' => $this->mappingVersion,
+                'enemyPatrol'    => $enemyPatrol,
+            ]), [
+                'mapping_version_id' => $this->mappingVersion->id,
+                'floor_id'           => $this->floor->id,
+                'teeming'            => null,
+                'faction'            => 'any',
+                'polyline'           => [
+                    'color'          => '#25e433',
+                    'color_animated' => null,
+                    'weight'         => 2,
+                    'vertices_json'  => $newVerticesJson,
+                ],
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame($polylineId, $enemyPatrol->fresh()->mdt_polyline_id);
+
+            /** @var Polyline $storedPolyline */
+            $storedPolyline = Polyline::query()->findOrFail($enemyPatrol->fresh()->polyline_id);
+            $this->assertSame('#25e433', $storedPolyline->color);
+            $this->assertSame($newVerticesJson, $storedPolyline->vertices_json);
+        } finally {
+            MappingChangeLog::query()->where('id', '>', $lastMappingChangeLogId)->delete();
+            Polyline::query()->where('model_class', EnemyPatrol::class)->where('model_id', $enemyPatrol->id)->delete();
+            EnemyPatrol::query()->whereKey($enemyPatrol->id)->delete();
+        }
+    }
+
     private function createEnemyPatrol(): EnemyPatrol
     {
         $enemyPatrol = EnemyPatrol::create([

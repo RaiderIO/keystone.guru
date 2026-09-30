@@ -338,6 +338,72 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
+    public function delete_givenKillZoneOfAnotherUsersRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $nonOwner      = User::factory()->create();
+        $otherRoute    = $this->createRouteOwnedByAnotherUser();
+        $otherKillZone = KillZone::factory()->create([
+            'dungeon_route_id' => $otherRoute->id,
+            'floor_id'         => null,
+            'lat'              => null,
+            'lng'              => null,
+            'color'            => '#000000',
+            'index'            => 1,
+        ]);
+
+        try {
+            $this->actingAs($nonOwner);
+
+            // Act - named through the sandbox route, which anyone may edit; the kill zone's own route decides
+            $response = $this->delete(sprintf('/ajax/%s/killzone/%s', $this->dungeonRoute->public_key, $otherKillZone->id));
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+            $this->assertDatabaseHas('kill_zones', ['id' => $otherKillZone->id]);
+        } finally {
+            KillZone::query()->where('id', $otherKillZone->id)->delete();
+            DungeonRouteChange::query()->where('dungeon_route_id', $otherRoute->id)->delete();
+            $otherRoute->delete();
+            $nonOwner->delete();
+        }
+    }
+
+    #[Test]
+    public function deleteAll_givenAnotherUsersRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $nonOwner      = User::factory()->create();
+        $otherRoute    = $this->createRouteOwnedByAnotherUser();
+        $otherKillZone = KillZone::factory()->create([
+            'dungeon_route_id' => $otherRoute->id,
+            'floor_id'         => null,
+            'lat'              => null,
+            'lng'              => null,
+            'color'            => '#000000',
+            'index'            => 1,
+        ]);
+
+        try {
+            $this->actingAs($nonOwner);
+
+            // Act
+            $response = $this->delete(sprintf('/ajax/%s/killzone', $otherRoute->public_key), [
+                'confirm' => 'yes',
+            ]);
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+            $this->assertDatabaseHas('kill_zones', ['id' => $otherKillZone->id]);
+        } finally {
+            KillZone::query()->where('id', $otherKillZone->id)->delete();
+            DungeonRouteChange::query()->where('dungeon_route_id', $otherRoute->id)->delete();
+            $otherRoute->delete();
+            $nonOwner->delete();
+        }
+    }
+
+    #[Test]
     public function storeAll_givenEnemyIds_shouldSetEnemyIdOnKillZoneEnemies(): void
     {
         // Arrange

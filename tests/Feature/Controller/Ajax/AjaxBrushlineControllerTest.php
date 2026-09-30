@@ -6,6 +6,8 @@ use App\Events\Models\Brushline\BrushlineChangedEvent;
 use App\Models\DungeonRoute\DungeonRouteChange;
 use App\Models\Floor\Floor;
 use App\Models\Polyline;
+use App\Models\PublishedState;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
@@ -151,6 +153,7 @@ final class AjaxBrushlineControllerTest extends DungeonRouteTestBase
 
         // Assert
         $response->assertStatus(422);
+        $this->assertEquals(0, $this->dungeonRoute->brushlines()->count());
     }
 
     #[Test]
@@ -269,5 +272,169 @@ final class AjaxBrushlineControllerTest extends DungeonRouteTestBase
             // would also wipe its own boot() listeners for the rest of the PHPUnit process
             Event::forget('eloquent.creating: ' . DungeonRouteChange::class);
         }
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function delete_givenExistingBrushline_deletesBrushline(): void
+    {
+        // Arrange
+        $floor          = $this->nonFacadeFloor();
+        $createResponse = $this->post(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $floor->id,
+            'polyline' => PolylineFixtures::createPolyline($floor),
+        ]);
+        $createResponse->assertCreated();
+
+        // Act
+        $response = $this->delete(route('ajax.dungeonroute.brushline.delete', [
+            'dungeonRoute' => $this->dungeonRoute,
+            'brushline'    => $createResponse->json('id'),
+        ]));
+
+        // Assert
+        $response->assertNoContent();
+        $this->assertEquals(0, $this->dungeonRoute->brushlines()->count());
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function store_givenAUserWhoMayNotEditTheRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $otherUser = null;
+
+        try {
+            $this->makeRouteUnpublishedAndNonSandbox();
+            $otherUser = User::factory()->create();
+            $floor     = $this->nonFacadeFloor();
+            $this->actingAs($otherUser);
+
+            // Act
+            $response = $this->post(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $this->dungeonRoute]), [
+                'floor_id' => $floor->id,
+                'polyline' => PolylineFixtures::createPolyline($floor),
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertEquals(0, $this->dungeonRoute->brushlines()->count());
+        } finally {
+            $otherUser?->delete();
+        }
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function update_givenExistingBrushline_updatesItsPolyline(): void
+    {
+        // Arrange
+        $floor          = $this->nonFacadeFloor();
+        $createResponse = $this->post(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $floor->id,
+            'polyline' => PolylineFixtures::createPolyline($floor, color: '#111111'),
+        ]);
+        $createResponse->assertCreated();
+
+        // Act
+        $response = $this->put(route('ajax.dungeonroute.brushline.update', [
+            'dungeonRoute' => $this->dungeonRoute,
+            'brushline'    => $createResponse->json('id'),
+        ]), [
+            'floor_id' => $floor->id,
+            'polyline' => PolylineFixtures::createPolyline($floor, color: '#222222'),
+        ]);
+
+        // Assert
+        $response->assertOk();
+        $this->assertEquals(1, $this->dungeonRoute->brushlines()->count());
+        $this->assertSame('#222222', $this->dungeonRoute->brushlines()->firstOrFail()->polyline->color);
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function delete_givenAUserWhoMayNotEditTheRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $otherUser = null;
+
+        try {
+            $floor          = $this->nonFacadeFloor();
+            $createResponse = $this->post(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $this->dungeonRoute]), [
+                'floor_id' => $floor->id,
+                'polyline' => PolylineFixtures::createPolyline($floor),
+            ]);
+            $createResponse->assertCreated();
+
+            $this->makeRouteUnpublishedAndNonSandbox();
+            $otherUser = User::factory()->create();
+            $this->actingAs($otherUser);
+
+            // Act
+            $response = $this->delete(route('ajax.dungeonroute.brushline.delete', [
+                'dungeonRoute' => $this->dungeonRoute,
+                'brushline'    => $createResponse->json('id'),
+            ]));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertEquals(1, $this->dungeonRoute->brushlines()->count());
+        } finally {
+            $otherUser?->delete();
+        }
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function show_givenAUserWhoMayNotViewTheRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $otherUser = null;
+
+        try {
+            $floor          = $this->nonFacadeFloor();
+            $createResponse = $this->post(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $this->dungeonRoute]), [
+                'floor_id' => $floor->id,
+                'polyline' => PolylineFixtures::createPolyline($floor),
+            ]);
+            $createResponse->assertCreated();
+
+            $this->makeRouteUnpublishedAndNonSandbox();
+            $otherUser = User::factory()->create();
+            $this->actingAs($otherUser);
+
+            // Act
+            $response = $this->get(route('ajax.dungeonroute.brushline.show', [
+                'dungeonRoute' => $this->dungeonRoute,
+                'brushline'    => $createResponse->json('id'),
+            ]));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $otherUser?->delete();
+        }
+    }
+
+    private function nonFacadeFloor(): Floor
+    {
+        /** @var Floor $floor */
+        $floor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->orderBy('id')
+            ->firstOrFail();
+
+        return $floor;
+    }
+
+    /**
+     * The factory route is a sandbox route, which anyone may edit and view.
+     */
+    private function makeRouteUnpublishedAndNonSandbox(): void
+    {
+        $this->dungeonRoute->update([
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+        ]);
     }
 }

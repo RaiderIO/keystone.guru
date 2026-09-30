@@ -273,6 +273,24 @@ final class AjaxDungeonRouteControllerDeleteBulkTest extends PublicTestCase
     }
 
     #[Test]
+    public function deleteBulk_givenASandboxRoute_returnsValidationErrorAndDeletesNothing(): void
+    {
+        // Arrange
+        $author       = $this->createUser();
+        $ownRoute     = $this->createRoute($author);
+        $sandboxRoute = $this->createRoute($author);
+        DungeonRoute::query()->whereKey($sandboxRoute->id)->update(['expires_at' => now()->addHour()]);
+
+        // Act
+        $response = $this->deleteBulk($author, [$ownRoute->public_key, $sandboxRoute->public_key]);
+
+        // Assert
+        $response->assertJsonValidationErrors('dungeon_routes.1');
+        $this->assertNotNull($ownRoute->fresh());
+        $this->assertNotNull($sandboxRoute->fresh());
+    }
+
+    #[Test]
     public function deleteBulk_givenDuplicatePublicKeys_returnsValidationErrorAndDeletesNothing(): void
     {
         // Arrange
