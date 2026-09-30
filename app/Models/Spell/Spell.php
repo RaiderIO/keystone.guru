@@ -485,9 +485,10 @@ class Spell extends Model implements MappingModelInterface
     public static function getWowheadLink(?int $gameVersionId, int $spellId, ?string $name = null): string
     {
         $result = sprintf('%s/spell=%d', GameVersion::getWowheadBaseUrl($gameVersionId), $spellId);
+        $slug   = $name === null ? '' : Str::slug(__($name));
 
-        if (!empty(__($name))) {
-            $result .= '/' . Str::slug(__($name));
+        if ($slug !== '') {
+            $result .= '/' . $slug;
         }
 
         return $result;

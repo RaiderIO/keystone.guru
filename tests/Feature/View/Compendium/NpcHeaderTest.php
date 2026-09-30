@@ -5,6 +5,7 @@ namespace Tests\Feature\View\Compendium;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcType;
+use App\Models\Spell\Spell;
 use Illuminate\Support\Facades\App;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -116,6 +117,78 @@ final class NpcHeaderTest extends PublicTestCase
             'cata'         => [GameVersion::GAME_VERSION_CATA, 'https://www.wowhead.com/npc=56439/sha-of-doubt'],
             'legion remix' => [GameVersion::GAME_VERSION_LEGION_REMIX, 'https://www.wowhead.com/npc=56439/sha-of-doubt'],
         ];
+    }
+
+    #[Test]
+    #[DataProvider('localeWowheadUrlProvider')]
+    public function getWowheadLink_givenLocale_linksToThatLocalesWowheadPage(
+        string $locale,
+        string $gameVersionKey,
+        string $expectedUrl,
+    ): void {
+        // Arrange
+        $gameVersionId  = GameVersion::ALL[$gameVersionKey];
+        $originalLocale = App::getLocale();
+
+        try {
+            App::setLocale($locale);
+
+            // Act
+            $result = Npc::getWowheadLink($gameVersionId, 56439, 'Sha of Doubt');
+        } finally {
+            App::setLocale($originalLocale);
+        }
+
+        // Assert
+        $this->assertSame($expectedUrl, $result);
+    }
+
+    /**
+     * Wowhead puts the locale after the game version's database, and has no pages for Ukrainian.
+     *
+     * @return array<string, array{0: string, 1: string, 2: string}>
+     */
+    public static function localeWowheadUrlProvider(): array
+    {
+        return [
+            'german retail'         => ['de_DE_ai', GameVersion::GAME_VERSION_RETAIL, 'https://www.wowhead.com/de/npc=56439/sha-of-doubt'],
+            'german classic era'    => ['de_DE_ai', GameVersion::GAME_VERSION_CLASSIC_ERA, 'https://www.wowhead.com/classic/de/npc=56439/sha-of-doubt'],
+            'mexican spanish mop'   => ['es_MX_ai', GameVersion::GAME_VERSION_MOP, 'https://www.wowhead.com/mop-classic/mx/npc=56439/sha-of-doubt'],
+            'unsupported ukrainian' => ['uk_UA', GameVersion::GAME_VERSION_RETAIL, 'https://www.wowhead.com/npc=56439/sha-of-doubt'],
+        ];
+    }
+
+    #[Test]
+    public function getWowheadLink_givenNameWithoutASlug_omitsTheSlug(): void
+    {
+        // Arrange
+        $gameVersionId = GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL];
+
+        // Act
+        $result = Npc::getWowheadLink($gameVersionId, 56439, '!!!');
+
+        // Assert
+        $this->assertSame('https://www.wowhead.com/npc=56439', $result);
+    }
+
+    #[Test]
+    public function getWowheadLink_givenSpellInGermanLocale_linksToTheGermanWowheadPage(): void
+    {
+        // Arrange
+        $gameVersionId  = GameVersion::ALL[GameVersion::GAME_VERSION_WRATH];
+        $originalLocale = App::getLocale();
+
+        try {
+            App::setLocale('de_DE_ai');
+
+            // Act
+            $result = Spell::getWowheadLink($gameVersionId, 12345, 'Frost Nova');
+        } finally {
+            App::setLocale($originalLocale);
+        }
+
+        // Assert
+        $this->assertSame('https://www.wowhead.com/wrath/de/spell=12345/frost-nova', $result);
     }
 
     #[Test]

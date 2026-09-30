@@ -253,6 +253,20 @@ const GAME_VERSION_BETA = 'beta';
 const GAME_VERSION_CATA = 'cata';
 const GAME_VERSION_MOP = 'mop';
 
+// Wowhead's page locale path per app locale - must match App\Service\WagoTools\GameLocale::wowheadPath()
+const WOWHEAD_LOCALE_PATHS = {
+    de_DE: 'de',
+    es_ES: 'es',
+    es_MX: 'mx',
+    fr_FR: 'fr',
+    it_IT: 'it',
+    ko_KR: 'ko',
+    pt_BR: 'pt',
+    ru_RU: 'ru',
+    zh_CN: 'cn',
+    zh_TW: 'tw',
+};
+
 // Mountable Areas
 const MOVEMENT_SPEED_DEFAULT = 7;
 const MOVEMENT_SPEED_MOUNTED = 14;

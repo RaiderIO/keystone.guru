@@ -8,6 +8,7 @@ use App\Models\Traits\SeederModel;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
+use App\Service\WagoTools\GameLocale;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -187,14 +188,17 @@ class GameVersion extends Model
     /**
      * The Wowhead base URL a link for this game version must be built on - the domain part of a
      * link must match getWowheadDomain()'s tooltip domain for the same game version, or the hover
-     * tooltip shows retail data while the link points at a classic database.
+     * tooltip shows retail data while the link points at a classic database. The locale segment
+     * follows the domain (`wowhead.com/classic/de`) and defaults to the application locale.
      */
-    public static function getWowheadBaseUrl(?int $gameVersionId): string
+    public static function getWowheadBaseUrl(?int $gameVersionId, ?string $locale = null): string
     {
-        $domain = self::getWowheadDomain($gameVersionId);
+        $segments = array_filter([
+            'https://www.wowhead.com',
+            self::getWowheadDomain($gameVersionId),
+            GameLocale::forAppLocale($locale ?? App::getLocale())->wowheadPath(),
+        ]);
 
-        return $domain === null
-            ? 'https://www.wowhead.com'
-            : sprintf('https://www.wowhead.com/%s', $domain);
+        return implode('/', $segments);
     }
 }

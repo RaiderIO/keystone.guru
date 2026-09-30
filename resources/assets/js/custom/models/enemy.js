@@ -626,12 +626,17 @@ class Enemy extends VersionableMapObject {
                 break;
         }
 
+        const wowheadLocalePath = WOWHEAD_LOCALE_PATHS[lang.getLocale().replace(/_ai$/, '')];
+        if (wowheadLocalePath) {
+            wowheadBaseUrl += `/${wowheadLocalePath}`;
+        }
+
         const slug = (spell.name ?? 'missing spell name')
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, '-')   // Replace non-alphanumeric with dashes
             .replace(/^-+|-+$/g, '');      // Trim leading/trailing dashes
 
-        return `${wowheadBaseUrl}/spell=${spell.id}/${slug}`;
+        return slug === '' ? `${wowheadBaseUrl}/spell=${spell.id}` : `${wowheadBaseUrl}/spell=${spell.id}/${slug}`;
     }
 
     /**

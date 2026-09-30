@@ -172,13 +172,13 @@ class Npc extends Model implements MappingModelInterface
             'classification'    => $this->classification === null ? null : __($this->classification->name),
             'classificationKey' => $this->classification?->key,
             'health'            => $this->getTooltipHealth(),
-            'type'              => $this->type->type,
+            'type'              => __(sprintf('npctypes.%s', $this->type->type_key)),
             // Mirrors the flags the NPC's own compendium page shows; bursting/bolstering/sanguine are
             // deliberately left out there as well
             'flags' => array_values(array_filter([
-                $this->dangerous ? __('view_admin.npc.edit.dangerous') : null,
-                $this->truesight ? __('view_admin.npc.edit.truesight') : null,
-                $this->runs_away_in_fear ? __('view_admin.npc.edit.runs_away_in_fear') : null,
+                $this->dangerous ? __('view_compendium.npc.sections.header.dangerous') : null,
+                $this->truesight ? __('view_compendium.npc.sections.header.truesight') : null,
+                $this->runs_away_in_fear ? __('view_compendium.npc.sections.header.runs_away_in_fear') : null,
             ])),
             // Observed crowd control only - an NPC without a characteristic was never seen affected by
             // one, which is not the same as being immune to it (#4028), so nothing is listed as absent
@@ -244,9 +244,10 @@ class Npc extends Model implements MappingModelInterface
     public static function getWowheadLink(?int $gameVersionId, int $npcId, ?string $name = null): string
     {
         $result = sprintf('%s/npc=%d', GameVersion::getWowheadBaseUrl($gameVersionId), $npcId);
+        $slug   = $name === null ? '' : Str::slug(__($name));
 
-        if (!empty(__($name))) {
-            $result .= '/' . Str::slug(__($name));
+        if ($slug !== '') {
+            $result .= '/' . $slug;
         }
 
         return $result;
