@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Service\Creator\CreatorDirectoryServiceInterface;
 use App\Service\Creator\Enums\CreatorDirectorySort;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Str;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -498,7 +499,7 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
     {
         // Arrange - searched for by name, so the creator is on the first page whatever else is listed
         $viewer      = User::factory()->create();
-        $creator     = User::factory()->create();
+        $creator     = $this->createSearchableCreator();
         $statsSeason = app(CreatorDirectoryServiceInterface::class)->getStatsSeason();
         $this->assertNotNull($statsSeason, 'Expected the default game version to have a current season');
 
@@ -527,6 +528,14 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
             $creator->delete();
             $viewer->delete();
         }
+    }
+
+    /**
+     * A creator whose name fits the directory search's 24 character limit - faker's full names do not always.
+     */
+    private function createSearchableCreator(): User
+    {
+        return User::factory()->create(['name' => sprintf('creator_%s', Str::random(10))]);
     }
 
     private function minPublishedRoutes(): int
