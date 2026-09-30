@@ -10,10 +10,10 @@ globalThis.InlineCode = InlineCode;
 const {CommonModalMdtimportoverwrite} = require('./mdtimportoverwrite');
 
 /**
- * @param {boolean} hasPendingDraft
+ * @param {number|null} pendingDraftId
  * @returns {CommonModalMdtimportoverwrite}
  */
-function makeModal(hasPendingDraft) {
+function makeModal(pendingDraftId) {
     document.body.innerHTML = `
         <input type="checkbox" id="discard_existing_draft">
         <button id="submit" disabled></button>
@@ -22,13 +22,13 @@ function makeModal(hasPendingDraft) {
     return new CommonModalMdtimportoverwrite('test-id', 'common/modal/mdtimportoverwrite', {
         discardExistingDraftSelector: '#discard_existing_draft',
         submitSelector:               '#submit',
-        hasPendingDraft:              hasPendingDraft,
+        pendingDraftId:               pendingDraftId,
     });
 }
 
 test('canSubmit_givenNoPreviewedString_returnsFalse', () => {
     // Arrange
-    const modal = makeModal(false);
+    const modal = makeModal(null);
 
     // Act
     const canSubmit = modal.canSubmit();
@@ -39,7 +39,7 @@ test('canSubmit_givenNoPreviewedString_returnsFalse', () => {
 
 test('canSubmit_givenPreviewedStringAndNoPendingDraft_returnsTrue', () => {
     // Arrange
-    const modal                  = makeModal(false);
+    const modal                  = makeModal(null);
     modal._previewedImportString = '!~MDT2~abc';
 
     // Act
@@ -51,7 +51,7 @@ test('canSubmit_givenPreviewedStringAndNoPendingDraft_returnsTrue', () => {
 
 test('canSubmit_givenPendingDraftWithoutConfirmation_returnsFalse', () => {
     // Arrange
-    const modal                  = makeModal(true);
+    const modal                  = makeModal(42);
     modal._previewedImportString = '!~MDT2~abc';
 
     // Act
@@ -63,7 +63,7 @@ test('canSubmit_givenPendingDraftWithoutConfirmation_returnsFalse', () => {
 
 test('canSubmit_givenPendingDraftWithConfirmation_returnsTrue', () => {
     // Arrange
-    const modal                  = makeModal(true);
+    const modal                  = makeModal(42);
     modal._previewedImportString = '!~MDT2~abc';
     $('#discard_existing_draft').prop('checked', true);
 
@@ -74,9 +74,9 @@ test('canSubmit_givenPendingDraftWithConfirmation_returnsTrue', () => {
     expect(canSubmit).toBe(true);
 });
 
-test('buildImportPayload_givenConfirmedPendingDraft_sendsDiscardFlag', () => {
+test('buildImportPayload_givenConfirmedPendingDraft_sendsDisplayedDraftId', () => {
     // Arrange
-    const modal                  = makeModal(true);
+    const modal                  = makeModal(42);
     modal._previewedImportString = '!~MDT2~abc';
     $('#discard_existing_draft').prop('checked', true);
 
@@ -84,12 +84,12 @@ test('buildImportPayload_givenConfirmedPendingDraft_sendsDiscardFlag', () => {
     const payload = modal.buildImportPayload();
 
     // Assert
-    expect(payload).toEqual({import_string: '!~MDT2~abc', discard_existing_draft: 1});
+    expect(payload).toEqual({import_string: '!~MDT2~abc', discard_existing_draft_id: 42});
 });
 
-test('buildImportPayload_givenNoPendingDraft_neverSendsDiscardFlag', () => {
+test('buildImportPayload_givenNoPendingDraft_neverSendsDraftId', () => {
     // Arrange
-    const modal                  = makeModal(false);
+    const modal                  = makeModal(null);
     modal._previewedImportString = '!~MDT2~abc';
     $('#discard_existing_draft').prop('checked', true);
 
@@ -97,5 +97,17 @@ test('buildImportPayload_givenNoPendingDraft_neverSendsDiscardFlag', () => {
     const payload = modal.buildImportPayload();
 
     // Assert
-    expect(payload.discard_existing_draft).toBe(0);
+    expect(payload).toEqual({import_string: '!~MDT2~abc'});
+});
+
+test('buildImportPayload_givenUnconfirmedPendingDraft_neverSendsDraftId', () => {
+    // Arrange
+    const modal                  = makeModal(42);
+    modal._previewedImportString = '!~MDT2~abc';
+
+    // Act
+    const payload = modal.buildImportPayload();
+
+    // Assert
+    expect(payload).toEqual({import_string: '!~MDT2~abc'});
 });

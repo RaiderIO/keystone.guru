@@ -23,8 +23,9 @@ class DungeonRouteImportMdtStringFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'import_string'          => ['required', 'string', sprintf('max:%d', ImportStringFormRequest::IMPORT_STRING_MAX_LENGTH)],
-            'discard_existing_draft' => ['sometimes', 'boolean'],
+            'import_string' => ['required', 'string', sprintf('max:%d', ImportStringFormRequest::IMPORT_STRING_MAX_LENGTH)],
+            // No exists rule: a draft deleted since the author confirmed is the stale case the service answers with a 409
+            'discard_existing_draft_id' => ['sometimes', 'nullable', 'integer', 'min:1'],
         ];
     }
 
@@ -39,8 +40,14 @@ class DungeonRouteImportMdtStringFormRequest extends FormRequest
         ];
     }
 
-    public function isDiscardExistingDraft(): bool
+    /**
+     * The id of the pending draft the author saw and confirmed may be discarded, if any. An id rather than a
+     * model: a concurrent replacement may have deleted the draft it names.
+     */
+    public function getDiscardExistingDraftId(): ?int
     {
-        return $this->boolean('discard_existing_draft');
+        $discardExistingDraftId = $this->validated('discard_existing_draft_id');
+
+        return $discardExistingDraftId === null ? null : (int)$discardExistingDraftId;
     }
 }
