@@ -29,6 +29,8 @@ class CommonModalMdtimportoverwrite extends InlineCode {
         /** @type {string|null} The pasted string, once its preview came back without errors */
         this._previewedImportString = null;
         this._submitting = false;
+        /** @type {number} Bumped on every paste and reset, so a preview answer for an earlier paste is ignored */
+        this._previewGeneration = 0;
     }
 
     /**
@@ -54,6 +56,7 @@ class CommonModalMdtimportoverwrite extends InlineCode {
      */
     _importStringPasted(importString) {
         let self = this;
+        let generation = ++this._previewGeneration;
 
         // Deferred so the pasted value lands before the field locks
         setTimeout(function () {
@@ -71,9 +74,15 @@ class CommonModalMdtimportoverwrite extends InlineCode {
                 $(self.options.loaderSelector).show();
             },
             complete: function () {
-                $(self.options.loaderSelector).hide();
+                if (generation === self._previewGeneration) {
+                    $(self.options.loaderSelector).hide();
+                }
             },
             success: function (responseData) {
+                if (generation !== self._previewGeneration) {
+                    return;
+                }
+
                 self._renderDetails(responseData);
 
                 self._previewedImportString = responseData.errors.length === 0 ? importString : null;
@@ -81,6 +90,10 @@ class CommonModalMdtimportoverwrite extends InlineCode {
                 self._refreshSubmit();
             },
             error: function (xhr, textStatus, errorThrown) {
+                if (generation !== self._previewGeneration) {
+                    return;
+                }
+
                 self._reset();
 
                 defaultAjaxErrorFn(xhr, textStatus, errorThrown);
@@ -204,6 +217,7 @@ class CommonModalMdtimportoverwrite extends InlineCode {
      * @private
      */
     _reset() {
+        this._previewGeneration++;
         this._previewedImportString = null;
         this._submitting = false;
 
