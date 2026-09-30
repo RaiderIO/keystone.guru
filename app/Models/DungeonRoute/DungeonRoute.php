@@ -1048,6 +1048,13 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                     $this->team !== null &&
                     $this->team->isUserCollaborator($user) &&
                     $this->published_state_id !== PublishedState::ALL[PublishedState::UNPUBLISHED]
+                ) ||
+                // A draft is always unpublished, so a team collaborator may edit it whenever they may edit its original
+                (
+                    $this->is_upgrade_draft &&
+                    $this->team !== null &&
+                    $this->team->isUserCollaborator($user) &&
+                    ($this->upgradeOfDungeonRoute()->first()?->mayUserEdit($user) ?? false)
                 );
         }
     }
