@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
@@ -213,7 +214,16 @@ final class AjaxDungeonRouteSearchControllerTest extends AjaxPublicTestCase
      */
     private function createPublishedRoute(User $user, array $attributes = []): DungeonRoute
     {
-        [$dungeon, $mappingVersion] = $this->findDungeon(challengeMode: true, dungeonActive: true);
+        // Ask for a mapping version holding a pullable enemy, so no test needing one depends on which dungeon the pick lands on
+        [$dungeon, $mappingVersion] = $this->findDungeon(
+            challengeMode: true,
+            dungeonActive: true,
+            minEnemies:    1,
+            resolve:       static fn(Dungeon $dungeon, MappingVersion $mappingVersion) => $mappingVersion->enemies()
+                ->whereNotNull('npc_id')
+                ->whereNotNull('floor_id')
+                ->exists() ?: null,
+        );
 
         return DungeonRoute::factory()->create(array_merge([
             'author_id'          => $user->id,
