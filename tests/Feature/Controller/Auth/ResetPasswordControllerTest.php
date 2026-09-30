@@ -2,7 +2,11 @@
 
 namespace Tests\Feature\Controller\Auth;
 
+use App\Models\User;
 use App\Providers\AppServiceProvider;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionProperty;
@@ -92,6 +96,60 @@ final class ResetPasswordControllerTest extends PublicTestCase
         // that GET route shares its path with the password.update POST route
         $response->assertOk();
         $response->assertSee(sprintf('action="%s"', route('password.update')), false);
+    }
+
+    #[Test]
+    public function reset_givenAValidToken_changesThePasswordLogsInAndRedirectsHome(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+
+        try {
+            $token = Password::broker()->createToken($user);
+
+            // Act
+            $response = $this->post(route('password.update'), [
+                'token'                 => $token,
+                'email'                 => $user->email,
+                'password'              => 'a-brand-new-password',
+                'password_confirmation' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $response->assertRedirect('/');
+            $response->assertSessionHasNoErrors();
+            $this->assertTrue(Hash::check('a-brand-new-password', (string)$user->fresh()?->password));
+            $this->assertAuthenticatedAs($user);
+        } finally {
+            auth()->logout();
+            DB::table((string)config('auth.passwords.users.table'))->where('email', $user->email)->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function reset_givenAnInvalidToken_keepsThePasswordAndReturnsAnEmailError(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+
+        try {
+            // Act
+            $response = $this->post(route('password.update'), [
+                'token'                 => 'some-token',
+                'email'                 => $user->email,
+                'password'              => 'a-brand-new-password',
+                'password_confirmation' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $response->assertRedirect();
+            $response->assertSessionHasErrors(['email']);
+            $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
+            $this->assertGuest();
+        } finally {
+            $user->delete();
+        }
     }
 
     private function overrideHttpRateLimit(?int $limit): void

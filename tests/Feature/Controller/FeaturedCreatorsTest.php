@@ -55,16 +55,20 @@ final class FeaturedCreatorsTest extends PublicTestCase
     #[Test]
     public function getFeaturedCreators_givenACreatorWhoOptedOut_excludesThem(): void
     {
-        // Arrange
+        // Arrange - an eligible creator too, or the rail hides itself below its minimum whatever the opt-out does
         $dungeon = $this->featuredDungeon();
         $creator = User::factory()->create(['hide_from_creator_directory' => true]);
         $routes  = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes(), $dungeon);
+        $other   = User::factory()->create();
+        $routes->push(...$this->createPublishedRoutesFor($other, $this->minPublishedRoutes(), $dungeon));
+        config(['keystoneguru.creators.featured_min_count' => 1]);
 
         try {
             // Act
             $featured = app(CreatorDirectoryServiceInterface::class)->getFeaturedCreators($dungeon, PHP_INT_MAX);
 
             // Assert
+            $this->assertTrue($featured->pluck('id')->contains($other->id), 'The eligible creator must be featured');
             $this->assertFalse(
                 $featured->pluck('id')->contains($creator->id),
                 'A creator who opted out must not be featured on the route page either',
@@ -72,6 +76,7 @@ final class FeaturedCreatorsTest extends PublicTestCase
         } finally {
             $this->deleteAll($routes);
             $creator->delete();
+            $other->delete();
         }
     }
 

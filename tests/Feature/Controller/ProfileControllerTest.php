@@ -4,7 +4,10 @@ namespace Tests\Feature\Controller;
 
 use App\Features\CreatorProfiles;
 use App\Models\Laratrust\Role;
+use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -312,6 +315,190 @@ final class ProfileControllerTest extends PublicTestCase
             $victim?->delete();
             $attacker?->delete();
         }
+    }
+
+    #[Test]
+    public function changepassword_givenCorrectCurrentPassword_changesThePassword(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange - the factory hashes the literal string 'password'
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertSessionHas('status', __('controller.profile.flash.password_changed'));
+            $this->assertTrue(Hash::check('a-brand-new-password', (string)$user->fresh()?->password));
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenMismatchingNewPasswords_keepsThePasswordAndReportsTheMismatch(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'another-new-password',
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas('errors', static fn($errors): bool => $errors->has('passwords_no_match'));
+            $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenTheCurrentPasswordAsTheNewOne_reportsItAndKeepsThePassword(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'password',
+                'new_password-confirm' => 'password',
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas('errors', static fn($errors): bool => $errors->has('passwords_match'));
+            $response->assertSessionMissing('status');
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenSelf_deletesTheAccountAndLogsOut(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->delete(route('profile.delete'));
+
+            // Assert
+            $response->assertRedirect(route('home'));
+            $response->assertSessionHas('status', __('controller.profile.flash.account_deleted_successfully'));
+            $this->assertFalse(User::query()->whereKey($user->id)->exists());
+            $this->assertGuest();
+        } finally {
+            if ($user !== null) {
+                User::query()->whereKey($user->id)->first()?->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function delete_givenSiteAdmin_returnsForbiddenAndKeepsTheAccount(): void
+    {
+        $admin = null;
+
+        try {
+            // Arrange - a throwaway admin, so a regression cannot delete the seeded one
+            $admin = User::factory()->create();
+            $admin->addRole(Role::ROLE_ADMIN);
+
+            // Act
+            $response = $this->actingAs($admin)->delete(route('profile.delete'));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertTrue(User::query()->whereKey($admin->id)->exists());
+        } finally {
+            if ($admin !== null) {
+                $admin->roles()->sync([]);
+                User::query()->whereKey($admin->id)->first()?->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function createTag_givenNewName_createsAPersonalTag(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user    = $this->userWithUserRole();
+            $tagName = sprintf('test-profile-tag-%s', fake()->uuid());
+
+            // Act
+            $response = $this->actingAs($user)->post(route('profile.tag.create'), ['tag_name_new' => $tagName]);
+
+            // Assert
+            $response->assertRedirect(route('profile.tags'));
+            $response->assertSessionHas('status', __('controller.profile.flash.tag_created_successfully'));
+            $this->assertSame(1, $this->personalTagCount($user, $tagName));
+        } finally {
+            if ($user !== null) {
+                Tag::query()->where('context_class', User::class)->where('context_id', $user->id)->delete();
+            }
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function createTag_givenExistingName_returnsAnErrorAndCreatesNoDuplicate(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user    = $this->userWithUserRole();
+            $tagName = sprintf('test-profile-tag-%s', fake()->uuid());
+            $this->actingAs($user)->post(route('profile.tag.create'), ['tag_name_new' => $tagName]);
+
+            // Act
+            $response = $this->actingAs($user)->post(route('profile.tag.create'), ['tag_name_new' => $tagName]);
+
+            // Assert
+            $response->assertRedirect(route('profile.tags'));
+            $response->assertSessionHasErrors(['tag_name_new' => __('controller.profile.flash.tag_already_exists')]);
+            $this->assertSame(1, $this->personalTagCount($user, $tagName));
+        } finally {
+            if ($user !== null) {
+                Tag::query()->where('context_class', User::class)->where('context_id', $user->id)->delete();
+            }
+            $user?->delete();
+        }
+    }
+
+    private function personalTagCount(User $user, string $tagName): int
+    {
+        return Tag::query()
+            ->where('context_class', User::class)
+            ->where('context_id', $user->id)
+            ->where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])
+            ->where('name', $tagName)
+            ->count();
     }
 
     /**

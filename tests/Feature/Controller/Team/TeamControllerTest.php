@@ -141,6 +141,56 @@ final class TeamControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function edit_givenATeamModeratorWhoIsNoSiteAdmin_rendersTheRoutePickerForThisTeam(): void
+    {
+        // Arrange - user 1 is a site admin, which renders the picker whatever their team role
+        $moderator = null;
+        $teamUser  = null;
+
+        try {
+            $moderator = User::factory()->create();
+            $moderator->addRole(Role::ROLE_USER);
+            $moderator->legal_agreed = true;
+            $moderator->save();
+            $teamUser = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $moderator->id, 'role' => TeamUser::ROLE_MODERATOR]);
+            $this->actingAs($moderator);
+
+            // Act
+            $response = $this->get(route('team.edit', $this->team));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('id="team_edit_route_picker"', false);
+        } finally {
+            $teamUser?->delete();
+            $moderator?->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenUserOutsideTheTeam_returnsForbidden(): void
+    {
+        // Arrange
+        $outsider = null;
+
+        try {
+            $outsider = User::factory()->create();
+            $outsider->addRole(Role::ROLE_USER);
+            $outsider->legal_agreed = true;
+            $outsider->save();
+            $this->actingAs($outsider);
+
+            // Act
+            $response = $this->get(route('team.edit', $this->team));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $outsider?->delete();
+        }
+    }
+
+    #[Test]
     public function edit_givenATeamMemberWithoutModeratorRole_rendersNoRoutePicker(): void
     {
         // Arrange
@@ -222,6 +272,31 @@ final class TeamControllerTest extends PublicTestCase
                 'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM],
                 'name'            => $tagName,
             ]);
+        } finally {
+            Tag::where('name', $tagName)->delete();
+        }
+    }
+
+    #[Test]
+    public function createTag_givenExistingName_returnsAnErrorAndCreatesNoDuplicate(): void
+    {
+        $tagName = sprintf('test-team-tag-%s', fake()->uuid());
+
+        try {
+            // Arrange
+            $this->post(route('team.tag.create', $this->team), ['tag_name_new' => $tagName]);
+
+            // Act
+            $response = $this->post(route('team.tag.create', $this->team), ['tag_name_new' => $tagName]);
+
+            // Assert
+            $response->assertRedirect();
+            $response->assertSessionHasErrors(['tag_name_new' => __('controller.team.flash.tag_already_exists')]);
+            $this->assertSame(1, Tag::query()
+                ->where('context_id', $this->team->id)
+                ->where('context_class', Team::class)
+                ->where('name', $tagName)
+                ->count());
         } finally {
             Tag::where('name', $tagName)->delete();
         }

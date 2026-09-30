@@ -5,6 +5,7 @@ namespace Tests\Feature\Controller\Auth;
 use App\Models\User;
 use Laravel\Socialite\Contracts\Provider;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\InvalidStateException;
 use Laravel\Socialite\Two\User as SocialiteUser;
 use Mockery;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -86,6 +87,100 @@ final class OAuthLoginControllerTest extends PublicTestCase
             User::query()->where('oauth_id', $oAuthId)->first()?->delete();
             $slugOwner?->delete();
         }
+    }
+
+    #[Test]
+    public function handleProviderCallback_givenTheEmailOfAnExistingAccount_createsNoUserAndLogsNobodyIn(): void
+    {
+        // Arrange
+        $providerId   = sprintf('%d', random_int(100000000, 999999999));
+        $oAuthId      = sprintf('%s@discord', $providerId);
+        $existingUser = null;
+
+        try {
+            $existingUser = User::factory()->create(['email' => sprintf('%s@discord.test', $providerId)]);
+            $this->mockSocialiteUser('discord', $providerId, sprintf('Newcomer%d', random_int(100000, 999999)));
+
+            // Act
+            $response = $this->get(route('login.discord.callback'));
+
+            // Assert
+            $response->assertRedirect('/');
+            $response->assertSessionHas('warning', sprintf(__('controller.oauthlogin.flash.email_exists'), $existingUser->email));
+            $this->assertGuest();
+            $this->assertFalse(User::query()->where('oauth_id', $oAuthId)->exists());
+        } finally {
+            User::query()->where('oauth_id', $oAuthId)->first()?->delete();
+            $existingUser?->delete();
+        }
+    }
+
+    #[Test]
+    public function handleProviderCallback_givenTheNameOfAnExistingAccount_createsNoUserAndLogsNobodyIn(): void
+    {
+        // Arrange
+        $providerId   = sprintf('%d', random_int(100000000, 999999999));
+        $oAuthId      = sprintf('%s@discord', $providerId);
+        $existingUser = null;
+
+        try {
+            $existingUser = User::factory()->create(['name' => sprintf('Taken%d', random_int(100000, 999999))]);
+            $this->mockSocialiteUser('discord', $providerId, $existingUser->name);
+
+            // Act
+            $response = $this->get(route('login.discord.callback'));
+
+            // Assert
+            $response->assertRedirect('/');
+            $response->assertSessionHas('warning', sprintf(__('controller.oauthlogin.flash.user_exists'), $existingUser->name));
+            $this->assertGuest();
+            $this->assertFalse(User::query()->where('oauth_id', $oAuthId)->exists());
+        } finally {
+            User::query()->where('oauth_id', $oAuthId)->first()?->delete();
+            $existingUser?->delete();
+        }
+    }
+
+    #[Test]
+    public function handleProviderCallback_givenAReturningOAuthUser_logsThemInWithoutCreatingAnotherUser(): void
+    {
+        // Arrange
+        $providerId   = sprintf('%d', random_int(100000000, 999999999));
+        $oAuthId      = sprintf('%s@discord', $providerId);
+        $existingUser = null;
+
+        try {
+            $existingUser = User::factory()->create(['oauth_id' => $oAuthId, 'password' => '']);
+            $this->mockSocialiteUser('discord', $providerId, sprintf('Returning%d', random_int(100000, 999999)));
+
+            // Act
+            $response = $this->get(route('login.discord.callback'));
+
+            // Assert
+            $response->assertRedirect('/');
+            $this->assertAuthenticatedAs($existingUser);
+            $this->assertSame(1, User::query()->where('oauth_id', $oAuthId)->count());
+        } finally {
+            auth()->logout();
+            $existingUser?->delete();
+        }
+    }
+
+    #[Test]
+    public function handleProviderCallback_givenAnInvalidState_redirectsHomeWithAWarning(): void
+    {
+        // Arrange
+        $provider = $this->createMockPublic(Provider::class);
+        $provider->method('user')->willThrowException(new InvalidStateException());
+        Socialite::shouldReceive('driver')->with('discord')->andReturn($provider);
+
+        // Act
+        $response = $this->get(route('login.discord.callback'));
+
+        // Assert
+        $response->assertRedirect('/');
+        $response->assertSessionHas('warning', __('controller.oauthlogin.flash.permission_denied'));
+        $this->assertGuest();
     }
 
     private function mockSocialiteUser(string $driver, string $providerId, string $nickname): void

@@ -11,7 +11,6 @@ use App\Models\User;
 use App\Service\Creator\CreatorDirectoryServiceInterface;
 use App\Service\Creator\Enums\CreatorDirectorySort;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Support\Str;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -73,14 +72,14 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
     {
         // Arrange
         $viewer  = User::factory()->create();
-        $creator = User::factory()->create();
+        $creator = $this->createSearchableCreator();
         $routes  = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes() - 1);
 
         Feature::for($viewer)->activate(CreatorProfiles::class);
 
         try {
-            // Act
-            $response = $this->actingAs($viewer)->get(route('creators.index'));
+            // Act - narrowed to the creator, so a regression cannot hide them on a later page
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['search' => $creator->name]));
 
             // Assert
             $response->assertOk();
@@ -105,14 +104,14 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
     {
         // Arrange
         $viewer  = User::factory()->create();
-        $creator = User::factory()->create(['hide_from_creator_directory' => true]);
+        $creator = $this->createSearchableCreator(['hide_from_creator_directory' => true]);
         $routes  = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes());
 
         Feature::for($viewer)->activate(CreatorProfiles::class);
 
         try {
-            // Act
-            $response = $this->actingAs($viewer)->get(route('creators.index'));
+            // Act - narrowed to the creator, so a regression cannot hide them on a later page
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['search' => $creator->name]));
 
             // Assert
             $response->assertOk();
@@ -137,7 +136,7 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
     {
         // Arrange
         $viewer  = User::factory()->create();
-        $creator = User::factory()->create();
+        $creator = $this->createSearchableCreator();
         $routes  = new EloquentCollection();
 
         for ($i = 0; $i < $this->minPublishedRoutes(); $i++) {
@@ -151,8 +150,8 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
         Feature::for($viewer)->activate(CreatorProfiles::class);
 
         try {
-            // Act
-            $response = $this->actingAs($viewer)->get(route('creators.index'));
+            // Act - narrowed to the creator, so a regression cannot hide them on a later page
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['search' => $creator->name]));
 
             // Assert
             $response->assertOk();
@@ -281,7 +280,7 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
     {
         // Arrange
         $viewer  = User::factory()->create();
-        $creator = User::factory()->create();
+        $creator = $this->createSearchableCreator();
         $routes  = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes());
 
         $collection = $this->createPublishedCollectionFor($creator, DungeonRouteCollectionCategoryType::Expert);
@@ -290,9 +289,10 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
         Feature::for($viewer)->activate(CreatorProfiles::class);
 
         try {
-            // Act
+            // Act - narrowed to the creator, so a regression cannot hide them on a later page
             $response = $this->actingAs($viewer)->get(route('creators.index', [
                 'category_id' => DungeonRouteCollectionCategoryType::Expert->id(),
+                'search'      => $creator->name,
             ]));
 
             // Assert
@@ -531,11 +531,15 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
     }
 
     /**
-     * A creator whose name fits the directory search's 24 character limit - faker's full names do not always.
+     * A creator whose whole name passes the search's length cap, which a faker name does not always do.
+     *
+     * @param array<string, mixed> $attributes
      */
-    private function createSearchableCreator(): User
+    private function createSearchableCreator(array $attributes = []): User
     {
-        return User::factory()->create(['name' => sprintf('creator_%s', Str::random(10))]);
+        return User::factory()->create(array_merge([
+            'name' => sprintf('ZzTestCreator%d', random_int(100000, 999999)),
+        ], $attributes));
     }
 
     private function minPublishedRoutes(): int
@@ -577,8 +581,8 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
     }
 
     /**
-     * The ids actually rendered into the directory, read off the view rather than the HTML so a
-     * creator on a later page is not mistaken for one that was filtered out.
+     * The ids on the rendered page of the directory, read off the view rather than the HTML. Only
+     * the current page: a test asserting a creator is absent narrows the listing with a search first.
      *
      * @param \Illuminate\Testing\TestResponse<\Symfony\Component\HttpFoundation\Response> $response
      *
