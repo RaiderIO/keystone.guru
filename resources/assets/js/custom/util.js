@@ -678,6 +678,7 @@ if (typeof module !== 'undefined' && module.exports) {
         getLatLngDistanceSquared,
         rotateLatLng,
         roundHalfAwayFromZero,
+        getHandlebarsDefaultVariables,
         getCenteroid,
         filterHTML,
         getQueryParams,

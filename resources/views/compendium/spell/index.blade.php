@@ -90,15 +90,14 @@ use Illuminate\Support\Collection;
                             }
 
                             return data.map(function (npc) {
-                                return npcTemplate({
+                                return npcTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                                     compendium_url: `${npcShowBaseUrl}/${npc.id}-${slugify(lang.get(npc.name))}`,
                                     portrait_url: `${assetsBaseUrl}/${npc.enemy_portrait_url}`,
                                     is_boss: bossClassificationIds.includes(npc.classification_id),
                                     boss_icon_url: skullIconUrl,
-                                    boss_label: lang.get('js.boss_label'),
                                     name: lang.get(npc.name),
                                     npc_tooltip: npc.tooltip_data ? JSON.stringify(npc.tooltip_data) : null,
-                                });
+                                }));
                             }).join('');
                         },
                     },

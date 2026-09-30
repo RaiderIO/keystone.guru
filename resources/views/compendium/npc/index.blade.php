@@ -63,15 +63,14 @@ use Illuminate\Support\Collection;
                         'data': 'name',
                         'name': 'name',
                         'render': function (data, type, row) {
-                            return npcTemplate({
+                            return npcTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                                 compendium_url: `${npcShowBaseUrl}/${row.id}-${slugify(data ?? '')}`,
                                 portrait_url: `${assetsBaseUrl}/${row.enemy_portrait_url}`,
                                 is_boss: bossClassificationIds.includes(row.classification_id),
                                 boss_icon_url: skullIconUrl,
-                                boss_label: lang.get('js.boss_label'),
                                 name: data ?? '',
                                 npc_tooltip: row.tooltip_data ? JSON.stringify(row.tooltip_data) : null,
-                            });
+                            }));
                         },
                     },
                     {
