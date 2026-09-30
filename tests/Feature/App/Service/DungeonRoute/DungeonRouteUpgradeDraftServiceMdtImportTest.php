@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\App\Service\DungeonRoute;
 
+use App\Logic\MDT\Exception\ImportError;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\Brushline;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
@@ -260,6 +262,7 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
             [$source, $mdtString] = $this->createSourceRouteAndString();
             $original             = $this->createOriginal($source->dungeon_id, $source->mapping_version_id);
             $existingDraft        = $this->createExistingDraft($original);
+            $this->createBrushlineForRoute($existingDraft);
 
             // Act
             $draft = $this->buildService()->createDraftFromMdtString($original, $mdtString, collect(), discardExistingDraft: true);
@@ -267,8 +270,125 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
 
             // Assert
             $this->assertNull(DungeonRoute::find($existingDraft->id));
+            $this->assertSame(0, Brushline::query()->where('dungeon_route_id', $existingDraft->id)->count(), 'The discarded draft\'s content goes with it');
             $this->assertSame($original->id, $draft->upgrade_of_dungeon_route_id);
             $this->assertSame(DungeonRouteDraftSource::MdtImport, $draft->draft_source);
+            $this->assertSame(2, $draft->killZones()->count(), 'The replacement holds the string\'s pulls');
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function createDraftFromMdtString_givenImportFailingWithConfirmation_keepsExistingDraftAndContent(): void
+    {
+        try {
+            // Arrange
+            [$source]      = $this->createSourceRouteAndString();
+            $original      = $this->createOriginal($source->dungeon_id, $source->mapping_version_id);
+            $existingDraft = $this->createExistingDraft($original);
+            $this->createBrushlineForRoute($existingDraft);
+
+            $mdtImportStringService = $this->createMockPublic(MDTImportStringServiceInterface::class);
+            $mdtImportStringService->method('setEncodedString')->willReturnSelf();
+            $mdtImportStringService->method('getDetails')->willReturn(
+                $this->buildImportStringDetails($source->dungeon, $source->mappingVersion, collect()),
+            );
+            $mdtImportStringService->method('getDungeonRoute')->willThrowException(new RuntimeException('Import failed'));
+
+            // Act
+            $exception = null;
+
+            try {
+                $this->buildService(mdtImportStringService: $mdtImportStringService)
+                    ->createDraftFromMdtString($original, 'an MDT string', collect(), discardExistingDraft: true);
+            } catch (RuntimeException $runtimeException) {
+                $exception = $runtimeException;
+            }
+
+            // Assert
+            $this->assertInstanceOf(RuntimeException::class, $exception);
+            $this->assertSame($existingDraft->id, $original->upgradeDraft()->first()?->id, 'The existing draft must survive a failed import');
+            $this->assertSame(1, $existingDraft->brushlines()->count(), 'The existing draft keeps its content');
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function createDraftFromMdtString_givenMappingUpgradeFailingWithConfirmation_keepsExistingDraftAndContent(): void
+    {
+        try {
+            // Arrange
+            [$source, $mdtString] = $this->createSourceRouteAndString();
+            $original             = $this->createOriginal($source->dungeon_id, $source->mapping_version_id);
+            $existingDraft        = $this->createExistingDraft($original);
+            $this->createBrushlineForRoute($existingDraft);
+            array_unshift(
+                $this->cleanup,
+                $this->createNewerMappingVersion($source->dungeon, $source->mappingVersion, mdtChangesPending: true),
+            );
+            $dungeonRouteService = $this->createMockPublic(DungeonRouteServiceInterface::class);
+            $dungeonRouteService->method('upgradeMappingVersion')->willThrowException(new RuntimeException('Upgrade failed'));
+            $maxRouteId = DungeonRoute::query()->max('id');
+
+            // Act
+            $exception = null;
+
+            try {
+                $this->buildService($dungeonRouteService)
+                    ->createDraftFromMdtString($original, $mdtString, collect(), discardExistingDraft: true);
+            } catch (RuntimeException $runtimeException) {
+                $exception = $runtimeException;
+            }
+
+            // Assert
+            $this->assertInstanceOf(RuntimeException::class, $exception);
+            $this->assertSame($existingDraft->id, $original->upgradeDraft()->first()?->id, 'The existing draft must survive a failed upgrade');
+            $this->assertSame(1, $existingDraft->brushlines()->count(), 'The existing draft keeps its content');
+            $this->assertFalse(
+                DungeonRoute::query()->where('id', '>', $maxRouteId)->exists(),
+                'The imported replacement must be removed again',
+            );
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function createDraftFromMdtString_givenPreviewErrorsWithConfirmation_throwsAndKeepsExistingDraft(): void
+    {
+        try {
+            // Arrange
+            [$source]      = $this->createSourceRouteAndString();
+            $original      = $this->createOriginal($source->dungeon_id, $source->mapping_version_id);
+            $existingDraft = $this->createExistingDraft($original);
+            $this->createBrushlineForRoute($existingDraft);
+
+            $mdtImportStringService = $this->createMockPublic(MDTImportStringServiceInterface::class);
+            $mdtImportStringService->method('setEncodedString')->willReturnSelf();
+            $mdtImportStringService->method('getDetails')->willReturn($this->buildImportStringDetails(
+                $source->dungeon,
+                $source->mappingVersion,
+                collect([new ImportError('pulls', 'Unable to find the enemy.')]),
+            ));
+            $mdtImportStringService->expects($this->never())->method('getDungeonRoute');
+
+            // Act
+            $exception = null;
+
+            try {
+                $this->buildService(mdtImportStringService: $mdtImportStringService)
+                    ->createDraftFromMdtString($original, 'an MDT string', collect(), discardExistingDraft: true);
+            } catch (UpgradeDraftException $upgradeDraftException) {
+                $exception = $upgradeDraftException;
+            }
+
+            // Assert
+            $this->assertInstanceOf(UpgradeDraftException::class, $exception);
+            $this->assertStringContainsString('Unable to find the enemy.', $exception->getMessage());
+            $this->assertSame($existingDraft->id, $original->upgradeDraft()->first()?->id, 'A rejected string may not discard the draft');
+            $this->assertSame(1, $existingDraft->brushlines()->count(), 'The existing draft keeps its content');
         } finally {
             $this->tearDownCleanup();
         }
@@ -507,6 +627,28 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
         $dungeon->reloadMappingVersions();
 
         return $mappingVersion;
+    }
+
+    /**
+     * @param Collection<int, ImportError> $errors
+     */
+    private function buildImportStringDetails(Dungeon $dungeon, MappingVersion $mappingVersion, Collection $errors): ImportStringDetails
+    {
+        return new ImportStringDetails(
+            collect(),
+            $errors,
+            $dungeon,
+            collect(),
+            false,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            $mappingVersion,
+        );
     }
 
     /**
