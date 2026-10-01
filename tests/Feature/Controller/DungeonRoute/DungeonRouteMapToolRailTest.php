@@ -3,6 +3,8 @@
 namespace Tests\Feature\Controller\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
+use App\Models\LiveSession;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\PublishedState;
 use App\Models\User;
@@ -89,6 +91,42 @@ final class DungeonRouteMapToolRailTest extends PublicTestCase
             $response->assertOk();
             $this->assertContains('ad_loaded', $this->toolRailClasses((string)$response->getContent()));
         } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function liveSession_givenUserWithAds_marksTheToolRailAdLoaded(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $owner->addRole(Role::firstWhere('name', Role::ROLE_USER));
+        $route       = $this->createRoute($owner);
+        $liveSession = LiveSession::create([
+            'dungeon_route_id' => $route->id,
+            'user_id'          => $owner->id,
+            'public_key'       => LiveSession::generateRandomPublicKey(),
+        ]);
+
+        try {
+            $this->be($owner);
+
+            // Act
+            $response = $this->followingRedirects()->get(route('dungeonroute.livesession.view', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+                'liveSession'  => $liveSession,
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas('liveSession', static fn(LiveSession $renderedLiveSession) => $renderedLiveSession->id === $liveSession->id);
+            $this->assertContains('ad_loaded', $this->toolRailClasses((string)$response->getContent()));
+        } finally {
+            // Mass delete: LiveSession's "deleting" hook cascades into overpulled_enemies, a table no migration creates
+            LiveSession::query()->whereKey($liveSession->id)->delete();
             $route->delete();
             $owner->delete();
         }
