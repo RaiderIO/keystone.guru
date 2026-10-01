@@ -80,11 +80,13 @@ class DungeonRouteSubmitFormRequest extends FormRequest
                 new FactionSelectionRequiredRule($this->request),
             ],
 
-            'race'  => 'nullable|array',
-            'class' => 'nullable|array',
+            'race'           => 'nullable|array',
+            'class'          => 'nullable|array',
+            'specialization' => 'nullable|array',
 
-            'race.*'  => 'nullable|numeric',
-            'class.*' => 'nullable|numeric',
+            'race.*'           => 'nullable|numeric',
+            'class.*'          => 'nullable|numeric',
+            'specialization.*' => 'nullable|numeric',
 
             'route_select_affixes'   => 'array',
             'route_select_affixes.*' => 'string',
