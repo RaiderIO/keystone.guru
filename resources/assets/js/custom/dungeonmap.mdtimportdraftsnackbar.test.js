@@ -13,16 +13,29 @@ const mdtImportDraftSnackbarTemplate = HandlebarsRuntime.compile(
     )
 );
 
+const MESSAGES = {
+    'js.mdt_import_draft_label': 'You are reviewing an MDT import draft.',
+    'js.mdt_import_draft_of_label': 'View the route it replaces',
+    'js.mapping_version_upgrade_apply_label': 'Apply',
+    'js.mapping_version_upgrade_discard_label': 'Discard',
+};
+
+let previousLang;
+
+beforeEach(() => {
+    previousLang = globalThis.lang;
+    globalThis.lang = {get: (key) => MESSAGES[key] ?? key};
+});
+
+afterEach(() => {
+    globalThis.lang = previousLang;
+});
+
 /**
  * @param {Object} data
  */
 function render(data) {
-    document.body.innerHTML = mdtImportDraftSnackbarTemplate($.extend({
-        mdt_import_draft_label: 'You are reviewing an MDT import draft.',
-        mdt_import_draft_of_label: 'View the route it replaces',
-        mapping_version_upgrade_apply_label: 'Apply',
-        mapping_version_upgrade_discard_label: 'Discard',
-    }, data));
+    document.body.innerHTML = mdtImportDraftSnackbarTemplate(data);
 }
 
 test('template_givenMdtImportDraft_offersApplyAndDiscard', () => {
