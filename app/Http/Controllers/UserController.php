@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GrantPatreonBenefitsFormRequest;
+use App\Http\Requests\User\UserPatreonBenefitsFormRequest;
 use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserBenefit;
@@ -105,9 +106,9 @@ class UserController extends Controller
     /**
      * @return Response
      */
-    public function storePatreonBenefits(Request $request, User $user): Response
+    public function storePatreonBenefits(UserPatreonBenefitsFormRequest $request, User $user): Response
     {
-        $newPatreonBenefitIds = $request->get('patreonBenefits', []);
+        $newPatreonBenefitIds = $request->patreonBenefitIds();
 
         if (isset($user->patreonUserLink)) {
             // Remove old patreon benefits

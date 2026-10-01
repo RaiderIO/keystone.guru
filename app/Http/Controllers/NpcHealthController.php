@@ -59,6 +59,8 @@ class NpcHealthController extends Controller
      */
     public function edit(Request $request, Npc $npc, NpcHealth $npcHealth): View
     {
+        $this->abortUnlessNpcHealthOfNpc($npc, $npcHealth);
+
         $npc->load(['dungeons', 'npcHealths']);
         $npcHealth->load('gameVersion');
 
@@ -76,6 +78,8 @@ class NpcHealthController extends Controller
 
     public function update(NpcHealthFormRequest $request, Npc $npc, NpcHealth $npcHealth): RedirectResponse
     {
+        $this->abortUnlessNpcHealthOfNpc($npc, $npcHealth);
+
         $npcHealth->update($request->validated());
 
         // Message to the user
@@ -92,6 +96,8 @@ class NpcHealthController extends Controller
      */
     public function delete(Request $request, Npc $npc, NpcHealth $npcHealth): RedirectResponse
     {
+        $this->abortUnlessNpcHealthOfNpc($npc, $npcHealth);
+
         $npcHealth->delete();
 
         // Message to the user
@@ -100,5 +106,10 @@ class NpcHealthController extends Controller
         return redirect()->route('admin.npc.edit', [
             'npc' => $npc,
         ]);
+    }
+
+    private function abortUnlessNpcHealthOfNpc(Npc $npc, NpcHealth $npcHealth): void
+    {
+        abort_unless($npcHealth->npc_id === $npc->id, 404);
     }
 }
