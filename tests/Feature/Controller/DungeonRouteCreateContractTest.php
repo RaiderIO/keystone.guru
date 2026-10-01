@@ -233,10 +233,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             $this->assertNotNull($dungeonRoute);
             $this->assertSame(Faction::ALL[Faction::FACTION_ALLIANCE], $dungeonRoute->faction_id);
             $this->assertSame([$characterClass->id], $dungeonRoute->playerclasses()->pluck('character_class_id')->all());
-            // Surprising pre-existing behaviour (not caused by this MR, not fixed here): DungeonRouteSubmitFormRequest
-            // has validation rules for 'class' and 'race' but none for 'specialization', so FormRequest::validated()
-            // silently drops the submitted specialization[] values before DungeonRouteSaveService ever sees them.
-            $this->assertSame([], $dungeonRoute->playerspecializations()->pluck('character_class_specialization_id')->all());
+            $this->assertSame([$specialization->id], $dungeonRoute->playerspecializations()->pluck('character_class_specialization_id')->all());
             // Party members #2-5 submit the sentinel "0", which is not a race and is not stored
             $this->assertSame(
                 [$characterRace->id],
