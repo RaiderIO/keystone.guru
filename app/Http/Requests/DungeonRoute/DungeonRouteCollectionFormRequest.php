@@ -276,7 +276,7 @@ class DungeonRouteCollectionFormRequest extends FormRequest
     }
 
     /**
-     * A route joins a collection only when its own mapping version is of the collection's game version and, for a
+     * A route joins a collection only when the collection's game version can use its own mapping version and, for a
      * season set, it is of the collection's season, and when its dungeon has room left. Routes already in the
      * collection may stay, so the owner of a collection that predates these rules can still save it.
      */
@@ -325,7 +325,7 @@ class DungeonRouteCollectionFormRequest extends FormRequest
             }
 
             $mappingVersion = $dungeonRoute->mappingVersion;
-            if ($mappingVersion === null || $mappingVersion->game_version_id !== $gameVersion->id) {
+            if ($mappingVersion === null || !$gameVersion->canUseMappingVersion($mappingVersion)) {
                 $validator->errors()->add(
                     sprintf('dungeon_routes.%d', $index),
                     __('validation.custom.collection_dungeon_routes.game_version'),

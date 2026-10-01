@@ -253,6 +253,8 @@ const GAME_VERSION_WOTLK = 'wotlk';
 const GAME_VERSION_BETA = 'beta';
 const GAME_VERSION_CATA = 'cata';
 const GAME_VERSION_MOP = 'mop';
+const GAME_VERSION_TBC = 'tbc';
+const GAME_VERSION_SOD = 'sod';
 
 // Wowhead's page locale path per app locale - must match App\Service\WagoTools\GameLocale::wowheadPath()
 const WOWHEAD_LOCALE_PATHS = {

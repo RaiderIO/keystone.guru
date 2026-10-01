@@ -139,7 +139,7 @@ class AjaxDungeonRouteController extends Controller
                 'dungeon_routes.id',
                 'mapping_versions.dungeon_id',
             ])
-            ->when($request->gameVersion(), static fn(Builder $query, GameVersion $gameVersion) => $query->where('mapping_versions.game_version_id', $gameVersion->id))
+            ->when($request->gameVersion(), static fn(Builder $query, GameVersion $gameVersion) => $gameVersion->whereMappingVersionIsUsable($query))
             ->when($request->season(), static fn(Builder $query, Season $season) => $query->where('dungeon_routes.season_id', $season->id))
             ->when($request->dungeons(), static fn(Builder $query, Collection $dungeons) => $query->whereIn('dungeon_routes.dungeon_id', $dungeons->pluck('id')));
 

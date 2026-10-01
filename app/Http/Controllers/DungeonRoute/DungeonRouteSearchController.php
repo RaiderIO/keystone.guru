@@ -65,7 +65,7 @@ class DungeonRouteSearchController extends Controller
         DungeonServiceInterface         $dungeonService,
         FloorResolutionServiceInterface $floorResolutionService,
     ): View|RedirectResponse {
-        $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
+        $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersionOrParent($gameVersion);
 
         if ($mappingVersion === null) {
             return redirect()->route('dungeon.dungeonroute.search.gameversion.select', [

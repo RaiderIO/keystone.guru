@@ -28,7 +28,7 @@ class DevDiscoverService extends BaseDiscoverService
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             ->when($this->season === null, function (Builder $builder) {
-                $builder->where('mapping_versions.game_version_id', $this->gameVersion->id);
+                $this->gameVersion->whereMappingVersionIsUsable($builder);
             })
             ->when($this->season !== null, function (Builder $builder) {
                 $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeons.id')
@@ -55,7 +55,7 @@ class DevDiscoverService extends BaseDiscoverService
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             ->when($this->season === null, function (Builder $builder) {
-                $builder->where('mapping_versions.game_version_id', $this->gameVersion->id);
+                $this->gameVersion->whereMappingVersionIsUsable($builder);
             })
             ->when($this->season !== null, function (Builder $builder) {
                 $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeons.id')

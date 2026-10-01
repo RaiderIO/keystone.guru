@@ -448,6 +448,8 @@ describe('Enemy raid marker shortcut hint (#3703)', () => {
 // Constants referenced as bare globals, with their real values from constants.js.
 global.GAME_VERSION_WOTLK = 'wotlk';
 global.GAME_VERSION_CLASSIC_ERA = 'classic';
+global.GAME_VERSION_TBC = 'tbc';
+global.GAME_VERSION_SOD = 'sod';
 global.WOWHEAD_LOCALE_PATHS = {de_DE: 'de', es_MX: 'mx', zh_CN: 'cn'};
 
 describe('Enemy#getWowheadLinkForGameVersion', () => {
@@ -462,6 +464,8 @@ describe('Enemy#getWowheadLinkForGameVersion', () => {
         ['de_DE_ai', 'retail', 'https://www.wowhead.com/de/spell=123/frost-nova'],
         ['de_DE', 'classic', 'https://www.wowhead.com/classic/de/spell=123/frost-nova'],
         ['es_MX_ai', 'wotlk', 'https://www.wowhead.com/wrath/mx/spell=123/frost-nova'],
+        ['en_US', 'tbc', 'https://www.wowhead.com/tbc/spell=123/frost-nova'],
+        ['de_DE', 'sod', 'https://www.wowhead.com/classic/de/spell=123/frost-nova'],
         ['uk_UA', 'retail', 'https://www.wowhead.com/spell=123/frost-nova'],
     ])('getWowheadLinkForGameVersion_givenLocale %s on %s_returnsThatLocalesWowheadPage', (locale, gameVersionKey, expected) => {
         // Arrange

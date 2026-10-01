@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,7 @@ use Override;
 /**
  * @property int      $id
  * @property int      $expansion_id                 The expansion that this game version focussed on.
+ * @property int|null $parent_game_version_id       The game version whose dungeons this game version inherits.
  * @property string   $key
  * @property string   $name
  * @property string   $description
@@ -31,6 +33,7 @@ use Override;
  * @property int|null $retired_into_game_version_id The game version this one's content now lives under, when retired.
  *
  * @property Expansion                               $expansion
+ * @property GameVersion|null                        $parentGameVersion
  * @property GameVersion|null                        $retiredIntoGameVersion
  * @property EloquentCollection<int, MappingVersion> $mappingVersions
  *
@@ -48,6 +51,7 @@ class GameVersion extends Model
 
     protected $fillable = [
         'id',
+        'parent_game_version_id',
         'key',
         'name',
         'description',
@@ -72,6 +76,8 @@ class GameVersion extends Model
     public const string GAME_VERSION_MOP          = 'mop';
     public const string GAME_VERSION_LEGION_REMIX = 'legion-remix';
     public const string GAME_VERSION_FOREVER      = 'forever';
+    public const string GAME_VERSION_TBC          = 'tbc';
+    public const string GAME_VERSION_SOD          = 'sod';
 
     public const array ALL = [
         self::GAME_VERSION_RETAIL       => 1,
@@ -82,6 +88,8 @@ class GameVersion extends Model
         self::GAME_VERSION_MOP          => 6,
         self::GAME_VERSION_LEGION_REMIX => 7,
         self::GAME_VERSION_FOREVER      => 8,
+        self::GAME_VERSION_TBC          => 9,
+        self::GAME_VERSION_SOD          => 10,
     ];
 
     /**
@@ -91,6 +99,16 @@ class GameVersion extends Model
     public function getRouteKeyName(): string
     {
         return 'key';
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'parent_game_version_id' => 'integer',
+        ];
     }
 
     /**
@@ -110,6 +128,84 @@ class GameVersion extends Model
     public function expansion(): BelongsTo
     {
         return $this->belongsTo(Expansion::class);
+    }
+
+    /**
+     * @return BelongsTo<GameVersion, $this>
+     */
+    public function parentGameVersion(): BelongsTo
+    {
+        return $this->belongsTo(GameVersion::class, 'parent_game_version_id');
+    }
+
+    /**
+     * The game version ids whose mapping versions this game version can use, most specific first: this
+     * game version's own, then the game version it inherits from.
+     *
+     * @return array<int, int>
+     */
+    public function getMappingVersionGameVersionIds(): array
+    {
+        return $this->parent_game_version_id === null
+            ? [$this->id]
+            : [$this->id, $this->parent_game_version_id];
+    }
+
+    /**
+     * Whether this game version lists the mapping version's dungeon: the mapping version is of this game version or
+     * of the game version it inherits from.
+     */
+    public function listsDungeonOfMappingVersion(MappingVersion $mappingVersion): bool
+    {
+        return in_array($mappingVersion->game_version_id, $this->getMappingVersionGameVersionIds(), true);
+    }
+
+    /**
+     * Whether routes on the mapping version belong to this game version: it is this game version's own, or the
+     * parent's for a dungeon this game version has no mapping version of its own for.
+     */
+    public function canUseMappingVersion(MappingVersion $mappingVersion): bool
+    {
+        if ($mappingVersion->game_version_id === $this->id) {
+            return true;
+        }
+
+        if ($this->parent_game_version_id === null || $mappingVersion->game_version_id !== $this->parent_game_version_id) {
+            return false;
+        }
+
+        return !MappingVersion::query()
+            ->where('dungeon_id', $mappingVersion->dungeon_id)
+            ->where('game_version_id', $this->id)
+            ->exists();
+    }
+
+    /**
+     * Limits a query that joins mapping_versions to the routes this game version shows: those on its own mapping
+     * versions, and those on the parent's mapping versions of dungeons it has no mapping version of its own for.
+     *
+     * @template TModel of Model
+     *
+     * @param  Builder<TModel> $query
+     * @return Builder<TModel>
+     */
+    public function whereMappingVersionIsUsable(Builder $query): Builder
+    {
+        return $query->where(function (Builder $query) {
+            $query->where('mapping_versions.game_version_id', $this->id);
+
+            if ($this->parent_game_version_id !== null) {
+                $query->orWhere(function (Builder $query) {
+                    $query->where('mapping_versions.game_version_id', $this->parent_game_version_id)
+                        ->whereNotExists(function (QueryBuilder $query) {
+                            $query->selectRaw('1')
+                                ->from('mapping_versions as own_mapping_versions')
+                                ->whereColumn('own_mapping_versions.dungeon_id', 'mapping_versions.dungeon_id')
+                                ->where('own_mapping_versions.game_version_id', $this->id);
+                        });
+                });
+            }
+        });
     }
 
     /**
@@ -200,6 +296,8 @@ class GameVersion extends Model
         return match ($gameVersionId) {
             self::ALL[self::GAME_VERSION_WRATH]       => 'wrath',
             self::ALL[self::GAME_VERSION_CLASSIC_ERA] => 'classic',
+            self::ALL[self::GAME_VERSION_SOD]         => 'classic',
+            self::ALL[self::GAME_VERSION_TBC]         => 'tbc',
             self::ALL[self::GAME_VERSION_MOP]         => 'mop-classic',
             default                                   => null,
         };

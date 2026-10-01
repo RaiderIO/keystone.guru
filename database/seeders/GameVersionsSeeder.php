@@ -16,6 +16,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
         $gameVersionAttributes = [
             [
                 'expansion_id'                 => Expansion::ALL[Expansion::EXPANSION_MIDNIGHT],
+                'parent_game_version_id'       => null,
                 'key'                          => GameVersion::GAME_VERSION_RETAIL,
                 'name'                         => 'gameversions.retail.name',
                 'description'                  => 'gameversions.retail.description',
@@ -25,6 +26,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
             ],
             [
                 'expansion_id'                 => Expansion::ALL[Expansion::EXPANSION_CLASSIC],
+                'parent_game_version_id'       => null,
                 'key'                          => GameVersion::GAME_VERSION_CLASSIC_ERA,
                 'name'                         => 'gameversions.classic.name',
                 'description'                  => 'gameversions.classic.description',
@@ -34,6 +36,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
             ],
             [
                 'expansion_id'                 => Expansion::ALL[Expansion::EXPANSION_WOTLK],
+                'parent_game_version_id'       => null,
                 'key'                          => GameVersion::GAME_VERSION_WRATH,
                 'name'                         => 'gameversions.wotlk.name',
                 'description'                  => 'gameversions.wotlk.description',
@@ -43,6 +46,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
             ],
             [
                 'expansion_id'                 => Expansion::ALL[Expansion::EXPANSION_TWW],
+                'parent_game_version_id'       => null,
                 'key'                          => GameVersion::GAME_VERSION_BETA,
                 'name'                         => 'gameversions.beta.name',
                 'description'                  => 'gameversions.beta.description',
@@ -52,6 +56,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
             ],
             [
                 'expansion_id'                 => Expansion::ALL[Expansion::EXPANSION_CATACLYSM],
+                'parent_game_version_id'       => null,
                 'key'                          => GameVersion::GAME_VERSION_CATA,
                 'name'                         => 'gameversions.cata.name',
                 'description'                  => 'gameversions.cata.description',
@@ -61,6 +66,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
             ],
             [
                 'expansion_id'                 => Expansion::ALL[Expansion::EXPANSION_MOP],
+                'parent_game_version_id'       => null,
                 'key'                          => GameVersion::GAME_VERSION_MOP,
                 'name'                         => 'gameversions.mop.name',
                 'description'                  => 'gameversions.mop.description',
@@ -70,6 +76,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
             ],
             [
                 'expansion_id'                 => Expansion::ALL[Expansion::EXPANSION_LEGION],
+                'parent_game_version_id'       => null,
                 'key'                          => GameVersion::GAME_VERSION_LEGION_REMIX,
                 'name'                         => 'gameversions.legion-remix.name',
                 'description'                  => 'gameversions.legion-remix.description',
@@ -79,11 +86,32 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
             ],
             [
                 'expansion_id'                 => Expansion::ALL[Expansion::EXPANSION_CLASSIC],
+                'parent_game_version_id'       => GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA],
                 'key'                          => GameVersion::GAME_VERSION_FOREVER,
                 'name'                         => 'gameversions.forever.name',
                 'description'                  => 'gameversions.forever.description',
                 'has_seasons'                  => false,
                 'active'                       => false,
+                'retired_into_game_version_id' => null,
+            ],
+            [
+                'expansion_id'                 => Expansion::ALL[Expansion::EXPANSION_TBC],
+                'parent_game_version_id'       => GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA],
+                'key'                          => GameVersion::GAME_VERSION_TBC,
+                'name'                         => 'gameversions.tbc.name',
+                'description'                  => 'gameversions.tbc.description',
+                'has_seasons'                  => false,
+                'active'                       => true,
+                'retired_into_game_version_id' => null,
+            ],
+            [
+                'expansion_id'                 => Expansion::ALL[Expansion::EXPANSION_CLASSIC],
+                'parent_game_version_id'       => GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA],
+                'key'                          => GameVersion::GAME_VERSION_SOD,
+                'name'                         => 'gameversions.sod.name',
+                'description'                  => 'gameversions.sod.description',
+                'has_seasons'                  => false,
+                'active'                       => true,
                 'retired_into_game_version_id' => null,
             ],
         ];

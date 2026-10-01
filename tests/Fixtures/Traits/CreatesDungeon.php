@@ -93,8 +93,9 @@ trait CreatesDungeon
     {
         foreach ($this->createdDungeons as $dungeon) {
             // Through the models on purpose: MappingVersion::deleting removes whatever the test hung off the version
-            foreach ($dungeon->mappingVersions()->get() as $mappingVersion) {
-                $mappingVersion->delete();
+            // One at a time: a model of a multi-row result may not lazy-load what MappingVersion::deleting walks
+            foreach ($dungeon->mappingVersions()->pluck('id') as $mappingVersionId) {
+                MappingVersion::findOrFail($mappingVersionId)->delete();
             }
             foreach ($dungeon->floors()->get() as $floor) {
                 $floor->delete();

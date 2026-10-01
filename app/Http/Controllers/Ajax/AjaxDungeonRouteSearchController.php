@@ -34,7 +34,7 @@ class AjaxDungeonRouteSearchController extends Controller
         try {
             $result = $dungeonRouteSearchService->search(
                 DungeonRouteSearchFilter::fromArray(
-                    $dungeon->getCurrentMappingVersionForGameVersion($gameVersion),
+                    $dungeon->getCurrentMappingVersionForGameVersionOrParent($gameVersion),
                     $request->validated(),
                 ),
             );

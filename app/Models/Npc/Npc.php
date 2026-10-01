@@ -488,6 +488,18 @@ class Npc extends Model implements MappingModelInterface
     }
 
     /**
+     * The health a player of the game version sees. Code working with a mapping version reads or writes the exact row
+     * of that mapping version's game version through getHealthByGameVersion() instead.
+     */
+    public function getHealthForGameVersion(GameVersion $gameVersion): ?NpcHealth
+    {
+        $npcHealthsByGameVersionId = $this->npcHealths->keyBy('game_version_id');
+
+        return $npcHealthsByGameVersionId->get($gameVersion->id)
+            ?? $npcHealthsByGameVersionId->get($gameVersion->parent_game_version_id ?? 0);
+    }
+
+    /**
      * @param array<int, string> $affixes A list of Affix:: string constants
      */
     public function calculateHealthForKey(GameVersion $gameVersion, int $keyLevel, array $affixes = []): float
@@ -550,7 +562,7 @@ class Npc extends Model implements MappingModelInterface
      */
     private function getTooltipHealth(): ?int
     {
-        $npcHealth = $this->getHealthByGameVersion(GameVersion::getUserOrDefaultGameVersion());
+        $npcHealth = $this->getHealthForGameVersion(GameVersion::getUserOrDefaultGameVersion());
 
         // A health of exactly the placeholder means we never learned this NPC's health, so it says
         // nothing worth a row - a fair few dungeons still carry those (#4094). Checked before the

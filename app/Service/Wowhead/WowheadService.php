@@ -350,10 +350,13 @@ class WowheadService implements WowheadServiceInterface
 
     public function getNpcPageHtml(GameVersion $gameVersion, Npc $npc): string
     {
+        $wowheadDomain = GameVersion::getWowheadDomain($gameVersion->id)
+            ?? ($gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? null : $gameVersion->key);
+
         return $this->curlGet(
             sprintf(
                 'https://wowhead.com/%snpc=%s/%s',
-                $gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? '' : $gameVersion->key . '/',
+                $wowheadDomain === null ? '' : $wowheadDomain . '/',
                 $npc->id,
                 Str::slug($npc->name),
             ),
