@@ -141,15 +141,13 @@ class FloorController extends Controller
      */
     public function update(FloorFormRequest $request, Dungeon $dungeon, Floor $floor)
     {
-        if ($floor->dungeon_id !== $dungeon->id) {
-            return $this->edit($request, $dungeon, $floor);
+        if ($floor->dungeon_id === $dungeon->id) {
+            // Store it and show the edit page again
+            $floor = $this->store($request, $dungeon, $floor);
+
+            // Message to the user
+            Session::flash('status', __('view_admin.floor.flash.floor_updated'));
         }
-
-        // Store it and show the edit page again
-        $floor = $this->store($request, $dungeon, $floor);
-
-        // Message to the user
-        Session::flash('status', __('view_admin.floor.flash.floor_updated'));
 
         // Display the edit page
         return $this->edit($request, $dungeon, $floor);
