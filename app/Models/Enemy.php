@@ -134,7 +134,6 @@ class Enemy extends Model implements MappingModelCloneableInterface, MappingMode
     public const SEASONAL_TYPE_BEGUILING           = 'beguiling';
     public const SEASONAL_TYPE_AWAKENED            = 'awakened';
     public const SEASONAL_TYPE_INSPIRING           = 'inspiring';
-    public const SEASONAL_TYPE_PRIDEFUL            = 'prideful';
     public const SEASONAL_TYPE_TORMENTED           = 'tormented';
     public const SEASONAL_TYPE_ENCRYPTED           = 'encrypted';
     public const SEASONAL_TYPE_MDT_PLACEHOLDER     = 'mdt_placeholder';
@@ -147,7 +146,6 @@ class Enemy extends Model implements MappingModelCloneableInterface, MappingMode
         self::SEASONAL_TYPE_BEGUILING,
         self::SEASONAL_TYPE_AWAKENED,
         self::SEASONAL_TYPE_INSPIRING,
-        self::SEASONAL_TYPE_PRIDEFUL,
         self::SEASONAL_TYPE_TORMENTED,
         self::SEASONAL_TYPE_ENCRYPTED,
         self::SEASONAL_TYPE_MDT_PLACEHOLDER,

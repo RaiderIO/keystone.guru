@@ -58,7 +58,6 @@ use App\Http\Controllers\Ajax\AjaxMountableAreaController;
 use App\Http\Controllers\Ajax\AjaxNpcController;
 use App\Http\Controllers\Ajax\AjaxOverpulledEnemyController;
 use App\Http\Controllers\Ajax\AjaxPathController;
-use App\Http\Controllers\Ajax\AjaxPridefulEnemyController;
 use App\Http\Controllers\Ajax\AjaxProfileController;
 use App\Http\Controllers\Ajax\AjaxSiteController;
 use App\Http\Controllers\Ajax\AjaxSpellController;
@@ -810,9 +809,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::post('/mapicon', new AjaxMapIconController()->dungeonRouteStore(...));
                 Route::put('/mapicon/{mapIcon}', new AjaxMapIconController()->dungeonRouteStore(...));
                 Route::delete('/mapicon/{mapIcon}', new AjaxMapIconController()->delete(...));
-
-                Route::post('/pridefulenemy/{enemy}', new AjaxPridefulEnemyController()->store(...));
-                Route::delete('/pridefulenemy/{enemy}', new AjaxPridefulEnemyController()->delete(...));
 
                 Route::post('/path', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.create');
                 Route::put('/path/{path}', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.update');

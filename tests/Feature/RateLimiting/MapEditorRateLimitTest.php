@@ -47,7 +47,6 @@ final class MapEditorRateLimitTest extends PublicTestCase
             'killzone mass'    => ['PUT', '/ajax/doesnotexist/killzone/mass'],
             'killzone delete'  => ['DELETE', '/ajax/doesnotexist/killzone/1'],
             'mapicon update'   => ['PUT', '/ajax/doesnotexist/mapicon/1'],
-            'pridefulenemy'    => ['POST', '/ajax/doesnotexist/pridefulenemy/1'],
             'path create'      => ['POST', '/ajax/doesnotexist/path'],
             'arrow delete'     => ['DELETE', '/ajax/doesnotexist/arrow/1'],
             'raidmarker'       => ['POST', '/ajax/doesnotexist/raidmarker/1'],

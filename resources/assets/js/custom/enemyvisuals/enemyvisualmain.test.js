@@ -259,7 +259,6 @@ function makeTemplateDataFakeThis({classificationId, dangerousBorder = true, npc
         isNotShrouded: () => false,
         isInspiring: () => false,
         isEncrypted: () => false,
-        isPridefulNpc: () => false,
         isTormented: () => false,
         isRequiresActivation: () => false,
     };

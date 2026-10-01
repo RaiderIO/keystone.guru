@@ -54,9 +54,6 @@ class PullImporter
             $enemy->npc_id = $enemy->mdt_npc_id ?? $enemy->npc_id;
         });
 
-        // Keep a list of prideful enemies to assign
-        //        $pridefulEnemies    = $enemies->where('npc_id', config('keystoneguru.prideful.npc_id'));
-        //        $pridefulEnemyCount = config('keystoneguru.prideful.count');
         // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
         $enemiesByNpcId      = $enemies->groupBy('npc_id');
         $enemyForcesByNpcIds = NpcEnemyForces::where('mapping_version_id', $importStringPulls->getMappingVersion()->id)->get()->keyBy('npc_id');
@@ -66,11 +63,6 @@ class PullImporter
             ->getClonesAsEnemies($importStringPulls->getMappingVersion(), $floors);
         // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
         $mdtEnemiesByMdtNpcIndex = $mdtEnemies->groupBy('mdt_npc_index');
-
-        // Required for calculating when to add prideful enemies
-        //        $enemyForcesRequired = $importStringPulls->isRouteTeeming() ?
-        //            $importStringPulls->getMappingVersion()->enemy_forces_required_teeming :
-        //            $importStringPulls->getMappingVersion()->enemy_forces_required;
 
         // For each pull the user created
         $newPullIndex = 1;
@@ -88,10 +80,6 @@ class PullImporter
             $totalEnemiesMatched = 0;
             // If the pull was empty because all enemies in it were skipped based on seasonal index
             $seasonalIndexSkip = false;
-            // Keeps track of the amount of prideful enemies to add, a pull can in theory require us to add multiple
-            // But mostly since we add them in the center in the pack, we need to know all coordinates of the pack enemies
-            // first before we can place the prideful enemies
-            //            $totalPridefulEnemiesToAdd = 0;
 
             try {
                 // For each NPC that is killed in this pull (and their clones)

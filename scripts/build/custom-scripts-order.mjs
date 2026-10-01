@@ -143,7 +143,6 @@ export const customScripts = [
     'resources/assets/js/custom/models/polyline.js',
     'resources/assets/js/custom/models/hullpolyline.js',
     'resources/assets/js/custom/models/enemy.js',
-    'resources/assets/js/custom/models/pridefulenemy.js',
     'resources/assets/js/custom/models/enemypatrol.js',
     'resources/assets/js/custom/models/enemypack.js',
     'resources/assets/js/custom/models/path.js',

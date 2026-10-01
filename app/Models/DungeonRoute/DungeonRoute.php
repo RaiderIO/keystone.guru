@@ -17,7 +17,6 @@ use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Models\Dungeon;
 use App\Models\DungeonStart;
 use App\Models\Enemies\OverpulledEnemy;
-use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
 use App\Models\Expansion;
 use App\Models\Faction;
@@ -149,7 +148,6 @@ use Override;
  * @property EloquentCollection<int, Path>                             $paths
  * @property EloquentCollection<int, Arrow>                            $arrows
  * @property EloquentCollection<int, KillZone>                         $killZones
- * @property EloquentCollection<int, PridefulEnemy>                    $pridefulEnemies
  * @property EloquentCollection<int, OverpulledEnemy>                  $overpulledenemies
  * @property EloquentCollection<int, DungeonRouteEnemyRaidMarker>      $enemyRaidMarkers
  * @property EloquentCollection<int, MapIcon>                          $mapicons
@@ -425,12 +423,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function killZones(): HasMany
     {
         return $this->hasMany(KillZone::class)->orderBy('index');
-    }
-
-    /** @return HasMany<PridefulEnemy, $this> */
-    public function pridefulEnemies(): HasMany
-    {
-        return $this->hasMany(PridefulEnemy::class);
     }
 
     /** @return BelongsTo<PublishedState, $this> */
@@ -1133,7 +1125,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
             foreach ($killZone->killZoneEnemies as $kzEnemy) {
                 if ($kzEnemy->enemy === null || in_array($kzEnemy->enemy->seasonal_type, [
-                    Enemy::SEASONAL_TYPE_PRIDEFUL,
                     Enemy::SEASONAL_TYPE_TORMENTED,
                     Enemy::SEASONAL_TYPE_ENCRYPTED,
                     // Do not include these as they are not new enemies but are a seasonal type on existing enemies
@@ -1637,7 +1628,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         foreach ($this->routeMapIcons()->get() as $mapIcon) {
             $mapIcon->delete();
         }
-        $this->pridefulEnemies()->delete();
 
         // Dungeonroute settings
         $this->affixgroups()->delete();

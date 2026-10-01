@@ -288,15 +288,6 @@ class KillZone extends MapObject {
     }
 
     /**
-     * Called whenever a prideful enemy has changed (moved its position, is deleted etc.)
-     * @param objectChangedEvent {Object}
-     * @private
-     */
-    _pridefulEnemyChanged(objectChangedEvent) {
-        this.redrawConnectionsToEnemies();
-    }
-
-    /**
      * Called whenever the obsolete state of an enemy has changed
      * @param enemyObsoleteChangedEvent {Object}
      * @private
@@ -370,9 +361,6 @@ class KillZone extends MapObject {
                 // This enemy left us, no longer interested in it
                 enemy.unregister('obsolete:changed', this);
                 enemy.unregister('killzone:detached', this);
-                if (enemy.isPridefulNpc()) {
-                    enemy.unregister('object:changed', this);
-                }
             }
             if (!this._isBulkUpdating) {
                 this.signal('killzone:enemyremoved', {enemy: enemy});
@@ -434,9 +422,6 @@ class KillZone extends MapObject {
 
             // We're interested in knowing when this enemy has detached itself (by assigning to another killzone, for example)
             enemy.register('killzone:detached', this, this._enemyDetached.bind(this));
-            if (enemy.isPridefulNpc()) {
-                enemy.register('object:changed', this, this._pridefulEnemyChanged.bind(this));
-            }
             enemy.register('obsolete:changed', this, this._enemyObsoleteChanged.bind(this));
             if (!this._isBulkUpdating) {
                 this.signal('killzone:enemyadded', {enemy: enemy});

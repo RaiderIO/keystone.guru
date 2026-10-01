@@ -353,13 +353,6 @@ return [
      */
     'sandbox_dungeon_route_expires_hours' => 24,
 
-    /**
-     * Prideful enemy variables
-     */
-    'prideful' => [
-        'npc_id' => 173729,
-        'count'  => 5,
-    ],
     'shrouded' => [
         'npc_id'           => 189878,
         'npc_id_zul_gamux' => 190128,

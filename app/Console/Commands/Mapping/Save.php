@@ -480,7 +480,6 @@ class Save extends Command
                 'killZones',
                 'killZones.enemies:id',
                 'enemyRaidMarkers',
-                'pridefulEnemies',
                 'mapicons',
             ]);
 
@@ -542,10 +541,6 @@ class Save extends Command
             }
 
             foreach ($demoRoute->enemyRaidMarkers as $item) {
-                $toHide->add($item);
-            }
-
-            foreach ($demoRoute->pridefulEnemies as $item) {
                 $toHide->add($item);
             }
 

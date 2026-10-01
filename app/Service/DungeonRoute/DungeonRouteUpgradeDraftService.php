@@ -258,7 +258,6 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
             $dungeonRoute->brushlines,
             $dungeonRoute->arrows,
             $dungeonRoute->killZones,
-            $dungeonRoute->pridefulEnemies,
             $dungeonRoute->enemyRaidMarkers,
             // routeMapIcons, never mapicons - the latter widens itself to team wide icons that do not
             // belong to this route

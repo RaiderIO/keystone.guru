@@ -407,11 +407,6 @@ class Npc extends Model implements MappingModelInterface
         ]);
     }
 
-    public function isPrideful(): bool
-    {
-        return $this->id === config('keystoneguru.prideful.npc_id');
-    }
-
     public function isShrouded(): bool
     {
         return $this->id === config('keystoneguru.shrouded.npc_id');
