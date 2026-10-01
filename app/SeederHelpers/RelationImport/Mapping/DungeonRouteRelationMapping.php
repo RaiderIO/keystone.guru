@@ -13,7 +13,6 @@ use App\SeederHelpers\RelationImport\Parsers\Relation\DungeonRoutePathsRelationP
 use App\SeederHelpers\RelationImport\Parsers\Relation\DungeonRoutePlayerClassRelationParser;
 use App\SeederHelpers\RelationImport\Parsers\Relation\DungeonRoutePlayerRaceRelationParser;
 use App\SeederHelpers\RelationImport\Parsers\Relation\DungeonRoutePlayerSpecializationRelationParser;
-use App\SeederHelpers\RelationImport\Parsers\Relation\DungeonRoutePridefulEnemiesRelationParser;
 use App\SeederHelpers\RelationImport\Parsers\Relation\NestedModelRelationParser;
 
 class DungeonRouteRelationMapping extends RelationMapping
@@ -44,7 +43,6 @@ class DungeonRouteRelationMapping extends RelationMapping
             new DungeonRouteKillZoneRelationParser(),
 
             new DungeonRouteEnemyRaidMarkersRelationParser(),
-            new DungeonRoutePridefulEnemiesRelationParser(),
 
             new DungeonRouteMapIconsRelationParser(),
         ]));

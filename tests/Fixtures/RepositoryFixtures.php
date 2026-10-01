@@ -29,7 +29,6 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRatingRepositoryInterfa
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailJobRepositoryInterface;
 use App\Repositories\Interfaces\Enemies\OverpulledEnemyRepositoryInterface;
-use App\Repositories\Interfaces\Enemies\PridefulEnemyRepositoryInterface;
 use App\Repositories\Interfaces\EnemyPackRepositoryInterface;
 use App\Repositories\Interfaces\EnemyPatrolRepositoryInterface;
 use App\Repositories\Interfaces\EnemyRepositoryInterface;
@@ -393,22 +392,6 @@ class RepositoryFixtures
         array          $methodsToMock = [],
     ): MockObject|OverpulledEnemyRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilderPublic(OverpulledEnemyRepositoryInterface::class);
-
-        if (!empty($methodsToMock)) {
-            $mockBuilder->onlyMethods($methodsToMock);
-        }
-
-        return $mockBuilder->getMock();
-    }
-
-    /**
-     * @param array<int, string> $methodsToMock
-     */
-    public static function getPridefulEnemyRepositoryMock(
-        PublicTestCase $testCase,
-        array          $methodsToMock = [],
-    ): MockObject|PridefulEnemyRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilderPublic(PridefulEnemyRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);

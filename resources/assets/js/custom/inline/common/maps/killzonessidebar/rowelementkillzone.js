@@ -35,7 +35,6 @@ class RowElementKillZone extends RowElement {
             'has_kill_area': this.killZone.hasKillArea() ? '1' : '0',
             'icon_boss_url': `${this.map.options.assetsBaseUrl}/images/mapicon/raid_marker_skull.png`,
             'icon_modifier_awakened_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/awakened.png`,
-            'icon_modifier_prideful_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/prideful.png`,
             'icon_modifier_shrouded_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/shrouded.png`,
             'icon_modifier_shrouded_zul_gamux_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/shrouded_zul_gamux.png`,
             'icon_modifier_inspiring_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/inspiring.png`,
@@ -145,7 +144,7 @@ class RowElementKillZone extends RowElement {
 
         // Show boss icon or not
         let bossNames = [];
-        let hasAwakened = false, hasPrideful = false, hasInspiring = false, hasShrouded = false,
+        let hasAwakened = false, hasInspiring = false, hasShrouded = false,
             hasShroudedZulGamux = false;
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
@@ -158,8 +157,6 @@ class RowElementKillZone extends RowElement {
                         bossNames.push(lang.get(enemy.npc.name));
                     } else if (!hasAwakened && enemy.isAwakenedNpc()) {
                         hasAwakened = true;
-                    } else if (!hasPrideful && enemy.isPridefulNpc()) {
-                        hasPrideful = true;
                     } else if (!hasInspiring && enemy.isInspiring()) {
                         hasInspiring = true;
                     } else if (!hasShrouded && enemy.isShrouded()) {
@@ -172,7 +169,7 @@ class RowElementKillZone extends RowElement {
             }
         }
 
-        let hasAnything = bossNames.length > 0 || hasAwakened || hasPrideful || hasInspiring || hasShrouded || hasShroudedZulGamux;
+        let hasAnything = bossNames.length > 0 || hasAwakened || hasInspiring || hasShrouded || hasShroudedZulGamux;
 
         let cumulativeShroudedEnemyStacks = this.killZone.getShroudedEnemyStacksCumulative();
         // Reset any previous states
@@ -182,7 +179,6 @@ class RowElementKillZone extends RowElement {
             .toggle(bossNames.length > 0)
             .refreshTooltips();
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_awakened:not(.draggable--original)`).toggle(hasAwakened);
-        $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_prideful:not(.draggable--original)`).toggle(hasPrideful);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_inspiring:not(.draggable--original)`).toggle(hasInspiring);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_shrouded:not(.draggable--original)`).toggle(hasShrouded)
             .find('.shrouded_stacks').text(cumulativeShroudedEnemyStacks);
@@ -224,7 +220,6 @@ class RowElementKillZone extends RowElement {
                     npcArr[enemy.npc.id] = {
                         name: lang.get(enemy.npc.name),
                         awakened: enemy.isAwakenedNpc(),
-                        prideful: enemy.isPridefulNpc(),
                         inspiring: false, // Will be set below
                         obsolete: enemy.isObsolete(),
                         overpulled: enemy.getOverpulledKillZoneId() !== null,
@@ -263,7 +258,6 @@ class RowElementKillZone extends RowElement {
                 'count': npc.count,
                 'name': lang.get(npc.name),
                 'awakened': npc.awakened,
-                'prideful': npc.prideful,
                 'inspiring': npc.inspiring,
                 'overpulled': npc.overpulled,
                 'obsolete': npc.obsolete,

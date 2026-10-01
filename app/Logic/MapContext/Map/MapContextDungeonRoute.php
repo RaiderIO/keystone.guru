@@ -136,7 +136,6 @@ class MapContextDungeonRoute extends MapContextBase
             'paths'            => $this->dungeonRoute->mapContextPaths($this->coordinatesService, $useFacade),
             'brushlines'       => $this->dungeonRoute->mapContextBrushlines($this->coordinatesService, $useFacade),
             'arrows'           => $this->dungeonRoute->mapContextArrows($this->coordinatesService, $useFacade),
-            'pridefulEnemies'  => $this->dungeonRoute->pridefulEnemies,
             'enemyRaidMarkers' => $this->dungeonRoute->enemyRaidMarkers->map(static fn(
                 DungeonRouteEnemyRaidMarker $drEnemyRaidMarker,
             ) => [

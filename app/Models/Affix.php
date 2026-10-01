@@ -155,7 +155,6 @@ class Affix extends Model
         Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX => Affix::AFFIX_SHROUDED,
         Enemy::SEASONAL_TYPE_ENCRYPTED          => Affix::AFFIX_ENCRYPTED,
         Enemy::SEASONAL_TYPE_TORMENTED          => Affix::AFFIX_TORMENTED,
-        Enemy::SEASONAL_TYPE_PRIDEFUL           => Affix::AFFIX_PRIDEFUL,
     ];
 
     public function getImageNameAttribute(): string

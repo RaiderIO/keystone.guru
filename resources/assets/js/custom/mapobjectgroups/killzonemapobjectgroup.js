@@ -420,15 +420,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                     killZone.onDeleteSuccess(json, true);
                 }
 
-                let enemyMapObjectGroup = self.manager.getEnemyMapObjectGroup();
-                for (let key in enemyMapObjectGroup.objects) {
-                    let enemy = enemyMapObjectGroup.objects[key];
-                    if (enemy instanceof PridefulEnemy && enemy.isAssigned()) {
-                        // Prideful enemies override the delete method, so we can delete them without deleting the actual enemy
-                        enemy.unsetAssignedLocation();
-                    }
-                }
-
                 /** @type KillZonePathMapObjectGroup */
                 let killZonePathMapObjectGroup = self.manager.getKillZonePathMapObjectGroup();
                 killZonePathMapObjectGroup.refresh([]);

@@ -152,28 +152,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     }
 
     /**
-     *
-     * @param assignedEvent {Object}
-     * @private
-     */
-    _onPridefulEnemyAssigned(assignedEvent) {
-        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
-
-        this.signal('pridefulenemy:assigned', {pridefulenemy: assignedEvent.context});
-    }
-
-    /**
-     *
-     * @param unassignedEvent {Object}
-     * @private
-     */
-    _onPridefulEnemyUnassigned(unassignedEvent) {
-        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
-
-        this.signal('pridefulenemy:unassigned', {pridefulenemy: unassignedEvent.context});
-    }
-
-    /**
      * @inheritDoc
      **/
     _getRawObjects() {
@@ -198,20 +176,11 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     /**
      * @inheritDoc
      */
-    _getOptions(remoteMapObject) {
-        return {seasonalType: remoteMapObject.seasonal_type};
-    }
-
-    /**
-     * @inheritDoc
-     */
     _createMapObject(layer, options = {}) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
         if (getState().isMapAdmin()) {
             return new AdminEnemy(this.manager.map, layer);
-        } else if (options.hasOwnProperty('seasonalType') && options.seasonalType === 'prideful') {
-            return new PridefulEnemy(this.manager.map, layer);
         } else {
             return new Enemy(this.manager.map, layer);
         }
@@ -239,7 +208,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         let mapContext = getState().getMapContext();
         let isRouteAwakened = mapContext.hasAffix(AFFIX_AWAKENED);
-        let isRoutePrideful = mapContext.hasAffix(AFFIX_PRIDEFUL);
 
         let enemyPatrolMapObjectGroup = this.manager.getEnemyPatrolMapObjectGroup();
 
@@ -263,24 +231,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         break;
                     }
                 }
-            }
-
-            // Check if the enemy is a Prideful enemy, and if so if we should move it to a different floor / lat+lng
-            if (isRoutePrideful && enemy instanceof PridefulEnemy) {
-                let pridefulEnemiesData = mapContext.getPridefulEnemies();
-                for (let i = 0; i < pridefulEnemiesData.length; i++) {
-                    let pridefulEnemyData = pridefulEnemiesData[i];
-
-                    // If we have a match..
-                    if (pridefulEnemyData.enemy_id === enemy.id) {
-                        enemy.setAssignedLocation(pridefulEnemyData.lat, pridefulEnemyData.lng, pridefulEnemyData.floor_id);
-                        // May stop now
-                        break;
-                    }
-                }
-
-                enemy.register('pridefulenemy:assigned', this, this._onPridefulEnemyAssigned.bind(this));
-                enemy.register('pridefulenemy:unassigned', this, this._onPridefulEnemyUnassigned.bind(this));
             }
 
             // Assign exclusive enemies
@@ -376,45 +326,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         }
 
         return finalBoss;
-    }
-
-    /**
-     *
-     * @returns {PridefulEnemy|null}
-     */
-    getFreePridefulEnemy() {
-        let result = null;
-
-        for (let key in this.objects) {
-            let enemy = this.objects[key];
-            if (enemy instanceof PridefulEnemy) {
-                if (!enemy.isAssigned()) {
-                    result = enemy;
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Get the amount of free prideful enemies.
-     * @returns {Number}
-     */
-    getAssignedPridefulEnemies() {
-        let result = 0;
-
-        for (let key in this.objects) {
-            let enemy = this.objects[key];
-            if (enemy instanceof PridefulEnemy) {
-                if (enemy.isAssigned()) {
-                    result++;
-                }
-            }
-        }
-
-        return result;
     }
 }
 

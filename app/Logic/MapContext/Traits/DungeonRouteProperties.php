@@ -22,7 +22,6 @@ trait DungeonRouteProperties
 //            'mapicons',
 //            'paths',
 //            'brushlines',
-//            'pridefulEnemies',
 //            'enemyRaidMarkers',
 //        ])->whereIn('public_key', $publicKeys)->get();
 //

@@ -266,7 +266,6 @@ class Enemy extends VersionableMapObject {
                     {id: ENEMY_SEASONAL_TYPE_BEGUILING, name: lang.get('enemies.seasonal_type.beguiling')},
                     {id: ENEMY_SEASONAL_TYPE_AWAKENED, name: lang.get('enemies.seasonal_type.awakened')},
                     {id: ENEMY_SEASONAL_TYPE_INSPIRING, name: lang.get('enemies.seasonal_type.inspiring')},
-                    {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: lang.get('enemies.seasonal_type.prideful')},
                     {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: lang.get('enemies.seasonal_type.tormented')},
                     {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: lang.get('enemies.seasonal_type.encrypted')},
                     {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: lang.get('enemies.seasonal_type.mdt_placeholder')},
@@ -1226,15 +1225,6 @@ class Enemy extends VersionableMapObject {
      *
      * @returns {boolean}
      */
-    isPridefulNpc() {
-        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.npc !== null && this.npc.id === 173729;
-    }
-
-    /**
-     *
-     * @returns {boolean}
-     */
     isEncryptedNpc() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         return this.npc !== null && [185680, 185683, 185685].includes(this.npc.id);
@@ -1314,7 +1304,6 @@ class Enemy extends VersionableMapObject {
             this.isShrouded() ||
             this.isShroudedZulGamux() ||
             this.isTormented() ||
-            this.isPridefulNpc() ||
             this.isAwakenedNpc();
     }
 

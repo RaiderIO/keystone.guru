@@ -74,10 +74,9 @@ global.NPC_CLASSIFICATION_ID_RARE = 5;
 global.NPC_TYPE_CRITTER = 3;
 global.NPC_ID_NATHREZIM_INFILTRATOR = 189878;
 global.NPC_ID_ZUL_GAMUX = 190128;
-// Awakened/Prideful NPC ids are hardcoded in enemy.js itself, mirrored here for readability.
+// Awakened NPC ids are hardcoded in enemy.js itself, mirrored here for readability.
 const NPC_IDS_AWAKENED = [161124, 161241, 161244, 161243];
 const NPC_ID_AWAKENED_OBELISK = NPC_IDS_AWAKENED[0];
-const NPC_ID_PRIDEFUL = 173729;
 
 // 1e. Lightweight base class standing in for VersionableMapObject -> MapObject, providing only
 // what Enemy calls on `super` / `this`. Emitted signals are recorded on `_emittedSignals`.
@@ -1027,18 +1026,6 @@ describe('Enemy NPC classification', () => {
         expect(makeEnemy({npc: makeNpc({id: 1})}).isAwakenedNpc()).toBe(false);
     });
 
-    test('isPridefulNpc_givenThePridefulNpc_returnsTrue', () => {
-        setFakeState();
-
-        expect(makeEnemy({npc: makeNpc({id: NPC_ID_PRIDEFUL})}).isPridefulNpc()).toBe(true);
-    });
-
-    test('isPridefulNpc_givenAnotherNpc_returnsFalse', () => {
-        setFakeState();
-
-        expect(makeEnemy({npc: makeNpc({id: 1})}).isPridefulNpc()).toBe(false);
-    });
-
     test('isInspiring_givenAnInspiringEnemyWithTheAffix_returnsTrue', () => {
         setFakeState({affixes: [AFFIX_INSPIRING]});
 
@@ -1066,7 +1053,6 @@ describe('Enemy NPC classification', () => {
 
     test.each([
         ['a boss', {npc: makeNpc({classificationId: NPC_CLASSIFICATION_ID_BOSS})}],
-        ['a prideful npc', {npc: makeNpc({id: NPC_ID_PRIDEFUL})}],
         ['an awakened npc', {npc: makeNpc({id: NPC_ID_AWAKENED_OBELISK})}],
         ['a tormented enemy', {seasonal_type: ENEMY_SEASONAL_TYPE_TORMENTED}],
     ])('isImportant_given%s_returnsTrue', (label, properties) => {

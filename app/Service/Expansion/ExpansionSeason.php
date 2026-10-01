@@ -16,8 +16,6 @@ class ExpansionSeason
 
     private bool $isAwakened = false;
 
-    private bool $isPrideful = false;
-
     private bool $isTormented = false;
 
     private bool $isInfernal = false;
@@ -32,7 +30,6 @@ class ExpansionSeason
 
         if ($this->season !== null) {
             $this->isAwakened  = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_AWAKENED];
-            $this->isPrideful  = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_PRIDEFUL];
             $this->isTormented = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_TORMENTED];
             $this->isInfernal  = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_INFERNAL];
         }
@@ -53,11 +50,6 @@ class ExpansionSeason
     public function isAwakened(): bool
     {
         return $this->isAwakened;
-    }
-
-    public function isPrideful(): bool
-    {
-        return $this->isPrideful;
     }
 
     public function isTormented(): bool

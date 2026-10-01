@@ -182,7 +182,6 @@ const NPC_ID_ZUL_GAMUX = 190128;
 let ENEMY_SEASONAL_TYPE_BEGUILING = 'beguiling';
 let ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';
 let ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
-let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
 let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
 let ENEMY_SEASONAL_TYPE_ENCRYPTED = 'encrypted';
 let ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER = 'mdt_placeholder';
@@ -363,13 +362,6 @@ let c = {
                     mouseoverAddEnemy: '#5DE27F',
                     mouseoverAddEnemyBorder: '#347D47',
                 }
-            }
-        },
-        pridefulenemy: {
-            max: 5,
-            isEnabled: function () {
-                // Shadowlands dungeons only
-                return [28, 29, 30, 31, 32, 33, 34, 35].includes(getState().getMapContext().getDungeon().id);
             }
         },
         mapicon: {

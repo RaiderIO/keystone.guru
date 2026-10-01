@@ -55,11 +55,6 @@ class PullExporter
             $enemiesAdded    = 0;
             $killZoneEnemies = $killZone->getEnemies();
             foreach ($killZoneEnemies as $enemy) {
-                // MDT does not handle prideful NPCs
-                if ($enemy->npc->isPrideful()) {
-                    continue;
-                }
-
                 // Find the MDT enemy - we need to know the mdt_npc_index
                 $mdtNpcIndex = $this->findMdtNpcIndex($mdtEnemies, $enemy->getMdtNpcId(), $enemy->mdt_id, $enemy->floor_id);
 

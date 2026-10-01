@@ -152,8 +152,7 @@ class DungeonMap extends Signalable {
                     if (mapObject.shouldBeVisible()) {
                         self.drawnLayers.addLayer(newLayer);
 
-                        // Make sure we know it's editable; PridefulEnemies are part of the EnemyMapObjectGroup which is not editable, but they should be
-                        if (mapObject.isEditable() && (layerChangedEvent.data.objectgroup.editable || mapObject instanceof PridefulEnemy) && self.options.edit) {
+                        if (mapObject.isEditable() && layerChangedEvent.data.objectgroup.editable && self.options.edit) {
                             self.editableLayers.addLayer(newLayer);
                         }
                     }
@@ -196,8 +195,8 @@ class DungeonMap extends Signalable {
                     if (visibilityEvent.data.visible && !self.drawnLayers.hasLayer(mapObject.layer)) {
                         // Add it
                         self.drawnLayers.addLayer(mapObject.layer);
-                        // Only if we may add the layer; PridefulEnemies are part of the EnemyMapObjectGroup which is not editable, but they should be
-                        if (mapObject.isEditable() && (visibilityEvent.data.objectgroup.editable || mapObject instanceof PridefulEnemy) && self.options.edit) {
+                        // Only if we may add the layer
+                        if (mapObject.isEditable() && visibilityEvent.data.objectgroup.editable && self.options.edit) {
                             self.editableLayers.addLayer(mapObject.layer);
                         }
                     }
@@ -337,41 +336,30 @@ class DungeonMap extends Signalable {
 
         // If we created something
         this.leafletMap.on(L.Draw.Event.CREATED, function (event) {
-            if (event.layerType === 'pridefulenemy') {
-                let mapObjectGroup = self.mapObjectGroupManager.getEnemyMapObjectGroup();
-                let pridefulEnemy = mapObjectGroup.getFreePridefulEnemy();
-                // Place the prideful enemy at the correct position
-                pridefulEnemy.setAssignedLocation(event.layer.getLatLng().lat, event.layer.getLatLng().lng, getState().getCurrentFloor().id);
-                // Make it visible
-                mapObjectGroup.setMapObjectVisibility(pridefulEnemy, pridefulEnemy.shouldBeVisible());
-                // Save the enemy - this way we're persisting across sessions
-                pridefulEnemy.save();
-            } else {
-                // Find the corresponding map object group
-                let mapObjectGroup = self.mapObjectGroupManager.getByName(event.layerType);
-                if (mapObjectGroup !== null) {
-                    let mapObject;
-                    // Catch creating a KillZone - we want to add a layer to an existing KillZone, not create a new KillZone object
-                    if (mapObjectGroup instanceof KillZoneMapObjectGroup) {
-                        let mapState = self.getMapState();
-                        console.assert(mapState instanceof AddKillZoneMapState, 'MapState was not in AddKillZoneMapState!', mapState);
+            // Find the corresponding map object group
+            let mapObjectGroup = self.mapObjectGroupManager.getByName(event.layerType);
+            if (mapObjectGroup !== null) {
+                let mapObject;
+                // Catch creating a KillZone - we want to add a layer to an existing KillZone, not create a new KillZone object
+                if (mapObjectGroup instanceof KillZoneMapObjectGroup) {
+                    let mapState = self.getMapState();
+                    console.assert(mapState instanceof AddKillZoneMapState, 'MapState was not in AddKillZoneMapState!', mapState);
 
-                        // Get the killzone that we should add this layer to
-                        mapObject = mapState.getMapObject();
-                        console.assert(mapObject instanceof KillZone, 'object is not a KillZone!', mapObject);
-                        // Apply the layer to the killzone
-                        mapObjectGroup.setLayerToMapObject(event.layer, mapObject);
+                    // Get the killzone that we should add this layer to
+                    mapObject = mapState.getMapObject();
+                    console.assert(mapObject instanceof KillZone, 'object is not a KillZone!', mapObject);
+                    // Apply the layer to the killzone
+                    mapObjectGroup.setLayerToMapObject(event.layer, mapObject);
 
-                        // No longer in AddKillZoneMapState; we finished
-                        self.setMapState(null);
-                    } else {
-                        mapObject = mapObjectGroup.onNewLayerCreated(event.layer);
-                    }
-                    // Save it to server instantly, manually saving is meh
-                    mapObject.save();
+                    // The kill area is drawn - leave AddKillZoneMapState
+                    self.setMapState(null);
                 } else {
-                    console.warn('Unable to find MapObjectGroup after creating a ' + event.layerType);
+                    mapObject = mapObjectGroup.onNewLayerCreated(event.layer);
                 }
+                // Save it to server instantly, manually saving is meh
+                mapObject.save();
+            } else {
+                console.warn('Unable to find MapObjectGroup after creating a ' + event.layerType);
             }
         });
 

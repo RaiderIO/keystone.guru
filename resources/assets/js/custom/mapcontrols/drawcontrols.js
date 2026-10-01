@@ -34,10 +34,6 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
             handler: new L.Draw.Enemy(map, this.options.enemy),
             title: this.options.enemy.title
         }, {
-            enabled: this.options.pridefulenemy,
-            handler: new L.Draw.PridefulEnemy(map, this.options.pridefulenemy),
-            title: this.options.pridefulenemy.title
-        }, {
             enabled: this.options.enemypatrol,
             handler: new L.Draw.EnemyPatrol(map, this.options.enemypatrol),
             title: this.options.enemypatrol.title
@@ -104,12 +100,7 @@ class DrawControls extends MapControl {
 
         // Add a created item to the list of drawn items
         this.map.leafletMap.on(L.Draw.Event.CREATED, function (event) {
-            let layer = event.layer;
-            // Prideful enemies are replaced with a real enemy that was hidden on the map. This is easier for various
-            // reasons.
-            if (event.layerType !== 'pridefulenemy') {
-                self.editableItemsLayer.addLayer(layer);
-            }
+            self.editableItemsLayer.addLayer(event.layer);
         });
 
         // Make sure that when pather is toggled, the button changes state accordingly
@@ -138,10 +129,6 @@ class DrawControls extends MapControl {
             }
         });
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
-        enemyMapObjectGroup.register('pridefulenemy:assigned', this, this._refreshPridefulButtonText.bind(this));
-        enemyMapObjectGroup.register('pridefulenemy:unassigned', this, this._refreshPridefulButtonText.bind(this));
-
         this._attachHotkeys();
 
         // Remove delete all button -> https://stackoverflow.com/a/46949925
@@ -157,7 +144,6 @@ class DrawControls extends MapControl {
      */
     _getHotkeys() {
         console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
-        let self = this;
 
         let hotkeys = [{
             hotkey: '1',
@@ -175,18 +161,6 @@ class DrawControls extends MapControl {
             hotkey: '6',
             cssClass: 'leaflet-draw-edit-remove',
         }];
-
-        // Only when the route has a prideful affix
-        if (getState().getMapContext().hasAffix(AFFIX_PRIDEFUL)) {
-            hotkeys.push({
-                hotkey: '4',
-                cssClass: 'leaflet-draw-draw-pridefulenemy',
-                enabled: function () {
-                    let enemyMapObjectGroup = self.map.mapObjectGroupManager.getEnemyMapObjectGroup();
-                    return c.map.pridefulenemy.isEnabled() && enemyMapObjectGroup.getAssignedPridefulEnemies() < c.map.pridefulenemy.max;
-                }
-            });
-        }
 
         return hotkeys;
     }
@@ -233,26 +207,6 @@ class DrawControls extends MapControl {
     }
 
     /**
-     *
-     * @private
-     */
-    _refreshPridefulButtonText() {
-        console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
-
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
-
-        let assignedPridefulEnemies = enemyMapObjectGroup.getAssignedPridefulEnemies();
-        let buttonText = `${lang.get(`js.pridefulenemy`)} (${assignedPridefulEnemies}/${c.map.pridefulenemy.max})`;
-        $('.leaflet-draw-draw-pridefulenemy .button-text').text(buttonText);
-
-        let limitReached = assignedPridefulEnemies === c.map.pridefulenemy.max || !c.map.pridefulenemy.isEnabled();
-
-        $('#disabled_pridefulenemy_button .button-text').text(buttonText);
-        $('#disabled_pridefulenemy_button').toggle(limitReached);
-        $('.leaflet-draw-draw-pridefulenemy').toggleClass('leaflet-disabled draw-control-disabled', limitReached).toggle(!limitReached);
-    }
-
-    /**
      * Gets the newly generated options for the drawing control.
      * @returns object
      * @protected
@@ -263,7 +217,6 @@ class DrawControls extends MapControl {
         let hotkeys = {
             path: this._findHotkeyByCssClass('path'),
             mapicon: this._findHotkeyByCssClass('icon'),
-            pridefulenemy: this._findHotkeyByCssClass('pridefulenemy'),
         };
 
         return {
@@ -301,13 +254,6 @@ class DrawControls extends MapControl {
                     cssClass: 'd-none',
                     faClass: 'fa-icons'
                 },
-                pridefulenemy: getState().getMapContext().hasAffix(AFFIX_PRIDEFUL) ? {
-                    repeatMode: false,
-                    zIndexOffset: 1000,
-                    faClass: 'fa-user',
-                    title: lang.get('js.pridefulenemy_title', {hotkey: hotkeys.pridefulenemy}),
-                    hotkey: hotkeys.pridefulenemy
-                } : false,
                 brushline: false,
                 // Brushlines are added in a custom way since I'm using Pather for this
                 // brushline: {
@@ -370,26 +316,6 @@ class DrawControls extends MapControl {
         };
 
         return template(data);
-    }
-
-    _addControlSetupFakePridefulButton() {
-        let $disabledPridefulButton = $('<a>', {
-            id: 'disabled_pridefulenemy_button',
-            class: 'draw_icon leaflet-disabled draw-control-disabled',
-            href: '#'
-        });
-
-        $disabledPridefulButton.html(
-            this._getButtonHtml(
-                'fa-user',
-                lang.get('js.brushline'),
-                '',
-                c.map.pridefulenemy.isEnabled() ? lang.get('js.pridefulenemy_disabled_title') : lang.get('js.pridefulenemy_disabled_no_shadowlands_title')
-            )
-        );
-
-        $disabledPridefulButton.hide();
-        $disabledPridefulButton.insertAfter('.leaflet-draw-draw-pridefulenemy');
     }
 
     _addControlSetupBottomBar() {
@@ -548,12 +474,7 @@ class DrawControls extends MapControl {
             });
         });
 
-        // Depends on whether the prideful button was added or not
-        if (getState().getMapContext().hasAffix(AFFIX_PRIDEFUL)) {
-            $brushlineButton.insertBefore('.leaflet-draw-draw-pridefulenemy');
-        } else {
-            $brushlineButton.insertAfter('.leaflet-draw-draw-mapicon');
-        }
+        $brushlineButton.insertAfter('.leaflet-draw-draw-mapicon');
 
         // Re-set pather to the same enabled state so all events are fired and UI is put back in a proper state
         this.map.togglePather(this.map.getMapState() instanceof PatherMapState);
@@ -620,11 +541,6 @@ class DrawControls extends MapControl {
             }
         }
 
-        this._addControlSetupFakePridefulButton();
-
-        // Update the prideful button text to show (x/y)
-        this._refreshPridefulButtonText();
-
         // Add the leaflet draw control to the bottom bar
         this._addControlSetupBottomBar();
 
@@ -644,9 +560,6 @@ class DrawControls extends MapControl {
     cleanup() {
         super.cleanup();
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
-        enemyMapObjectGroup.unregister('pridefulenemy:assigned', this);
-        enemyMapObjectGroup.unregister('pridefulenemy:unassigned', this);
         // this.map.leafletMap.off(L.Draw.Event.CREATED);
     }
 }

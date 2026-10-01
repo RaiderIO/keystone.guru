@@ -169,13 +169,6 @@ class MapContextDungeonRoute extends MapContext {
     }
 
     /**
-     * @returns {[]}
-     */
-    getPridefulEnemies() {
-        return this._options.pridefulEnemies;
-    }
-
-    /**
      * "enemyRaidMarkers":[{"enemy_id":6891,"raid_marker_name":"skull"}]
      * @returns {[]}
      */

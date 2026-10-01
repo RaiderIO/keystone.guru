@@ -124,7 +124,6 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
                 $source->brushlines,
                 $source->arrows,
                 $source->killZones,
-                $source->pridefulEnemies,
                 $source->enemyRaidMarkers,
                 $source->routeMapIcons,
                 $source->routeattributesraw,

@@ -6,7 +6,6 @@ return [
         'beguiling'           => 'Beguiling',
         'awakened'            => 'Awakened',
         'inspiring'           => 'Inspiring',
-        'prideful'            => 'Prideful',
         'tormented'           => 'Tormented',
         'encrypted'           => 'Encrypted',
         'mdt_placeholder'     => 'MDT Placeholder',

@@ -122,7 +122,7 @@ const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManage
 /**
  * A fake enemy collaborator. Tracks its assigned kill zone and answers the classification
  * questions KillZone asks with defaults for an enemy with no special classification (not
- * prideful, awakened, or linked to the last boss).
+ * awakened or linked to the last boss).
  */
 function makeFakeEnemy(id) {
     // KillZone._enemySelected() asserts `enemy instanceof Enemy`, so build off that prototype.
@@ -138,7 +138,6 @@ function makeFakeEnemy(id) {
         },
         register() {},
         unregister() {},
-        isPridefulNpc: () => false,
         isAwakenedNpc: () => false,
         isLinkedToLastBoss: () => false,
         isObsolete: () => false,

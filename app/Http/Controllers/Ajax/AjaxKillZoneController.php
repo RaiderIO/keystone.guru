@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Events\Models\KillZone\KillZoneChangedEvent;
 use App\Events\Models\KillZone\KillZoneDeletedEvent;
-use App\Events\Models\PridefulEnemy\PridefulEnemyDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
@@ -15,7 +14,6 @@ use App\Jobs\RefreshEnemyForces;
 use App\Logic\Structs\LatLng;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteLimitType;
-use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
@@ -681,8 +679,8 @@ class AjaxKillZoneController extends Controller
 
         if ($validated['confirm'] === 'yes') {
             try {
-                // Clearing a route is six writes per pull plus the prideful enemies and the route
-                // itself; without a transaction a failure part-way through left the route
+                // Clearing a route is six writes per pull plus the route itself;
+                // without a transaction a failure part-way through left the route
                 // half-cleared, with no way for the client to tell how far it got (#4260)
                 DB::transaction(function () use ($dungeonRoute): void {
                     // Queried rather than read off $dungeonRoute's relation: Model::delete() flips
@@ -692,16 +690,12 @@ class AjaxKillZoneController extends Controller
                     $killZones = KillZone::query()
                         ->where('dungeon_route_id', $dungeonRoute->id)
                         ->get();
-                    $pridefulEnemies = PridefulEnemy::query()
-                        ->where('dungeon_route_id', $dungeonRoute->id)
-                        ->get();
 
                     // Deleted one at a time - a mass delete on the relation skips KillZone::deleting, which
                     // is what cleans up the kill zone's enemies and spells
                     foreach ($killZones as $killZone) {
                         $killZone->delete();
                     }
-                    $dungeonRoute->pridefulEnemies()->delete();
 
                     if (Auth::check()) {
                         /** @var User $user */
@@ -712,18 +706,10 @@ class AjaxKillZoneController extends Controller
 
                         // afterCommit: collaborators must not be told the route was cleared while a
                         // rollback or a retried attempt can still put every pull back
-                        DB::afterCommit(static function () use ($dungeonRoute, $user, $killZones, $pridefulEnemies): void {
+                        DB::afterCommit(static function () use ($dungeonRoute, $user, $killZones): void {
                             foreach ($killZones as $killZone) {
                                 try {
                                     broadcast(new KillZoneDeletedEvent($dungeonRoute, $user, $killZone));
-                                } catch (BroadcastException) {
-                                    // Ignore broadcast failures
-                                }
-                            }
-
-                            foreach ($pridefulEnemies as $pridefulEnemy) {
-                                try {
-                                    broadcast(new PridefulEnemyDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
                                 } catch (BroadcastException) {
                                     // Ignore broadcast failures
                                 }

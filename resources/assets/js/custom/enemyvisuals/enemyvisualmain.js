@@ -60,8 +60,6 @@ class EnemyVisualMain extends EnemyVisualIcon {
                 mainVisualInnerClasses.push('inspiring');
             } else if (this.enemyvisual.enemy.isEncrypted()) {
                 mainVisualInnerClasses.push('encrypted');
-            } else if (this.enemyvisual.enemy.isPridefulNpc()) {
-                mainVisualInnerClasses.push('prideful');
             } else if (this.enemyvisual.enemy.isTormented()) {
                 mainVisualInnerClasses.push('tormented');
             } else if (this.enemyvisual.enemy.isRequiresActivation()) {
