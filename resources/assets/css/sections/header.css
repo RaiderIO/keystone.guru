@@ -75,12 +75,7 @@
     height: 1rem;
 }
 
-/* The selected item in the header's selector rows */
-.ksg-header .ksg-selected {
-    border-color: var(--theme-border-accent);
-}
-
-.game_version_header .game_version.ksg-selected {
+.game_version_header .game_version[aria-current] {
     color: var(--theme-text-contrast);
 }
 

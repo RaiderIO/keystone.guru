@@ -22,7 +22,7 @@ final class ViewServiceGetAllGameVersionsTest extends PublicTestCase
         // Arrange
         Cache::store('tmp_file')->flush();
 
-        $mop                  = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_MOP);
+        $mop                  = GameVersion::query()->where('key', GameVersion::GAME_VERSION_MOP)->firstOrFail();
         $originalDisplayOrder = $mop->display_order;
 
         try {

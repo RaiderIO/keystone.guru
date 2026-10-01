@@ -9,7 +9,7 @@ use App\Models\GameVersion\GameVersion;
 $isSelectedGameVersion = $currentUserGameVersion->id === $gameVersion->id;
 ?>
 <li>
-    <a class="game_version {{ $isSelectedGameVersion ? 'ksg-selected' : '' }}"
+    <a class="game_version {{ $isSelectedGameVersion ? 'border-accent' : '' }}"
        href="{{ route('gameversion.update', ['gameVersion' => $gameVersion]) }}"
        @if($isSelectedGameVersion) aria-current="true" @endif>
         <img src="{{ ksgAssetImage(sprintf('gameversions/%s.webp', $gameVersion->key)) }}" alt="" height="16"/>
