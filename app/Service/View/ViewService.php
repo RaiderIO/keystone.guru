@@ -239,7 +239,7 @@ class ViewService implements ViewServiceInterface
      */
     public function getAllGameVersions(): Collection
     {
-        return $this->cachedGlobal('all_game_versions', static fn() => GameVersion::active()->get());
+        return $this->cachedGlobal('all_game_versions', static fn() => GameVersion::active()->orderBy('display_order')->get());
     }
 
     /**

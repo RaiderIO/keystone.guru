@@ -169,17 +169,16 @@ $compendiumEntries        = [
      {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
     <div class="container discover bg-dark rounded ">
         @if($showGameVersionSelection)
-            <div class="row">
-                @foreach ($allGameVersions as $gameVersion)
-                    @include('common.gameversion.gameversionheader', [
-                        'gameVersion' => $gameVersion,
-                        'currentUserGameVersion' => $currentUserGameVersion,
-                    ])
-                @endforeach
-                <div class="col">
-                    &nbsp;
-                </div>
-            </div>
+            <nav aria-label="{{ __('view_common.layout.header.game_versions') }}">
+                <ul class="game_version_list">
+                    @foreach ($allGameVersions as $gameVersion)
+                        @include('common.gameversion.gameversionheader', [
+                            'gameVersion' => $gameVersion,
+                            'currentUserGameVersion' => $currentUserGameVersion,
+                        ])
+                    @endforeach
+                </ul>
+            </nav>
         @endif
         @if($showDungeonContext)
             <div class="row g-0 dungeon_context_header">

@@ -24,6 +24,7 @@ use Override;
  * @property int      $id
  * @property int      $expansion_id                 The expansion that this game version focussed on.
  * @property string   $key
+ * @property int      $display_order                Position in the game version selectors: Retail first, then flavours in release order.
  * @property string   $name
  * @property string   $description
  * @property bool     $has_seasons
@@ -49,6 +50,7 @@ class GameVersion extends Model
     protected $fillable = [
         'id',
         'key',
+        'display_order',
         'name',
         'description',
         'has_seasons',

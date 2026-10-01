@@ -361,6 +361,7 @@ return [
         ],
         'header' => [
             'toggle_navigation_title'         => 'Toggle navigation',
+            'game_versions'                   => 'Game versions',
             'create_route'                    => 'Create route',
             'create_route_description'        => 'Plan your own route on the dungeon map',
             'search'                          => 'Search',
