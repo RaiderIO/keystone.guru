@@ -12,6 +12,7 @@ use App\Service\Npc\NpcServiceInterface;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Session;
 
@@ -44,6 +45,8 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
         Floor                                  $floor,
         int                                    $difficulty,
     ): RedirectResponse {
+        $this->abortUnlessFloorOfDungeon($dungeon, $floor);
+
         $validated = $request->validated();
 
         $parent = DungeonSpeedrunRequiredNpc::create([
@@ -82,8 +85,14 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
         int                        $difficulty,
         DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc,
     ): RedirectResponse {
+        $this->abortUnlessFloorOfDungeon($dungeon, $floor);
+        abort_unless($dungeonspeedrunrequirednpc->floor_id === $floor->id, 404);
+
         try {
-            $dungeonspeedrunrequirednpc->delete();
+            DB::transaction(static function () use ($dungeonspeedrunrequirednpc): void {
+                $dungeonspeedrunrequirednpc->dungeonSpeedrunRequiredNpcNpcs()->delete();
+                $dungeonspeedrunrequirednpc->delete();
+            });
         } catch (Exception) {
             abort(500);
         }
@@ -94,5 +103,10 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
             'dungeon' => $dungeon,
             'floor'   => $floor,
         ]);
+    }
+
+    private function abortUnlessFloorOfDungeon(Dungeon $dungeon, Floor $floor): void
+    {
+        abort_unless($floor->dungeon_id === $dungeon->id, 404);
     }
 }

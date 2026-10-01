@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Admin;
 
+use App\Models\Dungeon;
 use App\Models\DungeonDifficulty;
 use App\Models\Floor\Floor;
 use App\Models\Npc\NpcDungeon;
@@ -172,6 +173,228 @@ final class DungeonSpeedrunRequiredNpcsControllerTest extends PublicTestCase
         } finally {
             DungeonSpeedrunRequiredNpc::query()->whereKey($requiredNpc->id)->delete();
         }
+    }
+
+    #[Test]
+    public function createSave_givenBodyDungeonIdOfAnotherDungeon_validatesNpcsAgainstTheRouteDungeon(): void
+    {
+        // Arrange
+        [$floor]    = $this->findFloorWithTwoDungeonNpcs();
+        $foreignNpc = NpcDungeon::query()->where('dungeon_id', '!=', $floor->dungeon_id)
+            ->whereNotIn('npc_id', NpcDungeon::query()->where('dungeon_id', $floor->dungeon_id)->select('npc_id'))
+            ->firstOrFail();
+        $maxIdBefore = (int)DungeonSpeedrunRequiredNpc::query()->max('id');
+
+        try {
+            // Act
+            $response = $this->post($this->saveNewUrl($floor), array_merge($this->validPayload($floor, $foreignNpc->npc_id), [
+                'dungeon_id' => $foreignNpc->dungeon_id,
+            ]));
+
+            // Assert
+            $response->assertSessionHasErrors('npc_id');
+            $this->assertFalse(DungeonSpeedrunRequiredNpc::query()->where('id', '>', $maxIdBefore)->exists());
+        } finally {
+            $this->deleteRequiredNpcsCreatedAfter($maxIdBefore);
+        }
+    }
+
+    #[Test]
+    public function createSave_givenMissingLinkedNpcFields_returnsValidationErrors(): void
+    {
+        // Arrange
+        [$floor, $npcIds] = $this->findFloorWithTwoDungeonNpcs();
+        $maxIdBefore      = (int)DungeonSpeedrunRequiredNpc::query()->max('id');
+        $payload          = $this->validPayload($floor, $npcIds[0]);
+        unset($payload['floor_id'], $payload['npc2_id'], $payload['npc3_id'], $payload['npc4_id'], $payload['npc5_id']);
+
+        try {
+            // Act
+            $response = $this->post($this->saveNewUrl($floor), $payload);
+
+            // Assert
+            $response->assertSessionHasErrors(['floor_id', 'npc2_id', 'npc3_id', 'npc4_id', 'npc5_id']);
+            $this->assertFalse(DungeonSpeedrunRequiredNpc::query()->where('id', '>', $maxIdBefore)->exists());
+        } finally {
+            $this->deleteRequiredNpcsCreatedAfter($maxIdBefore);
+        }
+    }
+
+    #[Test]
+    public function createSave_givenFloorIdOfAnotherFloor_returnsValidationError(): void
+    {
+        // Arrange
+        [$floor, $npcIds] = $this->findFloorWithTwoDungeonNpcs();
+        $otherFloor       = Floor::query()->whereKeyNot($floor->id)->firstOrFail();
+        $maxIdBefore      = (int)DungeonSpeedrunRequiredNpc::query()->max('id');
+
+        try {
+            // Act
+            $response = $this->post($this->saveNewUrl($floor), array_merge($this->validPayload($floor, $npcIds[0]), [
+                'floor_id' => $otherFloor->id,
+            ]));
+
+            // Assert
+            $response->assertSessionHasErrors('floor_id');
+            $this->assertFalse(DungeonSpeedrunRequiredNpc::query()->where('id', '>', $maxIdBefore)->exists());
+        } finally {
+            $this->deleteRequiredNpcsCreatedAfter($maxIdBefore);
+        }
+    }
+
+    #[Test]
+    public function createSave_givenFloorOfAnotherDungeon_returnsNotFound(): void
+    {
+        // Arrange
+        [$dungeonFloor, $npcIds] = $this->findFloorWithTwoDungeonNpcs();
+        $foreignFloor            = Floor::query()->whereNotNull('dungeon_id')->where('dungeon_id', '!=', $dungeonFloor->dungeon_id)->firstOrFail();
+        $maxIdBefore             = (int)DungeonSpeedrunRequiredNpc::query()->max('id');
+
+        try {
+            // Act
+            $response = $this->post(route('admin.dungeonspeedrunrequirednpc.savenew', [
+                'dungeon'    => $dungeonFloor->dungeon,
+                'floor'      => $foreignFloor,
+                'difficulty' => DungeonDifficulty::TEN_MAN->value,
+            ]), array_merge($this->validPayload($dungeonFloor, $npcIds[0]), [
+                'floor_id' => $foreignFloor->id,
+            ]));
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertFalse(DungeonSpeedrunRequiredNpc::query()->where('id', '>', $maxIdBefore)->exists());
+        } finally {
+            $this->deleteRequiredNpcsCreatedAfter($maxIdBefore);
+        }
+    }
+
+    #[Test]
+    public function delete_givenFloorOfAnotherDungeon_returnsNotFoundAndKeepsIt(): void
+    {
+        // Arrange
+        $floor        = Floor::whereNotNull('dungeon_id')->firstOrFail();
+        $otherDungeon = Dungeon::query()->whereKeyNot($floor->dungeon_id)->firstOrFail();
+        $requiredNpc  = DungeonSpeedrunRequiredNpc::create([
+            'floor_id'   => $floor->id,
+            'difficulty' => DungeonDifficulty::TEN_MAN->value,
+            'count'      => 1,
+        ]);
+
+        try {
+            // Act
+            $response = $this->delete(route('admin.dungeonspeedrunrequirednpc.delete', [
+                'dungeon'                    => $otherDungeon,
+                'floor'                      => $floor,
+                'difficulty'                 => DungeonDifficulty::TEN_MAN->value,
+                'dungeonspeedrunrequirednpc' => $requiredNpc,
+            ]));
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertTrue(DungeonSpeedrunRequiredNpc::query()->whereKey($requiredNpc->id)->exists());
+        } finally {
+            DungeonSpeedrunRequiredNpc::query()->whereKey($requiredNpc->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenRequiredNpcOfAnotherFloor_returnsNotFoundAndKeepsIt(): void
+    {
+        // Arrange
+        $floor      = Floor::whereNotNull('dungeon_id')->firstOrFail();
+        $otherFloor = Floor::query()->where('dungeon_id', $floor->dungeon_id)->whereKeyNot($floor->id)->first()
+            ?? Floor::query()->whereNotNull('dungeon_id')->whereKeyNot($floor->id)->firstOrFail();
+        $requiredNpc = DungeonSpeedrunRequiredNpc::create([
+            'floor_id'   => $otherFloor->id,
+            'difficulty' => DungeonDifficulty::TEN_MAN->value,
+            'count'      => 1,
+        ]);
+
+        try {
+            // Act
+            $response = $this->delete(route('admin.dungeonspeedrunrequirednpc.delete', [
+                'dungeon'                    => $floor->dungeon,
+                'floor'                      => $floor,
+                'difficulty'                 => DungeonDifficulty::TEN_MAN->value,
+                'dungeonspeedrunrequirednpc' => $requiredNpc,
+            ]));
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertTrue(DungeonSpeedrunRequiredNpc::query()->whereKey($requiredNpc->id)->exists());
+        } finally {
+            DungeonSpeedrunRequiredNpc::query()->whereKey($requiredNpc->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenRequiredNpcWithLinkedNpcs_deletesTheLinkedNpcsToo(): void
+    {
+        // Arrange
+        [$floor, $npcIds] = $this->findFloorWithTwoDungeonNpcs();
+        $requiredNpc      = DungeonSpeedrunRequiredNpc::create([
+            'floor_id'   => $floor->id,
+            'difficulty' => DungeonDifficulty::TEN_MAN->value,
+            'count'      => 1,
+        ]);
+        foreach ($npcIds as $npcId) {
+            DungeonSpeedrunRequiredNpcNpc::create([
+                'dungeon_speedrun_required_npc_id' => $requiredNpc->id,
+                'npc_id'                           => $npcId,
+            ]);
+        }
+
+        try {
+            // Act
+            $response = $this->delete(route('admin.dungeonspeedrunrequirednpc.delete', [
+                'dungeon'                    => $floor->dungeon,
+                'floor'                      => $floor,
+                'difficulty'                 => DungeonDifficulty::TEN_MAN->value,
+                'dungeonspeedrunrequirednpc' => $requiredNpc,
+            ]));
+
+            // Assert
+            $response->assertRedirect(route('admin.floor.edit', ['dungeon' => $floor->dungeon, 'floor' => $floor]));
+            $this->assertFalse(DungeonSpeedrunRequiredNpc::query()->whereKey($requiredNpc->id)->exists());
+            $this->assertFalse(DungeonSpeedrunRequiredNpcNpc::query()->where('dungeon_speedrun_required_npc_id', $requiredNpc->id)->exists());
+        } finally {
+            DungeonSpeedrunRequiredNpcNpc::query()->where('dungeon_speedrun_required_npc_id', $requiredNpc->id)->delete();
+            DungeonSpeedrunRequiredNpc::query()->whereKey($requiredNpc->id)->delete();
+        }
+    }
+
+    private function saveNewUrl(Floor $floor): string
+    {
+        return route('admin.dungeonspeedrunrequirednpc.savenew', [
+            'dungeon'    => $floor->dungeon,
+            'floor'      => $floor,
+            'difficulty' => DungeonDifficulty::TEN_MAN->value,
+        ]);
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    private function validPayload(Floor $floor, int $npcId): array
+    {
+        return [
+            'dungeon_id' => $floor->dungeon_id,
+            'floor_id'   => $floor->id,
+            'difficulty' => DungeonDifficulty::TEN_MAN->value,
+            'npc_id'     => $npcId,
+            'npc2_id'    => -1,
+            'npc3_id'    => -1,
+            'npc4_id'    => -1,
+            'npc5_id'    => -1,
+            'count'      => 3,
+        ];
+    }
+
+    private function deleteRequiredNpcsCreatedAfter(int $maxIdBefore): void
+    {
+        $leakedIds = DungeonSpeedrunRequiredNpc::query()->where('id', '>', $maxIdBefore)->pluck('id')->all();
+        DungeonSpeedrunRequiredNpcNpc::query()->whereIn('dungeon_speedrun_required_npc_id', $leakedIds)->delete();
+        DungeonSpeedrunRequiredNpc::query()->whereKey($leakedIds)->delete();
     }
 
     /**
