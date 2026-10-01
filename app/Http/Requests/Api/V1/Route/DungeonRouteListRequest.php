@@ -23,7 +23,7 @@ class DungeonRouteListRequest extends APIFormRequest
     public function rules(): array
     {
         return [
-
+            'dungeon_id' => ['nullable', 'integer', 'exists:dungeons,id'],
         ];
     }
 }

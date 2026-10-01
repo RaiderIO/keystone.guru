@@ -26,9 +26,12 @@ class APIDungeonRouteController extends Controller
      *     summary="Get a list of routes",
      *     tags={"Route"},
      *
+     *     @OA\Parameter(name="dungeon_id", in="query", required=false, description="Only routes of this dungeon", @OA\Schema(type="integer")),
+     *
      *     @OA\Response(response=200, description="Successful operation",
      *         @OA\JsonContent(ref="#/components/schemas/DungeonRouteSummaryEnvelope")
-     *    )
+     *    ),
+     *     @OA\Response(response=422, description="Validation errors")
      * )
      */
     public function index(

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Api\V1\APIDungeonRouteController;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
@@ -77,6 +78,69 @@ final class APIDungeonRouteControllerTest extends APIPublicTestCase
         } finally {
             $foreignRoute?->delete();
             $ownRoute?->delete();
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenDungeonId_returnsOnlyRoutesOfThatDungeon(): void
+    {
+        // Arrange
+        Queue::fake();
+        $user     = null;
+        $routeInA = null;
+        $routeInB = null;
+
+        try {
+            $user = User::factory()->create();
+            $user->addRole(Role::firstWhere('name', Role::ROLE_USER));
+            $routeInA = DungeonRoute::factory()->create([
+                'author_id'  => $user->id,
+                'expires_at' => null,
+            ]);
+            $dungeonB = Dungeon::query()
+                ->whereNotNull('challenge_mode_id')
+                ->whereKeyNot($routeInA->dungeon_id)
+                ->whereHas('floors')
+                ->get()
+                ->first(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion() !== null);
+            $routeInB = DungeonRoute::factory()->create([
+                'author_id'          => $user->id,
+                'dungeon_id'         => $dungeonB->id,
+                'mapping_version_id' => $dungeonB->getCurrentMappingVersion()->id,
+                'expires_at'         => null,
+            ]);
+
+            // Act
+            $response = $this->actingAs($user)->getJson(route('api.v1.route.index', ['dungeon_id' => $routeInB->dungeon_id]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$routeInB->public_key], array_column($response->json('data'), 'publicKey'));
+        } finally {
+            $routeInB?->delete();
+            $routeInA?->delete();
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenUnknownDungeonId_returnsUnprocessableEntity(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = User::factory()->create();
+            $user->addRole(Role::firstWhere('name', Role::ROLE_USER));
+
+            // Act
+            $response = $this->actingAs($user)->getJson(route('api.v1.route.index', ['dungeon_id' => (Dungeon::max('id') ?? 0) + 1000]));
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors('dungeon_id', 'data');
+        } finally {
             $user?->delete();
         }
     }
