@@ -183,7 +183,7 @@ final class AjaxDungeonRouteSearchControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function getMapContext_givenRouteUserMayNotView_returnsNoMapContext(): void
+    public function getMapContext_givenRouteUserMayNotView_returnsForbidden(): void
     {
         // Arrange
         $viewer = null;
@@ -200,7 +200,7 @@ final class AjaxDungeonRouteSearchControllerTest extends AjaxPublicTestCase
             $response = $this->get(sprintf('/ajax/dungeonroute/%s/mapcontext', $route->public_key));
 
             // Assert
-            $this->assertFalse($response->isSuccessful());
+            $response->assertForbidden();
             $response->assertJsonMissingPath('publicKey');
             $response->assertJsonPath('message', __('policy.view_route_not_published'));
         } finally {
