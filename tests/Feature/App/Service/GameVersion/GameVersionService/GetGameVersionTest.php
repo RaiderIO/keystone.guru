@@ -105,6 +105,28 @@ final class GetGameVersionTest extends PublicTestCase
 
     #[Test]
     #[DataProvider('retiredGameVersionKeyProvider')]
+    public function getGameVersion_givenGuestCookieForARetiredGameVersionInTheCachedList_returnsTheDefaultGameVersion(
+        string $retiredGameVersionKey,
+    ): void {
+        // Arrange
+        $retiredGameVersion = GameVersion::query()->where('key', $retiredGameVersionKey)->firstOrFail();
+        $service            = $this->buildService(collect([$retiredGameVersion]));
+
+        $_COOKIE['game_version'] = $retiredGameVersionKey;
+
+        try {
+            // Act
+            $result = $service->getGameVersion(null);
+
+            // Assert
+            $this->assertSame(GameVersion::getDefaultGameVersion()->id, $result->id);
+        } finally {
+            unset($_COOKIE['game_version']);
+        }
+    }
+
+    #[Test]
+    #[DataProvider('retiredGameVersionKeyProvider')]
     public function getGameVersion_givenUserWithARetiredGameVersion_returnsAndSavesTheDefaultGameVersion(
         string $retiredGameVersionKey,
     ): void {

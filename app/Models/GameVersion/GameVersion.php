@@ -20,15 +20,17 @@ use Illuminate\Support\Facades\Auth;
 use Override;
 
 /**
- * @property int    $id
- * @property int    $expansion_id The expansion that this game version focussed on.
- * @property string $key
- * @property string $name
- * @property string $description
- * @property bool   $has_seasons
- * @property bool   $active
+ * @property int      $id
+ * @property int      $expansion_id                 The expansion that this game version focussed on.
+ * @property string   $key
+ * @property string   $name
+ * @property string   $description
+ * @property bool     $has_seasons
+ * @property bool     $active
+ * @property int|null $retired_into_game_version_id The game version this one's content now lives under, when retired.
  *
  * @property Expansion                               $expansion
+ * @property GameVersion|null                        $retiredIntoGameVersion
  * @property EloquentCollection<int, MappingVersion> $mappingVersions
  *
  * @method static Builder<GameVersion> active()
@@ -50,6 +52,7 @@ class GameVersion extends Model
         'description',
         'has_seasons',
         'active',
+        'retired_into_game_version_id',
     ];
 
     protected $with = [
@@ -78,16 +81,6 @@ class GameVersion extends Model
         self::GAME_VERSION_MOP          => 6,
         self::GAME_VERSION_LEGION_REMIX => 7,
         self::GAME_VERSION_FOREVER      => 8,
-    ];
-
-    /**
-     * Game versions whose flavour is not playable on its own, mapped to the game version their
-     * content now lives under.
-     */
-    public const array RETIRED_INTO = [
-        self::GAME_VERSION_WRATH        => self::GAME_VERSION_RETAIL,
-        self::GAME_VERSION_CATA         => self::GAME_VERSION_RETAIL,
-        self::GAME_VERSION_LEGION_REMIX => self::GAME_VERSION_RETAIL,
     ];
 
     /**
@@ -126,9 +119,17 @@ class GameVersion extends Model
         return $this->hasMany(MappingVersion::class);
     }
 
+    /**
+     * @return BelongsTo<GameVersion, $this>
+     */
+    public function retiredIntoGameVersion(): BelongsTo
+    {
+        return $this->belongsTo(GameVersion::class, 'retired_into_game_version_id');
+    }
+
     public function isRetired(): bool
     {
-        return isset(self::RETIRED_INTO[$this->key]);
+        return $this->retired_into_game_version_id !== null;
     }
 
     /**

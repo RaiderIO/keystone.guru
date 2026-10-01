@@ -121,8 +121,11 @@ final class RetiredGameVersionTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $html = $response->getContent();
-        foreach (array_keys(GameVersion::RETIRED_INTO) as $retiredGameVersionKey) {
+        $html                   = $response->getContent();
+        $retiredGameVersionKeys = GameVersion::query()->whereNotNull('retired_into_game_version_id')->pluck('key');
+        $this->assertNotEmpty($retiredGameVersionKeys);
+
+        foreach ($retiredGameVersionKeys as $retiredGameVersionKey) {
             $this->assertNotContains($retiredGameVersionKey, $activeGameVersions->pluck('key'));
             $this->assertStringNotContainsString(
                 route('gameversion.update', ['gameVersion' => $retiredGameVersionKey]),

@@ -23,14 +23,22 @@ class RedirectRetiredGameVersion
             return $next($request);
         }
 
-        $gameVersion    = $route->parameter(self::PARAMETER_NAME);
-        $gameVersionKey = $gameVersion instanceof GameVersion ? $gameVersion->key : $gameVersion;
-        if (!is_string($gameVersionKey) || !isset(GameVersion::RETIRED_INTO[$gameVersionKey])) {
+        $gameVersion = $route->parameter(self::PARAMETER_NAME);
+        if (is_string($gameVersion)) {
+            $gameVersion = GameVersion::query()->where('key', $gameVersion)->first();
+        }
+
+        if (!$gameVersion instanceof GameVersion || !$gameVersion->isRetired()) {
+            return $next($request);
+        }
+
+        $retiredIntoGameVersion = $gameVersion->retiredIntoGameVersion;
+        if ($retiredIntoGameVersion === null) {
             return $next($request);
         }
 
         $parameters                       = $route->parameters();
-        $parameters[self::PARAMETER_NAME] = GameVersion::RETIRED_INTO[$gameVersionKey];
+        $parameters[self::PARAMETER_NAME] = $retiredIntoGameVersion->key;
 
         $url         = url()->toRoute($route, $parameters, true);
         $queryString = $request->getQueryString();

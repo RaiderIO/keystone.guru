@@ -38,11 +38,8 @@ class GameVersionService implements GameVersionServiceInterface
             // Every returning guest carries this cookie and the header asks on every page, so answer from
             // the cached list of active game versions before asking the database.
             $gameVersion = $gameVersionId === 0 ? null :
-                ($this->viewService->getAllGameVersions()->firstWhere('id', $gameVersionId) ?? GameVersion::find($gameVersionId));
-
-            if ($gameVersion?->isRetired()) {
-                $gameVersion = null;
-            }
+                ($this->viewService->getAllGameVersions()->whereNull('retired_into_game_version_id')->firstWhere('id', $gameVersionId) ??
+                    GameVersion::query()->whereNull('retired_into_game_version_id')->find($gameVersionId));
         }
 
         if ($gameVersion === null) {
