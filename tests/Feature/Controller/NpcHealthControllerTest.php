@@ -222,6 +222,105 @@ final class NpcHealthControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function update_givenMissingGameVersion_returnsValidationErrorAndKeepsTheHealth(): void
+    {
+        // Arrange
+        $npc       = $this->createNpcInDatabase();
+        $npcHealth = NpcHealth::query()->create([
+            'npc_id'          => $npc->id,
+            'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+            'health'          => 1000,
+        ]);
+
+        try {
+            // Act
+            $response = $this->patch(route('admin.npc.npchealth.update', ['npc' => $npc->id, 'npcHealth' => $npcHealth->id]), [
+                'health' => '2500',
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('game_version_id');
+            $this->assertSame(1000, $npcHealth->refresh()->health);
+        } finally {
+            NpcHealth::query()->where('npc_id', $npc->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenNpcHealthOfAnotherNpc_returnsNotFound(): void
+    {
+        // Arrange
+        $npc       = $this->createNpcInDatabase();
+        $otherNpc  = $this->createNpcInDatabase();
+        $npcHealth = NpcHealth::query()->create([
+            'npc_id'          => $otherNpc->id,
+            'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+            'health'          => 1000,
+        ]);
+
+        try {
+            // Act
+            $response = $this->get(route('admin.npc.npchealth.edit', ['npc' => $npc->id, 'npcHealth' => $npcHealth->id]));
+
+            // Assert
+            $response->assertNotFound();
+        } finally {
+            NpcHealth::query()->where('npc_id', $otherNpc->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenNpcHealthOfAnotherNpc_returnsNotFoundAndKeepsTheHealth(): void
+    {
+        // Arrange
+        $npc       = $this->createNpcInDatabase();
+        $otherNpc  = $this->createNpcInDatabase();
+        $npcHealth = NpcHealth::query()->create([
+            'npc_id'          => $otherNpc->id,
+            'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+            'health'          => 1000,
+        ]);
+
+        try {
+            // Act
+            $response = $this->patch(route('admin.npc.npchealth.update', ['npc' => $npc->id, 'npcHealth' => $npcHealth->id]), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+                'health'          => '2500',
+            ]);
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertSame(1000, $npcHealth->refresh()->health);
+        } finally {
+            NpcHealth::query()->where('npc_id', $otherNpc->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenNpcHealthOfAnotherNpc_returnsNotFoundAndKeepsTheHealth(): void
+    {
+        // Arrange
+        $npc       = $this->createNpcInDatabase();
+        $otherNpc  = $this->createNpcInDatabase();
+        $npcHealth = NpcHealth::query()->create([
+            'npc_id'          => $otherNpc->id,
+            'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+            'health'          => 1000,
+        ]);
+
+        try {
+            // Act
+            $response = $this->delete(route('admin.npc.npchealth.delete', ['npc' => $npc->id, 'npcHealth' => $npcHealth->id]));
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertTrue(NpcHealth::query()->whereKey($npcHealth->id)->exists());
+        } finally {
+            NpcHealth::query()->where('npc_id', $otherNpc->id)->delete();
+        }
+    }
+
+    #[Test]
     public function edit_givenNonAdmin_returnsForbidden(): void
     {
         // Arrange

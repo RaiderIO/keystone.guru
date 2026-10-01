@@ -104,6 +104,55 @@ final class UserControllerPatreonBenefitsTest extends PublicTestCase
     }
 
     #[Test]
+    public function storePatreonBenefits_givenUnknownBenefitId_returnsValidationErrorAndKeepsExistingBenefits(): void
+    {
+        // Arrange
+        $user = $this->createPatreonLinkedUser();
+        $user->patreonUserLink->patreonBenefits()->attach(PatreonBenefit::ALL[PatreonBenefit::AD_FREE]);
+
+        try {
+            // Act
+            $response = $this->putJson("/ajax/user/{$user->id}/patreon/benefits", [
+                'patreonBenefits' => [(int)PatreonBenefit::query()->max('id') + 1000],
+            ], self::AJAX_HEADERS);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors('patreonBenefits.0');
+            $this->assertSame(
+                [PatreonBenefit::ALL[PatreonBenefit::AD_FREE]],
+                PatreonUserBenefit::query()
+                    ->where('patreon_user_link_id', $user->patreon_user_link_id)
+                    ->pluck('patreon_benefit_id')
+                    ->all(),
+            );
+        } finally {
+            $user->patreonUserLink()->first()?->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function storePatreonBenefits_givenNoBenefits_removesAllBenefits(): void
+    {
+        // Arrange
+        $user = $this->createPatreonLinkedUser();
+        $user->patreonUserLink->patreonBenefits()->attach(PatreonBenefit::ALL[PatreonBenefit::AD_FREE]);
+
+        try {
+            // Act - jQuery sends no key at all for an empty multi-select
+            $response = $this->put("/ajax/user/{$user->id}/patreon/benefits", [], self::AJAX_HEADERS);
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertFalse(PatreonUserBenefit::query()->where('patreon_user_link_id', $user->patreon_user_link_id)->exists());
+        } finally {
+            $user->patreonUserLink()->first()?->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
     public function storePatreonBenefits_givenUserWithoutPatreonLink_returnsBadRequest(): void
     {
         // Arrange

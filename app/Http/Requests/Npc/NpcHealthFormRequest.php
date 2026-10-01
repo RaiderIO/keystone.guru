@@ -39,8 +39,11 @@ class NpcHealthFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'game_version_id' => Rule::in(GameVersion::ALL),
-            'health'          => [
+            'game_version_id' => [
+                'required',
+                Rule::in(GameVersion::ALL),
+            ],
+            'health' => [
                 'required',
                 'regex:/^[\d\s,]*$/',
             ],

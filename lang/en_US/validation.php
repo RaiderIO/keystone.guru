@@ -56,6 +56,9 @@ return [
         'telemetry_range' => [
             'in' => 'The selected period is not one of the supported periods.',
         ],
+        'patreon_benefits' => [
+            'exists' => 'One or more of the selected Patreon benefits does not exist.',
+        ],
         'patreon_grant_reason' => [
             'required' => 'A reason is required - it is what makes this grant reviewable later.',
             'max'      => 'The reason may not be longer than :max characters.',
