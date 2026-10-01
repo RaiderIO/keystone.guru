@@ -3,6 +3,8 @@
 namespace Tests\Feature\Controller\Admin;
 
 use App\Models\Dungeon;
+use App\Models\Floor\Floor;
+use App\Models\Floor\FloorCoupling;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\Dungeon\DungeonServiceInterface;
@@ -96,5 +98,52 @@ final class FloorControllerMappingTest extends PublicTestCase
 
         // Assert
         $response->assertNotFound();
+    }
+
+    #[Test]
+    public function update_givenFloorOfAnotherDungeon_redirectsWithoutChangingTheFloor(): void
+    {
+        // Arrange
+        $dungeon      = Dungeon::query()->whereHas('floors')->firstOrFail();
+        $otherDungeon = Dungeon::query()->whereKeyNot($dungeon->id)->firstOrFail();
+        $floor        = null;
+        $coupling     = null;
+
+        try {
+            $floor = Floor::create([
+                'dungeon_id'   => $dungeon->id,
+                'index'        => 99,
+                'ui_map_id'    => 1,
+                'name'         => 'Test floor',
+                'ingame_min_x' => 0,
+                'ingame_min_y' => 0,
+                'ingame_max_x' => 1000,
+                'ingame_max_y' => 1000,
+            ]);
+            $coupling = FloorCoupling::create([
+                'floor1_id' => $floor->id,
+                'floor2_id' => $dungeon->floors()->whereKeyNot($floor->id)->firstOrFail()->id,
+                'direction' => FloorCoupling::DIRECTION_UP,
+            ]);
+
+            // Act
+            $response = $this->patch(route('admin.floor.update', ['dungeon' => $otherDungeon, 'floor' => $floor]), [
+                'name'      => 'Renamed through the wrong dungeon',
+                'index'     => 98,
+                'ui_map_id' => 2,
+            ]);
+
+            // Assert
+            $response->assertRedirect(route('admin.dungeon.edit', ['dungeon' => $otherDungeon]));
+            $response->assertSessionHas('warning');
+            $floor->refresh();
+            $this->assertSame('Test floor', $floor->name);
+            $this->assertSame(99, $floor->index);
+            $this->assertSame(1, $floor->ui_map_id);
+            $this->assertTrue(FloorCoupling::query()->whereKey($coupling->id)->exists());
+        } finally {
+            $coupling?->delete();
+            $floor?->delete();
+        }
     }
 }
