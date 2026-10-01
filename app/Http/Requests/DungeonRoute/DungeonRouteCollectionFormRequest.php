@@ -9,7 +9,6 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\Team;
-use App\Repositories\Interfaces\GameVersion\GameVersionRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use Illuminate\Foundation\Http\FormRequest;
@@ -326,7 +325,7 @@ class DungeonRouteCollectionFormRequest extends FormRequest
             }
 
             $mappingVersion = $dungeonRoute->mappingVersion;
-            if ($mappingVersion === null || !app(GameVersionRepositoryInterface::class)->canUseMappingVersion($gameVersion, $mappingVersion)) {
+            if ($mappingVersion === null || !$gameVersion->canUseMappingVersion($mappingVersion)) {
                 $validator->errors()->add(
                     sprintf('dungeon_routes.%d', $index),
                     __('validation.custom.collection_dungeon_routes.game_version'),

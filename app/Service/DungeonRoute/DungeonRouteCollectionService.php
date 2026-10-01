@@ -11,7 +11,6 @@ use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\User;
-use App\Repositories\Interfaces\GameVersion\GameVersionRepositoryInterface;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
 use App\Service\Season\SeasonServiceInterface;
@@ -28,9 +27,8 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
     private const int OVERVIEW_RANK_OTHER_SEASON   = 2;
 
     public function __construct(
-        private readonly SeasonServiceInterface         $seasonService,
-        private readonly SeasonRepositoryInterface      $seasonRepository,
-        private readonly GameVersionRepositoryInterface $gameVersionRepository,
+        private readonly SeasonServiceInterface    $seasonService,
+        private readonly SeasonRepositoryInterface $seasonRepository,
     ) {
     }
 
@@ -42,7 +40,7 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
     ): ?string {
         $mappingVersion = $dungeonRoute->mappingVersion;
 
-        if ($mappingVersion === null || !$this->gameVersionRepository->canUseMappingVersion($dungeonRouteCollection->gameVersion, $mappingVersion)) {
+        if ($mappingVersion === null || !$dungeonRouteCollection->gameVersion->canUseMappingVersion($mappingVersion)) {
             return self::ADD_BLOCKED_GAME_VERSION;
         }
 

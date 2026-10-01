@@ -160,6 +160,26 @@ class GameVersion extends Model
     }
 
     /**
+     * Whether routes on the mapping version belong to this game version: it is this game version's own, or the
+     * parent's for a dungeon this game version has no mapping version of its own for.
+     */
+    public function canUseMappingVersion(MappingVersion $mappingVersion): bool
+    {
+        if ($mappingVersion->game_version_id === $this->id) {
+            return true;
+        }
+
+        if ($this->parent_game_version_id === null || $mappingVersion->game_version_id !== $this->parent_game_version_id) {
+            return false;
+        }
+
+        return !MappingVersion::query()
+            ->where('dungeon_id', $mappingVersion->dungeon_id)
+            ->where('game_version_id', $this->id)
+            ->exists();
+    }
+
+    /**
      * @return HasMany<MappingVersion, $this>
      */
     public function mappingVersions(): HasMany

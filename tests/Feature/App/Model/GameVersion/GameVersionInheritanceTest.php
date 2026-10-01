@@ -495,7 +495,7 @@ final class GameVersionInheritanceTest extends PublicTestCase
 
     private function canUseMappingVersion(GameVersion $gameVersion, MappingVersion $mappingVersion): bool
     {
-        return app(GameVersionRepositoryInterface::class)->canUseMappingVersion($gameVersion, $mappingVersion);
+        return $gameVersion->canUseMappingVersion($mappingVersion);
     }
 
     private function makeMappingVersion(string $gameVersionKey): MappingVersion

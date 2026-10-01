@@ -4,7 +4,6 @@ namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
-use App\Repositories\Interfaces\GameVersion\GameVersionRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use Illuminate\Validation\Validator;
 use Override;
@@ -70,7 +69,7 @@ class AjaxDungeonRouteCollectionRoutesAddFormRequest extends AjaxDungeonRouteCol
 
                     if (!$dungeonRouteCollection->mayContainDungeonRoute($dungeonRoute)) {
                         $isOfGameVersion = $dungeonRoute->mappingVersion !== null &&
-                            app(GameVersionRepositoryInterface::class)->canUseMappingVersion($dungeonRouteCollection->gameVersion, $dungeonRoute->mappingVersion);
+                            $dungeonRouteCollection->gameVersion->canUseMappingVersion($dungeonRoute->mappingVersion);
 
                         $validator->errors()->add($key, $isOfGameVersion
                             ? __('validation.custom.collection_dungeon_routes.season')
