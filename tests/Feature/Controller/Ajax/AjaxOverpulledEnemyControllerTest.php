@@ -123,6 +123,81 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
         $this->assertEquals(0, OverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
     }
 
+    #[Test]
+    public function delete_givenOverpulledEnemies_unmarksThemAndReturnsTheRouteCorrection(): void
+    {
+        // Arrange
+        $enemies = $this->distinctEnemies(3);
+        $this->markOverpulled($enemies);
+
+        // Act
+        $response = $this->delete($this->url(), [
+            'kill_zone_id' => 1,
+            'enemy_ids'    => $enemies->take(2)->pluck('id')->toArray(),
+        ]);
+
+        // Assert
+        $response->assertOk();
+        $response->assertJsonStructure(['obsolete_enemy_ids', 'enemy_forces']);
+        $this->assertEquals(
+            [$enemies->last()->mdt_id],
+            OverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->pluck('mdt_id')->toArray(),
+        );
+    }
+
+    #[Test]
+    public function delete_givenNoResult_unmarksTheEnemiesAndReturnsNoContent(): void
+    {
+        // Arrange
+        $enemies = $this->distinctEnemies(2);
+        $this->markOverpulled($enemies);
+
+        // Act
+        $response = $this->delete($this->url(), [
+            'kill_zone_id' => 1,
+            'enemy_ids'    => $enemies->pluck('id')->toArray(),
+            'no_result'    => true,
+        ]);
+
+        // Assert
+        $response->assertNoContent();
+        $this->assertEquals(0, OverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
+    }
+
+    #[Test]
+    public function delete_givenAnExpiredLiveSession_returnsForbiddenAndDeletesNothing(): void
+    {
+        // Arrange
+        $enemies = $this->distinctEnemies(2);
+        $this->markOverpulled($enemies);
+        LiveSession::query()->whereKey($this->liveSession->id)->update(['expires_at' => now()->subHour()]);
+
+        // Act
+        $response = $this->delete($this->url(), [
+            'kill_zone_id' => 1,
+            'enemy_ids'    => $enemies->pluck('id')->toArray(),
+        ]);
+
+        // Assert
+        $response->assertForbidden();
+        $this->assertEquals(2, OverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
+    }
+
+    /**
+     * @param Collection<int, Enemy> $enemies
+     */
+    private function markOverpulled(Collection $enemies): void
+    {
+        foreach ($enemies as $enemy) {
+            OverpulledEnemy::create([
+                'live_session_id' => $this->liveSession->id,
+                'kill_zone_id'    => 1,
+                'npc_id'          => $enemy->npc_id,
+                'mdt_id'          => $enemy->mdt_id,
+            ]);
+        }
+    }
+
     /**
      * @return Collection<int, Enemy>
      */
