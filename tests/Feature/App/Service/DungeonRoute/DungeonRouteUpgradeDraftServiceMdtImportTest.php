@@ -9,6 +9,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\DungeonRoute\DungeonRouteDraftSource;
+use App\Models\DungeonStart;
 use App\Models\KillZone\KillZone;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MDTImport;
@@ -16,6 +17,7 @@ use App\Models\PublishedState;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonStartRepositoryInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteUpgradeDraftService;
@@ -122,6 +124,60 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
             $this->assertNull(DungeonRoute::find($draft->id), 'The draft is gone once applied');
             $this->assertNull(MDTImport::find($previousMdtImport->id), 'The original\'s previous import is replaced');
             $this->assertSame($original->id, $draftMdtImport->fresh()?->dungeon_route_id, 'The import follows the content');
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function apply_givenMdtImportDraftOfRouteWithChosenStart_keepsChosenStart(): void
+    {
+        try {
+            // Arrange
+            [$source, $mdtString] = $this->createSourceRouteAndString();
+            $dungeonStart         = $this->createDungeonStart($source->mappingVersion, 'Chosen start');
+            $original             = $this->createOriginal($source->dungeon_id, $source->mapping_version_id, [
+                'dungeon_start_id' => $dungeonStart->id,
+            ]);
+            $service = $this->buildService();
+            $draft   = $service->createDraftFromMdtString($original, $mdtString, collect());
+
+            // Act
+            $applied = $service->apply($draft);
+
+            // Assert
+            $this->assertSame($dungeonStart->id, $draft->dungeon_start_id, 'The draft carries the original\'s start');
+            $this->assertSame($dungeonStart->id, $applied->dungeon_start_id);
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function createDraftFromMdtString_givenSiteAheadOfMdtAndChosenStart_remapsStartOntoUpgradedMappingVersion(): void
+    {
+        try {
+            // Arrange
+            [$source, $mdtString] = $this->createSourceRouteAndString();
+            $dungeonStart         = $this->createDungeonStart($source->mappingVersion, 'Chosen start');
+            $original             = $this->createOriginal($source->dungeon_id, $source->mapping_version_id, [
+                'dungeon_start_id' => $dungeonStart->id,
+            ]);
+            $siteMappingVersion = $this->createNewerMappingVersion($source->dungeon, $source->mappingVersion, mdtChangesPending: true);
+            array_unshift($this->cleanup, $siteMappingVersion);
+            // Created by the new mapping version cloning the previous one's starts
+            $siteDungeonStart = DungeonStart::query()
+                ->where('mapping_version_id', $siteMappingVersion->id)
+                ->where('comment', 'Chosen start')
+                ->firstOrFail();
+
+            // Act
+            $draft = $this->buildService()->createDraftFromMdtString($original, $mdtString, collect());
+            array_unshift($this->cleanup, $draft);
+
+            // Assert
+            $this->assertSame($siteMappingVersion->id, $draft->mapping_version_id);
+            $this->assertSame($siteDungeonStart->id, $draft->dungeon_start_id);
         } finally {
             $this->tearDownCleanup();
         }
@@ -672,6 +728,7 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
             $this->createMockPublic(DungeonRouteUpgradeDraftServiceLoggingInterface::class),
             $mdtImportStringService ?? app(MDTImportStringServiceInterface::class),
             app(MappingServiceInterface::class),
+            app(DungeonStartRepositoryInterface::class),
         );
     }
 
@@ -727,6 +784,18 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
         ]);
 
         return $original;
+    }
+
+    private function createDungeonStart(MappingVersion $mappingVersion, string $comment): DungeonStart
+    {
+        $dungeonStart = DungeonStart::factory()->create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $mappingVersion->dungeon->floors()->firstOrFail()->id,
+            'comment'            => $comment,
+        ]);
+        array_unshift($this->cleanup, $dungeonStart);
+
+        return $dungeonStart;
     }
 
     private function createExistingDraft(DungeonRoute $original): DungeonRoute
