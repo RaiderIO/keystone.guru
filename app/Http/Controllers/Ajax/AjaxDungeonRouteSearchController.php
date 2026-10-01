@@ -64,9 +64,9 @@ class AjaxDungeonRouteSearchController extends Controller
         DungeonRoute               $dungeonRoute,
         MapContextServiceInterface $mapContextService,
     ): JsonResponse {
-        try {
-            Gate::authorize('view', $dungeonRoute);
+        Gate::authorize('view', $dungeonRoute);
 
+        try {
             return response()->json(
                 $mapContextService->createMapContextDungeonRoute($dungeonRoute, User::getCurrentUserMapFacadeStyle())->toArray(),
             );
