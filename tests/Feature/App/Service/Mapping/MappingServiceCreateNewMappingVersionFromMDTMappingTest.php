@@ -4,8 +4,10 @@ namespace Tests\Feature\App\Service\Mapping;
 
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\Mapping\MappingServiceInterface;
+use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -43,7 +45,7 @@ final class MappingServiceCreateNewMappingVersionFromMDTMappingTest extends Publ
         /** @var GameVersion $retailGameVersion */
         $retailGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_RETAIL)->firstOrFail();
         /** @var GameVersion $facadeDisabledGameVersion */
-        $facadeDisabledGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_LEGION_REMIX)->firstOrFail();
+        $facadeDisabledGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_MOP)->firstOrFail();
 
         $dungeon = $this->getFacadeDungeonWithFacadeDisabledOtherGameVersionAndNoMappingForGameVersion(
             $targetGameVersion,
@@ -51,7 +53,8 @@ final class MappingServiceCreateNewMappingVersionFromMDTMappingTest extends Publ
             $facadeDisabledGameVersion,
         );
 
-        $retailMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($retailGameVersion);
+        $retailMappingVersion         = $dungeon->getCurrentMappingVersionForGameVersion($retailGameVersion);
+        $facadeDisabledMappingVersion = $this->createFacadeDisabledMappingVersion($dungeon, $facadeDisabledGameVersion);
 
         // An authenticated user browsing under $facadeDisabledGameVersion. Dungeon::getCurrentMappingVersion()'s
         // ambient fallback resolves through THIS user's own game_version_id - proving the old ambient-resolution
@@ -96,6 +99,7 @@ final class MappingServiceCreateNewMappingVersionFromMDTMappingTest extends Publ
             );
         } finally {
             $newMappingVersion?->delete();
+            $facadeDisabledMappingVersion->delete();
             $user->delete();
         }
     }
@@ -129,7 +133,7 @@ final class MappingServiceCreateNewMappingVersionFromMDTMappingTest extends Publ
         /** @var GameVersion $retailGameVersion */
         $retailGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_RETAIL)->firstOrFail();
         /** @var GameVersion $facadeDisabledGameVersion */
-        $facadeDisabledGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_LEGION_REMIX)->firstOrFail();
+        $facadeDisabledGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_MOP)->firstOrFail();
 
         $dungeon = $this->getFacadeDungeonWithPhysicalAndCuratedContentAndNoMappingForGameVersion(
             $targetGameVersion,
@@ -193,10 +197,10 @@ final class MappingServiceCreateNewMappingVersionFromMDTMappingTest extends Publ
 
     /**
      * A dungeon that (a) physically has a facade floor, (b) has a facade-ENABLED retail mapping version with at
-     * least one FloorUnion - the CORRECT source this should clone from, (c) has a facade-DISABLED mapping
-     * version for another game version - what the old ambient resolution would have picked up instead if the
-     * acting user's game version happened to point at it, and (d) has zero mapping versions for the target game
-     * version, so importing it is a genuine "first ever" case.
+     * least one FloorUnion - the CORRECT source this should clone from, (c) has no mapping version for the
+     * facade-disabled game version, so the test can add the facade-DISABLED one the old ambient resolution would
+     * have picked up instead, and (d) has zero mapping versions for the target game version, so importing it is
+     * a genuine "first ever" case.
      */
     private function getFacadeDungeonWithFacadeDisabledOtherGameVersionAndNoMappingForGameVersion(
         GameVersion $gameVersion,
@@ -229,23 +233,37 @@ final class MappingServiceCreateNewMappingVersionFromMDTMappingTest extends Publ
                     return false;
                 }
 
-                $facadeDisabledMappingVersion = $dungeon->mappingVersions
-                    ->where('game_version_id', $facadeDisabledGameVersion->id)
-                    ->sortByDesc('version')
-                    ->first();
-
-                return $facadeDisabledMappingVersion !== null && !$facadeDisabledMappingVersion->facade_enabled;
+                return $dungeon->mappingVersions->where('game_version_id', $facadeDisabledGameVersion->id)->isEmpty();
             });
 
         if ($dungeon === null) {
             $this->fail(
                 'No dungeon found with a physical facade floor, a facade-enabled retail mapping version ' .
-                '(with FloorUnions and a timer), a facade-DISABLED mapping version for another game version, ' .
-                'and no mapping version for the target game version.',
+                '(with FloorUnions and a timer), and no mapping version for either the target or the ' .
+                'facade-disabled game version.',
             );
         }
 
         return $dungeon;
+    }
+
+    /**
+     * Inserted quietly, as MappingService::copyMappingVersionToDungeon() does, so no clone-on-create runs.
+     */
+    private function createFacadeDisabledMappingVersion(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion
+    {
+        $now = Carbon::now()->toDateTimeString();
+
+        return MappingVersion::findOrFail(MappingVersion::insertGetId([
+            'game_version_id'       => $gameVersion->id,
+            'dungeon_id'            => $dungeon->id,
+            'version'               => 1,
+            'enemy_forces_required' => 0,
+            'timer_max_seconds'     => 0,
+            'facade_enabled'        => 0,
+            'created_at'            => $now,
+            'updated_at'            => $now,
+        ]));
     }
 
     /**

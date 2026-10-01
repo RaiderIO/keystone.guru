@@ -252,19 +252,19 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
     }
 
     /**
-     * Scenario: Cataclysm's expansion holds dungeons that were never mapped for the Cataclysm game version.
+     * Scenario: Classic Era's expansion holds dungeons that were never mapped for the Classic Era game version.
      */
     #[Test]
     public function getDungeonsForGameVersion_givenNoCurrentSeason_excludesDungeonsWithoutAMappingVersionForTheGameVersion(): void
     {
         // Arrange
-        $gameVersion      = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CATA);
+        $gameVersion      = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
         $unmappedDungeons = $gameVersion->expansion->dungeons()
             ->whereDoesntHave('mappingVersions', static fn($query) => $query->where('game_version_id', $gameVersion->id))
             ->pluck('id')
             ->all();
 
-        $this->assertNotEmpty($unmappedDungeons, 'Need a Cataclysm dungeon without a Cataclysm mapping version');
+        $this->assertNotEmpty($unmappedDungeons, 'Need a Classic Era dungeon without a Classic Era mapping version');
 
         // Act
         $dungeons = $this->buildService($this->createSeasonlessSeasonService())->getDungeonsForGameVersion($gameVersion);

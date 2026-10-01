@@ -39,9 +39,6 @@ final class RepointDungeonRoutesOffRemovedRetailMappingVersionsTest extends Publ
         /** @var GameVersion $legionRemix */
         $legionRemix = GameVersion::query()->where('key', GameVersion::GAME_VERSION_LEGION_REMIX)->firstOrFail();
 
-        $expectedMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($legionRemix);
-        $this->assertNotNull($expectedMappingVersion, sprintf('%s must keep a Legion Remix mapping version.', $dungeonKey));
-
         // An id that no mapping version has, standing in for the removed retail one
         $removedMappingVersionId = MappingVersion::query()->max('id') + 1000;
 
@@ -51,6 +48,13 @@ final class RepointDungeonRoutesOffRemovedRetailMappingVersionsTest extends Publ
         DB::beginTransaction();
 
         try {
+            // Both dungeons' mapping versions have since moved to Retail along with the rest of Legion Remix;
+            // put them back where they were when this migration ran.
+            MappingVersion::query()->where('dungeon_id', $dungeon->id)->update(['game_version_id' => $legionRemix->id]);
+
+            $expectedMappingVersion = $dungeon->reloadMappingVersions()->getCurrentMappingVersionForGameVersion($legionRemix);
+            $this->assertNotNull($expectedMappingVersion, sprintf('%s must keep a Legion Remix mapping version.', $dungeonKey));
+
             $dungeonRoute = DungeonRoute::factory()->create([
                 'dungeon_id'         => $dungeon->id,
                 'mapping_version_id' => $removedMappingVersionId,

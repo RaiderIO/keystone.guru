@@ -3,12 +3,14 @@
 namespace Tests\Feature\App\Service\GameVersion\GameVersionService;
 
 use App\Models\GameVersion\GameVersion;
+use App\Models\User;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\GameVersion\GameVersionService;
 use App\Service\View\ViewServiceInterface;
 use Closure;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -78,6 +80,85 @@ final class GetGameVersionTest extends PublicTestCase
         } finally {
             unset($_COOKIE['game_version']);
         }
+    }
+
+    #[Test]
+    #[DataProvider('retiredGameVersionKeyProvider')]
+    public function getGameVersion_givenGuestCookieForARetiredGameVersion_returnsTheDefaultGameVersion(
+        string $retiredGameVersionKey,
+    ): void {
+        // Arrange
+        $service = $this->buildService(collect());
+
+        $_COOKIE['game_version'] = $retiredGameVersionKey;
+
+        try {
+            // Act
+            $result = $service->getGameVersion(null);
+
+            // Assert
+            $this->assertSame(GameVersion::getDefaultGameVersion()->id, $result->id);
+        } finally {
+            unset($_COOKIE['game_version']);
+        }
+    }
+
+    #[Test]
+    #[DataProvider('retiredGameVersionKeyProvider')]
+    public function getGameVersion_givenGuestCookieForARetiredGameVersionInTheCachedList_returnsTheDefaultGameVersion(
+        string $retiredGameVersionKey,
+    ): void {
+        // Arrange
+        $retiredGameVersion = GameVersion::query()->where('key', $retiredGameVersionKey)->firstOrFail();
+        $service            = $this->buildService(collect([$retiredGameVersion]));
+
+        $_COOKIE['game_version'] = $retiredGameVersionKey;
+
+        try {
+            // Act
+            $result = $service->getGameVersion(null);
+
+            // Assert
+            $this->assertSame(GameVersion::getDefaultGameVersion()->id, $result->id);
+        } finally {
+            unset($_COOKIE['game_version']);
+        }
+    }
+
+    #[Test]
+    #[DataProvider('retiredGameVersionKeyProvider')]
+    public function getGameVersion_givenUserWithARetiredGameVersion_returnsAndSavesTheDefaultGameVersion(
+        string $retiredGameVersionKey,
+    ): void {
+        // Arrange
+        $service = $this->buildService(collect());
+        $user    = User::factory()->create([
+            'game_version_id' => GameVersion::ALL[$retiredGameVersionKey],
+        ]);
+
+        try {
+            // Act
+            $result = $service->getGameVersion($user);
+
+            // Assert
+            $defaultGameVersionId = GameVersion::getDefaultGameVersion()->id;
+            $this->assertSame($defaultGameVersionId, $result->id);
+            $this->assertSame($defaultGameVersionId, $user->refresh()->game_version_id);
+        } finally {
+            $user->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function retiredGameVersionKeyProvider(): array
+    {
+        return [
+            'wrath'        => [GameVersion::GAME_VERSION_WRATH],
+            'cata'         => [GameVersion::GAME_VERSION_CATA],
+            'legion remix' => [GameVersion::GAME_VERSION_LEGION_REMIX],
+        ];
     }
 
     /**

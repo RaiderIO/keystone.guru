@@ -21,15 +21,17 @@ use Illuminate\Support\Facades\Auth;
 use Override;
 
 /**
- * @property int    $id
- * @property int    $expansion_id The expansion that this game version focussed on.
- * @property string $key
- * @property string $name
- * @property string $description
- * @property bool   $has_seasons
- * @property bool   $active
+ * @property int      $id
+ * @property int      $expansion_id                 The expansion that this game version focussed on.
+ * @property string   $key
+ * @property string   $name
+ * @property string   $description
+ * @property bool     $has_seasons
+ * @property bool     $active
+ * @property int|null $retired_into_game_version_id The game version this one's content now lives under, when retired.
  *
  * @property Expansion                               $expansion
+ * @property GameVersion|null                        $retiredIntoGameVersion
  * @property EloquentCollection<int, MappingVersion> $mappingVersions
  *
  * @method static Builder<GameVersion> active()
@@ -51,6 +53,7 @@ class GameVersion extends Model
         'description',
         'has_seasons',
         'active',
+        'retired_into_game_version_id',
     ];
 
     protected $with = [
@@ -118,6 +121,19 @@ class GameVersion extends Model
     }
 
     /**
+     * @return BelongsTo<GameVersion, $this>
+     */
+    public function retiredIntoGameVersion(): BelongsTo
+    {
+        return $this->belongsTo(GameVersion::class, 'retired_into_game_version_id');
+    }
+
+    public function isRetired(): bool
+    {
+        return $this->retired_into_game_version_id !== null;
+    }
+
+    /**
      * @return Collection<int, MappingVersion>
      */
     public function getDungeonsWithHeatmapsEnabled(): Collection
@@ -155,7 +171,11 @@ class GameVersion extends Model
 
     public static function getUserGameVersion(User $user): ?GameVersion
     {
-        return $user->game_version_id > 0 ? $user->gameVersion : null;
+        if ($user->game_version_id <= 0 || $user->gameVersion === null || $user->gameVersion->isRetired()) {
+            return null;
+        }
+
+        return $user->gameVersion;
     }
 
     public static function getDefaultGameVersion(): GameVersion

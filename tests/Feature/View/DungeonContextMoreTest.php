@@ -61,7 +61,7 @@ final class DungeonContextMoreTest extends PublicTestCase
     {
         return [
             'classic era, more dungeons than the strip holds' => [GameVersion::GAME_VERSION_CLASSIC_ERA],
-            'cata, fewer dungeons than the strip holds'       => [GameVersion::GAME_VERSION_CATA],
+            'mists'                                           => [GameVersion::GAME_VERSION_MOP],
         ];
     }
 
@@ -126,11 +126,13 @@ final class DungeonContextMoreTest extends PublicTestCase
      */
     private function listParams(): array
     {
-        $cata = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CATA);
+        $mop      = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_MOP);
+        $dungeons = app(DungeonServiceInterface::class)->getDungeonsForGameVersion($mop);
 
         return [
-            'gameVersion'     => $cata,
-            'dungeons'        => app(DungeonServiceInterface::class)->getDungeonsForGameVersion($cata),
+            'gameVersion'     => $mop,
+            'dungeons'        => $dungeons,
+            'maxColCount'     => $dungeons->count() + 1,
             'useAbbreviation' => true,
             'selectable'      => true,
             'showMore'        => true,
