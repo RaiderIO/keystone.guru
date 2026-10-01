@@ -11,6 +11,7 @@ use App\Models\DungeonRoute\DungeonRouteDraftSource;
 use App\Models\MDTImport;
 use App\Models\PublishedState;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonStartRepositoryInterface;
 use App\Service\DungeonRoute\Exceptions\PendingUpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\StaleUpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
@@ -46,6 +47,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
         private DungeonRouteUpgradeDraftServiceLoggingInterface $log,
         private MDTImportStringServiceInterface                 $mdtImportStringService,
         private MappingServiceInterface                         $mappingService,
+        private DungeonStartRepositoryInterface                 $dungeonStartRepository,
     ) {
     }
 
@@ -440,7 +442,9 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
      */
     private function copyOriginalMetadataInto(DungeonRoute $original, DungeonRoute $draft): void
     {
-        DB::transaction(static function () use ($original, $draft): void {
+        $dungeonStartId = $this->findOriginalDungeonStartIdFor($original, $draft);
+
+        DB::transaction(static function () use ($original, $draft, $dungeonStartId): void {
             // The query builder: demo is not fillable, and a retried Eloquent save would silently no-op
             DungeonRoute::query()->whereKey($draft->id)->update([
                 'draft_source'       => DungeonRouteDraftSource::MdtImport->value,
@@ -460,6 +464,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                 'pull_gradient_apply_always' => $original->pull_gradient_apply_always,
                 'demo'                       => $original->demo,
                 'published_state_id'         => PublishedState::ALL[PublishedState::UNPUBLISHED],
+                'dungeon_start_id'           => $dungeonStartId,
             ]);
 
             DungeonRouteAffixGroup::query()->where('dungeon_route_id', $draft->id)->delete();
@@ -472,6 +477,23 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                     ->all(),
             );
         });
+    }
+
+    /**
+     * The original's chosen dungeon start, as it exists in the mapping version the string was imported on.
+     * Null when the original has no chosen start or the start has no match there, which falls back to the
+     * mapping version's first start.
+     */
+    private function findOriginalDungeonStartIdFor(DungeonRoute $original, DungeonRoute $draft): ?int
+    {
+        if ($original->dungeon_start_id === null || $original->mapping_version_id === $draft->mapping_version_id) {
+            return $original->dungeon_start_id;
+        }
+
+        return $this->dungeonStartRepository->findMatchingDungeonStartIdInMappingVersion(
+            $original->dungeon_start_id,
+            $draft->mapping_version_id,
+        );
     }
 
     /**

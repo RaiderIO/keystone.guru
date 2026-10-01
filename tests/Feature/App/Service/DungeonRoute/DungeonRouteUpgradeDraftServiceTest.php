@@ -19,6 +19,7 @@ use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonStartRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteUpgradeDraftService;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
@@ -52,6 +53,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             $this->createMockPublic(DungeonRouteUpgradeDraftServiceLoggingInterface::class),
             app(MDTImportStringServiceInterface::class),
             app(MappingServiceInterface::class),
+            app(DungeonStartRepositoryInterface::class),
         );
     }
 
