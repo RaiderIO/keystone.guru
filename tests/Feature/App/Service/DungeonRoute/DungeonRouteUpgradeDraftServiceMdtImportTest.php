@@ -10,6 +10,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\DungeonRoute\DungeonRouteDraftSource;
 use App\Models\DungeonStart;
+use App\Models\GameVersion\GameVersion;
 use App\Models\KillZone\KillZone;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MDTImport;
@@ -261,6 +262,91 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
             $this->assertInstanceOf(UpgradeDraftException::class, $exception);
             $this->assertSame(__('services.dungeonroute.upgrade_draft.mdt_import_outdated_mapping'), $exception->getMessage());
             $this->assertNull($original->upgradeDraft()->first(), 'No draft may be persisted');
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function createDraftFromMdtString_givenOriginalOnNonDefaultGameVersion_importsOntoOriginalsGameVersion(): void
+    {
+        try {
+            // Arrange
+            [$dungeon, , $legionRemixMappingVersion] = $this->findDungeonOnRetailAndLegionRemix();
+            $original                                = $this->createOriginal($dungeon->id, $legionRemixMappingVersion->id);
+            // Resolves the way the real import does: the given game version, otherwise the acting user's (retail)
+            $resolveMappingVersion = static fn(?GameVersion $gameVersion): MappingVersion => $dungeon->getCurrentMappingVersion($gameVersion);
+
+            $mdtImportStringService = $this->createMockPublic(MDTImportStringServiceInterface::class);
+            $mdtImportStringService->method('setEncodedString')->willReturnSelf();
+            $mdtImportStringService->method('getDetails')->willReturnCallback(
+                fn(Collection $warnings, Collection $errors, ?GameVersion $gameVersion = null): ImportStringDetails => $this->buildImportStringDetails($dungeon, $resolveMappingVersion($gameVersion), collect()),
+            );
+            $mdtImportStringService->method('getDungeonRoute')->willReturnCallback(
+                function (
+                    Collection   $warnings,
+                    Collection   $errors,
+                    bool         $sandbox = false,
+                    bool         $save = false,
+                    bool         $assignNotesToPulls = true,
+                    bool         $importAsThisWeek = false,
+                    ?GameVersion $gameVersion = null,
+                ) use ($dungeon, $original, $resolveMappingVersion): DungeonRoute {
+                    $importedRoute = DungeonRoute::factory()->create([
+                        'author_id'          => $original->author_id,
+                        'dungeon_id'         => $dungeon->id,
+                        'mapping_version_id' => $resolveMappingVersion($gameVersion)->id,
+                        'expires_at'         => null,
+                        'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+                    ]);
+                    array_unshift($this->cleanup, $importedRoute);
+
+                    return $importedRoute;
+                },
+            );
+
+            // Act
+            $draft = $this->buildService(mdtImportStringService: $mdtImportStringService)
+                ->createDraftFromMdtString($original, 'an MDT string', collect());
+
+            // Assert
+            $this->assertSame($legionRemixMappingVersion->id, $draft->mapping_version_id, 'The draft stays on the original\'s game version');
+            $this->assertSame($original->id, $draft->upgrade_of_dungeon_route_id);
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function createDraftFromMdtString_givenStringResolvedOnOtherGameVersion_throwsAndPersistsNothing(): void
+    {
+        try {
+            // Arrange
+            [$dungeon, $retailMappingVersion, $legionRemixMappingVersion] = $this->findDungeonOnRetailAndLegionRemix();
+            $original                                                     = $this->createOriginal($dungeon->id, $legionRemixMappingVersion->id);
+            $maxRouteId                                                   = DungeonRoute::query()->max('id');
+
+            $mdtImportStringService = $this->createMockPublic(MDTImportStringServiceInterface::class);
+            $mdtImportStringService->method('setEncodedString')->willReturnSelf();
+            $mdtImportStringService->method('getDetails')->willReturn(
+                $this->buildImportStringDetails($dungeon, $retailMappingVersion, collect()),
+            );
+            $mdtImportStringService->expects($this->never())->method('getDungeonRoute');
+
+            // Act
+            $exception = null;
+
+            try {
+                $this->buildService(mdtImportStringService: $mdtImportStringService)
+                    ->createDraftFromMdtString($original, 'an MDT string', collect());
+            } catch (UpgradeDraftException $upgradeDraftException) {
+                $exception = $upgradeDraftException;
+            }
+
+            // Assert
+            $this->assertInstanceOf(UpgradeDraftException::class, $exception);
+            $this->assertSame(__('services.dungeonroute.upgrade_draft.mdt_import_other_game_version'), $exception->getMessage());
+            $this->assertSame($maxRouteId, DungeonRoute::query()->max('id'), 'No route may be persisted');
         } finally {
             $this->tearDownCleanup();
         }
@@ -854,6 +940,28 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
             0,
             $mappingVersion,
         );
+    }
+
+    /**
+     * @return array{0: Dungeon, 1: MappingVersion, 2: MappingVersion} A dungeon mapped for both retail and Legion
+     *                                                                 Remix, with its current mapping version of each.
+     */
+    private function findDungeonOnRetailAndLegionRemix(): array
+    {
+        $retail      = GameVersion::query()->findOrFail(GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL]);
+        $legionRemix = GameVersion::query()->findOrFail(GameVersion::ALL[GameVersion::GAME_VERSION_LEGION_REMIX]);
+
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::query()
+            ->whereHas('mappingVersions', static fn($query) => $query->where('game_version_id', $retail->id))
+            ->whereHas('mappingVersions', static fn($query) => $query->where('game_version_id', $legionRemix->id))
+            ->firstOrFail();
+
+        return [
+            $dungeon,
+            $dungeon->getCurrentMappingVersionForGameVersion($retail),
+            $dungeon->getCurrentMappingVersionForGameVersion($legionRemix),
+        ];
     }
 
     /**
