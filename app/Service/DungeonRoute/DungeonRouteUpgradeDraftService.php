@@ -174,8 +174,12 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                 $discardExistingDraftId,
             );
 
+            // Resolved against the original's game version rather than the acting user's, since Apply moves the
+            // original onto the draft's mapping version
+            $gameVersion = $original->mappingVersion->gameVersion;
+
             // Only parses - nothing is persisted until the string is known to fit this route
-            $details = $this->mdtImportStringService->setEncodedString($mdtString)->getDetails(collect(), collect());
+            $details = $this->mdtImportStringService->setEncodedString($mdtString)->getDetails(collect(), collect(), $gameVersion);
             $this->assertMdtStringFitsRoute($original, $details);
 
             // The replacement is imported and upgraded as a standalone route first; the existing draft is only
@@ -187,6 +191,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                 collect(),
                 sandbox: false,
                 save: true,
+                gameVersion: $gameVersion,
             ));
 
             try {
@@ -396,8 +401,9 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
     }
 
     /**
-     * Rejects, before anything is persisted, a string the preview found errors in, that is for another dungeon
-     * or that was built against an MDT mapping older than the newest one MDT ships for the dungeon.
+     * Rejects, before anything is persisted, a string the preview found errors in, that is for another dungeon,
+     * that resolved to another game version than the route's, or that was built against an MDT mapping
+     * older than the newest one MDT ships for the dungeon.
      *
      * @throws UpgradeDraftException
      */
@@ -422,6 +428,10 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
         $stringMappingVersion = $details->getMappingVersion();
         if ($stringMappingVersion === null) {
             return;
+        }
+
+        if ($stringMappingVersion->game_version_id !== $original->mappingVersion->game_version_id) {
+            throw new UpgradeDraftException(__('services.dungeonroute.upgrade_draft.mdt_import_other_game_version'));
         }
 
         $newestMdtMappingVersion = $this->mappingService->getNewestMdtSyncedMappingVersion(
