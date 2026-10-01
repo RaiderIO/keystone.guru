@@ -94,6 +94,12 @@ class AdminDrawControls extends DrawControls {
                     title: lang.get('js.dungeonfloorswitchmarker_title', {hotkey: hotkeys.dungeonfloorswitchmarker}),
                     hotkey: hotkeys.dungeonfloorswitchmarker
                 },
+                dungeonstart: {
+                    repeatMode: false,
+                    zIndexOffset: 1000,
+                    faClass: 'fa-flag-checkered',
+                    title: lang.get('js.dungeonstart_title'),
+                },
                 mountablearea: {
                     shapeOptions: {
                         color: c.map.mountablearea.color

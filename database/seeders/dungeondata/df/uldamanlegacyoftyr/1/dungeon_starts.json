@@ -1,0 +1,92 @@
+[
+    {
+        "id": 254,
+        "mapping_version_id": 102,
+        "floor_id": 161,
+        "target_dungeon_id": null,
+        "lat": -106.5336,
+        "lng": 288.4787,
+        "comment": null
+    },
+    {
+        "id": 255,
+        "mapping_version_id": 114,
+        "floor_id": 161,
+        "target_dungeon_id": null,
+        "lat": -106.5336,
+        "lng": 288.4787,
+        "comment": null
+    },
+    {
+        "id": 256,
+        "mapping_version_id": 123,
+        "floor_id": 161,
+        "target_dungeon_id": null,
+        "lat": -106.5336,
+        "lng": 288.4787,
+        "comment": null
+    },
+    {
+        "id": 257,
+        "mapping_version_id": 129,
+        "floor_id": 161,
+        "target_dungeon_id": null,
+        "lat": -106.5336,
+        "lng": 288.4787,
+        "comment": null
+    },
+    {
+        "id": 258,
+        "mapping_version_id": 132,
+        "floor_id": 161,
+        "target_dungeon_id": null,
+        "lat": -106.5336,
+        "lng": 288.4787,
+        "comment": null
+    },
+    {
+        "id": 259,
+        "mapping_version_id": 146,
+        "floor_id": 161,
+        "target_dungeon_id": null,
+        "lat": -106.5336,
+        "lng": 288.4787,
+        "comment": null
+    },
+    {
+        "id": 260,
+        "mapping_version_id": 154,
+        "floor_id": 161,
+        "target_dungeon_id": null,
+        "lat": -106.5336,
+        "lng": 288.4787,
+        "comment": null
+    },
+    {
+        "id": 261,
+        "mapping_version_id": 310,
+        "floor_id": 161,
+        "target_dungeon_id": null,
+        "lat": -106.5336,
+        "lng": 288.4787,
+        "comment": null
+    },
+    {
+        "id": 262,
+        "mapping_version_id": 311,
+        "floor_id": 161,
+        "target_dungeon_id": null,
+        "lat": -106.5336,
+        "lng": 288.4787,
+        "comment": null
+    },
+    {
+        "id": 263,
+        "mapping_version_id": 328,
+        "floor_id": 161,
+        "target_dungeon_id": null,
+        "lat": -106.5336,
+        "lng": 288.4787,
+        "comment": null
+    }
+]

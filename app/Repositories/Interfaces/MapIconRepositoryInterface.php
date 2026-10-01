@@ -19,12 +19,4 @@ use Illuminate\Support\Collection;
  */
 interface MapIconRepositoryInterface extends BaseRepositoryInterface
 {
-    public function isDungeonStart(int $id, int $mappingVersionId): bool;
-
-    /**
-     * Returns dungeon-start icons for the given mapping version, mapped to [{id, text}] shape.
-     *
-     * @return Collection<int, array{id: int, text: string}>
-     */
-    public function getDungeonStartsForMappingVersion(int $mappingVersionId): Collection;
 }

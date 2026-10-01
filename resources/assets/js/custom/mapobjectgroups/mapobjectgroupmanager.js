@@ -58,6 +58,7 @@ class MapObjectGroupManager extends Signalable {
             [MAP_OBJECT_GROUP_ARROW]: () => new ArrowMapObjectGroup(this, !isMapAdmin),
             [MAP_OBJECT_GROUP_MAPICON]: () => new MapIconMapObjectGroup(this, true),
             [MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER]: () => new DungeonFloorSwitchMarkerMapObjectGroup(this, isMapAdmin),
+            [MAP_OBJECT_GROUP_DUNGEON_START]: () => new DungeonStartMapObjectGroup(this, isMapAdmin),
             [MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT]: () => new EnemyForcesCheckpointMapObjectGroup(this, isMapAdmin),
             [MAP_OBJECT_GROUP_MOUNTABLE_AREA]: () => new MountableAreaMapObjectGroup(this, isMapAdmin),
             [MAP_OBJECT_GROUP_FLOOR_UNION]: () => new FloorUnionMapObjectGroup(this, isMapAdmin),
@@ -167,6 +168,13 @@ class MapObjectGroupManager extends Signalable {
      */
     getDungeonFloorSwitchMarkerMapObjectGroup() {
         return this.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+    }
+
+    /**
+     * @returns {DungeonStartMapObjectGroup|null}
+     */
+    getDungeonStartMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_DUNGEON_START);
     }
 
     /**

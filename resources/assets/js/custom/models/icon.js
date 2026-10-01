@@ -121,7 +121,8 @@ class Icon extends VersionableMapObject {
             // Only editable types!
             if (mapIconTypes.hasOwnProperty(i)) {
                 let mapIconType = mapIconTypes[i];
-                if (mapIconType.isEditable()) {
+                // Dungeon starts are placed with their own tool
+                if (mapIconType.isEditable() && mapIconType.id !== MAP_ICON_TYPE_DUNGEON_START_ID) {
                     // Generate html if necessary
                     if (typeof mapIconType.html === 'undefined') {
                         let template = Handlebars.templates['map_map_icon_select_option_template'];

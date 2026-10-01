@@ -99,6 +99,7 @@ class MapContextMappingVersionData implements Arrayable
                         'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),
                         'mapIcons'                  => $this->mappingVersion->mapContextMapIcons($this->coordinatesService, $useFacade),
                         'dungeonFloorSwitchMarkers' => $this->mappingVersion->mapContextDungeonFloorSwitchMarkers($this->coordinatesService, $useFacade),
+                        'dungeonStarts'             => $this->mappingVersion->mapContextDungeonStarts($this->coordinatesService, $useFacade),
                         'mountableAreas'            => $this->mappingVersion->mapContextMountableAreas($this->coordinatesService, $useFacade),
                         'enemyForcesCheckpoints'    => $this->mappingVersion->mapContextEnemyForcesCheckpoints($this->coordinatesService, $useFacade),
                         'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $useFacade),

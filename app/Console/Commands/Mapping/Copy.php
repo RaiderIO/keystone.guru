@@ -76,6 +76,7 @@ class Copy extends Command
             // Try to migrate all floors as good as we can
             $relations = [
                 'dungeonFloorSwitchMarkers',
+                'dungeonStarts',
                 'enemies',
                 'enemyPacks',
                 'enemyPatrols',

@@ -1,0 +1,29 @@
+[
+    {
+        "id": 131,
+        "mapping_version_id": 172,
+        "floor_id": 221,
+        "target_dungeon_id": null,
+        "lat": -213.2655,
+        "lng": 323.6093,
+        "comment": null
+    },
+    {
+        "id": 132,
+        "mapping_version_id": 194,
+        "floor_id": 221,
+        "target_dungeon_id": null,
+        "lat": -213.2655,
+        "lng": 323.6093,
+        "comment": null
+    },
+    {
+        "id": 133,
+        "mapping_version_id": 202,
+        "floor_id": 221,
+        "target_dungeon_id": null,
+        "lat": -213.2655,
+        "lng": 323.6093,
+        "comment": null
+    }
+]

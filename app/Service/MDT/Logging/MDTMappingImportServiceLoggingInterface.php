@@ -184,6 +184,8 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importMapPOIsCreatedNewMapIcon(int $mapIconId, int $floorId, int $mapIconTypeId): void;
 
+    public function importMapPOIsCreatedNewDungeonStart(int $dungeonStartId, int $floorId): void;
+
     /**
      * @param array<string, mixed> $latLng
      */
@@ -200,7 +202,7 @@ interface MDTMappingImportServiceLoggingInterface
     /**
      * @param array<string, float> $latLng
      */
-    public function importMapPOIsHaveExistingDungeonStartMapIcon(array $latLng): void;
+    public function importMapPOIsHaveExistingDungeonStart(array $latLng): void;
 
     public function importMapPOIsEnd(): void;
 }

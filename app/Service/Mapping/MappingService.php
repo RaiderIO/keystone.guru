@@ -300,6 +300,11 @@ class MappingService implements MappingServiceInterface
             $mapIcon->cloneForNewMappingVersion($targetMappingVersion);
         }
 
+        // Dungeon Starts
+        foreach ($sourceMappingVersion->dungeonStarts()->get() as $dungeonStart) {
+            $dungeonStart->cloneForNewMappingVersion($targetMappingVersion);
+        }
+
         // Mountable Areas
         $this->cloneMountableAreasToMappingVersion($sourceMappingVersion, $targetMappingVersion);
 

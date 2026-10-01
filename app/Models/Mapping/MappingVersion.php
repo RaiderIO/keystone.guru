@@ -6,6 +6,7 @@ use App\Logic\Structs\LatLng;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonStart;
 use App\Models\Enemy;
 use App\Models\EnemyForcesCheckpoint;
 use App\Models\EnemyPack;
@@ -17,11 +18,13 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Interfaces\CloneForNewMappingVersionInterface;
 use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\MapIcon;
+use App\Models\MapIconType;
 use App\Models\MountableArea;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Traits\SeederModel;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -54,6 +57,7 @@ use Override;
  *
  * @property EloquentCollection<int, DungeonRoute>             $dungeonRoutes
  * @property EloquentCollection<int, DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers
+ * @property EloquentCollection<int, DungeonStart>             $dungeonStarts
  * @property EloquentCollection<int, Enemy>                    $enemies
  * @property EloquentCollection<int, EnemyPack>                $enemyPacks
  * @property EloquentCollection<int, EnemyPatrol>              $enemyPatrols
@@ -156,6 +160,12 @@ class MappingVersion extends Model
     public function dungeonFloorSwitchMarkers(): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class);
+    }
+
+    /** @return HasMany<DungeonStart, $this> */
+    public function dungeonStarts(): HasMany
+    {
+        return $this->hasMany(DungeonStart::class)->orderBy('id');
     }
 
     /** @return HasMany<Enemy, $this> */
@@ -414,6 +424,9 @@ class MappingVersion extends Model
     {
         /** @var EloquentCollection<int, MapIcon> $mapIcons */
         $mapIcons = $this->mapIcons()
+            // Legacy dungeon start icons stay seeded for the code still running during a deploy; DungeonStart replaces them
+            ->where(static fn(Builder $query) => $query->whereNull('map_icon_type_id')
+                ->orWhere('map_icon_type_id', '!=', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START]))
             ->with(['floor'])
             ->get();
 
@@ -460,6 +473,30 @@ class MappingVersion extends Model
         }
 
         return $dungeonFloorSwitchMarkers;
+    }
+
+    /**
+     * @return EloquentCollection<int, DungeonStart>
+     */
+    public function mapContextDungeonStarts(CoordinatesServiceInterface $coordinatesService, bool $useFacade): EloquentCollection
+    {
+        /** @var EloquentCollection<int, DungeonStart> $dungeonStarts */
+        $dungeonStarts = $this->dungeonStarts()
+            ->with(['floor'])
+            ->get();
+
+        if ($this->facade_enabled && $useFacade) {
+            foreach ($dungeonStarts as $dungeonStart) {
+                $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+                    $this,
+                    $dungeonStart->getLatLng(),
+                );
+
+                $dungeonStart->setLatLng($convertedLatLng);
+            }
+        }
+
+        return $dungeonStarts;
     }
 
     /**
@@ -563,6 +600,7 @@ class MappingVersion extends Model
             ]);
             $previousMappingVersion->load([
                 'dungeonFloorSwitchMarkers',
+                'dungeonStarts',
                 'enemies',
                 'enemyPacks.polyline',
                 'enemyPatrols',
@@ -573,9 +611,10 @@ class MappingVersion extends Model
                 'floorUnionAreas',
                 'npcEnemyForces',
             ]);
-            /** @var Collection<int, MappingModelInterface|DungeonFloorSwitchMarker|Enemy|EnemyPack|EnemyPatrol|MapIcon|MountableArea|EnemyForcesCheckpoint|FloorUnion|FloorUnionArea|NpcEnemyForces> $previousMapping */
+            /** @var Collection<int, MappingModelInterface|DungeonFloorSwitchMarker|DungeonStart|Enemy|EnemyPack|EnemyPatrol|MapIcon|MountableArea|EnemyForcesCheckpoint|FloorUnion|FloorUnionArea|NpcEnemyForces> $previousMapping */
             $previousMapping = collect()
                 ->merge($previousMappingVersion->dungeonFloorSwitchMarkers)
+                ->merge($previousMappingVersion->dungeonStarts)
                 ->merge($previousMappingVersion->enemies)
                 ->merge($previousMappingVersion->enemyPacks)
                 ->merge($previousMappingVersion->enemyPatrols)
@@ -587,6 +626,7 @@ class MappingVersion extends Model
                 ->merge($previousMappingVersion->npcEnemyForces);
             $idMapping = collect([
                 DungeonFloorSwitchMarker::class => collect(),
+                DungeonStart::class             => collect(),
                 Enemy::class                    => collect(),
                 EnemyPack::class                => collect(),
                 EnemyPatrol::class              => collect(),
@@ -699,6 +739,7 @@ class MappingVersion extends Model
         // Deleting a mapping version also causes their relations to be deleted (as does creating a mapping version duplicates them)
         static::deleting(static function (MappingVersion $mappingVersion) {
             $mappingVersion->dungeonFloorSwitchMarkers()->delete();
+            $mappingVersion->dungeonStarts()->delete();
             $mappingVersion->enemies()->delete();
             foreach ($mappingVersion->enemyPacks()->with('polyline')->get() as $enemyPack) {
                 $enemyPack->delete();

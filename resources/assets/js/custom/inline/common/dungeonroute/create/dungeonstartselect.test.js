@@ -38,8 +38,8 @@ function buildDom(selectedDungeonId) {
             <option value="${RETAIL_DUNGEON_BETA_ID}" ${selectedDungeonId === RETAIL_DUNGEON_BETA_ID ? 'selected' : ''}>Beta</option>
             <option value="${DUNGEON_WITHOUT_STARTS_ID}" ${selectedDungeonId === DUNGEON_WITHOUT_STARTS_ID ? 'selected' : ''}>No starts</option>
         </select>
-        <div id="dungeon_start_map_icon_id_container" style="display: none;">
-            <select id="dungeon_start_map_icon_id"></select>
+        <div id="dungeon_start_id_container" style="display: none;">
+            <select id="dungeon_start_id"></select>
         </div>`;
 }
 
@@ -53,8 +53,8 @@ function buildAndActivate(selectedDungeonId, selectedDungeonStartId = null) {
 
     const code = new CommonDungeonrouteCreateDungeonstartselect('dungeonstartselect', 'common/dungeonroute/create/dungeonstartselect', {
         dungeonSelectId: '#dungeon_id_select',
-        dungeonStartSelectId: '#dungeon_start_map_icon_id',
-        dungeonStartContainerId: '#dungeon_start_map_icon_id_container',
+        dungeonStartSelectId: '#dungeon_start_id',
+        dungeonStartContainerId: '#dungeon_start_id_container',
         dungeonStartsByDungeonId: DUNGEON_STARTS_BY_DUNGEON_ID,
         selectedDungeonStartId,
     });
@@ -74,7 +74,7 @@ describe('CommonDungeonrouteCreateDungeonstartselect.activate', () => {
         buildAndActivate(RETAIL_DUNGEON_BETA_ID);
 
         // Assert
-        const options = Array.from(document.getElementById('dungeon_start_map_icon_id').options);
+        const options = Array.from(document.getElementById('dungeon_start_id').options);
         const expectedStarts = DUNGEON_STARTS_BY_DUNGEON_ID[RETAIL_DUNGEON_BETA_ID];
         expect(options.map((option) => option.value)).toEqual(expectedStarts.map((start) => String(start.id)));
         expect(options.map((option) => option.text)).toEqual(expectedStarts.map((start) => start.text));
@@ -85,7 +85,7 @@ describe('CommonDungeonrouteCreateDungeonstartselect.activate', () => {
         buildAndActivate(RETAIL_DUNGEON_BETA_ID);
 
         // Assert
-        expect(document.getElementById('dungeon_start_map_icon_id_container').style.display).not.toBe('none');
+        expect(document.getElementById('dungeon_start_id_container').style.display).not.toBe('none');
     });
 
     it('activate_givenDungeonWithExactlyOneStart_leavesContainerHiddenWithNoOptions', () => {
@@ -94,8 +94,8 @@ describe('CommonDungeonrouteCreateDungeonstartselect.activate', () => {
         buildAndActivate(RETAIL_DUNGEON_ALPHA_ID);
 
         // Assert
-        expect(document.getElementById('dungeon_start_map_icon_id_container').style.display).toBe('none');
-        expect(document.getElementById('dungeon_start_map_icon_id').options.length).toBe(0);
+        expect(document.getElementById('dungeon_start_id_container').style.display).toBe('none');
+        expect(document.getElementById('dungeon_start_id').options.length).toBe(0);
     });
 
     it('activate_givenDungeonWithNoStartsEntry_leavesContainerHiddenWithNoOptions', () => {
@@ -103,8 +103,8 @@ describe('CommonDungeonrouteCreateDungeonstartselect.activate', () => {
         buildAndActivate(DUNGEON_WITHOUT_STARTS_ID);
 
         // Assert
-        expect(document.getElementById('dungeon_start_map_icon_id_container').style.display).toBe('none');
-        expect(document.getElementById('dungeon_start_map_icon_id').options.length).toBe(0);
+        expect(document.getElementById('dungeon_start_id_container').style.display).toBe('none');
+        expect(document.getElementById('dungeon_start_id').options.length).toBe(0);
     });
 
     it('activate_givenPreselectedDungeonStartId_marksMatchingOptionSelected', () => {
@@ -113,35 +113,35 @@ describe('CommonDungeonrouteCreateDungeonstartselect.activate', () => {
         buildAndActivate(RETAIL_DUNGEON_BETA_ID, preselected.id);
 
         // Assert
-        expect($('#dungeon_start_map_icon_id').val()).toBe(String(preselected.id));
+        expect($('#dungeon_start_id').val()).toBe(String(preselected.id));
     });
 
     it('activate_givenDungeonChangedToDungeonWithFewerStarts_clearsOldOptionsBeforeRebuilding', () => {
         // Arrange
         buildAndActivate(RETAIL_DUNGEON_BETA_ID);
-        expect(document.getElementById('dungeon_start_map_icon_id').options.length).toBe(3);
+        expect(document.getElementById('dungeon_start_id').options.length).toBe(3);
 
         // Act: switch to the dungeon with only one start.
         $('#dungeon_id_select').val(RETAIL_DUNGEON_ALPHA_ID).trigger('change');
 
         // Assert: options are cleared (not merged with the previous dungeon's), container hides again.
-        expect(document.getElementById('dungeon_start_map_icon_id').options.length).toBe(0);
-        expect(document.getElementById('dungeon_start_map_icon_id_container').style.display).toBe('none');
+        expect(document.getElementById('dungeon_start_id').options.length).toBe(0);
+        expect(document.getElementById('dungeon_start_id_container').style.display).toBe('none');
     });
 
     it('activate_givenDungeonChangedToDungeonWithMultipleStarts_clearsOldOptionAndRebuilds', () => {
         // Arrange
         buildAndActivate(RETAIL_DUNGEON_ALPHA_ID);
-        expect(document.getElementById('dungeon_start_map_icon_id').options.length).toBe(0);
+        expect(document.getElementById('dungeon_start_id').options.length).toBe(0);
 
         // Act: switch to the dungeon with three starts.
         $('#dungeon_id_select').val(RETAIL_DUNGEON_BETA_ID).trigger('change');
 
         // Assert
-        const options = Array.from(document.getElementById('dungeon_start_map_icon_id').options);
+        const options = Array.from(document.getElementById('dungeon_start_id').options);
         expect(options.map((option) => option.value)).toEqual(
             DUNGEON_STARTS_BY_DUNGEON_ID[RETAIL_DUNGEON_BETA_ID].map((start) => String(start.id)),
         );
-        expect(document.getElementById('dungeon_start_map_icon_id_container').style.display).not.toBe('none');
+        expect(document.getElementById('dungeon_start_id_container').style.display).not.toBe('none');
     });
 });

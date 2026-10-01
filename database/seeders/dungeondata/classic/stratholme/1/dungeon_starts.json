@@ -1,0 +1,20 @@
+[
+    {
+        "id": 138,
+        "mapping_version_id": 176,
+        "floor_id": 234,
+        "target_dungeon_id": null,
+        "lat": -225.141,
+        "lng": 254.665,
+        "comment": null
+    },
+    {
+        "id": 139,
+        "mapping_version_id": 215,
+        "floor_id": 234,
+        "target_dungeon_id": null,
+        "lat": -225.4726,
+        "lng": 255.1801,
+        "comment": "mapping.map_icons.classic.stratholme.living_entrance"
+    }
+]

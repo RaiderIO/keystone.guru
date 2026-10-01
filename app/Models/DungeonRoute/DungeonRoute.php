@@ -15,6 +15,7 @@ use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Models\Dungeon;
+use App\Models\DungeonStart;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
@@ -30,7 +31,6 @@ use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Laratrust\Role;
 use App\Models\LiveSession;
 use App\Models\MapIcon;
-use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MDTImport;
 use App\Models\PageView;
@@ -85,6 +85,7 @@ use Override;
  * @property int|null             $team_id
  * @property int                  $published_state_id
  * @property int|null             $dungeon_start_map_icon_id
+ * @property int|null             $dungeon_start_id
  * @property string|null          $clone_of
  * @property int|null             $upgrade_of_dungeon_route_id
  * @property string               $title
@@ -236,6 +237,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'team_id',
         'published_state_id',
         'dungeon_start_map_icon_id',
+        'dungeon_start_id',
         'teeming',
         'title',
         'description',
@@ -532,22 +534,20 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     }
 
     /**
-     * Resolves the dungeon start map icon for this route. When a specific start was chosen
-     * (dungeon_start_map_icon_id) it is returned directly; otherwise falls back to the first
-     * dungeon start of the route's mapping version. Only its floor is eager loaded - callers need its location.
+     * Resolves the dungeon start for this route. When a specific start was chosen (dungeon_start_id) it is
+     * returned directly; otherwise falls back to the first dungeon start of the route's mapping version. Only its
+     * floor is eager loaded - callers need its location.
      */
-    public function getDungeonStartMapIcon(): ?MapIcon
+    public function getDungeonStart(): ?DungeonStart
     {
-        $query = MapIcon::query()
-            ->without(['mapIconType', 'linkedawakenedobelisks'])
-            ->with('floor');
+        $query = DungeonStart::query()->with('floor');
 
-        if ($this->dungeon_start_map_icon_id !== null) {
-            return $query->find($this->dungeon_start_map_icon_id);
+        if ($this->dungeon_start_id !== null) {
+            return $query->find($this->dungeon_start_id);
         }
 
         return $query->where('mapping_version_id', $this->mapping_version_id)
-            ->where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START])
+            ->orderBy('id')
             ->first();
     }
 

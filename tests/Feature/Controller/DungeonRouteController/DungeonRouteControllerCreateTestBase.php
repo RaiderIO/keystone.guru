@@ -5,8 +5,7 @@ namespace Tests\Feature\Controller\DungeonRouteController;
 use App\Models\Dungeon;
 use App\Models\DungeonDifficulty;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\MapIcon;
-use App\Models\MapIconType;
+use App\Models\DungeonStart;
 use PHPUnit\Framework\Attributes\Group;
 use Tests\Fixtures\Traits\CreatesNpclessCombatLogDungeon;
 use Tests\TestCases\PublicTestCase;
@@ -97,16 +96,14 @@ abstract class DungeonRouteControllerCreateTestBase extends PublicTestCase
     }
 
     /**
-     * @return array{0: Dungeon, 1: MapIcon}
+     * @return array{0: Dungeon, 1: DungeonStart}
      */
-    protected function getDungeonWithStartIcon(): array
+    protected function getDungeonWithDungeonStart(): array
     {
         // Some mapping versions are "bare" (e.g. created only to hold floor union data) and don't
-        // have a cloned dungeon start icon, so the newest icon overall isn't necessarily one that
+        // have a cloned dungeon start, so the newest start overall isn't necessarily one that
         // lives on its own dungeon's current mapping version - walk candidates until one does.
-        $mapIcons = MapIcon::query()
-            ->where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START])
-            ->whereNotNull('mapping_version_id')
+        $dungeonStarts = DungeonStart::query()
             ->whereHas('mappingVersion.dungeon', static function ($query): void {
                 $query->where('active', true);
             })
@@ -114,14 +111,14 @@ abstract class DungeonRouteControllerCreateTestBase extends PublicTestCase
             ->orderByDesc('id')
             ->get();
 
-        foreach ($mapIcons as $mapIcon) {
-            $dungeon = $mapIcon->mappingVersion->dungeon;
+        foreach ($dungeonStarts as $dungeonStart) {
+            $dungeon = $dungeonStart->mappingVersion->dungeon;
 
-            if ($dungeon->getCurrentMappingVersion()?->id === $mapIcon->mapping_version_id) {
-                return [$dungeon, $mapIcon];
+            if ($dungeon->getCurrentMappingVersion()?->id === $dungeonStart->mapping_version_id) {
+                return [$dungeon, $dungeonStart];
             }
         }
 
-        $this->fail('Expected a seeded dungeon start map icon on its dungeon\'s current mapping version.');
+        $this->fail('Expected a seeded dungeon start on its dungeon\'s current mapping version.');
     }
 }

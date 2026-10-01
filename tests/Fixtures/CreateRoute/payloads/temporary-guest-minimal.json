@@ -7,6 +7,6 @@
         {"name": "dungeon_id", "value": "{{dungeon_id}}"},
         {"name": "dungeon_route_level", "value": "{{key_level_min}};{{key_level_max}}"},
         {"name": "dungeon_difficulty", "value": ""},
-        {"name": "dungeon_start_map_icon_id", "value": ""}
+        {"name": "dungeon_start_id", "value": ""}
     ]
 }

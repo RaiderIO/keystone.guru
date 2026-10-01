@@ -44,6 +44,7 @@ use App\Repositories\Database\DungeonRoute\DungeonRouteRatingRepository;
 use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
 use App\Repositories\Database\DungeonRoute\DungeonRouteThumbnailJobRepository;
 use App\Repositories\Database\DungeonRoute\DungeonRouteThumbnailRepository;
+use App\Repositories\Database\DungeonStartRepository;
 use App\Repositories\Database\Enemies\OverpulledEnemyRepository;
 use App\Repositories\Database\Enemies\PridefulEnemyRepository;
 use App\Repositories\Database\EnemyForcesCheckpointRepository;
@@ -171,6 +172,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRatingRepositoryInterfa
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailJobRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInterface;
+use App\Repositories\Interfaces\DungeonStartRepositoryInterface;
 use App\Repositories\Interfaces\Enemies\OverpulledEnemyRepositoryInterface;
 use App\Repositories\Interfaces\Enemies\PridefulEnemyRepositoryInterface;
 use App\Repositories\Interfaces\EnemyForcesCheckpointRepositoryInterface;
@@ -395,6 +397,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CharacterRaceClassCouplingRepositoryInterface::class, CharacterRaceClassCouplingRepository::class);
         $this->app->bind(CharacterRaceRepositoryInterface::class, CharacterRaceRepository::class);
         $this->app->bind(DungeonFloorSwitchMarkerRepositoryInterface::class, DungeonFloorSwitchMarkerRepository::class);
+        $this->app->bind(DungeonStartRepositoryInterface::class, DungeonStartRepository::class);
         $this->app->bind(DungeonRepositoryInterface::class, DungeonRepository::class);
         $this->app->bind(EnemyForcesCheckpointRepositoryInterface::class, EnemyForcesCheckpointRepository::class);
         $this->app->bind(EnemyPackRepositoryInterface::class, EnemyPackRepository::class);

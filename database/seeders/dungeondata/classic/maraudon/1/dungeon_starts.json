@@ -1,0 +1,38 @@
+[
+    {
+        "id": 112,
+        "mapping_version_id": 166,
+        "floor_id": 214,
+        "target_dungeon_id": null,
+        "lat": -168.75,
+        "lng": 294.75,
+        "comment": null
+    },
+    {
+        "id": 113,
+        "mapping_version_id": 166,
+        "floor_id": 214,
+        "target_dungeon_id": null,
+        "lat": -72.25,
+        "lng": 239,
+        "comment": null
+    },
+    {
+        "id": 114,
+        "mapping_version_id": 203,
+        "floor_id": 214,
+        "target_dungeon_id": null,
+        "lat": -168.5671,
+        "lng": 295.2399,
+        "comment": "mapping.map_icons.classic.maraudon.purple_entrance"
+    },
+    {
+        "id": 115,
+        "mapping_version_id": 203,
+        "floor_id": 214,
+        "target_dungeon_id": null,
+        "lat": -72.7379,
+        "lng": 239.3257,
+        "comment": "mapping.map_icons.classic.maraudon.orange_entrance"
+    }
+]

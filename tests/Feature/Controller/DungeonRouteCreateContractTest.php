@@ -16,7 +16,6 @@ use App\Models\Season;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
-use App\Repositories\Interfaces\MapIconRepositoryInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
@@ -306,20 +305,20 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $this->assertNotNull($mappingVersion);
 
-        $startIcons = app(MapIconRepositoryInterface::class)->getDungeonStartsForMappingVersion($mappingVersion->id);
+        $startIcons = $mappingVersion->dungeonStarts;
         // Judgment call: the seeded DB's currently-active season dungeons only ever have a single dungeon start
         // icon. retailDungeon() prefers a dungeon with >1 start icons where one exists (documented in its
         // docblock); if none exists at all in the seeded data we fall back to the single icon so the fixture is
         // still exercised (with a lone icon instead of a real "multiple" choice).
         $this->assertNotEmpty($startIcons, 'Chosen dungeon must have at least one dungeon start icon.');
-        $startIconId = (int)$startIcons->first()['id'];
+        $startIconId = $startIcons->first()->id;
 
         $fields = $this->loadFixture('retail-multiple-start-icons', [
-            'dungeon_id'                => $dungeon->id,
-            'key_level_min'             => $season->key_level_min,
-            'key_level_max'             => $season->key_level_max,
-            'affix_group_id'            => $affixIds[0],
-            'dungeon_start_map_icon_id' => $startIconId,
+            'dungeon_id'       => $dungeon->id,
+            'key_level_min'    => $season->key_level_min,
+            'key_level_max'    => $season->key_level_max,
+            'affix_group_id'   => $affixIds[0],
+            'dungeon_start_id' => $startIconId,
         ]);
 
         $dungeonRoute = null;
@@ -334,7 +333,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
 
             $dungeonRoute = $this->findCreatedRoute($dungeon, $user);
             $this->assertNotNull($dungeonRoute);
-            $this->assertSame($startIconId, $dungeonRoute->getRawOriginal('dungeon_start_map_icon_id'));
+            $this->assertSame($startIconId, $dungeonRoute->getRawOriginal('dungeon_start_id'));
         } finally {
             $dungeonRoute?->delete();
             $user->delete();
@@ -769,13 +768,11 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             ->filter(static fn(Dungeon $dungeon): bool => $dungeon->hasMappingVersionWithSeasons())
             ->values();
 
-        $mapIconRepository = app(MapIconRepositoryInterface::class);
-
-        $withMultipleStartIcons = $candidates->first(static function (Dungeon $dungeon) use ($mapIconRepository): bool {
+        $withMultipleStartIcons = $candidates->first(static function (Dungeon $dungeon): bool {
             $mappingVersion = $dungeon->getCurrentMappingVersion();
 
             return $mappingVersion !== null
-                && $mapIconRepository->getDungeonStartsForMappingVersion($mappingVersion->id)->count() > 1;
+                && $mappingVersion->dungeonStarts()->count() > 1;
         });
 
         $dungeon = $withMultipleStartIcons ?? $candidates->first();

@@ -10,6 +10,7 @@ use App\Logic\MDT\Entity\MDTNpc;
 use App\Logic\MDT\Entity\MDTPatrol;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
+use App\Models\DungeonStart;
 use App\Models\Enemy;
 use App\Models\EnemyForcesCheckpoint;
 use App\Models\EnemyPack;
@@ -1024,10 +1025,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             // draws its DungeonEntrance POI - so matching on position (the check every other map icon type uses)
             // finds nothing and adds MDT's on top of ours. One start marker anywhere in the mapping version is enough
             // to mean we already have one.
-            $dungeonStartMapIconTypeId               = MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START];
-            $newMappingVersionHasDungeonStartMapIcon = $newMappingVersion->mapIcons()
-                ->where('map_icon_type_id', $dungeonStartMapIconTypeId)
-                ->exists();
+            $newMappingVersionHasDungeonStart = $newMappingVersion->dungeonStarts()->exists();
 
             if ($mdtMapPOIs->isNotEmpty()) {
                 $this->log->importMapPOIsMDTHasMapPOIs();
@@ -1046,14 +1044,21 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                     $mapIconTypeKey = Conversion::convertMDTMapPOIToMapIconTypeKey($mdtMapPOI);
 
-                    if ($mapIconTypeKey !== null) {
-                        $mapIconTypeId = MapIconType::ALL[$mapIconTypeKey];
-
-                        if ($mapIconTypeId === $dungeonStartMapIconTypeId && $newMappingVersionHasDungeonStartMapIcon) {
-                            $this->log->importMapPOIsHaveExistingDungeonStartMapIcon($latLng->toArray());
+                    if ($mapIconTypeKey === MapIconType::MAP_ICON_TYPE_DUNGEON_START) {
+                        if ($newMappingVersionHasDungeonStart) {
+                            $this->log->importMapPOIsHaveExistingDungeonStart($latLng->toArray());
 
                             continue;
                         }
+
+                        $dungeonStart = DungeonStart::create(array_merge([
+                            'mapping_version_id' => $newMappingVersion->id,
+                        ], $latLng->toArrayWithFloor()));
+                        $newMappingVersionHasDungeonStart = true;
+
+                        $this->log->importMapPOIsCreatedNewDungeonStart($dungeonStart->id, $dungeonStart->floor_id);
+                    } elseif ($mapIconTypeKey !== null) {
+                        $mapIconTypeId = MapIconType::ALL[$mapIconTypeKey];
 
                         // Generic item icons were just unconditionally cleared from $newMappingVersion above
                         // (deleteClonedGenericItemMapIcons) so they can be re-created fresh from MDT below -

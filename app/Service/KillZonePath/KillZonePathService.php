@@ -88,7 +88,7 @@ class KillZonePathService implements KillZonePathServiceInterface
             ->get();
         $dungeonRoute->setRelation('killZones', $killZones);
 
-        $dungeonStart = $dungeonRoute->getDungeonStartMapIcon();
+        $dungeonStart = $dungeonRoute->getDungeonStart();
 
         /** @var array<string, PathNode> $nodes */
         $nodes = [];
@@ -100,7 +100,7 @@ class KillZonePathService implements KillZonePathServiceInterface
             $startLatLng = $dungeonStart->getLatLng();
 
             // Same facade-floor guard as the kill-zone nodes below (#3917) - a stale
-            // dungeon_start_map_icon_id can point at a map icon left on an old mapping version's
+            // dungeon_start_id can point at a start left on an old mapping version's
             // facade floor. A missing start node is already an anticipated state everywhere this is
             // consumed (both findPathsToKillZones() and computePathSegments() check isset()).
             if ($startLatLng->getFloor()?->facade !== true) {

@@ -1,0 +1,11 @@
+[
+    {
+        "id": 450,
+        "mapping_version_id": 32,
+        "floor_id": 83,
+        "target_dungeon_id": null,
+        "lat": -134.5,
+        "lng": 41.75,
+        "comment": "mapping.map_icons.sl.sanguine_depths.start"
+    }
+]

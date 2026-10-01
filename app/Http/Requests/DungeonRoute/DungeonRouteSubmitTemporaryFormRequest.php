@@ -34,7 +34,7 @@ class DungeonRouteSubmitTemporaryFormRequest extends FormRequest
             'dungeon_route_level' => new DungeonRouteLevelRule(),
 
             // Verified against the dungeon's mapping version in DungeonRouteSaveService
-            'dungeon_start_map_icon_id' => 'nullable|integer',
+            'dungeon_start_id' => 'nullable|integer',
         ];
 
         // Validate demo state, optional or numeric

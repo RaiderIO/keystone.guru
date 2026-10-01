@@ -1,0 +1,20 @@
+[
+    {
+        "id": 140,
+        "mapping_version_id": 176,
+        "floor_id": 235,
+        "target_dungeon_id": null,
+        "lat": -233.0581,
+        "lng": 252.6858,
+        "comment": null
+    },
+    {
+        "id": 141,
+        "mapping_version_id": 215,
+        "floor_id": 235,
+        "target_dungeon_id": null,
+        "lat": -231.8929,
+        "lng": 252.5685,
+        "comment": "mapping.map_icons.classic.stratholme.undead_entrance"
+    }
+]
