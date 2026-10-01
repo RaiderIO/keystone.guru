@@ -181,7 +181,15 @@ final class APIDungeonRouteControllerTest extends APIPublicTestCase
             $apiDungeonRouteControllerService = $this->createMockPublic(APIDungeonRouteControllerServiceInterface::class);
             $apiDungeonRouteControllerService->expects($this->once())
                 ->method('createThumbnails')
-                ->with($this->callback(static fn(DungeonRoute $passed): bool => $passed->id === $dungeonRoute->id))
+                ->with(
+                    $this->callback(static fn(DungeonRoute $passed): bool => $passed->id === $dungeonRoute->id),
+                    800,
+                    600,
+                    400,
+                    300,
+                    2.5,
+                    90,
+                )
                 ->willReturn(collect());
             app()->instance(APIDungeonRouteControllerServiceInterface::class, $apiDungeonRouteControllerService);
 
@@ -198,6 +206,43 @@ final class APIDungeonRouteControllerTest extends APIPublicTestCase
             // Assert
             $response->assertSuccessful();
             $response->assertJsonPath('data', []);
+        } finally {
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function storeThumbnails_givenNoDimensions_passesNullsSoTheServiceDefaultsApply(): void
+    {
+        // Arrange
+        Queue::fake();
+        $dungeonRoute = null;
+
+        try {
+            $dungeonRoute = DungeonRoute::factory()->create([
+                'author_id'  => 1,
+                'expires_at' => null,
+            ]);
+            $apiDungeonRouteControllerService = $this->createMockPublic(APIDungeonRouteControllerServiceInterface::class);
+            $apiDungeonRouteControllerService->expects($this->once())
+                ->method('createThumbnails')
+                ->with(
+                    $this->callback(static fn(DungeonRoute $passed): bool => $passed->id === $dungeonRoute->id),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                )
+                ->willReturn(collect());
+            app()->instance(APIDungeonRouteControllerServiceInterface::class, $apiDungeonRouteControllerService);
+
+            // Act
+            $response = $this->postJson(route('api.v1.route.thumbnail.store', ['dungeonRoute' => $dungeonRoute]));
+
+            // Assert
+            $response->assertSuccessful();
         } finally {
             $dungeonRoute?->delete();
         }
