@@ -29,6 +29,6 @@ abstract class APIFormRequest extends FormRequest
             return null;
         }
 
-        return new $requestDtoClass($this->validated());
+        return $requestDtoClass::createFromArray($this->validated());
     }
 }
