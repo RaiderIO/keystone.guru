@@ -36,28 +36,39 @@
   }
 }
 
+.route_manipulation_tools:not(.top, .mobile) {
+  top: var(--ksg-header-height, 0px);
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/** Clears the bottom rail ad, the same 90px the snackbar footer keeps free */
+.route_manipulation_tools.ad_loaded:not(.top, .mobile) {
+  bottom: 90px;
+}
+
+/** Auto margins centre a rail that fits; unlike align-items: center they drop to 0 on one that
+    does not, so its first tools stay reachable by scrolling instead of overflowing upwards */
+.route_manipulation_tools:not(.top, .mobile) > .bg-header {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 @media (min-width: 1200px) {
   .route_manipulation_tools.top {
     padding-top: 1rem !important;
   }
 
-  .route_manipulation_tools:not(.top) {
-    top: unset;
-    align-items: center !important;
-    height: 100%;
-  }
-
-  .route_manipulation_tools.left .bg-header {
-    margin-left: 0.5rem !important;
+  /** Padding on the rail rather than a margin on its .bg-header: the rail's shrink-to-fit width
+      leaves a child's margin out and would push the tools 0.5rem past its right edge */
+  .route_manipulation_tools.left:not(.top) {
+    padding-left: 0.5rem;
   }
 
   .route_manipulation_tools.right .bg-header {
     margin-right: 0.5rem !important;
   }
-}
-
-.route_manipulation_tools:not(.embed, .presenter), {
-  top: 0;
 }
 
 .route_sidebar.right:not(.embed), {

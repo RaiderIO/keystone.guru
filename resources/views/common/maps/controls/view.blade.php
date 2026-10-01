@@ -9,11 +9,12 @@ use Illuminate\Support\Collection;
  * @var Collection<int, Floor> $floors
  * @var DungeonRoute|null      $dungeonroute
  * @var bool                   $isMobile
+ * @var bool                   $showAds
  * @var bool                   $facadeEnabled
  */
 ?>
 <nav
-    class="route_sidebar route_manipulation_tools left row g-0 map_fade_out {{ $isMobile ? 'mobile' : '' }}">
+    class="route_sidebar route_manipulation_tools left row g-0 map_fade_out {{ $isMobile ? 'mobile' : '' }} {{ $showAds ? 'ad_loaded' : '' }}">
     <div class="bg-header">
         @isset($dungeonroute)
             <div id="view_route_actions_container" class="mb-2">

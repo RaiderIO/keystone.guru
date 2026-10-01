@@ -8,11 +8,12 @@ use Illuminate\Support\Collection;
  * @var boolean                $isAdmin
  * @var Collection<int, Floor> $floors
  * @var DungeonRoute|null      $dungeonroute
+ * @var bool                   $showAds
  * @var bool                   $facadeEnabled
  */
 ?>
 <nav
-    class="route_sidebar route_manipulation_tools left row g-0 map_fade_out {{ $isMobile ? 'mobile' : '' }}">
+    class="route_sidebar route_manipulation_tools left row g-0 map_fade_out {{ $isMobile ? 'mobile' : '' }} {{ $showAds ? 'ad_loaded' : '' }}">
     <div class="bg-header" style="background-color: unset !important;">
         <!-- Draw controls are injected here through drawcontrols.js -->
         <div id="edit_route_draw_container" class="mb-2">

@@ -11,7 +11,8 @@ use Illuminate\Support\Collection;
     <div class="col btn-group dropend">
         <button type="button"
                 class="btn btn-accent dropdown-toggle {{ $floors->count() > 1 ? '' : 'disabled' }}"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                data-bs-boundary="viewport" data-bs-popper-config='{"strategy":"fixed"}'>
             <i class="fa fa-dungeon"></i>
             <span class="map_controls_element_label_toggle" style="display: none;">
                 {{ __('view_common.maps.controls.elements.floor_switch.switch_floors') }}
