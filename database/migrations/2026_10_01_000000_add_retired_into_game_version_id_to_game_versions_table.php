@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('game_versions', function (Blueprint $table) {
-            $table->unsignedBigInteger('retired_into_game_version_id')->nullable()->after('active');
+            $table->unsignedBigInteger('retired_into_game_version_id')->nullable()->after('expansion_id');
         });
     }
 
