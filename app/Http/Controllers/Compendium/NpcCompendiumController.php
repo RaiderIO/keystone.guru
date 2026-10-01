@@ -66,7 +66,7 @@ class NpcCompendiumController extends Controller
 
         $currentGameVersion = GameVersion::getUserOrDefaultGameVersion();
 
-        $currentNpcHealth = $npc->getHealthForGameVersion($currentGameVersion);
+        $currentNpcHealth = $npc->getHealthByGameVersion($currentGameVersion);
 
         return view('compendium.npc.show', [
             'npc'                => $npc,

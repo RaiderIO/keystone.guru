@@ -213,16 +213,12 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
         return $this->hasMany(MappingVersion::class)->orderByDesc('mapping_versions.version');
     }
 
-    public function getCurrentMappingVersionForGameVersion(GameVersion $gameVersion): ?MappingVersion
-    {
-        return $this->getCurrentMappingVersionForGameVersionId($gameVersion->id);
-    }
-
     /**
      * The mapping version the game version shows for this dungeon: its own, or else the one of the game version it
-     * inherits from. Code that creates mapping versions uses getCurrentMappingVersionForGameVersion() instead.
+     * inherits from. Mapping versions are numbered per game version, so code creating one picks its game version's
+     * latest from mappingVersions itself.
      */
-    public function getCurrentMappingVersionForGameVersionOrParent(GameVersion $gameVersion): ?MappingVersion
+    public function getCurrentMappingVersionForGameVersion(GameVersion $gameVersion): ?MappingVersion
     {
         $mappingVersion = $this->getCurrentMappingVersionForGameVersionId($gameVersion->id);
         if ($mappingVersion === null && $gameVersion->parent_game_version_id !== null) {
@@ -245,7 +241,7 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
 
         // Attempt to load the current mapping version for the given game version
         if ($gameVersion !== null) {
-            $result = $this->getCurrentMappingVersionForGameVersionOrParent($gameVersion);
+            $result = $this->getCurrentMappingVersionForGameVersion($gameVersion);
         }
 
         // If we didn't find a mapping version for the given game version, fall back to the default game version
@@ -253,7 +249,7 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
             $gameVersionService = app(GameVersionServiceInterface::class);
             /** @var \App\Models\User|null $user */
             $user   = Auth::user();
-            $result = $this->getCurrentMappingVersionForGameVersionOrParent($gameVersionService->getGameVersion($user))
+            $result = $this->getCurrentMappingVersionForGameVersion($gameVersionService->getGameVersion($user))
                 // It could be that the dungeon has no mapping for the user's game version, so we fall back to the default game version
                 ?? $this->getCurrentMappingVersionForGameVersion(GameVersion::getDefaultGameVersion())
                 // Fall back to the most recent mapping version if no mapping version was found for the default game version

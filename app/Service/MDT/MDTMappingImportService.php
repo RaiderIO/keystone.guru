@@ -281,7 +281,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $this->log->importNpcsDataFromMDTStart($dungeon->key);
 
             // Get a list of NPCs and update/save them. npcHealths must be eager loaded here - it is read
-            // per NPC below via getHealthByGameVersion(), which would otherwise be an N+1 that hard-fails
+            // per NPC below, which would otherwise be an N+1 that hard-fails
             // under preventLazyLoading (dev) for any dungeon that already has NPCs.
             $existingNpcs = $dungeon->npcs()->with(['npcHealths'])->get()->keyBy('id');
 
@@ -335,7 +335,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 // MDT's health is never imported - it is frequently wrong (Midnight bosses stored ~4.17% high).
                 // Health comes from combat logs (combatlog:extractnpchealth, which fills placeholder rows) or
                 // by hand; a missing row gets the placeholder so the NPC has a row to fill.
-                if ($npc->getHealthByGameVersion($gameVersion) === null) {
+                if ($npc->npcHealths->firstWhere('game_version_id', $gameVersion->id) === null) {
                     NpcHealth::query()->firstOrCreate([
                         'npc_id'          => $npc->id,
                         'game_version_id' => $gameVersion->id,

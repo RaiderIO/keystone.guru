@@ -10,6 +10,7 @@ use App\Models\Team;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\User;
 use App\Models\UserPinnedDungeonRouteCollection;
+use App\Repositories\Interfaces\GameVersion\GameVersionRepositoryInterface;
 use Database\Factories\DungeonRoute\DungeonRouteCollectionFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -195,7 +196,7 @@ class DungeonRouteCollection extends Model
             return false;
         }
 
-        if (!$this->gameVersion->canUseMappingVersion($mappingVersion)) {
+        if (!app(GameVersionRepositoryInterface::class)->canUseMappingVersion($this->gameVersion, $mappingVersion)) {
             return false;
         }
 

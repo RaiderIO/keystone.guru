@@ -10,6 +10,8 @@ use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcHealth;
+use App\Repositories\Interfaces\GameVersion\GameVersionRepositoryInterface;
+use App\Service\Mapping\MappingServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -120,7 +122,7 @@ final class GameVersionInheritanceTest extends PublicTestCase
     }
 
     #[Test]
-    public function getCurrentMappingVersionForGameVersionOrParent_givenChildAndParentMappingVersions_returnsChildMappingVersion(): void
+    public function getCurrentMappingVersionForGameVersion_givenChildAndParentMappingVersions_returnsChildMappingVersion(): void
     {
         // Arrange
         $dungeon           = $this->createClassicEraDungeon();
@@ -128,8 +130,8 @@ final class GameVersionInheritanceTest extends PublicTestCase
         $freshDungeon      = Dungeon::findOrFail($dungeon->id);
 
         // Act
-        $forSod        = $freshDungeon->getCurrentMappingVersionForGameVersionOrParent($this->gameVersion(GameVersion::GAME_VERSION_SOD));
-        $forClassicEra = $freshDungeon->getCurrentMappingVersionForGameVersionOrParent($this->gameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA));
+        $forSod        = $freshDungeon->getCurrentMappingVersionForGameVersion($this->gameVersion(GameVersion::GAME_VERSION_SOD));
+        $forClassicEra = $freshDungeon->getCurrentMappingVersionForGameVersion($this->gameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA));
 
         // Assert
         $this->assertSame($sodMappingVersion->id, $forSod?->id);
@@ -137,21 +139,21 @@ final class GameVersionInheritanceTest extends PublicTestCase
     }
 
     #[Test]
-    public function getCurrentMappingVersionForGameVersionOrParent_givenParentMappingVersionOnly_returnsParentMappingVersion(): void
+    public function getCurrentMappingVersionForGameVersion_givenParentMappingVersionOnly_returnsParentMappingVersion(): void
     {
         // Arrange
         $dungeon  = $this->createClassicEraDungeon();
         $expected = $dungeon->mappingVersions()->firstOrFail();
 
         // Act
-        $mappingVersion = Dungeon::findOrFail($dungeon->id)->getCurrentMappingVersionForGameVersionOrParent($this->gameVersion(GameVersion::GAME_VERSION_TBC));
+        $mappingVersion = Dungeon::findOrFail($dungeon->id)->getCurrentMappingVersionForGameVersion($this->gameVersion(GameVersion::GAME_VERSION_TBC));
 
         // Assert
         $this->assertSame($expected->id, $mappingVersion?->id);
     }
 
     #[Test]
-    public function getCurrentMappingVersionForGameVersionOrParent_givenChildMappingVersionOnly_returnsNullForParent(): void
+    public function getCurrentMappingVersionForGameVersion_givenChildMappingVersionOnly_returnsNullForParent(): void
     {
         // Arrange
         $dungeon = $this->createDungeon(
@@ -160,23 +162,26 @@ final class GameVersionInheritanceTest extends PublicTestCase
         );
 
         // Act
-        $mappingVersion = Dungeon::findOrFail($dungeon->id)->getCurrentMappingVersionForGameVersionOrParent($this->gameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA));
+        $mappingVersion = Dungeon::findOrFail($dungeon->id)->getCurrentMappingVersionForGameVersion($this->gameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA));
 
         // Assert
         $this->assertNull($mappingVersion);
     }
 
     #[Test]
-    public function getCurrentMappingVersionForGameVersion_givenParentMappingVersionOnly_returnsNullForChild(): void
+    public function createNewBareMappingVersion_givenChildOfDungeonWithParentMappingVersionsOnly_startsAtVersionOne(): void
     {
         // Arrange
         $dungeon = $this->createClassicEraDungeon();
+        $this->createMappingVersion($dungeon, GameVersion::GAME_VERSION_CLASSIC_ERA, 3);
+        $tbc = $this->gameVersion(GameVersion::GAME_VERSION_TBC);
 
         // Act
-        $mappingVersion = Dungeon::findOrFail($dungeon->id)->getCurrentMappingVersionForGameVersion($this->gameVersion(GameVersion::GAME_VERSION_TBC));
+        $mappingVersion = app(MappingServiceInterface::class)->createNewBareMappingVersion(Dungeon::findOrFail($dungeon->id), $tbc);
 
         // Assert
-        $this->assertNull($mappingVersion, 'Code that creates mapping versions numbers them per game version, so this lookup must not fall back to the parent');
+        $this->assertSame($tbc->id, $mappingVersion->game_version_id);
+        $this->assertSame(1, $mappingVersion->version, 'Mapping versions are numbered per game version, so the parent\'s must not count');
     }
 
     #[Test]
@@ -201,10 +206,10 @@ final class GameVersionInheritanceTest extends PublicTestCase
         $sod = $this->gameVersion(GameVersion::GAME_VERSION_SOD);
 
         // Act
-        $usesOwn     = $sod->canUseMappingVersion($this->makeMappingVersion(GameVersion::GAME_VERSION_SOD));
-        $usesParent  = $sod->canUseMappingVersion($this->makeMappingVersion(GameVersion::GAME_VERSION_CLASSIC_ERA));
-        $usesSibling = $sod->canUseMappingVersion($this->makeMappingVersion(GameVersion::GAME_VERSION_TBC));
-        $parentUses  = $this->gameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA)->canUseMappingVersion($this->makeMappingVersion(GameVersion::GAME_VERSION_SOD));
+        $usesOwn     = $this->canUseMappingVersion($sod, $this->makeMappingVersion(GameVersion::GAME_VERSION_SOD));
+        $usesParent  = $this->canUseMappingVersion($sod, $this->makeMappingVersion(GameVersion::GAME_VERSION_CLASSIC_ERA));
+        $usesSibling = $this->canUseMappingVersion($sod, $this->makeMappingVersion(GameVersion::GAME_VERSION_TBC));
+        $parentUses  = $this->canUseMappingVersion($this->gameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA), $this->makeMappingVersion(GameVersion::GAME_VERSION_SOD));
 
         // Assert
         $this->assertTrue($usesOwn);
@@ -225,9 +230,9 @@ final class GameVersionInheritanceTest extends PublicTestCase
         $sod                            = $this->gameVersion(GameVersion::GAME_VERSION_SOD);
 
         // Act
-        $usesOverriddenParent = $sod->canUseMappingVersion($overriddenParentMappingVersion);
-        $usesInheritedParent  = $sod->canUseMappingVersion($inheritedParentMappingVersion);
-        $tbcUsesOverridden    = $this->gameVersion(GameVersion::GAME_VERSION_TBC)->canUseMappingVersion($overriddenParentMappingVersion);
+        $usesOverriddenParent = $this->canUseMappingVersion($sod, $overriddenParentMappingVersion);
+        $usesInheritedParent  = $this->canUseMappingVersion($sod, $inheritedParentMappingVersion);
+        $tbcUsesOverridden    = $this->canUseMappingVersion($this->gameVersion(GameVersion::GAME_VERSION_TBC), $overriddenParentMappingVersion);
 
         // Assert
         $this->assertFalse($usesOverriddenParent);
@@ -332,7 +337,7 @@ final class GameVersionInheritanceTest extends PublicTestCase
     }
 
     #[Test]
-    public function getHealthForGameVersion_givenParentHealthOnly_returnsParentHealth(): void
+    public function getHealthByGameVersion_givenParentHealthOnly_returnsParentHealth(): void
     {
         // Arrange
         $npc = $this->createNpcInDatabase(['game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]]);
@@ -340,16 +345,14 @@ final class GameVersionInheritanceTest extends PublicTestCase
         $npc->load('npcHealths');
 
         // Act
-        $forTbc = $npc->getHealthForGameVersion($this->gameVersion(GameVersion::GAME_VERSION_TBC));
-        $strict = $npc->getHealthByGameVersion($this->gameVersion(GameVersion::GAME_VERSION_TBC));
+        $forTbc = $npc->getHealthByGameVersion($this->gameVersion(GameVersion::GAME_VERSION_TBC));
 
         // Assert
         $this->assertSame(1000, $forTbc?->health);
-        $this->assertNull($strict, 'Everything with a mapping version reads the strict lookup, so it must not fall back to the parent');
     }
 
     #[Test]
-    public function getHealthForGameVersion_givenChildAndParentHealth_returnsChildHealth(): void
+    public function getHealthByGameVersion_givenChildAndParentHealth_returnsChildHealth(): void
     {
         // Arrange
         $npc = $this->createNpcInDatabase(['game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]]);
@@ -358,8 +361,8 @@ final class GameVersionInheritanceTest extends PublicTestCase
         $npc->load('npcHealths');
 
         // Act
-        $forSod        = $npc->getHealthForGameVersion($this->gameVersion(GameVersion::GAME_VERSION_SOD));
-        $forClassicEra = $npc->getHealthForGameVersion($this->gameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA));
+        $forSod        = $npc->getHealthByGameVersion($this->gameVersion(GameVersion::GAME_VERSION_SOD));
+        $forClassicEra = $npc->getHealthByGameVersion($this->gameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA));
 
         // Assert
         $this->assertSame(2500, $forSod?->health);
@@ -367,7 +370,7 @@ final class GameVersionInheritanceTest extends PublicTestCase
     }
 
     #[Test]
-    public function getHealthForGameVersion_givenSiblingHealthOnly_returnsNull(): void
+    public function getHealthByGameVersion_givenSiblingHealthOnly_returnsNull(): void
     {
         // Arrange
         $npc = $this->createNpcInDatabase(['game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]]);
@@ -375,7 +378,7 @@ final class GameVersionInheritanceTest extends PublicTestCase
         $npc->load('npcHealths');
 
         // Act
-        $forTbc = $npc->getHealthForGameVersion($this->gameVersion(GameVersion::GAME_VERSION_TBC));
+        $forTbc = $npc->getHealthByGameVersion($this->gameVersion(GameVersion::GAME_VERSION_TBC));
 
         // Assert
         $this->assertNull($forTbc);
@@ -487,7 +490,12 @@ final class GameVersionInheritanceTest extends PublicTestCase
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             ->whereIn('dungeon_routes.id', $routeIds);
 
-        return $gameVersion->whereMappingVersionIsUsable($query)->pluck('dungeon_routes.id')->all();
+        return app(GameVersionRepositoryInterface::class)->whereMappingVersionIsUsable($gameVersion, $query)->pluck('dungeon_routes.id')->all();
+    }
+
+    private function canUseMappingVersion(GameVersion $gameVersion, MappingVersion $mappingVersion): bool
+    {
+        return app(GameVersionRepositoryInterface::class)->canUseMappingVersion($gameVersion, $mappingVersion);
     }
 
     private function makeMappingVersion(string $gameVersionKey): MappingVersion

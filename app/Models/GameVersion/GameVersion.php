@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -158,54 +157,6 @@ class GameVersion extends Model
     public function listsDungeonOfMappingVersion(MappingVersion $mappingVersion): bool
     {
         return in_array($mappingVersion->game_version_id, $this->getMappingVersionGameVersionIds(), true);
-    }
-
-    /**
-     * Whether routes on the mapping version belong to this game version: it is this game version's own, or the
-     * parent's for a dungeon this game version has no mapping version of its own for.
-     */
-    public function canUseMappingVersion(MappingVersion $mappingVersion): bool
-    {
-        if ($mappingVersion->game_version_id === $this->id) {
-            return true;
-        }
-
-        if ($this->parent_game_version_id === null || $mappingVersion->game_version_id !== $this->parent_game_version_id) {
-            return false;
-        }
-
-        return !MappingVersion::query()
-            ->where('dungeon_id', $mappingVersion->dungeon_id)
-            ->where('game_version_id', $this->id)
-            ->exists();
-    }
-
-    /**
-     * Limits a query that joins mapping_versions to the routes this game version shows: those on its own mapping
-     * versions, and those on the parent's mapping versions of dungeons it has no mapping version of its own for.
-     *
-     * @template TModel of Model
-     *
-     * @param  Builder<TModel> $query
-     * @return Builder<TModel>
-     */
-    public function whereMappingVersionIsUsable(Builder $query): Builder
-    {
-        return $query->where(function (Builder $query) {
-            $query->where('mapping_versions.game_version_id', $this->id);
-
-            if ($this->parent_game_version_id !== null) {
-                $query->orWhere(function (Builder $query) {
-                    $query->where('mapping_versions.game_version_id', $this->parent_game_version_id)
-                        ->whereNotExists(function (QueryBuilder $query) {
-                            $query->selectRaw('1')
-                                ->from('mapping_versions as own_mapping_versions')
-                                ->whereColumn('own_mapping_versions.dungeon_id', 'mapping_versions.dungeon_id')
-                                ->where('own_mapping_versions.game_version_id', $this->id);
-                        });
-                });
-            }
-        });
     }
 
     /**

@@ -80,7 +80,7 @@ class DiscoverService extends BaseDiscoverService
                 if ($this->expansion !== null) {
                     $builder->where('dungeons.expansion_id', $this->expansion->id);
                 } else {
-                    $this->gameVersion->whereMappingVersionIsUsable($builder);
+                    $this->gameVersionRepository->whereMappingVersionIsUsable($this->gameVersion, $builder);
                 }
                 $builder->orderBy('dungeon_routes.popularity', 'desc');
             })
@@ -132,7 +132,7 @@ class DiscoverService extends BaseDiscoverService
                 if ($this->expansion !== null) {
                     $builder->where('dungeons.expansion_id', $this->expansion->id);
                 } else {
-                    $this->gameVersion->whereMappingVersionIsUsable($builder);
+                    $this->gameVersionRepository->whereMappingVersionIsUsable($this->gameVersion, $builder);
                 }
             })
             ->when($this->season !== null, function (Builder $builder) {

@@ -222,6 +222,39 @@ final class NpcHealthExtractionServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function applyNpcHealths_givenOnlyTheParentGameVersionsRow_createsTheChildsRowAndLeavesTheParentsAlone(): void
+    {
+        // Arrange
+        $classicEra = GameVersion::query()->where('key', GameVersion::GAME_VERSION_CLASSIC_ERA)->firstOrFail();
+        $tbc        = GameVersion::query()->where('key', GameVersion::GAME_VERSION_TBC)->firstOrFail();
+        $this->assertSame($classicEra->id, $tbc->parent_game_version_id);
+        $this->assertNull($this->storedHealth($classicEra));
+        $this->assertNull($this->storedHealth($tbc));
+
+        try {
+            NpcHealth::create([
+                'npc_id'          => $this->npc->id,
+                'game_version_id' => $classicEra->id,
+                'health'          => 1_000_000,
+                'percentage'      => null,
+            ]);
+            $this->refreshNpc();
+            $changes = $this->service->compareNpcHealths($this->observations($this->npc->id, 2, 2_140_000), $this->dungeon, $tbc);
+
+            // Act
+            $written = $this->service->applyNpcHealths($changes, $tbc, false);
+
+            // Assert
+            $this->assertTrue($changes->get($this->npc->id)->isMissing());
+            $this->assertSame(1, $written);
+            $this->assertSame($changes->get($this->npc->id)->newHealth, $this->storedHealth($tbc));
+            $this->assertSame(1_000_000, $this->storedHealth($classicEra));
+        } finally {
+            NpcHealth::query()->where('npc_id', $this->npc->id)->whereIn('game_version_id', [$classicEra->id, $tbc->id])->delete();
+        }
+    }
+
+    #[Test]
     public function applyNpcHealths_givenCuratedNpc_neverWritesEvenWithOverwrite(): void
     {
         // Arrange - a curated NPC's stored health deliberately differs from what the game shows (Murder Row's Infernal

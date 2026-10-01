@@ -75,7 +75,7 @@ class DungeonExploreController extends Controller
         Dungeon                         $dungeon,
         FloorResolutionServiceInterface $floorResolutionService,
     ): RedirectResponse {
-        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersionOrParent($gameVersion);
+        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
         if (!$dungeon->active || $currentMappingVersion === null) {
             return redirect()->route('dungeon.explore.gameversion.select', [
@@ -114,7 +114,7 @@ class DungeonExploreController extends Controller
         Dungeon                          $dungeon,
         string                           $floorIndex = '1',
     ): View|RedirectResponse {
-        $currentMappingVersion = $dungeon->loadMappingVersions()->getCurrentMappingVersionForGameVersionOrParent($gameVersion);
+        $currentMappingVersion = $dungeon->loadMappingVersions()->getCurrentMappingVersionForGameVersion($gameVersion);
 
         if (!$dungeon->active || $currentMappingVersion === null) {
             return redirect()->route('dungeon.explore.gameversion.select', [
@@ -178,7 +178,7 @@ class DungeonExploreController extends Controller
         Dungeon                          $dungeon,
         string                           $floorIndex = '1',
     ): View|RedirectResponse {
-        $currentMappingVersion = $dungeon->loadMappingVersions()->getCurrentMappingVersionForGameVersionOrParent($gameVersion);
+        $currentMappingVersion = $dungeon->loadMappingVersions()->getCurrentMappingVersionForGameVersion($gameVersion);
 
         if (!$dungeon->active || $currentMappingVersion === null) {
             return redirect()->route('dungeon.explore.gameversion.select', [
