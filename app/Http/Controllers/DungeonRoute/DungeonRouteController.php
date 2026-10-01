@@ -762,9 +762,15 @@ class DungeonRouteController extends Controller
     ): JsonResponse {
         Gate::authorize('edit', $dungeonroute);
 
-        // The draft is a route of the original's author until it is applied, so it counts against their limit
-        $author = $dungeonroute->author;
-        if ($author === null || !$author->canCreateDungeonRoute()) {
+        // The draft is a route of the original's author until it is applied, so it counts against their limit -
+        // unless it replaces the original's pending draft, which leaves the author's route count unchanged
+        $author                 = $dungeonroute->author;
+        $discardExistingDraftId = $request->getDiscardExistingDraftId();
+        $replacesExistingDraft  = $discardExistingDraftId !== null && DungeonRoute::query()
+            ->whereKey($discardExistingDraftId)
+            ->where('upgrade_of_dungeon_route_id', $dungeonroute->id)
+            ->exists();
+        if ($author === null || (!$replacesExistingDraft && !$author->canCreateDungeonRoute())) {
             abort(StatusCode::FORBIDDEN, sprintf(
                 __('view_dungeonroute.limitreached.limit_reached_description'),
                 config('keystoneguru.registered_user_dungeonroute_limit'),
@@ -780,7 +786,7 @@ class DungeonRouteController extends Controller
                 $dungeonroute,
                 $importString,
                 $warnings,
-                $request->getDiscardExistingDraftId(),
+                $discardExistingDraftId,
             );
         } catch (PendingUpgradeDraftException $pendingUpgradeDraftException) {
             abort(StatusCode::CONFLICT, $pendingUpgradeDraftException->getMessage());
