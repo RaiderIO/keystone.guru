@@ -316,6 +316,63 @@ final class DungeonRouteControllerImportMdtStringTest extends MDTImportStringSer
     }
 
     #[Test]
+    public function importMdtString_givenAuthorAtRouteLimitReplacingPendingDraft_replacesDraft(): void
+    {
+        try {
+            // Arrange
+            [$source, $mdtString] = $this->createSourceRouteAndString();
+            $owner                = $this->createUser();
+            $original             = $this->createOriginal($owner, $source);
+            $existingDraft        = $this->createExistingDraft($original);
+            // The original and its pending draft use up the limit; replacing the draft does not add a route
+            Config::set('keystoneguru.registered_user_dungeonroute_limit', 2);
+
+            // Act
+            $response = $this->actingAs($owner)->postJson($this->importUrl($original), [
+                'import_string'             => $mdtString,
+                'discard_existing_draft_id' => $existingDraft->id,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertNull(DungeonRoute::find($existingDraft->id));
+            $this->assertSame(DungeonRouteDraftSource::MdtImport, $original->upgradeDraft()->first()?->draft_source);
+            $this->assertSame(2, $owner->dungeonRoutes()->count(), 'The author still has as many routes as before');
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function importMdtString_givenAuthorAtRouteLimitWithDraftIdOfOtherRoute_returnsForbiddenWithLimitMessage(): void
+    {
+        try {
+            // Arrange
+            $owner         = $this->createUser();
+            $original      = $this->createOriginal($owner);
+            $otherOriginal = $this->createOriginal($owner);
+            $otherDraft    = $this->createExistingDraft($otherOriginal);
+            Config::set('keystoneguru.registered_user_dungeonroute_limit', 3);
+
+            // Act
+            $response = $this->actingAs($owner)->postJson($this->importUrl($original), [
+                'import_string'             => 'irrelevant',
+                'discard_existing_draft_id' => $otherDraft->id,
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame(
+                sprintf(__('view_dungeonroute.limitreached.limit_reached_description'), 3),
+                $response->json('message'),
+            );
+            $this->assertNotNull(DungeonRoute::find($otherDraft->id), 'Another route\'s draft is never touched');
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
     public function applyUpgrade_givenMdtImportDraft_returnsMdtImportAppliedStatus(): void
     {
         try {
