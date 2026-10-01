@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Speedrun;
 
+use App\Models\Dungeon;
 use App\Models\DungeonDifficulty;
 use App\Models\Floor\Floor;
 use App\Models\Laratrust\Role;
@@ -23,22 +24,27 @@ class DungeonSpeedrunRequiredNpcsFormRequest extends FormRequest
      */
     public function rules(): array
     {
+        /** @var Dungeon $dungeon */
+        $dungeon = $this->route('dungeon');
+        /** @var Floor $floor */
+        $floor = $this->route('floor');
+
         $npcIds = Npc::join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
             ->select('npcs.id')
-            ->where('npc_dungeons.dungeon_id', $this->get('dungeon_id'))
+            ->where('npc_dungeons.dungeon_id', $dungeon->id)
             ->pluck('id')
             ->toArray();
 
         $npcIdsWithNullable = array_merge($npcIds, [-1]);
 
         return [
-            'floor_id'   => Rule::in(Floor::all('id')->pluck('id')->toArray()),
-            'npc_id'     => Rule::in($npcIds),
-            'npc2_id'    => Rule::in($npcIdsWithNullable),
-            'npc3_id'    => Rule::in($npcIdsWithNullable),
-            'npc4_id'    => Rule::in($npcIdsWithNullable),
-            'npc5_id'    => Rule::in($npcIdsWithNullable),
-            'difficulty' => Rule::in(DungeonDifficulty::values()),
+            'floor_id'   => ['required', Rule::in([$floor->id])],
+            'npc_id'     => ['required', Rule::in($npcIds)],
+            'npc2_id'    => ['required', Rule::in($npcIdsWithNullable)],
+            'npc3_id'    => ['required', Rule::in($npcIdsWithNullable)],
+            'npc4_id'    => ['required', Rule::in($npcIdsWithNullable)],
+            'npc5_id'    => ['required', Rule::in($npcIdsWithNullable)],
+            'difficulty' => ['required', Rule::in(DungeonDifficulty::values())],
             'count'      => 'required|int',
         ];
     }
