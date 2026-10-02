@@ -24,10 +24,10 @@ class DungeonService implements DungeonServiceInterface
     private const int POPULAR_DUNGEON_FRACTION = 4;
 
     public function __construct(
-        private readonly CookieServiceInterface         $cookieService,
-        private readonly SeasonServiceInterface         $seasonService,
-        private readonly DungeonServiceLoggingInterface $log,
-        private readonly GameVersionServiceInterface    $gameVersionService,
+        private readonly CookieServiceInterface           $cookieService,
+        private readonly SeasonServiceInterface           $seasonService,
+        private readonly DungeonServiceLoggingInterface   $log,
+        private readonly GameVersionServiceInterface      $gameVersionService,
         private readonly DungeonRepositoryInterface       $dungeonRepository,
         private readonly PageViewCountRepositoryInterface $pageViewCountRepository,
         private readonly CacheServiceInterface            $cacheService,
