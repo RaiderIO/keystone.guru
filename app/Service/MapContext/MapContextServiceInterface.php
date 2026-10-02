@@ -12,6 +12,7 @@ use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\MapContextStaticData;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\GameVersion\GameVersion;
 use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;
 
@@ -48,10 +49,15 @@ interface MapContextServiceInterface
         string         $mapFacadeStyle,
     ): MapContextDungeonRouteSearch;
 
+    /**
+     * @param GameVersion|null $dungeonStartNavigationGameVersion The game version being viewed, to make dungeon starts
+     *                                                            navigate between dungeons; null leaves them inert.
+     */
     public function createMapContextDungeonExplore(
         Dungeon        $dungeon,
         MappingVersion $mappingVersion,
         string         $mapFacadeStyle,
+        ?GameVersion   $dungeonStartNavigationGameVersion = null,
     ): MapContextDungeonExplore;
 
     public function createMapContextMappingVersionEdit(

@@ -16,6 +16,13 @@ global.L = {
 };
 
 global.MapContextMappingVersionEdit = class MapContextMappingVersionEdit {
+    getDungeonSelectValues() {
+        return [{id: 80, name: 'The Deadmines'}];
+    }
+
+    getDungeonStartNavigation() {
+        return null;
+    }
 };
 global.EditMapState = class EditMapState {
 };
@@ -43,7 +50,9 @@ global.Handlebars = {
 };
 
 global.lang = {
-    get: (key) => `translated(${key})`,
+    get: (key, replacements = null) => replacements === null ?
+        `translated(${key})` :
+        `translated(${key}, ${JSON.stringify(replacements)})`,
 };
 
 let mapContext = null;
@@ -89,6 +98,12 @@ function fakeLayer() {
     return {
         icon: null,
         tooltip: null,
+        handlers: {},
+        on(event, handler) {
+            this.handlers[event] = handler;
+
+            return this;
+        },
         setIcon(icon) {
             this.icon = icon;
         },
@@ -96,6 +111,18 @@ function fakeLayer() {
             this.tooltip = text;
         },
         getLatLng: () => ({lat: 1, lng: 2}),
+    };
+}
+
+/**
+ * An explore page's map context, where the given dungeon starts navigate.
+ *
+ * @param {Object} navigationById
+ * @returns {Object}
+ */
+function exploreContext(navigationById = {}) {
+    return {
+        getDungeonStartNavigation: (dungeonStartId) => navigationById[dungeonStartId] ?? null,
     };
 }
 
@@ -138,8 +165,10 @@ describe('DungeonStart', () => {
             ['mapping_version_id', 'floor_id', 'target_dungeon_id', 'comment', 'lat', 'lng'],
         );
         const targetDungeonAttribute = attributes.find((attribute) => attribute.name === 'target_dungeon_id');
-        expect(targetDungeonAttribute.options.edit).toBe(false);
-        expect(targetDungeonAttribute.options.save).toBe(false);
+        expect(targetDungeonAttribute.options.type).toBe('select');
+        expect(targetDungeonAttribute.options.edit).toBeUndefined();
+        expect(targetDungeonAttribute.options.save).toBeUndefined();
+        expect(targetDungeonAttribute.options.values()).toEqual([{id: 80, name: 'The Deadmines'}]);
         expect(attributes.find((attribute) => attribute.name === 'comment').options.edit).toBeUndefined();
         expect(attributes.find((attribute) => attribute.name === 'floor_id').options.default).toBe(7);
     });
@@ -193,6 +222,102 @@ describe('DungeonStart', () => {
 
         // Assert
         expect(dungeonStart.layer.tooltip).toBe('translated(mapping.map_icons.sl.plaguefall.exit)');
+    });
+
+    it('bindTooltip_givenNavigationToADungeon_saysGoToThatDungeon', () => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(exploreContext({
+            5: {backLink: false, dungeonName: 'dungeons.classic.deadmines', url: 'https://keystone.guru/start/5'},
+        }));
+        dungeonStart.id = 5;
+        dungeonStart.comment = 'mapping.map_icons.sl.plaguefall.exit';
+
+        // Act
+        dungeonStart.bindTooltip();
+
+        // Assert
+        expect(dungeonStart.layer.tooltip).toBe(
+            'translated(js.dungeonstart_go_to_label, {"dungeon":"translated(dungeons.classic.deadmines)"})',
+        );
+    });
+
+    it('bindTooltip_givenBackLink_saysBackToThatDungeon', () => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(exploreContext({
+            5: {backLink: true, dungeonName: 'dungeons.continent.eastern_kingdoms', url: 'https://keystone.guru/start/5'},
+        }));
+        dungeonStart.id = 5;
+
+        // Act
+        dungeonStart.bindTooltip();
+
+        // Assert
+        expect(dungeonStart.layer.tooltip).toBe(
+            'translated(js.dungeonstart_back_to_label, {"dungeon":"translated(dungeons.continent.eastern_kingdoms)"})',
+        );
+    });
+
+    it('bindTooltip_givenNavigationOfAnotherStart_usesTheDefaultTooltip', () => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(exploreContext({
+            6: {backLink: false, dungeonName: 'dungeons.classic.deadmines', url: 'https://keystone.guru/start/6'},
+        }));
+        dungeonStart.id = 5;
+
+        // Act
+        dungeonStart.bindTooltip();
+
+        // Assert
+        expect(dungeonStart.layer.tooltip).toBe('translated(js.dungeonstart_tooltip)');
+    });
+
+    describe('click', () => {
+        let assignedHref;
+
+        beforeEach(() => {
+            // jsdom refuses a real navigation, so stand in for it
+            assignedHref = null;
+
+            delete window.location;
+            window.location = {
+                set href(url) {
+                    assignedHref = url;
+                },
+                get href() {
+                    return assignedHref;
+                },
+            };
+        });
+
+        it('onLayerInit_givenNavigationThenClick_navigatesToItsUrl', () => {
+            // Arrange
+            const dungeonStart = buildDungeonStart(exploreContext({
+                5: {backLink: false, dungeonName: 'dungeons.classic.deadmines', url: 'https://keystone.guru/start/5'},
+            }));
+            dungeonStart.id = 5;
+            dungeonStart.onLayerInit();
+
+            // Act
+            dungeonStart.layer.handlers.click?.();
+
+            // Assert
+            expect(assignedHref).toBe('https://keystone.guru/start/5');
+        });
+
+        it('onLayerInit_givenNoNavigationThenClick_staysOnThePage', () => {
+            // Arrange
+            const dungeonStart = buildDungeonStart(exploreContext({
+                6: {backLink: false, dungeonName: 'dungeons.classic.deadmines', url: 'https://keystone.guru/start/6'},
+            }));
+            dungeonStart.id = 5;
+            dungeonStart.onLayerInit();
+
+            // Act
+            dungeonStart.layer.handlers.click();
+
+            // Assert
+            expect(assignedHref).toBeNull();
+        });
     });
 
     it('isEditable_givenMappingVersionEditContext_returnsTrue', () => {

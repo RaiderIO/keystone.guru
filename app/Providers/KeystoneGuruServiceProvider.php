@@ -131,6 +131,8 @@ use App\Service\DungeonRoute\ThumbnailGenerationToggleService;
 use App\Service\DungeonRoute\ThumbnailGenerationToggleServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use App\Service\DungeonStart\DungeonStartNavigationService;
+use App\Service\DungeonStart\DungeonStartNavigationServiceInterface;
 use App\Service\EnemyForces\EnemyForcesDb2Service;
 use App\Service\EnemyForces\EnemyForcesDb2ServiceInterface;
 use App\Service\Expansion\ExpansionService;
@@ -265,6 +267,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(ApiRequestServiceInterface::class, ApiRequestService::class);
         $this->app->bind(CoordinatesServiceInterface::class, CoordinatesService::class);
         $this->app->bind(FloorResolutionServiceInterface::class, FloorResolutionService::class);
+        $this->app->bind(DungeonStartNavigationServiceInterface::class, DungeonStartNavigationService::class);
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
         $this->app->bind(PatreonDiagnosticsServiceInterface::class, PatreonDiagnosticsService::class);

@@ -305,6 +305,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::prefix('{gameVersion}')->group(static function () {
             Route::get('/', new DungeonExploreController()->getByGameVersion(...))->name('dungeon.explore.gameversion');
             Route::get('/select', new DungeonExploreController()->select(...))->name('dungeon.explore.gameversion.select');
+            Route::get('/start/{dungeonStart}', new DungeonExploreController()->navigateDungeonStart(...))->name('dungeon.explore.gameversion.start.navigate');
             Route::prefix('{dungeon}')->group(static function () {
                 Route::get('/', new DungeonExploreController()->viewDungeon(...))->name('dungeon.explore.gameversion.view');
                 Route::get('/embed', new DungeonExploreController()->embed(...))->name('dungeon.explore.gameversion.embed');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\DungeonStart;
 
+use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Foundation\Http\FormRequest;
@@ -15,6 +16,13 @@ class DungeonStartFormRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'target_dungeon_id' => (int)$this->target_dungeon_id === -1 ? null : $this->target_dungeon_id,
+        ]);
     }
 
     /**
@@ -31,6 +39,11 @@ class DungeonStartFormRequest extends FormRequest
             'floor_id' => [
                 'required',
                 Rule::exists(Floor::class, 'id'),
+            ],
+            'target_dungeon_id' => [
+                'nullable',
+                'integer',
+                Rule::exists(Dungeon::class, 'id'),
             ],
             'comment' => [
                 'nullable',

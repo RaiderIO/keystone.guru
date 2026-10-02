@@ -33,4 +33,12 @@ class GameVersionRepository extends DatabaseRepository implements GameVersionRep
             }
         });
     }
+
+    public function findFirstInDisplayOrder(array $gameVersionIds): ?GameVersion
+    {
+        return GameVersion::query()
+            ->whereIn('id', $gameVersionIds)
+            ->orderBy('display_order')
+            ->first();
+    }
 }

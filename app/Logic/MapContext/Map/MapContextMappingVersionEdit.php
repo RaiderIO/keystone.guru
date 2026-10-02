@@ -6,8 +6,10 @@ use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Override;
 
 /**
  * Class MapContextMappingVersionEdit
@@ -19,10 +21,11 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 class MapContextMappingVersionEdit extends MapContextMappingVersion
 {
     public function __construct(
-        CacheServiceInterface       $cacheService,
-        CoordinatesServiceInterface $coordinatesService,
-        Dungeon                     $dungeon,
-        MappingVersion              $mappingVersion,
+        CacheServiceInterface                       $cacheService,
+        CoordinatesServiceInterface                 $coordinatesService,
+        private readonly DungeonRepositoryInterface $dungeonRepository,
+        Dungeon                                     $dungeon,
+        MappingVersion                              $mappingVersion,
     ) {
         parent::__construct($cacheService, $coordinatesService, $dungeon, $mappingVersion, User::MAP_FACADE_STYLE_SPLIT_FLOORS);
     }
@@ -55,5 +58,19 @@ class MapContextMappingVersionEdit extends MapContextMappingVersion
     public function getVisibleFloors(): array
     {
         return $this->dungeon->floors->toArray();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    #[Override]
+    public function toArray(): array
+    {
+        return array_merge(parent::toArray(), [
+            'dungeonSelectValues' => $this->dungeonRepository->getSelectValues()
+                ->where('id', '!=', $this->dungeon->id)
+                ->values()
+                ->all(),
+        ]);
     }
 }
