@@ -43,49 +43,65 @@ final class DiscoverServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function popular_givenChildGameVersionMappingTheDungeonItself_returnsOnlyTheRouteOnTheChildMappingVersion(): void
+    public function popular_givenChildGameVersionMappingTheDungeonItself_returnsTheChildsRouteAndTheParentsRouteOfAnInheritedDungeon(): void
     {
         // Arrange
-        $parentRoute = null;
-        $childRoute  = null;
+        $parentRoute    = null;
+        $childRoute     = null;
+        $inheritedRoute = null;
 
         try {
             [$parentMappingVersion, $childMappingVersion] = $this->createDungeonMappedByClassicEraAndTbc();
             $parentRoute                                  = $this->createDiscoverableRoute($parentMappingVersion);
             $childRoute                                   = $this->createDiscoverableRoute($childMappingVersion);
+            $inheritedRoute                               = $this->createDiscoverableRoute($this->createDungeonMappedByClassicEraOnly());
 
             // Act
-            $routes = $this->discoverServiceForTbc([$parentRoute->id, $childRoute->id])->popular();
+            $routes = $this->discoverServiceForTbc([$parentRoute->id, $childRoute->id, $inheritedRoute->id])->popular();
 
             // Assert
-            $this->assertSame([$childRoute->id], $routes->pluck('id')->all());
+            $this->assertEqualsCanonicalizing([$childRoute->id, $inheritedRoute->id], $routes->pluck('id')->all());
         } finally {
+            $inheritedRoute?->delete();
             $childRoute?->delete();
             $parentRoute?->delete();
         }
     }
 
     #[Test]
-    public function new_givenChildGameVersionMappingTheDungeonItself_returnsOnlyTheRouteOnTheChildMappingVersion(): void
+    public function new_givenChildGameVersionMappingTheDungeonItself_returnsTheChildsRouteAndTheParentsRouteOfAnInheritedDungeon(): void
     {
         // Arrange
-        $parentRoute = null;
-        $childRoute  = null;
+        $parentRoute    = null;
+        $childRoute     = null;
+        $inheritedRoute = null;
 
         try {
             [$parentMappingVersion, $childMappingVersion] = $this->createDungeonMappedByClassicEraAndTbc();
             $parentRoute                                  = $this->createDiscoverableRoute($parentMappingVersion);
             $childRoute                                   = $this->createDiscoverableRoute($childMappingVersion);
+            $inheritedRoute                               = $this->createDiscoverableRoute($this->createDungeonMappedByClassicEraOnly());
 
             // Act
-            $routes = $this->discoverServiceForTbc([$parentRoute->id, $childRoute->id])->new();
+            $routes = $this->discoverServiceForTbc([$parentRoute->id, $childRoute->id, $inheritedRoute->id])->new();
 
             // Assert
-            $this->assertSame([$childRoute->id], $routes->pluck('id')->all());
+            $this->assertEqualsCanonicalizing([$childRoute->id, $inheritedRoute->id], $routes->pluck('id')->all());
         } finally {
+            $inheritedRoute?->delete();
             $childRoute?->delete();
             $parentRoute?->delete();
         }
+    }
+
+    private function createDungeonMappedByClassicEraOnly(): MappingVersion
+    {
+        $dungeon = $this->createDungeon(
+            ['expansion_id' => Expansion::ALL[Expansion::EXPANSION_CLASSIC], 'active' => true],
+            mappingVersionAttributes: ['game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]],
+        );
+
+        return MappingVersion::query()->where('dungeon_id', $dungeon->id)->firstOrFail();
     }
 
     /**

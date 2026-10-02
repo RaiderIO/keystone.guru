@@ -242,6 +242,33 @@ final class MDTMappingAcceptPendingMappingVersionTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function acceptMDTMappingForPendingMappingVersion_givenChildGameVersionWithoutOwnMappingVersion_throwsAndLeavesTheParentsPending(): void
+    {
+        // Arrange
+        $dungeon              = $this->getDungeon();
+        $parentGameVersion    = $this->getGameVersion();
+        $childGameVersion     = $this->getChildGameVersionWithoutMappingVersion($dungeon, $parentGameVersion);
+        $mappingImportService = $this->app->make(MDTMappingImportServiceInterface::class);
+
+        $mappingVersion = $this->makeCurrentMappingVersionPending($dungeon, $parentGameVersion, self::OUTDATED_MAPPING_HASH);
+
+        try {
+            // Assert
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessageMatches('/has no mapping version for game version/');
+
+            // Act
+            $mappingImportService->acceptMDTMappingForPendingMappingVersion($this->reloadDungeon($dungeon), $childGameVersion);
+        } finally {
+            $parentMappingVersion = MappingVersion::query()->findOrFail($mappingVersion->id);
+            $this->assertTrue($parentMappingVersion->mdt_changes_pending, 'The parent\'s mapping version must stay pending.');
+            $this->assertSame(self::OUTDATED_MAPPING_HASH, $parentMappingVersion->mdt_mapping_hash);
+
+            $this->restoreMappingVersion($mappingVersion);
+        }
+    }
+
     private function getDungeon(): Dungeon
     {
         return Dungeon::query()->where('key', DungeonKey::MURDER_ROW->value)->firstOrFail();
@@ -250,6 +277,24 @@ final class MDTMappingAcceptPendingMappingVersionTest extends PublicTestCase
     private function getGameVersion(): GameVersion
     {
         return GameVersion::query()->where('key', GameVersion::GAME_VERSION_RETAIL)->firstOrFail();
+    }
+
+    /**
+     * A game version that inherits from $parentGameVersion, held in memory only so the seeded game versions stay
+     * untouched.
+     */
+    private function getChildGameVersionWithoutMappingVersion(Dungeon $dungeon, GameVersion $parentGameVersion): GameVersion
+    {
+        /** @var GameVersion $childGameVersion */
+        $childGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_BETA)->firstOrFail();
+        $this->assertFalse(
+            $dungeon->mappingVersions()->where('game_version_id', $childGameVersion->id)->exists(),
+            'The child game version must have no mapping version of its own for the dungeon.',
+        );
+
+        $childGameVersion->parent_game_version_id = $parentGameVersion->id;
+
+        return $childGameVersion;
     }
 
     /**
