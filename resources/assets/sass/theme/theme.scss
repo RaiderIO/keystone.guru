@@ -740,6 +740,31 @@ body {
     color: var($--theme-light) !important;
   }
 
+  .route_manipulation_tools .draw_tool_group_flyout {
+    background-color: var($--theme-dark);
+    border: var($--theme-header-border);
+  }
+
+  .route_manipulation_tools .draw_tool_group_flyout_header {
+    color: var($--theme-light);
+    border-bottom: var($--theme-header-border);
+  }
+
+  .route_manipulation_tools .draw_tool_flyout_item {
+    color: var($--theme-text-contrast);
+  }
+
+  .route_manipulation_tools .draw_tool_flyout_item.leaflet-draw-toolbar-button-enabled,
+  .route_manipulation_tools .draw_tool_flyout_item:hover {
+    background: var($--theme-primary);
+    color: var($--theme-light);
+  }
+
+  .route_manipulation_tools .draw_tool_keycap {
+    background-color: var($--theme-darker);
+    color: var($--theme-text-contrast);
+  }
+
   #pulls_sidebar .map_killzonessidebar_floor_switch:not(.selected):hover,
   #pulls_sidebar .map_killzonessidebar_killzone.selectable:not(.selected):hover {
     background-color: var($--theme-darker) !important;

@@ -1,0 +1,23 @@
+<div class="draw_tool_group" data-draw-tool-group="{{ group }}">
+    <a href="#" class="draw_icon draw_tool_group_button" aria-label="{{ label }}" aria-haspopup="true"
+       aria-expanded="false">
+        <div class="row g-0" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ label }}">
+            <div class="col btn btn-info">
+                <div class="row g-0">
+                    <div class="col-auto">
+                        <i class="fas {{ fa_class }} draw_tool_group_icon"></i>
+                    </div>
+                    <div class="col">
+                        <span class="map_controls_element_label_toggle" style="display: none;">
+                            {{ label }} <i class="fas fa-caret-right"></i>
+                        </span>
+                    </div>
+                </div>
+                <span class="draw_tool_group_tick" aria-hidden="true"></span>
+            </div>
+        </div>
+    </a>
+    <div class="draw_tool_group_flyout" style="display: none;">
+        <div class="draw_tool_group_flyout_header">{{ label }}</div>
+    </div>
+</div>

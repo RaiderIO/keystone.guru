@@ -1,72 +1,15 @@
+// The mode handlers are generated from the editor's tool list (DrawControls#_getTools()), passed in as `tools`.
 L.DrawToolbar.prototype.getModeHandlers = function (map) {
+    return (this.options.tools ?? []).map((tool) => {
+        let handler = new tool.handler(map, this.options[tool.id]);
+        console.assert(handler.type === tool.id, 'Draw tool id must match its handler type', tool.id, handler.type);
 
-    return [
-        {
-            enabled: this.options.path,
-            handler: new L.Draw.Path(map, this.options.path),
-            title: this.options.path.title
-        }, {
-            enabled: this.options.killzone,
-            handler: new L.Draw.KillZone(map, this.options.killzone),
-            title: this.options.killzone.title
-        }, {
-            enabled: this.options.mapicon,
-            handler: new L.Draw.MapIcon(map, this.options.mapicon),
-            title: this.options.mapicon.title
-        }, {
-            enabled: this.options.awakenedobeliskgatewaymapicon,
-            handler: new L.Draw.AwakenedObeliskGatewayMapIcon(map, this.options.awakenedobeliskgatewaymapicon),
-            title: this.options.awakenedobeliskgatewaymapicon.title
-        }, {
-            enabled: this.options.brushline,
-            handler: new L.Draw.Brushline(map, this.options.brushline),
-            title: this.options.brushline.title
-        }, {
-            enabled: this.options.arrow,
-            handler: new L.Draw.Arrow(map, this.options.arrow),
-            title: this.options.arrow.title
-        }, {
-            enabled: this.options.enemypack,
-            handler: new L.Draw.EnemyPack(map, this.options.enemypack),
-            title: this.options.enemypack.title
-        }, {
-            enabled: this.options.enemy,
-            handler: new L.Draw.Enemy(map, this.options.enemy),
-            title: this.options.enemy.title
-        }, {
-            enabled: this.options.enemypatrol,
-            handler: new L.Draw.EnemyPatrol(map, this.options.enemypatrol),
-            title: this.options.enemypatrol.title
-        }, {
-            enabled: this.options.dungeonfloorswitchmarker,
-            handler: new L.Draw.DungeonFloorSwitchMarker(map, this.options.dungeonfloorswitchmarker),
-            title: this.options.dungeonfloorswitchmarker.title
-        }, {
-            enabled: this.options.dungeonstart,
-            handler: new L.Draw.DungeonStart(map, this.options.dungeonstart),
-            title: this.options.dungeonstart.title
-        }, {
-            enabled: this.options.usermouseposition,
-            handler: new L.Draw.UserMousePosition(map, this.options.usermouseposition),
-            title: this.options.usermouseposition.title
-        }, {
-            enabled: this.options.mountablearea,
-            handler: new L.Draw.MountableArea(map, this.options.mountablearea),
-            title: this.options.mountablearea.title
-        }, {
-            enabled: this.options.enemyforcescheckpoint,
-            handler: new L.Draw.EnemyForcesCheckpoint(map, this.options.enemyforcescheckpoint),
-            title: this.options.enemyforcescheckpoint.title
-        }, {
-            enabled: this.options.floorunion,
-            handler: new L.Draw.FloorUnion(map, this.options.floorunion),
-            title: this.options.floorunion.title
-        }, {
-            enabled: this.options.floorunionarea,
-            handler: new L.Draw.FloorUnionArea(map, this.options.floorunionarea),
-            title: this.options.floorunionarea.title
-        },
-    ];
+        return {
+            enabled: this.options[tool.id],
+            handler: handler,
+            title: this.options[tool.id].title
+        };
+    });
 };
 
 // Prevent the creation of new vertices during edit for layers that opted out (arrows, which are
@@ -138,155 +81,144 @@ class DrawControls extends MapControl {
     }
 
     /**
+     * The tools of this editor in toolbar order. The Leaflet.draw mode handlers and options, the toolbar buttons and
+     * the hotkeys are all generated from this list.
      *
-     * @returns {Object}
-     * @private
+     * @returns {DrawTool[]}
+     * @protected
      */
-    _getHotkeys() {
+    _getTools() {
         console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
 
-        let hotkeys = [{
-            hotkey: '1',
-            cssClass: 'leaflet-draw-draw-path',
+        return [{
+            id: 'path',
+            icon: 'fa-route',
+            label: 'js.path',
+            title: 'js.path_title',
+            keys: ['1', 'p'],
+            handler: L.Draw.Path,
+            options: {
+                shapeOptions: {
+                    color: c.map.polyline.defaultColor(),
+                    weight: c.map.polyline.defaultWeight,
+                    opacity: 1.0
+                },
+                zIndexOffset: 1000,
+            },
         }, {
-            hotkey: '2',
-            cssClass: 'leaflet-draw-draw-mapicon',
+            id: 'killzone',
+            hidden: true,
+            handler: L.Draw.KillZone,
+            options: {
+                repeatMode: false,
+                zIndexOffset: 1000,
+            },
         }, {
-            hotkey: '3',
-            cssClass: 'leaflet-draw-draw-brushline',
+            id: 'mapicon',
+            icon: 'fa-icons',
+            label: 'js.mapicon',
+            title: 'js.mapicon_title',
+            keys: ['2', 'i'],
+            handler: L.Draw.MapIcon,
+            options: {
+                repeatMode: false,
+                zIndexOffset: 1000,
+            },
         }, {
-            hotkey: '5',
-            cssClass: 'leaflet-draw-edit-edit',
+            id: 'awakenedobeliskgatewaymapicon',
+            hidden: true,
+            handler: L.Draw.AwakenedObeliskGatewayMapIcon,
+            options: {
+                repeatMode: false,
+                zIndexOffset: 1000,
+            },
         }, {
-            hotkey: '6',
-            cssClass: 'leaflet-draw-edit-remove',
+            id: 'brushline',
+            kind: 'pather',
+            icon: 'fa-paint-brush',
+            label: 'js.brushline',
+            title: 'js.brushline_title',
+            keys: ['3', 'b'],
+        }, {
+            id: 'arrow',
+            icon: 'fa-arrow-right',
+            label: 'js.arrow',
+            title: 'js.arrow_title',
+            keys: ['4', 'r'],
+            handler: L.Draw.Arrow,
+            options: {
+                shapeOptions: {
+                    color: c.map.polyline.defaultColor(),
+                    weight: c.map.polyline.defaultWeight,
+                    opacity: 1.0
+                },
+                zIndexOffset: 1000,
+            },
+        }, {
+            id: 'edit',
+            kind: 'edit',
+            icon: 'fa-edit',
+            label: 'js.edit',
+            title: 'js.edit_title',
+            keys: ['5', 'e'],
+        }, {
+            id: 'delete',
+            kind: 'remove',
+            icon: 'fa-trash',
+            label: 'js.delete',
+            title: 'js.delete_title',
+            keys: ['6', 'x'],
+            btnType: 'btn-danger',
         }];
-
-        return hotkeys;
     }
 
     /**
-     * @param cssClass {String}
-     * @returns {null|String}
-     * @private
-     */
-    _findHotkeyByCssClass(cssClass) {
-        console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
-
-        let result = null;
-
-        let hotkeys = this._getHotkeys();
-        for (let index in hotkeys) {
-            if (hotkeys.hasOwnProperty(index)) {
-                let hotkey = hotkeys[index];
-                if (hotkey.cssClass.endsWith(cssClass)) {
-                    result = hotkey.hotkey;
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     *
      * @protected
      */
     _attachHotkeys() {
         console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
 
-        let hotkeys = this._getHotkeys();
+        this.map.hotkeys.setTools(this._getTools());
+    }
 
-        for (let index in hotkeys) {
-            if (hotkeys.hasOwnProperty(index)) {
-                let hotkey = hotkeys[index];
-                this.map.hotkeys.attach(hotkey.hotkey, hotkey.cssClass, hotkey.enabled);
-            }
-        }
+    /**
+     * @param tool {DrawTool}
+     * @returns {String} Every key of the tool, for in a tooltip
+     * @private
+     */
+    _getToolHotkeyText(tool) {
+        return (tool.keys ?? []).map((chord) => Hotkeys.formatChord(chord)).join(' / ');
+    }
+
+    /**
+     * @param tool {DrawTool}
+     * @returns {String} The key shown on the tool's button
+     * @private
+     */
+    _getToolKeycap(tool) {
+        return (tool.keys ?? []).length > 0 ? Hotkeys.formatChord(tool.keys[0]) : '';
     }
 
     /**
      * Gets the newly generated options for the drawing control.
+     * @param tools {DrawTool[]}
      * @returns object
      * @protected
      */
-    _getDrawControlOptions() {
+    _getDrawControlOptions(tools) {
         console.assert(this instanceof DrawControls, 'this was not a DrawControls', this);
 
-        let hotkeys = {
-            path: this._findHotkeyByCssClass('path'),
-            mapicon: this._findHotkeyByCssClass('icon'),
-        };
+        let drawTools = tools.filter((tool) => (tool.kind ?? 'draw') === 'draw');
+        let draw = {tools: drawTools};
+        for (let tool of drawTools) {
+            draw[tool.id] = $.extend({}, tool.options, {
+                title: tool.hidden ? '' : lang.get(tool.title, {hotkey: this._getToolHotkeyText(tool)}),
+            });
+        }
 
         return {
             position: 'topleft',
-            // This now shows/hides the brushline icon
-            brushline: true,
-            draw: {
-                path: {
-                    shapeOptions: {
-                        color: c.map.polyline.defaultColor(),
-                        weight: c.map.polyline.defaultWeight,
-                        opacity: 1.0
-                    },
-                    zIndexOffset: 1000,
-                    faClass: 'fa-route',
-                    title: lang.get('js.path_title', {hotkey: hotkeys.path}),
-                    hotkey: hotkeys.path
-                },
-                killzone: {
-                    repeatMode: false,
-                    zIndexOffset: 1000,
-                    cssClass: 'd-none',
-                    faClass: 'fa-bullseye'
-                },
-                mapicon: {
-                    repeatMode: false,
-                    zIndexOffset: 1000,
-                    faClass: 'fa-icons',
-                    title: lang.get('js.mapicon_title', {hotkey: hotkeys.mapicon}),
-                    hotkey: hotkeys.mapicon
-                },
-                awakenedobeliskgatewaymapicon: {
-                    repeatMode: false,
-                    zIndexOffset: 1000,
-                    cssClass: 'd-none',
-                    faClass: 'fa-icons'
-                },
-                brushline: false,
-                // Brushlines are added in a custom way since I'm using Pather for this
-                // brushline: {
-                //     shapeOptions: {
-                //         color: color,
-                //         weight: weight,
-                //         opacity: 1.0
-                //     },
-                //     zIndexOffset: 1000,
-                //     faClass: 'fa-paint-brush',
-                //     title: 'Draw a line using a brush'
-                // },
-                arrow: {
-                    shapeOptions: {
-                        color: c.map.polyline.defaultColor(),
-                        weight: c.map.polyline.defaultWeight,
-                        opacity: 1.0
-                    },
-                    zIndexOffset: 1000,
-                    faClass: 'fa-arrow-right',
-                    title: lang.get('js.arrow_title'),
-                },
-                enemypack: false,
-                enemypatrol: false,
-                enemy: false,
-                dungeonfloorswitchmarker: false,
-                dungeonstart: false,
-                usermouseposition: false,
-                mountablearea: false,
-                enemyforcescheckpoint: false,
-                floorunion: false,
-                floorunionarea: false,
-            },
+            draw: draw,
             edit: {
                 featureGroup: this.editableItemsLayer, //REQUIRED!!
                 remove: true
@@ -332,25 +264,7 @@ class DrawControls extends MapControl {
         $container.addClass('container p-0');
 
         $.each($container.children(), function (i, child) {
-            let $child = $(child);
-
-            // Clear of classes, add a row
-            let $parent = $child.removeClass();
-
-            // Add columns to the buttons
-            let $buttons = $parent.find('a');
-            $buttons.addClass('draw_icon');
-
-            $.each($buttons, function (index, button) {
-                let $button = $(button);
-                let $row = $($button.children()[0]);
-                $row.attr('data-bs-toggle', 'tooltip');
-                $row.attr('data-bs-placement', 'right');
-                $row.attr('title', $button.attr('title'));
-            });
-
-            // The buttons have a parent that shouldn't be there; strip the children from that bad parent!
-            $parent.append($buttons);
+            $(child).removeClass();
         });
 
         let $originalDrawActions = $container.find('.leaflet-draw-actions');
@@ -358,6 +272,8 @@ class DrawControls extends MapControl {
         this.map.leafletMap.off(L.Draw.Event.TOOLBAROPENED).on(L.Draw.Event.TOOLBAROPENED, function (e) {
             // Ensure that pather is disabled now
             self.map.togglePather(false);
+
+            self._refreshToolGroups();
 
             // Put the draw actions in a different div
             let $drawActions = $container.find('.leaflet-draw-actions');
@@ -387,6 +303,9 @@ class DrawControls extends MapControl {
         });
 
         this.map.leafletMap.off(L.Draw.Event.TOOLBARCLOSED).on(L.Draw.Event.TOOLBARCLOSED, function (e) {
+            // Fired before Leaflet.draw takes the active class off the closed tool's button
+            $container.find('.draw_tool_group_button').removeClass('leaflet-draw-toolbar-button-enabled');
+
             let snackbar = $(`#${self.drawControlSnackbarId}`);
 
             if (snackbar.length > 0) {
@@ -402,26 +321,21 @@ class DrawControls extends MapControl {
         });
     }
 
-    _addControlSetupBrushlineButton() {
+    /**
+     * @returns {jQuery} The button that toggles Pather, which is not a Leaflet.draw tool
+     * @private
+     */
+    _createBrushlineButton() {
         let self = this;
 
         // Add a special button for the Brushline
         let $brushlineButton = $('<a>', {
-            class: 'leaflet-draw-draw-brushline draw_icon mt-2' +
+            class: 'leaflet-draw-draw-brushline mt-2' +
                 // If pather was enabled, make sure it stays active
                 (self.map.getMapState() instanceof PatherMapState ? ' leaflet-draw-toolbar-button-enabled' : ''),
             href: '#',
         });
 
-        let hotkey = this._findHotkeyByCssClass('brushline');
-        $brushlineButton.html(
-            this._getButtonHtml(
-                'fa-paint-brush',
-                lang.get('js.brushline'),
-                hotkey,
-                lang.get('js.brushline_title', {hotkey: hotkey})
-            )
-        );
         $brushlineButton.unbind('click').bind('click', function () {
             // Check if it's enabled now
             let wasEnabled = self.map.getMapState() instanceof PatherMapState;
@@ -474,13 +388,89 @@ class DrawControls extends MapControl {
             });
         });
 
-        $brushlineButton.insertAfter('.leaflet-draw-draw-mapicon');
-
-        // Re-set pather to the same enabled state so all events are fired and UI is put back in a proper state
-        this.map.togglePather(this.map.getMapState() instanceof PatherMapState);
+        return $brushlineButton;
     }
 
-    _addControlSetupEditDeleteButtons() {
+    /**
+     * @param $container {jQuery}
+     * @param tool {DrawTool}
+     * @returns {jQuery}
+     * @private
+     */
+    _findToolButton($container, tool) {
+        switch (tool.kind ?? 'draw') {
+            case 'pather':
+                return this._createBrushlineButton();
+            case 'edit':
+                return $container.find('.leaflet-draw-edit-edit');
+            case 'remove':
+                return $container.find('.leaflet-draw-edit-remove');
+            default:
+                return $container.find(`.leaflet-draw-draw-${tool.id}`);
+        }
+    }
+
+    /**
+     * @param group {String}
+     * @param firstTool {DrawTool}
+     * @returns {jQuery}
+     * @private
+     */
+    _createToolGroup(group, firstTool) {
+        let self = this;
+        let template = Handlebars.templates['map_controls_draw_tool_group_template'];
+
+        let $group = $(template({
+            group: group,
+            fa_class: firstTool.icon,
+            label: lang.get(`js.draw_tool_group_${group}`),
+        }));
+
+        $group.find('.draw_tool_group_button').on('click', function (clickEvent) {
+            clickEvent.preventDefault();
+
+            let $flyout = $group.find('.draw_tool_group_flyout');
+            let wasOpen = $flyout.is(':visible');
+            self._closeToolGroups();
+            if (!wasOpen) {
+                $flyout.show();
+                $(this).attr('aria-expanded', 'true');
+            }
+        });
+
+        return $group;
+    }
+
+    /**
+     * @private
+     */
+    _closeToolGroups() {
+        $('.draw_tool_group_flyout').hide();
+        $('.draw_tool_group_button').attr('aria-expanded', 'false');
+    }
+
+    /**
+     * Marks the group of the active tool as active.
+     * @private
+     */
+    _refreshToolGroups() {
+        $('.draw_tool_group').each(function (index, group) {
+            let $group = $(group);
+            $group.find('.draw_tool_group_button').toggleClass(
+                'leaflet-draw-toolbar-button-enabled',
+                $group.find('.draw_tool_group_flyout .leaflet-draw-toolbar-button-enabled').length > 0
+            );
+        });
+    }
+
+    /**
+     * Renders every tool's button in the order of the tool list; grouped tools go in their group's flyout.
+     * @param tools {DrawTool[]}
+     * @private
+     */
+    _addControlSetupToolButtons(tools) {
+        let self = this;
+
         let $container = $(this._mapControl.getContainer());
         let $buttonContainer = $($container.children()[0]);
         let $editRouteControls = $($container.children()[1]);
@@ -488,22 +478,65 @@ class DrawControls extends MapControl {
         // Add some padding for the above custom controls
         $editRouteControls.css('height', '0');
 
-        // Add custom content for the edit and remove buttons
-        let $buttons = $editRouteControls.find('a');
-        let $editButton = $($buttons[0]);
-        let editHotkey = this._findHotkeyByCssClass('edit');
-        $editButton.html(this._getButtonHtml('fa-edit', lang.get('js.edit'), editHotkey, lang.get('js.edit_title', {hotkey: editHotkey})));
-        $editButton.attr('title', '');
+        let flyoutItemTemplate = Handlebars.templates['map_controls_draw_tool_flyout_item_template'];
+        let $groups = {};
 
-        let $deleteButton = $($buttons[1]);
-        let deleteHotkey = this._findHotkeyByCssClass('remove');
-        $deleteButton.html(
-            this._getButtonHtml('fa-trash', lang.get('js.delete'), deleteHotkey, lang.get('js.delete_title', {hotkey: deleteHotkey}), 'btn-danger')
-        );
-        $deleteButton.attr('title', '');
+        for (let tool of tools) {
+            let $button = this._findToolButton($container, tool);
+            $button.attr('data-draw-tool', tool.id).removeAttr('title');
 
-        // Remove from the second row, inject in the first row
-        $buttonContainer.append($buttons);
+            if (tool.hidden) {
+                $buttonContainer.append($button.addClass('d-none'));
+                continue;
+            }
+
+            let label = lang.get(tool.label);
+            $button.attr('aria-label', label).css('background-image', 'none');
+
+            if (!tool.group) {
+                $button.addClass('draw_icon').html(
+                    this._getButtonHtml(
+                        tool.icon,
+                        label,
+                        this._getToolKeycap(tool),
+                        lang.get(tool.title, {hotkey: this._getToolHotkeyText(tool)}),
+                        tool.btnType ?? ''
+                    )
+                );
+                $buttonContainer.append($button);
+                continue;
+            }
+
+            if (!$groups.hasOwnProperty(tool.group)) {
+                $groups[tool.group] = this._createToolGroup(tool.group, tool);
+                $buttonContainer.append($groups[tool.group]);
+            }
+            let $group = $groups[tool.group];
+
+            $button.addClass('draw_tool_flyout_item').html(flyoutItemTemplate({
+                fa_class: tool.icon,
+                text: label,
+                hotkey: this._getToolKeycap(tool),
+            }));
+            // Through a hotkey too, since that clicks the button
+            $button.on('click', function () {
+                $group.find('.draw_tool_group_icon').removeClass().addClass(`fas ${tool.icon} draw_tool_group_icon`);
+                self._closeToolGroups();
+            });
+            $group.find('.draw_tool_group_flyout').append($button);
+        }
+
+        $(document).off('.drawtoolgroups')
+            .on('click.drawtoolgroups', function (clickEvent) {
+                if ($(clickEvent.target).closest('.draw_tool_group').length === 0) {
+                    self._closeToolGroups();
+                }
+            })
+            .on('keydown.drawtoolgroups', function (keyEvent) {
+                if (keyEvent.key === 'Escape') {
+                    self._closeToolGroups();
+                }
+            });
     }
 
     /**
@@ -517,40 +550,22 @@ class DrawControls extends MapControl {
             this.map.leafletMap.removeControl(this._mapControl);
         }
 
+        let tools = this._getTools();
+
         // Add the control to the map
-        this.drawControlOptions = this._getDrawControlOptions(this.editableItemsLayer);
+        this.drawControlOptions = this._getDrawControlOptions(tools);
         this._mapControl = new L.Control.Draw(this.drawControlOptions);
         this.map.leafletMap.addControl(this._mapControl);
-
-        // If the option wants, render it with a font-awesome icon instead.
-        // Surely there must be a better way for this but whatever, this works..
-        for (let optionName in this.drawControlOptions.draw) {
-            if (this.drawControlOptions.draw.hasOwnProperty(optionName)) {
-                let option = this.drawControlOptions.draw[optionName];
-                if (option.hasOwnProperty('faClass')) {
-                    // Set the FA icon and remove the background image that was initially there
-                    let $option = $(`.leaflet-draw-draw-${optionName}`)
-                        .html(this._getButtonHtml(option.faClass, lang.get(`js.${optionName}`), option.hotkey))
-                        .css('background-image', 'none');
-
-                    // Add any css class that may or may not have been set
-                    if (typeof option.cssClass !== 'undefined') {
-                        $option.addClass(option.cssClass);
-                    }
-                }
-            }
-        }
 
         // Add the leaflet draw control to the bottom bar
         this._addControlSetupBottomBar();
 
-        // Setup the brushline button, it's a custom contraption
-        if (this.drawControlOptions.brushline !== false) {
-            this._addControlSetupBrushlineButton();
-        }
+        this._addControlSetupToolButtons(tools);
 
-        // Edit and delete buttons need to be moved to the same container as the other buttons
-        this._addControlSetupEditDeleteButtons();
+        // Re-set pather to the same enabled state so all events are fired and UI is put back in a proper state
+        if (tools.some((tool) => tool.kind === 'pather')) {
+            this.map.togglePather(this.map.getMapState() instanceof PatherMapState);
+        }
 
         // Now done by the dungeonmap at the end of refresh
         // refreshTooltips();
@@ -560,6 +575,12 @@ class DrawControls extends MapControl {
     cleanup() {
         super.cleanup();
 
+        $(document).off('.drawtoolgroups');
+
         // this.map.leafletMap.off(L.Draw.Event.CREATED);
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {DrawControls};
 }
