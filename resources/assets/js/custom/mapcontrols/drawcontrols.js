@@ -34,6 +34,43 @@ L.EditToolbar.prototype._checkDisabled = function () {
     }
 };
 
+/**
+ * Prefixes each action button's text with a Font Awesome icon, picked by the action's callback since
+ * Leaflet.draw gives its actions no other identity.
+ *
+ * @param actions {Object[]}
+ * @param iconsByCallback {Map<Function, String>}
+ * @returns {Object[]}
+ */
+function _withActionIcons(actions, iconsByCallback) {
+    return actions.map((action) => {
+        let icon = typeof action.callback === 'function' ? iconsByCallback.get(action.callback) : undefined;
+
+        return icon === undefined ? action : {
+            ...action,
+            text: `<i class="fas ${icon} me-1" aria-hidden="true"></i>${action.text}`
+        };
+    });
+}
+
+const _originalDrawGetActions = L.DrawToolbar.prototype.getActions;
+L.DrawToolbar.prototype.getActions = function (handler) {
+    return _withActionIcons(_originalDrawGetActions.call(this, handler), new Map([
+        [handler.completeShape, 'fa-check'],
+        [handler.deleteLastVertex, 'fa-undo'],
+        [this.disable, 'fa-times'],
+    ]));
+};
+
+const _originalEditGetActions = L.EditToolbar.prototype.getActions;
+L.EditToolbar.prototype.getActions = function (handler) {
+    return _withActionIcons(_originalEditGetActions.call(this, handler), new Map([
+        [this._save, 'fa-save'],
+        [this.disable, 'fa-times'],
+        [this._clearAllLayers, 'fa-trash'],
+    ]));
+};
+
 // Add some new strings to the draw controls
 // https://github.com/Leaflet/Leaflet.draw#customizing-language-and-text-in-leafletdraw
 L.drawLocal = $.extend(L.drawLocal, lang.messages[`${lang.locale}.leafletdraw`]);
@@ -423,8 +460,10 @@ class DrawControls extends MapControl {
                 'data-bs-toggle': 'tooltip',
                 'data-bs-placement': 'right',
                 title: lang.get('js.finish_drawing'),
-                text: lang.get('js.finish')
-            });
+            }).append(
+                $('<i>', {class: 'fas fa-check me-1', 'aria-hidden': 'true'}),
+                document.createTextNode(lang.get('js.finish'))
+            );
 
             // On click, disable pather
             $button.unbind('click').bind('click', function () {

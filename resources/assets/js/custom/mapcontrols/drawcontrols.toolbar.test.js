@@ -326,6 +326,77 @@ describe('DrawControls toolbar generated from the tool list', () => {
         expect($snackbar.find('.draw_tool_status').length).toBe(0);
     });
 
+    /**
+     * @returns {{icon: String, text: String, classes: String}[]} The visible draw action buttons
+     */
+    function visibleDrawActions() {
+        return jQuery('#edit_route_draw_container .leaflet-draw-actions li').toArray().map((li) => ({
+            icon: Array.from(li.querySelector('a > i.fas')?.classList ?? []).find((className) => className.startsWith('fa-')) ?? null,
+            text: li.querySelector('a').textContent.trim(),
+            classes: li.className,
+        }));
+    }
+
+    test('drawTool_givenPolylineActivated_prefixesEveryActionWithItsIcon', () => {
+        // Act
+        $rail.children('[data-draw-tool="polyline"]')[0].dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, detail: 1}));
+
+        // Assert
+        expect(visibleDrawActions()).toEqual([
+            {icon: 'fa-check', text: L.drawLocal.draw.toolbar.finish.text, classes: 'col btn btn-info mx-2 p-0'},
+            {icon: 'fa-undo', text: L.drawLocal.draw.toolbar.undo.text, classes: 'col btn btn-info mx-2 p-0'},
+            {icon: 'fa-times', text: L.drawLocal.draw.toolbar.actions.text, classes: 'col btn btn-info mx-2 p-0'},
+        ]);
+    });
+
+    test('drawTool_givenMarkerActivated_rendersOnlyCancelWithItsIcon', () => {
+        // Act
+        $rail.find('[data-draw-tool="marker"]')[0].dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, detail: 1}));
+
+        // Assert
+        expect(visibleDrawActions().map((action) => [action.icon, action.text])).toEqual([
+            ['fa-times', L.drawLocal.draw.toolbar.actions.text],
+        ]);
+    });
+
+    test('deleteTool_givenActivated_prefixesEveryActionWithItsIcon', () => {
+        // Arrange
+        controls.editableItemsLayer.addLayer(L.marker([0, 0]));
+
+        // Act
+        $rail.children('[data-draw-tool="delete"]')[0].dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, detail: 1}));
+
+        // Assert
+        expect(visibleDrawActions().map((action) => [action.icon, action.text])).toEqual([
+            ['fa-save', L.drawLocal.edit.toolbar.actions.save.text],
+            ['fa-times', L.drawLocal.edit.toolbar.actions.cancel.text],
+            ['fa-trash', L.drawLocal.edit.toolbar.actions.clearAll.text],
+        ]);
+    });
+
+    test('brushlineButton_givenClicked_rendersFinishWithItsIcon', () => {
+        // Arrange
+        global.getState = () => ({
+            addSnackbar: (html, options) => {
+                jQuery('#outside').html(`<div id="brushline_snackbar">${html}</div>`);
+                options.onDomAdded('brushline_snackbar');
+                return 'brushline_snackbar';
+            },
+            removeSnackbar: () => {
+            },
+        });
+        const $brushlineButton = controls._createBrushlineButton();
+
+        // Act
+        $brushlineButton.trigger('click');
+
+        // Assert
+        const $finish = jQuery('#brushline_snackbar .leaflet-draw-actions-pather li.btn-info > a');
+        expect($finish.length).toBe(1);
+        expect($finish.children('i.fas.fa-check').length).toBe(1);
+        expect($finish.text().trim()).toBe('js.finish');
+    });
+
     test('groupButton_givenKeyboardClick_opensFlyoutAndFocusesFirstTool', () => {
         // Arrange
         const $group = $rail.find('[data-draw-tool-group="markers"]');

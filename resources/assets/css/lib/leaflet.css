@@ -29,17 +29,21 @@
 }
 
 #snackbar_container .leaflet-draw-actions li.btn {
-    border-radius: 0;
+    flex: 1 0 auto;
+    width: auto;
+    border-radius: 0.25rem;
 }
 
+/** Leaflet.draw gives every action link its own grey background, hiding the .btn colour of the item behind it */
 #snackbar_container .leaflet-draw-actions a {
-    color: white;
+    background-color: transparent;
+    color: inherit;
     border: unset;
     font: inherit;
 }
 
 #snackbar_container .leaflet-draw-actions a:hover {
-    background-color: unset;
+    background-color: transparent;
     text-decoration: none;
 }
 
