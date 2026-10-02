@@ -605,10 +605,12 @@ class DrawControls extends MapControl {
         let $flyout = $group.find('.draw_tool_group_flyout');
         // Fixed, because the rail is a scroll container that would clip the flyout and scroll sideways to a focused tool
         let buttonRect = $groupButton[0].getBoundingClientRect();
+        // The rail already stops at the header above it and at any ad reserved below it
+        let railRect = $group.closest('.route_manipulation_tools')[0].getBoundingClientRect();
         $flyout.css({top: buttonRect.top, left: buttonRect.right}).show();
-        let overflowBottom = buttonRect.top + $flyout[0].getBoundingClientRect().height - window.innerHeight;
+        let overflowBottom = buttonRect.top + $flyout[0].getBoundingClientRect().height - railRect.bottom;
         if (overflowBottom > 0) {
-            $flyout.css('top', Math.max(0, buttonRect.top - overflowBottom));
+            $flyout.css('top', Math.max(railRect.top, buttonRect.top - overflowBottom));
         }
         $groupButton.attr('aria-expanded', 'true');
         if (typeof bootstrap !== 'undefined') {
