@@ -6,6 +6,7 @@ use App\Models\PageView;
 use App\Models\PageViewCount;
 use App\Repositories\Interfaces\PageViewCountRepositoryInterface;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PageViewCountRepository extends DatabaseRepository implements PageViewCountRepositoryInterface
 {
@@ -36,13 +37,16 @@ class PageViewCountRepository extends DatabaseRepository implements PageViewCoun
                 'views'       => (int)$row->views,
             ]);
 
-        foreach ($rows->chunk(self::UPSERT_CHUNK_SIZE) as $chunk) {
-            PageViewCount::query()->upsert(
-                $chunk->values()->all(),
-                ['model_class', 'model_id', 'viewed_on', 'source'],
-                ['views'],
-            );
-        }
+        // All or nothing: the prune resumes after the latest aggregated day, so a half-written day would never be completed.
+        DB::transaction(static function () use ($rows): void {
+            foreach ($rows->chunk(self::UPSERT_CHUNK_SIZE) as $chunk) {
+                PageViewCount::query()->upsert(
+                    $chunk->values()->all(),
+                    ['model_class', 'model_id', 'viewed_on', 'source'],
+                    ['views'],
+                );
+            }
+        });
 
         return $rows->count();
     }

@@ -6,8 +6,10 @@ use App\Models\PageView;
 use App\Models\PageViewCount;
 use App\Repositories\Database\PageViewCountRepository;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use RuntimeException;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('PageView')]
@@ -34,6 +36,7 @@ final class PageViewCountRepositoryTest extends PublicTestCase
     {
         try {
             PageView::query()->whereIn('id', $this->createdIds)->delete();
+            PageView::query()->where('model_class', 'TestModel')->delete();
             PageViewCount::query()->where('id', '>', $this->maxPageViewCountIdBefore)->delete();
         } finally {
             parent::tearDown();
@@ -75,6 +78,39 @@ final class PageViewCountRepositoryTest extends PublicTestCase
     }
 
     #[Test]
+    public function aggregateDay_givenLaterChunkFails_writesNothingForThatDay(): void
+    {
+        // Arrange
+        $day       = Carbon::today()->subDays(2);
+        $createdAt = $day->copy()->setTime(12, 0);
+        $rows      = [];
+        for ($modelId = 1; $modelId <= 1001; $modelId++) {
+            $rows[] = $this->getPageViewAttributes($modelId, $createdAt);
+        }
+        PageView::query()->insert($rows);
+
+        $countInserts = 0;
+        DB::connection()->beforeExecuting(static function (string $query) use (&$countInserts): void {
+            if (str_starts_with($query, 'insert into `page_view_counts`') && ++$countInserts === 2) {
+                throw new RuntimeException('Second chunk failed');
+            }
+        });
+
+        // Act
+        $exception = null;
+
+        try {
+            $this->repository->aggregateDay($day);
+        } catch (RuntimeException $runtimeException) {
+            $exception = $runtimeException;
+        }
+
+        // Assert
+        $this->assertSame('Second chunk failed', $exception?->getMessage());
+        $this->assertSame(0, PageViewCount::query()->where('model_class', 'TestModel')->count());
+    }
+
+    #[Test]
     public function getLatestViewedOn_givenCounts_returnsTheMostRecentDay(): void
     {
         // Arrange
@@ -104,6 +140,22 @@ final class PageViewCountRepositoryTest extends PublicTestCase
         ]);
 
         $this->createdIds[] = $pageView->id;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getPageViewAttributes(int $modelId, Carbon $createdAt): array
+    {
+        return [
+            'user_id'     => -1,
+            'model_id'    => $modelId,
+            'model_class' => 'TestModel',
+            'session_id'  => 'test-session',
+            'source'      => 1,
+            'created_at'  => $createdAt,
+            'updated_at'  => $createdAt,
+        ];
     }
 
     private function getViews(Carbon $day): ?int
