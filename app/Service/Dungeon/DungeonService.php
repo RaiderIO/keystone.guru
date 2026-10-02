@@ -7,10 +7,13 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\PageViewCountRepositoryInterface;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -19,11 +22,13 @@ class DungeonService implements DungeonServiceInterface
     private const string DUNGEON_CONTEXT_COOKIE = 'dungeon_context';
 
     public function __construct(
-        private readonly CookieServiceInterface         $cookieService,
-        private readonly SeasonServiceInterface         $seasonService,
-        private readonly DungeonServiceLoggingInterface $log,
-        private readonly GameVersionServiceInterface    $gameVersionService,
-        private readonly DungeonRepositoryInterface     $dungeonRepository,
+        private readonly CookieServiceInterface           $cookieService,
+        private readonly SeasonServiceInterface           $seasonService,
+        private readonly DungeonServiceLoggingInterface   $log,
+        private readonly GameVersionServiceInterface      $gameVersionService,
+        private readonly DungeonRepositoryInterface       $dungeonRepository,
+        private readonly PageViewCountRepositoryInterface $pageViewCountRepository,
+        private readonly CacheServiceInterface            $cacheService,
     ) {
     }
 
@@ -129,6 +134,27 @@ class DungeonService implements DungeonServiceInterface
         $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
 
         return $currentSeason === null ? $this->getGameVersionDungeons($gameVersion) : $this->getSeasonDungeons($currentSeason);
+    }
+
+    public function getViewShares(Collection $dungeons): Collection
+    {
+        // The counts only change when page-views:prune aggregates another day, so every page can share one read.
+        /** @var Collection<int, int> $viewsPerDungeon */
+        $viewsPerDungeon = $this->cacheService->remember(
+            'dungeon_views',
+            fn() => $this->pageViewCountRepository->getViewsPerDungeon(
+                Carbon::today()->subDays(config('keystoneguru.page_views.dungeon_views_days')),
+            ),
+            config('keystoneguru.cache.dungeon_views.ttl'),
+        );
+
+        $views     = $dungeons->mapWithKeys(static fn(Dungeon $dungeon): array => [$dungeon->id => $viewsPerDungeon->get($dungeon->id, 0)]);
+        $mostViews = $views->max();
+        if (!$mostViews) {
+            return collect();
+        }
+
+        return $views->map(static fn(int $dungeonViews): float => $dungeonViews / $mostViews);
     }
 
     /**

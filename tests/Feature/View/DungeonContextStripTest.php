@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\View;
 
+use App\Http\View\Composers\HeaderComposer;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
+use App\Models\PageViewCount;
 use App\Service\Dungeon\DungeonServiceInterface;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
@@ -198,6 +200,139 @@ final class DungeonContextStripTest extends PublicTestCase
     }
 
     #[Test]
+    public function render_givenViewShares_fillsEveryChipToItsShareAndDescribesIt(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+        /** @var Dungeon $mostViewed */
+        $mostViewed = $dungeons->get(1);
+        /** @var Dungeon $halfViewed */
+        $halfViewed = $dungeons->get(2);
+        $viewShares = $dungeons->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => 0.0])
+            ->put($mostViewed->id, 1.0)
+            ->put($halfViewed->id, 0.4567);
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons, null, $viewShares);
+
+        // Assert
+        $this->assertSame($dungeons->count(), substr_count($html, 'dungeon_strip_chip--views'));
+        $this->assertMatchesRegularExpression($this->getViewsChipPattern($mostViewed, __('view_common.dungeon.list.chips.most_viewed'), '100%', '1'), $html);
+        $this->assertMatchesRegularExpression(
+            $this->getViewsChipPattern($halfViewed, __('view_common.dungeon.list.chips.view_share', ['percent' => 46]), '45.7%', '0.4567'),
+            $html,
+        );
+        $this->assertMatchesRegularExpression(
+            $this->getViewsChipPattern($dungeons->get(3), __('view_common.dungeon.list.chips.not_viewed'), '0%', '0'),
+            $html,
+        );
+    }
+
+    #[Test]
+    public function render_givenATinyOrNearlyTopShare_neverDescribesItAsZeroOrAHundredPercent(): void
+    {
+        // Arrange
+        $dungeons   = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $viewShares = collect([$dungeons->get(1)->id => 1.0, $dungeons->get(2)->id => 0.001, $dungeons->get(3)->id => 0.999]);
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons, null, $viewShares);
+
+        // Assert
+        $this->assertStringContainsString(e(__('view_common.dungeon.list.chips.view_share', ['percent' => 1])), $html);
+        $this->assertStringContainsString(e(__('view_common.dungeon.list.chips.view_share', ['percent' => 99])), $html);
+        $this->assertStringNotContainsString(e(__('view_common.dungeon.list.chips.view_share', ['percent' => 0])), $html);
+        $this->assertStringNotContainsString(e(__('view_common.dungeon.list.chips.view_share', ['percent' => 100])), $html);
+    }
+
+    #[Test]
+    public function render_givenViewShares_describesTheSelectedDungeonsViewsInTheReadout(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+        /** @var Dungeon $selected */
+        $selected   = $dungeons->get(1);
+        $viewShares = collect([$dungeons->first()->id => 1.0, $selected->id => 0.5]);
+        $views      = e(__('view_common.dungeon.list.chips.view_share', ['percent' => 50]));
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons, $selected->key, $viewShares);
+
+        // Assert
+        $this->assertMatchesRegularExpression('/<div class="dungeon_strip_readout"[^>]*data-view-share="0.5"/', $html);
+        $this->assertMatchesRegularExpression(sprintf('/<span class="dungeon_strip_readout_views">%s<\/span>/', preg_quote($views, '/')), $html);
+    }
+
+    #[Test]
+    public function render_givenNoViewShares_rendersPlainChipsAndAnEmptyReadoutViews(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons, $dungeons->first()->key);
+
+        // Assert
+        $this->assertStringContainsString('class="dungeon_strip_chip"', $html);
+        $this->assertStringNotContainsString('dungeon_strip_chip--views', $html);
+        $this->assertStringNotContainsString('--dungeon-strip-view-share', $html);
+        $this->assertStringContainsString('<span class="dungeon_strip_readout_views"></span>', $html);
+    }
+
+    #[Test]
+    public function header_givenPageViewCountsOnClassicEra_fillsTheViewedDungeonsChip(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+        /** @var Dungeon $viewed */
+        $viewed    = $dungeons->get(1);
+        $viewCount = PageViewCount::factory()->create([
+            'model_class' => Dungeon::class,
+            'model_id'    => $viewed->id,
+            'source'      => Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON,
+            'views'       => 100,
+        ]);
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_CLASSIC_ERA;
+
+        try {
+            // Act
+            $html = view('common.layout.header')->render();
+
+            // Assert
+            $this->assertMatchesRegularExpression($this->getViewsChipPattern($viewed, __('view_common.dungeon.list.chips.most_viewed'), '100%', '1'), $html);
+        } finally {
+            unset($_COOKIE['game_version']);
+            $viewCount->delete();
+        }
+    }
+
+    #[Test]
+    public function compose_givenPageViewCountsOnRetail_comparesNoViews(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+        /** @var Dungeon $viewed */
+        $viewed    = $this->getDungeons(GameVersion::GAME_VERSION_RETAIL)->first();
+        $viewCount = PageViewCount::factory()->create([
+            'model_class' => Dungeon::class,
+            'model_id'    => $viewed->id,
+            'source'      => Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON,
+            'views'       => 100,
+        ]);
+        $view = view('common.layout.header');
+
+        try {
+            // Act
+            app(HeaderComposer::class)->compose($view);
+
+            // Assert
+            $this->assertTrue($view->getData()['dungeonContextViewShares']->isEmpty());
+        } finally {
+            $viewCount->delete();
+        }
+    }
+
+    #[Test]
     public function render_givenRetail_marksOnlyTheSelectedTileCurrent(): void
     {
         // Arrange
@@ -247,9 +382,10 @@ final class DungeonContextStripTest extends PublicTestCase
     }
 
     /**
-     * @param Collection<int, Dungeon> $dungeons
+     * @param Collection<int, Dungeon>    $dungeons
+     * @param Collection<int, float>|null $viewShares
      */
-    private function renderList(string $gameVersionKey, Collection $dungeons, ?string $selected = null): string
+    private function renderList(string $gameVersionKey, Collection $dungeons, ?string $selected = null, ?Collection $viewShares = null): string
     {
         return view('common.dungeon.list', [
             'gameVersion'     => GameVersion::firstWhere('key', $gameVersionKey),
@@ -257,6 +393,7 @@ final class DungeonContextStripTest extends PublicTestCase
             'useAbbreviation' => true,
             'selected'        => $selected,
             'links'           => $dungeons->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->key => sprintf('/link/%s', $dungeon->key)]),
+            'viewShares'      => $viewShares ?? collect(),
         ])->render();
     }
 
@@ -276,6 +413,20 @@ final class DungeonContextStripTest extends PublicTestCase
         }
 
         return $result;
+    }
+
+    /**
+     * A chip filled to $fill, describing its views as $views in its title and handing $viewShare to the readout.
+     */
+    private function getViewsChipPattern(Dungeon $dungeon, string $views, string $fill, string $viewShare): string
+    {
+        return sprintf(
+            '/<a class="dungeon_strip_chip dungeon_strip_chip--views"\s+href="[^"]*"\s+aria-label="%1$s" title="%1$s - %2$s"\s+data-image="[^"]*"\s+data-view-share="%4$s" style="--dungeon-strip-view-share: %3$s"/',
+            preg_quote(e(__($dungeon->name)), '/'),
+            preg_quote(e($views), '/'),
+            preg_quote($fill, '/'),
+            preg_quote($viewShare, '/'),
+        );
     }
 
     private function getStripHtml(string $html): string

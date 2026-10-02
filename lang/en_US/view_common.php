@@ -67,6 +67,11 @@ return [
             'card' => [
                 'this_week_tier' => 'This week\'s difficulty tier (archon.gg)',
             ],
+            'chips' => [
+                'most_viewed' => 'Most viewed',
+                'not_viewed'  => 'No recent views',
+                'view_share'  => ':percent% of top views',
+            ],
         ],
         'gridtabs' => [
             'raid' => 'Raid',

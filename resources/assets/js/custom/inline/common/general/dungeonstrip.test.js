@@ -1,21 +1,43 @@
 const {DungeonStrip} = require('./dungeonstrip');
 
 describe('DungeonStrip', () => {
+    const messages = {
+        'js.dungeon_strip_most_viewed': 'Most viewed',
+        'js.dungeon_strip_not_viewed': 'No recent views',
+        'js.dungeon_strip_view_share': ':percent% of top views',
+    };
+    const originalLang = globalThis.lang;
+
+    beforeEach(() => {
+        globalThis.lang = {
+            get: (key, replacements = {}) => Object.entries(replacements)
+                .reduce((message, [name, value]) => message.replace(`:${name}`, value), messages[key] ?? key),
+        };
+    });
+
+    afterEach(() => {
+        globalThis.lang = originalLang;
+    });
+
     /**
-     * Two chips and the selected dungeon in the readout - the markup of common/dungeon/list/chips, trimmed.
+     * Three chips, one without view counts, and the selected dungeon in the readout - the markup of common/dungeon/list/chips, trimmed.
      *
      * @returns {DungeonStrip}
      */
     function makeStrip() {
         document.body.innerHTML = `
             <div class="dungeon_strip">
-                <div class="dungeon_strip_readout" data-name="Blackrock Depths" data-image="http://test/brd.webp">
+                <div class="dungeon_strip_readout" data-name="Blackrock Depths" data-image="http://test/brd.webp" data-view-share="1">
                     <img class="dungeon_strip_readout_image" src="http://test/brd.webp" alt=""/>
-                    <span class="dungeon_strip_readout_name">Blackrock Depths</span>
+                    <span class="dungeon_strip_readout_text">
+                        <span class="dungeon_strip_readout_name">Blackrock Depths</span>
+                        <span class="dungeon_strip_readout_views">Most viewed</span>
+                    </span>
                 </div>
                 <div class="dungeon_strip_groups" id="dungeon_strip_groups">
-                    <a class="dungeon_strip_chip" href="/brd" aria-label="Blackrock Depths" data-image="http://test/brd.webp">BRD</a>
-                    <a class="dungeon_strip_chip" href="/mc" aria-label="Molten Core" data-image="http://test/mc.webp">MC</a>
+                    <a class="dungeon_strip_chip" href="/brd" aria-label="Blackrock Depths" data-image="http://test/brd.webp" data-view-share="1">BRD</a>
+                    <a class="dungeon_strip_chip" href="/mc" aria-label="Molten Core" data-image="http://test/mc.webp" data-view-share="0.4133">MC</a>
+                    <a class="dungeon_strip_chip" href="/zg" aria-label="Zul'Gurub" data-image="http://test/zg.webp">ZG</a>
                 </div>
                 <button type="button" class="dungeon_strip_all" aria-expanded="false">All 2</button>
             </div>
@@ -32,6 +54,13 @@ describe('DungeonStrip', () => {
             name: document.querySelector('.dungeon_strip_readout_name').textContent,
             image: document.querySelector('.dungeon_strip_readout_image').getAttribute('src'),
         };
+    }
+
+    /**
+     * @returns {string}
+     */
+    function readoutViews() {
+        return document.querySelector('.dungeon_strip_readout_views').textContent;
     }
 
     /**
@@ -77,6 +106,55 @@ describe('DungeonStrip', () => {
         // Assert
         expect(whileFocused).toBe('Molten Core');
         expect(readout().name).toBe('Blackrock Depths');
+    });
+
+    it('pointerover_givenAChipWithViews_putsItsViewsInTheReadout', () => {
+        // Arrange
+        makeStrip();
+
+        // Act
+        chip('Molten Core').dispatchEvent(new Event('pointerover', {bubbles: true}));
+
+        // Assert
+        expect(readoutViews()).toBe('41% of top views');
+    });
+
+    it('pointerover_givenAChipWithoutViews_emptiesTheReadoutViews', () => {
+        // Arrange
+        makeStrip();
+
+        // Act
+        chip("Zul'Gurub").dispatchEvent(new Event('pointerover', {bubbles: true}));
+
+        // Assert
+        expect(readout().name).toBe("Zul'Gurub");
+        expect(readoutViews()).toBe('');
+    });
+
+    it('pointerleave_givenNoChipFocused_restoresTheSelectedDungeonsViews', () => {
+        // Arrange
+        const strip = makeStrip();
+        chip('Molten Core').dispatchEvent(new Event('pointerover', {bubbles: true}));
+
+        // Act
+        strip.element.dispatchEvent(new Event('pointerleave'));
+
+        // Assert
+        expect(readoutViews()).toBe('Most viewed');
+    });
+
+    it.each([
+        [1, 'Most viewed'],
+        [0, 'No recent views'],
+        [0.4567, '46% of top views'],
+        [0.001, '1% of top views'],
+        [0.999, '99% of top views'],
+    ])('describeViewShare_givenShare%s_returns%s', (viewShare, expected) => {
+        // Act
+        const result = DungeonStrip.describeViewShare(viewShare);
+
+        // Assert
+        expect(result).toBe(expected);
     });
 
     it('allButtonClick_givenAClosedStrip_opensAndClosesTheFlyout', () => {

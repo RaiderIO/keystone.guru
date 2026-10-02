@@ -6,6 +6,8 @@ use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\PageViewCountRepositoryInterface;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\DungeonService;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
@@ -43,6 +45,8 @@ final class GetDungeonContextTest extends PublicTestCase
                 $log ?? $this->createMockPublic(DungeonServiceLoggingInterface::class),
                 $gameVersionService ?? $this->createMockPublic(GameVersionServiceInterface::class),
                 $this->createMockPublic(DungeonRepositoryInterface::class),
+                $this->createMockPublic(PageViewCountRepositoryInterface::class),
+                $this->createMockPublic(CacheServiceInterface::class),
             ])
             ->onlyMethods(['setDungeonContext'])
             ->getMock();

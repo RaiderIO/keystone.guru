@@ -184,6 +184,7 @@ $compendiumEntries        = [
                         // "What's easy this week" ease tiers (archon.gg), resolved in HeaderComposer.
                         'easeTiers' => $dungeonContextEaseTiers ?? collect(),
                         'currentAffixGroup' => $dungeonContextCurrentAffixGroup ?? null,
+                        'viewShares' => $dungeonContextViewShares ?? collect(),
                         'links' => $resolvedDungeonContextLinks,
                     ])
                 </div>

@@ -107,6 +107,9 @@ return [
         'displayed_affix_groups' => [
             'ttl' => '15 minutes',
         ],
+        'dungeon_views' => [
+            'ttl' => '6 hours',
+        ],
         'global_view_variables' => [
             'ttl' => '1 hour',
         ],
@@ -271,6 +274,8 @@ return [
     'page_views' => [
         /** The number of days page view records are kept before being pruned. Only the last X days are needed for popularity calculations. */
         'retention_days' => 30,
+        /** The number of days of daily page view counts that the dungeon strip compares the dungeons' views over. */
+        'dungeon_views_days' => 90,
     ],
 
     'telemetry' => [

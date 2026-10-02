@@ -682,4 +682,9 @@ return [
     'enemy_resolution_group_consistency'            => 'Direction consistency :consistency, shape ratio :ratio',
     'enemy_resolution_group_seen'                   => 'Seen :first - :last',
     'enemy_resolution_group_low_volume'             => 'Few routes - treat with caution',
+
+    // Header dungeon strip
+    'dungeon_strip_most_viewed' => 'Most viewed',
+    'dungeon_strip_not_viewed'  => 'No recent views',
+    'dungeon_strip_view_share'  => ':percent% of top views',
 ];

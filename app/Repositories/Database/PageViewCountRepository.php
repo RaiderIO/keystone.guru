@@ -2,10 +2,13 @@
 
 namespace App\Repositories\Database;
 
+use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\PageView;
 use App\Models\PageViewCount;
 use App\Repositories\Interfaces\PageViewCountRepositoryInterface;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class PageViewCountRepository extends DatabaseRepository implements PageViewCountRepositoryInterface
@@ -56,5 +59,36 @@ class PageViewCountRepository extends DatabaseRepository implements PageViewCoun
         $latest = PageViewCount::query()->max('viewed_on');
 
         return $latest === null ? null : Carbon::parse($latest);
+    }
+
+    public function getViewsPerDungeon(Carbon $since): Collection
+    {
+        $viewedOn = $since->toDateString();
+
+        $dungeonViews = PageViewCount::query()
+            ->where('model_class', Dungeon::class)
+            ->where('source', Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON)
+            ->where('viewed_on', '>=', $viewedOn)
+            ->groupBy('model_id')
+            ->selectRaw('`model_id` AS `dungeon_id`, SUM(`views`) AS `views`')
+            ->toBase()
+            ->get();
+
+        $routeViews = PageViewCount::query()
+            ->join('dungeon_routes', 'dungeon_routes.id', '=', 'page_view_counts.model_id')
+            ->where('page_view_counts.model_class', DungeonRoute::class)
+            ->whereIn('page_view_counts.source', [
+                DungeonRoute::PAGE_VIEW_SOURCE_VIEW_ROUTE,
+                DungeonRoute::PAGE_VIEW_SOURCE_PRESENT_ROUTE,
+            ])
+            ->where('page_view_counts.viewed_on', '>=', $viewedOn)
+            ->groupBy('dungeon_routes.dungeon_id')
+            ->selectRaw('`dungeon_routes`.`dungeon_id`, SUM(`page_view_counts`.`views`) AS `views`')
+            ->toBase()
+            ->get();
+
+        return $dungeonViews->concat($routeViews)
+            ->groupBy(static fn(object $row): int => (int)$row->dungeon_id)
+            ->map(static fn(Collection $rows): int => (int)$rows->sum('views'));
     }
 }

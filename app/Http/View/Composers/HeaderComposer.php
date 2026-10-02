@@ -48,7 +48,12 @@ readonly class HeaderComposer implements ViewComposerInterface
         $view->with('allGameVersions', $this->viewService->getAllGameVersions());
 
         $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
-        $view->with('gameVersionDungeons', $this->dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion));
+        $gameVersionDungeons      = $this->dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion);
+        $view->with('gameVersionDungeons', $gameVersionDungeons);
+        // Only the chip grid of a seasonless game version compares its dungeons' views
+        $view->with('dungeonContextViewShares', $userOrDefaultGameVersion->has_seasons
+            ? collect()
+            : $this->dungeonService->getViewShares($gameVersionDungeons));
 
         // The dungeon context bar follows the current season only (#3761) - the upcoming season is
         // advertised next to it as a card of its own, leading to a selection of just its dungeons.
