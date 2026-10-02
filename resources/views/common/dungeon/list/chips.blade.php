@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
  * @var Collection<int, Dungeon>   $dungeons Sorted by selector group
  * @var Collection<string, string> $links    Keyed by dungeon key
  * @var string|null                $selected The selected dungeon's key
+ * @var Collection<int, int>       $popularDungeonIds
  */
 
 /** @var Collection<string, Collection<int, Dungeon>> $dungeonsByGroup */
@@ -37,17 +38,24 @@ $readoutImageUrl = $selectedDungeon?->getImageUrl() ?? $gameVersion->expansion->
                 </span>
                 <div class="dungeon_strip_chips">
                     @foreach($groupDungeons as $dungeon)
-                        <?php $isSelected = $selected === $dungeon->key; ?>
-                        <a class="dungeon_strip_chip {{ $isSelected ? 'border-accent' : '' }}"
+                        <?php
+                        $isSelected = $selected === $dungeon->key;
+                        $isPopular  = $popularDungeonIds->contains($dungeon->id);
+                        ?>
+                        <a @class(['dungeon_strip_chip', 'border-accent' => $isSelected, 'dungeon_strip_chip--popular' => $isPopular])
                            href="{{ $links->get($dungeon->key) }}"
-                           aria-label="{{ __($dungeon->name) }}" title="{{ __($dungeon->name) }}"
+                           aria-label="{{ __($dungeon->name) }}" title="{{ $isPopular ? __('view_common.dungeon.list.chips.popular_title', ['name' => __($dungeon->name)]) : __($dungeon->name) }}"
                            data-image="{{ $dungeon->getImageUrl() }}"
+                           @if($isPopular) aria-describedby="dungeon_strip_popular" @endif
                            @if($isSelected) aria-current="true" @endif>{{ __($dungeon->abbreviation) }}</a>
                     @endforeach
                 </div>
             </div>
         @endforeach
     </div>
+    @if($popularDungeonIds->isNotEmpty())
+        <span class="visually-hidden" id="dungeon_strip_popular">{{ __('view_common.dungeon.list.chips.popular') }}</span>
+    @endif
     <button type="button" class="dungeon_strip_all" aria-expanded="false" aria-controls="dungeon_strip_groups">
         {{ __('view_common.dungeon.list.all', ['count' => $dungeons->count()]) }}
         <i class="fas fa-caret-down" aria-hidden="true"></i>

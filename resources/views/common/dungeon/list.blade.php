@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
  * @var boolean                  $useAbbreviation
  * @var Season|null              $nextSeason
  * @var string|null              $nextSeasonLink
+ * @var Collection<int, int>     $popularDungeonIds
  */
 
 $dungeons        ??= $expansion->dungeonsAndRaids()->active()->get();
@@ -31,6 +32,7 @@ $nextSeasonLink ??= null;
 // Ease tiers ("what's easy this week") - a Collection<affixGroupId, Collection<dungeonId, tier>>
 $easeTiers         ??= collect();
 $currentAffixGroup ??= null;
+$popularDungeonIds ??= collect();
 ?>
 {{-- A seasonless game version offers every dungeon and raid it has mapped - up to forty, far more than a
      row of image cards holds - so it gets a chip grid instead --}}
@@ -40,6 +42,7 @@ $currentAffixGroup ??= null;
         'dungeons' => $dungeons,
         'links' => $links,
         'selected' => $selected,
+        'popularDungeonIds' => $popularDungeonIds,
     ])
 @else
 <div class="row">

@@ -7,10 +7,13 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\PageViewCountRepositoryInterface;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -18,12 +21,16 @@ class DungeonService implements DungeonServiceInterface
 {
     private const string DUNGEON_CONTEXT_COOKIE = 'dungeon_context';
 
+    private const int POPULAR_DUNGEON_FRACTION = 4;
+
     public function __construct(
         private readonly CookieServiceInterface         $cookieService,
         private readonly SeasonServiceInterface         $seasonService,
         private readonly DungeonServiceLoggingInterface $log,
         private readonly GameVersionServiceInterface    $gameVersionService,
-        private readonly DungeonRepositoryInterface     $dungeonRepository,
+        private readonly DungeonRepositoryInterface       $dungeonRepository,
+        private readonly PageViewCountRepositoryInterface $pageViewCountRepository,
+        private readonly CacheServiceInterface            $cacheService,
     ) {
     }
 
@@ -129,6 +136,27 @@ class DungeonService implements DungeonServiceInterface
         $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
 
         return $currentSeason === null ? $this->getGameVersionDungeons($gameVersion) : $this->getSeasonDungeons($currentSeason);
+    }
+
+    public function getPopularDungeonIds(Collection $dungeons): Collection
+    {
+        // The counts only change when page-views:prune aggregates another day, so every page can share one read.
+        /** @var Collection<int, int> $viewsPerDungeon */
+        $viewsPerDungeon = $this->cacheService->remember(
+            'dungeon_views',
+            fn() => $this->pageViewCountRepository->getViewsPerDungeon(
+                Carbon::today()->subDays(config('keystoneguru.page_views.popular_dungeons_days')),
+            ),
+            config('keystoneguru.cache.dungeon_views.ttl'),
+        );
+
+        return $dungeons
+            ->map(static fn(Dungeon $dungeon): array => [$dungeon->id, $viewsPerDungeon->get($dungeon->id, 0)])
+            ->filter(static fn(array $dungeonViews): bool => $dungeonViews[1] > 0)
+            ->sortByDesc(static fn(array $dungeonViews): int => $dungeonViews[1])
+            ->take((int)ceil($dungeons->count() / self::POPULAR_DUNGEON_FRACTION))
+            ->map(static fn(array $dungeonViews): int => $dungeonViews[0])
+            ->values();
     }
 
     /**

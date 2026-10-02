@@ -32,4 +32,12 @@ interface PageViewCountRepositoryInterface extends BaseRepositoryInterface
      * The most recent day that has been aggregated, or null when nothing has been aggregated yet.
      */
     public function getLatestViewedOn(): ?Carbon;
+
+    /**
+     * The views each dungeon received on site from $since onwards: its own explore and heatmap views plus the
+     * views of its routes. Embeds are left out - they count the traffic of the site embedding them.
+     *
+     * @return Collection<int, int> The number of views, keyed by dungeon id
+     */
+    public function getViewsPerDungeon(Carbon $since): Collection;
 }

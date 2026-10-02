@@ -22,4 +22,13 @@ interface DungeonServiceInterface
      * @return Collection<int, Dungeon>
      */
     public function getDungeonsForGameVersion(?GameVersion $gameVersion = null): Collection;
+
+    /**
+     * The ids of the most viewed quarter of $dungeons, judged by the page views of the last
+     * `keystoneguru.page_views.popular_dungeons_days` days. A dungeon nobody viewed is never among them.
+     *
+     * @param  Collection<int, Dungeon> $dungeons
+     * @return Collection<int, int>
+     */
+    public function getPopularDungeonIds(Collection $dungeons): Collection;
 }

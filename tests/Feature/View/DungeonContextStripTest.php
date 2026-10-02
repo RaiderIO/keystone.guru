@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\View;
 
+use App\Http\View\Composers\HeaderComposer;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
+use App\Models\PageViewCount;
 use App\Service\Dungeon\DungeonServiceInterface;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
@@ -198,6 +200,111 @@ final class DungeonContextStripTest extends PublicTestCase
     }
 
     #[Test]
+    public function render_givenPopularDungeons_marksAndDescribesOnlyTheirChips(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+        /** @var Dungeon $popular */
+        $popular = $dungeons->get(2);
+        /** @var Dungeon $other */
+        $other = $dungeons->get(3);
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons, null, collect([$popular->id]));
+
+        // Assert
+        $this->assertSame(1, substr_count($html, 'dungeon_strip_chip--popular'));
+        $this->assertSame(1, substr_count($html, 'aria-describedby="dungeon_strip_popular"'));
+        $this->assertMatchesRegularExpression(
+            sprintf(
+                '/<a class="dungeon_strip_chip dungeon_strip_chip--popular"\s+href="[^"]*"\s+aria-label="%1$s" title="%2$s"[^>]*aria-describedby="dungeon_strip_popular"/',
+                preg_quote(e(__($popular->name)), '/'),
+                preg_quote(e(__('view_common.dungeon.list.chips.popular_title', ['name' => __($popular->name)])), '/'),
+            ),
+            $html,
+        );
+        $this->assertMatchesRegularExpression(
+            sprintf('/<a class="dungeon_strip_chip"\s+href="[^"]*"\s+aria-label="%1$s" title="%1$s"/', preg_quote(e(__($other->name)), '/')),
+            $html,
+        );
+        $this->assertMatchesRegularExpression(
+            sprintf('/<span class="visually-hidden" id="dungeon_strip_popular">%s<\/span>/', preg_quote(e(__('view_common.dungeon.list.chips.popular')), '/')),
+            $html,
+        );
+    }
+
+    #[Test]
+    public function render_givenNoPopularDungeons_rendersNoPopularDescription(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons);
+
+        // Assert
+        $this->assertStringContainsString('class="dungeon_strip_chip"', $html);
+        $this->assertStringNotContainsString('dungeon_strip_popular', $html);
+    }
+
+    #[Test]
+    public function header_givenPageViewCountsOnClassicEra_marksTheMostViewedDungeonsChip(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+        /** @var Dungeon $popular */
+        $popular   = $dungeons->get(1);
+        $viewCount = PageViewCount::factory()->create([
+            'model_class' => Dungeon::class,
+            'model_id'    => $popular->id,
+            'source'      => Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON,
+            'views'       => 100,
+        ]);
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_CLASSIC_ERA;
+
+        try {
+            // Act
+            $html = view('common.layout.header')->render();
+
+            // Assert
+            $this->assertSame(1, substr_count($html, 'dungeon_strip_chip--popular'));
+            $this->assertMatchesRegularExpression(
+                sprintf('/<a class="dungeon_strip_chip dungeon_strip_chip--popular"\s+href="[^"]*"\s+aria-label="%s"/', preg_quote(e(__($popular->name)), '/')),
+                $html,
+            );
+        } finally {
+            unset($_COOKIE['game_version']);
+            $viewCount->delete();
+        }
+    }
+
+    #[Test]
+    public function compose_givenPageViewCountsOnRetail_marksNoDungeonPopular(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+        /** @var Dungeon $viewed */
+        $viewed    = $this->getDungeons(GameVersion::GAME_VERSION_RETAIL)->first();
+        $viewCount = PageViewCount::factory()->create([
+            'model_class' => Dungeon::class,
+            'model_id'    => $viewed->id,
+            'source'      => Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON,
+            'views'       => 100,
+        ]);
+        $view = view('common.layout.header');
+
+        try {
+            // Act
+            app(HeaderComposer::class)->compose($view);
+
+            // Assert
+            $this->assertTrue($view->getData()['dungeonContextPopularDungeonIds']->isEmpty());
+        } finally {
+            $viewCount->delete();
+        }
+    }
+
+    #[Test]
     public function render_givenRetail_marksOnlyTheSelectedTileCurrent(): void
     {
         // Arrange
@@ -247,16 +354,18 @@ final class DungeonContextStripTest extends PublicTestCase
     }
 
     /**
-     * @param Collection<int, Dungeon> $dungeons
+     * @param Collection<int, Dungeon>  $dungeons
+     * @param Collection<int, int>|null $popularDungeonIds
      */
-    private function renderList(string $gameVersionKey, Collection $dungeons, ?string $selected = null): string
+    private function renderList(string $gameVersionKey, Collection $dungeons, ?string $selected = null, ?Collection $popularDungeonIds = null): string
     {
         return view('common.dungeon.list', [
-            'gameVersion'     => GameVersion::firstWhere('key', $gameVersionKey),
-            'dungeons'        => $dungeons,
-            'useAbbreviation' => true,
-            'selected'        => $selected,
-            'links'           => $dungeons->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->key => sprintf('/link/%s', $dungeon->key)]),
+            'gameVersion'       => GameVersion::firstWhere('key', $gameVersionKey),
+            'dungeons'          => $dungeons,
+            'useAbbreviation'   => true,
+            'selected'          => $selected,
+            'links'             => $dungeons->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->key => sprintf('/link/%s', $dungeon->key)]),
+            'popularDungeonIds' => $popularDungeonIds ?? collect(),
         ])->render();
     }
 

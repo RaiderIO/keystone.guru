@@ -194,6 +194,21 @@
     text-decoration: none;
 }
 
+.dungeon_strip_chip--popular {
+    position: relative;
+}
+
+.dungeon_strip_chip--popular::after {
+    content: "";
+    position: absolute;
+    top: 0.1875rem;
+    right: 0.1875rem;
+    width: 0.3125rem;
+    height: 0.3125rem;
+    border-radius: 50%;
+    background-color: var(--theme-btn-accent);
+}
+
 .dungeon_strip_chip:hover,
 .dungeon_strip_chip:focus-visible {
     background-color: var(--dungeon-strip-control-bg-hover);

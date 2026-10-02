@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\App\Repository;
 
+use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\PageView;
 use App\Models\PageViewCount;
 use App\Repositories\Database\PageViewCountRepository;
@@ -125,6 +127,97 @@ final class PageViewCountRepositoryTest extends PublicTestCase
 
         // Assert
         $this->assertSame($latestDay->toDateString(), $result?->toDateString());
+    }
+
+    #[Test]
+    public function getViewsPerDungeon_givenDungeonAndRouteViews_sumsThemPerDungeon(): void
+    {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create();
+
+        try {
+            $dungeonId = $dungeonRoute->dungeon_id;
+            $this->createDungeonViewCount($dungeonId, Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON, 5);
+            $this->createRouteViewCount($dungeonRoute->id, DungeonRoute::PAGE_VIEW_SOURCE_VIEW_ROUTE, 3);
+            $this->createRouteViewCount($dungeonRoute->id, DungeonRoute::PAGE_VIEW_SOURCE_PRESENT_ROUTE, 2);
+
+            // Act
+            $result = $this->repository->getViewsPerDungeon(Carbon::today()->subDays(7));
+
+            // Assert
+            $this->assertSame(10, $result->get($dungeonId));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function getViewsPerDungeon_givenEmbedViews_leavesThemOut(): void
+    {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create();
+
+        try {
+            $dungeonId = $dungeonRoute->dungeon_id;
+            $this->createDungeonViewCount($dungeonId, Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON, 1);
+            $this->createDungeonViewCount($dungeonId, Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED, 20);
+            $this->createDungeonViewCount($dungeonId, Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON_HEATMAP_EMBED, 40);
+            $this->createRouteViewCount($dungeonRoute->id, DungeonRoute::PAGE_VIEW_SOURCE_VIEW_EMBED, 80);
+
+            // Act
+            $result = $this->repository->getViewsPerDungeon(Carbon::today()->subDays(7));
+
+            // Assert
+            $this->assertSame(1, $result->get($dungeonId));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function getViewsPerDungeon_givenViewsBeforeSince_leavesThemOut(): void
+    {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create();
+        $since        = Carbon::today()->subDays(7);
+
+        try {
+            $dungeonId = $dungeonRoute->dungeon_id;
+            $this->createDungeonViewCount($dungeonId, Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON, 1, $since);
+            $this->createDungeonViewCount($dungeonId, Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON, 20, $since->copy()->subDay());
+            $this->createRouteViewCount($dungeonRoute->id, DungeonRoute::PAGE_VIEW_SOURCE_VIEW_ROUTE, 2, $since);
+            $this->createRouteViewCount($dungeonRoute->id, DungeonRoute::PAGE_VIEW_SOURCE_VIEW_ROUTE, 40, $since->copy()->subDay());
+
+            // Act
+            $result = $this->repository->getViewsPerDungeon($since);
+
+            // Assert
+            $this->assertSame(3, $result->get($dungeonId));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    private function createDungeonViewCount(int $dungeonId, int $source, int $views, ?Carbon $viewedOn = null): void
+    {
+        PageViewCount::factory()->create([
+            'model_class' => Dungeon::class,
+            'model_id'    => $dungeonId,
+            'source'      => $source,
+            'viewed_on'   => ($viewedOn ?? Carbon::yesterday())->toDateString(),
+            'views'       => $views,
+        ]);
+    }
+
+    private function createRouteViewCount(int $dungeonRouteId, int $source, int $views, ?Carbon $viewedOn = null): void
+    {
+        PageViewCount::factory()->create([
+            'model_class' => DungeonRoute::class,
+            'model_id'    => $dungeonRouteId,
+            'source'      => $source,
+            'viewed_on'   => ($viewedOn ?? Carbon::yesterday())->toDateString(),
+            'views'       => $views,
+        ]);
     }
 
     private function createPageView(Carbon $createdAt): void
