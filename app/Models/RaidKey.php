@@ -9,17 +9,15 @@ enum RaidKey: string
 {
     // @formatter:off
     // Classic
-    case GNOMEREGAN_SOD          = 'gnomeregan_sod';             //gnomeregan
-    case ZUL_GURUB               = 'zulgurub';
-    case ONYXIAS_LAIR            = 'onyxias_lair_classic';
-    case MOLTEN_CORE             = 'moltencore';
-    case BLACKWING_LAIR          = 'blackwinglair';
-    case RUINS_OF_AHN_QIRAJ      = 'ruins_of_ahnqiraj_classic';  // 20-man (classic)
-    case TEMPLE_OF_AHN_QIRAJ     = 'temple_of_ahnqiraj_classic'; // 40-man (classic)
-    case RUINS_OF_AHN_QIRAJ_SOD  = 'ruins_of_ahnqiraj_sod';      // 20-man (classic)
-    case TEMPLE_OF_AHN_QIRAJ_SOD = 'temple_of_ahnqiraj_sod';     // 40-man (classic)
-    case NAXXRAMAS               = 'naxxramas_classic';
-    case SCARLET_ENCLAVE         = 'scarlet_enclave';
+    case GNOMEREGAN_SOD      = 'gnomeregan_sod';             //gnomeregan
+    case ZUL_GURUB           = 'zulgurub';
+    case ONYXIAS_LAIR        = 'onyxias_lair_classic';
+    case MOLTEN_CORE         = 'moltencore';
+    case BLACKWING_LAIR      = 'blackwinglair';
+    case RUINS_OF_AHN_QIRAJ  = 'ruins_of_ahnqiraj_classic';  // 20-man (classic)
+    case TEMPLE_OF_AHN_QIRAJ = 'temple_of_ahnqiraj_classic'; // 40-man (classic)
+    case NAXXRAMAS           = 'naxxramas_classic';
+    case SCARLET_ENCLAVE     = 'scarlet_enclave';
 
     // The Burning Crusade
     case KARAZHAN                   = 'karazhan';
@@ -60,8 +58,6 @@ enum RaidKey: string
             self::BLACKWING_LAIR,
             self::RUINS_OF_AHN_QIRAJ,
             self::TEMPLE_OF_AHN_QIRAJ,
-            self::RUINS_OF_AHN_QIRAJ_SOD,
-            self::TEMPLE_OF_AHN_QIRAJ_SOD,
             self::NAXXRAMAS,
             self::SCARLET_ENCLAVE => Expansion::EXPANSION_CLASSIC,
             self::KARAZHAN,

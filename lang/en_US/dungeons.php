@@ -228,13 +228,6 @@ return [
             ],
         ],
         'ruins_of_ahnqiraj_classic' => [
-            'name'         => 'Ruins of Ahn\'Qiraj (Classic)',
-            'abbreviation' => 'AQ20',
-            'floors'       => [
-                'ruins_of_ahnqiraj' => 'Ruins of Ahn\'Qiraj',
-            ],
-        ],
-        'ruins_of_ahnqiraj_sod' => [
             'name'         => 'Ruins of Ahn\'Qiraj',
             'abbreviation' => 'AQ20',
             'floors'       => [
@@ -312,15 +305,6 @@ return [
             ],
         ],
         'temple_of_ahnqiraj_classic' => [
-            'name'         => 'Temple of Ahn\'Qiraj (Classic)',
-            'abbreviation' => 'AQ40',
-            'floors'       => [
-                'the_hive_undergrounds' => 'The Hive Undergrounds',
-                'the_temple_gates'      => 'Temple of Ahn\'Qiraj (Classic)',
-                'vault_of_cthun'        => 'Vault of C\'Thun',
-            ],
-        ],
-        'temple_of_ahnqiraj_sod' => [
             'name'         => 'Temple of Ahn\'Qiraj',
             'abbreviation' => 'AQ40',
             'floors'       => [
