@@ -6105,7 +6105,7 @@
     {
         "id": 426,
         "game_version_id": 10,
-        "dungeon_id": 125,
+        "dungeon_id": 123,
         "version": 1,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": null,
@@ -6122,7 +6122,7 @@
     {
         "id": 427,
         "game_version_id": 10,
-        "dungeon_id": 126,
+        "dungeon_id": 124,
         "version": 1,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": null,
@@ -6173,7 +6173,7 @@
     {
         "id": 431,
         "game_version_id": 10,
-        "dungeon_id": 126,
+        "dungeon_id": 124,
         "version": 2,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": null,
@@ -6326,7 +6326,7 @@
     {
         "id": 440,
         "game_version_id": 10,
-        "dungeon_id": 126,
+        "dungeon_id": 124,
         "version": 3,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": null,
@@ -6343,7 +6343,7 @@
     {
         "id": 442,
         "game_version_id": 10,
-        "dungeon_id": 126,
+        "dungeon_id": 124,
         "version": 4,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": null,
