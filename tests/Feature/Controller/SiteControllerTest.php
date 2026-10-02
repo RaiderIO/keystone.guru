@@ -229,6 +229,125 @@ final class SiteControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function embedExplore_givenNoParameters_rendersIframeOnRequestedFloor(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+
+        // Act
+        $response = $this->get(route('misc.embed.explore', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('id="ksg_iframe"', false);
+        $response->assertSee(route('dungeon.explore.gameversion.embed.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => '1',
+        ]));
+    }
+
+    #[Test]
+    public function embedExplore_givenFloorIndexAndParameters_passesBothToIframe(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+
+        // Act
+        $response = $this->get(route('misc.embed.explore.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => '2',
+            'showSidebar' => '0',
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee(route('dungeon.explore.gameversion.embed.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => '2',
+            'showSidebar' => '0',
+        ]));
+    }
+
+    /**
+     * The explore embed shows no heatmap, so it has nothing a specialization filter could apply to.
+     */
+    #[Test]
+    public function embedExplore_givenGuest_rendersNoSpecializationFilter(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+
+        // Act
+        $response = $this->get(route('misc.embed.explore', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('id="ksg_iframe"', false);
+        $response->assertDontSee('filter_specializations');
+    }
+
+    #[Test]
+    public function embedHeatmap_givenNoParameters_rendersIframeOnRequestedFloorAndSpecializationFilter(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+
+        // Act
+        $response = $this->get(route('misc.embed.heatmap', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('id="ksg_iframe"', false);
+        $response->assertSee(route('dungeon.heatmap.gameversion.embed.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => '1',
+        ]));
+        $response->assertSee('<select id="filter_specializations"', false);
+    }
+
+    #[Test]
+    public function embedHeatmap_givenFloorIndexAndParameters_passesBothToIframe(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+
+        // Act
+        $response = $this->get(route('misc.embed.heatmap.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => '2',
+            'showSidebar' => '0',
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee(route('dungeon.heatmap.gameversion.embed.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => '2',
+            'showSidebar' => '0',
+        ]));
+    }
+
+    #[Test]
     #[DataProvider('affixes_givenNonEnglishLocale_rendersRegionNameInThatLocaleOrEnglish_dataProvider')]
     public function affixes_givenNonEnglishLocale_rendersRegionNameInThatLocaleOrEnglish(?string $germanRegionName, bool $expectsEnglish): void
     {

@@ -33,9 +33,9 @@ class DungeonHeatmapGameversionEmbed extends InlineCode {
             }
 
             if (event.data.function === 'setFilters') {
-                /** @type CommonMapsHeatmapsearchsidebar|false */
+                /** @type CommonMapsHeatmapsearchsidebar|InlineCode[] */
                 let inlineCode = _inlineManager.getInlineCode('common/maps/heatmapsearchsidebar');
-                if (!inlineCode) {
+                if (!(inlineCode instanceof InlineCode)) {
                     console.error('Unable to find sidebar!');
                     return false;
                 }
@@ -54,4 +54,10 @@ class DungeonHeatmapGameversionEmbed extends InlineCode {
 
     cleanup() {
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {DungeonHeatmapGameversionEmbed};
 }
