@@ -35,6 +35,244 @@
     height: 64px;
 }
 
+/* Seasonless dungeon strip: a readout naming the selected (or hovered/focused) dungeon, then the chips in
+   three column-flowing rows per group. The variables switch it to one clipped row plus the "All" flyout
+   wherever three rows do not fit: the shrunk header, below xl, or (siteheader.js) a list too long for xl. */
+.dungeon_strip {
+    --dungeon-strip-rows: 3;
+    --dungeon-strip-label-display: block;
+    --dungeon-strip-all-display: none;
+    --dungeon-strip-readout-width: 11rem;
+    --dungeon-strip-all-width: 5rem;
+    --dungeon-strip-padding: 0.25rem;
+    --dungeon-strip-gap: 0.5rem;
+    --dungeon-strip-clip-mask: none;
+    /* A neutral tint rather than a theme surface: the band is a different rung per theme, and a tint lifts
+       the chips off whichever one it is */
+    --dungeon-strip-control-bg: rgba(128, 128, 128, 0.2);
+    --dungeon-strip-control-bg-hover: rgba(128, 128, 128, 0.4);
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: var(--dungeon-strip-gap);
+    height: 100%;
+    padding: var(--dungeon-strip-padding);
+}
+
+.ksg-header--shrink .dungeon_strip,
+.dungeon_strip.dungeon_strip--compact {
+    --dungeon-strip-rows: 1;
+    --dungeon-strip-label-display: none;
+    --dungeon-strip-all-display: inline-flex;
+    --dungeon-strip-readout-width: 10rem;
+    --dungeon-strip-clip-mask: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+}
+
+@media (max-width: 1199.98px) {
+    .dungeon_strip {
+        --dungeon-strip-rows: 1;
+        --dungeon-strip-label-display: none;
+        --dungeon-strip-all-display: inline-flex;
+        --dungeon-strip-readout-width: 10rem;
+        --dungeon-strip-clip-mask: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+    }
+}
+
+/* Dark imagery in every theme, like the poster card: the scrim and the white name do not follow the theme */
+.dungeon_strip_readout {
+    position: relative;
+    flex: 0 0 var(--dungeon-strip-readout-width);
+    overflow: hidden;
+    border-radius: 0.25rem;
+    background-color: #222;
+}
+
+.dungeon_strip_readout::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0.85) 100%);
+}
+
+.dungeon_strip_readout_image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dungeon_strip_readout_name {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.375rem;
+    left: 0.5rem;
+    z-index: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.ksg-header--shrink .dungeon_strip_readout_name {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+}
+
+.dungeon_strip_groups {
+    display: flex;
+    flex: 1 1 auto;
+    gap: 0.75rem;
+    min-width: 0;
+    overflow: hidden;
+    mask-image: var(--dungeon-strip-clip-mask);
+}
+
+.dungeon_strip_group {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.dungeon_strip_group + .dungeon_strip_group {
+    padding-left: 0.75rem;
+    border-left: 1px solid var(--theme-border-subtle);
+}
+
+/* Reads bottom-to-top along the group's left edge: three chip rows leave no height for a label above them */
+.dungeon_strip_group_label {
+    display: var(--dungeon-strip-label-display);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 0.6875rem;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+:root.darkly .dungeon_strip_group_label,
+:root.vapor .dungeon_strip_group_label {
+    color: var(--theme-light);
+}
+
+:root.lux .dungeon_strip_group_label {
+    color: #55595c;
+}
+
+.dungeon_strip_chips {
+    display: grid;
+    grid-template-rows: repeat(var(--dungeon-strip-rows), 1.75rem);
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(2.75rem, max-content);
+    gap: 0.1875rem 0.25rem;
+}
+
+.dungeon_strip_chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.375rem;
+    border: 0.125rem solid transparent;
+    border-radius: 0.25rem;
+    background-color: var(--dungeon-strip-control-bg);
+    color: var(--theme-text-contrast);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.dungeon_strip_chip:hover,
+.dungeon_strip_chip:focus-visible {
+    background-color: var(--dungeon-strip-control-bg-hover);
+    color: var(--theme-text-contrast);
+}
+
+.dungeon_strip_all {
+    display: var(--dungeon-strip-all-display);
+    flex: 0 0 var(--dungeon-strip-all-width);
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    align-self: center;
+    height: 1.75rem;
+    padding: 0 0.5rem;
+    border: 0.125rem solid transparent;
+    border-radius: 0.25rem;
+    background-color: var(--dungeon-strip-control-bg);
+    color: var(--theme-text-contrast);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.dungeon_strip_all:hover,
+.dungeon_strip_all:focus-visible {
+    background-color: var(--dungeon-strip-control-bg-hover);
+}
+
+.dungeon_strip_all .fa-caret-down {
+    transition: transform 0.2s ease;
+}
+
+.dungeon_strip.is-open .dungeon_strip_all .fa-caret-down {
+    transform: rotate(180deg);
+}
+
+/* The flyout unfolds the clipped row in place: it covers the row's own slot and grows downwards over the
+   page, with the groups stacked and every chip wrapped into view. Floats over the page, so it earns a shadow. */
+.dungeon_strip.is-open .dungeon_strip_groups {
+    position: absolute;
+    top: var(--dungeon-strip-padding);
+    right: calc(var(--dungeon-strip-padding) + var(--dungeon-strip-all-width) + var(--dungeon-strip-gap));
+    left: calc(var(--dungeon-strip-padding) + var(--dungeon-strip-readout-width) + var(--dungeon-strip-gap));
+    z-index: 10;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: calc(100dvh - var(--ksg-header-height, 0px));
+    padding: 0.5rem;
+    overflow-y: auto;
+    border-radius: 0.25rem;
+    background-color: var(--theme-header);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+    mask-image: none;
+}
+
+.dungeon_strip.is-open .dungeon_strip_group {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.dungeon_strip.is-open .dungeon_strip_group + .dungeon_strip_group {
+    padding-top: 0.75rem;
+    padding-left: 0;
+    border-top: 1px solid var(--theme-border-subtle);
+    border-left: 0;
+}
+
+.dungeon_strip.is-open .dungeon_strip_group_label {
+    display: block;
+    writing-mode: horizontal-tb;
+    transform: none;
+}
+
+.dungeon_strip.is-open .dungeon_strip_chips {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dungeon_strip.is-open .dungeon_strip_chip {
+    min-width: 2.75rem;
+    height: 1.75rem;
+}
+
 .ksg-header .navbar-second {
     /* Halve the theme's 1rem navbar padding: with the bars stacking in flow the full
        padding is actually visible (the old fixed bars overlapped it away) and reads bulky */

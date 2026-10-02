@@ -29,16 +29,10 @@ $thisWeekTier ??= null;
                 </span>
             </div>
         @endif
-        <a href="{{ $link }}">
-            <h5 class="card-text text-white dungeon_card_dungeon_name">
+        <a href="{{ $link }}" @if($isSelected) aria-current="true" @endif>
+            <span class="card-text text-white dungeon_card_dungeon_name">
                 {{ $title }}
-            </h5>
-
-            {{--                @isset($subtextFn)--}}
-            {{--                    <div class="card-text subtext text-white">--}}
-            {{--                        {!! $subtextFn($dungeon) !!}--}}
-            {{--                    </div>--}}
-            {{--                @endisset--}}
+            </span>
 
             <img class="card-img-top"
                  src="{{ $imageUrl }}"

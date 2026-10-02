@@ -13,7 +13,6 @@ use Illuminate\Support\Collection;
  * @var Season|null                  $dungeonContextNextSeason
  * @var string|null                  $dungeonContextNextSeasonLink
  * @var bool                         $forceShrink
- * @var bool                         $showMore
  * @var bool                         $showDungeonContext
  * @var bool                         $showGameVersionSelection
  * @var bool                         $showExpansionNav
@@ -22,7 +21,6 @@ use Illuminate\Support\Collection;
  * @var array<int, array<string, mixed>> $developerEntries
  */
 
-$showMore                 ??= false;
 $showDungeonContext       ??= true;
 // Map pages hide the game version selection row - it made the floating header too bulky
 $showGameVersionSelection ??= true;
@@ -49,17 +47,6 @@ if ($showDungeonContext) {
         $dungeon->key => route('dungeon.changecontext', [
             'dungeon' => $dungeon,
         ]),
-    ]);
-}
-
-// Retail's strip holds the current season's dungeons, which are all that matter there. Every other game
-// version's dungeons are all relevant, so the full selection is always one click away - pages without a
-// selection page of their own fall back to the explore one.
-$alwaysShowMore = $showDungeonContext && $currentUserGameVersion->key !== GameVersion::GAME_VERSION_RETAIL;
-if ($alwaysShowMore) {
-    $showMore                    = true;
-    $resolvedDungeonContextLinks = $resolvedDungeonContextLinks->union([
-        'more' => route('dungeon.explore.gameversion.select', ['gameVersion' => $currentUserGameVersion]),
     ]);
 }
 
@@ -181,7 +168,8 @@ $compendiumEntries        = [
             </nav>
         @endif
         @if($showDungeonContext)
-            <div class="row g-0 dungeon_context_header">
+            <nav class="row g-0 dungeon_context_header"
+                 aria-label="{{ __('view_common.layout.header.dungeon_context') }}">
                 <div class="col">
                     @include('common.dungeon.list', [
                         'gameVersion' => $currentUserGameVersion,
@@ -189,8 +177,6 @@ $compendiumEntries        = [
                         'colCount' => $gameVersionDungeons->count(),
                         'useAbbreviation' => true,
                         'selectable' => true,
-                        'showMore' => $showMore,
-                        'alwaysShowMore' => $alwaysShowMore,
                         // Only set when the next season is close enough to be advertised (#3761)
                         'nextSeason' => $dungeonContextNextSeason,
                         'nextSeasonLink' => $dungeonContextNextSeasonLink,
@@ -201,7 +187,7 @@ $compendiumEntries        = [
                         'links' => $resolvedDungeonContextLinks,
                     ])
                 </div>
-            </div>
+            </nav>
         @endif
     </div>
 </div>
@@ -221,8 +207,6 @@ $compendiumEntries        = [
                 @include('common.layout.nav.dungeoncontext', [
                     'gameVersion' => $currentUserGameVersion,
                     'dungeons' => $gameVersionDungeons,
-                    'showMore' => $showMore,
-                    'alwaysShowMore' => $alwaysShowMore,
                     'selectedDungeon' => $dungeonContextSelectedDungeon,
                     'links' => $resolvedDungeonContextLinks,
                     'nextSeason' => $dungeonContextNextSeason,

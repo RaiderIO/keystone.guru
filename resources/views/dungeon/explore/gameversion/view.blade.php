@@ -58,7 +58,7 @@ use Illuminate\Support\Collection;
                     'gameVersion' => $gameVersion,
                     'dungeon' => $dungeon,
                 ])
-            ])->put('more', route('dungeon.explore.gameversion.select', ['gameVersion' => $gameVersion])),
+            ]),
             'hiddenMapObjectGroups' => [
                 'arrow',
                 'brushline',
