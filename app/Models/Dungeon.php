@@ -32,8 +32,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Query\JoinClause;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Override;
@@ -89,16 +87,6 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
     public const PAGE_VIEW_SOURCE_VIEW_DUNGEON               = 1;
     public const PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED         = 2;
     public const PAGE_VIEW_SOURCE_VIEW_DUNGEON_HEATMAP_EMBED = 3;
-
-    /**
-     * Slug of a dungeon that was merged into another => the slug of the dungeon it was merged into.
-     *
-     * @var array<string, string>
-     */
-    public const array MERGED_DUNGEON_SLUGS = [
-        'ruins-of-ahnqiraj-sod'  => 'ruins-of-ahnqiraj-classic',
-        'temple-of-ahnqiraj-sod' => 'temple-of-ahnqiraj-classic',
-    ];
 
     /**
      * The accessors to append to the model's array form.
@@ -158,27 +146,6 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
     public function getRouteKeyName(): string
     {
         return 'slug';
-    }
-
-    /**
-     * A slug of a merged dungeon redirects to the same URL with the slug of the dungeon it was merged into.
-     *
-     * @throws HttpResponseException
-     */
-    #[Override]
-    public function resolveRouteBinding($value, $field = null): ?static
-    {
-        /** @var static|null $dungeon */
-        $dungeon = parent::resolveRouteBinding($value, $field);
-
-        $mergedIntoSlug = self::MERGED_DUNGEON_SLUGS[$value] ?? null;
-        if ($dungeon === null && $field === null && $mergedIntoSlug !== null) {
-            throw new HttpResponseException(
-                redirect()->to(self::replaceUrlSegment(request(), (string)$value, $mergedIntoSlug), 301),
-            );
-        }
-
-        return $dungeon;
     }
 
     public function getMdtSupportedAttribute(): bool
@@ -731,24 +698,6 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
         $user = Auth::user();
 
         return $dungeonService->getDungeonContext($user);
-    }
-
-    /**
-     * The request's URL, query string included, with the first path segment equal to $search replaced by
-     * $replace. A dungeon is always the first parameter of its route, so later segments are left alone.
-     */
-    private static function replaceUrlSegment(Request $request, string $search, string $replace): string
-    {
-        $segments = $request->segments();
-        $index    = array_search($search, $segments, true);
-        if ($index !== false) {
-            $segments[$index] = $replace;
-        }
-
-        $url         = url(implode('/', $segments));
-        $queryString = $request->getQueryString();
-
-        return $queryString === null ? $url : sprintf('%s?%s', $url, $queryString);
     }
 
     #[Override]
