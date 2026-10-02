@@ -86,12 +86,13 @@ final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function get_givenChildGameVersionIdOfADungeonItMapsItself_returnsOnlyTheRouteOnTheChildMappingVersion(): void
+    public function get_givenChildGameVersionIdOfADungeonItMapsItself_returnsTheChildsRouteAndTheParentsRouteOfAnInheritedDungeon(): void
     {
         // Arrange
-        $user        = null;
-        $parentRoute = null;
-        $childRoute  = null;
+        $user           = null;
+        $parentRoute    = null;
+        $childRoute     = null;
+        $inheritedRoute = null;
 
         try {
             $user    = $this->createUserWithUserRole();
@@ -124,6 +125,17 @@ final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
                 'mapping_version_id' => $childMappingVersion->id,
                 'season_id'          => null,
             ]);
+            $inheritedDungeon = $this->createDungeon(
+                ['expansion_id' => Expansion::ALL[Expansion::EXPANSION_CLASSIC], 'active' => true],
+                mappingVersionAttributes: ['game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]],
+            );
+            /** @var MappingVersion $inheritedMappingVersion */
+            $inheritedMappingVersion = $inheritedDungeon->mappingVersions()->firstOrFail();
+            $inheritedRoute          = $this->createOwnRoute($user, [
+                'dungeon_id'         => $inheritedDungeon->id,
+                'mapping_version_id' => $inheritedMappingVersion->id,
+                'season_id'          => null,
+            ]);
             $this->actingAs($user);
 
             // Act
@@ -131,8 +143,12 @@ final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
 
             // Assert
             $response->assertOk();
-            $this->assertSame([$childRoute->public_key], array_column($response->json('data'), 'public_key'));
+            $this->assertEqualsCanonicalizing(
+                [$childRoute->public_key, $inheritedRoute->public_key],
+                array_column($response->json('data'), 'public_key'),
+            );
         } finally {
+            $inheritedRoute?->delete();
             $childRoute?->delete();
             $parentRoute?->delete();
             $user?->delete();

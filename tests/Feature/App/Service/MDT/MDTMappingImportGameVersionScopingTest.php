@@ -15,6 +15,7 @@ use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionProperty;
@@ -48,8 +49,10 @@ use Tests\TestCases\PublicTestCase;
 final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
 {
     #[Test]
-    public function importMappingVersionFromMDT_givenGameVersionWithNoExistingMappingVersion_createsMappingVersionForThatGameVersionWithNothingClonedFromAnotherGameVersion(): void
-    {
+    #[DataProvider('importMappingVersionFromMDT_givenGameVersionWithNoExistingMappingVersion_createsMappingVersionForThatGameVersionWithNothingClonedFromAnotherGameVersion_dataProvider')]
+    public function importMappingVersionFromMDT_givenGameVersionWithNoExistingMappingVersion_createsMappingVersionForThatGameVersionWithNothingClonedFromAnotherGameVersion(
+        bool $inheritsFromRetail,
+    ): void {
         // Arrange
         $mappingService       = $this->app->make(MappingServiceInterface::class);
         $mappingImportService = $this->app->make(MDTMappingImportServiceInterface::class);
@@ -58,6 +61,11 @@ final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
         $targetGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_BETA)->firstOrFail();
         /** @var GameVersion $retailGameVersion */
         $retailGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_RETAIL)->firstOrFail();
+
+        // In memory only, so the seeded game versions stay untouched
+        if ($inheritsFromRetail) {
+            $targetGameVersion->parent_game_version_id = $retailGameVersion->id;
+        }
 
         $dungeon = $this->getMdtDungeonWithRetailCheckpointAndNoMappingForGameVersion($targetGameVersion, $retailGameVersion);
 
@@ -157,6 +165,17 @@ final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
                 ->whereNotIn('id', $preExistingNpcHealthIds)
                 ->delete();
         }
+    }
+
+    /**
+     * @return array<string, array{bool}>
+     */
+    public static function importMappingVersionFromMDT_givenGameVersionWithNoExistingMappingVersion_createsMappingVersionForThatGameVersionWithNothingClonedFromAnotherGameVersion_dataProvider(): array
+    {
+        return [
+            'unrelated game version' => [false],
+            'inherits from retail'   => [true],
+        ];
     }
 
     /**
