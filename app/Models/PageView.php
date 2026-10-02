@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Session;
  * @property string   $model_class
  * @property string   $session_id
  * @property int|null $source
- * @property string   $created_at
- * @property string   $updated_at
+ * @property Carbon   $created_at
+ * @property Carbon   $updated_at
  *
  * @mixin Eloquent
  */
@@ -36,10 +36,7 @@ class PageView extends Model
      */
     public function isRecent(): bool
     {
-        // If the previous page view was created at least view_time_threshold_mins minutes ago.
-        return Carbon::createFromTimeString($this->created_at)
-            ->subMinutes(config('keystoneguru.view_time_threshold_mins'))
-            ->isPast();
+        return $this->created_at->isAfter(Carbon::now()->subMinutes(config('keystoneguru.view_time_threshold_mins')));
     }
 
     /**
@@ -55,7 +52,7 @@ class PageView extends Model
         // PHP session ID for keeping track of guests
         $sessionId = Session::getId();
 
-        $mostRecentPageView = PageView::getMostRecentPageView($modelId, $modelClass);
+        $mostRecentPageView = PageView::getMostRecentPageView($userId, $sessionId, $modelId, $modelClass);
 
         // Only if the view may be counted
         if ($mostRecentPageView === null || !$mostRecentPageView->isRecent()) {
@@ -75,22 +72,17 @@ class PageView extends Model
     }
 
     /**
-     * Checks if the view may be counted or if it shouldn't be counted because a previously existing view is too recent.
-     *
-     * @param                $modelId    int
-     * @param                $modelClass string
+     * @param  int           $userId The user's ID, or -1 for a guest
      * @return PageView|null The most recent page view, or null if none was found.
      */
-    private static function getMostRecentPageView(int $modelId, string $modelClass): ?PageView
+    private static function getMostRecentPageView(int $userId, string $sessionId, int $modelId, string $modelClass): ?PageView
     {
-        $userId = Auth::id();
-        // PHP session ID for keeping track of guests
-        $sessionId = Session::getId();
-
-        return PageView::where('user_id', $userId)
+        return PageView::query()
+            ->where('user_id', $userId)
             ->where('model_id', $modelId)
             ->where('model_class', $modelClass)
             ->where('session_id', $sessionId)
+            ->latest()
             ->first();
     }
 }
