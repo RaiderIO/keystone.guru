@@ -17,7 +17,8 @@ use Illuminate\Support\Collection;
     <div class="dropdown-menu text-center text-xl-start" aria-labelledby="gameVersionDropdown">
         @foreach ($allGameVersions as $gameVersion)
             <a class="dropdown-item {{ $currentUserGameVersion->id === $gameVersion->id ? 'active' : '' }}"
-               href="{{ route('gameversion.update', ['gameVersion' => $gameVersion]) }}">
+               href="{{ route('gameversion.update', ['gameVersion' => $gameVersion]) }}"
+               @if($currentUserGameVersion->id === $gameVersion->id) aria-current="true" @endif>
                 @include('common.gameversion.gameversionnav', ['gameVersion' => $gameVersion, 'width' => 50, 'showName' => true])
             </a>
         @endforeach

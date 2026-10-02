@@ -13,8 +13,8 @@ $showName ??= false;
 
 $name = __($gameVersion->name);
 ?>
-<img src="{{ ksgAssetImage(sprintf('gameversions/%s.webp', $gameVersion->key)) }}"
-     alt="{{ $name }}"
-     @isset($width) width="{{ $width }}px" @endisset
-     height="17px" loading="lazy"/>
+<img class="game_version_logo" src="{{ ksgAssetImage(sprintf('gameversions/%s.webp', $gameVersion->key)) }}"
+     alt="{{ $showName ? '' : $name }}"
+     @isset($width) width="{{ $width }}" @endisset
+     height="17" loading="lazy"/>
 {{ $showName ? $name : '' }}

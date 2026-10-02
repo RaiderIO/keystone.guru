@@ -49,8 +49,39 @@
     padding-bottom: 0.25rem;
 }
 
+.game_version_header .game_version_list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0.125rem 0;
+    list-style: none;
+}
+
 .game_version_header .game_version {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 2rem;
+    padding: 0 0.625rem;
+    border: 0.125rem solid transparent;
     border-radius: 0.25rem;
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+
+.game_version_header .game_version img {
+    width: auto;
+    height: 1rem;
+}
+
+.game_version_header .game_version[aria-current] {
+    color: var(--theme-text-contrast);
+}
+
+/* The logos differ in aspect ratio; the mobile selector boxes them all to one width so the names line up */
+.game_version_logo {
+    object-fit: contain;
 }
 
 /* Mobile dungeon-context selector (#4097): the desktop strip is a row of image cards that cannot

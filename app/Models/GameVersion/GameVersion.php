@@ -25,6 +25,7 @@ use Override;
  * @property int      $expansion_id                 The expansion that this game version focussed on.
  * @property int|null $parent_game_version_id       The game version whose dungeons this game version inherits.
  * @property string   $key
+ * @property int      $display_order                Position in the game version selectors: Retail first, then flavours in release order.
  * @property string   $name
  * @property string   $description
  * @property bool     $has_seasons
@@ -52,6 +53,7 @@ class GameVersion extends Model
         'id',
         'parent_game_version_id',
         'key',
+        'display_order',
         'name',
         'description',
         'has_seasons',
