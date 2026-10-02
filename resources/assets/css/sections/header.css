@@ -498,12 +498,25 @@ body:has(#map_header) .offcanvas-backdrop {
 .game_version_segments .game_version_segment:focus-visible {
     background-color: rgba(128, 128, 128, 0.2);
     color: var(--theme-text-contrast);
+    text-decoration: none;
 }
 
 .game_version_segments .game_version_segment[aria-current] {
     background-color: var(--theme-header);
     color: var(--theme-text-contrast);
     font-weight: 600;
+}
+
+/* The page reloads on a version switch; the list it is about to replace steps back meanwhile */
+.dungeon_sheet .dungeon_sheet_filter,
+.dungeon_sheet .dungeon_sheet_list {
+    transition: opacity 0.15s ease-out;
+}
+
+.dungeon_sheet.is-switching .dungeon_sheet_filter,
+.dungeon_sheet.is-switching .dungeon_sheet_list {
+    opacity: 0.4;
+    pointer-events: none;
 }
 
 /* Opaque so the rows scroll under it rather than through it */
@@ -568,6 +581,7 @@ body:has(#map_header) .offcanvas-backdrop {
 .dungeon_sheet .dungeon_sheet_row:focus-visible {
     background-color: var(--dungeon-sheet-row-bg-hover);
     color: var(--theme-text-contrast);
+    text-decoration: none;
 }
 
 .dungeon_sheet .dungeon_sheet_row[aria-current] {

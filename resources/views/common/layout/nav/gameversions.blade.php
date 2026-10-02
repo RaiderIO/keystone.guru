@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
             <li>
                 <a @class(['game_version_segment', 'border-accent' => $isSelectedGameVersion])
                    href="{{ route('gameversion.update', ['gameVersion' => $gameVersion]) }}"
+                   data-current="{{ $isSelectedGameVersion ? 'true' : 'false' }}"
                    @if($isSelectedGameVersion) aria-current="true" @endif>
                     <img class="game_version_segment_logo"
                          src="{{ ksgAssetImage(sprintf('gameversions/%s.webp', $gameVersion->key)) }}" alt=""

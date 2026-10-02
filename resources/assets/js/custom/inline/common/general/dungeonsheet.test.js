@@ -24,17 +24,24 @@ describe('DungeonSheet', () => {
     const originalBootstrap = globalThis.bootstrap;
     let mediaQueryListeners;
     let hiddenOffcanvases;
+    let shownOffcanvases;
+    let isDesktop;
 
     beforeEach(() => {
         mediaQueryListeners = [];
         hiddenOffcanvases = [];
+        shownOffcanvases = [];
+        isDesktop = false;
+        sessionStorage.clear();
         window.matchMedia = query => ({
             media: query,
+            matches: isDesktop,
             addEventListener: (type, listener) => mediaQueryListeners.push({query, type, listener}),
         });
         globalThis.bootstrap = {
             Offcanvas: {
                 getInstance: element => ({hide: () => hiddenOffcanvases.push(element)}),
+                getOrCreateInstance: element => ({show: () => shownOffcanvases.push(element)}),
             },
         };
     });
@@ -42,6 +49,8 @@ describe('DungeonSheet', () => {
     afterEach(() => {
         window.matchMedia = originalMatchMedia;
         globalThis.bootstrap = originalBootstrap;
+        sessionStorage.clear();
+        vi.useRealTimers();
     });
 
     /**
@@ -63,6 +72,10 @@ describe('DungeonSheet', () => {
             <header id="site_header">
                 <div class="offcanvas offcanvas-bottom dungeon_sheet" id="dungeon_sheet">
                     <div class="offcanvas-body dungeon_sheet_body">
+                        <nav class="game_version_segments">
+                            <a class="game_version_segment border-accent" id="retail" href="#retail" data-current="true" aria-current="true">Retail</a>
+                            <a class="game_version_segment" id="classic" href="#classic" data-current="false">Classic Era</a>
+                        </nav>
                         <input type="search" class="dungeon_sheet_filter_input"/>
                         <div class="dungeon_sheet_list">
                             <section class="dungeon_sheet_group" id="group_dungeon">
@@ -231,6 +244,155 @@ describe('DungeonSheet', () => {
         // Assert
         expect(mediaQueryListeners).toHaveLength(1);
         expect(hiddenOffcanvases).toEqual([]);
+    });
+
+    /**
+     * @param {string} id
+     * @param {MouseEventInit} init
+     * @returns {MouseEvent}
+     */
+    function clickGameVersion(id, init = {}) {
+        const event = new MouseEvent('click', {bubbles: true, cancelable: true, button: 0, ...init});
+        // jsdom would follow the href and stop the test run
+        document.getElementById(id).addEventListener('click', clickEvent => clickEvent.preventDefault(), {once: true});
+        document.getElementById(id).dispatchEvent(event);
+
+        return event;
+    }
+
+    it('gameVersionClick_givenAnotherVersion_marksItSelectedAndDimsTheList', () => {
+        // Arrange
+        const sheet = makeSheet();
+
+        // Act
+        clickGameVersion('classic');
+
+        // Assert
+        expect(document.getElementById('classic').getAttribute('aria-current')).toBe('true');
+        expect(document.getElementById('classic').classList.contains('border-accent')).toBe(true);
+        expect(document.getElementById('retail').hasAttribute('aria-current')).toBe(false);
+        expect(document.getElementById('retail').classList.contains('border-accent')).toBe(false);
+        expect(sheet.element.classList.contains('is-switching')).toBe(true);
+        expect(sheet.body.getAttribute('aria-busy')).toBe('true');
+    });
+
+    it('gameVersionClick_givenAnotherVersion_asksTheNextPageToReopenTheSheet', () => {
+        // Arrange
+        vi.useFakeTimers({now: 1_000_000, toFake: ['Date']});
+        makeSheet();
+
+        // Act
+        clickGameVersion('classic');
+
+        // Assert
+        expect(sessionStorage.getItem(DungeonSheet.REOPEN_STORAGE_KEY)).toBe('1000000');
+    });
+
+    it.each([
+        ['ACtrl', {ctrlKey: true}],
+        ['AMeta', {metaKey: true}],
+        ['AShift', {shiftKey: true}],
+        ['AnAlt', {altKey: true}],
+        ['AMiddleButton', {button: 1}],
+    ])('gameVersionClick_given%sClick_leavesTheSheetAsItIs', (_, init) => {
+        // Arrange
+        const sheet = makeSheet();
+
+        // Act
+        clickGameVersion('classic', init);
+
+        // Assert
+        expect(sessionStorage.getItem(DungeonSheet.REOPEN_STORAGE_KEY)).toBeNull();
+        expect(sheet.element.classList.contains('is-switching')).toBe(false);
+        expect(document.getElementById('retail').getAttribute('aria-current')).toBe('true');
+    });
+
+    it('gameVersionClick_givenTheCurrentVersion_leavesTheSheetAsItIs', () => {
+        // Arrange
+        const sheet = makeSheet();
+
+        // Act
+        clickGameVersion('retail');
+
+        // Assert
+        expect(sessionStorage.getItem(DungeonSheet.REOPEN_STORAGE_KEY)).toBeNull();
+        expect(sheet.element.classList.contains('is-switching')).toBe(false);
+    });
+
+    it('constructor_givenARecentVersionSwitch_reopensTheSheetAndForgetsTheSwitch', () => {
+        // Arrange
+        vi.useFakeTimers({now: 1_000_000, toFake: ['Date']});
+        sessionStorage.setItem(DungeonSheet.REOPEN_STORAGE_KEY, `${1_000_000 - DungeonSheet.REOPEN_MAX_AGE_MS}`);
+
+        // Act
+        const sheet = makeSheet();
+
+        // Assert
+        expect(shownOffcanvases).toEqual([sheet.element]);
+        expect(sessionStorage.getItem(DungeonSheet.REOPEN_STORAGE_KEY)).toBeNull();
+    });
+
+    it('constructor_givenAnAbandonedVersionSwitch_leavesTheSheetClosedAndForgetsTheSwitch', () => {
+        // Arrange
+        vi.useFakeTimers({now: 1_000_000, toFake: ['Date']});
+        sessionStorage.setItem(DungeonSheet.REOPEN_STORAGE_KEY, `${1_000_000 - DungeonSheet.REOPEN_MAX_AGE_MS - 1}`);
+
+        // Act
+        makeSheet();
+
+        // Assert
+        expect(shownOffcanvases).toEqual([]);
+        expect(sessionStorage.getItem(DungeonSheet.REOPEN_STORAGE_KEY)).toBeNull();
+    });
+
+    it('constructor_givenAVersionSwitchOnDesktop_leavesTheSheetClosedAndForgetsTheSwitch', () => {
+        // Arrange
+        isDesktop = true;
+        sessionStorage.setItem(DungeonSheet.REOPEN_STORAGE_KEY, `${Date.now()}`);
+
+        // Act
+        makeSheet();
+
+        // Assert
+        expect(shownOffcanvases).toEqual([]);
+        expect(sessionStorage.getItem(DungeonSheet.REOPEN_STORAGE_KEY)).toBeNull();
+    });
+
+    it('constructor_givenNoVersionSwitch_leavesTheSheetClosed', () => {
+        // Act
+        makeSheet();
+
+        // Assert
+        expect(shownOffcanvases).toEqual([]);
+    });
+
+    it('pageshow_givenARestoreFromTheBackForwardCache_endsThePendingSwitch', () => {
+        // Arrange
+        const sheet = makeSheet();
+        clickGameVersion('classic');
+
+        // Act
+        window.dispatchEvent(new PageTransitionEvent('pageshow', {persisted: true}));
+
+        // Assert
+        expect(sheet.element.classList.contains('is-switching')).toBe(false);
+        expect(sheet.body.hasAttribute('aria-busy')).toBe(false);
+        expect(document.getElementById('retail').getAttribute('aria-current')).toBe('true');
+        expect(document.getElementById('retail').classList.contains('border-accent')).toBe(true);
+        expect(document.getElementById('classic').hasAttribute('aria-current')).toBe(false);
+        expect(document.getElementById('classic').classList.contains('border-accent')).toBe(false);
+    });
+
+    it('pageshow_givenAFreshLoad_keepsThePendingSwitch', () => {
+        // Arrange
+        const sheet = makeSheet();
+        clickGameVersion('classic');
+
+        // Act
+        window.dispatchEvent(new PageTransitionEvent('pageshow', {persisted: false}));
+
+        // Assert
+        expect(sheet.element.classList.contains('is-switching')).toBe(true);
     });
 
     it('hidden_givenAFilter_clearsItAndShowsEveryRowAgain', () => {

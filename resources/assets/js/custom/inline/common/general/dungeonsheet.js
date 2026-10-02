@@ -24,13 +24,22 @@ function foldForDungeonSheetFilter(text) {
 
 /**
  * The mobile dungeon sheet in the header: the filter narrows the rows and hides the sections it empties, Enter
- * follows the first row left, and opening the sheet brings the selected dungeon into view.
+ * follows the first row left, and opening the sheet brings the selected dungeon into view. Switching game version
+ * reloads the page, so the sheet reopens itself afterwards on the new version's dungeons.
  */
 class DungeonSheet {
     /**
      * Matches Bootstrap's `lg` breakpoint, from which the sheet is display: none (`d-lg-none`).
      */
     static DESKTOP_MEDIA_QUERY = '(min-width: 992px)';
+
+    static REOPEN_STORAGE_KEY = 'dungeon_sheet_reopen_at';
+
+    /**
+     * A switch that takes longer than this never reopens the sheet - it was abandoned, and the visitor would not
+     * expect a sheet on whatever page they reach next.
+     */
+    static REOPEN_MAX_AGE_MS = 30000;
 
     /**
      * @param {HTMLElement} element The #dungeon_sheet
@@ -42,6 +51,7 @@ class DungeonSheet {
         this.rows = [...element.querySelectorAll('.dungeon_sheet_row')];
         this.groups = [...element.querySelectorAll('.dungeon_sheet_group')];
         this.empty = element.querySelector('.dungeon_sheet_empty');
+        this.desktopMediaQuery = window.matchMedia(DungeonSheet.DESKTOP_MEDIA_QUERY);
 
         // The sticky header is a stacking context below Bootstrap's body-level backdrop
         document.body.appendChild(element);
@@ -50,18 +60,88 @@ class DungeonSheet {
         this.input.addEventListener('keydown', this._onInputKeyDown.bind(this));
         element.addEventListener('show.bs.offcanvas', this._onShow.bind(this));
         element.addEventListener('hidden.bs.offcanvas', this._onHidden.bind(this));
+        element.querySelectorAll('.game_version_segment').forEach(
+            segment => segment.addEventListener('click', this._onGameVersionClick.bind(this))
+        );
 
         // Bootstrap only dismisses an offcanvas on resize once it stops being position: fixed, so an open sheet
         // hidden by d-lg-none would leave its backdrop, scroll lock and focus trap behind
-        window.matchMedia(DungeonSheet.DESKTOP_MEDIA_QUERY).addEventListener('change', event => {
+        this.desktopMediaQuery.addEventListener('change', event => {
             if (event.matches) {
                 this.hide();
             }
         });
+
+        // Back from the version's page restores this one from the bfcache as it was left: mid-switch
+        window.addEventListener('pageshow', event => {
+            if (event.persisted) {
+                this._endGameVersionSwitch();
+            }
+        });
+
+        this._reopenAfterGameVersionSwitch();
+    }
+
+    show() {
+        bootstrap.Offcanvas.getOrCreateInstance(this.element).show();
     }
 
     hide() {
         bootstrap.Offcanvas.getInstance(this.element)?.hide();
+    }
+
+    /**
+     * The tapped version takes the selection at once and the list dims, so the tap reads as taken while the
+     * page reloads.
+     *
+     * @param {MouseEvent} event
+     */
+    _onGameVersionClick(event) {
+        // A modified click opens the version elsewhere - this page is not reloading
+        if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+            return;
+        }
+
+        const segment = event.currentTarget;
+        if (segment.hasAttribute('aria-current')) {
+            return;
+        }
+
+        sessionStorage.setItem(DungeonSheet.REOPEN_STORAGE_KEY, `${Date.now()}`);
+
+        this.element.querySelectorAll('.game_version_segment').forEach(other => {
+            other.classList.remove('border-accent');
+            other.removeAttribute('aria-current');
+        });
+        segment.classList.add('border-accent');
+        segment.setAttribute('aria-current', 'true');
+        this.element.classList.add('is-switching');
+        this.body.setAttribute('aria-busy', 'true');
+    }
+
+    _endGameVersionSwitch() {
+        this.element.classList.remove('is-switching');
+        this.body.removeAttribute('aria-busy');
+        this.element.querySelectorAll('.game_version_segment').forEach(segment => {
+            const isCurrent = segment.dataset.current === 'true';
+            segment.classList.toggle('border-accent', isCurrent);
+            if (isCurrent) {
+                segment.setAttribute('aria-current', 'true');
+            } else {
+                segment.removeAttribute('aria-current');
+            }
+        });
+    }
+
+    _reopenAfterGameVersionSwitch() {
+        const reopenAt = parseInt(sessionStorage.getItem(DungeonSheet.REOPEN_STORAGE_KEY) ?? '', 10);
+        sessionStorage.removeItem(DungeonSheet.REOPEN_STORAGE_KEY);
+
+        if (Number.isNaN(reopenAt) || Date.now() - reopenAt > DungeonSheet.REOPEN_MAX_AGE_MS || this.desktopMediaQuery.matches) {
+            return;
+        }
+
+        this.show();
     }
 
     /**

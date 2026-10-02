@@ -253,9 +253,12 @@ final class HeaderComposerTest extends PublicTestCase
         $this->assertSame($gameVersions->count(), preg_match_all('/class="game_version_segment[" ]/', $sheet));
         $this->assertSame($gameVersions->count(), preg_match_all('/class="game_version_segment[" ]/', $html));
         $this->assertMatchesRegularExpression(
-            sprintf('/href="%s"\s+aria-current="true"/', preg_quote(route('gameversion.update', ['gameVersion' => $currentVersion]), '/')),
+            sprintf('/href="%s"\s+data-current="true"\s+aria-current="true"/', preg_quote(route('gameversion.update', ['gameVersion' => $currentVersion]), '/')),
             $sheet,
         );
+        // The sheet restores the selection from data-current when the page returns from the back/forward cache
+        $this->assertSame(1, substr_count($sheet, 'data-current="true"'));
+        $this->assertSame($gameVersions->count() - 1, substr_count($sheet, 'data-current="false"'));
     }
 
     /**
