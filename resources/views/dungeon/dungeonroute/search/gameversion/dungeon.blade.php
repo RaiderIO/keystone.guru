@@ -41,7 +41,7 @@ use App\Models\GameVersion\GameVersion;
                     'gameVersion' => $gameVersion,
                     'dungeon' => $dungeon,
                 ])
-            ])->put('more', route('dungeon.dungeonroute.search.gameversion.select', ['gameVersion' => $gameVersion])),
+            ]),
             'show' => [
                 'header' => true,
                 'controls' => [

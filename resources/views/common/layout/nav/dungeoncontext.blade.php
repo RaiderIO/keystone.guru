@@ -17,27 +17,22 @@ use Illuminate\Support\Collection;
  * @var Collection<int, Dungeon>                 $dungeons
  * @var Dungeon                                  $selectedDungeon
  * @var Collection<string, string>               $links
- * @var bool                                     $showMore
- * @var bool                                     $alwaysShowMore
  * @var Season|null                              $nextSeason
  * @var string|null                              $nextSeasonLink
  * @var Collection<int, Collection<int, string>> $easeTiers
  * @var AffixGroup|null                          $currentAffixGroup
  */
 
-$showMore          ??= false;
-$alwaysShowMore    ??= false;
 $nextSeason        ??= null;
 $nextSeasonLink    ??= null;
 $easeTiers         ??= collect();
 $currentAffixGroup ??= null;
-// Mirrors common/dungeon/list's own cap, so both selectors offer the same dungeons and the same
-// "More" way into the full selection. Without it, a game version whose dungeon list is not scoped
-// to the active ones would drop 25+ entries into the dropdown that the desktop strip never shows.
-$maxColCount       ??= 8;
 
-$shownDungeons      = $dungeons->take($maxColCount);
-$hasSelectedDungeon = $shownDungeons->contains('key', $selectedDungeon->key);
+// A seasonless game version lists every dungeon and raid it has mapped, grouped the same way as the desktop
+// chip grid; a season's pool is one group and needs no header.
+$showGroupHeaders   = !$gameVersion->has_seasons;
+/** @var Collection<string, Collection<int, Dungeon>> $dungeonsByGroup */
+$dungeonsByGroup    = $dungeons->groupBy(static fn(Dungeon $dungeon) => $dungeon->getSelectorGroup()->value);
 $changeDungeonLabel = __('view_common.layout.nav.dungeoncontext.change_dungeon');
 ?>
 <li class="nav-item dropdown dungeon_context_nav">
@@ -51,32 +46,28 @@ $changeDungeonLabel = __('view_common.layout.nav.dungeoncontext.change_dungeon')
     <div class="dropdown-menu dropdown-menu-end dungeon_context_nav_menu"
          aria-labelledby="dungeonContextDropdown">
         <h6 class="dropdown-header">{{ $changeDungeonLabel }}</h6>
-        @foreach($shownDungeons as $dungeon)
-            <?php
-            $thisWeekTier = $currentAffixGroup === null ? null : ($easeTiers[$currentAffixGroup->id][$dungeon->id] ?? null);
-            ?>
-            <a class="dropdown-item d-flex align-items-center {{ $selectedDungeon->key === $dungeon->key ? 'active' : '' }}"
-               href="{{ $links->get($dungeon->key) }}">
-                <img class="dungeon_context_nav_icon me-2" src="{{ $dungeon->getImageUrl() }}" loading="lazy" alt=""/>
-                <span class="flex-grow-1 text-start">{{ __($dungeon->name) }}</span>
-                @if($thisWeekTier !== null)
-                    <span class="dungeon_context_nav_tier ms-2" data-bs-toggle="tooltip"
-                          title="{{ __('view_common.dungeon.list.card.this_week_tier') }}">
-                        <span class="tier {{ strtolower($thisWeekTier) }}">{{ $thisWeekTier }}</span>
-                    </span>
-                @endif
-            </a>
+        @foreach($dungeonsByGroup as $group => $groupDungeons)
+            @if($showGroupHeaders)
+                <h6 class="dropdown-header">{{ __(sprintf('view_common.dungeon.list.groups.%s', $group)) }}</h6>
+            @endif
+            @foreach($groupDungeons as $dungeon)
+                <?php
+                $thisWeekTier = $currentAffixGroup === null ? null : ($easeTiers[$currentAffixGroup->id][$dungeon->id] ?? null);
+                ?>
+                <a class="dropdown-item d-flex align-items-center {{ $selectedDungeon->key === $dungeon->key ? 'active' : '' }}"
+                   href="{{ $links->get($dungeon->key) }}"
+                   @if($selectedDungeon->key === $dungeon->key) aria-current="true" @endif>
+                    <img class="dungeon_context_nav_icon me-2" src="{{ $dungeon->getImageUrl() }}" loading="lazy" alt=""/>
+                    <span class="flex-grow-1 text-start">{{ __($dungeon->name) }}</span>
+                    @if($thisWeekTier !== null)
+                        <span class="dungeon_context_nav_tier ms-2" data-bs-toggle="tooltip"
+                              title="{{ __('view_common.dungeon.list.card.this_week_tier') }}">
+                            <span class="tier {{ strtolower($thisWeekTier) }}">{{ $thisWeekTier }}</span>
+                        </span>
+                    @endif
+                </a>
+            @endforeach
         @endforeach
-        {{-- Explore, heatmap and route search cap the strip and add a 'more' link into their own full
-             dungeon selection page - the mobile dropdown is capped the same way, so it needs it too --}}
-        @if($showMore && ($alwaysShowMore || $dungeons->count() >= $maxColCount))
-            <a class="dropdown-item d-flex align-items-center {{ $hasSelectedDungeon ? '' : 'active' }}"
-               href="{{ $links->get('more') }}">
-                <img class="dungeon_context_nav_icon me-2" src="{{ $gameVersion->expansion->getWallpaperUrl() }}"
-                     loading="lazy" alt="{{ __($gameVersion->expansion->name) }}"/>
-                <span class="flex-grow-1 text-start">{{ __('view_common.dungeon.list.more') }}</span>
-            </a>
-        @endif
         {{-- The upcoming season is advertised next to the dungeons, never in their place (#3761) --}}
         @if($nextSeason !== null && $nextSeasonLink !== null)
             <div class="dropdown-divider"></div>

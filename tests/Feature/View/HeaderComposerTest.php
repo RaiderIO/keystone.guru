@@ -249,34 +249,6 @@ final class HeaderComposerTest extends PublicTestCase
     }
 
     /**
-     * Map pages cap the strip at `maxColCount` dungeons and add a 'more' link into their own full dungeon
-     * selection page. The mobile dropdown is capped the same way, so it has to offer the same way out - or
-     * the dungeons past the cap become unreachable on a phone.
-     */
-    #[Test]
-    public function render_givenShowMore_rendersTheMoreEntryInTheMobileDungeonSelector(): void
-    {
-        // Arrange - `maxColCount` is not a header parameter: exactly like the desktop strip's own include,
-        // the partial reads it out of the enclosing view scope, which is what lets the cap be forced here
-        // instead of depending on how many dungeons the current season happens to seed.
-        $links = collect(['more' => 'https://example.test/more']);
-
-        // Act
-        $selector = $this->getMobileDungeonSelectorHtml(
-            view('common.layout.header', [
-                'showMore'            => true,
-                'maxColCount'         => 1,
-                'dungeonContextLinks' => $links,
-            ])->render(),
-        );
-
-        // Assert
-        $this->assertNotNull($selector);
-        $this->assertStringContainsString('https://example.test/more', $selector);
-        $this->assertStringContainsString(__('view_common.dungeon.list.more'), $selector);
-    }
-
-    /**
      * Dungeon abbreviations are keystone.guru's own short names, so no game-data sync fills them and every
      * non-English locale file carries them as an empty string - which the header rendered as a blank label.
      */

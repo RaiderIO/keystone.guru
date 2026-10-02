@@ -4,7 +4,6 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
-use App\Service\Expansion\ExpansionService;
 use Illuminate\Support\Collection;
 
 /**
@@ -24,10 +23,6 @@ $selectable      ??= false;
 $selected        ??= null;
 $subtextFn       ??= null;
 $width           ??= null;
-$showMore        ??= false;
-// Show the "More" card even when every dungeon fits in the strip
-$alwaysShowMore  ??= false;
-$maxColCount     ??= 8;
 // The upcoming season is shown as an extra card next to the dungeons, leading to a selection of just
 // its dungeons - it never takes the place of the current season's dungeons (#3761). Only set when the
 // season is close enough to its start to be advertised.
@@ -36,15 +31,22 @@ $nextSeasonLink ??= null;
 // Ease tiers ("what's easy this week") - a Collection<affixGroupId, Collection<dungeonId, tier>>
 $easeTiers         ??= collect();
 $currentAffixGroup ??= null;
-
-// @formatter:off
 ?>
+{{-- A seasonless game version offers every dungeon and raid it has mapped - up to forty, far more than a
+     row of image cards holds - so it gets a chip grid instead --}}
+@if(!$gameVersion->has_seasons)
+    @include('common.dungeon.list.chips', [
+        'gameVersion' => $gameVersion,
+        'dungeons' => $dungeons,
+        'links' => $links,
+        'selected' => $selected,
+    ])
+@else
 <div class="row">
     <?php
-    $hasSelectedDungeon = false;
-    foreach($dungeons->take($maxColCount) as $dungeon) {
+    // @formatter:off
+    foreach($dungeons as $dungeon) {
         /** @var Dungeon $dungeon */
-        $hasSelectedDungeon = $hasSelectedDungeon || $selected === $dungeon->key;
         $thisWeekTier = $currentAffixGroup === null ? null : ($easeTiers[$currentAffixGroup->id][$dungeon->id] ?? null);
         ?>
         @include('common.dungeon.list.card', [
@@ -60,22 +62,6 @@ $currentAffixGroup ??= null;
     <?php
     }
 
-    if($showMore && ($alwaysShowMore || $dungeons->count() >= $maxColCount)) {
-        ?>
-        @include('common.dungeon.list.card', [
-            'link' => $links->get('more'),
-            'title' => __('view_common.dungeon.list.more'),
-            'isSelected' => !$hasSelectedDungeon,
-            'imageUrl' => $gameVersion->expansion->getWallpaperUrl(),
-            'imageAlt' => __($gameVersion->expansion->name),
-            'width' => $width,
-            // Explicitly null: an @include inherits the enclosing scope, so the last dungeon's tier would
-            // otherwise leak into this card - it is not a dungeon and has no difficulty tier
-            'thisWeekTier' => null,
-        ])
-    <?php
-    }
-
     if($nextSeason !== null && $nextSeasonLink !== null) {
         ?>
         @include('common.dungeon.list.card', [
@@ -85,6 +71,8 @@ $currentAffixGroup ??= null;
             'imageUrl' => $nextSeason->expansion->getWallpaperUrl(),
             'imageAlt' => __($nextSeason->expansion->name),
             'width' => $width,
+            // Explicitly null: an @include inherits the enclosing scope, so the last dungeon's tier would
+            // otherwise leak into this card - it is not a dungeon and has no difficulty tier
             'thisWeekTier' => null,
         ])
     <?php
@@ -92,3 +80,4 @@ $currentAffixGroup ??= null;
 // @formatter:on
     ?>
 </div>
+@endif

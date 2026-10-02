@@ -37,7 +37,6 @@ final class DungeonListTest extends PublicTestCase
             'dungeons'        => collect(),
             'useAbbreviation' => true,
             'selectable'      => true,
-            'showMore'        => false,
         ];
     }
 
@@ -80,8 +79,8 @@ final class DungeonListTest extends PublicTestCase
 
     /**
      * A Blade @include inherits the enclosing scope, so `$thisWeekTier` - assigned per dungeon in the loop -
-     * stays set for whatever is rendered after it. Both the "More" and the "next season" card would show the
-     * last dungeon's "what's easy this week" badge, which means nothing for a card that is not a dungeon.
+     * stays set for whatever is rendered after it. The "next season" card would show the last dungeon's
+     * "what's easy this week" badge, which means nothing for a card that is not a dungeon.
      */
     #[Test]
     public function render_givenEaseTiers_showsThemOnDungeonCardsOnly(): void
@@ -95,21 +94,17 @@ final class DungeonListTest extends PublicTestCase
 
         $this->assertGreaterThan(0, $dungeons->count(), 'Need seeded season dungeons to give a tier to');
 
-        // Act - every dungeon has a tier, and both extra cards render alongside them
+        // Act - every dungeon has a tier, and the next season card renders alongside them
         $html = view('common.dungeon.list', [
             ...$this->baseParams(),
             'dungeons'          => $dungeons,
-            'maxColCount'       => $dungeons->count(),
-            'showMore'          => true,
-            'links'             => collect(['more' => '/explore/retail/select']),
             'easeTiers'         => $easeTiers,
             'currentAffixGroup' => $affixGroup,
             'nextSeason'        => $this->nextSeason(),
             'nextSeasonLink'    => $this->nextSeasonLink(),
         ])->render();
 
-        // Assert - one badge per dungeon, none for the "More" and "next season" cards
-        $this->assertStringContainsString('More', $html);
+        // Assert - one badge per dungeon, none for the "next season" card
         $this->assertStringContainsString(__('view_common.dungeon.list.next_season'), $html);
         $this->assertSame(
             $dungeons->count(),

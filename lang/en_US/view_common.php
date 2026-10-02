@@ -56,9 +56,15 @@ return [
             'popular' => 'Popular',
         ],
         'list' => [
-            'more'        => 'More',
-            'next_season' => 'Next season',
-            'card'        => [
+            'next_season'    => 'Next season',
+            'all'            => 'All :count',
+            'choose_dungeon' => 'Choose a dungeon',
+            'groups'         => [
+                'world'   => 'World',
+                'dungeon' => 'Dungeons',
+                'raid'    => 'Raids',
+            ],
+            'card' => [
                 'this_week_tier' => 'This week\'s difficulty tier (archon.gg)',
             ],
         ],
@@ -362,6 +368,7 @@ return [
         'header' => [
             'toggle_navigation_title'         => 'Toggle navigation',
             'game_versions'                   => 'Game versions',
+            'dungeon_context'                 => 'Dungeons',
             'create_route'                    => 'Create route',
             'create_route_description'        => 'Plan your own route on the dungeon map',
             'search'                          => 'Search',

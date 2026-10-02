@@ -446,15 +446,33 @@
     }
 }
 
-.list_dungeon.selectable.selected {
-    border: 0.125rem solid forestgreen;
-    border-radius: 5px;
+/* The border is always there, transparent at rest, so selecting a tile never moves its contents; its colour
+   comes from .border-accent, the same treatment as the selected game version */
+.list_dungeon.selectable {
+    border: 0.125rem solid transparent;
+    border-radius: 0.25rem;
 }
 
-/** Prevents the title from jumping when it gets selected */
-.list_dungeon.selectable.selected h5 {
-    width: calc(100% - 0.75rem); /* 0.375 x2 for the padding */
-    top: calc(15% - 0.125rem); /* 0.125 for the border, but just one side since it's the top */
+.list_dungeon .dungeon_card_dungeon_name {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+/* Legibility scrim behind the tile's name, which sits on the top half of the dungeon art */
+.list_dungeon .card-img-caption a::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    z-index: 1;
+    height: 70%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+    pointer-events: none;
+}
+
+.list_dungeon .card-img-caption .card-text {
+    z-index: 2;
 }
 
 .discover .select_icon.class_icon.selectable,

@@ -71,6 +71,7 @@ class CommonGeneralSiteheader extends InlineCode {
         // Publish the header's rendered height so dependents (e.g. the route sidebar) can
         // position themselves below it without hardcoded offsets.
         this._initNavbarCollapse();
+        this._initDungeonStrip();
 
         this._resizeObserver = new ResizeObserver(this._onHeaderResized.bind(this));
         this._resizeObserver.observe(this.header);
@@ -106,6 +107,12 @@ class CommonGeneralSiteheader extends InlineCode {
     _onHeaderResized() {
         this._reportHeaderHeight();
         this._updateNavbarCollapseMaxHeight();
+        this.dungeonStrip?.updateCompact();
+    }
+
+    _initDungeonStrip() {
+        const element = this.header.querySelector('.dungeon_strip');
+        this.dungeonStrip = element === null ? null : new DungeonStrip(element);
     }
 
     _reportHeaderHeight() {
