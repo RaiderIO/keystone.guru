@@ -14,7 +14,8 @@ $enemyDisplayTypes = [
 <div class="row g-0">
     <div class="col btn-group dropend">
         <button type="button" class="btn btn-accent dropdown-toggle" data-bs-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+                aria-haspopup="true" aria-expanded="false"
+                data-bs-boundary="viewport" data-bs-popper-config='{"strategy":"fixed"}'>
             <i class="fa fa-users"></i>
             <span class="map_controls_element_label_toggle" style="display: none;">
                 {{ __('view_common.maps.controls.elements.enemydisplaytype.enemy_display_type_title') }}

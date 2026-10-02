@@ -36,28 +36,52 @@
   }
 }
 
+/** Auto margins centre a rail that fits; unlike align-items: center they drop to 0 on one that
+    does not, so its first tools stay reachable by scrolling instead of overflowing upwards */
+@mixin tool-rail-below-header {
+  top: var(--ksg-header-height, 0px);
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+
+  > .bg-header {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
+
+.route_manipulation_tools:not(.top, .mobile) {
+  @include tool-rail-below-header;
+}
+
+/** The bottom rail ad is centred and click-through around its unit, so it only reaches the rail
+    on viewports narrower than the 970px unit plus the rail on either side */
+@media (max-width: 1199.98px) {
+  .route_manipulation_tools.ad_loaded:not(.top, .mobile) {
+    bottom: 90px;
+  }
+}
+
 @media (min-width: 1200px) {
   .route_manipulation_tools.top {
     padding-top: 1rem !important;
   }
 
-  .route_manipulation_tools:not(.top) {
-    top: unset;
-    align-items: center !important;
-    height: 100%;
+  /** Tablets in landscape */
+  .route_manipulation_tools.mobile:not(.top) {
+    @include tool-rail-below-header;
   }
 
-  .route_manipulation_tools.left .bg-header {
-    margin-left: 0.5rem !important;
+  /** Bootstrap's .row > * gives .bg-header width: 100%, so a margin on it would push the tools
+      0.5rem past the rail's right edge, where the overflow clips them */
+  .route_manipulation_tools.left:not(.top) {
+    padding-left: 0.5rem;
   }
 
   .route_manipulation_tools.right .bg-header {
     margin-right: 0.5rem !important;
   }
-}
-
-.route_manipulation_tools:not(.embed, .presenter), {
-  top: 0;
 }
 
 .route_sidebar.right:not(.embed), {
