@@ -4,15 +4,22 @@ namespace Tests\Feature\App\Service\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
+use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
+use App\Models\User;
 use App\Service\Season\SeasonServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
+use Tests\Fixtures\Traits\CreatesDungeon;
 
 #[Group('DungeonRouteSaveService')]
 final class DungeonRouteSaveServiceSaveTemporaryTest extends DungeonRouteSaveServiceTestCase
 {
+    use CreatesDungeon;
+
     /**
      * @return MockObject&SeasonServiceInterface
      */
@@ -109,6 +116,42 @@ final class DungeonRouteSaveServiceSaveTemporaryTest extends DungeonRouteSaveSer
             if ($route->exists) {
                 $this->cleanupRoute($route);
             }
+        }
+    }
+
+    #[Test]
+    public function saveTemporary_givenUserOnChildGameVersionAndDungeonMappedForParent_pinsParentMappingVersion(): void
+    {
+        // Arrange - the dungeon also has a retail (default game version) mapping version to fall back to
+        $dungeon                  = $this->createDungeon(['expansion_id' => Expansion::ALL[Expansion::EXPANSION_CLASSIC]]);
+        $classicEraMappingVersion = MappingVersion::create([
+            'game_version_id'                 => GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA],
+            'dungeon_id'                      => $dungeon->id,
+            'version'                         => 1,
+            'enemy_forces_required'           => 100,
+            'enemy_forces_required_teeming'   => null,
+            'enemy_forces_shrouded'           => 0,
+            'enemy_forces_shrouded_zul_gamux' => 0,
+            'timer_max_seconds'               => 1800,
+            'facade_enabled'                  => false,
+        ]);
+        $user    = User::factory()->create(['game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_SOD]]);
+        $service = $this->buildService(seasonService: $this->noSeasonService());
+        $route   = new DungeonRoute();
+
+        try {
+            $this->actingAs($user);
+
+            // Act
+            $service->saveTemporary($route, ['dungeon_id' => $dungeon->id]);
+
+            // Assert
+            $this->assertSame($classicEraMappingVersion->id, $route->mapping_version_id);
+        } finally {
+            if ($route->exists) {
+                $this->cleanupRoute($route);
+            }
+            $user->delete();
         }
     }
 }

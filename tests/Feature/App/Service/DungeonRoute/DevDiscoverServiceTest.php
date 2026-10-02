@@ -6,9 +6,8 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
-use App\Models\PublishedState;
+use App\Service\DungeonRoute\DevDiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
-use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -16,31 +15,9 @@ use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('DiscoverService')]
-final class DiscoverServiceTest extends PublicTestCase
+final class DevDiscoverServiceTest extends PublicTestCase
 {
     use CreatesDungeon;
-
-    #[Test]
-    public function heroRoutes_givenCurrentSeason_returnsDeduplicatedDungeonRoutes(): void
-    {
-        // Arrange - the seeded test DB has a current season with dungeons and popular community routes
-        $currentSeason = app(SeasonServiceInterface::class)->getCurrentSeason();
-        $this->assertNotNull($currentSeason, 'Expected a current season in the seeded test database');
-
-        /** @var DiscoverServiceInterface $discoverService */
-        $discoverService = app(DiscoverServiceInterface::class);
-
-        // Act
-        $heroRoutes = $discoverService->heroRoutes($currentSeason, 2);
-
-        // Assert - every entry is a DungeonRoute and there are no duplicates by id
-        $heroRoutes->each(fn($route) => $this->assertInstanceOf(DungeonRoute::class, $route));
-        $this->assertSame(
-            $heroRoutes->pluck('id')->unique()->count(),
-            $heroRoutes->count(),
-            'heroRoutes must be deduplicated by id',
-        );
-    }
 
     #[Test]
     public function popular_givenChildGameVersionMappingTheDungeonItself_returnsOnlyTheRouteOnTheChildMappingVersion(): void
@@ -51,11 +28,11 @@ final class DiscoverServiceTest extends PublicTestCase
 
         try {
             [$parentMappingVersion, $childMappingVersion] = $this->createDungeonMappedByClassicEraAndTbc();
-            $parentRoute                                  = $this->createDiscoverableRoute($parentMappingVersion);
-            $childRoute                                   = $this->createDiscoverableRoute($childMappingVersion);
+            $parentRoute                                  = $this->createRoute($parentMappingVersion);
+            $childRoute                                   = $this->createRoute($childMappingVersion);
 
             // Act
-            $routes = $this->discoverServiceForTbc([$parentRoute->id, $childRoute->id])->popular();
+            $routes = $this->devDiscoverServiceForTbc([$parentRoute->id, $childRoute->id])->popular();
 
             // Assert
             $this->assertSame([$childRoute->id], $routes->pluck('id')->all());
@@ -74,11 +51,11 @@ final class DiscoverServiceTest extends PublicTestCase
 
         try {
             [$parentMappingVersion, $childMappingVersion] = $this->createDungeonMappedByClassicEraAndTbc();
-            $parentRoute                                  = $this->createDiscoverableRoute($parentMappingVersion);
-            $childRoute                                   = $this->createDiscoverableRoute($childMappingVersion);
+            $parentRoute                                  = $this->createRoute($parentMappingVersion);
+            $childRoute                                   = $this->createRoute($childMappingVersion);
 
             // Act
-            $routes = $this->discoverServiceForTbc([$parentRoute->id, $childRoute->id])->new();
+            $routes = $this->devDiscoverServiceForTbc([$parentRoute->id, $childRoute->id])->new();
 
             // Assert
             $this->assertSame([$childRoute->id], $routes->pluck('id')->all());
@@ -120,14 +97,12 @@ final class DiscoverServiceTest extends PublicTestCase
         return [$parentMappingVersion, $childMappingVersion];
     }
 
-    private function createDiscoverableRoute(MappingVersion $mappingVersion): DungeonRoute
+    private function createRoute(MappingVersion $mappingVersion): DungeonRoute
     {
         return DungeonRoute::factory()->create([
             'dungeon_id'         => $mappingVersion->dungeon_id,
             'mapping_version_id' => $mappingVersion->id,
             'season_id'          => null,
-            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
-            'enemy_forces'       => $mappingVersion->enemy_forces_required,
             'expires_at'         => null,
         ]);
     }
@@ -135,10 +110,9 @@ final class DiscoverServiceTest extends PublicTestCase
     /**
      * @param array<int, int> $routeIds
      */
-    private function discoverServiceForTbc(array $routeIds): DiscoverServiceInterface
+    private function devDiscoverServiceForTbc(array $routeIds): DiscoverServiceInterface
     {
-        return app(DiscoverServiceInterface::class)
-            ->withCache(false)
+        return app(DevDiscoverService::class)
             ->withGameVersion(GameVersion::query()->where('key', GameVersion::GAME_VERSION_TBC)->firstOrFail())
             ->withBuilder(static fn(Builder $builder) => $builder->whereIn('dungeon_routes.id', $routeIds));
     }

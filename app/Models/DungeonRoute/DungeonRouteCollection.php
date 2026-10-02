@@ -183,7 +183,7 @@ class DungeonRouteCollection extends Model
     }
 
     /**
-     * Whether a route may be in this collection: its own mapping version must be of the collection's game version
+     * Whether a route may be in this collection: its own mapping version must be one the collection's game version uses
      * (never judged by its dungeon, which spans several game versions), and for a season set the route must be of
      * the collection's season. Expects the route's mapping version to be loaded.
      */
@@ -195,7 +195,7 @@ class DungeonRouteCollection extends Model
             return false;
         }
 
-        if ($mappingVersion->game_version_id !== $this->game_version_id) {
+        if (!$this->gameVersion->canUseMappingVersion($mappingVersion)) {
             return false;
         }
 

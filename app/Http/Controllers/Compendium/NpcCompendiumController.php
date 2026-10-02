@@ -11,7 +11,6 @@ use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
-use App\Models\Npc\NpcHealth;
 use App\Service\Compendium\NpcCompendiumServiceInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -67,8 +66,7 @@ class NpcCompendiumController extends Controller
 
         $currentGameVersion = GameVersion::getUserOrDefaultGameVersion();
 
-        /** @var NpcHealth|null $currentNpcHealth */
-        $currentNpcHealth = $npc->npcHealths->firstWhere('game_version_id', $currentGameVersion->id);
+        $currentNpcHealth = $npc->getHealthByGameVersion($currentGameVersion);
 
         return view('compendium.npc.show', [
             'npc'                => $npc,

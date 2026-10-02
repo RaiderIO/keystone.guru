@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Service\Mapping;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
+use App\Models\User;
 use App\Service\Mapping\MappingServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -280,12 +281,56 @@ final class GetMappingVersionForMdtAddonVersionTest extends PublicTestCase
         $this->assertSame($current->id, $result->id);
     }
 
-    private function createMappingVersion(int $version, ?int $addonVersion, string $createdAt, bool $mdtChangesPending = false): MappingVersion
+    #[Test]
+    public function getMappingVersionForMdtAddonVersion_givenChildGameVersionOfInheritedDungeon_selectsAmongParentMappingVersions(): void
     {
+        // Arrange
+        $classicEra = GameVersion::query()->where('key', GameVersion::GAME_VERSION_CLASSIC_ERA)->firstOrFail();
+        $sod        = GameVersion::query()->where('key', GameVersion::GAME_VERSION_SOD)->firstOrFail();
+        $expected   = $this->createMappingVersion(1, 5014, '2024-09-28 00:00:00', gameVersion: $classicEra);
+        $this->createMappingVersion(2, 6115, '2026-06-08 00:00:00', gameVersion: $classicEra);
+        $this->createMappingVersion(3, 5014, '2024-09-28 00:00:00');
+
+        // Act
+        $result = $this->mappingService->getMappingVersionForMdtAddonVersion($this->reloadDungeon(), 5014, $sod);
+
+        // Assert
+        $this->assertSame($expected->id, $result?->id, 'A child game version must import onto its parent\'s mapping versions, never another game version\'s.');
+    }
+
+    #[Test]
+    public function getMappingVersionForMdtAddonVersion_givenUserOnChildGameVersionAndNoGameVersion_returnsParentMappingVersion(): void
+    {
+        // Arrange
+        $classicEra = GameVersion::query()->where('key', GameVersion::GAME_VERSION_CLASSIC_ERA)->firstOrFail();
+        $expected   = $this->createMappingVersion(1, 5014, '2024-09-28 00:00:00', gameVersion: $classicEra);
+        $this->createMappingVersion(2, 6115, '2026-06-08 00:00:00');
+        $user = User::factory()->create(['game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_SOD]]);
+
+        try {
+            $this->actingAs($user);
+
+            // Act - the MDT importer resolves without a game version, i.e. through the user's
+            $result = $this->mappingService->getMappingVersionForMdtAddonVersion($this->reloadDungeon(), null);
+
+            // Assert
+            $this->assertSame($expected->id, $result?->id);
+        } finally {
+            $user->delete();
+        }
+    }
+
+    private function createMappingVersion(
+        int          $version,
+        ?int         $addonVersion,
+        string       $createdAt,
+        bool         $mdtChangesPending = false,
+        ?GameVersion $gameVersion = null,
+    ): MappingVersion {
         // insertGetId bypasses the clone-on-create boot, giving us exactly the candidate rows we define.
         $id = MappingVersion::query()->insertGetId([
             'dungeon_id'            => $this->dungeon->id,
-            'game_version_id'       => $this->gameVersion->id,
+            'game_version_id'       => ($gameVersion ?? $this->gameVersion)->id,
             'version'               => $version,
             'enemy_forces_required' => 0,
             'timer_max_seconds'     => 0,

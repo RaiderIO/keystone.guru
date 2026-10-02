@@ -5,6 +5,7 @@ namespace Tests\Feature\Controller\Ajax;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
+use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\KillZone\KillZone;
 use App\Models\Laratrust\Role;
@@ -18,6 +19,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\AjaxPublicTestCase;
 
 /**
@@ -27,6 +29,7 @@ use Tests\TestCases\AjaxPublicTestCase;
 #[Group('DungeonRoute')]
 final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
 {
+    use CreatesDungeon;
     use ProvidesDungeon;
 
     #[Test]
@@ -78,6 +81,60 @@ final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
             $this->assertSame(0, $response->json('recordsFiltered'));
         } finally {
             $route?->delete();
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function get_givenChildGameVersionIdOfADungeonItMapsItself_returnsOnlyTheRouteOnTheChildMappingVersion(): void
+    {
+        // Arrange
+        $user        = null;
+        $parentRoute = null;
+        $childRoute  = null;
+
+        try {
+            $user    = $this->createUserWithUserRole();
+            $dungeon = $this->createDungeon(
+                ['expansion_id' => Expansion::ALL[Expansion::EXPANSION_CLASSIC], 'active' => true],
+                mappingVersionAttributes: ['game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]],
+            );
+            /** @var MappingVersion $parentMappingVersion */
+            $parentMappingVersion = $dungeon->mappingVersions()->firstOrFail();
+            $childMappingVersion  = MappingVersion::create([
+                'game_version_id'                 => GameVersion::ALL[GameVersion::GAME_VERSION_TBC],
+                'dungeon_id'                      => $dungeon->id,
+                'version'                         => 1,
+                'enemy_forces_required'           => 100,
+                'enemy_forces_required_teeming'   => null,
+                'enemy_forces_shrouded'           => 0,
+                'enemy_forces_shrouded_zul_gamux' => 0,
+                'timer_max_seconds'               => 1800,
+                'facade_enabled'                  => false,
+                'mdt_mapping_hash'                => null,
+                'mdt_changes_pending'             => false,
+            ]);
+            $parentRoute = $this->createOwnRoute($user, [
+                'dungeon_id'         => $dungeon->id,
+                'mapping_version_id' => $parentMappingVersion->id,
+                'season_id'          => null,
+            ]);
+            $childRoute = $this->createOwnRoute($user, [
+                'dungeon_id'         => $dungeon->id,
+                'mapping_version_id' => $childMappingVersion->id,
+                'season_id'          => null,
+            ]);
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->get($this->mineQuery(['game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_TBC]]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$childRoute->public_key], array_column($response->json('data'), 'public_key'));
+        } finally {
+            $childRoute?->delete();
+            $parentRoute?->delete();
             $user?->delete();
         }
     }

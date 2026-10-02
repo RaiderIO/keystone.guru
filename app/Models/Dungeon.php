@@ -213,15 +213,16 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
         return $this->hasMany(MappingVersion::class)->orderByDesc('mapping_versions.version');
     }
 
+    /**
+     * The mapping version the game version shows for this dungeon: its own, or else the one of the game version it
+     * inherits from. Mapping versions are numbered per game version, so code creating one picks its game version's
+     * latest from mappingVersions itself.
+     */
     public function getCurrentMappingVersionForGameVersion(GameVersion $gameVersion): ?MappingVersion
     {
-        /** @var MappingVersion|null $mappingVersion */
-        $mappingVersion = $this->loadMappingVersions()->mappingVersions->firstWhere('game_version_id', $gameVersion->id);
-
-        // Eloquent flags every model of a multi-row relation for lazy-load prevention, but callers use the
-        // current version as a standalone model, the same as a single-row query would return it.
-        if ($mappingVersion !== null) {
-            $mappingVersion->preventsLazyLoading = false;
+        $mappingVersion = $this->getCurrentMappingVersionForGameVersionId($gameVersion->id);
+        if ($mappingVersion === null && $gameVersion->parent_game_version_id !== null) {
+            $mappingVersion = $this->getCurrentMappingVersionForGameVersionId($gameVersion->parent_game_version_id);
         }
 
         return $mappingVersion;
@@ -431,7 +432,8 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
     }
 
     /**
-     * Scope a query to only include active dungeons.
+     * Scope a query to only include dungeons that have a mapping version for the game version, or for the game
+     * version it inherits from.
      *
      * @param  Builder<self> $query
      * @return Builder<self>
@@ -440,7 +442,7 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
     protected function forGameVersion(Builder $query, GameVersion $gameVersion): Builder
     {
         return $query->whereHas('mappingVersions', function (Builder $query) use ($gameVersion) {
-            $query->where('game_version_id', $gameVersion->id);
+            $query->whereIn('game_version_id', $gameVersion->getMappingVersionGameVersionIds());
         });
     }
 
@@ -668,6 +670,20 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
         }
 
         return $result;
+    }
+
+    private function getCurrentMappingVersionForGameVersionId(int $gameVersionId): ?MappingVersion
+    {
+        /** @var MappingVersion|null $mappingVersion */
+        $mappingVersion = $this->loadMappingVersions()->mappingVersions->firstWhere('game_version_id', $gameVersionId);
+
+        // Eloquent flags every model of a multi-row relation for lazy-load prevention, but callers use the
+        // current version as a standalone model, the same as a single-row query would return it.
+        if ($mappingVersion !== null) {
+            $mappingVersion->preventsLazyLoading = false;
+        }
+
+        return $mappingVersion;
     }
 
     /**

@@ -39,6 +39,7 @@ use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\User;
 use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
+use App\Repositories\Interfaces\GameVersion\GameVersionRepositoryInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteKillZoneServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
@@ -82,6 +83,7 @@ class AjaxDungeonRouteController extends Controller
         SeasonAffixGroupServiceInterface               $seasonAffixGroupService,
         DungeonRouteKillZoneServiceInterface           $dungeonRouteKillZoneService,
         DungeonRouteSeasonContinuationServiceInterface $seasonContinuationService,
+        GameVersionRepositoryInterface                 $gameVersionRepository,
     ) {
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);
@@ -139,7 +141,7 @@ class AjaxDungeonRouteController extends Controller
                 'dungeon_routes.id',
                 'mapping_versions.dungeon_id',
             ])
-            ->when($request->gameVersion(), static fn(Builder $query, GameVersion $gameVersion) => $query->where('mapping_versions.game_version_id', $gameVersion->id))
+            ->when($request->gameVersion(), static fn(Builder $query, GameVersion $gameVersion) => $gameVersionRepository->whereMappingVersionIsUsable($gameVersion, $query))
             ->when($request->season(), static fn(Builder $query, Season $season) => $query->where('dungeon_routes.season_id', $season->id))
             ->when($request->dungeons(), static fn(Builder $query, Collection $dungeons) => $query->whereIn('dungeon_routes.dungeon_id', $dungeons->pluck('id')));
 

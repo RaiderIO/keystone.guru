@@ -3,6 +3,7 @@
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
@@ -119,8 +120,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
                 !$ignoreGameVersion,
                 static fn(Collection $collection) => $collection->filter(
                     static fn(Dungeon $dungeon) => $dungeon->mappingVersions->contains(
-                        'game_version_id',
-                        $selectGameVersion->id
+                        static fn(MappingVersion $mappingVersion) => $selectGameVersion->listsDungeonOfMappingVersion($mappingVersion)
                     )
                 )
             )

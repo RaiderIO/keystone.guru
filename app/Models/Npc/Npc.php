@@ -482,9 +482,16 @@ class Npc extends Model implements MappingModelInterface
         return $result;
     }
 
+    /**
+     * The health of the game version, or else that of the game version it inherits from. Code writing a health picks
+     * its game version's row from npcHealths itself.
+     */
     public function getHealthByGameVersion(GameVersion $gameVersion): ?NpcHealth
     {
-        return $this->npcHealths->keyBy('game_version_id')->get($gameVersion->id);
+        $npcHealthsByGameVersionId = $this->npcHealths->keyBy('game_version_id');
+
+        return $npcHealthsByGameVersionId->get($gameVersion->id)
+            ?? $npcHealthsByGameVersionId->get($gameVersion->parent_game_version_id ?? 0);
     }
 
     /**

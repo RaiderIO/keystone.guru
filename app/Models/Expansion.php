@@ -247,7 +247,7 @@ class Expansion extends Model
 
         foreach ($this->raids->filter($filterFn) as $raid) {
             foreach ($raid->mappingVersions as $mappingVersion) {
-                if ($mappingVersion->game_version_id === $gameVersion->id) {
+                if ($gameVersion->listsDungeonOfMappingVersion($mappingVersion)) {
                     $result = true;
                     break 2;
                 }
@@ -271,7 +271,7 @@ class Expansion extends Model
         foreach ($this->dungeons->filter($filterFn) as $dungeon) {
             foreach ($dungeon->mappingVersions as $mappingVersion) {
                 /** @var MappingVersion $mappingVersion */
-                if ($mappingVersion->game_version_id === $gameVersion->id) {
+                if ($gameVersion->listsDungeonOfMappingVersion($mappingVersion)) {
                     $result = true;
                     break 2;
                 }

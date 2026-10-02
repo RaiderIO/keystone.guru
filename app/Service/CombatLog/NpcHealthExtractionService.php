@@ -48,7 +48,7 @@ class NpcHealthExtractionService implements NpcHealthExtractionServiceInterface
             $scalingFactor      = $npc->getScalingFactor($observation->keyLevel, $observation->affixes);
             $observedBaseHealth = (int)round($observation->getMostObservedMaxHp() / $scalingFactor);
 
-            $existingNpcHealth = $npc->getHealthByGameVersion($gameVersion);
+            $existingNpcHealth = $npc->npcHealths->firstWhere('game_version_id', $gameVersion->id);
             $percentage        = $existingNpcHealth?->percentage;
 
             // Keep the row's percentage; store whatever `health` makes health * percentage / 100 equal the observed base

@@ -9,6 +9,7 @@ use App\Models\Season;
 use App\Models\Team;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\GameVersion\GameVersionRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use Closure;
@@ -40,6 +41,7 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     public function __construct(
         protected CacheServiceInterface                  $cacheService,
         protected ExpansionServiceInterface              $expansionService,
+        protected GameVersionRepositoryInterface         $gameVersionRepository,
         private readonly DungeonRouteRepositoryInterface $dungeonRouteRepository,
     ) {
     }

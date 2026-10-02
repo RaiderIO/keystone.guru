@@ -40,7 +40,7 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
     ): ?string {
         $mappingVersion = $dungeonRoute->mappingVersion;
 
-        if ($mappingVersion === null || $mappingVersion->game_version_id !== $dungeonRouteCollection->game_version_id) {
+        if ($mappingVersion === null || !$dungeonRouteCollection->gameVersion->canUseMappingVersion($mappingVersion)) {
             return self::ADD_BLOCKED_GAME_VERSION;
         }
 

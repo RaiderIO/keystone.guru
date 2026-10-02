@@ -69,7 +69,7 @@ class AjaxDungeonRouteCollectionRoutesAddFormRequest extends AjaxDungeonRouteCol
 
                     if (!$dungeonRouteCollection->mayContainDungeonRoute($dungeonRoute)) {
                         $isOfGameVersion = $dungeonRoute->mappingVersion !== null &&
-                            $dungeonRoute->mappingVersion->game_version_id === $dungeonRouteCollection->game_version_id;
+                            $dungeonRouteCollection->gameVersion->canUseMappingVersion($dungeonRoute->mappingVersion);
 
                         $validator->errors()->add($key, $isOfGameVersion
                             ? __('validation.custom.collection_dungeon_routes.season')

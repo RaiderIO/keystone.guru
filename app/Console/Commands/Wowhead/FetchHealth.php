@@ -41,7 +41,7 @@ class FetchHealth extends Command
 
         foreach ($dungeon->npcs as $npc) {
             foreach ($dungeon->getMappingVersionGameVersions() as $gameVersion) {
-                if ($npc->getHealthByGameVersion($gameVersion) !== null) {
+                if ($npc->npcHealths->firstWhere('game_version_id', $gameVersion->id) !== null) {
                     $this->info(sprintf('Skipping already set health for %s (%d)', __($npc->name), $npc->id));
 
                     continue;

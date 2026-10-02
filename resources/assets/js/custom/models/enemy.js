@@ -621,7 +621,11 @@ class Enemy extends VersionableMapObject {
                 wowheadBaseUrl += '/wrath';
                 break;
             case GAME_VERSION_CLASSIC_ERA:
+            case GAME_VERSION_SOD:
                 wowheadBaseUrl += '/classic';
+                break;
+            case GAME_VERSION_TBC:
+                wowheadBaseUrl += '/tbc';
                 break;
         }
 
