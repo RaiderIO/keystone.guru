@@ -363,11 +363,39 @@ final class DungeonContextStripTest extends PublicTestCase
             $html = view('common.layout.header')->render();
 
             // Assert
-            $this->assertSame(1, preg_match('/<li class="nav-item dropdown dungeon_context_nav".*?<\/li>/s', $html, $matches));
-            $selector = $matches[0];
-            $this->assertSame($dungeons->count(), substr_count($selector, 'class="dropdown-item'));
-            $this->assertStringContainsString(e(__('view_common.dungeon.list.groups.dungeon')), $selector);
-            $this->assertStringContainsString(e(__('view_common.dungeon.list.groups.raid')), $selector);
+            $this->assertSame(1, preg_match('/<div class="offcanvas offcanvas-bottom dungeon_sheet.*<p class="dungeon_sheet_empty"/s', $html, $matches));
+            $sheet = $matches[0];
+            $this->assertSame($dungeons->count(), preg_match_all('/class="dungeon_sheet_row[" ]/', $sheet));
+            $this->assertStringContainsString(e(__('view_common.dungeon.list.groups.dungeon')), $sheet);
+            $this->assertStringContainsString(e(__('view_common.dungeon.list.groups.raid')), $sheet);
+        } finally {
+            unset($_COOKIE['game_version']);
+        }
+    }
+
+    /**
+     * The sheet's filter matches on what the row shows: the full name and the abbreviation right-aligned next to it.
+     */
+    #[Test]
+    public function render_givenClassicEraOnMobile_givesEverySheetRowItsNameAndAbbreviationToFilterOn(): void
+    {
+        // Arrange
+        $dungeons                = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_CLASSIC_ERA;
+
+        try {
+            // Act
+            $html = view('common.layout.header')->render();
+
+            // Assert
+            $this->assertGreaterThan(0, $dungeons->count());
+            foreach ($dungeons as $dungeon) {
+                $this->assertStringContainsString(
+                    sprintf('data-filter-text="%s"', e(mb_strtolower(sprintf('%s %s', __($dungeon->name), __($dungeon->abbreviation))))),
+                    $html,
+                    sprintf('%s has no filter text', $dungeon->key),
+                );
+            }
         } finally {
             unset($_COOKIE['game_version']);
         }

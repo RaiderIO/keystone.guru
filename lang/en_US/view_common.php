@@ -409,7 +409,11 @@ return [
         ],
         'nav' => [
             'dungeoncontext' => [
-                'change_dungeon' => 'Change dungeon',
+                'change_dungeon'     => 'Change dungeon',
+                'close'              => 'Close',
+                'filter_label'       => 'Filter dungeons',
+                'filter_placeholder' => 'Filter dungeons…',
+                'no_results'         => 'No dungeon matches that filter.',
             ],
             'user' => [
                 'login'                      => 'Login',

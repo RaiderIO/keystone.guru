@@ -356,14 +356,19 @@
     color: var(--theme-text-contrast);
 }
 
-/* The logos differ in aspect ratio; the mobile selector boxes them all to one width so the names line up */
-.game_version_logo {
-    object-fit: contain;
+/* The mobile dungeon toggle shares the navbar row with the logo and the toggler, so it stays as narrow as
+   the dungeon abbreviation allows and truncates rather than wrapping the toggler onto a second line */
+.dungeon_context_nav_toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 2.75rem;
+    padding: 0 0.5rem;
+    border: 0;
+    border-radius: 0.25rem;
+    background: none;
 }
 
-/* Mobile dungeon-context selector (#4097): the desktop strip is a row of image cards that cannot
-   lay out at phone widths, so below lg the same selection is a dropdown beside the navbar toggler.
-   The dungeon art is what makes a row scannable at a glance, so each entry keeps its thumbnail. */
 .dungeon_context_nav_icon {
     flex-shrink: 0;
     width: 32px;
@@ -372,15 +377,13 @@
     border-radius: 0.25rem;
 }
 
-/* The trigger shares the navbar row with the logo and the toggler, so it stays as narrow as the
-   dungeon abbreviation allows and truncates rather than wrapping the toggler onto a second line */
-.dungeon_context_nav .nav-link {
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-}
-
 .dungeon_context_nav .dungeon_context_nav_label {
     max-width: 4rem;
+    font-weight: 600;
+}
+
+.dungeon_context_nav_caret {
+    font-size: 0.625rem;
 }
 
 /* Same row-budget problem from the other side: the stock 200px logo alone leaves too little room
@@ -398,24 +401,215 @@
     }
 }
 
-/* Bootstrap only lifts `.navbar-nav .dropdown-menu` out of the flow from the expand breakpoint up -
-   it assumes every navbar dropdown lives inside the collapse. This one sits beside the toggler, so
-   below lg it would push the whole page down instead of overlaying it. Out-specifies rather than
-   merely ties `.navbar-nav .dropdown-menu` - both end up theme-prefixed, so an equal-weight
-   selector would leave this depending on stylesheet order. */
-.ksg-header .navbar-nav .dungeon_context_nav .dropdown-menu {
+/* Bootstrap's toggler focus is a colourless zero-blur ring that also shows on every tap; keyboard focus gets
+   the accent ring the rest of the header uses */
+.ksg-header .navbar-second .navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.ksg-header .navbar-second .navbar-toggler:focus-visible,
+.ksg-header .dungeon_context_nav .dungeon_context_nav_toggle:focus-visible {
+    outline: 0.125rem solid var(--theme-border-accent);
+    outline-offset: 0.125rem;
+    box-shadow: none;
+}
+
+/* The mobile dungeon sheet: game versions on top, a filter that sticks while the list scrolls under it,
+   then one 44px row per dungeon */
+.offcanvas.offcanvas-bottom.dungeon_sheet {
+    --bs-offcanvas-height: 85dvh;
+    --bs-offcanvas-bg: var(--theme-header);
+    --bs-offcanvas-color: var(--theme-text-contrast);
+    --bs-offcanvas-border-color: var(--theme-border-subtle);
+    --dungeon-sheet-muted: var(--theme-light);
+    --dungeon-sheet-row-bg-hover: rgba(128, 128, 128, 0.2);
+    border-radius: 0.25rem 0.25rem 0 0;
+}
+
+:root.lux .dungeon_sheet {
+    --dungeon-sheet-muted: #55595c;
+}
+
+/* The ad-free map header floats far above Bootstrap's offcanvas layer */
+body:has(#map_header) .dungeon_sheet {
+    --bs-offcanvas-zindex: 100031;
+}
+
+body:has(#map_header) .offcanvas-backdrop {
+    z-index: 100030;
+}
+
+.dungeon_sheet .dungeon_sheet_header {
+    padding: 0.75rem 1rem 0.5rem;
+}
+
+.dungeon_sheet .dungeon_sheet_title {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+}
+
+.dungeon_sheet .dungeon_sheet_body {
+    padding: 0 0 max(1rem, env(safe-area-inset-bottom));
+    overscroll-behavior: contain;
+}
+
+.game_version_segments .game_version_segments_list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0.25rem;
+    border-radius: 0.375rem;
+    background-color: rgba(128, 128, 128, 0.15);
+    list-style: none;
+}
+
+.dungeon_sheet .game_version_segments {
+    padding: 0 1rem;
+}
+
+.game_version_segments .game_version_segment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    height: 100%;
+    min-height: 2.75rem;
+    padding: 0.375rem 0.125rem;
+    border: 0.125rem solid transparent;
+    border-radius: 0.25rem;
+    color: var(--dungeon-sheet-muted, var(--theme-light));
+    font-size: 0.875rem;
+    line-height: 1.15;
+    text-align: center;
+    text-decoration: none;
+}
+
+.game_version_segments .game_version_segment_logo {
+    width: auto;
+    max-width: 100%;
+    height: 1rem;
+    object-fit: contain;
+}
+
+.game_version_segments .game_version_segment:hover,
+.game_version_segments .game_version_segment:focus-visible {
+    background-color: rgba(128, 128, 128, 0.2);
+    color: var(--theme-text-contrast);
+}
+
+.game_version_segments .game_version_segment[aria-current] {
+    background-color: var(--theme-header);
+    color: var(--theme-text-contrast);
+    font-weight: 600;
+}
+
+/* Opaque so the rows scroll under it rather than through it */
+.dungeon_sheet .dungeon_sheet_filter {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 0.75rem 1rem 0.5rem;
+    background-color: var(--theme-header);
+}
+
+.dungeon_sheet .dungeon_sheet_filter_icon {
     position: absolute;
+    top: 50%;
+    left: 1.75rem;
+    margin-top: 0.125rem;
+    transform: translateY(-50%);
+    color: var(--dungeon-sheet-muted);
+    pointer-events: none;
 }
 
-/* A season's dungeon pool plus the upcoming-season entry runs past a phone viewport otherwise */
-.dungeon_context_nav_menu {
-    max-height: 70vh;
-    overflow-y: auto;
+/* 16px or iOS zooms the page on focus */
+.dungeon_sheet .dungeon_sheet_filter_input {
+    min-height: 2.75rem;
+    padding-left: 2.25rem;
+    font-size: 1rem;
 }
 
-.dungeon_context_nav_tier {
+.dungeon_sheet .dungeon_sheet_group_label {
+    margin: 0;
+    padding: 0.75rem 1rem 0.25rem;
+    color: var(--dungeon-sheet-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.dungeon_sheet .dungeon_sheet_rows {
+    margin: 0;
+    padding: 0 0.5rem;
+    list-style: none;
+}
+
+.dungeon_sheet .dungeon_sheet_group--next_season {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--theme-border-subtle);
+}
+
+.dungeon_sheet .dungeon_sheet_row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 2.75rem;
+    padding: 0 0.5rem;
+    border: 0.125rem solid transparent;
+    border-radius: 0.25rem;
+    color: var(--theme-text-contrast);
+    text-decoration: none;
+}
+
+.dungeon_sheet .dungeon_sheet_row:hover,
+.dungeon_sheet .dungeon_sheet_row:focus-visible {
+    background-color: var(--dungeon-sheet-row-bg-hover);
+    color: var(--theme-text-contrast);
+}
+
+.dungeon_sheet .dungeon_sheet_row[aria-current] {
+    background-color: var(--dungeon-sheet-row-bg-hover);
+    font-weight: 600;
+}
+
+.dungeon_sheet .dungeon_sheet_row_image {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 1.75rem;
+    object-fit: cover;
+    border-radius: 0.25rem;
+}
+
+.dungeon_sheet .dungeon_sheet_row_name {
+    flex-grow: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dungeon_sheet .dungeon_sheet_row_tier {
     font-weight: 700;
     line-height: 1;
+}
+
+.dungeon_sheet .dungeon_sheet_row_abbreviation {
+    flex-shrink: 0;
+    min-width: 2.5rem;
+    color: var(--dungeon-sheet-muted);
+    font-size: 0.875rem;
+    font-weight: 400;
+    text-align: right;
+}
+
+.dungeon_sheet .dungeon_sheet_empty {
+    margin: 0;
+    padding: 1.5rem 1rem;
+    color: var(--dungeon-sheet-muted);
+    text-align: center;
 }
 
 /* Caps the open mobile menu to the viewport (#4378) - the sticky header doesn't scroll with the

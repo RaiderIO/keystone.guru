@@ -205,16 +205,16 @@ $compendiumEntries        = [
              on desktop, so on mobile it stays one tap away rather than buried in the hamburger (#4097) --}}
         @if($showDungeonContext)
             <ul class="navbar-nav flex-row d-lg-none">
-                @include('common.layout.nav.dungeoncontext', [
-                    'gameVersion' => $currentUserGameVersion,
-                    'dungeons' => $gameVersionDungeons,
-                    'selectedDungeon' => $dungeonContextSelectedDungeon,
-                    'links' => $resolvedDungeonContextLinks,
-                    'nextSeason' => $dungeonContextNextSeason,
-                    'nextSeasonLink' => $dungeonContextNextSeasonLink,
-                    'easeTiers' => $dungeonContextEaseTiers ?? collect(),
-                    'currentAffixGroup' => $dungeonContextCurrentAffixGroup ?? null,
-                ])
+                <li class="nav-item dungeon_context_nav">
+                    <button type="button" class="nav-link dungeon_context_nav_toggle" id="dungeonContextToggle"
+                            data-bs-toggle="offcanvas" data-bs-target="#dungeon_sheet" aria-controls="dungeon_sheet"
+                            aria-label="{{ __('view_common.layout.nav.dungeoncontext.change_dungeon') }}">
+                        <img class="dungeon_context_nav_icon" src="{{ $dungeonContextSelectedDungeon->getImageUrl() }}"
+                             alt=""/>
+                        <span class="dungeon_context_nav_label text-truncate">{{ __($dungeonContextSelectedDungeon->abbreviation) }}</span>
+                        <i class="fas fa-chevron-up dungeon_context_nav_caret" aria-hidden="true"></i>
+                    </button>
+                </li>
             </ul>
         @endif
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -269,10 +269,26 @@ $compendiumEntries        = [
                         <i class="fas fa-plus"></i> {{__('view_common.layout.header.create_route')}}
                     </a>
                 </li>
-                @include('common.layout.nav.gameversions')
+                @unless($showDungeonContext)
+                    <li class="nav-item d-lg-none">
+                        @include('common.layout.nav.gameversions')
+                    </li>
+                @endunless
                 @include('common.layout.nav.user')
             </ul>
         </div>
     </div>
 </nav>
 </header>
+@if($showDungeonContext)
+    @include('common.layout.nav.dungeoncontext', [
+        'gameVersion' => $currentUserGameVersion,
+        'dungeons' => $gameVersionDungeons,
+        'selectedDungeon' => $dungeonContextSelectedDungeon,
+        'links' => $resolvedDungeonContextLinks,
+        'nextSeason' => $dungeonContextNextSeason,
+        'nextSeasonLink' => $dungeonContextNextSeasonLink,
+        'easeTiers' => $dungeonContextEaseTiers ?? collect(),
+        'currentAffixGroup' => $dungeonContextCurrentAffixGroup ?? null,
+    ])
+@endif

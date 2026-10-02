@@ -73,7 +73,8 @@ final class SiteHeaderTest extends PublicTestCase
         $html = $response->getContent();
 
         $this->assertStringNotContainsString('Routes by expansion', $html);
-        $this->assertSame(1, substr_count($html, 'id="gameVersionDropdown"'));
+        $this->assertSame(0, substr_count($html, 'id="gameVersionDropdown"'));
+        $this->assertSame(1, substr_count($html, 'class="game_version_segments"'));
         $this->assertSame(0, substr_count($html, 'id="languageDropdown"'));
     }
 
