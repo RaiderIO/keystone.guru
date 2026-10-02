@@ -13,8 +13,6 @@ use Illuminate\Support\Collection;
  * @var Collection<int, CharacterClassSpecialization> $characterClassSpecializations
  */
 
-$showStyle = 'regular';
-
 $characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(fn(CharacterClassSpecialization $characterClassSpecialization): string => (string) __($characterClassSpecialization->class->name))->mapWithKeys(fn(Collection $specializations, string $className) => [
     $className => $specializations->mapWithKeys(fn(CharacterClassSpecialization $characterClassSpecialization) => [
         $characterClassSpecialization->specialization_id => [
@@ -53,41 +51,26 @@ $characterClassSpecializationsSelectOptions = $characterClassSpecializations->gr
 @section('content')
     <div class="mb-3 row">
         <div class="col">
-{{--            @include('common.forms.select.imageselectcategories', [--}}
-{{--                'id' => 'filter_specializations',--}}
-{{--                'name' => 'filter_specializations[]',--}}
-{{--                'valuesByCategory' => $characterClassSpecializationsSelectOptions,--}}
-{{--                'multiple' => true,--}}
-{{--                'liveSearch' => true,--}}
-{{--            ])--}}
+            @include('common.forms.select.imageselectcategories', [
+                'id' => 'filter_specializations',
+                'name' => 'filter_specializations[]',
+                'valuesByCategory' => $characterClassSpecializationsSelectOptions,
+                'multiple' => true,
+                'liveSearch' => true,
+            ])
         </div>
     </div>
 
     <div class="row justify-content-lg-center">
         <div class="col">
-            @if(!empty($parameters))
-                <iframe
-                    id="ksg_iframe"
-                    src="{{ route('dungeon.heatmap.gameversion.embed', array_merge([
-                        'gameVersion' => $gameVersion,
-                        'dungeon' => $model,
-                        'floorIndex' => $floorIndex,
-                    ], $parameters)) }}"
-                    style="width: 100%; height: 600px; border: none;"></iframe>
-            @elseif($showStyle === 'compact')
-                <iframe
-                    id="ksg_iframe"
-                    src="{{ route('dungeon.heatmap.gameversion.embed', [
-                        'gameVersion' => $gameVersion,
-                        'dungeon' => $model,
-                        'floorIndex' => $floorIndex,
-                        'style' => 'compact',
-                        'headerBackgroundColor' => '#0F0',
-                        'mapBackgroundColor' => '#F00',
-                        'showEnemyInfo' => 0,
-                    ]) }}"
-                    style="width: 100%; height: 600px; border: none;"></iframe>
-            @endif
+            <iframe
+                id="ksg_iframe"
+                src="{{ route('dungeon.heatmap.gameversion.embed.floor', array_merge([
+                    'gameVersion' => $gameVersion,
+                    'dungeon' => $model,
+                    'floorIndex' => $floorIndex,
+                ], $parameters)) }}"
+                style="width: 100%; height: 600px; border: none;"></iframe>
         </div>
     </div>
     {{--    <div class="row">--}}

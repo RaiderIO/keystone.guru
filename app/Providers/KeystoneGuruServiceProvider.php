@@ -434,10 +434,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         view()->composer('common.layout.header', HeaderComposer::class);
 
-        view()->composer([
-            'misc.embedexplore',
-            'misc.embedheatmap',
-        ], EmbedComposer::class);
+        view()->composer('misc.embedheatmap', EmbedComposer::class);
 
         view()->composer([
             'dungeonroute.discover.category',

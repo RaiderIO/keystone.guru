@@ -100,7 +100,7 @@ final class ViewComposerTest extends PublicTestCase
     #[Test]
     public function embedComposer_givenView_setsSpecializations(): void
     {
-        $this->assertComposerSetsKeys(EmbedComposer::class, 'misc.embedexplore', [
+        $this->assertComposerSetsKeys(EmbedComposer::class, 'misc.embedheatmap', [
             'characterClassSpecializations',
         ]);
     }
