@@ -20,6 +20,39 @@ describe('dungeonSheetRowMatches', () => {
 });
 
 describe('DungeonSheet', () => {
+    const originalMatchMedia = window.matchMedia;
+    const originalBootstrap = globalThis.bootstrap;
+    let mediaQueryListeners;
+    let hiddenOffcanvases;
+
+    beforeEach(() => {
+        mediaQueryListeners = [];
+        hiddenOffcanvases = [];
+        window.matchMedia = query => ({
+            media: query,
+            addEventListener: (type, listener) => mediaQueryListeners.push({query, type, listener}),
+        });
+        globalThis.bootstrap = {
+            Offcanvas: {
+                getInstance: element => ({hide: () => hiddenOffcanvases.push(element)}),
+            },
+        };
+    });
+
+    afterEach(() => {
+        window.matchMedia = originalMatchMedia;
+        globalThis.bootstrap = originalBootstrap;
+    });
+
+    /**
+     * @param {boolean} matches
+     */
+    function crossBreakpoint(matches) {
+        mediaQueryListeners
+            .filter(({query, type}) => query === DungeonSheet.DESKTOP_MEDIA_QUERY && type === 'change')
+            .forEach(({listener}) => listener({matches}));
+    }
+
     /**
      * Two groups, the selected dungeon in the first - the markup of common/layout/nav/dungeoncontext, trimmed.
      *
@@ -156,6 +189,48 @@ describe('DungeonSheet', () => {
 
         // Assert
         expect(clicked).toEqual([]);
+    });
+
+    it('input_givenEnterDuringAnImeComposition_followsNothing', () => {
+        // Arrange
+        const sheet = makeSheet();
+        const clicked = [];
+        sheet.rows.forEach(row => row.addEventListener('click', event => {
+            event.preventDefault();
+            clicked.push(row.id);
+        }));
+        sheet.filter('core');
+
+        // Act
+        const event = new KeyboardEvent('keydown', {key: 'Enter', isComposing: true, cancelable: true});
+        sheet.input.dispatchEvent(event);
+
+        // Assert
+        expect(clicked).toEqual([]);
+        expect(event.defaultPrevented).toBe(false);
+    });
+
+    it('breakpoint_givenTheViewportGrowsToDesktop_hidesTheSheet', () => {
+        // Arrange
+        const sheet = makeSheet();
+
+        // Act
+        crossBreakpoint(true);
+
+        // Assert
+        expect(hiddenOffcanvases).toEqual([sheet.element]);
+    });
+
+    it('breakpoint_givenTheViewportShrinksToMobile_leavesTheSheetAlone', () => {
+        // Arrange
+        makeSheet();
+
+        // Act
+        crossBreakpoint(false);
+
+        // Assert
+        expect(mediaQueryListeners).toHaveLength(1);
+        expect(hiddenOffcanvases).toEqual([]);
     });
 
     it('hidden_givenAFilter_clearsItAndShowsEveryRowAgain', () => {

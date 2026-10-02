@@ -28,6 +28,11 @@ function foldForDungeonSheetFilter(text) {
  */
 class DungeonSheet {
     /**
+     * Matches Bootstrap's `lg` breakpoint, from which the sheet is display: none (`d-lg-none`).
+     */
+    static DESKTOP_MEDIA_QUERY = '(min-width: 992px)';
+
+    /**
      * @param {HTMLElement} element The #dungeon_sheet
      */
     constructor(element) {
@@ -45,6 +50,18 @@ class DungeonSheet {
         this.input.addEventListener('keydown', this._onInputKeyDown.bind(this));
         element.addEventListener('show.bs.offcanvas', this._onShow.bind(this));
         element.addEventListener('hidden.bs.offcanvas', this._onHidden.bind(this));
+
+        // Bootstrap only dismisses an offcanvas on resize once it stops being position: fixed, so an open sheet
+        // hidden by d-lg-none would leave its backdrop, scroll lock and focus trap behind
+        window.matchMedia(DungeonSheet.DESKTOP_MEDIA_QUERY).addEventListener('change', event => {
+            if (event.matches) {
+                this.hide();
+            }
+        });
+    }
+
+    hide() {
+        bootstrap.Offcanvas.getInstance(this.element)?.hide();
     }
 
     /**
@@ -73,7 +90,8 @@ class DungeonSheet {
      * @param {KeyboardEvent} event
      */
     _onInputKeyDown(event) {
-        if (event.key !== 'Enter') {
+        // Enter also confirms an IME composition, which must not navigate away
+        if (event.key !== 'Enter' || event.isComposing) {
             return;
         }
 
