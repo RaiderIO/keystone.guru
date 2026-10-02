@@ -31,7 +31,7 @@ $readoutImageUrl = $selectedDungeon?->getImageUrl() ?? $gameVersion->expansion->
     </div>
     <div class="dungeon_strip_groups" id="dungeon_strip_groups">
         @foreach($dungeonsByGroup as $group => $groupDungeons)
-            <div class="dungeon_strip_group" role="group" aria-labelledby="dungeon_strip_group_{{ $group }}">
+            <div class="dungeon_strip_group dungeon_strip_group--{{ $group }}" role="group" aria-labelledby="dungeon_strip_group_{{ $group }}">
                 <span class="dungeon_strip_group_label" id="dungeon_strip_group_{{ $group }}">
                     {{ __(sprintf('view_common.dungeon.list.groups.%s', $group)) }}
                 </span>

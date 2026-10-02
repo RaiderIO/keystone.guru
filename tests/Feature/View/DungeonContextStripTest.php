@@ -119,6 +119,23 @@ final class DungeonContextStripTest extends PublicTestCase
     }
 
     #[Test]
+    public function render_givenASeasonlessGameVersion_marksEveryGroupWithItsSelectorGroupModifier(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons);
+
+        // Assert
+        preg_match_all('/class="dungeon_strip_group dungeon_strip_group--([a-z]+)"[^>]*aria-labelledby="dungeon_strip_group_([a-z]+)"/', $html, $groups, PREG_SET_ORDER);
+        $this->assertSame(
+            [['dungeon', 'dungeon'], ['raid', 'raid']],
+            array_map(static fn(array $match) => [$match[1], $match[2]], $groups),
+        );
+    }
+
+    #[Test]
     public function render_givenASeasonlessGameVersion_namesEveryChipInItsLabelAndTitle(): void
     {
         // Arrange

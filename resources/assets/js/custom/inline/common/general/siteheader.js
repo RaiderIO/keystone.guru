@@ -91,12 +91,11 @@ class DungeonStrip {
     }
 
     /**
-     * Only above xl and at full height can three rows be wanted - header.css compacts the strip everywhere
-     * else. There, a list too long for its width also falls back to the single row and the flyout.
+     * A list wider than the strip clips at its right edge and offers the "All" flyout instead. Measured with
+     * the group labels shown and without the "All" button, so the result does not depend on the last one.
      */
     updateCompact() {
-        if (this.isOpen() || this.element.closest('.ksg-header--shrink') !== null ||
-            !window.matchMedia('(min-width: 1200px)').matches) {
+        if (this.isOpen()) {
             return;
         }
 

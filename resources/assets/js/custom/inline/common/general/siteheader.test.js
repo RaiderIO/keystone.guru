@@ -576,4 +576,45 @@ describe('DungeonStrip', () => {
         // Assert
         expect(strip.isOpen()).toBe(true);
     });
+
+    /**
+     * jsdom does no layout, so the groups' widths are pinned by hand.
+     *
+     * @param {DungeonStrip} strip
+     * @param {number} scrollWidth
+     * @param {number} clientWidth
+     */
+    function setGroupsWidth(strip, scrollWidth, clientWidth) {
+        Object.defineProperty(strip.groups, 'scrollWidth', {configurable: true, value: scrollWidth});
+        Object.defineProperty(strip.groups, 'clientWidth', {configurable: true, value: clientWidth});
+    }
+
+    it('updateCompact_givenAListWiderThanTheStripInAShrunkHeader_compactsIt', () => {
+        // Arrange
+        const strip = makeStrip();
+        const header = document.createElement('div');
+        header.className = 'ksg-header ksg-header--shrink';
+        strip.element.replaceWith(header);
+        header.appendChild(strip.element);
+        setGroupsWidth(strip, 900, 600);
+
+        // Act
+        strip.updateCompact();
+
+        // Assert
+        expect(strip.element.classList.contains('dungeon_strip--compact')).toBe(true);
+    });
+
+    it('updateCompact_givenACompactStripWhoseListNowFits_expandsIt', () => {
+        // Arrange
+        const strip = makeStrip();
+        strip.element.classList.add('dungeon_strip--compact');
+        setGroupsWidth(strip, 600, 600);
+
+        // Act
+        strip.updateCompact();
+
+        // Assert
+        expect(strip.element.classList.contains('dungeon_strip--compact')).toBe(false);
+    });
 });
