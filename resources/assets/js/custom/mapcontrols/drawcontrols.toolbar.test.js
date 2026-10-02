@@ -28,6 +28,7 @@ global.Handlebars = {
         map_controls_route_edit_button_template: compileTemplate('map_controls_route_edit_button_template'),
         map_controls_draw_tool_group_template: compileTemplate('map_controls_draw_tool_group_template'),
         map_controls_draw_tool_flyout_item_template: compileTemplate('map_controls_draw_tool_flyout_item_template'),
+        map_controls_draw_tool_status_template: compileTemplate('map_controls_draw_tool_status_template'),
     },
 };
 
@@ -102,6 +103,8 @@ describe('DrawControls toolbar generated from the tool list', () => {
     let leafletMap;
     let controls;
     let $rail;
+    /** @type {String[]} */
+    let snackbars;
 
     beforeEach(() => {
         previousLang = global.lang;
@@ -110,13 +113,17 @@ describe('DrawControls toolbar generated from the tool list', () => {
             get: (key, params = {}) => params.hotkey ? `${key}(${params.hotkey})` : key,
             messages: {},
         };
+        snackbars = [];
         global.getState = () => ({
-            addSnackbar: () => 'snackbar',
+            addSnackbar: (html) => {
+                snackbars.push(html);
+                return 'snackbar';
+            },
             removeSnackbar: () => {
             },
         });
 
-        document.body.innerHTML = '<div id="edit_route_draw_container"></div><div id="outside"></div>';
+        document.body.innerHTML = '<div class="route_manipulation_tools"><div id="edit_route_draw_container"></div></div><div id="outside"></div>';
         const container = document.createElement('div');
         Object.defineProperty(container, 'clientWidth', {value: 800});
         Object.defineProperty(container, 'clientHeight', {value: 600});
@@ -140,7 +147,7 @@ describe('DrawControls toolbar generated from the tool list', () => {
     });
 
     afterEach(() => {
-        jQuery(document).off('.drawtoolgroups');
+        controls.cleanup();
         leafletMap.remove();
         global.lang = previousLang;
         global.getState = previousGetState;
@@ -170,8 +177,8 @@ describe('DrawControls toolbar generated from the tool list', () => {
         // Assert
         const $polyline = $rail.children('[data-draw-tool="polyline"]');
         expect($polyline.find('.draw_tool_keycap').text().trim()).toBe('1');
-        expect($polyline.find('[data-bs-toggle="tooltip"]').attr('title')).toBe('js.polyline_title(1 / P)');
-        expect($polyline.attr('aria-label')).toBe('js.polyline');
+        expect($polyline.attr('data-bs-toggle')).toBe('tooltip');
+        expect($polyline.attr('data-bs-title')).toBe('js.polyline_title(1 / P)');
         expect($rail.children('[data-draw-tool="delete"]').find('.btn-danger').length).toBe(1);
     });
 
@@ -238,5 +245,246 @@ describe('DrawControls toolbar generated from the tool list', () => {
 
         // Assert
         expect($group.find('.draw_tool_group_button').hasClass('leaflet-draw-toolbar-button-enabled')).toBe(false);
+    });
+    test('addControl_givenToolList_givesEveryButtonANameWithItsHotkeysAndNoNativeTitle', () => {
+        // Assert
+        const $polyline = $rail.children('[data-draw-tool="polyline"]');
+        expect($polyline.attr('role')).toBe('button');
+        expect($polyline.attr('aria-label')).toBe('js.draw_tool_aria_label(1 / P)');
+        expect($polyline.attr('aria-keyshortcuts')).toBe('1 P');
+        expect($rail.find('[data-draw-tool="polygon"]').attr('aria-keyshortcuts')).toBe('Shift+U');
+        expect($rail.children('[data-draw-tool="edit"]').attr('aria-label')).toBe('js.draw_tool_aria_label(5)');
+        expect($rail.children('[data-draw-tool="delete"]').attr('aria-label')).toBe('js.draw_tool_aria_label(6)');
+        expect($rail.find('[title]').length).toBe(0);
+    });
+
+    test('editToolbar_givenLayersAddedAndRemoved_syncsAriaDisabledWithoutNativeTitle', () => {
+        // Arrange
+        const $edit = $rail.children('[data-draw-tool="edit"]');
+        const $delete = $rail.children('[data-draw-tool="delete"]');
+        const disabledWhenEmpty = [$edit.attr('aria-disabled'), $delete.attr('aria-disabled')];
+        const marker = L.marker([0, 0]);
+
+        // Act
+        controls.editableItemsLayer.addLayer(marker);
+        const disabledWithLayer = [$edit.attr('aria-disabled'), $delete.attr('aria-disabled')];
+        const titlesWithLayer = [$edit.attr('title'), $delete.attr('title')];
+        controls.editableItemsLayer.removeLayer(marker);
+
+        // Assert
+        expect(disabledWhenEmpty).toEqual(['true', 'true']);
+        expect(disabledWithLayer).toEqual(['false', 'false']);
+        expect(titlesWithLayer).toEqual([undefined, undefined]);
+        expect([$edit.attr('aria-disabled'), $delete.attr('aria-disabled')]).toEqual(['true', 'true']);
+        expect([$edit.attr('title'), $delete.attr('title')]).toEqual([undefined, undefined]);
+    });
+
+    test('drawTool_givenActivatedThenClosed_togglesAriaPressed', () => {
+        // Arrange
+        const polyline = $rail.children('[data-draw-tool="polyline"]')[0];
+        const polygon = $rail.find('[data-draw-tool="polygon"]')[0];
+        const pressedBefore = polyline.getAttribute('aria-pressed');
+
+        // Act
+        polyline.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, detail: 1}));
+        const pressedWhileActive = [polyline.getAttribute('aria-pressed'), polygon.getAttribute('aria-pressed')];
+        controls._mapControl._toolbars.draw.disable();
+
+        // Assert
+        expect(pressedBefore).toBe('false');
+        expect(pressedWhileActive).toEqual(['true', 'false']);
+        expect(polyline.getAttribute('aria-pressed')).toBe('false');
+    });
+
+    test('drawTool_givenActivated_namesTheToolInTheSnackbar', () => {
+        // Arrange
+        const polygon = $rail.find('[data-draw-tool="polygon"]')[0];
+
+        // Act
+        polygon.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, detail: 1}));
+
+        // Assert
+        expect(snackbars.length).toBe(1);
+        const $snackbar = jQuery(`<div>${snackbars[0]}</div>`);
+        const $status = $snackbar.find('.draw_tool_snackbar > .draw_tool_status[role="status"]');
+        expect($status.length).toBe(1);
+        expect($status.find('.visually-hidden').text().trim()).toBe('js.draw_tool_status');
+        expect($status.find('.draw_tool_status_label').text().trim()).toBe('js.polygon');
+        expect($status.find('.fa-draw-polygon').length).toBe(1);
+        expect($status.find('.draw_tool_keycap').text().trim()).toBe('Shift+U');
+    });
+
+    test('drawTool_givenHiddenToolActivated_rendersSnackbarWithoutStatus', () => {
+        // Act
+        new L.Draw.Rectangle(leafletMap, controls.drawControlOptions.draw.rectangle);
+        $rail.children('[data-draw-tool="rectangle"]')[0].dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, detail: 1}));
+
+        // Assert
+        expect(snackbars.length).toBe(1);
+        const $snackbar = jQuery(`<div>${snackbars[0]}</div>`);
+        expect($snackbar.find('.draw_tool_snackbar').length).toBe(1);
+        expect($snackbar.find('.draw_tool_status').length).toBe(0);
+    });
+
+    test('groupButton_givenKeyboardClick_opensFlyoutAndFocusesFirstTool', () => {
+        // Arrange
+        const $group = $rail.find('[data-draw-tool-group="markers"]');
+        const groupButton = $group.find('.draw_tool_group_button')[0];
+
+        // Act
+        groupButton.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, detail: 0}));
+
+        // Assert
+        expect($group.find('.draw_tool_group_flyout').css('display')).not.toBe('none');
+        expect(groupButton.getAttribute('aria-expanded')).toBe('true');
+        expect(document.activeElement).toBe($group.find('[data-draw-tool="marker"]')[0]);
+    });
+
+    test('groupButton_givenMouseClick_opensFlyoutWithoutMovingFocus', () => {
+        // Arrange
+        const $group = $rail.find('[data-draw-tool-group="markers"]');
+        const groupButton = $group.find('.draw_tool_group_button')[0];
+        groupButton.focus();
+
+        // Act
+        groupButton.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, detail: 1}));
+
+        // Assert
+        expect($group.find('.draw_tool_group_flyout').css('display')).not.toBe('none');
+        expect(document.activeElement).toBe(groupButton);
+    });
+
+    test('groupButton_givenArrowRight_opensFlyoutAndFocusesActiveTool', () => {
+        // Arrange
+        const $group = $rail.find('[data-draw-tool-group="markers"]');
+        const polygon = $group.find('[data-draw-tool="polygon"]')[0];
+        polygon.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, detail: 1}));
+        const groupButton = $group.find('.draw_tool_group_button')[0];
+
+        // Act
+        jQuery(groupButton).trigger(jQuery.Event('keydown', {key: 'ArrowRight'}));
+
+        // Assert
+        expect($group.find('.draw_tool_group_flyout').css('display')).not.toBe('none');
+        expect(document.activeElement).toBe(polygon);
+    });
+
+    test('groupFlyout_givenArrowKeys_movesFocusAndWraps', () => {
+        // Arrange
+        const $group = $rail.find('[data-draw-tool-group="markers"]');
+        const marker = $group.find('[data-draw-tool="marker"]')[0];
+        const polygon = $group.find('[data-draw-tool="polygon"]')[0];
+        $group.find('.draw_tool_group_button')[0].dispatchEvent(new MouseEvent('click', {bubbles: true, detail: 0}));
+        const pressKey = (key) => jQuery(document.activeElement).trigger(jQuery.Event('keydown', {key: key}));
+
+        // Act
+        pressKey('ArrowDown');
+        const afterDown = document.activeElement;
+        pressKey('ArrowDown');
+        const afterWrapDown = document.activeElement;
+        pressKey('ArrowUp');
+        const afterWrapUp = document.activeElement;
+        pressKey('Home');
+        const afterHome = document.activeElement;
+        pressKey('End');
+
+        // Assert
+        expect(afterDown).toBe(polygon);
+        expect(afterWrapDown).toBe(marker);
+        expect(afterWrapUp).toBe(polygon);
+        expect(afterHome).toBe(marker);
+        expect(document.activeElement).toBe(polygon);
+    });
+
+    test('groupFlyout_givenEscape_closesFlyoutAndFocusesGroupButtonOnly', () => {
+        // Arrange
+        const $group = $rail.find('[data-draw-tool-group="markers"]');
+        const groupButton = $group.find('.draw_tool_group_button')[0];
+        groupButton.dispatchEvent(new MouseEvent('click', {bubbles: true, detail: 0}));
+        let escapeReachedDocument = false;
+        jQuery(document).on('keydown.escapeprobe', (keyEvent) => {
+            escapeReachedDocument = keyEvent.key === 'Escape';
+        });
+
+        // Act
+        jQuery(document.activeElement).trigger(jQuery.Event('keydown', {key: 'Escape'}));
+        jQuery(document).off('.escapeprobe');
+
+        // Assert
+        expect($group.find('.draw_tool_group_flyout').css('display')).toBe('none');
+        expect(groupButton.getAttribute('aria-expanded')).toBe('false');
+        expect(document.activeElement).toBe(groupButton);
+        expect(escapeReachedDocument).toBe(false);
+    });
+
+    test('groupFlyout_givenFocusLeavesTheGroup_closesFlyout', () => {
+        // Arrange
+        const $group = $rail.find('[data-draw-tool-group="markers"]');
+        $group.find('.draw_tool_group_button')[0].dispatchEvent(new MouseEvent('click', {bubbles: true, detail: 0}));
+        const focusInsideStaysOpen = (() => {
+            $group.find('[data-draw-tool="polygon"]')[0].focus();
+            return $group.find('.draw_tool_group_flyout').css('display') !== 'none';
+        })();
+
+        // Act
+        $rail.children('[data-draw-tool="edit"]')[0].focus();
+
+        // Assert
+        expect(focusInsideStaysOpen).toBe(true);
+        expect($group.find('.draw_tool_group_flyout').css('display')).toBe('none');
+    });
+
+    test('toolButton_givenSpacePressed_activatesTool', () => {
+        // Arrange
+        const polyline = $rail.children('[data-draw-tool="polyline"]')[0];
+
+        // Act
+        jQuery(polyline).trigger(jQuery.Event('keydown', {key: ' '}));
+
+        // Assert
+        expect(polyline.classList.contains('leaflet-draw-toolbar-button-enabled')).toBe(true);
+        expect(polyline.getAttribute('aria-pressed')).toBe('true');
+    });
+    test('groupButton_givenOpened_positionsFlyoutBesideTheButton', () => {
+        // Arrange
+        const $group = $rail.find('[data-draw-tool-group="markers"]');
+        $group.find('.draw_tool_group_button')[0].getBoundingClientRect = () => ({top: 120, right: 64, bottom: 168, left: 0});
+
+        // Act
+        $group.find('.draw_tool_group_button').trigger('click');
+
+        // Assert
+        const $flyout = $group.find('.draw_tool_group_flyout');
+        expect($flyout.css('top')).toBe('120px');
+        expect($flyout.css('left')).toBe('64px');
+    });
+
+    test('groupButton_givenOpenedNearTheBottom_keepsFlyoutOnScreen', () => {
+        // Arrange
+        const $group = $rail.find('[data-draw-tool-group="markers"]');
+        const $flyout = $group.find('.draw_tool_group_flyout');
+        $group.find('.draw_tool_group_button')[0].getBoundingClientRect = () => ({top: window.innerHeight - 50, right: 64, bottom: window.innerHeight, left: 0});
+        $flyout[0].getBoundingClientRect = () => ({top: 0, right: 0, bottom: 200, left: 0, width: 240, height: 200});
+
+        // Act
+        $group.find('.draw_tool_group_button').trigger('click');
+
+        // Assert
+        expect($flyout.css('top')).toBe(`${window.innerHeight - 200}px`);
+    });
+
+    test('rail_givenScrolled_closesOpenFlyout', () => {
+        // Arrange
+        const $group = $rail.find('[data-draw-tool-group="markers"]');
+        $group.find('.draw_tool_group_button').trigger('click');
+        const openBeforeScroll = $group.find('.draw_tool_group_flyout').css('display') !== 'none';
+
+        // Act
+        jQuery('.route_manipulation_tools').trigger('scroll');
+
+        // Assert
+        expect(openBeforeScroll).toBe(true);
+        expect($group.find('.draw_tool_group_flyout').css('display')).toBe('none');
+        expect($group.find('.draw_tool_group_button').attr('aria-expanded')).toBe('false');
     });
 });

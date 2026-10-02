@@ -62,9 +62,7 @@
   }
 
   .draw_tool_group_flyout {
-    position: absolute;
-    top: 0;
-    left: 100%;
+    position: fixed;
     margin-left: 0.5rem;
     min-width: 15rem;
     z-index: 1;
@@ -95,10 +93,63 @@
 
   .draw_icon.leaflet-disabled .col,
   .draw_icon.leaflet-disabled .col:hover {
-    background: gray;
-    color: inherit;
     text-decoration: unset;
     cursor: default;
+  }
+
+  /** The rail scrolls, so a focus ring drawn outside a button would be clipped */
+  .draw_icon:focus-visible {
+    outline: none;
+  }
+
+  .draw_icon:focus-visible .btn {
+    outline-offset: -4px;
+  }
+
+  .draw_tool_flyout_item:focus-visible {
+    outline-offset: -3px;
+  }
+
+  @media (forced-colors: active) {
+    .leaflet-draw-toolbar-button-enabled .btn,
+    .draw_tool_flyout_item.leaflet-draw-toolbar-button-enabled {
+      outline: 3px solid Highlight;
+      outline-offset: -3px;
+    }
+  }
+}
+
+.draw_tool_snackbar {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+
+  .leaflet-draw-actions {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+.draw_tool_status {
+  display: flex;
+  align-items: center;
+  flex: 0 1 auto;
+  gap: 0.5rem;
+  min-width: 0;
+  max-width: 45%;
+  padding: 0 0.75rem;
+  border-radius: 0.25rem;
+  font-weight: bold;
+
+  .draw_tool_status_label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .draw_tool_keycap {
+    padding: 0 0.25rem;
+    font-weight: normal;
   }
 }
 

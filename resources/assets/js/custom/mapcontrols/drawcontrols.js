@@ -23,6 +23,17 @@ L.Edit.PolyVerticesEdit.prototype._createMiddleMarker = function (marker1, marke
     _originalCreateMiddleMarker.call(this, marker1, marker2);
 };
 
+// Leaflet.draw re-sets a native title on Edit and Delete on every layer change, which shows on top of their
+// Bootstrap tooltip; it only marks them disabled with a class.
+const _originalCheckDisabled = L.EditToolbar.prototype._checkDisabled;
+L.EditToolbar.prototype._checkDisabled = function () {
+    _originalCheckDisabled.call(this);
+    for (let mode of Object.values(this._modes)) {
+        mode.button.removeAttribute('title');
+        mode.button.setAttribute('aria-disabled', L.DomUtil.hasClass(mode.button, 'leaflet-disabled') ? 'true' : 'false');
+    }
+};
+
 // Add some new strings to the draw controls
 // https://github.com/Leaflet/Leaflet.draw#customizing-language-and-text-in-leafletdraw
 L.drawLocal = $.extend(L.drawLocal, lang.messages[`${lang.locale}.leafletdraw`]);
@@ -37,6 +48,8 @@ class DrawControls extends MapControl {
         let self = this;
 
         this._mapControl = null;
+        /** @type {DrawTool[]} */
+        this._tools = [];
         this.editableItemsLayer = editableItemsLayer;
         this.drawControlOptions = {};
         this.drawControlSnackbarId = null;
@@ -61,6 +74,7 @@ class DrawControls extends MapControl {
             } else {
                 $brushlineButton.removeClass('leaflet-draw-toolbar-button-enabled');
             }
+            $brushlineButton.attr('aria-pressed', enabled ? 'true' : 'false');
         });
 
         this.map.register('map:pathertoggled', this, function (toggleEvent) {
@@ -200,6 +214,47 @@ class DrawControls extends MapControl {
     }
 
     /**
+     * @param tool {DrawTool}
+     * @returns {String} The tool's label, plus its hotkeys when it has any
+     * @private
+     */
+    _getToolAriaLabel(tool) {
+        let label = lang.get(tool.label);
+
+        return (tool.keys ?? []).length > 0 ?
+            lang.get('js.draw_tool_aria_label', {label: label, hotkey: this._getToolHotkeyText(tool)}) : label;
+    }
+
+    /**
+     * @param tool {DrawTool}
+     * @returns {String} Every key of the tool, in aria-keyshortcuts syntax
+     * @private
+     */
+    _getToolAriaKeyShortcuts(tool) {
+        return (tool.keys ?? []).map((chord) => Hotkeys.formatChord(chord)).join(' ');
+    }
+
+    /**
+     * @param tool {DrawTool|null}
+     * @returns {String} The contents of the snackbar shown while the tool is active
+     * @private
+     */
+    _getToolSnackbarHtml(tool) {
+        let status = '';
+        if (tool !== null && !tool.hidden) {
+            let label = lang.get(tool.label);
+            status = Handlebars.templates['map_controls_draw_tool_status_template']({
+                status: lang.get('js.draw_tool_status', {label: label}),
+                fa_class: tool.icon,
+                text: label,
+                hotkey: this._getToolKeycap(tool),
+            });
+        }
+
+        return `<div class="draw_tool_snackbar">${status}</div>`;
+    }
+
+    /**
      * Gets the newly generated options for the drawing control.
      * @param tools {DrawTool[]}
      * @returns object
@@ -231,19 +286,17 @@ class DrawControls extends MapControl {
      * @param faIconClass {String}
      * @param text {String}
      * @param hotkey {String}
-     * @param title {String}
      * @param btnType {String}
      * @returns {String}
      * @private
      */
-    _getButtonHtml(faIconClass, text, hotkey = '', title = '', btnType = '') {
+    _getButtonHtml(faIconClass, text, hotkey = '', btnType = '') {
         let template = Handlebars.templates['map_controls_route_edit_button_template'];
 
         let data = {
             fa_class: faIconClass,
             text: text,
             hotkey: hotkey,
-            title: title,
             btnType: btnType
         };
 
@@ -273,7 +326,7 @@ class DrawControls extends MapControl {
             // Ensure that pather is disabled now
             self.map.togglePather(false);
 
-            self._refreshToolGroups();
+            self._refreshActiveTool();
 
             // Put the draw actions in a different div
             let $drawActions = $container.find('.leaflet-draw-actions');
@@ -292,19 +345,23 @@ class DrawControls extends MapControl {
                 }
             });
 
-            // Add it to an empty snackbar - but copy the DOM over on render time so that we preserve all the Leaflet.draw events
-            self.drawControlSnackbarId = getState().addSnackbar('', {
-                onDomAdded: function (id) {
-                    $(`#${id}`).append(
-                        $drawActions
-                    );
-                }
-            });
+            let activeToolId = $container.find('[data-draw-tool].leaflet-draw-toolbar-button-enabled').attr('data-draw-tool');
+
+            // Add it to a snackbar naming the tool - but copy the DOM over on render time so that we preserve all the Leaflet.draw events
+            self.drawControlSnackbarId = getState().addSnackbar(
+                self._getToolSnackbarHtml(self._tools.find((tool) => tool.id === activeToolId) ?? null), {
+                    onDomAdded: function (id) {
+                        $(`#${id} .draw_tool_snackbar`).append(
+                            $drawActions
+                        );
+                    }
+                });
         });
 
         this.map.leafletMap.off(L.Draw.Event.TOOLBARCLOSED).on(L.Draw.Event.TOOLBARCLOSED, function (e) {
             // Fired before Leaflet.draw takes the active class off the closed tool's button
             $container.find('.draw_tool_group_button').removeClass('leaflet-draw-toolbar-button-enabled');
+            $container.find('[data-draw-tool]').attr('aria-pressed', 'false');
 
             let snackbar = $(`#${self.drawControlSnackbarId}`);
 
@@ -379,13 +436,14 @@ class DrawControls extends MapControl {
                 class: 'col btn btn-info p-0'
             }).append($button));
 
-            self.drawControlSnackbarId = getState().addSnackbar('', {
-                onDomAdded: function (id) {
-                    $(`#${id}`).append(
-                        $drawActions
-                    );
-                }
-            });
+            self.drawControlSnackbarId = getState().addSnackbar(
+                self._getToolSnackbarHtml(self._tools.find((tool) => tool.kind === 'pather') ?? null), {
+                    onDomAdded: function (id) {
+                        $(`#${id} .draw_tool_snackbar`).append(
+                            $drawActions
+                        );
+                    }
+                });
         });
 
         return $brushlineButton;
@@ -426,19 +484,103 @@ class DrawControls extends MapControl {
             label: lang.get(`js.draw_tool_group_${group}`),
         }));
 
-        $group.find('.draw_tool_group_button').on('click', function (clickEvent) {
+        let $groupButton = $group.find('.draw_tool_group_button');
+        let $flyout = $group.find('.draw_tool_group_flyout');
+
+        $groupButton.on('click', function (clickEvent) {
             clickEvent.preventDefault();
 
-            let $flyout = $group.find('.draw_tool_group_flyout');
             let wasOpen = $flyout.is(':visible');
             self._closeToolGroups();
             if (!wasOpen) {
-                $flyout.show();
-                $(this).attr('aria-expanded', 'true');
+                // A click from Enter or Space has no click count
+                self._openToolGroup($group, (clickEvent.originalEvent?.detail ?? 1) === 0);
+            }
+        }).on('keydown', function (keyEvent) {
+            if (keyEvent.key === 'ArrowRight' || keyEvent.key === 'ArrowDown') {
+                keyEvent.preventDefault();
+                self._openToolGroup($group, true);
+            }
+        });
+
+        $flyout.on('keydown', function (keyEvent) {
+            let $items = self._getToolGroupItems($group);
+            let index = $items.index(document.activeElement);
+            let nextIndex;
+            switch (keyEvent.key) {
+                case 'ArrowDown':
+                    nextIndex = (index + 1) % $items.length;
+                    break;
+                case 'ArrowUp':
+                    nextIndex = (index - 1 + $items.length) % $items.length;
+                    break;
+                case 'Home':
+                    nextIndex = 0;
+                    break;
+                case 'End':
+                    nextIndex = $items.length - 1;
+                    break;
+                case 'Escape':
+                case 'ArrowLeft':
+                    // Escape closes the flyout only, it does not also cancel the active tool
+                    keyEvent.preventDefault();
+                    keyEvent.stopPropagation();
+                    self._closeToolGroups();
+                    $groupButton[0].focus();
+                    return;
+                default:
+                    return;
+            }
+            keyEvent.preventDefault();
+            $items[nextIndex].focus();
+        });
+
+        $group.on('focusout', function (focusEvent) {
+            let target = focusEvent.relatedTarget;
+            if (target instanceof Node && !$group[0].contains(target)) {
+                self._closeToolGroups();
             }
         });
 
         return $group;
+    }
+
+    /**
+     * @param $group {jQuery}
+     * @returns {jQuery} The tool buttons in the group's flyout
+     * @private
+     */
+    _getToolGroupItems($group) {
+        return $group.find('.draw_tool_group_flyout [data-draw-tool]');
+    }
+
+    /**
+     * @param $group {jQuery}
+     * @param focusTool {Boolean} Move focus to the active tool of the group, or its first one
+     * @private
+     */
+    _openToolGroup($group, focusTool) {
+        this._closeToolGroups();
+
+        let $groupButton = $group.find('.draw_tool_group_button');
+        let $flyout = $group.find('.draw_tool_group_flyout');
+        // Fixed, because the rail is a scroll container that would clip the flyout and scroll sideways to a focused tool
+        let buttonRect = $groupButton[0].getBoundingClientRect();
+        $flyout.css({top: buttonRect.top, left: buttonRect.right}).show();
+        let overflowBottom = buttonRect.top + $flyout[0].getBoundingClientRect().height - window.innerHeight;
+        if (overflowBottom > 0) {
+            $flyout.css('top', Math.max(0, buttonRect.top - overflowBottom));
+        }
+        $groupButton.attr('aria-expanded', 'true');
+        if (typeof bootstrap !== 'undefined') {
+            bootstrap.Tooltip.getInstance($groupButton[0])?.hide();
+        }
+
+        if (focusTool) {
+            let $items = this._getToolGroupItems($group);
+            let $active = $items.filter('.leaflet-draw-toolbar-button-enabled');
+            ($active.length > 0 ? $active : $items).first()[0]?.focus();
+        }
     }
 
     /**
@@ -450,11 +592,17 @@ class DrawControls extends MapControl {
     }
 
     /**
-     * Marks the group of the active tool as active.
+     * Marks the active tool, and the group it is in, as pressed.
      * @private
      */
-    _refreshToolGroups() {
-        $('.draw_tool_group').each(function (index, group) {
+    _refreshActiveTool() {
+        let $container = $(this._mapControl.getContainer());
+
+        $container.find('[data-draw-tool]').each(function (index, button) {
+            button.setAttribute('aria-pressed', button.classList.contains('leaflet-draw-toolbar-button-enabled') ? 'true' : 'false');
+        });
+
+        $container.find('.draw_tool_group').each(function (index, group) {
             let $group = $(group);
             $group.find('.draw_tool_group_button').toggleClass(
                 'leaflet-draw-toolbar-button-enabled',
@@ -491,15 +639,27 @@ class DrawControls extends MapControl {
             }
 
             let label = lang.get(tool.label);
-            $button.attr('aria-label', label).css('background-image', 'none');
+            $button.attr({
+                role: 'button',
+                'aria-label': this._getToolAriaLabel(tool),
+                'aria-pressed': $button.hasClass('leaflet-draw-toolbar-button-enabled') ? 'true' : 'false',
+            }).css('background-image', 'none');
+            let keyShortcuts = this._getToolAriaKeyShortcuts(tool);
+            if (keyShortcuts !== '') {
+                $button.attr('aria-keyshortcuts', keyShortcuts);
+            }
 
             if (!tool.group) {
-                $button.addClass('draw_icon').html(
+                $button.addClass('draw_icon').attr({
+                    'data-bs-toggle': 'tooltip',
+                    'data-bs-placement': 'right',
+                    'data-bs-html': 'true',
+                    'data-bs-title': lang.get(tool.title, {hotkey: this._getToolHotkeyText(tool)}),
+                }).html(
                     this._getButtonHtml(
                         tool.icon,
                         label,
                         this._getToolKeycap(tool),
-                        lang.get(tool.title, {hotkey: this._getToolHotkeyText(tool)}),
                         tool.btnType ?? ''
                     )
                 );
@@ -526,6 +686,22 @@ class DrawControls extends MapControl {
             $group.find('.draw_tool_group_flyout').append($button);
         }
 
+        // The buttons are links; role=button promises Space activates them as well
+        $buttonContainer.off('keydown.drawtoolspace').on('keydown.drawtoolspace', '[role="button"]', function (keyEvent) {
+            if (keyEvent.key === ' ' && !keyEvent.ctrlKey && !keyEvent.altKey && !keyEvent.metaKey) {
+                keyEvent.preventDefault();
+                this.click();
+            }
+        });
+
+        // An open flyout is positioned against its group button, so it would detach from it
+        $container.closest('.route_manipulation_tools').off('.drawtoolgroups').on('scroll.drawtoolgroups', function () {
+            self._closeToolGroups();
+        });
+        $(window).off('.drawtoolgroups').on('resize.drawtoolgroups', function () {
+            self._closeToolGroups();
+        });
+
         $(document).off('.drawtoolgroups')
             .on('click.drawtoolgroups', function (clickEvent) {
                 if ($(clickEvent.target).closest('.draw_tool_group').length === 0) {
@@ -551,6 +727,7 @@ class DrawControls extends MapControl {
         }
 
         let tools = this._getTools();
+        this._tools = tools;
 
         // Add the control to the map
         this.drawControlOptions = this._getDrawControlOptions(tools);
@@ -576,6 +753,8 @@ class DrawControls extends MapControl {
         super.cleanup();
 
         $(document).off('.drawtoolgroups');
+        $(window).off('.drawtoolgroups');
+        $('.route_manipulation_tools').off('.drawtoolgroups');
 
         // this.map.leafletMap.off(L.Draw.Event.CREATED);
     }

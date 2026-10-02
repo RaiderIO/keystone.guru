@@ -1,0 +1,8 @@
+<div class="draw_tool_status" role="status">
+    <span class="visually-hidden">{{ status }}</span>
+    <i class="fas {{ fa_class }}" aria-hidden="true"></i>
+    <span class="draw_tool_status_label" aria-hidden="true">{{ text }}</span>
+    {{#if hotkey}}
+        <kbd class="draw_tool_keycap" aria-hidden="true">{{ hotkey }}</kbd>
+    {{/if}}
+</div>

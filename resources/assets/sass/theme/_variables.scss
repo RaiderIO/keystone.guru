@@ -23,6 +23,8 @@ $--theme-bg-card-footer: --theme-bg-card-footer;
 $--theme-affix-page-seasonal-color: --theme-affix-page-seasonal-color;
 $--theme-affix-page-seasonal-background-color: --theme-affix-page-seasonal-background-color;
 $--theme-affix-page-current-week-border-color: --theme-affix-page-current-week-border-color;
+$--theme-btn-disabled: --theme-btn-disabled;
+$--theme-btn-disabled-text: --theme-btn-disabled-text;
 
 // Darkly
 $theme-map-darkly: (
@@ -47,7 +49,9 @@ $theme-map-darkly: (
         $--theme-bg-card-footer: #444,
         $--theme-affix-page-seasonal-color: #00bc8c,
         $--theme-affix-page-seasonal-background-color: #00bc8cbb,
-        $--theme-affix-page-current-week-border-color: rgb(235, 235, 235)
+        $--theme-affix-page-current-week-border-color: rgb(235, 235, 235),
+        $--theme-btn-disabled: #444,
+        $--theme-btn-disabled-text: #adb5bd
 );
 
 // Lux
@@ -73,7 +77,9 @@ $theme-map-lux: (
         $--theme-bg-card-footer: rgba(0, 0, 0, 0.03),
         $--theme-affix-page-seasonal-color: #df691a,
         $--theme-affix-page-seasonal-background-color: #df691abb,
-        $--theme-affix-page-current-week-border-color: var($--theme-primary)
+        $--theme-affix-page-current-week-border-color: var($--theme-primary),
+        $--theme-btn-disabled: #dee2e6,
+        $--theme-btn-disabled-text: #6c757d
 );
 
 // Xal'atath - Midnight variant (Vapor based)
@@ -102,5 +108,7 @@ $theme-map-vapor: (
   // Seasonal / highlight colors (purple glow feel)
         $--theme-affix-page-seasonal-color: #6a2dbd,
         $--theme-affix-page-seasonal-background-color: #6a2dbdbb,
-        $--theme-affix-page-current-week-border-color: rgb(235, 235, 235)
+        $--theme-affix-page-current-week-border-color: rgb(235, 235, 235),
+        $--theme-btn-disabled: #444,
+        $--theme-btn-disabled-text: #adb5bd
 );

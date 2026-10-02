@@ -734,10 +734,25 @@ body {
     color: var($--theme-light);
   }
 
-  .route_manipulation_tools .draw_icon.leaflet-draw-toolbar-button-enabled .col,
   .route_manipulation_tools .draw_icon .col:hover {
     background: var($--theme-primary);
     color: var($--theme-light) !important;
+  }
+
+  .route_manipulation_tools .draw_icon.leaflet-draw-toolbar-button-enabled .col {
+    background: var($--theme-btn-accent) !important;
+    color: var($--theme-btn-accent-text) !important;
+  }
+
+  .route_manipulation_tools .draw_icon.leaflet-disabled .col,
+  .route_manipulation_tools .draw_icon.leaflet-disabled .col:hover {
+    background: var($--theme-btn-disabled) !important;
+    color: var($--theme-btn-disabled-text) !important;
+  }
+
+  .route_manipulation_tools .draw_icon:focus-visible .btn,
+  .route_manipulation_tools .draw_tool_flyout_item:focus-visible {
+    outline: 2px solid var($--theme-text-contrast);
   }
 
   .route_manipulation_tools .draw_tool_group_flyout {
@@ -746,7 +761,7 @@ body {
   }
 
   .route_manipulation_tools .draw_tool_group_flyout_header {
-    color: var($--theme-light);
+    color: var($--theme-text-contrast);
     border-bottom: var($--theme-header-border);
   }
 
@@ -754,15 +769,25 @@ body {
     color: var($--theme-text-contrast);
   }
 
-  .route_manipulation_tools .draw_tool_flyout_item.leaflet-draw-toolbar-button-enabled,
   .route_manipulation_tools .draw_tool_flyout_item:hover {
     background: var($--theme-primary);
     color: var($--theme-light);
   }
 
-  .route_manipulation_tools .draw_tool_keycap {
+  .route_manipulation_tools .draw_tool_flyout_item.leaflet-draw-toolbar-button-enabled {
+    background: var($--theme-btn-accent);
+    color: var($--theme-btn-accent-text);
+  }
+
+  .route_manipulation_tools .draw_tool_keycap,
+  .draw_tool_status .draw_tool_keycap {
     background-color: var($--theme-darker);
     color: var($--theme-text-contrast);
+  }
+
+  .draw_tool_status {
+    background: var($--theme-btn-accent);
+    color: var($--theme-btn-accent-text);
   }
 
   #pulls_sidebar .map_killzonessidebar_floor_switch:not(.selected):hover,
