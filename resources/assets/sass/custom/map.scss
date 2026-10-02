@@ -27,6 +27,72 @@
     height: 100%;
   }
 
+  .draw_icon .btn {
+    position: relative;
+  }
+
+  .draw_tool_keycap {
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    padding: 0 0.25rem;
+    font-size: 0.65rem;
+    line-height: 1.2;
+  }
+
+  .draw_icon .btn.maximized .draw_tool_keycap {
+    right: 0.5rem;
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .draw_tool_group {
+    position: relative;
+  }
+
+  .draw_tool_group_tick {
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-bottom: 6px solid currentColor;
+  }
+
+  .draw_tool_group_flyout {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    margin-left: 0.5rem;
+    min-width: 15rem;
+    z-index: 1;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .draw_tool_group_flyout_header {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .draw_tool_flyout_item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    text-decoration: none;
+  }
+
+  .draw_tool_flyout_item .draw_tool_flyout_item_label {
+    flex-grow: 1;
+    white-space: nowrap;
+  }
+
+  .draw_tool_flyout_item .draw_tool_keycap {
+    position: static;
+  }
+
   .draw_icon.leaflet-disabled .col,
   .draw_icon.leaflet-disabled .col:hover {
     background: gray;
