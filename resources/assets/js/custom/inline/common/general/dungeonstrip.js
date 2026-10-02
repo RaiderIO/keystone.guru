@@ -49,7 +49,26 @@ class DungeonStrip {
 
         this.readoutName.textContent = chip === null ? source.name : chip.getAttribute('aria-label');
         this.readoutImage.src = source.image;
-        this.readoutViews.textContent = source.views ?? '';
+        this.readoutViews.textContent = source.viewShare === undefined ? '' : DungeonStrip.describeViewShare(parseFloat(source.viewShare));
+    }
+
+    /**
+     * Words a dungeon's views as a share of the most viewed dungeon's, the way the chips' titles do.
+     *
+     * @param {number} viewShare Between 0 and 1
+     * @returns {string}
+     */
+    static describeViewShare(viewShare) {
+        if (viewShare >= 1) {
+            return lang.get('js.dungeon_strip_most_viewed');
+        }
+
+        if (viewShare <= 0) {
+            return lang.get('js.dungeon_strip_not_viewed');
+        }
+
+        // Never "0%" for a dungeon that was viewed, nor "100%" for one that is not the most viewed
+        return lang.get('js.dungeon_strip_view_share', {percent: Math.min(99, Math.max(1, Math.round(viewShare * 100)))});
     }
 
     /**

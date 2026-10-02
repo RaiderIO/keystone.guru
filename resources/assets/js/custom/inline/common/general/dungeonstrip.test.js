@@ -1,6 +1,24 @@
 const {DungeonStrip} = require('./dungeonstrip');
 
 describe('DungeonStrip', () => {
+    const messages = {
+        'js.dungeon_strip_most_viewed': 'Most viewed',
+        'js.dungeon_strip_not_viewed': 'No recent views',
+        'js.dungeon_strip_view_share': ':percent% of top views',
+    };
+    const originalLang = globalThis.lang;
+
+    beforeEach(() => {
+        globalThis.lang = {
+            get: (key, replacements = {}) => Object.entries(replacements)
+                .reduce((message, [name, value]) => message.replace(`:${name}`, value), messages[key] ?? key),
+        };
+    });
+
+    afterEach(() => {
+        globalThis.lang = originalLang;
+    });
+
     /**
      * Three chips, one without view counts, and the selected dungeon in the readout - the markup of common/dungeon/list/chips, trimmed.
      *
@@ -9,7 +27,7 @@ describe('DungeonStrip', () => {
     function makeStrip() {
         document.body.innerHTML = `
             <div class="dungeon_strip">
-                <div class="dungeon_strip_readout" data-name="Blackrock Depths" data-image="http://test/brd.webp" data-views="Most viewed">
+                <div class="dungeon_strip_readout" data-name="Blackrock Depths" data-image="http://test/brd.webp" data-view-share="1">
                     <img class="dungeon_strip_readout_image" src="http://test/brd.webp" alt=""/>
                     <span class="dungeon_strip_readout_text">
                         <span class="dungeon_strip_readout_name">Blackrock Depths</span>
@@ -17,8 +35,8 @@ describe('DungeonStrip', () => {
                     </span>
                 </div>
                 <div class="dungeon_strip_groups" id="dungeon_strip_groups">
-                    <a class="dungeon_strip_chip" href="/brd" aria-label="Blackrock Depths" data-image="http://test/brd.webp" data-views="Most viewed">BRD</a>
-                    <a class="dungeon_strip_chip" href="/mc" aria-label="Molten Core" data-image="http://test/mc.webp" data-views="41% of top views">MC</a>
+                    <a class="dungeon_strip_chip" href="/brd" aria-label="Blackrock Depths" data-image="http://test/brd.webp" data-view-share="1">BRD</a>
+                    <a class="dungeon_strip_chip" href="/mc" aria-label="Molten Core" data-image="http://test/mc.webp" data-view-share="0.4133">MC</a>
                     <a class="dungeon_strip_chip" href="/zg" aria-label="Zul'Gurub" data-image="http://test/zg.webp">ZG</a>
                 </div>
                 <button type="button" class="dungeon_strip_all" aria-expanded="false">All 2</button>
@@ -123,6 +141,20 @@ describe('DungeonStrip', () => {
 
         // Assert
         expect(readoutViews()).toBe('Most viewed');
+    });
+
+    it.each([
+        [1, 'Most viewed'],
+        [0, 'No recent views'],
+        [0.4567, '46% of top views'],
+        [0.001, '1% of top views'],
+        [0.999, '99% of top views'],
+    ])('describeViewShare_givenShare%s_returns%s', (viewShare, expected) => {
+        // Act
+        const result = DungeonStrip.describeViewShare(viewShare);
+
+        // Assert
+        expect(result).toBe(expected);
     });
 
     it('allButtonClick_givenAClosedStrip_opensAndClosesTheFlyout', () => {

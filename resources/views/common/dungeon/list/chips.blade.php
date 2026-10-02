@@ -42,14 +42,16 @@ $describeViewShare = static function (?float $viewShare): string {
         return __('view_common.dungeon.list.chips.not_viewed');
     }
 
-    // Never "0%" for a dungeon that was viewed, nor "100%" for one that is not the most viewed
+    // Never "0%" for a dungeon that was viewed, nor "100%" for one that is not the most viewed - dungeonstrip.js words it the same way
     return __('view_common.dungeon.list.chips.view_share', ['percent' => min(99, max(1, (int)round($viewShare * 100)))]);
 };
-$readoutViews = $selectedDungeon === null ? '' : $describeViewShare($viewShares->get($selectedDungeon->id));
+$readoutViewShare = $selectedDungeon === null ? null : $viewShares->get($selectedDungeon->id);
+$readoutViews     = $describeViewShare($readoutViewShare);
 ?>
 <div class="dungeon_strip">
     <div class="dungeon_strip_readout" aria-hidden="true"
-         data-name="{{ $readoutName }}" data-image="{{ $readoutImageUrl }}" data-views="{{ $readoutViews }}">
+         data-name="{{ $readoutName }}" data-image="{{ $readoutImageUrl }}"
+         @if($readoutViewShare !== null) data-view-share="{{ round($readoutViewShare, 4) }}" @endif>
         <img class="dungeon_strip_readout_image" src="{{ $readoutImageUrl }}" alt=""/>
         <span class="dungeon_strip_readout_text">
             <span class="dungeon_strip_readout_name">{{ $readoutName }}</span>
@@ -73,7 +75,7 @@ $readoutViews = $selectedDungeon === null ? '' : $describeViewShare($viewShares-
                            href="{{ $links->get($dungeon->key) }}"
                            aria-label="{{ __($dungeon->name) }}" title="{{ $views === '' ? __($dungeon->name) : sprintf('%s - %s', __($dungeon->name), $views) }}"
                            data-image="{{ $dungeon->getImageUrl() }}"
-                           @if($viewShare !== null) data-views="{{ $views }}" style="--dungeon-strip-view-share: {{ round($viewShare * 100, 1) }}%" @endif
+                           @if($viewShare !== null) data-view-share="{{ round($viewShare, 4) }}" style="--dungeon-strip-view-share: {{ round($viewShare * 100, 1) }}%" @endif
                            @if($isSelected) aria-current="true" @endif>{{ __($dungeon->abbreviation) }}</a>
                     @endforeach
                 </div>

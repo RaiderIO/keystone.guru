@@ -217,13 +217,13 @@ final class DungeonContextStripTest extends PublicTestCase
 
         // Assert
         $this->assertSame($dungeons->count(), substr_count($html, 'dungeon_strip_chip--views'));
-        $this->assertMatchesRegularExpression($this->getViewsChipPattern($mostViewed, __('view_common.dungeon.list.chips.most_viewed'), '100%'), $html);
+        $this->assertMatchesRegularExpression($this->getViewsChipPattern($mostViewed, __('view_common.dungeon.list.chips.most_viewed'), '100%', '1'), $html);
         $this->assertMatchesRegularExpression(
-            $this->getViewsChipPattern($halfViewed, __('view_common.dungeon.list.chips.view_share', ['percent' => 46]), '45.7%'),
+            $this->getViewsChipPattern($halfViewed, __('view_common.dungeon.list.chips.view_share', ['percent' => 46]), '45.7%', '0.4567'),
             $html,
         );
         $this->assertMatchesRegularExpression(
-            $this->getViewsChipPattern($dungeons->get(3), __('view_common.dungeon.list.chips.not_viewed'), '0%'),
+            $this->getViewsChipPattern($dungeons->get(3), __('view_common.dungeon.list.chips.not_viewed'), '0%', '0'),
             $html,
         );
     }
@@ -259,7 +259,7 @@ final class DungeonContextStripTest extends PublicTestCase
         $html = $this->renderList(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons, $selected->key, $viewShares);
 
         // Assert
-        $this->assertMatchesRegularExpression(sprintf('/<div class="dungeon_strip_readout"[^>]*data-views="%s"/', preg_quote($views, '/')), $html);
+        $this->assertMatchesRegularExpression('/<div class="dungeon_strip_readout"[^>]*data-view-share="0.5"/', $html);
         $this->assertMatchesRegularExpression(sprintf('/<span class="dungeon_strip_readout_views">%s<\/span>/', preg_quote($views, '/')), $html);
     }
 
@@ -299,7 +299,7 @@ final class DungeonContextStripTest extends PublicTestCase
             $html = view('common.layout.header')->render();
 
             // Assert
-            $this->assertMatchesRegularExpression($this->getViewsChipPattern($viewed, __('view_common.dungeon.list.chips.most_viewed'), '100%'), $html);
+            $this->assertMatchesRegularExpression($this->getViewsChipPattern($viewed, __('view_common.dungeon.list.chips.most_viewed'), '100%', '1'), $html);
         } finally {
             unset($_COOKIE['game_version']);
             $viewCount->delete();
@@ -416,15 +416,16 @@ final class DungeonContextStripTest extends PublicTestCase
     }
 
     /**
-     * A chip filled to $fill and describing its views as $views, in its title and for the readout.
+     * A chip filled to $fill, describing its views as $views in its title and handing $viewShare to the readout.
      */
-    private function getViewsChipPattern(Dungeon $dungeon, string $views, string $fill): string
+    private function getViewsChipPattern(Dungeon $dungeon, string $views, string $fill, string $viewShare): string
     {
         return sprintf(
-            '/<a class="dungeon_strip_chip dungeon_strip_chip--views"\s+href="[^"]*"\s+aria-label="%1$s" title="%1$s - %2$s"\s+data-image="[^"]*"\s+data-views="%2$s" style="--dungeon-strip-view-share: %3$s"/',
+            '/<a class="dungeon_strip_chip dungeon_strip_chip--views"\s+href="[^"]*"\s+aria-label="%1$s" title="%1$s - %2$s"\s+data-image="[^"]*"\s+data-view-share="%4$s" style="--dungeon-strip-view-share: %3$s"/',
             preg_quote(e(__($dungeon->name)), '/'),
             preg_quote(e($views), '/'),
             preg_quote($fill, '/'),
+            preg_quote($viewShare, '/'),
         );
     }
 
