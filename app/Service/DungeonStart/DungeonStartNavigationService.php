@@ -31,7 +31,7 @@ class DungeonStartNavigationService implements DungeonStartNavigationServiceInte
     public function getNavigationsForMappingVersion(MappingVersion $mappingVersion, GameVersion $gameVersion): Collection
     {
         $dungeonStarts = $mappingVersion->dungeonStarts()
-            ->with(['floor.dungeon', 'targetDungeon'])
+            ->with(['floor.dungeon', 'targetDungeon.mappingVersions'])
             ->get();
 
         /** @var array<int, DungeonStartNavigation|null> $backLinkNavigationByDungeonId */

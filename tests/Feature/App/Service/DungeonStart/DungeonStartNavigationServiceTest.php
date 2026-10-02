@@ -9,6 +9,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\DungeonStart\DungeonStartNavigationServiceInterface;
 use Database\Factories\FloorFactory;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\Traits\CreatesDungeon;
@@ -214,6 +215,43 @@ final class DungeonStartNavigationServiceTest extends PublicTestCase
         $this->assertSame([$dungeonStart->id], $navigations->keys()->all());
         $this->assertTrue($navigations->get($dungeonStart->id)->isBackLink);
         $this->assertSame($continent->id, $navigations->get($dungeonStart->id)->dungeon->id);
+    }
+
+    #[Test]
+    public function getNavigationsForMappingVersion_givenMoreTargets_runsNoMoreQueries(): void
+    {
+        // Arrange
+        $gameVersion          = $this->getGameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $oneTargetContinent   = $this->createDungeonInGameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $fourTargetsContinent = $this->createDungeonInGameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $this->createDungeonStart($oneTargetContinent, $this->createDungeonInGameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA));
+        for ($i = 0; $i < 4; $i++) {
+            $this->createDungeonStart($fourTargetsContinent, $this->createDungeonInGameVersion(GameVersion::GAME_VERSION_CLASSIC_ERA));
+        }
+        $oneTargetMappingVersion   = $oneTargetContinent->mappingVersions()->firstOrFail();
+        $fourTargetsMappingVersion = $fourTargetsContinent->mappingVersions()->firstOrFail();
+
+        // Act
+        $oneTargetQueryCount   = $this->countQueries(fn() => $this->getService()->getNavigationsForMappingVersion($oneTargetMappingVersion, $gameVersion));
+        $fourTargetsQueryCount = $this->countQueries(fn() => $this->getService()->getNavigationsForMappingVersion($fourTargetsMappingVersion, $gameVersion));
+
+        // Assert
+        $this->assertCount(4, $this->getService()->getNavigationsForMappingVersion($fourTargetsMappingVersion, $gameVersion));
+        $this->assertSame($oneTargetQueryCount, $fourTargetsQueryCount);
+    }
+
+    private function countQueries(callable $callable): int
+    {
+        DB::flushQueryLog();
+        DB::enableQueryLog();
+
+        try {
+            $callable();
+
+            return count(DB::getQueryLog());
+        } finally {
+            DB::disableQueryLog();
+        }
     }
 
     private function getService(): DungeonStartNavigationServiceInterface
