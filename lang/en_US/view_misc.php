@@ -36,8 +36,9 @@ return [
         'header' => 'Demo routes',
     ],
     'embed' => [
-        'title'  => 'Embed a route',
-        'header' => 'Keystone.guru embed test on webpage',
+        'title'          => 'Embed a route',
+        'header'         => 'Keystone.guru embed test on webpage',
+        'get_mdt_string' => 'Get MDT string',
     ],
     'health' => [
         'title'  => 'Health calculation',
