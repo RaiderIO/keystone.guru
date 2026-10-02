@@ -1,5 +1,4 @@
-<div class="row g-0" data-bs-toggle="tooltip" data-bs-placement="right"
-     title="{{title}}" data-bs-html="true">
+<div class="row g-0">
     <div class="col btn
         {{#ifCond btnType '!=' '' }}
         {{ btnType }}
@@ -9,7 +8,7 @@
         ">
         <div class="row g-0">
             <div class="col-auto">
-                <i class="fas {{ fa_class }}"></i>
+                <i class="fas {{ fa_class }}" aria-hidden="true"></i>
             </div>
             <div class="col">
                 <span class="map_controls_element_label_toggle" style="display: none;">

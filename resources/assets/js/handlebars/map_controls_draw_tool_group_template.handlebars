@@ -1,15 +1,16 @@
 <div class="draw_tool_group" data-draw-tool-group="{{ group }}">
-    <a href="#" class="draw_icon draw_tool_group_button" aria-label="{{ label }}" aria-haspopup="true"
-       aria-expanded="false">
-        <div class="row g-0" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ label }}">
+    <a href="#" class="draw_icon draw_tool_group_button" role="button" aria-label="{{ label }}"
+       aria-expanded="false" aria-controls="draw_tool_group_flyout_{{ group }}"
+       data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{ label }}">
+        <div class="row g-0">
             <div class="col btn btn-info">
                 <div class="row g-0">
                     <div class="col-auto">
-                        <i class="fas {{ fa_class }} draw_tool_group_icon"></i>
+                        <i class="fas {{ fa_class }} draw_tool_group_icon" aria-hidden="true"></i>
                     </div>
                     <div class="col">
                         <span class="map_controls_element_label_toggle" style="display: none;">
-                            {{ label }} <i class="fas fa-caret-right"></i>
+                            {{ label }} <i class="fas fa-caret-right" aria-hidden="true"></i>
                         </span>
                     </div>
                 </div>
@@ -17,7 +18,8 @@
             </div>
         </div>
     </a>
-    <div class="draw_tool_group_flyout" style="display: none;">
-        <div class="draw_tool_group_flyout_header">{{ label }}</div>
+    <div id="draw_tool_group_flyout_{{ group }}" class="draw_tool_group_flyout" role="group"
+         aria-labelledby="draw_tool_group_flyout_header_{{ group }}" style="display: none;">
+        <div id="draw_tool_group_flyout_header_{{ group }}" class="draw_tool_group_flyout_header">{{ label }}</div>
     </div>
 </div>

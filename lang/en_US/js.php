@@ -106,6 +106,8 @@ return [
     'draw_tool_group_enemies'        => 'Enemies',
     'draw_tool_group_floors'         => 'Floors & navigation',
     'draw_tool_group_markers'        => 'Markers & areas',
+    'draw_tool_aria_label'           => ':label (hotkey :hotkey)',
+    'draw_tool_status'               => 'Active tool: :label',
     'title_raid_marker_no_selection' => 'No raid marker',
     'title_raid_marker_star'         => 'Star',
     'title_raid_marker_circle'       => 'Circle',
