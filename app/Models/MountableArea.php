@@ -49,7 +49,6 @@ class MountableArea extends Model implements HasPolylineInterface, MappingModelC
     public $hidden = [
         'floor',
         'polyline_id',
-        'vertices_json',
     ];
 
     /** Every reader of a mountable area needs its shape */
@@ -128,7 +127,7 @@ class MountableArea extends Model implements HasPolylineInterface, MappingModelC
         /** @var static $clonedMountableArea */
         $clonedMountableArea         = clone $this;
         $clonedMountableArea->exists = false;
-        unset($clonedMountableArea->id, $clonedMountableArea->vertices_json);
+        unset($clonedMountableArea->id);
         $clonedMountableArea->mapping_version_id = $mappingVersion->id;
         $clonedMountableArea->save();
 
@@ -154,13 +153,6 @@ class MountableArea extends Model implements HasPolylineInterface, MappingModelC
 
         static::deleting(static function (MountableArea $mountableArea) {
             $mountableArea->polyline?->delete();
-        });
-
-        // The release before the column is dropped still reads the shape from vertices_json
-        Polyline::saved(static function (Polyline $polyline) {
-            if ($polyline->model_class === MountableArea::class) {
-                MountableArea::query()->whereKey($polyline->model_id)->update(['vertices_json' => $polyline->vertices_json]);
-            }
         });
     }
 }
