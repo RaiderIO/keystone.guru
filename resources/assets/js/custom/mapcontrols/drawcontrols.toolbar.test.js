@@ -97,6 +97,15 @@ const TOOLS = [{
     btnType: 'btn-danger',
 }];
 
+/**
+ * jsdom lays nothing out, so the rail the flyouts are kept within has to be given its extent.
+ * @param top {Number}
+ * @param bottom {Number}
+ */
+function stubRailRect(top, bottom) {
+    document.querySelector('.route_manipulation_tools').getBoundingClientRect = () => ({top: top, right: 64, bottom: bottom, left: 0, width: 64, height: bottom - top});
+}
+
 describe('DrawControls toolbar generated from the tool list', () => {
     let previousLang;
     let previousGetState;
@@ -124,6 +133,7 @@ describe('DrawControls toolbar generated from the tool list', () => {
         });
 
         document.body.innerHTML = '<div class="route_manipulation_tools"><div id="edit_route_draw_container"></div></div><div id="outside"></div>';
+        stubRailRect(0, window.innerHeight);
         const container = document.createElement('div');
         Object.defineProperty(container, 'clientWidth', {value: 800});
         Object.defineProperty(container, 'clientHeight', {value: 600});
@@ -542,6 +552,37 @@ describe('DrawControls toolbar generated from the tool list', () => {
 
         // Assert
         expect($flyout.css('top')).toBe(`${window.innerHeight - 200}px`);
+    });
+
+    test('groupButton_givenOpenedNearTheRailBottom_keepsFlyoutAboveTheAdReserve', () => {
+        // Arrange
+        const railBottom = window.innerHeight - 90;
+        stubRailRect(100, railBottom);
+        const $group = $rail.find('[data-draw-tool-group="markers"]');
+        const $flyout = $group.find('.draw_tool_group_flyout');
+        $group.find('.draw_tool_group_button')[0].getBoundingClientRect = () => ({top: railBottom - 48, right: 64, bottom: railBottom, left: 0});
+        $flyout[0].getBoundingClientRect = () => ({top: 0, right: 0, bottom: 200, left: 0, width: 240, height: 200});
+
+        // Act
+        $group.find('.draw_tool_group_button').trigger('click');
+
+        // Assert
+        expect($flyout.css('top')).toBe(`${railBottom - 200}px`);
+    });
+
+    test('groupButton_givenRailShorterThanFlyout_keepsFlyoutBelowTheHeader', () => {
+        // Arrange
+        stubRailRect(100, 250);
+        const $group = $rail.find('[data-draw-tool-group="markers"]');
+        const $flyout = $group.find('.draw_tool_group_flyout');
+        $group.find('.draw_tool_group_button')[0].getBoundingClientRect = () => ({top: 200, right: 64, bottom: 248, left: 0});
+        $flyout[0].getBoundingClientRect = () => ({top: 0, right: 0, bottom: 200, left: 0, width: 240, height: 200});
+
+        // Act
+        $group.find('.draw_tool_group_button').trigger('click');
+
+        // Assert
+        expect($flyout.css('top')).toBe('100px');
     });
 
     test('rail_givenScrolled_closesOpenFlyout', () => {

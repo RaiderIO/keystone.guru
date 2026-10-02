@@ -107,6 +107,7 @@ class CommonMapsMap extends InlineCode {
             this._setupMapObjectGroupVisibility();
             this._setupEnemyDisplayTypes();
             this._setupZoomControl();
+            this._setupRailDropdowns();
             this._setupFavorite();
             this._setupLabelToggle();
             this._setupFacadeToggle();
@@ -458,6 +459,43 @@ class CommonMapsMap extends InlineCode {
                 self._dungeonMap.leafletMap.getZoom() + c.map.settings.zoomStep
             );
         });
+    }
+
+    /**
+     * Keeps the rail's dropdown menus within the rail's height, which already leaves out the header and any bottom ad.
+     * @private
+     */
+    _setupRailDropdowns() {
+        let self = this;
+
+        $('.route_manipulation_tools:not(.top) [data-bs-toggle="dropdown"]').each(function (index, toggle) {
+            let rail = toggle.closest('.route_manipulation_tools');
+            bootstrap.Dropdown.getOrCreateInstance(toggle, {
+                popperConfig: (defaultConfig) => self._getRailDropdownPopperConfig(rail, defaultConfig),
+            });
+        });
+    }
+
+    /**
+     * Bootstrap calls this on every show, so the padding follows the rail as the header shrinks or an ad loads.
+     * @param rail {HTMLElement}
+     * @param defaultConfig {Object} Bootstrap's own Popper config for the dropdown
+     * @returns {Object}
+     * @private
+     */
+    _getRailDropdownPopperConfig(rail, defaultConfig) {
+        let railRect = rail.getBoundingClientRect();
+        let padding = {top: railRect.top, bottom: window.innerHeight - railRect.bottom};
+
+        return {
+            ...defaultConfig,
+            // Fixed, because the rail is a scroll container that would clip the menu
+            strategy: 'fixed',
+            modifiers: defaultConfig.modifiers.map((modifier) => modifier.name === 'preventOverflow'
+                ? {...modifier, options: {...modifier.options, padding: padding}}
+                : modifier
+            ),
+        };
     }
 
     /**

@@ -844,6 +844,25 @@ body {
     padding: 0.75rem 0.75rem 0.75rem 1.4rem;
   }
 
+  /** Fits the route editor's rail on 1366×768 and 1280×720 without scrolling; touch keeps 48px targets */
+  @media (max-height: 800px) and (not (pointer: coarse)) {
+    .route_manipulation_tools.left .btn {
+      height: 40px;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  .route_manipulation_tools .btn-check:checked + .btn {
+    background: var($--theme-btn-accent) !important;
+    color: var($--theme-btn-accent-text) !important;
+  }
+
+  .route_manipulation_tools .btn-check:focus-visible + .btn {
+    outline: 2px solid var($--theme-text-contrast);
+    outline-offset: -4px;
+  }
+
   .route_manipulation_tools.left .btn.maximized {
     //justify-content: unset;
     //padding: 0.49rem 0.75rem;

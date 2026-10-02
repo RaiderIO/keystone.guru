@@ -63,6 +63,39 @@ final class FloorControllerMappingTest extends PublicTestCase
     }
 
     #[Test]
+    public function mapping_asAdmin_rendersMdtClonesControlsAsIconRailButtons(): void
+    {
+        // Arrange
+        $dungeon   = Dungeon::query()->whereHas('floors')->whereHas('mappingVersions')->firstOrFail();
+        $floor     = $dungeon->floors()->firstOrFail();
+        $mdt       = preg_quote(e(__('view_common.maps.controls.elements.mdtclones.mdt')), '/');
+        $autoSolve = preg_quote(e(__('view_common.maps.controls.elements.mdtclones.auto_solve')), '/');
+
+        // Act
+        $response = $this->get(route('admin.floor.edit.mapping', [
+            'dungeon'         => $dungeon,
+            'floor'           => $floor,
+            'mapping_version' => $dungeon->getCurrentMappingVersion(),
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $content = $response->getContent();
+        $this->assertMatchesRegularExpression(
+            sprintf('/<input type="checkbox" class="btn-check"[^>]*id="map_enemy_visuals_map_mdt_clones_to_enemies"[^>]*aria-label="%s"/', $mdt),
+            $content,
+        );
+        $this->assertMatchesRegularExpression(
+            sprintf('/<label class="btn btn-info" for="map_enemy_visuals_map_mdt_clones_to_enemies".*?<span class="map_controls_element_label_toggle" style="display: none;">\s*%s\s*<\/span>/s', $mdt),
+            $content,
+        );
+        $this->assertMatchesRegularExpression(
+            sprintf('/<button type="button" id="map_enemy_visuals_mdt_auto_solve"[^>]*aria-label="%s".*?<span class="map_controls_element_label_toggle" style="display: none;">\s*%s\s*<\/span>/s', $autoSolve, $autoSolve),
+            $content,
+        );
+    }
+
+    #[Test]
     public function mapping_givenMappingVersionOfAnotherDungeon_redirectsToDungeonEdit(): void
     {
         // Arrange
