@@ -21,8 +21,6 @@ class DungeonService implements DungeonServiceInterface
 {
     private const string DUNGEON_CONTEXT_COOKIE = 'dungeon_context';
 
-    private const int POPULAR_DUNGEON_FRACTION = 4;
-
     public function __construct(
         private readonly CookieServiceInterface           $cookieService,
         private readonly SeasonServiceInterface           $seasonService,
@@ -138,25 +136,25 @@ class DungeonService implements DungeonServiceInterface
         return $currentSeason === null ? $this->getGameVersionDungeons($gameVersion) : $this->getSeasonDungeons($currentSeason);
     }
 
-    public function getPopularDungeonIds(Collection $dungeons): Collection
+    public function getViewShares(Collection $dungeons): Collection
     {
         // The counts only change when page-views:prune aggregates another day, so every page can share one read.
         /** @var Collection<int, int> $viewsPerDungeon */
         $viewsPerDungeon = $this->cacheService->remember(
             'dungeon_views',
             fn() => $this->pageViewCountRepository->getViewsPerDungeon(
-                Carbon::today()->subDays(config('keystoneguru.page_views.popular_dungeons_days')),
+                Carbon::today()->subDays(config('keystoneguru.page_views.dungeon_views_days')),
             ),
             config('keystoneguru.cache.dungeon_views.ttl'),
         );
 
-        return $dungeons
-            ->map(static fn(Dungeon $dungeon): array => [$dungeon->id, $viewsPerDungeon->get($dungeon->id, 0)])
-            ->filter(static fn(array $dungeonViews): bool => $dungeonViews[1] > 0)
-            ->sortByDesc(static fn(array $dungeonViews): int => $dungeonViews[1])
-            ->take((int)ceil($dungeons->count() / self::POPULAR_DUNGEON_FRACTION))
-            ->map(static fn(array $dungeonViews): int => $dungeonViews[0])
-            ->values();
+        $views     = $dungeons->mapWithKeys(static fn(Dungeon $dungeon): array => [$dungeon->id => $viewsPerDungeon->get($dungeon->id, 0)]);
+        $mostViews = $views->max();
+        if (!$mostViews) {
+            return collect();
+        }
+
+        return $views->map(static fn(int $dungeonViews): float => $dungeonViews / $mostViews);
     }
 
     /**

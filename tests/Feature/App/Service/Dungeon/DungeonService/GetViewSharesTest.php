@@ -18,70 +18,70 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('DungeonService')]
-#[Group('GetPopularDungeonIds')]
-final class GetPopularDungeonIdsTest extends PublicTestCase
+#[Group('GetViewShares')]
+final class GetViewSharesTest extends PublicTestCase
 {
     #[Test]
-    public function getPopularDungeonIds_givenEightViewedDungeons_returnsTheTwoMostViewedMostViewedFirst(): void
+    public function getViewShares_givenViewedDungeons_returnsEachDungeonsViewsAsAShareOfTheMostViewed(): void
     {
         // Arrange
-        $dungeons = $this->makeDungeons(range(1, 8));
-        $service  = $this->buildService(collect([1 => 10, 2 => 50, 3 => 5, 4 => 70, 5 => 20, 6 => 1, 7 => 30, 8 => 2]));
+        $dungeons = $this->makeDungeons([1, 2, 3]);
+        $service  = $this->buildService(collect([1 => 50, 2 => 200, 3 => 100]));
 
         // Act
-        $result = $service->getPopularDungeonIds($dungeons);
+        $result = $service->getViewShares($dungeons);
 
         // Assert
-        $this->assertSame([4, 2], $result->all());
+        $this->assertSame([1 => 0.25, 2 => 1.0, 3 => 0.5], $result->all());
     }
 
     #[Test]
-    public function getPopularDungeonIds_givenNineDungeons_roundsTheQuarterUp(): void
+    public function getViewShares_givenADungeonWithoutViews_returnsZeroForIt(): void
     {
         // Arrange
-        $dungeons = $this->makeDungeons(range(1, 9));
-        $service  = $this->buildService(collect([1 => 10, 2 => 20, 3 => 30, 4 => 40, 5 => 50, 6 => 60, 7 => 70, 8 => 80, 9 => 90]));
+        $dungeons = $this->makeDungeons([1, 2]);
+        $service  = $this->buildService(collect([1 => 40]));
 
         // Act
-        $result = $service->getPopularDungeonIds($dungeons);
+        $result = $service->getViewShares($dungeons);
 
         // Assert
-        $this->assertSame([9, 8, 7], $result->all());
+        $this->assertSame([1 => 1.0, 2 => 0.0], $result->all());
     }
 
     #[Test]
-    public function getPopularDungeonIds_givenOnlyOneViewedDungeon_returnsJustThatOne(): void
+    public function getViewShares_givenViewsOfADungeonOutsideTheList_comparesOnlyTheListedDungeons(): void
     {
         // Arrange
-        $dungeons = $this->makeDungeons(range(1, 8));
-        $service  = $this->buildService(collect([3 => 4]));
+        $dungeons = $this->makeDungeons([1, 2]);
+        $service  = $this->buildService(collect([1 => 10, 2 => 5, 99 => 1000]));
 
         // Act
-        $result = $service->getPopularDungeonIds($dungeons);
+        $result = $service->getViewShares($dungeons);
 
         // Assert
-        $this->assertSame([3], $result->all());
+        $this->assertSame([1 => 1.0, 2 => 0.5], $result->all());
     }
 
     #[Test]
-    public function getPopularDungeonIds_givenViewsOfDungeonsOutsideTheList_ignoresThem(): void
+    public function getViewShares_givenNoListedDungeonWasViewed_returnsEmpty(): void
     {
         // Arrange
-        $dungeons = $this->makeDungeons(range(1, 4));
-        $service  = $this->buildService(collect([1 => 5, 2 => 3, 99 => 1000]));
+        $dungeons = $this->makeDungeons([1, 2]);
+        $service  = $this->buildService(collect([99 => 1000]));
 
         // Act
-        $result = $service->getPopularDungeonIds($dungeons);
+        $result = $service->getViewShares($dungeons);
 
         // Assert
-        $this->assertSame([1], $result->all());
+        $this->assertTrue($result->isEmpty());
     }
 
     #[Test]
-    public function getPopularDungeonIds_givenTheConfiguredWindow_readsTheViewsSinceItsFirstDay(): void
+    public function getViewShares_givenTheConfiguredWindow_readsTheViewsSinceItsFirstDay(): void
     {
         // Arrange
-        config(['keystoneguru.page_views.popular_dungeons_days' => 14]);
+        config(['keystoneguru.page_views.dungeon_views_days' => 14]);
         $since                   = null;
         $pageViewCountRepository = $this->createMockPublic(PageViewCountRepositoryInterface::class);
         $pageViewCountRepository->method('getViewsPerDungeon')->willReturnCallback(static function (Carbon $from) use (&$since): Collection {
@@ -92,7 +92,7 @@ final class GetPopularDungeonIdsTest extends PublicTestCase
         $service = $this->buildServiceWith($pageViewCountRepository);
 
         // Act
-        $service->getPopularDungeonIds($this->makeDungeons([1]));
+        $service->getViewShares($this->makeDungeons([1]));
 
         // Assert
         $this->assertSame(Carbon::today()->subDays(14)->toDateString(), $since?->toDateString());

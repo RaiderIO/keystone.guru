@@ -24,11 +24,12 @@ interface DungeonServiceInterface
     public function getDungeonsForGameVersion(?GameVersion $gameVersion = null): Collection;
 
     /**
-     * The ids of the most viewed quarter of $dungeons, judged by the page views of the last
-     * `keystoneguru.page_views.popular_dungeons_days` days. A dungeon nobody viewed is never among them.
+     * Every dungeon's views as a share of the most viewed one's, judged by the page views of the last
+     * `keystoneguru.page_views.dungeon_views_days` days: 1 for the most viewed, 0 for one nobody viewed. Empty when
+     * none of $dungeons was viewed at all.
      *
      * @param  Collection<int, Dungeon> $dungeons
-     * @return Collection<int, int>
+     * @return Collection<int, float>   Keyed by dungeon id
      */
-    public function getPopularDungeonIds(Collection $dungeons): Collection;
+    public function getViewShares(Collection $dungeons): Collection;
 }

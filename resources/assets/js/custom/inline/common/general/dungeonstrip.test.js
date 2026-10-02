@@ -2,20 +2,24 @@ const {DungeonStrip} = require('./dungeonstrip');
 
 describe('DungeonStrip', () => {
     /**
-     * Two chips and the selected dungeon in the readout - the markup of common/dungeon/list/chips, trimmed.
+     * Three chips, one without view counts, and the selected dungeon in the readout - the markup of common/dungeon/list/chips, trimmed.
      *
      * @returns {DungeonStrip}
      */
     function makeStrip() {
         document.body.innerHTML = `
             <div class="dungeon_strip">
-                <div class="dungeon_strip_readout" data-name="Blackrock Depths" data-image="http://test/brd.webp">
+                <div class="dungeon_strip_readout" data-name="Blackrock Depths" data-image="http://test/brd.webp" data-views="Most viewed">
                     <img class="dungeon_strip_readout_image" src="http://test/brd.webp" alt=""/>
-                    <span class="dungeon_strip_readout_name">Blackrock Depths</span>
+                    <span class="dungeon_strip_readout_text">
+                        <span class="dungeon_strip_readout_name">Blackrock Depths</span>
+                        <span class="dungeon_strip_readout_views">Most viewed</span>
+                    </span>
                 </div>
                 <div class="dungeon_strip_groups" id="dungeon_strip_groups">
-                    <a class="dungeon_strip_chip" href="/brd" aria-label="Blackrock Depths" data-image="http://test/brd.webp">BRD</a>
-                    <a class="dungeon_strip_chip" href="/mc" aria-label="Molten Core" data-image="http://test/mc.webp">MC</a>
+                    <a class="dungeon_strip_chip" href="/brd" aria-label="Blackrock Depths" data-image="http://test/brd.webp" data-views="Most viewed">BRD</a>
+                    <a class="dungeon_strip_chip" href="/mc" aria-label="Molten Core" data-image="http://test/mc.webp" data-views="41% of top views">MC</a>
+                    <a class="dungeon_strip_chip" href="/zg" aria-label="Zul'Gurub" data-image="http://test/zg.webp">ZG</a>
                 </div>
                 <button type="button" class="dungeon_strip_all" aria-expanded="false">All 2</button>
             </div>
@@ -32,6 +36,13 @@ describe('DungeonStrip', () => {
             name: document.querySelector('.dungeon_strip_readout_name').textContent,
             image: document.querySelector('.dungeon_strip_readout_image').getAttribute('src'),
         };
+    }
+
+    /**
+     * @returns {string}
+     */
+    function readoutViews() {
+        return document.querySelector('.dungeon_strip_readout_views').textContent;
     }
 
     /**
@@ -77,6 +88,41 @@ describe('DungeonStrip', () => {
         // Assert
         expect(whileFocused).toBe('Molten Core');
         expect(readout().name).toBe('Blackrock Depths');
+    });
+
+    it('pointerover_givenAChipWithViews_putsItsViewsInTheReadout', () => {
+        // Arrange
+        makeStrip();
+
+        // Act
+        chip('Molten Core').dispatchEvent(new Event('pointerover', {bubbles: true}));
+
+        // Assert
+        expect(readoutViews()).toBe('41% of top views');
+    });
+
+    it('pointerover_givenAChipWithoutViews_emptiesTheReadoutViews', () => {
+        // Arrange
+        makeStrip();
+
+        // Act
+        chip("Zul'Gurub").dispatchEvent(new Event('pointerover', {bubbles: true}));
+
+        // Assert
+        expect(readout().name).toBe("Zul'Gurub");
+        expect(readoutViews()).toBe('');
+    });
+
+    it('pointerleave_givenNoChipFocused_restoresTheSelectedDungeonsViews', () => {
+        // Arrange
+        const strip = makeStrip();
+        chip('Molten Core').dispatchEvent(new Event('pointerover', {bubbles: true}));
+
+        // Act
+        strip.element.dispatchEvent(new Event('pointerleave'));
+
+        // Assert
+        expect(readoutViews()).toBe('Most viewed');
     });
 
     it('allButtonClick_givenAClosedStrip_opensAndClosesTheFlyout', () => {

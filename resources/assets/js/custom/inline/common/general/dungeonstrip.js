@@ -11,6 +11,7 @@ class DungeonStrip {
         this.readout = element.querySelector('.dungeon_strip_readout');
         this.readoutImage = element.querySelector('.dungeon_strip_readout_image');
         this.readoutName = element.querySelector('.dungeon_strip_readout_name');
+        this.readoutViews = element.querySelector('.dungeon_strip_readout_views');
         this.groups = element.querySelector('.dungeon_strip_groups');
         this.allButton = element.querySelector('.dungeon_strip_all');
 
@@ -39,16 +40,16 @@ class DungeonStrip {
     }
 
     /**
-     * Names the given chip's dungeon in the readout, or the selected dungeon when no chip is given.
+     * Names the given chip's dungeon and its views in the readout, or the selected dungeon's when no chip is given.
      *
      * @param {HTMLElement|null} chip
      */
     showInReadout(chip) {
-        const name = chip === null ? this.readout.dataset.name : chip.getAttribute('aria-label');
-        const image = chip === null ? this.readout.dataset.image : chip.dataset.image;
+        const source = chip === null ? this.readout.dataset : chip.dataset;
 
-        this.readoutName.textContent = name;
-        this.readoutImage.src = image;
+        this.readoutName.textContent = chip === null ? source.name : chip.getAttribute('aria-label');
+        this.readoutImage.src = source.image;
+        this.readoutViews.textContent = source.views ?? '';
     }
 
     /**

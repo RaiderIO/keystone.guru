@@ -68,8 +68,9 @@ return [
                 'this_week_tier' => 'This week\'s difficulty tier (archon.gg)',
             ],
             'chips' => [
-                'popular'       => 'One of the most viewed on Keystone.guru',
-                'popular_title' => ':name - one of the most viewed on Keystone.guru',
+                'most_viewed' => 'Most viewed',
+                'not_viewed'  => 'No recent views',
+                'view_share'  => ':percent% of top views',
             ],
         ],
         'gridtabs' => [
