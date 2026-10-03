@@ -19,16 +19,19 @@ global.lang = {
 
 const {MapContextMappingVersionEdit} = require('./mapcontextmappingversionedit');
 
+const buildMapContext = () => new MapContextMappingVersionEdit({
+    dungeon: {id: 1},
+    dungeonSelectValues: [
+        {id: 3, name: 'dungeons.classic.wailing_caverns'},
+        {id: 1, name: 'dungeons.classic.deadmines'},
+        {id: 2, name: 'dungeons.classic.blackfathom_deeps'},
+    ],
+});
+
 describe('MapContextMappingVersionEdit', () => {
-    test('getDungeonSelectValues_givenDungeons_returnsThemTranslatedAndSortedByName', () => {
+    test('getDungeonSelectValues_givenNoArgument_returnsEveryDungeonTranslatedAndSortedByName', () => {
         // Arrange
-        const mapContext = new MapContextMappingVersionEdit({
-            dungeonSelectValues: [
-                {id: 3, name: 'dungeons.classic.wailing_caverns'},
-                {id: 1, name: 'dungeons.classic.deadmines'},
-                {id: 2, name: 'dungeons.classic.blackfathom_deeps'},
-            ],
-        });
+        const mapContext = buildMapContext();
 
         // Act
         const selectValues = mapContext.getDungeonSelectValues();
@@ -37,6 +40,20 @@ describe('MapContextMappingVersionEdit', () => {
         expect(selectValues).toEqual([
             {id: 2, name: 'Blackfathom Deeps'},
             {id: 1, name: 'The Deadmines'},
+            {id: 3, name: 'Wailing Caverns'},
+        ]);
+    });
+
+    test('getDungeonSelectValues_givenIncludeCurrentDungeonFalse_returnsEveryOtherDungeonTranslatedAndSortedByName', () => {
+        // Arrange
+        const mapContext = buildMapContext();
+
+        // Act
+        const selectValues = mapContext.getDungeonSelectValues(false);
+
+        // Assert
+        expect(selectValues).toEqual([
+            {id: 2, name: 'Blackfathom Deeps'},
             {id: 3, name: 'Wailing Caverns'},
         ]);
     });

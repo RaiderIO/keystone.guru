@@ -65,7 +65,7 @@ class DungeonStart extends VersionableMapObject {
             new Attribute({
                 name: 'target_dungeon_id',
                 type: 'select',
-                values: () => getState().getMapContext().getDungeonSelectValues(),
+                values: () => getState().getMapContext().getDungeonSelectValues(false),
                 live_search: true,
                 default: null,
             }),

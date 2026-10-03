@@ -16,8 +16,10 @@ global.L = {
 };
 
 global.MapContextMappingVersionEdit = class MapContextMappingVersionEdit {
-    getDungeonSelectValues() {
-        return [{id: 80, name: 'The Deadmines'}];
+    getDungeonSelectValues(includeCurrentDungeon) {
+        return includeCurrentDungeon === false
+            ? [{id: 80, name: 'The Deadmines'}]
+            : [{id: 80, name: 'The Deadmines'}, {id: 1, name: 'The Current Dungeon'}];
     }
 
     getDungeonStartNavigation() {

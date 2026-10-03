@@ -67,10 +67,7 @@ class MapContextMappingVersionEdit extends MapContextMappingVersion
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
-            'dungeonSelectValues' => $this->dungeonRepository->getSelectValues()
-                ->where('id', '!=', $this->dungeon->id)
-                ->values()
-                ->all(),
+            'dungeonSelectValues' => $this->dungeonRepository->getSelectValues()->all(),
         ]);
     }
 }

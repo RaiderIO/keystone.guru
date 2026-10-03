@@ -12,12 +12,14 @@ class MapContextMappingVersionEdit extends MapContextMappingVersion {
     }
 
     /**
-     * Every other dungeon, by translated name.
+     * Every dungeon, by translated name.
      *
+     * @param {Boolean} includeCurrentDungeon
      * @returns {{id: Number, name: String}[]}
      */
-    getDungeonSelectValues() {
+    getDungeonSelectValues(includeCurrentDungeon = true) {
         return (this._options.dungeonSelectValues ?? [])
+            .filter((dungeon) => includeCurrentDungeon || dungeon.id !== this._options.dungeon.id)
             .map((dungeon) => ({id: dungeon.id, name: lang.get(dungeon.name)}))
             .sort((a, b) => a.name.localeCompare(b.name));
     }

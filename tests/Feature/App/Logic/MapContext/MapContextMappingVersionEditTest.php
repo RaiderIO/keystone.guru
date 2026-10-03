@@ -30,7 +30,7 @@ final class MapContextMappingVersionEditTest extends PublicTestCase
     }
 
     #[Test]
-    public function toArray_givenMappingVersionEditContext_listsEveryOtherDungeonForTheTargetDungeonSelect(): void
+    public function toArray_givenMappingVersionEditContext_listsEveryDungeonForTheTargetDungeonSelect(): void
     {
         // Arrange
         $mappingVersion = MappingVersion::query()->firstOrFail();
@@ -46,8 +46,8 @@ final class MapContextMappingVersionEditTest extends PublicTestCase
         $dungeonSelectValues = collect($dungeonSelectValues);
 
         // Assert
-        $this->assertSame(Dungeon::query()->count() - 1, $dungeonSelectValues->count());
+        $this->assertSame(Dungeon::query()->count(), $dungeonSelectValues->count());
         $this->assertContains(['id' => $otherDungeon->id, 'name' => $otherDungeon->name], $dungeonSelectValues->all());
-        $this->assertNull($dungeonSelectValues->firstWhere('id', $dungeon->id));
+        $this->assertContains(['id' => $dungeon->id, 'name' => $dungeon->name], $dungeonSelectValues->all());
     }
 }
