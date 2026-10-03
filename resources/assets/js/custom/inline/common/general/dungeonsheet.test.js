@@ -1,6 +1,6 @@
-const {DungeonSheet, dungeonSheetRowMatches} = require('./dungeonsheet');
+const {DungeonSheet} = require('./dungeonsheet');
 
-describe('dungeonSheetRowMatches', () => {
+describe('DungeonSheet.rowMatches', () => {
     it.each([
         ['an abbreviation', true, 'blackrock depths brd', 'brd'],
         ['a part of the name', true, 'blackrock depths brd', 'depth'],
@@ -12,7 +12,7 @@ describe('dungeonSheetRowMatches', () => {
         ['one of two terms missing', false, 'scarlet monastery library sml', 'scar armory'],
     ])('given %s returns %s', (_, expected, filterText, query) => {
         // Act
-        const matches = dungeonSheetRowMatches(filterText, query);
+        const matches = DungeonSheet.rowMatches(filterText, query);
 
         // Assert
         expect(matches).toBe(expected);

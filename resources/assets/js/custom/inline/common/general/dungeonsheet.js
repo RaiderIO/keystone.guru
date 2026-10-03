@@ -1,28 +1,4 @@
 /**
- * Whether every term of the filter occurs somewhere in a row's filter text, in any order and ignoring case and
- * accents - "zul g" finds Zul'Gurub, "brd" finds Blackrock Depths by its abbreviation.
- *
- * @param {string} filterText The row's lowercase name and abbreviation
- * @param {string} query What the visitor typed
- * @returns {boolean}
- */
-function dungeonSheetRowMatches(filterText, query) {
-    const haystack = foldForDungeonSheetFilter(filterText);
-
-    return foldForDungeonSheetFilter(query).split(/\s+/)
-        .filter(term => term !== '')
-        .every(term => haystack.includes(term));
-}
-
-/**
- * @param {string} text
- * @returns {string}
- */
-function foldForDungeonSheetFilter(text) {
-    return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-}
-
-/**
  * The mobile dungeon sheet in the header: the filter narrows the rows and hides the sections it empties, Enter
  * follows the first row left, and opening the sheet brings the selected dungeon into view. Switching game version
  * reloads the page, so the sheet reopens itself afterwards on the new version's dungeons.
@@ -149,7 +125,7 @@ class DungeonSheet {
      */
     filter(query) {
         for (const row of this.rows) {
-            row.parentElement.hidden = !dungeonSheetRowMatches(row.dataset.filterText ?? '', query);
+            row.parentElement.hidden = !DungeonSheet.rowMatches(row.dataset.filterText ?? '', query);
         }
 
         for (const group of this.groups) {
@@ -202,10 +178,34 @@ class DungeonSheet {
         this.input.value = '';
         this.filter('');
     }
+
+    /**
+     * Whether every term of the filter occurs somewhere in a row's filter text, in any order and ignoring case and
+     * accents - "zul g" finds Zul'Gurub, "brd" finds Blackrock Depths by its abbreviation.
+     *
+     * @param {string} filterText The row's lowercase name and abbreviation
+     * @param {string} query What the visitor typed
+     * @returns {boolean}
+     */
+    static rowMatches(filterText, query) {
+        const haystack = DungeonSheet._foldForFilter(filterText);
+
+        return DungeonSheet._foldForFilter(query).split(/\s+/)
+            .filter(term => term !== '')
+            .every(term => haystack.includes(term));
+    }
+
+    /**
+     * @param {string} text
+     * @returns {string}
+     */
+    static _foldForFilter(text) {
+        return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    }
 }
 
 // Guarded export for the test runner (Vitest). This is a no-op in the browser,
 // where `module` is undefined, so it does not affect the concatenated bundle.
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {DungeonSheet, dungeonSheetRowMatches};
+    module.exports = {DungeonSheet};
 }
