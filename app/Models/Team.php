@@ -24,13 +24,14 @@ use Illuminate\Support\Str;
 use Override;
 
 /**
- * @property int    $id
- * @property string $public_key
- * @property string $name
- * @property string $description
- * @property string $invite_code
- * @property string $default_role
- * @property bool   $route_publishing_enabled
+ * @property int         $id
+ * @property string      $public_key
+ * @property string|null $vanity_key
+ * @property string      $name
+ * @property string      $description
+ * @property string      $invite_code
+ * @property string      $default_role
+ * @property bool        $route_publishing_enabled
  *
  * @property Carbon $updated_at
  * @property Carbon $created_at
@@ -47,6 +48,14 @@ class Team extends Model
     use GeneratesPublicKey;
     use HasTags;
 
+    /**
+     * Keys a team may not claim as its vanity key, because a static route of the same name matches first.
+     */
+    public const RESERVED_VANITY_KEYS = [
+        'invite',
+        'new',
+    ];
+
     protected $visible = [
         'name',
         'description',
@@ -57,6 +66,7 @@ class Team extends Model
         'default_role',
         'route_publishing_enabled',
         'public_key',
+        'vanity_key',
         'name',
         'description',
         'invite_code',
@@ -67,16 +77,28 @@ class Team extends Model
     #[Override]
     public function getRouteKey(): string
     {
-        return sprintf('%s-%s', $this->public_key, Str::slug($this->name));
+        return $this->vanity_key ?? sprintf('%s-%s', $this->public_key, Str::slug($this->name));
     }
 
     #[Override]
     public function resolveRouteBinding($value, $field = null): ?static
     {
-        $publicKey = explode('-', (string)$value, 2)[0];
+        if ($field !== null) {
+            /** @var static|null */
+            return parent::resolveRouteBinding($value, $field);
+        }
+
+        $team = $this->where('vanity_key', $value)->first();
+
+        if ($team === null) {
+            // The name is only there to make the URL readable, the public key in front of it identifies the team
+            $publicKey = explode('-', (string)$value, 2)[0];
+
+            $team = $this->where('public_key', $publicKey)->first();
+        }
 
         /** @var static|null */
-        return $this->where('public_key', $publicKey)->first();
+        return $team;
     }
 
     /**
