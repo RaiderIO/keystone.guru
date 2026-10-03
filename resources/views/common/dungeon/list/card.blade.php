@@ -23,9 +23,11 @@ $thisWeekTier ??= null;
         @if($thisWeekTier !== null)
             {{-- This week's ease tier (archon.gg). Kept outside the card's <a> to avoid nesting anchors. --}}
             <div class="dungeon_card_tiers">
-                <span class="dungeon_card_tier" data-bs-toggle="tooltip"
-                      title="{{ __('view_common.dungeon.list.card.this_week_tier') }}">
-                    <span class="tier {{ strtolower($thisWeekTier) }}">{{ $thisWeekTier }}</span>
+                {{-- Focusable so its tooltip opens for the keyboard as well, and named so a screen reader hears more than a letter --}}
+                <span class="dungeon_card_tier" tabindex="0" role="img" data-bs-toggle="tooltip"
+                      title="{{ __('view_common.dungeon.list.card.this_week_tier') }}"
+                      aria-label="{{ __('view_common.dungeon.list.card.this_week_tier_label', ['tier' => $thisWeekTier]) }}">
+                    <span class="tier {{ strtolower($thisWeekTier) }}" aria-hidden="true">{{ $thisWeekTier }}</span>
                 </span>
             </div>
         @endif
@@ -37,6 +39,7 @@ $thisWeekTier ??= null;
             <img class="card-img-top"
                  src="{{ $imageUrl }}"
                  alt="{{ $imageAlt }}"
+                 data-image-fallback
             />
         </a>
     </div>

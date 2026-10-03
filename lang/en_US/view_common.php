@@ -65,7 +65,8 @@ return [
                 'raid'    => 'Raids',
             ],
             'card' => [
-                'this_week_tier' => 'This week\'s difficulty tier (archon.gg)',
+                'this_week_tier'       => 'This week\'s difficulty tier (archon.gg)',
+                'this_week_tier_label' => 'This week\'s difficulty tier (archon.gg): :tier',
             ],
             'chips' => [
                 'most_viewed' => 'Most viewed',
@@ -414,6 +415,7 @@ return [
                 'filter_label'       => 'Filter dungeons',
                 'filter_placeholder' => 'Filter dungeons…',
                 'no_results'         => 'No dungeon matches that filter.',
+                'no_selection'       => 'Dungeon',
             ],
             'user' => [
                 'login'                      => 'Login',

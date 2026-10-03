@@ -3,6 +3,7 @@
 namespace Tests\Feature\View;
 
 use App\Http\View\Composers\HeaderComposer;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\PageViewCount;
@@ -402,6 +403,100 @@ final class DungeonContextStripTest extends PublicTestCase
     }
 
     /**
+     * A game version without raids (or without world maps) must not render an empty, labelled group.
+     */
+    #[Test]
+    public function render_givenASeasonlessGameVersionWithoutRaids_rendersNoRaidGroup(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA)->reject(static fn(Dungeon $dungeon) => $dungeon->raid)->values();
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons);
+
+        // Assert
+        $this->assertSame(['dungeon'], array_keys($this->getChipLabelsByGroup($html)));
+        $this->assertStringNotContainsString('dungeon_strip_group--raid', $html);
+        $this->assertStringNotContainsString('dungeon_strip_group--world', $html);
+    }
+
+    #[Test]
+    public function render_givenASeasonlessGameVersionWithoutRaidsOnMobile_rendersNoRaidGroupHeader(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA)->reject(static fn(Dungeon $dungeon) => $dungeon->raid)->values();
+
+        // Act
+        $html = $this->renderSheet(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons);
+
+        // Assert
+        $this->assertSame(1, substr_count($html, 'class="dungeon_sheet_group_label"'));
+        $this->assertStringContainsString('id="dungeon_sheet_group_dungeon"', $html);
+        $this->assertStringNotContainsString('id="dungeon_sheet_group_raid"', $html);
+        $this->assertStringNotContainsString(e(__('view_common.dungeon.list.groups.raid')), $html);
+    }
+
+    /**
+     * The tier letter alone tells a screen reader nothing, and a tooltip on an element that takes no focus never
+     * opens for the keyboard.
+     */
+    #[Test]
+    public function render_givenRetailEaseTiers_makesEveryTierBadgeFocusableAndNamed(): void
+    {
+        // Arrange
+        $dungeons       = $this->getDungeons(GameVersion::GAME_VERSION_RETAIL);
+        $affixGroup     = new AffixGroup();
+        $affixGroup->id = 1;
+        $easeTiers      = collect([1 => $dungeons->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => 'S'])]);
+
+        // Act
+        $html = view('common.dungeon.list', [
+            'gameVersion'       => GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
+            'dungeons'          => $dungeons,
+            'useAbbreviation'   => true,
+            'links'             => collect(),
+            'easeTiers'         => $easeTiers,
+            'currentAffixGroup' => $affixGroup,
+        ])->render();
+
+        // Assert
+        $this->assertGreaterThan(0, $dungeons->count());
+        $this->assertSame($dungeons->count(), preg_match_all(
+            sprintf(
+                '/<span class="dungeon_card_tier" tabindex="0" role="img" data-bs-toggle="tooltip"\s+title="[^"]+"\s+aria-label="%s">/',
+                preg_quote(e(__('view_common.dungeon.list.card.this_week_tier_label', ['tier' => 'S'])), '/'),
+            ),
+            $html,
+        ));
+    }
+
+    /**
+     * A sheet row is a link, so the tier cannot take focus of its own: it is spelled out in the link's name instead.
+     */
+    #[Test]
+    public function render_givenRetailEaseTiersOnMobile_spellsTheTierOutInsideEveryRowLink(): void
+    {
+        // Arrange
+        $dungeons       = $this->getDungeons(GameVersion::GAME_VERSION_RETAIL);
+        $affixGroup     = new AffixGroup();
+        $affixGroup->id = 1;
+        $easeTiers      = collect([1 => $dungeons->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => 'A'])]);
+
+        // Act
+        $html = $this->renderSheet(GameVersion::GAME_VERSION_RETAIL, $dungeons, $easeTiers, $affixGroup);
+
+        // Assert
+        $this->assertGreaterThan(0, $dungeons->count());
+        $this->assertSame($dungeons->count(), preg_match_all(
+            sprintf(
+                '/<a class="dungeon_sheet_row"(?:(?!<\/a>).)*<span class="visually-hidden">%s<\/span>(?:(?!<\/a>).)*<\/a>/s',
+                preg_quote(e(__('view_common.dungeon.list.card.this_week_tier_label', ['tier' => 'A'])), '/'),
+            ),
+            $html,
+        ));
+    }
+
+    /**
      * @return Collection<int, Dungeon>
      */
     private function getDungeons(string $gameVersionKey): Collection
@@ -422,6 +517,23 @@ final class DungeonContextStripTest extends PublicTestCase
             'selected'        => $selected,
             'links'           => $dungeons->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->key => sprintf('/link/%s', $dungeon->key)]),
             'viewShares'      => $viewShares ?? collect(),
+        ])->render();
+    }
+
+    /**
+     * @param Collection<int, Dungeon>                      $dungeons
+     * @param Collection<int, Collection<int, string>>|null $easeTiers
+     */
+    private function renderSheet(string $gameVersionKey, Collection $dungeons, ?Collection $easeTiers = null, ?AffixGroup $currentAffixGroup = null): string
+    {
+        return view('common.layout.nav.dungeoncontext', [
+            'gameVersion'       => GameVersion::firstWhere('key', $gameVersionKey),
+            'dungeons'          => $dungeons,
+            'selectedDungeon'   => null,
+            'links'             => $dungeons->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->key => sprintf('/link/%s', $dungeon->key)]),
+            'easeTiers'         => $easeTiers ?? collect(),
+            'currentAffixGroup' => $currentAffixGroup,
+            'allGameVersions'   => collect(),
         ])->render();
     }
 

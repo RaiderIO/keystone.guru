@@ -49,6 +49,8 @@
     --dungeon-strip-all-display: none;
     --dungeon-strip-readout-width: 12rem;
     --dungeon-strip-readout-font-size: 1rem;
+    --dungeon-strip-readout-long-font-size: 0.875rem;
+    --dungeon-strip-readout-long-views-display: block;
     --dungeon-strip-readout-views-font-size: 0.75rem;
     --dungeon-strip-all-width: 5.5rem;
     --dungeon-strip-padding: 0.25rem;
@@ -76,6 +78,9 @@
     --dungeon-strip-row-gap: 0.1875rem;
     --dungeon-strip-readout-width: 10rem;
     --dungeon-strip-readout-font-size: 0.875rem;
+    --dungeon-strip-readout-long-font-size: 0.6875rem;
+    /* Three lines of name are all the shrunk readout holds */
+    --dungeon-strip-readout-long-views-display: none;
     --dungeon-strip-readout-views-font-size: 0.6875rem;
     --dungeon-strip-all-width: 5rem;
 }
@@ -132,6 +137,17 @@
     font-size: var(--dungeon-strip-readout-font-size);
     font-weight: 700;
     line-height: 1.15;
+}
+
+.dungeon_strip_readout_name--long {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    font-size: var(--dungeon-strip-readout-long-font-size);
+    line-height: 1.1;
+}
+
+.dungeon_strip_readout_name--long + .dungeon_strip_readout_views {
+    display: var(--dungeon-strip-readout-long-views-display);
 }
 
 .dungeon_strip_readout_views {
@@ -570,7 +586,7 @@ body:has(#map_header) .offcanvas-backdrop {
     align-items: center;
     gap: 0.75rem;
     min-height: 2.75rem;
-    padding: 0 0.5rem;
+    padding: 0.25rem 0.5rem;
     border: 0.125rem solid transparent;
     border-radius: 0.25rem;
     color: var(--theme-text-contrast);
@@ -597,12 +613,12 @@ body:has(#map_header) .offcanvas-backdrop {
     border-radius: 0.25rem;
 }
 
+/* Wraps rather than truncates: the end of a long name is often what tells it apart ("Scarlet Monastery - Armory") */
 .dungeon_sheet .dungeon_sheet_row_name {
     flex-grow: 1;
     min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
 }
 
 .dungeon_sheet .dungeon_sheet_row_tier {

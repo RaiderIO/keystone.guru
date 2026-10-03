@@ -5,6 +5,7 @@ namespace App\Http\View\Composers;
 use App\Features\XalatathTheme;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupEaseTier;
+use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\Cache\CacheServiceInterface;
@@ -50,6 +51,10 @@ readonly class HeaderComposer implements ViewComposerInterface
         $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
         $gameVersionDungeons      = $this->dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion);
         $view->with('gameVersionDungeons', $gameVersionDungeons);
+        // The saved dungeon context outlives a game version switch and a season rotation; a dungeon the list no
+        // longer offers is no selection at all, rather than one the selectors cannot show
+        $contextDungeon = Dungeon::getUserOrDefaultDungeon();
+        $view->with('dungeonContextSelectedDungeon', $gameVersionDungeons->contains('id', $contextDungeon->id) ? $contextDungeon : null);
         // Only the chip grid of a seasonless game version compares its dungeons' views
         $view->with('dungeonContextViewShares', $userOrDefaultGameVersion->has_seasons
             ? collect()

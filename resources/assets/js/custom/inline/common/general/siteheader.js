@@ -37,6 +37,49 @@ function calculateNavbarCollapseMaxHeight(viewportHeight, collapseTop, bottomMar
     return Math.max(0, Math.floor(viewportHeight - collapseTop - bottomMargin));
 }
 
+/**
+ * The tile shown in place of a dungeon image that failed to load: a hatched, unlit doorway in a neutral grey that
+ * reads on every theme. A data URI, so the fallback itself can never fail.
+ */
+const HEADER_IMAGE_FALLBACK_SRC = 'data:image/svg+xml,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="160" height="90" viewBox="0 0 160 90">' +
+    '<defs><pattern id="h" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">' +
+    '<rect width="3" height="8" fill="#808080" fill-opacity="0.22"/></pattern></defs>' +
+    '<rect width="160" height="90" fill="#808080" fill-opacity="0.14"/>' +
+    '<rect width="160" height="90" fill="url(#h)"/>' +
+    '<path d="M66 68V42a14 14 0 0 1 28 0v26M58 68h44" fill="none" stroke="#808080" stroke-opacity="0.8" ' +
+    'stroke-width="3" stroke-linecap="round"/>' +
+    '</svg>'
+);
+
+/**
+ * Swaps every `img[data-image-fallback]` under the root that fails to load - now or later, when its src changes -
+ * for the fallback tile, so a missing image never shows the browser's broken-image glyph or raw alt text.
+ *
+ * @param {HTMLElement} root
+ */
+function installHeaderImageFallback(root) {
+    const useFallback = (image) => {
+        if (image.matches('img[data-image-fallback]') && image.getAttribute('src') !== HEADER_IMAGE_FALLBACK_SRC) {
+            image.src = HEADER_IMAGE_FALLBACK_SRC;
+        }
+    };
+
+    // An image's error event does not bubble, but it does pass its ancestors in the capture phase
+    root.addEventListener('error', (event) => {
+        if (event.target instanceof HTMLImageElement) {
+            useFallback(event.target);
+        }
+    }, true);
+
+    // An image above the fold can fail ahead of the listener above being attached
+    root.querySelectorAll('img[data-image-fallback]').forEach((image) => {
+        if (image.complete && image.naturalWidth === 0 && image.getAttribute('src')) {
+            useFallback(image);
+        }
+    });
+}
+
 class CommonGeneralSiteheader extends InlineCode {
     /**
      * Never start shrinking when the page barely scrolls - the height change itself would make up
@@ -73,6 +116,12 @@ class CommonGeneralSiteheader extends InlineCode {
         this._initNavbarCollapse();
         this._initDungeonStrip();
         this._initDungeonSheet();
+        installHeaderImageFallback(this.header);
+        // The sheet is moved to <body>, out from under the header
+        const dungeonSheet = document.getElementById('dungeon_sheet');
+        if (dungeonSheet !== null) {
+            installHeaderImageFallback(dungeonSheet);
+        }
 
         this._resizeObserver = new ResizeObserver(this._onHeaderResized.bind(this));
         this._resizeObserver.observe(this.header);
@@ -108,7 +157,7 @@ class CommonGeneralSiteheader extends InlineCode {
     _onHeaderResized() {
         this._reportHeaderHeight();
         this._updateNavbarCollapseMaxHeight();
-        this.dungeonStrip?.updateCompact();
+        this.dungeonStrip?.updateLayout();
     }
 
     _initDungeonStrip() {
@@ -226,5 +275,5 @@ class CommonGeneralSiteheader extends InlineCode {
 // Guarded export for the test runner (Vitest). This is a no-op in the browser,
 // where `module` is undefined, so it does not affect the concatenated bundle.
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {CommonGeneralSiteheader, shouldShrinkHeader, calculateNavbarCollapseMaxHeight};
+    module.exports = {CommonGeneralSiteheader, shouldShrinkHeader, calculateNavbarCollapseMaxHeight, installHeaderImageFallback, HEADER_IMAGE_FALLBACK_SRC};
 }

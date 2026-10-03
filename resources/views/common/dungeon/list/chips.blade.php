@@ -52,7 +52,7 @@ $readoutViews     = $describeViewShare($readoutViewShare);
     <div class="dungeon_strip_readout" aria-hidden="true"
          data-name="{{ $readoutName }}" data-image="{{ $readoutImageUrl }}"
          @if($readoutViewShare !== null) data-view-share="{{ round($readoutViewShare, 4) }}" @endif>
-        <img class="dungeon_strip_readout_image" src="{{ $readoutImageUrl }}" alt=""/>
+        <img class="dungeon_strip_readout_image" src="{{ $readoutImageUrl }}" alt="" data-image-fallback/>
         <span class="dungeon_strip_readout_text">
             <span class="dungeon_strip_readout_name">{{ $readoutName }}</span>
             <span class="dungeon_strip_readout_views">{{ $readoutViews }}</span>

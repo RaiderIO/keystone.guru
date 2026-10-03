@@ -8,7 +8,13 @@
 const {InlineCode}    = require('../../inlinecode');
 globalThis.InlineCode = InlineCode;
 
-const {CommonGeneralSiteheader, shouldShrinkHeader, calculateNavbarCollapseMaxHeight} = require('./siteheader');
+const {
+    CommonGeneralSiteheader,
+    shouldShrinkHeader,
+    calculateNavbarCollapseMaxHeight,
+    installHeaderImageFallback,
+    HEADER_IMAGE_FALLBACK_SRC,
+} = require('./siteheader');
 
 describe('shouldShrinkHeader', () => {
     it('shouldShrinkHeader_givenTopOfPageNotShrunk_returnsFalse', () => {
@@ -441,5 +447,94 @@ describe('CommonGeneralSiteheader mobile menu height', () => {
         expect(siteheader.navbarCollapse).toBeNull();
         expect(document.documentElement.style.getPropertyValue('--ksg-navbar-collapse-max-height'))
             .toBe('');
+    });
+});
+
+describe('installHeaderImageFallback', () => {
+    /**
+     * jsdom loads no images, so whether one has already failed is whatever the test says.
+     *
+     * @param {HTMLImageElement} image
+     * @param {boolean} failed
+     */
+    function setLoadState(image, failed) {
+        Object.defineProperty(image, 'complete', {configurable: true, get: () => true});
+        Object.defineProperty(image, 'naturalWidth', {configurable: true, get: () => (failed ? 0 : 160)});
+    }
+
+    function makeHeader() {
+        document.body.innerHTML = `
+            <header id="site_header">
+                <img id="opted_in" src="http://test/gruuls_lair.webp" alt="" data-image-fallback/>
+                <img id="opted_out" src="http://test/logo.webp" alt="Keystone.guru"/>
+            </header>`;
+        setLoadState(document.getElementById('opted_in'), false);
+        setLoadState(document.getElementById('opted_out'), false);
+
+        return document.getElementById('site_header');
+    }
+
+    it('error_givenAnOptedInImage_swapsInTheFallback', () => {
+        // Arrange
+        const header = makeHeader();
+        installHeaderImageFallback(header);
+        const image = document.getElementById('opted_in');
+
+        // Act
+        image.dispatchEvent(new Event('error'));
+
+        // Assert
+        expect(image.getAttribute('src')).toBe(HEADER_IMAGE_FALLBACK_SRC);
+    });
+
+    it('error_givenAnImageThatDidNotOptIn_leavesItAlone', () => {
+        // Arrange
+        const header = makeHeader();
+        installHeaderImageFallback(header);
+        const image = document.getElementById('opted_out');
+
+        // Act
+        image.dispatchEvent(new Event('error'));
+
+        // Assert
+        expect(image.getAttribute('src')).toBe('http://test/logo.webp');
+    });
+
+    it('error_givenAnOptedInImageWhoseSrcChangedLater_swapsInTheFallbackAgain', () => {
+        // Arrange - the dungeon strip readout swaps its image on every hover
+        const header = makeHeader();
+        installHeaderImageFallback(header);
+        const image = document.getElementById('opted_in');
+        image.dispatchEvent(new Event('error'));
+        image.src = 'http://test/magtheridons_lair.webp';
+
+        // Act
+        image.dispatchEvent(new Event('error'));
+
+        // Assert
+        expect(image.getAttribute('src')).toBe(HEADER_IMAGE_FALLBACK_SRC);
+    });
+
+    it('install_givenAnOptedInImageThatAlreadyFailed_swapsInTheFallback', () => {
+        // Arrange
+        const header = makeHeader();
+        setLoadState(document.getElementById('opted_in'), true);
+
+        // Act
+        installHeaderImageFallback(header);
+
+        // Assert
+        expect(document.getElementById('opted_in').getAttribute('src')).toBe(HEADER_IMAGE_FALLBACK_SRC);
+    });
+
+    it('install_givenAnOptedInImageThatLoaded_keepsIt', () => {
+        // Arrange
+        const header = makeHeader();
+
+        // Act
+        installHeaderImageFallback(header);
+
+        // Assert
+        expect(document.getElementById('opted_in').getAttribute('src')).toBe('http://test/gruuls_lair.webp');
     });
 });
