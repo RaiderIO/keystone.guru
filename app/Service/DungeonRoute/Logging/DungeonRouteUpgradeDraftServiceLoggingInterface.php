@@ -12,6 +12,16 @@ interface DungeonRouteUpgradeDraftServiceLoggingInterface
 
     public function findOrCreateDraftEnd(int $draftDungeonRouteId): void;
 
+    public function createDraftFromMdtStringStart(int $originalDungeonRouteId, ?int $discardExistingDraftId): void;
+
+    public function createDraftFromMdtStringDiscardingExistingDraft(int $originalDungeonRouteId, int $draftDungeonRouteId): void;
+
+    public function createDraftFromMdtStringUpgradingMappingVersion(int $draftDungeonRouteId, int $mappingVersionId): void;
+
+    public function createDraftFromMdtStringFailed(int $originalDungeonRouteId, int $draftDungeonRouteId, string $message): void;
+
+    public function createDraftFromMdtStringEnd(int $draftDungeonRouteId): void;
+
     public function applyStart(int $draftDungeonRouteId, int $originalDungeonRouteId): void;
 
     public function applyPublishInvariantBypassed(int $draftDungeonRouteId, int $originalDungeonRouteId): void;

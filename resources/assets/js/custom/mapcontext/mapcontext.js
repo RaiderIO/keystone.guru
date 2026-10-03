@@ -623,6 +623,15 @@ class MapContext extends Signalable {
     }
 
     /**
+     * What produced this draft ('mapping_upgrade', 'mdt_import' or 'arc_regeneration'), or null if the route being
+     * viewed is not a draft.
+     * @returns {?String}
+     */
+    getDraftSource() {
+        return this._options.draftSource ?? null;
+    }
+
+    /**
      * True if an upgrade draft was created for the route being viewed.
      * @returns {Boolean}
      */

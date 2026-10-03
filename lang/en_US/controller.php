@@ -102,6 +102,9 @@ return [
             'upgrade_draft_created'     => 'An upgrade draft was created. Repair it here - the original route keeps serving its old content until you apply your changes.',
             'upgrade_applied'           => 'The upgrade was applied to your route.',
             'upgrade_discarded'         => 'The upgrade draft was discarded.',
+            'mdt_import_draft_created'  => 'Your MDT string was imported as a draft of your route. Review it here - the route keeps serving its current content until you apply the draft.',
+            'mdt_import_applied'        => 'The imported MDT string replaced the contents of your route.',
+            'mdt_import_discarded'      => 'The MDT import draft was discarded.',
         ],
         'continue_in_newer_season' => [
             'limit_reached'   => 'You have reached the maximum amount of routes you can create.',

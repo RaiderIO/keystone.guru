@@ -65,7 +65,10 @@ class DungeonMap extends Signalable {
             } else if (this.options.edit && mapContext.isUpgradeDraft()) {
                 // Deliberately NOT gated on the outdated check: findOrCreateDraft() already upgraded the
                 // draft, so it is on the newest mapping version and never reads as outdated
-                let template = Handlebars.templates['map_controls_snackbar_mapping_version_upgrade_draft'];
+                let isMdtImportDraft = mapContext.getDraftSource() === DRAFT_SOURCE_MDT_IMPORT;
+                let template = Handlebars.templates[isMdtImportDraft ?
+                    'map_controls_snackbar_mdt_import_draft' :
+                    'map_controls_snackbar_mapping_version_upgrade_draft'];
 
                 let data = $.extend({}, getHandlebarsDefaultVariables(), {
                     'upgrade_of_url': mapContext.getUpgradeOfDungeonRouteEditUrl()
@@ -73,7 +76,7 @@ class DungeonMap extends Signalable {
 
                 state.addSnackbar(template(data));
 
-                this._bindUpgradeDraftSnackbarHandlers(mapContext);
+                this._bindUpgradeDraftSnackbarHandlers(mapContext, isMdtImportDraft);
             } else if (this.options.edit && mapContext.getMappingVersion().version < mapContext.getDungeonLatestMappingVersion().version) {
                 let template = Handlebars.templates['map_controls_snackbar_mapping_version_upgrade'];
 
@@ -434,9 +437,10 @@ class DungeonMap extends Signalable {
      * sit behind a confirm, since neither can be undone.
      *
      * @param mapContext {MapContextDungeonRoute}
+     * @param isMdtImportDraft {Boolean} Whether the draft came from an MDT string rather than a mapping upgrade
      * @private
      */
-    _bindUpgradeDraftSnackbarHandlers(mapContext) {
+    _bindUpgradeDraftSnackbarHandlers(mapContext, isMdtImportDraft) {
         let bindUpgradeDraftAction = function (selector, url, confirmMessage) {
             // The server emits these urls as null unless the route really is a draft, so a client that
             // somehow reaches this branch anyway still cannot post anything
@@ -471,12 +475,12 @@ class DungeonMap extends Signalable {
         bindUpgradeDraftAction(
             '.upgrade_draft_apply',
             mapContext.getMappingVersionUpgradeApplyUrl(),
-            lang.get('js.mapping_version_upgrade_apply_confirm')
+            lang.get(isMdtImportDraft ? 'js.mdt_import_draft_apply_confirm' : 'js.mapping_version_upgrade_apply_confirm')
         );
         bindUpgradeDraftAction(
             '.upgrade_draft_discard',
             mapContext.getMappingVersionUpgradeDiscardUrl(),
-            lang.get('js.mapping_version_upgrade_discard_confirm')
+            lang.get(isMdtImportDraft ? 'js.mdt_import_draft_discard_confirm' : 'js.mapping_version_upgrade_discard_confirm')
         );
     }
 

@@ -340,6 +340,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 // model - that is the page the buttons live on.
                 Route::post('upgrade/apply', new DungeonRouteController()->applyUpgrade(...))->name('dungeonroute.upgrade.apply');
                 Route::post('upgrade/discard', new DungeonRouteController()->discardUpgrade(...))->name('dungeonroute.upgrade.discard');
+                // Import an MDT string as a draft of this route - takes the ORIGINAL as its route model
+                Route::post('upgrade/mdtimport', new DungeonRouteController()->importMdtString(...))
+                    ->middleware('throttle:mdt-details')
+                    ->name('dungeonroute.upgrade.mdtimport');
             });
         });
     });
