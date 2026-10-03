@@ -65,3 +65,54 @@ https://keystone.guru/explore/retail/tazavesh-streets-of-wonder/embed/1?showPull
 | Name                  | Type             | Default | Description                                                    |
 |-----------------------|------------------|---------|----------------------------------------------------------------|
 | includePlayerSpellIds | **string\|null** | `null`  | Comma-separated player spell IDs to include (CSV of integers). |
+
+## postMessage API
+
+The page that embeds the heatmap can talk to it with `window.postMessage`. Messages are only processed when they come
+from a page on `localhost`, `keystone.guru`, `raider.io` or `raiderio.dev` (or a subdomain of one of those); messages
+from any other origin are ignored and get no reply.
+
+Every message is an object with a `function` key naming what to do.
+
+### setFilters
+
+Sets the heatmap's filters and re-runs the search. Pass any of the parameters from the reference tables above under the
+same name, as strings (comma-separated for the `*Ids` filters). There is no reply.
+
+```js
+iframe.contentWindow.postMessage({
+    function: 'setFilters',
+    type: 'player_spell',
+    includeSpecIds: '62,63,64',
+    minMythicLevel: '2',
+    region: 'us',
+}, 'https://keystone.guru');
+```
+
+### getMdtString
+
+Requests the route's MDT import string. The embed answers the sending window, targeted at its origin, with a message
+whose `function` is `mdtString`. `requestId` is any value you choose and is echoed back unchanged, so you can match a
+reply to its request.
+
+This only produces a string on a [route embed](./embed.md). A heatmap or explore embed has no route, so it always
+replies with `mdtString: null` and the error `MDT export is not available for this route`.
+
+```js
+window.addEventListener('message', (event) => {
+    if (event.origin !== 'https://keystone.guru' || event.data?.function !== 'mdtString') {
+        return;
+    }
+
+    console.log(event.data.requestId, event.data.mdtString, event.data.error);
+});
+
+iframe.contentWindow.postMessage({function: 'getMdtString', requestId: 'abc'}, 'https://keystone.guru');
+```
+
+| Key       | Type             | Description                                                                                                                                                                                                                                           |
+|-----------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| function  | **string**       | Always `mdtString`.                                                                                                                                                                                                                                   |
+| requestId | **any**          | The `requestId` from the request, unchanged.                                                                                                                                                                                                          |
+| mdtString | **string\|null** | The MDT import string, or `null` when none could be made.                                                                                                                                                                                             |
+| error     | **string**       | Only present when `mdtString` is `null`. One of `MDT export is not available for this route` (the dungeon is not supported by MDT, or the embed has no route), `MDT export url expired` (reload the embed to get a fresh one) or `MDT export failed`. |

@@ -14,7 +14,42 @@ $showStyle = 'regular';
 
 @section('header-title', __('view_misc.embed.header'))
 
+@section('scripts')
+    @parent
+    <script type="text/javascript">
+        $(function () {
+            let requestId = 0;
+
+            window.addEventListener('message', function (event) {
+                if (event.source !== $('#ksg_iframe')[0].contentWindow || event.data.function !== 'mdtString') {
+                    return;
+                }
+
+                $('#mdt_string_result').val(JSON.stringify(event.data, null, 2));
+            });
+
+            $('#get_mdt_string').on('click', function () {
+                $('#ksg_iframe')[0].contentWindow.postMessage({
+                    function: 'getMdtString',
+                    requestId: `request-${++requestId}`,
+                }, '*');
+            });
+        });
+    </script>
+@endsection
+
 @section('content')
+    <div class="mb-3 row">
+        <div class="col-auto">
+            <button id="get_mdt_string" type="button" class="btn btn-primary">
+                {{ __('view_misc.embed.get_mdt_string') }}
+            </button>
+        </div>
+        <div class="col">
+            <textarea id="mdt_string_result" class="form-control" rows="3" readonly></textarea>
+        </div>
+    </div>
+
     <div class="row justify-content-lg-center">
         <div class="col">
             @if(!empty($parameters))
