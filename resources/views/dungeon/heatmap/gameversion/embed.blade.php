@@ -38,8 +38,9 @@ $showHeader = !isset($embedOptions['show']['header']) || $embedOptions['show']['
     'cookieConsent' => false,
 ])
 
-@include('common.general.inline', ['path' => 'dungeon/heatmap/gameversion/embed', 'options' => [
+@include('common.general.inline', ['path' => 'common/maps/embedmessageapi', 'options' => [
     'dependencies' => ['common/maps/map'],
+    'mdtStringCopyEnabled' => false,
 ]])
 
 @include('common.general.inline', ['path' => 'common/maps/embedtopbar', 'options' => [

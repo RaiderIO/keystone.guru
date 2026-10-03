@@ -3,21 +3,15 @@ globalThis.$ = globalThis.jQuery = require('jquery');
 const {InlineCode} = require('../../inlinecode');
 globalThis.InlineCode = InlineCode;
 
-globalThis.SidebarNavigation = class SidebarNavigation {
-    activate() {
-    }
-
-    cleanup() {
-    }
-};
 globalThis.METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY = 'dungeon_route_mdt_copy';
 globalThis.METRIC_TAG_MDT_COPY_EMBED = 'embed';
 
-const {CommonMapsEmbedtopbar} = require('./embedtopbar');
+const {CommonMapsEmbedmessageapi} = require('./embedmessageapi');
 
-describe('CommonMapsEmbedtopbar getMdtString message', () => {
+describe('CommonMapsEmbedmessageapi', () => {
     let mdtExportUrl;
     let sendMetricForDungeonRoute;
+    let heatmapSearchSidebar;
 
     beforeEach(() => {
         mdtExportUrl = 'http://localhost:8008/ajax/abc123/mdtExport?signature=sig';
@@ -27,7 +21,14 @@ describe('CommonMapsEmbedtopbar getMdtString message', () => {
             getMapContext: () => ({getMdtExportUrl: () => mdtExportUrl}),
             sendMetricForDungeonRoute: sendMetricForDungeonRoute,
         }));
-        globalThis.refreshTooltips = vi.fn();
+        heatmapSearchSidebar = new (class extends InlineCode {
+            searchWithFilters = vi.fn();
+        })('sidebar', 'common/maps/heatmapsearchsidebar', {});
+        globalThis._inlineManager = {
+            getInlineCode: vi.fn((bladePath) => bladePath === 'common/maps/heatmapsearchsidebar' ? heatmapSearchSidebar : []),
+        };
+        vi.spyOn(console, 'error').mockImplementation(() => {
+        });
         vi.spyOn(console, 'log').mockImplementation(() => {
         });
         vi.spyOn(console, 'warn').mockImplementation(() => {
@@ -39,7 +40,7 @@ describe('CommonMapsEmbedtopbar getMdtString message', () => {
     });
 
     /**
-     * Activates the top bar and returns the message listener it registered on the window.
+     * Activates the API and returns the message listener it registered on the window.
      * @param {Object} options
      * @returns {Function}
      */
@@ -47,7 +48,7 @@ describe('CommonMapsEmbedtopbar getMdtString message', () => {
         const addEventListener = vi.spyOn(window, 'addEventListener').mockImplementation(() => {
         });
 
-        new CommonMapsEmbedtopbar('id', 'common/maps/embedtopbar', options).activate();
+        new CommonMapsEmbedmessageapi('id', 'common/maps/embedmessageapi', options).activate();
 
         const call = addEventListener.mock.calls.find(([type]) => type === 'message');
         return call[1];
@@ -197,19 +198,99 @@ describe('CommonMapsEmbedtopbar getMdtString message', () => {
         expect(event.source.postMessage).not.toHaveBeenCalled();
     });
 
-    it('onMessage_givenOtherFunction_ignoresMessage', () => {
+    it('onMessage_givenSetFilters_appliesFiltersToHeatmapSearchSidebarWithoutReply', () => {
         // Arrange
-        const ajaxSpy = vi.spyOn($, 'ajax').mockImplementation(() => {
-        });
         const listener = activateAndCaptureMessageListener();
-        const event = buildMessageEvent({function: 'setFilters', requestId: 'req-1'});
+        const event = buildMessageEvent({
+            function: 'setFilters',
+            requestId: 'req-1',
+            type: 'player_spell',
+            includeSpecIds: '62,63',
+        });
+
+        // Act
+        const result = listener(event);
+
+        // Assert
+        expect(result).toBe(true);
+        expect(heatmapSearchSidebar.searchWithFilters).toHaveBeenCalledWith({type: 'player_spell', includeSpecIds: '62,63'});
+        expect(event.data.function).toBe('setFilters');
+        expect(event.source.postMessage).not.toHaveBeenCalled();
+    });
+
+    it('onMessage_givenSetFiltersWithoutHeatmapSearchSidebar_logsErrorWithoutThrowingOrReplying', () => {
+        // Arrange
+        _inlineManager.getInlineCode.mockReturnValue([]);
+        const listener = activateAndCaptureMessageListener();
+        const event = buildMessageEvent({function: 'setFilters', type: 'player_spell'});
+        let result;
+
+        // Act
+        const act = () => {
+            result = listener(event);
+        };
+
+        // Assert
+        expect(act).not.toThrow();
+        expect(result).toBe(true);
+        expect(_inlineManager.getInlineCode).toHaveBeenCalledWith('common/maps/heatmapsearchsidebar');
+        expect(heatmapSearchSidebar.searchWithFilters).not.toHaveBeenCalled();
+        expect(console.error).toHaveBeenCalledWith('Unable to find sidebar!');
+        expect(event.source.postMessage).not.toHaveBeenCalled();
+    });
+
+    it('onMessage_givenSetFiltersFromUntrustedOrigin_ignoresMessage', () => {
+        // Arrange
+        const listener = activateAndCaptureMessageListener();
+        const event = buildMessageEvent({function: 'setFilters', type: 'player_spell'}, 'https://evil.example');
 
         // Act
         const result = listener(event);
 
         // Assert
         expect(result).toBe(false);
+        expect(heatmapSearchSidebar.searchWithFilters).not.toHaveBeenCalled();
+    });
+
+    it.each([
+        ['doesNotExist'],
+        ['constructor'],
+        ['toString'],
+    ])('onMessage_givenUnknownFunction_%s_repliesWithUnknownFunctionError', (functionName) => {
+        // Arrange
+        const ajaxSpy = vi.spyOn($, 'ajax').mockImplementation(() => {
+        });
+        const listener = activateAndCaptureMessageListener();
+        const event = buildMessageEvent({function: functionName, requestId: 'req-1'});
+
+        // Act
+        const result = listener(event);
+
+        // Assert
+        expect(result).toBe(true);
         expect(ajaxSpy).not.toHaveBeenCalled();
+        expect(heatmapSearchSidebar.searchWithFilters).not.toHaveBeenCalled();
+        expect(event.source.postMessage).toHaveBeenCalledWith(
+            {function: 'error', requestId: 'req-1', error: 'Unknown function'},
+            'https://raider.io'
+        );
+    });
+
+    it.each([
+        [null],
+        ['getMdtString'],
+        [{requestId: 'req-1'}],
+        [{function: 42, requestId: 'req-1'}],
+    ])('onMessage_givenMessageWithoutFunctionName_%j_ignoresMessage', (data) => {
+        // Arrange
+        const listener = activateAndCaptureMessageListener();
+        const event = buildMessageEvent(data);
+
+        // Act
+        const result = listener(event);
+
+        // Assert
+        expect(result).toBe(false);
         expect(event.source.postMessage).not.toHaveBeenCalled();
     });
 
@@ -219,14 +300,14 @@ describe('CommonMapsEmbedtopbar getMdtString message', () => {
         });
         const removeEventListener = vi.spyOn(window, 'removeEventListener').mockImplementation(() => {
         });
-        const topBar = new CommonMapsEmbedtopbar('id', 'common/maps/embedtopbar', {mdtStringCopyEnabled: true});
-        topBar.activate();
+        const messageApi = new CommonMapsEmbedmessageapi('id', 'common/maps/embedmessageapi', {mdtStringCopyEnabled: true});
+        messageApi.activate();
         removeEventListener.mockClear();
 
         // Act
-        topBar.cleanup();
+        messageApi.cleanup();
 
         // Assert
-        expect(removeEventListener).toHaveBeenCalledWith('message', topBar._onMessageListener);
+        expect(removeEventListener).toHaveBeenCalledWith('message', messageApi._onMessageListener);
     });
 });

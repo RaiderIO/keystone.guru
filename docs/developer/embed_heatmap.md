@@ -72,7 +72,8 @@ The page that embeds the heatmap can talk to it with `window.postMessage`. Messa
 from a page on `localhost`, `keystone.guru`, `raider.io` or `raiderio.dev` (or a subdomain of one of those); messages
 from any other origin are ignored and get no reply.
 
-Every message is an object with a `function` key naming what to do.
+Every message is an object with a `function` key naming what to do. A `function` the embed does not know is answered
+with `{function: 'error', requestId, error: 'Unknown function'}`, where `requestId` is echoed from the request.
 
 ### setFilters
 

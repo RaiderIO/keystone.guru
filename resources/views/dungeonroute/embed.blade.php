@@ -48,6 +48,11 @@ if ($dungeon->floorsForMapFacade($dungeonroute->mappingVersion, $useFacade, true
     'dependencies' => ['common/maps/map'],
 ])
 
+@include('common.general.inline', ['path' => 'common/maps/embedmessageapi', 'options' => [
+    'dependencies' => ['common/maps/map'],
+    'mdtStringCopyEnabled' => $dungeon->mdt_supported,
+]])
+
 @include('common.general.inline', ['path' => 'common/maps/embedtopbar', 'options' => [
     'dependencies' => ['common/maps/map'],
     'switchDungeonFloorSelect' => '#map_floor_selection_dropdown',
