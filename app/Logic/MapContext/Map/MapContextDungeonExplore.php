@@ -4,10 +4,13 @@ namespace App\Logic\MapContext\Map;
 
 use App\Models\Dungeon;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\DungeonStart\Dtos\DungeonStartNavigation;
+use App\Service\DungeonStart\DungeonStartNavigationServiceInterface;
 use App\Service\Season\Dtos\SeasonWeek;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -23,13 +26,15 @@ use Override;
 class MapContextDungeonExplore extends MapContextMappingVersion
 {
     public function __construct(
-        CacheServiceInterface                             $cacheService,
-        CoordinatesServiceInterface                       $coordinatesService,
-        private readonly SeasonServiceInterface           $seasonService,
-        private readonly SeasonAffixGroupServiceInterface $seasonAffixGroupService,
-        Dungeon                                           $dungeon,
-        MappingVersion                                    $mappingVersion,
-        string                                            $mapFacadeStyle,
+        CacheServiceInterface                                   $cacheService,
+        CoordinatesServiceInterface                             $coordinatesService,
+        private readonly SeasonServiceInterface                 $seasonService,
+        private readonly SeasonAffixGroupServiceInterface       $seasonAffixGroupService,
+        private readonly DungeonStartNavigationServiceInterface $dungeonStartNavigationService,
+        Dungeon                                                 $dungeon,
+        MappingVersion                                          $mappingVersion,
+        string                                                  $mapFacadeStyle,
+        private readonly ?GameVersion                           $dungeonStartNavigationGameVersion = null,
     ) {
         parent::__construct($cacheService, $coordinatesService, $dungeon, $mappingVersion, $mapFacadeStyle);
     }
@@ -74,9 +79,36 @@ class MapContextDungeonExplore extends MapContextMappingVersion
         $activeSeason = $this->dungeon->getActiveSeason($this->seasonService);
 
         return array_merge(parent::toArray(), [
-            'featuredAffixes' => $activeSeason == null ? [] : $this->seasonAffixGroupService->getFeaturedAffixes($activeSeason),
-            'seasonWeeks'     => $this->getSeasonWeeks(),
+            'featuredAffixes'        => $activeSeason == null ? [] : $this->seasonAffixGroupService->getFeaturedAffixes($activeSeason),
+            'seasonWeeks'            => $this->getSeasonWeeks(),
+            'dungeonStartNavigation' => $this->getDungeonStartNavigation(),
         ]);
+    }
+
+    /**
+     * Where each navigable dungeon start leads, keyed by dungeon start id. The url resolves the destination again on
+     * click, so it is never stale.
+     *
+     * @return array<int, array{backLink: bool, dungeonName: string, url: string}>
+     */
+    private function getDungeonStartNavigation(): array
+    {
+        $gameVersion = $this->dungeonStartNavigationGameVersion;
+        if ($gameVersion === null) {
+            return [];
+        }
+
+        return $this->dungeonStartNavigationService
+            ->getNavigationsForMappingVersion($this->mappingVersion, $gameVersion)
+            ->map(static fn(DungeonStartNavigation $navigation, int $dungeonStartId): array => [
+                'backLink'    => $navigation->isBackLink,
+                'dungeonName' => $navigation->dungeon->name,
+                'url'         => route('dungeon.explore.gameversion.start.navigate', [
+                    'gameVersion'  => $gameVersion,
+                    'dungeonStart' => $dungeonStartId,
+                ]),
+            ])
+            ->all();
     }
 
     /**

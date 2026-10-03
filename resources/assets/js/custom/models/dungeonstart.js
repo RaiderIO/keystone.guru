@@ -64,9 +64,9 @@ class DungeonStart extends VersionableMapObject {
             }),
             new Attribute({
                 name: 'target_dungeon_id',
-                type: 'int',
-                edit: false,
-                save: false,
+                type: 'select',
+                values: () => getState().getMapContext().getDungeonSelectValues(false),
+                live_search: true,
                 default: null,
             }),
             new Attribute({
@@ -142,9 +142,28 @@ class DungeonStart extends VersionableMapObject {
     getDisplayText() {
         console.assert(this instanceof DungeonStart, 'this was not a DungeonStart', this);
 
+        let navigation = this.getNavigation();
+        if (navigation !== null) {
+            return lang.get(
+                navigation.backLink ? 'js.dungeonstart_back_to_label' : 'js.dungeonstart_go_to_label',
+                {dungeon: lang.get(navigation.dungeonName)},
+            );
+        }
+
         return this.comment !== null && this.comment.length > 0 ?
             lang.get(this.comment) :
             lang.get('js.dungeonstart_tooltip');
+    }
+
+    /**
+     * Where clicking this start leads, or null when it leads nowhere.
+     *
+     * @returns {{backLink: Boolean, dungeonName: String, url: String}|null}
+     */
+    getNavigation() {
+        console.assert(this instanceof DungeonStart, 'this was not a DungeonStart', this);
+
+        return getState().getMapContext().getDungeonStartNavigation(this.id);
     }
 
     /**
@@ -153,6 +172,13 @@ class DungeonStart extends VersionableMapObject {
     onLayerInit() {
         console.assert(this instanceof DungeonStart, 'this was not a DungeonStart', this);
         super.onLayerInit();
+
+        this.layer.on('click', () => {
+            let navigation = this.getNavigation();
+            if (navigation !== null) {
+                window.location.href = navigation.url;
+            }
+        });
 
         this._refreshVisual();
     }

@@ -7,11 +7,13 @@ use App\Http\Requests\Heatmap\ExploreEmbedUrlFormRequest;
 use App\Http\Requests\Heatmap\ExploreUrlFormRequest;
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
+use App\Models\DungeonStart;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
 use App\Service\Dungeon\DungeonServiceInterface;
+use App\Service\DungeonStart\DungeonStartNavigationServiceInterface;
 use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
@@ -22,6 +24,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Teapot\StatusCode;
 
 class DungeonExploreController extends Controller
 {
@@ -143,18 +146,37 @@ class DungeonExploreController extends Controller
             $dungeonService->setDungeonContext($dungeon, $user);
 
             return view('dungeon.explore.gameversion.view', array_merge($this->getFilterSettings($mostRecentSeason), [
-                'gameVersion'             => $gameVersion,
-                'season'                  => $mostRecentSeason,
-                'dungeon'                 => $dungeon,
-                'floor'                   => $floor,
-                'title'                   => __($dungeon->name),
-                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, User::getCurrentUserMapFacadeStyle()),
+                'gameVersion' => $gameVersion,
+                'season'      => $mostRecentSeason,
+                'dungeon'     => $dungeon,
+                'floor'       => $floor,
+                'title'       => __($dungeon->name),
+                'mapContext'  => $mapContextService->createMapContextDungeonExplore(
+                    $dungeon,
+                    $currentMappingVersion,
+                    User::getCurrentUserMapFacadeStyle(),
+                    $gameVersion,
+                ),
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                     $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
                 'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
             ]));
         }
+    }
+
+    public function navigateDungeonStart(
+        DungeonStartNavigationServiceInterface $dungeonStartNavigationService,
+        GameVersion                            $gameVersion,
+        DungeonStart                           $dungeonStart,
+    ): RedirectResponse {
+        $navigation = $dungeonStartNavigationService->resolveNavigation($dungeonStart, $gameVersion);
+
+        if ($navigation === null) {
+            abort(StatusCode::NOT_FOUND);
+        }
+
+        return redirect()->to($navigation->getUrl());
     }
 
     public function embedMechagonWorkshopCorrection(
