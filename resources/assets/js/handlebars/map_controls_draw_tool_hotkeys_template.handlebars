@@ -1,0 +1,6 @@
+<span class="draw_tool_hotkeys">
+    {{#each hotkeys}}
+        {{#unless @first}}<span class="draw_tool_hotkeys_separator">/</span>{{/unless}}
+        <span class="draw_tool_keycap">{{ this }}</span>
+    {{/each}}
+</span>

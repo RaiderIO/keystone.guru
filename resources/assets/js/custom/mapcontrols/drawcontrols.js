@@ -243,6 +243,20 @@ class DrawControls extends MapControl {
 
     /**
      * @param tool {DrawTool}
+     * @returns {String} The tool's tooltip: what it does, then every key of the tool as a keycap
+     * @private
+     */
+    _getToolTooltipHtml(tool) {
+        let hotkeys = (tool.keys ?? []).map((chord) => Hotkeys.formatChord(chord));
+
+        return lang.get(tool.title, {
+            hotkey: hotkeys.length > 0 ?
+                Handlebars.templates['map_controls_draw_tool_hotkeys_template']({hotkeys: hotkeys}) : '',
+        });
+    }
+
+    /**
+     * @param tool {DrawTool}
      * @returns {String} The key shown on the tool's button
      * @private
      */
@@ -695,7 +709,7 @@ class DrawControls extends MapControl {
                     'data-bs-toggle': 'tooltip',
                     'data-bs-placement': 'right',
                     'data-bs-html': 'true',
-                    'data-bs-title': lang.get(tool.title, {hotkey: this._getToolHotkeyText(tool)}),
+                    'data-bs-title': this._getToolTooltipHtml(tool),
                 }).html(
                     this._getButtonHtml(
                         tool.icon,

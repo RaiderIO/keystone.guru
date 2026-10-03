@@ -29,6 +29,7 @@ global.Handlebars = {
         map_controls_draw_tool_group_template: compileTemplate('map_controls_draw_tool_group_template'),
         map_controls_draw_tool_flyout_item_template: compileTemplate('map_controls_draw_tool_flyout_item_template'),
         map_controls_draw_tool_status_template: compileTemplate('map_controls_draw_tool_status_template'),
+        map_controls_draw_tool_hotkeys_template: compileTemplate('map_controls_draw_tool_hotkeys_template'),
     },
 };
 
@@ -47,6 +48,7 @@ global.PatherMapState = class PatherMapState {
 };
 
 const {DrawControls} = require('./drawcontrols');
+const {sanitizeHtml, DefaultAllowlist} = require('bootstrap/js/dist/util/sanitizer');
 
 /** @type {DrawTool[]} */
 const TOOLS = [{
@@ -183,13 +185,38 @@ describe('DrawControls toolbar generated from the tool list', () => {
         expect($flyout.is(':visible')).toBe(false);
     });
 
-    test('addControl_givenToolKeys_rendersFirstKeyAsKeycapAndAllKeysInTitle', () => {
-        // Assert
+    test('addControl_givenToolKeys_rendersFirstKeyAsKeycapAndAllKeysAsKeycapsInTooltip', () => {
+        // Arrange
         const $polyline = $rail.children('[data-draw-tool="polyline"]');
+
+        // Act: Bootstrap runs an HTML tooltip through its sanitizer before showing it
+        const $tooltip = jQuery('<div>').html(sanitizeHtml($polyline.attr('data-bs-title'), DefaultAllowlist, null));
+
+        // Assert
         expect($polyline.find('.draw_tool_keycap').text().trim()).toBe('1');
         expect($polyline.attr('data-bs-toggle')).toBe('tooltip');
-        expect($polyline.attr('data-bs-title')).toBe('js.polyline_title(1 / P)');
+        expect($polyline.attr('data-bs-html')).toBe('true');
+        expect($tooltip.text().trim().startsWith('js.polyline_title(')).toBe(true);
+        expect($tooltip.find('.draw_tool_hotkeys .draw_tool_keycap').toArray().map((element) => element.textContent)).toEqual(['1', 'P']);
+        expect($tooltip.find('.draw_tool_hotkeys_separator').length).toBe(1);
         expect($rail.children('[data-draw-tool="delete"]').find('.btn-danger').length).toBe(1);
+    });
+
+    test('getToolTooltipHtml_givenChordKey_rendersOneKeycapWithoutSeparator', () => {
+        // Act
+        const $tooltip = jQuery('<div>').html(controls._getToolTooltipHtml(TOOLS.find((tool) => tool.id === 'polygon')));
+
+        // Assert
+        expect($tooltip.find('.draw_tool_keycap').toArray().map((element) => element.textContent)).toEqual(['Shift+U']);
+        expect($tooltip.find('.draw_tool_hotkeys_separator').length).toBe(0);
+    });
+
+    test('getToolTooltipHtml_givenToolWithoutKeys_rendersNoKeycaps', () => {
+        // Act
+        const html = controls._getToolTooltipHtml({id: 'nokeys', title: 'js.nokeys_title', keys: []});
+
+        // Assert
+        expect(html).toBe('js.nokeys_title');
     });
 
     test('getModeHandlers_givenToolList_createsOneHandlerPerDrawTool', () => {
