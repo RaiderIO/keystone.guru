@@ -36,8 +36,9 @@ use Illuminate\Support\Collection;
     'cookieConsent' => false,
 ])
 
-@include('common.general.inline', ['path' => 'dungeon/explore/gameversion/embed', 'options' => [
+@include('common.general.inline', ['path' => 'common/maps/embedmessageapi', 'options' => [
     'dependencies' => ['common/maps/map'],
+    'mdtStringCopyEnabled' => false,
 ]])
 
 @include('common.general.inline', ['path' => 'common/maps/embedtopbar', 'options' => [
