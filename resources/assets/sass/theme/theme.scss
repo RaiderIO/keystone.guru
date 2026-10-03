@@ -734,9 +734,10 @@ body {
     color: var($--theme-light);
   }
 
-  .route_manipulation_tools .draw_icon .col:hover {
-    background: var($--theme-primary);
-    color: var($--theme-light) !important;
+  /** Delete keeps its own danger hover */
+  .route_manipulation_tools .draw_icon .col:not(.btn-danger):hover {
+    background: var($--theme-btn-hover) !important;
+    color: var($--theme-btn-hover-text) !important;
   }
 
   .route_manipulation_tools .draw_icon.leaflet-draw-toolbar-button-enabled .col {
@@ -765,16 +766,17 @@ body {
     border-bottom: var($--theme-header-border);
   }
 
-  .route_manipulation_tools .draw_tool_flyout_item {
+  /** The flyout items are links in #edit_route_draw_container, whose link colour would otherwise win */
+  #edit_route_draw_container .draw_tool_flyout_item {
     color: var($--theme-text-contrast);
   }
 
-  .route_manipulation_tools .draw_tool_flyout_item:hover {
-    background: var($--theme-primary);
-    color: var($--theme-light);
+  #edit_route_draw_container .draw_tool_flyout_item:hover {
+    background: var($--theme-btn-hover);
+    color: var($--theme-btn-hover-text);
   }
 
-  .route_manipulation_tools .draw_tool_flyout_item.leaflet-draw-toolbar-button-enabled {
+  #edit_route_draw_container .draw_tool_flyout_item.leaflet-draw-toolbar-button-enabled {
     background: var($--theme-btn-accent);
     color: var($--theme-btn-accent-text);
   }

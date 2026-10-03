@@ -25,6 +25,9 @@ $--theme-affix-page-seasonal-background-color: --theme-affix-page-seasonal-backg
 $--theme-affix-page-current-week-border-color: --theme-affix-page-current-week-border-color;
 $--theme-btn-disabled: --theme-btn-disabled;
 $--theme-btn-disabled-text: --theme-btn-disabled-text;
+/* Hover for a rail button; must differ from the resting button, which is --theme-primary on vapor */
+$--theme-btn-hover: --theme-btn-hover;
+$--theme-btn-hover-text: --theme-btn-hover-text;
 
 // Darkly
 $theme-map-darkly: (
@@ -51,7 +54,9 @@ $theme-map-darkly: (
         $--theme-affix-page-seasonal-background-color: #00bc8cbb,
         $--theme-affix-page-current-week-border-color: rgb(235, 235, 235),
         $--theme-btn-disabled: #444,
-        $--theme-btn-disabled-text: #adb5bd
+        $--theme-btn-disabled-text: #adb5bd,
+        $--theme-btn-hover: #375a7f,
+        $--theme-btn-hover-text: #fff
 );
 
 // Lux
@@ -79,7 +84,9 @@ $theme-map-lux: (
         $--theme-affix-page-seasonal-background-color: #df691abb,
         $--theme-affix-page-current-week-border-color: var($--theme-primary),
         $--theme-btn-disabled: #dee2e6,
-        $--theme-btn-disabled-text: #6c757d
+        $--theme-btn-disabled-text: #6c757d,
+        $--theme-btn-hover: #1a1a1a,
+        $--theme-btn-hover-text: #fff
 );
 
 // Xal'atath - Midnight variant (Vapor based)
@@ -110,5 +117,7 @@ $theme-map-vapor: (
         $--theme-affix-page-seasonal-background-color: #6a2dbdbb,
         $--theme-affix-page-current-week-border-color: rgb(235, 235, 235),
         $--theme-btn-disabled: #444,
-        $--theme-btn-disabled-text: #adb5bd
+        $--theme-btn-disabled-text: #adb5bd,
+        $--theme-btn-hover: #e6c65a,
+        $--theme-btn-hover-text: #202020
 );

@@ -171,6 +171,30 @@
   }
 }
 
+/** A tool's hotkeys on their own line under its tooltip text, as keycaps inverted against the tooltip.
+    Spans, since Bootstrap's tooltip sanitizer strips <kbd> */
+.tooltip .draw_tool_hotkeys {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+
+  .draw_tool_hotkeys_separator {
+    opacity: 0.75;
+  }
+
+  .draw_tool_keycap {
+    padding: 0 0.3rem;
+    border-radius: var(--bs-border-radius-sm);
+    font-family: var(--bs-font-monospace);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    background-color: var(--bs-tooltip-color);
+    color: var(--bs-tooltip-bg);
+  }
+}
+
 /** Auto margins centre a rail that fits; unlike align-items: center they drop to 0 on one that
     does not, so its first tools stay reachable by scrolling instead of overflowing upwards */
 .route_manipulation_tools:not(.top) {

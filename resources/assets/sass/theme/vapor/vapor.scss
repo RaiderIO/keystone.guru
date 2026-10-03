@@ -11,6 +11,8 @@
   // is gone; falling back to the bootswatch default restores the theme's real palette, from which
   // Bootstrap 5 also derives --bs-body-bg for cards, modals, dropdowns and list-groups.
   $body-bg: #1a0933;
+  // Bootstrap derives the tooltip text from the body background, which is near-black on vapor's black tooltip
+  $tooltip-color: #fff;
 
   @import "~bootswatch/dist/vapor/variables";
   @import "~bootstrap/scss/bootstrap";
