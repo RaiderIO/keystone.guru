@@ -172,6 +172,98 @@ describe('DungeonStrip', () => {
         expect([strip.element.classList.contains('is-open'), button.getAttribute('aria-expanded')]).toEqual([false, 'false']);
     });
 
+    it('allButtonClick_givenAKeyboardClick_focusesTheSelectedChip', () => {
+        // Arrange
+        const strip = makeStrip();
+        chip('Molten Core').setAttribute('aria-current', 'true');
+        const button = document.querySelector('.dungeon_strip_all');
+        button.focus();
+
+        // Act
+        button.dispatchEvent(new MouseEvent('click', {bubbles: true, detail: 0}));
+
+        // Assert
+        expect(strip.isOpen()).toBe(true);
+        expect(document.activeElement).toBe(chip('Molten Core'));
+    });
+
+    it('allButtonClick_givenAKeyboardClickWithoutASelectedChip_focusesTheFirstChip', () => {
+        // Arrange
+        const strip = makeStrip();
+        const button = document.querySelector('.dungeon_strip_all');
+        button.focus();
+
+        // Act
+        button.dispatchEvent(new MouseEvent('click', {bubbles: true, detail: 0}));
+
+        // Assert
+        expect(strip.isOpen()).toBe(true);
+        expect(document.activeElement).toBe(chip('Blackrock Depths'));
+    });
+
+    it('allButtonClick_givenAPointerClick_leavesFocusOnTheButton', () => {
+        // Arrange
+        const strip = makeStrip();
+        const button = document.querySelector('.dungeon_strip_all');
+        button.focus();
+
+        // Act
+        button.dispatchEvent(new MouseEvent('click', {bubbles: true, detail: 1}));
+
+        // Assert
+        expect(strip.isOpen()).toBe(true);
+        expect(document.activeElement).toBe(button);
+    });
+
+    /**
+     * jsdom lays nothing out, so the name's line-clamped box reports the overflow it is given.
+     *
+     * @param {HTMLElement} name
+     * @param {number} scrollHeight
+     * @param {number} clientHeight
+     */
+    function setNameHeights(name, scrollHeight, clientHeight) {
+        Object.defineProperty(name, 'scrollHeight', {configurable: true, get: () => scrollHeight});
+        Object.defineProperty(name, 'clientHeight', {configurable: true, get: () => clientHeight});
+    }
+
+    it('fitReadoutName_givenANameOverflowingTwoLines_marksItLong', () => {
+        // Arrange
+        const strip = makeStrip();
+        setNameHeights(strip.readoutName, 55, 37);
+
+        // Act
+        strip.fitReadoutName();
+
+        // Assert
+        expect(strip.readoutName.classList.contains('dungeon_strip_readout_name--long')).toBe(true);
+    });
+
+    it('fitReadoutName_givenALongNameReplacedByOneThatFits_unmarksIt', () => {
+        // Arrange
+        const strip = makeStrip();
+        strip.readoutName.classList.add('dungeon_strip_readout_name--long');
+        setNameHeights(strip.readoutName, 37, 37);
+
+        // Act
+        strip.fitReadoutName();
+
+        // Assert
+        expect(strip.readoutName.classList.contains('dungeon_strip_readout_name--long')).toBe(false);
+    });
+
+    it('pointerover_givenAChipWithALongName_marksTheReadoutNameLong', () => {
+        // Arrange
+        const strip = makeStrip();
+        setNameHeights(strip.readoutName, 55, 37);
+
+        // Act
+        chip('Molten Core').dispatchEvent(new Event('pointerover', {bubbles: true}));
+
+        // Assert
+        expect(strip.readoutName.classList.contains('dungeon_strip_readout_name--long')).toBe(true);
+    });
+
     it('escape_givenAnOpenFlyout_closesItAndFocusesTheAllButton', () => {
         // Arrange
         const strip = makeStrip();
