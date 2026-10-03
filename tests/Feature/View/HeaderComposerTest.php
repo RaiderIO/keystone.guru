@@ -10,6 +10,8 @@ use App\Models\Season;
 use App\Models\User;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
+use DOMDocument;
+use DOMXPath;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -193,59 +195,111 @@ final class HeaderComposerTest extends PublicTestCase
     }
 
     /**
-     * The desktop dungeon-context strip is hidden below `lg`, so the mobile dropdown beside the navbar
-     * toggler is the only way to switch dungeon on a phone (#4097).
+     * The desktop dungeon-context strip is hidden below `lg`, so the toggle beside the navbar toggler and the
+     * sheet it opens are the only way to switch dungeon on a phone.
      */
     #[Test]
-    public function render_givenShowDungeonContextDefault_rendersTheMobileDungeonSelector(): void
+    public function render_givenShowDungeonContextDefault_rendersTheMobileDungeonToggleAndSheet(): void
     {
         // Arrange
         $dungeon = Dungeon::getUserOrDefaultDungeon();
 
         // Act
-        $selector = $this->getMobileDungeonSelectorHtml(view('common.layout.header')->render());
+        $html = view('common.layout.header')->render();
 
         // Assert
-        $this->assertNotNull($selector, 'The mobile dungeon selector should render');
-        $this->assertStringContainsString(__('view_common.layout.nav.dungeoncontext.change_dungeon'), $selector);
-        $this->assertStringContainsString(route('dungeon.changecontext', ['dungeon' => $dungeon]), $selector);
+        $toggle = $this->getMobileDungeonToggleHtml($html);
+        $sheet  = $this->getMobileDungeonSheetHtml($html);
+        $this->assertNotNull($toggle, 'The mobile dungeon toggle should render');
+        $this->assertStringContainsString('data-bs-target="#dungeon_sheet"', $toggle);
+        $this->assertNotNull($sheet, 'The mobile dungeon sheet should render');
+        $this->assertStringContainsString(__('view_common.layout.nav.dungeoncontext.change_dungeon'), $sheet);
+        $this->assertStringContainsString(route('dungeon.changecontext', ['dungeon' => $dungeon]), $sheet);
     }
 
     /**
      * A dungeon route's map view has no dungeon context to switch - it passes `showDungeonContext => false`
-     * for the desktop strip, and the mobile selector must follow it.
+     * for the desktop strip, and the mobile toggle and sheet must follow it.
      */
     #[Test]
-    public function render_givenShowDungeonContextFalse_omitsTheMobileDungeonSelector(): void
+    public function render_givenShowDungeonContextFalse_omitsTheMobileDungeonToggleAndSheet(): void
     {
         // Act
         $html = view('common.layout.header', ['showDungeonContext' => false])->render();
 
         // Assert
-        $this->assertNull($this->getMobileDungeonSelectorHtml($html));
+        $this->assertNull($this->getMobileDungeonToggleHtml($html));
+        $this->assertNull($this->getMobileDungeonSheetHtml($html));
+    }
+
+    /**
+     * The game version switch sits on top of the dungeon sheet, and only there - the navbar menu does not
+     * carry a second copy.
+     */
+    #[Test]
+    public function render_givenShowDungeonContextDefault_putsTheGameVersionSwitchInTheSheetOnly(): void
+    {
+        // Arrange
+        $gameVersions   = app(ViewServiceInterface::class)->getAllGameVersions();
+        $currentVersion = GameVersion::getUserOrDefaultGameVersion();
+
+        // Act
+        $html = view('common.layout.header')->render();
+
+        // Assert
+        $sheet = $this->getMobileDungeonSheetHtml($html);
+        $this->assertNotNull($sheet);
+        $this->assertGreaterThan(1, $gameVersions->count());
+        $this->assertSame($gameVersions->count(), preg_match_all('/class="game_version_segment[" ]/', $sheet));
+        $this->assertSame($gameVersions->count(), preg_match_all('/class="game_version_segment[" ]/', $html));
+        $this->assertMatchesRegularExpression(
+            sprintf('/href="%s"\s+data-current="true"\s+aria-current="true"/', preg_quote(route('gameversion.update', ['gameVersion' => $currentVersion]), '/')),
+            $sheet,
+        );
+        // The sheet restores the selection from data-current when the page returns from the back/forward cache
+        $this->assertSame(1, substr_count($sheet, 'data-current="true"'));
+        $this->assertSame($gameVersions->count() - 1, substr_count($sheet, 'data-current="false"'));
+    }
+
+    /**
+     * Without a dungeon sheet there is nothing to put the game version switch on top of, so the navbar menu
+     * keeps it rather than leaving the page without one.
+     */
+    #[Test]
+    public function render_givenShowDungeonContextFalse_keepsTheGameVersionSwitchInTheNavbarMenu(): void
+    {
+        // Arrange
+        $gameVersions = app(ViewServiceInterface::class)->getAllGameVersions();
+
+        // Act
+        $html = view('common.layout.header', ['showDungeonContext' => false])->render();
+
+        // Assert
+        $this->assertSame(1, preg_match('/<div class="collapse navbar-collapse.*<\/nav>/s', $html, $matches));
+        $this->assertSame($gameVersions->count(), preg_match_all('/class="game_version_segment[" ]/', $matches[0]));
     }
 
     /**
      * Explore, heatmap, the compendiums, search and discover all override the dungeon context links so that
-     * picking a dungeon keeps you on the page type you were already on. The mobile selector honouring the
+     * picking a dungeon keeps you on the page type you were already on. The mobile sheet honouring the
      * default instead would silently kick those pages' visitors onto a map.
      */
     #[Test]
-    public function render_givenOverriddenDungeonContextLinks_usesThemForTheMobileDungeonSelector(): void
+    public function render_givenOverriddenDungeonContextLinks_usesThemForTheMobileDungeonSheet(): void
     {
         // Arrange
         $dungeon = Dungeon::getUserOrDefaultDungeon();
         $links   = collect([$dungeon->key => 'https://example.test/overridden']);
 
         // Act
-        $selector = $this->getMobileDungeonSelectorHtml(
+        $sheet = $this->getMobileDungeonSheetHtml(
             view('common.layout.header', ['dungeonContextLinks' => $links])->render(),
         );
 
         // Assert
-        $this->assertNotNull($selector);
-        $this->assertStringContainsString('https://example.test/overridden', $selector);
-        $this->assertStringNotContainsString(route('dungeon.changecontext', ['dungeon' => $dungeon]), $selector);
+        $this->assertNotNull($sheet);
+        $this->assertStringContainsString('https://example.test/overridden', $sheet);
+        $this->assertStringNotContainsString(route('dungeon.changecontext', ['dungeon' => $dungeon]), $sheet);
     }
 
     /**
@@ -268,11 +322,11 @@ final class HeaderComposerTest extends PublicTestCase
         app()->setLocale('de_DE_ai');
 
         // Act
-        $selector = $this->getMobileDungeonSelectorHtml(view('common.layout.header')->render());
+        $toggle = $this->getMobileDungeonToggleHtml(view('common.layout.header')->render());
 
         // Assert
-        $this->assertNotNull($selector);
-        $this->assertSame(1, preg_match('/<span class="dungeon_context_nav_label[^"]*">\s*(.*?)\s*<\/span>/s', $selector, $matches));
+        $this->assertNotNull($toggle);
+        $this->assertSame(1, preg_match('/<span class="dungeon_context_nav_label[^"]*">\s*(.*?)\s*<\/span>/s', $toggle, $matches));
         $this->assertSame(e($expectsEnglish ? $englishAbbreviation : $germanAbbreviation), $matches[1]);
     }
 
@@ -288,15 +342,30 @@ final class HeaderComposerTest extends PublicTestCase
     }
 
     /**
-     * The rendered `<li>` of the mobile dungeon selector, or null when the header did not render one. Scoped
-     * on purpose: the desktop strip carries the same links, so an assertion over the whole header would pass
-     * on the desktop markup alone.
+     * The rendered `<li>` of the mobile dungeon toggle, or null when the header did not render one.
      */
-    private function getMobileDungeonSelectorHtml(string $html): ?string
+    private function getMobileDungeonToggleHtml(string $html): ?string
     {
-        $matched = preg_match('/<li class="nav-item dropdown dungeon_context_nav".*?<\/li>/s', $html, $matches);
+        $matched = preg_match('/<li class="nav-item dungeon_context_nav">.*?<\/li>/s', $html, $matches);
 
         return $matched === 1 ? $matches[0] : null;
+    }
+
+    /**
+     * The rendered mobile dungeon sheet, or null when the header did not render one. Scoped on purpose: the
+     * desktop strip carries the same links, so an assertion over the whole header would pass on the desktop
+     * markup alone.
+     */
+    private function getMobileDungeonSheetHtml(string $html): ?string
+    {
+        $document = new DOMDocument();
+        libxml_use_internal_errors(true);
+        $document->loadHTML(sprintf('<?xml encoding="UTF-8"><body>%s</body>', $html), LIBXML_NOERROR);
+        libxml_clear_errors();
+
+        $sheet = (new DOMXPath($document))->query('//*[@id="dungeon_sheet"]')->item(0);
+
+        return $sheet === null ? null : $document->saveHTML($sheet);
     }
 
     private function deleteSeason(Season $season): void

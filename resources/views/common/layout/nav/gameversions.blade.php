@@ -3,24 +3,28 @@ use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
- * This is only visible for mobile users
+ * This is only visible for mobile users: a segmented control of every game version, on top of the dungeon
+ * sheet - or in the navbar menu on pages that have no dungeon sheet.
  *
  * @var Collection<int, GameVersion> $allGameVersions
  * @var GameVersion                  $currentUserGameVersion
  */
 ?>
-<li class="nav-item dropdown d-lg-none d-block">
-    <a class="nav-link dropdown-toggle" href="#" id="gameVersionDropdown" role="button"
-       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        @include('common.gameversion.gameversionnav', ['gameVersion' => $currentUserGameVersion])
-    </a>
-    <div class="dropdown-menu text-center text-xl-start" aria-labelledby="gameVersionDropdown">
+<nav class="game_version_segments" aria-label="{{ __('view_common.layout.header.game_versions') }}">
+    <ul class="game_version_segments_list">
         @foreach ($allGameVersions as $gameVersion)
-            <a class="dropdown-item {{ $currentUserGameVersion->id === $gameVersion->id ? 'active' : '' }}"
-               href="{{ route('gameversion.update', ['gameVersion' => $gameVersion]) }}"
-               @if($currentUserGameVersion->id === $gameVersion->id) aria-current="true" @endif>
-                @include('common.gameversion.gameversionnav', ['gameVersion' => $gameVersion, 'width' => 50, 'showName' => true])
-            </a>
+            <?php $isSelectedGameVersion = $currentUserGameVersion->id === $gameVersion->id; ?>
+            <li>
+                <a @class(['game_version_segment', 'border-accent' => $isSelectedGameVersion])
+                   href="{{ route('gameversion.update', ['gameVersion' => $gameVersion]) }}"
+                   data-current="{{ $isSelectedGameVersion ? 'true' : 'false' }}"
+                   @if($isSelectedGameVersion) aria-current="true" @endif>
+                    <img class="game_version_segment_logo"
+                         src="{{ ksgAssetImage(sprintf('gameversions/%s.webp', $gameVersion->key)) }}" alt=""
+                         height="16"/>
+                    <span class="game_version_segment_name">{{ __($gameVersion->name) }}</span>
+                </a>
+            </li>
         @endforeach
-    </div>
-</li>
+    </ul>
+</nav>
