@@ -571,7 +571,7 @@ return [
     'mdt_export_url_expired'          => 'This page has been open too long to export to MDT. Please reload the page and try again.',
     'copy_mdt_string_copying'         => 'Copying…',
     'copy_mdt_string_copied'          => 'Copied',
-    'mdt_string_copied'               => 'MDT string copied. In MDT, click Import and paste it.',
+    'mdt_string_copied'               => 'MDT string copied to clipboard.',
     'mdt_string_copied_with_warnings' => 'MDT string copied, but parts of this route could not be exported to MDT. Open Share to see which.',
     'mdt_string_copy_blocked'         => 'Your browser blocked copying. Copy the MDT string from the Share window instead.',
 
