@@ -616,6 +616,7 @@ return [
                 'edit_route_settings'            => 'Route settings',
                 'edit_mapping_version'           => 'Edit mapping version',
                 'share'                          => 'Share',
+                'copy_mdt_string'                => 'Copy MDT string',
                 'route_actions'                  => 'Route actions',
                 'start_live_session'             => 'Start live session',
                 'start_live_session_paragraph_1' => 'Once you start running your route in-game you can create a live session where Keystone.guru will aid you in completing your M+ key. You may follow another user\'s map movements by selecting the option when clicking their icon/initials in the top header.',
