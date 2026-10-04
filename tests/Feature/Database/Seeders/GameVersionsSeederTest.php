@@ -41,4 +41,23 @@ final class GameVersionsSeederTest extends PublicTestCase
             DB::statement(sprintf('DROP TABLE IF EXISTS %s;', $tempTable));
         }
     }
+
+    #[Test]
+    public function run_givenForever_insertsItActive(): void
+    {
+        // Arrange
+        $tempTable = DatabaseSeeder::getTempTableName(GameVersion::class);
+        DB::statement(sprintf('DROP TABLE IF EXISTS %s;', $tempTable));
+        DB::statement(sprintf('CREATE TABLE %s LIKE %s;', $tempTable, (new GameVersion())->getTable()));
+
+        try {
+            // Act
+            (new GameVersionsSeeder())->run();
+
+            // Assert
+            $this->assertTrue((bool)DB::table($tempTable)->where('key', GameVersion::GAME_VERSION_FOREVER)->value('active'));
+        } finally {
+            DB::statement(sprintf('DROP TABLE IF EXISTS %s;', $tempTable));
+        }
+    }
 }

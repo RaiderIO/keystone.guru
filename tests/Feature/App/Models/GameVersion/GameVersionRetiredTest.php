@@ -55,7 +55,7 @@ final class GameVersionRetiredTest extends PublicTestCase
     }
 
     /**
-     * Beta and Forever are inactive without being retired, so inactivity alone does not count.
+     * Beta is inactive without being retired, so inactivity alone does not count.
      *
      * @return array<string, array{string}>
      */

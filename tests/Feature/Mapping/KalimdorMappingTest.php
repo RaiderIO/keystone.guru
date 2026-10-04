@@ -12,6 +12,7 @@ use App\Models\Floor\Floor;
 use App\Models\Floor\FloorCoupling;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -48,7 +49,7 @@ final class KalimdorMappingTest extends TestCase
     }
 
     #[Test]
-    public function mappingVersion_givenKalimdor_returnsInactiveForeverGameVersionWithFacadeEnabled(): void
+    public function mappingVersion_givenKalimdor_returnsActiveForeverGameVersionWithFacadeEnabled(): void
     {
         // Arrange
         $dungeon = $this->getKalimdor();
@@ -57,11 +58,24 @@ final class KalimdorMappingTest extends TestCase
         $gameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_FOREVER)->firstOrFail();
 
         // Assert
-        $this->assertFalse((bool)$gameVersion->active);
+        $this->assertTrue((bool)$gameVersion->active);
         $this->assertSame(Expansion::ALL[Expansion::EXPANSION_CLASSIC], $gameVersion->expansion_id);
         $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
         $this->assertNotNull($mappingVersion);
         $this->assertTrue((bool)$mappingVersion->facade_enabled);
+    }
+
+    #[Test]
+    public function shouldUseFacadeNavigation_givenKalimdorInFacadeStyle_returnsTrue(): void
+    {
+        // Arrange
+        $mappingVersion = $this->getMappingVersion();
+
+        // Act
+        $shouldUseFacadeNavigation = User::shouldUseFacadeNavigation($mappingVersion, User::MAP_FACADE_STYLE_FACADE);
+
+        // Assert
+        $this->assertTrue($shouldUseFacadeNavigation);
     }
 
     #[Test]

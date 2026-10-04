@@ -11,6 +11,7 @@ use App\Models\Floor\Floor;
 use App\Models\Floor\FloorCoupling;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -61,6 +62,19 @@ final class EasternKingdomsMappingTest extends TestCase
         // Assert
         $this->assertNotNull($mappingVersion);
         $this->assertTrue((bool)$mappingVersion->facade_enabled);
+    }
+
+    #[Test]
+    public function shouldUseFacadeNavigation_givenEasternKingdomsInFacadeStyle_returnsTrue(): void
+    {
+        // Arrange
+        $mappingVersion = $this->getMappingVersion();
+
+        // Act
+        $shouldUseFacadeNavigation = User::shouldUseFacadeNavigation($mappingVersion, User::MAP_FACADE_STYLE_FACADE);
+
+        // Assert
+        $this->assertTrue($shouldUseFacadeNavigation);
     }
 
     #[Test]
