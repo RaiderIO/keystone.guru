@@ -3,10 +3,12 @@
 namespace Tests\Feature\Controller;
 
 use App\Features\CreatorProfiles;
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
 use App\Models\PublishedState;
+use App\Models\Season;
 use App\Models\User;
 use App\Service\Creator\CreatorDirectoryServiceInterface;
 use App\Service\Creator\Enums\CreatorDirectorySort;
@@ -528,6 +530,227 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
             $creator->delete();
             $viewer->delete();
         }
+    }
+
+    /**
+     * The card's coverage line counts only world-published routes of the season: a link-only or unpublished route
+     * for another of the season's dungeons must neither raise the count nor add that dungeon's name.
+     */
+    #[Test]
+    public function index_givenACreatorWithSeasonRoutes_rendersTheDungeonsOnlyWorldPublishedRoutesCover(): void
+    {
+        // Arrange - searched for by name, so the creator is on the first page whatever else is listed
+        $viewer   = User::factory()->create();
+        $creator  = $this->createSearchableCreator();
+        $dungeons = $this->statsSeason()->dungeons;
+        $routes   = $this->createRoutesFor($creator, $dungeons[0], $this->minPublishedRoutes());
+        $routes->push(...$this->createRoutesFor($creator, $dungeons[1], 1, PublishedState::WORLD_WITH_LINK));
+        $routes->push(...$this->createRoutesFor($creator, $dungeons[2], 1, PublishedState::UNPUBLISHED));
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['search' => $creator->name]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(e(__('view_creator.stats.coverage_some', [
+                'count'    => 1,
+                'total'    => $dungeons->count(),
+                'dungeons' => __($dungeons[0]->name),
+            ])), false);
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $this->deleteAll($routes);
+            $creator->delete();
+            $viewer->delete();
+        }
+    }
+
+    /**
+     * Only world-published routes for the dungeon in its current season qualify a creator - a link-only or
+     * unpublished route there must not, or the filter would reveal that route exists.
+     */
+    #[Test]
+    public function index_givenADungeon_listsOnlyCreatorsWithWorldPublishedSeasonRoutesThere(): void
+    {
+        // Arrange - every creator is listed site-wide, so only the dungeon filter can tell them apart
+        config(['keystoneguru.creators.per_page' => PHP_INT_MAX]);
+        $viewer   = User::factory()->create();
+        $dungeons = $this->statsSeason()->dungeons;
+        $dungeon  = $dungeons[0];
+        $maker    = $this->createSearchableCreator();
+        $other    = $this->createSearchableCreator();
+        $routes   = $this->createRoutesFor($maker, $dungeon, $this->minPublishedRoutes());
+        $routes->push(...$this->createRoutesFor($other, $dungeons[1], $this->minPublishedRoutes()));
+        $routes->push(...$this->createRoutesFor($other, $dungeon, 1, PublishedState::WORLD_WITH_LINK));
+        $routes->push(...$this->createRoutesFor($other, $dungeon, 1, PublishedState::UNPUBLISHED));
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['dungeon' => $dungeon->slug]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas('selectedDungeon', static fn(?Dungeon $selectedDungeon): bool => $selectedDungeon?->id === $dungeon->id);
+            $creatorIds = $this->creatorIdsFrom($response);
+            $this->assertContains($maker->id, $creatorIds);
+            $this->assertNotContains($other->id, $creatorIds);
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $this->deleteAll($routes);
+            $maker->delete();
+            $other->delete();
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenADungeon_ranksCreatorsByPopularityThere(): void
+    {
+        // Arrange - the less popular creator has more routes, so a route-count ordering would flip them
+        config(['keystoneguru.creators.per_page' => PHP_INT_MAX]);
+        $viewer    = User::factory()->create();
+        $dungeon   = $this->statsSeason()->dungeons[0];
+        $popular   = $this->createSearchableCreator();
+        $unpopular = $this->createSearchableCreator();
+        $routes    = $this->createRoutesFor($popular, $dungeon, $this->minPublishedRoutes(), PublishedState::WORLD, ['popularity' => 50]);
+        $routes->push(...$this->createRoutesFor($unpopular, $dungeon, $this->minPublishedRoutes() + 1, PublishedState::WORLD, ['popularity' => 1]));
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act - the routes sort asked for must not override the dungeon's ranking
+            $response = $this->actingAs($viewer)->get(route('creators.index', [
+                'dungeon' => $dungeon->slug,
+                'sort'    => CreatorDirectorySort::MostRoutes->value,
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $creatorIds = $this->creatorIdsFrom($response);
+            $this->assertContains($popular->id, $creatorIds);
+            $this->assertLessThan($creatorIds->search($unpopular->id), $creatorIds->search($popular->id));
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $this->deleteAll($routes);
+            $popular->delete();
+            $unpopular->delete();
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenADungeon_saysWhichDungeonAndLinksToClearIt(): void
+    {
+        // Arrange
+        $viewer  = User::factory()->create();
+        $dungeon = $this->statsSeason()->dungeons[0];
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['dungeon' => $dungeon->slug]));
+
+            // Assert - the clear link drops the dungeon and nothing else, so it lands on the unfiltered directory
+            $response->assertOk();
+            $response->assertSee(e(__('view_creator.directory.filtered_to_dungeon', ['dungeon' => __($dungeon->name)])), false);
+            $this->assertMatchesRegularExpression(
+                sprintf('/<a href="%s"\s+class="ms-2 text-nowrap">/', preg_quote(route('creators.index'), '/')),
+                (string)$response->getContent(),
+            );
+            $response->assertSee(sprintf('name="dungeon" value="%s"', e($dungeon->slug)), false);
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenADungeonNobodyPublishesRoutesFor_rendersTheEmptyMessageForIt(): void
+    {
+        // Arrange
+        $viewer = User::factory()->create();
+        /** @var Dungeon|null $dungeon */
+        $dungeon = Dungeon::query()
+            ->where('slug', '!=', '')
+            ->whereDoesntHave('dungeonRoutes', static fn($builder) => $builder->where('published_state_id', PublishedState::ALL[PublishedState::WORLD]))
+            ->first();
+        $this->assertNotNull($dungeon, 'Expected a seeded dungeon without world-published routes');
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['dungeon' => $dungeon->slug]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertTrue($this->creatorIdsFrom($response)->isEmpty());
+            $response->assertSee(e(__('view_creator.directory.empty_for_dungeon', ['dungeon' => __($dungeon->name)])), false);
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenAnUnknownDungeon_failsValidation(): void
+    {
+        // Arrange
+        $viewer = User::factory()->create();
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['dungeon' => 'not-a-dungeon']));
+
+            // Assert
+            $response->assertSessionHasErrors('dungeon');
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $viewer->delete();
+        }
+    }
+
+    private function statsSeason(): Season
+    {
+        $statsSeason = app(CreatorDirectoryServiceInterface::class)->getStatsSeason();
+        $this->assertNotNull($statsSeason, 'Expected the default game version to have a current season');
+        $this->assertGreaterThanOrEqual(4, $statsSeason->dungeons->count(), 'Expected the current season to have at least four dungeons');
+
+        return $statsSeason;
+    }
+
+    /**
+     * Routes for a dungeon in the stats season, which is the dungeon's own current season as well.
+     *
+     * @param array<string, mixed> $attributes
+     *
+     * @return EloquentCollection<int, DungeonRoute>
+     */
+    private function createRoutesFor(
+        User    $creator,
+        Dungeon $dungeon,
+        int     $count,
+        string  $publishedState = PublishedState::WORLD,
+        array   $attributes = [],
+    ): EloquentCollection {
+        $routes = new EloquentCollection();
+
+        for ($i = 0; $i < $count; $i++) {
+            $routes->push(DungeonRoute::factory()->create(array_merge([
+                'author_id'          => $creator->id,
+                'dungeon_id'         => $dungeon->id,
+                'season_id'          => $this->statsSeason()->id,
+                'expires_at'         => null,
+                'published_state_id' => PublishedState::ALL[$publishedState],
+            ], $attributes)));
+        }
+
+        return $routes;
     }
 
     /**

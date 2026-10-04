@@ -17,12 +17,15 @@ return [
         'empty'                   => 'There are no listed creators yet.',
         'empty_for_category'      => 'No creators are sharing a ":category" collection yet.',
         'empty_for_search'        => 'No creators found matching ":search".',
+        'empty_for_dungeon'       => 'No creators are publishing :dungeon routes yet.',
+        'filtered_to_dungeon'     => 'Creators for :dungeon, most popular routes there first.',
+        'clear_dungeon_filter'    => 'All dungeons',
     ],
     'featured' => [
-        'title'         => 'Featured creators',
-        'title_dungeon' => 'Creators for :dungeon',
-        'see_all'       => 'See all creators',
-        /** Tooltip on a rail entry - it carries the name because the name itself may be clipped to an ellipsis */
+        'title'           => 'Featured creators',
+        'title_dungeon'   => 'Creators for :dungeon',
+        'see_all_dungeon' => 'See all creators for :dungeon',
+        /** Tooltip on a rail entry - it carries the name because a name past two lines is clipped to an ellipsis */
         'entry_title'         => ':name - :routes',
         'route_count'         => '{1} :count route|[2,*] :count routes',
         'dungeon_route_count' => '{1} :count :dungeon route|[2,*] :count :dungeon routes',
@@ -36,5 +39,8 @@ return [
         'views'                    => '{0} No views|{1} :views view|[2,*] :views views',
         'rating'                   => '{1} ★ :rating (:count rating)|[2,*] ★ :rating (:count ratings)',
         'last_published'           => 'Last published :time',
+        'coverage_all'             => '{1} Covers the only dungeon this season|[2,*] Covers all :total dungeons this season',
+        'coverage_some'            => 'Covers :count of :total dungeons: :dungeons',
+        'coverage_most'            => 'Covers :count of :total dungeons, all but :dungeons',
     ],
 ];

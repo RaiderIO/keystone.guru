@@ -11,7 +11,8 @@ class CreatorDirectoryController extends Controller
 {
     /**
      * The creator directory: everyone with enough published routes who has not opted out, with an
-     * optional name search, an optional filter on the kind of collections they share, and a sort.
+     * optional name search, optional filters on the kind of collections they share and on a dungeon
+     * they make routes for, and a sort.
      */
     public function index(
         CreatorDirectoryFormRequest      $request,
@@ -19,13 +20,15 @@ class CreatorDirectoryController extends Controller
     ): View {
         $search   = $request->search();
         $category = $request->dungeonRouteCollectionCategory();
+        $dungeon  = $request->dungeon();
         $sort     = $request->sort();
 
         return view('creator.directory', [
-            'creators'         => $creatorDirectoryService->paginateCreators($search, $category?->id, $sort),
+            'creators'         => $creatorDirectoryService->paginateCreators($search, $category?->id, $dungeon, $sort),
             'search'           => $search,
             'categories'       => DungeonRouteCollectionCategory::all(),
             'selectedCategory' => $category,
+            'selectedDungeon'  => $dungeon,
             'sort'             => $sort,
             'statsSeason'      => $creatorDirectoryService->getStatsSeason(),
         ]);

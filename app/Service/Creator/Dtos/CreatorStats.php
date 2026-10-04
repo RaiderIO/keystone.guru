@@ -2,8 +2,10 @@
 
 namespace App\Service\Creator\Dtos;
 
+use App\Models\Dungeon;
 use App\Models\Season;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * What a creator's world-published routes say about them, as shown on the directory card and the
@@ -12,15 +14,20 @@ use Illuminate\Support\Carbon;
  */
 readonly class CreatorStats
 {
+    /**
+     * @param Collection<int, Dungeon> $seasonCoveredDungeons The season's dungeons the season routes are for, in the
+     *                                                        season's order.
+     */
     public function __construct(
-        public int     $publishedRouteCount,
-        public int     $totalViews,
-        public int     $seasonRouteCount,
-        public int     $seasonViews,
-        public ?float  $ratingAverage,
-        public int     $ratingCount,
-        public ?Carbon $lastPublishedAt,
-        public ?Season $season,
+        public int        $publishedRouteCount,
+        public int        $totalViews,
+        public int        $seasonRouteCount,
+        public int        $seasonViews,
+        public ?float     $ratingAverage,
+        public int        $ratingCount,
+        public ?Carbon    $lastPublishedAt,
+        public ?Season    $season,
+        public Collection $seasonCoveredDungeons,
     ) {
     }
 
@@ -33,6 +40,7 @@ readonly class CreatorStats
         $ratingCount       = (int)($attributes['rating_count'] ?? 0);
         $ratingWeightedSum = (float)($attributes['rating_weighted_sum'] ?? 0);
         $lastPublishedAt   = $attributes['last_published_at'] ?? null;
+        $seasonDungeonIds  = array_map('intval', array_filter(explode(',', (string)($attributes['season_dungeon_ids'] ?? ''))));
 
         return new self(
             (int)($attributes['published_route_count'] ?? 0),
@@ -43,6 +51,7 @@ readonly class CreatorStats
             $ratingCount,
             $lastPublishedAt === null ? null : Carbon::parse($lastPublishedAt),
             $season,
+            $season === null ? collect() : $season->dungeons->whereIn('id', $seasonDungeonIds)->values(),
         );
     }
 
@@ -122,6 +131,36 @@ readonly class CreatorStats
         }
 
         return $parts;
+    }
+
+    /**
+     * Which of the season's dungeons the creator has routes for, naming whichever side of the split is shorter so
+     * the names are on the page rather than behind a tooltip. Null without a season or without any season routes.
+     */
+    public function getCoverageLine(): ?string
+    {
+        if ($this->season === null || $this->seasonCoveredDungeons->isEmpty()) {
+            return null;
+        }
+
+        $seasonDungeons = $this->season->dungeons;
+        $coveredCount   = $this->seasonCoveredDungeons->count();
+        $totalCount     = $seasonDungeons->count();
+
+        if ($coveredCount >= $totalCount) {
+            return trans_choice('view_creator.stats.coverage_all', $totalCount, ['total' => $totalCount]);
+        }
+
+        $coversAtMostHalf = $coveredCount * 2 <= $totalCount;
+        $namedDungeons    = $coversAtMostHalf
+            ? $this->seasonCoveredDungeons
+            : $seasonDungeons->whereNotIn('id', $this->seasonCoveredDungeons->pluck('id'));
+
+        return __($coversAtMostHalf ? 'view_creator.stats.coverage_some' : 'view_creator.stats.coverage_most', [
+            'count'    => $coveredCount,
+            'total'    => $totalCount,
+            'dungeons' => $namedDungeons->map(static fn(Dungeon $dungeon): string => __($dungeon->name))->implode(', '),
+        ]);
     }
 
     private function formatViews(int $views): string

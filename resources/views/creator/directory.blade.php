@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use App\Models\Season;
 use App\Models\User;
@@ -12,12 +13,14 @@ use Illuminate\Pagination\LengthAwarePaginator;
  * @var string|null                                            $search
  * @var Collection<int, DungeonRouteCollectionCategory>        $categories
  * @var DungeonRouteCollectionCategory|null                    $selectedCategory
+ * @var Dungeon|null                                           $selectedDungeon
  * @var CreatorDirectorySort                                   $sort
  * @var Season|null                                            $statsSeason
  */
 
 $categories       ??= collect();
 $selectedCategory ??= null;
+$selectedDungeon  ??= null;
 ?>
 @extends('layouts.sitepage', [
     'wide'  => true,
@@ -34,6 +37,10 @@ $selectedCategory ??= null;
     </p>
 
     <form method="GET" action="{{ route('creators.index') }}" class="row g-2 mb-4" role="search">
+        @if($selectedDungeon !== null)
+            <input type="hidden" name="dungeon" value="{{ $selectedDungeon->slug }}"/>
+        @endif
+
         <div class="col-12 col-md-6 col-lg-4">
             <label for="creator_search" class="visually-hidden">
                 {{ __('view_creator.directory.search_label') }}
@@ -75,8 +82,9 @@ $selectedCategory ??= null;
             </div>
         @endif
 
-        {{-- Without a season there is nothing for "active this season" to order by --}}
-        @if($statsSeason !== null)
+        {{-- Without a season there is nothing for "active this season" to order by, and a dungeon filter ranks by
+             popularity in that dungeon whatever the sort says --}}
+        @if($statsSeason !== null && $selectedDungeon === null)
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="input-group">
                     <label for="creator_sort" class="input-group-text">
@@ -94,11 +102,28 @@ $selectedCategory ??= null;
                 @include('common.forms.form-error', ['key' => 'sort'])
             </div>
         @endif
+        @include('common.forms.form-error', ['key' => 'dungeon'])
     </form>
+
+    @if($selectedDungeon !== null)
+        <p class="creator_directory_dungeon_filter mb-4">
+            {{ __('view_creator.directory.filtered_to_dungeon', ['dungeon' => __($selectedDungeon->name)]) }}
+            <a href="{{ route('creators.index', array_filter([
+                    'search'      => $search,
+                    'category_id' => $selectedCategory?->id,
+                ], static fn($value): bool => $value !== null)) }}"
+               class="ms-2 text-nowrap">
+                <i class="fas fa-times" aria-hidden="true"></i>
+                {{ __('view_creator.directory.clear_dungeon_filter') }}
+            </a>
+        </p>
+    @endif
 
     @if($creators->isEmpty())
         <p class="text-body-secondary">
-            @if($selectedCategory !== null)
+            @if($selectedDungeon !== null)
+                {{ __('view_creator.directory.empty_for_dungeon', ['dungeon' => __($selectedDungeon->name)]) }}
+            @elseif($selectedCategory !== null)
                 {{ __('view_creator.directory.empty_for_category', ['category' => $selectedCategory->getTranslatedName()]) }}
             @elseif($search !== null)
                 {{ __('view_creator.directory.empty_for_search', ['search' => $search]) }}

@@ -19,9 +19,9 @@ use Illuminate\Database\Eloquent\Collection;
     <?php $featuredTitle = __('view_creator.featured.title_dungeon', ['dungeon' => __($dungeon->name)]); ?>
     <nav class="discover_creator_rail mt-4" aria-label="{{ $featuredTitle }}">
         <div class="discover_creator_rail_heading">
-            <a href="{{ route('creators.index') }}"
+            <a href="{{ route('creators.index', ['dungeon' => $dungeon->slug]) }}"
                class="discover_creator_rail_label"
-               title="{{ __('view_creator.featured.see_all') }}">
+               title="{{ __('view_creator.featured.see_all_dungeon', ['dungeon' => __($dungeon->name)]) }}">
                 {{ $featuredTitle }}
                 <i class="fas fa-angle-right" aria-hidden="true"></i>
             </a>
@@ -34,7 +34,7 @@ use Illuminate\Database\Eloquent\Collection;
                 ?>
                 <a href="{{ route('profile.view', ['user' => $creator]) }}"
                    class="discover_creator_entry"
-                   {{-- A long name clips to an ellipsis; the title is its only reveal path --}}
+                   {{-- A name past two lines clips to an ellipsis; the title carries it in full --}}
                    title="{{ __('view_creator.featured.entry_title', [
                        'name'   => $creator->name,
                        'routes' => trans_choice('view_creator.featured.dungeon_route_count', $dungeonRouteCount, [

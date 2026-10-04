@@ -143,11 +143,15 @@ final class FeaturedCreatorsTest extends PublicTestCase
             // Act
             $response = $this->get($this->dungeonRouteListUrl($dungeon));
 
-            // Assert - the rail, its label naming the dungeon and linking into the directory, and the featured creator
+            // Assert - the rail, its label naming the dungeon and linking into the directory filtered to it, and the
+            // featured creator
             $response->assertOk();
             $response->assertSee('discover_creator_rail', false);
             $response->assertSee(e(__('view_creator.featured.title_dungeon', ['dungeon' => __($dungeon->name)])), false);
-            $response->assertSee(route('creators.index'), false);
+            $response->assertSee(
+                sprintf('href="%s"', e(route('creators.index', ['dungeon' => $dungeon->slug]))),
+                false,
+            );
             $response->assertSee($featuredCreator->name);
         } finally {
             $this->deleteAll($routes);

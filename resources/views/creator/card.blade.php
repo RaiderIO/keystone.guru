@@ -32,5 +32,12 @@ $creatorStats = CreatorStats::fromAttributes($creator->getAttributes(), $statsSe
         <div class="text-body-secondary small">
             {{ implode(' · ', $creatorStats->getSummaryParts()) }}
         </div>
+
+        <?php $coverageLine = $creatorStats->getCoverageLine(); ?>
+        @if($coverageLine !== null)
+            <div class="creator_card_coverage text-body-secondary small mt-1">
+                {{ $coverageLine }}
+            </div>
+        @endif
     </div>
 </a>

@@ -70,6 +70,13 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
                         {{ implode(' · ', $creatorStats->getProfileParts()) }}
                     </div>
 
+                    <?php $coverageLine = $creatorStats->getCoverageLine(); ?>
+                    @if($coverageLine !== null)
+                        <div class="creator_hero_coverage text-body-secondary small mb-2">
+                            {{ $coverageLine }}
+                        </div>
+                    @endif
+
                     @if(!empty($user->bio))
                         <p class="creator_hero_bio">
                             {{ $user->bio }}

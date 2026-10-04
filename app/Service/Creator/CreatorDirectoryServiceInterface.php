@@ -15,15 +15,19 @@ interface CreatorDirectoryServiceInterface
     /**
      * A page of listed creators, their season figures counted for getStatsSeason().
      *
-     * @param string|null $search     Optional case-insensitive match on the creator's name.
-     * @param int|null    $categoryId Optional DungeonRouteCollectionCategory to filter on: only
-     *                                creators who publicly share a collection of that kind.
+     * @param string|null  $search     Optional case-insensitive match on the creator's name.
+     * @param int|null     $categoryId Optional DungeonRouteCollectionCategory to filter on: only
+     *                                 creators who publicly share a collection of that kind.
+     * @param Dungeon|null $dungeon    Optional dungeon to filter on: only creators with routes for it
+     *                                 in its current season, ranked like getFeaturedCreators() and
+     *                                 regardless of $sort.
      *
      * @return LengthAwarePaginator<int, User>
      */
     public function paginateCreators(
         ?string              $search = null,
         ?int                 $categoryId = null,
+        ?Dungeon             $dungeon = null,
         CreatorDirectorySort $sort = CreatorDirectorySort::ActiveThisSeason,
         ?int                 $perPage = null,
     ): LengthAwarePaginator;
@@ -41,7 +45,7 @@ interface CreatorDirectoryServiceInterface
 
     /**
      * The season "this season" means on the directory and profiles: the current season of the
-     * viewer's game version, or null when that game version has no seasons.
+     * viewer's game version with its dungeons loaded, or null when that game version has no seasons.
      */
     public function getStatsSeason(): ?Season;
 }

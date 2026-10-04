@@ -71,13 +71,14 @@ use Override;
  * @property bool $is_admin
  *
  * The creator figures below are only present when hydrated through UserRepository's
- * buildListedCreatorsQuery() or buildFeaturedCreatorsForDungeonQuery(); MySQL returns the sums as
+ * buildListedCreatorsQuery() or buildListedCreatorsForDungeonQuery(); MySQL returns the sums as
  * numeric strings.
  * @property int|null        $published_route_count
  * @property int|string|null $total_views
  * @property int|string|null $season_route_count
  * @property int|string|null $season_views
  * @property int|string|null $season_popularity
+ * @property string|null     $season_dungeon_ids    Comma-separated ids of the dungeons the season routes are for.
  * @property int|string|null $rating_weighted_sum
  * @property int|string|null $rating_count
  * @property string|null     $last_published_at

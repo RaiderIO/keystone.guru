@@ -29,9 +29,9 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      *
      * The threshold and the figures rendered on each card come from the same aggregate, exposed on
      * the returned models as `published_route_count`, `total_views`, `season_route_count`,
-     * `season_views`, `season_popularity`, `rating_weighted_sum`, `rating_count` and
-     * `last_published_at`, so they cannot drift apart. `users.id` is always the final tiebreak so
-     * pagination cannot repeat or skip a creator between pages.
+     * `season_views`, `season_popularity`, `season_dungeon_ids`, `rating_weighted_sum`,
+     * `rating_count` and `last_published_at`, so they cannot drift apart. `users.id` is always the
+     * final tiebreak so pagination cannot repeat or skip a creator between pages.
      *
      * @param int|null             $categoryId When set, only creators who publicly share a collection
      *                                         filed under this category are listed.
@@ -53,11 +53,29 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * Listed creators who have world-published routes for a dungeon, most popular there first.
      * Exposes `dungeon_route_count` and `dungeon_popularity` next to the listed-creator figures.
      *
-     * @param int|null $seasonId When set, only the dungeon's routes of this season count.
+     * @param int|null $seasonId When set, only the dungeon's routes of this season count, and the
+     *                           listed-creator season figures are counted for it too.
      *
      * @return Builder<User>
      */
     public function buildFeaturedCreatorsForDungeonQuery(int $dungeonId, ?int $seasonId): Builder;
+
+    /**
+     * buildFeaturedCreatorsForDungeonQuery() with the dungeon's season and the season the card
+     * figures are counted for set apart, plus the directory's category filter.
+     *
+     * @param int|null $dungeonSeasonId When set, only the dungeon's routes of this season count.
+     * @param int|null $categoryId      As buildListedCreatorsQuery().
+     * @param int|null $seasonId        The season the listed-creator season figures are counted for.
+     *
+     * @return Builder<User>
+     */
+    public function buildListedCreatorsForDungeonQuery(
+        int  $dungeonId,
+        ?int $dungeonSeasonId,
+        ?int $categoryId = null,
+        ?int $seasonId = null,
+    ): Builder;
 
     /**
      * The same aggregate buildListedCreatorsQuery() lists creators by, for one user regardless of

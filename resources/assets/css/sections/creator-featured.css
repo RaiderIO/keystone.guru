@@ -60,7 +60,7 @@
     align-items: center;
     max-width: 100%;
     scroll-snap-align: start;
-    padding: 0.375rem 0.75rem 0.375rem 0.375rem;
+    padding: 0.25rem 0.75rem 0.25rem 0.375rem;
     background-color: rgba(128, 128, 128, 0.12);
     border: 1px solid rgba(128, 128, 128, 0.28);
     border-radius: var(--bs-border-radius);
@@ -122,22 +122,28 @@
     line-height: 1.25;
 }
 
-/* One line each; the entry's title attribute carries the full name */
-.discover_creator_name,
 .discover_creator_count {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-.discover_creator_name {
-    max-width: 10rem;
-    color: var(--theme-text-contrast);
-    font-weight: 600;
-}
-
-.discover_creator_count {
     font-size: 0.8125rem;
+    line-height: 1.15;
+}
+
+/* Wraps to a second line before it clips. Two lines of it plus the count are 47px; with the entry's 4px top and
+   bottom padding that keeps the rail inside its 94px. */
+.discover_creator_name {
+    display: -webkit-box;
+    max-width: 10rem;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow-wrap: anywhere;
+    color: var(--theme-text-contrast);
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.15;
 }
 
 @media (prefers-reduced-motion: reduce) {
