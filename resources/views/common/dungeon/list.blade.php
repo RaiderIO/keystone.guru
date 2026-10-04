@@ -56,6 +56,7 @@ $viewShares        ??= collect();
             'id' => $dungeon->id,
             'link' => $links->get($dungeon->key),
             'title' => $useAbbreviation ? __($dungeon->abbreviation) : __($dungeon->name),
+            'fullName' => $useAbbreviation ? __($dungeon->name) : null,
             'isSelected' => $selected === $dungeon->key,
             'imageUrl' => $dungeon->getImageUrl(),
             'imageAlt' => __($dungeon->name),
