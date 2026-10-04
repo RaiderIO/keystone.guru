@@ -33,6 +33,7 @@ $echo               ??= false;
 $user               = Auth::user();
 $mayUserEdit        = $dungeonroute !== null && Gate::allows('edit', $dungeonroute);
 $showShare          = !empty($show['share']) && in_array(true, $show['share'], true);
+$showCopyMdtString  = isset($dungeonroute) && $showShare && ($show['share']['mdt-export'] ?? false);
 $showCreateRouteBtn = isset($dungeonroute) && $dungeonroute->isSandbox();
 
 $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
@@ -239,6 +240,14 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
             @endif
 
 
+            @if($showCopyMdtString)
+                @component('common.maps.controls.buttons.headerbutton')
+                    <button type="button" id="copy_mdt_string_button" class="btn btn-info btn-sm w-100 copy_mdt_string_button">
+                        <i class="far fa-copy copy_mdt_string_icon" aria-hidden="true"></i>
+                        <span class="copy_mdt_string_label">{{ __('view_common.maps.controls.header.copy_mdt_string') }}</span>
+                    </button>
+                @endcomponent
+            @endif
             @if($showShare)
                 @component('common.maps.controls.buttons.headerbutton')
                     <button class="btn btn-info btn-sm w-100"
@@ -325,6 +334,14 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
                                 </a>
                             </li>
                         @endif
+                        @if($showCopyMdtString)
+                            <li>
+                                <a class="dropdown-item copy_mdt_string_button" href="#" role="button">
+                                    <i class="far fa-copy copy_mdt_string_icon" aria-hidden="true"></i>
+                                    <span class="copy_mdt_string_label">{{ __('view_common.maps.controls.header.copy_mdt_string') }}</span>
+                                </a>
+                            </li>
+                        @endif
                         @if($showShare)
                             <li>
                                 <a class="dropdown-item" href="#"
@@ -342,6 +359,14 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
 @endif
 
 @isset($dungeonroute)
+
+    @if($showCopyMdtString)
+        @include('common.general.inline', ['path' => 'common/maps/copymdtstring', 'options' => [
+            'buttonSelector' => '.copy_mdt_string_button',
+            'shareModalSelector' => '#share_modal',
+            'edit' => $edit ?? false,
+        ]])
+    @endif
 
     @if($showShare)
         @component('common.general.modal', ['id' => 'share_modal'])
