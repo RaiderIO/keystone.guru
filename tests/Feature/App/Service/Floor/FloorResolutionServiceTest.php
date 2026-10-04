@@ -61,7 +61,7 @@ final class FloorResolutionServiceTest extends PublicTestCase
     {
         // Arrange
         $this->admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false, requireDefaultFloor: true);
         /** @var Floor $expected */
         $expected = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
 
@@ -130,7 +130,7 @@ final class FloorResolutionServiceTest extends PublicTestCase
     {
         // Arrange
         $this->admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false, requireDefaultFloor: true);
 
         // Act
         $resolved = app(FloorResolutionServiceInterface::class)->resolveRequestedFloor($dungeon, $mappingVersion, '1');
@@ -144,7 +144,7 @@ final class FloorResolutionServiceTest extends PublicTestCase
     {
         // Arrange
         $this->admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false, requireDefaultFloor: true);
         /** @var Floor $facadeFloor */
         $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
         /** @var Floor $floor */
@@ -170,7 +170,7 @@ final class FloorResolutionServiceTest extends PublicTestCase
     {
         // Arrange
         $this->admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false, requireDefaultFloor: true);
         /** @var Floor $facadeFloor */
         $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
 
@@ -194,7 +194,7 @@ final class FloorResolutionServiceTest extends PublicTestCase
     {
         // Arrange
         $this->admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false, requireDefaultFloor: true);
         /** @var Floor $facadeFloor */
         $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
 
@@ -218,7 +218,7 @@ final class FloorResolutionServiceTest extends PublicTestCase
     {
         // Arrange
         $this->admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false, requireDefaultFloor: true);
         /** @var Floor $floor */
         $floor = $dungeon->floors()->where('facade', 0)->firstOrFail();
 
@@ -234,7 +234,7 @@ final class FloorResolutionServiceTest extends PublicTestCase
     public function resolveRequestedFloor_givenFacadeNavigationAndSplitFloorsStyle_returnsThatFloorAsCanonical(): void
     {
         // Arrange - the admin's style is split floors (setUp)
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false, requireDefaultFloor: true);
         /** @var Floor $facadeFloor */
         $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
 

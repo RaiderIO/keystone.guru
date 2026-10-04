@@ -215,7 +215,7 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
         $admin = User::findOrFail(1);
         $admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
         $this->be($admin);
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, dungeonActive: true, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false, dungeonActive: true, requireDefaultFloor: true);
         $gameVersion                = $mappingVersion->gameVersion;
         /** @var Floor $facadeFloor */
         $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
@@ -246,7 +246,7 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
         $admin = User::findOrFail(1);
         $admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
         $this->be($admin);
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, dungeonActive: true, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false, dungeonActive: true, requireDefaultFloor: true);
         $gameVersion                = $mappingVersion->gameVersion;
         /** @var Floor $facadeFloor */
         $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
