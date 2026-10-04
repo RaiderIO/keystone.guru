@@ -16,7 +16,7 @@ use Illuminate\Support\Collection;
  *
  * @var GameVersion                              $gameVersion
  * @var Collection<int, Dungeon>                 $dungeons
- * @var Dungeon                                  $selectedDungeon
+ * @var Dungeon|null                             $selectedDungeon Null when the saved dungeon is not listed
  * @var Collection<string, string>               $links
  * @var Season|null                              $nextSeason
  * @var string|null                              $nextSeasonLink
@@ -67,7 +67,7 @@ $filterText = static fn(string ...$texts): string => mb_strtolower(implode(' ', 
                     <ul class="dungeon_sheet_rows">
                         @foreach($groupDungeons as $dungeon)
                             <?php
-                            $isSelected   = $selectedDungeon->key === $dungeon->key;
+                            $isSelected   = $selectedDungeon?->key === $dungeon->key;
                             $thisWeekTier = $currentAffixGroup === null ? null : ($easeTiers[$currentAffixGroup->id][$dungeon->id] ?? null);
                             ?>
                             <li>
@@ -76,12 +76,13 @@ $filterText = static fn(string ...$texts): string => mb_strtolower(implode(' ', 
                                    data-filter-text="{{ $filterText(__($dungeon->name), __($dungeon->abbreviation)) }}"
                                    @if($isSelected) aria-current="true" @endif>
                                     <img class="dungeon_sheet_row_image" src="{{ $dungeon->getImageUrl() }}"
-                                         loading="lazy" alt=""/>
+                                         loading="lazy" alt="" data-image-fallback/>
                                     <span class="dungeon_sheet_row_name">{{ __($dungeon->name) }}</span>
                                     @if($thisWeekTier !== null)
-                                        <span class="dungeon_sheet_row_tier"
-                                              title="{{ __('view_common.dungeon.list.card.this_week_tier') }}">
-                                            <span class="tier {{ strtolower($thisWeekTier) }}">{{ $thisWeekTier }}</span>
+                                        {{-- Part of the link's name: a title inside a link reaches neither a keyboard nor a screen reader --}}
+                                        <span class="dungeon_sheet_row_tier">
+                                            <span class="tier {{ strtolower($thisWeekTier) }}" aria-hidden="true">{{ $thisWeekTier }}</span>
+                                            <span class="visually-hidden">{{ __('view_common.dungeon.list.card.this_week_tier_label', ['tier' => $thisWeekTier]) }}</span>
                                         </span>
                                     @endif
                                     <span class="dungeon_sheet_row_abbreviation" aria-hidden="true">{{ __($dungeon->abbreviation) }}</span>
@@ -99,9 +100,9 @@ $filterText = static fn(string ...$texts): string => mb_strtolower(implode(' ', 
                             <a class="dungeon_sheet_row" href="{{ $nextSeasonLink }}"
                                data-filter-text="{{ $filterText(__('view_common.dungeon.list.next_season'), __($nextSeason->expansion->name)) }}">
                                 <img class="dungeon_sheet_row_image"
-                                     src="{{ $nextSeason->expansion->getWallpaperUrl() }}" loading="lazy" alt=""/>
+                                     src="{{ $nextSeason->expansion->getWallpaperUrl() }}" loading="lazy" alt="" data-image-fallback/>
                                 <span class="dungeon_sheet_row_name">{{ __('view_common.dungeon.list.next_season') }}</span>
-                                <i class="fas fa-arrow-right dungeon_sheet_row_abbreviation" aria-hidden="true"></i>
+                                <span class="dungeon_sheet_row_abbreviation" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
                             </a>
                         </li>
                     </ul>

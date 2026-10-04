@@ -8,11 +8,13 @@ use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
 use DOMDocument;
 use DOMXPath;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -174,6 +176,107 @@ final class HeaderComposerTest extends PublicTestCase
             );
         } finally {
             unset($_COOKIE['game_version']);
+        }
+    }
+
+    #[Test]
+    public function compose_givenAContextDungeonInTheGameVersionsList_selectsIt(): void
+    {
+        // Arrange
+        /** @var Dungeon $dungeon */
+        $dungeon                    = $this->getClassicEraDungeons()->get(1);
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_CLASSIC_ERA;
+        $_COOKIE['dungeon_context'] = $dungeon->key;
+        $view                       = view('common.layout.header');
+
+        try {
+            // Act
+            app(HeaderComposer::class)->compose($view);
+
+            // Assert
+            $this->assertSame($dungeon->id, $view->getData()['dungeonContextSelectedDungeon']?->id);
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
+    /**
+     * Switching game version keeps the saved dungeon, which the new version's list may not offer at all.
+     */
+    #[Test]
+    public function compose_givenAContextDungeonOutsideTheGameVersionsList_selectsNothing(): void
+    {
+        // Arrange
+        $retailDungeon              = $this->getRetailDungeonOutsideClassicEra();
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_CLASSIC_ERA;
+        $_COOKIE['dungeon_context'] = $retailDungeon->key;
+        $view                       = view('common.layout.header');
+
+        try {
+            // Act
+            app(HeaderComposer::class)->compose($view);
+
+            // Assert
+            $this->assertNull($view->getData()['dungeonContextSelectedDungeon']);
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
+    /**
+     * The mobile toggle must not name a dungeon that the sheet it opens does not list.
+     */
+    #[Test]
+    public function render_givenAContextDungeonOutsideTheGameVersionsList_showsNoSelectionInTheMobileToggleAndSheet(): void
+    {
+        // Arrange
+        $retailDungeon              = $this->getRetailDungeonOutsideClassicEra();
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_CLASSIC_ERA;
+        $_COOKIE['dungeon_context'] = $retailDungeon->key;
+
+        try {
+            // Act
+            $html = view('common.layout.header')->render();
+
+            // Assert
+            $toggle = $this->getMobileDungeonToggleHtml($html);
+            $sheet  = $this->getMobileDungeonSheetHtml($html);
+            $this->assertNotNull($toggle);
+            $this->assertNotNull($sheet);
+            $this->assertSame(1, preg_match('/<span class="dungeon_context_nav_label[^"]*">\s*(.*?)\s*<\/span>/s', $toggle, $matches));
+            $this->assertSame(e(__('view_common.layout.nav.dungeoncontext.no_selection')), $matches[1]);
+            $this->assertStringNotContainsString($retailDungeon->getImageUrl(), $toggle);
+            $this->assertSame(0, preg_match_all('/<a class="dungeon_sheet_row[^"]*"[^>]*aria-current="true"/', $sheet));
+            $this->assertStringContainsString('class="dungeon_sheet_row"', $sheet);
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
+    #[Test]
+    public function render_givenAContextDungeonInTheGameVersionsList_namesItInTheMobileToggleAndSheet(): void
+    {
+        // Arrange
+        /** @var Dungeon $dungeon */
+        $dungeon                    = $this->getClassicEraDungeons()->get(1);
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_CLASSIC_ERA;
+        $_COOKIE['dungeon_context'] = $dungeon->key;
+
+        try {
+            // Act
+            $html = view('common.layout.header')->render();
+
+            // Assert
+            $toggle = $this->getMobileDungeonToggleHtml($html);
+            $sheet  = $this->getMobileDungeonSheetHtml($html);
+            $this->assertNotNull($toggle);
+            $this->assertNotNull($sheet);
+            $this->assertSame(1, preg_match('/<span class="dungeon_context_nav_label[^"]*">\s*(.*?)\s*<\/span>/s', $toggle, $matches));
+            $this->assertSame(e(__($dungeon->abbreviation)), $matches[1]);
+            $this->assertStringContainsString($dungeon->getImageUrl(), $toggle);
+            $this->assertSame(1, preg_match_all('/<a class="dungeon_sheet_row[^"]*"[^>]*aria-current="true"/', $sheet));
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
         }
     }
 
@@ -339,6 +442,25 @@ final class HeaderComposerTest extends PublicTestCase
             'translated'   => ['TESTKÜRZEL', false],
             'untranslated' => ['', true],
         ];
+    }
+
+    /**
+     * @return Collection<int, Dungeon>
+     */
+    private function getClassicEraDungeons(): Collection
+    {
+        return app(DungeonServiceInterface::class)->getDungeonsForGameVersion(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA));
+    }
+
+    private function getRetailDungeonOutsideClassicEra(): Dungeon
+    {
+        $classicEraDungeonIds = $this->getClassicEraDungeons()->pluck('id');
+        /** @var Dungeon|null $dungeon */
+        $dungeon = app(DungeonServiceInterface::class)->getDungeonsForGameVersion(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL))
+            ->first(static fn(Dungeon $dungeon) => !$classicEraDungeonIds->contains($dungeon->id));
+        $this->assertNotNull($dungeon, 'Need a seeded retail dungeon that Classic Era does not list');
+
+        return $dungeon;
     }
 
     /**

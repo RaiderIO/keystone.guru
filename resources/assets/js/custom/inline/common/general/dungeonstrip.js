@@ -20,7 +20,7 @@ class DungeonStrip {
         element.addEventListener('focusin', this._onFocusIn.bind(this));
         element.addEventListener('focusout', this._onFocusOut.bind(this));
         element.addEventListener('keydown', this._onKeyDown.bind(this));
-        this.allButton.addEventListener('click', () => this.setOpen(!this.isOpen()));
+        this.allButton.addEventListener('click', this._onAllClick.bind(this));
         document.addEventListener('pointerdown', this._onDocumentPointerDown.bind(this));
     }
 
@@ -50,6 +50,24 @@ class DungeonStrip {
         this.readoutName.textContent = chip === null ? source.name : chip.getAttribute('aria-label');
         this.readoutImage.src = source.image;
         this.readoutViews.textContent = source.viewShare === undefined ? '' : DungeonStrip.describeViewShare(parseFloat(source.viewShare));
+        this.fitReadoutName();
+    }
+
+    /**
+     * A name too long for the readout's two lines gets a third at a smaller size, rather than losing its end - which
+     * is where a dungeon's wings differ ("Scarlet Monastery - Armory").
+     */
+    fitReadoutName() {
+        this.readoutName.classList.remove('dungeon_strip_readout_name--long');
+        this.readoutName.classList.toggle('dungeon_strip_readout_name--long', this.readoutName.scrollHeight > this.readoutName.clientHeight);
+    }
+
+    /**
+     * Everything that depends on the strip's measured size, which changes with the header's.
+     */
+    updateLayout() {
+        this.fitReadoutName();
+        this.updateCompact();
     }
 
     /**
@@ -124,6 +142,20 @@ class DungeonStrip {
 
         this.showInReadout(null);
         this.setOpen(false);
+    }
+
+    /**
+     * The flyout's chips come before the button in the tab order, so a keyboard user who unfolds it is moved into it.
+     *
+     * @param {MouseEvent} event
+     */
+    _onAllClick(event) {
+        this.setOpen(!this.isOpen());
+
+        // A click from Enter or Space has no pointer behind it
+        if (this.isOpen() && event.detail === 0) {
+            (this.groups.querySelector('.dungeon_strip_chip[aria-current]') ?? this.groups.querySelector('.dungeon_strip_chip'))?.focus();
+        }
     }
 
     _onKeyDown(event) {

@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
  * @var bool                         $showGameVersionSelection
  * @var bool                         $showExpansionNav
  * @var Collection<string, string>   $dungeonContextLinks
+ * @var Dungeon|null                 $dungeonContextSelectedDungeon Null when the saved dungeon is not in the list
  * @var string|false                 $headerId
  * @var array<int, array<string, mixed>> $developerEntries
  */
@@ -39,11 +40,10 @@ $currentUserGameVersion   ??= GameVersion::getUserOrDefaultGameVersion();
 // Resolved once and shared by the desktop dungeon-context strip and its mobile dropdown counterpart:
 // explore, heatmap, the compendiums, search and discover all override these links so that picking a
 // dungeon keeps you on the page type you were already on. Both selectors must honour that override.
-$dungeonContextSelectedDungeon = null;
+$dungeonContextSelectedDungeon ??= null;
 $resolvedDungeonContextLinks   = null;
 if ($showDungeonContext) {
-    $dungeonContextSelectedDungeon = Dungeon::getUserOrDefaultDungeon();
-    $resolvedDungeonContextLinks   = $dungeonContextLinks ?? $gameVersionDungeons->mapWithKeys(fn(Dungeon $dungeon) => [
+    $resolvedDungeonContextLinks = $dungeonContextLinks ?? $gameVersionDungeons->mapWithKeys(fn(Dungeon $dungeon) => [
         $dungeon->key => route('dungeon.changecontext', [
             'dungeon' => $dungeon,
         ]),
@@ -180,7 +180,7 @@ $compendiumEntries        = [
                         // Only set when the next season is close enough to be advertised (#3761)
                         'nextSeason' => $dungeonContextNextSeason,
                         'nextSeasonLink' => $dungeonContextNextSeasonLink,
-                        'selected' => $dungeonContextSelectedDungeon->key,
+                        'selected' => $dungeonContextSelectedDungeon?->key,
                         // "What's easy this week" ease tiers (archon.gg), resolved in HeaderComposer.
                         'easeTiers' => $dungeonContextEaseTiers ?? collect(),
                         'currentAffixGroup' => $dungeonContextCurrentAffixGroup ?? null,
@@ -209,9 +209,9 @@ $compendiumEntries        = [
                     <button type="button" class="nav-link dungeon_context_nav_toggle" id="dungeonContextToggle"
                             data-bs-toggle="offcanvas" data-bs-target="#dungeon_sheet" aria-controls="dungeon_sheet"
                             aria-label="{{ __('view_common.layout.nav.dungeoncontext.change_dungeon') }}">
-                        <img class="dungeon_context_nav_icon" src="{{ $dungeonContextSelectedDungeon->getImageUrl() }}"
-                             alt=""/>
-                        <span class="dungeon_context_nav_label text-truncate">{{ __($dungeonContextSelectedDungeon->abbreviation) }}</span>
+                        <img class="dungeon_context_nav_icon" data-image-fallback alt=""
+                             src="{{ $dungeonContextSelectedDungeon?->getImageUrl() ?? $currentUserGameVersion->expansion->getWallpaperUrl() }}"/>
+                        <span class="dungeon_context_nav_label text-truncate">{{ $dungeonContextSelectedDungeon === null ? __('view_common.layout.nav.dungeoncontext.no_selection') : __($dungeonContextSelectedDungeon->abbreviation) }}</span>
                         <i class="fas fa-chevron-up dungeon_context_nav_caret" aria-hidden="true"></i>
                     </button>
                 </li>

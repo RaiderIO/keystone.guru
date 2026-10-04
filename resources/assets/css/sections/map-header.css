@@ -31,6 +31,16 @@
     pointer-events: auto;
 }
 
+.dungeon_context_header .dungeon_card_tier {
+    padding: 0.125rem;
+    border-radius: 0.25rem;
+}
+
+.dungeon_context_header .dungeon_card_tier:focus-visible {
+    outline: 0.125rem solid var(--theme-border-accent);
+    outline-offset: 0;
+}
+
 /** HEADER */
 /* The map header floats over the map: one fixed flex column, its bars stacking
    in flow inside it. The included .ksg-header degrades to a plain flow child. */
