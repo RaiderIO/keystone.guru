@@ -73,10 +73,6 @@ $showAds                ??= true;
                                 <i class='fas fa-cog'></i>
                             </button>
                         </div>
-                        <div class="col-auto ps-2 d-flex align-items-center" data-bs-toggle="tooltip"
-                             title="{{ __('view_common.maps.controls.pulls.cycle_pulls_hotkey_title') }}">
-                            <i class="fas fa-keyboard"></i>
-                        </div>
                         <div class="col ps-2 pe-2">
                             <div id="killzones_new_pull" class="btn btn-success w-100">
                                 <i class="fas fa-plus"></i> {{__('view_common.maps.controls.pulls.new_pull')}}
@@ -90,12 +86,20 @@ $showAds                ??= true;
                         </div>
                     </div>
                 </div>
-                @if( $dungeon->speedrun_enabled )
-                    @include('common.maps.controls.dungeonspeedrunrequirednpcs', ['edit' => true, 'showAllEnabled' => $showAllEnabled])
-                    <hr class="my-2">
-                @else
-                    <div id="edit_route_enemy_forces_container"></div>
-                @endif
+                <div class="row g-0">
+                    <div class="col">
+                        @if( $dungeon->speedrun_enabled )
+                            @include('common.maps.controls.dungeonspeedrunrequirednpcs', ['edit' => true, 'showAllEnabled' => $showAllEnabled])
+                            <hr class="my-2">
+                        @else
+                            <div id="edit_route_enemy_forces_container"></div>
+                        @endif
+                    </div>
+                    <div class="col-auto ps-2 pe-2 d-flex align-items-center" data-bs-toggle="tooltip"
+                         title="{{ __('view_common.maps.controls.pulls.cycle_pulls_hotkey_title') }}">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                </div>
             @else
                 <div class="row p-1 pe-2 mb-2 g-0">
                     <div class="col-auto" data-bs-toggle="tooltip"
@@ -104,16 +108,16 @@ $showAds                ??= true;
                             <i class='fas fa-cog'></i>
                         </button>
                     </div>
-                    <div class="col-auto ps-2 d-flex align-items-center" data-bs-toggle="tooltip"
-                         title="{{ __('view_common.maps.controls.pulls.cycle_pulls_hotkey_title') }}">
-                        <i class="fas fa-keyboard"></i>
-                    </div>
                     <div class="col">
                         @if( $dungeon->speedrun_enabled )
                             @include('common.maps.controls.dungeonspeedrunrequirednpcs', ['edit' => false, 'showAllEnabled' => $showAllEnabled])
                         @else
                             <div id="edit_route_enemy_forces_container" class="pt-1"></div>
                         @endif
+                    </div>
+                    <div class="col-auto ps-2 d-flex align-items-center" data-bs-toggle="tooltip"
+                         title="{{ __('view_common.maps.controls.pulls.cycle_pulls_hotkey_title') }}">
+                        <i class="fas fa-keyboard"></i>
                     </div>
                 </div>
             @endif
