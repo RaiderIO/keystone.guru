@@ -103,6 +103,91 @@ final class AjaxDungeonStartControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function store_givenTargetDungeon_savesIt(): void
+    {
+        // Arrange
+        $mappingVersion = $this->getNonFacadeMappingVersion();
+        $floorId        = $mappingVersion->dungeon->floors->first()->id;
+        /** @var Dungeon $targetDungeon */
+        $targetDungeon  = Dungeon::query()->whereKeyNot($mappingVersion->dungeon_id)->firstOrFail();
+        $dungeonStartId = null;
+
+        try {
+            // Act
+            $response = $this->post(route('ajax.admin.dungeonstart.create', ['mappingVersion' => $mappingVersion]), [
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $floorId,
+                'target_dungeon_id'  => $targetDungeon->id,
+                'lat'                => -100.5,
+                'lng'                => 150.5,
+            ]);
+
+            // Assert
+            $response->assertCreated();
+            $dungeonStartId = json_decode($response->content(), true)['id'];
+            $this->assertSame($targetDungeon->id, DungeonStart::query()->findOrFail($dungeonStartId)->target_dungeon_id);
+        } finally {
+            if ($dungeonStartId !== null) {
+                DungeonStart::query()->whereKey($dungeonStartId)->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function store_givenNoTargetDungeonSelected_clearsTheTargetDungeon(): void
+    {
+        // Arrange
+        $mappingVersion = $this->getNonFacadeMappingVersion();
+        $floorId        = $mappingVersion->dungeon->floors->first()->id;
+        /** @var Dungeon $targetDungeon */
+        $targetDungeon = Dungeon::query()->whereKeyNot($mappingVersion->dungeon_id)->firstOrFail();
+        $dungeonStart  = DungeonStart::factory()->create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $floorId,
+            'target_dungeon_id'  => $targetDungeon->id,
+        ]);
+
+        try {
+            // Act
+            $response = $this->put(route('ajax.admin.dungeonstart.update', ['mappingVersion' => $mappingVersion, 'dungeonStart' => $dungeonStart]), [
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $floorId,
+                'target_dungeon_id'  => -1,
+                'lat'                => -110.0,
+                'lng'                => 160.0,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertNull($dungeonStart->refresh()->target_dungeon_id);
+        } finally {
+            $dungeonStart->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenUnknownTargetDungeon_returnsValidationError(): void
+    {
+        // Arrange
+        $mappingVersion = $this->getNonFacadeMappingVersion();
+        $countBefore    = DungeonStart::query()->count();
+
+        // Act
+        $response = $this->postJson(route('ajax.admin.dungeonstart.create', ['mappingVersion' => $mappingVersion]), [
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $mappingVersion->dungeon->floors->first()->id,
+            'target_dungeon_id'  => (int)Dungeon::query()->max('id') + 1,
+            'lat'                => -100.5,
+            'lng'                => 150.5,
+        ]);
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('target_dungeon_id');
+        $this->assertSame($countBefore, DungeonStart::query()->count());
+    }
+
+    #[Test]
     public function delete_givenDungeonStart_deletesIt(): void
     {
         // Arrange

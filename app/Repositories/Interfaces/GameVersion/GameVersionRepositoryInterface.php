@@ -31,4 +31,11 @@ interface GameVersionRepositoryInterface extends BaseRepositoryInterface
      * @return Builder<TModel>
      */
     public function whereMappingVersionIsUsable(GameVersion $gameVersion, Builder $query): Builder;
+
+    /**
+     * The game version among the given ids that comes first in the game version selectors.
+     *
+     * @param array<int, int> $gameVersionIds
+     */
+    public function findFirstInDisplayOrder(array $gameVersionIds): ?GameVersion;
 }

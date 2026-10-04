@@ -77,4 +77,15 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
             ->forGameVersion($gameVersion)
             ->get();
     }
+
+    public function getSelectValues(): Collection
+    {
+        return Dungeon::query()
+            ->orderBy('id')
+            ->get(['id', 'name'])
+            ->map(static fn(Dungeon $dungeon): array => [
+                'id'   => $dungeon->id,
+                'name' => $dungeon->name,
+            ]);
+    }
 }

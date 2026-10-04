@@ -38,4 +38,11 @@ interface DungeonRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, Dungeon>
      */
     public function getActiveForGameVersion(GameVersion $gameVersion): Collection;
+
+    /**
+     * Every dungeon's id and name (a translation key), for a dungeon select.
+     *
+     * @return Collection<int, array{id: int, name: string}>
+     */
+    public function getSelectValues(): Collection;
 }

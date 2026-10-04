@@ -4,6 +4,7 @@ namespace App\Repositories\Database;
 
 use App\Models\DungeonStart;
 use App\Repositories\Interfaces\DungeonStartRepositoryInterface;
+use Illuminate\Support\Collection;
 
 class DungeonStartRepository extends DatabaseRepository implements DungeonStartRepositoryInterface
 {
@@ -33,5 +34,14 @@ class DungeonStartRepository extends DatabaseRepository implements DungeonStartR
             ->value('id');
 
         return $matchingId !== null ? (int)$matchingId : null;
+    }
+
+    public function getDungeonStartsTargetingDungeon(int $dungeonId): Collection
+    {
+        return DungeonStart::query()
+            ->with(['floor.dungeon'])
+            ->where('target_dungeon_id', $dungeonId)
+            ->orderBy('id')
+            ->get();
     }
 }

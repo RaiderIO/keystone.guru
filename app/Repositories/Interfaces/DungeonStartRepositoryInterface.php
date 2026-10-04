@@ -26,4 +26,12 @@ interface DungeonStartRepositoryInterface extends BaseRepositoryInterface
      * start has no comment or no such start exists.
      */
     public function findMatchingDungeonStartIdInMappingVersion(int $dungeonStartId, int $mappingVersionId): ?int;
+
+    /**
+     * Every dungeon start, in any mapping version, that points at the given dungeon - with its floor and that
+     * floor's dungeon loaded.
+     *
+     * @return Collection<int, DungeonStart>
+     */
+    public function getDungeonStartsTargetingDungeon(int $dungeonId): Collection;
 }

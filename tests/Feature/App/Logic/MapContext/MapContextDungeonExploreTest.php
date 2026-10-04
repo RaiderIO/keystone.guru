@@ -3,7 +3,9 @@
 namespace Tests\Feature\App\Logic\MapContext;
 
 use App\Models\Dungeon;
+use App\Models\DungeonStart;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\User;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\Dtos\SeasonWeek;
@@ -13,11 +15,13 @@ use Override;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('MapContext')]
 final class MapContextDungeonExploreTest extends PublicTestCase
 {
+    use CreatesDungeon;
     use ProvidesDungeon;
 
     #[Override]
@@ -94,5 +98,82 @@ final class MapContextDungeonExploreTest extends PublicTestCase
         $this->assertNotEmpty($seasonWeeks);
         $this->assertSame(1, $seasonWeeks[0]['week']);
         $this->assertSame($firstSeasonWeek->period, $seasonWeeks[0]['period']);
+    }
+
+    #[Test]
+    public function toArray_givenNavigationGameVersion_exposesTheNavigableDungeonStartsKeyedById(): void
+    {
+        // Arrange
+        $gameVersion                                        = GameVersion::query()->where('key', GameVersion::GAME_VERSION_CLASSIC_ERA)->firstOrFail();
+        [$continent, $target, $navigableStart, $inertStart] = $this->createContinentWithStarts($gameVersion);
+
+        // Act
+        $dungeonStartNavigation = app(MapContextServiceInterface::class)
+            ->createMapContextDungeonExplore(
+                $continent,
+                $continent->mappingVersions()->firstOrFail(),
+                User::MAP_FACADE_STYLE_SPLIT_FLOORS,
+                $gameVersion,
+            )
+            ->toArray()['dungeonStartNavigation'];
+
+        // Assert
+        $this->assertSame([
+            $navigableStart->id => [
+                'backLink'    => false,
+                'dungeonName' => $target->name,
+                'url'         => route('dungeon.explore.gameversion.start.navigate', [
+                    'gameVersion'  => $gameVersion,
+                    'dungeonStart' => $navigableStart,
+                ]),
+            ],
+        ], $dungeonStartNavigation);
+        $this->assertArrayNotHasKey($inertStart->id, $dungeonStartNavigation);
+    }
+
+    #[Test]
+    public function toArray_givenNoNavigationGameVersion_exposesNoDungeonStartNavigation(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_CLASSIC_ERA)->firstOrFail();
+        [$continent] = $this->createContinentWithStarts($gameVersion);
+
+        // Act
+        $dungeonStartNavigation = app(MapContextServiceInterface::class)
+            ->createMapContextDungeonExplore(
+                $continent,
+                $continent->mappingVersions()->firstOrFail(),
+                User::MAP_FACADE_STYLE_SPLIT_FLOORS,
+            )
+            ->toArray()['dungeonStartNavigation'];
+
+        // Assert
+        $this->assertSame([], $dungeonStartNavigation);
+    }
+
+    /**
+     * A continent with one start pointing at a dungeon and one pointing nowhere; all deleted with the test's dungeons.
+     *
+     * @return array{Dungeon, Dungeon, DungeonStart, DungeonStart}
+     */
+    private function createContinentWithStarts(GameVersion $gameVersion): array
+    {
+        $continent = $this->createDungeon(['active' => true], mappingVersionAttributes: ['game_version_id' => $gameVersion->id]);
+        $target    = $this->createDungeon(['active' => true], mappingVersionAttributes: ['game_version_id' => $gameVersion->id]);
+
+        $mappingVersionId = $continent->mappingVersions()->firstOrFail()->id;
+        $floorId          = $continent->floors()->firstOrFail()->id;
+
+        $navigableStart = DungeonStart::factory()->create([
+            'mapping_version_id' => $mappingVersionId,
+            'floor_id'           => $floorId,
+            'target_dungeon_id'  => $target->id,
+        ]);
+        $inertStart = DungeonStart::factory()->create([
+            'mapping_version_id' => $mappingVersionId,
+            'floor_id'           => $floorId,
+        ]);
+
+        return [$continent, $target, $navigableStart, $inertStart];
     }
 }
