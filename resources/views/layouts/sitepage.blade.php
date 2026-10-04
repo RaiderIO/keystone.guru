@@ -50,6 +50,7 @@ $breadcrumbsParams ??= [];
 
     @if($header)
         @include('common.layout.header')
+        <div id="main_content" class="skip_link_target" tabindex="-1"></div>
     @endif
 
     @if($custom)

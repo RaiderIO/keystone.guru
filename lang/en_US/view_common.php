@@ -380,6 +380,7 @@ return [
         ],
         'header' => [
             'toggle_navigation_title'         => 'Toggle navigation',
+            'skip_to_content'                 => 'Skip to content',
             'game_versions'                   => 'Game versions',
             'dungeon_context'                 => 'Dungeons',
             'create_route'                    => 'Create route',

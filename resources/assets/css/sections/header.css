@@ -376,6 +376,61 @@
     flex-wrap: wrap;
 }
 
+/* Opened by "/" while every chip fits the strip: there is no "All" button to keep clear of */
+.dungeon_strip.is-open:not(.dungeon_strip--compact) .dungeon_strip_groups {
+    right: 0;
+}
+
+.dungeon_strip_filter,
+.dungeon_strip_filter_empty {
+    display: none;
+}
+
+.dungeon_strip.is-open .dungeon_strip_filter {
+    position: relative;
+    display: block;
+    flex-shrink: 0;
+}
+
+.dungeon_strip_filter_icon {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    transform: translateY(-50%);
+    color: var(--theme-text-muted);
+    pointer-events: none;
+}
+
+.dungeon_strip .dungeon_strip_filter_input {
+    padding-right: 2.25rem;
+    padding-left: 2.25rem;
+}
+
+.dungeon_strip_filter_key {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    padding: 0.125rem 0.375rem;
+    border: 1px solid var(--theme-border-subtle);
+    border-radius: 0.25rem;
+    background: none;
+    color: var(--theme-text-muted);
+    font-size: 0.75rem;
+    pointer-events: none;
+}
+
+/* Makes way for the search input's own clear button once there is something to clear */
+.dungeon_strip_filter_input:not(:placeholder-shown) ~ .dungeon_strip_filter_key {
+    display: none;
+}
+
+.dungeon_strip.is-open .dungeon_strip_filter_empty:not([hidden]) {
+    display: block;
+    margin: 0;
+    color: var(--theme-text-muted);
+}
+
 .ksg-header .navbar-second {
     /* Halve the theme's 1rem navbar padding: with the bars stacking in flow the full
        padding is actually visible (the old fixed bars overlapped it away) and reads bulky */
@@ -890,4 +945,20 @@ body:has(#map_header) .offcanvas-backdrop {
     .dungeon_sheet * {
         transition: none !important;
     }
+}
+
+/* Above the sticky header and any open dropdown, in the corner a keyboard user's first Tab looks at */
+.skip_link.visually-hidden-focusable:focus {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 1090;
+}
+
+.skip_link_target {
+    scroll-margin-top: var(--ksg-header-height, 0px);
+}
+
+.skip_link_target:focus {
+    outline: none;
 }

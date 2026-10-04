@@ -188,9 +188,9 @@ class DungeonSheet {
      * @returns {boolean}
      */
     static rowMatches(filterText, query) {
-        const haystack = DungeonSheet._foldForFilter(filterText);
+        const haystack = DungeonSheet.foldForFilter(filterText);
 
-        return DungeonSheet._foldForFilter(query).split(/\s+/)
+        return DungeonSheet.foldForFilter(query).split(/\s+/)
             .filter(term => term !== '')
             .every(term => haystack.includes(term));
     }
@@ -199,7 +199,7 @@ class DungeonSheet {
      * @param {string} text
      * @returns {string}
      */
-    static _foldForFilter(text) {
+    static foldForFilter(text) {
         return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
     }
 }

@@ -76,6 +76,15 @@ $readoutViews     = $describeViewShare($readoutViewShare);
         </span>
     </div>
     <div class="dungeon_strip_groups" id="dungeon_strip_groups">
+        {{-- Only shown in the unfolded strip, which "/" opens from anywhere on the page --}}
+        <div class="dungeon_strip_filter" role="search">
+            <i class="fas fa-search dungeon_strip_filter_icon" aria-hidden="true"></i>
+            <input type="search" class="form-control dungeon_strip_filter_input"
+                   placeholder="{{ __('view_common.layout.nav.dungeoncontext.filter_placeholder') }}"
+                   aria-label="{{ __('view_common.layout.nav.dungeoncontext.filter_label') }}"
+                   aria-keyshortcuts="/" autocomplete="off" spellcheck="false"/>
+            <kbd class="dungeon_strip_filter_key" aria-hidden="true">/</kbd>
+        </div>
         @foreach($dungeonsByGroup as $group => $groupDungeons)
             <div class="dungeon_strip_group dungeon_strip_group--{{ $group }}" role="group" aria-labelledby="dungeon_strip_group_{{ $group }}">
                 <span class="dungeon_strip_group_label" title="{{ __(sprintf('view_common.dungeon.list.groups.%s', $group)) }}">
@@ -99,6 +108,7 @@ $readoutViews     = $describeViewShare($readoutViewShare);
                 </div>
             </div>
         @endforeach
+        <p class="dungeon_strip_filter_empty" role="status" hidden>{{ __('view_common.layout.nav.dungeoncontext.no_results') }}</p>
     </div>
     <button type="button" class="dungeon_strip_all" aria-expanded="false" aria-controls="dungeon_strip_groups">
         {{ __('view_common.dungeon.list.all', ['count' => $dungeons->count()]) }}

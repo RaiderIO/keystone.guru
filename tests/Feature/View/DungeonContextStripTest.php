@@ -619,6 +619,27 @@ final class DungeonContextStripTest extends PublicTestCase
         ));
     }
 
+    #[Test]
+    public function render_givenASeasonlessGameVersion_putsTheSlashFilterAheadOfTheGroupsAndAHiddenEmptyMessageAfter(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons);
+
+        // Assert
+        $this->assertSame(1, preg_match(
+            sprintf(
+                '/<div class="dungeon_strip_groups" id="dungeon_strip_groups">\s*<div class="dungeon_strip_filter" role="search">.*?<input type="search" class="form-control dungeon_strip_filter_input"\s+placeholder="%s"\s+aria-label="%s"\s+aria-keyshortcuts="\/".*?<div class="dungeon_strip_group .*<p class="dungeon_strip_filter_empty" role="status" hidden>%s<\/p>\s*<\/div>\s*<button/s',
+                preg_quote(e(__('view_common.layout.nav.dungeoncontext.filter_placeholder')), '/'),
+                preg_quote(e(__('view_common.layout.nav.dungeoncontext.filter_label')), '/'),
+                preg_quote(e(__('view_common.layout.nav.dungeoncontext.no_results')), '/'),
+            ),
+            $html,
+        ));
+    }
+
     /**
      * @return Collection<int, Dungeon>
      */
