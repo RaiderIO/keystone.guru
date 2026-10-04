@@ -9,6 +9,7 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\PublishedState;
 use App\Models\Team;
+use App\Models\User;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\Group;
@@ -20,10 +21,16 @@ final class DungeonRouteSaveServiceCloneTest extends DungeonRouteSaveServiceTest
     #[Test]
     public function cloneRoute_givenSourceRoute_createsRouteWithCloneOfAndNullTeamId(): void
     {
-        // Arrange — cloneRoute uses Auth::id() for author_id which is NOT NULL in the DB
-        Auth::loginUsingId(1);
-
-        $source = DungeonRoute::factory()->create(['team_id' => null]);
+        // Arrange — a team route of another author, cloned by a user who is neither
+        $author = User::factory()->create();
+        $cloner = User::factory()->create();
+        $team   = Team::create([
+            'public_key'  => Team::generateRandomPublicKey(),
+            'name'        => 'Clone route test team',
+            'description' => 'Clone route test team',
+        ]);
+        $source = DungeonRoute::factory()->create(['author_id' => $author->id, 'team_id' => $team->id]);
+        Auth::login($cloner);
 
         $thumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
         $thumbnailService->method('copyThumbnails')->willReturn(null);
@@ -39,6 +46,7 @@ final class DungeonRouteSaveServiceCloneTest extends DungeonRouteSaveServiceTest
             $this->assertTrue($clone->exists);
             $this->assertEquals($source->public_key, $clone->clone_of);
             $this->assertNull($clone->team_id);
+            $this->assertSame($cloner->id, $clone->author_id);
             $this->assertNotEquals($source->public_key, $clone->public_key);
             $this->assertEquals($source->dungeon_id, $clone->dungeon_id);
         } finally {
@@ -47,6 +55,9 @@ final class DungeonRouteSaveServiceCloneTest extends DungeonRouteSaveServiceTest
                 $this->cleanupRoute($clone);
             }
             $this->cleanupRoute($source);
+            $team->delete();
+            $cloner->delete();
+            $author->delete();
         }
     }
 

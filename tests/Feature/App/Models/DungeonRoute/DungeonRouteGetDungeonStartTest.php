@@ -25,9 +25,11 @@ final class DungeonRouteGetDungeonStartTest extends PublicTestCase
     #[Test]
     public function getDungeonStart_givenChosenStart_returnsThatStart(): void
     {
-        // Arrange — an explicitly chosen start of the route's own mapping version is returned as-is
+        // Arrange — an explicitly chosen start of the route's own mapping version is returned as-is, even when
+        // the mapping version has a start with a lower id that the fallback would pick instead
         $route   = DungeonRoute::factory()->create();
         $floorId = $route->dungeon->floors->first()->id;
+        $other   = $this->createDungeonStart($route->mapping_version_id, $floorId, 'mapping.start.west');
         $chosen  = $this->createDungeonStart($route->mapping_version_id, $floorId, 'mapping.start.east');
         $route->update(['dungeon_start_id' => $chosen->id]);
 
@@ -40,6 +42,7 @@ final class DungeonRouteGetDungeonStartTest extends PublicTestCase
             $this->assertEquals($chosen->id, $result->id);
         } finally {
             $chosen->delete();
+            $other->delete();
             $route->delete();
         }
     }

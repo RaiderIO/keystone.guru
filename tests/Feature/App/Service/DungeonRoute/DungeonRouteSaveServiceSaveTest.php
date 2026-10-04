@@ -13,8 +13,10 @@ use App\Models\DungeonRoute\DungeonRouteAttribute;
 use App\Models\DungeonRoute\DungeonRoutePlayerClass;
 use App\Models\DungeonRoute\DungeonRoutePlayerRace;
 use App\Models\DungeonRoute\DungeonRoutePlayerSpecialization;
+use App\Models\KillZone\KillZone;
 use App\Models\RouteAttribute;
 use App\Models\Season;
+use App\Models\User;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -300,12 +302,13 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     #[Test]
     public function save_givenSpeedrunDungeonWithEnabledDifficulty_keepsChosenDifficulty(): void
     {
-        // Arrange — pick a speedrun dungeon that has at least one enabled speedrun difficulty
+        // Arrange — pick a speedrun dungeon with several enabled speedrun difficulties and choose one that is not the
+        // first, so keeping the choice is distinguishable from falling back to the first enabled difficulty
         $dungeon = $this->getDungeonWithNonFacadeFloor(
-            fn(Builder $query) => $query->where('speedrun_enabled', true)->whereHas('dungeonSpeedrunDifficulties'),
+            fn(Builder $query) => $query->where('speedrun_enabled', true)->has('dungeonSpeedrunDifficulties', '>=', 2),
         );
         $enabledDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
-        $chosenDifficulty    = $enabledDifficulties[0];
+        $chosenDifficulty    = $enabledDifficulties[array_key_last($enabledDifficulties)];
 
         $service   = $this->buildService(seasonService: $this->noSeasonService(), thumbnailService: $this->thumbnailServiceAllowingRefresh());
         $route     = new DungeonRoute();
@@ -424,6 +427,38 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
             if ($route->exists) {
                 $this->cleanupRoute($route);
             }
+        }
+    }
+
+    #[Test]
+    public function save_givenNonAdminWithDemoFlag_leavesDemoFalse(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        Auth::login($user);
+        $dungeon   = $this->getRetailDungeon();
+        $service   = $this->buildService(seasonService: $this->noSeasonService(), thumbnailService: $this->thumbnailServiceAllowingRefresh());
+        $route     = new DungeonRoute();
+        $validated = [
+            'dungeon_id'          => $dungeon->id,
+            'faction_id'          => 1,
+            'dungeon_route_title' => 'Demo Test',
+            'demo'                => 1,
+        ];
+
+        try {
+            // Act
+            $result = $service->save($route, $validated);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertFalse((bool)$route->fresh()->demo);
+        } finally {
+            Auth::logout();
+            if ($route->exists) {
+                $this->cleanupRoute($route);
+            }
+            $user->delete();
         }
     }
 
@@ -837,8 +872,23 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     #[Test]
     public function save_givenNewRouteWithTemplateFlag_clonesTemplateRelations(): void
     {
-        // Arrange
-        $demoRoute = DungeonRoute::factory()->create(['demo' => true, 'teeming' => false]);
+        // Arrange — a dungeon without a demo route of its own, so the demo route below is the only template
+        $dungeon = $this->getDungeonWithNonFacadeFloor(
+            fn(Builder $query) => $query
+                ->whereNotNull('challenge_mode_id')
+                ->whereDoesntHave('dungeonRoutes', fn(Builder $sub) => $sub->where('demo', true)),
+        );
+        $demoRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'demo'               => true,
+            'teeming'            => false,
+        ]);
+        KillZone::create([
+            'dungeon_route_id' => $demoRoute->id,
+            'color'            => '#ff0000',
+            'index'            => 1,
+        ]);
 
         $log = LoggingFixtures::createDungeonRouteSaveServiceLogging($this);
         $log->expects($this->once())->method('saveTemplateCloneStart');
@@ -859,6 +909,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
 
             // Assert
             $this->assertTrue($result);
+            $this->assertSame(1, KillZone::where('dungeon_route_id', $newRoute->id)->count(), 'The template\'s pulls must be cloned into the new route');
         } finally {
             if ($newRoute->exists) {
                 $this->cleanupRoute($newRoute);

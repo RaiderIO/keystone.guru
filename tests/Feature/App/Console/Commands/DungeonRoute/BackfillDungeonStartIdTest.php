@@ -75,6 +75,69 @@ final class BackfillDungeonStartIdTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenStartMapIconWithOnlyItsLngDifferent_leavesDungeonStartIdNull(): void
+    {
+        // Arrange
+        $route   = DungeonRoute::factory()->create(['dungeon_start_id' => null]);
+        $mapIcon = $this->createDungeonStartMapIcon($route, -100.25, 150.5);
+        $route->update(['dungeon_start_map_icon_id' => $mapIcon->id]);
+        $this->writeDungeonStartsJson($route, -100.25, 99.0);
+
+        try {
+            // Act
+            $this->artisan('dungeonroute:backfilldungeonstartid', ['--dir' => $this->dungeonDataDir])->assertSuccessful();
+
+            // Assert
+            $this->assertNull($route->fresh()->dungeon_start_id);
+        } finally {
+            $mapIcon->delete();
+            $route->delete();
+        }
+    }
+
+    #[Test]
+    public function handle_givenMapIconThatIsNotADungeonStart_leavesDungeonStartIdNull(): void
+    {
+        // Arrange - a comment icon sitting exactly where the dungeon start in the json is
+        $route   = DungeonRoute::factory()->create(['dungeon_start_id' => null]);
+        $mapIcon = $this->createDungeonStartMapIcon($route, -100.25, 150.5, MapIconType::MAP_ICON_TYPE_COMMENT);
+        $route->update(['dungeon_start_map_icon_id' => $mapIcon->id]);
+        $this->writeDungeonStartsJson($route, -100.25, 150.5);
+
+        try {
+            // Act
+            $this->artisan('dungeonroute:backfilldungeonstartid', ['--dir' => $this->dungeonDataDir])->assertSuccessful();
+
+            // Assert
+            $this->assertNull($route->fresh()->dungeon_start_id);
+        } finally {
+            $mapIcon->delete();
+            $route->delete();
+        }
+    }
+
+    #[Test]
+    public function handle_givenDungeonStartOfAnotherMappingVersionAtTheSamePosition_leavesDungeonStartIdNull(): void
+    {
+        // Arrange
+        $route   = DungeonRoute::factory()->create(['dungeon_start_id' => null]);
+        $mapIcon = $this->createDungeonStartMapIcon($route, -100.25, 150.5);
+        $route->update(['dungeon_start_map_icon_id' => $mapIcon->id]);
+        $this->writeDungeonStartsJson($route, -100.25, 150.5, $route->mapping_version_id + 999999);
+
+        try {
+            // Act
+            $this->artisan('dungeonroute:backfilldungeonstartid', ['--dir' => $this->dungeonDataDir])->assertSuccessful();
+
+            // Assert
+            $this->assertNull($route->fresh()->dungeon_start_id);
+        } finally {
+            $mapIcon->delete();
+            $route->delete();
+        }
+    }
+
+    #[Test]
     public function handle_givenStartMapIconThatNoLongerExists_leavesDungeonStartIdNull(): void
     {
         // Arrange - the seeder re-creates map icons with new ids, so an old choice can point at nothing
@@ -114,14 +177,18 @@ final class BackfillDungeonStartIdTest extends PublicTestCase
         }
     }
 
-    private function createDungeonStartMapIcon(DungeonRoute $route, float $lat, float $lng): MapIcon
-    {
+    private function createDungeonStartMapIcon(
+        DungeonRoute $route,
+        float        $lat,
+        float        $lng,
+        string       $mapIconTypeKey = MapIconType::MAP_ICON_TYPE_DUNGEON_START,
+    ): MapIcon {
         return MapIcon::create([
             'mapping_version_id' => $route->mapping_version_id,
             'floor_id'           => $route->dungeon->floors->first()->id,
             'dungeon_route_id'   => null,
             'team_id'            => null,
-            'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
+            'map_icon_type_id'   => MapIconType::ALL[$mapIconTypeKey],
             'lat'                => $lat,
             'lng'                => $lng,
             'comment'            => null,
@@ -130,13 +197,13 @@ final class BackfillDungeonStartIdTest extends PublicTestCase
         ]);
     }
 
-    private function writeDungeonStartsJson(DungeonRoute $route, float $lat, float $lng): void
+    private function writeDungeonStartsJson(DungeonRoute $route, float $lat, float $lng, ?int $mappingVersionId = null): void
     {
         $floorDir = sprintf('%s/expansion/dungeon/1', $this->dungeonDataDir);
         File::ensureDirectoryExists($floorDir);
         File::put(sprintf('%s/dungeon_starts.json', $floorDir), json_encode([[
             'id'                 => self::JSON_DUNGEON_START_ID,
-            'mapping_version_id' => $route->mapping_version_id,
+            'mapping_version_id' => $mappingVersionId ?? $route->mapping_version_id,
             'floor_id'           => $route->dungeon->floors->first()->id,
             'target_dungeon_id'  => null,
             'lat'                => $lat,

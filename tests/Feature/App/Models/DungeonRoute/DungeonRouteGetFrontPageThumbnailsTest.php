@@ -122,6 +122,29 @@ final class DungeonRouteGetFrontPageThumbnailsTest extends PublicTestCase
     }
 
     #[Test]
+    public function getFrontPageThumbnails_givenHeroAndStandardThumbnailOnAFloor_returnsTheStandardThumbnail(): void
+    {
+        // Arrange - the hero variant is created first, so it would be the floor's first thumbnail
+        Storage::fake(config('filesystems.default'));
+        $dungeonRoute = DungeonRoute::factory()->create();
+        $floorId      = $dungeonRoute->dungeon->floors->first()->id;
+        $this->createThumbnailFile($dungeonRoute, $floorId, DungeonRouteThumbnailVariant::Hero, '/thumbnails/hero.jpg');
+        $standardFile = $this->createThumbnailFile($dungeonRoute, $floorId, DungeonRouteThumbnailVariant::Standard, '/thumbnails/standard.jpg');
+
+        try {
+            // Act
+            $result = $dungeonRoute->fresh()->getFrontPageThumbnails();
+
+            // Assert
+            $this->assertCount(1, $result);
+            $this->assertSame($standardFile->getURL(), $result->first()->getURL());
+        } finally {
+            $dungeonRoute->dungeonRouteThumbnails()->get()->each->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
     public function getFrontPageThumbnails_givenNoThumbnails_returnsEmptyCollection(): void
     {
         // Arrange

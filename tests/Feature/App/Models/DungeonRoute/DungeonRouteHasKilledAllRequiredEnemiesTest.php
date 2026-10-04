@@ -84,6 +84,29 @@ final class DungeonRouteHasKilledAllRequiredEnemiesTest extends PublicTestCase
     }
 
     #[Test]
+    public function hasKilledAllRequiredEnemies_givenOnlyOneOfTwoRequiredEnemiesKilled_returnsFalse(): void
+    {
+        // Arrange
+        $route = $this->createRouteWithOwnMappingVersion();
+
+        try {
+            $killedEnemy = $this->createEnemy($route->mappingVersion, required: true);
+            $this->createEnemy($route->mappingVersion, required: true);
+            KillZone::factory()
+                ->withEnemies($killedEnemy)
+                ->create(['dungeon_route_id' => $route->id, 'floor_id' => $killedEnemy->floor_id]);
+
+            // Act
+            $result = $route->fresh()->hasKilledAllRequiredEnemies();
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            $this->cleanup($route);
+        }
+    }
+
+    #[Test]
     public function hasKilledAllRequiredEnemies_givenRequiredEnemyOnlyInOtherMappingVersion_returnsTrue(): void
     {
         // Arrange - this is the #3666 regression: a required enemy belonging to a *different* mapping version of the

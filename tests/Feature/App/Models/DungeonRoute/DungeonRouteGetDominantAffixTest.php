@@ -86,4 +86,86 @@ final class DungeonRouteGetDominantAffixTest extends PublicTestCase
             $route->delete();
         }
     }
+
+    #[Test]
+    public function getDominantAffix_givenAffixGroupWithOnlyFortified_returnsFortified(): void
+    {
+        // Arrange
+        $route = DungeonRoute::factory()->create(['season_id' => Season::SEASON_DF_S4]);
+
+        try {
+            $route->affixes()->attach($this->getDragonflightS4AffixGroupWithOnly(Affix::AFFIX_FORTIFIED)->id);
+
+            // Act
+            $result = $route->fresh()->getDominantAffix();
+
+            // Assert
+            $this->assertSame(Affix::AFFIX_FORTIFIED, $result);
+        } finally {
+            $route->delete();
+        }
+    }
+
+    #[Test]
+    public function getDominantAffix_givenOneFortifiedAndOneTyrannicalAffixGroup_returnsNull(): void
+    {
+        // Arrange
+        $route = DungeonRoute::factory()->create(['season_id' => Season::SEASON_DF_S4]);
+
+        try {
+            $route->affixes()->attach([
+                $this->getDragonflightS4AffixGroupWithOnly(Affix::AFFIX_FORTIFIED)->id,
+                $this->getDragonflightS4AffixGroupWithOnly(Affix::AFFIX_TYRANNICAL)->id,
+            ]);
+
+            // Act
+            $result = $route->fresh()->getDominantAffix();
+
+            // Assert
+            $this->assertNull($result);
+        } finally {
+            $route->delete();
+        }
+    }
+
+    #[Test]
+    public function getDominantAffix_givenTwoFortifiedAndOneTyrannicalAffixGroup_returnsFortified(): void
+    {
+        // Arrange
+        $fortifiedAffixGroups = AffixGroup::where('season_id', Season::SEASON_DF_S4)
+            ->get()
+            ->filter(static fn(AffixGroup $affixGroup) => $affixGroup->hasAffix(Affix::AFFIX_FORTIFIED)
+                && !$affixGroup->hasAffix(Affix::AFFIX_TYRANNICAL))
+            ->take(2);
+        $this->assertCount(2, $fortifiedAffixGroups, 'Expected two Dragonflight Season 4 affix groups with only Fortified');
+        $route = DungeonRoute::factory()->create(['season_id' => Season::SEASON_DF_S4]);
+
+        try {
+            $route->affixes()->attach([
+                ...$fortifiedAffixGroups->pluck('id')->all(),
+                $this->getDragonflightS4AffixGroupWithOnly(Affix::AFFIX_TYRANNICAL)->id,
+            ]);
+
+            // Act
+            $result = $route->fresh()->getDominantAffix();
+
+            // Assert
+            $this->assertSame(Affix::AFFIX_FORTIFIED, $result);
+        } finally {
+            $route->delete();
+        }
+    }
+
+    private function getDragonflightS4AffixGroupWithOnly(string $affixKey): AffixGroup
+    {
+        $otherAffixKey = $affixKey === Affix::AFFIX_FORTIFIED ? Affix::AFFIX_TYRANNICAL : Affix::AFFIX_FORTIFIED;
+
+        /** @var ?AffixGroup $affixGroup */
+        $affixGroup = AffixGroup::where('season_id', Season::SEASON_DF_S4)
+            ->get()
+            ->first(static fn(AffixGroup $affixGroup) => $affixGroup->hasAffix($affixKey) && !$affixGroup->hasAffix($otherAffixKey));
+        $this->assertNotNull($affixGroup, sprintf('Expected a Dragonflight Season 4 affix group with only %s', $affixKey));
+
+        return $affixGroup;
+    }
 }

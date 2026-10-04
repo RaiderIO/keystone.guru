@@ -47,19 +47,23 @@ final class MappingVersionUpgradeDiffServiceTest extends DungeonRouteSaveService
     /**
      * Two empty mapping versions of the same dungeon, so every test states exactly the mapping it diffs.
      *
+     * @param bool $withSecondNonFacadeFloor Only pick a dungeon that has another non-facade floor besides the returned one
+     *
      * @return array{0: Dungeon, 1: MappingVersion, 2: MappingVersion, 3: Floor}
      */
-    private function createMappingVersionPair(): array
+    private function createMappingVersionPair(bool $withSecondNonFacadeFloor = false): array
     {
         [$dungeon, $mappingVersion, $floor] = $this->findDungeon(
             facadeEnabled: false,
-            resolve:       static fn(Dungeon $dungeon): ?Floor => $dungeon->floors()
-                ->where('facade', false)
-                ->where('active', true)
-                ->whereNotNull('ingame_min_y')
-                ->whereRaw('ingame_max_y != ingame_min_y')
-                ->whereRaw('ingame_max_x != ingame_min_x')
-                ->first(),
+            resolve:       static fn(Dungeon $dungeon): ?Floor => $withSecondNonFacadeFloor && $dungeon->floors()->where('facade', false)->count() < 2
+                ? null
+                : $dungeon->floors()
+                    ->where('facade', false)
+                    ->where('active', true)
+                    ->whereNotNull('ingame_min_y')
+                    ->whereRaw('ingame_max_y != ingame_min_y')
+                    ->whereRaw('ingame_max_x != ingame_min_x')
+                    ->first(),
         );
 
         $oldMappingVersion = $this->createNewerMappingVersion($dungeon, $mappingVersion);
@@ -362,17 +366,13 @@ final class MappingVersionUpgradeDiffServiceTest extends DungeonRouteSaveService
     public function diff_givenEnemyOnAnotherFloor_reportsMovedPullEnemyWithoutADistance(): void
     {
         // Arrange
-        [$dungeon, $oldMappingVersion, $newMappingVersion, $floor] = $this->createMappingVersionPair();
+        [$dungeon, $oldMappingVersion, $newMappingVersion, $floor] = $this->createMappingVersionPair(withSecondNonFacadeFloor: true);
 
         try {
             $otherFloor = $dungeon->floors()
                 ->where('facade', false)
                 ->where('id', '!=', $floor->id)
-                ->first();
-
-            if ($otherFloor === null) {
-                $this->markTestSkipped('The chosen dungeon has only one non-facade floor');
-            }
+                ->firstOrFail();
 
             $route = $this->createRoute($dungeon, $oldMappingVersion);
 
