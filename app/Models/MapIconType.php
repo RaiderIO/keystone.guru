@@ -44,9 +44,11 @@ class MapIconType extends Model
     public const string MAP_ICON_TYPE_DOOR_DOWN                              = 'door_down';
     public const string MAP_ICON_TYPE_COMMENT                                = 'comment';
     public const string MAP_ICON_TYPE_DOOR_LEFT                              = 'door_left';
+    public const string MAP_ICON_TYPE_DOOR_LEFT_RIGHT                        = 'door_left_right';
     public const string MAP_ICON_TYPE_DOOR_LOCKED                            = 'door_locked';
     public const string MAP_ICON_TYPE_DOOR_RIGHT                             = 'door_right';
     public const string MAP_ICON_TYPE_DOOR_UP                                = 'door_up';
+    public const string MAP_ICON_TYPE_DOOR_UP_DOWN                           = 'door_up_down';
     public const string MAP_ICON_TYPE_DOT_YELLOW                             = 'dot_yellow';
     public const string MAP_ICON_TYPE_DUNGEON_START                          = 'dungeon_start';
     public const string MAP_ICON_TYPE_GATEWAY                                = 'gateway';
@@ -331,6 +333,9 @@ class MapIconType extends Model
         self::MAP_ICON_TYPE_DEN_OF_NALORAKK_WARDING_INCENSE   => 126,
         self::MAP_ICON_TYPE_VOIDSCAR_ARENA_PROOF_OF_ENDURANCE => 127,
         self::MAP_ICON_TYPE_VOIDSCAR_ARENA_PROOF_OF_MASTERY   => 128,
+
+        self::MAP_ICON_TYPE_DOOR_LEFT_RIGHT => 129,
+        self::MAP_ICON_TYPE_DOOR_UP_DOWN    => 130,
     ];
 
     public function getIconUrlAttribute(): string

@@ -77,7 +77,19 @@ class DungeonFloorSwitchMarker extends Icon {
         // in the 'unknown floor' fallback text. Rebind once all attributes have loaded.
         this.register('object:initialized', this, function () {
             self.bindTooltip();
+
+            // The two-way icon depends on the linked marker's hidden_in_facade, and either marker of a pair
+            // may finish loading last
+            self._refreshMapIconType();
+            let linkedDungeonFloorSwitchMarker = self._getLinkedDungeonFloorSwitchMarker();
+            if (linkedDungeonFloorSwitchMarker !== null) {
+                linkedDungeonFloorSwitchMarker._refreshMapIconType();
+            }
         });
+
+        // Icon only redraws a visible marker, and the two-way icon is decided before the markers are shown
+        this._refreshVisualOnShown = this._refreshVisual.bind(this);
+        this.register('shown', this, this._refreshVisualOnShown);
 
         if (getState().isEchoEnabled()) {
             getState().getEchoHandler().register('mouseposition:received', this, this._mousePositionReceived.bind(this));
@@ -151,20 +163,9 @@ class DungeonFloorSwitchMarker extends Icon {
                     ];
                 },
                 setter: function (value) {
-                    let mapping = {
-                        'down': 'door_down',
-                        'left': 'door_left',
-                        'right': 'door_right',
-                        'up': 'door_up',
-                    };
-
-                    self.setMapIconType(
-                        getState().getMapContext().getMapIconTypeByKey(
-                            value === null ? mapping[self.floorCouplingDirection] : mapping[value]
-                        )
-                    );
-
                     self.direction = value;
+
+                    self._refreshMapIconType();
                 },
                 default: null
             }),
@@ -221,13 +222,83 @@ class DungeonFloorSwitchMarker extends Icon {
         }
     }
 
+    /**
+     * @returns {DungeonFloorSwitchMarker|null}
+     * @private
+     */
+    _getLinkedDungeonFloorSwitchMarker() {
+        if (this.linked_dungeon_floor_switch_marker_id === null) {
+            return null;
+        }
+
+        /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
+        let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getDungeonFloorSwitchMarkerMapObjectGroup();
+
+        return dungeonFloorSwitchMarkerMapObjectGroup.findMapObjectById(this.linked_dungeon_floor_switch_marker_id);
+    }
+
+    /**
+     * The mapping editor always shows every marker on split floors, whatever the facade style is.
+     * @returns {boolean}
+     * @private
+     */
+    _isOnFacade() {
+        let state = getState();
+
+        return !(state.getMapContext() instanceof MapContextMappingVersionEdit) && state.isCurrentDungeonFacadeEnabled();
+    }
+
+    /**
+     * On the facade, a marker whose linked marker is hidden there is the only marker left for that transition,
+     * so it points both ways.
+     * @returns {boolean}
+     * @private
+     */
+    _isOnlyMarkerOfTransitionOnFacade() {
+        if (!this._isOnFacade()) {
+            return false;
+        }
+
+        let linkedDungeonFloorSwitchMarker = this._getLinkedDungeonFloorSwitchMarker();
+
+        return linkedDungeonFloorSwitchMarker !== null && linkedDungeonFloorSwitchMarker.hidden_in_facade;
+    }
+
+    /**
+     * @returns {String|undefined}
+     * @private
+     */
+    _getMapIconTypeKey() {
+        let direction = this.direction ?? this.floorCouplingDirection;
+
+        if (this._isOnlyMarkerOfTransitionOnFacade()) {
+            if (direction === 'left' || direction === 'right') {
+                return 'door_left_right';
+            } else if (direction === 'up' || direction === 'down') {
+                return 'door_up_down';
+            }
+        }
+
+        return {
+            'down': 'door_down',
+            'left': 'door_left',
+            'right': 'door_right',
+            'up': 'door_up',
+        }[direction];
+    }
+
+    /**
+     * @private
+     */
+    _refreshMapIconType() {
+        this.setMapIconType(getState().getMapContext().getMapIconTypeByKey(this._getMapIconTypeKey()));
+    }
+
     _getDecorator() {
         let result = null;
 
-        if (getState().isCurrentDungeonFacadeEnabled() && this.linked_dungeon_floor_switch_marker_id !== null) {
-            /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
-            let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getDungeonFloorSwitchMarkerMapObjectGroup();
-            let linkedDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.findMapObjectById(this.linked_dungeon_floor_switch_marker_id);
+        if (getState().isCurrentDungeonFacadeEnabled()) {
+            let linkedDungeonFloorSwitchMarker = this._getLinkedDungeonFloorSwitchMarker();
 
             if (linkedDungeonFloorSwitchMarker !== null && linkedDungeonFloorSwitchMarker.isVisible()) {
                 let options = c.map.dungeonfloorswitchmarker.floorUnionConnectionPolylineOptions;
@@ -330,9 +401,7 @@ class DungeonFloorSwitchMarker extends Icon {
     }
 
     shouldBeVisible() {
-        let state = getState();
-        if (!(state.getMapContext() instanceof MapContextMappingVersionEdit) &&
-            state.getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE && this.hidden_in_facade) {
+        if (this._isOnFacade() && this.hidden_in_facade) {
             return false;
         }
 
@@ -343,6 +412,7 @@ class DungeonFloorSwitchMarker extends Icon {
         super.cleanup();
         getState().unregister('floorid:changed', this);
         this.unregister('object:initialized', this);
+        this.unregister('shown', this, this._refreshVisualOnShown);
 
         if (getState().isEchoEnabled()) {
             getState().getEchoHandler().unregister('mouseposition:received', this);
