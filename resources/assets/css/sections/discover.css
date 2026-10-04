@@ -447,8 +447,9 @@
 }
 
 /* The border is always there, transparent at rest, so selecting a tile never moves its contents; its colour
-   comes from .border-accent, the same treatment as the selected game version */
+   comes from .border-accent, and it sits flush on the art like the chips' and game versions' borders do */
 .list_dungeon.selectable {
+    padding: 0;
     border: 0.125rem solid transparent;
     border-radius: 0.25rem;
 }

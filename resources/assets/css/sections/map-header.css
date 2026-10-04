@@ -5,6 +5,17 @@
     height: 100%;
 }
 
+/* The tiles' art lines up with the band's content edge and sits as far in from its top and bottom as the
+   seasonless strip's readout does; each tile's border and margin make up the 0.25rem pulled back out */
+.dungeon_context_header .row {
+    margin: 0 -0.25rem;
+    padding: 0.125rem 0;
+}
+
+.dungeon_context_header .list_dungeon {
+    margin: 0 0.125rem;
+}
+
 .dungeon_context_header .card-img-caption {
     position: relative;
 }
@@ -12,8 +23,13 @@
 .dungeon_context_header .card-img-top {
     height: 100%;
     width: 100%;
-    object-fit: fill; /* or cover */
-    transition: height 0.2s ease;
+    object-fit: cover;
+    border-radius: 0.125rem;
+    transition: filter 0.15s ease;
+}
+
+.dungeon_context_header .list_dungeon:hover .card-img-top {
+    filter: brightness(1.2);
 }
 
 /* "What's easy this week" ease-tier badge overlaid on each dungeon-context card. */

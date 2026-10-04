@@ -31,6 +31,11 @@
     transition: height 0.2s ease;
 }
 
+/* The navbar's own 1rem inset, so the version row, the strip and the navbar share their left and right edges */
+.ksg-header .game_version_header {
+    padding: 0 1rem;
+}
+
 .ksg-header--shrink .dungeon_context_header {
     height: 64px;
 }
@@ -53,6 +58,7 @@
     --dungeon-strip-readout-long-views-display: block;
     --dungeon-strip-readout-views-font-size: 0.75rem;
     --dungeon-strip-all-width: 5.5rem;
+    /* The inset above and below the strip's contents, and the room a focus ring needs around a chip */
     --dungeon-strip-padding: 0.25rem;
     --dungeon-strip-gap: 0.5rem;
     --dungeon-strip-clip-mask: none;
@@ -66,7 +72,6 @@
     align-items: stretch;
     gap: var(--dungeon-strip-gap);
     height: 100%;
-    padding: var(--dungeon-strip-padding);
 }
 
 /* 64px band: two 26px rows plus the gap and padding is all it holds */
@@ -95,9 +100,11 @@
 .dungeon_strip_readout {
     position: relative;
     flex: 0 0 var(--dungeon-strip-readout-width);
+    margin: var(--dungeon-strip-padding) 0;
     overflow: hidden;
     border-radius: 0.25rem;
     background-color: #222;
+    transition: flex-basis 0.2s ease;
 }
 
 .dungeon_strip_readout::after {
@@ -137,6 +144,7 @@
     font-size: var(--dungeon-strip-readout-font-size);
     font-weight: 700;
     line-height: 1.15;
+    transition: font-size 0.2s ease;
 }
 
 .dungeon_strip_readout_name--long {
@@ -163,11 +171,15 @@
     display: none;
 }
 
+/* Padded on every side and pulled back out by the same amount horizontally: the chips stay put, while a focus
+   ring around an edge chip lands inside the clipped box instead of being cut off */
 .dungeon_strip_groups {
     display: flex;
     flex: 1 1 auto;
     gap: 0.75rem;
     min-width: 0;
+    margin: 0 calc(var(--dungeon-strip-padding) * -1);
+    padding: var(--dungeon-strip-padding);
     overflow: hidden;
     mask-image: var(--dungeon-strip-clip-mask);
 }
@@ -194,42 +206,39 @@
     display: var(--dungeon-strip-label-display);
     writing-mode: vertical-rl;
     transform: rotate(180deg);
+    color: var(--theme-text-muted);
     font-size: 0.6875rem;
     line-height: 1;
     white-space: nowrap;
 }
 
-:root.darkly .dungeon_strip_group_label,
-:root.vapor .dungeon_strip_group_label {
-    color: var(--theme-light);
-}
-
-:root.lux .dungeon_strip_group_label {
-    color: #55595c;
-}
-
 .dungeon_strip_chips {
     display: grid;
-    grid-template-rows: repeat(2, var(--dungeon-strip-chip-height));
+    grid-template-rows: repeat(2, auto);
     grid-auto-flow: column;
-    grid-auto-columns: minmax(var(--dungeon-strip-chip-min-width), max-content);
+    grid-auto-columns: max-content;
     gap: var(--dungeon-strip-row-gap) 0.25rem;
 }
 
+/* Sized on the chip rather than by the grid tracks, so the chips follow the band's own shrink transition. The
+   text colour comes from the theme's .game_version_header link rule. */
 .dungeon_strip_chip {
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: var(--dungeon-strip-chip-min-width);
+    height: var(--dungeon-strip-chip-height);
     padding: 0 var(--dungeon-strip-chip-padding);
     border: 0.125rem solid transparent;
     border-radius: 0.25rem;
     background-color: var(--dungeon-strip-control-bg);
-    color: var(--theme-text-contrast);
     font-size: var(--dungeon-strip-chip-font-size);
     font-weight: 600;
     line-height: 1;
     white-space: nowrap;
     text-decoration: none;
+    transition: height 0.2s ease, min-width 0.2s ease, padding 0.2s ease, font-size 0.2s ease,
+        background-color 0.15s ease, color 0.15s ease;
 }
 
 /* The chip itself is the bar: filled from the bottom up to the dungeon's share of the most viewed one's views */
@@ -242,7 +251,6 @@
 .dungeon_strip_chip:hover,
 .dungeon_strip_chip:focus-visible {
     background-color: var(--dungeon-strip-control-bg-hover);
-    color: var(--theme-text-contrast);
 }
 
 .dungeon_strip_all {
@@ -259,12 +267,14 @@
     font-size: var(--dungeon-strip-chip-font-size);
     font-weight: 600;
     white-space: nowrap;
+    transition: flex-basis 0.2s ease, font-size 0.2s ease, background-color 0.15s ease;
 }
 
-/* Keeps it at the far end once the open flyout takes the groups out of the flow; two classes because the
-   themes' `.darkly button { margin: 0 }` reboot outranks one */
+/* Kept at the far end once the open flyout takes the groups out of the flow; two classes because the themes'
+   `.darkly button` reboot (margin and radius) outranks one */
 .dungeon_strip .dungeon_strip_all {
-    margin-left: auto;
+    margin: var(--dungeon-strip-padding) 0 var(--dungeon-strip-padding) auto;
+    border-radius: 0.25rem;
 }
 
 .dungeon_strip_all:hover,
@@ -285,12 +295,13 @@
 .dungeon_strip.is-open .dungeon_strip_groups {
     position: absolute;
     top: var(--dungeon-strip-padding);
-    right: calc(var(--dungeon-strip-padding) + var(--dungeon-strip-all-width) + var(--dungeon-strip-gap));
-    left: calc(var(--dungeon-strip-padding) + var(--dungeon-strip-readout-width) + var(--dungeon-strip-gap));
+    right: calc(var(--dungeon-strip-all-width) + var(--dungeon-strip-gap));
+    left: calc(var(--dungeon-strip-readout-width) + var(--dungeon-strip-gap));
     z-index: 10;
     flex-direction: column;
     gap: 0.75rem;
     max-height: calc(100dvh - var(--ksg-header-height, 0px));
+    margin: 0;
     padding: 0.5rem;
     overflow-y: auto;
     border-radius: 0.25rem;
@@ -323,11 +334,6 @@
     flex-wrap: wrap;
 }
 
-.dungeon_strip.is-open .dungeon_strip_chip {
-    min-width: var(--dungeon-strip-chip-min-width);
-    height: var(--dungeon-strip-chip-height);
-}
-
 .ksg-header .navbar-second {
     /* Halve the theme's 1rem navbar padding: with the bars stacking in flow the full
        padding is actually visible (the old fixed bars overlapped it away) and reads bulky */
@@ -342,12 +348,20 @@
     padding-bottom: 0.25rem;
 }
 
+/* The strip's contents already sit 0.25rem above its bottom edge; this completes the same 0.5rem step the
+   version row and the strip are apart */
+@media (min-width: 992px) {
+    .ksg-header .game_version_header + .navbar-second {
+        padding-top: 0.25rem;
+    }
+}
+
 .game_version_header .game_version_list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem;
     margin: 0;
-    padding: 0.125rem 0;
+    padding: 0.5rem 0 0.25rem;
     list-style: none;
 }
 
@@ -361,6 +375,11 @@
     border-radius: 0.25rem;
     font-size: 0.875rem;
     text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.game_version_header .game_version:hover {
+    background-color: rgba(128, 128, 128, 0.2);
 }
 
 .game_version_header .game_version img {
@@ -368,7 +387,9 @@
     height: 1rem;
 }
 
-.game_version_header .game_version[aria-current] {
+/* One "current" language across the header: the accent border (.border-accent) and full-contrast text */
+.game_version_header .game_version[aria-current],
+.game_version_header .dungeon_strip_chip[aria-current] {
     color: var(--theme-text-contrast);
 }
 
@@ -423,8 +444,15 @@
     box-shadow: none;
 }
 
+/* Offset from the element, so a focused control never reads as the flush accent border of the current one */
 .ksg-header .navbar-second .navbar-toggler:focus-visible,
-.ksg-header .dungeon_context_nav .dungeon_context_nav_toggle:focus-visible {
+.ksg-header .dungeon_context_nav .dungeon_context_nav_toggle:focus-visible,
+.game_version_header .game_version:focus-visible,
+.game_version_header .dungeon_strip_chip:focus-visible,
+.game_version_header .dungeon_strip_all:focus-visible,
+.dungeon_context_header .list_dungeon a:focus-visible,
+.dungeon_sheet .dungeon_sheet_row:focus-visible,
+.game_version_segments .game_version_segment:focus-visible {
     outline: 0.125rem solid var(--theme-border-accent);
     outline-offset: 0.125rem;
     box-shadow: none;
@@ -437,13 +465,8 @@
     --bs-offcanvas-bg: var(--theme-header);
     --bs-offcanvas-color: var(--theme-text-contrast);
     --bs-offcanvas-border-color: var(--theme-border-subtle);
-    --dungeon-sheet-muted: var(--theme-light);
     --dungeon-sheet-row-bg-hover: rgba(128, 128, 128, 0.2);
     border-radius: 0.25rem 0.25rem 0 0;
-}
-
-:root.lux .dungeon_sheet {
-    --dungeon-sheet-muted: #55595c;
 }
 
 /* The ad-free map header floats far above Bootstrap's offcanvas layer */
@@ -496,11 +519,12 @@ body:has(#map_header) .offcanvas-backdrop {
     padding: 0.375rem 0.125rem;
     border: 0.125rem solid transparent;
     border-radius: 0.25rem;
-    color: var(--dungeon-sheet-muted, var(--theme-light));
+    color: var(--theme-text-muted);
     font-size: 0.875rem;
     line-height: 1.15;
     text-align: center;
     text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .game_version_segments .game_version_segment_logo {
@@ -520,7 +544,6 @@ body:has(#map_header) .offcanvas-backdrop {
 .game_version_segments .game_version_segment[aria-current] {
     background-color: var(--theme-header);
     color: var(--theme-text-contrast);
-    font-weight: 600;
 }
 
 /* The page reloads on a version switch; the list it is about to replace steps back meanwhile */
@@ -550,7 +573,7 @@ body:has(#map_header) .offcanvas-backdrop {
     left: 1.75rem;
     margin-top: 0.125rem;
     transform: translateY(-50%);
-    color: var(--dungeon-sheet-muted);
+    color: var(--theme-text-muted);
     pointer-events: none;
 }
 
@@ -564,7 +587,7 @@ body:has(#map_header) .offcanvas-backdrop {
 .dungeon_sheet .dungeon_sheet_group_label {
     margin: 0;
     padding: 0.75rem 1rem 0.25rem;
-    color: var(--dungeon-sheet-muted);
+    color: var(--theme-text-muted);
     font-size: 0.875rem;
     font-weight: 600;
 }
@@ -591,6 +614,7 @@ body:has(#map_header) .offcanvas-backdrop {
     border-radius: 0.25rem;
     color: var(--theme-text-contrast);
     text-decoration: none;
+    transition: background-color 0.15s ease;
 }
 
 .dungeon_sheet .dungeon_sheet_row:hover,
@@ -598,11 +622,6 @@ body:has(#map_header) .offcanvas-backdrop {
     background-color: var(--dungeon-sheet-row-bg-hover);
     color: var(--theme-text-contrast);
     text-decoration: none;
-}
-
-.dungeon_sheet .dungeon_sheet_row[aria-current] {
-    background-color: var(--dungeon-sheet-row-bg-hover);
-    font-weight: 600;
 }
 
 .dungeon_sheet .dungeon_sheet_row_image {
@@ -629,7 +648,7 @@ body:has(#map_header) .offcanvas-backdrop {
 .dungeon_sheet .dungeon_sheet_row_abbreviation {
     flex-shrink: 0;
     min-width: 2.5rem;
-    color: var(--dungeon-sheet-muted);
+    color: var(--theme-text-muted);
     font-size: 0.875rem;
     font-weight: 400;
     text-align: right;
@@ -638,7 +657,7 @@ body:has(#map_header) .offcanvas-backdrop {
 .dungeon_sheet .dungeon_sheet_empty {
     margin: 0;
     padding: 1.5rem 1rem;
-    color: var(--dungeon-sheet-muted);
+    color: var(--theme-text-muted);
     text-align: center;
 }
 
@@ -689,14 +708,9 @@ body:has(#map_header) .offcanvas-backdrop {
 }
 
 /* Muted by colour, not opacity: an opacity-muted description on the panel surface drops below the
-   4.5:1 contrast floor. The dropdown surface differs per theme, so each theme names its own value. */
-:root.darkly .ksg-header .ksg-nav-entry-desc,
-:root.vapor .ksg-header .ksg-nav-entry-desc {
-    color: var(--theme-light);
-}
-
-:root.lux .ksg-header .ksg-nav-entry-desc {
-    color: #55595c;
+   4.5:1 contrast floor */
+.ksg-header .ksg-nav-entry-desc {
+    color: var(--theme-text-muted);
 }
 
 .ksg-header .ksg-nav-entry.active .ksg-nav-entry-desc {
@@ -815,5 +829,13 @@ body:has(#map_header) .offcanvas-backdrop {
     .ksg-header .navbar-second .btn {
         padding-left: 0.5rem;
         padding-right: 0.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ksg-header,
+    .ksg-header *,
+    .dungeon_sheet * {
+        transition: none !important;
     }
 }

@@ -154,7 +154,7 @@ $compendiumEntries        = [
 <div
     class="game_version_header navbar-first d-none d-lg-block
      {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
-    <div class="container discover bg-dark rounded ">
+    <div class="container discover bg-dark rounded px-1">
         @if($showGameVersionSelection)
             <nav aria-label="{{ __('view_common.layout.header.game_versions') }}">
                 <ul class="game_version_list">

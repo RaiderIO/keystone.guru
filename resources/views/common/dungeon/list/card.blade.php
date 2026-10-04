@@ -14,7 +14,7 @@ $id ??= null;
 $thisWeekTier ??= null;
 ?>
 <div
-    class="list_dungeon col p-1 selectable {{ $isSelected ? 'selected border-accent' : '' }} {{$width ?? 'col'}}"
+    class="list_dungeon col selectable {{ $isSelected ? 'selected border-accent' : '' }} {{$width ?? 'col'}}"
     @isset($id)
         data-id="{{ $id }}"
     @endisset

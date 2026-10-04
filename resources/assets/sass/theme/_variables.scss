@@ -4,6 +4,8 @@ $--theme-light: --theme-light;
 $--theme-dark: --theme-dark;
 $--theme-darker: --theme-darker;
 $--theme-text-contrast: --theme-text-contrast;
+/* Secondary text that still clears 4.5:1 on the header and dropdown surfaces - lux's --theme-light is white */
+$--theme-text-muted: --theme-text-muted;
 $--theme-form-required: --theme-form-required;
 /* Used for things like the header */
 $--theme-header: --theme-header;
@@ -37,6 +39,7 @@ $theme-map-darkly: (
         $--theme-dark: #303030,
         $--theme-darker: #202020,
         $--theme-text-contrast: #ebebeb,
+        $--theme-text-muted: #adb5bd,
         $--theme-form-required: #ff6b6b,
         $--theme-header: var($--theme-dark),
         $--theme-header-border: unset,
@@ -67,6 +70,7 @@ $theme-map-lux: (
         $--theme-dark: #ebebeb,
         $--theme-darker: #ebebeb,
         $--theme-text-contrast: #1a1a1a,
+        $--theme-text-muted: #55595c,
         $--theme-form-required: #c40000,
         $--theme-header: var($--theme-light),
         $--theme-header-border: 1px solid #1a1a1a,
@@ -99,6 +103,7 @@ $theme-map-vapor: (
         $--theme-dark: #303030,
         $--theme-darker: #202020,
         $--theme-text-contrast: #ebebeb,
+        $--theme-text-muted: #adb5bd,
         $--theme-form-required: #ff6b6b,
         $--theme-header: var($--theme-dark),
         $--theme-header-border: unset,
