@@ -160,3 +160,84 @@ describe('TeamEdit route picker host', () => {
         expect(showInfoNotification).not.toHaveBeenCalled();
     });
 });
+
+describe('TeamEdit destructive confirms', () => {
+    const DANGER_BUTTONS = {yesClass: 'btn btn-danger me-1', cancelClass: 'btn btn-secondary'};
+    let previousShowConfirmYesCancel;
+    let previousLang;
+
+    /**
+     * @param {Array} members
+     * @returns {Object}
+     */
+    function buildContext(members) {
+        return Object.assign(Object.create(TeamEdit.prototype), {
+            options: {data: members},
+            _removeUserFromTeam: vi.fn(),
+        });
+    }
+
+    beforeEach(() => {
+        previousShowConfirmYesCancel    = globalThis.showConfirmYesCancel;
+        previousLang                    = globalThis.lang;
+        globalThis.showConfirmYesCancel = vi.fn();
+        globalThis.lang                 = {get: (key) => key};
+    });
+
+    afterEach(() => {
+        globalThis.showConfirmYesCancel = previousShowConfirmYesCancel;
+        globalThis.lang                 = previousLang;
+    });
+
+    it('_confirmDeleteTeam_givenCall_asksWithADangerButtonNamingTheDeletion', () => {
+        // Arrange
+        const context = buildContext([{user_id: 1}, {user_id: 2}]);
+
+        // Act
+        TeamEdit.prototype._confirmDeleteTeam.call(context);
+
+        // Assert
+        expect(globalThis.showConfirmYesCancel).toHaveBeenCalledExactlyOnceWith('js.delete_team_confirm_label', expect.any(Function), null, {
+            type:     'error',
+            yesLabel: 'js.delete_team_confirm_yes',
+            ...DANGER_BUTTONS,
+        });
+    });
+
+    it('_confirmRemoveMember_givenConfirmed_removesTheMemberBehindADangerButton', () => {
+        // Arrange
+        const context = buildContext([{user_id: 1}, {user_id: 2}]);
+
+        // Act
+        TeamEdit.prototype._confirmRemoveMember.call(context, 2);
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+
+        // Assert
+        expect(globalThis.showConfirmYesCancel).toHaveBeenCalledExactlyOnceWith('js.remove_member_confirm_label', expect.any(Function), null, {
+            type:     'error',
+            yesLabel: 'js.remove_member_confirm_yes',
+            ...DANGER_BUTTONS,
+        });
+        expect(context._removeUserFromTeam).toHaveBeenCalledExactlyOnceWith(2);
+    });
+
+    it.each([
+        ['OtherMembers', [{user_id: 1}, {user_id: 2}], 'js.leave_team_confirm_label', 'js.leave_team_confirm_yes'],
+        ['NoOtherMembers', [{user_id: 1}], 'js.leave_team_disband_confirm_label', 'js.leave_team_disband_confirm_yes'],
+    ])('_confirmLeaveTeam_given%s_namesWhatLeavingDoesOnADangerButton', (name, members, expectedText, expectedYesLabel) => {
+        // Arrange
+        const context = buildContext(members);
+
+        // Act
+        TeamEdit.prototype._confirmLeaveTeam.call(context, 1);
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+
+        // Assert
+        expect(globalThis.showConfirmYesCancel).toHaveBeenCalledExactlyOnceWith(expectedText, expect.any(Function), null, {
+            type:     'error',
+            yesLabel: expectedYesLabel,
+            ...DANGER_BUTTONS,
+        });
+        expect(context._removeUserFromTeam).toHaveBeenCalledExactlyOnceWith(1);
+    });
+});

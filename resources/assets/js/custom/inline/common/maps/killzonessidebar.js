@@ -436,6 +436,26 @@ class CommonMapsKillzonessidebar extends InlineCode {
     }
 
     /**
+     * Asks before deleting every pull of the route, naming the deletion on the confirm button.
+     * @private
+     */
+    _confirmDeleteAllPulls() {
+        let self = this;
+
+        showConfirmYesCancel(lang.get('js.killzone_sidebar_delete_all_pulls_confirm_label'), function () {
+            /** @type KillZoneMapObjectGroup */
+            let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
+
+            killZoneMapObjectGroup.deleteAll();
+            self._rebuildFloorSwitches();
+        }, null, {
+            yesLabel: lang.get('js.killzone_sidebar_delete_all_pulls_confirm_yes'),
+            yesClass: 'btn btn-danger me-1',
+            cancelClass: 'btn btn-secondary',
+        });
+    }
+
+    /**
      *
      * @returns {Pickr|null}
      */
@@ -482,15 +502,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             getState().setKillZonesNumberStyle($(this).is(':checked') ? NUMBER_STYLE_PERCENTAGE : NUMBER_STYLE_ENEMY_FORCES);
         });
 
-        $(this.options.killZonesPullsSettingsDeleteAllSelector).unbind('click').bind('click', function () {
-            showConfirmYesCancel(lang.get('js.killzone_sidebar_delete_all_pulls_confirm_label'), function () {
-                /** @type KillZoneMapObjectGroup */
-                let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
-
-                killZoneMapObjectGroup.deleteAll();
-                self._rebuildFloorSwitches();
-            });
-        });
+        $(this.options.killZonesPullsSettingsDeleteAllSelector).unbind('click').bind('click', this._confirmDeleteAllPulls.bind(this));
 
         // This must be the longest variable name I've ever made :)
         $(this.options.killZonesPullsSettingsPullsSidebarFloorSwitchVisibilitySelector).bind('change', function () {

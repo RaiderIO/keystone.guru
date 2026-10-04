@@ -770,11 +770,30 @@ describe('CommonDungeonroutePicker', () => {
         request.complete();
 
         // Assert
-        expect(globalThis.showConfirmYesCancel).toHaveBeenCalledWith('Delete this route permanently?', expect.any(Function));
+        expect(globalThis.showConfirmYesCancel).toHaveBeenCalledWith('Delete this route permanently?', expect.any(Function), null, expect.any(Object));
         expect(request.url).toBe('/ajax/routes');
         expect(request.data).toEqual({dungeon_routes: ['a']});
         expect(callback).toHaveBeenCalledWith(expect.objectContaining({publicKeys: ['a'], response: {dungeon_routes: ['a']}}));
         expect(offcanvas.hide).toHaveBeenCalledTimes(1);
+    });
+
+    it('confirm_givenDeleteModeWithSeveralRoutes_asksWithADangerButtonNamingTheDeletion', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')]);
+        tick('a');
+        tick('b');
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+
+        // Assert
+        expect(globalThis.showConfirmYesCancel).toHaveBeenCalledExactlyOnceWith('Delete these 2 routes permanently?', expect.any(Function), null, {
+            yesLabel:    'Delete 2 routes',
+            yesClass:    'btn btn-danger me-1',
+            cancelClass: 'btn btn-secondary',
+        });
     });
 
     it('confirm_givenDeleteModeAndADismissedPrompt_sendsNothing', () => {

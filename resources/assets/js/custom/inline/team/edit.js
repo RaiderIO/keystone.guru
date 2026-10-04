@@ -60,12 +60,7 @@ class TeamEdit extends InlineCode {
         }
 
         $(this.options.deleteTeamSelector).unbind('click').bind('click', function (clickEvent) {
-            showConfirmYesCancel(lang.get('js.delete_team_confirm_label'), function () {
-                // Change the method to DELETE
-                $(self.options.detailsMethodInputSelector).val('DELETE');
-                // Submit the form
-                $(self.options.detailsFormSelector).submit();
-            }, null, {type: 'error'});
+            self._confirmDeleteTeam();
 
             clickEvent.preventDefault();
         });
@@ -478,19 +473,68 @@ class TeamEdit extends InlineCode {
         });
 
         $('.remove_user_btn').unbind('click').bind('click', function (e) {
-            let userId = parseInt($(this).data('userid'));
-            showConfirmYesCancel(lang.get('js.remove_member_confirm_label'), function () {
-                self._removeUserFromTeam(userId);
-            }, null, {type: 'error'});
+            self._confirmRemoveMember(parseInt($(this).data('userid')));
         });
 
         $('.leave_team_btn').unbind('click').bind('click', function (e) {
-            let userId = parseInt($(this).data('userid'));
-            showConfirmYesCancel(lang.get(self.options.data.length === 1 ?
-                'js.leave_team_disband_confirm_label' :
-                'js.leave_team_confirm_label'), function () {
-                self._removeUserFromTeam(userId);
-            }, null, {type: 'error'});
+            self._confirmLeaveTeam(parseInt($(this).data('userid')));
+        });
+    }
+
+    /**
+     * Asks before deleting the team, naming the deletion on the confirm button.
+     * @private
+     */
+    _confirmDeleteTeam() {
+        let self = this;
+
+        showConfirmYesCancel(lang.get('js.delete_team_confirm_label'), function () {
+            // Change the method to DELETE
+            $(self.options.detailsMethodInputSelector).val('DELETE');
+            // Submit the form
+            $(self.options.detailsFormSelector).submit();
+        }, null, {
+            type: 'error',
+            yesLabel: lang.get('js.delete_team_confirm_yes'),
+            yesClass: 'btn btn-danger me-1',
+            cancelClass: 'btn btn-secondary',
+        });
+    }
+
+    /**
+     * Asks before removing a member from the team, naming the removal on the confirm button.
+     * @param {number} userId
+     * @private
+     */
+    _confirmRemoveMember(userId) {
+        let self = this;
+
+        showConfirmYesCancel(lang.get('js.remove_member_confirm_label'), function () {
+            self._removeUserFromTeam(userId);
+        }, null, {
+            type: 'error',
+            yesLabel: lang.get('js.remove_member_confirm_yes'),
+            yesClass: 'btn btn-danger me-1',
+            cancelClass: 'btn btn-secondary',
+        });
+    }
+
+    /**
+     * Asks before the current user leaves the team; leaving as its last member disbands it.
+     * @param {number} userId
+     * @private
+     */
+    _confirmLeaveTeam(userId) {
+        let self = this;
+        let disbands = this.options.data.length === 1;
+
+        showConfirmYesCancel(lang.get(disbands ? 'js.leave_team_disband_confirm_label' : 'js.leave_team_confirm_label'), function () {
+            self._removeUserFromTeam(userId);
+        }, null, {
+            type: 'error',
+            yesLabel: lang.get(disbands ? 'js.leave_team_disband_confirm_yes' : 'js.leave_team_confirm_yes'),
+            yesClass: 'btn btn-danger me-1',
+            cancelClass: 'btn btn-secondary',
         });
     }
 
