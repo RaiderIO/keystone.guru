@@ -206,9 +206,10 @@ $compendiumEntries        = [
         @if($showDungeonContext)
             <ul class="navbar-nav flex-row d-lg-none">
                 <li class="nav-item dungeon_context_nav">
+                    {{-- Named by its visible label plus a hidden verb, so the name a voice user sees is the name they can say --}}
                     <button type="button" class="nav-link dungeon_context_nav_toggle" id="dungeonContextToggle"
-                            data-bs-toggle="offcanvas" data-bs-target="#dungeon_sheet" aria-controls="dungeon_sheet"
-                            aria-label="{{ __('view_common.layout.nav.dungeoncontext.change_dungeon') }}">
+                            data-bs-toggle="offcanvas" data-bs-target="#dungeon_sheet" aria-controls="dungeon_sheet">
+                        <span class="visually-hidden">{{ __('view_common.layout.nav.dungeoncontext.change_dungeon') }}</span>
                         <img class="dungeon_context_nav_icon" data-image-fallback alt=""
                              src="{{ $dungeonContextSelectedDungeon?->getImageUrl() ?? $currentUserGameVersion->expansion->getWallpaperUrl() }}"/>
                         <span class="dungeon_context_nav_label text-truncate">{{ $dungeonContextSelectedDungeon === null ? __('view_common.layout.nav.dungeoncontext.no_selection') : __($dungeonContextSelectedDungeon->abbreviation) }}</span>

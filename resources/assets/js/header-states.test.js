@@ -17,6 +17,8 @@ const themeCss = sass.compile(path.join(ROOT, 'resources/assets/sass/theme/theme
     silenceDeprecations: ['import'],
 }).css;
 const headerCss = fs.readFileSync(path.join(ROOT, 'resources/assets/css/sections/header.css'), 'utf8');
+const discoverCss = fs.readFileSync(path.join(ROOT, 'resources/assets/css/sections/discover.css'), 'utf8');
+const mapHeaderCss = fs.readFileSync(path.join(ROOT, 'resources/assets/css/sections/map-header.css'), 'utf8');
 // Bootstrap's reboot as each theme compiles it, wrapped in the theme class; it outranks a single-class button rule
 const themeRebootCss = '.darkly button { margin: 0; border-radius: 0; }';
 
@@ -74,7 +76,8 @@ function contrastRatio(foreground, background) {
  */
 function renderHeader(html) {
     document.documentElement.className = 'theme darkly';
-    document.head.innerHTML = `<style>${themeCss}</style><style>${themeRebootCss}</style><style>${headerCss}</style>`;
+    document.head.innerHTML = `<style>${themeCss}</style><style>${themeRebootCss}</style><style>${headerCss}</style>`
+        + `<style>${discoverCss}</style><style>${mapHeaderCss}</style>`;
     document.body.innerHTML = html;
 }
 
@@ -171,5 +174,50 @@ describe('header state language', () => {
         // Assert
         expect(radiusOf('all')).toBe(radiusOf('chip'));
         expect(radiusOf('all')).toBe('0.25rem');
+    });
+
+    test('retailTile_givenAnyTheme_keepsAGapBetweenItsBorderAndTheArt', () => {
+        // Arrange
+        renderHeader(`
+            <div class="dungeon_context_header">
+                <div class="row"><div class="list_dungeon col selectable selected border-accent" id="tile"></div></div>
+            </div>`);
+
+        // Act
+        const tile = getComputedStyle(document.getElementById('tile'));
+
+        // Assert: the art is dark in every theme, and lux's accent is black - flush on the art it would vanish
+        // jsdom resolves this padding to px but leaves other rem lengths as written
+        expect(['0.125rem', '2px']).toContain(tile.paddingTop);
+        expect(['0.125rem', '2px']).toContain(tile.paddingLeft);
+    });
+
+    test('readoutName_givenItsLongNameFit_changesSizeWithoutATransition', () => {
+        // Arrange
+        renderHeader(`
+            <div class="game_version_header"><div class="dungeon_strip">
+                <div class="dungeon_strip_readout"><span class="dungeon_strip_readout_name" id="name">Dire Maul East</span></div>
+            </div></div>`);
+
+        // Act
+        const name = getComputedStyle(document.getElementById('name'));
+
+        // Assert: DungeonStrip.fitReadoutName() measures right after toggling the smaller size, so it must apply at once
+        expect(name.transitionProperty).not.toContain('font-size');
+        expect(name.transition ?? '').not.toContain('font-size');
+    });
+
+    test('stripGroups_givenAFocusedClippedChip_clipRatherThanScroll', () => {
+        // Arrange
+        renderHeader(`
+            <div class="game_version_header"><div class="dungeon_strip">
+                <div class="dungeon_strip_groups" id="groups"></div>
+            </div></div>`);
+
+        // Act
+        const groups = getComputedStyle(document.getElementById('groups'));
+
+        // Assert: a hidden box scrolls to a focused chip, so DungeonStrip never sees it clipped and never unfolds
+        expect(groups.overflow).toBe('clip');
     });
 });

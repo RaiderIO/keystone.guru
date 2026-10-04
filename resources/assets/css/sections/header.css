@@ -144,7 +144,6 @@
     font-size: var(--dungeon-strip-readout-font-size);
     font-weight: 700;
     line-height: 1.15;
-    transition: font-size 0.2s ease;
 }
 
 .dungeon_strip_readout_name--long {
@@ -172,7 +171,9 @@
 }
 
 /* Padded on every side and pulled back out by the same amount horizontally: the chips stay put, while a focus
-   ring around an edge chip lands inside the clipped box instead of being cut off */
+   ring around an edge chip lands inside the clipped box instead of being cut off. Clipped rather than hidden: a
+   hidden box scrolls itself to a focused chip, so dungeonstrip.js would find it in view and not unfold the strip,
+   and the strip would stay scrolled after focus left. */
 .dungeon_strip_groups {
     display: flex;
     flex: 1 1 auto;
@@ -180,7 +181,7 @@
     min-width: 0;
     margin: 0 calc(var(--dungeon-strip-padding) * -1);
     padding: var(--dungeon-strip-padding);
-    overflow: hidden;
+    overflow: clip;
     mask-image: var(--dungeon-strip-clip-mask);
 }
 
@@ -456,6 +457,11 @@
     outline: 0.125rem solid var(--theme-border-accent);
     outline-offset: 0.125rem;
     box-shadow: none;
+}
+
+/* A tile's border sits a gap away from its art, so its ring goes one step further out */
+.dungeon_context_header .list_dungeon a:focus-visible {
+    outline-offset: 0.25rem;
 }
 
 /* The mobile dungeon sheet: game versions on top, a filter that sticks while the list scrolls under it,
