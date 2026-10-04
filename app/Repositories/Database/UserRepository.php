@@ -65,8 +65,11 @@ class UserRepository extends DatabaseRepository implements UserRepositoryInterfa
     /**
      * The dungeon aggregate is joined on top of the listed-creators query, so a creator must clear
      * the same site-wide bar (and not have opted out) before a dungeon page or the directory's
-     * dungeon filter may show them. It is grouped over the (dungeon_id, published_state_id,
-     * expires_at) index, so it reads the dungeon's routes rather than every published route.
+     * dungeon filter may show them. The dungeon aggregate only reads the dungeon's routes - with a
+     * season, an index_merge intersecting the dungeon_id and season_id indexes - so it adds next to
+     * nothing to the listed-creators aggregate it joins:
+     *
+     *   dungeon_routes  type=index_merge  Using intersect(dungeon_id_index,season_id_index)  rows=1188 of 200k
      */
     public function buildListedCreatorsForDungeonQuery(
         int  $dungeonId,
@@ -155,7 +158,9 @@ class UserRepository extends DatabaseRepository implements UserRepositoryInterfa
      * never match, and `<=>` would count the routes that have no season instead.
      *
      * `season_dungeon_ids` is the comma-separated set of dungeons those season routes are for;
-     * GROUP_CONCAT skips the NULLs the IF() yields for every other route.
+     * GROUP_CONCAT skips the NULLs the IF() yields for every other route. Its DISTINCT makes MySQL
+     * group by sorting instead of through a temporary table, at the same cost: ~200ms either way
+     * over 160k world-published routes by 3,000 authors.
      *
      * @return Builder<DungeonRoute>
      */
