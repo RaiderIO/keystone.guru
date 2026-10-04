@@ -187,6 +187,49 @@ final class ProfileCreatorProfileTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function view_givenAPinnedRoute_titlesItsCardOneLevelBelowThePinnedRoutesHeading(): void
+    {
+        // Arrange
+        $creator = User::factory()->create();
+        $viewer  = User::factory()->create();
+
+        $publishedRoute = DungeonRoute::factory()->create([
+            'author_id'          => $creator->id,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+
+        $pin                   = new UserPinnedDungeonRoute();
+        $pin->user_id          = $creator->id;
+        $pin->dungeon_route_id = $publishedRoute->id;
+        $pin->order            = 0;
+        $pin->save();
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('profile.view', ['user' => $creator]));
+
+            // Assert
+            $response->assertOk();
+            $content = (string)$response->getContent();
+            $this->assertMatchesRegularExpression(
+                sprintf('/<h2 class="h4 mb-3">\s*%s\s*<\/h2>/', preg_quote(__('view_profile.view.pinned_routes'), '/')),
+                $content,
+            );
+            $this->assertSame(1, preg_match_all('/<h(\d) class="[^"]*\btitle">/', $content, $titleHeadings));
+            $this->assertSame(['3'], $titleHeadings[1]);
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $pin->delete();
+            $publishedRoute->delete();
+            $viewer->delete();
+            $creator->delete();
+        }
+    }
+
     /**
      * Same rule as the pinned routes: pinning a collection nobody may see must not share it.
      */

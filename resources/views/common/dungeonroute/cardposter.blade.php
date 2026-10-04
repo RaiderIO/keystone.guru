@@ -11,10 +11,12 @@ use App\Service\Cache\CacheServiceInterface;
  * @var array<string, mixed>  $__env
  * @var boolean               $cache
  * @var boolean|null          $useFrontPageThumbnail
+ * @var int|null              $titleHeadingLevel     Level of the title's heading, one below the page's heading above the card.
  */
 
 $showDungeonImage      ??= false;
 $useFrontPageThumbnail ??= false;
+$titleHeadingLevel     ??= 4;
 $isAdmin          = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 // Generate a unique string so each card on the page has a stable, unique id
 $uniqueString = uniqid();
@@ -27,6 +29,7 @@ use (
     $dungeonroute,
     $isAdmin,
     $useFrontPageThumbnail,
+    $titleHeadingLevel,
     $__env
 )
 
@@ -84,13 +87,13 @@ use (
 
         <div class="row g-0 px-2 align-items-end poster_title_row">
             <div class="col">
-                <h4 class="mb-0 title">
+                <h{{ $titleHeadingLevel }} class="h4 mb-0 title">
                     {{-- The title clamps to two lines (see discover.css); the attribute keeps the full text reachable --}}
                     <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
                        title="{{ $dungeonroute->title }}">
                         {{ $dungeonroute->title }}
                     </a>
-                </h4>
+                </h{{ $titleHeadingLevel }}>
             </div>
             <div class="col-auto ps-2 poster_enemy_forces">
                 @if( $enemyForcesWarning )
@@ -154,7 +157,7 @@ if ($cache) {
 // Echo the result of this function
     echo $cacheService->rememberInHash(
         DungeonRoute::getCardCacheKey($dungeonroute->id),
-        DungeonRoute::getCardCacheField('poster', $currentUserLocale, 0, (int)$showDungeonImage, (int)$isAdmin, (int)$useFrontPageThumbnail),
+        DungeonRoute::getCardCacheField($titleHeadingLevel === 4 ? 'poster' : sprintf('poster_h%d', $titleHeadingLevel), $currentUserLocale, 0, (int)$showDungeonImage, (int)$isAdmin, (int)$useFrontPageThumbnail),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );

@@ -162,6 +162,22 @@ function setupToggleDeselect(instance) {
 }
 
 /**
+ * Tom Select points the select's label at its own control, which is a <div> unless the control holds a text input -
+ * and a label cannot be for a <div>, so the `for` names nothing. The control already takes its name from the label
+ * through aria-labelledby and Tom Select focuses it on a label click, so the dangling `for` is dropped.
+ *
+ * @param {HTMLSelectElement} select
+ */
+function dropDanglingLabelFor(select) {
+    const controlId = `${select.id}-ts-control`;
+    document.querySelectorAll(`label[for="${CSS.escape(controlId)}"]`).forEach((label) => {
+        if (label.control === null) {
+            label.removeAttribute('for');
+        }
+    });
+}
+
+/**
  * @param {HTMLSelectElement} select
  * @returns {TomSelect}
  */
@@ -195,6 +211,9 @@ function initSelectPicker(select) {
         setupToggleDeselect(instance);
     }
     setupSelectedCountSummary(instance, select);
+    if (select.id) {
+        dropDanglingLabelFor(select);
+    }
 
     return instance;
 }

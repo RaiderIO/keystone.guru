@@ -25,6 +25,7 @@ const OPTIONS = {
     emptySelector:     '#routes_empty',
     countSelector:     '#routes_count',
     fullSelector:      '#routes_full',
+    overSelector:      '#routes_over',
     statusSelector:    '#routes_status',
     max:               3,
 };
@@ -39,6 +40,8 @@ const MESSAGES = {
         orderedselect_moved_status:   'Moved :name to position :position',
         orderedselect_removed_status: 'Removed :name',
         orderedselect_full:           'Full (maximum :max)',
+        orderedselect_over:           'Over (maximum :max)',
+        slot_over:                    'Slot over its :max',
     },
 };
 
@@ -52,7 +55,10 @@ function itemHtml(id, name) {
         <li class="list-group-item ordered_select_item" data-id="${id}">
             <span class="ordered_select_handle"></span>
             <span class="ordered_select_position">0</span>
-            <span class="ordered_select_label">${name}</span>
+            <span class="ordered_select_text">
+                <span class="ordered_select_label">${name}</span>
+                <span class="ordered_select_over_badge" hidden>Over the limit</span>
+            </span>
             <span class="ordered_select_detail" hidden>
                 <i class="ordered_select_detail_icon" hidden></i>
                 <span class="ordered_select_detail_text"></span>
@@ -305,6 +311,7 @@ describe('CommonFormsOrderedselect in ajax mode', () => {
                 <p id="routes_empty" hidden>Empty</p>
                 <button id="routes_add_button" type="button">Add route</button>
                 <span id="routes_full" hidden>Full</span>
+                <span id="routes_over" hidden></span>
                 <div id="routes_status"></div>
                 <template id="routes_template">${itemHtml(0, '')}</template>
             </div>`;
@@ -473,5 +480,79 @@ describe('CommonFormsOrderedselect in ajax mode', () => {
         // Assert
         expect(document.querySelector('#routes_add_button').disabled).toBe(false);
         expect(document.querySelector('#routes_full').hidden).toBe(true);
+    });
+    /**
+     * A control whose list (Bravo, Alpha) already holds more than its item max of 1, as legacy data can.
+     *
+     * @returns {CommonFormsOrderedselect}
+     */
+    function overFullControl() {
+        let overFull = new CommonFormsOrderedselect('routes', 'common/forms/orderedselect', Object.assign({}, OPTIONS, {
+            ajax:         true,
+            rootSelector: '#routes',
+            fullCount:    2,
+            itemMax:      1,
+            itemOverKey:  'js.slot_over',
+        }));
+        overFull.activate();
+
+        return overFull;
+    }
+
+    it('activate_givenMoreItemsThanItsItemMax_marksTheItemsPastItAndShowsTheOverNote', () => {
+        // Arrange
+        document.querySelector('#routes_full').hidden = false;
+
+        // Act
+        overFullControl();
+
+        // Assert
+        expect(itemNamed('Bravo').classList.contains('ordered_select_item_over')).toBe(false);
+        expect(itemNamed('Bravo').querySelector('.ordered_select_over_badge').hidden).toBe(true);
+        expect(itemNamed('Alpha').classList.contains('ordered_select_item_over')).toBe(true);
+        expect(itemNamed('Alpha').querySelector('.ordered_select_over_badge').hidden).toBe(false);
+        expect(document.querySelector('#routes_over').hidden).toBe(false);
+        expect(document.querySelector('#routes_over').textContent).toBe('Slot over its 1');
+        expect(document.querySelector('#routes_full').hidden).toBe(true);
+        expect(document.querySelector('#routes_add_button').disabled).toBe(true);
+    });
+
+    it('onMoveClicked_givenAnItemMovesIntoItsItemMax_marksTheItemItPushedPastIt', () => {
+        // Arrange
+        overFullControl();
+
+        // Act
+        itemNamed('Alpha').querySelector('.ordered_select_up').click();
+
+        // Assert
+        expect(itemNamed('Alpha').classList.contains('ordered_select_item_over')).toBe(false);
+        expect(itemNamed('Bravo').classList.contains('ordered_select_item_over')).toBe(true);
+        expect(itemNamed('Bravo').querySelector('.ordered_select_over_badge').hidden).toBe(false);
+    });
+
+    it('removeItem_givenTheListDropsToItsItemMax_swapsTheOverNoteForTheFullNote', () => {
+        // Arrange
+        let overFull = overFullControl();
+
+        // Act
+        overFull.removeItem(1);
+
+        // Assert
+        expect(itemNamed('Bravo').classList.contains('ordered_select_item_over')).toBe(false);
+        expect(document.querySelector('#routes_over').hidden).toBe(true);
+        expect(document.querySelector('#routes_full').hidden).toBe(false);
+        expect(document.querySelector('#routes_full').textContent).toBe('Full (maximum 1)');
+    });
+
+    it('refresh_givenNoItemMax_marksNoItemOver', () => {
+        // Arrange - the shared control holds two items and has no item max
+
+        // Act
+        control.setFullCount(2);
+
+        // Assert
+        expect(document.querySelectorAll('#routes_list .ordered_select_item_over')).toHaveLength(0);
+        expect(itemNamed('Alpha').querySelector('.ordered_select_over_badge').hidden).toBe(true);
+        expect(document.querySelector('#routes_over').hidden).toBe(true);
     });
 });

@@ -34,8 +34,17 @@
     text-align: end;
 }
 
-.ordered_select .ordered_select_label {
+/* The label with, below it, what marks the item */
+.ordered_select .ordered_select_text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.125rem;
     min-width: 0;
+}
+
+.ordered_select .ordered_select_label {
+    max-width: 100%;
     overflow-wrap: anywhere;
 }
 
@@ -81,4 +90,38 @@
     border: 1px solid var(--theme-btn-accent);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.45);
     cursor: grabbing;
+}
+
+/* An item past the most its list may hold (data from before the limit): flagged in the warning colour */
+.ordered_select .ordered_select_item.ordered_select_item_over {
+    box-shadow: inset 3px 0 0 var(--bs-warning);
+}
+
+.ordered_select .ordered_select_over_badge {
+    color: #000;
+    background-color: var(--bs-warning);
+    white-space: nowrap;
+}
+
+/* Touch-sized controls on phones: the label keeps the first line, the detail and the buttons wrap below it */
+@media (max-width: 575.98px) {
+    .ordered_select .ordered_select_item {
+        flex-wrap: wrap;
+        row-gap: 0;
+    }
+
+    .ordered_select .ordered_select_handle,
+    .ordered_select .ordered_select_item .btn {
+        min-width: 2.75rem;
+        min-height: 2.75rem;
+    }
+
+    /* flex-fill keeps the basis on auto, so the width is what claims the line */
+    .ordered_select .ordered_select_text {
+        width: calc(100% - 2.75rem - 1.5rem - 1rem);
+    }
+
+    .ordered_select .ordered_select_up {
+        margin-inline-start: auto;
+    }
 }

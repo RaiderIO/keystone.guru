@@ -107,6 +107,7 @@ $orderedSelectOptions = static function (array $section) use (
         'selectedIds'       => $editSection->dungeonRoutes->pluck('public_key')->all(),
         'max'               => DungeonRouteCollection::MAX_ROUTES,
         'itemMax'           => $dungeonName !== null ? DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON : null,
+        'itemOverKey'       => 'js.collection_dungeonroutes_over_dungeon_limit',
         'emptyText'         => $dungeonName !== null
             ? __('view_common.collection.details.dungeon_routes_slot_empty', ['dungeon' => $dungeonName])
             : __('view_common.collection.details.dungeon_routes_empty'),

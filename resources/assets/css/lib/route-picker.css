@@ -113,3 +113,8 @@
 .route_sidebar .route_picker .route_picker_row_label {
     padding: 0;
 }
+
+/* Bootstrap's 0.65 leaves a disabled page button looking live on the drawer's dark surface */
+.route_picker .route_picker_page_button:disabled {
+    opacity: 0.35;
+}

@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
  * @var bool|null                                                                       $showDungeonImage
  * @var bool|null                                                                       $cache
  * @var bool|null                                                                       $useFrontPageThumbnail
+ * @var int|null                                                                        $titleHeadingLevel Level of each poster card's title heading.
  * @var string                                                                          $orientation
  * @var Collection<integer, array<string, string>>                                      $headers
  */
@@ -23,12 +24,13 @@ $cache                 ??= true;
 $orientation           ??= 'poster';
 $cardHeaders           ??= collect();
 $useFrontPageThumbnail ??= false;
+$titleHeadingLevel     ??= 4;
 
 $renderedDungeonRouteCount = 0;
 $i                         = 0;
 
 // @formatter:off
-$renderDungeonRouteCollection = static function (Collection $collection, ?string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env, &$renderedDungeonRouteCount, $cardHeaders, $useFrontPageThumbnail) {
+$renderDungeonRouteCollection = static function (Collection $collection, ?string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env, &$renderedDungeonRouteCount, $cardHeaders, $useFrontPageThumbnail, $titleHeadingLevel) {
     /** @var Collection<int, DungeonRoute> $collection */
     $count = $collection->count();
     if( $count > 0 && $header !== null ) { ?>
@@ -72,6 +74,7 @@ $renderDungeonRouteCollection = static function (Collection $collection, ?string
                     'showDungeonImage' => $showDungeonImage,
                     'cache' => $cache,
                     'useFrontPageThumbnail' => $useFrontPageThumbnail,
+                    'titleHeadingLevel' => $titleHeadingLevel,
                 ])
                 @php($renderedDungeonRouteCount++)
             @endif

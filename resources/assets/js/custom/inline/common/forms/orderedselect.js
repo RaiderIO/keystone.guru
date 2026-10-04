@@ -7,12 +7,14 @@
  @property {string} emptySelector     Shown instead of the list while it is empty.
  @property {string} countSelector     The "n / max" counter.
  @property {string} fullSelector      The note shown once the list holds max items.
+ @property {string} overSelector      The note shown while the list holds more than itemMax items.
  @property {string} statusSelector    Polite live region announcing every change.
  @property {Number} max
  @property {boolean} ajax             Report changes as events on the root instead of adding from the select.
  @property {string} rootSelector      The control's root element, which the ajax mode events are fired on.
  @property {Number|null} fullCount    What counts towards max in ajax mode, when that is more than this list.
  @property {Number|null} itemMax      Most items this list itself may hold, when that is below max.
+ @property {string} itemOverKey       Translation key of the over-itemMax note, given :max.
  @property {boolean} showCountMax     Whether the counter reads "n / max" rather than just "n".
  */
 
@@ -288,12 +290,16 @@ class CommonFormsOrderedselect extends InlineCode {
         let fullCount = this.options.ajax && typeof this.options.fullCount === 'number' ? this.options.fullCount : count;
         let isListFull = fullCount >= this.options.max;
         let isFull = isListFull || this._isItemsFull(count);
+        let isItemsOver = typeof this.options.itemMax === 'number' && count > this.options.itemMax;
 
         $items.each(function (index, element) {
             let $item = $(element);
             let name = self._getName($item);
 
             $item.find('.ordered_select_position').text(index + 1);
+            let isOver = typeof self.options.itemMax === 'number' && index >= self.options.itemMax;
+            $item.toggleClass('ordered_select_item_over', isOver);
+            $item.find('.ordered_select_over_badge').prop('hidden', !isOver);
             $item.find('.ordered_select_up')
                 .prop('disabled', index === 0)
                 .attr('aria-label', lang.get('js.orderedselect_move_up', {name: name}));
@@ -313,7 +319,11 @@ class CommonFormsOrderedselect extends InlineCode {
         $(this.options.fullSelector).text(
             lang.get('js.orderedselect_full', {max: isListFull ? this.options.max : this.options.itemMax})
         );
-        $(this.options.fullSelector).prop('hidden', !isFull);
+        // An over-full list says so instead, which also explains why nothing can be added
+        $(this.options.fullSelector).prop('hidden', !isFull || isItemsOver);
+        $(this.options.overSelector)
+            .text(lang.get(this.options.itemOverKey ?? 'js.orderedselect_over', {max: this.options.itemMax}))
+            .prop('hidden', !isItemsOver);
         $(this.options.addSelectSelector).prop('disabled', isFull);
         $(this.options.addButtonSelector).prop('disabled', isFull);
 

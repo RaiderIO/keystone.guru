@@ -122,6 +122,7 @@ $inlineOptions = [
     'listSelector'               => sprintf('#%s_list', $id),
     'loadingSelector'            => sprintf('#%s_loading', $id),
     'emptySelector'              => sprintf('#%s_empty', $id),
+    'clearFiltersSelector'       => sprintf('#%s_clear_filters', $id),
     'errorSelector'              => sprintf('#%s_error', $id),
     'previousSelector'           => sprintf('#%s_previous', $id),
     'nextSelector'               => sprintf('#%s_next', $id),
@@ -201,9 +202,12 @@ $inlineOptions = [
                 <i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
                 {{ __('view_common.dungeonroute.picker.loading') }}
             </p>
-            <p id="{{ $id }}_empty" class="route_picker_message text-body-secondary px-3 py-4 mb-0" hidden>
-                {{ __('view_common.dungeonroute.picker.empty') }}
-            </p>
+            <div id="{{ $id }}_empty" class="route_picker_message text-body-secondary px-3 py-4" hidden>
+                <p class="mb-2">{{ __('view_common.dungeonroute.picker.empty') }}</p>
+                <button id="{{ $id }}_clear_filters" type="button" class="btn btn-sm btn-secondary" hidden>
+                    <i class="fas fa-times" aria-hidden="true"></i> {{ __('view_common.dungeonroute.picker.clear_filters') }}
+                </button>
+            </div>
             <p id="{{ $id }}_error" class="route_picker_message text-danger px-3 py-4 mb-0" hidden>
                 {{ __('view_common.dungeonroute.picker.load_failed') }}
             </p>
@@ -222,12 +226,14 @@ $inlineOptions = [
 
             <nav class="d-flex align-items-center gap-2 px-3 py-2"
                  aria-label="{{ __('view_common.dungeonroute.picker.pagination') }}">
-                <button id="{{ $id }}_previous" type="button" class="btn btn-sm btn-secondary" disabled>
+                <button id="{{ $id }}_previous" type="button" class="btn btn-sm btn-secondary route_picker_page_button"
+                        disabled aria-disabled="true">
                     <i class="fas fa-chevron-left" aria-hidden="true"></i>
                     {{ __('view_common.dungeonroute.picker.previous') }}
                 </button>
                 <span id="{{ $id }}_range" class="small text-body-secondary mx-auto"></span>
-                <button id="{{ $id }}_next" type="button" class="btn btn-sm btn-secondary" disabled>
+                <button id="{{ $id }}_next" type="button" class="btn btn-sm btn-secondary route_picker_page_button"
+                        disabled aria-disabled="true">
                     {{ __('view_common.dungeonroute.picker.next') }}
                     <i class="fas fa-chevron-right" aria-hidden="true"></i>
                 </button>

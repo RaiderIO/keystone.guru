@@ -41,7 +41,7 @@ if ($showFavoriteRequirement) {
     ], $dungeonSelectOptions))
 </div>
 <div class="{{ $columnClass }}">
-    {{ html()->label(__('view_common.dungeonroute.tablefilters.affixes'), sprintf('%s[]', $affixSelectId)) }}
+    {{ html()->label(__('view_common.dungeonroute.tablefilters.affixes'), $affixSelectId) }}
     {{
         html()
             ->multiselect(sprintf('%s[]', $affixSelectId), $affixgroups->pluck('text', 'id'))
@@ -73,7 +73,7 @@ if ($showFavoriteRequirement) {
 </div>
 @if($showTags)
     <div class="{{ $columnClass }}">
-        {{ html()->label(__('view_common.dungeonroute.tablefilters.tags'), sprintf('%s[]', $tagsSelectId)) }}
+        {{ html()->label(__('view_common.dungeonroute.tablefilters.tags'), $tagsSelectId) }}
         {{
             html()
                 ->multiselect(sprintf('%s[]', $tagsSelectId), $searchTags->pluck('name', 'name'))

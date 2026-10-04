@@ -145,6 +145,7 @@ $uncoveredDungeonNames = $dungeonRouteGroups
                                             'tierAffixGroup' => null,
                                             'showDungeonImage' => true,
                                             'cache' => true,
+                                            'titleHeadingLevel' => 3,
                                         ])
                                     </li>
                                 @endforeach

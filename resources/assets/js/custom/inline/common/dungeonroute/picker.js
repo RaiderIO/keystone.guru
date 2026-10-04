@@ -11,6 +11,7 @@
  @property {string} listSelector              The <ul> the route rows are rendered into.
  @property {string} loadingSelector
  @property {string} emptySelector
+ @property {string} clearFiltersSelector      Puts every filter back on the value the drawer started with.
  @property {string} errorSelector
  @property {string} previousSelector
  @property {string} nextSelector
@@ -96,6 +97,8 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         /** @type {Object<string, PickerDungeonRoute>} Every listed or ticked route, by public key */
         this._dungeonRoutes = {};
         this._onConfirmedCallbacks = [];
+        /** @type {Object<string, string|string[]>} Every filter's value when the drawer was activated, by filter name */
+        this._initialFilterValues = {};
     }
 
     activate() {
@@ -107,6 +110,12 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         this.dialog.onFirstShow(this.reload.bind(this));
         this.dialog.onShow(this._reloadWhenOutOfDate.bind(this));
         this.dialog.onConfirm(this._confirmDungeonRoutes.bind(this));
+
+        for (let name in this.filters) {
+            let value = this.filters[name].getValue();
+            this._initialFilterValues[name] = Array.isArray(value) ? value.slice() : value;
+        }
+        $(this.options.clearFiltersSelector).on('click', this.clearFilters.bind(this));
 
         $(this.options.previousSelector).on('click', this._goToPage.bind(this, -1));
         $(this.options.nextSelector).on('click', this._goToPage.bind(this, 1));
@@ -165,6 +174,40 @@ class CommonDungeonroutePicker extends SearchInlineBase {
      */
     getSelectedPublicKeys() {
         return this._selected.slice();
+    }
+
+    /**
+     * Puts every filter back on the value the drawer started with and lists the first page for them.
+     */
+    clearFilters() {
+        for (let name in this.filters) {
+            let filter = this.filters[name];
+            let value = this._initialFilterValues[name];
+            let select = $(filter.selector)[0];
+
+            if (typeof select !== 'undefined' && select.tomselect) {
+                // Silent, so every filter's change handler does not load a page of its own
+                select.tomselect.setValue(value, true);
+            } else {
+                filter.setValue(value);
+            }
+        }
+
+        this.reload();
+        $(this.options.titleSearchSelector).trigger('focus');
+    }
+
+    /**
+     * @returns {boolean} Whether any filter is off the value the drawer started with.
+     */
+    hasChangedFilters() {
+        for (let name in this.filters) {
+            if (JSON.stringify(this.filters[name].getValue()) !== JSON.stringify(this._initialFilterValues[name])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -340,8 +383,12 @@ class CommonDungeonroutePicker extends SearchInlineBase {
             total: this._total,
         }) : '');
 
-        $(this.options.previousSelector).prop('disabled', state !== 'loaded' || this._page === 0);
-        $(this.options.nextSelector).prop('disabled', state !== 'loaded' || to >= this._total);
+        $(this.options.clearFiltersSelector).prop('hidden', state !== 'empty' || !this.hasChangedFilters());
+
+        let hasPrevious = state === 'loaded' && this._page > 0;
+        let hasNext = state === 'loaded' && to < this._total;
+        $(this.options.previousSelector).prop('disabled', !hasPrevious).attr('aria-disabled', hasPrevious ? 'false' : 'true');
+        $(this.options.nextSelector).prop('disabled', !hasNext).attr('aria-disabled', hasNext ? 'false' : 'true');
     }
 
     /**

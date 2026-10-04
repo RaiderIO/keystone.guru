@@ -67,6 +67,8 @@ return [
     'orderedselect_moved_status'   => 'Moved :name to position :position',
     'orderedselect_removed_status' => 'Removed :name',
     'orderedselect_full'           => 'The list is full: remove one to add another (maximum :max).',
+    'orderedselect_over'           => 'Over the limit of :max: the items marked over the limit stay, but remove some to add another.',
+    'orderedselect_over_badge'     => 'Over the limit',
 
     // Map: toolbar and drawing
     'path'                           => 'Path',
@@ -497,6 +499,7 @@ return [
     // Collections
     'add_to_collection_label'                        => 'Add to collection…',
     'collection_dungeonroutes_count'                 => ':count / :max routes',
+    'collection_dungeonroutes_over_dungeon_limit'    => 'Over the limit of :max routes per dungeon. The routes marked over the limit stay in this collection, but a copy of it leaves them out. Remove routes until fewer than :max are left to add another.',
     'collection_dungeonroutes_added_one'             => 'Added 1 route.',
     'collection_dungeonroutes_added_many'            => 'Added :count routes.',
     'collection_dungeonroutes_removed'               => 'Removed :name.',
