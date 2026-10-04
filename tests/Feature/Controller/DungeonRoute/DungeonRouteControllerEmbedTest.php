@@ -145,7 +145,7 @@ final class DungeonRouteControllerEmbedTest extends PublicTestCase
     {
         // Arrange - guests default to the facade map style
         $owner                      = User::factory()->create();
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false, requireDefaultFloor: true);
         $route                      = $this->createRouteOn($owner, $dungeon->id, $mappingVersion->id);
         /** @var Floor $facadeFloor */
         $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
@@ -175,7 +175,7 @@ final class DungeonRouteControllerEmbedTest extends PublicTestCase
     {
         // Arrange - guests default to the facade map style
         $owner                      = User::factory()->create();
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false, requireDefaultFloor: true);
         $route                      = $this->createRouteOn($owner, $dungeon->id, $mappingVersion->id);
 
         try {

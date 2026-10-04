@@ -99,7 +99,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
                 'name'                         => 'gameversions.forever.name',
                 'description'                  => 'gameversions.forever.description',
                 'has_seasons'                  => false,
-                'active'                       => false,
+                'active'                       => true,
                 'retired_into_game_version_id' => null,
             ],
             [

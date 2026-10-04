@@ -456,7 +456,7 @@ final class DungeonRouteControllerFloorResolutionTest extends PublicTestCase
      */
     private function createFacadeRoute(User $owner): DungeonRoute
     {
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, minActiveFloors: 1, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false, minActiveFloors: 1, requireDefaultFloor: true);
 
         return DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,

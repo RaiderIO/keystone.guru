@@ -18,7 +18,7 @@ final class DungeonFloorsForMapFacadeTest extends PublicTestCase
     public function floorsForMapFacade_givenFacadeNavigationRequestedAndEnabled_returnsAllFloors(): void
     {
         // Arrange
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false);
         /** @var Floor $facadeFloor */
         $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
 
@@ -40,7 +40,7 @@ final class DungeonFloorsForMapFacadeTest extends PublicTestCase
     public function floorsForMapFacade_givenFacadeNavigationEnabledButNotRequested_returnsOnlyFacadeFloor(): void
     {
         // Arrange - thumbnails and MDT exports call this without asking for facade navigation
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false);
         /** @var Floor $facadeFloor */
         $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
 
@@ -62,7 +62,7 @@ final class DungeonFloorsForMapFacadeTest extends PublicTestCase
     public function floorsForMapFacade_givenFacadeNavigationRequestedButDisabled_returnsOnlyFacadeFloor(): void
     {
         // Arrange
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false);
         /** @var Floor $facadeFloor */
         $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
 
@@ -77,7 +77,7 @@ final class DungeonFloorsForMapFacadeTest extends PublicTestCase
     public function floorsForMapFacade_givenFacadeNavigationAndSplitFloors_returnsOnlyNonFacadeFloors(): void
     {
         // Arrange
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, facadeNavigation: false);
         /** @var Floor $facadeFloor */
         $facadeFloor = $dungeon->floors()->where('facade', 1)->firstOrFail();
 

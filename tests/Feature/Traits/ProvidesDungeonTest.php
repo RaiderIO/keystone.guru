@@ -3,6 +3,7 @@
 namespace Tests\Feature\Traits;
 
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
@@ -58,6 +59,31 @@ final class ProvidesDungeonTest extends PublicTestCase
         // Assert
         self::assertTrue((bool)$mappingVersion->facade_enabled);
         self::assertGreaterThanOrEqual(1, $dungeon->floors()->where('facade', 1)->where('active', 1)->count());
+    }
+
+    #[Test]
+    public function findDungeon_givenFacadeNavigationTrue_returnsDungeonWhoseFacadeFloorHasIt(): void
+    {
+        // Arrange & Act
+        [$dungeon] = $this->findDungeon(facadeEnabled: true, facadeNavigation: true, shuffle: false);
+
+        // Assert
+        self::assertTrue($dungeon->floors()->where('facade', 1)->where('active', 1)->where('facade_navigation', 1)->exists());
+    }
+
+    #[Test]
+    public function findDungeon_givenFacadeNavigationFalseAndOnlyMapsShippingWithIt_throwsRuntimeException(): void
+    {
+        // Assert
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('facadeNavigation: false');
+
+        // Arrange & Act
+        $this->findDungeon(
+            facadeEnabled:    true,
+            facadeNavigation: false,
+            constraint:       static fn(Builder $query) => $query->whereIn('key', [DungeonKey::KALIMDOR->value, DungeonKey::EASTERN_KINGDOMS->value]),
+        );
     }
 
     /**

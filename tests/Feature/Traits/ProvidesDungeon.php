@@ -45,6 +45,7 @@ trait ProvidesDungeon
      * `DungeonRouteSaveService::persist()` does) can yield a *different* row.
      *
      * @param  bool|null                                      $facadeEnabled       Require the current mapping version to (not) render a facade. `false` additionally excludes dungeons that have any facade floor at all.
+     * @param  bool|null                                      $facadeNavigation    Require the active facade floor's `facade_navigation` to equal this. Pass false from any test that flips the flag itself, so it never resets a seeded map that ships with navigation on.
      * @param  int                                            $minActiveFloors     Minimum number of active floors the dungeon renders, counted exactly as production does via `floorsForMapFacade()->active()`.
      * @param  int|null                                       $maxActiveFloors     Maximum number of those floors; `null` for no upper bound.
      * @param  bool|null                                      $challengeMode       Require the dungeon to (not) be a Mythic+ dungeon.
@@ -61,6 +62,7 @@ trait ProvidesDungeon
      */
     protected function findDungeon(
         ?bool        $facadeEnabled = null,
+        ?bool        $facadeNavigation = null,
         int          $minActiveFloors = 1,
         ?int         $maxActiveFloors = null,
         ?bool        $challengeMode = null,
@@ -117,6 +119,14 @@ trait ProvidesDungeon
                 // requiring a non-facade floor to exist.
                 $query->whereDoesntHave('floors', static fn(Builder $query) => $query->where('facade', 1));
             }
+        }
+
+        if ($facadeNavigation !== null) {
+            $requirements[] = sprintf('facadeNavigation: %s', $facadeNavigation ? 'true' : 'false');
+            $query->whereHas('floors', static fn(Builder $query) => $query
+                ->where('facade', 1)
+                ->where('active', 1)
+                ->where('facade_navigation', $facadeNavigation));
         }
 
         if ($gameVersion !== null) {

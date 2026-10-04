@@ -343,6 +343,32 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
     }
 
     #[Test]
+    public function getDungeonsForGameVersion_givenForeverAndTbcClassic_listsTheTbcRaidsUnderTbcClassicOnly(): void
+    {
+        // Arrange
+        $foreverGameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_FOREVER);
+        $tbcGameVersion     = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_TBC);
+        $tbcRaidIds         = Dungeon::query()
+            ->active()
+            ->where('raid', true)
+            ->where('expansion_id', Expansion::ALL[Expansion::EXPANSION_TBC])
+            ->pluck('id')
+            ->all();
+        $this->assertNotEmpty($tbcRaidIds);
+
+        $service = $this->buildService($this->createSeasonlessSeasonService());
+
+        // Act
+        $foreverDungeonIds = $service->getDungeonsForGameVersion($foreverGameVersion)->pluck('id')->all();
+        $tbcDungeonIds     = $service->getDungeonsForGameVersion($tbcGameVersion)->pluck('id')->all();
+
+        // Assert
+        $this->assertNotEmpty($foreverDungeonIds);
+        $this->assertSame([], array_values(array_intersect($tbcRaidIds, $foreverDungeonIds)));
+        $this->assertSame([], array_values(array_diff($tbcRaidIds, $tbcDungeonIds)));
+    }
+
+    #[Test]
     public function getDungeonsForGameVersion_givenADungeonWithAMappingVersionForTheGameVersion_returnsIt(): void
     {
         $dungeon = null;
