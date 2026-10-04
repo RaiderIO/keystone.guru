@@ -281,6 +281,41 @@ final class HeaderComposerTest extends PublicTestCase
     }
 
     /**
+     * An aria-label would replace the visible dungeon abbreviation as the button's name, so a voice-control user
+     * saying what they see would not reach it (WCAG 2.5.3). The name is its own text: a hidden verb, then the label.
+     */
+    #[Test]
+    public function render_givenAContextDungeonInTheGameVersionsList_namesTheMobileToggleByItsVisibleLabel(): void
+    {
+        // Arrange
+        /** @var Dungeon $dungeon */
+        $dungeon                    = $this->getClassicEraDungeons()->get(1);
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_CLASSIC_ERA;
+        $_COOKIE['dungeon_context'] = $dungeon->key;
+
+        try {
+            // Act
+            $html = view('common.layout.header')->render();
+
+            // Assert
+            $document = new DOMDocument();
+            libxml_use_internal_errors(true);
+            $document->loadHTML(sprintf('<?xml encoding="UTF-8"><body>%s</body>', $html), LIBXML_NOERROR);
+            libxml_clear_errors();
+            /** @var \DOMElement|null $toggle */
+            $toggle = (new DOMXPath($document))->query('//*[@id="dungeonContextToggle"]')->item(0);
+            $this->assertNotNull($toggle);
+            $this->assertFalse($toggle->hasAttribute('aria-label'));
+            $this->assertSame(
+                sprintf('%s %s', __('view_common.layout.nav.dungeoncontext.change_dungeon'), __($dungeon->abbreviation)),
+                trim((string)preg_replace('/\s+/', ' ', $toggle->textContent)),
+            );
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
+    /**
      * The "Routes by expansion" dropdown was cut from the bar in #4465 - every destination now lives
      * inside a category panel. The map view still passes `showExpansionNav`, so the header must keep
      * accepting it and render identically either way.

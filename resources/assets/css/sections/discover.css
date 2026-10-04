@@ -447,8 +447,10 @@
 }
 
 /* The border is always there, transparent at rest, so selecting a tile never moves its contents; its colour
-   comes from .border-accent, the same treatment as the selected game version */
+   comes from .border-accent. The gap keeps it off the art, which is dark in every theme - lux's black accent
+   would vanish against it. */
 .list_dungeon.selectable {
+    padding: 0.125rem;
     border: 0.125rem solid transparent;
     border-radius: 0.25rem;
 }

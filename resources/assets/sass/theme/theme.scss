@@ -550,6 +550,18 @@ body {
     color: var($--theme-link-hover);
   }
 
+  /* The header's game versions and dungeon chips: quiet at rest, full contrast on hover and when current */
+  .game_version_header {
+    a {
+      color: var($--theme-text-muted);
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: var($--theme-text-contrast);
+    }
+  }
+
   .fixed-bottom {
     z-index: 1000;
   }
