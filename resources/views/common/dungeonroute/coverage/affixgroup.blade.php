@@ -62,7 +62,7 @@ $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static 
     ],
 ])
 
-<div id="dungeonroute_coverage_affixgroup">
+<div id="dungeonroute_coverage_affixgroup" class="table-responsive-md">
     <table id="dungeonroute_coverage_affixgroup_table" class="bg-secondary" style="width: 100%">
         <thead>
         <tr>
