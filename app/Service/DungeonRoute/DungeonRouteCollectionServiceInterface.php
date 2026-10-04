@@ -53,6 +53,16 @@ interface DungeonRouteCollectionServiceInterface
     public function filterMatchingDungeonRoutes(GameVersion $gameVersion, ?Season $season, Collection $dungeonRoutes): Collection;
 
     /**
+     * The passed routes a copy of the passed game version and season keeps: the matching ones, within
+     * DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON per dungeon and DungeonRouteCollection::MAX_ROUTES in total, in
+     * passed order. Expects every route's mapping version to be loaded.
+     *
+     * @param  Collection<int, DungeonRoute> $dungeonRoutes
+     * @return Collection<int, DungeonRoute>
+     */
+    public function filterDuplicatableDungeonRoutes(GameVersion $gameVersion, ?Season $season, Collection $dungeonRoutes): Collection;
+
+    /**
      * The routes of a collection as it is shown: a season set has one slot per pool dungeon in pool order, empty
      * slots included; a free-form collection one group per dungeon in order of first appearance. Expects the
      * season's dungeons and every route's dungeon to be loaded.

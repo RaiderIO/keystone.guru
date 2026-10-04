@@ -247,10 +247,10 @@ class DungeonRouteCollectionController extends Controller
         /** @var array<int|string, int> $duplicateMatchingCounts */
         $duplicateMatchingCounts = $duplicateSeasons
             ->mapWithKeys(static fn(Season $season): array => [
-                $season->id => $dungeonRouteCollectionService->filterMatchingDungeonRoutes($duplicateGameVersion, $season, $dungeonRouteCollection->dungeonRoutes)->count(),
+                $season->id => $dungeonRouteCollectionService->filterDuplicatableDungeonRoutes($duplicateGameVersion, $season, $dungeonRouteCollection->dungeonRoutes)->count(),
             ])
             ->all();
-        $duplicateMatchingCounts[''] = $dungeonRouteCollectionService->filterMatchingDungeonRoutes($duplicateGameVersion, null, $dungeonRouteCollection->dungeonRoutes)->count();
+        $duplicateMatchingCounts[''] = $dungeonRouteCollectionService->filterDuplicatableDungeonRoutes($duplicateGameVersion, null, $dungeonRouteCollection->dungeonRoutes)->count();
 
         /** @var User $user */
         $user = Auth::user();
@@ -374,11 +374,7 @@ class DungeonRouteCollectionController extends Controller
         $season      = $request->season();
 
         $dungeonRouteCollection->load(['dungeonRoutes.mappingVersion']);
-        $matchingDungeonRoutes = $dungeonRouteCollectionService->filterMatchingDungeonRoutes($gameVersion, $season, $dungeonRouteCollection->dungeonRoutes);
-        $dungeonRoutes         = $matchingDungeonRoutes
-            ->diffKeys($dungeonRouteCollectionService->getDungeonRoutesOverDungeonLimit($matchingDungeonRoutes, collect()))
-            ->take(DungeonRouteCollection::MAX_ROUTES)
-            ->values();
+        $dungeonRoutes = $dungeonRouteCollectionService->filterDuplicatableDungeonRoutes($gameVersion, $season, $dungeonRouteCollection->dungeonRoutes);
 
         $duplicate = DB::transaction(function () use (
             $user,
@@ -397,7 +393,7 @@ class DungeonRouteCollectionController extends Controller
                 'season_id'                            => $season?->id,
                 'public_key'                           => DungeonRouteCollection::generateRandomPublicKey(),
                 'published_state_id'                   => PublishedState::ALL[PublishedState::UNPUBLISHED],
-                'name'                                 => $dungeonRouteCollection->name,
+                'name'                                 => self::getDuplicateName($dungeonRouteCollection->name),
                 'description'                          => $dungeonRouteCollection->description,
             ]);
 
@@ -407,6 +403,8 @@ class DungeonRouteCollectionController extends Controller
         });
 
         Session::flash('status', __('controller.dungeonroutecollection.flash.collection_duplicated'));
+        // The copy's name is the first thing its owner changes, so the edit page it lands on selects it
+        Session::flash('collection_select_name', true);
 
         $leftOutCount = $dungeonRouteCollection->dungeonRoutes->count() - $dungeonRoutes->count();
         if ($leftOutCount > 0) {
@@ -541,6 +539,18 @@ class DungeonRouteCollectionController extends Controller
             ->with(['dungeon', 'mappingVersion'])
             ->orderBy('id')
             ->get();
+    }
+
+    /**
+     * The name of a copy: the source's name with a suffix, the source's name shortened when both would not fit.
+     */
+    private static function getDuplicateName(string $name): string
+    {
+        $suffixLength = mb_strlen(__('controller.dungeonroutecollection.duplicate_name', ['name' => '']));
+
+        return __('controller.dungeonroutecollection.duplicate_name', [
+            'name' => rtrim(mb_substr($name, 0, DungeonRouteCollection::MAX_NAME_LENGTH - $suffixLength)),
+        ]);
     }
 
     /**

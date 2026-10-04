@@ -36,7 +36,7 @@ class DungeonRouteCollectionFormRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                'max:128',
+                sprintf('max:%d', DungeonRouteCollection::MAX_NAME_LENGTH),
             ],
             'description' => [
                 'nullable',

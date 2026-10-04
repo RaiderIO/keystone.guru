@@ -43,6 +43,16 @@
     height: 16px;
 }
 
+/* The collection form's delete, set apart from the save row by distance and a danger-tinted rule */
+.collection_danger_zone {
+    border: 1px solid rgba(var(--bs-danger-rgb), 0.5);
+    border-radius: var(--bs-border-radius);
+}
+
+.collection_danger_zone p {
+    max-width: 70ch;
+}
+
 /* Public collection page: the header leads, the dungeon index answers "is my dungeon in here", the groups follow */
 .collection_header_body {
     display: flex;

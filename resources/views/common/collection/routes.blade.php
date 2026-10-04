@@ -142,8 +142,15 @@ $inlineOptions = [
 <section id="collection_routes" class="mb-4" aria-labelledby="collection_routes_heading"
          data-inline-id="{{ $inlineId }}" data-inline-path="common/collection/routes"
          data-inline-options="{{ json_encode($inlineOptions) }}">
-    <div class="d-flex align-items-baseline mb-2">
+    <div class="d-flex flex-wrap align-items-baseline column-gap-3 mb-2">
         <h2 id="collection_routes_heading" class="h4 mb-0">{{ __('view_common.collection.routes.heading') }}</h2>
+        <span id="collection_routes_save_mode" class="small text-body-secondary">
+            @if($isNew)
+                {{ __('view_common.collection.routes.saved_on_create') }}
+            @else
+                <i class="fas fa-check" aria-hidden="true"></i> {{ __('view_common.collection.routes.saved_automatically') }}
+            @endif
+        </span>
         <span id="collection_routes_count" class="text-body-secondary ms-auto">
             {{ __('view_common.collection.routes.count', ['count' => $collectionDungeonRouteCount, 'max' => DungeonRouteCollection::MAX_ROUTES]) }}
         </span>

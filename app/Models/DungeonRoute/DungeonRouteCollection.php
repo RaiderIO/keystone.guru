@@ -83,6 +83,8 @@ class DungeonRouteCollection extends Model
      */
     public const int MAX_COLLECTIONS = 25;
 
+    public const int MAX_NAME_LENGTH = 128;
+
     /**
      * The published states a collection may be in. Unlike a dungeon route a collection is never
      * a draft that must be completed first, so all states are always available.

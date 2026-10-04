@@ -83,6 +83,16 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
             ->values();
     }
 
+    public function filterDuplicatableDungeonRoutes(GameVersion $gameVersion, ?Season $season, Collection $dungeonRoutes): Collection
+    {
+        $matchingDungeonRoutes = $this->filterMatchingDungeonRoutes($gameVersion, $season, $dungeonRoutes);
+
+        return $matchingDungeonRoutes
+            ->diffKeys($this->getDungeonRoutesOverDungeonLimit($matchingDungeonRoutes, collect()))
+            ->take(DungeonRouteCollection::MAX_ROUTES)
+            ->values();
+    }
+
     public function getDungeonRouteGroups(DungeonRouteCollection $dungeonRouteCollection, Collection $dungeonRoutes): Collection
     {
         $season = $dungeonRouteCollection->season;
