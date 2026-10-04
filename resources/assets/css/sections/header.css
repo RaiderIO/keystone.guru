@@ -817,6 +817,50 @@ body:has(#map_header) .offcanvas-backdrop {
     color: var(--theme-btn-accent-text) !important;
 }
 
+.ksg-header .btn-accent:hover {
+    color: var(--theme-btn-accent-hover-text) !important;
+}
+
+/* This stylesheet loads before the theme, so each rule below outranks the theme rule it replaces by
+   specificity - vapor paints .bg-header .btn-info gold with !important */
+.ksg-header .navbar-second .navbar-nav .btn-info {
+    border-color: var(--theme-btn-info) !important;
+    background-color: var(--theme-btn-info) !important;
+    color: var(--theme-btn-info-text) !important;
+}
+
+.ksg-header .navbar-second .navbar-nav .btn-info:hover,
+.ksg-header .navbar-second .navbar-nav .btn-info:focus-visible,
+.ksg-header .navbar-second .navbar-nav .btn-info:active {
+    border-color: var(--theme-btn-info-hover) !important;
+    background-color: var(--theme-btn-info-hover) !important;
+}
+
+.ksg-header .navbar-second .dropdown .dropdown-header {
+    color: var(--theme-dropdown-header) !important;
+}
+
+.ksg-header .navbar-second .dropdown-menu .dropdown-item:hover,
+.ksg-header .navbar-second .dropdown-menu .dropdown-item:focus {
+    background-color: var(--theme-dropdown-item-hover);
+    color: var(--theme-dropdown-item-hover-text);
+}
+
+.ksg-header .navbar-second .dropdown-menu .dropdown-item.active,
+.ksg-header .navbar-second .dropdown-menu .dropdown-item:active {
+    background-color: var(--theme-dropdown-item-active);
+    color: var(--theme-dropdown-item-active-text);
+}
+
+.ksg-header .ksg-nav-entry:hover .ksg-nav-entry-desc,
+.ksg-header .ksg-nav-entry:focus .ksg-nav-entry-desc {
+    color: inherit;
+}
+
+.ksg-header .ksg-nav-prefs-ai {
+    color: var(--theme-ai-marker);
+}
+
 @media (min-width: 992px) {
     /* Two-line labels would otherwise double the bar's height at the widths where the container
        is tightest (#4465) */
