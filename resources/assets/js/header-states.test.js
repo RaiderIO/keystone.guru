@@ -70,6 +70,46 @@ function contrastRatio(foreground, background) {
 }
 
 /**
+ * @param {string} hex #rgb or #rrggbb
+ * @returns {number[]} The red, green and blue channels, 0-255
+ */
+function hexChannels(hex) {
+    const digits = hex.length === 4 ? hex.slice(1).split('').map(digit => digit + digit) : hex.slice(1).match(/../g);
+
+    return digits.map(pair => parseInt(pair, 16));
+}
+
+/**
+ * Paints an rgba() tint over an opaque colour.
+ *
+ * @param {string} tint rgba(r, g, b, a)
+ * @param {string} backdrop #rgb or #rrggbb
+ * @returns {string} #rrggbb
+ */
+function compositeTint(tint, backdrop) {
+    const [r, g, b, alpha] = tint.match(/[\d.]+/g).map(Number);
+
+    return '#' + hexChannels(backdrop)
+        .map((channel, index) => Math.round([r, g, b][index] * alpha + channel * (1 - alpha)))
+        .map(channel => channel.toString(16).padStart(2, '0'))
+        .join('');
+}
+
+/**
+ * jsdom does not cascade into pseudo-elements, so their declarations are read from the stylesheets.
+ *
+ * @param {string} selector
+ * @returns {CSSStyleDeclaration[]} The style of every rule with exactly this selector, in source order
+ */
+function rulesFor(selector) {
+    return [...document.styleSheets]
+        .flatMap(sheet => [...sheet.cssRules])
+        .filter(rule => rule.selectorText !== undefined
+            && rule.selectorText.split(',').map(part => part.trim()).includes(selector))
+        .map(rule => rule.style);
+}
+
+/**
  * Loads the theme and header stylesheets in bundle order under a darkly root and renders the given markup.
  *
  * @param {string} html
@@ -205,6 +245,99 @@ describe('header state language', () => {
         // Assert: DungeonStrip.fitReadoutName() measures right after toggling the smaller size, so it must apply at once
         expect(name.transitionProperty).not.toContain('font-size');
         expect(name.transition ?? '').not.toContain('font-size');
+    });
+
+    test('viewsChip_givenAFullViewShare_paintsNoFillUnderItsLabel', () => {
+        // Arrange
+        renderHeader(`
+            <div class="game_version_header"><div class="dungeon_strip">
+                <a class="dungeon_strip_chip dungeon_strip_chip--views" id="chip" href="#" style="--dungeon-strip-view-share: 100%">BRD</a>
+            </div></div>`);
+
+        // Act
+        const chip = getComputedStyle(document.getElementById('chip'));
+        const bar = rulesFor('.dungeon_strip_chip--views::after');
+
+        // Assert: the chip keeps its plain tint, and the share is drawn by a bar in the label's own colour
+        expect(chip.backgroundColor).toBe('var(--dungeon-strip-control-bg)');
+        expect(['', 'none']).toContain(chip.backgroundImage);
+        expect(bar).toHaveLength(1);
+        expect(bar[0].backgroundColor.toLowerCase()).toBe('currentcolor');
+        expect(bar[0].scale).toBe('var(--dungeon-strip-view-share) 1');
+    });
+
+    test.each([false, true])('viewBar_givenShrunkHeader%s_staysBelowTheLabelsLineBox', shrunk => {
+        // Arrange
+        renderHeader(`
+            <div class="ksg-header ${shrunk ? 'ksg-header--shrink' : ''}"><div class="game_version_header"><div class="dungeon_strip">
+                <a class="dungeon_strip_chip dungeon_strip_chip--views" id="chip" href="#" style="--dungeon-strip-view-share: 100%">BRD</a>
+            </div></div></div>`);
+        const chip = getComputedStyle(document.getElementById('chip'));
+        const rem = name => parseFloat(chip.getPropertyValue(name));
+
+        // Act: the label is one line of line-height 1, centred between the chip's 0.125rem borders
+        const roomUnderLabel = (rem('--dungeon-strip-chip-height') - 2 * 0.125 - rem('--dungeon-strip-chip-font-size')) / 2;
+        const barReach = rem('--dungeon-strip-view-bar-bottom') + rem('--dungeon-strip-view-bar-height');
+
+        // Assert
+        expect(rulesFor('.dungeon_strip_chip--views::after')[0].bottom).toBe('var(--dungeon-strip-view-bar-bottom)');
+        expect(rulesFor('.dungeon_strip_chip--views::after')[0].height).toBe('var(--dungeon-strip-view-bar-height)');
+        expect(barReach).toBeGreaterThan(0);
+        expect(barReach).toBeLessThanOrEqual(roomUnderLabel);
+    });
+
+    test('chip_givenKeyboardFocus_rendersFullContrastText', () => {
+        // Arrange
+        renderHeader(`
+            <div class="game_version_header"><div class="dungeon_strip">
+                <a class="dungeon_strip_chip" id="chip_focused" href="#">BRD</a>
+                <a class="dungeon_strip_chip" id="chip_other" href="#">BFD</a>
+            </div></div>`);
+
+        // Act
+        document.getElementById('chip_focused').focus();
+        const colourOf = id => getComputedStyle(document.getElementById(id)).color;
+
+        // Assert: focus takes the hover tint, which muted text does not clear in any theme
+        expect(colourOf('chip_focused')).toBe('var(--theme-text-contrast)');
+        expect(colourOf('chip_other')).toBe('var(--theme-text-muted)');
+    });
+
+    test.each(THEMES)('viewsChip_given%sTheme_keepsItsLabelAndBarReadableInEveryState', theme => {
+        // Arrange
+        renderHeader(`
+            <div class="game_version_header"><div class="dungeon_strip">
+                <a class="dungeon_strip_chip dungeon_strip_chip--views" id="chip_rest" href="#" style="--dungeon-strip-view-share: 100%">BRD</a>
+                <a class="dungeon_strip_chip dungeon_strip_chip--views" id="chip_current" aria-current="true" href="#" style="--dungeon-strip-view-share: 100%">BFD</a>
+                <a class="dungeon_strip_chip dungeon_strip_chip--views" id="chip_focused" href="#" style="--dungeon-strip-view-share: 100%">GNO</a>
+            </div></div>`);
+        document.getElementById('chip_focused').focus();
+        const variables = themeVariables(theme);
+        const strip = getComputedStyle(document.querySelector('.dungeon_strip'));
+        // The strip sits on the page band; hover shares the focus tint and the theme's full-contrast hover text
+        const band = resolveColour(variables, '--theme-darker');
+        const states = ['chip_rest', 'chip_current', 'chip_focused'].map(id => {
+            const chip = getComputedStyle(document.getElementById(id));
+            const tint = strip.getPropertyValue(chip.backgroundColor.match(/^var\((--[a-z-]+)\)$/)[1]).trim();
+
+            return {id, text: chip.color.match(/^var\((--theme-[a-z-]+)\)$/)[1], background: compositeTint(tint, band)};
+        });
+        const barColour = rulesFor('.dungeon_strip_chip--views::after')[0].backgroundColor;
+
+        // Act
+        const ratios = states.map(state => {
+            const text = resolveColour(variables, state.text);
+            const bar = barColour.toLowerCase() === 'currentcolor' ? text : resolveColour(variables, barColour.match(/^var\((--theme-[a-z-]+)\)$/)[1]);
+
+            return {id: state.id, label: contrastRatio(text, state.background), bar: contrastRatio(bar, state.background)};
+        });
+
+        // Assert: AA text contrast for the label, non-text contrast for the bar
+        for (const ratio of ratios) {
+            expect(ratio.label, `${ratio.id} label`).toBeGreaterThanOrEqual(4.5);
+            expect(ratio.bar, `${ratio.id} bar`).toBeGreaterThanOrEqual(3);
+        }
+        expect(ratios).toHaveLength(3);
     });
 
     test('stripGroups_givenAFocusedClippedChip_clipRatherThanScroll', () => {
