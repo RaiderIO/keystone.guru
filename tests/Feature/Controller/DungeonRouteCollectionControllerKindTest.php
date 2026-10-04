@@ -2,9 +2,6 @@
 
 namespace Tests\Feature\Controller;
 
-use DOMDocument;
-use DOMElement;
-use DOMXPath;
 use App\Features\CreatorProfiles;
 use App\Http\Requests\DungeonRoute\DungeonRouteCollectionCreateFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteCollectionIndexFormRequest;
@@ -20,6 +17,9 @@ use App\Models\User;
 use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
 use App\Service\Season\SeasonServiceInterface;
 use Database\Factories\DungeonRoute\DungeonRouteCollectionFactory;
+use DOMDocument;
+use DOMElement;
+use DOMXPath;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;

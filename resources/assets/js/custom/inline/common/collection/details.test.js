@@ -309,6 +309,12 @@ describe('CommonCollectionDetails', () => {
 
     it('onFormSubmit_givenACollectionWithNoSeasonToLose_savesFreeFormWithoutAsking', () => {
         // Arrange
+        new CommonCollectionDetails('details_free_form', 'common/collection/details', {
+            ...OPTIONS,
+            formSelector:       '#collection_details_form',
+            confirmFreeForm:    false,
+            deleteFormSelector: null,
+        }).activate();
         document.querySelector('#s_none').checked = true;
         const event = new Event('submit', {cancelable: true});
 
