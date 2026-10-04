@@ -24,6 +24,13 @@ $groupAnchor = static fn(DungeonRouteCollectionGroup $dungeonRouteGroup): string
 );
 
 $isEmpty = $dungeonRoutes->isEmpty();
+
+$coveredDungeonRouteGroups = $dungeonRouteGroups
+    ->filter(static fn(DungeonRouteCollectionGroup $dungeonRouteGroup): bool => $dungeonRouteGroup->dungeonRoutes->isNotEmpty());
+
+$uncoveredDungeonNames = $dungeonRouteGroups
+    ->filter(static fn(DungeonRouteCollectionGroup $dungeonRouteGroup): bool => $dungeonRouteGroup->dungeonRoutes->isEmpty() && $dungeonRouteGroup->dungeon !== null)
+    ->map(static fn(DungeonRouteCollectionGroup $dungeonRouteGroup): string => __($dungeonRouteGroup->dungeon->name));
 ?>
 @extends('layouts.sitepage', [
     'title' => $title,
@@ -108,7 +115,7 @@ $isEmpty = $dungeonRoutes->isEmpty();
         </div>
     @else
         <div class="row row-cols-1 row-cols-lg-2 g-3">
-            @foreach($dungeonRouteGroups as $dungeonRouteGroup)
+            @foreach($coveredDungeonRouteGroups as $dungeonRouteGroup)
                 <?php
                 $dungeonName       = __($dungeonRouteGroup->dungeon->name ?? '');
                 $dungeonRouteCount = $dungeonRouteGroup->dungeonRoutes->count();
@@ -121,39 +128,37 @@ $isEmpty = $dungeonRoutes->isEmpty();
                         <div class="collection_slot_scrim h-100 p-3">
                             <div class="collection_slot_header">
                                 <h2 id="{{ $headingId }}" class="h6 fw-bold mb-0">{{ $dungeonName }}</h2>
-                                @if($dungeonRouteCount > 0)
-                                    <span class="small">
-                                        {{ trans_choice('view_collection.view.route_count', $dungeonRouteCount, ['count' => $dungeonRouteCount]) }}
-                                    </span>
-                                @endif
+                                <span class="small">
+                                    {{ trans_choice('view_collection.view.route_count', $dungeonRouteCount, ['count' => $dungeonRouteCount]) }}
+                                </span>
                             </div>
 
-                            @if($dungeonRouteCount === 0)
-                                <p class="collection_slot_empty mb-0">
-                                    {{ __('view_collection.view.slot_empty', ['dungeon' => $dungeonName]) }}
-                                </p>
-                            @else
-                                <ol class="collection_route_grid list-unstyled mb-0">
-                                    @foreach($dungeonRouteGroup->dungeonRoutes as $dungeonRoute)
-                                        <li class="collection_route_item{{ $dungeonRouteCount > 1 ? ' collection_route_item_numbered' : '' }}">
-                                            @if($dungeonRouteCount > 1)
-                                                <span class="collection_route_position" aria-hidden="true">{{ $loop->iteration }}</span>
-                                            @endif
-                                            @include('common.dungeonroute.cardposter', [
-                                                'dungeonroute' => $dungeonRoute,
-                                                'currentAffixGroup' => null,
-                                                'tierAffixGroup' => null,
-                                                'showDungeonImage' => true,
-                                                'cache' => true,
-                                            ])
-                                        </li>
-                                    @endforeach
-                                </ol>
-                            @endif
+                            <ol class="collection_route_grid list-unstyled mb-0">
+                                @foreach($dungeonRouteGroup->dungeonRoutes as $dungeonRoute)
+                                    <li class="collection_route_item{{ $dungeonRouteCount > 1 ? ' collection_route_item_numbered' : '' }}">
+                                        @if($dungeonRouteCount > 1)
+                                            <span class="collection_route_position" aria-hidden="true">{{ $loop->iteration }}</span>
+                                        @endif
+                                        @include('common.dungeonroute.cardposter', [
+                                            'dungeonroute' => $dungeonRoute,
+                                            'currentAffixGroup' => null,
+                                            'tierAffixGroup' => null,
+                                            'showDungeonImage' => true,
+                                            'cache' => true,
+                                        ])
+                                    </li>
+                                @endforeach
+                            </ol>
                         </div>
                     </section>
                 </div>
             @endforeach
         </div>
+
+        @if($uncoveredDungeonNames->isNotEmpty())
+            <p class="collection_not_covered text-body-secondary small mt-3 mb-0">
+                {{ __('view_collection.view.not_covered', ['dungeons' => $uncoveredDungeonNames->implode(', ')]) }}
+            </p>
+        @endif
     @endif
 @endsection

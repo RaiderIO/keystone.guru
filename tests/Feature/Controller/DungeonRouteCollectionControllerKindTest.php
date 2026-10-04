@@ -703,7 +703,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
     }
 
     #[Test]
-    public function view_givenASeasonSet_showsOneSlotPerPoolDungeonInPoolOrderWithGaps(): void
+    public function view_givenASeasonSet_groupsPerPoolDungeonInPoolOrder(): void
     {
         // Arrange
         $this->creator();
@@ -724,11 +724,16 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         /** @var Collection<int, DungeonRouteCollectionGroup> $groups */
         $groups = $response->viewData('dungeonRouteGroups');
         $this->assertSame($poolDungeonIds, $groups->map(static fn(DungeonRouteCollectionGroup $group): ?int => $group->dungeon?->id)->all());
-        $this->assertSame([], $groups->get(0)->dungeonRoutes->pluck('id')->all(), 'An empty slot is still shown');
+        $this->assertSame([], $groups->get(0)->dungeonRoutes->pluck('id')->all());
         $this->assertSame([$secondSlotFirst->id, $secondSlotSecond->id], $groups->get(1)->dungeonRoutes->pluck('id')->all());
         $this->assertSame([$thirdSlot->id], $groups->get(2)->dungeonRoutes->pluck('id')->all());
-        $response->assertSeeText(__('view_collection.view.slot_empty', ['dungeon' => __($groups->get(0)->dungeon->name)]));
-        $response->assertSeeText(__('view_collection.kind.season_set', ['season' => $season->name, 'covered' => 2, 'total' => 3]));
+        $response->assertSeeInOrder([
+            sprintf('id="collection_dungeon_%d"', $poolDungeonIds[1]),
+            'ZzTestSecondSlotFirst',
+            'ZzTestSecondSlotSecond',
+            sprintf('id="collection_dungeon_%d"', $poolDungeonIds[2]),
+            'ZzTestThirdSlot',
+        ], false);
     }
 
     #[Test]
@@ -809,11 +814,11 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
     }
 
     #[Test]
-    public function view_givenASeasonSet_showsASlotForEveryPoolDungeon(): void
+    public function view_givenASeasonSetWithGaps_showsOnlyCoveredSlotsAndNamesTheGapsInOneLine(): void
     {
         // Arrange
         $this->creator();
-        $mappingVersions        = $this->retailMappingVersions()->take(2)->values();
+        $mappingVersions        = $this->retailMappingVersions()->take(3)->values()->each->load('dungeon');
         $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id], $mappingVersions->pluck('dungeon_id')->all());
         $coveredRoute           = $this->createRoute($mappingVersions->get(1), $season, 'ZzTestCoveredRoute');
         $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
@@ -824,12 +829,79 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
+        $response->assertSee(sprintf('id="collection_dungeon_%d"', $mappingVersions->get(1)->dungeon_id), false);
+        $response->assertDontSee(sprintf('id="collection_dungeon_%d"', $mappingVersions->get(0)->dungeon_id), false);
+        $response->assertDontSee(sprintf('id="collection_dungeon_%d"', $mappingVersions->get(2)->dungeon_id), false);
         $response->assertSeeInOrder([
-            sprintf('id="collection_dungeon_%d"', $mappingVersions->get(0)->dungeon_id),
-            __('view_collection.view.slot_empty', ['dungeon' => __($mappingVersions->get(0)->load('dungeon')->dungeon->name)]),
-            sprintf('id="collection_dungeon_%d"', $mappingVersions->get(1)->dungeon_id),
             'ZzTestCoveredRoute',
-        ], false);
+            __('view_collection.view.not_covered', ['dungeons' => sprintf(
+                '%s, %s',
+                __($mappingVersions->get(0)->dungeon->name),
+                __($mappingVersions->get(2)->dungeon->name),
+            )]),
+        ]);
+    }
+
+    #[Test]
+    public function view_givenAFullyCoveredSeasonSet_showsNoNotCoveredLine(): void
+    {
+        // Arrange
+        $this->creator();
+        $mappingVersions        = $this->retailMappingVersions()->take(2)->values();
+        $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id], $mappingVersions->pluck('dungeon_id')->all());
+        $firstRoute             = $this->createRoute($mappingVersions->get(0), $season, 'ZzTestFirstCovered');
+        $secondRoute            = $this->createRoute($mappingVersions->get(1), $season, 'ZzTestSecondCovered');
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
+        $this->addRoutes($dungeonRouteCollection, [$firstRoute, $secondRoute]);
+
+        // Act
+        $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeText('ZzTestFirstCovered');
+        $response->assertSeeText('ZzTestSecondCovered');
+        $response->assertDontSee('collection_not_covered', false);
+    }
+
+    #[Test]
+    public function view_givenAVisitorOfASeasonSet_showsCoveredDungeonsWithoutThePoolSize(): void
+    {
+        // Arrange
+        $this->creator();
+        $mappingVersions        = $this->retailMappingVersions()->take(3)->values();
+        $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id], $mappingVersions->pluck('dungeon_id')->all());
+        $coveredRoute           = $this->createRoute($mappingVersions->get(0), $season);
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
+        $this->addRoutes($dungeonRouteCollection, [$coveredRoute]);
+
+        // Act
+        $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeText(trans_choice('view_collection.kind.season_set_public', 1, ['season' => $season->name, 'count' => 1]));
+        $response->assertDontSeeText(__('view_collection.kind.season_set', ['season' => $season->name, 'covered' => 1, 'total' => 3]));
+    }
+
+    #[Test]
+    public function view_givenTheOwnerOfASeasonSet_showsCoverageAgainstThePool(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $mappingVersions        = $this->retailMappingVersions()->take(3)->values();
+        $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id], $mappingVersions->pluck('dungeon_id')->all());
+        $coveredRoute           = $this->createRoute($mappingVersions->get(0), $season);
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
+        $this->addRoutes($dungeonRouteCollection, [$coveredRoute]);
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeText(__('view_collection.kind.season_set', ['season' => $season->name, 'covered' => 1, 'total' => 3]));
+        $response->assertDontSeeText(trans_choice('view_collection.kind.season_set_public', 1, ['season' => $season->name, 'count' => 1]));
     }
 
     #[Test]

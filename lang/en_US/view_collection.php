@@ -8,8 +8,9 @@ return [
         'world'           => 'Anyone may view this collection, and the creator directory can list you under its category',
     ],
     'kind' => [
-        'season_set' => ':season set · :covered/:total dungeons',
-        'free_form'  => '{0} :game_version · no dungeons|{1} :game_version · :count dungeon|[2,*] :game_version · :count dungeons',
+        'season_set'        => ':season set · :covered/:total dungeons',
+        'season_set_public' => '{0} :season · no dungeons|{1} :season · :count dungeon|[2,*] :season · :count dungeons',
+        'free_form'         => '{0} :game_version · no dungeons|{1} :game_version · :count dungeon|[2,*] :game_version · :count dungeons',
     ],
     'index' => [
         'title'                   => 'My collections',
@@ -72,7 +73,7 @@ return [
         'no_routes'       => 'There are no routes to show in this collection yet.',
         'no_routes_owner' => 'This collection has no routes yet.',
         'add_routes'      => 'Add routes',
-        'slot_empty'      => 'No route for :dungeon yet.',
+        'not_covered'     => 'Not covered: :dungeons',
         'copy_link'       => 'Copy link',
         'edit'            => 'Edit',
     ],
