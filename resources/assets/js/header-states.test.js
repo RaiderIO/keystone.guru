@@ -220,4 +220,34 @@ describe('header state language', () => {
         // Assert: a hidden box scrolls to a focused chip, so DungeonStrip never sees it clipped and never unfolds
         expect(groups.overflow).toBe('clip');
     });
+
+    test.each([
+        ['', 'inline', 'none'],
+        ['dungeon_strip--compact', 'none', 'inline-block'],
+        ['dungeon_strip--compact is-open', 'inline', 'none'],
+    ])('groupLabel_givenStripState%j_showsTheNameOrTheIcon', (stripState, nameDisplay, iconDisplay) => {
+        // Arrange
+        renderHeader(`
+            <div class="game_version_header"><div class="dungeon_strip ${stripState}" id="strip">
+                <div class="dungeon_strip_groups"><div class="dungeon_strip_group">
+                    <span class="dungeon_strip_group_label" id="label">
+                        <i class="fas fa-dragon dungeon_strip_group_icon" id="icon"></i>
+                        <span class="dungeon_strip_group_name" id="name">Raids</span>
+                    </span>
+                </div></div>
+            </div></div>`);
+
+        // Act: jsdom leaves var() unresolved, so a display naming a variable is read from the strip that sets it
+        const displayOf = id => {
+            const display = getComputedStyle(document.getElementById(id)).display;
+            const variable = display.match(/^var\((--[a-z-]+)\)$/);
+
+            return variable === null ? display : getComputedStyle(document.getElementById('strip')).getPropertyValue(variable[1]).trim();
+        };
+
+        // Assert: the label itself never disappears, so compact mode keeps a marker between the groups
+        expect(getComputedStyle(document.getElementById('label')).display).toBe('block');
+        expect(displayOf('name')).toBe(nameDisplay);
+        expect(displayOf('icon')).toBe(iconDisplay);
+    });
 });
