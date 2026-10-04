@@ -142,6 +142,36 @@ final class ProvidesDungeonTest extends PublicTestCase
     }
 
     #[Test]
+    public function findDungeon_givenMinEnemyPacksAndAPoolOfMostlyPacklessDungeons_returnsTheOneWithPacks(): void
+    {
+        // Arrange
+        $packlessIds = [];
+        foreach (Dungeon::query()->get() as $candidate) {
+            /** @var Dungeon $candidate */
+            $mappingVersion = $candidate->getCurrentMappingVersion();
+
+            if ($mappingVersion !== null && $mappingVersion->enemyPacks()->doesntExist()) {
+                $packlessIds[] = $candidate->id;
+            }
+        }
+        self::assertNotEmpty($packlessIds, 'Expected seeded dungeons whose current mapping version has no enemy packs');
+
+        [$suitable] = $this->findDungeon(minEnemyPacks: 1);
+        $poolIds    = [...$packlessIds, $suitable->id];
+
+        // Act & Assert - repeated because the scan order is shuffled; every order must succeed
+        for ($attempt = 0; $attempt < 10; $attempt++) {
+            [$dungeon, $mappingVersion] = $this->findDungeon(
+                minEnemyPacks: 1,
+                constraint:    static fn(Builder $query) => $query->whereIn('dungeons.id', $poolIds),
+            );
+
+            self::assertSame($suitable->id, $dungeon->id);
+            self::assertGreaterThanOrEqual(1, $mappingVersion->enemyPacks()->count());
+        }
+    }
+
+    #[Test]
     public function findDungeon_givenChallengeMode_returnsMythicPlusDungeon(): void
     {
         // Arrange & Act

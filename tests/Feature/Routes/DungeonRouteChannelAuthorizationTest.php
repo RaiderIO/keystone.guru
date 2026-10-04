@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Routes;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\LiveSession;
@@ -244,6 +245,88 @@ final class DungeonRouteChannelAuthorizationTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function routeEditChannel_givenAnAnonymousViewerOfSomeoneElsesRoute_hidesTheirName(): void
+    {
+        // Arrange
+        $owner  = User::factory()->create();
+        $viewer = $this->createUserWithUserRole(['echo_anonymous' => true]);
+        $route  = $this->createRoute($owner, PublishedState::WORLD);
+
+        try {
+            // Act
+            $result = $this->getChannelCallback($this->routeEditChannel())($viewer, $route);
+
+            // Assert
+            $this->assertIsArray($result);
+            $this->assertSame($viewer->public_key, $result['public_key']);
+            $this->assertTrue($result['anonymous']);
+            $this->assertStringStartsWith('Anonymous ', $result['name']);
+            $this->assertStringNotContainsString($viewer->name, $result['name']);
+            $this->assertSame('#', $result['url']);
+        } finally {
+            $route->delete();
+            $viewer->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function routeEditChannel_givenAnAnonymousAuthorOfTheirOwnRoute_showsTheirName(): void
+    {
+        // Arrange
+        $owner = $this->createUserWithUserRole(['echo_anonymous' => true]);
+        $route = $this->createRoute($owner, PublishedState::WORLD);
+
+        try {
+            // Act
+            $result = $this->getChannelCallback($this->routeEditChannel())($owner, $route);
+
+            // Assert
+            $this->assertIsArray($result);
+            $this->assertFalse($result['anonymous']);
+            $this->assertSame($owner->name, $result['name']);
+            $this->assertSame(route('profile.view', $owner), $result['url']);
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function mappingVersionEditChannel_givenNonAdmin_returnsFalse(): void
+    {
+        // Arrange
+        $user    = $this->createUserWithUserRole();
+        $dungeon = Dungeon::query()->firstOrFail();
+
+        try {
+            // Act
+            $result = $this->getChannelCallback($this->mappingVersionEditChannel())($user, $dungeon);
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function mappingVersionEditChannel_givenAdmin_returnsPresenceData(): void
+    {
+        // Arrange
+        $admin = User::findOrFail(1);
+        $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
+        $dungeon = Dungeon::query()->firstOrFail();
+
+        // Act
+        $result = $this->getChannelCallback($this->mappingVersionEditChannel())($admin, $dungeon);
+
+        // Assert
+        $this->assertIsArray($result);
+        $this->assertSame($admin->public_key, $result['public_key']);
+    }
+
     private function routeEditChannel(): string
     {
         return sprintf('%s-route-edit.{dungeonRoute}', config('app.type'));
@@ -257,6 +340,11 @@ final class DungeonRouteChannelAuthorizationTest extends PublicTestCase
     private function routeCompareChannel(): string
     {
         return sprintf('%s-route-compare.{dungeonRouteA}-{dungeonRouteB}', config('app.type'));
+    }
+
+    private function mappingVersionEditChannel(): string
+    {
+        return sprintf('%s-mapping-version-edit.{dungeon}', config('app.type'));
     }
 
     /**
@@ -274,9 +362,12 @@ final class DungeonRouteChannelAuthorizationTest extends PublicTestCase
         return $channels[$channelName];
     }
 
-    private function createUserWithUserRole(): User
+    /**
+     * @param array<string, mixed> $attributes
+     */
+    private function createUserWithUserRole(array $attributes = []): User
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create($attributes);
         $user->addRole(Role::ROLE_USER);
 
         return $user;

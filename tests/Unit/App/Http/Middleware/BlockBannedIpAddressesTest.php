@@ -63,6 +63,33 @@ class BlockBannedIpAddressesTest extends PublicTestCase
         // Assert
         self::assertSame(403, $response->getStatusCode());
         self::assertJson((string)$response->getContent());
+        self::assertSame(['message' => 'Forbidden'], json_decode((string)$response->getContent(), true));
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_GivenBannedIpJsonRequestWithoutAjaxHeader_ReturnsForbiddenJson(): void
+    {
+        // Arrange
+        $bannedIpAddressService = $this->createMockPublic(BannedIpAddressServiceInterface::class);
+        $bannedIpAddressService->method('isBanned')->willReturn(true);
+
+        $middleware = new BlockBannedIpAddresses($bannedIpAddressService);
+        $request    = Request::create('/', 'POST', [], [], [], [
+            'REMOTE_ADDR'  => '203.0.113.1',
+            'CONTENT_TYPE' => 'application/json',
+        ], '{}');
+
+        // Act
+        $response = $middleware->handle($request, function () {
+            self::fail('$next should not be called for a banned IP');
+        });
+
+        // Assert
+        self::assertSame(403, $response->getStatusCode());
+        self::assertSame(['message' => 'Forbidden'], json_decode((string)$response->getContent(), true));
     }
 
     /**

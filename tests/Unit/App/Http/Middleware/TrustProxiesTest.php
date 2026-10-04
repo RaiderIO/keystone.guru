@@ -185,6 +185,26 @@ class TrustProxiesTest extends PublicTestCase
     /**
      * @throws Exception
      */
+    #[Test]
+    public function handle_GivenNonProductionEnvironment_TrustsNoProxy(): void
+    {
+        // Arrange - the same CloudFlare peer and headers that production resolves to the visitor
+        $this->app->detectEnvironment(static fn() => 'local');
+        $middleware = $this->makeMiddleware();
+        $request    = Request::create('/', 'GET', [], [], [], ['REMOTE_ADDR' => '172.68.0.1']);
+        $request->headers->set('X-Forwarded-For', '203.0.113.7');
+        $request->headers->set('CF-Connecting-IP', '198.51.100.42');
+
+        // Act
+        $middleware->handle($request, static fn() => new Response());
+
+        // Assert - locally neither header can be trusted, so the connecting peer is the client
+        self::assertSame('172.68.0.1', $request->ip());
+    }
+
+    /**
+     * @throws Exception
+     */
     private function makeMiddleware(): TrustProxies
     {
         $cloudflareService = $this->createMockPublic(CloudflareServiceInterface::class);

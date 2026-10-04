@@ -32,13 +32,16 @@ final class RouteActionSerializationTest extends TestCase
     public function routes_givenFirstClassCallableActions_surviveSerializableClosureRoundTrip(): void
     {
         // Arrange/Act
-        $failures = [];
+        $failures       = [];
+        $roundTripCount = 0;
 
         foreach (Route::getRoutes()->getRoutes() as $route) {
             $uses = $route->getAction('uses');
             if (!$uses instanceof Closure) {
                 continue;
             }
+
+            ++$roundTripCount;
 
             try {
                 $serialized = serialize(new SerializableClosure($uses));
@@ -49,6 +52,7 @@ final class RouteActionSerializationTest extends TestCase
         }
 
         // Assert
+        $this->assertGreaterThan(0, $roundTripCount, 'No route registers a closure action, so nothing was round-tripped');
         $this->assertSame(
             [],
             $failures,
@@ -80,7 +84,8 @@ final class RouteActionSerializationTest extends TestCase
     public function routes_givenActionUsingThisOnlyInsideNestedClosure_remainBoundAfterRoundTrip(): void
     {
         // Arrange/Act
-        $failures = [];
+        $failures         = [];
+        $thisReadingCount = 0;
 
         foreach (Route::getRoutes()->getRoutes() as $route) {
             $uses = $route->getAction('uses');
@@ -93,6 +98,8 @@ final class RouteActionSerializationTest extends TestCase
             if (!$this->readsThis($uses)) {
                 continue;
             }
+
+            ++$thisReadingCount;
 
             $reconstructed = unserialize(serialize(new SerializableClosure($uses)))->getClosure();
 
@@ -111,6 +118,7 @@ final class RouteActionSerializationTest extends TestCase
         }
 
         // Assert
+        $this->assertGreaterThan(0, $thisReadingCount, 'No closure route action reads $this, so no binding was checked');
         $this->assertSame(
             [],
             $failures,

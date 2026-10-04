@@ -30,4 +30,41 @@ class AddsTraceIdToContextTest extends PublicTestCase
         self::assertTrue(Context::has('trace_id'));
         self::assertTrue(Str::isUuid(Context::get('trace_id')));
     }
+
+    #[Test]
+    public function handle_GivenRequest_ShouldAddTraceIdBeforeTheRequestIsHandled(): void
+    {
+        // Arrange
+        $middleware       = new AddsTraceIdToContext();
+        $traceIdWhileNext = null;
+
+        // Act
+        $middleware->handle(Request::create('/'), static function () use (&$traceIdWhileNext): Response {
+            $traceIdWhileNext = Context::get('trace_id');
+
+            return new Response();
+        });
+
+        // Assert
+        self::assertNotNull($traceIdWhileNext, 'Log lines written while handling the request must carry the trace_id');
+        self::assertSame($traceIdWhileNext, Context::get('trace_id'));
+    }
+
+    #[Test]
+    public function handle_GivenTwoRequests_ShouldGiveEachItsOwnTraceId(): void
+    {
+        // Arrange
+        $middleware = new AddsTraceIdToContext();
+
+        // Act
+        $middleware->handle(Request::create('/'), static fn() => new Response());
+        $firstTraceId = Context::get('trace_id');
+        $middleware->handle(Request::create('/'), static fn() => new Response());
+        $secondTraceId = Context::get('trace_id');
+
+        // Assert
+        self::assertTrue(Str::isUuid($firstTraceId));
+        self::assertTrue(Str::isUuid($secondTraceId));
+        self::assertNotSame($firstTraceId, $secondTraceId);
+    }
 }
