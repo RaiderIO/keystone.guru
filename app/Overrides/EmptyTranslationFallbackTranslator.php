@@ -23,7 +23,6 @@ class EmptyTranslationFallbackTranslator extends BaseTranslator
     {
         $result = new self($translator->getLoader(), $translator->getLocale());
         $result->setFallback($translator->getFallback());
-        $result->setSelector($translator->getSelector());
 
         return $result;
     }
