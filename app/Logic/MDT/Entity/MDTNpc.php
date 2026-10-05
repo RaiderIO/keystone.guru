@@ -17,19 +17,19 @@ class MDTNpc implements Arrayable
     /**
      * @var array<int, mixed>
      */
-    private array $spells       = [];
-    private float $scale        = 0.0;
-    private bool $stealthDetect = false;
-    private bool $isBoss        = false;
-    private int $countTeeming   = 0;
-    private int $count          = 0;
-    private string $name;
-    private int $displayId    = 0;
-    private ?int $encounterId = null;
-    private ?int $instanceId  = null;
-    private string $creatureType;
-    private int $level  = 0;
-    private int $health = 0;
+    private array $spells         = [];
+    private float $scale          = 0.0;
+    private bool $stealthDetect   = false;
+    private bool $isBoss          = false;
+    private int $countTeeming     = 0;
+    private int $count            = 0;
+    private ?string $name         = null;
+    private int $displayId        = 0;
+    private ?int $encounterId     = null;
+    private ?int $instanceId      = null;
+    private ?string $creatureType = null;
+    private int $level            = 0;
+    private int $health           = 0;
     /**
      * @var array<int, mixed>
      */

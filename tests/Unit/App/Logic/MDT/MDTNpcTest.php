@@ -130,6 +130,79 @@ final class MDTNpcTest extends TestCase
         $this->assertTrue(new MDTNpc(1, $this->minimalRawMdtNpc())->isValid());
     }
 
+    #[Test]
+    public function getName_givenNoName_returnsNull(): void
+    {
+        // Arrange
+        $npc = new MDTNpc(1, $this->minimalRawMdtNpc());
+
+        // Act
+        $name = $npc->getName();
+
+        // Assert
+        $this->assertNull($name);
+    }
+
+    #[Test]
+    public function getName_givenName_returnsIt(): void
+    {
+        // Arrange
+        $raw         = $this->minimalRawMdtNpc();
+        $raw['name'] = 'Sureki Webmage';
+        $npc         = new MDTNpc(1, $raw);
+
+        // Act
+        $name = $npc->getName();
+
+        // Assert
+        $this->assertSame('Sureki Webmage', $name);
+    }
+
+    #[Test]
+    public function getCreatureType_givenNoCreatureType_returnsNull(): void
+    {
+        // Arrange
+        $npc = new MDTNpc(1, $this->minimalRawMdtNpc());
+
+        // Act
+        $creatureType = $npc->getCreatureType();
+
+        // Assert
+        $this->assertNull($creatureType);
+    }
+
+    #[Test]
+    public function getCreatureType_givenCreatureType_returnsIt(): void
+    {
+        // Arrange
+        $raw                 = $this->minimalRawMdtNpc();
+        $raw['creatureType'] = 'Humanoid';
+        $npc                 = new MDTNpc(1, $raw);
+
+        // Act
+        $creatureType = $npc->getCreatureType();
+
+        // Assert
+        $this->assertSame('Humanoid', $creatureType);
+    }
+
+    #[Test]
+    public function toArray_givenNoNameOrCreatureType_returnsNullForBoth(): void
+    {
+        // Arrange
+        $npc = new MDTNpc(1, $this->minimalRawMdtNpc());
+
+        // Act
+        $array = $npc->toArray();
+
+        // Assert
+        $this->assertArrayHasKey('name', $array);
+        $this->assertArrayHasKey('creatureType', $array);
+        $this->assertNull($array['name']);
+        $this->assertNull($array['creatureType']);
+        $this->assertSame(246404, $array['id']);
+    }
+
     /**
      * @return array<string, mixed>
      */
