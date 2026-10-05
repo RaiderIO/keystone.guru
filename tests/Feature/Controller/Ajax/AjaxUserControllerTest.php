@@ -117,6 +117,31 @@ final class AjaxUserControllerTest extends AjaxPublicTestCase
         }
     }
 
+    #[Test]
+    public function store_givenAnEmptyKillZonePathWeight_returnsValidationErrorAndKeepsIt(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = User::factory()->create(['kill_zone_path_weight' => 3]);
+            $user->addRole(Role::ROLE_USER);
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->putJson(sprintf('/ajax/user/%s', $user->public_key), [
+                'kill_zone_path_weight' => '',
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['kill_zone_path_weight']);
+            $this->assertSame(3, (int)$user->refresh()->kill_zone_path_weight);
+        } finally {
+            $user?->delete();
+        }
+    }
+
     /**
      * @param TestResponse<\Symfony\Component\HttpFoundation\Response> $response
      */

@@ -256,6 +256,34 @@ final class AjaxTagControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function updateAll_givenANameLongerThanItsColumn_returnsValidationErrorAndKeepsTheTag(): void
+    {
+        $author = null;
+        $route  = null;
+        $tag    = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $tag    = $this->createUserTagFor($author, $route);
+
+            // Act
+            $response = $this->actingAs($author)->putJson(sprintf('/ajax/tag/%d/all', $tag->id), [
+                'name'  => str_repeat('a', 256),
+                'color' => '#ff0000',
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['name']);
+            $this->assertSame($tag->name, $tag->fresh()->name);
+        } finally {
+            $this->cleanUp(tag: $tag, route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
     public function updateAll_givenAColorLongerThanItsColumn_returnsValidationErrorAndKeepsTheTag(): void
     {
         $author = null;

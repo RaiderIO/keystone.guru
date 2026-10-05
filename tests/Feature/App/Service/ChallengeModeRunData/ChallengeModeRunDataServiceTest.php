@@ -21,6 +21,36 @@ final class ChallengeModeRunDataServiceTest extends PublicTestCase
     private const string FIXTURE_ROOT_PATH = '../../../Controller/Api/V1/APICombatLogController/';
 
     #[Test]
+    public function convertChallengeModeRunData_givenRunWithAPeriod_storesItOnItsEvents(): void
+    {
+        $runId                = Str::uuid()->toString();
+        $challengeModeRunData = null;
+
+        try {
+            // Arrange
+            $postBody                      = $this->getJsonData(self::FIXTURE_NAME, self::FIXTURE_ROOT_PATH);
+            $postBody['metadata']['runId'] = $runId;
+            $challengeModeRunData          = ChallengeModeRunData::create([
+                'challenge_mode_run_id' => -1,
+                'run_id'                => $runId,
+                'correlation_id'        => $runId,
+                'post_body'             => json_encode($postBody),
+                'processed'             => false,
+            ]);
+
+            // Act
+            $result = app(ChallengeModeRunDataServiceInterface::class)->convertChallengeModeRunData($challengeModeRunData);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertSame([$postBody['metadata']['period']], CombatLogEvent::query()->where('run_id', $runId)->distinct()->pluck('period')->map(intval(...))->all());
+        } finally {
+            CombatLogEvent::query()->where('run_id', $runId)->delete();
+            $challengeModeRunData?->delete();
+        }
+    }
+
+    #[Test]
     public function convertChallengeModeRunData_givenRunWithoutTheOptionalRunFields_insertsItsEvents(): void
     {
         $runId                = Str::uuid()->toString();
