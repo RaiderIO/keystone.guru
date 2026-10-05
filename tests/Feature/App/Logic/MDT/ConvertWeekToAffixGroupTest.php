@@ -432,13 +432,13 @@ final class ConvertWeekToAffixGroupTest extends TestCase
     }
 
     /**
-     * A dungeon whose mapping versions are all on a game version without seasons has no affix rotation, even
-     * when the season service would hand back a season for it.
+     * A dungeon without any mapping version has none on a game version with seasons, so it has no affix
+     * rotation, even when the season service would hand back a season for it.
      *
      * @throws Exception
      */
     #[Test]
-    public function convertWeekToAffixGroup_givenDungeonWithoutMappingVersionWithSeasons_returnsNull(): void
+    public function convertWeekToAffixGroup_givenDungeonWithoutMappingVersion_returnsNull(): void
     {
         // Arrange
         $dungeon       = $this->createDungeon(withMappingVersion: false);

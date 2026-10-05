@@ -26,6 +26,7 @@ use Tests\TestCases\PublicTestCase;
  * misconfigured (#3742). Per review feedback on #3739 it now throws instead, so the mapping version's
  * facade setup gets fixed rather than worked around.
  */
+#[Group('UsesLua')]
 #[Group('MDT')]
 final class MDTDungeonGetClonesAsEnemiesFacadeTest extends PublicTestCase
 {
