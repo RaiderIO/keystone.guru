@@ -525,6 +525,34 @@ div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-pag
     }
 }
 
+/* `nowrap` makes every cell as wide as its longest line, which on a phone sums to more than twice
+   the viewport. Below md the cells wrap instead. */
+@media (max-width: 767.98px) {
+    table.dataTable.routes_table.nowrap th,
+    table.dataTable.routes_table.nowrap td {
+        white-space: normal;
+    }
+
+    /* DataTables pins every column to the pixel width it measured; let the browser share the
+       little room there is by content instead. */
+    table.dataTable.routes_table > colgroup > col {
+        width: auto !important;
+    }
+
+    /* Free user text: an unbroken word in a title or description must not widen the column. */
+    .routes_table .routes_table_title,
+    .routes_table .routes_table_title .description-content {
+        overflow-wrap: anywhere;
+    }
+
+    /* A datetime-local input's intrinsic width (~244px) sets its column's minimum; a zero width
+       with a 100% minimum fills the cell without claiming that width. */
+    .routes_table .scheduled-publish-form .scheduled-publish-at {
+        width: 0;
+        min-width: 100%;
+    }
+}
+
 .routes_table .not_clickable {
     cursor: default !important;
 }

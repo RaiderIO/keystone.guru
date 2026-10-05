@@ -285,6 +285,20 @@ describe('DungeonrouteTable._renderTitle', () => {
         expect(result).toContain('My route');
         expect(result).toContain('<i class="fas fa-globe"></i>');
     });
+
+    it('_renderTitle_givenTitleWithDescription_returnsBothInsideTheRoutesTableTitleWrapper', () => {
+        // Arrange
+        const row = buildRow({title: 'My route', description: 'Pull everything'});
+
+        // Act
+        const result = DungeonrouteTable.prototype._renderTitle.call(buildRenderTitleContext(), null, 'display', row, null, true);
+
+        // Assert: the phone stylesheet breaks long words inside this wrapper only.
+        const wrapper = new DOMParser().parseFromString(result, 'text/html').querySelector('.routes_table_title');
+        expect(wrapper).not.toBeNull();
+        expect(wrapper.textContent).toContain('My route');
+        expect(wrapper.querySelector('.description-content').textContent).toContain('Pull everything');
+    });
 });
 
 describe('DungeonrouteTable._renderAuthor', () => {

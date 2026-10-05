@@ -36,4 +36,26 @@ final class ProfileRoutesCoverageTest extends PublicTestCase
             $user->delete();
         }
     }
+
+    #[Test]
+    public function routes_givenRetailUser_scrollsTheCoverageMatrixInsteadOfThePageBelowMd(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $user->addRole(Role::ROLE_USER);
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->get(route('profile.routes'));
+
+            // Assert
+            $response->assertOk();
+            $this->assertMatchesRegularExpression(
+                '/<div id="dungeonroute_coverage_affixgroup" class="table-responsive-md">\s*<table id="dungeonroute_coverage_affixgroup_table"/',
+                $response->getContent(),
+            );
+        } finally {
+            $user->delete();
+        }
+    }
 }

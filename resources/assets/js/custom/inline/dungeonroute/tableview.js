@@ -61,23 +61,23 @@ class ProfileTableView extends TableView {
         this._columns = {
             list: [
                 {name: 'title', width: '15%', className: 'pt-0 pb-0'},
-                {name: 'dungeon', width: '15%', defaultSearch: defaultDungeonId},
+                {name: 'dungeon', width: '15%', className: 'd-none d-sm-table-cell', defaultSearch: defaultDungeonId},
                 {name: 'affixes', width: '15%', className: 'd-none d-lg-table-cell'},
-                {name: 'author', width: '10%'},
+                {name: 'author', width: '10%', className: 'd-none d-md-table-cell'},
                 // {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
                 // {name: 'setup', width: '15%', className: 'd-none d-lg-table-cell'},
-                {name: 'enemy_forces', width: '10%'},
+                {name: 'enemy_forces', width: '10%', className: 'd-none d-md-table-cell'},
                 {name: 'views', width: '5%', className: 'd-none d-lg-table-cell'},
                 {name: 'rating', width: '5%', className: 'd-none d-lg-table-cell'},
                 {name: 'actions', width: '10%', clickable: false},
             ],
             biglist: [
-                {name: 'preview', width: '15%', clickable: false},
+                {name: 'preview', width: '15%', className: 'd-none d-md-table-cell', clickable: false},
                 {name: 'title_description', width: '15%'},
                 {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell', defaultSearch: defaultDungeonId},
                 {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
-                {name: 'author', width: '10%'},
-                {name: 'enemy_forces', width: '10%'},
+                {name: 'author', width: '10%', className: 'd-none d-md-table-cell'},
+                {name: 'enemy_forces', width: '10%', className: 'd-none d-md-table-cell'},
                 {name: 'views', width: '5%', className: 'd-none d-lg-table-cell'},
                 {name: 'rating', width: '5%', className: 'd-none d-lg-table-cell'},
                 {name: 'actions', width: '7%', clickable: false},
@@ -109,8 +109,8 @@ class UserProfileTableView extends TableView {
                 {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
                 // {name: 'setup', width: '15%', className: 'd-none d-lg-table-cell'},
                 {name: 'enemy_forces', width: '10%'},
-                {name: 'views', width: '5%'},
-                {name: 'rating', width: '5%'},
+                {name: 'views', width: '5%', className: 'd-none d-md-table-cell'},
+                {name: 'rating', width: '5%', className: 'd-none d-md-table-cell'},
             ],
             biglist: [
                 {name: 'preview', width: '15%', clickable: false},
@@ -118,8 +118,8 @@ class UserProfileTableView extends TableView {
                 {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell', defaultSearch: defaultDungeonId},
                 {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
                 {name: 'enemy_forces', width: '10%'},
-                {name: 'views', width: '5%'},
-                {name: 'rating', width: '5%'},
+                {name: 'views', width: '5%', className: 'd-none d-md-table-cell'},
+                {name: 'rating', width: '5%', className: 'd-none d-md-table-cell'},
             ]
         };
     }
@@ -200,17 +200,17 @@ class TeamTableView extends TableView {
         this._columns = {
             list: [
                 {name: 'title', width: '15%'},
-                {name: 'dungeon', width: '15%', defaultSearch: defaultDungeonId},
-                {name: 'features', width: '25%'},
+                {name: 'dungeon', width: '15%', className: 'd-none d-sm-table-cell', defaultSearch: defaultDungeonId},
+                {name: 'features', width: '25%', className: 'd-none d-md-table-cell'},
                 // {name: 'setup', width: '15%'},
-                {name: 'enemy_forces', width: '10%'},
-                {name: 'author', width: '10%'},
+                {name: 'enemy_forces', width: '10%', className: 'd-none d-md-table-cell'},
+                {name: 'author', width: '10%', className: 'd-none d-md-table-cell'},
             ],
             biglist: [
-                {name: 'preview', width: '15%', clickable: false},
+                {name: 'preview', width: '15%', className: 'd-none d-md-table-cell', clickable: false},
                 {name: 'title_description', width: '15%'},
                 {name: 'dungeon', width: '15%', className: 'd-none d-lg-table-cell', defaultSearch: defaultDungeonId},
-                {name: 'features', width: '25%'},
+                {name: 'features', width: '25%', className: 'd-none d-md-table-cell'},
                 {name: 'author', width: '10%', className: 'd-none d-lg-table-cell'},
             ]
         };
@@ -272,13 +272,13 @@ class TeamRoutePublishingTableView extends TableView {
         this._columns = {
             list: [
                 {name: 'title', width: '15%'},
-                {name: 'dungeon', width: '15%', defaultSearch: defaultDungeonId},
+                {name: 'dungeon', width: '15%', className: 'd-none d-md-table-cell', defaultSearch: defaultDungeonId},
                 {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
                 // {name: 'setup', width: '15%'},
-                {name: 'enemy_forces', width: '10%'},
+                {name: 'enemy_forces', width: '10%', className: 'd-none d-md-table-cell'},
             ],
             biglist: [
-                {name: 'preview', width: '15%', clickable: false},
+                {name: 'preview', width: '15%', className: 'd-none d-md-table-cell', clickable: false},
                 {name: 'title', width: '15%'},
                 {name: 'dungeon', width: '15%', className: 'd-none d-lg-table-cell', defaultSearch: defaultDungeonId},
                 {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
@@ -297,4 +297,16 @@ class TeamRoutePublishingTableView extends TableView {
     getName() {
         return 'team_route_publishing';
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        ProfileTableView,
+        UserProfileTableView,
+        FavoritesTableView,
+        TeamTableView,
+        TeamRoutePublishingTableView,
+    };
 }
