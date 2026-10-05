@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Artisan;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -66,6 +67,19 @@ final class AnalyzeEnemyResolutionsCommandTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenMappingVersionOfAnotherDungeon_returnsFailure(): void
+    {
+        // Arrange
+        /** @var MappingVersion $otherMappingVersion */
+        $otherMappingVersion = MappingVersion::query()->where('dungeon_id', '!=', $this->dungeon->id)->firstOrFail();
+
+        // Act + Assert
+        $this->artisan('combatlog:analyzeenemyresolutions', ['dungeon' => $this->dungeon->key, '--mapping-version' => $otherMappingVersion->id])
+            ->expectsOutputToContain(sprintf('No mapping version %d', $otherMappingVersion->id))
+            ->assertFailed();
+    }
+
+    #[Test]
     public function handle_givenUnknownFormat_returnsFailure(): void
     {
         $this->artisan('combatlog:analyzeenemyresolutions', ['dungeon' => $this->dungeon->key, '--format' => 'xml'])
@@ -97,16 +111,57 @@ final class AnalyzeEnemyResolutionsCommandTest extends PublicTestCase
         $enemyId = 999999902;
         $this->createResolutions($enemyId, 1);
 
-        // Act + Assert
-        $this->artisan('combatlog:analyzeenemyresolutions', [
+        // Act
+        $exitCode = Artisan::call('combatlog:analyzeenemyresolutions', [
             'dungeon'           => $this->dungeon->key,
             '--mapping-version' => $this->mappingVersion->id,
             '--format'          => 'json',
             '--hide-low-volume' => true,
-        ])
-            ->expectsOutputToContain('"min_route_share"')
-            ->doesntExpectOutputToContain((string)$enemyId)
-            ->assertSuccessful();
+        ]);
+        $output = Artisan::output();
+
+        // Assert - decoded, because the whole document is one written line: an expected and an unexpected substring
+        // of the same line only ever check the first
+        $this->assertSame(0, $exitCode, $output);
+        $result = json_decode($output, true);
+        $this->assertIsArray($result, $output);
+        $this->assertArrayHasKey('min_route_share', $result);
+        $this->assertNotContains($enemyId, $this->getGroupEnemyIds($result));
+    }
+
+    #[Test]
+    public function handle_givenFormatJsonWithoutHideLowVolume_keepsTheLowVolumeGroup(): void
+    {
+        // Arrange - the same single route as above
+        $enemyId = 999999903;
+        $this->createResolutions($enemyId, 1);
+
+        // Act
+        $exitCode = Artisan::call('combatlog:analyzeenemyresolutions', [
+            'dungeon'           => $this->dungeon->key,
+            '--mapping-version' => $this->mappingVersion->id,
+            '--format'          => 'json',
+        ]);
+        $output = Artisan::output();
+
+        // Assert
+        $this->assertSame(0, $exitCode, $output);
+        $result = json_decode($output, true);
+        $this->assertIsArray($result, $output);
+        /** @var array<int, array{enemy_ids: array<int, int>, low_volume: bool}> $data */
+        $data   = $result['data'];
+        $groups = array_values(array_filter($data, static fn(array $group): bool => in_array($enemyId, $group['enemy_ids'], true)));
+        $this->assertCount(1, $groups);
+        $this->assertTrue($groups[0]['low_volume']);
+    }
+
+    /**
+     * @param  array{data: array<int, array{enemy_ids: array<int, int>}>} $result
+     * @return array<int, int>
+     */
+    private function getGroupEnemyIds(array $result): array
+    {
+        return array_merge(...array_column($result['data'], 'enemy_ids'));
     }
 
     /**

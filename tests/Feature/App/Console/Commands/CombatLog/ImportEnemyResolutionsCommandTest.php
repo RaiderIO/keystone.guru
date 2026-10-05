@@ -154,7 +154,8 @@ final class ImportEnemyResolutionsCommandTest extends PublicTestCase
     public function handle_givenFirstPageFails_leavesLocalRowsUntouched(): void
     {
         // Arrange
-        $existing = $this->createLocalResolution();
+        // A row imported from the host being asked - the only kind of row a premature replace would delete
+        $existing = $this->createLocalResolution(['source' => 'production']);
         Http::fake([
             self::BASE_URL . '/api/v1/combatlog/enemy-resolutions/*' => Http::response(['error' => 'Unauthenticated'], 401),
         ]);
@@ -173,7 +174,8 @@ final class ImportEnemyResolutionsCommandTest extends PublicTestCase
     public function handle_givenUnreachableHost_returnsFailureWithoutTouchingLocalRows(): void
     {
         // Arrange
-        $existing = $this->createLocalResolution();
+        // A row imported from the host being asked - the only kind of row a premature replace would delete
+        $existing = $this->createLocalResolution(['source' => 'production']);
         Http::fake(static fn() => throw new ConnectionException('cURL error 6: Could not resolve host'));
 
         // Act
@@ -184,6 +186,27 @@ final class ImportEnemyResolutionsCommandTest extends PublicTestCase
 
         // Assert
         $this->assertNotNull(CombatLogRouteEnemyResolution::find($existing->id));
+    }
+
+    #[Test]
+    public function handle_givenUnknownHost_returnsFailureWithoutRequestingOrTouchingLocalRows(): void
+    {
+        // Arrange
+        $existing = $this->createLocalResolution(['source' => 'production']);
+        Http::fake();
+
+        // Act
+        $this->artisan('combatlog:importenemyresolutions', [
+            'dungeon'            => $this->dungeon->key,
+            '--host'             => 'no-such-host',
+            '--credentials-file' => $this->credentialsFile,
+        ])
+            ->expectsOutputToContain('Unknown host "no-such-host"')
+            ->assertFailed();
+
+        // Assert
+        $this->assertNotNull(CombatLogRouteEnemyResolution::find($existing->id));
+        Http::assertNothingSent();
     }
 
     #[Test]

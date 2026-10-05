@@ -128,6 +128,80 @@ final class CombatLogServiceTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function parseCombatLog_givenCallbackThrowsOnALine_reportsThatLineAndItsNumber(): void
+    {
+        // Arrange
+        $filePath = sprintf('%s/keystone_test_combatlog_%d.txt', sys_get_temp_dir(), random_int(1, PHP_INT_MAX));
+        file_put_contents($filePath, "COMBAT_LOG_VERSION,21\nZONE_CHANGE,1234\n");
+
+        $parseException = null;
+
+        try {
+            /** @var CombatLogServiceInterface $combatLogService */
+            $combatLogService = app(CombatLogServiceInterface::class);
+
+            // Act
+            try {
+                $combatLogService->parseCombatLog($filePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent): void {
+                    if (str_starts_with($rawEvent, 'ZONE_CHANGE')) {
+                        throw new InvalidArgumentException('Unbalanced quotes');
+                    }
+                });
+            } catch (CombatLogParseException $exception) {
+                $parseException = $exception;
+            }
+
+            // Assert
+            $this->assertNotNull($parseException);
+            $this->assertSame(2, $parseException->lineNumber);
+            $this->assertSame('ZONE_CHANGE,1234', $parseException->rawLine);
+            $this->assertSame('Unbalanced quotes', $parseException->getMessage());
+            $this->assertSame(InvalidArgumentException::class, $parseException->getOriginalExceptionClass());
+        } finally {
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
+    }
+
+    #[Test]
+    public function parseCombatLog_givenZip_removesTheExtractedFileAfterwards(): void
+    {
+        // Arrange
+        $innerEntry    = sprintf('WoWCombatLog-%d.txt', random_int(1, PHP_INT_MAX));
+        $zipFilePath   = sprintf('%s/run_0_segment_%d.zip', sys_get_temp_dir(), random_int(1, PHP_INT_MAX));
+        $extractedPath = sprintf('/tmp/%s', $innerEntry);
+
+        $zip = new ZipArchive();
+        $zip->open($zipFilePath, ZipArchive::CREATE);
+        $zip->addFromString($innerEntry, "COMBAT_LOG_VERSION,21\nZONE_CHANGE,1234\n");
+        $zip->close();
+
+        $parsedLines = [];
+
+        try {
+            /** @var CombatLogServiceInterface $combatLogService */
+            $combatLogService = app(CombatLogServiceInterface::class);
+
+            // Act
+            $combatLogService->parseCombatLog($zipFilePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use (&$parsedLines): void {
+                $parsedLines[] = trim($rawEvent);
+            });
+
+            // Assert - the archive's contents were read, and the copy unpacked for that is gone again
+            $this->assertSame(['COMBAT_LOG_VERSION,21', 'ZONE_CHANGE,1234'], $parsedLines);
+            $this->assertFileDoesNotExist($extractedPath);
+        } finally {
+            if (file_exists($zipFilePath)) {
+                unlink($zipFilePath);
+            }
+            if (file_exists($extractedPath)) {
+                unlink($extractedPath);
+            }
+        }
+    }
+
 //    #[Test]
 //    #[Group('CombatLogService')]
 //    #[DataProvider('parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors_DataProvider')]

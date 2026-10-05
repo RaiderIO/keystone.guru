@@ -16,8 +16,11 @@ use App\Models\Spell\Spell;
 use App\Models\Spell\SpellCounter;
 use App\Models\Spell\SpellDungeon;
 use App\Models\Spell\SpellImmunity;
+use App\Models\Spell\SpellMissType;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Season\SeasonServiceStub;
+use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
@@ -37,6 +40,12 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // The first test of a process migrates in setUp(), which builds the Artisan application and constructs every
+        // command with the services bound at that point - drop it so this test's own bindings reach the constructor
+        /** @var ConsoleKernel $consoleKernel */
+        $consoleKernel = $this->app->make(ConsoleKernelContract::class);
+        $consoleKernel->setArtisan(null);
 
         // The staleness/prune cutoffs are now derived from the full, global contents of both
         // observation tables, so a leftover row from real data or a sibling test would silently
@@ -775,5 +784,99 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
             'model_id'    => $characteristicId,
         ], 'combatlog');
         $this->assertSame(1, CombatLogNpcCharacteristicObservation::where('npc_id', self::NPC_ID)->count());
+    }
+
+    #[Test]
+    public function handle_givenStaleSpellMissType_clearsOnlyThatMissTypeBitAndCreatesRemovedEvent(): void
+    {
+        // Arrange - interrupt stale, immune fresh: only the interrupt bit may go
+        $windowDays = config('keystoneguru.combat_log_staleness.observation_window_days');
+        $this->seedObservationDays($windowDays + 1);
+        $this->createTestSpell(['miss_types_mask' => SpellMissType::Interrupt->value | SpellMissType::Immune->value]);
+        $this->linkSpellToCurrentSeason();
+        $this->createSpellPropertyObservation(SpellProperty::MissInterrupt, now()->subDays($windowDays + 10));
+        $this->createSpellPropertyObservation(SpellProperty::MissImmune, now());
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert
+        $this->assertDatabaseHas('spells', ['id' => self::SPELL_ID, 'miss_types_mask' => SpellMissType::Immune->value]);
+        $this->assertDatabaseHas('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyRemoved->value,
+            'property'   => SpellProperty::MissInterrupt->value,
+        ], 'combatlog');
+        $this->assertDatabaseMissing('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyRemoved->value,
+            'property'   => SpellProperty::MissImmune->value,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function handle_givenFreshObservationOfAnotherCharacteristic_stillRemovesTheStaleCharacteristic(): void
+    {
+        // Arrange - one NPC, polymorph last seen long ago, stun seen today
+        $windowDays  = config('keystoneguru.combat_log_staleness.observation_window_days');
+        $polymorphId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
+        $stunId      = Characteristic::ALL[Characteristic::CHARACTERISTIC_STUN];
+        $this->seedObservationDays($windowDays + 1);
+        $this->createTestNpc();
+        $this->linkNpcToCurrentSeason();
+        NpcCharacteristic::create(['npc_id' => self::NPC_ID, 'characteristic_id' => $polymorphId]);
+        NpcCharacteristic::create(['npc_id' => self::NPC_ID, 'characteristic_id' => $stunId]);
+        $this->createNpcCharacteristicObservation(now()->subDays($windowDays + 10));
+        CombatLogNpcCharacteristicObservation::create([
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $stunId,
+            'observed_on'       => now()->toDateString(),
+            'combat_log_path'   => '/tmp/test.log',
+        ]);
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert
+        $this->assertDatabaseMissing('npc_characteristics', ['npc_id' => self::NPC_ID, 'characteristic_id' => $polymorphId]);
+        $this->assertDatabaseHas('npc_characteristics', ['npc_id' => self::NPC_ID, 'characteristic_id' => $stunId]);
+        $this->assertDatabaseHas('combat_log_npc_events', [
+            'npc_id'     => self::NPC_ID,
+            'event_type' => CombatLogNpcEventType::CharacteristicRemoved->value,
+            'model_id'   => $polymorphId,
+        ], 'combatlog');
+        $this->assertDatabaseMissing('combat_log_npc_events', [
+            'npc_id'     => self::NPC_ID,
+            'event_type' => CombatLogNpcEventType::CharacteristicRemoved->value,
+            'model_id'   => $stunId,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function handle_givenFreshObservationOfAnotherProperty_stillClearsTheStaleProperty(): void
+    {
+        // Arrange - one spell, aura last seen long ago, debuff seen today
+        $windowDays = config('keystoneguru.combat_log_staleness.observation_window_days');
+        $this->seedObservationDays($windowDays + 1);
+        $this->createTestSpell(['aura' => true, 'debuff' => true]);
+        $this->linkSpellToCurrentSeason();
+        $this->createSpellPropertyObservation(SpellProperty::Aura, now()->subDays($windowDays + 10));
+        $this->createSpellPropertyObservation(SpellProperty::Debuff, now());
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert
+        $this->assertDatabaseHas('spells', ['id' => self::SPELL_ID, 'aura' => false, 'debuff' => true]);
+        $this->assertDatabaseHas('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyRemoved->value,
+            'property'   => SpellProperty::Aura->value,
+        ], 'combatlog');
+        $this->assertDatabaseMissing('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyRemoved->value,
+            'property'   => SpellProperty::Debuff->value,
+        ], 'combatlog');
     }
 }

@@ -33,6 +33,9 @@ final class ImportEnemyFailuresCommandTest extends PublicTestCase
 
     private string $postBodiesDir;
 
+    /** @var array<int, int> Rows of the dungeon that are not this test's to delete */
+    private array $preExistingFailureIds = [];
+
     #[\Override]
     protected function setUp(): void
     {
@@ -46,6 +49,13 @@ final class ImportEnemyFailuresCommandTest extends PublicTestCase
 
         config(['keystoneguru.remote_hosts.production.base_url' => self::BASE_URL]);
 
+        // The test database is persistent and this dungeon is a seeded one, so it can carry rows that have nothing to
+        // do with this test - tearDown() must leave those alone
+        $this->preExistingFailureIds = CombatLogRouteEnemyFailure::query()
+            ->where('dungeon_id', $this->dungeon->id)
+            ->pluck('id')
+            ->all();
+
         $this->credentialsFile = storage_path(sprintf('framework/testing/import-enemy-failures-%s.txt', uniqid()));
         $this->postBodiesDir   = storage_path(sprintf('framework/testing/import-enemy-failures-bodies-%s', uniqid()));
         File::ensureDirectoryExists(dirname($this->credentialsFile));
@@ -58,7 +68,10 @@ final class ImportEnemyFailuresCommandTest extends PublicTestCase
         try {
             File::delete($this->credentialsFile);
             File::deleteDirectory($this->postBodiesDir);
-            CombatLogRouteEnemyFailure::query()->where('dungeon_id', $this->dungeon->id)->delete();
+            CombatLogRouteEnemyFailure::query()
+                ->where('dungeon_id', $this->dungeon->id)
+                ->whereNotIn('id', $this->preExistingFailureIds)
+                ->delete();
         } finally {
             parent::tearDown();
         }
@@ -124,7 +137,8 @@ final class ImportEnemyFailuresCommandTest extends PublicTestCase
     public function handle_givenFirstPageFails_leavesLocalRowsUntouched(): void
     {
         // Arrange
-        $existing = $this->createLocalFailure();
+        // A row imported from the host being asked - the only kind of row a premature replace would delete
+        $existing = $this->createLocalFailure(['source' => 'production']);
         Http::fake([
             self::BASE_URL . '/api/v1/combatlog/enemy-failures/*' => Http::response(['error' => 'Unauthenticated'], 401),
         ]);
@@ -143,7 +157,8 @@ final class ImportEnemyFailuresCommandTest extends PublicTestCase
     public function handle_givenUnreachableHost_returnsFailureWithoutTouchingLocalRows(): void
     {
         // Arrange
-        $existing = $this->createLocalFailure();
+        // A row imported from the host being asked - the only kind of row a premature replace would delete
+        $existing = $this->createLocalFailure(['source' => 'production']);
         Http::fake(static fn() => throw new ConnectionException('cURL error 6: Could not resolve host'));
 
         // Act
@@ -154,6 +169,27 @@ final class ImportEnemyFailuresCommandTest extends PublicTestCase
 
         // Assert
         $this->assertNotNull(CombatLogRouteEnemyFailure::find($existing->id));
+    }
+
+    #[Test]
+    public function handle_givenUnknownHost_returnsFailureWithoutRequestingOrTouchingLocalRows(): void
+    {
+        // Arrange
+        $existing = $this->createLocalFailure(['source' => 'production']);
+        Http::fake();
+
+        // Act
+        $this->artisan('combatlog:importenemyfailures', [
+            'dungeon'            => $this->dungeon->key,
+            '--host'             => 'no-such-host',
+            '--credentials-file' => $this->credentialsFile,
+        ])
+            ->expectsOutputToContain('Unknown host "no-such-host"')
+            ->assertFailed();
+
+        // Assert
+        $this->assertNotNull(CombatLogRouteEnemyFailure::find($existing->id));
+        Http::assertNothingSent();
     }
 
     #[Test]
