@@ -69,12 +69,13 @@ final class TagRepositoryTest extends PublicTestCase
     public function getPersonalRouteTags_givenTeamContextAndTeamCategoryTags_returnsOnlyThePersonalRouteTag(): void
     {
         // Arrange - a team whose id equals the user's id, and a tag filed under the team category
-        $user = null;
+        $user   = null;
+        $tagIds = [];
 
         try {
-            $user = User::factory()->create();
-            $this->createTag($user, 'Own', 1);
-            Tag::query()->create([
+            $user     = User::factory()->create();
+            $tagIds[] = $this->createTag($user, 'Own', 1)->id;
+            $tagIds[] = Tag::query()->create([
                 'context_id'      => $user->id,
                 'context_class'   => Team::class,
                 'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL],
@@ -82,8 +83,8 @@ final class TagRepositoryTest extends PublicTestCase
                 'model_class'     => DungeonRoute::class,
                 'name'            => 'TeamContext',
                 'color'           => null,
-            ]);
-            Tag::query()->create([
+            ])->id;
+            $tagIds[] = Tag::query()->create([
                 'context_id'      => $user->id,
                 'context_class'   => User::class,
                 'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM],
@@ -91,7 +92,7 @@ final class TagRepositoryTest extends PublicTestCase
                 'model_class'     => DungeonRoute::class,
                 'name'            => 'TeamCategory',
                 'color'           => null,
-            ]);
+            ])->id;
 
             // Act
             $tags = $this->app->make(TagRepositoryInterface::class)->getPersonalRouteTags($user);
@@ -99,10 +100,8 @@ final class TagRepositoryTest extends PublicTestCase
             // Assert
             $this->assertSame(['Own'], $tags->pluck('name')->all());
         } finally {
-            if ($user !== null) {
-                Tag::query()->where('context_id', $user->id)->whereIn('context_class', [User::class, Team::class])->delete();
-                $user->delete();
-            }
+            Tag::query()->whereKey($tagIds)->delete();
+            $user?->delete();
         }
     }
 
