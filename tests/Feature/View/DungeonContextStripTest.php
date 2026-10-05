@@ -619,6 +619,48 @@ final class DungeonContextStripTest extends PublicTestCase
         ));
     }
 
+    #[Test]
+    public function render_givenASeasonlessGameVersion_putsTheSlashFilterAheadOfTheGroupsAndAHiddenEmptyMessageAfter(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons);
+
+        // Assert
+        $this->assertSame(1, preg_match(
+            sprintf(
+                '/<div class="dungeon_strip_groups" id="dungeon_strip_groups">\s*<div class="dungeon_strip_filter" role="search">.*?<input type="search" class="form-control dungeon_strip_filter_input"\s+placeholder="%s"\s+aria-label="%s"\s+aria-keyshortcuts="\/".*?<div class="dungeon_strip_group .*<p class="dungeon_strip_filter_empty" role="status" hidden>%s<\/p>\s*<\/div>\s*<button/s',
+                preg_quote(e(__('view_common.layout.nav.dungeoncontext.filter_placeholder')), '/'),
+                preg_quote(e(__('view_common.layout.nav.dungeoncontext.filter_label')), '/'),
+                preg_quote(e(__('view_common.layout.nav.dungeoncontext.no_results')), '/'),
+            ),
+            $html,
+        ));
+    }
+
+    #[Test]
+    public function render_givenASeasonlessGameVersion_putsANamedSearchButtonWithTheSlashKeyInItsTooltipAheadOfTheGroups(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $label    = __('view_common.dungeon.list.chips.filter');
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons);
+
+        // Assert
+        $this->assertSame(1, preg_match(
+            sprintf(
+                '/<\/div>\s*<button type="button" class="dungeon_strip_search" aria-expanded="false" aria-controls="dungeon_strip_groups"\s+aria-label="%s" aria-keyshortcuts="\/"\s+data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="%s">\s*<i class="fas fa-search" aria-hidden="true"><\/i>\s*<\/button>\s*<div class="dungeon_strip_groups"/',
+                preg_quote(e($label), '/'),
+                preg_quote(e(sprintf('%s<span class="draw_tool_hotkeys"><span class="draw_tool_keycap">/</span></span>', e($label))), '/'),
+            ),
+            $html,
+        ));
+    }
+
     /**
      * @return Collection<int, Dungeon>
      */

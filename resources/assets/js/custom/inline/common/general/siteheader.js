@@ -80,6 +80,24 @@ function installHeaderImageFallback(root) {
     });
 }
 
+/**
+ * Moves focus to the skip link's target without navigating to its fragment: a fragment navigation adds a history
+ * entry and fires popstate, which the map page reads as a floor change. Without JS the plain anchor still works.
+ *
+ * @param {HTMLAnchorElement} skipLink
+ */
+function installSkipLink(skipLink) {
+    skipLink.addEventListener('click', (event) => {
+        const target = document.getElementById(skipLink.hash.slice(1));
+        if (target === null) {
+            return;
+        }
+
+        event.preventDefault();
+        target.focus();
+    });
+}
+
 class CommonGeneralSiteheader extends InlineCode {
     /**
      * Never start shrinking when the page barely scrolls - the height change itself would make up
@@ -116,6 +134,10 @@ class CommonGeneralSiteheader extends InlineCode {
         this._initNavbarCollapse();
         this._initDungeonStrip();
         this._initDungeonSheet();
+        const skipLink = document.querySelector('a.skip_link');
+        if (skipLink !== null) {
+            installSkipLink(skipLink);
+        }
         installHeaderImageFallback(this.header);
         // The sheet is moved to <body>, out from under the header
         const dungeonSheet = document.getElementById('dungeon_sheet');
@@ -275,5 +297,5 @@ class CommonGeneralSiteheader extends InlineCode {
 // Guarded export for the test runner (Vitest). This is a no-op in the browser,
 // where `module` is undefined, so it does not affect the concatenated bundle.
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {CommonGeneralSiteheader, shouldShrinkHeader, calculateNavbarCollapseMaxHeight, installHeaderImageFallback, HEADER_IMAGE_FALLBACK_SRC};
+    module.exports = {CommonGeneralSiteheader, shouldShrinkHeader, calculateNavbarCollapseMaxHeight, installHeaderImageFallback, installSkipLink, HEADER_IMAGE_FALLBACK_SRC};
 }

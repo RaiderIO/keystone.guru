@@ -19,6 +19,7 @@ use Illuminate\Support\Collection;
  * @var Collection<string, string>   $dungeonContextLinks
  * @var Dungeon|null                 $dungeonContextSelectedDungeon Null when the saved dungeon is not in the list
  * @var string|false                 $headerId
+ * @var string                       $skipLinkTarget The id of the element the skip link jumps to
  * @var array<int, array<string, mixed>> $developerEntries
  */
 
@@ -31,6 +32,7 @@ $dungeonContextLinks      ??= null;
 // The map view passes false (not null - ??= would overwrite null) - its own #map_header wraps
 // this include, and a stray #site_header would make siteheader.js measure the wrong element.
 $headerId                 ??= 'site_header';
+$skipLinkTarget           ??= 'main_content';
 $developerEntries         ??= [];
 // Defense in depth for #3806 - GlobalComposer normally supplies this, but view composers are
 // skipped entirely on paths ViewService::shouldLoadViewVariables() blacklists (e.g. /ajax/),
@@ -148,6 +150,7 @@ $compendiumEntries        = [
     ],
 ];
 ?>
+<a class="btn btn-accent visually-hidden-focusable skip_link" href="#{{ $skipLinkTarget }}">{{ __('view_common.layout.header.skip_to_content') }}</a>
 <header @if($headerId !== false) id="{{ $headerId }}" @endif
         class="ksg-header {{ $forceShrink ? 'ksg-header--shrink ksg-header--shrink-forced' : '' }}">
 @if($showGameVersionSelection || $showDungeonContext)

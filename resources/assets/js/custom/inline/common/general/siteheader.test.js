@@ -13,6 +13,7 @@ const {
     shouldShrinkHeader,
     calculateNavbarCollapseMaxHeight,
     installHeaderImageFallback,
+    installSkipLink,
     HEADER_IMAGE_FALLBACK_SRC,
 } = require('./siteheader');
 
@@ -536,5 +537,47 @@ describe('installHeaderImageFallback', () => {
 
         // Assert
         expect(document.getElementById('opted_in').getAttribute('src')).toBe('http://test/gruuls_lair.webp');
+    });
+});
+
+describe('installSkipLink', () => {
+    afterEach(() => {
+        document.body.innerHTML = '';
+        history.replaceState(null, '', '/');
+    });
+
+    it('click_givenATargetOnThePage_focusesItWithoutNavigatingToTheFragment', () => {
+        // Arrange
+        document.body.innerHTML = `
+            <a class="skip_link" href="#main_content">Skip to content</a>
+            <header><a href="/">Logo</a></header>
+            <div id="main_content" tabindex="-1"></div>`;
+        const skipLink = document.querySelector('.skip_link');
+        installSkipLink(skipLink);
+        const historyLength = history.length;
+
+        // Act
+        const event = new MouseEvent('click', {bubbles: true, cancelable: true});
+        skipLink.dispatchEvent(event);
+
+        // Assert
+        expect(document.activeElement).toBe(document.getElementById('main_content'));
+        expect(event.defaultPrevented).toBe(true);
+        expect(location.hash).toBe('');
+        expect(history.length).toBe(historyLength);
+    });
+
+    it('click_givenNoTargetOnThePage_leavesTheLinkToTheBrowser', () => {
+        // Arrange
+        document.body.innerHTML = '<a class="skip_link" href="#main_content">Skip to content</a>';
+        const skipLink = document.querySelector('.skip_link');
+        installSkipLink(skipLink);
+
+        // Act
+        const event = new MouseEvent('click', {bubbles: true, cancelable: true});
+        skipLink.dispatchEvent(event);
+
+        // Assert
+        expect(event.defaultPrevented).toBe(false);
     });
 });

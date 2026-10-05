@@ -1,8 +1,17 @@
 /**
  * The seasonless dungeon strip in the header: the readout names whichever chip is hovered or focused, and
  * the "All" button unfolds the strip wherever the list is too wide for it.
+ *
+ * Each chip group is a single tab stop: the arrow keys move between its chips the way they are laid out, Home and
+ * End jump to its ends, and typing a letter jumps to the next chip whose abbreviation or name starts with it. The
+ * search button, or "/" anywhere on the page, unfolds the strip with its filter focused.
  */
 class DungeonStrip {
+    /**
+     * How long typed letters keep adding up to one search before the next letter starts a new one.
+     */
+    static TYPEAHEAD_RESET_MS = 500;
+
     /**
      * @param {HTMLElement} element The .dungeon_strip
      */
@@ -14,6 +23,15 @@ class DungeonStrip {
         this.readoutViews = element.querySelector('.dungeon_strip_readout_views');
         this.groups = element.querySelector('.dungeon_strip_groups');
         this.allButton = element.querySelector('.dungeon_strip_all');
+        this.searchButton = element.querySelector('.dungeon_strip_search');
+        this.filterInput = element.querySelector('.dungeon_strip_filter_input');
+        this.filterEmpty = element.querySelector('.dungeon_strip_filter_empty');
+        this.chips = [...element.querySelectorAll('.dungeon_strip_chip')];
+        this.typeahead = '';
+        this.typeaheadTimer = null;
+        this.focusBeforeFilter = null;
+
+        this._initTabStops();
 
         element.addEventListener('pointerover', this._onPointerOver.bind(this));
         element.addEventListener('pointerleave', this._onPointerLeave.bind(this));
@@ -21,7 +39,17 @@ class DungeonStrip {
         element.addEventListener('focusout', this._onFocusOut.bind(this));
         element.addEventListener('keydown', this._onKeyDown.bind(this));
         this.allButton.addEventListener('click', this._onAllClick.bind(this));
+        this.searchButton?.addEventListener('click', this._onSearchClick.bind(this));
+        // Its tooltip would cover the flyout it opened; a hover's tooltip is only shown after the click
+        this.searchButton?.addEventListener('show.bs.tooltip', event => {
+            if (this.isOpen()) {
+                event.preventDefault();
+            }
+        });
+        this.filterInput?.addEventListener('input', () => this.filter(this.filterInput.value));
+        this.filterInput?.addEventListener('keydown', this._onFilterKeyDown.bind(this));
         document.addEventListener('pointerdown', this._onDocumentPointerDown.bind(this));
+        document.addEventListener('keydown', this._onDocumentKeyDown.bind(this));
     }
 
     /**
@@ -37,6 +65,48 @@ class DungeonStrip {
     setOpen(open) {
         this.element.classList.toggle('is-open', open);
         this.allButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+        this.searchButton?.setAttribute('aria-expanded', open ? 'true' : 'false');
+
+        if (!open && this.filterInput !== null && this.filterInput.value !== '') {
+            this.filterInput.value = '';
+            this.filter('');
+        }
+    }
+
+    /**
+     * Unfolds the strip with the filter focused, remembering where focus came from so Escape can return it there.
+     *
+     * @param {Element|null} returnFocusTo Where Escape puts focus back
+     */
+    openFilter(returnFocusTo = document.activeElement) {
+        if (this.filterInput === null) {
+            return;
+        }
+
+        this.focusBeforeFilter = returnFocusTo;
+        this.setOpen(true);
+        this.filterInput.focus();
+    }
+
+    /**
+     * Hides the chips that do not match, and the groups that leaves empty, with the mobile sheet's matcher.
+     *
+     * @param {string} query
+     */
+    filter(query) {
+        for (const chip of this.chips) {
+            chip.hidden = !DungeonSheet.rowMatches(DungeonStrip._filterTextFor(chip), query);
+        }
+
+        for (const group of this._chipGroups()) {
+            group.hidden = group.querySelector('.dungeon_strip_chip:not([hidden])') === null;
+        }
+
+        if (this.filterEmpty !== null) {
+            this.filterEmpty.hidden = this._visibleChips().length > 0;
+        }
+
+        this._syncTabStops();
     }
 
     /**
@@ -127,6 +197,7 @@ class DungeonStrip {
             return;
         }
 
+        this._setTabStop(chip);
         this.showInReadout(chip);
 
         // Tabbing onto a chip the single row clips away unfolds the strip, so focus never lands out of sight
@@ -158,17 +229,330 @@ class DungeonStrip {
         }
     }
 
+    /**
+     * Toggles the flyout like the "All" button does, but opens it with the filter focused.
+     */
+    _onSearchClick() {
+        if (typeof bootstrap !== 'undefined') {
+            bootstrap.Tooltip.getInstance(this.searchButton)?.hide();
+        }
+
+        if (this.isOpen()) {
+            this.setOpen(false);
+        } else {
+            this.openFilter(this.searchButton);
+        }
+    }
+
+    /**
+     * @param {KeyboardEvent} event
+     */
     _onKeyDown(event) {
         if (event.key === 'Escape' && this.isOpen()) {
-            this.setOpen(false);
-            this.allButton.focus();
+            event.preventDefault();
+            this._close(event.target === this.filterInput ? this.focusBeforeFilter : event.target);
+
+            return;
         }
+
+        const chip = this._chipFor(event.target);
+        if (chip !== null) {
+            this._onChipKeyDown(event, chip);
+        }
+    }
+
+    /**
+     * Closes the flyout and puts focus where it can stay: back where "/" was pressed or on the search button that
+     * opened it, else on the "All" button that reopens the flyout, else on the chip itself when every chip fits the
+     * strip and there is no "All" button.
+     *
+     * @param {EventTarget|null} focusFrom
+     */
+    _close(focusFrom) {
+        const isElement = focusFrom instanceof HTMLElement && focusFrom.isConnected && focusFrom !== document.body;
+        let target = null;
+        if (isElement && (!this.element.contains(focusFrom) || focusFrom === this.searchButton)) {
+            target = focusFrom;
+        } else if (getComputedStyle(this.allButton).display !== 'none') {
+            target = this.allButton;
+        } else if (isElement && this._chipFor(focusFrom) !== null) {
+            target = focusFrom;
+        }
+
+        this.setOpen(false);
+
+        if (target === null) {
+            document.activeElement?.blur();
+        } else {
+            target.focus();
+        }
+    }
+
+    /**
+     * @param {KeyboardEvent} event
+     * @param {HTMLElement} chip
+     */
+    _onChipKeyDown(event, chip) {
+        if (event.ctrlKey || event.metaKey || event.altKey) {
+            return;
+        }
+
+        let target;
+        switch (event.key) {
+            case 'ArrowLeft':
+            case 'ArrowRight': {
+                const chips = this._rowsOf(this._groupOf(chip)).flat();
+                target = chips[chips.indexOf(chip) + (event.key === 'ArrowRight' ? 1 : -1)];
+                break;
+            }
+            case 'ArrowUp':
+            case 'ArrowDown':
+                target = this._verticalNeighbour(chip, event.key === 'ArrowDown' ? 1 : -1);
+                break;
+            case 'Home':
+                target = this._rowsOf(this._groupOf(chip)).flat()[0];
+                break;
+            case 'End':
+                target = this._rowsOf(this._groupOf(chip)).flat().at(-1);
+                break;
+            default:
+                // "/" is left to the document, which opens the filter
+                if (event.key.length !== 1 || event.key === '/' || event.key.trim() === '') {
+                    return;
+                }
+                target = this._typeaheadTarget(chip, event.key);
+        }
+
+        event.preventDefault();
+        target?.focus();
+    }
+
+    /**
+     * The chip in the row above or below with its centre nearest the given chip's. Up from the first group's top row
+     * of the open flyout reaches the filter.
+     *
+     * @param {HTMLElement} chip
+     * @param {number} direction -1 for up, 1 for down
+     * @returns {HTMLElement|null}
+     */
+    _verticalNeighbour(chip, direction) {
+        const group = this._groupOf(chip);
+        const rows = this._rowsOf(group);
+        const rowIndex = rows.findIndex(row => row.includes(chip));
+        const row = rows[rowIndex + direction];
+
+        if (row === undefined) {
+            const isFirstGroup = this._chipGroups().find(other => !other.hidden) === group;
+
+            return direction < 0 && rowIndex === 0 && isFirstGroup && this.isOpen() ? this.filterInput : null;
+        }
+
+        const centre = DungeonStrip._centreX(chip);
+
+        return row.reduce((nearest, other) =>
+            Math.abs(DungeonStrip._centreX(other) - centre) < Math.abs(DungeonStrip._centreX(nearest) - centre) ? other : nearest
+        );
+    }
+
+    /**
+     * The next chip, from any group, whose abbreviation or name starts with what was typed. Typing one letter
+     * repeatedly cycles through the chips starting with it.
+     *
+     * @param {HTMLElement} chip
+     * @param {string} key
+     * @returns {HTMLElement|null}
+     */
+    _typeaheadTarget(chip, key) {
+        clearTimeout(this.typeaheadTimer);
+        this.typeaheadTimer = setTimeout(() => {
+            this.typeahead = '';
+        }, DungeonStrip.TYPEAHEAD_RESET_MS);
+
+        this.typeahead += DungeonSheet.foldForFilter(key);
+        const isRepeat = [...this.typeahead].every(letter => letter === this.typeahead[0]);
+        const term = isRepeat ? this.typeahead[0] : this.typeahead;
+
+        const chips = this._chipGroups().flatMap(group => this._rowsOf(group).flat());
+        // A new or repeated letter moves on from the current chip; a longer search may still match it
+        const start = chips.indexOf(chip) + (isRepeat ? 1 : 0);
+
+        for (let i = 0; i < chips.length; i++) {
+            const candidate = chips[(start + i) % chips.length];
+            const texts = [candidate.textContent.trim(), candidate.getAttribute('aria-label') ?? ''];
+            if (texts.some(text => DungeonSheet.foldForFilter(text).startsWith(term))) {
+                return candidate;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param {KeyboardEvent} event
+     */
+    _onFilterKeyDown(event) {
+        if (event.isComposing) {
+            return;
+        }
+
+        const first = this._chipGroups().flatMap(group => this._rowsOf(group).flat())[0];
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            first?.click();
+        } else if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            first?.focus();
+        }
+    }
+
+    /**
+     * @param {KeyboardEvent} event
+     */
+    _onDocumentKeyDown(event) {
+        if (event.key !== '/' || event.ctrlKey || event.metaKey || event.altKey || event.defaultPrevented) {
+            return;
+        }
+
+        // Hidden below the lg breakpoint, where the mobile sheet has a filter of its own; and a modal keeps focus
+        if (DungeonStrip._isTypingTarget(event.target) || !this.element.isConnected || this.element.getClientRects().length === 0 ||
+            document.body.classList.contains('modal-open')) {
+            return;
+        }
+
+        event.preventDefault();
+        this.openFilter();
     }
 
     _onDocumentPointerDown(event) {
         if (this.isOpen() && !this.element.contains(event.target)) {
             this.setOpen(false);
         }
+    }
+
+    /**
+     * Every group starts with its tab stop on the selected dungeon's chip, or else on its first chip.
+     */
+    _initTabStops() {
+        for (const group of this._chipGroups()) {
+            const chips = this._chipsOf(group);
+            this._setTabStop(chips.find(chip => chip.hasAttribute('aria-current')) ?? this._rowsOf(group).flat()[0]);
+        }
+    }
+
+    /**
+     * Moves a group's tab stop off a chip the filter hid, onto the first chip still shown.
+     */
+    _syncTabStops() {
+        for (const group of this._chipGroups()) {
+            const stop = this._chipsOf(group).find(chip => chip.tabIndex === 0);
+            if (stop === undefined || stop.hidden) {
+                this._setTabStop(this._rowsOf(group).flat()[0]);
+            }
+        }
+    }
+
+    /**
+     * @param {HTMLElement|undefined} chip
+     */
+    _setTabStop(chip) {
+        if (chip === undefined) {
+            return;
+        }
+
+        for (const other of this._chipsOf(this._groupOf(chip))) {
+            other.tabIndex = other === chip ? 0 : -1;
+        }
+    }
+
+    /**
+     * @returns {HTMLElement[]}
+     */
+    _chipGroups() {
+        const groups = [...this.groups.querySelectorAll('.dungeon_strip_group')];
+
+        return groups.length > 0 ? groups : [this.groups];
+    }
+
+    /**
+     * @param {HTMLElement} chip
+     * @returns {HTMLElement}
+     */
+    _groupOf(chip) {
+        return chip.closest('.dungeon_strip_group') ?? this.groups;
+    }
+
+    /**
+     * @param {HTMLElement} group
+     * @returns {HTMLElement[]}
+     */
+    _chipsOf(group) {
+        return [...group.querySelectorAll('.dungeon_strip_chip')];
+    }
+
+    /**
+     * @returns {HTMLElement[]}
+     */
+    _visibleChips() {
+        return this.chips.filter(chip => !chip.hidden);
+    }
+
+    /**
+     * A group's shown chips as they are laid out - top to bottom, each row left to right - whatever their order in
+     * the markup. The closed strip flows them down two-row columns, the open flyout wraps them in rows.
+     *
+     * @param {HTMLElement} group
+     * @returns {HTMLElement[][]}
+     */
+    _rowsOf(group) {
+        if (group.hidden) {
+            return [];
+        }
+
+        const entries = this._chipsOf(group)
+            .filter(chip => !chip.hidden)
+            .map(chip => ({chip, rect: chip.getBoundingClientRect()}))
+            .sort((a, b) => a.rect.top - b.rect.top);
+
+        const rows = [];
+        for (const entry of entries) {
+            const row = rows.at(-1);
+            if (row !== undefined && entry.rect.top - row[0].rect.top <= row[0].rect.height / 2) {
+                row.push(entry);
+            } else {
+                rows.push([entry]);
+            }
+        }
+
+        return rows.map(row => row.sort((a, b) => a.rect.left - b.rect.left).map(entry => entry.chip));
+    }
+
+    /**
+     * @param {HTMLElement} chip
+     * @returns {number}
+     */
+    static _centreX(chip) {
+        const rect = chip.getBoundingClientRect();
+
+        return rect.left + rect.width / 2;
+    }
+
+    /**
+     * The same name-and-abbreviation text the mobile sheet's rows filter on.
+     *
+     * @param {HTMLElement} chip
+     * @returns {string}
+     */
+    static _filterTextFor(chip) {
+        return `${chip.getAttribute('aria-label') ?? ''} ${chip.textContent.trim()}`.toLowerCase();
+    }
+
+    /**
+     * @param {EventTarget|null} target
+     * @returns {boolean}
+     */
+    static _isTypingTarget(target) {
+        return target instanceof HTMLElement &&
+            (target.isContentEditable || target.closest('input, textarea, select') !== null);
     }
 }
 

@@ -298,6 +298,7 @@ if ($isAdmin) {
         <nav id="map_header" class="map_fade_out">
             @include('common.layout.header', [
                 'headerId' => false,
+                'skipLinkTarget' => 'map',
                 'showDungeonContext' => !($mapContext instanceof MapContextDungeonRoute),
                 'showGameVersionSelection' => false,
                 'showExpansionNav' => false,

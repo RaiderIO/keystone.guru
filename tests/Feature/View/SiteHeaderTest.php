@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\View;
 
+use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\User;
@@ -364,5 +365,50 @@ final class SiteHeaderTest extends PublicTestCase
 
         $this->assertStringContainsString(sprintf('href="%s"', route('dungeon.dungeonroute.search')), $html);
         $this->assertStringNotContainsString(sprintf('href="%s"', route('dungeonroutes.search')), $html);
+    }
+
+    #[Test]
+    public function home_givenAGuest_rendersTheSkipLinkAheadOfTheHeaderAndItsTargetAfterIt(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+
+        // Act
+        $html = $this->withHeader('User-Agent', self::DESKTOP_USER_AGENT)->get('/')->assertOk()->getContent();
+
+        // Assert
+        $this->assertSame(1, preg_match(
+            sprintf(
+                '/<a class="btn btn-accent visually-hidden-focusable skip_link" href="#main_content">%s<\/a>\s*<header\s+id="site_header".*?<\/header>.*?<div id="main_content" class="skip_link_target" tabindex="-1"><\/div>/s',
+                preg_quote(e(__('view_common.layout.header.skip_to_content')), '/'),
+            ),
+            $html,
+        ));
+        $this->assertSame(1, substr_count($html, 'skip_link"'));
+    }
+
+    #[Test]
+    public function explore_givenAGuest_pointsTheSkipLinkAtTheMap(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+        $retail = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        /** @var Dungeon|null $dungeon */
+        $dungeon = Dungeon::query()->where('active', true)->get()
+            ->first(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersionForGameVersion($retail) !== null);
+
+        $this->assertNotNull($dungeon, 'Need a seeded retail dungeon with a retail mapping version');
+
+        // Act
+        $html = $this->withHeader('User-Agent', self::DESKTOP_USER_AGENT)->followingRedirects()->get(route('dungeon.explore.gameversion.view', [
+            'gameVersion' => $retail,
+            'dungeon'     => $dungeon,
+        ]))->assertOk()->getContent();
+
+        // Assert
+        $this->assertStringContainsString('id="map_header"', $html, 'Expected the map, not the selection page');
+        $this->assertStringContainsString('class="btn btn-accent visually-hidden-focusable skip_link" href="#map"', $html);
+        $this->assertStringContainsString('<div id="map" ', $html);
+        $this->assertStringNotContainsString('href="#main_content"', $html);
     }
 }
