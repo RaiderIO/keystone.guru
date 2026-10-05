@@ -476,24 +476,7 @@ class DungeonrouteTable extends InlineCode {
                 'data': 'views',
                 'name': 'views',
                 'render': function (data, type, row, meta) {
-                    let findMetric = function (category, tag) {
-                        for (let i in row.metric_aggregations) {
-                            let metric = row.metric_aggregations[i];
-                            if (metric.category === category && metric.tag === tag) {
-                                return metric.value;
-                            }
-                        }
-
-                        return 0;
-                    }
-
-                    let template = Handlebars.templates['dungeonroute_table_views_metrics'];
-                    return template($.extend({}, getHandlebarsDefaultVariables(), {
-                        views: row.views,
-                        views_embed: row.views_embed,
-                        copy_view: findMetric(METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, METRIC_TAG_MDT_COPY_VIEW),
-                        copy_embed: findMetric(METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, METRIC_TAG_MDT_COPY_EMBED),
-                    }));
+                    return self._renderViews(data, type, row, meta);
                 }
                 // 'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
             },
@@ -657,6 +640,32 @@ class DungeonrouteTable extends InlineCode {
      */
     _renderAuthor(data, type, row, meta) {
         return Handlebars.escapeExpression(data);
+    }
+
+    _renderViews(data, type, row, meta) {
+        let findMetric = function (category, tag) {
+            for (let i in row.metric_aggregations) {
+                let metric = row.metric_aggregations[i];
+                if (metric.category === category && metric.tag === tag) {
+                    return metric.value;
+                }
+            }
+
+            return 0;
+        }
+
+        let copyView = findMetric(METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, METRIC_TAG_MDT_COPY_VIEW);
+        let copyEmbed = findMetric(METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, METRIC_TAG_MDT_COPY_EMBED);
+
+        let template = Handlebars.templates['dungeonroute_table_views_metrics'];
+        return template($.extend({}, getHandlebarsDefaultVariables(), {
+            views: abbreviateNumber(row.views),
+            views_embed: abbreviateNumber(row.views_embed),
+            views_exact: `${row.views}/${row.views_embed}`,
+            copy_view: abbreviateNumber(copyView),
+            copy_embed: abbreviateNumber(copyEmbed),
+            copy_exact: `${copyView}/${copyEmbed}`,
+        }));
     }
 
     _renderTitle(data, type, row, meta, showDescription) {

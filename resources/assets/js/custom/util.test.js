@@ -6,6 +6,7 @@ const {
     toSnakeCase,
     trimEnd,
     getFormattedPercentage,
+    abbreviateNumber,
     isNumeric,
     decodeHtmlEntity,
     isPolygonClockwise,
@@ -99,6 +100,36 @@ describe('getFormattedPercentage', () => {
 
     it('returns zero when the max is zero', () => {
         expect(getFormattedPercentage(5, 0)).toBe(0);
+    });
+});
+
+describe('abbreviateNumber', () => {
+    it('abbreviateNumber_givenBelowAThousand_returnsTheNumberUnchanged', () => {
+        expect(abbreviateNumber(0)).toBe('0');
+        expect(abbreviateNumber(999)).toBe('999');
+    });
+
+    it('abbreviateNumber_givenThousands_returnsOneDecimalWithK', () => {
+        expect(abbreviateNumber(1000)).toBe('1K');
+        expect(abbreviateNumber(2140)).toBe('2.1K');
+        expect(abbreviateNumber(50000)).toBe('50K');
+    });
+
+    it('abbreviateNumber_givenMillions_returnsOneDecimalWithM', () => {
+        expect(abbreviateNumber(1000000)).toBe('1M');
+        expect(abbreviateNumber(2340000)).toBe('2.3M');
+    });
+
+    it('abbreviateNumber_givenAHalfwayDecimal_roundsHalfUpLikeThePhpHelper', () => {
+        expect(abbreviateNumber(1150)).toBe('1.2K');
+        expect(abbreviateNumber(2150)).toBe('2.2K');
+        expect(abbreviateNumber(1150000)).toBe('1.2M');
+        expect(abbreviateNumber(999950)).toBe('1000K');
+    });
+
+    it('abbreviateNumber_givenNumericStringOrMissingValue_parsesIt', () => {
+        expect(abbreviateNumber('12500')).toBe('12.5K');
+        expect(abbreviateNumber(undefined)).toBe('0');
     });
 });
 

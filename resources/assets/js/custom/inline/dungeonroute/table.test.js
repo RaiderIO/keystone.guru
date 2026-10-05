@@ -14,6 +14,9 @@ globalThis.AFFIX_ENCRYPTED = 'Encrypted';
 globalThis.AFFIX_SHROUDED = 'Shrouded';
 globalThis.EXPANSION_SHADOWLANDS = 'sl';
 globalThis.EXPANSION_DRAGONFLIGHT = 'df';
+globalThis.METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY = 1;
+globalThis.METRIC_TAG_MDT_COPY_VIEW = 'view';
+globalThis.METRIC_TAG_MDT_COPY_EMBED = 'embed';
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -556,5 +559,71 @@ describe('DungeonrouteTable.redrawKeepingPage', () => {
 
         // Assert
         expect(dt.draw).toHaveBeenCalledExactlyOnceWith(false);
+    });
+});
+
+describe('DungeonrouteTable._renderViews', () => {
+    /**
+     * @returns {Object} A `this` context with the real metrics template compiled.
+     */
+    function buildRenderViewsContext() {
+        const templateSource = fs.readFileSync(
+            path.join(__dirname, '../../../handlebars/dungeonroute_table_views_metrics.handlebars'),
+            'utf8'
+        );
+
+        Handlebars.templates = {
+            dungeonroute_table_views_metrics: Handlebars.compile(templateSource),
+        };
+
+        return buildTableContext(1);
+    }
+
+    it('_renderViews_givenLargeCounts_returnsAbbreviatedCountsWithExactCountsOnHover', () => {
+        // Arrange
+        const row = buildRow({
+            views:               52340,
+            views_embed:         1200,
+            metric_aggregations: [
+                {category: METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, tag: METRIC_TAG_MDT_COPY_VIEW, value: 2140},
+                {category: METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, tag: METRIC_TAG_MDT_COPY_EMBED, value: 3000000},
+            ],
+        });
+
+        // Act
+        const result = DungeonrouteTable.prototype._renderViews.call(buildRenderViewsContext(), row.views, 'display', row, null);
+
+        // Assert
+        expect(result).toContain('<span class="views" title="52340/1200">52.3K/1.2K</span>');
+        expect(result).toContain('<span class="copies" title="2140/3000000">2.1K/3M</span>');
+    });
+
+    it('_renderViews_givenSmallCountsAndNoMetrics_returnsCountsUnchanged', () => {
+        // Arrange
+        const row = buildRow({views: 42, views_embed: 0, metric_aggregations: []});
+
+        // Act
+        const result = DungeonrouteTable.prototype._renderViews.call(buildRenderViewsContext(), row.views, 'display', row, null);
+
+        // Assert
+        expect(result).toContain('<span class="views" title="42/0">42/0</span>');
+        expect(result).toContain('<span class="copies" title="0/0">0/0</span>');
+    });
+
+    it('_renderViews_givenAnyCounts_keepsEachIconOnTheSameLineAsItsCount', () => {
+        // Arrange
+        const row = buildRow({views: 52340, views_embed: 1200, metric_aggregations: []});
+        const container = document.createElement('div');
+
+        // Act
+        container.innerHTML = DungeonrouteTable.prototype._renderViews.call(buildRenderViewsContext(), row.views, 'display', row, null);
+
+        // Assert
+        const counts = container.querySelectorAll('span.views, span.copies');
+        expect(counts).toHaveLength(2);
+        counts.forEach(count => {
+            expect(count.closest('.row').classList).toContain('flex-nowrap');
+            expect(count.parentElement.classList).toContain('text-nowrap');
+        });
     });
 });
