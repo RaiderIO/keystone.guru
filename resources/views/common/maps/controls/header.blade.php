@@ -7,10 +7,12 @@ use App\Logic\MapContext\Map\MapContextLiveSession;
 use App\Logic\MapContext\Map\MapContextMappingVersionEdit;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteDraftSource;
 use App\Models\Floor\Floor;
 use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Team;
+use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
 use App\Service\DungeonRoute\MappingVersionUpgradeDiffServiceInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
@@ -40,12 +42,22 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 
 // What the mapping version upgrade that produced this draft changed. Only an upgrade draft has one, and only
 // its author's edit page shows it.
-$upgradeDiff = ($edit ?? false) && $dungeonroute !== null && $dungeonroute->is_upgrade_draft
+$upgradeDiff = ($edit ?? false) && $dungeonroute !== null
+    && $dungeonroute->getEffectiveDraftSource() === DungeonRouteDraftSource::MappingUpgrade
     ? app(MappingVersionUpgradeDiffServiceInterface::class)->diffForUpgradeDraft($dungeonroute)
     : null;
 // Opened by itself exactly once, on the redirect straight after pressing Upgrade, and only when the author is
 // actually being asked to repair something
 $upgradeDiffAutoOpen = $upgradeDiff !== null && $upgradeDiff->hasRouteImpact() && session()->has('upgrade_draft_created');
+
+// Replacing the route's contents with an MDT string goes through a draft, so it is offered on the route itself only
+$showMdtImportOverwrite = ($edit ?? false) && $dungeonroute !== null && $user !== null && $mayUserEdit
+    && !$dungeonroute->isSandbox() && !$dungeonroute->is_upgrade_draft;
+/** @var array<int, string> $mdtImportWarnings */
+$mdtImportWarnings = ($edit ?? false) && $dungeonroute !== null
+    && $dungeonroute->getEffectiveDraftSource() === DungeonRouteDraftSource::MdtImport
+    ? session('mdt_import_warnings', [])
+    : [];
 
 // Whether the mobile overflow (kebab) menu has anything to show - mirrors the desktop button conditions below
 $hasMobileActions = isset($dungeonroute) || $showShare
@@ -239,6 +251,14 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
                 @endcomponent
             @endif
 
+            @if($showMdtImportOverwrite)
+                @component('common.maps.controls.buttons.headerbutton')
+                    <button id="mdt_import_overwrite_button" class="btn btn-info btn-sm w-100"
+                            data-bs-toggle="modal" data-bs-target="#mdt_import_overwrite_modal">
+                        <i class="fas fa-file-import"></i> {{ __('view_common.maps.controls.header.import_mdt_string') }}
+                    </button>
+                @endcomponent
+            @endif
 
             @if($showCopyMdtString)
                 @component('common.maps.controls.buttons.headerbutton')
@@ -342,6 +362,14 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
                                 </a>
                             </li>
                         @endif
+                        @if($showMdtImportOverwrite)
+                            <li>
+                                <a class="dropdown-item" href="#"
+                                   data-bs-toggle="modal" data-bs-target="#mdt_import_overwrite_modal">
+                                    <i class="fas fa-file-import"></i> {{ __('view_common.maps.controls.header.import_mdt_string') }}
+                                </a>
+                            </li>
+                        @endif
                         @if($showShare)
                             <li>
                                 <a class="dropdown-item" href="#"
@@ -400,6 +428,21 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
             'active' => $upgradeDiffAutoOpen,
         ])
             @include('common.modal.mappingversionupgradediff', ['upgradeDiff' => $upgradeDiff])
+        @endcomponent
+    @endif
+
+    @if($showMdtImportOverwrite)
+        @component('common.general.modal', ['id' => 'mdt_import_overwrite_modal', 'size' => 'lg', 'keyboard' => true])
+            @include('common.modal.mdtimportoverwrite', [
+                'dungeonroute' => $dungeonroute,
+                'contentLoss' => app(DungeonRouteUpgradeDraftServiceInterface::class)->getMdtImportContentLoss($dungeonroute),
+            ])
+        @endcomponent
+    @endif
+
+    @if(!empty($mdtImportWarnings))
+        @component('common.general.modal', ['id' => 'mdt_import_warnings_modal', 'size' => 'lg', 'keyboard' => true, 'active' => true])
+            @include('common.modal.mdtimportwarnings', ['warnings' => $mdtImportWarnings])
         @endcomponent
     @endif
 
