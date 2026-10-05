@@ -2,14 +2,15 @@
 
 namespace Tests\Feature\App\Service\Season\SeasonService;
 use App\Models\Expansion;
+use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Models\Timewalking\TimewalkingEvent;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -19,20 +20,23 @@ use Tests\TestCases\PublicTestCase;
 final class GetSeasonsTest extends PublicTestCase
 {
     #[Test]
-    public function getSeasons_GivenNoArguments_ShouldReturnNonTimewalkingSeasons(): void
+    public function getSeasons_givenNoExpansion_returnsTheCurrentExpansionsSeasons(): void
     {
         // Arrange
-        $service = app(SeasonServiceInterface::class);
+        $service          = app(SeasonServiceInterface::class);
+        $currentExpansion = app(ExpansionServiceInterface::class)->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
+        $expectedIds      = Season::query()
+            ->where('expansion_id', $currentExpansion->id)
+            ->orderBy('start')
+            ->pluck('id')
+            ->all();
+        $this->assertNotEmpty($expectedIds, 'The current expansion must have seasons, or this test proves nothing.');
 
         // Act
-        /** @var Collection<int, Season> $result */
         $result = $service->getSeasons();
 
         // Assert
-        foreach ($result as $season) {
-            $season->loadMissing('expansion.timewalkingEvent');
-            $this->assertNull($season->expansion->timewalkingEvent);
-        }
+        $this->assertSame($expectedIds, $result->pluck('id')->values()->all());
     }
 
     #[Test]

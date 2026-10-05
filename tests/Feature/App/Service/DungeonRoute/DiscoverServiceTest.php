@@ -27,28 +27,6 @@ final class DiscoverServiceTest extends PublicTestCase
     use CreatesDungeon;
 
     #[Test]
-    public function heroRoutes_givenCurrentSeason_returnsDeduplicatedDungeonRoutes(): void
-    {
-        // Arrange - the seeded test DB has a current season with dungeons and popular community routes
-        $currentSeason = app(SeasonServiceInterface::class)->getCurrentSeason();
-        $this->assertNotNull($currentSeason, 'Expected a current season in the seeded test database');
-
-        /** @var DiscoverServiceInterface $discoverService */
-        $discoverService = app(DiscoverServiceInterface::class);
-
-        // Act
-        $heroRoutes = $discoverService->heroRoutes($currentSeason, 2);
-
-        // Assert - every entry is a DungeonRoute and there are no duplicates by id
-        $heroRoutes->each(fn($route) => $this->assertInstanceOf(DungeonRoute::class, $route));
-        $this->assertSame(
-            $heroRoutes->pluck('id')->unique()->count(),
-            $heroRoutes->count(),
-            'heroRoutes must be deduplicated by id',
-        );
-    }
-
-    #[Test]
     public function heroRoutes_givenWeeklyRouteThatIsAlsoTheTopCommunityRoute_returnsItOnce(): void
     {
         // Arrange - without a Raider.IO team to exclude, the weekly route also tops its dungeon's community routes

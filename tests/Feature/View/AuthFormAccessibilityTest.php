@@ -143,7 +143,10 @@ final class AuthFormAccessibilityTest extends PublicTestCase
             $this->assertSame('true', $asterisk->getAttribute('aria-hidden'));
         }
 
-        foreach ($document->getElementById($formId)?->querySelectorAll('[required]') ?? [] as $control) {
+        $requiredControls = $document->getElementById($formId)?->querySelectorAll('[required]');
+        $this->assertNotNull($requiredControls, sprintf('The page has no #%s', $formId));
+        $this->assertGreaterThan(0, $requiredControls->length, sprintf('#%s has no required controls to check', $formId));
+        foreach ($requiredControls as $control) {
             $label = $document->querySelector(sprintf('label[for="%s"]', $control->getAttribute('id')));
             $this->assertNotNull($label?->querySelector('.form-required'), sprintf('#%s is required but its label is unmarked', $control->getAttribute('id')));
         }

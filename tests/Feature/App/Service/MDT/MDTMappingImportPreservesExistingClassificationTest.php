@@ -12,6 +12,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\RestoresNpcsImportedFromMdt;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -24,6 +25,8 @@ use Tests\TestCases\PublicTestCase;
 #[Group('MDT')]
 final class MDTMappingImportPreservesExistingClassificationTest extends PublicTestCase
 {
+    use RestoresNpcsImportedFromMdt;
+
     #[Test]
     public function importNpcsDataFromMDT_givenExistingFinalBossNpcFlaggedIsBossInMDT_doesNotDowngradeClassification(): void
     {
@@ -49,6 +52,7 @@ final class MDTMappingImportPreservesExistingClassificationTest extends PublicTe
             'coordinatesService' => app(CoordinatesServiceInterface::class),
             'dungeon'            => $dungeon,
         ]);
+        $this->restoreNpcsImportedFromMdtAfterTheTest($mdtDungeon);
 
         // Act
         $failures = [];

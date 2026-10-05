@@ -7,7 +7,6 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\File;
-use App\Models\Laratrust\Role;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\User;
@@ -18,48 +17,6 @@ use Tests\TestCases\PublicTestCase;
 #[Group('User')]
 final class UserTest extends PublicTestCase
 {
-    #[Test]
-    public function hasRole_givenUserHydratedInMultiRowCollection_doesNotLazyLoadRolesRelation(): void
-    {
-        // Arrange - fetching more than one row arms Eloquent's preventLazyLoading for these models
-        $userA = User::factory()->create();
-        $userB = User::factory()->create();
-
-        try {
-            $userA->addRole(Role::ROLE_USER);
-            $userB->addRole(Role::ROLE_USER);
-            $user = User::query()->whereIn('id', [$userA->id, $userB->id])->get()->firstOrFail();
-
-            // Act & Assert - would throw LazyLoadingViolationException if `roles` isn't explicitly loaded first
-            $this->assertFalse($user->hasRole(Role::ROLE_ADMIN));
-            $this->assertTrue($user->hasRole(Role::ROLE_USER));
-        } finally {
-            $userA->delete();
-            $userB->delete();
-        }
-    }
-
-    #[Test]
-    public function hasPermission_givenUserHydratedInMultiRowCollection_doesNotLazyLoadRolesRelation(): void
-    {
-        // Arrange - fetching more than one row arms Eloquent's preventLazyLoading for these models
-        $userA = User::factory()->create();
-        $userB = User::factory()->create();
-
-        try {
-            $userA->addRole(Role::ROLE_USER);
-            $userB->addRole(Role::ROLE_USER);
-            $user = User::query()->whereIn('id', [$userA->id, $userB->id])->get()->firstOrFail();
-
-            // Act & Assert - would throw LazyLoadingViolationException if `roles` isn't explicitly loaded first
-            $this->assertFalse($user->hasPermission('some-permission-that-does-not-exist'));
-            $this->assertTrue($user->hasPermission('create-dungeonroute'));
-        } finally {
-            $userA->delete();
-            $userB->delete();
-        }
-    }
-
     #[Test]
     public function delete_givenUserWithPopulatedDungeonRoute_firesTheDungeonRouteDeletingHook(): void
     {

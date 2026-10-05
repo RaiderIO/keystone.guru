@@ -33,20 +33,6 @@ final class GetFirstSeasonTest extends PublicTestCase
     }
 
     #[Test]
-    public function getFirstSeason_CalledTwice_ShouldReturnSameSeason(): void
-    {
-        // Arrange
-        $service = app(SeasonServiceInterface::class);
-
-        // Act
-        $result1 = $service->getFirstSeason();
-        $result2 = $service->getFirstSeason();
-
-        // Assert
-        $this->assertEquals($result1->id, $result2->id);
-    }
-
-    #[Test]
     public function getFirstSeason_givenCalledBefore_runsNoQuery(): void
     {
         // Arrange

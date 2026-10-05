@@ -139,11 +139,9 @@ final class CardRowTest extends PublicTestCase
     #[Test]
     public function render_givenExactlyRequiredEnemyForces_hidesEnemyForcesWarning(): void
     {
-        // Arrange
-        $dungeonroute = DungeonRoute::factory()->create();
-        // Meeting the requirement exactly is a healthy 100% and must not surface a warning
-        $dungeonroute->enemy_forces = $dungeonroute->mappingVersion->enemy_forces_required;
-        $dungeonroute->save();
+        // Arrange - meeting the requirement exactly is a healthy 100% and must not surface a warning
+        $mappingVersion = $this->mappingVersionRequiringEnemyForces();
+        $dungeonroute   = $this->createRouteOn($mappingVersion, $mappingVersion->enemy_forces_required);
 
         try {
             // Act

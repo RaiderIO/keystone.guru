@@ -2,16 +2,20 @@
 
 namespace Tests\Feature\App\Service\MDT;
 
+use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
+use App\Service\Cache\CacheServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\Exceptions\MDTMappingPendingAcceptanceException;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use Exception;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\RestoresNpcsImportedFromMdt;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -29,6 +33,8 @@ use Tests\TestCases\PublicTestCase;
 #[Group('MappingVersion')]
 final class MDTMappingAcceptPendingMappingVersionTest extends PublicTestCase
 {
+    use RestoresNpcsImportedFromMdt;
+
     private const string OUTDATED_MAPPING_HASH = 'outdated-hash-4281';
 
     #[Test]
@@ -69,6 +75,12 @@ final class MDTMappingAcceptPendingMappingVersionTest extends PublicTestCase
         // so --force must stay able to push one through
         $dungeon     = $this->getDungeon();
         $gameVersion = $this->getGameVersion();
+
+        $this->restoreNpcsImportedFromMdtAfterTheTest(app(MDTDungeon::class, [
+            'cacheService'       => app(CacheServiceInterface::class),
+            'coordinatesService' => app(CoordinatesServiceInterface::class),
+            'dungeon'            => $dungeon,
+        ]));
 
         $mappingVersion = $this->makeCurrentMappingVersionPending($dungeon, $gameVersion, self::OUTDATED_MAPPING_HASH);
 

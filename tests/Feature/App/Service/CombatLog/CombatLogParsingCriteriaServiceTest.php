@@ -445,26 +445,25 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         /** @var Dungeon $dungeon */
         $dungeon = $season->dungeons()->firstOrFail();
 
-        try {
+        $this->assertFalse(
             CombatLogParsingCriterion::query()
+                ->where('combat_log_version', self::VERSION)
                 ->where('model_class', Dungeon::class)
                 ->where('model_id', $dungeon->id)
+                ->where('mythic_level_min', $this->band()->min)
+                ->where('mythic_level_max', $this->band()->max)
                 ->where('date', Carbon::now()->toDateString())
-                ->delete();
+                ->exists(),
+            'The dungeon must have no parsing criterion in this band today, or this test proves nothing.',
+        );
 
-            // Act
-            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band(), PollingBudgetWindow::full());
+        // Act
+        $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band(), PollingBudgetWindow::full());
 
-            // Assert — all season dungeons are eligible when no rows exist
-            $this->assertNotEmpty($result);
-            $this->assertTrue($result->contains('id', $dungeon->id));
-            $this->assertContainsOnlyInstancesOf(Dungeon::class, $result->all());
-        } finally {
-            CombatLogParsingCriterion::query()
-                ->where('model_class', Dungeon::class)
-                ->where('model_id', $dungeon->id)
-                ->delete();
-        }
+        // Assert — all season dungeons are eligible when no rows exist
+        $this->assertNotEmpty($result);
+        $this->assertTrue($result->contains('id', $dungeon->id));
+        $this->assertContainsOnlyInstancesOf(Dungeon::class, $result->all());
     }
 
     #[Test]
@@ -473,10 +472,11 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         // Arrange
         $season = Season::query()->has('dungeons')->firstOrFail();
         /** @var Dungeon $dungeon */
-        $dungeon = $season->dungeons()->firstOrFail();
+        $dungeon   = $season->dungeons()->firstOrFail();
+        $criterion = null;
 
         try {
-            CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->atThreshold()->create();
+            $criterion = CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->atThreshold()->create();
 
             // Act
             $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band(), PollingBudgetWindow::full());
@@ -484,10 +484,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             // Assert — dungeon at threshold is excluded
             $this->assertFalse($result->contains('id', $dungeon->id));
         } finally {
-            CombatLogParsingCriterion::query()
-                ->where('model_class', Dungeon::class)
-                ->where('model_id', $dungeon->id)
-                ->delete();
+            $criterion?->delete();
         }
     }
 
@@ -497,10 +494,11 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         // Arrange
         $season = Season::query()->has('dungeons')->firstOrFail();
         /** @var Dungeon $dungeon */
-        $dungeon = $season->dungeons()->firstOrFail();
+        $dungeon   = $season->dungeons()->firstOrFail();
+        $criterion = null;
 
         try {
-            CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->withCount(50)->create();
+            $criterion = CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->withCount(50)->create();
 
             // Act
             $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band(), PollingBudgetWindow::full());
@@ -508,10 +506,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             // Assert — dungeon below threshold is still included
             $this->assertTrue($result->contains('id', $dungeon->id));
         } finally {
-            CombatLogParsingCriterion::query()
-                ->where('model_class', Dungeon::class)
-                ->where('model_id', $dungeon->id)
-                ->delete();
+            $criterion?->delete();
         }
     }
 
@@ -728,10 +723,11 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         // Arrange
         $season = Season::query()->has('dungeons')->firstOrFail();
         /** @var Dungeon $dungeon */
-        $dungeon = $season->dungeons()->firstOrFail();
+        $dungeon   = $season->dungeons()->firstOrFail();
+        $criterion = null;
 
         try {
-            CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->forBand(17, null)->withCount(5)->create(['threshold' => 0]);
+            $criterion = CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->forBand(17, null)->withCount(5)->create(['threshold' => 0]);
 
             // Act
             $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, new KeyLevelBand(17, 18), PollingBudgetWindow::full());
@@ -739,10 +735,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             // Assert
             $this->assertTrue($result->contains('id', $dungeon->id));
         } finally {
-            CombatLogParsingCriterion::query()
-                ->where('model_class', Dungeon::class)
-                ->where('model_id', $dungeon->id)
-                ->delete();
+            $criterion?->delete();
         }
     }
 
@@ -778,10 +771,11 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         // Arrange
         $season = Season::query()->has('dungeons')->firstOrFail();
         /** @var Dungeon $dungeon */
-        $dungeon = $season->dungeons()->firstOrFail();
+        $dungeon   = $season->dungeons()->firstOrFail();
+        $criterion = null;
 
         try {
-            CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->forBand(2, 6)->atThreshold()->create();
+            $criterion = CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->forBand(2, 6)->atThreshold()->create();
 
             // Act
             $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, new KeyLevelBand(7, 11), PollingBudgetWindow::full());
@@ -789,10 +783,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             // Assert — being full in one band says nothing about another
             $this->assertTrue($result->contains('id', $dungeon->id));
         } finally {
-            CombatLogParsingCriterion::query()
-                ->where('model_class', Dungeon::class)
-                ->where('model_id', $dungeon->id)
-                ->delete();
+            $criterion?->delete();
         }
     }
 
@@ -802,10 +793,11 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         // Arrange
         $season = Season::query()->has('dungeons')->firstOrFail();
         /** @var Dungeon $dungeon */
-        $dungeon = $season->dungeons()->firstOrFail();
+        $dungeon   = $season->dungeons()->firstOrFail();
+        $criterion = null;
 
         try {
-            CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->forBand(22, null)->atThreshold()->create();
+            $criterion = CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->forBand(22, null)->atThreshold()->create();
 
             // Act
             $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, new KeyLevelBand(22, null), PollingBudgetWindow::full());
@@ -813,10 +805,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             // Assert — nothing is ever excluded from the top band
             $this->assertTrue($result->contains('id', $dungeon->id));
         } finally {
-            CombatLogParsingCriterion::query()
-                ->where('model_class', Dungeon::class)
-                ->where('model_id', $dungeon->id)
-                ->delete();
+            $criterion?->delete();
         }
     }
 
@@ -961,10 +950,11 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         // Arrange
         $season = Season::query()->has('dungeons')->firstOrFail();
         /** @var Dungeon $dungeon */
-        $dungeon = $season->dungeons()->firstOrFail();
+        $dungeon   = $season->dungeons()->firstOrFail();
+        $criterion = null;
 
         try {
-            CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->withCount(50)->create();
+            $criterion = CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->withCount(50)->create();
 
             // Act
             $early = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band(), new PollingBudgetWindow(1, 6));
@@ -974,10 +964,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             $this->assertFalse($early->contains('id', $dungeon->id));
             $this->assertTrue($late->contains('id', $dungeon->id));
         } finally {
-            CombatLogParsingCriterion::query()
-                ->where('model_class', Dungeon::class)
-                ->where('model_id', $dungeon->id)
-                ->delete();
+            $criterion?->delete();
         }
     }
 
