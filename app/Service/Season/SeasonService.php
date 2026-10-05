@@ -111,13 +111,7 @@ class SeasonService implements SeasonServiceInterface
             return $result;
         }
 
-        // getNextSeason() is scoped to a single expansion, which is the wrong lens here: seasons run back to back
-        // across expansions, so the next season to start - whichever expansion it belongs to - is what ends this one.
-        $nextSeasonStart = $this->getAllSeasons()
-            ->map(static fn(Season $candidate): Carbon => $candidate->start($region)->setTimezone('UTC'))
-            ->filter(static fn(Carbon $candidateStart): bool => $candidateStart->greaterThan($seasonStart))
-            ->sortBy(static fn(Carbon $candidateStart): int => $candidateStart->getTimestamp())
-            ->first();
+        $nextSeasonStart = $this->getSeasonEnd($season, $region)?->setTimezone('UTC');
 
         $seasonEnd = $nextSeasonStart === null || $nextSeasonStart->greaterThan($now) ? $now : $nextSeasonStart;
 
@@ -139,6 +133,19 @@ class SeasonService implements SeasonServiceInterface
         }
 
         return $result;
+    }
+
+    public function getSeasonEnd(Season $season, GameServerRegion $region): ?Carbon
+    {
+        $seasonStart = $season->start($region);
+
+        // getNextSeason() is scoped to a single expansion, which is the wrong lens here: seasons run back to back
+        // across expansions, so the next season to start - whichever expansion it belongs to - is what ends this one.
+        return $this->getAllSeasons()
+            ->map(static fn(Season $candidate): Carbon => $candidate->start($region))
+            ->filter(static fn(Carbon $candidateStart): bool => $candidateStart->greaterThan($seasonStart))
+            ->sortBy(static fn(Carbon $candidateStart): int => $candidateStart->getTimestamp())
+            ->first();
     }
 
     /**

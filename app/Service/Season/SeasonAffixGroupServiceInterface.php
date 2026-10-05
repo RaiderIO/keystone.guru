@@ -69,6 +69,9 @@ interface SeasonAffixGroupServiceInterface
     public function getDisplayedAffixGroups(int $iterationOffset): Collection;
 
     /**
+     * Every week of the given season with its affix group, from the season's start up to the season's end, or up to
+     * and including the current week while the season is still running.
+     *
      * @return Collection<int, WeeklyAffixGroup>
      */
     public function getWeeklyAffixGroupsSinceStart(Season $season, GameServerRegion $region): Collection;

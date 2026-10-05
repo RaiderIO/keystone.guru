@@ -317,9 +317,11 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
 
         $currentDate = $season->start($region)->copy();
         $now         = Carbon::now();
+        $seasonEnd   = $this->seasonService->getSeasonEnd($season, $region);
+        $lastWeekEnd = $seasonEnd === null || $seasonEnd->greaterThan($now) ? $now : $seasonEnd;
 
         $week = 1;
-        while ($currentDate->lt($now)) {
+        while ($currentDate->lt($lastWeekEnd)) {
             $affixGroup = $this->getAffixGroupAt($season, $currentDate, $region);
 
             if ($affixGroup !== null) {
