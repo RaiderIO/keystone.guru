@@ -609,4 +609,21 @@ describe('DungeonrouteTable._renderViews', () => {
         expect(result).toContain('<span class="views" title="42/0">42/0</span>');
         expect(result).toContain('<span class="copies" title="0/0">0/0</span>');
     });
+
+    it('_renderViews_givenAnyCounts_keepsEachIconOnTheSameLineAsItsCount', () => {
+        // Arrange
+        const row = buildRow({views: 52340, views_embed: 1200, metric_aggregations: []});
+        const container = document.createElement('div');
+
+        // Act
+        container.innerHTML = DungeonrouteTable.prototype._renderViews.call(buildRenderViewsContext(), row.views, 'display', row, null);
+
+        // Assert
+        const counts = container.querySelectorAll('span.views, span.copies');
+        expect(counts).toHaveLength(2);
+        counts.forEach(count => {
+            expect(count.closest('.row').classList).toContain('flex-nowrap');
+            expect(count.parentElement.classList).toContain('text-nowrap');
+        });
+    });
 });
