@@ -9,8 +9,8 @@ use Illuminate\Support\Collection;
  * on the left names the selected dungeon and follows hover and focus, so every abbreviation is one glance
  * from its full name - several are not unique on their own (a dungeon and its raid version share one).
  *
- * With view counts, each chip fills from the bottom up to its share of the most viewed dungeon's views, and the
- * readout puts that share into words.
+ * With view counts, each chip carries a bar under its label as long as its share of the most viewed dungeon's views,
+ * and the readout puts that share into words.
  *
  * @var GameVersion                $gameVersion
  * @var Collection<int, Dungeon>   $dungeons   Sorted by selector group

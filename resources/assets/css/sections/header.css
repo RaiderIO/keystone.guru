@@ -66,7 +66,11 @@
        the chips off whichever one it is */
     --dungeon-strip-control-bg: rgba(128, 128, 128, 0.2);
     --dungeon-strip-control-bg-hover: rgba(128, 128, 128, 0.4);
-    --dungeon-strip-view-fill: color-mix(in srgb, var(--theme-primary) 70%, transparent);
+    /* One length for every chip's view bar, so bars compare across chips of any width: the narrowest chip's
+       content box */
+    --dungeon-strip-view-bar-width: calc(var(--dungeon-strip-chip-min-width) - 2 * var(--dungeon-strip-chip-padding));
+    --dungeon-strip-view-bar-height: 0.1875rem;
+    --dungeon-strip-view-bar-bottom: 0.125rem;
     position: relative;
     display: flex;
     align-items: stretch;
@@ -88,6 +92,9 @@
     --dungeon-strip-readout-long-views-display: none;
     --dungeon-strip-readout-views-font-size: 0.6875rem;
     --dungeon-strip-all-width: 5rem;
+    /* The label's line box ends 3.5px above the chip's inner edge here */
+    --dungeon-strip-view-bar-height: 0.125rem;
+    --dungeon-strip-view-bar-bottom: 0;
 }
 
 .dungeon_strip.dungeon_strip--compact {
@@ -242,11 +249,22 @@
         background-color 0.15s ease, color 0.15s ease;
 }
 
-/* The chip itself is the bar: filled from the bottom up to the dungeon's share of the most viewed one's views */
+/* A bar under the label, as long as the dungeon's share of the most viewed one's views. It stays below the
+   glyphs and takes the label's colour, so the label never sits on a fill it has to clear. */
 .dungeon_strip_chip--views {
-    background-image: linear-gradient(to top,
-        var(--dungeon-strip-view-fill) var(--dungeon-strip-view-share),
-        transparent var(--dungeon-strip-view-share));
+    position: relative;
+}
+
+.dungeon_strip_chip--views::after {
+    position: absolute;
+    bottom: var(--dungeon-strip-view-bar-bottom);
+    left: calc(50% - var(--dungeon-strip-view-bar-width) / 2);
+    width: var(--dungeon-strip-view-bar-width);
+    height: var(--dungeon-strip-view-bar-height);
+    border-radius: 0.125rem;
+    background-color: currentColor;
+    content: '';
+    scale: var(--dungeon-strip-view-share) 1;
 }
 
 .dungeon_strip_chip:hover,
@@ -391,6 +409,11 @@
 /* One "current" language across the header: the accent border (.border-accent) and full-contrast text */
 .game_version_header .game_version[aria-current],
 .game_version_header .dungeon_strip_chip[aria-current] {
+    color: var(--theme-text-contrast);
+}
+
+/* Keyboard focus takes the hover tint, which muted text does not clear in lux, so it takes hover's text too */
+.game_version_header .dungeon_strip_chip:focus-visible {
     color: var(--theme-text-contrast);
 }
 
