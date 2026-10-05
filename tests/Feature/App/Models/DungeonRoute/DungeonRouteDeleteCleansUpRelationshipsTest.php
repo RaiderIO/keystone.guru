@@ -40,7 +40,6 @@ use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\User;
 use App\Models\UserPinnedDungeonRoute;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Storage;
@@ -58,62 +57,30 @@ final class DungeonRouteDeleteCleansUpRelationshipsTest extends PublicTestCase
     use ProvidesDungeon;
 
     /**
-     * Every relation whose rows DungeonRoute's deleting hook removes. A BelongsToMany is listed when its pivot rows
-     * are removed.
-     */
-    private const array CLEANED_UP_RELATIONS = [
-        'affixGroups',
-        'affixes',
-        'arrows',
-        'brushlines',
-        'challengeModeRun',
-        'classes',
-        'dungeonRouteCollectionRoutes',
-        'dungeonRouteThumbnailJobs',
-        'dungeonRouteThumbnails',
-        'enemyRaidMarkers',
-        'favorites',
-        'heroThumbnails',
-        'killZones',
-        'livesessions',
-        'mdtImport',
-        'metricAggregations',
-        'metrics',
-        'paths',
-        'pinnedByUsers',
-        'playerclasses',
-        'playerraces',
-        'playerspecializations',
-        'races',
-        'ratings',
-        'routeMapIcons',
-        'routeattributes',
-        'routeattributesraw',
-        'scheduledPublish',
-        'specializations',
-        'tags',
-        'tagspersonal',
-        'tagsteam',
-        'thumbnails',
-        'upgradeDraft',
-    ];
-
-    /**
-     * Every relation whose rows deliberately survive the route's deletion, with the reason.
+     * Every DungeonRoute relation whose rows deliberately survive the route's deletion, with the reason. Every other
+     * relation discovered on DungeonRoute must be emptied by its deleting hook.
      *
      * @var array<string, string>
      */
     private const array KEPT_RELATIONS = [
-        'mapicons'    => 'Widens itself to the team wide map icons, which belong to the team - the icons the route owns are routeMapIcons',
-        'pageviews'   => 'Traffic history - page-views:prune rolls them up into page_view_counts and ages them out after the retention period',
-        'userreports' => 'Moderation record - the admin report list keeps showing a report whose route is gone until an admin handles it',
+        'author'                => 'Parent - the user outlives their routes',
+        'dungeon'               => 'Parent - seeded dungeon data',
+        'faction'               => 'Parent - seeded faction data',
+        'mappingVersion'        => 'Parent - seeded mapping data',
+        'publishedState'        => 'Parent - seeded published state data',
+        'season'                => 'Parent - seeded season data',
+        'team'                  => 'Parent - the team outlives its routes',
+        'upgradeOfDungeonRoute' => 'Parent - deleting an upgrade draft must leave the original route alone',
+        'mapicons'              => 'Widens itself to the team wide map icons, which belong to the team - the icons the route owns are routeMapIcons',
+        'pageviews'             => 'Traffic history - page-views:prune rolls them up into page_view_counts and ages them out after the retention period',
+        'userreports'           => 'Moderation record - the admin report list keeps showing a report whose route is gone until an admin handles it',
     ];
 
     #[Test]
-    public function relations_givenDungeonRouteModel_areEachEitherCleanedUpOrDeliberatelyKept(): void
+    public function keptRelations_givenDungeonRouteModel_eachExistsOnDungeonRoute(): void
     {
         // Arrange
-        $classifiedRelations = array_merge(self::CLEANED_UP_RELATIONS, array_keys(self::KEPT_RELATIONS));
+        $keptRelations = array_keys(self::KEPT_RELATIONS);
 
         // Act
         $relations = $this->getDungeonRouteRelationNames();
@@ -121,23 +88,13 @@ final class DungeonRouteDeleteCleansUpRelationshipsTest extends PublicTestCase
         // Assert
         $this->assertSame(
             [],
-            array_values(array_intersect(self::CLEANED_UP_RELATIONS, array_keys(self::KEPT_RELATIONS))),
-            'A relation cannot be both cleaned up and kept',
-        );
-        $this->assertSame(
-            [],
-            array_values(array_diff($relations, $classifiedRelations)),
-            'These DungeonRoute relations are neither cleaned up on delete nor listed as deliberately kept - delete their rows in DungeonRoute\'s deleting hook and add them to CLEANED_UP_RELATIONS, or add them to KEPT_RELATIONS with the reason',
-        );
-        $this->assertSame(
-            [],
-            array_values(array_diff($classifiedRelations, $relations)),
-            'These listed relations no longer exist on DungeonRoute',
+            array_values(array_diff($keptRelations, $relations)),
+            'These relations in KEPT_RELATIONS no longer exist on DungeonRoute',
         );
     }
 
     #[Test]
-    public function delete_givenRouteWithARowInEveryCleanedUpRelation_leavesNoRowBehind(): void
+    public function delete_givenRouteWithARowInEveryRelation_leavesNoRowBehindInAnyRelationNotDeliberatelyKept(): void
     {
         // Arrange
         $owner      = null;
@@ -160,12 +117,17 @@ final class DungeonRouteDeleteCleansUpRelationshipsTest extends PublicTestCase
             ]);
             $collection = DungeonRouteCollection::factory()->create(['user_id' => $owner->id]);
 
-            $fileIds = $this->createRowInEveryCleanedUpRelation($route, $owner, $floor->id, $collection);
+            $fileIds = $this->createRowInEveryRelation($route, $owner, $floor->id, $collection);
 
-            foreach (self::CLEANED_UP_RELATIONS as $relation) {
+            $cleanedUpRelations = $this->getRelationsCleanedUpOnDelete();
+            $this->assertContains('killZones', $cleanedUpRelations, 'Relation discovery found none of DungeonRoute\'s relations');
+            foreach ($cleanedUpRelations as $relation) {
                 $this->assertTrue(
                     $this->relationHasRows($route, $relation),
-                    sprintf('The fixture must give relation %s a row, or its cleanup is not tested', $relation),
+                    sprintf(
+                        'DungeonRoute relation %s is not covered: delete its rows in DungeonRoute\'s deleting hook and give it a row in createRowInEveryRelation(), or add it to KEPT_RELATIONS with the reason',
+                        $relation,
+                    ),
                 );
             }
 
@@ -174,7 +136,7 @@ final class DungeonRouteDeleteCleansUpRelationshipsTest extends PublicTestCase
 
             // Assert
             $this->assertNull(DungeonRoute::find($route->id), 'The route itself should be deleted');
-            foreach (self::CLEANED_UP_RELATIONS as $relation) {
+            foreach ($cleanedUpRelations as $relation) {
                 $this->assertFalse(
                     $this->relationHasRows($route, $relation),
                     sprintf('Deleting the route left rows behind in relation %s', $relation),
@@ -213,8 +175,7 @@ final class DungeonRouteDeleteCleansUpRelationshipsTest extends PublicTestCase
                 continue;
             }
 
-            $returnClass = $returnType->getName();
-            if (is_a($returnClass, Relation::class, true) && !is_a($returnClass, BelongsTo::class, true)) {
+            if (is_a($returnType->getName(), Relation::class, true)) {
                 $relations[] = $method->getName();
             }
         }
@@ -223,9 +184,17 @@ final class DungeonRouteDeleteCleansUpRelationshipsTest extends PublicTestCase
     }
 
     /**
+     * @return array<int, string>
+     */
+    private function getRelationsCleanedUpOnDelete(): array
+    {
+        return array_values(array_diff($this->getDungeonRouteRelationNames(), array_keys(self::KEPT_RELATIONS)));
+    }
+
+    /**
      * @return array<int, int> The ids of the files the thumbnails and thumbnail job point to.
      */
-    private function createRowInEveryCleanedUpRelation(
+    private function createRowInEveryRelation(
         DungeonRoute           $route,
         User                   $owner,
         int                    $floorId,
@@ -360,7 +329,7 @@ final class DungeonRouteDeleteCleansUpRelationshipsTest extends PublicTestCase
 
     private function deleteLeftoverRows(DungeonRoute $route): void
     {
-        foreach (self::CLEANED_UP_RELATIONS as $relation) {
+        foreach ($this->getRelationsCleanedUpOnDelete() as $relation) {
             if ($relation === 'challengeModeRun') {
                 ChallengeModeRun::query()->where('dungeon_route_id', $route->id)->delete();
 
