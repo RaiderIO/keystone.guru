@@ -18,6 +18,8 @@ use Tests\TestCases\PublicTestCase;
 #[Group('ReverbHttpApiService')]
 final class ReverbHttpApiServiceTest extends PublicTestCase
 {
+    private MockHandler $mockHandler;
+
     /**
      * Guards #4152: Reverb 404s the "channel users" endpoint when the presence channel has no
      * active members yet (e.g. nobody joined it, or the last member left) - that's a routine
@@ -51,6 +53,29 @@ final class ReverbHttpApiServiceTest extends PublicTestCase
 
         // Assert
         $this->assertSame([['id' => '1'], ['id' => '2']], $result);
+        $this->assertSame(
+            '/apps/123456/channels/presence-app-route-edit.somekey/users',
+            $this->mockHandler->getLastRequest()?->getUri()->getPath(),
+        );
+    }
+
+    /**
+     * Reverb rejects an HTTP API request whose auth_signature is not the HMAC of method, path and query under the
+     * app secret.
+     */
+    #[Test]
+    public function getChannelUsers_givenARequest_signsItWithTheAppSecret(): void
+    {
+        // Arrange
+        $service = $this->makeService(new Response(StatusCode::OK, [], json_encode(['users' => []])));
+        $path    = '/apps/123456/channels/presence-app-route-edit.somekey/users';
+
+        // Act
+        $service->getChannelUsers('presence-app-route-edit.somekey');
+
+        // Assert
+        parse_str($this->mockHandler->getLastRequest()?->getUri()->getQuery() ?? '', $query);
+        $this->assertSame(hash_hmac('sha256', sprintf("GET\n%s\n", $path), 'test-secret'), $query['auth_signature'] ?? null);
     }
 
     /**
@@ -72,11 +97,16 @@ final class ReverbHttpApiServiceTest extends PublicTestCase
 
     private function makeService(Response $response): ReverbHttpApiService
     {
+        config([
+            'reverb.apps.apps.0.app_id' => '123456',
+            'reverb.apps.apps.0.secret' => 'test-secret',
+        ]);
+
         $service = new ReverbHttpApiService();
 
-        $mock         = new MockHandler([$response]);
-        $handlerStack = HandlerStack::create($mock);
-        $client       = new Client(['handler' => $handlerStack]);
+        $this->mockHandler = new MockHandler([$response]);
+        $handlerStack      = HandlerStack::create($this->mockHandler);
+        $client            = new Client(['handler' => $handlerStack]);
 
         $reflection = new ReflectionClass($service);
         $property   = $reflection->getProperty('client');

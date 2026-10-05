@@ -3,12 +3,15 @@
 namespace Tests\Unit\App\Logging;
 
 use App\Logging\StructuredLogging;
+use ArrayObject;
+use Illuminate\Log\LogManager;
 use Illuminate\Support\Facades\Context;
 use LogicException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use RuntimeException;
 use Tests\Fixtures\LoggingFixtures;
 use Tests\TestCases\PublicTestCase;
@@ -323,6 +326,128 @@ class StructuredLoggingTest extends PublicTestCase
     }
 
     /**
+     * @throws Exception
+     */
+    #[Test]
+    public function start_givenAGroupThatIsAlreadyOpen_logsAnError(): void
+    {
+        // Arrange
+        config(['app.log_level' => 'debug', 'app.type' => 'production']);
+
+        $logger = LoggingFixtures::createLogManager($this);
+        $log    = new TestableStructuredLogging($logger);
+        $lines  = $this->collectLogLines($logger);
+
+        // Act
+        $log->start('firstStart', ['test' => 'test']);
+        $log->start('firstStart', ['test' => 'test']);
+
+        // Assert
+        self::assertSame(['INFO', 'ERROR', 'INFO'], array_column($lines->getArrayCopy(), 'level'));
+        self::assertStringContainsString('already started', $lines[1]['message']);
+        self::assertSame('first', $lines[1]['context']['targetKey']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function end_givenAGroupThatWasNeverStarted_logsAnError(): void
+    {
+        // Arrange
+        config(['app.log_level' => 'debug', 'app.type' => 'production']);
+
+        $logger = LoggingFixtures::createLogManager($this);
+        $log    = new TestableStructuredLogging($logger);
+        $lines  = $this->collectLogLines($logger);
+
+        // Act
+        $log->end('neverEnd');
+
+        // Assert
+        self::assertSame(['INFO', 'ERROR'], array_column($lines->getArrayCopy(), 'level'));
+        self::assertStringContainsString("wasn't started", $lines[1]['message']);
+        self::assertSame('never', $lines[1]['context']['targetKey']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function log_givenALevelBelowTheConfiguredLogLevel_skipsTheLine(): void
+    {
+        // Arrange
+        config(['app.log_level' => 'warning', 'app.type' => 'production']);
+
+        $logger = LoggingFixtures::createLogManager($this);
+        $log    = new TestableStructuredLogging($logger);
+        $lines  = $this->collectLogLines($logger);
+
+        // Act
+        $log->debug('belowThreshold');
+        $log->warning('atThreshold');
+        $log->error('aboveThreshold');
+
+        // Assert
+        self::assertSame(['atThreshold', 'aboveThreshold'], array_column($lines->getArrayCopy(), 'message'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function log_givenStructuredLoggingDisabled_writesNothingUntilEnabledAgain(): void
+    {
+        // Arrange
+        config(['app.log_level' => 'debug', 'app.type' => 'production']);
+
+        $logger = LoggingFixtures::createLogManager($this);
+        $log    = new TestableStructuredLogging($logger);
+        $lines  = $this->collectLogLines($logger);
+
+        try {
+            StructuredLogging::disable();
+
+            // Act
+            $log->start('firstStart', ['test' => 'test']);
+            $log->error('whileDisabled');
+            $log->end('firstEnd');
+        } finally {
+            StructuredLogging::enable();
+        }
+
+        $log->error('afterEnabled');
+
+        // Assert
+        self::assertSame(['afterEnabled'], array_column($lines->getArrayCopy(), 'message'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function start_givenAddContextFalse_logsTheContextOnceWithoutCarryingItForward(): void
+    {
+        // Arrange
+        config(['app.log_level' => 'debug', 'app.type' => 'production']);
+
+        $logger = LoggingFixtures::createLogManager($this);
+        $log    = new TestableStructuredLogging($logger);
+        $lines  = $this->collectLogLines($logger);
+
+        // Act
+        $log->start('firstStart', ['once' => 'once'], false);
+        $log->debug('log');
+        $log->end('firstEnd');
+
+        // Assert
+        self::assertSame(['firstStart', 'log', 'firstEnd'], array_column($lines->getArrayCopy(), 'message'));
+        self::assertArrayHasKey('once', $lines[0]['context']);
+        self::assertArrayNotHasKey('once', $lines[1]['context']);
+        self::assertArrayNotHasKey('once', $lines[2]['context']);
+    }
+
+    /**
      * The stderr channel exists so a locally-run artisan command shows its own output. Under PHPUnit
      * it only interleaves structured log lines with the test progress output, which is what happened
      * in CI: the channel is static, so a single logger built before the application had bound its
@@ -418,5 +543,21 @@ class StructuredLoggingTest extends PublicTestCase
             'not console + not tests + non-local => null' => [false, false, false, null],
             'not console + tests + non-local => null'     => [false, true, false, null],
         ];
+    }
+
+    /**
+     * @return ArrayObject<int, array{level: string, message: string, context: array<string, mixed>}>
+     */
+    private function collectLogLines(MockObject&LogManager $logger): ArrayObject
+    {
+        $lines = new ArrayObject();
+
+        $logger->method('log')->willReturnCallback(
+            static function (string $level, string $message, array $context = []) use ($lines): void {
+                $lines->append(['level' => $level, 'message' => $message, 'context' => $context]);
+            },
+        );
+
+        return $lines;
     }
 }

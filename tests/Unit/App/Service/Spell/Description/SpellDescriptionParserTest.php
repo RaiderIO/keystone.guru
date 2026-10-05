@@ -28,6 +28,9 @@ final class SpellDescriptionParserTest extends TestCase
     /** A spell that lasts until it is dispelled, which the client stores as a negative duration. */
     private const int ENDLESS_SPELL_ID = 4000;
 
+    /** A spell whose description quotes its own description. */
+    private const int SELF_QUOTING_SPELL_ID = 5000;
+
     /**
      * Damage is a coefficient of the content the caster belongs to. A multiplier of ten means an amount
      * is its coefficient, which keeps the expectations below about the parsing rather than the scaling.
@@ -270,6 +273,26 @@ final class SpellDescriptionParserTest extends TestCase
 
         // Assert
         $this->assertSame('Lasts 2 hrs.', $result->render());
+    }
+
+    #[Test]
+    public function parse_givenADescriptionThatQuotesItself_stopsAtTheRecursionLimit(): void
+    {
+        // Arrange - client data is externally sourced, so a spell quoting its own description must not recurse forever
+        $parser  = new SpellDescriptionParser();
+        $context = new ArraySpellDescriptionContext(
+            effects: [],
+            durationsMs: [],
+            names: [],
+            templates: [self::SELF_QUOTING_SPELL_ID => 'Echo.$@spelldesc5000'],
+            descriptionVariables: [],
+        );
+
+        // Act
+        $result = $parser->parse($context, self::SELF_QUOTING_SPELL_ID, 'Echo.$@spelldesc5000');
+
+        // Assert - the template itself plus five nested quotes
+        $this->assertSame(str_repeat('Echo.', 6), $result->render());
     }
 
     /**

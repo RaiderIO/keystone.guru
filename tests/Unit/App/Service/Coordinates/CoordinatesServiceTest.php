@@ -234,6 +234,64 @@ final class CoordinatesServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function calculateMapLocationForIngameLocation_givenNoFloor_throws(): void
+    {
+        // Arrange
+        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
+
+        // Assert
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/No floor set/');
+
+        // Act
+        $coordinatesService->calculateMapLocationForIngameLocation(new IngameXY(500, 500));
+    }
+
+    #[Test]
+    public function convertFacadeMapLocationToMapLocation_givenNoFloor_throws(): void
+    {
+        // Arrange
+        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
+        $mappingVersion     = $this->createMappingVersion([]);
+
+        // Assert
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/No floor set/');
+
+        // Act
+        $coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, new LatLng(-64, 96));
+    }
+
+    #[Test]
+    public function convertMapLocationToFacadeMapLocation_givenNoFloor_throws(): void
+    {
+        // Arrange
+        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
+        $mappingVersion     = $this->createMappingVersion([]);
+
+        // Assert
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/No floor set/');
+
+        // Act
+        $coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, new LatLng(-64, 96));
+    }
+
+    #[Test]
+    public function calculateGridLocationForIngameLocation_givenNoFloor_throws(): void
+    {
+        // Arrange
+        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
+
+        // Assert
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/No floor set/');
+
+        // Act
+        $coordinatesService->calculateGridLocationForIngameLocation(new IngameXY(500, 500), 9, 9);
+    }
+
+    #[Test]
     public function calculateMapLocationForIngameLocation_givenFloorWithoutIngameBounds_throws(): void
     {
         // Arrange

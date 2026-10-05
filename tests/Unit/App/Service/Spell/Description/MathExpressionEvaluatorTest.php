@@ -21,7 +21,8 @@ final class MathExpressionEvaluatorTest extends TestCase
         // Act
         $result = $evaluator->evaluate($expression);
 
-        // Assert
+        // Assert - the delta comparison treats null as 0.0, so a rejected expression would pass every row expecting 0
+        $this->assertNotNull($result, $expression);
         $this->assertEqualsWithDelta($expected, $result, 0.0001, $expression);
     }
 
@@ -45,6 +46,15 @@ final class MathExpressionEvaluatorTest extends TestCase
             'ternary takes true side'  => ['3>2?10:20', 10.0],
             'ternary takes false side' => ['3<2?10:20', 20.0],
             'nested spell math'        => ['(20)*(1+(50)/100)', 30.0],
+            'ceil'                     => ['ceil(7/2)', 4.0],
+            'round'                    => ['round(2.4)', 2.0],
+            'abs'                      => ['abs(3-5)', 2.0],
+            'modulo'                   => ['7%3', 1.0],
+            'less than or equal'       => ['2<=2', 1.0],
+            'greater than or equal'    => ['2>=2', 1.0],
+            'equal'                    => ['2==2', 1.0],
+            'single equals compares'   => ['2=3', 0.0],
+            'not equal'                => ['2!=3', 1.0],
         ];
     }
 
@@ -73,6 +83,10 @@ final class MathExpressionEvaluatorTest extends TestCase
             'trailing operator'         => ['2+'],
             'division by zero'          => ['2/0'],
             'unknown function'          => ['sqrt(4)'],
+            'modulo by zero'            => ['5%0'],
+            'floor of two arguments'    => ['floor(7, 2)'],
+            'min of a single argument'  => ['min(4)'],
+            'a ternary without a colon' => ['3>2?10'],
             // The templates are externally sourced, so anything that is not arithmetic must simply fail
             'php code'       => ['phpinfo()'],
             'a shell string' => ['`ls`'],
