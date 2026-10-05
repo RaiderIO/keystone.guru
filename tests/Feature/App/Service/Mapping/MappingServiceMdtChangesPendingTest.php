@@ -198,6 +198,54 @@ final class MappingServiceMdtChangesPendingTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function createNewBareMappingVersion_givenExistingMappingVersions_numbersItAfterTheGameVersionsNewest(): void
+    {
+        // Arrange
+        $mappingService = $this->app->make(MappingServiceInterface::class);
+        $dungeon        = $this->getDungeon();
+        $gameVersion    = $this->getGameVersionOf($dungeon);
+        $newestVersion  = (int)$dungeon->mappingVersions()->where('game_version_id', $gameVersion->id)->max('version');
+        $this->assertGreaterThan(0, $newestVersion);
+
+        $newMappingVersion = null;
+
+        try {
+            // Act
+            $newMappingVersion = $mappingService->createNewBareMappingVersion($dungeon, $gameVersion);
+
+            // Assert
+            $this->assertSame($gameVersion->id, $newMappingVersion->game_version_id);
+            $this->assertSame($newestVersion + 1, $newMappingVersion->version);
+        } finally {
+            $newMappingVersion?->delete();
+        }
+    }
+
+    #[Test]
+    public function createNewMappingVersionFromPreviousMapping_givenExistingMappingVersions_numbersItAfterTheGameVersionsNewest(): void
+    {
+        // Arrange
+        $mappingService = $this->app->make(MappingServiceInterface::class);
+        $dungeon        = $this->getDungeon();
+        $gameVersion    = $this->getGameVersionOf($dungeon);
+        $newestVersion  = (int)$dungeon->mappingVersions()->where('game_version_id', $gameVersion->id)->max('version');
+        $this->assertGreaterThan(0, $newestVersion);
+
+        $newMappingVersion = null;
+
+        try {
+            // Act
+            $newMappingVersion = $mappingService->createNewMappingVersionFromPreviousMapping($dungeon, $gameVersion);
+
+            // Assert
+            $this->assertSame($gameVersion->id, $newMappingVersion->game_version_id);
+            $this->assertSame($newestVersion + 1, $newMappingVersion->version);
+        } finally {
+            $newMappingVersion?->delete();
+        }
+    }
+
     private function getDungeon(): Dungeon
     {
         return Dungeon::query()->whereNotNull('challenge_mode_id')->firstOrFail();

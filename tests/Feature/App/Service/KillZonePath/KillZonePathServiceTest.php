@@ -204,6 +204,14 @@ final class KillZonePathServiceTest extends PublicTestCase
             'lng'              => 100.0,
             'index'            => 2,
         ]);
+        // And back to floor2 again, the direction markerA does allow
+        $killZone3 = KillZone::factory()->create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $floor2->id,
+            'lat'              => -210.0,
+            'lng'              => 210.0,
+            'index'            => 3,
+        ]);
 
         try {
             // Act
@@ -217,7 +225,13 @@ final class KillZonePathServiceTest extends PublicTestCase
                 $result[$killZone2->id],
                 'Expected no cross-floor path when the backward marker has null linked_dungeon_floor_switch_marker_id (one-way)',
             );
+            $this->assertArrayHasKey($killZone3->id, $result);
+            $this->assertNotEmpty(
+                $result[$killZone3->id],
+                'Expected a cross-floor path in the direction the linked marker allows',
+            );
         } finally {
+            $killZone3->delete();
             $killZone2->delete();
             $killZone1->delete();
             $markerB->delete();

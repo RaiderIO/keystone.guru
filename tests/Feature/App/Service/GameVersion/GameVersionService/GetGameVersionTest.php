@@ -47,17 +47,19 @@ final class GetGameVersionTest extends PublicTestCase
     public function getGameVersion_givenGuestCookieForAGameVersionOutsideTheActiveList_readsItFromTheDatabase(): void
     {
         // Arrange
-        $retail  = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        // Not the default game version, so a cookie that is ignored cannot pass
+        $classicEra = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $this->assertNotSame(GameVersion::getDefaultGameVersion()->id, $classicEra->id);
         $service = $this->buildService(collect());
 
-        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_RETAIL;
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_CLASSIC_ERA;
 
         try {
             // Act
             $result = $service->getGameVersion(null);
 
             // Assert
-            $this->assertSame($retail->id, $result->id);
+            $this->assertSame($classicEra->id, $result->id);
         } finally {
             unset($_COOKIE['game_version']);
         }
@@ -159,6 +161,31 @@ final class GetGameVersionTest extends PublicTestCase
             'cata'         => [GameVersion::GAME_VERSION_CATA],
             'legion remix' => [GameVersion::GAME_VERSION_LEGION_REMIX],
         ];
+    }
+
+    #[Test]
+    public function getGameVersion_givenUserWithAnActiveGameVersionAndAGameVersionCookie_returnsTheUsersGameVersion(): void
+    {
+        // Arrange
+        $classicEra = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $retail     = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        $this->assertNotSame(GameVersion::getDefaultGameVersion()->id, $classicEra->id);
+        $service = $this->buildService(collect([$classicEra, $retail]));
+        $user    = User::factory()->create(['game_version_id' => $classicEra->id]);
+
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_RETAIL;
+
+        try {
+            // Act
+            $result = $service->getGameVersion($user);
+
+            // Assert
+            $this->assertSame($classicEra->id, $result->id);
+            $this->assertSame($classicEra->id, $user->refresh()->game_version_id);
+        } finally {
+            unset($_COOKIE['game_version']);
+            $user->delete();
+        }
     }
 
     /**

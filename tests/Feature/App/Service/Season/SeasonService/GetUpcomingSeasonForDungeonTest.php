@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Service\Season\SeasonService;
 use App\Models\Dungeon;
 use App\Models\Season;
+use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
@@ -95,6 +96,31 @@ final class GetUpcomingSeasonForDungeonTest extends PublicTestCase
             ])
             ->onlyMethods([])
             ->getMock();
+
+        // Act
+        $result = $service->getUpcomingSeasonForDungeon($dungeon);
+
+        // Assert
+        $this->assertNull($result);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getUpcomingSeasonForDungeon_givenDungeonWithNoMappingVersionWithSeasons_neverAsksTheRepository(): void
+    {
+        // Arrange
+        /** @var MockObject&Dungeon $dungeon */
+        $dungeon = $this->createPartialMockPublic(Dungeon::class, ['hasMappingVersionWithSeasons']);
+        $dungeon->method('hasMappingVersionWithSeasons')->willReturn(false);
+
+        $seasonRepository = RepositoryFixtures::getSeasonRepositoryMock($this);
+        $seasonRepository->expects($this->never())
+            ->method('getUpcomingSeasonForDungeon')
+            ->willReturn(Season::findOrFail(Season::SEASON_BFA_S4));
+
+        $service = new SeasonService(app(ExpansionService::class), $seasonRepository);
 
         // Act
         $result = $service->getUpcomingSeasonForDungeon($dungeon);
