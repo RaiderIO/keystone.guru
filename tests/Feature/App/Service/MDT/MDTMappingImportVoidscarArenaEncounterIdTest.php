@@ -44,14 +44,30 @@ final class MDTMappingImportVoidscarArenaEncounterIdTest extends PublicTestCase
             'dungeon'            => $dungeon,
         ]);
 
-        // Act
-        $failures = [];
-        $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $retailGameVersion, $failures);
+        $originalEncounterIds = [
+            $tazrah->id   => $tazrah->encounter_id,
+            $atroxus->id  => $atroxus->encounter_id,
+            $charonus->id => $charonus->encounter_id,
+        ];
 
-        // Assert
-        $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
-        $this->assertSame(2791, $tazrah->fresh()->encounter_id, "Taz'Rah's encounter_id must come from MDT.");
-        $this->assertSame(2792, $atroxus->fresh()->encounter_id, "Atroxus's encounter_id must come from MDT, not collide with Taz'Rah's.");
-        $this->assertSame(2793, $charonus->fresh()->encounter_id, "Charonus's encounter_id must come from MDT, not collide with the other two bosses.");
+        try {
+            // The seeder already ships the distinct ids, so start from the collision the upstream bug produced:
+            // only the import writing MDT's encounter_id can get each boss its own id back
+            Npc::query()->whereIn('id', array_keys($originalEncounterIds))->update(['encounter_id' => 2791]);
+
+            // Act
+            $failures = [];
+            $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $retailGameVersion, $failures);
+
+            // Assert
+            $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
+            $this->assertSame(2791, $tazrah->fresh()->encounter_id, "Taz'Rah's encounter_id must come from MDT.");
+            $this->assertSame(2792, $atroxus->fresh()->encounter_id, "Atroxus's encounter_id must come from MDT, not collide with Taz'Rah's.");
+            $this->assertSame(2793, $charonus->fresh()->encounter_id, "Charonus's encounter_id must come from MDT, not collide with the other two bosses.");
+        } finally {
+            foreach ($originalEncounterIds as $npcId => $encounterId) {
+                Npc::query()->whereKey($npcId)->update(['encounter_id' => $encounterId]);
+            }
+        }
     }
 }

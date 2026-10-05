@@ -175,6 +175,34 @@ final class MDTMappingImportNpcSetGuardTest extends PublicTestCase
     }
 
     #[Test]
+    public function assertMDTNpcSetIsPlausible_givenOverlapExactlyAtTheMinimum_doesNotThrow(): void
+    {
+        // Arrange - 5 of the dungeon's own NPCs and 5 foreign ones: exactly the 50% minimum survives
+        $dungeon                 = $this->getDungeon(DungeonKey::MURDER_ROW);
+        $temporaryMappingVersion = $this->createTemporaryMappingVersionWithNpcs($dungeon, 5, 5);
+
+        try {
+            $this->assertSame(
+                0.5,
+                MDTMappingImportService::NPC_SET_OVERLAP_MINIMUM,
+                'The fixture holds 5 kept NPCs out of 10, which is only the boundary at a 50% minimum.',
+            );
+
+            // Act
+            $this->assertMDTNpcSetIsPlausible($dungeon, $temporaryMappingVersion, false);
+
+            // Assert
+            $this->assertSame(
+                10,
+                $temporaryMappingVersion->enemies()->distinct()->count('npc_id'),
+                'The fixture should hold exactly the 10 NPCs the overlap was calculated from.',
+            );
+        } finally {
+            $temporaryMappingVersion->delete();
+        }
+    }
+
+    #[Test]
     public function assertMDTNpcSetIsPlausible_givenOverlapAtTheMinimum_doesNotThrow(): void
     {
         // Arrange - 6 of the dungeon's own NPCs and 4 foreign ones: 60% survives, which is roughly the

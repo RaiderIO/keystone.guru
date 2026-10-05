@@ -3,9 +3,11 @@
 namespace Tests\Feature\App\Service\MDT;
 
 use App\Models\Dungeon;
+use App\Service\MDT\MDTMappingImportService;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use ReflectionMethod;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -38,5 +40,35 @@ final class MDTMappingHashStabilityTest extends PublicTestCase
         // Assert
         $this->assertSame($firstHash, $secondHash, 'The MDT mapping hash must be stable across repeated calls for the same, unchanged dungeon.');
         $this->assertSame($firstHash, $thirdHash, 'The MDT mapping hash must be stable across repeated calls for the same, unchanged dungeon.');
+    }
+
+    /**
+     * One process builds its Lua VMs the same way every time, so the repeated calls above agree even without
+     * the canonicalization; the differing key order only shows up between processes.
+     */
+    #[Test]
+    public function canonicalizeForHash_givenTheSameTablesInADifferentKeyOrder_returnsIdenticalArrays(): void
+    {
+        // Arrange
+        $canonicalizeForHash = new ReflectionMethod(MDTMappingImportService::class, 'canonicalizeForHash');
+
+        $poi = [
+            'type' => 'genericItem',
+            'info' => ['atlas' => 'poi-icon', 'spellId' => 1234],
+            'x'    => 1.5,
+        ];
+        $samePoiInAnotherKeyOrder = [
+            'x'    => 1.5,
+            'info' => ['spellId' => 1234, 'atlas' => 'poi-icon'],
+            'type' => 'genericItem',
+        ];
+
+        // Act
+        $canonicalPoi                 = $canonicalizeForHash->invoke(null, [$poi, ['b', 'a']]);
+        $canonicalSamePoiInOtherOrder = $canonicalizeForHash->invoke(null, [$samePoiInAnotherKeyOrder, ['b', 'a']]);
+
+        // Assert - json_encode() is what the hash is taken over, so it must not see the key order
+        $this->assertSame(json_encode($canonicalPoi), json_encode($canonicalSamePoiInOtherOrder));
+        $this->assertSame(['b', 'a'], $canonicalPoi[1], 'A list keeps its order: it is data, not key order.');
     }
 }
