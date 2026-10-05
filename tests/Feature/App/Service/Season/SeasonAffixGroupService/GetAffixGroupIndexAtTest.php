@@ -1,9 +1,11 @@
 <?php
 
 namespace Tests\Feature\App\Service\Season\SeasonAffixGroupService;
+use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Service\Season\SeasonAffixGroupService;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Exception;
@@ -11,12 +13,15 @@ use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception as MockException;
+use Tests\Fixtures\Traits\CreatesSeason;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('SeasonAffixGroupService')]
 #[Group('GetAffixGroupIndexAt')]
 final class GetAffixGroupIndexAtTest extends PublicTestCase
 {
+    use CreatesSeason;
+
     /**
      * @throws MockException
      * @throws Exception
@@ -179,5 +184,33 @@ final class GetAffixGroupIndexAtTest extends PublicTestCase
         // Act & Assert
         $this->expectException(Exception::class);
         $service->getAffixGroupIndexAt($date, $region);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getAffixGroupIndexAt_givenFirstResetOfMidWeekStartingSeason_returnsStartAffixGroupIndex(): void
+    {
+        // Arrange
+        $service      = app(SeasonAffixGroupServiceInterface::class);
+        $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $twwExpansion = Expansion::where('shortname', Expansion::EXPANSION_TWW)->firstOrFail();
+        // Wednesday 2030-01-09: its first reset is counted from Monday 2030-01-07
+        $season = $this->createSeason([
+            'expansion_id'            => $twwExpansion->id,
+            'start'                   => '2030-01-09 00:00:00',
+            'start_affix_group_index' => 5,
+            'affix_group_count'       => 8,
+        ]);
+        $date = Carbon::create(2030, 1, 7, 0, 0, 0, 'UTC')
+            ->addDays($usRegion->reset_day_offset)
+            ->addHours($usRegion->reset_hours_offset);
+
+        // Act
+        $result = $service->getAffixGroupIndexAt($date, $usRegion, $season->expansion);
+
+        // Assert
+        $this->assertSame(5, $result);
     }
 }
