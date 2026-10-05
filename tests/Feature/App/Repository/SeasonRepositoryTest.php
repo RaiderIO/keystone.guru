@@ -119,6 +119,29 @@ final class SeasonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
+    public function getUpcomingSeasonForDungeon_givenTwoUpcomingSeasons_returnsTheNextOne(): void
+    {
+        // Arrange - the later season is created first, so neither id order nor insertion order picks the right one
+        $midnightExpansionId = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT)->id;
+        $dungeon             = $this->createDungeon();
+        $this->createSeason([
+            'expansion_id' => $midnightExpansionId,
+            'start'        => now()->addYear()->toDateTimeString(),
+        ], [$dungeon->id]);
+        $nextSeason = $this->createSeason([
+            'expansion_id' => $midnightExpansionId,
+            'start'        => now()->addMonth()->toDateTimeString(),
+        ], [$dungeon->id]);
+
+        // Act
+        $result = $this->repository->getUpcomingSeasonForDungeon($dungeon);
+
+        // Assert
+        $this->assertNotNull($result);
+        $this->assertSame($nextSeason->id, $result->id);
+    }
+
+    #[Test]
     public function getMostRecentSeasonForDungeon_givenDungeonWithMultipleSeasons_returnsMostRecent(): void
     {
         // Arrange — a dungeon of our own with two past seasons, so the ordering is what is being confirmed
@@ -175,5 +198,45 @@ final class SeasonRepositoryTest extends PublicTestCase
         // Assert
         $this->assertNotNull($result);
         $this->assertSame($ownSeason->id, $result->id);
+    }
+
+    #[Test]
+    public function getNewestSeasonsForDungeons_givenTwoUpcomingSeasons_returnsTheNextOne(): void
+    {
+        // Arrange - the later season is created first, so neither id order nor insertion order picks the right one
+        $midnightExpansionId = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT)->id;
+        $dungeon             = $this->createDungeon();
+        $this->createSeason(['start' => now()->subYear()->toDateTimeString()], [$dungeon->id]);
+        $this->createSeason([
+            'expansion_id' => $midnightExpansionId,
+            'start'        => now()->addYear()->toDateTimeString(),
+        ], [$dungeon->id]);
+        $nextSeason = $this->createSeason([
+            'expansion_id' => $midnightExpansionId,
+            'start'        => now()->addMonth()->toDateTimeString(),
+        ], [$dungeon->id]);
+
+        // Act
+        $result = $this->repository->getNewestSeasonsForDungeons(collect([$dungeon->id]));
+
+        // Assert
+        $this->assertSame([$dungeon->id], $result->keys()->all());
+        $this->assertSame($nextSeason->id, $result->get($dungeon->id)->id);
+    }
+
+    #[Test]
+    public function getNewestSeasonsForDungeons_givenOnlyStartedSeasons_returnsTheMostRecentOne(): void
+    {
+        // Arrange - the older season is created last, so neither id order nor insertion order picks the right one
+        $dungeon          = $this->createDungeon();
+        $mostRecentSeason = $this->createSeason(['start' => now()->subYear()->toDateTimeString()], [$dungeon->id]);
+        $this->createSeason(['start' => now()->subYears(2)->toDateTimeString()], [$dungeon->id]);
+
+        // Act
+        $result = $this->repository->getNewestSeasonsForDungeons(collect([$dungeon->id]));
+
+        // Assert
+        $this->assertSame([$dungeon->id], $result->keys()->all());
+        $this->assertSame($mostRecentSeason->id, $result->get($dungeon->id)->id);
     }
 }

@@ -56,7 +56,7 @@ class SeasonRepository extends DatabaseRepository implements SeasonRepositoryInt
          * INNER JOIN season_dungeons ON seasons . id = season_dungeons . season_id
          * WHERE season_dungeons . dungeon_id = 77
          * AND seasons . start > '2023-08-28 14:00:00'
-         * ORDER BY seasons . start DESC
+         * ORDER BY seasons . start ASC
          * LIMIT 1
          */
 
@@ -70,7 +70,7 @@ class SeasonRepository extends DatabaseRepository implements SeasonRepositoryInt
             // dropped outright. Widened well past a year (#3868: King's Rest's real Season 2 assignment was
             // being lost by the old 1-year cap) while staying nowhere near that placeholder.
             ->where('seasons.start', '<', now()->addYears(3))
-            ->orderBy('seasons.start', 'desc')
+            ->orderBy('seasons.start')
             ->first();
 
         return $season;
@@ -82,18 +82,21 @@ class SeasonRepository extends DatabaseRepository implements SeasonRepositoryInt
             return collect();
         }
 
-        // Same bounds as getUpcomingSeasonForDungeon() ?? getMostRecentSeasonForDungeon(): the upcoming season is
-        // always newer than any started one, so the newest season below the placeholder cap is the answer
+        $now = now();
+
+        // Same bounds as getUpcomingSeasonForDungeon() ?? getMostRecentSeasonForDungeon(): the first season that has
+        // yet to start, else the last one that started
         return Season::selectRaw('seasons.*, season_dungeons.dungeon_id as season_dungeon_id')
             ->with(['expansion'])
             ->join('season_dungeons', 'seasons.id', 'season_dungeons.season_id')
             ->whereIn('season_dungeons.dungeon_id', $dungeonIds)
-            ->where('seasons.start', '<', now()->addYears(3))
+            ->where('seasons.start', '<', $now->copy()->addYears(3))
             ->orderBy('seasons.start')
             ->get()
-            // keyBy() keeps the last season per dungeon, which is the newest with the ascending order
-            ->keyBy(static fn(Season $season): int => (int)$season->getAttribute('season_dungeon_id'))
-            ->map(static fn(Season $season): Season => $season->makeHidden(['season_dungeon_id']));
+            ->groupBy(static fn(Season $season): int => (int)$season->getAttribute('season_dungeon_id'))
+            ->map(static fn(Collection $seasons): Season => ($seasons->first(
+                static fn(Season $season): bool => $season->start->greaterThan($now),
+            ) ?? $seasons->last())->makeHidden(['season_dungeon_id']));
     }
 
     public function getSeasonsByIds(Collection $seasonIds): Collection
