@@ -15,11 +15,14 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCase;
 
 #[Group('MDT')]
 final class ConvertWeekToAffixGroupTest extends TestCase
 {
+    use CreatesDungeon;
+
     /**
      * End-to-end through the real SeasonService: on 2022-09-01 Shadowlands S4 is the current season
      * and genuinely contains Operation Mechagon: Junkyard, so its MDT week must resolve to a
@@ -400,6 +403,72 @@ final class ConvertWeekToAffixGroupTest extends TestCase
         $seasonService = $this->createSeasonServicePinnedTo($season);
 
         Log::shouldReceive('error')->once();
+
+        // Act
+        $affixGroup = Conversion::convertWeekToAffixGroup($seasonService, $dungeon, 1);
+
+        // Assert
+        $this->assertNull($affixGroup);
+    }
+
+    /**
+     * An MDT string without a week carries no affix information at all - the importer then falls back to
+     * the current affix group, so no season is consulted.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function convertWeekToAffixGroup_givenNoWeek_returnsNull(): void
+    {
+        // Arrange
+        $dungeon       = Dungeon::where('key', 'mechagonjunkyard')->firstOrFail();
+        $seasonService = $this->createSeasonServicePinnedTo(Season::with('affixGroups')->findOrFail(Season::SEASON_SL_S4));
+
+        // Act
+        $affixGroup = Conversion::convertWeekToAffixGroup($seasonService, $dungeon, null);
+
+        // Assert
+        $this->assertNull($affixGroup);
+    }
+
+    /**
+     * A dungeon without any mapping version has none on a game version with seasons, so it has no affix
+     * rotation, even when the season service would hand back a season for it.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function convertWeekToAffixGroup_givenDungeonWithoutMappingVersion_returnsNull(): void
+    {
+        // Arrange
+        $dungeon       = $this->createDungeon(withMappingVersion: false);
+        $seasonService = $this->createSeasonServicePinnedTo(Season::with('affixGroups')->findOrFail(Season::SEASON_SL_S4));
+
+        // Act
+        $affixGroup = Conversion::convertWeekToAffixGroup($seasonService, $dungeon, 1);
+
+        // Assert
+        $this->assertNull($affixGroup);
+    }
+
+    /**
+     * When the season service finds no current, upcoming or most recent season for the dungeon, there is
+     * nothing to resolve the week against: log it and return null.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function convertWeekToAffixGroup_givenNoSeasonForDungeon_returnsNullAndLogsError(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::where('key', 'mechagonjunkyard')->firstOrFail();
+
+        $seasonService = $this->createMock(SeasonServiceInterface::class);
+        $seasonService->method('getCurrentSeasonForDungeon')->willReturn(null);
+        $seasonService->method('getUpcomingSeasonForDungeon')->willReturn(null);
+        $seasonService->method('getMostRecentSeasonForDungeon')->willReturn(null);
+
+        Log::shouldReceive('error')->once()->withArgs(static fn(string $message) => str_contains($message, 'Unable to find season'));
 
         // Act
         $affixGroup = Conversion::convertWeekToAffixGroup($seasonService, $dungeon, 1);

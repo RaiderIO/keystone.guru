@@ -100,9 +100,47 @@ final class LuaTableParserTest extends TestCase
 
         // Assert
         $this->expectException(LuaParseException::class);
+        $this->expectExceptionMessage('Unexpected end of source while parsing a table');
 
         // Act
         new LuaTableParser($source)->parseDungeonIndexAssignments();
+    }
+
+    #[Test]
+    public function parseDungeonIndexAssignments_givenAnUnterminatedString_throws(): void
+    {
+        // Arrange
+        $source = 'MDT.dungeonEnemies[dungeonIndex] = {
+  [1] = {
+    ["name"] = "Never closed,
+  },
+};';
+
+        // Assert
+        $this->expectException(LuaParseException::class);
+        $this->expectExceptionMessage('Unexpected end of source while parsing a string');
+
+        // Act
+        new LuaTableParser($source)->parseDungeonIndexAssignments();
+    }
+
+    #[Test]
+    public function parseDungeonIndexAssignments_givenCommentsAndPositionalEntries_skipsCommentsAndNumbersEntriesFromOne(): void
+    {
+        // Arrange
+        $source = 'MDT.dungeonSubLevels[dungeonIndex] = {
+  -- the first floor
+  L["FloorOne"], -- trailing comment
+  L["FloorTwo"],
+};';
+
+        // Act
+        $assignments = new LuaTableParser($source)->parseDungeonIndexAssignments();
+
+        // Assert
+        $this->assertSame([1, 2], array_keys($assignments['dungeonSubLevels']));
+        $this->assertSame('L["FloorOne"]', (string)$assignments['dungeonSubLevels'][1]);
+        $this->assertSame('L["FloorTwo"]', (string)$assignments['dungeonSubLevels'][2]);
     }
 
     #[Test]

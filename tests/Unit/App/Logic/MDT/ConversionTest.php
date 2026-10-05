@@ -3,8 +3,10 @@
 namespace Tests\Unit\App\Logic\MDT;
 
 use App\Logic\MDT\Conversion;
+use App\Logic\Structs\LatLng;
 use App\Models\Dungeon;
 use App\Models\Expansion;
+use App\Models\Floor\Floor;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -154,5 +156,68 @@ final class ConversionTest extends TestCase
             . "silently returns the first one:\n%s",
             implode("\n", $duplicates),
         ));
+    }
+
+    #[Test]
+    #[Group('MDT')]
+    public function getExpansionName_givenDungeonKeyMDTDoesNotKnow_returnsNull(): void
+    {
+        // Act
+        $expansionName = Conversion::getExpansionName('not_an_mdt_dungeon');
+
+        // Assert
+        $this->assertNull($expansionName);
+        $this->assertFalse(Conversion::hasMDTExpansionName('not_an_mdt_dungeon'));
+        $this->assertFalse(Conversion::hasMDTDungeonName('not_an_mdt_dungeon'));
+        $this->assertNull(Conversion::getMDTDungeonName('not_an_mdt_dungeon'));
+    }
+
+    #[Test]
+    #[Group('MDT')]
+    public function getMDTDungeonName_givenMappedDungeonKey_returnsMDTsFileName(): void
+    {
+        // Act
+        $mdtDungeonName = Conversion::getMDTDungeonName('kingsrest');
+
+        // Assert
+        $this->assertSame(Conversion::DUNGEON_NAME_MAPPING[Conversion::getExpansionName('kingsrest')]['kingsrest'], $mdtDungeonName);
+        $this->assertSame('KingsRest', $mdtDungeonName);
+        $this->assertTrue(Conversion::hasMDTDungeonName('kingsrest'));
+        $this->assertTrue(Conversion::hasMDTExpansionName('kingsrest'));
+    }
+
+    #[Test]
+    #[Group('MDT')]
+    public function convertMDTCoordinateToLatLng_givenMDTCoordinate_returnsScaledLatLngWithAxesSwapped(): void
+    {
+        // Arrange - MDT's y is our lat and its x our lng, both 2.185 times larger
+        $floor = new Floor();
+
+        // Act
+        $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => 10.123, 'y' => -218.5], $floor);
+
+        // Assert
+        $this->assertSame(-100.0, $latLng->getLat());
+        $this->assertSame(4.63, $latLng->getLng());
+        $this->assertSame($floor, $latLng->getFloor());
+    }
+
+    #[Test]
+    #[Group('MDT')]
+    public function convertLatLngToMDTCoordinate_givenLatLng_returnsScaledCoordinateRoundedToOneDecimal(): void
+    {
+        // Arrange
+        $latLng = new LatLng(-100.0, 200.04);
+
+        // Act
+        $mdtCoordinate          = Conversion::convertLatLngToMDTCoordinate($latLng);
+        $mdtCoordinateString    = Conversion::convertLatLngToMDTCoordinateString($latLng);
+        $mdtCoordinateUnrounded = Conversion::convertLatLngToMDTCoordinateUnrounded($latLng);
+
+        // Assert
+        $this->assertSame(['y' => -218.5, 'x' => 437.1], $mdtCoordinate);
+        $this->assertSame(['y' => '-218.5', 'x' => '437.1'], $mdtCoordinateString);
+        $this->assertEqualsWithDelta(437.0874, $mdtCoordinateUnrounded['x'], 0.00001);
+        $this->assertEqualsWithDelta(-218.5, $mdtCoordinateUnrounded['y'], 0.00001);
     }
 }
