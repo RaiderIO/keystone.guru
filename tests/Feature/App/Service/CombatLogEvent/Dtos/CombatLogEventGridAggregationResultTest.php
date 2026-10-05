@@ -101,6 +101,7 @@ final class CombatLogEventGridAggregationResultTest extends PublicTestCase
         /** @var array<int, array{floor_id: int, lat_lngs: array<int, mixed>}> $data */
         $data             = $array['data'];
         $latLngsByFloorId = array_column($data, 'lat_lngs', 'floor_id');
+        $this->assertEqualsCanonicalizing(array_merge([$facadeFloor->id], array_keys($results)), array_keys($latLngsByFloorId));
         $this->assertCount(array_sum(array_map('count', $results)), $latLngsByFloorId[$facadeFloor->id]);
         foreach ($results as $floorId => $rows) {
             $this->assertCount(count($rows), $latLngsByFloorId[$floorId]);

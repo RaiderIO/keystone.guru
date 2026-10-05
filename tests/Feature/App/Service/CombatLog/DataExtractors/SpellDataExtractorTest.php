@@ -168,6 +168,82 @@ final class SpellDataExtractorTest extends PublicTestCase
             'id'           => self::SPELL_ID,
             'schools_mask' => SpellSchool::Shadow->value,
         ]);
+
+        // Assert - the creation is auditable from the activity feed
+        $this->assertDatabaseHas('combat_log_spell_events', [
+            'spell_id'        => self::SPELL_ID,
+            'event_type'      => CombatLogSpellEventType::SpellCreated->value,
+            'combat_log_path' => self::COMBAT_LOG_PATH,
+        ], 'combatlog');
+        $this->assertSame(1, $this->result->toArray()['createdSpells']);
+    }
+
+    #[Test]
+    public function extractData_givenASummonedNpcCastingABuff_ignoresTheSpell(): void
+    {
+        // Arrange - another creature summoned NPC_ID earlier in the log
+        $this->createTestNpc();
+        $extractor   = $this->makeExtractor();
+        $summonEvent = $this->parsedEvent('8/2/2024 16:24:17.477-4  SPELL_SUMMON,Creature-0-2085-2290-22744-76149-000000000,"Summoner",0xa48,0x0,Creature-0-2085-2290-22744-999601-000000000,"TestNpc",0xa48,0x0,999603,"Summon TestNpc",0x1');
+
+        // Act
+        $this->runExtract($extractor, [$summonEvent, $this->parsedEvent(self::RAW_SHADOW_BUFF_EVENT)]);
+
+        // Assert
+        $this->assertDatabaseMissing('spells', ['id' => self::SPELL_ID]);
+        $this->assertSame(0, $this->result->toArray()['createdSpells']);
+    }
+
+    #[Test]
+    public function extractData_givenAnNpcDebuffingAnotherNpc_ignoresTheSpell(): void
+    {
+        // Arrange - player abilities make NPCs debuff one another (Blinding Sleet); that is not the NPC's own spell
+        $this->createTestNpc();
+        $extractor = $this->makeExtractor();
+        $rawEvent  = str_replace(',BUFF', ',DEBUFF', self::RAW_SHADOW_BUFF_EVENT);
+
+        // Act
+        $this->runExtract($extractor, [$this->parsedEvent($rawEvent)]);
+
+        // Assert
+        $this->assertDatabaseMissing('spells', ['id' => self::SPELL_ID]);
+        $this->assertSame(0, $this->result->toArray()['createdSpells']);
+    }
+
+    #[Test]
+    public function extractData_givenAnNpcBreakingAPlayerAura_ignoresTheBrokenSpell(): void
+    {
+        // Arrange - the NPC broke the player out of the aura, it did not cast it
+        $this->createTestNpc();
+        $extractor = $this->makeExtractor();
+        $rawEvent  = '8/2/2024 16:24:18.477-4  SPELL_AURA_BROKEN_SPELL,Creature-0-2085-2290-22744-999601-000000000,"TestNpc",0xa48,0x0,Player-1084-0B48C032,"TestPlayer",0x512,0x0,999602,"TestSpell",0x1,457129,"Deathstalker\'s Mark",1,DEBUFF';
+
+        // Act
+        $this->runExtract($extractor, [$this->parsedEvent($rawEvent)]);
+
+        // Assert
+        $this->assertDatabaseMissing('spells', ['id' => self::SPELL_ID]);
+        $this->assertSame(0, $this->result->toArray()['createdSpells']);
+    }
+
+    #[Test]
+    public function extractData_givenAPetCastingABuff_ignoresTheSpell(): void
+    {
+        // Arrange - same npc id, but logged as a pet rather than a creature
+        $this->createTestNpc();
+        $extractor = $this->makeExtractor();
+        $rawEvent  = str_replace(
+            'SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-999601-000000000',
+            'SPELL_AURA_APPLIED,Pet-0-2085-2290-22744-999601-000000000',
+            self::RAW_SHADOW_BUFF_EVENT,
+        );
+
+        // Act
+        $this->runExtract($extractor, [$this->parsedEvent($rawEvent)]);
+
+        // Assert
+        $this->assertDatabaseMissing('spells', ['id' => self::SPELL_ID]);
+        $this->assertSame(0, $this->result->toArray()['createdSpells']);
     }
 
     #[Test]
@@ -487,6 +563,26 @@ final class SpellDataExtractorTest extends PublicTestCase
             1,
             SpellDungeon::where('spell_id', self::SPELL_ID)->where('dungeon_id', $this->currentDungeon->dungeon->id)->count(),
         );
+    }
+
+    #[Test]
+    public function afterExtract_givenASpellWithAKnownCategory_doesNotAssignItToTheNpc(): void
+    {
+        // Arrange - a categorised spell (a player class, general) is not proof the NPC casts it
+        $this->createTestSpell([
+            'category' => SpellCategory::General->translationKey(),
+            'aura'     => true,
+        ]);
+        $this->createTestNpc();
+        $extractor = $this->makeExtractor();
+
+        // Act
+        $this->runExtract($extractor, [$this->parsedEvent(self::RAW_BUFF_EVENT)]);
+
+        // Assert
+        $this->assertDatabaseMissing('npc_spells', ['npc_id' => self::NPC_ID]);
+        $this->assertDatabaseMissing('combat_log_npc_events', ['npc_id' => self::NPC_ID], 'combatlog');
+        $this->assertSame(0, $this->result->toArray()['createdNpcSpells']);
     }
 
     #[Test]

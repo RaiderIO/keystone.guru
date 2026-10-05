@@ -149,14 +149,25 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
     #[Test]
     public function extractData_givenMappedSpellAppliedTwice_createsOnlyOneNpcCharacteristic(): void
     {
-        // Arrange
+        // Arrange - the database's unique pair hides a second queued insert, so count the assignments themselves
         $this->createTestNpc();
         $parsedEvent = $this->parsedEvent();
+
+        $assignedCount = 0;
+        $log           = Mockery::mock(NpcCharacteristicDataExtractorLoggingInterface::class)->shouldIgnoreMissing();
+        /** @var Mockery\Expectation $expectation */
+        $expectation = $log->shouldReceive('extractDataAssignedCharacteristicToNpc');
+        $expectation->andReturnUsing(static function () use (&$assignedCount): void {
+            $assignedCount++;
+        });
+        $this->app->bind(NpcCharacteristicDataExtractorLoggingInterface::class, fn() => $log);
+        $this->extractor = new NpcCharacteristicDataExtractor(new SpellRepositorySwoole());
 
         // Act
         $this->runExtract([$parsedEvent, $parsedEvent]);
 
         // Assert
+        $this->assertSame(1, $assignedCount);
         $this->assertSame(1, $this->result->toArray()['createdNpcCharacteristics']);
         $this->assertSame(
             1,
@@ -308,6 +319,25 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, $this->result->toArray()['createdNpcCharacteristics']);
+    }
+
+    #[Test]
+    public function extractData_givenAVehicleDestination_doesNotCreateNpcCharacteristic(): void
+    {
+        // Arrange - the same npc id, but logged as a Vehicle rather than a plain creature
+        $this->createTestNpc();
+        $rawEvent    = str_replace('Creature-0-2085-2290-22744-9995011-00012D4051', 'Vehicle-0-2085-2290-22744-9995011-00012D4051', self::RAW_EVENT);
+        $parsedEvent = new CombatLogEntry($rawEvent)->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
+
+        // Act
+        $this->runExtract([$parsedEvent]);
+
+        // Assert
+        $this->assertSame(0, $this->result->toArray()['createdNpcCharacteristics']);
+        $this->assertDatabaseMissing('npc_characteristics', ['npc_id' => self::NPC_ID]);
+        $this->assertDatabaseMissing('combat_log_npc_characteristic_observations', [
+            'npc_id' => self::NPC_ID,
+        ], 'combatlog');
     }
 
     #[Test]

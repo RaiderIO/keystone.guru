@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Service\CombatLogEvent\Dtos;
 
 use App;
+use App\Models\Affix;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
@@ -15,6 +16,7 @@ use App\Service\Season\SeasonServiceInterface;
 use Codeart\OpensearchLaravel\Interfaces\OpenSearchQuery;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -153,6 +155,190 @@ final class CombatLogEventFilterTest extends PublicTestCase
 
         // Assert
         $this->assertNull($range);
+    }
+
+    #[Test]
+    public function toOpensearchQuery_givenAnyFilter_matchesTheDungeonAndEventType(): void
+    {
+        // Arrange
+        $combatLogEventFilter = $this->createFilter();
+
+        // Act
+        $matches = $this->findClauses($combatLogEventFilter, 'match');
+
+        // Assert
+        $this->assertContains(['challenge_mode_id', $combatLogEventFilter->getDungeon()->challenge_mode_id], $matches);
+        $this->assertContains(['event_type', CombatLogEventEventType::NpcDeath->value], $matches);
+    }
+
+    #[Test]
+    public function toOpensearchQuery_givenKeyLevelPlayerDeathsAndDurationRanges_addsARangeForEach(): void
+    {
+        // Arrange
+        $combatLogEventFilter = $this->createFilter()
+            ->setKeyLevelMin(5)
+            ->setKeyLevelMax(10)
+            ->setPlayerDeathsMin(1)
+            ->setPlayerDeathsMax(3)
+            ->setDurationMin(20)
+            ->setDurationMax(30);
+
+        // Act
+        $ranges = $this->findRangesByField($combatLogEventFilter);
+
+        // Assert - durations are minutes, the indexed duration_ms is milliseconds
+        $this->assertSame(['gte' => 5, 'lte' => 10], $ranges['level'] ?? null);
+        $this->assertSame(['gte' => 1, 'lte' => 3], $ranges['num_deaths'] ?? null);
+        $this->assertSame(['gte' => 1_200_000, 'lte' => 1_800_000], $ranges['duration_ms'] ?? null);
+    }
+
+    #[Test]
+    public function toOpensearchQuery_givenOnlyTheMinimumOfEachRange_addsNoRange(): void
+    {
+        // Arrange
+        $combatLogEventFilter = $this->createFilter()
+            ->setKeyLevelMin(5)
+            ->setItemLevelMin(600)
+            ->setPlayerDeathsMin(1)
+            ->setDurationMin(20);
+
+        // Act
+        $ranges = $this->findRangesByField($combatLogEventFilter);
+
+        // Assert
+        $this->assertSame([], $ranges);
+    }
+
+    /**
+     * Only the presence of the clause is pinned here: which bounds it carries is a separate defect.
+     */
+    #[Test]
+    public function toOpensearchQuery_givenAnItemLevelRange_addsAnAverageItemLevelRange(): void
+    {
+        // Arrange
+        $combatLogEventFilter = $this->createFilter()
+            ->setItemLevelMin(600)
+            ->setItemLevelMax(650);
+
+        // Act
+        $ranges = $this->findRangesByField($combatLogEventFilter);
+
+        // Assert
+        $this->assertArrayHasKey('average_item_level', $ranges);
+    }
+
+    #[Test]
+    #[DataProvider('toOpensearchQuery_givenARegion_matchesTheRaiderIoRegionId_DataProvider')]
+    public function toOpensearchQuery_givenARegion_matchesTheRaiderIoRegionId(?string $region, ?int $expectedRegionId): void
+    {
+        // Arrange
+        $combatLogEventFilter = $this->createFilter()->setRegion($region);
+
+        // Act
+        $regionIds = array_values(array_map(
+            static fn(array $match) => $match[1],
+            array_filter($this->findClauses($combatLogEventFilter, 'match'), static fn(array $match) => $match[0] === 'region_id'),
+        ));
+
+        // Assert
+        $this->assertSame($expectedRegionId === null ? [] : [$expectedRegionId], $regionIds);
+    }
+
+    /**
+     * @return array<string, array{0: string|null, 1: int|null}>
+     */
+    public static function toOpensearchQuery_givenARegion_matchesTheRaiderIoRegionId_DataProvider(): array
+    {
+        return [
+            'world'    => [GameServerRegion::WORLD, null],
+            'europe'   => [GameServerRegion::EUROPE, 3],
+            'americas' => [GameServerRegion::AMERICAS, 2],
+            'china'    => [GameServerRegion::CHINA, 6],
+            'korea'    => [GameServerRegion::KOREA, 4],
+            'taiwan'   => [GameServerRegion::TAIWAN, 5],
+            'none'     => [null, 2],
+        ];
+    }
+
+    #[Test]
+    public function toOpensearchQuery_givenAffixes_matchesAnyOfTheirInGameIds(): void
+    {
+        // Arrange
+        /** @var Collection<int, Affix> $affixes */
+        $affixes = Affix::query()->orderBy('id')->limit(2)->get();
+        $this->assertCount(2, $affixes, 'The seeded database must carry at least two affixes');
+        $combatLogEventFilter = $this->createFilter()->setAffixes($affixes);
+
+        // Act
+        $affixIds = array_values(array_map(
+            static fn(array $match) => $match[1],
+            array_filter($this->findClauses($combatLogEventFilter, 'match'), static fn(array $match) => $match[0] === 'affix_id'),
+        ));
+
+        // Assert
+        $this->assertSame($affixes->pluck('affix_id')->all(), $affixIds);
+    }
+
+    private function createFilter(): CombatLogEventFilter
+    {
+        [$dungeon] = $this->findDungeon(challengeMode: true);
+
+        return new CombatLogEventFilter(
+            App::make(SeasonServiceInterface::class),
+            $dungeon,
+            CombatLogEventEventType::NpcDeath,
+            CombatLogEventDataType::PlayerPosition,
+        );
+    }
+
+    /**
+     * Every `range` clause the filter added to its Opensearch query, keyed by the field it ranges over.
+     *
+     * @return array<string, array<string, int>>
+     */
+    private function findRangesByField(CombatLogEventFilter $combatLogEventFilter): array
+    {
+        $result = [];
+        foreach ($this->findClauses($combatLogEventFilter, 'range') as [$field, $range]) {
+            $result[$field] = $range;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Every clause of the given type (`match`, `range`) the filter added to its Opensearch query, as [field, value] pairs.
+     *
+     * @return array<int, array{0: string, 1: mixed}>
+     */
+    private function findClauses(CombatLogEventFilter $combatLogEventFilter, string $type): array
+    {
+        $result = [];
+        $walk   = static function (mixed $node) use (&$walk, &$result, $type): void {
+            if ($node instanceof OpenSearchQuery) {
+                $node = $node->toOpenSearchQuery();
+            }
+
+            if (!is_array($node)) {
+                return;
+            }
+
+            if (isset($node[$type]) && is_array($node[$type])) {
+                foreach ($node[$type] as $field => $value) {
+                    $result[] = [$field, $value];
+                }
+
+                return;
+            }
+
+            foreach ($node as $child) {
+                $walk($child);
+            }
+        };
+
+        $walk($combatLogEventFilter->toOpensearchQuery());
+
+        return $result;
     }
 
     /**

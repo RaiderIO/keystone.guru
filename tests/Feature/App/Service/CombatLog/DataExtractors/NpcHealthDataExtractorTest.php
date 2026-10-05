@@ -118,6 +118,21 @@ final class NpcHealthDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
+    public function extractData_givenNoMaxHp_recordsNothing(): void
+    {
+        // Arrange
+        $extractor      = new NpcHealthDataExtractor();
+        $currentDungeon = new DataExtractionCurrentDungeon($this->dungeon, 2);
+        $parsedEvent    = $this->parsedEvent(self::CREATURE_GUID, self::NO_OWNER_GUID, 0);
+
+        // Act
+        $extractor->extractData($this->result, $currentDungeon, $parsedEvent);
+
+        // Assert
+        $this->assertTrue($extractor->getObservations()->isEmpty());
+    }
+
+    #[Test]
     public function extractData_givenVehicle_recordsIt(): void
     {
         // Arrange - Ikuzz the Light Hunter (a Blinding Vale boss) logs as a Vehicle

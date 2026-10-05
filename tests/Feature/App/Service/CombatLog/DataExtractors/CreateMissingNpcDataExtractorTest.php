@@ -142,10 +142,103 @@ final class CreateMissingNpcDataExtractorTest extends PublicTestCase
                 ->where('dungeon_id', $this->currentDungeon->dungeon->id)
                 ->exists());
             $this->assertFalse(NpcHealth::query()->where('npc_id', self::UNKNOWN_NPC_ID)->exists());
+            $this->assertSame(1, $this->result->toArray()['createdNpcs']);
         } finally {
             Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->first()?->delete();
             NpcHealth::query()->where('npc_id', self::UNKNOWN_NPC_ID)->delete();
         }
+    }
+
+    #[Test]
+    public function extractData_givenAnUnknownCreatureThatWasSummoned_doesNotCreateTheNpc(): void
+    {
+        // Arrange
+        $this->assertFalse(Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->exists());
+
+        $extractor   = new CreateMissingNpcDataExtractor();
+        $unknownGuid = $this->unknownCreatureGuid();
+        $summonEvent = $this->parsedEvent(sprintf(
+            '8/2/2024 16:24:17.477-4  SPELL_SUMMON,Creature-0-4237-1209-2796-76149-0000293D52,"Dread Raven",0xa48,0x0,%s,"Dread Raven",0xa48,0x0,999603,"Summon Raven",0x1',
+            $unknownGuid,
+        ));
+
+        try {
+            // Act
+            $extractor->beforeExtract($this->result, self::COMBAT_LOG_PATH);
+            $extractor->extractData($this->result, $this->currentDungeon, $summonEvent);
+            $extractor->extractData($this->result, $this->currentDungeon, $this->parsedEvent($this->unknownCreatureSourcedEvent($unknownGuid)));
+            $extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
+
+            // Assert
+            $this->assertFalse(Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->exists());
+            $this->assertSame(0, $this->result->toArray()['createdNpcs']);
+        } finally {
+            Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->first()?->delete();
+        }
+    }
+
+    #[Test]
+    public function extractData_givenAnUnknownCreatureWithAnOwner_doesNotCreateThePet(): void
+    {
+        // Arrange
+        $this->assertFalse(Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->exists());
+
+        $extractor   = new CreateMissingNpcDataExtractor();
+        $unknownGuid = $this->unknownCreatureGuid();
+        $rawEvent    = str_replace(
+            sprintf('%s,0000000000000000,', $unknownGuid),
+            sprintf('%s,Player-1084-0A5F8492,', $unknownGuid),
+            $this->unknownCreatureSourcedEvent($unknownGuid),
+        );
+
+        try {
+            // Act
+            $extractor->beforeExtract($this->result, self::COMBAT_LOG_PATH);
+            $extractor->extractData($this->result, $this->currentDungeon, $this->parsedEvent($rawEvent));
+            $extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
+
+            // Assert
+            $this->assertFalse(Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->exists());
+            $this->assertSame(0, $this->result->toArray()['createdNpcs']);
+        } finally {
+            Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->first()?->delete();
+        }
+    }
+
+    #[Test]
+    public function extractData_givenAnUnknownCreatureThatIsNeitherSourceNorDestination_doesNotCreateTheNpc(): void
+    {
+        // Arrange - the info GUID names a creature the line does not, so there is no name to give it
+        $this->assertFalse(Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->exists());
+
+        $extractor = new CreateMissingNpcDataExtractor();
+        $rawEvent  = sprintf(self::RAW_EVENT_TEMPLATE, $this->unknownCreatureGuid());
+
+        try {
+            // Act
+            $extractor->beforeExtract($this->result, self::COMBAT_LOG_PATH);
+            $extractor->extractData($this->result, $this->currentDungeon, $this->parsedEvent($rawEvent));
+            $extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
+
+            // Assert
+            $this->assertFalse(Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->exists());
+            $this->assertSame(0, $this->result->toArray()['createdNpcs']);
+        } finally {
+            Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->first()?->delete();
+        }
+    }
+
+    private function unknownCreatureGuid(): string
+    {
+        return sprintf('Creature-0-4237-1209-2796-%d-0000293D52', self::UNKNOWN_NPC_ID);
+    }
+
+    /**
+     * The template event with the unknown creature as both its source and its info GUID.
+     */
+    private function unknownCreatureSourcedEvent(string $unknownGuid): string
+    {
+        return str_replace('Creature-0-4237-1209-2796-76149-0000293D52', $unknownGuid, sprintf(self::RAW_EVENT_TEMPLATE, $unknownGuid));
     }
 
     private function assertAdvancedEvent(BaseEvent $parsedEvent): AdvancedDataInterface
