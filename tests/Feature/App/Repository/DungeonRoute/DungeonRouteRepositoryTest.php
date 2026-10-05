@@ -6,6 +6,7 @@ use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
+use App\Models\PublishedState;
 use App\Models\User;
 use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
@@ -101,6 +102,12 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
             'title'      => 'UniqueTestRouteTitle12345',
             'expires_at' => null,
         ]);
+        $otherTitleRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeonRoute->dungeon_id,
+            'mapping_version_id' => $dungeonRoute->mapping_version_id,
+            'title'              => 'OtherTestRouteTitle67890',
+            'expires_at'         => null,
+        ]);
 
         try {
             $filter = new DungeonRouteSearchFilter(
@@ -116,7 +123,9 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
             $result->each(function (DungeonRoute $route) {
                 $this->assertStringContainsStringIgnoringCase('UniqueTestRouteTitle12345', $route->title);
             });
+            $this->assertSame([$dungeonRoute->id], $result->pluck('id')->all());
         } finally {
+            $otherTitleRoute->delete();
             $dungeonRoute->delete();
         }
     }
@@ -124,15 +133,35 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
     #[Test]
     public function findRoutes_givenKeyLevelFilter_returnsRoutesWithinRange(): void
     {
-        // Arrange
+        // Arrange - one shared title keeps the result to these routes, well inside findRoutes()'s limit
+        $title        = 'UniqueKeyLevelRouteTitle24680';
         $dungeonRoute = DungeonRoute::factory()->create([
-            'level_min' => 10,
-            'level_max' => 15,
+            'title'      => $title,
+            'level_min'  => 10,
+            'level_max'  => 15,
+            'expires_at' => null,
+        ]);
+        $belowMinimumRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeonRoute->dungeon_id,
+            'mapping_version_id' => $dungeonRoute->mapping_version_id,
+            'title'              => $title,
+            'level_min'          => 5,
+            'level_max'          => 12,
+            'expires_at'         => null,
+        ]);
+        $aboveMaximumRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeonRoute->dungeon_id,
+            'mapping_version_id' => $dungeonRoute->mapping_version_id,
+            'title'              => $title,
+            'level_min'          => 12,
+            'level_max'          => 20,
+            'expires_at'         => null,
         ]);
 
         try {
             $filter = new DungeonRouteSearchFilter(
                 mappingVersion: $dungeonRoute->mappingVersion,
+                title: $title,
                 minKeyLevel: 10,
                 maxKeyLevel: 15,
             );
@@ -146,7 +175,53 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
                 $this->assertGreaterThanOrEqual(10, $route->level_min);
                 $this->assertLessThanOrEqual(15, $route->level_max);
             });
+            $this->assertSame([$dungeonRoute->id], $result->pluck('id')->all());
         } finally {
+            $aboveMaximumRoute->delete();
+            $belowMinimumRoute->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function findRoutes_givenSandboxUnpublishedAndClonedRoutes_returnsOnlyTheWorldPublishedOriginal(): void
+    {
+        // Arrange
+        $title        = 'UniqueSearchableRouteTitle13579';
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'title'              => $title,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+        $sameMappingVersion = [
+            'dungeon_id'         => $dungeonRoute->dungeon_id,
+            'mapping_version_id' => $dungeonRoute->mapping_version_id,
+            'title'              => $title,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ];
+        $excludedRoutes = collect([
+            DungeonRoute::factory()->create([...$sameMappingVersion, 'expires_at' => now()->addHour()]),
+            DungeonRoute::factory()->create([
+                ...$sameMappingVersion,
+                'expires_at'         => null,
+                'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
+            ]),
+            DungeonRoute::factory()->create([...$sameMappingVersion, 'expires_at' => null, 'clone_of' => $dungeonRoute->public_key]),
+        ]);
+
+        try {
+            $filter = new DungeonRouteSearchFilter(
+                mappingVersion: $dungeonRoute->mappingVersion,
+                title: $title,
+            );
+
+            // Act
+            $result = $this->repository->findRoutes($filter);
+
+            // Assert
+            $this->assertSame([$dungeonRoute->id], $result->pluck('id')->all());
+        } finally {
+            $excludedRoutes->each(static fn(DungeonRoute $excludedRoute) => $excludedRoute->delete());
             $dungeonRoute->delete();
         }
     }

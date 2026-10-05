@@ -94,9 +94,14 @@ final class NpcTest extends PublicTestCase
                 ]);
             }
 
-            // Act & Assert - must not throw
+            // Act
             $this->mappingChanged($npc, $npc);
-            $this->addToAssertionCount(1);
+
+            // Assert
+            /** @var MappingChangeLog $mappingChangeLog */
+            $mappingChangeLog = MappingChangeLog::query()->where('model_id', 900001)->where('model_class', Npc::class)->sole();
+            $this->assertSame($dungeons->first()->id, $mappingChangeLog->dungeon_id);
+            $this->assertArrayNotHasKey('dungeons', json_decode($mappingChangeLog->after_model, true));
         } finally {
             MappingChangeLog::query()->where('model_id', 900001)->where('model_class', Npc::class)->delete();
             NpcDungeon::query()->where('npc_id', 900001)->delete();
