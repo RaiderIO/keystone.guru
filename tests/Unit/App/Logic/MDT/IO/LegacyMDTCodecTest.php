@@ -35,6 +35,42 @@ final class LegacyMDTCodecTest extends TestCase
         // Assert
         $this->assertArrayHasKey('value', $decoded);
         $this->assertNotEmpty($decoded['value']);
+        $this->assertSame('Default', $decoded['text'] ?? null);
+        $this->assertEquals(1, $decoded['week'] ?? null);
+        $this->assertEquals(31, $decoded['value']['currentDungeonIdx']);
+        $this->assertCount(10, $decoded['value']['pulls']);
+    }
+
+    #[Test]
+    #[Group('UsesLua')]
+    public function decode_givenEncodedPreset_roundTripsIt(): void
+    {
+        // Arrange
+        $preset = [
+            'text'  => 'Round trip',
+            'week'  => 3,
+            'value' => ['currentDungeonIdx' => 17, 'teeming' => false],
+        ];
+        $string = $this->codec->encode($preset);
+
+        // Act
+        $decoded = $this->codec->decode($string);
+
+        // Assert
+        $this->assertTrue($this->codec->appliesTo($string));
+        $this->assertEquals($preset, $decoded);
+    }
+
+    #[Test]
+    #[Group('UsesLua')]
+    public function decode_givenCorruptString_throwsLegacyMDTDecodeException(): void
+    {
+        // Assert - cli_weakauras_parser's own error becomes the message
+        $this->expectException(LegacyMDTDecodeException::class);
+        $this->expectExceptionMessage('Failed to decompress');
+
+        // Act
+        $this->codec->decode('!garbage');
     }
 
     #[Test]

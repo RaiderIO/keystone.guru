@@ -35,13 +35,19 @@ class MDTBaseServiceLoggingTest extends PublicTestCase
         $logManager
             ->expects($this->once())
             ->method('log')
-            ->with(Level::Error->getName(), $this->anything(), $this->anything());
+            ->with(
+                Level::Error->getName(),
+                $this->stringContains('decodeFailed'),
+                $this->callback(static fn(array $context) => ($context['string'] ?? null) === '!abc' &&
+                    ($context['exceptionClass'] ?? null) === 'RuntimeException' &&
+                    ($context['message'] ?? null) === 'Failed to decompress data'),
+            );
 
         // Act
         (new MDTBaseServiceLogging())->decodeFailed('!abc', 'RuntimeException', 'Failed to decompress data');
 
         // Assert
-        // Already checked by the mock expectation
+        // Already checked by the mock expectation - the exceptionClass/message context keys fingerprint the Sentry issue
     }
 
     /**
@@ -59,7 +65,13 @@ class MDTBaseServiceLoggingTest extends PublicTestCase
         $logManager
             ->expects($this->once())
             ->method('log')
-            ->with(Level::Warning->getName(), $this->anything(), $this->anything());
+            ->with(
+                Level::Warning->getName(),
+                $this->stringContains('decodeInvalidStringFailed'),
+                $this->callback(static fn(array $context) => ($context['string'] ?? null) === 'garbage' &&
+                    ($context['exceptionClass'] ?? null) === 'RuntimeException' &&
+                    ($context['message'] ?? null) === 'Invalid prefix'),
+            );
 
         // Act
         (new MDTBaseServiceLogging())->decodeInvalidStringFailed('garbage', 'RuntimeException', 'Invalid prefix');

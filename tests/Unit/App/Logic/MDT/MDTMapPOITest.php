@@ -6,9 +6,11 @@ use App\Logic\MDT\Entity\MDTMapPOI;
 use App\Logic\MDT\Entity\MDTMapPOITemplate;
 use App\Logic\MDT\Entity\MDTMapPOIType;
 use Exception;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
+#[Group('MDT')]
 final class MDTMapPOITest extends TestCase
 {
     #[Test]
@@ -210,5 +212,64 @@ final class MDTMapPOITest extends TestCase
         $this->assertSame('RIGHT', $result['textAnchor']);
         $this->assertSame('LEFT', $result['textAnchorTo']);
         $this->assertSame($raw['info'], $result['info']);
+    }
+
+    #[Test]
+    public function construct_givenUnknownTemplate_throwsException(): void
+    {
+        // Arrange
+        $raw = [
+            'template' => 'UnknownTemplateThatDoesNotExist',
+            'type'     => 'graveyard',
+            'x'        => 0.0,
+            'y'        => 0.0,
+        ];
+
+        // Assert
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/Found new template/');
+
+        // Act
+        new MDTMapPOI(1, $raw);
+    }
+
+    #[Test]
+    public function toArray_givenItemPOIOnAnotherSubLevelWithItsOwnTemplate_includesAllFields(): void
+    {
+        // Arrange
+        $raw = [
+            'template'        => 'DeathReleasePinTemplate',
+            'type'            => 'nwItem',
+            'x'               => 12.5,
+            'y'               => -34.25,
+            'itemType'        => 2,
+            'itemIndex'       => 3,
+            'connectionIndex' => 4,
+        ];
+
+        // Act
+        $poi    = new MDTMapPOI(3, $raw);
+        $result = $poi->toArray();
+
+        // Assert
+        $this->assertSame(3, $poi->getSubLevel());
+        $this->assertSame(MDTMapPOITemplate::DeathReleasePin, $poi->getTemplate());
+        $this->assertSame([
+            'subLevel'        => 3,
+            'template'        => 'DeathReleasePinTemplate',
+            'type'            => 'nwItem',
+            'itemType'        => 2,
+            'itemIndex'       => 3,
+            'target'          => null,
+            'direction'       => null,
+            'connectionIndex' => 4,
+            'index'           => null,
+            'textAnchor'      => null,
+            'textAnchorTo'    => null,
+            'info'            => null,
+            'sizeMult'        => null,
+            'x'               => 12.5,
+            'y'               => -34.25,
+        ], $result);
     }
 }

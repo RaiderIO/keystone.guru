@@ -298,6 +298,7 @@ final class MDT2CodecTest extends TestCase
 
         // Assert
         $this->expectException(MDT2DecodeException::class);
+        $this->expectExceptionMessageMatches('/Unsupported CBOR item/');
 
         // Act
         $this->codec->decode($this->buildMdt2String($cbor));
@@ -311,6 +312,7 @@ final class MDT2CodecTest extends TestCase
 
         // Assert
         $this->expectException(MDT2DecodeException::class);
+        $this->expectExceptionMessageMatches('/Indefinite-length/');
 
         // Act
         $this->codec->decode($this->buildMdt2String($cbor));
@@ -395,6 +397,7 @@ final class MDT2CodecTest extends TestCase
 
         // Assert
         $this->expectException(MDT2DecodeException::class);
+        $this->expectExceptionMessageMatches('/root is not a map/');
 
         // Act
         $this->codec->decode($this->buildMdt2String($cbor));
@@ -516,25 +519,26 @@ final class MDT2CodecTest extends TestCase
 
     #[Test]
     #[DataProvider('decode_givenCorruptString_throwsMDT2DecodeException_Provider')]
-    public function decode_givenCorruptString_throwsMDT2DecodeException(string $string): void
+    public function decode_givenCorruptString_throwsMDT2DecodeException(string $string, string $expectedMessage): void
     {
         // Assert
         $this->expectException(MDT2DecodeException::class);
+        $this->expectExceptionMessage($expectedMessage);
 
         // Act
         $this->codec->decode($string);
     }
 
     /**
-     * @return array<string, array{string}>
+     * @return array<string, array{string, string}>
      */
     public static function decode_givenCorruptString_throwsMDT2DecodeException_Provider(): array
     {
         return [
-            'no prefix'       => ['!fBcBcAWnPXhz'],
-            'invalid base64'  => ['!~MDT2~%%%not-base64%%%'],
-            'invalid deflate' => [sprintf('!~MDT2~%s', base64_encode('this is not a deflate stream'))],
-            'truncated cbor'  => [sprintf('!~MDT2~%s', base64_encode(gzdeflate("\xA5\x41\x61", 9)))],
+            'no prefix'       => ['!fBcBcAWnPXhz', 'does not start with'],
+            'invalid base64'  => ['!~MDT2~%%%not-base64%%%', 'Unable to decode Base64'],
+            'invalid deflate' => [sprintf('!~MDT2~%s', base64_encode('this is not a deflate stream')), 'Unable to inflate'],
+            'truncated cbor'  => [sprintf('!~MDT2~%s', base64_encode(gzdeflate("\xA5\x41\x61", 9))), 'Truncated CBOR payload'],
         ];
     }
 

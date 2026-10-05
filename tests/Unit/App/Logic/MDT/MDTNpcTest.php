@@ -51,6 +51,85 @@ final class MDTNpcTest extends TestCase
         $this->assertFalse($npc->isBoss());
     }
 
+    #[Test]
+    public function getClones_givenCloneWithoutSublevel_returnsItOnSublevelOne(): void
+    {
+        // Arrange
+        $raw           = $this->minimalRawMdtNpc();
+        $raw['clones'] = [
+            1 => ['x' => 1.0, 'y' => 2.0],
+            2 => ['x' => 3.0, 'y' => 4.0, 'sublevel' => 2],
+        ];
+
+        // Act
+        $clones = new MDTNpc(1, $raw)->getClones();
+
+        // Assert
+        $this->assertSame(1, $clones[1]['sublevel'] ?? null);
+        $this->assertSame(2, $clones[2]['sublevel']);
+    }
+
+    #[Test]
+    public function getClones_givenClonesOutOfOrder_returnsThemSortedByIndex(): void
+    {
+        // Arrange - Lua hands tables over in no particular order
+        $raw           = $this->minimalRawMdtNpc();
+        $raw['clones'] = [
+            3 => ['x' => 5.0, 'y' => 6.0, 'sublevel' => 1],
+            1 => ['x' => 1.0, 'y' => 2.0, 'sublevel' => 1],
+            2 => ['x' => 3.0, 'y' => 4.0, 'sublevel' => 1],
+        ];
+
+        // Act
+        $clones = new MDTNpc(1, $raw)->getClones();
+
+        // Assert
+        $this->assertSame([1, 2, 3], array_keys($clones));
+    }
+
+    #[Test]
+    public function getCountTeeming_givenNoTeemingCount_returnsMinusOne(): void
+    {
+        // Arrange
+        $raw = $this->minimalRawMdtNpc();
+
+        // Act
+        $countTeeming = new MDTNpc(1, $raw)->getCountTeeming();
+
+        // Assert
+        $this->assertSame(-1, $countTeeming);
+    }
+
+    #[Test]
+    public function getCountTeeming_givenTeemingCount_returnsIt(): void
+    {
+        // Arrange
+        $raw                 = $this->minimalRawMdtNpc();
+        $raw['teemingCount'] = 7;
+
+        // Act
+        $countTeeming = new MDTNpc(1, $raw)->getCountTeeming();
+
+        // Assert
+        $this->assertSame(7, $countTeeming);
+    }
+
+    #[Test]
+    public function isValid_givenEmissary_returnsFalse(): void
+    {
+        // Arrange
+        $raw       = $this->minimalRawMdtNpc();
+        $raw['id'] = 155432;
+
+        // Act
+        $npc = new MDTNpc(1, $raw);
+
+        // Assert
+        $this->assertTrue($npc->isEmissary());
+        $this->assertFalse($npc->isValid());
+        $this->assertTrue(new MDTNpc(1, $this->minimalRawMdtNpc())->isValid());
+    }
+
     /**
      * @return array<string, mixed>
      */

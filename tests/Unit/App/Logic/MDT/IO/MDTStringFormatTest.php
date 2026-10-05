@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\App\Logic\MDT\IO;
 
+use App\Logic\MDT\IO\LegacyMDTCodec;
+use App\Logic\MDT\IO\MDT2Codec;
 use App\Logic\MDT\IO\MDTStringFormat;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -72,5 +74,17 @@ final class MDTStringFormatTest extends TestCase
             'random text'                            => ['this_is_not_a_valid_mdt_string', false],
             'empty string'                           => ['', false],
         ];
+    }
+
+    #[Test]
+    public function codec_givenEachFormat_returnsThatFormatsCodec(): void
+    {
+        // Act
+        $legacyCodec = MDTStringFormat::Legacy->codec();
+        $mdt2Codec   = MDTStringFormat::MDT2->codec();
+
+        // Assert
+        $this->assertInstanceOf(LegacyMDTCodec::class, $legacyCodec);
+        $this->assertInstanceOf(MDT2Codec::class, $mdt2Codec);
     }
 }

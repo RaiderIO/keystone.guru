@@ -115,6 +115,40 @@ final class MDTMappingExportPreservedContentTest extends TestCase
     }
 
     #[Test]
+    public function getMatchingClone_givenAnEnemyThatOnlyMovedAlongX_returnsNull(): void
+    {
+        // Arrange
+        $preservedContent = $this->getPreservedContent();
+
+        // Act
+        $clone = $preservedContent->getMatchingClone(134600, 589.2, -277.6);
+
+        // Assert - 0.09 on x alone is past the tolerance, even with y spot on
+        $this->assertNull($clone);
+    }
+
+    #[Test]
+    public function getEnemyValue_givenAnEmptyTable_returnsNull(): void
+    {
+        // Arrange - `{}` carries nothing to preserve, the same as the key being absent
+        $preservedContent = MDTMappingExportPreservedContent::fromParsedAssignments(
+            new LuaTableParser('MDT.dungeonEnemies[dungeonIndex] = {
+  [1] = {
+    ["id"] = 134600,
+    ["spells"] = {},
+  },
+};')->parseDungeonIndexAssignments(),
+        );
+
+        // Act
+        $spells = $preservedContent->getEnemyValue(134600, 'spells');
+
+        // Assert
+        $this->assertNull($spells);
+        $this->assertSame('134600', (string)$preservedContent->getEnemyValue(134600, 'id'));
+    }
+
+    #[Test]
     public function getMapPOIs_givenAnEmptyTable_returnsAnEmptyArrayRatherThanNull(): void
     {
         // Arrange - `= {};` means MDT deliberately has no POIs, which is not the same as having no table

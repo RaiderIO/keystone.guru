@@ -172,4 +172,31 @@ final class ConversionMapPOIMapIconTypeTest extends TestCase
             );
         }
     }
+
+    #[Test]
+    public function isMDTMapPOIUnhandled_givenTypeWithAMapIconType_returnsFalse(): void
+    {
+        // Arrange
+        $mdtMapPOI = new MDTMapPOI(1, ['type' => 'graveyard', 'x' => 1.0, 'y' => 2.0]);
+
+        // Act
+        $unhandled = Conversion::isMDTMapPOIUnhandled($mdtMapPOI);
+
+        // Assert
+        $this->assertFalse($unhandled);
+    }
+
+    #[Test]
+    public function isMDTMapPOIUnhandled_givenTypeWithoutAMapIconType_returnsTrue(): void
+    {
+        // Arrange - not a generic item, not part of MDT's own UI, and nothing we import it as
+        $mdtMapPOI = new MDTMapPOI(1, ['type' => 'ironDocksIronStar', 'x' => 1.0, 'y' => 2.0]);
+
+        // Act
+        $unhandled = Conversion::isMDTMapPOIUnhandled($mdtMapPOI);
+
+        // Assert
+        $this->assertNull(Conversion::convertMDTMapPOIToMapIconTypeKey($mdtMapPOI));
+        $this->assertTrue($unhandled);
+    }
 }
