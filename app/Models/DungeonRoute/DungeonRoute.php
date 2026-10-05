@@ -1676,7 +1676,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         static::deleting(static function (DungeonRoute $dungeonRoute) {
             $dungeonRoute->load([
                 'dungeonRouteThumbnails',
-                'dungeonRouteThumbnailJobs',
+                'dungeonRouteThumbnailJobs.file',
                 'livesessions',
             ]);
 
@@ -1703,9 +1703,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 $dungeonRouteThumbnail->delete();
             }
 
-            // Delete all API thumbnail jobs/thumbnails generated for it
+            // Delete all API thumbnail jobs and the thumbnails generated for them
             foreach ($dungeonRoute->dungeonRouteThumbnailJobs as $dungeonRouteThumbnailJob) {
-                $dungeonRouteThumbnailJob->expire();
+                $dungeonRouteThumbnailJob->file?->delete();
+                $dungeonRouteThumbnailJob->delete();
             }
 
             // Dungeonroute settings + mapping related items. Tags are deliberately NOT part of this -
@@ -1722,6 +1723,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 $liveSession->delete();
             }
             $dungeonRoute->mdtImport()->delete();
+            $dungeonRoute->scheduledPublish()->delete();
             $dungeonRoute->metrics()->delete();
             $dungeonRoute->metricAggregations()->delete();
         });
