@@ -478,7 +478,8 @@
 }
 
 /* An abbreviated tile shows its full name in the abbreviation's place on hover and keyboard focus, the way the
-   seasonless strip's readout does. Three lines still fit the shrunk header's 64px tile. */
+   seasonless strip's readout does, set like the abbreviation. Three lines fit the full header's tile, two the
+   shrunk header's 64px one. */
 .list_dungeon .dungeon_card_dungeon_name,
 .list_dungeon .dungeon_card_dungeon_full_name {
     transition: opacity 0.15s ease;
@@ -492,11 +493,16 @@
     overflow: hidden;
     overflow-wrap: anywhere;
     padding: 0 0.375rem;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    line-height: 1.15;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.2;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.6);
     opacity: 0;
+}
+
+.ksg-header--shrink .list_dungeon .dungeon_card_dungeon_full_name {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
 }
 
 /* Clear of the ease-tier badge in the top right corner, on both sides so the name stays centred */
