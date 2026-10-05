@@ -33,16 +33,6 @@ final class MDTMappingImportVoidscarArenaEncounterIdTest extends PublicTestCase
         $atroxus  = Npc::query()->findOrFail(239008);
         $charonus = Npc::query()->findOrFail(239167);
 
-        $originalEncounterIds = [
-            $tazrah->id   => $tazrah->encounter_id,
-            $atroxus->id  => $atroxus->encounter_id,
-            $charonus->id => $charonus->encounter_id,
-        ];
-
-        // The seeder already ships the distinct ids, so start from the collision the upstream bug produced:
-        // only the import writing MDT's encounter_id can get each boss its own id back
-        Npc::query()->whereIn('id', array_keys($originalEncounterIds))->update(['encounter_id' => 2791]);
-
         $mappingImportService = $this->app->make(MDTMappingImportServiceInterface::class);
 
         /** @var GameVersion $retailGameVersion */
@@ -54,7 +44,17 @@ final class MDTMappingImportVoidscarArenaEncounterIdTest extends PublicTestCase
             'dungeon'            => $dungeon,
         ]);
 
+        $originalEncounterIds = [
+            $tazrah->id   => $tazrah->encounter_id,
+            $atroxus->id  => $atroxus->encounter_id,
+            $charonus->id => $charonus->encounter_id,
+        ];
+
         try {
+            // The seeder already ships the distinct ids, so start from the collision the upstream bug produced:
+            // only the import writing MDT's encounter_id can get each boss its own id back
+            Npc::query()->whereIn('id', array_keys($originalEncounterIds))->update(['encounter_id' => 2791]);
+
             // Act
             $failures = [];
             $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $retailGameVersion, $failures);

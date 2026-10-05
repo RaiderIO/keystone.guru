@@ -90,13 +90,14 @@ final class MDTMappingImportCuratedNpcDataTest extends PublicTestCase
 
         $infernal = Npc::query()->findOrFail(self::INFERNAL_NPC_ID);
 
-        // A display id MDT does not report: any update of this row from MDT's data overwrites it
-        $sentinelDisplayId = $mdtNpc->getDisplayId() + 1;
-        Npc::query()->whereKey($infernal->id)->update(['display_id' => $sentinelDisplayId]);
-
         $mappingImportService = $this->app->make(MDTMappingImportServiceInterface::class);
 
+        // A display id MDT does not report: any update of this row from MDT's data overwrites it
+        $sentinelDisplayId = $mdtNpc->getDisplayId() + 1;
+
         try {
+            Npc::query()->whereKey($infernal->id)->update(['display_id' => $sentinelDisplayId]);
+
             // Act
             $failures = [];
             $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $retailGameVersion, $failures);
