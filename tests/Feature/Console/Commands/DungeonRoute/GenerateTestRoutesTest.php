@@ -86,6 +86,64 @@ final class GenerateTestRoutesTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenUnknownAuthor_failsNamingItWithoutCreatingRoutes(): void
+    {
+        // Arrange
+        $dungeon         = $this->getDungeonWithCurrentMappingVersionWithEnemies();
+        $unknownAuthorId = (int)User::query()->max('id') + 1;
+
+        // Act
+        $result = $this->artisan('dungeonroute:generatetest', [
+            '--dungeon' => [$dungeon->key],
+            '--count'   => 1,
+            '--author'  => (string)$unknownAuthorId,
+        ]);
+
+        // Assert
+        $result->expectsOutputToContain(sprintf('No user with id %d.', $unknownAuthorId))->assertFailed();
+        $result->run();
+        $this->assertFalse(DungeonRoute::query()->where('id', '>', $this->maxDungeonRouteIdBefore)->exists());
+    }
+
+    #[Test]
+    public function handle_givenAuthorWithTrailingNonDigits_failsNamingItWithoutCreatingRoutes(): void
+    {
+        // Arrange - an integer cast would read this as user 1, the seeded admin
+        $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
+
+        // Act
+        $result = $this->artisan('dungeonroute:generatetest', [
+            '--dungeon' => [$dungeon->key],
+            '--count'   => 1,
+            '--author'  => '1abc',
+        ]);
+
+        // Assert
+        $result->expectsOutputToContain('No user with id 1abc.')->assertFailed();
+        $result->run();
+        $this->assertFalse(DungeonRoute::query()->where('id', '>', $this->maxDungeonRouteIdBefore)->exists());
+    }
+
+    #[Test]
+    public function handle_givenUnknownPublishedState_failsNamingItWithoutCreatingRoutes(): void
+    {
+        // Arrange
+        $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
+
+        // Act
+        $result = $this->artisan('dungeonroute:generatetest', [
+            '--dungeon'         => [$dungeon->key],
+            '--count'           => 1,
+            '--published-state' => 'not_a_published_state',
+        ]);
+
+        // Assert
+        $result->expectsOutputToContain('Unknown published state not_a_published_state.')->assertFailed();
+        $result->run();
+        $this->assertFalse(DungeonRoute::query()->where('id', '>', $this->maxDungeonRouteIdBefore)->exists());
+    }
+
+    #[Test]
     public function handle_givenDeleteWithAuthor_deletesOnlyThatAuthorsGeneratedRoutes(): void
     {
         // Arrange
