@@ -8,6 +8,8 @@ use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\File;
 use Mockery;
 use Mockery\Expectation;
@@ -31,6 +33,12 @@ final class DownloadCombatLogRunsCommandTest extends PublicTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // The first test of a process migrates in setUp(), which builds the Artisan application and constructs every
+        // command with the services bound at that point - drop it so this test's own bindings reach the constructor
+        /** @var ConsoleKernel $consoleKernel */
+        $consoleKernel = $this->app->make(ConsoleKernelContract::class);
+        $consoleKernel->setArtisan(null);
 
         $this->season        = Season::query()->firstOrFail();
         $this->outputDir     = sprintf('test-downloadruns-%s', uniqid());
@@ -131,6 +139,86 @@ final class DownloadCombatLogRunsCommandTest extends PublicTestCase
             ->expectsOutputToContain('runs_ok=0 runs_failed=1 files=0');
     }
 
+    #[Test]
+    public function handle_givenASegmentThatIsNotACombatLog_deletesItAndCountsTheRunAsFailed(): void
+    {
+        // Arrange - an error document served with a 200
+        $runId = 5003;
+
+        $raiderIOService = $this->mockSegmentsForRun($runId, [
+            new CombatLogSegment(id: 1, type: 'part', downloadUrl: 'https://example.test/logs/part1.txt.gz?sig=abc'),
+        ]);
+
+        $command = $this->stubbedDownloadCommand(
+            $raiderIOService,
+            static fn(string $downloadUrl, string $filePath): bool => file_put_contents($filePath, "<Error><Code>AccessDenied</Code></Error>\n") !== false,
+        );
+        app()->instance(DownloadCombatLogRunsCommand::class, $command);
+
+        // Act
+        $this->artisan('combatlog:downloadruns', [
+            '--run'        => [$runId],
+            '--output-dir' => $this->outputDir,
+        ])
+            ->assertSuccessful()
+            ->expectsOutputToContain(sprintf('Run %d segment 1 — downloaded file is not a combat log', $runId))
+            ->expectsOutputToContain('runs_ok=0 runs_failed=1 files=0');
+
+        // Assert
+        $this->assertFileDoesNotExist(sprintf('%s/run_%d_segment_1.txt', $this->outputDirPath, $runId));
+    }
+
+    #[Test]
+    public function handle_givenOneSegmentDownloadFails_countsTheRunAsFailedAndKeepsTheOtherSegments(): void
+    {
+        // Arrange
+        $runId = 5004;
+
+        $raiderIOService = $this->mockSegmentsForRun($runId, [
+            new CombatLogSegment(id: 1, type: 'part', downloadUrl: 'https://example.test/logs/part1.txt.gz?sig=abc'),
+            new CombatLogSegment(id: 2, type: 'part', downloadUrl: 'https://example.test/logs/part2.txt.gz?sig=def'),
+        ]);
+
+        $command = $this->stubbedDownloadCommand(
+            $raiderIOService,
+            static fn(string $downloadUrl, string $filePath): bool => !str_contains($downloadUrl, 'part1') &&
+                file_put_contents($filePath, "fixture-combat-log-content\n") !== false,
+        );
+        app()->instance(DownloadCombatLogRunsCommand::class, $command);
+
+        // Act
+        $this->artisan('combatlog:downloadruns', [
+            '--run'        => [$runId],
+            '--output-dir' => $this->outputDir,
+        ])
+            ->assertSuccessful()
+            ->expectsOutputToContain(sprintf('Run %d segment 1 — download failed', $runId))
+            ->expectsOutputToContain('runs_ok=0 runs_failed=1 files=1');
+
+        // Assert
+        $this->assertFileDoesNotExist(sprintf('%s/run_%d_segment_1.txt', $this->outputDirPath, $runId));
+        $this->assertFileExists(sprintf('%s/run_%d_segment_2.txt', $this->outputDirPath, $runId));
+    }
+
+    /**
+     * @param array<int, CombatLogSegment> $segments
+     */
+    private function mockSegmentsForRun(int $runId, array $segments): RaiderIOApiServiceInterface
+    {
+        $raiderIOServiceMock = Mockery::mock(RaiderIOApiServiceInterface::class);
+        /** @var Expectation $expectation */
+        $expectation = $raiderIOServiceMock->shouldReceive('getCombatLogSegmentsForRun');
+        $expectation->once()
+            ->with($this->season, $runId)
+            ->andReturn(new CombatLogSegmentsResponse(sourceUserId: 1, segments: $segments));
+
+        /** @var RaiderIOApiServiceInterface $raiderIOService */
+        $raiderIOService = $raiderIOServiceMock;
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOService);
+
+        return $raiderIOService;
+    }
+
     /**
      * Builds the command with its network boundary (downloadSegmentToFile) stubbed to write a small local
      * fixture instead of performing a real curl request - the segment download URLs are presigned/short-lived
@@ -138,15 +226,17 @@ final class DownloadCombatLogRunsCommandTest extends PublicTestCase
      * constructor, which leaves the underlying Symfony Command uninitialized (it needs the signature-driven
      * setup `parent::__construct()` does), so the constructor is invoked explicitly here instead.
      */
-    private function stubbedDownloadCommand(RaiderIOApiServiceInterface $raiderIOService): DownloadCombatLogRunsCommand
-    {
+    private function stubbedDownloadCommand(
+        RaiderIOApiServiceInterface $raiderIOService,
+        ?callable                   $downloadSegmentToFile = null,
+    ): DownloadCombatLogRunsCommand {
         $command = $this->getMockBuilderPublic(DownloadCombatLogRunsCommand::class)
             ->setConstructorArgs([$raiderIOService, $this->seasonService])
             ->onlyMethods(['downloadSegmentToFile'])
             ->getMock();
 
         $command->method('downloadSegmentToFile')->willReturnCallback(
-            static fn(string $downloadUrl, string $filePath): bool => file_put_contents($filePath, "fixture-combat-log-content\n") !== false,
+            $downloadSegmentToFile ?? static fn(string $downloadUrl, string $filePath): bool => file_put_contents($filePath, "fixture-combat-log-content\n") !== false,
         );
 
         return $command;

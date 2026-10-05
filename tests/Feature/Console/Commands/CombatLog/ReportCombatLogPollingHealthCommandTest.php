@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Console\Commands\CombatLog;
 
+use App\Models\Telemetry\TelemetryMetric;
 use App\Service\CombatLog\CombatLogPollingHealthServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogPollingHealthSummary;
 use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
@@ -15,10 +16,27 @@ use Tests\TestCases\PublicTestCase;
 #[Group('CombatLog')]
 final class ReportCombatLogPollingHealthCommandTest extends PublicTestCase
 {
+    private int $telemetryMetricMaxIdBefore;
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->telemetryMetricMaxIdBefore = (int)TelemetryMetric::query()->max('id');
+    }
+
     #[\Override]
     protected function tearDown(): void
     {
         Carbon::setTestNow(null);
+
+        // Every run records its own duration through trackTime()
+        TelemetryMetric::query()
+            ->where('id', '>', $this->telemetryMetricMaxIdBefore)
+            ->where('measurement', TelemetryMetric::MEASUREMENT_SCHEDULER)
+            ->where('name', 'combatlog:reportpollinghealth')
+            ->delete();
 
         parent::tearDown();
     }
@@ -79,6 +97,32 @@ final class ReportCombatLogPollingHealthCommandTest extends PublicTestCase
 
         // Act + Assert
         $this->artisan('combatlog:reportpollinghealth', ['--hours-ago' => 3])->assertSuccessful();
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenHoursAgoZero_stillReportsOnTheWindowEndingInThePreviousHour(): void
+    {
+        // Arrange - the current hour is still being written to, whatever the option asks for
+        Carbon::setTestNow(Carbon::parse('2026-08-20 15:10:00'));
+
+        $reportedHour  = null;
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->method('getSummary')->willReturnCallback(function (Carbon $endHour) use (&$reportedHour): CombatLogPollingHealthSummary {
+            $reportedHour = $endHour->format('Y-m-d-H');
+
+            return $this->makeSummary(dispatched: 10, failures: 2);
+        });
+        $healthService->method('reportSummary')->willReturn(false);
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        // Act
+        $this->artisan('combatlog:reportpollinghealth', ['--hours-ago' => 0])->assertSuccessful();
+
+        // Assert
+        $this->assertSame('2026-08-20-14', $reportedHour);
     }
 
     /**

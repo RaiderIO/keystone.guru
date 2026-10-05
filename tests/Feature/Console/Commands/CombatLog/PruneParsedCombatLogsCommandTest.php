@@ -4,6 +4,7 @@ namespace Tests\Feature\Console\Commands\CombatLog;
 
 use App\Console\Commands\CombatLog\PruneParsedCombatLogsCommand;
 use App\Models\CombatLog\ParsedCombatLog;
+use App\Models\Telemetry\TelemetryMetric;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -16,6 +17,8 @@ final class PruneParsedCombatLogsCommandTest extends PublicTestCase
     /** @var array<int> */
     private array $createdIds = [];
 
+    private int $telemetryMetricMaxIdBefore;
+
     private function retentionDays(): int
     {
         $windowDays = (int)config('keystoneguru.raider_io.combat_log_polling.completed_at_window_days');
@@ -24,10 +27,25 @@ final class PruneParsedCombatLogsCommandTest extends PublicTestCase
     }
 
     #[\Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->telemetryMetricMaxIdBefore = (int)TelemetryMetric::query()->max('id');
+    }
+
+    #[\Override]
     protected function tearDown(): void
     {
         try {
             ParsedCombatLog::query()->whereIn('id', $this->createdIds)->delete();
+
+            // Every run records its own duration through trackTime()
+            TelemetryMetric::query()
+                ->where('id', '>', $this->telemetryMetricMaxIdBefore)
+                ->where('measurement', TelemetryMetric::MEASUREMENT_SCHEDULER)
+                ->where('name', 'combatlog:pruneparsedlogs')
+                ->delete();
         } finally {
             parent::tearDown();
         }

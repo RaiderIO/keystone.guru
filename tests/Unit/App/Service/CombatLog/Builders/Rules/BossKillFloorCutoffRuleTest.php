@@ -33,6 +33,19 @@ class BossKillFloorCutoffRuleTest extends PublicTestCase
     }
 
     #[Test]
+    public function appliesToDungeon_givenTheAzureVault_returnsTrue(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+
+        // Act
+        $result = $rule->appliesToDungeon($this->makeDungeon(DungeonKey::THE_AZURE_VAULT->value));
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    #[Test]
     public function appliesToDungeon_givenAnUnlistedDungeon_returnsFalse(): void
     {
         // Arrange

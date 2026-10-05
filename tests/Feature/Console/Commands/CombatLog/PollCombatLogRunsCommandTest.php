@@ -21,7 +21,9 @@ use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
@@ -66,6 +68,12 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // The first test of a process migrates in setUp(), which builds the Artisan application and constructs every
+        // command with the services bound at that point - drop it so this test's own bindings reach the constructor
+        /** @var ConsoleKernel $consoleKernel */
+        $consoleKernel = $this->app->make(ConsoleKernelContract::class);
+        $consoleKernel->setArtisan(null);
 
         $this->dungeon    = Dungeon::query()->whereNotNull('challenge_mode_id')->first();
         $this->spec       = CharacterClassSpecialization::query()->first();
@@ -868,6 +876,9 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
 
         $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
         $criteriaService->method('shouldParse')->willReturn(true);
+        // ProcessCombatLogSegments is unique per run, so a second dispatch never reaches the bus - the budget it
+        // would spend a second time does
+        $criteriaService->expects($this->once())->method('recordParsed');
         app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
 
         $this->mockRaiderIOApiService(spreadRuns: [$run], topRuns: [$run]);

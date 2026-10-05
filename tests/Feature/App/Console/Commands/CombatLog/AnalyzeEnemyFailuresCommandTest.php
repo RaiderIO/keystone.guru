@@ -67,6 +67,19 @@ final class AnalyzeEnemyFailuresCommandTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenMappingVersionOfAnotherDungeon_returnsFailure(): void
+    {
+        // Arrange
+        /** @var MappingVersion $otherMappingVersion */
+        $otherMappingVersion = MappingVersion::query()->where('dungeon_id', '!=', $this->dungeon->id)->firstOrFail();
+
+        // Act + Assert
+        $this->artisan('combatlog:analyzeenemyfailures', ['dungeon' => $this->dungeon->key, '--mapping-version' => $otherMappingVersion->id])
+            ->expectsOutputToContain(sprintf('No mapping version %d', $otherMappingVersion->id))
+            ->assertFailed();
+    }
+
+    #[Test]
     public function handle_givenUnknownFormat_returnsFailure(): void
     {
         $this->artisan('combatlog:analyzeenemyfailures', ['dungeon' => $this->dungeon->key, '--format' => 'xml'])

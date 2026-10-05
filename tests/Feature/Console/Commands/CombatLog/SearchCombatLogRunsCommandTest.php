@@ -4,12 +4,16 @@ namespace Tests\Feature\Console\Commands\CombatLog;
 
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
+use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Season;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Mockery;
 use Mockery\Expectation;
 use PHPUnit\Framework\Attributes\Group;
@@ -26,6 +30,12 @@ final class SearchCombatLogRunsCommandTest extends PublicTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // The first test of a process migrates in setUp(), which builds the Artisan application and constructs every
+        // command with the services bound at that point - drop it so this test's own bindings reach the constructor
+        /** @var ConsoleKernel $consoleKernel */
+        $consoleKernel = $this->app->make(ConsoleKernelContract::class);
+        $consoleKernel->setArtisan(null);
 
         $this->season = Season::query()->firstOrFail();
 
@@ -110,6 +120,66 @@ final class SearchCombatLogRunsCommandTest extends PublicTestCase
         // Act + Assert
         $this->artisan('combatlog:searchruns', ['--dungeon' => 'not-a-real-dungeon-key'])
             ->assertFailed();
+    }
+
+    #[Test]
+    public function handle_givenUnknownClassOption_returnsFailureWithoutSearching(): void
+    {
+        // Arrange
+        $searched = false;
+
+        $raiderIOServiceMock = Mockery::mock(RaiderIOApiServiceInterface::class);
+        /** @var Expectation $expectation */
+        $expectation = $raiderIOServiceMock->shouldReceive('searchAdvancedRuns');
+        $expectation->andReturnUsing(static function () use (&$searched): SearchAdvancedRunsResponse {
+            $searched = true;
+
+            return new SearchAdvancedRunsResponse([], 0);
+        });
+
+        /** @var RaiderIOApiServiceInterface $raiderIOService */
+        $raiderIOService = $raiderIOServiceMock;
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOService);
+
+        // Act
+        $this->artisan('combatlog:searchruns', ['--class' => ['not-a-real-class']])
+            ->expectsOutputToContain('Unknown --class "not-a-real-class"')
+            ->assertFailed();
+
+        // Assert
+        $this->assertFalse($searched);
+    }
+
+    #[Test]
+    public function handle_givenDungeonKeyOption_passesThatDungeonInFilter(): void
+    {
+        // Arrange
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::query()->where('key', DungeonKey::FREEHOLD->value)->firstOrFail();
+
+        $capturedFilter = null;
+
+        $raiderIOServiceMock = Mockery::mock(RaiderIOApiServiceInterface::class);
+        /** @var Expectation $expectation */
+        $expectation = $raiderIOServiceMock->shouldReceive('searchAdvancedRuns');
+        $expectation->once()
+            ->andReturnUsing(static function (SearchAdvancedRunsFilter $filter) use (&$capturedFilter): SearchAdvancedRunsResponse {
+                $capturedFilter = $filter;
+
+                return new SearchAdvancedRunsResponse([], 0);
+            });
+
+        /** @var RaiderIOApiServiceInterface $raiderIOService */
+        $raiderIOService = $raiderIOServiceMock;
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOService);
+
+        // Act
+        $this->artisan('combatlog:searchruns', ['--dungeon' => $dungeon->key])
+            ->assertSuccessful();
+
+        // Assert
+        $this->assertNotNull($capturedFilter);
+        $this->assertSame($dungeon->id, $capturedFilter->dungeon?->id);
     }
 
     #[Test]

@@ -162,6 +162,40 @@ class KingsRestDespawningEnemiesRuleTest extends PublicTestCase
     }
 
     /**
+     * Two of the three Council of Tribes bosses down is not the Council down - the party has not moved on yet.
+     */
+    #[Test]
+    public function onEnemyDied_givenAMinionOfZulDiedWithPartOfTheCouncilOfTribesDefeated_awardsNothing(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+        $rule->onEnemyDied(NpcId::AKAALI_THE_CONQUEROR->value, null);
+        $rule->onEnemyDied(NpcId::ZANAZAL_THE_WISE->value, null);
+
+        // Act
+        $result = $rule->onEnemyDied(NpcId::MINION_OF_ZUL->value, null);
+
+        // Assert
+        $this->assertEmpty($result);
+    }
+
+    #[Test]
+    public function onEnemyDied_givenAMinionOfZulDiedWithTheWholeCouncilOfTribesDefeated_awardsTheShadowOfZul(): void
+    {
+        // Arrange - the three bosses' own deaths, no totem
+        $rule = $this->makeRule();
+        $rule->onEnemyDied(NpcId::AKAALI_THE_CONQUEROR->value, null);
+        $rule->onEnemyDied(NpcId::ZANAZAL_THE_WISE->value, null);
+        $rule->onEnemyDied(NpcId::KULA_THE_BUTCHER->value, null);
+
+        // Act
+        $result = $rule->onEnemyDied(NpcId::MINION_OF_ZUL->value, null);
+
+        // Assert
+        $this->assertEquals([NpcId::SHADOW_OF_ZUL->value], $result);
+    }
+
+    /**
      * NpcId::MINION_OF_ZUL_EARLY_DUNGEON carries the name "Minion of Zul" as well, but is mapped in the early dungeon
      * packs rather than in the Shadow of Zul's own pack - killing it must not award anything.
      */
