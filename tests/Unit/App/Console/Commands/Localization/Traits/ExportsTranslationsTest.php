@@ -87,6 +87,29 @@ final class ExportsTranslationsTest extends TestCase
     }
 
     #[Test]
+    public function exportTranslations_givenIntegerValues_producesLoadableIntegersWithTrailingZeros(): void
+    {
+        // Arrange
+        $filePath = $this->prepareTestLocale();
+        $data     = [
+            10           => 10,
+            'pageLength' => 250,
+            'zero'       => 0,
+            'negative'   => -100,
+        ];
+
+        try {
+            // Act
+            $this->runExport($data);
+
+            // Assert
+            $this->assertSame($data, include $filePath);
+        } finally {
+            $this->cleanUpTestLocale();
+        }
+    }
+
+    #[Test]
     public function exportTranslations_givenPreserveExisting_keepsExistingKeysAndOverwritesGivenOnes(): void
     {
         // Arrange

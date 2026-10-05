@@ -146,7 +146,10 @@ trait ExportsTranslations
         if (is_string($value)) {
             return "'" . $this->escapePhpSingleQuoted($value) . "'";
         }
-        if (is_int($value) || is_float($value)) {
+        if (is_int($value)) {
+            return (string)$value;
+        }
+        if (is_float($value)) {
             // Use var_export for numeric edge cases (INF, NAN) but strip "array" forms
             return rtrim(rtrim(var_export($value, true), '0'), '.') ?: '0';
         }
