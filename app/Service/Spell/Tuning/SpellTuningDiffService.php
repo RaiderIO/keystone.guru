@@ -109,9 +109,9 @@ class SpellTuningDiffService implements SpellTuningDiffServiceInterface
             return [];
         }
 
-        // A generic placeholder record has no player-visible numbers or icon; a "change" on it is
-        // ingest noise, not a tuning change
-        if ($old->isPlaceholder() || $new->isPlaceholder()) {
+        // A generic placeholder record has no player-visible numbers or icon; a "change" between two
+        // of them is ingest noise. A spell turning into or out of one is a real change and falls through.
+        if ($old->isPlaceholder() && $new->isPlaceholder()) {
             return [];
         }
 
