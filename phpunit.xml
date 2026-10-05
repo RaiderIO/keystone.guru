@@ -35,6 +35,8 @@
         <!-- No test may ever reach the real error tracker, full stop. -->
         <env name="SENTRY_LARAVEL_DSN" value="" force="true"/>
         <env name="SENTRY_DSN" value="" force="true"/>
+        <!-- No test may ever post to the real Discord log channel either. -->
+        <env name="APP_LOG_DISCORD_WEBHOOK" value="" force="true"/>
         <!-- No test may ever send real mail, full stop - a developer's local .env can carry a real Mailgun secret. -->
         <env name="MAIL_DRIVER" value="log" force="true"/>
         <env name="APP_SERVICES_CACHE" value="/tmp/phpunit_services.php"/>

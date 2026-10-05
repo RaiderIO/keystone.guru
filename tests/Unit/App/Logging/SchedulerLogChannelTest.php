@@ -19,13 +19,12 @@ final class SchedulerLogChannelTest extends PublicTestCase
     #[Test]
     public function discordChannel_givenEmptyWebhook_resolvesToValidChannel(): void
     {
-        // Arrange - a configured 'url' means a webhook is set, which is not the case this test guards
-        $discordConfig = config('logging.channels.discord');
-        if (array_key_exists('url', $discordConfig)) {
-            self::markTestSkipped('A discord webhook is configured; this test covers the empty-webhook default.');
-        }
+        // Arrange - phpunit.xml pins APP_LOG_DISCORD_WEBHOOK empty
 
-        // Act & Assert
+        // Act
+        $discordConfig = config('logging.channels.discord');
+
+        // Assert
         self::assertArrayHasKey('driver', $discordConfig, 'discord must be a valid channel even without a webhook.');
     }
 

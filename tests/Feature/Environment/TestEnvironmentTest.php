@@ -74,6 +74,19 @@ final class TestEnvironmentTest extends TestCase
         $this->assertEmpty($dsn, 'No test may reach the real error tracker - a DSN resolved here means events are being sent');
     }
 
+    #[Test]
+    public function discordLogWebhook_givenTestRun_isEmpty(): void
+    {
+        // Arrange - pinned empty the same way as the Sentry DSN above, and bypassed the same way by a webhook in
+        // the process environment
+
+        // Act
+        $discordConfig = config('logging.channels.discord');
+
+        // Assert
+        $this->assertArrayNotHasKey('url', $discordConfig, 'No test may post to the real Discord log channel - a webhook resolved here means log lines are being sent');
+    }
+
     /**
      * @return array<string, array{string, string}>
      */
