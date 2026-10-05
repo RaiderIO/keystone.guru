@@ -5,6 +5,7 @@ namespace Tests\Unit\Database\Seeders;
 use App\Models\RaidMarker;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionMethod;
@@ -30,6 +31,28 @@ final class DatabaseSeederTest extends TestCase
 
         // Assert
         $this->assertTrue($result);
+    }
+
+    #[Test]
+    public function cleanupTempTableForModel_givenAnExistingTempTable_dropsIt(): void
+    {
+        // Arrange
+        $tempTable = DatabaseSeeder::getTempTableName(RaidMarker::class);
+        DB::statement(sprintf('DROP TABLE IF EXISTS %s;', $tempTable));
+        DB::statement(sprintf('CREATE TABLE %s LIKE %s;', $tempTable, (new RaidMarker())->getTable()));
+
+        $method = new ReflectionMethod(DatabaseSeeder::class, 'cleanupTempTableForModel');
+
+        try {
+            // Act
+            $result = $method->invoke(new DatabaseSeeder(), RaidMarker::class);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertFalse(Schema::hasTable($tempTable));
+        } finally {
+            DB::statement(sprintf('DROP TABLE IF EXISTS %s;', $tempTable));
+        }
     }
 
     #[Test]

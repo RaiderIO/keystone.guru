@@ -84,6 +84,65 @@ final class RepointDungeonRoutesOffRemovedRetailMappingVersionsTest extends Publ
         ];
     }
 
+    #[Test]
+    public function up_givenRoutesOnASurvivingVersionOnNoVersionAndOnAnotherDungeon_repointsOnlyTheOneWithoutAVersion(): void
+    {
+        // Arrange
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::query()->where('key', 'mawofsouls')->firstOrFail();
+        /** @var Dungeon $otherDungeon */
+        $otherDungeon = Dungeon::query()->where('key', '!=', 'mawofsouls')->where('key', '!=', 'cathedralofeternalnight')->firstOrFail();
+        /** @var GameVersion $legionRemix */
+        $legionRemix             = GameVersion::query()->where('key', GameVersion::GAME_VERSION_LEGION_REMIX)->firstOrFail();
+        $removedMappingVersionId = MappingVersion::query()->max('id') + 1000;
+
+        DB::beginTransaction();
+
+        try {
+            MappingVersion::query()->where('dungeon_id', $dungeon->id)->update(['game_version_id' => $legionRemix->id]);
+
+            $currentMappingVersion = $dungeon->reloadMappingVersions()->getCurrentMappingVersionForGameVersion($legionRemix);
+            /** @var MappingVersion $olderMappingVersion */
+            $olderMappingVersion = MappingVersion::query()
+                ->where('dungeon_id', $dungeon->id)
+                ->whereKeyNot($currentMappingVersion->id)
+                ->firstOrFail();
+
+            $routeOnOlderVersion = DungeonRoute::factory()->create([
+                'dungeon_id'         => $dungeon->id,
+                'mapping_version_id' => $olderMappingVersion->id,
+            ]);
+            $routeWithoutVersion = DungeonRoute::factory()->create([
+                'dungeon_id'         => $dungeon->id,
+                'mapping_version_id' => $currentMappingVersion->id,
+            ]);
+            DungeonRoute::query()->whereKey($routeWithoutVersion->id)->update(['mapping_version_id' => null]);
+            $routeOnOtherDungeon = DungeonRoute::factory()->create([
+                'dungeon_id'         => $otherDungeon->id,
+                'mapping_version_id' => $removedMappingVersionId,
+            ]);
+
+            // Act
+            $migration = require database_path(self::MIGRATION);
+            $migration->up();
+
+            // Assert
+            $this->assertSame($currentMappingVersion->id, $routeWithoutVersion->fresh()->mapping_version_id);
+            $this->assertSame(
+                $olderMappingVersion->id,
+                $routeOnOlderVersion->fresh()->mapping_version_id,
+                'A route on a surviving mapping version keeps it.',
+            );
+            $this->assertSame(
+                $removedMappingVersionId,
+                $routeOnOtherDungeon->fresh()->mapping_version_id,
+                'Routes on other dungeons are left alone.',
+            );
+        } finally {
+            DB::rollBack();
+        }
+    }
+
     /**
      * The whole point of the repair: after it, nothing is left pointing at a mapping version that the
      * seeder no longer creates. Meaningful against a production-like database; on a freshly seeded one it

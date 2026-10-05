@@ -4,6 +4,8 @@ namespace Tests\Feature\Console\Commands\MapContext;
 
 use App\Console\Commands\MapContext\MakeMapContextDungeon;
 use App\Models\Dungeon;
+use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\OutputStyle;
@@ -66,6 +68,37 @@ final class ResolvesMapContextScopeTest extends PublicTestCase
                 ->unique()
                 ->values()
                 ->all(),
+            $result->values()->all(),
+        );
+    }
+
+    #[Test]
+    public function resolveDungeonIdsForScope_givenPriorityAndASeasonOnANonSeasonalGameVersion_leavesItsDungeonsOut(): void
+    {
+        // Arrange - every active game version's expansion gets a season from the stub; only the ones on a
+        // game version with seasons may count. TWW S1/S2 have disjoint dungeon rosters.
+        $seasonalSeason    = Season::find(Season::SEASON_TWW_S1);
+        $nonSeasonalSeason = Season::find(Season::SEASON_TWW_S2);
+
+        $activeGameVersions        = GameVersion::active()->get();
+        $seasonalExpansionIds      = $activeGameVersions->where('has_seasons', true)->pluck('expansion_id');
+        $nonSeasonalGameVersionIds = $activeGameVersions->where('has_seasons', false)->pluck('id');
+        $this->assertNotEmpty($seasonalExpansionIds);
+        $this->assertNotEmpty($nonSeasonalGameVersionIds, 'Precondition: an active game version without seasons exists.');
+
+        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
+        $seasonService->method('getCurrentSeason')->willReturnCallback(
+            static fn(Expansion $expansion): Season => $seasonalExpansionIds->contains($expansion->id) ? $seasonalSeason : $nonSeasonalSeason,
+        );
+        $seasonService->method('getNextSeasonOfExpansion')->willReturn(null);
+
+        // Act
+        $result = $this->resolveScope('priority', $seasonService);
+
+        // Assert
+        $this->assertNotNull($result);
+        $this->assertEqualsCanonicalizing(
+            $seasonalSeason->dungeons()->pluck('dungeons.id')->all(),
             $result->values()->all(),
         );
     }

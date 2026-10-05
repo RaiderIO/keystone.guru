@@ -8,11 +8,14 @@ use App\Models\Mapping\MappingVersion;
 use App\Service\MapContext\MapContextServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('MapContext')]
 final class MapContextMappingVersionEditTest extends PublicTestCase
 {
+    use CreatesDungeon;
+
     #[Test]
     public function toArray_givenMappingVersionEditContext_returnsFactionKeyInsteadOfTranslatedName(): void
     {
@@ -49,5 +52,23 @@ final class MapContextMappingVersionEditTest extends PublicTestCase
         $this->assertSame(Dungeon::query()->count(), $dungeonSelectValues->count());
         $this->assertContains(['id' => $otherDungeon->id, 'name' => $otherDungeon->name], $dungeonSelectValues->all());
         $this->assertContains(['id' => $dungeon->id, 'name' => $dungeon->name], $dungeonSelectValues->all());
+    }
+
+    #[Test]
+    public function toArray_givenAnInactiveDungeon_listsItForTheTargetDungeonSelect(): void
+    {
+        // Arrange
+        $mappingVersion  = MappingVersion::query()->firstOrFail();
+        $dungeon         = Dungeon::query()->findOrFail($mappingVersion->dungeon_id);
+        $inactiveDungeon = $this->createDungeon(['active' => false], withMappingVersion: false);
+
+        // Act
+        /** @var array<int, array{id: int, name: string}> $dungeonSelectValues */
+        $dungeonSelectValues = app(MapContextServiceInterface::class)
+            ->createMapContextMappingVersionEdit($dungeon, $mappingVersion)
+            ->toArray()['dungeonSelectValues'];
+
+        // Assert
+        $this->assertContains(['id' => $inactiveDungeon->id, 'name' => $inactiveDungeon->name], $dungeonSelectValues);
     }
 }

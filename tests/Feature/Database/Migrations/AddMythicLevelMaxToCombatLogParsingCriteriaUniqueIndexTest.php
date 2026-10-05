@@ -3,6 +3,7 @@
 namespace Tests\Feature\Database\Migrations;
 
 use App\Models\CombatLog\CombatLogParsingCriterion;
+use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -85,6 +86,48 @@ final class AddMythicLevelMaxToCombatLogParsingCriteriaUniqueIndexTest extends P
 
         // Assert
         $this->assertSame(2, CombatLogParsingCriterion::query()->where('model_id', self::DUNGEON_ID)->count());
+    }
+
+    #[Test]
+    public function down_givenTwoTopBandRowsOnTheSameFloor_keepsTheOlderOne(): void
+    {
+        // Arrange
+        $migration = $this->requireMigration();
+        $older     = CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->forBand(17, null)->create();
+        $newer     = CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->forBand(17, null)->create();
+
+        try {
+            // Act
+            $migration->down();
+
+            // Assert
+            $this->assertNotNull(CombatLogParsingCriterion::query()->find($older->id));
+            $this->assertNull(CombatLogParsingCriterion::query()->find($newer->id));
+        } finally {
+            $migration->up();
+        }
+    }
+
+    #[Test]
+    public function up_givenTheNarrowerIndex_replacesItWithOneThatIncludesMythicLevelMax(): void
+    {
+        // Arrange
+        $migration = $this->requireMigration();
+        $migration->down();
+
+        // Act
+        $migration->up();
+
+        // Assert
+        $columnsByIndexName = collect(Schema::getIndexes('combat_log_parsing_criteria'))
+            ->filter(static fn(array $index): bool => $index['unique'])
+            ->mapWithKeys(static fn(array $index): array => [$index['name'] => $index['columns']]);
+
+        $this->assertFalse($columnsByIndexName->has('clpc_version_class_id_date_band_unique'));
+        $this->assertSame(
+            ['combat_log_version', 'model_class', 'model_id', 'date', 'mythic_level_min', 'mythic_level_max'],
+            $columnsByIndexName->get('clpc_version_class_id_date_band_min_max_unique'),
+        );
     }
 
     private function requireMigration(): mixed
