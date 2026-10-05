@@ -6,6 +6,7 @@ use App\Logic\Structs\IngameXY;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Opensearch\OpensearchModel;
+use App\Models\Traits\RelatesToDefaultConnectionModels;
 use Codeart\OpensearchLaravel\Traits\HasOpenSearchDocuments;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -49,7 +50,7 @@ use Illuminate\Support\Carbon;
 class CombatLogEvent extends OpensearchModel
 {
     /** @use HasFactory<Factory> */
-    use HasFactory, HasOpenSearchDocuments;
+    use HasFactory, HasOpenSearchDocuments, RelatesToDefaultConnectionModels;
 
     protected $connection = 'combatlog';
 
