@@ -13,6 +13,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -25,6 +26,7 @@ use Tests\TestCases\PublicTestCase;
 #[Group('ProvidesDungeon')]
 final class ProvidesDungeonTest extends PublicTestCase
 {
+    use CreatesDungeon;
     use ProvidesDungeon;
 
     #[Test]
@@ -144,30 +146,33 @@ final class ProvidesDungeonTest extends PublicTestCase
     #[Test]
     public function findDungeon_givenMinEnemyPacksAndAPoolOfMostlyPacklessDungeons_returnsTheOneWithPacks(): void
     {
-        // Arrange
-        $packlessIds = [];
-        foreach (Dungeon::query()->get() as $candidate) {
-            /** @var Dungeon $candidate */
-            $mappingVersion = $candidate->getCurrentMappingVersion();
-
-            if ($mappingVersion !== null && $mappingVersion->enemyPacks()->doesntExist()) {
-                $packlessIds[] = $candidate->id;
-            }
-        }
-        self::assertNotEmpty($packlessIds, 'Expected seeded dungeons whose current mapping version has no enemy packs');
-
-        [$suitable] = $this->findDungeon(minEnemyPacks: 1);
-        $poolIds    = [...$packlessIds, $suitable->id];
-
-        // Act & Assert - repeated because the scan order is shuffled; every order must succeed
-        for ($attempt = 0; $attempt < 10; $attempt++) {
-            [$dungeon, $mappingVersion] = $this->findDungeon(
-                minEnemyPacks: 1,
-                constraint:    static fn(Builder $query) => $query->whereIn('dungeons.id', $poolIds),
+        try {
+            // Arrange - dungeons whose current mapping version carries no packs, but satisfy everything else
+            $packlessIds = [
+                $this->createDungeon()->id,
+                $this->createDungeon()->id,
+                $this->createDungeon()->id,
+            ];
+            [$packlessDungeon] = $this->findDungeon(
+                constraint: static fn(Builder $query) => $query->whereIn('dungeons.id', $packlessIds),
             );
+            self::assertContains($packlessDungeon->id, $packlessIds, 'Only the pack requirement may reject the packless dungeons');
 
-            self::assertSame($suitable->id, $dungeon->id);
-            self::assertGreaterThanOrEqual(1, $mappingVersion->enemyPacks()->count());
+            [$suitable] = $this->findDungeon(minEnemyPacks: 1);
+            $poolIds    = [...$packlessIds, $suitable->id];
+
+            // Act & Assert - repeated because the scan order is shuffled; every order must succeed
+            for ($attempt = 0; $attempt < 10; $attempt++) {
+                [$dungeon, $mappingVersion] = $this->findDungeon(
+                    minEnemyPacks: 1,
+                    constraint:    static fn(Builder $query) => $query->whereIn('dungeons.id', $poolIds),
+                );
+
+                self::assertSame($suitable->id, $dungeon->id);
+                self::assertGreaterThanOrEqual(1, $mappingVersion->enemyPacks()->count());
+            }
+        } finally {
+            $this->deleteCreatedDungeons();
         }
     }
 
