@@ -38,3 +38,6 @@ globalThis.Cookies = globalThis.Cookies ?? {get: () => null};
 require('handlebars').registerHelper('t', function (key) {
     return lang.get('js.' + key);
 });
+
+// util.js's abbreviateNumber is a bundle global that the route picker and route table call bare.
+globalThis.abbreviateNumber = require('../custom/util').abbreviateNumber;

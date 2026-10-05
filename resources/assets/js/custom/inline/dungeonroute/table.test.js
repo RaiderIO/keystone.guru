@@ -17,7 +17,6 @@ globalThis.EXPANSION_DRAGONFLIGHT = 'df';
 globalThis.METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY = 1;
 globalThis.METRIC_TAG_MDT_COPY_VIEW = 'view';
 globalThis.METRIC_TAG_MDT_COPY_EMBED = 'embed';
-globalThis.abbreviateNumber = require('../../util').abbreviateNumber;
 
 const fs = require('node:fs');
 const path = require('node:path');
