@@ -82,8 +82,9 @@ final class ImportFloorUnionAreasTest extends PublicTestCase
     public function handle_givenUiSpaceOutlineMatchedByUiMapId_replacesTheUnionsAreasWithFacadeVertices(): void
     {
         // Arrange
-        $existingArea = $this->createFloorUnionArea($this->firstFloorUnion);
-        $file         = $this->writeFile([
+        $existingArea    = $this->createFloorUnionArea($this->firstFloorUnion);
+        $otherUnionsArea = $this->createFloorUnionArea($this->secondFloorUnion);
+        $file            = $this->writeFile([
             'coordinate_space' => 'ui',
             'floors'           => [
                 [
@@ -102,6 +103,10 @@ final class ImportFloorUnionAreasTest extends PublicTestCase
         // Assert
         $this->assertSame(0, $exitCode, Artisan::output());
         $this->assertNull(FloorUnionArea::query()->find($existingArea->id));
+        $this->assertNotNull(
+            FloorUnionArea::query()->find($otherUnionsArea->id),
+            'Only the areas of the matched floor\'s union are replaced.',
+        );
 
         $areas = FloorUnionArea::query()->where('floor_union_id', $this->firstFloorUnion->id)->orderBy('id')->get();
         $this->assertCount(2, $areas);
@@ -142,8 +147,10 @@ final class ImportFloorUnionAreasTest extends PublicTestCase
         $this->assertSame(0, $exitCode, Artisan::output());
 
         /** @var FloorUnionArea $area */
-        $area = FloorUnionArea::query()->where('floor_union_id', $this->secondFloorUnion->id)->sole();
-        foreach (json_decode($area->vertices_json, true) as $i => $vertex) {
+        $area     = FloorUnionArea::query()->where('floor_union_id', $this->secondFloorUnion->id)->sole();
+        $vertices = json_decode($area->vertices_json, true);
+        $this->assertCount(count($ingameVertices), $vertices);
+        foreach ($vertices as $i => $vertex) {
             $ingameXY = $coordinatesService->calculateIngameLocationForMapLocation(
                 $coordinatesService->convertFacadeMapLocationToMapLocation(
                     $this->mappingVersion,

@@ -177,6 +177,91 @@ final class ReportTest extends PublicTestCase
         $this->artisan('release:report')->assertExitCode(0);
     }
 
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenDiscordRejectsTheEmbeds_returnsFailureWithoutLoggingTheReport(): void
+    {
+        // Arrange
+        $this->mockGithubReleases([
+            $this->githubRelease('v15.3.3', '* #1234 Fixed a bug.'),
+            $this->githubRelease('v15.3.2', '* #1230 Some other change.'),
+        ]);
+
+        $discordApiService = $this->createMockPublic(DiscordApiServiceInterface::class);
+        $discordApiService->expects($this->once())->method('sendEmbeds')->willReturn(false);
+        app()->instance(DiscordApiServiceInterface::class, $discordApiService);
+
+        $releaseReportLogRepository = RepositoryFixtures::getReleaseReportLogRepositoryMock($this);
+        $releaseReportLogRepository->expects($this->never())->method('create');
+        app()->instance(ReleaseReportLogRepositoryInterface::class, $releaseReportLogRepository);
+
+        // Act & Assert
+        $this->artisan('release:report', ['version' => 'v15.3.3'])->assertExitCode(1);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenVersionWithoutVPrefix_reportsTheMatchingRelease(): void
+    {
+        // Arrange
+        $this->mockGithubReleases([
+            $this->githubRelease('v15.3.3', '* #1234 Fixed a bug.'),
+            $this->githubRelease('v15.3.2', '* #1230 Some other change.'),
+        ]);
+
+        $discordApiService = $this->createMockPublic(DiscordApiServiceInterface::class);
+        $discordApiService->expects($this->once())->method('sendEmbeds')
+            ->willReturnCallback(function (string $webhookUrl, array $embeds): bool {
+                $this->assertStringContainsString('v15.3.2', $embeds[0]['title']);
+
+                return true;
+            });
+        app()->instance(DiscordApiServiceInterface::class, $discordApiService);
+
+        $releaseReportLogRepository = RepositoryFixtures::getReleaseReportLogRepositoryMock($this);
+        $releaseReportLogRepository->expects($this->once())->method('create')
+            ->with(['version' => 'v15.3.2', 'platform' => 'discord']);
+        app()->instance(ReleaseReportLogRepositoryInterface::class, $releaseReportLogRepository);
+
+        // Act & Assert
+        $this->artisan('release:report', ['version' => '15.3.2'])->assertExitCode(0);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenBodyLongerThanTheDiscordLimit_truncatesItAndKeepsTheFooter(): void
+    {
+        // Arrange
+        $this->mockGithubReleases([
+            $this->githubRelease('v15.3.3', str_repeat("* #1234 Fixed a bug.\n", 300)),
+            $this->githubRelease('v15.3.2', '* #1230 Some other change.'),
+        ]);
+
+        $discordApiService = $this->createMockPublic(DiscordApiServiceInterface::class);
+        $discordApiService->expects($this->once())->method('sendEmbeds')
+            ->willReturnCallback(function (string $webhookUrl, array $embeds): bool {
+                $description = $embeds[0]['description'];
+                $this->assertLessThanOrEqual(4096, strlen($description));
+                $this->assertMatchesRegularExpression('/ \(\d+ more\) /', $description);
+                $this->assertStringEndsWith('(https://keystone.guru/new)', $description);
+
+                return true;
+            });
+        app()->instance(DiscordApiServiceInterface::class, $discordApiService);
+
+        $releaseReportLogRepository = RepositoryFixtures::getReleaseReportLogRepositoryMock($this);
+        app()->instance(ReleaseReportLogRepositoryInterface::class, $releaseReportLogRepository);
+
+        // Act & Assert
+        $this->artisan('release:report', ['version' => 'v15.3.3'])->assertExitCode(0);
+    }
+
     /** @param array<int, array<string, mixed>> $githubReleases */
     private function mockGithubReleases(array $githubReleases): void
     {

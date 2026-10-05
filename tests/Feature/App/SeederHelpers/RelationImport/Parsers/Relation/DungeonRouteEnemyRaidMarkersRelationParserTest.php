@@ -4,9 +4,10 @@ namespace Tests\Feature\App\SeederHelpers\RelationImport\Parsers\Relation;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
+use App\Models\Enemy;
 use App\Models\RaidMarker;
 use App\SeederHelpers\RelationImport\Parsers\Relation\DungeonRouteEnemyRaidMarkersRelationParser;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Attributes\Group;
@@ -23,11 +24,9 @@ final class DungeonRouteEnemyRaidMarkersRelationParserTest extends PublicTestCas
     {
         parent::setUp();
 
-        // Mirrors what DatabaseSeeder::getTempTableName(Enemy::class) resolves to while seeding -
-        // only an id column is needed to exercise the "enemy not found" path this test covers.
-        Schema::create(self::TEMP_ENEMIES_TABLE, function (Blueprint $table): void {
-            $table->id();
-        });
+        // Mirrors what DatabaseSeeder::getTempTableName(Enemy::class) resolves to while seeding
+        DB::statement(sprintf('DROP TABLE IF EXISTS %s;', self::TEMP_ENEMIES_TABLE));
+        DB::statement(sprintf('CREATE TABLE %s LIKE %s;', self::TEMP_ENEMIES_TABLE, (new Enemy())->getTable()));
     }
 
     #[\Override]
@@ -63,6 +62,45 @@ final class DungeonRouteEnemyRaidMarkersRelationParserTest extends PublicTestCas
             $this->assertSame(['id' => $dungeonRoute->id], $result);
             $this->assertSame(0, DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $dungeonRoute->id)->count());
             $logSpy->shouldHaveReceived('warning');
+        } finally {
+            DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $dungeonRoute->id)->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function parseRelation_givenAnUnresolvableRowBeforeAResolvableOne_insertsTheResolvableOneWithTheEnemysMdtIds(): void
+    {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create();
+
+        try {
+            /** @var Enemy $enemy */
+            $enemy = Enemy::query()->whereNotNull('mdt_id')->whereNotNull('npc_id')->firstOrFail();
+            DB::statement(sprintf('INSERT INTO %s SELECT * FROM %s WHERE id = ?;', self::TEMP_ENEMIES_TABLE, $enemy->getTable()), [$enemy->id]);
+
+            $parser = new DungeonRouteEnemyRaidMarkersRelationParser();
+
+            /** @var array<string, mixed> $value */
+            $value = json_decode(sprintf(
+                '[{"enemy_id": %d, "raid_marker_id": %d}, {"enemy_id": %d, "raid_marker_id": %d}]',
+                $enemy->id + 1_000_000,
+                RaidMarker::ALL['skull'],
+                $enemy->id,
+                RaidMarker::ALL['cross'],
+            ), true);
+
+            // Act
+            $result = $parser->parseRelation(DungeonRoute::class, ['id' => $dungeonRoute->id], 'enemy_raid_markers', $value);
+
+            // Assert
+            $this->assertSame(['id' => $dungeonRoute->id], $result);
+
+            $enemyRaidMarkers = DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $dungeonRoute->id)->get();
+            $this->assertCount(1, $enemyRaidMarkers);
+            $this->assertSame(RaidMarker::ALL['cross'], $enemyRaidMarkers->first()->raid_marker_id);
+            $this->assertSame($enemy->getMdtNpcId(), $enemyRaidMarkers->first()->npc_id);
+            $this->assertSame($enemy->mdt_id, $enemyRaidMarkers->first()->mdt_id);
         } finally {
             DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $dungeonRoute->id)->delete();
             $dungeonRoute->delete();

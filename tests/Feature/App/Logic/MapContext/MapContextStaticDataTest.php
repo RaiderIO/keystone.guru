@@ -65,6 +65,8 @@ final class MapContextStaticDataTest extends PublicTestCase
         // faction should never be part of this payload.
         $factionKeys = array_column($factions, 'key');
         $this->assertNotContains(Faction::FACTION_UNSPECIFIED, $factionKeys);
+        $this->assertContains(Faction::FACTION_HORDE, $factionKeys);
+        $this->assertContains(Faction::FACTION_ALLIANCE, $factionKeys);
     }
 
     #[Test]

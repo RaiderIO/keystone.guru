@@ -56,6 +56,66 @@ final class CopyDungeonStartFloorsTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function handle_givenTargetDungeonWithMoreFloors_failsWithoutCreatingAMappingVersion(): void
+    {
+        // Arrange - a source with fewer floors than its target, so every source floor index still has a
+        // counterpart on the target and only the floor count check stands between the two
+        /** @var GameVersion $gameVersion */
+        $gameVersion                     = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        [$sourceDungeon, $targetDungeon] = $this->getDungeonsWithMoreFloorsOnTheTarget($gameVersion);
+        $maxMappingVersionIdBefore       = (int)MappingVersion::query()->max('id');
+
+        try {
+            // Act
+            $exitCode = Artisan::call('mapping:copy', [
+                'gameVersion'   => $gameVersion->key,
+                'sourceDungeon' => $sourceDungeon->key,
+                'targetDungeon' => $targetDungeon->key,
+            ]);
+
+            // Assert
+            $this->assertNotSame(0, $exitCode);
+            $this->assertStringContainsString('floor count does not match', Artisan::output());
+            $this->assertFalse(
+                MappingVersion::query()->where('id', '>', $maxMappingVersionIdBefore)->exists(),
+                'A refused copy must not leave a mapping version behind.',
+            );
+        } finally {
+            MappingVersion::query()
+                ->where('id', '>', $maxMappingVersionIdBefore)
+                ->whereIn('dungeon_id', [$sourceDungeon->id, $targetDungeon->id])
+                ->get()
+                ->each(static fn(MappingVersion $mappingVersion) => $mappingVersion->delete());
+        }
+    }
+
+    /**
+     * @return array{0: Dungeon, 1: Dungeon}
+     */
+    private function getDungeonsWithMoreFloorsOnTheTarget(GameVersion $gameVersion): array
+    {
+        $dungeons = Dungeon::query()
+            ->whereNotNull('challenge_mode_id')
+            ->withCount('floors')
+            ->get();
+
+        foreach ($dungeons as $sourceDungeon) {
+            if ($sourceDungeon->floors_count === 0 || $sourceDungeon->getCurrentMappingVersionForGameVersion($gameVersion) === null) {
+                continue;
+            }
+
+            $sourceFloorIndices = $sourceDungeon->floors()->pluck('index');
+            $targetDungeon      = $dungeons->first(static fn(Dungeon $dungeon) => $dungeon->floors_count > $sourceDungeon->floors_count
+                && $sourceFloorIndices->diff($dungeon->floors()->pluck('index'))->isEmpty());
+            if ($targetDungeon !== null) {
+                return [$sourceDungeon, $targetDungeon];
+            }
+        }
+
+        $this->fail('No source dungeon whose floor indices all exist on a target dungeon with more floors found for testing.');
+    }
+
     /**
      * @return array{0: Dungeon, 1: Dungeon}
      */

@@ -21,24 +21,28 @@ final class AssignMissingSpellDungeonsTest extends PublicTestCase
     private const int SPELL_ID   = 9995096;
     private const int DUNGEON_ID = 1;
 
+    private const int OTHER_NPC_ID     = 9995098;
+    private const int OTHER_SPELL_ID   = 9995100;
+    private const int UNKNOWN_SPELL_ID = 9995095;
+
     #[\Override]
     protected function tearDown(): void
     {
         try {
-            NpcSpell::where('npc_id', self::NPC_ID)->delete();
-            NpcDungeon::where('npc_id', self::NPC_ID)->delete();
-            SpellDungeon::where('spell_id', self::SPELL_ID)->delete();
-            Npc::where('id', self::NPC_ID)->delete();
-            Spell::where('id', self::SPELL_ID)->delete();
+            NpcSpell::whereIn('npc_id', [self::NPC_ID, self::OTHER_NPC_ID])->delete();
+            NpcDungeon::whereIn('npc_id', [self::NPC_ID, self::OTHER_NPC_ID])->delete();
+            SpellDungeon::whereIn('spell_id', [self::SPELL_ID, self::OTHER_SPELL_ID, self::UNKNOWN_SPELL_ID])->delete();
+            Npc::whereIn('id', [self::NPC_ID, self::OTHER_NPC_ID])->delete();
+            Spell::whereIn('id', [self::SPELL_ID, self::OTHER_SPELL_ID])->delete();
         } finally {
             parent::tearDown();
         }
     }
 
-    private function createTestNpc(): Npc
+    private function createTestNpc(int $npcId = self::NPC_ID): Npc
     {
         return Npc::create([
-            'id'                => self::NPC_ID,
+            'id'                => $npcId,
             'classification_id' => 1,
             'npc_type_id'       => 1,
             'npc_class_id'      => 1,
@@ -50,10 +54,10 @@ final class AssignMissingSpellDungeonsTest extends PublicTestCase
         ]);
     }
 
-    private function createTestSpell(): Spell
+    private function createTestSpell(int $spellId = self::SPELL_ID): Spell
     {
         return Spell::create([
-            'id'              => self::SPELL_ID,
+            'id'              => $spellId,
             'game_version_id' => 1,
             'dispel_type'     => '',
             'mechanic'        => '',
@@ -196,5 +200,48 @@ final class AssignMissingSpellDungeonsTest extends PublicTestCase
             SpellDungeon::where('spell_id', self::SPELL_ID)->where('dungeon_id', self::DUNGEON_ID)->count(),
         );
         $this->assertDatabaseHas('spell_dungeons', ['spell_id' => self::SPELL_ID, 'dungeon_id' => $secondDungeonId]);
+    }
+
+    #[Test]
+    public function handle_givenNpcSpellOfAnUnknownSpell_skipsItAndAssignsTheNpcsOtherSpells(): void
+    {
+        // Arrange - the unknown spell sorts before the known one, so it is handled first
+        $this->createTestNpc();
+        $this->createTestSpell();
+        NpcDungeon::create(['npc_id' => self::NPC_ID, 'dungeon_id' => self::DUNGEON_ID]);
+        NpcSpell::create(['npc_id' => self::NPC_ID, 'spell_id' => self::UNKNOWN_SPELL_ID]);
+        NpcSpell::create(['npc_id' => self::NPC_ID, 'spell_id' => self::SPELL_ID]);
+
+        // Act
+        $this->artisan(AssignMissingSpellDungeons::class, [
+            'npc' => self::NPC_ID,
+        ])->assertSuccessful();
+
+        // Assert
+        $this->assertDatabaseHas('spell_dungeons', ['spell_id' => self::SPELL_ID, 'dungeon_id' => self::DUNGEON_ID]);
+        $this->assertDatabaseMissing('spell_dungeons', ['spell_id' => self::UNKNOWN_SPELL_ID]);
+    }
+
+    #[Test]
+    public function handle_givenNpcArgument_leavesOtherNpcsSpellsAlone(): void
+    {
+        // Arrange
+        $this->createTestNpc();
+        $this->createTestNpc(self::OTHER_NPC_ID);
+        $this->createTestSpell();
+        $this->createTestSpell(self::OTHER_SPELL_ID);
+        NpcDungeon::create(['npc_id' => self::NPC_ID, 'dungeon_id' => self::DUNGEON_ID]);
+        NpcDungeon::create(['npc_id' => self::OTHER_NPC_ID, 'dungeon_id' => self::DUNGEON_ID]);
+        NpcSpell::create(['npc_id' => self::NPC_ID, 'spell_id' => self::SPELL_ID]);
+        NpcSpell::create(['npc_id' => self::OTHER_NPC_ID, 'spell_id' => self::OTHER_SPELL_ID]);
+
+        // Act
+        $this->artisan(AssignMissingSpellDungeons::class, [
+            'npc' => self::NPC_ID,
+        ])->assertSuccessful();
+
+        // Assert
+        $this->assertDatabaseHas('spell_dungeons', ['spell_id' => self::SPELL_ID, 'dungeon_id' => self::DUNGEON_ID]);
+        $this->assertDatabaseMissing('spell_dungeons', ['spell_id' => self::OTHER_SPELL_ID]);
     }
 }
