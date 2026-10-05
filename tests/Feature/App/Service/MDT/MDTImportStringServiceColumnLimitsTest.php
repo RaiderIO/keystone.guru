@@ -7,6 +7,7 @@ use App\Logic\MDT\IO\MDT2Codec;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Service\MDT\MDTImportStringServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -33,9 +34,10 @@ final class MDTImportStringServiceColumnLimitsTest extends MDTImportStringServic
             // Act - the legacy format, since the MDT2 codec only encodes 32-bit integers
             $importedRoute = $this->importStringToDungeonRoute($this->encode($decoded));
 
-            // Assert
-            $this->assertSame($importedRoute->season->key_level_min, $importedRoute->level_min);
-            $this->assertSame($importedRoute->season->key_level_max, $importedRoute->level_max);
+            // Assert - the seed does not promise the dungeon a season, and without one the import uses +2
+            $season = app(SeasonServiceInterface::class)->getMostRecentSeasonForDungeon($dungeonRoute->dungeon);
+            $this->assertSame($season === null ? 2 : $season->key_level_min, $importedRoute->level_min);
+            $this->assertSame($season === null ? 2 : $season->key_level_max, $importedRoute->level_max);
         } finally {
             $importedRoute?->delete();
             $dungeonRoute?->delete();
