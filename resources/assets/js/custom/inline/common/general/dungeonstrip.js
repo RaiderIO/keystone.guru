@@ -3,8 +3,8 @@
  * the "All" button unfolds the strip wherever the list is too wide for it.
  *
  * Each chip group is a single tab stop: the arrow keys move between its chips the way they are laid out, Home and
- * End jump to its ends, and typing a letter jumps to the next chip whose abbreviation or name starts with it. "/"
- * anywhere on the page unfolds the strip with its filter focused.
+ * End jump to its ends, and typing a letter jumps to the next chip whose abbreviation or name starts with it. The
+ * search button, or "/" anywhere on the page, unfolds the strip with its filter focused.
  */
 class DungeonStrip {
     /**
@@ -23,6 +23,7 @@ class DungeonStrip {
         this.readoutViews = element.querySelector('.dungeon_strip_readout_views');
         this.groups = element.querySelector('.dungeon_strip_groups');
         this.allButton = element.querySelector('.dungeon_strip_all');
+        this.searchButton = element.querySelector('.dungeon_strip_search');
         this.filterInput = element.querySelector('.dungeon_strip_filter_input');
         this.filterEmpty = element.querySelector('.dungeon_strip_filter_empty');
         this.chips = [...element.querySelectorAll('.dungeon_strip_chip')];
@@ -38,6 +39,13 @@ class DungeonStrip {
         element.addEventListener('focusout', this._onFocusOut.bind(this));
         element.addEventListener('keydown', this._onKeyDown.bind(this));
         this.allButton.addEventListener('click', this._onAllClick.bind(this));
+        this.searchButton?.addEventListener('click', this._onSearchClick.bind(this));
+        // Its tooltip would cover the flyout it opened; a hover's tooltip is only shown after the click
+        this.searchButton?.addEventListener('show.bs.tooltip', event => {
+            if (this.isOpen()) {
+                event.preventDefault();
+            }
+        });
         this.filterInput?.addEventListener('input', () => this.filter(this.filterInput.value));
         this.filterInput?.addEventListener('keydown', this._onFilterKeyDown.bind(this));
         document.addEventListener('pointerdown', this._onDocumentPointerDown.bind(this));
@@ -57,6 +65,7 @@ class DungeonStrip {
     setOpen(open) {
         this.element.classList.toggle('is-open', open);
         this.allButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+        this.searchButton?.setAttribute('aria-expanded', open ? 'true' : 'false');
 
         if (!open && this.filterInput !== null && this.filterInput.value !== '') {
             this.filterInput.value = '';
@@ -66,13 +75,15 @@ class DungeonStrip {
 
     /**
      * Unfolds the strip with the filter focused, remembering where focus came from so Escape can return it there.
+     *
+     * @param {Element|null} returnFocusTo Where Escape puts focus back
      */
-    openFilter() {
+    openFilter(returnFocusTo = document.activeElement) {
         if (this.filterInput === null) {
             return;
         }
 
-        this.focusBeforeFilter = document.activeElement;
+        this.focusBeforeFilter = returnFocusTo;
         this.setOpen(true);
         this.filterInput.focus();
     }
@@ -219,6 +230,21 @@ class DungeonStrip {
     }
 
     /**
+     * Toggles the flyout like the "All" button does, but opens it with the filter focused.
+     */
+    _onSearchClick() {
+        if (typeof bootstrap !== 'undefined') {
+            bootstrap.Tooltip.getInstance(this.searchButton)?.hide();
+        }
+
+        if (this.isOpen()) {
+            this.setOpen(false);
+        } else {
+            this.openFilter(this.searchButton);
+        }
+    }
+
+    /**
      * @param {KeyboardEvent} event
      */
     _onKeyDown(event) {
@@ -236,15 +262,16 @@ class DungeonStrip {
     }
 
     /**
-     * Closes the flyout and puts focus where it can stay: back where "/" was pressed, else on the "All" button that
-     * reopens the flyout, else on the chip itself when every chip fits the strip and there is no button.
+     * Closes the flyout and puts focus where it can stay: back where "/" was pressed or on the search button that
+     * opened it, else on the "All" button that reopens the flyout, else on the chip itself when every chip fits the
+     * strip and there is no "All" button.
      *
      * @param {EventTarget|null} focusFrom
      */
     _close(focusFrom) {
         const isElement = focusFrom instanceof HTMLElement && focusFrom.isConnected && focusFrom !== document.body;
         let target = null;
-        if (isElement && !this.element.contains(focusFrom)) {
+        if (isElement && (!this.element.contains(focusFrom) || focusFrom === this.searchButton)) {
             target = focusFrom;
         } else if (getComputedStyle(this.allButton).display !== 'none') {
             target = this.allButton;

@@ -61,6 +61,8 @@
     --dungeon-strip-readout-long-views-display: block;
     --dungeon-strip-readout-views-font-size: 0.75rem;
     --dungeon-strip-all-width: 5.5rem;
+    --dungeon-strip-search-size: 2rem;
+    --dungeon-strip-search-font-size: 0.875rem;
     /* The inset above and below the strip's contents, and the room a focus ring needs around a chip */
     --dungeon-strip-padding: 0.25rem;
     --dungeon-strip-gap: 0.5rem;
@@ -98,6 +100,8 @@
     /* The label's line box ends 3.5px above the chip's inner edge here */
     --dungeon-strip-view-bar-height: 0.125rem;
     --dungeon-strip-view-bar-bottom: 0;
+    --dungeon-strip-search-size: 1.5rem;
+    --dungeon-strip-search-font-size: 0.75rem;
 }
 
 .dungeon_strip.dungeon_strip--compact {
@@ -182,6 +186,38 @@
 
 .dungeon_strip_readout_views:empty {
     display: none;
+}
+
+/* Over the readout's top right corner, which its name at the bottom leaves free: the chips already fill the band's
+   width at common desktop sizes, so a button of its own beside them would clip the raids. Dark like the readout. */
+.dungeon_strip_search {
+    position: absolute;
+    top: calc(var(--dungeon-strip-padding) + 0.25rem);
+    left: calc(var(--dungeon-strip-readout-width) - var(--dungeon-strip-search-size) - 0.25rem);
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--dungeon-strip-search-size);
+    height: var(--dungeon-strip-search-size);
+    padding: 0;
+    border: 0.125rem solid transparent;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: var(--dungeon-strip-search-font-size);
+    transition: left 0.2s ease, width 0.2s ease, height 0.2s ease, font-size 0.2s ease, background-color 0.15s ease;
+}
+
+/* Two classes because the themes' `.darkly button` reboot (margin and radius) outranks one */
+.dungeon_strip .dungeon_strip_search {
+    margin: 0;
+    border-radius: 0.25rem;
+}
+
+.dungeon_strip_search:hover,
+.dungeon_strip_search:focus-visible,
+.dungeon_strip_search[aria-expanded="true"] {
+    background-color: rgba(0, 0, 0, 0.85);
 }
 
 /* Padded on every side and pulled back out by the same amount horizontally: the chips stay put, while a focus
@@ -552,6 +588,7 @@
 .game_version_header .game_version:focus-visible,
 .game_version_header .dungeon_strip_chip:focus-visible,
 .game_version_header .dungeon_strip_all:focus-visible,
+.game_version_header .dungeon_strip_search:focus-visible,
 .dungeon_context_header .list_dungeon a:focus-visible,
 .dungeon_sheet .dungeon_sheet_row:focus-visible,
 .game_version_segments .game_version_segment:focus-visible {

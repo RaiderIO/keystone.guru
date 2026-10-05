@@ -64,6 +64,9 @@ $getGroupIcon = static fn(string $group): string => match (DungeonSelectorGroup:
 };
 $readoutViewShare = $selectedDungeon === null ? null : $viewShares->get($selectedDungeon->id);
 $readoutViews     = $describeViewShare($readoutViewShare);
+$filterLabel      = __('view_common.dungeon.list.chips.filter');
+// Spans rather than a <kbd>, which Bootstrap's tooltip sanitizer strips
+$filterTooltip = sprintf('%s<span class="draw_tool_hotkeys"><span class="draw_tool_keycap">/</span></span>', e($filterLabel));
 ?>
 <div class="dungeon_strip">
     <div class="dungeon_strip_readout" aria-hidden="true"
@@ -75,8 +78,13 @@ $readoutViews     = $describeViewShare($readoutViewShare);
             <span class="dungeon_strip_readout_views">{{ $readoutViews }}</span>
         </span>
     </div>
+    <button type="button" class="dungeon_strip_search" aria-expanded="false" aria-controls="dungeon_strip_groups"
+            aria-label="{{ $filterLabel }}" aria-keyshortcuts="/"
+            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="{{ $filterTooltip }}">
+        <i class="fas fa-search" aria-hidden="true"></i>
+    </button>
     <div class="dungeon_strip_groups" id="dungeon_strip_groups">
-        {{-- Only shown in the unfolded strip, which "/" opens from anywhere on the page --}}
+        {{-- Only shown in the unfolded strip, which the search button and "/" open --}}
         <div class="dungeon_strip_filter" role="search">
             <i class="fas fa-search dungeon_strip_filter_icon" aria-hidden="true"></i>
             <input type="search" class="form-control dungeon_strip_filter_input"

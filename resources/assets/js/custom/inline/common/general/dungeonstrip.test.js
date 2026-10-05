@@ -42,6 +42,7 @@ describe('DungeonStrip', () => {
                         <span class="dungeon_strip_readout_views">Most viewed</span>
                     </span>
                 </div>
+                <button type="button" class="dungeon_strip_search" aria-expanded="false" aria-label="Filter dungeons">S</button>
                 <div class="dungeon_strip_groups" id="dungeon_strip_groups">
                     <div class="dungeon_strip_filter" role="search">
                         <input type="search" class="form-control dungeon_strip_filter_input" aria-label="Filter dungeons"/>
@@ -836,6 +837,69 @@ describe('DungeonStrip', () => {
         // Assert
         expect(strip.isOpen()).toBe(false);
         expect(document.activeElement).toBe(chip('Molten Core'));
+    });
+
+    it('searchButtonClick_givenAClosedStrip_opensItWithTheFilterFocused', () => {
+        // Arrange
+        const strip = makeStrip();
+        strip.searchButton.focus();
+
+        // Act
+        strip.searchButton.click();
+
+        // Assert
+        expect(strip.isOpen()).toBe(true);
+        expect(strip.searchButton.getAttribute('aria-expanded')).toBe('true');
+        expect(document.activeElement).toBe(strip.filterInput);
+    });
+
+    it('searchButtonClick_givenAnOpenStrip_closesIt', () => {
+        // Arrange
+        const strip = makeStrip();
+        strip.searchButton.click();
+        const wasOpen = strip.isOpen();
+        strip.searchButton.focus();
+
+        // Act
+        strip.searchButton.click();
+
+        // Assert
+        expect(wasOpen).toBe(true);
+        expect(strip.isOpen()).toBe(false);
+        expect(strip.searchButton.getAttribute('aria-expanded')).toBe('false');
+        expect(document.activeElement).toBe(strip.searchButton);
+    });
+
+    it('filterEscape_givenTheFilterOpenedByTheSearchButton_returnsFocusToTheButton', () => {
+        // Arrange
+        const strip = makeStrip();
+        strip.searchButton.focus();
+        strip.searchButton.click();
+        const focusedBeforeEscape = document.activeElement;
+
+        // Act
+        press(strip.filterInput, 'Escape');
+
+        // Assert
+        expect(focusedBeforeEscape).toBe(strip.filterInput);
+        expect(strip.isOpen()).toBe(false);
+        expect(document.activeElement).toBe(strip.searchButton);
+    });
+
+    it.each([
+        ['AClosedStrip', false, false],
+        ['AnOpenStrip', true, true],
+    ])('searchButtonTooltip_given%s_isPreventedOnlyWhileOpen', (_, open, expected) => {
+        // Arrange
+        const strip = makeStrip();
+        strip.setOpen(open);
+        const event = new Event('show.bs.tooltip', {cancelable: true});
+
+        // Act
+        strip.searchButton.dispatchEvent(event);
+
+        // Assert
+        expect(event.defaultPrevented).toBe(expected);
     });
 
     it('pointerdown_givenAFilteredFlyoutAndAClickOutside_clearsTheFilter', () => {

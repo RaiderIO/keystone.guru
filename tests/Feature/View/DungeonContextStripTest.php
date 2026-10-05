@@ -640,6 +640,27 @@ final class DungeonContextStripTest extends PublicTestCase
         ));
     }
 
+    #[Test]
+    public function render_givenASeasonlessGameVersion_putsANamedSearchButtonWithTheSlashKeyInItsTooltipAheadOfTheGroups(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $label    = __('view_common.dungeon.list.chips.filter');
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_CLASSIC_ERA, $dungeons);
+
+        // Assert
+        $this->assertSame(1, preg_match(
+            sprintf(
+                '/<\/div>\s*<button type="button" class="dungeon_strip_search" aria-expanded="false" aria-controls="dungeon_strip_groups"\s+aria-label="%s" aria-keyshortcuts="\/"\s+data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="%s">\s*<i class="fas fa-search" aria-hidden="true"><\/i>\s*<\/button>\s*<div class="dungeon_strip_groups"/',
+                preg_quote(e($label), '/'),
+                preg_quote(e(sprintf('%s<span class="draw_tool_hotkeys"><span class="draw_tool_keycap">/</span></span>', e($label))), '/'),
+            ),
+            $html,
+        ));
+    }
+
     /**
      * @return Collection<int, Dungeon>
      */
