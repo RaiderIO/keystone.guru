@@ -121,12 +121,12 @@ $selectedDungeon  ??= null;
 
     @if($creators->isEmpty())
         <p class="text-body-secondary">
-            @if($selectedDungeon !== null)
+            @if($search !== null)
+                {{ __('view_creator.directory.empty_for_search', ['search' => $search]) }}
+            @elseif($selectedDungeon !== null)
                 {{ __('view_creator.directory.empty_for_dungeon', ['dungeon' => __($selectedDungeon->name)]) }}
             @elseif($selectedCategory !== null)
                 {{ __('view_creator.directory.empty_for_category', ['category' => $selectedCategory->getTranslatedName()]) }}
-            @elseif($search !== null)
-                {{ __('view_creator.directory.empty_for_search', ['search' => $search]) }}
             @else
                 {{ __('view_creator.directory.empty') }}
             @endif

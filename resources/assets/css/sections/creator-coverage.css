@@ -12,8 +12,9 @@
     gap: 0.5rem;
 }
 
-/* Element + class: each theme scopes Bootstrap's `ul { padding-left: 2rem }` as `.<theme> ul`, which beats a class */
-ul.creator_coverage_dungeons {
+/* Each theme scopes Bootstrap's `ul { padding-left: 2rem }` as `.<theme> ul` (0,1,1); this outranks it on specificity
+   rather than relying on custom.css loading after app.css */
+.creator_coverage ul.creator_coverage_dungeons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     flex: 0 1 13rem;

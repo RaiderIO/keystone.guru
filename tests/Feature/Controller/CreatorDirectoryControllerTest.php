@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Service\Creator\CreatorDirectoryServiceInterface;
 use App\Service\Creator\Enums\CreatorDirectorySort;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Str;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -691,6 +692,39 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
             $response->assertOk();
             $this->assertTrue($this->creatorIdsFrom($response)->isEmpty());
             $response->assertSee(e(__('view_creator.directory.empty_for_dungeon', ['dungeon' => __($dungeon->name)])), false);
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $viewer->delete();
+        }
+    }
+
+    /**
+     * The dungeon is carried through every search, so an unmatched name inside a dungeon filter must say the search
+     * found no one rather than claim nobody publishes routes for the dungeon.
+     */
+    #[Test]
+    public function index_givenADungeonAndASearchNobodyMatches_rendersTheEmptyMessageForTheSearch(): void
+    {
+        // Arrange
+        $viewer = User::factory()->create();
+        $search = sprintf('nobody-%s', Str::random(12));
+        /** @var Dungeon|null $dungeon */
+        $dungeon = Dungeon::query()
+            ->where('slug', '!=', '')
+            ->whereDoesntHave('dungeonRoutes', static fn($builder) => $builder->where('published_state_id', PublishedState::ALL[PublishedState::WORLD]))
+            ->first();
+        $this->assertNotNull($dungeon, 'Expected a seeded dungeon without world-published routes');
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['dungeon' => $dungeon->slug, 'search' => $search]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertTrue($this->creatorIdsFrom($response)->isEmpty());
+            $response->assertSee(e(__('view_creator.directory.empty_for_search', ['search' => $search])), false);
+            $response->assertDontSee(e(__('view_creator.directory.empty_for_dungeon', ['dungeon' => __($dungeon->name)])), false);
         } finally {
             Feature::for($viewer)->forget(CreatorProfiles::class);
             $viewer->delete();
