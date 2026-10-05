@@ -3,6 +3,7 @@
 namespace Tests\Unit\App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
 
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
+use App\Logic\CombatLog\CombatEvents\Advanced\Versions\V22\AdvancedDataV22;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\CombatLogVersion;
@@ -178,6 +179,46 @@ final class AdvancedDataTest extends PublicTestCase
         Assert::assertEquals($rawBeforeParsing, $rawAfterParsing);
     }
 
+    /**
+     * @throws \Exception
+     */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('AdvancedData')]
+    public function parseEvent_givenAV22LineWithADistinctValuePerField_returnsEachFieldFromItsOwnPosition(): void
+    {
+        // Arrange
+        $combatLogEntry = new CombatLogEntry('3/25/2026 10:38:29.4491  SWING_DAMAGE,Pet-0-4241-2526-8814-165189-0203C3ACE6,"Devilsaur",0x1112,0x80000000,Creature-0-4241-2526-8814-197398-000343ACE6,"Hungry Lasher",0xa48,0x80000000,Pet-0-4241-2526-8814-165189-0203C3ACE6,Player-1303-09231FEC,291718,446020,2494,698,4052,414,77,1234,2|3,50|60,100|120,5|6,1801.07,-3077.86,2097,5.2480,247,3001,3002,-1,1,0,0,0,nil,nil,nil');
+
+        // Act
+        /** @var AdvancedCombatLogEvent $parseEventResult */
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_12_0_1);
+        /** @var AdvancedDataV22 $advancedData */
+        $advancedData = $parseEventResult->getAdvancedData();
+
+        // Assert
+        Assert::assertSame(AdvancedDataV22::class, $advancedData::class);
+        Assert::assertEquals('Pet-0-4241-2526-8814-165189-0203C3ACE6', $advancedData->getInfoGuid()?->getGuid());
+        Assert::assertEquals('Player-1303-09231FEC', $advancedData->getOwnerGuid()?->getGuid());
+        Assert::assertEquals(291718, $advancedData->getCurrentHP());
+        Assert::assertEquals(446020, $advancedData->getMaxHP());
+        Assert::assertEquals(2494, $advancedData->getAttackPower());
+        Assert::assertEquals(698, $advancedData->getSpellPower());
+        Assert::assertEquals(4052, $advancedData->getArmor());
+        Assert::assertEquals(414, $advancedData->getUnknown1());
+        Assert::assertEquals(77, $advancedData->getUnknown2());
+        Assert::assertEquals(1234, $advancedData->getAbsorb());
+        Assert::assertEquals([2, 3], $advancedData->getPowerType());
+        Assert::assertEquals([50, 60], $advancedData->getCurrentPower());
+        Assert::assertEquals([100, 120], $advancedData->getMaxPower());
+        Assert::assertEquals([5, 6], $advancedData->getPowerCost());
+        Assert::assertEquals(3077.86, $advancedData->getPositionX());
+        Assert::assertEquals(1801.07, $advancedData->getPositionY());
+        Assert::assertEquals(2097, $advancedData->getUiMapId());
+        Assert::assertEquals(5.2480, $advancedData->getFacing());
+        Assert::assertEquals(247, $advancedData->getLevel());
+    }
+
     private function guidHasBeenParsed(AdvancedDataInterface $advancedData, string $property): bool
     {
         return new ReflectionProperty($advancedData, $property)->getValue($advancedData) !== false;
@@ -257,6 +298,27 @@ final class AdvancedDataTest extends PublicTestCase
                 1041,
                 3.3024,
                 71,
+            ],
+            // A distinct value in every field, so reading one field from a neighbour's position cannot pass
+            [
+                '5/15 21:20:24.467  SPELL_CAST_SUCCESS,Player-1084-0A6D63A6,"Sadarøn-TarrenMill",0x512,0x0,Creature-0-4242-1841-14566-131436-0000E285EA,"Chosen Blood Matron",0x10a48,0x0,22568,"Ferocious Bite",0x1,Player-1084-0A6D63A6,0000000000000000,295296,370660,8542,2087,3228,4321,3|4,47|5,100|6,25|7,685.25,1257.08,1041,5.7142,407',
+                'Player-1084-0A6D63A6',
+                null,
+                295296,
+                370660,
+                8542,
+                2087,
+                3228,
+                4321,
+                [3, 4],
+                [47, 5],
+                [100, 6],
+                [25, 7],
+                -1257.08,
+                685.25,
+                1041,
+                5.7142,
+                407,
             ],
         ];
     }

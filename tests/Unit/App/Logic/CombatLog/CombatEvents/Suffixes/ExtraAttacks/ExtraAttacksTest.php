@@ -53,6 +53,10 @@ final class ExtraAttacksTest extends PublicTestCase
                 '3/25/2026 10:38:39.1361  SPELL_EXTRA_ATTACKS,Player-3674-0AFCC88F,"Legain-TwistingNether-EU",0x512,0x80000000,Player-3674-0AFCC88F,"Legain-TwistingNether-EU",0x512,0x80000000,465660,"Skyfury",0x1,1',
                 1,
             ],
+            'windfury-two-attacks' => [
+                '3/25/2026 10:38:40.1361  SPELL_EXTRA_ATTACKS,Player-1303-09231FEC,"Riptidewave-Aggra(Português)-EU",0x512,0x80000000,Player-1303-09231FEC,"Riptidewave-Aggra(Português)-EU",0x512,0x80000000,25504,"Windfury Attack",0x1,2',
+                2,
+            ],
         ];
     }
 }

@@ -221,6 +221,33 @@ final class GenericDataTest extends PublicTestCase
         Assert::assertFalse($this->guidHasBeenParsed($genericData, 'destGuid'));
     }
 
+    /**
+     * @throws \Exception
+     */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('GenericDataAll')]
+    public function parseEvent_givenDifferentSourceAndDestinationRaidFlags_returnsEachSidesOwnFlags(): void
+    {
+        // Arrange
+        $combatLogEntry = new CombatLogEntry('3/25/2026 10:47:23.2961  SPELL_INTERRUPT,Player-580-0AE12FF4,"Palatsch-Blackmoore-EU",0x512,0x80000020,Creature-0-4241-2526-8814-196045-000343ACE6,"Corrupted Manafiend",0xa48,0x80000000,96231,"Rebuke",0x1,388862,"Surge",64');
+
+        // Act
+        /** @var \App\Logic\CombatLog\CombatEvents\CombatLogEvent $parseEventResult */
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_12_0_1);
+        $genericData      = $parseEventResult->getGenericData();
+
+        // Assert
+        Assert::assertEquals('Player-580-0AE12FF4', $genericData->getSourceGuidRaw());
+        Assert::assertEquals('Palatsch-Blackmoore-EU', $genericData->getSourceName());
+        Assert::assertEquals('0x512', $genericData->getSourceFlags());
+        Assert::assertEquals('0x80000020', $genericData->getSourceRaidFlags());
+        Assert::assertEquals('Creature-0-4241-2526-8814-196045-000343ACE6', $genericData->getDestGuidRaw());
+        Assert::assertEquals('Corrupted Manafiend', $genericData->getDestName());
+        Assert::assertEquals('0xa48', $genericData->getDestFlags());
+        Assert::assertEquals('0x80000000', $genericData->getDestRaidFlags());
+    }
+
     private function guidHasBeenParsed(GenericDataInterface $genericData, string $property): bool
     {
         return new ReflectionProperty($genericData, $property)->getValue($genericData) !== false;

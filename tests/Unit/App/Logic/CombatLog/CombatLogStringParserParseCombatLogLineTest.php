@@ -71,6 +71,13 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
                     '123',
                 ],
             ],
+            'Escaped Quote Followed By A Comma Stays In The Value' => [
+                'line'     => '"Name \\"Nick, The\\" Last",123',
+                'expected' => [
+                    'Name \\"Nick, The\\" Last',
+                    '123',
+                ],
+            ],
             'Deeply Nested Brackets' => [
                 'line'     => '[[(1,2),(3,4)],[(5,[6,7])]],123',
                 'expected' => [

@@ -26,7 +26,7 @@ final class UnitDiedTest extends PublicTestCase
         $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_12_0_1);
 
         // Assert
-        Assert::assertInstanceOf(UnitDied::class, $combatLogEntry->getParsedEvent());
+        Assert::assertSame(UnitDied::class, $combatLogEntry->getParsedEvent()::class);
     }
 
     #[Test]
@@ -75,5 +75,21 @@ final class UnitDiedTest extends PublicTestCase
 
         // Assert
         Assert::assertNull($result->getGenericData()->getSourceGuid());
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('UnitDied')]
+    public function parseEvent_givenAUnitThatDiedUnconscious_returnsUnconscious(): void
+    {
+        // Arrange
+        $combatLogEntry = new CombatLogEntry('3/25/2026 10:38:49.5691  UNIT_DIED,0000000000000000,nil,0x80000000,0x80000000,Player-1303-09231FEC,"Riptidewave-Aggra(Português)-EU",0x512,0x80000000,1');
+
+        // Act
+        /** @var UnitDied $result */
+        $result = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_12_0_1);
+
+        // Assert
+        Assert::assertTrue($result->isUnconsciousOnDeath());
     }
 }

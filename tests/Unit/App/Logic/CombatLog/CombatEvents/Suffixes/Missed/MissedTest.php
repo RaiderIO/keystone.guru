@@ -33,7 +33,7 @@ class MissedTest extends PublicTestCase
         $suffix = Suffix::createFromEventName($combatLogVersion, 'MISSED');
 
         // Assert
-        $this->assertInstanceOf($expectedClassName, $suffix);
+        $this->assertSame($expectedClassName, $suffix::class);
         $this->assertInstanceOf(MissedInterface::class, $suffix);
     }
 
@@ -61,6 +61,22 @@ class MissedTest extends PublicTestCase
             ],
             [
                 'combatLogVersion'  => CombatLogVersion::RETAIL_11_0_5,
+                'expectedClassName' => MissedV22::class,
+            ],
+            [
+                'combatLogVersion'  => CombatLogVersion::CLASSIC_TBC_2_5_5,
+                'expectedClassName' => MissedV9SoD::class,
+            ],
+            [
+                'combatLogVersion'  => CombatLogVersion::CLASSIC_SOD_1_15_6,
+                'expectedClassName' => MissedV9SoD::class,
+            ],
+            [
+                'combatLogVersion'  => CombatLogVersion::CLASSIC_SOD_1_15_7,
+                'expectedClassName' => MissedV9SoD::class,
+            ],
+            [
+                'combatLogVersion'  => CombatLogVersion::RETAIL_12_0_5,
                 'expectedClassName' => MissedV22::class,
             ],
         ];
@@ -323,6 +339,15 @@ class MissedTest extends PublicTestCase
                 'offhand'       => true,
                 'amountMissed'  => 0,
                 'amountTotal'   => 0,
+                'critical'      => false,
+                'damageType'    => null,
+            ],
+            'Absorb' => [
+                'combatLogLine' => '12/9/2024 19:07:25.3510  SPELL_MISSED,Creature-0-5208-531-679-15262-0001573C0B,"Obsidian Eradicator",0x10a48,0x0,Player-5827-02477156,"Shineqt-LivingFlame-EU",0x514,0x0,26350,"Shock Blast",0x8,ABSORB,nil,1234,5678',
+                'missType'      => Guid::createFromGuidString('ABSORB'),
+                'offhand'       => false,
+                'amountMissed'  => 1234,
+                'amountTotal'   => 5678,
                 'critical'      => false,
                 'damageType'    => null,
             ],

@@ -8,6 +8,7 @@ use App\Logic\CombatLog\SpecialEvents\EncounterEnd\EncounterEndBuilder;
 use App\Logic\CombatLog\SpecialEvents\EncounterEnd\Versions\V20\EncounterEndV20;
 use App\Logic\CombatLog\SpecialEvents\EncounterEnd\Versions\V9\EncounterEndV9;
 use Illuminate\Support\Carbon;
+use InvalidArgumentException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -89,6 +90,62 @@ final class EncounterEndTest extends PublicTestCase
                 1,
                 133503,
             ],
+            'crawth-wipe' => [
+                '3/25/2026 10:45:48.8171  ENCOUNTER_END,2564,"Crawth",8,5,0,73503',
+                2564,
+                'Crawth',
+                8,
+                5,
+                0,
+                73503,
+            ],
+        ];
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('EncounterEnd')]
+    #[DataProvider('create_givenAClassicVersion_returnsEncounterEndV9WithEachField_DataProvider')]
+    public function create_givenAClassicVersion_returnsEncounterEndV9WithEachField(int $combatLogVersion): void
+    {
+        // Arrange
+        $result    = null;
+        $exception = null;
+
+        // Act
+        try {
+            $result = EncounterEndBuilder::create(
+                $combatLogVersion,
+                Carbon::now(),
+                'ENCOUNTER_END',
+                [665, 'Gehennas', 226, 20, 0],
+                '',
+            );
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $exception = $invalidArgumentException;
+        }
+
+        // Assert
+        Assert::assertNull($exception?->getMessage());
+        Assert::assertInstanceOf(EncounterEndV9::class, $result);
+        Assert::assertEquals(665, $result->getEncounterId());
+        Assert::assertEquals('Gehennas', $result->getEncounterName());
+        Assert::assertEquals(226, $result->getDifficultyId());
+        Assert::assertEquals(20, $result->getGroupSize());
+        Assert::assertEquals(0, $result->getSuccess());
+    }
+
+    /**
+     * @return array<string, array{0: int}>
+     */
+    public static function create_givenAClassicVersion_returnsEncounterEndV9WithEachField_DataProvider(): array
+    {
+        return [
+            'classic'            => [CombatLogVersion::CLASSIC],
+            'classic tbc 2.5.5'  => [CombatLogVersion::CLASSIC_TBC_2_5_5],
+            'classic sod 1.15.5' => [CombatLogVersion::CLASSIC_SOD_1_15_5],
+            'classic sod 1.15.6' => [CombatLogVersion::CLASSIC_SOD_1_15_6],
+            'classic sod 1.15.7' => [CombatLogVersion::CLASSIC_SOD_1_15_7],
         ];
     }
 }

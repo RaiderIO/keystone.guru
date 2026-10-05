@@ -65,6 +65,13 @@ final class HealTest extends PublicTestCase
                 0,
                 true,
             ],
+            'distinct-value-per-field' => [
+                '3/25/2026 10:38:29.5101  SPELL_HEAL,Player-1303-09231FEC,"Riptidewave-Aggra(Português)-EU",0x512,0x80000000,Player-1303-09231FEC,"Riptidewave-Aggra(Português)-EU",0x512,0x80000000,379,"Earth Shield",0x8,Player-1303-09231FEC,0000000000000000,350281,355540,770,1973,1834,996,0,0,0,271070,275000,0,1776.73,-3060.78,2097,6.2619,252,20000,1500,312,1,nil',
+                20000,
+                1500,
+                312,
+                true,
+            ],
         ];
     }
 }

@@ -8,6 +8,7 @@ use App\Logic\CombatLog\SpecialEvents\EncounterStart\EncounterStartBuilder;
 use App\Logic\CombatLog\SpecialEvents\EncounterStart\Versions\V20\EncounterStartV20;
 use App\Logic\CombatLog\SpecialEvents\EncounterStart\Versions\V9\EncounterStartV9;
 use Illuminate\Support\Carbon;
+use InvalidArgumentException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -85,6 +86,53 @@ final class EncounterStartTest extends PublicTestCase
                 5,
                 2526,
             ],
+        ];
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('EncounterStart')]
+    #[DataProvider('create_givenAClassicVersion_returnsEncounterStartV9WithEachField_DataProvider')]
+    public function create_givenAClassicVersion_returnsEncounterStartV9WithEachField(int $combatLogVersion): void
+    {
+        // Arrange
+        $result    = null;
+        $exception = null;
+
+        // Act
+        try {
+            $result = EncounterStartBuilder::create(
+                $combatLogVersion,
+                Carbon::now(),
+                'ENCOUNTER_START',
+                [665, 'Gehennas', 226, 20, 409, 2],
+                '',
+            );
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $exception = $invalidArgumentException;
+        }
+
+        // Assert
+        Assert::assertNull($exception?->getMessage());
+        Assert::assertInstanceOf(EncounterStartV9::class, $result);
+        Assert::assertEquals(665, $result->getEncounterId());
+        Assert::assertEquals('Gehennas', $result->getEncounterName());
+        Assert::assertEquals(226, $result->getDifficultyId());
+        Assert::assertEquals(20, $result->getGroupSize());
+        Assert::assertEquals(409, $result->getInstanceID());
+    }
+
+    /**
+     * @return array<string, array{0: int}>
+     */
+    public static function create_givenAClassicVersion_returnsEncounterStartV9WithEachField_DataProvider(): array
+    {
+        return [
+            'classic'            => [CombatLogVersion::CLASSIC],
+            'classic tbc 2.5.5'  => [CombatLogVersion::CLASSIC_TBC_2_5_5],
+            'classic sod 1.15.5' => [CombatLogVersion::CLASSIC_SOD_1_15_5],
+            'classic sod 1.15.6' => [CombatLogVersion::CLASSIC_SOD_1_15_6],
+            'classic sod 1.15.7' => [CombatLogVersion::CLASSIC_SOD_1_15_7],
         ];
     }
 }

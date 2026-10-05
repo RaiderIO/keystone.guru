@@ -4,8 +4,10 @@ namespace Tests\Unit\App\Logic\CombatLog\CombatLogEntry;
 
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
+use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Support\Carbon;
+use InvalidArgumentException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -135,6 +137,82 @@ final class CombatLogEntryTest extends PublicTestCase
                 59,
                 958,
             ],
+        ];
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('CombatLogEntry')]
+    public function parseEvent_givenALineWithoutATimestamp_throwsInvalidArgumentException(): void
+    {
+        // Arrange
+        $combatLogEntry = new CombatLogEntry('ZONE_CHANGE,2526,"Algeth\'ar Academy",23');
+
+        // Assert
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unable to parse event ZONE_CHANGE');
+
+        // Act
+        $combatLogEntry->parseEvent();
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('CombatLogEntry')]
+    public function parseEvent_givenAKnownStrayLineWithoutATimestamp_returnsNull(): void
+    {
+        // Arrange
+        $combatLogEntry = new CombatLogEntry("Search the gold piles for magic items!\n");
+
+        // Act
+        $result    = null;
+        $exception = null;
+
+        try {
+            $result = $combatLogEntry->parseEvent();
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $exception = $invalidArgumentException;
+        }
+
+        // Assert
+        Assert::assertNull($exception?->getMessage());
+        Assert::assertNull($result);
+        Assert::assertNull($combatLogEntry->getParsedEvent());
+        Assert::assertNull($combatLogEntry->getParsedTimestamp());
+    }
+
+    /**
+     * @param array<int, string> $eventWhiteList
+     */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('CombatLogEntry')]
+    #[DataProvider('parseEvent_givenAnEventWhiteList_onlyParsesWhiteListedEvents_DataProvider')]
+    public function parseEvent_givenAnEventWhiteList_onlyParsesWhiteListedEvents(
+        array   $eventWhiteList,
+        ?string $expectedEventClass,
+    ): void {
+        // Arrange
+        $combatLogEntry = new CombatLogEntry('3/25/2026 10:36:28.9051  ZONE_CHANGE,2526,"Algeth\'ar Academy",23');
+
+        // Act
+        $result = $combatLogEntry->parseEvent($eventWhiteList);
+
+        // Assert
+        Assert::assertSame($expectedEventClass, $result === null ? null : $result::class);
+        Assert::assertSame($result, $combatLogEntry->getParsedEvent());
+        Assert::assertEquals(25, $combatLogEntry->getParsedTimestamp()?->day);
+    }
+
+    /**
+     * @return array<string, array{0: array<int, string>, 1: class-string|null}>
+     */
+    public static function parseEvent_givenAnEventWhiteList_onlyParsesWhiteListedEvents_DataProvider(): array
+    {
+        return [
+            'no white list parses every event' => [[], ZoneChange::class],
+            'white-listed event'               => [['CHALLENGE_MODE_START', 'ZONE_CHANGE'], ZoneChange::class],
+            'event outside the white list'     => [['CHALLENGE_MODE_START', 'ENCOUNTER_START'], null],
         ];
     }
 }
