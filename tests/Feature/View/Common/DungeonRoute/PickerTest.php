@@ -198,6 +198,7 @@ final class PickerTest extends PublicTestCase
     {
         // Arrange
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown route picker action publish');
 
         // Act
         $this->renderPicker(['action' => 'publish']);
@@ -269,6 +270,7 @@ final class PickerTest extends PublicTestCase
     {
         // Arrange
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown route picker source scope everyone');
 
         // Act
         $this->renderPicker(['sourceScope' => 'everyone']);
@@ -350,6 +352,7 @@ final class PickerTest extends PublicTestCase
     {
         // Arrange
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Route picker source scope unassigned_by_members needs a sourceTeam');
 
         // Act
         $this->renderPicker(['sourceScope' => 'unassigned_by_members']);

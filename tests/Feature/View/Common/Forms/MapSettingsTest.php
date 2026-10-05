@@ -54,6 +54,23 @@ final class MapSettingsTest extends PublicTestCase
     }
 
     #[Test]
+    public function render_givenAggressivenessBorderCookieEnabled_checksAggressivenessBorderBox(): void
+    {
+        // Arrange
+        $_COOKIE['map_enemy_aggressiveness_border'] = '1';
+
+        try {
+            // Act
+            $html = view('common.forms.mapsettings', ['edit' => false])->render();
+
+            // Assert
+            $this->assertTrue($this->isInputChecked($html, 'map_settings_enemy_aggressiveness_border'));
+        } finally {
+            unset($_COOKIE['map_enemy_aggressiveness_border']);
+        }
+    }
+
+    #[Test]
     public function render_givenNoCookies_leavesPercentageNumberStyleUnchecked(): void
     {
         // Arrange

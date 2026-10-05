@@ -24,6 +24,16 @@ final class PullGraphTest extends PublicTestCase
         ));
     }
 
+    /**
+     * @return array<int, string> The height of every bar, in render order.
+     */
+    private function barHeights(string $html): array
+    {
+        preg_match_all('/<rect [^>]*height="(\d+)"/', $html, $matches);
+
+        return $matches[1];
+    }
+
     #[Test]
     public function render_givenPullsWithForces_returnsOneBarPerPull(): void
     {
@@ -44,9 +54,10 @@ final class PullGraphTest extends PublicTestCase
             'tooltipKey'  => 'view_common.dungeonroute.cardrow.pulls',
         ])->render();
 
-        // Assert
+        // Assert - trash bars scale against the largest trash pull: 10/20 and 5/20 of the chart height, rounded
         $this->assertStringContainsString('leaderboard_pull_graph', $html);
         $this->assertSame(3, substr_count($html, '<rect'));
+        $this->assertSame(['11', '22', '6'], $this->barHeights($html));
     }
 
     #[Test]
@@ -94,10 +105,32 @@ final class PullGraphTest extends PublicTestCase
             'tooltipKey'  => 'view_common.dungeonroute.cardrow.pulls',
         ])->render();
 
-        // Assert
+        // Assert - the svg itself is 22 high as well, so the boss bar is matched as a whole
         $this->assertSame(2, substr_count($html, '<rect'));
         $this->assertStringContainsString('rgba(240, 180, 60, 0.9)', $html);
         $this->assertStringContainsString('height="22"', $html);
+        $this->assertMatchesRegularExpression(
+            '/<rect x="4" y="0" width="3" height="22"\s+fill="rgba\(240, 180, 60, 0\.9\)"><\/rect>/',
+            $html,
+        );
+    }
+
+    #[Test]
+    public function render_givenMoreThanThirtyPulls_capsTheBarsAndKeepsTheRealPullCount(): void
+    {
+        // Arrange
+        $pullForces = $this->pullForces(array_fill(0, 35, ['enemy_forces' => 10, 'has_boss' => false]));
+
+        // Act
+        $html = view('common.dungeonroute.pullgraph', [
+            'pullForces' => $pullForces,
+            'graphClass' => 'leaderboard_pull_graph',
+            'tooltipKey' => 'view_common.dungeonroute.cardrow.pulls',
+        ])->render();
+
+        // Assert
+        $this->assertSame(30, substr_count($html, '<rect'));
+        $this->assertStringContainsString('35 pulls', $html);
     }
 
     #[Test]

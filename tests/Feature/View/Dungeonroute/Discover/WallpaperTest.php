@@ -4,6 +4,7 @@ namespace Tests\Feature\View\Dungeonroute\Discover;
 
 use App\Models\Dungeon;
 use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -49,6 +50,22 @@ final class WallpaperTest extends PublicTestCase
 
         // Assert
         $this->assertStringContainsString($expansion->getWallpaperUrl(), $result);
+    }
+
+    #[Test]
+    public function render_givenGameVersion_rendersItsExpansionWallpaper(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::query()->whereHas('expansion')->with('expansion')->firstOrFail();
+
+        // Act
+        $result = view('dungeonroute.discover.wallpaper', ['gameVersion' => $gameVersion])->render();
+
+        // Assert
+        $this->assertStringContainsString(
+            sprintf("background-image: url('%s')", $gameVersion->expansion->getWallpaperUrl()),
+            $result,
+        );
     }
 
     #[Test]
