@@ -38,7 +38,8 @@
     white-space: pre-line;
 }
 
-.creator_hero_socials {
+/* Shared with the directory card, which shrinks the links in creator-directory.css */
+.creator_socials {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -46,7 +47,7 @@
 
 /* Not btn-outline-secondary: bootswatch's $secondary is as dark as the card under darkly and vapor. The icon's colour
    is stated on the icon: each theme's link rule outweighs any colour set on the link itself. */
-.creator_hero_social_link {
+.creator_social_link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -59,23 +60,23 @@
     transition: border-color 0.12s ease, background-color 0.12s ease;
 }
 
-.creator_hero_social_link > i {
+.creator_social_link > i {
     color: var(--theme-text-contrast);
 }
 
-.creator_hero_social_link:hover,
-.creator_hero_social_link:focus-visible {
+.creator_social_link:hover,
+.creator_social_link:focus-visible {
     border-color: var(--theme-btn-accent);
     background-color: rgba(128, 128, 128, 0.15);
 }
 
-.creator_hero_social_link:focus-visible {
+.creator_social_link:focus-visible {
     outline: 2px solid var(--theme-btn-accent);
     outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .creator_hero_social_link {
+    .creator_social_link {
         transition: none;
     }
 }

@@ -53,6 +53,7 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
                     sprintf('%%%s%%', addcslashes((string)$search, '%_\\')),
                 ),
             )
+            ->with('socialLinks')
             ->paginate($perPage)
             ->withQueryString();
     }
@@ -99,8 +100,7 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
     public function getStatsSeason(): ?Season
     {
         return GameVersion::getUserOrDefaultGameVersion()->has_seasons
-            // The coverage row reads the season's dungeons and their images for every creator it is built for
-            ? $this->seasonService->getCurrentSeason()?->loadMissing('dungeons.expansion')
+            ? $this->seasonService->getCurrentSeason()
             : null;
     }
 }

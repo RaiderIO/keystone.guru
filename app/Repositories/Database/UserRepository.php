@@ -127,7 +127,6 @@ class UserRepository extends DatabaseRepository implements UserRepositoryInterfa
                 'published_routes.season_route_count',
                 'published_routes.season_views',
                 'published_routes.season_popularity',
-                'published_routes.season_dungeon_ids',
                 'published_routes.rating_weighted_sum',
                 'published_routes.rating_count',
                 'published_routes.last_published_at',
@@ -157,11 +156,6 @@ class UserRepository extends DatabaseRepository implements UserRepositoryInterfa
      * not add a second scan. Without a season they are constant zeroes - `season_id = NULL` would
      * never match, and `<=>` would count the routes that have no season instead.
      *
-     * `season_dungeon_ids` is the comma-separated set of dungeons those season routes are for;
-     * GROUP_CONCAT skips the NULLs the IF() yields for every other route. Its DISTINCT makes MySQL
-     * group by sorting instead of through a temporary table, at the same cost: ~200ms either way
-     * over 160k world-published routes by 3,000 authors.
-     *
      * @return Builder<DungeonRoute>
      */
     private function buildPublishedRouteStatsQuery(?int $seasonId): Builder
@@ -177,13 +171,12 @@ class UserRepository extends DatabaseRepository implements UserRepositoryInterfa
             ->groupBy('author_id');
 
         if ($seasonId === null) {
-            return $builder->selectRaw('0 AS season_route_count, 0 AS season_views, 0 AS season_popularity, NULL AS season_dungeon_ids');
+            return $builder->selectRaw('0 AS season_route_count, 0 AS season_views, 0 AS season_popularity');
         }
 
         return $builder
             ->selectRaw('SUM(season_id = ?) AS season_route_count', [$seasonId])
             ->selectRaw('SUM(IF(season_id = ?, views, 0)) AS season_views', [$seasonId])
-            ->selectRaw('SUM(IF(season_id = ?, popularity, 0)) AS season_popularity', [$seasonId])
-            ->selectRaw('GROUP_CONCAT(DISTINCT IF(season_id = ?, dungeon_id, NULL)) AS season_dungeon_ids', [$seasonId]);
+            ->selectRaw('SUM(IF(season_id = ?, popularity, 0)) AS season_popularity', [$seasonId]);
     }
 }

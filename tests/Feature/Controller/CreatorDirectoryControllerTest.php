@@ -10,6 +10,8 @@ use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\User;
+use App\Models\UserSocialLink;
+use App\Models\UserSocialLinkPlatform;
 use App\Service\Creator\CreatorDirectoryServiceInterface;
 use App\Service\Creator\Enums\CreatorDirectorySort;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -534,19 +536,24 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
     }
 
     /**
-     * The card's coverage row counts only world-published routes of the season: a link-only or unpublished route
-     * for another of the season's dungeons must neither raise the count nor colour that dungeon.
+     * The card is one stretched link to the profile, so a social link must sit beside that link, never inside it: an
+     * anchor inside an anchor is invalid HTML that browsers split apart.
      */
     #[Test]
-    public function index_givenACreatorWithSeasonRoutes_rendersTheDungeonsOnlyWorldPublishedRoutesCover(): void
+    public function index_givenACreatorWithSocialLinks_rendersEachBesideTheProfileLink(): void
     {
         // Arrange - searched for by name, so the creator is on the first page whatever else is listed
-        $viewer   = User::factory()->create();
-        $creator  = $this->createSearchableCreator();
-        $dungeons = $this->statsSeason()->dungeons;
-        $routes   = $this->createRoutesFor($creator, $dungeons[0], $this->minPublishedRoutes());
-        $routes->push(...$this->createRoutesFor($creator, $dungeons[1], 1, PublishedState::WORLD_WITH_LINK));
-        $routes->push(...$this->createRoutesFor($creator, $dungeons[2], 1, PublishedState::UNPUBLISHED));
+        $viewer      = User::factory()->create();
+        $creator     = $this->createSearchableCreator();
+        $routes      = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes());
+        $socialLinks = collect([
+            UserSocialLinkPlatform::Twitch->value  => 'https://twitch.tv/someone',
+            UserSocialLinkPlatform::Youtube->value => 'https://youtube.com/@someone',
+        ])->map(static fn(string $url, string $platform): UserSocialLink => UserSocialLink::create([
+            'user_id'  => $creator->id,
+            'platform' => $platform,
+            'url'      => $url,
+        ]));
 
         Feature::for($viewer)->activate(CreatorProfiles::class);
 
@@ -556,15 +563,57 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $response->assertSee(e(__('view_creator.stats.coverage', ['count' => 1, 'total' => $dungeons->count()])), false);
+            $profileLinkPattern = sprintf(
+                '#<a href="%s"\s+class="creator_card_name stretched-link[^"]*">(.*?)</a>#s',
+                preg_quote(route('profile.view', ['user' => $creator]), '#'),
+            );
+            $this->assertSame(1, preg_match($profileLinkPattern, $response->getContent(), $profileLink));
+            $this->assertSame($creator->name, trim($profileLink[1]));
             $response->assertSeeInOrder([
-                e(__('view_creator.stats.coverage_dungeon_covered', ['dungeon' => __($dungeons[0]->name)])),
-                e(__('view_creator.stats.coverage_dungeon_missing', ['dungeon' => __($dungeons[1]->name)])),
-                e(__('view_creator.stats.coverage_dungeon_missing', ['dungeon' => __($dungeons[2]->name)])),
+                sprintf('href="%s"', 'https://twitch.tv/someone'),
+                sprintf('aria-label="%s"', e(__('view_profile.view.social_link', ['platform' => __('view_profile.view.platform.twitch')]))),
+                sprintf('href="%s"', 'https://youtube.com/@someone'),
+                sprintf('aria-label="%s"', e(__('view_profile.view.social_link', ['platform' => __('view_profile.view.platform.youtube')]))),
             ], false);
         } finally {
             Feature::for($viewer)->forget(CreatorProfiles::class);
+            $socialLinks->each(static fn(UserSocialLink $socialLink) => $socialLink->delete());
             $this->deleteAll($routes);
+            $creator->delete();
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
+    public function index_givenACreatorWithoutSocialLinks_rendersNoSocialsRow(): void
+    {
+        // Arrange - a creator with a link on the same page is the control that the row renders at all
+        $viewer        = User::factory()->create();
+        $creator       = $this->createSearchableCreator();
+        $linkedCreator = $this->createSearchableCreator(['name' => sprintf('%sLinked', $creator->name)]);
+        $routes        = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes());
+        $routes->push(...$this->createPublishedRoutesFor($linkedCreator, $this->minPublishedRoutes()));
+        $socialLink = UserSocialLink::create([
+            'user_id'  => $linkedCreator->id,
+            'platform' => UserSocialLinkPlatform::Twitch->value,
+            'url'      => 'https://twitch.tv/someone',
+        ]);
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['search' => $creator->name]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertEqualsCanonicalizing([$creator->id, $linkedCreator->id], $this->creatorIdsFrom($response)->all());
+            $this->assertSame(1, substr_count($response->getContent(), 'creator_card_socials'));
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $socialLink->delete();
+            $this->deleteAll($routes);
+            $linkedCreator->delete();
             $creator->delete();
             $viewer->delete();
         }

@@ -12,7 +12,6 @@ use App\Models\UserPinnedDungeonRoute;
 use App\Models\UserPinnedDungeonRouteCollection;
 use App\Models\UserSocialLink;
 use App\Models\UserSocialLinkPlatform;
-use App\Service\Creator\CreatorDirectoryServiceInterface;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
@@ -101,52 +100,6 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             $this->assertSame(1, $response->viewData('creatorStats')->publishedRouteCount);
             $response->assertSee(e(trans_choice('view_creator.stats.route_count_total', 1, ['count' => 1])), false);
             $response->assertSee(e(__('view_creator.stats.last_published', ['time' => now()->subDays(3)->diffForHumans()])), false);
-        } finally {
-            $routes->each(static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->delete());
-            Feature::for($creator)->forget(CreatorProfiles::class);
-            $creator->delete();
-        }
-    }
-
-    /**
-     * Only world-published routes of the season count: a link-only or unpublished route for another of the season's
-     * dungeons must neither raise the count nor colour that dungeon in the row.
-     */
-    #[Test]
-    public function view_givenFeatureActive_showsTheDungeonsOnlyWorldPublishedSeasonRoutesCover(): void
-    {
-        // Arrange
-        $creator     = User::factory()->create();
-        $statsSeason = app(CreatorDirectoryServiceInterface::class)->getStatsSeason();
-        $this->assertNotNull($statsSeason, 'Expected the default game version to have a current season');
-        $dungeons = $statsSeason->dungeons;
-        $this->assertGreaterThanOrEqual(4, $dungeons->count(), 'Expected the current season to have at least four dungeons');
-        Feature::for($creator)->activate(CreatorProfiles::class);
-
-        $routes = collect([
-            PublishedState::WORLD           => $dungeons[0],
-            PublishedState::WORLD_WITH_LINK => $dungeons[1],
-            PublishedState::UNPUBLISHED     => $dungeons[2],
-        ])->map(static fn($dungeon, string $publishedState): DungeonRoute => DungeonRoute::factory()->create([
-            'author_id'          => $creator->id,
-            'dungeon_id'         => $dungeon->id,
-            'season_id'          => $statsSeason->id,
-            'expires_at'         => null,
-            'published_state_id' => PublishedState::ALL[$publishedState],
-        ]));
-
-        try {
-            // Act
-            $response = $this->actingAs($creator)->get(route('profile.view', ['user' => $creator]));
-
-            // Assert
-            $response->assertOk();
-            $response->assertSee(e(__('view_creator.stats.coverage', ['count' => 1, 'total' => $dungeons->count()])), false);
-            $response->assertSeeInOrder([
-                e(__('view_creator.stats.coverage_dungeon_covered', ['dungeon' => __($dungeons[0]->name)])),
-                e(__('view_creator.stats.coverage_dungeon_missing', ['dungeon' => __($dungeons[1]->name)])),
-                e(__('view_creator.stats.coverage_dungeon_missing', ['dungeon' => __($dungeons[2]->name)])),
-            ], false);
         } finally {
             $routes->each(static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->delete());
             Feature::for($creator)->forget(CreatorProfiles::class);

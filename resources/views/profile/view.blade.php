@@ -70,8 +70,6 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
                         {{ implode(' · ', $creatorStats->getProfileParts()) }}
                     </div>
 
-                    @include('creator.coverage', ['creatorStats' => $creatorStats])
-
                     @if(!empty($user->bio))
                         <p class="creator_hero_bio">
                             {{ $user->bio }}
@@ -81,19 +79,7 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
 
                 @if($socialLinks->isNotEmpty())
                     <div class="col-12 col-sm-auto">
-                        <div class="creator_hero_socials">
-                            @foreach($socialLinks as $socialLink)
-                                <?php $platformName = __(sprintf('view_profile.view.platform.%s', $socialLink->platform)); ?>
-                                <a href="{{ $socialLink->url }}"
-                                   class="creator_hero_social_link"
-                                   target="_blank"
-                                   rel="nofollow noopener noreferrer"
-                                   title="{{ __('view_profile.view.social_link', ['platform' => $platformName]) }}"
-                                   aria-label="{{ __('view_profile.view.social_link', ['platform' => $platformName]) }}">
-                                    <i class="{{ $socialLink->getIconClass() }}" aria-hidden="true"></i>
-                                </a>
-                            @endforeach
-                        </div>
+                        @include('creator.socials', ['socialLinks' => $socialLinks, 'class' => 'creator_hero_socials'])
                     </div>
                 @endif
             </div>

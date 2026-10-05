@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Collection;
 interface CreatorDirectoryServiceInterface
 {
     /**
-     * A page of listed creators, their season figures counted for getStatsSeason().
+     * A page of listed creators with their social links, their season figures counted for getStatsSeason().
      *
      * @param string|null  $search     Optional case-insensitive match on the creator's name.
      * @param int|null     $categoryId Optional DungeonRouteCollectionCategory to filter on: only
@@ -45,7 +45,7 @@ interface CreatorDirectoryServiceInterface
 
     /**
      * The season "this season" means on the directory and profiles: the current season of the
-     * viewer's game version with its dungeons loaded, or null when that game version has no seasons.
+     * viewer's game version, or null when that game version has no seasons.
      */
     public function getStatsSeason(): ?Season;
 }

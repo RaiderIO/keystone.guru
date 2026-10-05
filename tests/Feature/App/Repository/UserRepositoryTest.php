@@ -283,64 +283,6 @@ final class UserRepositoryTest extends PublicTestCase
         }
     }
 
-    /**
-     * The coverage line names dungeons, so a route that is not world-published - or not of the season - must not
-     * add its dungeon: that would reveal an unlisted, team or private route exists.
-     */
-    #[Test]
-    public function buildListedCreatorsQuery_givenASeason_exposesOnlyTheDungeonsOfWorldPublishedSeasonRoutes(): void
-    {
-        // Arrange
-        [$seasonId, $otherSeasonId]   = $this->twoSeasonIds();
-        [$dungeonId, $otherDungeonId] = $this->twoDungeonIds();
-        $hiddenDungeonIds             = Dungeon::query()->whereNotIn('id', [$dungeonId, $otherDungeonId])->limit(4)->pluck('id');
-        $this->assertCount(4, $hiddenDungeonIds, 'Expected at least six seeded dungeons');
-        $creator = User::factory()->create();
-        $routes  = $this->createRoutesFor($creator, [
-            ...array_fill(0, $this->minPublishedRoutes(), ['dungeon_id' => $dungeonId, 'season_id' => $seasonId]),
-            ['dungeon_id' => $otherDungeonId, 'season_id' => $seasonId],
-            ['dungeon_id' => $hiddenDungeonIds[0], 'season_id' => $otherSeasonId],
-            ['dungeon_id' => $hiddenDungeonIds[1], 'season_id' => $seasonId, 'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK]],
-            ['dungeon_id' => $hiddenDungeonIds[2], 'season_id' => $seasonId, 'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED]],
-            ['dungeon_id' => $hiddenDungeonIds[3], 'season_id' => $seasonId, 'published_state_id' => PublishedState::ALL[PublishedState::TEAM]],
-        ]);
-
-        try {
-            // Act
-            $listedCreator = $this->repository->buildListedCreatorsQuery(null, $seasonId)->get()->firstWhere('id', $creator->id);
-
-            // Assert
-            $this->assertNotNull($listedCreator);
-            $seasonDungeonIds = array_map('intval', explode(',', (string)$listedCreator->season_dungeon_ids));
-            sort($seasonDungeonIds);
-            $this->assertSame([min($dungeonId, $otherDungeonId), max($dungeonId, $otherDungeonId)], $seasonDungeonIds);
-        } finally {
-            $this->deleteAll($routes);
-            $creator->delete();
-        }
-    }
-
-    #[Test]
-    public function buildListedCreatorsQuery_givenNoSeason_exposesNoSeasonDungeonIds(): void
-    {
-        // Arrange
-        [$dungeonId] = $this->twoDungeonIds();
-        $creator     = User::factory()->create();
-        $routes      = $this->createRoutesFor($creator, array_fill(0, $this->minPublishedRoutes(), ['dungeon_id' => $dungeonId, 'season_id' => null]));
-
-        try {
-            // Act
-            $listedCreator = $this->repository->buildListedCreatorsQuery()->get()->firstWhere('id', $creator->id);
-
-            // Assert
-            $this->assertNotNull($listedCreator);
-            $this->assertNull($listedCreator->season_dungeon_ids);
-        } finally {
-            $this->deleteAll($routes);
-            $creator->delete();
-        }
-    }
-
     #[Test]
     public function buildListedCreatorsQuery_givenActiveThisSeasonSort_listsCreatorsWithSeasonRoutesFirst(): void
     {

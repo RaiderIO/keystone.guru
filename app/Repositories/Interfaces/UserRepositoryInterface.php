@@ -29,9 +29,9 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      *
      * The threshold and the figures rendered on each card come from the same aggregate, exposed on
      * the returned models as `published_route_count`, `total_views`, `season_route_count`,
-     * `season_views`, `season_popularity`, `season_dungeon_ids`, `rating_weighted_sum`,
-     * `rating_count` and `last_published_at`, so they cannot drift apart. `users.id` is always the
-     * final tiebreak so pagination cannot repeat or skip a creator between pages.
+     * `season_views`, `season_popularity`, `rating_weighted_sum`, `rating_count` and
+     * `last_published_at`, so they cannot drift apart. `users.id` is always the final tiebreak so
+     * pagination cannot repeat or skip a creator between pages.
      *
      * @param int|null             $categoryId When set, only creators who publicly share a collection
      *                                         filed under this category are listed.

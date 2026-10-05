@@ -2,11 +2,9 @@
 
 namespace Tests\Unit\App\Service\Creator;
 
-use App\Models\Dungeon;
 use App\Models\Season;
 use App\Service\Creator\Dtos\CreatorStats;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -134,94 +132,6 @@ final class CreatorStatsTest extends PublicTestCase
 
         // Assert
         $this->assertSame(['No published routes'], $parts);
-    }
-
-    #[Test]
-    public function getSeasonDungeonCoverage_givenRoutesForSomeDungeons_returnsEverySeasonDungeonInTheSeasonsOrder(): void
-    {
-        // Arrange - listed out of the season's order, which the row must not follow
-        $season       = $this->seasonWithDungeons();
-        $dungeons     = $season->dungeons;
-        $creatorStats = CreatorStats::fromAttributes([
-            'season_route_count' => 3,
-            'season_dungeon_ids' => sprintf('%d,%d', $dungeons[2]->id, $dungeons[0]->id),
-        ], $season);
-
-        // Act
-        $seasonDungeonCoverage = $creatorStats->getSeasonDungeonCoverage();
-
-        // Assert
-        $this->assertSame(
-            $dungeons->map(static fn(Dungeon $dungeon, int $index): array => [$dungeon->id, in_array($index, [0, 2], true)])->all(),
-            $this->coverageStates($seasonDungeonCoverage),
-        );
-    }
-
-    /**
-     * A route can carry a season while its dungeon is not part of that season; the row is the season's dungeons, so
-     * such a dungeon must not join it.
-     */
-    #[Test]
-    public function getSeasonDungeonCoverage_givenADungeonOutsideTheSeason_leavesItOut(): void
-    {
-        // Arrange
-        $season           = $this->seasonWithDungeons();
-        $dungeons         = $season->dungeons;
-        $outsideDungeonId = Dungeon::query()->whereNotIn('id', $dungeons->pluck('id'))->value('id');
-        $creatorStats     = CreatorStats::fromAttributes([
-            'season_route_count' => 2,
-            'season_dungeon_ids' => sprintf('%d,%d', $dungeons[0]->id, $outsideDungeonId),
-        ], $season);
-
-        // Act
-        $seasonDungeonCoverage = $creatorStats->getSeasonDungeonCoverage();
-
-        // Assert
-        $this->assertSame(
-            $dungeons->map(static fn(Dungeon $dungeon, int $index): array => [$dungeon->id, $index === 0])->all(),
-            $this->coverageStates($seasonDungeonCoverage),
-        );
-    }
-
-    #[Test]
-    public function getSeasonDungeonCoverage_givenNoSeasonRoutes_returnsEverySeasonDungeonUncovered(): void
-    {
-        // Arrange
-        $season       = $this->seasonWithDungeons();
-        $creatorStats = CreatorStats::fromAttributes([
-            'published_route_count' => 3,
-            'season_route_count'    => 0,
-            'season_dungeon_ids'    => null,
-        ], $season);
-
-        // Act
-        $seasonDungeonCoverage = $creatorStats->getSeasonDungeonCoverage();
-
-        // Assert
-        $this->assertSame(
-            $season->dungeons->map(static fn(Dungeon $dungeon): array => [$dungeon->id, false])->all(),
-            $this->coverageStates($seasonDungeonCoverage),
-        );
-    }
-
-    /**
-     * @param  Collection<int, array{dungeon: Dungeon, covered: bool}> $seasonDungeonCoverage
-     * @return list<array{int, bool}>
-     */
-    private function coverageStates(Collection $seasonDungeonCoverage): array
-    {
-        return $seasonDungeonCoverage
-            ->map(static fn(array $dungeonCoverage): array => [$dungeonCoverage['dungeon']->id, $dungeonCoverage['covered']])
-            ->all();
-    }
-
-    private function seasonWithDungeons(): Season
-    {
-        /** @var Season|null $season */
-        $season = Season::query()->has('dungeons', '>=', 4)->with('dungeons')->first();
-        $this->assertNotNull($season, 'Expected a seeded season with at least four dungeons');
-
-        return $season;
     }
 
     private function season(): Season
