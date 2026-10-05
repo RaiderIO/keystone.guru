@@ -5,6 +5,8 @@
 
 const Lang = require('lang.js');
 
+globalThis.abbreviateNumber = require('../../../util').abbreviateNumber;
+
 const {PickerDungeonRoute} = require('./pickerdungeonroute');
 const {isColorDark} = require('../../../colorutil');
 

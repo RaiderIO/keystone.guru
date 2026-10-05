@@ -232,6 +232,26 @@ function getFormattedPercentage(value, max) {
 }
 
 /**
+ * Mirrors the abbreviateNumber() PHP helper the route cards render their counts with.
+ * @param value {number|string}
+ * @returns {string}
+ */
+function abbreviateNumber(value) {
+    let number = parseInt(value) || 0;
+    let round = value => String(parseFloat(value.toFixed(1)));
+
+    if (number >= 1000000) {
+        return `${round(number / 1000000)}M`;
+    }
+
+    if (number >= 1000) {
+        return `${round(number / 1000)}K`;
+    }
+
+    return String(number);
+}
+
+/**
  *
  * @param value
  * @param $input
@@ -671,6 +691,7 @@ if (typeof module !== 'undefined' && module.exports) {
         toSnakeCase,
         trimEnd,
         getFormattedPercentage,
+        abbreviateNumber,
         isNumeric,
         decodeHtmlEntity,
         isPolygonClockwise,

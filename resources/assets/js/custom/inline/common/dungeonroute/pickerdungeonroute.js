@@ -170,22 +170,10 @@ class PickerDungeonRoute {
     }
 
     /**
-     * Mirrors the abbreviateNumber() PHP helper the route rows render their counts with.
      * @returns {string}
      */
     getViewsAbbreviated() {
-        let views = parseInt(this.json.views) || 0;
-        let round = value => String(parseFloat(value.toFixed(1)));
-
-        if (views >= 1000000) {
-            return `${round(views / 1000000)}M`;
-        }
-
-        if (views >= 1000) {
-            return `${round(views / 1000)}K`;
-        }
-
-        return String(views);
+        return abbreviateNumber(this.json.views);
     }
 
     /**
