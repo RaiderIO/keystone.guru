@@ -37,6 +37,12 @@ interface SeasonServiceInterface
      */
     public function getSeasonWeeks(Season $season, GameServerRegion $region): Collection;
 
+    /**
+     * The moment the given season ends: the start of the next season - of any expansion, seasons run back to back
+     * across them - whether or not that one has started yet. Null when no later season exists.
+     */
+    public function getSeasonEnd(Season $season, GameServerRegion $region): ?Carbon;
+
     public function getCurrentSeason(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season;
 
     public function getNextSeasonOfExpansion(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season;

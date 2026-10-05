@@ -43,6 +43,11 @@ class SeasonServiceStub implements SeasonServiceInterface
         return collect();
     }
 
+    public function getSeasonEnd(Season $season, GameServerRegion $region): ?Carbon
+    {
+        return null;
+    }
+
     public function getSeasonAt(Carbon $date, ?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
     {
         return null;
