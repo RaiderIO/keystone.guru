@@ -133,4 +133,47 @@ final class SeasonRepositoryTest extends PublicTestCase
         $this->assertNotNull($result);
         $this->assertEquals($expectedSeason->id, $result->id);
     }
+
+    #[Test]
+    public function getMostRecentSeasonForDungeon_givenDungeonWithPastAndUpcomingSeason_returnsThePastSeason(): void
+    {
+        // Arrange
+        $dungeon    = $this->createDungeon();
+        $pastSeason = $this->createSeason(['start' => now()->subYear()->toDateTimeString()], [$dungeon->id]);
+        $this->createSeason([
+            'expansion_id' => Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT)->id,
+            'start'        => now()->addMonth()->toDateTimeString(),
+        ], [$dungeon->id]);
+
+        // Act
+        $result = $this->repository->getMostRecentSeasonForDungeon($dungeon);
+
+        // Assert
+        $this->assertNotNull($result);
+        $this->assertSame($pastSeason->id, $result->id);
+    }
+
+    #[Test]
+    public function getUpcomingSeasonForDungeon_givenAnotherDungeonWithALaterUpcomingSeason_returnsItsOwnSeason(): void
+    {
+        // Arrange
+        $midnightExpansionId = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT)->id;
+        $dungeon             = $this->createDungeon();
+        $otherDungeon        = $this->createDungeon();
+        $ownSeason           = $this->createSeason([
+            'expansion_id' => $midnightExpansionId,
+            'start'        => now()->addYear()->toDateTimeString(),
+        ], [$dungeon->id]);
+        $this->createSeason([
+            'expansion_id' => $midnightExpansionId,
+            'start'        => now()->addYears(2)->toDateTimeString(),
+        ], [$otherDungeon->id]);
+
+        // Act
+        $result = $this->repository->getUpcomingSeasonForDungeon($dungeon);
+
+        // Assert
+        $this->assertNotNull($result);
+        $this->assertSame($ownSeason->id, $result->id);
+    }
 }

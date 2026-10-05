@@ -61,6 +61,7 @@ final class NpcRepositoryTest extends PublicTestCase
         $result = $this->repository->getInUseNpcs($mappingVersion);
 
         // Assert — every NPC returned must be linked to this dungeon
+        $this->assertNotEmpty($result);
         $dungeonNpcIds = $dungeon->npcs()->pluck('npcs.id');
         $result->each(function (Npc $npc) use ($dungeonNpcIds, $dungeon) {
             $this->assertTrue(
@@ -117,15 +118,21 @@ final class NpcRepositoryTest extends PublicTestCase
 
         $preloadedNpcs = $this->repository->getInUseNpcs($mappingVersion);
 
+        $singlePreloadedNpc = $preloadedNpcs->take(1);
+
         // Act — pass the preloaded NPCs to avoid an extra query
-        $resultFromPreloaded = $this->repository->getInUseNpcIds($mappingVersion, $preloadedNpcs);
-        $resultFromQuery     = $this->repository->getInUseNpcIds($mappingVersion);
+        $resultFromPreloaded       = $this->repository->getInUseNpcIds($mappingVersion, $preloadedNpcs);
+        $resultFromQuery           = $this->repository->getInUseNpcIds($mappingVersion);
+        $resultFromSinglePreloaded = $this->repository->getInUseNpcIds($mappingVersion, $singlePreloadedNpc);
 
         // Assert — both paths must produce the same set of IDs
         $this->assertEquals(
             $resultFromQuery->sort()->values()->toArray(),
             $resultFromPreloaded->sort()->values()->toArray(),
         );
+        // A subset proves the passed collection is what gets read, not a fresh query
+        $this->assertGreaterThan(1, $preloadedNpcs->count());
+        $this->assertSame([$singlePreloadedNpc->firstOrFail()->id, 194373], $resultFromSinglePreloaded->values()->all());
     }
 
     #[Test]
@@ -172,6 +179,12 @@ final class NpcRepositoryTest extends PublicTestCase
                 'npc_id'             => $npc->id,
                 'enemy_forces'       => 30,
             ]);
+            // A second leftover row, so a join that is not scoped to the version under test lists the NPC twice
+            NpcEnemyForces::query()->create([
+                'mapping_version_id' => $otherMappingVersion->id - 1,
+                'npc_id'             => $npc->id,
+                'enemy_forces'       => 30,
+            ]);
 
             // Act
             $result = $this->repository->getInUseNpcIds($mappingVersionUnderTest);
@@ -181,6 +194,7 @@ final class NpcRepositoryTest extends PublicTestCase
                 $result->contains($npc->id),
                 'NPC with enemy forces only on a different mapping version must still be included for the version under test.',
             );
+            $this->assertCount(1, $result->filter(static fn(int $npcId) => $npcId === $npc->id));
         } finally {
             NpcEnemyForces::query()->where('npc_id', $npcId)->delete();
             $dungeon->npcs()->detach($npcId);

@@ -178,6 +178,21 @@ final class NpcScalingFactorTest extends PublicTestCase
         $this->assertEqualsWithDelta(3_132_985, $health, 1);
     }
 
+    #[Test]
+    public function getScalingFactor_givenThunderingFromTen_appliesItsFactorOnTopOfBothAffixes(): void
+    {
+        // Arrange
+        $trash = $this->npc(NpcClassification::NPC_CLASSIFICATION_NORMAL);
+
+        // Act
+        $factorAtTen  = $trash->getScalingFactor(10, [Affix::AFFIX_THUNDERING]);
+        $factorAtNine = $trash->getScalingFactor(9, [Affix::AFFIX_THUNDERING]);
+
+        // Assert - Thundering only exists from +10, so a lower key ignores it
+        $this->assertEqualsWithDelta(2.208 * 1.05, $factorAtTen, 0.0001);
+        $this->assertEqualsWithDelta(1.72, $factorAtNine, 0.0001);
+    }
+
     private function npc(string $classification): Npc
     {
         return new Npc([

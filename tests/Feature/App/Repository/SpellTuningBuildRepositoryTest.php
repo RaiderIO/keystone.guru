@@ -191,6 +191,24 @@ final class SpellTuningBuildRepositoryTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function findReleasedAt_givenTheBuildOnlyOnAnotherGameVersion_returnsNull(): void
+    {
+        // Arrange
+        $build              = $this->createBuild(1, self::OLD_BUILD, self::MID_BUILD, 12, '2001-02-03 04:05:06');
+        $otherGameVersionId = GameVersion::query()->whereKeyNot(1)->orderBy('id')->firstOrFail()->id;
+
+        try {
+            // Act
+            $releasedAt = $this->repository->findReleasedAt($otherGameVersionId, self::MID_BUILD);
+
+            // Assert
+            $this->assertNull($releasedAt);
+        } finally {
+            $build->delete();
+        }
+    }
+
     private function createBuild(int $gameVersionId, string $fromBuild, string $toBuild, int $toBuildNumber, ?string $releasedAt = null): SpellTuningBuild
     {
         return SpellTuningBuild::factory()->create([

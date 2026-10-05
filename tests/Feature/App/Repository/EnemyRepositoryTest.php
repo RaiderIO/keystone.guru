@@ -65,20 +65,34 @@ final class EnemyRepositoryTest extends PublicTestCase
     #[Test]
     public function getAvailableEnemiesForDungeonRouteBuilder_givenMappingVersion_excludesMdtPlaceholders(): void
     {
-        // Arrange
-        $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
-
+        // Arrange - the fixture mapping version carries no placeholders of its own, so add one next to a regular enemy
+        $dungeon        = $this->getDungeonWithCurrentMappingVersionWithEnemies();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
 
-        // Act
-        $result = $this->repository->getAvailableEnemiesForDungeonRouteBuilder($mappingVersion);
+        $baseEnemy = $mappingVersion->enemies()->first();
+        $this->assertNotNull($baseEnemy, 'Expected at least one enemy in fixture mapping version.');
 
-        // Assert — MDT placeholder enemies must not appear in results
-        $placeholders = $result->filter(
-            static fn(Enemy $enemy) => $enemy->seasonal_type === Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER,
-        );
-        $this->assertEmpty($placeholders, 'MDT placeholder enemies should not be included in the builder collection.');
+        $attributes = $baseEnemy->only($baseEnemy->getFillable());
+        unset($attributes['id']);
+
+        $placeholderEnemy = Enemy::query()->create(array_merge($attributes, ['seasonal_type' => Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER]));
+        $regularEnemy     = Enemy::query()->create(array_merge($attributes, ['seasonal_type' => null]));
+
+        try {
+            // Act
+            $result = $this->repository->getAvailableEnemiesForDungeonRouteBuilder($mappingVersion);
+
+            // Assert — MDT placeholder enemies must not appear in results
+            $placeholders = $result->filter(
+                static fn(Enemy $enemy) => $enemy->seasonal_type === Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER,
+            );
+            $this->assertEmpty($placeholders, 'MDT placeholder enemies should not be included in the builder collection.');
+            $this->assertFalse($result->has($placeholderEnemy->id));
+            $this->assertTrue($result->has($regularEnemy->id));
+        } finally {
+            Enemy::query()->whereKey([$placeholderEnemy->id, $regularEnemy->id])->delete();
+        }
     }
 
     #[Test]

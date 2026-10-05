@@ -26,10 +26,13 @@ final class UserTest extends PublicTestCase
         $userB = User::factory()->create();
 
         try {
+            $userA->addRole(Role::ROLE_USER);
+            $userB->addRole(Role::ROLE_USER);
             $user = User::query()->whereIn('id', [$userA->id, $userB->id])->get()->firstOrFail();
 
             // Act & Assert - would throw LazyLoadingViolationException if `roles` isn't explicitly loaded first
             $this->assertFalse($user->hasRole(Role::ROLE_ADMIN));
+            $this->assertTrue($user->hasRole(Role::ROLE_USER));
         } finally {
             $userA->delete();
             $userB->delete();
@@ -44,10 +47,13 @@ final class UserTest extends PublicTestCase
         $userB = User::factory()->create();
 
         try {
+            $userA->addRole(Role::ROLE_USER);
+            $userB->addRole(Role::ROLE_USER);
             $user = User::query()->whereIn('id', [$userA->id, $userB->id])->get()->firstOrFail();
 
             // Act & Assert - would throw LazyLoadingViolationException if `roles` isn't explicitly loaded first
             $this->assertFalse($user->hasPermission('some-permission-that-does-not-exist'));
+            $this->assertTrue($user->hasPermission('create-dungeonroute'));
         } finally {
             $userA->delete();
             $userB->delete();

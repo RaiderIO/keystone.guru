@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\App\Repository;
 
+use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
 use App\Models\Spell\SpellTuningChange;
@@ -118,6 +119,40 @@ final class SpellTuningChangeRepositoryTest extends PublicTestCase
             $this->assertSame(['replaced', 'replaced'], $remaining->pluck('new_text')->all());
             $this->assertNotNull(SpellTuningChange::query()->find($other->id), 'Rows of other builds must survive');
             $created->push(...$remaining->all());
+        } finally {
+            $created->each(static fn(SpellTuningChange $change) => $change->delete());
+        }
+    }
+
+    #[Test]
+    public function replaceForBuild_givenSameBuildOnAnotherGameVersion_leavesItsRowsAlone(): void
+    {
+        // Arrange
+        /** @var Collection<int, SpellTuningChange> $created */
+        $created = new Collection();
+
+        try {
+            $stale = SpellTuningChange::factory()->create(['to_build' => self::NEW_BUILD, 'to_build_number' => 13]);
+            $created->push($stale);
+            $otherGameVersionId = GameVersion::query()->whereKeyNot($stale->game_version_id)->orderBy('id')->firstOrFail()->id;
+            $otherGameVersion   = SpellTuningChange::factory()->create([
+                'game_version_id' => $otherGameVersionId,
+                'to_build'        => self::NEW_BUILD,
+                'to_build_number' => 13,
+            ]);
+            $created->push($otherGameVersion);
+            $row                = $stale->only(['game_version_id', 'spell_id', 'from_build', 'to_build', 'to_build_number', 'value_index', 'old_coefficient', 'new_coefficient', 'old_text', 'new_text', 'delta']);
+            $row['change_type'] = $stale->change_type->value;
+            $row['kind']        = $stale->kind->value;
+            $row['new_text']    = 'replaced';
+
+            // Act
+            $this->repository->replaceForBuild($stale->game_version_id, self::NEW_BUILD, [$row]);
+
+            // Assert
+            $created->push(...SpellTuningChange::query()->where('to_build', self::NEW_BUILD)->whereKeyNot([$stale->id, $otherGameVersion->id])->get()->all());
+            $this->assertNull(SpellTuningChange::query()->find($stale->id));
+            $this->assertNotNull(SpellTuningChange::query()->find($otherGameVersion->id), 'Rows of the same build on another game version must survive');
         } finally {
             $created->each(static fn(SpellTuningChange $change) => $change->delete());
         }

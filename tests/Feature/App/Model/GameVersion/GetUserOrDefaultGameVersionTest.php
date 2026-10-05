@@ -107,4 +107,43 @@ final class GetUserOrDefaultGameVersionTest extends PublicTestCase
             $user->delete();
         }
     }
+
+    #[Test]
+    public function getUserOrDefaultGameVersion_givenGuestWithRetiredGameVersionCookie_returnsTheDefaultGameVersion(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_WRATH;
+
+        try {
+            // Act
+            $result = GameVersion::getUserOrDefaultGameVersion();
+
+            // Assert
+            $this->assertNotSame(GameVersion::ALL[GameVersion::GAME_VERSION_WRATH], GameVersion::getDefaultGameVersion()->id);
+            $this->assertSame(GameVersion::getDefaultGameVersion()->id, $result->id);
+        } finally {
+            unset($_COOKIE['game_version']);
+        }
+    }
+
+    #[Test]
+    public function getUserOrDefaultGameVersion_givenUserWithRetiredGameVersion_returnsTheDefaultGameVersion(): void
+    {
+        // Arrange
+        $wrath = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_WRATH);
+        $this->assertTrue($wrath->isRetired(), 'Fixture assumption changed - Wrath must still be a retired game version.');
+        $user = User::factory()->create(['game_version_id' => $wrath->id]);
+        $this->actingAs($user);
+
+        try {
+            // Act
+            $result = GameVersion::getUserOrDefaultGameVersion();
+
+            // Assert
+            $this->assertSame(GameVersion::getDefaultGameVersion()->id, $result->id);
+        } finally {
+            $user->delete();
+        }
+    }
 }

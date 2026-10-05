@@ -33,8 +33,21 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
     #[Test]
     public function hasFreshThumbnailForVariant_givenNoThumbnailOfThatVariant_returnsFalse(): void
     {
-        // Arrange
-        $dungeonRoute = DungeonRoute::factory()->create();
+        // Arrange - a fresh thumbnail of another variant must not count towards this one
+        $dungeon        = $this->getDungeonWithExactlyOneNonFacadeFloor();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $floor          = $dungeon->floors()->where('facade', false)->first();
+        $dungeonRoute   = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+        $standardThumbnail = DungeonRouteThumbnail::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $floor->id,
+            'variant'          => DungeonRouteThumbnailVariant::Standard,
+        ]);
+        DungeonRouteThumbnail::where('id', $standardThumbnail->id)
+            ->update(['updated_at' => $dungeonRoute->updated_at->copy()->addMinute()]);
 
         try {
             // Act
@@ -42,7 +55,9 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
 
             // Assert
             $this->assertFalse($result);
+            $this->assertTrue($this->repository->hasFreshThumbnailForVariant($dungeonRoute, DungeonRouteThumbnailVariant::Standard));
         } finally {
+            $standardThumbnail->delete();
             $dungeonRoute->delete();
         }
     }

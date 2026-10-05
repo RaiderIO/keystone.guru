@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Repository\Tags;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
+use App\Models\Team;
 use App\Models\User;
 use App\Repositories\Interfaces\Tags\TagRepositoryInterface;
 use PHPUnit\Framework\Attributes\Group;
@@ -60,6 +61,46 @@ final class TagRepositoryTest extends PublicTestCase
             // Assert
             $this->assertTrue($tags->isEmpty());
         } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function getPersonalRouteTags_givenTeamContextAndTeamCategoryTags_returnsOnlyThePersonalRouteTag(): void
+    {
+        // Arrange - a team whose id equals the user's id, and a tag filed under the team category
+        $user   = null;
+        $tagIds = [];
+
+        try {
+            $user     = User::factory()->create();
+            $tagIds[] = $this->createTag($user, 'Own', 1)->id;
+            $tagIds[] = Tag::query()->create([
+                'context_id'      => $user->id,
+                'context_class'   => Team::class,
+                'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL],
+                'model_id'        => 1,
+                'model_class'     => DungeonRoute::class,
+                'name'            => 'TeamContext',
+                'color'           => null,
+            ])->id;
+            $tagIds[] = Tag::query()->create([
+                'context_id'      => $user->id,
+                'context_class'   => User::class,
+                'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM],
+                'model_id'        => 1,
+                'model_class'     => DungeonRoute::class,
+                'name'            => 'TeamCategory',
+                'color'           => null,
+            ])->id;
+
+            // Act
+            $tags = $this->app->make(TagRepositoryInterface::class)->getPersonalRouteTags($user);
+
+            // Assert
+            $this->assertSame(['Own'], $tags->pluck('name')->all());
+        } finally {
+            Tag::query()->whereKey($tagIds)->delete();
             $user?->delete();
         }
     }

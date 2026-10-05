@@ -87,5 +87,6 @@ final class MDTAddonVersionRepositoryTest extends PublicTestCase
         $resultDate = $this->repository->findReleaseDate($result);
         $this->assertNotNull($resultDate);
         $this->assertTrue($resultDate->lessThanOrEqualTo($date));
+        $this->assertSame(40120, $result);
     }
 }

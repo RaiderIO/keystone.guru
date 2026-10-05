@@ -40,7 +40,8 @@ final class FacadeFloorUnionsRequireFacadeEnabledTest extends PublicTestCase
         // Arrange
         $dungeons = Dungeon::with(['floors', 'mappingVersions'])->get();
 
-        $failures = [];
+        $failures               = [];
+        $checkedMappingVersions = 0;
 
         // Act
         foreach ($dungeons as $dungeon) {
@@ -61,6 +62,10 @@ final class FacadeFloorUnionsRequireFacadeEnabledTest extends PublicTestCase
                     ->whereIn('floor_id', $facadeFloorIds)
                     ->exists();
 
+                if ($hasFacadeFloorUnions) {
+                    $checkedMappingVersions++;
+                }
+
                 if ($hasFacadeFloorUnions && !$mappingVersion->facade_enabled) {
                     $failures[] = sprintf(
                         '%s mapping version %d (game_version_id %d) has floor unions on a facade floor but facade_enabled is false',
@@ -74,5 +79,10 @@ final class FacadeFloorUnionsRequireFacadeEnabledTest extends PublicTestCase
 
         // Assert
         $this->assertEmpty($failures, implode("\n", $failures));
+        $this->assertGreaterThan(
+            0,
+            $checkedMappingVersions,
+            'No current mapping version with floor unions on a facade floor was examined - the assertion above proved nothing.',
+        );
     }
 }

@@ -35,4 +35,23 @@ final class HasStartTest extends PublicTestCase
         $this->assertTrue($americasStart->isTuesday(), 'Americas reset should fall on a Tuesday');
         $this->assertTrue($europeStart->isWednesday(), 'Europe reset should fall on a Wednesday');
     }
+
+    #[Test]
+    public function start_givenMidWeekStoredStart_resolvesToThatWeeksResetDay(): void
+    {
+        // Arrange - 2026-03-05 is a Thursday, so its week started on Monday 2026-03-02
+        $season = new Season([
+            'start' => Carbon::create(2026, 3, 5, 0, 0, 0, 'UTC'),
+        ]);
+        $americas = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $europe   = GameServerRegion::where('short', GameServerRegion::EUROPE)->firstOrFail();
+
+        // Act
+        $americasStart = $season->start($americas);
+        $europeStart   = $season->start($europe);
+
+        // Assert
+        $this->assertSame('2026-03-03', $americasStart->toDateString());
+        $this->assertSame('2026-03-04', $europeStart->toDateString());
+    }
 }

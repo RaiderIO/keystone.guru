@@ -91,6 +91,21 @@ final class PageViewTest extends PublicTestCase
         $this->assertSame(2, $this->countPageViews());
     }
 
+    #[Test]
+    public function trackPageView_givenAnotherUsersRecentViewInTheSameSession_returnsTrue(): void
+    {
+        // Arrange
+        $this->actingAs(User::findOrFail(1));
+        $this->createPageView(4, Carbon::now()->subMinutes(1));
+
+        // Act
+        $result = PageView::trackPageView(self::MODEL_ID, self::MODEL_CLASS);
+
+        // Assert
+        $this->assertTrue($result);
+        $this->assertSame(2, $this->countPageViews());
+    }
+
     private function createPageView(int $userId, Carbon $createdAt): void
     {
         PageView::forceCreate([
