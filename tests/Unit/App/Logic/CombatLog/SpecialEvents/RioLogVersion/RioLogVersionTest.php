@@ -239,6 +239,27 @@ final class RioLogVersionTest extends PublicTestCase
                 '12.1.0',
                 1,
             ],
+            'mplus-trash-win32-advanced-logging-disabled' => [
+                '5/31/2026 22:14:06.7292  RIO_LOG_VERSION,1,SEGMENT_TYPE,mplus_trash,APP_VERSION,4.11.2,PROCESSOR_VERSION,1,PLATFORM,win32,INSTANCE_ID,2811,DUNGEON_ID,558,SEGMENT_ID,1,CORRELATION_ID,2811-10-158-9-10-ae253ffcf1bff14c79f9bd407eb657e49852d3ce529730155977c8b809ba4121,CHALLENGE_MODE_STARTED_AT,1780258447159,TYPE,trash,CLIENT_SESSION_ID,ba6e8ff8-2496-4280-9aca-42ae0d94bb56,COMBAT_LOG_VERSION,22,ADVANCED_LOG_ENABLED,0,BUILD_VERSION,12.0.5,PROJECT_ID,2',
+                1,
+                'mplus_trash',
+                '4.11.2',
+                1,
+                'win32',
+                2811,
+                558,
+                null,
+                1,
+                '2811-10-158-9-10-ae253ffcf1bff14c79f9bd407eb657e49852d3ce529730155977c8b809ba4121',
+                1780258447159,
+                null,
+                'trash',
+                'ba6e8ff8-2496-4280-9aca-42ae0d94bb56',
+                22,
+                false,
+                '12.0.5',
+                2,
+            ],
         ];
     }
 }

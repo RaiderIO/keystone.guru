@@ -6,6 +6,9 @@ use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Logic\CombatLog\SpecialEvents\CombatLogVersion as CombatLogVersionEvent;
 use App\Logic\CombatLog\SpecialEvents\Interfaces\HasCombatLogVersionInterface;
+use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
+use Exception;
+use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -55,6 +58,63 @@ final class CombatLogVersionTest extends PublicTestCase
             'retail-12-1-0' => [
                 '7/19/2026 19:31:59.774-6  COMBAT_LOG_VERSION,22,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,12.1.0,PROJECT_ID,1',
                 CombatLogVersion::RETAIL_12_1_0,
+            ],
+        ];
+    }
+
+    #[Test]
+    public function setParameters_givenABuildVersionThatIsNotRegistered_throwsException(): void
+    {
+        // Arrange
+        $parameters = ['22', 'ADVANCED_LOG_ENABLED', '1', 'BUILD_VERSION', '9.9.9', 'PROJECT_ID', '1'];
+
+        // Assert
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unable to find combat log version 22009009009!');
+
+        // Act
+        new CombatLogVersionEvent(
+            CombatLogVersion::RETAIL_12_0_5,
+            Carbon::parse('2026-05-31 22:00:00'),
+            SpecialEvent::SPECIAL_EVENT_COMBAT_LOG_VERSION,
+            $parameters,
+            '',
+        );
+    }
+
+    #[Test]
+    #[DataProvider('parseEvent_givenAnAdvancedLogEnabledFlag_returnsWhetherAdvancedLoggingIsEnabled_DataProvider')]
+    public function parseEvent_givenAnAdvancedLogEnabledFlag_returnsWhetherAdvancedLoggingIsEnabled(
+        string $rawEvent,
+        bool   $expectedAdvancedLogEnabled,
+    ): void {
+        // Arrange
+        $combatLogEntry = new CombatLogEntry($rawEvent);
+
+        // Act
+        /** @var CombatLogVersionEvent $result */
+        $result = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_12_0_5);
+
+        // Assert
+        Assert::assertSame($expectedAdvancedLogEnabled, $result->isAdvancedLogEnabled());
+        Assert::assertSame(22, $result->getVersion());
+        Assert::assertSame('12.0.5', $result->getBuildVersion());
+        Assert::assertSame(1, $result->getProjectID());
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: bool}>
+     */
+    public static function parseEvent_givenAnAdvancedLogEnabledFlag_returnsWhetherAdvancedLoggingIsEnabled_DataProvider(): array
+    {
+        return [
+            'enabled' => [
+                '5/31/2026 22:00:00.0000  COMBAT_LOG_VERSION,22,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,12.0.5,PROJECT_ID,1',
+                true,
+            ],
+            'disabled' => [
+                '5/31/2026 22:00:00.0000  COMBAT_LOG_VERSION,22,ADVANCED_LOG_ENABLED,0,BUILD_VERSION,12.0.5,PROJECT_ID,1',
+                false,
             ],
         ];
     }

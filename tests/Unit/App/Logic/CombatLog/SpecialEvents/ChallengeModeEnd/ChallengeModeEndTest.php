@@ -67,6 +67,15 @@ final class ChallengeModeEndTest extends PublicTestCase
                 '200.000000',
                 '200.000000',
             ],
+            'pit-of-saron-key-5-depleted' => [
+                '3/25/2026 11:14:12.8031  CHALLENGE_MODE_END,658,0,5,2150634,0.000000,0.000000',
+                658,
+                0,
+                5,
+                2150634,
+                '0.000000',
+                '0.000000',
+            ],
         ];
     }
 }

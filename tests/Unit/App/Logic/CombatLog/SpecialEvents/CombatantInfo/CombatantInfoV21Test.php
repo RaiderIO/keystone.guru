@@ -3,8 +3,12 @@
 namespace Tests\Unit\App\Logic\CombatLog\SpecialEvents\CombatantInfo;
 
 use App\Logic\CombatLog\CombatLogEntry;
+use App\Logic\CombatLog\CombatLogStringParser;
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Logic\CombatLog\SpecialEvents\CombatantInfo\Versions\V21\CombatantInfoV21;
+use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
+use Exception;
+use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -124,7 +128,61 @@ class CombatantInfoV21Test extends PublicTestCase
                 0,
                 0,
             ],
+            // A distinct value in every field, so reading one field from a neighbour's position cannot pass
+            [
+                '10/18/2024 21:34:24.8572  COMBATANT_INFO,Player-1084-0A6C4CFA,1,102,103,104,105,106,107,108,110,111,112,113,114,115,116,117,118,119,120,121,122,123,253,[(94957,117554,1)],(0,0,0,0),[(211024,606,(),(6652),())],[Player-1084-0A6C4CFA,462513],129,130,131,132',
+                'Player-1084-0A6C4CFA',
+                1,
+                102,
+                103,
+                104,
+                105,
+                106,
+                107,
+                108,
+                110,
+                111,
+                112,
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119,
+                120,
+                121,
+                122,
+                123,
+                253,
+                129,
+                130,
+                131,
+                132,
+            ],
         ];
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('CombatantInfo')]
+    public function setParameters_givenACombatantThatIsNotAPlayer_throwsException(): void
+    {
+        // Arrange
+        $parameters = CombatLogStringParser::parseCombatLogLine('Creature-0-4241-2526-8814-197219-000043ACE6,1,102,103,104,105,106,107,108,110,111,112,113,114,115,116,117,118,119,120,121,122,123,253,[(94957,117554,1)],(0,0,0,0),[(211024,606,(),(6652),())],[Player-1084-0A6C4CFA,462513],129,130,131,132');
+
+        // Assert
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('PlayerGuid is not a Player');
+
+        // Act
+        new CombatantInfoV21(
+            CombatLogVersion::RETAIL_11_2_0,
+            Carbon::parse('2024-10-18 21:34:24'),
+            SpecialEvent::SPECIAL_EVENT_COMBATANT_INFO,
+            $parameters,
+            '',
+        );
     }
 
     /**

@@ -29,7 +29,7 @@ class DamageLandedSupportTest extends PublicTestCase
         $suffix = Suffix::createFromEventName($combatLogVersion, 'DAMAGE_LANDED_SUPPORT');
 
         // Assert
-        $this->assertInstanceOf($expectedClassName, $suffix);
+        $this->assertSame($expectedClassName, $suffix::class);
         $this->assertInstanceOf(DamageLandedSupportInterface::class, $suffix);
     }
 
@@ -53,6 +53,26 @@ class DamageLandedSupportTest extends PublicTestCase
             ],
             [
                 'combatLogVersion'  => CombatLogVersion::RETAIL_11_0_5,
+                'expectedClassName' => DamageLandedSupportV22::class,
+            ],
+            [
+                'combatLogVersion'  => CombatLogVersion::CLASSIC_TBC_2_5_5,
+                'expectedClassName' => DamageLandedSupportV20::class,
+            ],
+            [
+                'combatLogVersion'  => CombatLogVersion::CLASSIC_SOD_1_15_5,
+                'expectedClassName' => DamageLandedSupportV20::class,
+            ],
+            [
+                'combatLogVersion'  => CombatLogVersion::CLASSIC_SOD_1_15_6,
+                'expectedClassName' => DamageLandedSupportV20::class,
+            ],
+            [
+                'combatLogVersion'  => CombatLogVersion::CLASSIC_SOD_1_15_7,
+                'expectedClassName' => DamageLandedSupportV20::class,
+            ],
+            [
+                'combatLogVersion'  => CombatLogVersion::RETAIL_12_0_5,
                 'expectedClassName' => DamageLandedSupportV22::class,
             ],
         ];

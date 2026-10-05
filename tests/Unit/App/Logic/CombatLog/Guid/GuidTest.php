@@ -70,6 +70,47 @@ final class GuidTest extends PublicTestCase
     #[Test]
     #[Group('CombatLog')]
     #[Group('Guid')]
+    #[DataProvider('createFromGuidString_givenACreatureMappedGuidType_returnsACreatureWithThatUnitType_DataProvider')]
+    public function createFromGuidString_givenACreatureMappedGuidType_returnsACreatureWithThatUnitType(
+        string $guidString,
+        string $expectedUnitType,
+    ): void {
+        // Act
+        $result = Guid::createFromGuidString($guidString);
+
+        // Assert
+        Assert::assertInstanceOf(Creature::class, $result);
+        Assert::assertSame($expectedUnitType, $result->getUnitType());
+        Assert::assertEquals(165189, $result->getId());
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string}>
+     */
+    public static function createFromGuidString_givenACreatureMappedGuidType_returnsACreatureWithThatUnitType_DataProvider(): array
+    {
+        return [
+            'Pet'        => ['Pet-0-4241-2526-8814-165189-0203C3ACE6', Creature::CREATURE_UNIT_TYPE_PET],
+            'GameObject' => ['GameObject-0-4241-2526-8814-165189-0203C3ACE6', Creature::CREATURE_UNIT_TYPE_GAME_OBJECT],
+            'Vehicle'    => ['Vehicle-0-4241-2526-8814-165189-0203C3ACE6', Creature::CREATURE_UNIT_TYPE_VEHICLE],
+        ];
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('Guid')]
+    public function createFromGuidString_givenAnUnknownGuidType_returnsNull(): void
+    {
+        // Act
+        $result = Guid::createFromGuidString('SomeUnknownPrefix-0-4241-2526-8814-197219-000043ACE6');
+
+        // Assert
+        Assert::assertNull($result);
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('Guid')]
     public function createFromGuidString_givenAbsorbMissType_returnsAbsorbInstance(): void
     {
         // Act
