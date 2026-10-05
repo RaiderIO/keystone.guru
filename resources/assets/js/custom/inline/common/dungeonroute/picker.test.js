@@ -404,6 +404,21 @@ describe('CommonDungeonroutePicker', () => {
         expect(document.querySelector('#picker_title_search').value).toBe('');
     });
 
+    it('clearFilters_givenATomSelectFilter_resetsItSilentlyAndRepaintsItsSelectedSummary', () => {
+        // Arrange
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        respondWithRoutes([]);
+        const attributes = document.querySelector('#picker_attributes');
+        attributes.tomselect = {setValue: vi.fn(), selectpickerUpdateCountSummary: vi.fn()};
+
+        // Act
+        picker.clearFilters();
+
+        // Assert
+        expect(attributes.tomselect.setValue).toHaveBeenCalledWith(['-1'], true);
+        expect(attributes.tomselect.selectpickerUpdateCountSummary).toHaveBeenCalledTimes(1);
+    });
+
     it('load_givenTheFirstOfSeveralPages_disablesOnlyPrevious', () => {
         // Arrange
         picker.reload();

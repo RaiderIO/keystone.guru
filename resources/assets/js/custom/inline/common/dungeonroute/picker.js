@@ -186,8 +186,10 @@ class CommonDungeonroutePicker extends SearchInlineBase {
             let select = $(filter.selector)[0];
 
             if (typeof select !== 'undefined' && select.tomselect) {
-                // Silent, so every filter's change handler does not load a page of its own
+                // Silent, so every filter's change handler does not load a page of its own - which also skips the
+                // change event the "N selected" summary of a multi select repaints on
                 select.tomselect.setValue(value, true);
+                select.tomselect.selectpickerUpdateCountSummary?.();
             } else {
                 filter.setValue(value);
             }
