@@ -9,6 +9,7 @@ use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
 use App\Service\CombatLog\Builders\CombatLogRouteEnemyRecordingsBuilder;
 use Illuminate\Support\Collection;
@@ -207,6 +208,134 @@ final class CombatLogRouteEnemyRecordingsBuilderFailuresTest extends PublicTestC
 
             if ($npcEnemyForcesIds !== []) {
                 NpcEnemyForces::query()->whereKey($npcEnemyForcesIds)->delete();
+            }
+        }
+    }
+
+    /**
+     * A failure that no npc id attributes to any npc cannot be marked as noise by the enemy forces filter, so it is
+     * recorded - while an npc the same filter does mark as noise is still skipped.
+     */
+    #[Test]
+    public function buildAndSave_givenUnresolvedNpcWithoutNpcId_recordsIt(): void
+    {
+        $resolvedEnemy = Enemy::query()->whereNotNull('floor_id')->with('floor')->first();
+        $this->assertNotNull($resolvedEnemy, 'Expected at least one seeded Enemy with a floor.');
+
+        $worthForcesNpcId = 99934;
+        $noForcesNpcId    = 99935;
+        $dungeonRoute     = null;
+        $npcEnemyForcesId = null;
+
+        try {
+            // Arrange
+            $dungeonRoute = DungeonRoute::factory()->create([
+                'dungeon_id'         => $resolvedEnemy->floor->dungeon_id,
+                'mapping_version_id' => $resolvedEnemy->mapping_version_id,
+            ]);
+
+            // Guarantees the mapping version has npcs worth enemy forces, so the filter is active
+            $npcEnemyForcesId = NpcEnemyForces::query()->create([
+                'mapping_version_id' => $resolvedEnemy->mapping_version_id,
+                'npc_id'             => $worthForcesNpcId,
+                'enemy_forces'       => 10,
+            ])->id;
+
+            $resolved = new CombatLogRouteNpcRequestDto(npcId: $resolvedEnemy->npc_id, coord: new CombatLogRouteCoordRequestDto(1.0, 1.0));
+            $resolved->setResolvedEnemy($resolvedEnemy);
+
+            $combatLogRoute = new CombatLogRouteRequestDto(npcs: new Collection([
+                $resolved,
+                new CombatLogRouteNpcRequestDto(npcId: null, coord: new CombatLogRouteCoordRequestDto(2.0, 2.0)),
+                new CombatLogRouteNpcRequestDto(npcId: $noForcesNpcId, coord: new CombatLogRouteCoordRequestDto(3.0, 3.0)),
+            ]));
+
+            $builder = app(CombatLogRouteEnemyRecordingsBuilder::class);
+
+            // Act
+            $builder->buildAndSave($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
+
+            // Assert
+            $failures = CombatLogRouteEnemyFailure::where('dungeon_route_id', $dungeonRoute->id)->get();
+            $this->assertCount(1, $failures);
+            $this->assertNull($failures->first()->npc_id);
+        } finally {
+            if ($dungeonRoute !== null) {
+                CombatLogRouteEnemyFailure::where('dungeon_route_id', $dungeonRoute->id)->delete();
+                $dungeonRoute->delete();
+            }
+
+            if ($npcEnemyForcesId !== null) {
+                NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
+            }
+        }
+    }
+
+    /**
+     * A mapping version in which no npc is worth any enemy forces yet has not been tuned, so the enemy forces filter
+     * cannot tell noise from a real failure there and every unresolved npc is recorded.
+     */
+    #[Test]
+    public function buildAndSave_givenMappingVersionWithoutAnyEnemyForces_recordsEveryUnresolvedNpc(): void
+    {
+        $resolvedEnemy = Enemy::query()->whereNotNull('floor_id')->with('floor')->first();
+        $this->assertNotNull($resolvedEnemy, 'Expected at least one seeded Enemy with a floor.');
+
+        $dungeonRoute            = null;
+        $untunedMappingVersionId = null;
+
+        try {
+            // Arrange - a mapping version of the enemy's dungeon without a single enemy forces row
+            $current                 = $resolvedEnemy->mappingVersion;
+            $untunedMappingVersionId = MappingVersion::insertGetId([
+                'game_version_id'                 => $current->game_version_id,
+                'dungeon_id'                      => $current->dungeon_id,
+                'version'                         => $current->version + 100,
+                'enemy_forces_required'           => $current->enemy_forces_required,
+                'enemy_forces_required_teeming'   => $current->enemy_forces_required_teeming,
+                'enemy_forces_shrouded'           => $current->enemy_forces_shrouded,
+                'enemy_forces_shrouded_zul_gamux' => $current->enemy_forces_shrouded_zul_gamux,
+                'timer_max_seconds'               => $current->timer_max_seconds,
+                'created_at'                      => now(),
+                'updated_at'                      => now(),
+            ]);
+            $untunedMappingVersion = MappingVersion::findOrFail($untunedMappingVersionId);
+            $this->assertFalse(
+                NpcEnemyForces::query()->where('mapping_version_id', $untunedMappingVersionId)->exists(),
+                'Precondition: the mapping version must not carry any enemy forces.',
+            );
+
+            $dungeonRoute = DungeonRoute::factory()->create([
+                'dungeon_id'         => $current->dungeon_id,
+                'mapping_version_id' => $untunedMappingVersionId,
+            ]);
+
+            $resolved = new CombatLogRouteNpcRequestDto(npcId: $resolvedEnemy->npc_id, coord: new CombatLogRouteCoordRequestDto(1.0, 1.0));
+            $resolved->setResolvedEnemy($resolvedEnemy);
+
+            $combatLogRoute = new CombatLogRouteRequestDto(npcs: new Collection([
+                $resolved,
+                new CombatLogRouteNpcRequestDto(npcId: 99936, coord: new CombatLogRouteCoordRequestDto(2.0, 2.0)),
+                new CombatLogRouteNpcRequestDto(npcId: 99937, coord: new CombatLogRouteCoordRequestDto(3.0, 3.0)),
+            ]));
+
+            $builder = app(CombatLogRouteEnemyRecordingsBuilder::class);
+
+            // Act
+            $builder->buildAndSave($untunedMappingVersion, $combatLogRoute, $dungeonRoute);
+
+            // Assert
+            $failures = CombatLogRouteEnemyFailure::where('dungeon_route_id', $dungeonRoute->id)->get();
+            $this->assertEqualsCanonicalizing([99936, 99937], $failures->pluck('npc_id')->all());
+            $this->assertSame([$untunedMappingVersionId], $failures->pluck('mapping_version_id')->unique()->values()->all());
+        } finally {
+            if ($dungeonRoute !== null) {
+                CombatLogRouteEnemyFailure::where('dungeon_route_id', $dungeonRoute->id)->delete();
+                $dungeonRoute->delete();
+            }
+
+            if ($untunedMappingVersionId !== null) {
+                MappingVersion::query()->whereKey($untunedMappingVersionId)->delete();
             }
         }
     }

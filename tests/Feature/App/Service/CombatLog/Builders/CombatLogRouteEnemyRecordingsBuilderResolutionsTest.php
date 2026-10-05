@@ -198,6 +198,39 @@ final class CombatLogRouteEnemyRecordingsBuilderResolutionsTest extends PublicTe
     }
 
     /**
+     * The threshold is applied to the weighted distance: a line long enough to record on its own, but which the
+     * enemy's kill priority explains, stays out of the recording.
+     */
+    #[Test]
+    public function buildAndSave_givenHighKillPriorityEnemyBelowThresholdOnceWeighted_recordsNothing(): void
+    {
+        // Arrange
+        $enemy                = $this->getResolvableEnemy();
+        $originalKillPriority = $enemy->kill_priority;
+        $dungeonRoute         = $this->createDungeonRouteFor($enemy);
+
+        try {
+            // Kill priority 10 halves the distance the matcher judges on
+            $enemy->update(['kill_priority' => 10]);
+            $enemy->refresh();
+            $enemy->load(['floor', 'npc']);
+
+            $rawDistance    = (float)config('keystoneguru.enemy_resolution.record_min_distance_yd') * 1.5;
+            $combatLogRoute = $this->createCombatLogRoute($enemy, $rawDistance);
+
+            // Act
+            $this->saveEnemyRecordings($dungeonRoute, $combatLogRoute);
+
+            // Assert
+            $this->assertSame(0, CombatLogRouteEnemyResolution::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
+        } finally {
+            $enemy->update(['kill_priority' => $originalKillPriority]);
+
+            $this->cleanUp($dungeonRoute);
+        }
+    }
+
+    /**
      * A regeneration replaces what an earlier generation recorded for the same route rather than adding to it.
      */
     #[Test]

@@ -293,6 +293,25 @@ final class CombatLogPollingHealthServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function reportSummary_givenIdleThresholdOfZero_neverReportsTheIdleTopBand(): void
+    {
+        // Arrange - a threshold of 0 switches the idle top band signal off
+        config(['keystoneguru.raider_io.combat_log_polling.health.top_band_idle_polls' => 0]);
+        Carbon::setTestNow(Carbon::parse('2026-08-20 14:30:00'));
+        for ($i = 0; $i < 3; $i++) {
+            $this->service->recordTopBandPoll(available: 2279, dispatched: 0);
+        }
+
+        $this->log->expects($this->never())->method('reportTopBandIdle');
+
+        // Act
+        $degraded = $this->service->reportSummary($this->service->getSummary(Carbon::now(), windowHours: 1));
+
+        // Assert
+        $this->assertFalse($degraded);
+    }
+
+    #[Test]
     public function getSummary_givenNothingButAnIdleTopBand_isNotEmpty(): void
     {
         // Arrange - an hour in which the only thing that happened is the top band staying silent is

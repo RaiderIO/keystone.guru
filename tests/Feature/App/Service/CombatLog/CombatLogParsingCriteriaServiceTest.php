@@ -23,10 +23,11 @@ use Tests\TestCases\PublicTestCase;
 #[Group('CombatLogParsingCriteriaService')]
 final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
 {
-    private const int VERSION    = CombatLogVersion::RETAIL_12_0_5;
-    private const int DUNGEON_ID = 999901;
-    private const int SPEC_ID    = 999902;
-    private const int RACE_ID    = 999904;
+    private const int VERSION       = CombatLogVersion::RETAIL_12_0_5;
+    private const int OTHER_VERSION = CombatLogVersion::RETAIL_12_0_1;
+    private const int DUNGEON_ID    = 999901;
+    private const int SPEC_ID       = 999902;
+    private const int RACE_ID       = 999904;
 
     /**
      * A band no other test in this suite touches. ensureCriteriaExist() creates rows for every real
@@ -244,6 +245,48 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             ->value('count'));
     }
 
+    /**
+     * Every WoW client build has its own budget: a build that has used up its share must not stop another build's
+     * logs from being parsed.
+     */
+    #[Test]
+    public function shouldParse_givenOtherCombatLogVersionAtThreshold_returnsTrue(): void
+    {
+        // Arrange
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID, self::OTHER_VERSION)->atThreshold()->create();
+        CombatLogParsingCriterion::factory()->forClassSpec(self::SPEC_ID, self::OTHER_VERSION)->atThreshold()->create();
+
+        // Act
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), PollingBudgetWindow::full());
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    #[Test]
+    public function releaseParsed_givenRowsOfTwoCombatLogVersions_decrementsOnlyTheGivenVersion(): void
+    {
+        // Arrange
+        $today = Carbon::now()->toDateString();
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->withCount(5)->create();
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID, self::OTHER_VERSION)->withCount(5)->create();
+
+        // Act
+        $this->service->releaseParsed(self::VERSION, [
+            new CombatLogParsingCriterionCheck(Dungeon::class, self::DUNGEON_ID, $this->band()),
+        ], $today);
+
+        // Assert
+        $this->assertEquals(4, CombatLogParsingCriterion::query()
+            ->where('model_id', self::DUNGEON_ID)
+            ->where('combat_log_version', self::VERSION)
+            ->value('count'));
+        $this->assertEquals(5, CombatLogParsingCriterion::query()
+            ->where('model_id', self::DUNGEON_ID)
+            ->where('combat_log_version', self::OTHER_VERSION)
+            ->value('count'));
+    }
+
     #[Test]
     public function shouldParse_givenYesterdayCountsAtThreshold_returnsTrue(): void
     {
@@ -295,6 +338,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         // Assert
         $this->assertNotEmpty($result);
         $this->assertContainsOnlyInstancesOf(Dungeon::class, $result->all());
+        $this->assertEqualsCanonicalizing($season->dungeons()->get()->pluck('id')->all(), $result->pluck('id')->all());
     }
 
     #[Test]
@@ -309,6 +353,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         // Assert
         $this->assertNotEmpty($result);
         $this->assertContainsOnlyInstancesOf(CharacterClassSpecialization::class, $result->all());
+        $this->assertEqualsCanonicalizing(CharacterClassSpecialization::query()->pluck('id')->all(), $result->pluck('id')->all());
     }
 
     /**
@@ -467,6 +512,28 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
                 ->where('model_class', Dungeon::class)
                 ->where('model_id', $dungeon->id)
                 ->delete();
+        }
+    }
+
+    #[Test]
+    public function getModelsEligibleForPolling_givenDungeonAtThresholdInOtherCombatLogVersion_includesDungeon(): void
+    {
+        // Arrange
+        $season = Season::query()->has('dungeons')->firstOrFail();
+        /** @var Dungeon $dungeon */
+        $dungeon   = $season->dungeons()->firstOrFail();
+        $criterion = null;
+
+        try {
+            $criterion = CombatLogParsingCriterion::factory()->forDungeon($dungeon->id, self::OTHER_VERSION)->atThreshold()->create();
+
+            // Act
+            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band(), PollingBudgetWindow::full());
+
+            // Assert
+            $this->assertTrue($result->contains('id', $dungeon->id));
+        } finally {
+            $criterion?->delete();
         }
     }
 

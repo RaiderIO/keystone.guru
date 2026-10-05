@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Service\CombatLog;
 
 use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
+use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\KillZone\KillZone;
@@ -47,9 +48,10 @@ final class CombatLogRouteDungeonRouteServicePersistenceTest extends PublicTestC
         $countsBefore   = $this->getRowCounts();
 
         // Act
-        $this->service->correctCombatLogRoute($combatLogRoute);
+        $correctedCombatLogRoute = $this->service->correctCombatLogRoute($combatLogRoute);
 
-        // Assert
+        // Assert - the route was built and corrected, and still nothing of it was written
+        $this->assertNotEmpty($correctedCombatLogRoute->npcs, 'The correction must have resolved npcs, or nothing was built at all');
         $this->assertSame($countsBefore, $this->getRowCounts());
     }
 
@@ -61,9 +63,13 @@ final class CombatLogRouteDungeonRouteServicePersistenceTest extends PublicTestC
         $countsBefore   = $this->getRowCounts();
 
         // Act
-        $this->service->convertCombatLogRouteToCombatLogEvents($combatLogRoute);
+        $combatLogEvents = $this->service->convertCombatLogRouteToCombatLogEvents($combatLogRoute);
 
-        // Assert
+        // Assert - the route was built into events, and still nothing of it was written
+        $this->assertNotEmpty(
+            $combatLogEvents->where('event_type', CombatLogEventEventType::NpcDeath->value),
+            'The conversion must have produced an event per resolved npc, or nothing was built at all',
+        );
         $this->assertSame($countsBefore, $this->getRowCounts());
     }
 
