@@ -66,10 +66,16 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
 
         // Each part is extracted independently (no combining), with the run context forwarded.
+        $extractedContents = [];
         $extractionService = $this->createMockPublic(CombatLogDataExtractionServiceInterface::class);
         $extractionService->expects($this->exactly(2))
             ->method('extractData')
-            ->with(new IsType('string'), null, null, $this->identicalTo($runContext));
+            ->with(new IsType('string'), null, null, $this->identicalTo($runContext))
+            ->willReturnCallback(static function (string $filePath) use (&$extractedContents): null {
+                $extractedContents[$filePath] = file_get_contents($filePath);
+
+                return null;
+            });
         app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
 
         $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
@@ -97,7 +103,15 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         // Act
         app()->call([$job, 'handle']);
 
-        // Assert — handled by mock expectations above
+        // Assert - extracted in segment id order rather than the order Raider.IO listed them, and every
+        // downloaded part is removed again
+        $this->assertSame([
+            sprintf('content from %s', self::DOWNLOAD_URL_1),
+            sprintf('content from %s', self::DOWNLOAD_URL_2),
+        ], array_values($extractedContents));
+        foreach (array_keys($extractedContents) as $extractedPath) {
+            $this->assertFileDoesNotExist($extractedPath);
+        }
     }
 
     /**

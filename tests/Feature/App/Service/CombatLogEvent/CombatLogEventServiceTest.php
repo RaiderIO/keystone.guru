@@ -33,8 +33,10 @@ final class CombatLogEventServiceTest extends PublicTestCase
         $seasonService = app(SeasonServiceInterface::class);
         $region        = GameServerRegion::where('short', $regionShort)->firstOrFail();
         $method        = new ReflectionMethod($service, 'resolveSeasonStartPeriod');
+        $seasons       = $seasonService->getAllSeasons();
+        $this->assertNotEmpty($seasons, 'The seeded database must carry at least one season to compare against');
 
-        foreach ($seasonService->getAllSeasons() as $season) {
+        foreach ($seasons as $season) {
             /** @var Season $season */
             // Act
             $result = $method->invoke($service, $season, $region);

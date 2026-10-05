@@ -3,7 +3,9 @@
 namespace Tests\Feature\App\Model\CombatLog;
 
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
+use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use PHPUnit\Framework\Attributes\Group;
@@ -92,5 +94,14 @@ final class CombatLogRouteEnemyFailureTest extends PublicTestCase
         $this->assertInstanceOf(BelongsTo::class, $failure->floor());
         $this->assertInstanceOf(BelongsTo::class, $failure->mappingVersion());
         $this->assertInstanceOf(BelongsTo::class, $failure->npc());
+
+        $this->assertInstanceOf(Dungeon::class, $failure->dungeon()->getRelated());
+        $this->assertSame('dungeon_id', $failure->dungeon()->getForeignKeyName());
+        $this->assertInstanceOf(Floor::class, $failure->floor()->getRelated());
+        $this->assertSame('floor_id', $failure->floor()->getForeignKeyName());
+        $this->assertInstanceOf(MappingVersion::class, $failure->mappingVersion()->getRelated());
+        $this->assertSame('mapping_version_id', $failure->mappingVersion()->getForeignKeyName());
+        $this->assertInstanceOf(Npc::class, $failure->npc()->getRelated());
+        $this->assertSame('npc_id', $failure->npc()->getForeignKeyName());
     }
 }
