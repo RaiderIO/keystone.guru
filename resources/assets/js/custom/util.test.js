@@ -120,6 +120,13 @@ describe('abbreviateNumber', () => {
         expect(abbreviateNumber(2340000)).toBe('2.3M');
     });
 
+    it('abbreviateNumber_givenAHalfwayDecimal_roundsHalfUpLikeThePhpHelper', () => {
+        expect(abbreviateNumber(1150)).toBe('1.2K');
+        expect(abbreviateNumber(2150)).toBe('2.2K');
+        expect(abbreviateNumber(1150000)).toBe('1.2M');
+        expect(abbreviateNumber(999950)).toBe('1000K');
+    });
+
     it('abbreviateNumber_givenNumericStringOrMissingValue_parsesIt', () => {
         expect(abbreviateNumber('12500')).toBe('12.5K');
         expect(abbreviateNumber(undefined)).toBe('0');

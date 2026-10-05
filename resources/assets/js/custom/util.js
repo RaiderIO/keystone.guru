@@ -238,14 +238,14 @@ function getFormattedPercentage(value, max) {
  */
 function abbreviateNumber(value) {
     let number = parseInt(value) || 0;
-    let round = value => String(parseFloat(value.toFixed(1)));
 
+    // toFixed() rounds the binary float, so 1.15 would become 1.1 where PHP's number_format() gives 1.2
     if (number >= 1000000) {
-        return `${round(number / 1000000)}M`;
+        return `${Math.round(number / 100000) / 10}M`;
     }
 
     if (number >= 1000) {
-        return `${round(number / 1000)}K`;
+        return `${Math.round(number / 100) / 10}K`;
     }
 
     return String(number);
