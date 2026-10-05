@@ -217,6 +217,8 @@ final class CombatLogEventFilterTest extends PublicTestCase
     {
         // Arrange
         $combatLogEventFilter = $this->createFilter()
+            ->setKeyLevelMin(5)
+            ->setKeyLevelMax(10)
             ->setItemLevelMin(600)
             ->setItemLevelMax(650);
 
@@ -224,7 +226,7 @@ final class CombatLogEventFilterTest extends PublicTestCase
         $ranges = $this->findRangesByField($combatLogEventFilter);
 
         // Assert
-        $this->assertArrayHasKey('average_item_level', $ranges);
+        $this->assertSame(['gte' => 600, 'lte' => 650], $ranges['average_item_level'] ?? null);
     }
 
     #[Test]

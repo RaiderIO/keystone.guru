@@ -406,8 +406,8 @@ class CombatLogEventFilter implements Arrayable
 
         if ($this->itemLevelMin !== null && $this->itemLevelMax !== null) {
             $must[] = Range::make('average_item_level', [
-                'gte' => $this->keyLevelMin,
-                'lte' => $this->keyLevelMax,
+                'gte' => $this->itemLevelMin,
+                'lte' => $this->itemLevelMax,
             ]);
         }
 
