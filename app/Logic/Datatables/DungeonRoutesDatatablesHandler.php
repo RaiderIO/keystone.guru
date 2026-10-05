@@ -67,6 +67,8 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
             ])
             // ->cloneWithoutBindings(['select'])
             ->selectRaw('count(distinct dungeon_routes.id) as aggregate');
+        $countQuery->offset = null;
+        $countQuery->limit  = null;
         // Get the count
         $result = $countQuery->get(['aggregate']);
         // Returns an array with numbers, sum the entries to get the actual count. Again, a hack but it works for now.
