@@ -11,6 +11,7 @@ use Tests\Fixtures\LoggingFixtures;
 use Tests\Fixtures\ServiceFixtures;
 use Tests\TestCases\PublicTestCase;
 
+#[Group('CloudflareService')]
 final class CloudflareServiceTest extends PublicTestCase
 {
     private CloudflareServiceInterface|MockObject $cacheService;
@@ -183,6 +184,110 @@ final class CloudflareServiceTest extends PublicTestCase
 
         // Act
         $cloudflareService->getIpRangesV4(false);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getIpRangesV4_givenIpV6Range_rejectsTheIpV6Range(): void
+    {
+        // Arrange
+        $log = LoggingFixtures::createCloudflareServiceLogging($this);
+        $log->expects($this->once())
+            ->method('getIpRangesInvalidIpAddress')
+            ->with('2400:cb00::/32');
+
+        $cloudflareService = ServiceFixtures::getCloudflareServiceMock(
+            testCase: $this,
+            methodsToMock: ['curlGet'],
+            cacheService: $this->cacheService,
+            log: $log,
+        );
+
+        $cloudflareService->method('curlGet')
+            ->willReturn("173.245.48.0/20\n2400:cb00::/32\n");
+
+        // Act
+        $ipRanges = $cloudflareService->getIpRangesV4(false);
+
+        // Assert
+        $this->assertSame(['173.245.48.0/20'], $ipRanges);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getIpRangesV6_givenIpV4Range_rejectsTheIpV4Range(): void
+    {
+        // Arrange
+        $log = LoggingFixtures::createCloudflareServiceLogging($this);
+        $log->expects($this->once())
+            ->method('getIpRangesInvalidIpAddress')
+            ->with('173.245.48.0/20');
+
+        $cloudflareService = ServiceFixtures::getCloudflareServiceMock(
+            testCase: $this,
+            methodsToMock: ['curlGet'],
+            cacheService: $this->cacheService,
+            log: $log,
+        );
+
+        $cloudflareService->method('curlGet')
+            ->willReturn("2400:cb00::/32\n173.245.48.0/20\n");
+
+        // Act
+        $ipRanges = $cloudflareService->getIpRangesV6(false);
+
+        // Assert
+        $this->assertSame(['2400:cb00::/32'], $ipRanges);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getIpRangesV4_givenRequest_requestsTheIpV4ListUrl(): void
+    {
+        // Arrange
+        $cloudflareService = ServiceFixtures::getCloudflareServiceMock(
+            testCase: $this,
+            methodsToMock: ['curlGet'],
+            cacheService: $this->cacheService,
+        );
+
+        // Assert
+        $cloudflareService->expects($this->once())
+            ->method('curlGet')
+            ->with('https://cloudflare.com/ips-v4', $this->anything())
+            ->willReturn($this->getResponse('ipsv4'));
+
+        // Act
+        $cloudflareService->getIpRangesV4(false);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getIpRangesV6_givenRequest_requestsTheIpV6ListUrl(): void
+    {
+        // Arrange
+        $cloudflareService = ServiceFixtures::getCloudflareServiceMock(
+            testCase: $this,
+            methodsToMock: ['curlGet'],
+            cacheService: $this->cacheService,
+        );
+
+        // Assert
+        $cloudflareService->expects($this->once())
+            ->method('curlGet')
+            ->with('https://cloudflare.com/ips-v6', $this->anything())
+            ->willReturn($this->getResponse('ipsv6'));
+
+        // Act
+        $cloudflareService->getIpRangesV6(false);
     }
 
     private function getResponse(string $fileName): string

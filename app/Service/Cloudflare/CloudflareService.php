@@ -13,7 +13,7 @@ class CloudflareService implements CloudflareServiceInterface
 {
     use Curl;
 
-    private const string CLOUDFLARE_BASE_URL = 'https://cloudflare.com/';
+    private const string CLOUDFLARE_BASE_URL = 'https://cloudflare.com';
 
     /**
      * getIpRanges() runs inline in TrustProxies on every production request on a cache miss, so this
@@ -75,9 +75,10 @@ class CloudflareService implements CloudflareServiceInterface
     }
 
     /**
+     * @param  int                $addressFamily FILTER_FLAG_IPV4 or FILTER_FLAG_IPV6; a range of the other family is rejected
      * @return array<int, string>
      */
-    private function validateIpAddressRanges(string $ipAddresses, int $options): array
+    private function validateIpAddressRanges(string $ipAddresses, int $addressFamily): array
     {
         $result = [];
 
@@ -85,7 +86,7 @@ class CloudflareService implements CloudflareServiceInterface
         $ipRanges = array_filter(explode("\n", $ipAddresses));
 
         foreach ($ipRanges as $ipRange) {
-            if ($this->validateCidr($ipRange)) {
+            if ($this->validateCidr($ipRange, $addressFamily)) {
                 $result[] = $ipRange;
             } else {
                 $this->log->getIpRangesInvalidIpAddress($ipRange);
@@ -96,11 +97,11 @@ class CloudflareService implements CloudflareServiceInterface
     }
 
     /**
-     * @param  string $cidr
-     * @return bool
-     *                https://gist.github.com/pavinjosdev/cb1d636ea9dc2bd201d54107d10650c5
+     * https://gist.github.com/pavinjosdev/cb1d636ea9dc2bd201d54107d10650c5
+     *
+     * @param int $addressFamily FILTER_FLAG_IPV4 or FILTER_FLAG_IPV6
      */
-    private function validateCidr(string $cidr): bool
+    private function validateCidr(string $cidr, int $addressFamily): bool
     {
         $parts = explode('/', $cidr);
         if (count($parts) != 2) {
@@ -120,14 +121,10 @@ class CloudflareService implements CloudflareServiceInterface
             return false;
         }
 
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-            return $netmask <= 32;
+        if (filter_var($ip, FILTER_VALIDATE_IP, $addressFamily) === false) {
+            return false;
         }
 
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-            return $netmask <= 128;
-        }
-
-        return false;
+        return $netmask <= ($addressFamily === FILTER_FLAG_IPV4 ? 32 : 128);
     }
 }
