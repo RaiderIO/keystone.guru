@@ -43,6 +43,7 @@ use App\Models\UserPinnedDungeonRoute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionClass;
@@ -143,6 +144,8 @@ final class DungeonRouteDeleteCleansUpRelationshipsTest extends PublicTestCase
         $route      = null;
         $collection = null;
         $fileIds    = [];
+
+        Storage::fake(config('filesystems.default'));
 
         try {
             [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: false);
