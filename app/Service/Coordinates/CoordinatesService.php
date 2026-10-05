@@ -55,7 +55,9 @@ class CoordinatesService implements CoordinatesServiceInterface
         if ($targetFloor === null) {
             throw new InvalidArgumentException('No floor set for ingame XY!');
         } elseif ($targetFloor->facade) {
-            sprintf('Unable to convert ingame XY %s that is on facade floor!', json_encode($ingameXY->toArrayWithFloor()));
+            throw new InvalidArgumentException(
+                sprintf('Unable to convert ingame XY %s that is on facade floor!', json_encode($ingameXY->toArrayWithFloor())),
+            );
         }
 
         $ingameMapSizeX = $targetFloor->ingame_max_x - $targetFloor->ingame_min_x;

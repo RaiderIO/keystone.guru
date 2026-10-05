@@ -292,6 +292,26 @@ final class CoordinatesServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function calculateMapLocationForIngameLocation_givenFacadeFloor_throws(): void
+    {
+        // Arrange
+        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
+        $facadeFloor        = $this->createFloor(self::FACADE_FLOOR_ID, 'floor.facade', true, [
+            'ingame_min_x' => 100,
+            'ingame_max_x' => 1000,
+            'ingame_min_y' => 100,
+            'ingame_max_y' => 1000,
+        ]);
+
+        // Assert
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/facade floor/');
+
+        // Act
+        $coordinatesService->calculateMapLocationForIngameLocation(new IngameXY(550, 550, $facadeFloor));
+    }
+
+    #[Test]
     public function calculateMapLocationForIngameLocation_givenFloorWithoutIngameBounds_throws(): void
     {
         // Arrange
