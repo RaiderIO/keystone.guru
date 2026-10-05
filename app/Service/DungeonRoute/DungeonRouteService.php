@@ -47,7 +47,7 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
                 GROUP BY page_views.model_id
             ) as page_views,
             (
-                SELECT MAX(id) as ids
+                SELECT dungeon_id, MAX(id) as id
                 FROM mapping_versions
                 GROUP BY mapping_versions.dungeon_id
                 /**
@@ -64,8 +64,9 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
             /*
                 Adds a penalty if your route does not use the latest mapping version for your dungeon
              */
-                * IF(FIND_IN_SET(dungeon_routes.mapping_version_id, latest_mapping_version_ids.ids) > 1, 1, :outOfDateMappingVersionPenalty)
+                * IF(dungeon_routes.mapping_version_id = latest_mapping_version_ids.id, 1, :outOfDateMappingVersionPenalty)
             WHERE dungeon_routes.id = page_views.model_id
+                AND dungeon_routes.dungeon_id = latest_mapping_version_ids.dungeon_id
             /*
                Only public routes can have their popularity updated for performance reasons
              */
