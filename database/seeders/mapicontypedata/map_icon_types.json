@@ -33,6 +33,13 @@
         "admin_only": true
     },
     {
+        "key": "door_left_right",
+        "name": "mapicontypes.door_left_right",
+        "width": 23,
+        "height": 22,
+        "admin_only": true
+    },
+    {
         "key": "door_locked",
         "name": "mapicontypes.door_locked",
         "width": 26,
@@ -49,6 +56,13 @@
     {
         "key": "door_up",
         "name": "mapicontypes.door_up",
+        "width": 23,
+        "height": 24,
+        "admin_only": true
+    },
+    {
+        "key": "door_up_down",
+        "name": "mapicontypes.door_up_down",
         "width": 23,
         "height": 24,
         "admin_only": true

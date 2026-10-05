@@ -7,7 +7,7 @@
         "target_floor_id": 519,
         "linked_dungeon_floor_switch_marker_id": 3806,
         "direction": null,
-        "hidden_in_facade": false,
+        "hidden_in_facade": true,
         "lat": -147.75,
         "lng": 85
     },
@@ -31,7 +31,7 @@
         "target_floor_id": 499,
         "linked_dungeon_floor_switch_marker_id": 3810,
         "direction": null,
-        "hidden_in_facade": false,
+        "hidden_in_facade": true,
         "lat": -212.75,
         "lng": 166.75
     },
@@ -43,7 +43,7 @@
         "target_floor_id": 518,
         "linked_dungeon_floor_switch_marker_id": 3840,
         "direction": null,
-        "hidden_in_facade": false,
+        "hidden_in_facade": true,
         "lat": -236.15,
         "lng": 258.89
     }

@@ -21468,37 +21468,37 @@
                 "enemy_pack_margin": null,
                 "floorcouplings": [
                     {
-                        "id": 1466,
-                        "floor1_id": 474,
-                        "floor2_id": 480,
-                        "direction": "right"
-                    },
-                    {
-                        "id": 1470,
-                        "floor1_id": 474,
-                        "floor2_id": 486,
-                        "direction": "left"
-                    },
-                    {
-                        "id": 1475,
+                        "id": 1518,
                         "floor1_id": 474,
                         "floor2_id": 475,
                         "direction": "up"
                     },
                     {
-                        "id": 1477,
+                        "id": 1519,
+                        "floor1_id": 474,
+                        "floor2_id": 480,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1520,
+                        "floor1_id": 474,
+                        "floor2_id": 481,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1521,
+                        "floor1_id": 474,
+                        "floor2_id": 486,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1522,
                         "floor1_id": 474,
                         "floor2_id": 490,
                         "direction": "left"
                     },
                     {
-                        "id": 1479,
-                        "floor1_id": 474,
-                        "floor2_id": 481,
-                        "direction": "down"
-                    },
-                    {
-                        "id": 1480,
+                        "id": 1523,
                         "floor1_id": 474,
                         "floor2_id": 493,
                         "direction": "down"
@@ -22708,16 +22708,16 @@
                 "enemy_pack_margin": null,
                 "floorcouplings": [
                     {
-                        "id": 1417,
+                        "id": 1524,
                         "floor1_id": 505,
                         "floor2_id": 509,
                         "direction": "right"
                     },
                     {
-                        "id": 1418,
+                        "id": 1525,
                         "floor1_id": 505,
                         "floor2_id": 510,
-                        "direction": "up"
+                        "direction": "right"
                     }
                 ],
                 "dungeon_speedrun_required_npcs": []
