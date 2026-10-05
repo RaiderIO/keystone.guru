@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use App\Service\Creator\Enums\CreatorDirectorySort;
 use Illuminate\Foundation\Http\FormRequest;
@@ -36,6 +37,11 @@ class CreatorDirectoryFormRequest extends FormRequest
                 'nullable',
                 Rule::enum(CreatorDirectorySort::class),
             ],
+            'dungeon' => [
+                'nullable',
+                'string',
+                'exists:dungeons,slug',
+            ],
         ];
     }
 
@@ -46,6 +52,7 @@ class CreatorDirectoryFormRequest extends FormRequest
             'search.max'         => __('validation.custom.creator_search.max'),
             'category_id.exists' => __('validation.custom.collection_category_id.exists'),
             'sort'               => __('validation.custom.creator_sort.enum'),
+            'dungeon.exists'     => __('validation.custom.creator_dungeon.exists'),
         ];
     }
 
@@ -67,6 +74,22 @@ class CreatorDirectoryFormRequest extends FormRequest
             }
 
             return DungeonRouteCollectionCategory::query()->findOrFail($categoryId);
+        });
+    }
+
+    /**
+     * The dungeon to filter the directory on, or null when the user is browsing every dungeon.
+     */
+    public function dungeon(): ?Dungeon
+    {
+        return once(function (): ?Dungeon {
+            $slug = $this->validated('dungeon');
+
+            if ($slug === null) {
+                return null;
+            }
+
+            return Dungeon::query()->where('slug', $slug)->firstOrFail();
         });
     }
 

@@ -4,6 +4,8 @@ namespace Tests\Feature\App\Repository;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteCollection;
+use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\User;
@@ -409,6 +411,71 @@ final class UserRepositoryTest extends PublicTestCase
             $this->deleteAll($belowRoutes);
             $optedOut->delete();
             $belowThreshold->delete();
+        }
+    }
+
+    /**
+     * The directory's dungeon filter: the dungeon's own season decides who qualifies, while the card figures are
+     * still counted for the viewer's season - two different seasons when the dungeon is not in the current one.
+     */
+    #[Test]
+    public function buildListedCreatorsForDungeonQuery_givenADungeonSeasonAndAStatsSeason_appliesEachToItsOwnFigures(): void
+    {
+        // Arrange
+        [$seasonId, $otherSeasonId]   = $this->twoSeasonIds();
+        [$dungeonId, $otherDungeonId] = $this->twoDungeonIds();
+        $creator                      = User::factory()->create();
+        $routes                       = $this->createRoutesFor($creator, [
+            ...array_fill(0, $this->minPublishedRoutes(), ['dungeon_id' => $otherDungeonId, 'season_id' => $otherSeasonId]),
+            ['dungeon_id' => $dungeonId, 'season_id' => $seasonId],
+            ['dungeon_id' => $dungeonId, 'season_id' => $otherSeasonId],
+            ['dungeon_id' => $dungeonId, 'season_id' => $otherSeasonId],
+        ]);
+
+        try {
+            // Act
+            $listedCreator = $this->repository->buildListedCreatorsForDungeonQuery($dungeonId, $seasonId, null, $otherSeasonId)
+                ->get()
+                ->firstWhere('id', $creator->id);
+
+            // Assert
+            $this->assertNotNull($listedCreator);
+            $this->assertEquals(1, $listedCreator->dungeon_route_count);
+            $this->assertEquals($this->minPublishedRoutes() + 2, $listedCreator->season_route_count);
+        } finally {
+            $this->deleteAll($routes);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function buildListedCreatorsForDungeonQuery_givenACategory_listsOnlyCreatorsSharingACollectionOfIt(): void
+    {
+        // Arrange
+        [$dungeonId] = $this->twoDungeonIds();
+        $categoryId  = DungeonRouteCollectionCategoryType::Mdi->id();
+        $sharing     = User::factory()->create();
+        $notSharing  = User::factory()->create();
+        $routes      = $this->createRoutesFor($sharing, array_fill(0, $this->minPublishedRoutes(), ['dungeon_id' => $dungeonId, 'season_id' => null]));
+        $routes->push(...$this->createRoutesFor($notSharing, array_fill(0, $this->minPublishedRoutes(), ['dungeon_id' => $dungeonId, 'season_id' => null])));
+        $collection = DungeonRouteCollection::factory()->create([
+            'user_id'                              => $sharing->id,
+            'published_state_id'                   => PublishedState::ALL[PublishedState::WORLD],
+            'dungeon_route_collection_category_id' => $categoryId,
+        ]);
+
+        try {
+            // Act
+            $ids = $this->repository->buildListedCreatorsForDungeonQuery($dungeonId, null, $categoryId)->pluck('users.id');
+
+            // Assert
+            $this->assertContains($sharing->id, $ids);
+            $this->assertNotContains($notSharing->id, $ids);
+        } finally {
+            $collection->delete();
+            $this->deleteAll($routes);
+            $sharing->delete();
+            $notSharing->delete();
         }
     }
 

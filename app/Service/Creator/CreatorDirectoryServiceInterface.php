@@ -13,17 +13,21 @@ use Illuminate\Database\Eloquent\Collection;
 interface CreatorDirectoryServiceInterface
 {
     /**
-     * A page of listed creators, their season figures counted for getStatsSeason().
+     * A page of listed creators with their social links, their season figures counted for getStatsSeason().
      *
-     * @param string|null $search     Optional case-insensitive match on the creator's name.
-     * @param int|null    $categoryId Optional DungeonRouteCollectionCategory to filter on: only
-     *                                creators who publicly share a collection of that kind.
+     * @param string|null  $search     Optional case-insensitive match on the creator's name.
+     * @param int|null     $categoryId Optional DungeonRouteCollectionCategory to filter on: only
+     *                                 creators who publicly share a collection of that kind.
+     * @param Dungeon|null $dungeon    Optional dungeon to filter on: only creators with routes for it
+     *                                 in its current season, ranked like getFeaturedCreators() and
+     *                                 regardless of $sort.
      *
      * @return LengthAwarePaginator<int, User>
      */
     public function paginateCreators(
         ?string              $search = null,
         ?int                 $categoryId = null,
+        ?Dungeon             $dungeon = null,
         CreatorDirectorySort $sort = CreatorDirectorySort::ActiveThisSeason,
         ?int                 $perPage = null,
     ): LengthAwarePaginator;

@@ -57,20 +57,34 @@ class UserRepository extends DatabaseRepository implements UserRepositoryInterfa
             ->orderBy('users.id');
     }
 
-    /**
-     * The dungeon aggregate is joined on top of the listed-creators query, so a creator must clear
-     * the same site-wide bar (and not have opted out) before a dungeon page may feature them.
-     */
     public function buildFeaturedCreatorsForDungeonQuery(int $dungeonId, ?int $seasonId): Builder
     {
+        return $this->buildListedCreatorsForDungeonQuery($dungeonId, $seasonId, null, $seasonId);
+    }
+
+    /**
+     * The dungeon aggregate is joined on top of the listed-creators query, so a creator must clear
+     * the same site-wide bar (and not have opted out) before a dungeon page or the directory's
+     * dungeon filter may show them. The dungeon aggregate only reads the dungeon's routes - with a
+     * season, an index_merge intersecting the dungeon_id and season_id indexes - so it adds next to
+     * nothing to the listed-creators aggregate it joins:
+     *
+     *   dungeon_routes  type=index_merge  Using intersect(dungeon_id_index,season_id_index)  rows=1188 of 200k
+     */
+    public function buildListedCreatorsForDungeonQuery(
+        int  $dungeonId,
+        ?int $dungeonSeasonId,
+        ?int $categoryId = null,
+        ?int $seasonId = null,
+    ): Builder {
         $dungeonRouteStats = DungeonRoute::query()
             ->selectRaw('author_id, COUNT(*) AS dungeon_route_count, SUM(popularity) AS dungeon_popularity')
             ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->where('dungeon_id', $dungeonId)
-            ->when($seasonId !== null, static fn(Builder $builder): Builder => $builder->where('season_id', $seasonId))
+            ->when($dungeonSeasonId !== null, static fn(Builder $builder): Builder => $builder->where('season_id', $dungeonSeasonId))
             ->groupBy('author_id');
 
-        return $this->buildListedCreatorsBaseQuery(null, $seasonId)
+        return $this->buildListedCreatorsBaseQuery($categoryId, $seasonId)
             ->addSelect('dungeon_routes_stats.dungeon_route_count', 'dungeon_routes_stats.dungeon_popularity')
             ->joinSub($dungeonRouteStats, 'dungeon_routes_stats', 'dungeon_routes_stats.author_id', '=', 'users.id')
             ->orderByDesc('dungeon_routes_stats.dungeon_popularity')

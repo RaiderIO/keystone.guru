@@ -48,6 +48,9 @@ return [
         'creator_sort' => [
             'enum' => 'Sort the creators by activity this season or by their number of routes.',
         ],
+        'creator_dungeon' => [
+            'exists' => 'That is not a dungeon you can find creators for.',
+        ],
         'autoroutecoverage_days' => [
             'integer' => 'The amount of days must be a whole number.',
             'min'     => 'The overview must cover at least :min day.',

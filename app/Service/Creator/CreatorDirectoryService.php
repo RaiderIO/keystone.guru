@@ -28,12 +28,23 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
     public function paginateCreators(
         ?string              $search = null,
         ?int                 $categoryId = null,
+        ?Dungeon             $dungeon = null,
         CreatorDirectorySort $sort = CreatorDirectorySort::ActiveThisSeason,
         ?int                 $perPage = null,
     ): LengthAwarePaginator {
         $perPage ??= (int)config('keystoneguru.creators.per_page');
+        $statsSeasonId = $this->getStatsSeason()?->id;
 
-        return $this->userRepository->buildListedCreatorsQuery($categoryId, $this->getStatsSeason()?->id, $sort)
+        $builder = $dungeon === null
+            ? $this->userRepository->buildListedCreatorsQuery($categoryId, $statsSeasonId, $sort)
+            : $this->userRepository->buildListedCreatorsForDungeonQuery(
+                $dungeon->id,
+                $this->seasonService->getCurrentSeasonForDungeon($dungeon)?->id,
+                $categoryId,
+                $statsSeasonId,
+            );
+
+        return $builder
             ->when(
                 $search !== null && $search !== '',
                 static fn(Builder $builder): Builder => $builder->where(
@@ -42,6 +53,7 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
                     sprintf('%%%s%%', addcslashes((string)$search, '%_\\')),
                 ),
             )
+            ->with('socialLinks')
             ->paginate($perPage)
             ->withQueryString();
     }
