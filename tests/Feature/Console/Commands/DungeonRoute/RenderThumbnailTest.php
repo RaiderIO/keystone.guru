@@ -23,7 +23,8 @@ final class RenderThumbnailTest extends PublicTestCase
     #[Test]
     public function handle_givenProductionEnvironment_failsWithoutRendering(): void
     {
-        // Arrange
+        // Arrange — an existing route, so the unknown public key guard cannot be what fails the command
+        $dungeonRoute     = DungeonRoute::factory()->create();
         $thumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
         $thumbnailService->expects($this->never())->method('createThumbnail');
         app()->instance(ThumbnailServiceInterface::class, $thumbnailService);
@@ -33,9 +34,12 @@ final class RenderThumbnailTest extends PublicTestCase
 
         try {
             // Act & Assert
-            $this->artisan(RenderThumbnail::class, ['publicKey' => 'ANYKEY12'])->assertFailed();
+            $this->artisan(RenderThumbnail::class, ['publicKey' => $dungeonRoute->public_key])
+                ->expectsOutputToContain('must not be run in production')
+                ->assertFailed();
         } finally {
             $this->app['env'] = $originalEnv;
+            $dungeonRoute->delete();
         }
     }
 

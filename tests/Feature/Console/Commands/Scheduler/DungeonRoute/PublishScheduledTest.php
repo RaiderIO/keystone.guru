@@ -8,6 +8,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteScheduledPublish;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
+use App\Models\User;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -52,22 +53,32 @@ final class PublishScheduledTest extends PublicTestCase
     #[Test]
     public function handle_givenDueSchedule_publishesRouteAndDeletesRecord(): void
     {
-        // Arrange
+        // Arrange — an unpublished route on a mapping version without required enemies, so nothing but the
+        // schedule decides its published state
+        $route = $this->createTeamRouteOnActiveDungeon(
+            withRequiredEnemies: false,
+            attributes: ['published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED]],
+        );
         DungeonRouteScheduledPublish::create([
-            'dungeon_route_id' => $this->dungeonRoute->id,
+            'dungeon_route_id' => $route->id,
             'published_state'  => PublishedState::TEAM,
             'publish_at'       => Carbon::now()->subMinute(),
         ]);
 
-        // Act
-        $this->artisan(PublishScheduled::class)->assertSuccessful();
+        try {
+            // Act
+            $this->artisan(PublishScheduled::class)->assertSuccessful();
 
-        // Assert
-        $this->dungeonRoute->refresh();
-        $this->assertEquals(PublishedState::ALL[PublishedState::TEAM], $this->dungeonRoute->published_state_id);
-        $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', [
-            'dungeon_route_id' => $this->dungeonRoute->id,
-        ]);
+            // Assert
+            $route->refresh();
+            $this->assertEquals(PublishedState::ALL[PublishedState::TEAM], $route->published_state_id);
+            $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', [
+                'dungeon_route_id' => $route->id,
+            ]);
+        } finally {
+            DungeonRouteScheduledPublish::where('dungeon_route_id', $route->id)->delete();
+            $route->delete();
+        }
     }
 
     #[Test]
@@ -86,6 +97,7 @@ final class PublishScheduledTest extends PublicTestCase
             'dungeon_id'         => $activeDungeon->id,
             'mapping_version_id' => $mappingVersion->id,
             'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
+            'published_at'       => Carbon::now()->subYear(),
         ]);
         $worldRoute->save();
 
@@ -102,7 +114,7 @@ final class PublishScheduledTest extends PublicTestCase
             // Assert
             $worldRoute->refresh();
             $this->assertEquals(PublishedState::ALL[PublishedState::WORLD], $worldRoute->published_state_id);
-            $this->assertInstanceOf(Carbon::class, $worldRoute->published_at);
+            $this->assertTrue($worldRoute->published_at->isAfter(Carbon::now()->subMinute()), 'Publishing to world must stamp published_at');
             $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', [
                 'dungeon_route_id' => $worldRoute->id,
             ]);
@@ -167,5 +179,120 @@ final class PublishScheduledTest extends PublicTestCase
             DungeonRouteScheduledPublish::where('dungeon_route_id', $inactiveRoute->id)->delete();
             $inactiveRoute->delete();
         }
+    }
+
+    #[Test]
+    public function handle_givenWorldScheduleForRouteMissingRequiredEnemies_skipsAndDeletesRecord(): void
+    {
+        // Arrange — a route without pulls on a mapping version that has required enemies
+        $route = $this->createTeamRouteOnActiveDungeon(withRequiredEnemies: true);
+        DungeonRouteScheduledPublish::create([
+            'dungeon_route_id' => $route->id,
+            'published_state'  => PublishedState::WORLD,
+            'publish_at'       => Carbon::now()->subMinute(),
+        ]);
+
+        try {
+            // Act
+            $this->artisan(PublishScheduled::class)->assertSuccessful();
+
+            // Assert
+            $route->refresh();
+            $this->assertEquals(PublishedState::ALL[PublishedState::TEAM], $route->published_state_id);
+            $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', [
+                'dungeon_route_id' => $route->id,
+            ]);
+        } finally {
+            DungeonRouteScheduledPublish::where('dungeon_route_id', $route->id)->delete();
+            $route->delete();
+        }
+    }
+
+    #[Test]
+    public function handle_givenWorldWithLinkScheduleByAuthorWithoutPatreonBenefit_skipsAndDeletesRecord(): void
+    {
+        // Arrange
+        $author = User::factory()->create();
+        $route  = $this->createTeamRouteOnActiveDungeon(withRequiredEnemies: false, attributes: ['author_id' => $author->id]);
+        DungeonRouteScheduledPublish::create([
+            'dungeon_route_id' => $route->id,
+            'published_state'  => PublishedState::WORLD_WITH_LINK,
+            'publish_at'       => Carbon::now()->subMinute(),
+        ]);
+
+        try {
+            // Act
+            $this->artisan(PublishScheduled::class)->assertSuccessful();
+
+            // Assert
+            $route->refresh();
+            $this->assertEquals(PublishedState::ALL[PublishedState::TEAM], $route->published_state_id);
+            $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', [
+                'dungeon_route_id' => $route->id,
+            ]);
+        } finally {
+            DungeonRouteScheduledPublish::where('dungeon_route_id', $route->id)->delete();
+            $route->delete();
+            $author->delete();
+        }
+    }
+
+    #[Test]
+    public function handle_givenWorldScheduleForUpgradeDraft_skipsAndDeletesRecord(): void
+    {
+        // Arrange
+        $original = $this->createTeamRouteOnActiveDungeon(withRequiredEnemies: false);
+        $draft    = null;
+
+        try {
+            $draft = DungeonRoute::factory()->create([
+                'dungeon_id'                  => $original->dungeon_id,
+                'mapping_version_id'          => $original->mapping_version_id,
+                'upgrade_of_dungeon_route_id' => $original->id,
+                'expires_at'                  => null,
+                'published_at'                => Carbon::now()->subYear(),
+            ]);
+            DungeonRouteScheduledPublish::create([
+                'dungeon_route_id' => $draft->id,
+                'published_state'  => PublishedState::WORLD,
+                'publish_at'       => Carbon::now()->subMinute(),
+            ]);
+
+            // Act
+            $this->artisan(PublishScheduled::class)->assertSuccessful();
+
+            // Assert
+            $draft->refresh();
+            $this->assertEquals(PublishedState::ALL[PublishedState::UNPUBLISHED], $draft->published_state_id);
+            $this->assertTrue($draft->published_at->isBefore(Carbon::now()->subMonth()), 'An upgrade draft must never be stamped as published');
+            $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', [
+                'dungeon_route_id' => $draft->id,
+            ]);
+        } finally {
+            if ($draft !== null) {
+                DungeonRouteScheduledPublish::where('dungeon_route_id', $draft->id)->delete();
+                DungeonRoute::find($draft->id)?->delete();
+            }
+            $original->delete();
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $attributes
+     */
+    private function createTeamRouteOnActiveDungeon(bool $withRequiredEnemies, array $attributes = []): DungeonRoute
+    {
+        [$activeDungeon, $mappingVersion] = $this->findDungeon(
+            challengeMode: true,
+            dungeonActive: true,
+            resolve: static fn(Dungeon $dungeon, MappingVersion $mappingVersion): ?bool => $mappingVersion->enemies()->where('required', true)->exists() === $withRequiredEnemies ? true : null,
+        );
+
+        return DungeonRoute::factory()->create(array_merge([
+            'dungeon_id'         => $activeDungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
+            'expires_at'         => null,
+        ], $attributes));
     }
 }

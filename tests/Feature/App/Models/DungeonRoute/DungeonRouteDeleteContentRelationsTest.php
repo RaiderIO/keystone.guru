@@ -2,15 +2,29 @@
 
 namespace Tests\Feature\App\Models\DungeonRoute;
 
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\Arrow;
 use App\Models\Brushline;
+use App\Models\CharacterClass;
+use App\Models\CharacterClassSpecialization;
+use App\Models\CharacterRace;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteAffixGroup;
+use App\Models\DungeonRoute\DungeonRouteAttribute;
+use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Models\DungeonRoute\DungeonRouteFavorite;
+use App\Models\DungeonRoute\DungeonRoutePlayerClass;
+use App\Models\DungeonRoute\DungeonRoutePlayerRace;
+use App\Models\DungeonRoute\DungeonRoutePlayerSpecialization;
 use App\Models\DungeonRoute\DungeonRouteRating;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
+use App\Models\Path;
 use App\Models\Polyline;
+use App\Models\RaidMarker;
+use App\Models\RouteAttribute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
@@ -167,6 +181,60 @@ class DungeonRouteDeleteContentRelationsTest extends PublicTestCase
             // Assert
             $this->assertNull(KillZone::find($killZone->id), 'The kill zone should be deleted');
             $this->assertNull(KillZoneEnemy::find($killZoneEnemy->id), 'The kill zone\'s enemies should be deleted along with it');
+        } finally {
+            $route?->delete();
+            $owner?->delete();
+        }
+    }
+
+    #[Test]
+    public function deleteContentRelations_givenRouteWithPathsArrowsRaidMarkersAndSettings_deletesThemAll(): void
+    {
+        // Arrange
+        $owner = null;
+        $route = null;
+
+        try {
+            $dungeon = $this->getDungeonWithNonFacadeFloor();
+            $floor   = $dungeon->floors()->where('facade', 0)->firstOrFail();
+
+            $owner = User::factory()->create();
+            $route = DungeonRoute::factory()->create([
+                'author_id'  => $owner->id,
+                'dungeon_id' => $dungeon->id,
+                'expires_at' => null,
+            ]);
+
+            $path  = Path::create(['dungeon_route_id' => $route->id, 'floor_id' => $floor->id, 'polyline_id' => -1]);
+            $arrow = Arrow::create(['dungeon_route_id' => $route->id, 'floor_id' => $floor->id, 'polyline_id' => -1]);
+            DungeonRouteEnemyRaidMarker::create([
+                'dungeon_route_id' => $route->id,
+                'raid_marker_id'   => RaidMarker::ALL['skull'],
+                'npc_id'           => 12345,
+                'mdt_id'           => 1,
+                'enemy_id'         => 99999,
+            ]);
+            DungeonRouteAffixGroup::create(['dungeon_route_id' => $route->id, 'affix_group_id' => AffixGroup::query()->value('id')]);
+            DungeonRouteAttribute::insert(['dungeon_route_id' => $route->id, 'route_attribute_id' => RouteAttribute::query()->value('id')]);
+            DungeonRoutePlayerClass::create(['dungeon_route_id' => $route->id, 'character_class_id' => CharacterClass::query()->value('id')]);
+            DungeonRoutePlayerRace::insert(['dungeon_route_id' => $route->id, 'character_race_id' => CharacterRace::query()->value('id')]);
+            DungeonRoutePlayerSpecialization::create([
+                'dungeon_route_id'                  => $route->id,
+                'character_class_specialization_id' => CharacterClassSpecialization::query()->value('id'),
+            ]);
+
+            // Act
+            $route->deleteContentRelations();
+
+            // Assert
+            $this->assertNull(Path::find($path->id), 'The path should be deleted');
+            $this->assertNull(Arrow::find($arrow->id), 'The arrow should be deleted');
+            $this->assertSame(0, DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $route->id)->count(), 'The raid markers should be deleted');
+            $this->assertSame(0, DungeonRouteAffixGroup::where('dungeon_route_id', $route->id)->count(), 'The affix groups should be deleted');
+            $this->assertSame(0, DungeonRouteAttribute::where('dungeon_route_id', $route->id)->count(), 'The route attributes should be deleted');
+            $this->assertSame(0, DungeonRoutePlayerClass::where('dungeon_route_id', $route->id)->count(), 'The player classes should be deleted');
+            $this->assertSame(0, DungeonRoutePlayerRace::where('dungeon_route_id', $route->id)->count(), 'The player races should be deleted');
+            $this->assertSame(0, DungeonRoutePlayerSpecialization::where('dungeon_route_id', $route->id)->count(), 'The player specializations should be deleted');
         } finally {
             $route?->delete();
             $owner?->delete();

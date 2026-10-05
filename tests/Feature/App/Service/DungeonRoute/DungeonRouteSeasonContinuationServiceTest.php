@@ -78,6 +78,7 @@ final class DungeonRouteSeasonContinuationServiceTest extends DungeonRouteSaveSe
 
             // Assert
             $continuationAffixGroups = $continuation->affixes()->get();
+            $this->assertNotEmpty($continuationAffixGroups, 'The continuation must get an affix group of the newest season');
             $this->assertNotContains($olderAffixGroup->id, $continuationAffixGroups->pluck('id'));
             foreach ($continuationAffixGroups as $affixGroup) {
                 $this->assertSame($newestSeason->id, $affixGroup->season_id);

@@ -2,11 +2,17 @@
 
 namespace Tests\Feature\App\Service\DungeonRoute;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
+use App\Models\Season;
+use App\Models\Team;
+use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
+use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -40,6 +46,61 @@ final class DiscoverServiceTest extends PublicTestCase
             $heroRoutes->count(),
             'heroRoutes must be deduplicated by id',
         );
+    }
+
+    #[Test]
+    public function heroRoutes_givenWeeklyRouteThatIsAlsoTheTopCommunityRoute_returnsItOnce(): void
+    {
+        // Arrange - without a Raider.IO team to exclude, the weekly route also tops its dungeon's community routes
+        $season      = $this->getCurrentSeason();
+        $weeklyRoute = null;
+
+        try {
+            config(['keystoneguru.raider_io.team_id' => (int)Team::query()->max('id') + 1000]);
+            $weeklyRoute = $this->createTopCommunityRoute($season, popularity: 1_000_000);
+            $this->bindWeeklyRoutes($weeklyRoute);
+
+            // Act
+            $heroRoutes = app(DiscoverServiceInterface::class)->withCache(false)->heroRoutes($season, 1);
+
+            // Assert
+            $this->assertSame(1, $heroRoutes->where('id', $weeklyRoute->id)->count(), 'The weekly route must be in the hero routes exactly once');
+        } finally {
+            $weeklyRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function heroRoutes_givenRaiderIOTeamRouteWithTheHighestPopularity_leavesItOutOfTheCommunityRoutes(): void
+    {
+        // Arrange
+        $season         = $this->getCurrentSeason();
+        $raiderIOTeam   = null;
+        $weeklyRoute    = null;
+        $communityRoute = null;
+
+        try {
+            $raiderIOTeam = Team::create([
+                'public_key'  => Team::generateRandomPublicKey(),
+                'name'        => 'Hero routes test Raider.IO team',
+                'description' => 'Hero routes test Raider.IO team',
+            ]);
+            config(['keystoneguru.raider_io.team_id' => $raiderIOTeam->id]);
+            $weeklyRoute    = $this->createTopCommunityRoute($season, popularity: 1_000_001, attributes: ['team_id' => $raiderIOTeam->id]);
+            $communityRoute = $this->createTopCommunityRoute($season, popularity: 1_000_000, dungeonId: $weeklyRoute->dungeon_id);
+            $this->bindWeeklyRoutes($weeklyRoute);
+
+            // Act
+            $heroRoutes = app(DiscoverServiceInterface::class)->withCache(false)->heroRoutes($season, 1);
+
+            // Assert
+            $this->assertSame(1, $heroRoutes->where('id', $weeklyRoute->id)->count(), 'The weekly route must be in the hero routes exactly once');
+            $this->assertSame(1, $heroRoutes->where('id', $communityRoute->id)->count(), 'The best community route must not be pushed out by the Raider.IO team route');
+        } finally {
+            $communityRoute?->delete();
+            $weeklyRoute?->delete();
+            $raiderIOTeam?->delete();
+        }
     }
 
     #[Test]
@@ -157,5 +218,52 @@ final class DiscoverServiceTest extends PublicTestCase
             ->withCache(false)
             ->withGameVersion(GameVersion::query()->where('key', GameVersion::GAME_VERSION_TBC)->firstOrFail())
             ->withBuilder(static fn(Builder $builder) => $builder->whereIn('dungeon_routes.id', $routeIds));
+    }
+
+    private function getCurrentSeason(): Season
+    {
+        $season = app(SeasonServiceInterface::class)->getCurrentSeason();
+        $this->assertNotNull($season, 'Expected a current season in the seeded test database');
+
+        return $season;
+    }
+
+    /**
+     * A published route that outranks every seeded route of a dungeon of the season.
+     *
+     * @param array<string, mixed> $attributes
+     */
+    private function createTopCommunityRoute(Season $season, int $popularity, ?int $dungeonId = null, array $attributes = []): DungeonRoute
+    {
+        /** @var Dungeon|null $dungeon */
+        $dungeon = $dungeonId === null
+            ? $season->dungeons()->active()->get()->first(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion() !== null)
+            : Dungeon::findOrFail($dungeonId);
+        $this->assertNotNull($dungeon, 'Expected an active dungeon with a mapping version in the current season');
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+
+        return DungeonRoute::factory()->create(array_merge([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+            'season_id'          => $season->id,
+            'team_id'            => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            'teeming'            => false,
+            'enemy_forces'       => $mappingVersion->enemy_forces_required,
+            'popularity'         => $popularity,
+            'expires_at'         => null,
+        ], $attributes));
+    }
+
+    private function bindWeeklyRoutes(DungeonRoute $weeklyRoute): void
+    {
+        $dungeonRouteRepository = $this->getMockBuilderPublic(DungeonRouteRepository::class)
+            ->setConstructorArgs([app()->make(SeasonServiceInterface::class)])
+            ->onlyMethods(['getWeeklyRoutes'])
+            ->getMock();
+        $dungeonRouteRepository->method('getWeeklyRoutes')->willReturn(collect([
+            $weeklyRoute->dungeon->key => collect([new WeeklyRoute('pug_friendly', $weeklyRoute)]),
+        ]));
+        app()->instance(DungeonRouteRepositoryInterface::class, $dungeonRouteRepository);
     }
 }
