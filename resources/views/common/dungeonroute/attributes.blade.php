@@ -13,12 +13,12 @@ $id               ??= 'attributes';
 ?>
 <div class="mb-3">
     @if($showNoAttributes)
-        <label for="attributes" data-bs-toggle="tooltip"
+        <label for="{{ $id }}" data-bs-toggle="tooltip"
                title="{{ __('view_common.dungeonroute.attributes.no_attributes_title') }}">
             {{ __('view_common.dungeonroute.attributes.attributes') }}
         </label>
     @else
-        <label for="attributes">{{ __('view_common.dungeonroute.attributes.attributes') }}</label>
+        <label for="{{ $id }}">{{ __('view_common.dungeonroute.attributes.attributes') }}</label>
         <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
         __('view_common.dungeonroute.attributes.select_attributes_title')
          }}"></i>

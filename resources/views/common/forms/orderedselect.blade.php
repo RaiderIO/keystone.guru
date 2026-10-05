@@ -25,6 +25,8 @@
  * @var bool               $showCount    Whether the "n / max" counter is shown.
  * @var int|null           $fullCount    What counts towards $max, when that is more than this list (ajax mode).
  * @var int|null           $itemMax      Maximum number of items in this list itself, when that is below $max (ajax mode).
+ * @var string             $itemOverKey  Translation key (js.*) of the note shown while the list holds more than $itemMax
+ *                                       items; the items past $itemMax are marked.
  */
 $help              ??= null;
 $formId            ??= null;
@@ -41,8 +43,10 @@ $showCountMax ??= true;
 $selectedIds = array_values(array_filter($selectedIds, static fn(int|string $selectedId): bool => isset($options[$selectedId])));
 $fullCount   ??= count($selectedIds);
 $itemMax     ??= null;
+$itemOverKey ??= 'js.orderedselect_over';
 $isListFull  = $fullCount >= $max;
 $isItemsFull = $itemMax !== null && count($selectedIds) >= $itemMax;
+$isItemsOver = $itemMax !== null && count($selectedIds) > $itemMax;
 $isFull      = $isListFull || $isItemsFull;
 $helpId      = sprintf('%s_help', $id);
 $errorKey    = $name;
@@ -55,12 +59,14 @@ $inlineOptions = [
     'emptySelector'     => sprintf('#%s_empty', $id),
     'countSelector'     => sprintf('#%s_count', $id),
     'fullSelector'      => sprintf('#%s_full', $id),
+    'overSelector'      => sprintf('#%s_over', $id),
     'statusSelector'    => sprintf('#%s_status', $id),
     'max'               => $max,
     'ajax'              => $ajax,
     'rootSelector'      => sprintf('#%s', $id),
     'fullCount'         => $ajax ? $fullCount : null,
     'itemMax'           => $itemMax,
+    'itemOverKey'       => $itemOverKey,
     'showCountMax'      => $showCountMax,
 ];
 ?>
@@ -89,6 +95,7 @@ $inlineOptions = [
                 'itemDetail' => $optionDetails[$selectedId] ?? null,
                 'detailWarningText' => $detailWarningText,
                 'position' => $index + 1,
+                'isOver' => $itemMax !== null && $index >= $itemMax,
             ])
         @endforeach
     </ol>
@@ -121,8 +128,11 @@ $inlineOptions = [
     @endif
 
     <small id="{{ $helpId }}" class="form-text text-body-secondary d-block">
-        <span id="{{ $id }}_full" @if(!$isFull) hidden @endif>
+        <span id="{{ $id }}_full" @if(!$isFull || $isItemsOver) hidden @endif>
             {{ __('js.orderedselect_full', ['max' => $isListFull ? $max : $itemMax]) }}
+        </span>
+        <span id="{{ $id }}_over" class="ordered_select_over_note" @if(!$isItemsOver) hidden @endif>
+            {{ __($itemOverKey, ['max' => $itemMax ?? $max]) }}
         </span>
         @if($help !== null)
             {{ $help }}

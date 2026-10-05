@@ -77,6 +77,7 @@ const OPTIONS = {
     listSelector:               '#picker_list',
     loadingSelector:            '#picker_loading',
     emptySelector:              '#picker_empty',
+    clearFiltersSelector:       '#picker_clear_filters',
     errorSelector:              '#picker_error',
     previousSelector:           '#picker_previous',
     nextSelector:               '#picker_next',
@@ -136,7 +137,7 @@ const MARKUP = `
                 <select id="picker_requirements" multiple><option value="favorite">Favorite</option></select>
                 <select id="picker_tags" multiple><option value="mine">mine</option></select>
                 <p id="picker_loading" hidden></p>
-                <p id="picker_empty" hidden></p>
+                <div id="picker_empty" hidden><button id="picker_clear_filters" hidden></button></div>
                 <p id="picker_error" hidden></p>
                 <div aria-busy="false">
                     <div class="route_picker_select_page" hidden><input id="picker_select_page" type="checkbox"></div>
@@ -350,6 +351,106 @@ describe('CommonDungeonroutePicker', () => {
         // Assert
         expect(document.querySelector('#picker_empty').hidden).toBe(false);
         expect(document.querySelector('#picker_next').disabled).toBe(true);
+    });
+
+    it('load_givenNoRoutesForChangedFilters_offersToClearThem', () => {
+        // Arrange
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        respondWithRoutes([route('a')]);
+        jQuery('#picker_affixes').val(['7']).trigger('change');
+
+        // Act
+        respondWithRoutes([]);
+
+        // Assert
+        expect(document.querySelector('#picker_empty').hidden).toBe(false);
+        expect(document.querySelector('#picker_clear_filters').hidden).toBe(false);
+    });
+
+    it('load_givenNoRoutesForTheStartingFilters_offersNoClear', () => {
+        // Arrange
+        picker.reload();
+
+        // Act
+        respondWithRoutes([]);
+
+        // Assert
+        expect(document.querySelector('#picker_empty').hidden).toBe(false);
+        expect(document.querySelector('#picker_clear_filters').hidden).toBe(true);
+    });
+
+    it('clearFilters_givenChangedFilters_restoresTheStartingValuesAndListsTheFirstPage', () => {
+        // Arrange
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        respondWithRoutes([route('a'), route('b')], 5);
+        document.querySelector('#picker_next').click();
+        respondWithRoutes([route('c')], 5);
+        document.querySelector('#picker_title_search').value = 'Nothing like this';
+        jQuery('#picker_dungeon').val('3').trigger('change');
+        jQuery('#picker_affixes').val(['7']).trigger('change');
+        jQuery('#picker_attributes').val([]).trigger('change');
+        respondWithRoutes([]);
+
+        // Act
+        document.querySelector('#picker_clear_filters').click();
+
+        // Assert
+        const request = ajaxCalls[ajaxCalls.length - 1];
+        expect(request.data.start).toBe(0);
+        expect(request.data.columns[0].search.value).toBe('');
+        expect(request.data.columns[1].search.value).toBe('-1');
+        expect(request.data.columns[3].search.value).toEqual(['-1']);
+        expect(jQuery('#picker_affixes').val()).toEqual([]);
+        expect(document.querySelector('#picker_title_search').value).toBe('');
+    });
+
+    it('clearFilters_givenATomSelectFilter_resetsItSilentlyAndRepaintsItsSelectedSummary', () => {
+        // Arrange
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        respondWithRoutes([]);
+        const attributes = document.querySelector('#picker_attributes');
+        attributes.tomselect = {setValue: vi.fn(), selectpickerUpdateCountSummary: vi.fn()};
+
+        // Act
+        picker.clearFilters();
+
+        // Assert
+        expect(attributes.tomselect.setValue).toHaveBeenCalledWith(['-1'], true);
+        expect(attributes.tomselect.selectpickerUpdateCountSummary).toHaveBeenCalledTimes(1);
+    });
+
+    it('load_givenTheFirstOfSeveralPages_disablesOnlyPrevious', () => {
+        // Arrange
+        picker.reload();
+
+        // Act
+        respondWithRoutes([route('a'), route('b')], 5);
+
+        // Assert
+        const previous = document.querySelector('#picker_previous');
+        const next = document.querySelector('#picker_next');
+        expect(previous.disabled).toBe(true);
+        expect(previous.getAttribute('aria-disabled')).toBe('true');
+        expect(next.disabled).toBe(false);
+        expect(next.getAttribute('aria-disabled')).toBe('false');
+    });
+
+    it('load_givenTheLastPage_disablesOnlyNext', () => {
+        // Arrange
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')], 3);
+        document.querySelector('#picker_next').click();
+
+        // Act
+        respondWithRoutes([route('c')], 3);
+
+        // Assert
+        const previous = document.querySelector('#picker_previous');
+        const next = document.querySelector('#picker_next');
+        expect(previous.disabled).toBe(false);
+        expect(previous.getAttribute('aria-disabled')).toBe('false');
+        expect(next.disabled).toBe(true);
+        expect(next.getAttribute('aria-disabled')).toBe('true');
     });
 
     it('reload_givenARequestStillInFlight_abortsItSoItCannotOverwriteTheNewestRows', () => {

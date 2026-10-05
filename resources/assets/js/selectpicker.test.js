@@ -354,3 +354,20 @@ describe('getOptionSetFingerprint', () => {
         expect(getOptionSetFingerprint(select, false)).not.toBe(before);
     });
 });
+
+describe('select label', () => {
+    test('initSelectPicker_givenALabelledSelectWithoutLiveSearch_namesTheControlWithoutADanglingFor', () => {
+        // Arrange
+        document.body.innerHTML = `<label for="state">Visible to</label>
+            <select id="state" class="form-control selectpicker"><option value="1">One</option></select>`;
+
+        // Act
+        refreshSelectPickers();
+
+        // Assert
+        const label = document.querySelector('label');
+        const control = document.querySelector('#state-ts-control');
+        expect(control.getAttribute('aria-labelledby')).toBe(label.id);
+        expect(label.hasAttribute('for')).toBe(false);
+    });
+});

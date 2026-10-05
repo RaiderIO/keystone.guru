@@ -125,6 +125,7 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
                 'currentAffixGroup' => null,
                 'dungeonroutes' => $pinnedDungeonRoutes,
                 'showDungeonImage' => true,
+                'titleHeadingLevel' => 3,
             ])
 
             <h2 class="h4 mt-4 mb-3">

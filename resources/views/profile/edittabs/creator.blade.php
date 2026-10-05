@@ -37,7 +37,7 @@ $describedBy = static fn(string $errorKey, string $errorId, string $helpId): str
     $errors->has($errorKey) ? $errorId : '',
 ));
 ?>
-<div class="tab-pane fade" id="creator" role="tabpanel" aria-labelledby="creator-tab">
+<div class="tab-pane fade creator_profile_edit" id="creator" role="tabpanel" aria-labelledby="creator-tab">
     <h4>
         {{ __('view_profile.edit.creator') }}
     </h4>
@@ -67,7 +67,7 @@ $describedBy = static fn(string $errorKey, string $errorId, string $helpId): str
                 <i class="far fa-copy" aria-hidden="true"></i>
             </button>
         </div>
-        <small id="creator_public_profile_url_help" class="form-text text-muted">
+        <small id="creator_public_profile_url_help" class="form-text text-muted d-block">
             {{ __('view_profile.edit.creator_public_profile_url_help') }}
         </small>
     </div>
@@ -85,7 +85,7 @@ $describedBy = static fn(string $errorKey, string $errorId, string $helpId): str
             ->placeholder(__('view_profile.edit.creator_bio_placeholder'))
             ->attributeIf($errors->has('bio'), 'aria-invalid', 'true')
             ->attribute('aria-describedby', $describedBy('bio', 'bio_error', 'bio_help')) }}
-        <small id="bio_help" class="form-text text-muted">
+        <small id="bio_help" class="form-text text-muted d-block">
             {{ __('view_profile.edit.creator_bio_help', ['max' => 500]) }}
         </small>
         @include('common.forms.form-error', ['key' => 'bio', 'errorId' => 'bio_error'])

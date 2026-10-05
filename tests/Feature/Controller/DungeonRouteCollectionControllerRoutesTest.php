@@ -150,6 +150,104 @@ final class DungeonRouteCollectionControllerRoutesTest extends PublicTestCase
     }
 
     #[Test]
+    public function edit_givenASlotOverItsDungeonLimit_marksTheRoutesPastTheLimitAndSaysSo(): void
+    {
+        // Arrange
+        $owner                  = $this->owner();
+        $mappingVersion         = $this->retailMappingVersion();
+        $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id], [$mappingVersion->dungeon_id]);
+        $dungeonRoutes          = array_map(fn(): DungeonRoute => $this->createRoute($mappingVersion), range(0, DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON));
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season), $dungeonRoutes);
+
+        // Act
+        $response = $this->actingAs($owner)->get($this->editUrl($dungeonRouteCollection));
+
+        // Assert
+        $response->assertOk();
+        $content = (string)$response->getContent();
+        $slotId  = sprintf('dungeon_routes_%d', $mappingVersion->dungeon_id);
+        $this->assertSame(
+            array_fill(0, DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON, false) + [DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON => true],
+            $this->slotItemsOverTheLimit($content, $slotId),
+        );
+        $this->assertSame(
+            __('js.collection_dungeonroutes_over_dungeon_limit', ['max' => DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON]),
+            $this->slotNote($content, $slotId, 'over'),
+        );
+        $this->assertNull($this->slotNote($content, $slotId, 'full'));
+    }
+
+    #[Test]
+    public function edit_givenASlotAtItsDungeonLimit_marksNoRouteAndSaysItIsFull(): void
+    {
+        // Arrange
+        $owner                  = $this->owner();
+        $mappingVersion         = $this->retailMappingVersion();
+        $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id], [$mappingVersion->dungeon_id]);
+        $dungeonRoutes          = array_map(fn(): DungeonRoute => $this->createRoute($mappingVersion), range(1, DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON));
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season), $dungeonRoutes);
+
+        // Act
+        $response = $this->actingAs($owner)->get($this->editUrl($dungeonRouteCollection));
+
+        // Assert
+        $response->assertOk();
+        $content = (string)$response->getContent();
+        $slotId  = sprintf('dungeon_routes_%d', $mappingVersion->dungeon_id);
+        $this->assertSame(array_fill(0, DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON, false), $this->slotItemsOverTheLimit($content, $slotId));
+        $this->assertNull($this->slotNote($content, $slotId, 'over'));
+        $this->assertSame(
+            __('js.orderedselect_full', ['max' => DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON]),
+            $this->slotNote($content, $slotId, 'full'),
+        );
+    }
+
+    #[Test]
+    public function edit_givenTheOwner_labelsEveryFilterOfThePicker(): void
+    {
+        // Arrange
+        $owner                  = $this->owner();
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()), []);
+
+        // Act
+        $response = $this->actingAs($owner)->get($this->editUrl($dungeonRouteCollection));
+
+        // Assert
+        $response->assertOk();
+        $content = (string)$response->getContent();
+        foreach (['dungeon', 'affixes', 'attributes', 'requirements', 'tags'] as $filter) {
+            $selectId = sprintf('collection_route_picker_%s', $filter);
+            $this->assertMatchesRegularExpression(sprintf('/<label[^>]* for="%s"/', $selectId), $content, $filter);
+            $this->assertMatchesRegularExpression(sprintf('/<select[^>]* id="%s"/', $selectId), $content, $filter);
+        }
+    }
+
+    #[Test]
+    public function edit_givenTheOwner_rendersThePickersPagingDisabledUntilAPageIsListed(): void
+    {
+        // Arrange
+        $owner                  = $this->owner();
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()), []);
+
+        // Act
+        $response = $this->actingAs($owner)->get($this->editUrl($dungeonRouteCollection));
+
+        // Assert
+        $response->assertOk();
+        $content = (string)$response->getContent();
+        foreach (['previous', 'next'] as $pageButton) {
+            $this->assertMatchesRegularExpression(
+                sprintf('/<button id="collection_route_picker_%s"[^>]*\sdisabled aria-disabled="true">/', $pageButton),
+                $content,
+            );
+        }
+        $this->assertMatchesRegularExpression(
+            '/<button id="collection_route_picker_clear_filters"[^>]*hidden>\s*<i[^>]*><\/i>\s*' . preg_quote(__('view_common.dungeonroute.picker.clear_filters'), '/') . '/',
+            $content,
+        );
+    }
+
+    #[Test]
     public function update_givenNoRoutesPosted_keepsTheRoutesOfTheCollection(): void
     {
         // Arrange
@@ -168,6 +266,29 @@ final class DungeonRouteCollectionControllerRoutesTest extends PublicTestCase
         $dungeonRouteCollection->refresh();
         $this->assertSame('ZzTestRenamedCollection', $dungeonRouteCollection->name);
         $this->assertSame([$dungeonRoute->id], $dungeonRouteCollection->dungeonRoutes->pluck('id')->all());
+    }
+
+    /**
+     * Per route of a slot's list, in list order, whether it is marked as past the dungeon limit.
+     *
+     * @return array<int, bool>
+     */
+    private function slotItemsOverTheLimit(string $content, string $slotId): array
+    {
+        $this->assertSame(1, preg_match(sprintf('/<ol id="%s_list"[^>]*>(.*?)<\/ol>/s', $slotId), $content, $list));
+        preg_match_all('/<li class="([^"]*)"/', $list[1], $items);
+
+        return array_map(static fn(string $classes): bool => str_contains($classes, 'ordered_select_item_over'), $items[1]);
+    }
+
+    /**
+     * The text of a slot's note ('full' or 'over'), or null while the note is hidden.
+     */
+    private function slotNote(string $content, string $slotId, string $note): ?string
+    {
+        $this->assertSame(1, preg_match(sprintf('/<span id="%s_%s"([^>]*)>(.*?)<\/span>/s', $slotId, $note), $content, $match));
+
+        return str_contains($match[1], 'hidden') ? null : trim(html_entity_decode($match[2], ENT_QUOTES));
     }
 
     private function owner(): User

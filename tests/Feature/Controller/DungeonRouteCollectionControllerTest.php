@@ -1466,6 +1466,42 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function view_givenARoute_titlesItsCardOneLevelBelowTheDungeonHeading(): void
+    {
+        // Arrange
+        $creator      = $this->createCreator();
+        $dungeonRoute = $this->createRouteFor($creator, PublishedState::WORLD);
+        Feature::for(null)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $dungeonRoute->id,
+            'order'                       => 0,
+        ]);
+
+        try {
+            // Act
+            $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+            // Assert
+            $response->assertOk();
+            $content = (string)$response->getContent();
+            $this->assertMatchesRegularExpression('/<h2 id="[^"]*_heading" class="h6 fw-bold mb-0">/', $content);
+            $this->assertSame(1, preg_match_all('/<h(\d) class="[^"]*\btitle">/', $content, $titleHeadings));
+            $this->assertSame(['3'], $titleHeadings[1]);
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for(null)->forget(CreatorProfiles::class);
+            $dungeonRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function view_givenACollection_titlesThePageWithItsNameAndAuthor(): void
     {
         // Arrange

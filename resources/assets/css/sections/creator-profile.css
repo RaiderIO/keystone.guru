@@ -94,6 +94,8 @@
     }
 }
 
-.creator_profile_edit_intro {
+/* The Creator tab's prose keeps a readable measure while its inputs use the tab's full width */
+.creator_profile_edit_intro,
+.creator_profile_edit .form-text {
     max-width: 70ch;
 }

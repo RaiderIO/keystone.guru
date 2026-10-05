@@ -9,18 +9,24 @@
  * @var array{text: string, isWarning?: bool}|null $itemDetail
  * @var string|null $detailWarningText
  * @var int    $position
+ * @var bool   $isOver Whether the item is past the most items its list may hold.
  */
 $itemDetail        ??= null;
+$isOver            ??= false;
 $formId            ??= null;
 $detailWarningText ??= null;
 $isDetailWarning   = (bool)($itemDetail['isWarning'] ?? false);
 ?>
-<li class="list-group-item ordered_select_item d-flex align-items-center" data-id="{{ $itemId }}">
+<li class="list-group-item ordered_select_item d-flex align-items-center{{ $isOver ? ' ordered_select_item_over' : '' }}"
+    data-id="{{ $itemId }}">
     <span class="ordered_select_handle" aria-hidden="true">
         <i class="fas fa-grip-vertical"></i>
     </span>
     <span class="ordered_select_position" aria-hidden="true">{{ $position }}</span>
-    <span class="ordered_select_label flex-fill">{{ $itemLabel }}</span>
+    <span class="ordered_select_text flex-fill">
+        <span class="ordered_select_label">{{ $itemLabel }}</span>
+        <span class="badge ordered_select_over_badge" @if(!$isOver) hidden @endif>{{ __('js.orderedselect_over_badge') }}</span>
+    </span>
     <span class="ordered_select_detail{{ $isDetailWarning ? ' ordered_select_detail_warning' : '' }}"
           @if($itemDetail === null) hidden @endif
           @if($isDetailWarning && $detailWarningText !== null) title="{{ $detailWarningText }}" @endif>

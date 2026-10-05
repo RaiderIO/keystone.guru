@@ -171,6 +171,7 @@ return [
             'title_search_placeholder'     => 'Search by title',
             'loading'                      => 'Loading routes...',
             'empty'                        => 'No routes match these filters.',
+            'clear_filters'                => 'Clear filters',
             'load_failed'                  => 'The routes could not be loaded. Change a filter, or open this again, to retry.',
             'previous'                     => 'Previous',
             'next'                         => 'Next',
