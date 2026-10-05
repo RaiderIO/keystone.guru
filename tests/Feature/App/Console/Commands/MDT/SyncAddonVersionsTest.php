@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\App\Console\Commands\MDT;
 
+use App\Models\MDTAddonVersion;
+use Closure;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -47,18 +49,64 @@ final class SyncAddonVersionsTest extends PublicTestCase
         Http::assertSent(static fn(Request $request) => !$request->hasHeader('Authorization'));
     }
 
+    #[Test]
+    public function refresh_givenTwoTagsOfTheSameAddonVersion_writesTheEarliestReleaseDate(): void
+    {
+        // Arrange - both tags collapse to addonVersion 622
+        $this->fakeReleasePages([
+            ['tag_name' => 'v6.2.2', 'published_at' => '2026-08-10T12:00:00Z'],
+            ['tag_name' => '6.2.2', 'published_at' => '2026-08-14T00:01:50Z'],
+            ['tag_name' => '6.2.3', 'published_at' => null],
+        ]);
+
+        $this->runRefreshWithoutSideEffects(function (): void {
+            // Assert
+            $this->assertSame(
+                ['622' => '2026-08-10T12:00:00Z'],
+                json_decode(File::get(database_path(self::DATA_PATH)), true),
+            );
+            $this->assertSame(
+                '2026-08-10 12:00:00',
+                MDTAddonVersion::query()->where('addon_version', 622)->firstOrFail()->getRawOriginal('released_at'),
+            );
+        });
+    }
+
+    #[Test]
+    public function refresh_givenAFailingGitHubRequest_leavesTheMapUntouched(): void
+    {
+        // Arrange
+        $originalJson = File::get(database_path(self::DATA_PATH));
+        Http::fake([
+            'api.github.com/repos/nnoggie/MythicDungeonTools/releases*' => Http::response(['message' => 'rate limited'], 403),
+        ]);
+
+        $this->runRefreshWithoutSideEffects(function () use ($originalJson): void {
+            // Assert
+            $this->assertSame($originalJson, File::get(database_path(self::DATA_PATH)));
+        }, 'GitHub request failed (page 1): HTTP 403');
+    }
+
     /**
      * Fakes the GitHub releases endpoint with a single release, so the command has something to write.
      */
     private function fakeSingleReleasePage(): void
     {
+        $this->fakeReleasePages([['tag_name' => '6.2.2', 'published_at' => '2026-08-14T00:01:50Z']]);
+    }
+
+    /**
+     * Fakes the GitHub releases endpoint with one page holding $releases, followed by an empty page.
+     *
+     * @param array<int, array{tag_name: string, published_at: ?string}> $releases
+     */
+    private function fakeReleasePages(array $releases): void
+    {
         $page = 0;
 
         Http::fake([
-            'api.github.com/repos/nnoggie/MythicDungeonTools/releases*' => static function () use (&$page) {
-                return Http::response(++$page === 1
-                    ? [['tag_name' => '6.2.2', 'published_at' => '2026-08-14T00:01:50Z']]
-                    : []);
+            'api.github.com/repos/nnoggie/MythicDungeonTools/releases*' => static function () use (&$page, $releases) {
+                return Http::response(++$page === 1 ? $releases : []);
             },
         ]);
     }
@@ -68,14 +116,23 @@ final class SyncAddonVersionsTest extends PublicTestCase
      * mdt_addon_versions and then sweeps every mapping_versions row with a NULL mdt_addon_version - all
      * against the persistent seeded database this suite shares, so none of it may survive the test.
      */
-    private function runRefreshWithoutSideEffects(): void
+    private function runRefreshWithoutSideEffects(?Closure $assertBeforeUndoing = null, ?string $expectedOutput = null): void
     {
         $originalJson = File::get(database_path(self::DATA_PATH));
         DB::beginTransaction();
 
         try {
             // Act
-            $this->artisan('mdt:syncaddonversions', ['--refresh' => true])->assertSuccessful();
+            $pendingCommand = $this->artisan('mdt:syncaddonversions', ['--refresh' => true]);
+            if ($expectedOutput !== null) {
+                $pendingCommand->expectsOutputToContain($expectedOutput);
+            }
+
+            $pendingCommand->assertSuccessful()->run();
+
+            if ($assertBeforeUndoing !== null) {
+                $assertBeforeUndoing();
+            }
         } finally {
             DB::rollBack();
             File::put(database_path(self::DATA_PATH), $originalJson);

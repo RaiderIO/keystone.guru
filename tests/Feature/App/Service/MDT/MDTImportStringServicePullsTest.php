@@ -97,10 +97,14 @@ class MDTImportStringServicePullsTest extends MDTImportStringServiceTestBase
             // and not every safe enemy's npc has one (e.g. shrouded-only npcs) - one MDT dungeon has
             // none at all. Require it as part of the draw, not afterwards, or the draw succeeds and
             // the test fails on something it never guaranteed.
-            $hasNpcEnemyForces = static fn(Enemy $enemy): bool => NpcEnemyForces::query()
-                ->where('mapping_version_id', $enemy->mapping_version_id)
-                ->where('npc_id', $enemy->npc_id)
-                ->exists();
+            // Positive enemy forces, and not shrouded (whose forces come from the mapping version), so the
+            // route's enemy forces show which value the import fell back to.
+            $hasNpcEnemyForces = static fn(Enemy $enemy): bool => !in_array($enemy->seasonal_type, [Enemy::SEASONAL_TYPE_SHROUDED, Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX], true) &&
+                NpcEnemyForces::query()
+                    ->where('mapping_version_id', $enemy->mapping_version_id)
+                    ->where('npc_id', $enemy->npc_id)
+                    ->where('enemy_forces', '>', 0)
+                    ->exists();
 
             $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies(
                 enemyCount:  1,
@@ -137,6 +141,7 @@ class MDTImportStringServicePullsTest extends MDTImportStringServiceTestBase
             // Assert
             $this->assertCount(1, $importedRoute->killZones);
             $this->assertCount(1, $importedRoute->killZones->first()->killZoneEnemies);
+            $this->assertSame($npcEnemyForces->enemy_forces, $importedRoute->enemy_forces);
         } finally {
             $npcEnemyForces?->update(['enemy_forces_teeming' => $originalEnemyForcesTeeming]);
             $importedRoute?->delete();

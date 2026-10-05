@@ -7,6 +7,8 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
+use App\Models\MapObjectToAwakenedObeliskLink;
+use App\Models\Path;
 use App\Models\Polyline;
 use App\Service\MDT\Import\RiftOffsetImporter;
 use App\Service\MDT\Models\ImportStringRiftOffsets;
@@ -267,6 +269,45 @@ final class RiftOffsetImporterTest extends PublicTestCase
         $this->assertCount(0, $result->getPaths());
     }
 
+    #[Test]
+    public function parseRiftOffsets_givenRiftOffsetOnAnotherSublevel_addsWarningAndSkipsIt(): void
+    {
+        // Arrange
+        $dungeon        = Dungeon::where('key', self::DUNGEON_KEY_UNPACKED_ONLY)->firstOrFail();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+
+        $importStringRiftOffsets = new ImportStringRiftOffsets(
+            warnings:       new Collection(),
+            dungeon:        $dungeon,
+            mappingVersion: $mappingVersion,
+            seasonalIndex:  null,
+            riftOffsets:    [
+                1 => [
+                    self::BRUTAL_NPC_ID => ['x' => 50.0, 'y' => 50.0, 'sublevel' => 2],
+                ],
+            ],
+            week: 1,
+        );
+
+        /** @var RiftOffsetImporter $importer */
+        $importer = app(RiftOffsetImporter::class);
+
+        // Act
+        $result = $importer->parseRiftOffsets($importStringRiftOffsets);
+
+        // Assert
+        $this->assertCount(1, $result->getWarnings());
+        $this->assertSame(
+            __(
+                'services.mdt.io.import_string.unable_to_find_awakened_obelisk_different_floor',
+                ['name' => __('mapicontypes.awakened_obelisk_brutal')],
+            ),
+            $result->getWarnings()->first()->getMessage(),
+        );
+        $this->assertCount(0, $result->getMapIcons());
+        $this->assertCount(0, $result->getPaths());
+    }
+
     /**
      * The happy path of the apply half of this importer, which had no coverage at all: a parsed
      * rift offset must land as a real map icon plus a path whose polyline is linked back to it.
@@ -315,6 +356,15 @@ final class RiftOffsetImporterTest extends PublicTestCase
             $path = $dungeonRoute->paths()->first();
             $this->assertNotEquals(-1, $path->polyline_id, 'The path was never linked back to its polyline');
             $this->assertNotNull(Polyline::find($path->polyline_id));
+            $this->assertSame(
+                [MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_BRUTAL]],
+                MapObjectToAwakenedObeliskLink::query()
+                    ->where('source_map_object_id', $path->id)
+                    ->where('source_map_object_class_name', Path::class)
+                    ->pluck('target_map_icon_type_id')
+                    ->all(),
+                'The path must be linked to the obelisk it leads away from',
+            );
         } finally {
             $dungeonRoute?->delete();
         }
