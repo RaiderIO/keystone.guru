@@ -32,12 +32,12 @@ final class CacheServiceClearIdleKeysTest extends PublicTestCase
     /**
      * Runs clearIdleKeys against a CacheService whose Redis layer is fully mocked, so no real keys are touched.
      * SCAN returns the supplied keys once per connection it is called on, OBJECT idletime reports every key as
-     * idle past the threshold, and DEL/SCAN calls are captured.
+     * idle for the given number of seconds (past the threshold by default), and DEL/SCAN calls are captured.
      *
      * @param  array<int, string>                                                                                                 $keysOnEachConnection
      * @return array{deletedKeys: array<int, string>, scanCalls: array<int, array{connection: string, args: array<int, string>}>}
      */
-    private function runClearIdleKeysAndCaptureCalls(array $keysOnEachConnection): array
+    private function runClearIdleKeysAndCaptureCalls(array $keysOnEachConnection, int $idleTimeSeconds = self::PRESENCE_IDLE_TIME_SECONDS): array
     {
         $deletedKeys = [];
         $scanCalls   = [];
@@ -45,7 +45,7 @@ final class CacheServiceClearIdleKeysTest extends PublicTestCase
         /** @var MockObject&RedisServiceInterface $redisService */
         $redisService = $this->createMockPublic(RedisServiceInterface::class);
         $redisService->method('rawCommand')->willReturnCallback(
-            function (Connection $redis, string $command, ...$params) use (&$deletedKeys, &$scanCalls, $keysOnEachConnection): mixed {
+            function (Connection $redis, string $command, ...$params) use (&$deletedKeys, &$scanCalls, $keysOnEachConnection, $idleTimeSeconds): mixed {
                 return match ($command) {
                     // [cursor, keys] - cursor 0 ends the SCAN loop after one iteration.
                     'SCAN' => (static function () use ($redis, $params, &$scanCalls, $keysOnEachConnection): array {
@@ -53,9 +53,7 @@ final class CacheServiceClearIdleKeysTest extends PublicTestCase
 
                         return ['0', $keysOnEachConnection];
                     })(),
-                    // Report every key as idle well past the presence sweep's 86400s threshold, so the idle check
-                    // never shields a match.
-                    'OBJECT' => self::PRESENCE_IDLE_TIME_SECONDS,
+                    'OBJECT' => $idleTimeSeconds,
                     'DEL'    => (static function () use (&$deletedKeys, $params): int {
                         foreach ($params as $key) {
                             $deletedKeys[] = $key;
@@ -123,6 +121,19 @@ final class CacheServiceClearIdleKeysTest extends PublicTestCase
 
         // Assert
         $this->assertContains($presenceKey, $deletedKeys, 'A presence key idle past 24 hours should be cleaned up by clearIdleKeys');
+    }
+
+    #[Test]
+    public function clearIdleKeys_givenPresenceKeyIdleForExactly24Hours_doesNotDeleteIt(): void
+    {
+        // Arrange - the key matches, so only the idle threshold can keep it
+        $presenceKey = sprintf('%spresence-%s-route-edit.E2mXPo3', $this->prefix(), config('app.type'));
+
+        // Act
+        $deletedKeys = $this->runClearIdleKeysAndCaptureCalls([$presenceKey], self::PRESENCE_IDLE_TIME_SECONDS - 1)['deletedKeys'];
+
+        // Assert
+        $this->assertSame([], $deletedKeys, 'A presence key that has not been idle for more than 24 hours must be kept');
     }
 
     #[Test]

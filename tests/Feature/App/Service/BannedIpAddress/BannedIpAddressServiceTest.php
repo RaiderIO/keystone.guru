@@ -3,7 +3,10 @@
 namespace Tests\Feature\App\Service\BannedIpAddress;
 
 use App\Models\BannedIpAddress;
+use App\Repositories\Interfaces\BannedIpAddressRepositoryInterface;
+use App\Service\BannedIpAddress\BannedIpAddressService;
 use App\Service\BannedIpAddress\BannedIpAddressServiceInterface;
+use App\Service\Cache\CacheService;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -48,6 +51,48 @@ final class BannedIpAddressServiceTest extends PublicTestCase
             'ip_address' => '203.0.113.10',
             'reason'     => 'testing',
         ]);
+    }
+
+    #[Test]
+    public function ban_givenAnAlreadyCachedBanList_takesEffectImmediately(): void
+    {
+        // Arrange - an isBanned() call first, so the ban list sits in the cache before the ban exists
+        $service = $this->createServiceWithLiveCache();
+        self::assertFalse($service->isBanned('203.0.113.15'));
+
+        // Act
+        $bannedIpAddress    = $service->ban('203.0.113.15', 'testing', null, 1);
+        $this->createdIds[] = $bannedIpAddress->id;
+
+        // Assert
+        $this->assertTrue($service->isBanned('203.0.113.15'));
+    }
+
+    #[Test]
+    public function unban_givenAnAlreadyCachedBanList_takesEffectImmediately(): void
+    {
+        // Arrange
+        $service            = $this->createServiceWithLiveCache();
+        $bannedIpAddress    = $service->ban('203.0.113.17', 'testing', null, 1);
+        $this->createdIds[] = $bannedIpAddress->id;
+        self::assertTrue($service->isBanned('203.0.113.17'));
+
+        // Act
+        $service->unban($bannedIpAddress);
+
+        // Assert
+        $this->assertFalse($service->isBanned('203.0.113.17'));
+    }
+
+    #[Test]
+    public function isBanned_givenBanExpiringInTheFuture_returnsTrue(): void
+    {
+        // Arrange
+        $bannedIpAddress    = BannedIpAddress::factory()->expiresAt(now()->addDay())->create(['ip_address' => '203.0.113.16']);
+        $this->createdIds[] = $bannedIpAddress->id;
+
+        // Act + Assert
+        $this->assertTrue($this->service->isBanned('203.0.113.16'));
     }
 
     #[Test]
@@ -99,7 +144,8 @@ final class BannedIpAddressServiceTest extends PublicTestCase
     public function unban_GivenExistingBan_RemovesIt(): void
     {
         // Arrange
-        $bannedIpAddress = BannedIpAddress::factory()->create(['ip_address' => '203.0.113.14']);
+        $bannedIpAddress    = BannedIpAddress::factory()->create(['ip_address' => '203.0.113.14']);
+        $this->createdIds[] = $bannedIpAddress->id;
         self::assertTrue($this->service->isBanned('203.0.113.14'));
 
         // Act
@@ -108,5 +154,17 @@ final class BannedIpAddressServiceTest extends PublicTestCase
         // Assert
         $this->assertFalse($this->service->isBanned('203.0.113.14'));
         $this->assertDatabaseMissing('banned_ip_addresses', ['id' => $bannedIpAddress->id]);
+    }
+
+    /**
+     * The container hands tests a cache service that never writes on a read-through, so a stale ban list can
+     * only be reproduced with the real one.
+     */
+    private function createServiceWithLiveCache(): BannedIpAddressService
+    {
+        return new BannedIpAddressService(
+            app(BannedIpAddressRepositoryInterface::class),
+            app(CacheService::class),
+        );
     }
 }
