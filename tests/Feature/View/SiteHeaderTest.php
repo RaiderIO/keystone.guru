@@ -60,6 +60,30 @@ final class SiteHeaderTest extends PublicTestCase
     }
 
     #[Test]
+    public function home_givenAGuestOnANonRetailGameVersion_omitsTheHeatmapEntry(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+        $mop                     = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_MOP);
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_MOP;
+
+        try {
+            // Act
+            $response = $this->withHeader('User-Agent', self::DESKTOP_USER_AGENT)->get('/');
+
+            // Assert - the Dungeons category does render for that game version, just without heatmaps
+            $response->assertOk();
+            $html = $response->getContent();
+
+            $this->assertStringContainsString(route('dungeon.explore.gameversion', ['gameVersion' => $mop]), $html);
+            $this->assertStringNotContainsString(route('dungeon.heatmap.gameversion', ['gameVersion' => $mop]), $html);
+            $this->assertStringNotContainsString(__('view_common.layout.header.heatmaps_description'), $html);
+        } finally {
+            unset($_COOKIE['game_version']);
+        }
+    }
+
+    #[Test]
     public function home_givenAGuest_dropsTheExpansionDropdownAndTheDuplicateDropdownId(): void
     {
         // Arrange
