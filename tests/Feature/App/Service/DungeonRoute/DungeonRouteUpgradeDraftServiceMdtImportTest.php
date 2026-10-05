@@ -272,8 +272,8 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
     {
         try {
             // Arrange
-            [$dungeon, , $legionRemixMappingVersion] = $this->findDungeonOnRetailAndLegionRemix();
-            $original                                = $this->createOriginal($dungeon->id, $legionRemixMappingVersion->id);
+            [$dungeon, , $otherGameVersionMappingVersion] = $this->findDungeonOnRetailAndOtherGameVersion();
+            $original                                     = $this->createOriginal($dungeon->id, $otherGameVersionMappingVersion->id);
             // Resolves the way the real import does: the given game version, otherwise the acting user's (retail)
             $resolveMappingVersion = static fn(?GameVersion $gameVersion): MappingVersion => $dungeon->getCurrentMappingVersion($gameVersion);
 
@@ -310,7 +310,7 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
                 ->createDraftFromMdtString($original, 'an MDT string', collect());
 
             // Assert
-            $this->assertSame($legionRemixMappingVersion->id, $draft->mapping_version_id, 'The draft stays on the original\'s game version');
+            $this->assertSame($otherGameVersionMappingVersion->id, $draft->mapping_version_id, 'The draft stays on the original\'s game version');
             $this->assertSame($original->id, $draft->upgrade_of_dungeon_route_id);
         } finally {
             $this->tearDownCleanup();
@@ -322,9 +322,9 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
     {
         try {
             // Arrange
-            [$dungeon, $retailMappingVersion, $legionRemixMappingVersion] = $this->findDungeonOnRetailAndLegionRemix();
-            $original                                                     = $this->createOriginal($dungeon->id, $legionRemixMappingVersion->id);
-            $maxRouteId                                                   = DungeonRoute::query()->max('id');
+            [$dungeon, $retailMappingVersion, $otherGameVersionMappingVersion] = $this->findDungeonOnRetailAndOtherGameVersion();
+            $original                                                          = $this->createOriginal($dungeon->id, $otherGameVersionMappingVersion->id);
+            $maxRouteId                                                        = DungeonRoute::query()->max('id');
 
             $mdtImportStringService = $this->createMockPublic(MDTImportStringServiceInterface::class);
             $mdtImportStringService->method('setEncodedString')->willReturnSelf();
@@ -943,24 +943,28 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
     }
 
     /**
-     * @return array{0: Dungeon, 1: MappingVersion, 2: MappingVersion} A dungeon mapped for both retail and Legion
-     *                                                                 Remix, with its current mapping version of each.
+     * @return array{0: Dungeon, 1: MappingVersion, 2: MappingVersion} A dungeon mapped for both retail and another
+     *                                                                 game version, with its current mapping version
+     *                                                                 of each.
      */
-    private function findDungeonOnRetailAndLegionRemix(): array
+    private function findDungeonOnRetailAndOtherGameVersion(): array
     {
-        $retail      = GameVersion::query()->findOrFail(GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL]);
-        $legionRemix = GameVersion::query()->findOrFail(GameVersion::ALL[GameVersion::GAME_VERSION_LEGION_REMIX]);
+        $retail = GameVersion::query()->findOrFail(GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL]);
 
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::query()
-            ->whereHas('mappingVersions', static fn($query) => $query->where('game_version_id', $retail->id))
-            ->whereHas('mappingVersions', static fn($query) => $query->where('game_version_id', $legionRemix->id))
+        /** @var MappingVersion $otherGameVersionMappingVersion */
+        $otherGameVersionMappingVersion = MappingVersion::query()
+            ->with(['dungeon', 'gameVersion'])
+            ->where('game_version_id', '!=', $retail->id)
+            ->whereIn('dungeon_id', MappingVersion::query()->select('dungeon_id')->where('game_version_id', $retail->id))
+            ->orderBy('id')
             ->firstOrFail();
+
+        $dungeon = $otherGameVersionMappingVersion->dungeon;
 
         return [
             $dungeon,
             $dungeon->getCurrentMappingVersionForGameVersion($retail),
-            $dungeon->getCurrentMappingVersionForGameVersion($legionRemix),
+            $dungeon->getCurrentMappingVersionForGameVersion($otherGameVersionMappingVersion->gameVersion),
         ];
     }
 
