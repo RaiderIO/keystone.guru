@@ -99,6 +99,13 @@ $publishRoutesConfirmState = $publishRoutesConfirm !== null
     @endif
 
     <div class="container">
+        @include('common.collection.details', [
+            'dungeonRouteCollection' => $dungeonRouteCollection,
+            'formId' => $formId,
+            'selectedGameVersion' => $selectedGameVersion,
+            'selectedSeason' => $selectedSeason,
+        ])
+
         @include('common.collection.routes', [
             'dungeonRouteCollection' => $dungeonRouteCollection,
             'editSections' => $editSections,
@@ -109,14 +116,12 @@ $publishRoutesConfirmState = $publishRoutesConfirm !== null
             'formId' => null,
         ])
 
-        <h2 class="h4">{{ __('view_collection.edit.details') }}</h2>
-        @include('common.collection.details', [
+        @include('common.collection.sharing', [
             'dungeonRouteCollection' => $dungeonRouteCollection,
             'formId' => $formId,
-            'selectedGameVersion' => $selectedGameVersion,
-            'selectedSeason' => $selectedSeason,
             'teams' => $teams,
             'categories' => $categories,
+            'selectName' => (bool)session('collection_select_name'),
         ])
     </div>
 @endsection

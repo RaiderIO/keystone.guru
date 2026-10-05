@@ -11,7 +11,10 @@
  * @var array<int, string>    $availablePublishedStates The names the user may pick.
  * @var string                $selected                 The name selected initially.
  * @var array<string, string> $subtexts                 Explanation per published state name.
+ * @var string|null           $formId                   The form the select belongs to, for a select rendered outside of it.
  */
+
+$formId ??= null;
 
 use App\Models\PublishedState;
 
@@ -22,7 +25,8 @@ $icons = [
     PublishedState::WORLD_WITH_LINK => 'fa-link',
 ];
 ?>
-<select id="{{ $id }}" name="{{ $name }}" class="form-control selectpicker" size="{{ count($publishedStates) }}">
+<select id="{{ $id }}" name="{{ $name }}" class="form-control selectpicker" size="{{ count($publishedStates) }}"
+        @if($formId !== null) form="{{ $formId }}" @endif>
     @foreach($publishedStates as $publishedState)
         <?php
         $title   = __(sprintf('js.publish_state_title_%s', $publishedState));

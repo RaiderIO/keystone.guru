@@ -3,6 +3,7 @@
 namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\Tags\TagCategory;
@@ -64,7 +65,7 @@ class DungeonRouteCollectionCreateFormRequest extends FormRequest
             'name' => [
                 'nullable',
                 'string',
-                'max:128',
+                sprintf('max:%d', DungeonRouteCollection::MAX_NAME_LENGTH),
             ],
             'description' => [
                 'nullable',

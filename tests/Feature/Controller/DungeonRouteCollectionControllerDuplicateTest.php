@@ -97,7 +97,8 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $this->assertNotSame($source->id, $duplicate->id);
         $response->assertRedirect(route('collections.edit', ['dungeonRouteCollection' => $duplicate]));
         $response->assertSessionMissing('warning');
-        $this->assertSame('ZzTest set', $duplicate->name);
+        $response->assertSessionHas('collection_select_name', true);
+        $this->assertSame('ZzTest set (copy)', $duplicate->name);
         $this->assertSame('ZzTest description', $duplicate->description);
         $this->assertSame($category->id, $duplicate->dungeon_route_collection_category_id);
         $this->assertSame(PublishedState::ALL[PublishedState::UNPUBLISHED], $duplicate->published_state_id);
@@ -106,6 +107,24 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $this->assertSame($season->id, $duplicate->season_id);
         $this->assertSame([$bravo->id, $alpha->id], $this->memberIds($duplicate));
         $this->assertSame([$bravo->id, $alpha->id], $this->memberIds($source), 'The source keeps its routes');
+    }
+
+    #[Test]
+    public function duplicate_givenANameAtTheLengthLimit_shortensItSoTheSuffixFits(): void
+    {
+        // Arrange
+        $owner  = $this->createUser();
+        $name   = str_repeat('é', DungeonRouteCollection::MAX_NAME_LENGTH);
+        $source = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()), $owner, [], ['name' => $name]);
+
+        // Act
+        $this->actingAs($owner)->post($this->duplicateUrl($source), ['season_id' => '']);
+
+        // Assert
+        $duplicate = $this->latestCollectionOf($owner);
+        $this->assertSame(DungeonRouteCollection::MAX_NAME_LENGTH, mb_strlen($duplicate->name));
+        $this->assertStringEndsWith(' (copy)', $duplicate->name);
+        $this->assertStringStartsWith(str_repeat('é', DungeonRouteCollection::MAX_NAME_LENGTH - mb_strlen(' (copy)')), $duplicate->name);
     }
 
     #[Test]
@@ -310,6 +329,30 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $this->assertSame(1, $counts[$season->id]);
         $this->assertSame(1, $counts['']);
         $this->assertContains($season->id, $response->viewData('duplicateSeasons')->pluck('id')->all(), 'The source\'s own season is offered even when inactive');
+    }
+
+    #[Test]
+    public function edit_givenMoreRoutesOfADungeonThanFit_countsOnlyTheRoutesADuplicateKeeps(): void
+    {
+        // Arrange
+        $owner         = $this->createUser();
+        $season        = $this->createRetailSeason();
+        $dungeonRoutes = collect(range(1, DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON + 1))
+            ->map(fn(): DungeonRoute => $this->createRoute($owner, $this->retailMappingVersion(), $season));
+        $source = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season), $owner, $dungeonRoutes->all());
+
+        // Act
+        $response = $this->actingAs($owner)->get(route('collections.edit', ['dungeonRouteCollection' => $source]));
+
+        // Assert
+        $response->assertOk();
+        $counts = $response->viewData('duplicateMatchingCounts');
+        $this->assertSame(DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON, $counts[$season->id]);
+        $this->assertSame(DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON, $counts['']);
+        $response->assertSeeText(__('view_collection.edit.duplicate_keeps', [
+            'kept'  => DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON,
+            'total' => DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON + 1,
+        ]));
     }
 
     #[Test]

@@ -17,6 +17,9 @@ use App\Models\User;
 use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
 use App\Service\Season\SeasonServiceInterface;
 use Database\Factories\DungeonRoute\DungeonRouteCollectionFactory;
+use DOMDocument;
+use DOMElement;
+use DOMXPath;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -1095,12 +1098,8 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         );
     }
 
-    /**
-     * Saving and deleting share one row, which only works because each button sits outside the form it
-     * submits and names it - a form cannot be nested in another.
-     */
     #[Test]
-    public function edit_givenACollection_putsSaveAndDeleteOnOneRow(): void
+    public function edit_givenACollection_keepsDeleteInADangerZoneApartFromTheSaveRow(): void
     {
         // Arrange
         $creator                = $this->creator();
@@ -1112,16 +1111,160 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $content = (string)$response->getContent();
-        $this->assertMatchesRegularExpression('/<form[^>]+id="collection_delete_form"/', $content);
+        preg_match('/<div id="collection_save"[^>]*>(.*?)<\/div>/s', $content, $saveRow);
+        $this->assertStringContainsString('form="collection_details_form"', $saveRow[1] ?? '', 'The save row holds the save button');
+        $this->assertStringNotContainsString(e(__('view_common.collection.details.delete')), $saveRow[1] ?? '', 'Delete is not on the save row');
         $this->assertMatchesRegularExpression(
-            '/<div class="d-flex align-items-center">.*?form="collection_details_form".*?form="collection_delete_form".*?<\/div>/s',
+            sprintf(
+                '/<section id="collection_danger_zone".*?<form[^>]+id="collection_delete_form".*?value="%s".*?<\/form>.*?<\/section>/s',
+                preg_quote(e(__('view_common.collection.details.delete')), '/'),
+            ),
             $content,
-            'Both buttons live in the same row, the delete one last',
         );
+        $response->assertSeeInOrder(['id="collection_save"', 'id="collection_danger_zone"'], false);
+    }
+
+    #[Test]
+    public function create_givenAGameVersionWithSeasons_ordersNameSeasonRoutesThenSharing(): void
+    {
+        // Arrange
+        $creator = $this->creator();
+        $creator->update(['game_version_id' => $this->retail()->id]);
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collections.new'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeInOrder([
+            'id="name"',
+            'id="season_id_none"',
+            'id="collection_routes"',
+            e(__('view_common.collection.routes.saved_on_create')),
+            'id="category_id"',
+            'id="published_state"',
+            sprintf('value="%s"', e(__('view_common.collection.details.submit'))),
+        ], false);
+        $response->assertDontSee('id="collection_danger_zone"', false);
+    }
+
+    #[Test]
+    public function edit_givenASeasonSet_ordersNameSeasonRoutesThenSharingAndSaysRoutesSaveThemselves(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $mappingVersion         = $this->retailMappingVersions()->first();
+        $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id], [$mappingVersion->dungeon_id]);
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeInOrder([
+            'id="name"',
+            'id="season_id_none"',
+            'id="collection_routes"',
+            e(__('view_common.collection.routes.saved_automatically')),
+            'id="category_id"',
+            'id="published_state"',
+            sprintf('value="%s"', e(__('view_common.collection.details.save'))),
+            e(__('view_common.collection.details.save_help')),
+        ], false);
     }
 
     /**
-     * The routes section sits above the form that creates the collection, so its hidden inputs only reach
+     * The form element is rendered empty above the routes section; a field only reaches the server when it names it.
+     */
+    #[Test]
+    public function createAndEdit_givenTheDetailsFields_tieEachToTheDetailsForm(): void
+    {
+        // Arrange
+        $creator = $this->creator();
+        $creator->update(['game_version_id' => $this->retail()->id]);
+        $mappingVersion         = $this->retailMappingVersions()->first();
+        $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id, 'active' => true], [$mappingVersion->dungeon_id]);
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
+
+        // Act
+        $createResponse = $this->actingAs($creator)->get(route('collections.new', ['season_id' => $season->id]));
+        $editResponse   = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        foreach (['create' => $createResponse, 'edit' => $editResponse] as $page => $response) {
+            $response->assertOk();
+            $document = new DOMDocument();
+            @$document->loadHTML((string)$response->getContent());
+            $xpath = new DOMXPath($document);
+            foreach (['name', 'description', 'season_id', 'category_id', 'published_state'] as $fieldName) {
+                // A field inside a form of its own, such as the duplicate dialog's season, belongs to that form
+                $fields = $xpath->query(sprintf('//*[self::input or self::select or self::textarea][@name="%s"][not(ancestor::form)]', $fieldName));
+                $this->assertGreaterThan(0, $fields->length, sprintf('%s: %s is rendered', $page, $fieldName));
+                foreach ($fields as $field) {
+                    /** @var DOMElement $field */
+                    $this->assertSame('collection_details_form', $field->getAttribute('form'), sprintf('%s: %s names the details form', $page, $fieldName));
+                }
+            }
+        }
+    }
+
+    #[Test]
+    public function edit_givenASeasonSet_asksBeforeSavingItAsFreeForm(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $mappingVersion         = $this->retailMappingVersions()->first();
+        $season                 = $this->createSeason(['expansion_id' => $this->retail()->expansion_id], [$mappingVersion->dungeon_id]);
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('"confirmFreeForm":true', false);
+    }
+
+    #[Test]
+    public function edit_givenAFreeFormCollection_hasNoFreeFormChangeToConfirm(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
+
+        // Act
+        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('"confirmFreeForm":false', false);
+    }
+
+    #[Test]
+    public function edit_givenAFreshDuplicate_selectsTheName(): void
+    {
+        // Arrange
+        $creator                = $this->creator();
+        $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
+
+        // Act
+        $duplicateResponse = $this->actingAs($creator)
+            ->withSession(['collection_select_name' => true])
+            ->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+        $plainResponse = $this->actingAs($creator)
+            ->withSession(['collection_select_name' => false])
+            ->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+        // Assert
+        $duplicateResponse->assertOk();
+        $duplicateResponse->assertSee('"selectName":true', false);
+        $plainResponse->assertOk();
+        $plainResponse->assertSee('"selectName":false', false);
+    }
+
+    /**
+     * The routes section sits outside the form that creates the collection, so its hidden inputs only reach
      * the server when they name that form.
      */
     #[Test]

@@ -317,28 +317,36 @@ function _showConfirm(opts) {
  * @param text
  * @param yesCallback
  * @param noCallback
- * @param opts
+ * @param opts {Object} Noty options, plus yesLabel/yesClass/cancelLabel/cancelClass to name a destructive action on its buttons.
  */
 function showConfirmYesCancel(text, yesCallback, noCallback, opts = {}) {
+    let {
+        yesLabel = lang.get('js.yes_label'),
+        yesClass = 'btn btn-success me-1',
+        cancelLabel = lang.get('js.cancel_label'),
+        cancelClass = 'btn btn-danger',
+        ...notyOpts
+    } = opts;
+
     _showConfirm($.extend({
             type: 'confirm',
             text: text,
             buttons: [
-                Noty.button(lang.get('js.yes_label'), 'btn btn-success me-1', function (n) {
+                Noty.button(yesLabel, yesClass, function (n) {
                     if (typeof yesCallback === 'function') {
                         yesCallback();
                     }
                     n.close();
                 }, {id: 'yes-button', 'data-status': 'ok'}),
 
-                Noty.button(lang.get('js.cancel_label'), 'btn btn-danger', function (n) {
+                Noty.button(cancelLabel, cancelClass, function (n) {
                     if (typeof noCallback === 'function') {
                         noCallback();
                     }
                     n.close();
                 })
             ]
-        }, opts)
+        }, notyOpts)
     );
 }
 
@@ -418,5 +426,5 @@ function showErrorNotification(text, opts = {}) {
 // Guarded export for the test runner (Vitest). This is a no-op in the browser,
 // where `module` is undefined, so it does not affect the concatenated bundle.
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {LayoutsApp, defaultAjaxErrorFn, mdtExportAjaxErrorFn, refreshTooltips, guardedAjaxClick};
+    module.exports = {LayoutsApp, defaultAjaxErrorFn, mdtExportAjaxErrorFn, refreshTooltips, guardedAjaxClick, showConfirmYesCancel};
 }

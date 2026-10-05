@@ -59,7 +59,8 @@ describe('CommonCollectionDetails', () => {
                 <div id="collection_routes_error" hidden></div>
                 <select id="slot_add"></select>
             </section>
-            <form>
+            <form id="collection_details_form">
+                <input type="text" id="name" value="Season 2 set (copy)">
                 <fieldset>
                     <input type="radio" name="season_id" id="s_17" value="17">
                     <input type="radio" name="season_id" id="s_18" value="18" checked>
@@ -230,7 +231,10 @@ describe('CommonCollectionDetails', () => {
 
         // Assert
         expect(event.defaultPrevented).toBe(true);
-        expect(globalThis.showConfirmYesCancel).toHaveBeenCalledWith('js.collection_delete_confirm', expect.any(Function));
+        expect(globalThis.showConfirmYesCancel).toHaveBeenCalledWith('js.collection_delete_confirm', expect.any(Function), null, expect.objectContaining({
+            yesLabel:    'js.collection_delete_confirm_yes',
+            cancelLabel: 'js.collection_delete_confirm_no',
+        }));
         expect(submit).not.toHaveBeenCalled();
     });
 
@@ -245,5 +249,112 @@ describe('CommonCollectionDetails', () => {
 
         // Assert
         expect(submit).toHaveBeenCalledTimes(1);
+    });
+
+    describe('a season set being edited', () => {
+        beforeEach(() => {
+            new CommonCollectionDetails('details_edit', 'common/collection/details', {
+                ...OPTIONS,
+                formSelector:    '#collection_details_form',
+                formUrl:         null,
+                confirmFreeForm: true,
+                deleteFormSelector: null,
+            }).activate();
+        });
+
+        it('onFormSubmit_givenFreeFormPicked_asksForConfirmationNamingTheChangeInsteadOfSaving', () => {
+            // Arrange
+            const submit = vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(() => {});
+            document.querySelector('#s_none').checked = true;
+            const event = new Event('submit', {cancelable: true});
+
+            // Act
+            document.querySelector('#collection_details_form').dispatchEvent(event);
+
+            // Assert
+            expect(event.defaultPrevented).toBe(true);
+            expect(globalThis.showConfirmYesCancel).toHaveBeenCalledWith('js.collection_free_form_confirm', expect.any(Function), null, expect.objectContaining({
+                yesLabel:    'js.collection_free_form_confirm_yes',
+                cancelLabel: 'js.collection_free_form_confirm_no',
+            }));
+            expect(submit).not.toHaveBeenCalled();
+        });
+
+        it('onFormSubmit_givenFreeFormConfirmed_savesTheForm', () => {
+            // Arrange
+            const submit = vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(() => {});
+            document.querySelector('#s_none').checked = true;
+            document.querySelector('#collection_details_form').dispatchEvent(new Event('submit', {cancelable: true}));
+            const confirmFreeForm = globalThis.showConfirmYesCancel.mock.calls[0][1];
+
+            // Act
+            confirmFreeForm();
+
+            // Assert
+            expect(submit).toHaveBeenCalledTimes(1);
+        });
+
+        it('onFormSubmit_givenTheSeasonKept_savesWithoutAsking', () => {
+            // Arrange
+            const event = new Event('submit', {cancelable: true});
+
+            // Act
+            document.querySelector('#collection_details_form').dispatchEvent(event);
+
+            // Assert
+            expect(event.defaultPrevented).toBe(false);
+            expect(globalThis.showConfirmYesCancel).not.toHaveBeenCalled();
+        });
+    });
+
+    it('onFormSubmit_givenACollectionWithNoSeasonToLose_savesFreeFormWithoutAsking', () => {
+        // Arrange
+        new CommonCollectionDetails('details_free_form', 'common/collection/details', {
+            ...OPTIONS,
+            formSelector:       '#collection_details_form',
+            confirmFreeForm:    false,
+            deleteFormSelector: null,
+        }).activate();
+        document.querySelector('#s_none').checked = true;
+        const event = new Event('submit', {cancelable: true});
+
+        // Act
+        document.querySelector('#collection_details_form').dispatchEvent(event);
+
+        // Assert
+        expect(event.defaultPrevented).toBe(false);
+        expect(globalThis.showConfirmYesCancel).not.toHaveBeenCalled();
+    });
+
+    it('activate_givenAFreshDuplicate_selectsTheName', () => {
+        // Arrange
+        const name = document.querySelector('#name');
+
+        // Act
+        new CommonCollectionDetails('details_duplicate', 'common/collection/details', {
+            ...OPTIONS,
+            nameSelector: '#name',
+            selectName:   true,
+        }).activate();
+
+        // Assert
+        expect(document.activeElement).toBe(name);
+        expect(name.selectionStart).toBe(0);
+        expect(name.selectionEnd).toBe(name.value.length);
+    });
+
+    it('activate_givenAnOrdinaryVisit_leavesTheNameAlone', () => {
+        // Arrange
+        const name = document.querySelector('#name');
+
+        // Act
+        new CommonCollectionDetails('details_plain', 'common/collection/details', {
+            ...OPTIONS,
+            nameSelector: '#name',
+            selectName:   false,
+        }).activate();
+
+        // Assert
+        expect(document.activeElement).not.toBe(name);
     });
 });

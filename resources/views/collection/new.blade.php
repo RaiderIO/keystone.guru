@@ -25,7 +25,7 @@ use Illuminate\Support\Collection;
  * @var array<string, string>                           $startFromQuery
  */
 
-// The routes section sits above the form it posts into, so its hidden inputs name that form
+// The form is rendered empty above the routes section; every field and route input names it
 $formId = 'collection_details_form';
 
 $tagOptions = ['' => __('view_collection.new.start_from_tag_none')]
@@ -37,6 +37,16 @@ $tagOptions = ['' => __('view_collection.new.start_from_tag_none')]
 
 @section('content')
     <div class="container">
+        @include('common.collection.details', [
+            'dungeonRouteCollection' => null,
+            'formId' => $formId,
+            'selectedGameVersion' => $selectedGameVersion,
+            'seasons' => $seasons,
+            'selectedSeason' => $selectedSeason,
+            'prefillName' => $prefillName,
+            'prefillDescription' => $prefillDescription,
+        ])
+
         @if($tagNames->isNotEmpty())
             <div class="mb-3">
                 {{ html()->label(__('view_collection.new.start_from_tag'), 'collection_start_from_tag') }}
@@ -62,17 +72,11 @@ $tagOptions = ['' => __('view_collection.new.start_from_tag_none')]
             'formId' => $formId,
         ])
 
-        <h2 class="h4">{{ __('view_collection.new.details') }}</h2>
-        @include('common.collection.details', [
+        @include('common.collection.sharing', [
             'dungeonRouteCollection' => null,
             'formId' => $formId,
-            'selectedGameVersion' => $selectedGameVersion,
-            'seasons' => $seasons,
-            'selectedSeason' => $selectedSeason,
             'teams' => $teams,
             'categories' => $categories,
-            'prefillName' => $prefillName,
-            'prefillDescription' => $prefillDescription,
             'mayCreateCollection' => $mayCreateCollection,
             'formUrlParams' => $startFromQuery,
         ])

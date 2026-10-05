@@ -1,5 +1,8 @@
 /**
  @typedef {Object} CommonCollectionDetailsOptions
+ @property {string} formSelector           The details form; its fields sit outside it and name it through their form attribute.
+ @property {string} nameSelector           The name field.
+ @property {boolean} selectName            Select the name on load: a fresh duplicate's name is the first thing to change.
  @property {string} dungeonRoutesSelector  The routes section, swapped as a whole when the season changes.
  @property {string} loadingSelector        Shown while the section is being rebuilt.
  @property {string} errorSelector          Shown when rebuilding the section failed.
@@ -8,6 +11,7 @@
                                            Null for an existing collection, whose season cannot be switched.
  @property {string} seasonNone             The season_id value that asks for a free-form collection.
  @property {Object} formUrlParams          Query the form is rebuilt with, next to the season: the route or tag the collection starts from.
+ @property {boolean} confirmFreeForm       A season set being edited: saving it as free-form asks first, since it can't get its season back.
  @property {string} publishedStateSelector The visibility select.
  @property {string} teamPublishedState     The visibility that shares the collection with a team.
  @property {string} teamFieldSelector      The team field, only shown for that visibility; absent when the user has no team.
@@ -29,6 +33,14 @@ class CommonCollectionDetails extends InlineCode {
         super.activate();
 
         this._requestCount = 0;
+
+        if (this.options.selectName) {
+            $(this.options.nameSelector).trigger('focus').trigger('select');
+        }
+
+        if (this.options.confirmFreeForm) {
+            $(this.options.formSelector).on('submit', this._onFormSubmit.bind(this));
+        }
 
         if (this.options.formUrl) {
             $(this.options.seasonSelector).on('change', this._onSeasonChanged.bind(this));
@@ -55,6 +67,30 @@ class CommonCollectionDetails extends InlineCode {
      * @param {Event} event
      * @private
      */
+    _onFormSubmit(event) {
+        let isFreeForm = String($(`${this.options.seasonSelector}:checked`).val() ?? '') === '';
+        if (!isFreeForm) {
+            return;
+        }
+
+        event.preventDefault();
+
+        let form = event.currentTarget;
+        showConfirmYesCancel(lang.get('js.collection_free_form_confirm'), function () {
+            // The native submit skips this handler, so the confirmed save goes through
+            form.submit();
+        }, null, {
+            yesLabel: lang.get('js.collection_free_form_confirm_yes'),
+            yesClass: 'btn btn-danger me-1',
+            cancelLabel: lang.get('js.collection_free_form_confirm_no'),
+            cancelClass: 'btn btn-secondary',
+        });
+    }
+
+    /**
+     * @param {Event} event
+     * @private
+     */
     _onDeleteSubmit(event) {
         event.preventDefault();
 
@@ -62,6 +98,11 @@ class CommonCollectionDetails extends InlineCode {
         showConfirmYesCancel(lang.get('js.collection_delete_confirm'), function () {
             // The native submit skips this handler, so the confirmed delete goes through
             form.submit();
+        }, null, {
+            yesLabel: lang.get('js.collection_delete_confirm_yes'),
+            yesClass: 'btn btn-danger me-1',
+            cancelLabel: lang.get('js.collection_delete_confirm_no'),
+            cancelClass: 'btn btn-secondary',
         });
     }
 

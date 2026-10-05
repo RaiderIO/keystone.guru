@@ -44,7 +44,6 @@ return [
     'new' => [
         'title'               => 'New collection',
         'header'              => 'New collection',
-        'details'             => 'Details',
         'start_from_tag'      => 'Start from tag',
         'start_from_tag_none' => 'No tag',
         'start_from_tag_help' => 'Fills the collection with your routes that carry this tag, as far as they match the game version and season.',
@@ -53,13 +52,12 @@ return [
     'edit' => [
         'title'                        => 'Edit %s',
         'view_collection'              => 'View collection',
-        'details'                      => 'Details',
         'duplicate'                    => 'Duplicate',
         'duplicate_title'              => 'Duplicate :name',
         'duplicate_help'               => 'Copies the name, description, category and routes into a new collection that only you can see.',
         'duplicate_season'             => 'Season of the copy',
         'duplicate_season_none'        => 'No season (free-form)',
-        'duplicate_keeps'              => ':kept of :total routes are copied; routes that do not match the season are left out.',
+        'duplicate_keeps'              => ':kept of :total routes are copied; routes that do not match the season or do not fit the route limits are left out.',
         'duplicate_submit'             => 'Duplicate collection',
         'publish_routes_confirm_title' => 'Some routes are not :state',
         'publish_routes_confirm_body'  => 'Not all routes in this collection are :state - make them :state too?',
