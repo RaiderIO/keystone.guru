@@ -35,13 +35,11 @@ class AjaxUserReportController extends Controller
         $userReport              = new UserReport();
         $userReport->model_id    = $model->getKey();
         $userReport->model_class = $model::class;
-        $userReport->user_id     = Auth::id() ?? -1;
-        // May be null if user was not logged in, this is fine
-        $userReport->username   = $request->get('username', null);
-        $userReport->category   = $request->get('category');
-        $userReport->message    = $request->get('message', '');
-        $userReport->contact_ok = $request->get('contact_ok', false);
-        $userReport->status     = '0';
+        $userReport->user_id     = Auth::id();
+        $userReport->category    = $request->get('category');
+        $userReport->message     = $request->get('message', '');
+        $userReport->contact_ok  = $request->get('contact_ok', false);
+        $userReport->status      = '0';
 
         $saveResult = $userReport->save();
         if ($saveResult) {

@@ -90,6 +90,53 @@ final class AjaxUserReportControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function dungeonrouteStore_givenGuest_returnsForbidden(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createRouteOwnedByAnotherUser(PublishedState::WORLD);
+
+        try {
+            $this->actingAsGuest();
+
+            // Act
+            $response = $this->post(sprintf('/ajax/userreport/dungeonroute/%s', $dungeonRoute->public_key), $this->validPayload());
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame(0, $this->reportsFor($dungeonRoute)->count());
+        } finally {
+            $this->reportsFor($dungeonRoute)->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function dungeonrouteStore_givenUserWithoutName_returnsNoNameValidationError(): void
+    {
+        // Arrange
+        $reporter     = $this->createUserWithUserRole();
+        $dungeonRoute = $this->createRouteOwnedByAnotherUser(PublishedState::WORLD);
+
+        try {
+            $this->actingAs($reporter);
+
+            // Act
+            $response = $this->postJson(sprintf('/ajax/userreport/dungeonroute/%s', $dungeonRoute->public_key), [
+                'category' => 'other',
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['message']);
+            $response->assertJsonMissingValidationErrors(['name']);
+        } finally {
+            $this->reportsFor($dungeonRoute)->delete();
+            $dungeonRoute->delete();
+            $reporter->delete();
+        }
+    }
+
+    #[Test]
     public function enemyStore_givenValidPayload_createsTheReport(): void
     {
         // Arrange
@@ -111,6 +158,61 @@ final class AjaxUserReportControllerTest extends AjaxPublicTestCase
                 'user_id'     => $reporter->id,
                 'category'    => 'other',
                 'message'     => 'Something is off with this route',
+            ]);
+        } finally {
+            UserReport::query()->where('user_id', $reporter->id)->delete();
+            $reporter->delete();
+        }
+    }
+
+    #[Test]
+    public function enemyStore_givenGuest_returnsForbidden(): void
+    {
+        // Arrange
+        /** @var Enemy $enemy */
+        $enemy        = Enemy::query()->firstOrFail();
+        $reportsQuery = UserReport::query()
+            ->where('model_class', Enemy::class)
+            ->where('model_id', $enemy->id);
+        $reportsBefore = $reportsQuery->count();
+
+        try {
+            $this->actingAsGuest();
+
+            // Act
+            $response = $this->post(sprintf('/ajax/userreport/enemy/%s', $enemy->id), $this->validPayload());
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame($reportsBefore, $reportsQuery->clone()->count());
+        } finally {
+            $reportsQuery->clone()->where('message', $this->validPayload()['message'])->delete();
+        }
+    }
+
+    #[Test]
+    public function enemyStore_givenUsername_storesTheReportWithoutIt(): void
+    {
+        // Arrange
+        $reporter = $this->createUserWithUserRole();
+        /** @var Enemy $enemy */
+        $enemy = Enemy::query()->firstOrFail();
+
+        try {
+            $this->actingAs($reporter);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/userreport/enemy/%s', $enemy->id), array_merge($this->validPayload(), [
+                'username' => 'Someone else',
+            ]));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseHas(UserReport::class, [
+                'model_class' => Enemy::class,
+                'model_id'    => $enemy->id,
+                'user_id'     => $reporter->id,
+                'username'    => null,
             ]);
         } finally {
             UserReport::query()->where('user_id', $reporter->id)->delete();

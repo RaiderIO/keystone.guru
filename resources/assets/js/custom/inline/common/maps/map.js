@@ -654,15 +654,28 @@ class CommonMapsMap extends InlineCode {
 
             refreshTooltips($('#enemy_details_modal_body [data-bs-toggle="tooltip"]'));
 
-            // Reset report form
-            $('#enemy_report_enemy_id').val(enemy.id);
-            $('#enemy_report_username').val('');
-            $('#enemy_report_message').val('');
-            $('#enemy_report_contact_ok').prop('checked', false);
-            bootstrap.Collapse.getOrCreateInstance(document.getElementById('enemy_report_collapse'), {toggle: false}).hide();
+            this._resetEnemyUserReport(enemy.id);
 
             bootstrap.Modal.getOrCreateInstance(enemyDetailsModal).show();
         }
+    }
+
+    /**
+     * The report form is only rendered for logged-in users.
+     *
+     * @param {Number} enemyId
+     * @private
+     */
+    _resetEnemyUserReport(enemyId) {
+        let enemyReportCollapse = document.getElementById('enemy_report_collapse');
+        if (enemyReportCollapse === null) {
+            return;
+        }
+
+        $('#enemy_report_enemy_id').val(enemyId);
+        $('#enemy_report_message').val('');
+        $('#enemy_report_contact_ok').prop('checked', false);
+        bootstrap.Collapse.getOrCreateInstance(enemyReportCollapse, {toggle: false}).hide();
     }
 
     /**
@@ -678,7 +691,6 @@ class CommonMapsMap extends InlineCode {
             dataType: 'json',
             data: {
                 category: $('#enemy_report_category').val(),
-                username: $('#enemy_report_username').val(),
                 message: $('#enemy_report_message').val(),
                 contact_ok: $('#enemy_report_contact_ok').is(':checked') ? 1 : 0
             },
