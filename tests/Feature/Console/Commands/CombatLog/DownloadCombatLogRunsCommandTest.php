@@ -8,8 +8,6 @@ use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
-use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
-use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\File;
 use Mockery;
 use Mockery\Expectation;
@@ -33,12 +31,6 @@ final class DownloadCombatLogRunsCommandTest extends PublicTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        // The first test of a process migrates in setUp(), which builds the Artisan application and constructs every
-        // command with the services bound at that point - drop it so this test's own bindings reach the constructor
-        /** @var ConsoleKernel $consoleKernel */
-        $consoleKernel = $this->app->make(ConsoleKernelContract::class);
-        $consoleKernel->setArtisan(null);
 
         $this->season        = Season::query()->firstOrFail();
         $this->outputDir     = sprintf('test-downloadruns-%s', uniqid());
