@@ -31,7 +31,7 @@ final class AjaxEnemyForcesCheckpointControllerTest extends AjaxPublicTestCase
         try {
             // Act
             $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcescheckpoint', $mappingVersion->id), [
-                'id'                 => -1,
+                'id'                 => 0,
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $floor->id,
                 'name'               => 'Test corridor',
@@ -71,7 +71,7 @@ final class AjaxEnemyForcesCheckpointControllerTest extends AjaxPublicTestCase
         try {
             // Act
             $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcescheckpoint', $mappingVersion->id), [
-                'id'                 => -1,
+                'id'                 => 0,
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $floor->id,
                 'lat'                => -128.5,
@@ -105,7 +105,7 @@ final class AjaxEnemyForcesCheckpointControllerTest extends AjaxPublicTestCase
 
         // Act
         $this->postJson(sprintf('/ajax/admin/mappingVersion/%d/enemyforcescheckpoint', $mappingVersion->id), [
-            'id'                 => -1,
+            'id'                 => 0,
             'mapping_version_id' => $mappingVersion->id,
             'floor_id'           => $floor->id,
             'name'               => 'Test corridor',
@@ -127,7 +127,7 @@ final class AjaxEnemyForcesCheckpointControllerTest extends AjaxPublicTestCase
         try {
             // Act
             $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcescheckpoint', $mappingVersion->id), [
-                'id'                 => -1,
+                'id'                 => 0,
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $floor->id,
                 'name'               => 'Test corridor',
@@ -286,7 +286,7 @@ final class AjaxEnemyForcesCheckpointControllerTest extends AjaxPublicTestCase
 
             // Act
             $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcescheckpoint', $mappingVersion->id), [
-                'id'                 => -1,
+                'id'                 => 0,
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $floor->id,
                 'name'               => 'Test corridor',

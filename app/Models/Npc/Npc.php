@@ -89,6 +89,16 @@ class Npc extends Model implements MappingModelInterface
 
     public $timestamps = false;
 
+    /**
+     * Flags without a database default that an NPC created from an MDT import is not given.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'dangerous' => 0,
+        'truesight' => 0,
+    ];
+
     protected $fillable = [
         'id',
         'game_version_id',

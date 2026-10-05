@@ -18,6 +18,12 @@ class NameColumnHandler extends SimpleColumnHandler
 {
     public const string NAME_EXPRESSION = "COALESCE(NULLIF(spell_name_translations.translation, ''), NULLIF(spell_name_fallback_translations.translation, ''), spells.name)";
 
+    /**
+     * NAME_EXPRESSION for a query grouped by spells.id: translations has no unique (locale, key), so MySQL cannot tell
+     * that the joined translations are functionally dependent on the grouped id.
+     */
+    public const string GROUPED_NAME_EXPRESSION = 'ANY_VALUE(' . self::NAME_EXPRESSION . ')';
+
     public function __construct(DatatablesHandler $dtHandler)
     {
         parent::__construct($dtHandler, 'name', 'spell_name_translations.translation');

@@ -357,7 +357,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         ]);
 
         // Apply the seasonal index to the route
-        $dungeonRoute->update(['seasonal_index' => $affixGroup->seasonal_index]);
+        $dungeonRoute->update(['seasonal_index' => $affixGroup->seasonal_index ?? 0]);
     }
 
     /**

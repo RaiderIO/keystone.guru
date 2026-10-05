@@ -29,6 +29,16 @@ use Override;
  */
 class DungeonRouteThumbnail extends Model
 {
+    /**
+     * file_id has no database default, and the File is only created once this row exists, since the File points
+     * back at it.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'file_id' => 0,
+    ];
+
     protected $fillable = [
         'dungeon_route_id',
         'floor_id',

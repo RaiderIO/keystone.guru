@@ -51,6 +51,9 @@ class KillZone extends Model
     /** @use HasFactory<KillZoneFactory> */
     use HasFactory;
 
+    /** The size of the description column. */
+    public const int DESCRIPTION_MAX_LENGTH = 255;
+
     public $visible = [
         'id',
         'floor_id',
@@ -307,7 +310,7 @@ class KillZone extends Model
 
         $queryResult = DB::select("
             select `kill_zone_enemies`.*,
-                    enemies.id as enemy_id,
+                    ANY_VALUE(enemies.id) as enemy_id,
                     enemies.enemy_pack_id,
                    CAST(IFNULL(
                            IF(:teeming = 1,

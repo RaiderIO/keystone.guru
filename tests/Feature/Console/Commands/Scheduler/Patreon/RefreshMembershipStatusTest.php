@@ -340,6 +340,35 @@ final class RefreshMembershipStatusTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenMoreFailingMembersThanTheFailureReasonHolds_recordsTheRunWithATruncatedReason(): void
+    {
+        // Arrange - every member id lands in the reason, which outgrows the 255 characters of its column
+        $members = [];
+        for ($i = 1; $i <= 40; $i++) {
+            $members[] = ['id' => sprintf('member-%d', $i), 'type' => 'member'];
+        }
+
+        $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
+        $patreonService->method('loadCampaignBenefits')->willReturn([]);
+        $patreonService->method('loadCampaignTiers')->willReturn([]);
+        $patreonService->method('loadCampaignMembers')->willReturn(new PatreonCampaignMembers($members, 1, count($members), truncated: false));
+        $patreonService->method('applyPaidBenefitsForMember')
+            ->willReturn(ApplyPaidBenefitsForMemberResult::UnknownTiers);
+        $this->app->instance(PatreonServiceInterface::class, $patreonService);
+
+        // Act
+        $this->artisan(RefreshMembershipStatus::class)->assertExitCode(Command::FAILURE);
+
+        // Assert
+        /** @var PatreonSyncRun $syncRun */
+        $syncRun = PatreonSyncRun::query()->latest('id')->firstOrFail();
+        $this->assertSame(40, $syncRun->members_failed);
+        $this->assertNotNull($syncRun->finished_at);
+        $this->assertSame(255, mb_strlen($syncRun->failure_reason));
+        $this->assertStringStartsWith('Unable to update the memberships of 40 member(s): member-1, member-2, ', $syncRun->failure_reason);
+    }
+
+    #[Test]
     public function handle_givenALoadThatThrows_closesTheRunAsInterrupted(): void
     {
         // Arrange

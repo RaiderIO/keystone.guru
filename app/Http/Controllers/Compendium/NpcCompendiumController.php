@@ -169,7 +169,7 @@ class NpcCompendiumController extends Controller
             ->afterQuery(static fn(EloquentCollection $npcs): EloquentCollection => $npcs->each->append('tooltip_data'))
             ->selectRaw(sprintf(
                 'npcs.*, %s as name, GROUP_CONCAT(DISTINCT %s SEPARATOR ", ") AS dungeon_names',
-                NameColumnHandler::NAME_EXPRESSION,
+                NameColumnHandler::GROUPED_NAME_EXPRESSION,
                 $dungeonName,
             ))
             ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
@@ -187,7 +187,7 @@ class NpcCompendiumController extends Controller
         NameColumnHandler::joinNameTranslations($npcs, $locale, $fallbackLocale)
             ->groupBy('npcs.id')
             ->orderBy('npcs.classification_id', 'DESC')
-            ->orderByRaw(NameColumnHandler::NAME_EXPRESSION);
+            ->orderByRaw(NameColumnHandler::GROUPED_NAME_EXPRESSION);
 
         if ($mappingVersion !== null) {
             $npcs->where('enemies.mapping_version_id', $mappingVersion->id);

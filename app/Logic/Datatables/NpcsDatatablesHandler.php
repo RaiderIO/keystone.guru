@@ -20,7 +20,7 @@ class NpcsDatatablesHandler extends DatatablesHandler
                 'offset',
                 'limit',
             ])->cloneWithoutBindings(['select'])
-            ->selectRaw('SQL_CALC_FOUND_ROWS *');
+            ->selectRaw('SQL_CALC_FOUND_ROWS npcs.id');
 
         $havings        = $query->havings;
         $query->havings = null;

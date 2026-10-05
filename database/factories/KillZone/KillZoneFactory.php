@@ -34,7 +34,7 @@ class KillZoneFactory extends Factory
             'dungeon_route_id' => 1,
             'floor_id'         => $floorId,
             'color'            => $this->faker->hexColor(),
-            'description'      => $this->faker->paragraph(),
+            'description'      => $this->faker->text(KillZone::DESCRIPTION_MAX_LENGTH),
             'index'            => $this->faker->numberBetween(1, 100),
             'lat'              => $floorId === null ? null : $this->faker->randomFloat(2, CoordinatesService::MAP_MAX_LAT, 0),
             'lng'              => $floorId === null ? null : $this->faker->randomFloat(2, 0, CoordinatesService::MAP_MAX_LNG),

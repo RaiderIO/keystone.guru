@@ -12,6 +12,7 @@ use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\KillZone\KillZone;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
@@ -346,7 +347,7 @@ class ObjectImporter
                 $newAttributes = ['spells' => $killZoneAttribute['spells']];
             } elseif ($assignNotesToPulls && empty($killZoneAttribute['description'])) {
                 // A pull holds one description - any further notes are rendered on the map as usual
-                $newAttributes = ['description' => $details[4]];
+                $newAttributes = ['description' => mb_substr((string)$details[4], 0, KillZone::DESCRIPTION_MAX_LENGTH)];
             }
 
             if ($newAttributes !== null) {

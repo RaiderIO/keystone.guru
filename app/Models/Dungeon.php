@@ -472,7 +472,9 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
      */
     public function getNpcsMinMaxHealth(MappingVersion $mappingVersion): array
     {
+        // toBase(): through the relation, get() would add the pivot columns to this aggregate's select
         $result = $this->npcs()
+            ->toBase()
             ->selectRaw('MIN(nh.health * (COALESCE(nh.percentage, 100) / 100)) AS min_health,
                      MAX(nh.health * (COALESCE(nh.percentage, 100) / 100)) AS max_health')
             // Ensure that there's at least one enemy by having this join

@@ -62,13 +62,13 @@ class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
             // Then sort by current affix ID on top, THEN sort by ID ascending
             if ($order['dir'] === 'asc') {
                 $orderBuilder->orderByRaw(sprintf(
-                    '(select if(MIN(ag.affix_group_id) is null, 10000, if(ag.affix_group_id = %s, -1, MIN(ag.affix_group_id)))
+                    '(select if(MIN(ag.affix_group_id) is null, 10000, if(MAX(ag.affix_group_id = %d), -1, MIN(ag.affix_group_id)))
                     from dungeon_route_affix_groups ag where ag.dungeon_route_id = dungeon_routes.id)',
                     $currentAffixId,
                 ));
             } else {
                 $orderBuilder->orderByRaw(sprintf(
-                    '(select if(MIN(ag.affix_group_id) is null, -1, if(ag.affix_group_id = %s, 10000, MAX(ag.affix_group_id)))
+                    '(select if(MIN(ag.affix_group_id) is null, -1, if(MAX(ag.affix_group_id = %d), 10000, MAX(ag.affix_group_id)))
                     from dungeon_route_affix_groups ag where ag.dungeon_route_id = dungeon_routes.id)',
                     $currentAffixId,
                 ));

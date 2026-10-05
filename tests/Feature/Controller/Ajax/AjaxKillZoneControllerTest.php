@@ -199,6 +199,55 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
+    public function store_givenDescriptionOfTheColumnsSize_savesIt(): void
+    {
+        // Arrange
+        $description = str_repeat('a', KillZone::DESCRIPTION_MAX_LENGTH);
+
+        try {
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/killzone', $this->dungeonRoute->public_key), [
+                'color'       => '#ff0000',
+                'description' => $description,
+                'index'       => 1,
+                'enemies'     => [],
+                'spells'      => [],
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertSame($description, $this->dungeonRoute->killZones()->firstOrFail()->description);
+        } finally {
+            $this->dungeonRoute->killZones()->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenDescriptionLongerThanItsColumn_returnsValidationErrorAndCreatesNothing(): void
+    {
+        // Arrange
+        $description = str_repeat('a', KillZone::DESCRIPTION_MAX_LENGTH + 1);
+
+        try {
+            // Act
+            $response = $this->postJson(sprintf('/ajax/%s/killzone', $this->dungeonRoute->public_key), [
+                'color'       => '#ff0000',
+                'description' => $description,
+                'index'       => 1,
+                'enemies'     => [],
+                'spells'      => [],
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['description']);
+            $this->assertSame(0, $this->dungeonRoute->killZones()->count());
+        } finally {
+            $this->dungeonRoute->killZones()->delete();
+        }
+    }
+
+    #[Test]
     public function store_givenNewKillZoneOnAnotherUsersRoute_returnsForbidden(): void
     {
         // Arrange

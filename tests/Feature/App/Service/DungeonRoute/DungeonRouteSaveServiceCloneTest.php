@@ -28,6 +28,7 @@ final class DungeonRouteSaveServiceCloneTest extends DungeonRouteSaveServiceTest
             'public_key'  => Team::generateRandomPublicKey(),
             'name'        => 'Clone route test team',
             'description' => 'Clone route test team',
+            'invite_code' => Team::generateRandomPublicKey(12, 'invite_code'),
         ]);
         $source = DungeonRoute::factory()->create(['author_id' => $author->id, 'team_id' => $team->id]);
         Auth::login($cloner);
@@ -153,6 +154,7 @@ final class DungeonRouteSaveServiceCloneTest extends DungeonRouteSaveServiceTest
                 'public_key'  => Team::generateRandomPublicKey(),
                 'name'        => 'Clone route test team',
                 'description' => 'Clone route test team',
+                'invite_code' => Team::generateRandomPublicKey(12, 'invite_code'),
             ]);
 
             $source = DungeonRoute::factory()->create([

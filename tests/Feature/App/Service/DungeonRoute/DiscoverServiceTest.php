@@ -84,6 +84,7 @@ final class DiscoverServiceTest extends PublicTestCase
                 'public_key'  => Team::generateRandomPublicKey(),
                 'name'        => 'Hero routes test Raider.IO team',
                 'description' => 'Hero routes test Raider.IO team',
+                'invite_code' => Team::generateRandomPublicKey(12, 'invite_code'),
             ]);
             config(['keystoneguru.raider_io.team_id' => $raiderIOTeam->id]);
             $weeklyRoute    = $this->createTopCommunityRoute($season, popularity: 1_000_001, attributes: ['team_id' => $raiderIOTeam->id]);

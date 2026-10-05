@@ -22,6 +22,7 @@ class DungeonRouteRating extends Model
     public $fillable = [
         'dungeon_route_id',
         'user_id',
+        'rating',
     ];
 
     public $timestamps = false;

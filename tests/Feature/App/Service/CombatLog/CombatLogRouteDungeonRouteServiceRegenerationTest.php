@@ -187,6 +187,7 @@ final class CombatLogRouteDungeonRouteServiceRegenerationTest extends PublicTest
                 'upgrade_of_dungeon_route_id' => $original->id,
                 'author_id'                   => $original->author_id,
                 'dungeon_id'                  => $original->dungeon_id,
+                'faction_id'                  => $original->faction_id,
                 'mapping_version_id'          => $original->mapping_version_id,
                 'title'                       => $original->title,
             ]);
@@ -515,6 +516,7 @@ final class CombatLogRouteDungeonRouteServiceRegenerationTest extends PublicTest
                             'upgrade_of_dungeon_route_id' => $original->id,
                             'author_id'                   => $original->author_id,
                             'dungeon_id'                  => $original->dungeon_id,
+                            'faction_id'                  => $original->faction_id,
                             'mapping_version_id'          => $original->mapping_version_id,
                             'title'                       => $original->title,
                         ])->id;

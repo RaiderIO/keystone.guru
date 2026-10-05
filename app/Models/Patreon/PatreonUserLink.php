@@ -45,6 +45,9 @@ class PatreonUserLink extends Model
 
     public const string PERMANENT_TOKEN = 'grantedthroughadminpages';
 
+    /** Stands in for "never" on a fabricated link: expires_at is a TIMESTAMP, whose range ends on 2038-01-19. */
+    public const string PERMANENT_EXPIRES_AT = '2038-01-01 00:00:00';
+
     protected $fillable = [
         'user_id',
         'email',

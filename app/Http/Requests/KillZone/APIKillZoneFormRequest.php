@@ -40,7 +40,7 @@ class APIKillZoneFormRequest extends FormRequest
                 'string',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'description' => 'nullable|string|max:500',
+            'description' => sprintf('nullable|string|max:%d', KillZone::DESCRIPTION_MAX_LENGTH),
             'lat'         => 'nullable|numeric',
             'lng'         => 'nullable|numeric',
             'index'       => 'int',
