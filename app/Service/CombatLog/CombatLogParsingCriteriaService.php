@@ -100,16 +100,6 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
             ->update(['count' => 0]);
     }
 
-    public function getBelowThresholdCriteria(int $combatLogVersion, string $modelClass): Collection
-    {
-        return CombatLogParsingCriterion::query()
-            ->where('combat_log_version', $combatLogVersion)
-            ->where('model_class', $modelClass)
-            ->where('date', Carbon::now()->toDateString())
-            ->whereColumn('count', '<', 'threshold')
-            ->get();
-    }
-
     public function getAllModelsForCriteria(string $modelClass, Season $season): Collection
     {
         return match ($modelClass) {

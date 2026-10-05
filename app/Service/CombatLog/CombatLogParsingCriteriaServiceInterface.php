@@ -2,7 +2,6 @@
 
 namespace App\Service\CombatLog;
 
-use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Season;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
@@ -63,13 +62,6 @@ interface CombatLogParsingCriteriaServiceInterface
      * passed gets nothing back until tomorrow, reset or not.
      */
     public function resetAllForToday(): void;
-
-    /**
-     * Returns all criteria rows for today where count < threshold for the given model class.
-     *
-     * @return Collection<int, CombatLogParsingCriterion>
-     */
-    public function getBelowThresholdCriteria(int $combatLogVersion, string $modelClass): Collection;
 
     /**
      * Returns all model instances that are valid polling targets for the given criteria model class.
