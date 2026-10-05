@@ -104,4 +104,28 @@ final class CombatLogRouteEnemyFailureTest extends PublicTestCase
         $this->assertInstanceOf(Npc::class, $failure->npc()->getRelated());
         $this->assertSame('npc_id', $failure->npc()->getForeignKeyName());
     }
+
+    #[Test]
+    public function with_givenPersistedFailure_loadsMainDatabaseRelations(): void
+    {
+        // Arrange
+        /** @var Npc $npc */
+        $npc = Npc::query()->where('id', '>', 100000)->firstOrFail();
+
+        $failure = CombatLogRouteEnemyFailure::factory()->withNpc($npc->id)->create();
+
+        try {
+            // Act
+            $retrieved = CombatLogRouteEnemyFailure::with(['dungeon', 'floor', 'mappingVersion', 'npc'])
+                ->findOrFail($failure->id);
+
+            // Assert
+            $this->assertSame($failure->dungeon_id, $retrieved->getRelation('dungeon')?->getKey());
+            $this->assertSame($failure->floor_id, $retrieved->getRelation('floor')?->getKey());
+            $this->assertSame($failure->mapping_version_id, $retrieved->getRelation('mappingVersion')?->getKey());
+            $this->assertSame($npc->id, $retrieved->getRelation('npc')?->getKey());
+        } finally {
+            CombatLogRouteEnemyFailure::where('id', $failure->id)->delete();
+        }
+    }
 }
