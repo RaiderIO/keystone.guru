@@ -26,6 +26,28 @@ final class UnbanTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenSeveralBans_removesOnlyTheMatchingOne(): void
+    {
+        // Arrange
+        $otherBannedIpAddress = null;
+        $bannedIpAddress      = null;
+
+        try {
+            $otherBannedIpAddress = BannedIpAddress::factory()->create(['ip_address' => '203.0.113.45']);
+            $bannedIpAddress      = BannedIpAddress::factory()->create(['ip_address' => '203.0.113.46']);
+
+            // Act
+            $this->artisan(Unban::class, ['ipAddress' => '203.0.113.46'])->assertSuccessful();
+
+            // Assert
+            $this->assertDatabaseMissing('banned_ip_addresses', ['id' => $bannedIpAddress->id]);
+            $this->assertDatabaseHas('banned_ip_addresses', ['id' => $otherBannedIpAddress->id]);
+        } finally {
+            BannedIpAddress::query()->whereIn('ip_address', ['203.0.113.45', '203.0.113.46'])->delete();
+        }
+    }
+
+    #[Test]
     public function handle_givenIpAddressNotBanned_returnsFailureWithoutError(): void
     {
         // Act + Assert

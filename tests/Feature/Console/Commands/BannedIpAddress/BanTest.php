@@ -19,7 +19,7 @@ final class BanTest extends PublicTestCase
     protected function tearDown(): void
     {
         try {
-            BannedIpAddress::query()->whereIn('ip_address', ['203.0.113.40', '203.0.113.43'])->delete();
+            BannedIpAddress::query()->whereIn('ip_address', ['203.0.113.40', '203.0.113.43', '203.0.113.44'])->delete();
         } finally {
             parent::tearDown();
         }
@@ -41,6 +41,35 @@ final class BanTest extends PublicTestCase
             'reason'     => 'CLI incident response',
             'created_by' => self::ADMIN_USER_ID,
         ]);
+    }
+
+    #[Test]
+    public function handle_givenExpiresAtOption_createsBanThatExpiresThen(): void
+    {
+        // Act
+        $this->artisan(Ban::class, [
+            'ipAddress'    => '203.0.113.44',
+            'adminId'      => self::ADMIN_USER_ID,
+            '--expires-at' => '2030-08-01 12:30:00',
+        ])->assertSuccessful();
+
+        // Assert
+        $bannedIpAddress = BannedIpAddress::query()->where('ip_address', '203.0.113.44')->sole();
+        $this->assertSame('2030-08-01 12:30:00', $bannedIpAddress->expires_at?->toDateTimeString());
+    }
+
+    #[Test]
+    public function handle_givenNoExpiresAtOption_createsPermanentBan(): void
+    {
+        // Act
+        $this->artisan(Ban::class, [
+            'ipAddress' => '203.0.113.44',
+            'adminId'   => self::ADMIN_USER_ID,
+        ])->assertSuccessful();
+
+        // Assert
+        $bannedIpAddress = BannedIpAddress::query()->where('ip_address', '203.0.113.44')->sole();
+        $this->assertNull($bannedIpAddress->expires_at);
     }
 
     #[Test]

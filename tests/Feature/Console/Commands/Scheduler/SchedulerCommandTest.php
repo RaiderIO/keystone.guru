@@ -6,6 +6,7 @@ use App\Models\Telemetry\TelemetryMetric;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Context;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
@@ -141,6 +142,34 @@ final class SchedulerCommandTest extends PublicTestCase
         // Act & Assert
         $this->artisan('test:schedulercommandstub')
             ->assertExitCode(Command::FAILURE);
+    }
+
+    #[Test]
+    public function trackTime_givenCallableThrows_reportsWithTheCommandNameInContextAndForgetsItAfterwards(): void
+    {
+        // Arrange
+        $commandInContext = null;
+
+        $exceptionHandler = $this->createMockPublic(ExceptionHandler::class);
+        $exceptionHandler->expects($this->once())
+            ->method('report')
+            ->willReturnCallback(static function () use (&$commandInContext): void {
+                $commandInContext = Context::get('command');
+            });
+        $this->app->instance(ExceptionHandler::class, $exceptionHandler);
+
+        SchedulerCommandStub::$callable = static function (): int {
+            throw new RuntimeException('Something went wrong');
+        };
+        Artisan::registerCommand(new SchedulerCommandStub());
+
+        // Act
+        $this->artisan('test:schedulercommandstub')
+            ->assertExitCode(Command::FAILURE);
+
+        // Assert
+        $this->assertSame('test:schedulercommandstub', $commandInContext);
+        $this->assertFalse(Context::has('command'));
     }
 
     #[Test]

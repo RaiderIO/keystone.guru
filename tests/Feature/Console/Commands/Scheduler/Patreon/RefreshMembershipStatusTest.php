@@ -299,4 +299,67 @@ final class RefreshMembershipStatusTest extends PublicTestCase
         $syncRun = PatreonSyncRun::query()->latest('id')->firstOrFail();
         $this->assertSame(1, $syncRun->members_unknown_tiers);
     }
+
+    #[Test]
+    public function handle_givenFailingMembers_recordsWhichMembersFailedInTheRun(): void
+    {
+        // Arrange
+        $members = [
+            ['id' => 'member-1', 'type' => 'member'],
+            ['id' => 'member-2', 'type' => 'member'],
+            ['id' => 'member-3', 'type' => 'member'],
+        ];
+
+        $exceptionHandler = $this->createMockPublic(ExceptionHandler::class);
+        $this->app->instance(ExceptionHandler::class, $exceptionHandler);
+
+        $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
+        $patreonService->method('loadCampaignBenefits')->willReturn([]);
+        $patreonService->method('loadCampaignTiers')->willReturn([]);
+        $patreonService->method('loadCampaignMembers')->willReturn(new PatreonCampaignMembers($members, 1, count($members), truncated: false));
+        $patreonService->method('applyPaidBenefitsForMember')
+            ->willReturnCallback(static fn(array $campaignBenefits, array $campaignTiers, array $member) => match ($member['id']) {
+                'member-1' => ApplyPaidBenefitsForMemberResult::Applied,
+                'member-2' => ApplyPaidBenefitsForMemberResult::UnknownBenefits,
+                default    => throw new RuntimeException('Everything is broken'),
+            });
+        $this->app->instance(PatreonServiceInterface::class, $patreonService);
+
+        // Act
+        $this->artisan(RefreshMembershipStatus::class)->assertExitCode(Command::FAILURE);
+
+        // Assert
+        /** @var PatreonSyncRun $syncRun */
+        $syncRun = PatreonSyncRun::query()->latest('id')->firstOrFail();
+        $this->assertSame(1, $syncRun->members_applied);
+        $this->assertSame(1, $syncRun->members_unknown_benefits);
+        $this->assertSame(2, $syncRun->members_failed);
+        $this->assertFalse($syncRun->successful);
+        $this->assertNotNull($syncRun->finished_at);
+        $this->assertSame('Unable to update the memberships of 2 member(s): member-2, member-3', $syncRun->failure_reason);
+    }
+
+    #[Test]
+    public function handle_givenALoadThatThrows_closesTheRunAsInterrupted(): void
+    {
+        // Arrange
+        $exceptionHandler = $this->createMockPublic(ExceptionHandler::class);
+        $this->app->instance(ExceptionHandler::class, $exceptionHandler);
+
+        $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
+        $patreonService->method('loadCampaignBenefits')->willReturn([]);
+        $patreonService->method('loadCampaignTiers')->willThrowException(new RuntimeException('Patreon is down'));
+        $patreonService->expects($this->never())->method('loadCampaignMembers');
+        $this->app->instance(PatreonServiceInterface::class, $patreonService);
+
+        // Act
+        $this->artisan(RefreshMembershipStatus::class)->assertExitCode(Command::FAILURE);
+
+        // Assert
+        /** @var PatreonSyncRun $syncRun */
+        $syncRun = PatreonSyncRun::query()->latest('id')->firstOrFail();
+        $this->assertFalse($syncRun->successful);
+        $this->assertNotNull($syncRun->finished_at);
+        $this->assertSame('The run was interrupted by an unexpected error', $syncRun->failure_reason);
+    }
 }

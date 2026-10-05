@@ -4,6 +4,7 @@ namespace Tests\Feature\Console\Commands\Scheduler\WagoTools;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\SpellDescriptionImportState;
+use App\Service\Spell\Description\SpellDescriptionPatchCheckServiceInterface;
 use App\Service\WagoTools\WagoToolsServiceInterface;
 use GrahamCampbell\GitHub\Facades\GitHub;
 use PHPUnit\Framework\Attributes\Group;
@@ -187,6 +188,23 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
 
         // Act & Assert
         $this->artisan('wagotools:checkforspelldescriptionpatch')->assertSuccessful();
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenUnknownGameVersion_failsWithoutCheckingForAPatch(): void
+    {
+        // Arrange
+        $patchCheckService = $this->createMockPublic(SpellDescriptionPatchCheckServiceInterface::class);
+        $patchCheckService->expects($this->never())->method('checkForPatch');
+        app()->instance(SpellDescriptionPatchCheckServiceInterface::class, $patchCheckService);
+
+        // Act & Assert
+        $this->artisan('wagotools:checkforspelldescriptionpatch', ['--gameVersion' => 'not-a-game-version'])
+            ->expectsOutputToContain('Unknown game version not-a-game-version')
+            ->assertFailed();
     }
 
     /**

@@ -167,6 +167,7 @@ final class EnsureHeroThumbnailsTest extends PublicTestCase
 
             // Assert
             $dungeonRoute->refresh();
+            $this->assertNotNull($dungeonRoute->last_hero_at, 'The hero route was never stamped');
             $this->assertTrue($dungeonRoute->last_hero_at->isToday());
             $this->assertSame($updatedAt, $dungeonRoute->updated_at->toDateTimeString());
         } finally {
@@ -302,6 +303,32 @@ final class EnsureHeroThumbnailsTest extends PublicTestCase
     }
 
     /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenNoCurrentSeason_queuesNothingAndLooksUpNoHeroRoutes(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
+        $seasonService->method('getCurrentSeason')->willReturn(null);
+        app()->instance(SeasonServiceInterface::class, $seasonService);
+
+        $discoverService = $this->createMockPublic(DiscoverServiceInterface::class);
+        $discoverService->expects($this->never())->method('heroRoutes');
+        app()->instance(DiscoverServiceInterface::class, $discoverService);
+
+        // Act
+        $this->artisan(EnsureHeroThumbnails::class)
+            ->expectsOutputToContain('No current season; nothing to do')
+            ->assertSuccessful();
+
+        // Assert
+        Queue::assertNotPushed(ProcessRouteFloorThumbnail::class);
+    }
+
+    /**
      * A route whose thumbnails exist for every floor the refresh would render, for each of the given
      * variants, each stamped newer than the route itself - the exact condition
      * hasFreshThumbnailForVariant() gates on.
@@ -366,6 +393,8 @@ final class EnsureHeroThumbnailsTest extends PublicTestCase
      */
     private function assertVariantsRemaining(Collection $thumbnails, array $expectedVariants): void
     {
+        $this->assertNotEmpty($thumbnails, 'The route has no thumbnails to check');
+
         foreach ($thumbnails as $thumbnail) {
             if (in_array($thumbnail->variant, $expectedVariants, true)) {
                 $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $thumbnail->id]);

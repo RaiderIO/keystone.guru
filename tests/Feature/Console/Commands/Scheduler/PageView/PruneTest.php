@@ -132,6 +132,30 @@ final class PruneTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenAnAggregatedDayOutsideTheRetentionWindow_aggregatesOnlyTheDaysInsideIt(): void
+    {
+        // Arrange
+        $retentionDays = config('keystoneguru.page_views.retention_days');
+        PageViewCount::factory()->create([
+            'model_class' => 'TestModel',
+            'model_id'    => 999999,
+            'source'      => 1,
+            'viewed_on'   => Carbon::today()->subDays($retentionDays + 5)->toDateString(),
+            'views'       => 1,
+        ]);
+
+        $outsideWindow = $this->createPageView(999999, 1, Carbon::today()->subDays($retentionDays + 2)->setTime(12, 0));
+        $yesterday     = $this->createPageView(999999, 1, Carbon::yesterday()->setTime(12, 0));
+
+        // Act
+        $this->artisan(Prune::class)->assertSuccessful();
+
+        // Assert
+        $this->assertNull($this->getViews(999999, 1, Carbon::parse($outsideWindow->created_at)), 'A day the prune may already have cut into is never aggregated');
+        $this->assertSame(1, $this->getViews(999999, 1, Carbon::parse($yesterday->created_at)));
+    }
+
+    #[Test]
     public function handle_givenAggregationFails_doesNotPrune(): void
     {
         // Arrange
