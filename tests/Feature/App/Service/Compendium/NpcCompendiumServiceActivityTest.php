@@ -446,6 +446,97 @@ final class NpcCompendiumServiceActivityTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function getEventsForDate_givenSpellAssignedEventsForAHiddenAndAVisibleSpell_returnsOnlyTheVisibleOne(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::first();
+
+        $hiddenSpell     = $this->createTestSpell($gameVersion->id, 'TestHiddenAssignedSpell', true);
+        $visibleSpell    = $this->createTestSpell($gameVersion->id, 'TestVisibleAssignedSpell', false, self::TEST_VISIBLE_SPELL_ID);
+        $hiddenNpcEvent  = $this->createSpellAssignedNpcEvent(self::TEST_SPELL_ID);
+        $visibleNpcEvent = $this->createSpellAssignedNpcEvent(self::TEST_VISIBLE_SPELL_ID);
+
+        try {
+            // Act
+            $events = $this->service->getEventsForDate(Carbon::today());
+
+            // Assert
+            $npcEventIds = $events->whereInstanceOf(CombatLogNpcEvent::class)->pluck('id');
+            $this->assertTrue($npcEventIds->contains($visibleNpcEvent->id));
+            $this->assertFalse($npcEventIds->contains($hiddenNpcEvent->id));
+        } finally {
+            $hiddenNpcEvent->delete();
+            $visibleNpcEvent->delete();
+            $hiddenSpell->delete();
+            $visibleSpell->delete();
+        }
+    }
+
+    #[Test]
+    public function buildEventFeed_givenSpellAssignedEventsForAHiddenAndAVisibleSpell_returnsOnlyTheVisibleOne(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::first();
+
+        $npc = $this->createTestNpc();
+        $this->createTestSpell($gameVersion->id, 'TestHiddenAssignedFeedSpell', true);
+        $this->createTestSpell($gameVersion->id, 'TestVisibleAssignedFeedSpell', false, self::TEST_VISIBLE_SPELL_ID);
+        $hiddenNpcEvent  = $this->createSpellAssignedNpcEvent(self::TEST_SPELL_ID);
+        $visibleNpcEvent = $this->createSpellAssignedNpcEvent(self::TEST_VISIBLE_SPELL_ID);
+
+        try {
+            // Act
+            $events = $this->service->buildEventFeed($npc->load('npcSpells'));
+
+            // Assert
+            $npcEventIds = $events->whereInstanceOf(CombatLogNpcEvent::class)->pluck('id');
+            $this->assertTrue($npcEventIds->contains($visibleNpcEvent->id));
+            $this->assertFalse($npcEventIds->contains($hiddenNpcEvent->id));
+        } finally {
+            $hiddenNpcEvent->delete();
+            $visibleNpcEvent->delete();
+            Spell::whereIn('id', [self::TEST_SPELL_ID, self::TEST_VISIBLE_SPELL_ID])->delete();
+            Npc::where('id', self::TEST_NPC_ID)->delete();
+        }
+    }
+
+    #[Test]
+    public function getActivityDates_givenDateWithOnlyVisibleSpellNpcEvents_returnsThatDate(): void
+    {
+        // Arrange
+        $uniqueDate  = '2000-01-07';
+        $gameVersion = GameVersion::first();
+
+        $visibleSpell = $this->createTestSpell($gameVersion->id, 'TestVisibleOnlyDayNpcSpell', false, self::TEST_VISIBLE_SPELL_ID);
+        $npcEvent     = $this->createSpellAssignedNpcEvent(self::TEST_VISIBLE_SPELL_ID);
+        CombatLogNpcEvent::where('id', $npcEvent->id)->update(['created_at' => $uniqueDate . ' 12:00:00']);
+
+        try {
+            // Act
+            $paginator = $this->service->getActivityDates(PHP_INT_MAX);
+
+            // Assert
+            $this->assertTrue(
+                collect($paginator->items())->contains($uniqueDate),
+                sprintf('Date %s should appear - its event points at a visible spell', $uniqueDate),
+            );
+        } finally {
+            $npcEvent->delete();
+            $visibleSpell->delete();
+        }
+    }
+
+    private function createSpellAssignedNpcEvent(int $spellId): CombatLogNpcEvent
+    {
+        return CombatLogNpcEvent::create([
+            'npc_id'      => self::TEST_NPC_ID,
+            'event_type'  => CombatLogNpcEventType::SpellAssigned->value,
+            'model_class' => Spell::class,
+            'model_id'    => $spellId,
+        ]);
+    }
+
     private function createTestNpc(): Npc
     {
         return Npc::create([

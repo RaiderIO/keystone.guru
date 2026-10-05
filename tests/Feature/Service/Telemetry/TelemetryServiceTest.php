@@ -8,6 +8,7 @@ use App\Service\Telemetry\Dtos\TelemetryDataPoint;
 use App\Service\Telemetry\Logging\TelemetryServiceLoggingInterface;
 use App\Service\Telemetry\TelemetryService;
 use App\Service\Telemetry\TelemetryServiceInterface;
+use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
@@ -69,6 +70,30 @@ final class TelemetryServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function recordCommandRun_givenAStartTime_recordsTheRunAtThatTime(): void
+    {
+        // Arrange
+        $telemetryService = $this->app->make(TelemetryServiceInterface::class);
+        $startedAt        = Carbon::parse('2020-01-01 12:34:56');
+
+        try {
+            // Act
+            $telemetryService->recordCommandRun(self::TEST_COMMAND_NAME, 42.0, true, $startedAt);
+
+            // Assert
+            /** @var TelemetryMetric $telemetryMetric */
+            $telemetryMetric = TelemetryMetric::query()
+                ->where('measurement', TelemetryMetric::MEASUREMENT_SCHEDULER)
+                ->where('name', self::TEST_COMMAND_NAME)
+                ->firstOrFail();
+
+            $this->assertSame($startedAt->toDateTimeString(), $telemetryMetric->recorded_at->toDateTimeString());
+        } finally {
+            $this->deleteTestRows();
+        }
+    }
+
+    #[Test]
     public function recordDataPoints_givenMultipleDataPoints_persistsAllRows(): void
     {
         // Arrange
@@ -89,6 +114,18 @@ final class TelemetryServiceTest extends PublicTestCase
                     ->where('name', self::TEST_COMMAND_NAME)
                     ->where('tag', 'default')
                     ->count(),
+            );
+            $this->assertSame(
+                [
+                    TelemetryMetric::MEASUREMENT_QUEUE      => 5.0,
+                    TelemetryMetric::MEASUREMENT_USER_COUNT => 10.0,
+                ],
+                TelemetryMetric::query()
+                    ->where('name', self::TEST_COMMAND_NAME)
+                    ->orderBy('measurement')
+                    ->get()
+                    ->mapWithKeys(static fn(TelemetryMetric $telemetryMetric): array => [$telemetryMetric->measurement => $telemetryMetric->value])
+                    ->all(),
             );
         } finally {
             $this->deleteTestRows();

@@ -130,20 +130,97 @@ final class PatreonServiceLinkToUserAccountTest extends PublicTestCase
         $this->assertDatabaseHas('patreon_user_links', ['user_id' => $this->user->id, 'email' => self::PATRON_EMAIL]);
     }
 
+    #[Test]
+    public function linkToUserAccount_givenATokenExchangeError_returnsSessionExpiredWithoutLinking(): void
+    {
+        // Arrange
+        $this->user = User::factory()->create();
+
+        $patreonService = $this->createPatreonService([], tokens: ['error' => 'invalid_grant']);
+
+        // Act
+        $result = $patreonService->linkToUserAccount($this->user, 'code', 'https://keystone.guru/patreon-link');
+
+        // Assert
+        $this->assertSame(LinkToUserIdResult::PatreonSessionExpired, $result);
+        $this->assertDatabaseMissing('patreon_user_links', ['user_id' => $this->user->id]);
+    }
+
+    #[Test]
+    public function linkToUserAccount_givenAnIdentityResponseCarryingErrors_returnsPatreonErrorWithoutLinking(): void
+    {
+        // Arrange
+        $this->user = User::factory()->create();
+
+        $patreonService = $this->createPatreonService([], identityResponse: ['errors' => [['detail' => 'Unauthorized']]]);
+
+        // Act
+        $result = $patreonService->linkToUserAccount($this->user, 'code', 'https://keystone.guru/patreon-link');
+
+        // Assert
+        $this->assertSame(LinkToUserIdResult::PatreonErrorOccurred, $result);
+        $this->assertDatabaseMissing('patreon_user_links', ['user_id' => $this->user->id]);
+    }
+
+    #[Test]
+    public function linkToUserAccount_givenAnIdentityResponseWithoutIncluded_returnsInternalErrorWithoutLinking(): void
+    {
+        // Arrange - the exception handler also answers InternalErrorOccurred, so the log call tells the two apart
+        $this->user = User::factory()->create();
+
+        $this->log->expects($this->once())->method('linkToUserAccountIdentityIncludedNotSet');
+        $this->log->expects($this->never())->method('linkToUserAccountException');
+
+        $patreonService = $this->createPatreonService([], identityResponse: [
+            'data' => ['id' => 'user-1', 'type' => 'user', 'attributes' => ['email' => self::PATRON_EMAIL]],
+        ]);
+
+        // Act
+        $result = $patreonService->linkToUserAccount($this->user, 'code', 'https://keystone.guru/patreon-link');
+
+        // Assert
+        $this->assertSame(LinkToUserIdResult::InternalErrorOccurred, $result);
+        $this->assertDatabaseMissing('patreon_user_links', ['user_id' => $this->user->id]);
+    }
+
+    #[Test]
+    public function linkToUserAccount_givenAUserWithAnExistingLink_replacesThatLink(): void
+    {
+        // Arrange - the existing link carries another email, so only the relink itself can remove it
+        $this->user   = User::factory()->create();
+        $existingLink = PatreonUserLink::factory()->create(['user_id' => $this->user->id]);
+        $this->user->update(['patreon_user_link_id' => $existingLink->id]);
+
+        $patreonService = $this->createPatreonService([]);
+
+        // Act
+        $result = $patreonService->linkToUserAccount($this->user, 'code', 'https://keystone.guru/patreon-link');
+
+        // Assert
+        $this->assertSame(LinkToUserIdResult::LinkSuccessful, $result);
+        $this->assertDatabaseMissing('patreon_user_links', ['id' => $existingLink->id]);
+        $this->assertSame(
+            [self::PATRON_EMAIL],
+            PatreonUserLink::query()->where('user_id', $this->user->id)->pluck('email')->all(),
+        );
+    }
+
     /**
      * @param array<int, array<string, mixed>> $memberships
+     * @param array<string, mixed>|null        $tokens           The token response, a successful exchange when null
+     * @param array<string, mixed>|null        $identityResponse The identity response, one carrying the memberships when null
      */
-    private function createPatreonService(array $memberships): PatreonService&MockObject
+    private function createPatreonService(array $memberships, ?array $tokens = null, ?array $identityResponse = null): PatreonService&MockObject
     {
         $patreonApiService = $this->createMockPublic(PatreonApiServiceInterface::class);
-        $patreonApiService->method('getAccessTokenFromCode')->willReturn([
+        $patreonApiService->method('getAccessTokenFromCode')->willReturn($tokens ?? [
             'scope'         => 'identity identity[email] identity.memberships campaigns',
             'access_token'  => 'access-token',
             'refresh_token' => 'refresh-token',
             'version'       => 2,
             'expires_in'    => 3600,
         ]);
-        $patreonApiService->method('getIdentity')->willReturn([
+        $patreonApiService->method('getIdentity')->willReturn($identityResponse ?? [
             'data'     => ['id' => 'user-1', 'type' => 'user', 'attributes' => ['email' => self::PATRON_EMAIL]],
             'included' => [
                 ['id' => self::CAMPAIGN_ID, 'type' => 'campaign'],

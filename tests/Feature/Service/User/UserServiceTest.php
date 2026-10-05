@@ -73,6 +73,7 @@ final class UserServiceTest extends PublicTestCase
 
             // Assert
             $this->assertSame(BasicAuthenticationResult::Success, $result);
+            $this->assertSame($user->id, auth()->id());
         } finally {
             User::query()->where('id', $user->id)->delete();
         }

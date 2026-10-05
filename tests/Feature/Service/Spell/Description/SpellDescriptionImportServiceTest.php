@@ -122,6 +122,8 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
 
             // Assert
             $this->assertSame(1, $secondResult->updatedCount);
+            // 30 coefficient / 10 x the spell's 1.5 damage multiplier, rounded - the first run stored 4
+            $this->assertSame('5', $spell->fresh()->description_values[0]['text']);
         } finally {
             $this->deleteTranslations();
             $spell?->delete();

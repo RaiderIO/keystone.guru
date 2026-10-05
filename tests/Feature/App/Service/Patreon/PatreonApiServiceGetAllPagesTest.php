@@ -25,8 +25,8 @@ final class PatreonApiServiceGetAllPagesTest extends PublicTestCase
     public function getAllPages_givenMultipleCleanPages_mergesDataAndIncludedFromEveryPage(): void
     {
         // Arrange
-        $apiClient = $this->createMockPublic(API::class);
-        $apiClient->method('get_data')->willReturnOnConsecutiveCalls(
+        $requestedSuffixes = [];
+        $pages             = [
             [
                 'data'     => [['id' => '1', 'type' => 'member']],
                 'included' => [['id' => 't1', 'type' => 'tier']],
@@ -37,6 +37,14 @@ final class PatreonApiServiceGetAllPagesTest extends PublicTestCase
                 'data'     => [['id' => '2', 'type' => 'member']],
                 'included' => [['id' => 't2', 'type' => 'tier']],
             ],
+        ];
+        $apiClient = $this->createMockPublic(API::class);
+        $apiClient->method('get_data')->willReturnCallback(
+            static function (string $suffix) use (&$requestedSuffixes, $pages): array {
+                $requestedSuffixes[] = $suffix;
+
+                return $pages[count($requestedSuffixes) - 1];
+            },
         );
 
         // Act
@@ -50,6 +58,11 @@ final class PatreonApiServiceGetAllPagesTest extends PublicTestCase
         $this->assertSame(['1', '2'], array_column($result->response['data'], 'id'));
         // A campaign's tiers live in `included` - keeping only the last page's makes a tier unresolvable
         $this->assertSame(['t1', 't2'], array_column($result->response['included'], 'id'));
+        // The second page is only reachable through the cursor the first page handed out
+        $this->assertSame([
+            'campaigns/1/members?include=currently_entitled_tiers',
+            'campaigns/1/members?include=currently_entitled_tiers&page%5Bcursor%5D=cursor-2',
+        ], $requestedSuffixes);
     }
 
     #[Test]
@@ -95,6 +108,9 @@ final class PatreonApiServiceGetAllPagesTest extends PublicTestCase
         // Assert
         $this->assertTrue($result->truncated);
         $this->assertTrue($result->hasErrors());
+        $this->assertSame([['detail' => 'Rate limited']], $result->response['errors']);
+        $this->assertSame(2, $result->pageCount);
+        $this->assertSame(['1'], array_column($result->response['data'], 'id'));
     }
 
     #[Test]

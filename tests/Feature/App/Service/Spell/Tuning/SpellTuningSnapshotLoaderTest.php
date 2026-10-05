@@ -104,11 +104,47 @@ final class SpellTuningSnapshotLoaderTest extends PublicTestCase
     #[Test]
     public function load_givenDatabaseSourceWithOverride_prefersOverride(): void
     {
+        // Arrange - a recorded build the override has to win from
+        $this->recordImportState('0.0.0.00041');
+
         // Act
         $snapshot = $this->loader->load(SpellTuningSnapshotLoaderInterface::SOURCE_DATABASE, self::BUILD, $this->gameVersionId);
 
         // Assert
         $this->assertSame(self::BUILD, $snapshot->build);
+    }
+
+    #[Test]
+    public function load_givenDatabaseSourceWithoutARecordedImport_throwsSpellTuningSnapshotException(): void
+    {
+        // Arrange
+        SpellDescriptionImportState::query()->where('game_version_id', $this->gameVersionId)->delete();
+
+        // Assert
+        $this->expectException(SpellTuningSnapshotException::class);
+        $this->expectExceptionMessage('No spell description import has been recorded');
+
+        // Act
+        $this->loader->load(SpellTuningSnapshotLoaderInterface::SOURCE_DATABASE, null, $this->gameVersionId);
+    }
+
+    #[Test]
+    public function load_givenFileThatIsNotJson_throwsSpellTuningSnapshotException(): void
+    {
+        // Arrange
+        $path = storage_path(sprintf('app/spell_tuning_test_%s.json', uniqid()));
+        File::put($path, 'not json');
+
+        try {
+            // Assert
+            $this->expectException(SpellTuningSnapshotException::class);
+            $this->expectExceptionMessage('is not valid JSON');
+
+            // Act
+            $this->loader->load($path, self::BUILD, $this->gameVersionId);
+        } finally {
+            File::delete($path);
+        }
     }
 
     #[Test]

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Service\WagoTools;
 
+use App\Service\WagoTools\Exceptions\WagoToolsDownloadException;
 use App\Service\WagoTools\GameLocale;
 use App\Service\WagoTools\Logging\WagoToolsServiceLoggingInterface;
 use App\Service\WagoTools\WagoToolsService;
@@ -108,6 +109,89 @@ final class WagoToolsServiceTest extends PublicTestCase
         // Assert
         $this->assertSame([], $result);
         $this->assertFileDoesNotExist(sprintf('%s/ManifestInterfaceData.csv', $this->getDb2Directory()));
+    }
+
+    #[Test]
+    public function getIconFileNamesByFileDataIds_givenNoFileDataIds_doesNotReadTheTable(): void
+    {
+        // Arrange - a table already on disk, so reading it needs no download and only the log can tell
+        $log = $this->createMockPublic(WagoToolsServiceLoggingInterface::class);
+        $log->expects($this->never())->method('getTableCsvPathCacheHit');
+        $log->expects($this->never())->method('downloadTableStart');
+
+        try {
+            $this->writeTable('ManifestInterfaceData', <<<'CSV'
+                ID,FilePath,FileName
+                1,Interface\ICONS\,UI_Profession_Engineering.blp
+                CSV);
+
+            // Act
+            $result = (new WagoToolsService($log))->getIconFileNamesByFileDataIds([], self::BUILD);
+
+            // Assert
+            $this->assertSame([], $result);
+        } finally {
+            $this->removeTables();
+        }
+    }
+
+    #[Test]
+    public function getTableCsvPath_givenABuildThatIsNotAGameBuild_throwsWagoToolsDownloadException(): void
+    {
+        // Arrange - the build ends up in a filesystem path; a cached file sits where that path would point
+        $build     = 'latest';
+        $directory = storage_path(sprintf('app/db2/%s/%s', $build, GameLocale::English->value));
+        mkdir($directory, 0755, true);
+        file_put_contents(sprintf('%s/Spell.csv', $directory), "ID\n1");
+
+        try {
+            // Assert
+            $this->expectException(WagoToolsDownloadException::class);
+            $this->expectExceptionMessage('latest is not a game build');
+
+            // Act
+            app(WagoToolsServiceInterface::class)->getTableCsvPath('Spell', $build);
+        } finally {
+            unlink(sprintf('%s/Spell.csv', $directory));
+            rmdir($directory);
+            rmdir(dirname($directory));
+        }
+    }
+
+    #[Test]
+    public function getTableCsvPath_givenATableNameWithAPath_throwsWagoToolsDownloadException(): void
+    {
+        // Arrange - a cached file sits where the table name would walk out of the locale directory to
+        $cachedFile = storage_path(sprintf('app/db2/%s/Spell.csv', self::BUILD));
+        mkdir($this->getDb2Directory(), 0755, true);
+        file_put_contents($cachedFile, "ID\n1");
+
+        try {
+            // Assert
+            $this->expectException(WagoToolsDownloadException::class);
+            $this->expectExceptionMessage('../Spell is not a DB2 table');
+
+            // Act
+            app(WagoToolsServiceInterface::class)->getTableCsvPath('../Spell', self::BUILD);
+        } finally {
+            unlink($cachedFile);
+            $this->removeTables();
+        }
+    }
+
+    #[Test]
+    public function getLatestBuild_givenAVersionThatIsNotABuild_returnsNull(): void
+    {
+        // Arrange - the latest build becomes part of a filesystem path, so anything but a build is refused
+        $wagoToolsService = $this->createServiceWithBuildsResponse(json_encode([
+            'wow' => [['version' => '../../12.1.0.69404']],
+        ]));
+
+        // Act
+        $latestBuild = $wagoToolsService->getLatestBuild('wow');
+
+        // Assert
+        $this->assertNull($latestBuild);
     }
 
     #[Test]
