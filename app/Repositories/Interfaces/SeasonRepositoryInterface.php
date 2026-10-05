@@ -30,10 +30,14 @@ interface SeasonRepositoryInterface extends BaseRepositoryInterface
 
     public function getMostRecentSeasonForDungeon(Dungeon $dungeon): ?Season;
 
+    /**
+     * The next of the dungeon's seasons to start, when one starts within three years.
+     */
     public function getUpcomingSeasonForDungeon(Dungeon $dungeon): ?Season;
 
     /**
-     * Per dungeon, the season a new route for it is created in: its upcoming season, else its most recent one.
+     * Per dungeon, the season a new route for it is created in: the next of its seasons to start, else the one that
+     * started most recently.
      *
      * @param  Collection<int, int>    $dungeonIds
      * @return Collection<int, Season> Keyed by dungeon ID
