@@ -43,16 +43,17 @@ class GenerateTestRoutes extends Command
         SeasonServiceInterface                    $seasonService,
     ): int {
         try {
-            $authorId = $this->option('author');
-            $author   = User::find((int)($authorId ?? self::DEFAULT_AUTHOR_ID));
+            $authorOption = $this->option('author');
+            $authorId     = $authorOption === null ? self::DEFAULT_AUTHOR_ID : filter_var($authorOption, FILTER_VALIDATE_INT);
+            $author       = $authorId === false ? null : User::find($authorId);
             if ($author === null) {
-                $this->error(sprintf('No user with id %s.', $authorId));
+                $this->error(sprintf('No user with id %s.', $authorOption));
 
                 return self::FAILURE;
             }
 
             if ($this->option('delete')) {
-                return $this->deleteGenerated($testDungeonRouteGeneratorService, $authorId === null ? null : $author);
+                return $this->deleteGenerated($testDungeonRouteGeneratorService, $authorOption === null ? null : $author);
             }
 
             $dungeons = $this->resolveDungeons($seasonService);
