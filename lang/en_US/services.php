@@ -54,8 +54,8 @@ return [
     ],
     'combatlogservice' => [
         'analyze_combat_log' => [
-            'verify_error'     => 'Unable to verify combat log: error.',
-            'processing_error' => 'Unable to process combat log: error.',
+            'verify_error'     => 'Unable to verify combat log: :error',
+            'processing_error' => 'Unable to process combat log: :error',
         ],
     ],
     'combatlog' => [
