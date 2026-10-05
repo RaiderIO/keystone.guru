@@ -352,6 +352,66 @@ final class DungeonContextStripTest extends PublicTestCase
         );
     }
 
+    /**
+     * The abbreviation is all a retail tile shows at rest; its full name takes its place on hover and focus, and is
+     * the one name a screen reader hears for the link - not the abbreviation, nor the image's alt on top of it.
+     */
+    #[Test]
+    public function render_givenRetail_namesEveryTileLinkOnceByItsFullName(): void
+    {
+        // Arrange
+        $dungeons = $this->getDungeons(GameVersion::GAME_VERSION_RETAIL);
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_RETAIL, $dungeons);
+
+        // Assert
+        $this->assertGreaterThan(0, $dungeons->count());
+        foreach ($dungeons as $dungeon) {
+            $this->assertMatchesRegularExpression(
+                sprintf(
+                    '/<a href="%s"\s*>\s*<span class="card-text text-white dungeon_card_dungeon_name"\s+aria-hidden="true"\s*>\s*%s\s*<\/span>\s*'
+                    . '<span class="card-text text-white dungeon_card_dungeon_full_name">%s<\/span>\s*<img class="card-img-top"\s+src="[^"]*"\s+alt=""/',
+                    preg_quote(sprintf('/link/%s', $dungeon->key), '/'),
+                    preg_quote(e(__($dungeon->abbreviation)), '/'),
+                    preg_quote(e(__($dungeon->name)), '/'),
+                ),
+                $html,
+                sprintf('%s is not named once by its full name', $dungeon->key),
+            );
+        }
+    }
+
+    /**
+     * A tile without an abbreviation (the next season's) keeps its label and image alt as its name, and gains no name
+     * line.
+     */
+    #[Test]
+    public function render_givenATileWithoutAFullName_keepsItsLabelAndImageAltAsItsName(): void
+    {
+        // Arrange
+        $title    = __('view_common.dungeon.list.next_season');
+        $imageAlt = 'Midnight';
+
+        // Act
+        $html = view('common.dungeon.list.card', [
+            'link'       => '/next-season',
+            'title'      => $title,
+            'isSelected' => false,
+            'imageUrl'   => '/next-season.jpg',
+            'imageAlt'   => $imageAlt,
+        ])->render();
+
+        // Assert
+        $this->assertMatchesRegularExpression(
+            sprintf('/<span class="card-text text-white dungeon_card_dungeon_name"\s*>\s*%s\s*<\/span>/', preg_quote(e($title), '/')),
+            $html,
+        );
+        $this->assertStringContainsString(sprintf('alt="%s"', $imageAlt), $html);
+        $this->assertStringNotContainsString('dungeon_card_dungeon_full_name', $html);
+        $this->assertStringNotContainsString('aria-hidden="true"', $html);
+    }
+
     #[Test]
     public function render_givenClassicEraOnMobile_listsEveryDungeonUnderGroupHeadersWithoutAMoreEntry(): void
     {

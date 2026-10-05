@@ -121,6 +121,22 @@ function renderHeader(html) {
     document.body.innerHTML = html;
 }
 
+/**
+ * Renders one abbreviated retail tile as common/dungeon/list/card.blade.php does in the header.
+ */
+function renderRetailTile() {
+    renderHeader(`
+        <div class="dungeon_context_header discover">
+            <div class="row"><div class="list_dungeon col selectable"><div class="card-img-caption">
+                <a href="#" id="link">
+                    <span class="card-text text-white dungeon_card_dungeon_name" id="abbreviation" aria-hidden="true">DON</span>
+                    <span class="card-text text-white dungeon_card_dungeon_full_name" id="full_name">Den of Nalorakk</span>
+                    <img class="card-img-top" src="" alt=""/>
+                </a>
+            </div></div></div>
+        </div>`);
+}
+
 describe('header state language', () => {
     afterEach(() => {
         document.documentElement.className = '';
@@ -230,6 +246,31 @@ describe('header state language', () => {
         // jsdom resolves this padding to px but leaves other rem lengths as written
         expect(['0.125rem', '2px']).toContain(tile.paddingTop);
         expect(['0.125rem', '2px']).toContain(tile.paddingLeft);
+    });
+
+    test('retailTile_givenRest_showsTheAbbreviationAndHidesTheFullName', () => {
+        // Arrange
+        renderRetailTile();
+
+        // Act
+        const opacityOf = id => getComputedStyle(document.getElementById(id)).opacity;
+
+        // Assert
+        expect(opacityOf('full_name')).toBe('0');
+        expect(['', '1']).toContain(opacityOf('abbreviation'));
+    });
+
+    test('retailTile_givenKeyboardFocus_showsTheFullNameInPlaceOfTheAbbreviation', () => {
+        // Arrange
+        renderRetailTile();
+
+        // Act
+        document.getElementById('link').focus();
+        const opacityOf = id => getComputedStyle(document.getElementById(id)).opacity;
+
+        // Assert
+        expect(opacityOf('full_name')).toBe('1');
+        expect(opacityOf('abbreviation')).toBe('0');
     });
 
     test('readoutName_givenItsLongNameFit_changesSizeWithoutATransition', () => {
