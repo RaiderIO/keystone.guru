@@ -26,7 +26,7 @@ final class ConversionTest extends TestCase
         $expansionKey = Conversion::getExpansionName($dungeonKey);
 
         // Assert
-        $this->assertEquals($expansionKey, $expectedExpansionKey);
+        $this->assertEquals($expectedExpansionKey, $expansionKey);
     }
 
     /**

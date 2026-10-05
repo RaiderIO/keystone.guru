@@ -203,7 +203,7 @@ final class MDTMappingImportNpcSetGuardTest extends PublicTestCase
     }
 
     #[Test]
-    public function assertMDTNpcSetIsPlausible_givenOverlapAtTheMinimum_doesNotThrow(): void
+    public function assertMDTNpcSetIsPlausible_givenOverlapAboveTheMinimum_doesNotThrow(): void
     {
         // Arrange - 6 of the dungeon's own NPCs and 4 foreign ones: 60% survives, which is roughly the
         // lowest overlap a real MDT transition has ever produced (59%) and must keep working

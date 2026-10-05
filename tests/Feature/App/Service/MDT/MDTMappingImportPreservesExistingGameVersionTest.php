@@ -11,6 +11,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\RestoresNpcsImportedFromMdt;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -23,18 +24,14 @@ use Tests\TestCases\PublicTestCase;
 #[Group('MDT')]
 final class MDTMappingImportPreservesExistingGameVersionTest extends PublicTestCase
 {
+    use RestoresNpcsImportedFromMdt;
+
     #[Test]
     public function importNpcsDataFromMDT_givenExistingNpcOfAnotherGameVersion_doesNotOverwriteItsGameVersion(): void
     {
         // Arrange - Avatar of Sethraliss, an NPC MDT knows about for this dungeon
         $dungeon = Dungeon::query()->where('key', 'templeofsethraliss')->firstOrFail();
         $npc     = Npc::query()->findOrFail(133392);
-
-        $originalGameVersionId = $npc->game_version_id;
-
-        Npc::query()->whereKey($npc->id)->update([
-            'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_MOP],
-        ]);
 
         /** @var GameVersion $retailGameVersion */
         $retailGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_RETAIL)->firstOrFail();
@@ -47,20 +44,22 @@ final class MDTMappingImportPreservesExistingGameVersionTest extends PublicTestC
             'dungeon'            => $dungeon,
         ]);
 
-        try {
-            // Act
-            $failures = [];
-            $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $retailGameVersion, $failures);
+        $this->restoreNpcsImportedFromMdtAfterTheTest($mdtDungeon);
 
-            // Assert
-            $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
-            $this->assertSame(
-                GameVersion::ALL[GameVersion::GAME_VERSION_MOP],
-                $npc->fresh()->game_version_id,
-                'Re-importing must not overwrite an already-curated game_version_id.',
-            );
-        } finally {
-            Npc::query()->whereKey($npc->id)->update(['game_version_id' => $originalGameVersionId]);
-        }
+        Npc::query()->whereKey($npc->id)->update([
+            'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_MOP],
+        ]);
+
+        // Act
+        $failures = [];
+        $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $retailGameVersion, $failures);
+
+        // Assert
+        $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
+        $this->assertSame(
+            GameVersion::ALL[GameVersion::GAME_VERSION_MOP],
+            $npc->fresh()->game_version_id,
+            'Re-importing must not overwrite an already-curated game_version_id.',
+        );
     }
 }

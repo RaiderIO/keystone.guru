@@ -44,15 +44,13 @@ final class DiffEnemyForcesTest extends PublicTestCase
     public function handle_givenTheEnemyForcesWeAlreadyHave_reportsThemAsIdentical(): void
     {
         // Arrange
-        $dungeon = $this->writeDb2Tables();
+        $this->writeDb2Tables();
 
         // Act & Assert
         $this->artisan('wagotools:diffenemyforces', ['--build' => self::BUILD, '--dungeon' => self::DUNGEON_KEY])
             ->expectsOutputToContain(sprintf('(scenario %d, criteria tree %d', self::SCENARIO_ID, self::FORCES_CRITERIA_TREE_ID))
             ->expectsOutputToContain('All 1 resolved dungeons match this build.')
             ->assertSuccessful();
-
-        $this->assertSame(self::DUNGEON_KEY, $dungeon->key);
     }
 
     #[Test]

@@ -13,7 +13,6 @@
         </testsuite>
         <testsuite name="Unit Tests">
             <directory suffix="Test.php">./tests/Unit</directory>
-            <exclude>./tests/Unit/App/Service/CombatLog/CombatLogDungeonRouteServiceTest.php</exclude>
         </testsuite>
     </testsuites>
     <php>

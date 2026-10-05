@@ -42,8 +42,6 @@ class MDTImportStringServicePullsTest extends MDTImportStringServiceTestBase
 
             // Assert
             $this->assertCount(3, $importedRoute->killZones);
-        } catch (\Exception $e) {
-            throw $e;
         } finally {
             $importedRoute?->delete();
             $dungeonRoute?->delete();

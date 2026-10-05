@@ -11,6 +11,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\RestoresNpcsImportedFromMdt;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -23,6 +24,8 @@ use Tests\TestCases\PublicTestCase;
 #[Group('MDT')]
 final class MDTMappingImportVoidscarArenaEncounterIdTest extends PublicTestCase
 {
+    use RestoresNpcsImportedFromMdt;
+
     #[Test]
     public function importNpcsDataFromMDT_givenVoidscarArenaBosses_usesDistinctEncounterIdsFromMDT(): void
     {
@@ -44,30 +47,20 @@ final class MDTMappingImportVoidscarArenaEncounterIdTest extends PublicTestCase
             'dungeon'            => $dungeon,
         ]);
 
-        $originalEncounterIds = [
-            $tazrah->id   => $tazrah->encounter_id,
-            $atroxus->id  => $atroxus->encounter_id,
-            $charonus->id => $charonus->encounter_id,
-        ];
+        $this->restoreNpcsImportedFromMdtAfterTheTest($mdtDungeon);
 
-        try {
-            // The seeder already ships the distinct ids, so start from the collision the upstream bug produced:
-            // only the import writing MDT's encounter_id can get each boss its own id back
-            Npc::query()->whereIn('id', array_keys($originalEncounterIds))->update(['encounter_id' => 2791]);
+        // The seeder already ships the distinct ids, so start from the collision the upstream bug produced:
+        // only the import writing MDT's encounter_id can get each boss its own id back
+        Npc::query()->whereIn('id', [$tazrah->id, $atroxus->id, $charonus->id])->update(['encounter_id' => 2791]);
 
-            // Act
-            $failures = [];
-            $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $retailGameVersion, $failures);
+        // Act
+        $failures = [];
+        $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $retailGameVersion, $failures);
 
-            // Assert
-            $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
-            $this->assertSame(2791, $tazrah->fresh()->encounter_id, "Taz'Rah's encounter_id must come from MDT.");
-            $this->assertSame(2792, $atroxus->fresh()->encounter_id, "Atroxus's encounter_id must come from MDT, not collide with Taz'Rah's.");
-            $this->assertSame(2793, $charonus->fresh()->encounter_id, "Charonus's encounter_id must come from MDT, not collide with the other two bosses.");
-        } finally {
-            foreach ($originalEncounterIds as $npcId => $encounterId) {
-                Npc::query()->whereKey($npcId)->update(['encounter_id' => $encounterId]);
-            }
-        }
+        // Assert
+        $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
+        $this->assertSame(2791, $tazrah->fresh()->encounter_id, "Taz'Rah's encounter_id must come from MDT.");
+        $this->assertSame(2792, $atroxus->fresh()->encounter_id, "Atroxus's encounter_id must come from MDT, not collide with Taz'Rah's.");
+        $this->assertSame(2793, $charonus->fresh()->encounter_id, "Charonus's encounter_id must come from MDT, not collide with the other two bosses.");
     }
 }

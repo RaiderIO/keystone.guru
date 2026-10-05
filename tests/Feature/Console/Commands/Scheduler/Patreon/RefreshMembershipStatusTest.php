@@ -20,12 +20,22 @@ use Tests\TestCases\PublicTestCase;
 #[Group('Patreon')]
 final class RefreshMembershipStatusTest extends PublicTestCase
 {
+    private int $lastPatreonSyncRunIdBeforeTheTest;
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->lastPatreonSyncRunIdBeforeTheTest = (int)PatreonSyncRun::query()->max('id');
+    }
+
     #[\Override]
     protected function tearDown(): void
     {
         try {
             // Every run of the command under test writes one of these
-            PatreonSyncRun::query()->delete();
+            PatreonSyncRun::query()->where('id', '>', $this->lastPatreonSyncRunIdBeforeTheTest)->delete();
         } finally {
             parent::tearDown();
         }

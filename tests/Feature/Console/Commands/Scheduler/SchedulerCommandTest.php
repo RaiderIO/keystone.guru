@@ -18,6 +18,8 @@ use TypeError;
 #[Group('Scheduler')]
 final class SchedulerCommandTest extends PublicTestCase
 {
+    private const int CALLABLE_DURATION_MS = 20;
+
     protected function tearDown(): void
     {
         // Every trackTime() call - including the failing ones above - records a telemetry row for the stub
@@ -33,7 +35,11 @@ final class SchedulerCommandTest extends PublicTestCase
     public function trackTime_givenSuccessfulCallable_recordsSuccessfulCommandRun(): void
     {
         // Arrange
-        SchedulerCommandStub::$callable = static fn(): int => Command::SUCCESS;
+        SchedulerCommandStub::$callable = static function (): int {
+            usleep(self::CALLABLE_DURATION_MS * 1000);
+
+            return Command::SUCCESS;
+        };
         Artisan::registerCommand(new SchedulerCommandStub());
 
         // Act
@@ -49,7 +55,8 @@ final class SchedulerCommandTest extends PublicTestCase
 
         $this->assertNotNull($telemetryMetric);
         $this->assertTrue($telemetryMetric->success);
-        $this->assertGreaterThanOrEqual(0, $telemetryMetric->value);
+        $this->assertGreaterThanOrEqual(self::CALLABLE_DURATION_MS, $telemetryMetric->value);
+        $this->assertLessThan(self::CALLABLE_DURATION_MS * 100, $telemetryMetric->value, 'The run time is recorded in milliseconds');
     }
 
     #[Test]

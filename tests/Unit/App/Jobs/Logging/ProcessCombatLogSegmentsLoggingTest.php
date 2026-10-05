@@ -10,10 +10,10 @@ use Tests\Fixtures\LoggingFixtures;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * Guards #3918: handleSegmentsNotAvailable() was downgraded from error to info so it stops paging
- * the sentry log channel (config/logging.php alerts on error level) for an expected, recurring
- * state - asserted directly against the concrete logging class, since a mocked interface (as used
- * elsewhere in this job's own test suite) can't observe the level.
+ * handleSegmentsNotAvailable() logs at info, not error: the sentry log channel (config/logging.php) alerts on
+ * error level, and segments that are not available yet are an expected, recurring state. Asserted directly
+ * against the concrete logging class, since a mocked interface (as used elsewhere in this job's own test
+ * suite) can't observe the level.
  */
 #[Group('Logging')]
 #[Group('ProcessCombatLogSegmentsLogging')]
@@ -50,9 +50,9 @@ final class ProcessCombatLogSegmentsLoggingTest extends PublicTestCase
     }
 
     /**
-     * Downgraded from error in #4173, for the same reason: a log we cannot parse costs the one run it
-     * came from, whose parsing budget is given back, and only a lot of them at once is worth paging
-     * for - which combatlog:reportpollinghealth does. The detail stays in the logs at warning level.
+     * Warning, not error, for the same reason: a log we cannot parse costs the one run it came from, whose
+     * parsing budget is given back, and only a lot of them at once is worth paging for - which
+     * combatlog:reportpollinghealth does. The detail stays in the logs at warning level.
      *
      * @throws Exception
      */

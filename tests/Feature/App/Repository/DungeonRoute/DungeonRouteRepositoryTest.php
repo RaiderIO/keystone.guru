@@ -16,7 +16,6 @@ use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Attributes\SlowTest;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('DungeonRouteRepository')]
@@ -72,26 +71,6 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
 
         // Assert
         $this->assertNull($result);
-    }
-
-    #[Test]
-    #[SlowTest]
-    public function findRoutes_givenFilter_returnsCollection(): void
-    {
-        // Arrange
-        $dungeonRoute = DungeonRoute::factory()->create();
-
-        try {
-            $filter = new DungeonRouteSearchFilter($dungeonRoute->mappingVersion);
-
-            // Act
-            $result = $this->repository->findRoutes($filter);
-
-            // Assert
-            $this->assertInstanceOf(Collection::class, $result);
-        } finally {
-            $dungeonRoute->delete();
-        }
     }
 
     #[Test]

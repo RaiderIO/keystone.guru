@@ -45,9 +45,9 @@ final class MDTAddonVersionSeederTest extends PublicTestCase
             // Assert - every committed entry is present with its release date.
             $this->assertSame(count($expected), MDTAddonVersion::query()->count());
 
-            /** @var MDTAddonVersion $newest */
-            $newest = MDTAddonVersion::query()->findOrFail(6120);
-            $this->assertSame('2026-07-03', $newest->released_at->toDateString());
+            /** @var MDTAddonVersion $addonVersion6120 */
+            $addonVersion6120 = MDTAddonVersion::query()->findOrFail(6120);
+            $this->assertSame('2026-07-03', $addonVersion6120->released_at->toDateString());
 
             $releasedAtByAddonVersion = MDTAddonVersion::query()
                 ->get()

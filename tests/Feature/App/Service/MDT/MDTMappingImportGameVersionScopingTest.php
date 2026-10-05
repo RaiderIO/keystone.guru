@@ -8,7 +8,6 @@ use App\Models\Dungeon;
 use App\Models\EnemyForcesCheckpoint;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc\NpcHealth;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
@@ -19,6 +18,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionProperty;
+use Tests\Fixtures\Traits\RestoresNpcsImportedFromMdt;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -48,6 +48,8 @@ use Tests\TestCases\PublicTestCase;
 #[Group('MappingVersion')]
 final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
 {
+    use RestoresNpcsImportedFromMdt;
+
     #[Test]
     #[DataProvider('importMappingVersionFromMDT_givenGameVersionWithNoExistingMappingVersion_createsMappingVersionForThatGameVersionWithNothingClonedFromAnotherGameVersion_dataProvider')]
     public function importMappingVersionFromMDT_givenGameVersionWithNoExistingMappingVersion_createsMappingVersionForThatGameVersionWithNothingClonedFromAnotherGameVersion(
@@ -72,21 +74,11 @@ final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
         $retailMappingVersion  = $dungeon->getCurrentMappingVersionForGameVersion($retailGameVersion);
         $retailCheckpointCount = $retailMappingVersion->enemyForcesCheckpoints()->count();
 
-        // importNpcsDataFromMDT() saves an NpcHealth row keyed by (npc_id, game_version_id) for every MDT NPC -
-        // unlike everything else the import creates, these are NOT scoped to (and therefore not cascade-deleted
-        // by) the mapping version, so the ids that already exist for the target game version have to be
-        // snapshotted up front and anything new cleaned up by hand afterwards.
-        $mdtDungeon = app(MDTDungeon::class, [
+        $this->restoreNpcsImportedFromMdtAfterTheTest(app(MDTDungeon::class, [
             'cacheService'       => app(CacheServiceInterface::class),
             'coordinatesService' => app(CoordinatesServiceInterface::class),
             'dungeon'            => $dungeon,
-        ]);
-        $mdtNpcIds               = $mdtDungeon->getMDTNPCs()->map(static fn($mdtNpc) => $mdtNpc->getId())->all();
-        $preExistingNpcHealthIds = NpcHealth::query()
-            ->where('game_version_id', $targetGameVersion->id)
-            ->whereIn('npc_id', $mdtNpcIds)
-            ->pluck('id')
-            ->all();
+        ]));
 
         $dungeon->setRelation('npcs', $dungeon->npcs()->get());
 
@@ -158,12 +150,6 @@ final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
                 ->where('game_version_id', $targetGameVersion->id)
                 ->get()
                 ->each(static fn(MappingVersion $mappingVersion) => $mappingVersion->delete());
-
-            NpcHealth::query()
-                ->where('game_version_id', $targetGameVersion->id)
-                ->whereIn('npc_id', $mdtNpcIds)
-                ->whereNotIn('id', $preExistingNpcHealthIds)
-                ->delete();
         }
     }
 

@@ -7,10 +7,6 @@ use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Entity\MDTNpc;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
-use App\Models\Npc\Npc;
-use App\Models\Npc\NpcDungeon;
-use App\Models\Npc\NpcEnemyForces;
-use App\Models\Npc\NpcHealth;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
@@ -19,6 +15,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\RestoresNpcsImportedFromMdt;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -38,6 +35,8 @@ use Tests\TestCases\PublicTestCase;
 #[Group('MDT')]
 final class MDTMappingImportNoSpellCouplingTest extends PublicTestCase
 {
+    use RestoresNpcsImportedFromMdt;
+
     #[Test]
     public function importNpcsDataFromMDT_givenMDTNpcCastingAnUncoupledSpell_doesNotCoupleTheSpellToTheNpcOrDungeon(): void
     {
@@ -57,78 +56,43 @@ final class MDTMappingImportNoSpellCouplingTest extends PublicTestCase
             'coordinatesService' => app(CoordinatesServiceInterface::class),
             'dungeon'            => $dungeon,
         ]);
-        $mdtNpcIds = $mdtDungeon->getMDTNPCs()->map(static fn(MDTNpc $mdtNpc) => $mdtNpc->getId())->all();
 
         $npcSpellCountBefore     = NpcSpell::query()->count();
         $spellCountBefore        = Spell::query()->count();
         $spellDungeonCountBefore = SpellDungeon::query()->count();
 
-        // Unlike the spell tables, the Npc/NpcHealth/NpcDungeon/NpcEnemyForces rows this import writes are a
-        // legitimate product of it and are not scoped to (nor cascade-deleted by) a mapping version, so
-        // snapshot what exists to clean up anything new. Today every MDT NPC of every dungeon is already
-        // seeded, so nothing is inserted at all - but that invariant breaks the moment an MDT bump introduces
-        // an NPC (#3980), and this test must not be the thing that leaves rows behind in the shared test DB
-        // when it does. A brand new NPC also gets NpcEnemyForces written into EVERY historical mapping version.
-        $preExistingNpcIds       = Npc::query()->whereIn('id', $mdtNpcIds)->pluck('id')->all();
-        $preExistingNpcHealthIds = NpcHealth::query()
-            ->where('game_version_id', $retailGameVersion->id)
-            ->whereIn('npc_id', $mdtNpcIds)
-            ->pluck('id')
-            ->all();
-        $preExistingNpcDungeonIds = NpcDungeon::query()->whereIn('npc_id', $mdtNpcIds)->pluck('id')->all();
+        $this->restoreNpcsImportedFromMdtAfterTheTest($mdtDungeon);
 
-        try {
-            // Act
-            $failures = [];
-            $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $retailGameVersion, $failures);
+        // Act
+        $failures = [];
+        $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $retailGameVersion, $failures);
 
-            // Assert
-            $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
+        // Assert
+        $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
 
-            $this->assertFalse(
-                NpcSpell::query()
-                    ->where('npc_id', $uncoupledNpcId)
-                    ->where('spell_id', $uncoupledSpellId)
-                    ->exists(),
-                'A spell MDT lists for an NPC must not be coupled to that NPC - only parsed combat log data may do that.',
-            );
+        $this->assertFalse(
+            NpcSpell::query()
+                ->where('npc_id', $uncoupledNpcId)
+                ->where('spell_id', $uncoupledSpellId)
+                ->exists(),
+            'A spell MDT lists for an NPC must not be coupled to that NPC - only parsed combat log data may do that.',
+        );
 
-            $this->assertSame(
-                $npcSpellCountBefore,
-                NpcSpell::query()->count(),
-                'The MDT import must not create any npc_spells rows.',
-            );
-            $this->assertSame(
-                $spellCountBefore,
-                Spell::query()->count(),
-                'The MDT import must not create placeholder spells rows for spell IDs it does not know.',
-            );
-            $this->assertSame(
-                $spellDungeonCountBefore,
-                SpellDungeon::query()->count(),
-                'The MDT import must not couple any spell to a dungeon.',
-            );
-        } finally {
-            NpcHealth::query()
-                ->where('game_version_id', $retailGameVersion->id)
-                ->whereIn('npc_id', $mdtNpcIds)
-                ->whereNotIn('id', $preExistingNpcHealthIds)
-                ->delete();
-
-            NpcDungeon::query()
-                ->whereIn('npc_id', $mdtNpcIds)
-                ->whereNotIn('id', $preExistingNpcDungeonIds)
-                ->delete();
-
-            // Npc last: its dependents above are keyed by npc_id. Query-builder deletes throughout - Npc and
-            // NpcEnemyForces are SeederModels, whose ->delete() is silently refused on the model instance.
-            $insertedNpcIds = array_values(array_diff($mdtNpcIds, $preExistingNpcIds));
-
-            if ($insertedNpcIds !== []) {
-                NpcEnemyForces::query()->whereIn('npc_id', $insertedNpcIds)->delete();
-                Npc::query()->whereIn('id', $insertedNpcIds)->delete();
-            }
-        }
+        $this->assertSame(
+            $npcSpellCountBefore,
+            NpcSpell::query()->count(),
+            'The MDT import must not create any npc_spells rows.',
+        );
+        $this->assertSame(
+            $spellCountBefore,
+            Spell::query()->count(),
+            'The MDT import must not create placeholder spells rows for spell IDs it does not know.',
+        );
+        $this->assertSame(
+            $spellDungeonCountBefore,
+            SpellDungeon::query()->count(),
+            'The MDT import must not couple any spell to a dungeon.',
+        );
     }
 
     /**

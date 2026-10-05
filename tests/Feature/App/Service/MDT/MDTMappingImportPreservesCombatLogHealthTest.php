@@ -13,12 +13,15 @@ use App\Service\MDT\MDTMappingImportServiceInterface;
 use Exception;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\RestoresNpcsImportedFromMdt;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('UsesLua')]
 #[Group('MDT')]
 final class MDTMappingImportPreservesCombatLogHealthTest extends PublicTestCase
 {
+    use RestoresNpcsImportedFromMdt;
+
     // Xathuux the Annihilator, Murder Row - #4208 corrected the seeded 23,648,733 (MDT's value, 4.17% high) to the
     // true, combat-log-measured base of 22,702,784.
     private const int XATHUUX_NPC_ID = 234647;
@@ -41,6 +44,7 @@ final class MDTMappingImportPreservesCombatLogHealthTest extends PublicTestCase
             'coordinatesService' => app(CoordinatesServiceInterface::class),
             'dungeon'            => $dungeon,
         ]);
+        $this->restoreNpcsImportedFromMdtAfterTheTest($mdtDungeon);
 
         // Don't assume what MDT currently reports (it drifts as the package's bundled data changes, e.g. #4211
         // itself) - fetch it first and arrange a sentinel health guaranteed to differ from it, so the assertion
@@ -167,6 +171,8 @@ final class MDTMappingImportPreservesCombatLogHealthTest extends PublicTestCase
         $npcHealth = $this->findXathuuxHealth($retailGameVersion);
         $this->assertNotNull($npcHealth, 'The seeder must ship a health row, or this test proves nothing.');
 
+        $this->restoreNpcsImportedFromMdtAfterTheTest($this->createMurderRowMdtDungeon($dungeon));
+
         return [$dungeon, $retailGameVersion, $npcHealth];
     }
 
@@ -180,15 +186,18 @@ final class MDTMappingImportPreservesCombatLogHealthTest extends PublicTestCase
      */
     private function importMurderRow(Dungeon $dungeon, GameVersion $gameVersion): array
     {
-        $mdtDungeon = app(MDTDungeon::class, [
+        $failures = [];
+        $this->app->make(MDTMappingImportServiceInterface::class)->importNpcsDataFromMDT($this->createMurderRowMdtDungeon($dungeon), $dungeon, $gameVersion, $failures);
+
+        return $failures;
+    }
+
+    private function createMurderRowMdtDungeon(Dungeon $dungeon): MDTDungeon
+    {
+        return app(MDTDungeon::class, [
             'cacheService'       => app(CacheServiceInterface::class),
             'coordinatesService' => app(CoordinatesServiceInterface::class),
             'dungeon'            => $dungeon,
         ]);
-
-        $failures = [];
-        $this->app->make(MDTMappingImportServiceInterface::class)->importNpcsDataFromMDT($mdtDungeon, $dungeon, $gameVersion, $failures);
-
-        return $failures;
     }
 }
