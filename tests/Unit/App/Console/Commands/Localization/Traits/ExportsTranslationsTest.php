@@ -62,6 +62,90 @@ final class ExportsTranslationsTest extends TestCase
         }
     }
 
+    #[Test]
+    public function exportTranslations_givenNestedArrays_producesLoadableNestedTranslations(): void
+    {
+        // Arrange
+        $filePath = $this->prepareTestLocale();
+        $data     = [
+            'dungeon' => [
+                'name'   => 'Some dungeon',
+                'floors' => ['upper' => 'Upper floor', 'lower' => 'Lower floor'],
+            ],
+            'empty' => [],
+        ];
+
+        try {
+            // Act
+            $this->runExport($data);
+
+            // Assert
+            $this->assertSame($data, include $filePath);
+        } finally {
+            $this->cleanUpTestLocale();
+        }
+    }
+
+    #[Test]
+    public function exportTranslations_givenPreserveExisting_keepsExistingKeysAndOverwritesGivenOnes(): void
+    {
+        // Arrange
+        $filePath = $this->prepareTestLocale();
+
+        try {
+            $this->runExport(['kept' => 'Kept', 'nested' => ['kept' => 'Kept', 'replaced' => 'Old']]);
+
+            // Act
+            $this->runExport(['nested' => ['replaced' => 'New'], 'added' => 'Added'], preserveExisting: true);
+
+            // Assert
+            $this->assertEquals([
+                'kept'   => 'Kept',
+                'nested' => ['kept' => 'Kept', 'replaced' => 'New'],
+                'added'  => 'Added',
+            ], include $filePath);
+        } finally {
+            $this->cleanUpTestLocale();
+        }
+    }
+
+    #[Test]
+    public function exportTranslations_givenNoPreserveExisting_replacesTheExistingFile(): void
+    {
+        // Arrange
+        $filePath = $this->prepareTestLocale();
+
+        try {
+            $this->runExport(['dropped' => 'Dropped']);
+
+            // Act
+            $this->runExport(['added' => 'Added']);
+
+            // Assert
+            $this->assertSame(['added' => 'Added'], include $filePath);
+        } finally {
+            $this->cleanUpTestLocale();
+        }
+    }
+
+    #[Test]
+    public function exportTranslations_givenFileNameWithoutExtension_writesThePhpFile(): void
+    {
+        // Arrange
+        $filePath = $this->prepareTestLocale();
+
+        try {
+            // Act
+            $this->runExport([123 => 'Some NPC'], fileName: 'npcs');
+
+            // Assert
+            $this->assertFileDoesNotExist(lang_path(sprintf('%s/npcs', self::TEST_LOCALE)));
+            $this->assertSame([123 => 'Some NPC'], include $filePath);
+        } finally {
+            $this->cleanUpTestLocale();
+        }
+    }
+
     /**
      * @return string the path the export will be written to
      */
@@ -78,7 +162,7 @@ final class ExportsTranslationsTest extends TestCase
      *
      * @param array<int|string, mixed> $data
      */
-    private function runExport(array $data): void
+    private function runExport(array $data, string $fileName = 'npcs.php', bool $preserveExisting = false): void
     {
         $command = new class extends Command {
             use ExportsTranslations;
@@ -87,17 +171,23 @@ final class ExportsTranslationsTest extends TestCase
 
             public string $locale = '';
 
+            public string $fileName = '';
+
+            public bool $preserveExisting = false;
+
             /** @var array<int|string, mixed> */
             public array $data = [];
 
             public function handle(): int
             {
-                return $this->exportTranslations($this->locale, 'npcs.php', $this->data) ? 0 : 1;
+                return $this->exportTranslations($this->locale, $this->fileName, $this->data, $this->preserveExisting) ? 0 : 1;
             }
         };
 
-        $command->locale = self::TEST_LOCALE;
-        $command->data   = $data;
+        $command->locale           = self::TEST_LOCALE;
+        $command->fileName         = $fileName;
+        $command->preserveExisting = $preserveExisting;
+        $command->data             = $data;
         $command->setLaravel($this->app);
 
         $this->assertEquals(0, $command->run(new ArrayInput([]), new NullOutput()));

@@ -306,7 +306,29 @@ final class DiffTuningTest extends PublicTestCase
             '--from'     => $this->fromPath,
             '--to'       => $this->toPath,
             '--to-build' => self::TO_BUILD,
-        ])->assertExitCode(1);
+        ])
+            ->expectsOutputToContain('carries no build of its own')
+            ->assertExitCode(1);
+
+        $this->assertSame(0, SpellTuningBuild::query()->where('to_build', self::TO_BUILD)->count());
+    }
+
+    #[Test]
+    public function handle_givenUnknownGameVersion_returnsFailureAndStoresNothing(): void
+    {
+        // Act
+        $this->artisan('spell:difftuning', [
+            '--from'        => $this->fromPath,
+            '--to'          => $this->toPath,
+            '--from-build'  => self::FROM_BUILD,
+            '--to-build'    => self::TO_BUILD,
+            '--gameVersion' => 'not-a-game-version',
+        ])
+            ->expectsOutputToContain('Unknown game version not-a-game-version')
+            ->assertExitCode(1);
+
+        // Assert
+        $this->assertSame(0, SpellTuningChange::query()->where('to_build', self::TO_BUILD)->count());
     }
 
     private function runDiff(): void

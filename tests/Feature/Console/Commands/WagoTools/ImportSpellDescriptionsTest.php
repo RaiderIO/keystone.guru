@@ -255,6 +255,45 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function handle_givenDb2Tables_recordsTheImportedBuild(): void
+    {
+        // Arrange
+        $spell = null;
+
+        try {
+            $this->clearImportState();
+            $this->writeDb2Tables();
+
+            $spell = $this->createSpell(self::SPELL_ID, null);
+
+            // Act
+            $this->artisan('wagotools:importspelldescriptions', ['--build' => self::BUILD])
+                ->assertSuccessful();
+
+            // Assert
+            $importState = SpellDescriptionImportState::query()
+                ->where('game_version_id', GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL])
+                ->first();
+            $this->assertNotNull($importState, 'The import recorded no build');
+            $this->assertSame(self::BUILD, $importState->build);
+            $this->assertSame('wow', $importState->product);
+        } finally {
+            $spell?->delete();
+            $this->clearImportState();
+            $this->removeDb2Tables();
+        }
+    }
+
+    #[Test]
+    public function handle_givenUnknownGameVersion_failsWithoutImporting(): void
+    {
+        // Act & Assert
+        $this->artisan('wagotools:importspelldescriptions', ['--build' => self::BUILD, '--gameVersion' => 'not-a-game-version'])
+            ->expectsOutputToContain('Unknown game version not-a-game-version')
+            ->assertFailed();
+    }
+
     private function clearImportState(): void
     {
         SpellDescriptionImportState::query()

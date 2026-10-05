@@ -58,6 +58,67 @@ final class RegenerateCombatLogRouteTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenOnlyAUserConfigured_logsCredentialsNotConfiguredWithoutSendingARequest(): void
+    {
+        // Arrange
+        config()->set('keystoneguru.combat_log_route_regeneration.user', 'regenerator');
+        config()->set('keystoneguru.combat_log_route_regeneration.password', '');
+
+        [$dungeon]    = $this->findDungeon(challengeMode: true);
+        $dungeonRoute = $this->createDungeonRouteWithChallengeModeRun($dungeon);
+
+        $log = $this->createMockPublic(RegenerateCombatLogRouteLoggingInterface::class);
+        $log->expects($this->once())->method('handleCredentialsNotConfigured');
+        $log->expects($this->never())->method('handleSuccess');
+        app()->instance(RegenerateCombatLogRouteLoggingInterface::class, $log);
+
+        try {
+            // Act
+            new RegenerateCombatLogRoute($dungeonRoute->id)->handle();
+
+            // Assert - the expectations set on the mock above
+        } finally {
+            $challengeModeRunIds = ChallengeModeRun::query()->where('dungeon_route_id', $dungeonRoute->id)->pluck('id');
+            ChallengeModeRunData::query()->whereIn('challenge_mode_run_id', $challengeModeRunIds)->delete();
+            ChallengeModeRun::query()->whereIn('id', $challengeModeRunIds)->delete();
+            DungeonRoute::query()->where('id', $dungeonRoute->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function handle_givenRouteWithoutChallengeModeRun_logsChallengeModeRunNotSet(): void
+    {
+        // Arrange
+        config()->set('keystoneguru.combat_log_route_regeneration.user', null);
+        config()->set('keystoneguru.combat_log_route_regeneration.password', null);
+
+        [$dungeon]    = $this->findDungeon(challengeMode: true);
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+        ]);
+
+        $endResults = [];
+        $log        = $this->createMockPublic(RegenerateCombatLogRouteLoggingInterface::class);
+        $log->expects($this->once())->method('handleChallengeModeRunNotSet');
+        $log->expects($this->never())->method('handleCredentialsNotConfigured');
+        $log->method('handleEnd')->willReturnCallback(static function (bool $result) use (&$endResults): void {
+            $endResults[] = $result;
+        });
+        app()->instance(RegenerateCombatLogRouteLoggingInterface::class, $log);
+
+        try {
+            // Act
+            new RegenerateCombatLogRoute($dungeonRoute->id)->handle();
+
+            // Assert - alongside the expectations set on the mock above
+            $this->assertSame([false], $endResults);
+        } finally {
+            DungeonRoute::query()->where('id', $dungeonRoute->id)->delete();
+        }
+    }
+
+    #[Test]
     public function handle_givenUnknownDungeonRoute_logsDungeonRouteNotFound(): void
     {
         // Arrange

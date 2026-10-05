@@ -57,11 +57,17 @@ final class PruneTest extends PublicTestCase
         $growthMeasurements = config('keystoneguru.telemetry.growth_measurements');
 
         $oldGrowthTelemetryMetric = null;
+        $oldTelemetryMetric       = null;
 
         try {
             // Arrange
             $oldGrowthTelemetryMetric = TelemetryMetric::factory()->create([
                 'measurement' => $growthMeasurements[0],
+                'name'        => 'test:prunetest',
+                'recorded_at' => now()->subDays($retentionDays + 3650),
+            ]);
+            $oldTelemetryMetric = TelemetryMetric::factory()->create([
+                'measurement' => TelemetryMetric::MEASUREMENT_SCHEDULER,
                 'name'        => 'test:prunetest',
                 'recorded_at' => now()->subDays($retentionDays + 3650),
             ]);
@@ -72,8 +78,10 @@ final class PruneTest extends PublicTestCase
             // Assert
             $this->assertSame(Command::SUCCESS, $exitCode);
             $this->assertNotNull(TelemetryMetric::query()->find($oldGrowthTelemetryMetric->id));
+            $this->assertNull(TelemetryMetric::query()->find($oldTelemetryMetric->id), 'An operational record just as old is pruned in the same run');
         } finally {
             $oldGrowthTelemetryMetric?->delete();
+            $oldTelemetryMetric?->delete();
             // The prune run itself records its own duration through trackTime()
             TelemetryMetric::query()
                 ->where('measurement', TelemetryMetric::MEASUREMENT_SCHEDULER)

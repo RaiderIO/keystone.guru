@@ -301,6 +301,65 @@ final class ProcessRouteFloorThumbnailTest extends PublicTestCase
     }
 
     /**
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    #[Test]
+    public function handle_givenUpToDateThumbnailWithoutForce_doesNotRender(): void
+    {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'thumbnail_updated_at' => Carbon::now()->addHours(2),
+        ]);
+
+        $thumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
+        $thumbnailService->expects($this->never())->method('createThumbnail');
+        app()->instance(ThumbnailServiceInterface::class, $thumbnailService);
+
+        $log = $this->createMockPublic(ProcessRouteFloorThumbnailLoggingInterface::class);
+        $log->expects($this->once())->method('handleThumbnailAlreadyUpToDate');
+        app()->instance(ProcessRouteFloorThumbnailLoggingInterface::class, $log);
+
+        try {
+            // Act
+            new ProcessRouteFloorThumbnail($dungeonRoute, 1)->handle();
+
+            // Assert - the expectations set on the mocks above
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    #[Test]
+    public function handle_givenOutdatedThumbnailWithoutForce_renders(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createDungeonRouteDueForThumbnail();
+
+        $thumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
+        $thumbnailService->expects($this->once())
+            ->method('createThumbnail')
+            ->willReturn($dungeonRoute->dungeonRouteThumbnails()->make());
+        app()->instance(ThumbnailServiceInterface::class, $thumbnailService);
+
+        $log = $this->createMockPublic(ProcessRouteFloorThumbnailLoggingInterface::class);
+        $log->expects($this->never())->method('handleThumbnailAlreadyUpToDate');
+        $log->expects($this->once())->method('handleEnd')->with(true);
+        app()->instance(ProcessRouteFloorThumbnailLoggingInterface::class, $log);
+
+        try {
+            // Act
+            new ProcessRouteFloorThumbnail($dungeonRoute, 1)->handle();
+
+            // Assert - the expectations set on the mocks above
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
      * A route whose thumbnail is considered out of date, so handle() actually attempts a render
      * rather than short-circuiting on handleThumbnailAlreadyUpToDate().
      */

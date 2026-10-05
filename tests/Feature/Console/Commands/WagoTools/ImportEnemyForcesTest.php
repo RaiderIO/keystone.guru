@@ -36,14 +36,19 @@ final class ImportEnemyForcesTest extends PublicTestCase
 
         $this->writeDb2Tables($dungeon, $mappingVersion->enemy_forces_required + 31, $db2EnemyForcesByNpcId);
 
-        // Act & Assert
-        $this->artisan('wagotools:importenemyforces', $this->commandOptions())
-            ->expectsOutputToContain(sprintf('Enemy forces required: %d -> %d', $mappingVersion->enemy_forces_required, $mappingVersion->enemy_forces_required + 31))
-            ->expectsOutputToContain('Dry run - nothing was written')
-            ->assertSuccessful();
+        try {
+            // Act & Assert
+            $this->artisan('wagotools:importenemyforces', $this->commandOptions())
+                ->expectsOutputToContain(sprintf('Enemy forces required: %d -> %d', $mappingVersion->enemy_forces_required, $mappingVersion->enemy_forces_required + 31))
+                ->expectsOutputToContain('Dry run - nothing was written')
+                ->assertSuccessful();
 
-        $this->assertSame($mappingVersion->enemy_forces_required, MappingVersion::findOrFail($mappingVersion->id)->enemy_forces_required);
-        $this->assertSame($ourEnemyForcesByNpcId[$retunedNpcId], $this->getNpcEnemyForces($mappingVersion, $retunedNpcId));
+            $this->assertSame($mappingVersion->enemy_forces_required, MappingVersion::findOrFail($mappingVersion->id)->enemy_forces_required);
+            $this->assertSame($ourEnemyForcesByNpcId[$retunedNpcId], $this->getNpcEnemyForces($mappingVersion, $retunedNpcId));
+        } finally {
+            // A dry run that writes anyway must not leave the seeded mapping version changed for later tests
+            $this->restoreEnemyForces($mappingVersion, $retunedNpcId, $ourEnemyForcesByNpcId[$retunedNpcId]);
+        }
     }
 
     #[Test]
@@ -67,16 +72,7 @@ final class ImportEnemyForcesTest extends PublicTestCase
             $this->assertSame($mappingVersion->enemy_forces_required + 31, MappingVersion::findOrFail($mappingVersion->id)->enemy_forces_required);
             $this->assertSame($ourEnemyForcesByNpcId[$retunedNpcId] * 2, $this->getNpcEnemyForces($mappingVersion, $retunedNpcId));
         } finally {
-            MappingVersion::query()
-                ->whereKey($mappingVersion->id)
-                ->update([
-                    'enemy_forces_required' => $mappingVersion->enemy_forces_required,
-                    'updated_at'            => $mappingVersion->updated_at,
-                ]);
-            NpcEnemyForces::query()
-                ->where('mapping_version_id', $mappingVersion->id)
-                ->where('npc_id', $retunedNpcId)
-                ->update(['enemy_forces' => $ourEnemyForcesByNpcId[$retunedNpcId]]);
+            $this->restoreEnemyForces($mappingVersion, $retunedNpcId, $ourEnemyForcesByNpcId[$retunedNpcId]);
         }
     }
 
@@ -154,6 +150,20 @@ final class ImportEnemyForcesTest extends PublicTestCase
     private function commandOptions(array $options = []): array
     {
         return ['--dungeon' => self::DUNGEON_KEY, '--product' => 'wow', '--build' => self::BUILD] + $options;
+    }
+
+    private function restoreEnemyForces(MappingVersion $mappingVersion, int $npcId, int $enemyForces): void
+    {
+        MappingVersion::query()
+            ->whereKey($mappingVersion->id)
+            ->update([
+                'enemy_forces_required' => $mappingVersion->enemy_forces_required,
+                'updated_at'            => $mappingVersion->updated_at,
+            ]);
+        NpcEnemyForces::query()
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->where('npc_id', $npcId)
+            ->update(['enemy_forces' => $enemyForces]);
     }
 
     private function getNpcEnemyForces(MappingVersion $mappingVersion, int $npcId): ?int

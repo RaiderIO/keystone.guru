@@ -56,6 +56,29 @@ final class DiffEnemyForcesTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenADifferentEnemyForcesTotal_reportsTheDungeonAsDiverging(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::firstWhere('key', self::DUNGEON_KEY);
+        $this->assertNotNull($dungeon);
+
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion(
+            GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
+        );
+
+        $this->writeDb2Tables(enemyForcesRequired: $mappingVersion->enemy_forces_required + 31);
+
+        // Act & Assert
+        $this->artisan('wagotools:diffenemyforces', ['--build' => self::BUILD, '--dungeon' => self::DUNGEON_KEY])
+            ->expectsOutputToContain(sprintf('DB2 %d - ours %d', $mappingVersion->enemy_forces_required + 31, $mappingVersion->enemy_forces_required))
+            ->expectsOutputToContain('1 of 1 resolved dungeons diverge from this build')
+            ->expectsOutputToContain('Of those, 1 have a different total')
+            ->doesntExpectOutputToContain('All 1 resolved dungeons match this build.')
+            ->assertSuccessful();
+    }
+
+    #[Test]
     public function handle_givenABuildResolvingNoneOfOurDungeons_fails(): void
     {
         // Arrange - a build we read wrong must not be able to report that everything matches
@@ -89,7 +112,7 @@ final class DiffEnemyForcesTest extends PublicTestCase
     }
 
     /** The rows the game client would ship for this dungeon's challenge mode scenario, as we have them. */
-    private function writeDb2Tables(?int $dungeonEncounterMapId = null): Dungeon
+    private function writeDb2Tables(?int $dungeonEncounterMapId = null, ?int $enemyForcesRequired = null): Dungeon
     {
         $dungeon = Dungeon::firstWhere('key', self::DUNGEON_KEY);
         $this->assertNotNull($dungeon, sprintf('The seeded database has no %s', self::DUNGEON_KEY));
@@ -102,7 +125,7 @@ final class DiffEnemyForcesTest extends PublicTestCase
         $criteriaTreeRows = [
             sprintf('%d,0,"12.1 Dungeon (Challenge)",0,4,0,0', self::ROOT_CRITERIA_TREE_ID),
             sprintf('%d,%d,"Defeat the boss",1,0,%d,0', self::ROOT_CRITERIA_TREE_ID + 10, self::ROOT_CRITERIA_TREE_ID, self::BOSS_CRITERIA_ID),
-            sprintf('%d,%d,"Enemy Forces",%d,9,0,1', self::FORCES_CRITERIA_TREE_ID, self::ROOT_CRITERIA_TREE_ID, $mappingVersion->enemy_forces_required),
+            sprintf('%d,%d,"Enemy Forces",%d,9,0,1', self::FORCES_CRITERIA_TREE_ID, self::ROOT_CRITERIA_TREE_ID, $enemyForcesRequired ?? $mappingVersion->enemy_forces_required),
         ];
         $criteriaRows = [sprintf('%d,165,%d,0', self::BOSS_CRITERIA_ID, self::DUNGEON_ENCOUNTER_ID)];
 
