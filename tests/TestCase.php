@@ -3,6 +3,8 @@
 namespace Tests;
 
 use App\Logging\StructuredLogging;
+use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Event;
@@ -106,6 +108,12 @@ abstract class TestCase extends BaseTestCase
             $initialized = true;
 
             $this->bootstrap();
+
+            // The migrate call above builds the Artisan application, constructing every command with the services
+            // bound at that point - drop it so the test's own bindings reach the command constructors
+            /** @var ConsoleKernel $consoleKernel */
+            $consoleKernel = $this->app->make(ConsoleKernelContract::class);
+            $consoleKernel->setArtisan(null);
         }
 
         // Last, so both schemas are the ones the test will actually write to

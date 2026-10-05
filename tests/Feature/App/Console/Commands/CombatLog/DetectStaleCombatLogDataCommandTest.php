@@ -19,8 +19,6 @@ use App\Models\Spell\SpellImmunity;
 use App\Models\Spell\SpellMissType;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Season\SeasonServiceStub;
-use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
-use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
@@ -40,12 +38,6 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        // The first test of a process migrates in setUp(), which builds the Artisan application and constructs every
-        // command with the services bound at that point - drop it so this test's own bindings reach the constructor
-        /** @var ConsoleKernel $consoleKernel */
-        $consoleKernel = $this->app->make(ConsoleKernelContract::class);
-        $consoleKernel->setArtisan(null);
 
         // The staleness/prune cutoffs are now derived from the full, global contents of both
         // observation tables, so a leftover row from real data or a sibling test would silently
@@ -441,22 +433,25 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
             'keystoneguru.combat_log_staleness.observation_window_days'    => 3,
             'keystoneguru.combat_log_staleness.observation_retention_days' => 5,
         ]);
-        $this->app->instance(SeasonServiceInterface::class, new SeasonServiceStub());
 
         // A continuous 5-day window (today .. 4 days ago); retaining 5 data-days puts the prune
-        // cutoff at the 5th most recent one, 4 days ago.
+        // cutoff at the 5th most recent one, 4 days ago, and the staleness cutoff at 3 days ago.
         $this->seedObservationDays(5);
 
         $characteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
         $this->createTestNpc();
+        // Linked to a current-season dungeon and last seen before the staleness cutoff, so only the
+        // missing season keeps the characteristic
+        $this->linkNpcToCurrentSeason();
         NpcCharacteristic::create([
             'npc_id'            => self::NPC_ID,
             'characteristic_id' => $characteristicId,
         ]);
-        // Stale observation (will be pruned, older than the 4-day prune cutoff) and a fresh one
-        // (will be kept, within the prune cutoff).
+        // Older than the prune cutoff (pruned), and on the prune cutoff itself (kept).
         $this->createNpcCharacteristicObservation(now()->subDays(5));
-        $this->createNpcCharacteristicObservation(now()->subDays(3));
+        $this->createNpcCharacteristicObservation(now()->subDays(4));
+
+        $this->app->instance(SeasonServiceInterface::class, new SeasonServiceStub());
 
         // Act
         $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
@@ -466,6 +461,10 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
             'npc_id'            => self::NPC_ID,
             'characteristic_id' => $characteristicId,
         ]);
+        $this->assertDatabaseMissing('combat_log_npc_events', [
+            'npc_id'     => self::NPC_ID,
+            'event_type' => CombatLogNpcEventType::CharacteristicRemoved->value,
+        ], 'combatlog');
         // Assert — old observation pruned, recent one kept
         $this->assertSame(1, CombatLogNpcCharacteristicObservation::where('npc_id', self::NPC_ID)->count());
     }
