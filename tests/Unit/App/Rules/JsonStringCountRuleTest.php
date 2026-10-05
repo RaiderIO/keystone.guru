@@ -55,8 +55,7 @@ final class JsonStringCountRuleTest extends TestCase
         });
 
         // Assert
-        $this->assertNotNull($message);
-        $this->assertStringContainsString('2', $message);
+        $this->assertSame(__('rules.json_string_count_rule.message_min', ['min_count' => 2]), $message);
     }
 
     #[Test]
@@ -72,14 +71,14 @@ final class JsonStringCountRuleTest extends TestCase
         });
 
         // Assert
-        $this->assertNotNull($message);
+        $this->assertSame(__('rules.json_string_count_rule.message_min', ['min_count' => 2]), $message);
     }
 
     #[Test]
     public function validate_givenValidJsonAboveMaxCount_failsWithMaxMessage(): void
     {
         // Arrange
-        $rule    = new JsonStringCountRule(minCount: 2, maxCount: 2);
+        $rule    = new JsonStringCountRule(minCount: 1, maxCount: 2);
         $message = null;
 
         // Act
@@ -88,8 +87,7 @@ final class JsonStringCountRuleTest extends TestCase
         });
 
         // Assert
-        $this->assertNotNull($message);
-        $this->assertStringContainsString('2', $message);
+        $this->assertSame(__('rules.json_string_count_rule.message_max', ['max_count' => 2]), $message);
     }
 
     #[Test]

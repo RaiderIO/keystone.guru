@@ -7,6 +7,7 @@ use App\Models\Spell\Spell;
 use App\Models\Spell\SpellCounter;
 use App\Models\Spell\SpellImmunity;
 use App\Models\Spell\SpellMissType;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -65,5 +66,100 @@ final class SpellPropertyTest extends PublicTestCase
             $this->assertArrayNotHasKey($key, $seen, sprintf('%s shares its bit with %s', $property->value, $seen[$key] ?? ''));
             $seen[$key] = $property->value;
         }
+    }
+
+    #[Test]
+    #[DataProvider('columnAndMaskBitProvider')]
+    public function columnAndMaskBit_givenAProperty_returnTheColumnAndBitItIsStoredIn(SpellProperty $property, string $expectedColumn, ?int $expectedMaskBit): void
+    {
+        // Act
+        $column  = $property->column();
+        $maskBit = $property->maskBit();
+
+        // Assert
+        $this->assertSame($expectedColumn, $column);
+        $this->assertSame($expectedMaskBit, $maskBit);
+    }
+
+    /**
+     * @return array<string, array{SpellProperty, string, int|null}>
+     */
+    public static function columnAndMaskBitProvider(): array
+    {
+        return [
+            'Aura'                         => [SpellProperty::Aura, 'aura', null],
+            'Debuff'                       => [SpellProperty::Debuff, 'debuff', null],
+            'MissAbsorb'                   => [SpellProperty::MissAbsorb, 'miss_types_mask', 1],
+            'MissBlock'                    => [SpellProperty::MissBlock, 'miss_types_mask', 2],
+            'MissDeflect'                  => [SpellProperty::MissDeflect, 'miss_types_mask', 4],
+            'MissDodge'                    => [SpellProperty::MissDodge, 'miss_types_mask', 8],
+            'MissEvade'                    => [SpellProperty::MissEvade, 'miss_types_mask', 16],
+            'MissImmune'                   => [SpellProperty::MissImmune, 'miss_types_mask', 32],
+            'MissMiss'                     => [SpellProperty::MissMiss, 'miss_types_mask', 64],
+            'MissParry'                    => [SpellProperty::MissParry, 'miss_types_mask', 128],
+            'MissReflect'                  => [SpellProperty::MissReflect, 'miss_types_mask', 256],
+            'MissResist'                   => [SpellProperty::MissResist, 'miss_types_mask', 512],
+            'MissInterrupt'                => [SpellProperty::MissInterrupt, 'miss_types_mask', 1024],
+            'CounterVanish'                => [SpellProperty::CounterVanish, 'counters_mask', 1],
+            'CounterShadowmeld'            => [SpellProperty::CounterShadowmeld, 'counters_mask', 2],
+            'CounterFeignDeath'            => [SpellProperty::CounterFeignDeath, 'counters_mask', 4],
+            'CounterInvisibility'          => [SpellProperty::CounterInvisibility, 'counters_mask', 8],
+            'CounterCloakOfShadows'        => [SpellProperty::CounterCloakOfShadows, 'counters_mask', 16],
+            'BypassDivineShield'           => [SpellProperty::BypassDivineShield, 'bypasses_immunities_mask', 1],
+            'BypassIceBlock'               => [SpellProperty::BypassIceBlock, 'bypasses_immunities_mask', 2],
+            'BypassAspectOfTheTurtle'      => [SpellProperty::BypassAspectOfTheTurtle, 'bypasses_immunities_mask', 4],
+            'BypassBlessingOfProtection'   => [SpellProperty::BypassBlessingOfProtection, 'bypasses_immunities_mask', 8],
+            'BypassBlessingOfSpellwarding' => [SpellProperty::BypassBlessingOfSpellwarding, 'bypasses_immunities_mask', 16],
+            'BypassAntiMagicShell'         => [SpellProperty::BypassAntiMagicShell, 'bypasses_immunities_mask', 32],
+        ];
+    }
+
+    #[Test]
+    public function fromMissTypeBit_givenAMissTypeBit_returnsTheMissPropertyOfThatType(): void
+    {
+        // Arrange
+        $bit = SpellMissType::Interrupt->value;
+
+        // Act
+        $property = SpellProperty::fromMissTypeBit($bit);
+
+        // Assert
+        $this->assertSame(SpellProperty::MissInterrupt, $property);
+    }
+
+    #[Test]
+    public function translationKey_givenABooleanProperty_returnsNull(): void
+    {
+        // Arrange
+        $property = SpellProperty::Debuff;
+
+        // Act
+        $translationKey = $property->translationKey();
+
+        // Assert
+        $this->assertNull($translationKey);
+    }
+
+    #[Test]
+    #[DataProvider('translationKeyProvider')]
+    public function translationKey_givenAMaskProperty_returnsTheKeyOfTheEnumCaseItStandsFor(SpellProperty $property, string $expected): void
+    {
+        // Act
+        $translationKey = $property->translationKey();
+
+        // Assert
+        $this->assertSame($expected, $translationKey);
+    }
+
+    /**
+     * @return array<string, array{SpellProperty, string}>
+     */
+    public static function translationKeyProvider(): array
+    {
+        return [
+            'miss type' => [SpellProperty::MissParry, 'spellmisstypes.parry'],
+            'counter'   => [SpellProperty::CounterFeignDeath, 'spellcounters.feign_death'],
+            'immunity'  => [SpellProperty::BypassIceBlock, 'spellimmunities.ice_block'],
+        ];
     }
 }

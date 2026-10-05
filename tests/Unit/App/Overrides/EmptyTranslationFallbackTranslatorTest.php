@@ -5,6 +5,7 @@ namespace Tests\Unit\App\Overrides;
 use App\Overrides\AiLocaleMessageSelector;
 use App\Overrides\EmptyTranslationFallbackTranslator;
 use Illuminate\Translation\ArrayLoader;
+use Illuminate\Translation\Translator;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -139,6 +140,23 @@ final class EmptyTranslationFallbackTranslatorTest extends TestCase
         $this->assertInstanceOf(EmptyTranslationFallbackTranslator::class, $translator);
         $this->assertInstanceOf(AiLocaleMessageSelector::class, $translator->getSelector());
         $this->assertSame(config('app.fallback_locale'), $translator->getFallback());
+    }
+
+    #[Test]
+    public function fromTranslator_givenATranslator_keepsItsLoaderLocaleAndFallback(): void
+    {
+        // Arrange
+        $loader   = new ArrayLoader();
+        $original = new Translator($loader, 'de_DE_ai');
+        $original->setFallback('en_US');
+
+        // Act
+        $translator = EmptyTranslationFallbackTranslator::fromTranslator($original);
+
+        // Assert
+        $this->assertSame($loader, $translator->getLoader());
+        $this->assertSame('de_DE_ai', $translator->getLocale());
+        $this->assertSame('en_US', $translator->getFallback());
     }
 
     #[Test]

@@ -209,4 +209,33 @@ final class LatLngTest extends PublicTestCase
         // Assert
         Assert::assertSame(['lat' => -1.0, 'lng' => 2.0, 'floor_id' => null], $result);
     }
+
+    #[Test]
+    public function toArrayWithFloor_givenFloor_returnsItsId(): void
+    {
+        // Arrange
+        $floor  = new Floor()->forceFill(['id' => 12]);
+        $latLng = new LatLng(-1, 2, $floor);
+
+        // Act
+        $result = $latLng->toArrayWithFloor();
+
+        // Assert
+        Assert::assertSame(['lat' => -1.0, 'lng' => 2.0, 'floor_id' => 12], $result);
+    }
+
+    #[Test]
+    public function fromArray_givenLatLngArrayAndFloor_returnsLatLngOnThatFloor(): void
+    {
+        // Arrange
+        $floor = new Floor()->forceFill(['id' => 12]);
+
+        // Act
+        $latLng = LatLng::fromArray(['lat' => -100.5, 'lng' => 200.25], $floor);
+
+        // Assert
+        Assert::assertSame(-100.5, $latLng->getLat());
+        Assert::assertSame(200.25, $latLng->getLng());
+        Assert::assertSame($floor, $latLng->getFloor());
+    }
 }
