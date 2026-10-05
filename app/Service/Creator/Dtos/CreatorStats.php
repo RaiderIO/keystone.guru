@@ -134,33 +134,25 @@ readonly class CreatorStats
     }
 
     /**
-     * Which of the season's dungeons the creator has routes for, naming whichever side of the split is shorter so
-     * the names are on the page rather than behind a tooltip. Null without a season or without any season routes.
+     * Every dungeon of the season, in the season's order, with whether the creator has season routes for it. Empty
+     * without a season.
+     *
+     * @return Collection<int, array{dungeon: Dungeon, covered: bool}>
      */
-    public function getCoverageLine(): ?string
+    public function getSeasonDungeonCoverage(): Collection
     {
-        if ($this->season === null || $this->seasonCoveredDungeons->isEmpty()) {
-            return null;
+        if ($this->season === null) {
+            return collect();
         }
 
-        $seasonDungeons = $this->season->dungeons;
-        $coveredCount   = $this->seasonCoveredDungeons->count();
-        $totalCount     = $seasonDungeons->count();
+        $coveredDungeonIds = $this->seasonCoveredDungeons->pluck('id');
 
-        if ($coveredCount >= $totalCount) {
-            return trans_choice('view_creator.stats.coverage_all', $totalCount, ['total' => $totalCount]);
-        }
-
-        $coversAtMostHalf = $coveredCount * 2 <= $totalCount;
-        $namedDungeons    = $coversAtMostHalf
-            ? $this->seasonCoveredDungeons
-            : $seasonDungeons->whereNotIn('id', $this->seasonCoveredDungeons->pluck('id'));
-
-        return __($coversAtMostHalf ? 'view_creator.stats.coverage_some' : 'view_creator.stats.coverage_most', [
-            'count'    => $coveredCount,
-            'total'    => $totalCount,
-            'dungeons' => $namedDungeons->map(static fn(Dungeon $dungeon): string => __($dungeon->name))->implode(', '),
-        ]);
+        return $this->season->dungeons
+            ->map(static fn(Dungeon $dungeon): array => [
+                'dungeon' => $dungeon,
+                'covered' => $coveredDungeonIds->contains($dungeon->id),
+            ])
+            ->values();
     }
 
     private function formatViews(int $views): string

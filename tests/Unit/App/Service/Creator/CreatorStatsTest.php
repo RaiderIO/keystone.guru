@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\Season;
 use App\Service\Creator\Dtos\CreatorStats;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -136,70 +137,32 @@ final class CreatorStatsTest extends PublicTestCase
     }
 
     #[Test]
-    public function getCoverageLine_givenRoutesForEveryDungeonOfTheSeason_returnsAllCovered(): void
+    public function getSeasonDungeonCoverage_givenRoutesForSomeDungeons_returnsEverySeasonDungeonInTheSeasonsOrder(): void
     {
-        // Arrange
-        $season       = $this->seasonWithDungeons();
-        $creatorStats = CreatorStats::fromAttributes([
-            'season_route_count' => $season->dungeons->count(),
-            'season_dungeon_ids' => $season->dungeons->pluck('id')->implode(','),
-        ], $season);
-
-        // Act
-        $coverageLine = $creatorStats->getCoverageLine();
-
-        // Assert
-        $this->assertSame(sprintf('Covers all %d dungeons this season', $season->dungeons->count()), $coverageLine);
-    }
-
-    #[Test]
-    public function getCoverageLine_givenRoutesForAtMostHalfTheDungeons_namesTheCoveredDungeons(): void
-    {
-        // Arrange - listed out of the season's order, which the line must not follow
+        // Arrange - listed out of the season's order, which the row must not follow
         $season       = $this->seasonWithDungeons();
         $dungeons     = $season->dungeons;
         $creatorStats = CreatorStats::fromAttributes([
             'season_route_count' => 3,
-            'season_dungeon_ids' => sprintf('%d,%d', $dungeons[1]->id, $dungeons[0]->id),
+            'season_dungeon_ids' => sprintf('%d,%d', $dungeons[2]->id, $dungeons[0]->id),
         ], $season);
 
         // Act
-        $coverageLine = $creatorStats->getCoverageLine();
+        $seasonDungeonCoverage = $creatorStats->getSeasonDungeonCoverage();
 
         // Assert
         $this->assertSame(
-            sprintf('Covers 2 of %d dungeons: %s, %s', $dungeons->count(), __($dungeons[0]->name), __($dungeons[1]->name)),
-            $coverageLine,
-        );
-    }
-
-    #[Test]
-    public function getCoverageLine_givenRoutesForMoreThanHalfTheDungeons_namesTheMissingDungeons(): void
-    {
-        // Arrange - every dungeon but the first
-        $season       = $this->seasonWithDungeons();
-        $dungeons     = $season->dungeons;
-        $creatorStats = CreatorStats::fromAttributes([
-            'season_route_count' => $dungeons->count() - 1,
-            'season_dungeon_ids' => $dungeons->slice(1)->pluck('id')->implode(','),
-        ], $season);
-
-        // Act
-        $coverageLine = $creatorStats->getCoverageLine();
-
-        // Assert
-        $this->assertSame(
-            sprintf('Covers %d of %d dungeons, all but %s', $dungeons->count() - 1, $dungeons->count(), __($dungeons[0]->name)),
-            $coverageLine,
+            $dungeons->map(static fn(Dungeon $dungeon, int $index): array => [$dungeon->id, in_array($index, [0, 2], true)])->all(),
+            $this->coverageStates($seasonDungeonCoverage),
         );
     }
 
     /**
-     * A route can carry a season while its dungeon is not part of that season; the line counts out of the season's
-     * dungeons, so such a dungeon must not push the count past them.
+     * A route can carry a season while its dungeon is not part of that season; the row is the season's dungeons, so
+     * such a dungeon must not join it.
      */
     #[Test]
-    public function getCoverageLine_givenADungeonOutsideTheSeason_leavesItOut(): void
+    public function getSeasonDungeonCoverage_givenADungeonOutsideTheSeason_leavesItOut(): void
     {
         // Arrange
         $season           = $this->seasonWithDungeons();
@@ -211,27 +174,45 @@ final class CreatorStatsTest extends PublicTestCase
         ], $season);
 
         // Act
-        $coverageLine = $creatorStats->getCoverageLine();
+        $seasonDungeonCoverage = $creatorStats->getSeasonDungeonCoverage();
 
         // Assert
-        $this->assertSame(sprintf('Covers 1 of %d dungeons: %s', $dungeons->count(), __($dungeons[0]->name)), $coverageLine);
+        $this->assertSame(
+            $dungeons->map(static fn(Dungeon $dungeon, int $index): array => [$dungeon->id, $index === 0])->all(),
+            $this->coverageStates($seasonDungeonCoverage),
+        );
     }
 
     #[Test]
-    public function getCoverageLine_givenNoSeasonRoutes_returnsNull(): void
+    public function getSeasonDungeonCoverage_givenNoSeasonRoutes_returnsEverySeasonDungeonUncovered(): void
     {
         // Arrange
+        $season       = $this->seasonWithDungeons();
         $creatorStats = CreatorStats::fromAttributes([
             'published_route_count' => 3,
             'season_route_count'    => 0,
             'season_dungeon_ids'    => null,
-        ], $this->seasonWithDungeons());
+        ], $season);
 
         // Act
-        $coverageLine = $creatorStats->getCoverageLine();
+        $seasonDungeonCoverage = $creatorStats->getSeasonDungeonCoverage();
 
         // Assert
-        $this->assertNull($coverageLine);
+        $this->assertSame(
+            $season->dungeons->map(static fn(Dungeon $dungeon): array => [$dungeon->id, false])->all(),
+            $this->coverageStates($seasonDungeonCoverage),
+        );
+    }
+
+    /**
+     * @param  Collection<int, array{dungeon: Dungeon, covered: bool}> $seasonDungeonCoverage
+     * @return list<array{int, bool}>
+     */
+    private function coverageStates(Collection $seasonDungeonCoverage): array
+    {
+        return $seasonDungeonCoverage
+            ->map(static fn(array $dungeonCoverage): array => [$dungeonCoverage['dungeon']->id, $dungeonCoverage['covered']])
+            ->all();
     }
 
     private function seasonWithDungeons(): Season

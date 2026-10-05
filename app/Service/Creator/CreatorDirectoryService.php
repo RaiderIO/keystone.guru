@@ -99,8 +99,8 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
     public function getStatsSeason(): ?Season
     {
         return GameVersion::getUserOrDefaultGameVersion()->has_seasons
-            // CreatorStats reads the season's dungeons for every creator it is built for
-            ? $this->seasonService->getCurrentSeason()?->loadMissing('dungeons')
+            // The coverage row reads the season's dungeons and their images for every creator it is built for
+            ? $this->seasonService->getCurrentSeason()?->loadMissing('dungeons.expansion')
             : null;
     }
 }

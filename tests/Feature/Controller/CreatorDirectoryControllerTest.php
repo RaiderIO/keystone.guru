@@ -533,8 +533,8 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
     }
 
     /**
-     * The card's coverage line counts only world-published routes of the season: a link-only or unpublished route
-     * for another of the season's dungeons must neither raise the count nor add that dungeon's name.
+     * The card's coverage row counts only world-published routes of the season: a link-only or unpublished route
+     * for another of the season's dungeons must neither raise the count nor colour that dungeon.
      */
     #[Test]
     public function index_givenACreatorWithSeasonRoutes_rendersTheDungeonsOnlyWorldPublishedRoutesCover(): void
@@ -555,11 +555,12 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $response->assertSee(e(__('view_creator.stats.coverage_some', [
-                'count'    => 1,
-                'total'    => $dungeons->count(),
-                'dungeons' => __($dungeons[0]->name),
-            ])), false);
+            $response->assertSee(e(__('view_creator.stats.coverage', ['count' => 1, 'total' => $dungeons->count()])), false);
+            $response->assertSeeInOrder([
+                e(__('view_creator.stats.coverage_dungeon_covered', ['dungeon' => __($dungeons[0]->name)])),
+                e(__('view_creator.stats.coverage_dungeon_missing', ['dungeon' => __($dungeons[1]->name)])),
+                e(__('view_creator.stats.coverage_dungeon_missing', ['dungeon' => __($dungeons[2]->name)])),
+            ], false);
         } finally {
             Feature::for($viewer)->forget(CreatorProfiles::class);
             $this->deleteAll($routes);

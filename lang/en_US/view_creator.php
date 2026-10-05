@@ -39,8 +39,10 @@ return [
         'views'                    => '{0} No views|{1} :views view|[2,*] :views views',
         'rating'                   => '{1} ★ :rating (:count rating)|[2,*] ★ :rating (:count ratings)',
         'last_published'           => 'Last published :time',
-        'coverage_all'             => '{1} Covers the only dungeon this season|[2,*] Covers all :total dungeons this season',
-        'coverage_some'            => 'Covers :count of :total dungeons: :dungeons',
-        'coverage_most'            => 'Covers :count of :total dungeons, all but :dungeons',
+        /** Read out in place of the coverage row's dungeon images */
+        'coverage'                 => 'Covers :count of :total dungeons this season',
+        'coverage_count'           => ':count/:total',
+        'coverage_dungeon_covered' => ':dungeon - has routes this season',
+        'coverage_dungeon_missing' => ':dungeon - no routes this season',
     ],
 ];
