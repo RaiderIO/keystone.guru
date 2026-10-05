@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * Guards against #4095 - a raw, unprefixed or otherwise unrecognised `dispel_type` value must never
+ * A raw, unprefixed or otherwise unrecognised `dispel_type` value must never
  * be surfaced verbatim in the tooltip, and a genuinely informative one must render translated.
  */
 #[Group('Models')]
@@ -154,7 +154,7 @@ final class SpellTest extends PublicTestCase
             'prefixed n/a (Sap)' => ['spelldispeltype.n_a'],
             'prefixed unknown'   => ['spelldispeltype.unknown'],
             'empty string'       => [''],
-            // Unprefixed legacy/drifted values (#4095) - must be suppressed, never printed raw.
+            // Unprefixed legacy/drifted values - must be suppressed, never printed raw.
             'unprefixed magic'       => ['magic'],
             'unprefixed n_a'         => ['n_a'],
             'unprefixed unknown'     => ['unknown'],

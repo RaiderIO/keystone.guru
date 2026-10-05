@@ -25,7 +25,7 @@ class HandlerTest extends PublicTestCase
     /**
      * The async ContextEvent broadcast job (killzone/route/mapping-version presence updates) is
      * reported to Sentry on every queue attempt, even ones a retry later succeeds on - a DNS lookup
-     * failure reaching the broadcast server is a transient environment issue (#4341), not an
+     * failure reaching the broadcast server is a transient environment issue, not an
      * application defect, so it must never reach the reportable pipeline.
      */
     #[Test]
@@ -96,7 +96,7 @@ class HandlerTest extends PublicTestCase
     /**
      * A crawler requesting a URL whose percent-encoding is truncated makes ValidatePathEncoding throw
      * MalformedUrlException - a 400 HttpException subclass. $dontReport is matched by exact class, so
-     * the subclass must be listed itself or the 400 is logged as an uncaught error (#4438).
+     * the subclass must be listed itself or the 400 is logged as an uncaught error.
      */
     #[Test]
     public function report_givenRequestWithTruncatedPercentEncodedPath_doesNotLogUncaughtException(): void
