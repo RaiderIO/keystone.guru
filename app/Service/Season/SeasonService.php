@@ -180,20 +180,14 @@ class SeasonService implements SeasonServiceInterface
         $region ??= GameServerRegion::getUserOrDefaultRegion();
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
-        // Database stores everything in UTC, so we need to convert the date to UTC to compare it properly
-        $dateUtc = $date->copy()->setTimezone('UTC');
-
         // An expansion has a handful of seasons and they never change during a request, while callers
         // ask for one date after another - `SeasonAffixGroupService::getWeeklyAffixGroupsSinceStart()`
         // walks every week since the season started. Resolving the date against the loaded rows keeps
-        // that at one query per expansion instead of one per date (#4587). The comparison mirrors the
-        // DATE_ADD(DATE_ADD(`start`, ...)) this used to run as SQL; `start` is stored and cast in UTC.
+        // that at one query per expansion instead of one per date. The boundary is the season's
+        // first reset, `HasStart::start()`, which the affix group index is counted from as well.
         /** @var Season|null $season */
         $season = $this->getSeasonsOfExpansion($expansion)
-            ->last(static fn(Season $season): bool => $season->start->copy()
-                ->addDays($region->reset_day_offset)
-                ->addHours($region->reset_hours_offset)
-                ->lessThanOrEqualTo($dateUtc));
+            ->last(static fn(Season $season): bool => $season->start($region)->lessThanOrEqualTo($date));
 
         return $season;
     }

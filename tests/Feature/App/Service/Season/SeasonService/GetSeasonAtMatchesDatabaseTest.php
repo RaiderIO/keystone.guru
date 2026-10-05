@@ -13,7 +13,7 @@ use Tests\TestCases\PublicTestCase;
 
 /**
  * Guards #4587: getSeasonAt() resolves the date against the expansion's seasons in memory instead of
- * asking the database once per date. This pins the PHP comparison to the SQL it replaced - if the two
+ * asking the database once per date. This pins the PHP comparison to an equivalent SQL query - if the two
  * ever disagree on a reset boundary, every affix group derived from a date silently shifts a season.
  */
 #[Group('SeasonService')]
@@ -37,9 +37,7 @@ final class GetSeasonAtMatchesDatabaseTest extends PublicTestCase
             $expansion = Expansion::findOrFail($season->expansion_id);
 
             foreach ($regions as $region) {
-                $resetMoment = $season->start->copy()
-                    ->addDays($region->reset_day_offset)
-                    ->addHours($region->reset_hours_offset);
+                $resetMoment = $season->start($region);
 
                 // One second either side of the reset moment, and the moment itself - the boundaries
                 // are the only dates where an off-by-one in the arithmetic shows up
@@ -70,13 +68,14 @@ final class GetSeasonAtMatchesDatabaseTest extends PublicTestCase
     }
 
     /**
-     * The query getSeasonAt() ran before #4587, kept here as the reference implementation.
+     * The reference implementation: the season whose first reset - its `start` snapped back to the Monday of
+     * its week, plus the region's reset offsets, as `HasStart::start()` computes it - is at or before the date.
      */
     private function getSeasonAtThroughDatabase(Carbon $date, Expansion $expansion, GameServerRegion $region): ?Season
     {
         /** @var Season|null $season */
         $season = Season::whereRaw(
-            'DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) <= ?',
+            'DATE_ADD(DATE_ADD(DATE_SUB(DATE(`start`), INTERVAL WEEKDAY(`start`) DAY), INTERVAL ? day), INTERVAL ? hour) <= ?',
             [
                 $region->reset_day_offset,
                 $region->reset_hours_offset,
