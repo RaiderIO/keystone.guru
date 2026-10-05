@@ -20,8 +20,7 @@ interface DungeonRouteCollectionServiceInterface
     /**
      * Why a route that is not in the collection cannot be added to it: one of the ADD_BLOCKED_* constants, or null
      * when it can. A route of another game version (or without a mapping version) is reported before one of another
-     * season, either before a full collection, and a full collection before a full dungeon. Expects the route's
-     * mapping version to be loaded.
+     * season, either before a full collection, and a full collection before a full dungeon.
      *
      * @param int $dungeonRouteCountForDungeon How many routes of the route's dungeon the collection holds.
      */
@@ -44,8 +43,7 @@ interface DungeonRouteCollectionServiceInterface
     public function getDungeonRoutesOverDungeonLimit(Collection $dungeonRoutes, Collection $keptDungeonRoutes): Collection;
 
     /**
-     * The passed routes that may be in a collection of the passed game version and season, in passed order. Expects
-     * every route's mapping version to be loaded.
+     * The passed routes that may be in a collection of the passed game version and season, in passed order.
      *
      * @param  Collection<int, DungeonRoute> $dungeonRoutes
      * @return Collection<int, DungeonRoute>
@@ -55,7 +53,7 @@ interface DungeonRouteCollectionServiceInterface
     /**
      * The passed routes a copy of the passed game version and season keeps: the matching ones, within
      * DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON per dungeon and DungeonRouteCollection::MAX_ROUTES in total, in
-     * passed order. Expects every route's mapping version to be loaded.
+     * passed order.
      *
      * @param  Collection<int, DungeonRoute> $dungeonRoutes
      * @return Collection<int, DungeonRoute>
