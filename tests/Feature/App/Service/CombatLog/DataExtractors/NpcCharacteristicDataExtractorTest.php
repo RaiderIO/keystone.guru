@@ -48,6 +48,8 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
 
     private DataExtractionCurrentDungeon $currentDungeon;
 
+    private ?int $originalSpellCharacteristicId = null;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -59,6 +61,7 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         );
 
         // Ensure spell 118 has characteristic_id set before the extractor loads its cache
+        $this->originalSpellCharacteristicId = Spell::query()->whereKey(self::SPELL_ID)->value('characteristic_id');
         Spell::where('id', self::SPELL_ID)->update(['characteristic_id' => Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH]]);
 
         // A fresh (non-app-bound) repository per test - the process-persistent app instance would serve a
@@ -76,7 +79,7 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         try {
             NpcCharacteristic::where('npc_id', self::NPC_ID)->delete();
             Npc::where('id', self::NPC_ID)->delete();
-            Spell::where('id', self::SPELL_ID)->update(['characteristic_id' => null]);
+            Spell::where('id', self::SPELL_ID)->update(['characteristic_id' => $this->originalSpellCharacteristicId]);
             CombatLogNpcCharacteristicObservation::where('npc_id', self::NPC_ID)->delete();
             CombatLogNpcEvent::where('npc_id', self::NPC_ID)->delete();
         } finally {

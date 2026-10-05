@@ -129,14 +129,20 @@ final class ProcessCombatLogPartTest extends PublicTestCase
             ->onlyMethods(['writeResourceToDisk'])
             ->getMock();
 
+        // A write that fails partway still leaves a truncated file behind
         $mockObject
             ->expects($this->once())
             ->method('writeResourceToDisk')
-            ->willReturn(false);
+            ->willReturnCallback(static function ($resource, string $destination): false {
+                file_put_contents($destination, 'partial');
+
+                return false;
+            });
 
         app()->call([$mockObject, 'handle']);
 
-        // Assert — handled by mock expectations above
+        // Assert
+        $this->assertFileDoesNotExist(self::tempPath());
     }
 
     private static function tempPath(): string
