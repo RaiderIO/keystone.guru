@@ -142,6 +142,21 @@ final class EmptyTranslationFallbackTranslatorTest extends TestCase
     }
 
     #[Test]
+    public function choice_givenApplicationContainerAndAiLocale_selectsTheBaseLocalePluralForm(): void
+    {
+        // Arrange
+        $translator = app('translator');
+        $translator->addLines(['ksg_plural_test.routes' => ':count маршрут|:count маршрута|:count маршрутов'], 'ru_RU_ai');
+
+        // Act
+        $line = $translator->choice('ksg_plural_test.routes', 5, [], 'ru_RU_ai');
+
+        // Assert
+        $this->assertSame('5 маршрутов', $line);
+        $this->assertInstanceOf(AiLocaleMessageSelector::class, $translator->getSelector());
+    }
+
+    #[Test]
     public function translate_givenAiLocaleWithEmptyTranslation_returnsEnglishTranslation(): void
     {
         // Arrange
