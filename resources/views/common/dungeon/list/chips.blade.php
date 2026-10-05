@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\Dungeon;
+use App\Models\DungeonSelectorGroup;
 use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * Every dungeon of a seasonless game version as an abbreviation chip, grouped by selector group. The readout
@@ -11,6 +13,10 @@ use Illuminate\Support\Collection;
  *
  * With view counts, each chip carries a bar under its label as long as its share of the most viewed dungeon's views,
  * and the readout puts that share into words.
+ *
+ * Within a group the chips follow their abbreviation rather than the full name the list arrives sorted by: the
+ * abbreviation is all a chip shows, and full names put "The Deadmines" (DM) between ST and STOCK. Natural order,
+ * so AQ20 comes before AQ40.
  *
  * @var GameVersion                $gameVersion
  * @var Collection<int, Dungeon>   $dungeons   Sorted by selector group
@@ -22,7 +28,12 @@ use Illuminate\Support\Collection;
 $viewShares ??= collect();
 
 /** @var Collection<string, Collection<int, Dungeon>> $dungeonsByGroup */
-$dungeonsByGroup = $dungeons->groupBy(static fn(Dungeon $dungeon) => $dungeon->getSelectorGroup()->value);
+$dungeonsByGroup = $dungeons
+    ->groupBy(static fn(Dungeon $dungeon) => $dungeon->getSelectorGroup()->value)
+    ->map(static fn(Collection $groupDungeons) => $groupDungeons->sortBy([
+        static fn(Dungeon $a, Dungeon $b) => strnatcasecmp(Str::ascii(__($a->abbreviation)), Str::ascii(__($b->abbreviation))),
+        static fn(Dungeon $a, Dungeon $b) => strcasecmp(Str::ascii(__($a->name)), Str::ascii(__($b->name))),
+    ])->values());
 /** @var Dungeon|null $selectedDungeon */
 $selectedDungeon = $dungeons->firstWhere('key', $selected);
 // The selected dungeon can belong to another game version - the readout then invites a pick instead
@@ -45,6 +56,12 @@ $describeViewShare = static function (?float $viewShare): string {
     // Never "0%" for a dungeon that was viewed, nor "100%" for one that is not the most viewed - dungeonstrip.js words it the same way
     return __('view_common.dungeon.list.chips.view_share', ['percent' => min(99, max(1, (int)round($viewShare * 100)))]);
 };
+// Compact mode has no room for the group names, so an icon keeps the groups apart at a glance
+$getGroupIcon = static fn(string $group): string => match (DungeonSelectorGroup::from($group)) {
+    DungeonSelectorGroup::WORLD   => 'fa-globe',
+    DungeonSelectorGroup::DUNGEON => 'fa-dungeon',
+    DungeonSelectorGroup::RAID    => 'fa-dragon',
+};
 $readoutViewShare = $selectedDungeon === null ? null : $viewShares->get($selectedDungeon->id);
 $readoutViews     = $describeViewShare($readoutViewShare);
 ?>
@@ -61,8 +78,9 @@ $readoutViews     = $describeViewShare($readoutViewShare);
     <div class="dungeon_strip_groups" id="dungeon_strip_groups">
         @foreach($dungeonsByGroup as $group => $groupDungeons)
             <div class="dungeon_strip_group dungeon_strip_group--{{ $group }}" role="group" aria-labelledby="dungeon_strip_group_{{ $group }}">
-                <span class="dungeon_strip_group_label" id="dungeon_strip_group_{{ $group }}">
-                    {{ __(sprintf('view_common.dungeon.list.groups.%s', $group)) }}
+                <span class="dungeon_strip_group_label" title="{{ __(sprintf('view_common.dungeon.list.groups.%s', $group)) }}">
+                    <i class="fas {{ $getGroupIcon($group) }} dungeon_strip_group_icon" aria-hidden="true"></i>
+                    <span class="dungeon_strip_group_name" id="dungeon_strip_group_{{ $group }}">{{ __(sprintf('view_common.dungeon.list.groups.%s', $group)) }}</span>
                 </span>
                 <div class="dungeon_strip_chips">
                     @foreach($groupDungeons as $dungeon)

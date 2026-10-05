@@ -43,14 +43,17 @@
 /* Seasonless dungeon strip: a readout naming the selected (or hovered/focused) dungeon, then the chips in
    two column-flowing rows per group, raids pushed to the far right. Two rows of chips fill the band's
    height in either header state, so the chips scale with it. Where the list is wider than the strip
-   (siteheader.js measures it) it clips, drops the group labels and offers the "All" flyout. */
+   (siteheader.js measures it) it clips, trades the group names for group icons and offers the "All" flyout. */
 .dungeon_strip {
     --dungeon-strip-chip-height: 2.625rem;
     --dungeon-strip-chip-min-width: 3.5rem;
     --dungeon-strip-chip-padding: 0.5rem;
     --dungeon-strip-chip-font-size: 1rem;
     --dungeon-strip-row-gap: 0.25rem;
-    --dungeon-strip-label-display: block;
+    --dungeon-strip-group-name-display: inline;
+    --dungeon-strip-group-icon-display: none;
+    --dungeon-strip-label-writing-mode: vertical-rl;
+    --dungeon-strip-label-transform: rotate(180deg);
     --dungeon-strip-all-display: none;
     --dungeon-strip-readout-width: 12rem;
     --dungeon-strip-readout-font-size: 1rem;
@@ -98,7 +101,11 @@
 }
 
 .dungeon_strip.dungeon_strip--compact {
-    --dungeon-strip-label-display: none;
+    --dungeon-strip-group-name-display: none;
+    --dungeon-strip-group-icon-display: inline-block;
+    /* Upright, or the icon stands on its head */
+    --dungeon-strip-label-writing-mode: horizontal-tb;
+    --dungeon-strip-label-transform: none;
     --dungeon-strip-all-display: inline-flex;
     --dungeon-strip-clip-mask: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
 }
@@ -211,13 +218,22 @@
 
 /* Reads bottom-to-top along the group's left edge: the chip rows leave no height for a label above them */
 .dungeon_strip_group_label {
-    display: var(--dungeon-strip-label-display);
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
+    display: block;
+    writing-mode: var(--dungeon-strip-label-writing-mode);
+    transform: var(--dungeon-strip-label-transform);
     color: var(--theme-text-muted);
     font-size: 0.6875rem;
     line-height: 1;
     white-space: nowrap;
+}
+
+.dungeon_strip_group_name {
+    display: var(--dungeon-strip-group-name-display);
+}
+
+.dungeon_strip_group_icon {
+    display: var(--dungeon-strip-group-icon-display);
+    font-size: 0.875rem;
 }
 
 .dungeon_strip_chips {
@@ -343,9 +359,16 @@
 }
 
 .dungeon_strip.is-open .dungeon_strip_group_label {
-    display: block;
     writing-mode: horizontal-tb;
     transform: none;
+}
+
+.dungeon_strip.is-open .dungeon_strip_group_name {
+    display: inline;
+}
+
+.dungeon_strip.is-open .dungeon_strip_group_icon {
+    display: none;
 }
 
 .dungeon_strip.is-open .dungeon_strip_chips {
