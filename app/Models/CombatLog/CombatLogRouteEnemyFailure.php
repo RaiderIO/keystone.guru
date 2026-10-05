@@ -7,6 +7,7 @@ use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Traits\HasLatLng;
+use App\Models\Traits\RelatesToDefaultConnectionModels;
 use Database\Factories\CombatLog\CombatLogRouteEnemyFailureFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,7 +39,7 @@ use Illuminate\Support\Carbon;
 class CombatLogRouteEnemyFailure extends Model
 {
     /** @use HasFactory<CombatLogRouteEnemyFailureFactory> */
-    use HasFactory, HasLatLng;
+    use HasFactory, HasLatLng, RelatesToDefaultConnectionModels;
 
     protected $connection = 'combatlog';
 
