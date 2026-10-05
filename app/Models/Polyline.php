@@ -30,6 +30,9 @@ class Polyline extends Model implements HasVerticesInterface, ConvertsVerticesIn
     use HasGenericModelRelation;
     use HasVertices;
 
+    /** The vertices_json TEXT column holds 65,535 bytes, and the JSON of coordinates is plain ASCII. */
+    public const int VERTICES_JSON_MAX_LENGTH = 65535;
+
     public $timestamps = false;
 
     public $visible = [

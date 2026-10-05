@@ -59,6 +59,7 @@ class CombatLogEvent extends OpensearchModel
         'challenge_mode_id',
         'keystone_run_id',
         'logged_run_id',
+        'period',
         'season',
         'region_id',
         'realm_type',

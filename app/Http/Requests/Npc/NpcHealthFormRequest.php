@@ -26,12 +26,9 @@ class NpcHealthFormRequest extends FormRequest
             ]);
         }
 
-        // Remove commas or dots in the name; we want the integer value
+        // Remove thousands separators (commas, dots, spaces); we want the integer value
         $this->merge([
-            'health' => str_replace([
-                ',',
-                '.',
-            ], '', (string)$this->input('health')),
+            'health' => preg_replace('/[\s,.]/u', '', (string)$this->input('health')),
         ]);
     }    /**
      * @return array<string, array<int, string|Rule>|string|Rule>
@@ -45,7 +42,8 @@ class NpcHealthFormRequest extends FormRequest
             ],
             'health' => [
                 'required',
-                'regex:/^[\d\s,]*$/',
+                'integer',
+                'min:0',
             ],
             'percentage' => 'nullable|int',
         ];

@@ -36,7 +36,7 @@ class APIKillZoneFormRequest extends FormRequest
                 Rule::exists(Floor::class, 'id'),
             ],
             'color' => [
-                'nullable',
+                'required',
                 'string',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],

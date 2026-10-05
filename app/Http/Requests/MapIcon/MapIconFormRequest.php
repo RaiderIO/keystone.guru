@@ -59,7 +59,7 @@ class MapIconFormRequest extends FormRequest
             'linked_awakened_obelisk_id' => 'nullable|int',
             'lat'                        => 'numeric',
             'lng'                        => 'numeric',
-            'comment'                    => 'nullable|string',
+            'comment'                    => sprintf('nullable|string|max:%d', MapIcon::COMMENT_MAX_LENGTH),
             'permanent_tooltip'          => 'boolean',
             'seasonal_index'             => 'nullable|int',
         ];

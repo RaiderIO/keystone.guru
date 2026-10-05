@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Events\Models\Arrow\ArrowChangedEvent;
+use App\Models\Arrow;
 use App\Models\DungeonRoute\DungeonRouteChange;
 use App\Models\Floor\Floor;
 use App\Models\Polyline;
@@ -46,6 +47,25 @@ final class AjaxArrowControllerTest extends DungeonRouteTestBase
         $this->assertEquals($polyline['color_animated'], $responseArr['polyline']['color_animated']);
         $this->assertEquals($polyline['weight'], $responseArr['polyline']['weight']);
         $this->assertEquals($polyline['vertices_json'], $responseArr['polyline']['vertices_json']);
+    }
+
+    #[Test]
+    public function store_givenAnEmptyColor_returnsAColorErrorAndCreatesNothing(): void
+    {
+        // Arrange
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors()->where('facade', false)->get()->random();
+        $polyline    = array_merge(PolylineFixtures::createPolyline($randomFloor), ['color' => '']);
+
+        // Act
+        $response = $this->post(route('ajax.dungeonroute.arrow.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $randomFloor->id,
+            'polyline' => $polyline,
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors(['polyline.color']);
+        $this->assertSame(0, Arrow::query()->where('dungeon_route_id', $this->dungeonRoute->id)->count());
     }
 
     #[Test]

@@ -47,6 +47,9 @@ class MapIcon extends Model implements HasLatLngInterface, MappingModelCloneable
     /** @use HasFactory<Factory> */
     use HasFactory;
 
+    /** The comment TEXT column holds 65,535 bytes, and a character takes up to 4 of them. */
+    public const int COMMENT_MAX_LENGTH = 16383;
+
     protected $visible = [
         'id',
         'mapping_version_id',

@@ -21,7 +21,7 @@ class AjaxUserReportController extends Controller
      */
     public function status(Request $request, UserReport $userreport)
     {
-        $userreport->status = $request->get('status', 0);
+        $userreport->status = (string)$request->integer('status');
 
         if (!$userreport->save()) {
             abort(500, __('controller.apiuserreport.error.unable_to_update_user_report'));

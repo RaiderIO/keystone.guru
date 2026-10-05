@@ -248,6 +248,26 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
+    public function store_givenNoColor_returnsAColorErrorAndCreatesNothing(): void
+    {
+        try {
+            // Act
+            $response = $this->postJson(sprintf('/ajax/%s/killzone', $this->dungeonRoute->public_key), [
+                'index'   => 1,
+                'enemies' => [],
+                'spells'  => [],
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['color']);
+            $this->assertSame(0, $this->dungeonRoute->killZones()->count());
+        } finally {
+            $this->dungeonRoute->killZones()->delete();
+        }
+    }
+
+    #[Test]
     public function store_givenNewKillZoneOnAnotherUsersRoute_returnsForbidden(): void
     {
         // Arrange

@@ -19,7 +19,7 @@ class TagFormRequest extends FormRequest
     {
         return [
             // Bit strange - but required with multiple forms existing on the profile page
-            'tag_name_new' => ['required'],
+            'tag_name_new' => ['required', 'string', 'max:255'],
         ];
     }
 }

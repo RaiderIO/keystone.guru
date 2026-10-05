@@ -65,7 +65,6 @@ class DungeonFloorSwitchMarkerFormRequest extends FormRequest
                 ])),
             ],
             'hidden_in_facade' => [
-                'nullable',
                 'boolean',
             ],
             'lat' => 'numeric',
