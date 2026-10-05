@@ -511,6 +511,34 @@ final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
         }
     }
 
+    #[Test]
+    public function get_givenAStartPastTheFirstPage_returnsTheRecordsTotalOfAllRoutes(): void
+    {
+        // Arrange
+        $user        = null;
+        $route       = null;
+        $secondRoute = null;
+
+        try {
+            $user        = $this->createUserWithUserRole();
+            $route       = $this->createOwnRoute($user);
+            $secondRoute = $this->createOwnRoute($user);
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->get($this->mineQuery(['start' => 25]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([], $response->json('data'));
+            $this->assertSame(2, $response->json('recordsTotal'));
+        } finally {
+            $secondRoute?->delete();
+            $route?->delete();
+            $user?->delete();
+        }
+    }
+
     /**
      * @param array<string, mixed> $scopeParameters
      */
