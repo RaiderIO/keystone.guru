@@ -436,6 +436,23 @@ describe('DungeonrouteTable row actions', () => {
         expect(clickEvent.preventDefault).toHaveBeenCalledTimes(1);
     });
 
+    it('_promptDeleteDungeonRouteClicked_givenClick_asksWithADangerButtonNamingTheDeletion', () => {
+        // Arrange
+        const {context} = arrangeRowActionContext();
+        globalThis.showConfirmYesCancel = vi.fn();
+        const clickEvent = {target: document.querySelector('.dungeonroute-delete'), preventDefault: vi.fn()};
+
+        // Act
+        DungeonrouteTable.prototype._promptDeleteDungeonRouteClicked.call(context, clickEvent);
+
+        // Assert
+        expect(globalThis.showConfirmYesCancel).toHaveBeenCalledExactlyOnceWith('js.route_delete_confirm', expect.any(Function), null, {
+            yesLabel:    'js.route_delete_confirm_yes',
+            yesClass:    'btn btn-danger me-1',
+            cancelClass: 'btn btn-secondary',
+        });
+    });
+
     it('_changePublishState_givenSuccessfulChange_redrawsInPlaceKeepingThePage', () => {
         // Arrange
         const {context, dt, filterClicked} = arrangeRowActionContext();

@@ -559,7 +559,13 @@ class CommonDungeonroutePicker extends SearchInlineBase {
         let plural = publicKeys.length === 1 ? 'one' : 'many';
         showConfirmYesCancel(
             lang.get(`js.${this.options.actionKeyPrefix}_confirm_${plural}`, {count: publicKeys.length}),
-            this._sendDungeonRoutes.bind(this, publicKeys)
+            this._sendDungeonRoutes.bind(this, publicKeys),
+            null,
+            {
+                yesLabel: lang.get(`js.${this.options.actionKeyPrefix}_${plural}`, {count: publicKeys.length}),
+                yesClass: 'btn btn-danger me-1',
+                cancelClass: 'btn btn-secondary',
+            }
         );
     }
 

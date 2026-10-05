@@ -749,6 +749,10 @@ class DungeonrouteTable extends InlineCode {
                     self.redrawKeepingPage();
                 }
             });
+        }, null, {
+            yesLabel: lang.get('js.route_delete_confirm_yes'),
+            yesClass: 'btn btn-danger me-1',
+            cancelClass: 'btn btn-secondary',
         });
 
         // Prevent clicking delete from opening the route after it returns

@@ -334,6 +334,7 @@ return [
     // Pulls and kill zones
     'killzone_sidebar_kill_location_label'            => 'Kill location',
     'killzone_sidebar_delete_all_pulls_confirm_label' => 'Are you sure you want to delete all your pulls? This action can not be undone.',
+    'killzone_sidebar_delete_all_pulls_confirm_yes'   => 'Delete all pulls',
     'delete_all_pulls_successful'                     => 'Pulls deleted successfully',
     'pull_workbench_header_label'                     => 'P:index',
     'pull_workbench_add_kill_area_label'              => 'Add kill area',
@@ -430,6 +431,7 @@ return [
     'vote'                                         => 'vote',
     'votes'                                        => 'votes',
     'route_delete_confirm'                         => 'Are you sure you wish to delete this route?',
+    'route_delete_confirm_yes'                     => 'Delete route',
     'route_delete_successful'                      => 'Route deleted successfully',
     'routes_delete_successful_one'                 => '1 route deleted successfully',
     'routes_delete_successful_many'                => ':count routes deleted successfully',
@@ -582,6 +584,7 @@ return [
 
     // Teams
     'delete_team_confirm_label'                            => 'Are you sure you want to IRREVERSIBLY delete this team and its user/route associations?',
+    'delete_team_confirm_yes'                              => 'Delete team',
     'roles_label'                                          => 'Roles',
     'add_to_team_label'                                    => 'Add to team...',
     'collaborator_label'                                   => 'Edit',
@@ -608,9 +611,12 @@ return [
     'datatable_no_members_in_table'                        => 'This team has no members yet',
     'remove_route_label'                                   => 'Remove',
     'remove_member_confirm_label'                          => 'Are you sure you want remove this user from the team? Any ad-free giveaways to this user will be removed.',
+    'remove_member_confirm_yes'                            => 'Remove member',
     'remove_member_success'                                => 'Member removed successfully',
     'leave_team_confirm_label'                             => 'Are you sure you wish to leave this team? You may lose any ad-free giveaways awarded to you from team members.',
     'leave_team_disband_confirm_label'                     => 'Are you sure you wish to leave this team? You may lose any ad-free giveaways awarded to you from team members. WARNING: this will disband the team.',
+    'leave_team_confirm_yes'                               => 'Leave team',
+    'leave_team_disband_confirm_yes'                       => 'Leave and disband team',
     'ad_free_giveaway_add_success'                         => 'Successfully granted ad-free status',
     'ad_free_giveaway_add_failed'                          => 'Failed to grant ad-free status',
     'ad_free_giveaway_remove_success'                      => 'Successfully revoked ad-free status',

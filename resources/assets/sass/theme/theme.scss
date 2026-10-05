@@ -591,6 +591,11 @@ body {
     background-color: var($--theme-btn-accent-hover) !important;
   }
 
+  .badge.bg-success,
+  .progress-bar.bg-success {
+    color: var($--theme-success-text);
+  }
+
   /* Xal'atath's purple is that theme's identity colour, so the theme switch advertises it
      regardless of which theme is currently applied */
   .theme_switch_xalatath {
