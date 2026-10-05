@@ -21,6 +21,11 @@ const discoverCss = fs.readFileSync(path.join(ROOT, 'resources/assets/css/sectio
 const mapHeaderCss = fs.readFileSync(path.join(ROOT, 'resources/assets/css/sections/map-header.css'), 'utf8');
 // Bootstrap's reboot as each theme compiles it, wrapped in the theme class; it outranks a single-class button rule
 const themeRebootCss = '.darkly button { margin: 0; border-radius: 0; }';
+// vapor.scss paints the header's info button gold with !important, and Bootstrap's own menu item states, each as
+// the theme bundle compiles them under the theme class
+const themeButtonCss = '.darkly .bg-header .btn-info { background-color: var(--theme-primary) !important; }'
+    + '.darkly .dropdown-item.active, .darkly .dropdown-item:active { color: #fff; background-color: #ea39b8; }'
+    + '.darkly .dropdown-item:hover, .darkly .dropdown-item:focus { color: #32fbe2; background-color: #4f4f4f; }';
 
 const THEMES = ['darkly', 'lux', 'vapor'];
 
@@ -43,7 +48,11 @@ function resolveColour(variables, name) {
     const value = variables[name];
     const reference = value.match(/^var\((--theme-[a-z-]+)\)$/);
 
-    return reference === null ? value : resolveColour(variables, reference[1]);
+    if (reference !== null) {
+        return resolveColour(variables, reference[1]);
+    }
+
+    return {black: '#000', white: '#fff'}[value] ?? value;
 }
 
 /**
@@ -116,7 +125,8 @@ function rulesFor(selector) {
  */
 function renderHeader(html) {
     document.documentElement.className = 'theme darkly';
-    document.head.innerHTML = `<style>${themeCss}</style><style>${themeRebootCss}</style><style>${headerCss}</style>`
+    document.head.innerHTML = `<style>${themeCss}</style><style>${themeRebootCss}</style><style>${themeButtonCss}</style>`
+        + `<style>${headerCss}</style>`
         + `<style>${discoverCss}</style><style>${mapHeaderCss}</style>`;
     document.body.innerHTML = html;
 }
@@ -154,6 +164,69 @@ describe('header state language', () => {
         // Assert: the chips and versions sit on the page band, the menus and the sheet on the header surface
         expect(contrastRatio(muted, resolveColour(variables, '--theme-header'))).toBeGreaterThanOrEqual(4.5);
         expect(contrastRatio(muted, resolveColour(variables, '--theme-darker'))).toBeGreaterThanOrEqual(4.5);
+    });
+
+    test.each(THEMES)('headerControls_given%sTheme_clearAaContrastInEveryState', theme => {
+        // Arrange
+        const variables = themeVariables(theme);
+        const ratio = (foreground, background) => contrastRatio(resolveColour(variables, foreground), resolveColour(variables, background));
+
+        // Act
+        const ratios = {
+            loginAtRest: ratio('--theme-btn-info-text', '--theme-btn-info'),
+            loginHovered: ratio('--theme-btn-info-text', '--theme-btn-info-hover'),
+            createRouteAtRest: ratio('--theme-btn-accent-text', '--theme-btn-accent'),
+            createRouteHovered: ratio('--theme-btn-accent-hover-text', '--theme-btn-accent-hover'),
+            menuHeading: ratio('--theme-dropdown-header', '--theme-dark'),
+            menuItemHovered: ratio('--theme-dropdown-item-hover-text', '--theme-dropdown-item-hover'),
+            menuItemCurrent: ratio('--theme-dropdown-item-active-text', '--theme-dropdown-item-active'),
+            aiMarker: ratio('--theme-ai-marker', '--theme-darker'),
+        };
+
+        // Assert: the menus sit on --theme-dark, the AI marker on its --theme-darker pill
+        expect(Object.entries(ratios).filter(([, value]) => !(value >= 4.5))).toEqual([]);
+    });
+
+    test('loginButton_givenTheThemesGoldHeaderButton_takesTheHeaderInfoVariables', () => {
+        // Arrange
+        renderHeader(`
+            <div class="ksg-header"><nav class="navbar-second"><div class="bg-header"><ul class="navbar-nav">
+                <li><a class="btn btn-info" id="login" href="#">Login</a></li>
+            </ul></div></nav></div>`);
+
+        // Act
+        const login = getComputedStyle(document.getElementById('login'));
+
+        // Assert
+        expect(login.backgroundColor).toBe('var(--theme-btn-info)');
+        expect(login.color).toBe('var(--theme-btn-info-text)');
+    });
+
+    test('menu_givenHeadingFocusedAndCurrentItems_takesTheHeaderMenuVariables', () => {
+        // Arrange
+        renderHeader(`
+            <div class="ksg-header"><nav class="navbar-second"><div class="dropdown"><div class="dropdown-menu show">
+                <h6 class="dropdown-header" id="heading">Preferences</h6>
+                <a class="dropdown-item ksg-nav-entry" id="focused" href="#">
+                    <span class="ksg-nav-entry-desc" id="focused_description">Find routes</span>
+                </a>
+                <a class="dropdown-item active" id="current" href="#">My routes</a>
+                <a class="ksg-nav-prefs-language" href="#"><span class="ksg-nav-prefs-ai" id="ai">AI</span></a>
+            </div></div></nav></div>`);
+        document.getElementById('focused').focus();
+
+        // Act
+        const styleOf = id => getComputedStyle(document.getElementById(id));
+
+        // Assert
+        expect(styleOf('heading').color).toBe('var(--theme-dropdown-header)');
+        expect(styleOf('focused').backgroundColor).toBe('var(--theme-dropdown-item-hover)');
+        // jsdom ranks a selector list by its most specific member, so the theme's `#map .dropdown-item:hover,
+        // .dropdown-item:focus` black wins the focused item's colour here, though not in a browser
+        expect(styleOf('focused_description').color).toBe(styleOf('focused').color);
+        expect(styleOf('current').backgroundColor).toBe('var(--theme-dropdown-item-active)');
+        expect(styleOf('current').color).toBe('var(--theme-dropdown-item-active-text)');
+        expect(styleOf('ai').color).toBe('var(--theme-ai-marker)');
     });
 
     test('gameVersionAndChip_givenCurrentAndNotCurrent_rendersContrastOnlyForTheCurrentOne', () => {

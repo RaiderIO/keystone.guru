@@ -24,7 +24,7 @@ $allLanguages       = collect($allLanguagesConfig)->keyBy('long');
                title="{{ $isAiTranslated ? sprintf('%s (AI)', $name) : $name }}">
                 @include('vendor.language.flag', ['code' => $code, 'name' => $name])
                 @if($isAiTranslated)
-                    <span class="ksg-nav-prefs-ai text-warning" aria-hidden="true">AI</span>
+                    <span class="ksg-nav-prefs-ai" aria-hidden="true">AI</span>
                 @endif
             </a>
         @endforeach

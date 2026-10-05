@@ -22,6 +22,21 @@ $--theme-btn-accent-hover: --theme-btn-accent-hover;
 $--theme-btn-accent-text: --theme-btn-accent-text;
 /* Foreground for the .bg-success badges and progress bars - white on each theme's success green measures 1.5-2.5:1 */
 $--theme-success-text: --theme-success-text;
+/* Foreground on the header's hovered .btn-accent - darkly's dark text on its dark green hover measures 2.7:1 */
+$--theme-btn-accent-hover-text: --theme-btn-accent-hover-text;
+/* The header's .btn-info (Login): white on Bootstrap's info measures 3.2:1 in darkly and lux, 2.1:1 on vapor's gold */
+$--theme-btn-info: --theme-btn-info;
+$--theme-btn-info-hover: --theme-btn-info-hover;
+$--theme-btn-info-text: --theme-btn-info-text;
+/* The header menus' section headings - darkly's primary on its menu surface measures 1.8:1 */
+$--theme-dropdown-header: --theme-dropdown-header;
+/* The header menus' items: vapor's stock cyan-on-gold hover measures 1.6:1 and its pink active 3.6:1 */
+$--theme-dropdown-item-hover: --theme-dropdown-item-hover;
+$--theme-dropdown-item-hover-text: --theme-dropdown-item-hover-text;
+$--theme-dropdown-item-active: --theme-dropdown-item-active;
+$--theme-dropdown-item-active-text: --theme-dropdown-item-active-text;
+/* The AI marker on a language tile - lux's warning orange on its pill measures 1.6:1 */
+$--theme-ai-marker: --theme-ai-marker;
 $--theme-bg-card: --theme-bg-card;
 $--theme-bg-card-footer: --theme-bg-card-footer;
 $--theme-affix-page-seasonal-color: --theme-affix-page-seasonal-color;
@@ -54,6 +69,16 @@ $theme-map-darkly: (
         $--theme-btn-accent-hover: #007053,
         $--theme-btn-accent-text: #202020,
         $--theme-success-text: #202020,
+        $--theme-btn-accent-hover-text: #fff,
+        $--theme-btn-info: #2574a9,
+        $--theme-btn-info-hover: #1f6391,
+        $--theme-btn-info-text: #fff,
+        $--theme-dropdown-header: #7fb2e5,
+        $--theme-dropdown-item-hover: #375a7f,
+        $--theme-dropdown-item-hover-text: #fff,
+        $--theme-dropdown-item-active: #375a7f,
+        $--theme-dropdown-item-active-text: #fff,
+        $--theme-ai-marker: #f39c12,
         $--theme-bg-card: #303030,
         $--theme-bg-card-footer: #444,
         $--theme-affix-page-seasonal-color: #00bc8c,
@@ -86,6 +111,16 @@ $theme-map-lux: (
         $--theme-btn-accent-hover: black,
         $--theme-btn-accent-text: #fff,
         $--theme-success-text: #1a1a1a,
+        $--theme-btn-accent-hover-text: #fff,
+        $--theme-btn-info: #1a73a0,
+        $--theme-btn-info-hover: #146385,
+        $--theme-btn-info-text: #fff,
+        $--theme-dropdown-header: var($--theme-primary),
+        $--theme-dropdown-item-hover: #f8f9fa,
+        $--theme-dropdown-item-hover-text: #1a1a1a,
+        $--theme-dropdown-item-active: #1a1a1a,
+        $--theme-dropdown-item-active-text: #fff,
+        $--theme-ai-marker: #8a4b00,
         $--theme-bg-card: #fff,
         $--theme-bg-card-footer: rgba(0, 0, 0, 0.03),
         $--theme-affix-page-seasonal-color: #df691a,
@@ -120,6 +155,16 @@ $theme-map-vapor: (
         $--theme-btn-accent-hover: #4b1f87,
         $--theme-btn-accent-text: #fff,
         $--theme-success-text: #202020,
+        $--theme-btn-accent-hover-text: #fff,
+        $--theme-btn-info: var($--theme-primary),
+        $--theme-btn-info-hover: var($--theme-primary-hover),
+        $--theme-btn-info-text: #202020,
+        $--theme-dropdown-header: var($--theme-primary),
+        $--theme-dropdown-item-hover: var($--theme-primary),
+        $--theme-dropdown-item-hover-text: #202020,
+        $--theme-dropdown-item-active: var($--theme-primary-hover),
+        $--theme-dropdown-item-active-text: #202020,
+        $--theme-ai-marker: #ffc107,
         $--theme-bg-card: #303030,
         $--theme-bg-card-footer: #252525,
   // Seasonal / highlight colors (purple glow feel)
