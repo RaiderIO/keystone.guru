@@ -115,6 +115,31 @@ final class CombatLogPollingBandServiceTest extends PublicTestCase
     }
 
     /**
+     * A probe that fails once the cached max has expired still knows what the previous probe found, which is a far
+     * better top band floor than the ceiling that matches no runs at all.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function getMaxKeyLevel_givenProbeFailsAfterAnEarlierProbe_returnsTheLastKnownLevel(): void
+    {
+        // Arrange
+        Carbon::setTestNow(Carbon::create(2026, 3, 4, 12));
+        $this->assertSame(24, $this->makeService(fn(int $level): int => $level <= 24 ? 300 : 0)->getMaxKeyLevel($this->season));
+
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('searchAdvancedRuns')->willThrowException(new RuntimeException('upstream down'));
+        $failingService = new CombatLogPollingBandService($raiderIOApiService, LoggingFixtures::createCombatLogPollingBandServiceLogging($this));
+        Carbon::setTestNow(Carbon::now()->addMinutes(self::CACHE_MINUTES + 1));
+
+        // Act
+        $result = $failingService->getMaxKeyLevel($this->season);
+
+        // Assert
+        $this->assertSame(24, $result);
+    }
+
+    /**
      * @throws Exception
      */
     #[Test]
