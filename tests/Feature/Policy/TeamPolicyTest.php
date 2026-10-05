@@ -9,6 +9,7 @@ use App\Policies\TeamPolicy;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -121,6 +122,178 @@ final class TeamPolicyTest extends PublicTestCase
         } finally {
             $team->delete();
             $user->delete();
+        }
+    }
+
+    #[Test]
+    #[TestWith([TeamUser::ROLE_ADMIN, true])]
+    #[TestWith([TeamUser::ROLE_MODERATOR, false])]
+    #[TestWith([TeamUser::ROLE_MEMBER, false])]
+    public function delete_givenTeamRole_returnsAllowedOnlyForTeamAdmins(string $role, bool $expected): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $team = $this->createTeam();
+        $this->addMember($team, $user, $role);
+
+        try {
+            // Act
+            $result = $this->policy->delete($user, $team->fresh());
+
+            // Assert
+            $this->assertSame($expected, $result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    #[TestWith([TeamUser::ROLE_ADMIN, true])]
+    #[TestWith([TeamUser::ROLE_MODERATOR, false])]
+    public function changeDefaultRole_givenTeamRole_returnsAllowedOnlyForTeamAdmins(string $role, bool $expected): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $team = $this->createTeam();
+        $this->addMember($team, $user, $role);
+
+        try {
+            // Act
+            $result = $this->policy->changeDefaultRole($user, $team->fresh());
+
+            // Assert
+            $this->assertSame($expected, $result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    #[TestWith([TeamUser::ROLE_MODERATOR, true])]
+    #[TestWith([TeamUser::ROLE_COLLABORATOR, false])]
+    #[TestWith([TeamUser::ROLE_MEMBER, false])]
+    public function refreshInviteLink_givenTeamRole_returnsAllowedOnlyForModerators(string $role, bool $expected): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $team = $this->createTeam();
+        $this->addMember($team, $user, $role);
+
+        try {
+            // Act
+            $result = $this->policy->refreshInviteLink($user, $team->fresh());
+
+            // Assert
+            $this->assertSame($expected, $result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenMemberAndOutsider_returnsAllowedOnlyForTheMember(): void
+    {
+        // Arrange
+        $member   = User::factory()->create();
+        $outsider = User::factory()->create();
+        $team     = $this->createTeam();
+        $this->addMember($team, $member, TeamUser::ROLE_MEMBER);
+
+        try {
+            // Act
+            $memberResult   = $this->policy->edit($member, $team->fresh());
+            $outsiderResult = $this->policy->edit($outsider, $team->fresh());
+
+            // Assert
+            $this->assertTrue($memberResult);
+            $this->assertFalse($outsiderResult);
+        } finally {
+            $team->delete();
+            $outsider->delete();
+            $member->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('removeMemberProvider')]
+    public function removeMember_givenRanks_returnsExpected(string $actorRole, string $targetRole, bool $expected): void
+    {
+        // Arrange
+        $actor  = User::factory()->create();
+        $target = User::factory()->create();
+        $team   = $this->createTeam();
+        $this->addMember($team, $actor, $actorRole);
+        $this->addMember($team, $target, $targetRole);
+
+        try {
+            // Act
+            $result = $this->policy->removeMember($actor, $team->fresh(), $target);
+
+            // Assert
+            $this->assertSame($expected, $result);
+        } finally {
+            $team->delete();
+            $target->delete();
+            $actor->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string, 2: bool}>
+     */
+    public static function removeMemberProvider(): array
+    {
+        return [
+            'admin removes a moderator'            => [TeamUser::ROLE_ADMIN, TeamUser::ROLE_MODERATOR, true],
+            'moderator removes a collaborator'     => [TeamUser::ROLE_MODERATOR, TeamUser::ROLE_COLLABORATOR, true],
+            'moderator may not remove an admin'    => [TeamUser::ROLE_MODERATOR, TeamUser::ROLE_ADMIN, false],
+            'moderator may not remove a moderator' => [TeamUser::ROLE_MODERATOR, TeamUser::ROLE_MODERATOR, false],
+            'collaborator may not remove a member' => [TeamUser::ROLE_COLLABORATOR, TeamUser::ROLE_MEMBER, false],
+        ];
+    }
+
+    #[Test]
+    public function removeMember_givenAPlainMemberRemovingThemselves_returnsAllowed(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $team = $this->createTeam();
+        $this->addMember($team, $user, TeamUser::ROLE_MEMBER);
+
+        try {
+            // Act
+            $result = $this->policy->removeMember($user, $team->fresh(), $user);
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function removeMember_givenAnOutsider_returnsDenied(): void
+    {
+        // Arrange - the outsider has no role at all, so no rank comparison can allow it
+        $outsider = User::factory()->create();
+        $target   = User::factory()->create();
+        $team     = $this->createTeam();
+        $this->addMember($team, $target, TeamUser::ROLE_MEMBER);
+
+        try {
+            // Act
+            $result = $this->policy->removeMember($outsider, $team->fresh(), $target);
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            $team->delete();
+            $target->delete();
+            $outsider->delete();
         }
     }
 

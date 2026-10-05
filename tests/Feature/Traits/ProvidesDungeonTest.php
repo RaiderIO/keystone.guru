@@ -13,6 +13,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -25,6 +26,7 @@ use Tests\TestCases\PublicTestCase;
 #[Group('ProvidesDungeon')]
 final class ProvidesDungeonTest extends PublicTestCase
 {
+    use CreatesDungeon;
     use ProvidesDungeon;
 
     #[Test]
@@ -139,6 +141,39 @@ final class ProvidesDungeonTest extends PublicTestCase
 
         // Assert
         self::assertGreaterThanOrEqual(1, $mappingVersion->enemyPacks()->count());
+    }
+
+    #[Test]
+    public function findDungeon_givenMinEnemyPacksAndAPoolOfMostlyPacklessDungeons_returnsTheOneWithPacks(): void
+    {
+        try {
+            // Arrange - dungeons whose current mapping version carries no packs, but satisfy everything else
+            $packlessIds = [
+                $this->createDungeon()->id,
+                $this->createDungeon()->id,
+                $this->createDungeon()->id,
+            ];
+            [$packlessDungeon] = $this->findDungeon(
+                constraint: static fn(Builder $query) => $query->whereIn('dungeons.id', $packlessIds),
+            );
+            self::assertContains($packlessDungeon->id, $packlessIds, 'Only the pack requirement may reject the packless dungeons');
+
+            [$suitable] = $this->findDungeon(minEnemyPacks: 1);
+            $poolIds    = [...$packlessIds, $suitable->id];
+
+            // Act & Assert - repeated because the scan order is shuffled; every order must succeed
+            for ($attempt = 0; $attempt < 10; $attempt++) {
+                [$dungeon, $mappingVersion] = $this->findDungeon(
+                    minEnemyPacks: 1,
+                    constraint:    static fn(Builder $query) => $query->whereIn('dungeons.id', $poolIds),
+                );
+
+                self::assertSame($suitable->id, $dungeon->id);
+                self::assertGreaterThanOrEqual(1, $mappingVersion->enemyPacks()->count());
+            }
+        } finally {
+            $this->deleteCreatedDungeons();
+        }
     }
 
     #[Test]

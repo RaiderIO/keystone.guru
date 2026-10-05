@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Traits;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Attributes\Group;
@@ -69,18 +70,27 @@ class HoldsTableLockTest extends TestCase
     {
         // Arrange
         $callbackRan = false;
+        $writeError  = null;
 
         // Act - the happy path: lock acquired, callback runs while this connection's writes to
-        // the table would time out (the four *TransactionRetryTests exercise that part in anger)
+        // the table time out
         $this->runWhileTableIsWriteLocked(
             'polylines',
-            static function () use (&$callbackRan): void {
+            static function () use (&$callbackRan, &$writeError): void {
                 $callbackRan = true;
+
+                try {
+                    DB::table('polylines')->where('id', -1)->update(['weight' => 1]);
+                } catch (QueryException $queryException) {
+                    $writeError = $queryException->getMessage();
+                }
             },
-            holdMs: 300,
+            holdMs: 1500,
         );
 
         // Assert
         $this->assertTrue($callbackRan);
+        $this->assertNotNull($writeError, 'A write to the table must block while the callback runs');
+        $this->assertStringContainsString('Lock wait timeout exceeded', $writeError);
     }
 }

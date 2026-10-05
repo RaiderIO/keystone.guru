@@ -46,6 +46,7 @@ class DungeonRoutePolicyUpgradeDraftTest extends PublicTestCase
 
             // Assert
             $this->assertTrue($response->denied(), 'An upgrade draft may never be published on its own');
+            $this->assertSame(__('policy.publish_route_is_upgrade_draft'), $response->message());
         } finally {
             $draft?->delete();
             $original?->delete();
@@ -141,6 +142,41 @@ class DungeonRoutePolicyUpgradeDraftTest extends PublicTestCase
     }
 
     #[Test]
+    public function applyUpgrade_givenUserWhoMayEditTheDraftButNotTheOriginal_returnsDeny(): void
+    {
+        $originalOwner = null;
+        $draftOwner    = null;
+        $original      = null;
+        $draft         = null;
+
+        try {
+            // Arrange - applying writes to the original, so edit rights on the draft alone are not enough
+            $originalOwner = $this->createUser();
+            $draftOwner    = $this->createUser();
+            $original      = DungeonRoute::factory()->create(['author_id' => $originalOwner->id, 'expires_at' => null]);
+            $draft         = DungeonRoute::factory()->create([
+                'author_id'                   => $draftOwner->id,
+                'dungeon_id'                  => $original->dungeon_id,
+                'mapping_version_id'          => $original->mapping_version_id,
+                'upgrade_of_dungeon_route_id' => $original->id,
+                'expires_at'                  => null,
+            ]);
+            $this->assertTrue($draft->mayUserEdit($draftOwner));
+
+            // Act
+            $response = new DungeonRoutePolicy()->applyUpgrade($draftOwner, $draft);
+
+            // Assert
+            $this->assertTrue($response->denied());
+        } finally {
+            $draft?->delete();
+            $original?->delete();
+            $draftOwner?->delete();
+            $originalOwner?->delete();
+        }
+    }
+
+    #[Test]
     public function applyUpgrade_givenNonDraft_returnsDeny(): void
     {
         $owner = null;
@@ -156,6 +192,7 @@ class DungeonRoutePolicyUpgradeDraftTest extends PublicTestCase
 
             // Assert
             $this->assertTrue($response->denied());
+            $this->assertSame(__('policy.apply_upgrade_route_not_upgrade_draft'), $response->message());
         } finally {
             $route?->delete();
             $owner?->delete();
@@ -189,6 +226,7 @@ class DungeonRoutePolicyUpgradeDraftTest extends PublicTestCase
 
             // Assert
             $this->assertTrue($response->denied());
+            $this->assertSame(__('policy.apply_upgrade_original_route_deleted'), $response->message());
         } finally {
             if ($draftId !== null) {
                 DungeonRoute::find($draftId)?->delete();
@@ -224,6 +262,40 @@ class DungeonRoutePolicyUpgradeDraftTest extends PublicTestCase
         } finally {
             $draft?->delete();
             $original?->delete();
+            $owner?->delete();
+        }
+    }
+
+    #[Test]
+    public function discardUpgrade_givenDraftAndUnrelatedUser_returnsDeny(): void
+    {
+        $owner     = null;
+        $unrelated = null;
+        $original  = null;
+        $draft     = null;
+
+        try {
+            // Arrange
+            $owner     = $this->createUser();
+            $unrelated = $this->createUser();
+            $original  = DungeonRoute::factory()->create(['author_id' => $owner->id, 'expires_at' => null]);
+            $draft     = DungeonRoute::factory()->create([
+                'author_id'                   => $owner->id,
+                'dungeon_id'                  => $original->dungeon_id,
+                'mapping_version_id'          => $original->mapping_version_id,
+                'upgrade_of_dungeon_route_id' => $original->id,
+                'expires_at'                  => null,
+            ]);
+
+            // Act
+            $response = new DungeonRoutePolicy()->discardUpgrade($unrelated, $draft);
+
+            // Assert
+            $this->assertTrue($response->denied());
+        } finally {
+            $draft?->delete();
+            $original?->delete();
+            $unrelated?->delete();
             $owner?->delete();
         }
     }

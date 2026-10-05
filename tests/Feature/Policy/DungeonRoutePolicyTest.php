@@ -7,11 +7,14 @@ use App\Models\Enemy;
 use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
+use App\Models\Team;
+use App\Models\TeamUser;
 use App\Models\User;
 use App\Policies\DungeonRoutePolicy;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Policy')]
@@ -288,13 +291,17 @@ final class DungeonRoutePolicyTest extends PublicTestCase
     public function publish_givenNonOwnerNonAdmin_returnsDenied(): void
     {
         // Arrange
-        $owner    = User::factory()->create();
-        $nonOwner = User::factory()->create();
-        $route    = $this->createRoute($owner);
+        $owner            = User::factory()->create();
+        $nonOwner         = User::factory()->create();
+        $route            = $this->createRoute($owner);
+        $mappingVersionId = null;
 
         try {
+            // An unkilled required enemy would deny this for an unrelated reason
+            $mappingVersionId = $this->giveRouteAnEmptyMappingVersion($route);
+
             // Act
-            $result = $this->policy->publish($nonOwner, $route);
+            $result = $this->policy->publish($nonOwner, $route->fresh());
 
             // Assert
             $this->assertTrue($result->denied());
@@ -302,6 +309,167 @@ final class DungeonRoutePolicyTest extends PublicTestCase
             $route->delete();
             $owner->delete();
             $nonOwner->delete();
+            if ($mappingVersionId !== null) {
+                MappingVersion::destroy($mappingVersionId);
+            }
+        }
+    }
+
+    #[Test]
+    public function publish_givenAdminWhoDoesNotOwnTheRoute_returnsAllowed(): void
+    {
+        // Arrange
+        $admin            = $this->adminUser();
+        $owner            = User::factory()->create();
+        $route            = $this->createRoute($owner);
+        $mappingVersionId = null;
+
+        try {
+            $mappingVersionId = $this->giveRouteAnEmptyMappingVersion($route);
+
+            // Act
+            $result = $this->policy->publish($admin, $route->fresh());
+
+            // Assert
+            $this->assertTrue($result->allowed());
+        } finally {
+            $route->delete();
+            $owner->delete();
+            if ($mappingVersionId !== null) {
+                MappingVersion::destroy($mappingVersionId);
+            }
+        }
+    }
+
+    #[Test]
+    public function present_givenUnpublishedRoute_returnsDeniedForNonOwnerAndAllowedForOwner(): void
+    {
+        // Arrange
+        $owner    = User::factory()->create();
+        $nonOwner = User::factory()->create();
+        $route    = $this->createRoute($owner, ['published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED]]);
+
+        try {
+            // Act
+            $nonOwnerResult = $this->policy->present($nonOwner, $route);
+            $ownerResult    = $this->policy->present($owner, $route);
+
+            // Assert
+            $this->assertTrue($nonOwnerResult->denied());
+            $this->assertSame(__('policy.present_route_not_published'), $nonOwnerResult->message());
+            $this->assertTrue($ownerResult->allowed());
+        } finally {
+            $route->delete();
+            $owner->delete();
+            $nonOwner->delete();
+        }
+    }
+
+    #[Test]
+    public function clone_givenUnpublishedRoute_returnsDeniedForNonOwnerAndAllowedForOwner(): void
+    {
+        // Arrange
+        $owner    = User::factory()->create();
+        $nonOwner = User::factory()->create();
+        $route    = $this->createRoute($owner, ['published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED]]);
+
+        try {
+            // Act
+            $nonOwnerResult = $this->policy->clone($nonOwner, $route);
+            $ownerResult    = $this->policy->clone($owner, $route);
+
+            // Assert
+            $this->assertFalse($nonOwnerResult);
+            $this->assertTrue($ownerResult);
+        } finally {
+            $route->delete();
+            $owner->delete();
+            $nonOwner->delete();
+        }
+    }
+
+    #[Test]
+    public function migrate_givenWorldPublishedRoute_returnsDeniedForNonOwnerAndAllowedForOwner(): void
+    {
+        // Arrange - viewing a route is not enough to migrate it
+        $owner    = User::factory()->create();
+        $nonOwner = User::factory()->create();
+        $route    = $this->createRoute($owner);
+
+        try {
+            // Act
+            $nonOwnerResult = $this->policy->migrate($nonOwner, $route);
+            $ownerResult    = $this->policy->migrate($owner, $route);
+
+            // Assert
+            $this->assertFalse($nonOwnerResult);
+            $this->assertTrue($ownerResult);
+        } finally {
+            $route->delete();
+            $owner->delete();
+            $nonOwner->delete();
+        }
+    }
+
+    #[Test]
+    public function schedulePublish_givenRouteOutsideATeam_returnsDeniedEvenForTheOwner(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner, ['team_id' => null]);
+
+        try {
+            // Act
+            $result = $this->policy->schedulePublish($owner, $route);
+
+            // Assert
+            $this->assertTrue($result->denied());
+            $this->assertSame(__('policy.schedule_publish_route_not_in_team'), $result->message());
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    #[TestWith([TeamUser::ROLE_MODERATOR, true])]
+    #[TestWith([TeamUser::ROLE_ADMIN, true])]
+    #[TestWith([TeamUser::ROLE_COLLABORATOR, false])]
+    #[TestWith([TeamUser::ROLE_MEMBER, false])]
+    public function schedulePublish_givenTeamRouteAndANonOwnerTeamMember_returnsAllowedOnlyForModerators(string $role, bool $expected): void
+    {
+        // Arrange
+        $owner  = User::factory()->create();
+        $member = User::factory()->create();
+        $team   = null;
+        $route  = null;
+
+        try {
+            $team = Team::create([
+                'name'         => sprintf('Policy test %s', uniqid()),
+                'public_key'   => Team::generateRandomPublicKey(),
+                'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+                'description'  => 'Created by DungeonRoutePolicyTest',
+                'icon_file_id' => -1,
+                'default_role' => TeamUser::ROLE_MEMBER,
+            ]);
+            TeamUser::create(['team_id' => $team->id, 'user_id' => $owner->id, 'role' => TeamUser::ROLE_ADMIN]);
+            TeamUser::create(['team_id' => $team->id, 'user_id' => $member->id, 'role' => $role]);
+            $route = $this->createRoute($owner, ['team_id' => $team->id]);
+
+            // Act
+            $result = $this->policy->schedulePublish($member, $route);
+
+            // Assert
+            $this->assertSame($expected, $result->allowed());
+        } finally {
+            $route?->delete();
+            if ($team !== null) {
+                TeamUser::query()->where('team_id', $team->id)->delete();
+                Team::query()->whereKey($team->id)->delete();
+            }
+            $member->delete();
+            $owner->delete();
         }
     }
 
