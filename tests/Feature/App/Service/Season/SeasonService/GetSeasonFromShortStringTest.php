@@ -112,4 +112,17 @@ final class GetSeasonFromShortStringTest extends PublicTestCase
             'Midnight S1' => ['s17-midnight-1', Season::SEASON_MIDNIGHT_S1],
         ];
     }
+
+    #[Test]
+    public function getSeasonFromShortString_givenStringWithMoreThanThreeParts_returnsNull(): void
+    {
+        // Arrange
+        $service = app(SeasonServiceInterface::class);
+
+        // Act
+        $result = $service->getSeasonFromShortString('s1-bfa-1-extra');
+
+        // Assert
+        $this->assertNull($result);
+    }
 }

@@ -67,4 +67,25 @@ final class GetCurrentSeasonForDungeonTest extends PublicTestCase
         // Assert
         $this->assertNull($result);
     }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getCurrentSeasonForDungeon_givenDungeonInCurrentSeasonWithoutMappingVersionWithSeasons_returnsNull(): void
+    {
+        // Arrange - Operation Mechagon: Junkyard is part of Shadowlands S4, which is active on 2022-09-01
+        $this->travelTo(Carbon::create(2022, 9, 1));
+        $service = app(SeasonServiceInterface::class);
+        /** @var MockObject&Dungeon $dungeon */
+        $dungeon = $this->createPartialMockPublic(Dungeon::class, ['hasMappingVersionWithSeasons']);
+        $dungeon->setRawAttributes(Dungeon::where('key', 'mechagonjunkyard')->firstOrFail()->getAttributes(), true);
+        $dungeon->method('hasMappingVersionWithSeasons')->willReturn(false);
+
+        // Act
+        $result = $service->getCurrentSeasonForDungeon($dungeon);
+
+        // Assert
+        $this->assertNull($result);
+    }
 }

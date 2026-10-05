@@ -23,6 +23,24 @@ final class PathFindingServiceTest extends PublicTestCase
         $this->service = new PathFindingService();
     }
 
+    /**
+     * @param  array<string, PathNode>  $nodes
+     * @param  LatLng[]                 $path
+     * @return array<int, string|false> The id of the node each waypoint is the location of, in path order
+     */
+    private function getNodeIds(array $nodes, array $path): array
+    {
+        return array_map(static function (LatLng $latLng) use ($nodes): string|false {
+            foreach ($nodes as $id => $node) {
+                if ($node->latLng === $latLng) {
+                    return $id;
+                }
+            }
+
+            return false;
+        }, $path);
+    }
+
     private function makeNode(string $id, float $x = 0, float $y = 0): PathNode
     {
         return new PathNode($id, new LatLng(0, 0), new IngameXY($x, $y));
@@ -39,6 +57,7 @@ final class PathFindingServiceTest extends PublicTestCase
 
         // Assert
         $this->assertCount(1, $result);
+        $this->assertSame(['a'], $this->getNodeIds($nodes, $result));
     }
 
     #[Test]
@@ -56,6 +75,7 @@ final class PathFindingServiceTest extends PublicTestCase
 
         // Assert
         $this->assertCount(2, $result);
+        $this->assertSame(['a', 'b'], $this->getNodeIds($nodes, $result));
     }
 
     #[Test]
@@ -78,6 +98,7 @@ final class PathFindingServiceTest extends PublicTestCase
 
         // Assert -- shortest path goes through c (3 nodes)
         $this->assertCount(3, $result);
+        $this->assertSame(['a', 'c', 'b'], $this->getNodeIds($nodes, $result));
     }
 
     #[Test]
@@ -101,6 +122,7 @@ final class PathFindingServiceTest extends PublicTestCase
 
         // Assert
         $this->assertCount(4, $result);
+        $this->assertSame(['a', 'b', 'c', 'd'], $this->getNodeIds($nodes, $result));
     }
 
     #[Test]

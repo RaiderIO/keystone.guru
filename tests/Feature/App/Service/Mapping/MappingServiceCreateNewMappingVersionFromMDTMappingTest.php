@@ -415,4 +415,48 @@ final class MappingServiceCreateNewMappingVersionFromMDTMappingTest extends Publ
 
         return $dungeon;
     }
+
+    #[Test]
+    public function createNewMappingVersionFromMDTMapping_givenPredecessor_copiesItsContentsAndPropertiesOntoTheNextVersion(): void
+    {
+        // Arrange
+        $mappingService = $this->app->make(MappingServiceInterface::class);
+        // One dungeon at a time: the current mapping version is lazy-loaded, which a multi-row result forbids
+        $dungeon = null;
+        foreach (Dungeon::query()->whereNotNull('challenge_mode_id')->orderBy('id')->pluck('id') as $dungeonId) {
+            $candidate      = Dungeon::query()->findOrFail($dungeonId);
+            $mappingVersion = $candidate->getCurrentMappingVersion();
+            if ($mappingVersion !== null
+                && $mappingVersion->enemy_forces_required > 0
+                && $mappingVersion->timer_max_seconds > 0
+                && $mappingVersion->mapIcons()->exists()
+                && $mappingVersion->dungeonStarts()->exists()) {
+                $dungeon = $candidate;
+                break;
+            }
+        }
+
+        if ($dungeon === null) {
+            $this->fail('No dungeon found whose current mapping version has enemy forces, a timer, map icons and a dungeon start.');
+        }
+
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        $gameVersion           = $currentMappingVersion->gameVersion;
+        $newMappingVersion     = null;
+
+        try {
+            // Act
+            $newMappingVersion = $mappingService->createNewMappingVersionFromMDTMapping($dungeon, $gameVersion, $currentMappingVersion);
+
+            // Assert
+            $this->assertSame($gameVersion->id, $newMappingVersion->game_version_id);
+            $this->assertSame($currentMappingVersion->version + 1, $newMappingVersion->version);
+            $this->assertSame($currentMappingVersion->enemy_forces_required, $newMappingVersion->enemy_forces_required);
+            $this->assertSame($currentMappingVersion->timer_max_seconds, $newMappingVersion->timer_max_seconds);
+            $this->assertSame($currentMappingVersion->mapIcons()->count(), $newMappingVersion->mapIcons()->count());
+            $this->assertSame($currentMappingVersion->dungeonStarts()->count(), $newMappingVersion->dungeonStarts()->count());
+        } finally {
+            $newMappingVersion?->delete();
+        }
+    }
 }

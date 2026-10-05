@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\App\Service\Floor;
 
+use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\Floor\FloorResolutionServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
@@ -71,6 +73,26 @@ final class FloorResolutionServiceTest extends PublicTestCase
         // Assert
         $this->assertSame($expected->id, $floor->id);
         $this->assertSame(1, $floor->facade);
+    }
+
+    #[Test]
+    public function resolveDefaultFloor_givenFacadeDungeonAndSplitFloorsStyle_returnsTheDefaultFloorRatherThanTheFacade(): void
+    {
+        // Arrange - setUp() puts the admin on split floors
+        [$dungeon, $mappingVersion] = $this->findDungeon(
+            facadeEnabled: true,
+            facadeNavigation: false,
+            requireDefaultFloor: true,
+            resolve: static fn(Dungeon $dungeon, MappingVersion $mappingVersion): ?bool => $dungeon->floors()->where('facade', 1)->exists()
+                && $dungeon->floors()->where('facade', 0)->where('default', 1)->exists() ? true : null,
+        );
+
+        // Act
+        $floor = app(FloorResolutionServiceInterface::class)->resolveDefaultFloor($dungeon, $mappingVersion);
+
+        // Assert
+        $this->assertSame(0, $floor->facade);
+        $this->assertSame(1, $floor->default);
     }
 
     #[Test]

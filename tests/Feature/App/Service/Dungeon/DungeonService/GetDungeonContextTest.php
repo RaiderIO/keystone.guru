@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Service\Dungeon\DungeonService;
 
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\PageViewCountRepositoryInterface;
@@ -173,5 +174,34 @@ final class GetDungeonContextTest extends PublicTestCase
             $dungeon->expansion_id,
             'getDungeonContext must use the logged-in user\'s game version as fallback',
         );
+    }
+
+    #[Test]
+    public function getDungeonContext_givenGuestWithNoCookiesAndACurrentSeason_returnsAndStoresTheSeasonsFirstDungeon(): void
+    {
+        // Arrange
+        unset($_COOKIE['dungeon_context']);
+        $retailGameVersion  = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        $gameVersionService = $this->createMockPublic(GameVersionServiceInterface::class);
+        $gameVersionService->method('getGameVersion')->with(null)->willReturn($retailGameVersion);
+
+        // Shadowlands S4 holds none of the retail expansion's own dungeons, so the expansion fallback cannot pass
+        $currentSeason   = Season::with('dungeons')->findOrFail(Season::SEASON_SL_S4);
+        $expectedDungeon = $currentSeason->dungeons->first();
+        $this->assertNotNull($expectedDungeon);
+        $this->assertNotSame($retailGameVersion->expansion_id, $expectedDungeon->expansion_id);
+        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
+        $seasonService->method('getCurrentSeason')->willReturn($currentSeason);
+
+        $service = $this->buildService(gameVersionService: $gameVersionService, seasonService: $seasonService);
+        $service->expects($this->once())
+            ->method('setDungeonContext')
+            ->with($this->callback(static fn(Dungeon $dungeon): bool => $dungeon->id === $expectedDungeon->id), null);
+
+        // Act
+        $dungeon = $service->getDungeonContext(null);
+
+        // Assert
+        $this->assertSame($expectedDungeon->id, $dungeon->id);
     }
 }

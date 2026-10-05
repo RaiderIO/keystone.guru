@@ -3,8 +3,11 @@
 namespace Tests\Feature\App\Service\AffixGroup;
 
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\AffixGroup\AffixGroupEaseTier;
 use App\Models\AffixGroup\AffixGroupEaseTierPull;
+use App\Models\Dungeon;
 use App\Models\Season;
+use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use DB;
@@ -686,6 +689,146 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
 
         // Assert
         $this->assertNull($result);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
+    public function parseTierList_givenCorrectResponse_storesTheTierOfEveryListedDungeon(): void
+    {
+        // Arrange
+        $affixGroup                = AffixGroup::findOrFail(124);
+        $response                  = $this->getJsonData('response');
+        $affixGroupEaseTierService = $this->getAffixGroupEaseTierServiceReturningAffixGroups($affixGroup);
+        $result                    = null;
+
+        try {
+            // Act
+            $result = $affixGroupEaseTierService->parseTierList($response);
+
+            // Assert
+            $this->assertInstanceOf(AffixGroupEaseTierPull::class, $result);
+            $this->assertSame($affixGroup->id, $result->affix_group_id);
+            $this->assertEquals([
+                'blackrookhold'                        => 'S',
+                'ataldazar'                            => 'A',
+                'dawn_of_the_infinite_galakronds_fall' => 'A',
+                'waycrestmanor'                        => 'A',
+                'darkheartthicket'                     => 'B',
+                'throne_of_the_tides'                  => 'C',
+                'dawn_of_the_infinite_murozonds_rise'  => 'C',
+                'theeverbloom'                         => 'C',
+            ], $this->getStoredTiersByDungeonKey($result, $affixGroup));
+        } finally {
+            $result?->delete();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
+    public function parseTierList_givenTheSameTiersForADifferentAffixGroup_createsNewPull(): void
+    {
+        // Arrange
+        $previousAffixGroup             = AffixGroup::findOrFail(124);
+        $affixGroup                     = AffixGroup::findOrFail(125);
+        $response                       = $this->getJsonData('response');
+        $affixGroupEaseTierService      = $this->getAffixGroupEaseTierServiceReturningAffixGroups($previousAffixGroup, $affixGroup);
+        $previousAffixGroupEaseTierPull = null;
+        $result                         = null;
+
+        try {
+            // Act
+            $previousAffixGroupEaseTierPull = $affixGroupEaseTierService->parseTierList($response);
+            $result                         = $affixGroupEaseTierService->parseTierList($response);
+
+            // Assert
+            $this->assertInstanceOf(AffixGroupEaseTierPull::class, $previousAffixGroupEaseTierPull);
+            $this->assertInstanceOf(AffixGroupEaseTierPull::class, $result);
+            $this->assertSame($previousAffixGroupEaseTierPull->tiers_hash, $result->tiers_hash);
+            $this->assertSame($affixGroup->id, $result->affix_group_id);
+        } finally {
+            $previousAffixGroupEaseTierPull?->delete();
+            $result?->delete();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
+    public function parseTierList_givenDifferentTiersForTheSameAffixGroup_createsNewPull(): void
+    {
+        // Arrange
+        $affixGroup                                                                      = AffixGroup::findOrFail(124);
+        $response                                                                        = $this->getJsonData('response');
+        $responseDifferentTiers                                                          = $response;
+        $responseDifferentTiers['encounterTierList']['tierLists'][0]['tiers'][0]['tier'] = 'F';
+        $affixGroupEaseTierService                                                       = $this->getAffixGroupEaseTierServiceReturningAffixGroups($affixGroup, $affixGroup);
+        $previousAffixGroupEaseTierPull                                                  = null;
+        $result                                                                          = null;
+
+        try {
+            // Act
+            $previousAffixGroupEaseTierPull = $affixGroupEaseTierService->parseTierList($response);
+            $result                         = $affixGroupEaseTierService->parseTierList($responseDifferentTiers);
+
+            // Assert
+            $this->assertInstanceOf(AffixGroupEaseTierPull::class, $previousAffixGroupEaseTierPull);
+            $this->assertInstanceOf(AffixGroupEaseTierPull::class, $result);
+            $this->assertSame($affixGroup->id, $result->affix_group_id);
+            $this->assertNotSame($previousAffixGroupEaseTierPull->tiers_hash, $result->tiers_hash);
+            $this->assertSame('F', $this->getStoredTiersByDungeonKey($result, $affixGroup)['blackrookhold'] ?? null);
+        } finally {
+            $previousAffixGroupEaseTierPull?->delete();
+            $result?->delete();
+        }
+    }
+
+    /**
+     * @return AffixGroupEaseTierServiceInterface|MockObject Resolves the response's affix string to the given affix
+     *                                                       groups, one per call
+     * @throws Exception
+     */
+    private function getAffixGroupEaseTierServiceReturningAffixGroups(
+        AffixGroup ...$affixGroups,
+    ): MockObject|AffixGroupEaseTierServiceInterface {
+        $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
+            $this,
+            null,
+            LoggingFixtures::createAffixGroupEaseTierServiceLogging($this),
+            ['getAffixGroupByString'],
+        );
+
+        $affixGroupEaseTierService->expects($this->exactly(count($affixGroups)))
+            ->method('getAffixGroupByString')
+            ->willReturnOnConsecutiveCalls(...array_values($affixGroups));
+
+        return $affixGroupEaseTierService;
+    }
+
+    /**
+     * @return array<string, string> The tiers the pull stored for the affix group, keyed by dungeon key
+     */
+    private function getStoredTiersByDungeonKey(AffixGroupEaseTierPull $affixGroupEaseTierPull, AffixGroup $affixGroup): array
+    {
+        $affixGroupEaseTiers = AffixGroupEaseTier::query()
+            ->where('affix_group_ease_tier_pull_id', $affixGroupEaseTierPull->id)
+            ->where('affix_group_id', $affixGroup->id)
+            ->get();
+
+        $dungeonKeys = Dungeon::query()->whereIn('id', $affixGroupEaseTiers->pluck('dungeon_id'))->pluck('key', 'id');
+
+        return $affixGroupEaseTiers
+            ->mapWithKeys(static fn(AffixGroupEaseTier $affixGroupEaseTier): array => [
+                $dungeonKeys->get($affixGroupEaseTier->dungeon_id) => $affixGroupEaseTier->tier,
+            ])
+            ->all();
     }
 
     /**
