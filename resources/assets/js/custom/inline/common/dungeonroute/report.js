@@ -40,7 +40,6 @@ class CommonDungeonrouteReport extends InlineCode {
             dataType: 'json',
             data: {
                 category: $root.find('.dungeonroute_report_category').val(),
-                username: $root.find('.dungeonroute_report_username').val(),
                 message: $root.find('.dungeonroute_report_message').val(),
                 contact_ok: $root.find('.dungeonroute_report_contact_ok').is(':checked') ? 1 : 0
             },
@@ -58,4 +57,10 @@ class CommonDungeonrouteReport extends InlineCode {
             }
         });
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {CommonDungeonrouteReport};
 }
