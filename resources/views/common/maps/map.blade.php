@@ -418,10 +418,10 @@ if ($isAdmin) {
 @endif
 
 
-<div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto"
-     style="background-color: {{ $mapBackgroundColor === null ? 'inherit' : $mapBackgroundColor }}">
+<main id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto"
+      style="background-color: {{ $mapBackgroundColor === null ? 'inherit' : $mapBackgroundColor }}">
 
-</div>
+</main>
 @if(!$noUI)
 
     {{--    @if(!$adFree && $showAds)--}}
