@@ -17,14 +17,14 @@ return [
         'empty'                   => 'Todavía no hay creadores listados.',
         'empty_for_category'      => 'Todavía no hay creadores que compartan una colección ":category".',
         'empty_for_search'        => 'No se encontraron creadores que coincidan con ":search".',
-        'empty_for_dungeon'       => '',
-        'filtered_to_dungeon'     => '',
-        'clear_dungeon_filter'    => '',
+        'empty_for_dungeon'       => 'Todavía no hay creadores que publiquen rutas de :dungeon.',
+        'filtered_to_dungeon'     => 'Creadores para :dungeon, primero los que tienen ahí las rutas más populares.',
+        'clear_dungeon_filter'    => 'Todas las mazmorras',
     ],
     'featured' => [
         'title'           => 'Creadores destacados',
         'title_dungeon'   => 'Creadores para :dungeon',
-        'see_all_dungeon' => '',
+        'see_all_dungeon' => 'Ver todos los creadores para :dungeon',
         /** Tooltip on a rail entry - it carries the name because a name past two lines is clipped to an ellipsis */
         'entry_title'         => ':name - :routes',
         'route_count'         => '{1} :count ruta|[2,*] :count rutas',
