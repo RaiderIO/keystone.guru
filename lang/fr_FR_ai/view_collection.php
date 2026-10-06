@@ -9,7 +9,7 @@ return [
     ],
     'kind' => [
         'season_set'        => 'Ensemble :season · :covered/:total donjons',
-        'season_set_public' => '',
+        'season_set_public' => '{0} :season · aucun donjon|{1} :season · :count donjon|[2,*] :season · :count donjons',
         'free_form'         => '{0} :game_version · aucun donjon|{1} :game_version · :count donjon|[2,*] :game_version · :count donjons',
     ],
     'index' => [
@@ -57,7 +57,7 @@ return [
         'duplicate_help'               => 'Copie le nom, la description, la catégorie et les itinéraires dans une nouvelle collection que vous seul pouvez voir.',
         'duplicate_season'             => 'Saison de la copie',
         'duplicate_season_none'        => 'Aucune saison (libre)',
-        'duplicate_keeps'              => ':kept itinéraires sur :total sont copiés ; les itinéraires qui ne correspondent pas à la saison sont exclus.',
+        'duplicate_keeps'              => ':kept itinéraires sur :total sont copiés ; les itinéraires qui ne correspondent pas à la saison ou qui dépassent les limites d\'itinéraires sont exclus.',
         'duplicate_submit'             => 'Dupliquer la collection',
         'publish_routes_confirm_title' => 'Certains itinéraires ne sont pas en « :state »',
         'publish_routes_confirm_body'  => 'Les itinéraires de cette collection ne sont pas tous en « :state » - les passer aussi en « :state » ?',
@@ -71,7 +71,7 @@ return [
         'no_routes'       => 'Cette collection ne contient encore aucun itinéraire à afficher.',
         'no_routes_owner' => 'Cette collection ne contient encore aucun itinéraire.',
         'add_routes'      => 'Ajouter des itinéraires',
-        'not_covered'     => '',
+        'not_covered'     => 'Non couverts : :dungeons',
         'copy_link'       => 'Copier le lien',
         'edit'            => 'Modifier',
     ],

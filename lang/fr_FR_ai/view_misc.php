@@ -38,7 +38,7 @@ return [
     'embed' => [
         'title'          => 'Intégrer un itinéraire',
         'header'         => 'Test d\'intégration de Keystone.guru sur la page Web',
-        'get_mdt_string' => '',
+        'get_mdt_string' => 'Obtenir la chaîne MDT',
     ],
     'health' => [
         'title'  => 'Calcul de la santé',
