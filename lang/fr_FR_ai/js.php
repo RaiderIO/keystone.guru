@@ -580,7 +580,7 @@ return [
     'mdt_enemy_forces'                => 'Forces ennemies',
     'mdt_export_url_expired'          => 'Cette page est ouverte depuis trop longtemps pour exporter vers MDT. Veuillez recharger la page et réessayer.',
     'copy_mdt_string_copying'         => 'Copie…',
-    'copy_mdt_string_copied'          => 'Copié',
+    'copy_mdt_string_copied'          => 'Copiée',
     'mdt_string_copied'               => 'Chaîne MDT copiée dans le presse-papiers.',
     'mdt_string_copied_with_warnings' => 'Chaîne MDT copiée, mais certaines parties de cet itinéraire n\'ont pas pu être exportées vers MDT. Ouvrez Partager pour voir lesquelles.',
     'mdt_string_copy_blocked'         => 'Votre navigateur a bloqué la copie. Copiez plutôt la chaîne MDT depuis la fenêtre Partager.',
