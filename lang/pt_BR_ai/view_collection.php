@@ -9,7 +9,7 @@ return [
     ],
     'kind' => [
         'season_set'        => 'Conjunto de :season · :covered/:total masmorras',
-        'season_set_public' => '',
+        'season_set_public' => '{0} :season · nenhuma masmorra|{1} :season · :count masmorra|[2,*] :season · :count masmorras',
         'free_form'         => '{0} :game_version · nenhuma masmorra|{1} :game_version · :count masmorra|[2,*] :game_version · :count masmorras',
     ],
     'index' => [
@@ -57,7 +57,7 @@ return [
         'duplicate_help'               => 'Copia o nome, a descrição, a categoria e as rotas para uma nova coleção que só você pode ver.',
         'duplicate_season'             => 'Temporada da cópia',
         'duplicate_season_none'        => 'Sem temporada (livre)',
-        'duplicate_keeps'              => ':kept de :total rotas são copiadas; as rotas que não correspondem à temporada ficam de fora.',
+        'duplicate_keeps'              => ':kept de :total rotas são copiadas; as rotas que não correspondem à temporada ou não cabem nos limites de rotas ficam de fora.',
         'duplicate_submit'             => 'Duplicar coleção',
         'publish_routes_confirm_title' => 'Algumas rotas não estão com visibilidade ":state"',
         'publish_routes_confirm_body'  => 'Nem todas as rotas desta coleção estão com visibilidade ":state" - defini-las como ":state" também?',
@@ -71,7 +71,7 @@ return [
         'no_routes'       => 'Ainda não há rotas para mostrar nesta coleção.',
         'no_routes_owner' => 'Esta coleção ainda não tem rotas.',
         'add_routes'      => 'Adicionar rotas',
-        'not_covered'     => '',
+        'not_covered'     => 'Sem cobertura: :dungeons',
         'copy_link'       => 'Copiar link',
         'edit'            => 'Editar',
     ],

@@ -17,14 +17,14 @@ return [
         'empty'                   => 'Ainda não há criadores listados.',
         'empty_for_category'      => 'Ainda não há criadores compartilhando uma coleção ":category".',
         'empty_for_search'        => 'Nenhum criador encontrado correspondendo a ":search".',
-        'empty_for_dungeon'       => '',
-        'filtered_to_dungeon'     => '',
-        'clear_dungeon_filter'    => '',
+        'empty_for_dungeon'       => 'Ainda não há criadores publicando rotas para :dungeon.',
+        'filtered_to_dungeon'     => 'Criadores para :dungeon, começando pelos que têm as rotas mais populares nela.',
+        'clear_dungeon_filter'    => 'Todas as masmorras',
     ],
     'featured' => [
         'title'           => 'Criadores em destaque',
         'title_dungeon'   => 'Criadores para :dungeon',
-        'see_all_dungeon' => '',
+        'see_all_dungeon' => 'Ver todos os criadores para :dungeon',
         /** Tooltip on a rail entry - it carries the name because a name past two lines is clipped to an ellipsis */
         'entry_title'         => ':name - :routes',
         'route_count'         => '{1} :count rota|[2,*] :count rotas',
