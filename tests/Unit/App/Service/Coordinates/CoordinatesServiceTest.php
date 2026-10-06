@@ -292,6 +292,47 @@ final class CoordinatesServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function calculateMapLocationForIngameLocation_givenFacadeFloorWithoutIngameBounds_throws(): void
+    {
+        // Arrange
+        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
+        $facadeFloor        = $this->createFloor(self::FACADE_FLOOR_ID, 'floor.facade', true, [
+            'ingame_min_x' => 0,
+            'ingame_max_x' => 0,
+            'ingame_min_y' => 0,
+            'ingame_max_y' => 0,
+        ]);
+
+        // Assert
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/facade floor/');
+
+        // Act
+        $coordinatesService->calculateMapLocationForIngameLocation(new IngameXY(550, 550, $facadeFloor));
+    }
+
+    #[Test]
+    public function calculateMapLocationForIngameLocation_givenFacadeFloorWithIngameBounds_returnsLatLngOnTheFacade(): void
+    {
+        // Arrange
+        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
+        $facadeFloor        = $this->createFloor(self::FACADE_FLOOR_ID, 'floor.facade', true, [
+            'ingame_min_x' => 100,
+            'ingame_max_x' => 1000,
+            'ingame_min_y' => 100,
+            'ingame_max_y' => 1000,
+        ]);
+
+        // Act
+        $result = $coordinatesService->calculateMapLocationForIngameLocation(new IngameXY(325, 775, $facadeFloor));
+
+        // Assert
+        $this->assertEqualsWithDelta(-64, $result->getLat(), self::JEST_CLOSE_TO_9_DIGITS);
+        $this->assertEqualsWithDelta(288, $result->getLng(), self::JEST_CLOSE_TO_9_DIGITS);
+        $this->assertSame(self::FACADE_FLOOR_ID, $result->getFloor()?->id);
+    }
+
+    #[Test]
     public function calculateMapLocationForIngameLocation_givenFloorWithoutIngameBounds_throws(): void
     {
         // Arrange
