@@ -203,6 +203,40 @@ final class SpellTuningDiffServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function diff_givenPlaceholderSpellBecomesReal_returnsDescriptionRewritten(): void
+    {
+        // Arrange - Blizzard fills in the template with an icon, numbers and a dispel type
+        $from = $this->snapshot(self::FROM_BUILD, [$this->spell(format: 'Attack for Physical damage.', values: [], iconName: '', dispelType: '')]);
+        $to   = $this->snapshot(self::TO_BUILD, [$this->spell(values: [$this->damage('29,095', 3.0), $this->duration('6 sec')])]);
+
+        // Act
+        $result = $this->service->diff($from, $to);
+
+        // Assert
+        $this->assertCount(1, $result->changes);
+        $this->assertSame(SpellTuningChangeType::DescriptionRewritten, $result->changes[0]->changeType);
+        $this->assertSame('Attack for Physical damage.', $result->changes[0]->oldText);
+        $this->assertSame('Deals 29,095 Shadow damage over 6 sec.', $result->changes[0]->newText);
+    }
+
+    #[Test]
+    public function diff_givenRealSpellBecomesPlaceholder_returnsDescriptionRewritten(): void
+    {
+        // Arrange
+        $from = $this->snapshot(self::FROM_BUILD, [$this->spell(values: [$this->damage('29,095', 3.0), $this->duration('6 sec')])]);
+        $to   = $this->snapshot(self::TO_BUILD, [$this->spell(format: 'Attack for Physical damage.', values: [], iconName: '', dispelType: '')]);
+
+        // Act
+        $result = $this->service->diff($from, $to);
+
+        // Assert
+        $this->assertCount(1, $result->changes);
+        $this->assertSame(SpellTuningChangeType::DescriptionRewritten, $result->changes[0]->changeType);
+        $this->assertSame('Deals 29,095 Shadow damage over 6 sec.', $result->changes[0]->oldText);
+        $this->assertSame('Attack for Physical damage.', $result->changes[0]->newText);
+    }
+
+    #[Test]
     public function diff_givenRealSpellWithNoNumbersButAnIcon_returnsDescriptionRewritten(): void
     {
         // Arrange - a real spell can legitimately have static-text-only description; an icon is
