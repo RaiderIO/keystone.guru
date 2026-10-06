@@ -15,6 +15,7 @@ use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Health\HealthCheckServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
@@ -25,12 +26,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\View\View;
 use Teapot\StatusCode;
-use Throwable;
 
 class SiteController extends Controller
 {
@@ -251,7 +248,7 @@ class SiteController extends Controller
     /**
      * @return Response
      */
-    public function status(Request $request): Response
+    public function status(Request $request, HealthCheckServiceInterface $healthCheckService): Response
     {
         $checks = [
             'database' => [
@@ -268,27 +265,15 @@ class SiteController extends Controller
             ],
         ];
 
-        // Database check: simple query
-        try {
-            DB::connection()->getPdo(); // ensure PDO established
-            DB::select('SELECT 1');     // trivial round trip
+        if ($healthCheckService->isDatabaseReachable()) {
             $checks['database']['ok'] = true;
-        } catch (Throwable $e) {
-            Log::error('Status check failed: database', ['exception' => $e]);
+        } else {
             $checks['database']['error'] = __('view_misc.status.check_failed');
         }
 
-        // Redis check: PING
-        try {
-            $pong = Redis::connection()->client()->ping();
-
-            // phpredis returns true (or the string "PONG"); predis returns a Status object
-            $checks['redis']['ok'] = $pong === true || $pong === 'PONG' || (is_object($pong) && method_exists($pong, 'getPayload') && $pong->getPayload() === 'PONG');
-            if (!$checks['redis']['ok']) {
-                $checks['redis']['error'] = 'Unexpected PING response';
-            }
-        } catch (Throwable $e) {
-            Log::error('Status check failed: redis', ['exception' => $e]);
+        if ($healthCheckService->isRedisReachable()) {
+            $checks['redis']['ok'] = true;
+        } else {
             $checks['redis']['error'] = __('view_misc.status.check_failed');
         }
 

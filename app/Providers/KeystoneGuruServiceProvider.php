@@ -141,6 +141,8 @@ use App\Service\Floor\FloorResolutionService;
 use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\GameVersion\GameVersionService;
 use App\Service\GameVersion\GameVersionServiceInterface;
+use App\Service\Health\HealthCheckService;
+use App\Service\Health\HealthCheckServiceInterface;
 use App\Service\Image\ImageService;
 use App\Service\Image\ImageServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyService;
@@ -340,6 +342,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(NpcCompendiumServiceInterface::class, NpcCompendiumService::class);
         $this->app->bind(SpellCompendiumServiceInterface::class, SpellCompendiumService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);
+        $this->app->bind(HealthCheckServiceInterface::class, HealthCheckService::class);
 
         // Depends on CacheService
         $this->app->bind(ReadOnlyModeServiceInterface::class, ReadOnlyModeService::class);
