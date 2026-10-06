@@ -17,14 +17,14 @@ return [
         'empty'                   => 'Es sind noch keine Creator aufgeführt.',
         'empty_for_category'      => 'Noch kein Creator teilt eine ":category"-Sammlung.',
         'empty_for_search'        => 'Keine Creator gefunden, die zu ":search" passen.',
-        'empty_for_dungeon'       => '',
-        'filtered_to_dungeon'     => '',
-        'clear_dungeon_filter'    => '',
+        'empty_for_dungeon'       => 'Noch veröffentlicht kein Creator Routen für :dungeon.',
+        'filtered_to_dungeon'     => 'Creator für :dungeon, die mit den beliebtesten Routen dort zuerst.',
+        'clear_dungeon_filter'    => 'Alle Dungeons',
     ],
     'featured' => [
         'title'           => 'Empfohlene Creator',
         'title_dungeon'   => 'Creator für :dungeon',
-        'see_all_dungeon' => '',
+        'see_all_dungeon' => 'Alle Creator für :dungeon ansehen',
         /** Tooltip on a rail entry - it carries the name because a name past two lines is clipped to an ellipsis */
         'entry_title'         => ':name - :routes',
         'route_count'         => '{1} :count Route|[2,*] :count Routen',

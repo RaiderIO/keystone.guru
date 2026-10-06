@@ -38,7 +38,7 @@ return [
     'embed' => [
         'title'          => 'Route einbetten',
         'header'         => 'Keystone.guru Einbettungstest auf Webseite',
-        'get_mdt_string' => '',
+        'get_mdt_string' => 'MDT-String abrufen',
     ],
     'health' => [
         'title'  => 'Gesundheitsberechnung',

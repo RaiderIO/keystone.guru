@@ -54,8 +54,8 @@ return [
     ],
     'combatlogservice' => [
         'analyze_combat_log' => [
-            'verify_error'     => 'Kampflog konnte nicht überprüft werden: Fehler.',
-            'processing_error' => 'Kampflog konnte nicht verarbeitet werden: Fehler.',
+            'verify_error'     => 'Kampflog konnte nicht überprüft werden: :error',
+            'processing_error' => 'Kampflog konnte nicht verarbeitet werden: :error',
         ],
     ],
     'combatlog' => [
