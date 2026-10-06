@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Controller;
 
+use App\Service\BannedIpAddress\BannedIpAddressServiceInterface;
 use App\Service\Health\HealthCheckServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use RuntimeException;
 use Teapot\StatusCode;
 use Tests\TestCases\PublicTestCase;
 
@@ -68,6 +70,42 @@ final class HealthControllerTest extends PublicTestCase
                 'redis'    => 'fail',
             ],
         ]);
+    }
+
+    #[Test]
+    public function check_givenBanListUnavailable_stillReturnsHealthJson(): void
+    {
+        // Arrange
+        $this->bindUnavailableBanList();
+        $this->bindHealthCheckService(databaseReachable: true, redisReachable: false);
+
+        // Act
+        $response = $this->get(route('health.app'));
+
+        // Assert
+        $response->assertStatus(StatusCode::SERVICE_UNAVAILABLE);
+        $response->assertJsonPath('checks.redis', 'fail');
+    }
+
+    #[Test]
+    public function status_givenBanListUnavailable_returnsServerError(): void
+    {
+        // Arrange
+        $this->bindUnavailableBanList();
+
+        // Act
+        $response = $this->get(route('misc.status'));
+
+        // Assert
+        $response->assertStatus(StatusCode::INTERNAL_SERVER_ERROR);
+    }
+
+    private function bindUnavailableBanList(): void
+    {
+        $bannedIpAddressService = $this->createMockPublic(BannedIpAddressServiceInterface::class);
+        $bannedIpAddressService->method('isBanned')->willThrowException(new RuntimeException('Redis is down'));
+
+        $this->app->instance(BannedIpAddressServiceInterface::class, $bannedIpAddressService);
     }
 
     private function bindHealthCheckService(bool $databaseReachable, bool $redisReachable): void
