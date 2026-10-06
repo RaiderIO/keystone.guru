@@ -193,7 +193,7 @@ return [
         ],
     ],
     'dungeonroutecollection' => [
-        'duplicate_name' => '',
+        'duplicate_name' => ':name (사본)',
         'flash'          => [
             'collection_created'             => '컬렉션이 생성되었습니다',
             'collection_updated'             => '컬렉션이 업데이트되었습니다',

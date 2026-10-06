@@ -35,12 +35,12 @@ return [
         'description' => 'WoW: 포에버',
     ],
     'tbc' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => '불성 클래식',
+        'description' => '불타는 성전 클래식',
     ],
     'sod' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => '발견의 시즌',
+        'description' => '발견의 시즌',
     ],
 
 ];

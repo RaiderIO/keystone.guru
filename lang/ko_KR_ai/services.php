@@ -54,8 +54,8 @@ return [
     ],
     'combatlogservice' => [
         'analyze_combat_log' => [
-            'verify_error'     => '전투 로그를 확인할 수 없음: 오류.',
-            'processing_error' => '전투 로그를 처리할 수 없음: 오류.',
+            'verify_error'     => '전투 로그를 확인할 수 없음: :error',
+            'processing_error' => '전투 로그를 처리할 수 없음: :error',
         ],
     ],
     'combatlog' => [

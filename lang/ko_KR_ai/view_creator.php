@@ -17,14 +17,14 @@ return [
         'empty'                   => '아직 등록된 제작자가 없습니다.',
         'empty_for_category'      => '아직 ":category" 컬렉션을 공유하는 제작자가 없습니다.',
         'empty_for_search'        => '":search"와(과) 일치하는 제작자를 찾을 수 없습니다.',
-        'empty_for_dungeon'       => '',
-        'filtered_to_dungeon'     => '',
-        'clear_dungeon_filter'    => '',
+        'empty_for_dungeon'       => '아직 :dungeon 경로를 게시하는 제작자가 없습니다.',
+        'filtered_to_dungeon'     => ':dungeon 제작자입니다. 이 던전에서 경로 인기가 높은 제작자가 먼저 표시됩니다.',
+        'clear_dungeon_filter'    => '모든 던전',
     ],
     'featured' => [
         'title'           => '추천 제작자',
         'title_dungeon'   => ':dungeon 제작자',
-        'see_all_dungeon' => '',
+        'see_all_dungeon' => ':dungeon 제작자 모두 보기',
         /** Tooltip on a rail entry - it carries the name because a name past two lines is clipped to an ellipsis */
         'entry_title'         => ':name - :routes',
         'route_count'         => '{1} 경로 :count개|[2,*] 경로 :count개',
