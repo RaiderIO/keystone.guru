@@ -193,7 +193,8 @@ return [
         ],
     ],
     'dungeonroutecollection' => [
-        'flash' => [
+        'duplicate_name' => '',
+        'flash'          => [
             'collection_created'             => '合集已创建',
             'collection_updated'             => '合集已更新',
             'collection_deleted'             => '合集已删除',

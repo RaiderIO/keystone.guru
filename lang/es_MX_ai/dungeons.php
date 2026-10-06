@@ -234,13 +234,6 @@ return [
                 'ruins_of_ahnqiraj' => 'Ruinas de Ahn\'Qiraj',
             ],
         ],
-        'ruins_of_ahnqiraj_sod' => [
-            'name'         => 'Ruinas de Ahn\'Qiraj',
-            'abbreviation' => '',
-            'floors'       => [
-                'ruins_of_ahnqiraj' => 'Ruinas de Ahn\'Qiraj',
-            ],
-        ],
         'scarlet_enclave' => [
             'name'         => 'Enclave Escarlata',
             'abbreviation' => '',
@@ -317,15 +310,6 @@ return [
             'floors'       => [
                 'the_hive_undergrounds' => 'El Subterráneo de la Colmena',
                 'the_temple_gates'      => 'Puertas del Templo',
-                'vault_of_cthun'        => 'Cámara de C\'Thun',
-            ],
-        ],
-        'temple_of_ahnqiraj_sod' => [
-            'name'         => 'Templo de Ahn\'Qiraj',
-            'abbreviation' => '',
-            'floors'       => [
-                'the_hive_undergrounds' => 'El Subterráneo de la Colmena',
-                'the_temple_gates'      => 'Las Puertas del Templo',
                 'vault_of_cthun'        => 'Cámara de C\'Thun',
             ],
         ],

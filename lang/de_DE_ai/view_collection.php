@@ -8,8 +8,9 @@ return [
         'world'           => 'Jeder darf diese Sammlung sehen',
     ],
     'kind' => [
-        'season_set' => 'Set für :season · :covered/:total Dungeons',
-        'free_form'  => '{0} :game_version · keine Dungeons|{1} :game_version · :count Dungeon|[2,*] :game_version · :count Dungeons',
+        'season_set'        => 'Set für :season · :covered/:total Dungeons',
+        'season_set_public' => '',
+        'free_form'         => '{0} :game_version · keine Dungeons|{1} :game_version · :count Dungeon|[2,*] :game_version · :count Dungeons',
     ],
     'index' => [
         'title'                   => 'Meine Sammlungen',
@@ -43,7 +44,6 @@ return [
     'new' => [
         'title'               => 'Neue Sammlung',
         'header'              => 'Neue Sammlung',
-        'details'             => 'Details',
         'start_from_tag'      => 'Mit einem Tag beginnen',
         'start_from_tag_none' => 'Kein Tag',
         'start_from_tag_help' => 'Füllt die Sammlung mit deinen Routen, die diesen Tag tragen, soweit sie zur Spielversion und Saison passen.',
@@ -52,7 +52,6 @@ return [
     'edit' => [
         'title'                        => '%s bearbeiten',
         'view_collection'              => 'Sammlung ansehen',
-        'details'                      => 'Details',
         'duplicate'                    => 'Duplizieren',
         'duplicate_title'              => ':name duplizieren',
         'duplicate_help'               => 'Kopiert Name, Beschreibung, Kategorie und Routen in eine neue Sammlung, die nur du sehen kannst.',
@@ -72,7 +71,7 @@ return [
         'no_routes'       => 'In dieser Sammlung gibt es noch keine Routen zum Anzeigen.',
         'no_routes_owner' => 'Diese Sammlung enthält noch keine Routen.',
         'add_routes'      => 'Routen hinzufügen',
-        'slot_empty'      => 'Noch keine Route für :dungeon.',
+        'not_covered'     => '',
         'copy_link'       => 'Link kopieren',
         'edit'            => 'Bearbeiten',
     ],

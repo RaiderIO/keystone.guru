@@ -36,8 +36,9 @@ return [
         'header' => 'Rutas de demostración',
     ],
     'embed' => [
-        'title'  => 'Insertar una ruta',
-        'header' => 'Prueba de inserción de Keystone.guru en la página web',
+        'title'          => 'Insertar una ruta',
+        'header'         => 'Prueba de inserción de Keystone.guru en la página web',
+        'get_mdt_string' => '',
     ],
     'health' => [
         'title'  => 'Cálculo de salud',

@@ -34,5 +34,13 @@ return [
         'name'        => 'Forever',
         'description' => 'WoW: Forever',
     ],
+    'tbc' => [
+        'name'        => '',
+        'description' => '',
+    ],
+    'sod' => [
+        'name'        => '',
+        'description' => '',
+    ],
 
 ];

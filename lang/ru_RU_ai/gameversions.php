@@ -34,5 +34,13 @@ return [
         'name'        => 'Форевер',
         'description' => 'WoW: Форевер',
     ],
+    'tbc' => [
+        'name'        => '',
+        'description' => '',
+    ],
+    'sod' => [
+        'name'        => '',
+        'description' => '',
+    ],
 
 ];

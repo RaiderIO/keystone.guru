@@ -6,7 +6,6 @@ return [
         'beguiling'           => '迷惑',
         'awakened'            => '觉醒',
         'inspiring'           => '鼓舞',
-        'prideful'            => '自豪',
         'tormented'           => '折磨',
         'encrypted'           => '加密',
         'mdt_placeholder'     => 'MDT 占位符',

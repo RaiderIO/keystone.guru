@@ -36,8 +36,9 @@ return [
         'header' => 'Itinéraires de démonstration',
     ],
     'embed' => [
-        'title'  => 'Intégrer un itinéraire',
-        'header' => 'Test d\'intégration de Keystone.guru sur la page Web',
+        'title'          => 'Intégrer un itinéraire',
+        'header'         => 'Test d\'intégration de Keystone.guru sur la page Web',
+        'get_mdt_string' => '',
     ],
     'health' => [
         'title'  => 'Calcul de la santé',

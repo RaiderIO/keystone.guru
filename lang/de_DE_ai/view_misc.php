@@ -36,8 +36,9 @@ return [
         'header' => 'Demo-Routen',
     ],
     'embed' => [
-        'title'  => 'Route einbetten',
-        'header' => 'Keystone.guru Einbettungstest auf Webseite',
+        'title'          => 'Route einbetten',
+        'header'         => 'Keystone.guru Einbettungstest auf Webseite',
+        'get_mdt_string' => '',
     ],
     'health' => [
         'title'  => 'Gesundheitsberechnung',

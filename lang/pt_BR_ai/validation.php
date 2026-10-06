@@ -48,6 +48,9 @@ return [
         'creator_sort' => [
             'enum' => '',
         ],
+        'creator_dungeon' => [
+            'exists' => '',
+        ],
         'autoroutecoverage_days' => [
             'integer' => '',
             'min'     => '',
@@ -55,6 +58,9 @@ return [
         ],
         'telemetry_range' => [
             'in' => '',
+        ],
+        'patreon_benefits' => [
+            'exists' => '',
         ],
         'patreon_grant_reason' => [
             'required' => '',

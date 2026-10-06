@@ -234,13 +234,6 @@ return [
                 'ruins_of_ahnqiraj' => 'Rovine di Ahn\'qiraj',
             ],
         ],
-        'ruins_of_ahnqiraj_sod' => [
-            'name'         => 'Rovine di Ahn\'qiraj',
-            'abbreviation' => '',
-            'floors'       => [
-                'ruins_of_ahnqiraj' => 'Rovine di Ahn\'qiraj',
-            ],
-        ],
         'scarlet_enclave' => [
             'name'         => 'Enclave Scarlatta',
             'abbreviation' => '',
@@ -313,15 +306,6 @@ return [
         ],
         'temple_of_ahnqiraj_classic' => [
             'name'         => 'Tempio di Ahn\'Qiraj',
-            'abbreviation' => '',
-            'floors'       => [
-                'the_hive_undergrounds' => 'Alveare Sotterraneo',
-                'the_temple_gates'      => 'Porte del Tempio',
-                'vault_of_cthun'        => 'Volta di C\'thun',
-            ],
-        ],
-        'temple_of_ahnqiraj_sod' => [
-            'name'         => 'Ahn\'qiraj',
             'abbreviation' => '',
             'floors'       => [
                 'the_hive_undergrounds' => 'Alveare Sotterraneo',

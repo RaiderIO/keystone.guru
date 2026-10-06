@@ -17,12 +17,15 @@ return [
         'empty'                   => 'Todavía no hay creadores listados.',
         'empty_for_category'      => 'Todavía no hay creadores que compartan una colección ":category".',
         'empty_for_search'        => 'No se encontraron creadores que coincidan con ":search".',
+        'empty_for_dungeon'       => '',
+        'filtered_to_dungeon'     => '',
+        'clear_dungeon_filter'    => '',
     ],
     'featured' => [
-        'title'         => 'Creadores destacados',
-        'title_dungeon' => 'Creadores para :dungeon',
-        'see_all'       => 'Ver todos los creadores',
-        /** Tooltip on a rail entry - it carries the name because the name itself may be clipped to an ellipsis */
+        'title'           => 'Creadores destacados',
+        'title_dungeon'   => 'Creadores para :dungeon',
+        'see_all_dungeon' => '',
+        /** Tooltip on a rail entry - it carries the name because a name past two lines is clipped to an ellipsis */
         'entry_title'         => ':name - :routes',
         'route_count'         => '{1} :count ruta|[2,*] :count rutas',
         'dungeon_route_count' => '{1} :count ruta de :dungeon|[2,*] :count rutas de :dungeon',

@@ -234,13 +234,6 @@ return [
                 'ruins_of_ahnqiraj' => 'Ruines d’Ahn’Qiraj',
             ],
         ],
-        'ruins_of_ahnqiraj_sod' => [
-            'name'         => 'Ruines d’Ahn’Qiraj',
-            'abbreviation' => '',
-            'floors'       => [
-                'ruins_of_ahnqiraj' => 'Ruines d’Ahn’Qiraj',
-            ],
-        ],
         'scarlet_enclave' => [
             'name'         => 'Bibliothèque du monastère écarlate',
             'abbreviation' => '',
@@ -317,15 +310,6 @@ return [
             'floors'       => [
                 'the_hive_undergrounds' => 'Les souterrains de la ruche',
                 'the_temple_gates'      => 'Portes du temple',
-                'vault_of_cthun'        => 'Caveau de C’Thun',
-            ],
-        ],
-        'temple_of_ahnqiraj_sod' => [
-            'name'         => 'Ahn’Qiraj',
-            'abbreviation' => '',
-            'floors'       => [
-                'the_hive_undergrounds' => 'Les souterrains de la ruche',
-                'the_temple_gates'      => 'Portes du Temple',
                 'vault_of_cthun'        => 'Caveau de C’Thun',
             ],
         ],

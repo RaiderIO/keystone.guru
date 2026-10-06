@@ -6,7 +6,6 @@ return [
         'beguiling'           => 'Очаровывающий',
         'awakened'            => 'Пробужденный',
         'inspiring'           => 'Вдохновляющий',
-        'prideful'            => 'Горделивый',
         'tormented'           => 'Мучимый',
         'encrypted'           => 'Зашифрованный',
         'mdt_placeholder'     => 'Заполнитель MDT',

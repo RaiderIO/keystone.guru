@@ -17,12 +17,15 @@ return [
         'empty'                   => '아직 등록된 제작자가 없습니다.',
         'empty_for_category'      => '아직 ":category" 컬렉션을 공유하는 제작자가 없습니다.',
         'empty_for_search'        => '":search"와(과) 일치하는 제작자를 찾을 수 없습니다.',
+        'empty_for_dungeon'       => '',
+        'filtered_to_dungeon'     => '',
+        'clear_dungeon_filter'    => '',
     ],
     'featured' => [
-        'title'         => '추천 제작자',
-        'title_dungeon' => ':dungeon 제작자',
-        'see_all'       => '모든 제작자 보기',
-        /** Tooltip on a rail entry - it carries the name because the name itself may be clipped to an ellipsis */
+        'title'           => '추천 제작자',
+        'title_dungeon'   => ':dungeon 제작자',
+        'see_all_dungeon' => '',
+        /** Tooltip on a rail entry - it carries the name because a name past two lines is clipped to an ellipsis */
         'entry_title'         => ':name - :routes',
         'route_count'         => '{1} 경로 :count개|[2,*] 경로 :count개',
         'dungeon_route_count' => '{1} :dungeon 경로 :count개|[2,*] :dungeon 경로 :count개',

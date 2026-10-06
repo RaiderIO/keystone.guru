@@ -36,8 +36,9 @@ return [
         'header' => 'Демо маршруты',
     ],
     'embed' => [
-        'title'  => 'Встроить маршрут',
-        'header' => 'Keystone.guru встроит тестовое окно на ваш сайт',
+        'title'          => 'Встроить маршрут',
+        'header'         => 'Keystone.guru встроит тестовое окно на ваш сайт',
+        'get_mdt_string' => '',
     ],
     'health' => [
         'title'  => 'Расчет здоровья',

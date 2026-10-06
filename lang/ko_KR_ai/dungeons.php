@@ -234,13 +234,6 @@ return [
                 'ruins_of_ahnqiraj' => '안퀴라즈 폐허',
             ],
         ],
-        'ruins_of_ahnqiraj_sod' => [
-            'name'         => '안퀴라즈 폐허',
-            'abbreviation' => '',
-            'floors'       => [
-                'ruins_of_ahnqiraj' => '안퀴라즈 폐허',
-            ],
-        ],
         'scarlet_enclave' => [
             'name'         => '스칼렛 엔클레이브',
             'abbreviation' => '',
@@ -317,15 +310,6 @@ return [
             'floors'       => [
                 'the_hive_undergrounds' => '지하 부화장',
                 'the_temple_gates'      => '사원의 문',
-                'vault_of_cthun'        => '크툰의 금고',
-            ],
-        ],
-        'temple_of_ahnqiraj_sod' => [
-            'name'         => '안퀴라즈',
-            'abbreviation' => '',
-            'floors'       => [
-                'the_hive_undergrounds' => '지하 부화장',
-                'the_temple_gates'      => '사원 관문',
                 'vault_of_cthun'        => '크툰의 금고',
             ],
         ],

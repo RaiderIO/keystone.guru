@@ -234,13 +234,6 @@ return [
                 'ruins_of_ahnqiraj' => 'Руины Ан\'Киража',
             ],
         ],
-        'ruins_of_ahnqiraj_sod' => [
-            'name'         => 'Руины Ан\'Киража',
-            'abbreviation' => '',
-            'floors'       => [
-                'ruins_of_ahnqiraj' => 'Руины Ан\'Киража',
-            ],
-        ],
         'scarlet_enclave' => [
             'name'         => '',
             'abbreviation' => '',
@@ -317,15 +310,6 @@ return [
             'floors'       => [
                 'the_hive_undergrounds' => 'Подземелье улья',
                 'the_temple_gates'      => '',
-                'vault_of_cthun'        => 'Обитель К\'Туна',
-            ],
-        ],
-        'temple_of_ahnqiraj_sod' => [
-            'name'         => 'Ан\'Кираж',
-            'abbreviation' => '',
-            'floors'       => [
-                'the_hive_undergrounds' => 'Подземелье улья',
-                'the_temple_gates'      => 'Ворота храма',
                 'vault_of_cthun'        => 'Обитель К\'Туна',
             ],
         ],
