@@ -54,16 +54,20 @@ class CoordinatesService implements CoordinatesServiceInterface
 
         if ($targetFloor === null) {
             throw new InvalidArgumentException('No floor set for ingame XY!');
-        } elseif ($targetFloor->facade) {
+        }
+
+        $ingameMapSizeX  = $targetFloor->ingame_max_x - $targetFloor->ingame_min_x;
+        $ingameMapSizeY  = $targetFloor->ingame_max_y - $targetFloor->ingame_min_y;
+        $hasIngameBounds = (int)$ingameMapSizeX !== 0 && (int)$ingameMapSizeY !== 0;
+
+        // Continent facades carry real world bounds, so they convert directly
+        if ($targetFloor->facade && !$hasIngameBounds) {
             throw new InvalidArgumentException(
                 sprintf('Unable to convert ingame XY %s that is on facade floor!', json_encode($ingameXY->toArrayWithFloor())),
             );
         }
 
-        $ingameMapSizeX = $targetFloor->ingame_max_x - $targetFloor->ingame_min_x;
-        $ingameMapSizeY = $targetFloor->ingame_max_y - $targetFloor->ingame_min_y;
-
-        if ((int)$ingameMapSizeX === 0 || (int)$ingameMapSizeY === 0) {
+        if (!$hasIngameBounds) {
             throw new InvalidArgumentException(
                 sprintf('Floor %s (%d) does not have ingame coordinates set!', __($targetFloor->name, [], 'en_US'), $targetFloor->id),
             );
