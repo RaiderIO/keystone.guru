@@ -8,6 +8,7 @@ use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Traits\HasLatLng;
+use App\Models\Traits\RelatesToDefaultConnectionModels;
 use Database\Factories\CombatLog\CombatLogRouteEnemyResolutionFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -48,7 +49,7 @@ use Illuminate\Support\Carbon;
 class CombatLogRouteEnemyResolution extends Model
 {
     /** @use HasFactory<CombatLogRouteEnemyResolutionFactory> */
-    use HasFactory, HasLatLng;
+    use HasFactory, HasLatLng, RelatesToDefaultConnectionModels;
 
     protected $connection = 'combatlog';
 
