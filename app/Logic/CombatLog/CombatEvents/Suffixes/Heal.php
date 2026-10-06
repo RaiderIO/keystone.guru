@@ -5,9 +5,17 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use Override;
 
+/**
+ * The combat log file writes `amount, baseAmount, overhealing, absorbed, critical` for every supported
+ * combat log version. `baseAmount` is file-only (advanced combat logging) and absent from the
+ * COMBAT_LOG_EVENT API, which is why the API documentation lists one field fewer.
+ */
 class Heal extends Suffix
 {
     private int $amount;
+
+    /** @var int The amount before critical strike bonus and before percent modifiers on the target */
+    private int $baseAmount;
 
     private int $overHealing;
 
@@ -15,12 +23,14 @@ class Heal extends Suffix
 
     private bool $critical;
 
-    /** @var string ex: nil (probably something like isGlancing or isCrushing, but those are not applicable to heals */
-    private string $unknown1;
-
     public function getAmount(): int
     {
         return $this->amount;
+    }
+
+    public function getBaseAmount(): int
+    {
+        return $this->baseAmount;
     }
 
     public function getOverHealing(): int
@@ -38,11 +48,6 @@ class Heal extends Suffix
         return $this->critical;
     }
 
-    public function getUnknown1(): string
-    {
-        return $this->unknown1;
-    }
-
     /**
      * @return HasParameters|$this
      */
@@ -52,10 +57,10 @@ class Heal extends Suffix
         parent::setParameters($parameters);
 
         $this->amount      = $parameters[0];
-        $this->overHealing = $parameters[1];
-        $this->absorbed    = $parameters[2];
-        $this->critical    = $parameters[3];
-        $this->unknown1    = $parameters[4];
+        $this->baseAmount  = $parameters[1];
+        $this->overHealing = $parameters[2];
+        $this->absorbed    = $parameters[3];
+        $this->critical    = $parameters[4] !== 'nil';
 
         return $this;
     }
