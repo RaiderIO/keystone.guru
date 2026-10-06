@@ -103,7 +103,7 @@ return [
     'mountablearea_title'            => 'Disegna un\'area in cui i giocatori possono cavalcare :hotkey',
     'floorunion'                     => 'Unione di piani',
     'floorunion_title'               => 'Posiziona un marcatore che rappresenta un altro piano :hotkey',
-    'floorunionarea'                 => 'Area di unione piano',
+    'floorunionarea'                 => 'Area di unione di piani',
     'floorunionarea_title'           => 'Disegna l\'area in cui è attiva un\'unione di piani :hotkey',
     'draw_tool_group_enemies'        => 'Nemici',
     'draw_tool_group_floors'         => 'Piani e navigazione',
