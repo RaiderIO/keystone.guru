@@ -6,7 +6,6 @@ use App\Models\Spell\SpellTuningChangeType;
 use App\Repositories\Interfaces\Spell\SpellTuningBuildRepositoryInterface;
 use App\Repositories\Interfaces\Spell\SpellTuningChangeRepositoryInterface;
 use App\Service\Spell\Description\Dtos\SpellDescriptionValueKind;
-use App\Service\Spell\Tuning\Dtos\SpellTuningDiffResult;
 use App\Service\Spell\Tuning\Dtos\SpellTuningSnapshot;
 use App\Service\Spell\Tuning\Logging\SpellTuningDiffServiceLoggingInterface;
 use App\Service\Spell\Tuning\SpellTuningDiffService;
@@ -524,7 +523,6 @@ final class SpellTuningDiffServiceTest extends PublicTestCase
         $rows = $result->toRows(Carbon::createFromFormat('Y-m-d H:i:s', '2026-08-20 19:18:02', 'UTC'));
 
         // Assert
-        $this->assertInstanceOf(SpellTuningDiffResult::class, $result);
         foreach ($rows[0] as $column => $value) {
             $this->assertTrue(is_scalar($value) || $value === null, sprintf('Column %s is not a scalar', $column));
         }

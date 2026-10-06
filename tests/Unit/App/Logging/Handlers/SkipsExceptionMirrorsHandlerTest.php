@@ -97,6 +97,34 @@ class SkipsExceptionMirrorsHandlerTest extends PublicTestCase
     }
 
     /**
+     * Parse error log sites carry an exceptionClass of their own; their fingerprint belongs to
+     * FingerprintsStructuredErrorsHandler, which never overwrites one that is already set.
+     */
+    #[Test]
+    public function handle_givenStructuredRecordCarryingAnExceptionClass_forwardsItWithoutAFingerprint(): void
+    {
+        // Arrange
+        $testHandler = new TestHandler();
+        $handler     = new SkipsExceptionMirrorsHandler($testHandler);
+
+        $record = new LogRecord(
+            new DateTimeImmutable(),
+            'testing',
+            Level::Error,
+            'ProcessCombatLogSegmentsLogging::handleParseError',
+            ['exceptionClass' => RuntimeException::class, 'message' => 'Invalid parameter count'],
+        );
+
+        // Act
+        $handler->handle($record);
+
+        // Assert
+        $records = $testHandler->getRecords();
+        self::assertCount(1, $records);
+        self::assertArrayNotHasKey('fingerprint', $records[0]->context);
+    }
+
+    /**
      * A buffering handler in front of this one forwards through handleBatch(), which would bypass the filter unless it
      * is overridden.
      */

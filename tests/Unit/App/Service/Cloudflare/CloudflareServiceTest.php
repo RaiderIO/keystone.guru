@@ -51,7 +51,9 @@ final class CloudflareServiceTest extends PublicTestCase
             log: $log,
         );
 
-        $cloudflareService->method('curlGet')
+        $cloudflareService->expects($this->once())
+            ->method('curlGet')
+            ->with($this->stringEndsWith('/ips-v4'))
             ->willReturn($response);
 
         // Act
@@ -59,6 +61,8 @@ final class CloudflareServiceTest extends PublicTestCase
 
         // Assert
         $this->assertCount(15, $ipRanges);
+        $this->assertSame('173.245.48.0/20', $ipRanges[0]);
+        $this->assertSame('131.0.72.0/22', $ipRanges[14]);
     }
 
     /**
@@ -82,7 +86,9 @@ final class CloudflareServiceTest extends PublicTestCase
             log: $log,
         );
 
-        $cloudflareService->method('curlGet')
+        $cloudflareService->expects($this->once())
+            ->method('curlGet')
+            ->with($this->stringEndsWith('/ips-v6'))
             ->willReturn($response);
 
         // Act
@@ -90,6 +96,8 @@ final class CloudflareServiceTest extends PublicTestCase
 
         // Assert
         $this->assertCount(7, $ipRanges);
+        $this->assertSame('2400:cb00::/32', $ipRanges[0]);
+        $this->assertSame('2c0f:f248::/32', $ipRanges[6]);
     }
 
     /**
@@ -122,7 +130,7 @@ final class CloudflareServiceTest extends PublicTestCase
         $ipRanges = $cloudflareService->getIpRanges();
 
         // Assert
-        $this->assertCount(count($ipRangesV4) + count($ipRangesV6), $ipRanges);
+        $this->assertSame([...$ipRangesV4, ...$ipRangesV6], $ipRanges);
     }
 
     /**
@@ -137,7 +145,8 @@ final class CloudflareServiceTest extends PublicTestCase
 
         $log = LoggingFixtures::createCloudflareServiceLogging($this);
         $log->expects($this->once())
-            ->method('getIpRangesInvalidIpAddress');
+            ->method('getIpRangesInvalidIpAddress')
+            ->with('error fetching ip from database');
 
         $cloudflareService = ServiceFixtures::getCloudflareServiceMock(
             testCase: $this,
@@ -154,6 +163,7 @@ final class CloudflareServiceTest extends PublicTestCase
 
         // Assert
         $this->assertCount(14, $ipRanges);
+        $this->assertNotContains('error fetching ip from database', $ipRanges);
     }
 
     /**
@@ -288,6 +298,40 @@ final class CloudflareServiceTest extends PublicTestCase
 
         // Act
         $cloudflareService->getIpRangesV6(false);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[Group('CloudflareService')]
+    public function getIpRanges_givenUseCache_cachesEachAddressFamilyUnderItsOwnKey(): void
+    {
+        // Arrange - one shared key would serve the IPv4 list as the IPv6 one, and TrustProxies would trust neither
+        $cacheCalls   = [];
+        $cacheService = ServiceFixtures::getCacheServiceMock($this, ['rememberWhen']);
+        $cacheService->expects($this->exactly(2))
+            ->method('rememberWhen')
+            ->willReturnCallback(static function (bool $useCache, string $key) use (&$cacheCalls): array {
+                $cacheCalls[] = [$useCache, $key];
+
+                return [];
+            });
+
+        $cloudflareService = ServiceFixtures::getCloudflareServiceMock(
+            testCase: $this,
+            methodsToMock: ['curlGet'],
+            cacheService: $cacheService,
+        );
+
+        // Act
+        $cloudflareService->getIpRanges();
+
+        // Assert
+        $this->assertSame([
+            [true, 'cloudflare:ip-ranges-v4'],
+            [true, 'cloudflare:ip-ranges-v6'],
+        ], $cacheCalls);
     }
 
     private function getResponse(string $fileName): string

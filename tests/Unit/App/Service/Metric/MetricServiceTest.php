@@ -3,13 +3,18 @@
 namespace Tests\Unit\App\Service\Metric;
 
 use App\Models\Metrics\Metric;
+use App\Models\Team;
 use App\Models\User;
+use App\Service\Cache\CacheService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use Tests\Fixtures\ServiceFixtures;
 use Tests\TestCases\PublicTestCase;
 
+#[Group('MetricService')]
 final class MetricServiceTest extends PublicTestCase
 {
     /**
@@ -20,7 +25,6 @@ final class MetricServiceTest extends PublicTestCase
      */
     #[Test]
     #[DataProvider('groupMetrics_GivenGroupableMetrics_ShouldReturnGroupedMetrics_Provider')]
-    #[Group('MetricService')]
     public function groupMetrics_GivenGroupableMetrics_ShouldReturnGroupedMetrics(
         array $pendingMetrics,
         int   $seconds,
@@ -43,7 +47,7 @@ final class MetricServiceTest extends PublicTestCase
     }
 
     /**
-     * @return array<int, mixed>
+     * @return array<int|string, mixed>
      */
     public static function groupMetrics_GivenGroupableMetrics_ShouldReturnGroupedMetrics_Provider(): array
     {
@@ -90,7 +94,100 @@ final class MetricServiceTest extends PublicTestCase
                     ],
                 ],
             ],
+            // Within one time bucket, a metric only joins a group with the same model, category and tag
+            'same bucket, different model, category or tag' => [
+                [
+                    self::createMetric(1, '2025-03-07 00:00:01'),
+                    self::createMetric(2, '2025-03-07 00:00:02', modelId: 2),
+                    self::createMetric(4, '2025-03-07 00:00:03', modelClass: Team::class),
+                    self::createMetric(8, '2025-03-07 00:00:04', category: Metric::CATEGORY_DUNGEON_ROUTE_MDT_COPY),
+                    self::createMetric(16, '2025-03-07 00:00:05', tag: 'GET /api/route'),
+                    self::createMetric(32, '2025-03-07 00:00:06'),
+                ],
+                30,
+                [
+                    [
+                        'created_at' => '2025-03-07 00:00:01',
+                        'value'      => 33,
+                    ],
+                    [
+                        'created_at' => '2025-03-07 00:00:02',
+                        'value'      => 2,
+                    ],
+                    [
+                        'created_at' => '2025-03-07 00:00:03',
+                        'value'      => 4,
+                    ],
+                    [
+                        'created_at' => '2025-03-07 00:00:04',
+                        'value'      => 8,
+                    ],
+                    [
+                        'created_at' => '2025-03-07 00:00:05',
+                        'value'      => 16,
+                    ],
+                ],
+            ],
         ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function flushPendingMetrics_givenPendingMetrics_returnsThemAndEmptiesTheList(): void
+    {
+        // Arrange
+        $pendingMetrics = [
+            self::createMetric(1, '2025-03-07 00:00:01'),
+            self::createMetric(3, '2025-03-07 00:00:02'),
+        ];
+        $cacheService = $this->createPendingMetricsCache($pendingMetrics);
+        $cacheService->expects($this->once())->method('set')->with('metrics:pending', []);
+
+        $metricService = ServiceFixtures::getMetricServiceMock($this, cacheService: $cacheService);
+
+        // Act
+        $result = $metricService->flushPendingMetrics();
+
+        // Assert
+        $this->assertSame($pendingMetrics, $result);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function flushPendingMetrics_givenGroupBySeconds_returnsThemGrouped(): void
+    {
+        // Arrange
+        $cacheService = $this->createPendingMetricsCache([
+            self::createMetric(1, '2025-03-07 00:00:01'),
+            self::createMetric(3, '2025-03-07 00:00:02'),
+        ]);
+        $cacheService->expects($this->once())->method('set')->with('metrics:pending', []);
+
+        $metricService = ServiceFixtures::getMetricServiceMock($this, cacheService: $cacheService);
+
+        // Act
+        $result = $metricService->flushPendingMetrics(30);
+
+        // Assert
+        $this->assertCount(1, $result);
+        $this->assertSame(4, $result[0]['value']);
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>> $pendingMetrics
+     * @throws Exception
+     */
+    private function createPendingMetricsCache(array $pendingMetrics): MockObject&CacheService
+    {
+        $cacheService = ServiceFixtures::getCacheServiceMock($this, ['lock', 'get', 'set']);
+        $cacheService->method('lock')->willReturnCallback(static fn(string $key, callable $callable): mixed => $callable());
+        $cacheService->method('get')->with('metrics:pending')->willReturn($pendingMetrics);
+
+        return $cacheService;
     }
 
     /**

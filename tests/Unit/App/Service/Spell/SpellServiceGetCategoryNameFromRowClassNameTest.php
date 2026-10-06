@@ -51,6 +51,7 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         $spellService
             ->expects($this->once())
             ->method('getCharacterClassFromClassName')
+            ->with($rowClassName)
             ->willReturn($this->characterClasses->get($characterClassName));
 
         $log
@@ -66,6 +67,31 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
 
         // Assert
         Assert::assertEquals($expected, $result);
+    }
+
+    /**
+     * The same rows without stubbing the class lookup: the class is matched on the start of the row's class name.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    #[Group('SpellService')]
+    #[DataProvider('getCategoryNameFromRowClassName_ShouldReturnCategoryName_GivenValidClassBasedRowClassName_DataProvider')]
+    public function getCategoryNameFromRowClassName_givenValidClassBasedRowClassNameAndTheRealClassLookup_returnsCategoryName(
+        string $rowClassName,
+        string $characterClassName,
+        string $expected,
+    ): void {
+        // Arrange
+        $spellService = ServiceFixtures::getSpellServiceMock(testCase: $this);
+
+        // Act
+        $characterClass = $spellService->getCharacterClassFromClassName($rowClassName);
+        $result         = $spellService->getCategoryNameFromRowClassName($rowClassName);
+
+        // Assert
+        Assert::assertSame($characterClassName, $characterClass?->key);
+        Assert::assertSame($expected, $result);
     }
 
     /**

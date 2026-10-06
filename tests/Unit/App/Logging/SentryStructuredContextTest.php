@@ -2,57 +2,56 @@
 
 namespace Tests\Unit\App\Logging;
 
-use DateTimeImmutable;
-use Monolog\Level;
-use Monolog\LogRecord;
+use App\Logging\StructuredLogging;
+use Illuminate\Support\Facades\Context;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Sentry\ClientBuilder;
-use Sentry\Event;
-use Sentry\Laravel\SentryHandler;
-use Sentry\Options;
-use Sentry\State\Hub;
-use Sentry\Transport\TransportInterface;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * Pins the two properties the Sentry triage workflow depends on, both of which come for free today and would break
- * silently:
+ * Pins the two properties the Sentry triage workflow depends on, both of which would break silently:
  *
- * 1. The structured context survives. Laravel's ContextLogProcessor merges the Context repository into
- *    LogRecord->extra, and SentryHandler copies every extra onto the scope - which is how trace_id and the
- *    'structured:*' groups end up on the issue.
+ * 1. The structured context survives. StructuredLogging mirrors every open start() group into Laravel's Context,
+ *    Laravel's ContextLogProcessor merges the Context repository into LogRecord->extra, and SentryHandler copies
+ *    every extra onto the scope - which is how trace_id and the 'structured:*' groups end up on the issue.
  * 2. A log-derived event's message is the bare 'ClassLogging::method'. Sentry groups message events by their
  *    message, so this yields exactly one stable issue per log site. Enabling attach_stacktrace would group by stack
  *    trace instead and fragment one log site into one issue per call path.
+ *
+ * Logged through a real StructuredLogging instance and the configured sentry channel, so the test fails when any
+ * link of that chain stops carrying the context.
  */
 #[Group('Logging')]
 final class SentryStructuredContextTest extends PublicTestCase
 {
+    use ResolvesDsnShapedSentryChannel;
+
+    private const string LOGGING_CLASS = 'App\\Service\\CombatLog\\Logging\\ProcessCombatLogSegmentsLogging';
+
     #[Test]
-    public function sentryHandler_givenStructuredLogRecord_capturesExtrasAndBareMessage(): void
+    public function sentryChannel_givenStructuredLogInsideAStartedGroup_capturesExtrasAndBareMessage(): void
     {
-        // Arrange - an in-memory transport so the assertions run against the Event the client actually built
-        $transport = new CapturingTransport();
+        // Arrange
+        config(['app.log_level' => 'debug', 'app.type' => 'production']);
+        $transport = $this->bindStubHub();
+        $this->sentryChannel();
 
-        $hub = $this->createHubUsing($transport);
+        Context::add('trace_id', 'f3776964-f303-4476-8d78-b6f1f17b3f18');
 
-        $record = new LogRecord(
-            new DateTimeImmutable(),
-            'testing',
-            Level::Error,
-            'ProcessCombatLogSegmentsLogging::handleSegmentsNotAvailable',
-            ['runId' => 42015954, 'depth' => 1],
-            [
-                'trace_id'                                           => 'f3776964-f303-4476-8d78-b6f1f17b3f18',
-                'structured:processcombatlogsegmentslogging::handle' => ['runId' => 42015954],
-            ],
-        );
+        $log = new TestableStructuredLogging(app('log'));
 
-        // Act
-        (new SentryHandler($hub, Level::Error->value))->handle($record);
+        try {
+            StructuredLogging::setChannel(self::DSN_SHAPED_CHANNEL);
 
-        // Assert
+            // Act
+            $log->start(sprintf('%s::handleStart', self::LOGGING_CLASS), ['runId' => 42015954]);
+            $log->error(sprintf('%s::handleSegmentsNotAvailable', self::LOGGING_CLASS));
+            $log->end(sprintf('%s::handleEnd', self::LOGGING_CLASS));
+        } finally {
+            StructuredLogging::setChannel(null);
+        }
+
+        // Assert - start() and end() log at info, below the channel's level
         self::assertCount(1, $transport->capturedEvents);
 
         $event = $transport->capturedEvents[0];
@@ -64,18 +63,11 @@ final class SentryStructuredContextTest extends PublicTestCase
         );
 
         $extra = $event->getExtra();
-        self::assertArrayHasKey('trace_id', $extra, 'trace_id must reach Sentry so an issue can be traced back.');
-        self::assertArrayHasKey('structured:processcombatlogsegmentslogging::handle', $extra);
-    }
-
-    private function createHubUsing(TransportInterface $transport): Hub
-    {
-        $clientBuilder = new ClientBuilder(new Options([
-            'dsn'                  => 'https://publickey@sentry.example.com/1',
-            'default_integrations' => false,
-        ]));
-        $clientBuilder->setTransport($transport);
-
-        return new Hub($clientBuilder->getClient());
+        self::assertSame(
+            'f3776964-f303-4476-8d78-b6f1f17b3f18',
+            $extra['trace_id'] ?? null,
+            'trace_id must reach Sentry so an issue can be traced back.',
+        );
+        self::assertSame(['runId' => 42015954], $extra['structured:processcombatlogsegmentslogging::handle'] ?? null);
     }
 }

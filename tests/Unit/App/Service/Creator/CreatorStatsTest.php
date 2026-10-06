@@ -102,6 +102,29 @@ final class CreatorStatsTest extends PublicTestCase
     }
 
     #[Test]
+    public function getProfileParts_givenASeasonWithoutRoutesThisSeason_leavesTheSeasonViewsOut(): void
+    {
+        // Arrange - "No views" next to "No routes" says nothing; the total that follows does
+        config(['keystoneguru.creators.min_ratings_shown' => 5]);
+        $season       = $this->season();
+        $creatorStats = CreatorStats::fromAttributes([
+            'published_route_count' => 140,
+            'total_views'           => 99000,
+            'season_route_count'    => 0,
+            'season_views'          => 0,
+        ], $season);
+
+        // Act
+        $parts = $creatorStats->getProfileParts();
+
+        // Assert
+        $this->assertSame([
+            sprintf('No routes in %s', $season->name_long),
+            '140 routes total',
+        ], $parts);
+    }
+
+    #[Test]
     public function getProfileParts_givenFewerRatingsThanTheMinimum_leavesTheRatingOut(): void
     {
         // Arrange
