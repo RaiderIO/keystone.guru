@@ -38,7 +38,7 @@ return [
     'embed' => [
         'title'          => 'Встроить маршрут',
         'header'         => 'Keystone.guru встроит тестовое окно на ваш сайт',
-        'get_mdt_string' => '',
+        'get_mdt_string' => 'Получить строку MDT',
     ],
     'health' => [
         'title'  => 'Расчет здоровья',

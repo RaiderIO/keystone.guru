@@ -9,7 +9,7 @@ return [
     ],
     'kind' => [
         'season_set'        => 'Набор: :season · подземелья: :covered/:total',
-        'season_set_public' => '',
+        'season_set_public' => '{0} :season · нет подземелий|{1} :season · :count подземелье|[2,*] :season · подземелий: :count',
         'free_form'         => '{0} :game_version · нет подземелий|{1} :game_version · :count подземелье|[2,*] :game_version · подземелий: :count',
     ],
     'index' => [
@@ -57,7 +57,7 @@ return [
         'duplicate_help'               => 'Копирует название, описание, категорию и маршруты в новую коллекцию, которую видите только Вы.',
         'duplicate_season'             => 'Сезон копии',
         'duplicate_season_none'        => 'Без сезона (свободная)',
-        'duplicate_keeps'              => 'Будет скопировано маршрутов: :kept из :total; маршруты, не соответствующие сезону, не копируются.',
+        'duplicate_keeps'              => 'Будет скопировано маршрутов: :kept из :total; маршруты, не соответствующие сезону или не укладывающиеся в лимиты маршрутов, не копируются.',
         'duplicate_submit'             => 'Копировать коллекцию',
         'publish_routes_confirm_title' => 'Не все маршруты имеют статус «:state»',
         'publish_routes_confirm_body'  => 'Не все маршруты в этой коллекции имеют статус «:state» - задать им тоже статус «:state»?',
@@ -71,7 +71,7 @@ return [
         'no_routes'       => 'В этой коллекции пока нет маршрутов для показа.',
         'no_routes_owner' => 'В этой коллекции пока нет маршрутов.',
         'add_routes'      => 'Добавить маршруты',
-        'not_covered'     => '',
+        'not_covered'     => 'Не охвачены: :dungeons',
         'copy_link'       => 'Копировать ссылку',
         'edit'            => 'Редактировать',
     ],

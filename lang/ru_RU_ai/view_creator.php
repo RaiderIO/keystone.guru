@@ -17,14 +17,14 @@ return [
         'empty'                   => 'Создатели пока не найдены.',
         'empty_for_category'      => 'Пока никто из создателей не делится коллекцией ":category".',
         'empty_for_search'        => 'Не найдено создателей по запросу ":search".',
-        'empty_for_dungeon'       => '',
-        'filtered_to_dungeon'     => '',
-        'clear_dungeon_filter'    => '',
+        'empty_for_dungeon'       => 'Пока никто из создателей не публикует маршруты для подземелья :dungeon.',
+        'filtered_to_dungeon'     => 'Создатели маршрутов для подземелья :dungeon; сначала те, чьи маршруты там популярнее всего.',
+        'clear_dungeon_filter'    => 'Все подземелья',
     ],
     'featured' => [
         'title'           => 'Избранные создатели',
         'title_dungeon'   => 'Создатели маршрутов: :dungeon',
-        'see_all_dungeon' => '',
+        'see_all_dungeon' => 'Все создатели маршрутов для подземелья :dungeon',
         /** Tooltip on a rail entry - it carries the name because a name past two lines is clipped to an ellipsis */
         'entry_title'         => ':name - :routes',
         'route_count'         => '{1} :count маршрут|[2,*] Маршрутов: :count',
