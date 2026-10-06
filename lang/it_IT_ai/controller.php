@@ -193,7 +193,7 @@ return [
         ],
     ],
     'dungeonroutecollection' => [
-        'duplicate_name' => '',
+        'duplicate_name' => ':name (copia)',
         'flash'          => [
             'collection_created'             => 'Raccolta creata',
             'collection_updated'             => 'Raccolta aggiornata',
