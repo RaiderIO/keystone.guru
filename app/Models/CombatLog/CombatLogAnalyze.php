@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
  * @property string                 $combat_log_path
  * @property int                    $percent_completed
  * @property CombatLogAnalyzeStatus $status
- * @property string                 $error
+ * @property string|null            $error
  * @property string                 $result
  *
  * @property Carbon $created_at
