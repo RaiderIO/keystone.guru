@@ -38,7 +38,7 @@ return [
     'embed' => [
         'title'          => '嵌入路线',
         'header'         => 'Keystone.guru 在网页上的嵌入测试',
-        'get_mdt_string' => '',
+        'get_mdt_string' => '获取MDT字符串',
     ],
     'health' => [
         'title'  => '健康计算',

@@ -35,12 +35,12 @@ return [
         'description' => 'WoW：永恒版',
     ],
     'tbc' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'TBC Classic',
+        'description' => 'The Burning Crusade Classic',
     ],
     'sod' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'SoD',
+        'description' => 'Season of Discovery',
     ],
 
 ];

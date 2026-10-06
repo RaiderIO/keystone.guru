@@ -9,7 +9,7 @@ return [
     ],
     'kind' => [
         'season_set'        => ':season 套组 · :covered/:total 个地下城',
-        'season_set_public' => '',
+        'season_set_public' => '{0} :season · 无地下城|{1} :season · :count 个地下城|[2,*] :season · :count 个地下城',
         'free_form'         => '{0} :game_version · 无地下城|{1} :game_version · :count 个地下城|[2,*] :game_version · :count 个地下城',
     ],
     'index' => [
@@ -57,7 +57,7 @@ return [
         'duplicate_help'               => '将名称、描述、类别和路线复制到一个只有您可以看到的新合集中。',
         'duplicate_season'             => '副本的赛季',
         'duplicate_season_none'        => '无赛季（自由组合）',
-        'duplicate_keeps'              => '将复制 :total 条路线中的 :kept 条；与赛季不符的路线不会被包含。',
+        'duplicate_keeps'              => '将复制 :total 条路线中的 :kept 条；与赛季不符或超出路线上限的路线不会被包含。',
         'duplicate_submit'             => '复制合集',
         'publish_routes_confirm_title' => '部分路线的状态不是“:state”',
         'publish_routes_confirm_body'  => '此合集中并非所有路线的状态都是“:state”——要把它们也设为“:state”吗？',
@@ -71,7 +71,7 @@ return [
         'no_routes'       => '此合集中还没有可显示的路线。',
         'no_routes_owner' => '此合集还没有路线。',
         'add_routes'      => '添加路线',
-        'not_covered'     => '',
+        'not_covered'     => '未覆盖：:dungeons',
         'copy_link'       => '复制链接',
         'edit'            => '编辑',
     ],
