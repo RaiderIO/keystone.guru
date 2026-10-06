@@ -2,14 +2,19 @@
 
 namespace Tests\Unit\Database\Seeders;
 
+use App\Exceptions\SeederStepFailedException;
 use App\Models\RaidMarker;
+use App\Service\Cache\CacheServiceInterface;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionMethod;
+use Tests\Fixtures\Seeders\StepResultDatabaseSeeder;
+use Tests\Fixtures\Seeders\StubTableSeeder;
 use Tests\TestCase;
+use Throwable;
 
 #[Group('DatabaseSeeder')]
 final class DatabaseSeederTest extends TestCase
@@ -102,5 +107,73 @@ final class DatabaseSeederTest extends TestCase
 
         // Assert
         $this->assertTrue($anyFailed);
+    }
+
+    #[Test]
+    public function run_givenPrepareStepFails_throwsSeederStepFailedException(): void
+    {
+        // Arrange
+        $this->bindStepResultSeeder(prepareSucceeds: false, applySucceeds: true, expectedDropCachesCalls: 0);
+
+        // Act
+        $exception = $this->runDbSeed();
+
+        // Assert
+        $this->assertInstanceOf(SeederStepFailedException::class, $exception);
+        $this->assertSame(sprintf('Preparing temp table for %s failed!', StubTableSeeder::class), $exception->getMessage());
+        $this->assertSame(0, StubTableSeeder::$runCount, 'The seeder must not run once its temp table failed to prepare');
+    }
+
+    #[Test]
+    public function run_givenApplyStepFails_throwsSeederStepFailedException(): void
+    {
+        // Arrange
+        $this->bindStepResultSeeder(prepareSucceeds: true, applySucceeds: false, expectedDropCachesCalls: 0);
+
+        // Act
+        $exception = $this->runDbSeed();
+
+        // Assert
+        $this->assertInstanceOf(SeederStepFailedException::class, $exception);
+        $this->assertSame(sprintf('Applying temp table for %s failed!', StubTableSeeder::class), $exception->getMessage());
+        $this->assertSame(1, StubTableSeeder::$runCount);
+    }
+
+    #[Test]
+    public function run_givenEveryStepSucceeds_seedsAndDropsCaches(): void
+    {
+        // Arrange
+        $this->bindStepResultSeeder(prepareSucceeds: true, applySucceeds: true, expectedDropCachesCalls: 1);
+
+        // Act
+        $exception = $this->runDbSeed();
+
+        // Assert
+        $this->assertNull($exception);
+        $this->assertSame(1, StubTableSeeder::$runCount);
+    }
+
+    private function bindStepResultSeeder(bool $prepareSucceeds, bool $applySucceeds, int $expectedDropCachesCalls): void
+    {
+        StubTableSeeder::$runCount = 0;
+
+        $cacheService = $this->createMock(CacheServiceInterface::class);
+        $cacheService->expects($this->exactly($expectedDropCachesCalls))->method('dropCaches');
+
+        $this->app->instance(CacheServiceInterface::class, $cacheService);
+        $this->app->instance(DatabaseSeeder::class, new StepResultDatabaseSeeder($prepareSucceeds, $applySucceeds));
+    }
+
+    private function runDbSeed(): ?Throwable
+    {
+        try {
+            $this->artisan('db:seed', ['--force' => true])->run();
+        } catch (Throwable $exception) {
+            return $exception;
+        } finally {
+            DatabaseSeeder::$running = false;
+        }
+
+        return null;
     }
 }
