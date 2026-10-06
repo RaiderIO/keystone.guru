@@ -24,7 +24,9 @@ return (new PhpCsFixer\Config())
     ->setIndent("    ")
     ->setLineEnding("\n")
     ->setFinder($finder)
-    ->setParallelConfig(ParallelConfigFactory::sequential())
+    // Parallel workers orphan and peg the CPU after an interrupted local run; CI runners are
+    // ephemeral, so only there is parallelism safe.
+    ->setParallelConfig(getenv('GITHUB_ACTIONS') === 'true' ? ParallelConfigFactory::detect() : ParallelConfigFactory::sequential())
     ->setRules([
         // Arrays & commas
         'array_syntax'                => ['syntax' => 'short'],
