@@ -8,8 +8,9 @@ return [
         'world'           => '누구나 이 컬렉션을 볼 수 있습니다',
     ],
     'kind' => [
-        'season_set' => ':season 세트 · 던전 :covered/:total개',
-        'free_form'  => '{0} :game_version · 던전 없음|{1} :game_version · 던전 :count개|[2,*] :game_version · 던전 :count개',
+        'season_set'        => ':season 세트 · 던전 :covered/:total개',
+        'season_set_public' => '{0} :season · 던전 없음|{1} :season · 던전 :count개|[2,*] :season · 던전 :count개',
+        'free_form'         => '{0} :game_version · 던전 없음|{1} :game_version · 던전 :count개|[2,*] :game_version · 던전 :count개',
     ],
     'index' => [
         'title'                   => '내 컬렉션',
@@ -43,7 +44,6 @@ return [
     'new' => [
         'title'               => '새 컬렉션',
         'header'              => '새 컬렉션',
-        'details'             => '세부 정보',
         'start_from_tag'      => '태그로 시작',
         'start_from_tag_none' => '태그 없음',
         'start_from_tag_help' => '이 태그가 붙은 내 경로 중 게임 버전과 시즌에 맞는 경로로 컬렉션을 채웁니다.',
@@ -52,13 +52,12 @@ return [
     'edit' => [
         'title'                        => '%s 편집',
         'view_collection'              => '컬렉션 보기',
-        'details'                      => '세부 정보',
         'duplicate'                    => '복제',
         'duplicate_title'              => ':name 복제',
         'duplicate_help'               => '이름, 설명, 카테고리와 경로를 본인만 볼 수 있는 새 컬렉션으로 복사합니다.',
         'duplicate_season'             => '사본의 시즌',
         'duplicate_season_none'        => '시즌 없음 (자유 구성)',
-        'duplicate_keeps'              => '경로 :total개 중 :kept개가 복사됩니다. 시즌과 맞지 않는 경로는 제외됩니다.',
+        'duplicate_keeps'              => '경로 :total개 중 :kept개가 복사됩니다. 시즌과 맞지 않거나 경로 한도를 넘는 경로는 제외됩니다.',
         'duplicate_submit'             => '컬렉션 복제',
         'publish_routes_confirm_title' => '일부 경로가 :state 상태가 아닙니다',
         'publish_routes_confirm_body'  => '이 컬렉션의 일부 경로가 :state 상태가 아닙니다. 해당 경로도 :state 상태로 변경하시겠습니까?',
@@ -72,7 +71,7 @@ return [
         'no_routes'       => '이 컬렉션에는 아직 표시할 경로가 없습니다.',
         'no_routes_owner' => '이 컬렉션에는 아직 경로가 없습니다.',
         'add_routes'      => '경로 추가',
-        'slot_empty'      => ':dungeon의 경로가 아직 없습니다.',
+        'not_covered'     => '포함되지 않음: :dungeons',
         'copy_link'       => '링크 복사',
         'edit'            => '편집',
     ],

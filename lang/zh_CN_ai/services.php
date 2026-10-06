@@ -54,8 +54,8 @@ return [
     ],
     'combatlogservice' => [
         'analyze_combat_log' => [
-            'verify_error'     => '无法验证战斗日志：错误。',
-            'processing_error' => '无法处理战斗日志：错误。',
+            'verify_error'     => '无法验证战斗日志：:error',
+            'processing_error' => '无法处理战斗日志：:error',
         ],
     ],
     'combatlog' => [

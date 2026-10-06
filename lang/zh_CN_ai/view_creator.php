@@ -17,12 +17,15 @@ return [
         'empty'                   => '目前还没有列出的创作者。',
         'empty_for_category'      => '目前还没有创作者共享":category"合集。',
         'empty_for_search'        => '未找到与":search"匹配的创作者。',
+        'empty_for_dungeon'       => '目前还没有创作者发布 :dungeon 的路线。',
+        'filtered_to_dungeon'     => ':dungeon 的创作者，按其在该地下城最受欢迎的路线排序。',
+        'clear_dungeon_filter'    => '所有地下城',
     ],
     'featured' => [
-        'title'         => '精选创作者',
-        'title_dungeon' => ':dungeon 的创作者',
-        'see_all'       => '查看所有创作者',
-        /** Tooltip on a rail entry - it carries the name because the name itself may be clipped to an ellipsis */
+        'title'           => '精选创作者',
+        'title_dungeon'   => ':dungeon 的创作者',
+        'see_all_dungeon' => '查看 :dungeon 的所有创作者',
+        /** Tooltip on a rail entry - it carries the name because a name past two lines is clipped to an ellipsis */
         'entry_title'         => ':name - :routes',
         'route_count'         => '{1} :count 条路线|[2,*] :count 条路线',
         'dungeon_route_count' => '{1} :count 条 :dungeon 路线|[2,*] :count 条 :dungeon 路线',

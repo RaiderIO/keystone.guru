@@ -8,8 +8,9 @@ return [
         'world'           => 'Cualquier persona puede ver esta colección',
     ],
     'kind' => [
-        'season_set' => 'Conjunto de :season · :covered/:total mazmorras',
-        'free_form'  => '{0} :game_version · sin mazmorras|{1} :game_version · :count mazmorra|[2,*] :game_version · :count mazmorras',
+        'season_set'        => 'Conjunto de :season · :covered/:total mazmorras',
+        'season_set_public' => '{0} :season · sin mazmorras|{1} :season · :count mazmorra|[2,*] :season · :count mazmorras',
+        'free_form'         => '{0} :game_version · sin mazmorras|{1} :game_version · :count mazmorra|[2,*] :game_version · :count mazmorras',
     ],
     'index' => [
         'title'                   => 'Mis colecciones',
@@ -43,7 +44,6 @@ return [
     'new' => [
         'title'               => 'Nueva colección',
         'header'              => 'Nueva colección',
-        'details'             => 'Detalles',
         'start_from_tag'      => 'Empezar a partir de una etiqueta',
         'start_from_tag_none' => 'Sin etiqueta',
         'start_from_tag_help' => 'Llena la colección con tus rutas que tienen esta etiqueta, siempre que coincidan con la versión del juego y la temporada.',
@@ -52,13 +52,12 @@ return [
     'edit' => [
         'title'                        => 'Editar %s',
         'view_collection'              => 'Ver colección',
-        'details'                      => 'Detalles',
         'duplicate'                    => 'Duplicar',
         'duplicate_title'              => 'Duplicar :name',
         'duplicate_help'               => 'Copia el nombre, la descripción, la categoría y las rutas en una nueva colección que solo tú puedes ver.',
         'duplicate_season'             => 'Temporada de la copia',
         'duplicate_season_none'        => 'Sin temporada (libre)',
-        'duplicate_keeps'              => 'Se copian :kept de :total rutas; las rutas que no coinciden con la temporada quedan fuera.',
+        'duplicate_keeps'              => 'Se copian :kept de :total rutas; las rutas que no coinciden con la temporada o que no caben en los límites de rutas quedan fuera.',
         'duplicate_submit'             => 'Duplicar colección',
         'publish_routes_confirm_title' => 'Algunas rutas no tienen el estado «:state»',
         'publish_routes_confirm_body'  => 'No todas las rutas de esta colección tienen el estado «:state». ¿Quieres cambiarlas también a «:state»?',
@@ -72,7 +71,7 @@ return [
         'no_routes'       => 'Todavía no hay rutas que mostrar en esta colección.',
         'no_routes_owner' => 'Esta colección todavía no tiene rutas.',
         'add_routes'      => 'Agregar rutas',
-        'slot_empty'      => 'Todavía no hay ninguna ruta para :dungeon.',
+        'not_covered'     => 'Sin cubrir: :dungeons',
         'copy_link'       => 'Copiar enlace',
         'edit'            => 'Editar',
     ],

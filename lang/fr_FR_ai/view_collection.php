@@ -8,8 +8,9 @@ return [
         'world'           => 'Tout le monde peut voir cette collection',
     ],
     'kind' => [
-        'season_set' => 'Ensemble :season · :covered/:total donjons',
-        'free_form'  => '{0} :game_version · aucun donjon|{1} :game_version · :count donjon|[2,*] :game_version · :count donjons',
+        'season_set'        => 'Ensemble :season · :covered/:total donjons',
+        'season_set_public' => '{0} :season · aucun donjon|{1} :season · :count donjon|[2,*] :season · :count donjons',
+        'free_form'         => '{0} :game_version · aucun donjon|{1} :game_version · :count donjon|[2,*] :game_version · :count donjons',
     ],
     'index' => [
         'title'                   => 'Mes collections',
@@ -43,7 +44,6 @@ return [
     'new' => [
         'title'               => 'Nouvelle collection',
         'header'              => 'Nouvelle collection',
-        'details'             => 'Détails',
         'start_from_tag'      => 'Partir d\'une étiquette',
         'start_from_tag_none' => 'Aucune étiquette',
         'start_from_tag_help' => 'Remplit la collection avec vos itinéraires portant cette étiquette, dans la mesure où ils correspondent à la version du jeu et à la saison.',
@@ -52,13 +52,12 @@ return [
     'edit' => [
         'title'                        => 'Modifier %s',
         'view_collection'              => 'Voir la collection',
-        'details'                      => 'Détails',
         'duplicate'                    => 'Dupliquer',
         'duplicate_title'              => 'Dupliquer :name',
         'duplicate_help'               => 'Copie le nom, la description, la catégorie et les itinéraires dans une nouvelle collection que vous seul pouvez voir.',
         'duplicate_season'             => 'Saison de la copie',
         'duplicate_season_none'        => 'Aucune saison (libre)',
-        'duplicate_keeps'              => ':kept itinéraires sur :total sont copiés ; les itinéraires qui ne correspondent pas à la saison sont exclus.',
+        'duplicate_keeps'              => ':kept itinéraires sur :total sont copiés ; les itinéraires qui ne correspondent pas à la saison ou qui dépassent les limites d\'itinéraires sont exclus.',
         'duplicate_submit'             => 'Dupliquer la collection',
         'publish_routes_confirm_title' => 'Certains itinéraires ne sont pas en « :state »',
         'publish_routes_confirm_body'  => 'Les itinéraires de cette collection ne sont pas tous en « :state » - les passer aussi en « :state » ?',
@@ -72,7 +71,7 @@ return [
         'no_routes'       => 'Cette collection ne contient encore aucun itinéraire à afficher.',
         'no_routes_owner' => 'Cette collection ne contient encore aucun itinéraire.',
         'add_routes'      => 'Ajouter des itinéraires',
-        'slot_empty'      => 'Pas encore d\'itinéraire pour :dungeon.',
+        'not_covered'     => 'Non couverts : :dungeons',
         'copy_link'       => 'Copier le lien',
         'edit'            => 'Modifier',
     ],

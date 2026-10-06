@@ -6,7 +6,6 @@ return [
         'beguiling'           => 'Betörend',
         'awakened'            => 'Erwacht',
         'inspiring'           => 'Inspirierend',
-        'prideful'            => 'Stolz',
         'tormented'           => 'Gequält',
         'encrypted'           => 'Verschlüsselt',
         'mdt_placeholder'     => 'MDT Platzhalter',

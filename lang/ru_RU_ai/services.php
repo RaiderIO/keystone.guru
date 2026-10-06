@@ -54,8 +54,8 @@ return [
     ],
     'combatlogservice' => [
         'analyze_combat_log' => [
-            'verify_error'     => 'Невозможно проверить журнал боя: ошибка.',
-            'processing_error' => 'Невозможно обработать журнал боя: ошибка.',
+            'verify_error'     => 'Невозможно проверить журнал боя: :error',
+            'processing_error' => 'Невозможно обработать журнал боя: :error',
         ],
     ],
     'combatlog' => [

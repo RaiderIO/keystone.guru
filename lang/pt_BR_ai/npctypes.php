@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'aberration'    => 'Aberração',
     'beast'         => 'Fera',
     'critter'       => 'Bicho',
@@ -14,5 +15,5 @@ return [
     'uncategorized' => 'Sem categoria',
     'totem'         => 'Totem',
     'not_specified' => 'Não Especificado',
-]
-;
+
+];

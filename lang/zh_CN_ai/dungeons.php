@@ -234,13 +234,6 @@ return [
                 'ruins_of_ahnqiraj' => '安其拉废墟',
             ],
         ],
-        'ruins_of_ahnqiraj_sod' => [
-            'name'         => '安其拉废墟',
-            'abbreviation' => '',
-            'floors'       => [
-                'ruins_of_ahnqiraj' => '安其拉废墟',
-            ],
-        ],
         'scarlet_enclave' => [
             'name'         => '',
             'abbreviation' => '',
@@ -317,15 +310,6 @@ return [
             'floors'       => [
                 'the_hive_undergrounds' => '地下虫巢',
                 'the_temple_gates'      => '',
-                'vault_of_cthun'        => '克苏恩地穴',
-            ],
-        ],
-        'temple_of_ahnqiraj_sod' => [
-            'name'         => '安其拉',
-            'abbreviation' => '',
-            'floors'       => [
-                'the_hive_undergrounds' => '地下虫巢',
-                'the_temple_gates'      => '神殿大门',
                 'vault_of_cthun'        => '克苏恩地穴',
             ],
         ],

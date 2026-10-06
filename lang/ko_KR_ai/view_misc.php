@@ -36,8 +36,9 @@ return [
         'header' => '데모 경로',
     ],
     'embed' => [
-        'title'  => '경로 임베드',
-        'header' => '웹페이지에서 Keystone.guru 임베드 테스트',
+        'title'          => '경로 임베드',
+        'header'         => '웹페이지에서 Keystone.guru 임베드 테스트',
+        'get_mdt_string' => 'MDT 문자열 가져오기',
     ],
     'health' => [
         'title'  => '건강 계산',

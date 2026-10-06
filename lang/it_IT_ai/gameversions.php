@@ -34,5 +34,13 @@ return [
         'name'        => 'Forever',
         'description' => 'WoW: Forever',
     ],
+    'tbc' => [
+        'name'        => 'TBC Classic',
+        'description' => 'The Burning Crusade Classic',
+    ],
+    'sod' => [
+        'name'        => 'SoD',
+        'description' => 'Stagione della Scoperta',
+    ],
 
 ];

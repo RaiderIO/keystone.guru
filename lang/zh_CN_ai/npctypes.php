@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'aberration'    => '畸变怪',
     'beast'         => '野兽',
     'critter'       => '小动物',
@@ -14,5 +15,5 @@ return [
     'uncategorized' => '未分类',
     'totem'         => '图腾',
     'not_specified' => '未指定',
-]
-;
+
+];

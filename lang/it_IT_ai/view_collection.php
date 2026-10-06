@@ -8,8 +8,9 @@ return [
         'world'           => 'Chiunque può vedere questa raccolta',
     ],
     'kind' => [
-        'season_set' => 'Set :season · :covered/:total dungeon',
-        'free_form'  => '{0} :game_version · nessun dungeon|{1} :game_version · :count dungeon|[2,*] :game_version · :count dungeon',
+        'season_set'        => 'Set :season · :covered/:total dungeon',
+        'season_set_public' => '{0} :season · nessun dungeon|{1} :season · :count dungeon|[2,*] :season · :count dungeon',
+        'free_form'         => '{0} :game_version · nessun dungeon|{1} :game_version · :count dungeon|[2,*] :game_version · :count dungeon',
     ],
     'index' => [
         'title'                   => 'Le mie raccolte',
@@ -43,7 +44,6 @@ return [
     'new' => [
         'title'               => 'Nuova raccolta',
         'header'              => 'Nuova raccolta',
-        'details'             => 'Dettagli',
         'start_from_tag'      => 'Parti da un tag',
         'start_from_tag_none' => 'Nessun tag',
         'start_from_tag_help' => 'Riempie la raccolta con i tuoi percorsi che hanno questo tag, purché corrispondano alla versione del gioco e alla stagione.',
@@ -52,13 +52,12 @@ return [
     'edit' => [
         'title'                        => 'Modifica %s',
         'view_collection'              => 'Visualizza raccolta',
-        'details'                      => 'Dettagli',
         'duplicate'                    => 'Duplica',
         'duplicate_title'              => 'Duplica :name',
         'duplicate_help'               => 'Copia nome, descrizione, categoria e percorsi in una nuova raccolta che solo tu puoi vedere.',
         'duplicate_season'             => 'Stagione della copia',
         'duplicate_season_none'        => 'Nessuna stagione (libera)',
-        'duplicate_keeps'              => 'Vengono copiati :kept percorsi su :total; i percorsi che non corrispondono alla stagione vengono esclusi.',
+        'duplicate_keeps'              => 'Vengono copiati :kept percorsi su :total; i percorsi che non corrispondono alla stagione o che superano i limiti di percorsi vengono esclusi.',
         'duplicate_submit'             => 'Duplica raccolta',
         'publish_routes_confirm_title' => 'Alcuni percorsi non hanno visibilità «:state»',
         'publish_routes_confirm_body'  => 'Non tutti i percorsi di questa raccolta hanno visibilità «:state» - impostare anche loro su «:state»?',
@@ -72,7 +71,7 @@ return [
         'no_routes'       => 'Non ci sono ancora percorsi da mostrare in questa raccolta.',
         'no_routes_owner' => 'Questa raccolta non ha ancora percorsi.',
         'add_routes'      => 'Aggiungi percorsi',
-        'slot_empty'      => 'Ancora nessun percorso per :dungeon.',
+        'not_covered'     => 'Non coperti: :dungeons',
         'copy_link'       => 'Copia link',
         'edit'            => 'Modifica',
     ],

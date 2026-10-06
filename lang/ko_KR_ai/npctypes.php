@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'aberration'    => '돌연변이',
     'beast'         => '야수',
     'critter'       => '동물',
@@ -14,5 +15,5 @@ return [
     'uncategorized' => '미분류',
     'totem'         => '토템',
     'not_specified' => '기타',
-]
-;
+
+];

@@ -54,8 +54,8 @@ return [
     ],
     'combatlogservice' => [
         'analyze_combat_log' => [
-            'verify_error'     => 'Impossible de vérifier le journal de combat : erreur.',
-            'processing_error' => 'Impossible de traiter le journal de combat : erreur.',
+            'verify_error'     => 'Impossible de vérifier le journal de combat : :error',
+            'processing_error' => 'Impossible de traiter le journal de combat : :error',
         ],
     ],
     'combatlog' => [
