@@ -54,8 +54,8 @@ return [
     ],
     'combatlogservice' => [
         'analyze_combat_log' => [
-            'verify_error'     => 'No se puede verificar el registro de combate: error.',
-            'processing_error' => 'No se puede procesar el registro de combate: error.',
+            'verify_error'     => 'No se puede verificar el registro de combate: :error',
+            'processing_error' => 'No se puede procesar el registro de combate: :error',
         ],
     ],
     'combatlog' => [
