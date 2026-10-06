@@ -15,6 +15,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Psr\Log\LogLevel;
 use ReflectionProperty;
 use RuntimeException;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Exceptions')]
@@ -24,7 +25,7 @@ class HandlerTest extends PublicTestCase
     /**
      * The async ContextEvent broadcast job (killzone/route/mapping-version presence updates) is
      * reported to Sentry on every queue attempt, even ones a retry later succeeds on - a DNS lookup
-     * failure reaching the broadcast server is a transient environment issue (#4341), not an
+     * failure reaching the broadcast server is a transient environment issue, not an
      * application defect, so it must never reach the reportable pipeline.
      */
     #[Test]
@@ -95,7 +96,7 @@ class HandlerTest extends PublicTestCase
     /**
      * A crawler requesting a URL whose percent-encoding is truncated makes ValidatePathEncoding throw
      * MalformedUrlException - a 400 HttpException subclass. $dontReport is matched by exact class, so
-     * the subclass must be listed itself or the 400 is logged as an uncaught error (#4438).
+     * the subclass must be listed itself or the 400 is logged as an uncaught error.
      */
     #[Test]
     public function report_givenRequestWithTruncatedPercentEncodedPath_doesNotLogUncaughtException(): void
@@ -123,7 +124,9 @@ class HandlerTest extends PublicTestCase
         // Arrange
         $this->markApplicationAsNotRunningInConsole();
         $handlerLogging = $this->createMock(HandlerLoggingInterface::class);
-        $handlerLogging->expects(self::once())->method('uncaughtException');
+        $handlerLogging->expects(self::once())
+            ->method('uncaughtException')
+            ->with(self::anything(), self::anything(), null, null, self::anything(), RuntimeException::class, 'boom', true);
         $this->instance(HandlerLoggingInterface::class, $handlerLogging);
         $handler = app()->make(Handler::class);
         $handler->reportable(static fn(RuntimeException $e): bool => false);
@@ -132,6 +135,61 @@ class HandlerTest extends PublicTestCase
         $handler->report(new RuntimeException('boom'));
 
         // Assert - the mock expectation
+    }
+
+    #[Test]
+    public function report_givenUnlistedExceptionWithSensitiveRequestInput_masksThatInputInTheUncaughtExceptionRecord(): void
+    {
+        // Arrange
+        $this->markApplicationAsNotRunningInConsole();
+        $this->app->instance('request', Request::create('/profile', 'POST', [
+            '_token'                => 'a-csrf-token',
+            'password'              => 'hunter2',
+            'password_confirmation' => 'hunter2',
+            'name'                  => 'Wotuu',
+        ]));
+        $handlerLogging = $this->createMock(HandlerLoggingInterface::class);
+        $handlerLogging->expects(self::once())
+            ->method('uncaughtException')
+            ->with(self::anything(), self::anything(), null, null, [
+                '_token'                => '*********',
+                'password'              => '*********',
+                'password_confirmation' => '*********',
+                'name'                  => 'Wotuu',
+            ], RuntimeException::class, 'boom', true);
+        $this->instance(HandlerLoggingInterface::class, $handlerLogging);
+        $handler = app()->make(Handler::class);
+        $handler->reportable(static fn(RuntimeException $e): bool => false);
+
+        // Act
+        $handler->report(new RuntimeException('boom'));
+
+        // Assert - the mock expectation
+    }
+
+    /**
+     * TooManyRequestsHttpException is an HttpException subclass, so the exact-class $dontReport check lets it
+     * through; it must land on the tooManyRequests record instead of the error-level uncaught one.
+     */
+    #[Test]
+    public function report_givenTooManyRequestsException_logsTooManyRequestsInsteadOfUncaughtException(): void
+    {
+        // Arrange
+        $this->markApplicationAsNotRunningInConsole();
+        $this->app->instance('request', Request::create('/ajax/i2zrVoe/mdtExport'));
+        $exception      = new TooManyRequestsHttpException();
+        $handlerLogging = $this->createMock(HandlerLoggingInterface::class);
+        $handlerLogging->expects(self::never())->method('uncaughtException');
+        $handlerLogging->expects(self::once())
+            ->method('tooManyRequests')
+            ->with(self::anything(), 'http://localhost/ajax/i2zrVoe/mdtExport', null, null, $exception);
+        $this->instance(HandlerLoggingInterface::class, $handlerLogging);
+        $handler = app()->make(Handler::class);
+
+        // Act
+        $handler->report($exception);
+
+        // Assert - the mock expectations
     }
 
     /**

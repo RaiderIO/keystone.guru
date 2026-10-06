@@ -12,11 +12,9 @@ use Symfony\Component\Finder\SplFileInfo;
 use Tests\TestCase;
 
 /**
- * Guards the connection isolation #4346 introduced.
- *
  * A model that hardcodes `protected $connection` ignores the default connection, so under PHPUnit it keeps reading and
  * writing DB_DATABASE while every other model uses DB_PHPUNIT_DATABASE. That splits a test's data across two schemas
- * and writes test rows into the live dev database (#4498).
+ * and writes test rows into the live dev database.
  *
  * The combatlog models are the deliberate exception: their data genuinely lives on a second server, and
  * `Tests\TestCase::setUp()` redirects that connection to DB_PHPUNIT_COMBATLOG_DATABASE instead.
@@ -43,7 +41,7 @@ final class ModelConnectionTest extends TestCase
             $connectionName,
             sprintf(
                 'User must follow the default connection, but is pinned to "%s". A pin here sends every test\'s user ' .
-                'rows to DB_DATABASE while the rest of the test data lives in DB_PHPUNIT_DATABASE (#4498).',
+                'rows to DB_DATABASE while the rest of the test data lives in DB_PHPUNIT_DATABASE.',
                 $connectionName ?? 'null',
             ),
         );
@@ -75,7 +73,7 @@ final class ModelConnectionTest extends TestCase
             [],
             $offenders,
             'Only App\Models\CombatLog models may pin $connection (to "combatlog"). Any other pin bypasses the ' .
-            'phpunit connection and leaks test data into DB_DATABASE (#4498).',
+            'phpunit connection and leaks test data into DB_DATABASE.',
         );
     }
 

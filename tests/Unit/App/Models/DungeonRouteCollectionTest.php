@@ -5,7 +5,10 @@ namespace Tests\Unit\App\Models;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
+use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
+use App\Models\Team;
+use App\Models\TeamUser;
 use App\Models\User;
 use App\Models\UserPinnedDungeonRouteCollection;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -23,25 +26,29 @@ final class DungeonRouteCollectionTest extends PublicTestCase
         bool   $expected,
         string $because,
     ): void {
-        // Arrange
-        $owner  = User::factory()->create();
-        $viewer = User::factory()->create();
-
-        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
-            'user_id'            => $owner->id,
-            'published_state_id' => PublishedState::ALL[$publishedState],
-        ]);
+        $owner                  = null;
+        $viewer                 = null;
+        $dungeonRouteCollection = null;
 
         try {
+            // Arrange
+            $owner  = User::factory()->create();
+            $viewer = User::factory()->create();
+
+            $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+                'user_id'            => $owner->id,
+                'published_state_id' => PublishedState::ALL[$publishedState],
+            ]);
+
             // Act
             $result = $dungeonRouteCollection->mayUserView($viewer);
 
             // Assert
             $this->assertSame($expected, $result, $because);
         } finally {
-            $dungeonRouteCollection->delete();
-            $viewer->delete();
-            $owner->delete();
+            $dungeonRouteCollection?->delete();
+            $viewer?->delete();
+            $owner?->delete();
         }
     }
 
@@ -71,46 +78,215 @@ final class DungeonRouteCollectionTest extends PublicTestCase
     #[Test]
     public function mayUserView_givenAnUnpublishedCollection_returnsTrueForItsOwner(): void
     {
-        // Arrange
-        $owner = User::factory()->create();
-
-        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
-            'user_id'            => $owner->id,
-            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
-        ]);
+        $owner                  = null;
+        $dungeonRouteCollection = null;
 
         try {
+            // Arrange
+            $owner = User::factory()->create();
+
+            $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+                'user_id'            => $owner->id,
+                'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+            ]);
+
             // Act
             $result = $dungeonRouteCollection->mayUserView($owner);
 
             // Assert
             $this->assertTrue($result, 'The owner may always view their own collection');
         } finally {
-            $dungeonRouteCollection->delete();
-            $owner->delete();
+            $dungeonRouteCollection?->delete();
+            $owner?->delete();
         }
     }
 
     #[Test]
     public function mayUserView_givenAWorldPublishedCollection_returnsTrueForAGuest(): void
     {
-        // Arrange
-        $owner = User::factory()->create();
-
-        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
-            'user_id'            => $owner->id,
-            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
-        ]);
+        $owner                  = null;
+        $dungeonRouteCollection = null;
 
         try {
+            // Arrange
+            $owner = User::factory()->create();
+
+            $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+                'user_id'            => $owner->id,
+                'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            ]);
+
             // Act
             $result = $dungeonRouteCollection->mayUserView(null);
 
             // Assert
             $this->assertTrue($result, 'A guest may view a world published collection');
         } finally {
+            $dungeonRouteCollection?->delete();
+            $owner?->delete();
+        }
+    }
+
+    #[Test]
+    public function mayUserView_givenATeamPublishedCollection_returnsTrueForATeamMember(): void
+    {
+        $owner                  = null;
+        $member                 = null;
+        $team                   = null;
+        $teamUser               = null;
+        $dungeonRouteCollection = null;
+
+        try {
+            // Arrange
+            $owner    = User::factory()->create();
+            $member   = User::factory()->create();
+            $team     = $this->createTeam();
+            $teamUser = TeamUser::create([
+                'team_id' => $team->id,
+                'user_id' => $member->id,
+                'role'    => TeamUser::ROLE_MEMBER,
+            ]);
+            $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+                'user_id'            => $owner->id,
+                'team_id'            => $team->id,
+                'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
+            ]);
+
+            // Act
+            $result = $dungeonRouteCollection->mayUserView($member);
+
+            // Assert
+            $this->assertTrue($result, 'A member of the team may view a team published collection');
+        } finally {
+            $dungeonRouteCollection?->delete();
+            $teamUser?->delete();
+            $team?->delete();
+            $member?->delete();
+            $owner?->delete();
+        }
+    }
+
+    #[Test]
+    public function mayUserView_givenATeamPublishedCollection_returnsFalseForAUserOutsideTheTeam(): void
+    {
+        $owner                  = null;
+        $member                 = null;
+        $outsider               = null;
+        $team                   = null;
+        $teamUser               = null;
+        $dungeonRouteCollection = null;
+
+        try {
+            // Arrange
+            $owner    = User::factory()->create();
+            $member   = User::factory()->create();
+            $outsider = User::factory()->create();
+            $team     = $this->createTeam();
+            $teamUser = TeamUser::create([
+                'team_id' => $team->id,
+                'user_id' => $member->id,
+                'role'    => TeamUser::ROLE_MEMBER,
+            ]);
+            $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+                'user_id'            => $owner->id,
+                'team_id'            => $team->id,
+                'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
+            ]);
+
+            // Act
+            $result = $dungeonRouteCollection->mayUserView($outsider);
+
+            // Assert
+            $this->assertFalse($result, 'Only members of the team may view a team published collection');
+        } finally {
+            $dungeonRouteCollection?->delete();
+            $teamUser?->delete();
+            $team?->delete();
+            $outsider?->delete();
+            $member?->delete();
+            $owner?->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('adminOnlyPublishedStateProvider')]
+    public function mayUserView_givenACollectionHiddenFromOtherUsers_returnsTrueForAnAdmin(string $publishedState): void
+    {
+        $owner                  = null;
+        $dungeonRouteCollection = null;
+
+        try {
+            // Arrange
+            $admin = User::findOrFail(1);
+            $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
+            $owner                  = User::factory()->create();
+            $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+                'user_id'            => $owner->id,
+                'published_state_id' => PublishedState::ALL[$publishedState],
+            ]);
+
+            // Act
+            $result = $dungeonRouteCollection->mayUserView($admin);
+
+            // Assert
+            $this->assertTrue($result, 'An admin may view any collection');
+        } finally {
+            $dungeonRouteCollection?->delete();
+            $owner?->delete();
+        }
+    }
+
+    /** @return array<string, array{0: string}> */
+    public static function adminOnlyPublishedStateProvider(): array
+    {
+        return [
+            'unpublished'         => [PublishedState::UNPUBLISHED],
+            'team without a team' => [PublishedState::TEAM],
+        ];
+    }
+
+    /**
+     * This project uses no foreign keys, so a deleted collection would otherwise leave its route
+     * couplings behind.
+     */
+    #[Test]
+    public function delete_givenACollectionHoldingARoute_removesItsCoupling(): void
+    {
+        $owner                  = null;
+        $dungeonRoute           = null;
+        $dungeonRouteCollection = null;
+        $coupling               = null;
+
+        try {
+            // Arrange
+            $owner        = User::factory()->create();
+            $dungeonRoute = DungeonRoute::factory()->create([
+                'author_id'  => $owner->id,
+                'expires_at' => null,
+            ]);
+            $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $owner->id]);
+            $coupling               = DungeonRouteCollectionRoute::create([
+                'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+                'dungeon_route_id'            => $dungeonRoute->id,
+                'order'                       => 0,
+            ]);
+
+            // Act
             $dungeonRouteCollection->delete();
-            $owner->delete();
+
+            // Assert
+            $this->assertFalse(
+                DungeonRouteCollectionRoute::whereKey($coupling->id)->exists(),
+                'Deleting a collection must clean up the couplings to its routes',
+            );
+            $this->assertTrue(DungeonRoute::whereKey($dungeonRoute->id)->exists(), 'The route itself stays');
+        } finally {
+            if ($coupling !== null) {
+                DungeonRouteCollectionRoute::whereKey($coupling->id)->delete();
+            }
+            $dungeonRouteCollection?->delete();
+            $dungeonRoute?->delete();
+            $owner?->delete();
         }
     }
 
@@ -121,21 +297,26 @@ final class DungeonRouteCollectionTest extends PublicTestCase
     #[Test]
     public function delete_givenARouteInsideACollection_removesItsCoupling(): void
     {
-        // Arrange
-        $owner        = User::factory()->create();
-        $dungeonRoute = DungeonRoute::factory()->create([
-            'author_id'  => $owner->id,
-            'expires_at' => null,
-        ]);
-
-        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $owner->id]);
-        DungeonRouteCollectionRoute::create([
-            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
-            'dungeon_route_id'            => $dungeonRoute->id,
-            'order'                       => 0,
-        ]);
+        $owner                  = null;
+        $dungeonRoute           = null;
+        $dungeonRouteCollection = null;
+        $coupling               = null;
 
         try {
+            // Arrange
+            $owner        = User::factory()->create();
+            $dungeonRoute = DungeonRoute::factory()->create([
+                'author_id'  => $owner->id,
+                'expires_at' => null,
+            ]);
+
+            $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $owner->id]);
+            $coupling               = DungeonRouteCollectionRoute::create([
+                'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+                'dungeon_route_id'            => $dungeonRoute->id,
+                'order'                       => 0,
+            ]);
+
             // Act
             $dungeonRoute->delete();
 
@@ -146,8 +327,12 @@ final class DungeonRouteCollectionTest extends PublicTestCase
                 'Deleting a route must clean up the collections it was in',
             );
         } finally {
-            $dungeonRouteCollection->delete();
-            $owner->delete();
+            if ($coupling !== null) {
+                DungeonRouteCollectionRoute::whereKey($coupling->id)->delete();
+            }
+            $dungeonRouteCollection?->delete();
+            $dungeonRoute?->delete();
+            $owner?->delete();
         }
     }
 
@@ -158,18 +343,23 @@ final class DungeonRouteCollectionTest extends PublicTestCase
     #[Test]
     public function delete_givenAPinnedCollection_removesThePin(): void
     {
-        // Arrange
-        $owner  = User::factory()->create();
-        $pinner = User::factory()->create();
-
-        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $owner->id]);
-        UserPinnedDungeonRouteCollection::create([
-            'user_id'                     => $pinner->id,
-            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
-            'order'                       => 0,
-        ]);
+        $owner                  = null;
+        $pinner                 = null;
+        $dungeonRouteCollection = null;
+        $pin                    = null;
 
         try {
+            // Arrange
+            $owner  = User::factory()->create();
+            $pinner = User::factory()->create();
+
+            $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $owner->id]);
+            $pin                    = UserPinnedDungeonRouteCollection::create([
+                'user_id'                     => $pinner->id,
+                'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+                'order'                       => 0,
+            ]);
+
             // Act
             $dungeonRouteCollection->delete();
 
@@ -180,8 +370,24 @@ final class DungeonRouteCollectionTest extends PublicTestCase
                 'Deleting a collection must clean up any pins pointing at it',
             );
         } finally {
-            $pinner->delete();
-            $owner->delete();
+            if ($pin !== null) {
+                UserPinnedDungeonRouteCollection::whereKey($pin->id)->delete();
+            }
+            $dungeonRouteCollection?->delete();
+            $pinner?->delete();
+            $owner?->delete();
         }
+    }
+
+    private function createTeam(): Team
+    {
+        return Team::create([
+            'name'         => sprintf('Collection test %s', uniqid()),
+            'public_key'   => Team::generateRandomPublicKey(),
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'description'  => 'Created by DungeonRouteCollectionTest',
+            'icon_file_id' => -1,
+            'default_role' => TeamUser::ROLE_MEMBER,
+        ]);
     }
 }

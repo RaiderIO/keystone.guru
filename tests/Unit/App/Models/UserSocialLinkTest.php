@@ -48,6 +48,10 @@ final class UserSocialLinkTest extends PublicTestCase
                 UserSocialLinkPlatform::X->value, 'https://twitter.com/someone', true,
                 'Legacy twitter.com links must keep working after the rename',
             ],
+            'uppercase scheme and host' => [
+                UserSocialLinkPlatform::Twitch->value, 'HTTPS://WWW.Twitch.TV/someone', true,
+                'Scheme and host are case-insensitive, so an uppercase link is still an allowed https link',
+            ],
             'website accepts any https host' => [
                 UserSocialLinkPlatform::Website->value, 'https://example.com/me', true,
                 'The website link is intentionally unconstrained beyond requiring https',
@@ -102,16 +106,17 @@ final class UserSocialLinkTest extends PublicTestCase
     }
 
     #[Test]
-    public function getIconClass_givenEveryKnownPlatform_returnsANonEmptyClass(): void
+    public function getIconClass_givenEveryKnownPlatform_returnsThatPlatformsIcon(): void
     {
         // Arrange & Act & Assert
         foreach (UserSocialLinkPlatform::cases() as $platform) {
             $socialLink           = new UserSocialLink();
             $socialLink->platform = $platform->value;
 
-            $this->assertNotEmpty(
+            $this->assertSame(
+                $platform->icon(),
                 $socialLink->getIconClass(),
-                sprintf('Platform %s must map to an icon class', $platform->value),
+                sprintf('Platform %s must map to its own icon class', $platform->value),
             );
         }
     }
@@ -154,5 +159,15 @@ final class UserSocialLinkTest extends PublicTestCase
                 );
             }
         }
+    }
+
+    #[Test]
+    public function icon_givenEveryPlatformCase_isDistinct(): void
+    {
+        // Act
+        $icons = array_map(static fn(UserSocialLinkPlatform $platform): string => $platform->icon(), UserSocialLinkPlatform::cases());
+
+        // Assert
+        $this->assertSame($icons, array_values(array_unique($icons)), 'Two platforms sharing an icon cannot be told apart on a profile');
     }
 }

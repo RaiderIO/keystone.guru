@@ -56,6 +56,10 @@ class HtmlSanitizerTest extends TestCase
                 '<h6>Small Title</h6>',
             ],
             [
+                '<b onclick="alert(\'xss\');"><a href="https://google.com" onclick="alert(\'xss\');">Nested</a></b>',
+                '<b>Nested</b>',
+            ],
+            [
                 '<a href="https://keystone.guru">Keystone.guru</a>',
                 '<a href="https://keystone.guru">Keystone.guru</a>',
             ],
@@ -104,6 +108,20 @@ class HtmlSanitizerTest extends TestCase
                 'Disallowed scheme on an allowed domain',
             ],
         ];
+    }
+
+    #[Test]
+    #[Group('HtmlSanitizer')]
+    public function sanitize_givenLineEndingConversionDisabled_keepsTheLineBreaks(): void
+    {
+        // Arrange
+        $sanitizer = new HtmlSanitizer();
+
+        // Act
+        $result = $sanitizer->sanitize("Line 1\nLine 2", false);
+
+        // Assert
+        $this->assertSame("Line 1\nLine 2", $result);
     }
 
     #[Test]

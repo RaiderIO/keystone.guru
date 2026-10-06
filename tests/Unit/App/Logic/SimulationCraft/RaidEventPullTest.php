@@ -3,11 +3,14 @@
 namespace Tests\Unit\App\Logic\SimulationCraft;
 
 use App\Logic\SimulationCraft\RaidEventPull;
+use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use InvalidArgumentException;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -46,6 +49,34 @@ final class RaidEventPullTest extends TestCase
     {
         return $this->getMockBuilder(RaidEventPull::class)
             ->setConstructorArgs([$this->coordinatesService, $this->options])
+            ->onlyMethods($methodsToMock)
+            ->getMock();
+    }
+
+    /**
+     * A pull whose two points lie $ingameDistance yards apart, walked at 7 yards per second.
+     *
+     * @param string[] $methodsToMock
+     *
+     * @return RaidEventPull&MockObject
+     */
+    private function makeRaidEventPullOverDistance(float $ingameDistance, int $rangedPullCompensationYards, array $methodsToMock = []): RaidEventPull
+    {
+        config([
+            'keystoneguru.character.default_movement_speed_yards_second' => 7,
+            'keystoneguru.character.mount_cast_time_seconds'             => 1.5,
+        ]);
+
+        $this->coordinatesService->method('calculateIngameLocationForMapLocation')->willReturn(new IngameXY());
+        $this->coordinatesService->method('distanceBetweenPoints')->willReturn($ingameDistance);
+
+        $options = new SimulationCraftRaidEventsOptions([
+            'ranged_pull_compensation_yards' => $rangedPullCompensationYards,
+            'use_mounts'                     => false,
+        ]);
+
+        return $this->getMockBuilder(RaidEventPull::class)
+            ->setConstructorArgs([$this->coordinatesService, $options])
             ->onlyMethods($methodsToMock)
             ->getMock();
     }
@@ -174,5 +205,79 @@ final class RaidEventPullTest extends TestCase
 
         // Assert
         Assert::assertSame(0.0, $result);
+    }
+
+    #[Test]
+    public function calculateDelayBetweenPoints_givenPointsOnDifferentFloors_throwsInvalidArgumentException(): void
+    {
+        // Arrange
+        $pull = $this->makeRaidEventPullOverDistance(140, 0);
+
+        // Assert
+        $this->expectException(InvalidArgumentException::class);
+
+        // Act
+        $pull->calculateDelayBetweenPoints(new LatLng(0, 0, $this->makeFloor(1)), new LatLng(1, 1, $this->makeFloor(2)));
+    }
+
+    #[Test]
+    #[DataProvider('walkingDelayProvider')]
+    public function calculateDelayBetweenPoints_givenNoMounts_returnsTheTimeToWalkTheDistance(
+        float $ingameDistance,
+        int   $rangedPullCompensationYards,
+        bool  $applyRangedCompensation,
+        float $expected,
+    ): void {
+        // Arrange
+        $floor = $this->makeFloor(1);
+        $pull  = $this->makeRaidEventPullOverDistance($ingameDistance, $rangedPullCompensationYards);
+
+        // Act
+        $result = $pull->calculateDelayBetweenPoints(new LatLng(0, 0, $floor), new LatLng(1, 1, $floor), $applyRangedCompensation);
+
+        // Assert
+        Assert::assertEqualsWithDelta($expected, $result, 0.0001);
+    }
+
+    /**
+     * @return array<string, array{float, int, bool, float}>
+     */
+    public static function walkingDelayProvider(): array
+    {
+        return [
+            'compensation shortens the walk'              => [140, 70, true, 10.0],
+            'compensation not applied walks it all'       => [140, 70, false, 20.0],
+            'compensation beyond the distance walks none' => [20, 30, true, 0.0],
+        ];
+    }
+
+    #[Test]
+    public function calculateDelayBetweenPoints_givenMountedAllTheWay_returnsTheRideAndOneMountCast(): void
+    {
+        // Arrange
+        $floor = $this->makeFloor(1);
+        $pull  = $this->makeRaidEventPullOverDistance(140, 0, ['calculateMountedFactorAndMountCastsBetweenPoints']);
+        $pull->method('calculateMountedFactorAndMountCastsBetweenPoints')->willReturn([[['factor' => 1.0, 'speed' => 14]], 1]);
+
+        // Act
+        $result = $pull->calculateDelayBetweenPoints(new LatLng(0, 0, $floor), new LatLng(1, 1, $floor));
+
+        // Assert - 140 yards at 14 yards per second plus a 1.5 second mount cast beats walking for 20 seconds
+        Assert::assertEqualsWithDelta(11.5, $result, 0.0001);
+    }
+
+    #[Test]
+    public function calculateDelayBetweenPoints_givenMountCastsCostingMoreThanWalking_returnsTheTimeToWalk(): void
+    {
+        // Arrange
+        $floor = $this->makeFloor(1);
+        $pull  = $this->makeRaidEventPullOverDistance(140, 0, ['calculateMountedFactorAndMountCastsBetweenPoints']);
+        $pull->method('calculateMountedFactorAndMountCastsBetweenPoints')->willReturn([[['factor' => 1.0, 'speed' => 14]], 10]);
+
+        // Act
+        $result = $pull->calculateDelayBetweenPoints(new LatLng(0, 0, $floor), new LatLng(1, 1, $floor));
+
+        // Assert - riding takes 10 seconds plus 15 seconds of mount casts, walking takes 20
+        Assert::assertEqualsWithDelta(20.0, $result, 0.0001);
     }
 }
