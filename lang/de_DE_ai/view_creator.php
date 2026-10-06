@@ -18,7 +18,7 @@ return [
         'empty_for_category'      => 'Noch kein Creator teilt eine ":category"-Sammlung.',
         'empty_for_search'        => 'Keine Creator gefunden, die zu ":search" passen.',
         'empty_for_dungeon'       => 'Noch veröffentlicht kein Creator Routen für :dungeon.',
-        'filtered_to_dungeon'     => 'Creator für :dungeon, die mit den beliebtesten Routen dort zuerst.',
+        'filtered_to_dungeon'     => 'Creator für :dungeon – zuerst diejenigen mit den beliebtesten Routen für diesen Dungeon.',
         'clear_dungeon_filter'    => 'Alle Dungeons',
     ],
     'featured' => [
