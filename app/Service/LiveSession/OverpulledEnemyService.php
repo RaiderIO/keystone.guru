@@ -115,10 +115,10 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
                                    ), 0
                            ) AS SIGNED) as enemy_forces
                 from `live_sessions`
-                         left join `dungeon_routes` on `dungeon_routes`.`id` = `live_sessions`.`id`
+                         left join `dungeon_routes` on `dungeon_routes`.`id` = `live_sessions`.`dungeon_route_id`
                          left join `overpulled_enemies` on `overpulled_enemies`.`live_session_id` = `live_sessions`.`id`
                          left join `kill_zones` on `kill_zones`.`id` = `overpulled_enemies`.`kill_zone_id`
-                         left join `enemies` on `enemies`.`id` = `overpulled_enemies`.`enemy_id`
+                         left join `enemies` on `enemies`.`npc_id` = `overpulled_enemies`.`npc_id` AND `enemies`.`mdt_id` = `overpulled_enemies`.`mdt_id` AND `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
                          left join `npcs` on `npcs`.`id` = `enemies`.`npc_id`
                          left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
                          left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
