@@ -491,3 +491,36 @@ describe('Enemy#getWowheadLinkForGameVersion', () => {
         expect(result).toBe('https://www.wowhead.com/cn/spell=123');
     });
 });
+
+describe('Enemy#assignRaidMarker', () => {
+    const originalGetState = global.getState;
+    const originalAjax = global.$.ajax;
+
+    afterEach(() => {
+        global.getState = originalGetState;
+        global.$.ajax = originalAjax;
+    });
+
+    test('assignRaidMarker_givenRaidMarkerKey_postsRaidMarkerKeyAndAppliesItOnSuccess', () => {
+        // Arrange
+        global.getState = () => ({
+            getMapContext: () => ({getPublicKey: () => 'abc123'}),
+        });
+        global.$.ajax = vi.fn(options => options.success());
+        const enemy = Object.create(Enemy.prototype);
+        enemy.id = 42;
+        enemy.map = {leafletMap: {closePopup: vi.fn()}};
+        enemy.signal = vi.fn();
+
+        // Act
+        enemy.assignRaidMarker('skull');
+
+        // Assert
+        expect(global.$.ajax).toHaveBeenCalledTimes(1);
+        const ajaxOptions = global.$.ajax.mock.calls[0][0];
+        expect(ajaxOptions.url).toBe('/ajax/abc123/raidmarker/42');
+        expect(ajaxOptions.data).toEqual({raid_marker_key: 'skull'});
+        expect(enemy.raid_marker_key).toBe('skull');
+        expect(enemy.signal).toHaveBeenCalledWith('enemy:set_raid_marker', {key: 'skull'});
+    });
+});

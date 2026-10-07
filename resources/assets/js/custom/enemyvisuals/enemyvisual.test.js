@@ -455,7 +455,7 @@ describe('EnemyVisual#_createModifiers', () => {
         // Arrange
         const self = {
             enemy: {
-                raid_marker_name: '',
+                raid_marker_key: '',
                 teeming: 'hidden',
                 npc: {classification_id: 2, truesight: true},
             },
@@ -472,7 +472,7 @@ describe('EnemyVisual#_createModifiers', () => {
         // Arrange
         const self = {
             enemy: {
-                raid_marker_name: '',
+                raid_marker_key: '',
                 teeming: 'hidden',
                 npc: {classification_id: 1, truesight: false},
             },
@@ -489,7 +489,7 @@ describe('EnemyVisual#_createModifiers', () => {
         // Arrange
         const self = {
             enemy: {
-                raid_marker_name: 'skull',
+                raid_marker_key: 'skull',
                 teeming: 'hidden',
                 npc: null,
             },

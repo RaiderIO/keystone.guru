@@ -215,7 +215,7 @@ class EnemyVisual extends Signalable {
 
         let modifiers = [];
         // Only add the modifiers if they're necessary; otherwise don't waste resources on adding hidden items
-        if (typeof this.enemy.raid_marker_name === 'string' && this.enemy.raid_marker_name !== '') {
+        if (typeof this.enemy.raid_marker_key === 'string' && this.enemy.raid_marker_key !== '') {
             modifiers.push(new EnemyVisualModifierRaidMarker(this, 0));
         }
 

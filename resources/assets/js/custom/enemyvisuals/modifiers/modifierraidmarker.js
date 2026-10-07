@@ -2,7 +2,7 @@ class EnemyVisualModifierRaidMarker extends EnemyVisualModifier {
     constructor(enemyvisual, index) {
         super(enemyvisual, index);
         // If it's loaded already, set it now
-        this.iconName = this.enemyvisual.enemy.raid_marker_name;
+        this.iconName = this.enemyvisual.enemy.raid_marker_key;
     }
 
     /**
@@ -17,7 +17,7 @@ class EnemyVisualModifierRaidMarker extends EnemyVisualModifier {
      */
     _getValidIconNames() {
         return [''].concat(getState().getMapContext().getStaticRaidMarkers().map(function (raidMarker){
-            return raidMarker.name;
+            return raidMarker.key;
         }));
     }
 
@@ -42,4 +42,10 @@ class EnemyVisualModifierRaidMarker extends EnemyVisualModifier {
             classes: this.iconName === '' || this.iconName === null ? '' : `raid_marker_enemy_icon ${this.iconName}_enemy_icon`,
         });
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemyVisualModifierRaidMarker,
+    };
 }
