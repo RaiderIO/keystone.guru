@@ -851,19 +851,53 @@ class Enemy extends VersionableMapObject {
             // permanently: the recomputed text is identical, so the guard short-circuits and the
             // rebind never happens.
             // Leaflet's getTooltip() is undefined before the first bind and null after unbindTooltip().
-            if (this.tooltipText !== text || !this.layer.getTooltip()) {
+            let canvasPath = this.getCanvasPath();
+            if (this.tooltipText !== text || !this.layer.getTooltip() || (canvasPath !== null && !canvasPath.getTooltip())) {
                 this.tooltipText = text;
 
                 // Remove any previous tooltip
                 this.unbindTooltip();
-                this.layer.bindTooltip(text, {
+                let tooltipOptions = {
                     direction: 'top',
                     // Lets DungeonMap suppress just enemy tooltips via CSS (see setMapState())
                     // without ever touching Leaflet's own tooltip bind state.
                     className: 'map_enemy_tooltip',
-                });
+                };
+                this.layer.bindTooltip(text, tooltipOptions);
+                if (canvasPath !== null) {
+                    canvasPath.bindTooltip(text, tooltipOptions);
+                }
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    unbindTooltip() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        super.unbindTooltip();
+
+        let canvasPath = this.getCanvasPath();
+        if (canvasPath !== null) {
+            canvasPath.unbindTooltip();
+        }
+    }
+
+    /**
+     * The path that draws this enemy on the enemy canvas instead of its marker; it takes the mouse
+     * events the marker would get.
+     * @returns {EnemyPath|null} Null when enemies are DOM markers, or this enemy has no layer yet.
+     */
+    getCanvasPath() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
+        if (this.layer === null || !enemyMapObjectGroup.isCanvasRendered()) {
+            return null;
+        }
+
+        return enemyMapObjectGroup.getCanvasPath(this.layer);
     }
 
     /**
@@ -1062,16 +1096,15 @@ class Enemy extends VersionableMapObject {
 
         let self = this;
 
-        // Show a permanent tooltip for the enemy's name
-        this.layer.on('click', function (clickEvent) {
+        let onClick = function (clickEvent) {
             if (self.map.getMapState() instanceof EnemySelection && self.selectable && !clickEvent.originalEvent.shiftKey) {
                 self.signal('enemy:selected', {clickEvent: clickEvent});
             } else {
                 self.signal('enemy:clicked', {clickEvent: clickEvent});
             }
-        });
+        };
 
-        this.layer.on('contextmenu', function (contextMenuEvent) {
+        let onContextMenu = function (contextMenuEvent) {
             L.DomEvent.preventDefault(contextMenuEvent);
 
             // Shift+right-click is reserved for the raid marker circle menu (see EnemyVisual).
@@ -1084,7 +1117,16 @@ class Enemy extends VersionableMapObject {
             }
 
             self.signal('enemy:contextmenu', {contextMenuEvent: contextMenuEvent});
-        });
+        };
+
+        this.layer.on('click', onClick);
+        this.layer.on('contextmenu', onContextMenu);
+
+        let canvasPath = this.getCanvasPath();
+        if (canvasPath !== null) {
+            canvasPath.on('click', onClick);
+            canvasPath.on('contextmenu', onContextMenu);
+        }
     }
 
     /**
