@@ -373,6 +373,9 @@ describe('EnemyCanvasRenderer', () => {
         renderer._containerRect = null;
         renderer.mouseOuts = 0;
         renderer._handleMouseOut = () => renderer.mouseOuts++;
+        renderer._handleMouseHover = () => {
+        };
+        renderer._isBelowCanvas = () => false;
         let order = null;
         for (let i = paths.length - 1; i >= 0; i--) {
             order = {layer: paths[i], next: order};
@@ -495,5 +498,161 @@ describe('EnemyCanvasRenderer', () => {
         // Assert
         expect(canvas.style.pointerEvents).toBe('none');
         expect(renderer.mouseOuts).toBe(0);
+    });
+
+    test('_onMapContainerMouseMove_givenTheMoveOntoAnEnemyLandedBelowTheCanvas_hoversTheEnemyAtOnce', () => {
+        // Arrange
+        const {renderer, canvas} = makeRenderer([makeHitPath(true)]);
+        renderer._setCapturesPointer(false);
+        renderer._isBelowCanvas = () => true;
+        const hovered = [];
+        renderer._handleMouseHover = (event) => hovered.push(event);
+
+        // Act
+        renderer._onMapContainerMouseMove({type: 'mousemove', target: {}, clientX: 150, clientY: 80});
+
+        // Assert
+        expect(hovered).toHaveLength(1);
+        expect(hovered[0].target).toBe(canvas);
+        expect(hovered[0].clientX).toBe(150);
+    });
+
+    test('_onMapContainerMouseMove_givenTheMoveOntoAnEnemyLandedOnAMarkerAboveTheCanvas_doesNotHoverTheEnemy', () => {
+        // Arrange
+        const {renderer} = makeRenderer([makeHitPath(true)]);
+        renderer._setCapturesPointer(false);
+        renderer._isBelowCanvas = () => false;
+        const hovered = [];
+        renderer._handleMouseHover = (event) => hovered.push(event);
+
+        // Act
+        renderer._onMapContainerMouseMove({type: 'mousemove', target: {}, clientX: 150, clientY: 80});
+
+        // Assert
+        expect(hovered).toHaveLength(0);
+    });
+
+    function makeClick(target) {
+        const click = {type: 'click', target, clientX: 150, clientY: 80, stopped: 0};
+        click.stopPropagation = () => click.stopped++;
+
+        return click;
+    }
+
+    test('_onMapContainerClick_givenATapBelowTheCanvasOnAnEnemy_handsItToTheEnemy', () => {
+        // Arrange
+        const {renderer, canvas} = makeRenderer([makeHitPath(true)]);
+        renderer._isBelowCanvas = () => true;
+        const clicks = [];
+        renderer._onClick = (event) => clicks.push(event);
+        const click = makeClick({});
+
+        // Act
+        renderer._onMapContainerClick(click);
+
+        // Assert
+        expect(clicks).toHaveLength(1);
+        expect(clicks[0].target).toBe(canvas);
+        expect(clicks[0].type).toBe('click');
+        expect(click.stopped).toBe(1);
+    });
+
+    test('_onMapContainerClick_givenATapBelowTheCanvasOffEnemies_leavesItAlone', () => {
+        // Arrange
+        const {renderer} = makeRenderer([makeHitPath(false)]);
+        renderer._isBelowCanvas = () => true;
+        const clicks = [];
+        renderer._onClick = (event) => clicks.push(event);
+        const click = makeClick({});
+
+        // Act
+        renderer._onMapContainerClick(click);
+
+        // Assert
+        expect(clicks).toHaveLength(0);
+        expect(click.stopped).toBe(0);
+    });
+
+    test('_onMapContainerClick_givenAClickOnAMarkerAboveTheCanvas_leavesItAlone', () => {
+        // Arrange
+        const {renderer} = makeRenderer([makeHitPath(true)]);
+        renderer._isBelowCanvas = () => false;
+        const clicks = [];
+        renderer._onClick = (event) => clicks.push(event);
+        const click = makeClick({});
+
+        // Act
+        renderer._onMapContainerClick(click);
+
+        // Assert
+        expect(clicks).toHaveLength(0);
+        expect(click.stopped).toBe(0);
+    });
+
+    test('_onMapContainerClick_givenAClickTheCanvasAlreadyHandles_leavesItAlone', () => {
+        // Arrange
+        const {renderer, canvas} = makeRenderer([makeHitPath(true)]);
+        renderer._isBelowCanvas = () => true;
+        const clicks = [];
+        renderer._onClick = (event) => clicks.push(event);
+
+        // Act
+        renderer._onMapContainerClick(makeClick(canvas));
+
+        // Assert
+        expect(clicks).toHaveLength(0);
+    });
+
+    describe('_isBelowCanvas', () => {
+        function makeMapDom() {
+            const container = document.createElement('div');
+            const mapPane = document.createElement('div');
+            container.appendChild(mapPane);
+            const pane = (zIndex) => {
+                const element = document.createElement('div');
+                element.style.zIndex = zIndex;
+                mapPane.appendChild(element);
+
+                return element;
+            };
+            const overlayPane = pane('400');
+            const enemyPane = pane('590');
+            const markerPane = pane('600');
+            const control = document.createElement('div');
+            container.appendChild(control);
+            const overlayPath = document.createElement('span');
+            overlayPane.appendChild(overlayPath);
+            const marker = document.createElement('span');
+            markerPane.appendChild(marker);
+            document.body.appendChild(container);
+
+            const {renderer} = makeRenderer([]);
+            renderer._map.getContainer = () => container;
+            renderer._map.getPane = () => mapPane;
+            renderer.getPane = () => enemyPane;
+            delete renderer._isBelowCanvas;
+
+            return {renderer, container, overlayPath, marker, control};
+        }
+
+        test('_isBelowCanvas_givenAPathInTheOverlayPane_returnsTrue', () => {
+            const {renderer, overlayPath} = makeMapDom();
+            expect(renderer._isBelowCanvas(overlayPath)).toBe(true);
+        });
+
+        test('_isBelowCanvas_givenTheMapContainer_returnsTrue', () => {
+            const {renderer, container} = makeMapDom();
+            expect(renderer._isBelowCanvas(container)).toBe(true);
+        });
+
+        test('_isBelowCanvas_givenAMarkerInTheMarkerPane_returnsFalse', () => {
+            const {renderer, marker} = makeMapDom();
+            expect(renderer._isBelowCanvas(marker)).toBe(false);
+        });
+
+        test('_isBelowCanvas_givenAMapControl_returnsFalse', () => {
+            const {renderer, control} = makeMapDom();
+            expect(renderer._isBelowCanvas(control)).toBe(false);
+        });
     });
 });

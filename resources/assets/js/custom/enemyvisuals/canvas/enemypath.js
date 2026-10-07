@@ -254,12 +254,16 @@ let EnemyCanvasRenderer = L.Canvas.extend({
         this._setCapturesPointer(false);
         this._invalidateContainerRect();
         L.DomEvent.on(this._map.getContainer(), 'mousemove', this._onMapContainerMouseMove, this);
+        this._map.getContainer().addEventListener('click', this._onMapContainerClickBound = this._onMapContainerClick.bind(this), true);
+        this._map.getContainer().addEventListener('contextmenu', this._onMapContainerClickBound, true);
         L.DomEvent.on(this._map.getContainer(), 'mouseenter', this._invalidateContainerRect, this);
         L.DomEvent.on(window, 'scroll resize', this._invalidateContainerRect, this);
     },
 
     onRemove: function () {
         L.DomEvent.off(this._map.getContainer(), 'mousemove', this._onMapContainerMouseMove, this);
+        this._map.getContainer().removeEventListener('click', this._onMapContainerClickBound, true);
+        this._map.getContainer().removeEventListener('contextmenu', this._onMapContainerClickBound, true);
         L.DomEvent.off(this._map.getContainer(), 'mouseenter', this._invalidateContainerRect, this);
         L.DomEvent.off(window, 'scroll resize', this._invalidateContainerRect, this);
 
@@ -331,7 +335,82 @@ let EnemyCanvasRenderer = L.Canvas.extend({
             this._handleMouseOut(event);
         }
 
+        let entered = capturesPointer && !this._capturesPointer;
         this._setCapturesPointer(capturesPointer);
+
+        // The move that reaches an enemy went to whatever lies underneath, so hover it from here
+        if (entered && this._isBelowCanvas(event.target)) {
+            this._mouseHoverThrottled = false;
+            this._handleMouseHover(this._toCanvasEvent(event), this.mouseEventToLayerPoint(event));
+        }
+    },
+
+    /**
+     * A tap, or a click without a mouse move onto the enemy first, reaches the layer underneath the
+     * canvas: hand it to the enemy instead.
+     * @param event {MouseEvent}
+     * @private
+     */
+    _onMapContainerClick: function (event) {
+        if (event.target === this._container || !this._isBelowCanvas(event.target) ||
+            this.getLayerAt(this.mouseEventToLayerPoint(event)) === null) {
+            return;
+        }
+
+        event.stopPropagation();
+        this._onClick(this._toCanvasEvent(event));
+    },
+
+    /**
+     * @param element {EventTarget}
+     * @returns {Boolean} Whether the element is drawn underneath the enemy canvas, rather than on top of it or outside the map.
+     * @private
+     */
+    _isBelowCanvas: function (element) {
+        let mapPane = this._map.getPane('mapPane');
+        let container = this._map.getContainer();
+
+        if (element === container || element === mapPane) {
+            return true;
+        }
+
+        let child = element;
+        while (child && child.parentNode !== mapPane) {
+            if (child === container) {
+                return false;
+            }
+            child = child.parentNode;
+        }
+
+        return !!child && child !== this.getPane() &&
+            (parseInt(getComputedStyle(child).zIndex, 10) || 0) < (parseInt(getComputedStyle(this.getPane()).zIndex, 10) || 0);
+    },
+
+    /**
+     * The event as Leaflet would get it had the canvas been its target.
+     * @param event {MouseEvent}
+     * @returns {Object}
+     * @private
+     */
+    _toCanvasEvent: function (event) {
+        return {
+            type: event.type,
+            target: this._container,
+            relatedTarget: null,
+            clientX: event.clientX,
+            clientY: event.clientY,
+            button: event.button,
+            shiftKey: event.shiftKey,
+            ctrlKey: event.ctrlKey,
+            altKey: event.altKey,
+            metaKey: event.metaKey,
+            preventDefault: function () {
+                event.preventDefault();
+            },
+            stopPropagation: function () {
+                event.stopPropagation();
+            },
+        };
     },
 
     /**
