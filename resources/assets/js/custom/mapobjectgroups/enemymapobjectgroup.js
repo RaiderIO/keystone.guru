@@ -51,6 +51,23 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     }
 
     /**
+     * Shows a canvas-drawn enemy as its DOM marker instead, for UI that has to attach to its DOM.
+     * @param marker {L.Marker}
+     * @returns {Boolean} False when enemies are not canvas-rendered, or the marker was not promoted.
+     */
+    promoteToDomMarker(marker) {
+        return this.layerGroup instanceof EnemyCanvasLayerGroup && this.layerGroup.promote(marker);
+    }
+
+    /**
+     * @param marker {L.Marker}
+     * @returns {Boolean} False when the marker was not promoted.
+     */
+    demoteToCanvas(marker) {
+        return this.layerGroup instanceof EnemyCanvasLayerGroup && this.layerGroup.demote(marker);
+    }
+
+    /**
      * @returns {EnemyCanvasStyleProbe}
      */
     getCanvasStyleProbe() {
