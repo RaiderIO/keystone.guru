@@ -8,6 +8,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\CombatLog\CombatLogMappingVersionService;
 use App\Service\CombatLog\Exceptions\DungeonHasNoNpcsException;
+use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLoggingInterface;
 use ArrayObject;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -92,6 +93,37 @@ final class CombatLogMappingVersionServiceChallengeModeTest extends PublicTestCa
             'no challenge mode'   => [['5/15 21:20:10.941  ZONE_CHANGE,1516,"The Arcway",23']],
             'two challenge modes' => [[self::ARCWAY_CHALLENGE_MODE_START, self::ARCWAY_CHALLENGE_MODE_START]],
         ];
+    }
+
+    #[Test]
+    public function createMappingVersionFromChallengeMode_givenThreeChallengeModes_logsTheChallengeModeCount(): void
+    {
+        // Arrange
+        $combatLogPath = $this->writeCombatLog([
+            self::ARCWAY_CHALLENGE_MODE_START,
+            self::ARCWAY_CHALLENGE_MODE_START,
+            self::ARCWAY_CHALLENGE_MODE_START,
+        ]);
+        $log = $this->createMockPublic(CombatLogMappingVersionServiceLoggingInterface::class);
+        $log->expects($this->once())
+            ->method('createMappingVersionFromChallengeModeMultipleChallengeModesFound')
+            ->with(3);
+        $service = $this->app->make(CombatLogMappingVersionService::class, [
+            'combatLogService' => $this->createParseCountingCombatLogService(new ArrayObject()),
+            'log'              => $log,
+        ]);
+        $createdMappingVersion = null;
+
+        try {
+            // Act
+            $createdMappingVersion = $service->createMappingVersionFromChallengeMode($combatLogPath, $this->getRetailGameVersion());
+
+            // Assert
+            $this->assertNull($createdMappingVersion);
+        } finally {
+            unlink($combatLogPath);
+            $createdMappingVersion?->delete();
+        }
     }
 
     #[Test]

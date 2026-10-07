@@ -19,9 +19,9 @@ class CombatLogMappingVersionServiceLogging extends StructuredLogging implements
         $this->debug(__METHOD__);
     }
 
-    public function createMappingVersionFromChallengeModeMultipleChallengeModesFound(): void
+    public function createMappingVersionFromChallengeModeMultipleChallengeModesFound(int $challengeModeCount): void
     {
-        $this->debug(__METHOD__);
+        $this->debug(__METHOD__, get_defined_vars());
     }
 
     public function createMappingVersionFromChallengeModeEnd(): void
