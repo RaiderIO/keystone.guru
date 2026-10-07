@@ -21,6 +21,7 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcType;
 use App\Models\Polyline;
 use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
+use App\Service\CombatLog\Dtos\ChallengeMode;
 use App\Service\CombatLog\Exceptions\CombatLogParseException;
 use App\Service\CombatLog\Exceptions\DungeonHasNoNpcsException;
 use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLoggingInterface;
@@ -51,21 +52,8 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         $this->log->createMappingVersionFromChallengeModeStart($filePath);
 
         try {
-            $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
-
-            // We don't need to do anything if there are no runs
-            // If there's one run, we may still want to trim the fat of the log and keep just
-            // the one challenge mode that's in there
-            $challengeModeCount = $this->combatLogService->getChallengeModes($targetFilePath)->count();
-            if ($challengeModeCount <= 0) {
-                $this->log->createMappingVersionFromChallengeModeNoChallengeModesFound();
-
-                return null;
-            } elseif ($challengeModeCount > 1) {
-                $this->log->createMappingVersionFromChallengeModeMultipleChallengeModesFound();
-
-                return null;
-            }
+            /** @var Collection<int, ChallengeMode> $challengeModes */
+            $challengeModes = collect();
 
             $mappingVersion = $this->createMappingVersionFromCombatLog($filePath, static function (
                 BaseEvent $parsedEvent,
@@ -77,7 +65,14 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 }
 
                 return $dungeon;
-            }, $gameVersion);
+            }, $gameVersion, challengeModes: $challengeModes);
+
+            // Only a log holding exactly one run maps onto a single dungeon
+            if ($challengeModes->count() <= 0) {
+                $this->log->createMappingVersionFromChallengeModeNoChallengeModesFound();
+            } elseif ($challengeModes->count() > 1) {
+                $this->log->createMappingVersionFromChallengeModeMultipleChallengeModesFound();
+            }
         } finally {
             $this->log->createMappingVersionFromChallengeModeEnd();
         }
@@ -112,13 +107,18 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         return $mappingVersion;
     }
 
+    /**
+     * @param Collection<int, ChallengeMode>|null $challengeModes When set, receives every challenge mode in the log, and
+     *                                                            the mapping version is only kept when there is exactly one
+     */
     private function createMappingVersionFromCombatLog(
         string          $filePath,
         callable        $extractDungeonCallable,
         GameVersion     $gameVersion,
         ?MappingVersion $mappingVersion = null,
         bool            $enemyConnections = false,
-    ): MappingVersion {
+        ?Collection     $challengeModes = null,
+    ): ?MappingVersion {
         $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
 
         $hasExistingMappingVersion = $mappingVersion !== null;
@@ -157,6 +157,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         ) use (
             $filePath,
             $extractDungeonCallable,
+            $challengeModes,
             $hasExistingMappingVersion,
             &$mappingVersion,
             &$dungeon,
@@ -174,6 +175,10 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
             $parsedEvent    = $combatLogEntry->parseEvent([], $combatLogVersion);
+
+            if ($challengeModes !== null && $parsedEvent instanceof ChallengeModeStart) {
+                $challengeModes->push($this->combatLogService->createChallengeMode($parsedEvent));
+            }
 
             if ($combatLogEntry->getParsedTimestamp() === null) {
                 $this->log->createMappingVersionFromCombatLogTimestampNotSet();
@@ -342,6 +347,16 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             }
 
             throw $throwable;
+        }
+
+        if ($challengeModes !== null && $challengeModes->count() !== 1) {
+            if (!$hasExistingMappingVersion) {
+                $mappingVersion->delete();
+            }
+
+            $this->log->removeContext('lineNr');
+
+            return null;
         }
 
         if ($enemiesAttributes !== []) {
