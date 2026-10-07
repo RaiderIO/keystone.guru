@@ -350,7 +350,27 @@ describe('EnemyCanvasRenderer', () => {
         const canvas = {style: {}};
         renderer._container = canvas;
         renderer._capturesPointer = null;
-        renderer._map = {mouseEventToLayerPoint: () => ({x: 0, y: 0})};
+        renderer.layoutReads = 0;
+        renderer._map = {
+            getContainer: () => ({
+                getBoundingClientRect: () => {
+                    renderer.layoutReads++;
+
+                    return {left: 100, top: 50, width: 800, height: 600};
+                },
+                offsetWidth: 800,
+                offsetHeight: 600,
+                clientLeft: 0,
+                clientTop: 0,
+            }),
+            containerPointToLayerPoint: (point) => ({x: point.x - 10, y: point.y - 20}),
+            mouseEventToLayerPoint: () => {
+                renderer.layoutReads++;
+
+                return {x: 0, y: 0};
+            },
+        };
+        renderer._containerRect = null;
         renderer.mouseOuts = 0;
         renderer._handleMouseOut = () => renderer.mouseOuts++;
         let order = null;
@@ -361,6 +381,55 @@ describe('EnemyCanvasRenderer', () => {
 
         return {renderer, canvas};
     }
+
+    test('mouseEventToLayerPoint_givenAMouseEvent_returnsTheLayerPointUnderIt', () => {
+        // Arrange
+        const {renderer} = makeRenderer([]);
+
+        // Act
+        const point = renderer.mouseEventToLayerPoint({clientX: 150, clientY: 80});
+
+        // Assert: 50, 30 into the container, which the map pane has moved by 10, 20
+        expect(point).toEqual({x: 40, y: 10});
+    });
+
+    test('mouseEventToLayerPoint_givenRepeatedMouseMoves_readsTheLayoutOnce', () => {
+        // Arrange
+        const {renderer} = makeRenderer([]);
+
+        // Act
+        renderer.mouseEventToLayerPoint({clientX: 150, clientY: 80});
+        renderer.mouseEventToLayerPoint({clientX: 160, clientY: 90});
+        renderer.mouseEventToLayerPoint({clientX: 170, clientY: 100});
+
+        // Assert
+        expect(renderer.layoutReads).toBe(1);
+    });
+
+    test('mouseEventToLayerPoint_givenTheContainerRectWasInvalidated_readsTheLayoutAgain', () => {
+        // Arrange
+        const {renderer} = makeRenderer([]);
+        renderer.mouseEventToLayerPoint({clientX: 150, clientY: 80});
+
+        // Act
+        renderer._invalidateContainerRect();
+        renderer.mouseEventToLayerPoint({clientX: 150, clientY: 80});
+
+        // Assert
+        expect(renderer.layoutReads).toBe(2);
+    });
+
+    test('_onMapContainerMouseMove_givenRepeatedMouseMoves_readsTheLayoutOnce', () => {
+        // Arrange
+        const {renderer} = makeRenderer([makeHitPath(false)]);
+
+        // Act
+        renderer._onMapContainerMouseMove({target: {}, clientX: 150, clientY: 80});
+        renderer._onMapContainerMouseMove({target: {}, clientX: 160, clientY: 90});
+
+        // Assert
+        expect(renderer.layoutReads).toBe(1);
+    });
 
     test('getLayerAt_givenTwoOverlappingPaths_returnsTheTopmost', () => {
         // Arrange
