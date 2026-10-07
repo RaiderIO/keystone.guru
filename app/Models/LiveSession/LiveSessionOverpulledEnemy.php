@@ -2,6 +2,7 @@
 
 namespace App\Models\LiveSession;
 
+use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\Npc\Npc;
@@ -9,6 +10,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\JoinClause;
+use Override;
 
 /**
  * @property int $id
@@ -73,5 +75,29 @@ class LiveSessionOverpulledEnemy extends Model
             ->first();
 
         return $result;
+    }
+
+    #[Override]
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Dual-write into the legacy table: the previous release reads overpulled enemies from `overpulled_enemies`
+        // while it is still serving requests, or again after a rollback.
+        static::saved(static function (LiveSessionOverpulledEnemy $overpulledEnemy) {
+            OverpulledEnemy::query()->updateOrCreate([
+                'live_session_id' => $overpulledEnemy->getOriginal('live_session_id') ?? $overpulledEnemy->live_session_id,
+                'npc_id'          => $overpulledEnemy->getOriginal('npc_id') ?? $overpulledEnemy->npc_id,
+                'mdt_id'          => $overpulledEnemy->getOriginal('mdt_id') ?? $overpulledEnemy->mdt_id,
+            ], $overpulledEnemy->only(['live_session_id', 'kill_zone_id', 'npc_id', 'mdt_id']));
+        });
+
+        static::deleted(static function (LiveSessionOverpulledEnemy $overpulledEnemy) {
+            OverpulledEnemy::query()
+                ->where('live_session_id', $overpulledEnemy->live_session_id)
+                ->where('npc_id', $overpulledEnemy->npc_id)
+                ->where('mdt_id', $overpulledEnemy->mdt_id)
+                ->delete();
+        });
     }
 }

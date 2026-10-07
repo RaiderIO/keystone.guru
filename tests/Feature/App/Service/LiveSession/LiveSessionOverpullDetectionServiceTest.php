@@ -8,6 +8,7 @@ use App\Events\LiveSession\RouteCorrectionEvent;
 use App\Events\Models\LiveSession\EnemyKilledEvent;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
@@ -506,6 +507,7 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
         } finally {
             LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            OverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionObsoleteEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
@@ -696,6 +698,7 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
     {
         LiveSessionKilledEnemy::query()->where('live_session_id', $liveSessionId)->delete();
         LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSessionId)->delete();
+        OverpulledEnemy::query()->where('live_session_id', $liveSessionId)->delete();
         LiveSessionObsoleteEnemy::query()->where('live_session_id', $liveSessionId)->delete();
         LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSessionId)->delete();
         KillZoneEnemy::query()->whereIn('kill_zone_id', $killZoneIds)->delete();

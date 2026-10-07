@@ -3,10 +3,10 @@
 namespace Tests\Feature\Service\LiveSession;
 
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
@@ -63,7 +63,7 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
                 'public_key'       => LiveSession::generateRandomPublicKey(),
             ]);
             // Rows written before enemy_id was stored identify the enemy by npc_id/mdt_id only
-            OverpulledEnemy::query()->insert([
+            LiveSessionOverpulledEnemy::query()->insert([
                 'live_session_id' => $liveSession->id,
                 'kill_zone_id'    => $killZone->id,
                 'npc_id'          => $enemy->npc_id,
@@ -78,7 +78,7 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
             $this->assertSame($expectedEnemyForces, $routeCorrection->getEnemyForces());
         } finally {
             if ($liveSession !== null) {
-                OverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+                LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
                 LiveSession::query()->whereKey($liveSession->id)->delete();
             }
             if ($killZone !== null) {

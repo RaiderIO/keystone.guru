@@ -14,6 +14,7 @@ use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
 use App\Logic\CombatLog\Guid\Guid;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
@@ -878,6 +879,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
         LiveSessionKilledEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
         LiveSessionOverpulledEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
+        OverpulledEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
         LiveSessionObsoleteEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
         LiveSessionInCombatEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
         KillZoneEnemy::query()->whereIn('kill_zone_id', $killZoneIds)->delete();

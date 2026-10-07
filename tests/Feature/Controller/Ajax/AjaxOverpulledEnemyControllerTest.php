@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Events\LiveSession\RouteCorrectionEvent;
+use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\LiveSession\LiveSession;
@@ -45,6 +46,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
         $this->killZone->delete();
 
         LiveSessionOverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->delete();
+        OverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->delete();
         $this->liveSession->delete();
 
         parent::tearDown();

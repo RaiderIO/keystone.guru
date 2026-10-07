@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Logic\MapContext;
 
 use App\Logic\MapContext\Map\MapContextLiveSession;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionInCombatEnemy;
@@ -161,6 +162,7 @@ final class MapContextLiveSessionHydrationTest extends PublicTestCase
             $this->assertIsInt($entry['kill_zone_id']);
         } finally {
             LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            OverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
             $dungeonRoute->delete();
         }

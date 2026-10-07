@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Scheduler\LiveSession;
 
 use App\Console\Commands\Scheduler\SchedulerCommand;
+use App\Models\Enemies\OverpulledEnemy;
 use App\Models\LiveSession\LiveSession;
 
 class CleanupExpiredLiveSessions extends SchedulerCommand
@@ -20,6 +21,7 @@ class CleanupExpiredLiveSessions extends SchedulerCommand
                 ->where('expires_at', '<=', now())
                 ->each(function (LiveSession $session) use (&$count) {
                     $session->overpulledEnemies()->delete();
+                    OverpulledEnemy::query()->where('live_session_id', $session->id)->delete();
                     $session->killedEnemies()->delete();
                     $session->obsoleteEnemies()->delete();
                     $session->inCombatEnemies()->delete();

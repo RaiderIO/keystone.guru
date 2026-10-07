@@ -3,6 +3,7 @@
 namespace App\Models\LiveSession;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\User;
@@ -253,6 +254,7 @@ class LiveSession extends Model
         static::deleting(static function (LiveSession $item) {
             $item->combatLogBuffer?->delete();
             $item->overpulledEnemies()->delete();
+            OverpulledEnemy::query()->where('live_session_id', $item->id)->delete();
             $item->killedEnemies()->delete();
             $item->obsoleteEnemies()->delete();
             $item->inCombatEnemies()->delete();

@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Service\LiveSession;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemies\OverpulledEnemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\LiveSession\LiveSession;
@@ -126,6 +127,7 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
             $this->assertContains(self::SKIPPABLE_ENEMY_ID, $correction->getObsoleteEnemies()->toArray());
         } finally {
             LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            OverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             KillZoneEnemy::query()->where('kill_zone_id', $killZone2->id)->delete();
             $killZone2->delete();
             $killZone1->delete();
@@ -202,6 +204,7 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
         } finally {
             LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            OverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             KillZoneEnemy::query()->whereIn('kill_zone_id', [$killZone2->id, $killZone3->id])->delete();
             $killZone3->delete();
             $killZone2->delete();
@@ -278,6 +281,7 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
         } finally {
             LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            OverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             KillZoneEnemy::query()->whereIn('kill_zone_id', [$killZone2->id, $killZone3->id])->delete();
             $killZone3->delete();
             $killZone2->delete();

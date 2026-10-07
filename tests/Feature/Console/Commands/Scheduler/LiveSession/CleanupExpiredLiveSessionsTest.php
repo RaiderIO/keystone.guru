@@ -4,6 +4,7 @@ namespace Tests\Feature\Console\Commands\Scheduler\LiveSession;
 
 use App\Console\Commands\Scheduler\LiveSession\CleanupExpiredLiveSessions;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemies\OverpulledEnemy;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionCombatLogBuffer;
 use App\Models\LiveSession\LiveSessionKilledEnemy;
@@ -33,6 +34,7 @@ final class CleanupExpiredLiveSessionsTest extends PublicTestCase
                 // Delete child records first, then sessions directly via the query builder
                 // to avoid triggering the boot() deleting listener (which has a null guard issue on combatLogBuffer).
                 DB::table('live_session_overpulled_enemies')->whereIn('live_session_id', $this->liveSessionIds)->delete();
+                DB::table('overpulled_enemies')->whereIn('live_session_id', $this->liveSessionIds)->delete();
                 DB::table('live_session_killed_enemies')->whereIn('live_session_id', $this->liveSessionIds)->delete();
                 DB::table('live_session_obsolete_enemies')->whereIn('live_session_id', $this->liveSessionIds)->delete();
                 DB::table('live_session_player_positions')->whereIn('live_session_id', $this->liveSessionIds)->delete();
@@ -117,5 +119,34 @@ final class CleanupExpiredLiveSessionsTest extends PublicTestCase
         $this->assertDatabaseMissing('live_session_obsolete_enemies', ['id' => $obsoleteEnemy->id]);
         $this->assertDatabaseMissing('live_session_player_positions', ['id' => $playerPosition->id]);
         $this->assertDatabaseMissing('live_session_combat_log_buffers', ['id' => $combatLogBuffer->id]);
+    }
+
+    #[Test]
+    public function handle_givenExpiredSessionWithLegacyOverpulledRows_deletesOnlyTheExpiredSessionsRows(): void
+    {
+        // Arrange
+        $expiredSession          = LiveSession::factory()->expired()->create();
+        $this->liveSessionIds[]  = $expiredSession->id;
+        $this->dungeonRouteIds[] = $expiredSession->dungeon_route_id;
+
+        $activeSession           = LiveSession::factory()->create(['expires_at' => now()->addHour()]);
+        $this->liveSessionIds[]  = $activeSession->id;
+        $this->dungeonRouteIds[] = $activeSession->dungeon_route_id;
+
+        foreach ([$expiredSession, $activeSession] as $liveSession) {
+            OverpulledEnemy::query()->insert([
+                'live_session_id' => $liveSession->id,
+                'kill_zone_id'    => 999999,
+                'npc_id'          => 12345,
+                'mdt_id'          => 1,
+            ]);
+        }
+
+        // Act
+        $this->artisan(CleanupExpiredLiveSessions::class)->assertSuccessful();
+
+        // Assert
+        $this->assertDatabaseMissing('overpulled_enemies', ['live_session_id' => $expiredSession->id]);
+        $this->assertDatabaseHas('overpulled_enemies', ['live_session_id' => $activeSession->id]);
     }
 }
