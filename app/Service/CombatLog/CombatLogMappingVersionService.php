@@ -8,6 +8,7 @@ use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\MapChange;
+use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
@@ -24,12 +25,14 @@ use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Service\CombatLog\Dtos\ChallengeMode;
 use App\Service\CombatLog\Exceptions\CombatLogParseException;
 use App\Service\CombatLog\Exceptions\DungeonHasNoNpcsException;
+use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLoggingInterface;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use RedisException;
 use Throwable;
 
 class CombatLogMappingVersionService implements CombatLogMappingVersionServiceInterface
@@ -329,8 +332,58 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             return $parsedEvent;
         };
 
+        /** @var CombatLogParseException|null $deferredParseException */
+        $deferredParseException = null;
+        if ($challengeModes !== null) {
+            // A dungeon that cannot be mapped only matters once the log turns out to hold exactly one run, so keep
+            // reading to count the runs, collecting only challenge modes after the first failure
+            $parseCombatLogCallback = function (
+                int    $combatLogVersion,
+                bool   $advancedLoggingEnabled,
+                string $rawEvent,
+                int    $lineNr,
+            ) use ($parseCombatLogCallback, $challengeModes, &$deferredParseException): ?BaseEvent {
+                if ($deferredParseException === null) {
+                    try {
+                        return $parseCombatLogCallback($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr);
+                    } catch (DungeonNotSupportedException|RedisException $exception) {
+                        throw $exception;
+                    } catch (Exception $exception) {
+                        $deferredParseException = new CombatLogParseException($lineNr, trim($rawEvent), $exception->getMessage(), $exception);
+
+                        return null;
+                    }
+                }
+
+                $parsedEvent = new CombatLogEntry($rawEvent)->parseEvent([
+                    SpecialEvent::SPECIAL_EVENT_COMBAT_LOG_VERSION,
+                    SpecialEvent::SPECIAL_EVENT_CHALLENGE_MODE_START,
+                ], $combatLogVersion);
+
+                if ($parsedEvent instanceof ChallengeModeStart) {
+                    $challengeModes->push($this->combatLogService->createChallengeMode($parsedEvent));
+                }
+
+                return $parsedEvent;
+            };
+        }
+
         try {
             $this->combatLogService->parseCombatLog($targetFilePath, $parseCombatLogCallback);
+
+            if ($challengeModes !== null && $challengeModes->count() !== 1) {
+                if (!$hasExistingMappingVersion) {
+                    $mappingVersion->delete();
+                }
+
+                $this->log->removeContext('lineNr');
+
+                return null;
+            }
+
+            if ($deferredParseException !== null) {
+                throw $deferredParseException;
+            }
         } catch (Throwable $throwable) {
             // The mapping version is created up-front, before the log reveals which dungeon it belongs to.
             // None of the cleanup below runs when the parse throws, so drop it here instead of leaving an
@@ -347,16 +400,6 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             }
 
             throw $throwable;
-        }
-
-        if ($challengeModes !== null && $challengeModes->count() !== 1) {
-            if (!$hasExistingMappingVersion) {
-                $mappingVersion->delete();
-            }
-
-            $this->log->removeContext('lineNr');
-
-            return null;
         }
 
         if ($enemiesAttributes !== []) {
