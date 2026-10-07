@@ -16,10 +16,15 @@ function makeExtendable() {
     return Base;
 }
 
-global.L = {CircleMarker: makeExtendable(), LayerGroup: makeExtendable()};
+global.L = {
+    CircleMarker: makeExtendable(),
+    LayerGroup: makeExtendable(),
+    Canvas: makeExtendable(),
+    point: (x, y) => ({x, y}),
+};
 global.EnemyCanvasSpriteCache = require('./enemycanvasspritecache').EnemyCanvasSpriteCache;
 
-const {EnemyPath} = require('./enemypath');
+const {EnemyPath, EnemyCanvasRenderer} = require('./enemypath');
 
 function makeRecordingContext() {
     const calls = [];
@@ -166,4 +171,260 @@ test('getDrawnRadius_givenSelection_coversHaloCorners', () => {
 
     // Assert
     expect(radius).toBeCloseTo(Math.hypot(24, 24), 6);
+});
+
+describe('EnemyPath#_containsPoint', () => {
+    test('_containsPoint_givenAPointInsideTheOuterCircle_returnsTrue', () => {
+        // Arrange: centre (100, 200), outer radius 20
+        const {path} = makePath(makeAppearance());
+
+        // Act
+        const result = path._containsPoint({x: 114, y: 214});
+
+        // Assert
+        expect(result).toBe(true);
+    });
+
+    test('_containsPoint_givenAPointOnTheBorder_returnsTrue', () => {
+        // Arrange
+        const {path} = makePath(makeAppearance());
+
+        // Act
+        const result = path._containsPoint({x: 120, y: 200});
+
+        // Assert
+        expect(result).toBe(true);
+    });
+
+    test('_containsPoint_givenAPointInTheIconBoxCornerOutsideTheCircle_returnsFalse', () => {
+        // Arrange: (115, 215) is inside the 40px box but 21.2px from the centre
+        const {path} = makePath(makeAppearance());
+
+        // Act
+        const result = path._containsPoint({x: 115, y: 215});
+
+        // Assert
+        expect(result).toBe(false);
+    });
+
+    test('_containsPoint_givenAPointOnABadgeOutsideTheCircle_returnsTrue', () => {
+        // Arrange: a 16px badge from (-8, 32) off the top left corner covers x 72-88, y 212-228
+        const {path} = makePath(makeAppearance({badges: [{box: {width: 16, height: 16}, left: -8, top: 32}]}));
+
+        // Act
+        const result = path._containsPoint({x: 74, y: 226});
+
+        // Assert
+        expect(result).toBe(true);
+    });
+
+    test('_containsPoint_givenAPointJustPastABadge_returnsFalse', () => {
+        // Arrange
+        const {path} = makePath(makeAppearance({badges: [{box: {width: 16, height: 16}, left: -8, top: 32}]}));
+
+        // Act
+        const result = path._containsPoint({x: 71, y: 226});
+
+        // Assert
+        expect(result).toBe(false);
+    });
+
+    test('_containsPoint_givenAPointInsideTheSelectionHaloOnly_returnsFalse', () => {
+        // Arrange: the halo reaches 24px out, the enemy 20px
+        const {path} = makePath(makeAppearance({selection: {width: 48, height: 48, borderWidth: 2, borderColor: 'red'}}));
+
+        // Act
+        const result = path._containsPoint({x: 122, y: 200});
+
+        // Assert
+        expect(result).toBe(false);
+    });
+
+    test('_containsPoint_givenNoAppearanceYet_returnsFalse', () => {
+        // Arrange
+        const {path} = makePath(null);
+
+        // Act
+        const result = path._containsPoint({x: 100, y: 200});
+
+        // Assert
+        expect(result).toBe(false);
+    });
+});
+
+describe('EnemyPath overlay anchors', () => {
+    test('_getTooltipAnchor_givenAnAppearance_returnsTheTopOfTheOuterCircle', () => {
+        // Arrange: EnemyVisual anchors the DOM tooltip at [0, -(height / 2) - margin]
+        const {path} = makePath(makeAppearance({outerDiameter: 46}));
+
+        // Act
+        const anchor = path._getTooltipAnchor();
+
+        // Assert
+        expect(anchor).toEqual({x: 0, y: -23});
+    });
+
+    test('_getPopupAnchor_givenAnAppearance_returnsTheTopOfTheOuterCircle', () => {
+        // Arrange
+        const {path} = makePath(makeAppearance({outerDiameter: 46}));
+
+        // Act
+        const anchor = path._getPopupAnchor();
+
+        // Assert
+        expect(anchor).toEqual({x: 0, y: -23});
+    });
+
+    test('_getTooltipAnchor_givenNoAppearanceYet_returnsTheCentre', () => {
+        // Arrange
+        const {path} = makePath(null);
+
+        // Act
+        const anchor = path._getTooltipAnchor();
+
+        // Assert
+        expect(anchor).toEqual({x: 0, y: 0});
+    });
+});
+
+describe('EnemyPath#fire', () => {
+    function makeFiringPath() {
+        const {path} = makePath(makeAppearance());
+        path.getLatLng = () => ({lat: -100, lng: 150});
+        path._map = {
+            latLngToLayerPoint: () => ({x: 100, y: 200}),
+            layerPointToContainerPoint: () => ({x: 300, y: 400}),
+        };
+        const fired = [];
+        L.CircleMarker.prototype.fire = function (type, data) {
+            fired.push([type, data]);
+
+            return this;
+        };
+
+        return {path, fired};
+    }
+
+    test('fire_givenAMouseEventAtTheMousePosition_movesItToTheEnemyLikeAMarker', () => {
+        // Arrange
+        const {path, fired} = makeFiringPath();
+        const data = {originalEvent: {}, latlng: {lat: -90, lng: 160}, layerPoint: {x: 110, y: 190}, containerPoint: {x: 310, y: 390}};
+
+        // Act
+        path.fire('click', data, true);
+
+        // Assert
+        expect(fired).toEqual([['click', {
+            originalEvent: {},
+            latlng: {lat: -100, lng: 150},
+            layerPoint: {x: 100, y: 200},
+            containerPoint: {x: 300, y: 400},
+        }]]);
+    });
+
+    test('fire_givenANonMouseEvent_passesItOnUntouched', () => {
+        // Arrange
+        const {path, fired} = makeFiringPath();
+        const data = {tooltip: 'tooltip'};
+
+        // Act
+        path.fire('tooltipopen', data, true);
+
+        // Assert
+        expect(fired).toEqual([['tooltipopen', {tooltip: 'tooltip'}]]);
+    });
+
+    test('options_givenANewPath_isInteractiveAndKeepsMouseEventsFromTheMap', () => {
+        expect(EnemyPath.prototype.options.interactive).toBe(true);
+        expect(EnemyPath.prototype.options.bubblingMouseEvents).toBe(false);
+    });
+});
+
+describe('EnemyCanvasRenderer', () => {
+    function makeHitPath(hit) {
+        return {options: {interactive: true}, _containsPoint: () => hit};
+    }
+
+    function makeRenderer(paths) {
+        const renderer = new EnemyCanvasRenderer();
+        const canvas = {style: {}};
+        renderer._container = canvas;
+        renderer._capturesPointer = null;
+        renderer._map = {mouseEventToLayerPoint: () => ({x: 0, y: 0})};
+        renderer.mouseOuts = 0;
+        renderer._handleMouseOut = () => renderer.mouseOuts++;
+        let order = null;
+        for (let i = paths.length - 1; i >= 0; i--) {
+            order = {layer: paths[i], next: order};
+        }
+        renderer._drawFirst = order;
+
+        return {renderer, canvas};
+    }
+
+    test('getLayerAt_givenTwoOverlappingPaths_returnsTheTopmost', () => {
+        // Arrange
+        const bottom = makeHitPath(true);
+        const top = makeHitPath(true);
+        const {renderer} = makeRenderer([bottom, makeHitPath(false), top]);
+
+        // Act
+        const result = renderer.getLayerAt({x: 0, y: 0});
+
+        // Assert
+        expect(result).toBe(top);
+    });
+
+    test('getLayerAt_givenANonInteractivePathUnderTheMouse_returnsNull', () => {
+        // Arrange
+        const path = makeHitPath(true);
+        path.options.interactive = false;
+        const {renderer} = makeRenderer([path]);
+
+        // Act
+        const result = renderer.getLayerAt({x: 0, y: 0});
+
+        // Assert
+        expect(result).toBeNull();
+    });
+
+    test('_onMapContainerMouseMove_givenTheMouseOverAnEnemy_letsTheCanvasTakePointerEvents', () => {
+        // Arrange
+        const {renderer, canvas} = makeRenderer([makeHitPath(true)]);
+        renderer._setCapturesPointer(false);
+
+        // Act
+        renderer._onMapContainerMouseMove({target: {}});
+
+        // Assert
+        expect(canvas.style.pointerEvents).toBe('auto');
+    });
+
+    test('_onMapContainerMouseMove_givenTheMouseLeftTheEnemyOnTheCanvas_dropsPointerEventsAndFiresMouseOut', () => {
+        // Arrange
+        const path = makeHitPath(true);
+        const {renderer, canvas} = makeRenderer([path]);
+        renderer._onMapContainerMouseMove({target: {}});
+        path._containsPoint = () => false;
+
+        // Act
+        renderer._onMapContainerMouseMove({target: canvas});
+
+        // Assert
+        expect(canvas.style.pointerEvents).toBe('none');
+        expect(renderer.mouseOuts).toBe(1);
+    });
+
+    test('_onMapContainerMouseMove_givenTheMouseStaysOffEnemies_firesNoMouseOut', () => {
+        // Arrange
+        const {renderer, canvas} = makeRenderer([makeHitPath(false)]);
+        renderer._setCapturesPointer(false);
+
+        // Act
+        renderer._onMapContainerMouseMove({target: canvas});
+
+        // Assert
+        expect(canvas.style.pointerEvents).toBe('none');
+        expect(renderer.mouseOuts).toBe(0);
+    });
 });
