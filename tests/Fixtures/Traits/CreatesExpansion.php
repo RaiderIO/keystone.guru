@@ -27,9 +27,12 @@ trait CreatesExpansion
             $this->beforeApplicationDestroyed(fn() => $this->deleteCreatedExpansions());
         }
 
+        $key = $attributes['key'] ?? sprintf('test_%s', uniqid());
+
         $expansion = Expansion::create(array_merge([
             'name'        => 'Test Expansion',
-            'shortname'   => sprintf('test_%s', uniqid()),
+            'key'         => $key,
+            'shortname'   => $key,
             'color'       => '#000000',
             'released_at' => now()->subYear()->toDateTimeString(),
             'active'      => false,

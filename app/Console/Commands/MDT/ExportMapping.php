@@ -132,7 +132,7 @@ class ExportMapping extends Command
             return $season->dungeons;
         }
 
-        $expansion = Expansion::where('shortname', $this->argument('expansion'))->firstOrFail();
+        $expansion = Expansion::where('key', $this->argument('expansion'))->firstOrFail();
 
         return $expansion->dungeonsAndRaids;
     }

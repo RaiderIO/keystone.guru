@@ -646,7 +646,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             // the region's weekly reset - not of the season - so it is taken from the same region metadata->regionId
             // claims, rather than counted forward from the season's start.
             $region->getKeystoneLeaderboardPeriod($runStart),
-            $season === null ? null : sprintf('season-%s-%d', $season->expansion->shortname, $season->index),
+            $season === null ? null : sprintf('season-%s-%d', $season->expansion->key, $season->index),
             $region->id,
             self::METADATA_PLACEHOLDER_REALM_TYPE,
             $wowInstanceId,

@@ -508,7 +508,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                     'keystone_run_id'    => $keystoneRunId,
                     'logged_run_id'      => $loggedRunId,
                     'period'             => $runPeriod,
-                    'season'             => sprintf('season-%s-%d', $season->expansion->shortname, $season->index),
+                    'season'             => sprintf('season-%s-%d', $season->expansion->key, $season->index),
                     'region_id'          => $regionId,
                     'realm_type'         => 'generated',
                     'wow_instance_id'    => $dungeon->instance_id,

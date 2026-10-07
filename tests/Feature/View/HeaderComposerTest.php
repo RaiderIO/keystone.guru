@@ -543,7 +543,7 @@ final class HeaderComposerTest extends PublicTestCase
 
     private function createUpcomingSeason(Carbon $start, bool $active): Season
     {
-        $expansion = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT);
+        $expansion = Expansion::firstWhere('key', Expansion::EXPANSION_MIDNIGHT);
 
         return Season::create([
             'expansion_id'            => $expansion->id,

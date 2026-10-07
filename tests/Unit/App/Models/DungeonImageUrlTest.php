@@ -21,7 +21,7 @@ final class DungeonImageUrlTest extends PublicTestCase
 
         // Assert
         $this->assertStringEndsWith(
-            sprintf('/images/dungeons/%s/%s.webp', $dungeon->expansion->shortname, $dungeon->key),
+            sprintf('/images/dungeons/%s/%s.webp', $dungeon->expansion->key, $dungeon->key),
             $imageUrl,
         );
     }
@@ -37,7 +37,7 @@ final class DungeonImageUrlTest extends PublicTestCase
 
         // Assert
         $this->assertStringEndsWith(
-            sprintf('/images/dungeons/%s/%s.jpg', $dungeon->expansion->shortname, $dungeon->key),
+            sprintf('/images/dungeons/%s/%s.jpg', $dungeon->expansion->key, $dungeon->key),
             $imageUrl,
         );
     }

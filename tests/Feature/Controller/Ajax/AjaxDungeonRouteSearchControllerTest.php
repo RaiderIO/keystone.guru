@@ -87,7 +87,7 @@ final class AjaxDungeonRouteSearchControllerTest extends AjaxPublicTestCase
                     'id'        => $route->dungeon->id,
                     'name'      => $route->dungeon->name,
                     'key'       => $route->dungeon->key,
-                    'expansion' => ['shortname' => $route->dungeon->expansion->shortname],
+                    'expansion' => ['key' => $route->dungeon->expansion->key],
                 ],
             ]]);
             $expectedPullForces = app(DungeonRouteKillZoneServiceInterface::class)

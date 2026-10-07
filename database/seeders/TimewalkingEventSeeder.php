@@ -17,7 +17,7 @@ class TimewalkingEventSeeder extends Seeder implements TableSeederInterface
     {
         $timewalkingEventsAttributes = [
             //            TimewalkingEvent::TIMEWALKING_EVENT_LEGION => [
-            //                'expansion_id'         => Expansion::where('shortname', Expansion::EXPANSION_LEGION)->first()->id,
+            //                'expansion_id'         => Expansion::where('key', Expansion::EXPANSION_LEGION)->first()->id,
             //                'name'                 => 'timewalkingevent.legion.name',
             //                'key'                  => TimewalkingEvent::TIMEWALKING_EVENT_LEGION,
             //                'start'                => '2021-12-07 00:00:00',
@@ -25,7 +25,7 @@ class TimewalkingEventSeeder extends Seeder implements TableSeederInterface
             //                'week_interval'        => 18,
             //            ],
             //            [
-            //                'expansion_id'         => Expansion::where('shortname', Expansion::EXPANSION_BFA)->first()->id,
+            //                'expansion_id'         => Expansion::where('key', Expansion::EXPANSION_BFA)->first()->id,
             //                'name'                 => 'timewalkingevent.bfa.name',
             //                'key'                  => TimewalkingEvent::TIMEWALKING_EVENT_BFA,
             //                'start'                => '2021-12-07 00:00:00',
@@ -33,7 +33,7 @@ class TimewalkingEventSeeder extends Seeder implements TableSeederInterface
             //                'week_interval'        => 14,
             //            ],
             //            [
-            //                'expansion_id'         => Expansion::where('shortname', Expansion::EXPANSION_SHADOWLANDS)->first()->id,
+            //                'expansion_id'         => Expansion::where('key', Expansion::EXPANSION_SHADOWLANDS)->first()->id,
             //                'name'                 => 'timewalkingevent.sl.name',
             //                'key'                  => TimewalkingEvent::TIMEWALKING_EVENT_SHADOWLANDS,
             //                'start'                => '2021-12-07 00:00:00',

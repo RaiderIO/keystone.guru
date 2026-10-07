@@ -174,15 +174,15 @@ class SyncZoneNames extends BaseSyncCommand
                 }
 
                 // Ensure expansion array is set
-                if (!isset($updatedTranslations[$locale][$dungeon->expansion->shortname])) {
-                    $updatedTranslations[$locale][$dungeon->expansion->shortname] = [];
+                if (!isset($updatedTranslations[$locale][$dungeon->expansion->key])) {
+                    $updatedTranslations[$locale][$dungeon->expansion->key] = [];
                 }
 
                 $dungeonTranslationKey = explode('.', $dungeon->name)[2];
                 // Only if we didn't have a translation yet for this dungeon, we add it
                 // This way we can make manual corrections that won't be overwritten
-                if (empty($existingTranslations[$dungeon->expansion->shortname][$dungeonTranslationKey]['name'])) {
-                    $updatedTranslations[$locale][$dungeon->expansion->shortname][$dungeonTranslationKey]['name'] = $dungeonName;
+                if (empty($existingTranslations[$dungeon->expansion->key][$dungeonTranslationKey]['name'])) {
+                    $updatedTranslations[$locale][$dungeon->expansion->key][$dungeonTranslationKey]['name'] = $dungeonName;
                 }
             }
 
@@ -317,7 +317,7 @@ class SyncZoneNames extends BaseSyncCommand
                     $dungeonTranslationKey = explode('.', $dungeon->name)[2];
 
                     // Add the facade floor name to the list of floor names "retrieved" from Wowhead so we can resolve facade floor names
-                    $floorNamesForLocale[$zoneId][] = $existingTranslationsByLocale[$locale][$dungeon->expansion->shortname][$dungeonTranslationKey]['name'] ?? '';
+                    $floorNamesForLocale[$zoneId][] = $existingTranslationsByLocale[$locale][$dungeon->expansion->key][$dungeonTranslationKey]['name'] ?? '';
 
                     foreach ($floorData as $floorId => $data) {
                         if (empty($floorNamesForLocale[$zoneId][$data['index']])) {
@@ -327,8 +327,8 @@ class SyncZoneNames extends BaseSyncCommand
 
                         // Only if we didn't have a translation yet for this floor, we add it
                         // This way we can make manual corrections that won't be overwritten
-                        if (empty($existingTranslationsByLocale[$locale][$dungeon->expansion->shortname][$dungeonTranslationKey]['floors'][$data['translationKey']])) {
-                            $updatedTranslations[$dungeon->expansion->shortname][$dungeonTranslationKey]['floors'][$data['translationKey']] = $floorNamesForLocale[$zoneId][$data['index']];
+                        if (empty($existingTranslationsByLocale[$locale][$dungeon->expansion->key][$dungeonTranslationKey]['floors'][$data['translationKey']])) {
+                            $updatedTranslations[$dungeon->expansion->key][$dungeonTranslationKey]['floors'][$data['translationKey']] = $floorNamesForLocale[$zoneId][$data['index']];
                         }
                     }
 
@@ -336,7 +336,7 @@ class SyncZoneNames extends BaseSyncCommand
 //                        dd(
 //                            $zoneId,
                     ////                            $zoneIdIndexReference,
-//                            $updatedTranslations[$dungeon->expansion->shortname][$dungeonTranslationKey],
+//                            $updatedTranslations[$dungeon->expansion->key][$dungeonTranslationKey],
 //                            $floorNamesForLocale[$zoneId],
 //                            $floorData
 //                        );
@@ -380,7 +380,7 @@ class SyncZoneNames extends BaseSyncCommand
 
         foreach ($continentDungeons as $dungeon) {
             /** @var Dungeon $dungeon */
-            $expansionKey          = $dungeon->expansion->shortname;
+            $expansionKey          = $dungeon->expansion->key;
             $dungeonTranslationKey = explode('.', $dungeon->name)[2];
             $continentKey          = self::CONTINENT_DUNGEONS[$dungeon->key];
 

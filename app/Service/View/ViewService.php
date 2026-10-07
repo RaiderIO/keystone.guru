@@ -333,7 +333,7 @@ class ViewService implements ViewServiceInterface
             ->pluck('expansion_id', 'id')->mapWithKeys(fn(
                 int $expansionId,
                 int $dungeonId,
-            ) => [$dungeonId => $this->getAllExpansions()->where('id', $expansionId)->first()->shortname]));
+            ) => [$dungeonId => $this->getAllExpansions()->where('id', $expansionId)->first()->key]));
     }
 
     /**
@@ -469,7 +469,7 @@ class ViewService implements ViewServiceInterface
                 /** @var Collection<string, ExpansionData> $expansionsData */
                 $expansionsData = collect();
                 foreach ($allExpansions as $expansion) {
-                    $expansionsData->put($expansion->shortname, $this->expansionService->getData($this->seasonAffixGroupService, $expansion, $gameServerRegion));
+                    $expansionsData->put($expansion->key, $this->expansionService->getData($this->seasonAffixGroupService, $expansion, $gameServerRegion));
                 }
 
                 return $expansionsData;
@@ -500,7 +500,7 @@ class ViewService implements ViewServiceInterface
     }
 
     /**
-     * The current affix group per expansion shortname (used by the create-route affix selector).
+     * The current affix group per expansion key (used by the create-route affix selector).
      *
      * @return Collection<string, AffixGroup|null>
      */
@@ -511,7 +511,7 @@ class ViewService implements ViewServiceInterface
             function () use ($gameServerRegion) {
                 $allCurrentAffixes = collect();
                 foreach ($this->getExpansionsData($gameServerRegion) as $expansionData) {
-                    $allCurrentAffixes->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup());
+                    $allCurrentAffixes->put($expansionData->getExpansion()->key, $expansionData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup());
                 }
 
                 return $allCurrentAffixes;
@@ -521,7 +521,7 @@ class ViewService implements ViewServiceInterface
     }
 
     /**
-     * All affix groups grouped by active expansion shortname (used by the discover/heatmap search filters).
+     * All affix groups grouped by active expansion key (used by the discover/heatmap search filters).
      *
      * @return Collection<string, Collection<int, AffixGroup>>
      */
@@ -534,8 +534,8 @@ class ViewService implements ViewServiceInterface
                 $allAffixGroupsByActiveExpansion = collect();
                 foreach ($this->getActiveExpansions() as $activeExpansion) {
                     /** @var ExpansionData $expansionData */
-                    $expansionData = $expansionsData->get($activeExpansion->shortname);
-                    $allAffixGroupsByActiveExpansion->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
+                    $expansionData = $expansionsData->get($activeExpansion->key);
+                    $allAffixGroupsByActiveExpansion->put($expansionData->getExpansion()->key, $expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
                 }
 
                 return $allAffixGroupsByActiveExpansion;
@@ -545,7 +545,7 @@ class ViewService implements ViewServiceInterface
     }
 
     /**
-     * The featured affixes grouped by active expansion shortname (used by the discover/heatmap search filters).
+     * The featured affixes grouped by active expansion key (used by the discover/heatmap search filters).
      *
      * @return Collection<string, Collection<int, Affix>>
      */
@@ -558,8 +558,8 @@ class ViewService implements ViewServiceInterface
                 $featuredAffixesByActiveExpansion = collect();
                 foreach ($this->getActiveExpansions() as $activeExpansion) {
                     /** @var ExpansionData $expansionData */
-                    $expansionData = $expansionsData->get($activeExpansion->shortname);
-                    $featuredAffixesByActiveExpansion->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getFeaturedAffixes());
+                    $expansionData = $expansionsData->get($activeExpansion->key);
+                    $featuredAffixesByActiveExpansion->put($expansionData->getExpansion()->key, $expansionData->getExpansionSeason()->getAffixGroups()->getFeaturedAffixes());
                 }
 
                 return $featuredAffixesByActiveExpansion;

@@ -365,7 +365,7 @@ class AjaxDungeonRouteController extends Controller
         $gameVersion = $gameVersionId !== 0 ? GameVersion::where('id', $gameVersionId)->first() : null;
 
         if ($request->has('expansion')) {
-            $expansion = Expansion::where('shortname', $request->get('expansion'))->first();
+            $expansion = Expansion::where('key', $request->get('expansion'))->first();
         } else {
             $expansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
         }

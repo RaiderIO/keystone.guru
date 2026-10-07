@@ -15,10 +15,10 @@ for ($i = 0; $i < $season->presets; ++$i) {
     $presets[$i] = __('view_common.group.affixes.seasonal_index_preset', ['count' => $i + 1]);
 }
 
-$shortname = $expansion->shortname;
+$expansionKey = $expansion->key;
 ?>
 
-<div class="mb-3 {{ $shortname }} presets">
+<div class="mb-3 {{ $expansionKey }} presets">
     {{ html()->label(__('view_common.group.affixes.tormented_preset'), 'seasonal_index') }}
     <span class="form-required">*</span>
     <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{

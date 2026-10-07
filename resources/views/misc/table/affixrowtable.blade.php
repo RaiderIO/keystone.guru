@@ -28,7 +28,7 @@ $showTopBorder    ??= true;
 $showBottomBorder ??= true;
 $isOdd            ??= false;
 
-$timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $timewalkingEvent->expansion->shortname : '';
+$timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $timewalkingEvent->expansion->key : '';
 ?>
 <tr class="table_row {{ $isOdd ? 'odd' : 'even' }} {{ !$affixGroup->confirmed ? 'unconfirmed' : '' }} {{ $timewalkingClasses }}">
     <?php

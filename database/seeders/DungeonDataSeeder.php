@@ -127,6 +127,14 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     /**
      * @throws Exception
      */
+    /**
+     * The expansion whose dungeon data lives in the given `database/seeders/dungeondata/<key>` directory.
+     */
+    public function findExpansionForDungeonDataDirectory(string $directoryName): ?Expansion
+    {
+        return Expansion::query()->where('key', $directoryName)->first();
+    }
+
     private function importDungeonMapping(): void
     {
         $rootDir         = database_path(self::DUNGEON_DATA_DIR);
@@ -155,8 +163,8 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             }
 
             $rootDirChildBaseName = basename($rootDirChild);
-            // Only folders which have the correct shortname
-            if (Expansion::where('shortname', $rootDirChildBaseName)->first() === null) {
+            // Only folders which have the correct expansion key
+            if ($this->findExpansionForDungeonDataDirectory($rootDirChildBaseName) === null) {
                 $this->command->warn(sprintf('- Unable to find expansion %s', $rootDirChildBaseName));
 
                 continue;

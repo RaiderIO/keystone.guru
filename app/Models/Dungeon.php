@@ -548,7 +548,7 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
 
     public function getImageUrl(): string
     {
-        return ksgAssetImage(sprintf('dungeons/%s/%s.webp', $this->expansion->shortname, $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/%s.webp', $this->expansion->key, $this->key));
     }
 
     /**
@@ -556,22 +556,22 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
      */
     public function getLinkPreviewImageUrl(): string
     {
-        return ksgAssetImage(sprintf('dungeons/%s/%s.jpg', $this->expansion->shortname, $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/%s.jpg', $this->expansion->key, $this->key));
     }
 
     public function getImage32Url(): string
     {
-        return ksgAssetImage(sprintf('dungeons/%s/%s_3-2.jpg', $this->expansion->shortname, $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/%s_3-2.jpg', $this->expansion->key, $this->key));
     }
 
     public function getImageTransparentUrl(): string
     {
-        return ksgAssetImage(sprintf('dungeons/%s/%s_transparent.png', $this->expansion->shortname, $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/%s_transparent.png', $this->expansion->key, $this->key));
     }
 
     public function getImageWallpaperUrl(): string
     {
-        return ksgAssetImage(sprintf('dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/%s_wallpaper.jpg', $this->expansion->key, $this->key));
     }
 
     public function hasImageWallpaper(): bool

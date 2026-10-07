@@ -55,7 +55,7 @@ final class GetFirstSeasonTest extends PublicTestCase
     public function getFirstSeason_givenTheEarliestSeasonsExpansionHasATimewalkingEvent_returnsTheFirstSeasonOfAnotherExpansion(): void
     {
         // Arrange
-        $bfaExpansion     = Expansion::where('shortname', Expansion::EXPANSION_BFA)->firstOrFail();
+        $bfaExpansion     = Expansion::where('key', Expansion::EXPANSION_BFA)->firstOrFail();
         $timewalkingEvent = null;
 
         try {

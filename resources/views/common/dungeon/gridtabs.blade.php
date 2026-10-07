@@ -60,7 +60,7 @@ foreach ($activeExpansions as $expansion) {
     $expansionDungeons = $expansion->dungeons()->active()->forGameVersion($gameVersion)->get()->filter($filterFn)->values();
     if ($expansionDungeons->isNotEmpty()) {
         $expansionTabs->push([
-            'key'      => $expansion->shortname,
+            'key'      => $expansion->key,
             'name'     => __($expansion->name),
             'dungeons' => $expansionDungeons,
         ]);
@@ -69,7 +69,7 @@ foreach ($activeExpansions as $expansion) {
     $expansionRaids = $expansion->raids()->active()->forGameVersion($gameVersion)->get()->filter($filterFn)->values();
     if ($expansionRaids->isNotEmpty()) {
         $expansionTabs->push([
-            'key'      => sprintf('%s-raid', $expansion->shortname),
+            'key'      => sprintf('%s-raid', $expansion->key),
             'name'     => sprintf('%s (%s)', __($expansion->name), __('view_common.dungeon.gridtabs.raid')),
             'dungeons' => $expansionRaids,
         ]);

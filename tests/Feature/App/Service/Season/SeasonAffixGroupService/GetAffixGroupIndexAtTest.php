@@ -195,7 +195,7 @@ final class GetAffixGroupIndexAtTest extends PublicTestCase
         // Arrange
         $service      = app(SeasonAffixGroupServiceInterface::class);
         $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
-        $twwExpansion = Expansion::where('shortname', Expansion::EXPANSION_TWW)->firstOrFail();
+        $twwExpansion = Expansion::where('key', Expansion::EXPANSION_TWW)->firstOrFail();
         // Wednesday 2030-01-09: its first reset is counted from Monday 2030-01-07
         $season = $this->createSeason([
             'expansion_id'            => $twwExpansion->id,

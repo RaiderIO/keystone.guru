@@ -217,7 +217,7 @@ class GameVersion extends Model
      */
     public function showDiscoverRoutesCardDungeonImage(): bool
     {
-        return !in_array($this->expansion->shortname, [
+        return !in_array($this->expansion->key, [
             Expansion::EXPANSION_MOP,
             Expansion::EXPANSION_SHADOWLANDS,
             Expansion::EXPANSION_TWW,

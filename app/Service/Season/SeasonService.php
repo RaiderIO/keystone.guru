@@ -287,7 +287,7 @@ class SeasonService implements SeasonServiceInterface
             $expansionShortName = $split[1];
             $seasonIndex        = (int)$split[2];
 
-            $expansion = Expansion::where('shortname', $expansionShortName)->first();
+            $expansion = Expansion::where('key', $expansionShortName)->first();
             if ($expansion !== null) {
                 $result = Season::where('expansion_id', $expansion->id)
                     ->where('index', $seasonIndex)

@@ -19,7 +19,7 @@ final class GetNextSeasonOfExpansionTest extends PublicTestCase
     {
         // Arrange - all BFA seasons started in the past, so there is no next season
         $service      = app(SeasonServiceInterface::class);
-        $bfaExpansion = Expansion::where('shortname', Expansion::EXPANSION_BFA)->firstOrFail();
+        $bfaExpansion = Expansion::where('key', Expansion::EXPANSION_BFA)->firstOrFail();
         $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
 
         // Act
@@ -34,7 +34,7 @@ final class GetNextSeasonOfExpansionTest extends PublicTestCase
     {
         // Arrange - TWW S1 started at 2024-09-16, S2 at 2025-03-03
         $service      = app(SeasonServiceInterface::class);
-        $twwExpansion = Expansion::where('shortname', Expansion::EXPANSION_TWW)->firstOrFail();
+        $twwExpansion = Expansion::where('key', Expansion::EXPANSION_TWW)->firstOrFail();
         $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
         $this->travelTo(
             Carbon::create(2025)
