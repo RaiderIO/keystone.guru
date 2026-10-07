@@ -360,9 +360,11 @@ class SpellCounterDataExtractor implements DataExtractorInterface
                 ->get()
                 ->keyBy('id');
 
+            $npcs = $this->loadNpcsWithSpells($this->pendingCounterObservations->pluck('npc_id')->all());
+
             foreach ($this->pendingCounterObservations as $observation) {
                 $this->applyCounterToSpell($result, $spells, $observation['spell_id'], $observation['property']);
-                $this->assignSpellToNpc($result, $spells, $observation);
+                $this->assignSpellToNpc($result, $spells, $npcs, $observation);
             }
         }
 
@@ -426,9 +428,10 @@ class SpellCounterDataExtractor implements DataExtractorInterface
      * so without this the countered spell would be invisible on the NPC's compendium page.
      *
      * @param Collection<int, SpellModel>                                                           $spells
+     * @param Collection<int, Npc>                                                                  $npcs
      * @param array{spell_id: int, property: SpellProperty, npc_id: int|null, dungeon_id: int|null} $observation
      */
-    private function assignSpellToNpc(ExtractedDataResult $result, Collection $spells, array $observation): void
+    private function assignSpellToNpc(ExtractedDataResult $result, Collection $spells, Collection $npcs, array $observation): void
     {
         $npcId = $observation['npc_id'];
 
@@ -446,7 +449,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         }
 
         /** @var Npc|null $npc */
-        $npc = Npc::with('npcSpells')->find($npcId);
+        $npc = $npcs->get($npcId);
         if ($npc === null) {
             return;
         }
@@ -456,10 +459,11 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             return;
         }
 
-        NpcSpell::create([
+        // Kept on the loaded NPC so a second observation of the same spell (another property) sees the new row
+        $npc->npcSpells->push(NpcSpell::create([
             'npc_id'   => $npcId,
             'spell_id' => $spellId,
-        ]);
+        ]));
 
         // insertOrIgnore (not exists()+create()) so a concurrent extraction job racing this same
         // pair cannot create a duplicate row - the unique index makes the second insert a no-op
@@ -480,6 +484,25 @@ class SpellCounterDataExtractor implements DataExtractorInterface
 
         $result->createdNpcSpell();
         $this->log->afterExtractAssignedCounteredSpellToNpc($npcId, $spellId);
+    }
+
+    /**
+     * Every NPC the observations name, loaded in one query.
+     *
+     * @param  array<int|null>      $npcIds
+     * @return Collection<int, Npc>
+     */
+    private function loadNpcsWithSpells(array $npcIds): Collection
+    {
+        $npcIds = array_values(array_unique(array_filter($npcIds)));
+        if (empty($npcIds)) {
+            return collect();
+        }
+
+        return Npc::with('npcSpells')
+            ->whereIn('id', $npcIds)
+            ->get()
+            ->keyBy('id');
     }
 
     /**
