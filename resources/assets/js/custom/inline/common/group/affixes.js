@@ -57,7 +57,7 @@ class CommonGroupAffixes extends InlineCode {
             let seasonForSelectedDungeon = this._getSeasonForDungeon(selectedDungeonId);
             // By default, assume that the currently selected expansion is the expansion that the dungeon released in
             // This dungeon was from a season - so grab the expansion of the current season instead
-            this.currentSelectionExpansionKey = seasonForSelectedDungeon !== null ? seasonForSelectedDungeon.expansion.shortname : expansionKeyOfDungeonAtRelease;
+            this.currentSelectionExpansionKey = seasonForSelectedDungeon !== null ? seasonForSelectedDungeon.expansion.key : expansionKeyOfDungeonAtRelease;
 
             // When initially loading the page, assign the default selected affixes
             if (this.currentSelection === null) {

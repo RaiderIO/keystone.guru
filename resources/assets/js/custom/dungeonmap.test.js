@@ -110,7 +110,7 @@ describe('DungeonMap.refreshLeafletMap', () => {
             global.getState = () => ({
                 getCurrentFloor: () => ({index: 1, zoom_max: 5}),
                 getMapContext: () => ({
-                    getDungeon: () => ({expansion: {shortname: 'tww'}, key: 'ara-kara'}),
+                    getDungeon: () => ({expansion: {key: 'tww'}, key: 'ara-kara'}),
                 }),
             });
 

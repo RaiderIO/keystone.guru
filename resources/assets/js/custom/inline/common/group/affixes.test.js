@@ -22,6 +22,7 @@ const {
     buildCreateRouteForm,
     buildInlineOptions,
     RETAIL_DUNGEON_ALPHA_ID,
+    RETAIL_EXPANSION_KEY,
     AFFIX_GROUP_DEFAULT_ID,
     AFFIX_GROUP_ALT_A_ID,
     AFFIX_GROUP_ALT_B_ID,
@@ -197,5 +198,23 @@ describe('CommonGroupAffixes.activate', () => {
 
         // Assert
         expect($('#seasonal_index').val()).toBe('1');
+    });
+
+    it('activate_givenSeasonDungeonReleasedInAnotherExpansion_selectsTheSeasonExpansionKey', () => {
+        // Arrange
+        buildCreateRouteForm({
+            gameVersion: 'retail',
+            dungeonIds: [RETAIL_DUNGEON_ALPHA_ID],
+            affixGroups: [{id: AFFIX_GROUP_DEFAULT_ID, seasonalIndex: null}],
+        });
+        const options = buildInlineOptions({defaultSelectedAffixes: [AFFIX_GROUP_DEFAULT_ID]}).affixes;
+        options.dungeonExpansions = {...options.dungeonExpansions, [RETAIL_DUNGEON_ALPHA_ID]: 'release_xpac'};
+
+        // Act
+        const code = new CommonGroupAffixes('affixes', 'common/group/affixes', options);
+        code.activate();
+
+        // Assert
+        expect(code.currentSelectionExpansionKey).toBe(RETAIL_EXPANSION_KEY);
     });
 });

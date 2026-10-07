@@ -42,7 +42,7 @@ function dungeonRoute(overrides = {}) {
         pull_forces:                   [],
         has_thumbnail:                 false,
         thumbnails:                    [],
-        dungeon:                       {id: 3, name: 'dungeons.ara_kara', key: 'arakara', expansion: {shortname: 'tww'}},
+        dungeon:                       {id: 3, name: 'dungeons.ara_kara', key: 'arakara', expansion: {key: 'tww'}},
     }, overrides));
 }
 
