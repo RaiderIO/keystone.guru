@@ -14,7 +14,7 @@ $idPrefix ??= '';
 
 // `world` is a Keystone.guru region row with no Battle.net OAuth endpoint behind it
 $battleNetRegions = $allRegions->filter(
-    static fn(GameServerRegion $region): bool => in_array($region->short, GameServerRegion::BATTLE_NET_REGIONS, true)
+    static fn(GameServerRegion $region): bool => in_array($region->key, GameServerRegion::BATTLE_NET_REGIONS, true)
 );
 ?>
 
@@ -27,7 +27,7 @@ $battleNetRegions = $allRegions->filter(
         </label>
 
         {{ html()->select('region', $battleNetRegions->mapWithKeys(function (GameServerRegion $region) {
-    return [$region->short => __($region->name)];
+    return [$region->key => __($region->name)];
 })->toArray())->id($idPrefix . 'oauth_battlenet_region')->value(GameServerRegion::DEFAULT_REGION)->class('form-select') }}
     </div>
 

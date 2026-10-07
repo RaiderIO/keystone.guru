@@ -22,7 +22,7 @@ final class GetSeasonEndTest extends PublicTestCase
     {
         // Arrange
         $service  = app(SeasonServiceInterface::class);
-        $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $season   = Season::findOrFail(Season::SEASON_TWW_S2);
 
         // Act
@@ -38,7 +38,7 @@ final class GetSeasonEndTest extends PublicTestCase
     {
         // Arrange
         $service  = app(SeasonServiceInterface::class);
-        $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $season   = Season::findOrFail(Season::SEASON_TWW_S3);
 
         // Act
@@ -59,7 +59,7 @@ final class GetSeasonEndTest extends PublicTestCase
             'expansion_id' => $latestSeason->expansion_id,
             'start'        => $upcomingStart->addWeeks(4)->toDateTimeString(),
         ]);
-        $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $service  = app(SeasonServiceInterface::class);
 
         // Act
@@ -80,7 +80,7 @@ final class GetSeasonEndTest extends PublicTestCase
             'expansion_id' => $latestSeason->expansion_id,
             'start'        => $latestSeason->start->copy()->addWeeks(20)->toDateTimeString(),
         ]);
-        $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $service  = app(SeasonServiceInterface::class);
 
         // Act

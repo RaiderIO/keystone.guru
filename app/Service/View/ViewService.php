@@ -415,7 +415,7 @@ class ViewService implements ViewServiceInterface
     public function getCurrentExpansionForRegion(GameServerRegion $gameServerRegion): Expansion
     {
         return $this->cachedGlobal(
-            sprintf('current_expansion:%s', $gameServerRegion->short),
+            sprintf('current_expansion:%s', $gameServerRegion->key),
             fn() => $this->expansionService->getCurrentExpansion($gameServerRegion),
             3600,
         );
@@ -426,7 +426,7 @@ class ViewService implements ViewServiceInterface
         // Cached together with what the header's affix group lookup reads from it, so that lookup never
         // lazy-loads them back on every page.
         return $this->cachedGlobal(
-            sprintf('current_season:%s', $gameServerRegion->short),
+            sprintf('current_season:%s', $gameServerRegion->key),
             fn() => $this->expansionService
                 ->getCurrentSeason($this->getCurrentExpansionForRegion($gameServerRegion), $gameServerRegion)
                 ?->loadMissing(['expansion.timewalkingEvent', 'affixGroups.affixes']),
@@ -442,7 +442,7 @@ class ViewService implements ViewServiceInterface
     public function getNextSeasonForRegion(GameServerRegion $gameServerRegion): ?Season
     {
         return $this->cachedGlobal(
-            sprintf('next_season:%s', $gameServerRegion->short),
+            sprintf('next_season:%s', $gameServerRegion->key),
             function () use ($gameServerRegion) {
                 // Fall back to the current expansion if the next expansion is not known yet, then the next season
                 // is still part of the current expansion
@@ -462,7 +462,7 @@ class ViewService implements ViewServiceInterface
     public function getExpansionsData(GameServerRegion $gameServerRegion): Collection
     {
         return $this->cachedGlobal(
-            sprintf('expansions_data:%s', $gameServerRegion->short),
+            sprintf('expansions_data:%s', $gameServerRegion->key),
             function () use ($gameServerRegion) {
                 $allExpansions = Expansion::with(['dungeonsAndRaids'])->orderBy('released_at', 'desc')->get();
 
@@ -486,7 +486,7 @@ class ViewService implements ViewServiceInterface
     public function getAllAffixGroupsForRegion(GameServerRegion $gameServerRegion): Collection
     {
         return $this->cachedGlobal(
-            sprintf('all_affix_groups:%s', $gameServerRegion->short),
+            sprintf('all_affix_groups:%s', $gameServerRegion->key),
             function () use ($gameServerRegion) {
                 $allAffixGroups = collect();
                 foreach ($this->getExpansionsData($gameServerRegion) as $expansionData) {
@@ -507,7 +507,7 @@ class ViewService implements ViewServiceInterface
     public function getAllCurrentAffixesForRegion(GameServerRegion $gameServerRegion): Collection
     {
         return $this->cachedGlobal(
-            sprintf('all_current_affixes:%s', $gameServerRegion->short),
+            sprintf('all_current_affixes:%s', $gameServerRegion->key),
             function () use ($gameServerRegion) {
                 $allCurrentAffixes = collect();
                 foreach ($this->getExpansionsData($gameServerRegion) as $expansionData) {
@@ -528,7 +528,7 @@ class ViewService implements ViewServiceInterface
     public function getAllAffixGroupsByActiveExpansion(GameServerRegion $gameServerRegion): Collection
     {
         return $this->cachedGlobal(
-            sprintf('all_affix_groups_by_active_expansion:%s', $gameServerRegion->short),
+            sprintf('all_affix_groups_by_active_expansion:%s', $gameServerRegion->key),
             function () use ($gameServerRegion) {
                 $expansionsData                  = $this->getExpansionsData($gameServerRegion);
                 $allAffixGroupsByActiveExpansion = collect();
@@ -552,7 +552,7 @@ class ViewService implements ViewServiceInterface
     public function getFeaturedAffixesByActiveExpansion(GameServerRegion $gameServerRegion): Collection
     {
         return $this->cachedGlobal(
-            sprintf('featured_affixes_by_active_expansion:%s', $gameServerRegion->short),
+            sprintf('featured_affixes_by_active_expansion:%s', $gameServerRegion->key),
             function () use ($gameServerRegion) {
                 $expansionsData                   = $this->getExpansionsData($gameServerRegion);
                 $featuredAffixesByActiveExpansion = collect();

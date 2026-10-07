@@ -24,8 +24,8 @@ final class HasStartTest extends PublicTestCase
         $season = new Season([
             'start' => Carbon::create(2026, 3, 2, 0, 0, 0, 'UTC'),
         ]);
-        $americas = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
-        $europe   = GameServerRegion::where('short', GameServerRegion::EUROPE)->firstOrFail();
+        $americas = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
+        $europe   = GameServerRegion::where('key', GameServerRegion::EUROPE)->firstOrFail();
 
         // Act
         $americasStart = $season->start($americas);
@@ -43,8 +43,8 @@ final class HasStartTest extends PublicTestCase
         $season = new Season([
             'start' => Carbon::create(2026, 3, 5, 0, 0, 0, 'UTC'),
         ]);
-        $americas = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
-        $europe   = GameServerRegion::where('short', GameServerRegion::EUROPE)->firstOrFail();
+        $americas = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
+        $europe   = GameServerRegion::where('key', GameServerRegion::EUROPE)->firstOrFail();
 
         // Act
         $americasStart = $season->start($americas);

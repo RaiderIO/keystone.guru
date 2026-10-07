@@ -999,7 +999,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
     public function combatlogregeneratesubmit_givenAdminWithNonDefaultRegion_usesThatRegionsWeeks(): void
     {
         // Arrange
-        $region = GameServerRegion::query()->where('short', GameServerRegion::EUROPE)->firstOrFail();
+        $region = GameServerRegion::query()->where('key', GameServerRegion::EUROPE)->firstOrFail();
         $admin  = User::findOrFail(1);
         User::query()->whereKey($admin->id)->update(['game_server_region_id' => $region->id]);
 
@@ -1035,7 +1035,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
     public function combatlogregenerate_givenAdminWithNonDefaultRegion_returnsOk(): void
     {
         // Arrange
-        $region = GameServerRegion::query()->where('short', GameServerRegion::EUROPE)->firstOrFail();
+        $region = GameServerRegion::query()->where('key', GameServerRegion::EUROPE)->firstOrFail();
         $admin  = User::findOrFail(1);
         User::query()->whereKey($admin->id)->update(['game_server_region_id' => $region->id]);
 
@@ -1283,7 +1283,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
     private function findSeasonWithWeeklyPeriods(?GameServerRegion $region = null): array
     {
         $seasonService = app(SeasonServiceInterface::class);
-        $region ??= GameServerRegion::query()->where('short', GameServerRegion::DEFAULT_REGION)->firstOrFail();
+        $region ??= GameServerRegion::query()->where('key', GameServerRegion::DEFAULT_REGION)->firstOrFail();
 
         /** @var Collection<int, Season> $seasons */
         $seasons = Season::with(['dungeons'])->orderByDesc('start')->get();

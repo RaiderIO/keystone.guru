@@ -55,14 +55,14 @@ class ExpansionService implements ExpansionServiceInterface
 
         // Called from all over a single request - the controller, the repositories and the view
         // composers each asked the database again for the same row (#4587)
-        if (!$this->currentExpansionCache->has($gameServerRegion->short)) {
+        if (!$this->currentExpansionCache->has($gameServerRegion->key)) {
             $this->currentExpansionCache->put(
-                $gameServerRegion->short,
+                $gameServerRegion->key,
                 $this->getExpansionAt(Carbon::now(), $gameServerRegion),
             );
         }
 
-        return $this->currentExpansionCache->get($gameServerRegion->short);
+        return $this->currentExpansionCache->get($gameServerRegion->key);
     }
 
     public function getNextExpansion(?GameServerRegion $gameServerRegion = null): ?Expansion
@@ -93,7 +93,7 @@ class ExpansionService implements ExpansionServiceInterface
 
         // Expansion::currentSeason() memoises on the model instance, and a request holds several
         // instances of the same expansion row because of the default eager loads (#4587)
-        $key = sprintf('%d-%s', $expansion->id, $gameServerRegion->short);
+        $key = sprintf('%d-%s', $expansion->id, $gameServerRegion->key);
 
         if (!$this->currentSeasonCache->has($key)) {
             $this->currentSeasonCache->put($key, $expansion->currentSeason($gameServerRegion));

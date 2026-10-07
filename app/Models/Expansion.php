@@ -151,8 +151,8 @@ class Expansion extends Model
             $this->currentSeasonCache = collect();
         }
 
-        if ($this->currentSeasonCache->has($gameServerRegion->short)) {
-            return $this->currentSeasonCache->get($gameServerRegion->short);
+        if ($this->currentSeasonCache->has($gameServerRegion->key)) {
+            return $this->currentSeasonCache->get($gameServerRegion->key);
         }
 
         /** @var Season|null $season */
@@ -169,7 +169,7 @@ class Expansion extends Model
             ->limit(1)
             ->first();
 
-        $this->currentSeasonCache->put($gameServerRegion->short, $season);
+        $this->currentSeasonCache->put($gameServerRegion->key, $season);
 
         return $season;
     }
@@ -182,8 +182,8 @@ class Expansion extends Model
             $this->nextSeasonCache = collect();
         }
 
-        if ($this->nextSeasonCache->has($gameServerRegion->short)) {
-            return $this->nextSeasonCache->get($gameServerRegion->short);
+        if ($this->nextSeasonCache->has($gameServerRegion->key)) {
+            return $this->nextSeasonCache->get($gameServerRegion->key);
         }
 
         /** @var Season|null $season */
@@ -201,7 +201,7 @@ class Expansion extends Model
             ->limit(1)
             ->first();
 
-        $this->nextSeasonCache->put($gameServerRegion->short, $season);
+        $this->nextSeasonCache->put($gameServerRegion->key, $season);
 
         return $season;
     }

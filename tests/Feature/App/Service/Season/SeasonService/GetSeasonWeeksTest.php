@@ -22,7 +22,7 @@ final class GetSeasonWeeksTest extends PublicTestCase
     {
         // Arrange
         $service         = app(SeasonServiceInterface::class);
-        $usRegion        = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion        = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $season          = Season::findOrFail(Season::SEASON_BFA_S1);
         $nextSeasonStart = Season::findOrFail(Season::SEASON_BFA_S2)->start($usRegion);
 
@@ -48,7 +48,7 @@ final class GetSeasonWeeksTest extends PublicTestCase
     {
         // Arrange
         $service  = app(SeasonServiceInterface::class);
-        $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $season   = Season::findOrFail(Season::SEASON_BFA_S1);
 
         // Act
@@ -68,7 +68,7 @@ final class GetSeasonWeeksTest extends PublicTestCase
     {
         // Arrange
         $service  = app(SeasonServiceInterface::class);
-        $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
 
         // Act
         $periods = $service->getAllSeasons()
@@ -86,7 +86,7 @@ final class GetSeasonWeeksTest extends PublicTestCase
     {
         // Arrange
         $service  = app(SeasonServiceInterface::class);
-        $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
 
         // A season of our own: a seeded upcoming season starts eventually, and then this test would be testing a
         // season that has begun

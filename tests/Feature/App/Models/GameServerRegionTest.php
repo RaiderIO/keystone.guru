@@ -29,11 +29,13 @@ final class GameServerRegionTest extends PublicTestCase
     }
 
     #[Test]
-    public function getUserOrDefaultRegion_givenGuestAndLegacyShortDiffers_returnsRegionWithDefaultKey(): void
+    public function getUserOrDefaultRegion_givenGuestAndAnotherRegionHoldingTheDefaultShort_returnsRegionWithDefaultKey(): void
     {
         // Arrange
-        $id = GameServerRegion::ALL[GameServerRegion::DEFAULT_REGION];
+        $id      = GameServerRegion::ALL[GameServerRegion::DEFAULT_REGION];
+        $decoyId = GameServerRegion::ALL[GameServerRegion::EUROPE];
         GameServerRegion::query()->whereKey($id)->update(['short' => sprintf('legacy_%s', GameServerRegion::DEFAULT_REGION)]);
+        GameServerRegion::query()->whereKey($decoyId)->update(['short' => GameServerRegion::DEFAULT_REGION]);
 
         try {
             // Act
@@ -44,6 +46,7 @@ final class GameServerRegionTest extends PublicTestCase
             $this->assertSame($id, $region->id);
             $this->assertSame(GameServerRegion::DEFAULT_REGION, $region->key);
         } finally {
+            GameServerRegion::query()->whereKey($decoyId)->update(['short' => GameServerRegion::EUROPE]);
             GameServerRegion::query()->whereKey($id)->update(['short' => GameServerRegion::DEFAULT_REGION]);
         }
     }
