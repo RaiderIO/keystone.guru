@@ -519,6 +519,14 @@ div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-pag
     white-space: nowrap;
 }
 
+/* The theme's 40px form checkbox would make every row of a selectable table twice as tall */
+table.dataTable.routes_table .dungeonroute_table_select[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+    border: 1px solid currentColor;
+}
+
 @media (max-width: 600px) {
     .routes_table .limit_width {
         max-width: 200px;

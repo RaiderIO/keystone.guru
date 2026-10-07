@@ -17,6 +17,10 @@
  * @property {Object[]} autoCompleteTags
  * @property {boolean} showAddToCollection Whether own routes offer "Add to collection…".
  * @property {string|null} massDeletePickerSelector The route picker drawer deleting several routes at once, null when the view has none.
+ * @property {boolean} viewModeLocked Whether viewMode is fixed for this table, so the user's chosen view mode is left alone.
+ * @property {boolean} selectable Whether every row starts with a checkbox that selects it.
+ * @property {string[]} selectedPublicKeys The rows that start out selected (selectable tables only).
+ * @property {Number|null} selectionMax At most this many rows may be selected; null for no limit.
  */
 
 /**
@@ -38,6 +42,10 @@ class DungeonrouteTable extends InlineCode {
         this._teamsHandler = new DungeonRouteTableTeam(this);
 
         this.carouselHandler = new CarouselHandler();
+
+        /** @type {DungeonRouteTableSelection|null} */
+        this._selection = this.options.selectable === true ?
+            new DungeonRouteTableSelection(this.options.selectedPublicKeys ?? [], this.options.selectionMax ?? null) : null;
 
         // Init the code
         this.setViewMode(this.options.viewMode);
@@ -145,6 +153,10 @@ class DungeonrouteTable extends InlineCode {
                 this._tableView = new ProfileTableView();
                 break;
             }
+            case 'profile_select': {
+                this._tableView = new ProfileSelectTableView();
+                break;
+            }
             case 'userprofile': {
                 this._tableView = new UserProfileTableView();
                 break;
@@ -176,13 +188,85 @@ class DungeonrouteTable extends InlineCode {
     }
 
     /**
+     * @returns {string[]} The public keys of the selected rows, in selection order; empty when the table is not selectable.
+     */
+    getSelectedPublicKeys() {
+        return this._selection === null ? [] : this._selection.getSelectedPublicKeys();
+    }
+
+    /**
+     * Replaces the selection without announcing it as a change of the user's.
+     * @param {string[]} publicKeys
+     */
+    setSelectedPublicKeys(publicKeys) {
+        if (this._selection === null) {
+            return;
+        }
+
+        this._selection.setSelectedPublicKeys(publicKeys);
+        this._applySelectionToCheckboxes();
+    }
+
+    /**
+     * Selects or deselects a row and announces the change with a `dungeonroutetable:selectionchanged` event on the table.
+     * @param {string} publicKey
+     * @param {boolean} selected
+     * @private
+     */
+    _toggleSelection(publicKey, selected) {
+        let changed = selected ? this._selection.select(publicKey) : this._selection.deselect(publicKey);
+        this._applySelectionToCheckboxes();
+
+        if (!changed) {
+            return;
+        }
+
+        $(this.options.tableSelector).trigger('dungeonroutetable:selectionchanged', [{
+            publicKey:  publicKey,
+            selected:   selected,
+            row:        this._routeData.find(row => row.public_key === publicKey) ?? null,
+            publicKeys: this._selection.getSelectedPublicKeys(),
+        }]);
+    }
+
+    /**
+     * @private
+     */
+    _applySelectionToCheckboxes() {
+        this._selection.applyToCheckboxes($(this.options.tableSelector).find('input.dungeonroute_table_select').get());
+    }
+
+    /**
+     * The checkbox column in front of every row of a selectable table.
+     * @returns {Object}
+     * @private
+     */
+    _getSelectColumn() {
+        return {
+            'title':      '',
+            'data':       'public_key',
+            'orderable':  false,
+            'searchable': false,
+            'width':      '1%',
+            'className':  'not_clickable dungeonroute_table_select_cell',
+            'render':     function (data, type, row) {
+                return `<input type="checkbox" class="form-check-input dungeonroute_table_select" ` +
+                    `value="${Handlebars.escapeExpression(data)}" ` +
+                    `aria-label="${Handlebars.escapeExpression(lang.get('js.dungeonroute_table_select_route', {title: row.title}))}">`;
+            }
+        };
+    }
+
+    /**
      * Binds a datatables instance to a jquery element.
      **/
     refreshTable() {
         let self = this;
 
         // Send cookie
-        Cookies.set('routes_viewmode', self._viewMode, cookieDefaultAttributes);
+        if (this.options.viewModeLocked !== true) {
+            Cookies.set('routes_viewmode', self._viewMode, cookieDefaultAttributes);
+        }
 
         let $element = $(this.options.tableSelector);
 
@@ -234,7 +318,7 @@ class DungeonrouteTable extends InlineCode {
             'lengthMenu': [25],
             'bLengthChange': false,
             // Order by affixes by default
-            'order': [[1 + (self._viewMode === 'biglist' ? 1 : 0), 'asc']],
+            'order': [[1 + (self._viewMode === 'biglist' ? 1 : 0) + (self._selection !== null ? 1 : 0), 'asc']],
             'columns': self._getColumns(),
             'searchCols': self._getDefaultSearchColumns(),
             'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
@@ -244,6 +328,10 @@ class DungeonrouteTable extends InlineCode {
 
         self._dt.on('draw.dt', function (e, settings, json, xhr) {
             refreshTooltips();
+
+            if (self._selection !== null) {
+                self._applySelectionToCheckboxes();
+            }
 
             self._tagsHandler.activate();
             self._teamsHandler.activate();
@@ -313,10 +401,20 @@ class DungeonrouteTable extends InlineCode {
             self.carouselHandler.refreshCarousel();
         });
 
+        self._dt.on('change', 'tbody input.dungeonroute_table_select', function (changeEvent) {
+            self._toggleSelection(changeEvent.currentTarget.value, changeEvent.currentTarget.checked);
+        });
+
         self._dt.on('click', 'tbody td.clickable', function (clickEvent) {
             let $currentTarget = $(clickEvent.currentTarget);
             let key = $currentTarget.data('publickey');
             let authorId = parseInt($currentTarget.data('authorid'));
+
+            // In a selectable table a click on the row (de)selects it, like its checkbox does
+            if (self._selection !== null) {
+                self._toggleSelection(key, !self._selection.isSelected(key));
+                return;
+            }
 
             window.open(
                 // Only link to edit page when YOU are the author of the route.
@@ -356,6 +454,10 @@ class DungeonrouteTable extends InlineCode {
                     viewColumn.hasOwnProperty('defaultSearch') ? {'search': viewColumn.defaultSearch} : null
                 );
             }
+        }
+
+        if (this._selection !== null) {
+            result.unshift(null);
         }
 
         return result;
@@ -555,6 +657,10 @@ class DungeonrouteTable extends InlineCode {
                     console.error('Unable to find DT column for view column ', column);
                 }
             }
+        }
+
+        if (this._selection !== null) {
+            result.unshift(this._getSelectColumn());
         }
 
         return result;
