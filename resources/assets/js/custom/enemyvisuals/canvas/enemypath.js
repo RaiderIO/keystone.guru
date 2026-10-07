@@ -252,13 +252,53 @@ let EnemyCanvasRenderer = L.Canvas.extend({
 
         this._capturesPointer = null;
         this._setCapturesPointer(false);
+        this._invalidateContainerRect();
         L.DomEvent.on(this._map.getContainer(), 'mousemove', this._onMapContainerMouseMove, this);
+        L.DomEvent.on(this._map.getContainer(), 'mouseenter', this._invalidateContainerRect, this);
+        L.DomEvent.on(window, 'scroll resize', this._invalidateContainerRect, this);
     },
 
     onRemove: function () {
         L.DomEvent.off(this._map.getContainer(), 'mousemove', this._onMapContainerMouseMove, this);
+        L.DomEvent.off(this._map.getContainer(), 'mouseenter', this._invalidateContainerRect, this);
+        L.DomEvent.off(window, 'scroll resize', this._invalidateContainerRect, this);
 
         L.Canvas.prototype.onRemove.call(this);
+    },
+
+    getEvents: function () {
+        let events = L.Canvas.prototype.getEvents.call(this);
+        events.resize = this._invalidateContainerRect;
+
+        return events;
+    },
+
+    /**
+     * Map#mouseEventToLayerPoint() reads the container's layout on every call, and the mousemove
+     * listeners that run ahead of it leave the layout dirty: a forced layout per mouse move.
+     * @param event {MouseEvent}
+     * @returns {L.Point}
+     */
+    mouseEventToLayerPoint: function (event) {
+        if (this._containerRect === null) {
+            let container = this._map.getContainer();
+            let rect = container.getBoundingClientRect();
+            this._containerRect = {
+                left: rect.left,
+                top: rect.top,
+                scaleX: rect.width / container.offsetWidth || 1,
+                scaleY: rect.height / container.offsetHeight || 1,
+                clientLeft: container.clientLeft,
+                clientTop: container.clientTop,
+            };
+        }
+
+        let rect = this._containerRect;
+
+        return this._map.containerPointToLayerPoint(L.point(
+            (event.clientX - rect.left) / rect.scaleX - rect.clientLeft,
+            (event.clientY - rect.top) / rect.scaleY - rect.clientTop
+        ));
     },
 
     /**
@@ -283,7 +323,7 @@ let EnemyCanvasRenderer = L.Canvas.extend({
      * @private
      */
     _onMapContainerMouseMove: function (event) {
-        let capturesPointer = this.getLayerAt(this._map.mouseEventToLayerPoint(event)) !== null;
+        let capturesPointer = this.getLayerAt(this.mouseEventToLayerPoint(event)) !== null;
 
         // Leaflet's own hover check is throttled, and the canvas gets no further mouse event once it
         // stops taking them, so the enemy just left would keep its tooltip and the pointer cursor.
@@ -292,6 +332,13 @@ let EnemyCanvasRenderer = L.Canvas.extend({
         }
 
         this._setCapturesPointer(capturesPointer);
+    },
+
+    /**
+     * @private
+     */
+    _invalidateContainerRect: function () {
+        this._containerRect = null;
     },
 
     /**
