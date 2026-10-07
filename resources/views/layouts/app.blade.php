@@ -36,7 +36,7 @@ $bodyClass ??= '';
 $rootClass ??= '';
 
 ?><!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', \Illuminate\Support\Str::replace('_ai', '', app()->getLocale())) }}" class="theme {{$theme}}">
+<html lang="{{ str_replace('_', '-', str_replace('_ai', '', app()->getLocale())) }}" class="theme {{$theme}}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
