@@ -73,7 +73,7 @@ function route(publicKey) {
         pull_forces:                   [{enemy_forces: 40, has_boss: false}, {enemy_forces: 0, has_boss: true}],
         has_thumbnail:                 false,
         thumbnails:                    [],
-        dungeon:                       {id: 3, name: 'dungeons.ara_kara', key: 'arakara', expansion: {shortname: 'tww'}},
+        dungeon:                       {id: 3, name: 'dungeons.ara_kara', key: 'arakara', expansion: {key: 'tww'}},
     };
 }
 

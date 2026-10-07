@@ -74,7 +74,7 @@ class PickerDungeonRoute {
             return this.json.thumbnails[0].url;
         }
 
-        return `${fallbackImageBaseUrl}/dungeons/${this.json.dungeon.expansion.shortname}/${this.json.dungeon.key}_3-2.jpg`;
+        return `${fallbackImageBaseUrl}/dungeons/${this.json.dungeon.expansion.key}/${this.json.dungeon.key}_3-2.jpg`;
     }
 
     /**

@@ -22,12 +22,12 @@ const {
     buildCreateRouteForm,
     buildInlineOptions,
     RETAIL_DUNGEON_ALPHA_ID,
+    RETAIL_EXPANSION_KEY,
     AFFIX_GROUP_DEFAULT_ID,
     AFFIX_GROUP_ALT_A_ID,
     AFFIX_GROUP_ALT_B_ID,
     RETAIL_DUNGEON_BETA_ID,
     RETAIL_EXPANSION_ID,
-    RETAIL_EXPANSION_SHORTNAME,
     CURRENT_SEASON_ID,
 } = require('#test/fixtures/createRouteForm');
 
@@ -51,7 +51,7 @@ function pickDungeon(dungeonId) {
  * @returns {string}
  */
 function affixRowHtml(seasonId, affixGroupId) {
-    return `<div class="row affix_list_row expansion ${RETAIL_EXPANSION_SHORTNAME} season season-${seasonId}" data-id="${affixGroupId}"><i class="check"></i></div>`;
+    return `<div class="row affix_list_row expansion ${RETAIL_EXPANSION_KEY} season season-${seasonId}" data-id="${affixGroupId}"><i class="check"></i></div>`;
 }
 
 /**
@@ -273,6 +273,24 @@ describe('CommonGroupAffixes.activate', () => {
         expect(displayOf(`.affix_list_row.season-${CURRENT_SEASON_ID}`)).not.toContain('none');
         expect(displayOf(`.affix_list_row.season-${CURRENT_SEASON_ID + 1}`)).toEqual(['none']);
     });
+
+    it('activate_givenSeasonDungeonReleasedInAnotherExpansion_selectsTheSeasonExpansionKey', () => {
+        // Arrange
+        buildCreateRouteForm({
+            gameVersion: 'retail',
+            dungeonIds: [RETAIL_DUNGEON_ALPHA_ID],
+            affixGroups: [{id: AFFIX_GROUP_DEFAULT_ID}],
+        });
+        const options = buildInlineOptions({defaultSelectedAffixes: [AFFIX_GROUP_DEFAULT_ID]}).affixes;
+        options.dungeonExpansions = {...options.dungeonExpansions, [RETAIL_DUNGEON_ALPHA_ID]: 'release_xpac'};
+
+        // Act
+        const code = new CommonGroupAffixes('affixes', 'common/group/affixes', options);
+        code.activate();
+
+        // Assert
+        expect(code.currentSelectionExpansionKey).toBe(RETAIL_EXPANSION_KEY);
+    });
 });
 
 describe('CommonGroupAffixes._dungeonChanged', () => {
@@ -293,7 +311,7 @@ describe('CommonGroupAffixes._dungeonChanged', () => {
             defaultSelectedAffixes: [AFFIX_GROUP_ALT_A_ID],
             dungeonIds: [RETAIL_DUNGEON_ALPHA_ID, RETAIL_DUNGEON_BETA_ID],
             beforeActivate: (options) => {
-                options.currentAffixes = {[RETAIL_EXPANSION_SHORTNAME]: {id: AFFIX_GROUP_ALT_B_ID}};
+                options.currentAffixes = {[RETAIL_EXPANSION_KEY]: {id: AFFIX_GROUP_ALT_B_ID}};
             },
         });
 
@@ -337,7 +355,7 @@ describe('CommonGroupAffixes._dungeonChanged', () => {
             beforeActivate: (options) => {
                 options.nextSeason = {
                     id:           nextSeasonId,
-                    expansion:    {shortname: RETAIL_EXPANSION_SHORTNAME},
+                    expansion:    {key: RETAIL_EXPANSION_KEY},
                     dungeons:     [{id: RETAIL_DUNGEON_BETA_ID}],
                     affix_groups: [{id: AFFIX_GROUP_ALT_B_ID, expansion_id: RETAIL_EXPANSION_ID, seasonal_index: null}],
                 };
