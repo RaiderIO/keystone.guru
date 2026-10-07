@@ -81,6 +81,8 @@ function makeOpenCircleMenu() {
     self.enemy = Object.assign(new global.MapObject(), {id: id});
     self.mainVisual = {getSize: () => ({iconSize: [30, 30]})};
     self.map = Object.assign(new global.DungeonMap(), {
+        // Enemies drawn as DOM markers: there is nothing to promote
+        mapObjectGroupManager: {getEnemyMapObjectGroup: () => ({promoteToDomMarker: () => false})},
         getMapState: () => mapState,
         setMapState: (newMapState) => {
             mapState = newMapState;

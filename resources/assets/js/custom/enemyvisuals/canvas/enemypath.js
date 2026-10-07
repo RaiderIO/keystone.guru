@@ -435,7 +435,8 @@ let EnemyCanvasRenderer = L.Canvas.extend({
 /**
  * Holds enemy markers exactly like an L.LayerGroup - so hasLayer(), visibility and every existing
  * caller keep working on the markers - but puts each marker's EnemyPath on the map instead of the
- * marker itself, so no enemy DOM is ever created.
+ * marker itself, so no enemy DOM is created - except for a marker promote()d to the DOM, which is
+ * on the map in place of its path until it is demote()d again.
  */
 let EnemyCanvasLayerGroup = L.LayerGroup.extend({
     /**
@@ -445,6 +446,7 @@ let EnemyCanvasLayerGroup = L.LayerGroup.extend({
      */
     initialize: function (layers, options) {
         this._resolvePath = options.resolvePath;
+        this._promotedLayerIds = {};
         L.LayerGroup.prototype.initialize.call(this, layers, options);
     },
 
@@ -467,8 +469,60 @@ let EnemyCanvasLayerGroup = L.LayerGroup.extend({
         }
 
         delete this._layers[id];
+        delete this._promotedLayerIds[id];
 
         return this;
+    },
+
+    /**
+     * Puts the marker itself on the map in place of its path, until demote() is called.
+     * @param layer {L.Marker}
+     * @returns {Boolean} False when the marker is not in this group or already promoted.
+     */
+    promote: function (layer) {
+        let id = this.getLayerId(layer);
+        if (!this._layers[id] || this._promotedLayerIds[id] === true) {
+            return false;
+        }
+
+        let path = this._getRenderedLayer(layer);
+        this._promotedLayerIds[id] = true;
+
+        if (this._map && this._map.hasLayer(path)) {
+            this._map.removeLayer(path);
+            this._map.addLayer(layer);
+        }
+
+        return true;
+    },
+
+    /**
+     * Swaps a promoted marker back for its path.
+     * @param layer {L.Marker}
+     * @returns {Boolean} False when the marker was not promoted.
+     */
+    demote: function (layer) {
+        let id = this.getLayerId(layer);
+        if (this._promotedLayerIds[id] !== true) {
+            return false;
+        }
+
+        delete this._promotedLayerIds[id];
+
+        if (this._map && this._map.hasLayer(layer)) {
+            this._map.removeLayer(layer);
+            this._map.addLayer(this._getRenderedLayer(layer));
+        }
+
+        return true;
+    },
+
+    /**
+     * @param layer {L.Marker}
+     * @returns {Boolean}
+     */
+    isPromoted: function (layer) {
+        return this._promotedLayerIds[this.getLayerId(layer)] === true;
     },
 
     onAdd: function (map) {
@@ -489,7 +543,11 @@ let EnemyCanvasLayerGroup = L.LayerGroup.extend({
      * @private
      */
     _getRenderedLayer: function (layer) {
-        return layer instanceof L.Marker ? this._resolvePath(layer) : layer;
+        if (!(layer instanceof L.Marker) || this._promotedLayerIds[this.getLayerId(layer)] === true) {
+            return layer;
+        }
+
+        return this._resolvePath(layer);
     },
 });
 

@@ -37,6 +37,8 @@ class EnemyVisual extends Signalable {
         // _circleMenu is still non-null (nothing else marks a menu that is on its way out rather than
         // open) but must not be treated as reopenable by buildVisual() (#3730).
         this._circleMenuClosing = false;
+        // True while a canvas-drawn enemy is shown as its DOM marker for the circle menu
+        this._promotedToDom = false;
 
         // Can be set to force the building of a visual when it's shown again
         this._forceBuildVisualOnShow = false;
@@ -254,6 +256,9 @@ class EnemyVisual extends Signalable {
 
         let self = this;
 
+        // The menu is DOM inside the enemy's marker, which a canvas-drawn enemy does not have
+        self._promoteToDomMarker();
+
         let template = Handlebars.templates['map_enemy_raid_marker_template'];
         let id = self.enemy.id;
 
@@ -327,6 +332,39 @@ class EnemyVisual extends Signalable {
     }
 
     /**
+     * Shows this canvas-drawn enemy as its DOM marker until _demoteToCanvas(). A no-op on DOM markers.
+     * @private
+     */
+    _promoteToDomMarker() {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
+        if (this._promotedToDom || !enemyMapObjectGroup.promoteToDomMarker(this.layer)) {
+            return;
+        }
+
+        this._promotedToDom = true;
+        this.refreshJQuerySelectors();
+        this.refreshSize();
+    }
+
+    /**
+     * Draws a promoted enemy on the canvas again, removing its DOM marker.
+     * @private
+     */
+    _demoteToCanvas() {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
+
+        if (!this._promotedToDom) {
+            return;
+        }
+
+        this._promotedToDom = false;
+        this.map.mapObjectGroupManager.getEnemyMapObjectGroup().demoteToCanvas(this.layer);
+        this.refreshSize();
+    }
+
+    /**
      * Cleans up the circle menu, removing it from the object completely.
      *
      * A no-op while the menu is already mid fade-out (a previous call already queued cleanupFn below):
@@ -380,6 +418,7 @@ class EnemyVisual extends Signalable {
                 $radial.remove().dequeue();
                 self._circleMenu = null;
                 self._circleMenuClosing = false;
+                self._demoteToCanvas();
 
                 // Only stop the map state at this point - and only if it is still ours. The menu can
                 // only be opened while no map state is active, but the user can start one while it is
@@ -649,7 +688,7 @@ class EnemyVisual extends Signalable {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
         let canvasPath = this.getCanvasPath();
-        if (canvasPath !== null) {
+        if (canvasPath !== null && !this._promotedToDom) {
             this._refreshCanvasPath(canvasPath);
             return;
         }
