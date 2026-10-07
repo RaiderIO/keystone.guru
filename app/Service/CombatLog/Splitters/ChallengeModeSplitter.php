@@ -12,11 +12,13 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange as ZoneChangeEvent;
 use App\Models\Dungeon;
 use App\Service\CombatLog\CombatLogServiceInterface;
+use App\Service\CombatLog\Dtos\ChallengeMode;
 use App\Service\CombatLog\Splitters\Logging\ChallengeModeSplitterLoggingInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
+use Throwable;
 
 class ChallengeModeSplitter extends CombatLogSplitter
 {
@@ -39,6 +41,8 @@ class ChallengeModeSplitter extends CombatLogSplitter
     private ?ZoneChangeEvent $lastZoneChangeEvent                 = null;
     private ?MapChangeEvent $lastMapChangeEvent                   = null;
     private ?Carbon $lastTimestamp                                = null;
+    /** @var Collection<int, ChallengeMode> */
+    private Collection $challengeModes;
     /** @var Collection<int, string>|null */
     private ?Collection $result = null;
     private ?string $filePath   = null;
@@ -61,31 +65,39 @@ class ChallengeModeSplitter extends CombatLogSplitter
     {
         $this->reset();
 
-        // We don't need to do anything if there are no runs
-        // If there's one run, we may still want to trim the fat of the log and keep just
-        // the one challenge mode that's in there
-        $foundChallengeModes = $this->combatLogService->getChallengeModes($filePath)->count();
+        $this->filePath = $filePath;
+
+        try {
+            // Pass $this->>parseCombatLogEvent as callable
+            $this->combatLogService->parseCombatLog(
+                $filePath,
+                fn(
+                    $combatLogVersion,
+                    $advancedLoggingEnabled,
+                    $rawEvent,
+                    $lineNr,
+                ) => $this->parseCombatLogEvent($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr),
+            );
+        } catch (Throwable $throwable) {
+            // A failed split produces no files, not the runs that happened to complete before the failing line
+            foreach ($this->result as $resultFilePath) {
+                if (file_exists($resultFilePath)) {
+                    unlink($resultFilePath);
+                }
+            }
+
+            throw $throwable;
+        }
+
+        // Remove the lineNr context since we stopped parsing lines, don't let the last line linger in the context
+        $this->log->removeContext('lineNr');
+
+        $foundChallengeModes = $this->challengeModes->count();
         if ($foundChallengeModes <= 0) {
             $this->log->splitCombatLogNoChallengeModesFound();
 
             return $this->result;
         }
-
-        $this->filePath = $filePath;
-
-        // Pass $this->>parseCombatLogEvent as callable
-        $this->combatLogService->parseCombatLog(
-            $filePath,
-            fn(
-                $combatLogVersion,
-                $advancedLoggingEnabled,
-                $rawEvent,
-                $lineNr,
-            ) => $this->parseCombatLogEvent($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr),
-        );
-
-        // Remove the lineNr context since we stopped parsing lines, don't let the last line linger in the context
-        $this->log->removeContext('lineNr');
 
         if ($this->lastChallengeModeStartEvent !== null) {
             $this->log->splitCombatLogLastRunNotCompleted();
@@ -115,6 +127,10 @@ class ChallengeModeSplitter extends CombatLogSplitter
 
         $combatLogEntry = (new CombatLogEntry($rawEvent));
         $parsedEvent    = $combatLogEntry->parseEvent(self::EVENTS_TO_KEEP, $combatLogVersion);
+
+        if ($parsedEvent instanceof ChallengeModeStartEvent) {
+            $this->challengeModes->push($this->combatLogService->createChallengeMode($parsedEvent));
+        }
 
         if ($combatLogEntry->getParsedTimestamp() === null) {
             $this->log->parseCombatLogEventTimestampNotSet();
@@ -238,6 +254,7 @@ class ChallengeModeSplitter extends CombatLogSplitter
         $this->lastCombatLogVersionEvent = null;
         $this->lastZoneChangeEvent       = null;
         $this->lastMapChangeEvent        = null;
+        $this->challengeModes            = collect();
         $this->result                    = collect();
     }
 
