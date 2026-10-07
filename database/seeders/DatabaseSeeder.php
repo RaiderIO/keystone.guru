@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Exceptions\SeederStepFailedException;
 use App\Models\Traits\SeederModel;
 use App\Service\Cache\CacheServiceInterface;
 use Exception;
@@ -117,9 +118,7 @@ class DatabaseSeeder extends Seeder
                 );
 
                 if ($prepareFailed) {
-                    $this->command->error(sprintf('Preparing temp table for %s failed!', $seederClass));
-
-                    break;
+                    throw new SeederStepFailedException($seederClass, 'Preparing');
                 }
 
                 DB::transaction(function () use ($seederClass) {
@@ -132,9 +131,7 @@ class DatabaseSeeder extends Seeder
                 );
 
                 if ($applyFailed) {
-                    $this->command->error(sprintf('Applying temp table for %s failed!', $seederClass));
-
-                    break;
+                    throw new SeederStepFailedException($seederClass, 'Applying');
                 }
             } catch (Exception $e) {
                 $this->command->error($e->getMessage());
@@ -157,7 +154,7 @@ class DatabaseSeeder extends Seeder
         self::$running = false;
     }
 
-    private function prepareTempTableForModel(string $className): bool
+    protected function prepareTempTableForModel(string $className): bool
     {
         /** @var Model $instance */
         $instance = new $className();
@@ -175,7 +172,7 @@ class DatabaseSeeder extends Seeder
     /**
      * @throws Throwable
      */
-    private function applyTempTableForModel(string $className): bool
+    protected function applyTempTableForModel(string $className): bool
     {
         /** @var Model $instance */
         $instance = new $className();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HealthController;
 use App\Http\Middleware\AddsTraceIdToContext;
 use App\Http\Middleware\Api\ApiAuthentication;
 use App\Http\Middleware\Api\ApiAuthenticationThrottle;
@@ -28,6 +29,7 @@ use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Route;
 use Jenssegers\Agent\AgentServiceProvider;
 use Laratrust\LaratrustServiceProvider;
 use Laravel\Tinker\TinkerServiceProvider;
@@ -51,6 +53,10 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__ . '/../routes/console.php',
         channels: __DIR__ . '/../routes/channels.php',
         health: '/up',
+        then: static function (): void {
+            // Outside the web group: the ALB polls this every few seconds, so it must not start a session
+            Route::get('health/app', new HealthController()->check(...))->name('health.app');
+        },
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->redirectGuestsTo(fn() => route('login'));
