@@ -123,4 +123,8 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
     @endif
 
     @include('common.dungeonroute.table', ['view' => 'userprofile'])
+
+    @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
+        @include('common.modal.userreport.dungeonroute')
+    @endcomponent
 @endsection
