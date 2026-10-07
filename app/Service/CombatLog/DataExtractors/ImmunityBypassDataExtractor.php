@@ -24,7 +24,6 @@ use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogNpcEventType;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\CombatLog\CombatLogSpellEventType;
-use App\Models\CombatLog\CombatLogSpellPropertyObservation;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
@@ -125,8 +124,16 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
     /** @var DataExtractionCurrentDungeon|null The context $currentDungeonId was read from - see extractData. */
     private ?DataExtractionCurrentDungeon $currentDungeonContext = null;
 
-    public function __construct()
+    /** Shared with the other writers of the observation table when injected - whoever injected it flushes it. */
+    private readonly SpellPropertyObservationBuffer $observationBuffer;
+
+    private readonly bool $flushesObservationBuffer;
+
+    public function __construct(?SpellPropertyObservationBuffer $sharedObservationBuffer = null)
     {
+        $this->observationBuffer        = $sharedObservationBuffer ?? new SpellPropertyObservationBuffer();
+        $this->flushesObservationBuffer = $sharedObservationBuffer === null;
+
         $definitionsByBuffSpellId = collect();
         $definitionsByProperty    = collect();
 
@@ -273,21 +280,13 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         $this->closeAllImmunityWindows();
 
         if ($this->pendingBypassObservations->isNotEmpty()) {
-            $now  = Carbon::now()->toDateTimeString();
-            $rows = $this->pendingBypassObservations->map(fn(array $observation) => [
-                'spell_id'        => $observation['spell_id'],
-                'property'        => $observation['property']->value,
-                'observed_on'     => Carbon::today()->toDateString(),
-                'combat_log_path' => $this->currentCombatLogFilePath ?? '',
-                'created_at'      => $now,
-                'updated_at'      => $now,
-            ])->all();
+            foreach ($this->pendingBypassObservations as $observation) {
+                $this->observationBuffer->queue($observation['spell_id'], $observation['property'], $this->currentCombatLogFilePath ?? '');
+            }
 
-            CombatLogSpellPropertyObservation::upsertWithDeadlockRetry(
-                $rows,
-                ['spell_id', 'property', 'observed_on'],
-                ['combat_log_path', 'updated_at'],
-            );
+            if ($this->flushesObservationBuffer) {
+                $this->observationBuffer->flush();
+            }
 
             /** @var Collection<int, SpellModel> $spells */
             $spells = SpellModel::query()

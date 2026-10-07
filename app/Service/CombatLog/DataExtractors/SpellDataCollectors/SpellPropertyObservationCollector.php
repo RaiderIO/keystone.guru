@@ -11,12 +11,11 @@ use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Player;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\CombatLog\CombatLogSpellEventType;
-use App\Models\CombatLog\CombatLogSpellPropertyObservation;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Spell\Spell as SpellModel;
 use App\Models\Spell\SpellMissType;
+use App\Service\CombatLog\DataExtractors\SpellPropertyObservationBuffer;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class SpellPropertyObservationCollector implements SpellDataCollectorInterface
@@ -30,13 +29,21 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
 
     private ?string $currentCombatLogFilePath = null;
 
+    /** Shared with the other writers of the observation table when injected - whoever injected it flushes it. */
+    private readonly SpellPropertyObservationBuffer $observationBuffer;
+
+    private readonly bool $flushesObservationBuffer;
+
     /**
      * @param Collection<int, SpellModel> $allSpells
      */
     public function __construct(
-        private readonly Collection $allSpells,
+        private readonly Collection     $allSpells,
+        ?SpellPropertyObservationBuffer $sharedObservationBuffer = null,
     ) {
         $this->pendingPropertyObservations = collect();
+        $this->observationBuffer           = $sharedObservationBuffer ?? new SpellPropertyObservationBuffer();
+        $this->flushesObservationBuffer    = $sharedObservationBuffer === null;
     }
 
     public function beforeCollect(string $combatLogFilePath): void
@@ -82,21 +89,13 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
     public function afterCollect(ExtractedDataResult $result, string $combatLogFilePath): void
     {
         if ($this->pendingPropertyObservations->isNotEmpty()) {
-            $now  = Carbon::now()->toDateTimeString();
-            $rows = $this->pendingPropertyObservations->map(fn(array $observation) => [
-                'spell_id'        => $observation['spell_id'],
-                'property'        => $observation['property']->value,
-                'observed_on'     => Carbon::today()->toDateString(),
-                'combat_log_path' => $this->currentCombatLogFilePath ?? '',
-                'created_at'      => $now,
-                'updated_at'      => $now,
-            ])->all();
+            foreach ($this->pendingPropertyObservations as $observation) {
+                $this->observationBuffer->queue($observation['spell_id'], $observation['property'], $this->currentCombatLogFilePath ?? '');
+            }
 
-            CombatLogSpellPropertyObservation::upsertWithDeadlockRetry(
-                $rows,
-                ['spell_id', 'property', 'observed_on'],
-                ['combat_log_path', 'updated_at'],
-            );
+            if ($this->flushesObservationBuffer) {
+                $this->observationBuffer->flush();
+            }
 
             foreach ($this->pendingPropertyObservations as $observation) {
                 /** @var SpellModel|null $spell */

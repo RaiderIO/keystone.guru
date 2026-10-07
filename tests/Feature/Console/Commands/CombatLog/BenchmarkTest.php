@@ -14,6 +14,7 @@ use App\Service\CombatLog\DataExtractors\NpcCharacteristicDataExtractor;
 use App\Service\CombatLog\DataExtractors\Profiling\ProfilingDataExtractor;
 use App\Service\CombatLog\DataExtractors\SpellCounterDataExtractor;
 use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
+use App\Service\CombatLog\DataExtractors\SpellPropertyObservationFlushDataExtractor;
 use Illuminate\Support\Facades\File;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -61,7 +62,7 @@ final class BenchmarkTest extends PublicTestCase
     }
 
     #[Test]
-    public function createExtractors_givenDefaultFactory_returnsFiveExtractorsInCurrentOrder(): void
+    public function createExtractors_givenDefaultFactory_returnsSixExtractorsInCurrentOrder(): void
     {
         // Arrange
         $factory = app(DataExtractorFactoryInterface::class);
@@ -72,13 +73,14 @@ final class BenchmarkTest extends PublicTestCase
             ->toArray();
 
         // Assert - the order is load-bearing (e.g. CreateMissingNpcDataExtractor must run before extractors
-        // that expect the NPC to exist)
+        // that expect the NPC to exist, and the observation flush must run after every writer queued its rows)
         $this->assertSame([
             CreateMissingNpcDataExtractor::class,
             SpellDataExtractor::class,
             NpcCharacteristicDataExtractor::class,
             SpellCounterDataExtractor::class,
             ImmunityBypassDataExtractor::class,
+            SpellPropertyObservationFlushDataExtractor::class,
         ], $extractorClasses);
     }
 
@@ -144,6 +146,7 @@ final class BenchmarkTest extends PublicTestCase
                 NpcCharacteristicDataExtractor::class,
                 SpellCounterDataExtractor::class,
                 ImmunityBypassDataExtractor::class,
+                SpellPropertyObservationFlushDataExtractor::class,
             ], $reportedClasses);
             foreach ($result['phaseB']['extractors'] as $extractor) {
                 // Specifically extractData: beforeExtract/afterExtract fire once per file no matter what the

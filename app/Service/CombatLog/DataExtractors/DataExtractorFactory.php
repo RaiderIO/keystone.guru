@@ -19,13 +19,16 @@ class DataExtractorFactory implements DataExtractorFactoryInterface
 
     public function createExtractors(): Collection
     {
+        $spellPropertyObservationBuffer = new SpellPropertyObservationBuffer();
+
         /** @var Collection<int, DataExtractorInterface> $extractors */
         $extractors = collect([
             new CreateMissingNpcDataExtractor(),
-            new SpellDataExtractor($this->spellRepository),
+            new SpellDataExtractor($this->spellRepository, $spellPropertyObservationBuffer),
             new NpcCharacteristicDataExtractor($this->spellRepository),
-            new SpellCounterDataExtractor(),
-            new ImmunityBypassDataExtractor(),
+            new SpellCounterDataExtractor($spellPropertyObservationBuffer),
+            new ImmunityBypassDataExtractor($spellPropertyObservationBuffer),
+            new SpellPropertyObservationFlushDataExtractor($spellPropertyObservationBuffer),
         ]);
 
         return $extractors;
