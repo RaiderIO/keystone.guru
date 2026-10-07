@@ -37,7 +37,7 @@ class AjaxTagController extends Controller
         $context = $request->getContext();
 
         /** @var TagCategory $tagCategory */
-        $tagCategory = TagCategory::where('name', $request->get('category'))->firstOrFail();
+        $tagCategory = TagCategory::where('key', $request->get('category'))->firstOrFail();
 
         $modelId = $request->get('model_id');
         $tagName = $request->get('name');
@@ -45,7 +45,7 @@ class AjaxTagController extends Controller
         // Reconstruct the model that we're trying to tag
         /** @var Builder<Model> $query */
         $query = $tagCategory->model_class::query();
-        if (in_array($tagCategory->name, [
+        if (in_array($tagCategory->key, [
             TagCategory::DUNGEON_ROUTE_PERSONAL,
             TagCategory::DUNGEON_ROUTE_TEAM,
         ])) {

@@ -464,7 +464,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             [$original] = $this->createOutdatedRoute();
             $rater      = User::factory()->create();
 
-            $tagCategory = TagCategory::firstWhere('name', TagCategory::DUNGEON_ROUTE_PERSONAL);
+            $tagCategory = TagCategory::firstWhere('key', TagCategory::DUNGEON_ROUTE_PERSONAL);
             $tag         = Tag::create([
                 'tag_category_id' => $tagCategory->id,
                 'model_id'        => $original->id,
