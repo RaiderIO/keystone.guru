@@ -2,6 +2,7 @@
 
 namespace App\Jobs\LiveSession;
 
+use App\Jobs\Enums\QueueName;
 use App\Models\LiveSession\LiveSession;
 use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
 use Illuminate\Bus\Queueable;
@@ -23,7 +24,7 @@ class ProcessLiveSessionCombatLogBuffer implements ShouldQueue
 
     public function __construct(public readonly int $liveSessionId)
     {
-        $this->queue = sprintf('%s-live-session-process', config('app.type'));
+        $this->queue = QueueName::LiveSessionProcess->queueName();
     }
 
     /**

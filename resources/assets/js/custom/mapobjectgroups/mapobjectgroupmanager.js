@@ -235,6 +235,13 @@ class MapObjectGroupManager extends Signalable {
     }
 
     /**
+     * @returns {PlayerPositionMapObjectGroup|null}
+     */
+    getPlayerPositionMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_PLAYER_POSITION);
+    }
+
+    /**
      * Set the visibility of a map object group.
      * @param objectGroupName object The name of the group to hide/show.
      * @param visible boolean True to display, false to hide.

@@ -216,6 +216,9 @@ setFakeState();
 
 const {Enemy} = require('./enemy');
 const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManager');
+// livesessionenemy.js extends the global Enemy at load time
+global.Enemy = Enemy;
+const {LiveSessionEnemy} = require('./livesessionenemy');
 
 // 1h. Only ever used through `instanceof` (raid markers are not available on the admin mapping page).
 global.AdminEnemy = class AdminEnemy extends Enemy {
@@ -317,6 +320,20 @@ function makeFakeMap({mapState = null, edit = false, enemyForcesRequired = 100, 
  */
 function makeEnemy(properties = {}, map = null) {
     return Object.assign(new Enemy(map ?? makeFakeMap(), null), {
+        enemy_forces_override: null,
+        enemy_forces_override_teeming: null,
+    }, properties);
+}
+
+/**
+ * A live session enemy, which is the only kind that carries overpulled and obsolete state.
+ *
+ * @param {Object} properties
+ * @param {Object|null} map
+ * @returns {LiveSessionEnemy}
+ */
+function makeLiveSessionEnemy(properties = {}, map = null) {
+    return Object.assign(new LiveSessionEnemy(map ?? makeFakeMap(), null), {
         enemy_forces_override: null,
         enemy_forces_override_teeming: null,
     }, properties);
@@ -827,10 +844,10 @@ describe('Enemy.setKillZone', () => {
     });
 });
 
-describe('Enemy overpull state', () => {
+describe('LiveSessionEnemy overpull state', () => {
     test('setOverpulledKillZoneId_givenANewId_signalsOnce', () => {
         setFakeState();
-        const enemy = makeEnemy();
+        const enemy = makeLiveSessionEnemy();
 
         enemy.setOverpulledKillZoneId(3);
 
@@ -840,7 +857,7 @@ describe('Enemy overpull state', () => {
 
     test('setOverpulledKillZoneId_givenTheSameId_doesNotSignalAgain', () => {
         setFakeState();
-        const enemy = makeEnemy();
+        const enemy = makeLiveSessionEnemy();
 
         enemy.setOverpulledKillZoneId(3);
         enemy.setOverpulledKillZoneId(3);
@@ -851,7 +868,7 @@ describe('Enemy overpull state', () => {
     test('getOverpulledKillZone_givenAnId_resolvesItThroughTheKillZoneGroup', () => {
         setFakeState();
         const killZone = new KillZone(3);
-        const enemy = makeEnemy({}, makeFakeMap({killZonesById: {3: killZone}}));
+        const enemy = makeLiveSessionEnemy({}, makeFakeMap({killZonesById: {3: killZone}}));
         enemy.setOverpulledKillZoneId(3);
 
         expect(enemy.getOverpulledKillZone()).toBe(killZone);
@@ -860,14 +877,14 @@ describe('Enemy overpull state', () => {
     test('getOverpulledKillZone_givenNoId_returnsNull', () => {
         setFakeState();
 
-        expect(makeEnemy().getOverpulledKillZone()).toBeNull();
+        expect(makeLiveSessionEnemy().getOverpulledKillZone()).toBeNull();
     });
 });
 
-describe('Enemy obsolete state', () => {
+describe('LiveSessionEnemy obsolete state', () => {
     test('setObsolete_givenAChangedValue_signalsOnce', () => {
         setFakeState();
-        const enemy = makeEnemy();
+        const enemy = makeLiveSessionEnemy();
 
         enemy.setObsolete(true);
 
@@ -877,7 +894,7 @@ describe('Enemy obsolete state', () => {
 
     test('setObsolete_givenTheSameValue_doesNotSignal', () => {
         setFakeState();
-        const enemy = makeEnemy();
+        const enemy = makeLiveSessionEnemy();
 
         enemy.setObsolete(false);
 

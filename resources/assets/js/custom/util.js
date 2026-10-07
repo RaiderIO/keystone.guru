@@ -517,6 +517,13 @@ function getFloorUnionAreaMapObjectGroup() {
 }
 
 /**
+ * @returns {PlayerPositionMapObjectGroup|null}
+ */
+function getPlayerPositionMapObjectGroup() {
+    return _getCurrentMapObjectGroupManager()?.getPlayerPositionMapObjectGroup() ?? null;
+}
+
+/**
  * Shorthand aliases for the browser console. They delegate to the accessors above and are therefore
  * null-safe as well.
  */
@@ -581,7 +588,7 @@ function getFloorUnionAreas() {
 }
 
 function getPlayerPositions() {
-    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PLAYER_POSITION);
+    return getPlayerPositionMapObjectGroup();
 }
 
 /**
@@ -731,6 +738,7 @@ if (typeof module !== 'undefined' && module.exports) {
         getMountableAreaMapObjectGroup,
         getFloorUnionMapObjectGroup,
         getFloorUnionAreaMapObjectGroup,
+        getPlayerPositionMapObjectGroup,
         getKillZones,
     };
 }
