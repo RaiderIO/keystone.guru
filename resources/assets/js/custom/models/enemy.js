@@ -743,8 +743,10 @@ class Enemy extends VersionableMapObject {
                 // still reads false - so this unbind was skipped, and the enemy's edit popup opened
                 // on the very first click of an enemy selection, closed again by the save's
                 // closePopup(): the flash that was reported.
-                this.layer.off('popupopen');
-                this.layer.unbindPopup();
+                for (let layer of this._getPointerLayers()) {
+                    layer.off('popupopen');
+                    layer.unbindPopup();
+                }
             }
         }
 
@@ -771,6 +773,11 @@ class Enemy extends VersionableMapObject {
      */
     _assignPopup(layer = null) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        let canvasPath = layer === null ? this.getCanvasPath() : null;
+        if (canvasPath !== null) {
+            this._assignPopup(canvasPath);
+        }
 
         if (this.map.getMapState() instanceof MapState) {
             let targetLayer = layer === null ? this.layer : layer;
@@ -882,6 +889,16 @@ class Enemy extends VersionableMapObject {
         if (canvasPath !== null) {
             canvasPath.unbindTooltip();
         }
+    }
+
+    /**
+     * @returns {L.Layer[]} The marker, and the canvas path when there is one: every layer the mouse can reach this enemy through.
+     * @private
+     */
+    _getPointerLayers() {
+        let canvasPath = this.getCanvasPath();
+
+        return canvasPath === null ? [this.layer] : [this.layer, canvasPath];
     }
 
     /**
@@ -1119,13 +1136,9 @@ class Enemy extends VersionableMapObject {
             self.signal('enemy:contextmenu', {contextMenuEvent: contextMenuEvent});
         };
 
-        this.layer.on('click', onClick);
-        this.layer.on('contextmenu', onContextMenu);
-
-        let canvasPath = this.getCanvasPath();
-        if (canvasPath !== null) {
-            canvasPath.on('click', onClick);
-            canvasPath.on('contextmenu', onContextMenu);
+        for (let layer of this._getPointerLayers()) {
+            layer.on('click', onClick);
+            layer.on('contextmenu', onContextMenu);
         }
     }
 
