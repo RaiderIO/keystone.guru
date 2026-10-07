@@ -3,9 +3,13 @@
 namespace Tests\Feature\App\Logic\MapContext;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
+use App\Models\Enemy;
+use App\Models\RaidMarker;
 use App\Models\User;
 use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -71,6 +75,45 @@ final class MapContextDungeonRouteTest extends PublicTestCase
             $this->assertStringContainsString('useCache=0', $mapContext['mdtExportUrlUncached']);
             $this->assertNotSame($mapContext['mdtExportUrl'], $mapContext['mdtExportUrlUncached']);
         } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function toArray_givenEnemyWithRaidMarker_emitsRaidMarkerKey(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createDungeonRoute();
+        /** @var Enemy $enemy */
+        $enemy = Enemy::query()
+            ->where('mapping_version_id', $dungeonRoute->mapping_version_id)
+            ->orderBy('id')
+            ->firstOrFail();
+        DungeonRouteEnemyRaidMarker::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'raid_marker_id'   => RaidMarker::ALL[RaidMarker::RAID_MARKER_SKULL],
+            'npc_id'           => $enemy->getMdtNpcId(),
+            'mdt_id'           => $enemy->mdt_id,
+            'enemy_id'         => $enemy->id,
+        ]);
+
+        try {
+            // Act
+            $mapContext = app(MapContextServiceInterface::class)
+                ->createMapContextDungeonRoute($dungeonRoute->fresh(), User::MAP_FACADE_STYLE_SPLIT_FLOORS)
+                ->toArray();
+
+            // Assert
+            /** @var Collection<int, array<string, mixed>> $enemyRaidMarkers */
+            $enemyRaidMarkers = $mapContext['enemyRaidMarkers'];
+            $this->assertSame([
+                [
+                    'enemy_id'        => $enemy->id,
+                    'raid_marker_key' => RaidMarker::RAID_MARKER_SKULL,
+                ],
+            ], $enemyRaidMarkers->toArray());
+        } finally {
+            DungeonRouteEnemyRaidMarker::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
             $dungeonRoute->delete();
         }
     }

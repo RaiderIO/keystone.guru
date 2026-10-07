@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $id
+ * @property string $key
  * @property string $name
  *
  * @mixin Eloquent
@@ -20,6 +21,7 @@ class RaidMarker extends Model
 
     protected $fillable = [
         'id',
+        'key',
         'name',
     ];
 
@@ -49,6 +51,6 @@ class RaidMarker extends Model
 
     public function getImageUrlAttribute(): string
     {
-        return ksgAssetImage(sprintf('mapicon/raid_marker_%s.png', $this->name));
+        return ksgAssetImage(sprintf('mapicon/raid_marker_%s.png', $this->key));
     }
 }

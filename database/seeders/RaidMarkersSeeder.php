@@ -13,10 +13,11 @@ class RaidMarkersSeeder extends Seeder implements TableSeederInterface
     public function run(): void
     {
         $raidMarkerAttributes = [];
-        foreach (RaidMarker::ALL as $raidMarkerName => $id) {
+        foreach (RaidMarker::ALL as $raidMarkerKey => $id) {
             $raidMarkerAttributes[] = [
                 'id'   => $id,
-                'name' => $raidMarkerName,
+                'key'  => $raidMarkerKey,
+                'name' => $raidMarkerKey,
             ];
         }
 

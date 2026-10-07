@@ -108,7 +108,7 @@ class Team extends Model
      */
     public function getVisibleRouteCount(): int
     {
-        return $this->dungeonRoutes()->whereIn('published_state_id', PublishedState::whereIn('name', [
+        return $this->dungeonRoutes()->whereIn('published_state_id', PublishedState::whereIn('key', [
             PublishedState::TEAM,
             PublishedState::WORLD,
             PublishedState::WORLD_WITH_LINK,

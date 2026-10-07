@@ -13,10 +13,11 @@ class PublishedStatesSeeder extends Seeder implements TableSeederInterface
     public function run(): void
     {
         $publishedStateAttributes = [];
-        foreach (PublishedState::ALL as $publishedStateName => $id) {
+        foreach (PublishedState::ALL as $publishedStateKey => $id) {
             $publishedStateAttributes[] = [
                 'id'   => $id,
-                'name' => $publishedStateName,
+                'key'  => $publishedStateKey,
+                'name' => $publishedStateKey,
             ];
         }
 

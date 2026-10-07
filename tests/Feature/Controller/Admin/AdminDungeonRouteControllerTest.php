@@ -148,6 +148,24 @@ final class AdminDungeonRouteControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenWorldPublishedRoute_rendersItsPublishedStateByKey(): void
+    {
+        // Arrange
+        $this->dungeonRoute->update(['published_state_id' => PublishedState::ALL[PublishedState::WORLD]]);
+
+        // Act
+        $response = $this->get(route('admin.dungeonroutes', [
+            'public_key' => $this->dungeonRoute->public_key,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertViewHas('publishedStates', static fn($publishedStates) => $publishedStates->all() === array_flip(PublishedState::ALL));
+        $response->assertSee('fa-globe');
+        $response->assertSee(__('js.publish_state_title_world'));
+    }
+
+    #[Test]
     public function index_givenNonAdmin_returnsForbidden(): void
     {
         // Arrange
@@ -178,6 +196,7 @@ final class AdminDungeonRouteControllerTest extends PublicTestCase
         $response->assertOk();
         $response->assertViewHas('dungeonRoute', fn(DungeonRoute $dungeonRoute) => $dungeonRoute->id === $this->dungeonRoute->id);
         $response->assertSee($this->dungeonRoute->public_key);
+        $response->assertViewHas('publishedStates', static fn($publishedStates) => $publishedStates->all() === array_flip(PublishedState::ALL));
     }
 
     #[Test]
