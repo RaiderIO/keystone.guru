@@ -284,21 +284,12 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
                 $this->observationBuffer->queue($observation['spell_id'], $observation['property'], $this->currentCombatLogFilePath ?? '');
             }
 
+            $observations  = $this->pendingBypassObservations->all();
+            $combatLogPath = $this->currentCombatLogFilePath;
+            $this->observationBuffer->afterFlush(fn() => $this->applyBypassObservations($result, $observations, $combatLogPath));
+
             if ($this->flushesObservationBuffer) {
                 $this->observationBuffer->flush();
-            }
-
-            /** @var Collection<int, SpellModel> $spells */
-            $spells = SpellModel::query()
-                ->whereIn('id', $this->pendingBypassObservations->pluck('spell_id')->unique()->all())
-                ->get()
-                ->keyBy('id');
-
-            $npcs = $this->loadNpcsWithSpells($this->pendingBypassObservations->pluck('npc_id')->all());
-
-            foreach ($this->pendingBypassObservations as $observation) {
-                $this->applyBypassToSpell($result, $spells, $observation['spell_id'], $observation['property']);
-                $this->assignSpellToNpc($result, $spells, $npcs, $observation);
             }
         }
 
@@ -307,6 +298,27 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         $this->currentCombatLogFilePath  = null;
         $this->currentDungeonId          = null;
         $this->currentDungeonContext     = null;
+    }
+
+    /**
+     * Runs once the observations are written, so the staleness sweep never sees a property without its observation.
+     *
+     * @param array<string, array{spell_id: int, property: SpellProperty, npc_id: int|null, dungeon_id: int|null}> $observations
+     */
+    private function applyBypassObservations(ExtractedDataResult $result, array $observations, ?string $combatLogPath): void
+    {
+        /** @var Collection<int, SpellModel> $spells */
+        $spells = SpellModel::query()
+            ->whereIn('id', array_values(array_unique(array_column($observations, 'spell_id'))))
+            ->get()
+            ->keyBy('id');
+
+        $npcs = $this->loadNpcsWithSpells(array_column($observations, 'npc_id'));
+
+        foreach ($observations as $observation) {
+            $this->applyBypassToSpell($result, $spells, $observation['spell_id'], $observation['property'], $combatLogPath);
+            $this->assignSpellToNpc($result, $spells, $npcs, $observation, $combatLogPath);
+        }
     }
 
     /**
@@ -319,6 +331,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         Collection          $spells,
         int                 $spellId,
         SpellProperty       $property,
+        ?string             $combatLogPath,
     ): void {
         /** @var SpellModel|null $spell */
         $spell = $spells->get($spellId);
@@ -347,7 +360,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
             'spell_id'        => $spellId,
             'event_type'      => CombatLogSpellEventType::PropertyChanged,
             'property'        => $property,
-            'combat_log_path' => $this->currentCombatLogFilePath,
+            'combat_log_path' => $combatLogPath,
         ]);
 
         $result->addedSpellImmunityBypass();
@@ -362,7 +375,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
      * @param Collection<int, Npc>                                                                  $npcs
      * @param array{spell_id: int, property: SpellProperty, npc_id: int|null, dungeon_id: int|null} $observation
      */
-    private function assignSpellToNpc(ExtractedDataResult $result, Collection $spells, Collection $npcs, array $observation): void
+    private function assignSpellToNpc(ExtractedDataResult $result, Collection $spells, Collection $npcs, array $observation, ?string $combatLogPath): void
     {
         $npcId = $observation['npc_id'];
 
@@ -408,7 +421,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
             'event_type'      => CombatLogNpcEventType::SpellAssigned,
             'model_class'     => SpellModel::class,
             'model_id'        => $spellId,
-            'combat_log_path' => $this->currentCombatLogFilePath,
+            'combat_log_path' => $combatLogPath,
         ]);
 
         $result->createdNpcSpell();

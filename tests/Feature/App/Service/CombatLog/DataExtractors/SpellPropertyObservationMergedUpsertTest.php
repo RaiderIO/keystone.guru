@@ -80,11 +80,15 @@ final class SpellPropertyObservationMergedUpsertTest extends PublicTestCase
             'created_at'      => $earlierTimestamp,
             'updated_at'      => $earlierTimestamp,
         ]);
-        $extractors         = new DataExtractorFactory(new SpellRepositorySwoole())->createExtractors();
-        $observationUpserts = 0;
-        DB::listen(function (QueryExecuted $query) use (&$observationUpserts): void {
+        $extractors           = new DataExtractorFactory(new SpellRepositorySwoole())->createExtractors();
+        $observationUpserts   = 0;
+        $propertyWritesBefore = 0;
+        DB::listen(function (QueryExecuted $query) use (&$observationUpserts, &$propertyWritesBefore): void {
             if (str_starts_with($query->sql, 'insert into `combat_log_spell_property_observations`')) {
                 $observationUpserts++;
+            } elseif ($observationUpserts === 0 &&
+                (str_starts_with($query->sql, 'update `spells` set') || str_starts_with($query->sql, 'insert into `combat_log_spell_events`'))) {
+                $propertyWritesBefore++;
             }
         });
 
@@ -123,8 +127,10 @@ final class SpellPropertyObservationMergedUpsertTest extends PublicTestCase
             $this->parse(sprintf('%s  SPELL_AURA_REMOVED,%s,%s,%d,"Divine Shield",0x2,BUFF', $this->timestamp(18000), $this->actorFields(self::PLAYER_GUID), $this->actorFields(self::PLAYER_GUID), KnownSpell::DivineShield->value)),
         ]);
 
-        // Assert
+        // Assert - a property written before its observation could be cleared by the staleness sweep in between
         $this->assertSame(1, $observationUpserts);
+        $this->assertSame(0, $propertyWritesBefore);
+        $this->assertSame(3, CombatLogSpellEvent::query()->where('spell_id', self::SPELL_ID)->count());
 
         /** @var Collection<string, CombatLogSpellPropertyObservation> $observations */
         $observations = CombatLogSpellPropertyObservation::query()

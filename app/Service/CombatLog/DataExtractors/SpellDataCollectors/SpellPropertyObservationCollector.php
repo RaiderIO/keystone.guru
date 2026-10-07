@@ -93,33 +93,45 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
                 $this->observationBuffer->queue($observation['spell_id'], $observation['property'], $this->currentCombatLogFilePath ?? '');
             }
 
+            $observations  = $this->pendingPropertyObservations;
+            $combatLogPath = $this->currentCombatLogFilePath;
+            $this->observationBuffer->afterFlush(fn() => $this->applyPropertyObservations($result, $observations, $combatLogPath));
+
             if ($this->flushesObservationBuffer) {
                 $this->observationBuffer->flush();
-            }
-
-            foreach ($this->pendingPropertyObservations as $observation) {
-                /** @var SpellModel|null $spell */
-                $spell = $this->allSpells->get($observation['spell_id']);
-                // The write itself decides whether this is a new fact - see Spell::recordCombatLogProperty(). A
-                // check against the in-memory catalog cannot: it may predate another worker's write by up to the
-                // catalog TTL, which had every job in that window emit the same PropertyChanged again (#4199)
-                if ($spell === null || !$spell->recordCombatLogProperty($observation['property'])) {
-                    continue;
-                }
-
-                $result->updatedSpell();
-
-                CombatLogSpellEvent::create([
-                    'spell_id'        => $observation['spell_id'],
-                    'event_type'      => CombatLogSpellEventType::PropertyChanged,
-                    'property'        => $observation['property'],
-                    'combat_log_path' => $this->currentCombatLogFilePath,
-                ]);
             }
         }
 
         $this->pendingPropertyObservations = collect();
         $this->currentCombatLogFilePath    = null;
+    }
+
+    /**
+     * Runs once the observations are written, so the staleness sweep never sees a property without its observation.
+     *
+     * @param Collection<string, array{spell_id: int, property: SpellProperty}> $observations
+     */
+    private function applyPropertyObservations(ExtractedDataResult $result, Collection $observations, ?string $combatLogPath): void
+    {
+        foreach ($observations as $observation) {
+            /** @var SpellModel|null $spell */
+            $spell = $this->allSpells->get($observation['spell_id']);
+            // The write itself decides whether this is a new fact - see Spell::recordCombatLogProperty(). A
+            // check against the in-memory catalog cannot: it may predate another worker's write by up to the
+            // catalog TTL, which had every job in that window emit the same PropertyChanged again
+            if ($spell === null || !$spell->recordCombatLogProperty($observation['property'])) {
+                continue;
+            }
+
+            $result->updatedSpell();
+
+            CombatLogSpellEvent::create([
+                'spell_id'        => $observation['spell_id'],
+                'event_type'      => CombatLogSpellEventType::PropertyChanged,
+                'property'        => $observation['property'],
+                'combat_log_path' => $combatLogPath,
+            ]);
+        }
     }
 
     private function queueObservation(int $spellId, SpellProperty $property): void
