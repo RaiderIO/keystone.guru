@@ -31,6 +31,7 @@ globalThis.getHandlebarsDefaultVariables = () => ({});
 globalThis.$.extend = (target, ...sources) => Object.assign(target, ...sources);
 
 const {DungeonrouteTable} = require('./table');
+const {DungeonRouteTableSelection} = require('./tableselection');
 
 /**
  * @param {Object} overrides
@@ -625,5 +626,94 @@ describe('DungeonrouteTable._renderViews', () => {
             expect(count.closest('.row').classList).toContain('flex-nowrap');
             expect(count.parentElement.classList).toContain('text-nowrap');
         });
+    });
+});
+
+describe('DungeonrouteTable selectable rows', () => {
+    useRealJQuery();
+
+    /**
+     * @param {string[]} publicKeys
+     */
+    function drawRows(publicKeys) {
+        document.body.innerHTML = '<table id="t"><tbody>' + publicKeys.map(publicKey =>
+            `<tr><td><input type="checkbox" class="dungeonroute_table_select" value="${publicKey}"></td></tr>`
+        ).join('') + '</tbody></table>';
+    }
+
+    /**
+     * @param {Number} max
+     * @returns {Object}
+     */
+    function arrangeContext(max) {
+        return Object.assign(Object.create(DungeonrouteTable.prototype), {
+            _selection: new DungeonRouteTableSelection([], max),
+            _routeData:  [{public_key: 'a', title: 'Alpha'}, {public_key: 'b', title: 'Bravo'}, {public_key: 'c', title: 'Charlie'}],
+            options:     {tableSelector: '#t'},
+        });
+    }
+
+    test('_toggleSelection_givenTheMaximumReached_disablesTheRemainingCheckboxes', () => {
+        // Arrange
+        drawRows(['a', 'b', 'c']);
+        const context = arrangeContext(2);
+        const changes = [];
+        $('#t').on('dungeonroutetable:selectionchanged', (event, change) => changes.push(change));
+
+        // Act
+        context._toggleSelection('a', true);
+        context._toggleSelection('b', true);
+        context._toggleSelection('c', true);
+
+        // Assert
+        const checkboxes = $('#t input').get();
+        expect(checkboxes.map(checkbox => checkbox.checked)).toEqual([true, true, false]);
+        expect(checkboxes.map(checkbox => checkbox.disabled)).toEqual([false, false, true]);
+        expect(changes.map(change => change.publicKey)).toEqual(['a', 'b']);
+        expect(changes[1].row.title).toBe('Bravo');
+        expect(changes[1].publicKeys).toEqual(['a', 'b']);
+    });
+
+    test('_applySelectionToCheckboxes_givenARedraw_ticksTheSelectedRowsAgain', () => {
+        // Arrange
+        drawRows(['a', 'b', 'c']);
+        const context = arrangeContext(3);
+        context._toggleSelection('b', true);
+
+        // Act
+        drawRows(['a', 'b', 'c']);
+        context._applySelectionToCheckboxes();
+
+        // Assert
+        expect($('#t input').get().map(checkbox => checkbox.checked)).toEqual([false, true, false]);
+        expect(context.getSelectedPublicKeys()).toEqual(['b']);
+    });
+
+    test('_getSelectColumn_givenATitleWithMarkup_rendersItEscaped', () => {
+        // Arrange
+        globalThis.lang = {get: (key, replace) => `${key} ${replace.title}`};
+        const context = Object.create(DungeonrouteTable.prototype);
+
+        // Act
+        const html = context._getSelectColumn().render('abc', 'display', {title: '<img src=x onerror=alert(1)>'});
+
+        // Assert
+        expect(html).toContain('value="abc"');
+        expect(html).not.toContain('<img');
+        expect(html).toContain('&lt;img src&#x3D;x onerror&#x3D;alert(1)&gt;');
+    });
+
+    test('_getDefaultSearchColumns_givenASelectableTable_putsNoSearchOnTheCheckboxColumn', () => {
+        // Arrange
+        const context = Object.assign(Object.create(DungeonrouteTable.prototype), {
+            _selection: new DungeonRouteTableSelection(),
+            _tableView: {getColumns: () => [{name: 'title'}, {name: 'dungeon', defaultSearch: 5}]},
+        });
+
+        // Act
+        const searchColumns = context._getDefaultSearchColumns();
+
+        // Assert
+        expect(searchColumns).toEqual([null, null, {search: 5}]);
     });
 });
