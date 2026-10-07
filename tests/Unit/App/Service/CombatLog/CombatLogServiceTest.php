@@ -201,4 +201,68 @@ final class CombatLogServiceTest extends PublicTestCase
             }
         }
     }
+
+    #[Test]
+    public function countCombatLogLines_givenZip_returnsTheLineCountParseCombatLogSeesWithoutExtracting(): void
+    {
+        // Arrange
+        $innerEntry    = sprintf('WoWCombatLog-%d.txt', random_int(1, PHP_INT_MAX));
+        $zipFilePath   = sprintf('%s/run_0_segment_%d.zip', sys_get_temp_dir(), random_int(1, PHP_INT_MAX));
+        $extractedPath = sprintf('/tmp/%s', $innerEntry);
+
+        $zip = new ZipArchive();
+        $zip->open($zipFilePath, ZipArchive::CREATE);
+        $zip->addFromString($innerEntry, "COMBAT_LOG_VERSION,21
+ZONE_CHANGE,1234
+MAP_CHANGE,5678");
+        $zip->close();
+
+        $parsedLineCount = 0;
+
+        try {
+            /** @var CombatLogServiceInterface $combatLogService */
+            $combatLogService = app(CombatLogServiceInterface::class);
+            $combatLogService->parseCombatLog($zipFilePath, function () use (&$parsedLineCount): void {
+                $parsedLineCount++;
+            });
+
+            // Act
+            $lineCount = $combatLogService->countCombatLogLines($zipFilePath);
+
+            // Assert
+            $this->assertSame(3, $parsedLineCount);
+            $this->assertSame($parsedLineCount, $lineCount);
+            $this->assertFileDoesNotExist($extractedPath);
+        } finally {
+            if (file_exists($zipFilePath)) {
+                unlink($zipFilePath);
+            }
+            if (file_exists($extractedPath)) {
+                unlink($extractedPath);
+            }
+        }
+    }
+
+    #[Test]
+    public function countCombatLogLines_givenInvalidZip_throwsInvalidArgumentException(): void
+    {
+        // Arrange
+        $zipFilePath = sprintf('%s/not_a_zip_%d.zip', sys_get_temp_dir(), random_int(1, PHP_INT_MAX));
+        file_put_contents($zipFilePath, "COMBAT_LOG_VERSION,21
+");
+
+        try {
+            /** @var CombatLogServiceInterface $combatLogService */
+            $combatLogService = app(CombatLogServiceInterface::class);
+
+            // Assert
+            $this->expectException(InvalidArgumentException::class);
+            $this->expectExceptionMessage('File is not a valid .zip file');
+
+            // Act
+            $combatLogService->countCombatLogLines($zipFilePath);
+        } finally {
+            unlink($zipFilePath);
+        }
+    }
 }

@@ -3,9 +3,11 @@
 namespace App\Service\CombatLog;
 
 use App\Logic\CombatLog\BaseEvent;
+use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartEvent;
 use App\Logic\Structs\MapBounds;
 use App\Models\Dungeon;
 use App\Service\CombatLog\Dtos\ChallengeMode;
+use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use Illuminate\Support\Collection;
 
@@ -22,6 +24,16 @@ interface CombatLogServiceInterface
      * @return Collection<int, ChallengeMode>
      */
     public function getChallengeModes(string $filePath): Collection;
+
+    /**
+     * @throws DungeonNotSupportedException When no dungeon carries the event's challenge mode id
+     */
+    public function createChallengeMode(ChallengeModeStartEvent $challengeModeStartEvent): ChallengeMode;
+
+    /**
+     * @return int The number of lines parseCombatLog() would hand to its callback for this file
+     */
+    public function countCombatLogLines(string $filePath): int;
 
     /**
      * @return Collection<int, string>
