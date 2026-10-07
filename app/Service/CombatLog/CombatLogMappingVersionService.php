@@ -74,7 +74,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             if ($challengeModes->count() <= 0) {
                 $this->log->createMappingVersionFromChallengeModeNoChallengeModesFound();
             } elseif ($challengeModes->count() > 1) {
-                $this->log->createMappingVersionFromChallengeModeMultipleChallengeModesFound();
+                $this->log->createMappingVersionFromChallengeModeMultipleChallengeModesFound($challengeModes->count());
             }
         } finally {
             $this->log->createMappingVersionFromChallengeModeEnd();
