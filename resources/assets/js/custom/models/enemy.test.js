@@ -266,9 +266,9 @@ function makeFakePopupLayer() {
  * flips what getMapState() returns and then calls the handler Enemy registered in its constructor,
  * exactly as DungeonMap does.
  */
-function makeFakeEditMap() {
+function makeFakeEditMap(canvasPath = null) {
     return {
-        mapObjectGroupManager: makeFakeMapObjectGroupManager(),
+        mapObjectGroupManager: makeFakeMapObjectGroupManager(canvasPath),
         options: {edit: true},
         _mapState: null,
         _handlers: [],
@@ -652,5 +652,60 @@ describe('Enemy on the enemy canvas (#5185)', () => {
 
         // Assert
         expect(canvasPath.getTooltip()).toBeNull();
+    });
+});
+
+/**
+ * An enemy that wants a popup, with both its marker and its canvas path recording popup binds.
+ */
+function makeEditableCanvasEnemy() {
+    const canvasPath = makeFakePopupLayer();
+    const map = makeFakeEditMap(canvasPath);
+    const layer = makeFakePopupLayer();
+    const enemy = new Enemy(map, layer);
+    enemy.npc = {id: 1, name: 'Murkbrine Shorerunner'};
+    enemy.getVisualData = () => ({info: [], custom: []});
+    enemy.isEditable = () => true;
+
+    return {enemy, layer, canvasPath, map};
+}
+
+describe('Enemy popup on the enemy canvas (#5185)', () => {
+    test('_assignPopup_givenACanvasPath_bindsThePopupToItToo', () => {
+        // Arrange
+        const {enemy, layer, canvasPath} = makeEditableCanvasEnemy();
+
+        // Act
+        enemy._assignPopup();
+
+        // Assert
+        expect(layer.getPopup()).not.toBeNull();
+        expect(canvasPath.getPopup()).toEqual(layer.getPopup());
+    });
+
+    test('_assignPopup_givenACanvasPathDuringAMapState_unbindsItsPopup', () => {
+        // Arrange
+        const {enemy, canvasPath, map} = makeEditableCanvasEnemy();
+        enemy._assignPopup();
+        map._mapState = new global.MapState();
+
+        // Act
+        enemy._assignPopup();
+
+        // Assert
+        expect(canvasPath.getPopup()).toBeNull();
+    });
+
+    test('setPopupEnabled_givenFalseAndACanvasPath_unbindsItsPopup', () => {
+        // Arrange
+        const {enemy, canvasPath} = makeEditableCanvasEnemy();
+        enemy._assignPopup();
+
+        // Act
+        enemy.setPopupEnabled(false);
+
+        // Assert
+        expect(canvasPath.getPopup()).toBeNull();
+        expect(canvasPath.handlers.popupopen).toBeUndefined();
     });
 });
