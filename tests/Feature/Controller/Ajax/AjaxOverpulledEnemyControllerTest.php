@@ -245,7 +245,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
 
         // Assert
         $response->assertForbidden();
-        $this->assertEquals(0, OverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
+        $this->assertEquals(0, LiveSessionOverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
     }
 
     #[Test]
@@ -266,7 +266,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
         $response->assertJsonStructure(['obsolete_enemy_ids', 'enemy_forces']);
         $this->assertEquals(
             [$enemies->last()->mdt_id],
-            OverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->pluck('mdt_id')->toArray(),
+            LiveSessionOverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->pluck('mdt_id')->toArray(),
         );
     }
 
@@ -286,7 +286,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
 
         // Assert
         $response->assertNoContent();
-        $this->assertEquals(0, OverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
+        $this->assertEquals(0, LiveSessionOverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
     }
 
     #[Test]
@@ -305,7 +305,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
 
         // Assert
         $response->assertForbidden();
-        $this->assertEquals(2, OverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
+        $this->assertEquals(2, LiveSessionOverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
     }
 
     /**
@@ -314,7 +314,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
     private function markOverpulled(Collection $enemies): void
     {
         foreach ($enemies as $enemy) {
-            OverpulledEnemy::create([
+            LiveSessionOverpulledEnemy::create([
                 'live_session_id' => $this->liveSession->id,
                 'kill_zone_id'    => 1,
                 'npc_id'          => $enemy->npc_id,

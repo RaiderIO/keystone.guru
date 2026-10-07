@@ -19,7 +19,7 @@ use Tests\TestCases\PublicTestCase;
 final class OverpulledEnemyServiceTest extends PublicTestCase
 {
     #[Test]
-    public function getRouteCorrection_givenOverpulledEnemyStoredWithoutEnemyId_returnsItsEnemyForces(): void
+    public function getRouteCorrection_givenOverpulledEnemyIdentifiedByNpcAndMdtId_returnsItsEnemyForces(): void
     {
         // Arrange
         /** @var Enemy $enemy */
@@ -62,13 +62,11 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
                 'user_id'          => $dungeonRoute->author_id,
                 'public_key'       => LiveSession::generateRandomPublicKey(),
             ]);
-            // Rows written before enemy_id was stored identify the enemy by npc_id/mdt_id only
             LiveSessionOverpulledEnemy::query()->insert([
                 'live_session_id' => $liveSession->id,
                 'kill_zone_id'    => $killZone->id,
                 'npc_id'          => $enemy->npc_id,
                 'mdt_id'          => $enemy->mdt_id,
-                'enemy_id'        => 0,
             ]);
 
             // Act
