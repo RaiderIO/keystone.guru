@@ -1381,7 +1381,9 @@ class Enemy extends VersionableMapObject {
             url: `/ajax/${getState().getMapContext().getPublicKey()}/raidmarker/${self.id}`,
             dataType: 'json',
             data: {
-                raid_marker_key: raidMarkerKey
+                raid_marker_key: raidMarkerKey,
+                // A backend still on the previous release only reads raid_marker_name
+                raid_marker_name: raidMarkerKey
             },
             success: function () {
                 self.map.leafletMap.closePopup();

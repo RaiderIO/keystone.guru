@@ -519,7 +519,7 @@ describe('Enemy#assignRaidMarker', () => {
         expect(global.$.ajax).toHaveBeenCalledTimes(1);
         const ajaxOptions = global.$.ajax.mock.calls[0][0];
         expect(ajaxOptions.url).toBe('/ajax/abc123/raidmarker/42');
-        expect(ajaxOptions.data).toEqual({raid_marker_key: 'skull'});
+        expect(ajaxOptions.data).toEqual({raid_marker_key: 'skull', raid_marker_name: 'skull'});
         expect(enemy.raid_marker_key).toBe('skull');
         expect(enemy.signal).toHaveBeenCalledWith('enemy:set_raid_marker', {key: 'skull'});
     });
