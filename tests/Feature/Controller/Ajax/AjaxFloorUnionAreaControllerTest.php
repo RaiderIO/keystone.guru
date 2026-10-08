@@ -17,6 +17,8 @@ final class AjaxFloorUnionAreaControllerTest extends AjaxPublicTestCase
 {
     use ProvidesDungeon;
 
+    private const VERTICES_JSON = '[{"lat":-142.88,"lng":171.929},{"lat":-150,"lng":180.5},{"lat":-160.25,"lng":170}]';
+
     private MappingVersion $mappingVersion;
 
     private FloorUnion $floorUnion;
@@ -33,7 +35,7 @@ final class AjaxFloorUnionAreaControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function store_givenFormEncodedVertices_storesNumericCoordinates(): void
+    public function store_givenVerticesJson_storesItVerbatim(): void
     {
         // Arrange
         $floorUnionAreaId       = null;
@@ -41,21 +43,13 @@ final class AjaxFloorUnionAreaControllerTest extends AjaxPublicTestCase
 
         try {
             // Act
-            $response = $this->post($this->createUrl(), $this->payload([
-                ['lat' => '-142.88', 'lng' => '171.929'],
-                ['lat' => '-150', 'lng' => '180.5'],
-                ['lat' => '-160.25', 'lng' => '170'],
-            ]));
+            $response = $this->post($this->createUrl(), $this->payload(self::VERTICES_JSON));
 
             // Assert
             $response->assertCreated();
             $floorUnionAreaId = $response->json('id');
 
-            $storedVerticesJson = FloorUnionArea::query()->findOrFail($floorUnionAreaId)->vertices_json;
-            $this->assertSame(
-                '[{"lat":-142.88,"lng":171.929},{"lat":-150,"lng":180.5},{"lat":-160.25,"lng":170}]',
-                $storedVerticesJson,
-            );
+            $this->assertSame(self::VERTICES_JSON, FloorUnionArea::query()->findOrFail($floorUnionAreaId)->vertices_json);
         } finally {
             $this->deleteFloorUnionArea($floorUnionAreaId);
             MappingChangeLog::query()->where('id', '>', $lastMappingChangeLogId)->delete();
@@ -63,21 +57,32 @@ final class AjaxFloorUnionAreaControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function store_givenNonNumericVertex_returnsValidationError(): void
+    public function store_givenFewerThanThreeVertices_returnsValidationError(): void
     {
         // Arrange
         $floorUnionAreaCount = FloorUnionArea::query()->count();
 
         // Act
-        $response = $this->postJson($this->createUrl(), $this->payload([
-            ['lat' => '-142.88', 'lng' => '171.929'],
-            ['lat' => 'north', 'lng' => '180.5'],
-            ['lat' => '-160.25', 'lng' => '170'],
-        ]));
+        $response = $this->postJson($this->createUrl(), $this->payload('[{"lat":-142.88,"lng":171.929},{"lat":-150,"lng":180.5}]'));
 
         // Assert
         $response->assertUnprocessable();
-        $response->assertJsonValidationErrors(['vertices.1.lat']);
+        $response->assertJsonValidationErrors(['vertices_json']);
+        $this->assertSame($floorUnionAreaCount, FloorUnionArea::query()->count());
+    }
+
+    #[Test]
+    public function store_givenVerticesThatAreNotJson_returnsValidationError(): void
+    {
+        // Arrange
+        $floorUnionAreaCount = FloorUnionArea::query()->count();
+
+        // Act
+        $response = $this->postJson($this->createUrl(), $this->payload('lat=-142.88&lng=171.929'));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['vertices_json']);
         $this->assertSame($floorUnionAreaCount, FloorUnionArea::query()->count());
     }
 
@@ -86,19 +91,15 @@ final class AjaxFloorUnionAreaControllerTest extends AjaxPublicTestCase
         return route('ajax.admin.floorunionarea.create', ['mappingVersion' => $this->mappingVersion]);
     }
 
-    /**
-     * @param array<int, array{lat: string, lng: string}> $vertices
-     *
-     * @return array<string, mixed>
-     */
-    private function payload(array $vertices): array
+    /** @return array<string, mixed> */
+    private function payload(string $verticesJson): array
     {
         return [
             'id'                 => 0,
             'mapping_version_id' => $this->mappingVersion->id,
             'floor_id'           => $this->floorUnion->floor_id,
             'floor_union_id'     => $this->floorUnion->id,
-            'vertices'           => $vertices,
+            'vertices_json'      => $verticesJson,
         ];
     }
 

@@ -5,6 +5,8 @@ namespace App\Http\Requests\Floor;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingVersion;
+use App\Rules\JsonStringCountRule;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -16,8 +18,10 @@ class FloorUnionAreaFormRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
-    }    /**
-     * @return array<string, array<int, string|Rule>|string|Rule>
+    }
+
+    /**
+     * @return array<string, array<int, string|Rule|ValidationRule>|string|Rule>
      */
     public function rules(): array
     {
@@ -35,9 +39,11 @@ class FloorUnionAreaFormRequest extends FormRequest
                 'nullable',
                 Rule::exists(FloorUnion::class, 'id'),
             ],
-            'vertices'       => ['required', 'array'],
-            'vertices.*.lat' => ['required', 'numeric'],
-            'vertices.*.lng' => ['required', 'numeric'],
+            'vertices_json' => [
+                'required',
+                'json',
+                new JsonStringCountRule(3),
+            ],
         ];
     }
 }
