@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\Floor\FloorUnion;
 use App\Models\Floor\FloorUnionArea;
+use App\Models\Mapping\MappingChangeLog;
 use App\Models\Mapping\MappingVersion;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -35,7 +36,8 @@ final class AjaxFloorUnionAreaControllerTest extends AjaxPublicTestCase
     public function store_givenFormEncodedVertices_storesNumericCoordinates(): void
     {
         // Arrange
-        $floorUnionAreaId = null;
+        $floorUnionAreaId       = null;
+        $lastMappingChangeLogId = (int)MappingChangeLog::query()->max('id');
 
         try {
             // Act
@@ -56,6 +58,7 @@ final class AjaxFloorUnionAreaControllerTest extends AjaxPublicTestCase
             );
         } finally {
             $this->deleteFloorUnionArea($floorUnionAreaId);
+            MappingChangeLog::query()->where('id', '>', $lastMappingChangeLogId)->delete();
         }
     }
 
