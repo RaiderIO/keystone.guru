@@ -11,6 +11,7 @@
         "team_id": null,
         "published_state_id": 3,
         "dungeon_start_map_icon_id": null,
+        "dungeon_start_id": null,
         "title": "Gnomeregan",
         "description": "",
         "level_min": 10,

@@ -11,6 +11,7 @@
         "team_id": null,
         "published_state_id": 1,
         "dungeon_start_map_icon_id": null,
+        "dungeon_start_id": null,
         "title": "4.12 ML by Dratnos",
         "description": "",
         "level_min": 2,
