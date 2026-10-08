@@ -195,6 +195,10 @@ if ($isAdmin) {
         ],
     ];
 }
+
+$getFloorSwitchFloors = static fn() => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($mappingVersion, $useFacade, true)->active())
+    ->displayOrdered()
+    ->get();
 ?>
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
     'embed' => $embed,
@@ -325,7 +329,7 @@ if ($isAdmin) {
     @if(isset($show['controls']['draw']) && $show['controls']['draw'])
         @include('common.maps.controls.draw', [
             'isAdmin' => $isAdmin,
-            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($mappingVersion, $useFacade, true)->active())->get(),
+            'floors' => $getFloorSwitchFloors(),
             'selectedFloorId' => $floor->id,
             'isMobile' => $isMobile,
             'showAds' => $showAds && !$adFree,
@@ -334,7 +338,7 @@ if ($isAdmin) {
     @elseif(isset($show['controls']['liveSession']) && $show['controls']['liveSession'])
         @include('common.maps.controls.livesession', [
             'isAdmin' => $isAdmin,
-            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($mappingVersion, $useFacade, true)->active())->get(),
+            'floors' => $getFloorSwitchFloors(),
             'selectedFloorId' => $floor->id,
             'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,
@@ -343,7 +347,7 @@ if ($isAdmin) {
     @elseif(isset($show['controls']['view']) && $show['controls']['view'])
         @include('common.maps.controls.view', [
             'isAdmin' => $isAdmin,
-            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($mappingVersion, $useFacade, true)->active())->get(),
+            'floors' => $getFloorSwitchFloors(),
             'selectedFloorId' => $floor->id,
             'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,
@@ -353,7 +357,7 @@ if ($isAdmin) {
     @elseif(isset($show['controls']['present']) && $show['controls']['present'])
         @include('common.maps.controls.present', [
             'isAdmin' => $isAdmin,
-            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($mappingVersion, $useFacade, true)->active())->get(),
+            'floors' => $getFloorSwitchFloors(),
             'selectedFloorId' => $floor->id,
             'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,

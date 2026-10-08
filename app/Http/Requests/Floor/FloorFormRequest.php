@@ -25,6 +25,7 @@ class FloorFormRequest extends FormRequest
             'default'           => $this->input('default', 0),
             'facade'            => $this->input('facade', 0),
             'facade_navigation' => $this->input('facade_navigation', 0),
+            'display_order'     => $this->input('display_order') ?? 0,
         ]);
     }
 
@@ -59,6 +60,12 @@ class FloorFormRequest extends FormRequest
             'index' => [
                 'required',
                 'integer',
+            ],
+            'display_order' => [
+                'required',
+                'integer',
+                'min:0',
+                'max:65535',
             ],
             'mdt_sub_level' => [
                 'nullable',

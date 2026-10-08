@@ -35,6 +35,7 @@ use Illuminate\Support\Collection;
  * @property int         $id
  * @property int         $dungeon_id
  * @property int         $index
+ * @property int         $display_order                      Position in floor lists, before index; lets a continent list its zones north to south without renumbering its map tiles
  * @property int|null    $mdt_sub_level
  * @property int|null    $ui_map_id
  * @property string|null $map_name                           The map name that Blizzard gives to this floor
@@ -84,6 +85,7 @@ use Illuminate\Support\Collection;
  * @property EloquentCollection<int, Floor>                      $reverseConnectedFloors
  *
  * @method static Builder<self> active()
+ * @method static Builder<self> displayOrdered()
  * @method static Builder<self> indexOrFacade(MappingVersion $mappingVersion, int $floorIndex)
  * @method static Builder<self> defaultOrFacade(MappingVersion $mappingVersion)
  *
@@ -247,6 +249,7 @@ class Floor extends Model implements MappingModelInterface
     protected $fillable = [
         'dungeon_id',
         'index',
+        'display_order',
         'mdt_sub_level',
         'ui_map_id',
         'map_name',
@@ -465,6 +468,18 @@ class Floor extends Model implements MappingModelInterface
     protected function active(Builder $query): Builder
     {
         return $query->where('floors.active', 1);
+    }
+
+    /**
+     * Replaces any existing ordering, so it also applies to relations that already order by index.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function displayOrdered(Builder $query): Builder
+    {
+        return $query->reorder('floors.display_order')->orderBy('floors.index');
     }
 
     /**
