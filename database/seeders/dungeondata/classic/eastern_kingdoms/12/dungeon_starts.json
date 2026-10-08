@@ -3,7 +3,7 @@
         "id": 603,
         "mapping_version_id": 1089,
         "floor_id": 509,
-        "target_dungeon_id": null,
+        "target_dungeon_id": 185,
         "lat": -133.6741,
         "lng": 162.5435,
         "comment": null
