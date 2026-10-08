@@ -37,24 +37,26 @@ use Illuminate\Support\Facades\App;
 use Override;
 
 /**
- * @property int      $id                The ID of this Dungeon.
- * @property int      $expansion_id      The linked expansion to this dungeon.
- * @property int      $zone_id           The ID of the location that WoW has given this dungeon.
- * @property int      $map_id            The ID of the map (used internally in the game, used for simulation craft purposes)
- * @property int|null $instance_id       The ID of the instance (used internally in the game, used for MDT mapping export purposes)
- * @property int|null $challenge_mode_id The ID of the M+ for this dungeon (used internally in the game, used for ARC)
- * @property int      $mdt_id            The ID that MDT has given this dungeon.
- * @property bool     $raid              True if the dungeon is actually a raid, false if it is not.
- * @property string   $name              The name of the dungeon.
- * @property string   $abbreviation      HOV for Halls of Valor, GAMBIT for Tazavesh: Gambit etc.
- * @property string   $slug              The url friendly slug of the dungeon.
- * @property string   $key               Shorthand key of the dungeon.
- * @property bool     $heatmap_enabled   True if this dungeon has a heatmap enabled, false if it does not.
- * @property bool     $speedrun_enabled  True if this dungeon has a speedrun enabled, false if it does not.
- * @property int      $views             The number of views this dungeon has had.
- * @property bool     $active            True if this dungeon is active, false if it is not.
- * @property bool     $has_wallpaper     True if this dungeon has a wallpaper to show as a background.
- * @property bool     $mdt_supported     True if MDT is supported for this dungeon, false if it is not.
+ * @property int      $id                  The ID of this Dungeon.
+ * @property int      $expansion_id        The linked expansion to this dungeon.
+ * @property int      $zone_id             The ID of the location that WoW has given this dungeon.
+ * @property int      $map_id              The ID of the map (used internally in the game, used for simulation craft purposes)
+ * @property int|null $instance_id         The ID of the instance (used internally in the game, used for MDT mapping export purposes)
+ * @property int|null $challenge_mode_id   The ID of the M+ for this dungeon (used internally in the game, used for ARC)
+ * @property int      $mdt_id              The ID that MDT has given this dungeon.
+ * @property bool     $raid                True if the dungeon is actually a raid, false if it is not.
+ * @property string   $name                The name of the dungeon.
+ * @property string   $abbreviation        HOV for Halls of Valor, GAMBIT for Tazavesh: Gambit etc.
+ * @property string   $slug                The url friendly slug of the dungeon.
+ * @property string   $key                 Shorthand key of the dungeon.
+ * @property bool     $heatmap_enabled     True if this dungeon has a heatmap enabled, false if it does not.
+ * @property bool     $speedrun_enabled    True if this dungeon has a speedrun enabled, false if it does not.
+ * @property int      $views               The number of views this dungeon has had.
+ * @property bool     $active              True if this dungeon is active, false if it is not.
+ * @property bool     $has_wallpaper       True if this dungeon has a wallpaper to show as a background.
+ * @property bool     $mdt_supported       True if MDT is supported for this dungeon, false if it is not.
+ * @property int|null $min_suggested_level The lowest character level this dungeon is suggested for, if any.
+ * @property int|null $max_suggested_level The highest character level this dungeon is suggested for, if any.
  *
  * @property Expansion $expansion
  *
@@ -115,6 +117,8 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
         'key',
         'slug',
         'views',
+        'min_suggested_level',
+        'max_suggested_level',
     ];
 
     public $with = [

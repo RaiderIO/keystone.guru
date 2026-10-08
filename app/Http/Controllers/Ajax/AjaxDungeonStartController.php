@@ -31,7 +31,7 @@ class AjaxDungeonStartController extends AjaxMappingModelBaseController
         ?DungeonStart               $dungeonStart = null,
     ): DungeonStart|Model {
         return $this->storeModel($coordinatesService, $mappingVersion, $request->validated(), DungeonStart::class, $dungeonStart)
-            ->append('raid');
+            ->append(DungeonStart::DESTINATION_ATTRIBUTES);
     }
 
     public function delete(

@@ -7,6 +7,7 @@ use App\Models\DungeonDifficulty;
 use App\Models\Laratrust\Role;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rule;
 
 class DungeonFormRequest extends FormRequest
@@ -18,7 +19,7 @@ class DungeonFormRequest extends FormRequest
     {
         return Auth::user()->hasRole(Role::ROLE_ADMIN);
     }    /**
-     * @return array<string, array<int, string|Rule>|string|Rule>
+     * @return array<string, array<int, string|Rule|ConditionalRules>|string|Rule>
      */
     public function rules(): array
     {
@@ -51,6 +52,14 @@ class DungeonFormRequest extends FormRequest
             'slug' => [
                 'required',
                 Rule::unique(Dungeon::class, 'slug')->ignore($this->get('slug'), 'slug'),
+            ],
+            'min_suggested_level' => ['nullable', 'integer', 'min:1', 'max:255'],
+            'max_suggested_level' => [
+                'nullable',
+                'integer',
+                'min:1',
+                'max:255',
+                Rule::when($this->filled('min_suggested_level'), ['gte:min_suggested_level']),
             ],
         ];
     }

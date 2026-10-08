@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App\Events\Models\DungeonStart\DungeonStartChangedEvent;
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\DungeonStart;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Facades\Event;
@@ -263,6 +264,80 @@ final class AjaxDungeonStartControllerTest extends AjaxPublicTestCase
 
                 $this->assertArrayHasKey('raid', $model);
                 $this->assertTrue($model['raid']);
+
+                return true;
+            });
+        } finally {
+            if ($dungeonStartId !== null) {
+                DungeonStart::query()->whereKey($dungeonStartId)->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function store_givenTargetDungeonWithSuggestedLevels_returnsItsSuggestedLevels(): void
+    {
+        // Arrange
+        $mappingVersion = $this->getNonFacadeMappingVersion();
+        /** @var Dungeon $targetDungeon */
+        $targetDungeon  = Dungeon::query()->where('key', DungeonKey::THE_HALL_OF_THANES->value)->firstOrFail();
+        $dungeonStartId = null;
+
+        try {
+            // Act
+            $response = $this->post(route('ajax.admin.dungeonstart.create', ['mappingVersion' => $mappingVersion]), [
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $mappingVersion->dungeon->floors->first()->id,
+                'target_dungeon_id'  => $targetDungeon->id,
+                'lat'                => -100.5,
+                'lng'                => 150.5,
+            ]);
+
+            // Assert
+            $response->assertCreated();
+            $dungeonStartId = $response->json('id');
+            $response->assertJsonPath('min_suggested_level', 13);
+            $response->assertJsonPath('max_suggested_level', 18);
+        } finally {
+            if ($dungeonStartId !== null) {
+                DungeonStart::query()->whereKey($dungeonStartId)->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function store_givenTargetDungeonWithSuggestedLevels_broadcastsThemAfterQueueSerialization(): void
+    {
+        // Arrange
+        Event::fake([DungeonStartChangedEvent::class]);
+        $mappingVersion = $this->getNonFacadeMappingVersion();
+        /** @var Dungeon $targetDungeon */
+        $targetDungeon  = Dungeon::query()->where('key', DungeonKey::THE_HALL_OF_THANES->value)->firstOrFail();
+        $dungeonStartId = null;
+
+        try {
+            // Act
+            $response = $this->post(route('ajax.admin.dungeonstart.create', ['mappingVersion' => $mappingVersion]), [
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $mappingVersion->dungeon->floors->first()->id,
+                'target_dungeon_id'  => $targetDungeon->id,
+                'lat'                => -100.5,
+                'lng'                => 150.5,
+            ]);
+
+            // Assert
+            $response->assertCreated();
+            $dungeonStartId = $response->json('id');
+            Event::assertDispatched(DungeonStartChangedEvent::class, function (DungeonStartChangedEvent $event): bool {
+                // The broadcast is queued, so the worker sees a model re-fetched from the database
+                /** @var DungeonStartChangedEvent $queuedEvent */
+                $queuedEvent = unserialize(serialize($event));
+                $model       = $queuedEvent->broadcastWith()['model']->toArray();
+
+                $this->assertArrayHasKey('min_suggested_level', $model);
+                $this->assertArrayHasKey('max_suggested_level', $model);
+                $this->assertSame(13, $model['min_suggested_level']);
+                $this->assertSame(18, $model['max_suggested_level']);
 
                 return true;
             });
