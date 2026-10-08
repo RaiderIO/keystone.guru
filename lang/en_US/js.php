@@ -99,6 +99,7 @@ return [
     'dungeonstart'                   => 'Dungeon start',
     'dungeonstart_title'             => 'Place a dungeon start :hotkey',
     'dungeonstart_tooltip'           => 'Dungeon Start',
+    'dungeonstart_raid_tooltip'      => 'Raid Start',
     'mountablearea'                  => 'Mountable area',
     'mountablearea_title'            => 'Draw an area in which players can mount :hotkey',
     'floorunion'                     => 'Floor union',

@@ -15,8 +15,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -63,8 +61,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -327,8 +323,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -553,8 +547,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -601,8 +593,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -649,8 +639,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -697,8 +685,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -847,8 +833,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -1159,8 +1143,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -1309,8 +1291,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -1357,8 +1337,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -1697,8 +1675,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -1770,8 +1746,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -1920,8 +1894,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -2007,8 +1979,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -2055,8 +2025,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -2128,8 +2096,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -2215,8 +2181,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -2294,8 +2258,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -2406,8 +2368,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -2454,8 +2414,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -2541,8 +2499,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -2818,8 +2774,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -3044,8 +2998,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -3131,8 +3083,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -3281,8 +3231,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -3368,8 +3316,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -3416,8 +3362,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -3579,8 +3523,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -3729,8 +3671,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -3802,8 +3742,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -3889,8 +3827,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -3976,8 +3912,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -4139,8 +4073,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -4289,8 +4221,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -4521,8 +4451,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -4709,8 +4637,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -4897,8 +4823,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -4945,8 +4869,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -4993,8 +4915,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -5041,8 +4961,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -5204,8 +5122,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -5252,8 +5168,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -5377,8 +5291,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -5464,8 +5376,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -5512,8 +5422,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -5599,8 +5507,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -5647,8 +5553,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -5695,8 +5599,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -5768,8 +5670,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -5855,8 +5755,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -5903,8 +5801,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -5951,8 +5847,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -6152,8 +6046,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -6200,8 +6092,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -6248,8 +6138,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -6373,8 +6261,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -6460,8 +6346,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -6816,8 +6700,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -6864,8 +6746,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -7525,8 +7405,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -7598,8 +7476,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -7646,8 +7522,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -7694,8 +7568,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -7742,8 +7614,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -8563,8 +8433,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -8611,8 +8479,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -8780,8 +8646,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -8905,8 +8769,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -9030,8 +8892,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -9155,8 +9015,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -9235,8 +9093,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -9360,8 +9216,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -9617,8 +9471,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -9742,8 +9594,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -9867,8 +9717,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -9915,8 +9763,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -9963,8 +9809,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -10088,8 +9932,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -10175,8 +10017,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -10262,8 +10102,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -10387,8 +10225,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -10550,8 +10386,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -10819,8 +10653,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -10906,8 +10738,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -10954,8 +10784,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -11002,8 +10830,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -11050,8 +10876,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -11098,8 +10922,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -11146,8 +10968,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -11194,8 +11014,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -11242,8 +11060,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -11417,8 +11233,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -11700,8 +11514,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -11787,8 +11599,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -11835,8 +11645,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -12048,8 +11856,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -12135,8 +11941,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -12183,8 +11987,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -12231,8 +12033,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -12279,8 +12079,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -12366,8 +12164,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -12453,8 +12249,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -12565,8 +12359,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -12690,8 +12482,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -12959,8 +12749,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -13340,8 +13128,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -13618,8 +13404,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -13730,8 +13514,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -13778,8 +13560,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -13890,8 +13670,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -14002,8 +13780,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -14114,8 +13890,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -14187,8 +13961,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -14481,8 +14253,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -14554,8 +14324,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -14627,8 +14395,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -14776,8 +14542,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -15002,8 +14766,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -15056,8 +14818,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -15187,8 +14947,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -15391,8 +15149,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -15439,8 +15195,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -15487,8 +15241,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -15762,8 +15514,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -16374,8 +16124,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -16447,8 +16195,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -16584,8 +16330,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -16671,8 +16415,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -16758,8 +16500,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -16908,8 +16648,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -17096,8 +16834,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -17246,8 +16982,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -17409,8 +17143,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -17572,8 +17304,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -17684,8 +17414,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -17885,8 +17613,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -17958,8 +17684,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -18120,8 +17844,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -18498,8 +18220,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -18571,8 +18291,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -18721,8 +18439,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -18769,8 +18485,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -18842,8 +18556,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -18992,8 +18704,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -19336,8 +19046,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -19448,8 +19156,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -19598,8 +19304,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -20568,8 +20272,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -20616,8 +20318,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -20664,8 +20364,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -20829,8 +20527,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -20962,8 +20658,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 1,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -21600,8 +21294,6 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": true,
         "floors": [
             {
@@ -21750,8 +21442,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -22708,8 +22398,6 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "min_suggested_level": null,
-        "max_suggested_level": null,
         "mdt_supported": false,
         "floors": [
             {
@@ -23802,438 +23490,6 @@
                 "ingame_min_y": -16000,
                 "ingame_max_x": -16000,
                 "ingame_max_y": 7466.6,
-                "percentage_display_zoom": null,
-                "zoom_max": null,
-                "active": 1,
-                "enemy_pack_margin": null,
-                "floorcouplings": [],
-                "dungeon_speedrun_required_npcs": []
-            }
-        ],
-        "dungeon_speedrun_difficulties": []
-    },
-    {
-        "id": 185,
-        "expansion_id": 4,
-        "zone_id": 16919,
-        "map_id": 3065,
-        "instance_id": null,
-        "challenge_mode_id": null,
-        "mdt_id": 12345,
-        "raid": 0,
-        "key": "the_hall_of_thanes",
-        "name": "dungeons.classic.the_hall_of_thanes.name",
-        "abbreviation": "dungeons.classic.the_hall_of_thanes.abbreviation",
-        "slug": "the-hall-of-thanes",
-        "heatmap_enabled": 0,
-        "speedrun_enabled": 0,
-        "has_wallpaper": 0,
-        "min_suggested_level": 13,
-        "max_suggested_level": 18,
-        "mdt_supported": false,
-        "floors": [
-            {
-                "id": 525,
-                "index": 1,
-                "mdt_sub_level": null,
-                "ui_map_id": 0,
-                "map_name": null,
-                "name": "dungeons.classic.the_hall_of_thanes.floors.the_hall_of_thanes",
-                "default": 1,
-                "facade": 0,
-                "facade_navigation": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "zoom_max": null,
-                "active": 1,
-                "enemy_pack_margin": null,
-                "floorcouplings": [],
-                "dungeon_speedrun_required_npcs": []
-            }
-        ],
-        "dungeon_speedrun_difficulties": []
-    },
-    {
-        "id": 186,
-        "expansion_id": 4,
-        "zone_id": 16611,
-        "map_id": 2999,
-        "instance_id": null,
-        "challenge_mode_id": null,
-        "mdt_id": 12345,
-        "raid": 0,
-        "key": "ruins_of_lordaeron",
-        "name": "dungeons.classic.ruins_of_lordaeron.name",
-        "abbreviation": "dungeons.classic.ruins_of_lordaeron.abbreviation",
-        "slug": "ruins-of-lordaeron",
-        "heatmap_enabled": 0,
-        "speedrun_enabled": 0,
-        "has_wallpaper": 0,
-        "min_suggested_level": 15,
-        "max_suggested_level": 20,
-        "mdt_supported": false,
-        "floors": [
-            {
-                "id": 526,
-                "index": 1,
-                "mdt_sub_level": null,
-                "ui_map_id": 0,
-                "map_name": null,
-                "name": "dungeons.classic.ruins_of_lordaeron.floors.ruins_of_lordaeron",
-                "default": 1,
-                "facade": 0,
-                "facade_navigation": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "zoom_max": null,
-                "active": 1,
-                "enemy_pack_margin": null,
-                "floorcouplings": [],
-                "dungeon_speedrun_required_npcs": []
-            }
-        ],
-        "dungeon_speedrun_difficulties": []
-    },
-    {
-        "id": 187,
-        "expansion_id": 4,
-        "zone_id": 16732,
-        "map_id": 2998,
-        "instance_id": null,
-        "challenge_mode_id": null,
-        "mdt_id": 12345,
-        "raid": 0,
-        "key": "excavation_site_wetlands",
-        "name": "dungeons.classic.excavation_site_wetlands.name",
-        "abbreviation": "dungeons.classic.excavation_site_wetlands.abbreviation",
-        "slug": "excavation-site-wetlands",
-        "heatmap_enabled": 0,
-        "speedrun_enabled": 0,
-        "has_wallpaper": 0,
-        "min_suggested_level": 24,
-        "max_suggested_level": 29,
-        "mdt_supported": false,
-        "floors": [
-            {
-                "id": 527,
-                "index": 1,
-                "mdt_sub_level": null,
-                "ui_map_id": 0,
-                "map_name": null,
-                "name": "dungeons.classic.excavation_site_wetlands.floors.excavation_site_wetlands",
-                "default": 1,
-                "facade": 0,
-                "facade_navigation": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "zoom_max": null,
-                "active": 1,
-                "enemy_pack_margin": null,
-                "floorcouplings": [],
-                "dungeon_speedrun_required_npcs": []
-            }
-        ],
-        "dungeon_speedrun_difficulties": []
-    },
-    {
-        "id": 188,
-        "expansion_id": 4,
-        "zone_id": 16544,
-        "map_id": 2959,
-        "instance_id": null,
-        "challenge_mode_id": null,
-        "mdt_id": 12345,
-        "raid": 0,
-        "key": "city_of_dalaran",
-        "name": "dungeons.classic.city_of_dalaran.name",
-        "abbreviation": "dungeons.classic.city_of_dalaran.abbreviation",
-        "slug": "city-of-dalaran",
-        "heatmap_enabled": 0,
-        "speedrun_enabled": 0,
-        "has_wallpaper": 0,
-        "min_suggested_level": 28,
-        "max_suggested_level": 33,
-        "mdt_supported": false,
-        "floors": [
-            {
-                "id": 528,
-                "index": 1,
-                "mdt_sub_level": null,
-                "ui_map_id": 0,
-                "map_name": null,
-                "name": "dungeons.classic.city_of_dalaran.floors.city_of_dalaran",
-                "default": 1,
-                "facade": 0,
-                "facade_navigation": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "zoom_max": null,
-                "active": 1,
-                "enemy_pack_margin": null,
-                "floorcouplings": [],
-                "dungeon_speedrun_required_npcs": []
-            }
-        ],
-        "dungeon_speedrun_difficulties": []
-    },
-    {
-        "id": 189,
-        "expansion_id": 4,
-        "zone_id": 0,
-        "map_id": 0,
-        "instance_id": null,
-        "challenge_mode_id": null,
-        "mdt_id": 12345,
-        "raid": 0,
-        "key": "the_drowned_city",
-        "name": "dungeons.classic.the_drowned_city.name",
-        "abbreviation": "dungeons.classic.the_drowned_city.abbreviation",
-        "slug": "the-drowned-city",
-        "heatmap_enabled": 0,
-        "speedrun_enabled": 0,
-        "has_wallpaper": 0,
-        "min_suggested_level": 35,
-        "max_suggested_level": 40,
-        "mdt_supported": false,
-        "floors": [
-            {
-                "id": 529,
-                "index": 1,
-                "mdt_sub_level": null,
-                "ui_map_id": 0,
-                "map_name": null,
-                "name": "dungeons.classic.the_drowned_city.floors.the_drowned_city",
-                "default": 1,
-                "facade": 0,
-                "facade_navigation": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "zoom_max": null,
-                "active": 1,
-                "enemy_pack_margin": null,
-                "floorcouplings": [],
-                "dungeon_speedrun_required_npcs": []
-            }
-        ],
-        "dungeon_speedrun_difficulties": []
-    },
-    {
-        "id": 190,
-        "expansion_id": 4,
-        "zone_id": 0,
-        "map_id": 0,
-        "instance_id": null,
-        "challenge_mode_id": null,
-        "mdt_id": 12345,
-        "raid": 0,
-        "key": "kroldok_stronghold",
-        "name": "dungeons.classic.kroldok_stronghold.name",
-        "abbreviation": "dungeons.classic.kroldok_stronghold.abbreviation",
-        "slug": "kroldok-stronghold",
-        "heatmap_enabled": 0,
-        "speedrun_enabled": 0,
-        "has_wallpaper": 0,
-        "min_suggested_level": 40,
-        "max_suggested_level": 45,
-        "mdt_supported": false,
-        "floors": [
-            {
-                "id": 530,
-                "index": 1,
-                "mdt_sub_level": null,
-                "ui_map_id": 0,
-                "map_name": null,
-                "name": "dungeons.classic.kroldok_stronghold.floors.kroldok_stronghold",
-                "default": 1,
-                "facade": 0,
-                "facade_navigation": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "zoom_max": null,
-                "active": 1,
-                "enemy_pack_margin": null,
-                "floorcouplings": [],
-                "dungeon_speedrun_required_npcs": []
-            }
-        ],
-        "dungeon_speedrun_difficulties": []
-    },
-    {
-        "id": 191,
-        "expansion_id": 4,
-        "zone_id": 0,
-        "map_id": 0,
-        "instance_id": null,
-        "challenge_mode_id": null,
-        "mdt_id": 12345,
-        "raid": 0,
-        "key": "alcaz_prison",
-        "name": "dungeons.classic.alcaz_prison.name",
-        "abbreviation": "dungeons.classic.alcaz_prison.abbreviation",
-        "slug": "alcaz-prison",
-        "heatmap_enabled": 0,
-        "speedrun_enabled": 0,
-        "has_wallpaper": 0,
-        "min_suggested_level": 48,
-        "max_suggested_level": 53,
-        "mdt_supported": false,
-        "floors": [
-            {
-                "id": 531,
-                "index": 1,
-                "mdt_sub_level": null,
-                "ui_map_id": 0,
-                "map_name": null,
-                "name": "dungeons.classic.alcaz_prison.floors.alcaz_prison",
-                "default": 1,
-                "facade": 0,
-                "facade_navigation": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "zoom_max": null,
-                "active": 1,
-                "enemy_pack_margin": null,
-                "floorcouplings": [],
-                "dungeon_speedrun_required_npcs": []
-            }
-        ],
-        "dungeon_speedrun_difficulties": []
-    },
-    {
-        "id": 192,
-        "expansion_id": 4,
-        "zone_id": 0,
-        "map_id": 0,
-        "instance_id": null,
-        "challenge_mode_id": null,
-        "mdt_id": 12345,
-        "raid": 0,
-        "key": "blackmaw_hold",
-        "name": "dungeons.classic.blackmaw_hold.name",
-        "abbreviation": "dungeons.classic.blackmaw_hold.abbreviation",
-        "slug": "blackmaw-hold",
-        "heatmap_enabled": 0,
-        "speedrun_enabled": 0,
-        "has_wallpaper": 0,
-        "min_suggested_level": 55,
-        "max_suggested_level": 60,
-        "mdt_supported": false,
-        "floors": [
-            {
-                "id": 532,
-                "index": 1,
-                "mdt_sub_level": null,
-                "ui_map_id": 0,
-                "map_name": null,
-                "name": "dungeons.classic.blackmaw_hold.floors.blackmaw_hold",
-                "default": 1,
-                "facade": 0,
-                "facade_navigation": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "zoom_max": null,
-                "active": 1,
-                "enemy_pack_margin": null,
-                "floorcouplings": [],
-                "dungeon_speedrun_required_npcs": []
-            }
-        ],
-        "dungeon_speedrun_difficulties": []
-    },
-    {
-        "id": 193,
-        "expansion_id": 4,
-        "zone_id": 0,
-        "map_id": 0,
-        "instance_id": null,
-        "challenge_mode_id": null,
-        "mdt_id": 12345,
-        "raid": 0,
-        "key": "shapers_terrace",
-        "name": "dungeons.classic.shapers_terrace.name",
-        "abbreviation": "dungeons.classic.shapers_terrace.abbreviation",
-        "slug": "shapers-terrace",
-        "heatmap_enabled": 0,
-        "speedrun_enabled": 0,
-        "has_wallpaper": 0,
-        "min_suggested_level": 58,
-        "max_suggested_level": 60,
-        "mdt_supported": false,
-        "floors": [
-            {
-                "id": 533,
-                "index": 1,
-                "mdt_sub_level": null,
-                "ui_map_id": 0,
-                "map_name": null,
-                "name": "dungeons.classic.shapers_terrace.floors.shapers_terrace",
-                "default": 1,
-                "facade": 0,
-                "facade_navigation": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,

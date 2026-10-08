@@ -177,7 +177,7 @@ class DungeonStart extends VersionableMapObject {
 
         return this.comment !== null && this.comment.length > 0 ?
             lang.get(this.comment) :
-            lang.get('js.dungeonstart_tooltip');
+            lang.get(this.raid ? 'js.dungeonstart_raid_tooltip' : 'js.dungeonstart_tooltip');
     }
 
     /**
