@@ -31,6 +31,7 @@ L.Draw.DungeonStart = L.Draw.Marker.extend({
  * @property {Number} floor_id
  * @property {Number|null} target_dungeon_id
  * @property {String|null} comment
+ * @property {Boolean} raid
  * @property {Number} lat
  * @property {Number} lng
  */
@@ -75,6 +76,13 @@ class DungeonStart extends VersionableMapObject {
                 default: '',
             }),
             new Attribute({
+                name: 'raid',
+                type: 'bool',
+                edit: false,
+                save: false,
+                default: false,
+            }),
+            new Attribute({
                 name: 'lat',
                 type: 'float',
                 edit: false,
@@ -104,11 +112,12 @@ class DungeonStart extends VersionableMapObject {
         let size = c.map.mapicon.calculateSize(DUNGEON_START_ICON_SIZE);
 
         let template = Handlebars.templates['map_map_icon_visual_template'];
+        let key = this.raid ? 'raid_start' : 'dungeon_start';
 
         return L.divIcon({
             html: template({
-                key: 'dungeon_start',
-                icon_url: `${this.map.options.assetsBaseUrl}/images/mapicon/dungeon_start.png`,
+                key: key,
+                icon_url: `${this.map.options.assetsBaseUrl}/images/mapicon/${key}.png`,
                 selectedclass: editModeEnabled ? ' leaflet-edit-marker-selected' : (deleteModeEnabled ? ' leaflet-edit-marker-selected delete' : ''),
                 outer_width: size + selectableMargin,
                 outer_height: size + selectableMargin,

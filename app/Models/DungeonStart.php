@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float       $lng
  * @property string|null $comment
  *
+ * @property bool $raid True if this start leads into a raid: its target dungeon when it has one, otherwise its own dungeon.
+ *
  * @property MappingVersion $mappingVersion
  * @property Floor          $floor
  * @property Dungeon|null   $targetDungeon
@@ -97,6 +99,11 @@ class DungeonStart extends Model implements HasLatLngInterface, MappingModelClon
     public function targetDungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class, 'target_dungeon_id');
+    }
+
+    public function getRaidAttribute(): bool
+    {
+        return ($this->targetDungeon ?? $this->floor->dungeon)->raid;
     }
 
     public function getDungeonId(): ?int

@@ -2,9 +2,12 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Events\Models\DungeonStart\DungeonStartChangedEvent;
 use App\Models\Dungeon;
 use App\Models\DungeonStart;
 use App\Models\Mapping\MappingVersion;
+use Illuminate\Support\Facades\Event;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\AjaxPublicTestCase;
@@ -185,6 +188,89 @@ final class AjaxDungeonStartControllerTest extends AjaxPublicTestCase
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors('target_dungeon_id');
         $this->assertSame($countBefore, DungeonStart::query()->count());
+    }
+
+    #[Test]
+    #[DataProvider('store_givenTargetDungeon_returnsWhetherItLeadsIntoARaid_dataProvider')]
+    public function store_givenTargetDungeon_returnsWhetherItLeadsIntoARaid(bool $targetIsRaid): void
+    {
+        // Arrange
+        $mappingVersion = $this->getNonFacadeMappingVersion();
+        /** @var Dungeon $targetDungeon */
+        $targetDungeon  = Dungeon::query()->whereKeyNot($mappingVersion->dungeon_id)->where('raid', $targetIsRaid)->firstOrFail();
+        $dungeonStartId = null;
+
+        try {
+            // Act
+            $response = $this->post(route('ajax.admin.dungeonstart.create', ['mappingVersion' => $mappingVersion]), [
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $mappingVersion->dungeon->floors->first()->id,
+                'target_dungeon_id'  => $targetDungeon->id,
+                'lat'                => -100.5,
+                'lng'                => 150.5,
+            ]);
+
+            // Assert
+            $response->assertCreated();
+            $dungeonStartId = $response->json('id');
+            $response->assertJsonPath('raid', $targetIsRaid);
+        } finally {
+            if ($dungeonStartId !== null) {
+                DungeonStart::query()->whereKey($dungeonStartId)->delete();
+            }
+        }
+    }
+
+    /**
+     * @return array<string, array{bool}>
+     */
+    public static function store_givenTargetDungeon_returnsWhetherItLeadsIntoARaid_dataProvider(): array
+    {
+        return [
+            'target is a raid'    => [true],
+            'target is a dungeon' => [false],
+        ];
+    }
+
+    #[Test]
+    public function store_givenTargetRaid_broadcastsTheRaidFlagAfterQueueSerialization(): void
+    {
+        // Arrange
+        Event::fake([DungeonStartChangedEvent::class]);
+        $mappingVersion = $this->getNonFacadeMappingVersion();
+        /** @var Dungeon $targetRaid */
+        $targetRaid     = Dungeon::query()->whereKeyNot($mappingVersion->dungeon_id)->where('raid', true)->firstOrFail();
+        $dungeonStartId = null;
+
+        try {
+            // Act
+            $response = $this->post(route('ajax.admin.dungeonstart.create', ['mappingVersion' => $mappingVersion]), [
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $mappingVersion->dungeon->floors->first()->id,
+                'target_dungeon_id'  => $targetRaid->id,
+                'lat'                => -100.5,
+                'lng'                => 150.5,
+            ]);
+
+            // Assert
+            $response->assertCreated();
+            $dungeonStartId = $response->json('id');
+            Event::assertDispatched(DungeonStartChangedEvent::class, function (DungeonStartChangedEvent $event): bool {
+                // The broadcast is queued, so the worker sees a model re-fetched from the database
+                /** @var DungeonStartChangedEvent $queuedEvent */
+                $queuedEvent = unserialize(serialize($event));
+                $model       = $queuedEvent->broadcastWith()['model']->toArray();
+
+                $this->assertArrayHasKey('raid', $model);
+                $this->assertTrue($model['raid']);
+
+                return true;
+            });
+        } finally {
+            if ($dungeonStartId !== null) {
+                DungeonStart::query()->whereKey($dungeonStartId)->delete();
+            }
+        }
     }
 
     #[Test]

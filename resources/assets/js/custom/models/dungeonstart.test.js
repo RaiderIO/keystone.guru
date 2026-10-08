@@ -164,8 +164,12 @@ describe('DungeonStart', () => {
 
         // Assert
         expect(attributes.map((attribute) => attribute.name)).toEqual(
-            ['mapping_version_id', 'floor_id', 'target_dungeon_id', 'comment', 'lat', 'lng'],
+            ['mapping_version_id', 'floor_id', 'target_dungeon_id', 'comment', 'raid', 'lat', 'lng'],
         );
+        const raidAttribute = attributes.find((attribute) => attribute.name === 'raid');
+        expect(raidAttribute.options.edit).toBe(false);
+        expect(raidAttribute.options.save).toBe(false);
+        expect(raidAttribute.options.default).toBe(false);
         const targetDungeonAttribute = attributes.find((attribute) => attribute.name === 'target_dungeon_id');
         expect(targetDungeonAttribute.options.type).toBe('select');
         expect(targetDungeonAttribute.options.edit).toBeUndefined();
@@ -187,6 +191,21 @@ describe('DungeonStart', () => {
         expect(html.icon_url).toBe('https://assets/images/mapicon/dungeon_start.png');
         expect(html.selectedclass).toBe('');
         expect(html.outer_width).toBe(24);
+        expect(dungeonStart.layer.icon.options.className).toBe('map_icon map_icon_dungeon_start');
+    });
+
+    it('onLayerInit_givenRaidStart_rendersTheRaidStartImage', () => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(new MapContextMappingVersionEdit());
+        dungeonStart.raid = true;
+
+        // Act
+        dungeonStart.onLayerInit();
+
+        // Assert
+        const html = JSON.parse(dungeonStart.layer.icon.options.html);
+        expect(html.key).toBe('raid_start');
+        expect(html.icon_url).toBe('https://assets/images/mapicon/raid_start.png');
         expect(dungeonStart.layer.icon.options.className).toBe('map_icon map_icon_dungeon_start');
     });
 
