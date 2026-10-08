@@ -3,7 +3,6 @@
 namespace Tests\Feature\Database\Migrations;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -12,22 +11,34 @@ use Tests\TestCases\PublicTestCase;
 #[Group('StoreLatLngAtFullPrecisionMigration')]
 final class StoreLatLngAtFullPrecisionTest extends PublicTestCase
 {
+    private const array TABLES = [
+        'dungeon_floor_switch_markers',
+        'enemies',
+        'floor_unions',
+    ];
+
+    /**
+     * The real tables hold the persistent seeded mapping data, which narrowing them would round for good. A
+     * temporary table shadows the real one of the same name on this connection only, so the migration
+     * alters the temporary table instead.
+     */
     #[Test]
     #[DataProvider('up_givenTwoDecimalLatLngColumns_widensThemToFullPrecision_dataProvider')]
     public function up_givenTwoDecimalLatLngColumns_widensThemToFullPrecision(string $tableName): void
     {
         // Arrange
         $migration = $this->requireMigration();
-        DB::statement(sprintf('ALTER TABLE `%s` MODIFY `lat` double(8,2) NOT NULL, MODIFY `lng` double(8,2) NOT NULL', $tableName));
 
         try {
+            $this->createTwoDecimalTemporaryTables();
+
             // Act
             $migration->up();
 
             // Assert
             $this->assertSame(['lat' => 'double', 'lng' => 'double'], $this->getLatLngColumnTypes($tableName));
         } finally {
-            $migration->up();
+            $this->dropTemporaryTables();
         }
     }
 
@@ -63,15 +74,31 @@ final class StoreLatLngAtFullPrecisionTest extends PublicTestCase
         $this->assertSame([], $fixedScaleColumns);
     }
 
+    private function createTwoDecimalTemporaryTables(): void
+    {
+        foreach (self::TABLES as $tableName) {
+            DB::statement(sprintf('CREATE TEMPORARY TABLE `%s` (`lat` double(8,2) NOT NULL, `lng` double(8,2) NOT NULL)', $tableName));
+        }
+    }
+
+    private function dropTemporaryTables(): void
+    {
+        foreach (self::TABLES as $tableName) {
+            DB::statement(sprintf('DROP TEMPORARY TABLE IF EXISTS `%s`', $tableName));
+        }
+    }
+
     /**
+     * SHOW COLUMNS sees a temporary table; information_schema, which Schema::getColumns() reads, does not.
+     *
      * @return array<string, string>
      */
     private function getLatLngColumnTypes(string $tableName): array
     {
-        return collect(Schema::getColumns($tableName))
-            ->whereIn('name', ['lat', 'lng'])
-            ->sortBy('name')
-            ->mapWithKeys(static fn(array $column): array => [$column['name'] => $column['type']])
+        return collect(DB::select(sprintf('SHOW COLUMNS FROM `%s`', $tableName)))
+            ->whereIn('Field', ['lat', 'lng'])
+            ->sortBy('Field')
+            ->mapWithKeys(static fn(object $column): array => [$column->Field => $column->Type])
             ->all();
     }
 
