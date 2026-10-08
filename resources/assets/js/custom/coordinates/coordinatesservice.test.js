@@ -220,6 +220,24 @@ describe('CoordinatesService.convertFacadeMapLocationToMapLocation', () => {
         expect(result.getLng()).toBeCloseTo(MAP_MAX_LNG / 2, 9);
     });
 
+    test('convertFacadeMapLocationToMapLocation_givenStringVertices_scalesOntoTheTargetFloor', () => {
+        // Arrange
+        let floorUnion = createFloorUnion();
+        floorUnion.floor_union_areas[0].vertices_json = JSON.stringify([
+            {lat: '-10', lng: '0'},
+            {lat: '-10', lng: '192'},
+            {lat: '-128', lng: '192'},
+            {lat: '-128', lng: '0'}
+        ]);
+        let coordinatesService = new CoordinatesService(createMapContext([floorUnion]));
+
+        // Act
+        let result = coordinatesService.convertFacadeMapLocationToMapLocation(new LatLng(-64, 96, FACADE_FLOOR));
+
+        // Assert
+        expect(result.getFloor()).toBe(TARGET_FLOOR);
+    });
+
     test('convertFacadeMapLocationToMapLocation_givenPointInDeadSpace_leavesTheFloorAlone', () => {
         // Arrange
         let coordinatesService = new CoordinatesService(createMapContext([createFloorUnion()]));
@@ -481,5 +499,15 @@ describe('CoordinatesService.distance', () => {
         // Act & assert
         expect(coordinatesService.distance(new LatLng(0, 0), new LatLng(3, 4))).toBeCloseTo(5, 9);
         expect(coordinatesService.distanceIngameXY(new IngameXY(0, 0), new IngameXY(3, 4))).toBeCloseTo(5, 9);
+    });
+});
+
+describe('CoordinatesService.parseVerticesJson', () => {
+    test('parseVerticesJson_givenStringCoordinates_returnsNumbers', () => {
+        // Act
+        let result = CoordinatesService.parseVerticesJson('[{"lat":"-142.88","lng":"171.929"},{"lat":-1,"lng":2}]');
+
+        // Assert
+        expect(result).toEqual([{lat: -142.88, lng: 171.929}, {lat: -1, lng: 2}]);
     });
 });

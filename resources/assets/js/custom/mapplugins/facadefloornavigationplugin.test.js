@@ -67,12 +67,12 @@ function createFloorUnion() {
 }
 
 /**
- * @param options {{currentFloor?: Object, isMapAdmin?: Boolean, facadeEnabled?: Boolean, mapState?: Object|null}}
+ * @param options {{currentFloor?: Object, isMapAdmin?: Boolean, facadeEnabled?: Boolean, mapState?: Object|null, floorUnions?: Object[]}}
  */
 function createPlugin(options = {}) {
     const currentFloor = options.currentFloor ?? FACADE_FLOOR;
     const floors = [FACADE_FLOOR, TARGET_FLOOR];
-    const floorUnions = [createFloorUnion()];
+    const floorUnions = options.floorUnions ?? [createFloorUnion()];
 
     const mapContext = {
         getMappingVersion: () => ({facade_enabled: true}),
@@ -175,6 +175,22 @@ describe('FacadeFloorNavigationPlugin mouse handling', () => {
 
         expect(plugin.hoveredFloorUnion?.id).toBe(10);
         expect(layerGroup.addLayer).toHaveBeenCalledTimes(1);
+    });
+
+    it('mouseMove_givenStringVertices_highlightsFloorUnion', () => {
+        const floorUnion = createFloorUnion();
+        floorUnion.floor_union_areas[0].vertices_json = JSON.stringify([
+            {lat: '-10', lng: '0'},
+            {lat: '-10', lng: '192'},
+            {lat: '-128', lng: '192'},
+            {lat: '-128', lng: '0'}
+        ]);
+        const {plugin} = createPlugin({floorUnions: [floorUnion]});
+        plugin.addToMap();
+
+        plugin._onLeafletMapMouseMove({latlng: {lat: -64, lng: 96}});
+
+        expect(plugin.hoveredFloorUnion?.id).toBe(10);
     });
 
     it('mouseMove_givenPointOutsideFloorUnionAreas_clearsHighlight', () => {
