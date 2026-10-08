@@ -237,7 +237,7 @@ final class EasternKingdomsMappingTest extends TestCase
             ->keyBy('id');
 
         // Assert
-        $this->assertCount(72, $markers);
+        $this->assertCount(74, $markers);
         foreach ($markers as $marker) {
             /** @var DungeonFloorSwitchMarker $marker */
             $linkedMarker = $markers->get($marker->linked_dungeon_floor_switch_marker_id);
