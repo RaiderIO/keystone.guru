@@ -8,6 +8,7 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -112,6 +113,74 @@ final class DungeonStartMappingVersionTest extends PublicTestCase
             $legacyStart->delete();
             $graveyard->delete();
         }
+    }
+
+    #[Test]
+    #[DataProvider('mapContextDungeonStarts_givenStart_returnsWhetherItLeadsIntoARaid_dataProvider')]
+    public function mapContextDungeonStarts_givenStart_returnsWhetherItLeadsIntoARaid(
+        bool  $startInRaid,
+        ?bool $targetIsRaid,
+        bool  $expectedRaid,
+    ): void {
+        // Arrange
+        $dungeon = $this->getDungeonWithMappingVersion($startInRaid);
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion  = $dungeon->mappingVersions()->first();
+        $targetDungeonId = $targetIsRaid === null ? null : Dungeon::query()
+            ->where('raid', $targetIsRaid)
+            ->where('id', '!=', $dungeon->id)
+            ->value('id');
+
+        $dungeonStart = DungeonStart::factory()->create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $dungeon->floors->first()->id,
+            'target_dungeon_id'  => $targetDungeonId,
+            'lat'                => self::SENTINEL_LAT,
+            'lng'                => 100.0,
+        ]);
+
+        try {
+            // Act
+            $dungeonStarts = $mappingVersion->mapContextDungeonStarts(app(CoordinatesServiceInterface::class), false);
+
+            // Assert
+            /** @var DungeonStart $result */
+            $result     = $dungeonStarts->firstWhere('id', $dungeonStart->id);
+            $serialized = $result->toArray();
+            $this->assertArrayHasKey('raid', $serialized);
+            $this->assertSame($expectedRaid, $serialized['raid']);
+        } finally {
+            $dungeonStart->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{bool, bool|null, bool}>
+     */
+    public static function mapContextDungeonStarts_givenStart_returnsWhetherItLeadsIntoARaid_dataProvider(): array
+    {
+        return [
+            'start in a dungeon without a target' => [false, null, false],
+            'start in a raid without a target'    => [true, null, true],
+            'start in a dungeon targeting a raid' => [false, true, true],
+            'start in a raid targeting a dungeon' => [true, false, false],
+        ];
+    }
+
+    private function getDungeonWithMappingVersion(bool $raid): Dungeon
+    {
+        /** @var Dungeon|null $dungeon */
+        $dungeon = Dungeon::query()
+            ->where('raid', $raid)
+            ->whereHas('mappingVersions')
+            ->whereHas('floors')
+            ->first();
+
+        if ($dungeon === null) {
+            $this->fail(sprintf('No %s with a mapping version found for testing.', $raid ? 'raid' : 'dungeon'));
+        }
+
+        return $dungeon;
     }
 
     private function getMappingVersionThatWillBeCloned(): MappingVersion
