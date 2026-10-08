@@ -301,7 +301,7 @@ describe('DungeonStart', () => {
         expect(dungeonStart.layer.tooltip).toBe('translated(js.dungeonstart_tooltip)');
     });
 
-    it('bindTooltip_givenNavigationToADungeonWithSuggestedLevels_addsTheLevelRangeOnANewLine', () => {
+    it('bindTooltip_givenNavigationToADungeonWithSuggestedLevels_addsTheLevelRangeBehindIt', () => {
         // Arrange
         const dungeonStart = buildDungeonStart(exploreContext({
             5: {backLink: false, dungeonName: 'dungeons.classic.the_hall_of_thanes', url: 'https://keystone.guru/start/5'},
@@ -315,8 +315,9 @@ describe('DungeonStart', () => {
 
         // Assert
         expect(dungeonStart.layer.tooltip).toBe(
-            'translated(js.dungeonstart_go_to_label, {"dungeon":"translated(dungeons.classic.the_hall_of_thanes)"})\n' +
-            'translated(js.dungeonstart_suggested_level_range, {"min":13,"max":18})',
+            'translated(js.dungeonstart_tooltip_with_suggested_level, {' +
+            '"text":"translated(js.dungeonstart_go_to_label, {\\"dungeon\\":\\"translated(dungeons.classic.the_hall_of_thanes)\\"})",' +
+            '"level":"translated(js.dungeonstart_suggested_level_range, {\\"min\\":13,\\"max\\":18})"})',
         );
     });
 
@@ -331,7 +332,9 @@ describe('DungeonStart', () => {
 
         // Assert
         expect(dungeonStart.layer.tooltip).toBe(
-            'translated(js.dungeonstart_tooltip)\ntranslated(js.dungeonstart_suggested_level_range, {"min":13,"max":18})',
+            'translated(js.dungeonstart_tooltip_with_suggested_level, {' +
+            '"text":"translated(js.dungeonstart_tooltip)",' +
+            '"level":"translated(js.dungeonstart_suggested_level_range, {\\"min\\":13,\\"max\\":18})"})',
         );
     });
 

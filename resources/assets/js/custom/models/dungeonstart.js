@@ -252,7 +252,7 @@ class DungeonStart extends VersionableMapObject {
         let suggestedLevelText = this.getSuggestedLevelText();
         let tooltipText = suggestedLevelText === null ?
             this.getDisplayText() :
-            `${this.getDisplayText()}\n${suggestedLevelText}`;
+            lang.get('js.dungeonstart_tooltip_with_suggested_level', {text: this.getDisplayText(), level: suggestedLevelText});
 
         this.layer.bindTooltip(c.map.sanitizeText(tooltipText), {direction: 'top'});
     }
