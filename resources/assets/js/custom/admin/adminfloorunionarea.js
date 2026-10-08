@@ -48,11 +48,11 @@ class FloorUnionArea extends VersionableMapObject {
                 edit: true
             }),
             new Attribute({
-                name: 'vertices',
-                type: 'array',
+                name: 'vertices_json',
+                type: 'string',
                 edit: false,
                 getter: function () {
-                    return self.getVertices();
+                    return JSON.stringify(self.getVertices());
                 }
             })
         ]);

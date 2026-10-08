@@ -30,7 +30,8 @@ class AjaxDungeonStartController extends AjaxMappingModelBaseController
         MappingVersion              $mappingVersion,
         ?DungeonStart               $dungeonStart = null,
     ): DungeonStart|Model {
-        return $this->storeModel($coordinatesService, $mappingVersion, $request->validated(), DungeonStart::class, $dungeonStart);
+        return $this->storeModel($coordinatesService, $mappingVersion, $request->validated(), DungeonStart::class, $dungeonStart)
+            ->append(DungeonStart::DESTINATION_ATTRIBUTES);
     }
 
     public function delete(

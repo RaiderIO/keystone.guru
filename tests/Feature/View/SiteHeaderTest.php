@@ -408,7 +408,7 @@ final class SiteHeaderTest extends PublicTestCase
         // Assert
         $this->assertStringContainsString('id="map_header"', $html, 'Expected the map, not the selection page');
         $this->assertStringContainsString('class="btn btn-accent visually-hidden-focusable skip_link" href="#map"', $html);
-        $this->assertStringContainsString('<div id="map" ', $html);
+        $this->assertStringContainsString('<main id="map" ', $html);
         $this->assertStringNotContainsString('href="#main_content"', $html);
     }
 }

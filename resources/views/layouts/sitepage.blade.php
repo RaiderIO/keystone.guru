@@ -50,116 +50,121 @@ $breadcrumbsParams ??= [];
 
     @if($header)
         @include('common.layout.header')
-        <div id="main_content" class="skip_link_target" tabindex="-1"></div>
     @endif
 
-    @if($custom)
-        @empty($rootClass)
-            @yield('content')
-        @else
-            <div class="{{$rootClass}}">
+    <main>
+        @if($header)
+            <div id="main_content" class="skip_link_target" tabindex="-1"></div>
+        @endif
+
+        @if($custom)
+            @empty($rootClass)
                 @yield('content')
-            </div>
-        @endisset
+            @else
+                <div class="{{$rootClass}}">
+                    @yield('content')
+                </div>
+            @endisset
 
-    @else
-        @if (!$isProduction && (!Auth::check() || !$user->hasRole(Role::ROLE_ADMIN)))
-            @component('common.layout.messagebanner')
-                <i class="fa fa-exclamation-triangle"></i>
-                {{ __('view_layouts.sitepage.staging_banner_description') }}
-                <br>
-                <a href="https://keystone.guru/">{{ __('view_layouts.sitepage.staging_banner_take_me_away') }}</a>
-            @endcomponent
-        @endif
+        @else
+            @if (!$isProduction && (!Auth::check() || !$user->hasRole(Role::ROLE_ADMIN)))
+                @component('common.layout.messagebanner')
+                    <i class="fa fa-exclamation-triangle"></i>
+                    {{ __('view_layouts.sitepage.staging_banner_description') }}
+                    <br>
+                    <a href="https://keystone.guru/">{{ __('view_layouts.sitepage.staging_banner_take_me_away') }}</a>
+                @endcomponent
+            @endif
 
-        @if($readOnlyEnabled)
-            @component('common.layout.messagebanner')
-                <i class="fa fa-exclamation-triangle"></i>
-                {{ __('view_layouts.sitepage.readonly_mode_enabled_description') }}
-            @endcomponent
-        @endif
+            @if($readOnlyEnabled)
+                @component('common.layout.messagebanner')
+                    <i class="fa fa-exclamation-triangle"></i>
+                    {{ __('view_layouts.sitepage.readonly_mode_enabled_description') }}
+                @endcomponent
+            @endif
 
-        @if($messageBanner !== null)
-            @component('common.layout.messagebanner')
-                {!! $messageBanner !!}
-            @endcomponent
-        @endif
+            @if($messageBanner !== null)
+                @component('common.layout.messagebanner')
+                    {!! $messageBanner !!}
+                @endcomponent
+            @endif
 
-        @if(isset($menuItems))
-            <div class="container mb-4 {{$rootClass}}">
+            @if(isset($menuItems))
+                <div class="container mb-4 {{$rootClass}}">
 
-                @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
+                    @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
-                <div class="row">
-                    <div class="col-xl-2 bg-secondary p-3 rounded-start">
-                        <h4>{{ $menuTitle }}</h4>
-                        <hr>
-                        @isset($menuModels)
-                            <select id="selected_model_id" class="form-control selectpicker">
-                                @foreach($menuModels as $menuModel)
-                                    @php($hasIcon = isset($menuModel->iconfile))
-                                    {{-- The explicit value matters: options without a value resolve to their (possibly empty) text, and empty-value options are treated as placeholders --}}
-                                    <option
-                                        value="{{ $menuModel->getKey() }}"
-                                        data-url="{{ route($menuModelsRoute, [$menuModelsRouteParameterName => $menuModel->getRouteKey()]) }}"
-                                        @if($hasIcon)
-                                            data-content="<img src='{{ $menuModel->iconfile->getURL() }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
-                                        @endif
-                                        {{ $menuModelEdit->getKey() === $menuModel->getKey() ? 'selected' : '' }}
-                                    >{{ $hasIcon ? '' : $menuModel->name }}</option>
-                                @endforeach
-                            </select>
+                    <div class="row">
+                        <div class="col-xl-2 bg-secondary p-3 rounded-start">
+                            <h4>{{ $menuTitle }}</h4>
                             <hr>
-                        @endisset
-                        <ul class="nav flex-column nav-pills">
-                            @foreach($menuItems as $index => $menuItem)
-                                <li class="nav-item">
-                                    <a class="nav-link {{ $index === 0 ? 'active' : '' }}"
-                                       data-bs-toggle="tab" href="{{ $menuItem['target'] }}" role="tab"
-                                       aria-controls="routes" aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
-                                        <i class="fas {{ $menuItem['icon'] }}"></i> {{ $menuItem['text'] }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <div class="col-xl-10 bg-secondary ms-0 mt-xl-0 mt-3 p-3 rounded-end">
-                        @yield('content')
+                            @isset($menuModels)
+                                <select id="selected_model_id" class="form-control selectpicker">
+                                    @foreach($menuModels as $menuModel)
+                                        @php($hasIcon = isset($menuModel->iconfile))
+                                        {{-- The explicit value matters: options without a value resolve to their (possibly empty) text, and empty-value options are treated as placeholders --}}
+                                        <option
+                                            value="{{ $menuModel->getKey() }}"
+                                            data-url="{{ route($menuModelsRoute, [$menuModelsRouteParameterName => $menuModel->getRouteKey()]) }}"
+                                            @if($hasIcon)
+                                                data-content="<img src='{{ $menuModel->iconfile->getURL() }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
+                                            @endif
+                                            {{ $menuModelEdit->getKey() === $menuModel->getKey() ? 'selected' : '' }}
+                                        >{{ $hasIcon ? '' : $menuModel->name }}</option>
+                                    @endforeach
+                                </select>
+                                <hr>
+                            @endisset
+                            <ul class="nav flex-column nav-pills">
+                                @foreach($menuItems as $index => $menuItem)
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ $index === 0 ? 'active' : '' }}"
+                                           data-bs-toggle="tab" href="{{ $menuItem['target'] }}" role="tab"
+                                           aria-controls="routes" aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
+                                            <i class="fas {{ $menuItem['icon'] }}"></i> {{ $menuItem['text'] }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <div class="col-xl-10 bg-secondary ms-0 mt-xl-0 mt-3 p-3 rounded-end">
+                            @yield('content')
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        @else
-            <div
-                class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill ps-lg-3 pe-lg-3" : ($disableDefaultRootClasses ? "" :  "col-md-8 offset-md-2") }}">
+            @else
+                <div
+                    class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill ps-lg-3 pe-lg-3" : ($disableDefaultRootClasses ? "" :  "col-md-8 offset-md-2") }}">
 
-                {{-- No mx-2 here: the utility's !important margin overrides the breadcrumb row's negative
-                     gutter, pushing it ~20px right of the content rows (which the header aligns to). --}}
-                @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
+                    {{-- No mx-2 here: the utility's !important margin overrides the breadcrumb row's negative
+                         gutter, pushing it ~20px right of the content rows (which the header aligns to). --}}
+                    @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
-                @hasSection('header-title')
-                    <div class="row my-4">
-                        @hasSection('header-addition')
-                            <div class="col text-center">
-                                <h1 class="h4">@yield('header-title')</h1>
-                            </div>
-                            <div class="ms-auto">
-                                @yield('header-addition')
-                            </div>
-                        @else
-                            <div class="col-lg-12 text-center">
-                                <h1 class="h4">@yield('header-title')</h1>
-                            </div>
-                        @endif
-                    </div>
-                @endif
+                    @hasSection('header-title')
+                        <div class="row my-4">
+                            @hasSection('header-addition')
+                                <div class="col text-center">
+                                    <h1 class="h4">@yield('header-title')</h1>
+                                </div>
+                                <div class="ms-auto">
+                                    @yield('header-addition')
+                                </div>
+                            @else
+                                <div class="col-lg-12 text-center">
+                                    <h1 class="h4">@yield('header-title')</h1>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
 
-                @include('common.general.messages')
+                    @include('common.general.messages')
 
-                @yield('content')
-            </div>
+                    @yield('content')
+                </div>
+            @endif
         @endif
-    @endif
+    </main>
 
     @if($footer)
         @include('common.layout.footer')

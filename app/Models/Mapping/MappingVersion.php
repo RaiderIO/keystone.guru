@@ -482,8 +482,9 @@ class MappingVersion extends Model
     {
         /** @var EloquentCollection<int, DungeonStart> $dungeonStarts */
         $dungeonStarts = $this->dungeonStarts()
-            ->with(['floor'])
-            ->get();
+            ->with(['floor.dungeon', 'targetDungeon'])
+            ->get()
+            ->append(DungeonStart::DESTINATION_ATTRIBUTES);
 
         if ($this->facade_enabled && $useFacade) {
             foreach ($dungeonStarts as $dungeonStart) {

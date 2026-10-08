@@ -31,6 +31,9 @@ L.Draw.DungeonStart = L.Draw.Marker.extend({
  * @property {Number} floor_id
  * @property {Number|null} target_dungeon_id
  * @property {String|null} comment
+ * @property {Boolean} raid
+ * @property {Number|null} min_suggested_level
+ * @property {Number|null} max_suggested_level
  * @property {Number} lat
  * @property {Number} lng
  */
@@ -75,6 +78,27 @@ class DungeonStart extends VersionableMapObject {
                 default: '',
             }),
             new Attribute({
+                name: 'raid',
+                type: 'bool',
+                edit: false,
+                save: false,
+                default: false,
+            }),
+            new Attribute({
+                name: 'min_suggested_level',
+                type: 'int',
+                edit: false,
+                save: false,
+                default: null,
+            }),
+            new Attribute({
+                name: 'max_suggested_level',
+                type: 'int',
+                edit: false,
+                save: false,
+                default: null,
+            }),
+            new Attribute({
                 name: 'lat',
                 type: 'float',
                 edit: false,
@@ -104,11 +128,12 @@ class DungeonStart extends VersionableMapObject {
         let size = c.map.mapicon.calculateSize(DUNGEON_START_ICON_SIZE);
 
         let template = Handlebars.templates['map_map_icon_visual_template'];
+        let key = this.raid ? 'raid_start' : 'dungeon_start';
 
         return L.divIcon({
             html: template({
-                key: 'dungeon_start',
-                icon_url: `${this.map.options.assetsBaseUrl}/images/mapicon/dungeon_start.png`,
+                key: key,
+                icon_url: `${this.map.options.assetsBaseUrl}/images/mapicon/${key}.png`,
                 selectedclass: editModeEnabled ? ' leaflet-edit-marker-selected' : (deleteModeEnabled ? ' leaflet-edit-marker-selected delete' : ''),
                 outer_width: size + selectableMargin,
                 outer_height: size + selectableMargin,
@@ -156,6 +181,35 @@ class DungeonStart extends VersionableMapObject {
     }
 
     /**
+     * The suggested level range of the dungeon this start leads into, or null when it has none or leads back out.
+     *
+     * @returns {String|null}
+     */
+    getSuggestedLevelText() {
+        console.assert(this instanceof DungeonStart, 'this was not a DungeonStart', this);
+
+        let navigation = this.getNavigation();
+        if (navigation !== null && navigation.backLink) {
+            return null;
+        }
+
+        let min = this.min_suggested_level ?? null;
+        let max = this.max_suggested_level ?? null;
+
+        if (min !== null && max !== null) {
+            return min === max ?
+                lang.get('js.dungeonstart_suggested_level', {level: min}) :
+                lang.get('js.dungeonstart_suggested_level_range', {min: min, max: max});
+        } else if (min !== null) {
+            return lang.get('js.dungeonstart_suggested_level_min', {min: min});
+        } else if (max !== null) {
+            return lang.get('js.dungeonstart_suggested_level_max', {max: max});
+        }
+
+        return null;
+    }
+
+    /**
      * Where clicking this start leads, or null when it leads nowhere.
      *
      * @returns {{backLink: Boolean, dungeonName: String, url: String}|null}
@@ -195,7 +249,12 @@ class DungeonStart extends VersionableMapObject {
 
         this.unbindTooltip();
 
-        this.layer.bindTooltip(c.map.sanitizeText(this.getDisplayText()), {direction: 'top'});
+        let suggestedLevelText = this.getSuggestedLevelText();
+        let tooltipText = suggestedLevelText === null ?
+            this.getDisplayText() :
+            lang.get('js.dungeonstart_tooltip_with_suggested_level', {text: this.getDisplayText(), level: suggestedLevelText});
+
+        this.layer.bindTooltip(c.map.sanitizeText(tooltipText), {direction: 'top'});
     }
 
     /**

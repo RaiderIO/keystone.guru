@@ -3,11 +3,13 @@
 namespace Tests\Feature\App\Model\Mapping;
 
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\DungeonStart;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -112,6 +114,164 @@ final class DungeonStartMappingVersionTest extends PublicTestCase
             $legacyStart->delete();
             $graveyard->delete();
         }
+    }
+
+    #[Test]
+    #[DataProvider('mapContextDungeonStarts_givenStart_returnsWhetherItLeadsIntoARaid_dataProvider')]
+    public function mapContextDungeonStarts_givenStart_returnsWhetherItLeadsIntoARaid(
+        bool  $startInRaid,
+        ?bool $targetIsRaid,
+        bool  $expectedRaid,
+    ): void {
+        // Arrange
+        $dungeon = $this->getDungeonWithMappingVersion($startInRaid);
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion  = $dungeon->mappingVersions()->first();
+        $targetDungeonId = $targetIsRaid === null ? null : Dungeon::query()
+            ->where('raid', $targetIsRaid)
+            ->where('id', '!=', $dungeon->id)
+            ->value('id');
+
+        $dungeonStart = DungeonStart::factory()->create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $dungeon->floors->first()->id,
+            'target_dungeon_id'  => $targetDungeonId,
+            'lat'                => self::SENTINEL_LAT,
+            'lng'                => 100.0,
+        ]);
+
+        try {
+            // Act
+            $dungeonStarts = $mappingVersion->mapContextDungeonStarts(app(CoordinatesServiceInterface::class), false);
+
+            // Assert
+            /** @var DungeonStart $result */
+            $result     = $dungeonStarts->firstWhere('id', $dungeonStart->id);
+            $serialized = $result->toArray();
+            $this->assertArrayHasKey('raid', $serialized);
+            $this->assertSame($expectedRaid, $serialized['raid']);
+        } finally {
+            $dungeonStart->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{bool, bool|null, bool}>
+     */
+    public static function mapContextDungeonStarts_givenStart_returnsWhetherItLeadsIntoARaid_dataProvider(): array
+    {
+        return [
+            'start in a dungeon without a target' => [false, null, false],
+            'start in a raid without a target'    => [true, null, true],
+            'start in a dungeon targeting a raid' => [false, true, true],
+            'start in a raid targeting a dungeon' => [true, false, false],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('mapContextDungeonStarts_givenStart_returnsTheSuggestedLevelsOfTheDungeonItLeadsInto_dataProvider')]
+    public function mapContextDungeonStarts_givenStart_returnsTheSuggestedLevelsOfTheDungeonItLeadsInto(
+        DungeonKey  $startDungeonKey,
+        ?DungeonKey $targetDungeonKey,
+        ?int        $expectedMinLevel,
+        ?int        $expectedMaxLevel,
+    ): void {
+        // Arrange
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::with(['floors', 'mappingVersions'])->where('key', $startDungeonKey->value)->firstOrFail();
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion  = $dungeon->mappingVersions->first();
+        $targetDungeonId = $targetDungeonKey === null ? null :
+            Dungeon::query()->where('key', $targetDungeonKey->value)->value('id');
+
+        $dungeonStart = DungeonStart::factory()->create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $dungeon->floors->first()->id,
+            'target_dungeon_id'  => $targetDungeonId,
+            'lat'                => self::SENTINEL_LAT,
+            'lng'                => 100.0,
+        ]);
+
+        try {
+            // Act
+            $dungeonStarts = $mappingVersion->mapContextDungeonStarts(app(CoordinatesServiceInterface::class), false);
+
+            // Assert
+            /** @var DungeonStart $result */
+            $result     = $dungeonStarts->firstWhere('id', $dungeonStart->id);
+            $serialized = $result->toArray();
+            $this->assertArrayHasKey('min_suggested_level', $serialized);
+            $this->assertArrayHasKey('max_suggested_level', $serialized);
+            $this->assertSame($expectedMinLevel, $serialized['min_suggested_level']);
+            $this->assertSame($expectedMaxLevel, $serialized['max_suggested_level']);
+        } finally {
+            $dungeonStart->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{DungeonKey, DungeonKey|null, int|null, int|null}>
+     */
+    public static function mapContextDungeonStarts_givenStart_returnsTheSuggestedLevelsOfTheDungeonItLeadsInto_dataProvider(): array
+    {
+        return [
+            'start without a target in a dungeon with levels'      => [DungeonKey::THE_HALL_OF_THANES, null, 13, 18],
+            'start targeting a dungeon with levels'                => [DungeonKey::RAGEFIRE_CHASM, DungeonKey::THE_HALL_OF_THANES, 13, 18],
+            'start in a dungeon with levels targeting one without' => [DungeonKey::THE_HALL_OF_THANES, DungeonKey::RAGEFIRE_CHASM, null, null],
+        ];
+    }
+
+    #[Test]
+    public function mapContextDungeonStarts_givenStartTargetingAnInactiveDungeon_stillReturnsTheStart(): void
+    {
+        // Arrange
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::with(['floors', 'mappingVersions'])->where('key', DungeonKey::RAGEFIRE_CHASM->value)->firstOrFail();
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion = $dungeon->mappingVersions->first();
+        /** @var Dungeon $targetDungeon */
+        $targetDungeon  = Dungeon::query()->where('key', DungeonKey::THE_HALL_OF_THANES->value)->firstOrFail();
+        $originalActive = $targetDungeon->active;
+        Dungeon::query()->whereKey($targetDungeon->id)->update(['active' => false]);
+
+        $dungeonStart = DungeonStart::factory()->create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $dungeon->floors->first()->id,
+            'target_dungeon_id'  => $targetDungeon->id,
+            'lat'                => self::SENTINEL_LAT,
+            'lng'                => 100.0,
+        ]);
+
+        try {
+            // Act
+            $dungeonStarts = $mappingVersion->mapContextDungeonStarts(app(CoordinatesServiceInterface::class), false);
+
+            // Assert
+            /** @var DungeonStart|null $result */
+            $result = $dungeonStarts->firstWhere('id', $dungeonStart->id);
+            $this->assertNotNull($result, 'A start into an inactive dungeon still marks where that dungeon is.');
+            $this->assertSame($targetDungeon->id, $result->target_dungeon_id);
+            $this->assertSame(13, $result->toArray()['min_suggested_level']);
+        } finally {
+            $dungeonStart->delete();
+            Dungeon::query()->whereKey($targetDungeon->id)->update(['active' => $originalActive]);
+        }
+    }
+
+    private function getDungeonWithMappingVersion(bool $raid): Dungeon
+    {
+        /** @var Dungeon|null $dungeon */
+        $dungeon = Dungeon::query()
+            ->where('raid', $raid)
+            ->whereHas('mappingVersions')
+            ->whereHas('floors')
+            ->first();
+
+        if ($dungeon === null) {
+            $this->fail(sprintf('No %s with a mapping version found for testing.', $raid ? 'raid' : 'dungeon'));
+        }
+
+        return $dungeon;
     }
 
     private function getMappingVersionThatWillBeCloned(): MappingVersion

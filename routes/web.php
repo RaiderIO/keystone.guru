@@ -762,9 +762,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::put('/floorunion/{floorUnion}', new AjaxFloorUnionController()->store(...));
                     Route::delete('/floorunion/{floorUnion}', new AjaxFloorUnionController()->delete(...));
 
-                    Route::post('/floorunionarea', new AjaxFloorUnionAreaController()->store(...));
-                    Route::put('/floorunionarea/{floorUnionArea}', new AjaxFloorUnionAreaController()->store(...));
-                    Route::delete('/floorunionarea/{floorUnionArea}', new AjaxFloorUnionAreaController()->delete(...));
+                    Route::post('/floorunionarea', new AjaxFloorUnionAreaController()->store(...))->name('ajax.admin.floorunionarea.create');
+                    Route::put('/floorunionarea/{floorUnionArea}', new AjaxFloorUnionAreaController()->store(...))->name('ajax.admin.floorunionarea.update');
+                    Route::delete('/floorunionarea/{floorUnionArea}', new AjaxFloorUnionAreaController()->delete(...))->name('ajax.admin.floorunionarea.delete');
                 });
 
                 Route::prefix('combatlogroute')->group(static function () {

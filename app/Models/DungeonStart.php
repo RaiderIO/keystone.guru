@@ -26,6 +26,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float       $lng
  * @property string|null $comment
  *
+ * @property bool     $raid                True if this start leads into a raid: its target dungeon when it has one, otherwise its own dungeon.
+ * @property int|null $min_suggested_level The lowest suggested level of the dungeon this start leads into.
+ * @property int|null $max_suggested_level The highest suggested level of the dungeon this start leads into.
+ *
  * @property MappingVersion $mappingVersion
  * @property Floor          $floor
  * @property Dungeon|null   $targetDungeon
@@ -39,6 +43,15 @@ class DungeonStart extends Model implements HasLatLngInterface, MappingModelClon
     /** @use HasFactory<DungeonStartFactory> */
     use HasFactory;
     use SeederModel;
+
+    /**
+     * Attributes describing the dungeon this start leads into, appended wherever a start is sent to the map.
+     */
+    public const array DESTINATION_ATTRIBUTES = [
+        'raid',
+        'min_suggested_level',
+        'max_suggested_level',
+    ];
 
     protected $hidden = [
         'mappingVersion',
@@ -97,6 +110,29 @@ class DungeonStart extends Model implements HasLatLngInterface, MappingModelClon
     public function targetDungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class, 'target_dungeon_id');
+    }
+
+    public function getRaidAttribute(): bool
+    {
+        return $this->getDestinationDungeon()->raid;
+    }
+
+    public function getMinSuggestedLevelAttribute(): ?int
+    {
+        return $this->getDestinationDungeon()->min_suggested_level;
+    }
+
+    public function getMaxSuggestedLevelAttribute(): ?int
+    {
+        return $this->getDestinationDungeon()->max_suggested_level;
+    }
+
+    /**
+     * The dungeon this start leads into: its target dungeon when it has one, otherwise its own dungeon.
+     */
+    public function getDestinationDungeon(): Dungeon
+    {
+        return $this->targetDungeon ?? $this->floor->dungeon;
     }
 
     public function getDungeonId(): ?int

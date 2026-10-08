@@ -33,12 +33,7 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
         MappingVersion              $mappingVersion,
         ?FloorUnionArea             $floorUnionArea = null,
     ): FloorUnionArea|Model {
-        $validated = $request->validated();
-
-        $validated['vertices_json'] = json_encode($request->get('vertices'));
-        unset($validated['vertices']);
-
-        return $this->storeModel($coordinatesService, $mappingVersion, $validated, FloorUnionArea::class, $floorUnionArea);
+        return $this->storeModel($coordinatesService, $mappingVersion, $request->validated(), FloorUnionArea::class, $floorUnionArea);
     }
 
     /**
