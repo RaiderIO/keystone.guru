@@ -164,8 +164,17 @@ describe('DungeonStart', () => {
 
         // Assert
         expect(attributes.map((attribute) => attribute.name)).toEqual(
-            ['mapping_version_id', 'floor_id', 'target_dungeon_id', 'comment', 'raid', 'lat', 'lng'],
+            [
+                'mapping_version_id', 'floor_id', 'target_dungeon_id', 'comment', 'raid',
+                'min_suggested_level', 'max_suggested_level', 'lat', 'lng',
+            ],
         );
+        for (const name of ['min_suggested_level', 'max_suggested_level']) {
+            const levelAttribute = attributes.find((attribute) => attribute.name === name);
+            expect(levelAttribute.options.edit).toBe(false);
+            expect(levelAttribute.options.save).toBe(false);
+            expect(levelAttribute.options.default).toBeNull();
+        }
         const raidAttribute = attributes.find((attribute) => attribute.name === 'raid');
         expect(raidAttribute.options.edit).toBe(false);
         expect(raidAttribute.options.save).toBe(false);
@@ -290,6 +299,77 @@ describe('DungeonStart', () => {
 
         // Assert
         expect(dungeonStart.layer.tooltip).toBe('translated(js.dungeonstart_tooltip)');
+    });
+
+    it('bindTooltip_givenNavigationToADungeonWithSuggestedLevels_addsTheLevelRangeOnANewLine', () => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(exploreContext({
+            5: {backLink: false, dungeonName: 'dungeons.classic.the_hall_of_thanes', url: 'https://keystone.guru/start/5'},
+        }));
+        dungeonStart.id = 5;
+        dungeonStart.min_suggested_level = 13;
+        dungeonStart.max_suggested_level = 18;
+
+        // Act
+        dungeonStart.bindTooltip();
+
+        // Assert
+        expect(dungeonStart.layer.tooltip).toBe(
+            'translated(js.dungeonstart_go_to_label, {"dungeon":"translated(dungeons.classic.the_hall_of_thanes)"})\n' +
+            'translated(js.dungeonstart_suggested_level_range, {"min":13,"max":18})',
+        );
+    });
+
+    it('bindTooltip_givenNoNavigationAndSuggestedLevels_addsTheLevelRangeToTheDefaultTooltip', () => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(new MapContextMappingVersionEdit());
+        dungeonStart.min_suggested_level = 13;
+        dungeonStart.max_suggested_level = 18;
+
+        // Act
+        dungeonStart.bindTooltip();
+
+        // Assert
+        expect(dungeonStart.layer.tooltip).toBe(
+            'translated(js.dungeonstart_tooltip)\ntranslated(js.dungeonstart_suggested_level_range, {"min":13,"max":18})',
+        );
+    });
+
+    it('bindTooltip_givenBackLinkWithSuggestedLevels_leavesTheLevelRangeOut', () => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(exploreContext({
+            5: {backLink: true, dungeonName: 'dungeons.classic.eastern_kingdoms', url: 'https://keystone.guru/start/5'},
+        }));
+        dungeonStart.id = 5;
+        dungeonStart.min_suggested_level = 13;
+        dungeonStart.max_suggested_level = 18;
+
+        // Act
+        dungeonStart.bindTooltip();
+
+        // Assert
+        expect(dungeonStart.layer.tooltip).toBe(
+            'translated(js.dungeonstart_back_to_label, {"dungeon":"translated(dungeons.classic.eastern_kingdoms)"})',
+        );
+    });
+
+    it.each([
+        [13, 18, 'translated(js.dungeonstart_suggested_level_range, {"min":13,"max":18})'],
+        [60, 60, 'translated(js.dungeonstart_suggested_level, {"level":60})'],
+        [13, null, 'translated(js.dungeonstart_suggested_level_min, {"min":13})'],
+        [null, 18, 'translated(js.dungeonstart_suggested_level_max, {"max":18})'],
+        [null, null, null],
+    ])('getSuggestedLevelText_givenMin%sAndMax%s_returnsTheMatchingText', (min, max, expected) => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(new MapContextMappingVersionEdit());
+        dungeonStart.min_suggested_level = min;
+        dungeonStart.max_suggested_level = max;
+
+        // Act
+        const text = dungeonStart.getSuggestedLevelText();
+
+        // Assert
+        expect(text).toBe(expected);
     });
 
     describe('click', () => {

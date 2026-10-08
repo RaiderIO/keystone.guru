@@ -54,6 +54,8 @@ return [
             'abbreviation'          => 'Abbreviation',
             'key'                   => 'Key',
             'slug'                  => 'Slug',
+            'min_suggested_level'   => 'Min suggested level',
+            'max_suggested_level'   => 'Max suggested level',
             'submit'                => 'Submit',
             'floor_management'      => [
                 'title'        => 'Floor management',

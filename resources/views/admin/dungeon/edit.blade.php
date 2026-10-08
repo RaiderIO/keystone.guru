@@ -151,6 +151,19 @@ use Illuminate\Support\Collection;
             @include('common.forms.form-error', ['key' => 'slug'])
         </div>
 
+        <div class="row">
+            <div class="col mb-3{{ $errors->has('min_suggested_level') ? ' has-error' : '' }}">
+                {{ html()->label(__('view_admin.dungeon.edit.min_suggested_level'), 'min_suggested_level') }}
+                {{ html()->number('min_suggested_level')->class('form-control') }}
+                @include('common.forms.form-error', ['key' => 'min_suggested_level'])
+            </div>
+            <div class="col mb-3{{ $errors->has('max_suggested_level') ? ' has-error' : '' }}">
+                {{ html()->label(__('view_admin.dungeon.edit.max_suggested_level'), 'max_suggested_level') }}
+                {{ html()->number('max_suggested_level')->class('form-control') }}
+                @include('common.forms.form-error', ['key' => 'max_suggested_level'])
+            </div>
+        </div>
+
         {{ html()->input('submit')->value(__('view_admin.dungeon.edit.submit'))->class('btn btn-info') }}
 
         {{ html()->closeModelForm() }}

@@ -18,7 +18,7 @@ class DungeonStartChangedEvent extends ModelChangedEvent
     public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [
-            'model' => $this->model->append('raid'),
+            'model' => $this->model->append(DungeonStart::DESTINATION_ATTRIBUTES),
         ]);
     }
 

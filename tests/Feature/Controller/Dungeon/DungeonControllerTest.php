@@ -25,11 +25,12 @@ final class DungeonControllerTest extends PublicTestCase
 
     /**
      * @param  list<int>              $difficulties
+     * @param  array<string, mixed>   $attributes
      * @return TestResponse<Response>
      */
-    private function updateDungeon(Dungeon $dungeon, array $difficulties): TestResponse
+    private function updateDungeon(Dungeon $dungeon, array $difficulties, array $attributes = []): TestResponse
     {
-        return $this->patch(route('admin.dungeon.update', $dungeon), [
+        return $this->patch(route('admin.dungeon.update', $dungeon), [...[
             'name'                  => __($dungeon->name, [], 'en_US'),
             'abbreviation'          => $dungeon->abbreviation,
             'key'                   => $dungeon->key,
@@ -39,7 +40,7 @@ final class DungeonControllerTest extends PublicTestCase
             'mdt_id'                => $dungeon->mdt_id,
             'speedrun_enabled'      => 1,
             'speedrun_difficulties' => $difficulties,
-        ]);
+        ], ...$attributes]);
     }
 
     #[Test]
@@ -112,6 +113,108 @@ final class DungeonControllerTest extends PublicTestCase
 
             // Assert
             $response->assertSessionHasErrors('speedrun_difficulties.0');
+        } finally {
+            $this->restoreDungeon($dungeon, $originalAttributes, $originalDifficulties);
+        }
+    }
+
+    #[Test]
+    public function update_givenSuggestedLevels_savesThem(): void
+    {
+        // Arrange
+        $dungeon              = Dungeon::firstOrFail();
+        $originalAttributes   = $dungeon->getAttributes();
+        $originalDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
+
+        try {
+            // Act
+            $response = $this->updateDungeon($dungeon, [], [
+                'min_suggested_level' => 13,
+                'max_suggested_level' => 18,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertSessionHasNoErrors();
+            $fresh = $dungeon->fresh();
+            $this->assertSame(13, $fresh->min_suggested_level);
+            $this->assertSame(18, $fresh->max_suggested_level);
+        } finally {
+            $this->restoreDungeon($dungeon, $originalAttributes, $originalDifficulties);
+        }
+    }
+
+    #[Test]
+    public function update_givenOnlyMaxSuggestedLevel_savesIt(): void
+    {
+        // Arrange
+        $dungeon              = Dungeon::firstOrFail();
+        $originalAttributes   = $dungeon->getAttributes();
+        $originalDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
+
+        try {
+            // Act
+            $response = $this->updateDungeon($dungeon, [], [
+                'min_suggested_level' => '',
+                'max_suggested_level' => 60,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertSessionHasNoErrors();
+            $fresh = $dungeon->fresh();
+            $this->assertNull($fresh->min_suggested_level);
+            $this->assertSame(60, $fresh->max_suggested_level);
+        } finally {
+            $this->restoreDungeon($dungeon, $originalAttributes, $originalDifficulties);
+        }
+    }
+
+    #[Test]
+    public function update_givenEmptySuggestedLevels_clearsThem(): void
+    {
+        // Arrange
+        $dungeon              = Dungeon::firstOrFail();
+        $originalAttributes   = $dungeon->getAttributes();
+        $originalDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
+        Dungeon::query()->whereKey($dungeon->id)->update(['min_suggested_level' => 13, 'max_suggested_level' => 18]);
+
+        try {
+            // Act
+            $response = $this->updateDungeon($dungeon, [], [
+                'min_suggested_level' => '',
+                'max_suggested_level' => '',
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $fresh = $dungeon->fresh();
+            $this->assertNull($fresh->min_suggested_level);
+            $this->assertNull($fresh->max_suggested_level);
+        } finally {
+            $this->restoreDungeon($dungeon, $originalAttributes, $originalDifficulties);
+        }
+    }
+
+    #[Test]
+    public function update_givenMaxSuggestedLevelBelowMin_redirectsWithValidationError(): void
+    {
+        // Arrange
+        $dungeon              = Dungeon::firstOrFail();
+        $originalAttributes   = $dungeon->getAttributes();
+        $originalDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
+
+        try {
+            // Act
+            $response = $this->updateDungeon($dungeon, [], [
+                'min_suggested_level' => 18,
+                'max_suggested_level' => 13,
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('max_suggested_level');
+            $response->assertSessionDoesntHaveErrors('min_suggested_level');
+            $this->assertSame($originalAttributes['max_suggested_level'], $dungeon->fresh()->max_suggested_level);
         } finally {
             $this->restoreDungeon($dungeon, $originalAttributes, $originalDifficulties);
         }

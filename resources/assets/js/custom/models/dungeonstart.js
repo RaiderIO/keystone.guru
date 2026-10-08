@@ -32,6 +32,8 @@ L.Draw.DungeonStart = L.Draw.Marker.extend({
  * @property {Number|null} target_dungeon_id
  * @property {String|null} comment
  * @property {Boolean} raid
+ * @property {Number|null} min_suggested_level
+ * @property {Number|null} max_suggested_level
  * @property {Number} lat
  * @property {Number} lng
  */
@@ -81,6 +83,20 @@ class DungeonStart extends VersionableMapObject {
                 edit: false,
                 save: false,
                 default: false,
+            }),
+            new Attribute({
+                name: 'min_suggested_level',
+                type: 'int',
+                edit: false,
+                save: false,
+                default: null,
+            }),
+            new Attribute({
+                name: 'max_suggested_level',
+                type: 'int',
+                edit: false,
+                save: false,
+                default: null,
             }),
             new Attribute({
                 name: 'lat',
@@ -165,6 +181,35 @@ class DungeonStart extends VersionableMapObject {
     }
 
     /**
+     * The suggested level range of the dungeon this start leads into, or null when it has none or leads back out.
+     *
+     * @returns {String|null}
+     */
+    getSuggestedLevelText() {
+        console.assert(this instanceof DungeonStart, 'this was not a DungeonStart', this);
+
+        let navigation = this.getNavigation();
+        if (navigation !== null && navigation.backLink) {
+            return null;
+        }
+
+        let min = this.min_suggested_level ?? null;
+        let max = this.max_suggested_level ?? null;
+
+        if (min !== null && max !== null) {
+            return min === max ?
+                lang.get('js.dungeonstart_suggested_level', {level: min}) :
+                lang.get('js.dungeonstart_suggested_level_range', {min: min, max: max});
+        } else if (min !== null) {
+            return lang.get('js.dungeonstart_suggested_level_min', {min: min});
+        } else if (max !== null) {
+            return lang.get('js.dungeonstart_suggested_level_max', {max: max});
+        }
+
+        return null;
+    }
+
+    /**
      * Where clicking this start leads, or null when it leads nowhere.
      *
      * @returns {{backLink: Boolean, dungeonName: String, url: String}|null}
@@ -204,7 +249,12 @@ class DungeonStart extends VersionableMapObject {
 
         this.unbindTooltip();
 
-        this.layer.bindTooltip(c.map.sanitizeText(this.getDisplayText()), {direction: 'top'});
+        let suggestedLevelText = this.getSuggestedLevelText();
+        let tooltipText = suggestedLevelText === null ?
+            this.getDisplayText() :
+            `${this.getDisplayText()}\n${suggestedLevelText}`;
+
+        this.layer.bindTooltip(c.map.sanitizeText(tooltipText), {direction: 'top'});
     }
 
     /**

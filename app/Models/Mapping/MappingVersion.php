@@ -484,7 +484,7 @@ class MappingVersion extends Model
         $dungeonStarts = $this->dungeonStarts()
             ->with(['floor.dungeon', 'targetDungeon'])
             ->get()
-            ->append('raid');
+            ->append(DungeonStart::DESTINATION_ATTRIBUTES);
 
         if ($this->facade_enabled && $useFacade) {
             foreach ($dungeonStarts as $dungeonStart) {

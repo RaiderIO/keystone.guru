@@ -9,28 +9,37 @@ enum DungeonKey: string
 {
     // @formatter:off
     // Classic
+    case ALCAZ_PRISON                = 'alcaz_prison';
     case BLACKFATHOM_DEEPS           = 'blackfathom_deeps';           //blackfanthomdeeps
+    case BLACKMAW_HOLD               = 'blackmaw_hold';
     case BLACKROCK_DEPTHS            = 'blackrock_depths';            //blackrockdepths
+    case CITY_OF_DALARAN             = 'city_of_dalaran';
     case DEADMINES                   = 'deadmines';                   //thedeadmines
     case DIRE_MAUL_WEST              = 'dire_maul_west';              //diremaul
     case DIRE_MAUL_NORTH             = 'dire_maul_north';             //diremaul
     case DIRE_MAUL_EAST              = 'dire_maul_east';              //diremaul
     case EASTERN_KINGDOMS            = 'eastern_kingdoms';
+    case EXCAVATION_SITE_WETLANDS    = 'excavation_site_wetlands';
     case GNOMEREGAN                  = 'gnomeregan';                  //gnomeregan
     case KALIMDOR                    = 'kalimdor';
     case KARAZHAN_CRYPTS             = 'karazhan_crypts';
+    case KROLDOK_STRONGHOLD          = 'kroldok_stronghold';
     case LOWER_BLACKROCK_SPIRE       = 'lower_blackrock_spire';       //blackrockspire
     case MARAUDON                    = 'maraudon';
     case RAGEFIRE_CHASM              = 'ragefire_chasm';              //ragefire
     case RAZORFEN_DOWNS              = 'razorfen_downs';              //razorfendowns
     case RAZORFEN_KRAUL              = 'razorfen_kraul';              //razorfenkraul
+    case RUINS_OF_LORDAERON          = 'ruins_of_lordaeron';
     case SCARLET_MONASTERY_ARMORY    = 'scarlet_monastery_armory';    //scarletmonastery
     case SCARLET_MONASTERY_CATHEDRAL = 'scarlet_monastery_cathedral'; //scarletmonastery
     case SCARLET_MONASTERY_GRAVEYARD = 'scarlet_monastery_graveyard'; //scarletmonastery
     case SCARLET_MONASTERY_LIBRARY   = 'scarlet_monastery_library';   //scarletmonastery
     case SCHOLOMANCE                 = 'scholomance';                 //scholomanceold
     case SHADOWFANG_KEEP             = 'shadowfang_keep';             //shadowfangkeep
+    case SHAPERS_TERRACE             = 'shapers_terrace';
     case STRATHOLME                  = 'stratholme';
+    case THE_DROWNED_CITY            = 'the_drowned_city';
+    case THE_HALL_OF_THANES          = 'the_hall_of_thanes';
     case THE_STOCKADE                = 'the_stockade';                //thestockade
     case THE_TEMPLE_OF_ATAL_HAKKAR   = 'the_temple_of_atal_hakkar';   //thetempleofatalhakkar
     case ULDAMAN                     = 'uldaman';
@@ -194,28 +203,37 @@ enum DungeonKey: string
     public function expansionKey(): string
     {
         return match ($this) {
+            self::ALCAZ_PRISON,
             self::BLACKFATHOM_DEEPS,
+            self::BLACKMAW_HOLD,
             self::BLACKROCK_DEPTHS,
+            self::CITY_OF_DALARAN,
             self::DEADMINES,
             self::DIRE_MAUL_WEST,
             self::DIRE_MAUL_NORTH,
             self::DIRE_MAUL_EAST,
             self::EASTERN_KINGDOMS,
+            self::EXCAVATION_SITE_WETLANDS,
             self::GNOMEREGAN,
             self::KALIMDOR,
             self::KARAZHAN_CRYPTS,
+            self::KROLDOK_STRONGHOLD,
             self::LOWER_BLACKROCK_SPIRE,
             self::MARAUDON,
             self::RAGEFIRE_CHASM,
             self::RAZORFEN_DOWNS,
             self::RAZORFEN_KRAUL,
+            self::RUINS_OF_LORDAERON,
             self::SCARLET_MONASTERY_ARMORY,
             self::SCARLET_MONASTERY_CATHEDRAL,
             self::SCARLET_MONASTERY_GRAVEYARD,
             self::SCARLET_MONASTERY_LIBRARY,
             self::SCHOLOMANCE,
             self::SHADOWFANG_KEEP,
+            self::SHAPERS_TERRACE,
             self::STRATHOLME,
+            self::THE_DROWNED_CITY,
+            self::THE_HALL_OF_THANES,
             self::THE_STOCKADE,
             self::THE_TEMPLE_OF_ATAL_HAKKAR,
             self::ULDAMAN,

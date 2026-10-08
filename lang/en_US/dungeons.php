@@ -8,6 +8,13 @@ return [
         4 => '40-man',
     ],
     'classic' => [
+        'alcaz_prison' => [
+            'name'         => 'Alcaz Prison',
+            'abbreviation' => 'ALC',
+            'floors'       => [
+                'alcaz_prison' => 'Alcaz Prison',
+            ],
+        ],
         'blackfathom_deeps' => [
             'name'         => 'Blackfathom Deeps',
             'abbreviation' => 'BFD',
@@ -15,6 +22,13 @@ return [
                 'the_pool_of_ask_ar' => 'The Pool of Ask\'Ar',
                 'moonshrine_sanctum' => 'Moonshrine Sanctum',
                 'the_forgotten_pool' => 'The Forgotten Pool',
+            ],
+        ],
+        'blackmaw_hold' => [
+            'name'         => 'Blackmaw Hold',
+            'abbreviation' => 'BMH',
+            'floors'       => [
+                'blackmaw_hold' => 'Blackmaw Hold',
             ],
         ],
         'blackrock_depths' => [
@@ -33,6 +47,13 @@ return [
                 'halls_of_strife'      => 'Halls of Strife',
                 'crimson_laboratories' => 'Crimson Laboratories',
                 'nefarians_lair'       => 'Nefarian\'s Lair',
+            ],
+        ],
+        'city_of_dalaran' => [
+            'name'         => 'City of Dalaran',
+            'abbreviation' => 'DAL',
+            'floors'       => [
+                'city_of_dalaran' => 'City of Dalaran',
             ],
         ],
         'deadmines' => [
@@ -100,6 +121,13 @@ return [
                 'eastern_kingdoms'    => 'Eastern Kingdoms',
             ],
         ],
+        'excavation_site_wetlands' => [
+            'name'         => 'Excavation Site: Wetlands',
+            'abbreviation' => 'EXW',
+            'floors'       => [
+                'excavation_site_wetlands' => 'Excavation Site: Wetlands',
+            ],
+        ],
         'gnomeregan' => [
             'name'         => 'Gnomeregan',
             'abbreviation' => 'GNO',
@@ -158,6 +186,13 @@ return [
                 'the_slough_of_dispair'   => 'The Slough of Dispair',
                 'tome_of_the_unrepentant' => 'Tome of the Unrepentant',
                 'the_pit_of_criminals'    => 'The Pit of Criminals',
+            ],
+        ],
+        'kroldok_stronghold' => [
+            'name'         => 'Krol\'dok Stronghold',
+            'abbreviation' => 'KDS',
+            'floors'       => [
+                'kroldok_stronghold' => 'Krol\'dok Stronghold',
             ],
         ],
         'lower_blackrock_spire' => [
@@ -234,6 +269,13 @@ return [
                 'ruins_of_ahnqiraj' => 'Ruins of Ahn\'Qiraj',
             ],
         ],
+        'ruins_of_lordaeron' => [
+            'name'         => 'Ruins of Lordaeron',
+            'abbreviation' => 'ROL',
+            'floors'       => [
+                'ruins_of_lordaeron' => 'Ruins of Lordaeron',
+            ],
+        ],
         'scarlet_enclave' => [
             'name'         => 'Scarlet Enclave',
             'abbreviation' => 'SE',
@@ -296,6 +338,13 @@ return [
                 'the_wall_walk'         => 'The Wall Walk',
             ],
         ],
+        'shapers_terrace' => [
+            'name'         => 'Shaper\'s Terrace',
+            'abbreviation' => 'SHT',
+            'floors'       => [
+                'shapers_terrace' => 'Shaper\'s Terrace',
+            ],
+        ],
         'stratholme' => [
             'name'         => 'Stratholme',
             'abbreviation' => 'STRAT',
@@ -311,6 +360,20 @@ return [
                 'the_hive_undergrounds' => 'The Hive Undergrounds',
                 'the_temple_gates'      => 'The Temple Gates',
                 'vault_of_cthun'        => 'Vault of C\'Thun',
+            ],
+        ],
+        'the_drowned_city' => [
+            'name'         => 'The Drowned City',
+            'abbreviation' => 'TDC',
+            'floors'       => [
+                'the_drowned_city' => 'The Drowned City',
+            ],
+        ],
+        'the_hall_of_thanes' => [
+            'name'         => 'The Hall of Thanes',
+            'abbreviation' => 'HOT',
+            'floors'       => [
+                'the_hall_of_thanes' => 'The Hall of Thanes',
             ],
         ],
         'the_stockade' => [
