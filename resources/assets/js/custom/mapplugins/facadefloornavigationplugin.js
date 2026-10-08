@@ -79,7 +79,7 @@ class FacadeFloorNavigationPlugin extends MapPlugin {
             (mapContext.getFloorUnionAreas() ?? []).filter(floorUnionArea => floorUnionArea.floor_union_id === floorUnion.id);
 
         return floorUnionAreas
-            .map(floorUnionArea => floorUnionArea._cachedVertices ??= JSON.parse(floorUnionArea.vertices_json))
+            .map(floorUnionArea => floorUnionArea._cachedVertices ??= CoordinatesService.parseVerticesJson(floorUnionArea.vertices_json))
             .filter(vertices => vertices.length >= 3);
     }
 

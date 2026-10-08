@@ -454,7 +454,7 @@ class CoordinatesService {
         // which is decoded once because this runs for every mouse move
         let vertices = typeof floorUnionArea.getVertices === 'function'
             ? floorUnionArea.getVertices()
-            : (floorUnionArea._cachedVertices ??= JSON.parse(floorUnionArea.vertices_json));
+            : (floorUnionArea._cachedVertices ??= CoordinatesService.parseVerticesJson(floorUnionArea.vertices_json));
 
         // An area that is still being drawn has no polygon yet
         if (vertices.length < 3) {
@@ -508,6 +508,18 @@ class CoordinatesService {
 
         return typeof floor === 'object' && floor !== null ? floor : null;
     }
+
+    /**
+     * Decodes a vertices_json payload into numeric vertices. Rows saved through the mapping editor may carry
+     * their coordinates as strings, which the < and > comparisons of the hit test would then compare as text.
+     *
+     * @param verticesJson {String}
+     * @returns {Array<{lat: Number, lng: Number}>}
+     */
+    static parseVerticesJson(verticesJson) {
+        return JSON.parse(verticesJson).map(vertex => ({lat: Number(vertex.lat), lng: Number(vertex.lng)}));
+    }
+
 }
 
 if (typeof module !== 'undefined' && module.exports) {

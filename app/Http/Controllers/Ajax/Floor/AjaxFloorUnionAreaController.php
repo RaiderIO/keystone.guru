@@ -35,7 +35,12 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
     ): FloorUnionArea|Model {
         $validated = $request->validated();
 
-        $validated['vertices_json'] = json_encode($request->get('vertices'));
+        // The vertices arrive form-encoded, so every coordinate is a string; the front-end hit test
+        // compares them with < and >, and a string "-142.88" sorts nothing like the number does
+        $validated['vertices_json'] = json_encode(array_map(static fn(array $vertex) => [
+            'lat' => (float)$vertex['lat'],
+            'lng' => (float)$vertex['lng'],
+        ], $validated['vertices']));
         unset($validated['vertices']);
 
         return $this->storeModel($coordinatesService, $mappingVersion, $validated, FloorUnionArea::class, $floorUnionArea);

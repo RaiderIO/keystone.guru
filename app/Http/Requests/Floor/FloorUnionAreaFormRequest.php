@@ -35,7 +35,9 @@ class FloorUnionAreaFormRequest extends FormRequest
                 'nullable',
                 Rule::exists(FloorUnion::class, 'id'),
             ],
-            'vertices' => 'required:array',
+            'vertices'       => ['required', 'array'],
+            'vertices.*.lat' => ['required', 'numeric'],
+            'vertices.*.lng' => ['required', 'numeric'],
         ];
     }
 }
