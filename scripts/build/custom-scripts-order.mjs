@@ -45,6 +45,7 @@ export const customScripts = [
     'resources/assets/js/custom/mapobjectgroups/arrowmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/dungeonstartmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/dungeontransportmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemypatrolmapobjectgroup.js',
@@ -153,6 +154,7 @@ export const customScripts = [
     'resources/assets/js/custom/models/mapiconawakenedobelisk.js',
     'resources/assets/js/custom/models/dungeonfloorswitchmarker.js',
     'resources/assets/js/custom/models/dungeonstart.js',
+    'resources/assets/js/custom/models/dungeontransport.js',
     'resources/assets/js/custom/models/brushline.js',
     'resources/assets/js/custom/models/arrow.js',
     'resources/assets/js/custom/models/usermouseposition.js',
@@ -223,6 +225,7 @@ export const customScripts = [
     'resources/assets/js/custom/admin/adminpanelcontrols.js',
     'resources/assets/js/custom/admin/admindungeonfloorswitchmarker.js',
     'resources/assets/js/custom/admin/admindungeonstart.js',
+    'resources/assets/js/custom/admin/admindungeontransport.js',
     'resources/assets/js/custom/admin/adminmapicon.js',
     'resources/assets/js/custom/admin/adminmountablearea.js',
     // Depends on models/enemyforcescheckpoint.js (base class)

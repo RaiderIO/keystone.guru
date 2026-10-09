@@ -29,9 +29,9 @@ final class DungeonTransportMappingVersionTest extends PublicTestCase
     public function create_givenMappingVersionWithLinkedTransports_clonesThemLinkedToEachOthersClones(): void
     {
         // Arrange
-        $existingMappingVersion = $this->getMappingVersionThatWillBeCloned();
+        $existingMappingVersion             = $this->getMappingVersionThatWillBeCloned();
         [$transportA, $transportB, $oneWay] = $this->createLinkedTransports($existingMappingVersion);
-        $newMappingVersion = null;
+        $newMappingVersion                  = null;
 
         try {
             // Act
@@ -60,10 +60,10 @@ final class DungeonTransportMappingVersionTest extends PublicTestCase
     public function copyMappingVersionContentsToDungeon_givenLinkedTransports_copiesThemLinkedToEachOthersCopies(): void
     {
         // Arrange
-        $mappingService       = $this->app->make(MappingServiceInterface::class);
-        $sourceMappingVersion = $this->getMappingVersionThatWillBeCloned();
+        $mappingService                     = $this->app->make(MappingServiceInterface::class);
+        $sourceMappingVersion               = $this->getMappingVersionThatWillBeCloned();
         [$transportA, $transportB, $oneWay] = $this->createLinkedTransports($sourceMappingVersion);
-        $targetMappingVersion = null;
+        $targetMappingVersion               = null;
 
         try {
             // Act
@@ -91,9 +91,9 @@ final class DungeonTransportMappingVersionTest extends PublicTestCase
     public function delete_givenMappingVersionWithTransports_deletesItsTransports(): void
     {
         // Arrange
-        $existingMappingVersion = $this->getMappingVersionThatWillBeCloned();
+        $existingMappingVersion             = $this->getMappingVersionThatWillBeCloned();
         [$transportA, $transportB, $oneWay] = $this->createLinkedTransports($existingMappingVersion);
-        $newMappingVersion = $this->createNextMappingVersion($existingMappingVersion);
+        $newMappingVersion                  = $this->createNextMappingVersion($existingMappingVersion);
 
         try {
             $this->assertTrue($newMappingVersion->dungeonTransports()->exists(), 'Precondition: the new MappingVersion has cloned transports.');

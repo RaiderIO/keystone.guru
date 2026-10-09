@@ -27,6 +27,7 @@ const MAP_OBJECT_GROUP_PATH = 'path';
 const MAP_OBJECT_GROUP_ARROW = 'arrow';
 const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 const MAP_OBJECT_GROUP_DUNGEON_START = 'dungeonstart';
+const MAP_OBJECT_GROUP_DUNGEON_TRANSPORT = 'dungeontransport';
 
 const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_USER_MOUSE_POSITION,
@@ -40,6 +41,7 @@ const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_PATH,
     MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER,
     MAP_OBJECT_GROUP_DUNGEON_START,
+    MAP_OBJECT_GROUP_DUNGEON_TRANSPORT,
     MAP_OBJECT_GROUP_BRUSHLINE,
     MAP_OBJECT_GROUP_ARROW,
     MAP_OBJECT_GROUP_MAPICON,
@@ -559,6 +561,17 @@ let c = {
                 opacity: 1
             }
         },
+        dungeontransport: {
+            connectionPolylineOptions: {
+                color: '#7f3fbf',
+                opacity: 0.4,
+                weight: 3,
+                dashArray: '6, 6',
+            },
+            connectionPolylineMouseoverOptions: {
+                opacity: 1
+            }
+        },
         path: {
             defaultColor: polylineDefaultColor,
         },
@@ -815,5 +828,6 @@ if (typeof module !== 'undefined' && module.exports) {
         MAP_OBJECT_GROUP_ARROW,
         MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER,
         MAP_OBJECT_GROUP_DUNGEON_START,
+        MAP_OBJECT_GROUP_DUNGEON_TRANSPORT,
     };
 }

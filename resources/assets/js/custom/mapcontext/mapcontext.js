@@ -397,6 +397,14 @@ class MapContext extends Signalable {
     }
 
     /**
+     *
+     * @returns {[]}
+     */
+    getDungeonTransports() {
+        return this._options.dungeon.dungeonTransports;
+    }
+
+    /**
      * Where clicking the dungeon start leads, or null when it leads nowhere (or this context does not navigate).
      *
      * @param dungeonStartId {Number}
