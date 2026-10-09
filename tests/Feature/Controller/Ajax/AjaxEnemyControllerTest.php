@@ -15,7 +15,7 @@ use Tests\Feature\Controller\DungeonRouteTestBase;
 final class AjaxEnemyControllerTest extends DungeonRouteTestBase
 {
     #[Test]
-    public function setRaidMarker_givenRaidMarkerName_persistsNpcIdAndMdtId(): void
+    public function setRaidMarker_givenRaidMarkerKey_persistsNpcIdAndMdtId(): void
     {
         // Arrange
         /** @var Enemy $enemy */
@@ -26,7 +26,7 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
         try {
             // Act
             $response = $this->post(sprintf('/ajax/%s/raidmarker/%s', $this->dungeonRoute->public_key, $enemy->id), [
-                'raid_marker_name' => 'skull',
+                'raid_marker_key' => 'skull',
             ]);
 
             // Assert
@@ -39,13 +39,15 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
             $this->assertEquals($enemy->id, $raidMarker->enemy_id);
             $this->assertEquals($enemy->getMdtNpcId(), $raidMarker->npc_id);
             $this->assertEquals($enemy->mdt_id, $raidMarker->mdt_id);
+            $this->assertSame(RaidMarker::ALL[RaidMarker::RAID_MARKER_SKULL], $raidMarker->raid_marker_id);
+            $response->assertJson(['key' => 'skull']);
         } finally {
             DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
         }
     }
 
     #[Test]
-    public function setRaidMarker_givenEmptyRaidMarkerName_deletesExistingRaidMarker(): void
+    public function setRaidMarker_givenEmptyRaidMarkerKey_deletesExistingRaidMarker(): void
     {
         // Arrange
         /** @var Enemy $enemy */
@@ -64,12 +66,40 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
         try {
             // Act
             $response = $this->post(sprintf('/ajax/%s/raidmarker/%s', $this->dungeonRoute->public_key, $enemy->id), [
-                'raid_marker_name' => '',
+                'raid_marker_key' => '',
             ]);
 
             // Assert
             $response->assertSuccessful();
             $this->assertDatabaseMissing('dungeon_route_enemy_raid_markers', ['dungeon_route_id' => $this->dungeonRoute->id]);
+        } finally {
+            DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function setRaidMarker_givenLegacyRaidMarkerName_persistsRaidMarker(): void
+    {
+        // Arrange
+        /** @var Enemy $enemy */
+        $enemy = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)
+            ->orderBy('id')
+            ->first();
+
+        try {
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/raidmarker/%s', $this->dungeonRoute->public_key, $enemy->id), [
+                'raid_marker_name' => 'moon',
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+            $response->assertJson(['key' => 'moon']);
+            $this->assertDatabaseHas('dungeon_route_enemy_raid_markers', [
+                'dungeon_route_id' => $this->dungeonRoute->id,
+                'enemy_id'         => $enemy->id,
+                'raid_marker_id'   => RaidMarker::ALL[RaidMarker::RAID_MARKER_MOON],
+            ]);
         } finally {
             DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
         }
@@ -91,7 +121,7 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
 
             // Act
             $response = $this->post(sprintf('/ajax/%s/raidmarker/%s', $this->dungeonRoute->public_key, $enemy->id), [
-                'raid_marker_name' => 'skull',
+                'raid_marker_key' => 'skull',
             ]);
 
             // Assert
@@ -104,7 +134,7 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
-    public function setRaidMarker_givenUnknownRaidMarkerName_returnsNotFound(): void
+    public function setRaidMarker_givenUnknownRaidMarkerKey_returnsNotFound(): void
     {
         // Arrange
         /** @var Enemy $enemy */
@@ -115,7 +145,7 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
         try {
             // Act
             $response = $this->post(sprintf('/ajax/%s/raidmarker/%s', $this->dungeonRoute->public_key, $enemy->id), [
-                'raid_marker_name' => 'not_a_raid_marker',
+                'raid_marker_key' => 'not_a_raid_marker',
             ]);
 
             // Assert

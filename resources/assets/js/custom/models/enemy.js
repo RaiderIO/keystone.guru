@@ -38,7 +38,7 @@ L.Draw.Enemy = L.Draw.Marker.extend({
  * @property {Number} enemy_forces_override
  * @property {Number} enemy_forces_override_teeming
  * @property {Number} dungeon_difficulty
- * @property {String} raid_marker_name
+ * @property {String} raid_marker_key
  * @property {Boolean} required
  * @property {Boolean} skippable
  * @property {Number} lat
@@ -346,11 +346,11 @@ class Enemy extends VersionableMapObject {
                 default: 0
             }),
             new Attribute({
-                name: 'raid_marker_name',
+                name: 'raid_marker_key',
                 type: 'string',
                 edit: false,
                 save: false,
-                setter: this.setRaidMarkerName.bind(this),
+                setter: this.setRaidMarkerKey.bind(this),
                 default: ''
             }),
             new Attribute({
@@ -923,14 +923,14 @@ class Enemy extends VersionableMapObject {
     }
 
     /**
-     * Sets the name of the raid marker and changes the icon on the map to that of the raid marker (allowing).
-     * @param name {String}
+     * Sets the key of the raid marker and changes the icon on the map to that of the raid marker (allowing).
+     * @param key {String}
      */
-    setRaidMarkerName(name) {
+    setRaidMarkerKey(key) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        this.raid_marker_name = name;
+        this.raid_marker_key = key;
         // Trigger a raid marker change event
-        this.signal('enemy:set_raid_marker', {name: name});
+        this.signal('enemy:set_raid_marker', {key: key});
     }
 
     /**
@@ -1370,9 +1370,9 @@ class Enemy extends VersionableMapObject {
 
     /**
      * Assigns a raid marker to this enemy.
-     * @param raidMarkerName {String} The name of the marker, or empty to unset it
+     * @param raidMarkerKey {String} The key of the marker, or empty to unset it
      */
-    assignRaidMarker(raidMarkerName) {
+    assignRaidMarker(raidMarkerKey) {
         console.assert(this instanceof Enemy, 'this was not an Enemy', this);
         let self = this;
 
@@ -1381,11 +1381,13 @@ class Enemy extends VersionableMapObject {
             url: `/ajax/${getState().getMapContext().getPublicKey()}/raidmarker/${self.id}`,
             dataType: 'json',
             data: {
-                raid_marker_name: raidMarkerName
+                raid_marker_key: raidMarkerKey,
+                // A backend still on the previous release only reads raid_marker_name
+                raid_marker_name: raidMarkerKey
             },
             success: function () {
                 self.map.leafletMap.closePopup();
-                self.setRaidMarkerName(raidMarkerName);
+                self.setRaidMarkerKey(raidMarkerKey);
             },
         });
     }

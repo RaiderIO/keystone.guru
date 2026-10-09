@@ -6,6 +6,7 @@ use App\Models\DungeonKey;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\RaidMarker;
+use App\Service\MDT\Export\EnemyAssignmentExporter;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -91,6 +92,39 @@ class MDTRaidMarkerTest extends MDTImportStringServiceTestBase
         } finally {
             $importedRoute?->enemyRaidMarkers()->delete();
             $importedRoute?->delete();
+            $dungeonRoute?->enemyRaidMarkers()->delete();
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function export_givenRaidMarkerOnNpcUnknownToMdt_warnsWithTheRaidMarkerKey(): void
+    {
+        $dungeonRoute = null;
+
+        try {
+            // Arrange
+            $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
+            DungeonRouteEnemyRaidMarker::create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'raid_marker_id'   => RaidMarker::ALL[RaidMarker::RAID_MARKER_MOON],
+                'npc_id'           => 987654321,
+                'mdt_id'           => 1,
+                'enemy_id'         => null,
+            ]);
+            $warnings = collect();
+
+            // Act
+            $result = app(EnemyAssignmentExporter::class)->export($dungeonRoute->fresh(), $dungeonRoute->mappingVersion, $warnings);
+
+            // Assert
+            $this->assertSame([], $result);
+            $this->assertCount(1, $warnings);
+            $this->assertSame(
+                sprintf(__('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_raid_marker'), RaidMarker::RAID_MARKER_MOON, 987654321),
+                $warnings->first()->getMessage(),
+            );
+        } finally {
             $dungeonRoute?->enemyRaidMarkers()->delete();
             $dungeonRoute?->delete();
         }

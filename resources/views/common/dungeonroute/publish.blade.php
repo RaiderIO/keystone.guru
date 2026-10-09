@@ -9,7 +9,7 @@ use App\Models\PublishedState;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
-$publishStates          = $allPublishedStates->pluck('name');
+$publishStates          = $allPublishedStates->pluck('key');
 /** @var User|null $user */
 $user                   = Auth::user();
 $publishStatesAvailable = PublishedState::getAvailablePublishedStates($dungeonroute, $user);
@@ -25,7 +25,7 @@ $publishStatesAvailable = PublishedState::getAvailablePublishedStates($dungeonro
     'name' => 'map_route_publish',
     'publishedStates' => $publishStates->all(),
     'availablePublishedStates' => $publishStatesAvailable->all(),
-    'selected' => $dungeonroute->publishedstate->name,
+    'selected' => $dungeonroute->publishedstate->key,
     'subtexts' => $publishStates->mapWithKeys(static fn(string $publishState): array => [
         $publishState => __(sprintf('js.publish_state_subtext_%s', $publishState)),
     ])->all(),

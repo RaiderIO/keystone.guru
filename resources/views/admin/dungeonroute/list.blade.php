@@ -131,15 +131,15 @@ use Illuminate\Support\Collection;
                 <td>{{ __($dungeonRoute->dungeon->name) }}</td>
                 <td>
                     @php
-                        $publishedStateName = $dungeonRoute->publishedState?->name;
-                        $publishedStateIcon = match($publishedStateName) {
+                        $publishedStateKey = $dungeonRoute->publishedState?->key;
+                        $publishedStateIcon = match($publishedStateKey) {
                             'unpublished'    => 'fa-plane-arrival',
                             'team'           => 'fa-users',
                             'world_with_link' => 'fa-link',
                             'world'          => 'fa-globe',
                             default          => null,
                         };
-                        $publishedStateTitle = match($publishedStateName) {
+                        $publishedStateTitle = match($publishedStateKey) {
                             'unpublished'    => __('js.publish_state_title_unpublished'),
                             'team'           => __('js.publish_state_title_team'),
                             'world_with_link' => __('js.publish_state_title_world_with_link'),

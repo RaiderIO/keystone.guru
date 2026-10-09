@@ -341,6 +341,40 @@ final class TeamTest extends PublicTestCase
     }
 
     #[Test]
+    public function getVisibleRouteCount_givenARouteInEveryPublishedState_countsAllButUnpublished(): void
+    {
+        $author = null;
+        $team   = null;
+        $routes = [];
+
+        try {
+            // Arrange
+            $author = User::factory()->create();
+            $team   = $this->createTeam();
+            $team->addMember($author, TeamUser::ROLE_MEMBER);
+            foreach (PublishedState::ALL as $publishedStateId) {
+                $routes[] = DungeonRoute::factory()->create([
+                    'author_id'          => $author->id,
+                    'team_id'            => $team->id,
+                    'published_state_id' => $publishedStateId,
+                ]);
+            }
+
+            // Act
+            $visibleRouteCount = $team->getVisibleRouteCount();
+
+            // Assert
+            $this->assertSame(count(PublishedState::ALL) - 1, $visibleRouteCount);
+        } finally {
+            foreach ($routes as $route) {
+                $route->delete();
+            }
+
+            $this->cleanUp(null, null, $team, $author);
+        }
+    }
+
+    #[Test]
     public function removeRoute_givenATeamPublishedRoute_revertsItToUnpublished(): void
     {
         $author = null;
