@@ -11,6 +11,7 @@
  * @property {number} defaultUnkilledImportantEnemyOpacity
  * @property {boolean} defaultEnemyAggressivenessBorder
  * @property {string} mapFacadeStyle
+ * @property {string} mapFacadeStyleForMappingVersion The style the page's mapping was converted to
  * @property {boolean} noUI
  * @property {?number} killZonePathWeightMultiplier
  * @property {boolean} showControls
@@ -93,6 +94,8 @@ class CommonMapsMap extends InlineCode {
 
         this._initDefaults();
         this._initDungeonMap();
+
+        getState().register('floorid:pageloadrequired', this, this._onFloorIdPageLoadRequired.bind(this));
 
         if (!this.options.noUI) {
             this.settingsTabMap.activate();
@@ -911,27 +914,7 @@ class CommonMapsMap extends InlineCode {
             this._floorIdChangeSource = null;
         }
 
-        let pathname = window.location.pathname;
-        let pathSplit = trimEnd(pathname, '/').split('/');
-        let newUrl = window.location.protocol + '//' + window.location.host;
-
-        if (getState().isMapAdmin()) {
-            // Example url: https://keystone.test/admin/dungeon/14/floor/42/mapping
-            // Strip the last two elements (<number>/mapping)
-            pathSplit.splice(-2);
-            pathname = pathSplit.join('/');
-            newUrl += `${pathname}/${floorIdChangedEvent.data.floorId}/mapping`;
-        } else {
-            // Example url: https://keystone.test/bbzlbOX, https://keystone.test/bbzlbOX/2 (last integer is optional)
-            if (isNumeric(pathSplit[pathSplit.length - 1])) {
-                // Strip the last two elements (<number>/mapping)
-                pathSplit.splice(-1);
-                pathname = pathSplit.join('/');
-            }
-            newUrl += `${pathname}/${getState().getCurrentFloor().index}`;
-        }
-
-        newUrl += window.location.search;
+        let newUrl = this._getFloorUrl(getState().getCurrentFloor());
 
         history.pushState({page: 1}, newUrl, newUrl);
 
@@ -941,6 +924,47 @@ class CommonMapsMap extends InlineCode {
 
         // Make sure that the sidebar's select picker gets updated with the newly selected value
         refreshSelectPickers();
+    }
+
+    /**
+     * @param floorIdPageLoadRequiredEvent {Object}
+     * @private
+     */
+    _onFloorIdPageLoadRequired(floorIdPageLoadRequiredEvent) {
+        console.assert(this instanceof CommonMapsMap, 'this is not a CommonMapsMap', this);
+
+        window.location.assign(this._getFloorUrl(getState().getMapContext().getFloorById(floorIdPageLoadRequiredEvent.data.floorId)));
+    }
+
+    /**
+     * @param floor {Object}
+     * @returns {string}
+     * @private
+     */
+    _getFloorUrl(floor) {
+        console.assert(this instanceof CommonMapsMap, 'this is not a CommonMapsMap', this);
+
+        let pathname = window.location.pathname;
+        let pathSplit = trimEnd(pathname, '/').split('/');
+        let newUrl = window.location.protocol + '//' + window.location.host;
+
+        if (getState().isMapAdmin()) {
+            // Example url: https://keystone.test/admin/dungeon/14/floor/42/mapping
+            // Strip the last two elements (<number>/mapping)
+            pathSplit.splice(-2);
+            pathname = pathSplit.join('/');
+            newUrl += `${pathname}/${floor.id}/mapping`;
+        } else {
+            // Example url: https://keystone.test/bbzlbOX, https://keystone.test/bbzlbOX/2 (last integer is optional)
+            if (isNumeric(pathSplit[pathSplit.length - 1])) {
+                // Strip the last two elements (<number>/mapping)
+                pathSplit.splice(-1);
+                pathname = pathSplit.join('/');
+            }
+            newUrl += `${pathname}/${floor.index}`;
+        }
+
+        return newUrl + window.location.search;
     }
 
     /**

@@ -12,6 +12,7 @@
  * @property {String} defaultUnkilledImportantEnemyOpacity
  * @property {String} defaultEnemyAggressivenessBorder
  * @property {String} mapFacadeStyle
+ * @property {String} mapFacadeStyleForMappingVersion The style the page's mapping was converted to
  * @property {boolean} noUI
  * @property {Array} showControls
  * @property {boolean} gestureHandling
