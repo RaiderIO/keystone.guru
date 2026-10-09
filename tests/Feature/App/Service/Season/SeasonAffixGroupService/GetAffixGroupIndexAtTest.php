@@ -30,7 +30,7 @@ final class GetAffixGroupIndexAtTest extends PublicTestCase
     public function getAffixGroupIndexAt_GivenNoActiveSeason_ShouldReturnNull(): void
     {
         // Arrange
-        $region = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $region = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $date   = Carbon::create(2017, 1, 1, 0, 0, 0, 'UTC');
 
         $seasonService = $this->createMock(SeasonServiceInterface::class);
@@ -57,7 +57,7 @@ final class GetAffixGroupIndexAtTest extends PublicTestCase
     {
         // Arrange - season starts Monday 2020-01-20
         // US: startOfWeek=2020-01-20 + 1 day + 15h = 2020-01-21 15:00 UTC
-        $region = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $region = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
 
         $season = new Season([
             'start'                   => Carbon::create(2020, 1, 20, 0, 0, 0, 'UTC'),
@@ -92,7 +92,7 @@ final class GetAffixGroupIndexAtTest extends PublicTestCase
     {
         // Arrange - season starts Monday 2020-01-20
         // US: startOfWeek=2020-01-20 + 1 day + 15h = 2020-01-21 15:00 UTC
-        $region = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $region = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
 
         $season = new Season([
             'start'                   => Carbon::create(2020, 1, 20, 0, 0, 0, 'UTC'),
@@ -127,7 +127,7 @@ final class GetAffixGroupIndexAtTest extends PublicTestCase
     {
         // Arrange - season starts Monday 2020-01-20, 12 affix groups = one full cycle per 12 weeks
         // US: 2020-01-21 15:00 UTC
-        $region = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $region = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
 
         $season = new Season([
             'start'                   => Carbon::create(2020, 1, 20, 0, 0, 0, 'UTC'),
@@ -161,7 +161,7 @@ final class GetAffixGroupIndexAtTest extends PublicTestCase
     {
         // Arrange - season start with offsets results in a date after our test date
         // Season starts 2020-02-01 (Saturday). US offsets: startOfWeek=2020-01-27 + 1 day + 15h = 2020-01-28 15:00 UTC
-        $region = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $region = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
 
         $season = new Season([
             'start'                   => Carbon::create(2020, 2, 1, 0, 0, 0, 'UTC'),
@@ -194,7 +194,7 @@ final class GetAffixGroupIndexAtTest extends PublicTestCase
     {
         // Arrange
         $service      = app(SeasonAffixGroupServiceInterface::class);
-        $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion     = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $twwExpansion = Expansion::where('shortname', Expansion::EXPANSION_TWW)->firstOrFail();
         // Wednesday 2030-01-09: its first reset is counted from Monday 2030-01-07
         $season = $this->createSeason([

@@ -137,7 +137,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
         } catch (Exception $exception) {
             Log::error('Error getting current affix group', [
                 'exception' => $exception,
-                'region'    => $region->short,
+                'region'    => $region->key,
             ]);
 
             throw $exception;
@@ -158,7 +158,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
         } catch (Exception $exception) {
             Log::error('Error getting next affix group in region', [
                 'exception' => $exception,
-                'region'    => $region->short,
+                'region'    => $region->key,
             ]);
 
             throw $exception;
@@ -179,7 +179,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
         } catch (Exception $exception) {
             Log::error('Error getting current affix group', [
                 'exception' => $exception,
-                'region'    => $region->short,
+                'region'    => $region->key,
             ]);
 
             throw $exception;
@@ -200,7 +200,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
         } catch (Exception $exception) {
             Log::error('Error getting next affix group', [
                 'exception' => $exception,
-                'region'    => $region->short,
+                'region'    => $region->key,
             ]);
 
             throw new Exception('Error getting next affix group');

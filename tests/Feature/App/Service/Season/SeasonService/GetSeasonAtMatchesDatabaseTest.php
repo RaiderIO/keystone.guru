@@ -54,7 +54,7 @@ final class GetSeasonAtMatchesDatabaseTest extends PublicTestCase
                         sprintf(
                             'Season %d, region %s, %+d second(s) from its reset moment',
                             $season->id,
-                            $region->short,
+                            $region->key,
                             $secondsOffset,
                         ),
                     );

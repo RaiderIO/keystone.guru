@@ -61,8 +61,8 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
 
 $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion $b) {
     // If one of them is "World", it comes first
-    if ($a->short === GameServerRegion::WORLD) return -1;
-    if ($b->short === GameServerRegion::WORLD) return 1;
+    if ($a->key === GameServerRegion::WORLD) return -1;
+    if ($b->key === GameServerRegion::WORLD) return 1;
 
     // Otherwise, sort by ID ascending
     return $a->id <=> $b->id;
@@ -298,13 +298,13 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                         $defaultRegion = GameServerRegion::WORLD;
                         ?>
                         @foreach($allRegions as $region)
-                            <input type="radio" name="region" id="filter_region_{{ $region->short }}"
-                                   class="btn-check {{ $region->short }}"
-                                   value="{{ $region->short }}"
-                                {{ $region->short === $defaultRegion ? 'checked' : '' }}
+                            <input type="radio" name="region" id="filter_region_{{ $region->key }}"
+                                   class="btn-check {{ $region->key }}"
+                                   value="{{ $region->key }}"
+                                {{ $region->key === $defaultRegion ? 'checked' : '' }}
                             >
-                            <label class="btn btn-secondary" for="filter_region_{{ $region->short }}">
-                                <img src="{{ ksgAssetImage(sprintf('flags/%s.webp', $region->short)) }}"
+                            <label class="btn btn-secondary" for="filter_region_{{ $region->key }}">
+                                <img src="{{ ksgAssetImage(sprintf('flags/%s.webp', $region->key)) }}"
                                      alt="{{ __($region->name) }}"
                                      class="filter_region_icon" loading="lazy">
                                 {{ __($region->name) }}

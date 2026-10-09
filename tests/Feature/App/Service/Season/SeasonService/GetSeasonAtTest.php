@@ -23,7 +23,7 @@ final class GetSeasonAtTest extends PublicTestCase
         // Arrange
         $service      = app(SeasonServiceInterface::class);
         $bfaExpansion = Expansion::where('shortname', Expansion::EXPANSION_BFA)->firstOrFail();
-        $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion     = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         // BFA S1 started 2018-09-04, BFA S2 started 2019-01-23
         $date = Carbon::create(2018, 11, 1, 0, 0, 0, 'UTC');
 
@@ -41,7 +41,7 @@ final class GetSeasonAtTest extends PublicTestCase
         // Arrange
         $service      = app(SeasonServiceInterface::class);
         $bfaExpansion = Expansion::where('shortname', Expansion::EXPANSION_BFA)->firstOrFail();
-        $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion     = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $date         = Carbon::create(2017, 1, 1, 0, 0, 0, 'UTC');
 
         // Act
@@ -57,7 +57,7 @@ final class GetSeasonAtTest extends PublicTestCase
         // Arrange
         $service      = app(SeasonServiceInterface::class);
         $bfaExpansion = Expansion::where('shortname', Expansion::EXPANSION_BFA)->firstOrFail();
-        $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion     = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         // BFA S2 started 2019-01-23, BFA S3 started after
         $date = Carbon::create(2019, 3, 15, 0, 0, 0, 'UTC');
 
@@ -75,7 +75,7 @@ final class GetSeasonAtTest extends PublicTestCase
         // Arrange
         $service      = app(SeasonServiceInterface::class);
         $bfaExpansion = Expansion::where('shortname', Expansion::EXPANSION_BFA)->firstOrFail();
-        $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion     = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         // US region: reset_day_offset=1, reset_hours_offset=15
         // BFA S1 start='2018-09-04', a Tuesday: Monday 2018-09-03 after offsets => 2018-09-04 15:00:00 UTC
         $date = Carbon::create(2018, 9, 4)
@@ -94,7 +94,7 @@ final class GetSeasonAtTest extends PublicTestCase
     {
         // Arrange
         $service      = app(SeasonServiceInterface::class);
-        $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion     = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $twwExpansion = Expansion::where('shortname', Expansion::EXPANSION_TWW)->firstOrFail();
         // Wednesday 2030-01-09: its first reset is counted from Monday 2030-01-07
         $season = $this->createSeason(['expansion_id' => $twwExpansion->id, 'start' => '2030-01-09 00:00:00']);
@@ -114,7 +114,7 @@ final class GetSeasonAtTest extends PublicTestCase
     {
         // Arrange
         $service      = app(SeasonServiceInterface::class);
-        $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion     = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $twwExpansion = Expansion::where('shortname', Expansion::EXPANSION_TWW)->firstOrFail();
         $season       = $this->createSeason(['expansion_id' => $twwExpansion->id, 'start' => '2030-01-09 00:00:00']);
         $date         = Carbon::create(2030, 1, 7, 0, 0, 0, 'UTC')
