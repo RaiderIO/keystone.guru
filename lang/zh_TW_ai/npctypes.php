@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'aberration'    => '變異怪',
     'beast'         => '野獸',
     'critter'       => '小動物',
@@ -11,7 +12,8 @@ return [
     'humanoid'      => '人形生物',
     'mechanical'    => '機械',
     'undead'        => '不死族',
+    'uncategorized' => '',
     'totem'         => '圖騰',
     'not_specified' => '不明',
-]
-;
+
+];

@@ -8,8 +8,9 @@ return [
         'world'           => '',
     ],
     'kind' => [
-        'season_set' => '',
-        'free_form'  => '',
+        'season_set'        => '',
+        'season_set_public' => '',
+        'free_form'         => '',
     ],
     'index' => [
         'title'                   => '',
@@ -43,7 +44,6 @@ return [
     'new' => [
         'title'               => '',
         'header'              => '',
-        'details'             => '',
         'start_from_tag'      => '',
         'start_from_tag_none' => '',
         'start_from_tag_help' => '',
@@ -52,7 +52,6 @@ return [
     'edit' => [
         'title'                        => '',
         'view_collection'              => '',
-        'details'                      => '',
         'duplicate'                    => '',
         'duplicate_title'              => '',
         'duplicate_help'               => '',
@@ -72,7 +71,7 @@ return [
         'no_routes'       => '',
         'no_routes_owner' => '',
         'add_routes'      => '',
-        'slot_empty'      => '',
+        'not_covered'     => '',
         'copy_link'       => '',
         'edit'            => '',
     ],

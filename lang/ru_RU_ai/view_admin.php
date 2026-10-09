@@ -54,6 +54,8 @@ return [
             'abbreviation'          => '',
             'key'                   => 'Ключ',
             'slug'                  => 'Жетон',
+            'min_suggested_level'   => '',
+            'max_suggested_level'   => '',
             'submit'                => 'Подтвердить',
             'floor_management'      => [
                 'title'        => '',
@@ -151,6 +153,7 @@ return [
             'header_edit'                        => 'Редактировать этаж - %s',
             'active'                             => '',
             'index'                              => 'Индекс',
+            'display_order'                      => '',
             'mdt_sub_level'                      => 'MDT подуровень',
             'ui_map_id'                          => '',
             'map_name'                           => '',

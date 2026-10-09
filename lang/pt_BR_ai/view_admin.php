@@ -54,6 +54,8 @@ return [
             'abbreviation'          => '',
             'key'                   => '',
             'slug'                  => '',
+            'min_suggested_level'   => '',
+            'max_suggested_level'   => '',
             'submit'                => '',
             'floor_management'      => [
                 'title'        => '',
@@ -151,6 +153,7 @@ return [
             'header_edit'                        => '',
             'active'                             => '',
             'index'                              => '',
+            'display_order'                      => '',
             'mdt_sub_level'                      => '',
             'ui_map_id'                          => '',
             'map_name'                           => '',
