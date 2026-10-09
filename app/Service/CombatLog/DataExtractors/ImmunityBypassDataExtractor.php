@@ -24,7 +24,6 @@ use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogNpcEventType;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\CombatLog\CombatLogSpellEventType;
-use App\Models\CombatLog\CombatLogSpellPropertyObservation;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
@@ -125,8 +124,16 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
     /** @var DataExtractionCurrentDungeon|null The context $currentDungeonId was read from - see extractData. */
     private ?DataExtractionCurrentDungeon $currentDungeonContext = null;
 
-    public function __construct()
+    /** Shared with the other writers of the observation table when injected - whoever injected it flushes it. */
+    private readonly SpellPropertyObservationBuffer $observationBuffer;
+
+    private readonly bool $flushesObservationBuffer;
+
+    public function __construct(?SpellPropertyObservationBuffer $sharedObservationBuffer = null)
     {
+        $this->observationBuffer        = $sharedObservationBuffer ?? new SpellPropertyObservationBuffer();
+        $this->flushesObservationBuffer = $sharedObservationBuffer === null;
+
         $definitionsByBuffSpellId = collect();
         $definitionsByProperty    = collect();
 
@@ -273,31 +280,16 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         $this->closeAllImmunityWindows();
 
         if ($this->pendingBypassObservations->isNotEmpty()) {
-            $now  = Carbon::now()->toDateTimeString();
-            $rows = $this->pendingBypassObservations->map(fn(array $observation) => [
-                'spell_id'        => $observation['spell_id'],
-                'property'        => $observation['property']->value,
-                'observed_on'     => Carbon::today()->toDateString(),
-                'combat_log_path' => $this->currentCombatLogFilePath ?? '',
-                'created_at'      => $now,
-                'updated_at'      => $now,
-            ])->all();
-
-            CombatLogSpellPropertyObservation::upsertWithDeadlockRetry(
-                $rows,
-                ['spell_id', 'property', 'observed_on'],
-                ['combat_log_path', 'updated_at'],
-            );
-
-            /** @var Collection<int, SpellModel> $spells */
-            $spells = SpellModel::query()
-                ->whereIn('id', $this->pendingBypassObservations->pluck('spell_id')->unique()->all())
-                ->get()
-                ->keyBy('id');
-
             foreach ($this->pendingBypassObservations as $observation) {
-                $this->applyBypassToSpell($result, $spells, $observation['spell_id'], $observation['property']);
-                $this->assignSpellToNpc($result, $spells, $observation);
+                $this->observationBuffer->queue($observation['spell_id'], $observation['property'], $this->currentCombatLogFilePath ?? '');
+            }
+
+            $observations  = $this->pendingBypassObservations->all();
+            $combatLogPath = $this->currentCombatLogFilePath;
+            $this->observationBuffer->afterFlush(fn() => $this->applyBypassObservations($result, $observations, $combatLogPath));
+
+            if ($this->flushesObservationBuffer) {
+                $this->observationBuffer->flush();
             }
         }
 
@@ -306,6 +298,27 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         $this->currentCombatLogFilePath  = null;
         $this->currentDungeonId          = null;
         $this->currentDungeonContext     = null;
+    }
+
+    /**
+     * Runs once the observations are written, so the staleness sweep never sees a property without its observation.
+     *
+     * @param array<string, array{spell_id: int, property: SpellProperty, npc_id: int|null, dungeon_id: int|null}> $observations
+     */
+    private function applyBypassObservations(ExtractedDataResult $result, array $observations, ?string $combatLogPath): void
+    {
+        /** @var Collection<int, SpellModel> $spells */
+        $spells = SpellModel::query()
+            ->whereIn('id', array_values(array_unique(array_column($observations, 'spell_id'))))
+            ->get()
+            ->keyBy('id');
+
+        $npcs = $this->loadNpcsWithSpells(array_column($observations, 'npc_id'));
+
+        foreach ($observations as $observation) {
+            $this->applyBypassToSpell($result, $spells, $observation['spell_id'], $observation['property'], $combatLogPath);
+            $this->assignSpellToNpc($result, $spells, $npcs, $observation, $combatLogPath);
+        }
     }
 
     /**
@@ -318,6 +331,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         Collection          $spells,
         int                 $spellId,
         SpellProperty       $property,
+        ?string             $combatLogPath,
     ): void {
         /** @var SpellModel|null $spell */
         $spell = $spells->get($spellId);
@@ -346,7 +360,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
             'spell_id'        => $spellId,
             'event_type'      => CombatLogSpellEventType::PropertyChanged,
             'property'        => $property,
-            'combat_log_path' => $this->currentCombatLogFilePath,
+            'combat_log_path' => $combatLogPath,
         ]);
 
         $result->addedSpellImmunityBypass();
@@ -358,9 +372,10 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
      * would be invisible on the NPC's compendium page.
      *
      * @param Collection<int, SpellModel>                                                           $spells
+     * @param Collection<int, Npc>                                                                  $npcs
      * @param array{spell_id: int, property: SpellProperty, npc_id: int|null, dungeon_id: int|null} $observation
      */
-    private function assignSpellToNpc(ExtractedDataResult $result, Collection $spells, array $observation): void
+    private function assignSpellToNpc(ExtractedDataResult $result, Collection $spells, Collection $npcs, array $observation, ?string $combatLogPath): void
     {
         $npcId = $observation['npc_id'];
 
@@ -376,7 +391,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         }
 
         /** @var Npc|null $npc */
-        $npc = Npc::with('npcSpells')->find($npcId);
+        $npc = $npcs->get($npcId);
         if ($npc === null) {
             return;
         }
@@ -386,10 +401,11 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
             return;
         }
 
-        NpcSpell::create([
+        // Kept on the loaded NPC so a second observation of the same spell (another property) sees the new row
+        $npc->npcSpells->push(NpcSpell::create([
             'npc_id'   => $npcId,
             'spell_id' => $spellId,
-        ]);
+        ]));
 
         // insertOrIgnore (not exists()+create()) so a concurrent extraction job racing this same
         // pair cannot create a duplicate row - the unique index makes the second insert a no-op
@@ -405,11 +421,30 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
             'event_type'      => CombatLogNpcEventType::SpellAssigned,
             'model_class'     => SpellModel::class,
             'model_id'        => $spellId,
-            'combat_log_path' => $this->currentCombatLogFilePath,
+            'combat_log_path' => $combatLogPath,
         ]);
 
         $result->createdNpcSpell();
         $this->log->afterExtractAssignedBypassingSpellToNpc($npcId, $spellId);
+    }
+
+    /**
+     * Every NPC the observations name, loaded in one query.
+     *
+     * @param  array<int|null>      $npcIds
+     * @return Collection<int, Npc>
+     */
+    private function loadNpcsWithSpells(array $npcIds): Collection
+    {
+        $npcIds = array_values(array_unique(array_filter($npcIds)));
+        if (empty($npcIds)) {
+            return collect();
+        }
+
+        return Npc::with('npcSpells')
+            ->whereIn('id', $npcIds)
+            ->get()
+            ->keyBy('id');
     }
 
     private function openImmunityWindow(string $playerGuid, int $buffSpellId, Carbon $timestamp): void

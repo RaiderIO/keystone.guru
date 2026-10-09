@@ -50,8 +50,10 @@ class SpellDataExtractor implements DataExtractorInterface
      */
     private readonly array $collectors;
 
-    public function __construct(SpellRepositorySwooleInterface $spellRepository)
-    {
+    public function __construct(
+        SpellRepositorySwooleInterface  $spellRepository,
+        ?SpellPropertyObservationBuffer $sharedObservationBuffer = null,
+    ) {
         // Shared, process-persistent catalog (#4058) - the collectors put() spells they create into it, so
         // a long-lived worker's catalog stays current with its own writes
         $this->allSpells = $spellRepository->getAllKeyedWithSpellDungeons();
@@ -61,7 +63,7 @@ class SpellDataExtractor implements DataExtractorInterface
 
         $this->summonedNpcCollector         = new SummonedNpcCollector($log);
         $this->spellCreationCollector       = new SpellCreationCollector($this->allSpells, $log);
-        $this->propertyObservationCollector = new SpellPropertyObservationCollector($this->allSpells);
+        $this->propertyObservationCollector = new SpellPropertyObservationCollector($this->allSpells, $sharedObservationBuffer);
         $this->dungeonAssignmentCollector   = new SpellDungeonAssignmentCollector($this->allSpells, $log);
         $this->npcSpellAssignmentCollector  = new NpcSpellAssignmentCollector($this->allSpells, $log);
 
