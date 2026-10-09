@@ -743,8 +743,10 @@ class Enemy extends VersionableMapObject {
                 // still reads false - so this unbind was skipped, and the enemy's edit popup opened
                 // on the very first click of an enemy selection, closed again by the save's
                 // closePopup(): the flash that was reported.
-                this.layer.off('popupopen');
-                this.layer.unbindPopup();
+                for (let layer of this._getPointerLayers()) {
+                    layer.off('popupopen');
+                    layer.unbindPopup();
+                }
             }
         }
 
@@ -771,6 +773,11 @@ class Enemy extends VersionableMapObject {
      */
     _assignPopup(layer = null) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        let canvasPath = layer === null ? this.getCanvasPath() : null;
+        if (canvasPath !== null) {
+            this._assignPopup(canvasPath);
+        }
 
         if (this.map.getMapState() instanceof MapState) {
             let targetLayer = layer === null ? this.layer : layer;
@@ -851,19 +858,63 @@ class Enemy extends VersionableMapObject {
             // permanently: the recomputed text is identical, so the guard short-circuits and the
             // rebind never happens.
             // Leaflet's getTooltip() is undefined before the first bind and null after unbindTooltip().
-            if (this.tooltipText !== text || !this.layer.getTooltip()) {
+            let canvasPath = this.getCanvasPath();
+            if (this.tooltipText !== text || !this.layer.getTooltip() || (canvasPath !== null && !canvasPath.getTooltip())) {
                 this.tooltipText = text;
 
                 // Remove any previous tooltip
                 this.unbindTooltip();
-                this.layer.bindTooltip(text, {
+                let tooltipOptions = {
                     direction: 'top',
                     // Lets DungeonMap suppress just enemy tooltips via CSS (see setMapState())
                     // without ever touching Leaflet's own tooltip bind state.
                     className: 'map_enemy_tooltip',
-                });
+                };
+                this.layer.bindTooltip(text, tooltipOptions);
+                if (canvasPath !== null) {
+                    canvasPath.bindTooltip(text, tooltipOptions);
+                }
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    unbindTooltip() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        super.unbindTooltip();
+
+        let canvasPath = this.getCanvasPath();
+        if (canvasPath !== null) {
+            canvasPath.unbindTooltip();
+        }
+    }
+
+    /**
+     * @returns {L.Layer[]} The marker, and the canvas path when there is one: every layer the mouse can reach this enemy through.
+     * @private
+     */
+    _getPointerLayers() {
+        let canvasPath = this.getCanvasPath();
+
+        return canvasPath === null ? [this.layer] : [this.layer, canvasPath];
+    }
+
+    /**
+     * The path that draws this enemy on the enemy canvas instead of its marker; it takes the mouse
+     * events the marker would get.
+     * @returns {EnemyPath|null} Null when enemies are DOM markers, or this enemy has no layer yet.
+     */
+    getCanvasPath() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
+        if (this.layer === null || !enemyMapObjectGroup.isCanvasRendered()) {
+            return null;
+        }
+
+        return enemyMapObjectGroup.getCanvasPath(this.layer);
     }
 
     /**
@@ -1062,16 +1113,15 @@ class Enemy extends VersionableMapObject {
 
         let self = this;
 
-        // Show a permanent tooltip for the enemy's name
-        this.layer.on('click', function (clickEvent) {
+        let onClick = function (clickEvent) {
             if (self.map.getMapState() instanceof EnemySelection && self.selectable && !clickEvent.originalEvent.shiftKey) {
                 self.signal('enemy:selected', {clickEvent: clickEvent});
             } else {
                 self.signal('enemy:clicked', {clickEvent: clickEvent});
             }
-        });
+        };
 
-        this.layer.on('contextmenu', function (contextMenuEvent) {
+        let onContextMenu = function (contextMenuEvent) {
             L.DomEvent.preventDefault(contextMenuEvent);
 
             // Shift+right-click is reserved for the raid marker circle menu (see EnemyVisual).
@@ -1084,7 +1134,12 @@ class Enemy extends VersionableMapObject {
             }
 
             self.signal('enemy:contextmenu', {contextMenuEvent: contextMenuEvent});
-        });
+        };
+
+        for (let layer of this._getPointerLayers()) {
+            layer.on('click', onClick);
+            layer.on('contextmenu', onContextMenu);
+        }
     }
 
     /**
