@@ -81,6 +81,12 @@ $floor ??= null;
         @include('common.forms.form-error', ['key' => 'index'])
     </div>
 
+    <div class="mb-3{{ $errors->has('display_order') ? ' has-error' : '' }}">
+        {{ html()->label(__('view_admin.floor.edit.display_order'), 'display_order')->class('fw-bold') }}
+        {{ html()->number('display_order', $floor?->display_order ?? 0)->class('form-control') }}
+        @include('common.forms.form-error', ['key' => 'display_order'])
+    </div>
+
     <div class="mb-3{{ $errors->has('mdt_sub_level') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.floor.edit.mdt_sub_level'), 'mdt_sub_level')->class('fw-bold') }}
         <span class="form-required">*</span>

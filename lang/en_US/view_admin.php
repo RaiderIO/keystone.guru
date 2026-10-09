@@ -153,6 +153,7 @@ return [
             'header_edit'                        => 'Edit Floor - %s',
             'active'                             => 'Active',
             'index'                              => 'Index',
+            'display_order'                      => 'Display order (floor lists sort on this first, then on index)',
             'mdt_sub_level'                      => 'MDT sub level',
             'ui_map_id'                          => 'UI Map ID',
             'map_name'                           => 'Map name',

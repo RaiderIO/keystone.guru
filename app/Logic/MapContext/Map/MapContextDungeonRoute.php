@@ -40,7 +40,7 @@ class MapContextDungeonRoute extends MapContextBase
             $this->dungeonRoute->mappingVersion,
             $this->mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE,
             true,
-        )->active()->get()->toArray();
+        )->active()->displayOrdered()->get()->toArray();
     }
 
     public function getType(): string

@@ -48,7 +48,7 @@ class MapContextDungeonExplore extends MapContextMappingVersion
             $this->mappingVersion,
             $this->mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE,
             true,
-        )->active()->get()->toArray();
+        )->active()->displayOrdered()->get()->toArray();
     }
 
     public function getType(): string

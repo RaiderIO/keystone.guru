@@ -57,7 +57,10 @@ class MapContextMappingVersionEdit extends MapContextMappingVersion
      */
     public function getVisibleFloors(): array
     {
-        return $this->dungeon->floors->toArray();
+        return $this->dungeon->floors
+            ->sortBy([['display_order', 'asc'], ['index', 'asc']])
+            ->values()
+            ->toArray();
     }
 
     /**
