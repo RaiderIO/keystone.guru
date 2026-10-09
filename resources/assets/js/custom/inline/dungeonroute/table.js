@@ -629,6 +629,7 @@ class DungeonrouteTable extends InlineCode {
                 lang.get('js.route_continue_in_season_hint', {season: continuationSeason.name}),
             // Both arrive for free through DungeonRoute's $appends
             is_upgrade_draft: row.is_upgrade_draft === true,
+            is_mdt_import_draft: row.is_upgrade_draft === true && row.draft_source === DRAFT_SOURCE_MDT_IMPORT,
             has_upgrade_draft: row.has_upgrade_draft === true,
             // Collections only hold their owner's own routes, and a sandbox route expires
             show_add_to_collection: this.options?.showAddToCollection === true && row.author.id === this.options.currentUserId

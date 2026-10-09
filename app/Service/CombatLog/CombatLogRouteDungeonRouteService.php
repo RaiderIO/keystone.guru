@@ -19,6 +19,7 @@ use App\Models\Brushline;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteDraftSource;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\MapIcon;
@@ -247,7 +248,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     private function markAsUpgradeDraft(DungeonRoute $draft, DungeonRoute $existingDungeonRoute): void
     {
         try {
-            $draft->update(['upgrade_of_dungeon_route_id' => $existingDungeonRoute->id]);
+            $draft->update([
+                'upgrade_of_dungeon_route_id' => $existingDungeonRoute->id,
+                'draft_source'                => DungeonRouteDraftSource::ArcRegeneration,
+            ]);
         } catch (UniqueConstraintViolationException) {
             throw new CombatLogRouteRegeneratedConcurrentlyException(
                 sprintf(

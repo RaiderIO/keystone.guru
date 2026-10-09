@@ -106,6 +106,9 @@ const DUNGEON_SIEGE_OF_BORALUS = 'siegeofboralus';
 const DUNGEON_THE_NEXUS = 'thenexus';
 const DUNGEON_ALGETHAR_ACADEMY = 'dragonacademy'; // Dragonflight version!!
 
+// Mirrors App\Models\DungeonRoute\DungeonRouteDraftSource
+const DRAFT_SOURCE_MDT_IMPORT = 'mdt_import';
+
 // Kill zones
 const NUMBER_STYLE_PERCENTAGE = 'percentage';
 const NUMBER_STYLE_ENEMY_FORCES = 'enemy_forces';

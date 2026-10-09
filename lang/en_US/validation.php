@@ -62,6 +62,10 @@ return [
         'patreon_benefits' => [
             'exists' => 'One or more of the selected Patreon benefits does not exist.',
         ],
+        'mdt_import_string' => [
+            'required' => 'Paste an MDT string to import.',
+            'max'      => 'The MDT string may not be longer than :max characters.',
+        ],
         'patreon_grant_reason' => [
             'required' => 'A reason is required - it is what makes this grant reviewable later.',
             'max'      => 'The reason may not be longer than :max characters.',
