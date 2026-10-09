@@ -51,6 +51,23 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     }
 
     /**
+     * Shows a canvas-drawn enemy as its DOM marker instead, for UI that has to attach to its DOM.
+     * @param marker {L.Marker}
+     * @returns {Boolean} False when enemies are not canvas-rendered, or the marker was not promoted.
+     */
+    promoteToDomMarker(marker) {
+        return this.layerGroup instanceof EnemyCanvasLayerGroup && this.layerGroup.promote(marker);
+    }
+
+    /**
+     * @param marker {L.Marker}
+     * @returns {Boolean} False when the marker was not promoted.
+     */
+    demoteToCanvas(marker) {
+        return this.layerGroup instanceof EnemyCanvasLayerGroup && this.layerGroup.demote(marker);
+    }
+
+    /**
      * @returns {EnemyCanvasStyleProbe}
      */
     getCanvasStyleProbe() {
@@ -72,13 +89,13 @@ class EnemyMapObjectGroup extends MapObjectGroup {
             if (!leafletMap.getPane(ENEMY_CANVAS_PANE)) {
                 // Above the overlay pane's pulls and patrols, below the marker pane's DOM markers. Leaflet's
                 // canvas renderer never passes a click on to the layers underneath, so the map-sized canvas
-                // must not take pointer events at all; enemy hover is the map's own mousemove distance check.
+                // only takes pointer events while the mouse is over an enemy - see EnemyCanvasRenderer.
                 let pane = leafletMap.createPane(ENEMY_CANVAS_PANE);
                 pane.style.zIndex = 590;
                 pane.style.pointerEvents = 'none';
             }
 
-            this._canvasRenderer = L.canvas({pane: ENEMY_CANVAS_PANE});
+            this._canvasRenderer = new EnemyCanvasRenderer({pane: ENEMY_CANVAS_PANE});
         }
 
         return this._canvasRenderer;

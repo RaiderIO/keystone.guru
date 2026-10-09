@@ -37,6 +37,10 @@ class EnemyVisual extends Signalable {
         // _circleMenu is still non-null (nothing else marks a menu that is on its way out rather than
         // open) but must not be treated as reopenable by buildVisual() (#3730).
         this._circleMenuClosing = false;
+        // True while a canvas-drawn enemy is shown as its DOM marker for the circle menu
+        this._promotedToDom = false;
+        /** @type {{keydown: Function, pointerdown: Function, zoomstart: Function}|null} */
+        this._circleMenuDismissals = null;
 
         // Can be set to force the building of a visual when it's shown again
         this._forceBuildVisualOnShow = false;
@@ -254,6 +258,9 @@ class EnemyVisual extends Signalable {
 
         let self = this;
 
+        // The menu is DOM inside the enemy's marker, which a canvas-drawn enemy does not have
+        self._promoteToDomMarker();
+
         let template = Handlebars.templates['map_enemy_raid_marker_template'];
         let id = self.enemy.id;
 
@@ -324,6 +331,93 @@ class EnemyVisual extends Signalable {
             // Prevent multiple clicks triggering the close
             $enemyDiv.unbind('click');
         });
+
+        if (self._promotedToDom) {
+            self._bindCircleMenuDismissals();
+        }
+    }
+
+    /**
+     * Shows this canvas-drawn enemy as its DOM marker until _demoteToCanvas(). A no-op on DOM markers.
+     * @private
+     */
+    _promoteToDomMarker() {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
+        if (this._promotedToDom || !enemyMapObjectGroup.promoteToDomMarker(this.layer)) {
+            return;
+        }
+
+        this._promotedToDom = true;
+        this.refreshJQuerySelectors();
+        this.refreshSize();
+    }
+
+    /**
+     * Draws a promoted enemy on the canvas again, removing its DOM marker.
+     * @private
+     */
+    _demoteToCanvas() {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
+
+        if (!this._promotedToDom) {
+            return;
+        }
+
+        this._promotedToDom = false;
+        this.map.mapObjectGroupManager.getEnemyMapObjectGroup().demoteToCanvas(this.layer);
+        this.refreshSize();
+    }
+
+    /**
+     * Closes the circle menu of a promoted enemy on Escape, a press anywhere outside the enemy's marker
+     * or a zoom, so its DOM marker cannot outlive the menu.
+     * @private
+     */
+    _bindCircleMenuDismissals() {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
+
+        let self = this;
+
+        self._unbindCircleMenuDismissals();
+        self._circleMenuDismissals = {
+            keydown: function (keyboardEvent) {
+                if (keyboardEvent.key === 'Escape') {
+                    self._cleanupCircleMenu(false);
+                }
+            },
+            pointerdown: function (pointerEvent) {
+                let element = self.layer.getElement();
+                if (!element || !element.contains(pointerEvent.target)) {
+                    self._cleanupCircleMenu(false);
+                }
+            },
+            zoomstart: function () {
+                self._cleanupCircleMenu(false);
+            },
+        };
+
+        // Capture phase: Leaflet stops propagation of presses on the map's own layers
+        document.addEventListener('keydown', self._circleMenuDismissals.keydown, true);
+        document.addEventListener('pointerdown', self._circleMenuDismissals.pointerdown, true);
+        self.map.leafletMap.on('zoomstart', self._circleMenuDismissals.zoomstart);
+    }
+
+    /**
+     * @private
+     */
+    _unbindCircleMenuDismissals() {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
+
+        if (!this._circleMenuDismissals) {
+            return;
+        }
+
+        document.removeEventListener('keydown', this._circleMenuDismissals.keydown, true);
+        document.removeEventListener('pointerdown', this._circleMenuDismissals.pointerdown, true);
+        this.map.leafletMap.off('zoomstart', this._circleMenuDismissals.zoomstart);
+        this._circleMenuDismissals = null;
     }
 
     /**
@@ -380,6 +474,8 @@ class EnemyVisual extends Signalable {
                 $radial.remove().dequeue();
                 self._circleMenu = null;
                 self._circleMenuClosing = false;
+                self._unbindCircleMenuDismissals();
+                self._demoteToCanvas();
 
                 // Only stop the map state at this point - and only if it is still ours. The menu can
                 // only be opened while no map state is active, but the user can start one while it is
@@ -649,7 +745,7 @@ class EnemyVisual extends Signalable {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
         let canvasPath = this.getCanvasPath();
-        if (canvasPath !== null) {
+        if (canvasPath !== null && !this._promotedToDom) {
             this._refreshCanvasPath(canvasPath);
             return;
         }

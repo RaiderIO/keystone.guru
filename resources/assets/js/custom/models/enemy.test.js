@@ -21,12 +21,14 @@ global.L = {
         Marker: {extend: () => function () {}},
         Feature: {prototype: {initialize() {}}},
     },
+    DomEvent: {preventDefault: () => {}},
 };
 
 // 1b. Map states referenced by the constructor and by bindTooltip(). The fake map below never
 // returns an instance of either, so the tooltip is always considered enabled.
 global.MapState = class MapState {};
 global.EditMapState = class EditMapState extends global.MapState {};
+global.EnemySelection = class EnemySelection extends global.MapState {};
 
 // 1c. Lightweight base class standing in for VersionableMapObject -> MapObject, providing only
 // what Enemy calls on `super` / `this`. unbindTooltip() mirrors the real MapObject implementation,
@@ -49,6 +51,9 @@ global.VersionableMapObject = class VersionableMapObject {
     }
 
     signal() {
+    }
+
+    onLayerInit() {
     }
 
     unbindTooltip() {
@@ -117,8 +122,8 @@ function makeFakeLayer() {
         getTooltip() {
             return this._tooltip;
         },
-        bindTooltip(text) {
-            this._tooltip = {text};
+        bindTooltip(text, options) {
+            this._tooltip = {text, options};
             this.bindCount++;
         },
         unbindTooltip() {
@@ -128,10 +133,24 @@ function makeFakeLayer() {
 }
 
 /**
+ * The enemy map object group as Enemy sees it: canvas rendered only when there is a canvas path.
+ * @param canvasPath {Object|null}
+ */
+function makeFakeMapObjectGroupManager(canvasPath = null) {
+    return {
+        getEnemyMapObjectGroup: () => ({
+            isCanvasRendered: () => canvasPath !== null,
+            getCanvasPath: () => canvasPath,
+        }),
+    };
+}
+
+/**
  * A fake DungeonMap exposing only what Enemy touches: an event bus, edit/state accessors.
  */
-function makeFakeMap() {
+function makeFakeMap(canvasPath = null) {
     return {
+        mapObjectGroupManager: makeFakeMapObjectGroupManager(canvasPath),
         options: {edit: false},
         register: () => {},
         unregister: () => {},
@@ -247,8 +266,9 @@ function makeFakePopupLayer() {
  * flips what getMapState() returns and then calls the handler Enemy registered in its constructor,
  * exactly as DungeonMap does.
  */
-function makeFakeEditMap() {
+function makeFakeEditMap(canvasPath = null) {
     return {
+        mapObjectGroupManager: makeFakeMapObjectGroupManager(canvasPath),
         options: {edit: true},
         _mapState: null,
         _handlers: [],
@@ -489,5 +509,203 @@ describe('Enemy#getWowheadLinkForGameVersion', () => {
 
         // Assert
         expect(result).toBe('https://www.wowhead.com/cn/spell=123');
+    });
+});
+
+/**
+ * An enemy on a read-only map whose enemies are drawn on the enemy canvas, with the marker and the
+ * canvas path both recording their tooltip and their handlers.
+ */
+function makeCanvasEnemy() {
+    const layer = makeFakePopupLayer();
+    const canvasPath = makeFakePopupLayer();
+    const map = makeFakeMap(canvasPath);
+    map._mapState = null;
+    map.getMapState = () => map._mapState;
+    const enemy = new Enemy(map, layer);
+    enemy.npc = {id: 1, name: 'Murkbrine Shorerunner'};
+    enemy.getVisualData = () => ({info: [], custom: []});
+    const signals = [];
+    enemy.signal = (name, data) => signals.push([name, data]);
+
+    return {enemy, layer, canvasPath, map, signals};
+}
+
+/**
+ * Calls every handler a fake layer recorded for the event, and returns the signals they sent.
+ */
+function fireOn(target, event, data, signals) {
+    signals.length = 0;
+    for (const fn of target.handlers[event] ?? []) {
+        fn(data);
+    }
+
+    return signals.map(([name]) => name);
+}
+
+describe('Enemy on the enemy canvas (#5185)', () => {
+    test('onLayerInit_givenACanvasPathAndAClick_signalsEnemyClickedLikeTheMarker', () => {
+        // Arrange
+        const {enemy, layer, canvasPath, signals} = makeCanvasEnemy();
+        enemy.onLayerInit();
+        const clickEvent = {originalEvent: {shiftKey: false}};
+
+        // Act
+        const markerSignals = fireOn(layer, 'click', clickEvent, signals);
+        const canvasSignals = fireOn(canvasPath, 'click', clickEvent, signals);
+
+        // Assert
+        expect(markerSignals).toEqual(['enemy:clicked']);
+        expect(canvasSignals).toEqual(markerSignals);
+        expect(signals[0][1]).toEqual({clickEvent: clickEvent});
+    });
+
+    test('onLayerInit_givenACanvasPathAndAClickDuringAnEnemySelection_signalsEnemySelected', () => {
+        // Arrange
+        const {enemy, canvasPath, map, signals} = makeCanvasEnemy();
+        enemy.onLayerInit();
+        enemy.selectable = true;
+        map._mapState = new global.EnemySelection();
+
+        // Act
+        const canvasSignals = fireOn(canvasPath, 'click', {originalEvent: {shiftKey: false}}, signals);
+
+        // Assert
+        expect(canvasSignals).toEqual(['enemy:selected']);
+    });
+
+    test('onLayerInit_givenACanvasPathAndARightClick_signalsEnemyContextMenuLikeTheMarker', () => {
+        // Arrange
+        const {enemy, layer, canvasPath, signals} = makeCanvasEnemy();
+        enemy.onLayerInit();
+        const contextMenuEvent = {originalEvent: {shiftKey: false}};
+
+        // Act
+        const markerSignals = fireOn(layer, 'contextmenu', contextMenuEvent, signals);
+        const canvasSignals = fireOn(canvasPath, 'contextmenu', contextMenuEvent, signals);
+
+        // Assert
+        expect(markerSignals).toEqual(['enemy:contextmenu']);
+        expect(canvasSignals).toEqual(markerSignals);
+        expect(signals[0][1]).toEqual({contextMenuEvent: contextMenuEvent});
+    });
+
+    test('onLayerInit_givenACanvasPathAndAShiftRightClick_signalsTheRaidMarkerContextMenu', () => {
+        // Arrange
+        const {enemy, canvasPath, signals} = makeCanvasEnemy();
+        enemy.onLayerInit();
+        enemy.canOpenRaidMarkerMenu = () => true;
+
+        // Act
+        const canvasSignals = fireOn(canvasPath, 'contextmenu', {originalEvent: {shiftKey: true}}, signals);
+
+        // Assert
+        expect(canvasSignals).toEqual(['enemy:raidmarker_contextmenu']);
+    });
+
+    test('onLayerInit_givenDomMarkers_bindsOnlyTheMarker', () => {
+        // Arrange
+        const layer = makeFakePopupLayer();
+        const enemy = new Enemy(makeFakeMap(), layer);
+
+        // Act
+        enemy.onLayerInit();
+
+        // Assert
+        expect(enemy.getCanvasPath()).toBeNull();
+        expect(layer.handlers.click).toHaveLength(1);
+        expect(layer.handlers.contextmenu).toHaveLength(1);
+    });
+
+    test('bindTooltip_givenACanvasPath_bindsTheMarkersTooltipToIt', () => {
+        // Arrange
+        const {enemy, layer, canvasPath} = makeCanvasEnemy();
+
+        // Act
+        enemy.bindTooltip();
+
+        // Assert
+        expect(canvasPath.getTooltip()).toEqual(layer.getTooltip());
+        expect(canvasPath.getTooltip()?.text).toContain('Murkbrine Shorerunner');
+    });
+
+    test('bindTooltip_givenTheCanvasPathLostItsTooltip_rebindsIt', () => {
+        // Arrange
+        const {enemy, canvasPath} = makeCanvasEnemy();
+        enemy.bindTooltip();
+        canvasPath.unbindTooltip();
+
+        // Act
+        enemy.bindTooltip();
+
+        // Assert
+        expect(canvasPath.getTooltip()?.text).toContain('Murkbrine Shorerunner');
+    });
+
+    test('unbindTooltip_givenACanvasPath_unbindsItsTooltipToo', () => {
+        // Arrange
+        const {enemy, canvasPath} = makeCanvasEnemy();
+        enemy.bindTooltip();
+
+        // Act
+        enemy.unbindTooltip();
+
+        // Assert
+        expect(canvasPath.getTooltip()).toBeNull();
+    });
+});
+
+/**
+ * An enemy that wants a popup, with both its marker and its canvas path recording popup binds.
+ */
+function makeEditableCanvasEnemy() {
+    const canvasPath = makeFakePopupLayer();
+    const map = makeFakeEditMap(canvasPath);
+    const layer = makeFakePopupLayer();
+    const enemy = new Enemy(map, layer);
+    enemy.npc = {id: 1, name: 'Murkbrine Shorerunner'};
+    enemy.getVisualData = () => ({info: [], custom: []});
+    enemy.isEditable = () => true;
+
+    return {enemy, layer, canvasPath, map};
+}
+
+describe('Enemy popup on the enemy canvas (#5185)', () => {
+    test('_assignPopup_givenACanvasPath_bindsThePopupToItToo', () => {
+        // Arrange
+        const {enemy, layer, canvasPath} = makeEditableCanvasEnemy();
+
+        // Act
+        enemy._assignPopup();
+
+        // Assert
+        expect(layer.getPopup()).not.toBeNull();
+        expect(canvasPath.getPopup()).toEqual(layer.getPopup());
+    });
+
+    test('_assignPopup_givenACanvasPathDuringAMapState_unbindsItsPopup', () => {
+        // Arrange
+        const {enemy, canvasPath, map} = makeEditableCanvasEnemy();
+        enemy._assignPopup();
+        map._mapState = new global.MapState();
+
+        // Act
+        enemy._assignPopup();
+
+        // Assert
+        expect(canvasPath.getPopup()).toBeNull();
+    });
+
+    test('setPopupEnabled_givenFalseAndACanvasPath_unbindsItsPopup', () => {
+        // Arrange
+        const {enemy, canvasPath} = makeEditableCanvasEnemy();
+        enemy._assignPopup();
+
+        // Act
+        enemy.setPopupEnabled(false);
+
+        // Assert
+        expect(canvasPath.getPopup()).toBeNull();
+        expect(canvasPath.handlers.popupopen).toBeUndefined();
     });
 });
