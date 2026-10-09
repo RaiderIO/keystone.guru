@@ -131,7 +131,7 @@ $unkilledImportantEnemyOpacity    = $_COOKIE['map_unkilled_important_enemy_opaci
 $defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
 $mapFacadeStyle                   ??= User::getCurrentUserMapFacadeStyle();
 $useFacade                        = $mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE;
-$mapFacadeStyleForMappingVersion  = ($useFacade && $mappingVersion->facade_enabled) ? User::MAP_FACADE_STYLE_FACADE : User::MAP_FACADE_STYLE_SPLIT_FLOORS;
+$mapFacadeStyleForMappingVersion  = User::getMapFacadeStyleForFloor($mappingVersion, $floor, $mapFacadeStyle);
 
 
 // Allow echo to be overridden
@@ -212,6 +212,7 @@ $getFloorSwitchFloors = static fn() => ($isAdmin ? $dungeon->floors() : $dungeon
     'defaultUnkilledImportantEnemyOpacity' => $unkilledImportantEnemyOpacity,
     'defaultEnemyAggressivenessBorder' => $defaultEnemyAggressivenessBorder,
     'mapFacadeStyle' => $mapFacadeStyle,
+    'mapFacadeStyleForMappingVersion' => $mapFacadeStyleForMappingVersion,
     'noUI' => $noUI,
     'killZonePathWeightMultiplier' => $killZonePathWeightMultiplier,
     'showControls' => $show['controls'],

@@ -497,6 +497,127 @@ describe('StateManager.isCurrentDungeonFacadeEnabled', () => {
 
         expect(stateManager.isCurrentDungeonFacadeEnabled()).toBe(false);
     });
+
+    test('isCurrentDungeonFacadeEnabled_givenAPageWhoseMappingIsOnSplitFloors_returnsFalse', () => {
+        const stateManager = makeStateManager(makeFakeMapContext({facadeEnabled: true}));
+        stateManager._map = {options: {mapFacadeStyleForMappingVersion: MAP_FACADE_STYLE_SPLIT_FLOORS}};
+
+        stateManager.setMapFacadeStyle(MAP_FACADE_STYLE_FACADE);
+
+        expect(stateManager.isCurrentDungeonFacadeEnabled()).toBe(false);
+    });
+});
+
+describe('StateManager facade navigation', () => {
+    const facadeFloor = {id: 1, facade: true, facade_navigation: true};
+    const zoneFloor = {id: 2, facade: false, facade_navigation: false};
+    const otherZoneFloor = {id: 3, facade: false, facade_navigation: false};
+
+    /**
+     * @param {Object} options
+     * @param {String} options.mapFacadeStyleForMappingVersion The style the page's mapping was converted to.
+     * @param {boolean} options.facadeNavigation Whether the facade floor offers facade navigation.
+     * @param {String} options.mapFacadeStyle The viewer's map facade style.
+     * @param {Function} options.mapContextClass The class of the map context.
+     * @returns {StateManager}
+     */
+    function makeFacadeNavigationStateManager({
+        mapFacadeStyleForMappingVersion,
+        facadeNavigation = true,
+        mapFacadeStyle = MAP_FACADE_STYLE_FACADE,
+        mapContextClass = MapContextDungeonExplore,
+    }) {
+        const mapContext = Object.assign(
+            Object.create(mapContextClass.prototype),
+            makeFakeMapContext({
+                visibleFloors: [{...facadeFloor, facade_navigation: facadeNavigation}, zoneFloor, otherZoneFloor],
+                facadeEnabled: true,
+            }),
+        );
+        const stateManager = makeStateManager(mapContext);
+        stateManager._map = {options: {mapFacadeStyleForMappingVersion: mapFacadeStyleForMappingVersion}};
+        stateManager.setMapFacadeStyle(mapFacadeStyle);
+
+        return stateManager;
+    }
+
+    test('setFloorId_givenTheFacadePageAndAFloorBehindIt_requiresAPageLoadInsteadOfChanging', () => {
+        const stateManager = makeFacadeNavigationStateManager({mapFacadeStyleForMappingVersion: MAP_FACADE_STYLE_FACADE});
+        const changed = listenFor(stateManager, 'floorid:changed');
+        const pageLoads = listenFor(stateManager, 'floorid:pageloadrequired');
+
+        stateManager.setFloorId('2');
+
+        expect(changed).toHaveLength(0);
+        expect(pageLoads).toHaveLength(1);
+        expect(pageLoads[0].data).toEqual({floorId: 2});
+    });
+
+    test('setFloorId_givenAFloorBehindTheFacadeAndTheFacadeFloor_requiresAPageLoadInsteadOfChanging', () => {
+        const stateManager = makeFacadeNavigationStateManager({mapFacadeStyleForMappingVersion: MAP_FACADE_STYLE_SPLIT_FLOORS});
+        const changed = listenFor(stateManager, 'floorid:changed');
+        const pageLoads = listenFor(stateManager, 'floorid:pageloadrequired');
+
+        stateManager.setFloorId(1);
+
+        expect(changed).toHaveLength(0);
+        expect(pageLoads).toHaveLength(1);
+        expect(pageLoads[0].data).toEqual({floorId: 1});
+    });
+
+    test('setFloorId_givenAFloorBehindTheFacadeAndAnotherOne_changesInPlace', () => {
+        const stateManager = makeFacadeNavigationStateManager({mapFacadeStyleForMappingVersion: MAP_FACADE_STYLE_SPLIT_FLOORS});
+        const changed = listenFor(stateManager, 'floorid:changed');
+        const pageLoads = listenFor(stateManager, 'floorid:pageloadrequired');
+
+        stateManager.setFloorId(3);
+
+        expect(pageLoads).toHaveLength(0);
+        expect(changed).toHaveLength(1);
+        expect(stateManager.getCurrentFloor()).toBe(otherZoneFloor);
+    });
+
+    test('setFloorId_givenAFacadeWithoutFacadeNavigation_changesInPlace', () => {
+        const stateManager = makeFacadeNavigationStateManager({
+            mapFacadeStyleForMappingVersion: MAP_FACADE_STYLE_FACADE,
+            facadeNavigation:                false,
+        });
+        const changed = listenFor(stateManager, 'floorid:changed');
+        const pageLoads = listenFor(stateManager, 'floorid:pageloadrequired');
+
+        stateManager.setFloorId(2);
+
+        expect(pageLoads).toHaveLength(0);
+        expect(changed).toHaveLength(1);
+    });
+
+    test('setFloorId_givenTheSplitFloorsStyle_changesInPlace', () => {
+        const stateManager = makeFacadeNavigationStateManager({
+            mapFacadeStyleForMappingVersion: MAP_FACADE_STYLE_SPLIT_FLOORS,
+            mapFacadeStyle:                  MAP_FACADE_STYLE_SPLIT_FLOORS,
+        });
+        const changed = listenFor(stateManager, 'floorid:changed');
+        const pageLoads = listenFor(stateManager, 'floorid:pageloadrequired');
+
+        stateManager.setFloorId(1);
+
+        expect(pageLoads).toHaveLength(0);
+        expect(changed).toHaveLength(1);
+    });
+
+    test('setFloorId_givenTheMappingEditor_changesInPlace', () => {
+        const stateManager = makeFacadeNavigationStateManager({
+            mapFacadeStyleForMappingVersion: MAP_FACADE_STYLE_SPLIT_FLOORS,
+            mapContextClass:                 MapContextMappingVersionEdit,
+        });
+        const changed = listenFor(stateManager, 'floorid:changed');
+        const pageLoads = listenFor(stateManager, 'floorid:pageloadrequired');
+
+        stateManager.setFloorId(1);
+
+        expect(pageLoads).toHaveLength(0);
+        expect(changed).toHaveLength(1);
+    });
 });
 
 describe('StateManager.setMdtMappingModeEnabled', () => {

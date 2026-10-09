@@ -7,6 +7,7 @@ use App\Logic\Utils\HtmlSanitizer;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\Feature\Feature;
+use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
@@ -511,6 +512,25 @@ class User extends Authenticatable implements LaratrustUser
         return ($mapFacadeStyle ?? self::getCurrentUserMapFacadeStyle()) === self::MAP_FACADE_STYLE_FACADE &&
             $mappingVersion->facade_enabled &&
             (bool)$mappingVersion->dungeon->floors->firstWhere('facade', true)?->facade_navigation;
+    }
+
+    /**
+     * The map facade style that the mapping shown on $floor is converted to. With facade navigation only the facade
+     * floor itself shows the facade; a floor behind it shows its own mapping, as it would on split floors.
+     */
+    public static function getMapFacadeStyleForFloor(MappingVersion $mappingVersion, Floor $floor, ?string $mapFacadeStyle = null): string
+    {
+        $mapFacadeStyle ??= self::getCurrentUserMapFacadeStyle();
+
+        if ($mapFacadeStyle !== self::MAP_FACADE_STYLE_FACADE || !$mappingVersion->facade_enabled) {
+            return self::MAP_FACADE_STYLE_SPLIT_FLOORS;
+        }
+
+        if (!$floor->facade && self::shouldUseFacadeNavigation($mappingVersion, $mapFacadeStyle)) {
+            return self::MAP_FACADE_STYLE_SPLIT_FLOORS;
+        }
+
+        return self::MAP_FACADE_STYLE_FACADE;
     }
 
     public static function getCurrentUserKillzonePathWeight(): int

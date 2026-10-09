@@ -455,10 +455,32 @@ class StateManager extends Signalable {
             return;
         }
 
+        // The mapping on this page is converted for one side of the facade only - the other side needs a page load
+        if (this._isFacadeNavigationPageLoadRequired(floorId)) {
+            this.signal('floorid:pageloadrequired', {floorId: Number(floorId)});
+
+            return;
+        }
+
         this._floorId = floorId;
 
         // Let everyone know it's changed
         this.signal('floorid:changed', {floorId: this._floorId, center: center, zoom: zoom});
+    }
+
+    /**
+     * @param {Number|String} floorId
+     * @returns {boolean}
+     * @private
+     */
+    _isFacadeNavigationPageLoadRequired(floorId) {
+        if (this._mapContext === null || this._map === null || !this.isFacadeNavigationEnabled()) {
+            return false;
+        }
+
+        let floor = this._getVisibleFloorsByFloorId().get(Number(floorId));
+
+        return !!floor.facade !== this.isCurrentDungeonFacadeEnabled();
     }
 
     /**
@@ -595,7 +617,25 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         return this._mapContext.getMappingVersion().facade_enabled &&
-            this.getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE;
+            this.getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE &&
+            this._map?.options.mapFacadeStyleForMappingVersion !== MAP_FACADE_STYLE_SPLIT_FLOORS;
+    }
+
+    /**
+     * Checks if the viewer may click through the facade floor to the floors behind it. Those floors then show their
+     * own mapping, so the facade style only applies while the facade floor itself is shown.
+     * @returns {boolean}
+     */
+    isFacadeNavigationEnabled() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        if (this.isMapAdmin() ||
+            !this._mapContext.getMappingVersion().facade_enabled ||
+            this.getMapFacadeStyle() !== MAP_FACADE_STYLE_FACADE) {
+            return false;
+        }
+
+        return this._mapContext.getVisibleFloors().some(floor => !!floor.facade && !!floor.facade_navigation);
     }
 
     /**
