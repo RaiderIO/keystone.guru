@@ -1175,6 +1175,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         }
 
         $previousNpcIds = $currentMappingVersion->enemies()
+            ->reorder()
             ->whereNotNull('npc_id')
             ->distinct()
             ->pluck('npc_id')

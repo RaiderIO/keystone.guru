@@ -477,7 +477,7 @@ class PatreonService implements PatreonServiceInterface
                     'access_token'  => PatreonUserLink::PERMANENT_TOKEN,
                     'refresh_token' => PatreonUserLink::PERMANENT_TOKEN,
                     'version'       => '0.0.1',
-                    'expires_at'    => Carbon::now()->addYears(100),
+                    'expires_at'    => PatreonUserLink::PERMANENT_EXPIRES_AT,
                 ]);
 
                 $user->setRelation('patreonUserLink', $patreonUserLink);

@@ -38,7 +38,7 @@ class APIPathFormRequest extends FormRequest
             ],
             'polyline'       => 'required|array',
             'polyline.color' => [
-                'nullable',
+                'required',
                 'string',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
@@ -53,6 +53,7 @@ class APIPathFormRequest extends FormRequest
             ],
             'polyline.vertices_json' => [
                 'json',
+                sprintf('max:%d', Polyline::VERTICES_JSON_MAX_LENGTH),
                 new JsonStringCountRule(2),
             ],
             'linked_awakened_obelisk_id' => 'nullable|int',

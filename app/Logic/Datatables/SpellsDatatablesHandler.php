@@ -14,7 +14,7 @@ class SpellsDatatablesHandler extends DatatablesHandler
                 'offset',
                 'limit',
             ])->cloneWithoutBindings(['select'])
-            ->selectRaw('SQL_CALC_FOUND_ROWS *');
+            ->selectRaw('SQL_CALC_FOUND_ROWS spells.id');
 
         $havings        = $query->havings;
         $query->havings = null;

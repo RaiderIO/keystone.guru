@@ -200,7 +200,7 @@ class ProfileController extends Controller
 
         $user->echo_color            = $validated['echo_color'] ?? randomHexColor();
         $user->echo_anonymous        = $validated['echo_anonymous'] ?? false;
-        $user->game_server_region_id = $validated['game_server_region_id'];
+        $user->game_server_region_id = $validated['game_server_region_id'] ?? $user->game_server_region_id;
         $user->timezone              = $validated['timezone'];
 
         // Only when no duplicates are found!
@@ -272,7 +272,7 @@ class ProfileController extends Controller
     {
         Gate::authorize('update', $user);
 
-        $user->analytics_cookie_opt_out = $request->get('analytics_cookie_opt_out');
+        $user->analytics_cookie_opt_out = $request->boolean('analytics_cookie_opt_out');
 
         if (!$user->save()) {
             abort(500, __('controller.profile.flash.unexpected_error_when_saving'));

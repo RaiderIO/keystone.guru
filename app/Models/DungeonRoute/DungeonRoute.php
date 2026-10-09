@@ -222,6 +222,19 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'published_state',
     ];
 
+    /**
+     * Columns without a database default that a route is created without on several paths (imports, clones,
+     * try routes, combat log routes); a strict-mode insert omitting them is rejected.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'description'                => '',
+        'teeming'                    => 0,
+        'pull_gradient'              => '',
+        'pull_gradient_apply_always' => 0,
+    ];
+
     protected $fillable = [
         'id',
         'public_key',

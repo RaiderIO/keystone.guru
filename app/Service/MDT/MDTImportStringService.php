@@ -44,6 +44,9 @@ use Illuminate\Support\Str;
  */
 class MDTImportStringService extends MDTBaseService implements MDTImportStringServiceInterface
 {
+    /** No keystone gets anywhere near this; a string claiming a higher one is broken or crafted. */
+    private const int MAX_KEY_LEVEL = 100;
+
     /** @var string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
     private string $encodedString;
 
@@ -238,8 +241,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             );
 
             // Create a dungeon route
-            $titleSlug    = Str::slug($decoded['text']);
-            $season       = $this->seasonService->getMostRecentSeasonForDungeon($dungeon);
+            $titleSlug   = Str::slug($decoded['text']);
+            $season      = $this->seasonService->getMostRecentSeasonForDungeon($dungeon);
+            $mdtKeyLevel = filter_var($decoded['difficulty'] ?? null, FILTER_VALIDATE_INT, [
+                'options' => ['min_range' => 1, 'max_range' => self::MAX_KEY_LEVEL],
+            ]);
             $dungeonRoute = DungeonRoute::create([
                 'author_id'          => $sandbox ? -1 : Auth::id() ?? -1,
                 'dungeon_id'         => $dungeon->id,
@@ -255,8 +261,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 'teeming'    => boolval($decoded['value']['teeming'] ?? false),
                 'title'      => empty($titleSlug) ? __($dungeon->name, [], 'en_US') : $decoded['text'],
                 'difficulty' => 'Casual',
-                'level_min'  => $decoded['difficulty'] ?? $season?->key_level_min ?? 2, // @phpstan-ignore nullsafe.neverNull
-                'level_max'  => $decoded['difficulty'] ?? $season?->key_level_max ?? 2, // @phpstan-ignore nullsafe.neverNull
+                'level_min'  => $mdtKeyLevel !== false ? $mdtKeyLevel : ($season?->key_level_min ?? 2), // @phpstan-ignore nullsafe.neverNull
+                'level_max'  => $mdtKeyLevel !== false ? $mdtKeyLevel : ($season?->key_level_max ?? 2), // @phpstan-ignore nullsafe.neverNull
                 'expires_at' => $sandbox ? Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString() : null,
             ]);
 
@@ -357,7 +363,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         ]);
 
         // Apply the seasonal index to the route
-        $dungeonRoute->update(['seasonal_index' => $affixGroup->seasonal_index]);
+        $dungeonRoute->update(['seasonal_index' => $affixGroup->seasonal_index ?? 0]);
     }
 
     /**

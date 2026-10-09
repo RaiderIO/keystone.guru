@@ -23,6 +23,9 @@ final class ImportEnemyFailuresCommandTest extends PublicTestCase
 
     private const string BASE_URL = 'https://ksg-test.example';
 
+    /** The largest value the int mapping_version_id column holds: a mapping version that does not exist. */
+    private const int NON_EXISTENT_MAPPING_VERSION_ID = 2147483647;
+
     private Dungeon $dungeon;
 
     private Floor $floor;
@@ -197,7 +200,7 @@ final class ImportEnemyFailuresCommandTest extends PublicTestCase
     {
         // Arrange — one production-imported row in the targeted mapping version (replaced) and one in another (kept)
         $targeted = $this->createLocalFailure(['mapping_version_id' => $this->mappingVersion->id, 'source' => 'production']);
-        $other    = $this->createLocalFailure(['mapping_version_id' => PHP_INT_MAX, 'source' => 'production']);
+        $other    = $this->createLocalFailure(['mapping_version_id' => self::NON_EXISTENT_MAPPING_VERSION_ID, 'source' => 'production']);
 
         Http::fake([
             self::BASE_URL . '/api/v1/combatlog/enemy-failures/*' => Http::response(self::page([$this->remoteRow(20, 601, null)], null, false)),

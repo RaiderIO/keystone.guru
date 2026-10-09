@@ -43,7 +43,7 @@ class AjaxDungeonRouteSimulateFormRequest extends FormRequest
             'hp_percent'                     => 'required|int',
             'ranged_pull_compensation_yards' => 'required|int',
             'use_mounts'                     => 'in:0,1',
-            'simulate_bloodlust_per_pull'    => 'array',
+            'simulate_bloodlust_per_pull'    => sprintf('array|max:%d', config('keystoneguru.dungeon_route_limits.kill_zones')),
             'simulate_bloodlust_per_pull.*'  => 'int',
         ];
     }

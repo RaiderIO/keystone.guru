@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller;
 
 use App\Features\CreatorProfiles;
+use App\Models\GameServerRegion;
 use App\Models\Laratrust\Role;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
@@ -88,6 +89,57 @@ final class ProfileControllerTest extends PublicTestCase
             $user->refresh();
             $this->assertSame('#abcdef', $user->echo_color);
             $this->assertSame('Europe/Amsterdam', $user->timezone);
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenAnEmptyRegion_keepsTheRegion(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+            $user->forceFill(['game_server_region_id' => GameServerRegion::ALL[GameServerRegion::EUROPE]])->save();
+
+            // Act
+            $response = $this->actingAs($user)->patch(sprintf('/profile/%d', $user->id), [
+                'echo_color'            => '#abcdef',
+                'timezone'              => 'Europe/Amsterdam',
+                'game_server_region_id' => '',
+            ]);
+
+            // Assert
+            $response->assertRedirect(route('profile.edit'));
+            $this->assertSame(GameServerRegion::ALL[GameServerRegion::EUROPE], $user->refresh()->game_server_region_id);
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenAnEmailLongerThanItsColumn_returnsAnEmailError(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange - a valid address, with labels and a local part each within their own limits
+            $user  = $this->userWithUserRole();
+            $email = sprintf('%s@%s.%s.%s.com', str_repeat('a', 64), str_repeat('b', 62), str_repeat('c', 62), str_repeat('d', 61));
+            $this->assertSame(256, strlen($email));
+
+            // Act
+            $response = $this->actingAs($user)->patch(sprintf('/profile/%d', $user->id), [
+                'email'      => $email,
+                'echo_color' => '#abcdef',
+                'timezone'   => 'Europe/Amsterdam',
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors(['email']);
+            $this->assertNotSame($email, $user->refresh()->email);
         } finally {
             $user?->delete();
         }
@@ -282,6 +334,27 @@ final class ProfileControllerTest extends PublicTestCase
             // Assert
             $response->assertRedirect(route('profile.edit'));
             $this->assertSame(1, (int)$user->refresh()->analytics_cookie_opt_out);
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function updatePrivacy_givenTheBoxUnchecked_turnsTheSettingOff(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange - an unchecked checkbox is not submitted at all
+            $user = $this->userWithUserRole();
+            $user->forceFill(['analytics_cookie_opt_out' => 1])->save();
+
+            // Act
+            $response = $this->actingAs($user)->patch(sprintf('/profile/%d/privacy', $user->id));
+
+            // Assert
+            $response->assertRedirect(route('profile.edit'));
+            $this->assertSame(0, (int)$user->refresh()->analytics_cookie_opt_out);
         } finally {
             $user?->delete();
         }
@@ -483,6 +556,30 @@ final class ProfileControllerTest extends PublicTestCase
             $response->assertRedirect(route('profile.tags'));
             $response->assertSessionHasErrors(['tag_name_new' => __('controller.profile.flash.tag_already_exists')]);
             $this->assertSame(1, $this->personalTagCount($user, $tagName));
+        } finally {
+            if ($user !== null) {
+                Tag::query()->where('context_class', User::class)->where('context_id', $user->id)->delete();
+            }
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function createTag_givenANameLongerThanItsColumn_returnsAnErrorAndCreatesNothing(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user    = $this->userWithUserRole();
+            $tagName = str_repeat('a', 256);
+
+            // Act
+            $response = $this->actingAs($user)->post(route('profile.tag.create'), ['tag_name_new' => $tagName]);
+
+            // Assert
+            $response->assertSessionHasErrors(['tag_name_new']);
+            $this->assertSame(0, $this->personalTagCount($user, $tagName));
         } finally {
             if ($user !== null) {
                 Tag::query()->where('context_class', User::class)->where('context_id', $user->id)->delete();

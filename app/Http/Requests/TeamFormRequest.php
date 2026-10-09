@@ -32,7 +32,7 @@ class TeamFormRequest extends FormRequest
 
         return [
             'name'        => $nameRules,
-            'description' => 'string|nullable',
+            'description' => 'string|nullable|max:255',
             'logo'        => [
                 'nullable',
                 File::image()

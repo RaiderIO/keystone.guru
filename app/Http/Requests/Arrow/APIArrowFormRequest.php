@@ -35,7 +35,7 @@ class APIArrowFormRequest extends FormRequest
             ],
             'polyline'       => 'required|array',
             'polyline.color' => [
-                'nullable',
+                'required',
                 'string',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
@@ -49,6 +49,7 @@ class APIArrowFormRequest extends FormRequest
             ],
             'polyline.vertices_json' => [
                 'json',
+                sprintf('max:%d', Polyline::VERTICES_JSON_MAX_LENGTH),
                 new JsonStringCountRule(minCount: 2, maxCount: 2),
             ],
         ];

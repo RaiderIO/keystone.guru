@@ -251,7 +251,10 @@ final class DungeonRouteControllerFloorResolutionTest extends PublicTestCase
         // Arrange
         $owner              = User::factory()->create();
         $route              = $this->createRoute($owner);
-        $challengeModeRunId = ChallengeModeRun::create(['dungeon_route_id' => $route->id])->id;
+        $challengeModeRunId = ChallengeModeRun::factory()->create([
+            'dungeon_id'       => $route->dungeon_id,
+            'dungeon_route_id' => $route->id,
+        ])->id;
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $route->dungeon_id)->defaultOrFacade($route->mappingVersion)->first();
 
@@ -305,7 +308,10 @@ final class DungeonRouteControllerFloorResolutionTest extends PublicTestCase
         // Arrange
         $owner              = User::factory()->create();
         $route              = $this->createRoute($owner);
-        $challengeModeRunId = ChallengeModeRun::create(['dungeon_route_id' => $route->id])->id;
+        $challengeModeRunId = ChallengeModeRun::factory()->create([
+            'dungeon_id'       => $route->dungeon_id,
+            'dungeon_route_id' => $route->id,
+        ])->id;
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $route->dungeon_id)->defaultOrFacade($route->mappingVersion)->first();
 

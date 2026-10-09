@@ -114,6 +114,19 @@ class Spell extends Model implements MappingModelInterface
         'bypasses_immunities_mask',
     ];
 
+    /**
+     * A spell known only by its id - fetched from Wowhead afterwards - is created without these, and none of them has
+     * a database default.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'dispel_type'  => SpellDispelType::TRANSLATION_KEY_PREFIX . SpellDispelType::Unknown->value,
+        'icon_name'    => '',
+        'name'         => '',
+        'schools_mask' => 0,
+    ];
+
     protected $appends = [
         'icon_url',
         'wowhead_url',

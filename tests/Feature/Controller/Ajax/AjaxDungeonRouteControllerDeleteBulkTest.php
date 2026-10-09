@@ -12,6 +12,7 @@ use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\File;
 use App\Models\Laratrust\Role;
 use App\Models\Team;
+use App\Models\TeamUser;
 use App\Models\User;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\JsonResponse;
@@ -166,6 +167,7 @@ final class AjaxDungeonRouteControllerDeleteBulkTest extends PublicTestCase
         $this->assertTrue(DungeonRouteChange::query()
             ->where('dungeon_route_id', $dungeonRoute->id)
             ->where('team_id', $team->id)
+            ->where('team_role', TeamUser::ALL_ROLES[TeamUser::ROLE_ADMIN])
             ->exists());
     }
 
@@ -351,6 +353,7 @@ final class AjaxDungeonRouteControllerDeleteBulkTest extends PublicTestCase
             'public_key'  => sprintf('t%s', substr(md5(uniqid('', true)), 0, 6)),
             'name'        => 'Delete Bulk Raiders',
             'description' => 'Team of the mass delete test',
+            'invite_code' => Team::generateRandomPublicKey(12, 'invite_code'),
         ]);
         $team->addMember($owner, 'admin');
         $this->createdTeams[] = $team;

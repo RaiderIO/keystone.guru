@@ -6,6 +6,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDescriptionImportState;
 use App\Models\Spell\SpellDescriptionTranslation;
+use App\Models\Spell\SpellEffect;
 use App\Service\Spell\Description\SpellDescriptionImportServiceInterface;
 use App\Service\WagoTools\GameLocale;
 use Illuminate\Support\Facades\File;
@@ -94,6 +95,31 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
             // Assert - nothing moved between the two runs; only key order in the stored json differs
             $this->assertSame(0, $secondResult->updatedCount);
         } finally {
+            $this->deleteTranslations();
+            $spell?->delete();
+            $this->clearImportState();
+            $this->removeDb2Tables();
+        }
+    }
+
+    #[Test]
+    public function importDescriptions_givenANegativeChainTargetCount_storesIt(): void
+    {
+        // Arrange - the client's SpellEffect data carries -1 and -10 chain targets
+        $spell = null;
+
+        try {
+            $this->writeDb2Tables(25, chainTargets: -1);
+
+            $spell = $this->createSpell();
+
+            // Act
+            $this->import();
+
+            // Assert
+            $this->assertSame(-1, (int)SpellEffect::query()->where('spell_id', self::SPELL_ID)->where('effect_index', 0)->firstOrFail()->chain_targets);
+        } finally {
+            SpellEffect::query()->where('spell_id', self::SPELL_ID)->delete();
             $this->deleteTranslations();
             $spell?->delete();
             $this->clearImportState();
@@ -313,7 +339,7 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
      * @param array<string, string> $describedByLocale a locale's description template, for a locale that
      *                                                 should not describe the spell at all
      */
-    private function writeDb2Tables(int $basePoints, array $describedByLocale = []): void
+    private function writeDb2Tables(int $basePoints, array $describedByLocale = [], int $chainTargets = 0): void
     {
         foreach (GameLocale::cases() as $locale) {
             $directory = $this->getDb2Directory($locale);
@@ -324,7 +350,7 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
 
             $description = $describedByLocale[$locale->value] ?? $this->getDescriptionTemplate($locale);
 
-            foreach ($this->getDb2Tables($basePoints, $locale, $description) as $table => $contents) {
+            foreach ($this->getDb2Tables($basePoints, $locale, $description, $chainTargets) as $table => $contents) {
                 // Heredocs keep the indentation of the code they sit in, which a CSV cannot have
                 file_put_contents(
                     sprintf('%s/%s.csv', $directory, $table),
@@ -343,7 +369,7 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
     /**
      * @return array<string, string>
      */
-    private function getDb2Tables(int $basePoints, GameLocale $locale, string $description): array
+    private function getDb2Tables(int $basePoints, GameLocale $locale, string $description, int $chainTargets): array
     {
         return [
             'Spell' => <<<CSV
@@ -363,7 +389,7 @@ final class SpellDescriptionImportServiceTest extends PublicTestCase
                 CSV,
             'SpellEffect' => <<<CSV
                 ID,DifficultyID,EffectIndex,Effect,EffectAuraPeriod,EffectChainTargets,Variance,EffectBasePointsF,EffectRadiusIndex_0,EffectRadiusIndex_1,SpellID
-                1,0,0,2,0,0,0,{$basePoints},0,0,999999911
+                1,0,0,2,0,{$chainTargets},0,{$basePoints},0,0,999999911
                 CSV,
             'SpellMisc' => <<<CSV
                 ID,DifficultyID,DurationIndex,SpellID

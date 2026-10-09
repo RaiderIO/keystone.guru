@@ -175,7 +175,7 @@ final class RegisterControllerTest extends PublicTestCase
         // Arrange - proves the DB's `users_email_unique` index actually throws
         // UniqueConstraintViolationException, which is what register()'s catch block relies on
         $method = new ReflectionMethod(RegisterController::class, 'create');
-        $data   = $this->validRegistrationData();
+        $data   = $this->validCreateData();
         $user   = null;
 
         try {
@@ -183,7 +183,7 @@ final class RegisterControllerTest extends PublicTestCase
 
             // Act & Assert
             $this->expectException(UniqueConstraintViolationException::class);
-            $method->invoke(new RegisterController(), $this->validRegistrationData(['email' => $data['email']]));
+            $method->invoke(new RegisterController(), $this->validCreateData(['email' => $data['email']]));
         } finally {
             $this->deleteRegisteredUser($user);
         }
@@ -250,7 +250,7 @@ final class RegisterControllerTest extends PublicTestCase
     {
         // Arrange - a real, already-registered email collides; the name in this request does not
         $existingUser = (new ReflectionMethod(RegisterController::class, 'create'))
-            ->invoke(new RegisterController(), $this->validRegistrationData());
+            ->invoke(new RegisterController(), $this->validCreateData());
 
         try {
             $controller = $this->createPartialMockPublic(RegisterController::class, ['create']);
@@ -453,6 +453,17 @@ final class RegisterControllerTest extends PublicTestCase
             'password_confirmation' => 'password123',
             'legal_agreed'          => '1',
         ], $overrides);
+    }
+
+    /**
+     * The data register() hands create(): by then ConvertEmptyStringsToNull has turned the empty region into null.
+     *
+     * @param  array<string, string>      $overrides
+     * @return array<string, string|null>
+     */
+    private function validCreateData(array $overrides = []): array
+    {
+        return array_merge($this->validRegistrationData($overrides), ['region' => null]);
     }
 
     private function deleteRegisteredUser(?User $user): void

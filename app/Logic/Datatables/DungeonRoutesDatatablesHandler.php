@@ -62,10 +62,17 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
         // Clear them
         $countQuery = $this->builder->getQuery()
             ->cloneWithout([
+                'columns',
                 'havings',
                 'groups',
+                'orders',
             ])
-            // ->cloneWithoutBindings(['select'])
+            ->cloneWithoutBindings([
+                'select',
+                'having',
+                'groupBy',
+                'order',
+            ])
             ->selectRaw('count(distinct dungeon_routes.id) as aggregate');
         $countQuery->offset = null;
         $countQuery->limit  = null;

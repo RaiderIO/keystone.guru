@@ -62,6 +62,7 @@ class ProfileFormRequest extends FormRequest
             'email' => [
                 'nullable',
                 'email',
+                'max:255',
                 Rule::unique('users', 'email')->ignore($user, 'id'),
             ],
             'game_server_region_id' => [

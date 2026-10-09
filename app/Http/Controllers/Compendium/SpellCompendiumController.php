@@ -94,7 +94,7 @@ class SpellCompendiumController extends Controller
         $spells = Spell::query()
             ->selectRaw(sprintf(
                 'spells.*, %s as name, GROUP_CONCAT(DISTINCT %s ORDER BY %s SEPARATOR ", ") AS dungeon_names',
-                NameColumnHandler::NAME_EXPRESSION,
+                NameColumnHandler::GROUPED_NAME_EXPRESSION,
                 $dungeonName,
                 $dungeonName,
             ))
@@ -125,7 +125,7 @@ class SpellCompendiumController extends Controller
         NameColumnHandler::joinNameTranslations($spells, $locale, $fallbackLocale)
             ->where('spells.hidden_on_map', false)
             ->groupBy('spells.id')
-            ->orderByRaw(NameColumnHandler::NAME_EXPRESSION);
+            ->orderByRaw(NameColumnHandler::GROUPED_NAME_EXPRESSION);
 
         if ($dungeon !== null) {
             $spells->where('spell_dungeons.dungeon_id', $dungeon->id);

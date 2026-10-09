@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Logic\Structs\LatLng;
+use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
@@ -122,6 +123,92 @@ final class AjaxMapEditorFacadeCoordinatesTest extends AjaxPublicTestCase
             /** @var Polyline $storedPolyline */
             $storedPolyline = Polyline::query()->findOrFail($storedPath->polyline_id);
             $this->assertNotEquals($polyline['vertices_json'], $storedPolyline->vertices_json);
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenPathOnFacadeFloor_storesItsRealFloorVerticesAtTheBrowsersPrecision(): void
+    {
+        // Arrange
+        [$mappingVersion, $facadeFloor, $facadeLatLng] = $this->findConvertibleFacadeLocation();
+
+        $dungeonRoute = $this->createFacadeDungeonRoute($mappingVersion);
+        $polyline     = PolylineFixtures::createPolyline($facadeFloor, collect([$facadeLatLng, $facadeLatLng]));
+
+        try {
+            // Act
+            $response = $this->post(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $dungeonRoute]), [
+                'floor_id' => $facadeFloor->id,
+                'polyline' => $polyline,
+            ]);
+
+            // Assert
+            $response->assertCreated();
+            /** @var Path $storedPath */
+            $storedPath = Path::query()->findOrFail($response->json('id'));
+            /** @var Polyline $storedPolyline */
+            $storedPolyline = Polyline::query()->findOrFail($storedPath->polyline_id);
+            $storedVertices = json_decode($storedPolyline->vertices_json, true);
+            $this->assertCount(2, $storedVertices);
+            foreach ($storedVertices as $storedVertex) {
+                $this->assertSame(round($storedVertex['lat'], 6), $storedVertex['lat']);
+                $this->assertSame(round($storedVertex['lng'], 6), $storedVertex['lng']);
+            }
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenPathOnFacadeFloorTooLongOnceOnItsRealFloor_returnsAVerticesErrorAndCreatesNothing(): void
+    {
+        // Arrange - one-decimal facade vertices fit the limit, their six-decimal real-floor equivalents do not
+        [$mappingVersion, $facadeFloor, $facadeLatLng] = $this->findConvertibleFacadeLocation();
+
+        $dungeonRoute  = $this->createFacadeDungeonRoute($mappingVersion);
+        $roundedLatLng = new LatLng($facadeLatLng->getLat(1), $facadeLatLng->getLng(1), $facadeFloor);
+        $polyline      = PolylineFixtures::createPolyline($facadeFloor, collect(array_fill(0, 2000, $roundedLatLng)));
+        $this->assertLessThanOrEqual(Polyline::VERTICES_JSON_MAX_LENGTH, strlen($polyline['vertices_json']));
+
+        try {
+            // Act
+            $response = $this->postJson(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $dungeonRoute]), [
+                'floor_id' => $facadeFloor->id,
+                'polyline' => $polyline,
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['polyline.vertices_json']);
+            $this->assertSame(0, Path::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenBrushlineOnFacadeFloorTooLongOnceOnItsRealFloor_returnsAVerticesErrorAndCreatesNothing(): void
+    {
+        // Arrange - one-decimal facade vertices fit the limit, their six-decimal real-floor equivalents do not
+        [$mappingVersion, $facadeFloor, $facadeLatLng] = $this->findConvertibleFacadeLocation();
+
+        $dungeonRoute  = $this->createFacadeDungeonRoute($mappingVersion);
+        $roundedLatLng = new LatLng($facadeLatLng->getLat(1), $facadeLatLng->getLng(1), $facadeFloor);
+        $polyline      = PolylineFixtures::createPolyline($facadeFloor, collect(array_fill(0, 2000, $roundedLatLng)));
+
+        try {
+            // Act
+            $response = $this->postJson(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $dungeonRoute]), [
+                'floor_id' => $facadeFloor->id,
+                'polyline' => $polyline,
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['polyline.vertices_json']);
+            $this->assertSame(0, Brushline::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
         } finally {
             $dungeonRoute->delete();
         }
