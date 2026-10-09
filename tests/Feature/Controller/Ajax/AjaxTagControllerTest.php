@@ -598,6 +598,106 @@ final class AjaxTagControllerTest extends PublicTestCase
         }
     }
 
+    /**
+     * The category is resolved by its key alone: once the contract release drops the name column
+     * there is nothing else to match on, which a legacy name that differs from the key simulates.
+     */
+    #[Test]
+    public function store_givenCategoryKeyWhoseLegacyNameDiffers_createsTheTag(): void
+    {
+        $author = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $name   = sprintf('test-tag-%s', fake()->uuid());
+            $this->renameLegacyTagCategoryNames();
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'category'      => TagCategory::DUNGEON_ROUTE_PERSONAL,
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertDatabaseHas('tags', [
+                'name'            => $name,
+                'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL],
+                'context_id'      => $author->id,
+                'context_class'   => User::class,
+            ]);
+        } finally {
+            $this->restoreLegacyTagCategoryNames();
+            $this->cleanUpTagsOfUsers([$author]);
+            $this->cleanUp(route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
+    public function store_givenUnknownCategoryKey_returnsValidationErrorAndCreatesNoTag(): void
+    {
+        $author = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $name   = sprintf('test-tag-%s', fake()->uuid());
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'category'      => 'not_a_tag_category',
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertInvalid(['category']);
+            $this->assertDatabaseMissing('tags', ['name' => $name]);
+        } finally {
+            $this->cleanUpTagsOfUsers([$author]);
+            $this->cleanUp(route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
+    public function delete_givenTeamTagOnOwnRouteWhoseCategoryLegacyNameDiffers_deletesIt(): void
+    {
+        $author = null;
+        $team   = null;
+        $route  = null;
+        $tag    = null;
+
+        try {
+            // Arrange - the author is not a team member, so only TagPolicy::edit()'s per-category
+            // fallback to the route's own permissions allows this
+            $author = User::factory()->create();
+            $team   = $this->createTeam();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $tag    = $this->createTeamTag($team, $route);
+            $this->renameLegacyTagCategoryNames();
+
+            // Act
+            $response = $this->actingAs($author)->delete(sprintf('/ajax/tag/%d', $tag->id));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseMissing('tags', ['id' => $tag->id]);
+        } finally {
+            $this->restoreLegacyTagCategoryNames();
+            $this->cleanUp(tag: $tag, route: $route, team: $team, users: [$author]);
+        }
+    }
+
     private function createUserWithUserRole(): User
     {
         $user = User::factory()->create(['public_key' => User::generateRandomPublicKey()]);
@@ -647,6 +747,20 @@ final class AjaxTagControllerTest extends PublicTestCase
             'name'            => sprintf('test-team-tag-%s', fake()->uuid()),
             'color'           => null,
         ]);
+    }
+
+    private function renameLegacyTagCategoryNames(): void
+    {
+        foreach (TagCategory::ALL as $tagCategoryKey => $id) {
+            TagCategory::query()->whereKey($id)->update(['name' => sprintf('legacy_%s', $tagCategoryKey)]);
+        }
+    }
+
+    private function restoreLegacyTagCategoryNames(): void
+    {
+        foreach (TagCategory::ALL as $tagCategoryKey => $id) {
+            TagCategory::query()->whereKey($id)->update(['name' => $tagCategoryKey]);
+        }
     }
 
     private function createTeam(): Team

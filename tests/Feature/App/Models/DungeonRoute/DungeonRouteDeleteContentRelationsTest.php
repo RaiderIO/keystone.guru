@@ -343,7 +343,7 @@ class DungeonRouteDeleteContentRelationsTest extends PublicTestCase
             ]);
             $routeId = $route->id;
 
-            $tagCategory = TagCategory::firstWhere('name', TagCategory::DUNGEON_ROUTE_PERSONAL);
+            $tagCategory = TagCategory::firstWhere('key', TagCategory::DUNGEON_ROUTE_PERSONAL);
             $tag         = Tag::create([
                 'tag_category_id' => $tagCategory->id,
                 'model_id'        => $route->id,

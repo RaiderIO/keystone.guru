@@ -9,6 +9,7 @@ use Override;
 
 /**
  * @property int          $id
+ * @property string       $key
  * @property string       $name
  * @property class-string $model_class
  *
@@ -31,6 +32,7 @@ class TagCategory extends Model
 
     protected $fillable = [
         'id',
+        'key',
         'name',
         'model_class',
     ];
@@ -41,6 +43,6 @@ class TagCategory extends Model
     #[Override]
     public function getRouteKeyName(): string
     {
-        return 'name';
+        return 'key';
     }
 }
