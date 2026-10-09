@@ -6,6 +6,7 @@ use App\Logic\Structs\MapBounds;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonStart;
+use App\Models\DungeonTransport;
 use App\Models\Enemy;
 use App\Models\EnemyForcesCheckpoint;
 use App\Models\EnemyPack;
@@ -74,6 +75,7 @@ use Illuminate\Support\Collection;
  * @property EloquentCollection<int, MapIcon>                    $mapIconsForExport
  * @property EloquentCollection<int, DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkersForExport
  * @property EloquentCollection<int, DungeonStart>               $dungeonStartsForExport
+ * @property EloquentCollection<int, DungeonTransport>           $dungeonTransportsForExport
  * @property EloquentCollection<int, MountableArea>              $mountableAreasForExport
  * @property EloquentCollection<int, EnemyForcesCheckpoint>      $enemyForcesCheckpointsForExport
  * @property EloquentCollection<int, FloorUnion>                 $floorUnionsForExport
@@ -403,6 +405,12 @@ class Floor extends Model implements MappingModelInterface
     public function dungeonStartsForExport(): HasMany
     {
         return $this->hasMany(DungeonStart::class)->orderBy('id');
+    }
+
+    /** @return HasMany<DungeonTransport, $this> */
+    public function dungeonTransportsForExport(): HasMany
+    {
+        return $this->hasMany(DungeonTransport::class)->orderBy('id');
     }
 
     /** @return HasMany<FloorCoupling, $this> */
