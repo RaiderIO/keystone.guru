@@ -106,7 +106,7 @@ readonly class CombatLogService implements CombatLogServiceInterface
     {
         $events = new Collection();
 
-        $this->parseCombatLog($filePath, static function (
+        $this->parseCombatLog($filePath, function (
             int    $combatLogVersion,
             bool   $advancedLoggingEnabled,
             string $rawEvent,
@@ -116,25 +116,81 @@ readonly class CombatLogService implements CombatLogServiceInterface
                 $combatLogVersion,
             );
             if ($parsedEvent instanceof ChallengeModeStartEvent) {
-                try {
-                    $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeId())->firstOrFail();
-                } catch (Exception) {
-                    throw new DungeonNotSupportedException(
-                        sprintf('Dungeon with challenge mode ID %d not found', $parsedEvent->getChallengeModeId()),
-                    );
-                }
-
-                $events->push((new ChallengeMode(
-                    $parsedEvent->getTimestamp(),
-                    $dungeon,
-                    $parsedEvent->getKeystoneLevel(),
-                )));
+                $events->push($this->createChallengeMode($parsedEvent));
             }
 
             return $parsedEvent;
         });
 
         return $events;
+    }
+
+    /**
+     * @throws DungeonNotSupportedException
+     */
+    public function createChallengeMode(ChallengeModeStartEvent $challengeModeStartEvent): ChallengeMode
+    {
+        try {
+            $dungeon = Dungeon::where('challenge_mode_id', $challengeModeStartEvent->getChallengeModeId())->firstOrFail();
+        } catch (Exception) {
+            throw new DungeonNotSupportedException(
+                sprintf('Dungeon with challenge mode ID %d not found', $challengeModeStartEvent->getChallengeModeId()),
+            );
+        }
+
+        return new ChallengeMode(
+            $challengeModeStartEvent->getTimestamp(),
+            $dungeon,
+            $challengeModeStartEvent->getKeystoneLevel(),
+        );
+    }
+
+    /**
+     * Counts the lines parseCombatLog() would hand to its callback, without parsing them or extracting the archive to disk.
+     *
+     * @throws InvalidArgumentException
+     */
+    public function countCombatLogLines(string $filePath): int
+    {
+        $zip    = null;
+        $handle = false;
+
+        try {
+            if (Str::endsWith($filePath, '.zip')) {
+                $zip = new ZipArchive();
+                if ($zip->open($filePath) !== true) {
+                    $zip = null;
+
+                    throw new InvalidArgumentException('File is not a valid .zip file');
+                }
+
+                $entryName = $zip->getNameIndex(0);
+                if ($entryName === false) {
+                    throw new InvalidArgumentException('Zip archive does not contain any entries');
+                }
+
+                $handle = $zip->getStream($entryName);
+            } else {
+                $handle = fopen($filePath, 'r');
+            }
+
+            if (!$handle) {
+                throw new InvalidArgumentException(sprintf('Unable to read file %s', $filePath));
+            }
+
+            $lineCount = 0;
+            while (fgets($handle) !== false) {
+                $lineCount++;
+            }
+
+            return $lineCount;
+        } finally {
+            if ($handle) {
+                fclose($handle);
+            }
+
+            $zip?->close();
+        }
     }
 
     /**

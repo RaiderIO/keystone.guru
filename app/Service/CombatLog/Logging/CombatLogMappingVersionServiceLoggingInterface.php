@@ -10,7 +10,7 @@ interface CombatLogMappingVersionServiceLoggingInterface extends StructuredLoggi
 
     public function createMappingVersionFromChallengeModeNoChallengeModesFound(): void;
 
-    public function createMappingVersionFromChallengeModeMultipleChallengeModesFound(): void;
+    public function createMappingVersionFromChallengeModeMultipleChallengeModesFound(int $challengeModeCount): void;
 
     public function createMappingVersionFromDungeonOrRaidStart(string $filePath): void;
 
