@@ -28,6 +28,12 @@ if (session()->hasOldInput()) {
 
 $existingSocialLinks = $user->socialLinks->keyBy('platform');
 
+$pinnedDungeonRoutePublicKeys = collect($pinnedDungeonRouteIds)
+    ->map(static fn(int $pinnedDungeonRouteId): ?string => $ownDungeonRoutes->firstWhere('id', $pinnedDungeonRouteId)?->public_key)
+    ->filter()
+    ->values()
+    ->all();
+
 /**
  * The help text and, when the field failed validation, its error message - what a field's aria-describedby lists.
  */
@@ -145,7 +151,32 @@ $describedBy = static fn(string $errorKey, string $errorId, string $helpId): str
                 'max' => UserPinnedDungeonRoute::MAX_PINNED_ROUTES,
                 'help' => __('view_profile.edit.creator_pinned_routes_help'),
                 'emptyText' => __('view_profile.edit.creator_pinned_routes_empty'),
+                'showAddSelect' => false,
             ])
+
+            <h6 class="mt-3 mb-1">
+                {{ __('view_profile.edit.creator_pinned_routes_table') }}
+            </h6>
+            <p class="form-text text-body-secondary mb-0">
+                {{ __('view_profile.edit.creator_pinned_routes_table_help', ['max' => UserPinnedDungeonRoute::MAX_PINNED_ROUTES]) }}
+            </p>
+            @include('common.dungeonroute.table', [
+                'inlineId' => 'creator_pinned_routes_table_inline',
+                'view' => 'profile_select',
+                'tableId' => 'creator_pinned_routes_table',
+                'lockedViewMode' => 'list',
+                'showFilters' => false,
+                'selectable' => true,
+                'selectedPublicKeys' => $pinnedDungeonRoutePublicKeys,
+                'selectionMax' => UserPinnedDungeonRoute::MAX_PINNED_ROUTES,
+            ])
+            @include('common.general.inline', ['path' => 'profile/edittabs/creator', 'options' => [
+                'pinnedRoutesTableSelector' => '#creator_pinned_routes_table',
+                'pinnedRoutesTableInlineId' => 'creator_pinned_routes_table_inline',
+                'pinnedRoutesOrderedSelectInlineId' => 'pinned_dungeon_routes_inline',
+                'pinnedRoutesListSelector' => '#pinned_dungeon_routes_list',
+                'dungeonRouteIdsByPublicKey' => $ownDungeonRoutes->pluck('id', 'public_key'),
+            ]])
         @endif
     </div>
 

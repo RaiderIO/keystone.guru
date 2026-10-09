@@ -94,6 +94,36 @@ class ProfileTableView extends TableView {
     }
 }
 
+/**
+ * The user's own routes as plain rows to pick from: no thumbnails, no actions.
+ */
+class ProfileSelectTableView extends TableView {
+    constructor() {
+        super();
+
+        let columns = [
+            {name: 'title', width: '30%', className: 'pt-0 pb-0'},
+            {name: 'dungeon', width: '20%', className: 'd-none d-sm-table-cell'},
+            {name: 'affixes', width: '20%', className: 'd-none d-lg-table-cell'},
+            {name: 'enemy_forces', width: '10%', className: 'd-none d-md-table-cell'},
+            {name: 'views', width: '10%', className: 'd-none d-lg-table-cell'},
+        ];
+
+        this._columns = {
+            list:    columns,
+            biglist: columns,
+        };
+    }
+
+    getAjaxParameters() {
+        return {mine: 1};
+    }
+
+    getName() {
+        return 'profile_select';
+    }
+}
+
 class UserProfileTableView extends TableView {
     constructor() {
         super();
@@ -304,6 +334,7 @@ class TeamRoutePublishingTableView extends TableView {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         ProfileTableView,
+        ProfileSelectTableView,
         UserProfileTableView,
         FavoritesTableView,
         TeamTableView,

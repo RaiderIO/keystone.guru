@@ -22,6 +22,7 @@
  *                                       form; the add select makes way for a button the host page wires up.
  * @var string|null        $addLabel     Text of that button (ajax mode).
  * @var bool               $showAdd      Whether that button is shown (ajax mode).
+ * @var bool               $showAddSelect Whether the add select is shown; without it the host page adds items itself.
  * @var bool               $showCount    Whether the "n / max" counter is shown.
  * @var int|null           $fullCount    What counts towards $max, when that is more than this list (ajax mode).
  * @var int|null           $itemMax      Maximum number of items in this list itself, when that is below $max (ajax mode).
@@ -38,6 +39,7 @@ $ajax       ??= false;
 $addLabel   ??= __('view_common.forms.orderedselect.add');
 $showCount  ??= true;
 $showAdd    ??= true;
+$showAddSelect ??= true;
 $showCountMax ??= true;
 
 $selectedIds = array_values(array_filter($selectedIds, static fn(int|string $selectedId): bool => isset($options[$selectedId])));
@@ -74,7 +76,7 @@ $inlineOptions = [
 <div id="{{ $id }}" class="ordered_select" data-inline-id="{{ sprintf('%s_inline', $id) }}"
      data-inline-path="common/forms/orderedselect" data-inline-options="{{ json_encode($inlineOptions) }}">
     <div class="d-flex align-items-baseline">
-        <label id="{{ $id }}_label" @if(!$ajax) for="{{ $id }}_add" @endif class="{{ $labelClass }}">
+        <label id="{{ $id }}_label" @if(!$ajax && $showAddSelect) for="{{ $id }}_add" @endif class="{{ $labelClass }}">
             {{ $label }}
         </label>
         @if($showCount)
@@ -109,7 +111,7 @@ $inlineOptions = [
                 aria-describedby="{{ $helpId }}" @disabled($isFull)>
             <i class="fas fa-plus" aria-hidden="true"></i> {{ $addLabel }}
         </button>
-    @elseif(!$ajax)
+    @elseif(!$ajax && $showAddSelect)
         <div class="input-group">
             <select id="{{ $id }}_add" class="form-select{{ $errors->has($errorKey) ? ' is-invalid' : '' }}"
                     aria-describedby="{{ $helpId }}" @disabled($isFull)>

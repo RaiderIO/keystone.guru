@@ -21,6 +21,11 @@ use Laravel\Pennant\Feature;
  * @var string|null                     $inlineId
  * @var Team|null                       $team
  * @var DungeonRoute                    $model
+ * @var string|null                     $lockedViewMode     'list' or 'biglist' to fix the view mode and hide its toggle.
+ * @var bool                            $showFilters        Whether the filter bar is shown.
+ * @var bool                            $selectable         Whether every row starts with a checkbox that selects it.
+ * @var array<int, string>              $selectedPublicKeys The rows that start out selected, in selection order.
+ * @var int|null                        $selectionMax       At most this many rows may be selected; null for no limit.
  */
 
 if (!isset($affixgroups)) {
@@ -38,6 +43,11 @@ $affixSelectId        ??= 'dungeonroute_affixes_select';
 $attributesSelectId   ??= 'dungeonroute_attributes_select';
 $requirementsSelectId ??= 'dungeonroute_requirements_select';
 $tagsSelectId         ??= 'dungeonroute_tags_select';
+$lockedViewMode       ??= null;
+$showFilters          ??= true;
+$selectable           ??= false;
+$selectedPublicKeys   ??= [];
+$selectionMax         ??= null;
 
 // "Add to collection…" is offered on My routes only
 $showAddToCollection = $view === 'profile' && Auth::check() && Feature::active(CreatorProfiles::class);
@@ -52,6 +62,7 @@ $massDeletePickerId     = sprintf('%s_mass_delete_picker', $tableId);
 $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 ($_COOKIE['routes_viewmode'] === 'biglist' || $_COOKIE['routes_viewmode'] === 'list') ?
     $_COOKIE['routes_viewmode'] : 'biglist';
+$viewMode = $lockedViewMode ?? $cookieViewMode;
 
 if ($team !== null) {
     $searchTags = $team->tags;
@@ -82,7 +93,8 @@ if (Auth::check()) {
             'currentUserId' => Auth::check() ? Auth::id() : -1,
             'currentUserPublicKey' => Auth::check() ? Auth::user()->public_key : '',
             'tableView' => $view,
-            'viewMode' => $cookieViewMode,
+            'viewMode' => $viewMode,
+            'viewModeLocked' => $lockedViewMode !== null,
 
             'tableSelector' => '#' . $tableId,
             'filterButtonSelector' => '#' . $filterButtonId,
@@ -100,6 +112,9 @@ if (Auth::check()) {
             'autoCompleteTags' => $autoCompleteTags,
             'showAddToCollection' => $showAddToCollection,
             'massDeletePickerSelector' => $showMassDelete ? sprintf('#%s', $massDeletePickerId) : null,
+            'selectable' => $selectable,
+            'selectedPublicKeys' => array_values($selectedPublicKeys),
+            'selectionMax' => $selectionMax,
         ],
 ])
 
@@ -128,6 +143,7 @@ if (Auth::check()) {
     @include('common.handlebars.thumbnailcarousel')
 @endsection
 
+@if($team instanceof Team || $showFilters || $lockedViewMode === null)
 <div class="row g-0 {{$tableId}}_filter_container">
     @if($team instanceof Team)
         <div class="col-lg ps-1 pe-1">
@@ -135,6 +151,7 @@ if (Auth::check()) {
             {{ html()->text('team_name', $team->name)->class('form-control')->isReadonly() }}
         </div>
     @endisset
+    @if($showFilters)
     @include('common.dungeonroute.tablefilters', [
         'dungeonSelectId' => $dungeonSelectId,
         'affixSelectId' => $affixSelectId,
@@ -155,6 +172,8 @@ if (Auth::check()) {
             <i class="fas fa-filter"></i> {{ __('view_common.dungeonroute.table.filter') }}
         </button>
     </div>
+    @endif
+    @if($lockedViewMode === null)
     <div class="col-lg ps-1 pe-1">
         <label>&nbsp;</label>
         <div class="mb-2 text-end">
@@ -170,7 +189,9 @@ if (Auth::check()) {
             </button>
         </div>
     </div>
+    @endif
 </div>
+@endif
 @if($showMassDelete)
     @include('common.dungeonroute.picker', [
         'id' => $massDeletePickerId,

@@ -438,6 +438,7 @@ return [
     'migrate_to_encrypted_label'                   => 'Migrate to Encrypted',
     'migrate_to_shrouded_label'                    => 'Migrate to Shrouded',
     'datatable_no_routes_in_table'                 => 'No routes found',
+    'dungeonroute_table_select_route'              => 'Select :title',
     'vote'                                         => 'vote',
     'votes'                                        => 'votes',
     'route_delete_confirm'                         => 'Are you sure you wish to delete this route?',
