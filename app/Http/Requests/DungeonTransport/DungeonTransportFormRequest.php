@@ -53,7 +53,7 @@ class DungeonTransportFormRequest extends FormRequest
                 'nullable',
                 'integer',
                 Rule::exists(DungeonTransport::class, 'id')
-                    ->where('mapping_version_id', (int)$this->input('mapping_version_id')),
+                    ->where('mapping_version_id', $this->getRouteMappingVersion()->id),
                 Rule::notIn([(int)$this->input('id')]),
             ],
             'target_dungeon_id' => [
@@ -85,5 +85,16 @@ class DungeonTransportFormRequest extends FormRequest
             'linked_dungeon_transport_id.exists' => __('validation.custom.dungeon_transport_linked_dungeon_transport_id.exists'),
             'linked_dungeon_transport_id.not_in' => __('validation.custom.dungeon_transport_linked_dungeon_transport_id.not_in'),
         ];
+    }
+
+    /**
+     * The mapping version the transport is stored in; the controller ignores the one in the request body.
+     */
+    private function getRouteMappingVersion(): MappingVersion
+    {
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion = $this->route('mappingVersion');
+
+        return $mappingVersion;
     }
 }

@@ -145,6 +145,32 @@ final class AjaxDungeonTransportControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function store_givenBodyMappingVersionOfTheLinkedTransportButAnotherRouteMappingVersion_returnsValidationError(): void
+    {
+        // Arrange - the controller stores into the route's mapping version whatever the body says
+        $mappingVersion      = $this->getNonFacadeMappingVersion();
+        $otherMappingVersion = MappingVersion::query()->whereKeyNot($mappingVersion->id)->with('dungeon.floors')->firstOrFail();
+        $foreignTransport    = $this->createTransport($otherMappingVersion);
+        $countBefore         = DungeonTransport::query()->count();
+
+        try {
+            // Act
+            $response = $this->postJson(route('ajax.admin.dungeontransport.create', ['mappingVersion' => $mappingVersion]), [
+                ...$this->validAttributes($mappingVersion),
+                'mapping_version_id'          => $otherMappingVersion->id,
+                'linked_dungeon_transport_id' => $foreignTransport->id,
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors('linked_dungeon_transport_id');
+            $this->assertSame($countBefore, DungeonTransport::query()->count());
+        } finally {
+            $foreignTransport->delete();
+        }
+    }
+
+    #[Test]
     public function store_givenLinkToItself_returnsValidationError(): void
     {
         // Arrange
