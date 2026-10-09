@@ -120,7 +120,7 @@ return [
             'header_edit'   => 'Edit expansion',
             'active'        => 'Active',
             'name'          => 'Name',
-            'shortname'     => 'Shortname',
+            'key'           => 'Key',
             'current_image' => 'Current image',
             'color'         => 'Color',
             'edit'          => 'Edit',

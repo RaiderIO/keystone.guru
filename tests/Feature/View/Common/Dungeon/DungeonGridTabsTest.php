@@ -24,7 +24,7 @@ final class DungeonGridTabsTest extends PublicTestCase
      */
     private function instanceIds(string $expansionShortname, bool $raid): Collection
     {
-        $expansion = Expansion::firstWhere('shortname', $expansionShortname);
+        $expansion = Expansion::firstWhere('key', $expansionShortname);
         $relation  = $raid ? $expansion->raids() : $expansion->dungeons();
 
         return $relation->forGameVersion($this->classicEra())->pluck('dungeons.id');

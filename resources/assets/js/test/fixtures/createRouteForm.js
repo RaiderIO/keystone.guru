@@ -33,16 +33,16 @@ const DIFFICULTY_BY_DUNGEON = {
 };
 
 const RETAIL_EXPANSION_ID        = 701;
-const RETAIL_EXPANSION_SHORTNAME = 'retail_xpac';
+const RETAIL_EXPANSION_KEY = 'retail_xpac';
 const CLASSIC_EXPANSION_ID        = 702;
-const CLASSIC_EXPANSION_SHORTNAME = 'classic_xpac';
+const CLASSIC_EXPANSION_KEY = 'classic_xpac';
 
 const DUNGEON_EXPANSIONS = {
-    [RETAIL_DUNGEON_ALPHA_ID]: RETAIL_EXPANSION_SHORTNAME,
-    [RETAIL_DUNGEON_BETA_ID]: RETAIL_EXPANSION_SHORTNAME,
-    [CLASSIC_DUNGEON_NONSPEEDRUN_ID]: CLASSIC_EXPANSION_SHORTNAME,
-    [CLASSIC_DUNGEON_SSC_ID]: CLASSIC_EXPANSION_SHORTNAME,
-    [CLASSIC_DUNGEON_TK_ID]: CLASSIC_EXPANSION_SHORTNAME,
+    [RETAIL_DUNGEON_ALPHA_ID]: RETAIL_EXPANSION_KEY,
+    [RETAIL_DUNGEON_BETA_ID]: RETAIL_EXPANSION_KEY,
+    [CLASSIC_DUNGEON_NONSPEEDRUN_ID]: CLASSIC_EXPANSION_KEY,
+    [CLASSIC_DUNGEON_SSC_ID]: CLASSIC_EXPANSION_KEY,
+    [CLASSIC_DUNGEON_TK_ID]: CLASSIC_EXPANSION_KEY,
 };
 
 const CURRENT_SEASON_ID = 501;
@@ -152,7 +152,7 @@ function dungeonStartSelectHtml(id) {
 function affixesHtml(affixGroups, withSeasonalIndexPreset) {
     const affixOptions = affixGroups.map(({id}) => `<option value="${id}">${id}</option>`).join('');
     const affixRows = affixGroups.map(({id}) => `
-        <div class="row affix_list_row expansion ${RETAIL_EXPANSION_SHORTNAME} season season-${CURRENT_SEASON_ID}" data-id="${id}">
+        <div class="row affix_list_row expansion ${RETAIL_EXPANSION_KEY} season season-${CURRENT_SEASON_ID}" data-id="${id}">
             <div class="col col-md pe-0 affix_row">
                 <div class="col-auto select_icon class_icon"></div>
             </div>
@@ -160,7 +160,7 @@ function affixesHtml(affixGroups, withSeasonalIndexPreset) {
         </div>`).join('');
 
     const seasonalIndexSelect = withSeasonalIndexPreset ? `
-        <div class="mb-3 ${RETAIL_EXPANSION_SHORTNAME} presets">
+        <div class="mb-3 ${RETAIL_EXPANSION_KEY} presets">
             <select id="seasonal_index" name="seasonal_index[]" class="form-control selectpicker">
                 <option value="0">Preset 1</option>
                 <option value="1">Preset 2</option>
@@ -305,7 +305,7 @@ function buildInlineOptions({temporary = false, defaultSelectedAffixes = [AFFIX_
         id: CURRENT_SEASON_ID,
         key_level_min: KEY_LEVEL_MIN,
         key_level_max: KEY_LEVEL_MAX,
-        expansion: {shortname: RETAIL_EXPANSION_SHORTNAME},
+        expansion: {key: RETAIL_EXPANSION_KEY},
         season_dungeons: CURRENT_SEASON_DUNGEON_IDS.map((dungeonId) => ({dungeon_id: dungeonId})),
         dungeons: CURRENT_SEASON_DUNGEON_IDS.map((dungeonId) => ({id: dungeonId})),
         affix_groups: [
@@ -347,14 +347,14 @@ function buildInlineOptions({temporary = false, defaultSelectedAffixes = [AFFIX_
             teemingSelector: '#teeming',
             modal: false,
             defaultSelected: defaultSelectedAffixes,
-            allExpansions: {[RETAIL_EXPANSION_SHORTNAME]: RETAIL_EXPANSION_ID, [CLASSIC_EXPANSION_SHORTNAME]: CLASSIC_EXPANSION_ID},
+            allExpansions: {[RETAIL_EXPANSION_KEY]: RETAIL_EXPANSION_ID, [CLASSIC_EXPANSION_KEY]: CLASSIC_EXPANSION_ID},
             allAffixGroups: [
                 {id: AFFIX_GROUP_DEFAULT_ID, expansion_id: RETAIL_EXPANSION_ID},
                 {id: AFFIX_GROUP_ALT_A_ID, expansion_id: RETAIL_EXPANSION_ID},
                 {id: AFFIX_GROUP_ALT_B_ID, expansion_id: RETAIL_EXPANSION_ID},
             ],
             dungeonExpansions: DUNGEON_EXPANSIONS,
-            currentAffixes: {[RETAIL_EXPANSION_SHORTNAME]: null},
+            currentAffixes: {[RETAIL_EXPANSION_KEY]: null},
             currentSeason,
             nextSeason: null,
             seasonalIndexSelector: '#seasonal_index',
@@ -449,9 +449,9 @@ module.exports = {
     DIFFICULTY_BY_DUNGEON,
     // Expansions / season
     RETAIL_EXPANSION_ID,
-    RETAIL_EXPANSION_SHORTNAME,
+    RETAIL_EXPANSION_KEY,
     CLASSIC_EXPANSION_ID,
-    CLASSIC_EXPANSION_SHORTNAME,
+    CLASSIC_EXPANSION_KEY,
     CURRENT_SEASON_ID,
     KEY_LEVEL_MIN,
     KEY_LEVEL_MAX,

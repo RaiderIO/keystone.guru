@@ -37,7 +37,7 @@ class CreateMissingFloors extends Command
 
             // Bit of a hack to get the correct translation key..
             $dungeonTranslationKey = explode('.', $dungeon->name)[2];
-            $floorsTranslationKey  = sprintf('dungeons.%s.%s.floors', $dungeon->expansion->shortname, $dungeonTranslationKey);
+            $floorsTranslationKey  = sprintf('dungeons.%s.%s.floors', $dungeon->expansion->key, $dungeonTranslationKey);
 
             $translatedFloors = __($floorsTranslationKey, [], 'en_US');
 

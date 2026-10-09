@@ -28,7 +28,7 @@ use Illuminate\Support\Collection;
 // If route was set, initialize with the affixes of the current route so that the user may adjust its selection
 if (isset($dungeonroute)) {
     $defaultSelected     = $dungeonroute->affixGroups->pluck(['affix_group_id'])->toArray();
-    $defaultExpansionKey = $dungeonroute->dungeon->expansion->shortname;
+    $defaultExpansionKey = $dungeonroute->dungeon->expansion->key;
 } // Fill it by default with the current week's affix group for the current user
 elseif (empty($defaultSelected)) {
     $defaultSelected = $currentAffixes->pluck(['id'])->values();
@@ -65,14 +65,14 @@ $allAffixGroupsWithSeasons = $allAffixGroups
     <div id="{{ $id }}_list_custom" class="affix_list col-lg-12">
         @if($nextSeason !== null)
             @foreach($nextSeason->affixGroups as $affixGroup)
-                @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $nextSeason, 'expansionKey' => $nextSeason->expansion->shortname])
+                @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $nextSeason, 'expansionKey' => $nextSeason->expansion->key])
             @endforeach
         @endif
 
         @foreach($expansionsData as $expansionData)
             @php($expansionSeason = $expansionData->getExpansionSeason())
             @foreach($expansionSeason->getAffixGroups()->getAllAffixGroups() as $affixGroup)
-                @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $expansionSeason->getSeason(), 'expansionKey' => $expansionData->getExpansion()->shortname])
+                @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $expansionSeason->getSeason(), 'expansionKey' => $expansionData->getExpansion()->key])
             @endforeach
         @endforeach
     </div>

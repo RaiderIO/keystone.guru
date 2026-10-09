@@ -16,7 +16,7 @@ class CreateMissing extends Command
      *
      * @var string
      */
-    protected $signature = 'dungeon:createmissing {expansion : The expansion shortname to add missing dungeons for, e.g. classic}';
+    protected $signature = 'dungeon:createmissing {expansion : The expansion key to add missing dungeons for, e.g. classic}';
 
     /**
      * The console command description.
@@ -28,7 +28,7 @@ class CreateMissing extends Command
     public function handle(): int
     {
         /** @var Collection<string, Expansion> $expansions */
-        $expansions = Expansion::all()->keyBy('shortname');
+        $expansions = Expansion::all()->keyBy('key');
         /** @var Collection<string, Dungeon> $dungeons */
         $dungeons = Dungeon::all()->keyBy('key');
 

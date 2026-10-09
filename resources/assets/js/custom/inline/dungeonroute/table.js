@@ -606,7 +606,7 @@ class DungeonrouteTable extends InlineCode {
         }
 
         // 9 = Shadowlands, 10 = Dragonflight
-        let expansion = row.dungeon.expansion.shortname;
+        let expansion = row.dungeon.expansion.key;
         let isShadowlandsRoute = expansion === EXPANSION_SHADOWLANDS;
         // let isDragonflightRoute = expansion === EXPANSION_DRAGONFLIGHT;
 

@@ -295,7 +295,7 @@ final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
             $response->assertJsonPath('data.0.level_min', 4);
             $response->assertJsonPath('data.0.level_max', 12);
             $response->assertJsonPath('data.0.dungeon.key', $route->dungeon->key);
-            $this->assertArrayHasKey('shortname', $response->json('data.0.dungeon.expansion'));
+            $this->assertArrayHasKey('key', $response->json('data.0.dungeon.expansion'));
             $this->assertArrayHasKey('enemy_forces_required', $response->json('data.0'));
             $this->assertArrayHasKey('has_thumbnail', $response->json('data.0'));
         } finally {

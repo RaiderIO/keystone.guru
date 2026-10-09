@@ -1358,7 +1358,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         // Say that we found the seasonal affix, we're attached to a season and that season is TWW
         // Then we want to display Xal'Atath's Guile when the min level is PAST the min for that affix
-        if ($this->affixes->isNotEmpty() && $this->season !== null && $this->season->expansion->shortname === Expansion::EXPANSION_TWW) {
+        if ($this->affixes->isNotEmpty() && $this->season !== null && $this->season->expansion->key === Expansion::EXPANSION_TWW) {
             /** @var AffixGroup $affixGroup */
             $affixGroup = $this->affixes->first();
 
@@ -1445,9 +1445,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 ),
             ]);
         } elseif ($this->demo) {
-            if ($this->dungeon->expansion->shortname === Expansion::EXPANSION_BFA) {
+            if ($this->dungeon->expansion->key === Expansion::EXPANSION_BFA) {
                 $subTitle = __('models.dungeonroute.permission_dratnos');
-            } elseif ($this->dungeon->expansion->shortname === Expansion::EXPANSION_SHADOWLANDS) {
+            } elseif ($this->dungeon->expansion->key === Expansion::EXPANSION_SHADOWLANDS) {
                 $subTitle = __('models.dungeonroute.permission_petko');
             } else {
                 // You made this? I made this.jpg

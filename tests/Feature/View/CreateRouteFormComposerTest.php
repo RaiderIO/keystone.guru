@@ -101,7 +101,7 @@ final class CreateRouteFormComposerTest extends PublicTestCase
     {
         // Arrange
         $expectedDungeon = Dungeon::active()
-            ->whereHas('expansion', static fn($q) => $q->where('shortname', 'classic'))
+            ->whereHas('expansion', static fn($q) => $q->where('key', 'classic'))
             ->first();
         $this->assertNotNull($expectedDungeon, 'Need at least one active Classic dungeon in the DB');
 
@@ -200,7 +200,7 @@ final class CreateRouteFormComposerTest extends PublicTestCase
 
     private function createUpcomingSeason(Carbon $start, bool $active): Season
     {
-        $expansion = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT);
+        $expansion = Expansion::firstWhere('key', Expansion::EXPANSION_MIDNIGHT);
 
         return Season::create([
             'expansion_id'            => $expansion->id,

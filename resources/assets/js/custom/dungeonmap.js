@@ -873,7 +873,7 @@ class DungeonMap extends Signalable {
         let northEast = this.leafletMap.unproject([tileSize.x * zoomSizeFactor, 0], floorMaxZoomLevel);
 
         let dungeonData = getState().getMapContext().getDungeon();
-        this.mapTileLayer = L.tileLayer(`${this.options.tilesBaseUrl}/${dungeonData.expansion.shortname}/${dungeonData.key}/${currentFloor.index}/{z}/{x}_{y}.webp`, {
+        this.mapTileLayer = L.tileLayer(`${this.options.tilesBaseUrl}/${dungeonData.expansion.key}/${dungeonData.key}/${currentFloor.index}/{z}/{x}_{y}.webp`, {
             maxNativeZoom: c.map.leafletSettings.maxNativeZoom,
             maxZoom: floorMaxZoomLevel,
             attribution: 'Map data © Blizzard Entertainment',

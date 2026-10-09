@@ -123,7 +123,7 @@ function route(publicKey, overrides = {}) {
         pull_forces:                   [{enemy_forces: 40, has_boss: false}, {enemy_forces: 0, has_boss: true}],
         has_thumbnail:                 false,
         thumbnails:                    [],
-        dungeon:                       {id: 3, name: 'dungeons.ara_kara', key: 'arakara', expansion: {shortname: 'tww'}},
+        dungeon:                       {id: 3, name: 'dungeons.ara_kara', key: 'arakara', expansion: {key: 'tww'}},
     }, overrides);
 }
 
@@ -650,7 +650,7 @@ describe('CommonDungeonroutePicker', () => {
         }));
         picker.activate();
         picker.reload();
-        const otherDungeon = {id: 4, name: 'dungeons.ara_kara', key: 'other', expansion: {shortname: 'tww'}};
+        const otherDungeon = {id: 4, name: 'dungeons.ara_kara', key: 'other', expansion: {key: 'tww'}};
         respondWithRoutes([route('a'), route('b'), route('c', {dungeon: otherDungeon})]);
 
         // Act
