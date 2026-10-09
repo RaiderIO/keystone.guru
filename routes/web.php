@@ -44,6 +44,7 @@ use App\Http\Controllers\Ajax\AjaxDungeonRouteCollectionController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteSearchController;
 use App\Http\Controllers\Ajax\AjaxDungeonStartController;
+use App\Http\Controllers\Ajax\AjaxDungeonTransportController;
 use App\Http\Controllers\Ajax\AjaxEnemyController;
 use App\Http\Controllers\Ajax\AjaxEnemyForcesCheckpointController;
 use App\Http\Controllers\Ajax\AjaxEnemyPackController;
@@ -745,6 +746,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::post('/dungeonstart', new AjaxDungeonStartController()->store(...))->name('ajax.admin.dungeonstart.create');
                     Route::put('/dungeonstart/{dungeonStart}', new AjaxDungeonStartController()->store(...))->name('ajax.admin.dungeonstart.update');
                     Route::delete('/dungeonstart/{dungeonStart}', new AjaxDungeonStartController()->delete(...))->name('ajax.admin.dungeonstart.delete');
+
+                    Route::post('/dungeontransport', new AjaxDungeonTransportController()->store(...))->name('ajax.admin.dungeontransport.create');
+                    Route::put('/dungeontransport/{dungeonTransport}', new AjaxDungeonTransportController()->store(...))->name('ajax.admin.dungeontransport.update');
+                    Route::delete('/dungeontransport/{dungeonTransport}', new AjaxDungeonTransportController()->delete(...))->name('ajax.admin.dungeontransport.delete');
 
                     Route::post('/mapicon', new AjaxMapIconController()->adminStore(...));
                     Route::put('/mapicon/{mapIcon}', new AjaxMapIconController()->adminStore(...));

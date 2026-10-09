@@ -77,6 +77,7 @@ class Copy extends Command
             $relations = [
                 'dungeonFloorSwitchMarkers',
                 'dungeonStarts',
+                'dungeonTransports',
                 'enemies',
                 'enemyPacks',
                 'enemyPatrols',

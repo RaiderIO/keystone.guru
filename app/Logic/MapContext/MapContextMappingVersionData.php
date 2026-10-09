@@ -21,7 +21,7 @@ class MapContextMappingVersionData implements Arrayable
     use RemembersToFile;
 
     /** Bump whenever the shape of the cached data changes, so a deploy never serves the previous shape */
-    private const int DATA_VERSION = 3;
+    private const int DATA_VERSION = 4;
 
     public function __construct(
         protected CacheServiceInterface       $cacheService,
@@ -100,6 +100,7 @@ class MapContextMappingVersionData implements Arrayable
                         'mapIcons'                  => $this->mappingVersion->mapContextMapIcons($this->coordinatesService, $useFacade),
                         'dungeonFloorSwitchMarkers' => $this->mappingVersion->mapContextDungeonFloorSwitchMarkers($this->coordinatesService, $useFacade),
                         'dungeonStarts'             => $this->mappingVersion->mapContextDungeonStarts($this->coordinatesService, $useFacade),
+                        'dungeonTransports'         => $this->mappingVersion->mapContextDungeonTransports($this->coordinatesService, $useFacade),
                         'mountableAreas'            => $this->mappingVersion->mapContextMountableAreas($this->coordinatesService, $useFacade),
                         'enemyForcesCheckpoints'    => $this->mappingVersion->mapContextEnemyForcesCheckpoints($this->coordinatesService, $useFacade),
                         'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $useFacade),

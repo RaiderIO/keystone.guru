@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonStart;
+use App\Models\DungeonTransport;
 use App\Models\Enemy;
 use App\Models\EnemyForcesCheckpoint;
 use App\Models\EnemyPack;
@@ -34,6 +35,7 @@ use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMap
 use App\SeederHelpers\RelationImport\Mapping\DungeonRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRouteRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonStartRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\DungeonTransportRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\EnemyForcesCheckpointRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\EnemyPackRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\EnemyPatrolRelationMapping;
@@ -97,6 +99,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             new EnemyPatrolRelationMapping(),
             new DungeonFloorSwitchMarkerRelationMapping(),
             new DungeonStartRelationMapping(),
+            new DungeonTransportRelationMapping(),
             new MapIconRelationMapping(),
             new MountableAreaRelationMapping(),
             new EnemyForcesCheckpointRelationMapping(),
@@ -559,6 +562,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             EnemyPatrol::class,
             DungeonFloorSwitchMarker::class,
             DungeonStart::class,
+            DungeonTransport::class,
             MountableArea::class,
             EnemyForcesCheckpoint::class,
             FloorUnion::class,

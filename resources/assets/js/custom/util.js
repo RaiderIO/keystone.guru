@@ -461,6 +461,13 @@ function getDungeonStartMapObjectGroup() {
 }
 
 /**
+ * @returns {DungeonTransportMapObjectGroup|null}
+ */
+function getDungeonTransportMapObjectGroup() {
+    return _getCurrentMapObjectGroupManager()?.getDungeonTransportMapObjectGroup() ?? null;
+}
+
+/**
  * @returns {BrushlineMapObjectGroup|null}
  */
 function getBrushlineMapObjectGroup() {
@@ -715,6 +722,7 @@ if (typeof module !== 'undefined' && module.exports) {
         getPathMapObjectGroup,
         getDungeonFloorSwitchMarkerMapObjectGroup,
         getDungeonStartMapObjectGroup,
+        getDungeonTransportMapObjectGroup,
         getBrushlineMapObjectGroup,
         getArrowMapObjectGroup,
         getMapIconMapObjectGroup,

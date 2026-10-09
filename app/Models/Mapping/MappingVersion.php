@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonStart;
+use App\Models\DungeonTransport;
 use App\Models\Enemy;
 use App\Models\EnemyForcesCheckpoint;
 use App\Models\EnemyPack;
@@ -58,6 +59,7 @@ use Override;
  * @property EloquentCollection<int, DungeonRoute>             $dungeonRoutes
  * @property EloquentCollection<int, DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers
  * @property EloquentCollection<int, DungeonStart>             $dungeonStarts
+ * @property EloquentCollection<int, DungeonTransport>         $dungeonTransports
  * @property EloquentCollection<int, Enemy>                    $enemies
  * @property EloquentCollection<int, EnemyPack>                $enemyPacks
  * @property EloquentCollection<int, EnemyPatrol>              $enemyPatrols
@@ -166,6 +168,12 @@ class MappingVersion extends Model
     public function dungeonStarts(): HasMany
     {
         return $this->hasMany(DungeonStart::class)->orderBy('id');
+    }
+
+    /** @return HasMany<DungeonTransport, $this> */
+    public function dungeonTransports(): HasMany
+    {
+        return $this->hasMany(DungeonTransport::class)->orderBy('id');
     }
 
     /** @return HasMany<Enemy, $this> */
@@ -501,6 +509,30 @@ class MappingVersion extends Model
     }
 
     /**
+     * @return EloquentCollection<int, DungeonTransport>
+     */
+    public function mapContextDungeonTransports(CoordinatesServiceInterface $coordinatesService, bool $useFacade): EloquentCollection
+    {
+        /** @var EloquentCollection<int, DungeonTransport> $dungeonTransports */
+        $dungeonTransports = $this->dungeonTransports()
+            ->with(['floor'])
+            ->get();
+
+        if ($this->facade_enabled && $useFacade) {
+            foreach ($dungeonTransports as $dungeonTransport) {
+                $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+                    $this,
+                    $dungeonTransport->getLatLng(),
+                );
+
+                $dungeonTransport->setLatLng($convertedLatLng);
+            }
+        }
+
+        return $dungeonTransports;
+    }
+
+    /**
      * @return EloquentCollection<int, MountableArea>
      */
     public function mapContextMountableAreas(
@@ -602,6 +634,7 @@ class MappingVersion extends Model
             $previousMappingVersion->load([
                 'dungeonFloorSwitchMarkers',
                 'dungeonStarts',
+                'dungeonTransports',
                 'enemies',
                 'enemyPacks.polyline',
                 'enemyPatrols',
@@ -612,10 +645,11 @@ class MappingVersion extends Model
                 'floorUnionAreas',
                 'npcEnemyForces',
             ]);
-            /** @var Collection<int, MappingModelInterface|DungeonFloorSwitchMarker|DungeonStart|Enemy|EnemyPack|EnemyPatrol|MapIcon|MountableArea|EnemyForcesCheckpoint|FloorUnion|FloorUnionArea|NpcEnemyForces> $previousMapping */
+            /** @var Collection<int, MappingModelInterface|DungeonFloorSwitchMarker|DungeonStart|DungeonTransport|Enemy|EnemyPack|EnemyPatrol|MapIcon|MountableArea|EnemyForcesCheckpoint|FloorUnion|FloorUnionArea|NpcEnemyForces> $previousMapping */
             $previousMapping = collect()
                 ->merge($previousMappingVersion->dungeonFloorSwitchMarkers)
                 ->merge($previousMappingVersion->dungeonStarts)
+                ->merge($previousMappingVersion->dungeonTransports)
                 ->merge($previousMappingVersion->enemies)
                 ->merge($previousMappingVersion->enemyPacks)
                 ->merge($previousMappingVersion->enemyPatrols)
@@ -628,6 +662,7 @@ class MappingVersion extends Model
             $idMapping = collect([
                 DungeonFloorSwitchMarker::class => collect(),
                 DungeonStart::class             => collect(),
+                DungeonTransport::class         => collect(),
                 Enemy::class                    => collect(),
                 EnemyPack::class                => collect(),
                 EnemyPatrol::class              => collect(),
@@ -719,6 +754,22 @@ class MappingVersion extends Model
                     'linked_dungeon_floor_switch_marker_id' => $newLinkedDungeonFloorSwitchMarkerId,
                 ]);
             }
+            // Change linked dungeon transports to point at their new sibling clone
+            $newDungeonTransportIds = $idMapping->get(DungeonTransport::class)->mapWithKeys(
+                /** @param array{oldModel: DungeonTransport, newModel: DungeonTransport} $coupling */
+                static fn(array $coupling) => [$coupling['oldModel']->id => $coupling['newModel']->id],
+            );
+            foreach ($idMapping->get(DungeonTransport::class) as $dungeonTransportRelationCoupling) {
+                /** @var array{oldModel: DungeonTransport, newModel: DungeonTransport} $dungeonTransportRelationCoupling */
+                $oldLinkedDungeonTransportId = $dungeonTransportRelationCoupling['oldModel']->linked_dungeon_transport_id;
+                if ($oldLinkedDungeonTransportId === null) {
+                    continue;
+                }
+
+                $dungeonTransportRelationCoupling['newModel']->update([
+                    'linked_dungeon_transport_id' => $newDungeonTransportIds->get($oldLinkedDungeonTransportId),
+                ]);
+            }
             // Change floor unions of floor union areas
             foreach ($idMapping->get(FloorUnionArea::class) as $floorUnionAreaRelationCoupling) {
                 /** @var array{oldModel: FloorUnionArea, newModel: FloorUnionArea} $floorUnionAreaRelationCoupling */
@@ -741,6 +792,7 @@ class MappingVersion extends Model
         static::deleting(static function (MappingVersion $mappingVersion) {
             $mappingVersion->dungeonFloorSwitchMarkers()->delete();
             $mappingVersion->dungeonStarts()->delete();
+            $mappingVersion->dungeonTransports()->delete();
             $mappingVersion->enemies()->delete();
             foreach ($mappingVersion->enemyPacks()->with('polyline')->get() as $enemyPack) {
                 $enemyPack->delete();
