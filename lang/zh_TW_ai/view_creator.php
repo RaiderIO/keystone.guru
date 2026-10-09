@@ -17,12 +17,15 @@ return [
         'empty'                   => '',
         'empty_for_category'      => '',
         'empty_for_search'        => '',
+        'empty_for_dungeon'       => '',
+        'filtered_to_dungeon'     => '',
+        'clear_dungeon_filter'    => '',
     ],
     'featured' => [
-        'title'         => '',
-        'title_dungeon' => '',
-        'see_all'       => '',
-        /** Tooltip on a rail entry - it carries the name because the name itself may be clipped to an ellipsis */
+        'title'           => '',
+        'title_dungeon'   => '',
+        'see_all_dungeon' => '',
+        /** Tooltip on a rail entry - it carries the name because a name past two lines is clipped to an ellipsis */
         'entry_title'         => '',
         'route_count'         => '',
         'dungeon_route_count' => '',

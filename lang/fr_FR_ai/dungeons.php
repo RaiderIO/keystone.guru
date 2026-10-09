@@ -8,6 +8,13 @@ return [
         4 => '40 joueurs',
     ],
     'classic' => [
+        'alcaz_prison' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'alcaz_prison' => '',
+            ],
+        ],
         'blackfathom_deeps' => [
             'name'         => 'Profondeurs de Brassenoire',
             'abbreviation' => '',
@@ -15,6 +22,13 @@ return [
                 'the_pool_of_ask_ar' => 'Le Bassin d’Ask’ar',
                 'moonshrine_sanctum' => 'Sanctuaire d’Écrin-de-Lune',
                 'the_forgotten_pool' => 'Les bassins Oubliés',
+            ],
+        ],
+        'blackmaw_hold' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'blackmaw_hold' => '',
             ],
         ],
         'blackrock_depths' => [
@@ -33,6 +47,13 @@ return [
                 'halls_of_strife'      => 'Halls des conflits',
                 'crimson_laboratories' => 'Laboratoires Cramoisis',
                 'nefarians_lair'       => 'Antre de Nefarian',
+            ],
+        ],
+        'city_of_dalaran' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'city_of_dalaran' => '',
             ],
         ],
         'deadmines' => [
@@ -100,6 +121,13 @@ return [
                 'eastern_kingdoms'    => 'Royaumes de l’Est',
             ],
         ],
+        'excavation_site_wetlands' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'excavation_site_wetlands' => '',
+            ],
+        ],
         'gnomeregan' => [
             'name'         => 'Gnomeregan',
             'abbreviation' => '',
@@ -158,6 +186,13 @@ return [
                 'the_slough_of_dispair'   => 'Bourbier du désespoir',
                 'tome_of_the_unrepentant' => 'Tome de l’Impénitent',
                 'the_pit_of_criminals'    => 'Fosse des criminels',
+            ],
+        ],
+        'kroldok_stronghold' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'kroldok_stronghold' => '',
             ],
         ],
         'lower_blackrock_spire' => [
@@ -234,6 +269,13 @@ return [
                 'ruins_of_ahnqiraj' => 'Ruines d’Ahn’Qiraj',
             ],
         ],
+        'ruins_of_lordaeron' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'ruins_of_lordaeron' => '',
+            ],
+        ],
         'scarlet_enclave' => [
             'name'         => 'Bibliothèque du monastère écarlate',
             'abbreviation' => '',
@@ -296,6 +338,13 @@ return [
                 'the_wall_walk'         => 'Le chemin de ronde',
             ],
         ],
+        'shapers_terrace' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'shapers_terrace' => '',
+            ],
+        ],
         'stratholme' => [
             'name'         => 'Stratholme',
             'abbreviation' => '',
@@ -311,6 +360,20 @@ return [
                 'the_hive_undergrounds' => 'Les souterrains de la ruche',
                 'the_temple_gates'      => 'Portes du temple',
                 'vault_of_cthun'        => 'Caveau de C’Thun',
+            ],
+        ],
+        'the_drowned_city' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'the_drowned_city' => '',
+            ],
+        ],
+        'the_hall_of_thanes' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'the_hall_of_thanes' => '',
             ],
         ],
         'the_stockade' => [

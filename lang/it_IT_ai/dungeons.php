@@ -8,6 +8,13 @@ return [
         4 => '40 giocatori',
     ],
     'classic' => [
+        'alcaz_prison' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'alcaz_prison' => '',
+            ],
+        ],
         'blackfathom_deeps' => [
             'name'         => 'Abissi di Fondocupo',
             'abbreviation' => '',
@@ -15,6 +22,13 @@ return [
                 'the_pool_of_ask_ar' => 'Stagno di Ask\'ar',
                 'moonshrine_sanctum' => 'Santuario del Tempio della Luna',
                 'the_forgotten_pool' => 'Pozza Dimenticata',
+            ],
+        ],
+        'blackmaw_hold' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'blackmaw_hold' => '',
             ],
         ],
         'blackrock_depths' => [
@@ -33,6 +47,13 @@ return [
                 'halls_of_strife'      => 'Sale dei Conflitti',
                 'crimson_laboratories' => 'Laboratori Cremisi',
                 'nefarians_lair'       => 'Antro di Nefarian',
+            ],
+        ],
+        'city_of_dalaran' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'city_of_dalaran' => '',
             ],
         ],
         'deadmines' => [
@@ -100,6 +121,13 @@ return [
                 'eastern_kingdoms'    => 'Regni Orientali',
             ],
         ],
+        'excavation_site_wetlands' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'excavation_site_wetlands' => '',
+            ],
+        ],
         'gnomeregan' => [
             'name'         => 'Gnomeregan',
             'abbreviation' => '',
@@ -158,6 +186,13 @@ return [
                 'the_slough_of_dispair'   => 'Pantano della Disperazione',
                 'tome_of_the_unrepentant' => 'Tomo dell’Insensibile',
                 'the_pit_of_criminals'    => 'Fossa dei Criminali',
+            ],
+        ],
+        'kroldok_stronghold' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'kroldok_stronghold' => '',
             ],
         ],
         'lower_blackrock_spire' => [
@@ -234,6 +269,13 @@ return [
                 'ruins_of_ahnqiraj' => 'Rovine di Ahn\'qiraj',
             ],
         ],
+        'ruins_of_lordaeron' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'ruins_of_lordaeron' => '',
+            ],
+        ],
         'scarlet_enclave' => [
             'name'         => 'Enclave Scarlatta',
             'abbreviation' => '',
@@ -296,6 +338,13 @@ return [
                 'the_wall_walk'         => 'Passaggio sulla Muraglia',
             ],
         ],
+        'shapers_terrace' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'shapers_terrace' => '',
+            ],
+        ],
         'stratholme' => [
             'name'         => 'Stratholme',
             'abbreviation' => '',
@@ -311,6 +360,20 @@ return [
                 'the_hive_undergrounds' => 'Alveare Sotterraneo',
                 'the_temple_gates'      => 'Porte del Tempio',
                 'vault_of_cthun'        => 'Volta di C\'thun',
+            ],
+        ],
+        'the_drowned_city' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'the_drowned_city' => '',
+            ],
+        ],
+        'the_hall_of_thanes' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'the_hall_of_thanes' => '',
             ],
         ],
         'the_stockade' => [

@@ -100,7 +100,10 @@ return [
         ],
         'sections' => [
             'header' => [
-                'level' => '',
+                'level'             => '',
+                'dangerous'         => '',
+                'truesight'         => '',
+                'runs_away_in_fear' => '',
             ],
             'characteristics' => [
                 'title'        => '',

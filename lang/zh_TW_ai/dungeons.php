@@ -8,6 +8,13 @@ return [
         4 => '40人',
     ],
     'classic' => [
+        'alcaz_prison' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'alcaz_prison' => '',
+            ],
+        ],
         'blackfathom_deeps' => [
             'name'         => '黑澗深淵',
             'abbreviation' => '',
@@ -15,6 +22,13 @@ return [
                 'the_pool_of_ask_ar' => '阿斯卡之池',
                 'moonshrine_sanctum' => '月光神殿密室',
                 'the_forgotten_pool' => '遺忘之池',
+            ],
+        ],
+        'blackmaw_hold' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'blackmaw_hold' => '',
             ],
         ],
         'blackrock_depths' => [
@@ -33,6 +47,13 @@ return [
                 'halls_of_strife'      => '征戰大廳',
                 'crimson_laboratories' => '赤紅實驗室',
                 'nefarians_lair'       => '奈法利安的巢穴',
+            ],
+        ],
+        'city_of_dalaran' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'city_of_dalaran' => '',
             ],
         ],
         'deadmines' => [
@@ -100,6 +121,13 @@ return [
                 'eastern_kingdoms'    => '東部王國',
             ],
         ],
+        'excavation_site_wetlands' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'excavation_site_wetlands' => '',
+            ],
+        ],
         'gnomeregan' => [
             'name'         => '諾姆瑞根',
             'abbreviation' => '',
@@ -158,6 +186,13 @@ return [
                 'the_slough_of_dispair'   => '',
                 'tome_of_the_unrepentant' => '',
                 'the_pit_of_criminals'    => '',
+            ],
+        ],
+        'kroldok_stronghold' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'kroldok_stronghold' => '',
             ],
         ],
         'lower_blackrock_spire' => [
@@ -234,11 +269,11 @@ return [
                 'ruins_of_ahnqiraj' => '安其拉廢墟',
             ],
         ],
-        'ruins_of_ahnqiraj_sod' => [
-            'name'         => '安其拉廢墟',
+        'ruins_of_lordaeron' => [
+            'name'         => '',
             'abbreviation' => '',
             'floors'       => [
-                'ruins_of_ahnqiraj' => '安其拉廢墟',
+                'ruins_of_lordaeron' => '',
             ],
         ],
         'scarlet_enclave' => [
@@ -303,6 +338,13 @@ return [
                 'the_wall_walk'         => '巨牆步道',
             ],
         ],
+        'shapers_terrace' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'shapers_terrace' => '',
+            ],
+        ],
         'stratholme' => [
             'name'         => '斯坦索姆',
             'abbreviation' => '',
@@ -320,13 +362,18 @@ return [
                 'vault_of_cthun'        => '克蘇恩穹殿',
             ],
         ],
-        'temple_of_ahnqiraj_sod' => [
-            'name'         => '安其拉',
+        'the_drowned_city' => [
+            'name'         => '',
             'abbreviation' => '',
             'floors'       => [
-                'the_hive_undergrounds' => '蟲巢地穴',
-                'the_temple_gates'      => '神廟大門',
-                'vault_of_cthun'        => '克蘇恩穹殿',
+                'the_drowned_city' => '',
+            ],
+        ],
+        'the_hall_of_thanes' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'the_hall_of_thanes' => '',
             ],
         ],
         'the_stockade' => [

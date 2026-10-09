@@ -34,5 +34,13 @@ return [
         'name'        => '',
         'description' => '',
     ],
+    'tbc' => [
+        'name'        => '',
+        'description' => '',
+    ],
+    'sod' => [
+        'name'        => '',
+        'description' => '',
+    ],
 
 ];

@@ -8,6 +8,13 @@ return [
         4 => '40인',
     ],
     'classic' => [
+        'alcaz_prison' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'alcaz_prison' => '',
+            ],
+        ],
         'blackfathom_deeps' => [
             'name'         => '검은심연 나락',
             'abbreviation' => '',
@@ -15,6 +22,13 @@ return [
                 'the_pool_of_ask_ar' => '아스카르 연못',
                 'moonshrine_sanctum' => '달의 제단 성소',
                 'the_forgotten_pool' => '잊혀진 웅덩이',
+            ],
+        ],
+        'blackmaw_hold' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'blackmaw_hold' => '',
             ],
         ],
         'blackrock_depths' => [
@@ -33,6 +47,13 @@ return [
                 'halls_of_strife'      => '투쟁의 전당',
                 'crimson_laboratories' => '진홍빛 연구소',
                 'nefarians_lair'       => '네파리안의 둥지',
+            ],
+        ],
+        'city_of_dalaran' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'city_of_dalaran' => '',
             ],
         ],
         'deadmines' => [
@@ -100,6 +121,13 @@ return [
                 'eastern_kingdoms'    => '동부 왕국',
             ],
         ],
+        'excavation_site_wetlands' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'excavation_site_wetlands' => '',
+            ],
+        ],
         'gnomeregan' => [
             'name'         => '놈리건',
             'abbreviation' => '',
@@ -158,6 +186,13 @@ return [
                 'the_slough_of_dispair'   => '절망의 늪지',
                 'tome_of_the_unrepentant' => '회개하지 않는 자의 서',
                 'the_pit_of_criminals'    => '범죄자의 구덩이',
+            ],
+        ],
+        'kroldok_stronghold' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'kroldok_stronghold' => '',
             ],
         ],
         'lower_blackrock_spire' => [
@@ -234,6 +269,13 @@ return [
                 'ruins_of_ahnqiraj' => '안퀴라즈 폐허',
             ],
         ],
+        'ruins_of_lordaeron' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'ruins_of_lordaeron' => '',
+            ],
+        ],
         'scarlet_enclave' => [
             'name'         => '스칼렛 엔클레이브',
             'abbreviation' => '',
@@ -296,6 +338,13 @@ return [
                 'the_wall_walk'         => '성벽 통로',
             ],
         ],
+        'shapers_terrace' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'shapers_terrace' => '',
+            ],
+        ],
         'stratholme' => [
             'name'         => '스트라솔름',
             'abbreviation' => '',
@@ -311,6 +360,20 @@ return [
                 'the_hive_undergrounds' => '지하 부화장',
                 'the_temple_gates'      => '사원의 문',
                 'vault_of_cthun'        => '크툰의 금고',
+            ],
+        ],
+        'the_drowned_city' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'the_drowned_city' => '',
+            ],
+        ],
+        'the_hall_of_thanes' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'the_hall_of_thanes' => '',
             ],
         ],
         'the_stockade' => [

@@ -8,6 +8,13 @@ return [
         4 => '40 jugadores',
     ],
     'classic' => [
+        'alcaz_prison' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'alcaz_prison' => '',
+            ],
+        ],
         'blackfathom_deeps' => [
             'name'         => 'Cavernas de Brazanegra',
             'abbreviation' => '',
@@ -15,6 +22,13 @@ return [
                 'the_pool_of_ask_ar' => 'La Alberca de Ask\'ar',
                 'moonshrine_sanctum' => 'Sagrario Lunar',
                 'the_forgotten_pool' => 'Las Charcas del Olvido',
+            ],
+        ],
+        'blackmaw_hold' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'blackmaw_hold' => '',
             ],
         ],
         'blackrock_depths' => [
@@ -33,6 +47,13 @@ return [
                 'halls_of_strife'      => 'Salas de los Conflictos',
                 'crimson_laboratories' => 'Laboratorios Carmesí',
                 'nefarians_lair'       => 'Guarida de Nefarian',
+            ],
+        ],
+        'city_of_dalaran' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'city_of_dalaran' => '',
             ],
         ],
         'deadmines' => [
@@ -100,6 +121,13 @@ return [
                 'eastern_kingdoms'    => 'Reinos del Este',
             ],
         ],
+        'excavation_site_wetlands' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'excavation_site_wetlands' => '',
+            ],
+        ],
         'gnomeregan' => [
             'name'         => 'Gnomeregan',
             'abbreviation' => '',
@@ -158,6 +186,13 @@ return [
                 'the_slough_of_dispair'   => 'El Cenagal de la Desesperación',
                 'tome_of_the_unrepentant' => 'Tumba de los Implacables',
                 'the_pit_of_criminals'    => 'Foso de los Criminales',
+            ],
+        ],
+        'kroldok_stronghold' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'kroldok_stronghold' => '',
             ],
         ],
         'lower_blackrock_spire' => [
@@ -234,6 +269,13 @@ return [
                 'ruins_of_ahnqiraj' => 'Ruinas de Ahn\'Qiraj',
             ],
         ],
+        'ruins_of_lordaeron' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'ruins_of_lordaeron' => '',
+            ],
+        ],
         'scarlet_enclave' => [
             'name'         => 'Enclave Escarlata',
             'abbreviation' => '',
@@ -296,6 +338,13 @@ return [
                 'the_wall_walk'         => 'El Camino de la Muralla',
             ],
         ],
+        'shapers_terrace' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'shapers_terrace' => '',
+            ],
+        ],
         'stratholme' => [
             'name'         => 'Stratholme',
             'abbreviation' => '',
@@ -311,6 +360,20 @@ return [
                 'the_hive_undergrounds' => 'El Subterráneo de la Colmena',
                 'the_temple_gates'      => 'Puertas del Templo',
                 'vault_of_cthun'        => 'Cámara de C\'Thun',
+            ],
+        ],
+        'the_drowned_city' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'the_drowned_city' => '',
+            ],
+        ],
+        'the_hall_of_thanes' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'the_hall_of_thanes' => '',
             ],
         ],
         'the_stockade' => [
