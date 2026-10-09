@@ -24,8 +24,6 @@ class MapState {
     }
 }
 
-class SelectKillZoneEnemySelectionOverpull extends MapState {}
-
 class EditKillZoneEnemySelection extends MapState {}
 
 class ViewKillZoneEnemySelection extends MapState {}
@@ -33,7 +31,6 @@ class ViewKillZoneEnemySelection extends MapState {}
 class MapContextLiveSession {}
 
 globalThis.KillZone                            = KillZone;
-globalThis.SelectKillZoneEnemySelectionOverpull = SelectKillZoneEnemySelectionOverpull;
 globalThis.EditKillZoneEnemySelection          = EditKillZoneEnemySelection;
 globalThis.ViewKillZoneEnemySelection          = ViewKillZoneEnemySelection;
 globalThis.MapContextLiveSession               = MapContextLiveSession;
@@ -205,15 +202,16 @@ describe('CommonMapsKillzonessidebar hotkeys', () => {
             expect(map.mapState).toBeInstanceOf(ViewKillZoneEnemySelection);
         });
 
-        test('keydown_givenLiveSession_usesOverpullMapState', () => {
+        test('keydown_givenLiveSessionOnNonEditMap_usesViewMapState', () => {
             // Arrange
+            map.options.edit    = false;
             globalThis.getState = () => ({getMapContext: () => new MapContextLiveSession()});
 
             // Act
             keyDown(document.body);
 
             // Assert
-            expect(map.mapState).toBeInstanceOf(SelectKillZoneEnemySelectionOverpull);
+            expect(map.mapState).toBeInstanceOf(ViewKillZoneEnemySelection);
         });
 
         test('keydown_givenScrollableRow_scrollsRowIntoView', () => {

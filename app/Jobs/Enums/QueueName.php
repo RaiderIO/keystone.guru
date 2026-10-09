@@ -19,6 +19,8 @@ enum QueueName: string
 
     case CombatLogProcess = 'cl-process';
 
+    case LiveSessionProcess = 'live-session-process';
+
     /**
      * The full queue name for the current stage, e.g. `production-thumbnail`.
      */

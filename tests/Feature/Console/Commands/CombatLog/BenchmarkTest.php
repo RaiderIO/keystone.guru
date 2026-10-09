@@ -248,7 +248,7 @@ final class BenchmarkTest extends PublicTestCase
     {
         // Arrange + Act + Assert
         $this->artisan('combatlog:benchmark', [
-            '--file' => base_path('tests/CombatLogs/WoWCombatLog-050923_172619_7_freehold.zip'),
+            '--file' => base_path('tests/CombatLogs/df_s2/WoWCombatLog-050923_172619_7_freehold.zip'),
         ])
             ->expectsOutputToContain('--i-know-what-im-doing')
             ->assertExitCode(1);

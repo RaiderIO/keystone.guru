@@ -9,7 +9,7 @@ use App\Http\Requests\ProfileFormRequest;
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\Season;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;

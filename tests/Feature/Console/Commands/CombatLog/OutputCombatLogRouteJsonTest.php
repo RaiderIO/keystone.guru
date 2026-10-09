@@ -19,7 +19,7 @@ use ZipArchive;
 final class OutputCombatLogRouteJsonTest extends PublicTestCase
 {
     /** A +14 The Underrot run - CHALLENGE_MODE_START,"The Underrot",1841,251,14,[9,124,6] */
-    private const string COMBAT_LOG = 'tests/CombatLogs/WoWCombatLog-051023_160438_14_the-underrot.zip';
+    private const string COMBAT_LOG = 'tests/CombatLogs/df_s2/WoWCombatLog-051023_160438_14_the-underrot.zip';
 
     private const int INSTANCE_ID = 1841;
 

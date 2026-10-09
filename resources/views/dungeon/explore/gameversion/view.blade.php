@@ -67,6 +67,7 @@ use Illuminate\Support\Collection;
                 'killzonepath',
                 'floorunion',
                 'floorunionarea',
+                'playerposition',
             ],
         ])
     </div>
