@@ -89,6 +89,28 @@ describe('Pickr default colour fix', () => {
         expect(onSave).not.toHaveBeenCalled();
     });
 
+    test('create_givenAnUndefinedDefaultColor_keepsTheInitialColorWithoutThrowing', async () => {
+        // Arrange
+        const FixedPickr = withPickrDefaultColorFix(Pickr);
+        const button = document.createElement('button');
+        document.body.appendChild(button);
+        const errors = [];
+        const onError = event => {
+            errors.push(event.error ? event.error.message : event.message);
+            event.preventDefault();
+        };
+        window.addEventListener('error', onError);
+
+        // Act
+        const pickr = FixedPickr.create({el: button, theme: 'nano', default: undefined});
+        await new Promise(resolve => setTimeout(resolve, 200));
+        window.removeEventListener('error', onError);
+
+        // Assert
+        expect(errors).toEqual([]);
+        expect(pickr.getColor().toHEXA().toString()).toBe('#000000');
+    });
+
     test('create_givenANullDefaultColor_clearsTheButton', async () => {
         // Arrange
         const FixedPickr = withPickrDefaultColorFix(Pickr);

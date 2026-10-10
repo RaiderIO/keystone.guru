@@ -29,6 +29,10 @@ function withPickrDefaultColorFix(Pickr) {
 
             this.on('init', () => {
                 const defaultColor = this.options.default;
+                // Pickr's colour parser throws on undefined
+                if (typeof defaultColor === 'undefined') {
+                    return;
+                }
 
                 // Silent, like the setup frame: initialising a picker must not fire 'save'
                 if (this.setColor(defaultColor, true) && defaultColor !== null) {
