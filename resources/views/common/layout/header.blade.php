@@ -246,14 +246,16 @@ $compendiumEntries        = [
                     'columns' => 1,
                     'isActiveRoute' => $isActiveRoute,
                 ])
-                @include('common.layout.nav.category', [
-                    'id' => 'navCategoryCompendium',
-                    'fa' => 'fas fa-book-open',
-                    'text' => __('view_common.layout.header.compendium'),
-                    'entries' => $compendiumEntries,
-                    'columns' => 2,
-                    'isActiveRoute' => $isActiveRoute,
-                ])
+                @if($currentUserGameVersion->has_compendium)
+                    @include('common.layout.nav.category', [
+                        'id' => 'navCategoryCompendium',
+                        'fa' => 'fas fa-book-open',
+                        'text' => __('view_common.layout.header.compendium'),
+                        'entries' => $compendiumEntries,
+                        'columns' => 2,
+                        'isActiveRoute' => $isActiveRoute,
+                    ])
+                @endif
             </ul>
             <ul class="navbar-nav">
                 @if($developerEntries !== [])

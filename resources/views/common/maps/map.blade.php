@@ -11,6 +11,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
@@ -227,7 +228,7 @@ $getFloorSwitchFloors = static fn() => ($isAdmin ? $dungeon->floors() : $dungeon
     'tilesBaseUrl' => $tilesBaseUrl,
     'parameters' => $parameters,
     'floorId' => $floor->id,
-    'npcCompendiumBaseUrl' => url('/compendium/npc'),
+    'npcCompendiumBaseUrl' => GameVersion::getUserOrDefaultGameVersion()->has_compendium ? url('/compendium/npc') : null,
     'canvasEnemyRenderer' => $canvasEnemyRenderer,
 ], $adminOptions)])
 

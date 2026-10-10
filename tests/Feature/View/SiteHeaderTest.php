@@ -85,6 +85,28 @@ final class SiteHeaderTest extends PublicTestCase
     }
 
     #[Test]
+    public function home_givenAGuestOnANonRetailGameVersion_omitsTheCompendiumCategory(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_CLASSIC_ERA;
+
+        try {
+            // Act
+            $response = $this->withHeader('User-Agent', self::DESKTOP_USER_AGENT)->get('/');
+
+            // Assert
+            $response->assertOk();
+            $html = $response->getContent();
+
+            $this->assertStringContainsString('id="navCategoryDungeons"', $html);
+            $this->assertStringNotContainsString('id="navCategoryCompendium"', $html);
+        } finally {
+            unset($_COOKIE['game_version']);
+        }
+    }
+
+    #[Test]
     public function home_givenAGuest_dropsTheExpansionDropdownAndTheDuplicateDropdownId(): void
     {
         // Arrange
