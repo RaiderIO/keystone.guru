@@ -96,4 +96,17 @@ describe('CommonMapsMap._onEnemyContextMenu', () => {
         expect(windowOpenSpy).toHaveBeenCalledWith('/compendium/npc/123');
         expect(modalShowSpy).toHaveBeenCalled();
     });
+
+    it('_onEnemyContextMenu_givenNoCompendiumForGameVersion_showsModalWithoutOpeningTab', () => {
+        // Arrange
+        document.body.innerHTML = '<div id="enemy_details_modal"></div><div id="enemy_details_modal_title_text"></div><div id="enemy_details_modal_body"></div>';
+        let map = buildMap({npcCompendiumBaseUrl: null});
+
+        // Act
+        map._onEnemyContextMenu({context: enemy});
+
+        // Assert
+        expect(windowOpenSpy).not.toHaveBeenCalled();
+        expect(modalShowSpy).toHaveBeenCalled();
+    });
 });

@@ -87,6 +87,11 @@ return [
             'unable_to_delete_arrow' => 'Unable to delete arrow',
         ],
     ],
+    'compendium' => [
+        'flash' => [
+            'unavailable_for_game_version' => 'The Compendium is not available for this game version yet.',
+        ],
+    ],
     'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Dungeon created',

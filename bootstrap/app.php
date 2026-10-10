@@ -9,6 +9,7 @@ use App\Http\Middleware\BlockBannedIpAddresses;
 use App\Http\Middleware\DebugBarMessageLogger;
 use App\Http\Middleware\DebugInfoContextLogger;
 use App\Http\Middleware\EnsureFeatureIsActive;
+use App\Http\Middleware\EnsureGameVersionHasCompendium;
 use App\Http\Middleware\LegalAgreed;
 use App\Http\Middleware\OnlyAjax;
 use App\Http\Middleware\PoweredBySwoole;
@@ -121,6 +122,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'track_ip'                  => TracksUserIpAddress::class,
             'viewcachebuster'           => ViewCacheBuster::class,
             'feature_active'            => EnsureFeatureIsActive::class,
+            'game_version_compendium'   => EnsureGameVersionHasCompendium::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
