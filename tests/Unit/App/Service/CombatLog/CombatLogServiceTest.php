@@ -2,12 +2,17 @@
 
 namespace Tests\Unit\App\Service\CombatLog;
 
+use App\Logic\CombatLog\CombatLogEntry;
+use App\Logic\CombatLog\CombatLogVersion;
+use App\Service\CombatLog\CombatLogService;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\Exceptions\CombatLogParseException;
+use Illuminate\Support\Facades\Cache;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use RedisException;
+use Tests\Fixtures\LoggingFixtures;
 use Tests\TestCases\PublicTestCase;
 use ZipArchive;
 
@@ -198,6 +203,95 @@ final class CombatLogServiceTest extends PublicTestCase
             }
             if (file_exists($extractedPath)) {
                 unlink($extractedPath);
+            }
+        }
+    }
+
+    #[Test]
+    public function parseCombatLog_givenALineBeforeAnyVersionHeader_passesTheLatestRetailVersion(): void
+    {
+        // Arrange
+        $filePath = sprintf('%s/keystone_test_combatlog_%d.txt', sys_get_temp_dir(), random_int(1, PHP_INT_MAX));
+        file_put_contents($filePath, "ZONE_CHANGE,1234\n");
+
+        $passedCombatLogVersions = [];
+
+        try {
+            /** @var CombatLogServiceInterface $combatLogService */
+            $combatLogService = app(CombatLogServiceInterface::class);
+
+            // Act
+            $combatLogService->parseCombatLog($filePath, function (int $combatLogVersion) use (&$passedCombatLogVersions): void {
+                $passedCombatLogVersions[] = $combatLogVersion;
+            });
+
+            // Assert
+            $this->assertSame([CombatLogVersion::getLatestRetail()], $passedCombatLogVersions);
+        } finally {
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
+    }
+
+    #[Test]
+    public function parseCombatLog_givenTwoLogsOfTheSameUnregisteredBuild_reportsTheBuildOnce(): void
+    {
+        // Arrange
+        $unregisteredCombatLogVersion = 22_012_009_009;
+        $filePath                     = sprintf('%s/keystone_test_combatlog_%d.txt', sys_get_temp_dir(), random_int(1, PHP_INT_MAX));
+        file_put_contents($filePath, "10/11/2026 21:00:00.0000  COMBAT_LOG_VERSION,22,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,12.9.9,PROJECT_ID,1\n");
+
+        $log = LoggingFixtures::createCombatLogServiceLogging($this);
+        $log->expects($this->once())
+            ->method('parseCombatLogUnregisteredCombatLogVersion')
+            ->with($unregisteredCombatLogVersion);
+
+        try {
+            /** @var CombatLogServiceInterface $combatLogService */
+            $combatLogService = app()->make(CombatLogService::class, ['log' => $log]);
+
+            // Act
+            foreach ([1, 2] as $parse) {
+                $combatLogService->parseCombatLog(
+                    $filePath,
+                    static fn(int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) => new CombatLogEntry($rawEvent)->parseEvent([], $combatLogVersion),
+                );
+            }
+        } finally {
+            Cache::forget(sprintf('combatlog:unregistered_combat_log_version:%d', $unregisteredCombatLogVersion));
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
+    }
+
+    #[Test]
+    public function parseCombatLog_givenARegisteredBuild_doesNotReportIt(): void
+    {
+        // Arrange
+        $filePath = sprintf('%s/keystone_test_combatlog_%d.txt', sys_get_temp_dir(), random_int(1, PHP_INT_MAX));
+        file_put_contents($filePath, "10/11/2026 21:00:00.0000  COMBAT_LOG_VERSION,22,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,12.1.0,PROJECT_ID,1\n");
+
+        $log = LoggingFixtures::createCombatLogServiceLogging($this);
+        $log->expects($this->once())
+            ->method('parseCombatLogParseEventsChangedCombatLogVersion')
+            ->with(CombatLogVersion::RETAIL_12_1_0, true);
+        $log->expects($this->never())
+            ->method('parseCombatLogUnregisteredCombatLogVersion');
+
+        try {
+            /** @var CombatLogServiceInterface $combatLogService */
+            $combatLogService = app()->make(CombatLogService::class, ['log' => $log]);
+
+            // Act
+            $combatLogService->parseCombatLog(
+                $filePath,
+                static fn(int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) => new CombatLogEntry($rawEvent)->parseEvent([], $combatLogVersion),
+            );
+        } finally {
+            if (file_exists($filePath)) {
+                unlink($filePath);
             }
         }
     }

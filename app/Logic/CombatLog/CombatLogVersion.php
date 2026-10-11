@@ -53,4 +53,26 @@ class CombatLogVersion
         self::RETAIL_12_0_7      => 15,
         self::RETAIL_12_1_0      => 16,
     ];
+
+    public static function getLatestRetail(): int
+    {
+        return array_key_last(self::RETAIL_ALL);
+    }
+
+    /**
+     * A registered version has been verified against real logs.
+     */
+    public static function isRegistered(int $combatLogVersion): bool
+    {
+        return isset(self::ALL[$combatLogVersion]);
+    }
+
+    /**
+     * A supported version resolves to a format in every builder: it is at or above the oldest version
+     * its lineage can parse, registered or not.
+     */
+    public static function isSupported(int $combatLogVersion): bool
+    {
+        return $combatLogVersion >= CombatLogLineage::fromCombatLogVersion($combatLogVersion)->getOldestSupportedCombatLogVersion();
+    }
 }

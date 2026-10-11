@@ -6,17 +6,33 @@ use App\Logic\CombatLog\CombatEvents\Advanced\Versions\V20\AdvancedDataV20;
 use App\Logic\CombatLog\CombatEvents\Advanced\Versions\V22\AdvancedDataV22;
 use App\Logic\CombatLog\CombatEvents\Advanced\Versions\V9\AdvancedDataV9;
 use App\Logic\CombatLog\CombatEvents\Advanced\Versions\V9SoD\AdvancedDataV9SoD;
+use App\Logic\CombatLog\CombatLogLineage;
 use App\Logic\CombatLog\CombatLogVersion;
+use App\Logic\CombatLog\Traits\ResolvesCombatLogFormat;
 
 class AdvancedDataBuilder
 {
+    use ResolvesCombatLogFormat;
+
     public static function create(int $combatLogVersion): AdvancedDataInterface
     {
-        return match ($combatLogVersion) {
-            CombatLogVersion::CLASSIC                                                                                                                             => new AdvancedDataV9(),
-            CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6, CombatLogVersion::CLASSIC_SOD_1_15_7, CombatLogVersion::CLASSIC_TBC_2_5_5 => new AdvancedDataV9SoD(),
-            CombatLogVersion::RETAIL_10_1_0, CombatLogVersion::RETAIL_11_0_2                                                                                      => new AdvancedDataV20(),
-            default                                                                                                                                               => new AdvancedDataV22(),
-        };
+        /** @var class-string<AdvancedDataInterface> $className */
+        $className = self::resolveClassName($combatLogVersion);
+
+        return new $className();
+    }
+
+    public static function getClassNamesByFirstCombatLogVersion(): array
+    {
+        return [
+            CombatLogLineage::Classic->value => [
+                CombatLogVersion::CLASSIC            => AdvancedDataV9::class,
+                CombatLogVersion::CLASSIC_SOD_1_15_5 => AdvancedDataV9SoD::class,
+            ],
+            CombatLogLineage::Retail->value => [
+                CombatLogVersion::RETAIL_10_1_0 => AdvancedDataV20::class,
+                CombatLogVersion::RETAIL_11_0_5 => AdvancedDataV22::class,
+            ],
+        ];
     }
 }

@@ -28,7 +28,9 @@ use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use File;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use RedisException;
@@ -390,7 +392,7 @@ readonly class CombatLogService implements CombatLogServiceInterface
 
         try {
             $this->log->parseCombatLogParseEventsStart();
-            $combatLogVersion         = CombatLogVersion::RETAIL_11_0_5;
+            $combatLogVersion         = CombatLogVersion::getLatestRetail();
             $isAdvancedLoggingEnabled = true;
             while (($rawEvent = fgets($handle)) !== false) {
                 $parsedEvent = $callback($combatLogVersion, $isAdvancedLoggingEnabled, $rawEvent, ++$lineNr);
@@ -398,6 +400,8 @@ readonly class CombatLogService implements CombatLogServiceInterface
                     $combatLogVersion         = $parsedEvent->getVersionLong();
                     $isAdvancedLoggingEnabled = $parsedEvent->isAdvancedLogEnabled();
                     $this->log->parseCombatLogParseEventsChangedCombatLogVersion($combatLogVersion, $isAdvancedLoggingEnabled);
+
+                    $this->reportUnregisteredCombatLogVersion($combatLogVersion);
                 }
             }
         } catch (RedisException $exception) {
@@ -445,5 +449,20 @@ readonly class CombatLogService implements CombatLogServiceInterface
         }
 
         return true;
+    }
+
+    /**
+     * An unregistered build parses with the newest format of its lineage. Reported once per build per
+     * day across all workers, so a new patch is noticed without every parsed log alerting on it.
+     */
+    private function reportUnregisteredCombatLogVersion(int $combatLogVersion): void
+    {
+        if (CombatLogVersion::isRegistered($combatLogVersion)) {
+            return;
+        }
+
+        if (Cache::add(sprintf('combatlog:unregistered_combat_log_version:%d', $combatLogVersion), true, Carbon::now()->addDay())) {
+            $this->log->parseCombatLogUnregisteredCombatLogVersion($combatLogVersion);
+        }
     }
 }

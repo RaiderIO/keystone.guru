@@ -81,6 +81,11 @@ class CombatLogServiceLogging extends StructuredLogging implements CombatLogServ
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function parseCombatLogUnregisteredCombatLogVersion(int $combatLogVersion): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function parseCombatLogParseEventsException(string $rawEvent, Exception $exception): void
     {
         $this->error(__METHOD__, get_defined_vars());
