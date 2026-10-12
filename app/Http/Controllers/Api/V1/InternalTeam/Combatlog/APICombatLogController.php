@@ -38,6 +38,7 @@ class APICombatLogController extends Controller
 
         return new DungeonRouteResource($combatLogRouteDungeonRouteService->convertCombatLogRouteToDungeonRoute(
             CombatLogRouteRequestDto::createFromArray($validated),
+            $request->user(),
         ));
     }
 
