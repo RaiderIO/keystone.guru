@@ -182,7 +182,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     });
 
     // Compendium
-    Route::prefix('compendium')->group(static function () {
+    Route::prefix('compendium')->middleware('game_version_compendium')->group(static function () {
         Route::get('/', new CompendiumController()->index(...))->name('compendium.index');
         // Every page whose content is scoped to a dungeon lives under the dungeon it is about.
         // The literal segment keeps the slug unambiguous, so no section here can ever be mistaken
@@ -706,7 +706,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         });
 
         // Compendium
-        Route::prefix('compendium')->group(static function () {
+        Route::prefix('compendium')->middleware('game_version_compendium')->group(static function () {
             Route::prefix('npc')->group(static function () {
                 Route::get('/', new NpcCompendiumController()->get(...))->name('ajax.npc.compendium.search');
             });

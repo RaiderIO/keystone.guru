@@ -26,7 +26,7 @@
  * @property {string} tilesBaseUrl
  * @property {Object} parameters
  * @property {number} floorId
- * @property {string} npcCompendiumBaseUrl
+ * @property {string|null} npcCompendiumBaseUrl Null when the visitor's game version has no compendium
  */
 
 /**
@@ -641,7 +641,8 @@ class CommonMapsMap extends InlineCode {
             // embedded route map this can still run inside a sandboxed iframe without
             // `allow-popups` - window.open() then returns null, so fall through to the modal
             // instead of silently doing nothing.
-            if (window.open(`${this.options.npcCompendiumBaseUrl}/${enemy.npc.id}`) !== null) {
+            if (this.options.npcCompendiumBaseUrl !== null &&
+                window.open(`${this.options.npcCompendiumBaseUrl}/${enemy.npc.id}`) !== null) {
                 return;
             }
 

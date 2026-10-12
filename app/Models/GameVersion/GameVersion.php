@@ -29,6 +29,7 @@ use Override;
  * @property string   $name
  * @property string   $description
  * @property bool     $has_seasons
+ * @property bool     $has_compendium               Whether the Compendium has data for this game version.
  * @property bool     $active
  * @property int|null $retired_into_game_version_id The game version this one's content now lives under, when retired.
  *
@@ -57,6 +58,7 @@ class GameVersion extends Model
         'name',
         'description',
         'has_seasons',
+        'has_compendium',
         'active',
         'retired_into_game_version_id',
     ];
@@ -109,6 +111,7 @@ class GameVersion extends Model
     {
         return [
             'parent_game_version_id' => 'integer',
+            'has_compendium'         => 'boolean',
         ];
     }
 
