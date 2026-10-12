@@ -137,4 +137,24 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     {
         return null;
     }
+
+    public function hasRoutesWithoutExpiryByAuthor(User $user): bool
+    {
+        return false;
+    }
+
+    public function getWithoutExpiryByAuthorAndPublicKeys(User $user, array $publicKeys): Collection
+    {
+        return collect();
+    }
+
+    public function getWithoutExpiryByAuthorAndIds(User $user, array $dungeonRouteIds): Collection
+    {
+        return collect();
+    }
+
+    public function getIdAndDungeonIdByIds(Collection $dungeonRouteIds): Collection
+    {
+        return collect();
+    }
 }

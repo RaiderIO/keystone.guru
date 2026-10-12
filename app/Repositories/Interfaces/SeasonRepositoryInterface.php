@@ -49,4 +49,9 @@ interface SeasonRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, Season> Keyed by season ID
      */
     public function getSeasonsByIds(Collection $seasonIds): Collection;
+
+    /**
+     * The season with the id, only when it belongs to the expansion.
+     */
+    public function findForExpansion(int $expansionId, int $seasonId): ?Season;
 }

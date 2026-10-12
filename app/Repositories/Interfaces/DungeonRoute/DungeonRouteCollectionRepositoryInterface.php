@@ -19,4 +19,13 @@ use Illuminate\Support\Collection;
  */
 interface DungeonRouteCollectionRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * Takes a row lock on the collection until the surrounding transaction ends, serialising concurrent changes to it.
+     */
+    public function lockForUpdate(DungeonRouteCollection $dungeonRouteCollection): void;
+
+    /**
+     * Stamps the collection as changed, for changes that only touch its routes.
+     */
+    public function touchUpdatedAt(DungeonRouteCollection $dungeonRouteCollection): void;
 }

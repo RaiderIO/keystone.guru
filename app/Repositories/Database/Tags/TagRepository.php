@@ -90,4 +90,20 @@ class TagRepository extends DatabaseRepository implements TagRepositoryInterface
             ->where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])
             ->exists();
     }
+
+    /**
+     * @return array<int, int>
+     */
+    public function getPersonalRouteIdsByTagName(User $user, string $tagName): array
+    {
+        return Tag::query()
+            ->where('context_id', $user->id)
+            ->where('context_class', User::class)
+            ->where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])
+            ->where('model_class', DungeonRoute::class)
+            ->where('name', $tagName)
+            ->pluck('model_id')
+            ->map(intval(...))
+            ->all();
+    }
 }

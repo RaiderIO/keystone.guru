@@ -10,9 +10,10 @@ use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionRoutesRemoveFormReq
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteCollectionsForRouteFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
-use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRouteRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -105,6 +106,8 @@ class AjaxDungeonRouteCollectionController extends Controller
         AjaxDungeonRouteCollectionRoutesAddFormRequest $request,
         DungeonRouteCollection                         $dungeonRouteCollection,
         DungeonRouteCollectionRouteRepositoryInterface $dungeonRouteCollectionRouteRepository,
+        DungeonRouteCollectionRepositoryInterface      $dungeonRouteCollectionRepository,
+        DungeonRouteRepositoryInterface                $dungeonRouteRepository,
         DungeonRouteCollectionServiceInterface         $dungeonRouteCollectionService,
     ): JsonResponse {
         Gate::authorize('edit', $dungeonRouteCollection);
@@ -116,6 +119,8 @@ class AjaxDungeonRouteCollectionController extends Controller
                 $dungeonRouteCollection,
                 $dungeonRoutes,
                 $dungeonRouteCollectionRouteRepository,
+                $dungeonRouteCollectionRepository,
+                $dungeonRouteRepository,
                 $dungeonRouteCollectionService,
             );
         } catch (UniqueConstraintViolationException) {
@@ -126,6 +131,8 @@ class AjaxDungeonRouteCollectionController extends Controller
                 $dungeonRouteCollection,
                 $dungeonRoutes,
                 $dungeonRouteCollectionRouteRepository,
+                $dungeonRouteCollectionRepository,
+                $dungeonRouteRepository,
                 $dungeonRouteCollectionService,
             );
         }
@@ -158,22 +165,23 @@ class AjaxDungeonRouteCollectionController extends Controller
         DungeonRouteCollection                         $dungeonRouteCollection,
         Collection                                     $dungeonRoutes,
         DungeonRouteCollectionRouteRepositoryInterface $dungeonRouteCollectionRouteRepository,
+        DungeonRouteCollectionRepositoryInterface      $dungeonRouteCollectionRepository,
+        DungeonRouteRepositoryInterface                $dungeonRouteRepository,
         DungeonRouteCollectionServiceInterface         $dungeonRouteCollectionService,
     ): Collection {
         return DB::transaction(static function () use (
             $dungeonRouteCollection,
             $dungeonRoutes,
             $dungeonRouteCollectionRouteRepository,
+            $dungeonRouteCollectionRepository,
+            $dungeonRouteRepository,
             $dungeonRouteCollectionService,
         ): Collection {
             // Serialises concurrent adds to one collection, so two requests that each fit cannot overshoot the cap together
-            DungeonRouteCollection::query()->whereKey($dungeonRouteCollection->id)->lockForUpdate()->first();
-
-            $dungeonRouteCollectionRoutes = DungeonRouteCollectionRoute::query()
-                ->where('dungeon_route_collection_id', $dungeonRouteCollection->id);
+            $dungeonRouteCollectionRepository->lockForUpdate($dungeonRouteCollection);
 
             // Validation ran before the lock, so a concurrent request may have added some of these routes since
-            $existingDungeonRouteIds = (clone $dungeonRouteCollectionRoutes)->pluck('dungeon_route_id');
+            $existingDungeonRouteIds = $dungeonRouteCollectionRouteRepository->getDungeonRouteIds($dungeonRouteCollection);
             $dungeonRoutes           = $dungeonRoutes->whereNotIn('id', $existingDungeonRouteIds)->values();
 
             if ($existingDungeonRouteIds->count() + $dungeonRoutes->count() > DungeonRouteCollection::MAX_ROUTES) {
@@ -182,7 +190,7 @@ class AjaxDungeonRouteCollectionController extends Controller
                 ]);
             }
 
-            $keptDungeonRoutes     = DungeonRoute::query()->whereIn('id', $existingDungeonRouteIds)->get(['id', 'dungeon_id']);
+            $keptDungeonRoutes     = $dungeonRouteRepository->getIdAndDungeonIdByIds($existingDungeonRouteIds);
             $overLimitDungeonRoute = $dungeonRouteCollectionService->getDungeonRoutesOverDungeonLimit($dungeonRoutes, $keptDungeonRoutes)->first();
             if ($overLimitDungeonRoute !== null) {
                 throw ValidationException::withMessages([
@@ -193,7 +201,7 @@ class AjaxDungeonRouteCollectionController extends Controller
                 ]);
             }
 
-            $nextOrder = (int)$dungeonRouteCollectionRoutes->max('order') + 1;
+            $nextOrder = $dungeonRouteCollectionRouteRepository->getMaxOrder($dungeonRouteCollection) + 1;
 
             foreach ($dungeonRoutes as $index => $dungeonRoute) {
                 $dungeonRouteCollectionRouteRepository->create([
@@ -203,7 +211,7 @@ class AjaxDungeonRouteCollectionController extends Controller
                 ]);
             }
 
-            DungeonRouteCollection::query()->whereKey($dungeonRouteCollection->id)->update(['updated_at' => now()]);
+            $dungeonRouteCollectionRepository->touchUpdatedAt($dungeonRouteCollection);
 
             return $dungeonRoutes;
         });
@@ -217,18 +225,22 @@ class AjaxDungeonRouteCollectionController extends Controller
     public function deleteRoutes(
         AjaxDungeonRouteCollectionRoutesRemoveFormRequest $request,
         DungeonRouteCollection                            $dungeonRouteCollection,
+        DungeonRouteCollectionRouteRepositoryInterface    $dungeonRouteCollectionRouteRepository,
+        DungeonRouteCollectionRepositoryInterface         $dungeonRouteCollectionRepository,
     ): JsonResponse {
         Gate::authorize('edit', $dungeonRouteCollection);
 
         $dungeonRoutes = $request->dungeonRoutes();
 
-        DB::transaction(static function () use ($dungeonRouteCollection, $dungeonRoutes): void {
-            DungeonRouteCollectionRoute::query()
-                ->where('dungeon_route_collection_id', $dungeonRouteCollection->id)
-                ->whereIn('dungeon_route_id', $dungeonRoutes->pluck('id'))
-                ->delete();
+        DB::transaction(static function () use (
+            $dungeonRouteCollection,
+            $dungeonRoutes,
+            $dungeonRouteCollectionRouteRepository,
+            $dungeonRouteCollectionRepository,
+        ): void {
+            $dungeonRouteCollectionRouteRepository->deleteDungeonRoutes($dungeonRouteCollection, $dungeonRoutes->pluck('id'));
 
-            DungeonRouteCollection::query()->whereKey($dungeonRouteCollection->id)->update(['updated_at' => now()]);
+            $dungeonRouteCollectionRepository->touchUpdatedAt($dungeonRouteCollection);
         });
 
         return response()->json([
@@ -244,20 +256,24 @@ class AjaxDungeonRouteCollectionController extends Controller
     public function updateRoutesOrder(
         AjaxDungeonRouteCollectionRoutesOrderFormRequest $request,
         DungeonRouteCollection                           $dungeonRouteCollection,
+        DungeonRouteCollectionRouteRepositoryInterface   $dungeonRouteCollectionRouteRepository,
+        DungeonRouteCollectionRepositoryInterface        $dungeonRouteCollectionRepository,
     ): JsonResponse {
         Gate::authorize('edit', $dungeonRouteCollection);
 
         $dungeonRoutes = $request->dungeonRoutes();
 
-        DB::transaction(static function () use ($dungeonRouteCollection, $dungeonRoutes): void {
+        DB::transaction(static function () use (
+            $dungeonRouteCollection,
+            $dungeonRoutes,
+            $dungeonRouteCollectionRouteRepository,
+            $dungeonRouteCollectionRepository,
+        ): void {
             foreach ($dungeonRoutes->values() as $order => $dungeonRoute) {
-                DungeonRouteCollectionRoute::query()
-                    ->where('dungeon_route_collection_id', $dungeonRouteCollection->id)
-                    ->where('dungeon_route_id', $dungeonRoute->id)
-                    ->update(['order' => $order]);
+                $dungeonRouteCollectionRouteRepository->updateOrder($dungeonRouteCollection, $dungeonRoute->id, $order);
             }
 
-            DungeonRouteCollection::query()->whereKey($dungeonRouteCollection->id)->update(['updated_at' => now()]);
+            $dungeonRouteCollectionRepository->touchUpdatedAt($dungeonRouteCollection);
         });
 
         return response()->json([

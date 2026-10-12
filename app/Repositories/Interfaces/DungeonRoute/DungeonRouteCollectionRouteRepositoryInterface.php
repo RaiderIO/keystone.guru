@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Interfaces\DungeonRoute;
 
+use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -19,4 +20,24 @@ use Illuminate\Support\Collection;
  */
 interface DungeonRouteCollectionRouteRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * The ids of the routes the collection holds.
+     *
+     * @return Collection<int, int>
+     */
+    public function getDungeonRouteIds(DungeonRouteCollection $dungeonRouteCollection): Collection;
+
+    /**
+     * The highest order of the collection's routes, 0 for an empty collection.
+     */
+    public function getMaxOrder(DungeonRouteCollection $dungeonRouteCollection): int;
+
+    /**
+     * Removes the given routes from the collection.
+     *
+     * @param Collection<int, int> $dungeonRouteIds
+     */
+    public function deleteDungeonRoutes(DungeonRouteCollection $dungeonRouteCollection, Collection $dungeonRouteIds): int;
+
+    public function updateOrder(DungeonRouteCollection $dungeonRouteCollection, int $dungeonRouteId, int $order): int;
 }

@@ -9,14 +9,14 @@ use App\Http\Requests\DungeonRoute\DungeonRouteCollectionFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteCollectionIndexFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
-use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use App\Models\PublishedState;
 use App\Models\Season;
-use App\Models\Tags\Tag;
-use App\Models\Tags\TagCategory;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionCategoryRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRouteRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Repositories\Interfaces\Tags\TagRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use Exception;
@@ -87,9 +87,12 @@ class DungeonRouteCollectionController extends Controller
      * pre-filled as far as they match that season.
      */
     public function create(
-        DungeonRouteCollectionCreateFormRequest $request,
-        DungeonRouteCollectionServiceInterface  $dungeonRouteCollectionService,
-        TagRepositoryInterface                  $tagRepository,
+        DungeonRouteCollectionCreateFormRequest           $request,
+        DungeonRouteCollectionServiceInterface            $dungeonRouteCollectionService,
+        TagRepositoryInterface                            $tagRepository,
+        SeasonRepositoryInterface                         $seasonRepository,
+        DungeonRouteRepositoryInterface                   $dungeonRouteRepository,
+        DungeonRouteCollectionCategoryRepositoryInterface $dungeonRouteCollectionCategoryRepository,
     ): View {
         /** @var User $user */
         $user        = Auth::user();
@@ -104,9 +107,7 @@ class DungeonRouteCollectionController extends Controller
         } elseif ($request->hasRequestedSeason()) {
             $season = $request->season();
         } elseif ($hasOldInput) {
-            $season = Season::query()
-                ->where('expansion_id', $gameVersion->expansion_id)
-                ->find((int)$request->old('season_id'));
+            $season = $seasonRepository->findForExpansion($gameVersion->expansion_id, (int)$request->old('season_id'));
         } elseif ($request->dungeonRoute() !== null) {
             $season = $request->season();
         } else {
@@ -127,11 +128,11 @@ class DungeonRouteCollectionController extends Controller
         if ($hasOldInput) {
             // After a failed validation the sections must show what was submitted, not an empty collection -
             // otherwise resubmitting the corrected form saves the collection with no routes
-            $selectedDungeonRoutes = $this->getSubmittedDungeonRoutes($user, (array)$request->old('dungeon_routes', []));
+            $selectedDungeonRoutes = $this->getSubmittedDungeonRoutes($dungeonRouteRepository, $user, (array)$request->old('dungeon_routes', []));
         } elseif ($dungeonRoute !== null) {
             $selectedDungeonRoutes = $dungeonRouteCollectionService->filterMatchingDungeonRoutes($gameVersion, $season, collect([$dungeonRoute]));
         } elseif ($tagName !== null) {
-            $taggedDungeonRoutes = $this->getTaggedDungeonRoutes($user, $tagName);
+            $taggedDungeonRoutes = $this->getTaggedDungeonRoutes($tagRepository, $dungeonRouteRepository, $user, $tagName);
 
             $matchingDungeonRoutes = $dungeonRouteCollectionService->filterMatchingDungeonRoutes($gameVersion, $season, $taggedDungeonRoutes);
             $selectedDungeonRoutes = $matchingDungeonRoutes
@@ -147,12 +148,12 @@ class DungeonRouteCollectionController extends Controller
         return view('collection.new', [
             'dungeonRouteCollection'  => null,
             'editSections'            => $dungeonRouteCollectionService->getEditSections($gameVersion, $season, collect(), $selectedDungeonRoutes),
-            'hasOwnDungeonRoutes'     => $this->hasOwnDungeonRoutes($user),
+            'hasOwnDungeonRoutes'     => $dungeonRouteRepository->hasRoutesWithoutExpiryByAuthor($user),
             'selectedGameVersion'     => $gameVersion,
             'seasons'                 => $selectableSeasons,
             'selectedSeason'          => $season,
             'teams'                   => $user->teams,
-            'categories'              => DungeonRouteCollectionCategory::all(),
+            'categories'              => $dungeonRouteCollectionCategoryRepository->all(),
             'tagNames'                => $tagRepository->getPersonalRouteTags($user)->pluck('name'),
             'selectedTagName'         => $tagName,
             'tagDungeonRoutesLeftOut' => $tagDungeonRoutesLeftOut,
@@ -223,9 +224,11 @@ class DungeonRouteCollectionController extends Controller
      * @throws AuthorizationException
      */
     public function edit(
-        Request                                $request,
-        DungeonRouteCollection                 $dungeonRouteCollection,
-        DungeonRouteCollectionServiceInterface $dungeonRouteCollectionService,
+        Request                                           $request,
+        DungeonRouteCollection                            $dungeonRouteCollection,
+        DungeonRouteCollectionServiceInterface            $dungeonRouteCollectionService,
+        DungeonRouteRepositoryInterface                   $dungeonRouteRepository,
+        DungeonRouteCollectionCategoryRepositoryInterface $dungeonRouteCollectionCategoryRepository,
     ): View {
         Gate::authorize('edit', $dungeonRouteCollection);
 
@@ -268,12 +271,12 @@ class DungeonRouteCollectionController extends Controller
             'mayAddDungeonRoutes' => $dungeonRouteCollection->isOwnedByUser(),
             // Scoped to the collection's own owner, not the acting user - an admin editing someone
             // else's collection must not be told the owner has no routes
-            'hasOwnDungeonRoutes' => $this->hasOwnDungeonRoutes($dungeonRouteCollection->user)
+            'hasOwnDungeonRoutes' => $dungeonRouteRepository->hasRoutesWithoutExpiryByAuthor($dungeonRouteCollection->user)
                 || $dungeonRouteCollection->dungeonRoutes->isNotEmpty(),
             'selectedGameVersion' => $dungeonRouteCollection->gameVersion,
             'selectedSeason'      => $dungeonRouteCollection->season,
             'teams'               => $dungeonRouteCollection->user->teams,
-            'categories'          => DungeonRouteCollectionCategory::all(),
+            'categories'          => $dungeonRouteCollectionCategoryRepository->all(),
             // Duplicating copies the owner's own routes, so only the owner may do it
             'mayDuplicate'         => $dungeonRouteCollection->isOwnedByUser($user),
             'mayCreateCollection'  => $user->dungeonRouteCollections()->count() < DungeonRouteCollection::MAX_COLLECTIONS,
@@ -470,18 +473,6 @@ class DungeonRouteCollectionController extends Controller
     }
 
     /**
-     * Whether the user has any route to put in a collection at all. Sandbox routes expire, so they are
-     * deliberately not counted.
-     */
-    private function hasOwnDungeonRoutes(User $user): bool
-    {
-        return DungeonRoute::query()
-            ->where('author_id', $user->id)
-            ->whereNull('expires_at')
-            ->exists();
-    }
-
-    /**
      * The routes a submission that failed validation held, in the order it held them, constrained to the
      * user's own routes.
      *
@@ -489,20 +480,17 @@ class DungeonRouteCollectionController extends Controller
      *
      * @return Collection<int, DungeonRoute>
      */
-    private function getSubmittedDungeonRoutes(User $user, array $publicKeys): Collection
-    {
+    private function getSubmittedDungeonRoutes(
+        DungeonRouteRepositoryInterface $dungeonRouteRepository,
+        User                            $user,
+        array                           $publicKeys,
+    ): Collection {
         $publicKeys = array_values(array_filter(array_map(strval(...), $publicKeys)));
         if ($publicKeys === []) {
             return collect();
         }
 
-        $dungeonRoutes = DungeonRoute::query()
-            ->where('author_id', $user->id)
-            ->whereNull('expires_at')
-            ->whereIn('public_key', $publicKeys)
-            ->with(['dungeon', 'mappingVersion'])
-            ->get()
-            ->keyBy('public_key');
+        $dungeonRoutes = $dungeonRouteRepository->getWithoutExpiryByAuthorAndPublicKeys($user, $publicKeys);
 
         return collect($publicKeys)
             ->map(static fn(string $publicKey): ?DungeonRoute => $dungeonRoutes->get($publicKey))
@@ -516,29 +504,19 @@ class DungeonRouteCollectionController extends Controller
      *
      * @return Collection<int, DungeonRoute>
      */
-    private function getTaggedDungeonRoutes(User $user, string $tagName): Collection
-    {
-        $taggedDungeonRouteIds = Tag::query()
-            ->where('context_id', $user->id)
-            ->where('context_class', User::class)
-            ->where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])
-            ->where('model_class', DungeonRoute::class)
-            ->where('name', $tagName)
-            ->pluck('model_id')
-            ->map(intval(...))
-            ->all();
+    private function getTaggedDungeonRoutes(
+        TagRepositoryInterface          $tagRepository,
+        DungeonRouteRepositoryInterface $dungeonRouteRepository,
+        User                            $user,
+        string                          $tagName,
+    ): Collection {
+        $taggedDungeonRouteIds = $tagRepository->getPersonalRouteIdsByTagName($user, $tagName);
 
         if ($taggedDungeonRouteIds === []) {
             return collect();
         }
 
-        return DungeonRoute::query()
-            ->where('author_id', $user->id)
-            ->whereNull('expires_at')
-            ->whereIn('id', $taggedDungeonRouteIds)
-            ->with(['dungeon', 'mappingVersion'])
-            ->orderBy('id')
-            ->get();
+        return $dungeonRouteRepository->getWithoutExpiryByAuthorAndIds($user, $taggedDungeonRouteIds);
     }
 
     /**
