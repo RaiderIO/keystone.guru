@@ -42,7 +42,7 @@ jobs:
       # A red shard must not cancel the others: every failure in the suite should show on one run.
       fail-fast: false
       matrix:
-        shard: [ 1, 2, 3, 4 ]
+        shard: [ 1, 2, 3, 4, 5 ]
 
     env:
       # The serial HoldsTableLock step runs on the last shard; the split reserves its time there.
@@ -75,8 +75,11 @@ jobs:
 
       # The expected list covers the whole suite (every shard writes the same one); the php-tests job
       # below checks the shards' junit output against it.
+      # The CPU model is printed because hosted runners differ: the same shard's tests have taken
+      # anywhere from ~240s to ~470s of summed test time depending on the machine it landed on.
       - name: Select this shard's test files
         run: |
+          grep -m1 'model name' /proc/cpuinfo
           vendor/bin/phpunit --list-tests --exclude-group=Nightly > phpunit-expected-tests.txt
           vendor/bin/phpunit --list-test-files --exclude-group=Nightly --exclude-group=HoldsTableLock > phpunit-test-files.txt
           php .github/scripts/phpunit-shards.php split ${{ matrix.shard }} ${{ strategy.job-total }} .github/phpunit-timings.json \
