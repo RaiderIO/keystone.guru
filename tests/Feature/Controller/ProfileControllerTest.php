@@ -767,8 +767,10 @@ final class ProfileControllerTest extends PublicTestCase
     private function fakeReverbChannels(string $channelName, User $userInChannel): void
     {
         $this->mock(ReverbHttpApiServiceInterface::class, static function (MockInterface $mock) use ($channelName, $userInChannel): void {
-            $mock->allows('getChannels')->andReturn([$channelName => []]);
-            $mock->expects('getChannelUsers')->with($channelName)->andReturn([['id' => $userInChannel->id]]);
+            $mock->allows([
+                'getChannels'     => [$channelName => []],
+                'getChannelUsers' => [['id' => $userInChannel->id]],
+            ]);
         });
     }
 
