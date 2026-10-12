@@ -283,7 +283,10 @@ class KillZone extends MapObject {
         if (enemyDetachedEvent.data.previous === null ||
             enemyDetachedEvent.data.previous.id === this.id) {
             this._removeEnemy(enemyDetachedEvent.context);
-            this.redrawConnectionsToEnemies();
+            // The bulk update redraws once when it finishes
+            if (!this._isBulkUpdating) {
+                this.redrawConnectionsToEnemies();
+            }
         }
     }
 
@@ -497,6 +500,8 @@ class KillZone extends MapObject {
         // the same killzone, it would otherwise send 10 save messages (if this.save() was part of killzone:detached
         // logic. By removing that there and adding it here, we get one clean save message.
         let previousKillZone = enemy.getKillZone();
+        /** @type {{killZone: KillZone, previousForces: Number}[]} */
+        let losingKillZones = [];
 
         // If the enemy was part of a pack..
         if (enemy.enemy_pack_id !== 0 && !ignorePackBuddies) {
@@ -511,6 +516,14 @@ class KillZone extends MapObject {
             let previousForces = collapseSignals ? this.getEnemyForces() : 0;
             this._isBulkUpdating = collapseSignals;
 
+            // Each pull the buddies are taken from signals and redraws once, not once per buddy
+            if (collapseSignals && !removed) {
+                losingKillZones = this._getOtherKillZonesOfEnemies(packBuddies, enemy.enemy_pack_id).map(killZone => {
+                    killZone._isBulkUpdating = true;
+                    return {killZone: killZone, previousForces: killZone.getEnemyForces()};
+                });
+            }
+
             // Add all enemies in the pack to this killzone as well
             for (let i = 0; i < packBuddies.length; i++) {
                 let packBuddy = packBuddies[i];
@@ -523,6 +536,15 @@ class KillZone extends MapObject {
 
             this._isBulkUpdating = false;
 
+            for (let i = 0; i < losingKillZones.length; i++) {
+                let losingKillZone = losingKillZones[i].killZone;
+                losingKillZone._isBulkUpdating = false;
+                losingKillZone.signal('killzone:enemieschanged', {
+                    previousForces: losingKillZones[i].previousForces,
+                    newForces: losingKillZone.getEnemyForces()
+                });
+            }
+
             if (collapseSignals) {
                 this.signal('killzone:enemieschanged', {previousForces: previousForces, newForces: this.getEnemyForces()});
             }
@@ -533,9 +555,34 @@ class KillZone extends MapObject {
         this.redrawConnectionsToEnemies();
 
         // The previous killzone lost a member, we have to notify it and save it
-        if (previousKillZone !== null && previousKillZone.id !== this.id) {
-            previousKillZone.redrawConnectionsToEnemies();
+        let killZonesToRedraw = losingKillZones.map(losingKillZone => losingKillZone.killZone);
+        if (previousKillZone !== null && previousKillZone.id !== this.id && !killZonesToRedraw.includes(previousKillZone)) {
+            killZonesToRedraw.push(previousKillZone);
         }
+
+        for (let i = 0; i < killZonesToRedraw.length; i++) {
+            killZonesToRedraw[i].redrawConnectionsToEnemies();
+        }
+    }
+
+    /**
+     * The distinct pulls other than this one that the given enemies of a pack are currently part of.
+     * @param enemies {Enemy[]}
+     * @param enemyPackId {Number}
+     * @returns {KillZone[]}
+     * @private
+     */
+    _getOtherKillZonesOfEnemies(enemies, enemyPackId) {
+        let result = [];
+
+        for (let i = 0; i < enemies.length; i++) {
+            let killZone = enemies[i].enemy_pack_id === enemyPackId ? enemies[i].getKillZone() : null;
+            if (killZone !== null && killZone.id !== this.id && !result.includes(killZone)) {
+                result.push(killZone);
+            }
+        }
+
+        return result;
     }
 
     /**

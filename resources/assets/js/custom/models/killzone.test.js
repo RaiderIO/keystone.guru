@@ -804,3 +804,132 @@ describe('KillZone redraws on zoom and number style changes', () => {
         expect(killZone.bindTooltip).toHaveBeenCalledTimes(expectedBinds);
     });
 });
+
+describe('KillZone._enemySelected - pulls losing pack buddies', () => {
+    /**
+     * A pack whose enemies, like the real Enemy.setKillZone(), signal killzone:detached to the pull they leave.
+     *
+     * @param {Number[]} ids
+     * @returns {Object[]}
+     */
+    function makeDetachingEnemyPack(ids) {
+        const pack = makeFakeEnemyPack(7, ids);
+        pack.forEach((enemy) => {
+            const listeners = [];
+            enemy.register = (name, listener, fn) => listeners.push({name, listener, fn});
+            enemy.unregister = (name, listener) => listeners.splice(0, listeners.length,
+                ...listeners.filter((candidate) => !(candidate.name === name && candidate.listener === listener)));
+            enemy.setKillZone = function (killZone) {
+                const previous = this._killZone;
+                this._killZone = killZone;
+                if (previous !== null && (killZone === null || previous.id !== killZone.id)) {
+                    listeners.filter((listener) => listener.name === 'killzone:detached')
+                        .forEach((listener) => listener.fn({context: this, data: {previous: previous}}));
+                }
+            };
+        });
+
+        return pack;
+    }
+
+    /**
+     * Saved pulls on one map, each holding the given enemies.
+     *
+     * @param {Object[]} enemies Every enemy on the map.
+     * @param {Object<Number, Number[]>} enemyIdsByKillZoneId
+     * @returns {Object<Number, KillZone>}
+     */
+    function makeSavedKillZones(enemies, enemyIdsByKillZoneId) {
+        const enemiesById = {};
+        enemies.forEach((enemy) => (enemiesById[enemy.id] = enemy));
+        const map = makeFakeMap(enemiesById);
+
+        const killZones = {};
+        Object.entries(enemyIdsByKillZoneId).forEach(([id, enemyIds]) => {
+            const killZone = new KillZone(map, null);
+            killZone.id = Number(id);
+            killZone.redrawConnectionsToEnemies = vi.fn();
+            enemyIds.forEach((enemyId) => killZone._addEnemy(enemiesById[enemyId]));
+            killZone._signals = [];
+            killZones[id] = killZone;
+        });
+
+        return killZones;
+    }
+
+    it('_enemySelected_givenPackTakenFromAnotherPull_signalsTheLosingPullOnce', () => {
+        // Arrange
+        const pack = makeDetachingEnemyPack([1, 2, 3]);
+        const killZones = makeSavedKillZones(pack, {5: [], 6: [1, 2, 3]});
+
+        // Act
+        killZones[5]._enemySelected(enemySelectedEvent(pack[0]));
+
+        // Assert
+        expect(killZones[6].enemies).toEqual([]);
+        expect(signalsOf(killZones[6], 'killzone:enemyremoved')).toHaveLength(0);
+        const changed = signalsOf(killZones[6], 'killzone:enemieschanged');
+        expect(changed).toHaveLength(1);
+        expect(changed[0].data).toEqual({previousForces: 30, newForces: 0});
+    });
+
+    it('_enemySelected_givenPackTakenFromAnotherPull_redrawsTheLosingPullOnce', () => {
+        // Arrange
+        const pack = makeDetachingEnemyPack([1, 2, 3]);
+        const killZones = makeSavedKillZones(pack, {5: [], 6: [1, 2, 3]});
+
+        // Act
+        killZones[5]._enemySelected(enemySelectedEvent(pack[0]));
+
+        // Assert
+        expect(killZones[6].redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+    });
+
+    it('_enemySelected_givenPackSpreadOverTwoOtherPulls_signalsAndRedrawsEachOnce', () => {
+        // Arrange
+        const pack = makeDetachingEnemyPack([1, 2, 3, 4]);
+        const unrelatedEnemy = makeFakeEnemy(9);
+        const killZones = makeSavedKillZones([...pack, unrelatedEnemy], {5: [], 6: [1, 2, 9], 7: [3]});
+
+        // Act
+        killZones[5]._enemySelected(enemySelectedEvent(pack[3]));
+
+        // Assert
+        expect(killZones[5].enemies).toEqual([1, 2, 3, 4]);
+        expect(signalsOf(killZones[6], 'killzone:enemieschanged').map((signal) => signal.data))
+            .toEqual([{previousForces: 30, newForces: 10}]);
+        expect(signalsOf(killZones[7], 'killzone:enemieschanged').map((signal) => signal.data))
+            .toEqual([{previousForces: 10, newForces: 0}]);
+        expect(killZones[6].redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+        expect(killZones[7].redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+    });
+
+    it('_enemySelected_givenPackRemovedFromThisPull_leavesThePullHoldingTheRestAlone', () => {
+        // Arrange
+        const pack = makeDetachingEnemyPack([1, 2, 3]);
+        const killZones = makeSavedKillZones(pack, {5: [1, 2], 6: [3]});
+
+        // Act
+        killZones[5]._enemySelected(enemySelectedEvent(pack[0]));
+
+        // Assert
+        expect(killZones[5].enemies).toEqual([]);
+        expect(killZones[6].enemies).toEqual([3]);
+        expect(killZones[6]._signals).toEqual([]);
+        expect(killZones[6]._isBulkUpdating).toBe(false);
+    });
+
+    it('_enemySelected_givenPackOverpulledFromAnotherPull_leavesThatPullAlone', () => {
+        // Arrange
+        const pack = makeDetachingEnemyPack([1, 2, 3]);
+        const killZones = makeSavedKillZones(pack, {5: [], 6: [1, 2, 3]});
+
+        // Act
+        killZones[5]._enemySelected(enemySelectedEvent(pack[0], new SelectKillZoneEnemySelectionOverpull()));
+
+        // Assert
+        expect(killZones[5].overpulledEnemies).toEqual([2, 3, 1]);
+        expect(killZones[6].enemies).toEqual([1, 2, 3]);
+        expect(killZones[6]._signals).toEqual([]);
+    });
+});
