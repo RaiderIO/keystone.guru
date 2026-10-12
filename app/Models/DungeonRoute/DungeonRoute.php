@@ -16,7 +16,6 @@ use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Models\Dungeon;
 use App\Models\DungeonStart;
-use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\Expansion;
 use App\Models\Faction;
@@ -28,7 +27,8 @@ use App\Models\Interfaces\TracksPageViewInterface;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Laratrust\Role;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MDTImport;
@@ -148,7 +148,7 @@ use Override;
  * @property EloquentCollection<int, Path>                             $paths
  * @property EloquentCollection<int, Arrow>                            $arrows
  * @property EloquentCollection<int, KillZone>                         $killZones
- * @property EloquentCollection<int, OverpulledEnemy>                  $overpulledenemies
+ * @property EloquentCollection<int, LiveSessionOverpulledEnemy>       $overpulledEnemies
  * @property EloquentCollection<int, DungeonRouteEnemyRaidMarker>      $enemyRaidMarkers
  * @property EloquentCollection<int, MapIcon>                          $mapicons
  * @property EloquentCollection<int, MapIcon>                          $routeMapIcons

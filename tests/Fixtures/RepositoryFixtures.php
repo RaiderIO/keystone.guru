@@ -28,7 +28,6 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRoutePlayerSpecializationRep
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRatingRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailJobRepositoryInterface;
-use App\Repositories\Interfaces\Enemies\OverpulledEnemyRepositoryInterface;
 use App\Repositories\Interfaces\EnemyPackRepositoryInterface;
 use App\Repositories\Interfaces\EnemyPatrolRepositoryInterface;
 use App\Repositories\Interfaces\EnemyRepositoryInterface;
@@ -47,6 +46,7 @@ use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
 use App\Repositories\Interfaces\Laratrust\PermissionRepositoryInterface;
 use App\Repositories\Interfaces\Laratrust\RoleRepositoryInterface;
+use App\Repositories\Interfaces\LiveSession\LiveSessionOverpulledEnemyRepositoryInterface;
 use App\Repositories\Interfaces\LiveSessionRepositoryInterface;
 use App\Repositories\Interfaces\MapIconRepositoryInterface;
 use App\Repositories\Interfaces\MapIconTypeRepositoryInterface;
@@ -387,11 +387,11 @@ class RepositoryFixtures
     /**
      * @param array<int, string> $methodsToMock
      */
-    public static function getOverpulledEnemyRepositoryMock(
+    public static function getLiveSessionOverpulledEnemyRepositoryMock(
         PublicTestCase $testCase,
         array          $methodsToMock = [],
-    ): MockObject|OverpulledEnemyRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilderPublic(OverpulledEnemyRepositoryInterface::class);
+    ): MockObject|LiveSessionOverpulledEnemyRepositoryInterface {
+        $mockBuilder = $testCase->getMockBuilderPublic(LiveSessionOverpulledEnemyRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);

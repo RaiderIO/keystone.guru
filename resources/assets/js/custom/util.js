@@ -517,6 +517,13 @@ function getFloorUnionAreaMapObjectGroup() {
 }
 
 /**
+ * @returns {PlayerPositionMapObjectGroup|null}
+ */
+function getPlayerPositionMapObjectGroup() {
+    return _getCurrentMapObjectGroupManager()?.getPlayerPositionMapObjectGroup() ?? null;
+}
+
+/**
  * Shorthand aliases for the browser console. They delegate to the accessors above and are therefore
  * null-safe as well.
  */
@@ -580,6 +587,10 @@ function getFloorUnionAreas() {
     return getFloorUnionAreaMapObjectGroup();
 }
 
+function getPlayerPositions() {
+    return getPlayerPositionMapObjectGroup();
+}
+
 /**
  * Helper functions to help debug the site.
  */
@@ -621,6 +632,10 @@ function getUserMousePosition(id) {
 
 function getMountableArea(id) {
     return getMountableAreas().findMapObjectById(id);
+}
+
+function getPlayerPosition(id) {
+    return getPlayerPositions().findMapObjectById(id);
 }
 
 $.fn.insertIndex = function (i) {
@@ -723,6 +738,7 @@ if (typeof module !== 'undefined' && module.exports) {
         getMountableAreaMapObjectGroup,
         getFloorUnionMapObjectGroup,
         getFloorUnionAreaMapObjectGroup,
+        getPlayerPositionMapObjectGroup,
         getKillZones,
     };
 }

@@ -4,7 +4,7 @@ namespace App\Models\Enemies;
 
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\Npc\Npc;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -23,6 +23,9 @@ use Illuminate\Database\Query\JoinClause;
  * @property Enemy       $enemy
  *
  * @mixin Eloquent
+ *
+ * @deprecated Mirror of {@see \App\Models\LiveSession\LiveSessionOverpulledEnemy}, written alongside it while the
+ *             previous release still reads `overpulled_enemies`. Removed together with that table.
  */
 class OverpulledEnemy extends Model
 {
