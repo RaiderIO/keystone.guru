@@ -46,6 +46,7 @@ class MapObject extends Signalable {
         this.teeming = null; // visible, hidden, null
         this.local = false;
         this._deleted = false;
+        this._isDeleteInFlight = false;
         // Overlapping saves may be answered out of order
         this._saveSequence = 0;
         this._appliedSaveSequence = 0;
@@ -1062,7 +1063,7 @@ class MapObject extends Signalable {
 
                 // Nothing else is guaranteed to save the newer local state: an enemy selection ignores this object's
                 // changes until this response's save:success when it was opened while the save was in flight
-                if (hasUnsentChanges && !self._deleted) {
+                if (hasUnsentChanges && !self._deleted && !self._isDeleteInFlight) {
                     self.save();
                 }
             },
@@ -1072,7 +1073,10 @@ class MapObject extends Signalable {
             },
             error: function (xhr, textStatus, errorThrown) {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
+                // (unless a newer save already succeeded, so the server holds a newer state than this request carried)
+                if (saveSequence >= self._appliedSaveSequence) {
+                    self.setSynced(false);
+                }
 
                 if (saveSequence === self._saveSequence) {
                     self._sentSaveRevision = null;
@@ -1106,6 +1110,8 @@ class MapObject extends Signalable {
         let self = this;
         console.assert(this instanceof MapObject, 'this was not a MapObject', this);
 
+        this._isDeleteInFlight = true;
+
         $.ajax({
             type: 'POST',
             url: this.options.hasOwnProperty('delete_url') ? this.options.delete_url :
@@ -1122,6 +1128,8 @@ class MapObject extends Signalable {
                 self.onDeleteSuccess(json);
             },
             error: function (xhr, textStatus, errorThrown) {
+                self._isDeleteInFlight = false;
+
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
 

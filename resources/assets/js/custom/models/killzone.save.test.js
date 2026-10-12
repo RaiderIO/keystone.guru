@@ -209,7 +209,7 @@ function respondWithSentKillZone(request, overrides = {}) {
  */
 function respondWithServerError(request) {
     request.error({status: 500}, 'error', 'Internal Server Error');
-    request.complete();
+    request.complete?.();
 }
 
 const sorted = (ids) => [...ids].sort((a, b) => a - b);
@@ -419,6 +419,100 @@ describe('KillZone.save', () => {
 
         // Assert
         expect(ajaxRequests).toHaveLength(2);
+    });
+
+    it('save_givenColorAndIndexMassSavedWhileInFlight_keepsTheLocalColorAndIndex', () => {
+        // Arrange
+        const {killZone, enemies} = makeSavedKillZone();
+        killZone.save();
+        // KillZoneMapObjectGroup.massSave() writes these without going through save()
+        killZone.color = '#222222';
+        killZone.index = 4;
+        killZone._removeEnemy(enemies[2]);
+
+        // Act
+        respondWithSentKillZone(ajaxRequests[0]);
+
+        // Assert
+        expect(killZone.color).toBe('#222222');
+        expect(killZone.index).toBe(4);
+    });
+
+    it('save_givenColorAndIndexMassSavedWhileInFlight_resavesTheLocalColorAndIndex', () => {
+        // Arrange
+        const {killZone, enemies} = makeSavedKillZone();
+        killZone.save();
+        killZone.color = '#222222';
+        killZone.index = 4;
+        killZone._removeEnemy(enemies[2]);
+
+        // Act
+        respondWithSentKillZone(ajaxRequests[0]);
+
+        // Assert
+        expect(ajaxRequests).toHaveLength(2);
+        expect(ajaxRequests[1].sentData.color).toBe('#222222');
+        expect(ajaxRequests[1].sentData.index).toBe(4);
+    });
+
+    it('save_givenEnemyAddedWhileInFlight_keepsThePullVisibleByDefault', () => {
+        // Arrange
+        const {killZone, enemies} = makeSavedKillZone();
+        killZone.save();
+        killZone._addEnemy(enemies[4]);
+
+        // Act
+        respondWithSentKillZone(ajaxRequests[0]);
+
+        // Assert
+        expect(killZone.isDefaultVisible()).toBe(true);
+    });
+
+    it('save_givenOlderSaveFailsAfterNewerSucceeded_staysSynced', () => {
+        // Arrange
+        const {killZone, enemies} = makeSavedKillZone();
+        killZone.save();
+        killZone._addEnemy(enemies[4]);
+        killZone.save();
+        const [olderSave, newerSave] = ajaxRequests;
+
+        // Act
+        respondWithSentKillZone(newerSave);
+        respondWithServerError(olderSave);
+
+        // Assert
+        expect(killZone.synced).toBe(true);
+    });
+
+    it('save_givenDeleteInFlightWhenAnOutdatedResponseArrives_doesNotSaveAgain', () => {
+        // Arrange
+        const {killZone, enemies} = makeSavedKillZone();
+        killZone.save();
+        killZone._addEnemy(enemies[4]);
+        killZone.delete();
+
+        // Act
+        respondWithSentKillZone(ajaxRequests[0]);
+
+        // Assert
+        expect(ajaxRequests).toHaveLength(2);
+        expect(ajaxRequests[1].sentData).toEqual({_method: 'DELETE'});
+    });
+
+    it('save_givenDeleteFailedWhenAnOutdatedResponseArrives_savesAgain', () => {
+        // Arrange
+        const {killZone, enemies} = makeSavedKillZone();
+        killZone.save();
+        killZone._addEnemy(enemies[4]);
+        killZone.delete();
+        respondWithServerError(ajaxRequests[1]);
+
+        // Act
+        respondWithSentKillZone(ajaxRequests[0]);
+
+        // Assert
+        expect(ajaxRequests).toHaveLength(3);
+        expect(sorted(ajaxRequests[2].sentData.enemies)).toEqual([1, 2, 3, 4]);
     });
 
     it('save_givenPullDeletedWhileInFlight_doesNotSaveItAgain', () => {

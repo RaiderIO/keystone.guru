@@ -197,7 +197,9 @@ class KillZone extends MapObject {
         super.loadRemoteMapObject(remoteMapObject, parentAttribute);
 
         // Hide the layer of the killzone
-        this.setDefaultVisible(remoteMapObject.floor_id === getState().getCurrentFloor().id);
+        if (remoteMapObject.hasOwnProperty('floor_id')) {
+            this.setDefaultVisible(remoteMapObject.floor_id === getState().getCurrentFloor().id);
+        }
     }
 
     /**
@@ -208,14 +210,12 @@ class KillZone extends MapObject {
     }
 
     /**
-     * Leaves out the enemies: the response echoes the ones that were sent, not this pull's current ones.
+     * Only the server-assigned id: the rest echoes what was sent, and color/index may also have changed locally through
+     * KillZoneMapObjectGroup.massSave(), which does not go through save().
      * @inheritDoc
      */
     _getOutdatedSaveResponseToApply(json) {
-        let response = Object.assign({}, json);
-        delete response.enemies;
-
-        return response;
+        return {id: json.id};
     }
 
     /**
