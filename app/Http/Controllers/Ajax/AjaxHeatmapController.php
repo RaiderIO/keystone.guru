@@ -34,6 +34,7 @@ class AjaxHeatmapController extends Controller
             return response()->json(
                 $raiderIOApiService->getHeatmapData(
                     HeatmapDataFilter::fromArray($request->validated()),
+                    $request->user(),
                 )->toArray(),
                 StatusCode::OK,
             );

@@ -3,6 +3,7 @@
 namespace App\Service\RaiderIO;
 
 use App\Models\Season;
+use App\Models\User;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\RaiderIO\Dtos\HeatmapDataResponse\HeatmapDataResponse;
@@ -15,7 +16,7 @@ interface RaiderIOApiServiceInterface
     /**
      * @throws InvalidApiResponseException
      */
-    public function getHeatmapData(HeatmapDataFilter $heatmapDataFilter): HeatmapDataResponse;
+    public function getHeatmapData(HeatmapDataFilter $heatmapDataFilter, ?User $user = null): HeatmapDataResponse;
 
     public function searchAdvancedRuns(SearchAdvancedRunsFilter $filter): SearchAdvancedRunsResponse;
 
