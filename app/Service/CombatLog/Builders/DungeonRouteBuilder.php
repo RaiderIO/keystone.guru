@@ -44,6 +44,15 @@ abstract class DungeonRouteBuilder
     ];
 
     /**
+     * Dungeons whose stacked floors share npc_ids at overlapping ingame X/Y, so the nearest enemy is often one on
+     * another floor. Matching prefers an enemy on the current floor and only then considers the others; unlike
+     * DUNGEON_ENEMY_FLOOR_CHECK_ENABLED nothing is excluded outright.
+     */
+    private const array DUNGEON_PREFERRED_FLOOR_ENABLED = [
+        DungeonKey::MAGISTERS_TERRACE_MIDNIGHT->value,
+    ];
+
+    /**
      * @var array<int, class-string<DungeonRouteBuilderRuleInterface>> Per-dungeon exceptions to the normal spatial
      *                                                                 matching, for dungeons where geometry alone cannot tell two sets of enemies apart.
      *                                                                 Each rule decides for itself which dungeons it applies to - see the interface.
@@ -379,7 +388,7 @@ abstract class DungeonRouteBuilder
                 $closestEnemy->getDistanceBetweenEnemies(),
                 $closestEnemy->getEnemy()->enemyPack->group,
             );
-        } elseif (in_array($this->dungeonRoute->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_ENABLED)) {
+        } elseif ($this->currentFloor !== null && $this->isPreferredFloorEnabled()) {
             $this->findClosestEnemyInPreferredFloor(
                 $filteredEnemies,
                 $activePullEnemy,
@@ -404,6 +413,12 @@ abstract class DungeonRouteBuilder
         }
 
         return $closestEnemy;
+    }
+
+    private function isPreferredFloorEnabled(): bool
+    {
+        return in_array($this->dungeonRoute->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_ENABLED) ||
+            in_array($this->dungeonRoute->dungeon->key, self::DUNGEON_PREFERRED_FLOOR_ENABLED);
     }
 
     /**

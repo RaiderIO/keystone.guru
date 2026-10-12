@@ -8,6 +8,7 @@ use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Spell\KnownSpell;
 use App\Models\Spell\Spell;
@@ -165,21 +166,17 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         //            return $event;
         //        }));
 
-        $floorCache          = collect();
         $firstEngagedAt      = null;
         $totalSpellsAssigned = 0;
         foreach ($npcEngagedAndDiedEvents as $event) {
             /** @var array{type: string, timestamp: Carbon, npc: CombatLogRouteNpcRequestDto} $event */
             $realUiMapId = Floor::UI_MAP_ID_MAPPING[$event['npc']->coord->uiMapId] ?? $event['npc']->coord->uiMapId;
             if ($this->currentFloor === null || $realUiMapId !== $this->currentFloor->ui_map_id) {
-                /** @var Floor|null $newFloor */
-                $newFloor = $floorCache->get($event['npc']->coord->uiMapId);
-
-                if ($newFloor === null) {
-                    $newFloor = $this->floorRepository->findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id);
-
-                    $floorCache->put($event['npc']->coord->uiMapId, $newFloor);
-                }
+                $newFloor = $this->floorRepository->findByUiMapIdInVisitOrder(
+                    $event['npc']->coord->uiMapId,
+                    $this->dungeonRoute->dungeon_id,
+                    $this->currentFloor,
+                );
 
                 if ($newFloor === null) {
                     // First floor ever, can't find it? Assign the default floor
@@ -233,6 +230,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 $event['npc']->setResolvedEnemy($resolvedEnemy)
                     ->setResolvedEnemyDistance($closestEnemy->getDistanceBetweenEnemies());
                 $activePullEnemy->setResolvedEnemy($resolvedEnemy);
+
+                $this->followResolvedEnemyToSiblingFloor($resolvedEnemy);
 
                 // A bit of a hack slash exception for Darkflame Cleft. In the second part of the dungeon you cycle back
                 // to the beginning, but you're now phased in a Shadow Realm. I split this off in a separate floor so
@@ -309,6 +308,24 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         if ($totalSpellsAssigned !== $this->combatLogRoute->spells->count()) {
             $this->log->buildKillZonesNotAllSpellsAssigned($totalSpellsAssigned, $this->combatLogRoute->spells->count());
         }
+    }
+
+    /**
+     * The logged ui_map_id cannot tell floors that share it apart, but the enemy the npc resolved to can: when it
+     * lies on another floor with the current floor's ui_map_id, the party is on that floor instead.
+     */
+    private function followResolvedEnemyToSiblingFloor(Enemy $resolvedEnemy): void
+    {
+        $resolvedFloor = $resolvedEnemy->floor;
+
+        if ($this->currentFloor === null ||
+            $resolvedFloor->id === $this->currentFloor->id ||
+            $resolvedFloor->ui_map_id !== $this->currentFloor->ui_map_id) {
+            return;
+        }
+
+        $this->currentFloor = $resolvedFloor;
+        $this->log->buildKillZonesNewCurrentFloorFromResolvedEnemy($resolvedEnemy->id, $resolvedFloor->id, $resolvedFloor->ui_map_id);
     }
 
     /**
