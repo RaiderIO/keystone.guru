@@ -324,6 +324,103 @@ describe('KillZone.save', () => {
         expect(sorted(ajaxRequests[2].sentData.enemies)).toEqual([1, 2, 3, 4]);
     });
 
+    it('save_givenOverlappingSavesAndNewerAnsweredFirst_keepsTheNewerColorAndEnemies', () => {
+        // Arrange
+        const {killZone, enemies} = makeSavedKillZone();
+        killZone.save();
+        killZone._addEnemy(enemies[4]);
+        killZone.color = '#00ff00';
+        killZone.save();
+        const [olderSave, newerSave] = ajaxRequests;
+
+        // Act
+        respondWithSentKillZone(newerSave);
+        respondWithSentKillZone(olderSave);
+
+        // Assert
+        expect(killZone.color).toBe('#00ff00');
+        expect(sorted(killZone.enemies)).toEqual([1, 2, 3, 4]);
+    });
+
+    it('save_givenOverlappingSavesAndNewerAnsweredFirst_doesNotSaveTheOlderStateAgain', () => {
+        // Arrange
+        const {killZone, enemies} = makeSavedKillZone();
+        killZone.save();
+        killZone._addEnemy(enemies[4]);
+        killZone.color = '#00ff00';
+        killZone.save();
+        const [olderSave, newerSave] = ajaxRequests;
+
+        // Act
+        respondWithSentKillZone(newerSave);
+        respondWithSentKillZone(olderSave);
+
+        // Assert
+        expect(ajaxRequests).toHaveLength(2);
+    });
+
+    it('save_givenOverlappingSavesAndNewerAnsweredFirst_signalsOnlyTheNewerEnemyForces', () => {
+        // Arrange
+        const {killZone, enemies} = makeSavedKillZone();
+        const signalledEnemyForces = [];
+        killZone.register('killzone:changed', 'test', (event) => signalledEnemyForces.push(event.data.enemy_forces));
+        killZone.save();
+        killZone._addEnemy(enemies[4]);
+        killZone.save();
+        const [olderSave, newerSave] = ajaxRequests;
+
+        // Act
+        respondWithSentKillZone(newerSave, {enemy_forces: 40});
+        respondWithSentKillZone(olderSave, {enemy_forces: 30});
+
+        // Assert
+        expect(signalledEnemyForces).toEqual([40]);
+    });
+
+    it('save_givenOverlappingSavesAndServerChangedTheEnemies_doesNotSaveAgain', () => {
+        // Arrange
+        const {killZone} = makeSavedKillZone();
+        killZone.save();
+        killZone.save();
+        const [olderSave, newerSave] = ajaxRequests;
+
+        // Act
+        respondWithSentKillZone(olderSave, {enemies: [1, 2]});
+        respondWithSentKillZone(newerSave, {enemies: [1, 2]});
+
+        // Assert
+        expect(sorted(killZone.enemies)).toEqual([1, 2]);
+        expect(ajaxRequests).toHaveLength(2);
+    });
+
+    it('save_givenEnemiesFromAnotherUserAppliedWhileInFlight_doesNotSaveAgain', () => {
+        // Arrange
+        const {killZone} = makeSavedKillZone();
+        killZone.save();
+        killZone.loadRemoteMapObject({...ajaxRequests[0].sentData, enemies: [1, 2, 3, 5]});
+
+        // Act
+        respondWithSentKillZone(ajaxRequests[0]);
+
+        // Assert
+        expect(ajaxRequests).toHaveLength(1);
+    });
+
+    it('save_givenNewerOfTwoUnchangedSavesFails_doesNotRetryWhenTheOlderSucceeds', () => {
+        // Arrange
+        const {killZone} = makeSavedKillZone();
+        killZone.save();
+        killZone.save();
+        const [olderSave, newerSave] = ajaxRequests;
+
+        // Act
+        respondWithServerError(newerSave);
+        respondWithSentKillZone(olderSave);
+
+        // Assert
+        expect(ajaxRequests).toHaveLength(2);
+    });
+
     it('save_givenPullDeletedWhileInFlight_doesNotSaveItAgain', () => {
         // Arrange
         const {killZone} = makeSavedKillZone();

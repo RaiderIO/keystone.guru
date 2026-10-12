@@ -46,6 +46,11 @@ class MapObject extends Signalable {
         this.teeming = null; // visible, hidden, null
         this.local = false;
         this._deleted = false;
+        // Overlapping saves may be answered out of order
+        this._saveSequence = 0;
+        this._appliedSaveSequence = 0;
+        /** @type {Number|null} The save revision carried by the newest save, null when that save failed */
+        this._sentSaveRevision = null;
         this.label = 'default label';
         this.decorator = null;
 
@@ -1018,6 +1023,8 @@ class MapObject extends Signalable {
 
         let has_route_model_binding = this.options.hasOwnProperty('has_route_model_binding') ? this.options.has_route_model_binding : false;
         let saveRevision = this._getSaveRevision();
+        let saveSequence = ++this._saveSequence;
+        this._sentSaveRevision = saveRevision;
 
         $.ajax({
             type: self.id > 0 && has_route_model_binding ? 'PUT' : 'POST',
@@ -1030,11 +1037,17 @@ class MapObject extends Signalable {
                 $(`#map_${mapObjectName}_edit_popup_submit_${self.id}`).attr('disabled', 'disabled');
             },
             success: function (json) {
-                // The response echoes what was sent; local changes made while it was in flight must survive it
-                let isOutdated = self._getSaveRevision() !== saveRevision;
+                let currentRevision = self._getSaveRevision();
+                // A newer response was already applied; this one would only roll its attributes back
+                let isSuperseded = saveSequence < self._appliedSaveSequence;
+                let hasUnsentChanges = currentRevision !== saveRevision && currentRevision !== self._sentSaveRevision;
 
-                // Apply all saved properties back our object
-                self.loadRemoteMapObject(isOutdated ? self._getOutdatedSaveResponseToApply(json) : json);
+                if (!isSuperseded) {
+                    self._appliedSaveSequence = saveSequence;
+
+                    // The response echoes what was sent; local changes made while it was in flight must survive it
+                    self.loadRemoteMapObject(currentRevision !== saveRevision ? self._getOutdatedSaveResponseToApply(json) : json);
+                }
 
                 self.setSynced(true);
                 self.map.leafletMap.closePopup();
@@ -1043,11 +1056,13 @@ class MapObject extends Signalable {
 
                 self.signal('save:success', {json: json});
 
-                self.onSaveSuccess(json);
+                if (!isSuperseded) {
+                    self.onSaveSuccess(json);
+                }
 
                 // Nothing else is guaranteed to save the newer local state: an enemy selection ignores this object's
                 // changes until this response's save:success when it was opened while the save was in flight
-                if (isOutdated && !self._deleted) {
+                if (hasUnsentChanges && !self._deleted) {
                     self.save();
                 }
             },
@@ -1058,6 +1073,10 @@ class MapObject extends Signalable {
             error: function (xhr, textStatus, errorThrown) {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
+
+                if (saveSequence === self._saveSequence) {
+                    self._sentSaveRevision = null;
+                }
 
                 let mapContext = getState().getMapContext();
 

@@ -265,7 +265,10 @@ class KillZone extends MapObject {
 
         // Do not unnecessarily call this function - it can be heavy
         if (!enemiesEqual) {
+            let enemiesRevision = this._enemiesRevision;
             this.setEnemies(enemies);
+            // Enemies received from the server are not local changes that still need saving
+            this._enemiesRevision = enemiesRevision;
         }
     }
 
