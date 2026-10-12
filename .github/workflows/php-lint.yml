@@ -59,7 +59,7 @@ jobs:
         run: vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1G
 
       - name: Save the PHP CS Fixer and PHPStan result caches
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || github.head_ref == '5251-ci-under-4-minutes'
         uses: actions/cache/save@v5
         with:
           path: |
