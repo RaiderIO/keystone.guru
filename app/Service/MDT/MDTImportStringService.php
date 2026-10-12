@@ -242,7 +242,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $titleSlug    = Str::slug($decoded['text']);
             $season       = $this->seasonService->getMostRecentSeasonForDungeon($dungeon);
             $dungeonRoute = DungeonRoute::create([
-                'author_id'          => $sandbox ? -1 : $user?->id ?? -1,
+                'author_id'          => $sandbox || $user === null ? -1 : $user->id,
                 'dungeon_id'         => $dungeon->id,
                 'mapping_version_id' => $currentMappingVersion->id,
                 'season_id'          => $season?->id,

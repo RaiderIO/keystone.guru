@@ -171,7 +171,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $this->floorRepository,
             $this->dungeonRepository,
             $combatLogRoute,
-            $user?->id ?? -1,
+            $user !== null ? $user->id : -1,
         );
 
         $enemyRecordings = new CombatLogRouteEnemyRecordings();
