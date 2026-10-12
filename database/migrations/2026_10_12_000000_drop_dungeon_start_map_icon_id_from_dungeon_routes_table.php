@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Symfony\Component\Finder\Finder;
 
@@ -16,6 +17,7 @@ return new class extends Migration {
     {
         // Has to run while the legacy start map icons are still in the database: the seeder removes them
         $this->backfillDungeonStartIds(database_path('seeders/dungeondata'));
+        $this->logUnmatchedDungeonStartSelections();
 
         Schema::table('dungeon_routes', function (Blueprint $table) {
             $table->dropIndex(['dungeon_start_map_icon_id']);
@@ -29,6 +31,47 @@ return new class extends Migration {
             $table->unsignedBigInteger('dungeon_start_map_icon_id')->nullable()->after('published_state_id');
             $table->index('dungeon_start_map_icon_id');
         });
+    }
+
+    /**
+     * Logs the original start selection of every route the backfill could not match, as the column drop removes the
+     * last record of it. Deliberately does not abort: a failing migration would block the deploy.
+     */
+    public function logUnmatchedDungeonStartSelections(): int
+    {
+        $count = 0;
+        DB::table('dungeon_routes')
+            ->leftJoin('map_icons', 'map_icons.id', '=', 'dungeon_routes.dungeon_start_map_icon_id')
+            ->whereNotNull('dungeon_routes.dungeon_start_map_icon_id')
+            ->whereNull('dungeon_routes.dungeon_start_id')
+            ->select([
+                'dungeon_routes.id',
+                'dungeon_routes.public_key',
+                'dungeon_routes.dungeon_start_map_icon_id',
+                'map_icons.mapping_version_id as icon_mapping_version_id',
+                'map_icons.floor_id as icon_floor_id',
+                'map_icons.lat as icon_lat',
+                'map_icons.lng as icon_lng',
+            ])
+            ->orderBy('dungeon_routes.id')
+            ->chunkById(500, function (Collection $dungeonRoutes) use (&$count): void {
+                foreach ($dungeonRoutes as $dungeonRoute) {
+                    $count++;
+                    Log::warning('Dropping dungeon_start_map_icon_id of a route without a matching dungeon start', [
+                        'dungeon_route_id'          => $dungeonRoute->id,
+                        'public_key'                => $dungeonRoute->public_key,
+                        'dungeon_start_map_icon_id' => $dungeonRoute->dungeon_start_map_icon_id,
+                        'icon_mapping_version_id'   => $dungeonRoute->icon_mapping_version_id,
+                        'icon_floor_id'             => $dungeonRoute->icon_floor_id,
+                        'icon_lat'                  => $dungeonRoute->icon_lat,
+                        'icon_lng'                  => $dungeonRoute->icon_lng,
+                    ]);
+                }
+            }, 'dungeon_routes.id', 'id');
+
+        Log::warning(sprintf('%d route(s) lose their dungeon_start_map_icon_id without a matching dungeon start', $count));
+
+        return $count;
     }
 
     /**

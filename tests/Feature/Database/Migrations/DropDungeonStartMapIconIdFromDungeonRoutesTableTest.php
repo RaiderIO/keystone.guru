@@ -8,6 +8,7 @@ use App\Models\MapIconType;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -87,6 +88,32 @@ final class DropDungeonStartMapIconIdFromDungeonRoutesTableTest extends PublicTe
 
         // Assert
         $this->assertFalse(Schema::hasColumn('dungeon_routes', 'dungeon_start_map_icon_id'));
+    }
+
+    #[Test]
+    public function up_givenRouteWithoutAMatchingDungeonStart_logsItsSelectionBeforeDropping(): void
+    {
+        // Arrange
+        $route     = DungeonRoute::factory()->create(['dungeon_start_id' => null]);
+        $mapIconId = (int)MapIcon::query()->max('id') + 1000;
+        DB::table('dungeon_routes')->where('id', $route->id)->update(['dungeon_start_map_icon_id' => $mapIconId]);
+        $log       = Log::spy();
+        $migration = require database_path(self::MIGRATION);
+
+        try {
+            // Act
+            $migration->up();
+
+            // Assert
+            $log->shouldHaveReceived('warning')->withArgs(
+                static fn(string $message, array $context = []): bool => ($context['dungeon_route_id'] ?? null) === $route->id
+                    && ($context['dungeon_start_map_icon_id'] ?? null) === $mapIconId
+                    && ($context['public_key'] ?? null) === $route->public_key,
+            )->once();
+            $this->assertFalse(Schema::hasColumn('dungeon_routes', 'dungeon_start_map_icon_id'));
+        } finally {
+            $route->delete();
+        }
     }
 
     #[Test]
