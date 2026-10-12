@@ -39,7 +39,7 @@ class MapPOIImporter
             $mdtMapPOIs = $mdtDungeon->getMDTMapPOIs();
 
             // Whether $newMappingVersion already has floor switch markers of its own - either cloned from
-            // $currentMappingVersion by copyMappingVersionContentsToDungeon(), or (#3757/#3762) cloned from a
+            // $currentMappingVersion by copyMappingVersionContentsToDungeon(), or cloned from a
             // prior game version's facade-source mapping version by
             // MappingService::createNewMappingVersionFromMDTMapping() on a genuinely first-ever import (where
             // $currentMappingVersion is null). Querying $newMappingVersion directly - rather than inspecting
@@ -89,8 +89,8 @@ class MapPOIImporter
                         // Generic item icons were just unconditionally cleared from $newMappingVersion above
                         // (deleteClonedGenericItemMapIcons) so they can be re-created fresh from MDT below -
                         // checking $currentMappingVersion here would find the old version's now-deleted-in-
-                        // $newMappingVersion copy and skip re-creating it, silently dropping the icon (#4112).
-                        // No predecessor to match against - always create a new icon (#3757).
+                        // $newMappingVersion copy and skip re-creating it, silently dropping the icon.
+                        // No predecessor to match against - always create a new icon.
                         $existingMapIcon = in_array($mapIconTypeId, $genericItemMapIconTypeIds, true)
                             ? $newMappingVersion->getMapIconNearLocation($latLng, $mapIconTypeId)
                             : $currentMappingVersion?->getMapIconNearLocation($latLng, $mapIconTypeId);
@@ -132,7 +132,7 @@ class MapPOIImporter
                         // Only create fresh markers when $newMappingVersion doesn't already have any - whether
                         // because copyMappingVersionContentsToDungeon() cloned them from $currentMappingVersion,
                         // or because a first-ever import for this game version cloned them from a prior game
-                        // version's facade-source mapping version (#3757/#3762) - to avoid creating duplicates
+                        // version's facade-source mapping version - to avoid creating duplicates
                         // on top of either.
                         if (!$newMappingVersionHasDungeonFloorSwitchMarkers) {
                             $floor = $this->findFloorByMdtSubLevel($dungeon, $newMappingVersion, $mdtMapPOI->getSubLevel());
@@ -182,7 +182,7 @@ class MapPOIImporter
         // facade enabled - convertFacadeMapLocationToMapLocation() is a no-op otherwise, which would leave
         // the coordinate stranded on the facade floor and blow up in CoordinatesService. Facade floors are
         // seeded with mdt_sub_level = 1, so without this they win the lookup for sub level 1 on every
-        // dungeon that has a facade floor but has not enabled it - Throne of the Tides today (#3742),
+        // dungeon that has a facade floor but has not enabled it - Throne of the Tides today,
         // and every historical mapping version from before its dungeon's facade was switched on.
         if (!$mappingVersion->facade_enabled) {
             $activeFloors = $activeFloors->filter(static fn(Floor $floor) => !$floor->facade);
@@ -205,7 +205,7 @@ class MapPOIImporter
      * `copyMappingVersionContentsToDungeon()` clones such an icon into every subsequent mapping version -
      * where it would now sit next to the imported copy as a duplicate. `getMapIconNearLocation()` does not
      * catch it: its window is +/-5 lat/lng, while Maisara Caverns' hand-placed Hearty Vilebranch Stew is
-     * 5.3 off MDT's position and Seat of the Triumvirate's Void Infusion 13.9 (#3993).
+     * 5.3 off MDT's position and Seat of the Triumvirate's Void Infusion 13.9.
      *
      * @param array<int> $genericItemMapIconTypeIds
      */

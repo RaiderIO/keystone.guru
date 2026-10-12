@@ -47,7 +47,7 @@ class EnemyPatrolImporter
             // Pretend the patrol is on the facade floor for correct translations, IF the facade floor is available
             $facadeFloor = $dungeon->getFacadeFloor();
 
-            // No predecessor - nothing to match against or re-clone below (#3757).
+            // No predecessor - nothing to match against or re-clone below.
             /** @var Collection<int, EnemyPatrol> $existingEnemyPatrols */
             $existingEnemyPatrols = $currentMappingVersion
                 ?->enemyPatrols()

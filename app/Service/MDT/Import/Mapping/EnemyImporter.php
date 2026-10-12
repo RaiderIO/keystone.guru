@@ -53,7 +53,7 @@ class EnemyImporter
             $this->log->importEnemiesStart();
 
             // No predecessor (e.g. this dungeon's first-ever import for this game version) - nothing to
-            // recover properties from, every MDT enemy below is treated as brand new (#3757).
+            // recover properties from, every MDT enemy below is treated as brand new.
             $currentEnemies = $currentMappingVersion
                 ?->enemies()
                 ->with('floor')
@@ -69,7 +69,7 @@ class EnemyImporter
                     continue;
                 }
 
-                // Skip teeming enemies for now - this affix was removed ages ago
+                // Skip teeming enemies - the Teeming affix is retired
                 if ($mdtEnemy->teeming !== null) {
                     $this->log->importEnemiesSkipTeemingEnemy($mdtEnemy->getUniqueKey());
 
@@ -139,7 +139,7 @@ class EnemyImporter
 
                     // Enemy forces checkpoints were cloned into the new mapping version before we got here, so the
                     // predecessor's checkpoint id must be translated - copying it verbatim would attach this enemy to
-                    // the previous mapping version's checkpoint (#3702).
+                    // the previous mapping version's checkpoint.
                     if ($existingEnemy->enemy_forces_checkpoint_id !== null) {
                         $newEnemyForcesCheckpointId = $enemyForcesCheckpointIdMapping[$existingEnemy->enemy_forces_checkpoint_id] ?? null;
 
@@ -192,7 +192,7 @@ class EnemyImporter
     /**
      * An MDT mapping bump is exactly when the enemy set changes. A checkpoint whose members were all removed
      * upstream - or which lost them because we could not match them to their predecessor - would otherwise
-     * survive as an empty checkpoint reporting zero enemy forces, which is not what the mapper drew (#3702).
+     * survive as an empty checkpoint reporting zero enemy forces, which is not what the mapper drew.
      *
      * A checkpoint that never had any members in the SOURCE mapping version did not lose anything by staying
      * empty here - most notably a "bare mapping version" checkpoint (MappingVersionController@saveNew's "Add
@@ -212,7 +212,7 @@ class EnemyImporter
         array           $enemyForcesCheckpointIdMapping,
     ): void {
         // No predecessor means $enemyForcesCheckpointIdMapping is already empty (nothing was cloned to prune
-        // from) - nothing to do (#3757).
+        // from) - nothing to do.
         if ($currentMappingVersion === null) {
             return;
         }
@@ -249,7 +249,7 @@ class EnemyImporter
         }
         // The per-checkpoint line above stays at warning, but the aggregate is worth paging on: after the fix
         // above, this only fires when a checkpoint that DID have members in the source could not be carried
-        // over - which is exactly the silent whole-dungeon wipe this bug used to cause (#3702).
+        // over - which is exactly the silent whole-dungeon wipe this guards against.
         $this->log->importEnemiesPrunedEmptyEnemyForcesCheckpoints(
             $newMappingVersion->dungeon_id,
             $enemyForcesCheckpointsToPrune->count(),

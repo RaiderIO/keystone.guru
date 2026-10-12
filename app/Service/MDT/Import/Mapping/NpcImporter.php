@@ -96,7 +96,7 @@ class NpcImporter
                     ]);
                 }
 
-                // Spells an MDT NPC lists are deliberately not imported (#3989): which spells an NPC casts
+                // Spells an MDT NPC lists are deliberately not imported: which spells an NPC casts
                 // is derived exclusively from parsed combat log data (see NpcSpellAssignmentCollector),
                 // which is curated data we gathered ourselves - MDT's list is not.
 
