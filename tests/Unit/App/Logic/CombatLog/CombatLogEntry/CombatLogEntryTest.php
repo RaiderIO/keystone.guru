@@ -3,6 +3,7 @@
 namespace Tests\Unit\App\Logic\CombatLog\CombatLogEntry;
 
 use App\Logic\CombatLog\CombatLogEntry;
+use App\Logic\CombatLog\CombatLogVersion;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use Carbon\Exceptions\InvalidFormatException;
@@ -214,5 +215,20 @@ final class CombatLogEntryTest extends PublicTestCase
             'white-listed event'               => [['CHALLENGE_MODE_START', 'ZONE_CHANGE'], ZoneChange::class],
             'event outside the white list'     => [['CHALLENGE_MODE_START', 'ENCOUNTER_START'], null],
         ];
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('CombatLogEntry')]
+    public function parseEvent_givenNoCombatLogVersion_parsesWithTheLatestRetailVersion(): void
+    {
+        // Arrange
+        $combatLogEntry = new CombatLogEntry('3/25/2026 10:36:28.9051  ZONE_CHANGE,2526,"Algeth\'ar Academy",23');
+
+        // Act
+        $result = $combatLogEntry->parseEvent();
+
+        // Assert
+        Assert::assertSame(CombatLogVersion::getLatestRetail(), $result?->getCombatLogVersion());
     }
 }

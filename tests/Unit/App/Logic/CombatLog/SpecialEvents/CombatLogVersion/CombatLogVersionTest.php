@@ -63,14 +63,34 @@ final class CombatLogVersionTest extends PublicTestCase
     }
 
     #[Test]
-    public function setParameters_givenABuildVersionThatIsNotRegistered_throwsException(): void
+    public function setParameters_givenASupportedBuildVersionThatIsNotRegistered_parses(): void
     {
         // Arrange
-        $parameters = ['22', 'ADVANCED_LOG_ENABLED', '1', 'BUILD_VERSION', '9.9.9', 'PROJECT_ID', '1'];
+        $parameters = ['22', 'ADVANCED_LOG_ENABLED', '1', 'BUILD_VERSION', '12.9.9', 'PROJECT_ID', '1'];
+
+        // Act
+        $result = new CombatLogVersionEvent(
+            CombatLogVersion::RETAIL_12_0_5,
+            Carbon::parse('2026-05-31 22:00:00'),
+            SpecialEvent::SPECIAL_EVENT_COMBAT_LOG_VERSION,
+            $parameters,
+            '',
+        );
+
+        // Assert
+        Assert::assertFalse(CombatLogVersion::isRegistered($result->getVersionLong()));
+        Assert::assertSame(22_012_009_009, $result->getVersionLong());
+    }
+
+    #[Test]
+    public function setParameters_givenAVersionOlderThanItsLineageSupports_throwsException(): void
+    {
+        // Arrange
+        $parameters = ['19', 'ADVANCED_LOG_ENABLED', '1', 'BUILD_VERSION', '9.2.7', 'PROJECT_ID', '1'];
 
         // Assert
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unable to find combat log version 22009009009!');
+        $this->expectExceptionMessage('Unable to find combat log version 19009002007!');
 
         // Act
         new CombatLogVersionEvent(

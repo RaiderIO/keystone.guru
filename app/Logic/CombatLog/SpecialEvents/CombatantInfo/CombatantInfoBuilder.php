@@ -2,16 +2,20 @@
 
 namespace App\Logic\CombatLog\SpecialEvents\CombatantInfo;
 
+use App\Logic\CombatLog\CombatLogLineage;
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Logic\CombatLog\SpecialEvents\CombatantInfo\Versions\V21\CombatantInfoV21;
 use App\Logic\CombatLog\SpecialEvents\CombatantInfo\Versions\V22\CombatantInfoV22;
 use App\Logic\CombatLog\SpecialEvents\CombatantInfo\Versions\V9SoD\CombatantInfoV9SoD;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEventBuilderInterface;
+use App\Logic\CombatLog\Traits\ResolvesCombatLogFormat;
 use Illuminate\Support\Carbon;
 
 class CombatantInfoBuilder implements SpecialEventBuilderInterface
 {
+    use ResolvesCombatLogFormat;
+
     /**
      * @param  array<int, mixed>                   $parameters
      * @return SpecialEvent&CombatantInfoInterface
@@ -23,12 +27,23 @@ class CombatantInfoBuilder implements SpecialEventBuilderInterface
         array  $parameters,
         string $rawEvent,
     ): SpecialEvent {
-        return match ($combatLogVersion) {
-            CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6, CombatLogVersion::CLASSIC_SOD_1_15_7, CombatLogVersion::CLASSIC_TBC_2_5_5 => new CombatantInfoV9SoD($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
-            CombatLogVersion::RETAIL_10_1_0, CombatLogVersion::RETAIL_11_0_2, CombatLogVersion::RETAIL_11_0_5,
-            CombatLogVersion::RETAIL_11_0_7, CombatLogVersion::RETAIL_11_1_0, CombatLogVersion::RETAIL_11_1_7,
-            CombatLogVersion::RETAIL_11_2_0 => new CombatantInfoV21($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
-            default                         => new CombatantInfoV22($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
-        };
+        /** @var class-string<SpecialEvent&CombatantInfoInterface> $className */
+        $className = self::resolveClassName($combatLogVersion);
+
+        return new $className($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
+    }
+
+    public static function getClassNamesByFirstCombatLogVersion(): array
+    {
+        return [
+            CombatLogLineage::Classic->value => [
+                CombatLogVersion::CLASSIC            => CombatantInfoV22::class,
+                CombatLogVersion::CLASSIC_SOD_1_15_5 => CombatantInfoV9SoD::class,
+            ],
+            CombatLogLineage::Retail->value => [
+                CombatLogVersion::RETAIL_10_1_0 => CombatantInfoV21::class,
+                CombatLogVersion::RETAIL_12_0_1 => CombatantInfoV22::class,
+            ],
+        ];
     }
 }

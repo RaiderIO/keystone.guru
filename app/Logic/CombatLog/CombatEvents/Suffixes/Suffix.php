@@ -185,9 +185,12 @@ abstract class Suffix implements HasParameters
             if (Str::endsWith($eventName, $prefix)) {
                 // is_subclass_of() answers this from the class name, so a builder no longer has an
                 // instance built and thrown away before create() is called on it.
-                $suffix = is_subclass_of($className, SuffixBuilderInterface::class)
-                    ? $className::create($combatLogVersion)
-                    : new $className($combatLogVersion);
+                if (is_subclass_of($className, SuffixBuilderInterface::class)) {
+                    $suffix = $className::create($combatLogVersion);
+                } else {
+                    /** @var class-string<Suffix> $className */
+                    $suffix = new $className($combatLogVersion);
+                }
 
                 if (count(self::$resolvedClassNames[$combatLogVersion] ?? []) < self::RESOLVED_CLASS_NAME_LIMIT) {
                     self::$resolvedClassNames[$combatLogVersion][$eventName] = $suffix::class;

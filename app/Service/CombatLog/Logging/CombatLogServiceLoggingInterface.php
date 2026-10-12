@@ -40,6 +40,8 @@ interface CombatLogServiceLoggingInterface
         bool $advancedLoggingEnabled,
     ): void;
 
+    public function parseCombatLogUnregisteredCombatLogVersion(int $combatLogVersion): void;
+
     public function parseCombatLogParseEventsException(string $rawEvent, Exception $exception): void;
 
     public function parseCombatLogParseEventsEnd(): void;

@@ -73,14 +73,17 @@ class CombatLogEntry
     }
 
     /**
-     * @param array<int, string> $eventWhiteList Empty to return all events
+     * @param array<int, string> $eventWhiteList   Empty to return all events
+     * @param int|null           $combatLogVersion Null for the latest registered Retail version
      *
      * @throws Exception
      */
     public function parseEvent(
         array $eventWhiteList = [],
-        int   $combatLogVersion = CombatLogVersion::RETAIL_12_0_5,
+        ?int  $combatLogVersion = null,
     ): ?BaseEvent {
+        $combatLogVersion ??= CombatLogVersion::getLatestRetail();
+
         $matches = [];
         if (!preg_match('/(\d*\/\d*(?:\/\d*)? \d*:\d*:\d*.\d*(?:-\d*)?)\s\s(.+)/', $this->rawEvent, $matches)) {
             if (!in_array(trim($this->rawEvent), self::RAW_EVENT_IGNORE)) {
