@@ -1,54 +1,61 @@
 <?php
 
-namespace App\Console\Commands\DungeonRoute;
-
-use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\MapIcon;
-use App\Models\MapIconType;
-use Illuminate\Console\Command;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Symfony\Component\Finder\Finder;
 
-class BackfillDungeonStartId extends Command
-{
+return new class extends Migration {
     private const float LAT_LNG_EPSILON = 0.000001;
 
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'dungeonroute:backfilldungeonstartid
-        {--dir= : Seeder dungeon data directory holding the dungeon_starts.json files, defaults to database/seeders/dungeondata}';
+    private const int LEGACY_DUNGEON_START_MAP_ICON_TYPE_ID = 10;
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Points dungeon_start_id of every route at the dungeon start its dungeon_start_map_icon_id map icon became, matched on mapping version, floor and position.';
-
-    public function handle(): int
+    public function up(): void
     {
-        $dungeonStartsByKey = $this->readDungeonStarts($this->option('dir') ?? database_path('seeders/dungeondata'));
+        // Has to run while the legacy start map icons are still in the database: the seeder removes them
+        $this->backfillDungeonStartIds(database_path('seeders/dungeondata'));
+
+        Schema::table('dungeon_routes', function (Blueprint $table) {
+            $table->dropIndex(['dungeon_start_map_icon_id']);
+            $table->dropColumn('dungeon_start_map_icon_id');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('dungeon_routes', function (Blueprint $table) {
+            $table->unsignedBigInteger('dungeon_start_map_icon_id')->nullable()->after('published_state_id');
+            $table->index('dungeon_start_map_icon_id');
+        });
+    }
+
+    /**
+     * Points dungeon_start_id of every route that only has a dungeon_start_map_icon_id (created by the code running
+     * during the previous release's rollout) at the dungeon start that map icon became, matched on mapping version,
+     * floor and position.
+     *
+     * @return array{updated: int, unmatched: int}
+     */
+    public function backfillDungeonStartIds(string $dungeonDataDir): array
+    {
+        $dungeonStartsByKey = $this->readDungeonStarts($dungeonDataDir);
 
         $updated   = 0;
         $unmatched = 0;
-        DungeonRoute::query()
+        DB::table('dungeon_routes')
             ->whereNotNull('dungeon_start_map_icon_id')
             ->whereNull('dungeon_start_id')
             ->select(['id', 'dungeon_start_map_icon_id'])
             ->chunkById(500, function (Collection $dungeonRoutes) use ($dungeonStartsByKey, &$updated, &$unmatched): void {
-                /** @var Collection<int, MapIcon> $mapIconsById */
-                $mapIconsById = MapIcon::query()
-                    ->without(['mapIconType', 'linkedawakenedobelisks'])
+                $mapIconsById = DB::table('map_icons')
                     ->whereIn('id', $dungeonRoutes->pluck('dungeon_start_map_icon_id'))
-                    ->where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START])
+                    ->where('map_icon_type_id', self::LEGACY_DUNGEON_START_MAP_ICON_TYPE_ID)
                     ->get(['id', 'mapping_version_id', 'floor_id', 'lat', 'lng'])
                     ->keyBy('id');
 
                 foreach ($dungeonRoutes as $dungeonRoute) {
-                    /** @var DungeonRoute $dungeonRoute */
                     $mapIcon        = $mapIconsById->get($dungeonRoute->dungeon_start_map_icon_id);
                     $dungeonStartId = $mapIcon === null ? null : $this->findDungeonStartId($dungeonStartsByKey, $mapIcon);
 
@@ -58,14 +65,12 @@ class BackfillDungeonStartId extends Command
                         continue;
                     }
 
-                    DungeonRoute::query()->whereKey($dungeonRoute->id)->update(['dungeon_start_id' => $dungeonStartId]);
+                    DB::table('dungeon_routes')->where('id', $dungeonRoute->id)->update(['dungeon_start_id' => $dungeonStartId]);
                     $updated++;
                 }
             });
 
-        $this->info(sprintf('Backfilled %d route(s), %d route(s) without a matching dungeon start', $updated, $unmatched));
-
-        return self::SUCCESS;
+        return ['updated' => $updated, 'unmatched' => $unmatched];
     }
 
     /**
@@ -91,7 +96,7 @@ class BackfillDungeonStartId extends Command
     /**
      * @param array<string, array<int, array{id: int, lat: float, lng: float}>> $dungeonStartsByKey
      */
-    private function findDungeonStartId(array $dungeonStartsByKey, MapIcon $mapIcon): ?int
+    private function findDungeonStartId(array $dungeonStartsByKey, object $mapIcon): ?int
     {
         $key = sprintf('%d-%d', $mapIcon->mapping_version_id, $mapIcon->floor_id);
         foreach ($dungeonStartsByKey[$key] ?? [] as $dungeonStart) {
@@ -103,4 +108,4 @@ class BackfillDungeonStartId extends Command
 
         return null;
     }
-}
+};

@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
@@ -12,9 +11,6 @@ return new class extends Migration {
             $table->unsignedInteger('dungeon_start_id')->nullable()->after('dungeon_start_map_icon_id');
             $table->index('dungeon_start_id');
         });
-
-        // Has to run before the seeder: seeding recreates the map icons dungeon_start_map_icon_id points at under new ids
-        Artisan::call('dungeonroute:backfilldungeonstartid');
     }
 
     public function down(): void
