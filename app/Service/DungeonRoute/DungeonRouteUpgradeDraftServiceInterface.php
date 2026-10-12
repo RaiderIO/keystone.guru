@@ -37,7 +37,7 @@ interface DungeonRouteUpgradeDraftServiceInterface
      *                                               its routes are published by construction and an imperfect enemy
      *                                               match is a routine outcome of a combat log, so enforcing it would
      *                                               turn a normal miss into a failed regeneration (#4297).
-     * @param  User|null    $user The acting user the live sessions' route-replaced notice is attributed to; without one the notice is skipped.
+     * @param  User|null    $user                    The acting user the live sessions' route-replaced notice is attributed to; without one the notice is skipped.
      * @return DungeonRoute The original, refreshed.
      *
      * @throws UpgradeDraftGoneException When the draft was applied, discarded or taken over concurrently.

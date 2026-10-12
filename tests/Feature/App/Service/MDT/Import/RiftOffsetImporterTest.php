@@ -10,6 +10,7 @@ use App\Models\MapIconType;
 use App\Models\MapObjectToAwakenedObeliskLink;
 use App\Models\Path;
 use App\Models\Polyline;
+use App\Models\User;
 use App\Service\MDT\Import\RiftOffsetImporter;
 use App\Service\MDT\Models\ImportStringRiftOffsets;
 use Illuminate\Database\Eloquent\Builder;
@@ -368,5 +369,57 @@ final class RiftOffsetImporterTest extends PublicTestCase
         } finally {
             $dungeonRoute?->delete();
         }
+    }
+
+    #[Test]
+    public function parseRiftOffsets_givenPatreonUserPassedWhileOtherUserAuthenticated_animatesThePath(): void
+    {
+        // Arrange - the admin implicitly holds every Patreon benefit, the authenticated user holds none
+        $authenticatedUser = User::factory()->create();
+
+        try {
+            $this->be($authenticatedUser);
+
+            // Act
+            $result = $this->parseBrutalRiftOffset(User::findOrFail(1));
+
+            // Assert
+            $this->assertSame('#244812', $result->getPaths()->first()['polyline']['color_animated']);
+        } finally {
+            $authenticatedUser->delete();
+        }
+    }
+
+    #[Test]
+    public function parseRiftOffsets_givenNoUserPassedWhilePatreonUserAuthenticated_doesNotAnimateThePath(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        // Act
+        $result = $this->parseBrutalRiftOffset(null);
+
+        // Assert
+        $this->assertNull($result->getPaths()->first()['polyline']['color_animated']);
+    }
+
+    private function parseBrutalRiftOffset(?User $user): ImportStringRiftOffsets
+    {
+        $dungeon = Dungeon::where('key', self::DUNGEON_KEY_UNPACKED_ONLY)->firstOrFail();
+
+        /** @var RiftOffsetImporter $importer */
+        $importer = app(RiftOffsetImporter::class);
+
+        return $importer->parseRiftOffsets(
+            new ImportStringRiftOffsets(
+                warnings:       new Collection(),
+                dungeon:        $dungeon,
+                mappingVersion: $dungeon->getCurrentMappingVersion(),
+                seasonalIndex:  null,
+                riftOffsets:    [1 => [self::BRUTAL_NPC_ID => ['x' => 50.0, 'y' => 50.0]]],
+                week:           1,
+            ),
+            $user,
+        );
     }
 }

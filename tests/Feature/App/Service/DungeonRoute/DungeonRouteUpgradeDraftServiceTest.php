@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\App\Service\DungeonRoute;
 
+use App\Events\LiveSession\RouteReplacedEvent;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteFavorite;
@@ -10,6 +11,7 @@ use App\Models\DungeonRoute\DungeonRouteRating;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
+use App\Models\LiveSession;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
@@ -419,6 +421,73 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             $this->assertSame('Repaired in the draft', $applied->title, 'Route settings are applied too');
         } finally {
             $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function apply_givenUserPassedWhileOtherUserAuthenticated_attributesRouteReplacedNoticeToPassedUser(): void
+    {
+        $authenticatedUser = User::factory()->create();
+        $passedUser        = User::factory()->create();
+
+        try {
+            // Arrange
+            [$original] = $this->createOutdatedRoute();
+            LiveSession::create([
+                'dungeon_route_id' => $original->id,
+                'user_id'          => $original->author_id,
+                'public_key'       => LiveSession::generateRandomPublicKey(),
+            ]);
+
+            $service = $this->buildUpgradeDraftService();
+            $draft   = $service->findOrCreateDraft($original);
+            $this->killRequiredEnemiesOn($draft);
+            $this->be($authenticatedUser);
+            Event::fake([RouteReplacedEvent::class]);
+
+            // Act
+            $service->apply($draft, user: $passedUser);
+
+            // Assert
+            Event::assertDispatched(
+                RouteReplacedEvent::class,
+                fn(RouteReplacedEvent $event): bool => (fn() => $this->user->id)->call($event) === $passedUser->id,
+            );
+        } finally {
+            $this->tearDownCleanup();
+            $authenticatedUser->delete();
+            $passedUser->delete();
+        }
+    }
+
+    #[Test]
+    public function apply_givenNoUserPassedWhileUserAuthenticated_skipsRouteReplacedNotice(): void
+    {
+        $authenticatedUser = User::factory()->create();
+
+        try {
+            // Arrange
+            [$original] = $this->createOutdatedRoute();
+            LiveSession::create([
+                'dungeon_route_id' => $original->id,
+                'user_id'          => $original->author_id,
+                'public_key'       => LiveSession::generateRandomPublicKey(),
+            ]);
+
+            $service = $this->buildUpgradeDraftService();
+            $draft   = $service->findOrCreateDraft($original);
+            $this->killRequiredEnemiesOn($draft);
+            $this->be($authenticatedUser);
+            Event::fake([RouteReplacedEvent::class]);
+
+            // Act
+            $service->apply($draft);
+
+            // Assert
+            Event::assertNotDispatched(RouteReplacedEvent::class);
+        } finally {
+            $this->tearDownCleanup();
+            $authenticatedUser->delete();
         }
     }
 

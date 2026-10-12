@@ -604,6 +604,52 @@ final class CombatLogRouteDungeonRouteServiceRegenerationTest extends PublicTest
         }
     }
 
+    #[Test]
+    public function convertCombatLogRouteToDungeonRoute_givenUserPassedWhileOtherUserAuthenticated_authorsRouteAsPassedUser(): void
+    {
+        // Arrange
+        $createdRouteIds   = [];
+        $authenticatedUser = User::factory()->create();
+        $passedUser        = User::factory()->create();
+
+        try {
+            $this->be($authenticatedUser);
+
+            // Act
+            $route             = $this->service->convertCombatLogRouteToDungeonRoute($this->getCombatLogRouteRequestDto(), $passedUser);
+            $createdRouteIds[] = $route->id;
+
+            // Assert
+            $this->assertSame($passedUser->id, $route->author_id);
+        } finally {
+            $this->deleteDungeonRoutes($createdRouteIds);
+            $authenticatedUser->delete();
+            $passedUser->delete();
+        }
+    }
+
+    #[Test]
+    public function convertCombatLogRouteToDungeonRoute_givenNoUserPassedWhileUserAuthenticated_authorsRouteAsNobody(): void
+    {
+        // Arrange
+        $createdRouteIds   = [];
+        $authenticatedUser = User::factory()->create();
+
+        try {
+            $this->be($authenticatedUser);
+
+            // Act
+            $route             = $this->service->convertCombatLogRouteToDungeonRoute($this->getCombatLogRouteRequestDto());
+            $createdRouteIds[] = $route->id;
+
+            // Assert
+            $this->assertSame(-1, $route->author_id);
+        } finally {
+            $this->deleteDungeonRoutes($createdRouteIds);
+            $authenticatedUser->delete();
+        }
+    }
+
     private function getCombatLogRouteRequestDto(): CombatLogRouteRequestDto
     {
         return CombatLogRouteRequestDto::createFromArray(
