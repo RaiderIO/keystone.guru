@@ -43,6 +43,32 @@ final class EnergizeBuilderTest extends PublicTestCase
     #[Group('CombatLog')]
     #[Group('Suffixes')]
     #[Group('Energize')]
+    public function create_GivenClassicSod1156Version_ShouldReturnV9(): void
+    {
+        // Act
+        $result = EnergizeBuilder::create(CombatLogVersion::CLASSIC_SOD_1_15_6);
+
+        // Assert
+        Assert::assertInstanceOf(EnergizeV9::class, $result);
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('Suffixes')]
+    #[Group('Energize')]
+    public function create_GivenClassicSod1155Version_ShouldReturnV9(): void
+    {
+        // Act
+        $result = EnergizeBuilder::create(CombatLogVersion::CLASSIC_SOD_1_15_5);
+
+        // Assert
+        Assert::assertInstanceOf(EnergizeV9::class, $result);
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('Suffixes')]
+    #[Group('Energize')]
     public function create_GivenRetailVersion_ShouldReturnV22(): void
     {
         // Act
