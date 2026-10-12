@@ -7,6 +7,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 /**
@@ -69,4 +70,26 @@ interface NpcRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, Collection<int, Npc>>
      */
     public function getNpcsBySpellIdForDungeon(Dungeon $dungeon, ?MappingVersion $mappingVersion, Collection $spellIds): Collection;
+
+    /**
+     * Every NPC that occurs in a dungeon, one row per NPC/dungeon pair with the `dungeon_id` selected, ordered by
+     * dungeon id and then English name - for the bolstering whitelist dropdown.
+     *
+     * @return Collection<int, Npc>
+     */
+    public function getForBolsteringWhitelistDropdown(): Collection;
+
+    /**
+     * A page of the NPCs that have at least one spell, with those spells loaded, optionally limited to a dungeon.
+     *
+     * @return LengthAwarePaginator<int, Npc>
+     */
+    public function paginateWithSpells(?Dungeon $dungeon, int $perPage): LengthAwarePaginator;
+
+    /**
+     * Every NPC that has no display id yet, with its dungeons.
+     *
+     * @return Collection<int, Npc>
+     */
+    public function getWithoutDisplayId(): Collection;
 }

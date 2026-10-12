@@ -12,4 +12,9 @@ class NpcEnemyForcesRepository extends DatabaseRepository implements NpcEnemyFor
     {
         parent::__construct(NpcEnemyForces::class);
     }
+
+    public function updateNpcId(int $oldNpcId, int $newNpcId): int
+    {
+        return NpcEnemyForces::where('npc_id', $oldNpcId)->update(['npc_id' => $newNpcId]);
+    }
 }

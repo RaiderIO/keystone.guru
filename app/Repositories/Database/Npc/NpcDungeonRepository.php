@@ -24,4 +24,12 @@ class NpcDungeonRepository extends DatabaseRepository implements NpcDungeonRepos
             ->where('dungeon_id', $dungeon->id)
             ->pluck('npc_id');
     }
+
+    public function firstOrCreateLink(int $npcId, int $dungeonId): NpcDungeon
+    {
+        return NpcDungeon::firstOrCreate([
+            'npc_id'     => $npcId,
+            'dungeon_id' => $dungeonId,
+        ]);
+    }
 }

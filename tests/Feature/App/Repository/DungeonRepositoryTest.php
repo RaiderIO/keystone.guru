@@ -248,4 +248,33 @@ final class DungeonRepositoryTest extends PublicTestCase
             MappingVersion::query()->where('id', $decoyId)->delete();
         }
     }
+
+    #[Test]
+    public function getByIds_givenIds_returnsOnlyThoseDungeons(): void
+    {
+        // Arrange
+        $dungeons = Dungeon::query()->orderBy('id')->limit(3)->get();
+
+        // Act
+        $result = $this->repository->getByIds([$dungeons[0]->id, $dungeons[1]->id]);
+
+        // Assert
+        $this->assertEqualsCanonicalizing([$dungeons[0]->id, $dungeons[1]->id], $result->pluck('id')->all());
+    }
+
+    #[Test]
+    public function getByZoneIds_givenZoneIds_returnsOnlyDungeonsInThoseZones(): void
+    {
+        // Arrange
+        $dungeon      = Dungeon::query()->whereNotNull('zone_id')->orderBy('id')->firstOrFail();
+        $otherDungeon = Dungeon::query()->whereNotNull('zone_id')->where('zone_id', '!=', $dungeon->zone_id)->orderBy('id')->firstOrFail();
+
+        // Act
+        $result = $this->repository->getByZoneIds([$dungeon->zone_id]);
+
+        // Assert
+        $this->assertTrue($result->contains('id', $dungeon->id));
+        $this->assertFalse($result->contains('id', $otherDungeon->id));
+        $this->assertTrue($result->every(static fn(Dungeon $d): bool => $d->zone_id === $dungeon->zone_id));
+    }
 }
