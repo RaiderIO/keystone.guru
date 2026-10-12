@@ -489,6 +489,11 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         return $result;
     }
 
+    public function findByPublicKey(string $publicKey): ?DungeonRoute
+    {
+        return DungeonRoute::where('public_key', $publicKey)->first();
+    }
+
     public function findCombatLogRouteByPublicKey(?string $publicKey): ?DungeonRoute
     {
         if ($publicKey === null) {

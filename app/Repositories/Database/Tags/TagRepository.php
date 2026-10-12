@@ -81,4 +81,13 @@ class TagRepository extends DatabaseRepository implements TagRepositoryInterface
             ->where('context_class', $tag->context_class)
             ->delete();
     }
+
+    public function existsPersonalRouteTagNamed(User $user, string $name): bool
+    {
+        return Tag::where('name', $name)
+            ->where('context_id', $user->id)
+            ->where('context_class', User::class)
+            ->where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])
+            ->exists();
+    }
 }
