@@ -66,6 +66,9 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
     /** @var Collection<int, Spell> */
     protected Collection $validSpellsById;
 
+    /** @var Collection<string, Collection<int, Floor>> */
+    private Collection $floorsByDungeonAndUiMapId;
+
     /**
      * @throws DungeonNotSupportedException
      * @throws RandomException
@@ -108,7 +111,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             $log,
         );
 
-        $this->validSpellsById = $this->spellRepository->findAllById(collect(self::VALID_SPELL_IDS));
+        $this->validSpellsById           = $this->spellRepository->findAllById(collect(self::VALID_SPELL_IDS));
+        $this->floorsByDungeonAndUiMapId = collect();
 
         /** @var CombatLogRouteDungeonRouteBuilderLoggingInterface $log */
         $this->log = $log;
@@ -172,11 +176,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             /** @var array{type: string, timestamp: Carbon, npc: CombatLogRouteNpcRequestDto} $event */
             $realUiMapId = Floor::UI_MAP_ID_MAPPING[$event['npc']->coord->uiMapId] ?? $event['npc']->coord->uiMapId;
             if ($this->currentFloor === null || $realUiMapId !== $this->currentFloor->ui_map_id) {
-                $newFloor = $this->floorRepository->findByUiMapIdInVisitOrder(
-                    $event['npc']->coord->uiMapId,
-                    $this->dungeonRoute->dungeon_id,
-                    $this->currentFloor,
-                );
+                $newFloor = $this->findFloorByUiMapIdInVisitOrder($event['npc']->coord->uiMapId);
 
                 if ($newFloor === null) {
                     // First floor ever, can't find it? Assign the default floor
@@ -311,6 +311,24 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
     }
 
     /**
+     * The builder asks on every event whose ui_map_id differs from the current floor's, which is every event when the
+     * ui_map_id matches no floor at all, so the candidates are fetched once per ui_map_id.
+     */
+    private function findFloorByUiMapIdInVisitOrder(int $uiMapId): ?Floor
+    {
+        $key = sprintf('%d-%d', $this->dungeonRoute->dungeon_id, $uiMapId);
+
+        if (!$this->floorsByDungeonAndUiMapId->has($key)) {
+            $this->floorsByDungeonAndUiMapId->put(
+                $key,
+                $this->floorRepository->findAllByUiMapId($uiMapId, $this->dungeonRoute->dungeon_id),
+            );
+        }
+
+        return $this->floorRepository->pickFloorInVisitOrder($this->floorsByDungeonAndUiMapId->get($key), $this->currentFloor);
+    }
+
+    /**
      * The logged ui_map_id cannot tell floors that share it apart, but the enemy the npc resolved to can: when it
      * lies on another floor with the current floor's ui_map_id, the party is on that floor instead.
      */
@@ -319,6 +337,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         $resolvedFloor = $resolvedEnemy->floor;
 
         if ($this->currentFloor === null ||
+            empty($this->currentFloor->ui_map_id) ||
             $resolvedFloor->id === $this->currentFloor->id ||
             $resolvedFloor->ui_map_id !== $this->currentFloor->ui_map_id) {
             return;

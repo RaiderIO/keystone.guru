@@ -41,8 +41,11 @@ class FloorRepository extends DatabaseRepository implements FloorRepositoryInter
 
     public function findByUiMapIdInVisitOrder(int $uiMapId, int $dungeonId, ?Floor $currentFloor): ?Floor
     {
-        $candidateFloors = $this->findAllByUiMapId($uiMapId, $dungeonId);
+        return $this->pickFloorInVisitOrder($this->findAllByUiMapId($uiMapId, $dungeonId), $currentFloor);
+    }
 
+    public function pickFloorInVisitOrder(Collection $candidateFloors, ?Floor $currentFloor): ?Floor
+    {
         if ($currentFloor === null) {
             return $candidateFloors->first();
         }

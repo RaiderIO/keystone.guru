@@ -38,5 +38,12 @@ interface FloorRepositoryInterface extends BaseRepositoryInterface
      */
     public function findByUiMapIdInVisitOrder(int $uiMapId, int $dungeonId, ?Floor $currentFloor): ?Floor;
 
+    /**
+     * findByUiMapIdInVisitOrder() over candidates fetched earlier with findAllByUiMapId().
+     *
+     * @param Collection<int, Floor> $candidateFloors
+     */
+    public function pickFloorInVisitOrder(Collection $candidateFloors, ?Floor $currentFloor): ?Floor;
+
     public function getDefaultFloorForDungeon(int $dungeonId): ?Floor;
 }
