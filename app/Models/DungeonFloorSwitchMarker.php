@@ -14,7 +14,6 @@ use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int      $id
@@ -29,10 +28,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool     $hidden_in_facade
  * @property string   $floorCouplingDirection
  *
- * @property Floor                         $floor
- * @property Floor|null                    $sourceFloor
- * @property Floor                         $targetFloor
- * @property DungeonFloorSwitchMarker|null $linkedDungeonFloorSwitchMarker
+ * @property Floor      $floor
+ * @property Floor|null $sourceFloor
+ * @property Floor      $targetFloor
  *
  * @mixin Eloquent
  */
@@ -149,14 +147,6 @@ class DungeonFloorSwitchMarker extends Model implements HasLatLngInterface, Mapp
     public function targetFloor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
-    }
-
-    /**
-     * @return HasOne<DungeonFloorSwitchMarker, $this>
-     */
-    public function linkedDungeonFloorSwitchMarker(): HasOne
-    {
-        return $this->hasOne(DungeonFloorSwitchMarker::class);
     }
 
     public function getDungeonId(): ?int
