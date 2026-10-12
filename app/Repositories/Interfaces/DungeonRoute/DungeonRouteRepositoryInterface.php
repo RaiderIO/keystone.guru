@@ -12,6 +12,7 @@ use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use Closure;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -154,4 +155,11 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, DungeonRoute>
      */
     public function getIdAndDungeonIdByIds(Collection $dungeonRouteIds): Collection;
+
+    /**
+     * Find a route by its numeric id when the key is numeric, otherwise by its public key.
+     *
+     * @throws ModelNotFoundException
+     */
+    public function findByIdOrPublicKeyOrFail(int|string|null $key): DungeonRoute;
 }

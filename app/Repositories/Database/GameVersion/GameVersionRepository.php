@@ -41,4 +41,9 @@ class GameVersionRepository extends DatabaseRepository implements GameVersionRep
             ->orderBy('display_order')
             ->first();
     }
+
+    public function findByKey(string $key): ?GameVersion
+    {
+        return GameVersion::firstWhere('key', $key);
+    }
 }

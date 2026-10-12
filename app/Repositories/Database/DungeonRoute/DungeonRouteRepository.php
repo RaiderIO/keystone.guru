@@ -707,4 +707,13 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
     {
         return DungeonRoute::query()->whereIn('id', $dungeonRouteIds)->get(['id', 'dungeon_id']);
     }
+
+    public function findByIdOrPublicKeyOrFail(int|string|null $key): DungeonRoute
+    {
+        return DungeonRoute::when(is_numeric($key), function (EloquentBuilder $builder) use ($key) {
+            $builder->where('id', $key);
+        }, function (EloquentBuilder $builder) use ($key) {
+            $builder->where('public_key', $key);
+        })->firstOrFail();
+    }
 }

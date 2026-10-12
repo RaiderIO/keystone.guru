@@ -280,4 +280,21 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
     {
         return Npc::with(['dungeons'])->whereNull('display_id')->get();
     }
+
+    /**
+     * @return Collection<int, Npc>
+     */
+    public function getAllWithMdtDiffRelations(): Collection
+    {
+        return Npc::with([
+            'npcEnemyForces',
+            'enemies',
+            'type',
+        ])->get();
+    }
+
+    public function findWithEnemyForces(int $npcId): ?Npc
+    {
+        return Npc::with(['enemyForces'])->find($npcId);
+    }
 }

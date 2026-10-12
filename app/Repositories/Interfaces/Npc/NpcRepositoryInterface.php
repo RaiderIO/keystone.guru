@@ -92,4 +92,13 @@ interface NpcRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, Npc>
      */
     public function getWithoutDisplayId(): Collection;
+
+    /**
+     * Every NPC with the relations the MDT diff compares against.
+     *
+     * @return Collection<int, Npc>
+     */
+    public function getAllWithMdtDiffRelations(): Collection;
+
+    public function findWithEnemyForces(int $npcId): ?Npc;
 }

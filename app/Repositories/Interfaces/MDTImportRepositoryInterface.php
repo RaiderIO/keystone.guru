@@ -4,6 +4,7 @@ namespace App\Repositories\Interfaces;
 
 use App\Models\MDTImport;
 use App\Repositories\BaseRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 /**
@@ -19,4 +20,10 @@ use Illuminate\Support\Collection;
  */
 interface MDTImportRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * A page of the imports that failed, newest first.
+     *
+     * @return LengthAwarePaginator<int, MDTImport>
+     */
+    public function paginateFailedNewestFirst(int $perPage): LengthAwarePaginator;
 }

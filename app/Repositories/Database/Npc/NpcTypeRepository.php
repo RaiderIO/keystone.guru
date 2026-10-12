@@ -12,4 +12,9 @@ class NpcTypeRepository extends DatabaseRepository implements NpcTypeRepositoryI
     {
         parent::__construct(NpcType::class);
     }
+
+    public function findByType(string $type): ?NpcType
+    {
+        return NpcType::where('type', $type)->first();
+    }
 }

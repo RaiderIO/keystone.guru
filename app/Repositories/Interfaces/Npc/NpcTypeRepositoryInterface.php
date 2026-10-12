@@ -19,4 +19,5 @@ use Illuminate\Support\Collection;
  */
 interface NpcTypeRepositoryInterface extends BaseRepositoryInterface
 {
+    public function findByType(string $type): ?NpcType;
 }
