@@ -45,6 +45,7 @@ class MapObject extends Signalable {
         this.faction = 'any'; // sensible default
         this.teeming = null; // visible, hidden, null
         this.local = false;
+        this._deleted = false;
         this.label = 'default label';
         this.decorator = null;
 
@@ -675,6 +676,7 @@ class MapObject extends Signalable {
     localDelete(massDelete = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
+        this._deleted = true;
         this.signal('object:deleted', {mass_delete: massDelete});
     }
 
@@ -981,6 +983,26 @@ class MapObject extends Signalable {
     }
 
     /**
+     * A counter of local changes that a save response would overwrite. save() compares it before and after the
+     * request to detect a response that is outdated. Never changes by default.
+     * @returns {Number}
+     * @protected
+     */
+    _getSaveRevision() {
+        return 0;
+    }
+
+    /**
+     * Returns the part of an outdated save response that may still be applied onto this object.
+     * @param json {Object} The save response.
+     * @returns {Object}
+     * @protected
+     */
+    _getOutdatedSaveResponseToApply(json) {
+        return json;
+    }
+
+    /**
      * Saves this map object to the server.
      */
     save() {
@@ -995,6 +1017,7 @@ class MapObject extends Signalable {
         self.signal('save:beforesend');
 
         let has_route_model_binding = this.options.hasOwnProperty('has_route_model_binding') ? this.options.has_route_model_binding : false;
+        let saveRevision = this._getSaveRevision();
 
         $.ajax({
             type: self.id > 0 && has_route_model_binding ? 'PUT' : 'POST',
@@ -1007,8 +1030,11 @@ class MapObject extends Signalable {
                 $(`#map_${mapObjectName}_edit_popup_submit_${self.id}`).attr('disabled', 'disabled');
             },
             success: function (json) {
+                // The response echoes what was sent; local changes made while it was in flight must survive it
+                let isOutdated = self._getSaveRevision() !== saveRevision;
+
                 // Apply all saved properties back our object
-                self.loadRemoteMapObject(json);
+                self.loadRemoteMapObject(isOutdated ? self._getOutdatedSaveResponseToApply(json) : json);
 
                 self.setSynced(true);
                 self.map.leafletMap.closePopup();
@@ -1018,6 +1044,12 @@ class MapObject extends Signalable {
                 self.signal('save:success', {json: json});
 
                 self.onSaveSuccess(json);
+
+                // Nothing else is guaranteed to save the newer local state: an enemy selection ignores this object's
+                // changes until this response's save:success when it was opened while the save was in flight
+                if (isOutdated && !self._deleted) {
+                    self.save();
+                }
             },
             complete: function () {
                 $(`#map_${mapObjectName}_edit_popup_submit_${self.id}`).removeAttr('disabled');

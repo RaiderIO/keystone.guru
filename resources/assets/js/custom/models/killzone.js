@@ -58,6 +58,8 @@ class KillZone extends MapObject {
         this.enemiesLayer = null;
         this.overpulledEnemiesLayer = null;
         this._isBulkUpdating = false;
+        // Bumped on every change to this.enemies
+        this._enemiesRevision = 0;
 
         this.setSynced(false);
 
@@ -196,6 +198,24 @@ class KillZone extends MapObject {
 
         // Hide the layer of the killzone
         this.setDefaultVisible(remoteMapObject.floor_id === getState().getCurrentFloor().id);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getSaveRevision() {
+        return this._enemiesRevision;
+    }
+
+    /**
+     * Leaves out the enemies: the response echoes the ones that were sent, not this pull's current ones.
+     * @inheritDoc
+     */
+    _getOutdatedSaveResponseToApply(json) {
+        let response = Object.assign({}, json);
+        delete response.enemies;
+
+        return response;
     }
 
     /**
@@ -354,6 +374,7 @@ class KillZone extends MapObject {
         if (index !== -1) {
             // Remove it
             let deleted = this.enemies.splice(index, 1);
+            this._enemiesRevision++;
             if (deleted.length === 1) {
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
                 /** @type {Enemy} */
@@ -419,6 +440,7 @@ class KillZone extends MapObject {
         // Add it, but don't double add it
         if ($.inArray(enemy.id, this.enemies) === -1) {
             this.enemies.push(enemy.id);
+            this._enemiesRevision++;
 
             // We're interested in knowing when this enemy has detached itself (by assigning to another killzone, for example)
             enemy.register('killzone:detached', this, this._enemyDetached.bind(this));
