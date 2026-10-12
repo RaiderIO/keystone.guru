@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Mockery;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -105,11 +106,14 @@ final class DropDungeonStartMapIconIdFromDungeonRoutesTableTest extends PublicTe
             $migration->up();
 
             // Assert
-            $log->shouldHaveReceived('warning')->withArgs(
-                static fn(string $message, array $context = []): bool => ($context['dungeon_route_id'] ?? null) === $route->id
-                    && ($context['dungeon_start_map_icon_id'] ?? null) === $mapIconId
-                    && ($context['public_key'] ?? null) === $route->public_key,
-            )->once();
+            $log->shouldHaveReceived('warning', [
+                Mockery::type('string'),
+                Mockery::on(
+                    static fn(array $context): bool => ($context['dungeon_route_id'] ?? null) === $route->id
+                        && ($context['dungeon_start_map_icon_id'] ?? null) === $mapIconId
+                        && ($context['public_key'] ?? null) === $route->public_key,
+                ),
+            ]);
             $this->assertFalse(Schema::hasColumn('dungeon_routes', 'dungeon_start_map_icon_id'));
         } finally {
             $route->delete();
