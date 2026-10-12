@@ -182,7 +182,7 @@ class NpcCompendiumController extends Controller
 
         NameColumnHandler::joinNameTranslations($npcs, $locale, $fallbackLocale)
             ->groupBy('npcs.id')
-            ->orderBy('npcs.classification_id', 'DESC')
+            ->orderBy('npcs.classification_id', 'desc')
             ->orderByRaw(NameColumnHandler::GROUPED_NAME_EXPRESSION);
 
         if ($mappingVersion !== null) {
