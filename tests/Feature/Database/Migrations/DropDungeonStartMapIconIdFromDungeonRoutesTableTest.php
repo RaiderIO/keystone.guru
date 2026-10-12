@@ -14,8 +14,8 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * The migration drops dungeon_routes.dungeon_start_map_icon_id, which an already migrated test schema no longer
- * has: each test restores the column for its own duration and drops it again afterwards.
+ * Each test adds dungeon_routes.dungeon_start_map_icon_id to the migrated test schema for its own duration and
+ * drops it again afterwards.
  */
 #[Group('Migrations')]
 #[Group('DungeonStart')]
