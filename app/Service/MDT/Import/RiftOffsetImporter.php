@@ -11,12 +11,12 @@ use App\Models\MapIconType;
 use App\Models\Path;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
+use App\Models\User;
 use App\Service\MDT\Models\ImportStringRiftOffsets;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RiftOffsetImporter
@@ -24,7 +24,7 @@ class RiftOffsetImporter
     /**
      * @throws ImportWarning
      */
-    public function parseRiftOffsets(ImportStringRiftOffsets $importStringRiftOffsets): ImportStringRiftOffsets
+    public function parseRiftOffsets(ImportStringRiftOffsets $importStringRiftOffsets, ?User $user = null): ImportStringRiftOffsets
     {
         // Build an array with a structure that makes more sense. No week at all (some MDT strings
         // don't carry one) means there's no way to know which rift offsets apply.
@@ -113,7 +113,7 @@ class RiftOffsetImporter
                     'y' => $mdtXy['y'],
                 ], $enemy->floor)->toArray());
 
-                $hasAnimatedLines = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES);
+                $hasAnimatedLines = $user?->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES) === true;
 
                 $pathAttributes = [
                     'floor_id' => $enemy->floor_id,
