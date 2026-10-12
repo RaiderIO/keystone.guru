@@ -28,12 +28,4 @@ class ZoneChange extends BaseResultEvent
     {
         return $this->dungeon;
     }
-
-    public function getZoneChangeEvent(): ZoneChangeEvent
-    {
-        /** @var ZoneChangeEvent $zoneChangeEvent */
-        $zoneChangeEvent = $this->getBaseEvent();
-
-        return $zoneChangeEvent;
-    }
 }

@@ -71,16 +71,6 @@ class MDTMapPOI implements Arrayable
         return $this->type;
     }
 
-    public function getItemType(): ?int
-    {
-        return $this->itemType;
-    }
-
-    public function getItemIndex(): ?int
-    {
-        return $this->itemIndex;
-    }
-
     public function getTarget(): ?int
     {
         return $this->target;
@@ -89,11 +79,6 @@ class MDTMapPOI implements Arrayable
     public function getDirection(): ?int
     {
         return $this->direction;
-    }
-
-    public function getConnectionIndex(): ?int
-    {
-        return $this->connectionIndex;
     }
 
     public function getIndex(): ?int
@@ -154,14 +139,6 @@ class MDTMapPOI implements Arrayable
     public function getY(): float
     {
         return $this->y;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function getRawMapPOI(): array
-    {
-        return $this->rawMapPOI;
     }
 
     /**
