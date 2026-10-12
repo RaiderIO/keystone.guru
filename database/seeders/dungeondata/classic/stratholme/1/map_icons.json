@@ -1,31 +1,5 @@
 [
     {
-        "mapping_version_id": 176,
-        "floor_id": 234,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 10,
-        "lat": -225.141,
-        "lng": 254.665,
-        "comment": null,
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 215,
-        "floor_id": 234,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 10,
-        "lat": -225.4726,
-        "lng": 255.1801,
-        "comment": "mapping.map_icons.classic.stratholme.living_entrance",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
         "mapping_version_id": 215,
         "floor_id": 234,
         "dungeon_route_id": null,

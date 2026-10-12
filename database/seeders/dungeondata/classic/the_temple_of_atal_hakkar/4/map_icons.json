@@ -1,18 +1,5 @@
 [
     {
-        "mapping_version_id": 178,
-        "floor_id": 237,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 10,
-        "lat": -28,
-        "lng": 191.25,
-        "comment": null,
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
         "mapping_version_id": 223,
         "floor_id": 237,
         "dungeon_route_id": null,
@@ -78,19 +65,6 @@
         "is_admin": true
     },
     {
-        "mapping_version_id": 223,
-        "floor_id": 237,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 10,
-        "lat": -28,
-        "lng": 191.25,
-        "comment": null,
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
         "mapping_version_id": 1084,
         "floor_id": 237,
         "dungeon_route_id": null,
@@ -151,19 +125,6 @@
         "lat": -89.0959,
         "lng": 299.3795,
         "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.jammalaan_aggro_warning",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 1084,
-        "floor_id": 237,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 10,
-        "lat": -28,
-        "lng": 191.25,
-        "comment": null,
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
