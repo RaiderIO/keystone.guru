@@ -5,7 +5,7 @@ name: PHP Tests
 # No draft filter: a draft PR is verified continuously while it is worked on, so that leaving
 # draft is an immediately actionable signal rather than the point at which the suite first runs.
 # ready_for_review is deliberately absent from the trigger list — the head commit already has a
-# run by then, and re-triggering on it only duplicates a 7-minute job.
+# run by then, and re-triggering on it only duplicates the whole suite.
 #
 # workflow_dispatch is the manual recovery for a dropped event: GitHub occasionally drops a
 # non-push pull_request event outright (no run object is created at all), which leaves the
@@ -26,13 +26,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # The suite is split over as many runners as the matrix lists shards, each running paratest with 4 workers on its
+  # share of the test files. One runner's 4 vCPUs are the limit: the suite sums to ~20 minutes of
+  # per-test time, so a single runner spends ~5 minutes in paratest however well it is balanced.
+  #
   # vendor/bin/paratest, not `php artisan test --parallel`: Laravel's ParallelTesting hooks would
   # migrate:fresh a `<db>_test_<token>` schema instead of using the copies php-ci-setup provisions.
-  php-tests:
+  php-tests-shard:
     runs-on: ubuntu-latest
     timeout-minutes: 25
 
-    name: php-tests
+    name: php-tests shard ${{ matrix.shard }}/${{ strategy.job-total }}
+
+    strategy:
+      # A red shard must not cancel the others: every failure in the suite should show on one run.
+      fail-fast: false
+      matrix:
+        shard: [ 1, 2, 3, 4 ]
+
+    env:
+      # The serial HoldsTableLock step runs on the last shard; the split reserves its time there.
+      SERIAL_SHARD_RESERVED_SECONDS: 10
 
     steps:
       - name: Checkout for local actions
@@ -41,8 +55,15 @@ jobs:
         # cost 10-15 minutes per job (#4135).
         uses: actions/checkout@v7
 
-      - name: Start services
-        run: docker compose -f docker-compose.ci.yml up -d --wait
+      # Pulling and health-checking the MySQL and Redis containers takes ~30s, which overlaps the
+      # PHP setup instead of preceding it; php-ci-setup waits for it before touching the database.
+      - name: Start services in the background
+        run: |
+          (
+            docker compose -f docker-compose.ci.yml up -d --wait > "$RUNNER_TEMP/ci-services.log" 2>&1
+            echo $? > "$RUNNER_TEMP/ci-services.rc"
+          ) < /dev/null > /dev/null 2>&1 &
+          touch "$RUNNER_TEMP/ci-services.started"
 
       - name: Common PHP/Laravel setup
         uses: ./.github/actions/php-ci-setup
@@ -52,6 +73,15 @@ jobs:
       - name: Switch APP_ENV to testing
         run: echo "APP_ENV=testing" >> .env
 
+      # The expected list covers the whole suite (every shard writes the same one); the php-tests job
+      # below checks the shards' junit output against it.
+      - name: Select this shard's test files
+        run: |
+          vendor/bin/phpunit --list-tests --exclude-group=Nightly > phpunit-expected-tests.txt
+          vendor/bin/phpunit --list-test-files --exclude-group=Nightly --exclude-group=HoldsTableLock > phpunit-test-files.txt
+          php .github/scripts/phpunit-shards.php split ${{ matrix.shard }} ${{ strategy.job-total }} .github/phpunit-timings.json \
+            phpunit-test-files.txt phpunit.xml phpunit.shard.xml "$SERIAL_SHARD_RESERVED_SECONDS"
+
       # paratest never reads its workers' stderr, so the stderr log channel writes to a file the
       # leak guard below can grep.
       - name: Run PHPUnit in parallel (paratest, 4 workers)
@@ -59,10 +89,12 @@ jobs:
           LOG_STDERR_STREAM: ${{ github.workspace }}/phpunit-stderr.log
         run: |
           set -o pipefail
-          ./vendor/bin/paratest --processes=4 --exclude-group=Nightly --exclude-group=HoldsTableLock \
+          ./vendor/bin/paratest --processes=4 --configuration=phpunit.shard.xml \
+            --exclude-group=Nightly --exclude-group=HoldsTableLock \
             --log-junit phpunit-junit.xml 2>&1 | tee phpunit-output.log
 
       - name: Run PHPUnit serially (HoldsTableLock group)
+        if: matrix.shard == strategy.job-total
         run: |
           set -o pipefail
           ./vendor/bin/phpunit --group=HoldsTableLock --exclude-group=Nightly \
@@ -74,8 +106,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: phpunit-junit
+          name: phpunit-shard-${{ matrix.shard }}
           path: |
+            phpunit-expected-tests.txt
             phpunit-junit.xml
             phpunit-junit-serial.xml
           if-no-files-found: warn
@@ -94,3 +127,43 @@ jobs:
             echo "::error::Log lines leaked into PHPUnit's own output - see #3782"
             exit 1
           fi
+
+  # The single `php-tests` check: green only when every shard passed and the shards together ran
+  # exactly the tests PHPUnit lists for the suite, so a file the split dropped turns it red.
+  php-tests:
+    needs: php-tests-shard
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    name: php-tests
+
+    steps:
+      - name: Require every shard to pass
+        if: needs.php-tests-shard.result != 'success'
+        run: |
+          echo "::error::At least one php-tests shard did not pass (${{ needs.php-tests-shard.result }})"
+          exit 1
+
+      - name: Checkout the shard script
+        uses: actions/checkout@v7
+        with:
+          sparse-checkout: .github/scripts
+
+      - name: Download the shards' junit output
+        uses: actions/download-artifact@v8
+        with:
+          pattern: phpunit-shard-*
+          path: phpunit-shards
+
+      # Runs on the runner image's own PHP; the script needs nothing setup-php adds.
+      - name: Verify the shards ran every listed test exactly once
+        run: php .github/scripts/phpunit-shards.php verify phpunit-shards
+
+      # Regenerate .github/phpunit-timings.json from this artifact when the shards drift apart:
+      # php .github/scripts/phpunit-shards.php timings phpunit-shard-*/phpunit-junit.xml
+      - name: Upload the merged junit output
+        uses: actions/upload-artifact@v7
+        with:
+          name: phpunit-junit
+          path: phpunit-shards

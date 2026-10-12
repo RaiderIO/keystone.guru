@@ -6,8 +6,8 @@ name: PHP Lint
 # No base-branch filter on pull_request: stacked PRs (one PR targeting another open PR's branch)
 # must run the same analysis as PRs against master (#4074).
 # The push trigger seeds branch-scoped caches from master (composer + Lua ext + cargo via
-# php-ci-setup — the same keys the php-tests shards restore, plus the PHPStan result cache
-# below); without it every new PR's first run is fully cold (#3612).
+# php-ci-setup — the same keys the php-tests shards restore — plus the PHP CS Fixer and PHPStan
+# result caches below); without it every new PR's first run is fully cold.
 on:
   pull_request:
   push:
@@ -39,17 +39,30 @@ jobs:
         with:
           run-migrations: 'false'
 
+      # Both tools keep a per-file result cache and invalidate stale entries themselves (the
+      # cs-fixer one on a rules/version/PHP change as well). Only the master push saves them: a PR
+      # restores its own branch's caches before master's, so caches saved by PR runs would hand a
+      # PR's later push the state of its previous one instead of current master's.
+      - name: Restore the PHP CS Fixer and PHPStan result caches
+        uses: actions/cache/restore@v5
+        with:
+          path: |
+            .php-cs-fixer.cache
+            tmp/phpstan
+          key: php-lint-results-${{ github.run_id }}
+          restore-keys: php-lint-results-
+
       - name: Run PHP CS Fixer (dry run)
         run: vendor/bin/php-cs-fixer fix --dry-run --diff
 
-      # Persist PHPStan's result cache (tmpDir in phpstan.neon) for incremental analysis;
-      # PHPStan invalidates stale entries itself (#4343).
-      - name: Restore PHPStan result cache
-        uses: actions/cache@v6
-        with:
-          path: tmp/phpstan
-          key: phpstan-result-${{ github.run_id }}
-          restore-keys: phpstan-result-
-
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1G
+
+      - name: Save the PHP CS Fixer and PHPStan result caches
+        if: github.event_name == 'push'
+        uses: actions/cache/save@v5
+        with:
+          path: |
+            .php-cs-fixer.cache
+            tmp/phpstan
+          key: php-lint-results-${{ github.run_id }}

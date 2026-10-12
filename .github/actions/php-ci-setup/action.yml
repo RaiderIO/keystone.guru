@@ -250,6 +250,23 @@ runs:
         path: ~/ci-db-dump
         key: ci-db-v1-${{ steps.db-cache-week.outputs.week }}-${{ hashFiles('database/migrations/**', 'database/migrations_combatlog/**', 'database/schema/**', 'database/seeders/**', 'database/data/**', 'lang/**', 'app/SeederHelpers/**', 'config/laratrust_seeder.php', '.env.ci.example', 'docker-compose.ci.yml', '.github/actions/php-ci-setup/action.yml') }}
 
+    # A caller may start the services in the background so they come up during the steps above; it
+    # touches ci-services.started when it does, and its background job writes ci-services.rc on exit.
+    # Callers that start them in the foreground leave no marker and skip straight past this.
+    - name: Wait for services started in the background
+      if: ${{ inputs.run-migrations == 'true' }}
+      run: |
+        [ -f "$RUNNER_TEMP/ci-services.started" ] || exit 0
+        for _ in $(seq 1 300); do
+          [ -f "$RUNNER_TEMP/ci-services.rc" ] && break
+          sleep 1
+        done
+        cat "$RUNNER_TEMP/ci-services.log" 2>/dev/null || true
+        [ -f "$RUNNER_TEMP/ci-services.rc" ] || { echo "::error::Services did not come up within 300s"; exit 1; }
+        rc="$(cat "$RUNNER_TEMP/ci-services.rc")"
+        [ "$rc" = "0" ] || { echo "::error::docker compose up --wait exited with $rc"; exit 1; }
+      shell: bash
+
     - name: Migrate & seed
       if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit != 'true' }}
       run: |
@@ -296,8 +313,9 @@ runs:
 
     # The dumps carry the `migrations` table, so Laravel sees a fully migrated schema, and mysqldump
     # emits AUTO_INCREMENT= on every CREATE TABLE, so id sequences survive the round trip.
+    # With per-worker copies to provision, the step below loads the base schema alongside them.
     - name: Load seeded database dump
-      if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit == 'true' }}
+      if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit == 'true' && inputs.parallel-schemas == '0' }}
       run: |
         docker compose -f docker-compose.ci.yml exec -T db \
           mysql -uroot -proot 'keystone.guru.dev' < ~/ci-db-dump/main.sql
@@ -305,14 +323,23 @@ runs:
           mysql -uroot -proot 'keystone.guru.combatlog' < ~/ci-db-dump/combatlog.sql
       shell: bash
 
-    # Loaded concurrently: one pair costs ~26s sequentially. The dump has no USE statement (mysqldump
-    # ran without --databases), so it loads into any schema name.
+    # Loaded concurrently, together with the base schema on a cache hit: one pair costs ~26s
+    # sequentially. The dump has no USE statement (mysqldump ran without --databases), so it loads
+    # into any schema name.
     - name: Provision per-worker schema copies
       if: ${{ inputs.run-migrations == 'true' && inputs.parallel-schemas != '0' }}
       run: |
         # The `mysql` connection (App\Models\User) authenticates as the compose MYSQL_USER, not root,
         # and a schema created by root carries no grant for it.
         pids=""
+        if [ "${{ steps.cache-db.outputs.cache-hit }}" = "true" ]; then
+          docker compose -f docker-compose.ci.yml exec -T db \
+            mysql -uroot -proot 'keystone.guru.dev' < ~/ci-db-dump/main.sql &
+          pids="$pids $!"
+          docker compose -f docker-compose.ci.yml exec -T db-combatlog \
+            mysql -uroot -proot 'keystone.guru.combatlog' < ~/ci-db-dump/combatlog.sql &
+          pids="$pids $!"
+        fi
         for t in $(seq 1 "${{ inputs.parallel-schemas }}"); do
           docker compose -f docker-compose.ci.yml exec -T db \
             mysql -uroot -proot -e "CREATE DATABASE \`keystone.guru.dev_${t}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL PRIVILEGES ON \`keystone.guru.dev_${t}\`.* TO 'homestead'@'%'"
