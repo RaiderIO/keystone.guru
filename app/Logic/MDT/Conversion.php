@@ -590,7 +590,7 @@ class Conversion
     /**
      * Whether MDT draws this POI but keystone.guru has nothing to import it as - the map will be missing
      * something MDT shows. This is deliberately not an exception: the rest of the mapping is still worth
-     * importing, so it is reported instead (see `MDTMappingImportService::importMapPOIs()` and
+     * importing, so it is reported instead (see `MapPOIImporter::importMapPOIs()` and
      * `mdt:importmapping`'s summary table).
      */
     public static function isMDTMapPOIUnhandled(MDTMapPOI $mdtMapPOI): bool

@@ -54,6 +54,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         private readonly MDTAddonVersionServiceInterface         $mdtAddonVersionService,
         private readonly MDTMappingImportServiceLoggingInterface $log,
     ) {
+        // Built here rather than injected: every importer must log through this exact Logging instance so its
+        // lines carry importMappingVersionFromMDT()'s start/end context and depth.
         $this->npcImporter         = new NpcImporter($this->log);
         $this->enemyImporter       = new EnemyImporter($this->coordinatesService, $this->log);
         $this->enemyPackImporter   = new EnemyPackImporter($this->log);
