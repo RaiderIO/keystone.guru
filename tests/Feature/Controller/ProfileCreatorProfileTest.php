@@ -458,6 +458,7 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             // The submitted pins stay listed after a failed validation, and the ones the user
             // just removed do not come back
             $this->assertSame([$submittedRoute->id], $this->listedIds($content, 'pinned_dungeon_routes'));
+            $this->assertStringContainsString(sprintf('"existingPublicKeys":["%s"]', $submittedRoute->public_key), $content);
             $this->assertSame([$submittedCollection->id], $this->listedIds($content, 'pinned_dungeon_route_collections'));
         } finally {
             $collectionPin->delete();
@@ -520,6 +521,123 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             $alphaCollection->delete();
             $bravoRoute->delete();
             $alphaRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenPinnedRoutes_rendersTheRoutePickerDrawerWithThemAsExisting(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $alphaRoute   = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null, 'title' => 'ZzTestAlpha']);
+        $bravoRoute   = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null, 'title' => 'ZzTestBravo']);
+        $sandboxRoute = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => now()->addDay()]);
+
+        foreach ([$bravoRoute, $alphaRoute] as $order => $dungeonRoute) {
+            $routePin                   = new UserPinnedDungeonRoute();
+            $routePin->user_id          = $creator->id;
+            $routePin->dungeon_route_id = $dungeonRoute->id;
+            $routePin->order            = $order;
+            $routePin->save();
+        }
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.edit'));
+
+            // Assert
+            $response->assertOk();
+            $content = (string)$response->getContent();
+
+            $this->assertStringContainsString('id="creator_pinned_routes_picker" class="offcanvas', $content);
+            $this->assertStringContainsString('"openButtonSelector":"#pinned_dungeon_routes_add_button"', $content);
+            $this->assertStringContainsString(sprintf(
+                '"existingPublicKeys":["%s","%s"],"max":%d',
+                $bravoRoute->public_key,
+                $alphaRoute->public_key,
+                UserPinnedDungeonRoute::MAX_PINNED_ROUTES,
+            ), $content);
+            // The drawer hands the picked routes to the page instead of saving them itself
+            $this->assertStringContainsString('"actionUrl":null', $content);
+            // The drawer's filters are not posted with the creator profile form
+            $saveButtonPosition = strpos($content, sprintf('value="%s"', __('view_profile.edit.creator_save')));
+            $this->assertNotFalse($saveButtonPosition);
+            $formEndPosition = strpos($content, '</form>', $saveButtonPosition);
+            $this->assertNotFalse($formEndPosition);
+            $this->assertGreaterThan($formEndPosition, strpos($content, 'id="creator_pinned_routes_picker"'));
+            // The drawer picks the routes, so the ordered list keeps its order but trades its add select for a button
+            $this->assertSame([$bravoRoute->id, $alphaRoute->id], $this->listedIds($content, 'pinned_dungeon_routes'));
+            $this->assertStringNotContainsString('id="pinned_dungeon_routes_add"', $content);
+            $this->assertStringContainsString('id="pinned_dungeon_routes_add_button"', $content);
+            // Only routes that may be pinned are mapped to the ids the form posts
+            $this->assertStringContainsString(sprintf('"%s":%d', $alphaRoute->public_key, $alphaRoute->id), $content);
+            $this->assertStringNotContainsString(sprintf('"%s":%d', $sandboxRoute->public_key, $sandboxRoute->id), $content);
+        } finally {
+            UserPinnedDungeonRoute::where('user_id', $creator->id)->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $sandboxRoute->delete();
+            $bravoRoute->delete();
+            $alphaRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenARouteWithAZeroExpiry_offersItForPinning(): void
+    {
+        // Arrange - the route picker lists a route whose expires_at is 0 as a regular route
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $legacyRoute = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null]);
+        DungeonRoute::query()->whereKey($legacyRoute->id)->update(['expires_at' => '0000-00-00 00:00:00']);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.edit'));
+
+            // Assert
+            $response->assertOk();
+            $this->assertStringContainsString(
+                sprintf('"%s":%d', $legacyRoute->public_key, $legacyRoute->id),
+                (string)$response->getContent(),
+            );
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $legacyRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function updateCreatorProfile_givenARouteWithAZeroExpiry_pinsIt(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $legacyRoute = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null]);
+        DungeonRoute::query()->whereKey($legacyRoute->id)->update(['expires_at' => '0000-00-00 00:00:00']);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'pinned_dungeon_routes' => [$legacyRoute->id],
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $this->assertSame(
+                [$legacyRoute->id],
+                UserPinnedDungeonRoute::where('user_id', $creator->id)->pluck('dungeon_route_id')->all(),
+            );
+        } finally {
+            UserPinnedDungeonRoute::where('user_id', $creator->id)->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $legacyRoute->delete();
             $creator->delete();
         }
     }

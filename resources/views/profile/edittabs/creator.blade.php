@@ -28,6 +28,14 @@ if (session()->hasOldInput()) {
 
 $existingSocialLinks = $user->socialLinks->keyBy('platform');
 
+// The route picker drawer works with public keys, the form posts ids
+$pinnedDungeonRoutePublicKeys = collect($pinnedDungeonRouteIds)
+    ->map(static fn(int $pinnedDungeonRouteId): ?string => $ownDungeonRoutes->firstWhere('id', $pinnedDungeonRouteId)?->public_key)
+    ->filter()
+    ->values()
+    ->all();
+$pinnedDungeonRoutesPickerId = 'creator_pinned_routes_picker';
+
 /**
  * The help text and, when the field failed validation, its error message - what a field's aria-describedby lists.
  */
@@ -145,7 +153,16 @@ $describedBy = static fn(string $errorKey, string $errorId, string $helpId): str
                 'max' => UserPinnedDungeonRoute::MAX_PINNED_ROUTES,
                 'help' => __('view_profile.edit.creator_pinned_routes_help'),
                 'emptyText' => __('view_profile.edit.creator_pinned_routes_empty'),
+                'ajax' => true,
+                'addLabel' => __('view_profile.edit.creator_pinned_routes_add'),
             ])
+            @include('common.general.inline', ['path' => 'profile/edittabs/creator', 'options' => [
+                'pickerSelector' => sprintf('#%s', $pinnedDungeonRoutesPickerId),
+                'pickerInlineId' => $pinnedDungeonRoutesPickerId,
+                'orderedSelectSelector' => '#pinned_dungeon_routes',
+                'orderedSelectInlineId' => 'pinned_dungeon_routes_inline',
+                'dungeonRouteIdsByPublicKey' => $ownDungeonRoutes->pluck('id', 'public_key'),
+            ]])
         @endif
     </div>
 
@@ -195,4 +212,17 @@ $describedBy = static fn(string $errorKey, string $errorId, string $helpId): str
 
     {{ html()->input('submit')->value(__('view_profile.edit.creator_save'))->class('btn btn-primary') }}
     {{ html()->closeModelForm() }}
+
+    {{-- Outside the form, so the drawer's own filters are not posted with it --}}
+    @if($ownDungeonRoutes->isNotEmpty())
+        @include('common.dungeonroute.picker', [
+            'id' => $pinnedDungeonRoutesPickerId,
+            'title' => __('view_profile.edit.creator_pinned_routes_picker'),
+            'sourceScope' => 'mine',
+            'existingPublicKeys' => $pinnedDungeonRoutePublicKeys,
+            'max' => UserPinnedDungeonRoute::MAX_PINNED_ROUTES,
+            'actionUrl' => null,
+            'openButtonSelector' => '#pinned_dungeon_routes_add_button',
+        ])
+    @endif
 </div>
