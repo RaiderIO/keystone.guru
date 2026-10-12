@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Interfaces\Npc;
 
+use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Repositories\BaseRepositoryInterface;
@@ -50,4 +51,22 @@ interface NpcRepositoryInterface extends BaseRepositoryInterface
      * @return Builder<Npc>
      */
     public function getAdminListBuilder(string $locale): Builder;
+
+    /**
+     * The NPCs placed in the dungeon (on the mapping version, when given) that have any of the given
+     * characteristics, grouped by characteristic id, with the relations the NPC link hover tooltips read.
+     *
+     * @param  Collection<int, int>                  $characteristicIds
+     * @return Collection<int, Collection<int, Npc>>
+     */
+    public function getNpcsByCharacteristicIdForDungeon(Dungeon $dungeon, ?MappingVersion $mappingVersion, Collection $characteristicIds): Collection;
+
+    /**
+     * The NPCs placed in the dungeon (on the mapping version, when given) that cast any of the given
+     * spells, grouped by spell id, with the relations the NPC link hover tooltips read.
+     *
+     * @param  Collection<int, int>                  $spellIds
+     * @return Collection<int, Collection<int, Npc>>
+     */
+    public function getNpcsBySpellIdForDungeon(Dungeon $dungeon, ?MappingVersion $mappingVersion, Collection $spellIds): Collection;
 }

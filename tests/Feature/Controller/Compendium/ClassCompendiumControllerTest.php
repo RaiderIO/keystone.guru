@@ -16,8 +16,10 @@ use App\Models\Spell\SpellCategory;
 use App\Models\Spell\SpellDungeon;
 use App\Models\Spell\SpellMissType;
 use App\Models\User;
+use App\Service\CombatLog\DataExtractors\SpellCounters\VanishSpellCounterDefinition;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -866,6 +868,267 @@ final class ClassCompendiumControllerTest extends PublicTestCase
             $this->assertSame($positions->sort()->values()->all(), $positions->all());
         } finally {
             $scenario['cleanUp']();
+        }
+    }
+
+    #[Test]
+    public function show_givenReflectedSpellCastByNpcsInAndOutsideTheDungeon_listsOnlyTheNpcInTheDungeon(): void
+    {
+        // Arrange
+        $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_WARRIOR)->firstOrFail();
+
+        $noOwnData = static function ($sub): void {
+            $sub->select('npc_id')->from('npc_characteristics')->union(
+                DB::table('npc_spells')->select('npc_id'),
+            );
+        };
+
+        [$dungeon, $mappingVersion, $npc] = $this->findDungeon(
+            challengeMode: true,
+            minEnemies:    2,
+            gameVersion:   GameVersion::getDefaultGameVersion(),
+            shuffle:       false,
+            constraint:    static fn(Builder $query) => $query
+                ->where('challenge_mode_id', '>', 0)
+                ->orderByDesc('dungeons.id'),
+            resolve:       static fn(Dungeon $dungeon, MappingVersion $mappingVersion) => Npc::query()
+                ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
+                ->where('enemies.mapping_version_id', $mappingVersion->id)
+                ->whereNotIn('npcs.id', $noOwnData)
+                ->select('npcs.*')
+                ->first(),
+        );
+        $this->assertNotNull($npc);
+
+        $dungeonNpcIds = Npc::query()
+            ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
+            ->join('mapping_versions', 'enemies.mapping_version_id', '=', 'mapping_versions.id')
+            ->where('mapping_versions.dungeon_id', $dungeon->id)
+            ->pluck('npcs.id');
+
+        $npcsToExclude = Npc::query()
+            ->whereNotIn('npcs.id', $noOwnData)
+            ->whereNotIn('npcs.id', $dungeonNpcIds)
+            ->whereIn('npcs.id', static function ($sub): void {
+                $sub->select('npc_id')->from('enemies');
+            })
+            ->get();
+        $outsideNpc = $npcsToExclude->first(static fn(Npc $other) => __($other->name) !== __($npc->name));
+        $this->assertNotNull($outsideNpc);
+
+        $unrelatedSpellNpc = Npc::query()
+            ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
+            ->where('enemies.mapping_version_id', $mappingVersion->id)
+            ->whereNotIn('npcs.id', $noOwnData)
+            ->where('npcs.id', '!=', $npc->id)
+            ->select('npcs.*')
+            ->get()
+            ->first(static fn(Npc $other) => !in_array(__($other->name), [__($npc->name), __($outsideNpc->name)], true));
+        $this->assertNotNull($unrelatedSpellNpc);
+
+        $reflectedSpell = $this->createSpell([
+            'game_version_id' => $mappingVersion->game_version_id,
+            'miss_types_mask' => SpellMissType::Reflect->value,
+        ]);
+        $unrelatedSpell = $this->createSpell([
+            'game_version_id' => $mappingVersion->game_version_id,
+        ]);
+
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $dungeon->id;
+        $user->save();
+        $user = $user->fresh();
+
+        $spellDungeon = null;
+        $npcSpells    = [];
+
+        try {
+            $spellDungeon = SpellDungeon::create(['spell_id' => $reflectedSpell->id, 'dungeon_id' => $dungeon->id]);
+            $npcSpells[]  = NpcSpell::create(['npc_id' => $npc->id, 'spell_id' => $reflectedSpell->id]);
+            $npcSpells[]  = NpcSpell::create(['npc_id' => $outsideNpc->id, 'spell_id' => $reflectedSpell->id]);
+            $npcSpells[]  = NpcSpell::create(['npc_id' => $unrelatedSpellNpc->id, 'spell_id' => $unrelatedSpell->id]);
+
+            // Act
+            $response = $this->actingAs($user)->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $characterClass,
+                'dungeon'        => $dungeon,
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeText(__($npc->name));
+            $response->assertDontSeeText(__($outsideNpc->name));
+            $response->assertDontSeeText(__($unrelatedSpellNpc->name));
+        } finally {
+            foreach ($npcSpells as $npcSpell) {
+                $npcSpell->delete();
+            }
+            $spellDungeon?->delete();
+
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
+    public function index_givenSeveralClasses_listsThemOrderedByName(): void
+    {
+        // Arrange
+        $expectedOrder = CharacterClass::query()->orderBy('name')->get();
+        $this->assertGreaterThan(1, $expectedOrder->count());
+
+        // Act
+        $response = $this->get(route('compendium.class.index'));
+
+        // Assert
+        $response->assertOk();
+        $content   = (string)$response->getContent();
+        $positions = $expectedOrder->map(static fn(CharacterClass $characterClass) => strpos($content, sprintf('<span>%s</span>', e(__($characterClass->name)))));
+
+        $this->assertNotContains(false, $positions->all(), 'Not every class rendered its name');
+        $this->assertSame($positions->sort()->values()->all(), $positions->all());
+    }
+
+    #[Test]
+    public function showDungeon_givenClassSpellOfAnotherGameVersion_omitsItFromTheCrowdControlTable(): void
+    {
+        // Arrange
+        $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $gameVersionId  = $dungeon->getCurrentMappingVersion()->game_version_id;
+        $otherVersionId = GameVersion::query()->where('id', '!=', $gameVersionId)->firstOrFail()->id;
+
+        $classSpell = $this->createSpell([
+            'game_version_id'   => $gameVersionId,
+            'category'          => SpellCategory::translationKeyFor($characterClass->key),
+            'characteristic_id' => Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH],
+            'name'              => 'Test Class Spell',
+        ]);
+        $otherVersionSpell = $this->createSpell([
+            'game_version_id'   => $otherVersionId,
+            'category'          => SpellCategory::translationKeyFor($characterClass->key),
+            'characteristic_id' => Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH],
+            'name'              => 'Test Other Version Spell',
+        ]);
+
+        // Act
+        $response = $this->get(route('compendium.class.show.dungeon', [
+            'characterClass' => $characterClass,
+            'dungeon'        => $dungeon,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeText(__($classSpell->name));
+        $response->assertDontSeeText(__($otherVersionSpell->name));
+    }
+
+    #[Test]
+    public function showDungeon_givenReflectedSpellsOfAnotherGameVersionOrHiddenOnMap_omitsThemFromTheReflectSection(): void
+    {
+        // Arrange
+        $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_WARRIOR)->firstOrFail();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $gameVersionId  = $dungeon->getCurrentMappingVersion()->game_version_id;
+        $otherVersionId = GameVersion::query()->where('id', '!=', $gameVersionId)->firstOrFail()->id;
+
+        $reflectedSpell = $this->createSpell([
+            'game_version_id' => $gameVersionId,
+            'miss_types_mask' => SpellMissType::Reflect->value,
+            'name'            => 'Test Reflected Spell',
+        ]);
+        $otherVersionSpell = $this->createSpell([
+            'game_version_id' => $otherVersionId,
+            'miss_types_mask' => SpellMissType::Reflect->value,
+            'name'            => 'Test Other Version Reflected Spell',
+        ]);
+        $hiddenSpell = $this->createSpell([
+            'game_version_id' => $gameVersionId,
+            'miss_types_mask' => SpellMissType::Reflect->value,
+            'hidden_on_map'   => true,
+            'name'            => 'Test Hidden Reflected Spell',
+        ]);
+        $notReflectedSpell = $this->createSpell([
+            'game_version_id' => $gameVersionId,
+            'miss_types_mask' => 0,
+            'name'            => 'Test Not Reflected Spell',
+        ]);
+
+        $spellDungeons = [];
+
+        try {
+            foreach ([$reflectedSpell, $otherVersionSpell, $hiddenSpell, $notReflectedSpell] as $spell) {
+                $spellDungeons[] = SpellDungeon::create(['spell_id' => $spell->id, 'dungeon_id' => $dungeon->id]);
+            }
+
+            // Act
+            $response = $this->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $characterClass,
+                'dungeon'        => $dungeon,
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeText(__($reflectedSpell->name));
+            $response->assertDontSeeText(__($otherVersionSpell->name));
+            $response->assertDontSeeText(__($hiddenSpell->name));
+            $response->assertDontSeeText(__($notReflectedSpell->name));
+        } finally {
+            foreach ($spellDungeons as $spellDungeon) {
+                $spellDungeon->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function showDungeon_givenSpellsWithoutTheCounterBitOrOfAnotherGameVersion_omitsThemFromTheCounterSection(): void
+    {
+        // Arrange
+        $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_ROGUE)->firstOrFail();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $gameVersionId  = $dungeon->getCurrentMappingVersion()->game_version_id;
+        $otherVersionId = GameVersion::query()->where('id', '!=', $gameVersionId)->firstOrFail()->id;
+        $vanishBit      = new VanishSpellCounterDefinition()->getCounterBit();
+
+        $counterSpell = $this->createSpell([
+            'game_version_id' => $gameVersionId,
+            'counters_mask'   => $vanishBit,
+            'name'            => 'Test Counter Spell',
+        ]);
+        $otherVersionSpell = $this->createSpell([
+            'game_version_id' => $otherVersionId,
+            'counters_mask'   => $vanishBit,
+            'name'            => 'Test Other Version Counter Spell',
+        ]);
+        $noBitSpell = $this->createSpell([
+            'game_version_id' => $gameVersionId,
+            'counters_mask'   => 0,
+            'name'            => 'Test No Counter Bit Spell',
+        ]);
+
+        $spellDungeons = [];
+
+        try {
+            foreach ([$counterSpell, $otherVersionSpell, $noBitSpell] as $spell) {
+                $spellDungeons[] = SpellDungeon::create(['spell_id' => $spell->id, 'dungeon_id' => $dungeon->id]);
+            }
+
+            // Act
+            $response = $this->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $characterClass,
+                'dungeon'        => $dungeon,
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeText(__($counterSpell->name));
+            $response->assertDontSeeText(__($otherVersionSpell->name));
+            $response->assertDontSeeText(__($noBitSpell->name));
+        } finally {
+            foreach ($spellDungeons as $spellDungeon) {
+                $spellDungeon->delete();
+            }
         }
     }
 
