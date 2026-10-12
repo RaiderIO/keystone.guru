@@ -27,6 +27,7 @@ runs:
         echo "php-lua-sha=a76f01149e6132810fe6b3095f2b9bc597d34f9e" >> "$GITHUB_OUTPUT"
         echo "cli-weakauras-parser-sha=febb57faeaa805a79c9c2e0425c804e441a0e969" >> "$GITHUB_OUTPUT" # = v0.1.8
         echo "rust-toolchain=1.91.1" >> "$GITHUB_OUTPUT"
+        echo "runner-image=${ImageOS:-unknown}-${ImageVersion:-unknown}" >> "$GITHUB_OUTPUT"
       shell: bash
     # No checkout here on purpose: a local composite action can only be resolved from an
     # already-checked-out workspace, so every caller has necessarily run actions/checkout before
@@ -54,8 +55,27 @@ runs:
         key: composer-${{ hashFiles('**/composer.lock') }}
         restore-keys: composer-
 
+    # The packages the step below installs, as downloaded for this runner image. On a hit they install
+    # with dpkg alone, skipping `apt-get update` (~16s) and the mirrors it depends on. The key carries
+    # this file's hash, so changing the package list re-downloads.
+    - name: Restore apt package cache
+      id: cache-apt
+      uses: actions/cache@v5
+      with:
+        path: ~/apt-debs
+        key: apt-debs-${{ steps.pins.outputs.runner-image }}-${{ hashFiles('.github/actions/php-ci-setup/action.yml') }}
+
     - name: Install system clients (mysql + redis CLI)
       run: |
+        if [ "${{ steps.cache-apt.outputs.cache-hit }}" = "true" ] && compgen -G "$HOME/apt-debs/*.deb" > /dev/null; then
+          if sudo dpkg -i "$HOME"/apt-debs/*.deb; then
+            echo "==> Installed from the cached packages"
+            exit 0
+          fi
+          echo "::warning::Installing the cached apt packages failed, falling back to apt-get"
+          sudo dpkg --configure -a || true
+        fi
+
         # Drop the Microsoft apt repos preinstalled on the runner image (azure-cli, microsoft-prod);
         # nothing here installs from them, and their recurring CDN outages fail `apt-get update`
         # with "Clearsigned file isn't valid, got 'NOSPLIT'" (#3441).
@@ -118,7 +138,11 @@ runs:
           sudo timeout "$seconds" apt-get "$@"
         }
         apt_bounded 300 update
-        apt_bounded 600 install -y default-mysql-client redis-tools lua5.3 liblua5.3-dev
+        sudo apt-get clean
+        apt_bounded 600 install -y -o APT::Keep-Downloaded-Packages=true default-mysql-client redis-tools lua5.3 liblua5.3-dev
+        mkdir -p ~/apt-debs
+        find /var/cache/apt/archives -maxdepth 1 -name '*.deb' -exec cp {} ~/apt-debs/ \;
+        ls ~/apt-debs
       shell: bash
 
     # Cache the compiled lua.so / bit.so so we skip the ~30-40s phpize/configure/make on every run
