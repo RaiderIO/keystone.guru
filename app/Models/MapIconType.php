@@ -50,7 +50,6 @@ class MapIconType extends Model
     public const string MAP_ICON_TYPE_DOOR_UP                                = 'door_up';
     public const string MAP_ICON_TYPE_DOOR_UP_DOWN                           = 'door_up_down';
     public const string MAP_ICON_TYPE_DOT_YELLOW                             = 'dot_yellow';
-    public const string MAP_ICON_TYPE_DUNGEON_START                          = 'dungeon_start';
     public const string MAP_ICON_TYPE_GATEWAY                                = 'gateway';
     public const string MAP_ICON_TYPE_GRAVEYARD                              = 'graveyard';
     public const string MAP_ICON_TYPE_GREASEBOT                              = 'greasebot';
@@ -182,7 +181,6 @@ class MapIconType extends Model
         self::MAP_ICON_TYPE_DOOR_RIGHT                => 7,
         self::MAP_ICON_TYPE_DOOR_UP                   => 8,
         self::MAP_ICON_TYPE_DOT_YELLOW                => 9,
-        self::MAP_ICON_TYPE_DUNGEON_START             => 10,
         self::MAP_ICON_TYPE_GATEWAY                   => 11,
         self::MAP_ICON_TYPE_GRAVEYARD                 => 12,
         self::MAP_ICON_TYPE_GREASEBOT                 => 13,

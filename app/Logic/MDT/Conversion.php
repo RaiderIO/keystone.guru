@@ -300,7 +300,6 @@ class Conversion
      */
     public const array MAP_POI_TYPE_MAP_ICON_TYPE_MAPPING = [
         MDTMapPOIType::Graveyard->value            => MapIconType::MAP_ICON_TYPE_GRAVEYARD,
-        MDTMapPOIType::DungeonEntrance->value      => MapIconType::MAP_ICON_TYPE_DUNGEON_START,
         MDTMapPOIType::PrioryItem->value           => MapIconType::MAP_ICON_TYPE_PRIORY_BLESSING_OF_THE_SACRED_FLAME,
         MDTMapPOIType::FloodgateItem->value        => MapIconType::MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION,
         MDTMapPOIType::EcoDomeAlDaniItem1->value   => MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_SHATTER_CONDUIT,
@@ -596,8 +595,8 @@ class Conversion
      */
     public static function isMDTMapPOIUnhandled(MDTMapPOI $mdtMapPOI): bool
     {
-        // Floor switch markers rather than map icons, handled on their own terms
-        if ($mdtMapPOI->getType() === MDTMapPOIType::MapLink) {
+        // Floor switch markers and dungeon starts rather than map icons, handled on their own terms
+        if (in_array($mdtMapPOI->getType(), [MDTMapPOIType::MapLink, MDTMapPOIType::DungeonEntrance], true)) {
             return false;
         }
 

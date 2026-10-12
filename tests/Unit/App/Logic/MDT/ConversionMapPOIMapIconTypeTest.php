@@ -116,6 +116,17 @@ final class ConversionMapPOIMapIconTypeTest extends TestCase
     }
 
     #[Test]
+    public function isMDTMapPOIUnhandled_givenDungeonEntrance_returnsFalse(): void
+    {
+        // Arrange - dungeon entrances become a DungeonStart instead of a map icon
+        $mdtMapPOI = new MDTMapPOI(1, ['type' => 'dungeonEntrance', 'x' => 1.0, 'y' => 2.0]);
+
+        // Act & Assert
+        $this->assertNull(Conversion::convertMDTMapPOIToMapIconTypeKey($mdtMapPOI));
+        $this->assertFalse(Conversion::isMDTMapPOIUnhandled($mdtMapPOI));
+    }
+
+    #[Test]
     #[DataProvider('notImportedTypeProvider')]
     public function isMDTMapPOIUnhandled_givenTypeThatIsPartOfMDTsOwnUI_returnsFalse(string $type): void
     {
