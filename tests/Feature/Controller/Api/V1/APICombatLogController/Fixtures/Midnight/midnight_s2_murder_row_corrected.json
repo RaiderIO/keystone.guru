@@ -13,7 +13,7 @@
         "settings": {
             "temporary": true,
             "debugIcons": false,
-            "mappingVersion": 8
+            "mappingVersion": 10
         },
         "challengeMode": {
             "start": "2026-08-21T11:49:17.967+00:00",
@@ -3188,8 +3188,8 @@
                     "uiMapId": 2434
                 },
                 "coordEnemy": {
-                    "x": 4969.14,
-                    "y": 9038.78,
+                    "x": 4974.23,
+                    "y": 9008.55,
                     "uiMapId": 2434
                 },
                 "gridCoord": {
@@ -3198,8 +3198,8 @@
                     "uiMapId": 2434
                 },
                 "gridCoordEnemy": {
-                    "x": 4969.77,
-                    "y": 9037.77,
+                    "x": 4976.73,
+                    "y": 9006.46,
                     "uiMapId": 2434
                 }
             },
@@ -3214,8 +3214,8 @@
                     "uiMapId": 2434
                 },
                 "coordEnemy": {
-                    "x": 4959.44,
-                    "y": 9037.47,
+                    "x": 4965.61,
+                    "y": 9007.52,
                     "uiMapId": 2434
                 },
                 "gridCoord": {
@@ -3224,8 +3224,8 @@
                     "uiMapId": 2434
                 },
                 "gridCoordEnemy": {
-                    "x": 4962.81,
-                    "y": 9034.29,
+                    "x": 4966.29,
+                    "y": 9006.46,
                     "uiMapId": 2434
                 }
             },
@@ -3240,8 +3240,8 @@
                     "uiMapId": 2434
                 },
                 "coordEnemy": {
-                    "x": 4961.59,
-                    "y": 9026.93,
+                    "x": 4967.81,
+                    "y": 8997.22,
                     "uiMapId": 2434
                 },
                 "gridCoord": {
@@ -3250,8 +3250,8 @@
                     "uiMapId": 2434
                 },
                 "gridCoordEnemy": {
-                    "x": 4962.81,
-                    "y": 9023.86,
+                    "x": 4969.77,
+                    "y": 8996.02,
                     "uiMapId": 2434
                 }
             },
@@ -3266,8 +3266,8 @@
                     "uiMapId": 2434
                 },
                 "coordEnemy": {
-                    "x": 4971.43,
-                    "y": 9029.29,
+                    "x": 4977.27,
+                    "y": 8998.55,
                     "uiMapId": 2434
                 },
                 "gridCoord": {
@@ -3276,8 +3276,8 @@
                     "uiMapId": 2434
                 },
                 "gridCoordEnemy": {
-                    "x": 4973.25,
-                    "y": 9027.33,
+                    "x": 4980.21,
+                    "y": 8996.02,
                     "uiMapId": 2434
                 }
             },
@@ -3292,8 +3292,8 @@
                     "uiMapId": 2434
                 },
                 "coordEnemy": {
-                    "x": 4962.62,
-                    "y": 9050.76,
+                    "x": 4969.33,
+                    "y": 9018.53,
                     "uiMapId": 2434
                 },
                 "gridCoord": {
@@ -3302,8 +3302,8 @@
                     "uiMapId": 2434
                 },
                 "gridCoordEnemy": {
-                    "x": 4962.81,
-                    "y": 9048.21,
+                    "x": 4969.77,
+                    "y": 9016.9,
                     "uiMapId": 2434
                 }
             },

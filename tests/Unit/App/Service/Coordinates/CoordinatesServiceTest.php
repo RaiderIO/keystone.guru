@@ -108,6 +108,17 @@ final class CoordinatesServiceTest extends PublicTestCase
     ];
 
     /**
+     * Enemies, by dungeon key, that KG places where they stand in game, outside the margin of where
+     * MDT draws them. The rest of the dungeon is still checked.
+     *
+     * @var array<string, array<int, string>>
+     */
+    private const array DEVIATES_FROM_MDT_ENEMY_UNIQUE_KEYS = [
+        // Group 53, ~32 units from MDT's positions.
+        DungeonKey::MURDER_ROW->value => ['235261-7', '235261-8', '235268-2', '235268-3', '235322-7'],
+    ];
+
+    /**
      * Scenario: Tests that the ingame location is converted correctly from the given map location.
      */
     #[Test]
@@ -789,7 +800,12 @@ final class CoordinatesServiceTest extends PublicTestCase
             }
 
             // Assert
+            $deviatingUniqueKeys = self::DEVIATES_FROM_MDT_ENEMY_UNIQUE_KEYS[$mappingVersion->dungeon->key] ?? [];
             foreach ($result as $uniqueKey => $converted) {
+                if (in_array((string)$uniqueKey, $deviatingUniqueKeys, true)) {
+                    continue;
+                }
+
                 [$npcId, $index] = explode('-', (string)$uniqueKey);
 
                 foreach ($mdtNpcs as $mdtNpc) {
