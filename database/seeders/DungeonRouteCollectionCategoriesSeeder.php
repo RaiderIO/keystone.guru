@@ -17,6 +17,7 @@ class DungeonRouteCollectionCategoriesSeeder extends Seeder implements TableSeed
         foreach (DungeonRouteCollectionCategoryType::cases() as $categoryType) {
             $categoryAttributes[] = [
                 'id'   => $categoryType->id(),
+                'key'  => $categoryType->value,
                 'name' => $categoryType->value,
             ];
         }

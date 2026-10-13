@@ -25,7 +25,7 @@ class TagCategoryPolicy
      */
     public function createTag(User $user, TagCategory $tagCategory, Model $model, Model $context): bool
     {
-        $contextIsOwnedAndPairedWithCategory = match ($tagCategory->name) {
+        $contextIsOwnedAndPairedWithCategory = match ($tagCategory->key) {
             TagCategory::DUNGEON_ROUTE_PERSONAL => $context instanceof User && $context->is($user),
             TagCategory::DUNGEON_ROUTE_TEAM     => $context instanceof Team && $context->isUserMember($user),
             default                             => false,

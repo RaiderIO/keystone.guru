@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * open it.
  *
  * @property int    $id
+ * @property string $key
  * @property string $name
  *
  * @property EloquentCollection<int, DungeonRouteCollection> $dungeonRouteCollections
@@ -27,6 +28,7 @@ class DungeonRouteCollectionCategory extends Model
 
     protected $fillable = [
         'id',
+        'key',
         'name',
     ];
 
@@ -40,6 +42,6 @@ class DungeonRouteCollectionCategory extends Model
 
     public function getTranslatedName(): string
     {
-        return __(sprintf('dungeonroutecollectioncategories.%s', $this->name));
+        return __(sprintf('dungeonroutecollectioncategories.%s', $this->key));
     }
 }

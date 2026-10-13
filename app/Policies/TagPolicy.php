@@ -55,7 +55,7 @@ class TagPolicy
         // longer holds - or whose team is gone entirely - manageable by the people who own the route
         // it is stuck on, rather than leaving it undeletable by anyone
         if (!$result && $tag->model_id !== null) {
-            switch ($tag->tagCategory->name) {
+            switch ($tag->tagCategory->key) {
                 case TagCategory::DUNGEON_ROUTE_PERSONAL:
                 case TagCategory::DUNGEON_ROUTE_TEAM:
                     /** @var DungeonRoute|null $dungeonRoute */
