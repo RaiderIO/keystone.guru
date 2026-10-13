@@ -8,6 +8,7 @@ use App\Models\UserPinnedDungeonRoute;
 use App\Models\UserPinnedDungeonRouteCollection;
 use App\Models\UserSocialLinkPlatform;
 use Closure;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -76,7 +77,7 @@ class CreatorProfileFormRequest extends FormRequest
                 Rule::exists('dungeon_routes', 'id')
                     ->where('author_id', $userId)
                     // Sandbox routes expire, so they are deliberately not offered as pinnable
-                    ->whereNull('expires_at'),
+                    ->where(static fn(Builder $query) => $query->where('expires_at', 0)->orWhereNull('expires_at')),
             ],
             'pinned_dungeon_route_collections' => [
                 'nullable',

@@ -29,6 +29,7 @@ use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Broadcasting\BroadcastException;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -456,9 +457,10 @@ class ProfileController extends Controller
             /** @var User $user */
             $user = Auth::user();
 
-            // Sandbox routes expire, so they are deliberately not offered as pinnable
+            // Sandbox routes expire, so they are deliberately not offered as pinnable. The column is 0 on some
+            // rows and NULL on others, the same pair the route picker's listing matches on
             $ownDungeonRoutes = $user->dungeonRoutes()
-                ->whereNull('expires_at')
+                ->where(static fn(Builder $query) => $query->where('expires_at', 0)->orWhereNull('expires_at'))
                 ->with(['dungeon'])
                 ->orderBy('title')
                 ->get();
