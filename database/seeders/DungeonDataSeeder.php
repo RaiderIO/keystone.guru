@@ -125,9 +125,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     }
 
     /**
-     * @throws Exception
-     */
-    /**
      * The expansion whose dungeon data lives in the given `database/seeders/dungeondata/<key>` directory.
      */
     public function findExpansionForDungeonDataDirectory(string $directoryName): ?Expansion
@@ -135,6 +132,9 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         return Expansion::query()->where('key', $directoryName)->first();
     }
 
+    /**
+     * @throws Exception
+     */
     private function importDungeonMapping(): void
     {
         $rootDir         = database_path(self::DUNGEON_DATA_DIR);
