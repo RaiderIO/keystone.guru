@@ -591,11 +591,11 @@ final class ProfileCreatorProfileTest extends PublicTestCase
         // Arrange - the route picker lists a route whose expires_at is 0 as a regular route
         $creator = $this->createCreator();
         Feature::for($creator)->activate(CreatorProfiles::class);
-
-        $legacyRoute = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null]);
-        DungeonRoute::query()->whereKey($legacyRoute->id)->update(['expires_at' => '0000-00-00 00:00:00']);
+        $legacyRoute = null;
 
         try {
+            $legacyRoute = $this->createLegacyZeroExpiryRoute($creator);
+
             // Act
             $response = $this->actingAs($creator)->get(route('profile.edit'));
 
@@ -607,7 +607,7 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             );
         } finally {
             Feature::for($creator)->forget(CreatorProfiles::class);
-            $legacyRoute->delete();
+            $legacyRoute?->delete();
             $creator->delete();
         }
     }
@@ -618,11 +618,11 @@ final class ProfileCreatorProfileTest extends PublicTestCase
         // Arrange
         $creator = $this->createCreator();
         Feature::for($creator)->activate(CreatorProfiles::class);
-
-        $legacyRoute = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null]);
-        DungeonRoute::query()->whereKey($legacyRoute->id)->update(['expires_at' => '0000-00-00 00:00:00']);
+        $legacyRoute = null;
 
         try {
+            $legacyRoute = $this->createLegacyZeroExpiryRoute($creator);
+
             // Act
             $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
                 'pinned_dungeon_routes' => [$legacyRoute->id],
@@ -637,7 +637,7 @@ final class ProfileCreatorProfileTest extends PublicTestCase
         } finally {
             UserPinnedDungeonRoute::where('user_id', $creator->id)->delete();
             Feature::for($creator)->forget(CreatorProfiles::class);
-            $legacyRoute->delete();
+            $legacyRoute?->delete();
             $creator->delete();
         }
     }
@@ -1229,6 +1229,27 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             UserSocialLink::where('user_id', $creator->id)->delete();
             $creator->delete();
         }
+    }
+
+    /**
+     * Rows written before expires_at became nullable still hold the zero date. The strict sql_mode
+     * (NO_ZERO_DATE) refuses to write it, so the session mode is relaxed for this one statement only.
+     */
+    private function createLegacyZeroExpiryRoute(User $creator): DungeonRoute
+    {
+        $legacyRoute = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null]);
+
+        $connection = $legacyRoute->getConnection();
+        $sqlMode    = $connection->selectOne('SELECT @@SESSION.sql_mode AS sql_mode')->sql_mode;
+        $connection->statement("SET SESSION sql_mode = ''");
+
+        try {
+            DungeonRoute::query()->whereKey($legacyRoute->id)->update(['expires_at' => '0000-00-00 00:00:00']);
+        } finally {
+            $connection->statement('SET SESSION sql_mode = ?', [$sqlMode]);
+        }
+
+        return $legacyRoute;
     }
 
     private function createCreator(): User
