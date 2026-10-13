@@ -74,7 +74,8 @@ describe('polylineDefaultColor', () => {
         expect(polylineDefaultColor()).toBe('#123456');
     });
 
-    it('falls back to a random color when no cookie is set', () => {
+    it('falls back to a random color when the cookie reader answers null', () => {
+        // js-cookie 3 answers undefined for a missing cookie, not null; this pins the null comparison only
         global.Cookies = {get: () => null};
         global.randomColor = () => '#123456';
         expect(polylineDefaultColor()).toBe('#123456');
