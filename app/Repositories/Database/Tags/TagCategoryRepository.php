@@ -13,7 +13,7 @@ class TagCategoryRepository extends DatabaseRepository implements TagCategoryRep
         parent::__construct(TagCategory::class);
     }
 
-    public function findByKeyOrFail(string $key): TagCategory
+    public function findByKeyOrFail(?string $key): TagCategory
     {
         return TagCategory::where('key', $key)->firstOrFail();
     }

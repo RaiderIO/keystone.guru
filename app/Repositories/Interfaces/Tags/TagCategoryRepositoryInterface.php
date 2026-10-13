@@ -19,5 +19,5 @@ use Illuminate\Support\Collection;
  */
 interface TagCategoryRepositoryInterface extends BaseRepositoryInterface
 {
-    public function findByKeyOrFail(string $key): TagCategory;
+    public function findByKeyOrFail(?string $key): TagCategory;
 }

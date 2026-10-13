@@ -356,6 +356,32 @@ final class AjaxTagControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function store_givenNoCategory_returnsNotFound(): void
+    {
+        $author = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'model_id'      => $route->public_key,
+                'name'          => sprintf('test-tag-%s', fake()->uuid()),
+            ]);
+
+            // Assert
+            $response->assertNotFound();
+        } finally {
+            $this->cleanUp(route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
     public function store_givenAnotherUsersContext_returnsForbidden(): void
     {
         $author = null;
