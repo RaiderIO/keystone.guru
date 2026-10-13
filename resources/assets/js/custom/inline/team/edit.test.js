@@ -158,13 +158,13 @@ describe('TeamEdit route picker host', () => {
         const context = buildContext();
         context._undoAddRoutes = vi.fn();
 
-        // Act
+        // Act - the routes are added, then the toast's undo button is clicked
         TeamEdit.prototype._onRoutesAdded.call(context, {publicKeys: ['a', 'b'], response: undefined});
+        showSuccessNotification.mock.calls[0]?.[1].buttons[0].callback({close: vi.fn()});
 
         // Assert
         expect(showSuccessNotification).toHaveBeenCalledExactlyOnceWith('js.team_add_routes_successful:2', expect.anything());
-        showSuccessNotification.mock.calls[0][1].buttons[0].callback({close: vi.fn()});
-        expect(context._undoAddRoutes).toHaveBeenCalledWith(['a', 'b']);
+        expect(context._undoAddRoutes).toHaveBeenCalledExactlyOnceWith(['a', 'b']);
     });
 
     it('_getRoutesAddedText_givenSeveralRoutes_returnsTheCountedText', () => {

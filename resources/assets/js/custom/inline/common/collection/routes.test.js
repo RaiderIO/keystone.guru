@@ -352,9 +352,20 @@ describe('CommonCollectionRoutes', () => {
         expect(lastCall('POST').data).toEqual({dungeon_routes: ['keyA']});
         expect(lists.slot_1_inline.getIds()).toEqual(['keyA', 'keyB']);
         expect(lastCall('PUT')).toMatchObject({url: '/order', data: {dungeon_routes: ['keyA', 'keyB', 'keyOld']}});
-        expect(globalThis.showInfoNotification).not.toHaveBeenCalled();
+    });
+
+    it('onRemoved_givenUndoAndTheRestoredOrderIsStored_saysItWasUndone', () => {
+        // Arrange
+        document.querySelector('#slot_1 [data-id="keyA"] .ordered_select_remove').click();
+        lastCall('DELETE').success({});
+        toasts[0].opts.buttons[0].callback({close: vi.fn()});
+        lastCall('POST').success({dungeon_routes: [{id: 11, public_key: 'keyA', title: 'Alpha', dungeon_id: 1, dungeon: 'One'}]});
+
+        // Act
         lastCall('PUT').success({});
-        expect(globalThis.showInfoNotification).toHaveBeenCalledWith('Undone');
+
+        // Assert
+        expect(globalThis.showInfoNotification).toHaveBeenCalledExactlyOnceWith('Undone');
     });
 
     it('onRemoved_givenUndoFails_leavesTheRouteOutAndSaysSo', () => {
