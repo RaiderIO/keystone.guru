@@ -81,6 +81,43 @@ describe('refreshSelectPickers', () => {
         expect(select.tomselect.wrapper.classList.contains('disabled')).toBe(false);
     });
 
+    test('refreshSelectPickers_givenRepopulatedAndDisabledInOneGo_disablesInstance', () => {
+        // Arrange
+        const select = createSelect();
+        refreshSelectPickers();
+        select.innerHTML = `
+            <option value="4">Four</option>
+            <option value="5" selected>Five</option>`;
+        select.disabled = true;
+
+        // Act
+        refreshSelectPickers();
+
+        // Assert
+        expect(Object.keys(select.tomselect.options).sort()).toEqual(['4', '5']);
+        expect(select.tomselect.isDisabled).toBe(true);
+        expect(select.tomselect.wrapper.classList.contains('disabled')).toBe(true);
+    });
+
+    test('refreshSelectPickers_givenRepopulatedAndReEnabledInOneGo_enablesInstance', () => {
+        // Arrange
+        const select = createSelect();
+        select.disabled = true;
+        refreshSelectPickers();
+        select.innerHTML = `
+            <option value="4">Four</option>
+            <option value="5" selected>Five</option>`;
+        select.disabled = false;
+
+        // Act
+        refreshSelectPickers();
+
+        // Assert
+        expect(Object.keys(select.tomselect.options).sort()).toEqual(['4', '5']);
+        expect(select.tomselect.isDisabled).toBe(false);
+        expect(select.tomselect.wrapper.classList.contains('disabled')).toBe(false);
+    });
+
     test('refreshSelectPickers_givenUnchangedOptionSet_keepsOptionOrder', () => {
         const select = createSelect();
         refreshSelectPickers();

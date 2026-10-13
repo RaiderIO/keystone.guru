@@ -237,6 +237,7 @@ function refreshSelectPicker(select) {
         instance.clear(true);
         instance.clearOptions(() => false);
         instance.clearOptionGroups();
+        // sync() also adopts the <select>'s disabled state (enable()/disable()), like the else branch does by hand
         instance.sync();
         instance.setValue(selectedValues, true);
         instance.selectpickerFingerprint = fingerprint;

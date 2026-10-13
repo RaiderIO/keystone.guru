@@ -23,7 +23,10 @@ class CommonGroupAffixes extends InlineCode {
         this.currentSelectionExpansionKey = null;
         this.hasDungeonRoute = typeof this.options.dungeonroute !== 'undefined' && this.options.dungeonroute !== null;
 
-        this._automaticSeasonalIndexChange = this.hasDungeonRoute;
+        this._automaticSeasonalIndexChange = !this.hasDungeonRoute;
+        $(this.options.seasonalIndexSelector).on('change', function () {
+            self._automaticSeasonalIndexChange = false;
+        });
 
         if (this.options.hasOwnProperty('teemingSelector')) {
             $(this.options.teemingSelector).bind('change', function () {
