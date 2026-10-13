@@ -4,6 +4,7 @@ namespace App\Console\Commands\CombatLog;
 
 use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
 use App\Logging\StructuredLogging;
+use App\Models\User;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use Auth;
 use Exception;
@@ -42,10 +43,12 @@ class IngestCombatLogRouteJson extends Command
         $log  = (bool)$this->option('log');
 
         // We are the admin
-        Auth::loginUsingId(1);
+        $admin = User::findOrFail(1);
+        Auth::login($admin);
 
         return $this->parseCreateRouteCombatLogJsonRecursively($filePath, function (string $filePath) use (
             $combatLogRouteBodyDungeonRouteService,
+            $admin,
             $temp,
             $log
         ) {
@@ -55,7 +58,7 @@ class IngestCombatLogRouteJson extends Command
                 return 0;
             }
 
-            return $this->ingestCombatLogRouteJson($combatLogRouteBodyDungeonRouteService, $filePath, $temp, $log);
+            return $this->ingestCombatLogRouteJson($combatLogRouteBodyDungeonRouteService, $admin, $filePath, $temp, $log);
         });
     }
 
@@ -64,6 +67,7 @@ class IngestCombatLogRouteJson extends Command
      */
     private function ingestCombatLogRouteJson(
         CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
+        User                                       $user,
         string                                     $filePath,
         bool                                       $temp = true,
         bool                                       $log = false,
@@ -79,6 +83,7 @@ class IngestCombatLogRouteJson extends Command
                 CombatLogRouteRequestDto::createFromArray(
                     json_decode(file_get_contents($filePath), true),
                 ),
+                $user,
             );
 
             if (!$temp) {
