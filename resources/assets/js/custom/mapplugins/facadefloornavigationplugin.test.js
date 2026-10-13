@@ -95,11 +95,12 @@ function createPlugin(options = {}) {
     global.L.layerGroup = vi.fn(() => layerGroup);
     global.L.polygon = vi.fn(() => ({bindTooltip: vi.fn()}));
 
+    const containerClassList = {toggle: vi.fn()};
     const leafletMap = {
         on: vi.fn(() => leafletMap),
         off: vi.fn(() => leafletMap),
         removeLayer: vi.fn(),
-        getContainer: () => ({classList: {toggle: vi.fn()}}),
+        getContainer: () => ({classList: containerClassList}),
     };
 
     const map = {
@@ -107,7 +108,7 @@ function createPlugin(options = {}) {
         getMapState: () => options.mapState ?? null,
     };
 
-    return {plugin: new FacadeFloorNavigationPlugin(map), state, leafletMap, layerGroup};
+    return {plugin: new FacadeFloorNavigationPlugin(map), state, leafletMap, layerGroup, containerClassList};
 }
 
 beforeEach(() => {
@@ -128,7 +129,7 @@ describe('FacadeFloorNavigationPlugin.isActive', () => {
     });
 
     it('isActive_givenNonFacadeFloor_returnsFalse', () => {
-        const {plugin} = createPlugin({currentFloor: TARGET_FLOOR});
+        const {plugin} = createPlugin({currentFloor: {...TARGET_FLOOR, facade_navigation: 1}});
 
         expect(plugin.isActive()).toBe(false);
     });
@@ -157,24 +158,47 @@ describe('FacadeFloorNavigationPlugin.addToMap', () => {
     });
 
     it('addToMap_givenActive_registersMouseHandlers', () => {
-        const {plugin, leafletMap} = createPlugin();
+        const {plugin, leafletMap, layerGroup} = createPlugin();
 
         plugin.addToMap();
 
-        expect(leafletMap.on).toHaveBeenCalledWith('mousemove', expect.any(Function));
-        expect(leafletMap.on).toHaveBeenCalledWith('click', expect.any(Function));
+        expect(leafletMap.on).toHaveBeenCalledWith('mousemove', plugin._onMouseMoveRef);
+        expect(leafletMap.on).toHaveBeenCalledWith('mouseout', plugin._onMouseOutRef);
+        expect(leafletMap.on).toHaveBeenCalledWith('click', plugin._onClickRef);
+        expect(plugin.layerGroup).toBe(layerGroup);
+        expect(layerGroup.addTo).toHaveBeenCalledWith(leafletMap);
+    });
+});
+
+describe('FacadeFloorNavigationPlugin.removeFromMap', () => {
+    it('removeFromMap_givenAddedToMap_unregistersHandlersAndRemovesTheHighlightLayer', () => {
+        const {plugin, leafletMap, layerGroup} = createPlugin();
+        plugin.addToMap();
+        plugin._onLeafletMapMouseMove({latlng: {lat: -64, lng: 96}});
+
+        plugin.removeFromMap();
+
+        expect(leafletMap.off).toHaveBeenCalledWith('mousemove', plugin._onMouseMoveRef);
+        expect(leafletMap.off).toHaveBeenCalledWith('mouseout', plugin._onMouseOutRef);
+        expect(leafletMap.off).toHaveBeenCalledWith('click', plugin._onClickRef);
+        expect(leafletMap.removeLayer).toHaveBeenCalledWith(layerGroup);
+        expect(plugin.layerGroup).toBeNull();
+        expect(plugin.hoveredFloorUnion).toBeNull();
     });
 });
 
 describe('FacadeFloorNavigationPlugin mouse handling', () => {
     it('mouseMove_givenPointInsideFloorUnionArea_highlightsFloorUnion', () => {
-        const {plugin, layerGroup} = createPlugin();
+        const {plugin, layerGroup, containerClassList} = createPlugin();
         plugin.addToMap();
 
         plugin._onLeafletMapMouseMove({latlng: {lat: -64, lng: 96}});
 
         expect(plugin.hoveredFloorUnion?.id).toBe(10);
         expect(layerGroup.addLayer).toHaveBeenCalledTimes(1);
+        const highlight = layerGroup.addLayer.mock.calls[0][0];
+        expect(highlight.bindTooltip).toHaveBeenCalledWith('floor.target', c.map.facadefloornavigation.tooltipOptions);
+        expect(containerClassList.toggle).toHaveBeenLastCalledWith('facade_floor_navigation_hover', true);
     });
 
     it('mouseMove_givenStringVertices_highlightsFloorUnion', () => {
@@ -194,11 +218,60 @@ describe('FacadeFloorNavigationPlugin mouse handling', () => {
     });
 
     it('mouseMove_givenPointOutsideFloorUnionAreas_clearsHighlight', () => {
+        const {plugin, layerGroup, containerClassList} = createPlugin();
+        plugin.addToMap();
+        plugin._onLeafletMapMouseMove({latlng: {lat: -64, lng: 96}});
+        layerGroup.clearLayers.mockClear();
+
+        plugin._onLeafletMapMouseMove({latlng: {lat: -200, lng: 300}});
+
+        expect(plugin.hoveredFloorUnion).toBeNull();
+        expect(layerGroup.clearLayers).toHaveBeenCalledOnce();
+        expect(containerClassList.toggle).toHaveBeenLastCalledWith('facade_floor_navigation_hover', false);
+    });
+
+    it('mouseMove_givenActiveMapState_clearsHighlight', () => {
+        const mapState = {state: 'active'};
+        const {plugin} = createPlugin({mapState: null});
+        plugin.addToMap();
+        plugin._onLeafletMapMouseMove({latlng: {lat: -64, lng: 96}});
+        const hoveredWithoutMapState = plugin.hoveredFloorUnion?.id;
+        plugin.map.getMapState = () => mapState;
+
+        plugin._onLeafletMapMouseMove({latlng: {lat: -64, lng: 96}});
+
+        expect(hoveredWithoutMapState).toBe(10);
+        expect(plugin.hoveredFloorUnion).toBeNull();
+    });
+
+    it('mouseOut_givenHighlightedFloorUnion_clearsHighlight', () => {
         const {plugin} = createPlugin();
         plugin.addToMap();
         plugin._onLeafletMapMouseMove({latlng: {lat: -64, lng: 96}});
+        const hoveredBeforeMouseOut = plugin.hoveredFloorUnion?.id;
 
-        plugin._onLeafletMapMouseMove({latlng: {lat: -200, lng: 300}});
+        plugin._onLeafletMapMouseOut();
+
+        expect(hoveredBeforeMouseOut).toBe(10);
+        expect(plugin.hoveredFloorUnion).toBeNull();
+    });
+
+    it('mouseMove_givenFloorUnionWithoutTargetFloor_highlightsNothing', () => {
+        const floorUnion = {...createFloorUnion(), target_floor_id: null};
+        const {plugin} = createPlugin({floorUnions: [floorUnion]});
+        plugin.addToMap();
+
+        plugin._onLeafletMapMouseMove({latlng: {lat: -64, lng: 96}});
+
+        expect(plugin.hoveredFloorUnion).toBeNull();
+    });
+
+    it('mouseMove_givenFloorUnionOfAnotherFloor_highlightsNothing', () => {
+        const floorUnion = {...createFloorUnion(), floor_id: TARGET_FLOOR.id};
+        const {plugin} = createPlugin({floorUnions: [floorUnion]});
+        plugin.addToMap();
+
+        plugin._onLeafletMapMouseMove({latlng: {lat: -64, lng: 96}});
 
         expect(plugin.hoveredFloorUnion).toBeNull();
     });
@@ -217,6 +290,16 @@ describe('FacadeFloorNavigationPlugin mouse handling', () => {
         plugin.addToMap();
 
         plugin._onLeafletMapClick({latlng: {lat: -200, lng: 300}});
+
+        expect(state.setFloorId).not.toHaveBeenCalled();
+    });
+
+    it('click_givenTargetFloorNotVisible_doesNothing', () => {
+        const {plugin, state} = createPlugin();
+        state.isVisibleFloorId = (floorId) => floorId !== TARGET_FLOOR.id;
+        plugin.addToMap();
+
+        plugin._onLeafletMapClick({latlng: {lat: -64, lng: 96}});
 
         expect(state.setFloorId).not.toHaveBeenCalled();
     });

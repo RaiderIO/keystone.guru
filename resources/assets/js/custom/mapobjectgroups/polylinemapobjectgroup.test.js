@@ -10,6 +10,8 @@ globalThis.KillZone = class KillZone {
 };
 globalThis.Handlebars = require('handlebars');
 globalThis.isColorDark = () => true;
+globalThis.MapObject = class MapObject {
+};
 
 const {MapObjectGroup} = require('./mapobjectgroup');
 globalThis.MapObjectGroup = MapObjectGroup;
@@ -90,5 +92,20 @@ describe('PolylineMapObjectGroup._createLayer', () => {
         // Assert
         expect(layer.type).toBe('polyline');
         expect(layer.points).toEqual([]);
+    });
+});
+
+describe('PolylineMapObjectGroup._updateMapObject', () => {
+    it('updateMapObject_givenRemoteVertices_setsThemOnTheExistingLayer', () => {
+        // Arrange
+        const group = buildGroup(false);
+        const mapObject = Object.assign(new MapObject(), {layer: {setLatLngs: vi.fn()}});
+
+        // Act
+        const result = group._updateMapObject({polyline: {vertices_json: VERTICES_JSON}}, mapObject);
+
+        // Assert
+        expect(result).toBe(mapObject);
+        expect(mapObject.layer.setLatLngs).toHaveBeenCalledExactlyOnceWith([[-1, 2], [-3, 4], [-5, 6]]);
     });
 });

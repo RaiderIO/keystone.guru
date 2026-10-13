@@ -57,4 +57,19 @@ describe('MapContextMappingVersionEdit', () => {
             {id: 3, name: 'Wailing Caverns'},
         ]);
     });
+
+    test('getDungeonSelectValues_givenNoDungeonSelectValues_returnsAnEmptyList', () => {
+        // Arrange
+        const mapContext = new MapContextMappingVersionEdit({dungeon: {id: 1}});
+
+        // Act
+        let selectValues;
+        const getSelectValues = () => {
+            selectValues = mapContext.getDungeonSelectValues();
+        };
+
+        // Assert
+        expect(getSelectValues).not.toThrow();
+        expect(selectValues).toEqual([]);
+    });
 });
