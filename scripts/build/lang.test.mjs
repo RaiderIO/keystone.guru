@@ -6,6 +6,33 @@ import Lang from 'lang.js';
 import {describe, expect, it, vi} from 'vitest';
 import {buildLangBundles, mergeTranslationsWithFallback, parseBuildLocales, parsePhpTranslationFile, shouldBuildLocale} from './lang.mjs';
 
+/**
+ * Runs `callback` with the given environment variables set (or unset, for `undefined`), restoring them afterwards.
+ *
+ * @param {Object} env
+ * @param {Function} callback
+ * @returns {*} Whatever callback returns.
+ */
+function withEnv(env, callback) {
+    const previous = Object.fromEntries(Object.keys(env).map(key => [key, process.env[key]]));
+    const apply    = values => {
+        for (const [key, value] of Object.entries(values)) {
+            if (value === undefined) {
+                delete process.env[key];
+            } else {
+                process.env[key] = value;
+            }
+        }
+    };
+
+    apply(env);
+    try {
+        return callback();
+    } finally {
+        apply(previous);
+    }
+}
+
 describe('parsePhpTranslationFile', () => {
     it('parsePhpTranslationFile_givenSimpleArray_returnsObject', () => {
         const source = `<?php
@@ -131,17 +158,7 @@ describe('buildLangBundles', () => {
             }
 
             // The builder skips every non-en_US locale when APP_ENV=local
-            const appEnv        = process.env.APP_ENV;
-            process.env.APP_ENV = 'testing';
-            try {
-                buildLangBundles(rootDir, 'v1', false);
-            } finally {
-                if (appEnv === undefined) {
-                    delete process.env.APP_ENV;
-                } else {
-                    process.env.APP_ENV = appEnv;
-                }
-            }
+            withEnv({APP_ENV: 'testing'}, () => buildLangBundles(rootDir, 'v1', false));
 
             const code   = fs.readFileSync(path.join(rootDir, 'public', 'js', `lang-${locale}-v1.js`), 'utf8');
             const window = {Lang, lang: new Lang({messages: {}, locale: htmlLang})};
@@ -191,17 +208,7 @@ describe('buildLangBundles', () => {
                 fs.writeFileSync(path.join(rootDir, 'lang', 'en_US', `${file}.php`), source);
             }
 
-            const appEnv        = process.env.APP_ENV;
-            process.env.APP_ENV = 'testing';
-            try {
-                buildLangBundles(rootDir, 'v1', false);
-            } finally {
-                if (appEnv === undefined) {
-                    delete process.env.APP_ENV;
-                } else {
-                    process.env.APP_ENV = appEnv;
-                }
-            }
+            withEnv({APP_ENV: 'testing'}, () => buildLangBundles(rootDir, 'v1', false));
 
             const code   = fs.readFileSync(path.join(rootDir, 'public', 'js', `lang-${locale}-v1.js`), 'utf8');
             const window = {Lang, lang: new Lang({messages: {}, locale: htmlLang})};
@@ -286,33 +293,6 @@ describe('buildLangBundles', () => {
     });
 });
 
-/**
- * Runs `callback` with the given environment variables set (or unset, for `undefined`), restoring them afterwards.
- *
- * @param {Object} env
- * @param {Function} callback
- * @returns {*} Whatever callback returns.
- */
-function withEnv(env, callback) {
-    const previous = Object.fromEntries(Object.keys(env).map(key => [key, process.env[key]]));
-    const apply    = values => {
-        for (const [key, value] of Object.entries(values)) {
-            if (value === undefined) {
-                delete process.env[key];
-            } else {
-                process.env[key] = value;
-            }
-        }
-    };
-
-    apply(env);
-    try {
-        return callback();
-    } finally {
-        apply(previous);
-    }
-}
-
 describe('shouldBuildLocale', () => {
     it('shouldBuildLocale_givenNonLocalEnv_buildsEveryLocale', () => {
         expect(shouldBuildLocale('de_DE_ai', 'production', [])).toBe(true);
@@ -355,7 +335,6 @@ describe('buildLangBundles locale selection', () => {
      */
     function buildUnder(env, locales) {
         const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ksg-lang-'));
-        const previous = {APP_ENV: process.env.APP_ENV, BUILD_LOCALES: process.env.BUILD_LOCALES};
 
         try {
             for (const locale of locales) {
@@ -363,23 +342,8 @@ describe('buildLangBundles locale selection', () => {
                 fs.writeFileSync(path.join(rootDir, 'lang', locale, 'js.php'), "<?php\n\nreturn ['edit_label' => 'x'];\n");
             }
 
-            for (const [key, value] of Object.entries(env)) {
-                if (value === undefined) {
-                    delete process.env[key];
-                } else {
-                    process.env[key] = value;
-                }
-            }
-
-            return buildLangBundles(rootDir, 'v1', false).sort();
+            return withEnv(env, () => buildLangBundles(rootDir, 'v1', false)).sort();
         } finally {
-            for (const [key, value] of Object.entries(previous)) {
-                if (value === undefined) {
-                    delete process.env[key];
-                } else {
-                    process.env[key] = value;
-                }
-            }
             fs.rmSync(rootDir, {recursive: true, force: true});
         }
     }
