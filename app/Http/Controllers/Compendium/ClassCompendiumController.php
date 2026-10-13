@@ -10,7 +10,9 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellCategory;
-use App\Models\Spell\SpellMissType;
+use App\Repositories\Interfaces\CharacterClassRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitions;
 use App\Service\Dungeon\DungeonServiceInterface;
@@ -31,10 +33,10 @@ class ClassCompendiumController extends Controller
         CharacterClass::CHARACTER_CLASS_WARRIOR => 'ability_warrior_shieldreflection',
     ];
 
-    public function index(): View
+    public function index(CharacterClassRepositoryInterface $characterClassRepository): View
     {
         return view('compendium.class.index', [
-            'characterClasses' => CharacterClass::orderBy('name')->get(),
+            'characterClasses' => $characterClassRepository->getAllOrderedByName(),
         ]);
     }
 
@@ -57,8 +59,13 @@ class ClassCompendiumController extends Controller
      * Parameters follow the URL's order (/compendium/dungeon/{dungeon}/class/{characterClass}) - a
      * route registered with first-class callable syntax binds them positionally, not by name.
      */
-    public function showDungeon(Dungeon $dungeon, CharacterClass $characterClass, DungeonServiceInterface $dungeonService): View
-    {
+    public function showDungeon(
+        Dungeon                  $dungeon,
+        CharacterClass           $characterClass,
+        DungeonServiceInterface  $dungeonService,
+        SpellRepositoryInterface $spellRepository,
+        NpcRepositoryInterface   $npcRepository,
+    ): View {
         // The URL is the source of truth for which dungeon is being viewed - make it the context
         // dungeon as well, so the header's dungeon selection follows along (as on explore/heatmap)
         $dungeonService->setDungeonContext($dungeon, Auth::user());
@@ -70,17 +77,10 @@ class ClassCompendiumController extends Controller
         // time the game adds an ability, and grouping by characteristic would order the rows by a
         // taxonomy nobody thinks in.
         $spells = self::sortByTranslatedName(
-            Spell::query()
-                ->where('category', SpellCategory::translationKeyFor($characterClass->key))
-                ->whereNotNull('characteristic_id')
-                // A PvP talent is unavailable in a dungeon, so listing it as crowd control for one is a
-                // lie the player only finds out about mid-pull
-                ->where('is_pvp_talent', false)
-                // What the spell links' hover tooltips read in a non-English locale
-                ->with('descriptionTranslation')
-                ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
-                ->with('characteristic')
-                ->get(),
+            $spellRepository->getCharacteristicSpellsForCategory(
+                SpellCategory::translationKeyFor($characterClass->key),
+                $mappingVersion,
+            ),
         );
 
         $characteristicIds = $spells->pluck('characteristic_id')->unique()->filter();
@@ -89,21 +89,7 @@ class ClassCompendiumController extends Controller
         $npcsByCharacteristicId = collect();
 
         if ($characteristicIds->isNotEmpty()) {
-            $npcsByCharacteristicId = Npc::query()
-                ->join('npc_characteristics', 'npc_characteristics.npc_id', '=', 'npcs.id')
-                ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
-                ->join('mapping_versions', 'enemies.mapping_version_id', '=', 'mapping_versions.id')
-                ->where('mapping_versions.dungeon_id', $dungeon->id)
-                ->when($mappingVersion !== null, static fn($q) => $q->where('mapping_versions.id', $mappingVersion->id))
-                ->whereIn('npc_characteristics.characteristic_id', $characteristicIds)
-                ->select('npcs.*', 'npc_characteristics.characteristic_id')
-                // classification/type/characteristics/npcHealths are what the NPC links' hover
-                // tooltips read (#4096)
-                ->with(['classification', 'type', 'characteristics', 'npcHealths'])
-                ->distinct()
-                ->orderBy('npcs.id')
-                ->get()
-                ->groupBy('characteristic_id');
+            $npcsByCharacteristicId = $npcRepository->getNpcsByCharacteristicIdForDungeon($dungeon, $mappingVersion, $characteristicIds);
         }
 
         return view('compendium.class.show', [
@@ -112,8 +98,8 @@ class ClassCompendiumController extends Controller
             'spells'                        => $spells,
             'npcsByCharacteristicId'        => $npcsByCharacteristicId,
             'notableNpcsByCharacteristicId' => $this->getNotableNpcsByCharacteristicId($characteristicIds, $npcsByCharacteristicId),
-            'counterSections'               => $this->getCounterSections($characterClass, $dungeon, $mappingVersion),
-            'reflectSection'                => $this->getReflectSection($characterClass, $dungeon, $mappingVersion),
+            'counterSections'               => $this->getCounterSections($characterClass, $dungeon, $mappingVersion, $spellRepository, $npcRepository),
+            'reflectSection'                => $this->getReflectSection($characterClass, $dungeon, $mappingVersion, $spellRepository, $npcRepository),
             // HeaderComposer only injects this into the header view itself - the dungeon context
             // links this page overrides are built in the view, so it needs its own copy
             'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(),
@@ -204,8 +190,13 @@ class ClassCompendiumController extends Controller
      *     npcsBySpellId: Collection<int, Collection<int, Npc>>,
      * }>
      */
-    private function getCounterSections(CharacterClass $characterClass, Dungeon $dungeon, ?MappingVersion $mappingVersion): array
-    {
+    private function getCounterSections(
+        CharacterClass           $characterClass,
+        Dungeon                  $dungeon,
+        ?MappingVersion          $mappingVersion,
+        SpellRepositoryInterface $spellRepository,
+        NpcRepositoryInterface   $npcRepository,
+    ): array {
         $classRaceKeys = $characterClass->races->pluck('key');
 
         $definitions = SpellCounterDefinitions::all()->filter(
@@ -219,18 +210,9 @@ class ClassCompendiumController extends Controller
             $bit = $definition->getCounterBit();
 
             // Scoped to the context dungeon so the listed spells match the section's "for this dungeon" framing
-            $spells = Spell::query()
-                ->visible()
-                // What the spell links' hover tooltips read in a non-English locale
-                ->with('descriptionTranslation')
-                ->whereRaw(sprintf('counters_mask & %d != 0', $bit))
-                ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
-                ->whereIn('id', static function ($query) use ($dungeon): void {
-                    $query->select('spell_id')->from('spell_dungeons')->where('dungeon_id', $dungeon->id);
-                })
-                ->get();
+            $spells = $spellRepository->getVisibleSpellsByCounterBitForDungeon($bit, $dungeon, $mappingVersion);
 
-            $npcsBySpellId = $this->getNpcsBySpellId($dungeon, $mappingVersion, $spells);
+            $npcsBySpellId = $this->getNpcsBySpellId($dungeon, $mappingVersion, $spells, $npcRepository);
 
             $raceKey  = $definition->getCharacterRaceKey();
             $raceName = $raceKey !== null ? $characterClass->races->firstWhere('key', $raceKey)?->name : null;
@@ -256,8 +238,13 @@ class ClassCompendiumController extends Controller
      *     npcsBySpellId: Collection<int, Collection<int, Npc>>,
      * }|null
      */
-    private function getReflectSection(CharacterClass $characterClass, Dungeon $dungeon, ?MappingVersion $mappingVersion): ?array
-    {
+    private function getReflectSection(
+        CharacterClass           $characterClass,
+        Dungeon                  $dungeon,
+        ?MappingVersion          $mappingVersion,
+        SpellRepositoryInterface $spellRepository,
+        NpcRepositoryInterface   $npcRepository,
+    ): ?array {
         $iconName = self::SPELL_REFLECT_CLASS_ICONS[$characterClass->key] ?? null;
 
         if ($iconName === null) {
@@ -265,20 +252,12 @@ class ClassCompendiumController extends Controller
         }
 
         // Scoped to the context dungeon so the listed spells match the section's "for this dungeon" framing
-        $spells = Spell::query()
-            ->visible()
-            ->with('descriptionTranslation')
-            ->whereRaw('miss_types_mask & ? != 0', [SpellMissType::Reflect->value])
-            ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
-            ->whereIn('id', static function ($query) use ($dungeon): void {
-                $query->select('spell_id')->from('spell_dungeons')->where('dungeon_id', $dungeon->id);
-            })
-            ->get();
+        $spells = $spellRepository->getVisibleReflectedSpellsForDungeon($dungeon, $mappingVersion);
 
         return [
             'iconName'      => $iconName,
             'spells'        => $spells,
-            'npcsBySpellId' => $this->getNpcsBySpellId($dungeon, $mappingVersion, $spells),
+            'npcsBySpellId' => $this->getNpcsBySpellId($dungeon, $mappingVersion, $spells, $npcRepository),
         ];
     }
 
@@ -288,29 +267,13 @@ class ClassCompendiumController extends Controller
      * @param  Collection<int, Spell>                $spells
      * @return Collection<int, Collection<int, Npc>>
      */
-    private function getNpcsBySpellId(Dungeon $dungeon, ?MappingVersion $mappingVersion, Collection $spells): Collection
+    private function getNpcsBySpellId(Dungeon $dungeon, ?MappingVersion $mappingVersion, Collection $spells, NpcRepositoryInterface $npcRepository): Collection
     {
         if ($spells->isEmpty()) {
             return collect();
         }
 
-        /** @var Collection<int, Collection<int, Npc>> $npcsBySpellId */
-        $npcsBySpellId = Npc::query()
-            ->join('npc_spells', 'npc_spells.npc_id', '=', 'npcs.id')
-            ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
-            ->join('mapping_versions', 'enemies.mapping_version_id', '=', 'mapping_versions.id')
-            ->where('mapping_versions.dungeon_id', $dungeon->id)
-            ->when($mappingVersion !== null, static fn($q) => $q->where('mapping_versions.id', $mappingVersion->id))
-            ->whereIn('npc_spells.spell_id', $spells->pluck('id'))
-            ->select('npcs.*', 'npc_spells.spell_id')
-            // classification/type/characteristics/npcHealths are what the NPC links' hover tooltips
-            // read (#4096)
-            ->with(['classification', 'type', 'characteristics', 'npcHealths'])
-            ->distinct()
-            ->get()
-            ->groupBy('spell_id');
-
-        return $npcsBySpellId;
+        return $npcRepository->getNpcsBySpellIdForDungeon($dungeon, $mappingVersion, $spells->pluck('id'));
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Repositories\Database\Npc;
 
 use App\Logic\Datatables\ColumnHandler\Npc\NameColumnHandler;
+use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
@@ -198,5 +199,48 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                     ->on('enemies.mapping_version_id', '=', 'mapping_versions.id');
             })
             ->groupBy('npcs.id');
+    }
+
+    public function getNpcsByCharacteristicIdForDungeon(Dungeon $dungeon, ?MappingVersion $mappingVersion, Collection $characteristicIds): Collection
+    {
+        /** @var Collection<int, Collection<int, Npc>> $npcsByCharacteristicId */
+        $npcsByCharacteristicId = Npc::query()
+            ->join('npc_characteristics', 'npc_characteristics.npc_id', '=', 'npcs.id')
+            ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
+            ->join('mapping_versions', 'enemies.mapping_version_id', '=', 'mapping_versions.id')
+            ->where('mapping_versions.dungeon_id', $dungeon->id)
+            ->when($mappingVersion !== null, static fn($q) => $q->where('mapping_versions.id', $mappingVersion->id))
+            ->whereIn('npc_characteristics.characteristic_id', $characteristicIds)
+            ->select('npcs.*', 'npc_characteristics.characteristic_id')
+            // classification/type/characteristics/npcHealths are what the NPC links' hover
+            // tooltips read
+            ->with(['classification', 'type', 'characteristics', 'npcHealths'])
+            ->distinct()
+            ->orderBy('npcs.id')
+            ->get()
+            ->groupBy('characteristic_id');
+
+        return $npcsByCharacteristicId;
+    }
+
+    public function getNpcsBySpellIdForDungeon(Dungeon $dungeon, ?MappingVersion $mappingVersion, Collection $spellIds): Collection
+    {
+        /** @var Collection<int, Collection<int, Npc>> $npcsBySpellId */
+        $npcsBySpellId = Npc::query()
+            ->join('npc_spells', 'npc_spells.npc_id', '=', 'npcs.id')
+            ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
+            ->join('mapping_versions', 'enemies.mapping_version_id', '=', 'mapping_versions.id')
+            ->where('mapping_versions.dungeon_id', $dungeon->id)
+            ->when($mappingVersion !== null, static fn($q) => $q->where('mapping_versions.id', $mappingVersion->id))
+            ->whereIn('npc_spells.spell_id', $spellIds)
+            ->select('npcs.*', 'npc_spells.spell_id')
+            // classification/type/characteristics/npcHealths are what the NPC links' hover tooltips
+            // read
+            ->with(['classification', 'type', 'characteristics', 'npcHealths'])
+            ->distinct()
+            ->get()
+            ->groupBy('spell_id');
+
+        return $npcsBySpellId;
     }
 }
