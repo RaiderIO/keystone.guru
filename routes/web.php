@@ -153,7 +153,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::get('health', new SiteController()->health(...))->name('misc.health');
     Route::get('mapping', new SiteController()->mapping(...))->name('misc.mapping');
     Route::get('affixes', new SiteController()->affixes(...))->name('misc.affixes');
-    Route::get('timetest', new SiteController()->timetest(...))->name('misc.timetest');
     Route::get('embed/explore/{gameVersion}/{dungeon}', new SiteController()->embedExplore(...))->name('misc.embed.explore');
     Route::get('embed/explore/{gameVersion}/{dungeon}/{floorIndex}', new SiteController()->embedExplore(...))->name('misc.embed.explore.floor');
     Route::get('embed/heatmap/{gameVersion}/{dungeon}', new SiteController()->embedHeatmap(...))->name('misc.embed.heatmap');
