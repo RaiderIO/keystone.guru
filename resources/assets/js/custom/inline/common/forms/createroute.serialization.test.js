@@ -98,17 +98,16 @@ describe('createroute.serialization', () => {
     });
 
     it('serializeForm_givenThreeAffixRowsClicked_submitsEveryClickedAffixGroup', () => {
-        // Arrange: an awakened season with 3 affix rows. The seasonalIndex values only label the rows:
-        // the seasonal indices affixes.js reads come from buildInlineOptions(), and it only moves the
-        // seasonal_index preset for an existing route - a new one submits the preset it rendered with.
+        // Arrange: an awakened season with 3 affix rows. affixes.js only moves the seasonal_index preset
+        // for an existing route - a new one submits the preset it rendered with.
         const form    = buildCreateRouteForm({
             gameVersion: 'retail',
             hasTeams: true,
             dungeonIds: [RETAIL_DUNGEON_ALPHA_ID],
             affixGroups: [
-                {id: AFFIX_GROUP_DEFAULT_ID, seasonalIndex: 0},
-                {id: AFFIX_GROUP_ALT_A_ID, seasonalIndex: 0},
-                {id: AFFIX_GROUP_ALT_B_ID, seasonalIndex: 1},
+                {id: AFFIX_GROUP_DEFAULT_ID},
+                {id: AFFIX_GROUP_ALT_A_ID},
+                {id: AFFIX_GROUP_ALT_B_ID},
             ],
             withSeasonalIndexPreset: true,
         });
