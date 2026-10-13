@@ -18,10 +18,9 @@ return [
             'collation'      => 'utf8mb4_unicode_ci',
             'prefix'         => '',
             'prefix_indexes' => true,
-            // this is probably a bad idea, https://stackoverflow.com/questions/43776758/how-can-i-solve-incompatible-with-sql-mode-only-full-group-by-in-laravel-eloquen
-            'strict'  => false,
-            'engine'  => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
+            'strict'         => true,
+            'engine'         => null,
+            'options'        => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
@@ -57,10 +56,9 @@ return [
             'collation'      => 'utf8mb4_unicode_ci',
             'prefix'         => '',
             'prefix_indexes' => true,
-            // this is probably a bad idea, https://stackoverflow.com/questions/43776758/how-can-i-solve-incompatible-with-sql-mode-only-full-group-by-in-laravel-eloquen
-            'strict'  => false,
-            'engine'  => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
+            'strict'         => true,
+            'engine'         => null,
+            'options'        => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
@@ -77,7 +75,7 @@ return [
             'collation'      => 'utf8mb4_unicode_ci',
             'prefix'         => '',
             'prefix_indexes' => true,
-            'strict'         => false,
+            'strict'         => true,
             'engine'         => null,
             'options'        => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
@@ -96,7 +94,7 @@ return [
             'collation'      => 'utf8mb4_unicode_ci',
             'prefix'         => '',
             'prefix_indexes' => true,
-            'strict'         => false,
+            'strict'         => true,
             'engine'         => null,
             'options'        => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
@@ -120,7 +118,7 @@ return [
             'collation'      => 'utf8mb4_unicode_ci',
             'prefix'         => '',
             'prefix_indexes' => true,
-            'strict'         => false,
+            'strict'         => true,
             'engine'         => null,
             'options'        => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
@@ -139,7 +137,7 @@ return [
             'collation'      => 'utf8mb4_unicode_ci',
             'prefix'         => '',
             'prefix_indexes' => true,
-            'strict'         => false,
+            'strict'         => true,
             'engine'         => null,
             'options'        => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),

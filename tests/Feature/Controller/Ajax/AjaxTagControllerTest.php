@@ -225,6 +225,93 @@ final class AjaxTagControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function store_givenANameLongerThanItsColumn_returnsValidationErrorAndCreatesNothing(): void
+    {
+        $author = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $name   = str_repeat('a', 256);
+
+            // Act
+            $response = $this->actingAs($author)->postJson('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'category'      => TagCategory::DUNGEON_ROUTE_PERSONAL,
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['name']);
+            $this->assertDatabaseMissing('tags', ['context_id' => $author->id, 'context_class' => User::class]);
+        } finally {
+            $this->cleanUpTagsOfUsers([$author]);
+            $this->cleanUp(route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
+    public function updateAll_givenANameLongerThanItsColumn_returnsValidationErrorAndKeepsTheTag(): void
+    {
+        $author = null;
+        $route  = null;
+        $tag    = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $tag    = $this->createUserTagFor($author, $route);
+
+            // Act
+            $response = $this->actingAs($author)->putJson(sprintf('/ajax/tag/%d/all', $tag->id), [
+                'name'  => str_repeat('a', 256),
+                'color' => '#ff0000',
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['name']);
+            $this->assertSame($tag->name, $tag->fresh()->name);
+        } finally {
+            $this->cleanUp(tag: $tag, route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
+    public function updateAll_givenAColorLongerThanItsColumn_returnsValidationErrorAndKeepsTheTag(): void
+    {
+        $author = null;
+        $route  = null;
+        $tag    = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $tag    = $this->createUserTagFor($author, $route);
+
+            // Act
+            $response = $this->actingAs($author)->putJson(sprintf('/ajax/tag/%d/all', $tag->id), [
+                'name'  => $tag->name,
+                'color' => str_repeat('a', 256),
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['color']);
+            $this->assertSame($tag->color, $tag->fresh()->color);
+        } finally {
+            $this->cleanUp(tag: $tag, route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
     public function store_givenAnotherUsersContext_returnsForbidden(): void
     {
         $author = null;

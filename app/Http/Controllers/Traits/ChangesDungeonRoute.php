@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Traits;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteChange;
+use App\Models\TeamUser;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -50,11 +51,13 @@ trait ChangesDungeonRoute
 
         // If there are any changes, log them
         if (!empty($changedKeys)) {
+            $teamRole = $user === null ? null : $dungeonRoute->team?->getUserRole($user);
+
             DungeonRouteChange::create([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'user_id'          => $user?->id,
                 'team_id'          => $dungeonRoute->team_id,
-                'team_role'        => $user === null ? null : $dungeonRoute->team?->getUserRole($user),
+                'team_role'        => $teamRole === null ? null : TeamUser::ALL_ROLES[$teamRole],
                 'model_id'         => $beforeModel?->getKey() ?? $afterModel->getKey(),
                 'model_class'      => ($beforeModel ?? $afterModel)::class,
                 'before'           => $beforeModel !== null ? json_encode(array_intersect_key($beforeAttributes, $changedKeys)) : null,

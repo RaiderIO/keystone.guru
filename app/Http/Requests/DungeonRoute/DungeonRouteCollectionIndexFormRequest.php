@@ -108,6 +108,7 @@ class DungeonRouteCollectionIndexFormRequest extends FormRequest
             $user = $this->user();
 
             $ownGameVersionIds = $user?->dungeonRouteCollections()
+                ->reorder()
                 ->whereNotNull('game_version_id')
                 ->distinct()
                 ->pluck('game_version_id')

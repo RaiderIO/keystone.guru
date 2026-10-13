@@ -120,6 +120,48 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
 
     #[Test]
     #[Group('Controller')]
+    public function store_givenAnEmptyColor_returnsAColorErrorAndCreatesNothing(): void
+    {
+        // Arrange
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors()->where('facade', false)->get()->random();
+        $polyline    = array_merge(PolylineFixtures::createPolyline($randomFloor), ['color' => '']);
+
+        // Act
+        $response = $this->post(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $randomFloor->id,
+            'polyline' => $polyline,
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors(['polyline.color']);
+        $this->assertSame(0, Path::query()->where('dungeon_route_id', $this->dungeonRoute->id)->count());
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function store_givenMoreVerticesThanAPolylineHolds_returnsAVerticesErrorAndCreatesNothing(): void
+    {
+        // Arrange
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors()->where('facade', false)->get()->random();
+        $vertices    = array_fill(0, 3000, ['lat' => -123.45, 'lng' => 123.45]);
+        $polyline    = array_merge(PolylineFixtures::createPolyline($randomFloor), ['vertices_json' => json_encode($vertices)]);
+        $this->assertGreaterThan(Polyline::VERTICES_JSON_MAX_LENGTH, strlen($polyline['vertices_json']));
+
+        // Act
+        $response = $this->post(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $randomFloor->id,
+            'polyline' => $polyline,
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors(['polyline.vertices_json']);
+        $this->assertSame(0, Path::query()->where('dungeon_route_id', $this->dungeonRoute->id)->count());
+    }
+
+    #[Test]
+    #[Group('Controller')]
     public function store_givenNewEmptyPath_shouldReturnFormValidationErrors(): void
     {
         // Arrange

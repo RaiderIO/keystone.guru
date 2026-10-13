@@ -58,6 +58,8 @@ class AjaxOverpulledEnemyController extends Controller
                         'kill_zone_id'    => $validated['kill_zone_id'],
                         'npc_id'          => $enemy->npc_id,
                         'mdt_id'          => $enemy->mdt_id,
+                    ], [
+                        'enemy_id' => $enemy->id,
                     ]);
 
                 if (!$overpulledEnemy->save()) {

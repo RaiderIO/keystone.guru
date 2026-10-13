@@ -12,6 +12,7 @@ use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\KillZone\KillZone;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
@@ -213,12 +214,17 @@ class ObjectImporter
     ): void {
         $weight = min(5, max(1, (int)$details[0]));
 
+        $verticesJson = json_encode($vertices);
+        if (!$this->fitsInPolyline($importStringObjects, $verticesJson)) {
+            return;
+        }
+
         $importStringObjects->getArrows()->push([
             'floor_id' => ($dominantFloor ?? $floor)->id,
             'polyline' => [
                 'color'         => (!str_starts_with((string)$details[4], '#') ? '#' : '') . $details[4],
                 'weight'        => $weight,
-                'vertices_json' => json_encode($vertices),
+                'vertices_json' => $verticesJson,
                 'model_class'   => Arrow::class,
             ],
         ]);
@@ -250,6 +256,11 @@ class ObjectImporter
         // Between 1 and 5
         $weight = min(5, max(1, (int)$details[0]));
 
+        $verticesJson = json_encode($vertices);
+        if (!$this->fitsInPolyline($importStringObjects, $verticesJson)) {
+            return;
+        }
+
         $lineOrPathAttribute = [
             'floor_id' => ($dominantFloor ?? $floor)->id,
             'polyline' => [
@@ -257,7 +268,7 @@ class ObjectImporter
                 // MDT decide to suddenly place it here
                 'color'         => (!str_starts_with((string)$details[4], '#') ? '#' : '') . $details[4],
                 'weight'        => $weight,
-                'vertices_json' => json_encode($vertices),
+                'vertices_json' => $verticesJson,
                 // To be set later
                 // 'model_id' => ?,
                 'model_class' => $isFreeDrawn ? Brushline::class : Path::class,
@@ -346,7 +357,7 @@ class ObjectImporter
                 $newAttributes = ['spells' => $killZoneAttribute['spells']];
             } elseif ($assignNotesToPulls && empty($killZoneAttribute['description'])) {
                 // A pull holds one description - any further notes are rendered on the map as usual
-                $newAttributes = ['description' => $details[4]];
+                $newAttributes = ['description' => mb_substr((string)$details[4], 0, KillZone::DESCRIPTION_MAX_LENGTH)];
             }
 
             if ($newAttributes !== null) {
@@ -365,7 +376,7 @@ class ObjectImporter
             'floor_id'           => $latLng->getFloor()->id,
             'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_COMMENT],
             // Bulk-inserted past MapIcon::setCommentAttribute()'s own stripping
-            'comment' => new HtmlSanitizer()->stripAllTags((string)$details[4]),
+            'comment' => mb_substr(new HtmlSanitizer()->stripAllTags((string)$details[4]), 0, MapIcon::COMMENT_MAX_LENGTH),
         ], $latLng->toArray()));
     }
 
@@ -554,5 +565,24 @@ class ObjectImporter
         }
 
         MapIcon::insert($mapIconsAttributes);
+    }
+
+    /**
+     * A line drawn with more points than a polyline can store is left out with a warning, rather than failing the import.
+     */
+    private function fitsInPolyline(ImportStringObjects $importStringObjects, string $verticesJson): bool
+    {
+        if (strlen($verticesJson) <= Polyline::VERTICES_JSON_MAX_LENGTH) {
+            return true;
+        }
+
+        $importStringObjects->getWarnings()->push(
+            new ImportWarning(
+                __('services.mdt.io.import_string.category.lines'),
+                __('services.mdt.io.import_string.line_too_long'),
+            ),
+        );
+
+        return false;
     }
 }

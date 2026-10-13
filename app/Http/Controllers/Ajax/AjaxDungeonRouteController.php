@@ -466,8 +466,8 @@ class AjaxDungeonRouteController extends Controller
 
         $beforeDungeonRoute = clone $dungeonRoute;
 
-        $dungeonRoute->pull_gradient              = $request->get('pull_gradient', '');
-        $dungeonRoute->pull_gradient_apply_always = $request->get('pull_gradient_apply_always', false);
+        $dungeonRoute->pull_gradient              = $request->get('pull_gradient') ?? '';
+        $dungeonRoute->pull_gradient_apply_always = $request->boolean('pull_gradient_apply_always');
 
         // Update or insert it
         if (!$dungeonRoute->save()) {

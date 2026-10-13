@@ -38,7 +38,7 @@ class FetchMissingSpells extends Command
 
         $result = 0;
         foreach ($missingSpellIds as $spellId) {
-            Spell::insert(['id' => $spellId]);
+            Spell::create(['id' => $spellId]);
 
             // $this->call will return 0 if the command was successful, 1 if it failed
             $result = $result || $this->call('wowhead:fetchspelldata', ['--spellId' => $spellId]);

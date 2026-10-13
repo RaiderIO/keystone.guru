@@ -22,11 +22,13 @@ class UserFormRequest extends FormRequest
     {
         return [
             'map_facade_style' => [
-                'nullable',
+                'sometimes',
+                'required',
                 Rule::in(User::MAP_FACADE_STYLE_ALL),
             ],
             'kill_zone_path_weight' => [
-                'nullable',
+                'sometimes',
+                'required',
                 'integer',
                 'between:1,5',
             ],

@@ -216,7 +216,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
             $dungeon        = Dungeon::getUserOrDefaultDungeon();
             $mappingVersion = $dungeon->getCurrentMappingVersion();
-            $mappedNpcIds   = $mappingVersion->enemies()->whereNotNull('npc_id')->distinct()->pluck('npc_id');
+            $mappedNpcIds   = $mappingVersion->enemies()->reorder('npc_id')->whereNotNull('npc_id')->distinct()->pluck('npc_id');
             /** @var Npc $unmappedNpc */
             $unmappedNpc = Npc::query()->whereNotIn('id', $mappedNpcIds)->firstOrFail();
             /** @var Floor $floor */

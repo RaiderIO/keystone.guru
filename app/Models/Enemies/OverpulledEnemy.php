@@ -15,6 +15,7 @@ use Illuminate\Database\Query\JoinClause;
  * @property int         $id
  * @property int         $live_session_id
  * @property int         $kill_zone_id
+ * @property int         $enemy_id
  * @property int         $npc_id
  * @property int         $mdt_id
  * @property LiveSession $livesession
@@ -29,6 +30,7 @@ class OverpulledEnemy extends Model
     protected $fillable = [
         'live_session_id',
         'kill_zone_id',
+        'enemy_id',
         'npc_id',
         'mdt_id',
     ];

@@ -55,6 +55,8 @@ class MapDrawingService implements MapDrawingServiceInterface
         for ($i = 1; $i < count($latLngs); $i++) {
             $latLng             = $latLngs[$i];
             $polyLineAttributes = array_merge($polylineAttributes, [
+                // The path or patrol it belongs to only exists once every polyline is made, see below
+                'model_id'      => -1,
                 'model_class'   => $modelClass,
                 'color'         => pickHexFromHandlers($gradient, $currentWeight += $weightStep),
                 'vertices_json' => json_encode([

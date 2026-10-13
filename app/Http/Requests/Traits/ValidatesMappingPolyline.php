@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Traits;
 
+use App\Models\Polyline;
 use App\Rules\JsonStringCountRule;
 
 trait ValidatesMappingPolyline
@@ -20,6 +21,7 @@ trait ValidatesMappingPolyline
             'polyline.vertices_json'  => [
                 'required',
                 'json',
+                sprintf('max:%d', Polyline::VERTICES_JSON_MAX_LENGTH),
                 new JsonStringCountRule(2),
             ],
         ];

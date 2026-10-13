@@ -22,6 +22,9 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
 {
     use CreatesDungeon;
 
+    /** The largest value the int mapping_version_id column holds: a mapping version that does not exist. */
+    private const int NON_EXISTENT_MAPPING_VERSION_ID = 2147483647;
+
     private CombatLogRouteEnemyFailureServiceInterface $service;
 
     private Dungeon $dungeon;
@@ -338,7 +341,7 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
         try {
             // Arrange — one failure in the selected mapping version, one in another (fake) one
             $created[] = $this->createFailure(['mapping_version_id' => $this->mappingVersion->id, 'lat' => -50.0, 'lng' => 100.0])->id;
-            $created[] = $this->createFailure(['mapping_version_id' => PHP_INT_MAX, 'lat' => -200.0, 'lng' => 300.0])->id;
+            $created[] = $this->createFailure(['mapping_version_id' => self::NON_EXISTENT_MAPPING_VERSION_ID, 'lat' => -200.0, 'lng' => 300.0])->id;
 
             // Act
             $array = $this->service->getEnemyFailureHeatmapData($this->dungeon, $this->mappingVersion, null)
@@ -440,7 +443,7 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             $created[] = $this->createFailure(['npc_id' => 99920])->id;
             $created[] = $this->createFailure(['npc_id' => 99920])->id;
             $created[] = $this->createFailure(['npc_id' => 99921])->id;
-            $created[] = $this->createFailure(['npc_id' => 99921, 'mapping_version_id' => PHP_INT_MAX])->id;
+            $created[] = $this->createFailure(['npc_id' => 99921, 'mapping_version_id' => self::NON_EXISTENT_MAPPING_VERSION_ID])->id;
             $created[] = $this->createFailure(['npc_id' => null])->id;
 
             // Act

@@ -50,6 +50,23 @@ final class AjaxSpellControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function update_givenAnEmptyGameVersion_returnsValidationErrorAndKeepsTheGameVersion(): void
+    {
+        // Arrange
+        $spell = $this->createSpell();
+
+        // Act
+        $response = $this->putJson(sprintf('/ajax/admin/spell/%s', $spell->getRouteKey()), [
+            'game_version_id' => '',
+        ]);
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['game_version_id']);
+        $this->assertSame($spell->game_version_id, Spell::query()->findOrFail($spell->id)->game_version_id);
+    }
+
+    #[Test]
     public function update_givenNonAdmin_returnsForbiddenAndKeepsTheSpell(): void
     {
         // Arrange

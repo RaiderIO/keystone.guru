@@ -58,6 +58,23 @@ final class TeamControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function update_givenADescriptionLongerThanItsColumn_returnsAnErrorAndKeepsTheDescription(): void
+    {
+        // Arrange
+        $description = str_repeat('a', 256);
+
+        // Act
+        $response = $this->patch(route('team.update', $this->team), [
+            'name'        => $this->team->name,
+            'description' => $description,
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors(['description']);
+        $this->assertSame('', $this->team->fresh()->description);
+    }
+
+    #[Test]
     public function getRouteKey_givenTeam_returnsPublicKeySlugFormat(): void
     {
         // Act

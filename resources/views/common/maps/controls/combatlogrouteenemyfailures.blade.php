@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  */
 
 $mappedNpcIds = $mappingVersion->enemies()
+    ->reorder()
     ->whereNotNull('npc_id')
     ->distinct()
     ->pluck('npc_id')

@@ -166,14 +166,15 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
         Carbon                   $end,
         int                      $uiMapId,
     ): array {
+        // The metadata and challenge mode fields defaulted here are still optional in the combat log route request
         return [
             'run_id'             => $correctedCombatLogRoute->metadata->runId,
             'keystone_run_id'    => $correctedCombatLogRoute->metadata->keystoneRunId,
             'logged_run_id'      => $correctedCombatLogRoute->metadata->loggedRunId,
-            'period'             => $correctedCombatLogRoute->metadata->period,
-            'season'             => $correctedCombatLogRoute->metadata->season,
+            'period'             => $correctedCombatLogRoute->metadata->period ?? 0,
+            'season'             => $correctedCombatLogRoute->metadata->season ?? '',
             'region_id'          => $correctedCombatLogRoute->metadata->regionId,
-            'realm_type'         => $correctedCombatLogRoute->metadata->realmType,
+            'realm_type'         => $correctedCombatLogRoute->metadata->realmType ?? '',
             'wow_instance_id'    => $correctedCombatLogRoute->metadata->wowInstanceId,
             'challenge_mode_id'  => $correctedCombatLogRoute->challengeMode->challengeModeId,
             'level'              => $correctedCombatLogRoute->challengeMode->level,
@@ -182,9 +183,9 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
             'start'              => $start,
             'end'                => $end,
             'duration_ms'        => $correctedCombatLogRoute->challengeMode->durationMs,
-            'par_time_ms'        => $correctedCombatLogRoute->challengeMode->parTimeMs,
-            'timer_fraction'     => $correctedCombatLogRoute->challengeMode->timerFraction,
-            'num_deaths'         => $correctedCombatLogRoute->challengeMode->numDeaths,
+            'par_time_ms'        => $correctedCombatLogRoute->challengeMode->parTimeMs ?? 0,
+            'timer_fraction'     => $correctedCombatLogRoute->challengeMode->timerFraction ?? 0,
+            'num_deaths'         => $correctedCombatLogRoute->challengeMode->numDeaths ?? 0,
             'ui_map_id'          => $uiMapId,
             'num_members'        => $correctedCombatLogRoute->roster?->numMembers ?? 0, // @phpstan-ignore nullsafe.neverNull
             'average_item_level' => $correctedCombatLogRoute->roster?->averageItemLevel ?? 0, // @phpstan-ignore nullsafe.neverNull

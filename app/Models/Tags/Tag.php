@@ -66,6 +66,9 @@ class Tag extends Model
     }
 
     /**
+     * Narrows the query to one tag per name, the one with the lowest id, so a name put on several models is listed
+     * once. Apply it after every other constraint: the subquery picking the ids copies the query as it stands.
+     *
      * @param  Builder<Tag> $query
      * @return Builder<Tag>
      */
@@ -76,7 +79,12 @@ class Tag extends Model
             $query = $query->where('tag_category_id', $categoryId);
         }
 
-        return $query->groupBy('name');
+        $firstTagIdPerName = (clone $query)
+            ->toBase()
+            ->selectRaw('MIN(`tags`.`id`)')
+            ->groupBy('tags.name');
+
+        return $query->whereIn('tags.id', $firstTagIdPerName);
     }
 
     public static function saveFromRequest(TagFormRequest $request, Model $context, int $tagCategoryId): Tag

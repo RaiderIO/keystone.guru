@@ -19,15 +19,20 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 trait SavesPolylines
 {
     use ChangesDungeonRoute;
 
+    /** The decimals Leaflet's toGeoJSON() sends a vertex with. */
+    private const int VERTEX_PRECISION = 6;
+
     /**
      * @param  Floor|null                                                                        $facadeFloor The facade floor the vertices were drawn on, if any
      * @param  array{color: string, color_animated: string, weight?: int, vertices_json: string} $data
      * @throws Exception
+     * @throws ValidationException
      */
     private function savePolylineToModel(
         CoordinatesServiceInterface $coordinatesService,
@@ -52,7 +57,10 @@ trait SavesPolylines
                     $changedFloor,
                 );
 
-                $realVertices[] = $latLng->toArray();
+                $realVertices[] = [
+                    'lat' => $latLng->getLat(self::VERTEX_PRECISION),
+                    'lng' => $latLng->getLng(self::VERTEX_PRECISION),
+                ];
                 // Assume the floor of the first vertex in the list
                 if ($changedFloor === null) {
                     $changedFloor = $latLng->getFloor();
@@ -60,6 +68,16 @@ trait SavesPolylines
             }
 
             $data['vertices_json'] = json_encode($realVertices);
+
+            // The submitted vertices were validated against this limit, but their real-floor equivalents can be longer
+            if (strlen($data['vertices_json']) > Polyline::VERTICES_JSON_MAX_LENGTH) {
+                throw ValidationException::withMessages([
+                    'polyline.vertices_json' => __('validation.max.string', [
+                        'attribute' => 'polyline.vertices_json',
+                        'max'       => Polyline::VERTICES_JSON_MAX_LENGTH,
+                    ]),
+                ]);
+            }
         }
 
         $polyline = Polyline::updateOrCreate([

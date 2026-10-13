@@ -24,6 +24,9 @@ final class APICombatLogEnemyResolutionControllerTest extends PublicTestCase
 {
     use ProvidesDungeon;
 
+    /** The largest value the int mapping_version_id column holds: a mapping version that does not exist. */
+    private const int NON_EXISTENT_MAPPING_VERSION_ID = 2147483647;
+
     private Dungeon $dungeon;
 
     private Floor $floor;
@@ -152,7 +155,7 @@ final class APICombatLogEnemyResolutionControllerTest extends PublicTestCase
 
         $matching = $this->createResolution(['npc_id' => 99811]);
         $this->createResolution(['npc_id' => 99812]);
-        $this->createResolution(['npc_id' => 99811, 'mapping_version_id' => PHP_INT_MAX]);
+        $this->createResolution(['npc_id' => 99811, 'mapping_version_id' => self::NON_EXISTENT_MAPPING_VERSION_ID]);
 
         // Act
         $response = $this->getJson(route('api.v1.combatlog.enemy_resolutions.index', [

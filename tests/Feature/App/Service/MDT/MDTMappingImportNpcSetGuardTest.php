@@ -73,6 +73,7 @@ final class MDTMappingImportNpcSetGuardTest extends PublicTestCase
         $dungeon       = $this->getDungeon(DungeonKey::MURDER_ROW);
         $foreignNpcIds = $this->getMappingVersionWithEnemies(DungeonKey::DEN_OF_NALORAKK)
             ->enemies()
+            ->reorder('npc_id')
             ->whereNotNull('npc_id')
             ->distinct()
             ->pluck('npc_id')
@@ -94,6 +95,7 @@ final class MDTMappingImportNpcSetGuardTest extends PublicTestCase
         $dungeon   = $this->getDungeon(DungeonKey::MURDER_ROW);
         $ownNpcIds = $this->getMappingVersionWithEnemies(DungeonKey::MURDER_ROW)
             ->enemies()
+            ->reorder('npc_id')
             ->whereNotNull('npc_id')
             ->distinct()
             ->pluck('npc_id')
@@ -236,6 +238,7 @@ final class MDTMappingImportNpcSetGuardTest extends PublicTestCase
         $currentMappingVersion = $this->getMappingVersionWithEnemies(DungeonKey::MURDER_ROW);
         $foreignNpcIds         = $this->getMappingVersionWithEnemies(DungeonKey::DEN_OF_NALORAKK)
             ->enemies()
+            ->reorder('npc_id')
             ->whereNotNull('npc_id')
             ->distinct()
             ->limit(3)
@@ -324,6 +327,7 @@ final class MDTMappingImportNpcSetGuardTest extends PublicTestCase
         $currentMappingVersion = $this->getMappingVersionWithEnemies(DungeonKey::MURDER_ROW);
 
         $ownNpcIds = $currentMappingVersion->enemies()
+            ->reorder('npc_id')
             ->whereNotNull('npc_id')
             ->distinct()
             ->limit($ownNpcCount)
@@ -332,6 +336,7 @@ final class MDTMappingImportNpcSetGuardTest extends PublicTestCase
 
         $foreignNpcIds = $this->getMappingVersionWithEnemies(DungeonKey::DEN_OF_NALORAKK)
             ->enemies()
+            ->reorder('npc_id')
             ->whereNotNull('npc_id')
             ->distinct()
             ->limit($foreignNpcCount)

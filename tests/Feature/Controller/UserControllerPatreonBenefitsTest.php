@@ -7,7 +7,6 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
-use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -40,7 +39,7 @@ final class UserControllerPatreonBenefitsTest extends PublicTestCase
             'access_token'  => PatreonUserLink::PERMANENT_TOKEN,
             'refresh_token' => PatreonUserLink::PERMANENT_TOKEN,
             'version'       => '0.0.1',
-            'expires_at'    => Carbon::now()->addYears(100),
+            'expires_at'    => PatreonUserLink::PERMANENT_EXPIRES_AT,
         ]);
 
         $user->update(['patreon_user_link_id' => $patreonUserLink->id]);

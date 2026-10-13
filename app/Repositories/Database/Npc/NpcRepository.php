@@ -174,7 +174,7 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
         ])
             ->selectRaw(sprintf(
                 'npcs.*, %s as name, GROUP_CONCAT(DISTINCT %s SEPARATOR ", ") AS dungeon_names, COUNT(enemies.id) as enemy_count',
-                NameColumnHandler::NAME_EXPRESSION,
+                NameColumnHandler::GROUPED_NAME_EXPRESSION,
                 self::ADMIN_LIST_DUNGEON_NAME_EXPRESSION,
             ))
             ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
