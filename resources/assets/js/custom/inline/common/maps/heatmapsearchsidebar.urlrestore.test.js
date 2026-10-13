@@ -478,11 +478,16 @@ describe('CommonMapsHeatmapsearchsidebar - preserving embed params in the URL', 
     });
 
     test('activate_givenNoMythicLevelParams_leavesThemOutOfTheUrl', () => {
-        // Arrange & Act
+        // Arrange
+        const pushState = vi.spyOn(window.history, 'pushState');
+
+        // Act
         activateSidebar(`?type=${COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH}&region=world`);
 
         // Assert - untouched filters stay implicit, so a plain link doesn't grow every default under the sun
-        expect(writtenParams()).toEqual({type: COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH, region: 'world'});
+        expect(pushState).toHaveBeenCalled();
+        const pushedUrl = pushState.mock.calls[pushState.mock.calls.length - 1][2];
+        expect(Object.fromEntries(new URLSearchParams(pushedUrl))).toEqual({type: COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH, region: 'world'});
         expect(writtenParams()).not.toHaveProperty('minMythicLevel');
         expect(writtenParams()).not.toHaveProperty('maxMythicLevel');
     });

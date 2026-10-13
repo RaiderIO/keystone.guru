@@ -215,11 +215,11 @@ describe('CommonMapsCombatlogrouteenemyfailures', () => {
         instance.activate();
         instance._clusters = [cluster({floor_id: 5, hull: []}), cluster({floor_id: 6, hull: [], centroid: {lat: -30, lng: 40, floor_id: 6}})];
         instance._redrawClusters();
-        const floorChanged = stateStub.register.mock.calls.find((call) => call[0] === 'floorid:changed');
+        const floorChangedRegistrations = stateStub.register.mock.calls.filter((call) => call[0] === 'floorid:changed');
         currentFloor = {id: 6};
-        floorChanged[2]();
+        floorChangedRegistrations.forEach((call) => call[2]());
 
-        expect(floorChanged[1]).toBe(instance);
+        expect(floorChangedRegistrations.map((call) => call[1])).toEqual([instance]);
         expect(layerGroupStub.layers.map((layer) => layer.latLngs)).toEqual([[-30, 40]]);
     });
 
