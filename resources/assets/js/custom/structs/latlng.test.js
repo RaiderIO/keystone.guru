@@ -112,4 +112,40 @@ describe('LatLng', () => {
         // Assert
         expect(result).toEqual({lat: -1, lng: 2, floor_id: null});
     });
+
+    test('toArrayWithFloor_givenFloor_returnsItsId', () => {
+        // Arrange
+        let latLng = new LatLng(-1, 2, {id: 12});
+
+        // Act
+        let result = latLng.toArrayWithFloor();
+
+        // Assert
+        expect(result).toEqual({lat: -1, lng: 2, floor_id: 12});
+    });
+
+    test('toArray_givenLatLngWithFloor_returnsOnlyTheCoordinates', () => {
+        // Arrange
+        let latLng = new LatLng(-1, 2, {id: 12});
+
+        // Act
+        let result = latLng.toArray();
+
+        // Assert
+        expect(result).toEqual({lat: -1, lng: 2});
+    });
+
+    test('fromArray_givenCoordinatesAndFloor_returnsLatLngOnThatFloor', () => {
+        // Arrange
+        let floor = {id: 12};
+
+        // Act
+        let result = LatLng.fromArray({lat: -1, lng: 2}, floor);
+
+        // Assert
+        expect(result).toBeInstanceOf(LatLng);
+        expect(result.getLat()).toBe(-1);
+        expect(result.getLng()).toBe(2);
+        expect(result.getFloor()).toBe(floor);
+    });
 });

@@ -153,6 +153,10 @@ describe('decodeHtmlEntity', () => {
     it('decodes HTML entities back to their characters', () => {
         expect(decodeHtmlEntity('a &amp; b &quot;c&quot;')).toBe('a & b "c"');
     });
+
+    it('decodes the apostrophe and equals sign Handlebars escapes', () => {
+        expect(decodeHtmlEntity('it&#x27;s a &#x3D; b')).toBe('it\'s a = b');
+    });
 });
 
 describe('isPolygonClockwise', () => {
@@ -215,6 +219,7 @@ describe('rotateLatLng', () => {
     it('returns the point unchanged for a zero degree rotation', () => {
         const latLng = {lat: 3, lng: 5};
         expect(rotateLatLng({lat: 0, lng: 0}, latLng, 0)).toBe(latLng);
+        expect(latLng).toEqual({lat: 3, lng: 5});
     });
 
     it('returns the center itself when the point equals the center', () => {
@@ -315,6 +320,11 @@ describe('getQueryParams', () => {
         expect(getQueryParams()).toEqual({'na me': 'he&llo'});
     });
 
+    it('decodes a plus sign as a space', () => {
+        window.history.replaceState({}, '', '/?name=hello+world');
+        expect(getQueryParams()).toEqual({name: 'hello world'});
+    });
+
     it('returns an empty object when there is no query string', () => {
         window.history.replaceState({}, '', '/');
         expect(getQueryParams()).toEqual({});
@@ -326,6 +336,11 @@ describe('isElementFullyVisible', () => {
 
     it('returns true when the element is fully within the viewport', () => {
         let element = makeElement({top: 10, left: 10, bottom: 100, right: 100});
+        expect(isElementFullyVisible(element)).toBe(true);
+    });
+
+    it('returns true when the element exactly fills the viewport', () => {
+        let element = makeElement({top: 0, left: 0, bottom: window.innerHeight, right: window.innerWidth});
         expect(isElementFullyVisible(element)).toBe(true);
     });
 
@@ -509,6 +524,16 @@ describe('getMapObjectGroup', () => {
 
         // Act & Assert - a new map object group must come with an accessor of its own
         expect(covered.slice().sort()).toEqual(MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_NAMES.slice().sort());
+    });
+
+    it('getKillZones_givenRegisteredGroup_returnsTheKillZoneGroup', () => {
+        // Arrange
+        let killZoneMapObjectGroup = {name: 'killzone'};
+        let getByName = stubMapWithGroup(killZoneMapObjectGroup);
+
+        // Act & Assert
+        expect(getKillZones()).toBe(killZoneMapObjectGroup);
+        expect(getByName).toHaveBeenCalledWith(MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_KILLZONE);
     });
 
     it('getKillZones_givenNoStateManager_returnsNull', () => {

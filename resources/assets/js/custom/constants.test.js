@@ -73,4 +73,56 @@ describe('polylineDefaultColor', () => {
         global.randomColor = () => '#123456';
         expect(polylineDefaultColor()).toBe('#123456');
     });
+
+    it('falls back to a random color when no cookie is set', () => {
+        global.Cookies = {get: () => null};
+        global.randomColor = () => '#123456';
+        expect(polylineDefaultColor()).toBe('#123456');
+    });
+});
+
+describe('c.map.killzone.polygonOptions.color', () => {
+    const {isColorDark, hex2name} = require('./colorutil');
+
+    /**
+     * @param {string[]} colors The colors randomColor() hands out, in order.
+     */
+    function stubRandomColors(colors) {
+        global.randomColor = vi.fn(() => colors.shift());
+    }
+
+    beforeEach(() => {
+        global.isColorDark = isColorDark;
+        global.hex2name = hex2name;
+    });
+
+    afterEach(() => {
+        delete global.randomColor;
+        delete global.isColorDark;
+        delete global.hex2name;
+    });
+
+    it('returns a light color after a dark pull, skipping orange', () => {
+        // Arrange
+        stubRandomColors(['#101010', '#ffa500', '#ffffff']);
+
+        // Act
+        const color = c.map.killzone.polygonOptions.color('#000000');
+
+        // Assert
+        expect(color).toBe('#ffffff');
+        expect(global.randomColor).toHaveBeenCalledTimes(3);
+    });
+
+    it('returns a dark color for the first pull, skipping brown', () => {
+        // Arrange
+        stubRandomColors(['#ffffff', '#8b4513', '#000080']);
+
+        // Act
+        const color = c.map.killzone.polygonOptions.color(null);
+
+        // Assert
+        expect(color).toBe('#000080');
+        expect(global.randomColor).toHaveBeenCalledTimes(3);
+    });
 });

@@ -37,6 +37,7 @@ test('template_givenUpgradeDraft_padsDiffButtonAwayFromNotice', () => {
     expect($diffButtonColumn.hasClass('col-auto')).toBe(true);
     expect($diffButtonColumn.hasClass('ps-2')).toBe(true);
     expect($diffButtonColumn.prev().hasClass('col')).toBe(true);
+    expect($diffButtonColumn.prev().find('a')).toHaveLength(0);
 });
 
 test('template_givenUpgradeOfUrl_stillPadsDiffButtonAwayFromNoticeLink', () => {

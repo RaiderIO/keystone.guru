@@ -16,6 +16,29 @@ describe('randomColor', () => {
     it('returns a six-digit hex color string', () => {
         expect(randomColor()).toMatch(/^#[0-9a-f]{6}$/);
     });
+
+    it('builds each component from its own random draw', () => {
+        // Arrange
+        const draws = [0, 0.5, 0.999];
+        vi.spyOn(Math, 'random').mockImplementation(() => draws.shift());
+
+        // Act
+        const result = randomColor();
+
+        // Assert
+        expect(result).toBe('#0080ff');
+    });
+
+    it('pads a single-digit component with a leading zero', () => {
+        // Arrange
+        vi.spyOn(Math, 'random').mockReturnValue(0.01);
+
+        // Act
+        const result = randomColor();
+
+        // Assert
+        expect(result).toBe('#020202');
+    });
 });
 
 describe('hexToRgb', () => {
@@ -55,6 +78,12 @@ describe('getLuminance', () => {
     it('defaults to black for an empty string', () => {
         expect(getLuminance('')).toBeCloseTo(1, 5);
     });
+
+    it('weighs the red, green and blue components by their perceived brightness', () => {
+        expect(getLuminance('#ff0000')).toBeCloseTo(1 - 0.299, 5);
+        expect(getLuminance('#00ff00')).toBeCloseTo(1 - 0.587, 5);
+        expect(getLuminance('#0000ff')).toBeCloseTo(1 - 0.114, 5);
+    });
 });
 
 describe('isColorDark', () => {
@@ -64,6 +93,11 @@ describe('isColorDark', () => {
 
     it('returns false for white', () => {
         expect(isColorDark('#ffffff')).toBe(false);
+    });
+
+    it('splits the greys right at half luminance', () => {
+        expect(isColorDark('#7f7f7f')).toBe(true);
+        expect(isColorDark('#808080')).toBe(false);
     });
 });
 
@@ -172,6 +206,12 @@ describe('pickHexFromHandlers', () => {
         const handlers = [[0, '#ff0000'], [50, '#00ff00'], [100, '#0000ff']];
         expect(pickHexFromHandlers(handlers, 25)).toBe('#808000');
         expect(pickHexFromHandlers(handlers, 75)).toBe('#008080');
+    });
+
+    it('returns a lowercase color for an uppercase stop', () => {
+        const handlers = [[0, '#FF0000'], [100, '#0000BB']];
+        expect(pickHexFromHandlers(handlers, 0)).toBe('#ff0000');
+        expect(pickHexFromHandlers(handlers, 100)).toBe('#0000bb');
     });
 
     it('returns the exact stop color when the weight lands on a handler', () => {
