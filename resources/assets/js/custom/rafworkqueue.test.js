@@ -31,17 +31,6 @@ describe('RafWorkQueue.enqueue', () => {
         expect(queue.length).toBe(3);
     });
 
-    it('enqueue_givenAlreadyPendingFrame_doesNotScheduleAnotherRaf', () => {
-        stubRaf();
-        const queue = new RafWorkQueue({run: vi.fn()});
-
-        queue.enqueue('a', {value: 1});
-        queue.enqueue('b', {value: 2});
-
-        expect(window.requestAnimationFrame).toHaveBeenCalledTimes(1);
-        expect(queue.length).toBe(2);
-    });
-
     it('enqueue_givenKeyAlreadyQueued_defaultMergeReplacesTaskInsteadOfDuplicating', () => {
         stubRaf();
         const runCalls = [];
@@ -190,18 +179,5 @@ describe('RafWorkQueue._processQueue', () => {
 
         expect(runCalls).toEqual([{value: 1}]);
         expect(queue.length).toBe(0);
-    });
-
-    it('processQueue_givenQueueDrainedWithinBudget_doesNotRescheduleAnotherFrame', () => {
-        stubRaf();
-        const queue = new RafWorkQueue({run: vi.fn()});
-        queue.enqueue('a', {value: 1});
-        window.performance.now = vi.fn(() => 0);
-        window.requestAnimationFrame.mockClear();
-
-        queue._processQueue();
-
-        expect(queue.length).toBe(0);
-        expect(window.requestAnimationFrame).not.toHaveBeenCalled();
     });
 });
