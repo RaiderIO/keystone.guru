@@ -4,7 +4,9 @@ namespace Tests\Feature\Controller\Dungeon;
 
 use App\Models\Dungeon;
 use App\Models\DungeonDifficulty;
+use App\Models\Expansion;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -218,6 +220,48 @@ final class DungeonControllerTest extends PublicTestCase
         } finally {
             $this->restoreDungeon($dungeon, $originalAttributes, $originalDifficulties);
         }
+    }
+
+    #[Test]
+    public function get_givenAdmin_listsEverySeededDungeon(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::query()->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.dungeons'));
+
+        // Assert
+        $response->assertOk();
+        $models = $response->viewData('models');
+        $this->assertCount(Dungeon::query()->count(), $models);
+        $this->assertTrue($models->contains('id', $dungeon->id));
+        $this->assertTrue($models->first()->relationLoaded('mappingVersions'));
+    }
+
+    #[Test]
+    public function edit_givenDungeon_passesExpansionsToView(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::query()->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.dungeon.edit', $dungeon));
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame(Expansion::query()->count(), $response->viewData('expansions')->count());
+    }
+
+    #[Test]
+    public function new_givenAdmin_rendersPage(): void
+    {
+        // Act
+        $response = $this->get(route('admin.dungeon.new'));
+
+        // Assert
+        $response->assertOk();
+        $this->assertInstanceOf(Collection::class, $response->viewData('availableKeysSelect'));
     }
 
     /**

@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\DungeonFormRequest;
 use App\Models\Dungeon;
-use App\Models\Expansion;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\ExpansionRepositoryInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -25,14 +26,17 @@ class DungeonController extends Controller
      *
      * @throws Exception
      */
-    public function store(DungeonFormRequest $request, ?Dungeon $dungeon = null)
-    {
+    public function store(
+        DungeonFormRequest           $request,
+        DungeonRepositoryInterface   $dungeonRepository,
+        ExpansionRepositoryInterface $expansionRepository,
+        ?Dungeon                     $dungeon = null,
+    ) {
         $validated = $request->validated();
 
-        $validated['expansion_id'] = Expansion::where(
-            'shortname',
+        $validated['expansion_id'] = $expansionRepository->getByShortnameOrFail(
             Dungeon::findExpansionByKey($validated['key']),
-        )->firstOrFail()->id;
+        )->id;
         $validated['active'] ??= 0;
         $validated['raid'] ??= 0;
         $validated['heatmap_enabled'] ??= 0;
@@ -43,7 +47,7 @@ class DungeonController extends Controller
 
         $beforeDungeon = null;
         if ($dungeon === null) {
-            $dungeon    = Dungeon::create($validated);
+            $dungeon    = $dungeonRepository->create($validated);
             $saveResult = true;
         } else {
             $beforeDungeon = clone $dungeon;
@@ -64,9 +68,9 @@ class DungeonController extends Controller
     /**
      * @return View
      */
-    public function create(): View
+    public function create(DungeonRepositoryInterface $dungeonRepository): View
     {
-        $dungeons            = Dungeon::all()->keyBy('key');
+        $dungeons            = $dungeonRepository->all()->keyBy('key');
         $availableKeysSelect = collect();
         foreach (Dungeon::allKeysByExpansionKey() as $expansion => $dungeonKeys) {
             $availableKeysForExpansion = collect();
@@ -89,10 +93,13 @@ class DungeonController extends Controller
     /**
      * @return View
      */
-    public function edit(Request $request, Dungeon $dungeon): View
-    {
+    public function edit(
+        Request                      $request,
+        Dungeon                      $dungeon,
+        ExpansionRepositoryInterface $expansionRepository,
+    ): View {
         return view('admin.dungeon.edit', [
-            'expansions' => Expansion::all()->pluck('name', 'id'),
+            'expansions' => $expansionRepository->all()->pluck('name', 'id'),
             'dungeon'    => $dungeon,
         ]);
     }
@@ -102,25 +109,32 @@ class DungeonController extends Controller
      *
      * @throws Exception
      */
-    public function update(DungeonFormRequest $request, Dungeon $dungeon)
-    {
+    public function update(
+        DungeonFormRequest           $request,
+        Dungeon                      $dungeon,
+        DungeonRepositoryInterface   $dungeonRepository,
+        ExpansionRepositoryInterface $expansionRepository,
+    ) {
         // Store it and show the edit page again
-        $dungeon = $this->store($request, $dungeon);
+        $dungeon = $this->store($request, $dungeonRepository, $expansionRepository, $dungeon);
 
         // Message to the user
         Session::flash('status', __('controller.dungeon.flash.dungeon_updated'));
 
         // Display the edit page
-        return $this->edit($request, $dungeon);
+        return $this->edit($request, $dungeon, $expansionRepository);
     }
 
     /**
      * @throws Exception
      */
-    public function savenew(DungeonFormRequest $request): RedirectResponse
-    {
+    public function savenew(
+        DungeonFormRequest           $request,
+        DungeonRepositoryInterface   $dungeonRepository,
+        ExpansionRepositoryInterface $expansionRepository,
+    ): RedirectResponse {
         // Store it and show the edit page
-        $dungeon = $this->store($request);
+        $dungeon = $this->store($request, $dungeonRepository, $expansionRepository);
 
         // Message to the user
         Session::flash('status', __('controller.dungeon.flash.dungeon_created'));
@@ -133,15 +147,10 @@ class DungeonController extends Controller
      *
      * @return View
      */
-    public function get(): View
+    public function get(DungeonRepositoryInterface $dungeonRepository): View
     {
         return view('admin.dungeon.list', [
-            'models' => Dungeon::with(['mappingVersions'])
-                ->select('dungeons.*')
-                ->join('expansions', 'expansions.id', 'dungeons.expansion_id')
-                ->orderByDesc('expansions.released_at')
-                ->orderBy('dungeons.name')
-                ->get(),
+            'models' => $dungeonRepository->getAllWithMappingVersionsForAdminList(),
         ]);
     }
 

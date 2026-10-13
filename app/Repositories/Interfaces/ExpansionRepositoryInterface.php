@@ -19,4 +19,5 @@ use Illuminate\Support\Collection;
  */
 interface ExpansionRepositoryInterface extends BaseRepositoryInterface
 {
+    public function getByShortnameOrFail(string $shortname): Expansion;
 }
