@@ -636,7 +636,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             ->first() ?? $this->seasonService->getMostRecentSeasonForDungeon($dungeonRoute->dungeon);
 
         /** @var GameServerRegion $region */
-        $region = GameServerRegion::where('short', self::METADATA_PLACEHOLDER_REGION)->firstOrFail();
+        $region = GameServerRegion::where('key', self::METADATA_PLACEHOLDER_REGION)->firstOrFail();
 
         return new CombatLogRouteMetadataRequestDto(
             Uuid::uuid4()->toString(),

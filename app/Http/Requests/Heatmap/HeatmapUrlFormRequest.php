@@ -38,7 +38,7 @@ class HeatmapUrlFormRequest extends DungeonRouteBaseUrlFormRequest
         return array_merge(parent::rules(), [
             'type'            => ['nullable', Rule::in(CombatLogEventEventType::cases()), ],
             'dataType'        => ['nullable', Rule::in(CombatLogEventDataType::cases()), ],
-            'region'          => ['nullable', Rule::exists(GameServerRegion::class, 'short'), ],
+            'region'          => ['nullable', Rule::exists(GameServerRegion::class, 'key'), ],
             'minMythicLevel'  => ['nullable', 'integer', ],
             'maxMythicLevel'  => ['nullable', 'integer', ],
             'minItemLevel'    => ['nullable', 'integer', ],

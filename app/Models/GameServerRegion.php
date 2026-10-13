@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int    $id
+ * @property string $key
  * @property string $short
  * @property string $name
  * @property Carbon $epoch_start
@@ -77,6 +78,7 @@ class GameServerRegion extends Model
     ];
 
     protected $fillable = [
+        'key',
         'short',
         'name',
         'epoch_start',
@@ -116,8 +118,8 @@ class GameServerRegion extends Model
         $cacheService = App::make(CacheServiceInterface::class);
 
         return $cacheService->remember(
-            'default_region',
-            static fn() => GameServerRegion::where('short', self::DEFAULT_REGION)->first(),
+            'default_game_server_region',
+            static fn() => GameServerRegion::where('key', self::DEFAULT_REGION)->first(),
             config('keystoneguru.cache.default_game_region.ttl'),
         );
     }
@@ -143,7 +145,7 @@ class GameServerRegion extends Model
      */
     public function getRegionEpochByDate(Carbon $dateTime): ?Carbon
     {
-        if ($this->short === self::EUROPE && $dateTime >= Carbon::parse(self::EU_EPOCH_CHANGE_STARTED_AT_DATE)) {
+        if ($this->key === self::EUROPE && $dateTime >= Carbon::parse(self::EU_EPOCH_CHANGE_STARTED_AT_DATE)) {
             return Carbon::parse(self::EU_EPOCH_CHANGE_DATE);
         }
 
