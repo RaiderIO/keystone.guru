@@ -248,6 +248,7 @@ describe('PickerDungeonRoute', () => {
         const pullGraph = dungeonRoute({pull_forces: pullForces}).getPullGraph();
 
         // Assert
+        expect(pullGraph).not.toBeNull();
         expect(pullGraph.bars).toHaveLength(1);
         expect(pullGraph.title).toBe('31 pulls');
     });

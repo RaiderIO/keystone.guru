@@ -311,11 +311,15 @@ describe('CommonDungeonrouteSimulate settings', () => {
         expect($('#simulate_hp_percent').val()).toBe('60');
     });
 
-    test('_loadSettings_givenNoRememberedSettings_keepsTheDefaults', () => {
+    test('_loadSettings_givenNoRememberedSettings_activatesWithoutThrowingAndKeepsTheDefaults', () => {
+        // Arrange - js-cookie answers undefined for a cookie that was never set
+        expect(Cookies.get('simulate_modal_settings')).toBeUndefined();
+
         // Act
-        activateSimulate();
+        const act = () => activateSimulate();
 
         // Assert
+        expect(act).not.toThrow();
         expect($('#simulate_key_level').val()).toBe('10');
         expect($('#simulate_use_mounts').is(':checked')).toBe(false);
     });
