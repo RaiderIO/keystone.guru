@@ -133,7 +133,6 @@ $.fn.rangeSlider = function (options) {
         }
 
         const isDouble = settings.type === 'double';
-        const isInverse = (settings.extra_classes || '').split(/\s+/).includes('inverse');
         const formatter = formatterForStep(settings.step);
 
         // When the caller doesn't pass from/to at all, fall back to the input's
@@ -163,7 +162,7 @@ $.fn.rangeSlider = function (options) {
             start: isDouble
                 ? [initialFrom ?? settings.min, initialTo ?? settings.max]
                 : [initialFrom ?? settings.min],
-            connect: isDouble ? true : (isInverse ? 'upper' : 'lower'),
+            connect: isDouble ? true : 'lower',
             range: {min: settings.min, max: settings.max},
             step: settings.step,
             format: formatter,

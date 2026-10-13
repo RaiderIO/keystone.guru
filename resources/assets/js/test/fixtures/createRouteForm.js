@@ -355,7 +355,6 @@ function buildInlineOptions({
             teemingSelector: '#teeming',
             modal: false,
             defaultSelected: defaultSelectedAffixes,
-            allExpansions: {[RETAIL_EXPANSION_SHORTNAME]: RETAIL_EXPANSION_ID, [CLASSIC_EXPANSION_SHORTNAME]: CLASSIC_EXPANSION_ID},
             allAffixGroups: affixGroups.map((affixGroup) => ({...affixGroup})),
             dungeonExpansions: DUNGEON_EXPANSIONS,
             currentAffixes: {[RETAIL_EXPANSION_SHORTNAME]: null},

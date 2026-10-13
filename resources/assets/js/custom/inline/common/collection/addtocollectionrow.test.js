@@ -160,6 +160,17 @@ describe('AddToCollectionRow', () => {
         expect(collection.getBlockedText()).toBe('Full');
     });
 
+    it('getBlockedReason_givenTheServerSaysFullWhileTheCountsHaveRoom_keepsTheServersReason', () => {
+        // Arrange
+        let collection = row({route_count: 3, blocked_reason: 'full'});
+
+        // Act
+        let reason = collection.getBlockedReason();
+
+        // Assert
+        expect(reason).toBe('full');
+    });
+
     it('getBlockedReason_givenAnotherSeasonAndAFullCollection_keepsTheServersReason', () => {
         // Arrange
         let collection = row({route_count: 24, blocked_reason: 'season'});

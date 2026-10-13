@@ -326,12 +326,6 @@ class HeatPlugin extends MapPlugin {
         this._applyLatLngsForFloor(getState().getCurrentFloor().id);
     }
 
-    clear() {
-        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
-
-        this.setLatLngs([]);
-    }
-
     /**
      * Weights that are a distance rather than a count need HEAT_COMBINE_MODE_MAX: the renderer folds every point
      * that lands in the same screen space bucket into one, and adding two distances up produces a value that is

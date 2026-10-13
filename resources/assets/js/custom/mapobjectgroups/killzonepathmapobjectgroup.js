@@ -196,7 +196,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         let killZoneDeletedFn = function (event) {
             self.refresh(event.data.json.killzone_paths !== undefined ? event.data.json.killzone_paths : null);
         }
-1
+
         killZoneMapObjectGroup.register('save:success', this, killZoneChangedFn);
         killZoneMapObjectGroup.register('delete:success', this, killZoneDeletedFn);
 

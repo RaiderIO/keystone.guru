@@ -250,9 +250,6 @@ class DungeonrouteTable extends InlineCode {
 
             (new ThumbnailRefresh(`.dungeonroute-refresh-thumbnails`)).refreshHandlers();
 
-            let $publishBtns = $('.dungeonroute-publish');
-            $publishBtns.unbind('click').bind('click', self._publishDungeonRouteClicked);
-
             let $publishedStateBtns = $('.dungeonroute-publishedstate');
             $publishedStateBtns.unbind('click').bind('click', function (clickEvent) {
                 self._changePublishState($(clickEvent.target).data('publickey'), $(clickEvent.target).data('publishedstate'));

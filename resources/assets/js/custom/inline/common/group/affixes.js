@@ -90,24 +90,8 @@ class CommonGroupAffixes extends InlineCode {
                 // Show the affixes for the season that was selected
                 $affixListRows.filter(`.season.season-${seasonForSelectedDungeon.id}`).show();
             }
-                // If the expansion changed we need to change the default selection, OR if we initialize, that means we need to trigger the
-            // 'show affix_groups' jquery code
-            else if (initialize || (this.currentSelectionExpansionKey !== expansionKeyOfDungeonAtRelease && !this.hasDungeonRoute)) {
-                // Don't override the default selection at the start
-                if (!initialize) {
-                    let currentAffix = this.options.currentAffixes[this.currentSelectionExpansionKey];
-                    if (currentAffix !== null) {
-                        this.currentSelection = [currentAffix.id];
-                    } else {
-                        let firstAffixGroupForExpansion = this._getFirstAffixGroupForExpansion(this.currentSelectionExpansionKey);
-                        if (firstAffixGroupForExpansion !== null) {
-                            this.currentSelection = [firstAffixGroupForExpansion.id];
-                        } else {
-                            this.currentSelection = [];
-                        }
-                    }
-                }
-
+            // When initializing, trigger the 'show affix_groups' jquery code
+            else if (initialize) {
                 // Show the affixes for the expansion that was selected
                 $affixListRows.filter(`.${expansionKeyOfDungeonAtRelease}:not(.season)`).show();
             }
@@ -221,38 +205,6 @@ class CommonGroupAffixes extends InlineCode {
             if (this.options.allAffixGroups[i].id === id) {
                 result = this.options.allAffixGroups[i];
                 break;
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     *
-     * @param {Number} expansionKey
-     * @returns {String|null}
-     * @private
-     */
-    _getFirstAffixGroupForExpansion(expansionKey) {
-        let result = null;
-        let expansionId = null;
-
-        for (let key in this.options.allExpansions) {
-            if (this.options.allExpansions.hasOwnProperty(key) && key === expansionKey) {
-                expansionId = this.options.allExpansions[key];
-                break;
-            }
-        }
-
-        console.assert(expansionId !== null, `ExpansionId must be found! Cannot find for ${expansionKey}`);
-
-        for (let index in this.options.allAffixGroups) {
-            if (this.options.allAffixGroups.hasOwnProperty(index)) {
-                let affixGroupCandidate = this.options.allAffixGroups[index];
-                if (affixGroupCandidate.expansion_id === expansionId) {
-                    result = affixGroupCandidate;
-                    break;
-                }
             }
         }
 

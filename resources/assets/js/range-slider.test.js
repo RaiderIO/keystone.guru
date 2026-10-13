@@ -125,6 +125,14 @@ describe('$.fn.rangeSlider (#3596)', () => {
         expect($(input).next('.range-slider').hasClass('inverse')).toBe(true);
     });
 
+    test('rangeSlider_givenSingleTypeWithAnInverseExtraClass_stillConnectsTheBarOnTheLowerSide', () => {
+        const input = createInput();
+
+        $(input).rangeSlider({type: 'single', min: 0, max: 10, from: 5, extra_classes: 'inverse'});
+
+        expect($(input).data('rangeSlider').noUiSlider.options.connect).toBe('lower');
+    });
+
     test('rangeSlider_givenRealUserInteraction_firesOnFinishAndNativeChange', () => {
         const input = createInput();
         const onFinish = vi.fn();
@@ -278,8 +286,6 @@ describe('$.fn.rangeSlider (#3596)', () => {
 
     test.each([
         ['', 'lower'],
-        ['inverse', 'upper'],
-        ['inverse compact', 'upper'],
     ])('rangeSlider_givenSingleTypeWithExtraClasses%j_connectsTheBarOn%sSide', (extraClasses, connect) => {
         const input = createInput();
 

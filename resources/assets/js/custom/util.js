@@ -181,25 +181,6 @@ function getHandlebarsDefaultVariables() {
 }
 
 /**
- * Hacked this myself to suit my needs.
- * @param str
- * @returns {*}
- */
-function decodeHtmlEntity(str) {
-    return str.replace(/&#x27;/g, '\'').replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&#x3D;/g, '=');
-}
-
-/**
- *
- * @param key {string}
- * @returns {string}
- */
-function toSnakeCase(key) {
-    let result = key.replace(/([A-Z])/g, " $1");
-    return result.split(' ').join('_').toLowerCase().substring(1);
-}
-
-/**
  * https://stackoverflow.com/a/55292366/771270
  * @param str
  * @param ch
@@ -688,12 +669,10 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         convertToSlug,
         slugify,
-        toSnakeCase,
         trimEnd,
         getFormattedPercentage,
         abbreviateNumber,
         isNumeric,
-        decodeHtmlEntity,
         isPolygonClockwise,
         getDistance,
         getDistanceSquared,
