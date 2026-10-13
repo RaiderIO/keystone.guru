@@ -50,7 +50,13 @@ function makeSwapHarness() {
         const originalBootstrap     = globalThis.bootstrap;
         const originalQuerySelector = document.querySelector.bind(document);
 
-        const $stub = () => $fromModal;
+        // Only the from-modal selector resolves to the recording collection, so hiding (or
+        // subscribing on) any other element shows up as a missing call
+        const $stub = (selector) => {
+            calls.push(`$:${selector}`);
+
+            return selector === OPTIONS.fromModal ? $fromModal : {0: `${selector} element`, one: () => {}};
+        };
         $stub.fn    = originalJQuery.fn;
 
         globalThis.$         = $stub;
@@ -113,7 +119,7 @@ describe('CommonFormsModalswap._swap', () => {
         swap();
 
         // Assert
-        expect(calls).toEqual(['one:hidden.bs.modal', 'hide:#login_modal element']);
+        expect(calls).toEqual(['$:#login_modal', 'one:hidden.bs.modal', 'hide:#login_modal element']);
     });
 
     it.each([
@@ -154,6 +160,45 @@ describe('CommonFormsModalswap._swap', () => {
         fireHidden();
 
         // Assert
-        expect(calls).toEqual(['one:hidden.bs.modal', 'hide:#login_modal element', 'show:#register_modal']);
+        expect(calls).toEqual(['$:#login_modal', 'one:hidden.bs.modal', 'hide:#login_modal element', 'show:#register_modal']);
+    });
+});
+
+describe('CommonFormsModalswap.activate', () => {
+    const jQuery = require('jquery');
+    let previousJquery;
+
+    beforeEach(() => {
+        previousJquery = globalThis.$;
+        globalThis.$   = jQuery;
+
+        document.body.innerHTML = `
+            <div id="login_modal">
+                <a id="modal-login_register_link" href="/register">Register</a>
+            </div>
+            <div id="register_modal"></div>`;
+    });
+
+    afterEach(() => {
+        globalThis.$            = previousJquery;
+        document.body.innerHTML = '';
+    });
+
+    it('activate_givenAClickOnTheCrossLink_swapsOnceNoMatterHowOftenActivated', () => {
+        // Arrange
+        const modalswap = new CommonFormsModalswap('test-id', 'common/forms/modalswap', OPTIONS);
+        const swapped   = [];
+        vi.spyOn(modalswap, '_swap').mockImplementation((event) => {
+            event.preventDefault();
+            swapped.push(event.currentTarget.id);
+        });
+        modalswap.activate();
+        modalswap.activate();
+
+        // Act
+        document.querySelector('#modal-login_register_link').click();
+
+        // Assert
+        expect(swapped).toEqual(['modal-login_register_link']);
     });
 });

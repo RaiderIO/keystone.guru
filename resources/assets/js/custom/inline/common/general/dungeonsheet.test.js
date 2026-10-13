@@ -246,6 +246,16 @@ describe('DungeonSheet', () => {
         expect(hiddenOffcanvases).toEqual([]);
     });
 
+    it('breakpoint_givenTheViewportGrowsToDesktopBeforeTheSheetWasEverOpened_doesNothing', () => {
+        // Arrange - Bootstrap has no instance for an offcanvas that was never shown
+        makeSheet();
+        globalThis.bootstrap.Offcanvas.getInstance = () => null;
+
+        // Act & Assert
+        expect(() => crossBreakpoint(true)).not.toThrow();
+        expect(hiddenOffcanvases).toEqual([]);
+    });
+
     /**
      * @param {string} id
      * @param {MouseEventInit} init
@@ -421,5 +431,16 @@ describe('DungeonSheet', () => {
 
         // Assert
         expect(sheet.body.scrollTop).toBe(800 - 100 - (400 - 44) / 2);
+    });
+
+    it('show_givenNoSelectedDungeon_leavesTheListScrolledAsItIs', () => {
+        // Arrange
+        const sheet = makeSheet();
+        document.getElementById('dm').removeAttribute('aria-current');
+        sheet.body.scrollTop = 120;
+
+        // Act & Assert
+        expect(() => sheet._onShow()).not.toThrow();
+        expect(sheet.body.scrollTop).toBe(120);
     });
 });

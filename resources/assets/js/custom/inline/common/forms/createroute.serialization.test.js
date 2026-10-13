@@ -97,8 +97,10 @@ describe('createroute.serialization', () => {
         }));
     });
 
-    it('serializeForm_givenThreeAffixRowsClicked_seasonalIndexFollowsMajoritySelection', () => {
-        // Arrange: an awakened season with 3 affix rows (two share seasonal_index 0, one is index 1).
+    it('serializeForm_givenThreeAffixRowsClicked_submitsEveryClickedAffixGroup', () => {
+        // Arrange: an awakened season with 3 affix rows. The seasonalIndex values only label the rows:
+        // the seasonal indices affixes.js reads come from buildInlineOptions(), and it only moves the
+        // seasonal_index preset for an existing route - a new one submits the preset it rendered with.
         const form    = buildCreateRouteForm({
             gameVersion: 'retail',
             hasTeams: true,
