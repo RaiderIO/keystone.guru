@@ -312,6 +312,76 @@ final class AjaxTagControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function store_givenTheContextAlreadyUsesTheName_createsTheTagWithTheSameColor(): void
+    {
+        $author      = null;
+        $route       = null;
+        $otherRoute  = null;
+        $otherAuthor = null;
+
+        try {
+            // Arrange - the same name under another user's context must not lend its colour
+            $author      = $this->createUserWithUserRole();
+            $otherAuthor = $this->createUserWithUserRole();
+            $route       = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $otherRoute  = DungeonRoute::factory()->create(['author_id' => $otherAuthor->id]);
+            $name        = sprintf('test-tag-%s', fake()->uuid());
+
+            $this->createUserTagFor($otherAuthor, $otherRoute, $name)->update(['color' => '#aaaaaa']);
+            $this->createUserTagFor($author, null, $name)->update(['color' => '#123456']);
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'category'      => TagCategory::DUNGEON_ROUTE_PERSONAL,
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertDatabaseHas('tags', [
+                'name'          => $name,
+                'context_id'    => $author->id,
+                'context_class' => User::class,
+                'model_id'      => $route->id,
+                'color'         => '#123456',
+            ]);
+        } finally {
+            $this->cleanUpTagsOfUsers([$author, $otherAuthor]);
+            $this->cleanUp(route: $route, users: [$author]);
+            $this->cleanUp(route: $otherRoute, users: [$otherAuthor]);
+        }
+    }
+
+    #[Test]
+    public function store_givenNoCategory_returnsNotFound(): void
+    {
+        $author = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'model_id'      => $route->public_key,
+                'name'          => sprintf('test-tag-%s', fake()->uuid()),
+            ]);
+
+            // Assert
+            $response->assertNotFound();
+        } finally {
+            $this->cleanUp(route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
     public function store_givenAnotherUsersContext_returnsForbidden(): void
     {
         $author = null;
