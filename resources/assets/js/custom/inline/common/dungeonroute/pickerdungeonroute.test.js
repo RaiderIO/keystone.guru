@@ -150,4 +150,139 @@ describe('PickerDungeonRoute', () => {
         expect(route.toTemplateData('https://assets/images').tags).toEqual([]);
         expect(route.toTemplateData('https://assets/images', true).tags).toHaveLength(1);
     });
+
+    it('getTags_givenPersonalAndTeamTags_prefersThePersonalTags', () => {
+        // Arrange
+        const route = dungeonRoute({tagspersonal: [{name: 'Mine', color: null}], tagsteam: [{name: 'Team', color: null}]});
+
+        // Act
+        const tags = route.getTags();
+
+        // Assert
+        expect(tags.map((tag) => tag.name)).toEqual(['Mine']);
+    });
+
+    it('getKeyRangeText_givenARangeOfKeyLevels_returnsTheRange', () => {
+        expect(dungeonRoute({level_min: 2, level_max: 10}).getKeyRangeText()).toBe('+2 - +10');
+    });
+
+    it('getKeyRangeText_givenOnlyAMinimumKeyLevel_returnsThatLevel', () => {
+        expect(dungeonRoute({level_min: 7, level_max: null}).getKeyRangeText()).toBe('+7');
+    });
+
+    it('getEnemyForcesRequired_givenANonTeemingRoute_returnsTheRegularRequirement', () => {
+        expect(dungeonRoute({teeming: 0}).getEnemyForcesRequired()).toBe(300);
+        expect(dungeonRoute({teeming: 0}).hasEnoughEnemyForces()).toBe(true);
+    });
+
+    it('getEnemyForces_givenNoUsableCount_returnsZero', () => {
+        expect(dungeonRoute({enemy_forces: null}).getEnemyForces()).toBe(0);
+        expect(dungeonRoute({enemy_forces: 'abc'}).getEnemyForces()).toBe(0);
+    });
+
+    it('getRating_givenAPerfectRating_returnsFiveFullStars', () => {
+        expect(dungeonRoute({rating: 10}).getRating().stars).toEqual(Array(5).fill('fas fa-star'));
+    });
+
+    it('getRating_givenAnEvenRating_endsOnEmptyStarsWithoutAHalfStar', () => {
+        expect(dungeonRoute({rating: 8}).getRating().stars).toEqual([
+            'fas fa-star', 'fas fa-star', 'fas fa-star', 'fas fa-star', 'far fa-star',
+        ]);
+    });
+
+    it('getRating_givenAFractionalRating_roundsItToTheNearestHalfStar', () => {
+        expect(dungeonRoute({rating: '6.6'}).getRating().stars).toEqual([
+            'fas fa-star', 'fas fa-star', 'fas fa-star', 'fas fa-star-half-alt', 'far fa-star',
+        ]);
+    });
+
+    it('getRating_givenVotesButNoUsableRating_returnsFiveEmptyStars', () => {
+        expect(dungeonRoute({rating: null, rating_count: 2}).getRating()).toEqual({
+            stars: Array(5).fill('far fa-star'),
+            title: '2 votes',
+        });
+    });
+
+    it('getPullGraph_givenTrashAndBossPulls_scalesTrashToTheBiggestPullAndDrawsBossesFullHeight', () => {
+        // Arrange
+        const pullForces = [
+            {enemy_forces: 40, has_boss: false},
+            {enemy_forces: 20, has_boss: false},
+            {enemy_forces: 1, has_boss: false},
+            {enemy_forces: 0, has_boss: true},
+            {enemy_forces: 0, has_boss: false},
+        ];
+
+        // Act
+        const pullGraph = dungeonRoute({pull_forces: pullForces}).getPullGraph();
+
+        // Assert
+        expect(pullGraph).toEqual({
+            width:  15,
+            height: 22,
+            title:  '5 pulls',
+            bars:   [
+                {x: 0, y: 0, width: 3, height: 22, fill: 'currentColor'},
+                {x: 4, y: 11, width: 3, height: 11, fill: 'currentColor'},
+                {x: 8, y: 20, width: 3, height: 2, fill: 'currentColor'},
+                {x: 12, y: 0, width: 3, height: 22, fill: 'rgba(240, 180, 60, 0.9)'},
+            ],
+        });
+    });
+
+    it('getPullGraph_givenASingleBossPull_saysOnePullAndDrawsItFullHeight', () => {
+        // Act
+        const pullGraph = dungeonRoute({pull_forces: [{enemy_forces: 0, has_boss: true}]}).getPullGraph();
+
+        // Assert
+        expect(pullGraph.title).toBe('1 pull');
+        expect(pullGraph.bars).toEqual([{x: 0, y: 0, width: 3, height: 22, fill: 'rgba(240, 180, 60, 0.9)'}]);
+    });
+
+    it('getPullGraph_givenEmptyPullsBeforeTheCap_dropsThemBeforeCapping', () => {
+        // Arrange
+        const pullForces = Array.from({length: 30}, () => ({enemy_forces: 0, has_boss: false}))
+            .concat([{enemy_forces: 10, has_boss: false}]);
+
+        // Act
+        const pullGraph = dungeonRoute({pull_forces: pullForces}).getPullGraph();
+
+        // Assert
+        expect(pullGraph.bars).toHaveLength(1);
+        expect(pullGraph.title).toBe('31 pulls');
+    });
+
+    it('getThumbnailUrl_givenAThumbnail_returnsItsUrl', () => {
+        // Arrange
+        const route = dungeonRoute({has_thumbnail: true, thumbnails: [{url: 'https://thumb/1.jpg'}, {url: 'https://thumb/2.jpg'}]});
+
+        // Act + Assert
+        expect(route.getThumbnailUrl('https://assets/images')).toBe('https://thumb/1.jpg');
+    });
+
+    it('getThumbnailUrl_givenAThumbnailFlagWithoutThumbnails_returnsTheDungeonImage', () => {
+        expect(dungeonRoute({has_thumbnail: true, thumbnails: []}).getThumbnailUrl('https://assets/images'))
+            .toBe('https://assets/images/dungeons/tww/arakara_3-2.jpg');
+    });
+
+    it('toTemplateData_givenARouteWithEnoughEnemyForces_carriesNoWarning', () => {
+        expect(dungeonRoute({enemy_forces: 300}).toTemplateData('https://assets/images').enemy_forces_warning).toBe('');
+    });
+
+    it('toTemplateData_givenARoute_carriesItsIdentityAndRowDetails', () => {
+        // Act
+        const data = dungeonRoute().toTemplateData('https://assets/images');
+
+        // Assert
+        expect(data).toMatchObject({
+            public_key:     'abc',
+            title:          'Route',
+            dungeon_name:   'Ara-Kara',
+            is_unpublished: false,
+            key_range:      '+2 - +10',
+            views:          '1.5K',
+            rating:         {title: '4 votes'},
+            pull_graph:     null,
+        });
+    });
 });

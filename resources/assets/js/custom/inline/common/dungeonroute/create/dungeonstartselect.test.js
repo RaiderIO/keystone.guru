@@ -144,4 +144,24 @@ describe('CommonDungeonrouteCreateDungeonstartselect.activate', () => {
         );
         expect(document.getElementById('dungeon_start_id_container').style.display).not.toBe('none');
     });
+
+    it('activate_givenDungeonWithMultipleStarts_refreshesSelectPickersAfterRebuildingTheOptions', () => {
+        // Arrange + Act
+        buildAndActivate(RETAIL_DUNGEON_BETA_ID);
+
+        // Assert
+        expect(refreshSelectPickers).toHaveBeenCalledTimes(1);
+    });
+
+    it('activate_givenDungeonChangedToDungeonWithOneStart_refreshesSelectPickersToSyncTheClearedSelect', () => {
+        // Arrange
+        buildAndActivate(RETAIL_DUNGEON_BETA_ID);
+        vi.clearAllMocks();
+
+        // Act
+        $('#dungeon_id_select').val(RETAIL_DUNGEON_ALPHA_ID).trigger('change');
+
+        // Assert
+        expect(refreshSelectPickers).toHaveBeenCalledTimes(1);
+    });
 });
