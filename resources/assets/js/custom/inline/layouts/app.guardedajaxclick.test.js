@@ -34,11 +34,20 @@ describe('guardedAjaxClick', () => {
     });
 
     test('guardedAjaxClick_givenNoRequestInFlight_firesTheRequestAndDisablesTheTrigger', () => {
+        // Arrange
+        const jqXhr = {};
+        $.ajax = (settings) => {
+            ajaxCalls.push(settings);
+            return jqXhr;
+        };
+
         // Act
-        guardedAjaxClick($button, {type: 'POST', url: '/ajax/tag/1/all'});
+        const result = guardedAjaxClick($button, {type: 'POST', url: '/ajax/tag/1/all', data: {tag_id: 1}});
 
         // Assert
         expect(ajaxCalls).toHaveLength(1);
+        expect(ajaxCalls[0]).toMatchObject({type: 'POST', url: '/ajax/tag/1/all', data: {tag_id: 1}});
+        expect(result).toBe(jqXhr);
         expect($button.prop('disabled')).toBe(true);
     });
 
