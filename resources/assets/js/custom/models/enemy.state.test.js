@@ -52,6 +52,8 @@ global.MapContextMappingVersionEdit = class MapContextMappingVersionEdit extends
 
 // 1d. Constants referenced as bare globals, with their real values from constants.js.
 global.MAP_OBJECT_GROUP_KILLZONE = 'killzone';
+global.MAP_OBJECT_GROUP_ENEMY = 'enemy';
+global.MAP_OBJECT_GROUP_ENEMY_PACK = 'enemypack';
 global.AFFIX_BEGUILING = 'Beguiling';
 global.AFFIX_AWAKENED = 'Awakened';
 global.AFFIX_INSPIRING = 'Inspiring';
@@ -946,6 +948,19 @@ describe('Enemy popup state transitions', () => {
         expect(layer.popupBindCount).toBe(0);
     });
 
+    test('setPopupEnabled_givenThePopupIsAlreadyEnabled_doesNotBindItAgain', () => {
+        // Arrange
+        setFakeState();
+        const {enemy, layer} = makeEditableEnemyOnEditMap();
+        enemy.setPopupEnabled(true);
+
+        // Act
+        enemy.setPopupEnabled(true);
+
+        // Assert
+        expect(layer.popupBindCount).toBe(1);
+    });
+
     test('setPopupEnabled_givenNoLayer_stillRecordsTheFlag', () => {
         // Arrange
         setFakeState();
@@ -1071,5 +1086,106 @@ describe('Enemy NPC classification', () => {
         setFakeState({affixes: []});
 
         expect(makeEnemy({seasonal_type: ENEMY_SEASONAL_TYPE_SHROUDED}).isImportant()).toBe(false);
+    });
+});
+
+describe('Enemy pack membership', () => {
+    /**
+     * Points the enemies' map at an enemy group holding exactly them, and an enemy pack group holding the given packs.
+     *
+     * @param {Enemy[]} enemies
+     * @param {Object|null} enemyPacksById Null when the page has no enemy pack group at all.
+     */
+    function placeOnOneMap(enemies, enemyPacksById = {}) {
+        const objects = {};
+        enemies.forEach((enemy) => (objects[enemy.id] = enemy));
+        const enemyPackMapObjectGroup = enemyPacksById === null ? null : {
+            findMapObjectById: (id) => enemyPacksById[id] ?? null,
+        };
+        const map = makeFakeMap();
+        map.mapObjectGroupManager = fakeMapObjectGroupManager((name) => {
+            if (name === MAP_OBJECT_GROUP_ENEMY) {
+                return {objects};
+            }
+
+            return name === MAP_OBJECT_GROUP_ENEMY_PACK ? enemyPackMapObjectGroup : null;
+        });
+        enemies.forEach((enemy) => (enemy.map = map));
+    }
+
+    /**
+     * @param {Number} id
+     * @param {Number|null} enemyPackId
+     * @param {Object} properties
+     * @returns {Enemy}
+     */
+    function makePackEnemy(id, enemyPackId, properties = {}) {
+        const enemy = makeEnemy({id, enemy_pack_id: enemyPackId, npc: makeNpc(), ...properties});
+        enemy.isVisible = () => true;
+
+        return enemy;
+    }
+
+    test('getPackBuddies_givenAPack_returnsTheOtherVisibleEnemiesOfThatPack', () => {
+        setFakeState();
+        const enemy = makePackEnemy(1, 7);
+        const buddy = makePackEnemy(2, 7);
+        const hiddenBuddy = makePackEnemy(3, 7);
+        hiddenBuddy.isVisible = () => false;
+        const otherPackEnemy = makePackEnemy(4, 8);
+        placeOnOneMap([enemy, buddy, hiddenBuddy, otherPackEnemy]);
+
+        expect(enemy.getPackBuddies()).toEqual([buddy]);
+    });
+
+    test('getPackBuddies_givenNoPack_returnsNothing', () => {
+        setFakeState();
+        const enemy = makePackEnemy(1, null);
+        const otherPacklessEnemy = makePackEnemy(2, null);
+        placeOnOneMap([enemy, otherPacklessEnemy]);
+
+        expect(enemy.getPackBuddies()).toEqual([]);
+    });
+
+    test('isLinkedToLastBoss_givenTheFinalBossInItsPack_returnsTrue', () => {
+        setFakeState();
+        const enemy = makePackEnemy(1, 7);
+        const boss = makePackEnemy(2, 7, {npc: makeNpc({classificationId: NPC_CLASSIFICATION_ID_FINAL_BOSS})});
+        placeOnOneMap([enemy, boss]);
+
+        expect(enemy.isLinkedToLastBoss()).toBe(true);
+        expect(boss.isLastBoss()).toBe(true);
+    });
+
+    test('isLinkedToLastBoss_givenARegularBossInItsPack_returnsFalse', () => {
+        setFakeState();
+        const enemy = makePackEnemy(1, 7);
+        const boss = makePackEnemy(2, 7, {npc: makeNpc({classificationId: NPC_CLASSIFICATION_ID_BOSS})});
+        placeOnOneMap([enemy, boss]);
+
+        expect(enemy.isLinkedToLastBoss()).toBe(false);
+        expect(boss.isLastBoss()).toBe(false);
+    });
+
+    test('getPackGroup_givenAPackWithAGroup_returnsThatGroup', () => {
+        setFakeState();
+        const enemy = makePackEnemy(1, 7);
+        placeOnOneMap([enemy], {7: {group: 3}});
+
+        expect(enemy.getPackGroup()).toBe(3);
+    });
+
+    test.each([
+        ['no pack', null, {7: {group: 3}}],
+        ['a pack that cannot be found', 8, {7: {group: 3}}],
+        ['no enemy pack group on the page', 7, null],
+    ])('getPackGroup_given%s_returnsNull', (label, enemyPackId, enemyPacksById) => {
+        setFakeState();
+        const enemy = makePackEnemy(1, enemyPackId);
+        placeOnOneMap([enemy], enemyPacksById);
+
+        let group;
+        expect(() => (group = enemy.getPackGroup())).not.toThrow();
+        expect(group).toBeNull();
     });
 });

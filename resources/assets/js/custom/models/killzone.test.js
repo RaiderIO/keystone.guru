@@ -102,13 +102,28 @@ global.EnemySelection = class EnemySelection {
 };
 
 // 1e. getState() is called from the constructor; provide a fake that satisfies
-// the event registrations it performs.
+// the event registrations it performs. The map context keeps the handler registered last
+// per event, so a test can fire the one of the kill zone it just built.
+const fakeMapContext = {
+    handlers: {},
+    register(name, listener, fn) {
+        this.handlers[name] = fn;
+    },
+    unregister: () => {},
+};
+let currentMapContext = fakeMapContext;
+let currentMapZoomLevel = 1;
 const fakeState = {
     register: () => {},
     unregister: () => {},
-    getMapContext: () => ({register: () => {}, unregister: () => {}}),
+    getMapContext: () => currentMapContext,
+    getMapZoomLevel: () => currentMapZoomLevel,
 };
 global.getState = () => fakeState;
+
+// 1e-bis. The zoom level at which pulls show their percentage, and lodash for the spell comparison.
+global.c = {map: {killzone: {getCurrentFloorPercentageDisplayZoom: () => 3}}};
+global._ = require('lodash');
 
 // 1f. cleanup() iterates the enemy group's objects via `$.each`; the shared setup's `$`
 // stub does not define it.
@@ -478,5 +493,314 @@ describe('KillZone._enemySelected', () => {
         expect(killZone.overpulledEnemies).toEqual([2, 3, 1]);
         expect(signalsOf(killZone, 'killzone:overpulledenemyadded')).toHaveLength(3);
         expect(signalsOf(killZone, 'killzone:enemieschanged')).toHaveLength(0);
+    });
+});
+
+describe('KillZone._enemySelected guards', () => {
+    /**
+     * @param {Object[]} enemies
+     * @returns {KillZone}
+     */
+    function makeKillZone(enemies) {
+        const enemiesById = {};
+        enemies.forEach((enemy) => (enemiesById[enemy.id] = enemy));
+
+        const killZone = new KillZone(makeFakeMap(enemiesById), null);
+        killZone.id = 5;
+        killZone.redrawConnectionsToEnemies = vi.fn();
+        killZone._signals = [];
+
+        return killZone;
+    }
+
+    it('ignores the selection while the kill zone is not saved yet', () => {
+        const enemy = makeFakeEnemy(1);
+        enemy.enemy_pack_id = 0;
+        const killZone = makeKillZone([enemy]);
+        killZone.id = 0;
+        const consoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+        killZone._enemySelected(enemySelectedEvent(enemy));
+
+        expect(killZone.enemies).toEqual([]);
+        expect(killZone.redrawConnectionsToEnemies).not.toHaveBeenCalled();
+        expect(consoleWarn).toHaveBeenCalledTimes(1);
+    });
+
+    it('adds only the clicked enemy when asked to ignore its pack buddies', () => {
+        const pack = makeFakeEnemyPack(7, [1, 2, 3]);
+        const killZone = makeKillZone(pack);
+
+        killZone._enemySelected({data: {enemy: pack[0], ignorePackBuddies: true}, context: {}});
+
+        expect(killZone.enemies).toEqual([1]);
+    });
+
+    it('redraws the pull the enemy was taken from', () => {
+        const enemy = makeFakeEnemy(1);
+        enemy.enemy_pack_id = 0;
+        const previousKillZone = {id: 9, redrawConnectionsToEnemies: vi.fn()};
+        enemy.setKillZone(previousKillZone);
+        const killZone = makeKillZone([enemy]);
+
+        killZone._enemySelected(enemySelectedEvent(enemy));
+
+        expect(killZone.enemies).toEqual([1]);
+        expect(killZone.redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+        expect(previousKillZone.redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+    });
+});
+
+describe('KillZone._mapStateChanged listener wiring', () => {
+    afterEach(() => {
+        currentMapContext = fakeMapContext;
+    });
+
+    /**
+     * @param {boolean} edit
+     * @returns {{killZone: KillZone, selection: EnemySelection}}
+     */
+    function makeKillZoneAndItsSelection(edit) {
+        const killZone = new KillZone(makeFakeMap(), null);
+        killZone.id = 5;
+        killZone.map.options.edit = edit;
+        killZone.redrawConnectionsToEnemies = vi.fn();
+        const selection = new EnemySelection({id: 5});
+        vi.spyOn(selection, 'register');
+        vi.spyOn(selection, 'unregister');
+
+        return {killZone, selection};
+    }
+
+    it('listens to the enemy selection of this kill zone on an editable map', () => {
+        const {killZone, selection} = makeKillZoneAndItsSelection(true);
+
+        killZone._mapStateChanged({data: {previousMapState: null, newMapState: selection}});
+
+        expect(selection.register).toHaveBeenCalledWith('enemyselection:enemyselected', killZone, expect.any(Function));
+    });
+
+    it('stops listening once the enemy selection of this kill zone ends', () => {
+        const {killZone, selection} = makeKillZoneAndItsSelection(true);
+
+        killZone._mapStateChanged({data: {previousMapState: selection, newMapState: null}});
+
+        expect(selection.unregister).toHaveBeenCalledWith('enemyselection:enemyselected', killZone);
+        expect(selection.register).not.toHaveBeenCalled();
+    });
+
+    it('listens to the enemy selection in a live session, even on a read-only map', () => {
+        currentMapContext = Object.assign(new MapContextLiveSession(), {register: () => {}, unregister: () => {}});
+        const {killZone, selection} = makeKillZoneAndItsSelection(false);
+
+        killZone._mapStateChanged({data: {previousMapState: null, newMapState: selection}});
+
+        expect(selection.register).toHaveBeenCalledWith('enemyselection:enemyselected', killZone, expect.any(Function));
+    });
+
+    it('does not listen to the enemy selection on a read-only map outside a live session', () => {
+        const {killZone, selection} = makeKillZoneAndItsSelection(false);
+
+        killZone._mapStateChanged({data: {previousMapState: null, newMapState: selection}});
+
+        expect(killZone.redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+        expect(selection.register).not.toHaveBeenCalled();
+    });
+});
+
+describe('KillZone remote enemies and spells', () => {
+    it('does not reapply the remote enemies when they equal the current ones', () => {
+        const killZone = new KillZone(makeFakeMap(), null);
+        killZone.enemies = [1, 2];
+        killZone.setEnemies = vi.fn();
+
+        killZone._setEnemiesFromRemote([1, 2]);
+
+        expect(killZone.setEnemies).not.toHaveBeenCalled();
+    });
+
+    it('skips a remote object that carries no enemies or spells', () => {
+        const killZone = new KillZone(makeFakeMap(), null);
+        killZone.setEnemies = vi.fn();
+        killZone.setSpells = vi.fn();
+
+        expect(() => killZone._setEnemiesFromRemote(undefined)).not.toThrow();
+        expect(() => killZone._setSpellsFromRemote(undefined)).not.toThrow();
+
+        expect(killZone.setEnemies).not.toHaveBeenCalled();
+        expect(killZone.setSpells).not.toHaveBeenCalled();
+    });
+
+    it.each([
+        ['another order', [2, 1]],
+        ['an extra enemy', [1, 2, 3]],
+        ['a missing enemy', [1]],
+    ])('applies the remote enemies when they differ by %s', (label, remoteEnemies) => {
+        const killZone = new KillZone(makeFakeMap(), null);
+        killZone.enemies = [1, 2];
+        killZone.setEnemies = vi.fn();
+
+        killZone._setEnemiesFromRemote(remoteEnemies);
+
+        expect(killZone.setEnemies).toHaveBeenCalledWith(remoteEnemies);
+    });
+
+    it('does not reapply the remote spells when they hold the same ids in any order', () => {
+        const killZone = new KillZone(makeFakeMap(), null);
+        killZone.spellIds = [10, 20];
+        killZone.setSpells = vi.fn();
+
+        killZone._setSpellsFromRemote([{id: '20'}, {id: '10'}]);
+
+        expect(killZone.setSpells).not.toHaveBeenCalled();
+    });
+
+    it('applies the remote spells as numeric ids when they differ', () => {
+        const killZone = new KillZone(makeFakeMap(), null);
+        killZone.spellIds = [10];
+        killZone.setSpells = vi.fn();
+
+        killZone._setSpellsFromRemote([{id: '10'}, {id: '30'}]);
+
+        expect(killZone.setSpells).toHaveBeenCalledWith([10, 30]);
+    });
+});
+
+describe('KillZone._enemyDetached', () => {
+    /**
+     * @returns {{killZone: KillZone, enemy: Object}}
+     */
+    function makeKillZoneWithEnemy() {
+        const enemy = makeFakeEnemy(42);
+        const killZone = new KillZone(makeFakeMap({42: enemy}), null);
+        killZone.id = 5;
+        killZone.redrawConnectionsToEnemies = vi.fn();
+        killZone._addEnemy(enemy);
+
+        return {killZone, enemy};
+    }
+
+    it.each([
+        ['no previous kill zone', () => null],
+        ['this kill zone as the previous one', () => ({id: 5})],
+    ])('removes the enemy given %s', (label, makePrevious) => {
+        const {killZone, enemy} = makeKillZoneWithEnemy();
+
+        killZone._enemyDetached({data: {previous: makePrevious()}, context: enemy});
+
+        expect(killZone.enemies).toEqual([]);
+        expect(killZone.redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+    });
+
+    it('keeps the enemy when it detached from another kill zone', () => {
+        const {killZone, enemy} = makeKillZoneWithEnemy();
+
+        killZone._enemyDetached({data: {previous: {id: 6}}, context: enemy});
+
+        expect(killZone.enemies).toEqual([42]);
+        expect(killZone.redrawConnectionsToEnemies).not.toHaveBeenCalled();
+    });
+});
+
+describe('KillZone teeming changes', () => {
+    /**
+     * @returns {{killZone: KillZone, teemingEnemy: Object, regularEnemy: Object}}
+     */
+    function makeKillZoneWithTeemingEnemy() {
+        const teemingEnemy = Object.assign(makeFakeEnemy(1), {teeming: 'visible'});
+        const regularEnemy = Object.assign(makeFakeEnemy(2), {teeming: null});
+        const killZone = new KillZone(makeFakeMap({1: teemingEnemy, 2: regularEnemy}), null);
+        killZone.id = 5;
+        killZone.save = vi.fn();
+        killZone.redrawConnectionsToEnemies = vi.fn();
+        killZone._addEnemy(teemingEnemy);
+        killZone._addEnemy(regularEnemy);
+
+        return {killZone, teemingEnemy, regularEnemy};
+    }
+
+    it('drops and saves its teeming-only enemies when teeming is turned off', () => {
+        const {killZone, teemingEnemy} = makeKillZoneWithTeemingEnemy();
+
+        fakeMapContext.handlers['teeming:changed']({data: {teeming: false}});
+
+        expect(killZone.enemies).toEqual([2]);
+        expect(teemingEnemy.getKillZone()).toBeNull();
+        expect(killZone.save).toHaveBeenCalledOnce();
+        expect(killZone.redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+    });
+
+    it('keeps its enemies and does not save when teeming is turned on', () => {
+        const {killZone} = makeKillZoneWithTeemingEnemy();
+
+        fakeMapContext.handlers['teeming:changed']({data: {teeming: true}});
+
+        expect(killZone.enemies).toEqual([1, 2]);
+        expect(killZone.save).not.toHaveBeenCalled();
+    });
+});
+
+describe('KillZone redraws on zoom and number style changes', () => {
+    afterEach(() => {
+        currentMapZoomLevel = 1;
+    });
+
+    /**
+     * @param {boolean} visible
+     * @returns {KillZone}
+     */
+    function makeRedrawableKillZone(visible = true) {
+        const killZone = new KillZone(makeFakeMap(), null);
+        killZone.isVisible = () => visible;
+        killZone.redrawConnectionsToEnemies = vi.fn();
+        killZone.bindTooltip = vi.fn();
+
+        return killZone;
+    }
+
+    it.each([
+        ['zooming in onto the percentage zoom level', 2, 3, 1],
+        ['zooming out from the percentage zoom level', 3, 2, 1],
+        ['zooming in past the percentage zoom level', 3, 4, 0],
+        ['zooming in below the percentage zoom level', 1, 2, 0],
+    ])('redraws only when %s', (label, previousMapZoomLevel, mapZoomLevel, expectedRedraws) => {
+        const killZone = makeRedrawableKillZone();
+
+        killZone._mapZoomLevelChanged({data: {mapZoomLevel: mapZoomLevel, previousMapZoomLevel: previousMapZoomLevel}});
+
+        expect(killZone.redrawConnectionsToEnemies).toHaveBeenCalledTimes(expectedRedraws);
+    });
+
+    it('does not redraw an invisible pull when the zoom level crosses the percentage zoom level', () => {
+        const killZone = makeRedrawableKillZone(false);
+
+        killZone._mapZoomLevelChanged({data: {mapZoomLevel: 3, previousMapZoomLevel: 2}});
+
+        expect(killZone.redrawConnectionsToEnemies).not.toHaveBeenCalled();
+    });
+
+    it.each([
+        [true, 1],
+        [false, 0],
+    ])('redraws on a number style change only when visible (%s)', (visible, expectedRedraws) => {
+        const killZone = makeRedrawableKillZone(visible);
+
+        killZone._numberStyleChanged({});
+
+        expect(killZone.redrawConnectionsToEnemies).toHaveBeenCalledTimes(expectedRedraws);
+    });
+
+    it.each([
+        ['an earlier pull changed while the percentages show', 2, 3, 1],
+        ['a later pull changed', 7, 3, 0],
+        ['an earlier pull changed while zoomed out too far for percentages', 2, 2, 0],
+    ])('rebinds its tooltip only when %s', (label, changedIndex, mapZoomLevel, expectedBinds) => {
+        const killZone = makeRedrawableKillZone();
+        killZone.index = 5;
+        currentMapZoomLevel = mapZoomLevel;
+
+        killZone._onKillZoneChanged({data: {killzone: {index: changedIndex}}});
+
+        expect(killZone.bindTooltip).toHaveBeenCalledTimes(expectedBinds);
     });
 });

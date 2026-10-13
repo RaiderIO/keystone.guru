@@ -81,6 +81,12 @@ global.Signalable = class Signalable {
 global.DungeonMap = class DungeonMap {
 };
 
+// 1e. loadRemoteMapObject() converts numeric strings through util.js' isNumeric(), and save()'s error
+// path checks the map context against MapContextDungeonRoute before falling back to defaultAjaxErrorFn().
+global.isNumeric = require('../util').isNumeric;
+global.MapContextDungeonRoute = class MapContextDungeonRoute {
+};
+
 const {MapObject} = require('./mapobject');
 
 /**
@@ -89,7 +95,7 @@ const {MapObject} = require('./mapobject');
  * leafletMap for isVisibleOnScreen().
  *
  * @param {Object} options
- * @param {boolean} options.sandbox Whether sandbox mode is enabled (disables the faction filter).
+ * @param {boolean} options.sandbox Whether sandbox mode is enabled. MapObject never reads it; the faction filter applies either way.
  * @param {L.LatLngBounds|null} options.bounds Bounds returned by the leaflet map.
  */
 function makeFakeMap({sandbox = false, bounds = null} = {}) {
@@ -452,5 +458,314 @@ describe('MapObject.isVisibleOnScreen', () => {
         mapObject.setVisible(true);
 
         expect(mapObject.isVisibleOnScreen()).toBe(true);
+    });
+});
+
+describe('MapObject.loadRemoteMapObject', () => {
+    it('converts each remote value by the type of its attribute', () => {
+        setFakeState();
+        const mapObject = makeMapObject();
+        mapObject._getAttributes = () => [
+            new Attribute({name: 'enabled', type: 'bool'}),
+            new Attribute({name: 'disabled', type: 'bool'}),
+            new Attribute({name: 'count', type: 'int'}),
+            new Attribute({name: 'label', type: 'int'}),
+            new Attribute({name: 'size', type: 'float'}),
+            new Attribute({name: 'scale', type: 'double'}),
+        ];
+
+        mapObject.loadRemoteMapObject({enabled: 1, disabled: '0', count: '12', label: 'abc', size: '1.5', scale: '2.25'});
+
+        expect(mapObject.enabled).toBe(true);
+        expect(mapObject.disabled).toBe(false);
+        expect(mapObject.count).toBe(12);
+        expect(mapObject.label).toBe('abc');
+        expect(mapObject.size).toBe(1.5);
+        expect(mapObject.scale).toBe(2.25);
+    });
+
+    it('hands a value to the attribute setter instead of assigning it', () => {
+        setFakeState();
+        const mapObject = makeMapObject();
+
+        mapObject.loadRemoteMapObject({faction: ''});
+
+        expect(mapObject.faction).toBe('any');
+    });
+
+    it('loads a nested object attribute into its own object', () => {
+        setFakeState();
+        const mapObject = makeMapObject();
+        mapObject._getAttributes = () => [
+            new Attribute({
+                name: 'polyline',
+                type: 'object',
+                attributes: [
+                    new Attribute({name: 'color', type: 'string'}),
+                    new Attribute({name: 'weight', type: 'int'}),
+                ],
+            }),
+        ];
+
+        mapObject.loadRemoteMapObject({polyline: {color: '#ff0000', weight: '3', ignored: true}});
+
+        expect(mapObject.polyline).toEqual({color: '#ff0000', weight: 3});
+    });
+
+    it('leaves attributes the remote object does not carry untouched', () => {
+        setFakeState();
+        const mapObject = makeMapObject({teeming: TEEMING_HIDDEN});
+
+        mapObject.loadRemoteMapObject({id: '5'});
+
+        expect(mapObject.id).toBe(5);
+        expect(mapObject.teeming).toBe(TEEMING_HIDDEN);
+    });
+
+    it('signals object:initialized once, after the first load only', () => {
+        setFakeState();
+        const mapObject = makeMapObject();
+
+        mapObject.loadRemoteMapObject({id: 5});
+        mapObject.loadRemoteMapObject({id: 6});
+
+        expect(mapObject.isInitialized()).toBe(true);
+        expect(signalsOf(mapObject, 'object:initialized')).toHaveLength(1);
+    });
+
+    it('signals object:initialized only once every attribute has loaded, nested ones included', () => {
+        setFakeState();
+        const mapObject = makeMapObject();
+        mapObject._getAttributes = () => [
+            new Attribute({name: 'polyline', type: 'object', attributes: [new Attribute({name: 'color', type: 'string'})]}),
+            new Attribute({name: 'description', type: 'string'}),
+        ];
+        let descriptionWhenInitialized = null;
+        mapObject.register('object:initialized', mapObject, () => (descriptionWhenInitialized = mapObject.description));
+
+        mapObject.loadRemoteMapObject({polyline: {color: '#ff0000'}, description: 'Pull 1'});
+
+        expect(descriptionWhenInitialized).toBe('Pull 1');
+        expect(signalsOf(mapObject, 'object:initialized')).toHaveLength(1);
+    });
+
+    it('does not initialize from an empty remote object', () => {
+        setFakeState();
+        const mapObject = makeMapObject();
+        const consoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {
+        });
+
+        expect(() => mapObject.loadRemoteMapObject(null)).not.toThrow();
+
+        expect(consoleWarn).toHaveBeenCalledWith('Unable to parse empty remoteMapObject');
+        expect(mapObject.isInitialized()).toBe(false);
+        expect(signalsOf(mapObject, 'object:initialized')).toHaveLength(0);
+    });
+});
+
+describe('MapObject.setSynced', () => {
+    it('rebinds the tooltip and popup and signals object:changed when synced', () => {
+        setFakeState();
+        const mapObject = makeMapObject();
+        mapObject.bindTooltip = vi.fn();
+        mapObject._assignPopup = vi.fn();
+
+        mapObject.setSynced(true, true);
+
+        expect(mapObject.synced).toBe(true);
+        expect(mapObject.bindTooltip).toHaveBeenCalledTimes(1);
+        expect(mapObject._assignPopup).toHaveBeenCalledTimes(1);
+        expect(signalsOf(mapObject, 'object:changed')).toEqual([{event: 'object:changed', data: {mass_save: true}}]);
+    });
+
+    it('only records the state when unsynced', () => {
+        setFakeState();
+        const mapObject = makeMapObject();
+        mapObject.bindTooltip = vi.fn();
+        mapObject._assignPopup = vi.fn();
+        mapObject.setSynced(true);
+
+        mapObject.setSynced(false);
+
+        expect(mapObject.synced).toBe(false);
+        expect(mapObject.bindTooltip).toHaveBeenCalledTimes(1);
+        expect(signalsOf(mapObject, 'object:changed')).toHaveLength(1);
+    });
+});
+
+describe('MapObject.rebindTooltip', () => {
+    it('unbinds the current tooltip before binding it again', () => {
+        setFakeState();
+        const calls = [];
+        const mapObject = makeMapObject({layer: {unbindTooltip: () => calls.push('unbind')}});
+        mapObject.bindTooltip = () => calls.push('bind');
+
+        mapObject.rebindTooltip();
+
+        expect(calls).toEqual(['unbind', 'bind']);
+    });
+
+    it('only binds when there is no layer yet', () => {
+        setFakeState();
+        const mapObject = makeMapObject();
+        mapObject.bindTooltip = vi.fn();
+
+        expect(() => mapObject.rebindTooltip()).not.toThrow();
+        expect(mapObject.bindTooltip).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('MapObject.save and delete', () => {
+    const originalAjax = global.$.ajax;
+
+    beforeEach(() => {
+        global.$.ajax = vi.fn();
+        global.defaultAjaxErrorFn = vi.fn();
+    });
+
+    afterEach(() => {
+        global.$.ajax = originalAjax;
+    });
+
+    /**
+     * Installs a fake state whose map context belongs to the route with the given public key.
+     *
+     * @param {String} publicKey
+     */
+    function setRouteState(publicKey = 'abc123') {
+        global.getState = () => ({
+            isDebug: () => false,
+            getMapContext: () => ({getPublicKey: () => publicKey}),
+        });
+    }
+
+    /**
+     * A map object of a model with route model binding, on a map that can close popups.
+     *
+     * @param {Object} options The options a subclass passes to the MapObject constructor.
+     * @returns {MapObject}
+     */
+    function makeSavableMapObject(options = {name: 'killzone', has_route_model_binding: true}) {
+        setFakeState();
+        const map = makeFakeMap();
+        map.leafletMap.closePopup = vi.fn();
+        const mapObject = new MapObject(map, null, options);
+        mapObject.getSaveData = () => ({color: '#ff0000'});
+        mapObject._assignPopup = vi.fn();
+        setRouteState();
+
+        return mapObject;
+    }
+
+    it('saves an existing object with route model binding through a PUT to its own url', () => {
+        const mapObject = makeSavableMapObject();
+        mapObject.id = 7;
+
+        mapObject.save();
+
+        expect(global.$.ajax).toHaveBeenCalledTimes(1);
+        const ajaxOptions = global.$.ajax.mock.calls[0][0];
+        expect(ajaxOptions.type).toBe('PUT');
+        expect(ajaxOptions.url).toBe('/ajax/abc123/killzone/7');
+        expect(ajaxOptions.data).toEqual({color: '#ff0000'});
+        expect(signalsOf(mapObject, 'save:beforesend')).toHaveLength(1);
+    });
+
+    it('creates a new object through a POST to the collection url', () => {
+        const mapObject = makeSavableMapObject();
+
+        mapObject.save();
+
+        const ajaxOptions = global.$.ajax.mock.calls[0][0];
+        expect(ajaxOptions.type).toBe('POST');
+        expect(ajaxOptions.url).toBe('/ajax/abc123/killzone');
+    });
+
+    it('posts an existing object without route model binding to the collection url', () => {
+        const mapObject = makeSavableMapObject({name: 'brushline'});
+        mapObject.id = 7;
+
+        mapObject.save();
+
+        const ajaxOptions = global.$.ajax.mock.calls[0][0];
+        expect(ajaxOptions.type).toBe('POST');
+        expect(ajaxOptions.url).toBe('/ajax/abc123/brushline');
+    });
+
+    it('saves to the save_url option when one is given', () => {
+        const mapObject = makeSavableMapObject({name: 'enemy', save_url: '/ajax/admin/enemy'});
+
+        mapObject.save();
+
+        expect(global.$.ajax.mock.calls[0][0].url).toBe('/ajax/admin/enemy');
+    });
+
+    it('applies the saved object and signals save:success when the save succeeds', () => {
+        const mapObject = makeSavableMapObject();
+        mapObject.onSaveSuccess = vi.fn();
+        mapObject.save();
+
+        global.$.ajax.mock.calls[0][0].success({id: '9'});
+
+        expect(mapObject.id).toBe(9);
+        expect(mapObject.synced).toBe(true);
+        expect(mapObject.map.leafletMap.closePopup).toHaveBeenCalledTimes(1);
+        expect(signalsOf(mapObject, 'save:success')).toEqual([{event: 'save:success', data: {json: {id: '9'}}}]);
+        expect(mapObject.onSaveSuccess).toHaveBeenCalledWith({id: '9'});
+    });
+
+    it('marks the object unsynced and reports the error when the save fails', () => {
+        const mapObject = makeSavableMapObject();
+        mapObject.synced = true;
+        mapObject.save();
+        const xhr = {responseJSON: {message: 'Server error'}};
+
+        global.$.ajax.mock.calls[0][0].error(xhr, 'error', 'Internal Server Error');
+
+        expect(mapObject.synced).toBe(false);
+        expect(global.defaultAjaxErrorFn).toHaveBeenCalledWith(xhr, 'error', 'Internal Server Error');
+        expect(signalsOf(mapObject, 'save:error')).toHaveLength(1);
+    });
+
+    it('never saves or deletes a local object', () => {
+        const mapObject = makeSavableMapObject();
+        mapObject.setIsLocal(true);
+
+        mapObject.save();
+        mapObject.delete();
+
+        expect(global.$.ajax).not.toHaveBeenCalled();
+        expect(signalsOf(mapObject, 'save:beforesend')).toHaveLength(0);
+    });
+
+    it('deletes through a DELETE to its own url and cleans up once it succeeded', () => {
+        const mapObject = makeSavableMapObject();
+        mapObject.id = 7;
+        mapObject.cleanup = vi.fn();
+
+        mapObject.delete();
+        const ajaxOptions = global.$.ajax.mock.calls[0][0];
+        ajaxOptions.success({});
+
+        expect(ajaxOptions.url).toBe('/ajax/abc123/killzone/7');
+        expect(ajaxOptions.data).toEqual({_method: 'DELETE'});
+        expect(signalsOf(mapObject, 'object:deleted')).toEqual([{event: 'object:deleted', data: {mass_delete: false}}]);
+        expect(signalsOf(mapObject, 'delete:success')).toHaveLength(1);
+        expect(mapObject.cleanup).toHaveBeenCalledTimes(1);
+    });
+
+    it('marks the object unsynced and reports the error when the delete fails', () => {
+        const mapObject = makeSavableMapObject({name: 'enemy', delete_url: '/ajax/admin/enemy/7'});
+        mapObject.synced = true;
+        mapObject.delete();
+        const ajaxOptions = global.$.ajax.mock.calls[0][0];
+        const xhr = {};
+
+        ajaxOptions.error(xhr, 'error', 'Internal Server Error');
+
+        expect(ajaxOptions.url).toBe('/ajax/admin/enemy/7');
+        expect(mapObject.synced).toBe(false);
+        expect(global.defaultAjaxErrorFn).toHaveBeenCalledWith(xhr, 'error', 'Internal Server Error');
+        expect(signalsOf(mapObject, 'delete:success')).toHaveLength(0);
     });
 });

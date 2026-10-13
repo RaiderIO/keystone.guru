@@ -92,6 +92,13 @@ global.Icon = class Icon {
         return true;
     }
 
+    onLayerInit() {
+    }
+
+    rebindTooltip() {
+        this.rebindTooltipCount = (this.rebindTooltipCount ?? 0) + 1;
+    }
+
     bindTooltip() {
         this.unbindTooltip();
 
@@ -193,6 +200,10 @@ describe('DungeonFloorSwitchMarker tooltip (#4408)', () => {
         marker.bindTooltip();
         expect(layer.getTooltip().text).toBe('js.dungeonfloorswitchmarker_unknown_label');
 
+        vi.spyOn(lang, 'get').mockImplementation((key, replacements) => (
+            replacements === undefined ? key : `${key}(${JSON.stringify(replacements)})`
+        ));
+
         // Act: the rest of loadRemoteMapObject() finishes assigning attributes, then fires
         // 'object:initialized' (mirrors MapObject#_setInitialized()).
         marker.target_floor_id = 5;
@@ -201,7 +212,7 @@ describe('DungeonFloorSwitchMarker tooltip (#4408)', () => {
 
         // Assert: the tooltip was rebound with the now-resolvable target floor
         expect(layer.bindCount).toBe(2);
-        expect(layer.getTooltip().text).toBe('js.dungeonfloorswitchmarker_go_to_label');
+        expect(layer.getTooltip().text).toBe('js.dungeonfloorswitchmarker_go_to_label({"floor":"floor.floor_5_name"})');
     });
 
     test('cleanup_unregistersTheObjectInitializedListener', () => {
@@ -459,5 +470,179 @@ describe('DungeonFloorSwitchMarker icon on the facade', () => {
 
         // Assert: the same unknown-type fallback a marker without a direction gets off the facade
         expect(marker.map_icon_type.key).toBe('unknown');
+    });
+});
+
+/**
+ * A fake state for the floor switching and live session checks: `echoUsers` are the users the echo handler knows,
+ * by public key, and `facadeEnabled` is what isCurrentDungeonFacadeEnabled() reports.
+ */
+function makeLiveState({facadeEnabled = false, echoUsers = {}} = {}) {
+    const echoHandler = {
+        handlers: {},
+        register(name, listener, fn) {
+            this.handlers[name] = fn;
+        },
+        unregister: vi.fn(),
+        getUserByPublicKey: (publicKey) => echoUsers[publicKey] ?? null,
+    };
+
+    return {
+        register: () => {},
+        unregister: () => {},
+        setFloorId: vi.fn(),
+        isEchoEnabled: () => true,
+        getEchoHandler: () => echoHandler,
+        isCurrentDungeonFacadeEnabled: () => facadeEnabled,
+        getMapContext: () => ({
+            getFloorById: () => false,
+            getMapIconTypeByKey: (key) => ({key: key, name: 'Floor switch'}),
+        }),
+    };
+}
+
+/**
+ * A fake layer that records the handlers onLayerInit() chains onto it.
+ */
+function makeFakeClickableLayer() {
+    return Object.assign(makeFakeLayer(), {
+        handlers: {},
+        on(event, fn) {
+            this.handlers[event] = fn;
+
+            return this;
+        },
+    });
+}
+
+describe('DungeonFloorSwitchMarker click', () => {
+    test.each([
+        ['switchesToTheTargetFloor', false, 5, [[5]]],
+        ['onTheFacadeStaysOnTheFacade', true, 5, []],
+        ['withoutATargetFloorDoesNothing', false, null, []],
+    ])('onLayerInit_givenAClick_%s', (label, facadeEnabled, targetFloorId, expectedCalls) => {
+        // Arrange
+        const state = makeLiveState({facadeEnabled});
+        global.getState = () => state;
+        const marker = new DungeonFloorSwitchMarker(makeFakeMap(), makeFakeClickableLayer());
+        marker.target_floor_id = targetFloorId;
+        marker.onLayerInit();
+
+        // Act
+        marker.layer.handlers.click();
+
+        // Assert
+        expect(state.setFloorId.mock.calls).toEqual(expectedCalls);
+    });
+});
+
+describe('DungeonFloorSwitchMarker.getDisplayText', () => {
+    test('getDisplayText_givenTheFacade_returnsNothing', () => {
+        // Arrange
+        global.getState = () => makeLiveState({facadeEnabled: true, echoUsers: {abc: {getName: () => 'Wotuu'}}});
+        const marker = new DungeonFloorSwitchMarker(makeFakeMap(), makeFakeLayer());
+        marker.usersOnThisFloor = ['abc'];
+
+        // Act
+        const text = marker.getDisplayText();
+
+        // Assert
+        expect(text).toBe('');
+    });
+
+    test('getDisplayText_givenUsersOnTheTargetFloor_listsTheKnownUsersNames', () => {
+        // Arrange
+        global.getState = () => makeLiveState({
+            echoUsers: {abc: {getName: () => 'Wotuu'}, def: {getName: () => 'Kerbal'}},
+        });
+        const marker = new DungeonFloorSwitchMarker(makeFakeMap(), makeFakeLayer());
+        marker.usersOnThisFloor = ['abc', 'gone', 'def'];
+        let text = null;
+
+        // Act + Assert
+        expect(() => (text = marker.getDisplayText())).not.toThrow();
+        expect(text).toBe('Wotuu, Kerbal');
+        expect(marker.getTooltipOptions()).toEqual({permanent: true});
+    });
+
+    test('getTooltipOptions_givenNoUsersOnTheTargetFloor_isNotPermanent', () => {
+        // Arrange
+        global.getState = () => makeLiveState();
+        const marker = new DungeonFloorSwitchMarker(makeFakeMap(), makeFakeLayer());
+
+        // Act
+        const options = marker.getTooltipOptions();
+
+        // Assert
+        expect(options).toEqual({permanent: false});
+    });
+});
+
+describe('DungeonFloorSwitchMarker mouse positions', () => {
+    /**
+     * @returns {{marker: DungeonFloorSwitchMarker, receive: function(Number, String): void, state: Object}}
+     */
+    function createListeningMarker() {
+        const state = makeLiveState();
+        global.getState = () => state;
+        const marker = new DungeonFloorSwitchMarker(makeFakeMap(), makeFakeLayer());
+        marker.target_floor_id = 5;
+
+        const receive = (floorId, publicKey) => state.getEchoHandler().handlers['mouseposition:received']?.({
+            data: {floor_id: floorId, user: {public_key: publicKey}},
+        });
+
+        return {marker, receive, state};
+    }
+
+    test('mousePositionReceived_givenAUserOnTheTargetFloor_addsThemOnceAndRebindsTheTooltip', () => {
+        // Arrange
+        const {marker, receive} = createListeningMarker();
+
+        // Act
+        receive(5, 'abc');
+        receive(5, 'abc');
+
+        // Assert
+        expect(marker.usersOnThisFloor).toEqual(['abc']);
+        expect(marker.rebindTooltipCount).toBe(1);
+    });
+
+    test('mousePositionReceived_givenAUserLeavingTheTargetFloor_removesThemAndRebindsTheTooltip', () => {
+        // Arrange
+        const {marker, receive} = createListeningMarker();
+        receive(5, 'abc');
+        receive(5, 'def');
+
+        // Act
+        receive(6, 'abc');
+
+        // Assert
+        expect(marker.usersOnThisFloor).toEqual(['def']);
+        expect(marker.rebindTooltipCount).toBe(3);
+    });
+
+    test('mousePositionReceived_givenAnUntrackedUserOnAnotherFloor_leavesTheTooltipAlone', () => {
+        // Arrange
+        const {marker, receive} = createListeningMarker();
+        receive(5, 'abc');
+
+        // Act
+        receive(6, 'def');
+
+        // Assert
+        expect(marker.usersOnThisFloor).toEqual(['abc']);
+        expect(marker.rebindTooltipCount).toBe(1);
+    });
+
+    test('cleanup_givenEchoEnabled_stopsListeningToMousePositions', () => {
+        // Arrange
+        const {marker, state} = createListeningMarker();
+
+        // Act
+        marker.cleanup();
+
+        // Assert
+        expect(state.getEchoHandler().unregister).toHaveBeenCalledWith('mouseposition:received', marker);
     });
 });
