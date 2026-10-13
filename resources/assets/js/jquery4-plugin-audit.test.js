@@ -47,12 +47,20 @@ describe('bootstrap5-toggle (#3590)', () => {
             }
         };
 
+        // The plugin only builds its widget once the checkbox's parent has a size, and defers
+        // to the ResizeObserver above otherwise; jsdom lays out nothing, so give the parent one
+        // or the render path - most of the plugin - never runs.
+        vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(100);
+        vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(30);
+
         // Same deep import as bootstrap.js - the package's bare "main" resolves to a
         // different, non-jQuery build.
         require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
         document.body.innerHTML = '<input type="checkbox" data-toggle="toggle">';
 
         expect(() => $('input[type=checkbox]').bootstrapToggle()).not.toThrow();
+        // ...and really initialised: the checkbox sits inside the plugin's toggle widget
+        expect(document.querySelector('input[type=checkbox]').closest('.toggle')).not.toBeNull();
     });
 });
 
@@ -73,13 +81,31 @@ describe('nouislider (#3596)', () => {
             start: [1],
             range: {min: 1, max: 10},
         })).not.toThrow();
+        expect(document.getElementById('rating-slider').noUiSlider.get()).toBe('1.00');
     });
 });
 
 describe('intro.js (#3590)', () => {
+    afterEach(() => {
+        document.body.innerHTML = '';
+    });
+
     test('introJs_givenStart_doesNotThrowSynchronously', () => {
         const introJs = require('intro.js');
 
         expect(() => introJs().start()).not.toThrow();
+    });
+
+    test('introJs_givenADataIntroStep_startsTheTourOnIt', () => {
+        // Arrange: the map's tutorial button marks its steps with data-intro attributes (map.js)
+        const introJs = require('intro.js');
+        document.body.innerHTML = '<div id="editsidebar" data-intro="The sidebar" data-step="1" data-position="right"></div>';
+
+        // Act
+        introJs().start();
+
+        // Assert
+        expect(document.querySelector('.introjs-overlay')).not.toBeNull();
+        expect(document.querySelector('.introjs-tooltiptext').textContent).toBe('The sidebar');
     });
 });

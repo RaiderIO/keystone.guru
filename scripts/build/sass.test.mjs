@@ -1,7 +1,9 @@
 // @vitest-environment node
+import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
-import {describe, expect, it} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it} from 'vitest';
 import {createSassImporter, hoistPlainCssImports, normalizeUrl, rewritePlainCssImports, scopeThemeRootSelectors} from './sass.mjs';
 
 const rootDir = path.resolve(import.meta.dirname, '..', '..');
@@ -35,6 +37,10 @@ describe('rewritePlainCssImports', () => {
     it('rewritePlainCssImports_givenRemoteOrUrlImport_leavesItAlone', () => {
         expect(rewritePlainCssImports('@import "https://example.com/font.css";'))
             .toBe('@import "https://example.com/font.css";');
+        expect(rewritePlainCssImports('@import "http://example.com/font.css";'))
+            .toBe('@import "http://example.com/font.css";');
+        expect(rewritePlainCssImports('@import "//example.com/font.css";'))
+            .toBe('@import "//example.com/font.css";');
         expect(rewritePlainCssImports('@import url("fonts.css");'))
             .toBe('@import url("fonts.css");');
     });
@@ -89,9 +95,11 @@ describe('scopeThemeRootSelectors', () => {
     it('scopeThemeRootSelectors_givenPlainRootOrLongerSelector_leavesItAlone', () => {
         const plainRoot = ':root {\n  --bs-blue: #375a7f;\n}';
         const nested    = '.darkly .card :root {\n  color: red;\n}';
+        const descendant = '.darkly :root .card {\n  color: red;\n}';
 
         expect(scopeThemeRootSelectors(plainRoot)).toBe(plainRoot);
         expect(scopeThemeRootSelectors(nested)).toBe(nested);
+        expect(scopeThemeRootSelectors(descendant)).toBe(descendant);
     });
 });
 
@@ -142,5 +150,70 @@ describe('createSassImporter', () => {
         expect(result.syntax).toBe('scss');
         expect(result.contents).toContain('@import "~leaflet/dist/leaflet";');
         expect(result.contents).not.toContain('leaflet.css');
+    });
+});
+
+describe('createSassImporter against a scratch node_modules', () => {
+    let scratchRoot;
+    let scratchImporter;
+
+    /**
+     * @param {string} relativePath
+     * @param {string} contents
+     */
+    function writeScratchFile(relativePath, contents) {
+        const filePath = path.join(scratchRoot, relativePath);
+        fs.mkdirSync(path.dirname(filePath), {recursive: true});
+        fs.writeFileSync(filePath, contents);
+    }
+
+    beforeEach(() => {
+        scratchRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ksg-sass-'));
+        scratchImporter = createSassImporter(scratchRoot);
+    });
+
+    afterEach(() => {
+        fs.rmSync(scratchRoot, {recursive: true, force: true});
+    });
+
+    it('canonicalize_givenDirectoryWithAnIndexPartial_resolvesTheIndex', () => {
+        writeScratchFile('node_modules/pkg/scss/_index.scss', '$a: 1;');
+
+        const url = scratchImporter.canonicalize('~pkg/scss');
+
+        expect(fileURLToPath(url)).toBe(path.join(scratchRoot, 'node_modules', 'pkg', 'scss', '_index.scss'));
+    });
+
+    it('canonicalize_givenFullAndPartialCandidates_prefersTheFullFile', () => {
+        writeScratchFile('node_modules/pkg/_mixins.scss', '$partial: 1;');
+        writeScratchFile('node_modules/pkg/mixins.scss', '$full: 1;');
+
+        const url = scratchImporter.canonicalize('~pkg/mixins');
+
+        expect(fileURLToPath(url)).toBe(path.join(scratchRoot, 'node_modules', 'pkg', 'mixins.scss'));
+    });
+
+    it('canonicalize_givenDirectoryNamedLikeAStylesheet_returnsNull', () => {
+        fs.mkdirSync(path.join(scratchRoot, 'node_modules', 'pkg', 'theme.scss'), {recursive: true});
+
+        expect(scratchImporter.canonicalize('~pkg/theme.scss')).toBeNull();
+    });
+
+    it('load_givenSassFile_returnsIndentedSyntax', () => {
+        writeScratchFile('node_modules/pkg/_grid.sass', '.grid\n  display: grid\n');
+
+        const result = scratchImporter.load(scratchImporter.canonicalize('~pkg/grid'));
+
+        expect(result.syntax).toBe('indented');
+        expect(result.contents).toBe('.grid\n  display: grid\n');
+    });
+
+    it('load_givenCssFileWithACssImport_returnsItUnrewritten', () => {
+        writeScratchFile('node_modules/pkg/dist/pkg.css', '@import "other.css";\n.pkg { color: red; }');
+
+        const result = scratchImporter.load(scratchImporter.canonicalize('~pkg/dist/pkg'));
+
+        expect(result.syntax).toBe('css');
+        expect(result.contents).toBe('@import "other.css";\n.pkg { color: red; }');
     });
 });

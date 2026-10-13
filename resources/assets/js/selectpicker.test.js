@@ -98,6 +98,56 @@ describe('refreshSelectPickers', () => {
         expect(instance.getValue()).toBe('1');
     });
 
+    test('refreshSelectPickers_givenDataWidth_sizesTheWrapper', () => {
+        const select = createSelect('data-width="150px"');
+
+        refreshSelectPickers();
+
+        expect(select.tomselect.wrapper.style.width).toBe('150px');
+    });
+
+    test('refreshSelectPickers_givenMoreThanFiftyOptions_rendersEveryOption', () => {
+        // Tom Select's default maxOptions (50) would silently truncate the NPC selects
+        const options = Array.from({length: 60}, (_, index) => `<option value="${index + 1}">Npc ${index + 1}</option>`).join('');
+        const select = createSelect('', options);
+        refreshSelectPickers();
+
+        select.tomselect.open();
+        select.tomselect.refreshOptions(true);
+
+        expect(select.tomselect.dropdown_content.querySelectorAll('[data-selectable]')).toHaveLength(60);
+    });
+
+    test('refreshSelectPickers_givenOptionTextWithMarkup_escapesItInTheItemAndTheOption', () => {
+        const select = createSelect('', `
+            <option value="1" selected>&lt;b&gt;One&lt;/b&gt;</option>
+            <option value="2">Two</option>`);
+        refreshSelectPickers();
+        const instance = select.tomselect;
+
+        instance.open();
+        instance.refreshOptions(true);
+
+        expect(instance.control.querySelector('.item b')).toBeNull();
+        expect(instance.control.querySelector('.item').textContent).toBe('<b>One</b>');
+        expect(instance.dropdown_content.querySelector('[data-value="1"] b')).toBeNull();
+        expect(instance.dropdown_content.querySelector('[data-value="1"]').textContent).toBe('<b>One</b>');
+    });
+
+    test('refreshSelectPickers_givenDataContentOption_rendersItsHtmlInTheItemAndTheOption', () => {
+        const select = createSelect('', `
+            <option value="1" selected data-content="&lt;i class='fa fa-skull'&gt;&lt;/i&gt; One">One</option>
+            <option value="2">Two</option>`);
+        refreshSelectPickers();
+        const instance = select.tomselect;
+
+        instance.open();
+        instance.refreshOptions(true);
+
+        expect(instance.control.querySelector('.item i.fa-skull')).not.toBeNull();
+        expect(instance.dropdown_content.querySelector('[data-value="1"] i.fa-skull')).not.toBeNull();
+    });
+
     test('refreshSelectPickers_givenDataContentOption_exposesHtmlContent', () => {
         const select = createSelect('', `
             <option value="1" data-content="&lt;img src='icon.png'/&gt; One">One</option>
@@ -273,6 +323,31 @@ describe('selected count summary (data-selected-text-format)', () => {
         expect(instance.control.dataset.countSummary).toBe('2 attributes');
     });
 
+    test('refreshSelectPickers_givenExternalSelectionCrossingThreshold_updatesSummaryOnRefresh', () => {
+        // The inline scripts select options on the <select> itself, then refresh - a silent setValue()
+        const select = createSelect(COUNT_ATTRS, `
+            <option value="1" selected>One</option>
+            <option value="2">Two</option>`);
+        refreshSelectPickers();
+
+        select.querySelector('option[value="2"]').selected = true;
+        refreshSelectPickers();
+
+        expect(select.tomselect.control.classList.contains('ts-count-summary')).toBe(true);
+        expect(select.tomselect.control.dataset.countSummary).toBe('2 attributes');
+    });
+
+    test('refreshSelectPickers_givenCountFormatWithoutThreshold_collapsesFromOneSelection', () => {
+        const select = createSelect('multiple data-selected-text-format="count"', `
+            <option value="1" selected>One</option>
+            <option value="2">Two</option>`);
+
+        refreshSelectPickers();
+
+        expect(select.tomselect.control.classList.contains('ts-count-summary')).toBe(true);
+        expect(select.tomselect.control.dataset.countSummary).toBe('1');
+    });
+
     test('refreshSelectPickers_givenSingleSelectWithFormat_doesNotCollapse', () => {
         const select = createSelect('data-selected-text-format="count > 1"', `
             <option value="1" selected>One</option>
@@ -315,6 +390,18 @@ describe('getSelectPickerSettings', () => {
         const select = createSelect('title="Select something"');
 
         expect(getSelectPickerSettings(select).placeholder).toBe('Select something');
+    });
+
+    test('getSelectPickerSettings_givenNoneSelectedTextWithoutTitle_usesItAsPlaceholder', () => {
+        const select = createSelect('data-none-selected-text="Nothing selected"');
+
+        expect(getSelectPickerSettings(select).placeholder).toBe('Nothing selected');
+    });
+
+    test('getSelectPickerSettings_givenNoEmptyValueOption_disallowsEmptyOption', () => {
+        const select = createSelect();
+
+        expect(getSelectPickerSettings(select).allowEmptyOption).toBe(false);
     });
 
     test('getSelectPickerSettings_givenEmptyValueOption_allowsEmptyOption', () => {

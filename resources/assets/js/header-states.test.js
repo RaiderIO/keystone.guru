@@ -285,6 +285,10 @@ describe('header state language', () => {
         // desktop chips and tiles do not use either
         expect(current.backgroundColor).toBe(other.backgroundColor);
         expect(current.fontWeight).toBe(other.fontWeight);
+        // ...and that border is really there: every row reserves a solid one for .border-accent to colour (jsdom does
+        // not cascade a var() border-color over the longhands, so the colour itself is not asserted)
+        expect(current.borderTopStyle).toBe('solid');
+        expect(['0.125rem', '2px']).toContain(current.borderTopWidth);
     });
 
     test('allButton_givenThemeButtonReboot_keepsTheChipsRadius', () => {

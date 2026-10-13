@@ -228,9 +228,71 @@ describe('$.fn.rangeSlider (#3596)', () => {
         const input = createInput();
 
         $(input).rangeSlider({type: 'double', min: 0, max: 100, from: 20, to: 80});
+        const updateOptions = vi.spyOn($(input).data('rangeSlider').noUiSlider, 'updateOptions');
         $(input).data('rangeSlider').update({from: 30, to: 90});
 
+        expect(updateOptions).not.toHaveBeenCalled();
         expect($(input).data('rangeSlider').noUiSlider.options.range).toEqual({min: 0, max: 100});
         expect(input.value).toBe('30;90');
+    });
+
+    test('rangeSlider_givenUpdateWithOnlyMax_keepsTheCurrentMin', () => {
+        const input = createInput();
+
+        $(input).rangeSlider({type: 'double', min: 10, max: 100, from: 20, to: 80});
+        $(input).data('rangeSlider').update({max: 200});
+
+        expect($(input).data('rangeSlider').noUiSlider.options.range).toEqual({min: 10, max: 200});
+        expect(input.value).toBe('20;80');
+    });
+
+    test('rangeSlider_givenUpdateWithOnlyMin_keepsTheCurrentMax', () => {
+        const input = createInput();
+
+        $(input).rangeSlider({type: 'double', min: 10, max: 100, from: 20, to: 80});
+        $(input).data('rangeSlider').update({min: 5});
+
+        expect($(input).data('rangeSlider').noUiSlider.options.range).toEqual({min: 5, max: 100});
+    });
+
+    test('rangeSlider_givenUpdateOnDoubleTypeWithOnlyTo_keepsTheCurrentFrom', () => {
+        const input = createInput();
+
+        $(input).rangeSlider({type: 'double', min: 0, max: 100, from: 20, to: 80});
+        $(input).data('rangeSlider').update({to: 60});
+
+        expect(input.value).toBe('20;60');
+    });
+
+    test('rangeSlider_givenRealUserInteractionOnDoubleType_firesOnFinishWithFromAndTo', () => {
+        const input = createInput();
+        const onFinish = vi.fn();
+
+        $(input).rangeSlider({type: 'double', min: 0, max: 100, from: 20, to: 80, onFinish});
+        pressArrowRight($(input).next('.range-slider').find('.noUi-handle')[1]);
+
+        expect(onFinish).toHaveBeenCalledTimes(1);
+        expect(onFinish).toHaveBeenCalledWith({from: 20, to: 81});
+        expect(input.value).toBe('20;81');
+    });
+
+    test.each([
+        ['', 'lower'],
+        ['inverse', 'upper'],
+        ['inverse compact', 'upper'],
+    ])('rangeSlider_givenSingleTypeWithExtraClasses%j_connectsTheBarOn%sSide', (extraClasses, connect) => {
+        const input = createInput();
+
+        $(input).rangeSlider({type: 'single', min: 0, max: 10, from: 5, extra_classes: extraClasses});
+
+        expect($(input).data('rangeSlider').noUiSlider.options.connect).toBe(connect);
+    });
+
+    test('rangeSlider_givenDoubleType_connectsTheBarBetweenTheHandles', () => {
+        const input = createInput();
+
+        $(input).rangeSlider({type: 'double', min: 0, max: 100, from: 20, to: 80, extra_classes: 'inverse'});
+
+        expect($(input).data('rangeSlider').noUiSlider.options.connect).toBe(true);
     });
 });

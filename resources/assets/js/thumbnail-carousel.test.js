@@ -420,6 +420,83 @@ describe('$.fn.thumbnailCarousel (#3595)', () => {
         expect(track.style.transform).toBe('translateX(-200%)');
     });
 
+    test('thumbnailCarousel_givenArrowLeftKeyOnNavButton_movesToThePreviousSlide', () => {
+        const track = createCarousel(3);
+        $(track).thumbnailCarousel();
+        const keydown = $.Event('keydown', {key: 'ArrowLeft'});
+
+        $('.thumbnail-carousel__nav--next').trigger(keydown);
+
+        // Wraps backward onto the start clone, whichever arrow button had focus
+        expect(track.style.transform).toBe('translateX(0%)');
+        expect(realSlide(track, 2).getAttribute('aria-hidden')).toBe('false');
+        expect(keydown.isDefaultPrevented()).toBe(true);
+    });
+
+    test('thumbnailCarousel_givenOtherKeyOnNavButton_staysOnTheCurrentSlide', () => {
+        const track = createCarousel(3);
+        $(track).thumbnailCarousel();
+        const keydown = $.Event('keydown', {key: 'Enter'});
+
+        $('.thumbnail-carousel__nav--next').trigger(keydown);
+
+        expect(track.style.transform).toBe('translateX(-100%)');
+        expect(keydown.isDefaultPrevented()).toBe(false);
+    });
+
+    test('thumbnailCarousel_givenArrowClicked_preventsTheDefaultAction', () => {
+        const track = createCarousel(3);
+        $(track).thumbnailCarousel();
+        const click = $.Event('click');
+
+        $('.thumbnail-carousel__nav--next').trigger(click);
+
+        expect(click.isDefaultPrevented()).toBe(true);
+        expect(track.style.transform).toBe('translateX(-200%)');
+    });
+
+    test('thumbnailCarousel_givenDragRightPastTheThreshold_movesToThePreviousSlide', () => {
+        const track = createCarousel(3);
+        $(track).thumbnailCarousel();
+        $('.thumbnail-carousel__nav--next').trigger('click');
+
+        drag(track, 80);
+
+        expect(track.style.transform).toBe('translateX(-100%)');
+        expect(realSlide(track, 0).getAttribute('aria-hidden')).toBe('false');
+    });
+
+    test('thumbnailCarousel_givenNonPrimaryButtonDrag_ignoresIt', () => {
+        // A right-click drag isn't a swipe
+        const track = createCarousel(3);
+        $(track).thumbnailCarousel();
+        const $track = $(track);
+
+        $track.trigger($.Event('pointerdown', {button: 2, pointerId: 1, clientX: 200}));
+        $track.trigger($.Event('pointermove', {pointerId: 1, clientX: 100}));
+        $track.trigger($.Event('pointerup', {pointerId: 1, clientX: 100}));
+
+        expect(track.style.transform).toBe('translateX(-100%)');
+        expect(document.querySelector('.thumbnail-carousel').classList.contains('thumbnail-carousel--dragging')).toBe(false);
+    });
+
+    test('thumbnailCarousel_givenDragInProgress_previewsTheOffsetAndMarksTheCarouselDragging', () => {
+        const track = createCarousel(3);
+        $(track).thumbnailCarousel();
+        const $track = $(track);
+        const carousel = document.querySelector('.thumbnail-carousel');
+
+        $track.trigger($.Event('pointerdown', {button: 0, pointerId: 1, clientX: 200}));
+        $track.trigger($.Event('pointermove', {pointerId: 1, clientX: 170}));
+
+        expect(track.style.transform).toBe('translateX(calc(-100% + -30px))');
+        expect(carousel.classList.contains('thumbnail-carousel--dragging')).toBe(true);
+
+        $track.trigger($.Event('pointerup', {pointerId: 1, clientX: 170}));
+
+        expect(carousel.classList.contains('thumbnail-carousel--dragging')).toBe(false);
+    });
+
     test('thumbnailCarousel_givenDragPastTheThreshold_movesToTheNextSlide', () => {
         const track = createCarousel(3);
         $(track).thumbnailCarousel();

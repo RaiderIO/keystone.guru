@@ -120,4 +120,30 @@ describe('leaflet tooltip focus listener (#128)', () => {
         expect(focusMarkerIcon(marker)).toBeNull();
         expect(marker.isTooltipOpen()).toBe(true);
     });
+
+    test('blurListener_givenThePatchAndAFocusedMarker_closesTheTooltip', () => {
+        const leaflet = loadLeaflet();
+        applyLeafletTooltipFocusFix(leaflet);
+        const {marker} = createMapWithMarker(leaflet);
+        marker.bindTooltip('Some enemy');
+        focusMarkerIcon(marker);
+
+        marker.getElement().dispatchEvent(new FocusEvent('blur'));
+
+        expect(marker.isTooltipOpen()).toBe(false);
+    });
+
+    test('focusListener_givenThePatchAndAGroupTooltip_opensItForTheFocusedMemberAndSkipsElementlessMembers', () => {
+        const leaflet = loadLeaflet();
+        applyLeafletTooltipFocusFix(leaflet);
+        const {map} = createMapWithMarker(leaflet);
+        const member = leaflet.marker([1, 1]);
+        // A nested layer group has no element of its own to listen on
+        const group = leaflet.featureGroup([leaflet.marker([2, 2]), member, leaflet.layerGroup()]).addTo(map);
+
+        expect(() => group.bindTooltip('Some pack')).not.toThrow();
+        expect(focusMarkerIcon(member)).toBeNull();
+        expect(group.isTooltipOpen()).toBe(true);
+        expect(group.getTooltip()._source).toBe(member);
+    });
 });

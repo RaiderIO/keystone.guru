@@ -21,6 +21,8 @@ describe('expandScriptList', () => {
         const inlineFiles = files.slice(explicitCount);
         expect(inlineFiles.length).toBeGreaterThan(100);
         expect(inlineFiles.every(file => /custom[\/\\]inline[\/\\].+[\/\\].+\.js$/.test(file))).toBe(true);
+        // The colocated vitest files must stay out of the bundle - they call describe() at load time
+        expect(inlineFiles.filter(file => file.endsWith('.test.js'))).toEqual([]);
 
         // Deterministic (sorted) glob expansion so builds are reproducible
         expect(inlineFiles).toEqual([...inlineFiles].sort());
