@@ -99,6 +99,7 @@ describe('CommonCollectionDetails', () => {
         expect(fetchedUrls).toEqual(['http://localhost/collections/new?season_id=none']);
         expect(document.querySelector('#collection_routes_loading').hidden).toBe(false);
         expect(document.querySelector('#slot_add').disabled).toBe(true);
+        expect(document.querySelector('#collection_routes').getAttribute('aria-busy')).toBe('true');
     });
 
     it('onSeasonChanged_givenAnotherSeason_fetchesTheSectionForThatSeason', () => {
@@ -167,10 +168,87 @@ describe('CommonCollectionDetails', () => {
         ]);
         expect(globalThis.refreshSelectPickers).toHaveBeenCalled();
         expect(document.querySelector('#collection_routes_loading').hidden).toBe(true);
+        expect(document.querySelectorAll('#collection_routes')).toHaveLength(1);
+        expect(document.querySelector('#collection_routes').dataset.inlineId).toBe('collection_routes_inline');
+        expect(document.querySelector('#collection_route_picker')).not.toBeNull();
+        expect(document.querySelector('#slot_add')).toBeNull();
+    });
+
+    it('onSeasonChanged_givenAnEarlierPickAnswersLast_keepsTheSectionOfTheLatestPick', async () => {
+        // Arrange
+        const resolvers = [];
+        globalThis.fetch = (url) => {
+            fetchedUrls.push(url);
+
+            return new Promise((resolve) => resolvers.push((html) => resolve({ok: true, text: () => Promise.resolve(html)})));
+        };
+        globalThis._inlineManager = {init: vi.fn(), activate: vi.fn()};
+        document.querySelector('#s_17').checked = true;
+        jQuery('#s_17').trigger('change');
+        document.querySelector('#s_none').checked = true;
+        jQuery('#s_none').trigger('change');
+
+        // Act
+        resolvers[1]('<section id="collection_routes" data-season="none"></section>');
+        await new Promise(process.nextTick);
+        resolvers[0]('<section id="collection_routes" data-season="17"></section>');
+        await new Promise(process.nextTick);
+
+        // Assert
+        expect(fetchedUrls).toEqual([
+            'http://localhost/collections/new?season_id=17',
+            'http://localhost/collections/new?season_id=none',
+        ]);
+        expect(document.querySelector('#collection_routes').dataset.season).toBe('none');
+    });
+
+    it('onSeasonChanged_givenAnEarlierPickFailsLast_keepsTheLatestSectionWithoutAnError', async () => {
+        // Arrange
+        const responses = [];
+        globalThis.fetch = () => new Promise((resolve) => responses.push(resolve));
+        globalThis._inlineManager = {init: vi.fn(), activate: vi.fn()};
+        document.querySelector('#s_17').checked = true;
+        jQuery('#s_17').trigger('change');
+        document.querySelector('#s_none').checked = true;
+        jQuery('#s_none').trigger('change');
+        responses[1]({ok: true, text: () => Promise.resolve(`
+            <section id="collection_routes" data-season="none">
+                <div id="collection_routes_loading" hidden></div>
+                <div id="collection_routes_error" hidden></div>
+            </section>`)});
+        await new Promise(process.nextTick);
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        // Act
+        responses[0]({ok: false, status: 500});
+        await new Promise(process.nextTick);
+
+        // Assert
+        expect(document.querySelector('#collection_routes').dataset.season).toBe('none');
+        expect(document.querySelector('#collection_routes_error').hidden).toBe(true);
+        expect(consoleError).not.toHaveBeenCalled();
+    });
+
+    it('onSeasonChanged_givenAResponseWithoutARoutesSection_saysSoAndLeavesTheSectionInPlace', async () => {
+        // Arrange
+        vi.spyOn(console, 'error').mockImplementation(() => {});
+        document.querySelector('#s_17').checked = true;
+        jQuery('#s_17').trigger('change');
+
+        // Act
+        resolveFetch('<p>Something else entirely</p>');
+        await new Promise(process.nextTick);
+
+        // Assert
+        expect(document.querySelector('#slot_add')).not.toBeNull();
+        expect(document.querySelector('#collection_routes_error').hidden).toBe(false);
+        expect(document.querySelector('#collection_routes_loading').hidden).toBe(true);
+        expect(document.querySelector('#collection_routes').hasAttribute('aria-busy')).toBe(false);
     });
 
     it('onSeasonChanged_givenTheFetchFails_saysSoAndLeavesTheSectionInPlace', async () => {
         // Arrange
+        vi.spyOn(console, 'error').mockImplementation(() => {});
         globalThis.fetch = () => Promise.resolve({ok: false, status: 500});
         document.querySelector('#s_17').checked = true;
 
@@ -181,7 +259,8 @@ describe('CommonCollectionDetails', () => {
         // Assert
         expect(document.querySelector('#collection_routes_error').hidden).toBe(false);
         expect(document.querySelector('#collection_routes_loading').hidden).toBe(true);
-        expect(document.querySelector('#collection_routes')).not.toBeNull();
+        expect(document.querySelector('#slot_add')).not.toBeNull();
+        expect(document.querySelector('#collection_routes').hasAttribute('aria-busy')).toBe(false);
     });
 
     it('onSeasonChanged_givenAnExistingCollection_leavesTheSectionAlone', () => {

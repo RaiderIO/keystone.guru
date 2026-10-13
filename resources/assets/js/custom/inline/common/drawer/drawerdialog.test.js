@@ -23,7 +23,7 @@ describe('DrawerDialog', () => {
         globalThis.bootstrap = {Offcanvas: {getOrCreateInstance: vi.fn(() => offcanvas)}};
 
         document.body.innerHTML = `
-            <button class="open_drawer">Open</button>
+            <a class="open_drawer" href="#elsewhere">Open</a>
             <div id="drawer">
                 <button id="drawer_confirm"></button>
                 <div id="drawer_status"></div>
@@ -46,11 +46,34 @@ describe('DrawerDialog', () => {
     });
 
     it('openButton_givenAClick_showsTheDrawer', () => {
+        // Arrange
+        const click = new MouseEvent('click', {bubbles: true, cancelable: true});
+
         // Act
-        document.querySelector('.open_drawer').click();
+        document.querySelector('.open_drawer').dispatchEvent(click);
 
         // Assert
+        expect(bootstrap.Offcanvas.getOrCreateInstance).toHaveBeenCalledWith(document.querySelector('#drawer'));
         expect(offcanvas.show).toHaveBeenCalledTimes(1);
+        expect(click.defaultPrevented).toBe(true);
+    });
+
+    it('activate_givenNoOpenButton_leavesClicksAlone', () => {
+        // Arrange
+        jQuery(document).off('click');
+        new DrawerDialog({
+            drawerSelector:        '#drawer',
+            openButtonSelector:    null,
+            confirmButtonSelector: '#drawer_confirm',
+            statusSelector:        '#drawer_status',
+        }).activate();
+
+        // Act
+        document.querySelector('.open_drawer').click();
+        document.querySelector('#drawer_status').click();
+
+        // Assert
+        expect(offcanvas.show).not.toHaveBeenCalled();
     });
 
     it('close_givenAnOpenDrawer_hidesIt', () => {
@@ -58,6 +81,7 @@ describe('DrawerDialog', () => {
         dialog.close();
 
         // Assert
+        expect(bootstrap.Offcanvas.getOrCreateInstance).toHaveBeenCalledWith(document.querySelector('#drawer'));
         expect(offcanvas.hide).toHaveBeenCalledTimes(1);
     });
 
@@ -73,6 +97,16 @@ describe('DrawerDialog', () => {
         // Assert
         expect(callback).toHaveBeenCalledTimes(1);
         expect(dialog.hasBeenShown()).toBe(true);
+    });
+
+    it('hasBeenShown_givenTheDrawerNeverOpened_returnsFalse', () => {
+        // Arrange - activated in beforeEach
+
+        // Act
+        const hasBeenShown = dialog.hasBeenShown();
+
+        // Assert
+        expect(hasBeenShown).toBe(false);
     });
 
     it('onShow_givenTheDrawerIsShownThreeTimes_callsBackForEveryShowAfterTheFirst', () => {
@@ -109,6 +143,26 @@ describe('DrawerDialog', () => {
         // Assert
         expect(document.querySelector('#drawer_confirm').textContent).toBe('Add 2 routes');
         expect(document.querySelector('#drawer_confirm').disabled).toBe(true);
+    });
+
+    it('setConfirmButton_givenEnabled_setsTheTextAndEnablesTheButton', () => {
+        // Arrange
+        document.querySelector('#drawer_confirm').disabled = true;
+
+        // Act
+        dialog.setConfirmButton('Add 3 routes', true);
+
+        // Assert
+        expect(document.querySelector('#drawer_confirm').textContent).toBe('Add 3 routes');
+        expect(document.querySelector('#drawer_confirm').disabled).toBe(false);
+    });
+
+    it('setStatus_givenAText_putsItInTheLiveRegion', () => {
+        // Act
+        dialog.setStatus('2 routes selected');
+
+        // Assert
+        expect(document.querySelector('#drawer_status').textContent).toBe('2 routes selected');
     });
 
     it('trigger_givenAnEvent_firesItOnTheDrawerElement', () => {

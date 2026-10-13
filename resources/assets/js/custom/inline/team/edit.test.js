@@ -49,13 +49,29 @@ describe('TeamEdit route picker host', () => {
         });
     }
 
+    let previousGlobals;
+
     beforeEach(() => {
+        previousGlobals = {
+            $:                       globalThis.$,
+            showSuccessNotification: globalThis.showSuccessNotification,
+            showInfoNotification:    globalThis.showInfoNotification,
+            showErrorNotification:   globalThis.showErrorNotification,
+            Noty:                    globalThis.Noty,
+            lang:                    globalThis.lang,
+        };
         globalThis.$ = jQuery;
         globalThis.showSuccessNotification = vi.fn();
         globalThis.showInfoNotification = vi.fn();
         globalThis.showErrorNotification = vi.fn();
         globalThis.Noty = {button: vi.fn((text, classes, callback) => ({text, callback}))};
         globalThis.lang = {get: (key, replacements) => replacements ? `${key}:${replacements.count}` : key};
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
+        Object.assign(globalThis, previousGlobals);
+        document.body.innerHTML = '';
     });
 
     it('_activateRoutePicker_givenTheDrawerOpensAgain_clearsWhatWasAddedAndReloads', () => {
@@ -90,6 +106,22 @@ describe('TeamEdit route picker host', () => {
         expect(picker.reload).toHaveBeenCalledTimes(1);
     });
 
+    it('_activateRoutePicker_givenThePickerConfirms_handsTheResultToTheHost', () => {
+        // Arrange
+        const context = buildContext();
+        context._onRoutesAdded = vi.fn();
+        const confirmedCallbacks = [];
+        const picker = {dialog: {onShow: vi.fn()}, onConfirmed: (callback) => confirmedCallbacks.push(callback)};
+        const result = {publicKeys: ['a'], response: {public_keys: ['a']}};
+        TeamEdit.prototype._activateRoutePicker.call(context, picker);
+
+        // Act
+        confirmedCallbacks.forEach((callback) => callback(result));
+
+        // Assert
+        expect(context._onRoutesAdded).toHaveBeenCalledExactlyOnceWith(result);
+    });
+
     it('_onRoutesAdded_givenAResponseListingTheAddedRoutes_offersUndoForOnlyThoseRoutes', () => {
         // Arrange
         const context = buildContext();
@@ -109,12 +141,30 @@ describe('TeamEdit route picker host', () => {
     it('_onRoutesAdded_givenNothingWasNewlyAdded_showsNoUndo', () => {
         // Arrange
         const context = buildContext();
+        const filterClicked = vi.fn();
+        document.body.innerHTML = '<button id="dungeonroute_filter"></button>';
+        jQuery('#dungeonroute_filter').on('click', filterClicked);
 
         // Act
         TeamEdit.prototype._onRoutesAdded.call(context, {publicKeys: ['a'], response: {public_keys: []}});
 
         // Assert
         expect(showSuccessNotification).not.toHaveBeenCalled();
+        expect(filterClicked).toHaveBeenCalledTimes(1);
+    });
+
+    it('_onRoutesAdded_givenAResponseWithoutTheAddedRoutes_offersUndoForEveryPickedRoute', () => {
+        // Arrange
+        const context = buildContext();
+        context._undoAddRoutes = vi.fn();
+
+        // Act
+        TeamEdit.prototype._onRoutesAdded.call(context, {publicKeys: ['a', 'b'], response: undefined});
+
+        // Assert
+        expect(showSuccessNotification).toHaveBeenCalledExactlyOnceWith('js.team_add_routes_successful:2', expect.anything());
+        showSuccessNotification.mock.calls[0][1].buttons[0].callback({close: vi.fn()});
+        expect(context._undoAddRoutes).toHaveBeenCalledWith(['a', 'b']);
     });
 
     it('_getRoutesAddedText_givenSeveralRoutes_returnsTheCountedText', () => {
@@ -148,6 +198,9 @@ describe('TeamEdit route picker host', () => {
     it('_undoAddRoutes_givenARemoveFails_reportsIt', () => {
         // Arrange
         const context = buildContext();
+        const filterClicked = vi.fn();
+        document.body.innerHTML = '<button id="dungeonroute_filter"></button>';
+        jQuery('#dungeonroute_filter').on('click', filterClicked);
         let call = 0;
         vi.spyOn(jQuery, 'ajax').mockImplementation(() => (call++ === 0 ?
             jQuery.Deferred().reject().promise() : jQuery.Deferred().resolve().promise()));
@@ -158,6 +211,7 @@ describe('TeamEdit route picker host', () => {
         // Assert
         expect(showErrorNotification).toHaveBeenCalledWith('js.team_add_routes_undo_failed');
         expect(showInfoNotification).not.toHaveBeenCalled();
+        expect(filterClicked).toHaveBeenCalledTimes(1);
     });
 });
 
@@ -202,6 +256,35 @@ describe('TeamEdit destructive confirms', () => {
             yesLabel: 'js.delete_team_confirm_yes',
             ...DANGER_BUTTONS,
         });
+    });
+
+    it('_confirmDeleteTeam_givenConfirmed_submitsTheDetailsFormAsADelete', () => {
+        // Arrange
+        const jQuery = require('jquery');
+        const previousJquery = globalThis.$;
+        globalThis.$ = jQuery;
+        document.body.innerHTML = `
+            <form id="team_details_form"><input type="hidden" id="team_details_method" name="_method" value="PATCH"></form>`;
+        const submittedMethods = [];
+        jQuery('#team_details_form').on('submit', (event) => {
+            submittedMethods.push(jQuery('#team_details_method').val());
+            event.preventDefault();
+        });
+        const context = Object.assign(Object.create(TeamEdit.prototype), {
+            options: {detailsFormSelector: '#team_details_form', detailsMethodInputSelector: '#team_details_method'},
+        });
+
+        try {
+            // Act
+            TeamEdit.prototype._confirmDeleteTeam.call(context);
+            globalThis.showConfirmYesCancel.mock.calls[0][1]();
+
+            // Assert
+            expect(submittedMethods).toEqual(['DELETE']);
+        } finally {
+            globalThis.$ = previousJquery;
+            document.body.innerHTML = '';
+        }
     });
 
     it('_confirmRemoveMember_givenConfirmed_removesTheMemberBehindADangerButton', () => {

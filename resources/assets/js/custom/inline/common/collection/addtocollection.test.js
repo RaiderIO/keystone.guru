@@ -120,6 +120,7 @@ describe('CommonCollectionAddtocollection', () => {
 
         document.body.innerHTML = `
             <a class="add_trigger" data-publickey="route1"></a>
+            <a class="add_trigger" data-publickey="route2"></a>
             <div id="modal">
                 <div id="status"></div>
                 <ul id="list" hidden></ul>
@@ -146,7 +147,7 @@ describe('CommonCollectionAddtocollection', () => {
      * @param {Object} json
      */
     function openWith(json) {
-        jQuery('.add_trigger').trigger('click');
+        jQuery('.add_trigger[data-publickey="route1"]').trigger('click');
         ajaxCalls.shift().success(json);
     }
 
@@ -154,7 +155,7 @@ describe('CommonCollectionAddtocollection', () => {
         // Arrange
 
         // Act
-        jQuery('.add_trigger').trigger('click');
+        jQuery('.add_trigger[data-publickey="route1"]').trigger('click');
 
         // Assert
         expect(modalShow).toHaveBeenCalled();
@@ -295,12 +296,15 @@ describe('CommonCollectionAddtocollection', () => {
         jQuery('#add_to_collection_colA').prop('checked', true).trigger('change');
         ajaxCalls.shift().success({});
 
+        let noty = {close: vi.fn()};
+
         // Act
-        toasts[0].opts.buttons[0].callback({close: vi.fn()});
+        toasts[0].opts.buttons[0].callback(noty);
         let request = ajaxCalls.shift();
         request.success({});
 
         // Assert
+        expect(noty.close).toHaveBeenCalledTimes(1);
         expect(request.type).toBe('DELETE');
         expect(request.url).toBe('/delete/colA');
         expect(jQuery('#add_to_collection_colA').prop('checked')).toBe(false);
@@ -373,10 +377,69 @@ describe('CommonCollectionAddtocollection', () => {
         // Arrange
 
         // Act
-        jQuery('.add_trigger').trigger('click');
+        jQuery('.add_trigger[data-publickey="route1"]').trigger('click');
         ajaxCalls.shift().error({});
 
         // Assert
         expect(jQuery('#status').text()).toBe('Load failed');
+    });
+
+    it('open_givenAnotherRouteOpenedBeforeTheFirstLoaded_ignoresTheFirstResponse', () => {
+        // Arrange
+        jQuery('.add_trigger[data-publickey="route1"]').trigger('click');
+        jQuery('.add_trigger[data-publickey="route2"]').trigger('click');
+        let [firstRequest, secondRequest] = ajaxCalls;
+
+        // Act
+        secondRequest.success(listResponse([collection({public_key: 'second'})]));
+        firstRequest.success(listResponse([collection({public_key: 'first'})]));
+
+        // Assert
+        expect(secondRequest.data).toEqual({dungeon_route: 'route2'});
+        expect(jQuery('#list > li').map((index, element) => jQuery(element).attr('data-public-key')).get()).toEqual(['second']);
+    });
+
+    it('open_givenTheDialogWasShowingAnotherRoute_clearsItWhileLoading', () => {
+        // Arrange
+        openWith(listResponse([collection()]));
+
+        // Act
+        jQuery('.add_trigger[data-publickey="route2"]').trigger('click');
+
+        // Assert
+        expect(jQuery('#list > li').length).toBe(0);
+        expect(jQuery('#list').prop('hidden')).toBe(true);
+        expect(jQuery('#new').children().length).toBe(0);
+        expect(jQuery('#status').text()).toBe('Loading');
+    });
+
+    it('toggle_givenTheSaveLandsAfterAnotherRouteWasOpened_leavesTheNewRoutesRowsAlone', () => {
+        // Arrange
+        openWith(listResponse([collection()]));
+        jQuery('#add_to_collection_colA').prop('checked', true).trigger('change');
+        let save = ajaxCalls.shift();
+        jQuery('.add_trigger[data-publickey="route2"]').trigger('click');
+        ajaxCalls.shift().success(listResponse([collection({route_count: 7})]));
+
+        // Act
+        save.success({});
+
+        // Assert
+        expect(save.data).toEqual({dungeon_routes: ['route1']});
+        expect(jQuery('#list .add_to_collection_count').text()).toBe('7 / 24');
+        expect(jQuery('#add_to_collection_colA').prop('checked')).toBe(false);
+        expect(toasts[0].text).toBe('Added to Season set.');
+    });
+
+    it('toggle_givenARejectedSaveWithoutAMessage_saysTheSaveFailed', () => {
+        // Arrange
+        openWith(listResponse([collection()]));
+
+        // Act
+        jQuery('#add_to_collection_colA').prop('checked', true).trigger('change');
+        ajaxCalls.shift().error({status: 500});
+
+        // Assert
+        expect(showErrorNotification).toHaveBeenCalledWith('Save failed');
     });
 });

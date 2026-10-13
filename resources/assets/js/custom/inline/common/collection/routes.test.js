@@ -163,9 +163,6 @@ describe('CommonCollectionRoutes', () => {
     });
 
     /**
-     * Replaces the controller with the one a collection that does not exist yet gets: no endpoints to save to.
-     */
-    /**
      * Replaces the controller with one built from other options.
      * @param {Object} overrides
      */
@@ -180,6 +177,9 @@ describe('CommonCollectionRoutes', () => {
         new CommonCollectionRoutes('routes', 'common/collection/routes', Object.assign({}, routesOptions, overrides)).activate();
     }
 
+    /**
+     * Replaces the controller with the one a collection that does not exist yet gets: no endpoints to save to.
+     */
     function asNewCollection() {
         withOptions({storeUrl: null, deleteUrl: null, orderUrl: null});
     }
@@ -276,6 +276,65 @@ describe('CommonCollectionRoutes', () => {
         expect(lists.slot_2_inline.getIds()).toEqual([]);
         expect(document.querySelector('#count').textContent).toBe('3 / 24');
         expect(picker.setExistingPublicKeys).toHaveBeenLastCalledWith(['keyA', 'keyB', 'keyOld'], expect.any(Object));
+        expect(globalThis.showInfoNotification).toHaveBeenCalledWith('Undone');
+    });
+
+    it('onAdded_givenUndoFails_keepsTheAddedRoutesAndSaysSo', () => {
+        // Arrange
+        const added = [{id: 21, public_key: 'keyC', title: 'Charlie', dungeon_id: 2, dungeon: 'Two'}];
+        jQuery('#picker').trigger('dungeonroutepicker:confirmed', [{publicKeys: ['keyC'], response: {dungeon_routes: added}}]);
+
+        // Act
+        toasts[0].opts.buttons[0].callback({close: vi.fn()});
+        lastCall('DELETE').error();
+
+        // Assert
+        expect(lists.slot_2_inline.getIds()).toEqual(['keyC']);
+        expect(globalThis.showErrorNotification).toHaveBeenCalledWith('Failed');
+        expect(globalThis.showInfoNotification).not.toHaveBeenCalled();
+    });
+
+    it('onAdded_givenARouteOfADungeonWithoutASlot_putsItInTheFlatListUnderItsDungeonName', () => {
+        // Arrange - a free-form collection: one slot for dungeon 1, and the flat list for every other dungeon
+        withOptions({
+            sections: [
+                {inlineId: 'slot_1_inline', rootSelector: '#slot_1', addButtonSelector: '#slot_1_add_button', dungeonId: 1, canAdd: true, withDungeonName: false},
+                {inlineId: 'slot_2_inline', rootSelector: '#slot_2', addButtonSelector: '#slot_2_add_button', dungeonId: null, canAdd: true, withDungeonName: true},
+            ],
+        });
+        const added = [
+            {id: 25, public_key: 'keyE', title: 'Echo', dungeon_id: 5, dungeon: 'Five'},
+            {id: 21, public_key: 'keyF', title: 'Foxtrot', dungeon_id: 1, dungeon: 'One'},
+        ];
+
+        // Act
+        jQuery('#picker').trigger('dungeonroutepicker:confirmed', [{publicKeys: ['keyE', 'keyF'], response: {dungeon_routes: added}}]);
+
+        // Assert
+        expect(lists.slot_2_inline.getIds()).toEqual(['keyE']);
+        expect(document.querySelector('#slot_2 [data-id="keyE"] .ordered_select_label').textContent).toBe('Echo — Five');
+        expect(lists.slot_1_inline.getIds()).toEqual(['keyA', 'keyB', 'keyF']);
+        expect(document.querySelector('#slot_1 [data-id="keyF"] .ordered_select_label').textContent).toBe('Foxtrot');
+    });
+
+    it('onAdded_givenARouteNoListMayHold_reloadsThePage', () => {
+        // Arrange - dungeon 3 only has the section the picker cannot fill, and there is no flat list
+        const originalLocation = window.location;
+        const reload = vi.fn();
+        delete window.location;
+        window.location = {reload};
+        const added = [{id: 23, public_key: 'keyG', title: 'Golf', dungeon_id: 3, dungeon: 'Three'}];
+
+        try {
+            // Act
+            jQuery('#picker').trigger('dungeonroutepicker:confirmed', [{publicKeys: ['keyG'], response: {dungeon_routes: added}}]);
+
+            // Assert
+            expect(reload).toHaveBeenCalledTimes(1);
+            expect(lists.off_pool_inline.getIds()).toEqual(['keyOld']);
+        } finally {
+            window.location = originalLocation;
+        }
     });
 
     it('onRemoved_givenARoute_deletesItAndUndoPutsItBackInPlace', () => {
@@ -293,6 +352,24 @@ describe('CommonCollectionRoutes', () => {
         expect(lastCall('POST').data).toEqual({dungeon_routes: ['keyA']});
         expect(lists.slot_1_inline.getIds()).toEqual(['keyA', 'keyB']);
         expect(lastCall('PUT')).toMatchObject({url: '/order', data: {dungeon_routes: ['keyA', 'keyB', 'keyOld']}});
+        expect(globalThis.showInfoNotification).not.toHaveBeenCalled();
+        lastCall('PUT').success({});
+        expect(globalThis.showInfoNotification).toHaveBeenCalledWith('Undone');
+    });
+
+    it('onRemoved_givenUndoFails_leavesTheRouteOutAndSaysSo', () => {
+        // Arrange
+        document.querySelector('#slot_1 [data-id="keyA"] .ordered_select_remove').click();
+        lastCall('DELETE').success({});
+
+        // Act
+        toasts[0].opts.buttons[0].callback({close: vi.fn()});
+        lastCall('POST').error();
+
+        // Assert
+        expect(lists.slot_1_inline.getIds()).toEqual(['keyB']);
+        expect(globalThis.showErrorNotification).toHaveBeenCalledWith('Failed');
+        expect(ajaxCalls.filter((call) => call.type === 'PUT')).toHaveLength(0);
     });
 
     it('onRemoved_givenTheDeleteFails_putsTheRouteBack', () => {
@@ -367,7 +444,25 @@ describe('CommonCollectionRoutes', () => {
         vi.advanceTimersByTime(500);
 
         // Assert
-        expect(lastCall('PUT').data).toEqual({dungeon_routes: ['keyB', 'keyA']});
+        const puts = ajaxCalls.filter((call) => call.type === 'PUT');
+        expect(puts).toHaveLength(1);
+        expect(puts[0].data).toEqual({dungeon_routes: ['keyB', 'keyA']});
+    });
+
+    it('onRemoved_givenTheListsAreThenMovedBackToTheStoredOrder_storesNothing', () => {
+        // Arrange
+        const bravo = () => document.querySelector('#slot_1 [data-id="keyB"]');
+        document.querySelector('#off_pool [data-id="keyOld"] .ordered_select_remove').click();
+        lastCall('DELETE').success({});
+
+        // Act
+        bravo().querySelector('.ordered_select_up').click();
+        bravo().querySelector('.ordered_select_down').click();
+        vi.advanceTimersByTime(500);
+
+        // Assert
+        expect(lists.slot_1_inline.getIds()).toEqual(['keyA', 'keyB']);
+        expect(ajaxCalls.filter((call) => call.type === 'PUT')).toHaveLength(0);
     });
 
     it('onAdded_givenAMoveWaitingToBeSaved_stillStoresTheMovedOrder', () => {
@@ -380,7 +475,9 @@ describe('CommonCollectionRoutes', () => {
         vi.advanceTimersByTime(500);
 
         // Assert
-        expect(lastCall('PUT').data).toEqual({dungeon_routes: ['keyB', 'keyA', 'keyC', 'keyOld']});
+        const puts = ajaxCalls.filter((call) => call.type === 'PUT');
+        expect(puts).toHaveLength(1);
+        expect(puts[0].data).toEqual({dungeon_routes: ['keyB', 'keyA', 'keyC', 'keyOld']});
     });
 
     it('onMoved_givenTheListIsPutBackWhileASaveIsInFlight_storesTheRestoredOrderToo', () => {
@@ -496,5 +593,6 @@ describe('CommonCollectionRoutes', () => {
 
         // Assert
         expect(lists.slot_1_inline.getIds()).toEqual(['keyA', 'keyB']);
+        expect(globalThis.showErrorNotification).toHaveBeenCalledWith('Failed');
     });
 });
