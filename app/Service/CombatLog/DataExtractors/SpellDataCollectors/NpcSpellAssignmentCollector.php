@@ -19,15 +19,13 @@ use Illuminate\Support\Collection;
 
 class NpcSpellAssignmentCollector implements SpellDataCollectorInterface
 {
-    /** @var Collection<int, Npc|false> */
-    private Collection $npcCache;
-
     /**
-     * New (npc_id, spell_id, dungeon_id) triples discovered this session — written in afterCollect.
+     * Every (npc_id, spell_id) pair cast this session with the dungeon and raw event of its first cast - resolved
+     * against the NPCs' known spells and written in afterCollect.
      *
-     * @var Collection<string, array{npc_id: int, spell_id: int, dungeon_id: int}>
+     * @var array<string, array{npc_id: int, spell_id: int, dungeon_id: int, raw_event: string}>
      */
-    private Collection $pendingNpcSpellAssignments;
+    private array $castNpcSpells = [];
 
     private ?string $currentCombatLogFilePath = null;
 
@@ -38,8 +36,6 @@ class NpcSpellAssignmentCollector implements SpellDataCollectorInterface
         private readonly Collection                         $allSpells,
         private readonly SpellDataExtractorLoggingInterface $log,
     ) {
-        $this->npcCache                   = collect();
-        $this->pendingNpcSpellAssignments = collect();
     }
 
     public function beforeCollect(string $combatLogFilePath): void
@@ -60,67 +56,81 @@ class NpcSpellAssignmentCollector implements SpellDataCollectorInterface
             return;
         }
 
-        // Assign spell IDs to NPCs
-        /** @var Npc|null|false $npc */
-        $npc = $this->npcCache->get($sourceGuid->getId());
-        if ($npc === false) {
-            return;
-        }
+        $npcId    = $sourceGuid->getId();
+        $spellId  = $prefix->getSpellId();
+        $dedupKey = sprintf('%d-%d', $npcId, $spellId);
 
-        if ($npc === null) {
-            $npc = Npc::with('npcSpells')->find($sourceGuid->getId());
-            // If we couldn't find the NPC, just write false and we'll never try it again for this NPC
-            $this->npcCache->put($sourceGuid->getId(), $npc ?? false);
-        }
-
-        if ($npc instanceof Npc) {
-            $dedupKey    = sprintf('%d-%d', $npc->id, $prefix->getSpellId());
-            $npcHasSpell = $npc->npcSpells->filter(fn(NpcSpell $npcSpell) => $npcSpell->spell_id === $prefix->getSpellId())->isNotEmpty();
-
-            // This NPC now casts this spell - we have proof
-            if (!$npcHasSpell && !$this->pendingNpcSpellAssignments->has($dedupKey)) {
-                $this->pendingNpcSpellAssignments->put($dedupKey, [
-                    'npc_id'     => $npc->id,
-                    'spell_id'   => $prefix->getSpellId(),
-                    'dungeon_id' => $currentDungeon->dungeon->id,
-                ]);
-
-                $this->log->extractDataAssignedSpellToNpc($npc->id, $prefix->getSpellId(), $parsedEvent->getRawEvent());
-            }
-        } else {
-            $this->log->extractDataSpellNpcNull($sourceGuid->getId());
-        }
+        $this->castNpcSpells[$dedupKey] ??= [
+            'npc_id'     => $npcId,
+            'spell_id'   => $spellId,
+            'dungeon_id' => $currentDungeon->dungeon->id,
+            'raw_event'  => $parsedEvent->getRawEvent(),
+        ];
     }
 
     public function afterCollect(ExtractedDataResult $result, string $combatLogFilePath): void
     {
-        foreach ($this->pendingNpcSpellAssignments as $pending) {
+        $npcs = $this->loadNpcsWithSpells();
+
+        foreach ($this->castNpcSpells as $castNpcSpell) {
+            /** @var Npc|null $npc */
+            $npc = $npcs->get($castNpcSpell['npc_id']);
+            if ($npc === null) {
+                $this->log->extractDataSpellNpcNull($castNpcSpell['npc_id']);
+
+                continue;
+            }
+
+            if ($npc->npcSpells->contains('spell_id', $castNpcSpell['spell_id'])) {
+                continue;
+            }
+
+            // This NPC now casts this spell - we have proof
+            $this->log->extractDataAssignedSpellToNpc($npc->id, $castNpcSpell['spell_id'], $castNpcSpell['raw_event']);
+
             NpcSpell::create([
-                'npc_id'   => $pending['npc_id'],
-                'spell_id' => $pending['spell_id'],
+                'npc_id'   => $castNpcSpell['npc_id'],
+                'spell_id' => $castNpcSpell['spell_id'],
             ]);
 
             // insertOrIgnore (not exists()+create()) so a concurrent extraction job racing this
             // same pair cannot create a duplicate row - the unique index makes the second insert
             // a no-op instead of a duplicate row, and it's one query instead of two either way
             SpellDungeon::query()->insertOrIgnore([
-                'spell_id'   => $pending['spell_id'],
-                'dungeon_id' => $pending['dungeon_id'],
+                'spell_id'   => $castNpcSpell['spell_id'],
+                'dungeon_id' => $castNpcSpell['dungeon_id'],
             ]);
 
             CombatLogNpcEvent::create([
-                'npc_id'          => $pending['npc_id'],
+                'npc_id'          => $castNpcSpell['npc_id'],
                 'event_type'      => CombatLogNpcEventType::SpellAssigned,
                 'model_class'     => SpellModel::class,
-                'model_id'        => $pending['spell_id'],
+                'model_id'        => $castNpcSpell['spell_id'],
                 'combat_log_path' => $this->currentCombatLogFilePath,
             ]);
 
             $result->createdNpcSpell();
         }
 
-        $this->npcCache                   = collect();
-        $this->pendingNpcSpellAssignments = collect();
-        $this->currentCombatLogFilePath   = null;
+        $this->castNpcSpells            = [];
+        $this->currentCombatLogFilePath = null;
+    }
+
+    /**
+     * Every NPC that cast a candidate spell this session, loaded in one query.
+     *
+     * @return Collection<int, Npc>
+     */
+    private function loadNpcsWithSpells(): Collection
+    {
+        $npcIds = array_values(array_unique(array_column($this->castNpcSpells, 'npc_id')));
+        if (empty($npcIds)) {
+            return collect();
+        }
+
+        return Npc::with('npcSpells')
+            ->whereIn('id', $npcIds)
+            ->get()
+            ->keyBy('id');
     }
 }
