@@ -119,6 +119,7 @@ describe('DungeonSpeedrunRequiredNpcsControls.refreshUI', () => {
     it('refreshUI_givenRealFloor_putsOtherFloorNpcsInTheOverflowWithTheirKilledCount', () => {
         // Arrange
         const controls = createControlsOnFloor({id: 1, facade: 0});
+        $('#edit_route_dungeon_speedrun_required_npcs_toggle_container').hide();
 
         // Act
         controls.refreshUI();
