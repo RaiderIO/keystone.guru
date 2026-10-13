@@ -271,7 +271,7 @@ class HeatPlugin extends MapPlugin {
      * @param rawLatLngsPerFloor {Object}
      * @param dataType {String}
      * @param runCount {Number}
-     * @param weightMax {Number}
+     * @param weightMax {Number|null} Null takes the highest weight in rawLatLngsPerFloor
      * @param gridSizeX {Number}
      * @param gridSizeY {Number}
      */
@@ -282,7 +282,6 @@ class HeatPlugin extends MapPlugin {
         this.runCount = runCount;
         this.gridSizeX = gridSizeX;
         this.gridSizeY = gridSizeY;
-        this.weightMax = weightMax ?? Math.max(this.weightMaxByFloorId);
 
         // Construct an easily referenced array that splits up the latLngs per floor
         this.rawLatLngsByFloorId = [];
@@ -322,6 +321,8 @@ class HeatPlugin extends MapPlugin {
 
             this.weightByFloorIdGrid[rawLatLngsOnFloor.floor_id] = weightByFloorIdGridCache[rawLatLngsOnFloor.floor_id];
         }
+
+        this.weightMax = weightMax ?? this.weightMaxByFloorId.reduce((max, floorWeightMax) => Math.max(max, floorWeightMax), 0);
 
         this._applyLatLngsForFloor(getState().getCurrentFloor().id);
     }

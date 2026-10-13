@@ -122,17 +122,6 @@ describe('EnemyForcesManager._setEnemyForces', () => {
         expect(manager.signal).not.toHaveBeenCalled();
     });
 
-    it('_setEnemyForces_givenUnchangedValueAndForce_signalsAnyway', () => {
-        // Arrange
-        const manager = createSignallingManager({enemyForces: 10});
-
-        // Act
-        manager._setEnemyForces(10, true);
-
-        // Assert
-        expect(manager.signal).toHaveBeenCalledWith('enemyforces:changed', {previousEnemyForces: 10, currentEnemyForces: 10});
-    });
-
     it('_setEnemyForces_givenOverrideActive_storesValueWithoutSignalling', () => {
         // Arrange
         const manager = createSignallingManager({enemyForces: 10, enemyForcesOverride: 50});
@@ -172,6 +161,49 @@ describe('EnemyForcesManager.setEnemyForcesOverride', () => {
         expect(manager.getEnemyForces()).toBe(10);
         expect(manager.getEnemyForcesOverride()).toBeNull();
         expect(manager.signal).toHaveBeenCalledWith('enemyforces:changed', expect.anything());
+    });
+
+    it('setEnemyForcesOverride_givenAnOverride_reportsTheOverrideAsCurrent', () => {
+        // Arrange
+        const manager = createSignallingManager({enemyForces: 10});
+
+        // Act
+        manager.setEnemyForcesOverride(25);
+
+        // Assert
+        expect(manager.signal).toHaveBeenCalledWith('enemyforces:changed', {
+            previousEnemyForces: 10,
+            currentEnemyForces: 25,
+        });
+    });
+
+    it('setEnemyForcesOverride_givenANewOverrideOverAnExistingOne_reportsTheOldOverrideAsPrevious', () => {
+        // Arrange
+        const manager = createSignallingManager({enemyForces: 10, enemyForcesOverride: 25});
+
+        // Act
+        manager.setEnemyForcesOverride(40);
+
+        // Assert
+        expect(manager.signal).toHaveBeenCalledWith('enemyforces:changed', {
+            previousEnemyForces: 25,
+            currentEnemyForces: 40,
+        });
+    });
+
+    it('setEnemyForcesOverride_givenNullWhileOverridden_reportsTheClearedOverrideAsPrevious', () => {
+        // Arrange
+        const manager = createSignallingManager({enemyForces: 10, enemyForcesOverride: 25});
+
+        // Act
+        manager.setEnemyForcesOverride(null);
+
+        // Assert
+        expect(manager.signal).toHaveBeenCalledWith('enemyforces:changed', {
+            previousEnemyForces: 25,
+            currentEnemyForces: 10,
+        });
+        expect(manager.getEnemyForcesOverride()).toBeNull();
     });
 });
 
