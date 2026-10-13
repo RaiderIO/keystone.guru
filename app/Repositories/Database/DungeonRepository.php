@@ -88,4 +88,14 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
                 'name' => $dungeon->name,
             ]);
     }
+
+    public function getAllWithMappingVersionsForAdminList(): Collection
+    {
+        return Dungeon::with(['mappingVersions'])
+            ->select('dungeons.*')
+            ->join('expansions', 'expansions.id', 'dungeons.expansion_id')
+            ->orderByDesc('expansions.released_at')
+            ->orderBy('dungeons.name')
+            ->get();
+    }
 }
