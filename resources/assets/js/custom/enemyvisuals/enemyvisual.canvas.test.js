@@ -41,12 +41,20 @@ const BASE_STYLE = {
     textGlyph: null,
 };
 
-function makeFakeThis({style = {}, content = null, modifiers = [], mapState = null, killZone = null} = {}) {
+function makeFakeThis({
+    style = {},
+    content = null,
+    modifiers = [],
+    mapState = null,
+    killZone = null,
+    aggressivenessBorder = false,
+    enemyOverrides = {},
+} = {}) {
     const reads = [];
     const boxReads = [];
     global.getState = () => ({
         getMapZoomLevel: () => 4,
-        hasEnemyAggressivenessBorder: () => false,
+        hasEnemyAggressivenessBorder: () => aggressivenessBorder,
         getUnkilledEnemyOpacity: () => 50,
         getUnkilledImportantEnemyOpacity: () => 80,
     });
@@ -66,6 +74,7 @@ function makeFakeThis({style = {}, content = null, modifiers = [], mapState = nu
             isSelectable: () => true,
             getKillZone: () => killZone,
             getOverpulledKillZoneId: () => null,
+            ...enemyOverrides,
         },
         map: {
             getMapState: () => mapState,
@@ -218,6 +227,146 @@ test('_refreshCanvasPath_givenKillZone_drawsBorderInItsColourAtZoomWidth', () =>
     // Assert
     expect(appearance.borderColor).toBe('#ff0000');
     expect(appearance.borderWidth).toBe(4);
+});
+
+test('_refreshCanvasPath_givenNoKillZone_drawsThinBlackBorderAtTheVisualsOpacity', () => {
+    // Arrange
+    const fakeThis = makeFakeThis();
+
+    // Act
+    const appearance = refresh(fakeThis);
+
+    // Assert
+    expect(appearance.borderColor).toBe('black');
+    expect(appearance.borderWidth).toBe(1);
+    expect(appearance.opacity).toBe(0.5);
+    expect(appearance.innerMargin).toBe(0);
+});
+
+test('_refreshCanvasPath_givenOverpulledEnemy_drawsBlackBorderAtZoomWidth', () => {
+    // Arrange
+    const fakeThis = makeFakeThis({enemyOverrides: {getOverpulledKillZoneId: () => 3}});
+
+    // Act
+    const appearance = refresh(fakeThis);
+
+    // Assert
+    expect(appearance.borderColor).toBe('black');
+    expect(appearance.borderWidth).toBe(4);
+});
+
+test('_refreshCanvasPath_givenAggressivenessBorder_insetsTheSpriteByTheMargin', () => {
+    // Arrange
+    const fakeThis = makeFakeThis({aggressivenessBorder: true, style: {outerBackgroundColor: 'rgb(220, 60, 60)'}});
+
+    // Act
+    const appearance = refresh(fakeThis);
+
+    // Assert
+    expect(appearance.innerMargin).toBe(5);
+    expect(appearance.outerBackgroundColor).toBe('rgb(220, 60, 60)');
+});
+
+test('_refreshCanvasPath_givenNoContent_bakesTheInnerImageIntoSprite', () => {
+    // Arrange
+    const fakeThis = makeFakeThis({style: {innerImageFit: 'contain', innerImageBlendMode: 'luminosity'}});
+
+    // Act
+    const appearance = refresh(fakeThis);
+
+    // Assert
+    expect(appearance.sprite).toEqual({
+        backgroundColors: ['rgb(255, 255, 255)'],
+        imageUrl: 'https://assets.example/melee.png',
+        imageFit: 'contain',
+        blendMode: 'luminosity',
+        stateBorder: null,
+        text: null,
+    });
+});
+
+test('_refreshCanvasPath_givenImageContent_bakesTheContentImageOverBothBackgrounds', () => {
+    // Arrange
+    const fakeThis = makeFakeThis({
+        content: {classes: 'enemy_icon_npc_enemy_portrait_inner', imageUrl: 'https://assets.example/portrait.png', text: null},
+        style: {contentBackgroundColor: 'rgb(4, 12, 31)', contentImageFit: 'contain', contentImageBlendMode: 'multiply'},
+    });
+
+    // Act
+    const appearance = refresh(fakeThis);
+
+    // Assert
+    expect(fakeThis.reads[0]).toEqual(['enemy_icon_npc_class', 'enemy_icon melee patrol', 'enemy_icon_npc_enemy_portrait_inner', 'border-color: blue;', null]);
+    expect(appearance.sprite).toEqual({
+        backgroundColors: ['rgb(255, 255, 255)', 'rgb(4, 12, 31)'],
+        imageUrl: 'https://assets.example/portrait.png',
+        imageFit: 'contain',
+        blendMode: 'multiply',
+        stateBorder: null,
+        text: null,
+    });
+});
+
+test('_refreshCanvasPath_givenTextWithoutColour_bakesNoText', () => {
+    // Arrange
+    const fakeThis = makeFakeThis({
+        content: {classes: 'enemy_icon_npc_enemy_forces_inner', imageUrl: null, text: {value: '7', classes: 'my-auto w-100', fontSize: 14}},
+    });
+
+    // Act
+    const appearance = refresh(fakeThis);
+
+    // Assert
+    expect(appearance.sprite.text).toBeNull();
+});
+
+test('_refreshCanvasPath_givenDeleteMapStateOnDeletableEnemy_addsDeleteHalo', () => {
+    // Arrange
+    const fakeThis = makeFakeThis({mapState: new DeleteMapState(), enemyOverrides: {isDeletable: () => true}});
+
+    // Act
+    const appearance = refresh(fakeThis);
+
+    // Assert
+    expect(fakeThis.boxReads).toEqual(['selected_enemy_icon leaflet-edit-marker-selected delete']);
+    expect(appearance.selection.width).toBe(68);
+});
+
+test('_refreshCanvasPath_givenDeleteMapStateOnUndeletableEnemy_addsNoHalo', () => {
+    // Arrange
+    const fakeThis = makeFakeThis({mapState: new DeleteMapState(), enemyOverrides: {isDeletable: () => false}});
+
+    // Act
+    const appearance = refresh(fakeThis);
+
+    // Assert
+    expect(appearance.selection).toBeNull();
+    expect(fakeThis.boxReads).toEqual([]);
+});
+
+test('_refreshCanvasPath_givenEditMapStateOnEditableEnemy_addsHalo', () => {
+    // Arrange
+    const fakeThis = makeFakeThis({mapState: new EditMapState(), enemyOverrides: {isEditable: () => true}});
+
+    // Act
+    const appearance = refresh(fakeThis);
+
+    // Assert
+    expect(fakeThis.boxReads).toEqual(['selected_enemy_icon leaflet-edit-marker-selected']);
+    expect(appearance.selection).not.toBeNull();
+});
+
+test('_refreshCanvasPath_givenSelectingMapStateWithoutEditBorder_addsNoHalo', () => {
+    // Arrange
+    const mapState = new EnemySelection();
+    mapState.drawsEnemyEditBorder = () => false;
+    const fakeThis = makeFakeThis({mapState});
+
+    // Act
+    const appearance = refresh(fakeThis);
+
+    // Assert
+    expect(appearance.selection).toBeNull();
 });
 
 test.each([

@@ -501,4 +501,42 @@ describe('EnemyVisual#_createModifiers', () => {
         // Assert
         expect(modifiers.map(modifier => modifier.name)).toEqual(['raidmarker']);
     });
+
+    test('_createModifiers_givenRaidMarkerTruesightAndVisibleTeeming_createsAllThreeAtTheirOwnIndex', () => {
+        // Arrange
+        const self = {
+            enemy: {
+                raid_marker_key: 'skull',
+                teeming: 'visible',
+                npc: {classification_id: 1, truesight: true},
+            },
+        };
+
+        // Act
+        const modifiers = EnemyVisual.prototype._createModifiers.call(self);
+
+        // Assert
+        expect(modifiers.map(modifier => [modifier.name, modifier.index])).toEqual([
+            ['raidmarker', 0],
+            ['truesight', 2],
+            ['teeming', 4],
+        ]);
+    });
+
+    test('_createModifiers_givenNoRaidMarkerKey_createsNoRaidMarkerModifier', () => {
+        // Arrange
+        const self = {
+            enemy: {
+                raid_marker_key: null,
+                teeming: 'visible',
+                npc: null,
+            },
+        };
+
+        // Act
+        const modifiers = EnemyVisual.prototype._createModifiers.call(self);
+
+        // Assert
+        expect(modifiers.map(modifier => modifier.name)).toEqual(['teeming']);
+    });
 });
