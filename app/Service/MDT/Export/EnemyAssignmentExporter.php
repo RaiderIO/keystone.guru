@@ -54,7 +54,7 @@ class EnemyAssignmentExporter
                     __('services.mdt.io.export_string.category.raid_markers'),
                     sprintf(
                         __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_raid_marker'),
-                        $enemyRaidMarker->raidMarker->name,
+                        $enemyRaidMarker->raidMarker->key,
                         $enemyRaidMarker->npc_id,
                     ),
                     ['details' => __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')],

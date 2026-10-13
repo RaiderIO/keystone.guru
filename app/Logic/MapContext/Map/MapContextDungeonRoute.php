@@ -139,8 +139,8 @@ class MapContextDungeonRoute extends MapContextBase
             'enemyRaidMarkers' => $this->dungeonRoute->enemyRaidMarkers->map(static fn(
                 DungeonRouteEnemyRaidMarker $drEnemyRaidMarker,
             ) => [
-                'enemy_id'         => $drEnemyRaidMarker->enemy_id,
-                'raid_marker_name' => $drEnemyRaidMarker->raidMarker->name,
+                'enemy_id'        => $drEnemyRaidMarker->enemy_id,
+                'raid_marker_key' => $drEnemyRaidMarker->raidMarker->key,
             ]),
             // A list of affixes that this route has (not to be confused with AffixGroups)
             'uniqueAffixes' => $this->dungeonRoute->affixes

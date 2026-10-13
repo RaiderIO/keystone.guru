@@ -169,7 +169,7 @@ class MapContextDungeonRoute extends MapContext {
     }
 
     /**
-     * "enemyRaidMarkers":[{"enemy_id":6891,"raid_marker_name":"skull"}]
+     * "enemyRaidMarkers":[{"enemy_id":6891,"raid_marker_key":"skull"}]
      * @returns {[]}
      */
     getEnemyRaidMarkers() {

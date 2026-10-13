@@ -14,6 +14,7 @@ use InvalidArgumentException;
 
 /**
  * @property int                                   $id
+ * @property string                                $key
  * @property string                                $name
  * @property EloquentCollection<int, DungeonRoute> $dungeonRoutes
  *
@@ -27,6 +28,7 @@ class PublishedState extends Model
 
     protected $fillable = [
         'id',
+        'key',
         'name',
     ];
 

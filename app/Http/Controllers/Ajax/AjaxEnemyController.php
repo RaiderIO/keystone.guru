@@ -102,8 +102,9 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
         Gate::authorize('edit', $dungeonRoute);
 
         try {
-            $raidMarkerName = $request->get('raid_marker_name', '');
-            $npcId          = $enemy->getMdtNpcId();
+            // A map editor tab opened on an older bundle still posts raid_marker_name
+            $raidMarkerKey = $request->input('raid_marker_key', $request->input('raid_marker_name', ''));
+            $npcId         = $enemy->getMdtNpcId();
 
             // The npc_id/mdt_id identity is durable across a mapping version upgrade, but it is NOT
             // guaranteed unique within one - a small number of NPCs are placed twice under the same
@@ -136,18 +137,18 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                 ->delete();
 
             // Create a new one, if the user didn't just want to clear it
-            if (!empty($raidMarkerName)) {
+            if (!empty($raidMarkerKey)) {
                 DungeonRouteEnemyRaidMarker::create([
                     'dungeon_route_id' => $dungeonRoute->id,
-                    'raid_marker_id'   => RaidMarker::ALL[$raidMarkerName],
+                    'raid_marker_id'   => RaidMarker::ALL[$raidMarkerKey],
                     'npc_id'           => $npcId,
                     'mdt_id'           => $enemy->mdt_id,
                     'enemy_id'         => $enemy->id,
                 ]);
 
-                $result = ['name' => $raidMarkerName];
+                $result = ['key' => $raidMarkerKey];
             } else {
-                $result = ['name' => ''];
+                $result = ['key' => ''];
             }
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
