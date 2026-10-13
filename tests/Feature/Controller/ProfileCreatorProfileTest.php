@@ -593,9 +593,10 @@ final class ProfileCreatorProfileTest extends PublicTestCase
         Feature::for($creator)->activate(CreatorProfiles::class);
 
         $legacyRoute = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null]);
-        DungeonRoute::query()->whereKey($legacyRoute->id)->update(['expires_at' => '0000-00-00 00:00:00']);
 
         try {
+            $this->writeZeroExpiry($legacyRoute);
+
             // Act
             $response = $this->actingAs($creator)->get(route('profile.edit'));
 
@@ -620,9 +621,10 @@ final class ProfileCreatorProfileTest extends PublicTestCase
         Feature::for($creator)->activate(CreatorProfiles::class);
 
         $legacyRoute = DungeonRoute::factory()->create(['author_id' => $creator->id, 'expires_at' => null]);
-        DungeonRoute::query()->whereKey($legacyRoute->id)->update(['expires_at' => '0000-00-00 00:00:00']);
 
         try {
+            $this->writeZeroExpiry($legacyRoute);
+
             // Act
             $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
                 'pinned_dungeon_routes' => [$legacyRoute->id],
@@ -1228,6 +1230,23 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             Feature::for($creator)->forget(CreatorProfiles::class);
             UserSocialLink::where('user_id', $creator->id)->delete();
             $creator->delete();
+        }
+    }
+
+    /**
+     * Legacy rows carry a zero expires_at, which the strict sql_mode refuses to write; only this one statement
+     * runs without it.
+     */
+    private function writeZeroExpiry(DungeonRoute $dungeonRoute): void
+    {
+        $connection = $dungeonRoute->getConnection();
+        $sqlMode    = $connection->selectOne('SELECT @@SESSION.sql_mode AS sql_mode')->sql_mode;
+
+        try {
+            $connection->statement("SET SESSION sql_mode = ''");
+            DungeonRoute::query()->whereKey($dungeonRoute->id)->update(['expires_at' => '0000-00-00 00:00:00']);
+        } finally {
+            $connection->statement('SET SESSION sql_mode = ?', [$sqlMode]);
         }
     }
 
