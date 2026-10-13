@@ -201,7 +201,7 @@ describe('DungeonFloorSwitchMarker tooltip (#4408)', () => {
         expect(layer.getTooltip().text).toBe('js.dungeonfloorswitchmarker_unknown_label');
 
         vi.spyOn(lang, 'get').mockImplementation((key, replacements) => (
-            replacements === undefined ? key : `${key}(${JSON.stringify(replacements)})`
+            replacements === undefined ? `t(${key})` : `t(${key}, ${JSON.stringify(replacements)})`
         ));
 
         // Act: the rest of loadRemoteMapObject() finishes assigning attributes, then fires
@@ -212,7 +212,7 @@ describe('DungeonFloorSwitchMarker tooltip (#4408)', () => {
 
         // Assert: the tooltip was rebound with the now-resolvable target floor
         expect(layer.bindCount).toBe(2);
-        expect(layer.getTooltip().text).toBe('js.dungeonfloorswitchmarker_go_to_label({"floor":"floor.floor_5_name"})');
+        expect(layer.getTooltip().text).toBe('t(t(js.dungeonfloorswitchmarker_go_to_label, {"floor":"t(floor.floor_5_name)"}))');
     });
 
     test('cleanup_unregistersTheObjectInitializedListener', () => {

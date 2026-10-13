@@ -1095,12 +1095,13 @@ describe('Enemy pack membership', () => {
      *
      * @param {Enemy[]} enemies
      * @param {Object|null} enemyPacksById Null when the page has no enemy pack group at all.
+     * @param {Function|null} findEnemyPack Replaces the lookup in enemyPacksById when given.
      */
-    function placeOnOneMap(enemies, enemyPacksById = {}) {
+    function placeOnOneMap(enemies, enemyPacksById = {}, findEnemyPack = null) {
         const objects = {};
         enemies.forEach((enemy) => (objects[enemy.id] = enemy));
         const enemyPackMapObjectGroup = enemyPacksById === null ? null : {
-            findMapObjectById: (id) => enemyPacksById[id] ?? null,
+            findMapObjectById: findEnemyPack ?? ((id) => enemyPacksById[id] ?? null),
         };
         const map = makeFakeMap();
         map.mapObjectGroupManager = fakeMapObjectGroupManager((name) => {
@@ -1175,8 +1176,17 @@ describe('Enemy pack membership', () => {
         expect(enemy.getPackGroup()).toBe(3);
     });
 
+    test('getPackGroup_givenNoPack_returnsNullWithoutLookingUpAPack', () => {
+        setFakeState();
+        const enemy = makePackEnemy(1, null);
+        const findEnemyPack = vi.fn(() => ({group: 3}));
+        placeOnOneMap([enemy], {}, findEnemyPack);
+
+        expect(enemy.getPackGroup()).toBeNull();
+        expect(findEnemyPack).not.toHaveBeenCalled();
+    });
+
     test.each([
-        ['no pack', null, {7: {group: 3}}],
         ['a pack that cannot be found', 8, {7: {group: 3}}],
         ['no enemy pack group on the page', 7, null],
     ])('getPackGroup_given%s_returnsNull', (label, enemyPackId, enemyPacksById) => {
