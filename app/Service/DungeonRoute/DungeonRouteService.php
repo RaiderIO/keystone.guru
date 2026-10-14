@@ -13,6 +13,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteEnemyRaidMarkerReposito
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\DungeonStartRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
+use App\Repositories\Interfaces\PageViewRepositoryInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLoggingInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -21,11 +22,14 @@ use Illuminate\Support\Facades\DB;
 
 readonly class DungeonRouteService implements DungeonRouteServiceInterface
 {
+    private const int POPULARITY_UPDATE_CHUNK_SIZE = 1000;
+
     public function __construct(
         private DungeonRouteRepositoryInterface                $dungeonRouteRepository,
         private KillZoneEnemyRepositoryInterface               $killZoneEnemyRepository,
         private DungeonRouteEnemyRaidMarkerRepositoryInterface $dungeonRouteEnemyRaidMarkerRepository,
         private DungeonStartRepositoryInterface                $dungeonStartRepository,
+        private PageViewRepositoryInterface                    $pageViewRepository,
         private ThumbnailServiceInterface                      $thumbnailService,
         private DungeonRouteServiceLoggingInterface            $log,
     ) {
@@ -38,50 +42,15 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
         try {
             $this->log->updatePopularityStart();
 
-            $updatedRouteCount = DB::update('
-            UPDATE dungeon_routes, (
-                SELECT model_id, count(0) as views
-                FROM page_views
-                WHERE page_views.model_class = :modelClass
-                AND page_views.created_at > :popularityDate
-                GROUP BY page_views.model_id
-            ) as page_views,
-            (
-                SELECT dungeon_id, MAX(id) as id
-                FROM mapping_versions
-                GROUP BY mapping_versions.dungeon_id
-                /**
-                  @TODO #2933 Where game version is the same as the dungeon route\'s mapping version?
-                 */
-            ) as latest_mapping_version_ids
-            SET dungeon_routes.popularity = page_views.views
-            /*
-                This will calculate a number between 1 and 0 depending on the age of the route. A new route will generate 1.
-                A route at popularityFalloffDays days will produce 0. This will ensure that old routes fall off the
-                popularity board over time and the overview stays fresh
-            */
-                * GREATEST(0, (1 - DATEDIFF(NOW(), dungeon_routes.updated_at) / :popularityFalloffDays))
-            /*
-                Adds a penalty if your route does not use the latest mapping version for your dungeon
-             */
-                * IF(dungeon_routes.mapping_version_id = latest_mapping_version_ids.id, 1, :outOfDateMappingVersionPenalty)
-            WHERE dungeon_routes.id = page_views.model_id
-                AND dungeon_routes.dungeon_id = latest_mapping_version_ids.dungeon_id
-            /*
-               Only public routes can have their popularity updated for performance reasons
-             */
-                AND dungeon_routes.published_state_id IN (:publishedStates)
-            /*
-                If your route is cloned, it cannot show up in any popularity pages
-             */
-                AND dungeon_routes.clone_of IS NULL
-        ', [
-                'modelClass'                     => DungeonRoute::class,
-                'popularityDate'                 => now()->subDays(config('keystoneguru.discover.service.popular_days'))->toDateTimeString(),
-                'popularityFalloffDays'          => config('keystoneguru.discover.service.popular_falloff_days'),
-                'outOfDateMappingVersionPenalty' => config('keystoneguru.discover.service.popular_out_of_date_mapping_version_penalty'),
-                'publishedStates'                => implode(',', [PublishedState::ALL[PublishedState::WORLD]]),
-            ]);
+            // Reading page_views inside the UPDATE itself takes shared next-key locks that block every page view insert until it commits
+            $viewCountsByRouteId = $this->pageViewRepository->getViewCountsByModelIdSince(
+                DungeonRoute::class,
+                now()->subDays(config('keystoneguru.discover.service.popular_days')),
+            );
+
+            foreach ($viewCountsByRouteId->chunk(self::POPULARITY_UPDATE_CHUNK_SIZE) as $chunk) {
+                $updatedRouteCount += $this->updatePopularityFromViewCounts($chunk);
+            }
         } finally {
             $this->log->updatePopularityEnd($updatedRouteCount);
         }
@@ -343,5 +312,57 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
         }
 
         return $publishedCount;
+    }
+
+    /**
+     * @param Collection<int, int> $viewCountsByRouteId
+     */
+    private function updatePopularityFromViewCounts(Collection $viewCountsByRouteId): int
+    {
+        $viewCountRows = [];
+        $bindings      = [];
+        foreach ($viewCountsByRouteId as $routeId => $viewCount) {
+            $viewCountRows[] = 'ROW(?, ?)';
+            $bindings[]      = $routeId;
+            $bindings[]      = $viewCount;
+        }
+
+        return DB::update(sprintf('
+            UPDATE dungeon_routes, (VALUES %s) AS view_counts (model_id, views),
+            (
+                SELECT dungeon_id, MAX(id) as id
+                FROM mapping_versions
+                GROUP BY mapping_versions.dungeon_id
+                /**
+                  @TODO #2933 Where game version is the same as the dungeon route\'s mapping version?
+                 */
+            ) as latest_mapping_version_ids
+            SET dungeon_routes.popularity = view_counts.views
+            /*
+                This will calculate a number between 1 and 0 depending on the age of the route. A new route will generate 1.
+                A route at popularityFalloffDays days will produce 0. This will ensure that old routes fall off the
+                popularity board over time and the overview stays fresh
+            */
+                * GREATEST(0, (1 - DATEDIFF(NOW(), dungeon_routes.updated_at) / ?))
+            /*
+                Adds a penalty if your route does not use the latest mapping version for your dungeon
+             */
+                * IF(dungeon_routes.mapping_version_id = latest_mapping_version_ids.id, 1, ?)
+            WHERE dungeon_routes.id = view_counts.model_id
+                AND dungeon_routes.dungeon_id = latest_mapping_version_ids.dungeon_id
+            /*
+               Only public routes can have their popularity updated for performance reasons
+             */
+                AND dungeon_routes.published_state_id IN (?)
+            /*
+                If your route is cloned, it cannot show up in any popularity pages
+             */
+                AND dungeon_routes.clone_of IS NULL
+        ', implode(', ', $viewCountRows)), [
+            ...$bindings,
+            config('keystoneguru.discover.service.popular_falloff_days'),
+            config('keystoneguru.discover.service.popular_out_of_date_mapping_version_penalty'),
+            implode(',', [PublishedState::ALL[PublishedState::WORLD]]),
+        ]);
     }
 }
