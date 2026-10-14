@@ -110,4 +110,11 @@ class SeasonRepository extends DatabaseRepository implements SeasonRepositoryInt
             ->get()
             ->keyBy('id');
     }
+
+    public function findForExpansion(int $expansionId, int $seasonId): ?Season
+    {
+        return Season::query()
+            ->where('expansion_id', $expansionId)
+            ->find($seasonId);
+    }
 }

@@ -125,4 +125,33 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
     public function hasNonSandboxRoutesByAuthor(User $user): bool;
 
     public function findByPublicKey(string $publicKey): ?DungeonRoute;
+
+    /**
+     * Whether the user authored any route that has no expiry set (sandbox routes carry one).
+     */
+    public function hasRoutesWithoutExpiryByAuthor(User $user): bool;
+
+    /**
+     * The user's own routes without an expiry that have one of the public keys, keyed by public key, with their dungeon and mapping version.
+     *
+     * @param  array<int, string>               $publicKeys
+     * @return Collection<string, DungeonRoute>
+     */
+    public function getWithoutExpiryByAuthorAndPublicKeys(User $user, array $publicKeys): Collection;
+
+    /**
+     * The user's own routes without an expiry that have one of the ids, ordered by id, with their dungeon and mapping version.
+     *
+     * @param  array<int, int>               $dungeonRouteIds
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getWithoutExpiryByAuthorAndIds(User $user, array $dungeonRouteIds): Collection;
+
+    /**
+     * Only the id and dungeon id of the routes with the given ids.
+     *
+     * @param  Collection<int, int>          $dungeonRouteIds
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getIdAndDungeonIdByIds(Collection $dungeonRouteIds): Collection;
 }

@@ -58,4 +58,11 @@ interface TagRepositoryInterface extends BaseRepositoryInterface
      * Whether the user already has a personal route tag with exactly this name.
      */
     public function existsPersonalRouteTagNamed(User $user, string $name): bool;
+
+    /**
+     * The ids of the routes the user tagged with the personal tag name.
+     *
+     * @return array<int, int>
+     */
+    public function getPersonalRouteIdsByTagName(User $user, string $tagName): array;
 }
