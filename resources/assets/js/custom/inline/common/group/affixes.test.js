@@ -25,6 +25,10 @@ const {
     AFFIX_GROUP_DEFAULT_ID,
     AFFIX_GROUP_ALT_A_ID,
     AFFIX_GROUP_ALT_B_ID,
+    RETAIL_DUNGEON_BETA_ID,
+    RETAIL_EXPANSION_ID,
+    RETAIL_EXPANSION_SHORTNAME,
+    CURRENT_SEASON_ID,
 } = require('#test/fixtures/createRouteForm');
 
 /**
@@ -35,8 +39,32 @@ function clickAffixRow(dataId) {
 }
 
 /**
+ * @param {number} dungeonId
+ */
+function pickDungeon(dungeonId) {
+    $('#dungeon_id_select').val(String(dungeonId)).trigger('change');
+}
+
+/**
+ * @param {number} seasonId
+ * @param {number} affixGroupId
+ * @returns {string}
+ */
+function affixRowHtml(seasonId, affixGroupId) {
+    return `<div class="row affix_list_row expansion ${RETAIL_EXPANSION_SHORTNAME} season season-${seasonId}" data-id="${affixGroupId}"><i class="check"></i></div>`;
+}
+
+/**
+ * @param {string} selector
+ * @returns {string[]}
+ */
+function displayOf(selector) {
+    return Array.from(document.querySelectorAll(selector)).map((row) => row.style.display);
+}
+
+/**
  * @param {Object} config
- * @param {{id: number, seasonalIndex: number|null}[]} config.affixGroups
+ * @param {{id: number}[]} config.affixGroups
  * @param {number[]} config.defaultSelectedAffixes
  * @param {boolean} [config.withSeasonalIndexPreset]
  * @param {boolean} [config.editingExistingRoute] - see the note on `_automaticSeasonalIndexChange`
@@ -51,10 +79,12 @@ function buildAndActivate({
     withSeasonalIndexPreset = false,
     editingExistingRoute = false,
     seasonalIndexOverrides = {},
+    dungeonIds = [RETAIL_DUNGEON_ALPHA_ID],
+    beforeActivate = () => {},
 }) {
     buildCreateRouteForm({
         gameVersion: 'retail',
-        dungeonIds: [RETAIL_DUNGEON_ALPHA_ID],
+        dungeonIds,
         affixGroups,
         withSeasonalIndexPreset,
     });
@@ -84,6 +114,8 @@ function buildAndActivate({
             : seasonalIndexById[group.id],
     }));
 
+    beforeActivate(options);
+
     const code = new CommonGroupAffixes('affixes', 'common/group/affixes', options);
     code.activate();
 
@@ -99,7 +131,7 @@ describe('CommonGroupAffixes.activate', () => {
     it('activate_givenUnselectedAffixRowClicked_addsItsIdToTheHiddenMultiselect', () => {
         // Arrange
         buildAndActivate({
-            affixGroups: [{id: AFFIX_GROUP_DEFAULT_ID, seasonalIndex: null}, {id: AFFIX_GROUP_ALT_A_ID, seasonalIndex: null}],
+            affixGroups: [{id: AFFIX_GROUP_DEFAULT_ID}, {id: AFFIX_GROUP_ALT_A_ID}],
             defaultSelectedAffixes: [],
         });
 
@@ -114,7 +146,7 @@ describe('CommonGroupAffixes.activate', () => {
     it('activate_givenSelectedAffixRowClickedAgain_removesItsIdFromTheHiddenMultiselect', () => {
         // Arrange: pre-selected via defaultSelected, mirroring the initial page load.
         buildAndActivate({
-            affixGroups: [{id: AFFIX_GROUP_DEFAULT_ID, seasonalIndex: null}, {id: AFFIX_GROUP_ALT_A_ID, seasonalIndex: null}],
+            affixGroups: [{id: AFFIX_GROUP_DEFAULT_ID}, {id: AFFIX_GROUP_ALT_A_ID}],
             defaultSelectedAffixes: [AFFIX_GROUP_DEFAULT_ID, AFFIX_GROUP_ALT_A_ID],
         });
         expect($('#route_select_affixes').val()).toEqual(expect.arrayContaining([String(AFFIX_GROUP_DEFAULT_ID), String(AFFIX_GROUP_ALT_A_ID)]));
@@ -133,9 +165,9 @@ describe('CommonGroupAffixes.activate', () => {
         // away from its rendered default first so the assertion proves a real no-op, not a coincidence.
         buildAndActivate({
             affixGroups: [
-                {id: AFFIX_GROUP_DEFAULT_ID, seasonalIndex: null},
-                {id: AFFIX_GROUP_ALT_A_ID, seasonalIndex: null},
-                {id: AFFIX_GROUP_ALT_B_ID, seasonalIndex: null},
+                {id: AFFIX_GROUP_DEFAULT_ID},
+                {id: AFFIX_GROUP_ALT_A_ID},
+                {id: AFFIX_GROUP_ALT_B_ID},
             ],
             defaultSelectedAffixes: [],
             withSeasonalIndexPreset: true,
@@ -157,9 +189,9 @@ describe('CommonGroupAffixes.activate', () => {
         // when editing an existing route (see the note in buildAndActivate).
         buildAndActivate({
             affixGroups: [
-                {id: AFFIX_GROUP_DEFAULT_ID, seasonalIndex: null},
-                {id: AFFIX_GROUP_ALT_A_ID, seasonalIndex: null},
-                {id: AFFIX_GROUP_ALT_B_ID, seasonalIndex: null},
+                {id: AFFIX_GROUP_DEFAULT_ID},
+                {id: AFFIX_GROUP_ALT_A_ID},
+                {id: AFFIX_GROUP_ALT_B_ID},
             ],
             defaultSelectedAffixes: [],
             withSeasonalIndexPreset: true,
@@ -182,7 +214,7 @@ describe('CommonGroupAffixes.activate', () => {
     it('activate_givenEditingExistingRouteAndSingleRowClicked_setsSeasonalIndexToThatRowsOwnIndex', () => {
         // Arrange
         buildAndActivate({
-            affixGroups: [{id: AFFIX_GROUP_DEFAULT_ID, seasonalIndex: null}, {id: AFFIX_GROUP_ALT_B_ID, seasonalIndex: null}],
+            affixGroups: [{id: AFFIX_GROUP_DEFAULT_ID}, {id: AFFIX_GROUP_ALT_B_ID}],
             defaultSelectedAffixes: [],
             withSeasonalIndexPreset: true,
             editingExistingRoute: true,
@@ -197,5 +229,135 @@ describe('CommonGroupAffixes.activate', () => {
 
         // Assert
         expect($('#seasonal_index').val()).toBe('1');
+    });
+
+    it('activate_givenADungeonOfTheCurrentSeason_showsOnlyThatSeasonsAffixRows', () => {
+        // Arrange + Act
+        buildAndActivate({
+            affixGroups: [{id: AFFIX_GROUP_DEFAULT_ID}, {id: AFFIX_GROUP_ALT_A_ID}],
+            defaultSelectedAffixes: [],
+            beforeActivate: () => $('#route_select_affixes_list_custom').append(affixRowHtml(CURRENT_SEASON_ID + 1, AFFIX_GROUP_ALT_B_ID)),
+        });
+
+        // Assert
+        expect(displayOf(`.affix_list_row.season-${CURRENT_SEASON_ID}`)).toHaveLength(2);
+        expect(displayOf(`.affix_list_row.season-${CURRENT_SEASON_ID}`)).not.toContain('none');
+        expect(displayOf(`.affix_list_row.season-${CURRENT_SEASON_ID + 1}`)).toEqual(['none']);
+    });
+});
+
+describe('CommonGroupAffixes._dungeonChanged', () => {
+    afterEach(() => {
+        document.body.innerHTML = '';
+        vi.restoreAllMocks();
+        vi.clearAllMocks();
+    });
+
+    it('dungeonChanged_givenAnotherDungeonOfTheCurrentSeason_selectsThisWeeksAffixGroup', () => {
+        // Arrange
+        buildAndActivate({
+            affixGroups: [
+                {id: AFFIX_GROUP_DEFAULT_ID},
+                {id: AFFIX_GROUP_ALT_A_ID},
+                {id: AFFIX_GROUP_ALT_B_ID},
+            ],
+            defaultSelectedAffixes: [AFFIX_GROUP_ALT_A_ID],
+            dungeonIds: [RETAIL_DUNGEON_ALPHA_ID, RETAIL_DUNGEON_BETA_ID],
+            beforeActivate: (options) => {
+                options.currentAffixes = {[RETAIL_EXPANSION_SHORTNAME]: {id: AFFIX_GROUP_ALT_B_ID}};
+            },
+        });
+
+        // Act
+        pickDungeon(RETAIL_DUNGEON_BETA_ID);
+
+        // Assert
+        expect($('#route_select_affixes').val()).toEqual([String(AFFIX_GROUP_ALT_B_ID)]);
+        expect(document.querySelector(`.affix_list_row[data-id="${AFFIX_GROUP_ALT_A_ID}"]`).classList).not.toContain('affix_list_row_selected');
+    });
+
+    it('dungeonChanged_givenAnotherDungeonOfTheCurrentSeasonWithoutAnAffixThisWeek_selectsTheSeasonsFirstAffixGroup', () => {
+        // Arrange - the fixture has no affix group for this week
+        buildAndActivate({
+            affixGroups: [
+                {id: AFFIX_GROUP_DEFAULT_ID},
+                {id: AFFIX_GROUP_ALT_A_ID},
+            ],
+            defaultSelectedAffixes: [AFFIX_GROUP_ALT_A_ID],
+            dungeonIds: [RETAIL_DUNGEON_ALPHA_ID, RETAIL_DUNGEON_BETA_ID],
+        });
+
+        // Act
+        pickDungeon(RETAIL_DUNGEON_BETA_ID);
+
+        // Assert
+        expect($('#route_select_affixes').val()).toEqual([String(AFFIX_GROUP_DEFAULT_ID)]);
+    });
+
+    it('dungeonChanged_givenADungeonOfTheNextSeason_selectsAndShowsTheNextSeasonsAffixGroups', () => {
+        // Arrange
+        const nextSeasonId = CURRENT_SEASON_ID + 1;
+        buildAndActivate({
+            affixGroups: [
+                {id: AFFIX_GROUP_DEFAULT_ID},
+                {id: AFFIX_GROUP_ALT_A_ID},
+                {id: AFFIX_GROUP_ALT_B_ID},
+            ],
+            defaultSelectedAffixes: [AFFIX_GROUP_ALT_A_ID],
+            dungeonIds: [RETAIL_DUNGEON_ALPHA_ID, RETAIL_DUNGEON_BETA_ID],
+            beforeActivate: (options) => {
+                options.nextSeason = {
+                    id:           nextSeasonId,
+                    expansion:    {shortname: RETAIL_EXPANSION_SHORTNAME},
+                    dungeons:     [{id: RETAIL_DUNGEON_BETA_ID}],
+                    affix_groups: [{id: AFFIX_GROUP_ALT_B_ID, expansion_id: RETAIL_EXPANSION_ID, seasonal_index: null}],
+                };
+                $('#route_select_affixes_list_custom').append(affixRowHtml(nextSeasonId, AFFIX_GROUP_ALT_B_ID));
+            },
+        });
+
+        // Act
+        pickDungeon(RETAIL_DUNGEON_BETA_ID);
+
+        // Assert
+        expect($('#route_select_affixes').val()).toEqual([String(AFFIX_GROUP_ALT_B_ID)]);
+        expect(displayOf(`.affix_list_row.season-${nextSeasonId}`)).toEqual(['']);
+        expect(displayOf(`.affix_list_row.season-${CURRENT_SEASON_ID}`)).toEqual(['none', 'none', 'none']);
+    });
+
+    it('dungeonChanged_givenADungeonWithoutAKnownExpansion_leavesTheAffixesAsTheyWere', () => {
+        // Arrange
+        buildAndActivate({
+            affixGroups: [{id: AFFIX_GROUP_DEFAULT_ID}, {id: AFFIX_GROUP_ALT_A_ID}],
+            defaultSelectedAffixes: [AFFIX_GROUP_ALT_A_ID],
+        });
+        $('#dungeon_id_select').append('<option value="12345">Unknown</option>');
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+        // Act
+        pickDungeon(12345);
+
+        // Assert
+        expect(displayOf('.affix_list_row')).not.toContain('none');
+        expect($('#route_select_affixes').val()).toEqual([String(AFFIX_GROUP_ALT_A_ID)]);
+        expect(warn).toHaveBeenCalledTimes(1);
+    });
+
+    it('overrideSelection_givenADungeonAndAffixGroups_selectsBoth', () => {
+        // Arrange
+        const code = buildAndActivate({
+            affixGroups: [{id: AFFIX_GROUP_DEFAULT_ID}, {id: AFFIX_GROUP_ALT_A_ID}],
+            defaultSelectedAffixes: [AFFIX_GROUP_DEFAULT_ID],
+            dungeonIds: [RETAIL_DUNGEON_ALPHA_ID, RETAIL_DUNGEON_BETA_ID],
+        });
+
+        // Act
+        code.overrideSelection(RETAIL_DUNGEON_BETA_ID, [AFFIX_GROUP_ALT_A_ID]);
+
+        // Assert
+        expect($('#dungeon_id_select').val()).toBe(String(RETAIL_DUNGEON_BETA_ID));
+        expect($('#route_select_affixes').val()).toEqual([String(AFFIX_GROUP_ALT_A_ID)]);
+        expect(document.querySelector(`.affix_list_row[data-id="${AFFIX_GROUP_ALT_A_ID}"]`).classList).toContain('affix_list_row_selected');
+        expect(document.querySelector(`.affix_list_row[data-id="${AFFIX_GROUP_DEFAULT_ID}"]`).classList).not.toContain('affix_list_row_selected');
     });
 });

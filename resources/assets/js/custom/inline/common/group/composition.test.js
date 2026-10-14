@@ -4,8 +4,6 @@
 // `lang.get` (stubbed by test/setup.js to return the translation key) and `refreshSelectPickers`
 // (stubbed here with a spy) at runtime.
 //
-// Kept deliberately small per the plan: fill-defaults, one selection case, one cross-filter case.
-//
 // Note: the change handlers only run their "changed by the user" branch when `changeEvent.
 // originalEvent` is truthy, which jQuery's own `.trigger('change')` does NOT set - only a change
 // event that reaches jQuery via a real/native dispatch does (this is how TomSelect's real sync
@@ -13,7 +11,7 @@
 // `dispatchEvent` API rather than jQuery's `.trigger()`.
 //
 // DOM is a single-party-member subset of common/group/composition.blade.php's markup (the full
-// PARTY_SIZE=5 form from the shared fixture is overkill for these 3 scenarios); options extend
+// PARTY_SIZE=5 form from the shared fixture is overkill for these scenarios); options extend
 // buildInlineOptions()'s composition shape with one extra race (a different faction) so the
 // cross-filter scenario has something to filter.
 // ---------------------------------------------------------------------------
@@ -33,6 +31,7 @@ const {
     FACTION_HORDE_ID,
     FACTION_ALLIANCE_ID,
     CLASS_WARRIOR_ID,
+    SPEC_FURY_ID,
     RACE_ORC_ID,
 } = require('#test/fixtures/createRouteForm');
 
@@ -53,7 +52,8 @@ function buildAndActivate() {
         <select name="faction_id" id="faction_id" class="form-control selectpicker"></select>
         <select name="class[]" class="form-control selectpicker classselect" data-id="1"></select>
         <select data-live-search="true" name="specialization[]" class="form-control selectpicker specializationselect" data-id="1"></select>
-        <select name="race[]" id="race_1" class="form-control selectpicker raceselect" data-id="1"></select>`;
+        <select name="race[]" id="race_1" class="form-control selectpicker raceselect" data-id="1"></select>
+        <button id="reload_button"></button>`;
 
     const options = buildInlineOptions().composition;
     // Add a second race belonging to a different faction than RACE_ORC_ID (Horde), so the
@@ -88,6 +88,17 @@ describe('CommonGroupComposition.activate', () => {
         expect(specializationFirstOption.text).toBe('js.specialization_select');
         expect(raceFirstOption.value).toBe('0');
         expect(raceFirstOption.text).toBe('js.race_select');
+    });
+
+    it('activate_givenNoSelectionMade_fillsClassSpecializationAndRaceSelectsWithEveryOption', () => {
+        // Arrange + Act
+        buildAndActivate();
+
+        // Assert
+        const valuesOf = (selector) => Array.from(document.querySelector(selector).options).map((option) => option.value);
+        expect(valuesOf('.classselect[data-id="1"]')).toEqual(['0', String(CLASS_WARRIOR_ID)]);
+        expect(valuesOf('.specializationselect[data-id="1"]')).toEqual(['0', String(SPEC_FURY_ID)]);
+        expect(valuesOf('.raceselect[data-id="1"]')).toEqual(['0', String(RACE_ORC_ID), String(RACE_HUMAN_ID)]);
     });
 
     it('activate_givenNoSelectionMade_fillsFactionSelectWithEveryFaction', () => {
@@ -133,5 +144,104 @@ describe('CommonGroupComposition.activate', () => {
         const humanOption = Array.from(raceSelect.options).find((option) => option.value === String(RACE_HUMAN_ID));
         expect(orcOption.style.display).not.toBe('none');
         expect(humanOption.style.display).toBe('none');
+    });
+
+    it('activate_givenFactionSelectedByUser_refreshesTheSelectPickers', () => {
+        // Arrange
+        buildAndActivate();
+        const factionSelect = document.getElementById('faction_id');
+
+        // Act
+        factionSelect.value = String(FACTION_HORDE_ID);
+        dispatchNativeChange(factionSelect);
+
+        // Assert
+        expect(refreshSelectPickers).toHaveBeenCalledTimes(1);
+    });
+
+    it('factionChanged_givenAFactionTheChosenRaceIsNotPartOf_resetsTheRace', () => {
+        // Arrange
+        buildAndActivate();
+        const factionSelect = document.getElementById('faction_id');
+        const raceSelect = document.querySelector('.raceselect[data-id="1"]');
+        raceSelect.value = String(RACE_ORC_ID);
+
+        // Act
+        factionSelect.value = String(FACTION_ALLIANCE_ID);
+        dispatchNativeChange(factionSelect);
+
+        // Assert
+        expect(raceSelect.value).toBe('0');
+    });
+
+    it('factionChanged_givenTheChosenRacesOwnFaction_keepsTheRace', () => {
+        // Arrange
+        buildAndActivate();
+        const factionSelect = document.getElementById('faction_id');
+        const raceSelect = document.querySelector('.raceselect[data-id="1"]');
+        raceSelect.value = String(RACE_ORC_ID);
+
+        // Act
+        factionSelect.value = String(FACTION_HORDE_ID);
+        dispatchNativeChange(factionSelect);
+
+        // Assert
+        expect(raceSelect.value).toBe(String(RACE_ORC_ID));
+    });
+
+    it('factionChanged_givenUnspecifiedAfterAFaction_showsAndKeepsEveryRace', () => {
+        // Arrange
+        buildAndActivate();
+        const factionSelect = document.getElementById('faction_id');
+        const raceSelect = document.querySelector('.raceselect[data-id="1"]');
+        factionSelect.value = String(FACTION_HORDE_ID);
+        dispatchNativeChange(factionSelect);
+        raceSelect.value = String(RACE_ORC_ID);
+
+        // Act
+        factionSelect.value = String(FACTION_UNSPECIFIED_ID);
+        dispatchNativeChange(factionSelect);
+
+        // Assert
+        const humanOption = Array.from(raceSelect.options).find((option) => option.value === String(RACE_HUMAN_ID));
+        expect(humanOption.style.display).not.toBe('none');
+        expect(raceSelect.value).toBe(String(RACE_ORC_ID));
+    });
+});
+
+describe('CommonGroupComposition._loadDungeonRouteDefaults', () => {
+    afterEach(() => {
+        document.body.innerHTML = '';
+        vi.restoreAllMocks();
+        vi.clearAllMocks();
+    });
+
+    it('reloadButton_givenDefaults_restoresTheFactionAndRefreshesTheSelectPickersOnce', () => {
+        // Arrange
+        const code = buildAndActivate();
+        code.setDefaults(String(FACTION_ALLIANCE_ID), [], [], []);
+        refreshSelectPickers.mockClear();
+
+        // Act
+        document.getElementById('reload_button').click();
+
+        // Assert
+        expect($('#faction_id').val()).toBe(String(FACTION_ALLIANCE_ID));
+        expect(refreshSelectPickers).toHaveBeenCalledTimes(1);
+    });
+
+    it('reloadButton_givenNoDefaults_changesNothing', () => {
+        // Arrange
+        buildAndActivate();
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+        $('#faction_id').val(String(FACTION_HORDE_ID));
+
+        // Act
+        document.getElementById('reload_button').click();
+
+        // Assert
+        expect($('#faction_id').val()).toBe(String(FACTION_HORDE_ID));
+        expect(refreshSelectPickers).not.toHaveBeenCalled();
+        expect(consoleError).toHaveBeenCalledWith('No defaults found - call setDefaults() first.');
     });
 });

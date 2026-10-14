@@ -93,6 +93,17 @@ describe('SearchInlineBase - keeping the URL in sync with the search', () => {
         expect(writtenParams()).toEqual({expansion: 'midnight'});
     });
 
+    test('search_givenAFiltersParamArrivedWithThePage_dropsItOnceTheFilterIsCleared', () => {
+        // Arrange - the URL came from a reload, so no earlier search of this instance wrote the param
+        const search = buildSearch('?title=abc&defaultZoom=1.4', {title: new FixedValueFilter('')});
+
+        // Act
+        search._search();
+
+        // Assert
+        expect(writtenParams()).toEqual({defaultZoom: '1.4'});
+    });
+
     test('search_givenAnInjectedParamIsNoLongerSent_dropsItFromTheUrl', () => {
         // Arrange - mirrors CommonMapsCombatlogrouteenemyfailures, which only injects npc_id while an npc is selected
         const search = buildSearch('', {title: new FixedValueFilter('abc')});
@@ -128,5 +139,37 @@ describe('SearchInlineBase - keeping the URL in sync with the search', () => {
 
         // Assert - re-emitting the key raw would split it into a different param set than it came in as
         expect(writtenParams()).toEqual({title: 'abc', 'a&b': 'c&d'});
+    });
+
+    test('search_givenPagingParams_keepsThemOutOfTheUrl', () => {
+        // Arrange - an offset left in the URL is ours too, so it must go rather than be preserved
+        const search = buildSearch('?title=abc&offset=40', {title: new FixedValueFilter('abc')});
+
+        // Act
+        search._search({}, {offset: 20, limit: 10});
+
+        // Assert
+        expect(writtenParams()).toEqual({title: 'abc'});
+    });
+
+    test('search_givenASearchThatDoesNotOwnThePageUrl_leavesTheUrlAlone', () => {
+        // Arrange
+        class DrawerSearch extends SearchInlineBase {
+            _syncsWithUrl() {
+                return false;
+            }
+        }
+        window.history.replaceState({}, '', '/routes?defaultZoom=1.4');
+        const searchHandler = {search: vi.fn()};
+        const search = new DrawerSearch(searchHandler, 'search', 'base/search', {});
+        search.filters = {title: new FixedValueFilter('abc')};
+
+        // Act
+        search._search();
+
+        // Assert
+        expect(searchHandler.search).toHaveBeenCalledTimes(1);
+        expect(searchHandler.search.mock.calls[0][0].params).toEqual({title: 'abc'});
+        expect(writtenParams()).toEqual({defaultZoom: '1.4'});
     });
 });

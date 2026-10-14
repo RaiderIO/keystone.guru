@@ -47,7 +47,7 @@ describe('CommonCollectionPublishroutesconfirm', () => {
         });
 
         modalHide = vi.fn();
-        globalThis.bootstrap = {Modal: {getOrCreateInstance: () => ({hide: modalHide})}};
+        globalThis.bootstrap = {Modal: {getOrCreateInstance: vi.fn(() => ({hide: modalHide}))}};
 
         globalThis.showSuccessNotification = vi.fn();
         globalThis.showInfoNotification    = vi.fn();
@@ -92,8 +92,10 @@ describe('CommonCollectionPublishroutesconfirm', () => {
         ajaxCalls.shift().success({raised_count: 3, skipped_count: 1});
 
         // Assert
+        expect(bootstrap.Modal.getOrCreateInstance).toHaveBeenCalledWith(document.querySelector('#modal'));
         expect(modalHide).toHaveBeenCalled();
         expect(showSuccessNotification).toHaveBeenCalledWith('3 routes are now Public');
+        expect(showInfoNotification).not.toHaveBeenCalled();
     });
 
     it('yesClicked_givenExactlyOneRouteWasRaised_usesTheSingularWording', () => {
