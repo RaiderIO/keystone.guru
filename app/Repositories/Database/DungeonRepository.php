@@ -116,4 +116,12 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
     {
         return Dungeon::whereIn('zone_id', $zoneIds)->get();
     }
+
+    /**
+     * @return Collection<int, Dungeon>
+     */
+    public function getAllWithMappingVersions(): Collection
+    {
+        return Dungeon::with(['mappingVersions', 'mappingVersions.dungeon'])->get();
+    }
 }
