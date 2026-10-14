@@ -145,7 +145,7 @@ function dungeonStartSelectHtml(id) {
 }
 
 /**
- * @param {{id: number, seasonalIndex: number|null}[]} affixGroups
+ * @param {{id: number}[]} affixGroups
  * @param {boolean} withSeasonalIndexPreset
  * @returns {string}
  */
@@ -222,7 +222,8 @@ function compositionHtml() {
  * @param {boolean} [config.hasTeams] - whether the team select renders at all (ignored when temporary).
  * @param {number[]} [config.dungeonIds] - dungeon ids rendered as `<option>`s.
  * @param {number} [config.selectedDungeonId] - the dungeon id that starts out selected.
- * @param {{id: number, seasonalIndex: number|null}[]} [config.affixGroups] - affix rows to render (retail only).
+ * @param {{id: number}[]} [config.affixGroups] - affix rows to render (retail only); their seasonal indices come
+ *        from buildInlineOptions().
  * @param {boolean} [config.withSeasonalIndexPreset] - render the awakened `#seasonal_index` preset select (retail only).
  * @returns {HTMLFormElement}
  */
@@ -232,7 +233,7 @@ function buildCreateRouteForm({
     hasTeams = true,
     dungeonIds = [RETAIL_DUNGEON_ALPHA_ID, RETAIL_DUNGEON_BETA_ID],
     selectedDungeonId = dungeonIds[0],
-    affixGroups = [{id: AFFIX_GROUP_DEFAULT_ID, seasonalIndex: null}],
+    affixGroups = [{id: AFFIX_GROUP_DEFAULT_ID}],
     withSeasonalIndexPreset = false,
 } = {}) {
     const hasSeasons        = gameVersion === 'retail';

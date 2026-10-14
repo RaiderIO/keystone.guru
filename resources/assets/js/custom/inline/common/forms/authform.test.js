@@ -310,5 +310,216 @@ describe('CommonFormsAuthform._renderErrors', () => {
         const feedback = document.querySelector('#modal-register_email').nextElementSibling;
         expect(feedback.classList.contains('invalid-feedback')).toBe(true);
         expect(feedback.textContent).toBe('Invalid e-mail.');
+        expect(document.querySelector('#modal-register_email').classList.contains('is-invalid')).toBe(true);
+    });
+
+    it('_renderErrors_givenSeveralMessagesForOneField_joinsThemIntoOneFeedback', () => {
+        // Arrange
+        const authform = makeAuthform({formSelector: '#modal-register_form'});
+
+        // Act
+        authform._renderErrors(globalThis.$('#modal-register_form'), {email: ['Invalid e-mail.', 'Already taken.']});
+
+        // Assert
+        expect(document.querySelectorAll('.invalid-feedback')).toHaveLength(1);
+        expect(document.querySelector('.invalid-feedback').textContent).toBe('Invalid e-mail. Already taken.');
+    });
+
+    it('_renderErrors_givenErrorsForTwoFields_focusesTheFirstInvalidInput', () => {
+        // Arrange
+        const authform = makeAuthform({formSelector: '#modal-register_form'});
+
+        // Act
+        authform._renderErrors(globalThis.$('#modal-register_form'), {password: ['Too short.'], email: ['Invalid e-mail.']});
+
+        // Assert - the first in the form, not the first in the response
+        expect(document.activeElement).toBe(document.querySelector('#modal-register_email'));
+    });
+
+    it('_renderErrors_givenErrorForAFieldTheFormDoesNotHave_showsItAsANotification', () => {
+        // Arrange
+        const authform      = makeAuthform({formSelector: '#modal-register_form'});
+        const notifications = [];
+        globalThis.showErrorNotification = (text) => notifications.push(text);
+
+        // Act
+        authform._renderErrors(globalThis.$('#modal-register_form'), {
+            email:    ['Invalid e-mail.'],
+            throttle: ['Too many attempts.'],
+            captcha:  'Captcha failed.',
+        });
+
+        // Assert
+        expect(notifications).toEqual(['Too many attempts. Captcha failed.']);
+        expect(document.querySelectorAll('.invalid-feedback')).toHaveLength(1);
+    });
+
+    it('_renderErrors_givenOnlyFieldsTheFormHas_showsNoNotification', () => {
+        // Arrange
+        const authform      = makeAuthform({formSelector: '#modal-register_form'});
+        const notifications = [];
+        globalThis.showErrorNotification = (text) => notifications.push(text);
+
+        // Act
+        authform._renderErrors(globalThis.$('#modal-register_form'), {email: ['Invalid e-mail.']});
+
+        // Assert
+        expect(notifications).toEqual([]);
+        expect(document.querySelectorAll('.invalid-feedback')).toHaveLength(1);
+    });
+});
+
+describe('CommonFormsAuthform._onError', () => {
+    let previousJquery;
+    let previousShowErrorNotification;
+    let previousDefaultAjaxErrorFn;
+    let defaultErrors;
+
+    beforeEach(() => {
+        previousJquery                = globalThis.$;
+        previousShowErrorNotification = globalThis.showErrorNotification;
+        previousDefaultAjaxErrorFn    = globalThis.defaultAjaxErrorFn;
+        globalThis.$                     = require('jquery');
+        globalThis.showErrorNotification = () => {};
+        defaultErrors                    = [];
+        globalThis.defaultAjaxErrorFn    = (...args) => defaultErrors.push(args);
+
+        document.body.innerHTML = `
+            <form id="modal-login_form">
+                <input id="modal-login_email" name="email" class="form-control">
+            </form>`;
+    });
+
+    afterEach(() => {
+        globalThis.$                     = previousJquery;
+        globalThis.showErrorNotification = previousShowErrorNotification;
+        globalThis.defaultAjaxErrorFn    = previousDefaultAjaxErrorFn;
+        document.body.innerHTML          = '';
+    });
+
+    it('_onError_givenAValidationFailure_rendersTheFieldErrorsInsteadOfTheDefaultToast', () => {
+        // Arrange
+        const authform = makeAuthform({formSelector: '#modal-login_form'});
+
+        // Act
+        authform._onError({status: 422, responseJSON: {errors: {email: ['These credentials do not match.']}}}, 'error', 'Unprocessable');
+
+        // Assert
+        expect(defaultErrors).toEqual([]);
+        expect(document.querySelector('.invalid-feedback')?.textContent).toBe('These credentials do not match.');
+    });
+
+    it.each([
+        ['AThrottledRequest', {status: 429, responseJSON: {message: 'Too Many Attempts.'}}],
+        ['AnExpiredSession', {status: 419, responseJSON: {message: 'Page Expired'}}],
+        ['AValidationFailureWithoutErrors', {status: 422, responseJSON: {message: 'Invalid.'}}],
+        ['AValidationFailureWithoutJson', {status: 422}],
+    ])('_onError_given%s_fallsBackToTheDefaultToast', (_, xhr) => {
+        // Arrange
+        const authform = makeAuthform({formSelector: '#modal-login_form'});
+
+        // Act
+        authform._onError(xhr, 'error', 'Failed');
+
+        // Assert
+        expect(defaultErrors).toEqual([[xhr, 'error', 'Failed']]);
+        expect(document.querySelector('.invalid-feedback')).toBeNull();
+    });
+});
+
+describe('CommonFormsAuthform against a real form', () => {
+    const jQuery = require('jquery');
+    let previousJquery;
+    let ajaxCalls;
+
+    beforeEach(() => {
+        previousJquery = globalThis.$;
+        globalThis.$   = jQuery;
+        ajaxCalls      = [];
+        vi.spyOn(jQuery, 'ajax').mockImplementation((settings) => {
+            ajaxCalls.push(settings);
+        });
+
+        document.body.innerHTML = `
+            <form id="modal-login_form" action="/login" method="POST">
+                <input id="modal-login_email" name="email" class="form-control is-invalid" aria-invalid="true" value="a@b.c">
+                <div class="invalid-feedback d-block" role="alert">Old error.</div>
+                <input id="modal-login_password" name="password" type="password" class="form-control" value="hunter2">
+                <button type="submit">Log in</button>
+            </form>`;
+    });
+
+    afterEach(() => {
+        globalThis.$            = previousJquery;
+        document.body.innerHTML = '';
+    });
+
+    it('_submit_givenAForm_postsItsFieldsAsJsonToItsAction', () => {
+        // Arrange
+        const authform = makeAuthform({formSelector: '#modal-login_form', successUrl: null});
+        let prevented  = false;
+
+        // Act
+        authform._submit({preventDefault: () => {
+            prevented = true;
+        }});
+
+        // Assert
+        expect(prevented).toBe(true);
+        expect(ajaxCalls).toHaveLength(1);
+        expect(ajaxCalls[0].type).toBe('POST');
+        expect(ajaxCalls[0].url).toBe('/login');
+        expect(ajaxCalls[0].data).toBe('email=a%40b.c&password=hunter2');
+        expect(ajaxCalls[0].headers).toEqual({'Accept': 'application/json'});
+    });
+
+    it('_submit_givenErrorsFromAnEarlierAttempt_clearsThemBeforePosting', () => {
+        // Arrange
+        const authform = makeAuthform({formSelector: '#modal-login_form', successUrl: null});
+
+        // Act
+        authform._submit({preventDefault: () => {}});
+
+        // Assert
+        const email = document.querySelector('#modal-login_email');
+        expect(email.classList.contains('is-invalid')).toBe(false);
+        expect(email.hasAttribute('aria-invalid')).toBe(false);
+        expect(document.querySelector('.invalid-feedback')).toBeNull();
+    });
+
+    it('_submit_givenAFailedRequest_allowsTheNextSubmit', () => {
+        // Arrange
+        const authform = makeAuthform({formSelector: '#modal-login_form', successUrl: null});
+        vi.spyOn(authform, '_onError').mockImplementation(() => {});
+        authform._submit({preventDefault: () => {}});
+        ajaxCalls[0].error?.({status: 500}, 'error', 'Internal Server Error');
+        ajaxCalls[0].complete();
+
+        // Act
+        authform._submit({preventDefault: () => {}});
+
+        // Assert
+        expect(authform._onError).toHaveBeenCalledWith({status: 500}, 'error', 'Internal Server Error');
+        expect(ajaxCalls).toHaveLength(2);
+    });
+
+    it('activate_givenTheFormIsSubmitted_postsItOnceNoMatterHowOftenActivated', () => {
+        // Arrange - each request completes at once, so the in-flight guard cannot mask a second handler
+        jQuery.ajax.mockImplementation((settings) => {
+            ajaxCalls.push(settings);
+            settings.complete();
+        });
+        const authform = makeAuthform({formSelector: '#modal-login_form', successUrl: null});
+        authform.activate();
+        authform.activate();
+
+        // Act
+        const event = new Event('submit', {bubbles: true, cancelable: true});
+        document.querySelector('#modal-login_form').dispatchEvent(event);
+
+        // Assert
+        expect(event.defaultPrevented).toBe(true);
+        expect(ajaxCalls).toHaveLength(1);
+        expect(ajaxCalls[0].url).toBe('/login');
     });
 });
