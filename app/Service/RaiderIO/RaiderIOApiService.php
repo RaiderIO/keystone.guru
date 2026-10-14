@@ -49,7 +49,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             $mostRecentSeason = $this->seasonService->getMostRecentSeasonForDungeon($heatmapDataFilter->getDungeon());
             if ($mostRecentSeason !== null) {
                 $heatmapDataFilter->setSeason($this->buildSeasonString(
-                    $mostRecentSeason->expansion->shortname,
+                    $mostRecentSeason->expansion->key,
                     $mostRecentSeason->index,
                 ));
             }
@@ -124,7 +124,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         $params = array_filter([
             'type'         => 'mythic_plus_runs',
             'hasAutoRoute' => [0 => ['eq' => 1]],
-            'season'       => [0 => ['eq' => $this->buildSeasonString($filter->season->expansion->shortname, $filter->season->index)]],
+            'season'       => [0 => ['eq' => $this->buildSeasonString($filter->season->expansion->key, $filter->season->index)]],
             'mythicLevel'  => [0 => $mythicLevel],
             'numChests'    => [
                 0 => ['eq' => 1],
@@ -203,7 +203,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         $this->log->getCombatLogSegmentsForRunStart($runId);
 
         $url = sprintf('%s?%s', self::SEGMENTS_URL, http_build_query([
-            'season'          => $this->buildSeasonString($season->expansion->shortname, $season->index),
+            'season'          => $this->buildSeasonString($season->expansion->key, $season->index),
             'keystone_run_id' => $runId,
             'access_key'      => config('keystoneguru.raiderio.api_key'),
         ]));

@@ -166,7 +166,7 @@ final class DungeonExploreControllerTest extends PublicTestCase
      */
     private function createUpcomingSeason(): Season
     {
-        $expansion = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT);
+        $expansion = Expansion::firstWhere('key', Expansion::EXPANSION_MIDNIGHT);
 
         $season = Season::create([
             'expansion_id'            => $expansion->id,

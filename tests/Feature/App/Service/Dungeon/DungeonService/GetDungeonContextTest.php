@@ -102,7 +102,7 @@ final class GetDungeonContextTest extends PublicTestCase
     {
         // Arrange
         $expectedDungeon = Dungeon::active()
-            ->whereHas('expansion', static fn($q) => $q->where('shortname', 'classic'))
+            ->whereHas('expansion', static fn($q) => $q->where('key', 'classic'))
             ->first();
         $this->assertNotNull($expectedDungeon, 'Need at least one active Classic dungeon in the DB');
 

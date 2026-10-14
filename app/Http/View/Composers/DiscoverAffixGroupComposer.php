@@ -28,7 +28,7 @@ readonly class DiscoverAffixGroupComposer implements ViewComposerInterface
         $expansion = $view->getData()['expansion'] ?? null;
         /** @var ExpansionData $expansionsData */
         $expansionsData = $this->viewService->getExpansionsData($this->requestViewContext->getUserOrDefaultRegion())
-            ->get(($expansion ?? $gameVersion->expansion)->shortname);
+            ->get(($expansion ?? $gameVersion->expansion)->key);
         $view->with('currentAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup());
         $view->with('nextAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getNextAffixGroup());
     }

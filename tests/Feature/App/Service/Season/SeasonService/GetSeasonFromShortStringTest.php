@@ -57,7 +57,7 @@ final class GetSeasonFromShortStringTest extends PublicTestCase
         // Arrange
         $service = app(SeasonServiceInterface::class);
 
-        // Act - format is "s{something}-{expansion_shortname}-{season_index}"
+        // Act - format is "s{something}-{expansion_key}-{season_index}"
         $result = $service->getSeasonFromShortString('s1-bfa-1');
 
         // Assert

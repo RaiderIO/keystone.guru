@@ -20,6 +20,7 @@ use Override;
 
 /**
  * @property int    $id
+ * @property string $key
  * @property bool   $active
  * @property bool   $has_wallpaper
  * @property string $name
@@ -47,6 +48,7 @@ class Expansion extends Model
     use UserCurrentTime;
 
     public $fillable = [
+        'key',
         'active',
         'name',
         'shortname',
@@ -110,7 +112,7 @@ class Expansion extends Model
     #[Override]
     public function getRouteKeyName(): string
     {
-        return 'shortname';
+        return 'key';
     }
 
     /** @return HasMany<Dungeon, $this> */
@@ -283,12 +285,12 @@ class Expansion extends Model
 
     public function getWallpaperUrl(): string
     {
-        return ksgAssetImage(sprintf('dungeons/%s/wallpaper.jpg', $this->shortname));
+        return ksgAssetImage(sprintf('dungeons/%s/wallpaper.jpg', $this->key));
     }
 
     public function getIconUrl(): string
     {
-        return ksgAssetImage(sprintf('expansions/%s.png', $this->shortname));
+        return ksgAssetImage(sprintf('expansions/%s.png', $this->key));
     }
 
     protected function casts(): array

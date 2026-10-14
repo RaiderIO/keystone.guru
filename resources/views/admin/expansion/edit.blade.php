@@ -27,9 +27,9 @@
     </div>
 
     <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
-        {{ html()->label(__('view_admin.expansion.edit.shortname'), 'shortname') }}
-        {{ html()->text('shortname')->class('form-control') }}
-        @include('common.forms.form-error', ['key' => 'shortname'])
+        {{ html()->label(__('view_admin.expansion.edit.key'), 'key') }}
+        {{ html()->text('key')->class('form-control') }}
+        @include('common.forms.form-error', ['key' => 'key'])
     </div>
 
     @isset($expansion)

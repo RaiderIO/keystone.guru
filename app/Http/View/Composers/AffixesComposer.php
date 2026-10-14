@@ -20,7 +20,7 @@ readonly class AffixesComposer implements ViewComposerInterface
 
         $currentSeason = $this->viewService->getCurrentSeasonForRegion($gameServerRegion)->load(['dungeons', 'dungeons.floors']);
         $currentSeason->dungeons->makeHidden(['floors']);
-        $view->with('allExpansions', $this->viewService->getAllExpansions()->pluck('id', 'shortname'));
+        $view->with('allExpansions', $this->viewService->getAllExpansions()->pluck('id', 'key'));
         $view->with('dungeonExpansions', $this->viewService->getDungeonExpansions());
         $view->with('affixes', $this->viewService->getAllAffixes());
         $view->with('currentSeason', $currentSeason);

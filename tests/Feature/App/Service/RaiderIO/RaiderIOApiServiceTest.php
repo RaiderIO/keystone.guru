@@ -455,8 +455,8 @@ final class RaiderIOApiServiceTest extends PublicTestCase
 
     private function makeSeason(): Season
     {
-        $expansion            = new Expansion();
-        $expansion->shortname = Expansion::EXPANSION_MIDNIGHT;
+        $expansion      = new Expansion();
+        $expansion->key = Expansion::EXPANSION_MIDNIGHT;
 
         $season        = new Season();
         $season->index = 1;

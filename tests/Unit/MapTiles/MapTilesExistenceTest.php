@@ -57,7 +57,7 @@ final class MapTilesExistenceTest extends PublicTestCase
 
             foreach ($dungeon->floors as $floor) {
                 $basePath = base_path(
-                    sprintf('%s/%s/%s/%d', self::TILES_PATH, $dungeon->expansion->shortname, $dungeon->key, $floor->index),
+                    sprintf('%s/%s/%s/%d', self::TILES_PATH, $dungeon->expansion->key, $dungeon->key, $floor->index),
                 );
                 $floorDirectory = realpath($basePath);
                 Assert::assertDirectoryExists($floorDirectory, $basePath);

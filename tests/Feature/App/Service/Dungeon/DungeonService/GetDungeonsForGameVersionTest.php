@@ -434,7 +434,7 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
 
         $gameVersion   = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
         $currentSeason = Season::findOrFail(Season::SEASON_MIDNIGHT_S1);
-        $expansion     = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT);
+        $expansion     = Expansion::firstWhere('key', Expansion::EXPANSION_MIDNIGHT);
         // A dungeon that is not part of the current season, so the assert below can tell the two apart
         $futureSeasonDungeon = Dungeon::firstWhere('key', DungeonKey::ARA_KARA_CITY_OF_ECHOES->value);
 

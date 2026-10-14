@@ -332,7 +332,7 @@ class MDTDungeon
         $mdtDungeonName = Conversion::getMDTDungeonName($this->dungeon->key);
         if (!empty($mdtExpansionName) &&
             !empty($mdtDungeonName) &&
-            Expansion::active()->where('shortname', $expansionName)->exists()) {
+            Expansion::active()->where('key', $expansionName)->exists()) {
             $dungeonHome = sprintf('%s/%s', $mdtHome, $mdtExpansionName);
 
             $mdtDungeonNameFile = sprintf('%s/%s.lua', $dungeonHome, $mdtDungeonName);

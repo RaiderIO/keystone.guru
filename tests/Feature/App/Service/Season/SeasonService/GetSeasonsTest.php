@@ -44,7 +44,7 @@ final class GetSeasonsTest extends PublicTestCase
     {
         // Arrange
         $service      = app(SeasonServiceInterface::class);
-        $bfaExpansion = Expansion::where('shortname', Expansion::EXPANSION_BFA)->firstOrFail();
+        $bfaExpansion = Expansion::where('key', Expansion::EXPANSION_BFA)->firstOrFail();
 
         // Act
         $result = $service->getSeasons($bfaExpansion);
@@ -61,7 +61,7 @@ final class GetSeasonsTest extends PublicTestCase
     {
         // Arrange
         $service      = app(SeasonServiceInterface::class);
-        $bfaExpansion = Expansion::where('shortname', Expansion::EXPANSION_BFA)->firstOrFail();
+        $bfaExpansion = Expansion::where('key', Expansion::EXPANSION_BFA)->firstOrFail();
 
         // Act
         $result = $service->getSeasons($bfaExpansion);
@@ -75,7 +75,7 @@ final class GetSeasonsTest extends PublicTestCase
     {
         // Arrange
         $service      = app(SeasonServiceInterface::class);
-        $bfaExpansion = Expansion::where('shortname', Expansion::EXPANSION_BFA)->firstOrFail();
+        $bfaExpansion = Expansion::where('key', Expansion::EXPANSION_BFA)->firstOrFail();
 
         // Act
         $result1 = $service->getSeasons($bfaExpansion);
@@ -90,7 +90,7 @@ final class GetSeasonsTest extends PublicTestCase
     {
         // Arrange
         $service      = app(SeasonServiceInterface::class);
-        $bfaExpansion = Expansion::where('shortname', Expansion::EXPANSION_BFA)->firstOrFail();
+        $bfaExpansion = Expansion::where('key', Expansion::EXPANSION_BFA)->firstOrFail();
 
         // Act
         $result = $service->getSeasons($bfaExpansion);
@@ -109,8 +109,8 @@ final class GetSeasonsTest extends PublicTestCase
     public function getSeasons_givenAnExpansionWithATimewalkingEvent_returnsNoSeasonsForIt(): void
     {
         // Arrange
-        $bfaExpansion         = Expansion::where('shortname', Expansion::EXPANSION_BFA)->firstOrFail();
-        $shadowlandsExpansion = Expansion::where('shortname', Expansion::EXPANSION_SHADOWLANDS)->firstOrFail();
+        $bfaExpansion         = Expansion::where('key', Expansion::EXPANSION_BFA)->firstOrFail();
+        $shadowlandsExpansion = Expansion::where('key', Expansion::EXPANSION_SHADOWLANDS)->firstOrFail();
         $timewalkingEvent     = null;
 
         try {

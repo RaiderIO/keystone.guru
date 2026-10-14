@@ -81,7 +81,7 @@ final class DungeonRouteControllerCreateSeasonGateTest extends DungeonRouteContr
 
     private function createUpcomingSeason(bool $active): Season
     {
-        $expansion = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT);
+        $expansion = Expansion::firstWhere('key', Expansion::EXPANSION_MIDNIGHT);
         $dungeon   = $this->getActiveDungeon();
 
         $season = Season::create([
