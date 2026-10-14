@@ -2,22 +2,36 @@
 
 namespace Tests\Feature\Controller;
 
+use App\Events\UserColorChangedEvent;
 use App\Features\CreatorProfiles;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\Laratrust\Role;
+use App\Models\LiveSession;
+use App\Models\PublishedState;
+use App\Models\Season;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\User;
+use App\Service\DungeonRoute\CoverageServiceInterface;
+use App\Service\Reverb\ReverbHttpApiServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Pennant\Feature;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('Profile')]
 final class ProfileControllerTest extends PublicTestCase
 {
+    use ProvidesDungeon;
+
     #[Test]
     public function tags_givenCreatorProfilesActive_pointsAtCollectionsForSharing(): void
     {
@@ -539,6 +553,134 @@ final class ProfileControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function createTag_givenSameNameOwnedByAnotherUser_createsTheTag(): void
+    {
+        $user      = null;
+        $otherUser = null;
+
+        try {
+            // Arrange - the name is only taken for the user who owns it
+            $user      = $this->userWithUserRole();
+            $otherUser = $this->userWithUserRole();
+            $tagName   = sprintf('test-profile-tag-%s', fake()->uuid());
+            $this->actingAs($otherUser)->post(route('profile.tag.create'), ['tag_name_new' => $tagName]);
+
+            // Act
+            $response = $this->actingAs($user)->post(route('profile.tag.create'), ['tag_name_new' => $tagName]);
+
+            // Assert
+            $response->assertSessionHas('status', __('controller.profile.flash.tag_created_successfully'));
+            $this->assertSame(1, $this->personalTagCount($user, $tagName));
+            $this->assertSame(1, $this->personalTagCount($otherUser, $tagName));
+        } finally {
+            foreach ([$user, $otherUser] as $createdUser) {
+                if ($createdUser !== null) {
+                    Tag::query()->where('context_class', User::class)->where('context_id', $createdUser->id)->delete();
+                    $createdUser->delete();
+                }
+            }
+        }
+    }
+
+    #[Test]
+    public function routes_givenSeasonCookie_loadsTheCoverageOfThatSeason(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user                                       = $this->userWithUserRole();
+            $cookieSeason                               = Season::query()->where('id', '!=', app(SeasonServiceInterface::class)->getCurrentSeason()->id)->firstOrFail();
+            $_COOKIE['dungeonroute_coverage_season_id'] = (string)$cookieSeason->id;
+
+            $this->mock(CoverageServiceInterface::class, static function (MockInterface $mock) use ($user, $cookieSeason): void {
+                $mock->expects('getForUser')
+                    ->withArgs(static fn(User $forUser, Season $season) => $forUser->id === $user->id && $season->id === $cookieSeason->id)
+                    ->andReturn(new Collection());
+            });
+
+            // Act
+            $response = $this->actingAs($user)->get(route('profile.routes'));
+
+            // Assert
+            $response->assertOk();
+        } finally {
+            unset($_COOKIE['dungeonroute_coverage_season_id']);
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenUserInRouteEditChannel_broadcastsTheColorChangeOnThatRoute(): void
+    {
+        $user  = null;
+        $route = null;
+
+        try {
+            // Arrange
+            $user  = $this->userWithUserRole();
+            $route = $this->createRoute($user);
+            $this->fakeReverbChannels(
+                sprintf('presence-%s-route-edit.%s', config('app.type'), $route->public_key),
+                $user,
+            );
+            Event::fake([UserColorChangedEvent::class]);
+
+            // Act
+            $this->actingAs($user)->patch(sprintf('/profile/%d', $user->id), $this->validUpdatePayload());
+
+            // Assert
+            Event::assertDispatched(
+                UserColorChangedEvent::class,
+                static fn(UserColorChangedEvent $event) => $event->broadcastOn()[0]->name === sprintf('presence-%s-route-edit.%s', config('app.type'), $route->public_key),
+            );
+        } finally {
+            $route?->delete();
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenUserInLiveSessionChannel_broadcastsTheColorChangeOnThatLiveSession(): void
+    {
+        $user        = null;
+        $route       = null;
+        $liveSession = null;
+
+        try {
+            // Arrange
+            $user        = $this->userWithUserRole();
+            $route       = $this->createRoute($user);
+            $liveSession = LiveSession::create([
+                'dungeon_route_id' => $route->id,
+                'user_id'          => $user->id,
+                'public_key'       => LiveSession::generateRandomPublicKey(),
+            ]);
+            $this->fakeReverbChannels(
+                sprintf('presence-%s-live-session.%s', config('app.type'), $liveSession->public_key),
+                $user,
+            );
+            Event::fake([UserColorChangedEvent::class]);
+
+            // Act
+            $this->actingAs($user)->patch(sprintf('/profile/%d', $user->id), $this->validUpdatePayload());
+
+            // Assert
+            Event::assertDispatched(
+                UserColorChangedEvent::class,
+                static fn(UserColorChangedEvent $event) => $event->broadcastOn()[0]->name === sprintf('presence-%s-live-session.%s', config('app.type'), $liveSession->public_key),
+            );
+        } finally {
+            // Mass delete: LiveSession's "deleting" hook cascades into a table no migration creates
+            if ($liveSession !== null) {
+                LiveSession::query()->whereKey($liveSession->id)->delete();
+            }
+            $route?->delete();
+            $user?->delete();
+        }
+    }
+
+    #[Test]
     public function createTag_givenExistingName_returnsAnErrorAndCreatesNoDuplicate(): void
     {
         $user = null;
@@ -596,6 +738,40 @@ final class ProfileControllerTest extends PublicTestCase
             ->where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])
             ->where('name', $tagName)
             ->count();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function validUpdatePayload(): array
+    {
+        return [
+            'echo_color'            => '#abcdef',
+            'timezone'              => 'Europe/Amsterdam',
+            'game_server_region_id' => 0,
+        ];
+    }
+
+    private function createRoute(User $author): DungeonRoute
+    {
+        [$dungeon] = $this->findDungeon(facadeEnabled: false, minActiveFloors: 1, requireDefaultFloor: true);
+
+        return DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'author_id'          => $author->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            'expires_at'         => null,
+        ]);
+    }
+
+    private function fakeReverbChannels(string $channelName, User $userInChannel): void
+    {
+        $this->mock(ReverbHttpApiServiceInterface::class, static function (MockInterface $mock) use ($channelName, $userInChannel): void {
+            $mock->allows([
+                'getChannels'     => [$channelName => []],
+                'getChannelUsers' => [['id' => $userInChannel->id]],
+            ]);
+        });
     }
 
     /**

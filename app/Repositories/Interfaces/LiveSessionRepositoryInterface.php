@@ -19,4 +19,5 @@ use Illuminate\Support\Collection;
  */
 interface LiveSessionRepositoryInterface extends BaseRepositoryInterface
 {
+    public function findByPublicKey(string $publicKey): ?LiveSession;
 }

@@ -53,4 +53,9 @@ interface TagRepositoryInterface extends BaseRepositoryInterface
      * @return int The number of tags deleted
      */
     public function deleteAllLikeTag(Tag $tag): int;
+
+    /**
+     * Whether the user already has a personal route tag with exactly this name.
+     */
+    public function existsPersonalRouteTagNamed(User $user, string $name): bool;
 }

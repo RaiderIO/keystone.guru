@@ -123,4 +123,6 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
      * Whether the user authored at least one route that is not a sandbox (try) route.
      */
     public function hasNonSandboxRoutesByAuthor(User $user): bool;
+
+    public function findByPublicKey(string $publicKey): ?DungeonRoute;
 }

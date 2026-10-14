@@ -132,4 +132,9 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     {
         return false;
     }
+
+    public function findByPublicKey(string $publicKey): ?DungeonRoute
+    {
+        return null;
+    }
 }
