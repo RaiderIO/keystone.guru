@@ -6,20 +6,21 @@ use App\Events\Models\Npc\NpcChangedEvent;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\NpcFormRequest;
 use App\Models\Dungeon;
-use App\Models\Enemy;
 use App\Models\Npc\Npc;
-use App\Models\Npc\NpcBolsteringWhitelist;
-use App\Models\Npc\NpcClassification;
-use App\Models\Npc\NpcDungeon;
-use App\Models\Npc\NpcEnemyForces;
-use App\Models\Npc\NpcSpell;
-use App\Models\Spell\Spell;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcBolsteringWhitelistRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcClassificationRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcDungeonRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcSpellRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\Npc\NpcServiceInterface;
 use Exception;
 use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -45,8 +46,16 @@ class NpcController extends Controller
      *
      * @throws Exception
      */
-    public function store(NpcFormRequest $request, ?Npc $npc = null)
-    {
+    public function store(
+        NpcFormRequest                            $request,
+        DungeonRepositoryInterface                $dungeonRepository,
+        EnemyRepositoryInterface                  $enemyRepository,
+        NpcBolsteringWhitelistRepositoryInterface $npcBolsteringWhitelistRepository,
+        NpcDungeonRepositoryInterface             $npcDungeonRepository,
+        NpcEnemyForcesRepositoryInterface         $npcEnemyForcesRepository,
+        NpcSpellRepositoryInterface               $npcSpellRepository,
+        ?Npc                                      $npc = null,
+    ) {
         $oldId         = null;
         $oldDungeonIds = null;
         // If we're saving as new, make a new NPC and save that instead
@@ -77,7 +86,7 @@ class NpcController extends Controller
             'runs_away_in_fear' => $validated['runs_away_in_fear'] ?? 0,
         ];
 
-        DB::transaction(function () use ($npc, $npcBefore, $oldId, $oldDungeonIds, $attributes, $validated) {
+        DB::transaction(function () use ($dungeonRepository, $enemyRepository, $npcBolsteringWhitelistRepository, $npcDungeonRepository, $npcEnemyForcesRepository, $npcSpellRepository, $npc, $npcBefore, $oldId, $oldDungeonIds, $attributes, $validated) {
             if ($oldId === null) {
                 $attributes['display_id'] = null;
                 $npc->setRawAttributes($attributes);
@@ -101,7 +110,7 @@ class NpcController extends Controller
                     'dungeon_id' => $dungeonId,
                 ];
             }
-            NpcDungeon::insert($dungeonAttributes);
+            $npcDungeonRepository->insert($dungeonAttributes);
             $npc->load('dungeons');
 
             // Bolstering whitelist, if set
@@ -115,7 +124,7 @@ class NpcController extends Controller
                     'whitelist_npc_id' => $whitelistNpcId,
                 ];
             }
-            NpcBolsteringWhitelist::insert($bolsteringWhitelistNpcAttributes);
+            $npcBolsteringWhitelistRepository->insert($bolsteringWhitelistNpcAttributes);
 
             // Spells, if set
             $spells = $validated['spells'] ?? [];
@@ -128,7 +137,7 @@ class NpcController extends Controller
                     'spell_id' => $spellId,
                 ];
             }
-            NpcSpell::insert($npcSpellAttributes);
+            $npcSpellRepository->insert($npcSpellAttributes);
 
             $existingEnemyForces = 0;
             // Now create new enemy forces. Default to 0, but can be set if we just changed the dungeon
@@ -136,15 +145,15 @@ class NpcController extends Controller
                 $npc->createNpcEnemyForcesForExistingMappingVersions($existingEnemyForces);
             } else {
                 // We got to update any existing enemies with the old ID to the new ID, makes it easier to convert ids
-                Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
-                NpcEnemyForces::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
+                $enemyRepository->updateNpcId($oldId, $npc->id);
+                $npcEnemyForcesRepository->updateNpcId($oldId, $npc->id);
 
                 // If we changed the dungeon our enemy forces no longer match up with the mapping version, so get rid of them
                 // But we can keep them if the dungeon is now the generic dungeon, then all mapping versions are valid
                 $removedDungeonIds = array_diff($oldDungeonIds, $npc->dungeons->pluck('id')->toArray());
                 if (!empty($removedDungeonIds)) {
                     /** @var Collection<int, Dungeon> $removedDungeons */
-                    $removedDungeons = Dungeon::whereIn('id', $removedDungeonIds)->get();
+                    $removedDungeons = $dungeonRepository->getByIds($removedDungeonIds);
                     // For each removed dungeon, delete the enemy forces for all mapping versions
                     // Any new dungeons assigned will have to have their enemy forces created again
                     foreach ($removedDungeons as $removedDungeon) {
@@ -190,7 +199,7 @@ class NpcController extends Controller
         if ($oldDungeonIds !== null) {
             $removedDungeonIds = array_diff($oldDungeonIds, $npc->dungeons->pluck('id')->toArray());
             if (!empty($removedDungeonIds)) {
-                foreach (Dungeon::whereIn('id', $removedDungeonIds)->get() as $dungeon) {
+                foreach ($dungeonRepository->getByIds($removedDungeonIds) as $dungeon) {
                     try {
                         broadcast(new NpcChangedEvent($dungeon, $user, $npc, removedFromDungeon: true, oldNpcId: $oldNpcId));
                     } catch (BroadcastException) {
@@ -208,27 +217,23 @@ class NpcController extends Controller
      *
      * @return View
      */
-    public function create()
-    {
+    public function create(
+        NpcRepositoryInterface               $npcRepository,
+        DungeonRepositoryInterface           $dungeonRepository,
+        NpcClassificationRepositoryInterface $npcClassificationRepository,
+        SpellRepositoryInterface             $spellRepository,
+    ) {
         return view('admin.npc.edit', [
-            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(
+            'classifications' => $npcClassificationRepository->all()->pluck('name', 'id')->mapWithKeys(static fn(
                 string $name,
                 int    $id,
             ) => [$id => __($name)]),
-            'spells'         => Spell::all(),
-            'bolsteringNpcs' => Npc::join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
-                ->join('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
-                ->join('translations', static function (JoinClause $join) {
-                    $join->on('translations.key', '=', 'npcs.name')
-                        ->where('translations.locale', '=', 'en_US');
-                })
-                ->selectRaw('npcs.*, npc_dungeons.dungeon_id as dungeon_id')
-                ->orderByRaw('npc_dungeons.dungeon_id, name')
-                ->get()
+            'spells'         => $spellRepository->all(),
+            'bolsteringNpcs' => $npcRepository->getForBolsteringWhitelistDropdown()
                 ->groupBy('dungeon_id')
-                ->mapWithKeys(static function ($value, $key) {
+                ->mapWithKeys(static function ($value, $key) use ($dungeonRepository) {
                     // Halls of Valor => [npcs]
-                    $dungeonName = __(Dungeon::find($key)?->name);
+                    $dungeonName = __($dungeonRepository->find($key)?->name);
 
                     return [
                         $dungeonName => $value->pluck('name', 'id')
@@ -242,15 +247,20 @@ class NpcController extends Controller
     /**
      * @return View
      */
-    public function edit(Request $request, NpcServiceInterface $npcService, Npc $npc): View
-    {
+    public function edit(
+        Request                              $request,
+        NpcServiceInterface                  $npcService,
+        NpcClassificationRepositoryInterface $npcClassificationRepository,
+        SpellRepositoryInterface             $spellRepository,
+        Npc                                  $npc,
+    ): View {
         return view('admin.npc.edit', [
             'npc'             => $npc,
-            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(
+            'classifications' => $npcClassificationRepository->all()->pluck('name', 'id')->mapWithKeys(static fn(
                 string $name,
                 int    $id,
             ) => [$id => __($name)]),
-            'spells'         => Spell::all(),
+            'spells'         => $spellRepository->all(),
             'bolsteringNpcs' => $npcService->getNpcsForDropdown($npc->dungeons),
         ]);
     }
@@ -263,29 +273,47 @@ class NpcController extends Controller
      *
      * @throws Exception
      */
-    public function update(NpcFormRequest $request, NpcServiceInterface $npcService, Npc $npc)
-    {
+    public function update(
+        NpcFormRequest                            $request,
+        NpcServiceInterface                       $npcService,
+        DungeonRepositoryInterface                $dungeonRepository,
+        EnemyRepositoryInterface                  $enemyRepository,
+        NpcBolsteringWhitelistRepositoryInterface $npcBolsteringWhitelistRepository,
+        NpcClassificationRepositoryInterface      $npcClassificationRepository,
+        NpcDungeonRepositoryInterface             $npcDungeonRepository,
+        NpcEnemyForcesRepositoryInterface         $npcEnemyForcesRepository,
+        NpcSpellRepositoryInterface               $npcSpellRepository,
+        SpellRepositoryInterface                  $spellRepository,
+        Npc                                       $npc,
+    ) {
         if ($this->isSaveAsNew($request)) {
-            return $this->savenew($request);
+            return $this->savenew($request, $dungeonRepository, $enemyRepository, $npcBolsteringWhitelistRepository, $npcDungeonRepository, $npcEnemyForcesRepository, $npcSpellRepository);
         } else {
             // Store it and show the edit page again
-            $npc = $this->store($request, $npc);
+            $npc = $this->store($request, $dungeonRepository, $enemyRepository, $npcBolsteringWhitelistRepository, $npcDungeonRepository, $npcEnemyForcesRepository, $npcSpellRepository, $npc);
 
             // Message to the user
             Session::flash('status', __('view_admin.npc.flash.npc_updated'));
 
             // Display the edit page
-            return $this->edit($request, $npcService, $npc);
+            return $this->edit($request, $npcService, $npcClassificationRepository, $spellRepository, $npc);
         }
     }
 
     /**
      * @throws Exception
      */
-    public function savenew(NpcFormRequest $request): RedirectResponse
-    {
+    public function savenew(
+        NpcFormRequest                            $request,
+        DungeonRepositoryInterface                $dungeonRepository,
+        EnemyRepositoryInterface                  $enemyRepository,
+        NpcBolsteringWhitelistRepositoryInterface $npcBolsteringWhitelistRepository,
+        NpcDungeonRepositoryInterface             $npcDungeonRepository,
+        NpcEnemyForcesRepositoryInterface         $npcEnemyForcesRepository,
+        NpcSpellRepositoryInterface               $npcSpellRepository,
+    ): RedirectResponse {
         // Store it and show the edit page
-        $npc = $this->store($request);
+        $npc = $this->store($request, $dungeonRepository, $enemyRepository, $npcBolsteringWhitelistRepository, $npcDungeonRepository, $npcEnemyForcesRepository, $npcSpellRepository);
 
         // Message to the user
         Session::flash('status', sprintf(__('view_admin.npc.flash.npc_created'), __($npc->name)));
@@ -298,8 +326,8 @@ class NpcController extends Controller
      *
      * @return View
      */
-    public function get(): View
+    public function get(NpcRepositoryInterface $npcRepository): View
     {
-        return view('admin.npc.list', ['models' => Npc::all()]);
+        return view('admin.npc.list', ['models' => $npcRepository->all()]);
     }
 }

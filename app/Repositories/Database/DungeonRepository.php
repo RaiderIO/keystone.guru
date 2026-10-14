@@ -98,4 +98,22 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
             ->orderBy('dungeons.name')
             ->get();
     }
+
+    /**
+     * @param  array<int, int>          $dungeonIds
+     * @return Collection<int, Dungeon>
+     */
+    public function getByIds(array $dungeonIds): Collection
+    {
+        return Dungeon::whereIn('id', $dungeonIds)->get();
+    }
+
+    /**
+     * @param  array<int, int>          $zoneIds
+     * @return Collection<int, Dungeon>
+     */
+    public function getByZoneIds(array $zoneIds): Collection
+    {
+        return Dungeon::whereIn('zone_id', $zoneIds)->get();
+    }
 }

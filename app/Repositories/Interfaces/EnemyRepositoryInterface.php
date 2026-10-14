@@ -25,4 +25,11 @@ interface EnemyRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, Enemy>
      */
     public function getAvailableEnemiesForDungeonRouteBuilder(MappingVersion $mappingVersion): Collection;
+
+    /**
+     * Re-point every enemy from one NPC id to another.
+     *
+     * @return int The number of enemies updated
+     */
+    public function updateNpcId(int $oldNpcId, int $newNpcId): int;
 }

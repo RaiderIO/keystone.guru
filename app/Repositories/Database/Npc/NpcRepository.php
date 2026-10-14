@@ -11,6 +11,7 @@ use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
@@ -242,5 +243,41 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
             ->groupBy('spell_id');
 
         return $npcsBySpellId;
+    }
+
+    /**
+     * @return Collection<int, Npc>
+     */
+    public function getForBolsteringWhitelistDropdown(): Collection
+    {
+        return Npc::join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+            ->join('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
+            ->join('translations', static function (JoinClause $join) {
+                $join->on('translations.key', '=', 'npcs.name')
+                    ->where('translations.locale', '=', 'en_US');
+            })
+            ->selectRaw('npcs.*, npc_dungeons.dungeon_id as dungeon_id')
+            ->orderByRaw('npc_dungeons.dungeon_id, name')
+            ->get();
+    }
+
+    /**
+     * @return LengthAwarePaginator<int, Npc>
+     */
+    public function paginateWithSpells(?Dungeon $dungeon, int $perPage): LengthAwarePaginator
+    {
+        return Npc::when($dungeon !== null, fn(Builder $builder) => $builder->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+            ->select('npcs.*')
+            ->where('npc_dungeons.dungeon_id', $dungeon->id))->with('npcSpells')
+            ->has('npcSpells')
+            ->paginate($perPage);
+    }
+
+    /**
+     * @return Collection<int, Npc>
+     */
+    public function getWithoutDisplayId(): Collection
+    {
+        return Npc::with(['dungeons'])->whereNull('display_id')->get();
     }
 }

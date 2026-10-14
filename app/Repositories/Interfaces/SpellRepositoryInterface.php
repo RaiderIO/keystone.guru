@@ -82,4 +82,11 @@ interface SpellRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, Spell>
      */
     public function getVisibleReflectedSpellsForDungeon(Dungeon $dungeon, ?MappingVersion $mappingVersion): Collection;
+
+    /**
+     * Every spell with its game version, keyed by spell ID, optionally limited to the spells seen in a dungeon.
+     *
+     * @return Collection<int, Spell>
+     */
+    public function getAllWithGameVersionKeyedById(?Dungeon $dungeon = null): Collection;
 }

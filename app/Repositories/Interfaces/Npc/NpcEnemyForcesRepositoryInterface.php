@@ -19,4 +19,10 @@ use Illuminate\Support\Collection;
  */
 interface NpcEnemyForcesRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * Re-point every enemy forces row from one NPC id to another.
+     *
+     * @return int The number of rows updated
+     */
+    public function updateNpcId(int $oldNpcId, int $newNpcId): int;
 }

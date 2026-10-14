@@ -52,4 +52,16 @@ interface DungeonRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, Dungeon>
      */
     public function getAllWithMappingVersionsForAdminList(): Collection;
+
+    /**
+     * @param  array<int, int>          $dungeonIds
+     * @return Collection<int, Dungeon>
+     */
+    public function getByIds(array $dungeonIds): Collection;
+
+    /**
+     * @param  array<int, int>          $zoneIds
+     * @return Collection<int, Dungeon>
+     */
+    public function getByZoneIds(array $zoneIds): Collection;
 }

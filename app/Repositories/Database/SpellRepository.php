@@ -9,6 +9,7 @@ use App\Models\Spell\Spell;
 use App\Models\Spell\SpellMissType;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\DataExtractors\Characteristics\CharacteristicEvidenceRule;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class SpellRepository extends DatabaseRepository implements SpellRepositoryInterface
@@ -126,5 +127,19 @@ class SpellRepository extends DatabaseRepository implements SpellRepositoryInter
                 $query->select('spell_id')->from('spell_dungeons')->where('dungeon_id', $dungeon->id);
             })
             ->get();
+    }
+
+    /**
+     * @return Collection<int, Spell>
+     */
+    public function getAllWithGameVersionKeyedById(?Dungeon $dungeon = null): Collection
+    {
+        return Spell::with('gameVersion')
+            ->when(
+                $dungeon !== null,
+                fn(Builder $builder) => $builder->whereRelation('spellDungeons', 'dungeon_id', $dungeon->id),
+            )
+            ->get()
+            ->keyBy('id');
     }
 }

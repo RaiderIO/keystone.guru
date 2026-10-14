@@ -26,4 +26,9 @@ interface NpcDungeonRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, int>
      */
     public function getNpcIdsByDungeon(Dungeon $dungeon): Collection;
+
+    /**
+     * Link an NPC to a dungeon, unless the link exists already.
+     */
+    public function firstOrCreateLink(int $npcId, int $dungeonId): NpcDungeon;
 }
