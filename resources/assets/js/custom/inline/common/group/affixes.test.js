@@ -221,6 +221,28 @@ describe('CommonGroupAffixes.activate', () => {
         expect($('#seasonal_index').val()).toBe('1');
     });
 
+    it('activate_givenCreatingNewRouteWithMoreSelectedGroupsWithoutASeasonalIndex_followsTheGroupsThatHaveOne', () => {
+        // Arrange: the page pre-selects this week's affix group of every expansion, and those carry no
+        // seasonal_index. They outnumber the one clicked row that does.
+        buildAndActivate({
+            affixGroups: [
+                {id: AFFIX_GROUP_DEFAULT_ID},
+                {id: AFFIX_GROUP_ALT_A_ID},
+                {id: AFFIX_GROUP_ALT_B_ID},
+            ],
+            defaultSelectedAffixes: [AFFIX_GROUP_DEFAULT_ID, AFFIX_GROUP_ALT_A_ID],
+            withSeasonalIndexPreset: true,
+            seasonalIndexOverrides: {[AFFIX_GROUP_DEFAULT_ID]: null, [AFFIX_GROUP_ALT_A_ID]: null, [AFFIX_GROUP_ALT_B_ID]: 1},
+        });
+        $('#seasonal_index').val('2');
+
+        // Act
+        clickAffixRow(AFFIX_GROUP_ALT_B_ID);
+
+        // Assert
+        expect($('#seasonal_index').val()).toBe('1');
+    });
+
     it('activate_givenCreatingNewRouteAndPresetPickedByHand_stopsFollowingAffixClicks', () => {
         // Arrange
         buildAndActivate({

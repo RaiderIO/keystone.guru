@@ -281,10 +281,12 @@ class CommonGroupAffixes extends InlineCode {
                 if (currentSelection === childId) {
                     let affixGroup = self._getAffixGroupById(childId);
 
-                    if (!selectedSeasonalIndices.hasOwnProperty(affixGroup.seasonal_index)) {
-                        selectedSeasonalIndices[affixGroup.seasonal_index] = 0;
+                    if (affixGroup.seasonal_index !== null && typeof affixGroup.seasonal_index !== 'undefined') {
+                        if (!selectedSeasonalIndices.hasOwnProperty(affixGroup.seasonal_index)) {
+                            selectedSeasonalIndices[affixGroup.seasonal_index] = 0;
+                        }
+                        selectedSeasonalIndices[affixGroup.seasonal_index]++;
                     }
-                    selectedSeasonalIndices[affixGroup.seasonal_index]++;
 
                     $child.addClass('affix_list_row_selected');
                     $child.find('.check').css('visibility', 'visible');
