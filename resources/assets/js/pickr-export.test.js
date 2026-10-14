@@ -77,4 +77,16 @@ describe('@simonwep/pickr export shape (#3669)', () => {
         expect(requiresPickr).toBe(false);
         expect(bootstrapJs).toMatch(/import\s+Pickr\s+from\s+['"]@simonwep\/pickr['"]/);
     });
+
+    test('bootstrapJs_givenPickrIsBundled_exposesTheDefaultColorFixedSubclass', () => {
+        // Arrange
+        const bootstrapJs = fs.readFileSync(path.join(rootDir, 'resources', 'assets', 'js', 'bootstrap.js'), 'utf8');
+
+        // Act
+        const windowPickrAssignments = bootstrapJs.match(/^\s*window\.Pickr\s*=.*$/gm) ?? [];
+
+        // Assert: every map-object popup creates its picker through window.Pickr, which must apply `default`
+        expect(windowPickrAssignments).toHaveLength(1);
+        expect(windowPickrAssignments[0]).toMatch(/require\(\s*['"]\.\/pickr-default-color-fix['"]\s*\)\.withPickrDefaultColorFix\(\s*Pickr\s*\)/);
+    });
 });

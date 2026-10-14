@@ -5,13 +5,26 @@ const {getCsrfToken} = require('./csrf');
 
 /**
  * Build a jQuery-like stub whose `$('meta[name="csrf-token"]').attr('content')` returns the
- * given value, mirroring how csrf.js reads the meta tag fallback.
+ * given value, mirroring how csrf.js reads the meta tag fallback. Any other selector or attribute
+ * reads as absent, so reading the wrong tag falls through to null.
  *
  * @param {string|undefined} metaContent
  * @returns {Function}
  */
 function makeJqueryStub(metaContent) {
-    return () => ({attr: () => metaContent});
+    return (selector) => ({
+        attr: (name) => (selector === 'meta[name="csrf-token"]' && name === 'content' ? metaContent : undefined),
+    });
+}
+
+/**
+ * Build a js-cookie-like stub that only knows the `XSRF-TOKEN` cookie.
+ *
+ * @param {?string} xsrfToken
+ * @returns {{get: Function}}
+ */
+function makeCookiesStub(xsrfToken) {
+    return {get: (name) => (name === 'XSRF-TOKEN' ? xsrfToken : undefined)};
 }
 
 describe('getCsrfToken', () => {
@@ -24,7 +37,7 @@ describe('getCsrfToken', () => {
     });
 
     it('getCsrfToken_givenXsrfCookiePresent_returnsXsrfHeaderFromCookie', () => {
-        globalThis.Cookies = {get: (name) => (name === 'XSRF-TOKEN' ? 'cookie-token' : null)};
+        globalThis.Cookies = makeCookiesStub('cookie-token');
         globalThis.$ = makeJqueryStub('meta-token');
 
         expect(getCsrfToken()).toEqual({header: 'X-XSRF-TOKEN', value: 'cookie-token'});
@@ -38,7 +51,7 @@ describe('getCsrfToken', () => {
     });
 
     it('getCsrfToken_givenEmptyCookie_fallsBackToMetaTag', () => {
-        globalThis.Cookies = {get: () => ''};
+        globalThis.Cookies = makeCookiesStub('');
         globalThis.$ = makeJqueryStub('meta-token');
 
         expect(getCsrfToken()).toEqual({header: 'X-CSRF-TOKEN', value: 'meta-token'});
@@ -56,5 +69,19 @@ describe('getCsrfToken', () => {
         globalThis.$ = makeJqueryStub('meta-token');
 
         expect(getCsrfToken()).toEqual({header: 'X-CSRF-TOKEN', value: 'meta-token'});
+    });
+
+    it('getCsrfToken_givenCookiesNull_fallsBackToMetaTag', () => {
+        globalThis.Cookies = null;
+        globalThis.$ = makeJqueryStub('meta-token');
+
+        expect(getCsrfToken()).toEqual({header: 'X-CSRF-TOKEN', value: 'meta-token'});
+    });
+
+    it('getCsrfToken_givenNoCookieAndEmptyMetaTag_returnsNull', () => {
+        globalThis.Cookies = makeCookiesStub(undefined);
+        globalThis.$ = makeJqueryStub('');
+
+        expect(getCsrfToken()).toBeNull();
     });
 });

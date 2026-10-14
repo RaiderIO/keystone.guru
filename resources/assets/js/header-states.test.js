@@ -270,21 +270,35 @@ describe('header state language', () => {
     });
 
     test('sheetRow_givenCurrent_isMarkedByItsBorderAlone', () => {
-        // Arrange
+        // Arrange: as common/layout/nav/dungeoncontext.blade.php renders a current and a non-current row
         renderHeader(`
             <div class="dungeon_sheet">
                 <a class="dungeon_sheet_row border-accent" id="row_current" aria-current="true" href="#">Blackfathom Deeps</a>
                 <a class="dungeon_sheet_row" id="row_other" href="#">Blackrock Depths</a>
             </div>`);
+        const sheetBlade = fs.readFileSync(path.join(ROOT, 'resources/views/common/layout/nav/dungeoncontext.blade.php'), 'utf8');
 
         // Act
         const current = getComputedStyle(document.getElementById('row_current'));
         const other = getComputedStyle(document.getElementById('row_other'));
+        const accentRules = rulesFor('.theme .border-accent');
 
         // Assert: the accent border (.border-accent) alone - neither the hover tint nor a heavier weight, which the
         // desktop chips and tiles do not use either
         expect(current.backgroundColor).toBe(other.backgroundColor);
         expect(current.fontWeight).toBe(other.fontWeight);
+        // Every row reserves a solid border...
+        expect(current.borderTopStyle).toBe('solid');
+        expect(['0.125rem', '2px']).toContain(current.borderTopWidth);
+        // ...which only the current row's .border-accent colours. jsdom does not cascade a var() border-color over the
+        // longhands, so the theme rule and the blade's class binding are read directly.
+        expect(accentRules).toHaveLength(1);
+        expect(accentRules[0].getPropertyValue('border-color')).toBe('var(--theme-border-accent)');
+        expect(accentRules[0].getPropertyPriority('border-color')).toBe('important');
+        expect(document.getElementById('row_current').matches('.theme .border-accent')).toBe(true);
+        expect(document.getElementById('row_other').matches('.theme .border-accent')).toBe(false);
+        expect(sheetBlade).toContain("@class(['dungeon_sheet_row', 'border-accent' => $isSelected])");
+        expect(sheetBlade).toContain('@if($isSelected) aria-current="true" @endif');
     });
 
     test('allButton_givenThemeButtonReboot_keepsTheChipsRadius', () => {

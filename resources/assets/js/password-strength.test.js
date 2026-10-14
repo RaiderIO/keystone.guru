@@ -59,8 +59,11 @@ describe('$.fn.passwordStrength (#3597)', () => {
         typePassword(input, 'something');
         typePassword(input, '');
 
+        const bar = document.querySelector('.progress-bar');
         expect(document.querySelector('.password-strength__text').innerHTML).toBe('&nbsp;');
-        expect(document.querySelector('.progress-bar').style.width).toBe('0%');
+        expect(bar.style.width).toBe('0%');
+        expect(bar.getAttribute('aria-valuenow')).toBe('0');
+        expect(bar.className).toBe('progress-bar');
     });
 
     test('passwordStrength_givenPasswordShorterThanMinimum_showsShortPassTip', () => {
@@ -72,6 +75,7 @@ describe('$.fn.passwordStrength (#3597)', () => {
         const $bar = $('.progress-bar');
         expect(document.querySelector('.password-strength__text').textContent).toBe(OPTIONS.shortPass);
         expect($bar.hasClass('bg-danger')).toBe(true);
+        expect($bar[0].style.width).toBe('10%');
     });
 
     test('passwordStrength_givenCommonLowercaseWord_showsWeakTip', () => {
@@ -152,10 +156,43 @@ describe('$.fn.passwordStrength (#3597)', () => {
         expect(widget.previousElementSibling.classList.contains('input-group')).toBe(true);
     });
 
-    test('passwordStrength_givenNoMatchingInput_doesNotThrowAndRendersNothing', () => {
-        document.body.innerHTML = '';
+    test('passwordStrength_givenStrongPasswordShortenedToWeak_swapsTheBarColour', () => {
+        const input = createPasswordInput();
+        $(input).passwordStrength(OPTIONS);
 
-        expect(() => $('#register_password').passwordStrength(OPTIONS)).not.toThrow();
-        expect(document.querySelector('.password-strength')).toBeNull();
+        typePassword(input, 'Tr7$kQm2!vLp9#Zx');
+        typePassword(input, 'password');
+
+        const bar = document.querySelector('.progress-bar');
+        expect(bar.classList.contains('bg-danger')).toBe(true);
+        expect(bar.classList.contains('bg-success')).toBe(false);
+    });
+
+    test('passwordStrength_givenChangeEvent_updatesTheMeter', () => {
+        const input = createPasswordInput();
+        $(input).passwordStrength(OPTIONS);
+
+        input.value = 'abc123';
+        $(input).trigger('change');
+
+        expect(document.querySelector('.password-strength__text').textContent).toBe(OPTIONS.shortPass);
+    });
+
+    test('passwordStrength_givenNoOptions_usesTheDefaultTipsAndMinimumLength', () => {
+        const input = createPasswordInput();
+        $(input).passwordStrength();
+
+        typePassword(input, 'abcdefg');
+
+        expect(document.querySelector('.password-strength__text').textContent).toBe('The password is too short');
+    });
+
+    test('passwordStrength_givenCustomMinimumLength_appliesIt', () => {
+        const input = createPasswordInput();
+        $(input).passwordStrength({...OPTIONS, minimumLength: 12});
+
+        typePassword(input, 'Password1');
+
+        expect(document.querySelector('.password-strength__text').textContent).toBe(OPTIONS.shortPass);
     });
 });
