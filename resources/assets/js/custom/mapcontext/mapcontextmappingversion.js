@@ -47,7 +47,7 @@ class MapContextMappingVersion extends MapContext {
                     // Remove it
                     let removed = this._options.dungeonNpcs.splice(index, 1);
 
-                    this.signal('npc:deleted', {npc: removed});
+                    this.signal('npc:removed', {npc: removed[0]});
                     break;
                 }
             }
