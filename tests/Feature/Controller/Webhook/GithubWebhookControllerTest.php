@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Webhook;
 
 use App\Service\Discord\DiscordApiServiceInterface;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Testing\TestResponse;
 use Mockery;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -11,12 +12,17 @@ use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
+use Throwable;
 
 #[Group('Controller')]
 #[Group('Webhook')]
 final class GithubWebhookControllerTest extends TestCase
 {
     private const string SECRET = 'test-webhook-secret';
+
+    private const string INVALID_SIGNATURE_HASH = '0123456789abcdef0123456789abcdef01234567';
+
+    private const string INVALID_SIGNATURE = 'sha1=' . self::INVALID_SIGNATURE_HASH;
 
     #[\Override]
     protected function setUp(): void
@@ -115,6 +121,81 @@ final class GithubWebhookControllerTest extends TestCase
         $this->assertNotSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
+    #[Test]
+    public function github_givenInvalidSignature_returnsForbidden(): void
+    {
+        // Arrange
+        $this->expectDiscordEmbeds(0);
+
+        // Act
+        $response = $this->postWebhookWithSignatureHeader(self::INVALID_SIGNATURE);
+
+        // Assert
+        $response->assertForbidden();
+    }
+
+    #[Test]
+    public function github_givenInvalidSignature_doesNotReportException(): void
+    {
+        // Arrange
+        Exceptions::fake();
+        $this->expectDiscordEmbeds(0);
+
+        // Act
+        $this->postWebhookWithSignatureHeader(self::INVALID_SIGNATURE);
+
+        // Assert
+        Exceptions::assertNothingReported();
+    }
+
+    #[Test]
+    public function github_givenInvalidSignature_throwsExceptionWithoutSignature(): void
+    {
+        // Arrange
+        $this->withoutExceptionHandling();
+        $this->expectDiscordEmbeds(0);
+        $thrown = null;
+
+        // Act
+        try {
+            $this->postWebhookWithSignatureHeader(self::INVALID_SIGNATURE);
+        } catch (Throwable $throwable) {
+            $thrown = $throwable;
+        }
+
+        // Assert
+        $this->assertNotNull($thrown);
+        $this->assertStringNotContainsString(self::INVALID_SIGNATURE_HASH, $thrown->getMessage());
+    }
+
+    #[Test]
+    #[DataProvider('badRequestSignatureHeaderProvider')]
+    public function github_givenMissingOrMalformedSignatureHeader_returnsBadRequestWithoutReporting(?string $signatureHeader): void
+    {
+        // Arrange
+        Exceptions::fake();
+        $this->expectDiscordEmbeds(0);
+
+        // Act
+        $response = $this->postWebhookWithSignatureHeader($signatureHeader);
+
+        // Assert
+        $response->assertBadRequest();
+        Exceptions::assertNothingReported();
+    }
+
+    /**
+     * @return array<string, array{string|null}>
+     */
+    public static function badRequestSignatureHeaderProvider(): array
+    {
+        return [
+            'missing header'    => [null],
+            'no algorithm part' => [self::INVALID_SIGNATURE_HASH],
+            'too many parts'    => ['sha1=' . self::INVALID_SIGNATURE_HASH . '=extra'],
+        ];
+    }
+
     /**
      * @param array<string, mixed> $commitOverrides
      */
@@ -211,6 +292,30 @@ final class GithubWebhookControllerTest extends TestCase
                 'X-Hub-Signature' => $signature,
                 'Content-Type'    => 'application/json',
             ]),
+            $payload,
+        );
+    }
+
+    /**
+     * POST a GitHub push webhook carrying the given X-Hub-Signature header verbatim (null = no header).
+     *
+     * @return TestResponse<Response>
+     */
+    private function postWebhookWithSignatureHeader(?string $signatureHeader): TestResponse
+    {
+        $payload = json_encode(['ref' => 'refs/heads/master', 'commits' => [$this->distinctCommit()]], JSON_THROW_ON_ERROR);
+        $headers = ['Content-Type' => 'application/json'];
+        if ($signatureHeader !== null) {
+            $headers['X-Hub-Signature'] = $signatureHeader;
+        }
+
+        return $this->call(
+            'POST',
+            route('webhook.github'),
+            [],
+            [],
+            [],
+            $this->transformHeadersToServerVars($headers),
             $payload,
         );
     }
