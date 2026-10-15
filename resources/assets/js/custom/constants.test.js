@@ -80,6 +80,20 @@ describe('polylineDefaultColor', () => {
         global.randomColor = () => '#123456';
         expect(polylineDefaultColor()).toBe('#123456');
     });
+
+    it('falls back to a random color when the cookie is not set', () => {
+        // Arrange
+        global.Cookies = require('js-cookie');
+        global.Cookies.remove('polyline_default_color');
+        global.randomColor = () => '#123456';
+
+        // Act
+        const color = polylineDefaultColor();
+
+        // Assert
+        expect(global.Cookies.get('polyline_default_color')).toBeUndefined();
+        expect(color).toBe('#123456');
+    });
 });
 
 describe('c.map.killzone.polygonOptions.color', () => {

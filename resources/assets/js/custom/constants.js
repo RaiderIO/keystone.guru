@@ -307,7 +307,7 @@ const ENEMY_CANVAS_PANE = 'enemyCanvasPane';
  */
 function polylineDefaultColor() {
     let defaultColor = Cookies.get('polyline_default_color');
-    if (defaultColor === null || defaultColor === 'null') {
+    if (defaultColor === undefined || defaultColor === null || defaultColor === 'null') {
         // Return the random color function
         return randomColor();
     } else {
