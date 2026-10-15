@@ -39,6 +39,25 @@ final class ObjectImporterTest extends PublicTestCase
         $this->assertSame($expectedText, $result->getMapIcons()->first()['comment']);
     }
 
+    /**
+     * The map icons are bulk-inserted past the model, and production's `map_icons.permanent_tooltip`
+     * has no column default (the schema dumps do), so strict mode rejects a row without it.
+     */
+    #[Test]
+    public function parseObjects_givenANote_setsPermanentTooltipOnTheMapIcon(): void
+    {
+        // Arrange
+        [$mappingVersion, $enemy, $floor] = $this->findDungeonWithEnemy();
+        $importStringObjects              = $this->createImportStringObjects($mappingVersion, $floor, $enemy, 'note');
+
+        // Act
+        $result = app()->make(ObjectImporter::class)->parseObjects($importStringObjects, false);
+
+        // Assert
+        $this->assertCount(1, $result->getMapIcons());
+        $this->assertSame(0, $result->getMapIcons()->first()['permanent_tooltip'] ?? null);
+    }
+
     #[Test]
     public function parseObjects_givenANoteWithHtmlAssignedToAPull_importsThePullDescriptionUnchanged(): void
     {

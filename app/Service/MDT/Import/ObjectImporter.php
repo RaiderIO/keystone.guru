@@ -375,6 +375,7 @@ class ObjectImporter
             'mapping_version_id' => null,
             'floor_id'           => $latLng->getFloor()->id,
             'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_COMMENT],
+            'permanent_tooltip'  => 0,
             // Bulk-inserted past MapIcon::setCommentAttribute()'s own stripping
             'comment' => mb_substr(new HtmlSanitizer()->stripAllTags((string)$details[4]), 0, MapIcon::COMMENT_MAX_LENGTH),
         ], $latLng->toArray()));

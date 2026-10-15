@@ -81,6 +81,8 @@ final class RiftOffsetImporterTest extends PublicTestCase
         $this->assertCount(1, $result->getPaths());
         $this->assertSame($expectedEnemy->floor_id, $result->getMapIcons()->first()['floor_id']);
         $this->assertSame($expectedEnemy->floor_id, $result->getPaths()->first()['floor_id']);
+        // Bulk-inserted past the model; production's column has no default under strict mode
+        $this->assertSame(0, $result->getMapIcons()->first()['permanent_tooltip'] ?? null);
     }
 
     /**
