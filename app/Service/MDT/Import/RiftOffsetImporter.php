@@ -106,6 +106,7 @@ class RiftOffsetImporter
                     'floor_id'           => $enemy->floor_id,
                     'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY],
                     'comment'            => __($obeliskMapIcon->mapIconType->name),
+                    'permanent_tooltip'  => 0,
                     'obelisk_map_icon'   => $obeliskMapIcon,
                     // MDT has the x and y inverted here
                 ], Conversion::convertMDTCoordinateToLatLng([
