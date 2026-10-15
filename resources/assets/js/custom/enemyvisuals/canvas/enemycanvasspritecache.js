@@ -246,8 +246,15 @@ class EnemyCanvasSpriteCache {
             ctx.font = text.font;
             ctx.fillStyle = text.color;
             ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(text.value, size / 2, size / 2);
+            ctx.textBaseline = 'alphabetic';
+            let metrics = ctx.measureText(text.value);
+            if (typeof metrics.fontBoundingBoxAscent === 'number' && typeof metrics.fontBoundingBoxDescent === 'number') {
+                // Where CSS puts the baseline of a vertically centred line box; 'middle' lands 1-2px higher
+                ctx.fillText(text.value, size / 2, size / 2 + (metrics.fontBoundingBoxAscent - metrics.fontBoundingBoxDescent) / 2);
+            } else {
+                ctx.textBaseline = 'middle';
+                ctx.fillText(text.value, size / 2, size / 2);
+            }
         }
 
         return canvas;

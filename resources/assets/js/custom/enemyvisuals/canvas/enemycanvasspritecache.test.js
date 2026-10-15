@@ -2,8 +2,9 @@ const {EnemyCanvasSpriteCache} = require('./enemycanvasspritecache');
 
 /**
  * jsdom has no 2D canvas, so the cache is given a canvas factory that records the drawing calls.
+ * @param textMetrics {Object} What measureText() returns.
  */
-function makeFakeCanvasFactory() {
+function makeFakeCanvasFactory(textMetrics = {}) {
     const created = [];
     const factory = (width, height) => {
         const calls = [];
@@ -23,11 +24,17 @@ function makeFakeCanvasFactory() {
             closePath: () => calls.push(['closePath']),
             setLineDash: (pattern) => calls.push(['setLineDash', pattern]),
             stroke: () => calls.push(['stroke', ctx.strokeStyle, ctx.lineWidth]),
-            fillText: (...args) => calls.push(['fillText', ctx.font, ctx.fillStyle, ...args]),
+            fillText: (...args) => calls.push(['fillText', ctx.font, ctx.fillStyle, ctx.textBaseline, ...args]),
+            measureText: (value) => {
+                calls.push(['measureText', ctx.font, ctx.textBaseline, value]);
+
+                return textMetrics;
+            },
             fillStyle: null,
             strokeStyle: null,
             lineWidth: 1,
             font: '',
+            textBaseline: 'alphabetic',
             globalCompositeOperation: 'source-over',
         };
         const canvas = {width, height, ctx, getContext: () => ctx};
@@ -61,8 +68,8 @@ function makeSprite(overrides = {}) {
     };
 }
 
-function makeCache(overrides = {}) {
-    const canvases = makeFakeCanvasFactory();
+function makeCache(overrides = {}, textMetrics = {}) {
+    const canvases = makeFakeCanvasFactory(textMetrics);
     const images = makeFakeImageFactory();
     const loaded = [];
     const cache = new EnemyCanvasSpriteCache({
@@ -327,7 +334,21 @@ test('get_givenText_drawsItCentredAtPixelRatio', () => {
     // Assert
     const calls = canvases.created[0].ctx.calls;
     expect(calls).toContainEqual(['scale', 2, 2]);
-    expect(calls).toContainEqual(['fillText', '14px Arial', 'rgb(255, 255, 255)', '12', 10, 10]);
+    expect(calls).toContainEqual(['fillText', '14px Arial', 'rgb(255, 255, 255)', 'middle', '12', 10, 10]);
+});
+
+test('get_givenTextWithFontMetrics_drawsItOnTheBaselineOfACentredLineBox', () => {
+    // Arrange
+    const {cache, canvases} = makeCache({}, {fontBoundingBoxAscent: 12, fontBoundingBoxDescent: 3});
+    const sprite = makeSprite({imageUrl: null, text: {value: '0', font: '13px Arial', color: 'rgb(255, 255, 255)'}});
+
+    // Act
+    cache.get(sprite, 26);
+
+    // Assert
+    const calls = canvases.created[0].ctx.calls;
+    expect(calls).toContainEqual(['measureText', '13px Arial', 'alphabetic', '0']);
+    expect(calls).toContainEqual(['fillText', '13px Arial', 'rgb(255, 255, 255)', 'alphabetic', '0', 13, 17.5]);
 });
 
 test('clear_givenRenderedSprite_rendersItAgainOnNextGet', () => {
