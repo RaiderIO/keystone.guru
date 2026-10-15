@@ -111,6 +111,20 @@ test('read_givenSeveralReads_attachesOneHiddenProbeTree', () => {
     expect(roots[0].style.visibility).toBe('hidden');
 });
 
+test('read_givenParentElement_attachesTheProbeTreeThere', () => {
+    // Arrange
+    const parent = document.createElement('div');
+    document.body.appendChild(parent);
+    const probe = new EnemyCanvasStyleProbe(parent);
+
+    // Act
+    const style = probe.read('aggressive enemy_icon_npc_class', 'enemy_icon melee');
+
+    // Assert
+    expect(parent.querySelectorAll('[aria-hidden="true"]')).toHaveLength(1);
+    expect(style.outerBackgroundColor).toBe('rgb(220, 60, 60)');
+});
+
 test.each([
     ['url("https://a/b.png")', 'https://a/b.png'],
     ["url('https://a/b.png')", 'https://a/b.png'],

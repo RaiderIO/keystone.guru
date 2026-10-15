@@ -16,11 +16,11 @@ global.NPC_CLASSIFICATION_ID_RARE = 5;
 
 const {EnemyVisualMainEnemyClass} = require('./enemyvisualmainenemyclass');
 
-function updateIconNameFor(classificationId) {
+function updateIconNameFor(classificationId, npcId = 1) {
     const fakeThis = {
         iconName: 'melee',
         enemyvisual: {
-            enemy: {npc: {id: 1, classification_id: classificationId, class: {key: 'caster'}}},
+            enemy: {npc: {id: npcId, classification_id: classificationId, class: {key: 'caster'}}},
         },
     };
 
@@ -42,4 +42,23 @@ test.each([
     ['rare', NPC_CLASSIFICATION_ID_RARE],
 ])('_updateIconName_given%sNpc_usesNpcClassIcon', (label, classificationId) => {
     expect(updateIconNameFor(classificationId)).toBe('caster');
+});
+
+test.each([
+    ['enchanted', 155432],
+    ['void', 155433],
+    ['tide', 155434],
+])('_updateIconName_given%sEmissaryNpc_usesItsEmissaryIcon', (expected, npcId) => {
+    expect(updateIconNameFor(NPC_CLASSIFICATION_ID_ELITE, npcId)).toBe(expected);
+});
+
+test('_updateIconName_givenNoNpc_keepsTheCurrentIcon', () => {
+    // Arrange
+    const fakeThis = {iconName: 'melee', enemyvisual: {enemy: {npc: null}}};
+
+    // Act
+    EnemyVisualMainEnemyClass.prototype._updateIconName.call(fakeThis);
+
+    // Assert
+    expect(fakeThis.iconName).toBe('melee');
 });

@@ -56,3 +56,81 @@ test('getCanvasBadge_givenNoIcon_returnsNull', () => {
     // Assert
     expect(badge).toBeNull();
 });
+
+describe('EnemyVisualModifier.updateVisibility', () => {
+    afterEach(() => {
+        document.body.innerHTML = '';
+    });
+
+    /**
+     * Renders the attribute element the DOM template gives a teeming modifier, and a modifier whose
+     * enemy records the handler it registers for `hidden`.
+     */
+    function makeRenderedModifier() {
+        document.body.innerHTML = '<div id="map_enemy_visual_attribute_teeming_1"></div>';
+        const handlers = {};
+        const enemyVisual = makeEnemyVisual('visible');
+        enemyVisual.enemy.register = (events, context, callback) => {
+            for (const event of [].concat(events)) {
+                handlers[event] = callback;
+            }
+        };
+        const modifier = new EnemyVisualModifierTeeming(enemyVisual, 4);
+
+        return {modifier, handlers, attribute: document.getElementById('map_enemy_visual_attribute_teeming_1')};
+    }
+
+    test('updateVisibility_givenZoomAtModifierZoom_showsAndPlacesTheAttribute', () => {
+        // Arrange
+        const {modifier, attribute} = makeRenderedModifier();
+        attribute.style.display = 'none';
+
+        // Act
+        modifier.updateVisibility(3, 66, 66, 8);
+
+        // Assert
+        expect(attribute.style.display).toBe('');
+        expect(attribute.style.left).toBe('-8px');
+        expect(attribute.style.top).toBe('58px');
+    });
+
+    test('updateVisibility_givenZoomBelowModifierZoom_hidesTheAttribute', () => {
+        // Arrange
+        const {modifier, attribute} = makeRenderedModifier();
+
+        // Act
+        modifier.updateVisibility(2, 66, 66, 8);
+
+        // Assert
+        expect(attribute.style.display).toBe('none');
+        expect(attribute.style.left).toBe('');
+    });
+
+    test('updateVisibility_givenStillHidden_doesNotLookTheAttributeUpAgain', () => {
+        // Arrange
+        const {modifier} = makeRenderedModifier();
+        modifier.updateVisibility(2, 66, 66, 8);
+        const getElementById = vi.spyOn(document, 'getElementById');
+
+        // Act
+        modifier.updateVisibility(2.5, 66, 66, 8);
+
+        // Assert
+        expect(getElementById).not.toHaveBeenCalled();
+    });
+
+    test('updateVisibility_givenEnemyHiddenInBetween_hidesTheRebuiltAttributeAgain', () => {
+        // Arrange: hidden once, then the floor is switched away and back, which rebuilds the
+        // attribute without the display the modifier set on it before
+        const {modifier, handlers, attribute} = makeRenderedModifier();
+        modifier.updateVisibility(2, 66, 66, 8);
+        handlers.hidden({});
+        attribute.style.display = '';
+
+        // Act
+        modifier.updateVisibility(2, 66, 66, 8);
+
+        // Assert
+        expect(attribute.style.display).toBe('none');
+    });
+});

@@ -210,3 +210,21 @@ test('scheduleUpdate_givenMultipleCallsBeforeTheNextFrame_coalescesIntoASingleUp
 
     expect(rafSpy).toHaveBeenCalledTimes(1);
 });
+
+test('scheduleUpdate_givenTheFrameRuns_cullsAgainstTheCurrentMapBoundsAndCanBeScheduledAgain', () => {
+    // Arrange
+    const rafCallbacks = [];
+    const rafSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => rafCallbacks.push(callback));
+    const enemy = makeEnemy(1, FAR_OUTSIDE);
+    const culler = makeCuller([enemy]);
+    culler.map = {leafletMap: {getBounds: () => BOUNDS}};
+    culler.scheduleUpdate();
+
+    // Act
+    rafCallbacks[0]();
+    culler.scheduleUpdate();
+
+    // Assert
+    expect(isCulled(enemy)).toBe(true);
+    expect(rafSpy).toHaveBeenCalledTimes(2);
+});

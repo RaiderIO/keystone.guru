@@ -69,23 +69,69 @@ function createVisual({
             return this;
         },
     });
-    global.L.marker = () => ({
-        addTo: (layerGroup) => layerGroup,
-    });
+    const markers = [];
+    global.L.marker = (latLng, options) => {
+        const marker = {latLng, options, addedTo: null};
+        markers.push(marker);
 
-    return {visual, removedLayers, addedLayers};
+        return {
+            addTo: (layerGroup) => (marker.addedTo = layerGroup),
+        };
+    };
+
+    return {visual, removedLayers, addedLayers, markers};
 }
 
 describe('EnemyForcesCheckpointVisual._refreshSatellitePill', () => {
     it('refreshSatellitePill_givenVisibleMapObjectGroup_drawsTheSatellite', () => {
         // Arrange
-        const {visual} = createVisual({groupIsShown: true});
+        const {visual, addedLayers, markers} = createVisual({groupIsShown: true});
+
+        // Act
+        visual._refreshSatellitePill('<div>10%</div>');
+
+        // Assert: one non-interactive pill in the middle of the members, on its own layer group
+        expect(visual._satelliteLayerGroup).not.toBeNull();
+        expect(addedLayers).toEqual([visual._satelliteLayerGroup]);
+        expect(markers).toHaveLength(1);
+        expect(markers[0].latLng).toEqual([20, 30]);
+        expect(markers[0].options).toEqual(expect.objectContaining({interactive: false, keyboard: false}));
+        expect(markers[0].options.icon.options.html).toBe('<div>10%</div>');
+        expect(markers[0].addedTo).toBe(visual._satelliteLayerGroup);
+    });
+
+    it('refreshSatellitePill_givenMembersOnSeveralFloors_centresThePillOnTheCurrentFloorsMembersOnly', () => {
+        // Arrange
+        const {visual, markers} = createVisual({
+            groupIsShown: true,
+            currentFloorId: 2,
+            enemies: [
+                {id: 1, floor_id: 2, source_floor_id: null, lat: 10, lng: 20},
+                {id: 2, floor_id: 2, source_floor_id: null, lat: 30, lng: 40},
+                {id: 3, floor_id: 3, source_floor_id: null, lat: 500, lng: 500},
+            ],
+        });
 
         // Act
         visual._refreshSatellitePill('<div>10%</div>');
 
         // Assert
-        expect(visual._satelliteLayerGroup).not.toBeNull();
+        expect(markers.map(marker => marker.latLng)).toEqual([[20, 30]]);
+    });
+
+    it('refreshSatellitePill_givenAnExistingSatellite_replacesIt', () => {
+        // Arrange
+        const {visual, removedLayers, addedLayers} = createVisual({groupIsShown: true});
+        visual._refreshSatellitePill('<div>10%</div>');
+        const previousSatellite = visual._satelliteLayerGroup;
+
+        // Act
+        visual._refreshSatellitePill('<div>20%</div>');
+
+        // Assert
+        expect(removedLayers).toEqual([previousSatellite]);
+        expect(addedLayers).toHaveLength(2);
+        expect(visual._satelliteLayerGroup).toBe(addedLayers[1]);
     });
 
     it('refreshSatellitePill_givenHiddenMapObjectGroup_drawsNothing', () => {
@@ -119,8 +165,15 @@ describe('EnemyForcesCheckpointVisual._refreshSatellitePill', () => {
 
     it('refreshSatellitePill_givenAnchorFloorIsTheCurrentFloor_drawsNothing', () => {
         // Arrange
-        // The checkpoint's own marker already covers its anchor floor.
-        const {visual} = createVisual({groupIsShown: true, currentFloorId: 1});
+        // The checkpoint's own marker already covers its anchor floor, members there included.
+        const {visual} = createVisual({
+            groupIsShown: true,
+            currentFloorId: 1,
+            enemies: [
+                {id: 1, floor_id: 1, source_floor_id: null, lat: 10, lng: 20},
+                {id: 2, floor_id: 2, source_floor_id: null, lat: 30, lng: 40},
+            ],
+        });
 
         // Act
         visual._refreshSatellitePill('<div>10%</div>');
@@ -159,13 +212,13 @@ describe('EnemyForcesCheckpointVisual._refreshSatellitePill', () => {
  *
  * @param options {{killZonesNumberStyle: String, mapNumberStyle: String}}
  */
-function createVisualForNumberStyle({killZonesNumberStyle, mapNumberStyle}) {
+function createVisualForNumberStyle({killZonesNumberStyle, mapNumberStyle, name = 'Corridor', enemyForces = 20, floorIds = [1]}) {
     const checkpoint = Object.create(EnemyForcesCheckpoint.prototype);
     checkpoint.id = 55;
     checkpoint.floor_id = 1;
-    checkpoint.name = 'Corridor';
-    checkpoint.getEnemyForces = () => 20;
-    checkpoint.getFloorIds = () => [1];
+    checkpoint.name = name;
+    checkpoint.getEnemyForces = () => enemyForces;
+    checkpoint.getFloorIds = () => floorIds;
 
     checkpoint.layer = {bindTooltip: (text) => (visual._boundTooltipText = text)};
     const map = {
@@ -235,7 +288,7 @@ describe('EnemyForcesCheckpointVisual number style', () => {
         visual.bindTooltip();
 
         // Assert
-        expect(visual._boundTooltipText).toContain('js.enemy_forces_checkpoint_tooltip_enemy_forces');
+        expect(visual._boundTooltipText).toBe('js.enemy_forces_checkpoint_tooltip_enemy_forces:{"name":"Corridor:{}","enemyForces":20}');
     });
 
     it('bindTooltip_givenPullNumberStyleIsPercentage_rendersAPercentage', () => {
@@ -251,6 +304,66 @@ describe('EnemyForcesCheckpointVisual number style', () => {
         // Assert
         expect(visual._boundTooltipText).toContain('js.enemy_forces_checkpoint_tooltip_percentage');
         expect(visual._boundTooltipText).toContain('20%');
+    });
+
+    it('bindTooltip_givenUnnamedCheckpoint_usesTheUnnamedLabel', () => {
+        // Arrange
+        const visual = createVisualForNumberStyle({
+            killZonesNumberStyle: NUMBER_STYLE_ENEMY_FORCES,
+            mapNumberStyle: NUMBER_STYLE_PERCENTAGE,
+            name: '',
+        });
+
+        // Act
+        visual.bindTooltip();
+
+        // Assert
+        expect(visual._boundTooltipText).toContain('"name":"js.enemy_forces_checkpoint_unnamed_label:{}"');
+    });
+
+    it('bindTooltip_givenCheckpointSpanningFloors_saysOnHowManyFloors', () => {
+        // Arrange
+        const visual = createVisualForNumberStyle({
+            killZonesNumberStyle: NUMBER_STYLE_ENEMY_FORCES,
+            mapNumberStyle: NUMBER_STYLE_PERCENTAGE,
+            floorIds: [1, 2],
+        });
+
+        // Act
+        visual.bindTooltip();
+
+        // Assert
+        expect(visual._boundTooltipText).toMatch(/ js\.enemy_forces_checkpoint_tooltip_spans_floors:\{"floors":2\}$/);
+    });
+
+    it('bindTooltip_givenCheckpointOnOneFloor_saysNothingAboutFloors', () => {
+        // Arrange
+        const visual = createVisualForNumberStyle({
+            killZonesNumberStyle: NUMBER_STYLE_ENEMY_FORCES,
+            mapNumberStyle: NUMBER_STYLE_PERCENTAGE,
+        });
+
+        // Act
+        visual.bindTooltip();
+
+        // Assert
+        expect(visual._boundTooltipText).toContain('js.enemy_forces_checkpoint_tooltip_enemy_forces');
+        expect(visual._boundTooltipText).not.toContain('spans_floors');
+    });
+
+    it('getPillHtml_givenCheckpointHoldingMoreThanRequired_rendersZero', () => {
+        // Arrange
+        const visual = createVisualForNumberStyle({
+            killZonesNumberStyle: NUMBER_STYLE_ENEMY_FORCES,
+            mapNumberStyle: NUMBER_STYLE_PERCENTAGE,
+            enemyForces: 120,
+        });
+
+        // Act
+        const html = visual._getPillHtml();
+
+        // Assert
+        expect(html).toBe('<div>js.enemy_forces_checkpoint_pill_enemy_forces:{"enemyForces":0}</div>');
     });
 
     it('bindTooltip_givenNoUI_bindsNothing', () => {
