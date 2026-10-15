@@ -57,12 +57,11 @@ class AddToCollectionRow {
             return null;
         }
 
-        // Fullness follows the route counts, which change as routes are added and removed
-        let isFullnessReason = [AddToCollectionRow.BLOCKED_FULL, AddToCollectionRow.BLOCKED_DUNGEON_FULL].includes(this.json.blocked_reason);
-        if (this.json.blocked_reason !== null && !isFullnessReason) {
+        if (this.json.blocked_reason !== null) {
             return this.json.blocked_reason;
         }
 
+        // The server gives no reason for a collection that held the route when the dialog opened
         if (this.dungeonRouteCount >= this.maxDungeonRoutes) {
             return AddToCollectionRow.BLOCKED_FULL;
         }

@@ -110,8 +110,6 @@ const hsv2name = (h, s, v) => clrLkp.find(([clr, val]) => h >= val)[0];
  */
 const hex2name = hex => [hex2rgb, rgb2hsv, hsv2name].reduce((a, v) => v(...[a].flat()), hex);
 
-const pad = v => (v + '0').slice(0, 2);
-const rgb2hex = (r, g, b) => '#' + [r, g, b].map(Math.round).map(n => pad(n.toString(16))).join('');
 /**
  * END Code for checking if a color is "brownish" so we can exclude it from randomly generated pulls
  */
@@ -178,7 +176,6 @@ if (typeof module !== 'undefined' && module.exports) {
         pickHexFromHandlers,
         hsv2rgb,
         rgb2hsv,
-        rgb2hex,
         hex2name,
     };
 }

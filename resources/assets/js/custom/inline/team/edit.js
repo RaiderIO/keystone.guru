@@ -287,8 +287,6 @@ class TeamEdit extends InlineCode {
         });
     }
 
-    _removeAdFreeGiveaway
-
     _removeUserFromTeam(userId) {
         let self = this;
 

@@ -252,24 +252,19 @@ $.fn.refreshTooltips = function () {
 }
 
 /**
- * @param {boolean} [enabled=true]
+ * @param {boolean} enabled
  * @param $element
  */
-function toggleTooltips(enabled = true, $element = null) {
+function toggleTooltips(enabled, $element) {
     if (!isMobile()) {
-        if ($element === null) {
-            disableTooltips($('[data-bs-toggle="tooltip"]'));
-            disableTooltips($('[data-tooltip="tooltip"]'));
-        } else {
-            $('.tooltip').remove();
-            $element.unbind('click', _hideTooltips)
-                .each(function () {
-                    let tooltip = bootstrap.Tooltip.getInstance(this);
-                    if (tooltip !== null) {
-                        enabled ? tooltip.enable() : tooltip.disable();
-                    }
-                });
-        }
+        $('.tooltip').remove();
+        $element.unbind('click', _hideTooltips)
+            .each(function () {
+                let tooltip = bootstrap.Tooltip.getInstance(this);
+                if (tooltip !== null) {
+                    enabled ? tooltip.enable() : tooltip.disable();
+                }
+            });
     }
 }
 

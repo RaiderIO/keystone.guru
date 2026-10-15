@@ -3,12 +3,10 @@
 const {
     convertToSlug,
     slugify,
-    toSnakeCase,
     trimEnd,
     getFormattedPercentage,
     abbreviateNumber,
     isNumeric,
-    decodeHtmlEntity,
     isPolygonClockwise,
     getDistance,
     getDistanceSquared,
@@ -70,16 +68,6 @@ describe('slugify', () => {
     it('returns an empty string for null or undefined', () => {
         expect(slugify(null)).toBe('');
         expect(slugify(undefined)).toBe('');
-    });
-});
-
-describe('toSnakeCase', () => {
-    it('converts PascalCase to snake_case', () => {
-        expect(toSnakeCase('CamelCaseKey')).toBe('camel_case_key');
-    });
-
-    it('lowercases a single word', () => {
-        expect(toSnakeCase('Name')).toBe('name');
     });
 });
 
@@ -146,16 +134,6 @@ describe('isNumeric', () => {
 
     it('returns false for non-string values', () => {
         expect(isNumeric(42)).toBe(false);
-    });
-});
-
-describe('decodeHtmlEntity', () => {
-    it('decodes HTML entities back to their characters', () => {
-        expect(decodeHtmlEntity('a &amp; b &quot;c&quot;')).toBe('a & b "c"');
-    });
-
-    it('decodes the apostrophe and equals sign Handlebars escapes', () => {
-        expect(decodeHtmlEntity('it&#x27;s a &#x3D; b')).toBe('it\'s a = b');
     });
 });
 

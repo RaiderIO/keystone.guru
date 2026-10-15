@@ -4,7 +4,6 @@
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Expansion;
 use App\Models\Season;
 use App\Service\Expansion\ExpansionData;
 use Illuminate\Support\Collection;
@@ -18,7 +17,6 @@ use Illuminate\Support\Collection;
  * @var Collection<int, Affix>         $affixes
  * @var Collection<int, ExpansionData> $expansionsData
  * @var Collection<int, AffixGroup>    $allAffixGroups
- * @var Collection<int, Expansion>     $allExpansions
  * @var Collection<int, AffixGroup>    $currentAffixes
  * @var array<string, int>             $dungeonExpansions
  * @var Season                         $currentSeason
@@ -50,7 +48,6 @@ $allAffixGroupsWithSeasons = $allAffixGroups
     'teemingSelector'       => $teemingSelector,
     'modal'                 => $modal ?? false,
     'defaultSelected'       => $defaultSelected,
-    'allExpansions'         => $allExpansions,
     'allAffixGroups'        => $allAffixGroups,
     'dungeonExpansions'     => $dungeonExpansions,
     'currentAffixes'        => $currentAffixes,

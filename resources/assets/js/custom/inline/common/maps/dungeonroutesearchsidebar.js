@@ -143,12 +143,6 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
         let ignorePackBuddies = enemySelectedEvent.data.ignorePackBuddies;
         console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', enemy);
 
-        // Only when we're saved
-        if (this.id === 0) {
-            console.warn('Not handling _enemySelected; killzone not (yet) saved!', this, enemy.id);
-            return;
-        }
-
         // If the enemy was part of a pack..
         if (enemy.enemy_pack_id !== 0 && !ignorePackBuddies) {
             let packBuddies = enemy.getPackBuddies();

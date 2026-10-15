@@ -948,10 +948,7 @@ body {
     opacity: 0.8;
   }
 
-  /** noUiSlider (#3596), the .range-slider wrapper $.fn.rangeSlider mounts on. The `.inverse`
-      extra class (only the rating filter) doesn't need its own color override here: it's handled
-      by range-slider.js choosing `connect: 'upper'` instead of `'lower'`, which alone flips which
-      side of the track the (always primary-colored) .noUi-connect fills. */
+  /** noUiSlider: the .range-slider wrapper $.fn.rangeSlider mounts on. */
   .range-slider.noUi-target {
     background-color: var($--theme-dark);
     border-color: rgba(128, 128, 128, 0.5);

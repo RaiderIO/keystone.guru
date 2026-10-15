@@ -8,7 +8,6 @@ const {
     pickHexFromHandlers,
     hsv2rgb,
     rgb2hsv,
-    rgb2hex,
     hex2name,
 } = require('./colorutil');
 
@@ -155,22 +154,6 @@ describe('rgb2hsv', () => {
         expect(h).toBeCloseTo(120, 10);
         expect(s).toBeCloseTo(1, 10);
         expect(v).toBeCloseTo(1, 10);
-    });
-});
-
-describe('rgb2hex', () => {
-    it('joins rounded components into a hex string', () => {
-        expect(rgb2hex(255, 0, 128)).toBe('#ff0080');
-    });
-
-    it('rounds fractional components before converting', () => {
-        expect(rgb2hex(254.6, 0.4, 127.5)).toBe('#ff0080');
-    });
-
-    // Documents a quirk: pad() appends a trailing zero, so single-hex-digit
-    // components (values < 16) are scaled up by 16 rather than zero-padded.
-    it('appends a trailing zero to single-digit components', () => {
-        expect(rgb2hex(5, 5, 5)).toBe('#505050');
     });
 });
 

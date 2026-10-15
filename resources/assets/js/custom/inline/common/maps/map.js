@@ -507,9 +507,6 @@ class CommonMapsMap extends InlineCode {
      */
     _setupFavorite() {
         let self = this;
-        $('#favorite').bind('change', function () {
-            self._favorite($('#favorite').is(':checked'));
-        });
 
         $('.favorite_star').unbind('mouseenter').bind('mouseenter', function () {
             $(this).toggleClass('favorited');

@@ -37,12 +37,6 @@ class SearchFilterWeeklyAffixGroups extends SearchFilterInput {
     }
 
     setValueOverride(name, value) {
-        // Select nothing if one of the periods is 0
-        if (value === 0) {
-            this.setValue([]);
-            return;
-        }
-
         // New value must be brought down to week indices
         let week = this._getWeekForPeriod(parseInt(value));
 
