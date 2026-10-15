@@ -135,3 +135,94 @@ describe('CommonMapsMap._initDefaults cookie cache handling', () => {
         expect(invalidateCookieCache).toHaveBeenCalledTimes(1);
     });
 });
+
+describe('CommonMapsMap._mapObjectGroupVisibilityChanged hidden groups cookie', () => {
+    let cookieJar;
+
+    /**
+     * @param {String} name
+     * @param {Boolean} userToggleable
+     * @param {Boolean} shown
+     */
+    function fakeGroup(name, userToggleable = true, shown = true) {
+        let group = new globalThis.MapObjectGroup();
+        group.name = name;
+        group.isUserToggleable = () => userToggleable;
+        group.isShown = () => shown;
+        group.setVisibility = vi.fn();
+        return group;
+    }
+
+    /**
+     * @param {Object} groupsOnThisMap Map object groups available on the current map, keyed by name
+     * @param {Array} hiddenInDropdown Names of the groups the user has toggled off in the dropdown
+     */
+    function visibilityChanged(groupsOnThisMap, hiddenInDropdown) {
+        let $dropdown = $('<div>', {id: 'map_map_object_group_visibility_dropdown'});
+        for (let name in groupsOnThisMap) {
+            $dropdown.append($('<a>', {
+                class: hiddenInDropdown.includes(name) ? 'dropdown-item' : 'dropdown-item active',
+                'data-group': name,
+            }));
+        }
+        $('body').append($dropdown);
+
+        globalThis.getMapObjectGroup = (name) => groupsOnThisMap[name];
+
+        CommonMapsMap.prototype._mapObjectGroupVisibilityChanged.call({});
+    }
+
+    beforeEach(() => {
+        cookieJar = new Map();
+
+        globalThis.cookieDefaultAttributes = undefined;
+        globalThis.Cookies = {
+            get: (key) => cookieJar.get(key),
+            set: (key, value) => cookieJar.set(key, `${value}`),
+        };
+        globalThis.MapObjectGroup = class MapObjectGroup {
+        };
+        globalThis.MAP_OBJECT_GROUP_NAMES = ['killzone', 'brushline', 'mountablearea'];
+    });
+
+    afterEach(() => {
+        $('#map_map_object_group_visibility_dropdown').remove();
+    });
+
+    test('_mapObjectGroupVisibilityChanged_givenANewlyHiddenGroup_keepsTheHiddenSettingOfAGroupNotOnThisMap', () => {
+        // Arrange
+        cookieJar.set('hidden_map_object_groups', '["brushline","mountablearea"]');
+        let groupsOnThisMap = {killzone: fakeGroup('killzone'), brushline: fakeGroup('brushline')};
+
+        // Act
+        visibilityChanged(groupsOnThisMap, ['killzone', 'brushline']);
+
+        // Assert
+        expect(JSON.parse(cookieJar.get('hidden_map_object_groups'))).toEqual(['killzone', 'brushline', 'mountablearea']);
+    });
+
+    test('_mapObjectGroupVisibilityChanged_givenAGroupShownAgain_removesItFromTheCookie', () => {
+        // Arrange
+        cookieJar.set('hidden_map_object_groups', '["brushline","mountablearea"]');
+        let groupsOnThisMap = {killzone: fakeGroup('killzone'), brushline: fakeGroup('brushline')};
+
+        // Act
+        visibilityChanged(groupsOnThisMap, []);
+
+        // Assert
+        expect(JSON.parse(cookieJar.get('hidden_map_object_groups'))).toEqual(['mountablearea']);
+        expect(groupsOnThisMap.brushline.setVisibility).toHaveBeenCalledWith(true);
+    });
+
+    test('_mapObjectGroupVisibilityChanged_givenAHiddenGroupNotToggleableByTheUser_storesItAsHidden', () => {
+        // Arrange
+        let groupsOnThisMap = {killzone: fakeGroup('killzone', false, false), brushline: fakeGroup('brushline')};
+
+        // Act
+        visibilityChanged(groupsOnThisMap, []);
+
+        // Assert
+        expect(JSON.parse(cookieJar.get('hidden_map_object_groups'))).toEqual(['killzone']);
+        expect(groupsOnThisMap.killzone.setVisibility).toHaveBeenCalledWith(false);
+    });
+});

@@ -751,9 +751,6 @@ class CommonMapsMap extends InlineCode {
                 ) {
                     hiddenMapObjectGroups.push(mapObjectGroupName);
                     group.setVisibility(false);
-
-                    // Remove it from the existing cookie list
-                    cookieHiddenMapObjectGroups.splice(cookieHiddenMapObjectGroups.indexOf(mapObjectGroupName), 1);
                 } else {
                     group.setVisibility(true);
                 }
