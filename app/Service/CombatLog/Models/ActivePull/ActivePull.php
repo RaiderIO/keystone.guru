@@ -148,31 +148,4 @@ class ActivePull
         $this->enemiesInCombat = $this->enemiesInCombat->merge($activePull->enemiesInCombat);
         $this->enemiesKilled   = $this->enemiesKilled->merge($activePull->enemiesKilled);
     }
-
-    /**
-     * @return array<string, int|float>
-     */
-    public function getAvgLatLng(): array
-    {
-        $result = [
-            'lat' => 0,
-            'lng' => 0,
-        ];
-
-        $count = 0;
-        foreach ($this->enemiesKilled as $killedActivePullEnemy) {
-            if ($killedActivePullEnemy->getResolvedEnemy() === null) {
-                continue;
-            }
-
-            $result['lat'] += $killedActivePullEnemy->getResolvedEnemy()->lat;
-            $result['lng'] += $killedActivePullEnemy->getResolvedEnemy()->lng;
-            $count++;
-        }
-
-        $result['lat'] /= $count;
-        $result['lng'] /= $count;
-
-        return $result;
-    }
 }

@@ -31,10 +31,6 @@ return [
         'header_libraries' => 'Libraries',
         'header_images'    => 'Images',
     ],
-    'demo' => [
-        'title'  => 'Demo routes',
-        'header' => 'Demo routes',
-    ],
     'embed' => [
         'title'          => 'Embed a route',
         'header'         => 'Keystone.guru embed test on webpage',

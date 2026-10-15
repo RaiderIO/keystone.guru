@@ -67,15 +67,6 @@ return [
         'title'  => 'Create temporary route',
         'header' => 'New temporary route',
     ],
-    'sandboxclaimed' => [
-        'title'               => 'Route already claimed',
-        'header'              => 'Route already claimed',
-        'claimed_description' => 'This route has already been claimed by someone (or you used the back button in your browser to navigate here).',
-    ],
-    'unavailable' => [
-        'title'                   => 'Unpublished route',
-        'unavailable_description' => 'You are not authorized to view this route. Ask the author of the route to change the route\'s Sharing settings so that you can view it.',
-    ],
     'view' => [
         'any'                                     => 'Any',
         'linkpreview_title'                       => '%s',
