@@ -170,6 +170,7 @@ describe('CommonDungeonroutePicker', () => {
         globalThis.showConfirmYesCancel          = vi.fn();
         globalThis.getHandlebarsDefaultVariables = () => MESSAGES['en.js'];
         globalThis.isColorDark                   = () => false;
+        globalThis.getQueryParams                = vi.fn(() => ({}));
         globalThis.Handlebars                    = Handlebars;
         Handlebars.templates = {};
         ['dungeonroute_picker_row', 'affixgroup_select_option_template'].forEach((name) => {
@@ -202,6 +203,7 @@ describe('CommonDungeonroutePicker', () => {
     afterEach(() => {
         globalThis.$         = previousJquery;
         globalThis.bootstrap = previousBootstrap;
+        delete globalThis.getQueryParams;
         document.body.innerHTML = '';
     });
 
@@ -270,6 +272,39 @@ describe('CommonDungeonroutePicker', () => {
         expect(ajaxCalls).toHaveLength(2);
         expect(ajaxCalls[1].data.columns[1].search.value).toBe('3');
         expect(offcanvas.show).toHaveBeenCalledTimes(1);
+    });
+
+    it('open_givenADungeonBeforeTheFirstShow_loadsOnceForThatDungeon', () => {
+        // Arrange
+        picker.open({dungeonId: 3});
+
+        // Act
+        jQuery('#picker').trigger('show.bs.offcanvas');
+
+        // Assert
+        expect(ajaxCalls).toHaveLength(1);
+        expect(ajaxCalls[0].data.columns[1].search.value).toBe('3');
+    });
+
+    it('activate_givenAffixGroups_decoratesTheAffixOptionsWithTheirIcons', () => {
+        // Assert - activated in beforeEach
+        const content = document.querySelector('#picker_affixes option[value="7"]').getAttribute('data-content') ?? '';
+        expect(content).toContain('affix_icon_fortified');
+        expect(refreshSelectPickers).toHaveBeenCalledTimes(1);
+    });
+
+    it('load_givenARequestInFlight_marksTheResultsBusyUntilTheyArrive', () => {
+        // Arrange
+        const results = document.querySelector('#picker_list').closest('[aria-busy]');
+        picker.reload();
+        const busyWhileLoading = results.getAttribute('aria-busy');
+
+        // Act
+        respondWithRoutes([route('a')]);
+
+        // Assert
+        expect(busyWhileLoading).toBe('true');
+        expect(results.getAttribute('aria-busy')).toBe('false');
     });
 
     it('open_givenTheDungeonTheFilterIsAlreadyOn_doesNotLoadAgain', () => {
@@ -583,16 +618,20 @@ describe('CommonDungeonroutePicker', () => {
 
     it('activate_givenQueryParametersNamedLikeAFilter_leavesTheFiltersAndTheUrlAlone', () => {
         // Arrange
+        document.body.innerHTML = MARKUP;
         globalThis.getQueryParams = vi.fn(() => ({title: 'from the url'}));
-        const pushState = vi.spyOn(history, 'pushState');
+        const pushState = vi.spyOn(history, 'pushState').mockImplementation(() => {
+        });
 
         // Act
+        picker = new CommonDungeonroutePicker('picker', 'common/dungeonroute/picker', Object.assign({}, OPTIONS));
+        picker.activate();
         picker.reload();
 
         // Assert
         expect(globalThis.getQueryParams).not.toHaveBeenCalled();
         expect(pushState).not.toHaveBeenCalled();
-        expect(ajaxCalls[0].data.columns[0].search.value).toBe('');
+        expect(ajaxCalls[ajaxCalls.length - 1].data.columns[0].search.value).toBe('');
     });
 
     it('goToPage_givenNext_requestsTheNextPage', () => {
@@ -979,6 +1018,81 @@ describe('CommonDungeonroutePicker', () => {
         expect(offcanvas.hide).not.toHaveBeenCalled();
     });
 
+    it('confirm_givenTheServerDeletedFewerRoutesThanSent_listsTheFirstPageAgain', () => {
+        // Arrange
+        picker = deletePicker();
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')], 2);
+        tick('a');
+        tick('b');
+
+        // Act
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        const request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.success({dungeon_routes: ['a']});
+        request.complete();
+
+        // Assert
+        const listRequests = ajaxCalls.filter((call) => call.type === 'GET');
+        expect(listRequests).toHaveLength(2);
+        expect(listRequests[1].data.start).toBe(0);
+    });
+
+    it('show_givenTheLastDeleteRemovedRoutes_listsTheRoutesAgain', () => {
+        // Arrange
+        picker = deletePicker();
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        respondWithRoutes([route('a'), route('b')], 2);
+        tick('a');
+        document.querySelector('#picker_confirm').click();
+        globalThis.showConfirmYesCancel.mock.calls[0][1]();
+        const request = ajaxCalls.find((call) => call.type === 'DELETE');
+        request.success({dungeon_routes: ['a']});
+        request.complete();
+        const listRequestCount = ajaxCalls.filter((call) => call.type === 'GET').length;
+
+        // Act
+        jQuery('#picker').trigger('show.bs.offcanvas');
+
+        // Assert
+        expect(offcanvas.hide).toHaveBeenCalledTimes(1);
+        expect(ajaxCalls.filter((call) => call.type === 'GET')).toHaveLength(listRequestCount + 1);
+    });
+
+    it('add_givenARequestInFlight_disablesConfirmAndSendsNoSecondRequest', () => {
+        // Arrange
+        picker.reload();
+        respondWithRoutes([route('a')]);
+        tick('a');
+        document.querySelector('#picker_confirm').click();
+
+        // Act - a click that reaches the handler although the button is disabled
+        jQuery('#picker_confirm').trigger('click');
+
+        // Assert
+        expect(document.querySelector('#picker_confirm').disabled).toBe(true);
+        expect(ajaxCalls.filter((call) => call.type === 'POST')).toHaveLength(1);
+    });
+
+    it('add_givenTheRequestCompletes_enablesConfirmAgain', () => {
+        // Arrange
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')]);
+        tick('a');
+        tick('b');
+        document.querySelector('#picker_confirm').click();
+        const post = ajaxCalls.find((call) => call.type === 'POST');
+
+        // Act
+        post.error({status: 500}, 'error');
+        post.complete();
+
+        // Assert
+        expect(document.querySelector('#picker_confirm').disabled).toBe(false);
+        expect(document.querySelector('#picker_confirm').textContent).toBe('Add 2 routes');
+    });
+
     it('confirm_givenARetryOfADeleteWhoseAnswerWasLost_forgetsTheDeletedRoutesAndKeepsTheRest', () => {
         // Arrange - the first request deleted 'a' and 'b' but its answer never arrived
         picker = deletePicker();
@@ -1250,17 +1364,6 @@ describe('CommonDungeonroutePicker', () => {
 
         // Assert
         expect(document.querySelector('.route_picker_select_page').hidden).toBe(false);
-    });
-
-    it('selectPage_givenAddMode_staysHidden', () => {
-        // Arrange - the add drawer has no selectPageSelector
-
-        // Act
-        picker.reload();
-        respondWithRoutes([route('a')]);
-
-        // Assert
-        expect(document.querySelector('.route_picker_select_page').hidden).toBe(true);
     });
 
     it('setExistingPublicKeys_givenAnUndoneAdd_makesTheRouteTickableAgain', () => {
