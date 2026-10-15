@@ -344,6 +344,41 @@ describe('CommonDungeonrouteSimulate settings', () => {
         expect(refreshSelectPickers).toHaveBeenCalledTimes(1);
     });
 
+    test('_simulateModalOpened_givenPullsPickedBeforeReopening_keepsThosePicks', () => {
+        // Arrange
+        killZones = {
+            a: {id: 11, index: 1, spellIds: [2825]},
+            b: {id: 21, index: 2, spellIds: []},
+        };
+        activateSimulate();
+        $('#simulate_modal').trigger('show.bs.modal');
+        $('#simulate_bloodlust_per_pull').val(['21']);
+
+        // Act
+        $('#simulate_modal').trigger('show.bs.modal');
+
+        // Assert
+        expect($('#simulate_bloodlust_per_pull').val()).toEqual(['21']);
+    });
+
+    test('_simulateModalOpened_givenEveryPickedPullDeletedBeforeReopening_ticksTheBloodlustPulls', () => {
+        // Arrange
+        killZones = {
+            a: {id: 11, index: 1, spellIds: [2825]},
+            b: {id: 21, index: 2, spellIds: []},
+        };
+        activateSimulate();
+        $('#simulate_modal').trigger('show.bs.modal');
+        $('#simulate_bloodlust_per_pull').val(['21']);
+        killZones = {a: {id: 11, index: 1, spellIds: [2825]}};
+
+        // Act
+        $('#simulate_modal').trigger('show.bs.modal');
+
+        // Assert
+        expect($('#simulate_bloodlust_per_pull').val()).toEqual(['11']);
+    });
+
     test('_simulateModalOpened_givenTheFirstOpen_turnsTheNumericOptionsIntoSliders', () => {
         // Arrange
         activateSimulate();
