@@ -16,14 +16,17 @@
  * One enemy drawn on the shared enemy L.Canvas: the aggressiveness ring, the pre-rendered image
  * layer from the sprite cache (with the state border and text), the border, the selection halo and
  * badges. None of them overlap except the badges, so the enemy's opacity reads as one layer's. A
- * CircleMarker underneath, so Leaflet's canvas renderer projects, culls and hit-tests it
- * (`_containsPoint`) like any other circle.
+ * CircleMarker underneath, so Leaflet's canvas renderer projects and culls it like any other circle,
+ * and hit-tests it on what is drawn (`_containsPoint`). Mouse events carry the enemy's own position
+ * and do not bubble to the map, as they do on an L.Marker, so listeners and popups cannot tell it
+ * from a DOM enemy.
  */
 let EnemyPath = L.CircleMarker.extend({
     options: {
         stroke: false,
         fill: false,
-        interactive: false,
+        interactive: true,
+        bubblingMouseEvents: false,
     },
 
     /**
@@ -59,6 +62,68 @@ let EnemyPath = L.CircleMarker.extend({
      */
     setProjectedCallback: function (callback) {
         this._onProjected = callback;
+    },
+
+    /**
+     * The map gives a path with a radius over 10px the mouse position, and an L.Marker its own.
+     * @inheritDoc
+     */
+    fire: function (type, data, propagate) {
+        if (this._map && data && data.originalEvent && data.latlng) {
+            data.latlng = this.getLatLng();
+            data.layerPoint = this._map.latLngToLayerPoint(data.latlng);
+            data.containerPoint = this._map.layerPointToContainerPoint(data.layerPoint);
+        }
+
+        return L.CircleMarker.prototype.fire.call(this, type, data, propagate);
+    },
+
+    /**
+     * The drawn circle and the badges hanging over its edge, as the DOM icon's children catch the
+     * mouse too. Not the selection halo, nor the rest of the radius Leaflet culls with.
+     * @param point {L.Point} A layer point.
+     * @returns {Boolean}
+     */
+    _containsPoint: function (point) {
+        let appearance = this._appearance;
+        if (appearance === null || !this._point) {
+            return false;
+        }
+
+        let radius = appearance.outerDiameter / 2;
+        let dx = point.x - this._point.x;
+        let dy = point.y - this._point.y;
+        if (dx * dx + dy * dy <= radius * radius) {
+            return true;
+        }
+
+        let badges = appearance.badges ?? [];
+        for (let i = 0; i < badges.length; i++) {
+            let badge = badges[i];
+            let left = badge.left - radius;
+            let top = badge.top - radius;
+            if (dx >= left && dx <= left + badge.box.width && dy >= top && dy <= top + badge.box.height) {
+                return true;
+            }
+        }
+
+        return false;
+    },
+
+    /**
+     * The top of the enemy, where EnemyVisual anchors the DOM icon's tooltip.
+     * @returns {L.Point}
+     */
+    _getTooltipAnchor: function () {
+        return L.point(0, this._appearance === null ? 0 : -this._appearance.outerDiameter / 2);
+    },
+
+    /**
+     * The top of the enemy, where EnemyVisual anchors the DOM icon's popup.
+     * @returns {L.Point}
+     */
+    _getPopupAnchor: function () {
+        return this._getTooltipAnchor();
     },
 
     _project: function () {
@@ -177,6 +242,197 @@ EnemyPath.getDrawnRadius = function (appearance) {
 };
 
 /**
+ * The enemy canvas sits above the overlay pane's pulls and patrols, and Leaflet's canvas renderer
+ * never passes a mouse event on to what lies underneath it. So the canvas only takes pointer events
+ * while the mouse is over an enemy; everywhere else they fall through to the layers below.
+ */
+let EnemyCanvasRenderer = L.Canvas.extend({
+    onAdd: function () {
+        L.Canvas.prototype.onAdd.call(this);
+
+        this._capturesPointer = null;
+        this._setCapturesPointer(false);
+        this._invalidateContainerRect();
+        L.DomEvent.on(this._map.getContainer(), 'mousemove', this._onMapContainerMouseMove, this);
+        this._map.getContainer().addEventListener('click', this._onMapContainerClickBound = this._onMapContainerClick.bind(this), true);
+        this._map.getContainer().addEventListener('contextmenu', this._onMapContainerClickBound, true);
+        L.DomEvent.on(this._map.getContainer(), 'mouseenter', this._invalidateContainerRect, this);
+        L.DomEvent.on(window, 'scroll resize', this._invalidateContainerRect, this);
+    },
+
+    onRemove: function () {
+        L.DomEvent.off(this._map.getContainer(), 'mousemove', this._onMapContainerMouseMove, this);
+        this._map.getContainer().removeEventListener('click', this._onMapContainerClickBound, true);
+        this._map.getContainer().removeEventListener('contextmenu', this._onMapContainerClickBound, true);
+        L.DomEvent.off(this._map.getContainer(), 'mouseenter', this._invalidateContainerRect, this);
+        L.DomEvent.off(window, 'scroll resize', this._invalidateContainerRect, this);
+
+        L.Canvas.prototype.onRemove.call(this);
+    },
+
+    getEvents: function () {
+        let events = L.Canvas.prototype.getEvents.call(this);
+        events.resize = this._invalidateContainerRect;
+
+        return events;
+    },
+
+    /**
+     * Map#mouseEventToLayerPoint() reads the container's layout on every call, and the mousemove
+     * listeners that run ahead of it leave the layout dirty: a forced layout per mouse move.
+     * @param event {MouseEvent}
+     * @returns {L.Point}
+     */
+    mouseEventToLayerPoint: function (event) {
+        if (this._containerRect === null) {
+            let container = this._map.getContainer();
+            let rect = container.getBoundingClientRect();
+            this._containerRect = {
+                left: rect.left,
+                top: rect.top,
+                scaleX: rect.width / container.offsetWidth || 1,
+                scaleY: rect.height / container.offsetHeight || 1,
+                clientLeft: container.clientLeft,
+                clientTop: container.clientTop,
+            };
+        }
+
+        let rect = this._containerRect;
+
+        return this._map.containerPointToLayerPoint(L.point(
+            (event.clientX - rect.left) / rect.scaleX - rect.clientLeft,
+            (event.clientY - rect.top) / rect.scaleY - rect.clientTop
+        ));
+    },
+
+    /**
+     * @param point {L.Point} A layer point.
+     * @returns {L.Path|null} The topmost interactive path at the point, as Leaflet's own hit test picks it.
+     */
+    getLayerAt: function (point) {
+        let result = null;
+
+        for (let order = this._drawFirst; order; order = order.next) {
+            let layer = order.layer;
+            if (layer.options.interactive && layer._containsPoint(point)) {
+                result = layer;
+            }
+        }
+
+        return result;
+    },
+
+    /**
+     * @param event {MouseEvent}
+     * @private
+     */
+    _onMapContainerMouseMove: function (event) {
+        let capturesPointer = this.getLayerAt(this.mouseEventToLayerPoint(event)) !== null;
+
+        // Leaflet's own hover check is throttled, and the canvas gets no further mouse event once it
+        // stops taking them, so the enemy just left would keep its tooltip and the pointer cursor.
+        if (!capturesPointer && this._capturesPointer && event.target === this._container) {
+            this._handleMouseOut(event);
+        }
+
+        let entered = capturesPointer && !this._capturesPointer;
+        this._setCapturesPointer(capturesPointer);
+
+        // The move that reaches an enemy went to whatever lies underneath, so hover it from here
+        if (entered && this._isBelowCanvas(event.target)) {
+            this._mouseHoverThrottled = false;
+            this._handleMouseHover(this._toCanvasEvent(event), this.mouseEventToLayerPoint(event));
+        }
+    },
+
+    /**
+     * A tap, or a click without a mouse move onto the enemy first, reaches the layer underneath the
+     * canvas: hand it to the enemy instead.
+     * @param event {MouseEvent}
+     * @private
+     */
+    _onMapContainerClick: function (event) {
+        if (event.target === this._container || !this._isBelowCanvas(event.target) ||
+            this.getLayerAt(this.mouseEventToLayerPoint(event)) === null) {
+            return;
+        }
+
+        event.stopPropagation();
+        this._onClick(this._toCanvasEvent(event));
+    },
+
+    /**
+     * @param element {EventTarget}
+     * @returns {Boolean} Whether the element is drawn underneath the enemy canvas, rather than on top of it or outside the map.
+     * @private
+     */
+    _isBelowCanvas: function (element) {
+        let mapPane = this._map.getPane('mapPane');
+        let container = this._map.getContainer();
+
+        if (element === container || element === mapPane) {
+            return true;
+        }
+
+        let child = element;
+        while (child && child.parentNode !== mapPane) {
+            if (child === container) {
+                return false;
+            }
+            child = child.parentNode;
+        }
+
+        return !!child && child !== this.getPane() &&
+            (parseInt(getComputedStyle(child).zIndex, 10) || 0) < (parseInt(getComputedStyle(this.getPane()).zIndex, 10) || 0);
+    },
+
+    /**
+     * The event as Leaflet would get it had the canvas been its target.
+     * @param event {MouseEvent}
+     * @returns {Object}
+     * @private
+     */
+    _toCanvasEvent: function (event) {
+        return {
+            type: event.type,
+            target: this._container,
+            relatedTarget: null,
+            clientX: event.clientX,
+            clientY: event.clientY,
+            button: event.button,
+            shiftKey: event.shiftKey,
+            ctrlKey: event.ctrlKey,
+            altKey: event.altKey,
+            metaKey: event.metaKey,
+            preventDefault: function () {
+                event.preventDefault();
+            },
+            stopPropagation: function () {
+                event.stopPropagation();
+            },
+        };
+    },
+
+    /**
+     * @private
+     */
+    _invalidateContainerRect: function () {
+        this._containerRect = null;
+    },
+
+    /**
+     * @param capturesPointer {Boolean}
+     * @private
+     */
+    _setCapturesPointer: function (capturesPointer) {
+        if (this._capturesPointer !== capturesPointer) {
+            this._capturesPointer = capturesPointer;
+            this._container.style.pointerEvents = capturesPointer ? 'auto' : 'none';
+        }
+    },
+});
+
+/**
  * Holds enemy markers exactly like an L.LayerGroup - so hasLayer(), visibility and every existing
  * caller keep working on the markers - but puts each marker's EnemyPath on the map instead of the
  * marker itself, so no enemy DOM is ever created.
@@ -240,6 +496,7 @@ let EnemyCanvasLayerGroup = L.LayerGroup.extend({
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         EnemyPath,
+        EnemyCanvasRenderer,
         EnemyCanvasLayerGroup,
     };
 }

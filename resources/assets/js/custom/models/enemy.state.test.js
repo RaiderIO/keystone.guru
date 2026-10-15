@@ -279,9 +279,12 @@ function makeFakeMap({mapState = null, edit = false, enemyForcesRequired = 100, 
         enemyForcesManager: {
             getEnemyForcesRequired: () => enemyForcesRequired,
         },
-        mapObjectGroupManager: fakeMapObjectGroupManager(() => ({
+        // Enemies are DOM markers here: no canvas path to bind to
+        mapObjectGroupManager: fakeMapObjectGroupManager((name) => name === MAP_OBJECT_GROUP_ENEMY ? {
+            isCanvasRendered: () => false,
+        } : {
             findMapObjectById: (id) => killZonesById[id] ?? null,
-        })),
+        }),
         /**
          * Switches the map state and notifies listeners, mirroring DungeonMap#setMapState(): the
          * new state is in place BEFORE the event is delivered, so a listener that calls back into
