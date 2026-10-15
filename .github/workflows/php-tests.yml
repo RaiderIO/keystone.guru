@@ -41,8 +41,16 @@ jobs:
         # cost 10-15 minutes per job (#4135).
         uses: actions/checkout@v7
 
-      - name: Start services
-        run: docker compose -f docker-compose.ci.yml up -d --wait
+      # Pulling and health-checking the MySQL and Redis containers takes ~30s, which overlaps the
+      # PHP setup instead of preceding it; php-ci-setup waits for it before touching the database.
+      - name: Start services in the background
+        run: |
+          (
+            rc=0
+            docker compose -f docker-compose.ci.yml up -d --wait > "$RUNNER_TEMP/ci-services.log" 2>&1 || rc=$?
+            echo "$rc" > "$RUNNER_TEMP/ci-services.rc"
+          ) < /dev/null > /dev/null 2>&1 &
+          touch "$RUNNER_TEMP/ci-services.started"
 
       - name: Common PHP/Laravel setup
         uses: ./.github/actions/php-ci-setup
