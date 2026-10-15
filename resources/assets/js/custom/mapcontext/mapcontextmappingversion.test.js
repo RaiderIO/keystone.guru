@@ -76,7 +76,7 @@ describe('MapContextMappingVersion', () => {
         expect(mapContext._options.dungeonNpcs).toEqual([{id: 42, name: 'Test Npc'}]);
     });
 
-    test('removeRawNpcById_givenExistingNpc_removesItFromDungeonNpcs', () => {
+    test('removeRawNpcById_givenExistingNpc_removesItFromDungeonNpcsAndSignalsNpcRemoved', () => {
         // Arrange
         let mapContext = makeMapContext({
             dungeonNpcs:    [{id: 1, name: 'Keep'}, {id: 42, name: 'Remove'}],
@@ -89,7 +89,7 @@ describe('MapContextMappingVersion', () => {
         // Assert
         expect(mapContext._options.dungeonNpcs).toHaveLength(1);
         expect(mapContext._options.dungeonNpcs[0].id).toBe(1);
-        expect(mapContext._signals).toHaveLength(1);
+        expect(mapContext._signals).toEqual([{event: 'npc:removed', data: {npc: {id: 42, name: 'Remove'}}}]);
     });
 
     test('removeRawNpcById_givenUnknownNpcId_leavesDungeonNpcsUntouched', () => {
