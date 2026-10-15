@@ -219,14 +219,14 @@ function randomHexColor(): string
  */
 function randomHexColorNoMapColors(): string
 {
-    // Keep generating a new color until we don't have an orangeish, brownish or vermillion color
+    // Keep generating a new color until we don't have an orangeish, brownish or vermilion color
     // to prevent the color from blending into the background map
     do {
         $result = randomHexColor();
     } while (in_array(hex2name($result), [
         'orange',
         'brown',
-        'vermillion',
+        'vermilion',
     ]));
 
     return $result;

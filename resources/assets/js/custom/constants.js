@@ -626,7 +626,7 @@ let c = {
                     // Generate colors until a valid color pops up
                     do {
                         color = randomColor();
-                    } while (isColorDark(color) === isPreviousColorDark || ['orange', 'brown', 'vermillion'].includes(hex2name(color)));
+                    } while (isColorDark(color) === isPreviousColorDark || ['orange', 'brown', 'vermilion'].includes(hex2name(color)));
 
                     return color;
                 }, //Cookies.get('polyline_default_color'),
