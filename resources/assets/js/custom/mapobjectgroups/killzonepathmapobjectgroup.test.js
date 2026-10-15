@@ -60,8 +60,12 @@ describe('KillZonePathMapObjectGroup.refresh', () => {
 
         group.refresh([segment(1, 0), segment(1, 10)]);
 
-        expect(group.createNewPath).toHaveBeenCalledTimes(2);
-        expect(group.setMapObjectVisibility).toHaveBeenCalledTimes(2);
+        expect(group.createNewPath.mock.calls).toEqual([
+            [segment(1, 0), {polyline: {color: '#0'}}],
+            [segment(1, 10), {polyline: {color: '#100'}}],
+        ]);
+        const paths = group.createNewPath.mock.results.map((result) => result.value);
+        expect(group.setMapObjectVisibility.mock.calls).toEqual([[paths[0], true], [paths[1], true]]);
     });
 
     it('drops segments that have fewer than two points on the current floor', () => {
@@ -97,6 +101,32 @@ describe('KillZonePathMapObjectGroup.refresh', () => {
         expect(group.createNewPath).toHaveBeenCalledOnce();
         expect(group.createNewPath.mock.calls[0][0]).toEqual([point(1, 10, 10), point(1, 99, 99)]);
         expect(group._renderedSegments[0].path).toBe(untouched);
+    });
+
+    it.each([
+        ['latitude', [point(1, 10, 10), point(1, 99, 11)]],
+        ['longitude', [point(1, 10, 10), point(1, 11, 99)]],
+    ])('recreates a segment when only the %s of a point moved', (coordinate, movedSegment) => {
+        const group = buildGroup();
+        group.refresh([segment(1, 0), segment(1, 10)]);
+        forgetCalls(group);
+
+        group.refresh([segment(1, 0), movedSegment]);
+
+        expect(group.createNewPath).toHaveBeenCalledOnce();
+        expect(group.createNewPath.mock.calls[0][0]).toEqual(movedSegment);
+    });
+
+    // A pull moved within the route shifts a segment's position, and with it its gradient colour.
+    it('recreates a segment whose colour changed even though its points did not', () => {
+        const group = buildGroup(1);
+        group.refresh([segment(1, 0), segment(2, 50)]);
+        forgetCalls(group);
+
+        group.refresh([segment(2, 50), segment(1, 0)]);
+
+        expect(group.clear).not.toHaveBeenCalled();
+        expect(group.createNewPath.mock.calls).toEqual([[segment(1, 0), {polyline: {color: '#100'}}]]);
     });
 
     it('destroys the path it replaces so it leaves no layer behind', () => {

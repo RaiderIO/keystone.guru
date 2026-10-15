@@ -84,6 +84,30 @@ describe('MapContextDungeonRouteSearch', () => {
         expect(redrawMapContents).not.toHaveBeenCalled();
     });
 
+    test('getMapIcons_givenRouteWithMapIcons_appendsThemToTheDungeonMapIcons', () => {
+        // Arrange
+        const mapContext = new MapContextDungeonRouteSearch({dungeonRoute: {publicKey: 'abc', mapIcons: [{id: 2}]}});
+        vi.spyOn(MapContextDungeonExplore.prototype, 'getMapIcons').mockReturnValue([{id: 1}]);
+
+        // Act
+        const mapIcons = mapContext.getMapIcons();
+
+        // Assert
+        expect(mapIcons).toEqual([{id: 1}, {id: 2}]);
+    });
+
+    test('getMapIcons_givenNoRoute_returnsOnlyTheDungeonMapIcons', () => {
+        // Arrange
+        const mapContext = new MapContextDungeonRouteSearch({});
+        vi.spyOn(MapContextDungeonExplore.prototype, 'getMapIcons').mockReturnValue([{id: 1}]);
+
+        // Act
+        const mapIcons = mapContext.getMapIcons();
+
+        // Assert
+        expect(mapIcons).toEqual([{id: 1}]);
+    });
+
     test('routeLevelGroups_givenEveryGetterReadingTheSelectedRoute_areAllInTheResetList', () => {
         // Arrange
         const routeReadingGetters = Object.getOwnPropertyNames(MapContextDungeonRouteSearch.prototype)

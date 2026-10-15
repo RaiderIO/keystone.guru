@@ -54,6 +54,7 @@ describe('EnemyMapObjectGroup.setFocusedEnemy', () => {
         group.setFocusedEnemy(enemy);
 
         expect(group.getFocusedEnemy()).toBe(enemy);
+        expect(received).toHaveLength(1);
         expect(received[0].data).toEqual({focusedenemy: enemy});
     });
 
@@ -64,6 +65,8 @@ describe('EnemyMapObjectGroup.setFocusedEnemy', () => {
 
         group.setFocusedEnemy(null);
 
+        expect(group.getFocusedEnemy()).toBeNull();
+        expect(received).toHaveLength(1);
         expect(received[0].data).toEqual({focusedenemy: null});
     });
 });

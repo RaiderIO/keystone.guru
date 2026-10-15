@@ -137,6 +137,90 @@ describe('EditKillZoneEnemySelection constructor (#4431)', () => {
         // Act / Assert
         expect(() => new EditKillZoneEnemySelection(fakeMap, null)).not.toThrow();
     });
+
+    it('constructor_givenKillZoneGroup_listensForDeletedKillZones', () => {
+        // Arrange
+        const killZoneMapObjectGroup = {register: vi.fn()};
+        const fakeMap = Object.assign(Object.create(DungeonMap.prototype), {
+            options: {edit: true},
+            mapObjectGroupManager: fakeMapObjectGroupManager((name) => name === MAP_OBJECT_GROUP_KILLZONE ? killZoneMapObjectGroup : null),
+        });
+
+        // Act
+        const selection = new EditKillZoneEnemySelection(fakeMap, null);
+
+        // Assert
+        expect(killZoneMapObjectGroup.register).toHaveBeenCalledExactlyOnceWith('object:deleted', selection, expect.any(Function));
+    });
+
+    it('constructor_givenPreviousSelectionWithQueuedKillZones_ignoresThemUntilTheirSaveSucceeds', () => {
+        // Arrange
+        const queuedKillZone = {register: vi.fn()};
+        const killZoneMapObjectGroup = {
+            register: vi.fn(),
+            findMapObjectById: (killZoneId) => killZoneId === 5 ? queuedKillZone : null,
+        };
+        const fakeMap = Object.assign(Object.create(DungeonMap.prototype), {
+            options: {edit: true},
+            mapObjectGroupManager: fakeMapObjectGroupManager((name) => name === MAP_OBJECT_GROUP_KILLZONE ? killZoneMapObjectGroup : null),
+        });
+        const previousSelection = new EditKillZoneEnemySelection(fakeMap, null);
+        previousSelection._changedKillZoneIds = [5, 6];
+
+        // Act
+        const selection = new EditKillZoneEnemySelection(fakeMap, null, previousSelection);
+
+        // Assert
+        expect(selection._blackListedKillZoneIds).toEqual([5, 6]);
+        expect(queuedKillZone.register).toHaveBeenCalledExactlyOnceWith('save:success', selection, expect.any(Function));
+    });
+});
+
+describe('MapState beforeunload registration', () => {
+    /**
+     * @param edit {Boolean}
+     * @returns {MapState}
+     */
+    function buildMapState(edit) {
+        return new MapState(Object.assign(Object.create(DungeonMap.prototype), {options: {edit: edit}}));
+    }
+
+    /**
+     * @returns {Boolean} Whether a listener blocked the navigation
+     */
+    function navigateAway() {
+        const event = new Event('beforeunload', {cancelable: true});
+        window.dispatchEvent(event);
+
+        return event.defaultPrevented;
+    }
+
+    it('start_givenEditableMap_warnsOnNavigationUntilStopped', () => {
+        // Arrange
+        const mapState = buildMapState(true);
+
+        // Act
+        mapState.start();
+        const blockedWhileStarted = navigateAway();
+        mapState.stop();
+
+        // Assert
+        expect(blockedWhileStarted).toBe(true);
+        expect(navigateAway()).toBe(false);
+    });
+
+    it('start_givenViewOnlyMap_doesNotWarnOnNavigation', () => {
+        // Arrange
+        const mapState = buildMapState(false);
+
+        // Act
+        mapState.start();
+        const blocked = navigateAway();
+        mapState.stop();
+
+        // Assert
+        expect(blocked).toBe(false);
+    });
 });
 
 describe('MapState._onBeforeUnload (#4365)', () => {

@@ -38,6 +38,20 @@ describe('FactionDisplayControls._buildFactionsData', () => {
         expect(result.map((faction) => faction.key)).toEqual(['horde', 'alliance']);
     });
 
+    it('_buildFactionsData_givenFactions_checksOnlyTheFirstFactionsRadioButton', () => {
+        const controls = createControls();
+
+        const result = controls._buildFactionsData([
+            {name: 'factions.horde', key: 'horde', icon_url: 'horde.png'},
+            {name: 'factions.alliance', key: 'alliance', icon_url: 'alliance.png'},
+        ]);
+
+        expect(result).toEqual([
+            {name: 'Nicht Horde', key: 'horde', icon_url: 'horde.png', fa_class: 'fas'},
+            {name: 'Nicht Allianz', key: 'alliance', icon_url: 'alliance.png', fa_class: 'far'},
+        ]);
+    });
+
     it('_buildFactionsData_givenTranslationDoesNotMatchKey_stillReturnsTheKey', () => {
         const controls = createControls();
 
@@ -47,5 +61,51 @@ describe('FactionDisplayControls._buildFactionsData', () => {
 
         expect(result[0].key).toBe('horde');
         expect(result[0].name).toBe('Nicht Horde');
+    });
+});
+
+describe('FactionDisplayControls._visibilityToggled', () => {
+    let previousJQuery;
+
+    beforeEach(() => {
+        previousJQuery = global.$;
+        global.$ = require('jquery');
+    });
+
+    afterEach(() => {
+        global.$ = previousJQuery;
+    });
+
+    /**
+     * @param objects {Object[]}
+     * @returns {{objects: Object[], setMapObjectVisibility: Function}}
+     */
+    function fakeGroup(objects) {
+        return {objects: objects, setMapObjectVisibility: vi.fn()};
+    }
+
+    it('_visibilityToggled_givenFaction_togglesOnlyThatFactionsObjectsInEveryEnemyGroup', () => {
+        const horde = {faction: 'horde'};
+        const alliance = {faction: 'alliance'};
+        const any = {faction: 'any'};
+        const hordePack = {faction: 'horde'};
+        const hordePatrol = {faction: 'horde'};
+        const enemyGroup = fakeGroup([horde, alliance, any]);
+        const enemyPackGroup = fakeGroup([hordePack]);
+        const enemyPatrolGroup = fakeGroup([hordePatrol]);
+        const controls = createControls();
+        controls.map = {
+            mapObjectGroupManager: {
+                getEnemyMapObjectGroup: () => enemyGroup,
+                getEnemyPackMapObjectGroup: () => enemyPackGroup,
+                getEnemyPatrolMapObjectGroup: () => enemyPatrolGroup,
+            },
+        };
+
+        controls._visibilityToggled('horde', false);
+
+        expect(enemyGroup.setMapObjectVisibility.mock.calls).toEqual([[horde, false]]);
+        expect(enemyPackGroup.setMapObjectVisibility.mock.calls).toEqual([[hordePack, false]]);
+        expect(enemyPatrolGroup.setMapObjectVisibility.mock.calls).toEqual([[hordePatrol, false]]);
     });
 });
