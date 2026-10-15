@@ -68,4 +68,37 @@ describe('refreshTooltips (#3967)', () => {
         // Assert: still showing its one and only title, not silently emptied
         expect(bootstrap.Tooltip.getInstance($target[0])._getTitle()).toBe('Static tip');
     });
+
+    test('refreshTooltips_givenAMobileDevice_createsNoTooltip', () => {
+        // Arrange
+        document.body.innerHTML = '<div id="target" data-bs-toggle="tooltip" title="Add kill area"></div>';
+        const $target = $('#target');
+        global.isMobile = () => true;
+
+        try {
+            // Act
+            refreshTooltips($target);
+        } finally {
+            global.isMobile = () => false;
+        }
+
+        // Assert
+        expect(bootstrap.Tooltip.getInstance($target[0])).toBeNull();
+        expect($target.attr('title')).toBe('Add kill area');
+    });
+
+    test('refreshTooltips_givenNoElement_initializesEveryTooltipElementOnThePage', () => {
+        // Arrange
+        document.body.innerHTML = '<div id="first" data-bs-toggle="tooltip" title="First"></div>' +
+            '<div id="second" data-tooltip="tooltip" title="Second"></div>' +
+            '<div id="plain" title="Plain"></div>';
+
+        // Act
+        refreshTooltips();
+
+        // Assert
+        expect(bootstrap.Tooltip.getInstance(document.getElementById('first'))?._getTitle()).toBe('First');
+        expect(bootstrap.Tooltip.getInstance(document.getElementById('second'))?._getTitle()).toBe('Second');
+        expect(bootstrap.Tooltip.getInstance(document.getElementById('plain'))).toBeNull();
+    });
 });

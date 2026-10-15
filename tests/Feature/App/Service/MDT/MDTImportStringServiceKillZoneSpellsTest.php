@@ -302,6 +302,36 @@ final class MDTImportStringServiceKillZoneSpellsTest extends MDTImportStringServ
     }
 
     #[Test]
+    public function getDungeonRoute_givenNoteLongerThanTheDescriptionAndAssignNotesToPulls_truncatesTheDescription(): void
+    {
+        $dungeonRoute  = null;
+        $importedRoute = null;
+
+        try {
+            // Arrange
+            $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
+            $enemy        = $this->getSafeMdtEnemies($dungeonRoute)->first();
+            $note         = str_repeat('Stun the caster. ', 20);
+            $this->createKillZone($dungeonRoute, 1, [], $enemy);
+            $this->createCommentMapIcon($dungeonRoute, $note, $this->getFloor($enemy->floor_id), $enemy->lat, $enemy->lng);
+
+            $encodedString = $this->exportDungeonRouteToString($dungeonRoute);
+
+            // Act
+            $importedRoute = $this->importStringToDungeonRoute($encodedString, assignNotesToPulls: true);
+
+            // Assert
+            $this->assertSame(
+                mb_substr($note, 0, KillZone::DESCRIPTION_MAX_LENGTH),
+                $importedRoute->killZones()->firstOrFail()->description,
+            );
+        } finally {
+            $importedRoute?->delete();
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
     public function getDungeonRoute_givenSpellNoteFarFromEveryPull_createsMapIconInstead(): void
     {
         $dungeonRoute  = null;

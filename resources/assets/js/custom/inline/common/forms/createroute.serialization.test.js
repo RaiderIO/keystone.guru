@@ -97,16 +97,17 @@ describe('createroute.serialization', () => {
         }));
     });
 
-    it('serializeForm_givenThreeAffixRowsClicked_seasonalIndexFollowsMajoritySelection', () => {
-        // Arrange: an awakened season with 3 affix rows (two share seasonal_index 0, one is index 1).
+    it('serializeForm_givenThreeAffixRowsClicked_submitsEveryClickedAffixGroup', () => {
+        // Arrange: an awakened season with 3 affix rows. affixes.js only moves the seasonal_index preset
+        // for an existing route - a new one submits the preset it rendered with.
         const form    = buildCreateRouteForm({
             gameVersion: 'retail',
             hasTeams: true,
             dungeonIds: [RETAIL_DUNGEON_ALPHA_ID],
             affixGroups: [
-                {id: AFFIX_GROUP_DEFAULT_ID, seasonalIndex: 0},
-                {id: AFFIX_GROUP_ALT_A_ID, seasonalIndex: 0},
-                {id: AFFIX_GROUP_ALT_B_ID, seasonalIndex: 1},
+                {id: AFFIX_GROUP_DEFAULT_ID},
+                {id: AFFIX_GROUP_ALT_A_ID},
+                {id: AFFIX_GROUP_ALT_B_ID},
             ],
             withSeasonalIndexPreset: true,
         });
@@ -128,6 +129,35 @@ describe('createroute.serialization', () => {
             affix_group_id_2: AFFIX_GROUP_ALT_A_ID,
             affix_group_id_3: AFFIX_GROUP_ALT_B_ID,
         }));
+    });
+
+    it('serializeForm_givenMajorityOfClickedAffixesInAnotherPreset_submitsThatPreset', () => {
+        // Arrange: the first click moves the preset to 2 through the real Tom Select, the next two make
+        // seasonal_index 1 the majority - so the preset must keep following after its own update, and
+        // end up off its rendered default of 0.
+        const affixGroups = [
+            {id: AFFIX_GROUP_DEFAULT_ID, seasonalIndex: 2},
+            {id: AFFIX_GROUP_ALT_A_ID, seasonalIndex: 1},
+            {id: AFFIX_GROUP_ALT_B_ID, seasonalIndex: 1},
+        ];
+        const form    = buildCreateRouteForm({
+            gameVersion: 'retail',
+            hasTeams: true,
+            dungeonIds: [RETAIL_DUNGEON_ALPHA_ID],
+            affixGroups,
+            withSeasonalIndexPreset: true,
+        });
+        const options = buildInlineOptions({defaultSelectedAffixes: [], seasonAffixGroups: affixGroups});
+        activateCreateRouteForm(form, options);
+
+        // Act
+        clickAffixRow(String(AFFIX_GROUP_DEFAULT_ID));
+        clickAffixRow(String(AFFIX_GROUP_ALT_A_ID));
+        clickAffixRow(String(AFFIX_GROUP_ALT_B_ID));
+
+        // Assert
+        expect(serializeForm(form).filter(({name}) => name === 'seasonal_index[]')).toEqual([{name: 'seasonal_index[]', value: '1'}]);
+        expect(form.querySelector('#seasonal_index').tomselect.getValue()).toBe('1');
     });
 
     it('serializeForm_givenTeamPickedViaTomSelect_includesSelectedTeamId', () => {

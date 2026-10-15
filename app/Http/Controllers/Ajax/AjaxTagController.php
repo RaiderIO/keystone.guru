@@ -10,12 +10,12 @@ use App\Http\Requests\Tag\APITagUpdateFormRequest;
 use App\Models\Interfaces\HasTagsInterface;
 use App\Models\Interfaces\TaggableInterface;
 use App\Models\Tags\Tag;
-use App\Models\Tags\TagCategory;
+use App\Repositories\Interfaces\Tags\TagCategoryRepositoryInterface;
+use App\Repositories\Interfaces\Tags\TagRepositoryInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -31,31 +31,21 @@ class AjaxTagController extends Controller
      * @throws AuthorizationException
      */
     public function store(
-        APITagFormRequest $request,
+        APITagFormRequest              $request,
+        TagCategoryRepositoryInterface $tagCategoryRepository,
+        TagRepositoryInterface         $tagRepository,
     ) {
         /** @var Model&HasTagsInterface $context */
         $context = $request->getContext();
 
-        /** @var TagCategory $tagCategory */
-        $tagCategory = TagCategory::where('name', $request->get('category'))->firstOrFail();
+        $tagCategory = $tagCategoryRepository->findByKeyOrFail($request->get('category'));
 
         $modelId = $request->get('model_id');
         $tagName = $request->get('name');
 
         // Reconstruct the model that we're trying to tag
-        /** @var Builder<Model> $query */
-        $query = $tagCategory->model_class::query();
-        if (in_array($tagCategory->name, [
-            TagCategory::DUNGEON_ROUTE_PERSONAL,
-            TagCategory::DUNGEON_ROUTE_TEAM,
-        ])) {
-            $query = $query->where('public_key', $modelId);
-        } else {
-            $query = $query->where('id', $modelId);
-        }
-
         /** @var Model&TaggableInterface $model */
-        $model = $query->firstOrFail();
+        $model = $tagRepository->findTaggableModelOrFail($tagCategory, $modelId);
 
         // Now that we know the category and created an instance of the model, check if we may actually do this
         Gate::authorize('create-tag', [
@@ -68,11 +58,7 @@ class AjaxTagController extends Controller
         if (!$model->hasTag($tagCategory->id, $tagName)) {
             // Get the first tag that has the same name, under the same context, with the same category
             /** @var Tag|null $similarTag */
-            $similarTag = Tag::where('name', $tagName)
-                ->where('context_id', $context->getKey())
-                ->where('context_class', $context::class)
-                ->where('tag_category_id', $tagCategory->id)
-                ->first();
+            $similarTag = $tagRepository->findFirstWithNameInContext($tagName, $context->getKey(), $context::class, $tagCategory->id);
 
             if ($tag = Tag::create([ // @phpstan-ignore if.alwaysTrue
                 'context_id'      => $context->getKey(),
@@ -97,19 +83,12 @@ class AjaxTagController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function updateAll(APITagUpdateFormRequest $request, Tag $tag): Response
+    public function updateAll(APITagUpdateFormRequest $request, Tag $tag, TagRepositoryInterface $tagRepository): Response
     {
         Gate::authorize('editAll', $tag);
 
         // Update all tags with the same name to the new name and color
-        Tag::where('name', $tag->name)
-            ->where('tag_category_id', $tag->tag_category_id)
-            ->where('context_id', $tag->context_id)
-            ->where('context_class', $tag->context_class)
-            ->update([
-                'name'  => $request->get('name'),
-                'color' => $request->get('color'),
-            ]);
+        $tagRepository->updateAllLikeTag($tag, $request->get('name'), $request->get('color'));
 
         return response()->noContent();
     }
@@ -118,16 +97,12 @@ class AjaxTagController extends Controller
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function deleteAll(Request $request, Tag $tag): Response
+    public function deleteAll(Request $request, Tag $tag, TagRepositoryInterface $tagRepository): Response
     {
         Gate::authorize('deleteAll', $tag);
 
         // Update all tags with the same name to the new name and color
-        Tag::where('name', $tag->name)
-            ->where('tag_category_id', $tag->tag_category_id)
-            ->where('context_id', $tag->context_id)
-            ->where('context_class', $tag->context_class)
-            ->delete();
+        $tagRepository->deleteAllLikeTag($tag);
 
         return response()->noContent();
     }

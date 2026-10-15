@@ -75,14 +75,16 @@ describe('MapObjectGroupManager', () => {
     });
 
     it('getByName_givenAliasOfAMultiNameGroup_returnsThatGroup', () => {
-        // Arrange - the map icon group registers the awakened obelisk alias as a second name
+        // Arrange - the map icon group registers the awakened obelisk alias as a second name. constants.js does
+        // not export that alias, so its value is spelled out here.
+        const awakenedObeliskAlias = 'awakenedobeliskgatewaymapicon';
         const mapIconMapObjectGroup = {
-            names: [MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_MAPICON, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK],
+            names: [MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_MAPICON, awakenedObeliskAlias],
         };
-        const manager = buildManager([mapIconMapObjectGroup]);
+        const manager = buildManager([{names: ['enemy']}, mapIconMapObjectGroup]);
 
         // Act
-        const result = manager.getByName(MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK);
+        const result = manager.getByName(awakenedObeliskAlias);
 
         // Assert
         expect(result).toBe(mapIconMapObjectGroup);

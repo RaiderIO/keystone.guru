@@ -14,8 +14,21 @@ const {InlineCode}    = require('../../inlinecode');
 globalThis.InlineCode = InlineCode;
 
 globalThis.$ = require('jquery');
+
+/**
+ * The ids of the tab triggers shown through `bootstrap.Tab`, in order.
+ *
+ * @type {string[]}
+ */
+let shownTabs = [];
 globalThis.bootstrap = {
-    Tab: {getOrCreateInstance: () => ({show() {}})},
+    Tab: {
+        getOrCreateInstance: (element) => ({
+            show() {
+                shownTabs.push(element?.getAttribute('href') ?? null);
+            },
+        }),
+    },
 };
 
 const {CommonGeneralMenuitemsanchor} = require('./menuitemsanchor');
@@ -34,10 +47,45 @@ function buildTabbedDom() {
 }
 
 describe('CommonGeneralMenuitemsanchor.activate', () => {
+    beforeEach(() => {
+        shownTabs = [];
+    });
+
     afterEach(() => {
         document.body.innerHTML = '';
         // Reset the fragment so tests do not leak state into each other.
         history.replaceState(undefined, undefined, ' ');
+        vi.restoreAllMocks();
+    });
+
+    it('activate_givenHashMatchingATab_showsThatTab', () => {
+        // Arrange
+        buildTabbedDom();
+        history.replaceState(undefined, undefined, '#account');
+        const getOrCreateInstanceSpy = vi.spyOn(globalThis.bootstrap.Tab, 'getOrCreateInstance');
+        const code = new CommonGeneralMenuitemsanchor('id', 'common/general/menuitemsanchor', {});
+
+        // Act
+        code.activate();
+
+        // Assert
+        expect(getOrCreateInstanceSpy).toHaveBeenCalledTimes(1);
+        expect(getOrCreateInstanceSpy).toHaveBeenCalledWith(document.querySelector('a[href="#account"]'));
+    });
+
+    it('activate_givenEmptyHash_doesNotShowALinkWithAnEmptyHref', () => {
+        // Arrange: an `a[href=""]` is what an unguarded empty hash would select.
+        buildTabbedDom();
+        document.body.insertAdjacentHTML('beforeend', '<a href="">Reload</a>');
+        expect(window.location.hash).toBe('');
+        const getOrCreateInstanceSpy = vi.spyOn(globalThis.bootstrap.Tab, 'getOrCreateInstance');
+        const code = new CommonGeneralMenuitemsanchor('id', 'common/general/menuitemsanchor', {});
+
+        // Act
+        code.activate();
+
+        // Assert
+        expect(getOrCreateInstanceSpy).not.toHaveBeenCalled();
     });
 
     it('activate_givenNavLinkClicked_updatesHashWithoutScrolling', () => {
@@ -64,11 +112,55 @@ describe('CommonGeneralMenuitemsanchor.activate', () => {
         const code = new CommonGeneralMenuitemsanchor('id', 'common/general/menuitemsanchor', {});
         code.activate();
 
+        const historyLength = history.length;
+
         // Act
         document.querySelector('a[href="#profile"]').click();
 
         // Assert
         expect(replaceStateSpy).toHaveBeenCalledTimes(1);
         expect(replaceStateSpy).toHaveBeenCalledWith(undefined, undefined, '#profile');
+        expect(history.length).toBe(historyLength);
+    });
+
+    it('activate_givenActivatedTwice_updatesTheHashOncePerClick', () => {
+        // Arrange
+        buildTabbedDom();
+        const replaceStateSpy = vi.spyOn(history, 'replaceState');
+        const code = new CommonGeneralMenuitemsanchor('id', 'common/general/menuitemsanchor', {});
+        code.activate();
+        code.activate();
+
+        // Act
+        document.querySelector('a[href="#account"]').click();
+
+        // Assert
+        expect(replaceStateSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('activate_givenAHashNamingATab_showsThatTab', () => {
+        // Arrange
+        buildTabbedDom();
+        history.replaceState(undefined, undefined, '#account');
+        const code = new CommonGeneralMenuitemsanchor('id', 'common/general/menuitemsanchor', {});
+
+        // Act
+        code.activate();
+
+        // Assert
+        expect(shownTabs).toEqual(['#account']);
+    });
+
+    it('activate_givenAHashNamingNoTab_showsNoTab', () => {
+        // Arrange
+        buildTabbedDom();
+        history.replaceState(undefined, undefined, '#billing');
+        const code = new CommonGeneralMenuitemsanchor('id', 'common/general/menuitemsanchor', {});
+
+        // Act
+        code.activate();
+
+        // Assert
+        expect(shownTabs).toEqual([]);
     });
 });

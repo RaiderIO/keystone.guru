@@ -148,4 +148,32 @@ describe('CommonDungeonrouteCreateDungeondifficultyselect.activate', () => {
         expect(document.getElementById('dungeon_difficulty_select_container').style.display).toBe('none');
         expect(document.getElementById('dungeon_difficulty_select').options.length).toBe(0);
     });
+
+    it('activate_givenSpeedrunDungeonSelected_refreshesSelectPickersAfterRebuildingTheOptions', () => {
+        // Arrange + Act
+        buildAndActivate(CLASSIC_DUNGEON_SSC_ID);
+
+        // Assert
+        expect(refreshSelectPickers).toHaveBeenCalledTimes(1);
+    });
+
+    it('activate_givenNonSpeedrunDungeonSelectedOnLoad_doesNotRefreshSelectPickers', () => {
+        // Arrange + Act: nothing to clear, so the page-wide refresh must not run.
+        buildAndActivate(CLASSIC_DUNGEON_NONSPEEDRUN_ID);
+
+        // Assert
+        expect(refreshSelectPickers).not.toHaveBeenCalled();
+    });
+
+    it('activate_givenDungeonChangedFromSpeedrunToNonSpeedrun_refreshesSelectPickersToSyncTheClearedSelect', () => {
+        // Arrange
+        buildAndActivate(CLASSIC_DUNGEON_SSC_ID);
+        vi.clearAllMocks();
+
+        // Act
+        $('#dungeon_id_select').val(CLASSIC_DUNGEON_NONSPEEDRUN_ID).trigger('change');
+
+        // Assert
+        expect(refreshSelectPickers).toHaveBeenCalledTimes(1);
+    });
 });

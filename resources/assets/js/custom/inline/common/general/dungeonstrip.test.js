@@ -502,6 +502,24 @@ describe('DungeonStrip', () => {
         expect(event.defaultPrevented).toBe(true);
     });
 
+    it('keydown_givenARowWhoseMarkupOrderIsNotItsVisualOrder_movesByPosition', () => {
+        // Arrange - one row, laid out SM, BRD, ST, Strat from left to right
+        makeStrip();
+        layOutGrid();
+        const columns = {'Scarlet Monastery': 0, 'Blackrock Depths': 1, "Temple of Atal'Hakkar": 2, 'Stratholme': 3};
+        for (const [label, column] of Object.entries(columns)) {
+            const left = column * 50;
+            chip(label).getBoundingClientRect = () => ({left, top: 0, right: left + 46, bottom: 26, width: 46, height: 26, x: left, y: 0});
+        }
+        chip('Scarlet Monastery').focus();
+
+        // Act
+        press(chip('Scarlet Monastery'), 'ArrowRight');
+
+        // Assert
+        expect(document.activeElement).toBe(chip('Blackrock Depths'));
+    });
+
     it('keydown_givenAnArrowKey_movesTheGroupsTabStopAlong', () => {
         // Arrange
         makeStrip();
@@ -914,5 +932,125 @@ describe('DungeonStrip', () => {
 
         // Assert
         expect(shownChips()).toHaveLength(6);
+    });
+
+    it.each([
+        ['AChipTheRowClipsAway', 450, true],
+        ['AChipInsideTheRow', 380, false],
+    ])('focus_given%s_unfoldsTheStripOnlyWhenTheChipIsOutOfSight', (_, chipRight, expectedOpen) => {
+        // Arrange - the groups end at 400px
+        const strip = makeStrip();
+        layOutGrid();
+        chip("Zul'Gurub").getBoundingClientRect = () => ({left: chipRight - 46, top: 0, right: chipRight, bottom: 26, width: 46, height: 26, x: chipRight - 46, y: 0});
+
+        // Act
+        chip("Zul'Gurub").focus();
+
+        // Assert
+        expect(strip.isOpen()).toBe(expectedOpen);
+    });
+
+    it('focusout_givenFocusMovingToAnotherChipOfTheOpenFlyout_keepsItOpen', () => {
+        // Arrange
+        const strip = makeStrip();
+        layOutGrid();
+        strip.setOpen(true);
+        chip('Molten Core').focus();
+
+        // Act
+        chip("Zul'Gurub").focus();
+
+        // Assert
+        expect(strip.isOpen()).toBe(true);
+        expect(readout().name).toBe("Zul'Gurub");
+    });
+
+    it('updateCompact_givenAnOpenFlyout_leavesTheCompactStateAlone', () => {
+        // Arrange - the open flyout wraps the list, so its width says nothing about the closed strip
+        const strip = makeStrip();
+        strip.element.classList.add('dungeon_strip--compact');
+        strip.setOpen(true);
+        setGroupsWidth(strip, 600, 600);
+
+        // Act
+        strip.updateCompact();
+
+        // Assert
+        expect(strip.element.classList.contains('dungeon_strip--compact')).toBe(true);
+    });
+
+    it('searchButtonClick_givenAShownTooltip_hidesIt', () => {
+        // Arrange
+        const strip = makeStrip();
+        const hiddenTooltips = [];
+        const previousBootstrap = globalThis.bootstrap;
+        globalThis.bootstrap = {
+            Tooltip: {
+                getInstance: (element) => ({hide: () => hiddenTooltips.push(element)}),
+            },
+        };
+
+        try {
+            // Act
+            strip.searchButton.click();
+
+            // Assert
+            expect(hiddenTooltips).toEqual([strip.searchButton]);
+            expect(strip.isOpen()).toBe(true);
+        } finally {
+            globalThis.bootstrap = previousBootstrap;
+        }
+    });
+
+    it.each([
+        ['Tab'],
+        [' '],
+        ['Shift'],
+    ])('keydown_given"%s"OnAChip_leavesItToTheBrowser', (key) => {
+        // Arrange
+        makeStrip();
+        layOutGrid();
+        chip('Blackrock Depths').focus();
+
+        // Act
+        const event = press(chip('Blackrock Depths'), key);
+
+        // Assert
+        expect(event.defaultPrevented).toBe(false);
+        expect(document.activeElement).toBe(chip('Blackrock Depths'));
+    });
+
+    it.each([
+        ['ACtrl', {ctrlKey: true}],
+        ['AMeta', {metaKey: true}],
+        ['AnAlt', {altKey: true}],
+    ])('slash_given%sModifier_leavesTheKeyAlone', (_, init) => {
+        // Arrange
+        const strip = makeStrip();
+        showStrip(strip);
+        const outside = document.getElementById('outside');
+        outside.focus();
+
+        // Act
+        const event = new KeyboardEvent('keydown', {key: '/', bubbles: true, cancelable: true, ...init});
+        outside.dispatchEvent(event);
+
+        // Assert
+        expect(strip.isOpen()).toBe(false);
+        expect(event.defaultPrevented).toBe(false);
+    });
+
+    it('slash_givenAKeyAnotherHandlerAlreadyClaimed_leavesItAlone', () => {
+        // Arrange
+        const strip = makeStrip();
+        showStrip(strip);
+        const outside = document.getElementById('outside');
+        outside.addEventListener('keydown', event => event.preventDefault(), {once: true});
+
+        // Act
+        press(outside, '/');
+
+        // Assert
+        expect(strip.isOpen()).toBe(false);
     });
 });

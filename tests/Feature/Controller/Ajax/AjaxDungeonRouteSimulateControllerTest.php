@@ -75,6 +75,29 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
+    public function simulate_givenBloodlustOnAsManyPullsAsARouteMayHave_storesThemAll(): void
+    {
+        // Arrange - kill zone ids run to ten digits
+        $killZoneIds = range(2_000_000_001, 2_000_000_050);
+
+        try {
+            // Act
+            $response = $this->post($this->simulateUrl(), array_merge($this->validPayload(), [
+                'simulate_bloodlust_per_pull' => $killZoneIds,
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame(
+                implode(',', $killZoneIds),
+                SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->firstOrFail()->simulate_bloodlust_per_pull,
+            );
+        } finally {
+            SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
+        }
+    }
+
+    #[Test]
     public function simulate_givenRouteUserMayNotView_returnsForbidden(): void
     {
         // Arrange - a sandbox route is viewable by anyone, so make it a real, unpublished one
@@ -125,7 +148,7 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
     }
 
     /**
-     * @return array<string, array{0: array<string, int|list<string>|string|null>, 1: string}>
+     * @return array<string, array{0: array<string, int|list<int|string>|string|null>, 1: string}>
      */
     public static function simulate_givenInvalidField_returnsUnprocessableEntity_dataProvider(): array
     {
@@ -144,6 +167,7 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
             'missing ranged_pull_compensation_yards'       => [['ranged_pull_compensation_yards' => null], 'ranged_pull_compensation_yards'],
             'invalid use_mounts (not 0 or 1)'              => [['use_mounts' => 2], 'use_mounts'],
             'non-integer simulate_bloodlust_per_pull item' => [['simulate_bloodlust_per_pull' => ['not-an-int']], 'simulate_bloodlust_per_pull.0'],
+            'more simulate_bloodlust_per_pull than pulls'  => [['simulate_bloodlust_per_pull' => range(1, 51)], 'simulate_bloodlust_per_pull'],
         ];
     }
 

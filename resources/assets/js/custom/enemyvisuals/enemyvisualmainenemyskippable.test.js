@@ -44,3 +44,25 @@ test('refreshSize_givenRenderedTemplateMarkup_updatesItsFontSize', () => {
 
     expect($(`#map_enemy_visual_${enemyId}_enemy_skippable`).css('font-size')).toBe('22px');
 });
+
+test.each([
+    ['Skippable', true, 'Y'],
+    ['NotSkippable', false, 'N'],
+])('getCanvasContent_given%sEnemy_returnsItsLetterAtItsTextWidth', (label, skippable, expectedText) => {
+    // Arrange
+    const fakeThis = {
+        enemyvisual: {enemy: {id: 42, skippable: skippable}},
+        _getDisplayText: EnemyVisualMainEnemySkippable.prototype._getDisplayText,
+        _getTextWidth: (textLength) => 20 + textLength,
+    };
+
+    // Act
+    const content = EnemyVisualMainEnemySkippable.prototype.getCanvasContent.call(fakeThis);
+
+    // Assert
+    expect(content).toEqual({
+        classes: 'enemy_icon_npc_enemy_skippable_inner',
+        imageUrl: null,
+        text: {value: expectedText, classes: 'my-auto w-100', fontSize: 21},
+    });
+});

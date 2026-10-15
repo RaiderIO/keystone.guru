@@ -7,13 +7,17 @@ use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTStringException;
 use App\Models\Dungeon;
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
-use App\Models\MDTImport;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
-use App\Models\Npc\NpcType;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\GameVersion\GameVersionRepositoryInterface;
+use App\Repositories\Interfaces\Mapping\MappingVersionRepositoryInterface;
+use App\Repositories\Interfaces\MDTImportRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcTypeRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\MDTExportStringServiceInterface;
@@ -22,7 +26,6 @@ use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use App\Service\MDT\MDTMappingVersionServiceInterface;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -52,12 +55,10 @@ class AdminToolsMdtController extends Controller
         return view('admin.tools.mdt.string', ['asDungeonroute' => true]);
     }
 
-    public function mdtImportList(): View
+    public function mdtImportList(MDTImportRepositoryInterface $mdtImportRepository): View
     {
         return view('admin.tools.mdt.list', [
-            'mdtImports' => MDTImport::whereNotNull('error')
-                ->orderByDesc('created_at')
-                ->paginate(50),
+            'mdtImports' => $mdtImportRepository->paginateFailedNewestFirst(50),
         ]);
     }
 
@@ -114,14 +115,9 @@ class AdminToolsMdtController extends Controller
         Request                         $request,
         MDTImportStringServiceInterface $mdtImportStringService,
         MDTExportStringServiceInterface $mdtExportStringService,
+        DungeonRouteRepositoryInterface $dungeonRouteRepository,
     ): void {
-        $publicKey = $request->get('public_key');
-
-        $dungeonRoute = DungeonRoute::when(is_numeric($publicKey), function (Builder $builder) use ($publicKey) {
-            $builder->where('id', $publicKey);
-        }, function (Builder $builder) use ($publicKey) {
-            $builder->where('public_key', $publicKey);
-        })->firstOrFail();
+        $dungeonRoute = $dungeonRouteRepository->findByIdOrPublicKeyOrFail($request->get('public_key'));
 
         try {
             $warnings = new Collection();
@@ -164,20 +160,22 @@ class AdminToolsMdtController extends Controller
     public function mdtdungeonmappinghashsubmit(
         Request                          $request,
         MDTMappingImportServiceInterface $mdtMappingService,
+        DungeonRepositoryInterface       $dungeonRepository,
     ): void {
-        $dungeon = Dungeon::findOrFail($request->get('dungeon_id'));
+        $dungeon = $dungeonRepository->findOrFail((int)$request->get('dungeon_id'));
 
         dd($mdtMappingService->getMDTMappingHash($dungeon));
     }
 
-    public function dungeonmappingversiontomdtmapping(): View
-    {
+    public function dungeonmappingversiontomdtmapping(
+        MappingVersionRepositoryInterface $mappingVersionRepository,
+        DungeonRepositoryInterface        $dungeonRepository,
+    ): View {
         return view('admin.tools.mdt.dungeonmappingversiontomdtmapping', [
-            'mappingVersionsSelect' => MappingVersion::orderBy('dungeon_id')
-                ->get()
+            'mappingVersionsSelect' => $mappingVersionRepository->getAllOrderedByDungeonId()
                 ->groupBy('dungeon_id')
-                ->mapWithKeys(static function (Collection $mappingVersionByDungeon, int $id) {
-                    $dungeon = Dungeon::findOrFail($id);
+                ->mapWithKeys(static function (Collection $mappingVersionByDungeon, int $id) use ($dungeonRepository) {
+                    $dungeon = $dungeonRepository->findOrFail($id);
 
                     return [
                         __($dungeon->name) => $mappingVersionByDungeon->mapWithKeys(static fn(
@@ -194,10 +192,11 @@ class AdminToolsMdtController extends Controller
      * @throws Throwable
      */
     public function dungeonmappingversiontomdtmappingsubmit(
-        Request                          $request,
-        MDTMappingExportServiceInterface $mdtMappingService,
+        Request                           $request,
+        MDTMappingExportServiceInterface  $mdtMappingService,
+        MappingVersionRepositoryInterface $mappingVersionRepository,
     ): void {
-        $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version_id'));
+        $mappingVersion = $mappingVersionRepository->findOrFail((int)$request->get('mapping_version_id'));
 
         echo $mdtMappingService->getMDTMappingAsLuaString($mappingVersion);
         dd();
@@ -206,9 +205,10 @@ class AdminToolsMdtController extends Controller
     public function dungeonMappingVersionAccuracy(
         Request                           $request,
         MDTMappingVersionServiceInterface $mappingVersionService,
+        DungeonRepositoryInterface        $dungeonRepository,
     ): View {
         /** @var Collection<int, Dungeon> $allDungeons */
-        $allDungeons = Dungeon::with(['mappingVersions', 'mappingVersions.dungeon'])->get();
+        $allDungeons = $dungeonRepository->getAllWithMappingVersions();
 
         $dungeonAccuracyByFloor = collect();
         foreach ($allDungeons as $dungeon) {
@@ -234,18 +234,17 @@ class AdminToolsMdtController extends Controller
     }
 
     public function mdtdiff(
-        CacheServiceInterface       $cacheService,
-        CoordinatesServiceInterface $coordinatesService,
+        CacheServiceInterface          $cacheService,
+        CoordinatesServiceInterface    $coordinatesService,
+        NpcRepositoryInterface         $npcRepository,
+        DungeonRepositoryInterface     $dungeonRepository,
+        GameVersionRepositoryInterface $gameVersionRepository,
     ): View {
         $warnings = new Collection();
-        $npcs     = Npc::with([
-            'npcEnemyForces',
-            'enemies',
-            'type',
-        ])->get();
+        $npcs     = $npcRepository->getAllWithMdtDiffRelations();
 
         // For each dungeon
-        foreach (Dungeon::all() as $dungeon) {
+        foreach ($dungeonRepository->all() as $dungeon) {
             /** @var Dungeon $dungeon */
             $mdtNpcs = new MDTDungeon($cacheService, $coordinatesService, $dungeon)->getMDTNPCs();
 
@@ -275,7 +274,7 @@ class AdminToolsMdtController extends Controller
                 } // Found, compare
                 else {
                     // Match health
-                    $npcHealth = $npc->getHealthByGameVersion(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL));
+                    $npcHealth = $npc->getHealthByGameVersion($gameVersionRepository->findByKey(GameVersion::GAME_VERSION_RETAIL));
                     if ($npcHealth?->health !== $mdtNpc->getHealth()) {
                         $warnings->push(
                             new ImportWarning(
@@ -374,21 +373,26 @@ class AdminToolsMdtController extends Controller
     /**
      * @return array<string, mixed>
      */
-    public function applyChange(Request $request): array
-    {
+    public function applyChange(
+        Request                        $request,
+        NpcRepositoryInterface         $npcRepository,
+        DungeonRepositoryInterface     $dungeonRepository,
+        GameVersionRepositoryInterface $gameVersionRepository,
+        NpcTypeRepositoryInterface     $npcTypeRepository,
+    ): array {
         $category  = $request->get('category');
         $npcId     = $request->get('npc_id');
         $dungeonId = $request->get('dungeon_id');
         $value     = $request->get('value');
 
         /** @var Npc $npc */
-        $npc     = Npc::with(['enemyForces'])->find($npcId);
-        $dungeon = Dungeon::findOrFail($dungeonId);
+        $npc     = $npcRepository->findWithEnemyForces((int)$npcId);
+        $dungeon = $dungeonRepository->findOrFail((int)$dungeonId);
 
         switch ($category) {
             case 'mismatched_health':
                 $npc->getHealthByGameVersion(
-                    GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
+                    $gameVersionRepository->findByKey(GameVersion::GAME_VERSION_RETAIL),
                 )?->update([
                     'health' => $value,
                 ]);
@@ -403,7 +407,7 @@ class AdminToolsMdtController extends Controller
             //                $npc->enemyForces->save();
             //                break;
             case 'mismatched_enemy_type':
-                $npcType          = NpcType::where('type', $value)->first();
+                $npcType          = $npcTypeRepository->findByType($value);
                 $npc->npc_type_id = $npcType->id;
                 $npc->save();
                 break;

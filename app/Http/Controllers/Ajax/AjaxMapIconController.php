@@ -66,7 +66,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         $validated['dungeon_route_id'] = $dungeonRoute?->id;
 
         // The team is only assigned further down, once the assignToTeam gate has passed for it
-        $requestedTeamId      = $validated['team_id'];
+        $requestedTeamId      = $validated['team_id'] ?? null;
         $validated['team_id'] = null;
 
         // No dungeon route means this icon is part of the mapping itself - admin only
@@ -101,7 +101,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
                 }
 
                 // Set or unset the linked awakened obelisks now that we have an ID
-                $mapIcon->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id']);
+                $mapIcon->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id'] ?? null);
             },
             // Can be null, it will then default to the dungeon internally
             $dungeonRoute,

@@ -18,7 +18,7 @@ $tagCategoryNameMapping = [
     2 => __('view_common.tag.manager.route_team')
 ];
 
-$tags        = $context->tags(TagCategory::ALL[$category])->groupByRaw('name')->get()->groupBy(['tag_category_id']);
+$tags        = $context->tags(TagCategory::ALL[$category])->unique()->get()->groupBy(['tag_category_id']);
 $isDarkTheme = User::isThemeDark($theme);
 ?>
 @include('common.general.inline', ['path' => 'common/tag/tagmanager'])

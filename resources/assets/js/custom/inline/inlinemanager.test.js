@@ -45,9 +45,15 @@ describe('InlineManager.init', () => {
     it('init_givenValidBladePath_returnsInlineCodeInstance', () => {
         const manager = new InlineManager();
 
-        const result = manager.init('id1', 'some/page', {});
+        const options = {foo: 'bar'};
 
-        expect(result).toBeInstanceOf(InlineCode);
+        const result = manager.init('id1', 'some/page', options);
+
+        expect(result).toBeInstanceOf(SomePage);
+        expect(result.id).toBe('id1');
+        expect(result.bladePath).toBe('some/page');
+        expect(result.options).toBe(options);
+        expect(result.isActivated()).toBe(false);
     });
 
     it('init_givenPathDependency_registersDependencyMapping', () => {
@@ -72,21 +78,24 @@ describe('InlineManager.getInlineCode', () => {
 
         expect(result).toBeInstanceOf(InlineCode);
         expect(Array.isArray(result)).toBe(false);
+        expect(result.id).toBe('id1');
     });
 
     it('getInlineCode_givenBladePathWithMultipleInstances_returnsArray', () => {
         const manager = new InlineManager();
         manager.init('id1', 'some/page', {});
+        manager.init('id-other', 'parent/page', {});
         manager.init('id2', 'some/page', {});
 
         const result = manager.getInlineCode('some/page');
 
         expect(Array.isArray(result)).toBe(true);
-        expect(result).toHaveLength(2);
+        expect(result.map((code) => code.id)).toEqual(['id1', 'id2']);
     });
 
     it('getInlineCode_givenUnknownBladePath_returnsEmptyArray', () => {
         const manager = new InlineManager();
+        manager.init('id1', 'some/page', {});
 
         const result = manager.getInlineCode('unknown/path');
 
@@ -132,6 +141,7 @@ describe('InlineManager.activate', () => {
         const manager = new InlineManager();
 
         expect(() => manager.activate('nonexistent')).not.toThrow();
+        expect(console.error).toHaveBeenCalledWith('Inline code for nonexistent not found!');
     });
 
     it('activate_givenPathDependencyNotYetActivated_doesNotActivateChild', () => {
@@ -178,6 +188,34 @@ describe('InlineManager.activate', () => {
         manager.activate('id-parent');
 
         expect(manager.getInlineCodeById('id-parent').isActivated()).toBe(true);
+        expect(manager.getInlineCodeById('id-child').isActivated()).toBe(true);
+    });
+
+    it('activate_givenOnlyOneOfTwoPathDependenciesActivated_waitsForTheOther', () => {
+        const manager = new InlineManager();
+        manager.init('id-parent', 'parent/page', {});
+        manager.init('id-source', 'source/page', {});
+        manager.init('id-child', 'child/page', {dependencies: ['parent/page', 'source/page']});
+
+        manager.activate('id-parent');
+        const activatedAfterFirstDependency = manager.getInlineCodeById('id-child').isActivated();
+        manager.activate('id-source');
+
+        expect(activatedAfterFirstDependency).toBe(false);
+        expect(manager.getInlineCodeById('id-child').isActivated()).toBe(true);
+    });
+
+    it('activate_givenOnlyOneOfTwoIdDependenciesActivated_waitsForTheOther', () => {
+        const manager = new InlineManager();
+        manager.init('id-parent', 'parent/page', {});
+        manager.init('id-source', 'source/page', {});
+        manager.init('id-child', 'child/page', {dependenciesById: ['id-parent', 'id-source']});
+
+        manager.activate('id-parent');
+        const activatedAfterFirstDependency = manager.getInlineCodeById('id-child').isActivated();
+        manager.activate('id-source');
+
+        expect(activatedAfterFirstDependency).toBe(false);
         expect(manager.getInlineCodeById('id-child').isActivated()).toBe(true);
     });
 

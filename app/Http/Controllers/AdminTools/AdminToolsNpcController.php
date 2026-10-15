@@ -5,14 +5,14 @@ namespace App\Http\Controllers\AdminTools;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Models\Dungeon;
-use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
-use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcType;
-use App\Models\Spell\Spell;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcDungeonRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\Mapping\MappingExportServiceInterface;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,8 +27,12 @@ class AdminToolsNpcController extends Controller
         return view('admin.tools.npc.import');
     }
 
-    public function npcimportsubmit(Request $request): void
-    {
+    public function npcimportsubmit(
+        Request                       $request,
+        DungeonRepositoryInterface    $dungeonRepository,
+        NpcRepositoryInterface        $npcRepository,
+        NpcDungeonRepositoryInterface $npcDungeonRepository,
+    ): void {
         $importString = $request->get('import_string');
 
         // Correct the string since wowhead sucks
@@ -70,12 +74,12 @@ class AdminToolsNpcController extends Controller
 
         try {
             foreach ($decoded['data'] as $npcData) {
-                $npcCandidate = Npc::findOrNew($npcData['id']);
+                $npcCandidate = $npcRepository->findOrNew($npcData['id']);
 
                 $beforeModel = clone $npcCandidate;
 
                 /** @var Dungeon $dungeon */
-                $dungeons = Dungeon::whereIn('zone_id', $npcData['location'])->get();
+                $dungeons = $dungeonRepository->getByZoneIds($npcData['location']);
                 if ($dungeons->isEmpty()) {
                     $log[] = sprintf('*** Unable to find dungeon(s) with zone_id(s) %s; npc %s (%s) NOT added; needs manual work', implode(', ', $npcData['location']), $npcData['id'], $npcData['name']);
 
@@ -104,10 +108,7 @@ class AdminToolsNpcController extends Controller
                 $existed = $npcCandidate->exists;
                 if ($npcCandidate->save()) {
                     foreach ($dungeons as $dungeon) {
-                        NpcDungeon::firstOrCreate([
-                            'npc_id'     => $npcCandidate->id,
-                            'dungeon_id' => $dungeon->id,
-                        ]);
+                        $npcDungeonRepository->firstOrCreateLink($npcCandidate->id, $dungeon->id);
 
                         if ($existed) {
                             $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
@@ -137,40 +138,34 @@ class AdminToolsNpcController extends Controller
         }
     }
 
-    public function manageSpellVisibility(Request $request, ?Dungeon $dungeon = null): View
-    {
+    public function manageSpellVisibility(
+        Request                  $request,
+        NpcRepositoryInterface   $npcRepository,
+        SpellRepositoryInterface $spellRepository,
+        ?Dungeon                 $dungeon = null,
+    ): View {
         return view('admin.tools.npc.managespellvisibility', [
-            'npcs' => Npc::when($dungeon !== null, fn(Builder $builder) => $builder->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
-                ->select('npcs.*')
-                ->where('npc_dungeons.dungeon_id', $dungeon->id))->with('npcSpells')
-                ->has('npcSpells')
-                ->paginate(50),
-            'spells' => Spell::with('gameVersion')
-                ->when(
-                    $dungeon !== null,
-                    fn(Builder $builder) => $builder->whereRelation('spellDungeons', 'dungeon_id', $dungeon->id),
-                )
-                ->get()
-                ->keyBy('id'),
+            'npcs'    => $npcRepository->paginateWithSpells($dungeon, 50),
+            'spells'  => $spellRepository->getAllWithGameVersionKeyedById($dungeon),
             'dungeon' => $dungeon,
         ]);
     }
 
-    public function manageSpellVisibilitySubmit(Request $request): RedirectResponse
+    public function manageSpellVisibilitySubmit(Request $request, DungeonRepositoryInterface $dungeonRepository): RedirectResponse
     {
         $dungeonId = (int)$request->get('dungeon_id');
         $dungeon   = null;
         if ($dungeonId !== -1) {
-            $dungeon = Dungeon::findOrFail($dungeonId);
+            $dungeon = $dungeonRepository->findOrFail($dungeonId);
         }
 
         return redirect()->route('admin.tools.npc.managespellvisibility', ['dungeon' => $dungeon]);
     }
 
-    public function npcsShowMissingDisplayId(): View
+    public function npcsShowMissingDisplayId(NpcRepositoryInterface $npcRepository): View
     {
         return view('admin.tools.npc.showmissingdisplayid', [
-            'npcs' => Npc::with(['dungeons'])->whereNull('display_id')->get(),
+            'npcs' => $npcRepository->getWithoutDisplayId(),
         ]);
     }
 

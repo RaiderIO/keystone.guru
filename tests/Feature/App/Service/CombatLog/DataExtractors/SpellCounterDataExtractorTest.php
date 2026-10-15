@@ -25,7 +25,9 @@ use App\Service\CombatLog\DataExtractors\SpellCounters\ShadowmeldSpellCounterDef
 use App\Service\CombatLog\DataExtractors\SpellCounters\VanishSpellCounterDefinition;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Group;
@@ -805,6 +807,69 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
         $this->assertTrue(SpellDungeon::where('spell_id', $castSpellId)->where('dungeon_id', $otherDungeon->id)->exists());
         $this->assertFalse(SpellDungeon::where('spell_id', $castSpellId)->where('dungeon_id', $this->currentDungeon->dungeon->id)->exists());
+    }
+
+    #[Test]
+    public function afterExtract_givenTwoCounteredSpellsOfOneNpc_loadsTheNpcOnceAndAssignsBothSpells(): void
+    {
+        // Arrange - the same NPC has two different casts countered by Vanish in one combat log
+        $firstCastSpellId    = 9990030;
+        $firstDebuffSpellId  = 9990031;
+        $secondCastSpellId   = 9990032;
+        $secondDebuffSpellId = 9990033;
+        $this->createTestSpell($firstCastSpellId);
+        $this->createTestSpell($firstDebuffSpellId, 12000);
+        $this->createTestSpell($secondCastSpellId);
+        $this->createTestSpell($secondDebuffSpellId, 12000);
+        $npcQueryCount = 0;
+        DB::listen(function (QueryExecuted $query) use (&$npcQueryCount): void {
+            if (str_contains($query->sql, 'from `npcs`')) {
+                $npcQueryCount++;
+            }
+        });
+
+        // Act
+        $this->runExtract([
+            $this->npcCastStart(0, $firstCastSpellId, 'Lens Flare'),
+            $this->debuffApplied(0, $firstDebuffSpellId, 'Lens Flare', null),
+            $this->debuffRemoved(1999, $firstDebuffSpellId, 'Lens Flare', null),
+            $this->playerCastSuccess(2000, VanishSpellCounterDefinition::SPELL_ID_VANISH_CAST, 'Vanish'),
+            $this->npcCastStart(60000, $secondCastSpellId, 'Solar Flare'),
+            $this->debuffApplied(60000, $secondDebuffSpellId, 'Solar Flare', null),
+            $this->debuffRemoved(61999, $secondDebuffSpellId, 'Solar Flare', null),
+            $this->playerCastSuccess(62000, VanishSpellCounterDefinition::SPELL_ID_VANISH_CAST, 'Vanish'),
+        ]);
+
+        // Assert
+        $this->assertSame(2, $this->result->toArray()['addedSpellCounters']);
+        $this->assertSame(1, $npcQueryCount);
+        $this->assertTrue(NpcSpell::where('npc_id', self::CREATURE_NPC_ID)->where('spell_id', $firstCastSpellId)->exists());
+        $this->assertTrue(NpcSpell::where('npc_id', self::CREATURE_NPC_ID)->where('spell_id', $secondCastSpellId)->exists());
+    }
+
+    #[Test]
+    public function afterExtract_givenOneSpellCounteredTwoWaysOnOneNpc_assignsTheSpellOnce(): void
+    {
+        // Arrange - the same channel is countered by Shadowmeld and, on a later cast, by Vanish: two properties, one
+        // NPC and one spell
+        $channelSpellId = 9990034;
+        $this->createTestSpell($channelSpellId, 6000);
+
+        // Act
+        $this->runExtract([
+            $this->npcCastSuccess(0, $channelSpellId, 'Solar Flame'),
+            $this->debuffApplied(0, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+            $this->playerCastSuccess(1700, ShadowmeldSpellCounterDefinition::SPELL_ID_SHADOWMELD, 'Shadowmeld'),
+            $this->debuffRemoved(1700, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+            $this->npcCastSuccess(60000, $channelSpellId, 'Solar Flame'),
+            $this->debuffApplied(60000, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+            $this->playerCastSuccess(61700, VanishSpellCounterDefinition::SPELL_ID_VANISH_CAST, 'Vanish'),
+            $this->debuffRemoved(61700, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+        ]);
+
+        // Assert
+        $this->assertSame(2, $this->result->toArray()['addedSpellCounters']);
+        $this->assertSame(1, NpcSpell::where('npc_id', self::CREATURE_NPC_ID)->where('spell_id', $channelSpellId)->count());
     }
 
     /**

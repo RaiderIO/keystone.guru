@@ -321,6 +321,40 @@ describe('CoordinatesService.convertFacadeMapLocationToMapLocation', () => {
         expect(latLng.getFloor()).toBe(FACADE_FLOOR);
     });
 
+    test('convertFacadeMapLocationToMapLocation_givenUnionWithoutNestedTargetFloor_looksTheFloorUp', () => {
+        // Arrange
+        let floorUnion = createFloorUnion();
+        delete floorUnion.target_floor;
+        let coordinatesService = new CoordinatesService(createMapContext([floorUnion]));
+
+        // Act
+        let result = coordinatesService.convertFacadeMapLocationToMapLocation(new LatLng(-64, 96, FACADE_FLOOR));
+
+        // Assert
+        expect(result.getFloor()).toBe(TARGET_FLOOR);
+        expect(result.getLat()).toBeCloseTo(MAP_MAX_LAT / 2, 9);
+    });
+
+    test('convertFacadeMapLocationToMapLocation_givenUnresolvableTargetFloor_leavesTheFloorAloneAndWarnsOnce', () => {
+        // Arrange
+        let floorUnion = createFloorUnion({target_floor_id: 99});
+        delete floorUnion.target_floor;
+        let coordinatesService = new CoordinatesService(createMapContext([floorUnion]));
+        let consoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {
+        });
+
+        // Act
+        let first = coordinatesService.convertFacadeMapLocationToMapLocation(new LatLng(-64, 96, FACADE_FLOOR));
+        let second = coordinatesService.convertFacadeMapLocationToMapLocation(new LatLng(-64, 96, FACADE_FLOOR));
+
+        // Assert
+        expect(first.getFloor()).toBe(FACADE_FLOOR);
+        expect(second.getFloor()).toBe(FACADE_FLOOR);
+        expect(second.getLat()).toBe(-64);
+        expect(consoleWarn).toHaveBeenCalledOnce();
+        expect(consoleWarn.mock.calls[0][0]).toContain('99');
+    });
+
     test('convertFacadeMapLocationToMapLocation_givenForcedFloor_usesThatUnionWithoutCheckingAreas', () => {
         // Arrange
         let coordinatesService = new CoordinatesService(createMapContext([createFloorUnion()]));
@@ -363,6 +397,77 @@ describe('CoordinatesService.convertMapLocationToFacadeMapLocation', () => {
         expect(result.getFloor()).toBe(FACADE_FLOOR);
         expect(result.getLat()).toBeCloseTo(floorUnion.lat, 9);
         expect(result.getLng()).toBeCloseTo(floorUnion.lng, 9);
+    });
+
+    describe('given two unions onto the same floor', () => {
+        /**
+         * Both unions put the target floor's map centre on their own centre, but neither area covers the
+         * left union's centre - so only the right union can claim the target floor's map centre.
+         *
+         * @param rightUnionArea {Object[]}
+         * @returns {CoordinatesService}
+         */
+        function createServiceWithTwoUnions(rightUnionArea) {
+            let leftUnion = createFloorUnion({
+                floor_union_areas: [{
+                    id: 100,
+                    floor_union_id: 10,
+                    vertices_json: JSON.stringify([
+                        {lat: -100, lng: 0},
+                        {lat: -100, lng: 30},
+                        {lat: -128, lng: 30},
+                        {lat: -128, lng: 0}
+                    ])
+                }]
+            });
+            let rightUnion = createFloorUnion({
+                id: 11,
+                lat: -192,
+                lng: 288,
+                floor_union_areas: [{id: 101, floor_union_id: 11, vertices_json: JSON.stringify(rightUnionArea)}]
+            });
+
+            return new CoordinatesService(createMapContext([leftUnion, rightUnion]));
+        }
+
+        test('convertMapLocationToFacadeMapLocation_givenTwoUnionsOntoTheFloor_picksTheOneWhoseAreaContainsTheConvertedPoint', () => {
+            // Arrange
+            let coordinatesService = createServiceWithTwoUnions([
+                {lat: -128, lng: 192},
+                {lat: -128, lng: 384},
+                {lat: -256, lng: 384},
+                {lat: -256, lng: 192}
+            ]);
+
+            // Act
+            let result = coordinatesService.convertMapLocationToFacadeMapLocation(
+                new LatLng(MAP_MAX_LAT / 2, MAP_MAX_LNG / 2, TARGET_FLOOR)
+            );
+
+            // Assert
+            expect(result.getFloor()).toBe(FACADE_FLOOR);
+            expect(result.getLat()).toBeCloseTo(-192, 9);
+            expect(result.getLng()).toBeCloseTo(288, 9);
+        });
+
+        test('convertMapLocationToFacadeMapLocation_givenNoUnionAreaContainsTheConvertedPoint_returnsThePointUnchanged', () => {
+            // Arrange
+            let coordinatesService = createServiceWithTwoUnions([
+                {lat: -128, lng: 350},
+                {lat: -128, lng: 384},
+                {lat: -150, lng: 384},
+                {lat: -150, lng: 350}
+            ]);
+            let latLng = new LatLng(MAP_MAX_LAT / 2, MAP_MAX_LNG / 2, TARGET_FLOOR);
+
+            // Act
+            let result = coordinatesService.convertMapLocationToFacadeMapLocation(latLng);
+
+            // Assert
+            expect(result.getFloor()).toBe(TARGET_FLOOR);
+            expect(result.getLat()).toBe(MAP_MAX_LAT / 2);
+            expect(result.getLng()).toBe(MAP_MAX_LNG / 2);
+        });
     });
 
     test.each([0, 30, -45])('convertMapLocationToFacadeMapLocation_givenRotation_roundTripsBackToTheSamePoint', (rotation) => {
@@ -473,6 +578,17 @@ describe('CoordinatesService.intersection', () => {
         expect(coordinatesService.intersection(
             new LatLng(0, 0), new LatLng(1, 1),
             new LatLng(10, 0), new LatLng(0, 10)
+        )).toBeNull();
+    });
+
+    test('intersection_givenSecondSegmentThatOnlyCrossesWhenExtended_returnsNull', () => {
+        // Arrange
+        let coordinatesService = new CoordinatesService(createMapContext());
+
+        // Act & assert
+        expect(coordinatesService.intersection(
+            new LatLng(10, 0), new LatLng(0, 10),
+            new LatLng(0, 0), new LatLng(1, 1)
         )).toBeNull();
     });
 });

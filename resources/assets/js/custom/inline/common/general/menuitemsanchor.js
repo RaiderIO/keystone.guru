@@ -3,7 +3,7 @@ class CommonGeneralMenuitemsanchor extends InlineCode {
         super.activate();
 
         const anchor = window.location.hash;
-        if (typeof anchor !== 'undefined') {
+        if (anchor !== '') {
             let tabTrigger = document.querySelector(`a[href="${anchor}"]`);
             if (tabTrigger !== null) {
                 bootstrap.Tab.getOrCreateInstance(tabTrigger).show();

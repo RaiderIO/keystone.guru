@@ -64,4 +64,61 @@ describe('defaultAjaxErrorFn', () => {
         expect(notifications).toHaveLength(1);
         expect(notifications[0].text).toContain('422: The dungeon id field is required.');
     });
+
+    test('defaultAjaxErrorFn_givenSeveralValidationErrors_showsEveryValidationMessage', () => {
+        // Arrange
+        const xhr = {
+            status:       422,
+            responseJSON: {errors: {dungeonId: 'The dungeon id field is required.', title: 'The title field is required.'}},
+        };
+
+        // Act
+        defaultAjaxErrorFn(xhr, 'error', 'Unprocessable Content');
+
+        // Assert
+        expect(notifications).toHaveLength(1);
+        expect(notifications[0].text).toContain('422: The dungeon id field is required. The title field is required.');
+    });
+
+    test.each([
+        [403, 'js.ajax_error_403'],
+        [404, 'js.ajax_error_404'],
+        [419, 'js.ajax_error_419'],
+        [500, 'js.ajax_error_default'],
+    ])('defaultAjaxErrorFn_givenStatus%sWithoutJson_showsTheMessageForThatStatus', (status, expectedMessage) => {
+        // Arrange
+        const xhr = {status: status};
+
+        // Act
+        defaultAjaxErrorFn(xhr, 'error', 'Error');
+
+        // Assert
+        expect(notifications).toHaveLength(1);
+        expect(notifications[0].type).toBe('error');
+        expect(notifications[0].text).toContain(`${status}: ${expectedMessage}`);
+    });
+
+    test('defaultAjaxErrorFn_givenAnEmptyJsonMessage_keepsTheMessageForThatStatus', () => {
+        // Arrange
+        const xhr = {status: 404, responseJSON: {message: ''}};
+
+        // Act
+        defaultAjaxErrorFn(xhr, 'error', 'Not Found');
+
+        // Assert
+        expect(notifications).toHaveLength(1);
+        expect(notifications[0].text).toContain('404: js.ajax_error_404');
+    });
+
+    test('defaultAjaxErrorFn_givenNoResponseThatWasNotAborted_stillShowsANotification', () => {
+        // Arrange - a dropped connection also has status 0, but the user does need to know about that one
+        const xhr = {status: 0};
+
+        // Act
+        defaultAjaxErrorFn(xhr, 'error', '');
+
+        // Assert
+        expect(notifications).toHaveLength(1);
+        expect(notifications[0].text).toContain('0: js.ajax_error_default');
+    });
 });

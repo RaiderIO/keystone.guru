@@ -34,7 +34,7 @@ final class GetWeeklyAffixGroupsSinceStartTest extends PublicTestCase
         // Arrange
         $service  = app(SeasonAffixGroupServiceInterface::class);
         $twwS2    = Season::findOrFail(Season::SEASON_TWW_S2);
-        $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
 
         // Act
         $result = $service->getWeeklyAffixGroupsSinceStart($twwS2, $usRegion);
@@ -52,7 +52,7 @@ final class GetWeeklyAffixGroupsSinceStartTest extends PublicTestCase
         // Arrange
         $service  = app(SeasonAffixGroupServiceInterface::class);
         $twwS2    = Season::findOrFail(Season::SEASON_TWW_S2);
-        $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
 
         // Act
         $result = $service->getWeeklyAffixGroupsSinceStart($twwS2, $usRegion);
@@ -75,7 +75,7 @@ final class GetWeeklyAffixGroupsSinceStartTest extends PublicTestCase
         // Arrange
         $service  = app(SeasonAffixGroupServiceInterface::class);
         $twwS2    = Season::findOrFail(Season::SEASON_TWW_S2);
-        $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
 
         // Act
         $result = $service->getWeeklyAffixGroupsSinceStart($twwS2, $usRegion);
@@ -97,7 +97,7 @@ final class GetWeeklyAffixGroupsSinceStartTest extends PublicTestCase
         // Arrange
         $service  = app(SeasonAffixGroupServiceInterface::class);
         $twwS2    = Season::findOrFail(Season::SEASON_TWW_S2);
-        $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
 
         // Act
         $result = $service->getWeeklyAffixGroupsSinceStart($twwS2, $usRegion);
@@ -122,7 +122,7 @@ final class GetWeeklyAffixGroupsSinceStartTest extends PublicTestCase
         // Arrange
         $service  = app(SeasonAffixGroupServiceInterface::class);
         $twwS2    = Season::findOrFail(Season::SEASON_TWW_S2);
-        $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $this->assertGreaterThan(1, $twwS2->affix_group_count);
         $this->assertCount($twwS2->affix_group_count, $twwS2->affixGroups);
 
@@ -152,7 +152,7 @@ final class GetWeeklyAffixGroupsSinceStartTest extends PublicTestCase
     ): void {
         // Arrange
         $service         = app(SeasonAffixGroupServiceInterface::class);
-        $usRegion        = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion        = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $season          = Season::findOrFail($seasonId);
         $nextSeasonStart = Season::findOrFail($nextSeasonId)->start($usRegion);
         $this->assertTrue($nextSeasonStart->lessThan(Carbon::now()));
@@ -191,7 +191,7 @@ final class GetWeeklyAffixGroupsSinceStartTest extends PublicTestCase
     public function getWeeklyAffixGroupsSinceStart_givenRunningSeasonWithAnUpcomingSuccessor_returnsWeeksUpToTheCurrentWeek(): void
     {
         // Arrange
-        $usRegion            = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion            = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
         $latestStartedSeason = Season::query()->where('start', '<=', Carbon::now())->orderByDesc('start')->firstOrFail();
         // A successor of our own: a seeded upcoming season starts eventually, and then the running season has ended.
         // Created before the scoped SeasonService loads its seasons, or it never sees this one.

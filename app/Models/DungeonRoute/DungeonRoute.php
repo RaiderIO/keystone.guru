@@ -83,7 +83,6 @@ use Override;
  * @property int                  $faction_id
  * @property int|null             $team_id
  * @property int                  $published_state_id
- * @property int|null             $dungeon_start_map_icon_id
  * @property int|null             $dungeon_start_id
  * @property string|null          $clone_of
  * @property int|null             $upgrade_of_dungeon_route_id
@@ -222,6 +221,19 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'published_state',
     ];
 
+    /**
+     * Columns without a database default that a route is created without on several paths (imports, clones,
+     * try routes, combat log routes); a strict-mode insert omitting them is rejected.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'description'                => '',
+        'teeming'                    => 0,
+        'pull_gradient'              => '',
+        'pull_gradient_apply_always' => 0,
+    ];
+
     protected $fillable = [
         'id',
         'public_key',
@@ -234,7 +246,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'faction_id',
         'team_id',
         'published_state_id',
-        'dungeon_start_map_icon_id',
         'dungeon_start_id',
         'teeming',
         'title',

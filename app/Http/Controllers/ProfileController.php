@@ -10,7 +10,6 @@ use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\LiveSession;
-use App\Models\Season;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\User;
@@ -18,8 +17,12 @@ use App\Models\UserPinnedDungeonRoute;
 use App\Models\UserPinnedDungeonRouteCollection;
 use App\Models\UserSocialLink;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\LiveSessionRepositoryInterface;
+use App\Repositories\Interfaces\SeasonRepositoryInterface;
+use App\Repositories\Interfaces\Tags\TagRepositoryInterface;
 use App\Repositories\Interfaces\UserPinnedDungeonRouteCollectionRepositoryInterface;
 use App\Repositories\Interfaces\UserPinnedDungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\UserSocialLinkRepositoryInterface;
 use App\Service\Creator\CreatorDirectoryServiceInterface;
 use App\Service\DungeonRoute\CoverageServiceInterface;
@@ -29,6 +32,7 @@ use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Broadcasting\BroadcastException;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -138,10 +142,11 @@ class ProfileController extends Controller
         CoverageServiceInterface        $coverageService,
         SeasonServiceInterface          $seasonService,
         DungeonRouteRepositoryInterface $dungeonRouteRepository,
+        SeasonRepositoryInterface       $seasonRepository,
     ): View {
         $season = null;
         if (isset($_COOKIE['dungeonroute_coverage_season_id'])) {
-            $season = Season::find($_COOKIE['dungeonroute_coverage_season_id']);
+            $season = $seasonRepository->find((int)$_COOKIE['dungeonroute_coverage_season_id']);
         }
 
         $season ??= $seasonService->getCurrentSeason();
@@ -175,9 +180,11 @@ class ProfileController extends Controller
      * @throws Exception
      */
     public function update(
-        ProfileFormRequest            $request,
-        User                          $user,
-        ReverbHttpApiServiceInterface $reverbHttpApiService,
+        ProfileFormRequest              $request,
+        User                            $user,
+        ReverbHttpApiServiceInterface   $reverbHttpApiService,
+        DungeonRouteRepositoryInterface $dungeonRouteRepository,
+        LiveSessionRepositoryInterface  $liveSessionRepository,
     ): RedirectResponse {
         Gate::authorize('update', $user);
 
@@ -200,7 +207,7 @@ class ProfileController extends Controller
 
         $user->echo_color            = $validated['echo_color'] ?? randomHexColor();
         $user->echo_anonymous        = $validated['echo_anonymous'] ?? false;
-        $user->game_server_region_id = $validated['game_server_region_id'];
+        $user->game_server_region_id = $validated['game_server_region_id'] ?? $user->game_server_region_id;
         $user->timezone              = $validated['timezone'];
 
         // Only when no duplicates are found!
@@ -227,11 +234,11 @@ class ProfileController extends Controller
                     if (str_contains((string)$name, 'route-edit')) {
                         $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', (string)$name);
                         /** @var DungeonRoute $context */
-                        $context = DungeonRoute::where('public_key', $routeKey)->first();
+                        $context = $dungeonRouteRepository->findByPublicKey($routeKey);
                     } elseif (str_contains((string)$name, 'live-session')) {
                         $routeKey = str_replace(sprintf('presence-%s-live-session.', config('app.type')), '', (string)$name);
                         /** @var LiveSession $context */
-                        $context = LiveSession::where('public_key', $routeKey)->first();
+                        $context = $liveSessionRepository->findByPublicKey($routeKey);
                     }
 
                     // Only if we could find a route
@@ -272,7 +279,7 @@ class ProfileController extends Controller
     {
         Gate::authorize('update', $user);
 
-        $user->analytics_cookie_opt_out = $request->get('analytics_cookie_opt_out');
+        $user->analytics_cookie_opt_out = $request->boolean('analytics_cookie_opt_out');
 
         if (!$user->save()) {
             abort(500, __('controller.profile.flash.unexpected_error_when_saving'));
@@ -394,18 +401,17 @@ class ProfileController extends Controller
      *
      * @return RedirectResponse
      */
-    public function createTag(TagFormRequest $request): RedirectResponse
+    public function createTag(TagFormRequest $request, TagRepositoryInterface $tagRepository): RedirectResponse
     {
         $error = [];
 
+        /** @var User $user */
+        $user = Auth::user();
+
         $tagCategoryId = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL];
 
-        if (!Tag::where('name', $request->get('tag_name_new'))
-            ->where('context_id', Auth::id())
-            ->where('context_class', User::class)
-            ->where('tag_category_id', $tagCategoryId)
-            ->exists()) {
-            Tag::saveFromRequest($request, Auth::user(), $tagCategoryId);
+        if (!$tagRepository->existsPersonalRouteTagNamed($user, $request->get('tag_name_new'))) {
+            Tag::saveFromRequest($request, $user, $tagCategoryId);
 
             Session::flash('status', __('controller.profile.flash.tag_created_successfully'));
         } else {
@@ -418,7 +424,7 @@ class ProfileController extends Controller
     /**
      * @throws Exception
      */
-    public function delete(Request $request): RedirectResponse
+    public function delete(Request $request, UserRepositoryInterface $userRepository): RedirectResponse
     {
         /** @var User $user */
         $user = Auth::getUser();
@@ -426,7 +432,7 @@ class ProfileController extends Controller
         Gate::authorize('delete', $user);
 
         try {
-            User::findOrFail($user->id)->delete();
+            $userRepository->findOrFail($user->id)->delete();
             Auth::logout();
             Session::flash('status', __('controller.profile.flash.account_deleted_successfully'));
         } catch (Exception) {
@@ -456,9 +462,10 @@ class ProfileController extends Controller
             /** @var User $user */
             $user = Auth::user();
 
-            // Sandbox routes expire, so they are deliberately not offered as pinnable
+            // Sandbox routes expire, so they are deliberately not offered as pinnable. The column is 0 on some
+            // rows and NULL on others, the same pair the route picker's listing matches on
             $ownDungeonRoutes = $user->dungeonRoutes()
-                ->whereNull('expires_at')
+                ->where(static fn(Builder $query) => $query->where('expires_at', 0)->orWhereNull('expires_at'))
                 ->with(['dungeon'])
                 ->orderBy('title')
                 ->get();

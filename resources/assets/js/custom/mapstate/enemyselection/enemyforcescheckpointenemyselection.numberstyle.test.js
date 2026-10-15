@@ -69,8 +69,12 @@ describe('EnemyForcesCheckpointEnemySelection._refreshSnackbar number style', ()
         });
 
         // Assert
-        expect(writtenText['#map_enemy_forces_checkpoint_edit_snackbar_summary'])
-            .toContain('js.enemy_forces_checkpoint_snackbar_enemy_forces');
+        expect(writtenText['#map_enemy_forces_checkpoint_edit_snackbar_summary']).toBe(
+            'js.enemy_forces_checkpoint_snackbar_summary:' + JSON.stringify({
+                enemies: 2,
+                amount:  'js.enemy_forces_checkpoint_snackbar_enemy_forces:' + JSON.stringify({enemyForces: 20}),
+            })
+        );
     });
 
     it('refreshSnackbar_givenPullNumberStyleIsPercentage_rendersAPercentage', () => {
@@ -82,8 +86,11 @@ describe('EnemyForcesCheckpointEnemySelection._refreshSnackbar number style', ()
 
         // Assert
         // The opposing "Enemy number style" value must not be able to reach the snackbar.
-        expect(writtenText['#map_enemy_forces_checkpoint_edit_snackbar_summary'])
-            .toContain('js.enemy_forces_checkpoint_snackbar_percentage');
-        expect(writtenText['#map_enemy_forces_checkpoint_edit_snackbar_summary']).toContain('20%');
+        expect(writtenText['#map_enemy_forces_checkpoint_edit_snackbar_summary']).toBe(
+            'js.enemy_forces_checkpoint_snackbar_summary:' + JSON.stringify({
+                enemies: 2,
+                amount:  'js.enemy_forces_checkpoint_snackbar_percentage:' + JSON.stringify({percentage: '20%'}),
+            })
+        );
     });
 });

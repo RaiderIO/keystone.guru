@@ -133,10 +133,7 @@ window.axios.defaults.headers.common = {
 // will populate messages at runtime via window.lang.setMessages(...)
 window.lang = new Lang({messages: {}});
 
-// {{t 'key'}} renders lang/<locale>/js.php's `key`; use {{{t 'key'}}} for translations holding markup
-window.Handlebars.registerHelper('t', function (key) {
-    return lang.get('js.' + key);
-});
+require('./handlebars-translation-helper').registerTranslationHelper(window.Handlebars);
 
 // https://stackoverflow.com/questions/13046401/how-to-set-selected-select-option-in-handlebars-template
 window.Handlebars.registerHelper('select', function (value, options) {

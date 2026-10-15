@@ -1046,7 +1046,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                     $mapIconTypeKey = Conversion::convertMDTMapPOIToMapIconTypeKey($mdtMapPOI);
 
-                    if ($mapIconTypeKey === MapIconType::MAP_ICON_TYPE_DUNGEON_START) {
+                    if ($mdtMapPOI->getType() === MDTMapPOIType::DungeonEntrance) {
                         if ($newMappingVersionHasDungeonStart) {
                             $this->log->importMapPOIsHaveExistingDungeonStart($latLng->toArray());
 
@@ -1175,6 +1175,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         }
 
         $previousNpcIds = $currentMappingVersion->enemies()
+            ->reorder()
             ->whereNotNull('npc_id')
             ->distinct()
             ->pluck('npc_id')

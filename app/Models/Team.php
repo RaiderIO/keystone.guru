@@ -53,6 +53,15 @@ class Team extends Model
         'public_key',
     ];
 
+    /**
+     * A team has no icon until one is uploaded, and icon_file_id has no database default.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'icon_file_id' => -1,
+    ];
+
     protected $fillable = [
         'default_role',
         'route_publishing_enabled',
@@ -108,7 +117,7 @@ class Team extends Model
      */
     public function getVisibleRouteCount(): int
     {
-        return $this->dungeonRoutes()->whereIn('published_state_id', PublishedState::whereIn('name', [
+        return $this->dungeonRoutes()->whereIn('published_state_id', PublishedState::whereIn('key', [
             PublishedState::TEAM,
             PublishedState::WORLD,
             PublishedState::WORLD_WITH_LINK,

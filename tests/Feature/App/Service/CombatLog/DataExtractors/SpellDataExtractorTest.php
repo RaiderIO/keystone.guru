@@ -25,7 +25,9 @@ use App\Service\CombatLog\DataExtractors\SpellDataCollectors\SpellCreationCollec
 use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Mockery;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -36,6 +38,7 @@ use Tests\TestCases\PublicTestCase;
 final class SpellDataExtractorTest extends PublicTestCase
 {
     private const int    NPC_ID          = 999601;
+    private const int    OTHER_NPC_ID    = 999603;
     private const int    SPELL_ID        = 999602;
     private const string COMBAT_LOG_PATH = '/tmp/test.log';
 
@@ -74,13 +77,13 @@ final class SpellDataExtractorTest extends PublicTestCase
     protected function tearDown(): void
     {
         try {
-            NpcSpell::where('npc_id', self::NPC_ID)->delete();
+            NpcSpell::whereIn('npc_id', [self::NPC_ID, self::OTHER_NPC_ID])->delete();
             SpellDungeon::where('spell_id', self::SPELL_ID)->delete();
-            Npc::where('id', self::NPC_ID)->delete();
+            Npc::whereIn('id', [self::NPC_ID, self::OTHER_NPC_ID])->delete();
             SpellModel::where('id', self::SPELL_ID)->delete();
             CombatLogSpellPropertyObservation::where('spell_id', self::SPELL_ID)->delete();
             CombatLogSpellEvent::where('spell_id', self::SPELL_ID)->delete();
-            CombatLogNpcEvent::where('npc_id', self::NPC_ID)->delete();
+            CombatLogNpcEvent::whereIn('npc_id', [self::NPC_ID, self::OTHER_NPC_ID])->delete();
         } finally {
             parent::tearDown();
         }
@@ -112,10 +115,10 @@ final class SpellDataExtractorTest extends PublicTestCase
         ], $overrides));
     }
 
-    private function createTestNpc(): Npc
+    private function createTestNpc(int $npcId = self::NPC_ID): Npc
     {
         return Npc::create([
-            'id'                => self::NPC_ID,
+            'id'                => $npcId,
             'classification_id' => 1,
             'npc_type_id'       => 1,
             'npc_class_id'      => 1,
@@ -563,6 +566,61 @@ final class SpellDataExtractorTest extends PublicTestCase
             1,
             SpellDungeon::where('spell_id', self::SPELL_ID)->where('dungeon_id', $this->currentDungeon->dungeon->id)->count(),
         );
+    }
+
+    #[Test]
+    public function afterExtract_givenSpellsCastByTwoNpcs_loadsBothNpcsInOneQueryAndAssignsTheSpellToEach(): void
+    {
+        // Arrange
+        $this->createTestSpell([
+            'category' => SpellCategory::Unknown->translationKey(),
+            'aura'     => true,
+        ]);
+        $this->createTestNpc();
+        $this->createTestNpc(self::OTHER_NPC_ID);
+        $extractor     = $this->makeExtractor();
+        $npcQueryCount = 0;
+        DB::listen(function (QueryExecuted $query) use (&$npcQueryCount): void {
+            if (str_contains($query->sql, 'from `npcs`')) {
+                $npcQueryCount++;
+            }
+        });
+
+        // Act
+        $this->runExtract($extractor, [
+            $this->parsedEvent(self::RAW_BUFF_EVENT),
+            $this->parsedEvent(str_replace('-999601-', sprintf('-%d-', self::OTHER_NPC_ID), self::RAW_BUFF_EVENT)),
+            $this->parsedEvent(self::RAW_BUFF_EVENT),
+        ]);
+
+        // Assert
+        $this->assertSame(1, $npcQueryCount);
+        $this->assertSame(2, $this->result->toArray()['createdNpcSpells']);
+        $this->assertSame(1, NpcSpell::where('npc_id', self::NPC_ID)->where('spell_id', self::SPELL_ID)->count());
+        $this->assertSame(1, NpcSpell::where('npc_id', self::OTHER_NPC_ID)->where('spell_id', self::SPELL_ID)->count());
+    }
+
+    #[Test]
+    public function afterExtract_givenASpellCastByAnUnknownNpc_assignsNothingAndLogsTheMissingNpc(): void
+    {
+        // Arrange - no Npc row for NPC_ID
+        $this->createTestSpell([
+            'category' => SpellCategory::Unknown->translationKey(),
+            'aura'     => true,
+        ]);
+        $log = Mockery::mock(SpellDataExtractorLoggingInterface::class)->shouldIgnoreMissing();
+        /** @var Mockery\Expectation $expectation */
+        $expectation = $log->shouldReceive('extractDataSpellNpcNull');
+        $expectation->once()->with(self::NPC_ID);
+        $this->app->bind(SpellDataExtractorLoggingInterface::class, fn() => $log);
+        $extractor = $this->makeExtractor();
+
+        // Act
+        $this->runExtract($extractor, [$this->parsedEvent(self::RAW_BUFF_EVENT)]);
+
+        // Assert
+        $this->assertSame(0, $this->result->toArray()['createdNpcSpells']);
+        $this->assertSame(0, NpcSpell::where('spell_id', self::SPELL_ID)->count());
     }
 
     #[Test]

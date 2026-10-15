@@ -9,6 +9,8 @@ global.Polyline = class Polyline {
 
     rebindTooltip() {}
 
+    bindTooltip() {}
+
     loadRemoteMapObject() {}
 };
 global.HullPolyline = require('./hullpolyline').HullPolyline;
@@ -38,6 +40,8 @@ global.createOffsetPolygon = (vertices, margin) => {
     return vertices.map(vertex => [vertex.lat, vertex.lng]);
 };
 
+global.getFormattedPercentage = require('../util').getFormattedPercentage;
+
 global.c = {
     map: {
         enemypack: {
@@ -57,13 +61,9 @@ const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManage
  *
  * @param options {{floorId?: Number, floorEnemyPackMargin?: Number|null|undefined}}
  */
-function createEnemyPack({floorId = 1, floorEnemyPackMargin = null} = {}) {
+function createEnemyPack({floorId = 1, floorEnemyPackMargin = null, enemiesById = null, inMappingEditor = false} = {}) {
     const enemyMapObjectGroup = {
-        findMapObjectById: (id) => ({
-            id,
-            layer: {getLatLng: () => ({lat: id, lng: id})},
-            shouldBeVisible: () => true,
-        }),
+        findMapObjectById: (id) => (enemiesById === null ? makeFakeEnemy(id) : enemiesById[id] ?? null),
     };
 
     const enemyPackMapObjectGroup = {
@@ -80,14 +80,39 @@ function createEnemyPack({floorId = 1, floorEnemyPackMargin = null} = {}) {
 
     const floor = floorEnemyPackMargin === undefined ? false : {id: floorId, enemy_pack_margin: floorEnemyPackMargin};
 
+    const mapContext = inMappingEditor ? new MapContextMappingVersionEdit() : {};
+    mapContext.getFloorById = () => floor;
+
     global.getState = () => ({
-        getMapContext: () => ({
-            getFloorById: () => floor,
-        }),
+        getMapContext: () => mapContext,
     });
 
     return enemyPack;
 }
+
+/**
+ * An enemy of the pack, positioned at [id, id].
+ *
+ * @param {Number} id
+ * @param {Object} overrides
+ * @returns {Object}
+ */
+function makeFakeEnemy(id, overrides = {}) {
+    return {
+        id,
+        layer: {getLatLng: () => ({lat: id, lng: id})},
+        shouldBeVisible: () => true,
+        getEnemyForces: () => 10,
+        register: vi.fn(),
+        bindTooltip: vi.fn(),
+        ...overrides,
+    };
+}
+
+beforeEach(() => {
+    lastOffsetPolygonMargin = null;
+    lastOffsetPolygonPoints = null;
+});
 
 describe('EnemyPack._updateHullLayer', () => {
     it('updateHullLayer_givenFloorWithMarginOverride_usesTheFloorMargin', () => {
@@ -134,6 +159,25 @@ describe('EnemyPack polyline seams', () => {
 
         // Assert
         expect(lastOffsetPolygonPoints).toEqual([[1, 1], [2, 2]]);
+    });
+
+    it('getHullPoints_givenHiddenMissingAndLayerlessEnemies_returnsOnlyTheVisibleOnes', () => {
+        // Arrange
+        const enemyPack = createEnemyPack({
+            enemiesById: {
+                1: makeFakeEnemy(1),
+                2: makeFakeEnemy(2, {shouldBeVisible: () => false}),
+                4: makeFakeEnemy(4, {layer: null}),
+                5: makeFakeEnemy(5),
+            },
+        });
+        enemyPack.rawEnemies = [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}];
+
+        let points = null;
+
+        // Act + Assert
+        expect(() => (points = enemyPack._getHullPoints())).not.toThrow();
+        expect(points).toEqual([[1, 1], [5, 5]]);
     });
 
     it('isWeightEditable_givenEnemyPack_returnsFalse', () => {
@@ -198,5 +242,106 @@ describe('EnemyPack.loadRemoteMapObject', () => {
         // Assert
         expect(enemyPack.setRawEnemies).not.toHaveBeenCalled();
         expect(enemyPack._updateHullLayer).not.toHaveBeenCalled();
+    });
+
+    it('loadRemoteMapObject_givenTheMappingEditor_keepsTheEditablePolygon', () => {
+        // Arrange
+        const enemyPack = createEnemyPack({inMappingEditor: true});
+        enemyPack.setRawEnemies = vi.fn();
+        enemyPack._updateHullLayer = vi.fn();
+
+        // Act
+        enemyPack.loadRemoteMapObject({id: 99, enemies: [{id: 1}], polyline: {}});
+
+        // Assert
+        expect(enemyPack.setRawEnemies).not.toHaveBeenCalled();
+        expect(enemyPack._updateHullLayer).not.toHaveBeenCalled();
+    });
+});
+
+describe('EnemyPack.setRawEnemies', () => {
+    it('setRawEnemies_givenEnemiesOfThePack_listensToTheirVisibilityAndRebindsTheirTooltips', () => {
+        // Arrange
+        const enemy = makeFakeEnemy(1);
+        const enemyPack = createEnemyPack({enemiesById: {1: enemy}});
+        enemyPack._updateHullLayer = vi.fn();
+        const consoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+        // Act
+        enemyPack.setRawEnemies([{id: 1}, {id: 2}]);
+
+        // Assert
+        expect(enemyPack.rawEnemies).toEqual([{id: 1}, {id: 2}]);
+        expect(enemy.register).toHaveBeenCalledWith(['shown', 'hidden'], enemyPack, expect.any(Function));
+        expect(enemy.bindTooltip).toHaveBeenCalledTimes(1);
+        expect(consoleWarn).toHaveBeenCalledWith('Unable to find enemy with id 2 for enemy pack 99');
+
+        enemy.register.mock.calls[0][2]({});
+        expect(enemyPack._updateHullLayer).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('EnemyPack._createHullLayer', () => {
+    it('createHullLayer_givenAHull_signalsEnemyPackClickedWhenItIsClicked', () => {
+        // Arrange
+        const enemyPack = createEnemyPack();
+        enemyPack.signal = vi.fn();
+        const handlers = {};
+        vi.spyOn(global.L, 'polygon').mockImplementation(() => ({on: (event, handler) => (handlers[event] = handler)}));
+        const clickEvent = {latlng: {lat: 1, lng: 1}};
+
+        // Act
+        const result = enemyPack._createHullLayer([[1, 1], [2, 2]]);
+        handlers.click(clickEvent);
+
+        // Assert
+        expect(result).not.toBeNull();
+        expect(enemyPack.signal).toHaveBeenCalledWith('enemypack:clicked', {clickEvent: clickEvent});
+    });
+
+    it('createHullLayer_givenTooFewPoints_returnsNull', () => {
+        // Arrange
+        const enemyPack = createEnemyPack();
+
+        // Act + Assert
+        expect(() => enemyPack._createHullLayer([[1, 1]])).not.toThrow();
+        expect(enemyPack._createHullLayer([[1, 1]])).toBeNull();
+    });
+});
+
+describe('EnemyPack.bindTooltip', () => {
+    /**
+     * @param {Number|null} group
+     * @returns {EnemyPack}
+     */
+    function createTooltipEnemyPack(group) {
+        const enemyPack = createEnemyPack();
+        enemyPack.group = group;
+        enemyPack.layer = {bindTooltip: vi.fn()};
+        enemyPack.map.enemyForcesManager = {getEnemyForcesRequired: () => 200};
+
+        return enemyPack;
+    }
+
+    it('bindTooltip_givenAGroup_prefixesTheGroupToTheEnemyForces', () => {
+        // Arrange
+        const enemyPack = createTooltipEnemyPack(3);
+
+        // Act
+        enemyPack.bindTooltip();
+
+        // Assert
+        expect(enemyPack.layer.bindTooltip).toHaveBeenCalledWith('G3: +20 / +10%', {sticky: true, direction: 'top'});
+    });
+
+    it('bindTooltip_givenNoGroup_showsOnlyTheEnemyForces', () => {
+        // Arrange
+        const enemyPack = createTooltipEnemyPack(null);
+
+        // Act
+        enemyPack.bindTooltip();
+
+        // Assert
+        expect(enemyPack.layer.bindTooltip).toHaveBeenCalledWith('+20 / +10%', {sticky: true, direction: 'top'});
     });
 });

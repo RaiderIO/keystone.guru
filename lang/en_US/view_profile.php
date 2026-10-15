@@ -78,6 +78,8 @@ return [
         'creator_pinned_routes_help'       => 'Your pinned routes are highlighted at the top of your profile, in this order. Pinning does not publish a route - each one only shows to the people who may view it.',
         'creator_pinned_routes_empty'      => 'No pinned routes yet.',
         'creator_pinned_routes_none'       => 'You have not created any routes yet, so there is nothing to pin.',
+        'creator_pinned_routes_add'        => 'Pin routes',
+        'creator_pinned_routes_picker'     => 'Pin routes to your profile',
         'creator_pinned_collections'       => 'Pinned collections',
         'creator_pinned_collections_none'  => 'You have not created any collections yet.',
         'creator_pinned_collections_help'  => 'Your pinned collections are highlighted above your routes, in this order. Pinning does not share a collection - each one only shows to the people who may view it.',

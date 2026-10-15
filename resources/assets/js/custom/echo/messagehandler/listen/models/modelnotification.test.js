@@ -80,4 +80,30 @@ describe.each([
         // Assert
         expect(global.showInfoNotification).not.toHaveBeenCalled();
     });
+
+    it('shows nothing when echo is disabled', () => {
+        // Arrange
+        const handler = makeHandler();
+        global.getState = () => ({
+            isEchoEnabled: () => false,
+            getUser: () => ({public_key: 'local-user'}),
+        });
+
+        // Act
+        handler[method]({toString: () => 'Pull 3'}, {public_key: 'remote-user', name: 'Wotuu'});
+
+        // Assert
+        expect(global.showInfoNotification).not.toHaveBeenCalled();
+    });
+
+    it('shows nothing for a user without a name', () => {
+        // Arrange
+        const handler = makeHandler();
+
+        // Act
+        handler[method]({toString: () => 'Pull 3'}, {public_key: 'remote-user', name: null});
+
+        // Assert
+        expect(global.showInfoNotification).not.toHaveBeenCalled();
+    });
 });

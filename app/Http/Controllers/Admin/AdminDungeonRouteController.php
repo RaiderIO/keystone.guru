@@ -39,7 +39,7 @@ class AdminDungeonRouteController extends Controller
 
         return view('admin.dungeonroute.list', [
             'models'          => $query->limit(self::MAX_RESULTS)->get(),
-            'publishedStates' => PublishedState::all()->pluck('name', 'id'),
+            'publishedStates' => PublishedState::all()->pluck('key', 'id'),
             'filters'         => [
                 'dungeon_id'         => $dungeonId,
                 'published_state_id' => $publishedStateId,
@@ -54,7 +54,7 @@ class AdminDungeonRouteController extends Controller
     {
         return view('admin.dungeonroute.edit', [
             'dungeonRoute'    => $dungeonRoute->load(['author', 'dungeon', 'publishedState']),
-            'publishedStates' => PublishedState::all()->pluck('name', 'id'),
+            'publishedStates' => PublishedState::all()->pluck('key', 'id'),
         ]);
     }
 

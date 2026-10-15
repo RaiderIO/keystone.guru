@@ -69,7 +69,8 @@ describe('CommonMapsKillzonessidebar hotkeys', () => {
         globalThis.$     = jQuery;
         globalThis._     = _;
 
-        document.body.innerHTML = '<div id="map"></div><textarea id="notes"></textarea><div id="editable" contenteditable="true"></div><div id="row"></div>';
+        document.body.innerHTML = '<div id="map"></div><textarea id="notes"></textarea><div id="editable" contenteditable="true"></div><div id="row"></div>' +
+            '<input id="search" type="text"><select id="choice"><option value="1">1</option></select>';
 
         // Deliberately not in index order.
         killZones = [new KillZone(12, 3), new KillZone(10, 1), new KillZone(11, 2)];
@@ -143,6 +144,19 @@ describe('CommonMapsKillzonessidebar hotkeys', () => {
             // Assert
             expect(next.index).toBe(3);
             expect(previous.index).toBe(1);
+        });
+
+        test('_getAdjacentKillZone_givenNoPulls_returnsNull', () => {
+            // Arrange
+            killZones.length = 0;
+
+            // Act
+            const next     = sidebar._getAdjacentKillZone(null, 1);
+            const previous = sidebar._getAdjacentKillZone(null, -1);
+
+            // Assert
+            expect(next).toBeNull();
+            expect(previous).toBeNull();
         });
 
         test('_getAdjacentKillZone_givenNoSelection_returnsFirstOrLast', () => {
@@ -233,6 +247,8 @@ describe('CommonMapsKillzonessidebar hotkeys', () => {
         test.each([
             ['textarea', 'notes'],
             ['contenteditable', 'editable'],
+            ['input', 'search'],
+            ['select', 'choice'],
         ])('keydown_givenFocusInA%s_doesNothing', (_label, id) => {
             // Arrange
             const target = document.getElementById(id);

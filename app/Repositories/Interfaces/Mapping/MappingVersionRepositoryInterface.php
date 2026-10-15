@@ -19,4 +19,8 @@ use Illuminate\Support\Collection;
  */
 interface MappingVersionRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * @return Collection<int, MappingVersion>
+     */
+    public function getAllOrderedByDungeonId(): Collection;
 }

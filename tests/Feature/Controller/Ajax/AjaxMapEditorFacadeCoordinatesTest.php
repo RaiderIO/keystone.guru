@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Logic\Structs\LatLng;
+use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
@@ -17,6 +18,7 @@ use App\Models\Path;
 use App\Models\Polyline;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Closure;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -35,6 +37,8 @@ use Tests\TestCases\AjaxPublicTestCase;
 final class AjaxMapEditorFacadeCoordinatesTest extends AjaxPublicTestCase
 {
     use GeneratesDungeonRoutes;
+
+    private const int TOO_LONG_VERTEX_COUNT = 2000;
 
     #[Test]
     public function store_givenMapIconOnFacadeFloor_savesOnRealFloorAndEchoesFacadeCoordinates(): void
@@ -122,6 +126,90 @@ final class AjaxMapEditorFacadeCoordinatesTest extends AjaxPublicTestCase
             /** @var Polyline $storedPolyline */
             $storedPolyline = Polyline::query()->findOrFail($storedPath->polyline_id);
             $this->assertNotEquals($polyline['vertices_json'], $storedPolyline->vertices_json);
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenPathOnFacadeFloor_storesItsRealFloorVerticesAtTheBrowsersPrecision(): void
+    {
+        // Arrange
+        [$mappingVersion, $facadeFloor, $facadeLatLng] = $this->findConvertibleFacadeLocation();
+
+        $dungeonRoute = $this->createFacadeDungeonRoute($mappingVersion);
+        $polyline     = PolylineFixtures::createPolyline($facadeFloor, collect([$facadeLatLng, $facadeLatLng]));
+
+        try {
+            // Act
+            $response = $this->post(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $dungeonRoute]), [
+                'floor_id' => $facadeFloor->id,
+                'polyline' => $polyline,
+            ]);
+
+            // Assert
+            $response->assertCreated();
+            /** @var Path $storedPath */
+            $storedPath = Path::query()->findOrFail($response->json('id'));
+            /** @var Polyline $storedPolyline */
+            $storedPolyline = Polyline::query()->findOrFail($storedPath->polyline_id);
+            $storedVertices = json_decode($storedPolyline->vertices_json, true);
+            $this->assertCount(2, $storedVertices);
+            foreach ($storedVertices as $storedVertex) {
+                $this->assertSame(round($storedVertex['lat'], 6), $storedVertex['lat']);
+                $this->assertSame(round($storedVertex['lng'], 6), $storedVertex['lng']);
+            }
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenPathOnFacadeFloorTooLongOnceOnItsRealFloor_returnsAVerticesErrorAndCreatesNothing(): void
+    {
+        // Arrange - one-decimal facade vertices fit the limit, their six-decimal real-floor equivalents do not
+        [$mappingVersion, $facadeFloor, $facadeLatLng] = $this->findFacadeLocationTooLongOnlyOnItsRealFloor(self::TOO_LONG_VERTEX_COUNT);
+
+        $dungeonRoute = $this->createFacadeDungeonRoute($mappingVersion);
+        $polyline     = PolylineFixtures::createPolyline($facadeFloor, collect(array_fill(0, self::TOO_LONG_VERTEX_COUNT, $facadeLatLng)));
+        $this->assertLessThanOrEqual(Polyline::VERTICES_JSON_MAX_LENGTH, strlen($polyline['vertices_json']));
+
+        try {
+            // Act
+            $response = $this->postJson(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $dungeonRoute]), [
+                'floor_id' => $facadeFloor->id,
+                'polyline' => $polyline,
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['polyline.vertices_json']);
+            $this->assertSame(0, Path::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenBrushlineOnFacadeFloorTooLongOnceOnItsRealFloor_returnsAVerticesErrorAndCreatesNothing(): void
+    {
+        // Arrange - one-decimal facade vertices fit the limit, their six-decimal real-floor equivalents do not
+        [$mappingVersion, $facadeFloor, $facadeLatLng] = $this->findFacadeLocationTooLongOnlyOnItsRealFloor(self::TOO_LONG_VERTEX_COUNT);
+
+        $dungeonRoute = $this->createFacadeDungeonRoute($mappingVersion);
+        $polyline     = PolylineFixtures::createPolyline($facadeFloor, collect(array_fill(0, self::TOO_LONG_VERTEX_COUNT, $facadeLatLng)));
+
+        try {
+            // Act
+            $response = $this->postJson(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $dungeonRoute]), [
+                'floor_id' => $facadeFloor->id,
+                'polyline' => $polyline,
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['polyline.vertices_json']);
+            $this->assertSame(0, Brushline::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
         } finally {
             $dungeonRoute->delete();
         }
@@ -408,16 +496,18 @@ final class AjaxMapEditorFacadeCoordinatesTest extends AjaxPublicTestCase
      * onto another floor at other coordinates. A facade point outside every floor union area converts
      * to itself, which would make these tests assert nothing.
      *
+     * @param  int|null                                                $precision Decimals to round the facade location to before it is checked
+     * @param  (Closure(MappingVersion, LatLng): bool)|null            $accept    Further requirement the facade location must meet
      * @return array{0: MappingVersion, 1: Floor, 2: LatLng, 3: Floor}
      */
-    private function findConvertibleFacadeLocation(): array
+    private function findConvertibleFacadeLocation(?int $precision = null, ?Closure $accept = null): array
     {
         /** @var CoordinatesServiceInterface $coordinatesService */
         $coordinatesService = app(CoordinatesServiceInterface::class);
 
         return $this->findDungeon(
             facadeEnabled: true,
-            resolve:       static function ($dungeon, MappingVersion $mappingVersion) use ($coordinatesService) {
+            resolve:       static function ($dungeon, MappingVersion $mappingVersion) use ($coordinatesService, $precision, $accept) {
                 $mappingVersion->load(['floorUnions.floor', 'floorUnions.floorUnionAreas']);
 
                 /** @var FloorUnion $floorUnion */
@@ -438,11 +528,16 @@ final class AjaxMapEditorFacadeCoordinatesTest extends AjaxPublicTestCase
                             $floorUnion->floor,
                         );
 
+                        if ($precision !== null) {
+                            $facadeLatLng = new LatLng($facadeLatLng->getLat($precision), $facadeLatLng->getLng($precision), $floorUnion->floor);
+                        }
+
                         $converted = $coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $facadeLatLng);
 
                         // A floor union can overlay its target floor 1:1 (Darkflame Cleft), changing the floor but not the coordinates
                         if ($converted->getFloor()?->id !== $floorUnion->floor_id
-                            && abs($converted->getLat() - $facadeLatLng->getLat()) > 0.0001) {
+                            && abs($converted->getLat() - $facadeLatLng->getLat()) > 0.0001
+                            && ($accept === null || $accept($mappingVersion, $facadeLatLng))) {
                             return [$mappingVersion, $floorUnion->floor, $facadeLatLng, $converted->getFloor()];
                         }
                     }
@@ -451,6 +546,37 @@ final class AjaxMapEditorFacadeCoordinatesTest extends AjaxPublicTestCase
                 return null;
             },
         )[2];
+    }
+
+    /**
+     * Finds a one-decimal facade location that fits Polyline::VERTICES_JSON_MAX_LENGTH $vertexCount times over while
+     * its six-decimal real-floor equivalent does not. Not every location qualifies: a floor union with a round size
+     * and no rotation (size 80 scales by 3.2) maps one-decimal facade coordinates onto three-decimal real ones.
+     *
+     * @return array{0: MappingVersion, 1: Floor, 2: LatLng, 3: Floor}
+     */
+    private function findFacadeLocationTooLongOnlyOnItsRealFloor(int $vertexCount): array
+    {
+        /** @var CoordinatesServiceInterface $coordinatesService */
+        $coordinatesService = app(CoordinatesServiceInterface::class);
+
+        return $this->findConvertibleFacadeLocation(
+            precision: 1,
+            accept:    static function (MappingVersion $mappingVersion, LatLng $facadeLatLng) use ($coordinatesService, $vertexCount): bool {
+                // As SavesPolylines converts them: the first vertex picks the real floor, the others are forced onto it
+                $firstLatLng = $coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $facadeLatLng);
+                $otherLatLng = $coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $facadeLatLng, $firstLatLng->getFloor());
+
+                $facadeVertices = array_fill(0, $vertexCount, $facadeLatLng->toArray());
+                $realVertices   = [
+                    ['lat' => $firstLatLng->getLat(6), 'lng' => $firstLatLng->getLng(6)],
+                    ...array_fill(0, $vertexCount - 1, ['lat' => $otherLatLng->getLat(6), 'lng' => $otherLatLng->getLng(6)]),
+                ];
+
+                return strlen(json_encode($facadeVertices)) <= Polyline::VERTICES_JSON_MAX_LENGTH
+                    && strlen(json_encode($realVertices)) > Polyline::VERTICES_JSON_MAX_LENGTH;
+            },
+        );
     }
 
     private function createFacadeDungeonRoute(MappingVersion $mappingVersion): DungeonRoute

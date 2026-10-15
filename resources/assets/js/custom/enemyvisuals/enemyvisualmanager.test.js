@@ -31,6 +31,41 @@ function createManager() {
     return manager;
 }
 
+/**
+ * A manager built by its real constructor, against a map whose enemy map object group records the
+ * handlers registered on it.
+ */
+function constructManager() {
+    global.EnemyMarkerCuller = require('./enemymarkerculler').EnemyMarkerCuller;
+    global.EnemyPatrolMapObjectGroup = class EnemyPatrolMapObjectGroup {
+    };
+    global.EnemyForcesCheckpointMapObjectGroup = class EnemyForcesCheckpointMapObjectGroup {
+    };
+    global.getState = () => ({
+        register: () => {
+        },
+    });
+
+    const enemyGroupHandlers = {};
+    const map = {
+        mapObjectGroupManager: {
+            getEnemyMapObjectGroup: () => ({
+                register: (events, context, callback) => {
+                    for (const event of [].concat(events)) {
+                        enemyGroupHandlers[event] = callback;
+                    }
+                },
+            }),
+            getEnemyPatrolMapObjectGroup: () => null,
+            getEnemyForcesCheckpointMapObjectGroup: () => null,
+        },
+        register: () => {
+        },
+    };
+
+    return {manager: new EnemyVisualManager(map), enemyGroupHandlers};
+}
+
 /** Controllable requestAnimationFrame queue, mirroring dungeonmap.test.js's createGate(). */
 function stubRaf() {
     const rafCallbacks = [];
@@ -99,6 +134,20 @@ describe('EnemyVisualManager._enqueueVisualRefreshTasks', () => {
         manager._enqueueVisualRefreshTasks([{enemy, build: false}]);
 
         expect(manager._visualRefreshQueue.length).toBe(1);
+    });
+
+    it('enqueueVisualRefreshTasks_givenEnemyAlreadyQueuedForBuild_keepsBuildingOnNewRefreshTask', () => {
+        const manager = createManager();
+        stubRaf();
+        const enemy = makeEnemy();
+
+        manager._enqueueVisualRefreshTasks([{enemy, build: true}]);
+        manager._enqueueVisualRefreshTasks([{enemy, build: false}]);
+        window.performance.now = vi.fn(() => 0);
+        manager._visualRefreshQueue._processQueue();
+
+        expect(enemy.visual.buildVisual).toHaveBeenCalledTimes(1);
+        expect(enemy.visual.refreshSize).not.toHaveBeenCalled();
     });
 
     it('enqueueVisualRefreshTasks_givenEnemyAlreadyQueuedForRefresh_upgradesExistingTaskToBuildOnNewBuildTask', () => {
@@ -172,22 +221,81 @@ describe('EnemyVisualManager visual refresh queue integration', () => {
     });
 
     it('objectDeletedHandler_givenEnemyQueuedForRefresh_cancelsItsQueuedTask', () => {
-        const manager = createManager();
+        // Arrange
+        const {manager, enemyGroupHandlers} = constructManager();
         stubRaf();
-        const enemy = makeEnemy();
-        manager._allEnemies = [enemy];
-        manager._visibleEnemies = [];
-        manager._hoveredEnemy = null;
-        manager._enqueueVisualRefreshTasks([{enemy, build: false}]);
+        const deleted = makeEnemy();
+        const kept = makeEnemy();
+        manager._allEnemies.push(deleted, kept);
+        manager._visibleEnemies.push(deleted);
+        manager._hoveredEnemy = deleted;
+        manager._enqueueVisualRefreshTasks([{enemy: deleted, build: false}, {enemy: kept, build: false}]);
 
-        expect(manager._visualRefreshQueue.length).toBe(1);
-
-        // Mirrors the object:deleted handler registered in the constructor.
-        manager._visualRefreshQueue.cancel(enemy);
+        // Act
+        enemyGroupHandlers['object:deleted']({data: {object: deleted}});
         window.performance.now = vi.fn(() => 0);
         manager._visualRefreshQueue._processQueue();
 
-        expect(manager._visualRefreshQueue.length).toBe(0);
-        expect(enemy.visual.refreshSize).not.toHaveBeenCalled();
+        // Assert
+        expect(deleted.visual.refreshSize).not.toHaveBeenCalled();
+        expect(kept.visual.refreshSize).toHaveBeenCalledTimes(1);
+        expect(manager._allEnemies).toEqual([kept]);
+        expect(manager._visibleEnemies).toEqual([]);
+        expect(manager._hoveredEnemy).toBeNull();
+    });
+});
+
+describe('EnemyVisualManager._onZoomLevelChanged', () => {
+    /**
+     * @param options {{id?: Number, onScreen?: Boolean, alwaysRebuild?: Boolean, highlighted?: Boolean}}
+     */
+    function makeZoomEnemy({id, onScreen = true, alwaysRebuild = false, highlighted = false}) {
+        return {
+            id: id,
+            is_mdt: false,
+            isVisibleOnScreen: () => onScreen,
+            visual: {
+                shouldAlwaysRebuild: () => alwaysRebuild,
+                isHighlighted: () => highlighted,
+            },
+        };
+    }
+
+    it('onZoomLevelChanged_givenEnemiesOnAndOffScreen_queuesWhatIsVisibleFirstAndSkipsTheRest', () => {
+        // Arrange
+        global.getState = () => ({getMdtMappingModeEnabled: () => false});
+        const bounds = {};
+        const onScreen = makeZoomEnemy({id: 1});
+        const offScreenAlwaysRebuilt = makeZoomEnemy({id: 2, onScreen: false, alwaysRebuild: true});
+        const offScreen = makeZoomEnemy({id: 3, onScreen: false});
+        const onScreenHighlighted = makeZoomEnemy({id: 4, highlighted: true});
+        const unsaved = makeZoomEnemy({id: -1});
+        const manager = createManager();
+        manager.map = {leafletMap: {getBounds: () => bounds}};
+        manager._allEnemies = [offScreenAlwaysRebuilt, onScreen, offScreen, onScreenHighlighted, unsaved];
+        manager._enemyVisibilityMap = {
+            1: {lastRefreshedZoomLevel: 2},
+            2: {lastRefreshedZoomLevel: 2},
+            3: {lastRefreshedZoomLevel: 2},
+            4: {lastRefreshedZoomLevel: 2},
+        };
+        manager._enemyMarkerCuller = {update: vi.fn()};
+        const enqueue = vi.spyOn(manager, '_enqueueVisualRefreshTasks').mockImplementation(() => {
+        });
+
+        // Act
+        manager._onZoomLevelChanged({data: {mapZoomLevel: 5.4}});
+
+        // Assert
+        expect(enqueue).toHaveBeenCalledWith([
+            {enemy: onScreen, build: false},
+            {enemy: onScreenHighlighted, build: true},
+            {enemy: offScreenAlwaysRebuilt, build: true},
+        ]);
+        expect(manager._visibleEnemies).toEqual([onScreen, onScreenHighlighted]);
+        expect(manager._enemyVisibilityMap[1].lastRefreshedZoomLevel).toBe(5);
+        expect(manager._enemyVisibilityMap[2].lastRefreshedZoomLevel).toBe(5);
+        expect(manager._enemyVisibilityMap[3].lastRefreshedZoomLevel).toBe(2);
+        expect(manager._enemyMarkerCuller.update).toHaveBeenCalledWith(bounds);
     });
 });

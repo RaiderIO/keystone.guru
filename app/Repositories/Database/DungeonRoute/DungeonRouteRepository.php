@@ -489,6 +489,11 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         return $result;
     }
 
+    public function findByPublicKey(string $publicKey): ?DungeonRoute
+    {
+        return DungeonRoute::where('public_key', $publicKey)->first();
+    }
+
     public function findCombatLogRouteByPublicKey(?string $publicKey): ?DungeonRoute
     {
         if ($publicKey === null) {
@@ -654,5 +659,61 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         }
 
         return $result;
+    }
+
+    public function hasRoutesWithoutExpiryByAuthor(User $user): bool
+    {
+        return DungeonRoute::query()
+            ->where('author_id', $user->id)
+            ->whereNull('expires_at')
+            ->exists();
+    }
+
+    /**
+     * @param  array<int, string>               $publicKeys
+     * @return Collection<string, DungeonRoute>
+     */
+    public function getWithoutExpiryByAuthorAndPublicKeys(User $user, array $publicKeys): Collection
+    {
+        return DungeonRoute::query()
+            ->where('author_id', $user->id)
+            ->whereNull('expires_at')
+            ->whereIn('public_key', $publicKeys)
+            ->with(['dungeon', 'mappingVersion'])
+            ->get()
+            ->keyBy('public_key');
+    }
+
+    /**
+     * @param  array<int, int>               $dungeonRouteIds
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getWithoutExpiryByAuthorAndIds(User $user, array $dungeonRouteIds): Collection
+    {
+        return DungeonRoute::query()
+            ->where('author_id', $user->id)
+            ->whereNull('expires_at')
+            ->whereIn('id', $dungeonRouteIds)
+            ->with(['dungeon', 'mappingVersion'])
+            ->orderBy('id')
+            ->get();
+    }
+
+    /**
+     * @param  Collection<int, int>          $dungeonRouteIds
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getIdAndDungeonIdByIds(Collection $dungeonRouteIds): Collection
+    {
+        return DungeonRoute::query()->whereIn('id', $dungeonRouteIds)->get(['id', 'dungeon_id']);
+    }
+
+    public function findByIdOrPublicKeyOrFail(int|string|null $key): DungeonRoute
+    {
+        return DungeonRoute::when(is_numeric($key), function (EloquentBuilder $builder) use ($key) {
+            $builder->where('id', $key);
+        }, function (EloquentBuilder $builder) use ($key) {
+            $builder->where('public_key', $key);
+        })->firstOrFail();
     }
 }

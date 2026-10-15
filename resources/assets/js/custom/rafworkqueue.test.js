@@ -31,25 +31,34 @@ describe('RafWorkQueue.enqueue', () => {
         expect(queue.length).toBe(3);
     });
 
-    it('enqueue_givenAlreadyPendingFrame_doesNotScheduleAnotherRaf', () => {
-        stubRaf();
-        const queue = new RafWorkQueue({run: vi.fn()});
-
-        queue.enqueue('a', {value: 1});
-        queue.enqueue('b', {value: 2});
-
-        expect(window.requestAnimationFrame).toHaveBeenCalledTimes(1);
-        expect(queue.length).toBe(2);
-    });
-
     it('enqueue_givenKeyAlreadyQueued_defaultMergeReplacesTaskInsteadOfDuplicating', () => {
         stubRaf();
-        const queue = new RafWorkQueue({run: vi.fn()});
+        const runCalls = [];
+        const queue = new RafWorkQueue({run: (task) => runCalls.push(task)});
 
         queue.enqueue('a', {value: 1});
         queue.enqueue('a', {value: 2});
 
         expect(queue.length).toBe(1);
+        window.performance.now = vi.fn(() => 0);
+        queue._processQueue();
+        expect(runCalls).toEqual([{value: 2}]);
+    });
+
+    it('enqueue_givenQueueDrainedByAnEarlierFrame_schedulesAFreshRafForTheSameKey', () => {
+        const rafCallbacks = stubRaf();
+        const runCalls = [];
+        const queue = new RafWorkQueue({run: (task) => runCalls.push(task)});
+        window.performance.now = vi.fn(() => 0);
+        queue.enqueue('a', {value: 1});
+        rafCallbacks.shift()(0);
+
+        queue.enqueue('a', {value: 2});
+
+        expect(window.requestAnimationFrame).toHaveBeenCalledTimes(2);
+        expect(queue.length).toBe(1);
+        rafCallbacks.shift()(16);
+        expect(runCalls).toEqual([{value: 1}, {value: 2}]);
     });
 
     it('enqueue_givenKeyAlreadyQueuedWithCustomMerge_usesMergeResultInsteadOfIncomingTask', () => {
@@ -80,6 +89,20 @@ describe('RafWorkQueue.cancel', () => {
 
         expect(queue.length).toBe(0);
         expect(run).not.toHaveBeenCalled();
+    });
+
+    it('cancel_givenQueuedKey_letsTheSameKeyBeQueuedAgain', () => {
+        stubRaf();
+        const runCalls = [];
+        const queue = new RafWorkQueue({run: (task) => runCalls.push(task)});
+
+        queue.enqueue('a', {value: 1});
+        queue.cancel('a');
+        queue.enqueue('a', {value: 2});
+        window.performance.now = vi.fn(() => 0);
+        queue._processQueue();
+
+        expect(runCalls).toEqual([{value: 2}]);
     });
 
     it('cancel_givenUnknownKey_doesNothing', () => {
@@ -145,28 +168,16 @@ describe('RafWorkQueue._processQueue', () => {
         // frame's nominal start, a deadline computed from that stale start time would already be
         // in the past - the loop would process zero tasks and just reschedule forever. The
         // deadline must be measured from when this callback itself starts running.
-        stubRaf();
+        const rafCallbacks = stubRaf();
         const runCalls = [];
         const queue = new RafWorkQueue({run: (task) => runCalls.push(task)});
         queue.enqueue('a', {value: 1});
         window.performance.now = vi.fn(() => 1000);
 
-        queue._processQueue();
+        // Frame time 0 while performance.now() already reads 1000
+        rafCallbacks[0](0);
 
         expect(runCalls).toEqual([{value: 1}]);
         expect(queue.length).toBe(0);
-    });
-
-    it('processQueue_givenQueueDrainedWithinBudget_doesNotRescheduleAnotherFrame', () => {
-        stubRaf();
-        const queue = new RafWorkQueue({run: vi.fn()});
-        queue.enqueue('a', {value: 1});
-        window.performance.now = vi.fn(() => 0);
-        window.requestAnimationFrame.mockClear();
-
-        queue._processQueue();
-
-        expect(queue.length).toBe(0);
-        expect(window.requestAnimationFrame).not.toHaveBeenCalled();
     });
 });

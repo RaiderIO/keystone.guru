@@ -259,6 +259,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
                 'public_key'  => Team::generateRandomPublicKey(),
                 'name'        => 'Upgrade draft service team',
                 'description' => 'Upgrade draft service team',
+                'invite_code' => Team::generateRandomPublicKey(12, 'invite_code'),
             ]);
             [$original] = $this->createOutdatedRoute(['team_id' => $team->id]);
 
@@ -285,6 +286,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
                 'public_key'  => Team::generateRandomPublicKey(),
                 'name'        => 'Upgrade draft icon team',
                 'description' => 'Upgrade draft icon team',
+                'invite_code' => Team::generateRandomPublicKey(12, 'invite_code'),
             ]);
             [$original, , , $dungeon] = $this->createOutdatedRoute(['team_id' => $team->id]);
             $floor                    = $dungeon->floors()->where('facade', 0)->firstOrFail();
@@ -464,7 +466,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             [$original] = $this->createOutdatedRoute();
             $rater      = User::factory()->create();
 
-            $tagCategory = TagCategory::firstWhere('name', TagCategory::DUNGEON_ROUTE_PERSONAL);
+            $tagCategory = TagCategory::firstWhere('key', TagCategory::DUNGEON_ROUTE_PERSONAL);
             $tag         = Tag::create([
                 'tag_category_id' => $tagCategory->id,
                 'model_id'        => $original->id,

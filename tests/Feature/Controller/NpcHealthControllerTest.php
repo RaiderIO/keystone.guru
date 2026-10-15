@@ -147,6 +147,50 @@ final class NpcHealthControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function savenew_givenHealthGroupedWithSpaces_storesTheWholeNumber(): void
+    {
+        // Arrange
+        $npc = $this->createNpcInDatabase();
+
+        try {
+            // Act
+            $response = $this->post(route('admin.npc.npchealth.savenew', ['npc' => $npc->id]), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+                'health'          => '1 234 567',
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $response->assertRedirect();
+            $this->assertSame(1234567, NpcHealth::query()->where('npc_id', $npc->id)->firstOrFail()->health);
+        } finally {
+            NpcHealth::query()->where('npc_id', $npc->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function savenew_givenHealthBeyondASignedInt_storesItWhole(): void
+    {
+        // Arrange - a raid boss, or health scaled up from a low observed percentage, easily passes 2,147,483,647
+        $npc = $this->createNpcInDatabase();
+
+        try {
+            // Act
+            $response = $this->post(route('admin.npc.npchealth.savenew', ['npc' => $npc->id]), [
+                'game_version_id' => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+                'health'          => '3,000,000,000',
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $response->assertRedirect();
+            $this->assertSame(3000000000, NpcHealth::query()->where('npc_id', $npc->id)->firstOrFail()->health);
+        } finally {
+            NpcHealth::query()->where('npc_id', $npc->id)->delete();
+        }
+    }
+
+    #[Test]
     public function savenew_givenNonNumericHealth_returnsValidationErrorAndCreatesNothing(): void
     {
         // Arrange

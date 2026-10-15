@@ -273,7 +273,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                 for (let i = 0; i < enemyRaidMarkers.length; i++) {
                     let enemyRaidMarker = enemyRaidMarkers[i];
                     if (enemyRaidMarker.enemy_id === enemy.id) {
-                        enemy.setRaidMarkerName(enemyRaidMarker.raid_marker_name);
+                        enemy.setRaidMarkerKey(enemyRaidMarker.raid_marker_key);
                         break;
                     }
                 }

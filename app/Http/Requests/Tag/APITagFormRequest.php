@@ -29,9 +29,9 @@ class APITagFormRequest extends FormRequest
         return [
             'context'       => 'required|string',
             'context_class' => 'required|in:team,user',
-            'category'      => [Rule::in(TagCategory::all()->pluck(['name']))],
+            'category'      => [Rule::in(TagCategory::all()->pluck(['key']))],
             'model_id'      => 'required|string',
-            'name'          => 'required|string',
+            'name'          => 'required|string|max:255',
         ];
     }
 

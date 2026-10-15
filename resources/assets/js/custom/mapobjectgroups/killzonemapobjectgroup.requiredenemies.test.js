@@ -63,6 +63,13 @@ describe('KillZoneMapObjectGroup.hasKilledAllRequiredEnemies', () => {
         expect(group.hasKilledAllRequiredEnemies()).toBe(true);
     });
 
+    it('returns true when the required enemies are spread over several pulls', () => {
+        const group = buildGroup([requiredEnemy(1), requiredEnemy(2)], [], false);
+        group.objects = [{enemies: [1], overpulledEnemies: []}, {enemies: [2], overpulledEnemies: []}];
+
+        expect(group.hasKilledAllRequiredEnemies()).toBe(true);
+    });
+
     it('counts an overpulled enemy as killed', () => {
         const group = buildGroup([requiredEnemy(1)], [], false);
         group.objects = [{enemies: [], overpulledEnemies: [1]}];

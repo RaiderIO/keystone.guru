@@ -47,17 +47,6 @@ describe('getHandlebarsDefaultVariables', () => {
         expect($('img[data-bs-toggle="tooltip"]').attr('title')).toBe('Boss (de)');
     });
 
-    it('getHandlebarsDefaultVariables_givenCallerValue_callerValueWinsOverDefault', () => {
-        // Arrange
-        const {getHandlebarsDefaultVariables} = require('./util');
-
-        // Act
-        const data = $.extend({}, getHandlebarsDefaultVariables(), {csrf_token: 'Override'});
-
-        // Assert
-        expect(data.csrf_token).toBe('Override');
-    });
-
     it('getHandlebarsDefaultVariables_givenAnyLocale_returnsNoTranslationKeys', () => {
         // Arrange
         const {getHandlebarsDefaultVariables} = require('./util');
@@ -69,6 +58,22 @@ describe('getHandlebarsDefaultVariables', () => {
         expect(Object.keys(defaults).sort()).toEqual(['csrf_token', 'is_map_admin', 'is_user_admin']);
         expect(defaults.csrf_token).toBe('test-csrf-token');
         expect(defaults.is_user_admin).toBe(false);
+    });
+
+    it('getHandlebarsDefaultVariables_givenAdminUser_returnsIsUserAdmin', () => {
+        // Arrange
+        const {getHandlebarsDefaultVariables} = require('./util');
+        globalThis.isUserAdmin = true;
+
+        try {
+            // Act
+            const defaults = getHandlebarsDefaultVariables();
+
+            // Assert
+            expect(defaults.is_user_admin).toBe(true);
+        } finally {
+            globalThis.isUserAdmin = false;
+        }
     });
 
     it('getHandlebarsDefaultVariables_givenStateInitialisedAfterFirstCall_returnsCurrentIsMapAdmin', () => {

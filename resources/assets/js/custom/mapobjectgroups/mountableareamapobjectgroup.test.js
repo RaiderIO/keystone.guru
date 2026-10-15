@@ -43,7 +43,7 @@ describe('MountableAreaMapObjectGroup._createLayer', () => {
 
         // Assert
         expect(layer.type).toBe('polygon');
-        expect(layer.points).toHaveLength(3);
+        expect(layer.points).toEqual([[-1, 2], [-3, 4], [-5, 6]]);
         expect(layer.options).toEqual({color: '#eb4934'});
     });
 

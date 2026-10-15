@@ -202,6 +202,93 @@ describe('CommonMapsCopymdtstring', () => {
         expect(ajaxSpy).toHaveBeenCalledWith(expect.objectContaining({url: uncachedUrl}));
     });
 
+    it('copy_givenACopyStillInProgress_returnsFalseWithoutFetchingAgain', async () => {
+        // Arrange - the export never answers, so the first copy stays busy
+        const ajaxSpy = vi.spyOn($, 'ajax').mockImplementation(() => {
+        });
+        const copier = createCopier(true);
+        copier.copy($button);
+
+        // Act
+        const result = await Promise.race([copier.copy($button), Promise.resolve('still pending')]);
+
+        // Assert
+        expect(result).toBe(false);
+        expect(ajaxSpy).toHaveBeenCalledTimes(1);
+        expect($button.hasClass('disabled')).toBe(true);
+    });
+
+    it('copy_givenCopied_resetsTheButtonTwoSecondsLater', async () => {
+        // Arrange
+        vi.useFakeTimers();
+        mockExportSuccess();
+        const copier = createCopier();
+        await copier.copy($button);
+        expect($button.find('.copy_mdt_string_label').text()).toBe('js.copy_mdt_string_copied');
+
+        // Act
+        vi.advanceTimersByTime(2000);
+
+        // Assert
+        expect($button.find('.copy_mdt_string_label').text()).toBe('Copy MDT string');
+        expect($button.find('.copy_mdt_string_icon').hasClass('fa-copy')).toBe(true);
+        expect($button.attr('aria-busy')).toBe('false');
+    });
+
+    it('copy_givenViewModeExportFailedBefore_fetchesTheExportAgain', async () => {
+        // Arrange
+        const ajaxSpy = vi.spyOn($, 'ajax').mockImplementationOnce((options) => {
+            options.error({status: 500}, 'error', 'Internal Server Error');
+        }).mockImplementation((options) => {
+            options.success({mdt_string: 'abc', warnings: []});
+        });
+        const copier = createCopier(false);
+        await copier.copy($button);
+
+        // Act
+        const result = await copier.copy($button);
+
+        // Assert
+        expect(result).toBe(true);
+        expect(ajaxSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it('copy_givenOnlyExecCommandAvailable_copiesThroughATemporaryTextarea', async () => {
+        // Arrange
+        delete globalThis.ClipboardItem;
+        Object.defineProperty(globalThis.navigator, 'clipboard', {value: undefined, configurable: true});
+        let copiedText = null;
+        document.execCommand = vi.fn(() => {
+            copiedText = $('textarea').val();
+            return true;
+        });
+        mockExportSuccess();
+        const copier = createCopier();
+
+        // Act
+        const result = await copier.copy($button);
+
+        // Assert
+        expect(result).toBe(true);
+        expect(document.execCommand).toHaveBeenCalledWith('copy');
+        expect(copiedText).toBe('dGhlIG1kdCBzdHJpbmc=');
+        expect($('textarea').length).toBe(0);
+        expect(modalShow).not.toHaveBeenCalled();
+    });
+
+    it('activate_givenButtonClicked_copiesTheMdtString', async () => {
+        // Arrange
+        mockExportSuccess();
+        createCopier().activate();
+
+        // Act
+        $button.trigger('click');
+        await vi.waitFor(() => expect(sendMetricForDungeonRoute).toHaveBeenCalledTimes(1));
+
+        // Assert
+        expect(clipboardWrite).toHaveBeenCalledTimes(1);
+    });
+
     it('activate_givenViewModePointerEnter_prefetchesTheExport', () => {
         // Arrange
         const ajaxSpy = mockExportSuccess();

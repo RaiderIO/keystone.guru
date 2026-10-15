@@ -71,11 +71,11 @@ final class TagCategoryPolicyTest extends PublicTestCase
     public function createTag_givenUnknownTagCategory_returnsDenied(): void
     {
         // Arrange - the policy only recognises the two dungeon route categories
-        $owner         = User::factory()->create();
-        $route         = $this->createRoute($owner);
-        $unknown       = new TagCategory();
-        $unknown->id   = 0;
-        $unknown->name = 'something_else';
+        $owner        = User::factory()->create();
+        $route        = $this->createRoute($owner);
+        $unknown      = new TagCategory();
+        $unknown->id  = 0;
+        $unknown->key = 'something_else';
 
         try {
             // Act & Assert
@@ -201,12 +201,12 @@ final class TagCategoryPolicyTest extends PublicTestCase
 
     private function personalTagCategory(): TagCategory
     {
-        return TagCategory::where('name', TagCategory::DUNGEON_ROUTE_PERSONAL)->firstOrFail();
+        return TagCategory::where('key', TagCategory::DUNGEON_ROUTE_PERSONAL)->firstOrFail();
     }
 
     private function teamTagCategory(): TagCategory
     {
-        return TagCategory::where('name', TagCategory::DUNGEON_ROUTE_TEAM)->firstOrFail();
+        return TagCategory::where('key', TagCategory::DUNGEON_ROUTE_TEAM)->firstOrFail();
     }
 
     private function createTeam(): Team

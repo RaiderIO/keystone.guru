@@ -38,4 +38,6 @@ interface GameVersionRepositoryInterface extends BaseRepositoryInterface
      * @param array<int, int> $gameVersionIds
      */
     public function findFirstInDisplayOrder(array $gameVersionIds): ?GameVersion;
+
+    public function findByKey(string $key): ?GameVersion;
 }

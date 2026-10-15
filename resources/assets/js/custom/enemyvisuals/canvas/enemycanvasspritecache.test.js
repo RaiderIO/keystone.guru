@@ -345,6 +345,21 @@ test('clear_givenRenderedSprite_rendersItAgainOnNextGet', () => {
     expect(cache.getSpriteCount()).toBe(1);
 });
 
+test('clear_givenRenderedBadge_rendersItAgainOnNextGetBadge', () => {
+    // Arrange
+    const {cache, canvases} = makeCache();
+    const box = makeBox({imageUrl: null});
+    const first = cache.getBadge(box);
+
+    // Act
+    cache.clear();
+    const second = cache.getBadge(box);
+
+    // Assert
+    expect(canvases.created).toHaveLength(2);
+    expect(second).not.toBe(first);
+});
+
 test.each([
     [2 * Math.PI * 20, 3],
     [2 * Math.PI * 7.5, 3],

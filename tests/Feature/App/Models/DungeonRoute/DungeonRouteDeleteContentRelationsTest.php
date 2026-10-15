@@ -61,6 +61,7 @@ class DungeonRouteDeleteContentRelationsTest extends PublicTestCase
                 'public_key'  => Team::generateRandomPublicKey(),
                 'name'        => 'Upgrade draft test team',
                 'description' => 'Upgrade draft test team',
+                'invite_code' => Team::generateRandomPublicKey(12, 'invite_code'),
             ]);
 
             $route = DungeonRoute::factory()->create([
@@ -343,7 +344,7 @@ class DungeonRouteDeleteContentRelationsTest extends PublicTestCase
             ]);
             $routeId = $route->id;
 
-            $tagCategory = TagCategory::firstWhere('name', TagCategory::DUNGEON_ROUTE_PERSONAL);
+            $tagCategory = TagCategory::firstWhere('key', TagCategory::DUNGEON_ROUTE_PERSONAL);
             $tag         = Tag::create([
                 'tag_category_id' => $tagCategory->id,
                 'model_id'        => $route->id,

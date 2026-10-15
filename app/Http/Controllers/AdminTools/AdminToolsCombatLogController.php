@@ -208,6 +208,7 @@ class AdminToolsCombatLogController extends Controller
     private function getEnemyFailureNpcs(MappingVersion $mappingVersion, Collection $npcFailureCounts): Collection
     {
         $mappedNpcIds = $mappingVersion->enemies()
+            ->reorder()
             ->whereNotNull('npc_id')
             ->distinct()
             ->pluck('npc_id');

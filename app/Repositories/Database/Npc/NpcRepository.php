@@ -3,6 +3,7 @@
 namespace App\Repositories\Database\Npc;
 
 use App\Logic\Datatables\ColumnHandler\Npc\NameColumnHandler;
+use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
@@ -10,6 +11,7 @@ use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
@@ -174,7 +176,7 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
         ])
             ->selectRaw(sprintf(
                 'npcs.*, %s as name, GROUP_CONCAT(DISTINCT %s SEPARATOR ", ") AS dungeon_names, COUNT(enemies.id) as enemy_count',
-                NameColumnHandler::NAME_EXPRESSION,
+                NameColumnHandler::GROUPED_NAME_EXPRESSION,
                 self::ADMIN_LIST_DUNGEON_NAME_EXPRESSION,
             ))
             ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
@@ -198,5 +200,101 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                     ->on('enemies.mapping_version_id', '=', 'mapping_versions.id');
             })
             ->groupBy('npcs.id');
+    }
+
+    public function getNpcsByCharacteristicIdForDungeon(Dungeon $dungeon, ?MappingVersion $mappingVersion, Collection $characteristicIds): Collection
+    {
+        /** @var Collection<int, Collection<int, Npc>> $npcsByCharacteristicId */
+        $npcsByCharacteristicId = Npc::query()
+            ->join('npc_characteristics', 'npc_characteristics.npc_id', '=', 'npcs.id')
+            ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
+            ->join('mapping_versions', 'enemies.mapping_version_id', '=', 'mapping_versions.id')
+            ->where('mapping_versions.dungeon_id', $dungeon->id)
+            ->when($mappingVersion !== null, static fn($q) => $q->where('mapping_versions.id', $mappingVersion->id))
+            ->whereIn('npc_characteristics.characteristic_id', $characteristicIds)
+            ->select('npcs.*', 'npc_characteristics.characteristic_id')
+            // classification/type/characteristics/npcHealths are what the NPC links' hover
+            // tooltips read
+            ->with(['classification', 'type', 'characteristics', 'npcHealths'])
+            ->distinct()
+            ->orderBy('npcs.id')
+            ->get()
+            ->groupBy('characteristic_id');
+
+        return $npcsByCharacteristicId;
+    }
+
+    public function getNpcsBySpellIdForDungeon(Dungeon $dungeon, ?MappingVersion $mappingVersion, Collection $spellIds): Collection
+    {
+        /** @var Collection<int, Collection<int, Npc>> $npcsBySpellId */
+        $npcsBySpellId = Npc::query()
+            ->join('npc_spells', 'npc_spells.npc_id', '=', 'npcs.id')
+            ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
+            ->join('mapping_versions', 'enemies.mapping_version_id', '=', 'mapping_versions.id')
+            ->where('mapping_versions.dungeon_id', $dungeon->id)
+            ->when($mappingVersion !== null, static fn($q) => $q->where('mapping_versions.id', $mappingVersion->id))
+            ->whereIn('npc_spells.spell_id', $spellIds)
+            ->select('npcs.*', 'npc_spells.spell_id')
+            // classification/type/characteristics/npcHealths are what the NPC links' hover tooltips
+            // read
+            ->with(['classification', 'type', 'characteristics', 'npcHealths'])
+            ->distinct()
+            ->get()
+            ->groupBy('spell_id');
+
+        return $npcsBySpellId;
+    }
+
+    /**
+     * @return Collection<int, Npc>
+     */
+    public function getForBolsteringWhitelistDropdown(): Collection
+    {
+        return Npc::join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+            ->join('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
+            ->join('translations', static function (JoinClause $join) {
+                $join->on('translations.key', '=', 'npcs.name')
+                    ->where('translations.locale', '=', 'en_US');
+            })
+            ->selectRaw('npcs.*, npc_dungeons.dungeon_id as dungeon_id')
+            ->orderByRaw('npc_dungeons.dungeon_id, name')
+            ->get();
+    }
+
+    /**
+     * @return LengthAwarePaginator<int, Npc>
+     */
+    public function paginateWithSpells(?Dungeon $dungeon, int $perPage): LengthAwarePaginator
+    {
+        return Npc::when($dungeon !== null, fn(Builder $builder) => $builder->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+            ->select('npcs.*')
+            ->where('npc_dungeons.dungeon_id', $dungeon->id))->with('npcSpells')
+            ->has('npcSpells')
+            ->paginate($perPage);
+    }
+
+    /**
+     * @return Collection<int, Npc>
+     */
+    public function getWithoutDisplayId(): Collection
+    {
+        return Npc::with(['dungeons'])->whereNull('display_id')->get();
+    }
+
+    /**
+     * @return Collection<int, Npc>
+     */
+    public function getAllWithMdtDiffRelations(): Collection
+    {
+        return Npc::with([
+            'npcEnemyForces',
+            'enemies',
+            'type',
+        ])->get();
+    }
+
+    public function findWithEnemyForces(int $npcId): ?Npc
+    {
+        return Npc::with(['enemyForces'])->find($npcId);
     }
 }

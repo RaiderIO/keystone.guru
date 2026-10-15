@@ -225,6 +225,163 @@ final class AjaxTagControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function store_givenANameLongerThanItsColumn_returnsValidationErrorAndCreatesNothing(): void
+    {
+        $author = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $name   = str_repeat('a', 256);
+
+            // Act
+            $response = $this->actingAs($author)->postJson('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'category'      => TagCategory::DUNGEON_ROUTE_PERSONAL,
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['name']);
+            $this->assertDatabaseMissing('tags', ['context_id' => $author->id, 'context_class' => User::class]);
+        } finally {
+            $this->cleanUpTagsOfUsers([$author]);
+            $this->cleanUp(route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
+    public function updateAll_givenANameLongerThanItsColumn_returnsValidationErrorAndKeepsTheTag(): void
+    {
+        $author = null;
+        $route  = null;
+        $tag    = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $tag    = $this->createUserTagFor($author, $route);
+
+            // Act
+            $response = $this->actingAs($author)->putJson(sprintf('/ajax/tag/%d/all', $tag->id), [
+                'name'  => str_repeat('a', 256),
+                'color' => '#ff0000',
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['name']);
+            $this->assertSame($tag->name, $tag->fresh()->name);
+        } finally {
+            $this->cleanUp(tag: $tag, route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
+    public function updateAll_givenAColorLongerThanItsColumn_returnsValidationErrorAndKeepsTheTag(): void
+    {
+        $author = null;
+        $route  = null;
+        $tag    = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $tag    = $this->createUserTagFor($author, $route);
+
+            // Act
+            $response = $this->actingAs($author)->putJson(sprintf('/ajax/tag/%d/all', $tag->id), [
+                'name'  => $tag->name,
+                'color' => str_repeat('a', 256),
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['color']);
+            $this->assertSame($tag->color, $tag->fresh()->color);
+        } finally {
+            $this->cleanUp(tag: $tag, route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
+    public function store_givenTheContextAlreadyUsesTheName_createsTheTagWithTheSameColor(): void
+    {
+        $author      = null;
+        $route       = null;
+        $otherRoute  = null;
+        $otherAuthor = null;
+
+        try {
+            // Arrange - the same name under another user's context must not lend its colour
+            $author      = $this->createUserWithUserRole();
+            $otherAuthor = $this->createUserWithUserRole();
+            $route       = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $otherRoute  = DungeonRoute::factory()->create(['author_id' => $otherAuthor->id]);
+            $name        = sprintf('test-tag-%s', fake()->uuid());
+
+            $this->createUserTagFor($otherAuthor, $otherRoute, $name)->update(['color' => '#aaaaaa']);
+            $this->createUserTagFor($author, null, $name)->update(['color' => '#123456']);
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'category'      => TagCategory::DUNGEON_ROUTE_PERSONAL,
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertDatabaseHas('tags', [
+                'name'          => $name,
+                'context_id'    => $author->id,
+                'context_class' => User::class,
+                'model_id'      => $route->id,
+                'color'         => '#123456',
+            ]);
+        } finally {
+            $this->cleanUpTagsOfUsers([$author, $otherAuthor]);
+            $this->cleanUp(route: $route, users: [$author]);
+            $this->cleanUp(route: $otherRoute, users: [$otherAuthor]);
+        }
+    }
+
+    #[Test]
+    public function store_givenNoCategory_returnsNotFound(): void
+    {
+        $author = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'model_id'      => $route->public_key,
+                'name'          => sprintf('test-tag-%s', fake()->uuid()),
+            ]);
+
+            // Assert
+            $response->assertNotFound();
+        } finally {
+            $this->cleanUp(route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
     public function store_givenAnotherUsersContext_returnsForbidden(): void
     {
         $author = null;
@@ -598,6 +755,106 @@ final class AjaxTagControllerTest extends PublicTestCase
         }
     }
 
+    /**
+     * The category is resolved by its key alone: once the contract release drops the name column
+     * there is nothing else to match on, which a legacy name that differs from the key simulates.
+     */
+    #[Test]
+    public function store_givenCategoryKeyWhoseLegacyNameDiffers_createsTheTag(): void
+    {
+        $author = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $name   = sprintf('test-tag-%s', fake()->uuid());
+            $this->renameLegacyTagCategoryNames();
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'category'      => TagCategory::DUNGEON_ROUTE_PERSONAL,
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertDatabaseHas('tags', [
+                'name'            => $name,
+                'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL],
+                'context_id'      => $author->id,
+                'context_class'   => User::class,
+            ]);
+        } finally {
+            $this->restoreLegacyTagCategoryNames();
+            $this->cleanUpTagsOfUsers([$author]);
+            $this->cleanUp(route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
+    public function store_givenUnknownCategoryKey_returnsValidationErrorAndCreatesNoTag(): void
+    {
+        $author = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $name   = sprintf('test-tag-%s', fake()->uuid());
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'category'      => 'not_a_tag_category',
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertInvalid(['category']);
+            $this->assertDatabaseMissing('tags', ['name' => $name]);
+        } finally {
+            $this->cleanUpTagsOfUsers([$author]);
+            $this->cleanUp(route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
+    public function delete_givenTeamTagOnOwnRouteWhoseCategoryLegacyNameDiffers_deletesIt(): void
+    {
+        $author = null;
+        $team   = null;
+        $route  = null;
+        $tag    = null;
+
+        try {
+            // Arrange - the author is not a team member, so only TagPolicy::edit()'s per-category
+            // fallback to the route's own permissions allows this
+            $author = User::factory()->create();
+            $team   = $this->createTeam();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $tag    = $this->createTeamTag($team, $route);
+            $this->renameLegacyTagCategoryNames();
+
+            // Act
+            $response = $this->actingAs($author)->delete(sprintf('/ajax/tag/%d', $tag->id));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseMissing('tags', ['id' => $tag->id]);
+        } finally {
+            $this->restoreLegacyTagCategoryNames();
+            $this->cleanUp(tag: $tag, route: $route, team: $team, users: [$author]);
+        }
+    }
+
     private function createUserWithUserRole(): User
     {
         $user = User::factory()->create(['public_key' => User::generateRandomPublicKey()]);
@@ -647,6 +904,20 @@ final class AjaxTagControllerTest extends PublicTestCase
             'name'            => sprintf('test-team-tag-%s', fake()->uuid()),
             'color'           => null,
         ]);
+    }
+
+    private function renameLegacyTagCategoryNames(): void
+    {
+        foreach (TagCategory::ALL as $tagCategoryKey => $id) {
+            TagCategory::query()->whereKey($id)->update(['name' => sprintf('legacy_%s', $tagCategoryKey)]);
+        }
+    }
+
+    private function restoreLegacyTagCategoryNames(): void
+    {
+        foreach (TagCategory::ALL as $tagCategoryKey => $id) {
+            TagCategory::query()->whereKey($id)->update(['name' => $tagCategoryKey]);
+        }
     }
 
     private function createTeam(): Team

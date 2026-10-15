@@ -423,6 +423,7 @@ final class CombatLogRouteEnemyResolutionAnalysisServiceTest extends PublicTestC
             'mapping_version_id' => $this->mappingVersion->id,
             'floor_id'           => $this->floor->id,
             'group'              => 7,
+            'label'              => 'Test pack',
             'teeming'            => null,
             'faction'            => 'any',
             'vertices_json'      => '[]',

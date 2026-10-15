@@ -19,12 +19,7 @@ const upgradeDraftSnackbarTemplate = HandlebarsRuntime.compile(
  * @returns {jQuery} The column holding the "What changed?" button.
  */
 function renderDiffButtonColumn(data) {
-    document.body.innerHTML = upgradeDraftSnackbarTemplate($.extend({
-        mapping_version_upgrade_draft_label: 'You are editing an upgrade draft.',
-        mapping_version_upgrade_diff_label: 'What changed?',
-        mapping_version_upgrade_apply_label: 'Apply',
-        mapping_version_upgrade_discard_label: 'Discard',
-    }, data));
+    document.body.innerHTML = upgradeDraftSnackbarTemplate(data);
 
     return $('[data-bs-target="#mapping_version_upgrade_diff_modal"]').parent();
 }
@@ -37,13 +32,13 @@ test('template_givenUpgradeDraft_padsDiffButtonAwayFromNotice', () => {
     expect($diffButtonColumn.hasClass('col-auto')).toBe(true);
     expect($diffButtonColumn.hasClass('ps-2')).toBe(true);
     expect($diffButtonColumn.prev().hasClass('col')).toBe(true);
+    expect($diffButtonColumn.prev().find('a')).toHaveLength(0);
 });
 
 test('template_givenUpgradeOfUrl_stillPadsDiffButtonAwayFromNoticeLink', () => {
     // Arrange / Act
     const $diffButtonColumn = renderDiffButtonColumn({
         upgrade_of_url: 'https://example.com/route/edit',
-        upgrade_draft_of_label: 'View the route it upgrades',
     });
 
     // Assert

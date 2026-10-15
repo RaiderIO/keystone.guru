@@ -75,6 +75,12 @@ describe('Hotkeys chords', () => {
         expect(Hotkeys.formatChord('ctrl+alt+k')).toBe('Ctrl+Alt+K');
     });
 
+    test('parseChord_givenThePlusKey_returnsPlusAsTheKey', () => {
+        // Arrange, Act, Assert
+        expect(Hotkeys.parseChord('+')).toEqual({key: '+', shift: false, ctrl: false, alt: false, meta: false});
+        expect(Hotkeys.parseChord('shift++')).toEqual({key: '+', shift: true, ctrl: false, alt: false, meta: false});
+    });
+
     test('matchesChord_givenCapsLockLetter_returnsTrue', () => {
         // Arrange, Act, Assert
         expect(Hotkeys.matchesChord('p', keyEvent('P'))).toBe(true);
@@ -192,7 +198,8 @@ describe('Hotkeys key listener', () => {
 
         document.body.innerHTML = '<div id="map"></div>' +
             '<a href="#" data-draw-tool="path"></a><a href="#" data-draw-tool="dungeonstart"></a>' +
-            '<input id="input"><textarea id="notes"></textarea><div id="editable" contenteditable="true"></div>' +
+            '<input id="input"><textarea id="notes"></textarea><select id="choice"></select>' +
+            '<div id="editable" contenteditable="true"></div>' +
             '<div id="modal" class="modal"></div>';
 
         clicked = [];
@@ -260,6 +267,7 @@ describe('Hotkeys key listener', () => {
     test.each([
         ['input'],
         ['notes'],
+        ['choice'],
         ['editable'],
     ])('onKeyPressed_givenTypingIn%s_ignoresKey', (id) => {
         // Arrange
@@ -295,6 +303,47 @@ describe('Hotkeys key listener', () => {
         // Act
         pressKey(document.body, '1');
         document.getElementById('modal').classList.remove('show');
+        pressKey(document.body, '1');
+
+        // Assert
+        expect(clicked).toEqual(['path']);
+    });
+
+    test('onKeyPressed_givenToolKey_signalsTheToolAndTheEvent', () => {
+        // Arrange
+        const received = [];
+        hotkeys.register('hotkey:pressed', {}, (signal) => received.push(signal.data));
+
+        // Act
+        const event = pressKey(document.body, 's');
+
+        // Assert
+        expect(received).toHaveLength(1);
+        expect(received[0].tool.id).toBe('dungeonstart');
+        expect(received[0].event).toBe(event);
+    });
+
+    test('onKeyPressed_givenToolWithoutAButton_stillSignalsIt', () => {
+        // Arrange
+        hotkeys.setTools([{id: 'arrow', keys: ['r']}]);
+        const received = [];
+        hotkeys.register('hotkey:pressed', {}, (signal) => received.push(signal.data));
+        let event = null;
+
+        // Act
+        expect(() => {
+            event = pressKey(document.body, 'r');
+        }).not.toThrow();
+
+        // Assert
+        expect(clicked).toEqual([]);
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect(received.map((data) => data.tool.id)).toEqual(['arrow']);
+    });
+
+    test('onKeyPressed_givenEventWithoutAKey_ignoresIt', () => {
+        // Arrange, Act
+        expect(() => pressKey(document.body, undefined)).not.toThrow();
         pressKey(document.body, '1');
 
         // Assert

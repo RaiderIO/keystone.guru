@@ -421,6 +421,11 @@ describe('StateManager cookie-backed display settings', () => {
 
         expect(Cookies.get(cookie)).toBe('1');
         expect(received[0].data).toEqual({[payloadKey]: true});
+
+        stateManager[setter](false);
+
+        expect(Cookies.get(cookie)).toBe('0');
+        expect(received[1].data).toEqual({[payloadKey]: false});
     });
 
     test('getMapFacadeStyle_givenNoStoredValue_defaultsToFacade', () => {
@@ -439,6 +444,16 @@ describe('StateManager cookie-backed display settings', () => {
 
     test('getMapNumberStyle_givenNoStoredValue_defaultsToEnemyForces', () => {
         expect(makeStateManager().getMapNumberStyle()).toBe(NUMBER_STYLE_ENEMY_FORCES);
+    });
+
+    test('setMapNumberStyle_givenAStyle_storesItAndNotifies', () => {
+        const stateManager = makeStateManager();
+        const received = listenFor(stateManager, 'mapnumberstyle:changed');
+
+        stateManager.setMapNumberStyle(NUMBER_STYLE_PERCENTAGE);
+
+        expect(stateManager.getMapNumberStyle()).toBe(NUMBER_STYLE_PERCENTAGE);
+        expect(received).toHaveLength(1);
     });
 
     test('getKillZonePathWeight_givenNoStoredValue_fallsBackToTheDefaultWeight', () => {
@@ -617,6 +632,99 @@ describe('StateManager facade navigation', () => {
 
         expect(pageLoads).toHaveLength(0);
         expect(changed).toHaveLength(1);
+    });
+});
+
+describe('StateManager.setDungeonMap', () => {
+    /**
+     * A fake DungeonMap carrying the defaults setDungeonMap() applies.
+     *
+     * @param {Object} options Overrides of the map's options.
+     * @returns {Object}
+     */
+    function makeFakeDungeonMap(options = {}) {
+        return {
+            register: vi.fn(),
+            unregister: vi.fn(),
+            options: {
+                defaultEnemyDisplayType: DISPLAY_TYPE_NPC_CLASS,
+                defaultHeatmapShowTooltips: true,
+                defaultHeatmapShowOnTop: false,
+                defaultUnkilledEnemyOpacity: 40,
+                defaultUnkilledImportantEnemyOpacity: 70,
+                defaultEnemyAggressivenessBorder: true,
+                mapFacadeStyle: MAP_FACADE_STYLE_SPLIT_FLOORS,
+                floorId: 2,
+                ...options,
+            },
+        };
+    }
+
+    afterEach(() => {
+        window.history.replaceState({}, '', window.location.pathname);
+    });
+
+    test('setDungeonMap_givenAMap_appliesItsDefaults', () => {
+        const stateManager = makeStateManager();
+        const floorChanges = listenFor(stateManager, 'floorid:changed');
+
+        stateManager.setDungeonMap(makeFakeDungeonMap());
+
+        expect(stateManager.getEnemyDisplayType()).toBe(DISPLAY_TYPE_NPC_CLASS);
+        expect(Cookies.get('map_heatmap_show_tooltips')).toBe('1');
+        expect(Cookies.get('map_heatmap_show_on_top')).toBe('0');
+        expect(stateManager.getUnkilledEnemyOpacity()).toBe(40);
+        expect(stateManager.getUnkilledImportantEnemyOpacity()).toBe(70);
+        expect(stateManager.hasEnemyAggressivenessBorder()).toBe(true);
+        expect(stateManager.getMapFacadeStyle()).toBe(MAP_FACADE_STYLE_SPLIT_FLOORS);
+        expect(floorChanges.map((signal) => signal.data.floorId)).toEqual([2]);
+    });
+
+    test('setDungeonMap_givenADisplayInTheUrlHash_appliesItOnceTheMapObjectGroupsLoaded', () => {
+        window.history.replaceState({}, '', `${window.location.pathname}#foo=bar&display=enemy_forces`);
+        const stateManager = makeStateManager();
+        const dungeonMap = makeFakeDungeonMap();
+
+        stateManager.setDungeonMap(dungeonMap);
+        const displayTypeBeforeLoad = stateManager.getEnemyDisplayType();
+        const [event, listener, onMapObjectGroupsLoaded] = dungeonMap.register.mock.calls[0];
+        onMapObjectGroupsLoaded();
+
+        expect(displayTypeBeforeLoad).toBe(DISPLAY_TYPE_NPC_CLASS);
+        expect(event).toBe('map:mapobjectgroupsloaded');
+        expect(listener).toBe(stateManager);
+        expect(stateManager.getEnemyDisplayType()).toBe('enemy_forces');
+    });
+
+    test('setDungeonMap_givenAHashWithoutADisplay_keepsTheMapDefault', () => {
+        window.history.replaceState({}, '', `${window.location.pathname}#foo=bar`);
+        const stateManager = makeStateManager();
+        const dungeonMap = makeFakeDungeonMap();
+
+        stateManager.setDungeonMap(dungeonMap);
+        dungeonMap.register.mock.calls[0][2]();
+
+        expect(stateManager.getEnemyDisplayType()).toBe(DISPLAY_TYPE_NPC_CLASS);
+    });
+
+    test('setDungeonMap_givenNoUrlHash_doesNotWaitForTheMapObjectGroups', () => {
+        const stateManager = makeStateManager();
+        const dungeonMap = makeFakeDungeonMap();
+
+        stateManager.setDungeonMap(dungeonMap);
+
+        expect(dungeonMap.register).not.toHaveBeenCalled();
+        expect(stateManager.getEnemyDisplayType()).toBe(DISPLAY_TYPE_NPC_CLASS);
+    });
+
+    test('setDungeonMap_givenAPreviousMap_unregistersFromIt', () => {
+        const stateManager = makeStateManager();
+        const previousMap = makeFakeDungeonMap();
+        stateManager.setDungeonMap(previousMap);
+
+        stateManager.setDungeonMap(makeFakeDungeonMap());
+
+        expect(previousMap.unregister).toHaveBeenCalledWith('map:mapobjectgroupsloaded', stateManager);
     });
 });
 

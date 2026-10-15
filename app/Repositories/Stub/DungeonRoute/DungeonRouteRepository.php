@@ -13,6 +13,7 @@ use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Stub\StubRepository;
 use Closure;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -131,5 +132,35 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     public function hasNonSandboxRoutesByAuthor(User $user): bool
     {
         return false;
+    }
+
+    public function findByPublicKey(string $publicKey): ?DungeonRoute
+    {
+        return null;
+    }
+
+    public function hasRoutesWithoutExpiryByAuthor(User $user): bool
+    {
+        return false;
+    }
+
+    public function getWithoutExpiryByAuthorAndPublicKeys(User $user, array $publicKeys): Collection
+    {
+        return collect();
+    }
+
+    public function getWithoutExpiryByAuthorAndIds(User $user, array $dungeonRouteIds): Collection
+    {
+        return collect();
+    }
+
+    public function getIdAndDungeonIdByIds(Collection $dungeonRouteIds): Collection
+    {
+        return collect();
+    }
+
+    public function findByIdOrPublicKeyOrFail(int|string|null $key): DungeonRoute
+    {
+        throw new ModelNotFoundException();
     }
 }

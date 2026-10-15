@@ -145,7 +145,7 @@ function dungeonStartSelectHtml(id) {
 }
 
 /**
- * @param {{id: number, seasonalIndex: number|null}[]} affixGroups
+ * @param {{id: number}[]} affixGroups
  * @param {boolean} withSeasonalIndexPreset
  * @returns {string}
  */
@@ -222,7 +222,8 @@ function compositionHtml() {
  * @param {boolean} [config.hasTeams] - whether the team select renders at all (ignored when temporary).
  * @param {number[]} [config.dungeonIds] - dungeon ids rendered as `<option>`s.
  * @param {number} [config.selectedDungeonId] - the dungeon id that starts out selected.
- * @param {{id: number, seasonalIndex: number|null}[]} [config.affixGroups] - affix rows to render (retail only).
+ * @param {{id: number}[]} [config.affixGroups] - affix rows to render (retail only); their seasonal indices come
+ *        from buildInlineOptions().
  * @param {boolean} [config.withSeasonalIndexPreset] - render the awakened `#seasonal_index` preset select (retail only).
  * @returns {HTMLFormElement}
  */
@@ -232,7 +233,7 @@ function buildCreateRouteForm({
     hasTeams = true,
     dungeonIds = [RETAIL_DUNGEON_ALPHA_ID, RETAIL_DUNGEON_BETA_ID],
     selectedDungeonId = dungeonIds[0],
-    affixGroups = [{id: AFFIX_GROUP_DEFAULT_ID, seasonalIndex: null}],
+    affixGroups = [{id: AFFIX_GROUP_DEFAULT_ID}],
     withSeasonalIndexPreset = false,
 } = {}) {
     const hasSeasons        = gameVersion === 'retail';
@@ -293,13 +294,24 @@ function buildCreateRouteForm({
  * @param {Object} config
  * @param {boolean} [config.temporary]
  * @param {number[]} [config.defaultSelectedAffixes] - affix group ids pre-selected on load.
+ * @param {{id: number, seasonalIndex: number|null}[]} [config.seasonAffixGroups] - the current season's affix
+ *   groups with the `seasonal_index` each carries (in `currentSeason.affix_groups` and `allAffixGroups` alike).
  * @returns {Object} keyed by inline class: createbase, dungeondifficultyselect, dungeonstartselect, affixes, composition
  */
-function buildInlineOptions({temporary = false, defaultSelectedAffixes = [AFFIX_GROUP_DEFAULT_ID]} = {}) {
+function buildInlineOptions({
+    temporary = false,
+    defaultSelectedAffixes = [AFFIX_GROUP_DEFAULT_ID],
+    seasonAffixGroups = [
+        {id: AFFIX_GROUP_DEFAULT_ID, seasonalIndex: null},
+        {id: AFFIX_GROUP_ALT_A_ID, seasonalIndex: 0},
+        {id: AFFIX_GROUP_ALT_B_ID, seasonalIndex: 0},
+    ],
+} = {}) {
     const dungeonSelectId     = temporary ? 'dungeon_id_select_temporary' : 'dungeon_id_select';
     const difficultySelectId = temporary ? 'dungeon_difficulty_select_temporary' : 'dungeon_difficulty_select';
     const startSelectId       = temporary ? 'dungeon_start_id_temporary' : 'dungeon_start_id';
     const levelSelector       = temporary ? '#temporary_dungeon_route_level' : '#dungeon_route_level';
+    const affixGroups         = seasonAffixGroups.map(({id, seasonalIndex}) => ({id, expansion_id: RETAIL_EXPANSION_ID, seasonal_index: seasonalIndex}));
 
     const currentSeason = {
         id: CURRENT_SEASON_ID,
@@ -308,11 +320,7 @@ function buildInlineOptions({temporary = false, defaultSelectedAffixes = [AFFIX_
         expansion: {shortname: RETAIL_EXPANSION_SHORTNAME},
         season_dungeons: CURRENT_SEASON_DUNGEON_IDS.map((dungeonId) => ({dungeon_id: dungeonId})),
         dungeons: CURRENT_SEASON_DUNGEON_IDS.map((dungeonId) => ({id: dungeonId})),
-        affix_groups: [
-            {id: AFFIX_GROUP_DEFAULT_ID, expansion_id: RETAIL_EXPANSION_ID, seasonal_index: null},
-            {id: AFFIX_GROUP_ALT_A_ID, expansion_id: RETAIL_EXPANSION_ID, seasonal_index: 0},
-            {id: AFFIX_GROUP_ALT_B_ID, expansion_id: RETAIL_EXPANSION_ID, seasonal_index: 0},
-        ],
+        affix_groups: affixGroups,
     };
 
     return {
@@ -348,11 +356,7 @@ function buildInlineOptions({temporary = false, defaultSelectedAffixes = [AFFIX_
             modal: false,
             defaultSelected: defaultSelectedAffixes,
             allExpansions: {[RETAIL_EXPANSION_SHORTNAME]: RETAIL_EXPANSION_ID, [CLASSIC_EXPANSION_SHORTNAME]: CLASSIC_EXPANSION_ID},
-            allAffixGroups: [
-                {id: AFFIX_GROUP_DEFAULT_ID, expansion_id: RETAIL_EXPANSION_ID},
-                {id: AFFIX_GROUP_ALT_A_ID, expansion_id: RETAIL_EXPANSION_ID},
-                {id: AFFIX_GROUP_ALT_B_ID, expansion_id: RETAIL_EXPANSION_ID},
-            ],
+            allAffixGroups: affixGroups.map((affixGroup) => ({...affixGroup})),
             dungeonExpansions: DUNGEON_EXPANSIONS,
             currentAffixes: {[RETAIL_EXPANSION_SHORTNAME]: null},
             currentSeason,

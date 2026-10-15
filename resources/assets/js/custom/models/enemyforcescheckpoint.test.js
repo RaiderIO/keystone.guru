@@ -128,6 +128,108 @@ describe('EnemyForcesCheckpoint.isMapObjectGroupShown', () => {
         // No group to obey - never suppress on that basis.
         expect(result).toBe(true);
     });
+
+    it.each([
+        [true, true],
+        [false, false],
+    ])('isMapObjectGroupShown_givenAGroupThatIsShown%s_returns%s', (isShown, expected) => {
+        // Arrange
+        const checkpoint = Object.create(EnemyForcesCheckpoint.prototype);
+        const group = {isShown: () => isShown};
+        checkpoint.map = {
+            mapObjectGroupManager: fakeMapObjectGroupManager((name) => name === MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT ? group : null),
+        };
+
+        // Act
+        const result = checkpoint.isMapObjectGroupShown();
+
+        // Assert
+        expect(result).toBe(expected);
+    });
+});
+
+/**
+ * A minimal signal bus recording what was registered on it, so a test can fire the handlers.
+ */
+function makeBus() {
+    return {
+        handlers: {},
+        register: vi.fn(function (name, listener, fn) {
+            this.handlers[name] = fn;
+        }),
+        unregister: vi.fn(),
+        fire(name) {
+            this.handlers[name]?.();
+        },
+    };
+}
+
+describe('EnemyForcesCheckpoint signal wiring', () => {
+    /**
+     * @param {Object|null} group The enemy forces checkpoint map object group, if the map has one.
+     */
+    function createWiredCheckpoint(group) {
+        const map = makeBus();
+        map.mapObjectGroupManager = fakeMapObjectGroupManager((name) => name === MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT ? group : null);
+        const state = makeBus();
+        const mapContext = makeBus();
+        state.getMapContext = () => mapContext;
+        global.getState = () => state;
+
+        const checkpoint = new EnemyForcesCheckpoint(map, null);
+
+        return {checkpoint, map, state, mapContext};
+    }
+
+    it('constructor_givenAMapObjectGroup_refreshesThePillOnEveryChangeItDependsOn', () => {
+        // Arrange
+        const group = makeBus();
+        const {checkpoint, map, state, mapContext} = createWiredCheckpoint(group);
+
+        // Act
+        map.fire('map:mapobjectgroupsloaded');
+        state.fire('killzonesnumberstyle:changed');
+        mapContext.fire('teeming:changed');
+        state.fire('floorid:changed');
+        group.fire('visibility:changed');
+
+        // Assert
+        expect(checkpoint.visual.refreshPillCalls).toBe(5);
+    });
+
+    it('constructor_givenNoMapObjectGroup_stillWiresTheOtherSignals', () => {
+        let wired = null;
+
+        // Act + Assert
+        expect(() => (wired = createWiredCheckpoint(null))).not.toThrow();
+        wired.map.fire('map:mapobjectgroupsloaded');
+        expect(wired.checkpoint.visual.refreshPillCalls).toBe(1);
+    });
+
+    it('cleanup_givenAMapObjectGroup_unregistersFromEverySignal', () => {
+        // Arrange
+        const group = makeBus();
+        const {checkpoint, map, state, mapContext} = createWiredCheckpoint(group);
+
+        // Act
+        checkpoint.cleanup();
+
+        // Assert
+        expect(map.unregister).toHaveBeenCalledWith('map:mapobjectgroupsloaded', checkpoint);
+        expect(state.unregister).toHaveBeenCalledWith('killzonesnumberstyle:changed', checkpoint);
+        expect(state.unregister).toHaveBeenCalledWith('floorid:changed', checkpoint);
+        expect(mapContext.unregister).toHaveBeenCalledWith('teeming:changed', checkpoint);
+        expect(group.unregister).toHaveBeenCalledWith('visibility:changed', checkpoint);
+    });
+
+    it('cleanup_givenNoMapObjectGroup_doesNotThrow', () => {
+        // Arrange
+        const {checkpoint} = createWiredCheckpoint(null);
+
+        // Act + Assert
+        expect(() => checkpoint.cleanup()).not.toThrow();
+        expect(checkpoint.visual.cleanupCalls).toBe(1);
+    });
 });
 
 describe('EnemyForcesCheckpoint data accessors', () => {
@@ -165,6 +267,21 @@ describe('EnemyForcesCheckpoint data accessors', () => {
 
         // Assert
         expect(result).toEqual([]);
+    });
+
+    it('getEnemyForces_givenItsEnemies_sumsThemThroughTheEnemyForcesManager', () => {
+        // Arrange
+        const own = {id: 1, enemy_forces_checkpoint_id: 55};
+        const other = {id: 2, enemy_forces_checkpoint_id: 56};
+        const checkpoint = createCheckpoint({1: own, 2: other});
+        checkpoint.map.enemyForcesManager = {getEnemyForcesForEnemies: vi.fn(() => 42)};
+
+        // Act
+        const result = checkpoint.getEnemyForces();
+
+        // Assert
+        expect(result).toBe(42);
+        expect(checkpoint.map.enemyForcesManager.getEnemyForcesForEnemies).toHaveBeenCalledWith([own]);
     });
 
     it('getFloorIds_givenFacadeEnemies_prefersSourceFloorIdAndDeduplicates', () => {

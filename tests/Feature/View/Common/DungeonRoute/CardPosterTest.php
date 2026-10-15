@@ -234,7 +234,8 @@ final class CardPosterTest extends PublicTestCase
     {
         // Arrange - a stored locale may be null; the card cache must key on the request's locale instead
         $user = User::factory()->create();
-        $user->forceFill(['locale' => null]);
+        // Synced as if loaded that way: the column is NOT NULL, and the render saves the acting user
+        $user->forceFill(['locale' => null])->syncOriginalAttribute('locale');
         $this->actingAs($user);
         $dungeonroute = DungeonRoute::factory()->create();
 

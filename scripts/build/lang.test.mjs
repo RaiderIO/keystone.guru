@@ -3,8 +3,35 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import Lang from 'lang.js';
-import {describe, expect, it} from 'vitest';
+import {describe, expect, it, vi} from 'vitest';
 import {buildLangBundles, mergeTranslationsWithFallback, parseBuildLocales, parsePhpTranslationFile, shouldBuildLocale} from './lang.mjs';
+
+/**
+ * Runs `callback` with the given environment variables set (or unset, for `undefined`), restoring them afterwards.
+ *
+ * @param {Object} env
+ * @param {Function} callback
+ * @returns {*} Whatever callback returns.
+ */
+function withEnv(env, callback) {
+    const previous = Object.fromEntries(Object.keys(env).map(key => [key, process.env[key]]));
+    const apply    = values => {
+        for (const [key, value] of Object.entries(values)) {
+            if (value === undefined) {
+                delete process.env[key];
+            } else {
+                process.env[key] = value;
+            }
+        }
+    };
+
+    apply(env);
+    try {
+        return callback();
+    } finally {
+        apply(previous);
+    }
+}
 
 describe('parsePhpTranslationFile', () => {
     it('parsePhpTranslationFile_givenSimpleArray_returnsObject', () => {
@@ -40,10 +67,10 @@ return array(
 
     it('parsePhpTranslationFile_givenRealTranslationFile_returnsNonEmptyObject', () => {
         // A real file from the repo, so the parser is exercised against production input
-        const parsed = parsePhpTranslationFile(fs.readFileSync('lang/en_US/auth.php', 'utf8'));
+        const parsed = parsePhpTranslationFile(fs.readFileSync(path.join(import.meta.dirname, '..', '..', 'lang', 'en_US', 'auth.php'), 'utf8'));
 
         expect(typeof parsed).toBe('object');
-        expect(Object.keys(parsed).length).toBeGreaterThan(0);
+        expect(parsed.failed).toEqual(expect.stringContaining('credentials'));
     });
 });
 
@@ -131,17 +158,7 @@ describe('buildLangBundles', () => {
             }
 
             // The builder skips every non-en_US locale when APP_ENV=local
-            const appEnv        = process.env.APP_ENV;
-            process.env.APP_ENV = 'testing';
-            try {
-                buildLangBundles(rootDir, 'v1', false);
-            } finally {
-                if (appEnv === undefined) {
-                    delete process.env.APP_ENV;
-                } else {
-                    process.env.APP_ENV = appEnv;
-                }
-            }
+            withEnv({APP_ENV: 'testing'}, () => buildLangBundles(rootDir, 'v1', false));
 
             const code   = fs.readFileSync(path.join(rootDir, 'public', 'js', `lang-${locale}-v1.js`), 'utf8');
             const window = {Lang, lang: new Lang({messages: {}, locale: htmlLang})};
@@ -191,17 +208,7 @@ describe('buildLangBundles', () => {
                 fs.writeFileSync(path.join(rootDir, 'lang', 'en_US', `${file}.php`), source);
             }
 
-            const appEnv        = process.env.APP_ENV;
-            process.env.APP_ENV = 'testing';
-            try {
-                buildLangBundles(rootDir, 'v1', false);
-            } finally {
-                if (appEnv === undefined) {
-                    delete process.env.APP_ENV;
-                } else {
-                    process.env.APP_ENV = appEnv;
-                }
-            }
+            withEnv({APP_ENV: 'testing'}, () => buildLangBundles(rootDir, 'v1', false));
 
             const code   = fs.readFileSync(path.join(rootDir, 'public', 'js', `lang-${locale}-v1.js`), 'utf8');
             const window = {Lang, lang: new Lang({messages: {}, locale: htmlLang})};
@@ -212,6 +219,51 @@ describe('buildLangBundles', () => {
             fs.rmSync(rootDir, {recursive: true, force: true});
         }
     }
+
+    it('buildLangBundles_givenNoLangInstanceYet_createsOneWithTheBundlesLocale', () => {
+        // Arrange
+        const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ksg-lang-'));
+        const window  = {Lang};
+
+        try {
+            fs.mkdirSync(path.join(rootDir, 'lang', 'de_DE_ai'), {recursive: true});
+            fs.writeFileSync(path.join(rootDir, 'lang', 'de_DE_ai', 'js.php'), "<?php\n\nreturn ['edit_label' => 'Bearbeiten'];\n");
+            withEnv({APP_ENV: 'testing'}, () => buildLangBundles(rootDir, 'v1', false));
+
+            // Act
+            new Function('window', fs.readFileSync(path.join(rootDir, 'public', 'js', 'lang-de_DE_ai-v1.js'), 'utf8'))(window);
+        } finally {
+            fs.rmSync(rootDir, {recursive: true, force: true});
+        }
+
+        // Assert
+        expect(window.lang).toBeInstanceOf(Lang);
+        expect(window.lang.getLocale()).toBe('de_DE_ai');
+        expect(window.lang.get('js.edit_label')).toBe('Bearbeiten');
+    });
+
+    it('buildLangBundles_givenProductionFlag_writesAMinifiedBundleThatStillPopulatesLang', () => {
+        // Arrange
+        const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ksg-lang-'));
+        let code;
+
+        try {
+            fs.mkdirSync(path.join(rootDir, 'lang', 'en_US'), {recursive: true});
+            fs.writeFileSync(path.join(rootDir, 'lang', 'en_US', 'js.php'), "<?php\n\nreturn ['edit_label' => 'Edit'];\n");
+
+            // Act
+            withEnv({APP_ENV: 'testing'}, () => buildLangBundles(rootDir, 'v1', true));
+            code = fs.readFileSync(path.join(rootDir, 'public', 'js', 'lang-en_US-v1.js'), 'utf8');
+        } finally {
+            fs.rmSync(rootDir, {recursive: true, force: true});
+        }
+
+        // Assert
+        expect(code).not.toContain('\n    ');
+        const window = {Lang, lang: new Lang({messages: {}, locale: 'en_US'})};
+        new Function('window', code)(window);
+        expect(window.lang.get('js.edit_label')).toBe('Edit');
+    });
 
     it('buildLangBundles_givenLocaleMissingAKeyEnUsHas_resolvesTheEnUsValue', () => {
         const lang = buildAndRunBundleWithFallback(
@@ -283,7 +335,6 @@ describe('buildLangBundles locale selection', () => {
      */
     function buildUnder(env, locales) {
         const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ksg-lang-'));
-        const previous = {APP_ENV: process.env.APP_ENV, BUILD_LOCALES: process.env.BUILD_LOCALES};
 
         try {
             for (const locale of locales) {
@@ -291,23 +342,8 @@ describe('buildLangBundles locale selection', () => {
                 fs.writeFileSync(path.join(rootDir, 'lang', locale, 'js.php'), "<?php\n\nreturn ['edit_label' => 'x'];\n");
             }
 
-            for (const [key, value] of Object.entries(env)) {
-                if (value === undefined) {
-                    delete process.env[key];
-                } else {
-                    process.env[key] = value;
-                }
-            }
-
-            return buildLangBundles(rootDir, 'v1', false).sort();
+            return withEnv(env, () => buildLangBundles(rootDir, 'v1', false)).sort();
         } finally {
-            for (const [key, value] of Object.entries(previous)) {
-                if (value === undefined) {
-                    delete process.env[key];
-                } else {
-                    process.env[key] = value;
-                }
-            }
             fs.rmSync(rootDir, {recursive: true, force: true});
         }
     }
@@ -322,5 +358,26 @@ describe('buildLangBundles locale selection', () => {
 
     it('buildLangBundles_givenNonLocalEnv_writesEveryLocale', () => {
         expect(buildUnder({APP_ENV: 'production', BUILD_LOCALES: undefined}, ['en_US', 'de_DE_ai'])).toEqual(['de_DE_ai', 'en_US']);
+    });
+
+    it('buildLangBundles_givenBuildLocalesNamingAMissingLocale_warnsAboutIt', () => {
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        vi.spyOn(console, 'log').mockImplementation(() => {});
+
+        const built = buildUnder({APP_ENV: 'local', BUILD_LOCALES: 'de_DE_ai,xx_XX'}, ['en_US', 'de_DE_ai']);
+
+        expect(built).toEqual(['de_DE_ai', 'en_US']);
+        expect(warn).toHaveBeenCalledTimes(1);
+        expect(warn.mock.calls[0][0]).toContain('no lang/ directory for xx_XX');
+        expect(warn.mock.calls[0][0]).not.toContain('de_DE_ai');
+    });
+
+    it('buildLangBundles_givenBuildLocalesAll_buildsEveryLocaleWithoutWarning', () => {
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+        const built = buildUnder({APP_ENV: 'local', BUILD_LOCALES: 'all'}, ['en_US', 'de_DE_ai', 'ru_RU_ai']);
+
+        expect(built).toEqual(['de_DE_ai', 'en_US', 'ru_RU_ai']);
+        expect(warn).not.toHaveBeenCalled();
     });
 });

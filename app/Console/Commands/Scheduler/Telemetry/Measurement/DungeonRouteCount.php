@@ -27,7 +27,7 @@ class DungeonRouteCount extends Measurement
         foreach ($publishedStates as $publishedState) {
             $result[] = new TelemetryDataPoint(
                 TelemetryMetric::MEASUREMENT_DUNGEON_ROUTE_COUNT,
-                sprintf('published_%s', $publishedState->name),
+                sprintf('published_%s', $publishedState->key),
                 DungeonRoute::where('published_state_id', $publishedState->id)
                     ->where('author_id', '>', 0)
                     ->count(),

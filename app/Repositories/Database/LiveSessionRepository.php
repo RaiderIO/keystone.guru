@@ -11,4 +11,9 @@ class LiveSessionRepository extends DatabaseRepository implements LiveSessionRep
     {
         parent::__construct(LiveSession::class);
     }
+
+    public function findByPublicKey(string $publicKey): ?LiveSession
+    {
+        return LiveSession::where('public_key', $publicKey)->first();
+    }
 }

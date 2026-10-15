@@ -81,6 +81,7 @@ describe('CommonMapsMap._onEnemyContextMenu', () => {
 
         // Assert
         expect(windowOpenSpy).toHaveBeenCalledWith('/compendium/npc/123');
+        expect(modalShowSpy).not.toHaveBeenCalled();
     });
 
     it('_onEnemyContextMenu_givenPopupBlocked_fallsBackToModal', () => {
@@ -95,6 +96,37 @@ describe('CommonMapsMap._onEnemyContextMenu', () => {
         // Assert
         expect(windowOpenSpy).toHaveBeenCalledWith('/compendium/npc/123');
         expect(modalShowSpy).toHaveBeenCalled();
+        expect($('#enemy_details_modal_title_text').html()).toBe('Some Npc');
+    });
+
+    it('_onEnemyContextMenu_givenMapAdmin_linksTheModalTitleToTheAdminNpcPage', () => {
+        // Arrange
+        document.body.innerHTML = '<div id="enemy_details_modal"></div><div id="enemy_details_modal_title_text"></div><div id="enemy_details_modal_body"></div>';
+        globalThis.getState = vi.fn(() => ({isMapAdmin: () => true}));
+        let map = buildMap({npcCompendiumBaseUrl: null});
+
+        // Act
+        map._onEnemyContextMenu({context: enemy});
+
+        // Assert
+        const $link = $('#enemy_details_modal_title_text a');
+        expect($link.attr('href')).toBe('/admin/npc/123');
+        expect($link.text()).toBe('Some Npc');
+        expect(modalShowSpy).toHaveBeenCalled();
+    });
+
+    it('_onEnemyContextMenu_givenNoVisualData_doesNothing', () => {
+        // Arrange
+        document.body.innerHTML = '<div id="enemy_details_modal"></div><div id="enemy_details_modal_title_text"></div><div id="enemy_details_modal_body"></div>';
+        visualData = null;
+        let map = buildMap({npcCompendiumBaseUrl: null});
+
+        // Act
+        map._onEnemyContextMenu({context: enemy});
+
+        // Assert
+        expect(modalShowSpy).not.toHaveBeenCalled();
+        expect($('#enemy_details_modal_title_text').html()).toBe('');
     });
 
     it('_onEnemyContextMenu_givenNoCompendiumForGameVersion_showsModalWithoutOpeningTab', () => {

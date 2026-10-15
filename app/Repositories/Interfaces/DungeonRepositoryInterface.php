@@ -45,4 +45,30 @@ interface DungeonRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, array{id: int, name: string}>
      */
     public function getSelectValues(): Collection;
+
+    /**
+     * Every dungeon with its mapping versions, newest expansion first, then by name.
+     *
+     * @return Collection<int, Dungeon>
+     */
+    public function getAllWithMappingVersionsForAdminList(): Collection;
+
+    /**
+     * @param  array<int, int>          $dungeonIds
+     * @return Collection<int, Dungeon>
+     */
+    public function getByIds(array $dungeonIds): Collection;
+
+    /**
+     * @param  array<int, int>          $zoneIds
+     * @return Collection<int, Dungeon>
+     */
+    public function getByZoneIds(array $zoneIds): Collection;
+
+    /**
+     * Every dungeon with its mapping versions (and their dungeon) loaded.
+     *
+     * @return Collection<int, Dungeon>
+     */
+    public function getAllWithMappingVersions(): Collection;
 }

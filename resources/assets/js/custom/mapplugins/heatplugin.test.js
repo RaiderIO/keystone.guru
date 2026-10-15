@@ -27,6 +27,9 @@ global.COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_FAILURE = 'enemy_failure';
 global.HEAT_COMBINE_MODE_SUM = 'sum';
 global.HEAT_COMBINE_MODE_MAX = 'max';
 global.isMobile = () => true;
+const {MAP_MAX_LAT, MAP_MAX_LNG} = require('../constants');
+global.MAP_MAX_LAT = MAP_MAX_LAT;
+global.MAP_MAX_LNG = MAP_MAX_LNG;
 
 const HeatPlugin = require('./heatplugin');
 
@@ -98,6 +101,17 @@ describe('HeatPlugin.addToMap', () => {
         expect(plugin.heatLayer).toBe(heatLayer);
     });
 
+    it('addToMap_givenMapContextIsNotExplore_addsNoLayer', () => {
+        const {plugin} = createHeatPlugin();
+        const getStateWithExploreContext = global.getState;
+        global.getState = () => ({...getStateWithExploreContext(), getMapContext: () => ({})});
+
+        plugin.addToMap();
+
+        expect(global.L.heatLayer).not.toHaveBeenCalled();
+        expect(plugin.heatLayer).toBeNull();
+    });
+
     it('addToMap_givenDataArrivedWhileDeferred_reAppliesFloorData', () => {
         const {plugin, heatLayer} = createHeatPlugin();
 
@@ -167,5 +181,93 @@ describe('HeatPlugin null-layer guards', () => {
 
         expect(plugin.heatLayer).toBeNull();
         expect(() => plugin.setOptions({radius: 10})).not.toThrow();
+    });
+});
+
+describe('HeatPlugin visibility', () => {
+    it('toggle_givenDisabled_emptiesTheLayer', () => {
+        const {plugin, heatLayer} = createHeatPlugin();
+        plugin.rawLatLngsByFloorId[1] = [[1, 2, 3]];
+        plugin.addToMap();
+        heatLayer.setLatLngs.mockClear();
+
+        plugin.toggle(false);
+
+        expect(plugin.hidden).toBe(true);
+        expect(heatLayer.setLatLngs).toHaveBeenCalledExactlyOnceWith([]);
+    });
+
+    it('toggle_givenReEnabled_showsTheCurrentFloorAgain', () => {
+        const {plugin, heatLayer} = createHeatPlugin();
+        plugin.rawLatLngsByFloorId[1] = [[1, 2, 3]];
+        plugin.addToMap();
+        plugin.toggle(false);
+
+        plugin.toggle(true);
+
+        expect(plugin.hidden).toBe(false);
+        expect(heatLayer.setLatLngs).toHaveBeenLastCalledWith([[1, 2, 3]]);
+    });
+
+    it('floorIdChanged_givenVisibleHeatmap_showsThatFloorsLatLngs', () => {
+        const {plugin, heatLayer, listeners} = createHeatPlugin();
+        plugin.rawLatLngsByFloorId[2] = [[4, 5, 6]];
+        plugin.addToMap();
+
+        listeners['floorid:changed']({data: {floorId: 2}});
+
+        expect(heatLayer.setLatLngs).toHaveBeenLastCalledWith([[4, 5, 6]]);
+    });
+
+    it('floorIdChanged_givenHeatmapHiddenByUser_leavesTheLayerEmpty', () => {
+        const {plugin, heatLayer, listeners} = createHeatPlugin();
+        plugin.rawLatLngsByFloorId[2] = [[4, 5, 6]];
+        plugin.addToMap();
+        plugin.toggle(false);
+        heatLayer.setLatLngs.mockClear();
+
+        listeners['floorid:changed']({data: {floorId: 2}});
+
+        expect(heatLayer.setLatLngs).not.toHaveBeenCalled();
+    });
+
+    it('setOptions_givenHeatLayer_forwardsTheOptions', () => {
+        const {plugin, heatLayer} = createHeatPlugin();
+        plugin.addToMap();
+
+        plugin.setOptions({radius: 10});
+
+        expect(heatLayer.setOptions).toHaveBeenCalledExactlyOnceWith({radius: 10});
+    });
+});
+
+describe('HeatPlugin.setRawLatLngsPerFloor', () => {
+    it('setRawLatLngsPerFloor_givenLatLngsOnTwoFloors_splitsThemPerFloorAndShowsTheCurrentFloor', () => {
+        const {plugin, heatLayer} = createHeatPlugin();
+        plugin.addToMap();
+
+        plugin.setRawLatLngsPerFloor([
+            {floor_id: 1, lat_lngs: [{lat: -100, lng: 200, weight: 7}, {lat: -10, lng: 20, weight: 3}]},
+            {floor_id: 2, lat_lngs: [{lat: -1, lng: 2, weight: 5}]},
+        ], COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION, 4, 9, 4, 4);
+
+        expect(plugin.rawLatLngsByFloorId[1]).toEqual([[-100, 200, 7], [-10, 20, 3]]);
+        expect(plugin.rawLatLngsByFloorId[2]).toEqual([[-1, 2, 5]]);
+        expect(plugin.weightMaxByFloorId[1]).toBe(7);
+        expect(plugin.weightMaxByFloorId[2]).toBe(5);
+        expect(plugin.weightMax).toBe(9);
+        expect(plugin.dataType).toBe(COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION);
+        expect(plugin.runCount).toBe(4);
+        expect(heatLayer.setLatLngs).toHaveBeenLastCalledWith([[-100, 200, 7], [-10, 20, 3]]);
+    });
+
+    it('setRawLatLngsPerFloor_givenNewData_dropsTheFloorsOfThePreviousData', () => {
+        const {plugin} = createHeatPlugin();
+        plugin.setRawLatLngsPerFloor([{floor_id: 2, lat_lngs: [{lat: -1, lng: 2, weight: 5}]}], COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION, 1, 5, 4, 4);
+
+        plugin.setRawLatLngsPerFloor([{floor_id: 1, lat_lngs: [{lat: -10, lng: 20, weight: 3}]}], COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION, 1, 3, 4, 4);
+
+        expect(plugin.rawLatLngsByFloorId[2]).toBeUndefined();
+        expect(plugin.rawLatLngsByFloorId[1]).toEqual([[-10, 20, 3]]);
     });
 });

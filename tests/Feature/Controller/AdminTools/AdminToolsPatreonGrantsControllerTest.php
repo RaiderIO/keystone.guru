@@ -208,7 +208,7 @@ final class AdminToolsPatreonGrantsControllerTest extends PublicTestCase
             'access_token'  => PatreonUserLink::PERMANENT_TOKEN,
             'refresh_token' => PatreonUserLink::PERMANENT_TOKEN,
             'version'       => '0.0.1',
-            'expires_at'    => Carbon::now()->addYears(100),
+            'expires_at'    => PatreonUserLink::PERMANENT_EXPIRES_AT,
         ]);
 
         $user->update(['patreon_user_link_id' => $patreonUserLink->id]);

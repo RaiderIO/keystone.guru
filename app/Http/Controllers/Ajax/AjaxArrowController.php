@@ -23,6 +23,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\ValidationException;
 use Override;
 use Teapot\StatusCode\Http;
 use Throwable;
@@ -69,6 +70,8 @@ class AjaxArrowController extends AjaxMappingModelBaseController
                 null,
                 $dungeonRoute,
             );
+        } catch (ValidationException $validationException) {
+            throw $validationException;
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }

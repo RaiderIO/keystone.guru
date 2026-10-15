@@ -109,7 +109,7 @@ final class OutputCombatLogRouteJsonTest extends PublicTestCase
         $this->assertSame(0, $exitCode, Artisan::output());
 
         $requestBody = $this->readRequestBody(sprintf('%s/the-underrot.json', $this->workingDir));
-        $region      = GameServerRegion::where('short', GameServerRegion::EUROPE)->firstOrFail();
+        $region      = GameServerRegion::where('key', GameServerRegion::EUROPE)->firstOrFail();
 
         $this->assertSame(self::INSTANCE_ID, $requestBody['metadata']['wowInstanceId']);
         $this->assertSame($region->id, $requestBody['metadata']['regionId']);

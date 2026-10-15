@@ -20,8 +20,8 @@ class APITagUpdateFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'  => 'required|string',
-            'color' => 'required|string',
+            'name'  => 'required|string|max:255',
+            'color' => 'required|string|max:255',
         ];
     }
 }

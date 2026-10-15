@@ -292,6 +292,43 @@ describe('CommonFormsOrderedselect', () => {
         expect(document.querySelector('#routes_empty').hidden).toBe(false);
         expect(document.activeElement).toBe(document.querySelector('#routes_add'));
     });
+
+    it('onRemoveClicked_givenAnItemWithANextItem_focusesThatItemsRemoveButton', () => {
+        // Arrange - done in beforeEach
+
+        // Act
+        itemNamed('Bravo').querySelector('.ordered_select_remove').click();
+
+        // Assert
+        expect(postedIds()).toEqual(['1']);
+        expect(document.activeElement).toBe(itemNamed('Alpha').querySelector('.ordered_select_remove'));
+    });
+
+    it('addSelected_givenTheListStaysBelowMax_keepsFocusOnTheAddSelect', () => {
+        // Arrange
+        itemNamed('Bravo').querySelector('.ordered_select_remove').click();
+
+        // Act
+        addOption('3');
+
+        // Assert
+        expect(postedIds()).toEqual(['1', '3']);
+        expect(document.querySelector('#routes_add').disabled).toBe(false);
+        expect(document.activeElement).toBe(document.querySelector('#routes_add'));
+    });
+
+    it('addSelected_givenTheListIsAlreadyFull_addsNothing', () => {
+        // Arrange - a disabled button ignores a real click, so the handler is triggered directly
+        addOption('3');
+        document.querySelector('#routes_add').value = '4';
+
+        // Act
+        jQuery('#routes_add_button').trigger('click');
+
+        // Assert
+        expect(postedIds()).toEqual(['2', '1', '3']);
+        expect(document.querySelector('#routes_add option[value="4"]').disabled).toBe(false);
+    });
 });
 
 describe('CommonFormsOrderedselect in ajax mode', () => {
@@ -391,13 +428,15 @@ describe('CommonFormsOrderedselect in ajax mode', () => {
     });
 
     it('addButton_givenAjaxMode_doesNotAddAnythingItself', () => {
-        // Arrange - nothing beyond beforeEach
+        // Arrange - an add select with a choice made, which a bound add handler would add
+        document.querySelector('#routes').insertAdjacentHTML('beforeend', '<select id="routes_add"><option value="3" selected>Charlie</option></select>');
 
         // Act
         document.querySelector('#routes_add_button').click();
 
         // Assert
         expect(control.getIds()).toEqual(['2', '1']);
+        expect(itemNamed('Charlie')).toBeUndefined();
     });
 
     it('addItem_givenANewItem_appendsItWithoutFiringAnEvent', () => {
@@ -554,5 +593,144 @@ describe('CommonFormsOrderedselect in ajax mode', () => {
         expect(document.querySelectorAll('#routes_list .ordered_select_item_over')).toHaveLength(0);
         expect(itemNamed('Alpha').querySelector('.ordered_select_over_badge').hidden).toBe(true);
         expect(document.querySelector('#routes_over').hidden).toBe(true);
+    });
+
+    it('onRemoveClicked_givenTheLastItemInAjaxMode_focusesTheAddButton', () => {
+        // Arrange
+        control.removeItem(2);
+
+        // Act
+        itemNamed('Alpha').querySelector('.ordered_select_remove').click();
+
+        // Assert
+        expect(control.getIds()).toEqual([]);
+        expect(document.activeElement).toBe(document.querySelector('#routes_add_button'));
+    });
+});
+
+describe('CommonFormsOrderedselect with Draggable', () => {
+    let previousJquery;
+    let previousLang;
+    let previousDraggable;
+    let sortables;
+
+    beforeEach(() => {
+        previousJquery    = globalThis.$;
+        previousLang      = globalThis.lang;
+        previousDraggable = globalThis.Draggable;
+        globalThis.$      = jQuery;
+        globalThis.lang   = new Lang({messages: MESSAGES, locale: 'en'});
+        sortables         = [];
+        globalThis.Draggable = {
+            Sortable: class {
+                constructor(container, options) {
+                    this.container = container;
+                    this.options   = options;
+                    this.handlers  = {};
+                    sortables.push(this);
+                }
+
+                on(event, handler) {
+                    this.handlers[event] = handler;
+                }
+            },
+        };
+
+        document.body.innerHTML = `
+            <div id="routes">
+                <ol id="routes_list">${itemHtml(2, 'Bravo')}${itemHtml(1, 'Alpha')}</ol>
+                <p id="routes_empty" hidden>Empty</p>
+                <span id="routes_count"></span>
+                <button id="routes_add_button" type="button">Add route</button>
+                <span id="routes_full" hidden>Full</span>
+                <div id="routes_status"></div>
+                <template id="routes_template">${itemHtml(0, '')}</template>
+            </div>`;
+    });
+
+    afterEach(() => {
+        globalThis.$         = previousJquery;
+        globalThis.lang      = previousLang;
+        globalThis.Draggable = previousDraggable;
+        document.body.innerHTML = '';
+    });
+
+    /**
+     * @param {boolean} ajax
+     * @returns {CommonFormsOrderedselect}
+     */
+    function makeControl(ajax) {
+        const control = new CommonFormsOrderedselect('routes', 'common/forms/orderedselect', Object.assign({}, OPTIONS, {
+            ajax:         ajax,
+            rootSelector: '#routes',
+        }));
+        control.activate();
+
+        return control;
+    }
+
+    /**
+     * Puts Alpha above Bravo the way a finished drag leaves the DOM, then reports the drag as stopped.
+     */
+    function dragAlphaToTheTop() {
+        const list = document.querySelector('#routes_list');
+        list.insertBefore(list.querySelector('[data-id="1"]'), list.firstElementChild);
+        sortables[0].handlers['drag:stopped']?.();
+    }
+
+    it('activate_givenDraggableIsLoaded_makesTheItemsSortableByTheirHandle', () => {
+        // Arrange - done in beforeEach
+
+        // Act
+        makeControl(false);
+
+        // Assert
+        expect(sortables).toHaveLength(1);
+        expect(sortables[0].container).toBe(document.querySelector('#routes_list'));
+        expect(sortables[0].options.draggable).toBe('.ordered_select_item');
+        expect(sortables[0].options.handle).toBe('.ordered_select_handle');
+    });
+
+    it('dragStopped_givenAnItemDraggedToTheTop_renumbersTheItems', () => {
+        // Arrange
+        const control = makeControl(false);
+
+        // Act
+        dragAlphaToTheTop();
+
+        // Assert
+        expect(control.getIds()).toEqual(['1', '2']);
+        expect([...document.querySelectorAll('.ordered_select_position')].map((el) => el.textContent)).toEqual(['1', '2']);
+        expect(document.querySelector('[data-id="1"] .ordered_select_up').disabled).toBe(true);
+    });
+
+    it.each([
+        ['AjaxMode', true, 1],
+        ['FormMode', false, 0],
+    ])('dragStopped_given%s_firesMovedOnTheRootOnlyInAjaxMode', (_, ajax, expectedMoves) => {
+        // Arrange
+        makeControl(ajax);
+        const moved = vi.fn();
+        jQuery('#routes').on('orderedselect:moved', moved);
+
+        // Act
+        dragAlphaToTheTop();
+
+        // Assert
+        expect(moved).toHaveBeenCalledTimes(expectedMoves);
+    });
+
+    it('getIds_givenADragInProgress_skipsTheMirrorAndTheHiddenOriginal', () => {
+        // Arrange
+        const control = makeControl(false);
+        const list    = document.querySelector('#routes_list');
+        list.querySelector('[data-id="2"]').classList.add('draggable--original');
+        list.insertAdjacentHTML('beforeend', itemHtml(2, 'Bravo').replace('ordered_select_item', 'ordered_select_item draggable-mirror'));
+
+        // Act
+        const ids = control.getIds();
+
+        // Assert
+        expect(ids).toEqual(['1']);
     });
 });

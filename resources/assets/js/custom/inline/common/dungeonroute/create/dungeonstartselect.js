@@ -29,9 +29,9 @@ class CommonDungeonrouteCreateDungeonstartselect extends InlineCode {
         let selectedDungeonId = parseInt($(this.options.dungeonSelectId).val());
         let dungeonStarts     = this.options.dungeonStartsByDungeonId[selectedDungeonId] || [];
 
-        $select.find('option').remove();
-
         if (dungeonStarts.length > 1) {
+            $select.find('option').remove();
+
             for (let i = 0; i < dungeonStarts.length; i++) {
                 let dungeonStart = dungeonStarts[i];
                 $select.append(jQuery('<option>', {
@@ -44,7 +44,12 @@ class CommonDungeonrouteCreateDungeonstartselect extends InlineCode {
             refreshSelectPickers();
             $container.show();
         } else {
-            refreshSelectPickers();
+            // refreshSelectPickers() is a page-wide sync: calling it with nothing to clear would initialize
+            // Tom Select on other not-yet-activated .selectpicker elements on the page too early.
+            if ($select.find('option').length > 0) {
+                $select.find('option').remove();
+                refreshSelectPickers();
+            }
             $container.hide();
         }
     }

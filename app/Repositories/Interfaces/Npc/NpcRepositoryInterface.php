@@ -2,10 +2,12 @@
 
 namespace App\Repositories\Interfaces\Npc;
 
+use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 /**
@@ -50,4 +52,53 @@ interface NpcRepositoryInterface extends BaseRepositoryInterface
      * @return Builder<Npc>
      */
     public function getAdminListBuilder(string $locale): Builder;
+
+    /**
+     * The NPCs placed in the dungeon (on the mapping version, when given) that have any of the given
+     * characteristics, grouped by characteristic id, with the relations the NPC link hover tooltips read.
+     *
+     * @param  Collection<int, int>                  $characteristicIds
+     * @return Collection<int, Collection<int, Npc>>
+     */
+    public function getNpcsByCharacteristicIdForDungeon(Dungeon $dungeon, ?MappingVersion $mappingVersion, Collection $characteristicIds): Collection;
+
+    /**
+     * The NPCs placed in the dungeon (on the mapping version, when given) that cast any of the given
+     * spells, grouped by spell id, with the relations the NPC link hover tooltips read.
+     *
+     * @param  Collection<int, int>                  $spellIds
+     * @return Collection<int, Collection<int, Npc>>
+     */
+    public function getNpcsBySpellIdForDungeon(Dungeon $dungeon, ?MappingVersion $mappingVersion, Collection $spellIds): Collection;
+
+    /**
+     * Every NPC that occurs in a dungeon, one row per NPC/dungeon pair with the `dungeon_id` selected, ordered by
+     * dungeon id and then English name - for the bolstering whitelist dropdown.
+     *
+     * @return Collection<int, Npc>
+     */
+    public function getForBolsteringWhitelistDropdown(): Collection;
+
+    /**
+     * A page of the NPCs that have at least one spell, with those spells loaded, optionally limited to a dungeon.
+     *
+     * @return LengthAwarePaginator<int, Npc>
+     */
+    public function paginateWithSpells(?Dungeon $dungeon, int $perPage): LengthAwarePaginator;
+
+    /**
+     * Every NPC that has no display id yet, with its dungeons.
+     *
+     * @return Collection<int, Npc>
+     */
+    public function getWithoutDisplayId(): Collection;
+
+    /**
+     * Every NPC with the relations the MDT diff compares against.
+     *
+     * @return Collection<int, Npc>
+     */
+    public function getAllWithMdtDiffRelations(): Collection;
+
+    public function findWithEnemyForces(int $npcId): ?Npc;
 }

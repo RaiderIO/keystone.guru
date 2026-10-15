@@ -313,6 +313,231 @@ describe('CommonGeneralSiteheader minimum scrollable distance', () => {
     });
 });
 
+describe('CommonGeneralSiteheader.activate', () => {
+    const previousGlobals = {};
+    let resizeObservers;
+    let animationFrames;
+    let builtStrips;
+    let builtSheets;
+
+    beforeEach(() => {
+        for (const name of ['ResizeObserver', 'DungeonStrip', 'DungeonSheet', 'requestAnimationFrame']) {
+            previousGlobals[name] = globalThis[name];
+        }
+        resizeObservers = [];
+        animationFrames = [];
+        builtStrips     = [];
+        builtSheets     = [];
+
+        globalThis.ResizeObserver = class {
+            constructor(callback) {
+                this.callback = callback;
+                this.observed = [];
+                resizeObservers.push(this);
+            }
+
+            observe(element) {
+                this.observed.push(element);
+            }
+        };
+        globalThis.DungeonStrip = class {
+            constructor(element) {
+                this.element      = element;
+                this.layoutCount  = 0;
+                builtStrips.push(this);
+            }
+
+            updateLayout() {
+                this.layoutCount++;
+            }
+        };
+        globalThis.DungeonSheet = class {
+            constructor(element) {
+                this.element = element;
+                builtSheets.push(this);
+            }
+        };
+        globalThis.requestAnimationFrame = (callback) => animationFrames.push(callback);
+
+        window.scrollY     = 0;
+        window.innerHeight = 1000;
+        vi.spyOn(document.documentElement, 'scrollHeight', 'get').mockReturnValue(5000);
+    });
+
+    afterEach(() => {
+        for (const [name, value] of Object.entries(previousGlobals)) {
+            globalThis[name] = value;
+        }
+        window.scrollY          = 0;
+        document.body.innerHTML = '';
+        document.documentElement.style.removeProperty('--ksg-header-height');
+        document.documentElement.style.removeProperty('overflow-anchor');
+    });
+
+    /**
+     * @returns {CommonGeneralSiteheader}
+     */
+    function activateSiteheader() {
+        const siteheader = new CommonGeneralSiteheader('siteheader', 'common/general/siteheader', {});
+        siteheader.activate();
+
+        return siteheader;
+    }
+
+    /**
+     * @param {string} id
+     * @param {number} height
+     */
+    function setHeight(id, height) {
+        document.getElementById(id).getBoundingClientRect = () => ({top: 0, bottom: height, width: 1200, height});
+    }
+
+    /**
+     * @returns {Function[]} The window scroll listeners activate() registered
+     */
+    function scrollListenersOf(addEventListenerSpy) {
+        return addEventListenerSpy.mock.calls.filter(([type]) => type === 'scroll').map(([, listener]) => listener);
+    }
+
+    it('activate_givenNoHeaderOnThePage_doesNothing', () => {
+        // Arrange
+        document.body.innerHTML = '<main></main>';
+
+        // Act & Assert
+        expect(() => activateSiteheader()).not.toThrow();
+        expect(resizeObservers).toEqual([]);
+        expect(document.documentElement.style.getPropertyValue('--ksg-header-height')).toBe('');
+    });
+
+    it('activate_givenAMapHeaderAroundTheSiteHeader_publishesTheMapHeadersHeight', () => {
+        // Arrange - the map header also wraps the route bar, so it is the taller of the two
+        document.body.innerHTML = `
+            <div id="map_header">
+                <div id="site_header" class="ksg-header ksg-header--shrink-forced"></div>
+            </div>`;
+        setHeight('map_header', 120.4);
+        setHeight('site_header', 64);
+
+        // Act
+        activateSiteheader();
+
+        // Assert
+        expect(resizeObservers[0].observed).toEqual([document.getElementById('map_header')]);
+        expect(document.documentElement.style.getPropertyValue('--ksg-header-height')).toBe('121px');
+    });
+
+    it('activate_givenTheHeaderResizes_republishesItsHeightAndLaysOutTheDungeonStrip', () => {
+        // Arrange
+        document.body.innerHTML = `
+            <div id="site_header" class="ksg-header">
+                <div class="dungeon_strip"></div>
+            </div>`;
+        setHeight('site_header', 96);
+        activateSiteheader();
+        setHeight('site_header', 64);
+
+        // Act
+        resizeObservers[0].callback();
+
+        // Assert
+        expect(builtStrips.map((strip) => strip.element)).toEqual([document.querySelector('.dungeon_strip')]);
+        expect(builtStrips[0].layoutCount).toBe(2);
+        expect(document.documentElement.style.getPropertyValue('--ksg-header-height')).toBe('64px');
+    });
+
+    it('activate_givenADungeonSheetOutsideTheHeader_buildsItAndGuardsItsImages', () => {
+        // Arrange - the sheet lives under <body>, so the header's own image guard does not reach it
+        document.body.innerHTML = `
+            <div id="site_header" class="ksg-header"></div>
+            <div id="dungeon_sheet"><img id="sheet_image" src="http://test/sm.webp" alt="" data-image-fallback/></div>`;
+
+        // Act
+        activateSiteheader();
+        document.getElementById('sheet_image').dispatchEvent(new Event('error'));
+
+        // Assert
+        expect(builtSheets.map((sheet) => sheet.element)).toEqual([document.getElementById('dungeon_sheet')]);
+        expect(document.getElementById('sheet_image').getAttribute('src')).toBe(HEADER_IMAGE_FALLBACK_SRC);
+    });
+
+    it('activate_givenASkipLink_focusesItsTargetOnClick', () => {
+        // Arrange
+        document.body.innerHTML = `
+            <a class="skip_link" href="#main_content">Skip to content</a>
+            <div id="site_header" class="ksg-header"></div>
+            <div id="main_content" tabindex="-1"></div>`;
+        activateSiteheader();
+
+        // Act
+        document.querySelector('.skip_link').click();
+
+        // Assert
+        expect(document.activeElement).toBe(document.getElementById('main_content'));
+    });
+
+    it('activate_givenAPageLoadedScrolledDown_shrinksTheHeaderStraightAway', () => {
+        // Arrange
+        document.body.innerHTML = '<div id="site_header" class="ksg-header"></div>';
+        window.scrollY = 500;
+
+        // Act
+        activateSiteheader();
+
+        // Assert
+        expect(document.getElementById('site_header').classList.contains('ksg-header--shrink')).toBe(true);
+    });
+
+    it('activate_givenSeveralScrollEventsWithinAFrame_updatesTheShrinkOnceInThatFrame', () => {
+        // Arrange
+        document.body.innerHTML = '<div id="site_header" class="ksg-header"></div>';
+        const addEventListenerSpy = vi.spyOn(window, 'addEventListener');
+        activateSiteheader();
+        const [onScroll] = scrollListenersOf(addEventListenerSpy);
+        window.scrollY = 500;
+
+        // Act
+        onScroll();
+        onScroll();
+        const framesRequested = animationFrames.length;
+        const shrunkBeforeTheFrame = document.getElementById('site_header').classList.contains('ksg-header--shrink');
+        animationFrames[0]();
+
+        // Assert
+        expect(framesRequested).toBe(1);
+        expect(shrunkBeforeTheFrame).toBe(false);
+        expect(document.getElementById('site_header').classList.contains('ksg-header--shrink')).toBe(true);
+    });
+
+    it('activate_givenAScrollAfterTheFrameRan_requestsANewFrame', () => {
+        // Arrange
+        document.body.innerHTML = '<div id="site_header" class="ksg-header"></div>';
+        const addEventListenerSpy = vi.spyOn(window, 'addEventListener');
+        activateSiteheader();
+        const [onScroll] = scrollListenersOf(addEventListenerSpy);
+        onScroll();
+        animationFrames[0]();
+
+        // Act
+        onScroll();
+
+        // Assert
+        expect(animationFrames).toHaveLength(2);
+    });
+
+    it('activate_givenAHeaderTheMapViewKeepsShrunk_registersNoScrollHandling', () => {
+        // Arrange
+        document.body.innerHTML = '<div id="site_header" class="ksg-header ksg-header--shrink ksg-header--shrink-forced"></div>';
+        const addEventListenerSpy = vi.spyOn(window, 'addEventListener');
+
+        // Act
+        activateSiteheader();
+
+        // Assert
+        expect(scrollListenersOf(addEventListenerSpy)).toEqual([]);
+        expect(document.getElementById('site_header').classList.contains('ksg-header--shrink')).toBe(true);
+    });
+});
+
 describe('calculateNavbarCollapseMaxHeight', () => {
     it('calculateNavbarCollapseMaxHeight_givenRoomBelowTheBrandRow_returnsTheRemainingViewport', () => {
         // A 640px tall phone viewport with a 56px brand row above the collapse
@@ -321,7 +546,7 @@ describe('calculateNavbarCollapseMaxHeight', () => {
 
     it('calculateNavbarCollapseMaxHeight_givenFractionalLayout_roundsDownToStayInsideTheViewport', () => {
         // Rounding up would push the last item back below the fold - the whole bug (#4378)
-        expect(calculateNavbarCollapseMaxHeight(640, 55.6, 8)).toBe(576);
+        expect(calculateNavbarCollapseMaxHeight(640, 55.4, 8)).toBe(576);
     });
 
     it('calculateNavbarCollapseMaxHeight_givenNoRoomLeft_clampsAtZero', () => {
@@ -526,6 +751,20 @@ describe('installHeaderImageFallback', () => {
 
         // Assert
         expect(document.getElementById('opted_in').getAttribute('src')).toBe(HEADER_IMAGE_FALLBACK_SRC);
+    });
+
+    it('install_givenAnOptedInImageWithoutASrc_leavesIt', () => {
+        // Arrange - an image whose src is set later reports complete with no width until then
+        const header = makeHeader();
+        const image  = document.getElementById('opted_in');
+        image.removeAttribute('src');
+        setLoadState(image, true);
+
+        // Act
+        installHeaderImageFallback(header);
+
+        // Assert
+        expect(image.hasAttribute('src')).toBe(false);
     });
 
     it('install_givenAnOptedInImageThatLoaded_keepsIt', () => {

@@ -63,6 +63,8 @@ describe('DungeonMap._whenMapSized', () => {
         // Still zero width: the first frame reschedules instead of running the callback.
         rafCallbacks.shift()();
         expect(callback).not.toHaveBeenCalled();
+        expect(map.leafletMap.invalidateSize).not.toHaveBeenCalled();
+        expect(rafCallbacks).toHaveLength(1);
 
         // The container is laid out; the next frame invalidates the size and runs the callback.
         container.clientWidth = 500;
@@ -79,6 +81,23 @@ describe('DungeonMap._whenMapSized', () => {
         map._whenMapSized(vi.fn());
 
         expect(window.cancelAnimationFrame).toHaveBeenCalledTimes(1);
+        expect(window.cancelAnimationFrame).toHaveBeenCalledWith(1);
+        expect(map._mapSizedRafId).toBe(2);
+    });
+
+    it('whenMapSized_givenPendingGateAndSizedMap_cancelsPreviousFrameAndRunsCallback', () => {
+        const {map, size} = createGate({mapSizeX: 0, containerWidth: 0});
+        const staleCallback = vi.fn();
+        const callback = vi.fn();
+        map._whenMapSized(staleCallback);
+        size.x = 500;
+
+        map._whenMapSized(callback);
+
+        expect(window.cancelAnimationFrame).toHaveBeenCalledWith(1);
+        expect(map._mapSizedRafId).toBeNull();
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(staleCallback).not.toHaveBeenCalled();
     });
 });
 
@@ -157,5 +176,34 @@ describe('DungeonMap._enemyClicked', () => {
 
         expect(() => map._enemyClicked({context: {}, data: {}})).not.toThrow();
         expect(EditKillZoneEnemySelection.isEnemySelectable).not.toHaveBeenCalled();
+    });
+
+    it('asks whether the enemy is selectable when the page has a killzone map object group', () => {
+        const map = Object.create(DungeonMap.prototype);
+        map.mapObjectGroupManager = fakeMapObjectGroupManager((name) => (name === 'killzone' ? {} : null));
+        map.getMapState = () => null;
+        EditKillZoneEnemySelection.isEnemySelectable.mockClear();
+        EditKillZoneEnemySelection.isEnemySelectable.mockReturnValueOnce(false);
+        const enemy = {id: 5};
+
+        map._enemyClicked({context: enemy, data: {}});
+
+        expect(EditKillZoneEnemySelection.isEnemySelectable).toHaveBeenCalledWith(enemy);
+    });
+
+    it('does nothing in a live session, even with a killzone map object group', () => {
+        const originalGetState = global.getState;
+        try {
+            global.getState = () => ({getMapContext: () => new MapContextLiveSession()});
+            const map = Object.create(DungeonMap.prototype);
+            map.mapObjectGroupManager = fakeMapObjectGroupManager((name) => (name === 'killzone' ? {} : null));
+            map.getMapState = () => null;
+            EditKillZoneEnemySelection.isEnemySelectable.mockClear();
+
+            expect(() => map._enemyClicked({context: {id: 5}, data: {}})).not.toThrow();
+            expect(EditKillZoneEnemySelection.isEnemySelectable).not.toHaveBeenCalled();
+        } finally {
+            global.getState = originalGetState;
+        }
     });
 });

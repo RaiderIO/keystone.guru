@@ -192,6 +192,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
             OverpulledEnemy::create([
                 'live_session_id' => $this->liveSession->id,
                 'kill_zone_id'    => 1,
+                'enemy_id'        => $enemy->id,
                 'npc_id'          => $enemy->npc_id,
                 'mdt_id'          => $enemy->mdt_id,
             ]);

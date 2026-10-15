@@ -28,7 +28,6 @@ class AjaxSpellUpdateFormRequest extends FormRequest
         return [
             'name'            => 'string',
             'game_version_id' => [
-                'nullable',
                 Rule::exists(GameVersion::class, 'id'),
             ],
             'icon_name'      => 'string',

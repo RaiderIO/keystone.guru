@@ -99,6 +99,26 @@ describe('enemy selection border box model (#3696)', () => {
         expect(cs.marginLeft).toBe('-4px');
     });
 
+    test('enemySelectionWrapper_givenPlainMarkerRoot_recentersByBorderWidth', () => {
+        // enemyvisual.js nests the selection wrapper a level below the marker root, so the enemy
+        // half of the pull-back matches it as a descendant rather than a direct child
+        document.head.innerHTML = `<style>${vendorCss}</style><style>${appCss}</style>`;
+        document.body.innerHTML = '<div class="leaflet-marker-icon"><div><div id="subject" class="selected_enemy_icon leaflet-edit-marker-selected"></div></div></div>';
+
+        const cs = getComputedStyle(document.querySelector('#subject'));
+        expect(cs.marginTop).toBe('-4px');
+        expect(cs.marginLeft).toBe('-4px');
+    });
+
+    test('enemySelectionWrapper_givenLeafletDrawSelectedRoot_doesNotRecenter', () => {
+        const wrapper = createNestedStyledElement('leaflet-marker-icon leaflet-edit-marker-selected', 'selected_enemy_icon leaflet-edit-marker-selected');
+
+        const cs = getComputedStyle(wrapper);
+        // jsdom serializes the unset margin as '0'; a browser would say '0px'
+        expect(['0', '0px']).toContain(cs.marginTop);
+        expect(['0', '0px']).toContain(cs.marginLeft);
+    });
+
     test('selectionVisual_givenLeafletDrawSelectedRoot_doesNotRecenter', () => {
         // In leaflet.draw's edit mode the ROOT also carries the class and
         // leaflet.draw re-centers the marker itself (_offsetMarker(icon, 4));

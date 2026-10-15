@@ -165,6 +165,91 @@ final class AjaxMapIconControllerTest extends DungeonRouteTestBase
         }
     }
 
+    /**
+     * The form request declares team_id and linked_awakened_obelisk_id nullable, so a payload that leaves them out
+     * has neither key in validated() - the controller must treat an absent key the same as an explicit null.
+     */
+    #[Test]
+    public function store_givenAPayloadWithoutTeamIdAndLinkedObeliskId_createsIt(): void
+    {
+        // Arrange
+        $payload = $this->newMapIconPayload('No optional keys');
+        unset($payload['team_id'], $payload['linked_awakened_obelisk_id']);
+
+        try {
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/mapicon', $this->dungeonRoute->getRouteKey()), $payload);
+
+            // Assert
+            $response->assertCreated();
+            /** @var MapIcon $mapIcon */
+            $mapIcon = $this->dungeonRoute->mapicons()->firstOrFail();
+            $this->assertNull($mapIcon->team_id);
+            $this->assertNull($mapIcon->linked_awakened_obelisk_id);
+        } finally {
+            $this->dungeonRoute->mapicons()->get()->each(static fn(MapIcon $mapIcon) => $mapIcon->delete());
+        }
+    }
+
+    #[Test]
+    public function dungeonRouteStore_givenAPayloadWithoutTeamIdAndLinkedObeliskId_updatesIt(): void
+    {
+        // Arrange
+        $mapIcon = $this->createMapIcon();
+        $payload = $this->storePayload($mapIcon, 'Updated without optional keys');
+        unset($payload['team_id'], $payload['linked_awakened_obelisk_id']);
+
+        try {
+            // Act
+            $response = $this->put($this->mapIconUrl($this->dungeonRoute, $mapIcon), $payload);
+
+            // Assert
+            $response->assertOk();
+            $mapIcon->refresh();
+            $this->assertEquals('Updated without optional keys', $mapIcon->comment);
+            $this->assertNull($mapIcon->team_id);
+        } finally {
+            $mapIcon->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenTheLongestCommentOfFourByteCharacters_storesItWhole(): void
+    {
+        // Arrange
+        $comment = str_repeat('😀', MapIcon::COMMENT_MAX_LENGTH);
+
+        try {
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/mapicon', $this->dungeonRoute->getRouteKey()), $this->newMapIconPayload($comment));
+
+            // Assert
+            $response->assertCreated();
+            $this->assertSame($comment, $this->dungeonRoute->mapicons()->firstOrFail()->comment);
+        } finally {
+            $this->dungeonRoute->mapicons()->get()->each(static fn(MapIcon $mapIcon) => $mapIcon->delete());
+        }
+    }
+
+    #[Test]
+    public function store_givenACommentLongerThanItsColumnHolds_returnsValidationErrorAndCreatesNothing(): void
+    {
+        // Arrange
+        $comment = str_repeat('😀', MapIcon::COMMENT_MAX_LENGTH + 1);
+
+        try {
+            // Act
+            $response = $this->postJson(sprintf('/ajax/%s/mapicon', $this->dungeonRoute->getRouteKey()), $this->newMapIconPayload($comment));
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['comment']);
+            $this->assertSame(0, $this->dungeonRoute->mapicons()->count());
+        } finally {
+            $this->dungeonRoute->mapicons()->get()->each(static fn(MapIcon $mapIcon) => $mapIcon->delete());
+        }
+    }
+
     #[Test]
     public function dungeonRouteStore_givenAMapIconFromAnotherDungeonRoute_returns403(): void
     {
@@ -370,6 +455,25 @@ final class AjaxMapIconControllerTest extends DungeonRouteTestBase
             'comment'                    => $comment,
             'permanent_tooltip'          => $mapIcon->permanent_tooltip,
             'seasonal_index'             => $mapIcon->seasonal_index,
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function newMapIconPayload(string $comment): array
+    {
+        return [
+            'mapping_version_id'         => null,
+            'floor_id'                   => $this->randomNonFacadeFloor($this->dungeonRoute)->id,
+            'team_id'                    => null,
+            'map_icon_type_id'           => $this->nonAdminMapIconType()->id,
+            'linked_awakened_obelisk_id' => null,
+            'lat'                        => -100,
+            'lng'                        => 100,
+            'comment'                    => $comment,
+            'permanent_tooltip'          => 0,
+            'seasonal_index'             => null,
         ];
     }
 

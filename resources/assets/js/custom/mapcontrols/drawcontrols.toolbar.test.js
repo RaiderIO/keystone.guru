@@ -248,11 +248,13 @@ describe('DrawControls toolbar generated from the tool list', () => {
         const $group = $rail.find('[data-draw-tool-group="markers"]');
         const $flyout = $group.find('.draw_tool_group_flyout');
         $group.find('.draw_tool_group_button').trigger('click');
+        const openBeforeEscape = $flyout.css('display') !== 'none';
 
         // Act
         jQuery(document.body).trigger(jQuery.Event('keydown', {key: 'Escape'}));
 
         // Assert
+        expect(openBeforeEscape).toBe(true);
         expect($flyout.css('display')).toBe('none');
     });
 
@@ -276,11 +278,13 @@ describe('DrawControls toolbar generated from the tool list', () => {
         // Arrange
         const $group = $rail.find('[data-draw-tool-group="markers"]');
         $group.find('[data-draw-tool="marker"]')[0].dispatchEvent(new MouseEvent('click', {bubbles: true}));
+        const markedWhileActive = $group.find('.draw_tool_group_button').hasClass('leaflet-draw-toolbar-button-enabled');
 
         // Act
         controls._mapControl._toolbars.draw.disable();
 
         // Assert
+        expect(markedWhileActive).toBe(true);
         expect($group.find('.draw_tool_group_button').hasClass('leaflet-draw-toolbar-button-enabled')).toBe(false);
     });
     test('addControl_givenToolList_givesEveryButtonANameWithItsHotkeysAndNoNativeTitle', () => {

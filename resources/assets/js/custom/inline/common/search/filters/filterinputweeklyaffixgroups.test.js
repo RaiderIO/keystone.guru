@@ -84,6 +84,17 @@ describe('SearchFilterWeeklyAffixGroups', () => {
         expect(filter.getValue()).toEqual([2, 3, 4]);
     });
 
+    test('setValueOverride_givenAMinPeriodAfterTheSelectedRange_selectsJustThatWeek', () => {
+        // Arrange
+        filter.setValue([1, 2]);
+
+        // Act
+        filter.setValueOverride('minPeriod', 1079);
+
+        // Assert
+        expect(filter.getValue()).toEqual([4]);
+    });
+
     test('setValueOverride_givenPeriodZero_selectsNothing', () => {
         // Arrange
         filter.setValue([1, 2, 3]);
@@ -116,5 +127,25 @@ describe('SearchFilterWeeklyAffixGroups', () => {
 
         // Assert
         expect(filter.getParamsOverride()).toEqual({minPeriod: 1077, maxPeriod: 1078});
+    });
+
+    test.each([
+        [[2, 3, 4], 'Weeks 2 - 4'],
+        [[], 'Weeks '],
+    ])('getFilterHeaderText_givenSelectedWeeks%j_namesTheFirstAndLastWeek', (weeks, expectedText) => {
+        // Arrange
+        const previousLang = globalThis.lang;
+        globalThis.lang = {get: (key) => key === 'js.filter_input_select_weekly_affix_groups_header' ? 'Weeks :week' : key};
+        filter.setValue(weeks);
+
+        try {
+            // Act
+            const result = filter.getFilterHeaderText();
+
+            // Assert
+            expect(result).toBe(expectedText);
+        } finally {
+            globalThis.lang = previousLang;
+        }
     });
 });

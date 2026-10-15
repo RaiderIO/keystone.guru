@@ -11,7 +11,6 @@ use App\Models\Dungeon;
 use App\Models\DungeonStart;
 use App\Models\Floor\Floor;
 use App\Models\MapIcon;
-use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
@@ -48,11 +47,8 @@ final class MDTMappingImportMapPOIsDungeonStartTest extends PublicTestCase
             $this->assertEqualsWithDelta($latLng->getLat(), $dungeonStarts->first()->lat, 0.1);
             $this->assertEqualsWithDelta($latLng->getLng(), $dungeonStarts->first()->lng, 0.1);
             $this->assertFalse(
-                MapIcon::query()
-                    ->where('mapping_version_id', $newMappingVersion->id)
-                    ->where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START])
-                    ->exists(),
-                'A dungeon entrance must no longer become a dungeon_start map icon.',
+                MapIcon::query()->where('mapping_version_id', $newMappingVersion->id)->exists(),
+                'A dungeon entrance must not become a map icon.',
             );
         } finally {
             $newMappingVersion?->delete();

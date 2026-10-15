@@ -229,21 +229,35 @@ test('constructor_givenEnemySetNpcSignal_clearsSizeCache', () => {
 
     const visual = new EnemyVisualMain(enemyvisual);
     visual._sizeCache[8] = {iconSize: [20, 20]};
+    const refreshNpc = vi.spyOn(visual, '_refreshNpc');
 
     registeredCallback();
 
     expect(visual._sizeCache).toEqual([]);
+    expect(refreshNpc).toHaveBeenCalledTimes(1);
 });
 
-function makeTemplateDataFakeThis({classificationId, dangerousBorder = true, npcDangerous = false}) {
+global.EnemyPatrol = class EnemyPatrol {
+};
+
+function makeTemplateDataFakeThis({
+    classificationId,
+    dangerousBorder = true,
+    npcDangerous = false,
+    aggressivenessBorder = false,
+    hasShroudedAffix = false,
+    isMapAdmin = false,
+    enemyOverrides = {},
+    isSpeedrunRequiredNpc = false,
+}) {
     global.$.extend = Object.assign;
     global.AFFIX_SHROUDED = 'shrouded';
     global.NPC_CLASSIFICATION_ID_RARE = 'rare';
     global.getState = () => ({
-        hasEnemyAggressivenessBorder: () => false,
+        hasEnemyAggressivenessBorder: () => aggressivenessBorder,
         hasEnemyDangerousBorder: () => dangerousBorder,
-        getMapContext: () => ({hasAffix: () => false}),
-        isMapAdmin: () => false,
+        getMapContext: () => ({hasAffix: (affix) => hasShroudedAffix && affix === AFFIX_SHROUDED}),
+        isMapAdmin: () => isMapAdmin,
     });
 
     const isBossNpc = [NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(classificationId);
@@ -261,12 +275,13 @@ function makeTemplateDataFakeThis({classificationId, dangerousBorder = true, npc
         isEncrypted: () => false,
         isTormented: () => false,
         isRequiresActivation: () => false,
+        ...enemyOverrides,
     };
 
     return {
         enemyvisual: {enemy},
         iconName: '',
-        isSpeedrunRequiredNpc: () => false,
+        isSpeedrunRequiredNpc: () => isSpeedrunRequiredNpc,
     };
 }
 
@@ -323,4 +338,72 @@ test('_getTemplateData_givenPlainNpc_addsNoBorderClasses', () => {
 
     expect(classes).not.toContain('dangerous');
     expect(classes).not.toContain('rare');
+});
+
+test.each([
+    ['AwakenedNpc', {enemyOverrides: {isAwakenedNpc: () => true}}, 'awakened'],
+    ['PatrollingEnemy', {enemyOverrides: {enemy_patrol_id: 7}}, 'patrol'],
+    ['SpeedrunRequiredNpc', {isSpeedrunRequiredNpc: true}, 'required_npc'],
+    ['ShroudedEnemyWithShroudedAffix', {hasShroudedAffix: true, enemyOverrides: {isShrouded: () => true}}, 'shrouded'],
+    ['ZulGamuxWithShroudedAffix', {hasShroudedAffix: true, enemyOverrides: {isShroudedZulGamux: () => true}}, 'shrouded_zul_gamux'],
+    ['NotShroudedEnemyForMapAdmin', {isMapAdmin: true, enemyOverrides: {isNotShrouded: () => true}}, 'no_shrouded'],
+    ['InspiringEnemy', {enemyOverrides: {isInspiring: () => true}}, 'inspiring'],
+    ['EncryptedEnemy', {enemyOverrides: {isEncrypted: () => true}}, 'encrypted'],
+    ['TormentedEnemy', {enemyOverrides: {isTormented: () => true}}, 'tormented'],
+    ['EnemyRequiringActivation', {enemyOverrides: {isRequiresActivation: () => true}}, 'requires_activation'],
+])('_getTemplateData_given%s_addsItsInnerClass', (label, options, expectedClass) => {
+    const fakeThis = makeTemplateDataFakeThis({classificationId: 'normal', ...options});
+
+    const classes = innerClasses(fakeThis);
+
+    expect(classes).toContain(expectedClass);
+});
+
+test.each([
+    ['ShroudedEnemyWithoutShroudedAffix', {enemyOverrides: {isShrouded: () => true}}, 'shrouded'],
+    ['ZulGamuxWithoutShroudedAffix', {enemyOverrides: {isShroudedZulGamux: () => true}}, 'shrouded_zul_gamux'],
+    ['NotShroudedEnemyForRegularUser', {enemyOverrides: {isNotShrouded: () => true}}, 'no_shrouded'],
+])('_getTemplateData_given%s_leavesItsInnerClassOut', (label, options, absentClass) => {
+    const fakeThis = makeTemplateDataFakeThis({classificationId: 'normal', ...options});
+
+    const classes = innerClasses(fakeThis);
+
+    expect(classes).not.toContain(absentClass);
+});
+
+test('_getTemplateData_givenAggressivenessBorder_addsTheNpcAggressivenessAsOuterClass', () => {
+    const fakeThis = makeTemplateDataFakeThis({classificationId: 'normal', aggressivenessBorder: true});
+    fakeThis.enemyvisual.enemy.npc.aggressiveness = 'aggressive';
+
+    const data = EnemyVisualMain.prototype._getTemplateData.call(fakeThis);
+
+    expect(data.main_visual_outer_classes).toBe('aggressive');
+});
+
+test('_getTemplateData_givenNoAggressivenessBorder_addsNoOuterClass', () => {
+    const fakeThis = makeTemplateDataFakeThis({classificationId: 'normal'});
+    fakeThis.enemyvisual.enemy.npc.aggressiveness = 'aggressive';
+
+    const data = EnemyVisualMain.prototype._getTemplateData.call(fakeThis);
+
+    expect(data.main_visual_outer_classes).toBe('');
+});
+
+test('_getTemplateData_givenNoNpc_returnsOnlyTheIconClasses', () => {
+    const fakeThis = makeTemplateDataFakeThis({classificationId: 'normal', dangerousBorder: false, isSpeedrunRequiredNpc: true});
+    fakeThis.enemyvisual.enemy.npc = null;
+    fakeThis.iconName = 'melee';
+
+    const data = EnemyVisualMain.prototype._getTemplateData.call(fakeThis);
+
+    expect(data.main_visual_inner_classes).toBe('enemy_icon melee');
+});
+
+test('_getTemplateData_givenEnemyOnADrawnPatrol_coloursTheBorderLikeThePatrol', () => {
+    const enemyPatrol = Object.assign(new EnemyPatrol(), {polyline: {color: '#00ff00'}});
+    const fakeThis = makeTemplateDataFakeThis({classificationId: 'normal', enemyOverrides: {enemy_patrol_id: 7, enemyPatrol}});
+
+    const data = EnemyVisualMain.prototype._getTemplateData.call(fakeThis);
+
+    expect(data.main_visual_inner_style).toBe('border-color: #00ff00;');
 });

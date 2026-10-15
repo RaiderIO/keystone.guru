@@ -75,6 +75,33 @@ describe('heatLayerRedrawCombiningByMax', () => {
         expect(layer._heat.maxValue).toBe(60);
     });
 
+    test('redraw_givenTheWeakerPointFirstInABucket_replacesItWithTheStrongerOne', () => {
+        const layer = createLayer([[100, 100, 40], [101, 101, 60]]);
+
+        layer._redraw();
+
+        expect(layer._heat.drawnData).toEqual([[101, 101, 60]]);
+        expect(layer._heat.maxValue).toBe(60);
+    });
+
+    test('redraw_givenAPointOutsideTheMapBounds_drawsOnlyThePointsInside', () => {
+        global.L.Bounds = class {
+            constructor(min, max) {
+                this.min = min;
+                this.max = max;
+            }
+
+            contains(point) {
+                return point.x >= this.min.x && point.x <= this.max.x && point.y >= this.min.y && point.y <= this.max.y;
+            }
+        };
+        const layer = createLayer([[100, 100, 60], [900, 100, 40]]);
+
+        layer._redraw();
+
+        expect(layer._heat.drawnData).toEqual([[100, 100, 60]]);
+    });
+
     test('redraw_givenPointsInDifferentBuckets_keepsThemApart', () => {
         const layer = createLayer([[100, 100, 60], [400, 400, 40]]);
 
@@ -86,15 +113,17 @@ describe('heatLayerRedrawCombiningByMax', () => {
     });
 
     test('setCombineMode_givenMax_installsTheOverrideOnTheLayerAndRestoresItForSum', () => {
-        const heatLayer = {redraw: () => {}};
+        const heatLayer = {redraw: vi.fn()};
         const plugin    = Object.create(HeatPlugin.prototype);
         plugin.heatLayer = heatLayer;
         plugin.combineMode = global.HEAT_COMBINE_MODE_SUM;
 
         plugin.setCombineMode(global.HEAT_COMBINE_MODE_MAX);
         expect(heatLayer._redraw).toBe(heatLayerRedrawCombiningByMax);
+        expect(heatLayer.redraw).toHaveBeenCalledOnce();
 
         plugin.setCombineMode(global.HEAT_COMBINE_MODE_SUM);
         expect(Object.prototype.hasOwnProperty.call(heatLayer, '_redraw')).toBe(false);
+        expect(heatLayer.redraw).toHaveBeenCalledTimes(2);
     });
 });

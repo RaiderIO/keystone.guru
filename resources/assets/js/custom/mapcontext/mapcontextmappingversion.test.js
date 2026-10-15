@@ -45,6 +45,7 @@ describe('MapContextMappingVersion', () => {
         expect(mapContext._options.dungeonNpcs).toHaveLength(1);
         expect(mapContext._options.dungeonNpcs[0].id).toBe(42);
         expect(mapContext._options.npcs).toBeUndefined();
+        expect(mapContext._signals).toEqual([{event: 'npc:added', data: {npc: mapContext._options.dungeonNpcs[0]}}]);
     });
 
     test('addRawNpc_givenMatchingNpcEnemyForcesEntry_enrichesTheNpcWithEnemyForces', () => {
@@ -61,6 +62,20 @@ describe('MapContextMappingVersion', () => {
         expect(mapContext._options.dungeonNpcs[0].enemy_forces).toBe(7);
     });
 
+    test('addRawNpc_givenNoMatchingNpcEnemyForcesEntry_leavesTheNpcWithoutEnemyForces', () => {
+        // Arrange
+        let mapContext = makeMapContext({
+            dungeonNpcs:    [],
+            npcEnemyForces: [{id: 41, enemy_forces: 7}],
+        });
+
+        // Act
+        mapContext.addRawNpc({id: 42, name: 'Test Npc'});
+
+        // Assert
+        expect(mapContext._options.dungeonNpcs).toEqual([{id: 42, name: 'Test Npc'}]);
+    });
+
     test('removeRawNpcById_givenExistingNpc_removesItFromDungeonNpcs', () => {
         // Arrange
         let mapContext = makeMapContext({
@@ -74,6 +89,7 @@ describe('MapContextMappingVersion', () => {
         // Assert
         expect(mapContext._options.dungeonNpcs).toHaveLength(1);
         expect(mapContext._options.dungeonNpcs[0].id).toBe(1);
+        expect(mapContext._signals).toHaveLength(1);
     });
 
     test('removeRawNpcById_givenUnknownNpcId_leavesDungeonNpcsUntouched', () => {
@@ -87,6 +103,7 @@ describe('MapContextMappingVersion', () => {
         mapContext.removeRawNpcById(999);
 
         // Assert
-        expect(mapContext._options.dungeonNpcs).toHaveLength(1);
+        expect(mapContext._options.dungeonNpcs).toEqual([{id: 1, name: 'Keep'}]);
+        expect(mapContext._signals).toBeUndefined();
     });
 });

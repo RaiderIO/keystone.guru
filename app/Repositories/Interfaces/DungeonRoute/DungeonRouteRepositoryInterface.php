@@ -12,6 +12,7 @@ use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use Closure;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -123,4 +124,42 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
      * Whether the user authored at least one route that is not a sandbox (try) route.
      */
     public function hasNonSandboxRoutesByAuthor(User $user): bool;
+
+    public function findByPublicKey(string $publicKey): ?DungeonRoute;
+
+    /**
+     * Whether the user authored any route that has no expiry set (sandbox routes carry one).
+     */
+    public function hasRoutesWithoutExpiryByAuthor(User $user): bool;
+
+    /**
+     * The user's own routes without an expiry that have one of the public keys, keyed by public key, with their dungeon and mapping version.
+     *
+     * @param  array<int, string>               $publicKeys
+     * @return Collection<string, DungeonRoute>
+     */
+    public function getWithoutExpiryByAuthorAndPublicKeys(User $user, array $publicKeys): Collection;
+
+    /**
+     * The user's own routes without an expiry that have one of the ids, ordered by id, with their dungeon and mapping version.
+     *
+     * @param  array<int, int>               $dungeonRouteIds
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getWithoutExpiryByAuthorAndIds(User $user, array $dungeonRouteIds): Collection;
+
+    /**
+     * Only the id and dungeon id of the routes with the given ids.
+     *
+     * @param  Collection<int, int>          $dungeonRouteIds
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getIdAndDungeonIdByIds(Collection $dungeonRouteIds): Collection;
+
+    /**
+     * Find a route by its numeric id when the key is numeric, otherwise by its public key.
+     *
+     * @throws ModelNotFoundException
+     */
+    public function findByIdOrPublicKeyOrFail(int|string|null $key): DungeonRoute;
 }

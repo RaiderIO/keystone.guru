@@ -491,3 +491,59 @@ describe('Enemy#getWowheadLinkForGameVersion', () => {
         expect(result).toBe('https://www.wowhead.com/cn/spell=123');
     });
 });
+
+describe('Enemy#assignRaidMarker', () => {
+    const originalGetState = global.getState;
+    const originalAjax = global.$.ajax;
+
+    afterEach(() => {
+        global.getState = originalGetState;
+        global.$.ajax = originalAjax;
+    });
+
+    test('assignRaidMarker_givenRaidMarkerKey_postsRaidMarkerKeyAndAppliesItOnSuccess', () => {
+        // Arrange
+        global.getState = () => ({
+            getMapContext: () => ({getPublicKey: () => 'abc123'}),
+        });
+        global.$.ajax = vi.fn(options => options.success());
+        const enemy = Object.create(Enemy.prototype);
+        enemy.id = 42;
+        enemy.map = {leafletMap: {closePopup: vi.fn()}};
+        enemy.signal = vi.fn();
+
+        // Act
+        enemy.assignRaidMarker('skull');
+
+        // Assert
+        expect(global.$.ajax).toHaveBeenCalledTimes(1);
+        const ajaxOptions = global.$.ajax.mock.calls[0][0];
+        expect(ajaxOptions.url).toBe('/ajax/abc123/raidmarker/42');
+        expect(ajaxOptions.data).toEqual({raid_marker_key: 'skull', raid_marker_name: 'skull'});
+        expect(enemy.raid_marker_key).toBe('skull');
+        expect(enemy.signal).toHaveBeenCalledWith('enemy:set_raid_marker', {key: 'skull'});
+        expect(enemy.map.leafletMap.closePopup).toHaveBeenCalledTimes(1);
+    });
+
+    test('assignRaidMarker_givenTheRequestHasNotSucceeded_leavesTheRaidMarkerAlone', () => {
+        // Arrange
+        global.getState = () => ({
+            getMapContext: () => ({getPublicKey: () => 'abc123'}),
+        });
+        global.$.ajax = vi.fn();
+        const enemy = Object.create(Enemy.prototype);
+        enemy.id = 42;
+        enemy.raid_marker_key = 'cross';
+        enemy.map = {leafletMap: {closePopup: vi.fn()}};
+        enemy.signal = vi.fn();
+
+        // Act
+        enemy.assignRaidMarker('');
+
+        // Assert
+        expect(global.$.ajax.mock.calls[0][0].data).toEqual({raid_marker_key: '', raid_marker_name: ''});
+        expect(enemy.raid_marker_key).toBe('cross');
+        expect(enemy.signal).not.toHaveBeenCalled();
+        expect(enemy.map.leafletMap.closePopup).not.toHaveBeenCalled();
+    });
+});

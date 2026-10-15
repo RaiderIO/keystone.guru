@@ -3,8 +3,10 @@
 namespace App\Repositories\Interfaces\Tags;
 
 use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
 use App\Models\User;
 use App\Repositories\BaseRepositoryInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
@@ -26,4 +28,41 @@ interface TagRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, Tag>
      */
     public function getPersonalRouteTags(User $user): Collection;
+
+    /**
+     * The model a tag of the category is placed on: routes are addressed by their public key, every
+     * other taggable by its id.
+     */
+    public function findTaggableModelOrFail(TagCategory $tagCategory, int|string $modelId): Model;
+
+    /**
+     * The first tag with the same name, under the same context, with the same category.
+     */
+    public function findFirstWithNameInContext(string $name, int|string $contextId, string $contextClass, int $tagCategoryId): ?Tag;
+
+    /**
+     * Renames and recolours every tag sharing the given tag's name, category and context.
+     *
+     * @return int The number of tags updated
+     */
+    public function updateAllLikeTag(Tag $tag, string $name, ?string $color): int;
+
+    /**
+     * Deletes every tag sharing the given tag's name, category and context.
+     *
+     * @return int The number of tags deleted
+     */
+    public function deleteAllLikeTag(Tag $tag): int;
+
+    /**
+     * Whether the user already has a personal route tag with exactly this name.
+     */
+    public function existsPersonalRouteTagNamed(User $user, string $name): bool;
+
+    /**
+     * The ids of the routes the user tagged with the personal tag name.
+     *
+     * @return array<int, int>
+     */
+    public function getPersonalRouteIdsByTagName(User $user, string $tagName): array;
 }

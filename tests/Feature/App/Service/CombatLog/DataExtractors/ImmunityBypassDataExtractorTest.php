@@ -24,7 +24,9 @@ use App\Service\CombatLog\DataExtractors\ImmunityBypasses\ImmunityDefinitions;
 use App\Service\CombatLog\DataExtractors\Logging\ImmunityBypassDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Group;
@@ -775,6 +777,40 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
                 ->count(),
             'Every immunity must have its own SpellProperty',
         );
+    }
+
+    #[Test]
+    public function afterExtract_givenOneSpellBypassingTwoImmunitiesOfOneNpc_loadsTheNpcOnceAndAssignsTheSpellOnce(): void
+    {
+        // Arrange - one NPC spell bypasses Divine Shield (damage) and later Anti-Magic Shell (harmful aura): two
+        // observations, two properties, one NPC and one spell
+        $spellId = 9991030;
+        $this->createTestSpell($spellId);
+        $npcQueryCount = 0;
+        DB::listen(function (QueryExecuted $query) use (&$npcQueryCount): void {
+            if (str_contains($query->sql, 'from `npcs`')) {
+                $npcQueryCount++;
+            }
+        });
+
+        // Act
+        $this->runExtract([
+            $this->immunityApplied(0, KnownSpell::DivineShield->value, 'Divine Shield'),
+            $this->npcDamage(2000, $spellId, 'Shadow Bolt'),
+            $this->immunityRemoved(8000, KnownSpell::DivineShield->value, 'Divine Shield'),
+            $this->immunityApplied(20000, KnownSpell::AntiMagicShell->value, 'Anti-Magic Shell'),
+            $this->npcDebuffApplied(22000, $spellId, 'Shadow Bolt'),
+            $this->immunityRemoved(25000, KnownSpell::AntiMagicShell->value, 'Anti-Magic Shell'),
+        ]);
+
+        // Assert
+        $this->assertSame(2, $this->result->toArray()['addedSpellImmunityBypasses']);
+        $this->assertSame(1, $npcQueryCount);
+        $this->assertSame(1, NpcSpell::where('npc_id', self::CREATURE_NPC_ID)->where('spell_id', $spellId)->count());
+        $this->assertSame(1, CombatLogNpcEvent::where('npc_id', self::CREATURE_NPC_ID)
+            ->where('event_type', CombatLogNpcEventType::SpellAssigned)
+            ->where('model_id', $spellId)
+            ->count());
     }
 
     /**

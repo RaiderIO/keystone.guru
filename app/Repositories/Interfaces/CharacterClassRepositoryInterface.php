@@ -19,4 +19,8 @@ use Illuminate\Support\Collection;
  */
 interface CharacterClassRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * @return Collection<int, CharacterClass>
+     */
+    public function getAllOrderedByName(): Collection;
 }

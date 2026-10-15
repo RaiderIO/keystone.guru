@@ -248,6 +248,61 @@ final class AjaxUserReportControllerTest extends AjaxPublicTestCase
         }
     }
 
+    #[Test]
+    public function status_givenAnEmptyStatus_resetsTheReportToOpen(): void
+    {
+        // Arrange
+        $userReport = UserReport::create([
+            'model_id'    => 1,
+            'model_class' => Enemy::class,
+            'user_id'     => 1,
+            'category'    => 'other',
+            'message'     => 'Created by AjaxUserReportControllerTest',
+            'contact_ok'  => false,
+            'status'      => 1,
+        ]);
+
+        try {
+            // Act
+            $response = $this->put(sprintf('/ajax/userreport/%s/status', $userReport->id), [
+                'status' => '',
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertEquals(0, $userReport->fresh()->status);
+        } finally {
+            $userReport->delete();
+        }
+    }
+
+    #[Test]
+    public function dungeonrouteStore_givenTheLongestMessageAllowed_storesItWhole(): void
+    {
+        // Arrange
+        $reporter     = $this->createUserWithUserRole();
+        $dungeonRoute = $this->createRouteOwnedByAnotherUser(PublishedState::WORLD);
+        $message      = str_repeat('a', 1000);
+
+        try {
+            $this->actingAs($reporter);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/userreport/dungeonroute/%s', $dungeonRoute->public_key), [
+                'category' => 'other',
+                'message'  => $message,
+            ]);
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertSame($message, $this->reportsFor($dungeonRoute)->where('user_id', $reporter->id)->firstOrFail()->message);
+        } finally {
+            $this->reportsFor($dungeonRoute)->delete();
+            $dungeonRoute->delete();
+            $reporter->delete();
+        }
+    }
+
     /**
      * @return array<string, string>
      */

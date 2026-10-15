@@ -79,6 +79,8 @@ describe('TableView.getColumns', () => {
         ['TeamTableView', false, 'list', TeamTableView, ['title']],
         ['TeamRoutePublishingTableView', true, 'biglist', TeamRoutePublishingTableView, ['title', 'scheduling']],
         ['TeamRoutePublishingTableView', true, 'list', TeamRoutePublishingTableView, ['title', 'scheduling']],
+        ['TeamRoutePublishingTableView', false, 'biglist', TeamRoutePublishingTableView, ['title']],
+        ['TeamRoutePublishingTableView', false, 'list', TeamRoutePublishingTableView, ['title']],
     ])('getColumns_given%sOnAPhone_returnsOnlyThePriorityColumnsAsVisible (moderator: %s, %s)', (name, isUserModerator, viewMode, TableViewClass, expected) => {
         // Arrange
         const tableView = buildTableView(TableViewClass, isUserModerator);
@@ -144,5 +146,96 @@ describe('TableView.getColumns', () => {
             expect(allColumns.length).toBeGreaterThan(0);
             expect(visible).toEqual(allColumns);
         }
+    });
+});
+
+describe('TableView request parameters and name', () => {
+    let originalJquery;
+
+    beforeEach(() => {
+        originalJquery = globalThis.$;
+        globalThis.$ = vi.fn(() => ({val: () => '-1'}));
+    });
+
+    afterEach(() => {
+        globalThis.$ = originalJquery;
+    });
+
+    it.each([
+        ['ProfileTableView', () => new ProfileTableView(), {mine: 1}, 'profile'],
+        ['UserProfileTableView', () => {
+            const tableView = new UserProfileTableView();
+            tableView.setUser({id: 7});
+
+            return tableView;
+        }, {user_id: 7}, 'userprofile'],
+        ['FavoritesTableView', () => new FavoritesTableView(), {favorites: 1}, 'favorites'],
+        ['TeamTableView', () => {
+            const tableView = new TeamTableView();
+            tableView.setTeamPublicKey('team123');
+
+            return tableView;
+        }, {team_public_key: 'team123'}, 'team'],
+        ['TeamRoutePublishingTableView', () => {
+            const tableView = new TeamRoutePublishingTableView();
+            tableView.setTeamPublicKey('team456');
+
+            return tableView;
+        }, {team_public_key: 'team456'}, 'team_route_publishing'],
+    ])('getAjaxParameters_given%s_selectsItsRoutes', (name, buildView, expectedParameters, expectedName) => {
+        // Arrange
+        const tableView = buildView();
+
+        // Act
+        const parameters = tableView.getAjaxParameters();
+
+        // Assert
+        expect(parameters).toEqual(expectedParameters);
+        expect(tableView.getName()).toBe(expectedName);
+    });
+
+    it('getTeamPublicKey_givenATeamTableView_returnsTheTeamItWasGiven', () => {
+        // Arrange
+        const tableView = new TeamTableView();
+
+        // Act
+        tableView.setTeamPublicKey('team123');
+
+        // Assert
+        expect(tableView.getTeamPublicKey()).toBe('team123');
+    });
+
+    it.each([
+        ['ProfileTableView', ProfileTableView, false],
+        ['UserProfileTableView', UserProfileTableView, false],
+        ['TeamTableView', TeamTableView, true],
+        ['TeamRoutePublishingTableView', TeamRoutePublishingTableView, true],
+    ])('getColumns_given%sAndASelectedDungeon_searchesTheDungeonColumnForIt', (name, TableViewClass, isUserModerator) => {
+        // Arrange
+        globalThis.$ = vi.fn(() => ({val: () => '12'}));
+        const tableView = buildTableView(TableViewClass, isUserModerator);
+
+        for (const viewMode of ['biglist', 'list']) {
+            // Act
+            const columns = tableView.getColumns(viewMode);
+
+            // Assert
+            expect(columns.find(column => column.name === 'dungeon')).toMatchObject({defaultSearch: '12'});
+            expect(columns.filter(column => column.hasOwnProperty('defaultSearch')).map(column => column.name)).toEqual(['dungeon']);
+        }
+        expect(globalThis.$).toHaveBeenCalledWith('#dungeonroute_search_dungeon_id');
+    });
+
+    it('constructor_givenAFavoritesTableView_resetsTheDungeonFilterToEveryDungeon', () => {
+        // Arrange
+        const dungeonSelect = {val: vi.fn(() => '12')};
+        globalThis.$ = vi.fn(() => dungeonSelect);
+
+        // Act
+        new FavoritesTableView();
+
+        // Assert
+        expect(globalThis.$).toHaveBeenLastCalledWith('#dungeonroute_search_dungeon_id');
+        expect(dungeonSelect.val).toHaveBeenLastCalledWith(-1);
     });
 });

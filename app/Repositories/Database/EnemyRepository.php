@@ -36,4 +36,9 @@ class EnemyRepository extends DatabaseRepository implements EnemyRepositoryInter
             ->sortBy(static fn(Enemy $enemy) => $enemy->enemy_patrol_id ?? 0)
             ->keyBy('id');
     }
+
+    public function updateNpcId(int $oldNpcId, int $newNpcId): int
+    {
+        return Enemy::where('npc_id', $oldNpcId)->update(['npc_id' => $newNpcId]);
+    }
 }

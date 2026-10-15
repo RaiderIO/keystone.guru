@@ -193,18 +193,8 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                 'status' => CombatLogAnalyzeStatus::Verifying,
             ]);
 
-            $totalLines = 0;
-
             try {
-                $this->combatLogService->parseCombatLog($filePath, function (
-                    int    $combatLogVersion,
-                    bool   $advancedLoggingEnabled,
-                    string $rawEvent,
-                ) use (&$totalLines) {
-                    $totalLines++;
-
-                    return new CombatLogEntry($rawEvent)->parseEvent([], $combatLogVersion);
-                });
+                $totalLines = $this->combatLogService->countCombatLogLines($filePath);
             } catch (Exception $e) {
                 $this->log->extractDataAsyncVerifyError($e);
 

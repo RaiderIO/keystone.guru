@@ -191,15 +191,6 @@ class SiteController extends Controller
 
     /**
      * @return View
-     */
-    public function timetest(Request $request): View
-    {
-        // @phpstan-ignore argument.type (runtime-verified view path)
-        return view('misc.timetest');
-    }
-
-    /**
-     * @return View
      *
      * @throws Exception
      */

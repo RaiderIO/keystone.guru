@@ -222,6 +222,96 @@ describe('CommonMapsDungeonroutesearchsidebar', () => {
         expect(ajaxCalls.length).toBe(requestCount);
     });
 
+    it('_search_givenStillInitializing_doesNotSearch', () => {
+        // Arrange
+        const baseSearch = vi.spyOn(SearchInlineBase.prototype, '_search').mockImplementation(() => {
+        });
+
+        // Act
+        sidebar._search();
+
+        // Assert
+        expect(baseSearch).not.toHaveBeenCalled();
+    });
+
+    it.each([
+        [200, 1],
+        [204, 0],
+    ])('_search_givenResponseStatus%s_rendersTheRowsOnlyForA200', (status, expectedRowCount) => {
+        // Arrange
+        const baseSearch = vi.spyOn(SearchInlineBase.prototype, '_search').mockImplementation(() => {
+        });
+        sidebar.initializing = false;
+        sidebar._search();
+        const [options, queryParameters, blacklist] = baseSearch.mock.calls[0];
+
+        // Act
+        options.success([route('a')], 'success', {status: status});
+
+        // Assert
+        expect(baseSearch).toHaveBeenCalledTimes(1);
+        expect(queryParameters).toEqual({});
+        expect(blacklist).toEqual(['dungeonId']);
+        expect(jQuery('.route_picker_row').length).toBe(expectedRowCount);
+    });
+
+    it('_toggleEnemy_givenRepeatedToggles_cyclesFromNormalToOverpulledToObsoleteAndBack', () => {
+        // Arrange
+        const enemy = {
+            overpulledKillZoneId:    null,
+            obsolete:                false,
+            getOverpulledKillZoneId() {
+                return this.overpulledKillZoneId;
+            },
+            setOverpulledKillZoneId(killZoneId) {
+                this.overpulledKillZoneId = killZoneId;
+            },
+            isObsolete() {
+                return this.obsolete;
+            },
+            setObsolete(obsolete) {
+                this.obsolete = obsolete;
+            },
+        };
+        const states = [];
+
+        // Act
+        for (let i = 0; i < 3; i++) {
+            sidebar._toggleEnemy(enemy);
+            states.push({overpulledKillZoneId: enemy.overpulledKillZoneId, obsolete: enemy.obsolete});
+        }
+
+        // Assert
+        expect(states).toEqual([
+            {overpulledKillZoneId: 1, obsolete: false},
+            {overpulledKillZoneId: null, obsolete: true},
+            {overpulledKillZoneId: null, obsolete: false},
+        ]);
+    });
+
+    it.each([
+        [false, ['selected', 'same pack']],
+        [true, ['selected']],
+    ])('_enemySelected_givenIgnorePackBuddies%s_togglesTheEnemyAndOnlyItsOwnPackBuddies', (ignorePackBuddies, expectedToggled) => {
+        // Arrange
+        globalThis.Enemy = class {};
+        const samePackBuddy  = {name: 'same pack', enemy_pack_id: 5};
+        const otherPackEnemy = {name: 'other pack', enemy_pack_id: 6};
+        const enemy          = Object.assign(new Enemy(), {
+            name:            'selected',
+            enemy_pack_id:   5,
+            getPackBuddies: () => [samePackBuddy, otherPackEnemy],
+        });
+        const toggled = [];
+        vi.spyOn(sidebar, '_toggleEnemy').mockImplementation((toggledEnemy) => toggled.push(toggledEnemy.name));
+
+        // Act
+        sidebar._enemySelected({data: {enemy: enemy, ignorePackBuddies: ignorePackBuddies}});
+
+        // Assert
+        expect(toggled.sort()).toEqual([...expectedToggled].sort());
+    });
+
     it('_renderSearchResults_givenTheShownRouteIsNoLongerListed_clearsTheShownRoute', () => {
         // Arrange
         sidebar._renderSearchResults([route('a')]);
