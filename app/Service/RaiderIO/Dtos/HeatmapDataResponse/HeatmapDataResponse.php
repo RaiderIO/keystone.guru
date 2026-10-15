@@ -42,6 +42,21 @@ class HeatmapDataResponse implements Arrayable
         return $this->runCount;
     }
 
+    public function getWeightMax(): int
+    {
+        return $this->weightMax;
+    }
+
+    public function getGridSizeX(): int
+    {
+        return $this->gridSizeX;
+    }
+
+    public function getGridSizeY(): int
+    {
+        return $this->gridSizeY;
+    }
+
     public function getUrl(): ?string
     {
         return $this->url;

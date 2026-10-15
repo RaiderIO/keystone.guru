@@ -27,6 +27,14 @@ class HeatmapDataFloorData implements Arrayable
         return $this->floorId;
     }
 
+    /**
+     * @return Collection<int, HeatmapDataLatLng>
+     */
+    public function getLatLngs(): Collection
+    {
+        return $this->latLngs;
+    }
+
     public function toArray(): array
     {
         return [

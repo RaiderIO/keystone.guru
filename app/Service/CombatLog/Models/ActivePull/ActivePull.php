@@ -41,6 +41,16 @@ class ActivePull
         $this->isCompleted = false;
     }
 
+    public function getStartTime(): ?Carbon
+    {
+        return $this->startTime;
+    }
+
+    public function getEndTime(): ?Carbon
+    {
+        return $this->endTime;
+    }
+
     public function getAverageHPPercentAt(Carbon $timestamp): float
     {
         $inCombatSum = $this->enemiesInCombat->sum(static fn(

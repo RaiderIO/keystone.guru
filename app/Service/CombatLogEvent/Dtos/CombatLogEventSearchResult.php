@@ -30,6 +30,11 @@ class CombatLogEventSearchResult
         return $this->combatLogEvents;
     }
 
+    public function getDungeonRouteCount(): int
+    {
+        return $this->dungeonRouteCount;
+    }
+
     /**
      * @return array<string, mixed>
      */

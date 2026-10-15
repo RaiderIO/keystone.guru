@@ -38,6 +38,11 @@ class SpellDataResult implements Arrayable
         return $this->category;
     }
 
+    public function getCooldownGroup(): string
+    {
+        return $this->cooldownGroup;
+    }
+
     public function getDispelType(): string
     {
         return $this->dispelType;
@@ -51,6 +56,21 @@ class SpellDataResult implements Arrayable
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getSchoolsMask(): int
+    {
+        return $this->schoolsMask;
+    }
+
+    public function getCastTime(): ?int
+    {
+        return $this->castTime;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
     }
 
     public function toArray(): array

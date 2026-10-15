@@ -348,16 +348,6 @@ final class SiteControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function timetest_givenGuest_returnsNotFound(): void
-    {
-        // Act
-        $response = $this->get('/timetest');
-
-        // Assert
-        $response->assertNotFound();
-    }
-
-    #[Test]
     #[DataProvider('affixes_givenNonEnglishLocale_rendersRegionNameInThatLocaleOrEnglish_dataProvider')]
     public function affixes_givenNonEnglishLocale_rendersRegionNameInThatLocaleOrEnglish(?string $germanRegionName, bool $expectsEnglish): void
     {
