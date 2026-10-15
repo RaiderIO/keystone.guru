@@ -48,15 +48,14 @@ class EnemyForcesManager extends Signalable {
     /**
      * Sets the enemy forces to a specific value.
      * @param value {Number}
-     * @param force {Boolean}
      * @private
      */
-    _setEnemyForces(value, force = false) {
+    _setEnemyForces(value) {
         console.assert(this instanceof EnemyForcesManager, 'this is not EnemyForcesManager', this);
 
         let previousEnemyForces = this.enemyForces;
 
-        if (previousEnemyForces !== value || force) {
+        if (previousEnemyForces !== value) {
             this.enemyForces = value;
 
             // If there's an override, we don't fire this. We don't want to fire an event for incorrect values.
@@ -77,19 +76,14 @@ class EnemyForcesManager extends Signalable {
     setEnemyForcesOverride(value) {
         console.assert(this instanceof EnemyForcesManager, 'this is not EnemyForcesManager', this);
 
-        let previousEnemyForces = this.enemyForcesOverride ?? this.enemyForces;
+        let previousEnemyForces = this.getEnemyForces();
 
         this.enemyForcesOverride = value;
 
-        if (this.enemyForcesOverride === null) {
-            // Re-setting the enemy forces will force a refresh
-            this._setEnemyForces(this.enemyForces, true);
-        } else {
-            this.signal('enemyforces:changed', {
-                previousEnemyForces: previousEnemyForces,
-                currentEnemyForces: this.enemyForces
-            });
-        }
+        this.signal('enemyforces:changed', {
+            previousEnemyForces: previousEnemyForces,
+            currentEnemyForces: this.getEnemyForces()
+        });
     }
 
     /**

@@ -314,8 +314,8 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
                     json.data_type,
                     json.run_count,
                     json.weight_max,
-                    json.grid_size_x ?? null,
-                    json.grid_size_y ?? null,
+                    json.grid_size_x,
+                    json.grid_size_y,
                 );
 
                 if (json.hasOwnProperty('url')) {

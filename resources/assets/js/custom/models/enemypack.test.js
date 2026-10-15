@@ -345,3 +345,21 @@ describe('EnemyPack.bindTooltip', () => {
         expect(enemyPack.layer.bindTooltip).toHaveBeenCalledWith('+20 / +10%', {sticky: true, direction: 'top'});
     });
 });
+
+describe('EnemyPack.getEnemyForces', () => {
+    it('getEnemyForces_givenAPackEnemyThatCannotBeFound_skipsIt', () => {
+        // Arrange
+        const enemyPack = createEnemyPack();
+        const enemiesById = {1: {id: 1, getEnemyForces: () => 5}};
+        enemyPack.map.mapObjectGroupManager = fakeMapObjectGroupManager((name) => (name === MAP_OBJECT_GROUP_ENEMY ? {
+            findMapObjectById: (id) => enemiesById[id] ?? null,
+        } : null));
+
+        // Act
+        const getEnemyForces = () => enemyPack.getEnemyForces();
+
+        // Assert
+        expect(getEnemyForces).not.toThrow();
+        expect(getEnemyForces()).toBe(5);
+    });
+});

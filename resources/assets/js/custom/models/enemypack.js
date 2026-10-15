@@ -273,7 +273,10 @@ class EnemyPack extends HullPolyline {
         for (let i = 0; i < this.rawEnemies.length; i++) {
             let rawEnemy = this.rawEnemies[i];
             let enemy = enemyMapObjectGroup.findMapObjectById(rawEnemy.id);
-            result += enemy.getEnemyForces();
+
+            if (enemy !== null) {
+                result += enemy.getEnemyForces();
+            }
         }
 
         return result;

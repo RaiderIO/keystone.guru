@@ -86,6 +86,17 @@ describe('CommonMapsMap._initDefaults cookie cache handling', () => {
         expect(cookieJar.get('map_number_style')).toBe('percentage');
     });
 
+    test('_initDefaults_givenAFreshPage_hidesMountableAreasOnce', () => {
+        // Arrange: no cookies at all
+
+        // Act
+        initDefaults();
+
+        // Assert
+        expect(JSON.parse(cookieJar.get('hidden_map_object_groups'))).toEqual(['mountablearea']);
+        expect(cookieJar.get('hidden_map_object_groups_added_mountablearea')).toBe('1');
+    });
+
     test('_initDefaults_givenHiddenGroupsFromBeforeMountableAreas_hidesMountableAreasOnce', () => {
         cookieJar.set('hidden_map_object_groups', '["enemypatrol"]');
 

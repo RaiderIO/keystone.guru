@@ -124,6 +124,47 @@ describe('HeatPlugin.addToMap', () => {
     });
 });
 
+describe('HeatPlugin.setRawLatLngsPerFloor', () => {
+    beforeEach(() => {
+        global.MAP_MAX_LAT = -256;
+        global.MAP_MAX_LNG = 384;
+    });
+
+    /**
+     * @param floorWeights {Object<Number, Number[]>} The weights of the lat/lngs to put on each floor, keyed by floor id
+     * @returns {Object[]}
+     */
+    function createRawLatLngsPerFloor(floorWeights) {
+        return Object.entries(floorWeights).map(([floorId, weights]) => ({
+            floor_id: Number(floorId),
+            lat_lngs: weights.map((weight, index) => ({lat: -10 - index, lng: 10 + index, weight: weight})),
+        }));
+    }
+
+    it('setRawLatLngsPerFloor_givenNoWeightMaxAndSeveralFloors_usesTheHighestWeightOfTheNewData', () => {
+        // Arrange
+        const {plugin} = createHeatPlugin();
+        plugin.setRawLatLngsPerFloor(createRawLatLngsPerFloor({1: [50]}), COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION, 1, null, 2, 2);
+
+        // Act
+        plugin.setRawLatLngsPerFloor(createRawLatLngsPerFloor({1: [3, 7], 2: [5]}), COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION, 1, null, 2, 2);
+
+        // Assert
+        expect(plugin.weightMax).toBe(7);
+    });
+
+    it('setRawLatLngsPerFloor_givenAWeightMax_usesIt', () => {
+        // Arrange
+        const {plugin} = createHeatPlugin();
+
+        // Act
+        plugin.setRawLatLngsPerFloor(createRawLatLngsPerFloor({1: [3, 7], 2: [5]}), COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION, 1, 12, 2, 2);
+
+        // Assert
+        expect(plugin.weightMax).toBe(12);
+    });
+});
+
 describe('HeatPlugin render order (show on top)', () => {
     it('constructor_givenDefaultHeatmapShowOnTopOption_seedsShowOnTop', () => {
         // The initial signal is missed (map applies settings before plugins register), so the

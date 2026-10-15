@@ -228,8 +228,10 @@ class CommonMapsMap extends InlineCode {
         if (Cookies.get('hidden_map_object_groups_added_mountablearea') === '0') {
             try {
                 let hiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
-                hiddenMapObjectGroups.push('mountablearea');
-                Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);
+                if (!hiddenMapObjectGroups.includes('mountablearea')) {
+                    hiddenMapObjectGroups.push('mountablearea');
+                    Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);
+                }
                 Cookies.set('hidden_map_object_groups_added_mountablearea', 1, cookieDefaultAttributes);
             } catch (e) {
                 console.error(e);
