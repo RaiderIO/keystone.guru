@@ -907,8 +907,6 @@ class DungeonrouteTable extends InlineCode {
         $(this.options.attributesSelectId).val([]);
         $(this.options.requirementsSelectId).val([]);
         $(this.options.tagsSelectId).val([]);
-
-        refreshSelectPickers();
     }
 
     /**
@@ -927,6 +925,8 @@ class DungeonrouteTable extends InlineCode {
         $(this.options.attributesSelectId).val(attributes);
         $(this.options.requirementsSelectId).val(requirements);
         $(this.options.tagsSelectId).val(tags);
+
+        refreshSelectPickers();
 
         // Refresh the list of routes
         $(this.options.filterButtonSelector).trigger('click');

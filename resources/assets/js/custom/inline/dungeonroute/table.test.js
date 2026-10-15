@@ -539,6 +539,59 @@ describe('DungeonrouteTable row actions', () => {
     });
 });
 
+describe('DungeonrouteTable.overrideSelection', () => {
+    useRealJQuery();
+
+    /**
+     * A `this` context over the filter selects, with a `refreshSelectPickers` spy that records which
+     * values the selects held each time the Tom Select controls were synced to them.
+     * @returns {{context: Object, refreshedValues: Array<Object>, filterClicked: Function}}
+     */
+    function arrangeOverrideContext() {
+        document.body.innerHTML = `
+            <select id="dungeon"><option value="-1">All</option><option value="5">Dungeon</option></select>
+            <select id="affixes" multiple><option value="11">Old</option><option value="12">New</option></select>
+            <select id="attributes" multiple><option value="melee">Melee</option></select>
+            <select id="requirements" multiple><option value="favorite">Favorite</option></select>
+            <select id="tags" multiple><option value="speed">Speed</option></select>
+            <button id="filter"></button>`;
+        $('#affixes').val(['11']);
+        const refreshedValues = [];
+        globalThis.refreshSelectPickers = vi.fn(() => refreshedValues.push({dungeon: $('#dungeon').val(), affixes: $('#affixes').val()}));
+        const filterClicked = vi.fn();
+        document.getElementById('filter').addEventListener('click', filterClicked);
+        const context = Object.assign(Object.create(DungeonrouteTable.prototype), {
+            options: {
+                dungeonSelectId:      '#dungeon',
+                affixSelectId:        '#affixes',
+                attributesSelectId:   '#attributes',
+                requirementsSelectId: '#requirements',
+                tagsSelectId:         '#tags',
+                filterButtonSelector: '#filter',
+            },
+        });
+
+        return {context, refreshedValues, filterClicked};
+    }
+
+    afterEach(() => {
+        delete globalThis.refreshSelectPickers;
+        document.body.innerHTML = '';
+    });
+
+    it('overrideSelection_givenDungeonAndAffixGroup_syncsSelectPickersToTheOverrideBeforeFiltering', () => {
+        // Arrange
+        const {context, refreshedValues, filterClicked} = arrangeOverrideContext();
+        filterClicked.mockImplementation(() => refreshedValues.push('filtered'));
+
+        // Act
+        DungeonrouteTable.prototype.overrideSelection.call(context, 5, [12]);
+
+        // Assert
+        expect(refreshedValues).toEqual([{dungeon: '5', affixes: ['12']}, 'filtered']);
+    });
+});
+
 describe('DungeonrouteTable._stepBackFromEmptyPage', () => {
     /**
      * @param {number} page

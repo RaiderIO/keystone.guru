@@ -107,6 +107,26 @@ describe('CommonDungeonrouteCreateDungeonstartselect.activate', () => {
         expect(document.getElementById('dungeon_start_id').options.length).toBe(0);
     });
 
+    it('activate_givenDungeonWithExactlyOneStart_doesNotRefreshSelectPickers', () => {
+        // Arrange + Act: nothing to clear, so the page-wide Tom Select sync must not run.
+        buildAndActivate(RETAIL_DUNGEON_ALPHA_ID);
+
+        // Assert
+        expect(refreshSelectPickers).not.toHaveBeenCalled();
+    });
+
+    it('activate_givenDungeonChangedFromMultipleStartsToOneStart_refreshesSelectPickersOnce', () => {
+        // Arrange
+        buildAndActivate(RETAIL_DUNGEON_BETA_ID);
+        vi.clearAllMocks();
+
+        // Act
+        $('#dungeon_id_select').val(RETAIL_DUNGEON_ALPHA_ID).trigger('change');
+
+        // Assert: the cleared options still have to reach the Tom Select control.
+        expect(refreshSelectPickers).toHaveBeenCalledTimes(1);
+    });
+
     it('activate_givenPreselectedDungeonStartId_marksMatchingOptionSelected', () => {
         // Arrange + Act
         const preselected = DUNGEON_STARTS_BY_DUNGEON_ID[RETAIL_DUNGEON_BETA_ID][2];

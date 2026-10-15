@@ -32,11 +32,18 @@ class CommonDungeonrouteReport extends InlineCode {
      * @private
      */
     _submitDungeonRouteUserReport() {
+        let publicKey = this.options.publicKey;
+        if (typeof publicKey === 'undefined' || publicKey === null || publicKey === '' || publicKey === 'auto') {
+            console.error('Not submitting the dungeonroute report: no public key known for the reported route');
+            showErrorNotification(lang.get('js.ajax_error_default'));
+            return;
+        }
+
         let $root = $(this.options.selectorRoot);
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/userreport/dungeonroute/${this.options.publicKey}`,
+            url: `/ajax/userreport/dungeonroute/${publicKey}`,
             dataType: 'json',
             data: {
                 category: $root.find('.dungeonroute_report_category').val(),

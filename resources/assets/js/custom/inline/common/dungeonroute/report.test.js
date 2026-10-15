@@ -45,6 +45,67 @@ describe('CommonDungeonrouteReport._submitDungeonRouteUserReport', () => {
         expect(options.data).toEqual({category: 'enemy', message: 'This route is spam', contact_ok: 1});
         expect(options.data).not.toHaveProperty('username');
     });
+
+    it.each([
+        ['Undefined', undefined],
+        ['Null', null],
+        ['Empty', ''],
+        ['UnresolvedAuto', 'auto'],
+    ])('_submitDungeonRouteUserReport_given%sPublicKey_blocksSubmitAndShowsError', (name, publicKey) => {
+        // Arrange
+        globalThis.showErrorNotification = vi.fn();
+        vi.spyOn(console, 'error').mockImplementation(() => {
+        });
+        let report = new CommonDungeonrouteReport('report', 'common/dungeonroute/report', {
+            selectorRoot: '.report_route_abc',
+            publicKey: publicKey,
+        });
+
+        // Act
+        report._submitDungeonRouteUserReport();
+
+        // Assert
+        expect(ajaxSpy).not.toHaveBeenCalled();
+        expect(globalThis.showErrorNotification).toHaveBeenCalledExactlyOnceWith('js.ajax_error_default');
+    });
+
+    it('_submitDungeonRouteUserReport_givenAutoKeyResolvedFromLinkWithoutPublicKey_blocksSubmit', () => {
+        // Arrange
+        globalThis.showErrorNotification = vi.fn();
+        vi.spyOn(console, 'error').mockImplementation(() => {
+        });
+        document.body.insertAdjacentHTML('beforeend', '<div id="userreport_dungeonroute_modal"></div><a id="report_link"></a>');
+        let report = new CommonDungeonrouteReport('report', 'common/dungeonroute/report', {
+            selectorRoot: '.report_route_abc',
+            publicKey: 'auto',
+        });
+        report.activate();
+        $('#userreport_dungeonroute_modal').trigger($.Event('show.bs.modal', {relatedTarget: document.getElementById('report_link')}));
+
+        // Act
+        report._submitDungeonRouteUserReport();
+
+        // Assert
+        expect(ajaxSpy).not.toHaveBeenCalled();
+    });
+
+    it('_submitDungeonRouteUserReport_givenAutoKeyResolvedFromLink_postsToThatRoute', () => {
+        // Arrange
+        document.body.insertAdjacentHTML('beforeend', '<div id="userreport_dungeonroute_modal"></div><a id="report_link" data-publickey="xyz"></a>');
+        let report = new CommonDungeonrouteReport('report', 'common/dungeonroute/report', {
+            selectorRoot: '.report_route_abc',
+            publicKey: 'auto',
+        });
+        report.activate();
+        $('#userreport_dungeonroute_modal').trigger($.Event('show.bs.modal', {relatedTarget: document.getElementById('report_link')}));
+
+        // Act
+        report._submitDungeonRouteUserReport();
+
+        // Assert
+        expect(ajaxSpy).toHaveBeenCalledTimes(1);
+        expect(ajaxSpy.mock.calls[0][0].url).toBe('/ajax/userreport/dungeonroute/xyz');
+    });
 });
 
 /**
