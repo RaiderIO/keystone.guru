@@ -46,8 +46,9 @@ jobs:
       - name: Start services in the background
         run: |
           (
-            docker compose -f docker-compose.ci.yml up -d --wait > "$RUNNER_TEMP/ci-services.log" 2>&1
-            echo $? > "$RUNNER_TEMP/ci-services.rc"
+            rc=0
+            docker compose -f docker-compose.ci.yml up -d --wait > "$RUNNER_TEMP/ci-services.log" 2>&1 || rc=$?
+            echo "$rc" > "$RUNNER_TEMP/ci-services.rc"
           ) < /dev/null > /dev/null 2>&1 &
           touch "$RUNNER_TEMP/ci-services.started"
 
