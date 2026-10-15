@@ -3,6 +3,7 @@
 namespace App\Service\RaiderIO;
 
 use App\Models\Season;
+use App\Models\User;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
@@ -41,7 +42,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
     ) {
     }
 
-    public function getHeatmapData(HeatmapDataFilter $heatmapDataFilter): HeatmapDataResponse
+    public function getHeatmapData(HeatmapDataFilter $heatmapDataFilter, ?User $user = null): HeatmapDataResponse
     {
         return HeatmapDataResponse::fromArray(
             $this->combatLogEventService->getGridAggregation(

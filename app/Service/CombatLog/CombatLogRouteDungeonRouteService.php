@@ -27,6 +27,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Polyline;
 use App\Models\Season;
+use App\Models\User;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
@@ -74,7 +75,6 @@ use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceStub;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Season\SeasonServiceStub;
-use Auth;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -135,7 +135,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
      * @throws CombatLogRouteRegeneratedConcurrentlyException
      * @throws Exception
      */
-    public function convertCombatLogRouteToDungeonRoute(CombatLogRouteRequestDto $combatLogRoute): DungeonRoute
+    public function convertCombatLogRouteToDungeonRoute(CombatLogRouteRequestDto $combatLogRoute, ?User $user = null): DungeonRoute
     {
         // Regeneration (settings->publicKey set) replaces the contents of an existing combat log route. That route -
         // and the ChallengeModeRun that makes it one - stays untouched until the replacement is completely built, so a
@@ -171,7 +171,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $this->floorRepository,
             $this->dungeonRepository,
             $combatLogRoute,
-            Auth::id() ?? -1,
+            $user !== null ? $user->id : -1,
         );
 
         $enemyRecordings = new CombatLogRouteEnemyRecordings();
@@ -223,7 +223,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             return $dungeonRoute;
         }
 
-        return $this->applyRegeneratedDungeonRoute($existingDungeonRoute, $dungeonRoute, $enemyRecordings);
+        return $this->applyRegeneratedDungeonRoute($existingDungeonRoute, $dungeonRoute, $enemyRecordings, $user);
     }
 
     /**
@@ -276,11 +276,12 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         DungeonRoute                  $existingDungeonRoute,
         DungeonRoute                  $draft,
         CombatLogRouteEnemyRecordings $enemyRecordings,
+        ?User                         $user = null,
     ): DungeonRoute {
         $draftId = $draft->id;
 
         try {
-            $dungeonRoute = $this->dungeonRouteUpgradeDraftService->apply($draft, enforcePublishInvariant: false);
+            $dungeonRoute = $this->dungeonRouteUpgradeDraftService->apply($draft, enforcePublishInvariant: false, user: $user);
         } catch (UpgradeDraftGoneException) {
             // Another regeneration of the same route took this draft over while this one was still building. Its
             // row is already gone, but delete() still fires DungeonRoute::deleting, which cleans up the kill zones

@@ -6,11 +6,12 @@ use App\Dto\Request\CombatLog\Route\CombatLogRouteCorrectionRequestDto;
 use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\User;
 use Illuminate\Support\Collection;
 
 interface CombatLogRouteDungeonRouteServiceInterface
 {
-    public function convertCombatLogRouteToDungeonRoute(CombatLogRouteRequestDto $combatLogRoute): DungeonRoute;
+    public function convertCombatLogRouteToDungeonRoute(CombatLogRouteRequestDto $combatLogRoute, ?User $user = null): DungeonRoute;
 
     /**
      * @return Collection<int, CombatLogEvent>

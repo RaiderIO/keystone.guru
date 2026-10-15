@@ -16,6 +16,7 @@ use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\Faction;
 use App\Models\MDTImport;
 use App\Models\PublishedState;
+use App\Models\User;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\Import\ObjectImporter;
 use App\Service\MDT\Import\PullImporter;
@@ -32,7 +33,6 @@ use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 /**
@@ -202,6 +202,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         bool       $save = false,
         bool       $assignNotesToPulls = true,
         bool       $importAsThisWeek = false,
+        ?User      $user = null,
     ): DungeonRoute {
         $error = null;
 
@@ -247,7 +248,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 'options' => ['min_range' => 1, 'max_range' => self::MAX_KEY_LEVEL],
             ]);
             $dungeonRoute = DungeonRoute::create([
-                'author_id'          => $sandbox ? -1 : Auth::id() ?? -1,
+                'author_id'          => $sandbox || $user === null ? -1 : $user->id,
                 'dungeon_id'         => $dungeon->id,
                 'mapping_version_id' => $currentMappingVersion->id,
                 'season_id'          => $season?->id,
@@ -284,7 +285,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     $dungeonRoute->seasonal_index,
                     $decoded['value']['riftOffsets'],
                     $decoded['week'] ?? null,
-                ));
+                ), $user);
 
                 $this->riftOffsetImporter->applyRiftOffsetsToDungeonRoute($importStringRiftOffsets, $dungeonRoute);
             }

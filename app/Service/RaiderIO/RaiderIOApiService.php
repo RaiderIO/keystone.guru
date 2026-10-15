@@ -3,6 +3,7 @@
 namespace App\Service\RaiderIO;
 
 use App\Models\Season;
+use App\Models\User;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
@@ -42,7 +43,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
     ) {
     }
 
-    public function getHeatmapData(HeatmapDataFilter $heatmapDataFilter): HeatmapDataResponse
+    public function getHeatmapData(HeatmapDataFilter $heatmapDataFilter, ?User $user = null): HeatmapDataResponse
     {
         // Ensure a season is set, even if it wasn't passed
         if ($heatmapDataFilter->getSeason() === null) {
@@ -92,6 +93,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                     $json['maxSamplesInGrid'],
                     $url,
                     $heatmapDataFilter->getFloorsAsArray(),
+                    $user,
                 )->toArray(),
             );
         } finally {

@@ -11,7 +11,6 @@ use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
 use App\Service\DungeonRoute\Logging\DungeonRouteUpgradeDraftServiceLoggingInterface;
 use Illuminate\Database\UniqueConstraintViolationException;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Override;
 use Throwable;
@@ -123,7 +122,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
     }
 
     #[Override]
-    public function apply(DungeonRoute $draft, bool $enforcePublishInvariant = true): DungeonRoute
+    public function apply(DungeonRoute $draft, bool $enforcePublishInvariant = true, ?User $user = null): DungeonRoute
     {
         if (!$draft->is_upgrade_draft) {
             throw new UpgradeDraftException('This route is not an upgrade draft, so there is nothing to apply.');
@@ -197,8 +196,6 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
             // Best effort - the live session is accepted as busted, connected clients are told to refresh.
             // ContextEvent needs an acting user; without one (queue, console) there is nobody to attribute
             // the refresh to and the notice is simply skipped.
-            /** @var User|null $user */
-            $user = Auth::user();
             if ($user !== null) {
                 foreach ($original->livesessions as $liveSession) {
                     broadcast(new RouteReplacedEvent($liveSession, $user));

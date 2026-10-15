@@ -74,7 +74,7 @@ class AdminToolsMdtController extends Controller
         try {
             $dungeonRoute = $mdtImportStringService
                 ->setEncodedString($request->get('import_string'))
-                ->getDungeonRoute(collect(), collect());
+                ->getDungeonRoute(collect(), collect(), user: $request->user());
             $dungeonRoute->makeVisible([
                 'affixes',
                 'killZones',

@@ -3,6 +3,7 @@
 namespace App\Service\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\User;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
 use Throwable;
@@ -36,13 +37,14 @@ interface DungeonRouteUpgradeDraftServiceInterface
      *                                               its routes are published by construction and an imperfect enemy
      *                                               match is a routine outcome of a combat log, so enforcing it would
      *                                               turn a normal miss into a failed regeneration (#4297).
+     * @param  User|null    $user                    The acting user the live sessions' route-replaced notice is attributed to; without one the notice is skipped.
      * @return DungeonRoute The original, refreshed.
      *
      * @throws UpgradeDraftGoneException When the draft was applied, discarded or taken over concurrently.
      * @throws UpgradeDraftException     When $draft is not a draft, or its original no longer exists.
      * @throws Throwable
      */
-    public function apply(DungeonRoute $draft, bool $enforcePublishInvariant = true): DungeonRoute;
+    public function apply(DungeonRoute $draft, bool $enforcePublishInvariant = true, ?User $user = null): DungeonRoute;
 
     /**
      * Deletes the draft, leaving its original untouched.

@@ -9,6 +9,7 @@ use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Logic\MDT\Exception\InvalidMDTStringException;
 use App\Logic\MDT\Exception\MDTStringParseException;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\User;
 use App\Service\MDT\Models\ImportStringDetails;
 use Illuminate\Support\Collection;
 
@@ -40,6 +41,7 @@ interface MDTImportStringServiceInterface
         bool       $save = false,
         bool       $assignNotesToPulls = true,
         bool       $importAsThisWeek = false,
+        ?User      $user = null,
     ): DungeonRoute;
 
     public function setEncodedString(string $encodedString): self;

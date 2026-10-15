@@ -661,7 +661,7 @@ class DungeonRouteController extends Controller
         Gate::authorize('applyUpgrade', $dungeonroute);
 
         try {
-            $original = $dungeonRouteUpgradeDraftService->apply($dungeonroute);
+            $original = $dungeonRouteUpgradeDraftService->apply($dungeonroute, user: $request->user());
         } catch (UpgradeDraftException $upgradeDraftException) {
             // Apply can still fail here even though Gate::authorize() already checked the original
             // exists - either it was deleted in the race window between that check and this request's

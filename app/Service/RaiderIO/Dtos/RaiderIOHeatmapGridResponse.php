@@ -3,10 +3,10 @@
 namespace App\Service\RaiderIO\Dtos;
 
 use App\Models\Laratrust\Role;
+use App\Models\User;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use Illuminate\Support\Facades\Auth;
 use Override;
 
 /**
@@ -26,6 +26,7 @@ class RaiderIOHeatmapGridResponse extends CombatLogEventGridAggregationResult
         private readonly int        $maxSamplesInGrid,
         private readonly string     $url,
         bool                        $floorsAsArray = false,
+        private readonly ?User      $user = null,
     ) {
         parent::__construct($coordinatesService, $combatLogEventFilter, $results, $runCount, $floorsAsArray);
     }
@@ -35,7 +36,7 @@ class RaiderIOHeatmapGridResponse extends CombatLogEventGridAggregationResult
     {
         $result = parent::toArray();
 
-        if (Auth::check() && Auth::user()->hasRole(Role::roles(Role::ROLES_INTERNAL))) {
+        if ($this->user?->hasRole(Role::roles(Role::ROLES_INTERNAL))) {
             $result['url'] = $this->url;
         }
         // Override the weight_max
