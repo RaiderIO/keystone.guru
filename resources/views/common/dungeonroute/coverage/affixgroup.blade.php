@@ -51,13 +51,10 @@ $seasons[]             = $currentSeason;
 $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static fn($name, $id) => [$id => __($name)]);
 ?>
 @include('common.general.inline', ['path' => 'common/dungeonroute/coverage/affixgroup',
-    'dependencies' => [
-        'dungeonroute/table',
-        'common/group/affixes',
-    ],
     'options' => [
         'coverageFilterButtonSelector' => '.dungeonroute_coverage_filter_select .btn',
         'coverageNewDungeonRouteButtonSelector' => '.dungeonroute_coverage_new_dungeon_route .btn',
+        'createRouteModalSelector' => '#create_route_modal',
         'seasonIdSelector' => '#dungeonroute_coverage_season_id',
     ],
 ])
