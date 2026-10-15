@@ -126,4 +126,16 @@ describe('c.map.killzone.polygonOptions.color', () => {
         expect(color).toBe('#000080');
         expect(global.randomColor).toHaveBeenCalledTimes(3);
     });
+
+    it('returns a dark color for the first pull, skipping vermilion', () => {
+        // Arrange
+        stubRandomColors(['#ff4000', '#000080']);
+
+        // Act
+        const color = c.map.killzone.polygonOptions.color(null);
+
+        // Assert
+        expect(color).toBe('#000080');
+        expect(global.randomColor).toHaveBeenCalledTimes(2);
+    });
 });
