@@ -79,7 +79,9 @@ describe('CommonMapsCombatlogrouteenemyfailures', () => {
             circleMarker: layerFactory('circleMarker'),
         };
 
-        vi.spyOn($, 'ajax').mockReturnValue({done: () => ({})});
+        vi.spyOn($, 'ajax').mockReturnValue({done: () => ({}), abort: () => {}});
+        // Every search writes its filters into the address bar, which jsdom keeps for the whole file
+        window.history.replaceState({}, '', '/');
     });
 
     let stateStub;
@@ -206,10 +208,55 @@ describe('CommonMapsCombatlogrouteenemyfailures', () => {
 
     test('activate_registersForFloorChangesToRedraw', () => {
         const instance = createInstance();
+        document.body.insertAdjacentHTML('beforeend', '<input type="checkbox" id="show_clusters" checked>');
+        let currentFloor = {id: 5};
+        stateStub.getCurrentFloor = () => currentFloor;
+
+        instance.activate();
+        instance._clusters = [cluster({floor_id: 5, hull: []}), cluster({floor_id: 6, hull: [], centroid: {lat: -30, lng: 40, floor_id: 6}})];
+        instance._redrawClusters();
+        const floorChangedRegistrations = stateStub.register.mock.calls.filter((call) => call[0] === 'floorid:changed');
+        currentFloor = {id: 6};
+        floorChangedRegistrations.forEach((call) => call[2]());
+
+        expect(floorChangedRegistrations.map((call) => call[1])).toEqual([instance]);
+        expect(layerGroupStub.layers.map((layer) => layer.latLngs)).toEqual([[-30, 40]]);
+    });
+
+    test('search_givenNoNpcSelected_fetchesClustersWithoutAnNpcFilter', () => {
+        const instance = createInstance();
 
         instance.activate();
 
-        expect(stateStub.register).toHaveBeenCalledWith('floorid:changed', instance, expect.any(Function));
+        const clusterCall = $.ajax.mock.calls.find((call) => call[0].url === '/ajax/admin/combatlogroute/enemy-failures/clusters');
+        expect(clusterCall[0].data).toEqual({dungeon_id: 123, mapping_version_id: 10});
+    });
+
+    test('clusterPopupSelectNpcClick_selectsOnlyThatNpcAndSearchesForIt', () => {
+        const instance = createInstance();
+        $('#filter_npc_id').append('<option value="41" selected>x</option><option value="42">y</option>');
+        instance.activate();
+        $.ajax.mockClear();
+        $('body').append(instance._getClusterPopupHtml(cluster({npc_id: 42})));
+
+        $('.js-enemy-failure-cluster-select-npc').trigger('click');
+
+        expect($('#filter_npc_id').val()).toEqual(['42']);
+        const clusterCall = $.ajax.mock.calls.find((call) => call[0].url === '/ajax/admin/combatlogroute/enemy-failures/clusters');
+        expect(clusterCall?.[0].data.npc_id).toEqual([42]);
+    });
+
+    test('getClusterPopupHtml_escapesServerTextAndNamesTheNearestEnemy', () => {
+        const instance = createInstance();
+
+        const html = instance._getClusterPopupHtml(cluster({npc_name: '<b>x</b>', suggestion: '<img src=x>', nearest_enemy_id: 77}));
+        const htmlWithoutNearest = instance._getClusterPopupHtml(cluster());
+
+        expect(html).toContain('&lt;b&gt;x&lt;/b&gt; (1)');
+        expect(html).toContain('&lt;img src=x&gt;');
+        expect(html).not.toContain('<img');
+        expect(html).toContain('<div>77</div>');
+        expect(htmlWithoutNearest).toContain('<div>none</div>');
     });
 
     test('mappingVersionChange_navigatesToThePageForThatMappingVersion', () => {

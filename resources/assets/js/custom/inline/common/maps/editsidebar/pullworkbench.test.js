@@ -26,7 +26,17 @@ function chainable(elements) {
 global.$ = vi.fn((selector) => chainable(typeof selector === 'string' ? Array.from(document.querySelectorAll(selector)) : []));
 
 const toggleSpy = vi.fn();
-global.bootstrap = {Button: {getOrCreateInstance: () => ({toggle: toggleSpy})}};
+const toggledElementIds = [];
+global.bootstrap = {
+    Button: {
+        getOrCreateInstance: (element) => ({
+            toggle: () => {
+                toggledElementIds.push(element.id);
+                toggleSpy();
+            },
+        }),
+    },
+};
 
 const {Signalable} = require('../../../../signalable');
 global.Signalable = Signalable;
@@ -57,6 +67,7 @@ function makeWorkBench(killZonesById) {
 beforeEach(() => {
     document.body.innerHTML = '';
     toggleSpy.mockClear();
+    toggledElementIds.length = 0;
     global.$.mockClear();
 });
 
@@ -73,7 +84,7 @@ describe('PullWorkBench.editPull', () => {
         expect(workBench.$workbench.hide).toHaveBeenCalled();
         // Depressed once when the panel first realizes it's the same id, then toggled back once
         // more in the close branch - net visual state unchanged, but both toggle() calls happen.
-        expect(toggleSpy).toHaveBeenCalledTimes(2);
+        expect(toggledElementIds).toEqual(['map_killzonessidebar_killzone_5_edit', 'map_killzonessidebar_killzone_5_edit']);
     });
 
     it('given an internal refresh call for the same pull with forceReopen, keeps the workbench open and never touches the edit-toggle button', () => {
@@ -122,7 +133,7 @@ describe('PullWorkBench.editPull', () => {
         expect(workBench.$workbench.hide).not.toHaveBeenCalled();
         expect(workBench.$workbench.show).toHaveBeenCalled();
         // The old pull's (5) button must still be depressed even though this isn't a close.
-        expect(toggleSpy).toHaveBeenCalledTimes(1);
+        expect(toggledElementIds).toEqual(['map_killzonessidebar_killzone_5_edit']);
     });
 
     it('given an unknown killZoneId, hides the workbench and clears the killZone', () => {
@@ -134,6 +145,8 @@ describe('PullWorkBench.editPull', () => {
 
         expect(workBench.killZone).toBeNull();
         expect(workBench.$workbench.hide).toHaveBeenCalled();
+        expect(workBench.$workbench.show).not.toHaveBeenCalled();
+        expect(workBench._initDescriptionButton).not.toHaveBeenCalled();
     });
 });
 
@@ -166,6 +179,21 @@ describe('PullWorkBench._initKillAreaButton', () => {
         workBench._initKillAreaButton();
 
         expect(toggleSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('given the toggle button is still pressed while the pull no longer has a kill area, releases it', () => {
+        document.body.innerHTML = `
+            <span id="map_killzonessidebar_killzone_kill_area_label"></span>
+            <button id="map_killzonessidebar_killzone_has_killzone" class="active"></button>
+            <i id="map_killzonessidebar_killzone_has_killzone_icon"></i>
+        `;
+        const killZoneA = makeFakeKillZone(5, false);
+        const workBench = makeWorkBench({5: killZoneA});
+        workBench.killZone = killZoneA;
+
+        workBench._initKillAreaButton();
+
+        expect(toggledElementIds).toEqual(['map_killzonessidebar_killzone_has_killzone']);
     });
 
     it('given it runs twice in a row (as happens on a forceReopen refresh), only toggles once total', () => {

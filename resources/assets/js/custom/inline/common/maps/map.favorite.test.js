@@ -73,3 +73,52 @@ describe('CommonMapsMap._favorite', () => {
         expect(showSuccessNotification).toHaveBeenCalledWith('js.dungeonroute_favorite_removed_success');
     });
 });
+
+describe('CommonMapsMap._setupFavorite', () => {
+    let ajaxSpy;
+
+    beforeEach(() => {
+        globalThis.getState = vi.fn(() => ({
+            getMapContext: () => ({getPublicKey: () => 'the_public_key'}),
+        }));
+        globalThis.lang = {get: (key) => key};
+        globalThis.showSuccessNotification = vi.fn();
+        ajaxSpy = vi.spyOn($, 'ajax').mockImplementation(() => {
+        });
+    });
+
+    afterEach(() => {
+        vi.clearAllMocks();
+        document.body.innerHTML = '';
+    });
+
+    /**
+     * Mirrors the favorite star in common/maps/controls/header.blade.php.
+     * @param {boolean} favorited
+     */
+    function renderStars(favorited) {
+        document.body.innerHTML = `
+            <i id="route_favorited" class="fas fa-star favorite_star favorited" style="display: ${favorited ? 'inherit' : 'none'}"></i>
+            <i id="route_not_favorited" class="far fa-star favorite_star" style="display: ${favorited ? 'none' : 'inherit'}"></i>
+            <input type="hidden" id="favorite" name="favorite" value="${favorited ? '1' : '0'}">`;
+    }
+
+    it.each([
+        [false, 'POST', '1', '#route_favorited', '#route_not_favorited'],
+        [true, 'DELETE', '0', '#route_not_favorited', '#route_favorited'],
+    ])('_setupFavorite_givenStarClickedWhileFavorited%s_togglesTheFavorite', (favorited, expectedType, expectedValue, shownStar, hiddenStar) => {
+        // Arrange
+        renderStars(favorited);
+        new CommonMapsMap('map', 'common/maps/map', {})._setupFavorite();
+
+        // Act
+        $(favorited ? '#route_favorited' : '#route_not_favorited').trigger('click');
+
+        // Assert
+        expect(ajaxSpy).toHaveBeenCalledTimes(1);
+        expect(ajaxSpy.mock.calls[0][0]).toMatchObject({type: expectedType, url: '/ajax/the_public_key/favorite'});
+        expect($('#favorite').val()).toBe(expectedValue);
+        expect($(shownStar).css('display')).not.toBe('none');
+        expect($(hiddenStar).css('display')).toBe('none');
+    });
+});

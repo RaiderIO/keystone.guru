@@ -84,8 +84,41 @@ describe('CommonMapsMap enemy user report', () => {
         // Assert
         expect(ajaxSpy).toHaveBeenCalledTimes(1);
         let options = ajaxSpy.mock.calls[0][0];
+        expect(options.type).toBe('POST');
         expect(options.url).toBe('/ajax/userreport/enemy/123');
         expect(options.data).toEqual({category: 'enemy', message: 'Old message', contact_ok: 1});
         expect(options.data).not.toHaveProperty('username');
+    });
+
+    it('_submitEnemyUserReport_givenContactNotAllowed_postsContactOkZero', () => {
+        // Arrange
+        document.body.innerHTML = REPORT_FORM_HTML;
+        $('#enemy_report_contact_ok').prop('checked', false);
+        let ajaxSpy = vi.spyOn($, 'ajax').mockImplementation(() => {
+        });
+
+        // Act
+        buildMap()._submitEnemyUserReport();
+
+        // Assert
+        expect(ajaxSpy.mock.calls[0][0].data.contact_ok).toBe(0);
+    });
+
+    it('_submitEnemyUserReport_givenTheReportWasSaved_collapsesTheFormAndConfirms', () => {
+        // Arrange
+        document.body.innerHTML = REPORT_FORM_HTML;
+        globalThis.lang = {get: (key) => key};
+        globalThis.showSuccessNotification = vi.fn();
+        vi.spyOn($, 'ajax').mockImplementation((options) => {
+            options.success({});
+        });
+
+        // Act
+        buildMap()._submitEnemyUserReport();
+
+        // Assert
+        expect(getOrCreateInstanceSpy).toHaveBeenCalledWith(document.getElementById('enemy_report_collapse'), {toggle: false});
+        expect(hideSpy).toHaveBeenCalledTimes(1);
+        expect(showSuccessNotification).toHaveBeenCalledWith('js.user_report_enemy_success');
     });
 });

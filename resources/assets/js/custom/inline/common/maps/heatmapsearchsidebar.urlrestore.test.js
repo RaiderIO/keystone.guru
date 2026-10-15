@@ -429,6 +429,8 @@ describe('CommonMapsHeatmapsearchsidebar - preserving embed params in the URL', 
         activateSidebar(`?type=${COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH}&region=world&${EMBED_QUERY_STRING}`);
 
         // Assert - they're display options for this page, the heatmap endpoint has no use for them
+        expect(searchSpy).toHaveBeenCalledTimes(1);
+        expect(searchSpy.mock.calls[0][0].params).toMatchObject({type: COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH, region: 'world'});
         for (const key of Object.keys(EMBED_PARAMS)) {
             expect(searchSpy.mock.calls[0][0].params).not.toHaveProperty(key);
         }
@@ -476,10 +478,16 @@ describe('CommonMapsHeatmapsearchsidebar - preserving embed params in the URL', 
     });
 
     test('activate_givenNoMythicLevelParams_leavesThemOutOfTheUrl', () => {
-        // Arrange & Act
+        // Arrange
+        const pushState = vi.spyOn(window.history, 'pushState');
+
+        // Act
         activateSidebar(`?type=${COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH}&region=world`);
 
         // Assert - untouched filters stay implicit, so a plain link doesn't grow every default under the sun
+        expect(pushState).toHaveBeenCalled();
+        const pushedUrl = pushState.mock.calls[pushState.mock.calls.length - 1][2];
+        expect(Object.fromEntries(new URLSearchParams(pushedUrl))).toEqual({type: COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH, region: 'world'});
         expect(writtenParams()).not.toHaveProperty('minMythicLevel');
         expect(writtenParams()).not.toHaveProperty('maxMythicLevel');
     });

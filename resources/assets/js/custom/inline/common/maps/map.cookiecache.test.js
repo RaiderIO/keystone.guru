@@ -56,10 +56,15 @@ describe('CommonMapsMap._initDefaults cookie cache handling', () => {
     test('_initDefaults_givenAFreshPage_invalidatesTheCookieCacheAfterWritingTheDefaults', () => {
         // Without this the very first read of a setting could be cached from before the defaults
         // were written, and would then be served for the rest of the session.
+        let cookieAtInvalidation;
+        invalidateCookieCache.mockImplementation(() => {
+            cookieAtInvalidation = cookieJar.get('map_enemy_dangerous_border');
+        });
+
         initDefaults();
 
-        expect(invalidateCookieCache).toHaveBeenCalled();
-        expect(cookieJar.get('map_enemy_dangerous_border')).toBe('0');
+        expect(invalidateCookieCache).toHaveBeenCalledTimes(1);
+        expect(cookieAtInvalidation).toBe('0');
     });
 
     test('_initDefaults_givenAFreshPage_writesTheSameDefaultsAsTheMapSettingsForm', () => {
@@ -79,6 +84,33 @@ describe('CommonMapsMap._initDefaults cookie cache handling', () => {
 
         expect(cookieJar.get('map_enemy_dangerous_border')).toBe('1');
         expect(cookieJar.get('map_number_style')).toBe('percentage');
+    });
+
+    test('_initDefaults_givenHiddenGroupsFromBeforeMountableAreas_hidesMountableAreasOnce', () => {
+        cookieJar.set('hidden_map_object_groups', '["enemypatrol"]');
+
+        initDefaults();
+
+        expect(JSON.parse(cookieJar.get('hidden_map_object_groups'))).toEqual(['enemypatrol', 'mountablearea']);
+        expect(cookieJar.get('hidden_map_object_groups_added_mountablearea')).toBe('1');
+    });
+
+    test('_initDefaults_givenMountableAreasAlreadyHandled_keepsTheUsersHiddenGroups', () => {
+        cookieJar.set('hidden_map_object_groups', '["enemypatrol"]');
+        cookieJar.set('hidden_map_object_groups_added_mountablearea', '1');
+
+        initDefaults();
+
+        expect(JSON.parse(cookieJar.get('hidden_map_object_groups'))).toEqual(['enemypatrol']);
+    });
+
+    test('_initDefaults_givenAnEmptyHiddenGroupsCookie_refillsIt', () => {
+        cookieJar.set('hidden_map_object_groups', '');
+        cookieJar.set('hidden_map_object_groups_added_mountablearea', '1');
+
+        initDefaults();
+
+        expect(cookieJar.get('hidden_map_object_groups')).toBe('["mountablearea"]');
     });
 
     test('_initDefaults_givenTheTabIsFocusedAgain_invalidatesTheCookieCache', () => {

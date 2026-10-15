@@ -116,9 +116,11 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
             }),
         };
 
-        const jqXhrStub = {done: function () { return this; }, fail: function () { return this; }};
+        const jqXhrStub = {done: function () { return this; }, fail: function () { return this; }, abort: () => {}};
         vi.spyOn($, 'ajax').mockReturnValue(jqXhrStub);
         globalThis.getQueryParams = getQueryParams;
+        // Every search writes its filters into the address bar, which jsdom keeps for the whole file
+        window.history.replaceState({}, '', '/');
     });
 
     let currentFloor;
@@ -251,6 +253,17 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
         search.mockRestore();
     });
 
+    test('activate_givenMetricAndMinDistanceInTheUrl_restoresBothControls', () => {
+        const search = vi.spyOn(CommonMapsCombatlogrouteenemyresolutions.prototype, '_search').mockImplementation(() => {});
+        globalThis.getQueryParams = () => ({metric: 'max', min_distance: '75'});
+
+        createInstance().activate();
+
+        expect($('#filter_metric').val()).toBe('max');
+        expect($('#filter_min_distance').val()).toBe('75');
+        search.mockRestore();
+    });
+
     test('activate_givenTomSelectOnTheNpcControl_restoresThroughItSilently', () => {
         const search   = vi.spyOn(CommonMapsCombatlogrouteenemyresolutions.prototype, '_search').mockImplementation(() => {});
         const setValue = vi.fn();
@@ -276,6 +289,39 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
         expect(ajaxCall.type).toBe('DELETE');
         expect(ajaxCall.url).toBe('/ajax/admin/combatlogroute/enemy-resolutions');
         expect(ajaxCall.data).toEqual({dungeon_id: 123});
+    });
+
+    test('clearButtonClick_givenDeleteSucceeded_reloadsThePage', () => {
+        const instance = createInstance();
+        const reload   = vi.spyOn(instance, '_reload').mockImplementation(() => {});
+        instance.activate();
+        $.ajax.mockReturnValue({done: (callback) => { callback(); return {}; }});
+
+        $('#clear_button').trigger('click');
+
+        expect(reload).toHaveBeenCalledTimes(1);
+    });
+
+    test('mappingVersionChange_navigatesToThePageForThatMappingVersion', () => {
+        const instance = createInstance();
+        const navigate = vi.spyOn(instance, '_navigateTo').mockImplementation(() => {});
+
+        instance.activate();
+        $('#filter_mapping_version_id').val('11').trigger('change');
+
+        expect(navigate).toHaveBeenCalledWith('/admin/tools/combatlog/route/enemy-resolutions?dungeon_id=123&mapping_version_id=11');
+    });
+
+    test('npcFilterChange_searchesAgainWithTheSelectedNpcs', () => {
+        const instance = createInstance();
+        $('#filter_npc_id').append('<option value="42">x</option><option value="43">y</option>');
+        instance.activate();
+        $.ajax.mockClear();
+
+        $('#filter_npc_id').val(['42', '43']).trigger('change');
+
+        const linesCall = $.ajax.mock.calls.find((call) => call[0].url === '/ajax/admin/combatlogroute/enemy-resolutions/lines');
+        expect(linesCall?.[0].data.npc_id).toEqual([42, 43]);
     });
 
     test('loaderFn_givenHeatmapResponse_feedsTheLayerAndFillsTheSummary', () => {
@@ -311,6 +357,17 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
         const linesCall = $.ajax.mock.calls.find((call) => call[0].url === '/ajax/admin/combatlogroute/enemy-resolutions/lines');
         expect(linesCall).toBeDefined();
         expect(linesCall[0].data).toEqual({dungeon_id: 123, mapping_version_id: 10, npc_id: [42], min_distance: '75'});
+    });
+
+    test('search_givenNoNpcAndNoMinDistance_fetchesLinesAndGroupsWithoutThoseFilters', () => {
+        const instance = createInstance();
+
+        instance.activate();
+
+        const linesCall  = $.ajax.mock.calls.find((call) => call[0].url === '/ajax/admin/combatlogroute/enemy-resolutions/lines');
+        const groupsCall = $.ajax.mock.calls.find((call) => call[0].url === '/ajax/admin/combatlogroute/enemy-resolutions/groups');
+        expect(linesCall[0].data).toEqual({dungeon_id: 123, mapping_version_id: 10});
+        expect(groupsCall[0].data).toEqual({dungeon_id: 123, mapping_version_id: 10});
     });
 
     test('redrawLines_drawsOnlyCurrentFloorLinesFromEngagementToEnemy', () => {
@@ -508,6 +565,40 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
         expect(layerGroupStub.layers).toEqual([]);
     });
 
+    test('floorChange_redrawsTheGroupsForTheNewFloor', () => {
+        const instance = createInstance();
+        instance.activate();
+        instance._groups = [group({floor_id: 5}), group({floor_id: 6, mapped_centroid: {lat: -1, lng: 2}, engaged_centroid: {lat: -3, lng: 4}})];
+        instance._redrawGroups();
+
+        currentFloor = {id: 6};
+        stateStub.register.mock.calls
+            .filter((call) => call[0] === 'floorid:changed')
+            .forEach((call) => call[2]());
+
+        expect(layerGroupStub.layers.length).toBe(3);
+        expect(layerGroupStub.layers[0].latLngs).toEqual([[-1, 2], [-3, 4]]);
+    });
+
+    test('fetchGroups_givenStaleFailureArrivingLate_keepsTheNewerGroups', () => {
+        const instance = createInstance();
+        instance.activate();
+
+        const pendingDone = [];
+        const pendingFail = [];
+        $.ajax.mockImplementation((options) => ({
+            done: function (callback) { if (options.url.endsWith('/groups')) pendingDone.push(callback); return this; },
+            fail: function (callback) { if (options.url.endsWith('/groups')) pendingFail.push(callback); return this; },
+        }));
+        instance._fetchGroups([1]);
+        instance._fetchGroups([2]);
+        pendingDone[1]({data: [group({enemy_pack_id: 2})]});
+        pendingFail[0]();
+
+        expect(instance._groups.map((entry) => entry.enemy_pack_id)).toEqual([2]);
+        expect(layerGroupStub.layers.length).toBe(3);
+    });
+
     test('fetchGroups_givenStaleResponseArrivingLate_ignoresIt', () => {
         const instance = createInstance();
         instance.activate();
@@ -553,6 +644,8 @@ describe('CommonMapsCombatlogrouteenemyresolutions', () => {
 
         const html = instance._getGroupPopupHtml(group({npc_names: '<b>x</b>', suggestion: '<img src=x>'}));
 
+        expect(html).toContain('&lt;b&gt;x&lt;/b&gt;');
+        expect(html).toContain('&lt;img src=x&gt;');
         expect(html).not.toContain('<b>x</b>');
         expect(html).not.toContain('<img');
     });

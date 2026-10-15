@@ -46,6 +46,8 @@ describe('showConfirmYesCancel', () => {
 
         // Assert
         expect(confirms).toHaveLength(1);
+        expect(confirms[0].type).toBe('confirm');
+        expect(confirms[0].text).toBe('Sure?');
         expect(confirms[0].buttons.map(button => button.text)).toEqual(['js.yes_label', 'js.cancel_label']);
         expect(confirms[0].buttons.map(button => button.classNames)).toEqual(['btn btn-success me-1', 'btn btn-danger']);
     });
@@ -82,6 +84,34 @@ describe('showConfirmYesCancel', () => {
 
         // Assert
         expect(yes).toHaveBeenCalledTimes(1);
+        expect(notification.close).toHaveBeenCalledTimes(1);
+    });
+
+    test('showConfirmYesCancel_givenTheActionCancelled_runsTheCancelCallbackOnly', () => {
+        // Arrange
+        const yes = vi.fn();
+        const no = vi.fn();
+        showConfirmYesCancel('Delete it?', yes, no);
+        const notification = {close: vi.fn()};
+
+        // Act
+        confirms[0].buttons[1].callback(notification);
+
+        // Assert
+        expect(no).toHaveBeenCalledTimes(1);
+        expect(yes).not.toHaveBeenCalled();
+        expect(notification.close).toHaveBeenCalledTimes(1);
+    });
+
+    test('showConfirmYesCancel_givenNoCancelCallback_stillClosesTheConfirm', () => {
+        // Arrange
+        showConfirmYesCancel('Delete it?', vi.fn(), null);
+        const notification = {close: vi.fn()};
+
+        // Act
+        confirms[0].buttons[1].callback(notification);
+
+        // Assert
         expect(notification.close).toHaveBeenCalledTimes(1);
     });
 });
