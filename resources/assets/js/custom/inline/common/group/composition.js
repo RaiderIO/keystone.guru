@@ -64,11 +64,17 @@ class CommonGroupComposition extends InlineCode {
         this._fillRaces();
     }
 
-    setDefaults(oldFaction, oldRaces, oldClasses, oldSpecializations) {
+    /**
+     * @param {string} oldFaction
+     * @param {{id: number|string}[]} oldClasses
+     * @param {{id: number|string}[]} oldSpecializations
+     * @param {{id: number|string}[]} oldRaces
+     */
+    setDefaults(oldFaction, oldClasses, oldSpecializations, oldRaces) {
         this._oldFaction = oldFaction;
-        this._oldRaces = oldRaces;
         this._oldClasses = oldClasses;
         this._oldSpecializations = oldSpecializations;
+        this._oldRaces = oldRaces;
 
         this._fillFactions();
         this._fillSpecializations();
@@ -262,7 +268,7 @@ class CommonGroupComposition extends InlineCode {
             let $raceSelect = $(changeEvent.target);
             let newRaceId = parseInt($raceSelect.val());
 
-            let $classSelect = $('.classselect').find("[data-id='" + $raceSelect.data('id') + "']");
+            let $classSelect = $(`select.classselect[data-id='${$raceSelect.data('id')}']`);
 
             if (newRaceId > 0) {
                 // Check if the current class we've selected is still valid with this new race
@@ -313,7 +319,7 @@ class CommonGroupComposition extends InlineCode {
         let $classSelect = $(changeEvent.target);
         let newClassId = parseInt($classSelect.val());
 
-        let $raceSelect = $('.raceselect').find("[data-id='" + $classSelect.data('id') + "']");
+        let $raceSelect = $(`select.raceselect[data-id='${$classSelect.data('id')}']`);
         let self = this;
 
         // For each race select there is ..
@@ -340,7 +346,7 @@ class CommonGroupComposition extends InlineCode {
 
         // Only update specs when updated by user, otherwise this event originated from changing a spec in the first place
         if (changeEvent.originalEvent) {
-            let $specSelect = $('.specializationselect').find("[data-id='" + $classSelect.data('id') + "']");
+            let $specSelect = $(`select.specializationselect[data-id='${$classSelect.data('id')}']`);
 
             if (newClassId > 0) {
                 // Adjust current selections in spec if the class changed, if spec was set to Enhancement, and the class was changed
@@ -382,15 +388,16 @@ class CommonGroupComposition extends InlineCode {
         let $specSelect = $(changeEvent.target);
         let newSpecId = parseInt($specSelect.val());
 
-        let $classSelect = $('.classselect').find("[data-id='" + $specSelect.data('id') + "']");
+        let $classSelect = $(`select.classselect[data-id='${$specSelect.data('id')}']`);
         // For each race select there is ..
         $.each($classSelect.find('option'), function (index, value) {
             // Hide the classes that do not have this spec (all but one)
             let $option = $(value);
 
             let optionClassId = parseInt($option.attr('value'));
-            // If it's not the first entry (Spec...), and the candidate race is not part of the new class
-            if (newSpecId > 0 && (optionClassId === 0 || (optionClassId > 0 && !self._isSpecPartOfClass(optionClassId, newSpecId)))) {
+            // Hide everything but the spec's own class: also the Class... entry, and the empty-value option
+            // Tom Select's clear() leaves behind in the <select>
+            if (newSpecId > 0 && !(optionClassId > 0 && self._isSpecPartOfClass(optionClassId, newSpecId))) {
                 $option.hide();
             } else {
                 $option.show();
@@ -570,9 +577,9 @@ class CommonGroupComposition extends InlineCode {
         // Have to manually trigger change..
         $faction.trigger('change');
 
-        let $specializationsSelects = $(".specializationselect select");
-        let $racesSelects = $(".raceselect select");
-        let $classSelects = $(".classselect select");
+        let $specializationsSelects = $('select.specializationselect');
+        let $racesSelects = $('select.raceselect');
+        let $classSelects = $('select.classselect');
 
         // For each class
         for (let i = 0; i < this._oldClasses.length; i++) {
