@@ -36,9 +36,7 @@ globalThis.Cookies = globalThis.Cookies ?? {get: () => undefined};
 
 // The `t` translation helper bootstrap.js registers on the bundle's Handlebars, for tests that
 // compile the real .handlebars sources. Resolves through whichever `lang` is current at render time.
-require('handlebars').registerHelper('t', function (key) {
-    return lang.get('js.' + key);
-});
+require('../handlebars-translation-helper').registerTranslationHelper(require('handlebars'));
 
 // util.js's abbreviateNumber is a bundle global that the route picker and route table call bare.
 globalThis.abbreviateNumber = require('../custom/util').abbreviateNumber;
