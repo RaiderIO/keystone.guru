@@ -869,6 +869,13 @@
     font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
+/** Centres the capitals and digits themselves, not the line box, whose descender space leaves them high */
+.enemy_icon_npc_enemy_group_inner > div,
+.enemy_icon_npc_enemy_skippable_inner > div,
+.enemy_icon_npc_enemy_forces_inner > div {
+    text-box: trim-both cap alphabetic;
+}
+
 /** #040C1F is the same blue as the background color of portraits */
 .enemy_icon_npc_enemy_portrait_inner {
     width: 100%;

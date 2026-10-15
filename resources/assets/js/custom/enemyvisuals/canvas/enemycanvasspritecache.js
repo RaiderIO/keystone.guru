@@ -248,9 +248,9 @@ class EnemyCanvasSpriteCache {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'alphabetic';
             let metrics = ctx.measureText(text.value);
-            if (typeof metrics.fontBoundingBoxAscent === 'number' && typeof metrics.fontBoundingBoxDescent === 'number') {
-                // Where CSS puts the baseline of a vertically centred line box; 'middle' lands 1-2px higher
-                ctx.fillText(text.value, size / 2, size / 2 + (metrics.fontBoundingBoxAscent - metrics.fontBoundingBoxDescent) / 2);
+            if (typeof metrics.actualBoundingBoxAscent === 'number' && typeof metrics.actualBoundingBoxDescent === 'number') {
+                // Centres the drawn glyphs; centring the font's box ('middle', or CSS's line box) leaves digits high
+                ctx.fillText(text.value, size / 2, size / 2 + (metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent) / 2);
             } else {
                 ctx.textBaseline = 'middle';
                 ctx.fillText(text.value, size / 2, size / 2);

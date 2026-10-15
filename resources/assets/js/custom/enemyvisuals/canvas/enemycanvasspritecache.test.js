@@ -337,9 +337,14 @@ test('get_givenText_drawsItCentredAtPixelRatio', () => {
     expect(calls).toContainEqual(['fillText', '14px Arial', 'rgb(255, 255, 255)', 'middle', '12', 10, 10]);
 });
 
-test('get_givenTextWithFontMetrics_drawsItOnTheBaselineOfACentredLineBox', () => {
+test('get_givenTextWithInkMetrics_drawsItsGlyphsCentred', () => {
     // Arrange
-    const {cache, canvases} = makeCache({}, {fontBoundingBoxAscent: 12, fontBoundingBoxDescent: 3});
+    const {cache, canvases} = makeCache({}, {
+        actualBoundingBoxAscent: 10,
+        actualBoundingBoxDescent: 0,
+        fontBoundingBoxAscent: 12,
+        fontBoundingBoxDescent: 3,
+    });
     const sprite = makeSprite({imageUrl: null, text: {value: '0', font: '13px Arial', color: 'rgb(255, 255, 255)'}});
 
     // Act
@@ -348,7 +353,7 @@ test('get_givenTextWithFontMetrics_drawsItOnTheBaselineOfACentredLineBox', () =>
     // Assert
     const calls = canvases.created[0].ctx.calls;
     expect(calls).toContainEqual(['measureText', '13px Arial', 'alphabetic', '0']);
-    expect(calls).toContainEqual(['fillText', '13px Arial', 'rgb(255, 255, 255)', 'alphabetic', '0', 13, 17.5]);
+    expect(calls).toContainEqual(['fillText', '13px Arial', 'rgb(255, 255, 255)', 'alphabetic', '0', 13, 18]);
 });
 
 test('clear_givenRenderedSprite_rendersItAgainOnNextGet', () => {
