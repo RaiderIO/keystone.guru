@@ -23,7 +23,10 @@ class CommonGroupAffixes extends InlineCode {
         this.currentSelectionExpansionKey = null;
         this.hasDungeonRoute = typeof this.options.dungeonroute !== 'undefined' && this.options.dungeonroute !== null;
 
-        this._automaticSeasonalIndexChange = this.hasDungeonRoute;
+        this._automaticSeasonalIndexChange = !this.hasDungeonRoute;
+        $(this.options.seasonalIndexSelector).on('change', function () {
+            self._automaticSeasonalIndexChange = false;
+        });
 
         if (this.options.hasOwnProperty('teemingSelector')) {
             $(this.options.teemingSelector).bind('change', function () {
@@ -278,10 +281,12 @@ class CommonGroupAffixes extends InlineCode {
                 if (currentSelection === childId) {
                     let affixGroup = self._getAffixGroupById(childId);
 
-                    if (!selectedSeasonalIndices.hasOwnProperty(affixGroup.seasonal_index)) {
-                        selectedSeasonalIndices[affixGroup.seasonal_index] = 0;
+                    if (affixGroup.seasonal_index !== null && typeof affixGroup.seasonal_index !== 'undefined') {
+                        if (!selectedSeasonalIndices.hasOwnProperty(affixGroup.seasonal_index)) {
+                            selectedSeasonalIndices[affixGroup.seasonal_index] = 0;
+                        }
+                        selectedSeasonalIndices[affixGroup.seasonal_index]++;
                     }
-                    selectedSeasonalIndices[affixGroup.seasonal_index]++;
 
                     $child.addClass('affix_list_row_selected');
                     $child.find('.check').css('visibility', 'visible');

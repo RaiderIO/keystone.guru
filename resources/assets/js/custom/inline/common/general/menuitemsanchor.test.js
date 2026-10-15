@@ -55,6 +55,37 @@ describe('CommonGeneralMenuitemsanchor.activate', () => {
         document.body.innerHTML = '';
         // Reset the fragment so tests do not leak state into each other.
         history.replaceState(undefined, undefined, ' ');
+        vi.restoreAllMocks();
+    });
+
+    it('activate_givenHashMatchingATab_showsThatTab', () => {
+        // Arrange
+        buildTabbedDom();
+        history.replaceState(undefined, undefined, '#account');
+        const getOrCreateInstanceSpy = vi.spyOn(globalThis.bootstrap.Tab, 'getOrCreateInstance');
+        const code = new CommonGeneralMenuitemsanchor('id', 'common/general/menuitemsanchor', {});
+
+        // Act
+        code.activate();
+
+        // Assert
+        expect(getOrCreateInstanceSpy).toHaveBeenCalledTimes(1);
+        expect(getOrCreateInstanceSpy).toHaveBeenCalledWith(document.querySelector('a[href="#account"]'));
+    });
+
+    it('activate_givenEmptyHash_doesNotShowALinkWithAnEmptyHref', () => {
+        // Arrange: an `a[href=""]` is what an unguarded empty hash would select.
+        buildTabbedDom();
+        document.body.insertAdjacentHTML('beforeend', '<a href="">Reload</a>');
+        expect(window.location.hash).toBe('');
+        const getOrCreateInstanceSpy = vi.spyOn(globalThis.bootstrap.Tab, 'getOrCreateInstance');
+        const code = new CommonGeneralMenuitemsanchor('id', 'common/general/menuitemsanchor', {});
+
+        // Act
+        code.activate();
+
+        // Assert
+        expect(getOrCreateInstanceSpy).not.toHaveBeenCalled();
     });
 
     it('activate_givenNavLinkClicked_updatesHashWithoutScrolling', () => {

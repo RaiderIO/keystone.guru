@@ -67,10 +67,9 @@ function displayOf(selector) {
  * @param {{id: number}[]} config.affixGroups
  * @param {number[]} config.defaultSelectedAffixes
  * @param {boolean} [config.withSeasonalIndexPreset]
- * @param {boolean} [config.editingExistingRoute] - see the note on `_automaticSeasonalIndexChange`
- *   below: pass true to exercise the seasonal_index auto-select feature at all.
- * @param {Object<number, number>} [config.seasonalIndexOverrides] - override `seasonal_index` per
- *   affix group id (see the allAffixGroups note below).
+ * @param {boolean} [config.editingExistingRoute] - sets `options.dungeonroute`, which turns off the automatic
+ *   seasonal_index preset selection.
+ * @param {Object<number, number>} [config.seasonalIndexOverrides] - override `seasonal_index` per affix group id.
  * @returns {CommonGroupAffixes}
  */
 function buildAndActivate({
@@ -88,31 +87,14 @@ function buildAndActivate({
         affixGroups,
         withSeasonalIndexPreset,
     });
-    const options = buildInlineOptions({defaultSelectedAffixes}).affixes;
-
-    // affixes.js only flips on its automatic seasonal_index rewrite (`_automaticSeasonalIndexChange`)
-    // when `options.dungeonroute` is set, i.e. when *editing* an existing route - never when creating
-    // one (dungeonroute is always null for /routes/new, which is what buildInlineOptions() defaults
-    // to). So in the create-route flow the "Awakened Enemy Set" preset never follows affix clicks at
-    // all; it stays at whatever the blade rendered it to (0, absent an existing route). Tests below
-    // cover both: the real create-flow no-op, and the edit-flow auto-select feature itself.
-    options.dungeonroute = editingExistingRoute ? {} : null;
-
-    // _getAffixGroupById() checks currentSeason/nextSeason first but then *unconditionally*
-    // re-checks allAffixGroups and overwrites the result if found there too - so for any affix group
-    // id present in both (as is always true here), allAffixGroups is what actually wins. In
-    // production allAffixGroups is a full AffixGroup Eloquent model dump and does carry
-    // seasonal_index; buildInlineOptions()'s fixture simplifies it down to {id, expansion_id} only.
-    // Enrich it here (in-test only, not touching the shared fixture) so the auto-select behaviour
-    // under test reflects the real seasonal_index each affix group carries in production, rather than
-    // silently no-op'ing on `undefined`.
-    const seasonalIndexById = Object.fromEntries(options.currentSeason.affix_groups.map((group) => [group.id, group.seasonal_index]));
-    options.allAffixGroups = options.allAffixGroups.map((group) => ({
-        ...group,
-        seasonal_index: Object.prototype.hasOwnProperty.call(seasonalIndexOverrides, group.id)
+    const seasonAffixGroups = buildInlineOptions().affixes.currentSeason.affix_groups.map((group) => ({
+        id: group.id,
+        seasonalIndex: Object.prototype.hasOwnProperty.call(seasonalIndexOverrides, group.id)
             ? seasonalIndexOverrides[group.id]
-            : seasonalIndexById[group.id],
+            : group.seasonal_index,
     }));
+    const options = buildInlineOptions({defaultSelectedAffixes, seasonAffixGroups}).affixes;
+    options.dungeonroute = editingExistingRoute ? {} : null;
 
     beforeActivate(options);
 
@@ -120,6 +102,17 @@ function buildAndActivate({
     code.activate();
 
     return code;
+}
+
+/**
+ * Picks a preset the way a user does: Tom Select (or the native select) fires `change` on the <select>.
+ *
+ * @param {string} value
+ */
+function pickSeasonalIndexByHand(value) {
+    const select = document.querySelector('#seasonal_index');
+    select.value = value;
+    select.dispatchEvent(new Event('change', {bubbles: true}));
 }
 
 describe('CommonGroupAffixes.activate', () => {
@@ -159,10 +152,9 @@ describe('CommonGroupAffixes.activate', () => {
         expect(document.querySelector(`.affix_list_row[data-id="${AFFIX_GROUP_ALT_A_ID}"]`).classList).not.toContain('affix_list_row_selected');
     });
 
-    it('activate_givenCreatingNewRoute_affixRowClicksNeverTouchSeasonalIndex', () => {
-        // Arrange: options.dungeonroute is null in the create flow, so _automaticSeasonalIndexChange
-        // is false and _applyAffixRowSelection's seasonal_index block never runs. Force the select
-        // away from its rendered default first so the assertion proves a real no-op, not a coincidence.
+    it('activate_givenEditingExistingRoute_affixRowClicksNeverTouchSeasonalIndex', () => {
+        // Arrange: an existing route keeps the preset it was saved with. Force the select away from its
+        // rendered default first so the assertion proves a real no-op, not a coincidence.
         buildAndActivate({
             affixGroups: [
                 {id: AFFIX_GROUP_DEFAULT_ID},
@@ -171,7 +163,8 @@ describe('CommonGroupAffixes.activate', () => {
             ],
             defaultSelectedAffixes: [],
             withSeasonalIndexPreset: true,
-            editingExistingRoute: false,
+            editingExistingRoute: true,
+            seasonalIndexOverrides: {[AFFIX_GROUP_DEFAULT_ID]: 0, [AFFIX_GROUP_ALT_A_ID]: 0, [AFFIX_GROUP_ALT_B_ID]: 1},
         });
         $('#seasonal_index').val('2');
 
@@ -184,9 +177,8 @@ describe('CommonGroupAffixes.activate', () => {
         expect($('#seasonal_index').val()).toBe('2');
     });
 
-    it('activate_givenEditingExistingRouteAndMultipleRowsSharingASeasonalIndexClicked_autoSelectsThatSeasonalIndexAsMajority', () => {
-        // Arrange: two rows share seasonal_index 0, one is index 1 - majority wins. Only reachable
-        // when editing an existing route (see the note in buildAndActivate).
+    it('activate_givenCreatingNewRouteAndMultipleRowsSharingASeasonalIndexClicked_autoSelectsThatSeasonalIndexAsMajority', () => {
+        // Arrange: two rows share seasonal_index 0, one is index 1 - majority wins.
         buildAndActivate({
             affixGroups: [
                 {id: AFFIX_GROUP_DEFAULT_ID},
@@ -195,7 +187,6 @@ describe('CommonGroupAffixes.activate', () => {
             ],
             defaultSelectedAffixes: [],
             withSeasonalIndexPreset: true,
-            editingExistingRoute: true,
             seasonalIndexOverrides: {[AFFIX_GROUP_DEFAULT_ID]: 0, [AFFIX_GROUP_ALT_A_ID]: 0, [AFFIX_GROUP_ALT_B_ID]: 1},
         });
         // Force the select away from its "majority winner" value first, so the assertion below
@@ -211,13 +202,12 @@ describe('CommonGroupAffixes.activate', () => {
         expect($('#seasonal_index').val()).toBe('0');
     });
 
-    it('activate_givenEditingExistingRouteAndSingleRowClicked_setsSeasonalIndexToThatRowsOwnIndex', () => {
+    it('activate_givenCreatingNewRouteAndSingleRowClicked_setsSeasonalIndexToThatRowsOwnIndex', () => {
         // Arrange
         buildAndActivate({
             affixGroups: [{id: AFFIX_GROUP_DEFAULT_ID}, {id: AFFIX_GROUP_ALT_B_ID}],
             defaultSelectedAffixes: [],
             withSeasonalIndexPreset: true,
-            editingExistingRoute: true,
             seasonalIndexOverrides: {[AFFIX_GROUP_ALT_B_ID]: 1},
         });
         // Force the select away from '1' first, so the assertion below actually proves the class
@@ -229,6 +219,45 @@ describe('CommonGroupAffixes.activate', () => {
 
         // Assert
         expect($('#seasonal_index').val()).toBe('1');
+    });
+
+    it('activate_givenCreatingNewRouteWithMoreSelectedGroupsWithoutASeasonalIndex_followsTheGroupsThatHaveOne', () => {
+        // Arrange: the page pre-selects this week's affix group of every expansion, and those carry no
+        // seasonal_index. They outnumber the one clicked row that does.
+        buildAndActivate({
+            affixGroups: [
+                {id: AFFIX_GROUP_DEFAULT_ID},
+                {id: AFFIX_GROUP_ALT_A_ID},
+                {id: AFFIX_GROUP_ALT_B_ID},
+            ],
+            defaultSelectedAffixes: [AFFIX_GROUP_DEFAULT_ID, AFFIX_GROUP_ALT_A_ID],
+            withSeasonalIndexPreset: true,
+            seasonalIndexOverrides: {[AFFIX_GROUP_DEFAULT_ID]: null, [AFFIX_GROUP_ALT_A_ID]: null, [AFFIX_GROUP_ALT_B_ID]: 1},
+        });
+        $('#seasonal_index').val('2');
+
+        // Act
+        clickAffixRow(AFFIX_GROUP_ALT_B_ID);
+
+        // Assert
+        expect($('#seasonal_index').val()).toBe('1');
+    });
+
+    it('activate_givenCreatingNewRouteAndPresetPickedByHand_stopsFollowingAffixClicks', () => {
+        // Arrange
+        buildAndActivate({
+            affixGroups: [{id: AFFIX_GROUP_DEFAULT_ID}, {id: AFFIX_GROUP_ALT_B_ID}],
+            defaultSelectedAffixes: [],
+            withSeasonalIndexPreset: true,
+            seasonalIndexOverrides: {[AFFIX_GROUP_ALT_B_ID]: 1},
+        });
+        pickSeasonalIndexByHand('2');
+
+        // Act
+        clickAffixRow(AFFIX_GROUP_ALT_B_ID);
+
+        // Assert
+        expect($('#seasonal_index').val()).toBe('2');
     });
 
     it('activate_givenADungeonOfTheCurrentSeason_showsOnlyThatSeasonsAffixRows', () => {
