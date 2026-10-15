@@ -6,6 +6,8 @@
 
 global.VersionableMapObject = class VersionableMapObject {
 };
+global.c = {map: {polyline: {polylineOptionsAnimated: {delay: 400}}}};
+global.$.extend = Object.assign;
 
 const {Polyline} = require('./polyline');
 
@@ -22,6 +24,14 @@ function buildPolyline(geometry) {
         redraw: vi.fn(),
     };
     polyline.layerAnimated = null;
+    polyline.map = {
+        drawnLayers: {
+            hasLayer: vi.fn(() => false),
+            addLayer: vi.fn(),
+            removeLayer: vi.fn(),
+        },
+    };
+    polyline._assignPopup = vi.fn();
 
     return polyline;
 }
@@ -75,12 +85,66 @@ describe('Polyline.setPolylineWeight', () => {
         expect(polyline.polyline.weight).toBe(5);
         expect(polyline.layer.setStyle).not.toHaveBeenCalled();
     });
+
+    it('setPolylineWeight_givenAnAnimatedLayer_restylesItToo', () => {
+        // Arrange
+        const polyline = buildPolyline({type: 'LineString', coordinates: []});
+        polyline.layerAnimated = {setStyle: vi.fn(), redraw: vi.fn()};
+
+        // Act
+        polyline.setPolylineWeight(5);
+
+        // Assert
+        expect(polyline.layerAnimated.setStyle).toHaveBeenCalledWith({weight: 5});
+        expect(polyline.layerAnimated.redraw).toHaveBeenCalledTimes(1);
+    });
 });
 
 describe('Polyline.setPolylineColorAnimated', () => {
+    let animatedLayer;
+
+    beforeEach(() => {
+        animatedLayer = {};
+        global.L = {polyline: {antPath: vi.fn(() => animatedLayer)}};
+    });
+
+    it('setPolylineColorAnimated_givenAnimatableWithAColor_showsAnAnimatedLayerAlongTheVertices', () => {
+        // Arrange
+        const polyline = buildPolyline({type: 'LineString', coordinates: [[2, -1], [4, -3]]});
+
+        // Act
+        polyline.setPolylineColorAnimated('#00ff00');
+
+        // Assert
+        expect(L.polyline.antPath).toHaveBeenCalledWith(
+            [{lat: -1, lng: 2}, {lat: -3, lng: 4}],
+            {delay: 400, color: '#ff0000', pulseColor: '#00ff00', weight: 3}
+        );
+        expect(polyline.layerAnimated).toBe(animatedLayer);
+        expect(polyline._assignPopup).toHaveBeenCalledWith(animatedLayer);
+        expect(polyline.map.drawnLayers.addLayer).toHaveBeenCalledWith(animatedLayer);
+    });
+
+    it('setPolylineColorAnimated_givenNull_removesTheExistingAnimatedLayer', () => {
+        // Arrange
+        const polyline = buildPolyline({type: 'LineString', coordinates: []});
+        const previousAnimatedLayer = {};
+        polyline.layerAnimated = previousAnimatedLayer;
+        polyline.map.drawnLayers.hasLayer = vi.fn((layer) => layer === previousAnimatedLayer);
+
+        // Act
+        polyline.setPolylineColorAnimated(null);
+
+        // Assert
+        expect(polyline.polyline.color_animated).toBeNull();
+        expect(polyline.map.drawnLayers.removeLayer).toHaveBeenCalledWith(previousAnimatedLayer);
+        expect(polyline.layerAnimated).toBeNull();
+        expect(L.polyline.antPath).not.toHaveBeenCalled();
+    });
+
     it('setPolylineColorAnimated_givenNotAnimatable_storesTheColorWithoutAnAnimatedLayer', () => {
         // Arrange
-        const polyline = buildPolyline({type: 'Polygon', coordinates: []});
+        const polyline = buildPolyline({type: 'Polygon', coordinates: [[[2, -1], [4, -3], [2, -1]]]});
         polyline._isAnimatable = () => false;
         polyline._setAnimatedLayerVisibility = vi.fn();
 
@@ -90,7 +154,37 @@ describe('Polyline.setPolylineColorAnimated', () => {
         // Assert
         expect(polyline.polyline.color_animated).toBe('#00ff00');
         expect(polyline.layerAnimated).toBeNull();
+        expect(L.polyline.antPath).not.toHaveBeenCalled();
         expect(polyline._setAnimatedLayerVisibility).not.toHaveBeenCalledWith(true);
+    });
+});
+
+describe('Polyline._setAnimatedLayerVisibility', () => {
+    it('setAnimatedLayerVisibility_givenVisibleAndAlreadyOnTheMap_doesNotAddItAgain', () => {
+        // Arrange
+        const polyline = buildPolyline({type: 'LineString', coordinates: []});
+        polyline.layerAnimated = {};
+        polyline.map.drawnLayers.hasLayer = vi.fn(() => true);
+
+        // Act
+        polyline._setAnimatedLayerVisibility(true);
+
+        // Assert
+        expect(polyline.map.drawnLayers.hasLayer).toHaveBeenCalledWith(polyline.layerAnimated);
+        expect(polyline.map.drawnLayers.addLayer).not.toHaveBeenCalled();
+    });
+
+    it('setAnimatedLayerVisibility_givenHiddenWhileNotOnTheMap_doesNotRemoveIt', () => {
+        // Arrange
+        const polyline = buildPolyline({type: 'LineString', coordinates: []});
+        polyline.layerAnimated = {};
+
+        // Act
+        polyline._setAnimatedLayerVisibility(false);
+
+        // Assert
+        expect(polyline.map.drawnLayers.hasLayer).toHaveBeenCalledWith(polyline.layerAnimated);
+        expect(polyline.map.drawnLayers.removeLayer).not.toHaveBeenCalled();
     });
 });
 

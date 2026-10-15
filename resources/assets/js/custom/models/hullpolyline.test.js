@@ -50,7 +50,9 @@ describe('HullPolyline._createHullLayer', () => {
     it('createHullLayer_givenPoints_returnsPolygonAroundTheirHull', () => {
         // Arrange
         const hullPolyline = buildHullPolyline();
-        const points = [[-10, 10], [-20, 20], [-10, 30]];
+        // The fourth point lies inside the hull of the other three
+        const points = [[-10, 10], [-20, 20], [-10, 30], [-12, 20]];
+        globalThis.hull = vi.fn((hullInput) => hullInput.slice(0, 3));
 
         // Act
         const result = hullPolyline._createHullLayer(points);
@@ -65,6 +67,20 @@ describe('HullPolyline._createHullLayer', () => {
         );
         expect(result.options).toEqual({weight: 1});
         expect(result.latLngs[0]).toHaveLength(3);
+    });
+
+    it('createHullLayer_givenTwoPoints_returnsPolygonAroundThem', () => {
+        // Arrange
+        const hullPolyline = buildHullPolyline();
+        const points = [[-10, 10], [-20, 20]];
+
+        // Act
+        const result = hullPolyline._createHullLayer(points);
+
+        // Assert
+        expect(globalThis.hull).toHaveBeenCalledWith(points, 100);
+        expect(arcSegments).toHaveBeenCalledWith(2);
+        expect(result.latLngs).toEqual([[[-10, 10], [-20, 20]]]);
     });
 
     it('createHullLayer_givenSinglePoint_returnsNull', () => {
@@ -103,7 +119,7 @@ describe('HullPolyline._createHullLayer', () => {
 
         // Assert
         expect(result).toBeNull();
-        expect(consoleError).toHaveBeenCalled();
+        expect(consoleError).toHaveBeenCalledWith('Unable to create offset hull polygon', expect.any(Error));
         consoleError.mockRestore();
     });
 });

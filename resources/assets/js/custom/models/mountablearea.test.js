@@ -4,6 +4,8 @@
 global.VersionableMapObject = class VersionableMapObject {
     rebindTooltip() {}
 
+    bindTooltip() {}
+
     loadRemoteMapObject() {}
 };
 global.Polyline = require('./polyline').Polyline;
@@ -11,6 +13,7 @@ global.HullPolyline = require('./hullpolyline').HullPolyline;
 global.MapContextMappingVersionEdit = class MapContextMappingVersionEdit {
 };
 global.MAP_OBJECT_GROUP_MOUNTABLE_AREA = 'mountablearea';
+global.MOVEMENT_SPEED_MOUNTED = 14;
 
 global.L = {
     Draw: {
@@ -160,5 +163,53 @@ describe('MountableArea.loadRemoteMapObject', () => {
 
         // Assert
         expect(mountableArea._updateHullLayer).not.toHaveBeenCalled();
+    });
+});
+
+describe('MountableArea.bindTooltip', () => {
+    beforeEach(() => {
+        vi.spyOn(lang, 'get').mockImplementation((key, replacements) => ` ${key} ${JSON.stringify(replacements)} `);
+    });
+
+    it('bindTooltip_givenASpeed_showsThatSpeed', () => {
+        // Arrange
+        const {mountableArea} = createMountableArea();
+        mountableArea.speed = 9;
+        mountableArea.layer.bindTooltip = vi.fn();
+
+        // Act
+        mountableArea.bindTooltip();
+
+        // Assert
+        expect(mountableArea.layer.bindTooltip).toHaveBeenCalledWith(
+            'js.mountablearea_tooltip_label {"speed":9}',
+            {sticky: true, direction: 'top'}
+        );
+    });
+
+    it('bindTooltip_givenNoSpeed_showsTheMountedMovementSpeed', () => {
+        // Arrange
+        const {mountableArea} = createMountableArea();
+        mountableArea.speed = null;
+        mountableArea.layer.bindTooltip = vi.fn();
+
+        // Act
+        mountableArea.bindTooltip();
+
+        // Assert
+        expect(mountableArea.layer.bindTooltip).toHaveBeenCalledWith(
+            'js.mountablearea_tooltip_label {"speed":14}',
+            {sticky: true, direction: 'top'}
+        );
+    });
+
+    it('bindTooltip_givenNoLayer_bindsNothing', () => {
+        // Arrange
+        const {mountableArea} = createMountableArea();
+        mountableArea.layer = null;
+
+        // Act + Assert
+        expect(() => mountableArea.bindTooltip()).not.toThrow();
+        expect(lang.get).not.toHaveBeenCalled();
     });
 });

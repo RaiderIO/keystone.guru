@@ -231,6 +231,45 @@ describe('DungeonStart', () => {
         expect(html.outer_width).toBe(32);
     });
 
+    it('onLayerInit_givenDeleteMapStateInMappingVersionEdit_rendersTheDeleteSelectedImage', () => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(new MapContextMappingVersionEdit(), new DeleteMapState());
+
+        // Act
+        dungeonStart.onLayerInit();
+
+        // Assert
+        const html = JSON.parse(dungeonStart.layer.icon.options.html);
+        expect(html.selectedclass).toBe(' leaflet-edit-marker-selected delete');
+        expect(html.outer_width).toBe(32);
+        expect(html.inner_width).toBe(24);
+    });
+
+    it.each([
+        ['EditMapState', () => new EditMapState()],
+        ['DeleteMapState', () => new DeleteMapState()],
+    ])('onLayerInit_given%sOutsideMappingVersionEdit_rendersTheUnselectedImage', (label, makeMapState) => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(exploreContext(), makeMapState());
+
+        // Act
+        dungeonStart.onLayerInit();
+
+        // Assert
+        const html = JSON.parse(dungeonStart.layer.icon.options.html);
+        expect(html.selectedclass).toBe('');
+        expect(html.outer_width).toBe(24);
+    });
+
+    it('refreshVisual_givenNoLayer_doesNothing', () => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(new MapContextMappingVersionEdit());
+        dungeonStart.layer = null;
+
+        // Act + Assert
+        expect(() => dungeonStart._refreshVisual()).not.toThrow();
+    });
+
     it('bindTooltip_givenNoComment_usesTheDefaultTooltip', () => {
         // Arrange
         const dungeonStart = buildDungeonStart(new MapContextMappingVersionEdit());
@@ -240,6 +279,43 @@ describe('DungeonStart', () => {
 
         // Assert
         expect(dungeonStart.layer.tooltip).toBe('translated(js.dungeonstart_tooltip)');
+    });
+
+    it('bindTooltip_givenEmptyComment_usesTheDefaultTooltip', () => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(new MapContextMappingVersionEdit());
+        dungeonStart.comment = '';
+
+        // Act
+        dungeonStart.bindTooltip();
+
+        // Assert
+        expect(dungeonStart.layer.tooltip).toBe('translated(js.dungeonstart_tooltip)');
+    });
+
+    it('bindTooltip_givenRaidStartWithoutComment_usesTheRaidTooltip', () => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(new MapContextMappingVersionEdit());
+        dungeonStart.raid = true;
+
+        // Act
+        dungeonStart.bindTooltip();
+
+        // Assert
+        expect(dungeonStart.layer.tooltip).toBe('translated(js.dungeonstart_raid_tooltip)');
+    });
+
+    it('bindTooltip_givenAnyText_sanitizesItBeforeBinding', () => {
+        // Arrange
+        const dungeonStart = buildDungeonStart(new MapContextMappingVersionEdit());
+        dungeonStart.comment = '<b>Exit</b>';
+        vi.spyOn(c.map, 'sanitizeText').mockImplementation((text) => `sanitized(${text})`);
+
+        // Act
+        dungeonStart.bindTooltip();
+
+        // Assert
+        expect(dungeonStart.layer.tooltip).toBe('sanitized(translated(<b>Exit</b>))');
     });
 
     it('bindTooltip_givenComment_translatesTheComment', () => {
@@ -376,7 +452,13 @@ describe('DungeonStart', () => {
     });
 
     describe('click', () => {
+        const originalLocation = window.location;
         let assignedHref;
+
+        afterEach(() => {
+            delete window.location;
+            window.location = originalLocation;
+        });
 
         beforeEach(() => {
             // jsdom refuses a real navigation, so stand in for it
@@ -416,10 +498,8 @@ describe('DungeonStart', () => {
             dungeonStart.id = 5;
             dungeonStart.onLayerInit();
 
-            // Act
-            dungeonStart.layer.handlers.click();
-
-            // Assert
+            // Act + Assert
+            expect(() => dungeonStart.layer.handlers.click()).not.toThrow();
             expect(assignedHref).toBeNull();
         });
     });
