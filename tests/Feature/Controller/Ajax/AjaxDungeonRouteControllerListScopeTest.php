@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\Enemy;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
@@ -15,6 +17,8 @@ use App\Models\Season;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\User;
+use Illuminate\Database\LazyLoadingViolationException;
+use Illuminate\Support\Facades\Exceptions;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -482,6 +486,54 @@ final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
             $this->assertArrayHasKey('enemy_forces', $pullForces[0]);
             $this->assertArrayHasKey('has_boss', $pullForces[0]);
         } finally {
+            $route?->delete();
+            $user?->delete();
+        }
+    }
+
+    /**
+     * The pull forces read every route's seasonal affix, which reads its season and the season's expansion.
+     * Two routes in two seasons, because Eloquent only flags a lazy load on a model that was hydrated
+     * alongside others - that goes for the routes and for their seasons.
+     */
+    #[Test]
+    public function get_givenWithPullForcesAndRoutesWithAffixesAndASeason_doesNotLazyLoad(): void
+    {
+        // Arrange
+        Exceptions::fake();
+        $user        = null;
+        $route       = null;
+        $secondRoute = null;
+
+        try {
+            /** @var AffixGroup $affixGroup */
+            $affixGroup = AffixGroup::query()->whereNotNull('season_id')->firstOrFail();
+            /** @var Season $otherSeason */
+            $otherSeason = Season::query()->where('id', '!=', $affixGroup->season_id)->firstOrFail();
+            $user        = $this->createUserWithUserRole();
+            $route       = $this->createOwnRoute($user, ['season_id' => $affixGroup->season_id]);
+            $secondRoute = $this->createOwnRoute($user, ['season_id' => $otherSeason->id]);
+            foreach ([$route, $secondRoute] as $dungeonRoute) {
+                DungeonRouteAffixGroup::create([
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'affix_group_id'   => $affixGroup->id,
+                ]);
+            }
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->get($this->mineQuery(['with_pull_forces' => 1]));
+
+            // Assert
+            Exceptions::assertNotReported(LazyLoadingViolationException::class);
+            $response->assertOk();
+            $this->assertEqualsCanonicalizing(
+                [$route->public_key, $secondRoute->public_key],
+                array_column($response->json('data'), 'public_key'),
+            );
+            $this->assertSame([[], []], array_column($response->json('data'), 'pull_forces'));
+        } finally {
+            $secondRoute?->delete();
             $route?->delete();
             $user?->delete();
         }
