@@ -171,17 +171,8 @@ jobs:
 
   # Builds app / worker / cron in parallel matrix legs (each a fresh runner).
   #
-  # Only the app base image (docker-compose/app) gets buildx + GHA layer caching:
-  # it's the expensive, self-contained build (rust/PHP-extension toolchain, ~5.4min)
-  # and every FROM in it resolves to a public registry image, which the buildx
-  # docker-container driver (required for --cache-to type=gha) can reach.
-  #
-  # The worker/cron base images (docker-compose/app-worker, docker-compose/cron) and
-  # all three production images instead FROM a *locally* tagged image (keystone.guru-app,
-  # or that leg's own base) — the docker-container builder cannot see the host docker
-  # daemon's local image store, so those stay on the plain `docker build` (default
-  # driver, shares the daemon). They're cheap layers (apt-get + one binary / a git
-  # clone), so there's little to gain from caching them anyway.
+  # No GitHub Actions layer cache: a tag-triggered run can only restore caches saved under
+  # its own tag or master, so one release can never read what the previous release wrote.
   build-push-images:
     strategy:
       fail-fast: false
@@ -228,9 +219,6 @@ jobs:
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
-
       # The base image build substitutes GIT_TOKEN into the composer auth.json.
       # All composer repositories are public, so the built-in token is sufficient.
       - name: Prepare base image build context
@@ -238,26 +226,9 @@ jobs:
 
       # Built on every leg (not just the app leg): the worker/cron base Dockerfiles
       # both FROM keystone.guru-app (see their Dockerfiles), so it has to exist
-      # locally on those runners too, all reading the one "app-base" GHA cache scope.
-      #
-      # This must be build-push-action rather than a raw `docker buildx build` run
-      # step: the type=gha cache backend needs the Actions runtime token/URL, which
-      # GitHub only injects into actions — a shell step never sees them, so the
-      # cache export would fail on the first real tag push.
-      #
-      # Only the app leg exports the cache (cache-to); worker/cron only read it.
-      # mode=max blobs are hundreds of MB, and three identical uploads per release
-      # would burn time and the repo's 10GB cache budget for nothing. An empty
-      # cache-to input is treated as "not set" by build-push-action.
+      # locally on those runners too.
       - name: Build app base image
-        uses: docker/build-push-action@v7
-        with:
-          context: docker-compose/app
-          tags: keystone.guru-app
-          load: true
-          push: false
-          cache-from: type=gha,scope=app-base
-          cache-to: ${{ matrix.image == 'app' && 'type=gha,mode=max,scope=app-base' || '' }}
+        run: docker build -t keystone.guru-app docker-compose/app
 
       - name: Build base ${{ matrix.image }} image
         if: matrix.needs_own_base_build
