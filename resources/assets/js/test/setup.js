@@ -30,8 +30,9 @@ globalThis.lang = globalThis.lang ?? {
 // returning `false` matches the no-op fallback defined in util.js.
 globalThis.getState = globalThis.getState ?? (() => false);
 
-// Cookie accessor (js-cookie). `constants.js` reads cookie values at load time.
-globalThis.Cookies = globalThis.Cookies ?? {get: () => null};
+// Cookie accessor (js-cookie 3, which answers undefined for a missing cookie). `constants.js` reads cookie values
+// at load time.
+globalThis.Cookies = globalThis.Cookies ?? {get: () => undefined};
 
 // The `t` translation helper bootstrap.js registers on the bundle's Handlebars, for tests that
 // compile the real .handlebars sources. Resolves through whichever `lang` is current at render time.

@@ -98,6 +98,7 @@ describe('NpcChangedHandler', () => {
         expect(enemy.npc_id).toBe(42);
         expect(enemy.visual.refresh).toHaveBeenCalled();
         expect(enemy.setSynced).toHaveBeenCalledWith(true);
+        expect(mapContext.removeRawNpcById).toHaveBeenCalledTimes(1);
     });
 
     test('onReceive_givenNpcStillBelongsToDungeon_preservesTheEnemysExistingEnemyForces', () => {
@@ -146,7 +147,27 @@ describe('NpcChangedHandler', () => {
         // Assert
         expect(enemy.npc).toBeUndefined();
         expect(enemy.npc_id).toBe(1);
+        expect(enemy.visual.refresh).not.toHaveBeenCalled();
         expect(enemy.setSynced).toHaveBeenCalledWith(true);
+    });
+
+    test('onReceive_givenNoOldNpcId_leavesEnemiesWithoutAnNpcUntouched', () => {
+        // Arrange - a null old_npc_id must not match the null npc_id of an enemy that has no npc
+        let unassignedEnemy = makeEnemy(null, 0, null);
+        let assignedEnemy = makeEnemy(42, 5, null);
+        let mapContext = makeMapContext();
+        let handler = makeHandler(mapContext, {1: unassignedEnemy, 2: assignedEnemy});
+        let npc = {id: 42, name: 'Updated Npc'};
+
+        // Act
+        handler.onReceive({model: npc, removed_from_dungeon: false, old_npc_id: null});
+
+        // Assert
+        expect(unassignedEnemy.npc).toBeUndefined();
+        expect(unassignedEnemy.npc_id).toBeNull();
+        expect(unassignedEnemy.visual.refresh).not.toHaveBeenCalled();
+        expect(assignedEnemy.npc).toBe(npc);
+        expect(mapContext.removeRawNpcById).toHaveBeenCalledTimes(1);
     });
 
     test('onReceive_givenNpcRenamedToNewId_reassignsEnemiesStillHoldingTheOldIdAndRemovesTheOldRawNpc', () => {
