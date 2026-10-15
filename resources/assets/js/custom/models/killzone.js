@@ -58,6 +58,8 @@ class KillZone extends MapObject {
         this.enemiesLayer = null;
         this.overpulledEnemiesLayer = null;
         this._isBulkUpdating = false;
+        // Bumped on every change to this.enemies
+        this._enemiesRevision = 0;
 
         this.setSynced(false);
 
@@ -195,7 +197,25 @@ class KillZone extends MapObject {
         super.loadRemoteMapObject(remoteMapObject, parentAttribute);
 
         // Hide the layer of the killzone
-        this.setDefaultVisible(remoteMapObject.floor_id === getState().getCurrentFloor().id);
+        if (remoteMapObject.hasOwnProperty('floor_id')) {
+            this.setDefaultVisible(remoteMapObject.floor_id === getState().getCurrentFloor().id);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getSaveRevision() {
+        return this._enemiesRevision;
+    }
+
+    /**
+     * Only the server-assigned id: the rest echoes what was sent, and color/index may also have changed locally through
+     * KillZoneMapObjectGroup.massSave(), which does not go through save().
+     * @inheritDoc
+     */
+    _getOutdatedSaveResponseToApply(json) {
+        return {id: json.id};
     }
 
     /**
@@ -245,7 +265,10 @@ class KillZone extends MapObject {
 
         // Do not unnecessarily call this function - it can be heavy
         if (!enemiesEqual) {
+            let enemiesRevision = this._enemiesRevision;
             this.setEnemies(enemies);
+            // Enemies received from the server are not local changes that still need saving
+            this._enemiesRevision = enemiesRevision;
         }
     }
 
@@ -357,6 +380,7 @@ class KillZone extends MapObject {
         if (index !== -1) {
             // Remove it
             let deleted = this.enemies.splice(index, 1);
+            this._enemiesRevision++;
             if (deleted.length === 1) {
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
                 /** @type {Enemy} */
@@ -422,6 +446,7 @@ class KillZone extends MapObject {
         // Add it, but don't double add it
         if ($.inArray(enemy.id, this.enemies) === -1) {
             this.enemies.push(enemy.id);
+            this._enemiesRevision++;
 
             // We're interested in knowing when this enemy has detached itself (by assigning to another killzone, for example)
             enemy.register('killzone:detached', this, this._enemyDetached.bind(this));

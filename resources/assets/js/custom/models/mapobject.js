@@ -45,6 +45,13 @@ class MapObject extends Signalable {
         this.faction = 'any'; // sensible default
         this.teeming = null; // visible, hidden, null
         this.local = false;
+        this._deleted = false;
+        this._isDeleteInFlight = false;
+        // Overlapping saves may be answered out of order
+        this._saveSequence = 0;
+        this._appliedSaveSequence = 0;
+        /** @type {Number|null} The save revision carried by the newest save, null when that save failed */
+        this._sentSaveRevision = null;
         this.label = 'default label';
         this.decorator = null;
 
@@ -675,6 +682,7 @@ class MapObject extends Signalable {
     localDelete(massDelete = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
+        this._deleted = true;
         this.signal('object:deleted', {mass_delete: massDelete});
     }
 
@@ -981,6 +989,26 @@ class MapObject extends Signalable {
     }
 
     /**
+     * A counter of local changes that a save response would overwrite. save() compares it before and after the
+     * request to detect a response that is outdated. Never changes by default.
+     * @returns {Number}
+     * @protected
+     */
+    _getSaveRevision() {
+        return 0;
+    }
+
+    /**
+     * Returns the part of an outdated save response that may still be applied onto this object.
+     * @param json {Object} The save response.
+     * @returns {Object}
+     * @protected
+     */
+    _getOutdatedSaveResponseToApply(json) {
+        return json;
+    }
+
+    /**
      * Saves this map object to the server.
      */
     save() {
@@ -995,6 +1023,9 @@ class MapObject extends Signalable {
         self.signal('save:beforesend');
 
         let has_route_model_binding = this.options.hasOwnProperty('has_route_model_binding') ? this.options.has_route_model_binding : false;
+        let saveRevision = this._getSaveRevision();
+        let saveSequence = ++this._saveSequence;
+        this._sentSaveRevision = saveRevision;
 
         $.ajax({
             type: self.id > 0 && has_route_model_binding ? 'PUT' : 'POST',
@@ -1007,8 +1038,17 @@ class MapObject extends Signalable {
                 $(`#map_${mapObjectName}_edit_popup_submit_${self.id}`).attr('disabled', 'disabled');
             },
             success: function (json) {
-                // Apply all saved properties back our object
-                self.loadRemoteMapObject(json);
+                let currentRevision = self._getSaveRevision();
+                // A newer response was already applied; this one would only roll its attributes back
+                let isSuperseded = saveSequence < self._appliedSaveSequence;
+                let hasUnsentChanges = currentRevision !== saveRevision && currentRevision !== self._sentSaveRevision;
+
+                if (!isSuperseded) {
+                    self._appliedSaveSequence = saveSequence;
+
+                    // The response echoes what was sent; local changes made while it was in flight must survive it
+                    self.loadRemoteMapObject(currentRevision !== saveRevision ? self._getOutdatedSaveResponseToApply(json) : json);
+                }
 
                 self.setSynced(true);
                 self.map.leafletMap.closePopup();
@@ -1017,7 +1057,15 @@ class MapObject extends Signalable {
 
                 self.signal('save:success', {json: json});
 
-                self.onSaveSuccess(json);
+                if (!isSuperseded) {
+                    self.onSaveSuccess(json);
+                }
+
+                // Nothing else is guaranteed to save the newer local state: an enemy selection ignores this object's
+                // changes until this response's save:success when it was opened while the save was in flight
+                if (hasUnsentChanges && !self._deleted && !self._isDeleteInFlight) {
+                    self.save();
+                }
             },
             complete: function () {
                 $(`#map_${mapObjectName}_edit_popup_submit_${self.id}`).removeAttr('disabled');
@@ -1025,7 +1073,14 @@ class MapObject extends Signalable {
             },
             error: function (xhr, textStatus, errorThrown) {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
-                self.setSynced(false);
+                // (unless a newer save already succeeded, so the server holds a newer state than this request carried)
+                if (saveSequence >= self._appliedSaveSequence) {
+                    self.setSynced(false);
+                }
+
+                if (saveSequence === self._saveSequence) {
+                    self._sentSaveRevision = null;
+                }
 
                 let mapContext = getState().getMapContext();
 
@@ -1055,6 +1110,8 @@ class MapObject extends Signalable {
         let self = this;
         console.assert(this instanceof MapObject, 'this was not a MapObject', this);
 
+        this._isDeleteInFlight = true;
+
         $.ajax({
             type: 'POST',
             url: this.options.hasOwnProperty('delete_url') ? this.options.delete_url :
@@ -1071,6 +1128,8 @@ class MapObject extends Signalable {
                 self.onDeleteSuccess(json);
             },
             error: function (xhr, textStatus, errorThrown) {
+                self._isDeleteInFlight = false;
+
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
 
