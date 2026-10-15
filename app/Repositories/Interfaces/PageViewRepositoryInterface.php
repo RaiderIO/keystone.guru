@@ -4,6 +4,7 @@ namespace App\Repositories\Interfaces;
 
 use App\Models\PageView;
 use App\Repositories\BaseRepositoryInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -19,4 +20,8 @@ use Illuminate\Support\Collection;
  */
 interface PageViewRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * @return Collection<int, int> The number of page views of each model of the given class since the given moment, keyed by model id
+     */
+    public function getViewCountsByModelIdSince(string $modelClass, Carbon $since): Collection;
 }
