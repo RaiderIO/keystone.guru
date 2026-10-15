@@ -34,7 +34,7 @@ class DungeonController extends Controller
     ) {
         $validated = $request->validated();
 
-        $validated['expansion_id'] = $expansionRepository->getByShortnameOrFail(
+        $validated['expansion_id'] = $expansionRepository->getByKeyOrFail(
             Dungeon::findExpansionByKey($validated['key']),
         )->id;
         $validated['active'] ??= 0;

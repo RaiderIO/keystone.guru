@@ -12,8 +12,8 @@ class ExpansionRepository extends DatabaseRepository implements ExpansionReposit
         parent::__construct(Expansion::class);
     }
 
-    public function getByShortnameOrFail(string $shortname): Expansion
+    public function getByKeyOrFail(string $key): Expansion
     {
-        return Expansion::where('shortname', $shortname)->firstOrFail();
+        return Expansion::where('key', $key)->firstOrFail();
     }
 }

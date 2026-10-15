@@ -25,7 +25,7 @@ class ExpansionFormRequest extends FormRequest
                 'required',
                 Rule::unique('expansions')->ignore($this->route()->parameter('expansion')),
             ],
-            'shortname' => [
+            'key' => [
                 'required',
                 Rule::unique('expansions')->ignore($this->route()->parameter('expansion')),
             ],

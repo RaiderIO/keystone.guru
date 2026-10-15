@@ -55,9 +55,9 @@ $isHeatmapSearchSidebarDefaultVisible = $defaultState === 1;
 $hideOnMove                           ??= $isMobile;
 $showAds                              ??= true;
 /** @var Collection<int, AffixGroup> $affixGroups */
-$affixGroups = $allAffixGroupsByActiveExpansion->get($season->expansion->shortname);
+$affixGroups = $allAffixGroupsByActiveExpansion->get($season->expansion->key);
 /** @var Collection<int, Affix> $featuredAffixes */
-$featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->shortname);
+$featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->key);
 
 $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion $b) {
     // If one of them is "World", it comes first

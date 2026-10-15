@@ -61,8 +61,8 @@ class Cache extends SchedulerCommand
             // Refresh caches for all categories
             foreach ($expansions as $expansion) {
                 /** @var Expansion $expansion */
-//                dump(sprintf('- %s', $expansion->shortname));
-                $this->info(sprintf('- %s', $expansion->shortname));
+//                dump(sprintf('- %s', $expansion->key));
+                $this->info(sprintf('- %s', $expansion->key));
 
                 $expansion->load('dungeonsAndRaids');
 

@@ -83,7 +83,7 @@ final class SeasonRepositoryTest extends PublicTestCase
         // Arrange - a dungeon of our own, so the season attached here is unambiguously its only upcoming one
         $dungeon        = $this->createDungeon();
         $upcomingSeason = $this->createSeason([
-            'expansion_id' => Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT)->id,
+            'expansion_id' => Expansion::firstWhere('key', Expansion::EXPANSION_MIDNIGHT)->id,
             'start'        => now()->addYears(2)->toDateTimeString(),
         ], [$dungeon->id]);
 
@@ -122,7 +122,7 @@ final class SeasonRepositoryTest extends PublicTestCase
     public function getUpcomingSeasonForDungeon_givenTwoUpcomingSeasons_returnsTheNextOne(): void
     {
         // Arrange - the later season is created first, so neither id order nor insertion order picks the right one
-        $midnightExpansionId = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT)->id;
+        $midnightExpansionId = Expansion::firstWhere('key', Expansion::EXPANSION_MIDNIGHT)->id;
         $dungeon             = $this->createDungeon();
         $this->createSeason([
             'expansion_id' => $midnightExpansionId,
@@ -164,7 +164,7 @@ final class SeasonRepositoryTest extends PublicTestCase
         $dungeon    = $this->createDungeon();
         $pastSeason = $this->createSeason(['start' => now()->subYear()->toDateTimeString()], [$dungeon->id]);
         $this->createSeason([
-            'expansion_id' => Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT)->id,
+            'expansion_id' => Expansion::firstWhere('key', Expansion::EXPANSION_MIDNIGHT)->id,
             'start'        => now()->addMonth()->toDateTimeString(),
         ], [$dungeon->id]);
 
@@ -180,7 +180,7 @@ final class SeasonRepositoryTest extends PublicTestCase
     public function getUpcomingSeasonForDungeon_givenAnotherDungeonWithALaterUpcomingSeason_returnsItsOwnSeason(): void
     {
         // Arrange
-        $midnightExpansionId = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT)->id;
+        $midnightExpansionId = Expansion::firstWhere('key', Expansion::EXPANSION_MIDNIGHT)->id;
         $dungeon             = $this->createDungeon();
         $otherDungeon        = $this->createDungeon();
         $ownSeason           = $this->createSeason([
@@ -204,7 +204,7 @@ final class SeasonRepositoryTest extends PublicTestCase
     public function getNewestSeasonsForDungeons_givenTwoUpcomingSeasons_returnsTheNextOne(): void
     {
         // Arrange - the later season is created first, so neither id order nor insertion order picks the right one
-        $midnightExpansionId = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT)->id;
+        $midnightExpansionId = Expansion::firstWhere('key', Expansion::EXPANSION_MIDNIGHT)->id;
         $dungeon             = $this->createDungeon();
         $this->createSeason(['start' => now()->subYear()->toDateTimeString()], [$dungeon->id]);
         $this->createSeason([

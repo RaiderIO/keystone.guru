@@ -19,12 +19,13 @@ class ExpansionController extends Controller
                 'id'        => $expansion?->id,
                 'active'    => $request->boolean('active'),
                 'name'      => $request->validated('name'),
-                'shortname' => $request->validated('shortname'),
+                'key'       => $request->validated('key'),
+                'shortname' => $request->validated('key'),
                 'color'     => $request->validated('color'),
             ],
-        ], uniqueBy: ['id'], update: ['active', 'name', 'shortname', 'color']);
+        ], uniqueBy: ['id'], update: ['active', 'name', 'key', 'shortname', 'color']);
 
-        return Expansion::where('shortname', $request->validated('shortname'))->firstOrFail();
+        return Expansion::where('key', $request->validated('key'))->firstOrFail();
     }
 
     /**

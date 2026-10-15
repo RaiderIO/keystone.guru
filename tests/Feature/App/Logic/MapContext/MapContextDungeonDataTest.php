@@ -87,6 +87,36 @@ final class MapContextDungeonDataTest extends PublicTestCase
     }
 
     #[Test]
+    public function toArray_givenPayloadCachedInThePreviousShapeWithoutExpansionKey_returnsDungeonWithExpansionKey(): void
+    {
+        // Arrange
+        $mappingVersion = MappingVersion::query()->whereHas('dungeon')->firstOrFail();
+        $staleLocalKey  = sprintf(
+            'local:dungeon_%d_%d_%s_v3',
+            $mappingVersion->dungeon->id,
+            $mappingVersion->id,
+            User::MAP_FACADE_STYLE_FACADE,
+        );
+        Cache::store('tmp_file')->put($staleLocalKey, ['expansion' => ['shortname' => 'stale']], 3600);
+
+        try {
+            // Act
+            $dungeonData = json_decode(json_encode(
+                app(MapContextServiceInterface::class)->createMapContextMappingVersionData(
+                    $mappingVersion->dungeon,
+                    $mappingVersion,
+                    User::MAP_FACADE_STYLE_FACADE,
+                )->toArray()['dungeon'],
+            ), true);
+
+            // Assert
+            $this->assertSame($mappingVersion->dungeon->expansion->key, $dungeonData['expansion']['key'] ?? null);
+        } finally {
+            Cache::store('tmp_file')->forget($staleLocalKey);
+        }
+    }
+
+    #[Test]
     public function toArray_givenLocaleWithNpcNameTranslation_returnsLocalizedName(): void
     {
         // Arrange

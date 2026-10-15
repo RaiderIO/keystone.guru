@@ -108,7 +108,7 @@ class AjaxDungeonRouteSearchController extends Controller
                 'id'        => $dungeonRoute->dungeon->id,
                 'name'      => $dungeonRoute->dungeon->name,
                 'key'       => $dungeonRoute->dungeon->key,
-                'expansion' => ['shortname' => $dungeonRoute->dungeon->expansion->shortname],
+                'expansion' => ['key' => $dungeonRoute->dungeon->expansion->key],
             ],
             'pull_forces' => $pullForces
                 ->map(static fn(KillZoneEnemyForces $pull): array => [

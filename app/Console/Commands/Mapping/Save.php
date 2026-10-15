@@ -405,7 +405,7 @@ class Save extends Command
             $progressBar->maxSecondsBetweenRedraws(0.1);
             $progressBar->setMessage(__($dungeon->name));
 
-            $rootDirPath = sprintf('%s%s/%s', $dungeonDataDir, $dungeon->expansion->shortname, $dungeon->key);
+            $rootDirPath = self::getDungeonDataDirectoryPath($dungeonDataDir, $dungeon);
 
             $this->saveDungeonDungeonRoutes($dungeon, $rootDirPath);
 
@@ -689,5 +689,13 @@ class Save extends Command
 
             $this->saveDataToJsonFile($categoryData->toArray(), sprintf('%s/%s', $rootDirPath, $floor->index), sprintf('%s.json', $category));
         }
+    }
+
+    /**
+     * The `database/seeders/dungeondata/<expansion key>/<dungeon key>` directory a dungeon's mapping is saved to.
+     */
+    public static function getDungeonDataDirectoryPath(string $dungeonDataDir, Dungeon $dungeon): string
+    {
+        return sprintf('%s%s/%s', $dungeonDataDir, $dungeon->expansion->key, $dungeon->key);
     }
 }

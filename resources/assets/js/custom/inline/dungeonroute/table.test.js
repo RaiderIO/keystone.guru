@@ -42,7 +42,7 @@ function buildRow(overrides = {}) {
         published: 'world',
         has_team: true,
         author: {id: 1},
-        dungeon: {expansion: {shortname: EXPANSION_DRAGONFLIGHT}},
+        dungeon: {expansion: {key: EXPANSION_DRAGONFLIGHT}},
         affixes: [],
         dungeon_latest_mapping_version_id: 5,
         mapping_version_id: 5,
@@ -94,7 +94,7 @@ describe('DungeonrouteTable._getAddRemoveRouteTemplate', () => {
 describe('DungeonrouteTable._getProfileActionsTemplateVariables', () => {
     it('_getProfileActionsTemplateVariables_givenShadowlandsRouteWithoutEncryptedOrShroudedAffix_showsBothMigrateOptions', () => {
         // Arrange
-        const row = buildRow({dungeon: {expansion: {shortname: EXPANSION_SHADOWLANDS}}, affixes: []});
+        const row = buildRow({dungeon: {expansion: {key: EXPANSION_SHADOWLANDS}}, affixes: []});
 
         // Act
         const result = DungeonrouteTable.prototype._getProfileActionsTemplateVariables(row);
@@ -107,7 +107,7 @@ describe('DungeonrouteTable._getProfileActionsTemplateVariables', () => {
     it('_getProfileActionsTemplateVariables_givenShadowlandsRouteWithEncryptedAffix_hidesMigrateToEncryptedOnly', () => {
         // Arrange
         const row = buildRow({
-            dungeon: {expansion: {shortname: EXPANSION_SHADOWLANDS}},
+            dungeon: {expansion: {key: EXPANSION_SHADOWLANDS}},
             affixes: [{affixes: [{key: AFFIX_ENCRYPTED}]}],
         });
 
@@ -123,7 +123,7 @@ describe('DungeonrouteTable._getProfileActionsTemplateVariables', () => {
     it('_getProfileActionsTemplateVariables_givenShadowlandsRouteWithShroudedAffix_hidesBothMigrateOptions', () => {
         // Arrange
         const row = buildRow({
-            dungeon: {expansion: {shortname: EXPANSION_SHADOWLANDS}},
+            dungeon: {expansion: {key: EXPANSION_SHADOWLANDS}},
             affixes: [{affixes: [{key: AFFIX_SHROUDED}]}],
         });
 
@@ -137,7 +137,7 @@ describe('DungeonrouteTable._getProfileActionsTemplateVariables', () => {
 
     it('_getProfileActionsTemplateVariables_givenNonShadowlandsRoute_hidesBothMigrateOptions', () => {
         // Arrange
-        const row = buildRow({dungeon: {expansion: {shortname: EXPANSION_DRAGONFLIGHT}}, affixes: []});
+        const row = buildRow({dungeon: {expansion: {key: EXPANSION_DRAGONFLIGHT}}, affixes: []});
 
         // Act
         const result = DungeonrouteTable.prototype._getProfileActionsTemplateVariables(row);
