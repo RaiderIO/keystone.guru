@@ -112,8 +112,9 @@ export function shouldBuildLocale(locale, appEnv, buildLocales) {
 }
 
 /**
- * Mirrors php-array-loader's preprocessing verbatim: drop everything up to and including the
- * `return` keyword, replace a trailing `?>` before parsing.
+ * Mirrors php-array-loader's preprocessing: drop everything up to and including the `return`
+ * keyword, then strip a trailing `?>` before parsing. php-array-loader replaces that tag with `_`,
+ * which php-array-parser rejects as a syntax error.
  *
  * @param {string} source
  * @returns {Object}
@@ -121,7 +122,7 @@ export function shouldBuildLocale(locale, appEnv, buildLocales) {
 export function parsePhpTranslationFile(source) {
     const ret = source.indexOf('return') + 'return'.length;
     let expression = source.substr(ret);
-    expression = expression.replace(/\?>\s*$/, '_');
+    expression = expression.replace(/\?>\s*$/, '');
 
     return parser.parse(expression);
 }

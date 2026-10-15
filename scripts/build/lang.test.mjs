@@ -65,6 +65,26 @@ return array(
         });
     });
 
+    it.each([
+        ['followed by a newline', '?>\n'],
+        ['at the very end', '?>'],
+    ])('parsePhpTranslationFile_givenClosingPhpTag_%s_returnsObject', (_, closingTag) => {
+        // Arrange
+        const source = `<?php
+
+return [
+    'title' => 'Keystone.guru',
+];
+${closingTag}`;
+
+        // Act
+        const parse = () => parsePhpTranslationFile(source);
+
+        // Assert
+        expect(parse).not.toThrow();
+        expect(parse()).toEqual({title: 'Keystone.guru'});
+    });
+
     it('parsePhpTranslationFile_givenRealTranslationFile_returnsNonEmptyObject', () => {
         // A real file from the repo, so the parser is exercised against production input
         const parsed = parsePhpTranslationFile(fs.readFileSync(path.join(import.meta.dirname, '..', '..', 'lang', 'en_US', 'auth.php'), 'utf8'));
