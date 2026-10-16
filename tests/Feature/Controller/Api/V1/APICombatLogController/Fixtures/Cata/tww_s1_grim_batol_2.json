@@ -1,6 +1,17 @@
 {
     "metadata": {
-        "runId": "a25ec1ae-a756-4e97-81f5-02f837bf2813"
+        "runId": "a25ec1ae-a756-4e97-81f5-02f837bf2813",
+        "period": 99,
+        "season": "season-tww-1",
+        "regionId": 2,
+        "realmType": "live",
+        "wowInstanceId": null
+    },
+    "roster": {
+        "averageItemLevel": null,
+        "characterIds": [],
+        "specIds": [],
+        "classIds": []
     },
     "settings": {
         "temporary": true,
@@ -16,7 +27,8 @@
         "level": 2,
         "affixes": [
             10
-        ]
+        ],
+        "timerFraction": 0
     },
     "npcs": [
         {

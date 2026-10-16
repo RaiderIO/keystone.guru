@@ -6,9 +6,9 @@ use App\Dto\Request\RequestDto;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
- * @OA\Schema(schema="CombatLogRouteRoster")
+ * @OA\Schema(schema="CombatLogRouteRoster",required={"averageItemLevel","characterIds","specIds","classIds"})
  * @OA\Property(property="numMembers", type="integer")
- * @OA\Property(property="averageItemLevel", type="number", format="float")
+ * @OA\Property(property="averageItemLevel", type="number", format="float", nullable=true)
  * @OA\Property(property="characterIds", type="array", @OA\Items(type="integer"))
  * @OA\Property(property="specIds", type="array", @OA\Items(type="integer"))
  * @OA\Property(property="classIds", type="array", @OA\Items(type="integer"))

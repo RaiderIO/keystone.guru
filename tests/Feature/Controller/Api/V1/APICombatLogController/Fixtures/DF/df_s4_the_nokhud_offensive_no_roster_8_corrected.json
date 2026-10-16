@@ -4,10 +4,10 @@
             "runId": "season-df-4 - logged: #1516945 - run: #3033087",
             "keystoneRunId": null,
             "loggedRunId": null,
-            "period": null,
-            "season": null,
-            "regionId": null,
-            "realmType": null,
+            "period": 99,
+            "season": "season-df-4",
+            "regionId": 2,
+            "realmType": "live",
             "wowInstanceId": null
         },
         "settings": {
@@ -21,7 +21,7 @@
             "success": true,
             "durationMs": 1707001,
             "parTimeMs": null,
-            "timerFraction": null,
+            "timerFraction": 0,
             "challengeModeId": 400,
             "level": 8,
             "numDeaths": null,
@@ -33,9 +33,9 @@
         "roster": {
             "numMembers": null,
             "averageItemLevel": null,
-            "characterIds": null,
-            "specIds": null,
-            "classIds": null
+            "characterIds": [],
+            "specIds": [],
+            "classIds": []
         },
         "npcs": [
             {

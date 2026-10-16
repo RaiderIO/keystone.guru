@@ -34,9 +34,9 @@
         "roster": {
             "numMembers": null,
             "averageItemLevel": null,
-            "characterIds": null,
-            "specIds": null,
-            "classIds": null
+            "characterIds": [],
+            "specIds": [],
+            "classIds": []
         },
         "npcs": [
             {

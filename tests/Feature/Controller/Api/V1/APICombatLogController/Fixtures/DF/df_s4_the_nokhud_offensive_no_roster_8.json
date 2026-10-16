@@ -1,6 +1,17 @@
 {
     "metadata": {
-        "runId": "season-df-4 - logged: #1516945 - run: #3033087"
+        "runId": "season-df-4 - logged: #1516945 - run: #3033087",
+        "period": 99,
+        "season": "season-df-4",
+        "regionId": 2,
+        "realmType": "live",
+        "wowInstanceId": null
+    },
+    "roster": {
+        "averageItemLevel": null,
+        "characterIds": [],
+        "specIds": [],
+        "classIds": []
     },
     "settings": {
         "temporary": true,
@@ -17,7 +28,8 @@
         "affixes": [
             10,
             134
-        ]
+        ],
+        "timerFraction": 0
     },
     "npcs": [
         {
