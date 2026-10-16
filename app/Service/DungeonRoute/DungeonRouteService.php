@@ -328,15 +328,18 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
         }
 
         return DB::update(sprintf('
-            UPDATE dungeon_routes, (VALUES %s) AS view_counts (model_id, views),
-            (
-                SELECT dungeon_id, MAX(id) as id
+            UPDATE dungeon_routes
+            INNER JOIN (VALUES %s) AS view_counts (model_id, views)
+                ON view_counts.model_id = dungeon_routes.id
+            INNER JOIN mapping_versions AS route_mapping_versions
+                ON route_mapping_versions.id = dungeon_routes.mapping_version_id
+            INNER JOIN (
+                SELECT dungeon_id, game_version_id, MAX(id) as id
                 FROM mapping_versions
-                GROUP BY mapping_versions.dungeon_id
-                /**
-                  @TODO #2933 Where game version is the same as the dungeon route\'s mapping version?
-                 */
+                GROUP BY mapping_versions.dungeon_id, mapping_versions.game_version_id
             ) as latest_mapping_version_ids
+                ON latest_mapping_version_ids.dungeon_id = dungeon_routes.dungeon_id
+                AND latest_mapping_version_ids.game_version_id = route_mapping_versions.game_version_id
             SET dungeon_routes.popularity = view_counts.views
             /*
                 This will calculate a number between 1 and 0 depending on the age of the route. A new route will generate 1.
@@ -345,15 +348,13 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
             */
                 * GREATEST(0, (1 - DATEDIFF(NOW(), dungeon_routes.updated_at) / ?))
             /*
-                Adds a penalty if your route does not use the latest mapping version for your dungeon
+                Adds a penalty if your route does not use the latest mapping version for your dungeon in the game version of your mapping version
              */
                 * IF(dungeon_routes.mapping_version_id = latest_mapping_version_ids.id, 1, ?)
-            WHERE dungeon_routes.id = view_counts.model_id
-                AND dungeon_routes.dungeon_id = latest_mapping_version_ids.dungeon_id
             /*
                Only public routes can have their popularity updated for performance reasons
              */
-                AND dungeon_routes.published_state_id IN (?)
+            WHERE dungeon_routes.published_state_id IN (?)
             /*
                 If your route is cloned, it cannot show up in any popularity pages
              */

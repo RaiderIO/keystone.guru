@@ -63,6 +63,42 @@ final class DungeonRouteServiceUpdatePopularityTest extends PublicTestCase
     }
 
     #[Test]
+    public function updatePopularity_givenMappingVersionsInTwoGameVersions_penalizesOnlyRoutesOutdatedWithinTheirOwnGameVersion(): void
+    {
+        // Arrange
+        $retailRoute          = null;
+        $outdatedClassicRoute = null;
+        $latestClassicRoute   = null;
+
+        try {
+            $dungeon = $this->createDungeon();
+            /** @var MappingVersion $retailMappingVersion */
+            $retailMappingVersion = $dungeon->mappingVersions()->firstOrFail();
+            $classicGameVersion   = GameVersion::query()
+                ->where('key', GameVersion::GAME_VERSION_CLASSIC_ERA)
+                ->firstOrFail();
+            // Both created after the Retail version, so either id is higher than the latest Retail id
+            $outdatedClassicMappingVersion = $this->createMappingVersion($dungeon->id, $classicGameVersion->id, 1);
+            $latestClassicMappingVersion   = $this->createMappingVersion($dungeon->id, $classicGameVersion->id, 2);
+
+            $retailRoute          = $this->createViewedRoute($dungeon->id, $retailMappingVersion->id);
+            $outdatedClassicRoute = $this->createViewedRoute($dungeon->id, $outdatedClassicMappingVersion->id);
+            $latestClassicRoute   = $this->createViewedRoute($dungeon->id, $latestClassicMappingVersion->id);
+
+            // Act
+            app(DungeonRouteServiceInterface::class)->updatePopularity();
+
+            // Assert
+            $penalty = config('keystoneguru.discover.service.popular_out_of_date_mapping_version_penalty');
+            $this->assertSame(self::VIEW_COUNT, $retailRoute->refresh()->popularity);
+            $this->assertSame(self::VIEW_COUNT, $latestClassicRoute->refresh()->popularity);
+            $this->assertSame((int)(self::VIEW_COUNT * $penalty), $outdatedClassicRoute->refresh()->popularity);
+        } finally {
+            $this->deleteRoutesAndTheirPageViews([$retailRoute, $outdatedClassicRoute, $latestClassicRoute]);
+        }
+    }
+
+    #[Test]
     public function updatePopularity_givenViewedRoute_neverReadsPageViewsInsideAWriteStatement(): void
     {
         // Arrange
@@ -140,6 +176,23 @@ final class DungeonRouteServiceUpdatePopularityTest extends PublicTestCase
         } finally {
             $this->deleteRoutesAndTheirPageViews([$viewedRoute, $unviewedRoute]);
         }
+    }
+
+    private function createMappingVersion(int $dungeonId, int $gameVersionId, int $version): MappingVersion
+    {
+        return MappingVersion::create([
+            'game_version_id'                 => $gameVersionId,
+            'dungeon_id'                      => $dungeonId,
+            'version'                         => $version,
+            'enemy_forces_required'           => 100,
+            'enemy_forces_required_teeming'   => null,
+            'enemy_forces_shrouded'           => 0,
+            'enemy_forces_shrouded_zul_gamux' => 0,
+            'timer_max_seconds'               => 1800,
+            'facade_enabled'                  => false,
+            'mdt_mapping_hash'                => null,
+            'mdt_changes_pending'             => false,
+        ]);
     }
 
     private function createRoute(int $dungeonId, int $mappingVersionId, int $popularity = 0): DungeonRoute
