@@ -45,6 +45,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature;
 use Session;
@@ -369,6 +370,8 @@ class ProfileController extends Controller
 
         // A failed queue push rolls the change back, so a password never changes without its alert
         DB::transaction(static function () use ($user, $request): void {
+            // A remember-me cookie is checked against the token alone, so without a new one it outlives the password
+            $user->setRememberToken(Str::random(60));
             $user->update([
                 'password' => Hash::make($request->validated('new_password')),
             ]);

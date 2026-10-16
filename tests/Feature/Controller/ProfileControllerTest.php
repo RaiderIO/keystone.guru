@@ -14,6 +14,7 @@ use App\Models\Season;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\User;
+use App\Providers\AppServiceProvider;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -32,6 +33,7 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use ReflectionProperty;
 use RuntimeException;
 use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\PublicTestCase;
@@ -485,6 +487,90 @@ final class ProfileControllerTest extends PublicTestCase
             $response->assertSessionHasErrors(['new_password' => __('controller.profile.flash.new_password_equals_old_password')]);
             $response->assertSessionMissing('status');
         } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenCorrectCurrentPassword_rotatesTheRememberToken(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+            User::query()->whereKey($user->id)->update(['remember_token' => 'token-of-a-remember-me-cookie']);
+
+            // Act
+            $response = $this->actingAs($user->refresh())->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $rememberToken = (string)$user->fresh()?->remember_token;
+            $this->assertNotSame('token-of-a-remember-me-cookie', $rememberToken);
+            $this->assertSame(60, strlen($rememberToken));
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenFailedChange_keepsTheRememberToken(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+            User::query()->whereKey($user->id)->update(['remember_token' => 'token-of-a-remember-me-cookie']);
+
+            // Act
+            $response = $this->actingAs($user->refresh())->patch(route('profile.changepassword'), [
+                'current_password'     => 'not-the-password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('current_password');
+            $this->assertSame('token-of-a-remember-me-cookie', $user->fresh()?->remember_token);
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenMoreAttemptsThanTheLimit_rejectsTheAttemptBeforeCheckingThePassword(): void
+    {
+        $user = null;
+        $this->overrideHttpRateLimit(1);
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+
+            // Act
+            $firstResponse = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => 'not-the-password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+            $secondResponse = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $firstResponse->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
+            $secondResponse->assertStatus(429);
+            $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
+        } finally {
+            $this->overrideHttpRateLimit(null);
             $user?->delete();
         }
     }
@@ -1008,6 +1094,11 @@ final class ProfileControllerTest extends PublicTestCase
      * that middleware instead of by the policy - which would make the forbidden assertions above
      * pass for the wrong reason.
      */
+    private function overrideHttpRateLimit(?int $limit): void
+    {
+        new ReflectionProperty(AppServiceProvider::class, 'rateLimitOverrideHttp')->setValue(null, $limit);
+    }
+
     private function userWithUserRole(): User
     {
         $user = User::factory()->create();

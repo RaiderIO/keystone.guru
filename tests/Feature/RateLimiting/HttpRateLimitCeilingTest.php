@@ -58,6 +58,7 @@ final class HttpRateLimitCeilingTest extends TestCase
             'create-reports'       => ['create-reports', 60],
             'create-user'          => ['create-user', 50],
             'login'                => ['login', 120],
+            'change-password'      => ['change-password', 30],
             'reset-password'       => ['reset-password', 60],
             'store-metric'         => ['store-metric', 600],
             'search-dungeonroute'  => ['search-dungeonroute', 600],
@@ -85,6 +86,30 @@ final class HttpRateLimitCeilingTest extends TestCase
 
             // Assert
             $this->assertInstanceOf(Unlimited::class, $limit);
+        } finally {
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    #[TestWith([Role::ROLE_INTERNAL_TEAM])]
+    #[TestWith([Role::ROLE_ADMIN])]
+    public function limiter_givenInternalUserChangingTheirPassword_isStillLimited(string $role): void
+    {
+        // Arrange
+        $this->overrideHttpRateLimit(null);
+        $user = User::factory()->create();
+
+        try {
+            $user->addRole($role);
+
+            // Act
+            $limit = $this->resolveLimit('change-password', $user);
+
+            // Assert
+            $this->assertNotInstanceOf(Unlimited::class, $limit);
+            $this->assertSame(30, $limit->maxAttempts);
+            $this->assertSame((string)$user->id, $limit->key);
         } finally {
             $user->delete();
         }
