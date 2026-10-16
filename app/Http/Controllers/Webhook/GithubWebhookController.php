@@ -6,14 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Service\Discord\DiscordApiServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Validation\UnauthorizedException;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class GithubWebhookController extends Controller
 {
     /**
-     * @throws BadRequestException|UnauthorizedException|RuntimeException
+     * @throws BadRequestException|AccessDeniedHttpException|RuntimeException
      *
      * @see https://dev.to/ryan1/how-to-validate-github-webhooks-with-laravel-and-php-2he1
      */
@@ -37,7 +37,7 @@ class GithubWebhookController extends Controller
         $knownSignature = hash_hmac('sha1', $request->getContent(), $secret);
 
         if (!hash_equals($knownSignature, $signatureParts[1])) {
-            throw new UnauthorizedException('Could not verify request signature ' . $signatureParts[1]);
+            throw new AccessDeniedHttpException('Could not verify request signature');
         }
     }
 
