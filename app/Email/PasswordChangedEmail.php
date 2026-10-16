@@ -2,12 +2,16 @@
 
 namespace App\Email;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
+/**
+ * Sent on demand to the address the account had when its password changed: a queued notification to the User
+ * would re-read the e-mail at delivery, by which time a hijacker may have changed it.
+ */
 class PasswordChangedEmail extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -15,12 +19,12 @@ class PasswordChangedEmail extends Notification implements ShouldQueue
     /**
      * @return array<int, string>
      */
-    public function via(User $notifiable): array
+    public function via(AnonymousNotifiable $notifiable): array
     {
         return ['mail'];
     }
 
-    public function toMail(User $notifiable): MailMessage
+    public function toMail(AnonymousNotifiable $notifiable): MailMessage
     {
         return new MailMessage()
             ->subject(__('mail.password_changed.subject'))

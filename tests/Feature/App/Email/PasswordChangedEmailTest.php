@@ -3,7 +3,7 @@
 namespace Tests\Feature\App\Email;
 
 use App\Email\PasswordChangedEmail;
-use App\Models\User;
+use Illuminate\Notifications\AnonymousNotifiable;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -16,13 +16,13 @@ final class PasswordChangedEmailTest extends PublicTestCase
     {
         // Arrange
         $notification = new PasswordChangedEmail();
-        $user         = new User();
+        $notifiable   = new AnonymousNotifiable()->route('mail', 'owner@example.com');
 
         // Act
-        $mailMessage = $notification->toMail($user);
+        $mailMessage = $notification->toMail($notifiable);
 
         // Assert
-        $this->assertSame(['mail'], $notification->via($user));
+        $this->assertSame(['mail'], $notification->via($notifiable));
         $this->assertSame(__('mail.password_changed.subject'), $mailMessage->subject);
         $this->assertSame([
             __('mail.password_changed.changed'),

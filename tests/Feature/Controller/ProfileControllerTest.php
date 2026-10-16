@@ -18,10 +18,13 @@ use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\AnonymousNotifiable;
+use Illuminate\Notifications\SendQueuedNotifications;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Queue;
 use Laravel\Pennant\Feature;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -503,13 +506,43 @@ final class ProfileControllerTest extends PublicTestCase
 
             // Assert
             $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
-            Notification::assertSentToTimes($user, PasswordChangedEmail::class, 1);
-            Notification::assertSentTo(
-                $user,
+            Notification::assertSentOnDemandTimes(PasswordChangedEmail::class, 1);
+            Notification::assertSentOnDemand(
                 PasswordChangedEmail::class,
-                static fn(PasswordChangedEmail $notification): bool => $notification->locale === 'de_DE',
+                static fn(PasswordChangedEmail $notification, array $channels, AnonymousNotifiable $notifiable): bool => $notification->locale === 'de_DE'
+                    && $notifiable->routeNotificationFor('mail') === $user->email,
             );
             $this->assertInstanceOf(ShouldQueue::class, new PasswordChangedEmail());
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenEmailChangedBeforeTheQueuedEmailIsSent_mailsTheAddressOfTheChange(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $queue         = Queue::fake();
+            $user          = $this->userWithUserRole();
+            $originalEmail = $user->email;
+
+            // Act
+            $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+            User::query()->whereKey($user->id)->update(['email' => sprintf('hijacked-%s', $originalEmail)]);
+            $jobs = $queue->pushed(SendQueuedNotifications::class);
+
+            // Assert
+            $this->assertCount(1, $jobs);
+            /** @var SendQueuedNotifications $restoredJob */
+            $restoredJob = unserialize(serialize($jobs->first()));
+            $this->assertSame($originalEmail, $restoredJob->notifiables->first()->routeNotificationFor('mail', $restoredJob->notification));
         } finally {
             $user?->delete();
         }
@@ -540,7 +573,7 @@ final class ProfileControllerTest extends PublicTestCase
             // Assert
             $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
             $response->assertSessionHasErrors($expectedErrorKey);
-            Notification::assertNotSentTo($user, PasswordChangedEmail::class);
+            Notification::assertSentOnDemandTimes(PasswordChangedEmail::class, 0);
             $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
         } finally {
             $user?->delete();
@@ -608,7 +641,7 @@ final class ProfileControllerTest extends PublicTestCase
                 'new_password'         => __('validation.custom.change_password.new_password_required'),
                 'new_password-confirm' => __('validation.custom.change_password.new_password_confirm_required'),
             ]);
-            Notification::assertNotSentTo($user, PasswordChangedEmail::class);
+            Notification::assertSentOnDemandTimes(PasswordChangedEmail::class, 0);
             $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
         } finally {
             $user?->delete();

@@ -44,6 +44,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature;
 use Session;
@@ -369,7 +370,7 @@ class ProfileController extends Controller
         $user->update([
             'password' => Hash::make($request->validated('new_password')),
         ]);
-        $user->notify(new PasswordChangedEmail()->locale($user->locale));
+        Notification::route('mail', $user->email)->notify(new PasswordChangedEmail()->locale($user->locale));
         Session::flash('status', __('controller.profile.flash.password_changed'));
 
         return redirect()->to(sprintf('%s#change-password', route('profile.edit')));
