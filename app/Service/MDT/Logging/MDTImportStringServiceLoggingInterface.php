@@ -7,7 +7,7 @@ interface MDTImportStringServiceLoggingInterface extends MDTBaseServiceLoggingIn
     /**
      * @param array<string, mixed> $latLngWithFloor
      */
-    public function parseObjectCommentAfterConversionFloorStillOnFacade(array $latLngWithFloor): void;
+    public function parseObjectAfterConversionFloorStillOnFacade(array $latLngWithFloor): void;
 
     public function getDetailsStart(): void;
 

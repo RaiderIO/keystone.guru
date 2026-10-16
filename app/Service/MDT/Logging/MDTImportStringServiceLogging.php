@@ -7,7 +7,7 @@ class MDTImportStringServiceLogging extends MDTBaseServiceLogging implements MDT
     /**
      * @param array<string, mixed> $latLngWithFloor
      */
-    public function parseObjectCommentAfterConversionFloorStillOnFacade(array $latLngWithFloor): void
+    public function parseObjectAfterConversionFloorStillOnFacade(array $latLngWithFloor): void
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
