@@ -16,6 +16,7 @@ use App\Models\Polyline;
 use App\Service\MDT\Lua\LuaTableParser;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use Database\Factories\FloorFactory;
+use Illuminate\Database\Eloquent\Builder;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\Traits\CreatesDungeon;
@@ -60,6 +61,34 @@ final class MDTMappingExportServiceTest extends PublicTestCase
 
         // Assert
         $this->assertSame('2', (string)$clones[1]['sublevel']);
+    }
+
+    #[Test]
+    public function getMDTMappingAsLuaString_givenFacadeMappingVersionWithEnemiesOnDeeperFloors_exportsEveryEnemyOnSubLevelOne(): void
+    {
+        // Arrange
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion = MappingVersion::query()
+            ->where('facade_enabled', true)
+            ->whereHas('enemies.floor', static function (Builder $builder) {
+                $builder->where('facade', false)->whereRaw('COALESCE(`mdt_sub_level`, `index`) > 1');
+            })
+            ->orderBy('id')
+            ->firstOrFail();
+
+        // Act
+        $dungeonEnemies = $this->getExportedLua($mappingVersion)['dungeonEnemies'];
+
+        // Assert
+        $subLevels = [];
+        foreach ($dungeonEnemies as $dungeonEnemy) {
+            foreach ($dungeonEnemy['clones'] as $clone) {
+                $subLevels[] = (string)$clone['sublevel'];
+            }
+        }
+
+        $this->assertNotEmpty($subLevels);
+        $this->assertSame(['1'], array_values(array_unique($subLevels)));
     }
 
     #[Test]
