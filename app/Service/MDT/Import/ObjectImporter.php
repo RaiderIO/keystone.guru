@@ -142,39 +142,31 @@ class ObjectImporter
                     // Also, ignore lines which are less than 2 points, and those with uneven coordinates (malformed)
                     if ($lineCount >= 4 && $lineCount % 2 === 0) {
                         // Convert all the line points to LatLngs
-                        $dominantFloor = null;
-                        $vertices      = [];
-                        for ($i = 0; $i < $lineCount; $i += 2) {
-                            $latLng = Conversion::convertMDTCoordinateToLatLng(
-                                [
-                                    'x' => floatval($object['l'][$i]),
-                                    'y' => floatval($object['l'][$i + 1]),
-                                ],
-                                $floor,
-                            );
+                        $latLngs = $this->convertLineToLatLngs($mappingVersion, $floor, $object['l']);
 
-                            if ($floor->facade) {
-                                $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation(
-                                    $mappingVersion,
-                                    $latLng,
-                                    $dominantFloor,
-                                );
+                        $isArrow = isset($object['t']) && $object['t'];
 
-                                // Attempt to set the dominant floor, or fall back to what was set before
-                                $dominantFloor ??= $latLng->getFloor();
-                            }
-
-                            $vertices[] = $latLng->toArray();
+                        if ($this->isOutOfBounds(
+                            $importStringObjects,
+                            $objectIndex,
+                            $latLngs[0],
+                            __($isArrow ?
+                                'services.mdt.io.import_string.arrow_out_of_bounds' :
+                                'services.mdt.io.import_string.line_out_of_bounds'),
+                        )) {
+                            continue;
                         }
 
+                        $vertices = array_map(static fn(LatLng $latLng) => $latLng->toArray(), $latLngs);
+
                         // Arrows
-                        if (isset($object['t']) && $object['t']) {
-                            $this->parseObjectTriangle($importStringObjects, $mappingVersion, $floor, $details, $vertices, $dominantFloor/*, $object['t'][0]*/);
+                        if ($isArrow) {
+                            $this->parseObjectTriangle($importStringObjects, $mappingVersion, $floor, $details, $vertices, $latLngs[0]->getFloor()/*, $object['t'][0]*/);
                         }
                         // If it's a line
                         // MethodDungeonTools.lua:2529
                         else {
-                            $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, $vertices, $dominantFloor);
+                            $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, $vertices, $latLngs[0]->getFloor());
                         }
                     }
                 }
@@ -185,6 +177,7 @@ class ObjectImporter
 
                     $this->parseObjectComment(
                         $importStringObjects,
+                        $objectIndex,
                         $mappingVersion,
                         $floor,
                         $details,
@@ -198,6 +191,85 @@ class ObjectImporter
         }
 
         return $importStringObjects;
+    }
+
+    /**
+     * Converts an MDT line (flat x, y pairs) to lat/lngs. On the facade, the first point that lands on a floor behind
+     * it decides the floor of the whole line, and every other point is converted onto that same floor - including the
+     * points before it, which would otherwise keep their facade coordinates. When no point lands on a floor, every
+     * point stays on the facade.
+     *
+     * @param  array<int, mixed>      $line
+     * @return non-empty-list<LatLng>
+     */
+    private function convertLineToLatLngs(MappingVersion $mappingVersion, Floor $floor, array $line): array
+    {
+        $mapLatLngs = [];
+        for ($i = 0; $i < count($line); $i += 2) {
+            $mapLatLngs[] = Conversion::convertMDTCoordinateToLatLng(
+                [
+                    'x' => floatval($line[$i]),
+                    'y' => floatval($line[$i + 1]),
+                ],
+                $floor,
+            );
+        }
+
+        if (!$floor->facade) {
+            return $mapLatLngs;
+        }
+
+        $dominantFloor = null;
+        $latLngs       = [];
+        foreach ($mapLatLngs as $mapLatLng) {
+            $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $mapLatLng, $dominantFloor);
+
+            if (!$latLng->getFloor()?->facade) {
+                $dominantFloor ??= $latLng->getFloor();
+            }
+
+            $latLngs[] = $latLng;
+        }
+
+        if ($dominantFloor !== null) {
+            foreach ($latLngs as $index => $latLng) {
+                if ($latLng->getFloor()?->facade) {
+                    $latLngs[$index] = $this->coordinatesService->convertFacadeMapLocationToMapLocation(
+                        $mappingVersion,
+                        $mapLatLngs[$index],
+                        $dominantFloor,
+                    );
+                }
+            }
+        }
+
+        return $latLngs;
+    }
+
+    /**
+     * A location that is still on the facade floor after converting it to the floors behind the facade lies outside
+     * every one of them, so the object it belongs to cannot be placed. Records an import warning when that happens.
+     */
+    private function isOutOfBounds(
+        ImportStringObjects $importStringObjects,
+        int                 $objectIndex,
+        LatLng              $latLng,
+        string              $warning,
+    ): bool {
+        if (!$latLng->getFloor()?->facade) {
+            return false;
+        }
+
+        $this->log->parseObjectAfterConversionFloorStillOnFacade($latLng->toArrayWithFloor());
+
+        $importStringObjects->getWarnings()->push(
+            new ImportWarning(
+                sprintf(__('services.mdt.io.import_string.category.object'), $objectIndex),
+                $warning,
+            ),
+        );
+
+        return true;
     }
 
     /**
@@ -306,6 +378,7 @@ class ObjectImporter
      */
     private function parseObjectComment(
         ImportStringObjects $importStringObjects,
+        int                 $objectIndex,
         MappingVersion      $mappingVersion,
         Floor               $floor,
         array               $details,
@@ -322,20 +395,15 @@ class ObjectImporter
                 $mappingVersion,
                 $latLng,
             );
+        }
 
-            // @TODO this needs to be put everywhere in this class in a generic function of sorts, no time now
-            if ($latLng->getFloor()->facade) {
-                $this->log->parseObjectCommentAfterConversionFloorStillOnFacade($latLng->toArrayWithFloor());
-
-                $importStringObjects->getWarnings()->push(
-                    new ImportWarning(
-                        __('services.mdt.io.import_string.category.object'),
-                        __('services.mdt.io.import_string.object_out_of_bounds', ['comment' => (string)$details['4']]),
-                    ),
-                );
-
-                return;
-            }
+        if ($this->isOutOfBounds(
+            $importStringObjects,
+            $objectIndex,
+            $latLng,
+            __('services.mdt.io.import_string.object_out_of_bounds', ['comment' => (string)$details['4']]),
+        )) {
+            return;
         }
 
         // Try to see if we can import this comment and apply it to our pulls directly instead

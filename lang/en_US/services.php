@@ -27,6 +27,8 @@ return [
                     'raid_markers'      => 'Raid markers',
                 ],
                 'object_out_of_bounds'                                 => 'Unable to place comment: could not place comment ":comment" object is out of bounds.',
+                'line_out_of_bounds'                                   => 'Unable to place line: every point of it is out of bounds.',
+                'arrow_out_of_bounds'                                  => 'Unable to place arrow: every point of it is out of bounds.',
                 'line_too_long'                                        => 'Unable to import a line: it has more points than Keystone.guru can store for one line.',
                 'limit_reached_pulls'                                  => 'Unable to import route: more than the max of :limit pulls.',
                 'limit_reached_brushlines'                             => 'Unable to import route: more than the max of :limit lines.',
