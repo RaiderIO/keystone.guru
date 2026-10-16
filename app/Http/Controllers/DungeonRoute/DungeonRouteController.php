@@ -778,6 +778,7 @@ class DungeonRouteController extends Controller
                 $importString,
                 $warnings,
                 $discardExistingDraftId,
+                $request->user(),
             );
         } catch (PendingUpgradeDraftException $pendingUpgradeDraftException) {
             abort(StatusCode::CONFLICT, $pendingUpgradeDraftException->getMessage());

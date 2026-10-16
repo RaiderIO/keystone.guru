@@ -290,6 +290,7 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
                     bool         $save = false,
                     bool         $assignNotesToPulls = true,
                     bool         $importAsThisWeek = false,
+                    ?User        $user = null,
                     ?GameVersion $gameVersion = null,
                 ) use ($dungeon, $original, $resolveMappingVersion): DungeonRoute {
                     $importedRoute = DungeonRoute::factory()->create([
@@ -312,6 +313,59 @@ final class DungeonRouteUpgradeDraftServiceMdtImportTest extends MDTImportString
             // Assert
             $this->assertSame($otherGameVersionMappingVersion->id, $draft->mapping_version_id, 'The draft stays on the original\'s game version');
             $this->assertSame($original->id, $draft->upgrade_of_dungeon_route_id);
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function createDraftFromMdtString_givenUser_importsStringAsThatUser(): void
+    {
+        try {
+            // Arrange
+            [$source]   = $this->createSourceRouteAndString();
+            $original   = $this->createOriginal($source->dungeon_id, $source->mapping_version_id);
+            $actingUser = User::factory()->create();
+            array_unshift($this->cleanup, $actingUser);
+            $importedAsUser = null;
+
+            $mdtImportStringService = $this->createMockPublic(MDTImportStringServiceInterface::class);
+            $mdtImportStringService->method('setEncodedString')->willReturnSelf();
+            $mdtImportStringService->method('getDetails')->willReturn(
+                $this->buildImportStringDetails($source->dungeon, $source->mappingVersion, collect()),
+            );
+            $mdtImportStringService->method('getDungeonRoute')->willReturnCallback(
+                function (
+                    Collection   $warnings,
+                    Collection   $errors,
+                    bool         $sandbox = false,
+                    bool         $save = false,
+                    bool         $assignNotesToPulls = true,
+                    bool         $importAsThisWeek = false,
+                    ?User        $user = null,
+                    ?GameVersion $gameVersion = null,
+                ) use ($original, $source, &$importedAsUser): DungeonRoute {
+                    $importedAsUser = $user;
+                    $importedRoute  = DungeonRoute::factory()->create([
+                        'author_id'          => $original->author_id,
+                        'dungeon_id'         => $source->dungeon_id,
+                        'mapping_version_id' => $source->mapping_version_id,
+                        'expires_at'         => null,
+                        'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+                    ]);
+                    array_unshift($this->cleanup, $importedRoute);
+
+                    return $importedRoute;
+                },
+            );
+
+            // Act
+            $this->buildService(mdtImportStringService: $mdtImportStringService)
+                ->createDraftFromMdtString($original, 'an MDT string', collect(), user: $actingUser);
+
+            // Assert
+            $this->assertInstanceOf(User::class, $importedAsUser);
+            $this->assertSame($actingUser->id, $importedAsUser->id);
         } finally {
             $this->tearDownCleanup();
         }

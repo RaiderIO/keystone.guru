@@ -11,6 +11,8 @@ use App\Models\PublishedState;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
+use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
+use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Group;
@@ -92,6 +94,38 @@ final class DungeonRouteControllerImportMdtStringTest extends MDTImportStringSer
                 ]),
             ]);
             $response->assertSessionHas('status', __('controller.dungeonroute.flash.mdt_import_draft_created'));
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function importMdtString_givenOwner_importsAsActingUser(): void
+    {
+        try {
+            // Arrange
+            [$source, $mdtString] = $this->createSourceRouteAndString();
+            $owner                = $this->createUser();
+            $original             = $this->createOriginal($owner, $source);
+            $importedAsUser       = null;
+
+            $dungeonRouteUpgradeDraftService = $this->createMock(DungeonRouteUpgradeDraftServiceInterface::class);
+            $dungeonRouteUpgradeDraftService->method('createDraftFromMdtString')->willReturnCallback(
+                static function (...$arguments) use (&$importedAsUser): never {
+                    $importedAsUser = $arguments[4] ?? null;
+
+                    throw new UpgradeDraftException('Stop after capturing the acting user');
+                },
+            );
+            $this->app->instance(DungeonRouteUpgradeDraftServiceInterface::class, $dungeonRouteUpgradeDraftService);
+
+            // Act
+            $response = $this->actingAs($owner)->postJson($this->importUrl($original), ['import_string' => $mdtString]);
+
+            // Assert
+            $response->assertBadRequest();
+            $this->assertInstanceOf(User::class, $importedAsUser);
+            $this->assertSame($owner->id, $importedAsUser->id);
         } finally {
             $this->tearDownCleanup();
         }

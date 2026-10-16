@@ -154,6 +154,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
         string       $mdtString,
         Collection   $warnings,
         ?int         $discardExistingDraftId = null,
+        ?User        $user = null,
     ): DungeonRoute {
         $this->log->createDraftFromMdtStringStart($original->id, $discardExistingDraftId);
 
@@ -190,6 +191,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                 collect(),
                 sandbox: false,
                 save: true,
+                user: $user,
                 gameVersion: $gameVersion,
             ));
 

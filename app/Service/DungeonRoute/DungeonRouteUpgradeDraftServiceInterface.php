@@ -48,6 +48,7 @@ interface DungeonRouteUpgradeDraftServiceInterface
      * @param  Collection<int, ImportWarning> $warnings               Receives the import's warnings.
      * @param  int|null                       $discardExistingDraftId The id of the pending draft of $original the author
      *                                                                confirmed may be discarded to make room for this one.
+     * @param  User|null                      $user                   The acting user the import's user-dependent objects are created for.
      * @return DungeonRoute                   The new draft.
      *
      * @throws PendingUpgradeDraftException When $original already has a draft and $discardExistingDraftId is null.
@@ -64,6 +65,7 @@ interface DungeonRouteUpgradeDraftServiceInterface
         string       $mdtString,
         Collection   $warnings,
         ?int         $discardExistingDraftId = null,
+        ?User        $user = null,
     ): DungeonRoute;
 
     /**
