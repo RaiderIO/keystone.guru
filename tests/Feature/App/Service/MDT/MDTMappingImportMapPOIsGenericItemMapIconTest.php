@@ -13,10 +13,9 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Mapping\MappingServiceInterface;
-use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\MDT\Import\Mapping\MapPOIImporter;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionMethod;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -38,7 +37,6 @@ final class MDTMappingImportMapPOIsGenericItemMapIconTest extends PublicTestCase
     {
         // Arrange
         $mappingService             = $this->app->make(MappingServiceInterface::class);
-        $mappingImportService       = $this->app->make(MDTMappingImportServiceInterface::class);
         [$spellId, $mapIconTypeKey] = $this->getGenericItemSpellIdAndMapIconTypeKey();
         $mapIconTypeId              = MapIconType::ALL[$mapIconTypeKey];
 
@@ -86,13 +84,12 @@ final class MDTMappingImportMapPOIsGenericItemMapIconTest extends PublicTestCase
 
             // Act - simulates a routine re-import: $currentMappingVersion still has the icon that was just
             // cloned (then deleted) from it into $newMappingVersion, and MDT still reports the same POI.
-            $importMapPOIs = new ReflectionMethod($mappingImportService, 'importMapPOIs');
-            $importMapPOIs->invokeArgs($mappingImportService, [
+            $this->app->make(MapPOIImporter::class)->importMapPOIs(
                 $sourceMappingVersion,
                 $newMappingVersion,
                 $mdtDungeon,
                 $dungeon,
-            ]);
+            );
 
             // Assert
             $this->assertSame(

@@ -8,13 +8,12 @@ use App\Models\Enemy;
 use App\Models\EnemyForcesCheckpoint;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Mapping\MappingServiceInterface;
-use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\MDT\Import\Mapping\EnemyImporter;
 use Generator;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionMethod;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -67,22 +66,15 @@ final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
                 ->willReturn(collect([$this->createMdtCloneOf($survivingEnemy)]));
 
             // Act
-            $importEnemies = new ReflectionMethod(
-                $this->app->make(MDTMappingImportServiceInterface::class),
-                'importEnemies',
-            );
             $failures = [];
-            $importEnemies->invokeArgs(
-                $this->app->make(MDTMappingImportServiceInterface::class),
-                [
-                    $sourceMappingVersion,
-                    $newMappingVersion,
-                    $mdtDungeon,
-                    $dungeon,
-                    $enemyForcesCheckpointIdMapping,
-                    $forceImport,
-                    &$failures,
-                ],
+            $this->app->make(EnemyImporter::class)->importEnemies(
+                $sourceMappingVersion,
+                $newMappingVersion,
+                $mdtDungeon,
+                $dungeon,
+                $enemyForcesCheckpointIdMapping,
+                $forceImport,
+                $failures,
             );
 
             // Assert
@@ -183,22 +175,15 @@ final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
             $mdtDungeon->method('getClonesAsEnemies')->willReturn(collect());
 
             // Act
-            $importEnemies = new ReflectionMethod(
-                $this->app->make(MDTMappingImportServiceInterface::class),
-                'importEnemies',
-            );
             $failures = [];
-            $importEnemies->invokeArgs(
-                $this->app->make(MDTMappingImportServiceInterface::class),
-                [
-                    $sourceMappingVersion,
-                    $newMappingVersion,
-                    $mdtDungeon,
-                    $dungeon,
-                    $enemyForcesCheckpointIdMapping,
-                    false,
-                    &$failures,
-                ],
+            $this->app->make(EnemyImporter::class)->importEnemies(
+                $sourceMappingVersion,
+                $newMappingVersion,
+                $mdtDungeon,
+                $dungeon,
+                $enemyForcesCheckpointIdMapping,
+                false,
+                $failures,
             );
 
             // Assert

@@ -5,41 +5,28 @@ namespace App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Entity\MDTMapPOI;
-use App\Logic\MDT\Entity\MDTMapPOIType;
 use App\Logic\MDT\Entity\MDTNpc;
-use App\Logic\MDT\Entity\MDTPatrol;
 use App\Models\Dungeon;
-use App\Models\DungeonFloorSwitchMarker;
-use App\Models\DungeonStart;
 use App\Models\Enemy;
-use App\Models\EnemyForcesCheckpoint;
-use App\Models\EnemyPack;
-use App\Models\EnemyPatrol;
-use App\Models\Faction;
-use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
-use App\Models\MapIcon;
-use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
-use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcDungeon;
-use App\Models\Npc\NpcEnemyForces;
-use App\Models\Npc\NpcHealth;
-use App\Models\Npc\NpcType;
-use App\Models\Polyline;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\Exceptions\MDTMappingImportPartialFailureException;
 use App\Service\MDT\Exceptions\MDTMappingNpcSetReplacedException;
 use App\Service\MDT\Exceptions\MDTMappingPendingAcceptanceException;
+use App\Service\MDT\Import\Mapping\EnemyImporter;
+use App\Service\MDT\Import\Mapping\EnemyPackImporter;
+use App\Service\MDT\Import\Mapping\EnemyPatrolImporter;
+use App\Service\MDT\Import\Mapping\MapPOIImporter;
+use App\Service\MDT\Import\Mapping\NpcImporter;
 use App\Service\MDT\Logging\MDTMappingImportServiceLoggingInterface;
 use Exception;
-use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
-use Str;
 use Throwable;
 
 class MDTMappingImportService implements MDTMappingImportServiceInterface
@@ -51,16 +38,15 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      */
     public const float NPC_SET_OVERLAP_MINIMUM = 0.5;
 
-    /** @var array<int, int> Ignore these enemies when their NPC ID is in this list */
-    private const array IGNORE_ENEMY_NPC_IDS = [
-        // Black Rook Hold, Troubled Soul
-        98362,
-    ];
+    private readonly NpcImporter $npcImporter;
 
-    private const array IGNORE_ENEMY_DISTANCE_CHECK_NPC_IDS = [
-        // Darkflame Cleft, The Darkness - we move it to an entirely different area so please ignore this check
-        208747,
-    ];
+    private readonly EnemyImporter $enemyImporter;
+
+    private readonly EnemyPackImporter $enemyPackImporter;
+
+    private readonly EnemyPatrolImporter $enemyPatrolImporter;
+
+    private readonly MapPOIImporter $mapPOIImporter;
 
     public function __construct(
         private readonly CacheServiceInterface                   $cacheService,
@@ -68,6 +54,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         private readonly MDTAddonVersionServiceInterface         $mdtAddonVersionService,
         private readonly MDTMappingImportServiceLoggingInterface $log,
     ) {
+        // Built here rather than injected: every importer must log through this exact Logging instance so its
+        // lines carry importMappingVersionFromMDT()'s start/end context and depth.
+        $this->npcImporter         = new NpcImporter($this->log);
+        $this->enemyImporter       = new EnemyImporter($this->coordinatesService, $this->log);
+        $this->enemyPackImporter   = new EnemyPackImporter($this->log);
+        $this->enemyPatrolImporter = new EnemyPatrolImporter($this->coordinatesService, $this->log);
+        $this->mapPOIImporter      = new MapPOIImporter($this->coordinatesService, $this->log);
     }
 
     /**
@@ -132,7 +125,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 $this->importDungeon($mdtDungeon, $dungeon, $newMappingVersion);
                 $this->importNpcs($newMappingVersion, $mdtDungeon, $dungeon, $gameVersion, $importFailures);
-                $enemies = $this->importEnemies(
+                $enemies = $this->enemyImporter->importEnemies(
                     $currentMappingVersion,
                     $newMappingVersion,
                     $mdtDungeon,
@@ -141,9 +134,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     $forceImport,
                     $importFailures,
                 );
-                $this->importEnemyPacks($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
-                $this->importEnemyPatrols($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon, $enemies);
-                $this->importMapPOIs($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon);
+                $this->enemyPackImporter->importEnemyPacks($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
+                $this->enemyPatrolImporter->importEnemyPatrols($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon, $enemies);
+                $this->mapPOIImporter->importMapPOIs($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon);
 
                 if (!empty($importFailures)) {
                     // Every step above ran, but one or more individual NPCs/enemies were silently dropped
@@ -279,119 +272,29 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
     public function importNpcsDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon, GameVersion $gameVersion, array &$failures = []): void
     {
+        $this->npcImporter->importNpcsDataFromMDT($mdtDungeon, $dungeon, $gameVersion, $failures);
+    }
+
+    /**
+     * @param  array<int, Exception> $failures Appended with NPC saves that failed - see
+     *                                         importNpcsDataFromMDT()'s $failures parameter.
+     * @throws Exception
+     */
+    private function importNpcs(
+        MappingVersion $newMappingVersion,
+        MDTDungeon     $mdtDungeon,
+        Dungeon        $dungeon,
+        GameVersion    $gameVersion,
+        array          &          $failures,
+    ): void {
         try {
-            $this->log->importNpcsDataFromMDTStart($dungeon->key);
+            $this->log->importNpcsStart();
 
-            // Get a list of NPCs and update/save them. npcHealths must be eager loaded here - it is read
-            // per NPC below, which would otherwise be an N+1 that hard-fails
-            // under preventLazyLoading (dev) for any dungeon that already has NPCs.
-            $existingNpcs = $dungeon->npcs()->with(['npcHealths'])->get()->keyBy('id');
+            $this->importNpcsDataFromMDT($mdtDungeon, $dungeon, $gameVersion, $failures);
 
-            $npcsUpdated           = $npcsInserted = 0;
-            $npcDungeonsAttributes = [];
-
-            foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
-                if (in_array($mdtNpc->getId(), Npc::getCuratedDataNpcIds(), true)) {
-                    $this->log->importNpcsDataFromMDTIgnoreNpc($mdtNpc->getId());
-                    continue;
-                }
-
-                $npc = $existingNpcs->get($mdtNpc->getId());
-
-                if ($newlyCreated = ($npc === null)) {
-                    $npc = new Npc();
-                    // Only on creation - an NPC that already exists may have had its game version
-                    // corrected by hand, and a re-import of another game version must not undo that
-                    $npc->game_version_id = $gameVersion->id;
-                }
-
-                $npc->id = $mdtNpc->getId();
-                // Allow manual override to -1
-                $npc->display_id   = $mdtNpc->getDisplayId();
-                $npc->encounter_id = $mdtNpc->getEncounterId();
-                $npc->classification_id ??= $mdtNpc->isBoss() ?
-                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS] :
-                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE];
-                $npc->name        = $mdtNpc->getName();
-                $npc->level       = $mdtNpc->getLevel();
-                $npc->mdt_scale   = $mdtNpc->getScale();
-                $npc->npc_type_id = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::UNCATEGORIZED;
-                $npc->truesight   = $mdtNpc->getStealthDetect();
-
-                // If no dungeons are assigned, OR if the current dungeon is not part of the list
-                if (!$npc->exists) {
-                    $npc->load('npcDungeons');
-
-                    if ($npc->npcDungeons->filter(
-                        // Check if this NPC is already associated with this dungeon
-
-                        fn(NpcDungeon $npcDungeon) => $npcDungeon->dungeon_id === $dungeon->id,
-                    )->isEmpty()) {
-                        $npcDungeonsAttributes[] = [
-                            'npc_id'     => $npc->id,
-                            'dungeon_id' => $dungeon->id,
-                        ];
-                    }
-                }
-
-                // MDT's health is never imported - it is frequently wrong (Midnight bosses stored ~4.17% high).
-                // Health comes from combat logs (combatlog:extractnpchealth, which fills placeholder rows) or
-                // by hand; a missing row gets the placeholder so the NPC has a row to fill.
-                if ($npc->npcHealths->firstWhere('game_version_id', $gameVersion->id) === null) {
-                    NpcHealth::query()->firstOrCreate([
-                        'npc_id'          => $npc->id,
-                        'game_version_id' => $gameVersion->id,
-                    ], [
-                        'health'     => NpcHealth::HEALTH_PLACEHOLDER,
-                        'percentage' => null,
-                    ]);
-                }
-
-                // Spells an MDT NPC lists are deliberately not imported (#3989): which spells an NPC casts
-                // is derived exclusively from parsed combat log data (see NpcSpellAssignmentCollector),
-                // which is curated data we gathered ourselves - MDT's list is not.
-
-                try {
-                    if ($newlyCreated) {
-                        $saveResult = $npc->save();
-                        $npcsInserted++;
-                    } else {
-                        $saveResult = $npc->update();
-                        $npcsUpdated++;
-                    }
-
-                    if (!$saveResult) {
-                        throw new Exception(sprintf('Unable to save npc %d!', $npc->id));
-                    } elseif ($newlyCreated) {
-                        $this->log->importNpcsDataFromMDTSaveNewNpc($npc->id);
-                    }
-
-                    if ($mdtNpc->getCount() > 0 && $newlyCreated) {
-                        // For new NPCs go back and create enemy forces for all historical mapping versions
-                        $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
-                    }
-                } catch (UniqueConstraintViolationException) {
-                    // Expected and recoverable, not a real failure: the NPC row already exists globally but
-                    // is not linked to this dungeon yet, so the dungeon-scoped lookup above missed it and we
-                    // attempted an insert on an existing primary key - the npc_dungeons link is written below,
-                    // so the next run takes the update path.
-                    $this->log->importNpcsDataFromMDTNpcNotMarkedForAllDungeons($npc->id);
-                } catch (Exception $exception) {
-                    $this->log->importNpcsDataFromMDTSaveNpcException($exception);
-                    $failures[] = $exception;
-                }
-            }
-
-            // Do not delete existing dungeons - we're only interested in new ones
-            NpcDungeon::insert($npcDungeonsAttributes);
-
-            $this->log->importNpcsDataFromMDTNpcsUpdate(
-                $npcsUpdated,
-                $npcsInserted,
-                count($npcDungeonsAttributes),
-            );
+            $this->npcImporter->importNpcEnemyForces($newMappingVersion, $mdtDungeon, $dungeon, $failures);
         } finally {
-            $this->log->importNpcsDataFromMDTEnd();
+            $this->log->importNpcsEnd();
         }
     }
 
@@ -419,734 +322,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             }
         } finally {
             $this->log->importDungeonEnd();
-        }
-    }
-
-    /**
-     * @param  array<int, Exception> $failures Appended with NPC saves that failed - see
-     *                                         importNpcsDataFromMDT()'s $failures parameter.
-     * @throws Exception
-     */
-    private function importNpcs(
-        MappingVersion $newMappingVersion,
-        MDTDungeon     $mdtDungeon,
-        Dungeon        $dungeon,
-        GameVersion    $gameVersion,
-        array          &          $failures,
-    ): void {
-        try {
-            $this->log->importNpcsStart();
-
-            $this->importNpcsDataFromMDT($mdtDungeon, $dungeon, $gameVersion, $failures);
-
-            // Get a list of NPCs and update/save them (re-fetch the list to include any new NPCs)
-            $npcs = $dungeon->npcs()->get()->keyBy('id');
-
-            foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
-                /** @var Npc|null $npc */
-                $npc = $npcs->get($mdtNpc->getId());
-
-                if ($npc === null) {
-                    $this->log->importNpcsUnableToFindNpc($mdtNpc->getId());
-
-                    continue;
-                }
-
-                try {
-                    if ($mdtNpc->getCount() > 0) {
-                        // Create new enemy forces for this NPC for this new mapping version
-                        NpcEnemyForces::create([
-                            'mapping_version_id'   => $newMappingVersion->id,
-                            'npc_id'               => $npc->id,
-                            'enemy_forces'         => $mdtNpc->getCount(),
-                            'enemy_forces_teeming' => null,
-                        ]);
-
-                        $this->log->importNpcsUpdateExistingNpc($npc->id);
-                    }
-
-                    // If shrouded (zul'gamux) update the mapping version to account for that
-                    if ($npc->isShrouded()) {
-                        $newMappingVersion->update([
-                            'enemy_forces_shrouded' => $mdtNpc->getCount(),
-                        ]);
-                    } elseif ($npc->isShroudedZulGamux()) {
-                        $newMappingVersion->update([
-                            'enemy_forces_shrouded_zul_gamux' => $mdtNpc->getCount(),
-                        ]);
-                    }
-                } catch (Exception $exception) {
-                    $this->log->importNpcsDataFromMDTSaveNpcException($exception);
-                    $failures[] = $exception;
-                }
-            }
-        } finally {
-            $this->log->importNpcsEnd();
-        }
-    }
-
-    /**
-     * @param  array<int, int>        $enemyForcesCheckpointIdMapping Source checkpoint id => cloned checkpoint id, as
-     *                                                                built by MappingService when it cloned the
-     *                                                                previous mapping version's checkpoints.
-     * @param  array<int, Exception>  $failures                       Appended with enemy saves that failed - see
-     *                                                                importNpcsDataFromMDT()'s $failures parameter.
-     * @return Collection<int, Enemy>
-     */
-    private function importEnemies(
-        ?MappingVersion $currentMappingVersion,
-        MappingVersion  $newMappingVersion,
-        MDTDungeon      $mdtDungeon,
-        Dungeon         $dungeon,
-        array           $enemyForcesCheckpointIdMapping,
-        bool            $forceImport,
-        array           &           $failures,
-    ): Collection {
-        // Get a list of new enemies and save them
-        try {
-            $this->log->importEnemiesStart();
-
-            // No predecessor (e.g. this dungeon's first-ever import for this game version) - nothing to
-            // recover properties from, every MDT enemy below is treated as brand new (#3757).
-            $currentEnemies = $currentMappingVersion
-                ?->enemies()
-                ->with('floor')
-                ->get()
-                ->keyBy(static fn(Enemy $enemy) => $enemy->getUniqueKey()) ?? collect();
-
-            $enemies = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
-
-            foreach ($enemies as $mdtEnemy) {
-                if (in_array($mdtEnemy->npc_id, self::IGNORE_ENEMY_NPC_IDS)) {
-                    $this->log->importEnemiesSkipIgnoredByNpcEnemy($mdtEnemy->getUniqueKey());
-
-                    continue;
-                }
-
-                // Skip teeming enemies for now - this affix was removed ages ago
-                if ($mdtEnemy->teeming !== null) {
-                    $this->log->importEnemiesSkipTeemingEnemy($mdtEnemy->getUniqueKey());
-
-                    continue;
-                }
-
-                $mdtEnemy->exists = false;
-                $mdtEnemy->unsetRelations();
-
-                // Not saved in the database
-                unset($mdtEnemy->npc);
-                unset($mdtEnemy->id);
-                unset($mdtEnemy->mdt_npc_index);
-                unset($mdtEnemy->is_mdt);
-                unset($mdtEnemy->enemy_id);
-
-                // Is group ID - we handle this later on
-                $mdtEnemy->enemy_pack_id = null;
-                // Membership is restored below, but only for enemies we can match to their predecessor
-                $mdtEnemy->enemy_forces_checkpoint_id = null;
-                $mdtEnemy->mapping_version_id         = $newMappingVersion->id;
-
-                $existingEnemy = $currentEnemies->get($mdtEnemy->getUniqueKey());
-                if ($existingEnemy instanceof Enemy) {
-                    $fields = [
-                        'teeming',
-                        'faction',
-                        'required',
-                        'skippable',
-                        'kill_priority',
-                    ];
-                    // We ignore MDT's position - we want to keep agency in the location we place enemies still
-                    // since we value VERY MUCH the enemy location being accurate to where they are in-game
-                    if (!$forceImport) {
-                        $fields[] = 'floor_id';
-
-                        if (!in_array($mdtEnemy->npc_id, self::IGNORE_ENEMY_DISTANCE_CHECK_NPC_IDS) &&
-                            ($distance = $this->coordinatesService->distanceIngameXY(
-                                $this->coordinatesService->calculateIngameLocationForMapLocation($existingEnemy->getLatLng()),
-                                $this->coordinatesService->calculateIngameLocationForMapLocation($mdtEnemy->getLatLng()),
-                            )) > 150) {
-                            $this->log->importEnemiesDistanceTooLargeNotTransferringExistingEnemyLatLng($mdtEnemy->getUniqueKey(), $distance);
-                        } else {
-                            // Ok, copy over lat/lng
-                            $fields = array_merge($fields, [
-                                'lat',
-                                'lng',
-                            ]);
-                        }
-                    }
-
-                    $updatedFields = [];
-                    foreach ($fields as $field) {
-                        $mdtEnemy->$field      = $existingEnemy->$field;
-                        $updatedFields[$field] = $existingEnemy->$field;
-                    }
-
-                    // Special case - if we manually assigned the MDT placeholder, we would want to migrate that over as well.
-                    // But all other seasonal types can be adjusted by MDT and we copy them back over.
-                    if (in_array($existingEnemy->seasonal_type, [
-                        Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER,
-                        Enemy::SEASONAL_TYPE_REQUIRES_ACTIVATION,
-                    ])) {
-                        $mdtEnemy->seasonal_type        = $existingEnemy->seasonal_type;
-                        $updatedFields['seasonal_type'] = $existingEnemy->seasonal_type;
-                    }
-
-                    // Enemy forces checkpoints were cloned into the new mapping version before we got here, so the
-                    // predecessor's checkpoint id must be translated - copying it verbatim would attach this enemy to
-                    // the previous mapping version's checkpoint (#3702).
-                    if ($existingEnemy->enemy_forces_checkpoint_id !== null) {
-                        $newEnemyForcesCheckpointId = $enemyForcesCheckpointIdMapping[$existingEnemy->enemy_forces_checkpoint_id] ?? null;
-
-                        if ($newEnemyForcesCheckpointId === null) {
-                            $this->log->importEnemiesCannotRecoverEnemyForcesCheckpoint(
-                                $mdtEnemy->getUniqueKey(),
-                                $existingEnemy->enemy_forces_checkpoint_id,
-                            );
-                        } else {
-                            $mdtEnemy->enemy_forces_checkpoint_id        = $newEnemyForcesCheckpointId;
-                            $updatedFields['enemy_forces_checkpoint_id'] = $newEnemyForcesCheckpointId;
-                        }
-                    }
-
-                    // Enemy forces corrections are only ever entered by hand in the mapping editor, so without this
-                    // a re-import silently resets them to null. MDT's own per-clone count wins where it has one - that
-                    // is authoritative, and newer than a correction entered against an older MDT release.
-                    foreach (['enemy_forces_override', 'enemy_forces_override_teeming'] as $enemyForcesField) {
-                        if ($mdtEnemy->$enemyForcesField === null && $existingEnemy->$enemyForcesField !== null) {
-                            $mdtEnemy->$enemyForcesField      = $existingEnemy->$enemyForcesField;
-                            $updatedFields[$enemyForcesField] = $existingEnemy->$enemyForcesField;
-                        }
-                    }
-
-                    $this->log->importEnemiesRecoverPropertiesFromExistingEnemy($mdtEnemy->getUniqueKey(), $updatedFields);
-                } else {
-                    $this->log->importEnemiesCannotRecoverPropertiesFromExistingEnemy($mdtEnemy->getUniqueKey());
-                }
-
-                try {
-                    if ($mdtEnemy->save()) {
-                        $this->log->importEnemiesSaveNewEnemy($mdtEnemy->id);
-                    } else {
-                        throw new Exception(sprintf('Unable to save enemy %d!', $mdtEnemy->id));
-                    }
-                } catch (Exception $exception) {
-                    $this->log->importEnemiesSaveNewEnemyException($exception);
-                    $failures[] = $exception;
-                }
-            }
-
-            $this->deleteEmptyEnemyForcesCheckpoints($currentMappingVersion, $newMappingVersion, $enemyForcesCheckpointIdMapping);
-        } finally {
-            $this->log->importEnemiesEnd();
-        }
-
-        return $enemies;
-    }
-
-    /**
-     * An MDT mapping bump is exactly when the enemy set changes. A checkpoint whose members were all removed
-     * upstream - or which lost them because we could not match them to their predecessor - would otherwise
-     * survive as an empty checkpoint reporting zero enemy forces, which is not what the mapper drew (#3702).
-     *
-     * A checkpoint that never had any members in the SOURCE mapping version did not lose anything by staying
-     * empty here - most notably a "bare mapping version" checkpoint (MappingVersionController@saveNew's "Add
-     * bare mapping version" action clones checkpoints without cloning any enemies), which is memberless by
-     * construction until the mapper re-assigns enemies to it by hand. Only a clone whose source counterpart
-     * genuinely had members - and lost them, or could not be matched to them - is pruned. Anything in the new
-     * mapping version that is not in $enemyForcesCheckpointIdMapping's value set is therefore deliberately
-     * left alone, even if it is currently empty.
-     *
-     * @param array<int, int> $enemyForcesCheckpointIdMapping Source checkpoint id => cloned checkpoint id, as
-     *                                                        built by MappingService when it cloned the
-     *                                                        previous mapping version's checkpoints.
-     */
-    private function deleteEmptyEnemyForcesCheckpoints(
-        ?MappingVersion $currentMappingVersion,
-        MappingVersion  $newMappingVersion,
-        array           $enemyForcesCheckpointIdMapping,
-    ): void {
-        // No predecessor means $enemyForcesCheckpointIdMapping is already empty (nothing was cloned to prune
-        // from) - nothing to do (#3757).
-        if ($currentMappingVersion === null) {
-            return;
-        }
-
-        /** @var Collection<int, EnemyForcesCheckpoint> $emptyEnemyForcesCheckpoints */
-        $emptyEnemyForcesCheckpoints = $newMappingVersion->enemyForcesCheckpoints()
-            ->whereDoesntHave('enemies')
-            ->get();
-
-        if ($emptyEnemyForcesCheckpoints->isEmpty()) {
-            return;
-        }
-
-        /** @var array<int, int> $sourceIdsWithMembers Source checkpoint ids that had at least one member */
-        $sourceIdsWithMembers = $currentMappingVersion->enemyForcesCheckpoints()
-            ->has('enemies')
-            ->pluck('id')
-            ->all();
-        // Clone ids whose SOURCE counterpart had members - only these may be pruned when still empty here.
-        $prunableCloneIds = array_intersect_key($enemyForcesCheckpointIdMapping, array_flip($sourceIdsWithMembers));
-
-        /** @var Collection<int, EnemyForcesCheckpoint> $enemyForcesCheckpointsToPrune */
-        $enemyForcesCheckpointsToPrune = $emptyEnemyForcesCheckpoints->whereIn('id', array_values($prunableCloneIds));
-
-        if ($enemyForcesCheckpointsToPrune->isEmpty()) {
-            return;
-        }
-
-        foreach ($enemyForcesCheckpointsToPrune as $emptyEnemyForcesCheckpoint) {
-            $this->log->importEnemiesDeleteEmptyEnemyForcesCheckpoint(
-                $emptyEnemyForcesCheckpoint->id,
-                $emptyEnemyForcesCheckpoint->name,
-            );
-        }
-        // The per-checkpoint line above stays at warning, but the aggregate is worth paging on: after the fix
-        // above, this only fires when a checkpoint that DID have members in the source could not be carried
-        // over - which is exactly the silent whole-dungeon wipe this bug used to cause (#3702).
-        $this->log->importEnemiesPrunedEmptyEnemyForcesCheckpoints(
-            $newMappingVersion->dungeon_id,
-            $enemyForcesCheckpointsToPrune->count(),
-        );
-
-        // A bulk query builder delete rather than looping model deletes: it skips per-model events, including
-        // the EnemyForcesCheckpoint `deleted` hook - which only releases member enemies, and these checkpoints
-        // have none by definition, so skipping it here is fine.
-        EnemyForcesCheckpoint::query()
-            ->whereIn('id', $enemyForcesCheckpointsToPrune->pluck('id'))
-            ->delete();
-    }
-
-    /**
-     * @param  Collection<int, Enemy>   $savedEnemies
-     * @throws InvalidArgumentException
-     */
-    private function importEnemyPacks(
-        MappingVersion $newMappingVersion,
-        MDTDungeon     $mdtDungeon,
-        Dungeon        $dungeon,
-        Collection     $savedEnemies,
-    ): void {
-        try {
-            $this->log->importEnemyPacksStart();
-
-            $savedEnemies = $savedEnemies->keyBy('id');
-
-            // Get a list of enemies from the new mapping version - these contain the correct Lat/Lngs
-            $newMappingVersionEnemies = $newMappingVersion
-                ->enemies()
-                ->whereIn('floor_id', $dungeon->floors()->active()->get()->pluck('id'))
-                ->get();
-
-            // Conserve the enemy_pack_id
-            $mdtEnemiesWithGroups = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
-            $mdtEnemyPacks        = $mdtEnemiesWithGroups->groupBy('enemy_pack_id');
-
-            // Save enemy packs
-            foreach ($mdtEnemyPacks as $groupIndex => $mdtEnemiesWithGroupsByEnemyPack) {
-                /** @var Collection<int, Enemy> $mdtEnemiesWithGroupsByEnemyPack */
-                $mdtEnemiesWithGroupsByEnemyPack = $mdtEnemiesWithGroupsByEnemyPack
-                    ->filter(static fn(
-                        Enemy $enemy,
-                    ) => $enemy->teeming === null && !in_array($enemy->npc_id, self::IGNORE_ENEMY_NPC_IDS))
-                    ->keyBy('id');
-
-                // Enemies without a group - don't import that group, or no enemies assigned to the group
-                if ($groupIndex === -1 || $mdtEnemiesWithGroupsByEnemyPack->isEmpty()) {
-                    continue;
-                }
-
-                // We cannot use the enemies from MDT directly since they may contain an incorrect lat/lng
-                // We do not re-import the lat/lng from MDT - we allow ourselves to adjust the lat/lng, so we must
-                // fetch the adjusted lat/lng by matching enemies with what we actually saved
-                // 1. Get a list of unique keys which we must look for in the real enemy list
-                $enemiesWithGroupsByEnemyPackUniqueIds = $mdtEnemiesWithGroupsByEnemyPack->map(static fn(
-                    Enemy $enemy,
-                ) => $enemy->getUniqueKey());
-                // 2. Find the enemies that were saved in the database by key
-                $boundingBoxEnemies = $newMappingVersionEnemies->filter(static fn(
-                    Enemy $enemy,
-                ) => $enemiesWithGroupsByEnemyPackUniqueIds->search($enemy->getUniqueKey()) !== false);
-
-                /** @var Enemy $firstEnemy */
-                $firstEnemy = ($boundingBoxEnemies->first() ?? $mdtEnemiesWithGroupsByEnemyPack->first());
-
-                $enemyPack = EnemyPack::create([
-                    'mapping_version_id' => $newMappingVersion->id,
-                    'floor_id'           => $firstEnemy->floor_id,
-                    'group'              => $groupIndex,
-                    'teeming'            => null,
-                    'faction'            => Faction::FACTION_ANY,
-                    'label'              => sprintf('Imported from MDT - group %d', $groupIndex),
-                ]);
-                $enemyPackPolyline = Polyline::create([
-                    'model_id'    => $enemyPack->id,
-                    'model_class' => EnemyPack::class,
-                    'color'       => EnemyPack::DEFAULT_COLOR,
-                    'weight'      => EnemyPack::DEFAULT_WEIGHT,
-                    // 3. Create a new bounding box according to the new enemies lat/lngs
-                    'vertices_json' => json_encode($this->getVerticesBoundingBoxFromEnemies($boundingBoxEnemies)),
-                ]);
-                $enemyPack->update(['polyline_id' => $enemyPackPolyline->id]);
-                $this->log->importEnemyPacksSaveNewEnemyPackOK($enemyPack->id, $mdtEnemiesWithGroupsByEnemyPack->count());
-
-                try {
-                    $this->log->importEnemyPacksCoupleEnemyToPackStart($enemyPack->id);
-
-                    foreach ($mdtEnemiesWithGroupsByEnemyPack as $enemyWithGroup) {
-                        // In the list of enemies that we saved to the database, find the enemy that still had the group intact.
-                        // Write the saved enemy's enemy pack back to the database
-                        $savedEnemy = $this->findSavedEnemyFromCloneEnemy($savedEnemies, $enemyWithGroup->npc_id, $enemyWithGroup->mdt_id);
-
-                        if ($savedEnemy->update(['enemy_pack_id' => $enemyPack->id])) {
-                            $this->log->importEnemyPacksCoupleEnemyToEnemyPack($savedEnemy->id);
-                        } else {
-                            throw new Exception('Unable to update enemy with enemy pack!');
-                        }
-                    }
-                } finally {
-                    $this->log->importEnemyPacksCoupleEnemyToPackEnd();
-                }
-            }
-        } finally {
-            $this->log->importEnemyPacksEnd();
-        }
-    }
-
-    /**
-     * @param  Collection<int, Enemy> $savedEnemies
-     * @throws Exception
-     */
-    private function importEnemyPatrols(
-        ?MappingVersion $currentMappingVersion,
-        MappingVersion  $newMappingVersion,
-        MDTDungeon      $mdtDungeon,
-        Dungeon         $dungeon,
-        Collection      $savedEnemies,
-    ): void {
-        try {
-            $this->log->importEnemyPatrolsStart();
-
-            // Get a list of new enemies and save them
-            $mdtNPCs = $mdtDungeon->getMDTNPCs();
-
-            // Pretend the patrol is on the facade floor for correct translations, IF the facade floor is available
-            $facadeFloor = $dungeon->getFacadeFloor();
-
-            // No predecessor - nothing to match against or re-clone below (#3757).
-            /** @var Collection<int, EnemyPatrol> $existingEnemyPatrols */
-            $existingEnemyPatrols = $currentMappingVersion
-                ?->enemyPatrols()
-                ->with([
-                    'polyline',
-                    'mdtPolyline',
-                ])
-                ->get() ?? collect();
-
-            foreach ($mdtNPCs as $mdtNPC) {
-                foreach ($mdtNPC->getRawMdtNpc()['clones'] as $mdtCloneIndex => $mdtNpcClone) {
-                    if (!isset($mdtNpcClone['patrol'])) {
-                        continue;
-                    }
-
-                    if (isset($mdtNpcClone['teeming'])) {
-                        continue;
-                    }
-
-                    try {
-                        $savedEnemy = $this->findSavedEnemyFromCloneEnemy($savedEnemies, $mdtNPC->getId(), $mdtCloneIndex);
-                    } catch (Exception $exception) {
-                        $this->log->importEnemyPatrolsUnableToFindAttachedEnemy($mdtCloneIndex, $mdtNpcClone, $mdtNPC->getId(), $mdtCloneIndex);
-
-                        throw $exception;
-                    }
-
-                    $this->log->importEnemyPatrolsEnemyHasPatrol($savedEnemy->getUniqueKey());
-
-                    if (empty($mdtNpcClone['patrol'])) {
-                        $this->log->importEnemyPatrolsFoundPatrolIsEmpty($savedEnemy->getUniqueKey());
-
-                        continue;
-                    }
-
-                    // @TODO Check based on existing enemy patrols if this patrol already exists
-                    // We check the MDTPolyline to see if it equals the one we are about to save
-                    // If it does, we re-import the existing enemy patrol instead (since it may have been altered manually)
-                    // Not doing this would overwrite any manual changes made to the enemy patrols
-                    $mdtPolylineVerticesJson = json_encode(array_values(array_map(fn(array $v) => [
-                        'lat' => $v['y'],
-                        'lng' => $v['x'],
-                    ], $mdtNpcClone['patrol'])));
-
-                    $existingEnemyPatrol = null;
-                    foreach ($existingEnemyPatrols as $existingEnemyPatrolCandidate) {
-                        // See if we imported this patrol already
-                        // It could be that MDT has changed the patrol slightly, we'll then have to re-do our changes
-                        // Patrols are otherwise hard or impossible to match (in theory could be done with the enemies
-                        // attached to the patrol, but that would be a lot of work)
-                        if ($existingEnemyPatrolCandidate->mdtPolyline?->vertices_json === $mdtPolylineVerticesJson) {
-                            $existingEnemyPatrol = $existingEnemyPatrolCandidate;
-                            $this->log->importEnemyPatrolsFoundExistingEnemyPatrol($existingEnemyPatrol->id);
-                            break;
-                        }
-                    }
-
-                    $verticesAttributes = $existingEnemyPatrol?->polyline->getAttributes() ?? null;
-                    if (empty($verticesAttributes)) {
-                        $vertices = [];
-                        foreach ($mdtNpcClone['patrol'] as $xy) {
-                            $latLng     = Conversion::convertMDTCoordinateToLatLng($xy, $facadeFloor ?? $savedEnemy->floor);
-                            $latLng     = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
-                            $vertices[] = $latLng->toArray();
-                        }
-
-                        // MDT automatically closes up the patrol which I don't, so correct for this (confirmed by Nnoggie)
-                        $vertices[]         = $vertices[0];
-                        $verticesAttributes = [
-                            'model_class'    => EnemyPatrol::class,
-                            'color'          => '#003280',
-                            'color_animated' => null,
-                            'weight'         => 2,
-                            'vertices_json'  => json_encode($vertices),
-                        ];
-                    }
-
-                    // Save polyline
-                    $polyLine = Polyline::create(array_merge($verticesAttributes, [
-                        // Reset the ID (in case it was imported from an existing enemy patrol)
-                        'id' => null,
-                        // But make sure that the polyline is not attached to any model yet
-                        'model_id' => -1,
-                    ]));
-                    $this->log->importEnemyPatrolsSaveNewPolyline($polyLine->id);
-
-                    // MDT Polyline
-                    $mdtPolyLine = Polyline::create([
-                        'model_id'       => -1,
-                        'model_class'    => MDTPatrol::class,
-                        'color'          => '#003280',
-                        'color_animated' => null,
-                        'weight'         => 2,
-                        // Save the direct X and Y coordinates as lat/lng so we can echo it back later exactly
-                        // This polyline is not meant to be used for display, but rather to be used for MDT
-                        'vertices_json' => $mdtPolylineVerticesJson,
-                    ]);
-                    $this->log->importEnemyPatrolsSaveNewMdtPolyline($mdtPolyLine->id);
-
-                    // Enemy patrols
-                    $enemyPatrol = EnemyPatrol::create([
-                        'mapping_version_id' => $newMappingVersion->id,
-                        'floor_id'           => $savedEnemy->floor_id,
-                        'polyline_id'        => $polyLine->id,
-                        'mdt_polyline_id'    => $mdtPolyLine->id,
-                        'mdt_npc_id'         => $mdtNPC->getId(),
-                        'mdt_id'             => $mdtCloneIndex,
-                        'teeming'            => null,
-                        'faction'            => Faction::FACTION_ANY,
-                    ]);
-                    $this->log->importEnemyPatrolsSaveNewEnemyPatrol($enemyPatrol->id);
-
-                    // Couple polyline to enemy patrol
-                    $polyLineSaveResult = $polyLine->update(['model_id' => $enemyPatrol->id]);
-                    if ($polyLineSaveResult) {
-                        $this->log->importEnemyPatrolsCoupleEnemyPatrolToPolyline($enemyPatrol->id, $polyLine->id);
-                    } else {
-                        throw new Exception('Unable to save polyline!');
-                    }
-                    // Couple mdt polyline to enemy patrol
-                    $mdtPolyLineSaveResult = $mdtPolyLine->update(['model_id' => $enemyPatrol->id]);
-                    if ($mdtPolyLineSaveResult) {
-                        $this->log->importEnemyPatrolsCoupleEnemyPatrolToPolyline($enemyPatrol->id, $polyLine->id);
-                    } else {
-                        throw new Exception('Unable to save polyline!');
-                    }
-
-                    // Couple enemy/enemies to enemy patrol
-                    if ($savedEnemy->enemy_pack_id !== null) {
-                        $enemyUpdateResult = Enemy::where('enemy_pack_id', $savedEnemy->enemy_pack_id)
-                            ->update(['enemy_patrol_id' => $enemyPatrol->id]);
-                    } else {
-                        $enemyUpdateResult = $savedEnemy->update(['enemy_patrol_id' => $enemyPatrol->id]);
-                    }
-
-                    if ($enemyUpdateResult) {
-                        $this->log->importEnemyPatrolsCoupleEnemiesToEnemyPatrol($enemyPatrol->id);
-                    } else {
-                        throw new Exception('Unable to update enemy to have attached patrol!');
-                    }
-                }
-            }
-
-            // Import any enemy patrols created that do not have a MDT polyline
-            // These patrols may be linked to connecting portals or skip icons together.
-            // They just use a patrol to make it look nice.
-            if ($existingEnemyPatrols->filter(
-                // Only import enemy patrols like this if there was ever an mdt polyline created for them
-                // On older mapping versions, enemy patrols were created without MDT polyline
-                static fn(EnemyPatrol $enemyPatrol) => $enemyPatrol->mdtPolyline !== null,
-            )->isNotEmpty()) {
-                foreach ($existingEnemyPatrols as $existingEnemyPatrolCandidate) {
-                    if ($existingEnemyPatrolCandidate->mdtPolyline === null) {
-                        // Clone the existing enemy patrol to the new mapping version
-                        $existingEnemyPatrolCandidate->cloneForNewMappingVersion(
-                            $newMappingVersion,
-                        );
-
-                        $this->log->importEnemyPatrolsClonedPatrolWithoutMdtPolyline(isset($enemyPatrol) ? $enemyPatrol->id : null);
-                    }
-                }
-            }
-        } finally {
-            $this->log->importEnemyPatrolsEnd();
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function importMapPOIs(
-        ?MappingVersion $currentMappingVersion,
-        MappingVersion  $newMappingVersion,
-        MDTDungeon      $mdtDungeon,
-        Dungeon         $dungeon,
-    ): void {
-        try {
-            $this->log->importMapPOIsStart();
-            $mdtMapPOIs = $mdtDungeon->getMDTMapPOIs();
-
-            // Whether $newMappingVersion already has floor switch markers of its own - either cloned from
-            // $currentMappingVersion by copyMappingVersionContentsToDungeon(), or (#3757/#3762) cloned from a
-            // prior game version's facade-source mapping version by
-            // MappingService::createNewMappingVersionFromMDTMapping() on a genuinely first-ever import (where
-            // $currentMappingVersion is null). Querying $newMappingVersion directly - rather than inspecting
-            // $currentMappingVersion, which is null in exactly the case that now pre-populates markers - is
-            // what keeps this from creating duplicates on top of a first-ever import's cloned markers.
-            $newMappingVersionHasDungeonFloorSwitchMarkers = $newMappingVersion->dungeonFloorSwitchMarkers()->exists();
-
-            // We place the dungeon's start marker where the party actually starts running, which is rarely where MDT
-            // draws its DungeonEntrance POI - so matching on position (the check every other map icon type uses)
-            // finds nothing and adds MDT's on top of ours. One start marker anywhere in the mapping version is enough
-            // to mean we already have one.
-            $newMappingVersionHasDungeonStart = $newMappingVersion->dungeonStarts()->exists();
-
-            if ($mdtMapPOIs->isNotEmpty()) {
-                $this->log->importMapPOIsMDTHasMapPOIs();
-
-                $genericItemMapIconTypeIds = $this->getGenericItemMapIconTypeIds();
-                $this->deleteClonedGenericItemMapIcons($newMappingVersion, $genericItemMapIconTypeIds);
-
-                foreach ($mdtMapPOIs as $mdtMapPOI) {
-                    $floor = $this->findFloorByMdtSubLevel($dungeon, $newMappingVersion, $mdtMapPOI->getSubLevel());
-
-                    $latLng = Conversion::convertMDTCoordinateToLatLng([
-                        'x' => $mdtMapPOI->getX(),
-                        'y' => $mdtMapPOI->getY(),
-                    ], $floor);
-                    $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
-
-                    $mapIconTypeKey = Conversion::convertMDTMapPOIToMapIconTypeKey($mdtMapPOI);
-
-                    if ($mdtMapPOI->getType() === MDTMapPOIType::DungeonEntrance) {
-                        if ($newMappingVersionHasDungeonStart) {
-                            $this->log->importMapPOIsHaveExistingDungeonStart($latLng->toArray());
-
-                            continue;
-                        }
-
-                        $dungeonStart = DungeonStart::create(array_merge([
-                            'mapping_version_id' => $newMappingVersion->id,
-                        ], $latLng->toArrayWithFloor()));
-                        $newMappingVersionHasDungeonStart = true;
-
-                        $this->log->importMapPOIsCreatedNewDungeonStart($dungeonStart->id, $dungeonStart->floor_id);
-                    } elseif ($mapIconTypeKey !== null) {
-                        $mapIconTypeId = MapIconType::ALL[$mapIconTypeKey];
-
-                        // Generic item icons were just unconditionally cleared from $newMappingVersion above
-                        // (deleteClonedGenericItemMapIcons) so they can be re-created fresh from MDT below -
-                        // checking $currentMappingVersion here would find the old version's now-deleted-in-
-                        // $newMappingVersion copy and skip re-creating it, silently dropping the icon (#4112).
-                        // No predecessor to match against - always create a new icon (#3757).
-                        $existingMapIcon = in_array($mapIconTypeId, $genericItemMapIconTypeIds, true)
-                            ? $newMappingVersion->getMapIconNearLocation($latLng, $mapIconTypeId)
-                            : $currentMappingVersion?->getMapIconNearLocation($latLng, $mapIconTypeId);
-                        if ($existingMapIcon === null) {
-                            $translationKey = null;
-                            if ($mdtMapPOI->getType() === MDTMapPOIType::GenericAssignablePOI &&
-                                isset($mdtMapPOI->getInfo()['name'])) {
-                                $translationKey = sprintf('mapping.map_icons.mdt.%s', Str::snake($mdtMapPOI->getInfo()['name']));
-
-                                if (__($translationKey) === $translationKey) {
-                                    // No translation found, fallback to the raw name
-                                    $this->log->importMapPOIsMissingTranslation($translationKey);
-                                }
-                            }
-
-                            $mapIcon = MapIcon::create(array_merge(array_filter([
-                                'mapping_version_id' => $newMappingVersion->id,
-                                'map_icon_type_id'   => $mapIconTypeId,
-                                'comment'            => $translationKey,
-                            ]), $latLng->toArrayWithFloor()));
-
-                            $this->log->importMapPOIsCreatedNewMapIcon(
-                                $mapIcon->id,
-                                $mapIcon->floor_id,
-                                $mapIcon->map_icon_type_id,
-                            );
-                        } else {
-                            $this->log->importMapPOIsMapIconAlreadyExists(
-                                $existingMapIcon->id,
-                                $latLng->toArray(),
-                                $mdtMapPOI->getType()->value,
-                            );
-                        }
-                    } elseif ($mdtMapPOI->getType() === MDTMapPOIType::MapLink) {
-                        // So because of the linked_floor_switch_id we cannot re-import dungeon floor switches
-                        // We cannot for sure map the floor switches between different versions to one another
-                        // We could use coordinates but if they change it's iffy.
-                        // They also don't change between mapping versions, it's not really something Blizzard _can_ change
-                        // Only create fresh markers when $newMappingVersion doesn't already have any - whether
-                        // because copyMappingVersionContentsToDungeon() cloned them from $currentMappingVersion,
-                        // or because a first-ever import for this game version cloned them from a prior game
-                        // version's facade-source mapping version (#3757/#3762) - to avoid creating duplicates
-                        // on top of either.
-                        if (!$newMappingVersionHasDungeonFloorSwitchMarkers) {
-                            $floor = $this->findFloorByMdtSubLevel($dungeon, $newMappingVersion, $mdtMapPOI->getSubLevel());
-
-                            $latLng = Conversion::convertMDTCoordinateToLatLng([
-                                'x' => $mdtMapPOI->getX(),
-                                'y' => $mdtMapPOI->getY(),
-                            ], $floor);
-                            $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
-
-                            $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::create(array_merge([
-                                'mapping_version_id' => $newMappingVersion->id,
-                                'floor_id'           => $floor->id,
-                                'target_floor_id'    => $this->findFloorByMdtSubLevel($dungeon, $newMappingVersion, $mdtMapPOI->getTarget())->id,
-                            ], $latLng->toArray()));
-                            $this->log->importMapPOIsNewDungeonFloorSwitchMarkerOK(
-                                $dungeonFloorSwitchMarker->id,
-                                $dungeonFloorSwitchMarker->floor_id,
-                                $dungeonFloorSwitchMarker->target_floor_id,
-                            );
-                        } else {
-                            $this->log->importMapPOIsHaveExistingFloorSwitchMarkers(
-                                $newMappingVersion->dungeonFloorSwitchMarkers()->count(),
-                            );
-                        }
-                    } elseif (Conversion::isMDTMapPOIUnhandled($mdtMapPOI)) {
-                        // MDT draws something we have no map icon type for - our map will be missing it.
-                        $this->log->importMapPOIsUnhandledMapPOI(
-                            $mdtMapPOI->getType()->value,
-                            $mdtMapPOI->getSpellId(),
-                            $mdtMapPOI->getTextureFileDataId(),
-                            $mdtMapPOI->getSubLevel(),
-                        );
-                    }
-                }
-            }
-        } finally {
-            $this->log->importMapPOIsEnd();
         }
     }
 
@@ -1222,41 +397,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
-     * MDT owns the item icons it draws - every map icon type in
-     * {@see Conversion::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING} exists for one specific MDT
-     * `genericItem` POI and nothing else, so the import below re-creates the complete set from MDT.
-     *
-     * Until this import existed those items could only be placed by hand, and
-     * `copyMappingVersionContentsToDungeon()` clones such an icon into every subsequent mapping version -
-     * where it would now sit next to the imported copy as a duplicate. `getMapIconNearLocation()` does not
-     * catch it: its window is +/-5 lat/lng, while Maisara Caverns' hand-placed Hearty Vilebranch Stew is
-     * 5.3 off MDT's position and Seat of the Triumvirate's Void Infusion 13.9 (#3993).
-     *
-     * @param array<int> $genericItemMapIconTypeIds
-     */
-    private function deleteClonedGenericItemMapIcons(MappingVersion $newMappingVersion, array $genericItemMapIconTypeIds): void
-    {
-        $deletedCount = $newMappingVersion->mapIcons()
-            ->whereIn('map_icon_type_id', $genericItemMapIconTypeIds)
-            ->delete();
-
-        if ($deletedCount > 0) {
-            $this->log->importMapPOIsDeletedClonedGenericItemMapIcons($deletedCount);
-        }
-    }
-
-    /**
-     * @return array<int>
-     */
-    private function getGenericItemMapIconTypeIds(): array
-    {
-        return array_map(
-            static fn(string $mapIconTypeKey): int => MapIconType::ALL[$mapIconTypeKey],
-            array_values(Conversion::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING),
-        );
-    }
-
-    /**
      * The dungeon that most of $npcIds are linked to, if it is not $dungeon itself - i.e. whose data MDT
      * appears to have handed us. Null when the NPCs are not predominantly another dungeon's.
      *
@@ -1278,97 +418,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         }
 
         return Dungeon::find($topNpcDungeon->dungeon_id)?->key;
-    }
-
-    /**
-     * @param Collection<int, Enemy> $savedEnemies
-     */
-    private function findSavedEnemyFromCloneEnemy(Collection $savedEnemies, int $npcId, int $mdtId): Enemy
-    {
-        return $savedEnemies->firstOrFail(static fn(
-            Enemy $enemy,
-        ) => $enemy->npc_id === $npcId && $enemy->mdt_id === $mdtId);
-    }
-
-    public function findFloorByMdtSubLevel(Dungeon $dungeon, MappingVersion $mappingVersion, int $mdtSubLevel): Floor
-    {
-        $activeFloors = $dungeon->floors()->active()->get();
-
-        // A facade floor is only a usable host for a coordinate when the mapping version actually has its
-        // facade enabled - convertFacadeMapLocationToMapLocation() is a no-op otherwise, which would leave
-        // the coordinate stranded on the facade floor and blow up in CoordinatesService. Facade floors are
-        // seeded with mdt_sub_level = 1, so without this they win the lookup for sub level 1 on every
-        // dungeon that has a facade floor but has not enabled it - Throne of the Tides today (#3742),
-        // and every historical mapping version from before its dungeon's facade was switched on.
-        if (!$mappingVersion->facade_enabled) {
-            $activeFloors = $activeFloors->filter(static fn(Floor $floor) => !$floor->facade);
-        }
-
-        // First check for mdt_sub_level, if that isn't found just match on our own index
-        return $activeFloors->first(static fn(
-            Floor $floor,
-        ) => $floor->mdt_sub_level === $mdtSubLevel) ?? $activeFloors->first(static fn(
-            Floor $floor,
-        ) => $floor->index === $mdtSubLevel);
-    }
-
-    /**
-     * Get a bounding box which encompasses all passed enemies
-     *
-     * @param  Collection<int, Enemy>               $enemies
-     * @return array<int, array<string, int|float>>
-     */
-    private function getVerticesBoundingBoxFromEnemies(Collection $enemies): array
-    {
-        $minLat = 1000;
-        $minLng = 1000;
-        $maxLat = -1000;
-        $maxLng = -1000;
-        foreach ($enemies as $enemy) {
-            // Find the min and max of lat and lng so we have a nice square
-            if ($minLat > $enemy->lat) {
-                $minLat = $enemy->lat;
-            }
-
-            if ($maxLat < $enemy->lat) {
-                $maxLat = $enemy->lat;
-            }
-
-            if ($minLng > $enemy->lng) {
-                $minLng = $enemy->lng;
-            }
-
-            if ($maxLng < $enemy->lng) {
-                $maxLng = $enemy->lng;
-            }
-        }
-
-        // Expand the box a bit
-        $padding = 1;
-        $minLat -= $padding;
-        $minLng -= $padding;
-        $maxLat += $padding;
-        $maxLng += $padding;
-
-        // Create a box
-        return [
-            [
-                'lat' => $minLat,
-                'lng' => $minLng,
-            ],
-            [
-                'lat' => $maxLat,
-                'lng' => $minLng,
-            ],
-            [
-                'lat' => $maxLat,
-                'lng' => $maxLng,
-            ],
-            [
-                'lat' => $minLat,
-                'lng' => $maxLng,
-            ],
-        ];
     }
 
     /**

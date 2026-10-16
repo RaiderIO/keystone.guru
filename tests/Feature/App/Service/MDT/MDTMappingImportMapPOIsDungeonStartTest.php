@@ -13,10 +13,9 @@ use App\Models\Floor\Floor;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Mapping\MappingServiceInterface;
-use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\MDT\Import\Mapping\MapPOIImporter;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionMethod;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('MDT')]
@@ -91,8 +90,6 @@ final class MDTMappingImportMapPOIsDungeonStartTest extends PublicTestCase
         Floor          $floor,
         LatLng         $latLng,
     ): void {
-        $mappingImportService = $this->app->make(MDTMappingImportServiceInterface::class);
-
         $mdtCoordinate = Conversion::convertLatLngToMDTCoordinate($latLng);
         $mdtMapPOI     = new MDTMapPOI($floor->index, [
             'type' => MDTMapPOIType::DungeonEntrance->value,
@@ -103,13 +100,12 @@ final class MDTMappingImportMapPOIsDungeonStartTest extends PublicTestCase
         $mdtDungeon = $this->createMockPublic(MDTDungeon::class);
         $mdtDungeon->method('getMDTMapPOIs')->willReturn(collect([$mdtMapPOI]));
 
-        $importMapPOIs = new ReflectionMethod($mappingImportService, 'importMapPOIs');
-        $importMapPOIs->invokeArgs($mappingImportService, [
+        $this->app->make(MapPOIImporter::class)->importMapPOIs(
             $currentMappingVersion,
             $newMappingVersion,
             $mdtDungeon,
             $dungeon,
-        ]);
+        );
     }
 
     /**

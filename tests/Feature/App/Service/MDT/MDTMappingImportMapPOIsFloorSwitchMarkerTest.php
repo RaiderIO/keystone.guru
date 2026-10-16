@@ -10,10 +10,9 @@ use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Mapping\MappingServiceInterface;
-use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\MDT\Import\Mapping\MapPOIImporter;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionMethod;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -40,8 +39,7 @@ final class MDTMappingImportMapPOIsFloorSwitchMarkerTest extends PublicTestCase
     public function importMapPOIs_givenNewMappingVersionAlreadyHasFloorSwitchMarkers_doesNotCreateDuplicateFromMDTMapLinkPOI(): void
     {
         // Arrange
-        $mappingService       = $this->app->make(MappingServiceInterface::class);
-        $mappingImportService = $this->app->make(MDTMappingImportServiceInterface::class);
+        $mappingService = $this->app->make(MappingServiceInterface::class);
 
         [$dungeon, $sourceMappingVersion, $sourceFloor, $targetFloor] = $this->getDungeonWithFloorSwitchMarkersAndNoFacadeFloor();
 
@@ -69,13 +67,12 @@ final class MDTMappingImportMapPOIsFloorSwitchMarkerTest extends PublicTestCase
 
             // Act - simulates importMapPOIs() being called right after a genuinely first-ever import
             // ($currentMappingVersion === null), exactly like importMappingVersionFromMDT() does.
-            $importMapPOIs = new ReflectionMethod($mappingImportService, 'importMapPOIs');
-            $importMapPOIs->invokeArgs($mappingImportService, [
+            $this->app->make(MapPOIImporter::class)->importMapPOIs(
                 null,
                 $newMappingVersion,
                 $mdtDungeon,
                 $dungeon,
-            ]);
+            );
 
             // Assert
             $this->assertSame(
@@ -92,8 +89,7 @@ final class MDTMappingImportMapPOIsFloorSwitchMarkerTest extends PublicTestCase
     public function importMapPOIs_givenNewMappingVersionHasNoFloorSwitchMarkersYet_stillCreatesOneFromMDTMapLinkPOI(): void
     {
         // Arrange
-        $mappingService       = $this->app->make(MappingServiceInterface::class);
-        $mappingImportService = $this->app->make(MDTMappingImportServiceInterface::class);
+        $mappingService = $this->app->make(MappingServiceInterface::class);
 
         [$dungeon, $sourceMappingVersion, $sourceFloor, $targetFloor] = $this->getDungeonWithFloorSwitchMarkersAndNoFacadeFloor();
 
@@ -117,13 +113,12 @@ final class MDTMappingImportMapPOIsFloorSwitchMarkerTest extends PublicTestCase
             ]));
 
             // Act
-            $importMapPOIs = new ReflectionMethod($mappingImportService, 'importMapPOIs');
-            $importMapPOIs->invokeArgs($mappingImportService, [
+            $this->app->make(MapPOIImporter::class)->importMapPOIs(
                 null,
                 $newMappingVersion,
                 $mdtDungeon,
                 $dungeon,
-            ]);
+            );
 
             // Assert
             $this->assertSame(

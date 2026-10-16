@@ -7,11 +7,10 @@ use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Mapping\MappingServiceInterface;
-use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\MDT\Import\Mapping\EnemyImporter;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionMethod;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -108,22 +107,15 @@ final class MDTMappingImportEnemyForcesOverrideTest extends PublicTestCase
             $mdtDungeon->method('getClonesAsEnemies')
                 ->willReturn(collect([$this->createMdtCloneOf($sourceEnemy, $mdtCloneOverride)]));
 
-            $importEnemies = new ReflectionMethod(
-                $this->app->make(MDTMappingImportServiceInterface::class),
-                'importEnemies',
-            );
             $failures = [];
-            $importEnemies->invokeArgs(
-                $this->app->make(MDTMappingImportServiceInterface::class),
-                [
-                    $sourceMappingVersion,
-                    $newMappingVersion,
-                    $mdtDungeon,
-                    $dungeon,
-                    [],
-                    false,
-                    &$failures,
-                ],
+            $this->app->make(EnemyImporter::class)->importEnemies(
+                $sourceMappingVersion,
+                $newMappingVersion,
+                $mdtDungeon,
+                $dungeon,
+                [],
+                false,
+                $failures,
             );
 
             $this->assertSame([], $failures, 'The import itself must not have failed.');
