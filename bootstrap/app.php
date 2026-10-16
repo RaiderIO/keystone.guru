@@ -132,5 +132,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // already reports on separately at error level.
         $exceptions->level(CombatLogSegmentDownloadFailedException::class, LogLevel::WARNING);
 
+        // On top of Laravel's own current_password, password and password_confirmation
+        $exceptions->dontFlash(['new_password', 'new_password-confirm']);
+
         Integration::handles($exceptions);
     })->create();

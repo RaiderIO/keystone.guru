@@ -591,6 +591,34 @@ final class ProfileControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function changepassword_givenFailedValidationWithNewPassword_neverFlashesTheNewPasswordToTheSession(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'username'             => $user->email,
+                'current_password'     => '',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('current_password');
+            $oldInput = session()->getOldInput();
+            $this->assertSame($user->email, $oldInput['username'] ?? null);
+            $this->assertArrayNotHasKey('new_password', $oldInput);
+            $this->assertArrayNotHasKey('new_password-confirm', $oldInput);
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
     public function delete_givenSelf_deletesTheAccountAndLogsOut(): void
     {
         $user = null;
