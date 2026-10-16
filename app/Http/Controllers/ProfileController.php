@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Email\PasswordChangedEmail;
 use App\Events\UserColorChangedEvent;
 use App\Features\CreatorProfiles;
 use App\Http\Requests\CreatorProfileFormRequest;
+use App\Http\Requests\ProfileChangePasswordFormRequest;
 use App\Http\Requests\ProfileFormRequest;
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -362,11 +364,11 @@ class ProfileController extends Controller
     /**
      * @return View
      */
-    public function changepassword(Request $request): View
+    public function changepassword(ProfileChangePasswordFormRequest $request): View
     {
-        $currentPw          = $request->get('current_password');
-        $newPassword        = $request->get('new_password');
-        $newPasswordConfirm = $request->get('new_password-confirm');
+        $currentPw          = $request->validated('current_password');
+        $newPassword        = $request->validated('new_password');
+        $newPasswordConfirm = $request->validated('new_password-confirm');
 
         /** @var User $user */
         $user = Auth::getUser();
@@ -388,10 +390,9 @@ class ProfileController extends Controller
             $user->update([
                 'password' => Hash::make($newPassword),
             ]);
+            $user->notify(new PasswordChangedEmail()->locale($user->locale));
             Session::flash('status', __('controller.profile.flash.password_changed'));
         }
-
-        // @todo Send an e-mail letting the user know the password has been changed
 
         return view('profile.edit', $this->creatorProfileEditViewData())->withErrors($error);
     }

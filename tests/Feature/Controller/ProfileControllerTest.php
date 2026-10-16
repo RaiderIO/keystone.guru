@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller;
 
+use App\Email\PasswordChangedEmail;
 use App\Events\UserColorChangedEvent;
 use App\Features\CreatorProfiles;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -16,11 +17,14 @@ use App\Models\User;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Laravel\Pennant\Feature;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -474,6 +478,113 @@ final class ProfileControllerTest extends PublicTestCase
             $response->assertOk();
             $response->assertViewHas('errors', static fn($errors): bool => $errors->has('passwords_match'));
             $response->assertSessionMissing('status');
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenCorrectCurrentPassword_queuesPasswordChangedEmailInTheUsersLocale(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            Notification::fake();
+            $user = $this->userWithUserRole();
+            User::query()->whereKey($user->id)->update(['locale' => 'de_DE']);
+
+            // Act
+            $response = $this->actingAs($user->refresh())->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $response->assertOk();
+            Notification::assertSentToTimes($user, PasswordChangedEmail::class, 1);
+            Notification::assertSentTo(
+                $user,
+                PasswordChangedEmail::class,
+                static fn(PasswordChangedEmail $notification): bool => $notification->locale === 'de_DE',
+            );
+            $this->assertInstanceOf(ShouldQueue::class, new PasswordChangedEmail());
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('changepassword_givenFailedChange_sendsNoPasswordChangedEmail_dataProvider')]
+    public function changepassword_givenFailedChange_sendsNoPasswordChangedEmail(
+        string $currentPassword,
+        string $newPassword,
+        string $newPasswordConfirm,
+        string $expectedErrorKey,
+    ): void {
+        $user = null;
+
+        try {
+            // Arrange
+            Notification::fake();
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => $currentPassword,
+                'new_password'         => $newPassword,
+                'new_password-confirm' => $newPasswordConfirm,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas('errors', static fn($errors): bool => $errors->has($expectedErrorKey));
+            Notification::assertNotSentTo($user, PasswordChangedEmail::class);
+            $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string, string, string, string}>
+     */
+    public static function changepassword_givenFailedChange_sendsNoPasswordChangedEmail_dataProvider(): array
+    {
+        return [
+            'wrong current password'  => ['not-the-password', 'a-brand-new-password', 'a-brand-new-password', 'passwords_incorrect'],
+            'mismatched confirmation' => ['password', 'a-brand-new-password', 'another-new-password', 'passwords_no_match'],
+            'current password reused' => ['password', 'password', 'password', 'passwords_match'],
+        ];
+    }
+
+    #[Test]
+    public function changepassword_givenEmptyFields_redirectsToThePasswordTabWithFieldErrors(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            Notification::fake();
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => '',
+                'new_password'         => '',
+                'new_password-confirm' => '',
+            ]);
+
+            // Assert
+            $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
+            $response->assertSessionHasErrors([
+                'current_password'     => __('validation.custom.change_password.current_password_required'),
+                'new_password'         => __('validation.custom.change_password.new_password_required'),
+                'new_password-confirm' => __('validation.custom.change_password.new_password_confirm_required'),
+            ]);
+            Notification::assertNotSentTo($user, PasswordChangedEmail::class);
+            $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
         } finally {
             $user?->delete();
         }
