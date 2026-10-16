@@ -316,14 +316,6 @@ final class DungeonRouteDeleteCleansUpRelationshipsTest extends PublicTestCase
 
     private function relationHasRows(DungeonRoute $route, string $relation): bool
     {
-        // challengeModeRun() only resolves with the route switched to the combatlog connection, see its docblock
-        if ($relation === 'challengeModeRun') {
-            $hasRows = $route->setConnection('combatlog')->challengeModeRun()->exists();
-            $route->setConnection(null);
-
-            return $hasRows;
-        }
-
         return $route->{$relation}()->exists();
     }
 

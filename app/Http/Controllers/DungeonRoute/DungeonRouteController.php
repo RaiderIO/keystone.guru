@@ -9,7 +9,6 @@ use App\Http\Requests\DungeonRoute\DungeonRoutePreviewUrlFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteSubmitFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteSubmitTemporaryFormRequest;
 use App\Http\Requests\DungeonRoute\MigrateToSeasonalTypeFormRequest;
-use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
@@ -181,14 +180,9 @@ class DungeonRouteController extends Controller
     ) {
         Gate::authorize('present', $dungeonroute);
 
-        // @TODO fix this - it has a different connection and that messes with the relation
-        $challengeModeRun = ChallengeModeRun::firstWhere('dungeon_route_id', $dungeonroute->id);
-
-        if ($challengeModeRun === null) {
+        if ($dungeonroute->loadMissing('challengeModeRun')->challengeModeRun === null) {
             abort(403, 'Route not generated from API!');
         }
-
-        $dungeonroute->setRelation('challengeModeRun', $challengeModeRun);
 
         if ($dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.present', [
