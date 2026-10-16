@@ -12,6 +12,7 @@ use App\Models\TeamUser;
 use App\Models\User;
 use App\Policies\DungeonRoutePolicy;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -29,6 +30,73 @@ final class DungeonRoutePolicyTest extends PublicTestCase
         parent::setUp();
 
         $this->policy = new DungeonRoutePolicy();
+    }
+
+    #[Test]
+    public function create_givenAUserUnderTheRouteLimit_returnsAllowed(): void
+    {
+        // Arrange
+        $user  = User::factory()->create();
+        $route = $this->createRoute($user);
+        config(['keystoneguru.registered_user_dungeonroute_limit' => 2]);
+
+        try {
+            // Act
+            $result = $this->policy->create($user);
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            $route->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function create_givenAUserAtTheRouteLimit_returnsDenied(): void
+    {
+        // Arrange
+        $user  = User::factory()->create();
+        $route = $this->createRoute($user);
+        config(['keystoneguru.registered_user_dungeonroute_limit' => 1]);
+
+        try {
+            // Act
+            $result = $this->policy->create($user);
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            $route->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function create_givenAnAdminAtTheRouteLimit_returnsAllowed(): void
+    {
+        // Arrange - admins hold every Patreon benefit, unlimited routes included
+        $admin = $this->adminUser();
+        config(['keystoneguru.registered_user_dungeonroute_limit' => 0]);
+
+        // Act
+        $result = $this->policy->create($admin);
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    #[Test]
+    public function create_givenAGuest_returnsDenied(): void
+    {
+        // Arrange - the limit cannot be what denies here
+        config(['keystoneguru.registered_user_dungeonroute_limit' => PHP_INT_MAX]);
+
+        // Act
+        $result = Gate::forUser(null)->allows('create', DungeonRoute::class);
+
+        // Assert
+        $this->assertFalse($result);
     }
 
     #[Test]

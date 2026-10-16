@@ -352,10 +352,7 @@ class DungeonRouteController extends Controller
     ) {
         Gate::authorize('clone', $dungeonroute);
 
-        /** @var User $user */
-        $user = Auth::user();
-
-        if ($user->canCreateDungeonRoute()) {
+        if (Gate::allows('create', DungeonRoute::class)) {
             $newRoute = $saveService->cloneRoute($dungeonroute);
 
             Session::flash('status', __('controller.dungeonroute.flash.route_cloned_successfully'));

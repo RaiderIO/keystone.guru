@@ -629,7 +629,7 @@ class AjaxDungeonRouteController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
+        if (Gate::allows('create', DungeonRoute::class) && $team->canAddRemoveRoute($user)) {
             DB::transaction(function () use ($dungeonRoute, $saveService, $team): void {
                 $newRoute = $saveService->cloneRoute($dungeonRoute, false);
 
@@ -654,10 +654,7 @@ class AjaxDungeonRouteController extends Controller
     ): Response {
         Gate::authorize('clone', $dungeonRoute);
 
-        /** @var User $user */
-        $user = Auth::user();
-
-        abort_unless($user->canCreateDungeonRoute(), Http::FORBIDDEN, __('controller.dungeonroute.continue_in_newer_season.limit_reached'));
+        abort_unless(Gate::allows('create', DungeonRoute::class), Http::FORBIDDEN, __('controller.dungeonroute.continue_in_newer_season.limit_reached'));
 
         try {
             $continuation = $seasonContinuationService->continueInNewerSeason($dungeonRoute);

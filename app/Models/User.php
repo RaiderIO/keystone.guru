@@ -431,15 +431,6 @@ class User extends Authenticatable implements LaratrustUser
     }
 
     /**
-     * Checks if this user can create a dungeon route or not (based on free account limits)
-     */
-    public function canCreateDungeonRoute(): bool
-    {
-        return $this->dungeonRoutes()->count() < config('keystoneguru.registered_user_dungeonroute_limit') ||
-            $this->hasPatreonBenefit(PatreonBenefit::UNLIMITED_DUNGEONROUTES);
-    }
-
-    /**
      * Sends the password reset notification.
      */
     public function sendPasswordResetNotification($token): void
