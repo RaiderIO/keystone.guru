@@ -99,28 +99,6 @@ final class DungeonRouteServiceUpdatePopularityTest extends PublicTestCase
     }
 
     #[Test]
-    public function updatePopularity_givenRouteWithoutMappingVersion_updatesItsPopularityWithThePenalty(): void
-    {
-        // Arrange
-        $route = null;
-
-        try {
-            $dungeon = $this->createDungeon();
-            $route   = $this->createViewedRoute($dungeon->id, $dungeon->mappingVersions()->firstOrFail()->id);
-            DungeonRoute::query()->whereKey($route->id)->update(['mapping_version_id' => null]);
-
-            // Act
-            app(DungeonRouteServiceInterface::class)->updatePopularity();
-
-            // Assert
-            $penalty = config('keystoneguru.discover.service.popular_out_of_date_mapping_version_penalty');
-            $this->assertSame((int)(self::VIEW_COUNT * $penalty), $route->refresh()->popularity);
-        } finally {
-            $this->deleteRoutesAndTheirPageViews([$route]);
-        }
-    }
-
-    #[Test]
     public function updatePopularity_givenViewedRoute_neverReadsPageViewsInsideAWriteStatement(): void
     {
         // Arrange

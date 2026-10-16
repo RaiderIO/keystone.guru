@@ -331,12 +331,9 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
             UPDATE dungeon_routes
             INNER JOIN (VALUES %s) AS view_counts (model_id, views)
                 ON view_counts.model_id = dungeon_routes.id
-            /*
-                Left joins so a route without a (valid) mapping version still gets its popularity, with the penalty
-             */
-            LEFT JOIN mapping_versions AS route_mapping_versions
+            INNER JOIN mapping_versions AS route_mapping_versions
                 ON route_mapping_versions.id = dungeon_routes.mapping_version_id
-            LEFT JOIN (
+            INNER JOIN (
                 SELECT dungeon_id, game_version_id, MAX(id) as id
                 FROM mapping_versions
                 GROUP BY mapping_versions.dungeon_id, mapping_versions.game_version_id
