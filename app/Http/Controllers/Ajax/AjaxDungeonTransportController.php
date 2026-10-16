@@ -6,7 +6,9 @@ use App\Events\Models\DungeonTransport\DungeonTransportChangedEvent;
 use App\Events\Models\DungeonTransport\DungeonTransportDeletedEvent;
 use App\Events\Models\ModelChangedEvent;
 use App\Http\Requests\DungeonTransport\DungeonTransportFormRequest;
+use App\Logic\Structs\LatLng;
 use App\Models\DungeonTransport;
+use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonTransportRepositoryInterface;
@@ -31,7 +33,15 @@ class AjaxDungeonTransportController extends AjaxMappingModelBaseController
         MappingVersion              $mappingVersion,
         ?DungeonTransport           $dungeonTransport = null,
     ): DungeonTransport|Model {
-        return $this->storeModel($coordinatesService, $mappingVersion, $request->validated(), DungeonTransport::class, $dungeonTransport);
+        $validated = $request->validated();
+
+        if (array_key_exists('path_vertices_json', $validated)) {
+            $validated['path_vertices_json'] = $validated['path_vertices_json'] === null ? null : json_encode(
+                $this->convertFacadePathVertices($coordinatesService, $mappingVersion, $validated['path_vertices_json']),
+            );
+        }
+
+        return $this->storeModel($coordinatesService, $mappingVersion, $validated, DungeonTransport::class, $dungeonTransport);
     }
 
     public function delete(
@@ -68,6 +78,17 @@ class AjaxDungeonTransportController extends AjaxMappingModelBaseController
         return $result;
     }
 
+    /**
+     * @param DungeonTransport $model
+     */
+    protected function restoreFacadeAttributes(
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+        Model                       $model,
+    ): void {
+        $model->convertPathVerticesToFacade($coordinatesService, $mappingVersion);
+    }
+
     protected function getModelChangedEvent(
         CoordinatesServiceInterface $coordinatesService,
         Model                       $context,
@@ -75,5 +96,38 @@ class AjaxDungeonTransportController extends AjaxMappingModelBaseController
         Model                       $model,
     ): ModelChangedEvent {
         return new DungeonTransportChangedEvent($context, $user, $model);
+    }
+
+    /**
+     * Converts each vertex on a facade floor back onto the floor it belongs to.
+     *
+     * @param  array<int, array{lat: float|string, lng: float|string, floor_id: int|string}> $pathVertices
+     * @return array<int, array{lat: float, lng: float, floor_id: int}>
+     */
+    private function convertFacadePathVertices(
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+        array                       $pathVertices,
+    ): array {
+        $floorsById = $mappingVersion->dungeon->floors->keyBy('id');
+
+        $result = [];
+        foreach ($pathVertices as $pathVertex) {
+            /** @var Floor $floor */
+            $floor  = $floorsById->get((int)$pathVertex['floor_id']);
+            $latLng = new LatLng((float)$pathVertex['lat'], (float)$pathVertex['lng'], $floor);
+
+            if ($floor->facade) {
+                $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $latLng);
+            }
+
+            $result[] = [
+                'lat'      => $latLng->getLat(DungeonTransport::PATH_VERTEX_PRECISION),
+                'lng'      => $latLng->getLng(DungeonTransport::PATH_VERTEX_PRECISION),
+                'floor_id' => $latLng->getFloor()?->id ?? $floor->id,
+            ];
+        }
+
+        return $result;
     }
 }
