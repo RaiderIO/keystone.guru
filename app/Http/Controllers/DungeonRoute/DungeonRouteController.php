@@ -568,7 +568,11 @@ class DungeonRouteController extends Controller
     public function saveNew(
         DungeonRouteSubmitFormRequest    $request,
         DungeonRouteSaveServiceInterface $saveService,
-    ): RedirectResponse {
+    ): RedirectResponse|View {
+        if (!Gate::allows('create', DungeonRoute::class)) {
+            return view('dungeonroute.limitreached');
+        }
+
         // Store it and show the edit page
         $dungeonRoute = $this->store($request, $saveService);
 

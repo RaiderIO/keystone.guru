@@ -169,7 +169,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::get('new', new DungeonRouteController()->create(...))->name('dungeonroute.new');
     Route::get('new/temporary', new DungeonRouteController()->createTemporary(...))->name('dungeonroute.temporary.new');
     Route::middleware('throttle:create-dungeonroute')->group(static function () {
-        Route::post('new', new DungeonRouteController()->saveNew(...))->name('dungeonroute.savenew');
+        Route::post('new', new DungeonRouteController()->saveNew(...))->middleware('auth')->name('dungeonroute.savenew');
         Route::post('new/temporary', new DungeonRouteController()->saveNewTemporary(...))->name('dungeonroute.temporary.savenew');
         Route::post('new/mdtimport', new MDTImportController()->import(...))->name('dungeonroute.new.mdtimport');
     });

@@ -56,6 +56,84 @@ final class DungeonRouteControllerSaveNewTest extends DungeonRouteControllerCrea
     }
 
     #[Test]
+    public function saveNew_givenAGuest_redirectsToLoginAndCreatesNothing(): void
+    {
+        // Arrange
+        $dungeon = $this->getActiveDungeon();
+        $sinceId = (int)DungeonRoute::query()->max('id');
+
+        try {
+            // Act
+            $response = $this->post(route('dungeonroute.savenew'), [
+                'dungeon_id' => $dungeon->id,
+            ]);
+
+            // Assert
+            $response->assertRedirect(route('login'));
+            $this->assertNull($this->latestRouteSince($sinceId));
+        } finally {
+            DungeonRoute::query()->where('id', '>', $sinceId)->where('author_id', -1)->get()->each->delete();
+        }
+    }
+
+    #[Test]
+    public function saveNew_givenAUserAtTheirRouteLimit_showsTheLimitReachedPageAndCreatesNothing(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        DungeonRoute::factory()->create(['author_id' => $user->id, 'expires_at' => null]);
+        config(['keystoneguru.registered_user_dungeonroute_limit' => 1]);
+        $dungeon = $this->getActiveDungeon();
+        $sinceId = (int)DungeonRoute::query()->max('id');
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->post(route('dungeonroute.savenew'), [
+                'dungeon_id' => $dungeon->id,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewIs('dungeonroute.limitreached');
+            $this->assertNull($this->latestRouteSince($sinceId));
+        } finally {
+            DungeonRoute::query()->where('author_id', $user->id)->get()->each->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function saveNew_givenAUserUnderTheirRouteLimit_createsRouteForUser(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        DungeonRoute::factory()->create(['author_id' => $user->id, 'expires_at' => null]);
+        config(['keystoneguru.registered_user_dungeonroute_limit' => 2]);
+        $dungeon = $this->getActiveDungeon();
+        $sinceId = (int)DungeonRoute::query()->max('id');
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->post(route('dungeonroute.savenew'), [
+                'dungeon_id' => $dungeon->id,
+            ]);
+
+            // Assert
+            $dungeonRoute = $this->latestRouteSince($sinceId);
+            $this->assertNotNull($dungeonRoute);
+            $this->assertSame($user->id, $dungeonRoute->author_id);
+            $response->assertRedirect(route('dungeonroute.edit', [
+                'dungeon'      => $dungeonRoute->dungeon,
+                'dungeonroute' => $dungeonRoute,
+                'title'        => $dungeonRoute->getTitleSlug(),
+            ]));
+        } finally {
+            DungeonRoute::query()->where('author_id', $user->id)->get()->each->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
     public function saveNew_givenDescriptionWithScript_persistsSanitizedDescription(): void
     {
         // Arrange
