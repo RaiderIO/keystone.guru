@@ -9,6 +9,7 @@
 // - title / data-none-selected-text  -> placeholder
 // - data-width                       -> explicit width on the wrapper
 // - multiple                         -> tags UI with remove buttons
+// - hidden <option> (display: none)  -> left out of the dropdown unless selected
 //
 // refreshSelectPickers() initializes any new `.selectpicker` elements and
 // syncs already-initialized ones with their underlying <select>. The option
@@ -179,11 +180,47 @@ function dropDanglingLabelFor(select) {
 
 /**
  * @param {HTMLSelectElement} select
+ * @returns {string[]}
+ */
+function getSelectedValues(select) {
+    return Array.from(select.selectedOptions, (option) => option.value);
+}
+
+/**
+ * Tom Select imports every <option>, so a hidden one (bootstrap-select's way of filtering a list, still used by
+ * the party composition) would stay in the dropdown. Hidden options are taken out of the instance and kept aside,
+ * and put back with their original `$order` once shown again: a fingerprint rebuild instead would re-import the
+ * <select> in the order Tom Select scrambled it to. A selected option stays, or its item would vanish.
+ *
+ * @param {TomSelect} instance
+ * @param {HTMLSelectElement} select
+ * @param {string[]} selectedValues
+ */
+function syncHiddenOptions(instance, select, selectedValues) {
+    instance.selectpickerHiddenOptions ??= {};
+
+    for (const option of select.options) {
+        const value = option.value;
+        const hidden = (option.hidden || option.style.display === 'none') && !selectedValues.includes(value);
+
+        if (hidden && instance.options[value] !== undefined) {
+            instance.selectpickerHiddenOptions[value] = instance.options[value];
+            instance.removeOption(value, true);
+        } else if (!hidden && instance.selectpickerHiddenOptions[value] !== undefined) {
+            instance.addOption(instance.selectpickerHiddenOptions[value]);
+            delete instance.selectpickerHiddenOptions[value];
+        }
+    }
+}
+
+/**
+ * @param {HTMLSelectElement} select
  * @returns {TomSelect}
  */
 function initSelectPicker(select) {
     const instance = new TomSelect(select, getSelectPickerSettings(select));
     instance.selectpickerFingerprint = getOptionSetFingerprint(select, instance.settings.allowEmptyOption);
+    syncHiddenOptions(instance, select, getSelectedValues(select));
 
     if (select.dataset.width) {
         instance.wrapper.style.width = select.dataset.width;
@@ -228,22 +265,25 @@ function refreshSelectPicker(select) {
     const instance = select.tomselect;
 
     const fingerprint = getOptionSetFingerprint(select, instance.settings.allowEmptyOption);
+    // Captured up front: clear() below rewrites the <select>'s selection (removeItem -> updateOriginalInput)
+    const selectedValues = getSelectedValues(select);
     if (fingerprint !== instance.selectpickerFingerprint) {
         // The <select>'s contents were replaced - rebuild the option list from the DOM.
         // sync() only ever adds options (setupOptions -> addOptions), so clear everything
-        // first. clear() rewrites the <select>'s selection (removeItem -> updateOriginalInput),
-        // so capture it up front and restore it after the rebuild.
-        const selectedValues = Array.from(select.selectedOptions, (option) => option.value);
+        // first, and restore the captured selection after the rebuild.
         instance.clear(true);
         instance.clearOptions(() => false);
         instance.clearOptionGroups();
+        instance.selectpickerHiddenOptions = {};
         // sync() also adopts the <select>'s disabled state (enable()/disable()), like the else branch does by hand
         instance.sync();
         instance.setValue(selectedValues, true);
+        syncHiddenOptions(instance, select, selectedValues);
         instance.selectpickerFingerprint = fingerprint;
     } else {
         // Same option set - still adopt external value/disabled changes ($select.val(), .prop('disabled'))
-        instance.setValue(Array.from(select.selectedOptions, (option) => option.value), true);
+        syncHiddenOptions(instance, select, selectedValues);
+        instance.setValue(selectedValues, true);
         if (select.disabled) {
             instance.disable();
         } else {

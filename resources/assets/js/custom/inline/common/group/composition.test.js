@@ -36,6 +36,17 @@ const {
 } = require('#test/fixtures/createRouteForm');
 
 const RACE_HUMAN_ID = 32;
+const CLASS_MAGE_ID = 12;
+const SPEC_FROST_ID = 22;
+
+/**
+ * @param {string} selector
+ * @param {number} value
+ * @returns {HTMLOptionElement}
+ */
+function findOption(selector, value) {
+    return Array.from(document.querySelector(selector).options).find((option) => option.value === String(value));
+}
 
 /**
  * @param {Element} element
@@ -45,9 +56,11 @@ function dispatchNativeChange(element) {
 }
 
 /**
+ * @param {boolean} withMage - add a Mage class (with a Frost spec) that only Human can play, so the
+ *        race/class/specialization cross-filters have something to filter.
  * @returns {CommonGroupComposition}
  */
-function buildAndActivate() {
+function buildAndActivate(withMage = false) {
     document.body.innerHTML = `
         <select name="faction_id" id="faction_id" class="form-control selectpicker"></select>
         <select name="class[]" class="form-control selectpicker classselect" data-id="1"></select>
@@ -59,6 +72,12 @@ function buildAndActivate() {
     // Add a second race belonging to a different faction than RACE_ORC_ID (Horde), so the
     // faction cross-filter scenario has an incompatible option to hide.
     options.races = [...options.races, {id: RACE_HUMAN_ID, key: 'human', name: 'races.human.name', faction_id: FACTION_ALLIANCE_ID, classes: []}];
+
+    if (withMage) {
+        options.classDetails = [...options.classDetails, {id: CLASS_MAGE_ID, key: 'mage', name: 'classes.mage.name', specializations: [{id: SPEC_FROST_ID}]}];
+        options.specializations = [...options.specializations, {id: SPEC_FROST_ID, key: 'frost', name: 'specializations.frost.name', character_class_id: CLASS_MAGE_ID}];
+        options.races = options.races.map((race) => race.id === RACE_HUMAN_ID ? {...race, classes: [{id: CLASS_WARRIOR_ID}, {id: CLASS_MAGE_ID}]} : race);
+    }
 
     const code = new CommonGroupComposition('composition', 'common/group/composition', options);
     code.activate();
@@ -209,6 +228,96 @@ describe('CommonGroupComposition.activate', () => {
     });
 });
 
+describe('CommonGroupComposition race, class and specialization cross-filters', () => {
+    afterEach(() => {
+        document.body.innerHTML = '';
+        vi.clearAllMocks();
+    });
+
+    it('raceChanged_givenARaceThatCannotPlayAClass_hidesThatClass', () => {
+        // Arrange
+        buildAndActivate(true);
+        const raceSelect = document.querySelector('.raceselect[data-id="1"]');
+
+        // Act
+        raceSelect.value = String(RACE_ORC_ID);
+        dispatchNativeChange(raceSelect);
+
+        // Assert
+        expect(findOption('.classselect[data-id="1"]', CLASS_WARRIOR_ID).style.display).not.toBe('none');
+        expect(findOption('.classselect[data-id="1"]', CLASS_MAGE_ID).style.display).toBe('none');
+    });
+
+    it('raceChanged_givenARaceThatCannotPlayTheChosenClass_resetsTheClass', () => {
+        // Arrange
+        buildAndActivate(true);
+        const classSelect = document.querySelector('.classselect[data-id="1"]');
+        const raceSelect = document.querySelector('.raceselect[data-id="1"]');
+        classSelect.value = String(CLASS_MAGE_ID);
+
+        // Act
+        raceSelect.value = String(RACE_ORC_ID);
+        dispatchNativeChange(raceSelect);
+
+        // Assert
+        expect(classSelect.value).toBe('0');
+    });
+
+    it('classChanged_givenAClassARaceCannotPlay_hidesThatRace', () => {
+        // Arrange
+        buildAndActivate(true);
+        const classSelect = document.querySelector('.classselect[data-id="1"]');
+
+        // Act
+        classSelect.value = String(CLASS_MAGE_ID);
+        dispatchNativeChange(classSelect);
+
+        // Assert
+        expect(findOption('.raceselect[data-id="1"]', RACE_HUMAN_ID).style.display).not.toBe('none');
+        expect(findOption('.raceselect[data-id="1"]', RACE_ORC_ID).style.display).toBe('none');
+    });
+
+    it('classChanged_givenAClass_hidesTheSpecializationsOfOtherClasses', () => {
+        // Arrange
+        buildAndActivate(true);
+        const classSelect = document.querySelector('.classselect[data-id="1"]');
+
+        // Act
+        classSelect.value = String(CLASS_MAGE_ID);
+        dispatchNativeChange(classSelect);
+
+        // Assert
+        expect(findOption('.specializationselect[data-id="1"]', SPEC_FROST_ID).style.display).not.toBe('none');
+        expect(findOption('.specializationselect[data-id="1"]', SPEC_FURY_ID).style.display).toBe('none');
+    });
+
+    it('specializationChanged_givenASpecialization_selectsItsClass', () => {
+        // Arrange
+        buildAndActivate(true);
+        const specializationSelect = document.querySelector('.specializationselect[data-id="1"]');
+
+        // Act
+        specializationSelect.value = String(SPEC_FROST_ID);
+        dispatchNativeChange(specializationSelect);
+
+        // Assert
+        expect($('.classselect[data-id="1"]').val()).toBe(String(CLASS_MAGE_ID));
+    });
+    it('specializationChanged_givenAnEmptyValueOptionInTheClassSelect_stillSelectsTheSpecializationsClass', () => {
+        // Arrange: Tom Select's clear() leaves an <option value=""> behind in the <select>
+        buildAndActivate(true);
+        $('.classselect[data-id="1"]').append('<option value=""></option>');
+        const specializationSelect = document.querySelector('.specializationselect[data-id="1"]');
+
+        // Act
+        specializationSelect.value = String(SPEC_FROST_ID);
+        dispatchNativeChange(specializationSelect);
+
+        // Assert
+        expect($('.classselect[data-id="1"]').val()).toBe(String(CLASS_MAGE_ID));
+    });
+});
+
 describe('CommonGroupComposition._loadDungeonRouteDefaults', () => {
     afterEach(() => {
         document.body.innerHTML = '';
@@ -228,6 +337,20 @@ describe('CommonGroupComposition._loadDungeonRouteDefaults', () => {
         // Assert
         expect($('#faction_id').val()).toBe(String(FACTION_ALLIANCE_ID));
         expect(refreshSelectPickers).toHaveBeenCalledTimes(1);
+    });
+
+    it('reloadButton_givenDefaultsForEveryPick_restoresTheClassSpecializationAndRace', () => {
+        // Arrange: same argument order as both setDefaults() calls in composition.blade.php
+        const code = buildAndActivate(true);
+        code.setDefaults(String(FACTION_ALLIANCE_ID), [{id: CLASS_MAGE_ID}], [{id: SPEC_FROST_ID}], [{id: RACE_HUMAN_ID}]);
+
+        // Act
+        document.getElementById('reload_button').click();
+
+        // Assert
+        expect($('.classselect[data-id="1"]').val()).toBe(String(CLASS_MAGE_ID));
+        expect($('.specializationselect[data-id="1"]').val()).toBe(String(SPEC_FROST_ID));
+        expect($('.raceselect[data-id="1"]').val()).toBe(String(RACE_HUMAN_ID));
     });
 
     it('reloadButton_givenNoDefaults_changesNothing', () => {

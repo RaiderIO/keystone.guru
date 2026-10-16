@@ -16,7 +16,6 @@ use Illuminate\Support\Collection;
  */
 
 $factions ??= $allFactions;
-// @TODO Upon form error, all specs/classes/races are cleared. It's really hard to get an error but it's gotta be handled at some point
 ?>
 @include('common.general.inline', ['path' => 'common/group/composition',
 'options' => [

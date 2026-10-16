@@ -22,6 +22,17 @@ function createSelect(attributes = '', options = `
     return document.querySelector('select.selectpicker');
 }
 
+/**
+ * @param {TomSelect} instance
+ * @returns {string[]}
+ */
+function renderedDropdownValues(instance) {
+    instance.open();
+    instance.refreshOptions(true);
+
+    return Array.from(instance.dropdown_content.querySelectorAll('[data-selectable]'), (option) => option.dataset.value);
+}
+
 describe('refreshSelectPickers', () => {
     test('refreshSelectPickers_givenUninitializedSelect_initializesTomSelect', () => {
         const select = createSelect();
@@ -224,6 +235,111 @@ describe('refreshSelectPickers', () => {
         // Options 1 and 2 stay under the first optgroup, option 3 under the second.
         expect(instance.options['1'].optgroup).toBe(instance.options['2'].optgroup);
         expect(instance.options['3'].optgroup).not.toBe(instance.options['1'].optgroup);
+    });
+
+    test('refreshSelectPickers_givenHiddenOption_leavesItOutOfTheDropdown', () => {
+        // Arrange
+        const select = createSelect('', `
+            <option value="1">One</option>
+            <option value="2" selected>Two</option>
+            <option value="3" style="display: none">Three</option>`);
+
+        // Act
+        refreshSelectPickers();
+
+        // Assert
+        expect(renderedDropdownValues(select.tomselect)).toEqual(['1', '2']);
+    });
+
+    test('refreshSelectPickers_givenRepopulatedOptionsWithAHiddenOne_leavesItOutOfTheDropdown', () => {
+        // Arrange
+        const select = createSelect();
+        refreshSelectPickers();
+        select.innerHTML = `
+            <option value="4">Four</option>
+            <option value="5" selected>Five</option>
+            <option value="6" style="display: none">Six</option>`;
+
+        // Act
+        refreshSelectPickers();
+
+        // Assert
+        expect(renderedDropdownValues(select.tomselect)).toEqual(['4', '5']);
+        expect(select.tomselect.getValue()).toBe('5');
+    });
+
+    test('refreshSelectPickers_givenOptionHiddenAfterInit_removesItFromTheDropdown', () => {
+        // Arrange
+        const select = createSelect();
+        refreshSelectPickers();
+
+        // Act: what the party composition does with $option.hide()
+        select.querySelector('option[value="3"]').style.display = 'none';
+        refreshSelectPickers();
+
+        // Assert
+        expect(renderedDropdownValues(select.tomselect)).toEqual(['1', '2']);
+    });
+
+    test('refreshSelectPickers_givenHiddenOptionShownAgain_putsItBackInItsPlaceInTheDropdown', () => {
+        // Arrange
+        const select = createSelect();
+        refreshSelectPickers();
+        select.querySelector('option[value="1"]').style.display = 'none';
+        refreshSelectPickers();
+
+        // Act
+        select.querySelector('option[value="1"]').style.display = '';
+        refreshSelectPickers();
+
+        // Assert: back in its original place, not appended
+        expect(renderedDropdownValues(select.tomselect)).toEqual(['1', '2', '3']);
+    });
+
+    test('refreshSelectPickers_givenSelectedOptionHidden_keepsItSelected', () => {
+        // Arrange
+        const select = createSelect();
+        refreshSelectPickers();
+
+        // Act
+        select.querySelector('option[value="2"]').style.display = 'none';
+        refreshSelectPickers();
+
+        // Assert
+        expect(select.tomselect.getValue()).toBe('2');
+        expect(select.tomselect.control.querySelector('.item').textContent).toBe('Two');
+    });
+
+    test('refreshSelectPickers_givenCurrentItemHiddenWhileAnotherOptionIsSelectedOnTheSelect_selectsTheOther', () => {
+        // Arrange
+        const select = createSelect();
+        refreshSelectPickers();
+
+        // Act: $select.val(3) plus hiding the option that was selected until now, before a single refresh
+        select.value = '3';
+        select.querySelector('option[value="2"]').style.display = 'none';
+        refreshSelectPickers();
+
+        // Assert
+        expect(select.value).toBe('3');
+        expect(select.tomselect.getValue()).toBe('3');
+        expect(renderedDropdownValues(select.tomselect)).toEqual(['1', '3']);
+    });
+
+    test('refreshSelectPickers_givenStillHiddenOptionSelectedOnTheSelect_selectsIt', () => {
+        // Arrange
+        const select = createSelect('', `
+            <option value="1">One</option>
+            <option value="2" selected>Two</option>
+            <option value="3" style="display: none">Three</option>`);
+        refreshSelectPickers();
+
+        // Act: $select.val(3) on an option that is still hidden
+        select.value = '3';
+        refreshSelectPickers();
+
+        // Assert
+        expect(select.tomselect.getValue()).toBe('3');
     });
 });
 
