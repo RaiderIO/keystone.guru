@@ -16,7 +16,7 @@ class RaiderIOApiServiceLogging extends StructuredLogging implements RaiderIOApi
 
     public function getHeatmapDataInvalidResponse(string $dungeonName, string $url, string $response): void
     {
-        // @TODO temporarily disable logging of invalid responses, it's spamming the logs
+        // Debug only: invalid responses flood the logs, and the caller throws right after.
         $this->debug(__METHOD__, get_defined_vars());
     }
 

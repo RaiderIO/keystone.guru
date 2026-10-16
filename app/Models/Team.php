@@ -237,8 +237,6 @@ class Team extends Model
     /**
      * Checks if a specific user may change the role of another user into a specific other role.
      *
-     * @TODO Should this go to a Policy?
-     *
      * @param  User   $user
      * @param  User   $targetUser
      * @param  string $role

@@ -30,7 +30,6 @@ $id ??= 'affixes';
     function handlebarsLoadWeekAffixGroupSelect{{ $id }}() {
         let affixWeekSelectSelector = '#{{ $id }}';
         let handlebarsDefaultVariables = $.extend({}, getHandlebarsDefaultVariables());
-        // @TODO make one template with multiple options, rather than calling this template N amount of times?
         for (let i in _seasonWeeklyAffixGroups{{ $id }}) {
             if (_seasonWeeklyAffixGroups{{ $id }}.hasOwnProperty(i)) {
                 let week = parseInt(i) + 1;

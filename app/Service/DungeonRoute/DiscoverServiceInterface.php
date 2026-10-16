@@ -114,25 +114,4 @@ interface DiscoverServiceInterface
 
     /** @return Collection<int, mixed> */
     public function newBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection;
-
-    /*
-    |--------------------------------------------------------------------------
-    | Users
-    |--------------------------------------------------------------------------
-    |
-    | The result of these queries should be a list of users
-    |
-    */
-
-    /** @return Collection<int, mixed> */
-    public function popularUsers(): Collection;
-
-    /** @return Collection<int, mixed> */
-    public function popularUsersByAffixGroup(AffixGroupBase $affixGroup): Collection;
-
-    /** @return Collection<int, mixed> */
-    public function popularUsersByDungeon(Dungeon $dungeon): Collection;
-
-    /** @return Collection<int, mixed> */
-    public function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
 }

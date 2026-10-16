@@ -11,7 +11,6 @@
 
     /**
      * Checks if the current user is on a mobile device or not.
-     * @TODO This should go somewhere else?
      **/
     function isMobile() {
         return {{ $isMobile ? 'true' : 'false' }};

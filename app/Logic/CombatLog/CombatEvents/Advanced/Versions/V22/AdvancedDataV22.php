@@ -239,10 +239,9 @@ class AdvancedDataV22 implements AdvancedDataInterface
         // This fixes the above issue. X and Y are fine after this
         $this->positionX = $parameters[15] * -1;
         $this->positionY = $parameters[14];
-        // @TODO TEMP ARA-KARA FIX
-        $this->uiMapId = $parameters[16];
-        $this->facing  = $parameters[17];
-        $this->level   = $parameters[18];
+        $this->uiMapId   = $parameters[16];
+        $this->facing    = $parameters[17];
+        $this->level     = $parameters[18];
 
         return $this;
     }

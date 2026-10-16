@@ -427,40 +427,4 @@ class DiscoverService extends BaseDiscoverService
             config('keystoneguru.discover.service.popular.ttl'),
         ), $this->cacheService->isCacheEnabled());
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function popularUsers(): Collection
-    {
-        // TODO: Implement popularUsers() method.
-        return collect();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function popularUsersByAffixGroup(AffixGroupBase $affixGroup): Collection
-    {
-        // TODO: Implement popularUsersByAffixGroup() method.
-        return collect();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function popularUsersByDungeon(Dungeon $dungeon): Collection
-    {
-        // TODO: Implement popularUsersByDungeon() method.
-        return collect();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
-    {
-        // TODO: Implement popularUsersByDungeonAndAffixGroup() method.
-        return collect();
-    }
 }

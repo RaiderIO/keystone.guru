@@ -21,8 +21,7 @@ readonly class DiscoverAffixGroupComposer implements ViewComposerInterface
     {
         /** @var GameVersion $gameVersion */
         $gameVersion = $view->getData()['gameVersion'];
-        // @TODO Should be loaded but it's not??
-        $gameVersion->load(['expansion']);
+        $gameVersion->loadMissing(['expansion']);
 
         /** @var Expansion|null $expansion */
         $expansion = $view->getData()['expansion'] ?? null;

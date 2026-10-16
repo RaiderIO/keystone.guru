@@ -24,9 +24,6 @@ use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 
-/**
- * @TODO Add caching layer here, instead of in the map context classes?
- */
 readonly class MapContextService implements MapContextServiceInterface
 {
     public function __construct(

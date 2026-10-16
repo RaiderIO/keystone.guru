@@ -20,6 +20,7 @@ use Illuminate\Support\Collection;
 $cols                  ??= 1;
 $showDungeonImage      ??= false;
 $affixgroup            ??= null;
+$currentAffixGroup     ??= null;
 $cache                 ??= true;
 $orientation           ??= 'poster';
 $cardHeaders           ??= collect();

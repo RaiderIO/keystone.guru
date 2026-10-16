@@ -224,9 +224,7 @@ class LocalizationSync extends Command
                         if ($targetLang === self::LANG_HODOR) {
                             $segment = $match[1] . 'Hodor' . $match[1];
                         } else {
-                            $segment = $match[1] .
-                                /*'@todo ' . $targetLang . ': ' . $key .*/
-                                $match[1];
+                            $segment = $match[1] . $match[1];
                         }
                     }
 

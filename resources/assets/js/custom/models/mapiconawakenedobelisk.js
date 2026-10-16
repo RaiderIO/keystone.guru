@@ -1,5 +1,5 @@
 /**
- * @TODO find a better way to do this? getState() is not available in the global scope yet outside this function
+ * getState() is not available in the global scope when this file loads, so the draw handler is built on demand.
  */
 function initAwakenedObeliskGatewayIcon() {
     L.Draw.AwakenedObeliskGatewayMapIcon = L.Draw.Marker.extend({

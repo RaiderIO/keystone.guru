@@ -203,10 +203,6 @@ class Icon extends VersionableMapObject {
 
             this.bindTooltip();
         }
-        // // @TODO Refresh the layer; required as a workaround since in mapiconmapobjectgroup we don't know the map_icon_type upon init,
-        // // thus we don't know if this will be editable or not. In the sync this will get called and the edit state is known
-        // // after which this function will function properly
-        // this.onLayerInit();
     }
 
     /**

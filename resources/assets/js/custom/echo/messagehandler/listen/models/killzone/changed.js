@@ -27,7 +27,6 @@ class KillZoneChangedHandler extends ModelChangedHandler {
             let mapObject = killZoneMapObjectGroup.loadMapObject(e.model, null, e.user);
             killZoneMapObjectGroup.setMapObjectVisibility(mapObject, true);
 
-            // @TODO use an event listener?
             /** @type {KillZonePathMapObjectGroup} */
             let killZonePathMapObjectGroup = this.echo.map.mapObjectGroupManager.getKillZonePathMapObjectGroup();
             killZonePathMapObjectGroup.fetchAndRefresh(e.context_route_key);
