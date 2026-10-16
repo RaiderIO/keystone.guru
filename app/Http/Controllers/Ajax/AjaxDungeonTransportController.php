@@ -124,7 +124,7 @@ class AjaxDungeonTransportController extends AjaxMappingModelBaseController
             $result[] = [
                 'lat'      => $latLng->getLat(DungeonTransport::PATH_VERTEX_PRECISION),
                 'lng'      => $latLng->getLng(DungeonTransport::PATH_VERTEX_PRECISION),
-                'floor_id' => $latLng->getFloor()?->id ?? $floor->id,
+                'floor_id' => $latLng->getFloor()->id,
             ];
         }
 

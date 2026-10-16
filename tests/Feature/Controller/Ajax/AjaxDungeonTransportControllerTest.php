@@ -285,9 +285,9 @@ final class AjaxDungeonTransportControllerTest extends AjaxPublicTestCase
         // Arrange
         [, $mappingVersion] = $this->findDungeon(facadeEnabled: false, minActiveFloors: 2);
         $mappingVersion->load('dungeon.floors');
-        [$floorA, $floorB]  = $mappingVersion->dungeon->floors->take(2)->values()->all();
-        $dungeonTransport   = $this->createTransport($mappingVersion);
-        $pathVertices       = [
+        [$floorA, $floorB] = $mappingVersion->dungeon->floors->take(2)->values()->all();
+        $dungeonTransport  = $this->createTransport($mappingVersion);
+        $pathVertices      = [
             ['lat' => -10.5, 'lng' => 20.5, 'floor_id' => $floorA->id],
             ['lat' => -30.5, 'lng' => 40.5, 'floor_id' => $floorB->id],
             ['lat' => -50.5, 'lng' => 60.5, 'floor_id' => $floorB->id],
@@ -441,13 +441,13 @@ final class AjaxDungeonTransportControllerTest extends AjaxPublicTestCase
         /** @var CoordinatesServiceInterface $coordinatesService */
         $coordinatesService = app(CoordinatesServiceInterface::class);
         /** @var array{0: Floor, 1: LatLng, 2: LatLng} $location */
-        [, $mappingVersion, $location]           = $this->findDungeon(
+        [, $mappingVersion, $location] = $this->findDungeon(
             facadeEnabled: true,
             resolve:       static fn($dungeon, MappingVersion $mappingVersion) => self::findConvertibleFacadeLocation($coordinatesService, $mappingVersion),
         );
         [$facadeFloor, $facadeLatLng, $floorLatLng] = $location;
-        $dungeonTransport                         = $this->createTransport($mappingVersion);
-        $facadeVertex                             = [
+        $dungeonTransport                           = $this->createTransport($mappingVersion);
+        $facadeVertex                               = [
             'lat'      => $facadeLatLng->getLat(DungeonTransport::PATH_VERTEX_PRECISION),
             'lng'      => $facadeLatLng->getLng(DungeonTransport::PATH_VERTEX_PRECISION),
             'floor_id' => $facadeFloor->id,

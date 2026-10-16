@@ -186,7 +186,7 @@ class DungeonTransport extends Model implements HasLatLngInterface, MappingModel
             $facadeVertices[] = [
                 'lat'      => $facadeLatLng->getLat(self::PATH_VERTEX_PRECISION),
                 'lng'      => $facadeLatLng->getLng(self::PATH_VERTEX_PRECISION),
-                'floor_id' => $facadeLatLng->getFloor()?->id ?? $floor->id,
+                'floor_id' => $facadeLatLng->getFloor()->id,
             ];
         }
 

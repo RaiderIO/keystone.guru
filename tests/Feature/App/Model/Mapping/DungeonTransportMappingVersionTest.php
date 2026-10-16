@@ -163,6 +163,7 @@ final class DungeonTransportMappingVersionTest extends PublicTestCase
             resolve:       static fn($dungeon, MappingVersion $mappingVersion) => self::findConvertibleFacadeLocation($coordinatesService, $mappingVersion),
         )[2];
         [$mappingVersion, $facadeFloor, $facadeLatLng, $floorLatLng] = $location;
+
         $pathFloor     = $floorLatLng->getFloor();
         $endpointFloor = $mappingVersion->dungeon->floors->firstWhere(static fn(Floor $floor) => $floor->id !== $pathFloor->id && !$floor->facade);
         $pathVertex    = ['lat' => $floorLatLng->getLat(6), 'lng' => $floorLatLng->getLng(6), 'floor_id' => $pathFloor->id];
