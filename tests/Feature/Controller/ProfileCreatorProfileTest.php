@@ -1094,11 +1094,6 @@ final class ProfileCreatorProfileTest extends PublicTestCase
         }
     }
 
-    /**
-     * changepassword() re-renders profile.edit directly (it is not a redirect), so it must supply
-     * the same podium view data edit() does - before the fix it omitted all three variables and
-     * the unconditional `if ($creatorProfileActive)` in the blade threw a fatal ErrorException.
-     */
     #[Test]
     public function changepassword_givenFeatureActiveAndIncorrectCurrentPassword_rendersPodiumViewDataWithoutError(): void
     {
@@ -1108,7 +1103,7 @@ final class ProfileCreatorProfileTest extends PublicTestCase
 
         try {
             // Act
-            $response = $this->actingAs($creator)->patch(route('profile.changepassword'), [
+            $response = $this->actingAs($creator)->followingRedirects()->patch(route('profile.changepassword'), [
                 'current_password'     => 'wrong-password',
                 'new_password'         => 'new-password',
                 'new_password-confirm' => 'new-password',
@@ -1119,7 +1114,7 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             $response->assertViewHas('creatorProfileActive', true);
             $response->assertViewHas('ownDungeonRoutes');
             $response->assertViewHas('pinnedDungeonRouteIds');
-            $response->assertViewHas('errors', static fn($errors): bool => $errors->has('passwords_incorrect'));
+            $response->assertViewHas('errors', static fn($errors): bool => $errors->has('current_password'));
         } finally {
             Feature::for($creator)->forget(CreatorProfiles::class);
             $creator->delete();

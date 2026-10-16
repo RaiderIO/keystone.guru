@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileChangePasswordFormRequest extends FormRequest
 {
@@ -23,14 +24,18 @@ class ProfileChangePasswordFormRequest extends FormRequest
             'current_password' => [
                 'required',
                 'string',
+                'current_password',
             ],
             'new_password' => [
                 'required',
                 'string',
+                Password::defaults(),
+                'different:current_password',
             ],
             'new_password-confirm' => [
                 'required',
                 'string',
+                'same:new_password',
             ],
         ];
     }
@@ -39,9 +44,12 @@ class ProfileChangePasswordFormRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'current_password.required'     => __('validation.custom.change_password.current_password_required'),
-            'new_password.required'         => __('validation.custom.change_password.new_password_required'),
-            'new_password-confirm.required' => __('validation.custom.change_password.new_password_confirm_required'),
+            'current_password.required'         => __('validation.custom.change_password.current_password_required'),
+            'new_password.required'             => __('validation.custom.change_password.new_password_required'),
+            'new_password-confirm.required'     => __('validation.custom.change_password.new_password_confirm_required'),
+            'current_password.current_password' => __('controller.profile.flash.current_password_is_incorrect'),
+            'new_password.different'            => __('controller.profile.flash.new_password_equals_old_password'),
+            'new_password-confirm.same'         => __('controller.profile.flash.new_passwords_do_not_match'),
         ];
     }
 

@@ -425,7 +425,7 @@ final class ProfileControllerTest extends PublicTestCase
             ]);
 
             // Assert
-            $response->assertOk();
+            $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
             $response->assertSessionHas('status', __('controller.profile.flash.password_changed'));
             $this->assertTrue(Hash::check('a-brand-new-password', (string)$user->fresh()?->password));
         } finally {
@@ -450,8 +450,8 @@ final class ProfileControllerTest extends PublicTestCase
             ]);
 
             // Assert
-            $response->assertOk();
-            $response->assertViewHas('errors', static fn($errors): bool => $errors->has('passwords_no_match'));
+            $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
+            $response->assertSessionHasErrors(['new_password-confirm' => __('controller.profile.flash.new_passwords_do_not_match')]);
             $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
         } finally {
             $user?->delete();
@@ -475,8 +475,8 @@ final class ProfileControllerTest extends PublicTestCase
             ]);
 
             // Assert
-            $response->assertOk();
-            $response->assertViewHas('errors', static fn($errors): bool => $errors->has('passwords_match'));
+            $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
+            $response->assertSessionHasErrors(['new_password' => __('controller.profile.flash.new_password_equals_old_password')]);
             $response->assertSessionMissing('status');
         } finally {
             $user?->delete();
@@ -502,7 +502,7 @@ final class ProfileControllerTest extends PublicTestCase
             ]);
 
             // Assert
-            $response->assertOk();
+            $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
             Notification::assertSentToTimes($user, PasswordChangedEmail::class, 1);
             Notification::assertSentTo(
                 $user,
@@ -538,8 +538,8 @@ final class ProfileControllerTest extends PublicTestCase
             ]);
 
             // Assert
-            $response->assertOk();
-            $response->assertViewHas('errors', static fn($errors): bool => $errors->has($expectedErrorKey));
+            $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
+            $response->assertSessionHasErrors($expectedErrorKey);
             Notification::assertNotSentTo($user, PasswordChangedEmail::class);
             $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
         } finally {
@@ -553,10 +553,35 @@ final class ProfileControllerTest extends PublicTestCase
     public static function changepassword_givenFailedChange_sendsNoPasswordChangedEmail_dataProvider(): array
     {
         return [
-            'wrong current password'  => ['not-the-password', 'a-brand-new-password', 'a-brand-new-password', 'passwords_incorrect'],
-            'mismatched confirmation' => ['password', 'a-brand-new-password', 'another-new-password', 'passwords_no_match'],
-            'current password reused' => ['password', 'password', 'password', 'passwords_match'],
+            'wrong current password'       => ['not-the-password', 'a-brand-new-password', 'a-brand-new-password', 'current_password'],
+            'mismatched confirmation'      => ['password', 'a-brand-new-password', 'another-new-password', 'new_password-confirm'],
+            'current password reused'      => ['password', 'password', 'password', 'new_password'],
+            'seven character new password' => ['password', 'seven77', 'seven77', 'new_password'],
         ];
+    }
+
+    #[Test]
+    public function changepassword_givenEightCharacterNewPassword_changesThePassword(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'eight888',
+                'new_password-confirm' => 'eight888',
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $this->assertTrue(Hash::check('eight888', (string)$user->fresh()?->password));
+        } finally {
+            $user?->delete();
+        }
     }
 
     #[Test]

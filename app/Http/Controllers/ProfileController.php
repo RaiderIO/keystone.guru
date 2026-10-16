@@ -361,40 +361,18 @@ class ProfileController extends Controller
         return redirect()->to(sprintf('%s#creator', route('profile.edit')));
     }
 
-    /**
-     * @return View
-     */
-    public function changepassword(ProfileChangePasswordFormRequest $request): View
+    public function changepassword(ProfileChangePasswordFormRequest $request): RedirectResponse
     {
-        $currentPw          = $request->validated('current_password');
-        $newPassword        = $request->validated('new_password');
-        $newPasswordConfirm = $request->validated('new_password-confirm');
-
         /** @var User $user */
         $user = Auth::getUser();
 
-        $error = [];
-        // Check if the entered PW was correct
-        if (!Auth::attempt([
-            'name'     => $user->name,
-            'password' => $currentPw,
-        ])) {
-            $error = ['passwords_incorrect' => __('controller.profile.flash.current_password_is_incorrect')];
-        } // New passwords must match
-        elseif ($newPassword !== $newPasswordConfirm) {
-            $error = ['passwords_no_match' => __('controller.profile.flash.new_passwords_do_not_match')];
-        } // But not the same password as they had
-        elseif ($currentPw === $newPassword) {
-            $error = ['passwords_match' => __('controller.profile.flash.new_password_equals_old_password')];
-        } else {
-            $user->update([
-                'password' => Hash::make($newPassword),
-            ]);
-            $user->notify(new PasswordChangedEmail()->locale($user->locale));
-            Session::flash('status', __('controller.profile.flash.password_changed'));
-        }
+        $user->update([
+            'password' => Hash::make($request->validated('new_password')),
+        ]);
+        $user->notify(new PasswordChangedEmail()->locale($user->locale));
+        Session::flash('status', __('controller.profile.flash.password_changed'));
 
-        return view('profile.edit', $this->creatorProfileEditViewData())->withErrors($error);
+        return redirect()->to(sprintf('%s#change-password', route('profile.edit')));
     }
 
     /**

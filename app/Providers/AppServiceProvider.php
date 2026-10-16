@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Translation\Translator;
+use Illuminate\Validation\Rules\Password;
 use Override;
 use Rollbar\Payload\Level;
 use Rollbar\Rollbar;
@@ -50,6 +51,9 @@ class AppServiceProvider extends ServiceProvider
 
             Log::warning(sprintf('Lazy loading violation: %s lazy-loaded relation [%s]', $model::class, $relation));
         });
+
+        // The one password policy for registration, password reset and password change
+        Password::defaults(static fn(): Password => Password::min(8));
 
         // Force HTTPS in production - these environments are running in AWS which terminates https at the load balancer
         // instead of at nginx, so the site will think it's serving http if it's not forced to https

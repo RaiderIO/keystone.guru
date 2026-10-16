@@ -21,6 +21,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Random\RandomException;
 use Session;
@@ -69,7 +70,7 @@ class RegisterController extends Controller implements HasMiddleware
             'name'         => ['required', 'alpha_dash', 'max:32', 'unique:users', new UserSlugAvailableRule()],
             'email'        => 'required|email|max:255|unique:users',
             'region'       => 'nullable|integer|exists:game_server_regions,id',
-            'password'     => 'required|min:8|confirmed',
+            'password'     => ['required', 'confirmed', Password::defaults()],
             'legal_agreed' => 'required|accepted',
         ], [
             'legal_agreed.required' => __('controller.register.legal_agreed_required'),
