@@ -163,13 +163,22 @@ final class ObjectImporterTest extends PublicTestCase
             [self::OUT_OF_BOUNDS_MDT_COORDINATE, $enemyMdtCoordinate],
             isArrow: false,
         );
+        $outOfBoundsFacadeLatLng = Conversion::convertMDTCoordinateToLatLng(self::OUT_OF_BOUNDS_MDT_COORDINATE, $facadeFloor);
+        $expectedFirstVertex     = app(CoordinatesServiceInterface::class)->convertFacadeMapLocationToMapLocation(
+            $mappingVersion,
+            $outOfBoundsFacadeLatLng,
+            Floor::query()->findOrFail($enemy->floor_id),
+        )->toArray();
 
         // Act
         $result = app()->make(ObjectImporter::class)->parseObjects($importStringObjects, false);
 
-        // Assert
+        // Assert - the point before the first one in bounds is in that floor's coordinates too, not the facade's
         $this->assertCount(1, $result->getPaths());
-        $this->assertSame($enemy->floor_id, $result->getPaths()->first()['floor_id']);
+        $path = $result->getPaths()->first();
+        $this->assertSame($enemy->floor_id, $path['floor_id']);
+        $this->assertNotEquals($outOfBoundsFacadeLatLng->toArray(), $expectedFirstVertex);
+        $this->assertEquals($expectedFirstVertex, json_decode($path['polyline']['vertices_json'], true)[0]);
     }
 
     #[Test]

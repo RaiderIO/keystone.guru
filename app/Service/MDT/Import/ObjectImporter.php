@@ -142,39 +142,14 @@ class ObjectImporter
                     // Also, ignore lines which are less than 2 points, and those with uneven coordinates (malformed)
                     if ($lineCount >= 4 && $lineCount % 2 === 0) {
                         // Convert all the line points to LatLngs
-                        $dominantLatLng = null;
-                        $vertices       = [];
-                        for ($i = 0; $i < $lineCount; $i += 2) {
-                            $latLng = Conversion::convertMDTCoordinateToLatLng(
-                                [
-                                    'x' => floatval($object['l'][$i]),
-                                    'y' => floatval($object['l'][$i + 1]),
-                                ],
-                                $floor,
-                            );
-
-                            if ($floor->facade) {
-                                $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation(
-                                    $mappingVersion,
-                                    $latLng,
-                                    $dominantLatLng?->getFloor(),
-                                );
-                            }
-
-                            // The first point that lands on an actual floor decides the floor of the whole line
-                            if ($dominantLatLng === null || $dominantLatLng->getFloor()->facade) {
-                                $dominantLatLng = $latLng;
-                            }
-
-                            $vertices[] = $latLng->toArray();
-                        }
+                        $latLngs = $this->convertLineToLatLngs($mappingVersion, $floor, $object['l']);
 
                         $isArrow = isset($object['t']) && $object['t'];
 
                         if ($this->isOutOfBounds(
                             $importStringObjects,
                             $objectIndex,
-                            $dominantLatLng,
+                            $latLngs[0],
                             __($isArrow ?
                                 'services.mdt.io.import_string.arrow_out_of_bounds' :
                                 'services.mdt.io.import_string.line_out_of_bounds'),
@@ -182,14 +157,16 @@ class ObjectImporter
                             continue;
                         }
 
+                        $vertices = array_map(static fn(LatLng $latLng) => $latLng->toArray(), $latLngs);
+
                         // Arrows
                         if ($isArrow) {
-                            $this->parseObjectTriangle($importStringObjects, $mappingVersion, $floor, $details, $vertices, $dominantLatLng->getFloor()/*, $object['t'][0]*/);
+                            $this->parseObjectTriangle($importStringObjects, $mappingVersion, $floor, $details, $vertices, $latLngs[0]->getFloor()/*, $object['t'][0]*/);
                         }
                         // If it's a line
                         // MethodDungeonTools.lua:2529
                         else {
-                            $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, $vertices, $dominantLatLng->getFloor());
+                            $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, $vertices, $latLngs[0]->getFloor());
                         }
                     }
                 }
@@ -214,6 +191,59 @@ class ObjectImporter
         }
 
         return $importStringObjects;
+    }
+
+    /**
+     * Converts an MDT line (flat x, y pairs) to lat/lngs. On the facade, the first point that lands on a floor behind
+     * it decides the floor of the whole line, and every other point is converted onto that same floor - including the
+     * points before it, which would otherwise keep their facade coordinates. When no point lands on a floor, every
+     * point stays on the facade.
+     *
+     * @param  array<int, mixed>      $line
+     * @return non-empty-list<LatLng>
+     */
+    private function convertLineToLatLngs(MappingVersion $mappingVersion, Floor $floor, array $line): array
+    {
+        $mapLatLngs = [];
+        for ($i = 0; $i < count($line); $i += 2) {
+            $mapLatLngs[] = Conversion::convertMDTCoordinateToLatLng(
+                [
+                    'x' => floatval($line[$i]),
+                    'y' => floatval($line[$i + 1]),
+                ],
+                $floor,
+            );
+        }
+
+        if (!$floor->facade) {
+            return $mapLatLngs;
+        }
+
+        $dominantFloor = null;
+        $latLngs       = [];
+        foreach ($mapLatLngs as $mapLatLng) {
+            $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $mapLatLng, $dominantFloor);
+
+            if (!$latLng->getFloor()?->facade) {
+                $dominantFloor ??= $latLng->getFloor();
+            }
+
+            $latLngs[] = $latLng;
+        }
+
+        if ($dominantFloor !== null) {
+            foreach ($latLngs as $index => $latLng) {
+                if ($latLng->getFloor()?->facade) {
+                    $latLngs[$index] = $this->coordinatesService->convertFacadeMapLocationToMapLocation(
+                        $mappingVersion,
+                        $mapLatLngs[$index],
+                        $dominantFloor,
+                    );
+                }
+            }
+        }
+
+        return $latLngs;
     }
 
     /**
