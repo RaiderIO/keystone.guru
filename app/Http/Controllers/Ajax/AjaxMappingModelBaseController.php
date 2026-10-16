@@ -167,7 +167,7 @@ abstract class AjaxMappingModelBaseController extends Controller
 
             // The change logs above must record the real coordinates, so only now put the facade
             // coordinates back - the client drew those and cannot make sense of anything else
-            if ($facadeFloor !== null && $facadeMappingVersion !== null) {
+            if ($facadeFloor !== null) {
                 $this->restoreFacadeCoordinates($model, $facadeFloor, $facadeLatLng, $polyline, $validated['polyline']['vertices_json'] ?? null);
                 $this->restoreFacadeAttributes($coordinatesService, $facadeMappingVersion, $model);
             }
