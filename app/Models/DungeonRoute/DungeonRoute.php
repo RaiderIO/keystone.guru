@@ -442,12 +442,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->belongsTo(PublishedState::class);
     }
 
-    /**
-     * WARNING: requires you to set ->setConnection('combatlog') on the model before calling this method!
-     * You then also need to call ->setConnection(null) to reset the connection to the default one.
-     *
-     * @return HasOne<ChallengeModeRun, $this>
-     */
+    /** @return HasOne<ChallengeModeRun, $this> */
     public function challengeModeRun(): HasOne
     {
         return $this->hasOne(ChallengeModeRun::class);
@@ -1700,8 +1695,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
             // A mass delete on the relation skips ChallengeModeRun::deleting, which is what cleans up
             // challenge_mode_run_data - fetch and delete the single row instead so the hook fires
-            $dungeonRoute->setConnection('combatlog')->challengeModeRun()->first()?->delete();
-            $dungeonRoute->setConnection(null);
+            $dungeonRoute->challengeModeRun()->first()?->delete();
 
             $dungeonRoute->deleteCombatLogRouteEnemyFailures();
             $dungeonRoute->deleteCombatLogRouteEnemyResolutions();
