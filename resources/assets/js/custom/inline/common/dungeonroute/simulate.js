@@ -99,6 +99,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
         // Remove existing options
         $bloodlustPerPullSelect.find('option').remove();
         let selectedPulls = [];
+        let pullIds = [];
 
         let killZoneMapObjectGroup = getKillZoneMapObjectGroup();
         let sortedKillZones = _.sortBy(_.values(killZoneMapObjectGroup.objects), 'index');
@@ -112,6 +113,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
             });
 
             $bloodlustPerPullSelect.append($option);
+            pullIds.push(`${killZone.id}`);
 
             // Determine if this pull activated Bloodlust~ spells
             for (let index in killZone.spellIds) {
@@ -124,9 +126,8 @@ class CommonDungeonrouteSimulate extends InlineCode {
             }
         }
 
-        if (previouslySelectedPulls.length === 0) {
-            $bloodlustPerPullSelect.val(selectedPulls);
-        }
+        let stillExistingSelectedPulls = previouslySelectedPulls.filter((pullId) => pullIds.includes(pullId));
+        $bloodlustPerPullSelect.val(stillExistingSelectedPulls.length > 0 ? stillExistingSelectedPulls : selectedPulls);
 
         refreshSelectPickers();
     }
