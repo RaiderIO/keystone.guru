@@ -8,6 +8,7 @@ use App\Models\Characteristic;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonStart;
 use App\Models\Enemy;
+use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
@@ -255,6 +256,8 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d }
         $floors = $mappingVersion->dungeon->floorsForMapFacade($mappingVersion, false)->get();
 
         $subLevelOverride = $mappingVersion->facade_enabled ? 1 : null;
+        /** @var array<int, int> $connectionIndices */
+        $connectionIndices = [];
         foreach ($floors as $floor) {
             $subLevel = $subLevelOverride ?? $floor->mdt_sub_level ?? $floor->index;
             // With a facade every floor collapses onto sublevel 1, so keep appending rather than start over
@@ -272,14 +275,19 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d }
                     ->get();
 
                 foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
+                    // Both ends of a link share one connection index, which is what pairs them in MDT
+                    $connectionKey = $dungeonFloorSwitchMarker->linked_dungeon_floor_switch_marker_id === null ?
+                        $dungeonFloorSwitchMarker->id :
+                        min($dungeonFloorSwitchMarker->id, $dungeonFloorSwitchMarker->linked_dungeon_floor_switch_marker_id);
+                    $connectionIndices[$connectionKey] ??= count($connectionIndices) + 1;
+
                     $mapPOIsOnFloor[++$mapPOIIndex] = [
                         'template' => 'MapLinkPinTemplate',
                         'type'     => 'mapLink',
                         ...$this->getMapPOICoordinate($dungeonFloorSwitchMarker->getLatLng()),
-                        'target'    => $dungeonFloorSwitchMarker->targetFloor->mdt_sub_level ?? $dungeonFloorSwitchMarker->targetFloor->index,
-                        'direction' => $dungeonFloorSwitchMarker->getMdtDirection(),
-                        // @TODO this is wrong?
-                        'connectionIndex' => $mapPOIIndex,
+                        'target'          => $dungeonFloorSwitchMarker->targetFloor->mdt_sub_level ?? $dungeonFloorSwitchMarker->targetFloor->index,
+                        'direction'       => $dungeonFloorSwitchMarker->getMdtDirection(),
+                        'connectionIndex' => $connectionIndices[$connectionKey],
                     ];
                 }
             }
@@ -540,17 +548,13 @@ MDT.mapPOIs[dungeonIndex] = {};
                     'y' => $mdtCoordinate['y'],
                     'g' => $group ?? null,
                     // Facade means that the sublevel is ALWAYS 1 since there's only one MDT level
-                    'sublevel' => $enemy->floor->mdt_sub_level ?? $mappingVersion->facade_enabled ? 1 : $enemy->floor->index,
+                    'sublevel' => $mappingVersion->facade_enabled ? 1 : ($enemy->floor->mdt_sub_level ?? $enemy->floor->index),
                     'scale'    => $enemy->mdt_scale,
                     'note'     => $preservedCloneExtras['note'] ?? null,
                 ]);
 
                 // Add patrol if any
-                if ($enemy->enemy_patrol_id !== null &&
-                    // @TODO creating a new patrol will cause it not to be able to be exported to MDT since mdt_npc_id and mdt_id are only set when importing MDT patrols
-                    // !$savedEnemyPatrols->has($enemy->enemy_patrol_id))
-                    $enemy->enemyPatrol->mdt_npc_id === $enemy->npc_id &&
-                    $enemy->enemyPatrol->mdt_id === $enemy->mdt_id) {
+                if ($enemy->enemy_patrol_id !== null && $this->isEnemyPatrolOwner($enemy, $savedEnemyPatrols)) {
                     $patrolVertices = [];
                     $vertexIndex    = 0;
                     // Prefer the mdt polyline if it exists (it was introduced later), otherwise use the regular polyline
@@ -585,10 +589,7 @@ MDT.mapPOIs[dungeonIndex] = {};
 
                     $dungeonEnemy['clones'][$enemyCloneIndex]['patrol'] = $patrolVertices;
 
-                    // Cache it only if the patrol was tied to a group
-                    if ($enemy->enemy_pack_id !== null) {
-                        $savedEnemyPatrols->put($enemy->enemy_patrol_id, $enemy->enemyPatrol);
-                    }
+                    $savedEnemyPatrols->put($enemy->enemy_patrol_id, $enemy->enemyPatrol);
                 } elseif (isset($preservedCloneExtras['patrol'])) {
                     // We could not produce a patrol for this enemy, but MDT has one - dropping it would delete
                     // a patrol from MDT that we simply failed to round trip
@@ -607,6 +608,23 @@ MDT.mapPOIs[dungeonIndex] = {};
         }
 
         return new PhpArray2LuaTable()->toLuaTableString('MDT.dungeonEnemies[dungeonIndex]', $dungeonEnemies);
+    }
+
+    /**
+     * MDT stores a patrol on exactly one clone. A patrol imported from MDT keeps the clone it came from; a patrol
+     * drawn in the mapping editor has no MDT ids and goes to the first of its enemies that is exported.
+     *
+     * @param Collection<int, EnemyPatrol> $savedEnemyPatrols The patrols exported so far, keyed by their ID.
+     */
+    private function isEnemyPatrolOwner(Enemy $enemy, Collection $savedEnemyPatrols): bool
+    {
+        $enemyPatrol = $enemy->enemyPatrol;
+
+        if ($enemyPatrol->mdt_npc_id === null || $enemyPatrol->mdt_id === null) {
+            return !$savedEnemyPatrols->has($enemyPatrol->id);
+        }
+
+        return $enemyPatrol->mdt_npc_id === $enemy->npc_id && $enemyPatrol->mdt_id === $enemy->mdt_id;
     }
 
     /**
