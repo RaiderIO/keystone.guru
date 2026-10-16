@@ -12,6 +12,7 @@ use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\DungeonStart\DungeonStartNavigationServiceInterface;
 use App\Service\Floor\FloorResolutionServiceInterface;
@@ -113,6 +114,7 @@ class DungeonExploreController extends Controller
         SeasonAffixGroupServiceInterface $seasonAffixGroupService,
         DungeonServiceInterface          $dungeonService,
         FloorResolutionServiceInterface  $floorResolutionService,
+        EnemyRepositoryInterface         $enemyRepository,
         GameVersion                      $gameVersion,
         Dungeon                          $dungeon,
         string                           $floorIndex = '1',
@@ -160,7 +162,8 @@ class DungeonExploreController extends Controller
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                     $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
-                'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
+                'gameVersionDungeons'         => $dungeonService->getDungeonsForGameVersion($gameVersion),
+                'showDungeonDifficultySwitch' => $enemyRepository->hasDungeonDifficultyEnemies($currentMappingVersion),
             ]));
         }
     }

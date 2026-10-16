@@ -109,6 +109,7 @@ class CommonMapsMap extends InlineCode {
             this._setupFloorSelection();
             this._setupMapObjectGroupVisibility();
             this._setupEnemyDisplayTypes();
+            this._setupDungeonDifficulty();
             this._setupZoomControl();
             this._setupRailDropdowns();
             this._setupFavorite();
@@ -425,6 +426,22 @@ class CommonMapsMap extends InlineCode {
             self._mapObjectGroupVisibilityChanged();
         });
         this._mapObjectGroupVisibilityChanged();
+    }
+
+    /**
+     *
+     * @private
+     */
+    _setupDungeonDifficulty() {
+        let $dropdown = $('#map_dungeon_difficulty_dropdown');
+
+        $dropdown.find('a:not(.disabled)').unbind('click').bind('click', function () {
+            let $this = $(this);
+            getState().getMapContext().setDungeonDifficulty(parseInt($this.data('value')));
+
+            $dropdown.find('a:not(.disabled)').removeClass('active');
+            $this.addClass('active');
+        });
     }
 
     /**

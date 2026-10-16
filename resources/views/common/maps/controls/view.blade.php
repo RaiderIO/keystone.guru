@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
  * @var bool                   $isMobile
  * @var bool                   $showAds
  * @var bool                   $facadeEnabled
+ * @var bool                   $dungeonDifficultySwitch
  */
 ?>
 <nav
@@ -41,6 +42,10 @@ use Illuminate\Support\Collection;
             @include('common.maps.controls.elements.floorswitch', ['floors' => $floors])
 
             @include('common.maps.controls.elements.enemydisplaytype')
+
+            @if($dungeonDifficultySwitch ?? false)
+                @include('common.maps.controls.elements.dungeondifficulty')
+            @endif
 
             @include('common.maps.controls.elements.mapobjectgroupvisibility', ['floors' => $floors])
 

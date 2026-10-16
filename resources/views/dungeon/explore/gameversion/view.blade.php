@@ -19,6 +19,7 @@ use Illuminate\Support\Collection;
  * @var int                               $playerDeathsMax
  * @var Collection<int, WeeklyAffixGroup> $seasonWeeklyAffixGroups
  * @var Collection<int, Dungeon>          $gameVersionDungeons
+ * @var bool                              $showDungeonDifficultySwitch
  */
 ?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])
@@ -51,6 +52,7 @@ use Illuminate\Support\Collection;
                     'pulls' => false,
                     'heatmapSearch' => false,
                     'enemyInfo' => true,
+                    'dungeonDifficulty' => $showDungeonDifficultySwitch,
                 ],
             ],
             'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [

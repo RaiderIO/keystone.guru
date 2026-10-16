@@ -41,4 +41,9 @@ class EnemyRepository extends DatabaseRepository implements EnemyRepositoryInter
     {
         return Enemy::where('npc_id', $oldNpcId)->update(['npc_id' => $newNpcId]);
     }
+
+    public function hasDungeonDifficultyEnemies(MappingVersion $mappingVersion): bool
+    {
+        return $mappingVersion->enemies()->whereNotNull('dungeon_difficulty')->exists();
+    }
 }
