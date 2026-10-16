@@ -62,6 +62,10 @@ return [
         'patreon_benefits' => [
             'exists' => 'One or more of the selected Patreon benefits does not exist.',
         ],
+        'dungeon_transport_linked_dungeon_transport_id' => [
+            'exists' => 'The linked transport must be another transport of the same mapping version.',
+            'not_in' => 'A transport cannot be linked to itself.',
+        ],
         'patreon_grant_reason' => [
             'required' => 'A reason is required - it is what makes this grant reviewable later.',
             'max'      => 'The reason may not be longer than :max characters.',

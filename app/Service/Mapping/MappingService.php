@@ -4,6 +4,7 @@ namespace App\Service\Mapping;
 
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
+use App\Models\DungeonTransport;
 use App\Models\EnemyForcesCheckpoint;
 use App\Models\Floor\FloorUnion;
 use App\Models\GameVersion\GameVersion;
@@ -148,6 +149,7 @@ class MappingService implements MappingServiceInterface
 
             if ($physicalGeometrySourceMappingVersion !== null) {
                 $this->cloneDungeonFloorSwitchMarkersToMappingVersion($physicalGeometrySourceMappingVersion, $newMappingVersion);
+                $this->cloneDungeonTransportsToMappingVersion($physicalGeometrySourceMappingVersion, $newMappingVersion);
             }
 
             // importMapPOIs() still guards against duplicating whatever gets cloned in here (it only creates a
@@ -155,6 +157,7 @@ class MappingService implements MappingServiceInterface
 
             return $newMappingVersion->load([
                 'dungeonFloorSwitchMarkers',
+                'dungeonTransports',
                 'mapIcons',
                 'mountableAreas',
                 'floorUnions',
@@ -305,6 +308,9 @@ class MappingService implements MappingServiceInterface
             $dungeonStart->cloneForNewMappingVersion($targetMappingVersion);
         }
 
+        // Dungeon Transports
+        $this->cloneDungeonTransportsToMappingVersion($sourceMappingVersion, $targetMappingVersion);
+
         // Mountable Areas
         $this->cloneMountableAreasToMappingVersion($sourceMappingVersion, $targetMappingVersion);
 
@@ -330,6 +336,7 @@ class MappingService implements MappingServiceInterface
         // Load the newly generated relationships
         $targetMappingVersion->load([
             'dungeonFloorSwitchMarkers',
+            'dungeonTransports',
             'mapIcons',
             'mountableAreas',
             'floorUnions',
@@ -397,6 +404,30 @@ class MappingService implements MappingServiceInterface
         foreach ($newDungeonFloorSwitchMarkers as $newDungeonFloorSwitchMarker) {
             $newDungeonFloorSwitchMarker->update([
                 'linked_dungeon_floor_switch_marker_id' => $dungeonFloorSwitchMarkerIdMapping[$newDungeonFloorSwitchMarker['linked_dungeon_floor_switch_marker_id']] ?? null,
+            ]);
+        }
+    }
+
+    private function cloneDungeonTransportsToMappingVersion(MappingVersion $sourceMappingVersion, MappingVersion $targetMappingVersion): void
+    {
+        $dungeonTransportIdMapping = [];
+        $newDungeonTransports      = [];
+
+        foreach ($sourceMappingVersion->dungeonTransports()->get() as $dungeonTransport) {
+            /** @var DungeonTransport $newDungeonTransport */
+            $newDungeonTransport = $dungeonTransport->cloneForNewMappingVersion($targetMappingVersion);
+
+            $dungeonTransportIdMapping[$dungeonTransport->id] = $newDungeonTransport->id;
+            $newDungeonTransports[]                           = $newDungeonTransport;
+        }
+
+        foreach ($newDungeonTransports as $newDungeonTransport) {
+            if ($newDungeonTransport->linked_dungeon_transport_id === null) {
+                continue;
+            }
+
+            $newDungeonTransport->update([
+                'linked_dungeon_transport_id' => $dungeonTransportIdMapping[$newDungeonTransport->linked_dungeon_transport_id] ?? null,
             ]);
         }
     }

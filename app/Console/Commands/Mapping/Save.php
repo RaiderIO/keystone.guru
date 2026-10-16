@@ -11,6 +11,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonStart;
+use App\Models\DungeonTransport;
 use App\Models\Enemy;
 use App\Models\EnemyForcesCheckpoint;
 use App\Models\Floor\Floor;
@@ -414,6 +415,7 @@ class Save extends Command
                 'enemyPatrolsForExport',
                 'dungeonFloorSwitchMarkersForExport',
                 'dungeonStartsForExport',
+                'dungeonTransportsForExport',
                 'mapIconsForExport',
                 'mountableAreasForExport',
                 'enemyForcesCheckpointsForExport',
@@ -645,6 +647,11 @@ class Save extends Command
             ->each(static fn(DungeonStart $item) => $item->setRelation('floor', $floor))
             ->values()
             ->each($roundLatLngFn);
+        /** @var EloquentCollection<int, Model&HasLatLngInterface> $dungeonTransports */
+        $dungeonTransports = $floor->dungeonTransportsForExport
+            ->each(static fn(DungeonTransport $item) => $item->setRelation('floor', $floor))
+            ->values()
+            ->each($roundLatLngFn);
         /** @var EloquentCollection<int, Model&HasLatLngInterface> $mapIcons */
         $mapIcons = $floor->mapIconsForExport
             ->each(static fn(MapIcon $item) => $item->setRelation('floor', $floor))
@@ -675,6 +682,7 @@ class Save extends Command
         $result['enemy_patrols']                = $enemyPatrols;
         $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
         $result['dungeon_starts']               = $dungeonStarts;
+        $result['dungeon_transports']           = $dungeonTransports;
         $result['map_icons']                    = $mapIcons;
         $result['mountable_areas']              = $mountableAreas;
         $result['enemy_forces_checkpoints']     = $enemyForcesCheckpoints;

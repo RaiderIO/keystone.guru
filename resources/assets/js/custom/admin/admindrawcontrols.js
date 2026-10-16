@@ -85,6 +85,18 @@ class AdminDrawControls extends DrawControls {
                 zIndexOffset: 1000,
             },
         }, {
+            id: 'dungeontransport',
+            group: 'floors',
+            icon: 'fa-ship',
+            label: 'js.dungeontransport',
+            title: 'js.dungeontransport_title',
+            keys: ['t'],
+            handler: L.Draw.DungeonTransport,
+            options: {
+                repeatMode: false,
+                zIndexOffset: 1000,
+            },
+        }, {
             id: 'floorunion',
             group: 'floors',
             icon: 'fa-object-group',
