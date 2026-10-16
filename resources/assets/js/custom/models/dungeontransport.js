@@ -51,7 +51,7 @@ class DungeonTransport extends Icon {
 
         // Either end of a pair may finish loading or be shown last, and only one of them draws the line between them
         this.register(['object:initialized', 'object:changed', 'shown'], this, this._rebuildPairLines.bind(this));
-        this.register('object:deleted', this, this._cleanPathLayer.bind(this));
+        this.register('object:deleted', this, this._onDeleted.bind(this));
         getState().register('floorid:changed', this, this._rebuildPathLayer.bind(this));
         this._getMapObjectGroup().register('visibility:changed', this, this._rebuildPathLayer.bind(this));
     }
@@ -134,7 +134,9 @@ class DungeonTransport extends Icon {
             return null;
         }
 
-        return this._getMapObjectGroup().findMapObjectById(this.linked_dungeon_transport_id);
+        let linkedDungeonTransport = this._getMapObjectGroup().findMapObjectById(this.linked_dungeon_transport_id);
+
+        return linkedDungeonTransport === null || linkedDungeonTransport._deleted ? null : linkedDungeonTransport;
     }
 
     /**
@@ -308,6 +310,19 @@ class DungeonTransport extends Icon {
         if (this.pathLayer !== null) {
             this.pathLayer.addTo(this.map.leafletMap);
         }
+    }
+
+    /**
+     * The transports that drew their line to this one have nothing left to draw it to.
+     *
+     * @private
+     */
+    _onDeleted() {
+        this._cleanPathLayer();
+
+        Object.values(this._getMapObjectGroup().objects)
+            .filter(dungeonTransport => dungeonTransport !== this && dungeonTransport.linked_dungeon_transport_id === this.id)
+            .forEach(dungeonTransport => dungeonTransport._rebuildPairLines());
     }
 
     /**

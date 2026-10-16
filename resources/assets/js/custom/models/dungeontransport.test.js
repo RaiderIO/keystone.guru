@@ -268,6 +268,27 @@ describe('DungeonTransport', () => {
         expect(transportsById[1].rebuildDecoratorCount).toBe(rebuildsBefore + 1);
     });
 
+    test('deleted_givenTheEndThatDoesNotDrawThePairsPath_removesThePathAndTheLine', () => {
+        // Arrange
+        global.getState = () => makeFakeState(1);
+        const {transportsById, mapLayers} = makeTransports([
+            {id: 1, linkedId: 2, pathVertices: [vertex(1, 1), vertex(2, 1)]},
+            {id: 2, linkedId: 1},
+        ]);
+        transportsById[1]._rebuildPathLayer();
+        const layerCountBefore = mapLayers.length;
+
+        // Act
+        transportsById[2]._deleted = true;
+        transportsById[2].signal('object:deleted');
+
+        // Assert
+        expect(layerCountBefore).toBe(1);
+        expect(mapLayers).toHaveLength(0);
+        expect(transportsById[1].pathLayer).toBeNull();
+        expect(transportsById[1]._getDecorator()).toBeNull();
+    });
+
     test('getDisplayText_givenPartnerOnAnotherFloor_namesThatFloor', () => {
         // Arrange
         global.getState = () => makeFakeState(1);
