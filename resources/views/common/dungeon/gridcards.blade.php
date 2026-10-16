@@ -55,21 +55,14 @@ for ($i = 0; $i < $rowCount; ++$i) { ?>
                 </div>
                 @if($names)
                     <div class="card-body {{ $cardBodyClass ?? '' }}">
-                        <!-- Normal big screen view -->
-                        <div class="d-lg-inline d-none">
-                            <p class="card-text text-center">
-                                @foreach($linksForDungeon as $link)
-                                    <a href="{{ $link['href'] }}">{{ $link['text'] }}</a>
-                                    @if(!$loop->last)
-                                        &middot;
-                                    @endif
-                                @endforeach
-                            </p>
-                        </div>
-
-                        <?php
-                        // @TODO Fix mobile view
-                        ?>
+                        <p class="card-text text-center">
+                            @foreach($linksForDungeon as $link)
+                                <a class="d-block d-lg-inline" href="{{ $link['href'] }}">{{ $link['text'] }}</a>
+                                @if(!$loop->last)
+                                    <span class="d-none d-lg-inline">&middot;</span>
+                                @endif
+                            @endforeach
+                        </p>
                     </div>
                 @endif
             </div>
