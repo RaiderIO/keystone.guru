@@ -3,10 +3,11 @@
 namespace App\SeederHelpers\RelationImport\Mapping;
 
 use App\Models\Npc\Npc;
-use App\SeederHelpers\RelationImport\Parsers\Relation\NpcNpcBolsteringWhitelistRelationParser;
-use App\SeederHelpers\RelationImport\Parsers\Relation\NpcNpcDungeonsRelationParser;
-use App\SeederHelpers\RelationImport\Parsers\Relation\NpcNpcEnemyForcesRelationParser;
-use App\SeederHelpers\RelationImport\Parsers\Relation\NpcNpcHealthsRelationParser;
+use App\Models\Npc\NpcBolsteringWhitelist;
+use App\Models\Npc\NpcDungeon;
+use App\Models\Npc\NpcEnemyForces;
+use App\Models\Npc\NpcHealth;
+use App\SeederHelpers\RelationImport\Parsers\Relation\PivotRelationParser;
 
 class NpcRelationMapping extends RelationMapping
 {
@@ -18,10 +19,10 @@ class NpcRelationMapping extends RelationMapping
         parent::__construct('npcs.json', Npc::class);
 
         $this->setPreSaveRelationParsers(collect([
-            new NpcNpcBolsteringWhitelistRelationParser(),
-            new NpcNpcEnemyForcesRelationParser(),
-            new NpcNpcDungeonsRelationParser(),
-            new NpcNpcHealthsRelationParser(),
+            new PivotRelationParser(Npc::class, 'npcbolsteringwhitelists', NpcBolsteringWhitelist::class),
+            new PivotRelationParser(Npc::class, 'npc_enemy_forces', NpcEnemyForces::class),
+            new PivotRelationParser(Npc::class, 'npc_dungeons', NpcDungeon::class),
+            new PivotRelationParser(Npc::class, 'npc_healths', NpcHealth::class),
         ]));
     }
 }
