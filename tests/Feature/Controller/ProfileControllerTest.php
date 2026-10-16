@@ -17,6 +17,7 @@ use App\Models\User;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Notifications\SendQueuedNotifications;
@@ -26,10 +27,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Pennant\Feature;
+use Mockery\Expectation;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use RuntimeException;
 use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\PublicTestCase;
 
@@ -543,6 +546,35 @@ final class ProfileControllerTest extends PublicTestCase
             /** @var SendQueuedNotifications $restoredJob */
             $restoredJob = unserialize(serialize($jobs->first()));
             $this->assertSame($originalEmail, $restoredJob->notifiables->first()->routeNotificationFor('mail', $restoredJob->notification));
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenQueueingTheEmailFails_keepsTheOldPassword(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+            $this->mock(Dispatcher::class, static function (MockInterface $mock): void {
+                /** @var Expectation $expectation */
+                $expectation = $mock->shouldReceive('send');
+                $expectation->andThrow(new RuntimeException('Queue unavailable'));
+            });
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $response->assertServerError();
+            $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
         } finally {
             $user?->delete();
         }

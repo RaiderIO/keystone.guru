@@ -367,10 +367,13 @@ class ProfileController extends Controller
         /** @var User $user */
         $user = Auth::getUser();
 
-        $user->update([
-            'password' => Hash::make($request->validated('new_password')),
-        ]);
-        Notification::route('mail', $user->email)->notify(new PasswordChangedEmail()->locale($user->locale));
+        // A failed queue push rolls the change back, so a password never changes without its alert
+        DB::transaction(static function () use ($user, $request): void {
+            $user->update([
+                'password' => Hash::make($request->validated('new_password')),
+            ]);
+            Notification::route('mail', $user->email)->notify(new PasswordChangedEmail()->locale($user->locale));
+        });
         Session::flash('status', __('controller.profile.flash.password_changed'));
 
         return redirect()->to(sprintf('%s#change-password', route('profile.edit')));
