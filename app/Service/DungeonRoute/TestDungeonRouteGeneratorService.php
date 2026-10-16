@@ -71,7 +71,7 @@ class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServi
 
         $enemyForcesByKey    = $this->getEnemyForcesByKey($mappingVersion);
         $floorIndexByFloorId = $dungeon->floors()->pluck('index', 'id');
-        $season              = $dungeon->getActiveSeason($this->seasonService);
+        $season              = $this->seasonService->getActiveSeasonForDungeon($dungeon);
         $keyLevelMin         = $season === null ? (int)config('keystoneguru.keystone.levels.default_min') : $season->key_level_min;
         $keyLevelMax         = $season === null ? (int)config('keystoneguru.keystone.levels.default_max') : $season->key_level_max;
 
@@ -136,7 +136,7 @@ class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServi
             'author_id'          => $author->id,
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
-            'season_id'          => $dungeon->getActiveSeason($this->seasonService)?->id,
+            'season_id'          => $this->seasonService->getActiveSeasonForDungeon($dungeon)?->id,
             'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
             'published_state_id' => $publishedStateId,
             'title'              => $title,

@@ -136,7 +136,7 @@ class DungeonExploreController extends Controller
         } else {
             $floor = $resolvedFloor->floor;
 
-            $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
+            $mostRecentSeason = $seasonService->getActiveSeasonForDungeon($dungeon);
 
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 
@@ -252,7 +252,7 @@ class DungeonExploreController extends Controller
             $validated['defaultZoom'],
         );
 
-        $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
+        $mostRecentSeason = $seasonService->getActiveSeasonForDungeon($dungeon);
 
         $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED);
 

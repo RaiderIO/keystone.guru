@@ -36,6 +36,9 @@ class SeasonService implements SeasonServiceInterface
     /** @var Collection<int, Collection<int, Season>> Seasons of an expansion, keyed by expansion id */
     private Collection $seasonsPerExpansionCache;
 
+    /** @var array<int, Season> Active season of a dungeon, keyed by dungeon id */
+    private array $activeSeasonForDungeonCache = [];
+
     public function __construct(
         private readonly ExpansionService          $expansionService,
         private readonly SeasonRepositoryInterface $seasonRepository,
@@ -272,6 +275,13 @@ class SeasonService implements SeasonServiceInterface
         return $currentSeason->dungeons()->where('dungeons.id', $dungeon->id)->exists()
             ? $currentSeason
             : null;
+    }
+
+    public function getActiveSeasonForDungeon(Dungeon $dungeon): ?Season
+    {
+        return $this->activeSeasonForDungeonCache[$dungeon->id] ??= $this->getUpcomingSeasonForDungeon($dungeon) ??
+            $this->getMostRecentSeasonForDungeon($dungeon) ??
+            $this->getCurrentSeason($dungeon->expansion);
     }
 
     public function getSeasonFromShortString(?string $season): ?Season

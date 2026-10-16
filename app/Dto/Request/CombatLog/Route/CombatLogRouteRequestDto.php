@@ -95,7 +95,7 @@ class CombatLogRouteRequestDto extends RequestDto implements Arrayable
         // Fallback if not set or not found
         $mappingVersion ??= $dungeon->getCurrentMappingVersion($retailGameVersion);
 
-        $currentSeasonForDungeon = $dungeon->getActiveSeason($seasonService);
+        $currentSeasonForDungeon = $seasonService->getActiveSeasonForDungeon($dungeon);
 
         // When regenerating (settings->publicKey set) this route never becomes the public one: it is turned into an
         // upgrade draft of the route being regenerated, and CombatLogRouteDungeonRouteService applies its content

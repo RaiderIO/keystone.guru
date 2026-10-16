@@ -76,7 +76,7 @@ class MapContextDungeonExplore extends MapContextMappingVersion
     #[Override]
     public function toArray(): array
     {
-        $activeSeason = $this->dungeon->getActiveSeason($this->seasonService);
+        $activeSeason = $this->seasonService->getActiveSeasonForDungeon($this->dungeon);
 
         return array_merge(parent::toArray(), [
             'featuredAffixes'        => $activeSeason == null ? [] : $this->seasonAffixGroupService->getFeaturedAffixes($activeSeason),
@@ -113,8 +113,8 @@ class MapContextDungeonExplore extends MapContextMappingVersion
 
     /**
      * The week index to keystone leaderboard period mapping the heatmap's week filter translates its selection
-     * with. Resolved against the most recent season rather than getActiveSeason(), because that is the season the
-     * week dropdown's options are built from - getActiveSeason() prefers an upcoming season, whose weeks are not
+     * with. Resolved against the most recent season rather than getActiveSeasonForDungeon(), because that is the season the
+     * week dropdown's options are built from - getActiveSeasonForDungeon() prefers an upcoming season, whose weeks are not
      * in the dropdown at all.
      *
      * @return array<int, array{week: int, period: int}>

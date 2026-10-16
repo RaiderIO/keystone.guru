@@ -40,7 +40,7 @@ class DungeonRouteFactory extends Factory
             $count++;
         } while ($currentMappingVersion === null || $dungeon->floors->isEmpty());
 
-        $activeSeason = $dungeon->getActiveSeason($seasonService);
+        $activeSeason = $seasonService->getActiveSeasonForDungeon($dungeon);
 
         return [
             'public_key'         => DungeonRoute::generateRandomPublicKey(),

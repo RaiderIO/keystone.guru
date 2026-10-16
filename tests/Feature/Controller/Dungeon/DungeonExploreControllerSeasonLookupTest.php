@@ -43,7 +43,7 @@ final class DungeonExploreControllerSeasonLookupTest extends PublicTestCase
             dungeonActive:       true,
             requireDefaultFloor: true,
             resolve:             static function (Dungeon $dungeon, MappingVersion $mappingVersion) use ($seasonService, $seasonAffixGroupService, $region): ?int {
-                $season = $dungeon->getActiveSeason($seasonService);
+                $season = $seasonService->getActiveSeasonForDungeon($dungeon);
                 if ($season === null || !$dungeon->hasMappingVersionWithSeasons()) {
                     return null;
                 }

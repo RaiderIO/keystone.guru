@@ -20,7 +20,6 @@ use App\Models\Spell\Spell;
 use App\Models\Traits\HasCombatLogCriterion;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
-use App\Service\Season\SeasonServiceInterface;
 use Auth;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -140,8 +139,6 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
     ];
 
     public $timestamps = false;
-
-    private ?Season $activeSeasonCache = null;
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -453,22 +450,6 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
     public function getFacadeFloor(): ?Floor
     {
         return $this->floors->first(static fn(Floor $floor) => $floor->facade);
-    }
-
-    /**
-     * Get the season that is active for this dungeon right now (preferring upcoming seasons if current and next season overlap)
-     * @TODO business logic should not be in a model - move to service
-     */
-    public function getActiveSeason(SeasonServiceInterface $seasonService, bool $useCache = true): ?Season
-    {
-        if ($useCache && $this->activeSeasonCache !== null) {
-            return $this->activeSeasonCache;
-        }
-
-        return $this->activeSeasonCache = $seasonService->getUpcomingSeasonForDungeon($this) ??
-            $seasonService->getMostRecentSeasonForDungeon($this) ??
-            // Timewalking fallback
-            $seasonService->getCurrentSeason($this->expansion);
     }
 
     /**

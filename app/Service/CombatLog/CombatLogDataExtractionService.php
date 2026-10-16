@@ -149,7 +149,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             $affixIds = $parsedEvent->getAffixIDs() ?? $runContext?->getAffixIds();
 
             $affixGroup = null;
-            $season     = $dungeon->getActiveSeason($this->seasonService);
+            $season     = $this->seasonService->getActiveSeasonForDungeon($dungeon);
             if ($season !== null && $affixIds !== null) {
                 /** @var AffixGroup|null $affixGroup */
                 $affixGroup = AffixGroup::findMatchingAffixGroupsForAffixIds($season, collect($affixIds)->values())->first();

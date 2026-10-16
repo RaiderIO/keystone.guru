@@ -203,7 +203,7 @@ final class DungeonRouteDiscoverCategoryTest extends PublicTestCase
         [$gameVersion, $dungeon] = $this->activeDungeon();
 
         $mappingVersion = $dungeon->getCurrentMappingVersion();
-        $activeSeason   = $dungeon->getActiveSeason(app(SeasonServiceInterface::class));
+        $activeSeason   = app(SeasonServiceInterface::class)->getActiveSeasonForDungeon($dungeon);
 
         $routes = DungeonRoute::factory()->count($count)->create([
             'dungeon_id'         => $dungeon->id,
