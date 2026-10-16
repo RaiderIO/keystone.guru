@@ -67,6 +67,14 @@ class Random extends Command
 //            );
 //        }
 
+//        $combatLogEvents = $combatLogEventService->generateCombatLogEvents(
+//            Season::findOrFail(Season::SEASON_TWW_S2),
+//            CombatLogEventEventType::PlayerDeath,
+//            1000000,
+//            100,
+//            Dungeon::firstWhere('key', DungeonKey::THE_MOTHERLODE->value),
+//        );
+
 //        $dungeonRouteService->refreshOutdatedThumbnails();
 
 //        dd($wowheadService->getSpellData(
@@ -136,6 +144,13 @@ class Random extends Command
 //        );
 //
 //        dd($latLng->toArrayWithFloor());
+
+//        $combatLogEvents = $combatLogEventService->generateCombatLogEvents(
+//            Season::findOrFail(13),
+//            CombatLogEvent::EVENT_TYPE_PLAYER_DEATH,
+//            1000,
+//            10
+//        );
 
 //        dd($combatLogEventService->getAvailableDateRange(
 //            new CombatLogEventFilter(
