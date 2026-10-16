@@ -199,6 +199,10 @@ class CoordinatesService implements CoordinatesServiceInterface
         ConvertsVerticesInterface&Model $hasVertices,
         Floor                           $floor,
     ): Floor {
+        if (!$mappingVersion->facade_enabled) {
+            return $floor;
+        }
+
         $convertedLatLngs = collect();
 
         foreach ($hasVertices->getDecodedLatLngs($floor) as $latLng) {

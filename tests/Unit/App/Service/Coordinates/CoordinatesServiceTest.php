@@ -669,6 +669,31 @@ final class CoordinatesServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function convertVerticesForFacade_givenFacadeDisabled_returnsGivenFloorAndLeavesVerticesUntouched(): void
+    {
+        // Arrange
+        $facadeFloor        = $this->createFacadeFloor();
+        $targetFloor        = $this->createTargetFloor();
+        $floorUnion         = $this->createFloorUnion($facadeFloor, $targetFloor);
+        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
+        $mappingVersion     = $this->createMappingVersion([$floorUnion], false);
+        $verticesJson       = json_encode([
+            ['lat' => CoordinatesService::MAP_MAX_LAT / 2, 'lng' => CoordinatesService::MAP_MAX_LNG / 2],
+            ['lat' => CoordinatesService::MAP_MAX_LAT / 2, 'lng' => CoordinatesService::MAP_MAX_LNG / 2],
+        ]);
+        $polyline = new Polyline()->forceFill([
+            'vertices_json' => $verticesJson,
+        ]);
+
+        // Act
+        $result = $coordinatesService->convertVerticesForFacade($mappingVersion, $polyline, $targetFloor);
+
+        // Assert
+        $this->assertSame($targetFloor, $result);
+        $this->assertSame($verticesJson, $polyline->vertices_json);
+    }
+
+    #[Test]
     public function intersection_givenCrossingSegments_returnsTheCrossingPoint(): void
     {
         // Arrange

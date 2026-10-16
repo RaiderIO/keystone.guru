@@ -29,9 +29,11 @@ interface CoordinatesServiceInterface
     ): LatLng;
 
     /**
-     * Rewrites the vertices_json of $hasVertices in place with its vertices converted onto the facade.
+     * Rewrites the vertices_json of $hasVertices in place with its vertices converted onto the facade. Leaves
+     * $hasVertices untouched when $mappingVersion has no facade enabled. A vertex outside every floor union, such as
+     * one already on the facade floor, keeps its location and floor.
      *
-     * @return Floor The floor the first converted vertex landed on, or $floor when there are no vertices.
+     * @return Floor The floor the first converted vertex landed on, or $floor when there are no vertices or no facade.
      */
     public function convertVerticesForFacade(
         MappingVersion                  $mappingVersion,
