@@ -45,7 +45,15 @@ global.Icon = class Icon {
         this.visible = true;
     }
 
-    register() {
+    register(names, listener, fn) {
+        this.handlers = this.handlers ?? {};
+        for (const name of [].concat(names)) {
+            (this.handlers[name] = this.handlers[name] ?? []).push(fn);
+        }
+    }
+
+    signal(name) {
+        (this.handlers?.[name] ?? []).forEach((fn) => fn());
     }
 
     unregister() {
@@ -242,6 +250,22 @@ describe('DungeonTransport', () => {
 
         // Assert
         expect(decorator).toBeNull();
+    });
+
+    test('shown_givenTheHigherIdOfATwoWayPairShownLast_rebuildsTheLowerIdsLine', () => {
+        // Arrange - the lower id was shown first, while its partner was still hidden
+        global.getState = () => makeFakeState(1);
+        const {transportsById} = makeTransports([
+            {id: 1, linkedId: 2},
+            {id: 2, linkedId: 1},
+        ]);
+        const rebuildsBefore = transportsById[1].rebuildDecoratorCount ?? 0;
+
+        // Act
+        transportsById[2].signal('shown');
+
+        // Assert
+        expect(transportsById[1].rebuildDecoratorCount).toBe(rebuildsBefore + 1);
     });
 
     test('getDisplayText_givenPartnerOnAnotherFloor_namesThatFloor', () => {
