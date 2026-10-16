@@ -146,7 +146,6 @@ abstract class DungeonRouteBuilder
     {
         $this->dungeonRoute->setRelation('killZones', $this->killZones);
 
-        // @TODO should this be done in the repository? Do we need to skip this for correction?
         // Direct update doesn't work.. no clue why
         $enemyForces = $this->dungeonRoute->getEnemyForces();
         $this->dungeonRouteRepository->find($this->dungeonRoute->id)->update(['enemy_forces' => $enemyForces]);

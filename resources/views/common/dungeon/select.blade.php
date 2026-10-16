@@ -106,7 +106,6 @@ $dungeonsByExpansion = $dungeons->load([
 
 
 // Group the dungeons by expansion
-// @TODO Fix the odd sorting of the expansions here, but it's late atm and can't think of a good way
 foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
     /**
      * @var Collection<int, Dungeon> $dungeonsOfExpansion

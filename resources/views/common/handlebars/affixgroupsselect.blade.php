@@ -35,7 +35,6 @@ $id ??= 'Affixes';
      */
     function handlebarsLoadAffixGroupSelect{{ $id }}() {
         let affixSelectSelector = '#{{ $id }}';
-        // @TODO make one template with multiple options, rather than calling this template N amount of times?
         for (let i in _affixGroups{{ $id }}) {
             if (_affixGroups{{ $id }}.hasOwnProperty(i)) {
                 let affixGroup = _affixGroups{{ $id }}[i];

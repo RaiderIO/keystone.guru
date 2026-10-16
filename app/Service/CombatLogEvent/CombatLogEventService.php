@@ -501,8 +501,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                     config('keystoneguru.heatmap.service.data.player.size_y'),
                 );
 
-                // @TODO This uses old format - needs to use new format IF you were to use this again, right now this function appears not to be used
-                // See #2632
+                // Writes the old event format; port it to the current one before using this again.
                 $attributes = [
                     'run_id'             => $runId,
                     'keystone_run_id'    => $keystoneRunId,

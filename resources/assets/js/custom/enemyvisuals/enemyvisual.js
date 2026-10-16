@@ -988,7 +988,6 @@ class EnemyVisual extends Signalable {
         this._mouseOut();
     }
 
-    // @TODO Listen to killzone selectable changed event
     refresh() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 

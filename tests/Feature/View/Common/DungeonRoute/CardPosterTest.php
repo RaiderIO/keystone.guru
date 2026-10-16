@@ -230,6 +230,26 @@ final class CardPosterTest extends PublicTestCase
     }
 
     #[Test]
+    public function cardlist_givenNoCurrentAffixGroup_rendersPosterCard(): void
+    {
+        // Arrange
+        $dungeonroute = DungeonRoute::factory()->create();
+
+        try {
+            // Act
+            $html = view('common.dungeonroute.cardlist', [
+                'dungeonroutes' => new Collection([$dungeonroute]),
+                'cache'         => false,
+            ])->render();
+
+            // Assert
+            $this->assertStringContainsString('card_dungeonroute poster', $html);
+        } finally {
+            $dungeonroute->delete();
+        }
+    }
+
+    #[Test]
     public function render_givenCachedCardAndUserWithoutLocale_rendersPosterCard(): void
     {
         // Arrange - a stored locale may be null; the card cache must key on the request's locale instead

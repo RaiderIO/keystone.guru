@@ -20,61 +20,6 @@ use Illuminate\Support\Collection;
 
 abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
 {
-//    private const IGNORE_MAP_IDS = [
-//        // Northern Barrens
-//        1,
-//        // Gorgrond
-//        1116,
-//        // The Ringing Depths
-//        2601,
-//    ];
-
-    // @TODO should be removed when all floor map UIs have been resolved for all existing dungeons
-//    private const IGNORE_FLOOR_MAP_UI_IDS = [
-//        // Wailing Caverns
-//        11,
-//        // Kalimdor,
-//        12,
-//        // Feralas,
-//        69,
-//        // Stormwind City
-//        84,
-//        // Orgrimmar
-//        85,
-//        // Dire Maul (outside)
-//        234,
-//        // Pandaria
-//        424,
-//        // Draenor
-//        572,
-//        // Broken Isles
-//        619,
-//        // Suramar
-//        680,
-//        // Waycrest Manor
-//        1029,
-//        // The Barrens
-//        1413,
-//        // Kalimdor
-//        1414,
-//        // Eastern Kingdoms
-//        1415,
-//        // Burning Steppes
-//        1428,
-//        // Thousand Needles
-//        1441,
-//        // The Waking Shores
-//        2022,
-//        // Thaldraszus
-//        2025,
-//        // Valdrakken
-//        2112,
-//        // Khaz Algar
-//        2274,
-//        // City of Threads (outside)
-//        2343,
-//    ];
-
     /**
      * @param Collection<int, BaseResultEvent> $resultEvents
      */
@@ -109,9 +54,6 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
                 $this->resultEvents->push((new ZoneChangeResultEvent($combatLogEvent)));
             } catch (DungeonNotSupportedException) {
                 // It's okay - we can ignore this
-//                if (!in_array($combatLogEvent->getZoneId(), self::IGNORE_MAP_IDS)) {
-//                    throw $e;
-//                }
             }
 
             return true;
@@ -123,9 +65,6 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
                 $this->resultEvents->push((new MapChangeResultEvent($combatLogEvent)));
             } catch (FloorNotSupportedException) {
                 // It's okay - we can ignore this
-//                if (!in_array($combatLogEvent->getUiMapID(), self::IGNORE_FLOOR_MAP_UI_IDS)) {
-//                    throw $e;
-//                }
             }
 
             return true;

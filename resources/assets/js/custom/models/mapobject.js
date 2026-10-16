@@ -661,9 +661,6 @@ class MapObject extends Signalable {
                             this[name] = value;
                         }
                     }
-                } else {
-                    // @TODO MapIcons don't have Teeming and Faction properties so this gets thrown a lot
-                    // console.error(`Wanted to load attribute '${property}' from remoteMapObject but it didn't have this property!`);
                 }
             }
         }
@@ -879,7 +876,6 @@ class MapObject extends Signalable {
      * Sets the synced state of the map object. Will adjust the colors of the layer if colors are set.
      * @param value {Boolean} True to set the status to synced, false to unsynced.
      * @param massSave {Boolean} True if the source of this change was a mass save action.
-     * @todo Somehow this does not work when trying to set edited colors. Very strange, couldn't get it to work
      */
     setSynced(value, massSave = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);

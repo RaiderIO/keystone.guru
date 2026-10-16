@@ -191,7 +191,6 @@ class ViewService implements ViewServiceInterface
      */
     public function getCharacterRacesClasses(): Collection
     {
-        // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
         return $this->cachedGlobal('character_races_classes', static fn() => CharacterRace::with(['classes:character_classes.id'])->orderBy('faction_id')->get());
     }
 

@@ -19,7 +19,6 @@ use App\Models\DungeonRoute\DungeonRoute;
         <div id="category_route_list" class="w-100">
             @include('common.dungeonroute.cardlist', [
                 'cols' => 4,
-                'currentAffixGroup' => null, // @TODO
                 'affixgroup' => null,
                 'dungeonroutes' => $dungeonRoutes,
                 'showDungeonImage' => true,

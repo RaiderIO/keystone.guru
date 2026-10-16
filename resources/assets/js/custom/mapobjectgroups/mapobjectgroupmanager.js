@@ -252,8 +252,6 @@ class MapObjectGroupManager extends Signalable {
         let objectGroup = this.getByName(objectGroupName);
         console.assert(objectGroup instanceof MapObjectGroup, 'objectGroup is not a MapObjectGroup', objectGroup);
 
-        // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
-        // I may or may not want
         objectGroup.setVisibility(visible);
     }
 

@@ -53,7 +53,6 @@ class SiteController extends Controller
         DungeonServiceInterface         $dungeonService,
         ThumbnailServiceInterface       $thumbnailService,
     ): View {
-        // @TODO Add caching
         $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes();
 
         $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();

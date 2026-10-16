@@ -390,7 +390,6 @@ class MapObjectGroup extends Signalable {
 
         if (mapObject.layer !== null) {
             this.layerGroup.removeLayer(mapObject.layer);
-            // @TODO Should this be put in the dungeonmap instead?
             this.manager.map.leafletMap.removeLayer(mapObject.layer);
             // Clean it up properly
             mapObject.setVisible(false);
@@ -507,8 +506,6 @@ class MapObjectGroup extends Signalable {
         if (!this._visible && visible) {
             // console.warn(`Unable to make map object visible - the MapObjectGroup is hidden`, mapObject);
         }
-            // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
-        // I may or may not want
         else if (mapObject.layer !== null) {
             if (visible) {
                 if (!this.layerGroup.hasLayer(mapObject.layer)) {

@@ -261,7 +261,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
             $enemyEngaged->getEngagedEvent()->getAdvancedData()->getPositionX(),
             $enemyEngaged->getEngagedEvent()->getAdvancedData()->getPositionY(),
             $enemyEngaged->getEngagedEvent()->getTimestamp(),
-            // @TODO We don't know this yet!
+            // A streamed parse cannot know the death time at engage time; nothing reads it.
             null,
             $enemyEngaged->getResolvedEnemy(),
         );

@@ -83,7 +83,6 @@ class EnemyPatrolImporter
                         continue;
                     }
 
-                    // @TODO Check based on existing enemy patrols if this patrol already exists
                     // We check the MDTPolyline to see if it equals the one we are about to save
                     // If it does, we re-import the existing enemy patrol instead (since it may have been altered manually)
                     // Not doing this would overwrite any manual changes made to the enemy patrols

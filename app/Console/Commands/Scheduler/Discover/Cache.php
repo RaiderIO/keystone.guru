@@ -71,7 +71,6 @@ class Cache extends SchedulerCommand
                 $discoverService->popular();
                 $discoverService->new();
                 $discoverService->popularGroupedByDungeon();
-                $discoverService->popularUsers();
 
                 // In theory this can lead to cache misses when we're in the process of switching seasons, but I'll take it
                 /** @var Season[] $seasons */
@@ -110,7 +109,6 @@ class Cache extends SchedulerCommand
 
                         $discoverService->popularByDungeon($dungeon);
                         $discoverService->newByDungeon($dungeon);
-                        $discoverService->popularUsersByDungeon($dungeon);
 
                         foreach ($affixGroups as $affixGroup) {
 //                            dump(sprintf('--- AffixGroup %s', $affixGroup->getTextAttribute()));
