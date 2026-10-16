@@ -25,6 +25,25 @@ final class FileTest extends PublicTestCase
     }
 
     #[Test]
+    public function toArray_givenFile_exposesOnlyTheUrl(): void
+    {
+        // Arrange
+        $file = new File()->forceFill([
+            'id'          => 1,
+            'model_id'    => 1,
+            'model_class' => self::class,
+            'disk'        => 'public',
+            'path'        => 'some/path.jpg',
+        ]);
+
+        // Act
+        $result = $file->toArray();
+
+        // Assert
+        $this->assertSame(['url' => $file->getURL()], $result);
+    }
+
+    #[Test]
     public function deleteFromDisk_givenLocalEnvironmentAndRemoteDisk_leavesTheDiskObjectUntouched(): void
     {
         // Arrange - a local environment restoring a production database backup can have File rows

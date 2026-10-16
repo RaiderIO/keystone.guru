@@ -211,18 +211,7 @@ class PullWorkBench extends Signalable {
                     new AddKillZoneMapState(getState().getDungeonMap(), self.killZone)
                 );
             } else {
-                // @TODO This entire piece of code is hacky, should be done differently eventually
-                getState().getDungeonMap().drawnLayers.removeLayer(self.killZone.layer);
-                getState().getDungeonMap().editableLayers.removeLayer(self.killZone.layer);
-
-                let killZoneMapObjectGroup = getKillZoneMapObjectGroup();
-                // It's been removed; unset it
-                killZoneMapObjectGroup.setLayerToMapObject(null, self.killZone);
-
-                self.killZone.floor_id = null;
-                // Update its visuals
-                self.killZone.redrawConnectionsToEnemies();
-                self.killZone.save();
+                self.killZone.removeKillArea();
 
                 // Re-init the workbench
                 self.editPull(self.killZone.id, {forceReopen: true});
@@ -284,12 +273,6 @@ class PullWorkBench extends Signalable {
 
             self.killZone.register('object:deleted', '123123', function () {
                 showSuccessNotification(lang.get('js.object.deleted'));
-
-                // Bit hacky?
-                if (self.killZone.isKillAreaVisible()) {
-                    getState().getDungeonMap().drawnLayers.removeLayer(self.killZone.layer);
-                    getState().getDungeonMap().editableLayers.removeLayer(self.killZone.layer);
-                }
 
                 self.killZone.unregister('object:deleted', '123123');
 
