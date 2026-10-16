@@ -14,6 +14,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Import\Traits\AppliesMdtCloneIndexHack;
+use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
 use App\Service\MDT\Models\ImportStringPulls;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -24,8 +25,9 @@ class PullImporter
     use AppliesMdtCloneIndexHack;
 
     public function __construct(
-        private readonly CacheServiceInterface       $cacheService,
-        private readonly CoordinatesServiceInterface $coordinatesService,
+        private readonly CacheServiceInterface                  $cacheService,
+        private readonly CoordinatesServiceInterface            $coordinatesService,
+        private readonly MDTImportStringServiceLoggingInterface $log,
     ) {
     }
 
@@ -287,7 +289,7 @@ class PullImporter
                             $npcEnemyForces->enemy_forces,
                     );
                 } else {
-                    logger()->warning(sprintf('Unable to find enemy forces for npc %d!', $enemy->npc->id));
+                    $this->log->parseMdtNpcClonesInPullEnemyForcesNotFound($enemy->npc->id);
                 }
             }
 

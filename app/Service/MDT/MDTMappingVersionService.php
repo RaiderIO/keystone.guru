@@ -12,14 +12,16 @@ use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\MDT\Logging\MDTMappingVersionServiceLoggingInterface;
 use Exception;
 use Illuminate\Support\Collection;
 
 class MDTMappingVersionService implements MDTMappingVersionServiceInterface
 {
     public function __construct(
-        private readonly CacheServiceInterface       $cacheService,
-        private readonly CoordinatesServiceInterface $coordinatesService,
+        private readonly CacheServiceInterface                    $cacheService,
+        private readonly CoordinatesServiceInterface              $coordinatesService,
+        private readonly MDTMappingVersionServiceLoggingInterface $log,
     ) {
     }
 
@@ -97,8 +99,7 @@ class MDTMappingVersionService implements MDTMappingVersionServiceInterface
             foreach ($mdtNpcs as $mdtNpc) {
                 if ($mdtNpc->getId() === (int)$npcId) {
                     if (!isset($mdtNpc->getClones()[$index])) {
-                        // TODO structured logging
-                        logger()->warning('No clone found for MDT NPC ' . $mdtNpc->getId() . ' and index ' . $index);
+                        $this->log->getFloorAccuracyNoCloneFound($mdtNpc->getId(), (int)$index);
                         continue;
                     }
                     $clone = $mdtNpc->getClones()[$index];

@@ -36,4 +36,9 @@ class MDTImportStringServiceLogging extends MDTBaseServiceLogging implements MDT
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
+
+    public function parseMdtNpcClonesInPullEnemyForcesNotFound(int $npcId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
 }

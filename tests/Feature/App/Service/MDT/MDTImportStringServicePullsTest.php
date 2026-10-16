@@ -6,6 +6,7 @@ use App\Models\DungeonKey;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\Npc\NpcEnemyForces;
+use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -142,6 +143,68 @@ class MDTImportStringServicePullsTest extends MDTImportStringServiceTestBase
             $this->assertSame($npcEnemyForces->enemy_forces, $importedRoute->enemy_forces);
         } finally {
             $npcEnemyForces?->update(['enemy_forces_teeming' => $originalEnemyForcesTeeming]);
+            $importedRoute?->delete();
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    #[Group('MDTImportStringServicePulls')]
+    public function getDungeonRoute_givenEnemyWithoutNpcEnemyForces_logsEnemyForcesNotFound(): void
+    {
+        $dungeonRoute             = null;
+        $importedRoute            = null;
+        $npcEnemyForcesAttributes = null;
+
+        try {
+            // Arrange
+            $hasNpcEnemyForces = static fn(Enemy $enemy): bool => !in_array($enemy->seasonal_type, [Enemy::SEASONAL_TYPE_SHROUDED, Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX], true) &&
+                NpcEnemyForces::query()
+                    ->where('mapping_version_id', $enemy->mapping_version_id)
+                    ->where('npc_id', $enemy->npc_id)
+                    ->exists();
+
+            $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies(
+                enemyCount:  1,
+                enemyFilter: $hasNpcEnemyForces,
+            );
+
+            /** @var Enemy $enemy */
+            $enemy = $this->getSafeMdtEnemies($dungeonRoute, limit: 1, enemyFilter: $hasNpcEnemyForces)->firstOrFail();
+
+            KillZone::factory()->withEnemies($enemy)->create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'index'            => 1,
+                'description'      => null,
+            ]);
+
+            $encodedString = $this->exportDungeonRouteToString($dungeonRoute);
+
+            /** @var NpcEnemyForces $npcEnemyForces */
+            $npcEnemyForces = NpcEnemyForces::query()
+                ->where('mapping_version_id', $dungeonRoute->mapping_version_id)
+                ->where('npc_id', $enemy->npc_id)
+                ->firstOrFail();
+            $npcEnemyForcesAttributes = $npcEnemyForces->getAttributes();
+            $npcEnemyForces->delete();
+
+            $log = $this->createMock(MDTImportStringServiceLoggingInterface::class);
+            $log->expects($this->once())
+                ->method('parseMdtNpcClonesInPullEnemyForcesNotFound')
+                ->with($enemy->npc_id);
+            $this->app->instance(MDTImportStringServiceLoggingInterface::class, $log);
+
+            // Act
+            $importedRoute = $this->importStringToDungeonRoute($encodedString);
+            $importedRoute->load(['killZones.killZoneEnemies']);
+
+            // Assert
+            $this->assertCount(1, $importedRoute->killZones->first()->killZoneEnemies);
+            $this->assertSame(0, $importedRoute->enemy_forces);
+        } finally {
+            if ($npcEnemyForcesAttributes !== null) {
+                NpcEnemyForces::query()->insert($npcEnemyForcesAttributes);
+            }
             $importedRoute?->delete();
             $dungeonRoute?->delete();
         }
