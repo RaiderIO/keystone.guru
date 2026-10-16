@@ -21,6 +21,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Closure;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -359,6 +360,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
     public function getEnemyForcesPerKillZoneForRoutes(Collection $dungeonRoutes): Collection
     {
         $existingRoutes = $dungeonRoutes->filter(static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->exists);
+        EloquentCollection::make($existingRoutes->all())->loadMissing(['season.expansion']);
 
         // The shrouded enemy-forces expression differs from the non-shrouded one (it reads from
         // mapping_versions.enemy_forces_shrouded* instead of npc_enemy_forces), so shrouded and
