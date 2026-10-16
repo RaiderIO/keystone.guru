@@ -196,6 +196,14 @@ class MapContext extends Signalable {
     }
 
     /**
+     * The ids of the spells that count as a Bloodlust.
+     * @returns {Number[]}
+     */
+    getStaticBloodlustySpellIds() {
+        return this._options.static.bloodlustySpellIds;
+    }
+
+    /**
      *
      * @returns {string}
      */

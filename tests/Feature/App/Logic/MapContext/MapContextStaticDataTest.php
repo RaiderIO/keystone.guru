@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Logic\MapContext;
 
 use App\Models\Faction;
+use App\Models\Spell\KnownSpell;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDescriptionTranslation;
 use App\Models\Spell\SpellSchool;
@@ -67,6 +68,21 @@ final class MapContextStaticDataTest extends PublicTestCase
         $this->assertNotContains(Faction::FACTION_UNSPECIFIED, $factionKeys);
         $this->assertContains(Faction::FACTION_HORDE, $factionKeys);
         $this->assertContains(Faction::FACTION_ALLIANCE, $factionKeys);
+    }
+
+    #[Test]
+    public function toArray_givenStaticData_returnsEveryBloodlustySpellId(): void
+    {
+        // Arrange
+        $mapContextStaticData = app(MapContextServiceInterface::class)->createMapContextStaticData('en_US');
+
+        // Act
+        $static = json_decode(json_encode($mapContextStaticData->toArray()['static']), true);
+
+        // Assert
+        $this->assertSame(KnownSpell::BLOODLUSTY_SPELLS, $static['bloodlustySpellIds']);
+        $this->assertContains(KnownSpell::ThunderousDrums->value, $static['bloodlustySpellIds']);
+        $this->assertContains(KnownSpell::HarriersCry->value, $static['bloodlustySpellIds']);
     }
 
     #[Test]

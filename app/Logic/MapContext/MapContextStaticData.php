@@ -10,6 +10,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\MapIconType;
 use App\Models\PublishedState;
 use App\Models\RaidMarker;
+use App\Models\Spell\KnownSpell;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDispelType;
 use App\Models\Spell\SpellMissType;
@@ -85,6 +86,7 @@ class MapContextStaticData implements Arrayable
                 'spellSchools'                      => SpellSchool::slugsByBit(),
                 'spellMissTypes'                    => SpellMissType::slugsByBit(),
                 'spellDispelTypes'                  => SpellDispelType::values(),
+                'bloodlustySpellIds'                => KnownSpell::BLOODLUSTY_SPELLS,
             ], config('keystoneguru.cache.static_data.ttl'));
         });
 
