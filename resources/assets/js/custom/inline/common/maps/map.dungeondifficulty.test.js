@@ -23,20 +23,31 @@ describe('CommonMapsMap dungeon difficulty', () => {
         mapContext = {setDungeonDifficulty: vi.fn()};
         globalThis.getState = () => ({getMapContext: () => mapContext});
 
-        document.body.innerHTML = `
-            <div id="map_dungeon_difficulty_dropdown" class="dropdown-menu">
-                <a class="dropdown-item disabled">Raid size</a>
-                <a class="dropdown-item active" data-value="1">10-man</a>
-                <a class="dropdown-item" data-value="2">25-man</a>
-            </div>`;
+        renderDropdown(`
+            <a class="dropdown-item active" data-value="1">10-man</a>
+            <a class="dropdown-item" data-value="2">25-man</a>
+            <a class="dropdown-item" data-value="3">20-man</a>
+            <a class="dropdown-item" data-value="4">40-man</a>`);
 
         new CommonMapsMap('map', 'common/maps/map', {})._setupDungeonDifficulty();
+        mapContext.setDungeonDifficulty.mockClear();
     });
 
     afterEach(() => {
         delete globalThis.getState;
         document.body.innerHTML = '';
     });
+
+    /**
+     * @param {string} items
+     */
+    function renderDropdown(items) {
+        document.body.innerHTML = `
+            <div id="map_dungeon_difficulty_dropdown" class="dropdown-menu">
+                <a class="dropdown-item disabled">Raid size</a>
+                ${items}
+            </div>`;
+    }
 
     /**
      * @param {string} value
@@ -55,6 +66,31 @@ describe('CommonMapsMap dungeon difficulty', () => {
         expect(mapContext.setDungeonDifficulty).toHaveBeenCalledWith(2);
         expect(item('2').hasClass('active')).toBe(true);
         expect(item('1').hasClass('active')).toBe(false);
+    });
+
+    it('_setupDungeonDifficulty_given40ManClicked_setsItOnTheMapContextAndMarksItActive', () => {
+        // Act
+        item('4').trigger('click');
+
+        // Assert
+        expect(mapContext.setDungeonDifficulty).toHaveBeenCalledTimes(1);
+        expect(mapContext.setDungeonDifficulty).toHaveBeenCalledWith(4);
+        expect(item('4').hasClass('active')).toBe(true);
+        expect($('#map_dungeon_difficulty_dropdown a.active').length).toBe(1);
+    });
+
+    it('_setupDungeonDifficulty_givenAnActiveEntryOtherThan10Man_setsItOnTheMapContext', () => {
+        // Arrange
+        renderDropdown(`
+            <a class="dropdown-item active" data-value="2">25-man</a>
+            <a class="dropdown-item" data-value="4">40-man</a>`);
+
+        // Act
+        new CommonMapsMap('map', 'common/maps/map', {})._setupDungeonDifficulty();
+
+        // Assert
+        expect(mapContext.setDungeonDifficulty).toHaveBeenCalledTimes(1);
+        expect(mapContext.setDungeonDifficulty).toHaveBeenCalledWith(2);
     });
 
     it('_setupDungeonDifficulty_givenTheHeaderClicked_leavesTheDifficultyAlone', () => {

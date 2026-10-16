@@ -482,8 +482,7 @@ return [
                     'route_info_title' => 'Info',
                 ],
                 'dungeondifficulty' => [
-                    'dungeon_difficulty'       => 'Raid size',
-                    'dungeon_difficulty_title' => 'Raid size',
+                    'dungeon_difficulty' => 'Raid size',
                 ],
                 'enemydisplaytype' => [
                     'portrait'                 => 'Portrait',

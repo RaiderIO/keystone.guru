@@ -628,6 +628,21 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
     }
 
     /**
+     * Gets the difficulties (raid sizes) that are enabled for this dungeon, in {@see DungeonDifficulty} case order.
+     *
+     * @return list<DungeonDifficulty>
+     */
+    public function getEnabledDungeonDifficulties(): array
+    {
+        $enabledSpeedrunDifficulties = $this->getEnabledSpeedrunDifficulties();
+
+        return array_values(array_filter(
+            DungeonDifficulty::cases(),
+            static fn(DungeonDifficulty $dungeonDifficulty) => in_array($dungeonDifficulty->value, $enabledSpeedrunDifficulties, true),
+        ));
+    }
+
+    /**
      * Replaces the dungeon's enabled speedrun difficulties with the given list.
      *
      * @param list<int> $difficulties

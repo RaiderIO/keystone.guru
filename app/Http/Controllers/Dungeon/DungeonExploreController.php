@@ -147,6 +147,8 @@ class DungeonExploreController extends Controller
 
             $dungeonService->setDungeonContext($dungeon, $user);
 
+            $dungeonDifficulties = $dungeon->loadMissing('dungeonSpeedrunDifficulties')->getEnabledDungeonDifficulties();
+
             return view('dungeon.explore.gameversion.view', array_merge($this->getFilterSettings($mostRecentSeason), [
                 'gameVersion' => $gameVersion,
                 'season'      => $mostRecentSeason,
@@ -162,8 +164,10 @@ class DungeonExploreController extends Controller
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                     $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
-                'gameVersionDungeons'         => $dungeonService->getDungeonsForGameVersion($gameVersion),
-                'showDungeonDifficultySwitch' => $enemyRepository->hasDungeonDifficultyEnemies($currentMappingVersion),
+                'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
+                'dungeonDifficulties' => count($dungeonDifficulties) > 1 && $enemyRepository->hasDungeonDifficultyEnemies($currentMappingVersion) ?
+                    $dungeonDifficulties :
+                    [],
             ]));
         }
     }

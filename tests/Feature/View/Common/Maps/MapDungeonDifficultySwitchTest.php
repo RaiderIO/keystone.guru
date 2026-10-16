@@ -3,8 +3,10 @@
 namespace Tests\Feature\View\Common\Maps;
 
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Speedrun\DungeonSpeedrunDifficulty;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
@@ -26,7 +28,7 @@ final class MapDungeonDifficultySwitchTest extends PublicTestCase
     public function explore_givenADungeonWithDifficultySpecificEnemies_rendersTheRaidSizeSwitchOn10Man(): void
     {
         // Arrange
-        $url = $this->exploreUrl(true);
+        [, $url] = $this->exploreUrl(true);
 
         // Act
         $response = $this->get($url);
@@ -45,7 +47,7 @@ final class MapDungeonDifficultySwitchTest extends PublicTestCase
     public function explore_givenADungeonWithoutDifficultySpecificEnemies_omitsTheRaidSizeSwitch(): void
     {
         // Arrange
-        $url = $this->exploreUrl(false);
+        [, $url] = $this->exploreUrl(false);
 
         // Act
         $response = $this->get($url);
@@ -54,6 +56,66 @@ final class MapDungeonDifficultySwitchTest extends PublicTestCase
         $response->assertOk();
         $response->assertSee(self::ENEMY_VISUALS_ID, false);
         $response->assertDontSee(self::SWITCH_ID, false);
+    }
+
+    #[Test]
+    public function explore_givenADungeonWithAllDifficultiesEnabled_rendersEveryDifficulty(): void
+    {
+        // Arrange
+        [$dungeon, $url]     = $this->exploreUrl(true);
+        $enabledDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
+        $addedDifficulties   = collect(DungeonDifficulty::cases())
+            ->reject(static fn(DungeonDifficulty $dungeonDifficulty) => in_array($dungeonDifficulty->value, $enabledDifficulties, true))
+            ->map(static fn(DungeonDifficulty $dungeonDifficulty) => DungeonSpeedrunDifficulty::query()->create([
+                'dungeon_id' => $dungeon->id,
+                'difficulty' => $dungeonDifficulty->value,
+            ]));
+        $this->assertNotEmpty($addedDifficulties, 'Expected a dungeon that does not have every difficulty enabled yet');
+
+        try {
+            // Act
+            $response = $this->get($url);
+
+            // Assert
+            $response->assertOk();
+            $xpath = $this->parse((string)$response->getContent());
+            $this->assertSame(
+                array_map(strval(...), DungeonDifficulty::values()),
+                $this->attributeValues($xpath, '//*[@id="map_dungeon_difficulty_dropdown"]/a[@data-value]', 'data-value'),
+            );
+        } finally {
+            DungeonSpeedrunDifficulty::query()->whereKey($addedDifficulties->pluck('id')->all())->delete();
+        }
+    }
+
+    #[Test]
+    public function explore_givenADungeonWithOnlyOneDifficultyEnabled_omitsTheRaidSizeSwitch(): void
+    {
+        // Arrange
+        [$dungeon, $url] = $this->exploreUrl(true);
+        /** @var list<array<string, mixed>> $removedRows */
+        $removedRows = DungeonSpeedrunDifficulty::query()
+            ->where('dungeon_id', $dungeon->id)
+            ->where('difficulty', '!=', DungeonDifficulty::TWENTY_FIVE_MAN->value)
+            ->get()
+            ->map(static fn(DungeonSpeedrunDifficulty $row) => $row->getAttributes())
+            ->all();
+        $this->assertNotEmpty($removedRows, 'Expected a dungeon with more than one difficulty enabled');
+
+        try {
+            DungeonSpeedrunDifficulty::query()->whereKey(array_column($removedRows, 'id'))->delete();
+            $this->assertSame([DungeonDifficulty::TWENTY_FIVE_MAN->value], $dungeon->load('dungeonSpeedrunDifficulties')->getEnabledSpeedrunDifficulties());
+
+            // Act
+            $response = $this->get($url);
+
+            // Assert - the rail itself did render
+            $response->assertOk();
+            $response->assertSee(self::ENEMY_VISUALS_ID, false);
+            $response->assertDontSee(self::SWITCH_ID, false);
+        } finally {
+            DungeonSpeedrunDifficulty::query()->insert($removedRows);
+        }
     }
 
     private function parse(string $html): DOMXPath
@@ -78,7 +140,10 @@ final class MapDungeonDifficultySwitchTest extends PublicTestCase
         return $values;
     }
 
-    private function exploreUrl(bool $withDifficultySpecificEnemies): string
+    /**
+     * @return array{Dungeon, string}
+     */
+    private function exploreUrl(bool $withDifficultySpecificEnemies): array
     {
         [$dungeon, $mappingVersion] = $this->findDungeon(
             dungeonActive:       true,
@@ -90,10 +155,13 @@ final class MapDungeonDifficultySwitchTest extends PublicTestCase
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
 
-        return route('dungeon.explore.gameversion.view.floor', [
-            'gameVersion' => $mappingVersion->gameVersion,
-            'dungeon'     => $dungeon,
-            'floorIndex'  => $floor->index,
-        ]);
+        return [
+            $dungeon,
+            route('dungeon.explore.gameversion.view.floor', [
+                'gameVersion' => $mappingVersion->gameVersion,
+                'dungeon'     => $dungeon,
+                'floorIndex'  => $floor->index,
+            ]),
+        ];
     }
 }

@@ -435,6 +435,11 @@ class CommonMapsMap extends InlineCode {
     _setupDungeonDifficulty() {
         let $dropdown = $('#map_dungeon_difficulty_dropdown');
 
+        let $active = $dropdown.find('a.active:not(.disabled)');
+        if ($active.length > 0) {
+            getState().getMapContext().setDungeonDifficulty(parseInt($active.data('value')));
+        }
+
         $dropdown.find('a:not(.disabled)').unbind('click').bind('click', function () {
             let $this = $(this);
             getState().getMapContext().setDungeonDifficulty(parseInt($this.data('value')));
