@@ -114,6 +114,7 @@ describe('CommonDungeonrouteSimulate settings', () => {
     let ajaxCalls;
     let storedCookies;
     let killZones;
+    let bloodlustySpellIds;
 
     /**
      * @param {HTMLElement} element
@@ -182,7 +183,13 @@ describe('CommonDungeonrouteSimulate settings', () => {
 
         killZones = {};
         globalThis.getKillZoneMapObjectGroup = () => ({objects: killZones});
-        globalThis.BLOODLUST_SPELLS = [2825, 32182];
+        bloodlustySpellIds = [2825, 32182];
+        globalThis.getState = () => ({
+            getMapContext: () => ({
+                getPublicKey: () => 'abc',
+                getStaticBloodlustySpellIds: () => bloodlustySpellIds,
+            }),
+        });
         globalThis.refreshSelectPickers = vi.fn();
         globalThis.copyToClipboard = vi.fn();
         $.fn.rangeSlider = vi.fn(function () {
@@ -342,6 +349,22 @@ describe('CommonDungeonrouteSimulate settings', () => {
         expect(options.map((option) => option.text)).toEqual(['js.simulate_pull', 'js.simulate_pull', 'js.simulate_pull']);
         expect($('#simulate_bloodlust_per_pull').val()).toEqual(['21', '31']);
         expect(refreshSelectPickers).toHaveBeenCalledTimes(1);
+    });
+
+    test('_simulateModalOpened_givenAPullWithAMapContextBloodlustySpell_ticksThatPull', () => {
+        // Arrange - Harrier's Cry
+        bloodlustySpellIds = [2825, 466904];
+        killZones = {
+            a: {id: 11, index: 1, spellIds: [466904]},
+            b: {id: 21, index: 2, spellIds: [12345]},
+        };
+        activateSimulate();
+
+        // Act
+        $('#simulate_modal').trigger('show.bs.modal');
+
+        // Assert
+        expect($('#simulate_bloodlust_per_pull').val()).toEqual(['11']);
     });
 
     test('_simulateModalOpened_givenPullsPickedBeforeReopening_keepsThosePicks', () => {

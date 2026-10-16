@@ -101,6 +101,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
         let selectedPulls = [];
         let pullIds = [];
 
+        let bloodlustySpellIds = getState().getMapContext().getStaticBloodlustySpellIds();
         let killZoneMapObjectGroup = getKillZoneMapObjectGroup();
         let sortedKillZones = _.sortBy(_.values(killZoneMapObjectGroup.objects), 'index');
 
@@ -119,7 +120,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
             for (let index in killZone.spellIds) {
                 let spellId = killZone.spellIds[index];
 
-                if (BLOODLUST_SPELLS.includes(spellId)) {
+                if (bloodlustySpellIds.includes(spellId)) {
                     selectedPulls.push(killZone.id);
                     break;
                 }
