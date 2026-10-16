@@ -6,7 +6,9 @@ use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
+use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Mapping\MappingVersion;
+use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 
 class CoordinatesService implements CoordinatesServiceInterface
@@ -190,6 +192,29 @@ class CoordinatesService implements CoordinatesServiceInterface
         $result->rotate($floorUnion->getLatLng(), $floorUnion->rotation * -1);
 
         return $result;
+    }
+
+    public function convertVerticesForFacade(
+        MappingVersion                  $mappingVersion,
+        ConvertsVerticesInterface&Model $hasVertices,
+        Floor                           $floor,
+    ): Floor {
+        $convertedLatLngs = collect();
+
+        foreach ($hasVertices->getDecodedLatLngs($floor) as $latLng) {
+            $convertedLatLngs->push($this->convertMapLocationToFacadeMapLocation(
+                $mappingVersion,
+                $latLng,
+            ));
+        }
+
+        $newFloor = isset($convertedLatLngs[0]) ? $convertedLatLngs[0]->getFloor() : $floor;
+
+        $hasVertices->setAttribute('vertices_json', json_encode($convertedLatLngs->map(static fn(
+            LatLng $latLng,
+        ) => $latLng->toArray())));
+
+        return $newFloor;
     }
 
     public function distanceBetweenPoints(float $x1, float $x2, float $y1, float $y2): float

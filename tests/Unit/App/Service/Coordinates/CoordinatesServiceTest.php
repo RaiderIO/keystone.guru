@@ -13,6 +13,7 @@ use App\Models\Floor\FloorUnion;
 use App\Models\Floor\FloorUnionArea;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Polyline;
 use App\Service\Coordinates\CoordinatesService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
@@ -636,6 +637,35 @@ final class CoordinatesServiceTest extends PublicTestCase
             'rotation 30'  => [30],
             'rotation -45' => [-45],
         ];
+    }
+
+    #[Test]
+    public function convertVerticesForFacade_givenVerticesInsideFloorUnion_rewritesThemOntoTheFacade(): void
+    {
+        // Arrange
+        $facadeFloor        = $this->createFacadeFloor();
+        $targetFloor        = $this->createTargetFloor();
+        $floorUnion         = $this->createFloorUnion($facadeFloor, $targetFloor);
+        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
+        $mappingVersion     = $this->createMappingVersion([$floorUnion]);
+        $polyline           = new Polyline()->forceFill([
+            'vertices_json' => json_encode([
+                ['lat' => CoordinatesService::MAP_MAX_LAT / 2, 'lng' => CoordinatesService::MAP_MAX_LNG / 2],
+                ['lat' => CoordinatesService::MAP_MAX_LAT / 2, 'lng' => CoordinatesService::MAP_MAX_LNG / 2],
+            ]),
+        ]);
+
+        // Act
+        $result = $coordinatesService->convertVerticesForFacade($mappingVersion, $polyline, $targetFloor);
+
+        // Assert
+        $this->assertSame($facadeFloor, $result);
+        $convertedLatLngs = $polyline->getDecodedLatLngs();
+        $this->assertCount(2, $convertedLatLngs);
+        foreach ($convertedLatLngs as $convertedLatLng) {
+            $this->assertEqualsWithDelta($floorUnion->lat, $convertedLatLng->getLat(), self::JEST_CLOSE_TO_9_DIGITS);
+            $this->assertEqualsWithDelta($floorUnion->lng, $convertedLatLng->getLng(), self::JEST_CLOSE_TO_9_DIGITS);
+        }
     }
 
     #[Test]

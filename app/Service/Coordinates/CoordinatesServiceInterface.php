@@ -6,7 +6,9 @@ use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
+use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Mapping\MappingVersion;
+use Illuminate\Database\Eloquent\Model;
 
 interface CoordinatesServiceInterface
 {
@@ -25,6 +27,17 @@ interface CoordinatesServiceInterface
         LatLng         $latLng,
         ?FloorUnion    $forceFloorUnion = null,
     ): LatLng;
+
+    /**
+     * Rewrites the vertices_json of $hasVertices in place with its vertices converted onto the facade.
+     *
+     * @return Floor The floor the first converted vertex landed on, or $floor when there are no vertices.
+     */
+    public function convertVerticesForFacade(
+        MappingVersion                  $mappingVersion,
+        ConvertsVerticesInterface&Model $hasVertices,
+        Floor                           $floor,
+    ): Floor;
 
     public function intersection(LatLng $latLngA1, LatLng $latLngA2, LatLng $latLngB1, LatLng $latLngB2): ?LatLng;
 
