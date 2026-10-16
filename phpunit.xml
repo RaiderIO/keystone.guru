@@ -39,6 +39,8 @@
         <env name="APP_LOG_DISCORD_WEBHOOK" value="" force="true"/>
         <!-- No test may ever send real mail, full stop - a developer's local .env can carry a real Mailgun secret. -->
         <env name="MAIL_DRIVER" value="log" force="true"/>
+        <!-- CI's .env leaves this empty, and the log transport refuses a message without a From header. -->
+        <env name="MAIL_FROM_ADDRESS" value="phpunit@keystone.guru" force="true"/>
         <env name="APP_SERVICES_CACHE" value="/tmp/phpunit_services.php"/>
         <!-- ReverbHttpApiService builds its Guzzle client in its CONSTRUCTOR, from
              reverb.apps.apps.0.options.host/port. An empty host (which is what .env.ci.example ships)

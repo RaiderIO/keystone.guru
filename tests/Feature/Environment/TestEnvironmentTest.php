@@ -87,6 +87,18 @@ final class TestEnvironmentTest extends TestCase
         $this->assertArrayNotHasKey('url', $discordConfig, 'No test may post to the real Discord log channel - a webhook resolved here means log lines are being sent');
     }
 
+    #[Test]
+    public function mailFromAddress_givenTestRun_isSet(): void
+    {
+        // Arrange - a notification sent through the sync queue renders the mail in the request itself
+
+        // Act
+        $fromAddress = config('mail.from.address');
+
+        // Assert
+        $this->assertSame('phpunit@keystone.guru', $fromAddress, 'A mail without a From address throws in the log transport');
+    }
+
     /**
      * @return array<string, array{string, string}>
      */
