@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Translation\Translator;
+use Illuminate\Validation\Rules\Password;
 use Override;
 use Rollbar\Payload\Level;
 use Rollbar\Rollbar;
@@ -50,6 +51,9 @@ class AppServiceProvider extends ServiceProvider
 
             Log::warning(sprintf('Lazy loading violation: %s lazy-loaded relation [%s]', $model::class, $relation));
         });
+
+        // The one password policy for registration, password reset and password change
+        Password::defaults(static fn(): Password => Password::min(8));
 
         // Force HTTPS in production - these environments are running in AWS which terminates https at the load balancer
         // instead of at nginx, so the site will think it's serving http if it's not forced to https
@@ -160,6 +164,10 @@ class AppServiceProvider extends ServiceProvider
         // Every attempt costs a password hash comparison, and the per-username lockout of ThrottlesLogins does not
         // bound a caller that rotates usernames. Account access, so the ceiling is set well above what real traffic produces
         RateLimiter::for('login', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 120)->by($this->userKey($request)));
+        // Every attempt is a guess at the signed-in account's current password, so this bounds how fast a stolen
+        // session can find it and lock the owner out. No exemption for internal roles: their sessions are the ones
+        // most worth guarding
+        RateLimiter::for('change-password', fn(Request $request) => Limit::perHour(self::$rateLimitOverrideHttp ?? 30)->by($this->userKey($request)));
         RateLimiter::for('reset-password', function (Request $request) {
             // Same as create-user: only the form submission is interesting, showing the form is free
             if ($request->method() === 'GET') {

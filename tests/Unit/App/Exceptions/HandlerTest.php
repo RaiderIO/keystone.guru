@@ -146,6 +146,9 @@ class HandlerTest extends PublicTestCase
             '_token'                => 'a-csrf-token',
             'password'              => 'hunter2',
             'password_confirmation' => 'hunter2',
+            'current_password'      => 'hunter1',
+            'new_password'          => 'hunter3',
+            'new_password-confirm'  => 'hunter3',
             'name'                  => 'Wotuu',
         ]));
         $handlerLogging = $this->createMock(HandlerLoggingInterface::class);
@@ -155,6 +158,9 @@ class HandlerTest extends PublicTestCase
                 '_token'                => '*********',
                 'password'              => '*********',
                 'password_confirmation' => '*********',
+                'current_password'      => '*********',
+                'new_password'          => '*********',
+                'new_password-confirm'  => '*********',
                 'name'                  => 'Wotuu',
             ], RuntimeException::class, 'boom', true);
         $this->instance(HandlerLoggingInterface::class, $handlerLogging);

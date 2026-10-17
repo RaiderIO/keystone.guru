@@ -360,7 +360,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::patch('{user}', new ProfileController()->update(...))->name('profile.update');
             Route::delete('delete', new ProfileController()->delete(...))->name('profile.delete');
             Route::patch('{user}/privacy', new ProfileController()->updatePrivacy(...))->name('profile.updateprivacy');
-            Route::patch('/', new ProfileController()->changepassword(...))->name('profile.changepassword');
+            Route::middleware('throttle:change-password')->patch('/', new ProfileController()->changepassword(...))->name('profile.changepassword');
             Route::middleware('throttle:create-tag')->group(static function () {
                 Route::post('tag', new ProfileController()->createTag(...))->name('profile.tag.create');
             });

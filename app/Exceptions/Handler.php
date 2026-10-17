@@ -239,12 +239,8 @@ class Handler extends ExceptionHandler
             return null;
         }
 
-        $keys = [
-            '_token',
-            'password',
-            'password_confirmation',
-        ];
-        foreach ($keys as $key) {
+        // Every input kept out of the session (passwords, see dontFlash) is kept out of the logs too
+        foreach (['_token', ...$this->dontFlash] as $key) {
             if (isset($array[$key]) && is_string($array[$key])) {
                 $array[$key] = '*********';
             }

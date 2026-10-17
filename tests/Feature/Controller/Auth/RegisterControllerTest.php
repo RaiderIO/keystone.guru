@@ -53,6 +53,21 @@ final class RegisterControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function register_givenSevenCharacterPassword_returnsPasswordErrorAndCreatesNoUser(): void
+    {
+        // Arrange
+        $postData = $this->validRegistrationData(['password' => 'seven77', 'password_confirmation' => 'seven77']);
+
+        // Act
+        $response = $this->post(route('register'), $postData);
+
+        // Assert
+        $response->assertRedirect('/register');
+        $response->assertSessionHasErrors(['password']);
+        $this->assertFalse(User::query()->where('email', $postData['email'])->exists());
+    }
+
+    #[Test]
     public function register_givenNonExistingRegion_returnsRegionError(): void
     {
         // Arrange - the placeholder used to submit -1, which was written to the database verbatim

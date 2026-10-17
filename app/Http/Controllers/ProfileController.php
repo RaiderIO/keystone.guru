@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Email\PasswordChangedEmail;
 use App\Events\UserColorChangedEvent;
 use App\Features\CreatorProfiles;
 use App\Http\Requests\CreatorProfileFormRequest;
+use App\Http\Requests\ProfileChangePasswordFormRequest;
 use App\Http\Requests\ProfileFormRequest;
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -42,6 +44,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature;
 use Session;
@@ -359,41 +363,23 @@ class ProfileController extends Controller
         return redirect()->to(sprintf('%s#creator', route('profile.edit')));
     }
 
-    /**
-     * @return View
-     */
-    public function changepassword(Request $request): View
+    public function changepassword(ProfileChangePasswordFormRequest $request): RedirectResponse
     {
-        $currentPw          = $request->get('current_password');
-        $newPassword        = $request->get('new_password');
-        $newPasswordConfirm = $request->get('new_password-confirm');
-
         /** @var User $user */
         $user = Auth::getUser();
 
-        $error = [];
-        // Check if the entered PW was correct
-        if (!Auth::attempt([
-            'name'     => $user->name,
-            'password' => $currentPw,
-        ])) {
-            $error = ['passwords_incorrect' => __('controller.profile.flash.current_password_is_incorrect')];
-        } // New passwords must match
-        elseif ($newPassword !== $newPasswordConfirm) {
-            $error = ['passwords_no_match' => __('controller.profile.flash.new_passwords_do_not_match')];
-        } // But not the same password as they had
-        elseif ($currentPw === $newPassword) {
-            $error = ['passwords_match' => __('controller.profile.flash.new_password_equals_old_password')];
-        } else {
+        // A failed queue push rolls the change back, so a password never changes without its alert
+        DB::transaction(static function () use ($user, $request): void {
+            // A remember-me cookie is checked against the token alone, so without a new one it outlives the password
+            $user->setRememberToken(Str::random(60));
             $user->update([
-                'password' => Hash::make($newPassword),
+                'password' => Hash::make($request->validated('new_password')),
             ]);
-            Session::flash('status', __('controller.profile.flash.password_changed'));
-        }
+            Notification::route('mail', $user->email)->notify(new PasswordChangedEmail()->locale($user->locale));
+        });
+        Session::flash('status', __('controller.profile.flash.password_changed'));
 
-        // @todo Send an e-mail letting the user know the password has been changed
-
-        return view('profile.edit', $this->creatorProfileEditViewData())->withErrors($error);
+        return redirect()->to(sprintf('%s#change-password', route('profile.edit')));
     }
 
     /**

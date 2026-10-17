@@ -128,6 +128,34 @@ final class ResetPasswordControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function reset_givenSevenCharacterPassword_keepsThePasswordAndReturnsAPasswordError(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+
+        try {
+            $token = Password::broker()->createToken($user);
+
+            // Act
+            $response = $this->post(route('password.update'), [
+                'token'                 => $token,
+                'email'                 => $user->email,
+                'password'              => 'seven77',
+                'password_confirmation' => 'seven77',
+            ]);
+
+            // Assert
+            $response->assertRedirect();
+            $response->assertSessionHasErrors(['password']);
+            $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
+            $this->assertGuest();
+        } finally {
+            DB::table((string)config('auth.passwords.users.table'))->where('email', $user->email)->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
     public function reset_givenAnInvalidToken_keepsThePasswordAndReturnsAnEmailError(): void
     {
         // Arrange

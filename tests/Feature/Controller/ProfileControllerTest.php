@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller;
 
+use App\Email\PasswordChangedEmail;
 use App\Events\UserColorChangedEvent;
 use App\Features\CreatorProfiles;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -13,16 +14,27 @@ use App\Models\Season;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\User;
+use App\Providers\AppServiceProvider;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Contracts\Notifications\Dispatcher;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\AnonymousNotifiable;
+use Illuminate\Notifications\SendQueuedNotifications;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Queue;
 use Laravel\Pennant\Feature;
+use Mockery\Expectation;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use ReflectionProperty;
+use RuntimeException;
 use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\PublicTestCase;
 
@@ -421,7 +433,7 @@ final class ProfileControllerTest extends PublicTestCase
             ]);
 
             // Assert
-            $response->assertOk();
+            $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
             $response->assertSessionHas('status', __('controller.profile.flash.password_changed'));
             $this->assertTrue(Hash::check('a-brand-new-password', (string)$user->fresh()?->password));
         } finally {
@@ -446,8 +458,8 @@ final class ProfileControllerTest extends PublicTestCase
             ]);
 
             // Assert
-            $response->assertOk();
-            $response->assertViewHas('errors', static fn($errors): bool => $errors->has('passwords_no_match'));
+            $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
+            $response->assertSessionHasErrors(['new_password-confirm' => __('controller.profile.flash.new_passwords_do_not_match')]);
             $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
         } finally {
             $user?->delete();
@@ -471,9 +483,312 @@ final class ProfileControllerTest extends PublicTestCase
             ]);
 
             // Assert
-            $response->assertOk();
-            $response->assertViewHas('errors', static fn($errors): bool => $errors->has('passwords_match'));
+            $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
+            $response->assertSessionHasErrors(['new_password' => __('controller.profile.flash.new_password_equals_old_password')]);
             $response->assertSessionMissing('status');
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenCorrectCurrentPassword_rotatesTheRememberToken(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+            User::query()->whereKey($user->id)->update(['remember_token' => 'token-of-a-remember-me-cookie']);
+
+            // Act
+            $response = $this->actingAs($user->refresh())->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $rememberToken = (string)$user->fresh()?->remember_token;
+            $this->assertNotSame('token-of-a-remember-me-cookie', $rememberToken);
+            $this->assertSame(60, strlen($rememberToken));
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenFailedChange_keepsTheRememberToken(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+            User::query()->whereKey($user->id)->update(['remember_token' => 'token-of-a-remember-me-cookie']);
+
+            // Act
+            $response = $this->actingAs($user->refresh())->patch(route('profile.changepassword'), [
+                'current_password'     => 'not-the-password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('current_password');
+            $this->assertSame('token-of-a-remember-me-cookie', $user->fresh()?->remember_token);
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenMoreAttemptsThanTheLimit_rejectsTheAttemptBeforeCheckingThePassword(): void
+    {
+        $user = null;
+        $this->overrideHttpRateLimit(1);
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+
+            // Act
+            $firstResponse = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => 'not-the-password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+            $secondResponse = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $firstResponse->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
+            $secondResponse->assertStatus(429);
+            $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
+        } finally {
+            $this->overrideHttpRateLimit(null);
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenCorrectCurrentPassword_queuesPasswordChangedEmailInTheUsersLocale(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            Notification::fake();
+            $user = $this->userWithUserRole();
+            User::query()->whereKey($user->id)->update(['locale' => 'de_DE']);
+
+            // Act
+            $response = $this->actingAs($user->refresh())->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
+            Notification::assertSentOnDemandTimes(PasswordChangedEmail::class, 1);
+            Notification::assertSentOnDemand(
+                PasswordChangedEmail::class,
+                static fn(PasswordChangedEmail $notification, array $channels, AnonymousNotifiable $notifiable): bool => $notification->locale === 'de_DE'
+                    && $notifiable->routeNotificationFor('mail') === $user->email,
+            );
+            $this->assertInstanceOf(ShouldQueue::class, new PasswordChangedEmail());
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenEmailChangedBeforeTheQueuedEmailIsSent_mailsTheAddressOfTheChange(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $queue         = Queue::fake();
+            $user          = $this->userWithUserRole();
+            $originalEmail = $user->email;
+
+            // Act
+            $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+            User::query()->whereKey($user->id)->update(['email' => sprintf('hijacked-%s', $originalEmail)]);
+            $jobs = $queue->pushed(SendQueuedNotifications::class);
+
+            // Assert
+            $this->assertCount(1, $jobs);
+            /** @var SendQueuedNotifications $restoredJob */
+            $restoredJob = unserialize(serialize($jobs->first()));
+            $this->assertSame($originalEmail, $restoredJob->notifiables->first()->routeNotificationFor('mail', $restoredJob->notification));
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenQueueingTheEmailFails_keepsTheOldPassword(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+            $this->mock(Dispatcher::class, static function (MockInterface $mock): void {
+                /** @var Expectation $expectation */
+                $expectation = $mock->shouldReceive('send');
+                $expectation->andThrow(new RuntimeException('Queue unavailable'));
+            });
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $response->assertServerError();
+            $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('changepassword_givenFailedChange_sendsNoPasswordChangedEmail_dataProvider')]
+    public function changepassword_givenFailedChange_sendsNoPasswordChangedEmail(
+        string $currentPassword,
+        string $newPassword,
+        string $newPasswordConfirm,
+        string $expectedErrorKey,
+    ): void {
+        $user = null;
+
+        try {
+            // Arrange
+            Notification::fake();
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => $currentPassword,
+                'new_password'         => $newPassword,
+                'new_password-confirm' => $newPasswordConfirm,
+            ]);
+
+            // Assert
+            $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
+            $response->assertSessionHasErrors($expectedErrorKey);
+            Notification::assertSentOnDemandTimes(PasswordChangedEmail::class, 0);
+            $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string, string, string, string}>
+     */
+    public static function changepassword_givenFailedChange_sendsNoPasswordChangedEmail_dataProvider(): array
+    {
+        return [
+            'wrong current password'       => ['not-the-password', 'a-brand-new-password', 'a-brand-new-password', 'current_password'],
+            'mismatched confirmation'      => ['password', 'a-brand-new-password', 'another-new-password', 'new_password-confirm'],
+            'current password reused'      => ['password', 'password', 'password', 'new_password'],
+            'seven character new password' => ['password', 'seven77', 'seven77', 'new_password'],
+        ];
+    }
+
+    #[Test]
+    public function changepassword_givenEightCharacterNewPassword_changesThePassword(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => 'password',
+                'new_password'         => 'eight888',
+                'new_password-confirm' => 'eight888',
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $this->assertTrue(Hash::check('eight888', (string)$user->fresh()?->password));
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenEmptyFields_redirectsToThePasswordTabWithFieldErrors(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            Notification::fake();
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'current_password'     => '',
+                'new_password'         => '',
+                'new_password-confirm' => '',
+            ]);
+
+            // Assert
+            $response->assertRedirect(sprintf('%s#change-password', route('profile.edit')));
+            $response->assertSessionHasErrors([
+                'current_password'     => __('validation.custom.change_password.current_password_required'),
+                'new_password'         => __('validation.custom.change_password.new_password_required'),
+                'new_password-confirm' => __('validation.custom.change_password.new_password_confirm_required'),
+            ]);
+            Notification::assertSentOnDemandTimes(PasswordChangedEmail::class, 0);
+            $this->assertTrue(Hash::check('password', (string)$user->fresh()?->password));
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function changepassword_givenFailedValidationWithNewPassword_neverFlashesTheNewPasswordToTheSession(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.changepassword'), [
+                'username'             => $user->email,
+                'current_password'     => '',
+                'new_password'         => 'a-brand-new-password',
+                'new_password-confirm' => 'a-brand-new-password',
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('current_password');
+            $oldInput = session()->getOldInput();
+            $this->assertSame($user->email, $oldInput['username'] ?? null);
+            $this->assertArrayNotHasKey('new_password', $oldInput);
+            $this->assertArrayNotHasKey('new_password-confirm', $oldInput);
         } finally {
             $user?->delete();
         }
@@ -779,6 +1094,11 @@ final class ProfileControllerTest extends PublicTestCase
      * that middleware instead of by the policy - which would make the forbidden assertions above
      * pass for the wrong reason.
      */
+    private function overrideHttpRateLimit(?int $limit): void
+    {
+        new ReflectionProperty(AppServiceProvider::class, 'rateLimitOverrideHttp')->setValue(null, $limit);
+    }
+
     private function userWithUserRole(): User
     {
         $user = User::factory()->create();
