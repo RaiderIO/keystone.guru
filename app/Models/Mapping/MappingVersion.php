@@ -17,7 +17,6 @@ use App\Models\Floor\FloorUnion;
 use App\Models\Floor\FloorUnionArea;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Interfaces\CloneForNewMappingVersionInterface;
-use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\MapIcon;
 use App\Models\MountableArea;
 use App\Models\Npc\NpcEnemyForces;
@@ -348,32 +347,6 @@ class MappingVersion extends Model
     }
 
     /**
-     * @todo duplicated function in DungeonRoute.php
-     */
-    private function convertVerticesForFacade(
-        CoordinatesServiceInterface     $coordinatesService,
-        ConvertsVerticesInterface&Model $hasVertices,
-        Floor                           $floor,
-    ): Floor {
-        $convertedLatLngs = collect();
-
-        foreach ($hasVertices->getDecodedLatLngs($floor) as $latLng) {
-            $convertedLatLngs->push($coordinatesService->convertMapLocationToFacadeMapLocation(
-                $this,
-                $latLng,
-            ));
-        }
-
-        $newFloor = isset($convertedLatLngs[0]) ? $convertedLatLngs[0]->getFloor() : $floor;
-
-        $hasVertices->setAttribute('vertices_json', json_encode($convertedLatLngs->map(static fn(
-            LatLng $latLng,
-        ) => $latLng->toArray())));
-
-        return $newFloor;
-    }
-
-    /**
      * @return EloquentCollection<int, EnemyPack>
      */
     public function mapContextEnemyPacks(CoordinatesServiceInterface $coordinatesService, bool $useFacade): EloquentCollection
@@ -391,7 +364,7 @@ class MappingVersion extends Model
                     return $enemyPack;
                 }
 
-                $newFloor = $this->convertVerticesForFacade($coordinatesService, $enemyPack->polyline, $enemyPack->floor);
+                $newFloor = $coordinatesService->convertVerticesForFacade($this, $enemyPack->polyline, $enemyPack->floor);
                 $enemyPack->setRelation('floor', $newFloor);
                 $enemyPack->floor_id = $newFloor->id;
 
@@ -412,7 +385,7 @@ class MappingVersion extends Model
 
         if ($this->facade_enabled && $useFacade) {
             $enemyPatrols = $enemyPatrols->map(function (EnemyPatrol $enemyPatrol) use ($coordinatesService) {
-                $newFloor = $this->convertVerticesForFacade($coordinatesService, $enemyPatrol->polyline, $enemyPatrol->floor);
+                $newFloor = $coordinatesService->convertVerticesForFacade($this, $enemyPatrol->polyline, $enemyPatrol->floor);
                 $enemyPatrol->setRelation('floor', $newFloor);
                 $enemyPatrol->floor_id = $newFloor->id;
 
@@ -543,7 +516,7 @@ class MappingVersion extends Model
                     return $mountableArea;
                 }
 
-                $newFloor = $this->convertVerticesForFacade($coordinatesService, $mountableArea->polyline, $mountableArea->floor);
+                $newFloor = $coordinatesService->convertVerticesForFacade($this, $mountableArea->polyline, $mountableArea->floor);
                 $mountableArea->setRelation('floor', $newFloor);
                 $mountableArea->floor_id = $newFloor->id;
 

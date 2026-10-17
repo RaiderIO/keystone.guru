@@ -2,7 +2,6 @@
 
 namespace App\Models\DungeonRoute;
 
-use App\Logic\Structs\LatLng;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupCoupling;
@@ -23,7 +22,6 @@ use App\Models\Faction;
 use App\Models\File;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
-use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Interfaces\TracksPageViewInterface;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
@@ -619,29 +617,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL]);
     }
 
-    private function convertVerticesForFacade(
-        CoordinatesServiceInterface     $coordinatesService,
-        ConvertsVerticesInterface&Model $hasVertices,
-        Floor                           $floor,
-    ): Floor {
-        $convertedLatLngs = collect();
-
-        foreach ($hasVertices->getDecodedLatLngs($floor) as $latLng) {
-            $convertedLatLngs->push($coordinatesService->convertMapLocationToFacadeMapLocation(
-                $this->mappingVersion,
-                $latLng,
-            ));
-        }
-
-        $newFloor = isset($convertedLatLngs[0]) ? $convertedLatLngs[0]->getFloor() : $floor;
-
-        $hasVertices->setAttribute('vertices_json', json_encode($convertedLatLngs->map(static fn(
-            LatLng $latLng,
-        ) => $latLng->toArray())));
-
-        return $newFloor;
-    }
-
     /** @return Collection<int, KillZone> */
     public function mapContextKillZones(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
@@ -704,7 +679,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 ->filter(static fn(Brushline $brushline) => $brushline->polyline !== null)->map(function (
                     Brushline $brushline,
                 ) use ($coordinatesService) {
-                    $newFloor = $this->convertVerticesForFacade($coordinatesService, $brushline->polyline, $brushline->floor);
+                    $newFloor = $coordinatesService->convertVerticesForFacade($this->mappingVersion, $brushline->polyline, $brushline->floor);
                     $brushline->setRelation('floor', $newFloor);
                     $brushline->floor_id = $newFloor->id;
 
@@ -726,7 +701,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 // #2177 Sometimes paths don't have a polyline
                 ->filter(static fn(Path $path) => $path->polyline !== null)
                 ->map(function (Path $path) use ($coordinatesService) {
-                    $newFloor = $this->convertVerticesForFacade($coordinatesService, $path->polyline, $path->floor);
+                    $newFloor = $coordinatesService->convertVerticesForFacade($this->mappingVersion, $path->polyline, $path->floor);
                     $path->setRelation('floor', $newFloor);
                     $path->floor_id = $newFloor->id;
 
@@ -748,7 +723,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 ->filter(static fn(Arrow $arrow) => $arrow->polyline !== null)->map(function (
                     Arrow $arrow,
                 ) use ($coordinatesService) {
-                    $newFloor = $this->convertVerticesForFacade($coordinatesService, $arrow->polyline, $arrow->floor);
+                    $newFloor = $coordinatesService->convertVerticesForFacade($this->mappingVersion, $arrow->polyline, $arrow->floor);
                     $arrow->setRelation('floor', $newFloor);
                     $arrow->floor_id = $newFloor->id;
 
