@@ -41,8 +41,6 @@ class File extends Model
      */
     public $appends = [
         'url',
-        // @TODO remove this? Find usages in .js files though
-        'icon_url',
     ];
 
     protected $fillable = [
@@ -71,14 +69,6 @@ class File extends Model
      * @return string Extend the file object with the full URL which is relevant for externals
      */
     public function getUrlAttribute(): string
-    {
-        return $this->getURL();
-    }
-
-    /**
-     * @return string Gets the URL Attribute if this File is an Icon.
-     */
-    public function getIconUrlAttribute(): string
     {
         return $this->getURL();
     }

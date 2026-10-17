@@ -343,6 +343,27 @@ describe('KillZone.onSaveSuccess', () => {
     });
 });
 
+describe('KillZone.removeKillArea', () => {
+    it('unsets the layer through the killzone group, clears the floor and saves', () => {
+        const killZoneGroup = {register: () => {}, unregister: () => {}, setLayerToMapObject: vi.fn()};
+        const map = makeFakeMap();
+        map.mapObjectGroupManager = fakeMapObjectGroupManager(
+            (name) => name === MAP_OBJECT_GROUP_KILLZONE ? killZoneGroup : null,
+        );
+        const killZone = new KillZone(map, null);
+        killZone.floor_id = 12;
+        killZone.redrawConnectionsToEnemies = vi.fn();
+        killZone.save = vi.fn();
+
+        killZone.removeKillArea();
+
+        expect(killZoneGroup.setLayerToMapObject).toHaveBeenCalledExactlyOnceWith(null, killZone);
+        expect(killZone.floor_id).toBeNull();
+        expect(killZone.redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+        expect(killZone.save).toHaveBeenCalledOnce();
+    });
+});
+
 describe('KillZone.cleanup', () => {
     // Regression test: EditKillZoneEnemySelection.isEnemySelectable() always calls
     // cleanup() on its throwaway KillZone, including on pages where the killzone map

@@ -214,3 +214,35 @@ describe('PullWorkBench._initKillAreaButton', () => {
         expect(toggleSpy).toHaveBeenCalledTimes(1);
     });
 });
+
+describe('PullWorkBench kill area button click', () => {
+    /**
+     * @param {string} selector
+     * @returns {Function} The click handler bound on the element matching the selector
+     */
+    function boundClickHandler(selector) {
+        const clickBinding = global.$.mock.calls
+            .map(([calledSelector], index) => calledSelector === selector ? global.$.mock.results[index].value : null)
+            .flatMap((element) => element?.bind.mock.calls ?? [])
+            .find(([event]) => event === 'click');
+
+        return clickBinding[1];
+    }
+
+    it('given the pull has a kill area, removes it through the kill zone and reopens the workbench', () => {
+        document.body.innerHTML = `
+            <button id="map_killzonessidebar_killzone_has_killzone" class="active"></button>
+            <i id="map_killzonessidebar_killzone_has_killzone_icon"></i>
+        `;
+        const killZoneA = Object.assign(makeFakeKillZone(5, true), {layer: {}, removeKillArea: vi.fn()});
+        const workBench = makeWorkBench({5: killZoneA});
+        workBench.killZone = killZoneA;
+        workBench._initKillAreaButton();
+        workBench.editPull = vi.fn();
+
+        boundClickHandler('#map_killzonessidebar_killzone_has_killzone')();
+
+        expect(killZoneA.removeKillArea).toHaveBeenCalledOnce();
+        expect(workBench.editPull).toHaveBeenCalledExactlyOnceWith(5, {forceReopen: true});
+    });
+});

@@ -873,6 +873,19 @@ class KillZone extends MapObject {
     }
 
     /**
+     * Removes the kill area from this kill zone and saves it without one.
+     */
+    removeKillArea() {
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
+
+        this.map.mapObjectGroupManager.getKillZoneMapObjectGroup().setLayerToMapObject(null, this);
+
+        this.floor_id = null;
+        this.redrawConnectionsToEnemies();
+        this.save();
+    }
+
+    /**
      * Checks if this kill zone kills the last boss or not.
      * @return {boolean}
      */
