@@ -761,7 +761,7 @@ class DungeonRouteController extends Controller
             ->whereKey($discardExistingDraftId)
             ->where('upgrade_of_dungeon_route_id', $dungeonroute->id)
             ->exists();
-        if ($author === null || (!$replacesExistingDraft && !$author->canCreateDungeonRoute())) {
+        if ($author === null || (!$replacesExistingDraft && Gate::forUser($author)->denies('create', DungeonRoute::class))) {
             abort(StatusCode::FORBIDDEN, sprintf(
                 __('view_dungeonroute.limitreached.limit_reached_description'),
                 config('keystoneguru.registered_user_dungeonroute_limit'),
