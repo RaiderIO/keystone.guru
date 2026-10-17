@@ -6,13 +6,16 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\Timewalking\TimewalkingEvent;
 use App\Service\Season\SeasonServiceInterface;
+use App\Service\TimewalkingEvent\Logging\TimewalkingEventServiceLoggingInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class TimewalkingEventService implements TimewalkingEventServiceInterface
 {
-    public function __construct(private readonly SeasonServiceInterface $seasonService)
-    {
+    public function __construct(
+        private readonly SeasonServiceInterface                  $seasonService,
+        private readonly TimewalkingEventServiceLoggingInterface $log,
+    ) {
     }
 
     /**
@@ -73,10 +76,11 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
                 }
             }
         } else {
-            logger()->error('Overlapping timewalking events found?', [
-                $timewalkingEvent,
-                $expansion,
-            ]);
+            $this->log->getAffixGroupAtOverlappingTimewalkingEvent(
+                $timewalkingEvent->id,
+                $timewalkingEvent->expansion_id,
+                $expansion->id,
+            );
         }
 
         return $result;

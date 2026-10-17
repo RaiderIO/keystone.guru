@@ -18,4 +18,6 @@ interface MDTImportStringServiceLoggingInterface extends MDTBaseServiceLoggingIn
     public function getDungeonRouteEnd(): void;
 
     public function setEncodedStringEncodedString(string $encodedString): void;
+
+    public function parseMdtNpcClonesInPullEnemyForcesNotFound(int $npcId): void;
 }
