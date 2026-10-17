@@ -6,7 +6,7 @@ use App\Dto\Request\RequestDto;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
- * @OA\Schema(schema="CombatLogRouteChallengeMode")
+ * @OA\Schema(schema="CombatLogRouteChallengeMode",required={"start","end","success","durationMs","timerFraction","challengeModeId","level","affixes"})
  * @OA\Property(property="start",type="string",format="date-time")
  * @OA\Property(property="end",type="string",format="date-time")
  * @OA\Property(property="success",type="boolean",nullable=true)
@@ -16,7 +16,7 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(property="challengeModeId",type="integer")
  * @OA\Property(property="level",type="integer")
  * @OA\Property(property="numDeaths",type="integer")
- * @OA\Property(property="affixes",type="array", @OA\Items(type="integer"))
+ * @OA\Property(property="affixes",type="array", @OA\Items(type="integer"), nullable=true)
  * @implements Arrayable<string, mixed>
  */
 class CombatLogRouteChallengeModeRequestDto extends RequestDto implements Arrayable

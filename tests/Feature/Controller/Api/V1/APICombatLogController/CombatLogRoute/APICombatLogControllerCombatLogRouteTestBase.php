@@ -275,7 +275,7 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
         $this->deleteDungeonRouteByPublicKey($responseArr['data']['publicKey']);
     }
 
-    private function deleteDungeonRouteByPublicKey(string $publicKey): void
+    protected function deleteDungeonRouteByPublicKey(string $publicKey): void
     {
         DungeonRoute::where('public_key', $publicKey)->first()?->delete();
     }

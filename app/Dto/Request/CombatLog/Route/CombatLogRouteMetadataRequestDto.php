@@ -6,7 +6,7 @@ use App\Dto\Request\RequestDto;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
- * @OA\Schema(schema="CombatLogRouteMetadata")
+ * @OA\Schema(schema="CombatLogRouteMetadata",required={"runId","period","season","regionId","realmType","wowInstanceId"})
  * @OA\Property(property="runId",type="string")
  * @OA\Property(property="keystoneRunId",type="integer",nullable=true)
  * @OA\Property(property="loggedRunId",type="integer")

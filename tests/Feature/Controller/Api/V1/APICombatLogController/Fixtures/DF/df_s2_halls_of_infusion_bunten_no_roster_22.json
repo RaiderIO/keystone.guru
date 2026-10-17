@@ -9,6 +9,12 @@
         "realmType": "live",
         "wowInstanceId": 4213
     },
+    "roster": {
+        "averageItemLevel": null,
+        "characterIds": [],
+        "specIds": [],
+        "classIds": []
+    },
     "settings": {
         "temporary": true,
         "debugIcons": false,
