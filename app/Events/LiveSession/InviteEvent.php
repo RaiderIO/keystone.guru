@@ -45,7 +45,7 @@ class InviteEvent extends ContextEvent
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->context->dungeonRoute->getRouteKey())),
+            new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->context->dungeonRoute->public_key)),
         ];
     }
 
