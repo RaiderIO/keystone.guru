@@ -34,7 +34,7 @@ class MapObjectGroup extends Signalable {
             // Rebuild the layer group
             self.layerGroup = self._createLayerGroup();
         }).bind(this));
-        getState().getMapContext().register('teeming:changed', this, this._updateVisibility.bind(this));
+        getState().getMapContext().register('teeming:changed', this, () => this._updateVisibility());
 
         if (!(this.manager.map instanceof AdminDungeonMap)) {
             getState().getMapContext().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
