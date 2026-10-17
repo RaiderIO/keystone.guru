@@ -2,18 +2,29 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Logic\Structs\LatLng;
 use App\Models\Dungeon;
 use App\Models\DungeonTransport;
+use App\Models\Floor\Floor;
+use App\Models\Floor\FloorUnion;
+use App\Models\Floor\FloorUnionArea;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
+use App\Service\Coordinates\CoordinatesServiceInterface;
+use Closure;
+use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\AjaxPublicTestCase;
 
 #[Group('DungeonTransport')]
 #[Group('AjaxDungeonTransportController')]
 final class AjaxDungeonTransportControllerTest extends AjaxPublicTestCase
 {
+    use ProvidesDungeon;
+
     #[Test]
     public function store_givenValidDungeonTransport_createsIt(): void
     {
@@ -214,6 +225,238 @@ final class AjaxDungeonTransportControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function store_givenPathWithoutVertexFloors_stampsThePostedFloorOnEveryVertex(): void
+    {
+        // Arrange
+        $mappingVersion   = $this->getNonFacadeMappingVersion();
+        $dungeonTransport = $this->createTransport($mappingVersion);
+
+        try {
+            // Act
+            $response = $this->putJson($this->updateRoute($mappingVersion, $dungeonTransport), [
+                ...$this->validAttributes($mappingVersion),
+                'path_vertices_json' => json_encode([
+                    ['lat' => -10.5, 'lng' => 20.5],
+                    ['lat' => -30.5, 'lng' => 40.5],
+                ]),
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $floorId = $mappingVersion->dungeon->floors->first()->id;
+            $this->assertSame([
+                ['lat' => -10.5, 'lng' => 20.5, 'floor_id' => $floorId],
+                ['lat' => -30.5, 'lng' => 40.5, 'floor_id' => $floorId],
+            ], $dungeonTransport->refresh()->getPathVertices());
+        } finally {
+            $dungeonTransport->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenPathOnSeveralFloors_keepsEachVertexOnItsOwnFloor(): void
+    {
+        // Arrange
+        [, $mappingVersion] = $this->findDungeon(facadeEnabled: false, minActiveFloors: 2);
+        $mappingVersion->load('dungeon.floors');
+        [$floorA, $floorB] = $mappingVersion->dungeon->floors->take(2)->values()->all();
+        $dungeonTransport  = $this->createTransport($mappingVersion);
+        $pathVertices      = [
+            ['lat' => -10.5, 'lng' => 20.5, 'floor_id' => $floorA->id],
+            ['lat' => -30.5, 'lng' => 40.5, 'floor_id' => $floorB->id],
+            ['lat' => -50.5, 'lng' => 60.5, 'floor_id' => $floorB->id],
+        ];
+
+        try {
+            // Act
+            $response = $this->putJson($this->updateRoute($mappingVersion, $dungeonTransport), [
+                ...$this->validAttributes($mappingVersion),
+                'path_vertices_json' => json_encode($pathVertices),
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame($pathVertices, $dungeonTransport->refresh()->getPathVertices());
+        } finally {
+            $dungeonTransport->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenEmptyPath_clearsThePath(): void
+    {
+        // Arrange
+        $mappingVersion   = $this->getNonFacadeMappingVersion();
+        $dungeonTransport = $this->createTransport($mappingVersion, [
+            'path_vertices_json' => $this->pathOnFirstFloor($mappingVersion),
+        ]);
+
+        try {
+            // Act
+            $response = $this->putJson($this->updateRoute($mappingVersion, $dungeonTransport), [
+                ...$this->validAttributes($mappingVersion),
+                'path_vertices_json' => '[]',
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertNull($dungeonTransport->refresh()->path_vertices_json);
+        } finally {
+            $dungeonTransport->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenNoPath_keepsTheStoredPath(): void
+    {
+        // Arrange
+        $mappingVersion   = $this->getNonFacadeMappingVersion();
+        $pathVerticesJson = $this->pathOnFirstFloor($mappingVersion);
+        $dungeonTransport = $this->createTransport($mappingVersion, [
+            'path_vertices_json' => $pathVerticesJson,
+        ]);
+
+        try {
+            // Act
+            $response = $this->putJson($this->updateRoute($mappingVersion, $dungeonTransport), [
+                ...$this->validAttributes($mappingVersion),
+                'comment' => 'Renamed',
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $dungeonTransport->refresh();
+            $this->assertSame('Renamed', $dungeonTransport->comment);
+            $this->assertSame($pathVerticesJson, $dungeonTransport->path_vertices_json);
+        } finally {
+            $dungeonTransport->delete();
+        }
+    }
+
+    /**
+     * @param Closure(MappingVersion): mixed $pathVerticesJson
+     */
+    #[Test]
+    #[DataProvider('invalidPathProvider')]
+    public function store_givenInvalidPath_returnsValidationError(Closure $pathVerticesJson, string $expectedErrorKey): void
+    {
+        // Arrange
+        $mappingVersion   = $this->getNonFacadeMappingVersion();
+        $dungeonTransport = $this->createTransport($mappingVersion);
+
+        try {
+            // Act
+            $response = $this->putJson($this->updateRoute($mappingVersion, $dungeonTransport), [
+                ...$this->validAttributes($mappingVersion),
+                'path_vertices_json' => $pathVerticesJson($mappingVersion),
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors($expectedErrorKey);
+            $this->assertNull($dungeonTransport->refresh()->path_vertices_json);
+        } finally {
+            $dungeonTransport->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{Closure(MappingVersion): mixed, string}>
+     */
+    public static function invalidPathProvider(): array
+    {
+        $floorIdOfAnotherDungeon = static fn(MappingVersion $mappingVersion) => Floor::query()
+            ->where('dungeon_id', '!=', $mappingVersion->dungeon_id)
+            ->value('id');
+
+        return [
+            'not json' => [
+                static fn() => 'not json',
+                'path_vertices_json',
+            ],
+            'an object instead of a list' => [
+                static fn() => json_encode(['a' => ['lat' => 1, 'lng' => 2], 'b' => ['lat' => 3, 'lng' => 4]]),
+                'path_vertices_json',
+            ],
+            'a single vertex' => [
+                static fn() => json_encode([['lat' => -10.5, 'lng' => 20.5]]),
+                'path_vertices_json',
+            ],
+            'too many vertices' => [
+                static fn() => json_encode(array_fill(0, DungeonTransport::PATH_VERTICES_MAX_COUNT + 1, ['lat' => -10.5, 'lng' => 20.5])),
+                'path_vertices_json',
+            ],
+            'a vertex without lng' => [
+                static fn() => json_encode([['lat' => -10.5, 'lng' => 20.5], ['lat' => -30.5]]),
+                'path_vertices_json.1.lng',
+            ],
+            'a non-numeric lat' => [
+                static fn() => json_encode([['lat' => -10.5, 'lng' => 20.5], ['lat' => 'north', 'lng' => 40.5]]),
+                'path_vertices_json.1.lat',
+            ],
+            'an unknown vertex key' => [
+                static fn() => json_encode([['lat' => -10.5, 'lng' => 20.5], ['lat' => -30.5, 'lng' => 40.5, 'z' => 1]]),
+                'path_vertices_json.1',
+            ],
+            'a vertex on another dungeon\'s floor' => [
+                static fn(MappingVersion $mappingVersion) => json_encode([
+                    ['lat' => -10.5, 'lng' => 20.5],
+                    ['lat' => -30.5, 'lng' => 40.5, 'floor_id' => $floorIdOfAnotherDungeon($mappingVersion)],
+                ]),
+                'path_vertices_json.1.floor_id',
+            ],
+        ];
+    }
+
+    #[Test]
+    public function store_givenPathOnTheFacade_storesEachVertexOnItsRealFloorAndEchoesTheFacadeVertices(): void
+    {
+        // Arrange
+        /** @var CoordinatesServiceInterface $coordinatesService */
+        $coordinatesService = app(CoordinatesServiceInterface::class);
+        /** @var array{0: Floor, 1: LatLng, 2: LatLng} $location */
+        [, $mappingVersion, $location] = $this->findDungeon(
+            facadeEnabled: true,
+            resolve:       static fn($dungeon, MappingVersion $mappingVersion) => self::findConvertibleFacadeLocation($coordinatesService, $mappingVersion),
+        );
+        [$facadeFloor, $facadeLatLng, $floorLatLng] = $location;
+        $dungeonTransport                           = $this->createTransport($mappingVersion);
+        $facadeVertex                               = [
+            'lat'      => $facadeLatLng->getLat(DungeonTransport::PATH_VERTEX_PRECISION),
+            'lng'      => $facadeLatLng->getLng(DungeonTransport::PATH_VERTEX_PRECISION),
+            'floor_id' => $facadeFloor->id,
+        ];
+
+        try {
+            // Act
+            $response = $this->putJson($this->updateRoute($mappingVersion, $dungeonTransport), [
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $facadeFloor->id,
+                'map_icon_type_id'   => $dungeonTransport->map_icon_type_id,
+                'lat'                => $facadeLatLng->getLat(),
+                'lng'                => $facadeLatLng->getLng(),
+                'path_vertices_json' => json_encode([$facadeVertex, $facadeVertex]),
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $echoedVertices = json_decode($response->json('path_vertices_json'), true);
+            $this->assertCount(2, $echoedVertices);
+            $this->assertSame($facadeFloor->id, $echoedVertices[0]['floor_id']);
+            $this->assertEqualsWithDelta($facadeVertex['lat'], $echoedVertices[0]['lat'], 0.0001);
+            $this->assertEqualsWithDelta($facadeVertex['lng'], $echoedVertices[0]['lng'], 0.0001);
+
+            $storedVertices = $dungeonTransport->refresh()->getPathVertices();
+            $this->assertCount(2, $storedVertices);
+            $this->assertSame($floorLatLng->getFloor()->id, $storedVertices[0]['floor_id']);
+            $this->assertEqualsWithDelta($floorLatLng->getLat(), $storedVertices[0]['lat'], 0.0001);
+            $this->assertEqualsWithDelta($floorLatLng->getLng(), $storedVertices[0]['lng'], 0.0001);
+        } finally {
+            $dungeonTransport->delete();
+        }
+    }
+
+    #[Test]
     public function delete_givenLinkedTransport_deletesItAndUnlinksItsPartners(): void
     {
         // Arrange
@@ -252,6 +495,52 @@ final class AjaxDungeonTransportControllerTest extends AjaxPublicTestCase
             'floor_id'           => $mappingVersion->dungeon->floors->first()->id,
             ...$attributes,
         ]);
+    }
+
+    private function pathOnFirstFloor(MappingVersion $mappingVersion): string
+    {
+        $floorId = $mappingVersion->dungeon->floors->first()->id;
+
+        return json_encode([
+            ['lat' => -10.5, 'lng' => 20.5, 'floor_id' => $floorId],
+            ['lat' => -30.5, 'lng' => 40.5, 'floor_id' => $floorId],
+        ]);
+    }
+
+    /**
+     * @return array{0: Floor, 1: LatLng, 2: LatLng}|null
+     */
+    private static function findConvertibleFacadeLocation(CoordinatesServiceInterface $coordinatesService, MappingVersion $mappingVersion): ?array
+    {
+        $mappingVersion->load(['floorUnions.floor', 'floorUnions.floorUnionAreas', 'dungeon.floors']);
+
+        /** @var FloorUnion $floorUnion */
+        foreach ($mappingVersion->floorUnions as $floorUnion) {
+            /** @var FloorUnionArea $floorUnionArea */
+            foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
+                /** @var Collection<int, LatLng> $vertices */
+                $vertices = $floorUnionArea->getDecodedLatLngs();
+                if ($vertices->isEmpty()) {
+                    continue;
+                }
+
+                $facadeLatLng = new LatLng(
+                    (float)$vertices->avg(static fn(LatLng $latLng) => $latLng->getLat()),
+                    (float)$vertices->avg(static fn(LatLng $latLng) => $latLng->getLng()),
+                    $floorUnion->floor,
+                );
+
+                $floorLatLng = $coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $facadeLatLng);
+
+                // A floor union can overlay its target floor 1:1, changing the floor but not the coordinates
+                if ($floorLatLng->getFloor()?->id !== $floorUnion->floor_id
+                    && abs($floorLatLng->getLat() - $facadeLatLng->getLat()) > 0.0001) {
+                    return [$floorUnion->floor, $facadeLatLng, $floorLatLng];
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
