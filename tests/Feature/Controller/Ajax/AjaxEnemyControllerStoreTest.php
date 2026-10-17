@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\DungeonDifficulty;
 use App\Models\Enemy;
 use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingChangeLog;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\AjaxPublicTestCase;
@@ -97,5 +99,89 @@ final class AjaxEnemyControllerStoreTest extends AjaxPublicTestCase
             MappingChangeLog::query()->where('id', '>', $lastMappingChangeLogId)->delete();
             $nonAdmin->delete();
         }
+    }
+
+    #[Test]
+    #[DataProvider('store_givenDungeonDifficulty_savesTheDungeonDifficulty_dataProvider')]
+    public function store_givenDungeonDifficulty_savesTheDungeonDifficulty(DungeonDifficulty $dungeonDifficulty): void
+    {
+        // Arrange
+        /** @var Enemy $enemy */
+        $enemy = Enemy::query()->whereNotNull('floor_id')->orderBy('id')->firstOrFail();
+
+        $lastMappingChangeLogId = (int)MappingChangeLog::query()->max('id');
+
+        try {
+            // Act
+            $response = $this->putJson(
+                sprintf('/ajax/admin/mappingVersion/%d/enemy/%d', $enemy->mapping_version_id, $enemy->id),
+                $this->getStorePayload($enemy, $dungeonDifficulty->value),
+            );
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertSame($dungeonDifficulty->value, $enemy->fresh()->dungeon_difficulty);
+        } finally {
+            Enemy::query()->whereKey($enemy->id)->update(['dungeon_difficulty' => $enemy->dungeon_difficulty]);
+            MappingChangeLog::query()->where('id', '>', $lastMappingChangeLogId)->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{DungeonDifficulty}>
+     */
+    public static function store_givenDungeonDifficulty_savesTheDungeonDifficulty_dataProvider(): array
+    {
+        return [
+            '10-man' => [DungeonDifficulty::TEN_MAN],
+            '25-man' => [DungeonDifficulty::TWENTY_FIVE_MAN],
+            '20-man' => [DungeonDifficulty::TWENTY_MAN],
+            '40-man' => [DungeonDifficulty::FORTY_MAN],
+        ];
+    }
+
+    #[Test]
+    public function store_givenUnknownDungeonDifficulty_returnsValidationErrorAndLeavesTheEnemyAlone(): void
+    {
+        // Arrange
+        /** @var Enemy $enemy */
+        $enemy = Enemy::query()->whereNotNull('floor_id')->orderBy('id')->firstOrFail();
+
+        $lastMappingChangeLogId = (int)MappingChangeLog::query()->max('id');
+
+        try {
+            // Act
+            $response = $this->putJson(
+                sprintf('/ajax/admin/mappingVersion/%d/enemy/%d', $enemy->mapping_version_id, $enemy->id),
+                $this->getStorePayload($enemy, max(DungeonDifficulty::values()) + 1),
+            );
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertOnlyJsonValidationErrors(['dungeon_difficulty']);
+            $this->assertSame($enemy->dungeon_difficulty, $enemy->fresh()->dungeon_difficulty);
+        } finally {
+            Enemy::query()->whereKey($enemy->id)->update(['dungeon_difficulty' => $enemy->dungeon_difficulty]);
+            MappingChangeLog::query()->where('id', '>', $lastMappingChangeLogId)->delete();
+        }
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getStorePayload(Enemy $enemy, int $dungeonDifficulty): array
+    {
+        return [
+            'floor_id'           => $enemy->floor_id,
+            'npc_id'             => $enemy->npc_id,
+            'faction'            => $enemy->faction,
+            'required'           => (int)$enemy->required,
+            'skippable'          => (int)$enemy->skippable,
+            'hyper_respawn'      => (int)$enemy->hyper_respawn,
+            'kill_priority'      => $enemy->kill_priority ?? 0,
+            'lat'                => $enemy->lat,
+            'lng'                => $enemy->lng,
+            'dungeon_difficulty' => $dungeonDifficulty,
+        ];
     }
 }

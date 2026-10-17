@@ -1,6 +1,8 @@
 class MapContextDungeonExplore extends MapContextMappingVersion {
     constructor(options) {
         super(options);
+
+        this._dungeonDifficulty = DUNGEON_DIFFICULTY_10_MAN;
     }
 
     /**
@@ -29,8 +31,21 @@ class MapContextDungeonExplore extends MapContextMappingVersion {
      * @returns {Number|null}
      */
     getDungeonDifficulty() {
-        // @TODO Make this configurable?
-        return DUNGEON_DIFFICULTY_10_MAN;
+        return this._dungeonDifficulty;
+    }
+
+    /**
+     * Shows the enemies of another raid size, e.g. the ones that only exist on 25-man.
+     * @param dungeonDifficulty {Number}
+     */
+    setDungeonDifficulty(dungeonDifficulty) {
+        if (this._dungeonDifficulty === dungeonDifficulty) {
+            return;
+        }
+
+        this._dungeonDifficulty = dungeonDifficulty;
+
+        this.signal('dungeondifficulty:changed', {dungeonDifficulty: dungeonDifficulty});
     }
 
     getFeaturedAffixes() {
@@ -44,4 +59,12 @@ class MapContextDungeonExplore extends MapContextMappingVersion {
     getSeasonWeeks() {
         return this._options.seasonWeeks ?? [];
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        MapContextDungeonExplore,
+    };
 }

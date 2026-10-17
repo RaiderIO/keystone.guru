@@ -152,9 +152,17 @@ const AFFIX_XALATATHS_BARGAIN_FRENZIED = 'Xal\'atath\'s Bargain: Frenzied';
 const AFFIX_XALATATHS_GUILE = 'Xal\'atath\'s Guile';
 const AFFIX_CHALLENGERS_PERIL = 'Challenger\'s Peril';
 
-// Dungeon Speedrun Required Npcs
+// Dungeon Speedrun Required Npcs - mirrors App\Models\DungeonDifficulty
 const DUNGEON_DIFFICULTY_10_MAN = 1;
 const DUNGEON_DIFFICULTY_25_MAN = 2;
+const DUNGEON_DIFFICULTY_20_MAN = 3;
+const DUNGEON_DIFFICULTY_40_MAN = 4;
+const DUNGEON_DIFFICULTIES = [
+    DUNGEON_DIFFICULTY_10_MAN,
+    DUNGEON_DIFFICULTY_25_MAN,
+    DUNGEON_DIFFICULTY_20_MAN,
+    DUNGEON_DIFFICULTY_40_MAN,
+];
 
 // NPC Classifications
 const NPC_CLASSIFICATION_ID_NORMAL = 1;
@@ -776,6 +784,7 @@ if (typeof module !== 'undefined' && module.exports) {
         AFFIX_TYRANNICAL,
         AFFIX_THUNDERING,
         AFFIX_XALATATHS_GUILE,
+        DUNGEON_DIFFICULTIES,
         COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH,
         COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH,
         COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_SPELL,

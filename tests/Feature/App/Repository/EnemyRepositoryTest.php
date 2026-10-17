@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\App\Repository;
 
+use App\Models\DungeonDifficulty;
 use App\Models\Enemy;
 use App\Repositories\Database\EnemyRepository;
 use PHPUnit\Framework\Attributes\Group;
@@ -158,6 +159,48 @@ final class EnemyRepositoryTest extends PublicTestCase
             $this->assertSame($expectedPatrolIds, $orderedPatrolIds, 'Enemies were not ordered ascending by enemy_patrol_id.');
         } finally {
             Enemy::query()->whereKey(collect($createdEnemies)->pluck('id')->all())->delete();
+        }
+    }
+
+    #[Test]
+    public function hasDungeonDifficultyEnemies_givenAMappingVersionWithoutThem_returnsFalse(): void
+    {
+        // Arrange - another mapping version having them must not leak into this one
+        $mappingVersion = $this->getDungeonWithCurrentMappingVersionWithEnemies()->getCurrentMappingVersion();
+        $this->assertNotNull($mappingVersion);
+        $this->assertFalse($mappingVersion->enemies()->whereNotNull('dungeon_difficulty')->exists());
+        $this->assertTrue(Enemy::query()->whereNotNull('dungeon_difficulty')->exists(), 'Expected a seeded raid with difficulty-specific enemies');
+
+        // Act
+        $result = $this->repository->hasDungeonDifficultyEnemies($mappingVersion);
+
+        // Assert
+        $this->assertFalse($result);
+    }
+
+    #[Test]
+    public function hasDungeonDifficultyEnemies_givenAnEnemyThatOnlyExistsOn25Man_returnsTrue(): void
+    {
+        // Arrange
+        $mappingVersion = $this->getDungeonWithCurrentMappingVersionWithEnemies()->getCurrentMappingVersion();
+        $this->assertNotNull($mappingVersion);
+        $baseEnemy = $mappingVersion->enemies()->firstOrFail();
+
+        $attributes = $baseEnemy->only($baseEnemy->getFillable());
+        unset($attributes['id']);
+
+        $enemy = Enemy::query()->create(array_merge($attributes, [
+            'dungeon_difficulty' => DungeonDifficulty::TWENTY_FIVE_MAN->value,
+        ]));
+
+        try {
+            // Act
+            $result = $this->repository->hasDungeonDifficultyEnemies($mappingVersion);
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            $enemy->delete();
         }
     }
 }

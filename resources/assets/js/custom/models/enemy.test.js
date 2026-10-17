@@ -50,6 +50,10 @@ global.VersionableMapObject = class VersionableMapObject {
     unregister() {
     }
 
+    _getAttributes() {
+        return [];
+    }
+
     signal() {
     }
 
@@ -109,6 +113,23 @@ const {Enemy} = require('./enemy');
 // 1f. Only ever used through `instanceof` (raid markers are not available on the admin mapping page).
 global.AdminEnemy = class AdminEnemy extends Enemy {
 };
+
+// 1g. What Enemy#_getAttributes() reads: Attribute just copies its options onto itself, the seasonal types only
+// need to exist, and the difficulty list is the real one from constants.js.
+global.Attribute = class Attribute {
+    constructor(options) {
+        Object.assign(this, options);
+    }
+};
+[
+    'ENEMY_SEASONAL_TYPE_AWAKENED', 'ENEMY_SEASONAL_TYPE_BEGUILING', 'ENEMY_SEASONAL_TYPE_ENCRYPTED',
+    'ENEMY_SEASONAL_TYPE_INSPIRING', 'ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER', 'ENEMY_SEASONAL_TYPE_NO_SHROUDED',
+    'ENEMY_SEASONAL_TYPE_REQUIRES_ACTIVATION', 'ENEMY_SEASONAL_TYPE_SHROUDED', 'ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX',
+    'ENEMY_SEASONAL_TYPE_TORMENTED',
+].forEach((name) => {
+    global[name] = name.toLowerCase();
+});
+global.DUNGEON_DIFFICULTIES = require('../constants').DUNGEON_DIFFICULTIES;
 
 /**
  * A fake Leaflet layer mirroring Leaflet's own tooltip semantics: getTooltip() is undefined before
@@ -763,5 +784,37 @@ describe('Enemy popup on the enemy canvas (#5185)', () => {
         // Assert
         expect(canvasPath.getPopup()).toBeNull();
         expect(canvasPath.handlers.popupopen).toBeUndefined();
+    });
+});
+
+// ---------------------------------------------------------------------------
+// Enemy#_getAttributes: the mapping editor's per-enemy difficulty field offers every DungeonDifficulty.
+// ---------------------------------------------------------------------------
+
+describe('Enemy#_getAttributes dungeon_difficulty', () => {
+    const originalGetState = global.getState;
+
+    afterEach(() => {
+        global.getState = originalGetState;
+    });
+
+    test('_getAttributes_givenAnyEnemy_offersEveryDungeonDifficulty', () => {
+        // Arrange
+        global.getState = () => ({
+            getMapContext: () => ({register: () => {}}),
+            getCurrentFloor: () => ({id: 1}),
+        });
+        const enemy = new Enemy(makeFakeMap(), null);
+
+        // Act
+        const attribute = enemy._getAttributes(true).find((candidate) => candidate.name === 'dungeon_difficulty');
+
+        // Assert
+        expect(attribute.values).toEqual([
+            {id: 1, name: 'dungeons.difficulty.1'},
+            {id: 2, name: 'dungeons.difficulty.2'},
+            {id: 3, name: 'dungeons.difficulty.3'},
+            {id: 4, name: 'dungeons.difficulty.4'},
+        ]);
     });
 });

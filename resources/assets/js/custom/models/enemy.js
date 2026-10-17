@@ -153,13 +153,10 @@ class Enemy extends VersionableMapObject {
                 name: 'dungeon_difficulty',
                 type: 'select',
                 admin: true,
-                values: [{
-                    id: DUNGEON_DIFFICULTY_10_MAN,
-                    name: lang.get(`dungeons.difficulty.${DUNGEON_DIFFICULTY_10_MAN}`)
-                }, {
-                    id: DUNGEON_DIFFICULTY_25_MAN,
-                    name: lang.get(`dungeons.difficulty.${DUNGEON_DIFFICULTY_25_MAN}`)
-                }],
+                values: DUNGEON_DIFFICULTIES.map((dungeonDifficulty) => ({
+                    id: dungeonDifficulty,
+                    name: lang.get(`dungeons.difficulty.${dungeonDifficulty}`)
+                })),
                 default: null,
                 getter: function () {
                     return self.dungeon_difficulty === null || self.dungeon_difficulty <= 0 ? null : self.dungeon_difficulty;
