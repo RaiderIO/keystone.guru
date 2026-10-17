@@ -78,6 +78,40 @@ final class GridCardsTest extends PublicTestCase
         $this->assertStringNotContainsString('·', $xpath->document->textContent);
     }
 
+    #[Test]
+    public function render_givenDungeon_centersTheDungeonNameVerticallyOnItsImage(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::query()->firstOrFail();
+
+        // Act
+        $xpath = $this->renderGridCards($dungeon, [
+            ['href' => self::EXPERT_HREF, 'text' => 'Expert'],
+        ]);
+
+        // Assert
+        $this->assertSame(1, $xpath->query(sprintf('//*[%s]', $this->hasClass('dungeon_card_dungeon_name')))->length);
+        $this->assertSame(
+            1,
+            $xpath->query(sprintf(
+                '//*[%s][%s][%s]',
+                $this->hasClass('dungeon_card_dungeon_name'),
+                $this->hasClass('top-50'),
+                $this->hasClass('translate-middle-y'),
+            ))->length,
+            'The dungeon name is offset to the middle of its positioning parent',
+        );
+        $this->assertSame(
+            1,
+            $xpath->query(sprintf(
+                '//a[%s][img][*[%s]]',
+                $this->hasClass('position-relative'),
+                $this->hasClass('dungeon_card_dungeon_name'),
+            ))->length,
+            'The dungeon name is positioned against the image link, not the whole card',
+        );
+    }
+
     /**
      * @param list<array{href: string, text: string}> $links
      */
