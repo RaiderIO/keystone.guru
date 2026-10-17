@@ -49,6 +49,8 @@ const MESSAGES = {
 
 const OPTIONS = {
     sidebarSearchResultSelector: '#dungeonroute_search_routes_container',
+    enabledStateCookie:          'dungeonroute_search_enabled',
+    enabledStateSelector:        '#dungeonroute_search_toggle',
     fallbackImageBaseUrl:        'https://assets/images',
 };
 
@@ -113,6 +115,8 @@ describe('CommonMapsDungeonroutesearchsidebar', () => {
             }),
         };
         globalThis.getState = () => ({getMapContext: () => mapContext});
+        globalThis.Cookies = {set: vi.fn()};
+        globalThis.cookieDefaultAttributes = {path: '/'};
 
         document.body.innerHTML = '<div id="dungeonroute_search_routes_container"></div>';
 
@@ -141,6 +145,28 @@ describe('CommonMapsDungeonroutesearchsidebar', () => {
      */
     function row(publicKey) {
         return jQuery(`.route_picker_row[data-public-key="${publicKey}"]`);
+    }
+
+    /**
+     * Activates the sidebar on a page whose Enabled/Disabled toggle starts in the given state.
+     * @param {boolean} enabled
+     */
+    function activateWithToggle(enabled) {
+        jQuery('body').append(`<input id="dungeonroute_search_toggle" type="checkbox" ${enabled ? 'checked' : ''}>`);
+        vi.spyOn(SearchInlineBase.prototype, 'activate').mockImplementation(() => {
+        });
+        vi.spyOn(sidebar, '_search').mockImplementation(() => {
+        });
+        globalThis.getEnemyMapObjectGroup = () => ({});
+        globalThis.DungeonRouteSearchEnemySelection = class {
+            register() {
+            }
+        };
+        const dungeonMap = {setMapState: vi.fn()};
+        globalThis.getState = () => ({getMapContext: () => mapContext, getDungeonMap: () => dungeonMap});
+        sidebar.sidebar = {activate: vi.fn()};
+
+        sidebar.activate();
     }
 
     it('_renderSearchResults_givenRoutes_rendersAPickerRowWithARadioPerRoute', () => {
@@ -220,6 +246,100 @@ describe('CommonMapsDungeonroutesearchsidebar', () => {
         expect(row('a').find('.route_picker_checkbox').prop('checked')).toBe(true);
         // The route's map context is cached, so it is not fetched again
         expect(ajaxCalls.length).toBe(requestCount);
+    });
+
+    it('changingTheToggle_givenAShownRouteAndSwitchedOff_hidesItFromTheMapButKeepsThePick', () => {
+        // Arrange
+        activateWithToggle(true);
+        sidebar._renderSearchResults([route('a')]);
+        row('a').find('.route_picker_checkbox').trigger('click');
+        respondWithMapContext('a');
+
+        // Act
+        jQuery('#dungeonroute_search_toggle').prop('checked', false).trigger('change');
+
+        // Assert
+        expect(mapContext.getDungeonRoute()).toBeNull();
+        expect(row('a').hasClass('route_picker_row_selected')).toBe(true);
+        expect(row('a').find('.route_picker_checkbox').prop('checked')).toBe(true);
+        expect(Cookies.set).toHaveBeenLastCalledWith('dungeonroute_search_enabled', '0', {path: '/'});
+    });
+
+    it('changingTheToggle_givenAPickedRouteAndSwitchedBackOn_showsThePickedRouteAgain', () => {
+        // Arrange
+        activateWithToggle(true);
+        sidebar._renderSearchResults([route('a'), route('b')]);
+        row('b').find('.route_picker_checkbox').trigger('click');
+        respondWithMapContext('b');
+        jQuery('#dungeonroute_search_toggle').prop('checked', false).trigger('change');
+        const requestCount = ajaxCalls.length;
+
+        // Act
+        jQuery('#dungeonroute_search_toggle').prop('checked', true).trigger('change');
+
+        // Assert
+        expect(mapContext.getDungeonRoute()).toEqual({publicKey: 'b'});
+        expect(ajaxCalls.length).toBe(requestCount);
+        expect(Cookies.set).toHaveBeenLastCalledWith('dungeonroute_search_enabled', '1', {path: '/'});
+    });
+
+    it('clickingARow_givenTheToggleStartedOff_picksTheRouteWithoutShowingIt', () => {
+        // Arrange
+        activateWithToggle(false);
+        sidebar._renderSearchResults([route('a')]);
+
+        // Act
+        row('a').find('.route_picker_checkbox').trigger('click');
+
+        // Assert
+        expect(row('a').hasClass('route_picker_row_selected')).toBe(true);
+        expect(ajaxCalls.length).toBe(0);
+        expect(mapContext.getDungeonRoute()).toBeNull();
+    });
+
+    it('changingTheToggle_givenNoPickedRoute_leavesTheMapAlone', () => {
+        // Arrange
+        activateWithToggle(true);
+        sidebar._renderSearchResults([route('a')]);
+        mapContext.setDungeonRoute.mockClear();
+
+        // Act
+        jQuery('#dungeonroute_search_toggle').prop('checked', false).trigger('change');
+        jQuery('#dungeonroute_search_toggle').prop('checked', true).trigger('change');
+
+        // Assert
+        expect(mapContext.setDungeonRoute).not.toHaveBeenCalled();
+        expect(ajaxCalls.length).toBe(0);
+    });
+
+    it('respondingWithARoute_givenTheToggleSwitchedOffWhileItLoaded_doesNotShowIt', () => {
+        // Arrange
+        activateWithToggle(true);
+        sidebar._renderSearchResults([route('a')]);
+        row('a').find('.route_picker_checkbox').trigger('click');
+        jQuery('#dungeonroute_search_toggle').prop('checked', false).trigger('change');
+
+        // Act
+        respondWithMapContext('a');
+
+        // Assert
+        expect(mapContext.getDungeonRoute()).toBeNull();
+    });
+
+    it('respondingWithARoute_givenAnotherRoutePickedWhileItLoaded_showsOnlyTheLatestPick', () => {
+        // Arrange
+        sidebar._renderSearchResults([route('a'), route('b')]);
+        row('a').find('.route_picker_checkbox').trigger('click');
+        const routeARequest = ajaxCalls[ajaxCalls.length - 1];
+        row('b').find('.route_picker_checkbox').trigger('click');
+        respondWithMapContext('b');
+
+        // Act
+        routeARequest.success({publicKey: 'a'});
+
+        // Assert
+        expect(mapContext.getDungeonRoute()).toEqual({publicKey: 'b'});
+        expect(row('b').hasClass('route_picker_row_selected')).toBe(true);
     });
 
     it('_search_givenStillInitializing_doesNotSearch', () => {

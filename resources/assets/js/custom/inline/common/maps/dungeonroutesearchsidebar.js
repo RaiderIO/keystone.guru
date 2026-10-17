@@ -57,7 +57,10 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
         };
 
         this.dungeonRouteCache = {};
-
+        /** @type {String|null} The public key of the route picked in the search results */
+        this.selectedPublicKey = null;
+        /** @type {Boolean} Whether the picked route is shown on the map */
+        this.enabled = true;
 
         this._setupFilterCollapseCookies();
     }
@@ -100,12 +103,15 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
 
         this.map = getState().getDungeonMap();
 
+        let self = this;
+
         let $enabledState = $(this.options.enabledStateSelector);
         $enabledState.on('change', function () {
             let enabled = $(this).is(':checked');
-            // @TODO Implement
+            self._toggleDungeonRouteSearch(enabled);
         });
 
+        this._toggleDungeonRouteSearch($enabledState.is(':checked'));
 
         this.sidebar.activate();
 
@@ -178,6 +184,30 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
         }
     }
 
+    /**
+     * Shows or hides the route picked in the search results on the map. The pick itself is kept, so enabling the
+     * search again brings that route back.
+     *
+     * @param {Boolean} enabled
+     * @private
+     */
+    _toggleDungeonRouteSearch(enabled) {
+        console.assert(this instanceof CommonMapsDungeonroutesearchsidebar, 'this is not a CommonMapsDungeonroutesearchsidebar', this);
+        this.enabled = enabled;
+
+        Cookies.set(this.options.enabledStateCookie, (enabled ? 1 : 0) + '', cookieDefaultAttributes);
+
+        if (this.selectedPublicKey === null) {
+            return;
+        }
+
+        if (enabled) {
+            this._showDungeonRoute(this.selectedPublicKey);
+        } else {
+            getState().getMapContext().setDungeonRoute(null);
+        }
+    }
+
     _search() {
         console.assert(this instanceof CommonMapsDungeonroutesearchsidebar, 'this is not a CommonMapsDungeonroutesearchsidebar', this);
 
@@ -239,7 +269,7 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
             self._loadDungeonRoute($(this).closest('.route_picker_row'));
         });
 
-        let publicKey = getState().getMapContext().getDungeonRoute()?.publicKey;
+        let publicKey = this.selectedPublicKey;
         let $currentlySelectedRoute = $searchResultsContainer.find('.route_picker_row').filter(function () {
             return $(this).attr('data-public-key') === publicKey;
         }).first();
@@ -269,29 +299,38 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
      */
     _loadDungeonRoute($row, force = false) {
         let publicKey = $row?.attr('data-public-key') ?? null;
-        let mapContext = getState().getMapContext();
-        let unset = mapContext.getDungeonRoute()?.publicKey === publicKey && !force;
+        let unset = this.selectedPublicKey === publicKey && !force;
 
         let $rows = $(this.options.sidebarSearchResultSelector).find('.route_picker_row');
         $rows.removeClass('route_picker_row_selected');
         $rows.find('.route_picker_checkbox').prop('checked', false);
 
-        if (publicKey === null) {
-            mapContext.setDungeonRoute(null);
+        if (publicKey === null || unset) {
+            this.selectedPublicKey = null;
+            getState().getMapContext().setDungeonRoute(null);
             return;
         }
 
-        if (!unset) {
-            $row.addClass('route_picker_row_selected');
-            $row.find('.route_picker_checkbox').prop('checked', true);
+        this.selectedPublicKey = publicKey;
+        $row.addClass('route_picker_row_selected');
+        $row.find('.route_picker_checkbox').prop('checked', true);
+
+        if (this.enabled) {
+            this._showDungeonRoute(publicKey);
         }
+    }
+
+    /**
+     * Shows a route on the map, fetching its map context the first time.
+     *
+     * @param {String} publicKey
+     * @private
+     */
+    _showDungeonRoute(publicKey) {
+        let mapContext = getState().getMapContext();
 
         if (this.dungeonRouteCache[publicKey]) {
-            if (unset) {
-                mapContext.setDungeonRoute(null)
-            } else {
-                mapContext.setDungeonRoute(this.dungeonRouteCache[publicKey]);
-            }
+            mapContext.setDungeonRoute(this.dungeonRouteCache[publicKey]);
             return;
         }
 
@@ -300,11 +339,12 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
             type: 'GET',
             url: `/ajax/dungeonroute/${publicKey}/mapcontext`,
             success: function (json) {
-                mapContext.setDungeonRoute(
-                    json
-                );
-
                 self.dungeonRouteCache[publicKey] = json;
+
+                // The pick may have changed, or the search been disabled, while this was loading
+                if (self.enabled && self.selectedPublicKey === publicKey) {
+                    mapContext.setDungeonRoute(json);
+                }
             }
         });
     }
