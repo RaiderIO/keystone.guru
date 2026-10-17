@@ -5,6 +5,7 @@ namespace App\Service\MDT\Models;
 use App\Logic\MDT\Exception\ImportError;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Models\Dungeon;
+use App\Models\Mapping\MappingVersion;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
@@ -21,18 +22,19 @@ class ImportStringDetails implements Arrayable
      * @param Collection<int, string>        $affixes
      */
     public function __construct(
-        private readonly Collection $warnings,
-        private readonly Collection $errors,
-        private readonly Dungeon    $dungeon,
-        private readonly Collection $affixes,
-        private readonly bool       $hasThisWeeksAffixGroup,
-        private readonly int        $pulls,
-        private readonly int        $paths,
-        private readonly int        $lines,
-        private readonly int        $arrows,
-        private readonly int        $notes,
-        private readonly int        $enemyForces,
-        private readonly int        $enemyForcesMax,
+        private readonly Collection      $warnings,
+        private readonly Collection      $errors,
+        private readonly Dungeon         $dungeon,
+        private readonly Collection      $affixes,
+        private readonly bool            $hasThisWeeksAffixGroup,
+        private readonly int             $pulls,
+        private readonly int             $paths,
+        private readonly int             $lines,
+        private readonly int             $arrows,
+        private readonly int             $notes,
+        private readonly int             $enemyForces,
+        private readonly int             $enemyForcesMax,
+        private readonly ?MappingVersion $mappingVersion = null,
     ) {
     }
 
@@ -95,6 +97,14 @@ class ImportStringDetails implements Arrayable
     public function getEnemyForcesMax(): int
     {
         return $this->enemyForcesMax;
+    }
+
+    /**
+     * The mapping version the string resolves to, which is the one an import of it attaches the route to.
+     */
+    public function getMappingVersion(): ?MappingVersion
+    {
+        return $this->mappingVersion;
     }
 
     public function getFaction(): ?string
