@@ -44,8 +44,8 @@ for ($i = 0; $i < $rowCount; ++$i) { ?>
         <div class="p-2 col-xl col-3 {{ $sideOffset && ($j === 0) ? 'ms-lg-auto' : (($j === $colCount - 1) ? 'me-lg-auto' : '') }}">
             <div class="card">
                 <div class="card-img-caption">
-                    <a href="{{ $imageLinks[$dungeon->key] ?? $linksForDungeon->first()['href'] }}">
-                        <h5 class="card-text text-white dungeon_card_dungeon_name">
+                    <a class="d-block position-relative" href="{{ $imageLinks[$dungeon->key] ?? $linksForDungeon->first()['href'] }}">
+                        <h5 class="card-text text-white dungeon_card_dungeon_name top-50 translate-middle-y mb-0">
                             {{ $useAbbreviation ? __($dungeon->abbreviation) : __($dungeon->name) }}
                         </h5>
                         <img class="card-img-top"
@@ -55,21 +55,14 @@ for ($i = 0; $i < $rowCount; ++$i) { ?>
                 </div>
                 @if($names)
                     <div class="card-body {{ $cardBodyClass ?? '' }}">
-                        <!-- Normal big screen view -->
-                        <div class="d-lg-inline d-none">
-                            <p class="card-text text-center">
-                                @foreach($linksForDungeon as $link)
-                                    <a href="{{ $link['href'] }}">{{ $link['text'] }}</a>
-                                    @if(!$loop->last)
-                                        &middot;
-                                    @endif
-                                @endforeach
-                            </p>
-                        </div>
-
-                        <?php
-                        // @TODO Fix mobile view
-                        ?>
+                        <p class="card-text text-center">
+                            @foreach($linksForDungeon as $link)
+                                <a class="d-block d-lg-inline" href="{{ $link['href'] }}">{{ $link['text'] }}</a>
+                                @if(!$loop->last)
+                                    <span class="d-none d-lg-inline">&middot;</span>
+                                @endif
+                            @endforeach
+                        </p>
                     </div>
                 @endif
             </div>
