@@ -79,7 +79,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
         // If affix group not found or
         if ($importAsThisWeek || $affixGroup === null) {
-            $activeSeason = $dungeon->getActiveSeason($this->seasonService);
+            $activeSeason = $this->seasonService->getActiveSeasonForDungeon($dungeon);
             if ($activeSeason !== null) {
                 $affixGroup = $this->seasonAffixGroupService->getCurrentAffixGroup($activeSeason);
             }

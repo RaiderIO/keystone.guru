@@ -72,7 +72,7 @@ final class MapContextDungeonExploreTest extends PublicTestCase
 
     /**
      * The week dropdown's options are built from the most recent season, and the server filters against that
-     * same season - so the periods must be resolved from it too. getActiveSeason() prefers an upcoming season,
+     * same season - so the periods must be resolved from it too. getActiveSeasonForDungeon() prefers an upcoming season,
      * whose weeks are not in the dropdown at all.
      */
     #[Test]

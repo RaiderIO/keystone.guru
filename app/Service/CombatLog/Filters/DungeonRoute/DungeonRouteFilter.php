@@ -96,7 +96,7 @@ class DungeonRouteFilter implements CombatLogParserInterface
 
             // Determine the affix group by timestamp — avoids failure when a dungeon only has a partial
             // set of affixes active (e.g. a single Fortified for non-max-level dungeons).
-            $currentSeasonForDungeon = $dungeon->getActiveSeason($this->seasonService);
+            $currentSeasonForDungeon = $this->seasonService->getActiveSeasonForDungeon($dungeon);
             if ($currentSeasonForDungeon !== null && $combatLogEvent instanceof ChallengeModeStart) {
                 $affixGroup = $this->seasonAffixGroupService->getAffixGroupAt(
                     $currentSeasonForDungeon,

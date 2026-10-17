@@ -57,6 +57,12 @@ interface SeasonServiceInterface
      */
     public function getCurrentSeasonForDungeon(Dungeon $dungeon): ?Season;
 
+    /**
+     * The season that is active for the given dungeon right now: its upcoming season when the current and next
+     * season overlap, else its most recent season, else the current season of its expansion (timewalking).
+     */
+    public function getActiveSeasonForDungeon(Dungeon $dungeon): ?Season;
+
     public function getSeasonFromShortString(string $season): ?Season;
 
     /**

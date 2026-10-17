@@ -80,7 +80,7 @@ class DungeonHeatmapController extends Controller
     ): RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $dungeon->getActiveSeason($seasonService));
+        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $seasonService->getActiveSeasonForDungeon($dungeon));
         if ($redirect instanceof RedirectResponse) {
             return $redirect;
         }
@@ -120,7 +120,7 @@ class DungeonHeatmapController extends Controller
 
         $seasonString     = $request->get('season');
         $mostRecentSeason = $seasonService->getSeasonFromShortString($seasonString) ??
-            $dungeon->getActiveSeason($seasonService);
+            $seasonService->getActiveSeasonForDungeon($dungeon);
 
         $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $mostRecentSeason);
         if ($redirect instanceof RedirectResponse) {
@@ -189,7 +189,7 @@ class DungeonHeatmapController extends Controller
             config('language.short_to_long')[$locale] ?? $locale,
         );
 
-        $unsupported = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $dungeon->getActiveSeason($seasonService), embed: true);
+        $unsupported = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $seasonService->getActiveSeasonForDungeon($dungeon), embed: true);
         if ($unsupported !== null) {
             return $unsupported;
         }
@@ -234,7 +234,7 @@ class DungeonHeatmapController extends Controller
             $validated['defaultZoom'],
         );
 
-        $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
+        $mostRecentSeason = $seasonService->getActiveSeasonForDungeon($dungeon);
 
         $heatmapActive = $dungeon->heatmap_enabled || isset($validated['token']);
 

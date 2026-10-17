@@ -206,7 +206,7 @@ final class DungeonRouteDiscoverDisplayedRoutesTest extends PublicTestCase
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
-            'season_id'          => $dungeon->getActiveSeason(app(SeasonServiceInterface::class))?->id,
+            'season_id'          => app(SeasonServiceInterface::class)->getActiveSeasonForDungeon($dungeon)?->id,
             'team_id'            => null,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
             'teeming'            => false,
@@ -247,7 +247,7 @@ final class DungeonRouteDiscoverDisplayedRoutesTest extends PublicTestCase
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
-            'season_id'          => $dungeon->getActiveSeason(app(SeasonServiceInterface::class))?->id,
+            'season_id'          => app(SeasonServiceInterface::class)->getActiveSeasonForDungeon($dungeon)?->id,
             'team_id'            => null,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
             'teeming'            => false,
