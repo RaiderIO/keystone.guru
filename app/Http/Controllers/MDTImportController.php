@@ -9,11 +9,13 @@ use App\Logic\MDT\Exception\CliWeakaurasParserNotFoundException;
 use App\Logic\MDT\Exception\InvalidMDTStringException;
 use App\Logic\MDT\Exception\MDTStringParseException;
 use App\Logic\MDT\IO\MDTStringFormat;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\Models\ImportStringDetails;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Teapot\StatusCode;
@@ -83,8 +85,7 @@ class MDTImportController extends Controller
         // If you're logged in, we will use the sandbox setting. Otherwise, we will ignore it and return true
         $sandbox = Auth::check() ? ($validated['mdt_import_sandbox'] ?? false) : true;
 
-        // @TODO This should be handled differently imho
-        if ($sandbox || ($user !== null && $user->canCreateDungeonRoute())) {
+        if ($sandbox || Gate::allows('create', DungeonRoute::class)) {
             $string = $validated['import_string'];
 
             try {
@@ -130,8 +131,6 @@ class MDTImportController extends Controller
                 'dungeonroute' => $dungeonRoute,
                 'title'        => $dungeonRoute->getTitleSlug(),
             ]);
-        } elseif ($user === null) {
-            return abort(StatusCode::UNAUTHORIZED, __('controller.mdtimport.error.cannot_create_route_must_be_logged_in'));
         } else {
             $result = view('dungeonroute.limitreached');
         }

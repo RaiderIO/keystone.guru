@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\PublishedState;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -104,6 +105,16 @@ class DungeonRoutePolicy
     public function rate(User $user, DungeonRoute $dungeonroute): bool
     {
         return !$dungeonroute->isOwnedByUser($user);
+    }
+
+    /**
+     * Determine whether the user can create another dungeon route. Free accounts are capped at a number of routes,
+     * which the unlimited routes Patreon benefit lifts.
+     */
+    public function create(User $user): bool
+    {
+        return $user->dungeonRoutes()->count() < config('keystoneguru.registered_user_dungeonroute_limit') ||
+            $user->hasPatreonBenefit(PatreonBenefit::UNLIMITED_DUNGEONROUTES);
     }
 
     /**

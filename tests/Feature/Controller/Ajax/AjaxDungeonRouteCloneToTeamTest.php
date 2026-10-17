@@ -120,6 +120,69 @@ final class AjaxDungeonRouteCloneToTeamTest extends DungeonRouteTestBase
         }
     }
 
+    #[Test]
+    public function cloneToTeam_givenAGuest_returnsForbiddenAndClonesNothing(): void
+    {
+        // Arrange
+        Auth::logout();
+
+        // Act
+        $response = $this->post($this->cloneToTeamUrl());
+
+        // Assert
+        $response->assertForbidden();
+        $this->assertEquals(0, DungeonRoute::query()->where('clone_of', $this->dungeonRoute->public_key)->count());
+    }
+
+    #[Test]
+    public function cloneToTeam_givenAUserAtTheirRouteLimit_returnsAnErrorAndClonesNothing(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = $this->createTeamAdminWithRoutes(1);
+            config(['keystoneguru.registered_user_dungeonroute_limit' => 1]);
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->post($this->cloneToTeamUrl());
+
+            // Assert
+            $response->assertOk();
+            $response->assertExactJson(['result' => 'error']);
+            $this->assertEquals(0, DungeonRoute::query()->where('clone_of', $this->dungeonRoute->public_key)->count());
+        } finally {
+            $this->deleteTeamAdminWithRoutes($user);
+        }
+    }
+
+    #[Test]
+    public function cloneToTeam_givenAUserUnderTheirRouteLimit_clonesTheRouteIntoThatTeam(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = $this->createTeamAdminWithRoutes(1);
+            config(['keystoneguru.registered_user_dungeonroute_limit' => 2]);
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->post($this->cloneToTeamUrl());
+
+            // Assert
+            $response->assertNoContent();
+
+            /** @var DungeonRoute $clone */
+            $clone = DungeonRoute::query()->where('clone_of', $this->dungeonRoute->public_key)->firstOrFail();
+            $this->assertSame($user->id, $clone->author_id);
+            $this->assertSame($this->team->id, $clone->team_id);
+        } finally {
+            $this->deleteTeamAdminWithRoutes($user);
+        }
+    }
+
     /**
      * Guards #4264: DungeonRouteSaveService::cloneRoute() is transacted, but the
      * $team->addRoute($newRoute) that follows it was not part of that transaction. A failure there
@@ -181,6 +244,28 @@ final class AjaxDungeonRouteCloneToTeamTest extends DungeonRouteTestBase
             // also wipe DungeonRoute::boot()'s own listeners for the rest of the PHPUnit process
             Event::forget('eloquent.saving: ' . DungeonRoute::class);
         }
+    }
+
+    private function createTeamAdminWithRoutes(int $routeCount): User
+    {
+        $user = User::factory()->create();
+        $user->addRole(Role::ROLE_USER);
+        TeamUser::create(['team_id' => $this->team->id, 'user_id' => $user->id, 'role' => TeamUser::ROLE_ADMIN]);
+
+        DungeonRoute::factory()->count($routeCount)->create(['author_id' => $user->id, 'expires_at' => null]);
+
+        return $user;
+    }
+
+    private function deleteTeamAdminWithRoutes(?User $user): void
+    {
+        if ($user === null) {
+            return;
+        }
+
+        DungeonRoute::query()->where('author_id', $user->id)->get()->each->delete();
+        TeamUser::query()->where('user_id', $user->id)->delete();
+        $user->delete();
     }
 
     private function cloneToTeamUrl(): string

@@ -144,6 +144,38 @@ final class AjaxDungeonRouteContinueInNewerSeasonTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function continueInNewerSeason_givenAUserUnderTheirRouteLimit_returnsCreatedCopyForThatUser(): void
+    {
+        // Arrange
+        [$dungeon, $olderSeason, $newestSeason] = $this->findDungeonInSeveralSeasons();
+        $user                                   = User::factory()->create();
+        $user->addRole(Role::ROLE_USER);
+        $source = $this->createDungeonRouteInSeason($dungeon, $olderSeason, [
+            'author_id'  => $user->id,
+            'expires_at' => null,
+        ]);
+        config(['keystoneguru.registered_user_dungeonroute_limit' => 2]);
+        $this->actingAs($user);
+
+        try {
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/continue', $source->public_key));
+
+            // Assert
+            $response->assertCreated();
+
+            /** @var DungeonRoute $continuation */
+            $continuation = DungeonRoute::query()->where('public_key', $response->json('public_key'))->firstOrFail();
+            $this->assertSame($user->id, $continuation->author_id);
+            $this->assertSame($newestSeason->id, $continuation->season_id);
+        } finally {
+            DungeonRoute::query()->where('clone_of', $source->public_key)->get()->each->delete();
+            $source->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
     public function get_givenOwnRouteInOlderSeason_stampsTheContinuationSeason(): void
     {
         // Arrange
