@@ -117,6 +117,7 @@ $show['controls']['heatmapSearchSidebar'] ??= true;
 $show['controls']['enemyForces']          = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
 $show['controls']['draw']                 ??= false;
 $show['controls']['view']                 ??= false;
+$show['controls']['dungeonDifficulties']  ??= [];
 $show['controls']['present']                       ??= false;
 $show['controls']['live']                          ??= false;
 $show['controls']['combatLogRouteEnemyFailures']   ??= false;
@@ -355,6 +356,7 @@ $getFloorSwitchFloors = static fn() => ($isAdmin ? $dungeon->floors() : $dungeon
             'isMobile' => $isMobile,
             'showAds' => $showAds && !$adFree,
             'facadeEnabled' => $mappingVersion->facade_enabled,
+            'dungeonDifficulties' => $show['controls']['dungeonDifficulties'],
         ])
     @elseif(isset($show['controls']['present']) && $show['controls']['present'])
         @include('common.maps.controls.present', [

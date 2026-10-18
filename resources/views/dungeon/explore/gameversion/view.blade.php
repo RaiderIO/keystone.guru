@@ -2,6 +2,7 @@
 
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Floor\Floor;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
@@ -19,6 +20,7 @@ use Illuminate\Support\Collection;
  * @var int                               $playerDeathsMax
  * @var Collection<int, WeeklyAffixGroup> $seasonWeeklyAffixGroups
  * @var Collection<int, Dungeon>          $gameVersionDungeons
+ * @var list<DungeonDifficulty>           $dungeonDifficulties
  */
 ?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])
@@ -51,6 +53,7 @@ use Illuminate\Support\Collection;
                     'pulls' => false,
                     'heatmapSearch' => false,
                     'enemyInfo' => true,
+                    'dungeonDifficulties' => $dungeonDifficulties,
                 ],
             ],
             'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [

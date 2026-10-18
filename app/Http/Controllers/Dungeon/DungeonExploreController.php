@@ -12,6 +12,7 @@ use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\DungeonStart\DungeonStartNavigationServiceInterface;
 use App\Service\Floor\FloorResolutionServiceInterface;
@@ -113,6 +114,7 @@ class DungeonExploreController extends Controller
         SeasonAffixGroupServiceInterface $seasonAffixGroupService,
         DungeonServiceInterface          $dungeonService,
         FloorResolutionServiceInterface  $floorResolutionService,
+        EnemyRepositoryInterface         $enemyRepository,
         GameVersion                      $gameVersion,
         Dungeon                          $dungeon,
         string                           $floorIndex = '1',
@@ -145,6 +147,8 @@ class DungeonExploreController extends Controller
 
             $dungeonService->setDungeonContext($dungeon, $user);
 
+            $dungeonDifficulties = $dungeon->loadMissing('dungeonSpeedrunDifficulties')->getEnabledDungeonDifficulties();
+
             return view('dungeon.explore.gameversion.view', array_merge($this->getFilterSettings($mostRecentSeason), [
                 'gameVersion' => $gameVersion,
                 'season'      => $mostRecentSeason,
@@ -161,6 +165,9 @@ class DungeonExploreController extends Controller
                     $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
                 'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
+                'dungeonDifficulties' => count($dungeonDifficulties) > 1 && $enemyRepository->hasDungeonDifficultyEnemies($currentMappingVersion) ?
+                    $dungeonDifficulties :
+                    [],
             ]));
         }
     }

@@ -32,4 +32,9 @@ interface EnemyRepositoryInterface extends BaseRepositoryInterface
      * @return int The number of enemies updated
      */
     public function updateNpcId(int $oldNpcId, int $newNpcId): int;
+
+    /**
+     * Whether any enemy of the mapping version only exists on a specific dungeon difficulty (e.g. 25-man).
+     */
+    public function hasDungeonDifficultyEnemies(MappingVersion $mappingVersion): bool;
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\DungeonDifficulty;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use Illuminate\Support\Collection;
@@ -11,6 +12,7 @@ use Illuminate\Support\Collection;
  * @var bool                   $isMobile
  * @var bool                   $showAds
  * @var bool                   $facadeEnabled
+ * @var list<DungeonDifficulty> $dungeonDifficulties
  */
 ?>
 <nav
@@ -41,6 +43,10 @@ use Illuminate\Support\Collection;
             @include('common.maps.controls.elements.floorswitch', ['floors' => $floors])
 
             @include('common.maps.controls.elements.enemydisplaytype')
+
+            @if(!empty($dungeonDifficulties))
+                @include('common.maps.controls.elements.dungeondifficulty', ['dungeonDifficulties' => $dungeonDifficulties])
+            @endif
 
             @include('common.maps.controls.elements.mapobjectgroupvisibility', ['floors' => $floors])
 
