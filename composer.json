@@ -85,13 +85,13 @@
         "haydenpierce/class-finder": "^0.5.3",
         "intervention/image": "^3.4",
         "jenssegers/agent": "^2.6",
-        "laravel/framework": "^12.34",
+        "laravel/framework": "^13.0",
         "laravel/octane": "^2.8",
         "laravel/pennant": "^1.15",
         "laravel/reverb": "^1.6",
         "laravel/socialite": "^5.17",
         "laravel/telescope": "^5.5",
-        "laravel/tinker": "^2.10.1",
+        "laravel/tinker": "^3.0",
         "laravel/ui": "^4.6",
         "league/flysystem-aws-s3-v3": "^3.0",
         "marvinlabs/laravel-discord-logger": "^1.4",
@@ -133,7 +133,7 @@
         "phpunit/phpunit": "^11.5.3",
         "rector/rector": "^2.2",
         "swoole/ide-helper": "~6.0.0",
-        "vildanbina/laravel-auto-translation": "dev-main"
+        "vildanbina/laravel-auto-translation": "dev-laravel-13"
     },
     "autoload": {
         "classmap": [

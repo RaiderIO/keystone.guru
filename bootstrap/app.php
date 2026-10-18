@@ -67,7 +67,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // without a session) and the unauthenticated metric counters, which are also posted from
         // cross-site embed <iframe>s that carry no session cookie under same_site=lax. Every other
         // route sends a token.
-        $middleware->validateCsrfTokens(except: [
+        $middleware->preventRequestForgery(except: [
             'webhook/*',
             'ajax/metric',
             'ajax/metric/*',
