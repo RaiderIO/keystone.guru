@@ -24,6 +24,11 @@ interface RequestViewContextInterface
     public function isAdFree(): bool;
 
     /**
+     * The number of user reports still awaiting an admin's attention.
+     */
+    public function getNumOpenUserReports(): int;
+
+    /**
      * Whether the current route is only reachable by a guest, i.e. it is behind the `guest`
      * middleware and would bounce an authenticated user elsewhere.
      */

@@ -33,4 +33,12 @@ interface NpcCompendiumServiceInterface
      * @return Collection<int, CombatLogNpcEvent|CombatLogSpellEvent>
      */
     public function getEventsForDate(Carbon $date, ?Dungeon $dungeon = null): Collection;
+
+    /**
+     * {@see getEventsForDate()} for several days at once, in a single query per event table.
+     *
+     * @param  Collection<int, string>                                                    $dates `Y-m-d` dates
+     * @return Collection<string, Collection<int, CombatLogNpcEvent|CombatLogSpellEvent>> keyed by date, in the order given
+     */
+    public function getEventsForDates(Collection $dates, ?Dungeon $dungeon = null): Collection;
 }

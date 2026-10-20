@@ -3,7 +3,6 @@
 namespace App\Http\View\Composers;
 
 use App\Models\User;
-use App\Models\UserReport;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\View\View;
@@ -35,6 +34,6 @@ readonly class GlobalComposer implements ViewComposerInterface
         $view->with('adFree', $this->requestViewContext->isAdFree());
         $view->with('userOrDefaultRegion', $this->requestViewContext->getUserOrDefaultRegion());
         $view->with('currentUserGameVersion', $this->requestViewContext->getCurrentUserGameVersion());
-        $view->with('numUserReports', $this->requestViewContext->isUserAdmin() ? UserReport::where('status', 0)->count() : 2);
+        $view->with('numUserReports', $this->requestViewContext->isUserAdmin() ? $this->requestViewContext->getNumOpenUserReports() : 2);
     }
 }

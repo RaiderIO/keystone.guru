@@ -4,7 +4,6 @@ namespace App\Repositories\Interfaces\CombatLog;
 
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Repositories\BaseRepositoryInterface;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -39,9 +38,12 @@ interface CombatLogSpellEventRepositoryInterface extends BaseRepositoryInterface
     public function getDistinctEventDates(Collection $hiddenSpellIds, ?Collection $spellIds = null): Collection;
 
     /**
+     * Every event on any of the given calendar days, newest first.
+     *
+     * @param  Collection<int, string>              $dates          `Y-m-d` dates
      * @param  Collection<int, int>                 $hiddenSpellIds
      * @param  Collection<int, int>|null            $spellIds       when given, only these spells are considered
      * @return Collection<int, CombatLogSpellEvent>
      */
-    public function getByDate(Carbon $date, Collection $hiddenSpellIds, ?Collection $spellIds = null): Collection;
+    public function getByDates(Collection $dates, Collection $hiddenSpellIds, ?Collection $spellIds = null): Collection;
 }

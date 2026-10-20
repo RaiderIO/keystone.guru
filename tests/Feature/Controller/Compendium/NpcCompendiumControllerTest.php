@@ -11,8 +11,11 @@ use App\Models\Npc\Npc;
 use App\Models\Season;
 use App\Models\Translation\Translation;
 use App\Models\User;
+use App\Models\UserReport;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -368,6 +371,46 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $response->assertSee($npc->wowhead_url, false);
+    }
+
+    #[Test]
+    public function show_givenAdmin_countsOpenUserReportsOnce(): void
+    {
+        $userReport = null;
+
+        try {
+            // Arrange - an open report, so the admin nav renders its badge
+            $npc        = Npc::with('classification')->firstOrFail();
+            $userReport = UserReport::create([
+                'model_id'    => $npc->id,
+                'model_class' => Npc::class,
+                'user_id'     => 1,
+                'username'    => 'admin',
+                'category'    => 'other',
+                'message'     => 'Test report',
+                'contact_ok'  => false,
+                'status'      => 0,
+            ]);
+            $numOpenUserReports = UserReport::query()->where('status', 0)->count();
+
+            /** @var array<int, string> $userReportQueries */
+            $userReportQueries = [];
+            DB::listen(static function (QueryExecuted $query) use (&$userReportQueries): void {
+                if (str_contains($query->sql, 'from `user_reports`')) {
+                    $userReportQueries[] = $query->sql;
+                }
+            });
+
+            // Act
+            $response = $this->get(route('npc.compendium.show', $npc));
+
+            // Assert
+            $response->assertOk();
+            $this->assertCount(1, $userReportQueries, 'The open user report count must be queried once per request, not once per rendered view');
+            $response->assertSee(sprintf('<span class="badge text-bg-warning rounded-pill">%d</span>', $numOpenUserReports), false);
+        } finally {
+            $userReport?->delete();
+        }
     }
 
     #[Test]

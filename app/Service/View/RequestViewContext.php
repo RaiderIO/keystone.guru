@@ -8,6 +8,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\User;
+use App\Models\UserReport;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
@@ -32,6 +33,8 @@ class RequestViewContext implements RequestViewContextInterface
     private ?bool $isAdFree = null;
 
     private ?bool $isCurrentRouteGuestOnly = null;
+
+    private ?int $numOpenUserReports = null;
 
     public function __construct(
         private readonly ExpansionServiceInterface   $expansionService,
@@ -63,6 +66,11 @@ class RequestViewContext implements RequestViewContextInterface
     {
         return $this->isAdFree ??= $this->getUser()?->hasPatreonBenefit(PatreonBenefit::AD_FREE)
             || $this->getUser()?->hasAdFreeGiveaway();
+    }
+
+    public function getNumOpenUserReports(): int
+    {
+        return $this->numOpenUserReports ??= UserReport::query()->where('status', 0)->count();
     }
 
     public function isCurrentRouteGuestOnly(): bool
