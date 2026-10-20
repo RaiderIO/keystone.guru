@@ -1,10 +1,12 @@
 <?php
 
+use App\Features\CreatorProfiles;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Laravel\Pennant\Feature;
 
 /**
  * @var GameVersion                  $currentUserGameVersion
@@ -80,12 +82,20 @@ $routeEntries = [
         'text'        => __('view_common.layout.header.find_routes'),
         'description' => __('view_common.layout.header.find_routes_description'),
     ],
-    [
-        'modal'       => '#create_route_modal',
-        'fa'          => 'fas fa-plus',
-        'text'        => __('view_common.layout.header.create_route'),
-        'description' => __('view_common.layout.header.create_route_description'),
-    ],
+];
+if (Feature::active(CreatorProfiles::class)) {
+    $routeEntries[] = [
+        'route'       => route('creators.index'),
+        'fa'          => 'fas fa-users',
+        'text'        => __('view_common.layout.header.creators'),
+        'description' => __('view_common.layout.header.creators_description'),
+    ];
+}
+$routeEntries[] = [
+    'modal'       => '#create_route_modal',
+    'fa'          => 'fas fa-plus',
+    'text'        => __('view_common.layout.header.create_route'),
+    'description' => __('view_common.layout.header.create_route_description'),
 ];
 
 $dungeonEntries = [];
