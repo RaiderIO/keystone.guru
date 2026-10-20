@@ -7,7 +7,6 @@ use App\Models\Spell\Spell;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\CombatLog\CombatLogNpcEventRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class CombatLogNpcEventRepository extends DatabaseRepository implements CombatLogNpcEventRepositoryInterface
@@ -35,10 +34,14 @@ class CombatLogNpcEventRepository extends DatabaseRepository implements CombatLo
             ->pluck('event_date');
     }
 
-    public function getByDate(Carbon $date, Collection $hiddenSpellIds, ?Collection $npcIds = null): Collection
+    public function getByDates(Collection $dates, Collection $hiddenSpellIds, ?Collection $npcIds = null): Collection
     {
+        if ($dates->isEmpty()) {
+            return collect();
+        }
+
         return $this->rejectHiddenSpellEvents(CombatLogNpcEvent::query(), $hiddenSpellIds)
-            ->whereDate('created_at', $date)
+            ->whereRaw(sprintf('DATE(created_at) IN (%s)', $dates->map(static fn() => '?')->implode(', ')), $dates->values()->all())
             ->when($npcIds !== null, static fn(Builder $builder) => $builder->whereIn('npc_id', $npcIds))
             ->latest('created_at')
             ->get();

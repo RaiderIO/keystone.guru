@@ -106,11 +106,7 @@ class NpcCompendiumController extends Controller
         $dungeonService->setDungeonContext($dungeon, Auth::user());
 
         $dates       = $npcCompendiumService->getActivityDates(10, $dungeon);
-        $eventsByDay = [];
-
-        foreach ($dates->items() as $date) {
-            $eventsByDay[$date] = $npcCompendiumService->getEventsForDate(Carbon::parse($date), $dungeon);
-        }
+        $eventsByDay = $npcCompendiumService->getEventsForDates(collect($dates->items()), $dungeon)->all();
 
         return view('compendium.activity.index', [
             'contextDungeon'      => $dungeon,

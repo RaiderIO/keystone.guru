@@ -70,6 +70,44 @@ final class NpcCompendiumServiceActivityTest extends PublicTestCase
     }
 
     #[Test]
+    public function getEventsForDates_givenEventsOnTwoDaysAndAnEmptyDay_groupsEachEventUnderItsOwnDay(): void
+    {
+        // Arrange - two events on one day, one on the next, and a day without any
+        $characteristicId = Characteristic::orderBy('id')->value('id');
+        $eventIds         = [];
+
+        try {
+            foreach (['2000-01-02 12:00:00', '2000-01-02 13:00:00', '2000-01-03 12:00:00'] as $createdAt) {
+                // insert(), not create(): created_at is not fillable so create() silently drops it
+                $eventIds[$createdAt] = CombatLogNpcEvent::query()->insertGetId([
+                    'npc_id'      => self::TEST_NPC_ID,
+                    'event_type'  => CombatLogNpcEventType::CharacteristicAdded->value,
+                    'model_class' => Characteristic::class,
+                    'model_id'    => $characteristicId,
+                    'created_at'  => $createdAt,
+                ]);
+            }
+
+            // Act
+            $eventsByDate = $this->service->getEventsForDates(collect(['2000-01-03', '2000-01-02', '2000-01-04']));
+
+            // Assert
+            $this->assertSame(['2000-01-03', '2000-01-02', '2000-01-04'], $eventsByDate->keys()->all());
+            $this->assertSame(
+                [$eventIds['2000-01-03 12:00:00']],
+                $eventsByDate->get('2000-01-03')->where('npc_id', self::TEST_NPC_ID)->pluck('id')->values()->all(),
+            );
+            $this->assertSame(
+                [$eventIds['2000-01-02 13:00:00'], $eventIds['2000-01-02 12:00:00']],
+                $eventsByDate->get('2000-01-02')->where('npc_id', self::TEST_NPC_ID)->pluck('id')->values()->all(),
+            );
+            $this->assertTrue($eventsByDate->get('2000-01-04')->where('npc_id', self::TEST_NPC_ID)->isEmpty());
+        } finally {
+            CombatLogNpcEvent::query()->whereIn('id', $eventIds)->delete();
+        }
+    }
+
+    #[Test]
     public function getEventsForDate_givenNpcAndSpellEvents_returnsMergedCollection(): void
     {
         // Arrange

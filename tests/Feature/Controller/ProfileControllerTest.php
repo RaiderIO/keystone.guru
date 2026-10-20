@@ -20,9 +20,11 @@ use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Notifications\SendQueuedNotifications;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -43,6 +45,32 @@ use Tests\TestCases\PublicTestCase;
 final class ProfileControllerTest extends PublicTestCase
 {
     use ProvidesDungeon;
+
+    #[Test]
+    public function view_givenProfile_loadsDungeonMappingVersionsInBoundedQueries(): void
+    {
+        // Arrange - the route table's dungeon select lists every expansion holding a dungeon of the game version
+        $this->actingAsGuest();
+        $user = User::findOrFail(1);
+
+        /** @var array<int, string> $mappingVersionQueries */
+        $mappingVersionQueries = [];
+        DB::listen(static function (QueryExecuted $query) use (&$mappingVersionQueries): void {
+            if (str_contains($query->sql, 'from `mapping_versions` where `mapping_versions`.`dungeon_id` in')) {
+                $mappingVersionQueries[] = $query->sql;
+            }
+        });
+
+        // Act
+        $response = $this->get(route('profile.view', ['user' => $user]));
+
+        // Assert - one query for the expansions' dungeons and one for the listed dungeons, however many expansions there are
+        $response->assertOk();
+        $this->assertLessThanOrEqual(2, count($mappingVersionQueries), sprintf(
+            'Mapping versions were loaded in %d queries, expected one per dungeon list, not one per expansion',
+            count($mappingVersionQueries),
+        ));
+    }
 
     #[Test]
     public function tags_givenCreatorProfilesActive_pointsAtCollectionsForSharing(): void

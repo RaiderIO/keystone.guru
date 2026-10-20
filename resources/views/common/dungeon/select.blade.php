@@ -5,6 +5,7 @@ use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
@@ -15,7 +16,7 @@ use Illuminate\Support\Collection;
  * @var Collection<int, Dungeon>   $allRaids
  * @var Collection<int, Dungeon>   $allActiveDungeons
  * @var Collection<int, Dungeon>   $allActiveRaids
- * @var Collection<int, Expansion> $allExpansions
+ * @var EloquentCollection<int, Expansion> $allExpansions
  * @var Dungeon                    $siegeOfBoralus
  * @var Season                     $currentSeason
  * @var Season|null                $nextSeason
@@ -72,6 +73,11 @@ if (!isset($dungeons)) {
     }
 
     if ($showExpansions) {
+        // Loaded for every expansion at once; hasDungeonForGameVersion() would otherwise query once per expansion
+        $allExpansions->loadMissing([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
+            'dungeons.mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
+        ]);
+
         $validExpansions = $allExpansions->when(!$ignoreGameVersion, static fn(Collection $collection) => $collection->filter(static fn(\App\Models\Expansion $expansion) => $expansion->hasDungeonForGameVersion($selectGameVersion)));
 
         foreach ($validExpansions as $expansion) {

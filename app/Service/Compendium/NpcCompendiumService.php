@@ -91,26 +91,43 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
 
     public function getEventsForDate(Carbon $date, ?Dungeon $dungeon = null): Collection
     {
+        $dateString = $date->format('Y-m-d');
+        /** @var Collection<int, string> $dates */
+        $dates = collect([$dateString]);
+
+        return $this->getEventsForDates($dates, $dungeon)->get($dateString);
+    }
+
+    public function getEventsForDates(Collection $dates, ?Dungeon $dungeon = null): Collection
+    {
+        if ($dates->isEmpty()) {
+            return collect();
+        }
+
         $hiddenSpellIds = $this->getHiddenSpellIds();
 
-        $npcEvents = $this->combatLogNpcEventRepository->getByDate(
-            $date,
+        $npcEvents = $this->combatLogNpcEventRepository->getByDates(
+            $dates,
             $hiddenSpellIds,
             $dungeon === null ? null : $this->getNpcIdsForDungeon($dungeon),
         );
         $this->hydrateModelRelation($npcEvents);
         $this->hydrateNpcRelation($npcEvents);
 
-        $spellEvents = $this->combatLogSpellEventRepository->getByDate(
-            $date,
+        $spellEvents = $this->combatLogSpellEventRepository->getByDates(
+            $dates,
             $hiddenSpellIds,
             $dungeon === null ? null : $this->getDungeonSpellIds($dungeon),
         );
         $this->hydrateSpellRelation($spellEvents);
 
-        return $npcEvents->concat($spellEvents)
+        $eventsByDate = $npcEvents->concat($spellEvents)
             ->sortByDesc('created_at')
-            ->values();
+            ->groupBy(static fn(CombatLogNpcEvent|CombatLogSpellEvent $event): string => $event->created_at->format('Y-m-d'));
+
+        return $dates->mapWithKeys(static fn(string $date): array => [
+            $date => $eventsByDate->get($date, collect())->values(),
+        ]);
     }
 
     /**

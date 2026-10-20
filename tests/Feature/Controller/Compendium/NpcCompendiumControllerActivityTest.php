@@ -14,6 +14,8 @@ use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -211,6 +213,80 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
             $response->assertSee(route('compendium.activity.day', ['dungeon' => $this->dungeon, 'date' => $uniqueDate]));
         } finally {
             CombatLogNpcEvent::query()->whereIn('id', $eventIds)->delete();
+        }
+    }
+
+    #[Test]
+    public function activity_givenEventsOnSeveralDays_queriesEachEventTableOnce(): void
+    {
+        // Arrange - an NPC and a spell event on each of three days that sort ahead of any other data,
+        // so all three render on page 1
+        $uniqueDates      = ['2027-02-03', '2027-02-02', '2027-02-01'];
+        $npcId            = DB::table('npc_dungeons')->where('dungeon_id', $this->dungeon->id)->value('npc_id');
+        $characteristicId = Characteristic::query()->orderBy('id')->value('id');
+
+        /** @var array<string, array{npc: int, spell: int}> $eventIdsByDate */
+        $eventIdsByDate = [];
+
+        try {
+            $this->createTestSpellOnNpc($npcId);
+
+            foreach ($uniqueDates as $uniqueDate) {
+                // insert(), not create(): created_at is not fillable so create() silently drops it
+                $eventIdsByDate[$uniqueDate] = [
+                    'npc' => CombatLogNpcEvent::query()->insertGetId([
+                        'npc_id'      => $npcId,
+                        'event_type'  => CombatLogNpcEventType::CharacteristicAdded->value,
+                        'model_class' => Characteristic::class,
+                        'model_id'    => $characteristicId,
+                        'created_at'  => $uniqueDate . ' 12:00:00',
+                    ]),
+                    'spell' => CombatLogSpellEvent::query()->insertGetId([
+                        'spell_id'   => self::TEST_SPELL_ID,
+                        'event_type' => CombatLogSpellEventType::PropertyChanged->value,
+                        'property'   => SpellProperty::Aura->value,
+                        'created_at' => $uniqueDate . ' 12:01:00',
+                    ]),
+                ];
+            }
+
+            /** @var array<string, int> $eventQueryCounts */
+            $eventQueryCounts = ['combat_log_npc_events' => 0, 'combat_log_spell_events' => 0];
+            DB::listen(static function (QueryExecuted $query) use (&$eventQueryCounts): void {
+                // The distinct-dates queries that build the paginator run once each by design
+                if (str_contains($query->sql, 'event_date')) {
+                    return;
+                }
+
+                foreach (array_keys($eventQueryCounts) as $table) {
+                    if (str_contains($query->sql, sprintf('from `%s`', $table))) {
+                        $eventQueryCounts[$table]++;
+                    }
+                }
+            });
+
+            // Act
+            $response = $this->get(route('compendium.activity', $this->dungeon));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame(1, $eventQueryCounts['combat_log_npc_events'], 'NPC events must be fetched in one query for all days on the page');
+            $this->assertSame(1, $eventQueryCounts['combat_log_spell_events'], 'Spell events must be fetched in one query for all days on the page');
+
+            /** @var array<string, Collection<int, CombatLogNpcEvent|CombatLogSpellEvent>> $eventsByDay */
+            $eventsByDay = $response->viewData('eventsByDay');
+            foreach ($eventIdsByDate as $uniqueDate => $eventIds) {
+                $this->assertSame(
+                    [$eventIds['spell'], $eventIds['npc']],
+                    $eventsByDay[$uniqueDate]->map(static fn(CombatLogNpcEvent|CombatLogSpellEvent $event): int => $event->id)->all(),
+                    sprintf('Day %s must list exactly its own events, newest first', $uniqueDate),
+                );
+            }
+        } finally {
+            CombatLogNpcEvent::query()->whereIn('id', array_column($eventIdsByDate, 'npc'))->delete();
+            CombatLogSpellEvent::query()->whereIn('id', array_column($eventIdsByDate, 'spell'))->delete();
+            NpcSpell::query()->where('spell_id', self::TEST_SPELL_ID)->delete();
+            Spell::query()->where('id', self::TEST_SPELL_ID)->delete();
         }
     }
 

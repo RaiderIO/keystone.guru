@@ -264,7 +264,7 @@ class Expansion extends Model
         $filterFn ??= fn(Dungeon $dungeon) => true;
         $result = false;
 
-        $this->dungeons->load([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
+        $this->dungeons->loadMissing([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
             'mappingVersions' => function (HasMany $query): void {
                 $query->without('dungeon');
             },

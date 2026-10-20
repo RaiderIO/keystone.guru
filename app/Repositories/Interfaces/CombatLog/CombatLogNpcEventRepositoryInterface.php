@@ -4,7 +4,6 @@ namespace App\Repositories\Interfaces\CombatLog;
 
 use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Repositories\BaseRepositoryInterface;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -38,9 +37,12 @@ interface CombatLogNpcEventRepositoryInterface extends BaseRepositoryInterface
     public function getDistinctEventDates(Collection $hiddenSpellIds, ?Collection $npcIds = null): Collection;
 
     /**
+     * Every event on any of the given calendar days, newest first.
+     *
+     * @param  Collection<int, string>            $dates          `Y-m-d` dates
      * @param  Collection<int, int>               $hiddenSpellIds
      * @param  Collection<int, int>|null          $npcIds         when given, only these NPCs are considered
      * @return Collection<int, CombatLogNpcEvent>
      */
-    public function getByDate(Carbon $date, Collection $hiddenSpellIds, ?Collection $npcIds = null): Collection;
+    public function getByDates(Collection $dates, Collection $hiddenSpellIds, ?Collection $npcIds = null): Collection;
 }
