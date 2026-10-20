@@ -87,6 +87,11 @@ return [
             'unable_to_delete_arrow' => '화살표를 삭제할 수 없습니다',
         ],
     ],
+    'compendium' => [
+        'flash' => [
+            'unavailable_for_game_version' => '이 게임 버전에서는 아직 도감을 이용할 수 없습니다.',
+        ],
+    ],
     'dungeon' => [
         'flash' => [
             'dungeon_created' => '던전 생성',
@@ -166,13 +171,12 @@ return [
     'mdtimport' => [
         'unknown_dungeon' => '알 수 없는 던전',
         'error'           => [
-            'mdt_string_parsing_failed'             => 'MDT 문자열 구문 분석에 실패했습니다. 정말로 MDT 문자열을 붙여넣으셨습니까?',
-            'mdt_string_format_not_recognized'      => 'MDT 문자열 형식을 인식할 수 없습니다.',
-            'cli_weakauras_parser_not_found'        => 'cli_weakauras_parser가 설치되지 않았습니다.',
-            'invalid_mdt_string_exception'          => '잘못된 MDT 문자열: %s',
-            'invalid_mdt_string'                    => '잘못된 MDT 문자열',
-            'mdt_importer_not_configured_properly'  => 'MDT 가져오기 기능이 올바르게 구성되지 않았습니다. 이 문제에 대해 관리자에게 문의하십시오.',
-            'cannot_create_route_must_be_logged_in' => '경로를 생성하려면 로그인해야 합니다',
+            'mdt_string_parsing_failed'            => 'MDT 문자열 구문 분석에 실패했습니다. 정말로 MDT 문자열을 붙여넣으셨습니까?',
+            'mdt_string_format_not_recognized'     => 'MDT 문자열 형식을 인식할 수 없습니다.',
+            'cli_weakauras_parser_not_found'       => 'cli_weakauras_parser가 설치되지 않았습니다.',
+            'invalid_mdt_string_exception'         => '잘못된 MDT 문자열: %s',
+            'invalid_mdt_string'                   => '잘못된 MDT 문자열',
+            'mdt_importer_not_configured_properly' => 'MDT 가져오기 기능이 올바르게 구성되지 않았습니다. 이 문제에 대해 관리자에게 문의하십시오.',
         ],
     ],
     'path' => [

@@ -78,6 +78,8 @@ return [
         'creator_pinned_routes_help'       => 'Vos itinéraires épinglés sont mis en avant en haut de votre profil, dans cet ordre. Les itinéraires non publiés restent cachés aux autres même s\'ils sont épinglés.',
         'creator_pinned_routes_empty'      => 'Aucun itinéraire épinglé pour l\'instant.',
         'creator_pinned_routes_none'       => 'Vous n\'avez pas encore créé d\'itinéraire, il n\'y a donc rien à épingler.',
+        'creator_pinned_routes_add'        => 'Épingler des itinéraires',
+        'creator_pinned_routes_picker'     => 'Épingler des itinéraires sur votre profil',
         'creator_pinned_collections'       => 'Collections épinglées',
         'creator_pinned_collections_none'  => 'Vous n\'avez pas encore créé de collection.',
         'creator_pinned_collections_help'  => 'Vos collections épinglées sont mises en avant au-dessus de vos itinéraires, dans cet ordre. Les collections qui ne sont pas visibles publiquement restent cachées aux autres même lorsqu\'elles sont épinglées.',

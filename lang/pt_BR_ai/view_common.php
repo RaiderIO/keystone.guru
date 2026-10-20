@@ -481,6 +481,9 @@ return [
                     'affixes'          => 'Afixos',
                     'route_info_title' => 'Informações',
                 ],
+                'dungeondifficulty' => [
+                    'dungeon_difficulty' => 'Tamanho da incursão',
+                ],
                 'enemydisplaytype' => [
                     'portrait'                 => 'Retrato',
                     'npc_class'                => 'Classe',

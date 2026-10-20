@@ -31,10 +31,6 @@ return [
         'header_libraries' => '라이브러리',
         'header_images'    => '이미지',
     ],
-    'demo' => [
-        'title'  => '데모 경로',
-        'header' => '데모 경로',
-    ],
     'embed' => [
         'title'          => '경로 임베드',
         'header'         => '웹페이지에서 Keystone.guru 임베드 테스트',

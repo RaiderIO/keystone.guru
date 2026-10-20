@@ -78,6 +78,8 @@ return [
         'creator_pinned_routes_help'       => 'Deine angehefteten Routen werden in dieser Reihenfolge oben in deinem Profil hervorgehoben. Nicht veröffentlichte Routen bleiben für andere verborgen, auch wenn sie angeheftet sind.',
         'creator_pinned_routes_empty'      => 'Noch keine angehefteten Routen.',
         'creator_pinned_routes_none'       => 'Du hast noch keine Routen erstellt, daher gibt es nichts zum Anheften.',
+        'creator_pinned_routes_add'        => 'Routen anheften',
+        'creator_pinned_routes_picker'     => 'Routen an dein Profil anheften',
         'creator_pinned_collections'       => 'Angeheftete Sammlungen',
         'creator_pinned_collections_none'  => 'Du hast noch keine Sammlungen erstellt.',
         'creator_pinned_collections_help'  => 'Deine angehefteten Sammlungen werden in dieser Reihenfolge über deinen Routen hervorgehoben. Sammlungen, die nicht öffentlich sichtbar sind, bleiben für andere verborgen, auch wenn sie angeheftet sind.',

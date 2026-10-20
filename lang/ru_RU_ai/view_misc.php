@@ -31,10 +31,6 @@ return [
         'header_libraries' => 'Библиотеки',
         'header_images'    => 'Изображения',
     ],
-    'demo' => [
-        'title'  => 'Демо маршруты',
-        'header' => 'Демо маршруты',
-    ],
     'embed' => [
         'title'          => 'Встроить маршрут',
         'header'         => 'Keystone.guru встроит тестовое окно на ваш сайт',

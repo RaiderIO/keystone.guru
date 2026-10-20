@@ -347,6 +347,9 @@ Aviso: atacar Shade of Eranikus faz todos os dragões verdes deste andar entrare
         'mdt' => [
             'witherbark_prisoner' => 'Prisioneiro Ramoscuro',
             'captive'             => 'Cativo',
+            'barrel_of_apples'    => 'Barril de maçãs',
+            'berry_bush'          => 'Arbusto de frutas silvestres',
+            'salmon_pool'         => 'Cardume de salmão',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [

@@ -481,6 +481,9 @@ return [
                     'affixes'          => '词缀',
                     'route_info_title' => '信息',
                 ],
+                'dungeondifficulty' => [
+                    'dungeon_difficulty' => '团队规模',
+                ],
                 'enemydisplaytype' => [
                     'portrait'                 => '肖像',
                     'npc_class'                => '职业',

@@ -31,10 +31,6 @@ return [
         'header_libraries' => 'Librerie',
         'header_images'    => 'Immagini',
     ],
-    'demo' => [
-        'title'  => 'Percorsi demo',
-        'header' => 'Percorsi demo',
-    ],
     'embed' => [
         'title'          => 'Incorpora un percorso',
         'header'         => 'Test di incorporamento di Keystone.guru sulla pagina web',

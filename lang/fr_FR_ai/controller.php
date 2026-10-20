@@ -87,6 +87,11 @@ return [
             'unable_to_delete_arrow' => 'Impossible de supprimer la flèche',
         ],
     ],
+    'compendium' => [
+        'flash' => [
+            'unavailable_for_game_version' => 'Le Compendium n\'est pas encore disponible pour cette version du jeu.',
+        ],
+    ],
     'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Donjon créé',
@@ -166,13 +171,12 @@ return [
     'mdtimport' => [
         'unknown_dungeon' => 'Donjon inconnu',
         'error'           => [
-            'mdt_string_parsing_failed'             => 'L\'analyse de la chaîne MDT a échoué. Avez-vous vraiment collé une chaîne MDT?',
-            'mdt_string_format_not_recognized'      => 'Le format de la chaîne MDT n\'a pas été reconnu.',
-            'cli_weakauras_parser_not_found'        => 'cli_weakauras_parser non installé.',
-            'invalid_mdt_string_exception'          => 'Chaîne MDT invalide : %s',
-            'invalid_mdt_string'                    => 'Chaîne MDT invalide',
-            'mdt_importer_not_configured_properly'  => 'L\'importateur MDT n\'est pas configuré correctement. Veuillez contacter l\'administrateur à propos de ce problème.',
-            'cannot_create_route_must_be_logged_in' => 'Vous devez être connecté pour créer un itinéraire',
+            'mdt_string_parsing_failed'            => 'L\'analyse de la chaîne MDT a échoué. Avez-vous vraiment collé une chaîne MDT?',
+            'mdt_string_format_not_recognized'     => 'Le format de la chaîne MDT n\'a pas été reconnu.',
+            'cli_weakauras_parser_not_found'       => 'cli_weakauras_parser non installé.',
+            'invalid_mdt_string_exception'         => 'Chaîne MDT invalide : %s',
+            'invalid_mdt_string'                   => 'Chaîne MDT invalide',
+            'mdt_importer_not_configured_properly' => 'L\'importateur MDT n\'est pas configuré correctement. Veuillez contacter l\'administrateur à propos de ce problème.',
         ],
     ],
     'path' => [

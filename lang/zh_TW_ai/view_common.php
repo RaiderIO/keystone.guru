@@ -481,6 +481,9 @@ return [
                     'affixes'          => '詞綴',
                     'route_info_title' => '信息',
                 ],
+                'dungeondifficulty' => [
+                    'dungeon_difficulty' => '',
+                ],
                 'enemydisplaytype' => [
                     'portrait'                 => '肖像',
                     'npc_class'                => '職業',

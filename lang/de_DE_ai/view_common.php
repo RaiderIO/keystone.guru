@@ -481,6 +481,9 @@ return [
                     'affixes'          => 'Affixe',
                     'route_info_title' => 'Info',
                 ],
+                'dungeondifficulty' => [
+                    'dungeon_difficulty' => 'Schlachtzugsgröße',
+                ],
                 'enemydisplaytype' => [
                     'portrait'                 => 'Porträt',
                     'npc_class'                => 'Klasse',

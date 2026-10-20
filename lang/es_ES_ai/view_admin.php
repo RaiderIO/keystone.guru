@@ -120,7 +120,7 @@ return [
             'header_edit'   => '',
             'active'        => '',
             'name'          => '',
-            'shortname'     => '',
+            'key'           => '',
             'current_image' => '',
             'color'         => '',
             'edit'          => '',

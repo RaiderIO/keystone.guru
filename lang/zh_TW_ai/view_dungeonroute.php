@@ -67,15 +67,6 @@ return [
         'title'  => '創建臨時路線',
         'header' => '新臨時路線',
     ],
-    'sandboxclaimed' => [
-        'title'               => '路線已被申請',
-        'header'              => '路線已被申請',
-        'claimed_description' => '此路線已被某人申請（或您使用了瀏覽器的返回按鈕來到此處）。',
-    ],
-    'unavailable' => [
-        'title'                   => '未發布的路線',
-        'unavailable_description' => '您無權查看此路線。請要求路線的作者更改路線的共享設置，以便您可以查看。',
-    ],
     'view' => [
         'any'                                     => '任何',
         'linkpreview_title'                       => '%s',

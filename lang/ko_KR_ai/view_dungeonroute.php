@@ -67,15 +67,6 @@ return [
         'title'  => '임시 경로 생성',
         'header' => '새 임시 경로',
     ],
-    'sandboxclaimed' => [
-        'title'               => '경로 이미 소유됨',
-        'header'              => '경로 이미 소유됨',
-        'claimed_description' => '이 경로는 이미 다른 사람이 소유했거나(또는 브라우저의 뒤로 가기 버튼을 사용하여 여기로 이동했습니다).',
-    ],
-    'unavailable' => [
-        'title'                   => '비공개 경로',
-        'unavailable_description' => '이 경로를 볼 권한이 없습니다. 경로 작성자에게 경로의 공유 설정을 변경하여 볼 수 있도록 요청하세요.',
-    ],
     'view' => [
         'any'                                     => '아무것이나',
         'linkpreview_title'                       => '%s',
