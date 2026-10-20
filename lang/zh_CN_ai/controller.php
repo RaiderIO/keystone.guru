@@ -89,7 +89,7 @@ return [
     ],
     'compendium' => [
         'flash' => [
-            'unavailable_for_game_version' => '',
+            'unavailable_for_game_version' => '此游戏版本暂未开放图鉴。',
         ],
     ],
     'dungeon' => [

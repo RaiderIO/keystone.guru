@@ -482,7 +482,7 @@ return [
                     'route_info_title' => '信息',
                 ],
                 'dungeondifficulty' => [
-                    'dungeon_difficulty' => '',
+                    'dungeon_difficulty' => '团队规模',
                 ],
                 'enemydisplaytype' => [
                     'portrait'                 => '肖像',
