@@ -78,6 +78,8 @@ return [
         'creator_pinned_routes_help'       => 'Suas rotas fixadas são destacadas no topo do seu perfil, nesta ordem. Rotas que não estão publicadas permanecem ocultas de outras pessoas mesmo quando fixadas.',
         'creator_pinned_routes_empty'      => 'Ainda não há rotas fixadas.',
         'creator_pinned_routes_none'       => 'Você ainda não criou nenhuma rota, então não há nada para fixar.',
+        'creator_pinned_routes_add'        => '',
+        'creator_pinned_routes_picker'     => '',
         'creator_pinned_collections'       => 'Coleções fixadas',
         'creator_pinned_collections_none'  => 'Você ainda não criou nenhuma coleção.',
         'creator_pinned_collections_help'  => 'Suas coleções fixadas são destacadas acima das suas rotas, nesta ordem. Coleções que não são visíveis publicamente permanecem ocultas de outras pessoas mesmo quando fixadas.',

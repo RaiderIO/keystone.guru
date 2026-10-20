@@ -67,15 +67,6 @@ return [
         'title'  => 'Temporäre Route erstellen',
         'header' => 'Neue temporäre Route',
     ],
-    'sandboxclaimed' => [
-        'title'               => 'Route bereits beansprucht',
-        'header'              => 'Route bereits beansprucht',
-        'claimed_description' => 'Diese Route wurde bereits von jemandem beansprucht (oder du hast die Zurück-Taste in deinem Browser verwendet, um hierher zu navigieren).',
-    ],
-    'unavailable' => [
-        'title'                   => 'Unveröffentlichte Route',
-        'unavailable_description' => 'Du bist nicht berechtigt, diese Route anzusehen. Bitte den Autor der Route, die Freigabeeinstellungen der Route zu ändern, damit du sie ansehen kannst.',
-    ],
     'view' => [
         'any'                                     => 'Jeder',
         'linkpreview_title'                       => '%s',

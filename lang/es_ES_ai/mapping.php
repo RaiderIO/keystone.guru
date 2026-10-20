@@ -347,6 +347,9 @@ Aviso: atacar a Shade of Eranikus provoca que todos los dragones verdes de esta 
         'mdt' => [
             'witherbark_prisoner' => 'Witherbark Prisoner',
             'captive'             => 'Cautivo',
+            'barrel_of_apples'    => '',
+            'berry_bush'          => '',
+            'salmon_pool'         => '',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [

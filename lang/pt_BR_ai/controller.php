@@ -87,6 +87,11 @@ return [
             'unable_to_delete_arrow' => 'Não foi possível excluir a seta',
         ],
     ],
+    'compendium' => [
+        'flash' => [
+            'unavailable_for_game_version' => '',
+        ],
+    ],
     'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Masmorra criada',
@@ -166,13 +171,12 @@ return [
     'mdtimport' => [
         'unknown_dungeon' => 'Masmorra desconhecida',
         'error'           => [
-            'mdt_string_parsing_failed'             => 'Falha ao analisar a string MDT. Você realmente colou uma string MDT?',
-            'mdt_string_format_not_recognized'      => 'O formato da string MDT não foi reconhecido.',
-            'cli_weakauras_parser_not_found'        => 'cli_weakauras_parser não instalado.',
-            'invalid_mdt_string_exception'          => 'String MDT inválida: %s',
-            'invalid_mdt_string'                    => 'String MDT inválida',
-            'mdt_importer_not_configured_properly'  => 'Importador MDT não configurado corretamente. Por favor, entre em contato com o administrador sobre este problema.',
-            'cannot_create_route_must_be_logged_in' => 'Você deve estar logado para criar uma rota',
+            'mdt_string_parsing_failed'            => 'Falha ao analisar a string MDT. Você realmente colou uma string MDT?',
+            'mdt_string_format_not_recognized'     => 'O formato da string MDT não foi reconhecido.',
+            'cli_weakauras_parser_not_found'       => 'cli_weakauras_parser não instalado.',
+            'invalid_mdt_string_exception'         => 'String MDT inválida: %s',
+            'invalid_mdt_string'                   => 'String MDT inválida',
+            'mdt_importer_not_configured_properly' => 'Importador MDT não configurado corretamente. Por favor, entre em contato com o administrador sobre este problema.',
         ],
     ],
     'path' => [

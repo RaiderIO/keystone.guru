@@ -87,6 +87,11 @@ return [
             'unable_to_delete_arrow' => 'No se pudo eliminar la flecha',
         ],
     ],
+    'compendium' => [
+        'flash' => [
+            'unavailable_for_game_version' => '',
+        ],
+    ],
     'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Mazmorra creada',
@@ -166,13 +171,12 @@ return [
     'mdtimport' => [
         'unknown_dungeon' => 'Mazmorra desconocida',
         'error'           => [
-            'mdt_string_parsing_failed'             => 'El análisis de la cadena MDT falló. ¿Realmente pegaste una cadena MDT?',
-            'mdt_string_format_not_recognized'      => 'El formato de la cadena MDT no fue reconocido.',
-            'cli_weakauras_parser_not_found'        => 'cli_weakauras_parser no está instalado.',
-            'invalid_mdt_string_exception'          => 'Cadena MDT no válida: %s',
-            'invalid_mdt_string'                    => 'Cadena MDT no válida',
-            'mdt_importer_not_configured_properly'  => 'El importador MDT no está configurado correctamente. Por favor contacte al administrador sobre este problema.',
-            'cannot_create_route_must_be_logged_in' => 'Debe iniciar sesión para crear una ruta',
+            'mdt_string_parsing_failed'            => 'El análisis de la cadena MDT falló. ¿Realmente pegaste una cadena MDT?',
+            'mdt_string_format_not_recognized'     => 'El formato de la cadena MDT no fue reconocido.',
+            'cli_weakauras_parser_not_found'       => 'cli_weakauras_parser no está instalado.',
+            'invalid_mdt_string_exception'         => 'Cadena MDT no válida: %s',
+            'invalid_mdt_string'                   => 'Cadena MDT no válida',
+            'mdt_importer_not_configured_properly' => 'El importador MDT no está configurado correctamente. Por favor contacte al administrador sobre este problema.',
         ],
     ],
     'path' => [

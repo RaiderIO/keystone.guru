@@ -87,6 +87,11 @@ return [
             'unable_to_delete_arrow' => '',
         ],
     ],
+    'compendium' => [
+        'flash' => [
+            'unavailable_for_game_version' => '',
+        ],
+    ],
     'dungeon' => [
         'flash' => [
             'dungeon_created' => '地下城已創建',
@@ -166,13 +171,12 @@ return [
     'mdtimport' => [
         'unknown_dungeon' => '未知的地牢',
         'error'           => [
-            'mdt_string_parsing_failed'             => 'MDT 字符串解析失敗。您確定粘貼的是 MDT 字符串嗎？',
-            'mdt_string_format_not_recognized'      => '未識別 MDT 字符串格式。',
-            'cli_weakauras_parser_not_found'        => '未安裝 cli_weakauras_parser。',
-            'invalid_mdt_string_exception'          => '無效的 MDT 字符串：%s',
-            'invalid_mdt_string'                    => '無效的 MDT 字符串',
-            'mdt_importer_not_configured_properly'  => 'MDT 匯入器未正確配置。請聯繫管理員處理此問題。',
-            'cannot_create_route_must_be_logged_in' => '您必須登入才能創建路線',
+            'mdt_string_parsing_failed'            => 'MDT 字符串解析失敗。您確定粘貼的是 MDT 字符串嗎？',
+            'mdt_string_format_not_recognized'     => '未識別 MDT 字符串格式。',
+            'cli_weakauras_parser_not_found'       => '未安裝 cli_weakauras_parser。',
+            'invalid_mdt_string_exception'         => '無效的 MDT 字符串：%s',
+            'invalid_mdt_string'                   => '無效的 MDT 字符串',
+            'mdt_importer_not_configured_properly' => 'MDT 匯入器未正確配置。請聯繫管理員處理此問題。',
         ],
     ],
     'path' => [

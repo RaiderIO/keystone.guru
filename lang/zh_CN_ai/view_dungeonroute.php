@@ -67,15 +67,6 @@ return [
         'title'  => '创建临时路线',
         'header' => '新临时路线',
     ],
-    'sandboxclaimed' => [
-        'title'               => '路线已被认领',
-        'header'              => '路线已被认领',
-        'claimed_description' => '此路线已被他人认领（或您使用浏览器的后退按钮导航到此处）。',
-    ],
-    'unavailable' => [
-        'title'                   => '未发布的路线',
-        'unavailable_description' => '您无权查看此路线。请要求路线作者更改路线的共享设置，以便您可以查看。',
-    ],
     'view' => [
         'any'                                     => '任何',
         'linkpreview_title'                       => '%s',

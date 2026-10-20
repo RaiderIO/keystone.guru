@@ -87,6 +87,11 @@ return [
             'unable_to_delete_arrow' => 'Pfeil konnte nicht gelöscht werden',
         ],
     ],
+    'compendium' => [
+        'flash' => [
+            'unavailable_for_game_version' => '',
+        ],
+    ],
     'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Dungeon erstellt',
@@ -166,13 +171,12 @@ return [
     'mdtimport' => [
         'unknown_dungeon' => 'Unbekannter Dungeon',
         'error'           => [
-            'mdt_string_parsing_failed'             => 'MDT-String-Parsing fehlgeschlagen. Hast du wirklich einen MDT-String eingefügt?',
-            'mdt_string_format_not_recognized'      => 'Das MDT-String-Format wurde nicht erkannt.',
-            'cli_weakauras_parser_not_found'        => 'cli_weakauras_parser nicht installiert.',
-            'invalid_mdt_string_exception'          => 'Ungültiger MDT-String: %s',
-            'invalid_mdt_string'                    => 'Ungültiger MDT-String',
-            'mdt_importer_not_configured_properly'  => 'MDT-Importer ist nicht richtig konfiguriert. Bitte kontaktiere den Administrator zu diesem Problem.',
-            'cannot_create_route_must_be_logged_in' => 'Du musst eingeloggt sein, um eine Route zu erstellen',
+            'mdt_string_parsing_failed'            => 'MDT-String-Parsing fehlgeschlagen. Hast du wirklich einen MDT-String eingefügt?',
+            'mdt_string_format_not_recognized'     => 'Das MDT-String-Format wurde nicht erkannt.',
+            'cli_weakauras_parser_not_found'       => 'cli_weakauras_parser nicht installiert.',
+            'invalid_mdt_string_exception'         => 'Ungültiger MDT-String: %s',
+            'invalid_mdt_string'                   => 'Ungültiger MDT-String',
+            'mdt_importer_not_configured_properly' => 'MDT-Importer ist nicht richtig konfiguriert. Bitte kontaktiere den Administrator zu diesem Problem.',
         ],
     ],
     'path' => [

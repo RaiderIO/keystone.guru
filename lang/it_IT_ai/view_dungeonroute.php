@@ -67,15 +67,6 @@ return [
         'title'  => 'Crea percorso temporaneo',
         'header' => 'Nuovo percorso temporaneo',
     ],
-    'sandboxclaimed' => [
-        'title'               => 'Percorso già reclamato',
-        'header'              => 'Percorso già reclamato',
-        'claimed_description' => 'Questo percorso è già stato reclamato da qualcuno (oppure hai usato il pulsante indietro nel tuo browser per navigare qui).',
-    ],
-    'unavailable' => [
-        'title'                   => 'Percorso non pubblicato',
-        'unavailable_description' => 'Non sei autorizzato a visualizzare questo percorso. Chiedi all\'autore del percorso di modificare le impostazioni di condivisione del percorso in modo che tu possa visualizzarlo.',
-    ],
     'view' => [
         'any'                                     => 'Qualsiasi',
         'linkpreview_title'                       => '%s',

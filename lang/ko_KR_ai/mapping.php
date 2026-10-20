@@ -347,6 +347,9 @@ Alzzin the Wildshaper 처치 후에는 이 동굴을 이용해 인스턴스를 �
         'mdt' => [
             'witherbark_prisoner' => '마른껍질 포로',
             'captive'             => '포로',
+            'barrel_of_apples'    => '',
+            'berry_bush'          => '',
+            'salmon_pool'         => '',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [

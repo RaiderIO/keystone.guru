@@ -87,6 +87,11 @@ return [
             'unable_to_delete_arrow' => 'Не удалось удалить стрелку',
         ],
     ],
+    'compendium' => [
+        'flash' => [
+            'unavailable_for_game_version' => '',
+        ],
+    ],
     'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Подземелье создано',
@@ -166,13 +171,12 @@ return [
     'mdtimport' => [
         'unknown_dungeon' => 'Неизвестное подземелье',
         'error'           => [
-            'mdt_string_parsing_failed'             => 'Ошибка при разборе строки MDT. Вы действительно вставили строку MDT?',
-            'mdt_string_format_not_recognized'      => 'Формат строки MDT не распознан.',
-            'cli_weakauras_parser_not_found'        => 'cli_weakauras_parser не установлен.',
-            'invalid_mdt_string_exception'          => 'Недействительная строка MDT: %s',
-            'invalid_mdt_string'                    => 'Недействительная строка MDT',
-            'mdt_importer_not_configured_properly'  => 'Импорт MDT настроен неправильно. Пожалуйста, свяжитесь с администратором по поводу этой проблемы.',
-            'cannot_create_route_must_be_logged_in' => 'Вы должны авторизоваться, чтобы создать маршрут',
+            'mdt_string_parsing_failed'            => 'Ошибка при разборе строки MDT. Вы действительно вставили строку MDT?',
+            'mdt_string_format_not_recognized'     => 'Формат строки MDT не распознан.',
+            'cli_weakauras_parser_not_found'       => 'cli_weakauras_parser не установлен.',
+            'invalid_mdt_string_exception'         => 'Недействительная строка MDT: %s',
+            'invalid_mdt_string'                   => 'Недействительная строка MDT',
+            'mdt_importer_not_configured_properly' => 'Импорт MDT настроен неправильно. Пожалуйста, свяжитесь с администратором по поводу этой проблемы.',
         ],
     ],
     'path' => [

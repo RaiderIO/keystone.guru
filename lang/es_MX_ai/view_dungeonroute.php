@@ -67,15 +67,6 @@ return [
         'title'  => 'Crear ruta temporal',
         'header' => 'Nueva ruta temporal',
     ],
-    'sandboxclaimed' => [
-        'title'               => 'Ruta ya reclamada',
-        'header'              => 'Ruta ya reclamada',
-        'claimed_description' => 'Esta ruta ya ha sido reclamada por alguien (o usaste el botón de retroceso en tu navegador para navegar aquí).',
-    ],
-    'unavailable' => [
-        'title'                   => 'Ruta no publicada',
-        'unavailable_description' => 'No estás autorizado para ver esta ruta. Pide al autor de la ruta que cambie la configuración de Compartir de la ruta para que puedas verla.',
-    ],
     'view' => [
         'any'                                     => 'Cualquiera',
         'linkpreview_title'                       => '%s',

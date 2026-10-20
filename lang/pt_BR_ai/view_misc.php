@@ -31,10 +31,6 @@ return [
         'header_libraries' => 'Bibliotecas',
         'header_images'    => 'Imagens',
     ],
-    'demo' => [
-        'title'  => 'Rotas de demonstração',
-        'header' => 'Rotas de demonstração',
-    ],
     'embed' => [
         'title'          => 'Incorporar uma rota',
         'header'         => 'Teste de incorporação do Keystone.guru em página da web',

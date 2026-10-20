@@ -481,6 +481,9 @@ return [
                     'affixes'          => 'Affixes',
                     'route_info_title' => 'Infos',
                 ],
+                'dungeondifficulty' => [
+                    'dungeon_difficulty' => '',
+                ],
                 'enemydisplaytype' => [
                     'portrait'                 => 'Portrait',
                     'npc_class'                => 'Classe',

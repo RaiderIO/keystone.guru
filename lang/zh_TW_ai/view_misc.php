@@ -31,10 +31,6 @@ return [
         'header_libraries' => '庫',
         'header_images'    => '圖片',
     ],
-    'demo' => [
-        'title'  => '演示路線',
-        'header' => '演示路線',
-    ],
     'embed' => [
         'title'          => '嵌入路線',
         'header'         => 'Keystone.guru 在網頁上的嵌入測試',

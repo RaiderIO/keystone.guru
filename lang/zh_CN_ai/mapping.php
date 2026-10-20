@@ -347,6 +347,9 @@ return [
         'mdt' => [
             'witherbark_prisoner' => 'Witherbark Prisoner',
             'captive'             => '俘虏',
+            'barrel_of_apples'    => '',
+            'berry_bush'          => '',
+            'salmon_pool'         => '',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [

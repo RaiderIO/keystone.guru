@@ -77,6 +77,8 @@ return [
         'creator_pinned_routes_help'       => '',
         'creator_pinned_routes_empty'      => '',
         'creator_pinned_routes_none'       => '',
+        'creator_pinned_routes_add'        => '',
+        'creator_pinned_routes_picker'     => '',
         'creator_pinned_collections'       => '',
         'creator_pinned_collections_none'  => '',
         'creator_pinned_collections_help'  => '',

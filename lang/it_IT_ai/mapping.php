@@ -347,6 +347,9 @@ Attenzione: attaccare Shade of Eranikus causa l\'aggro di tutti i draghi verdi s
         'mdt' => [
             'witherbark_prisoner' => 'Prigioniero degli Scorzasecca',
             'captive'             => 'Prigioniero',
+            'barrel_of_apples'    => '',
+            'berry_bush'          => '',
+            'salmon_pool'         => '',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [

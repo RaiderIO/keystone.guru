@@ -25,6 +25,11 @@ return [
     'confirmed'        => ':Attribute 확인 항목이 일치하지 않습니다.',
     'current_password' => '패스워드가 일치하지 않습니다.',
     'custom'           => [
+        'change_password' => [
+            'current_password_required'     => '',
+            'new_password_required'         => '',
+            'new_password_confirm_required' => '',
+        ],
         'bio' => [
             'max' => '',
         ],
@@ -61,6 +66,10 @@ return [
         ],
         'patreon_benefits' => [
             'exists' => '',
+        ],
+        'dungeon_transport_linked_dungeon_transport_id' => [
+            'exists' => '',
+            'not_in' => '',
         ],
         'patreon_grant_reason' => [
             'required' => '',

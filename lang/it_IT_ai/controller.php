@@ -87,6 +87,11 @@ return [
             'unable_to_delete_arrow' => 'Impossibile eliminare la freccia',
         ],
     ],
+    'compendium' => [
+        'flash' => [
+            'unavailable_for_game_version' => '',
+        ],
+    ],
     'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Dungeon creato',
@@ -166,13 +171,12 @@ return [
     'mdtimport' => [
         'unknown_dungeon' => 'Dungeon sconosciuto',
         'error'           => [
-            'mdt_string_parsing_failed'             => 'Parsing della stringa MDT fallito. Hai davvero incollato una stringa MDT?',
-            'mdt_string_format_not_recognized'      => 'Il formato della stringa MDT non è stato riconosciuto.',
-            'cli_weakauras_parser_not_found'        => 'cli_weakauras_parser non installato.',
-            'invalid_mdt_string_exception'          => 'Stringa MDT non valida: %s',
-            'invalid_mdt_string'                    => 'Stringa MDT non valida',
-            'mdt_importer_not_configured_properly'  => 'L\'importatore MDT non è configurato correttamente. Si prega di contattare l\'amministratore per questo problema.',
-            'cannot_create_route_must_be_logged_in' => 'Devi essere loggato per creare un percorso',
+            'mdt_string_parsing_failed'            => 'Parsing della stringa MDT fallito. Hai davvero incollato una stringa MDT?',
+            'mdt_string_format_not_recognized'     => 'Il formato della stringa MDT non è stato riconosciuto.',
+            'cli_weakauras_parser_not_found'       => 'cli_weakauras_parser non installato.',
+            'invalid_mdt_string_exception'         => 'Stringa MDT non valida: %s',
+            'invalid_mdt_string'                   => 'Stringa MDT non valida',
+            'mdt_importer_not_configured_properly' => 'L\'importatore MDT non è configurato correttamente. Si prega di contattare l\'amministratore per questo problema.',
         ],
     ],
     'path' => [

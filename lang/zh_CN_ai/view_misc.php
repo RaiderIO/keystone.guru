@@ -31,10 +31,6 @@ return [
         'header_libraries' => '库',
         'header_images'    => '图片',
     ],
-    'demo' => [
-        'title'  => '演示路线',
-        'header' => '演示路线',
-    ],
     'embed' => [
         'title'          => '嵌入路线',
         'header'         => 'Keystone.guru 在网页上的嵌入测试',

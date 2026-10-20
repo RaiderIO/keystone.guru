@@ -25,6 +25,11 @@ return [
     'confirmed'        => 'Le champ de confirmation :attribute ne correspond pas.',
     'current_password' => 'Le mot de passe est incorrect.',
     'custom'           => [
+        'change_password' => [
+            'current_password_required'     => '',
+            'new_password_required'         => '',
+            'new_password_confirm_required' => '',
+        ],
         'bio' => [
             'max' => '',
         ],
@@ -61,6 +66,10 @@ return [
         ],
         'patreon_benefits' => [
             'exists' => '',
+        ],
+        'dungeon_transport_linked_dungeon_transport_id' => [
+            'exists' => '',
+            'not_in' => '',
         ],
         'patreon_grant_reason' => [
             'required' => '',

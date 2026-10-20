@@ -67,15 +67,6 @@ return [
         'title'  => 'Criar rota temporária',
         'header' => 'Nova rota temporária',
     ],
-    'sandboxclaimed' => [
-        'title'               => 'Rota já reivindicada',
-        'header'              => 'Rota já reivindicada',
-        'claimed_description' => 'Esta rota já foi reivindicada por alguém (ou você usou o botão de voltar no seu navegador para chegar aqui).',
-    ],
-    'unavailable' => [
-        'title'                   => 'Rota não publicada',
-        'unavailable_description' => 'Você não está autorizado a visualizar esta rota. Peça ao autor da rota para alterar as configurações de compartilhamento da rota para que você possa visualizá-la.',
-    ],
     'view' => [
         'any'                                     => 'Qualquer',
         'linkpreview_title'                       => '%s',

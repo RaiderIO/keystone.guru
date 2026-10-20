@@ -67,15 +67,6 @@ return [
         'title'  => 'Créer une route temporaire',
         'header' => 'Nouvelle route temporaire',
     ],
-    'sandboxclaimed' => [
-        'title'               => 'Route déjà revendiquée',
-        'header'              => 'Route déjà revendiquée',
-        'claimed_description' => 'Cette route a déjà été revendiquée par quelqu\'un (ou vous avez utilisé le bouton retour de votre navigateur pour naviguer ici).',
-    ],
-    'unavailable' => [
-        'title'                   => 'Route non publiée',
-        'unavailable_description' => 'Vous n\'êtes pas autorisé à voir cette route. Demandez à l\'auteur de la route de modifier les paramètres de partage de la route pour que vous puissiez la voir.',
-    ],
     'view' => [
         'any'                                     => 'N\'importe lequel',
         'linkpreview_title'                       => '%s',

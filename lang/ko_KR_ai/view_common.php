@@ -481,6 +481,9 @@ return [
                     'affixes'          => '속성',
                     'route_info_title' => '정보',
                 ],
+                'dungeondifficulty' => [
+                    'dungeon_difficulty' => '',
+                ],
                 'enemydisplaytype' => [
                     'portrait'                 => '초상화',
                     'npc_class'                => '클래스',

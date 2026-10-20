@@ -78,6 +78,8 @@ return [
         'creator_pinned_routes_help'       => 'Tus rutas fijadas se destacan en la parte superior de tu perfil, en este orden. Las rutas que no están publicadas permanecen ocultas para otras personas aunque estén fijadas.',
         'creator_pinned_routes_empty'      => 'Todavía no hay rutas fijadas.',
         'creator_pinned_routes_none'       => 'Todavía no has creado ninguna ruta, así que no hay nada que fijar.',
+        'creator_pinned_routes_add'        => '',
+        'creator_pinned_routes_picker'     => '',
         'creator_pinned_collections'       => 'Colecciones fijadas',
         'creator_pinned_collections_none'  => 'Todavía no has creado ninguna colección.',
         'creator_pinned_collections_help'  => 'Tus colecciones fijadas se destacan encima de tus rutas, en este orden. Las colecciones que no son visibles públicamente permanecen ocultas para otras personas aunque estén fijadas.',

@@ -78,6 +78,8 @@ return [
         'creator_pinned_routes_help'       => '您的置顶路线将按此顺序在您的资料顶部突出显示。未发布的路线即使被置顶，其他人也无法看到。',
         'creator_pinned_routes_empty'      => '还没有置顶路线。',
         'creator_pinned_routes_none'       => '您还没有创建任何路线，因此没有可以置顶的内容。',
+        'creator_pinned_routes_add'        => '',
+        'creator_pinned_routes_picker'     => '',
         'creator_pinned_collections'       => '置顶合集',
         'creator_pinned_collections_none'  => '您还没有创建任何合集。',
         'creator_pinned_collections_help'  => '您的置顶合集将按此顺序在您的路线上方突出显示。未公开可见的合集即使被置顶，其他人也无法看到。',
