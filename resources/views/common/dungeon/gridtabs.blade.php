@@ -55,9 +55,16 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
  *
  * @var Collection<int, array{key: string, name: string, dungeons: Collection<int, Dungeon>}> $expansionTabs
  */
-$expansionTabs = collect();
+$expansionTabs      = collect();
+$expansionInstances = Dungeon::query()
+    ->whereIn('expansion_id', $activeExpansions->pluck('id'))
+    ->active()
+    ->forGameVersion($gameVersion)
+    ->orderBy('name')
+    ->get()
+    ->filter($filterFn);
 foreach ($activeExpansions as $expansion) {
-    $expansionDungeons = $expansion->dungeons()->active()->forGameVersion($gameVersion)->get()->filter($filterFn)->values();
+    $expansionDungeons = $expansionInstances->where('expansion_id', $expansion->id)->where('raid', false)->values();
     if ($expansionDungeons->isNotEmpty()) {
         $expansionTabs->push([
             'key'      => $expansion->key,
@@ -66,7 +73,7 @@ foreach ($activeExpansions as $expansion) {
         ]);
     }
 
-    $expansionRaids = $expansion->raids()->active()->forGameVersion($gameVersion)->get()->filter($filterFn)->values();
+    $expansionRaids = $expansionInstances->where('expansion_id', $expansion->id)->where('raid', true)->values();
     if ($expansionRaids->isNotEmpty()) {
         $expansionTabs->push([
             'key'      => sprintf('%s-raid', $expansion->key),
