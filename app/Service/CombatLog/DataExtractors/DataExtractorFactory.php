@@ -26,7 +26,7 @@ class DataExtractorFactory implements DataExtractorFactoryInterface
             new CreateMissingNpcDataExtractor(),
             new SpellDataExtractor($this->spellRepository, $spellPropertyObservationBuffer),
             new NpcCharacteristicDataExtractor($this->spellRepository),
-            new SpellCounterDataExtractor($spellPropertyObservationBuffer),
+            new SpellCounterDataExtractor($this->spellRepository, $spellPropertyObservationBuffer),
             new ImmunityBypassDataExtractor($spellPropertyObservationBuffer),
             new SpellPropertyObservationFlushDataExtractor($spellPropertyObservationBuffer),
         ]);

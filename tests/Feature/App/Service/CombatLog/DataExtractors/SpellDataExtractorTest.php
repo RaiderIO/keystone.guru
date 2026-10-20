@@ -40,6 +40,8 @@ final class SpellDataExtractorTest extends PublicTestCase
     private const int    NPC_ID          = 999601;
     private const int    OTHER_NPC_ID    = 999603;
     private const int    SPELL_ID        = 999602;
+    private const int    SECOND_SPELL_ID = 999604;
+    private const int    THIRD_SPELL_ID  = 999605;
     private const string COMBAT_LOG_PATH = '/tmp/test.log';
 
     /** SPELL_AURA_APPLIED, source=NPC, dest=NPC, BUFF → triggers SpellProperty::Aura */
@@ -78,11 +80,11 @@ final class SpellDataExtractorTest extends PublicTestCase
     {
         try {
             NpcSpell::whereIn('npc_id', [self::NPC_ID, self::OTHER_NPC_ID])->delete();
-            SpellDungeon::where('spell_id', self::SPELL_ID)->delete();
+            SpellDungeon::whereIn('spell_id', self::allTestSpellIds())->delete();
             Npc::whereIn('id', [self::NPC_ID, self::OTHER_NPC_ID])->delete();
-            SpellModel::where('id', self::SPELL_ID)->delete();
-            CombatLogSpellPropertyObservation::where('spell_id', self::SPELL_ID)->delete();
-            CombatLogSpellEvent::where('spell_id', self::SPELL_ID)->delete();
+            SpellModel::whereIn('id', self::allTestSpellIds())->delete();
+            CombatLogSpellPropertyObservation::whereIn('spell_id', self::allTestSpellIds())->delete();
+            CombatLogSpellEvent::whereIn('spell_id', self::allTestSpellIds())->delete();
             CombatLogNpcEvent::whereIn('npc_id', [self::NPC_ID, self::OTHER_NPC_ID])->delete();
         } finally {
             parent::tearDown();
@@ -128,6 +130,41 @@ final class SpellDataExtractorTest extends PublicTestCase
             'dangerous'         => 0,
             'truesight'         => 0,
         ]);
+    }
+
+    /**
+     * @return list<int>
+     */
+    private static function allTestSpellIds(): array
+    {
+        return [self::SPELL_ID, self::SECOND_SPELL_ID, self::THIRD_SPELL_ID];
+    }
+
+    private function debuffEventForSpell(int $spellId): BaseEvent
+    {
+        return $this->parsedEvent(str_replace(
+            sprintf('%d,"TestSpell"', self::SPELL_ID),
+            sprintf('%d,"TestSpell"', $spellId),
+            self::RAW_DEBUFF_EVENT,
+        ));
+    }
+
+    /**
+     * @param  callable(): void $callback
+     * @return list<string>
+     */
+    private function captureSpellsTableQueries(callable $callback): array
+    {
+        $queries = [];
+        DB::listen(function (QueryExecuted $query) use (&$queries): void {
+            if (str_contains($query->sql, '`spells`')) {
+                $queries[] = $query->sql;
+            }
+        });
+
+        $callback();
+
+        return $queries;
     }
 
     private function makeExtractor(): SpellDataExtractor
@@ -503,6 +540,67 @@ final class SpellDataExtractorTest extends PublicTestCase
             ->where('event_type', CombatLogSpellEventType::PropertyChanged->value)
             ->where('property', SpellProperty::Debuff->value)
             ->count());
+    }
+
+    #[Test]
+    public function afterExtract_givenDebuffsTheDatabaseAlreadyHolds_issuesNoSpellUpdates(): void
+    {
+        // Arrange
+        foreach (self::allTestSpellIds() as $spellId) {
+            $this->createTestSpell(['id' => $spellId, 'debuff' => true]);
+        }
+        $extractor = $this->makeExtractor();
+        $events    = array_map(fn(int $spellId) => $this->debuffEventForSpell($spellId), self::allTestSpellIds());
+
+        // Act
+        $queries = $this->captureSpellsTableQueries(fn() => $this->runExtract($extractor, $events));
+
+        // Assert - one batched read of the current values, and no per-spell conditional write
+        $updates = array_filter($queries, static fn(string $sql) => str_starts_with($sql, 'update `spells`'));
+        $reads   = array_filter($queries, static fn(string $sql) => str_starts_with($sql, 'select `id`, `debuff` from `spells`'));
+        $this->assertCount(0, $updates);
+        $this->assertCount(1, $reads);
+        $this->assertSame(3, CombatLogSpellPropertyObservation::whereIn('spell_id', self::allTestSpellIds())
+            ->where('property', SpellProperty::Debuff->value)
+            ->count());
+        $this->assertSame(0, $this->result->toArray()['updatedSpells']);
+    }
+
+    #[Test]
+    public function afterExtract_givenDebuffsThatAreFalseNullAndRecordedByAnotherWorker_recordsOnlyTheFalseAndNullOnes(): void
+    {
+        // Arrange - the catalog is built while all three are unset; another worker then records the third one, so
+        // only the database (not the catalog) has it set
+        $this->createTestSpell(['id' => self::SPELL_ID, 'debuff' => false]);
+        $this->createTestSpell(['id' => self::SECOND_SPELL_ID, 'debuff' => null]);
+        $this->createTestSpell(['id' => self::THIRD_SPELL_ID, 'debuff' => false]);
+        $extractor = $this->makeExtractor();
+        SpellModel::query()->whereKey(self::THIRD_SPELL_ID)->update(['debuff' => true]);
+        $events = array_map(fn(int $spellId) => $this->debuffEventForSpell($spellId), self::allTestSpellIds());
+
+        // Act
+        $queries = $this->captureSpellsTableQueries(fn() => $this->runExtract($extractor, $events));
+
+        // Assert
+        $updates = array_filter($queries, static fn(string $sql) => str_starts_with($sql, 'update `spells` set `debuff`'));
+        $this->assertCount(2, $updates);
+        $this->assertSame(2, $this->result->toArray()['updatedSpells']);
+        foreach (self::allTestSpellIds() as $spellId) {
+            $this->assertDatabaseHas('spells', [
+                'id'     => $spellId,
+                'debuff' => true,
+            ]);
+        }
+        $this->assertSame(
+            [self::SPELL_ID, self::SECOND_SPELL_ID],
+            CombatLogSpellEvent::on('combatlog')
+                ->whereIn('spell_id', self::allTestSpellIds())
+                ->where('event_type', CombatLogSpellEventType::PropertyChanged->value)
+                ->where('property', SpellProperty::Debuff->value)
+                ->orderBy('spell_id')
+                ->pluck('spell_id')
+                ->all(),
+        );
     }
 
     #[Test]

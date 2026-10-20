@@ -33,6 +33,7 @@ use App\Models\Spell\SpellCategory;
 use App\Models\Spell\SpellDispelType;
 use App\Models\Spell\SpellDungeon;
 use App\Models\Spell\SpellMechanic;
+use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
 use App\Service\CombatLog\DataExtractors\Logging\SpellCounterDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitions;
@@ -158,6 +159,13 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     private Collection $pendingCounterObservations;
 
     /**
+     * The shared spell catalog, fetched on the first spell lookup of each combat log.
+     *
+     * @var Collection<int, SpellModel>|null
+     */
+    private ?Collection $spellCatalog = null;
+
+    /**
      * Lazily memoized `spells`.`duration` per spell id, in milliseconds. False marks a spell that has no row.
      *
      * @var Collection<int, int|null|false>
@@ -193,8 +201,10 @@ class SpellCounterDataExtractor implements DataExtractorInterface
 
     private readonly bool $flushesObservationBuffer;
 
-    public function __construct(?SpellPropertyObservationBuffer $sharedObservationBuffer = null)
-    {
+    public function __construct(
+        private readonly SpellRepositorySwooleInterface $spellRepository,
+        ?SpellPropertyObservationBuffer                 $sharedObservationBuffer = null,
+    ) {
         $this->observationBuffer        = $sharedObservationBuffer ?? new SpellPropertyObservationBuffer();
         $this->flushesObservationBuffer = $sharedObservationBuffer === null;
 
@@ -233,6 +243,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     public function beforeExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
         $this->currentCombatLogFilePath = $combatLogFilePath;
+        $this->spellCatalog             = null;
     }
 
     public function extractData(
@@ -802,7 +813,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     private function isCastDisturbingDebuff(int $spellId): bool
     {
         if (!$this->spellMechanicCache->has($spellId)) {
-            $mechanic = SpellModel::query()->where('id', $spellId)->value('mechanic');
+            $mechanic = $this->getCatalogSpellColumn($spellId, 'mechanic');
 
             $this->spellMechanicCache->put($spellId, $mechanic ?? false);
         }
@@ -839,7 +850,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         }
 
         if (!$this->spellDispelTypeCache->has($removedSpellId)) {
-            $dispelType = SpellModel::query()->where('id', $removedSpellId)->value('dispel_type');
+            $dispelType = $this->getCatalogSpellColumn($removedSpellId, 'dispel_type');
 
             $this->spellDispelTypeCache->put($removedSpellId, $dispelType ?? false);
         }
@@ -867,7 +878,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     private function getSpellDurationMs(int $spellId): ?int
     {
         if (!$this->spellDurationCache->has($spellId)) {
-            $duration = SpellModel::query()->where('id', $spellId)->value('duration');
+            $duration = $this->getCatalogSpellColumn($spellId, 'duration');
 
             $this->spellDurationCache->put($spellId, $duration === null ? false : (int)$duration);
         }
@@ -875,6 +886,19 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         $duration = $this->spellDurationCache->get($spellId);
 
         return $duration === false ? null : $duration;
+    }
+
+    /**
+     * @return mixed The uncast `spells` column value, or null when the spell has no row (or the column is NULL)
+     */
+    private function getCatalogSpellColumn(int $spellId, string $column): mixed
+    {
+        $this->spellCatalog ??= $this->spellRepository->getAllKeyedWithSpellDungeons();
+
+        /** @var SpellModel|null $spell */
+        $spell = $this->spellCatalog->get($spellId);
+
+        return $spell?->getAttributes()[$column] ?? null;
     }
 
     /**
