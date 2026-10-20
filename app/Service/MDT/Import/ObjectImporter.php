@@ -39,6 +39,38 @@ class ObjectImporter
         'fury of the ancients' => KnownSpell::FuryOfTheAspects->value,
     ];
 
+    /** @var array<int, string> MDT's raid marker names, by raid target index */
+    private const array MDT_MAP_TEXT_RAID_MARKERS = [
+        1 => 'star',
+        2 => 'circle',
+        3 => 'diamond',
+        4 => 'triangle',
+        5 => 'moon',
+        6 => 'square',
+        7 => 'cross',
+        8 => 'skull',
+    ];
+
+    /** @var array<int, string> Map text tags MDT draws as an icon that read fine as the word itself */
+    private const array MDT_MAP_TEXT_WORD_TAGS = [
+        'tank',
+        'healer',
+        'dps',
+        'death knight',
+        'demon hunter',
+        'druid',
+        'evoker',
+        'hunter',
+        'mage',
+        'monk',
+        'paladin',
+        'priest',
+        'rogue',
+        'shaman',
+        'warlock',
+        'warrior',
+    ];
+
     public function __construct(
         private readonly CoordinatesServiceInterface            $coordinatesService,
         private readonly MDTImportStringServiceLoggingInterface $log,
@@ -173,6 +205,15 @@ class ObjectImporter
                 // Map comment (n = note)
                 // MethodDungeonTools.lua:2523
                 elseif (isset($object['n']) && $object['n']) {
+                    // A map text (tx = text) is a note whose text carries MDT's inline markup
+                    if (isset($object['tx']) && $object['tx']) {
+                        $details[4] = $this->convertMapTextToPlainText((string)($details[4] ?? ''));
+
+                        if ($details[4] === '') {
+                            continue;
+                        }
+                    }
+
                     $spellIdsByName ??= $this->getSpellIdsByName();
 
                     $this->parseObjectComment(
@@ -483,6 +524,67 @@ class ObjectImporter
         }
 
         return $nearestIndex;
+    }
+
+    /**
+     * MDT map texts are styled with |cffRRGGBB ... |r colour runs, || for a literal pipe and {tag} icons. Tags MDT
+     * does not know are drawn as written, and so are left in place here.
+     */
+    private function convertMapTextToPlainText(string $text): string
+    {
+        $text = (string)preg_replace_callback(
+            '/\|\||\|c[0-9a-f]{8}|\|r/i',
+            static fn(array $match): string => $match[0] === '||' ? '|' : '',
+            $text,
+        );
+
+        $text = (string)preg_replace_callback('/\{([^{}]+)\}/', function (array $match): string {
+            [$name, $argument] = array_pad(explode(':', $match[1], 2), 2, '');
+            $name              = mb_strtolower($name);
+
+            if ($name === 'spell' && preg_match('/^(\d+)/', $argument, $spellIdMatch)) {
+                return $this->getMapTextSpellName((int)$spellIdMatch[1]);
+            }
+
+            if (($name === 'icon' || $name === 'spec') && $argument !== '' && !str_contains($argument, '|')) {
+                return '';
+            }
+
+            if ($argument !== '') {
+                return $match[0];
+            }
+
+            $raidMarkerIndex = preg_match('/^rt([1-8])$/', $name, $raidMarkerMatch) ? (int)$raidMarkerMatch[1] :
+                (array_search($name, self::MDT_MAP_TEXT_RAID_MARKERS, true) ?: ($name === 'x' ? 7 : null));
+            if ($raidMarkerIndex !== null) {
+                return __(sprintf('mapicontypes.raid_marker_%s', self::MDT_MAP_TEXT_RAID_MARKERS[$raidMarkerIndex]));
+            }
+
+            return in_array($name, self::MDT_MAP_TEXT_WORD_TAGS, true) ? $match[1] : $match[0];
+        }, $text);
+
+        $lines = array_map(
+            static fn(string $line): string => trim((string)preg_replace('/[ \t]{2,}/', ' ', $line)),
+            preg_split('/\R/u', $text) ?: [],
+        );
+
+        return trim(implode("\n", $lines));
+    }
+
+    /**
+     * The name of a spell in a map text's {spell:ID} tag, or an empty string for a spell we do not know.
+     */
+    private function getMapTextSpellName(int $spellId): string
+    {
+        $spell = Spell::query()->find($spellId, ['id', 'name']);
+        if ($spell === null) {
+            return '';
+        }
+
+        $translatedName = __($spell->name);
+
+        // An untranslated name comes back as its translation key
+        return is_string($translatedName) && $translatedName !== $spell->name ? $translatedName : '';
     }
 
     /**
