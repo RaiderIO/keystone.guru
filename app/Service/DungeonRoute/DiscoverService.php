@@ -287,7 +287,10 @@ class DiscoverService extends BaseDiscoverService
         // Deliberately uncached: pagination is offset-based while the discover cache key only encodes
         // the limit, so paged fetches would collide. The grouped popularBuilder() is counted correctly
         // by paginate()'s count subquery, and its forPage() overrides the builder's limit.
+        // Telescope's request watcher JSON-encodes the paginator, which evaluates the appended setup and
+        // has_upgrade_draft attributes of every route on the page.
         return $this->popularBuilder()
+            ->with(['faction', 'specializations', 'classes', 'races', 'upgradeDraft'])
             ->where('dungeon_routes.dungeon_id', $dungeon->id)
             ->paginate($perPage);
     }
