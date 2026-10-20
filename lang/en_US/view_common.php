@@ -3,6 +3,9 @@
 return [
 
     'collection' => [
+        'card' => [
+            'by_author' => 'by :author',
+        ],
         'addtocollection' => [
             'title' => 'Add to collection',
             'help'  => 'A route is added to the end of a collection right away.',
@@ -400,6 +403,8 @@ return [
             'find_routes_description'         => 'Pick the enemies a route must pull or skip',
             'creators'                        => 'Creators',
             'creators_description'            => 'Route makers and the collections they share',
+            'collections'                     => 'Route collections',
+            'collections_description'         => 'Curated sets of routes shared by the community',
             'heatmaps'                        => 'Heatmaps',
             'heatmaps_description'            => 'See where wipes occur or spells are cast, with many filters',
             'explore'                         => 'Explore dungeons',

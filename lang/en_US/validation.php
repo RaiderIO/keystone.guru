@@ -107,6 +107,12 @@ return [
         'collection_category_id' => [
             'exists' => 'That is not a category you can file a collection under.',
         ],
+        'collection_browse_search' => [
+            'max' => 'A collection name is at most :max characters, so a longer search cannot match any collection.',
+        ],
+        'collection_browse_dungeon' => [
+            'exists' => 'That is not a dungeon you can find collections for.',
+        ],
         'collection_season_id' => [
             'exists'     => 'That season does not exist.',
             'no_seasons' => 'This game version has no seasons - leave the season empty to make a free-form collection.',

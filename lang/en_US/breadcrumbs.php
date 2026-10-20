@@ -56,6 +56,7 @@ return [
         'my_collections'   => 'My collections',
         'new_collection'   => 'New collection',
         'edit_collection'  => 'Edit :name',
+        'collections'      => 'Route collections',
         'my_teams'         => 'My teams',
         'overview'         => 'Overview',
         'new_team'         => 'New team',

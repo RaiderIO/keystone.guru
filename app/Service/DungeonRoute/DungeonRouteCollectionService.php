@@ -138,6 +138,27 @@ class DungeonRouteCollectionService implements DungeonRouteCollectionServiceInte
         return $coveredDungeonIds->count();
     }
 
+    public function getTileContents(Collection $dungeonRouteCollections, ?User $viewer): array
+    {
+        $dungeonRoutes        = collect();
+        $coveredDungeonCounts = collect();
+
+        foreach ($dungeonRouteCollections as $dungeonRouteCollection) {
+            $viewableDungeonRoutes = $dungeonRouteCollection->getViewableDungeonRoutes($viewer);
+
+            $dungeonRoutes->put($dungeonRouteCollection->id, $viewableDungeonRoutes);
+            $coveredDungeonCounts->put(
+                $dungeonRouteCollection->id,
+                $this->getCoveredDungeonCount($dungeonRouteCollection, $viewableDungeonRoutes),
+            );
+        }
+
+        return [
+            'dungeonRoutes'        => $dungeonRoutes,
+            'coveredDungeonCounts' => $coveredDungeonCounts,
+        ];
+    }
+
     public function sortForOverview(Collection $dungeonRouteCollections): Collection
     {
         return $dungeonRouteCollections

@@ -95,6 +95,15 @@ interface DungeonRouteCollectionServiceInterface
     public function getCoveredDungeonCount(DungeonRouteCollection $dungeonRouteCollection, Collection $dungeonRoutes): int;
 
     /**
+     * What each collection's tile shows the viewer: the routes in it they may open, in order, and how many dungeons
+     * those cover. The collections are expected to have their tile relations loaded.
+     *
+     * @param  Collection<int, DungeonRouteCollection>                                                                          $dungeonRouteCollections
+     * @return array{dungeonRoutes: Collection<int, Collection<int, DungeonRoute>>, coveredDungeonCounts: Collection<int, int>} Both keyed by collection id.
+     */
+    public function getTileContents(Collection $dungeonRouteCollections, ?User $viewer): array;
+
+    /**
      * Sorts collections for the overview: sets of the current season first, then free-form collections, then sets
      * of any other season, each most recently updated first.
      *

@@ -14,7 +14,10 @@ use Illuminate\Support\Collection;
  * @var DungeonRouteCollection        $dungeonRouteCollection
  * @var Collection<int, DungeonRoute> $dungeonRoutes          The collection's routes the viewer may see, in order.
  * @var int                           $coveredDungeonCount
+ * @var bool                          $showAuthor             Off on the author's own profile, where it goes without saying.
  */
+
+$showAuthor ??= false;
 
 $coverUrls = $dungeonRoutes
     ->take(4)
@@ -48,6 +51,11 @@ $coverUrls = $dungeonRoutes
             <span class="collection_card_name">
                 {{ $dungeonRouteCollection->name }}
             </span>
+            @if($showAuthor)
+                <span class="collection_card_author">
+                    {{ __('view_common.collection.card.by_author', ['author' => $dungeonRouteCollection->user->name]) }}
+                </span>
+            @endif
             <span class="collection_card_kind">
                 @include('common.collection.kind', [
                     'dungeonRouteCollection' => $dungeonRouteCollection,

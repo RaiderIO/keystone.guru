@@ -90,6 +90,12 @@ if (Feature::active(CreatorProfiles::class)) {
         'text'        => __('view_common.layout.header.creators'),
         'description' => __('view_common.layout.header.creators_description'),
     ];
+    $routeEntries[] = [
+        'route'       => route('collection.browse'),
+        'fa'          => 'fa fa-layer-group',
+        'text'        => __('view_common.layout.header.collections'),
+        'description' => __('view_common.layout.header.collections_description'),
+    ];
 }
 $routeEntries[] = [
     'modal'       => '#create_route_modal',

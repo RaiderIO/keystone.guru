@@ -391,6 +391,14 @@ return [
     ],
 
     /**
+     * The public page browsing world published route collections (see the CreatorProfiles feature flag)
+     */
+    'collections' => [
+        /** How many collections to show per page - a multiple of the one, two and three tiles a row holds */
+        'per_page' => 24,
+    ],
+
+    /**
      * For the discover section of the site - this controls various variables
      */
     'discover' => [
