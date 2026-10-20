@@ -89,7 +89,7 @@ return [
     ],
     'compendium' => [
         'flash' => [
-            'unavailable_for_game_version' => '',
+            'unavailable_for_game_version' => '이 게임 버전에서는 아직 도감을 이용할 수 없습니다.',
         ],
     ],
     'dungeon' => [

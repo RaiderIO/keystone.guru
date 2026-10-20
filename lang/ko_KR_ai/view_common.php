@@ -482,7 +482,7 @@ return [
                     'route_info_title' => '정보',
                 ],
                 'dungeondifficulty' => [
-                    'dungeon_difficulty' => '',
+                    'dungeon_difficulty' => '공격대 규모',
                 ],
                 'enemydisplaytype' => [
                     'portrait'                 => '초상화',
