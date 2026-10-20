@@ -347,9 +347,9 @@ return [
         'mdt' => [
             'witherbark_prisoner' => 'Пленник Сухокожих',
             'captive'             => 'Пленник',
-            'barrel_of_apples'    => '',
-            'berry_bush'          => '',
-            'salmon_pool'         => '',
+            'barrel_of_apples'    => 'Бочка с яблоками',
+            'berry_bush'          => 'Ягодный куст',
+            'salmon_pool'         => 'Косяк лосося',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [

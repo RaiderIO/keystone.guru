@@ -482,7 +482,7 @@ return [
                     'route_info_title' => 'Информация',
                 ],
                 'dungeondifficulty' => [
-                    'dungeon_difficulty' => '',
+                    'dungeon_difficulty' => 'Размер рейда',
                 ],
                 'enemydisplaytype' => [
                     'portrait'                 => 'Портрет',
