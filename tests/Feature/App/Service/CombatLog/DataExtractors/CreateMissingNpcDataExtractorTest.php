@@ -11,9 +11,12 @@ use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcHealth;
+use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -228,6 +231,80 @@ final class CreateMissingNpcDataExtractorTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function afterExtract_givenSeveralDistinctCreatures_loadsTheNpcsInOneQuery(): void
+    {
+        // Arrange
+        $this->assertFalse(Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->exists());
+
+        /** @var list<int> $knownNpcIds */
+        $knownNpcIds = Npc::query()
+            ->whereKeyNot(CombatLogDataExtractionService::SUMMONED_NPC_IDS)
+            ->orderBy('id')
+            ->limit(3)
+            ->pluck('id')
+            ->all();
+        $this->assertCount(3, $knownNpcIds);
+
+        $extractor = new CreateMissingNpcDataExtractor();
+        $events    = array_map(
+            fn(int $npcId) => $this->parsedEvent($this->creatureSourcedEvent(sprintf('Creature-0-4237-1209-2796-%d-0000293D52', $npcId))),
+            $knownNpcIds,
+        );
+        $events[] = $this->parsedEvent($this->unknownCreatureSourcedEvent($this->unknownCreatureGuid()));
+
+        $npcSelectCount = 0;
+        DB::listen(function (QueryExecuted $query) use (&$npcSelectCount): void {
+            if (str_starts_with($query->sql, 'select') && str_contains($query->sql, 'from `npcs`')) {
+                $npcSelectCount++;
+            }
+        });
+
+        try {
+            // Act
+            $extractor->beforeExtract($this->result, self::COMBAT_LOG_PATH);
+            foreach ($events as $event) {
+                $extractor->extractData($this->result, $this->currentDungeon, $event);
+            }
+            $extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
+
+            // Assert
+            $this->assertSame(1, $npcSelectCount);
+            $this->assertSame('Dread Raven', Npc::query()->findOrFail(self::UNKNOWN_NPC_ID)->name);
+            $this->assertSame(1, $this->result->toArray()['createdNpcs']);
+        } finally {
+            Npc::query()->whereKey(self::UNKNOWN_NPC_ID)->first()?->delete();
+            NpcDungeon::query()->where('npc_id', self::UNKNOWN_NPC_ID)->delete();
+        }
+    }
+
+    #[Test]
+    public function afterExtract_givenACreatureSeenInAnEarlierFile_doesNotLoadItAgain(): void
+    {
+        // Arrange
+        $extractor   = new CreateMissingNpcDataExtractor();
+        $parsedEvent = $this->parsedEvent(sprintf(self::RAW_EVENT_TEMPLATE, 'Creature-0-4237-1209-2796-76149-0000293D52'));
+
+        $extractor->beforeExtract($this->result, self::COMBAT_LOG_PATH);
+        $extractor->extractData($this->result, $this->currentDungeon, $parsedEvent);
+        $extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
+
+        $npcSelectCount = 0;
+        DB::listen(function (QueryExecuted $query) use (&$npcSelectCount): void {
+            if (str_starts_with($query->sql, 'select') && str_contains($query->sql, 'from `npcs`')) {
+                $npcSelectCount++;
+            }
+        });
+
+        // Act
+        $extractor->beforeExtract($this->result, self::COMBAT_LOG_PATH);
+        $extractor->extractData($this->result, $this->currentDungeon, $parsedEvent);
+        $extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
+
+        // Assert
+        $this->assertSame(0, $npcSelectCount);
+    }
+
     private function unknownCreatureGuid(): string
     {
         return sprintf('Creature-0-4237-1209-2796-%d-0000293D52', self::UNKNOWN_NPC_ID);
@@ -238,7 +315,15 @@ final class CreateMissingNpcDataExtractorTest extends PublicTestCase
      */
     private function unknownCreatureSourcedEvent(string $unknownGuid): string
     {
-        return str_replace('Creature-0-4237-1209-2796-76149-0000293D52', $unknownGuid, sprintf(self::RAW_EVENT_TEMPLATE, $unknownGuid));
+        return $this->creatureSourcedEvent($unknownGuid);
+    }
+
+    /**
+     * The template event with the given creature as both its source and its info GUID.
+     */
+    private function creatureSourcedEvent(string $creatureGuid): string
+    {
+        return str_replace('Creature-0-4237-1209-2796-76149-0000293D52', $creatureGuid, sprintf(self::RAW_EVENT_TEMPLATE, $creatureGuid));
     }
 
     private function assertAdvancedEvent(BaseEvent $parsedEvent): AdvancedDataInterface

@@ -19,7 +19,9 @@ use App\Service\CombatLog\DataExtractors\Logging\NpcCharacteristicDataExtractorL
 use App\Service\CombatLog\DataExtractors\NpcCharacteristicDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Facades\DB;
 use Mockery;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -87,10 +89,12 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         }
     }
 
-    private function createTestNpc(string $classificationKey = NpcClassification::NPC_CLASSIFICATION_NORMAL): Npc
-    {
+    private function createTestNpc(
+        string $classificationKey = NpcClassification::NPC_CLASSIFICATION_NORMAL,
+        int    $npcId = self::NPC_ID,
+    ): Npc {
         return Npc::create([
-            'id'                => self::NPC_ID,
+            'id'                => $npcId,
             'classification_id' => NpcClassification::ALL[$classificationKey],
             'npc_type_id'       => 1,
             'npc_class_id'      => 1,
@@ -461,5 +465,57 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
                 ->where('characteristic_id', $characteristicId)
                 ->count(),
         );
+    }
+
+    #[Test]
+    public function afterExtract_givenSeveralNpcs_loadsThemWithTheirCharacteristicsInOneQueryEach(): void
+    {
+        // Arrange
+        $npcIds = [self::NPC_ID, self::NPC_ID + 1, self::NPC_ID + 2];
+        foreach ($npcIds as $npcId) {
+            $this->createTestNpc(npcId: $npcId);
+        }
+
+        $events = array_map(
+            static fn(int $npcId) => new CombatLogEntry(
+                str_replace(sprintf('-%d-', self::NPC_ID), sprintf('-%d-', $npcId), self::RAW_EVENT),
+            )->parseEvent([], CombatLogVersion::RETAIL_11_0_5),
+            $npcIds,
+        );
+
+        $npcSelectCount                = 0;
+        $npcCharacteristicsSelectCount = 0;
+        DB::listen(function (QueryExecuted $query) use (&$npcSelectCount, &$npcCharacteristicsSelectCount): void {
+            if (str_starts_with($query->sql, 'select') && str_contains($query->sql, 'from `npcs`')) {
+                $npcSelectCount++;
+            }
+
+            if (str_contains($query->sql, 'where `npc_characteristics`.`npc_id` in')) {
+                $npcCharacteristicsSelectCount++;
+            }
+        });
+
+        try {
+            // Act
+            $this->runExtract($events);
+
+            // Assert
+            $this->assertSame(1, $npcSelectCount);
+            $this->assertSame(1, $npcCharacteristicsSelectCount);
+            $this->assertSame(3, $this->result->toArray()['createdNpcCharacteristics']);
+            $this->assertSame(
+                3,
+                NpcCharacteristic::query()
+                    ->whereIn('npc_id', $npcIds)
+                    ->where('characteristic_id', Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH])
+                    ->count(),
+            );
+        } finally {
+            $extraNpcIds = [self::NPC_ID + 1, self::NPC_ID + 2];
+            NpcCharacteristic::query()->whereIn('npc_id', $extraNpcIds)->delete();
+            CombatLogNpcCharacteristicObservation::query()->whereIn('npc_id', $extraNpcIds)->delete();
+            CombatLogNpcEvent::query()->whereIn('npc_id', $extraNpcIds)->delete();
+            Npc::query()->whereIn('id', $extraNpcIds)->delete();
+        }
     }
 }

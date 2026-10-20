@@ -25,6 +25,13 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
     /** @var Collection<int, int> */
     private readonly Collection $checkedNpcIds;
 
+    /**
+     * The first line naming each not-yet-checked creature this file, resolved against the database in afterExtract.
+     *
+     * @var array<int, array{guid: Creature, event: AdvancedCombatLogEvent, dungeonId: int}>
+     */
+    private array $pendingNpcSightings = [];
+
     private readonly CreateMissingNpcDataExtractorLoggingInterface $log;
 
     public function __construct()
@@ -38,6 +45,7 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
 
     public function beforeExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
+        $this->pendingNpcSightings = [];
     }
 
     public function extractData(
@@ -81,69 +89,93 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
         if ($guid instanceof Creature && $this->checkedNpcIds->search($guid->getId()) === false) {
             $this->checkedNpcIds->push($guid->getId());
 
-            $npc = Npc::find($guid->getId());
-
-            if ($npc !== null) {
-                // Npc existed, we're not going to do anything else
-                return;
-            }
-
-            // Determine name
-            if ($parsedEvent->getGenericData()->getSourceGuid()?->getGuid() === $guid->getGuid()) {
-                $name = $parsedEvent->getGenericData()->getSourceName();
-            } elseif ($parsedEvent->getGenericData()->getDestGuid()?->getGuid() === $guid->getGuid()) {
-                $name = $parsedEvent->getGenericData()->getDestName();
-            } else {
-                $this->log->extractDataNpcNameNotFound(
-                    $parsedEvent->getGenericData()->getSourceGuid()?->getGuid(),
-                    $parsedEvent->getGenericData()->getDestGuid()?->getGuid(),
-                );
-
-                return;
-            }
-
-            // Don't create any pets!
-            if ($parsedEvent->getAdvancedData()->getOwnerGuid() !== null) {
-                $this->log->extractDataNpcWasAPet($guid->getId(), $name);
-
-                return;
-            }
-
-            $createdNpc = Npc::create([
-                'id'                => $guid->getId(),
-                'classification_id' => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
-                'npc_type_id'       => NpcType::HUMANOID,
-                'npc_class_id'      => NpcClass::ALL[NpcClass::NPC_CLASS_MELEE],
-                'display_id'        => null,
-                'name'              => $name,
-                'aggressiveness'    => Npc::AGGRESSIVENESS_AGGRESSIVE,
-                'dangerous'         => 0,
-                'truesight'         => 0,
-            ]);
-
-            if ($createdNpc instanceof Npc) { // @phpstan-ignore instanceof.alwaysTrue
-                NpcDungeon::create([
-                    'npc_id'     => $createdNpc->id,
-                    'dungeon_id' => $currentDungeon->dungeon->id,
-                ]);
-
-                $result->createdNpc();
-
-                $this->log->extractDataCreatedNpc(
-                    $guid->getId(),
-                    $name,
-                    $parsedEvent->getRawEvent(),
-                );
-            } else {
-                $this->log->extractDataNpcNotCreated(
-                    $guid->getId(),
-                    $name,
-                );
-            }
+            $this->pendingNpcSightings[$guid->getId()] = [
+                'guid'      => $guid,
+                'event'     => $parsedEvent,
+                'dungeonId' => $currentDungeon->dungeon->id,
+            ];
         }
     }
 
     public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
+        if (empty($this->pendingNpcSightings)) {
+            return;
+        }
+
+        $existingNpcIds = Npc::query()
+            ->whereIn('id', array_keys($this->pendingNpcSightings))
+            ->pluck('id')
+            ->flip();
+
+        foreach ($this->pendingNpcSightings as $npcId => $sighting) {
+            if ($existingNpcIds->has($npcId)) {
+                continue;
+            }
+
+            $this->createMissingNpc($result, $sighting['guid'], $sighting['event'], $sighting['dungeonId']);
+        }
+
+        $this->pendingNpcSightings = [];
+    }
+
+    private function createMissingNpc(
+        ExtractedDataResult    $result,
+        Creature               $guid,
+        AdvancedCombatLogEvent $parsedEvent,
+        int                    $dungeonId,
+    ): void {
+        // Determine name
+        if ($parsedEvent->getGenericData()->getSourceGuid()?->getGuid() === $guid->getGuid()) {
+            $name = $parsedEvent->getGenericData()->getSourceName();
+        } elseif ($parsedEvent->getGenericData()->getDestGuid()?->getGuid() === $guid->getGuid()) {
+            $name = $parsedEvent->getGenericData()->getDestName();
+        } else {
+            $this->log->extractDataNpcNameNotFound(
+                $parsedEvent->getGenericData()->getSourceGuid()?->getGuid(),
+                $parsedEvent->getGenericData()->getDestGuid()?->getGuid(),
+            );
+
+            return;
+        }
+
+        // Don't create any pets!
+        if ($parsedEvent->getAdvancedData()->getOwnerGuid() !== null) {
+            $this->log->extractDataNpcWasAPet($guid->getId(), $name);
+
+            return;
+        }
+
+        $createdNpc = Npc::create([
+            'id'                => $guid->getId(),
+            'classification_id' => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
+            'npc_type_id'       => NpcType::HUMANOID,
+            'npc_class_id'      => NpcClass::ALL[NpcClass::NPC_CLASS_MELEE],
+            'display_id'        => null,
+            'name'              => $name,
+            'aggressiveness'    => Npc::AGGRESSIVENESS_AGGRESSIVE,
+            'dangerous'         => 0,
+            'truesight'         => 0,
+        ]);
+
+        if ($createdNpc instanceof Npc) { // @phpstan-ignore instanceof.alwaysTrue
+            NpcDungeon::create([
+                'npc_id'     => $createdNpc->id,
+                'dungeon_id' => $dungeonId,
+            ]);
+
+            $result->createdNpc();
+
+            $this->log->extractDataCreatedNpc(
+                $guid->getId(),
+                $name,
+                $parsedEvent->getRawEvent(),
+            );
+        } else {
+            $this->log->extractDataNpcNotCreated(
+                $guid->getId(),
+                $name,
+            );
+        }
     }
 }
