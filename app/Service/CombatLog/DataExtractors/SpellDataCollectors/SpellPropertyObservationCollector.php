@@ -113,7 +113,7 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
      */
     private function applyPropertyObservations(ExtractedDataResult $result, Collection $observations, ?string $combatLogPath): void
     {
-        foreach ($observations as $observation) {
+        foreach ($this->withoutAlreadyRecordedProperties($observations) as $observation) {
             /** @var SpellModel|null $spell */
             $spell = $this->allSpells->get($observation['spell_id']);
             // The write itself decides whether this is a new fact - see Spell::recordCombatLogProperty(). A
@@ -132,6 +132,43 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
                 'combat_log_path' => $combatLogPath,
             ]);
         }
+    }
+
+    /**
+     * Drops the observations whose property the database already holds, read fresh in one query, so only the
+     * candidates for a new fact reach the conditional write in Spell::recordCombatLogProperty(). The write keeps
+     * deciding for those, so a property another worker records in between still emits no second event.
+     *
+     * @param  Collection<string, array{spell_id: int, property: SpellProperty}> $observations
+     * @return Collection<string, array{spell_id: int, property: SpellProperty}>
+     */
+    private function withoutAlreadyRecordedProperties(Collection $observations): Collection
+    {
+        $columns = $observations
+            ->map(static fn(array $observation) => $observation['property']->column())
+            ->unique()
+            ->values()
+            ->all();
+
+        $currentRowsBySpellId = SpellModel::query()
+            ->toBase()
+            ->whereIn('id', $observations->pluck('spell_id')->unique()->values())
+            ->get(['id', ...$columns])
+            ->keyBy('id');
+
+        return $observations->filter(static function (array $observation) use ($currentRowsBySpellId): bool {
+            $currentRow = $currentRowsBySpellId->get($observation['spell_id']);
+            if ($currentRow === null) {
+                return false;
+            }
+
+            $currentValue = $currentRow->{$observation['property']->column()};
+            $bit          = $observation['property']->maskBit();
+
+            return $bit === null
+                ? !(bool)$currentValue
+                : ((int)$currentValue & $bit) === 0;
+        });
     }
 
     private function queueObservation(int $spellId, SpellProperty $property): void

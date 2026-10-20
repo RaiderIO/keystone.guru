@@ -16,6 +16,7 @@ use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellCounter;
 use App\Models\Spell\SpellDungeon;
+use App\Repositories\Swoole\SpellRepositorySwoole;
 use App\Service\CombatLog\DataExtractors\Logging\SpellCounterDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounterDataExtractor;
 use App\Service\CombatLog\DataExtractors\SpellCounters\CloakOfShadowsSpellCounterDefinition;
@@ -72,7 +73,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
 
         $this->cleanUpTestData();
 
-        $this->extractor = new SpellCounterDataExtractor();
+        $this->extractor = new SpellCounterDataExtractor(new SpellRepositorySwoole());
         $this->result    = new ExtractedDataResult();
 
         $dungeon              = Dungeon::first();
@@ -845,6 +846,48 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
         $this->assertSame(1, $npcQueryCount);
         $this->assertTrue(NpcSpell::where('npc_id', self::CREATURE_NPC_ID)->where('spell_id', $firstCastSpellId)->exists());
         $this->assertTrue(NpcSpell::where('npc_id', self::CREATURE_NPC_ID)->where('spell_id', $secondCastSpellId)->exists());
+    }
+
+    #[Test]
+    public function extractData_givenSeveralDistinctDebuffs_readsTheirMechanicDurationAndDispelTypeFromOneCatalogLoad(): void
+    {
+        // Arrange - every removed debuff needs its duration and dispel type, and a debuff landing on a casting NPC
+        // its mechanic
+        $castSpellId         = 9990037;
+        $firstDebuffSpellId  = 9990038;
+        $secondDebuffSpellId = 9990039;
+        $this->createTestSpell($castSpellId);
+        $this->createTestSpell($firstDebuffSpellId, 20000, null, 'spelldispeltype.magic');
+        $this->createTestSpell($secondDebuffSpellId, 20000, null, 'spelldispeltype.magic');
+        $perSpellColumnQueryCount = 0;
+        $catalogLoadCount         = 0;
+        DB::listen(function (QueryExecuted $query) use (&$perSpellColumnQueryCount, &$catalogLoadCount): void {
+            if (preg_match('/^select `(mechanic|duration|dispel_type)` from `spells`/', $query->sql) === 1) {
+                $perSpellColumnQueryCount++;
+            }
+
+            if ($query->sql === 'select * from `spells`') {
+                $catalogLoadCount++;
+            }
+        });
+
+        // Act
+        $this->runExtract([
+            $this->npcCastStart(0, $castSpellId, 'Dread Wind'),
+            $this->debuffApplied(100, $firstDebuffSpellId, 'Curse of the Void', self::PLAYER_GUID, self::CREATURE_GUID),
+            $this->debuffApplied(200, $firstDebuffSpellId, 'Curse of the Void', self::CREATURE_GUID),
+            $this->debuffApplied(200, $secondDebuffSpellId, 'Shadow Rot', self::CREATURE_GUID),
+            $this->playerBuffApplied(4000, CloakOfShadowsSpellCounterDefinition::SPELL_ID_CLOAK_OF_SHADOWS, 'Cloak of Shadows'),
+            $this->debuffRemoved(4000, $firstDebuffSpellId, 'Curse of the Void', self::CREATURE_GUID),
+            $this->debuffRemoved(4000, $secondDebuffSpellId, 'Shadow Rot', self::CREATURE_GUID),
+        ]);
+
+        // Assert
+        $this->assertSame(0, $perSpellColumnQueryCount);
+        $this->assertSame(1, $catalogLoadCount);
+        $this->assertSame(2, $this->result->toArray()['addedSpellCounters']);
+        $this->assertCounterRecorded($firstDebuffSpellId, SpellCounter::CloakOfShadows->value, SpellProperty::CounterCloakOfShadows);
+        $this->assertCounterRecorded($secondDebuffSpellId, SpellCounter::CloakOfShadows->value, SpellProperty::CounterCloakOfShadows);
     }
 
     #[Test]
