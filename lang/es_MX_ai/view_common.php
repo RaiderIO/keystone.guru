@@ -482,7 +482,7 @@ return [
                     'route_info_title' => 'Información',
                 ],
                 'dungeondifficulty' => [
-                    'dungeon_difficulty' => '',
+                    'dungeon_difficulty' => 'Tamaño de la incursión',
                 ],
                 'enemydisplaytype' => [
                     'portrait'                 => 'Retrato',
