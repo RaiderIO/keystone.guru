@@ -96,7 +96,7 @@ abstract class DatatablesColumnHandler
         // If the column we're supposed to represent is found
         if ($column !== null) {
             // == intended
-            $order = is_null($order) ? null : ($order['column'] == $columnIndex ? $order : null);
+            $order = isset($order['column']) && $order['column'] == $columnIndex ? $order : null;
 
             // Handle the filtering of this column
             $this->applyFilter($subBuilder, $orderBuilder, $column, $order, $generalSearch);
