@@ -89,7 +89,7 @@ return [
     ],
     'compendium' => [
         'flash' => [
-            'unavailable_for_game_version' => '',
+            'unavailable_for_game_version' => 'Le Compendium n\'est pas encore disponible pour cette version du jeu.',
         ],
     ],
     'dungeon' => [

@@ -347,9 +347,9 @@ Attention : attaquer Shade of Eranikus provoque l\'aggro de tous les dragons ver
         'mdt' => [
             'witherbark_prisoner' => 'Witherbark Prisoner',
             'captive'             => 'Captif',
-            'barrel_of_apples'    => '',
-            'berry_bush'          => '',
-            'salmon_pool'         => '',
+            'barrel_of_apples'    => 'Tonneau de pommes',
+            'berry_bush'          => 'Buisson de baies',
+            'salmon_pool'         => 'Banc de saumons',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [
