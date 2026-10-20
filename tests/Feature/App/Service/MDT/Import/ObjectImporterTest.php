@@ -9,6 +9,7 @@ use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Spell\KnownSpell;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Import\ObjectImporter;
 use App\Service\MDT\Models\ImportStringObjects;
@@ -232,6 +233,110 @@ final class ObjectImporterTest extends PublicTestCase
     }
 
     /**
+     * @param array<int, string> $expectedTextTranslationKeys Translated into the %s placeholders of $expectedText
+     */
+    #[Test]
+    #[DataProvider('parseObjects_mapText_dataProvider')]
+    public function parseObjects_givenAMapText_importsTheMapIconCommentAsPlainText(
+        string $mapText,
+        string $expectedText,
+        array  $expectedTextTranslationKeys = [],
+    ): void {
+        // Arrange
+        [$mappingVersion, $enemy, $floor] = $this->findDungeonWithEnemy();
+        $importStringObjects              = $this->createImportStringObjects($mappingVersion, $floor, $enemy, $mapText, isMapText: true);
+
+        // Act
+        $result = app()->make(ObjectImporter::class)->parseObjects($importStringObjects, false);
+
+        // Assert
+        $this->assertCount(1, $result->getMapIcons());
+        $this->assertSame(
+            sprintf($expectedText, ...array_map(static fn(string $key): string => __($key), $expectedTextTranslationKeys)),
+            $result->getMapIcons()->first()['comment'],
+        );
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string, 2?: array<int, string>}>
+     */
+    public static function parseObjects_mapText_dataProvider(): array
+    {
+        return [
+            'plain text'                   => ['Stack on the tank', 'Stack on the tank'],
+            'colour run'                   => ['|cffff3030Lust|r here', 'Lust here'],
+            'unterminated colour run'      => ['|cFFFF3030Lust here', 'Lust here'],
+            'escaped pipe'                 => ['a || b', 'a | b'],
+            'escaped pipe before a colour' => ['||cffff3030', '|cffff3030'],
+            'known spell'                  => ['Lust {spell:2825} here', 'Lust Bloodlust here'],
+            'known spell with a size'      => ['{spell:2825:16} now', 'Bloodlust now'],
+            'unknown spell'                => ['Lust {spell:999999999} here', 'Lust here'],
+            'spell without an id'          => ['{spell:abc}', '{spell:abc}'],
+            'file icon'                    => ['Go {icon:134400} here', 'Go here'],
+            'spec icon'                    => ['{spec:250} tanks', 'tanks'],
+            'raid marker index'            => ['Kill {rt8} first', 'Kill %s first', ['mapicontypes.raid_marker_skull']],
+            'raid marker name'             => ['Kill {Skull} first', 'Kill %s first', ['mapicontypes.raid_marker_skull']],
+            'raid marker alias'            => ['{x} last', '%s last', ['mapicontypes.raid_marker_cross']],
+            'role'                         => ['{tank} pulls', 'tank pulls'],
+            'class'                        => ['{Death Knight} grips', 'Death Knight grips'],
+            'unknown tag'                  => ['{foo} and {foo:bar}', '{foo} and {foo:bar}'],
+            'multiple lines'               => ["  {icon:1}  First \n{rt1}  ", "First\n%s", ['mapicontypes.raid_marker_star']],
+        ];
+    }
+
+    #[Test]
+    public function parseObjects_givenAMapTextOfOnlyIcons_skipsTheMapText(): void
+    {
+        // Arrange
+        [$mappingVersion, $enemy, $floor] = $this->findDungeonWithEnemy();
+        $importStringObjects              = $this->createImportStringObjects($mappingVersion, $floor, $enemy, '{icon:134400} |cffffffff|r', isMapText: true);
+
+        // Act
+        $result = app()->make(ObjectImporter::class)->parseObjects($importStringObjects, false);
+
+        // Assert
+        $this->assertCount(0, $result->getMapIcons());
+        $this->assertCount(0, $result->getWarnings());
+    }
+
+    #[Test]
+    public function parseObjects_givenANoteWithMapTextMarkup_importsTheMapIconCommentUnchanged(): void
+    {
+        // Arrange
+        $note = '|cffff3030Lust|r {rt8}';
+
+        [$mappingVersion, $enemy, $floor] = $this->findDungeonWithEnemy();
+        $importStringObjects              = $this->createImportStringObjects($mappingVersion, $floor, $enemy, $note);
+
+        // Act
+        $result = app()->make(ObjectImporter::class)->parseObjects($importStringObjects, false);
+
+        // Assert
+        $this->assertCount(1, $result->getMapIcons());
+        $this->assertSame($note, $result->getMapIcons()->first()['comment']);
+    }
+
+    #[Test]
+    public function parseObjects_givenAMapTextOfASpellTagNextToAPull_assignsTheSpellToThePull(): void
+    {
+        // Arrange
+        [$mappingVersion, $enemy, $floor] = $this->findDungeonWithEnemy();
+        $importStringObjects              = $this->createImportStringObjects($mappingVersion, $floor, $enemy, '|cffff3030{spell:2825}|r', isMapText: true);
+        $importStringObjects->getKillZoneAttributes()->put(1, [
+            'index'           => 1,
+            'killZoneEnemies' => [['enemy' => $enemy]],
+            'spells'          => [],
+        ]);
+
+        // Act
+        $result = app()->make(ObjectImporter::class)->parseObjects($importStringObjects, true);
+
+        // Assert
+        $this->assertCount(0, $result->getMapIcons());
+        $this->assertSame([['spell_id' => KnownSpell::Bloodlust->value]], $result->getKillZoneAttributes()->get(1)['spells']);
+    }
+
+    /**
      * @return array{0: MappingVersion, 1: Enemy, 2: Floor}
      */
     private function findDungeonWithEnemy(): array
@@ -319,6 +424,7 @@ final class ObjectImporterTest extends PublicTestCase
         Floor          $floor,
         Enemy          $enemy,
         string         $note,
+        bool           $isMapText = false,
     ): ImportStringObjects {
         $mdtCoordinate = Conversion::convertLatLngToMDTCoordinate(new LatLng($enemy->lat, $enemy->lng, $floor));
 
@@ -329,7 +435,7 @@ final class ObjectImporterTest extends PublicTestCase
             $mappingVersion,
             new Collection(),
             [
-                [
+                array_merge([
                     'n' => true,
                     'd' => [
                         $mdtCoordinate['x'],
@@ -338,7 +444,7 @@ final class ObjectImporterTest extends PublicTestCase
                         true,
                         $note,
                     ],
-                ],
+                ], $isMapText ? ['tx' => true] : []),
             ],
         );
     }
