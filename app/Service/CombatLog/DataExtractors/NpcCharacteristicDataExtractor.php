@@ -25,11 +25,13 @@ use Illuminate\Support\Collection;
 
 class NpcCharacteristicDataExtractor implements DataExtractorInterface
 {
-    /** @var Collection<int, Npc|false> */
-    private Collection $npcCache;
-
-    /** @var Collection<int, string> */
-    private Collection $addedCharacteristics;
+    /**
+     * The first application of each (npc, characteristic) pair this session, keyed `npcId-characteristicId` -
+     * resolved against the NPCs in afterExtract.
+     *
+     * @var Collection<string, array{npc_id: int, spell: SpellModel, raw_event: string}>
+     */
+    private Collection $pendingSightings;
 
     /**
      * All (npc_id, characteristic_id) pairs observed this session — batch-upserted in afterExtract.
@@ -60,8 +62,7 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
     public function __construct(
         private readonly SpellRepositorySwooleInterface $spellRepository,
     ) {
-        $this->npcCache                     = collect();
-        $this->addedCharacteristics         = collect();
+        $this->pendingSightings             = collect();
         $this->pendingObservations          = collect();
         $this->pendingNewNpcCharacteristics = collect();
 
@@ -123,64 +124,23 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
             return;
         }
 
-        $characteristicId  = $spell->characteristic_id;
-        $characteristicKey = array_flip(Characteristic::ALL)[$characteristicId] ?? (string)$characteristicId;
-        $npcId             = $destGuid->getId();
-
-        /** @var Npc|null|false $npc */
-        $npc = $this->npcCache->get($npcId);
-        if ($npc === false) {
+        $npcId    = $destGuid->getId();
+        $dedupKey = sprintf('%d-%d', $npcId, $spell->characteristic_id);
+        if ($this->pendingSightings->has($dedupKey)) {
             return;
         }
 
-        if ($npc === null) {
-            $npc = Npc::with('npcCharacteristics')->find($npcId);
-            $this->npcCache->put($npcId, $npc ?? false);
-        }
-
-        if (!($npc instanceof Npc)) {
-            $this->log->extractDataNpcNotFound($npcId);
-
-            return;
-        }
-
-        if (!CharacteristicEvidenceRule::isConclusiveOn($spell, $npc)) {
-            $this->log->extractDataEvidenceNotConclusiveOnNpc($npcId, $characteristicKey);
-
-            return;
-        }
-
-        $dedupKey = sprintf('%d-%d', $npcId, $characteristicId);
-        if ($this->addedCharacteristics->contains($dedupKey)) {
-            $this->log->extractDataCharacteristicAlreadyAssigned($npcId, $characteristicKey);
-
-            return;
-        }
-
-        $this->addedCharacteristics->push($dedupKey);
-
-        // Always queue an observation — this keeps the rolling window alive even for already-known characteristics
-        $this->pendingObservations->push([
-            'npc_id'            => $npcId,
-            'characteristic_id' => $characteristicId,
+        $this->pendingSightings->put($dedupKey, [
+            'npc_id'    => $npcId,
+            'spell'     => $spell,
+            'raw_event' => $parsedEvent->getRawEvent(),
         ]);
-
-        $alreadyHasCharacteristic = $npc->npcCharacteristics->contains('characteristic_id', $characteristicId);
-
-        if ($alreadyHasCharacteristic) {
-            $this->log->extractDataCharacteristicAlreadyAssigned($npcId, $characteristicKey);
-        } else {
-            $this->pendingNewNpcCharacteristics->push([
-                'npc_id'            => $npcId,
-                'characteristic_id' => $characteristicId,
-            ]);
-
-            $this->log->extractDataAssignedCharacteristicToNpc($npcId, $characteristicKey, $parsedEvent->getRawEvent());
-        }
     }
 
     public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
+        $this->resolvePendingSightings();
+
         if ($this->pendingObservations->isNotEmpty()) {
             $now  = Carbon::now()->toDateTimeString();
             $rows = $this->pendingObservations->map(fn(array $obs) => [
@@ -218,10 +178,69 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
             }
         }
 
-        $this->npcCache                     = collect();
-        $this->addedCharacteristics         = collect();
+        $this->pendingSightings             = collect();
         $this->pendingObservations          = collect();
         $this->pendingNewNpcCharacteristics = collect();
         $this->currentCombatLogFilePath     = null;
+    }
+
+    /**
+     * Loads every NPC the session's sightings name in one query, then queues an observation (and, when the NPC
+     * lacks it, a new NpcCharacteristic) for each sighting that is conclusive on its NPC.
+     */
+    private function resolvePendingSightings(): void
+    {
+        if ($this->pendingSightings->isEmpty()) {
+            return;
+        }
+
+        $npcs = Npc::with('npcCharacteristics')
+            ->whereIn('id', $this->pendingSightings->pluck('npc_id')->unique()->values())
+            ->get()
+            ->keyBy('id');
+
+        /** @var array<int, true> $loggedMissingNpcIds */
+        $loggedMissingNpcIds = [];
+        foreach ($this->pendingSightings as $sighting) {
+            $npcId = $sighting['npc_id'];
+            $spell = $sighting['spell'];
+
+            $characteristicId  = $spell->characteristic_id;
+            $characteristicKey = array_flip(Characteristic::ALL)[$characteristicId] ?? (string)$characteristicId;
+
+            /** @var Npc|null $npc */
+            $npc = $npcs->get($npcId);
+            if ($npc === null) {
+                if (!isset($loggedMissingNpcIds[$npcId])) {
+                    $loggedMissingNpcIds[$npcId] = true;
+                    $this->log->extractDataNpcNotFound($npcId);
+                }
+
+                continue;
+            }
+
+            if (!CharacteristicEvidenceRule::isConclusiveOn($spell, $npc)) {
+                $this->log->extractDataEvidenceNotConclusiveOnNpc($npcId, $characteristicKey);
+
+                continue;
+            }
+
+            // Always queue an observation — this keeps the rolling window alive even for already-known characteristics
+            $this->pendingObservations->push([
+                'npc_id'            => $npcId,
+                'characteristic_id' => $characteristicId,
+            ]);
+
+            if ($npc->npcCharacteristics->contains('characteristic_id', $characteristicId)) {
+                $this->log->extractDataCharacteristicAlreadyAssigned($npcId, $characteristicKey);
+            } else {
+                $this->pendingNewNpcCharacteristics->push([
+                    'npc_id'            => $npcId,
+                    'characteristic_id' => $characteristicId,
+                ]);
+
+                $this->log->extractDataAssignedCharacteristicToNpc($npcId, $characteristicKey, $sighting['raw_event']);
+            }
+        }
     }
 }
