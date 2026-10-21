@@ -104,6 +104,11 @@ class AjaxDungeonRouteSearchController extends Controller
                 ->map(static fn(File $file): array => ['url' => $file->getURL()])
                 ->values()
                 ->all(),
+            'url' => route('dungeonroute.view', [
+                'dungeon'      => $dungeonRoute->dungeon,
+                'dungeonroute' => $dungeonRoute,
+                'title'        => $dungeonRoute->getTitleSlug(),
+            ]),
             'dungeon' => [
                 'id'        => $dungeonRoute->dungeon->id,
                 'name'      => $dungeonRoute->dungeon->name,

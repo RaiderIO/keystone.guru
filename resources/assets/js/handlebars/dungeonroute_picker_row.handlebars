@@ -64,4 +64,11 @@
             </span>
         </span>
     </label>
+    {{#if view_url}}
+        <a href="{{ view_url }}" target="_blank" rel="noopener"
+           class="route_picker_view_link btn btn-sm btn-link ms-1"
+           title="{{ t 'dungeonroute_picker_view_route_label' }}" aria-label="{{ t 'dungeonroute_picker_view_route_label' }}">
+            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+        </a>
+    {{/if}}
 </li>

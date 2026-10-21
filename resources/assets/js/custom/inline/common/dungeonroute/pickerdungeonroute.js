@@ -170,6 +170,13 @@ class PickerDungeonRoute {
     }
 
     /**
+     * @returns {string} Empty when the row does not carry the route's page.
+     */
+    getViewUrl() {
+        return this.json.url ?? '';
+    }
+
+    /**
      * @returns {string}
      */
     getViewsAbbreviated() {
@@ -198,6 +205,7 @@ class PickerDungeonRoute {
                 }),
             rating: this.getRating(),
             pull_graph: this.getPullGraph(),
+            view_url: this.getViewUrl(),
             views: this.getViewsAbbreviated(),
             views_title: lang.get('js.dungeonroute_picker_views', {count: parseInt(this.json.views) || 0}),
         };

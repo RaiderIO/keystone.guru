@@ -83,7 +83,12 @@ final class AjaxDungeonRouteSearchControllerTest extends AjaxPublicTestCase
                 'enemy_forces_required_teeming' => $route->mappingVersion->enemy_forces_required_teeming,
                 'has_thumbnail'                 => false,
                 'thumbnails'                    => [],
-                'dungeon'                       => [
+                'url'                           => route('dungeonroute.view', [
+                    'dungeon'      => $route->dungeon,
+                    'dungeonroute' => $route,
+                    'title'        => $route->getTitleSlug(),
+                ]),
+                'dungeon' => [
                     'id'        => $route->dungeon->id,
                     'name'      => $route->dungeon->name,
                     'key'       => $route->dungeon->key,
