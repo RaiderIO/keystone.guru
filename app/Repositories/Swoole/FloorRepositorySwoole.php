@@ -13,6 +13,9 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
     /** @var Collection<string, Floor> */
     private readonly Collection $floorsByUiMapIdAndDungeonId;
 
+    /** @var Collection<string, Collection<int, Floor>> */
+    private readonly Collection $allFloorsByUiMapIdAndDungeonId;
+
     /** @var Collection<int, Floor> */
     private Collection $defaultFloorByDungeonId;
 
@@ -20,8 +23,9 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
     {
         parent::__construct();
 
-        $this->floorsByUiMapIdAndDungeonId = collect();
-        $this->defaultFloorByDungeonId     = collect();
+        $this->floorsByUiMapIdAndDungeonId    = collect();
+        $this->allFloorsByUiMapIdAndDungeonId = collect();
+        $this->defaultFloorByDungeonId        = collect();
     }
 
     #[Override]
@@ -38,6 +42,18 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
         }
 
         return $this->floorsByUiMapIdAndDungeonId->get($key);
+    }
+
+    #[Override]
+    public function findAllByUiMapId(int $uiMapId, int $dungeonId): Collection
+    {
+        $key = sprintf('%d-%d', $uiMapId, $dungeonId);
+
+        if (!$this->allFloorsByUiMapIdAndDungeonId->has($key)) {
+            $this->allFloorsByUiMapIdAndDungeonId->put($key, parent::findAllByUiMapId($uiMapId, $dungeonId));
+        }
+
+        return $this->allFloorsByUiMapIdAndDungeonId->get($key);
     }
 
     #[Override]
