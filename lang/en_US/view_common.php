@@ -398,6 +398,8 @@ return [
             'browse_routes_description'       => 'Published routes for the dungeon you picked',
             'find_routes'                     => 'Find routes',
             'find_routes_description'         => 'Pick the enemies a route must pull or skip',
+            'creators'                        => 'Creators',
+            'creators_description'            => 'Route makers and the collections they share',
             'heatmaps'                        => 'Heatmaps',
             'heatmaps_description'            => 'See where wipes occur or spells are cast, with many filters',
             'explore'                         => 'Explore dungeons',

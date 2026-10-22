@@ -2,10 +2,12 @@
 
 namespace Tests\Feature\View;
 
+use App\Features\CreatorProfiles;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -387,6 +389,57 @@ final class SiteHeaderTest extends PublicTestCase
 
         $this->assertStringContainsString(sprintf('href="%s"', route('dungeon.dungeonroute.search')), $html);
         $this->assertStringNotContainsString(sprintf('href="%s"', route('dungeonroutes.search')), $html);
+    }
+
+    #[Test]
+    public function home_givenCreatorProfilesActive_linksTheCreatorDirectory(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        Feature::for($user)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($user)
+                ->withHeader('User-Agent', self::DESKTOP_USER_AGENT)
+                ->get('/');
+
+            // Assert
+            $response->assertOk();
+            $html = $response->getContent();
+
+            $this->assertStringContainsString(sprintf('href="%s"', route('creators.index')), $html);
+            $this->assertStringContainsString(__('view_common.layout.header.creators_description'), $html);
+        } finally {
+            Feature::for($user)->forget(CreatorProfiles::class);
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function home_givenCreatorProfilesInactive_omitsTheCreatorDirectory(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        Feature::for($user)->deactivate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($user)
+                ->withHeader('User-Agent', self::DESKTOP_USER_AGENT)
+                ->get('/');
+
+            // Assert - Find routes is the positive control: the Routes category itself still renders
+            $response->assertOk();
+            $html = $response->getContent();
+
+            $this->assertStringContainsString(sprintf('href="%s"', route('dungeon.dungeonroute.search')), $html);
+            $this->assertStringNotContainsString(sprintf('href="%s"', route('creators.index')), $html);
+            $this->assertStringNotContainsString(__('view_common.layout.header.creators_description'), $html);
+        } finally {
+            Feature::for($user)->forget(CreatorProfiles::class);
+            $user->delete();
+        }
     }
 
     #[Test]
