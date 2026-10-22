@@ -189,6 +189,11 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
             'dungeon_start_id'           => $this->resolveDungeonStartId($mappingVersionId, $validated['dungeon_start_id'] ?? null),
         ] + $this->levelRangeAttributes($validated['dungeon_route_level'] ?? null, $activeSeason?->key_level_max);
 
+        // Absent whenever the form did not offer the field, which leaves the route's current key alone
+        if (array_key_exists('dungeon_route_vanity_key', $validated)) {
+            $attributes['vanity_key'] = $validated['dungeon_route_vanity_key'];
+        }
+
         if ($new) {
             $attributes['author_id']          = $user?->id ?? -1; // @phpstan-ignore nullsafe.neverNull
             $attributes['public_key']         = DungeonRoute::generateRandomPublicKey();

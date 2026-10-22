@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Laratrust\Role;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\Team;
 use App\Models\TeamUser;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +28,18 @@ use Illuminate\Support\Facades\Auth;
     {{ html()->label(__('view_common.team.details.description'), 'description') }}
     {{ html()->text('description')->class('form-control') }}
 </div>
+
+@if(isset($model) && Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::CUSTOM_URLS))
+    <div class="mb-3{{ $errors->has('vanity_key') ? ' has-error' : '' }}">
+        {{ html()->label(__('view_common.team.details.vanity_key'), 'vanity_key') }}
+        <i class="fas fa-info-circle" data-bs-toggle="tooltip"
+           title="{{ __('view_common.team.details.vanity_key_title') }}"></i>
+        <div class="input-group">
+            <span class="input-group-text">{{ url('team') }}/</span>
+            {{ html()->text('vanity_key')->class('form-control')->placeholder($model->public_key) }}
+        </div>
+    </div>
+@endif
 
 <div class="mb-3{{ $errors->has('logo') ? ' has-error' : '' }}">
     {{ html()->label(__('view_common.team.details.logo'), 'logo') }}
