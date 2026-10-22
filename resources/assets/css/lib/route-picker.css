@@ -78,7 +78,23 @@
     height: 44px;
 }
 
+/* The stats wrap under the title, so a centred row would drop the tick box below the thumbnail. Top-aligned,
+   the thumbnail-high rank column keeps the tick box level with the thumbnail's centre. !important overrides
+   the .align-items-center utilities in the row template. */
+.route_picker .route_picker_row,
+.route_picker .route_picker_row .route_picker_row_label,
+.route_picker .route_picker_row .leaderboard_row_inner {
+    align-items: flex-start !important;
+}
+
+/* Sized on the rest of the thumbnail's line rather than its one-line width, so a long title wraps beside the
+   thumbnail instead of the whole column wrapping under it. */
+.route_picker .route_picker_row.leaderboard_row .leaderboard_main {
+    flex-basis: calc(100% - 72px - 0.75rem);
+}
+
 .route_picker .route_picker_title {
+    min-width: 0;
     overflow-wrap: anywhere;
 }
 

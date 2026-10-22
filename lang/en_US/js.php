@@ -562,7 +562,7 @@ return [
     // Route picker
     'dungeonroute_picker_range'               => ':from–:to of :total',
     'dungeonroute_picker_already_in_label'    => 'Already added',
-    'dungeonroute_picker_unpublished_label'   => 'Hidden from others until published',
+    'dungeonroute_picker_unpublished_label'   => 'Unpublished',
     'dungeonroute_picker_key_level'           => '+:level',
     'dungeonroute_picker_key_range'           => '+:min – +:max',
     'dungeonroute_picker_enemy_forces'        => ':count/:required enemy forces',

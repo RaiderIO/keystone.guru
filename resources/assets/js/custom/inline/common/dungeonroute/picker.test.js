@@ -363,6 +363,21 @@ describe('CommonDungeonroutePicker', () => {
         expect(document.querySelector('#picker_next').disabled).toBe(false);
     });
 
+    it('load_givenAnUnpublishedRoute_endsTheTitleLineWithTheUnpublishedMarker', () => {
+        // Arrange
+        picker.reload();
+
+        // Act
+        respondWithRoutes([route('a', {published: 'unpublished'})]);
+
+        // Assert
+        const titleLine = rowOf('a').querySelector('.leaderboard_title');
+        const marker    = titleLine.lastElementChild;
+        expect(marker.classList.contains('route_picker_unpublished')).toBe(true);
+        expect(marker.classList.contains('ms-auto')).toBe(true);
+        expect(marker.textContent.trim()).toBe('Unpublished');
+    });
+
     it('load_givenARouteWithoutPulls_leavesTheGraphSlotEmptyButInPlace', () => {
         // Arrange
         picker.reload();
