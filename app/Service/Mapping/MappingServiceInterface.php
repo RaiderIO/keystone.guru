@@ -44,6 +44,12 @@ interface MappingServiceInterface
     public function getMappingVersionForMdtAddonVersion(Dungeon $dungeon, ?int $addonVersion, ?GameVersion $gameVersion = null): ?MappingVersion;
 
     /**
+     * The dungeon's newest mapping version for the game version that matches what MDT ships (not
+     * mdt_changes_pending), or null when it has none.
+     */
+    public function getNewestMdtSyncedMappingVersion(Dungeon $dungeon, int $gameVersionId): ?MappingVersion;
+
+    /**
      * Takes an existing mapping version and applies it to a dungeon (can be the same dungeon, or another one).
      */
     public function copyMappingVersionToDungeon(MappingVersion $sourceMappingVersion, Dungeon $dungeon): MappingVersion;

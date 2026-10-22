@@ -17,6 +17,7 @@ globalThis.EXPANSION_DRAGONFLIGHT = 'df';
 globalThis.METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY = 1;
 globalThis.METRIC_TAG_MDT_COPY_VIEW = 'view';
 globalThis.METRIC_TAG_MDT_COPY_EMBED = 'embed';
+globalThis.DRAFT_SOURCE_MDT_IMPORT = 'mdt_import';
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -205,6 +206,29 @@ describe('DungeonrouteTable._getProfileActionsTemplateVariables', () => {
 
         // Assert
         expect(result.show_continue_in_season).toBe(false);
+    });
+    it('_getProfileActionsTemplateVariables_givenMdtImportDraft_flagsMdtImportDraft', () => {
+        // Arrange
+        const row = buildRow({is_upgrade_draft: true, draft_source: 'mdt_import'});
+
+        // Act
+        const result = DungeonrouteTable.prototype._getProfileActionsTemplateVariables(row);
+
+        // Assert
+        expect(result.is_upgrade_draft).toBe(true);
+        expect(result.is_mdt_import_draft).toBe(true);
+    });
+
+    it('_getProfileActionsTemplateVariables_givenDraftWithoutSource_flagsMappingUpgradeDraft', () => {
+        // Arrange: drafts that predate draft_source carry null and are mapping upgrades
+        const row = buildRow({is_upgrade_draft: true, draft_source: null});
+
+        // Act
+        const result = DungeonrouteTable.prototype._getProfileActionsTemplateVariables(row);
+
+        // Assert
+        expect(result.is_upgrade_draft).toBe(true);
+        expect(result.is_mdt_import_draft).toBe(false);
     });
 });
 
