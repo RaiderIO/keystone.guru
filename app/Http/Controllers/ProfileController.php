@@ -114,15 +114,9 @@ class ProfileController extends Controller
                 ->filter(static fn(?DungeonRouteCollection $dungeonRouteCollection): bool => $dungeonRouteCollection?->mayUserView($viewer) ?? false)
                 ->values();
 
-            foreach ($pinnedDungeonRouteCollections as $pinnedDungeonRouteCollection) {
-                $viewableDungeonRoutes = $pinnedDungeonRouteCollection->getViewableDungeonRoutes($viewer);
-
-                $pinnedDungeonRouteCollectionDungeonRoutes->put($pinnedDungeonRouteCollection->id, $viewableDungeonRoutes);
-                $pinnedDungeonRouteCollectionCoveredDungeonCounts->put(
-                    $pinnedDungeonRouteCollection->id,
-                    $dungeonRouteCollectionService->getCoveredDungeonCount($pinnedDungeonRouteCollection, $viewableDungeonRoutes),
-                );
-            }
+            $pinnedDungeonRouteCollectionTileContents         = $dungeonRouteCollectionService->getTileContents($pinnedDungeonRouteCollections, $viewer);
+            $pinnedDungeonRouteCollectionDungeonRoutes        = $pinnedDungeonRouteCollectionTileContents['dungeonRoutes'];
+            $pinnedDungeonRouteCollectionCoveredDungeonCounts = $pinnedDungeonRouteCollectionTileContents['coveredDungeonCounts'];
         }
 
         return view('profile.view', [

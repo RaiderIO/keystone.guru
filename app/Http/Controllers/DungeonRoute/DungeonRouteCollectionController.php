@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\DungeonRoute;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DungeonRoute\DungeonRouteCollectionBrowseFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteCollectionCreateFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteCollectionDuplicateFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteCollectionFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteCollectionIndexFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
+use App\Models\GameVersion\GameVersion;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\User;
@@ -18,6 +20,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRouteReposito
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Repositories\Interfaces\Tags\TagRepositoryInterface;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteCollectionServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -437,6 +440,44 @@ class DungeonRouteCollectionController extends Controller
         Session::flash('status', __('controller.dungeonroutecollection.flash.collection_deleted'));
 
         return redirect()->route('collections.index');
+    }
+
+    /**
+     * The public listing of every world published collection of the visitor's game version, searchable by name and
+     * filterable by category and dungeon.
+     */
+    public function browse(
+        DungeonRouteCollectionBrowseFormRequest           $request,
+        DungeonRouteCollectionRepositoryInterface         $dungeonRouteCollectionRepository,
+        DungeonRouteCollectionCategoryRepositoryInterface $dungeonRouteCollectionCategoryRepository,
+        DungeonRouteCollectionServiceInterface            $dungeonRouteCollectionService,
+        DungeonServiceInterface                           $dungeonService,
+    ): View {
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $search      = $request->search();
+        $category    = $request->dungeonRouteCollectionCategory();
+        $dungeon     = $request->dungeon();
+
+        $dungeonRouteCollections = $dungeonRouteCollectionRepository->paginateWorldPublished(
+            $gameVersion,
+            $search,
+            $category,
+            $dungeon,
+            (int)config('keystoneguru.collections.per_page'),
+        );
+
+        $tileContents = $dungeonRouteCollectionService->getTileContents(collect($dungeonRouteCollections->items()), Auth::user());
+
+        return view('collection.browse', [
+            'dungeonRouteCollections' => $dungeonRouteCollections,
+            'tileDungeonRoutes'       => $tileContents['dungeonRoutes'],
+            'coveredDungeonCounts'    => $tileContents['coveredDungeonCounts'],
+            'search'                  => $search,
+            'categories'              => $dungeonRouteCollectionCategoryRepository->all(),
+            'selectedCategory'        => $category,
+            'dungeons'                => $dungeonService->getDungeonsForGameVersion($gameVersion),
+            'selectedDungeon'         => $dungeon,
+        ]);
     }
 
     /**

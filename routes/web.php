@@ -233,6 +233,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     // Publicly shared route collections
     Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
         ->prefix('collection')->group(static function () {
+            Route::get('/', new DungeonRouteCollectionController()->browse(...))->name('collection.browse');
             Route::get('/{dungeonRouteCollection}', new DungeonRouteCollectionController()->view(...))->name('collection.view');
         });
 
