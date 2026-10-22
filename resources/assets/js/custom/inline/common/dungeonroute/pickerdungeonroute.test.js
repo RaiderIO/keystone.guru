@@ -270,6 +270,15 @@ describe('PickerDungeonRoute', () => {
         expect(dungeonRoute({enemy_forces: 300}).toTemplateData('https://assets/images').enemy_forces_warning).toBe('');
     });
 
+    it('toTemplateData_givenAUrl_carriesItAsTheViewUrl', () => {
+        expect(dungeonRoute({url: 'https://keystone.guru/route/x'}).toTemplateData('https://assets/images').view_url)
+            .toBe('https://keystone.guru/route/x');
+    });
+
+    it('toTemplateData_givenNoUrl_carriesAnEmptyViewUrl', () => {
+        expect(dungeonRoute().toTemplateData('https://assets/images').view_url).toBe('');
+    });
+
     it('toTemplateData_givenARoute_carriesItsIdentityAndRowDetails', () => {
         // Act
         const data = dungeonRoute().toTemplateData('https://assets/images');

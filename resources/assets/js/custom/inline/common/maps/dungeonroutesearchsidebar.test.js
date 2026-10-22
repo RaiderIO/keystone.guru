@@ -43,6 +43,7 @@ const MESSAGES = {
         dungeonroute_picker_pulls_many:        ':count pulls',
         dungeonroute_picker_views:             ':count views',
         dungeonroute_picker_votes:             ':count votes',
+        dungeonroute_picker_view_route_label:  'Open route in a new tab',
     },
     'en.dungeons': {ara_kara: 'Ara-Kara'},
 };
@@ -62,6 +63,7 @@ function route(publicKey) {
     return {
         public_key:                    publicKey,
         title:                         `Route ${publicKey}`,
+        url:                           `https://keystone.guru/route/arakara/${publicKey}/route-${publicKey}`,
         published:                     'world',
         level_min:                     2,
         level_max:                     10,
@@ -184,6 +186,35 @@ describe('CommonMapsDungeonroutesearchsidebar', () => {
         const $inputs = $rows.find('.route_picker_checkbox');
         expect($inputs.toArray().map(input => input.type)).toEqual(['radio', 'radio']);
         expect($inputs.toArray().map(input => input.name)).toEqual(['dungeonroute_search_route', 'dungeonroute_search_route']);
+    });
+
+    it('_renderSearchResults_givenRoutes_linksEachRowToItsRoutePageOutsideTheRadiosLabel', () => {
+        // Arrange
+        const rows = [route('a'), route('b')];
+
+        // Act
+        sidebar._renderSearchResults(rows);
+
+        // Assert
+        const $link = row('b').find('.route_picker_view_link');
+        expect($link.length).toBe(1);
+        expect($link.attr('href')).toBe('https://keystone.guru/route/arakara/b/route-b');
+        expect($link.attr('target')).toBe('_blank');
+        expect($link.attr('title')).toBe('Open route in a new tab');
+        expect($link.closest('label').length).toBe(0);
+    });
+
+    it('_renderSearchResults_givenARouteWithoutAUrl_rendersNoLinkForThatRow', () => {
+        // Arrange
+        const withoutUrl = route('b');
+        delete withoutUrl.url;
+
+        // Act
+        sidebar._renderSearchResults([route('a'), withoutUrl]);
+
+        // Assert
+        expect(row('a').find('.route_picker_view_link').length).toBe(1);
+        expect(row('b').find('.route_picker_view_link').length).toBe(0);
     });
 
     it('_renderSearchResults_givenNull_saysNothingWasFoundAndClearsTheShownRoute', () => {
