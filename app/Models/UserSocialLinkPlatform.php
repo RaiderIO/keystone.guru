@@ -225,8 +225,9 @@ enum UserSocialLinkPlatform: string
             self::Instagram => $this->matchUsername('#^@?([A-Za-z0-9_.]{1,30})(?:/.*)?$#', $username),
             self::Patreon   => $this->matchUsername('#^(?:c/)?@?([A-Za-z0-9_-]{1,64})(?:/.*)?$#', $username),
             self::Tiktok    => $this->matchUsername('#^@?([A-Za-z0-9_.]{2,24})(?:/.*)?$#', $username, '@%s'),
-            self::Youtube   => $this->matchUsername('#^((?:channel|c|user)/[A-Za-z0-9_.-]{1,100})(?:/.*)?$#', $username)
-                ?? $this->matchUsername('#^@?([A-Za-z0-9_.-]{3,30})(?:/.*)?$#', $username, '@%s'),
+            // YouTube handles and custom names may use letters and digits of any script
+            self::Youtube => $this->matchUsername('#^((?:channel|c|user)/[\p{L}\p{M}\p{N}_.-]{1,100})(?:/.*)?$#u', $username)
+                ?? $this->matchUsername('#^@?([\p{L}\p{M}\p{N}_.·-]{3,30})(?:/.*)?$#u', $username, '@%s'),
             // A handle is a domain, and anyone without one of their own has a bsky.social subdomain
             self::Bluesky => $this->matchUsername('#^@?(did:plc:[a-z2-7]{24}|[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+)(?:/.*)?$#', $username)
                 ?? $this->matchUsername('#^@?([A-Za-z0-9-]{1,63})$#', $username, '%s.bsky.social'),

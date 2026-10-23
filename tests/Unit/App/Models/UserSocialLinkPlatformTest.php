@@ -49,6 +49,8 @@ final class UserSocialLinkPlatformTest extends PublicTestCase
             'youtube at-handle'                => [UserSocialLinkPlatform::Youtube, '@someone', 'https://youtube.com/@someone'],
             'youtube handle link'              => [UserSocialLinkPlatform::Youtube, 'https://www.youtube.com/@someone/videos', 'https://youtube.com/@someone'],
             'youtube channel link'             => [UserSocialLinkPlatform::Youtube, 'https://youtube.com/channel/UCabcdefghijklmnopqrstuv', 'https://youtube.com/channel/UCabcdefghijklmnopqrstuv'],
+            'youtube non-latin handle'         => [UserSocialLinkPlatform::Youtube, '@日本語', 'https://youtube.com/@日本語'],
+            'youtube percent-encoded handle'   => [UserSocialLinkPlatform::Youtube, 'https://www.youtube.com/@%E6%97%A5%E6%9C%AC%E8%AA%9E', 'https://youtube.com/@日本語'],
             'youtube video link is no channel' => [UserSocialLinkPlatform::Youtube, 'https://www.youtube.com/watch?v=abc123', null],
             'youtube short link is no channel' => [UserSocialLinkPlatform::Youtube, 'https://youtu.be/abc123', null],
 
