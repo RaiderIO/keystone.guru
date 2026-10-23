@@ -12,6 +12,7 @@ use App\Models\UserPinnedDungeonRoute;
 use App\Models\UserPinnedDungeonRouteCollection;
 use App\Models\UserSocialLink;
 use App\Models\UserSocialLinkPlatform;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
@@ -1036,6 +1037,72 @@ final class ProfileCreatorProfileTest extends PublicTestCase
         } finally {
             $socialLinks->each(static fn(UserSocialLink $socialLink) => $socialLink->delete());
             Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function updateCreatorProfile_givenALinkGoogleFlagsAsUnsafe_failsValidationAndStoresNothing(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+        config(['services.google_web_risk.api_key' => 'test-web-risk-key']);
+        Http::fake([
+            'webrisk.googleapis.com/*' => Http::response(['threat' => ['threatTypes' => ['SOCIAL_ENGINEERING']]]),
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'social_links' => [
+                    UserSocialLinkPlatform::Website->value => 'https://phishing.example.com/login',
+                ],
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors(['social_links.website' => __('validation.custom.social_links.unsafe')]);
+            $this->assertSame(0, UserSocialLink::where('user_id', $creator->id)->count());
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            UserSocialLink::where('user_id', $creator->id)->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function updateCreatorProfile_givenAnUnchangedLinkAndADiscordUsername_looksNeitherUp(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+        config(['services.google_web_risk.api_key' => 'test-web-risk-key']);
+        Http::fake([
+            'webrisk.googleapis.com/*' => Http::response(['threat' => ['threatTypes' => ['MALWARE']]]),
+        ]);
+
+        UserSocialLink::create([
+            'user_id'  => $creator->id,
+            'platform' => UserSocialLinkPlatform::Website->value,
+            'url'      => 'https://example.com/me',
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'social_links' => [
+                    UserSocialLinkPlatform::Website->value => 'https://example.com/me',
+                    UserSocialLinkPlatform::Discord->value => 'someone',
+                ],
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            Http::assertNothingSent();
+            $this->assertSame(2, UserSocialLink::where('user_id', $creator->id)->count());
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            UserSocialLink::where('user_id', $creator->id)->delete();
             $creator->delete();
         }
     }
