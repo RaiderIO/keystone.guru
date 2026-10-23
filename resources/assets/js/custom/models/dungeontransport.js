@@ -14,12 +14,30 @@ L.Draw.DungeonTransport = L.Draw.Marker.extend({
     }
 });
 
+L.Draw.DungeonTransportPath = L.Draw.Polyline.extend({
+    statics: {
+        TYPE: 'dungeontransportpath'
+    },
+    initialize: function (map, options) {
+        L.Draw.Polyline.prototype.initialize.call(this, map, options);
+        this.type = L.Draw.DungeonTransportPath.TYPE;
+    },
+    /**
+     * Hands the drawn vertices to options.onCreated instead of firing draw:created, which would add the line to the
+     * map as a new map object.
+     */
+    _fireCreatedEvent: function () {
+        this.options.onCreated(this._poly.getLatLngs());
+    }
+});
+
 /**
  * One end of a portal, boat, shortcut or other transport. Clicking it takes the viewer to its linked partner.
  *
  * @property {Number|null} linked_dungeon_transport_id
  * @property {Number|null} target_dungeon_id
  * @property {String|null} link_key
+ * @property {String|null} path_vertices_json [{lat, lng, floor_id}], from this transport towards its partner
  */
 class DungeonTransport extends Icon {
     constructor(map, layer) {
@@ -27,10 +45,15 @@ class DungeonTransport extends Icon {
 
         this.label = 'DungeonTransport';
         this.mouseOver = false;
+        /** @type {L.FeatureGroup|null} Lives outside the decorator, since a path can cross floors neither end is on */
+        this.pathLayer = null;
         this.setMapIconType(getState().getMapContext().getMapIconTypeByKey(DUNGEON_TRANSPORT_DEFAULT_MAP_ICON_TYPE_KEY), false);
 
-        // Either end of a pair may finish loading last, and only one of them draws the line between them
-        this.register(['object:initialized', 'object:changed'], this, this._rebuildPartnerDecorator.bind(this));
+        // Either end of a pair may finish loading or be shown last, and only one of them draws the line between them
+        this.register(['object:initialized', 'object:changed', 'shown'], this, this._rebuildPairLines.bind(this));
+        this.register('object:deleted', this, this._onDeleted.bind(this));
+        getState().register('floorid:changed', this, this._rebuildPathLayer.bind(this));
+        this._getMapObjectGroup().register('visibility:changed', this, this._rebuildPathLayer.bind(this));
     }
 
     /**
@@ -61,6 +84,12 @@ class DungeonTransport extends Icon {
             new Attribute({
                 name: 'link_key',
                 type: 'text',
+                default: null,
+            }),
+            new Attribute({
+                name: 'path_vertices_json',
+                type: 'text',
+                edit: false,
                 default: null,
             }),
         ]);
@@ -105,7 +134,9 @@ class DungeonTransport extends Icon {
             return null;
         }
 
-        return this._getMapObjectGroup().findMapObjectById(this.linked_dungeon_transport_id);
+        let linkedDungeonTransport = this._getMapObjectGroup().findMapObjectById(this.linked_dungeon_transport_id);
+
+        return linkedDungeonTransport === null || linkedDungeonTransport._deleted ? null : linkedDungeonTransport;
     }
 
     /**
@@ -119,44 +150,103 @@ class DungeonTransport extends Icon {
     }
 
     /**
+     * Of a two-way pair only the lower id draws the line between them.
+     *
+     * @param linkedDungeonTransport {DungeonTransport}
+     * @returns {Boolean}
+     */
+    isPairLineOwner(linkedDungeonTransport) {
+        return !this.isTwoWayWith(linkedDungeonTransport) || this.id < linkedDungeonTransport.id;
+    }
+
+    /**
+     * @returns {{lat: Number, lng: Number, floor_id: Number}[]}
+     */
+    getPathVertices() {
+        return this.path_vertices_json ? JSON.parse(this.path_vertices_json) : [];
+    }
+
+    /**
+     * Either end of a two-way pair may hold the pair's path.
+     *
+     * @returns {{lat: Number, lng: Number, floor_id: Number}[]} The pair's path, running from this transport to its partner.
+     */
+    getPairPathVertices() {
+        let pathVertices = this.getPathVertices();
+        let linkedDungeonTransport = this.getLinkedDungeonTransport();
+
+        if (pathVertices.length === 0 && linkedDungeonTransport !== null && this.isTwoWayWith(linkedDungeonTransport)) {
+            return linkedDungeonTransport.getPathVertices().reverse();
+        }
+
+        return pathVertices;
+    }
+
+    /**
+     * @param floor {{id: Number, facade: Boolean}}
+     * @returns {Number[][][]} The whole pair's path on the facade, otherwise each run of its consecutive vertices on the floor.
+     */
+    getPathLatLngRuns(floor) {
+        let runs = [];
+        let run = [];
+
+        for (let vertex of this.getPairPathVertices()) {
+            if (floor.facade || vertex.floor_id === floor.id) {
+                run.push([vertex.lat, vertex.lng]);
+            } else {
+                runs.push(run);
+                run = [];
+            }
+        }
+        runs.push(run);
+
+        return runs.filter(latLngs => latLngs.length >= 2);
+    }
+
+    /**
      * @private
      */
-    _rebuildPartnerDecorator() {
+    _rebuildPairLines() {
         let linkedDungeonTransport = this.getLinkedDungeonTransport();
-        if (linkedDungeonTransport !== null && linkedDungeonTransport.isVisible()) {
-            linkedDungeonTransport._rebuildDecorator();
+        if (linkedDungeonTransport !== null) {
+            if (linkedDungeonTransport.isVisible()) {
+                linkedDungeonTransport._rebuildDecorator();
+            }
+            linkedDungeonTransport._rebuildPathLayer();
         }
 
         if (this.isVisible()) {
             this._rebuildDecorator();
         }
+        this._rebuildPathLayer();
     }
 
     /**
-     * @inheritDoc
+     * @param linkedDungeonTransport {DungeonTransport}
+     * @returns {Object}
+     * @private
      */
-    _getDecorator() {
-        let linkedDungeonTransport = this.getLinkedDungeonTransport();
-
-        if (this.layer === null || linkedDungeonTransport === null || linkedDungeonTransport.layer === null ||
-            !this.isVisible() || !linkedDungeonTransport.isVisible()) {
-            return null;
-        }
-
-        let twoWay = this.isTwoWayWith(linkedDungeonTransport);
-        if (twoWay && this.id > linkedDungeonTransport.id) {
-            return null;
-        }
-
+    _getConnectionPolylineOptions(linkedDungeonTransport) {
         let options = c.map.dungeontransport.connectionPolylineOptions;
         if (this.mouseOver || linkedDungeonTransport.mouseOver) {
             options = $.extend({}, options, c.map.dungeontransport.connectionPolylineMouseoverOptions);
         }
 
-        let polyline = L.polyline([this.layer.getLatLng(), linkedDungeonTransport.layer.getLatLng()], options);
+        return options;
+    }
+
+    /**
+     * @param latLngs {Array}
+     * @param linkedDungeonTransport {DungeonTransport}
+     * @returns {L.Layer[]} The line, with an arrowhead halfway when the link is one-way.
+     * @private
+     */
+    _getConnectionLayers(latLngs, linkedDungeonTransport) {
+        let options = this._getConnectionPolylineOptions(linkedDungeonTransport);
+        let polyline = L.polyline(latLngs, options);
         let layers = [polyline];
 
-        if (!twoWay) {
+        if (!this.isTwoWayWith(linkedDungeonTransport)) {
             layers.push(L.polylineDecorator(polyline, {
                 patterns: [{
                     offset: '50%',
@@ -169,7 +259,80 @@ class DungeonTransport extends Icon {
             }));
         }
 
-        return L.featureGroup(layers);
+        return layers;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    _getDecorator() {
+        let linkedDungeonTransport = this.getLinkedDungeonTransport();
+
+        if (this.layer === null || linkedDungeonTransport === null || linkedDungeonTransport.layer === null ||
+            !this.isVisible() || !linkedDungeonTransport.isVisible() || !this.isPairLineOwner(linkedDungeonTransport) ||
+            this.getPairPathVertices().length > 0) {
+            return null;
+        }
+
+        return L.featureGroup(this._getConnectionLayers(
+            [this.layer.getLatLng(), linkedDungeonTransport.layer.getLatLng()],
+            linkedDungeonTransport,
+        ));
+    }
+
+    /**
+     * @returns {L.FeatureGroup|null} The pair's path on the current floor, when this transport draws the pair's line.
+     * @private
+     */
+    _getPathLayer() {
+        let linkedDungeonTransport = this.getLinkedDungeonTransport();
+
+        if (linkedDungeonTransport === null || !this.isPairLineOwner(linkedDungeonTransport) ||
+            !this._getMapObjectGroup().isShown()) {
+            return null;
+        }
+
+        let runs = this.getPathLatLngRuns(getState().getCurrentFloor());
+        if (runs.length === 0) {
+            return null;
+        }
+
+        return L.featureGroup(runs.flatMap(latLngs => this._getConnectionLayers(latLngs, linkedDungeonTransport)));
+    }
+
+    /**
+     * @private
+     */
+    _rebuildPathLayer() {
+        this._cleanPathLayer();
+
+        this.pathLayer = this._getPathLayer();
+        if (this.pathLayer !== null) {
+            this.pathLayer.addTo(this.map.leafletMap);
+        }
+    }
+
+    /**
+     * The transports that drew their line to this one have nothing left to draw it to.
+     *
+     * @private
+     */
+    _onDeleted() {
+        this._cleanPathLayer();
+
+        Object.values(this._getMapObjectGroup().objects)
+            .filter(dungeonTransport => dungeonTransport !== this && dungeonTransport.linked_dungeon_transport_id === this.id)
+            .forEach(dungeonTransport => dungeonTransport._rebuildPairLines());
+    }
+
+    /**
+     * @private
+     */
+    _cleanPathLayer() {
+        if (this.pathLayer !== null) {
+            this.map.leafletMap.removeLayer(this.pathLayer);
+            this.pathLayer = null;
+        }
     }
 
     /**
@@ -201,11 +364,11 @@ class DungeonTransport extends Icon {
         this.layer.on('click', this.travel.bind(this))
             .on('mouseover', () => {
                 this.mouseOver = true;
-                this._rebuildPartnerDecorator();
+                this._rebuildPairLines();
             })
             .on('mouseout', () => {
                 this.mouseOver = false;
-                this._rebuildPartnerDecorator();
+                this._rebuildPairLines();
             });
     }
 
@@ -254,7 +417,10 @@ class DungeonTransport extends Icon {
     cleanup() {
         super.cleanup();
 
-        this.unregister(['object:initialized', 'object:changed'], this);
+        this._cleanPathLayer();
+        this.unregister(['object:initialized', 'object:changed', 'shown', 'object:deleted'], this);
+        getState().unregister('floorid:changed', this);
+        this._getMapObjectGroup().unregister('visibility:changed', this);
     }
 }
 
