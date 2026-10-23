@@ -661,6 +661,47 @@ describe('CommonDungeonroutePicker', () => {
         expect(ajaxCalls[1].data.start).toBe(2);
     });
 
+    it('goToPage_givenARequestInFlight_keepsTheListedRowsUntilTheNextPageArrives', () => {
+        // Arrange
+        picker.reload();
+        respondWithRoutes([route('a'), route('b')], 5);
+
+        // Act
+        document.querySelector('#picker_next').click();
+
+        // Assert
+        expect(document.querySelector('#picker_loading').hidden).toBe(false);
+        expect(rowOf('a')).not.toBeNull();
+    });
+
+    it('open_givenADungeonWhileAnotherDungeonsRoutesAreListed_emptiesTheListWhileLoading', () => {
+        // Arrange
+        jQuery('#picker').trigger('show.bs.offcanvas');
+        respondWithRoutes([route('a')]);
+        picker.close();
+
+        // Act
+        picker.open({dungeonId: 3});
+
+        // Assert
+        expect(ajaxCalls).toHaveLength(2);
+        expect(document.querySelector('#picker_loading').hidden).toBe(false);
+        expect(document.querySelectorAll('#picker_list li')).toHaveLength(0);
+    });
+
+    it('reload_givenListedRoutes_emptiesTheListWhileLoading', () => {
+        // Arrange
+        picker.reload();
+        respondWithRoutes([route('a')]);
+
+        // Act
+        picker.reload();
+
+        // Assert
+        expect(document.querySelector('#picker_loading').hidden).toBe(false);
+        expect(rowOf('a')).toBeNull();
+    });
+
     it('onCheckboxChanged_givenTicksUpToMax_disablesTheRemainingRowsWithTheReason', () => {
         // Arrange - max 3 with one route already in, so two more fit
         picker.reload();

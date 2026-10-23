@@ -330,13 +330,15 @@ class CommonDungeonroutePicker extends SearchInlineBase {
     _goToPage(direction) {
         let lastPage = Math.max(0, Math.ceil(this._total / this.options.pageSize) - 1);
         this._page = Math.min(lastPage, Math.max(0, this._page + direction));
-        this._search();
+        this._search(true);
     }
 
     /**
+     * @param {Boolean} [keepRows] Leaves the listed rows up until the answer arrives, so a page flip does not
+     * move Previous/Next under the cursor; any other search empties the list first.
      * @private
      */
-    _search() {
+    _search(keepRows = false) {
         let self = this;
 
         this._failed = false;
@@ -345,6 +347,9 @@ class CommonDungeonroutePicker extends SearchInlineBase {
 
         super._search({
             beforeSend: function () {
+                if (!keepRows) {
+                    self._renderRows([]);
+                }
                 self._setState('loading');
             },
             success: function (json) {
