@@ -55,8 +55,8 @@ class CreatorProfileFormRequest extends FormRequest
 
                     $platform = last(explode('.', $attribute));
 
-                    if (!(UserSocialLinkPlatform::tryFrom((string)$platform)?->isValidUrl((string)$value) ?? false)) {
-                        $fail(__('validation.custom.social_links.invalid_url_for_platform'));
+                    if ((UserSocialLinkPlatform::tryFrom((string)$platform)?->normalize((string)$value) ?? null) === null) {
+                        $fail(__('validation.custom.social_links.invalid_for_platform'));
                     }
                 },
             ],
@@ -108,7 +108,7 @@ class CreatorProfileFormRequest extends FormRequest
     }
 
     /**
-     * The social links to persist, keyed by platform, with blank entries stripped out.
+     * The social links to persist, keyed by platform and normalized to what is stored, with blank entries stripped out.
      *
      * @return array<string, string>
      */
@@ -119,16 +119,14 @@ class CreatorProfileFormRequest extends FormRequest
             $submitted = $this->validated('social_links') ?? [];
 
             $result = [];
-            foreach ($submitted as $platform => $url) {
-                if (UserSocialLinkPlatform::tryFrom((string)$platform) === null) {
+            foreach ($submitted as $platform => $value) {
+                $normalizedValue = UserSocialLinkPlatform::tryFrom((string)$platform)?->normalize((string)$value);
+
+                if ($normalizedValue === null) {
                     continue;
                 }
 
-                if ($url === null || trim($url) === '') {
-                    continue;
-                }
-
-                $result[$platform] = trim($url);
+                $result[$platform] = $normalizedValue;
             }
 
             return $result;

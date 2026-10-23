@@ -106,6 +106,67 @@ final class UserSocialLinkTest extends PublicTestCase
     }
 
     #[Test]
+    #[DataProvider('hrefProvider')]
+    public function getHref_givenStoredValue_returnsTheLinkOrNull(string $platform, string $url, ?string $expected): void
+    {
+        // Arrange
+        $socialLink           = new UserSocialLink();
+        $socialLink->platform = $platform;
+        $socialLink->url      = $url;
+
+        // Act
+        $result = $socialLink->getHref();
+
+        // Assert
+        $this->assertSame($expected, $result);
+    }
+
+    /** @return array<string, array{0: string, 1: string, 2: string|null}> */
+    public static function hrefProvider(): array
+    {
+        return [
+            'profile link'     => [UserSocialLinkPlatform::Twitch->value, 'https://twitch.tv/someone', 'https://twitch.tv/someone'],
+            'discord invite'   => [UserSocialLinkPlatform::Discord->value, 'https://discord.gg/AbC123', 'https://discord.gg/AbC123'],
+            'discord username' => [UserSocialLinkPlatform::Discord->value, 'someone', null],
+            'unsafe value'     => [UserSocialLinkPlatform::Website->value, 'javascript:alert(1)', null],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('leavingPageProvider')]
+    public function needsLeavingPageAndGetHost_givenStoredValue_returnExpectedResult(
+        string  $platform,
+        string  $url,
+        bool    $expectedNeedsLeavingPage,
+        ?string $expectedHost,
+    ): void {
+        // Arrange
+        $socialLink           = new UserSocialLink();
+        $socialLink->platform = $platform;
+        $socialLink->url      = $url;
+
+        // Act
+        $needsLeavingPage = $socialLink->needsLeavingPage();
+        $host             = $socialLink->getHost();
+
+        // Assert
+        $this->assertSame($expectedNeedsLeavingPage, $needsLeavingPage);
+        $this->assertSame($expectedHost, $host);
+    }
+
+    /** @return array<string, array{0: string, 1: string, 2: bool, 3: string|null}> */
+    public static function leavingPageProvider(): array
+    {
+        return [
+            'website link'     => [UserSocialLinkPlatform::Website->value, 'https://WWW.Example.com/me', true, 'www.example.com'],
+            'platform link'    => [UserSocialLinkPlatform::Twitch->value, 'https://twitch.tv/someone', false, 'twitch.tv'],
+            'discord invite'   => [UserSocialLinkPlatform::Discord->value, 'https://discord.gg/AbC123', false, 'discord.gg'],
+            'discord username' => [UserSocialLinkPlatform::Discord->value, 'someone', false, null],
+            'unsafe website'   => [UserSocialLinkPlatform::Website->value, 'javascript:alert(1)', false, null],
+        ];
+    }
+
+    #[Test]
     public function getIconClass_givenEveryKnownPlatform_returnsThatPlatformsIcon(): void
     {
         // Arrange & Act & Assert

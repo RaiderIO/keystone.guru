@@ -38,6 +38,6 @@ $creatorStats = CreatorStats::fromAttributes($creator->getAttributes(), $statsSe
             {{ implode(' · ', $creatorStats->getSummaryParts()) }}
         </div>
 
-        @include('creator.socials', ['socialLinks' => $creator->socialLinks, 'class' => 'creator_card_socials'])
+        @include('creator.socials', ['user' => $creator, 'socialLinks' => $creator->socialLinks, 'class' => 'creator_card_socials'])
     </div>
 </div>

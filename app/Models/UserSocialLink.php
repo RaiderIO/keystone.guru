@@ -13,7 +13,7 @@ use Illuminate\Support\Carbon;
  * URLs are user supplied and rendered on a public page, so they are constrained twice: the scheme
  * must be https, and the host must appear in the matching {@see UserSocialLinkPlatform::hosts()}.
  * That rules out `javascript:` payloads and stops the profile from being used to launder arbitrary
- * outbound links.
+ * outbound links. A Discord username is not a link at all and is stored as-is; see {@see self::getHref()}.
  *
  * `platform` is deliberately kept a plain string column rather than a native enum cast - an
  * unrecognised value (e.g. a platform removed from {@see UserSocialLinkPlatform} after rows using it
@@ -57,6 +57,33 @@ class UserSocialLink extends Model
     public function getIconClass(): string
     {
         return (UserSocialLinkPlatform::tryFrom($this->platform) ?? UserSocialLinkPlatform::Website)->icon();
+    }
+
+    /**
+     * Where this link points, or `null` when the stored value is not a link to its platform - a Discord username.
+     */
+    public function getHref(): ?string
+    {
+        return self::isValidUrlForPlatform($this->platform, $this->url) ? $this->url : null;
+    }
+
+    /**
+     * The host this link points at, or `null` when it is not a link.
+     */
+    public function getHost(): ?string
+    {
+        $href = $this->getHref();
+
+        return $href === null ? null : strtolower((string)parse_url($href, PHP_URL_HOST));
+    }
+
+    /**
+     * Whether a visitor is shown the leaving-keystone.guru page before following this link: only for a link that may
+     * point at any site, as the others can only reach their own platform.
+     */
+    public function needsLeavingPage(): bool
+    {
+        return $this->getHref() !== null && (UserSocialLinkPlatform::tryFrom($this->platform)?->linksAnywhere() ?? true);
     }
 
     /**
