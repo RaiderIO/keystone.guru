@@ -131,6 +131,19 @@ class ProfileController extends Controller
         ]);
     }
 
+    /**
+     * The page between a creator's link and the site it points at, naming the destination before the visitor goes there.
+     */
+    public function leaveToSocialLink(User $user, UserSocialLink $socialLink): View
+    {
+        abort_if($socialLink->getHref() === null, 404);
+
+        return view('profile.leave', [
+            'user'       => $user,
+            'socialLink' => $socialLink,
+        ]);
+    }
+
     public function viewLegacy(Request $request, User $user): RedirectResponse
     {
         return $this->redirectToProfile($request, $user);

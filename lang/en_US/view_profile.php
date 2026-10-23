@@ -116,6 +116,13 @@ return [
         'collections'                       => 'Tags organize your routes for yourself, and are never published. To put a set of routes on one page that you can share with a single link, make %s instead.',
         'link_collections'                  => 'a collection',
     ],
+    'leave' => [
+        'title'       => 'You are leaving keystone.guru',
+        'description' => ':name added this link to their profile. keystone.guru did not create it and cannot vouch for the site it leads to.',
+        'destination' => 'This link goes to',
+        'continue'    => 'Continue to :host',
+        'back'        => 'Back to :name\'s profile',
+    ],
     'view' => [
         'title'              => '%s\'s routes',
         'header'             => '%s\'s routes',
@@ -124,6 +131,7 @@ return [
         'all_routes'         => 'All routes',
         'social_link'        => 'Visit :platform',
         'social_username'    => ':platform: :username',
+        'social_link_host'   => ':platform: :host',
         'platform'           => [
             'twitch'    => 'Twitch',
             'youtube'   => 'YouTube',

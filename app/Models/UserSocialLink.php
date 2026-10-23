@@ -68,6 +68,25 @@ class UserSocialLink extends Model
     }
 
     /**
+     * The host this link points at, or `null` when it is not a link.
+     */
+    public function getHost(): ?string
+    {
+        $href = $this->getHref();
+
+        return $href === null ? null : strtolower((string)parse_url($href, PHP_URL_HOST));
+    }
+
+    /**
+     * Whether a visitor is shown the leaving-keystone.guru page before following this link: only for a link that may
+     * point at any site, as the others can only reach their own platform.
+     */
+    public function needsLeavingPage(): bool
+    {
+        return $this->getHref() !== null && (UserSocialLinkPlatform::tryFrom($this->platform)?->linksAnywhere() ?? true);
+    }
+
+    /**
      * Whether the given URL is acceptable for the given platform.
      *
      * Enforces https and, for everything but the free-form website link, an allow-listed host.
