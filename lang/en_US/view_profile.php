@@ -73,7 +73,8 @@ return [
         'creator_bio_placeholder'          => 'Tell people who you are and what kind of routes you make.',
         'creator_bio_help'                 => 'Up to :max characters. Shown at the top of your public profile.',
         'creator_socials'                  => 'Links',
-        'creator_socials_help'             => 'Only https links to the matching site are accepted. Leave a field empty to remove that link.',
+        'creator_socials_help'             => 'Enter your username, or paste the link to your profile. Leave a field empty to remove it.',
+        'creator_socials_discord'          => 'Username or invite link',
         'creator_pinned_routes'            => 'Pinned routes',
         'creator_pinned_routes_help'       => 'Your pinned routes are highlighted at the top of your profile, in this order. Pinning does not publish a route - each one only shows to the people who may view it.',
         'creator_pinned_routes_empty'      => 'No pinned routes yet.',
@@ -122,6 +123,7 @@ return [
         'pinned_routes'      => 'Pinned routes',
         'all_routes'         => 'All routes',
         'social_link'        => 'Visit :platform',
+        'social_username'    => ':platform: :username',
         'platform'           => [
             'twitch'    => 'Twitch',
             'youtube'   => 'YouTube',

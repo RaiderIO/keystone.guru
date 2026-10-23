@@ -222,6 +222,8 @@ use App\Service\View\ViewService;
 use App\Service\View\ViewServiceInterface;
 use App\Service\WagoTools\WagoToolsService;
 use App\Service\WagoTools\WagoToolsServiceInterface;
+use App\Service\WebRisk\WebRiskService;
+use App\Service\WebRisk\WebRiskServiceInterface;
 use App\Service\Wowhead\WowheadService;
 use App\Service\Wowhead\WowheadServiceInterface;
 use App\Service\Wowhead\WowheadTranslationService;
@@ -248,6 +250,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
         $this->app->bind(WagoToolsServiceInterface::class, WagoToolsService::class);
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
+        $this->app->bind(WebRiskServiceInterface::class, WebRiskService::class);
         $this->app->bind(CreatorDirectoryServiceInterface::class, CreatorDirectoryService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
         $this->app->bind(WowheadTranslationServiceInterface::class, WowheadTranslationService::class);

@@ -6,7 +6,9 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\UserPinnedDungeonRoute;
 use App\Models\UserPinnedDungeonRouteCollection;
+use App\Models\UserSocialLink;
 use App\Models\UserSocialLinkPlatform;
+use App\Service\WebRisk\WebRiskServiceInterface;
 use Closure;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
@@ -25,9 +27,15 @@ class CreatorProfileFormRequest extends FormRequest
     }
 
     /** @return array<string, mixed> */
-    public function rules(): array
+    public function rules(WebRiskServiceInterface $webRiskService): array
     {
         $userId = Auth::id() ?? 0;
+
+        /** @var array<string, string> $storedSocialLinks Keyed by platform. */
+        $storedSocialLinks = UserSocialLink::query()
+            ->where('user_id', $userId)
+            ->pluck('url', 'platform')
+            ->all();
 
         return [
             'bio' => [
@@ -48,15 +56,26 @@ class CreatorProfileFormRequest extends FormRequest
                 'nullable',
                 'string',
                 'max:255',
-                function (string $attribute, mixed $value, Closure $fail): void {
+                function (string $attribute, mixed $value, Closure $fail) use ($webRiskService, $storedSocialLinks): void {
                     if ($value === null || $value === '') {
                         return;
                     }
 
-                    $platform = last(explode('.', $attribute));
+                    $platformValue   = (string)last(explode('.', $attribute));
+                    $platform        = UserSocialLinkPlatform::tryFrom($platformValue);
+                    $normalizedValue = $platform?->normalize((string)$value);
 
-                    if (!(UserSocialLinkPlatform::tryFrom((string)$platform)?->isValidUrl((string)$value) ?? false)) {
-                        $fail(__('validation.custom.social_links.invalid_url_for_platform'));
+                    if ($platform === null || $normalizedValue === null) {
+                        $fail(__('validation.custom.social_links.invalid_for_platform'));
+
+                        return;
+                    }
+
+                    // Only links new to this profile are looked up; a Discord username is not a link
+                    if (($storedSocialLinks[$platformValue] ?? null) !== $normalizedValue &&
+                        $platform->isValidUrl($normalizedValue) &&
+                        $webRiskService->isThreat($normalizedValue)) {
+                        $fail(__('validation.custom.social_links.unsafe'));
                     }
                 },
             ],
@@ -108,7 +127,7 @@ class CreatorProfileFormRequest extends FormRequest
     }
 
     /**
-     * The social links to persist, keyed by platform, with blank entries stripped out.
+     * The social links to persist, keyed by platform and normalized to what is stored, with blank entries stripped out.
      *
      * @return array<string, string>
      */
@@ -119,16 +138,14 @@ class CreatorProfileFormRequest extends FormRequest
             $submitted = $this->validated('social_links') ?? [];
 
             $result = [];
-            foreach ($submitted as $platform => $url) {
-                if (UserSocialLinkPlatform::tryFrom((string)$platform) === null) {
+            foreach ($submitted as $platform => $value) {
+                $normalizedValue = UserSocialLinkPlatform::tryFrom((string)$platform)?->normalize((string)$value);
+
+                if ($normalizedValue === null) {
                     continue;
                 }
 
-                if ($url === null || trim($url) === '') {
-                    continue;
-                }
-
-                $result[$platform] = trim($url);
+                $result[$platform] = $normalizedValue;
             }
 
             return $result;

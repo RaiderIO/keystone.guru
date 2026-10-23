@@ -12,6 +12,7 @@ use App\Models\UserPinnedDungeonRoute;
 use App\Models\UserPinnedDungeonRouteCollection;
 use App\Models\UserSocialLink;
 use App\Models\UserSocialLinkPlatform;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
@@ -937,6 +938,171 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             Feature::for($creator)->forget(CreatorProfiles::class);
             UserPinnedDungeonRoute::where('user_id', $creator->id)->delete();
             $sandboxRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function updateCreatorProfile_givenUsernamesAndPastedLinks_storesEachAsItsProfileLink(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'social_links' => [
+                    UserSocialLinkPlatform::Twitch->value  => 'someone',
+                    UserSocialLinkPlatform::Youtube->value => 'https://www.youtube.com/@someone/videos',
+                    UserSocialLinkPlatform::Discord->value => 'Some.One',
+                ],
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $this->assertSame([
+                UserSocialLinkPlatform::Discord->value => 'some.one',
+                UserSocialLinkPlatform::Twitch->value  => 'https://twitch.tv/someone',
+                UserSocialLinkPlatform::Youtube->value => 'https://youtube.com/@someone',
+            ], $creator->socialLinks()->orderBy('platform')->pluck('url', 'platform')->all());
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            UserSocialLink::where('user_id', $creator->id)->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenAStoredSocialLink_showsOnlyTheUsernameAfterThePlatformPrefix(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $socialLink = UserSocialLink::create([
+            'user_id'  => $creator->id,
+            'platform' => UserSocialLinkPlatform::Twitch->value,
+            'url'      => 'https://twitch.tv/someone',
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.edit'));
+
+            // Assert
+            $response->assertOk();
+            $content = $response->getContent();
+            $this->assertStringContainsString('<span class="input-group-text creator_profile_edit_social_prefix">twitch.tv/</span>', $content);
+            $this->assertMatchesRegularExpression('/<input[^>]*name="social_links\[twitch\]"[^>]*value="someone"/', $content);
+        } finally {
+            $socialLink->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function view_givenADiscordUsername_rendersItWithoutALink(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $socialLinks = collect([
+            UserSocialLinkPlatform::Discord->value => 'some.one',
+            UserSocialLinkPlatform::Twitch->value  => 'https://twitch.tv/someone',
+        ])->map(static fn(string $url, string $platform): UserSocialLink => UserSocialLink::create([
+            'user_id'  => $creator->id,
+            'platform' => $platform,
+            'url'      => $url,
+        ]));
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.view', ['user' => $creator]));
+
+            // Assert
+            $response->assertOk();
+            $content = $response->getContent();
+            $this->assertStringContainsString('href="https://twitch.tv/someone"', $content);
+            $this->assertStringNotContainsString('href="some.one"', $content);
+            $this->assertMatchesRegularExpression(
+                sprintf('/<span class="creator_social_link"[^>]*aria-label="%s"/', preg_quote(e(__('view_profile.view.social_username', [
+                    'platform' => __('view_profile.view.platform.discord'),
+                    'username' => 'some.one',
+                ])), '/')),
+                $content,
+            );
+        } finally {
+            $socialLinks->each(static fn(UserSocialLink $socialLink) => $socialLink->delete());
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function updateCreatorProfile_givenALinkGoogleFlagsAsUnsafe_failsValidationAndStoresNothing(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+        config(['services.google_web_risk.api_key' => 'test-web-risk-key']);
+        Http::fake([
+            'webrisk.googleapis.com/*' => Http::response(['threat' => ['threatTypes' => ['SOCIAL_ENGINEERING']]]),
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'social_links' => [
+                    UserSocialLinkPlatform::Website->value => 'https://phishing.example.com/login',
+                ],
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors(['social_links.website' => __('validation.custom.social_links.unsafe')]);
+            $this->assertSame(0, UserSocialLink::where('user_id', $creator->id)->count());
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            UserSocialLink::where('user_id', $creator->id)->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function updateCreatorProfile_givenAnUnchangedLinkAndADiscordUsername_looksNeitherUp(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+        config(['services.google_web_risk.api_key' => 'test-web-risk-key']);
+        Http::fake([
+            'webrisk.googleapis.com/*' => Http::response(['threat' => ['threatTypes' => ['MALWARE']]]),
+        ]);
+
+        UserSocialLink::create([
+            'user_id'  => $creator->id,
+            'platform' => UserSocialLinkPlatform::Website->value,
+            'url'      => 'https://example.com/me',
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'social_links' => [
+                    UserSocialLinkPlatform::Website->value => 'https://example.com/me',
+                    UserSocialLinkPlatform::Discord->value => 'someone',
+                ],
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            Http::assertNothingSent();
+            $this->assertSame(2, UserSocialLink::where('user_id', $creator->id)->count());
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            UserSocialLink::where('user_id', $creator->id)->delete();
             $creator->delete();
         }
     }

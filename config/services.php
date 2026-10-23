@@ -25,6 +25,10 @@ return [
         'redirect'      => '/login/google/callback',
     ],
 
+    'google_web_risk' => [
+        'api_key' => env('GOOGLE_WEB_RISK_API_KEY'),
+    ],
+
     'battlenet' => [
         'client_id'     => env('BATTLE_NET_SIGNIN_CLIENT_ID'),
         'client_secret' => env('BATTLE_NET_SIGNIN_CLIENT_SECRET'),
