@@ -106,6 +106,33 @@ final class UserSocialLinkTest extends PublicTestCase
     }
 
     #[Test]
+    #[DataProvider('hrefProvider')]
+    public function getHref_givenStoredValue_returnsTheLinkOrNull(string $platform, string $url, ?string $expected): void
+    {
+        // Arrange
+        $socialLink           = new UserSocialLink();
+        $socialLink->platform = $platform;
+        $socialLink->url      = $url;
+
+        // Act
+        $result = $socialLink->getHref();
+
+        // Assert
+        $this->assertSame($expected, $result);
+    }
+
+    /** @return array<string, array{0: string, 1: string, 2: string|null}> */
+    public static function hrefProvider(): array
+    {
+        return [
+            'profile link'     => [UserSocialLinkPlatform::Twitch->value, 'https://twitch.tv/someone', 'https://twitch.tv/someone'],
+            'discord invite'   => [UserSocialLinkPlatform::Discord->value, 'https://discord.gg/AbC123', 'https://discord.gg/AbC123'],
+            'discord username' => [UserSocialLinkPlatform::Discord->value, 'someone', null],
+            'unsafe value'     => [UserSocialLinkPlatform::Website->value, 'javascript:alert(1)', null],
+        ];
+    }
+
+    #[Test]
     public function getIconClass_givenEveryKnownPlatform_returnsThatPlatformsIcon(): void
     {
         // Arrange & Act & Assert
