@@ -44,6 +44,14 @@ enum UserSocialLinkPlatform: string
     }
 
     /**
+     * Whether a link for this platform may point at any site, rather than only at the platform's own.
+     */
+    public function linksAnywhere(): bool
+    {
+        return $this->hosts() === null;
+    }
+
+    /**
      * The profile link a username is appended to. `null` for the website, which takes a full link, and for Discord,
      * whose users have no profile link.
      */

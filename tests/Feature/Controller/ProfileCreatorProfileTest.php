@@ -1047,6 +1047,162 @@ final class ProfileCreatorProfileTest extends PublicTestCase
     }
 
     #[Test]
+    public function view_givenAWebsiteLink_linksToTheLeavingPageNamingItsHost(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $websiteLink = UserSocialLink::create([
+            'user_id'  => $creator->id,
+            'platform' => UserSocialLinkPlatform::Website->value,
+            'url'      => 'https://Example.com/me',
+        ]);
+        $twitchLink = UserSocialLink::create([
+            'user_id'  => $creator->id,
+            'platform' => UserSocialLinkPlatform::Twitch->value,
+            'url'      => 'https://twitch.tv/someone',
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.view', ['user' => $creator]));
+
+            // Assert
+            $response->assertOk();
+            $content = $response->getContent();
+            $this->assertStringContainsString(
+                sprintf('href="%s"', route('profile.sociallink.leave', ['user' => $creator, 'socialLink' => $websiteLink])),
+                $content,
+            );
+            $this->assertStringNotContainsString('href="https://Example.com/me"', $content);
+            $this->assertStringContainsString(sprintf('aria-label="%s"', e(__('view_profile.view.social_link_host', [
+                'platform' => __('view_profile.view.platform.website'),
+                'host'     => 'example.com',
+            ]))), $content);
+            // A link that can only reach its own platform stays direct
+            $this->assertStringContainsString('href="https://twitch.tv/someone"', $content);
+        } finally {
+            $websiteLink->delete();
+            $twitchLink->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function leaveToSocialLink_givenAWebsiteLink_showsTheDestinationAndContinueLink(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $websiteLink = UserSocialLink::create([
+            'user_id'  => $creator->id,
+            'platform' => UserSocialLinkPlatform::Website->value,
+            'url'      => 'https://example.com/me',
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.sociallink.leave', ['user' => $creator, 'socialLink' => $websiteLink]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(__('view_profile.leave.title'));
+            $response->assertSee('<code class="d-block text-break">https://example.com/me</code>', false);
+            $response->assertSee('<a href="https://example.com/me" class="btn btn-primary" rel="nofollow noopener noreferrer">', false);
+            $response->assertSee(__('view_profile.leave.continue', ['host' => 'example.com']));
+        } finally {
+            $websiteLink->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function leaveToSocialLink_givenAnotherUsersLink_returnsNotFound(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        $other   = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $othersLink = UserSocialLink::create([
+            'user_id'  => $other->id,
+            'platform' => UserSocialLinkPlatform::Website->value,
+            'url'      => 'https://example.com/other',
+        ]);
+
+        try {
+            // Act
+            $response        = $this->actingAs($creator)->get(route('profile.sociallink.leave', ['user' => $creator, 'socialLink' => $othersLink]));
+            $positiveControl = $this->actingAs($creator)->get(route('profile.sociallink.leave', ['user' => $other, 'socialLink' => $othersLink]));
+
+            // Assert
+            $response->assertNotFound();
+            $positiveControl->assertOk();
+        } finally {
+            $othersLink->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+            $other->delete();
+        }
+    }
+
+    #[Test]
+    public function leaveToSocialLink_givenADiscordUsername_returnsNotFound(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $discordLink = UserSocialLink::create([
+            'user_id'  => $creator->id,
+            'platform' => UserSocialLinkPlatform::Discord->value,
+            'url'      => 'some.one',
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.sociallink.leave', ['user' => $creator, 'socialLink' => $discordLink]));
+
+            // Assert
+            $response->assertNotFound();
+        } finally {
+            $discordLink->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function leaveToSocialLink_givenFeatureInactive_isNotServed(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->deactivate(CreatorProfiles::class);
+
+        $websiteLink = UserSocialLink::create([
+            'user_id'  => $creator->id,
+            'platform' => UserSocialLinkPlatform::Website->value,
+            'url'      => 'https://example.com/me',
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get(route('profile.sociallink.leave', ['user' => $creator, 'socialLink' => $websiteLink]));
+
+            // Assert
+            $response->assertNotFound();
+        } finally {
+            $websiteLink->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function updateCreatorProfile_givenALinkFlaggedAsUnsafe_failsValidationAndStoresNothing(): void
     {
         // Arrange
