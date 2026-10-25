@@ -3,6 +3,8 @@
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Service\DungeonRoute\Dtos\DungeonRouteCollectionGroup;
+use App\Service\DungeonRoute\DungeonRouteEnemyForcesPageResolver;
+use App\Service\DungeonRoute\DungeonRouteKillZoneServiceInterface;
 use Illuminate\Support\Collection;
 
 /**
@@ -24,6 +26,11 @@ $groupAnchor = static fn(DungeonRouteCollectionGroup $dungeonRouteGroup): string
 );
 
 $isEmpty = $dungeonRoutes->isEmpty();
+
+$pullForcesResolver = new DungeonRouteEnemyForcesPageResolver(
+    app(DungeonRouteKillZoneServiceInterface::class),
+    $dungeonRoutes,
+);
 
 $coveredDungeonRouteGroups = $dungeonRouteGroups
     ->filter(static fn(DungeonRouteCollectionGroup $dungeonRouteGroup): bool => $dungeonRouteGroup->dungeonRoutes->isNotEmpty());
@@ -122,34 +129,26 @@ $uncoveredDungeonNames = $dungeonRouteGroups
                 $headingId         = sprintf('%s_heading', $groupAnchor($dungeonRouteGroup));
                 ?>
                 <div class="col">
-                    <section id="{{ $groupAnchor($dungeonRouteGroup) }}" class="collection_slot h-100"
-                             style="background-image: url('{{ $dungeonRouteGroup->dungeon?->getImageUrl() }}')"
+                    <section id="{{ $groupAnchor($dungeonRouteGroup) }}" class="card collection_dungeon h-100"
                              aria-labelledby="{{ $headingId }}">
-                        <div class="collection_slot_scrim h-100 p-3">
-                            <div class="collection_slot_header">
+                        <div class="card-body p-2">
+                            <div class="collection_dungeon_header">
                                 <h2 id="{{ $headingId }}" class="h6 fw-bold mb-0">{{ $dungeonName }}</h2>
-                                <span class="small">
+                                <span class="small text-body-secondary">
                                     {{ trans_choice('view_collection.view.route_count', $dungeonRouteCount, ['count' => $dungeonRouteCount]) }}
                                 </span>
                             </div>
 
-                            <ol class="collection_route_grid list-unstyled mb-0">
+                            <div class="dungeonroute_leaderboard">
                                 @foreach($dungeonRouteGroup->dungeonRoutes as $dungeonRoute)
-                                    <li class="collection_route_item{{ $dungeonRouteCount > 1 ? ' collection_route_item_numbered' : '' }}">
-                                        @if($dungeonRouteCount > 1)
-                                            <span class="collection_route_position" aria-hidden="true">{{ $loop->iteration }}</span>
-                                        @endif
-                                        @include('common.dungeonroute.cardposter', [
-                                            'dungeonroute' => $dungeonRoute,
-                                            'currentAffixGroup' => null,
-                                            'tierAffixGroup' => null,
-                                            'showDungeonImage' => true,
-                                            'cache' => true,
-                                            'titleHeadingLevel' => 3,
-                                        ])
-                                    </li>
+                                    @include('common.dungeonroute.cardrow', [
+                                        'dungeonroute' => $dungeonRoute,
+                                        'rank' => $dungeonRouteCount > 1 ? $loop->iteration : null,
+                                        'cache' => true,
+                                        'pullForcesResolver' => $pullForcesResolver,
+                                    ])
                                 @endforeach
-                            </ol>
+                            </div>
                         </div>
                     </section>
                 </div>

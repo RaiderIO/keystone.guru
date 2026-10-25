@@ -1466,7 +1466,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function view_givenARoute_titlesItsCardOneLevelBelowTheDungeonHeading(): void
+    public function view_givenARoute_listsItAsARowUnderItsDungeonHeading(): void
     {
         // Arrange
         $creator      = $this->createCreator();
@@ -1489,10 +1489,12 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $content = (string)$response->getContent();
-            $this->assertMatchesRegularExpression('/<h2 id="[^"]*_heading" class="h6 fw-bold mb-0">/', $content);
-            $this->assertSame(1, preg_match_all('/<h(\d) class="[^"]*\btitle">/', $content, $titleHeadings));
-            $this->assertSame(['3'], $titleHeadings[1]);
+            $response->assertSeeInOrder([
+                sprintf('<h2 id="collection_dungeon_%d_heading" class="h6 fw-bold mb-0">', $dungeonRoute->dungeon_id),
+                'class="card_dungeonroute leaderboard_row',
+                e($dungeonRoute->title),
+            ], false);
+            $response->assertDontSee('card_dungeonroute poster', false);
         } finally {
             $dungeonRouteCollection->delete();
             Feature::for(null)->forget(CreatorProfiles::class);

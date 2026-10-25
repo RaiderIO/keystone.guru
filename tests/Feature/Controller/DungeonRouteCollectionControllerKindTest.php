@@ -813,7 +813,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $response->assertSeeText(__('view_collection.view.no_routes'));
-        $response->assertDontSee('collection_slot', false);
+        $response->assertDontSee('collection_dungeon', false);
     }
 
     #[Test]
@@ -922,7 +922,8 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $response->assertDontSee('collection_route_position', false);
+        $response->assertSee('leaderboard_row', false);
+        $response->assertDontSee('leaderboard_rank', false);
         $response->assertSeeText('ZzTestOnlyRoute');
     }
 
@@ -943,9 +944,9 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $response->assertSeeInOrder([
-            'collection_route_position" aria-hidden="true">1<',
+            'leaderboard_rank text-secondary text-end">1<',
             'ZzTestSecondInOrder',
-            'collection_route_position" aria-hidden="true">2<',
+            'leaderboard_rank text-secondary text-end">2<',
             'ZzTestFirstInOrder',
         ], false);
     }

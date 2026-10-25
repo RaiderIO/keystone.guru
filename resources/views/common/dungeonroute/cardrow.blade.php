@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
 /**
  * @var CacheServiceInterface                    $cacheService
  * @var DungeonRoute                              $dungeonroute
- * @var int                                       $rank
+ * @var int|null                                  $rank Omitted from the row when null
  * @var array<string, mixed>                      $__env
  * @var bool                                      $cache
  * @var DungeonRouteEnemyForcesPageResolver|null  $pullForcesResolver Batches the per-pull enemy
@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
 
 $isAdmin           = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 $pullForcesResolver ??= null;
+$rank ??= null;
 ?>
 <?php
 // The route-dependent HTML is cached per route; the rank is positional and therefore rendered outside the cache.
@@ -142,7 +143,9 @@ $cacheFn = static function () use (
 };
 ?>
 <div class="card_dungeonroute leaderboard_row d-flex align-items-center">
-    <div class="leaderboard_rank text-secondary text-end">{{ $rank }}</div>
+    @if($rank !== null)
+        <div class="leaderboard_rank text-secondary text-end">{{ $rank }}</div>
+    @endif
     <?php
     if ($cache) {
         $currentUserLocale = app()->getLocale();
