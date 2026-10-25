@@ -159,11 +159,26 @@
     flex-basis: 0;
 }
 
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_row_inner {
+    min-width: 0;
+}
+
+/* A rated, levelled route's stats outgrow a column at ~1000px: each stat hugs its content and the cluster wraps */
 .collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_stats {
     order: 2;
     flex-basis: 100%;
+    flex-wrap: wrap;
     justify-content: flex-end;
+    row-gap: 0.25rem;
     margin-top: 0.35rem;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_rating,
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_favorites,
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_level_chip,
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_views,
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_pull_graph {
+    min-width: 0;
 }
 
 /* The collection tile on the creator podium: a poster whose background is the covers of its first routes.
