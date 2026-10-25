@@ -18,6 +18,9 @@ use Illuminate\Validation\Rule;
 
 class CreatorProfileFormRequest extends FormRequest
 {
+    /** The `user_social_links.url` column's length, which the stored, normalized link must fit. */
+    private const int MAX_SOCIAL_LINK_LENGTH = 255;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -55,7 +58,7 @@ class CreatorProfileFormRequest extends FormRequest
             'social_links.*' => [
                 'nullable',
                 'string',
-                'max:255',
+                sprintf('max:%d', self::MAX_SOCIAL_LINK_LENGTH),
                 function (string $attribute, mixed $value, Closure $fail) use ($urlThreatService, $storedSocialLinks): void {
                     if ($value === null || $value === '') {
                         return;
@@ -67,6 +70,12 @@ class CreatorProfileFormRequest extends FormRequest
 
                     if ($platform === null || $normalizedValue === null) {
                         $fail(__('validation.custom.social_links.invalid_for_platform'));
+
+                        return;
+                    }
+
+                    if (mb_strlen($normalizedValue) > self::MAX_SOCIAL_LINK_LENGTH) {
+                        $fail(__('validation.custom.social_links.too_long', ['max' => self::MAX_SOCIAL_LINK_LENGTH]));
 
                         return;
                     }
