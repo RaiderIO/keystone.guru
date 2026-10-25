@@ -1,11 +1,13 @@
 <?php
 
+use App\Models\User;
 use App\Models\UserSocialLink;
 use Illuminate\Support\Collection;
 
 /**
  * A creator's social links as a row of round icon links, on the directory card and the profile hero.
  *
+ * @var User                            $user        Whose links these are.
  * @var Collection<int, UserSocialLink> $socialLinks
  * @var string                          $class       Where the row sits: creator_card_socials or creator_hero_socials.
  */
@@ -31,6 +33,21 @@ use Illuminate\Support\Collection;
                       aria-label="{{ $socialLinkLabel }}">
                     <i class="{{ $socialLink->getIconClass() }}" aria-hidden="true"></i>
                 </span>
+            @elseif($socialLink->needsLeavingPage())
+                <?php $socialLinkLabel = __('view_profile.view.social_link_host', [
+                    'platform' => $socialLinkPlatform,
+                    'host'     => $socialLink->getHost(),
+                ]); ?>
+                <a href="{{ $socialLinkHref }}"
+                   data-leaving-href="{{ route('profile.sociallink.leave', ['user' => $user, 'socialLink' => $socialLink]) }}"
+                   class="creator_social_link"
+                   target="_blank"
+                   rel="nofollow noopener noreferrer"
+                   data-bs-toggle="tooltip"
+                   title="{{ $socialLinkLabel }}"
+                   aria-label="{{ $socialLinkLabel }}">
+                    <i class="{{ $socialLink->getIconClass() }}" aria-hidden="true"></i>
+                </a>
             @else
                 <?php $socialLinkLabel = __('view_profile.view.social_link', ['platform' => $socialLinkPlatform]); ?>
                 <a href="{{ $socialLinkHref }}"

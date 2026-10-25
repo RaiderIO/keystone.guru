@@ -79,7 +79,7 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
 
                 @if($socialLinks->isNotEmpty())
                     <div class="col-12 col-sm-auto">
-                        @include('creator.socials', ['socialLinks' => $socialLinks, 'class' => 'creator_hero_socials'])
+                        @include('creator.socials', ['user' => $user, 'socialLinks' => $socialLinks, 'class' => 'creator_hero_socials'])
                     </div>
                 @endif
             </div>

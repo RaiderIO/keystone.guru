@@ -125,6 +125,8 @@ window.Draggable = require('@shopify/draggable');
 require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
 // Self-owned noUiSlider-backed range slider (#3596); replaces the unmaintained ion-rangeslider plugin
 require('./range-slider');
+// Links with a data-leaving-href open keystone.guru's leaving page instead of their destination
+require('./leaving-link').registerLeavingLinks(document);
 
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
