@@ -212,6 +212,8 @@ use App\Service\Telemetry\TelemetryService;
 use App\Service\Telemetry\TelemetryServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
+use App\Service\UrlThreat\UrlThreatService;
+use App\Service\UrlThreat\UrlThreatServiceInterface;
 use App\Service\User\UserService;
 use App\Service\User\UserServiceInterface;
 use App\Service\User\UserSlugService;
@@ -248,6 +250,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
         $this->app->bind(WagoToolsServiceInterface::class, WagoToolsService::class);
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
+        $this->app->bind(UrlThreatServiceInterface::class, UrlThreatService::class);
         $this->app->bind(CreatorDirectoryServiceInterface::class, CreatorDirectoryService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
         $this->app->bind(WowheadTranslationServiceInterface::class, WowheadTranslationService::class);

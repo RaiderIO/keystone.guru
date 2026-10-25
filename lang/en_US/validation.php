@@ -42,7 +42,8 @@ return [
             'exists' => 'You can only pin collections that you created yourself.',
         ],
         'social_links' => [
-            'invalid_url_for_platform' => 'That is not a valid https link for this platform.',
+            'invalid_for_platform' => 'That is not a valid username or link for this platform.',
+            'unsafe'               => 'This link is flagged as unsafe and cannot be added.',
         ],
         'periods' => [
             'not_in_season' => 'One or more selected weeks do not belong to :season, so that combination selects no routes at all.',

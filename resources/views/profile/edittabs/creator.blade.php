@@ -109,9 +109,11 @@ $describedBy = static fn(string $errorKey, string $errorId, string $helpId): str
     <div class="row g-3 mb-3">
         @foreach(UserSocialLinkPlatform::cases() as $platform)
             <?php
-            $errorKey = sprintf('social_links.%s', $platform->value);
-            $inputId  = sprintf('social_links_%s', $platform->value);
-            $errorId  = sprintf('%s_error', $inputId);
+            $errorKey          = sprintf('social_links.%s', $platform->value);
+            $inputId           = sprintf('social_links_%s', $platform->value);
+            $errorId           = sprintf('%s_error', $inputId);
+            $usernameUrlPrefix = $platform->usernameUrlPrefix();
+            $storedValue       = $existingSocialLinks->get($platform->value)?->url;
             ?>
             <div class="col-12 col-lg-6{{ $errors->has($errorKey) ? ' has-error' : '' }}">
                 <label for="{{ $inputId }}" class="form-label mb-1">
@@ -121,11 +123,16 @@ $describedBy = static fn(string $errorKey, string $errorId, string $helpId): str
                     <span class="input-group-text" aria-hidden="true">
                         <i class="{{ $platform->icon() }} fa-fw"></i>
                     </span>
-                    {{ html()->text(sprintf('social_links[%s]', $platform->value), $existingSocialLinks->get($platform->value)?->url)
+                    @if($usernameUrlPrefix !== null)
+                        <span class="input-group-text creator_profile_edit_social_prefix">{{ preg_replace('#^https://#', '', $usernameUrlPrefix) }}</span>
+                    @endif
+                    {{ html()->text(sprintf('social_links[%s]', $platform->value), $storedValue === null ? null : $platform->toInputValue($storedValue))
                         ->id($inputId)
                         ->class('form-control')
-                        ->attribute('inputmode', 'url')
-                        ->attribute('autocomplete', 'url')
+                        ->attributeIf($platform === UserSocialLinkPlatform::Website, 'inputmode', 'url')
+                        ->attributeIf($platform === UserSocialLinkPlatform::Website, 'autocomplete', 'url')
+                        ->attributeIf($platform !== UserSocialLinkPlatform::Website, 'autocomplete', 'off')
+                        ->attributeIf($platform === UserSocialLinkPlatform::Discord, 'placeholder', __('view_profile.edit.creator_socials_discord'))
                         ->attributeIf($errors->has($errorKey), 'aria-invalid', 'true')
                         ->attribute('aria-describedby', $describedBy($errorKey, $errorId, 'social_links_help')) }}
                 </div>

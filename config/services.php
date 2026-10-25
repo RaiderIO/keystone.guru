@@ -25,6 +25,10 @@ return [
         'redirect'      => '/login/google/callback',
     ],
 
+    'url_threat_check' => [
+        'enabled' => env('URL_THREAT_CHECK_ENABLED', true),
+    ],
+
     'battlenet' => [
         'client_id'     => env('BATTLE_NET_SIGNIN_CLIENT_ID'),
         'client_secret' => env('BATTLE_NET_SIGNIN_CLIENT_SECRET'),
