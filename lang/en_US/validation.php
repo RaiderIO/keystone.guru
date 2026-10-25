@@ -44,6 +44,7 @@ return [
         'social_links' => [
             'invalid_for_platform' => 'That is not a valid username or link for this platform.',
             'unsafe'               => 'This link is flagged as unsafe and cannot be added.',
+            'too_long'             => 'That link is too long: the full link may be at most :max characters.',
         ],
         'periods' => [
             'not_in_season' => 'One or more selected weeks do not belong to :season, so that combination selects no routes at all.',

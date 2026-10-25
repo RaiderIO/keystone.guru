@@ -15,6 +15,7 @@ use App\Models\UserSocialLinkPlatform;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Pennant\Feature;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -993,8 +994,12 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             // Assert
             $response->assertOk();
             $content = $response->getContent();
-            $this->assertStringContainsString('<span class="input-group-text creator_profile_edit_social_prefix">twitch.tv/</span>', $content);
-            $this->assertMatchesRegularExpression('/<input[^>]*name="social_links\[twitch\]"[^>]*value="someone"/', $content);
+            $this->assertMatchesRegularExpression(
+                '#<div class="form-control creator_profile_edit_social_field">\s*<label for="social_links_twitch" class="creator_profile_edit_social_prefix">twitch\.tv/</label>\s*<input[^>]*name="social_links\[twitch\]"[^>]*value="someone"#',
+                $content,
+            );
+            $this->assertMatchesRegularExpression('/<input[^>]*class="form-control"[^>]*name="social_links\[website\]"/', $content);
+            $this->assertStringNotContainsString('<label for="social_links_website" class="creator_profile_edit_social_prefix">', $content);
         } finally {
             $socialLink->delete();
             Feature::for($creator)->forget(CreatorProfiles::class);
@@ -1125,6 +1130,76 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             // Assert
             $response->assertSessionHasErrors('social_links.twitch');
             $this->assertSame(0, UserSocialLink::where('user_id', $creator->id)->count());
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            UserSocialLink::where('user_id', $creator->id)->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('updateCreatorProfile_givenASocialLinkWhoseFullLinkIsTooLong_failsValidation_dataProvider')]
+    public function updateCreatorProfile_givenASocialLinkWhoseFullLinkIsTooLong_failsValidation(UserSocialLinkPlatform $platform, string $value): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'social_links' => [
+                    $platform->value => $value,
+                ],
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors([
+                sprintf('social_links.%s', $platform->value) => __('validation.custom.social_links.too_long', ['max' => 255]),
+            ]);
+            $this->assertSame(0, UserSocialLink::where('user_id', $creator->id)->count());
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            UserSocialLink::where('user_id', $creator->id)->delete();
+            $creator->delete();
+        }
+    }
+
+    /**
+     * Each value fits the 255-character input limit on its own, but not once the scheme or profile prefix is added.
+     *
+     * @return array<string, array{UserSocialLinkPlatform, string}>
+     */
+    public static function updateCreatorProfile_givenASocialLinkWhoseFullLinkIsTooLong_failsValidation_dataProvider(): array
+    {
+        return [
+            'website without a scheme' => [UserSocialLinkPlatform::Website, sprintf('example.com/%s', str_repeat('a', 243))],
+            'bluesky domain handle'    => [UserSocialLinkPlatform::Bluesky, sprintf('%s.com', str_repeat('a', 240))],
+        ];
+    }
+
+    #[Test]
+    public function updateCreatorProfile_givenAWebsiteThatFillsTheColumnOnceCompleted_storesIt(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+        $website = sprintf('example.com/%s', str_repeat('a', 235));
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'social_links' => [
+                    UserSocialLinkPlatform::Website->value => $website,
+                ],
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $this->assertSame(
+                sprintf('https://%s', $website),
+                UserSocialLink::where('user_id', $creator->id)->value('url'),
+            );
         } finally {
             Feature::for($creator)->forget(CreatorProfiles::class);
             UserSocialLink::where('user_id', $creator->id)->delete();

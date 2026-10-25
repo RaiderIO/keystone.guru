@@ -123,18 +123,25 @@ $describedBy = static fn(string $errorKey, string $errorId, string $helpId): str
                     <span class="input-group-text" aria-hidden="true">
                         <i class="{{ $platform->icon() }} fa-fw"></i>
                     </span>
-                    @if($usernameUrlPrefix !== null)
-                        <span class="input-group-text creator_profile_edit_social_prefix">{{ preg_replace('#^https://#', '', $usernameUrlPrefix) }}</span>
-                    @endif
-                    {{ html()->text(sprintf('social_links[%s]', $platform->value), $storedValue === null ? null : $platform->toInputValue($storedValue))
+                    <?php
+                    $input = html()->text(sprintf('social_links[%s]', $platform->value), $storedValue === null ? null : $platform->toInputValue($storedValue))
                         ->id($inputId)
-                        ->class('form-control')
+                        ->class($usernameUrlPrefix === null ? 'form-control' : 'creator_profile_edit_social_username')
                         ->attributeIf($platform === UserSocialLinkPlatform::Website, 'inputmode', 'url')
                         ->attributeIf($platform === UserSocialLinkPlatform::Website, 'autocomplete', 'url')
                         ->attributeIf($platform !== UserSocialLinkPlatform::Website, 'autocomplete', 'off')
                         ->attributeIf($platform === UserSocialLinkPlatform::Discord, 'placeholder', __('view_profile.edit.creator_socials_discord'))
                         ->attributeIf($errors->has($errorKey), 'aria-invalid', 'true')
-                        ->attribute('aria-describedby', $describedBy($errorKey, $errorId, 'social_links_help')) }}
+                        ->attribute('aria-describedby', $describedBy($errorKey, $errorId, 'social_links_help'));
+                    ?>
+                    @if($usernameUrlPrefix === null)
+                        {{ $input }}
+                    @else
+                        <div class="form-control creator_profile_edit_social_field">
+                            <label for="{{ $inputId }}" class="creator_profile_edit_social_prefix">{{ preg_replace('#^https://#', '', $usernameUrlPrefix) }}</label>
+                            {{ $input }}
+                        </div>
+                    @endif
                 </div>
                 @include('common.forms.form-error', ['key' => $errorKey, 'errorId' => $errorId])
             </div>
