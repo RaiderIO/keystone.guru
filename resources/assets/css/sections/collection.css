@@ -136,49 +136,105 @@
     border-bottom: 0;
 }
 
-/* A dungeon column is never wider than ~650px, too narrow for the row's one-line desktop layout: the row takes
-   its phone layout at every width - thumbnail, title and menu on one line, the stats right-aligned under them.
-   !important overrides the .align-items-center utilities in the row template. */
-.collection_dungeon .card_dungeonroute.leaderboard_row,
-.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_row_inner {
-    align-items: flex-start !important;
+/* A dungeon column is ~400-600px, too narrow for the row's one-line desktop layout. The row becomes a tile:
+   the thumbnail spans the row's full height, the title sits beside it and the stats wrap underneath in the same
+   text column. !important beats the row template's .d-flex/.align-items-center utilities and the me-3 margins. */
+.collection_dungeon .card_dungeonroute.leaderboard_row {
+    position: relative;
 }
 
+/* The position rides on the thumbnail's corner, giving its column to the title. Dark scrim and white text in
+   every theme: it sits on route imagery, not on the card surface. */
 .collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_rank {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.5rem;
+    z-index: 1;
     display: inline-flex;
     align-items: center;
-    justify-content: flex-end;
-    height: 44px;
+    justify-content: center;
+    width: auto;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding: 0 0.375rem;
+    border-radius: 0.25rem;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff !important;
+    font-size: 0.8125rem;
+    pointer-events: none;
 }
 
-.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_actions {
-    order: 1;
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_row_inner {
+    display: grid !important;
+    grid-template-columns: 96px minmax(0, 1fr) auto;
+    grid-template-areas:
+        "thumbnail main actions"
+        "thumbnail stats stats";
+    gap: 0.375rem 0.75rem;
+    align-items: start !important;
+    min-width: 0;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_thumbnail {
+    grid-area: thumbnail;
+    align-self: stretch;
+    width: 96px;
+    height: auto;
+    min-height: 60px;
+    max-height: 96px;
+    margin-right: 0;
 }
 
 .collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_main {
-    flex-basis: 0;
+    grid-area: main;
 }
 
-.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_row_inner {
-    min-width: 0;
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_actions {
+    grid-area: actions;
 }
 
-/* A rated, levelled route's stats outgrow a column at ~1000px: each stat hugs its content and the cluster wraps */
+/* Every route in a collection is its owner's, already named in the page header */
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_author {
+    display: none;
+}
+
+/* Led by the pull graph, the route's shape; the warnings and social proof follow */
 .collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_stats {
-    order: 2;
-    flex-basis: 100%;
+    grid-area: stats;
+    align-self: end;
     flex-wrap: wrap;
-    justify-content: flex-end;
-    row-gap: 0.25rem;
-    margin-top: 0.35rem;
+    justify-content: flex-start;
+    gap: 0.25rem 1rem;
+    margin: 0 !important;
 }
 
-.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_rating,
-.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_favorites,
-.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_level_chip,
-.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_views,
-.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_pull_graph {
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_stats > * {
     min-width: 0;
+    margin-right: 0 !important;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_pull_graph {
+    order: 1;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_level_chip {
+    order: 2;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_views {
+    order: 3;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_enemy_forces {
+    order: 4;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_rating {
+    order: 5;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_favorites {
+    order: 6;
 }
 
 /* The collection tile on the creator podium: a poster whose background is the covers of its first routes.
