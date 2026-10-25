@@ -442,10 +442,10 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     public function update_givenMoreNewRoutesOfADungeonThanFit_failsValidationOnTheOnePastTheLimit(): void
     {
         // Arrange
-        $creator                = $this->createCreator();
-        $alpha                  = $this->createRouteFor($creator);
-        $bravo                  = $this->createRouteFor($creator);
-        $charlie                = $this->createRouteFor($creator);
+        $creator       = $this->createCreator();
+        $dungeonRoutes = collect(range(0, DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON))
+            ->map(fn(): DungeonRoute => $this->createRouteFor($creator));
+        $lastIndex              = DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON;
         $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
         Feature::for($creator)->activate(CreatorProfiles::class);
 
@@ -456,20 +456,20 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
                 [
                     'name'            => 'ZzTestTooManyOfADungeon',
                     'published_state' => PublishedState::WORLD,
-                    'dungeon_routes'  => [$alpha->public_key, $bravo->public_key, $charlie->public_key],
+                    'dungeon_routes'  => $dungeonRoutes->pluck('public_key')->all(),
                 ],
             );
 
             // Assert
-            $response->assertSessionHasErrors(['dungeon_routes.2']);
-            $response->assertSessionDoesntHaveErrors(['dungeon_routes.0', 'dungeon_routes.1']);
+            $response->assertSessionHasErrors([sprintf('dungeon_routes.%d', $lastIndex)]);
+            $response->assertSessionDoesntHaveErrors(
+                collect(range(0, $lastIndex - 1))->map(fn(int $index): string => sprintf('dungeon_routes.%d', $index))->all(),
+            );
             $this->assertCount(0, $dungeonRouteCollection->refresh()->dungeonRoutes);
         } finally {
             $dungeonRouteCollection->delete();
             Feature::for($creator)->forget(CreatorProfiles::class);
-            $charlie->delete();
-            $bravo->delete();
-            $alpha->delete();
+            $dungeonRoutes->each(fn(DungeonRoute $dungeonRoute) => $dungeonRoute->delete());
             $creator->delete();
         }
     }

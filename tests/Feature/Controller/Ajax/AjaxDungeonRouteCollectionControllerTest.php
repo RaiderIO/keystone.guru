@@ -168,14 +168,16 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
     public function storeRoutes_givenADungeonAtItsLimit_rejectsAnotherRouteOfIt(): void
     {
         // Arrange
-        $owner                  = $this->createUser();
-        $mappingVersion         = $this->retailMappingVersion();
-        $members                = [$this->createRoute($owner, $mappingVersion), $this->createRoute($owner, $mappingVersion)];
-        $third                  = $this->createRoute($owner, $mappingVersion);
+        $owner          = $this->createUser();
+        $mappingVersion = $this->retailMappingVersion();
+        $members        = collect(range(1, DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON))
+            ->map(fn(): DungeonRoute => $this->createRoute($owner, $mappingVersion))
+            ->all();
+        $oneTooMany             = $this->createRoute($owner, $mappingVersion);
         $dungeonRouteCollection = $this->createFreeFormCollection($owner, $members);
 
         // Act
-        $response = $this->actingAs($owner)->ajax('postJson', $this->storeUrl($dungeonRouteCollection), [$third]);
+        $response = $this->actingAs($owner)->ajax('postJson', $this->storeUrl($dungeonRouteCollection), [$oneTooMany]);
 
         // Assert
         $response->assertUnprocessable();
@@ -190,13 +192,16 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
     public function storeRoutes_givenMoreNewRoutesOfADungeonThanFit_rejectsOnlyTheOnesPastTheLimit(): void
     {
         // Arrange
-        $owner                  = $this->createUser();
-        $mappingVersions        = $this->retailMappingVersions();
-        $member                 = $this->createRoute($owner, $mappingVersions->get(0));
+        $owner           = $this->createUser();
+        $mappingVersions = $this->retailMappingVersions();
+        // One place left for the first dungeon
+        $members = collect(range(1, DungeonRouteCollection::MAX_ROUTES_PER_DUNGEON - 1))
+            ->map(fn(): DungeonRoute => $this->createRoute($owner, $mappingVersions->get(0)))
+            ->all();
         $fits                   = $this->createRoute($owner, $mappingVersions->get(0));
         $otherDungeon           = $this->createRoute($owner, $mappingVersions->get(1));
         $doesNotFit             = $this->createRoute($owner, $mappingVersions->get(0));
-        $dungeonRouteCollection = $this->createFreeFormCollection($owner, [$member]);
+        $dungeonRouteCollection = $this->createFreeFormCollection($owner, $members);
 
         // Act
         $response = $this->actingAs($owner)->ajax('postJson', $this->storeUrl($dungeonRouteCollection), [$fits, $otherDungeon, $doesNotFit]);
@@ -205,7 +210,7 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['dungeon_routes.2']);
         $response->assertJsonMissingValidationErrors(['dungeon_routes.0', 'dungeon_routes.1']);
-        $this->assertSame([$member->id], $this->dungeonRouteIds($dungeonRouteCollection));
+        $this->assertSame(collect($members)->pluck('id')->all(), $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
@@ -578,6 +583,29 @@ final class AjaxDungeonRouteCollectionControllerTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $this->assertCount(DungeonRouteCollection::MAX_ROUTES, $this->dungeonRouteIds($dungeonRouteCollection));
+    }
+
+    #[Test]
+    public function storeRoutes_givenFourRoutesOfEachOfEightDungeons_addsAllThirtyTwo(): void
+    {
+        // Arrange
+        $owner           = $this->createUser();
+        $mappingVersions = $this->retailMappingVersions()->take(8);
+        $this->assertCount(8, $mappingVersions, 'Needs 8 retail dungeons with a challenge mode (seed the DB).');
+        $dungeonRoutes = $mappingVersions
+            ->flatMap(fn(MappingVersion $mappingVersion): array => array_map(
+                fn(): DungeonRoute => $this->createRoute($owner, $mappingVersion),
+                range(1, 4),
+            ))
+            ->all();
+        $dungeonRouteCollection = $this->createFreeFormCollection($owner);
+
+        // Act
+        $response = $this->actingAs($owner)->ajax('postJson', $this->storeUrl($dungeonRouteCollection), $dungeonRoutes);
+
+        // Assert
+        $response->assertOk();
+        $this->assertCount(32, $this->dungeonRouteIds($dungeonRouteCollection));
     }
 
     #[Test]
