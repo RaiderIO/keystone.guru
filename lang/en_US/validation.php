@@ -43,7 +43,7 @@ return [
         ],
         'social_links' => [
             'invalid_for_platform' => 'That is not a valid username or link for this platform.',
-            'unsafe'               => 'This link is flagged as unsafe by Google and cannot be added.',
+            'unsafe'               => 'This link is flagged as unsafe and cannot be added.',
         ],
         'periods' => [
             'not_in_season' => 'One or more selected weeks do not belong to :season, so that combination selects no routes at all.',

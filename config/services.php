@@ -25,8 +25,8 @@ return [
         'redirect'      => '/login/google/callback',
     ],
 
-    'google_web_risk' => [
-        'api_key' => env('GOOGLE_WEB_RISK_API_KEY'),
+    'url_threat_check' => [
+        'enabled' => env('URL_THREAT_CHECK_ENABLED', true),
     ],
 
     'battlenet' => [

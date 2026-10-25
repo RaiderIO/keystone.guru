@@ -1042,14 +1042,14 @@ final class ProfileCreatorProfileTest extends PublicTestCase
     }
 
     #[Test]
-    public function updateCreatorProfile_givenALinkGoogleFlagsAsUnsafe_failsValidationAndStoresNothing(): void
+    public function updateCreatorProfile_givenALinkFlaggedAsUnsafe_failsValidationAndStoresNothing(): void
     {
         // Arrange
         $creator = $this->createCreator();
         Feature::for($creator)->activate(CreatorProfiles::class);
-        config(['services.google_web_risk.api_key' => 'test-web-risk-key']);
+        config(['services.url_threat_check.enabled' => true]);
         Http::fake([
-            'webrisk.googleapis.com/*' => Http::response(['threat' => ['threatTypes' => ['SOCIAL_ENGINEERING']]]),
+            'security.cloudflare-dns.com/dns-query*' => Http::response(['Status' => 0, 'Answer' => [['name' => 'phishing.example.com', 'type' => 1, 'data' => '0.0.0.0']]]),
         ]);
 
         try {
@@ -1076,9 +1076,9 @@ final class ProfileCreatorProfileTest extends PublicTestCase
         // Arrange
         $creator = $this->createCreator();
         Feature::for($creator)->activate(CreatorProfiles::class);
-        config(['services.google_web_risk.api_key' => 'test-web-risk-key']);
+        config(['services.url_threat_check.enabled' => true]);
         Http::fake([
-            'webrisk.googleapis.com/*' => Http::response(['threat' => ['threatTypes' => ['MALWARE']]]),
+            'security.cloudflare-dns.com/dns-query*' => Http::response(['Status' => 0, 'Answer' => [['name' => 'example.com', 'type' => 1, 'data' => '0.0.0.0']]]),
         ]);
 
         UserSocialLink::create([

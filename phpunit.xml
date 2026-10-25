@@ -64,6 +64,8 @@
         <!-- SeasonService keeps each expansion's seasons in that same file cache. Tests create and edit
              seasons freely, so a cached tree would outlive the test that built it. -->
         <env name="SEASONS_OF_EXPANSION_CACHE_ENABLED" value="false"/>
+        <!-- Saving a website link would otherwise query Cloudflare's resolver live; tests that cover it fake the call. -->
+        <env name="URL_THREAT_CHECK_ENABLED" value="false" force="true"/>
     </php>
     <source>
         <include>

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Service\WebRisk\Logging;
+namespace App\Service\UrlThreat\Logging;
 
 use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
-class WebRiskServiceLogging extends StructuredLogging implements WebRiskServiceLoggingInterface
+class UrlThreatServiceLogging extends StructuredLogging implements UrlThreatServiceLoggingInterface
 {
     use InteractsWithRollbar;
 
@@ -19,10 +19,7 @@ class WebRiskServiceLogging extends StructuredLogging implements WebRiskServiceL
         $this->warning(__METHOD__, get_defined_vars());
     }
 
-    /**
-     * @param array<int, string> $threatTypes
-     */
-    public function isThreatFound(string $url, array $threatTypes): void
+    public function isThreatFound(string $url, string $host): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }

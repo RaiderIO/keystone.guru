@@ -8,7 +8,7 @@ use App\Models\UserPinnedDungeonRoute;
 use App\Models\UserPinnedDungeonRouteCollection;
 use App\Models\UserSocialLink;
 use App\Models\UserSocialLinkPlatform;
-use App\Service\WebRisk\WebRiskServiceInterface;
+use App\Service\UrlThreat\UrlThreatServiceInterface;
 use Closure;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
@@ -27,7 +27,7 @@ class CreatorProfileFormRequest extends FormRequest
     }
 
     /** @return array<string, mixed> */
-    public function rules(WebRiskServiceInterface $webRiskService): array
+    public function rules(UrlThreatServiceInterface $urlThreatService): array
     {
         $userId = Auth::id() ?? 0;
 
@@ -56,7 +56,7 @@ class CreatorProfileFormRequest extends FormRequest
                 'nullable',
                 'string',
                 'max:255',
-                function (string $attribute, mixed $value, Closure $fail) use ($webRiskService, $storedSocialLinks): void {
+                function (string $attribute, mixed $value, Closure $fail) use ($urlThreatService, $storedSocialLinks): void {
                     if ($value === null || $value === '') {
                         return;
                     }
@@ -71,10 +71,9 @@ class CreatorProfileFormRequest extends FormRequest
                         return;
                     }
 
-                    // Only links new to this profile are looked up; a Discord username is not a link
+                    // Only links new to this profile are looked up
                     if (($storedSocialLinks[$platformValue] ?? null) !== $normalizedValue &&
-                        $platform->isValidUrl($normalizedValue) &&
-                        $webRiskService->isThreat($normalizedValue)) {
+                        $urlThreatService->isThreat($normalizedValue)) {
                         $fail(__('validation.custom.social_links.unsafe'));
                     }
                 },
