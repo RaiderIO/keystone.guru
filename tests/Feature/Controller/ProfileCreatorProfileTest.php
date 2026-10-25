@@ -1047,7 +1047,7 @@ final class ProfileCreatorProfileTest extends PublicTestCase
     }
 
     #[Test]
-    public function view_givenAWebsiteLink_linksToTheLeavingPageNamingItsHost(): void
+    public function view_givenAWebsiteLink_linksToItsDestinationThroughTheLeavingPageNamingItsHost(): void
     {
         // Arrange
         $creator = $this->createCreator();
@@ -1071,11 +1071,11 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             // Assert
             $response->assertOk();
             $content = $response->getContent();
-            $this->assertStringContainsString(
-                sprintf('href="%s"', route('profile.sociallink.leave', ['user' => $creator, 'socialLink' => $websiteLink])),
-                $content,
-            );
-            $this->assertStringNotContainsString('href="https://Example.com/me"', $content);
+            $this->assertMatchesRegularExpression(sprintf(
+                '~href="https://Example\.com/me"\s+data-leaving-href="%s"~',
+                preg_quote(route('profile.sociallink.leave', ['user' => $creator, 'socialLink' => $websiteLink]), '~'),
+            ), $content);
+            $this->assertSame(1, substr_count($content, 'data-leaving-href="'));
             $this->assertStringContainsString(sprintf('aria-label="%s"', e(__('view_profile.view.social_link_host', [
                 'platform' => __('view_profile.view.platform.website'),
                 'host'     => 'example.com',

@@ -38,10 +38,11 @@ use Illuminate\Support\Collection;
                     'platform' => $socialLinkPlatform,
                     'host'     => $socialLink->getHost(),
                 ]); ?>
-                <a href="{{ route('profile.sociallink.leave', ['user' => $user, 'socialLink' => $socialLink]) }}"
+                <a href="{{ $socialLinkHref }}"
+                   data-leaving-href="{{ route('profile.sociallink.leave', ['user' => $user, 'socialLink' => $socialLink]) }}"
                    class="creator_social_link"
                    target="_blank"
-                   rel="nofollow"
+                   rel="nofollow noopener noreferrer"
                    data-bs-toggle="tooltip"
                    title="{{ $socialLinkLabel }}"
                    aria-label="{{ $socialLinkLabel }}">
