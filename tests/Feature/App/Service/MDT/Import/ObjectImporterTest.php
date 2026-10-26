@@ -157,8 +157,10 @@ final class ObjectImporterTest extends PublicTestCase
     public function parseObjects_givenALineStartingOutOfBoundsOnTheFacade_importsTheLineOnTheFloorOfItsFirstPointInBounds(): void
     {
         // Arrange
-        [$mappingVersion, $facadeFloor, $enemy, $enemyMdtCoordinate] = $this->findFacadeDungeonWithEnemy();
-        $importStringObjects                                         = $this->createImportStringObjectsWithLine(
+        [$mappingVersion, $facadeFloor, $enemy, $enemyMdtCoordinate] = $this->findFacadeDungeonWithEnemy(
+            requireOutOfBoundsCoordinateMovesOnTheEnemyFloor: true,
+        );
+        $importStringObjects = $this->createImportStringObjectsWithLine(
             $mappingVersion,
             $facadeFloor,
             [self::OUT_OF_BOUNDS_MDT_COORDINATE, $enemyMdtCoordinate],
@@ -359,9 +361,10 @@ final class ObjectImporterTest extends PublicTestCase
     }
 
     /**
+     * @param  bool                                                                       $requireOutOfBoundsCoordinateMovesOnTheEnemyFloor Only accept an enemy on a floor where forcing the facade conversion of OUT_OF_BOUNDS_MDT_COORDINATE yields a different lat/lng; an identity floor union, or none targeting the floor, leaves it unchanged.
      * @return array{0: MappingVersion, 1: Floor, 2: Enemy, 3: array{x: float, y: float}}
      */
-    private function findFacadeDungeonWithEnemy(): array
+    private function findFacadeDungeonWithEnemy(bool $requireOutOfBoundsCoordinateMovesOnTheEnemyFloor = false): array
     {
         /** @var Dungeon $dungeon */
         /** @var MappingVersion $mappingVersion */
@@ -369,9 +372,33 @@ final class ObjectImporterTest extends PublicTestCase
         [$dungeon, $mappingVersion, $enemy] = $this->findDungeon(
             facadeEnabled: true,
             minEnemies: 1,
-            resolve: static fn(Dungeon $dungeon, MappingVersion $mappingVersion): ?Enemy => $mappingVersion->enemies()
-                ->whereHas('floor', static fn($query) => $query->where('facade', false))
-                ->first(),
+            resolve: static function (Dungeon $dungeon, MappingVersion $mappingVersion) use ($requireOutOfBoundsCoordinateMovesOnTheEnemyFloor): ?Enemy {
+                $enemies = $mappingVersion->enemies()
+                    ->whereHas('floor', static fn($query) => $query->where('facade', false));
+
+                if (!$requireOutOfBoundsCoordinateMovesOnTheEnemyFloor) {
+                    return $enemies->first();
+                }
+
+                /** @var Floor|null $facadeFloor */
+                $facadeFloor = $dungeon->floors()->where('facade', true)->first();
+                if ($facadeFloor === null) {
+                    return null;
+                }
+
+                $outOfBoundsFacadeLatLng = Conversion::convertMDTCoordinateToLatLng(self::OUT_OF_BOUNDS_MDT_COORDINATE, $facadeFloor);
+
+                /** @var Enemy|null $enemy */
+                $enemy = $enemies->get()->unique('floor_id')->first(
+                    static fn(Enemy $enemy): bool => app(CoordinatesServiceInterface::class)->convertFacadeMapLocationToMapLocation(
+                        $mappingVersion,
+                        $outOfBoundsFacadeLatLng,
+                        Floor::query()->findOrFail($enemy->floor_id),
+                    )->toArray() != $outOfBoundsFacadeLatLng->toArray(),
+                );
+
+                return $enemy;
+            },
         );
 
         $facadeFloor = $dungeon->getFacadeFloor();
