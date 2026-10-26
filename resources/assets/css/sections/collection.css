@@ -198,34 +198,35 @@
     display: none;
 }
 
-/* Led by the pull graph, the route's shape; the warnings and social proof follow */
+/* The row's fixed stat slots, packed from the right: always-present stats hold the bottom line and the rarer ones
+   wrap onto a line above, so each stat stays in the same column down the dungeon's list */
 .collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_stats {
     grid-area: stats;
     align-self: end;
-    flex-wrap: wrap;
+    flex-direction: row-reverse;
+    flex-wrap: wrap-reverse;
     justify-content: flex-start;
     gap: 0.25rem 1rem;
     margin: 0 !important;
 }
 
 .collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_stats > * {
-    min-width: 0;
     margin-right: 0 !important;
 }
 
-.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_pull_graph {
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_views {
     order: 1;
 }
 
-.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_level_chip {
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_pull_graph {
     order: 2;
 }
 
-.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_views {
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_level_chip {
     order: 3;
 }
 
-.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_enemy_forces {
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_favorites {
     order: 4;
 }
 
@@ -233,7 +234,7 @@
     order: 5;
 }
 
-.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_favorites {
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_enemy_forces {
     order: 6;
 }
 
