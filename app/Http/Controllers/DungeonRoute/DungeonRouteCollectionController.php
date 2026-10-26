@@ -498,7 +498,8 @@ class DungeonRouteCollectionController extends Controller
             'gameVersion',
             'season.expansion',
             'season.dungeons',
-            'dungeonRoutes' => static fn($query) => $query->withCardRelations(),
+            // The row's favorites stat reads favorites_count, and the rendered row is cached for the discover pages too
+            'dungeonRoutes' => static fn($query) => $query->withCardRelations()->withCount('favorites'),
         ]);
 
         // A collection being public never publishes the routes in it - an unpublished route

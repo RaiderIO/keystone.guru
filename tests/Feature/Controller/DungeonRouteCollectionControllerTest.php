@@ -7,6 +7,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
 use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
+use App\Models\DungeonRoute\DungeonRouteFavorite;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
@@ -1498,6 +1499,47 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         } finally {
             $dungeonRouteCollection->delete();
             Feature::for(null)->forget(CreatorProfiles::class);
+            $dungeonRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function view_givenAFavoritedRoute_showsItsFavoritesCount(): void
+    {
+        // Arrange
+        $creator      = $this->createCreator();
+        $dungeonRoute = $this->createRouteFor($creator, PublishedState::WORLD);
+        Feature::for(null)->activate(CreatorProfiles::class);
+
+        $dungeonRouteFavorite = DungeonRouteFavorite::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'user_id'          => $creator->id,
+        ]);
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $dungeonRoute->id,
+            'order'                       => 0,
+        ]);
+
+        try {
+            // Act
+            $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeInOrder([
+                e($dungeonRoute->title),
+                'class="leaderboard_favorites',
+            ], false);
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for(null)->forget(CreatorProfiles::class);
+            $dungeonRouteFavorite->delete();
             $dungeonRoute->delete();
             $creator->delete();
         }
