@@ -28,7 +28,6 @@ $title  = sprintf(__('view_profile.view.title'), $user->name);
 $header = sprintf(__('view_profile.view.header'), $user->name);
 ?>
 @extends('layouts.sitepage', [
-    'wide' => true,
     'title' => $title,
     'breadcrumbsParams' => [$user],
 ])

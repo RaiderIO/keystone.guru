@@ -21,7 +21,6 @@ use Illuminate\Support\Collection;
 $isFiltered = $search !== null || $selectedCategory !== null || $selectedDungeon !== null;
 ?>
 @extends('layouts.sitepage', [
-    'wide'  => true,
     'title' => __('view_collection.browse.title'),
 ])
 
